@@ -11,58 +11,62 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/roomPreviewNoPreviewToolbar"
-            style="@style/VectorToolbarStyle"
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout"
             android:layout_width="match_parent"
-            android:layout_height="?actionBarSize"
-            android:elevation="4dp">
+            android:layout_height="wrap_content">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/roomPreviewNoPreviewToolbar"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="?actionBarSize">
 
-                <ImageView
-                    android:id="@+id/roomPreviewNoPreviewToolbarAvatar"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:contentDescription="@string/avatar"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:src="@sample/room_round_avatars" />
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
-                <TextView
-                    android:id="@+id/roomPreviewNoPreviewToolbarTitle"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:textColor="?vctr_toolbar_primary_text_color"
-                    android:textSize="18sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toEndOf="@+id/roomPreviewNoPreviewToolbarAvatar"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:text="@sample/users.json/data/displayName" />
+                    <ImageView
+                        android:id="@+id/roomPreviewNoPreviewToolbarAvatar"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:contentDescription="@string/avatar"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:src="@sample/room_round_avatars" />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    <TextView
+                        android:id="@+id/roomPreviewNoPreviewToolbarTitle"
+                        style="@style/Widget.Vector.TextView.HeadlineMedium"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:textColor="?vctr_content_primary"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toEndOf="@+id/roomPreviewNoPreviewToolbarAvatar"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="@sample/users.json/data/displayName" />
 
-        </androidx.appcompat.widget.Toolbar>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <ProgressBar
-            android:id="@+id/roomPreviewPeekingProgress"
-            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="14dp"
-            android:layout_gravity="center"
-            android:background="?riotx_header_panel_background"
-            android:indeterminate="true" />
+            </com.google.android.material.appbar.MaterialToolbar>
+
+            <ProgressBar
+                android:id="@+id/roomPreviewPeekingProgress"
+                style="@style/Widget.Vector.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="14dp"
+                android:layout_gravity="center"
+                android:indeterminate="true" />
+
+        </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
@@ -86,44 +90,44 @@
 
                 <TextView
                     android:id="@+id/roomPreviewNoPreviewName"
+                    style="@style/Widget.Vector.TextView.Subtitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="56dp"
                     android:gravity="center"
-                    android:textAppearance="@style/TextAppearance.Vector.Title"
-                    android:textSize="15sp"
+                    android:textColor="?vctr_content_primary"
                     android:textStyle="bold"
                     tools:text="@sample/rooms.json/data/name" />
 
                 <TextView
                     android:id="@+id/roomPreviewNoPreviewTopic"
+                    style="@style/Widget.Vector.TextView.Subtitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/layout_vertical_margin"
                     android:autoLink="web"
                     android:gravity="center"
-                    android:textAppearance="@style/TextAppearance.Vector.Subtitle"
-                    android:textSize="15sp"
+                    android:textColor="?vctr_content_secondary"
                     tools:text="@sample/rooms.json/data/topic" />
 
                 <TextView
                     android:id="@+id/roomPreviewNoPreviewLabel"
+                    style="@style/Widget.Vector.TextView.Body"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="28dp"
                     android:gravity="center"
-                    android:textAppearance="@style/TextAppearance.Vector.Subtitle2"
-                    android:textSize="14sp"
+                    android:textColor="?vctr_content_secondary"
                     tools:text="@string/room_preview_no_preview" />
 
                 <TextView
                     android:id="@+id/roomPreviewNoPreviewError"
+                    style="@style/Widget.Vector.TextView.Subtitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/layout_vertical_margin"
                     android:gravity="center"
-                    android:textColor="@color/riotx_notice"
-                    android:textSize="15sp"
+                    android:textColor="?colorError"
                     android:visibility="gone"
                     tools:text="Error"
                     tools:visibility="visible" />

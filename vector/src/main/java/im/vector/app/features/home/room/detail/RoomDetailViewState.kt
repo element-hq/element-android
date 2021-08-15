@@ -65,7 +65,7 @@ data class RoomDetailViewState(
         val typingMessage: String? = null,
         val sendMode: SendMode = SendMode.REGULAR("", false),
         val tombstoneEvent: Event? = null,
-        val tombstoneEventHandling: Async<String> = Uninitialized,
+        val joinUpgradedRoomAsync: Async<String> = Uninitialized,
         val syncState: SyncState = SyncState.Idle,
         val highlightedEventId: String? = null,
         val unreadState: UnreadState = UnreadState.Unknown,
@@ -75,7 +75,6 @@ data class RoomDetailViewState(
         val canInvite: Boolean = true,
         val isAllowedToManageWidgets: Boolean = false,
         val isAllowedToStartWebRTCCall: Boolean = true,
-        val showDialerOption: Boolean = false,
         val hasFailedSending: Boolean = false
 ) : MvRxState {
 

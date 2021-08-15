@@ -16,13 +16,11 @@
 
 package im.vector.app.features.home.room.list
 
-import android.content.DialogInterface
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.ConcatAdapter
@@ -33,8 +31,8 @@ import com.airbnb.epoxy.OnModelBuildFinishedListener
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
-import im.vector.app.core.dialogs.withColoredButton
 import im.vector.app.core.epoxy.LayoutManagerStateRestorer
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.exhaustive
@@ -44,6 +42,7 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.UserPreferencesProvider
 import im.vector.app.databinding.FragmentRoomListBinding
 import im.vector.app.features.home.RoomListDisplayMode
+import im.vector.app.features.home.room.filtered.FilteredRoomFooterItem
 import im.vector.app.features.home.room.list.actions.RoomListActionsArgs
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsBottomSheet
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedAction
@@ -72,6 +71,7 @@ class RoomListFragment @Inject constructor(
 ) : VectorBaseFragment<FragmentRoomListBinding>(),
         RoomListListener,
         OnBackPressed,
+        FilteredRoomFooterItem.Listener,
         NotifsFabMenuView.Listener {
 
     private var modelBuildListener: OnModelBuildFinishedListener? = null
@@ -108,10 +108,11 @@ class RoomListFragment @Inject constructor(
         sharedActionViewModel = activityViewModelProvider.get(RoomListQuickActionsSharedActionViewModel::class.java)
         roomListViewModel.observeViewEvents {
             when (it) {
-                is RoomListViewEvents.Loading -> showLoading(it.message)
-                is RoomListViewEvents.Failure -> showFailure(it.throwable)
-                is RoomListViewEvents.SelectRoom -> handleSelectRoom(it)
-                is RoomListViewEvents.Done -> Unit
+                is RoomListViewEvents.Loading                   -> showLoading(it.message)
+                is RoomListViewEvents.Failure                   -> showFailure(it.throwable)
+                is RoomListViewEvents.SelectRoom                -> handleSelectRoom(it)
+                is RoomListViewEvents.Done                      -> Unit
+                is RoomListViewEvents.NavigateToMxToBottomSheet -> handleShowMxToLink(it.link)
             }.exhaustive
         }
 
@@ -155,6 +156,10 @@ class RoomListFragment @Inject constructor(
         showErrorInSnackbar(throwable)
     }
 
+    private fun handleShowMxToLink(link: String) {
+        navigator.openMatrixToBottomSheet(requireContext(), link)
+    }
+
     override fun onDestroyView() {
         adapterInfosList.onEach { it.contentEpoxyController.removeModelBuildListener(modelBuildListener) }
         adapterInfosList.clear()
@@ -175,16 +180,16 @@ class RoomListFragment @Inject constructor(
     private fun setupCreateRoomButton() {
         when (roomListParams.displayMode) {
             RoomListDisplayMode.NOTIFICATIONS -> views.createChatFabMenu.isVisible = true
-            RoomListDisplayMode.PEOPLE -> views.createChatRoomButton.isVisible = true
-            RoomListDisplayMode.ROOMS -> views.createGroupRoomButton.isVisible = true
+            RoomListDisplayMode.PEOPLE        -> views.createChatRoomButton.isVisible = true
+            RoomListDisplayMode.ROOMS         -> views.createGroupRoomButton.isVisible = true
             else                              -> Unit // No button in this mode
         }
 
         views.createChatRoomButton.debouncedClicks {
-            createDirectChat()
+            fabCreateDirectChat()
         }
         views.createGroupRoomButton.debouncedClicks {
-            openRoomDirectory()
+            fabOpenRoomDirectory()
         }
 
         // Hide FAB when list is scrolling
@@ -218,12 +223,26 @@ class RoomListFragment @Inject constructor(
         roomListViewModel.handle(RoomListAction.FilterWith(filter))
     }
 
-    override fun openRoomDirectory(initialFilter: String) {
-        navigator.openRoomDirectory(requireActivity(), initialFilter)
+    // FilteredRoomFooterItem.Listener
+    override fun createRoom(initialName: String) {
+        navigator.openCreateRoom(requireActivity(), initialName)
     }
 
     override fun createDirectChat() {
         navigator.openCreateDirectRoom(requireActivity())
+    }
+
+    override fun openRoomDirectory(initialFilter: String) {
+        navigator.openRoomDirectory(requireActivity(), initialFilter)
+    }
+
+    // NotifsFabMenuView.Listener
+    override fun fabCreateDirectChat() {
+        navigator.openCreateDirectRoom(requireActivity())
+    }
+
+    override fun fabOpenRoomDirectory() {
+        navigator.openRoomDirectory(requireActivity(), "")
     }
 
     private fun setupRecyclerView() {
@@ -336,8 +355,8 @@ class RoomListFragment @Inject constructor(
         if (isAdded) {
             when (roomListParams.displayMode) {
                 RoomListDisplayMode.NOTIFICATIONS -> views.createChatFabMenu.show()
-                RoomListDisplayMode.PEOPLE -> views.createChatRoomButton.show()
-                RoomListDisplayMode.ROOMS -> views.createGroupRoomButton.show()
+                RoomListDisplayMode.PEOPLE        -> views.createChatRoomButton.show()
+                RoomListDisplayMode.ROOMS         -> views.createGroupRoomButton.show()
                 else                              -> Unit
             }
         }
@@ -381,7 +400,7 @@ class RoomListFragment @Inject constructor(
                 append(getString(R.string.room_participants_leave_private_warning))
             }
         }
-        AlertDialog.Builder(requireContext())
+        MaterialAlertDialogBuilder(requireContext(), if (isPublicRoom) 0 else R.style.ThemeOverlay_Vector_MaterialAlertDialog_Destructive)
                 .setTitle(R.string.room_participants_leave_prompt_title)
                 .setMessage(message)
                 .setPositiveButton(R.string.leave) { _, _ ->
@@ -389,11 +408,6 @@ class RoomListFragment @Inject constructor(
                 }
                 .setNegativeButton(R.string.cancel, null)
                 .show()
-                .apply {
-                    if (!isPublicRoom) {
-                        withColoredButton(DialogInterface.BUTTON_POSITIVE)
-                    }
-                }
     }
 
     override fun invalidate() = withState(roomListViewModel) { state ->
@@ -411,14 +425,14 @@ class RoomListFragment @Inject constructor(
                             image = ContextCompat.getDrawable(requireContext(), R.drawable.ic_noun_party_popper),
                             message = getString(R.string.room_list_catchup_empty_body))
                 }
-                RoomListDisplayMode.PEOPLE ->
+                RoomListDisplayMode.PEOPLE        ->
                     StateView.State.Empty(
                             title = getString(R.string.room_list_people_empty_title),
                             image = ContextCompat.getDrawable(requireContext(), R.drawable.empty_state_dm),
                             isBigImage = true,
                             message = getString(R.string.room_list_people_empty_body)
                     )
-                RoomListDisplayMode.ROOMS ->
+                RoomListDisplayMode.ROOMS         ->
                     StateView.State.Empty(
                             title = getString(R.string.room_list_rooms_empty_title),
                             image = ContextCompat.getDrawable(requireContext(), R.drawable.empty_state_room),
@@ -474,12 +488,12 @@ class RoomListFragment @Inject constructor(
         roomListViewModel.handle(RoomListAction.JoinSuggestedRoom(room.childRoomId, room.viaServers))
     }
 
+    override fun onSuggestedRoomClicked(room: SpaceChildInfo) {
+        roomListViewModel.handle(RoomListAction.ShowRoomDetails(room.childRoomId, room.viaServers))
+    }
+
     override fun onRejectRoomInvitation(room: RoomSummary) {
         notificationDrawerManager.clearMemberShipNotificationForRoom(room.roomId)
         roomListViewModel.handle(RoomListAction.RejectInvitation(room))
-    }
-
-    override fun createRoom(initialName: String) {
-        navigator.openCreateRoom(requireActivity(), initialName)
     }
 }

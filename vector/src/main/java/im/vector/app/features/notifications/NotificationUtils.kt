@@ -33,7 +33,7 @@ import android.os.Build
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
-import androidx.annotation.ColorRes
+import androidx.annotation.AttrRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.core.app.NotificationCompat
@@ -48,15 +48,17 @@ import androidx.fragment.app.Fragment
 import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.core.services.CallService
 import im.vector.app.core.utils.startNotificationChannelSettingsIntent
 import im.vector.app.features.call.VectorCallActivity
 import im.vector.app.features.call.service.CallHeadsUpActionReceiver
+import im.vector.app.features.call.webrtc.WebRtcCall
 import im.vector.app.features.home.HomeActivity
 import im.vector.app.features.home.room.detail.RoomDetailActivity
 import im.vector.app.features.home.room.detail.RoomDetailArgs
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.troubleshoot.TestNotificationReceiver
-import org.matrix.android.sdk.api.session.call.MxCall
+import im.vector.app.features.themes.ThemeUtils
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -287,7 +289,7 @@ class NotificationUtils @Inject constructor(private val context: Context,
      * @return the call notification.
      */
     @SuppressLint("NewApi")
-    fun buildIncomingCallNotification(mxCall: MxCall,
+    fun buildIncomingCallNotification(call: WebRtcCall,
                                       title: String,
                                       fromBg: Boolean): Notification {
         val accentColor = ContextCompat.getColor(context, R.color.notification_accent_color)
@@ -295,24 +297,26 @@ class NotificationUtils @Inject constructor(private val context: Context,
         val builder = NotificationCompat.Builder(context, notificationChannel)
                 .setContentTitle(ensureTitleNotEmpty(title))
                 .apply {
-                    if (mxCall.isVideoCall) {
+                    if (call.mxCall.isVideoCall) {
                         setContentText(stringProvider.getString(R.string.incoming_video_call))
+                        setSmallIcon(R.drawable.ic_call_answer_video)
                     } else {
                         setContentText(stringProvider.getString(R.string.incoming_voice_call))
+                        setSmallIcon(R.drawable.ic_call_answer)
                     }
                 }
-                .setSmallIcon(R.drawable.incoming_call_notification_transparent)
                 .setCategory(NotificationCompat.CATEGORY_CALL)
+                .setColor(ThemeUtils.getColor(context, android.R.attr.colorPrimary))
                 .setLights(accentColor, 500, 500)
                 .setOngoing(true)
 
         val contentIntent = VectorCallActivity.newIntent(
                 context = context,
-                mxCall = mxCall,
+                call = call,
                 mode = VectorCallActivity.INCOMING_RINGING
         ).apply {
             flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-            data = Uri.parse("foobar://${mxCall.callId}")
+            data = Uri.parse("foobar://${call.callId}")
         }
         val contentPendingIntent = PendingIntent.getActivity(context, System.currentTimeMillis().toInt(), contentIntent, 0)
 
@@ -320,26 +324,25 @@ class NotificationUtils @Inject constructor(private val context: Context,
                 .addNextIntentWithParentStack(HomeActivity.newIntent(context))
                 .addNextIntent(VectorCallActivity.newIntent(
                         context = context,
-                        mxCall = mxCall,
+                        call = call,
                         mode = VectorCallActivity.INCOMING_ACCEPT)
                 )
                 .getPendingIntent(System.currentTimeMillis().toInt(), PendingIntent.FLAG_UPDATE_CURRENT)
 
-        val rejectCallPendingIntent = buildRejectCallPendingIntent(mxCall.callId)
+        val rejectCallPendingIntent = buildRejectCallPendingIntent(call.callId)
 
         builder.addAction(
                 NotificationCompat.Action(
-                        IconCompat.createWithResource(context, R.drawable.ic_call_hangup).setTint(ContextCompat.getColor(context, R.color.riotx_notice)),
-                        getActionText(R.string.call_notification_reject, R.color.riotx_notice),
+                        IconCompat.createWithResource(context, R.drawable.ic_call_hangup)
+                                .setTint(ThemeUtils.getColor(context, R.attr.colorError)),
+                        getActionText(R.string.call_notification_reject, R.attr.colorError),
                         rejectCallPendingIntent)
         )
 
         builder.addAction(
                 NotificationCompat.Action(
                         R.drawable.ic_call_answer,
-                        // IconCompat.createWithResource(applicationContext, R.drawable.ic_call)
-                        // .setTint(ContextCompat.getColor(applicationContext, R.color.riotx_positive_accent)),
-                        getActionText(R.string.call_notification_answer, R.color.riotx_positive_accent),
+                        getActionText(R.string.call_notification_answer, R.attr.colorPrimary),
                         answerCallPendingIntent
                 )
         )
@@ -351,34 +354,40 @@ class NotificationUtils @Inject constructor(private val context: Context,
         return builder.build()
     }
 
-    fun buildOutgoingRingingCallNotification(mxCall: MxCall,
+    fun buildOutgoingRingingCallNotification(call: WebRtcCall,
                                              title: String): Notification {
         val accentColor = ContextCompat.getColor(context, R.color.notification_accent_color)
         val builder = NotificationCompat.Builder(context, SILENT_NOTIFICATION_CHANNEL_ID)
                 .setContentTitle(ensureTitleNotEmpty(title))
                 .apply {
                     setContentText(stringProvider.getString(R.string.call_ring))
+                    if (call.mxCall.isVideoCall) {
+                        setSmallIcon(R.drawable.ic_call_answer_video)
+                    } else {
+                        setSmallIcon(R.drawable.ic_call_answer)
+                    }
                 }
-                .setSmallIcon(R.drawable.incoming_call_notification_transparent)
                 .setCategory(NotificationCompat.CATEGORY_CALL)
                 .setLights(accentColor, 500, 500)
+                .setColor(ThemeUtils.getColor(context, android.R.attr.colorPrimary))
                 .setOngoing(true)
 
         val contentIntent = VectorCallActivity.newIntent(
                 context = context,
-                mxCall = mxCall,
+                call = call,
                 mode = null).apply {
             flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-            data = Uri.parse("foobar://$mxCall.callId")
+            data = Uri.parse("foobar://$call.callId")
         }
         val contentPendingIntent = PendingIntent.getActivity(context, System.currentTimeMillis().toInt(), contentIntent, 0)
 
-        val rejectCallPendingIntent = buildRejectCallPendingIntent(mxCall.callId)
+        val rejectCallPendingIntent = buildRejectCallPendingIntent(call.callId)
 
         builder.addAction(
                 NotificationCompat.Action(
-                        IconCompat.createWithResource(context, R.drawable.ic_call_hangup).setTint(ContextCompat.getColor(context, R.color.riotx_notice)),
-                        getActionText(R.string.call_notification_hangup, R.color.riotx_notice),
+                        IconCompat.createWithResource(context, R.drawable.ic_call_hangup)
+                                .setTint(ThemeUtils.getColor(context, R.attr.colorError)),
+                        getActionText(R.string.call_notification_hangup, R.attr.colorError),
                         rejectCallPendingIntent)
         )
         builder.setContentIntent(contentPendingIntent)
@@ -397,32 +406,35 @@ class NotificationUtils @Inject constructor(private val context: Context,
      * @return the call notification.
      */
     @SuppressLint("NewApi")
-    fun buildPendingCallNotification(mxCall: MxCall,
+    fun buildPendingCallNotification(call: WebRtcCall,
                                      title: String): Notification {
         val builder = NotificationCompat.Builder(context, SILENT_NOTIFICATION_CHANNEL_ID)
                 .setContentTitle(ensureTitleNotEmpty(title))
                 .apply {
-                    if (mxCall.isVideoCall) {
+                    if (call.mxCall.isVideoCall) {
                         setContentText(stringProvider.getString(R.string.video_call_in_progress))
+                        setSmallIcon(R.drawable.ic_call_answer_video)
                     } else {
                         setContentText(stringProvider.getString(R.string.call_in_progress))
+                        setSmallIcon(R.drawable.ic_call_answer)
                     }
                 }
-                .setSmallIcon(R.drawable.incoming_call_notification_transparent)
+                .setColor(ThemeUtils.getColor(context, android.R.attr.colorPrimary))
                 .setCategory(NotificationCompat.CATEGORY_CALL)
 
-        val rejectCallPendingIntent = buildRejectCallPendingIntent(mxCall.callId)
+        val rejectCallPendingIntent = buildRejectCallPendingIntent(call.callId)
 
         builder.addAction(
                 NotificationCompat.Action(
-                        IconCompat.createWithResource(context, R.drawable.ic_call_hangup).setTint(ContextCompat.getColor(context, R.color.riotx_notice)),
-                        getActionText(R.string.call_notification_hangup, R.color.riotx_notice),
+                        IconCompat.createWithResource(context, R.drawable.ic_call_hangup)
+                                .setTint(ThemeUtils.getColor(context, R.attr.colorError)),
+                        getActionText(R.string.call_notification_hangup, R.attr.colorError),
                         rejectCallPendingIntent)
         )
 
         val contentPendingIntent = TaskStackBuilder.create(context)
                 .addNextIntentWithParentStack(HomeActivity.newIntent(context))
-                .addNextIntent(VectorCallActivity.newIntent(context, mxCall, null))
+                .addNextIntent(VectorCallActivity.newIntent(context, call, null))
                 .getPendingIntent(System.currentTimeMillis().toInt(), PendingIntent.FLAG_UPDATE_CURRENT)
 
         builder.setContentIntent(contentPendingIntent)
@@ -446,13 +458,50 @@ class NotificationUtils @Inject constructor(private val context: Context,
     /**
      * Build a temporary (because service will be stopped just after) notification for the CallService, when a call is ended
      */
-    fun buildCallEndedNotification(): Notification {
+    fun buildCallEndedNotification(isVideoCall: Boolean): Notification {
         return NotificationCompat.Builder(context, SILENT_NOTIFICATION_CHANNEL_ID)
                 .setContentTitle(stringProvider.getString(R.string.call_ended))
-                .setTimeoutAfter(2000)
-                .setSmallIcon(R.drawable.ic_material_call_end_grey)
+                .apply {
+                    if (isVideoCall) {
+                        setSmallIcon(R.drawable.ic_call_answer_video)
+                    } else {
+                        setSmallIcon(R.drawable.ic_call_answer)
+                    }
+                }
+                // This is a trick to make the previous notification with same id disappear as cancel notification is not working with Foreground Service.
+                .setTimeoutAfter(1)
+                .setColor(ThemeUtils.getColor(context, android.R.attr.colorPrimary))
                 .setCategory(NotificationCompat.CATEGORY_CALL)
                 .build()
+    }
+
+    /**
+     * Build notification for the CallService, when a call is missed
+     */
+    fun buildCallMissedNotification(callInformation: CallService.CallInformation): Notification {
+        val builder = NotificationCompat.Builder(context, SILENT_NOTIFICATION_CHANNEL_ID)
+                .setContentTitle(callInformation.opponentMatrixItem?.getBestName() ?: callInformation.opponentUserId)
+                .apply {
+                    if (callInformation.isVideoCall) {
+                        setContentText(stringProvider.getQuantityString(R.plurals.missed_video_call, 1, 1))
+                        setSmallIcon(R.drawable.ic_missed_video_call)
+                    } else {
+                        setContentText(stringProvider.getQuantityString(R.plurals.missed_audio_call, 1, 1))
+                        setSmallIcon(R.drawable.ic_missed_voice_call)
+                    }
+                }
+                .setShowWhen(true)
+                .setColor(ThemeUtils.getColor(context, android.R.attr.colorPrimary))
+                .setAutoCancel(true)
+                .setCategory(NotificationCompat.CATEGORY_CALL)
+
+        val contentPendingIntent = TaskStackBuilder.create(context)
+                .addNextIntentWithParentStack(HomeActivity.newIntent(context))
+                .addNextIntent(RoomDetailActivity.newIntent(context, RoomDetailArgs(callInformation.nativeRoomId)))
+                .getPendingIntent(System.currentTimeMillis().toInt(), PendingIntent.FLAG_UPDATE_CURRENT)
+
+        builder.setContentIntent(contentPendingIntent)
+        return builder.build()
     }
 
     fun buildDownloadFileNotification(uri: Uri, fileName: String, mimeType: String): Notification {
@@ -559,9 +608,8 @@ class NotificationUtils @Inject constructor(private val context: Context,
                             NotificationCompat.Action.Builder(R.drawable.vector_notification_quick_reply,
                                     stringProvider.getString(R.string.action_quick_reply), replyPendingIntent)
                                     .addRemoteInput(remoteInput)
-                                    .build()?.let {
-                                        addAction(it)
-                                    }
+                                    .build()
+                                    .let { addAction(it) }
                         }
                     }
 
@@ -869,9 +917,9 @@ class NotificationUtils @Inject constructor(private val context: Context,
                 || setting == NotificationManager.INTERRUPTION_FILTER_ALARMS
     }
 
-    private fun getActionText(@StringRes stringRes: Int, @ColorRes colorRes: Int): Spannable {
+    private fun getActionText(@StringRes stringRes: Int, @AttrRes colorRes: Int): Spannable {
         return SpannableString(context.getText(stringRes)).apply {
-            val foregroundColorSpan = ForegroundColorSpan(ContextCompat.getColor(context, colorRes))
+            val foregroundColorSpan = ForegroundColorSpan(ThemeUtils.getColor(context, colorRes))
             setSpan(foregroundColorSpan, 0, length, 0)
         }
     }

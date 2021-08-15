@@ -68,7 +68,7 @@ internal class VerificationTransportToDevice(
             contentMap.setObject(otherUserId, it, keyReq)
         }
         sendToDeviceTask
-                .configureWith(SendToDeviceTask.Params(MessageType.MSGTYPE_VERIFICATION_REQUEST, contentMap, localId)) {
+                .configureWith(SendToDeviceTask.Params(MessageType.MSGTYPE_VERIFICATION_REQUEST, contentMap)) {
                     this.callback = object : MatrixCallback<Unit> {
                         override fun onSuccess(data: Unit) {
                             Timber.v("## verification [$tx.transactionId] send toDevice request success")
@@ -124,7 +124,7 @@ internal class VerificationTransportToDevice(
         contentMap.setObject(tx.otherUserId, tx.otherDeviceId, toSendToDeviceObject)
 
         sendToDeviceTask
-                .configureWith(SendToDeviceTask.Params(type, contentMap, tx.transactionId)) {
+                .configureWith(SendToDeviceTask.Params(type, contentMap)) {
                     this.callback = object : MatrixCallback<Unit> {
                         override fun onSuccess(data: Unit) {
                             Timber.v("## SAS verification [$tx.transactionId] toDevice type '$type' success.")
@@ -155,7 +155,7 @@ internal class VerificationTransportToDevice(
         val contentMap = MXUsersDevicesMap<Any>()
         contentMap.setObject(otherUserId, otherUserDeviceId, cancelMessage)
         sendToDeviceTask
-                .configureWith(SendToDeviceTask.Params(EventType.KEY_VERIFICATION_DONE, contentMap, transactionId)) {
+                .configureWith(SendToDeviceTask.Params(EventType.KEY_VERIFICATION_DONE, contentMap)) {
                     this.callback = object : MatrixCallback<Unit> {
                         override fun onSuccess(data: Unit) {
                             onDone?.invoke()
@@ -176,7 +176,7 @@ internal class VerificationTransportToDevice(
         val contentMap = MXUsersDevicesMap<Any>()
         contentMap.setObject(otherUserId, otherUserDeviceId, cancelMessage)
         sendToDeviceTask
-                .configureWith(SendToDeviceTask.Params(EventType.KEY_VERIFICATION_CANCEL, contentMap, transactionId)) {
+                .configureWith(SendToDeviceTask.Params(EventType.KEY_VERIFICATION_CANCEL, contentMap)) {
                     this.callback = object : MatrixCallback<Unit> {
                         override fun onSuccess(data: Unit) {
                             Timber.v("## SAS verification [$transactionId] canceled for reason ${code.value}")

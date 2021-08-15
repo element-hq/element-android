@@ -17,11 +17,12 @@
 package org.matrix.android.sdk.internal.auth
 
 import org.matrix.android.sdk.api.auth.data.Credentials
+import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.internal.auth.data.Availability
 import org.matrix.android.sdk.internal.auth.data.LoginFlowResponse
 import org.matrix.android.sdk.internal.auth.data.PasswordLoginParams
-import org.matrix.android.sdk.internal.auth.data.RiotConfig
 import org.matrix.android.sdk.internal.auth.data.TokenLoginParams
+import org.matrix.android.sdk.internal.auth.data.WebClientConfig
 import org.matrix.android.sdk.internal.auth.login.ResetPasswordMailConfirmed
 import org.matrix.android.sdk.internal.auth.registration.AddThreePidRegistrationParams
 import org.matrix.android.sdk.internal.auth.registration.AddThreePidRegistrationResponse
@@ -43,16 +44,16 @@ import retrofit2.http.Url
  */
 internal interface AuthAPI {
     /**
-     * Get a Riot config file, using the name including the domain
+     * Get a Web client config file, using the name including the domain
      */
     @GET("config.{domain}.json")
-    suspend fun getRiotConfigDomain(@Path("domain") domain: String): RiotConfig
+    suspend fun getWebClientConfigDomain(@Path("domain") domain: String): WebClientConfig
 
     /**
-     * Get a Riot config file
+     * Get a Web client default config file
      */
     @GET("config.json")
-    suspend fun getRiotConfig(): RiotConfig
+    suspend fun getWebClientConfig(): WebClientConfig
 
     /**
      * Get the version information of the homeserver
@@ -72,6 +73,15 @@ internal interface AuthAPI {
      */
     @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "register/available")
     suspend fun registerAvailable(@Query("username") username: String): Availability
+
+    /**
+     * Get the combined profile information for this user.
+     * This API may be used to fetch the user's own profile information or other users; either locally or on remote homeservers.
+     * This API may return keys which are not limited to displayname or avatar_url.
+     * @param userId the user id to fetch profile info
+     */
+    @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "profile/{userId}")
+    suspend fun getProfile(@Path("userId") userId: String): JsonDict
 
     /**
      * Add 3Pid during registration

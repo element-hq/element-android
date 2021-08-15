@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Widget.Vector.ProgressBar.Horizontal" parent="Widget.AppCompat.ProgressBar.Horizontal" />
+
+    <style name="Widget.Vector.ProgressBar.Horizontal.File">
+        <item name="android:indeterminateOnly">false</item>
+        <item name="android:progressDrawable">@drawable/file_progress_bar</item>
+        <item name="android:minHeight">10dp</item>
+        <item name="android:maxHeight">40dp</item>
+    </style>
+
+</resources>

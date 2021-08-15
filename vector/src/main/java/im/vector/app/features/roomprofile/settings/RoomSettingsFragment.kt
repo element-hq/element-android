@@ -23,11 +23,11 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
 import im.vector.app.core.extensions.cleanup
@@ -44,7 +44,7 @@ import im.vector.app.features.roomprofile.RoomProfileArgs
 import im.vector.app.features.roomprofile.RoomProfileSharedActionViewModel
 import im.vector.app.features.roomprofile.settings.historyvisibility.RoomHistoryVisibilityBottomSheet
 import im.vector.app.features.roomprofile.settings.historyvisibility.RoomHistoryVisibilitySharedActionViewModel
-import im.vector.app.features.roomprofile.settings.joinrule.RoomJoinRuleBottomSheet
+import im.vector.app.features.roomprofile.settings.joinrule.RoomJoinRuleActivity
 import im.vector.app.features.roomprofile.settings.joinrule.RoomJoinRuleSharedActionViewModel
 import org.matrix.android.sdk.api.session.room.model.GuestAccess
 import org.matrix.android.sdk.api.util.toMatrixItem
@@ -179,10 +179,8 @@ class RoomSettingsFragment @Inject constructor(
                 .show(childFragmentManager, "RoomHistoryVisibilityBottomSheet")
     }
 
-    override fun onJoinRuleClicked() = withState(viewModel) { state ->
-        val currentJoinRule = state.newRoomJoinRules.newJoinRules ?: state.currentRoomJoinRules
-        RoomJoinRuleBottomSheet.newInstance(currentJoinRule)
-                .show(childFragmentManager, "RoomJoinRuleBottomSheet")
+    override fun onJoinRuleClicked() {
+        startActivity(RoomJoinRuleActivity.newIntent(requireContext(), roomProfileArgs.roomId))
     }
 
     override fun onToggleGuestAccess() = withState(viewModel) { state ->
@@ -230,7 +228,7 @@ class RoomSettingsFragment @Inject constructor(
 
         return withState(viewModel) {
             return@withState if (it.showSaveAction) {
-                AlertDialog.Builder(requireContext())
+                MaterialAlertDialogBuilder(requireContext())
                         .setTitle(R.string.dialog_title_warning)
                         .setMessage(R.string.warning_unsaved_change)
                         .setPositiveButton(R.string.warning_unsaved_change_discard) { _, _ ->

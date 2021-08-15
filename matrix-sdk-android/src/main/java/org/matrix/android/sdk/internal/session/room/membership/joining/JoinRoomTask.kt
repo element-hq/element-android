@@ -54,6 +54,10 @@ internal class DefaultJoinRoomTask @Inject constructor(
 ) : JoinRoomTask {
 
     override suspend fun execute(params: JoinRoomTask.Params) {
+        val currentState = roomChangeMembershipStateDataSource.getState(params.roomIdOrAlias)
+        if (currentState.isInProgress() || currentState == ChangeMembershipState.Joined) {
+            return
+        }
         roomChangeMembershipStateDataSource.updateState(params.roomIdOrAlias, ChangeMembershipState.Joining)
         val joinRoomResponse = try {
             executeRequest(globalErrorReceiver) {

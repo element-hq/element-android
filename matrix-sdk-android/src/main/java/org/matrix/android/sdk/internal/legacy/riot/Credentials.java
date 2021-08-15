@@ -41,7 +41,7 @@ public class Credentials {
 
     public String deviceId;
 
-    // Optional data that may contain info to override home server and/or identity server
+    // Optional data that may contain info to override homeserver and/or identity server
     public WellKnown wellKnown;
 
     public JSONObject toJson() throws JSONException {

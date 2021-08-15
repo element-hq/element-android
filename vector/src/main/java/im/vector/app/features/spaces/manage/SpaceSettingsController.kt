@@ -18,9 +18,9 @@ package im.vector.app.features.spaces.manage
 
 import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.app.R
+import im.vector.app.core.epoxy.dividerItem
 import im.vector.app.core.epoxy.profiles.buildProfileAction
 import im.vector.app.core.epoxy.profiles.buildProfileSection
-import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.form.formEditTextItem
 import im.vector.app.features.form.formEditableSquareAvatarItem
@@ -36,7 +36,6 @@ import javax.inject.Inject
 class SpaceSettingsController @Inject constructor(
         private val stringProvider: StringProvider,
         private val avatarRenderer: AvatarRenderer,
-        colorProvider: ColorProvider,
         private val vectorPreferences: VectorPreferences
 ) : TypedEpoxyController<RoomSettingsViewState>() {
 
@@ -53,14 +52,14 @@ class SpaceSettingsController @Inject constructor(
         fun onDevRoomSettings()
         fun onManageRooms()
         fun setIsPublic(public: Boolean)
+        fun onRoomAliasesClicked()
     }
-
-    private val dividerColor = colorProvider.getColorFromAttribute(R.attr.vctr_list_divider_color)
 
     var callback: Callback? = null
 
     override fun buildModels(data: RoomSettingsViewState?) {
         val roomSummary = data?.roomSummary?.invoke() ?: return
+        val host = this
 
         formEditableSquareAvatarItem {
             id("avatar")
@@ -68,17 +67,17 @@ class SpaceSettingsController @Inject constructor(
             when (val avatarAction = data.avatarAction) {
                 RoomSettingsViewState.AvatarAction.None -> {
                     // Use the current value
-                    avatarRenderer(avatarRenderer)
+                    avatarRenderer(host.avatarRenderer)
                     // We do not want to use the fallback avatar url, which can be the other user avatar, or the current user avatar.
-                    matrixItem(roomSummary.toMatrixItem().copy(avatarUrl = data.currentRoomAvatarUrl))
+                    matrixItem(roomSummary.toMatrixItem().updateAvatar(data.currentRoomAvatarUrl))
                 }
                 RoomSettingsViewState.AvatarAction.DeleteAvatar ->
                     imageUri(null)
                 is RoomSettingsViewState.AvatarAction.UpdateAvatar ->
                     imageUri(avatarAction.newAvatarUri)
             }
-            clickListener { callback?.onAvatarChange() }
-            deleteListener { callback?.onAvatarDelete() }
+            clickListener { host.callback?.onAvatarChange() }
+            deleteListener { host.callback?.onAvatarDelete() }
         }
 
         buildProfileSection(
@@ -89,10 +88,9 @@ class SpaceSettingsController @Inject constructor(
             id("name")
             enabled(data.actionPermissions.canChangeName)
             value(data.newName ?: roomSummary.displayName)
-            hint(stringProvider.getString(R.string.create_room_name_hint))
-            showBottomSeparator(false)
+            hint(host.stringProvider.getString(R.string.create_room_name_hint))
             onTextChange { text ->
-                callback?.onNameChanged(text)
+                host.callback?.onNameChanged(text)
             }
         }
 
@@ -100,48 +98,59 @@ class SpaceSettingsController @Inject constructor(
             id("topic")
             enabled(data.actionPermissions.canChangeTopic)
             value(data.newTopic ?: roomSummary.topic)
-            hint(stringProvider.getString(R.string.create_space_topic_hint))
-            showBottomSeparator(false)
+            hint(host.stringProvider.getString(R.string.create_space_topic_hint))
             onTextChange { text ->
-                callback?.onTopicChanged(text)
+                host.callback?.onTopicChanged(text)
             }
         }
 
+        val isPublic = (data.newRoomJoinRules.newJoinRules ?: data.currentRoomJoinRules) == RoomJoinRules.PUBLIC
         if (vectorPreferences.labsUseExperimentalRestricted()) {
             buildProfileAction(
                     id = "joinRule",
                     title = stringProvider.getString(R.string.room_settings_room_access_title),
                     subtitle = data.getJoinRuleWording(stringProvider),
-                    dividerColor = dividerColor,
-                    divider = true,
+                    divider = false,
                     editable = data.actionPermissions.canChangeJoinRule,
                     action = { if (data.actionPermissions.canChangeJoinRule) callback?.onJoinRuleClicked() }
             )
         } else {
-            val isPublic = (data.newRoomJoinRules.newJoinRules ?: data.currentRoomJoinRules) == RoomJoinRules.PUBLIC
             formSwitchItem {
                 id("isPublic")
                 enabled(data.actionPermissions.canChangeJoinRule)
-                title(stringProvider.getString(R.string.make_this_space_public))
+                title(host.stringProvider.getString(R.string.make_this_space_public))
                 switchChecked(isPublic)
 
                 listener { value ->
-                    callback?.setIsPublic(value)
+                    host.callback?.setIsPublic(value)
                 }
             }
+        }
+        dividerItem {
+            id("divider")
         }
 
         buildProfileAction(
                 id = "manage_rooms",
                 title = stringProvider.getString(R.string.space_settings_manage_rooms),
                 // subtitle = data.getJoinRuleWording(stringProvider),
-                dividerColor = dividerColor,
-                divider = vectorPreferences.developerMode(),
+                divider = vectorPreferences.developerMode() || isPublic,
                 editable = data.actionPermissions.canAddChildren,
                 action = {
                     if (data.actionPermissions.canAddChildren) callback?.onManageRooms()
                 }
         )
+
+        if (isPublic) {
+            buildProfileAction(
+                    id = "alias",
+                    title = stringProvider.getString(R.string.space_settings_alias_title),
+                    subtitle = stringProvider.getString(R.string.space_settings_alias_subtitle),
+                    divider = vectorPreferences.developerMode(),
+                    editable = true,
+                    action = { callback?.onRoomAliasesClicked() }
+            )
+        }
 
         if (vectorPreferences.developerMode()) {
             buildProfileAction(
@@ -149,7 +158,6 @@ class SpaceSettingsController @Inject constructor(
                     title = stringProvider.getString(R.string.settings_dev_tools),
                     icon = R.drawable.ic_verification_glasses,
                     tintIcon = false,
-                    dividerColor = dividerColor,
                     divider = true,
                     action = {
                         callback?.onDevTools()
@@ -161,7 +169,6 @@ class SpaceSettingsController @Inject constructor(
                     title = stringProvider.getString(R.string.room_list_quick_actions_room_settings),
                     icon = R.drawable.ic_verification_glasses,
                     tintIcon = false,
-                    dividerColor = dividerColor,
                     divider = false,
                     action = {
                         callback?.onDevRoomSettings()

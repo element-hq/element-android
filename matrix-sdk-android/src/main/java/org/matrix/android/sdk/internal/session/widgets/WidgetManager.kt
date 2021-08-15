@@ -39,7 +39,7 @@ import org.matrix.android.sdk.api.session.SessionLifecycleObserver
 import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.internal.session.integrationmanager.IntegrationManager
 import org.matrix.android.sdk.internal.session.room.state.StateEventDataSource
-import org.matrix.android.sdk.internal.session.user.accountdata.AccountDataDataSource
+import org.matrix.android.sdk.internal.session.user.accountdata.UserAccountDataDataSource
 import org.matrix.android.sdk.internal.session.widgets.helper.WidgetFactory
 import org.matrix.android.sdk.internal.session.widgets.helper.extractWidgetSequence
 import java.util.HashMap
@@ -47,7 +47,7 @@ import javax.inject.Inject
 
 @SessionScope
 internal class WidgetManager @Inject constructor(private val integrationManager: IntegrationManager,
-                                                 private val accountDataDataSource: AccountDataDataSource,
+                                                 private val userAccountDataDataSource: UserAccountDataDataSource,
                                                  private val stateEventDataSource: StateEventDataSource,
                                                  private val createWidgetTask: CreateWidgetTask,
                                                  private val widgetFactory: WidgetFactory,
@@ -136,7 +136,7 @@ internal class WidgetManager @Inject constructor(private val integrationManager:
             widgetTypes: Set<String>? = null,
             excludedTypes: Set<String>? = null
     ): LiveData<List<Widget>> {
-        val widgetsAccountData = accountDataDataSource.getLiveAccountDataEvent(UserAccountDataTypes.TYPE_WIDGETS)
+        val widgetsAccountData = userAccountDataDataSource.getLiveAccountDataEvent(UserAccountDataTypes.TYPE_WIDGETS)
         return Transformations.map(widgetsAccountData) {
             it.getOrNull()?.mapToWidgets(widgetTypes, excludedTypes).orEmpty()
         }
@@ -146,7 +146,7 @@ internal class WidgetManager @Inject constructor(private val integrationManager:
             widgetTypes: Set<String>? = null,
             excludedTypes: Set<String>? = null
     ): List<Widget> {
-        val widgetsAccountData = accountDataDataSource.getAccountDataEvent(UserAccountDataTypes.TYPE_WIDGETS) ?: return emptyList()
+        val widgetsAccountData = userAccountDataDataSource.getAccountDataEvent(UserAccountDataTypes.TYPE_WIDGETS) ?: return emptyList()
         return widgetsAccountData.mapToWidgets(widgetTypes, excludedTypes)
     }
 

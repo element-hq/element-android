@@ -18,8 +18,6 @@ package im.vector.app.features.crypto.verification.epoxy
 
 import android.content.Context
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
@@ -27,6 +25,7 @@ import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
+import im.vector.app.databinding.ItemEmojiVerifBinding
 import me.gujun.android.span.Span
 import me.gujun.android.span.image
 import me.gujun.android.span.span
@@ -68,16 +67,18 @@ abstract class BottomSheetVerificationEmojisItem : VectorEpoxyModel<BottomSheetV
     }
 
     private fun bindEmojiView(view: ViewGroup, rep: EmojiRepresentation) {
-        rep.drawableRes?.let {
-            view.findViewById<TextView>(R.id.item_emoji_tv).isVisible = false
-            view.findViewById<ImageView>(R.id.item_emoji_image).isVisible = true
-            view.findViewById<ImageView>(R.id.item_emoji_image).setImageDrawable(ContextCompat.getDrawable(view.context, it))
-        } ?: run {
-            view.findViewById<TextView>(R.id.item_emoji_tv).isVisible = true
-            view.findViewById<ImageView>(R.id.item_emoji_image).isVisible = false
-            view.findViewById<TextView>(R.id.item_emoji_tv).text = rep.emoji
+        val views = ItemEmojiVerifBinding.bind(view)
+        val drawableRes = rep.drawableRes
+        if (drawableRes != null) {
+            views.itemEmojiTv.isVisible = false
+            views.itemEmojiImage.isVisible = true
+            views.itemEmojiImage.setImageDrawable(ContextCompat.getDrawable(view.context, drawableRes))
+        } else {
+            views.itemEmojiTv.isVisible = true
+            views.itemEmojiImage.isVisible = false
+            views.itemEmojiTv.text = rep.emoji
         }
-        view.findViewById<TextView>(R.id.item_emoji_name_tv).setText(rep.nameResId)
+        views.itemEmojiNameTv.setText(rep.nameResId)
     }
 
     class Holder : VectorEpoxyHolder() {

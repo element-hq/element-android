@@ -60,8 +60,7 @@ data class MessageFileContent(
 ) : MessageWithAttachmentContent {
 
     override val mimeType: String?
-        get() = encryptedFileInfo?.mimetype
-                ?: info?.mimeType
+        get() = info?.mimeType
                 ?: MimeTypeMap.getFileExtensionFromUrl(filename ?: body)?.let { extension ->
                     MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension)
                 }

@@ -5,63 +5,68 @@
     android:id="@+id/rootConstraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?riotx_background">
+    android:background="?android:colorBackground">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/roomSettingsToolbar"
-        style="@style/VectorToolbarStyle"
-        android:layout_width="0dp"
-        android:layout_height="?actionBarSize"
-        android:elevation="4dp"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/roomSettingsToolbarContentView"
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/roomSettingsToolbar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="?actionBarSize">
 
-            <ImageView
-                android:id="@+id/roomSettingsToolbarAvatarImageView"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:contentDescription="@string/avatar"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:src="@sample/room_round_avatars" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/roomSettingsToolbarContentView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-            <im.vector.app.core.ui.views.ShieldImageView
-                android:id="@+id/roomSettingsDecorationToolbarAvatarImageView"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                app:layout_constraintCircle="@+id/roomSettingsToolbarAvatarImageView"
-                app:layout_constraintCircleAngle="135"
-                app:layout_constraintCircleRadius="20dp"
-                tools:ignore="MissingConstraints" />
+                <ImageView
+                    android:id="@+id/roomSettingsToolbarAvatarImageView"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:contentDescription="@string/avatar"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:src="@sample/room_round_avatars" />
 
-            <TextView
-                android:id="@+id/roomSettingsToolbarTitleView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:textColor="?vctr_toolbar_primary_text_color"
-                android:textSize="18sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/roomSettingsToolbarAvatarImageView"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="@sample/rooms.json/data/name" />
+                <im.vector.app.core.ui.views.ShieldImageView
+                    android:id="@+id/roomSettingsDecorationToolbarAvatarImageView"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    app:layout_constraintCircle="@+id/roomSettingsToolbarAvatarImageView"
+                    app:layout_constraintCircleAngle="135"
+                    app:layout_constraintCircleRadius="20dp"
+                    tools:ignore="MissingConstraints" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                <TextView
+                    android:id="@+id/roomSettingsToolbarTitleView"
+                    style="@style/Widget.Vector.TextView.HeadlineMedium"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textColor="?vctr_content_primary"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/roomSettingsToolbarAvatarImageView"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="@sample/rooms.json/data/name" />
 
-    </androidx.appcompat.widget.Toolbar>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.appbar.MaterialToolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/coordinatorLayout"
@@ -70,7 +75,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/roomSettingsToolbar">
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/roomSettingsRecyclerView"
@@ -82,7 +87,6 @@
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/searchViewAppBarLayout"
-            style="@style/VectorAppBarLayoutStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:elevation="4dp"
@@ -97,7 +101,6 @@
 
                 <androidx.appcompat.widget.SearchView
                     android:id="@+id/searchView"
-                    style="@style/VectorSearchView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"

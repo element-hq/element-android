@@ -22,7 +22,6 @@ import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
@@ -33,12 +32,12 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
-import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.ButtonStateView
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.core.utils.toast
 import im.vector.app.databinding.BottomSheetInvitedToSpaceBinding
 import im.vector.app.features.home.AvatarRenderer
+import im.vector.app.features.matrixto.SpaceCardRenderer
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
@@ -60,6 +59,9 @@ class SpaceInviteBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetIn
     @Inject
     lateinit var avatarRenderer: AvatarRenderer
 
+    @Inject
+    lateinit var spaceCardRenderer: SpaceCardRenderer
+
     private val viewModel: SpaceInviteBottomSheetViewModel by fragmentViewModel(SpaceInviteBottomSheetViewModel::class)
 
     @Inject lateinit var viewModelFactory: SpaceInviteBottomSheetViewModel.Factory
@@ -77,24 +79,16 @@ class SpaceInviteBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetIn
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        views.spaceCard.matrixToCardMainButton.callback = object : ButtonStateView.Callback {
-            override fun onButtonClicked() {
-                // quick local echo
-                views.spaceCard.matrixToCardMainButton.render(ButtonStateView.State.Loading)
-                views.spaceCard.matrixToCardSecondaryButton.button.isEnabled = false
-                viewModel.handle(SpaceInviteBottomSheetAction.DoJoin)
-            }
-
-            override fun onRetryClicked() = onButtonClicked()
+        views.spaceCard.matrixToCardMainButton.commonClicked = {
+            // quick local echo
+            views.spaceCard.matrixToCardMainButton.render(ButtonStateView.State.Loading)
+            views.spaceCard.matrixToCardSecondaryButton.button.isEnabled = false
+            viewModel.handle(SpaceInviteBottomSheetAction.DoJoin)
         }
-        views.spaceCard.matrixToCardSecondaryButton.callback = object : ButtonStateView.Callback {
-            override fun onButtonClicked() {
-                views.spaceCard.matrixToCardMainButton.button.isEnabled = false
-                views.spaceCard.matrixToCardSecondaryButton.render(ButtonStateView.State.Loading)
-                viewModel.handle(SpaceInviteBottomSheetAction.DoReject)
-            }
-
-            override fun onRetryClicked() = onButtonClicked()
+        views.spaceCard.matrixToCardSecondaryButton.commonClicked = {
+            views.spaceCard.matrixToCardMainButton.button.isEnabled = false
+            views.spaceCard.matrixToCardSecondaryButton.render(ButtonStateView.State.Loading)
+            viewModel.handle(SpaceInviteBottomSheetAction.DoReject)
         }
 
         viewModel.observeViewEvents {
@@ -133,12 +127,7 @@ class SpaceInviteBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetIn
             views.inviterMxid.isVisible = false
         }
 
-        views.spaceCard.matrixToCardContentVisibility.isVisible = true
-        summary?.toMatrixItem()?.let { avatarRenderer.renderSpace(it, views.spaceCard.matrixToCardAvatar) }
-        views.spaceCard.matrixToCardNameText.text = summary?.displayName
-        views.spaceCard.matrixToBetaTag.isVisible = true
-        views.spaceCard.matrixToCardAliasText.setTextOrHide(summary?.canonicalAlias)
-        views.spaceCard.matrixToCardDescText.setTextOrHide(summary?.topic)
+        spaceCardRenderer.render(summary, state.peopleYouKnow.invoke().orEmpty(), null, views.spaceCard)
 
         views.spaceCard.matrixToCardMainButton.button.text = getString(R.string.accept)
         views.spaceCard.matrixToCardSecondaryButton.button.text = getString(R.string.decline)
@@ -147,15 +136,15 @@ class SpaceInviteBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetIn
             Uninitialized -> {
                 views.spaceCard.matrixToCardMainButton.render(ButtonStateView.State.Button)
             }
-            is Loading -> {
+            is Loading    -> {
                 views.spaceCard.matrixToCardMainButton.render(ButtonStateView.State.Loading)
                 views.spaceCard.matrixToCardSecondaryButton.button.isEnabled = false
             }
-            is Success -> {
+            is Success    -> {
                 interactionListener?.spaceInviteBottomSheetOnAccept(inviteArgs.spaceId)
                 dismiss()
             }
-            is Fail -> {
+            is Fail       -> {
                 views.spaceCard.matrixToCardMainButton.render(ButtonStateView.State.Error)
                 views.spaceCard.matrixToCardSecondaryButton.button.isEnabled = true
             }
@@ -165,52 +154,18 @@ class SpaceInviteBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetIn
             Uninitialized -> {
                 views.spaceCard.matrixToCardSecondaryButton.render(ButtonStateView.State.Button)
             }
-            is Loading -> {
+            is Loading    -> {
                 views.spaceCard.matrixToCardSecondaryButton.render(ButtonStateView.State.Loading)
                 views.spaceCard.matrixToCardMainButton.button.isEnabled = false
             }
-            is Success -> {
+            is Success    -> {
                 interactionListener?.spaceInviteBottomSheetOnDecline(inviteArgs.spaceId)
                 dismiss()
             }
-            is Fail -> {
+            is Fail       -> {
                 views.spaceCard.matrixToCardSecondaryButton.render(ButtonStateView.State.Error)
                 views.spaceCard.matrixToCardSecondaryButton.button.isEnabled = true
             }
-        }
-
-        val memberCount = summary?.otherMemberIds?.size ?: 0
-        if (memberCount != 0) {
-            views.spaceCard.matrixToMemberPills.isVisible = true
-            views.spaceCard.spaceChildMemberCountText.text = resources.getQuantityString(R.plurals.room_title_members, memberCount, memberCount)
-        } else {
-            // hide the pill
-            views.spaceCard.matrixToMemberPills.isVisible = false
-        }
-
-        val peopleYouKnow = state.peopleYouKnow.invoke().orEmpty()
-
-        val images = listOf(
-                views.spaceCard.knownMember1,
-                views.spaceCard.knownMember2,
-                views.spaceCard.knownMember3,
-                views.spaceCard.knownMember4,
-                views.spaceCard.knownMember5
-        ).onEach { it.isGone = true }
-
-        if (peopleYouKnow.isEmpty()) {
-            views.spaceCard.peopleYouMayKnowText.isVisible = false
-        } else {
-            peopleYouKnow.forEachIndexed { index, item ->
-                images[index].isVisible = true
-                avatarRenderer.render(item.toMatrixItem(), images[index])
-            }
-            views.spaceCard.peopleYouMayKnowText.setTextOrHide(
-                    resources.getQuantityString(R.plurals.space_people_you_know,
-                            peopleYouKnow.count(),
-                            peopleYouKnow.count()
-                    )
-            )
         }
     }
 

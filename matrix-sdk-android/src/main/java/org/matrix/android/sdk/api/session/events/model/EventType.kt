@@ -31,9 +31,7 @@ object EventType {
     const val TYPING = "m.typing"
     const val REDACTION = "m.room.redaction"
     const val RECEIPT = "m.receipt"
-    const val TAG = "m.tag"
     const val ROOM_KEY = "m.room_key"
-    const val FULLY_READ = "m.fully_read"
     const val PLUMBING = "m.room.plumbing"
     const val BOT_OPTIONS = "m.room.bot.options"
     const val PREVIEW_URLS = "org.matrix.room.preview_urls"
@@ -78,6 +76,8 @@ object EventType {
     const val CALL_NEGOTIATE = "m.call.negotiate"
     const val CALL_REJECT = "m.call.reject"
     const val CALL_HANGUP = "m.call.hangup"
+    const val CALL_ASSERTED_IDENTITY = "m.call.asserted_identity"
+    const val CALL_ASSERTED_IDENTITY_PREFIX = "org.matrix.call.asserted_identity"
 
     // This type is not processed by the client, just sent to the server
     const val CALL_REPLACES = "m.call.replaces"

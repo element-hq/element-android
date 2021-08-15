@@ -4,19 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?riotx_background"
+    android:background="?android:colorBackground"
     android:padding="16dp">
 
     <TextView
         android:id="@+id/itemErrorRetryText"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/riotx_notice"
+        android:textColor="?colorError"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Error" />
 
-    <com.google.android.material.button.MaterialButton
+    <Button
         android:id="@+id/itemErrorRetryButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

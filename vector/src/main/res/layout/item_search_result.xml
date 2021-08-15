@@ -19,6 +19,7 @@
 
     <TextView
         android:id="@+id/messageMemberNameView"
+        style="@style/Widget.Vector.TextView.Subtitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -27,8 +28,7 @@
         android:layout_marginEnd="4dp"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textColor="?riotx_text_primary"
-        android:textSize="15sp"
+        android:textColor="?vctr_content_primary"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/messageTimeView"
         app:layout_constraintStart_toEndOf="@+id/messageAvatarImageView"
@@ -37,19 +37,20 @@
 
     <TextView
         android:id="@+id/messageTimeView"
+        style="@style/Widget.Vector.TextView.Caption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/messageMemberNameView"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:textColor="?riotx_text_secondary"
-        android:textSize="12sp"
+        android:textColor="?vctr_content_secondary"
         app:layout_constraintBottom_toBottomOf="@+id/messageMemberNameView"
         app:layout_constraintEnd_toEndOf="parent"
         tools:text="@tools:sample/date/hhmm" />
 
     <TextView
         android:id="@+id/messageContentView"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"

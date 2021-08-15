@@ -11,18 +11,18 @@
         android:layout_gravity="center_vertical"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:background="?riotx_list_bottom_sheet_divider_color" />
+        android:background="?vctr_content_tertiary" />
 
     <TextView
         android:id="@+id/itemDayTextView"
+        style="@style/Widget.Vector.TextView.Subtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:background="?android:attr/windowBackground"
+        android:background="?android:colorBackground"
         android:paddingStart="24dp"
         android:paddingEnd="24dp"
-        android:textColor="?riotx_header_panel_text_secondary"
-        android:textSize="15sp"
+        android:textColor="?vctr_content_tertiary"
         tools:text="@tools:sample/date/day_of_week" />
 
 </FrameLayout>

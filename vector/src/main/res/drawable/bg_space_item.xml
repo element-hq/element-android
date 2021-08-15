@@ -11,7 +11,7 @@
             <item android:gravity="center_vertical|start" >
                 <shape>
                     <size android:width="4dp" android:height="40dp" />
-                    <solid android:color="?colorAccent" />
+                    <solid android:color="?colorSecondary" />
                     <corners android:bottomRightRadius="8dp" android:topRightRadius="8dp" />
                 </shape>
             </item>
@@ -20,7 +20,7 @@
 
     <item>
         <shape>
-            <solid android:color="@android:color/transparent" />
+            <solid android:color="?android:colorBackground" />
         </shape>
     </item>
 

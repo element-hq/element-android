@@ -25,7 +25,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:background="?riotx_bottom_nav_background_color"
+        android:background="?colorSurface"
         android:orientation="horizontal"
         android:padding="16dp"
         android:visibility="gone"
@@ -40,12 +40,13 @@
 
         <TextView
             android:id="@+id/widgetErrorText"
+            style="@style/Widget.Vector.TextView.Subtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginStart="@dimen/layout_horizontal_margin"
             android:layout_marginEnd="@dimen/layout_horizontal_margin"
-            android:textColor="?riotx_text_primary"
+            android:textColor="?vctr_content_primary"
             android:textStyle="bold"
             tools:text="Fail to load widget " />
     </LinearLayout>

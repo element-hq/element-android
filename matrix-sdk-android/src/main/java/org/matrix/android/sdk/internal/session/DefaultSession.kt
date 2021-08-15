@@ -29,7 +29,7 @@ import org.matrix.android.sdk.api.pushrules.PushRuleService
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.SessionLifecycleObserver
 import org.matrix.android.sdk.api.session.account.AccountService
-import org.matrix.android.sdk.api.session.accountdata.AccountDataService
+import org.matrix.android.sdk.api.session.accountdata.SessionAccountDataService
 import org.matrix.android.sdk.api.session.cache.CacheService
 import org.matrix.android.sdk.api.session.call.CallSignalingService
 import org.matrix.android.sdk.api.session.content.ContentUploadStateTracker
@@ -43,6 +43,7 @@ import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilitiesServi
 import org.matrix.android.sdk.api.session.initsync.InitialSyncProgressService
 import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerService
 import org.matrix.android.sdk.api.session.media.MediaService
+import org.matrix.android.sdk.api.session.openid.OpenIdService
 import org.matrix.android.sdk.api.session.permalinks.PermalinkService
 import org.matrix.android.sdk.api.session.profile.ProfileService
 import org.matrix.android.sdk.api.session.pushers.PushersService
@@ -116,7 +117,7 @@ internal class DefaultSession @Inject constructor(
         private val contentDownloadStateTracker: ContentDownloadStateTracker,
         private val initialSyncProgressService: Lazy<InitialSyncProgressService>,
         private val homeServerCapabilitiesService: Lazy<HomeServerCapabilitiesService>,
-        private val accountDataService: Lazy<AccountDataService>,
+        private val accountDataService: Lazy<SessionAccountDataService>,
         private val _sharedSecretStorageService: Lazy<SharedSecretStorageService>,
         private val accountService: Lazy<AccountService>,
         private val eventService: Lazy<EventService>,
@@ -125,9 +126,11 @@ internal class DefaultSession @Inject constructor(
         private val thirdPartyService: Lazy<ThirdPartyService>,
         private val callSignalingService: Lazy<CallSignalingService>,
         private val spaceService: Lazy<SpaceService>,
+        private val openIdService: Lazy<OpenIdService>,
         @UnauthenticatedWithCertificate
         private val unauthenticatedWithCertificateOkHttpClient: Lazy<OkHttpClient>
 ) : Session,
+        GlobalErrorHandler.Listener,
         RoomService by roomService.get(),
         RoomDirectoryService by roomDirectoryService.get(),
         GroupService by groupService.get(),
@@ -142,9 +145,7 @@ internal class DefaultSession @Inject constructor(
         SecureStorageService by secureStorageService.get(),
         HomeServerCapabilitiesService by homeServerCapabilitiesService.get(),
         ProfileService by profileService.get(),
-        AccountDataService by accountDataService.get(),
-        AccountService by accountService.get(),
-        GlobalErrorHandler.Listener {
+        AccountService by accountService.get() {
 
     override val sharedSecretStorageService: SharedSecretStorageService
         get() = _sharedSecretStorageService.get()
@@ -162,16 +163,16 @@ internal class DefaultSession @Inject constructor(
     override fun open() {
         assert(!isOpen)
         isOpen = true
+        globalErrorHandler.listener = this
         cryptoService.get().ensureDevice()
         uiHandler.post {
             lifecycleObservers.forEach {
                 it.onSessionStarted(this)
             }
-            sessionListeners.dispatch {
-                it.onSessionStarted(this)
+            sessionListeners.dispatch { _, listener ->
+                listener.onSessionStarted(this)
             }
         }
-        globalErrorHandler.listener = this
     }
 
     override fun requireBackgroundSync() {
@@ -211,13 +212,13 @@ internal class DefaultSession @Inject constructor(
         // timelineEventDecryptor.destroy()
         uiHandler.post {
             lifecycleObservers.forEach { it.onSessionStopped(this) }
-            sessionListeners.dispatch {
-                it.onSessionStopped(this)
+            sessionListeners.dispatch { _, listener ->
+                listener.onSessionStopped(this)
             }
         }
         cryptoService.get().close()
-        isOpen = false
         globalErrorHandler.listener = null
+        isOpen = false
     }
 
     override fun getSyncStateLive() = getSyncThread().liveState()
@@ -241,8 +242,8 @@ internal class DefaultSession @Inject constructor(
             lifecycleObservers.forEach {
                 it.onClearCache(this)
             }
-            sessionListeners.dispatch {
-                it.onClearCache(this)
+            sessionListeners.dispatch { _, listener ->
+                listener.onClearCache(this)
             }
         }
         withContext(NonCancellable) {
@@ -252,8 +253,8 @@ internal class DefaultSession @Inject constructor(
     }
 
     override fun onGlobalError(globalError: GlobalError) {
-        sessionListeners.dispatch {
-            it.onGlobalError(this, globalError)
+        sessionListeners.dispatch { _, listener ->
+            listener.onGlobalError(this, globalError)
         }
     }
 
@@ -289,6 +290,10 @@ internal class DefaultSession @Inject constructor(
 
     override fun spaceService(): SpaceService = spaceService.get()
 
+    override fun openIdService(): OpenIdService = openIdService.get()
+
+    override fun accountDataService(): SessionAccountDataService = accountDataService.get()
+
     override fun getOkHttpClient(): OkHttpClient {
         return unauthenticatedWithCertificateOkHttpClient.get()
     }
@@ -308,7 +313,7 @@ internal class DefaultSession @Inject constructor(
 
     override fun getUiaSsoFallbackUrl(authenticationSessionId: String): String {
         val hsBas = sessionParams.homeServerConnectionConfig
-                .homeServerUri
+                .homeServerUriBase
                 .toString()
                 .trim { it == '/' }
         return buildString {

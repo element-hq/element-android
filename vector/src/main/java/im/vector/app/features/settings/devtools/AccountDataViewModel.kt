@@ -43,7 +43,7 @@ class AccountDataViewModel @AssistedInject constructor(@Assisted initialState: A
     : VectorViewModel<AccountDataViewState, AccountDataAction, EmptyViewEvents>(initialState) {
 
     init {
-        session.rx().liveAccountData(emptySet())
+        session.rx().liveUserAccountData(emptySet())
                 .execute {
                     copy(accountData = it)
                 }
@@ -57,7 +57,7 @@ class AccountDataViewModel @AssistedInject constructor(@Assisted initialState: A
 
     private fun handleDeleteAccountData(action: AccountDataAction.DeleteAccountData) {
         viewModelScope.launch {
-            session.updateAccountData(action.type, emptyMap())
+            session.accountDataService().updateUserAccountData(action.type, emptyMap())
         }
     }
 

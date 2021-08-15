@@ -16,7 +16,7 @@
 package im.vector.app.core.dialogs
 
 import android.app.Activity
-import androidx.appcompat.app.AlertDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.resources.StringProvider
@@ -50,7 +50,15 @@ class UnrecognizedCertificateDialog @Inject constructor(
         val userId = activeSessionHolder.getSafeActiveSession()?.myUserId
         val hsConfig = activeSessionHolder.getSafeActiveSession()?.sessionParams?.homeServerConnectionConfig ?: return
 
-        internalShow(activity, unrecognizedFingerprint, true, callback, userId, hsConfig.homeServerUri.toString(), hsConfig.allowedFingerprints.isNotEmpty())
+        internalShow(
+                activity = activity,
+                unrecognizedFingerprint = unrecognizedFingerprint,
+                existing = true,
+                callback = callback,
+                userId = userId,
+                homeServerUrl = hsConfig.homeServerUriBase.toString(),
+                homeServerConnectionConfigHasFingerprints = hsConfig.allowedFingerprints.isNotEmpty()
+        )
     }
 
     /**
@@ -60,7 +68,15 @@ class UnrecognizedCertificateDialog @Inject constructor(
              unrecognizedFingerprint: Fingerprint,
              homeServerUrl: String,
              callback: Callback) {
-        internalShow(activity, unrecognizedFingerprint, false, callback, null, homeServerUrl, false)
+        internalShow(
+                activity = activity,
+                unrecognizedFingerprint = unrecognizedFingerprint,
+                existing = false,
+                callback = callback,
+                userId = null,
+                homeServerUrl = homeServerUrl,
+                homeServerConnectionConfigHasFingerprints = false
+        )
     }
 
     /**
@@ -92,7 +108,7 @@ class UnrecognizedCertificateDialog @Inject constructor(
             }
         }
 
-        val builder = AlertDialog.Builder(activity)
+        val builder = MaterialAlertDialogBuilder(activity)
         val inflater = activity.layoutInflater
         val layout = inflater.inflate(R.layout.dialog_ssl_fingerprint, null)
         val views = DialogSslFingerprintBinding.bind(layout)

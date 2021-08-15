@@ -23,6 +23,8 @@ import android.widget.TextView
 import androidx.annotation.IdRes
 import androidx.core.view.isVisible
 import im.vector.app.R
+import im.vector.app.core.epoxy.ClickListener
+import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.ui.views.ShieldImageView
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.MessageColorProvider
@@ -94,7 +96,7 @@ abstract class AbsBaseMessageItem<H : AbsBaseMessageItem.Holder> : BaseEventItem
             }
         }
 
-        holder.view.setOnClickListener(baseAttributes.itemClickListener)
+        holder.view.onClick(baseAttributes.itemClickListener)
         holder.view.setOnLongClickListener(baseAttributes.itemLongClickListener)
     }
 
@@ -124,9 +126,9 @@ abstract class AbsBaseMessageItem<H : AbsBaseMessageItem.Holder> : BaseEventItem
         val avatarRenderer: AvatarRenderer
         val messageColorProvider: MessageColorProvider
         val itemLongClickListener: View.OnLongClickListener?
-        val itemClickListener: View.OnClickListener?
+        val itemClickListener: ClickListener?
 
-        //        val memberClickListener: View.OnClickListener?
+        //        val memberClickListener: ClickListener?
         val reactionPillCallback: TimelineEventController.ReactionPillCallback?
 
         //        val avatarCallback: TimelineEventController.AvatarCallback?
@@ -139,7 +141,7 @@ abstract class AbsBaseMessageItem<H : AbsBaseMessageItem.Holder> : BaseEventItem
 //            override val avatarRenderer: AvatarRenderer,
 //            override val colorProvider: ColorProvider,
 //            override val itemLongClickListener: View.OnLongClickListener? = null,
-//            override val itemClickListener: View.OnClickListener? = null,
+//            override val itemClickListener: ClickListener? = null,
 //            override val reactionPillCallback: TimelineEventController.ReactionPillCallback? = null,
 //            override val readReceiptsCallback: TimelineEventController.ReadReceiptsCallback? = null
 //    ) : Attributes

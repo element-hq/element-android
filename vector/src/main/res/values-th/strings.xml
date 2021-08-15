@@ -300,9 +300,9 @@
     <string name="room_participants_action_set_admin">ทำให้เป็นผู้ดูแล</string>
     <string name="room_participants_action_set_moderator">ทำให้เป็นผู้ควบคุม</string>
     <string name="room_participants_action_remove">เอาออกจากห้องนี้</string>
-    <string name="room_title_one_member">1 สมาชิก</string>
+    <string name="room_title_one_member">สมาชิก 1 คน</string>
     <plurals name="room_title_members">
-        <item quantity="other">%d สมาชิก</item>
+        <item quantity="other">สมาชิก %d คน</item>
     </plurals>
     <string name="option_send_files">ส่งไฟล์</string>
     <string name="user_directory_header">ไดเรกทอรีผู้ใช้</string>
@@ -320,4 +320,14 @@
     <string name="room_permissions_ban_users">ห้ามผู้ใช้</string>
     <string name="ssl_fingerprint_hash">ลายนิ้วมือ (%s):</string>
     <string name="room_participants_action_ignore_title">เพิกเฉยผู้ใช้</string>
+    <string name="settings_fail_to_update_password">ไม่สามารถอัปเดตรหัสผ่าน</string>
+    <string name="settings_change_password_submit">อัปเดตรหัสผ่าน</string>
+    <string name="settings_confirm_password">ยืนยันรหัสผ่านใหม่</string>
+    <string name="settings_new_password">รหัสผ่านใหม่</string>
+    <string name="settings_old_password">รหัสผ่านปัจจุบัน</string>
+    <string name="settings_select_language">เลือกภาษา</string>
+    <string name="settings_interface_language">ภาษา</string>
+    <string name="dialog_edit_hint">ค่าใหม่</string>
+    <string name="action_switch">สลับ</string>
+    <string name="settings_category_room_directory">ไดเรกทอรีห้อง</string>
 </resources>

@@ -94,7 +94,7 @@ internal class DefaultSyncTask @Inject constructor(
             userStore.createOrUpdate(userId)
             initialSyncProgressService.startRoot(InitSyncStep.ImportingAccount, 100)
         }
-        // Maybe refresh the home server capabilities data we know
+        // Maybe refresh the homeserver capabilities data we know
         getHomeServerCapabilitiesTask.execute(GetHomeServerCapabilitiesTask.Params(forceRefresh = false))
 
         val readTimeOut = (params.timeout + TIMEOUT_MARGIN).coerceAtLeast(TimeOutInterceptor.DEFAULT_LONG_TIMEOUT)

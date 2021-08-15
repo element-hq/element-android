@@ -38,7 +38,7 @@ internal class DefaultSessionCreator @Inject constructor(
 ) : SessionCreator {
 
     /**
-     * Credentials can affect the homeServerConnectionConfig, override home server url and/or
+     * Credentials can affect the homeServerConnectionConfig, override homeserver url and/or
      * identity server url if provided in the credentials
      */
     override suspend fun createSession(credentials: Credentials, homeServerConnectionConfig: HomeServerConnectionConfig): Session {
@@ -49,6 +49,8 @@ internal class DefaultSessionCreator @Inject constructor(
                 // remove trailing "/"
                 ?.trim { it == '/' }
                 ?.takeIf { it.isNotBlank() }
+                // It can be the same value, so in this case, do not check again the validity
+                ?.takeIf { it != homeServerConnectionConfig.homeServerUriBase.toString() }
                 ?.also { Timber.d("Overriding homeserver url to $it (will check if valid)") }
                 ?.let { Uri.parse(it) }
                 ?.takeIf {
@@ -56,7 +58,7 @@ internal class DefaultSessionCreator @Inject constructor(
                     tryOrNull {
                         isValidClientServerApiTask.execute(
                                 IsValidClientServerApiTask.Params(
-                                        homeServerConnectionConfig.copy(homeServerUri = it)
+                                        homeServerConnectionConfig.copy(homeServerUriBase = it)
                                 )
                         )
                                 .also { Timber.d("Overriding homeserver url: $it") }
@@ -66,7 +68,7 @@ internal class DefaultSessionCreator @Inject constructor(
         val sessionParams = SessionParams(
                 credentials = credentials,
                 homeServerConnectionConfig = homeServerConnectionConfig.copy(
-                        homeServerUri = overriddenUrl ?: homeServerConnectionConfig.homeServerUri,
+                        homeServerUriBase = overriddenUrl ?: homeServerConnectionConfig.homeServerUriBase,
                         identityServerUri = credentials.discoveryInformation?.identityServer?.baseURL
                                 // remove trailing "/"
                                 ?.trim { it == '/' }

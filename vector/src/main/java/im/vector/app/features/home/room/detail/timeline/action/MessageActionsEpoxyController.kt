@@ -15,19 +15,18 @@
  */
 package im.vector.app.features.home.room.detail.timeline.action
 
-import android.view.View
 import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.Success
 import im.vector.app.EmojiCompatFontProvider
 import im.vector.app.R
 import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
+import im.vector.app.core.epoxy.bottomSheetDividerItem
 import im.vector.app.core.epoxy.bottomsheet.BottomSheetQuickReactionsItem
 import im.vector.app.core.epoxy.bottomsheet.bottomSheetActionItem
 import im.vector.app.core.epoxy.bottomsheet.bottomSheetMessagePreviewItem
 import im.vector.app.core.epoxy.bottomsheet.bottomSheetQuickReactionsItem
 import im.vector.app.core.epoxy.bottomsheet.bottomSheetSendStateItem
-import im.vector.app.core.epoxy.dividerItem
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.DimensionConverter
@@ -61,19 +60,20 @@ class MessageActionsEpoxyController @Inject constructor(
     var listener: MessageActionsEpoxyControllerListener? = null
 
     override fun buildModels(state: MessageActionState) {
+        val host = this
         // Message preview
         val date = state.timelineEvent()?.root?.originServerTs
         val formattedDate = dateFormatter.format(date, DateFormatKind.MESSAGE_DETAIL)
         bottomSheetMessagePreviewItem {
             id("preview")
-            avatarRenderer(avatarRenderer)
+            avatarRenderer(host.avatarRenderer)
             matrixItem(state.informationData.matrixItem)
-            movementMethod(createLinkMovementMethod(listener))
-            imageContentRenderer(imageContentRenderer)
-            data(state.timelineEvent()?.buildImageContentRendererData(dimensionConverter.dpToPx(66)))
-            userClicked { listener?.didSelectMenuAction(EventSharedAction.OpenUserProfile(state.informationData.senderId)) }
-            body(state.messageBody.linkify(listener))
-            bodyDetails(eventDetailsFormatter.format(state.timelineEvent()?.root))
+            movementMethod(createLinkMovementMethod(host.listener))
+            imageContentRenderer(host.imageContentRenderer)
+            data(state.timelineEvent()?.buildImageContentRendererData(host.dimensionConverter.dpToPx(66)))
+            userClicked { host.listener?.didSelectMenuAction(EventSharedAction.OpenUserProfile(state.informationData.senderId)) }
+            body(state.messageBody.linkify(host.listener))
+            bodyDetails(host.eventDetailsFormatter.format(state.timelineEvent()?.root))
             time(formattedDate)
         }
 
@@ -94,23 +94,23 @@ class MessageActionsEpoxyController @Inject constructor(
             bottomSheetSendStateItem {
                 id("send_state")
                 showProgress(true)
-                text(stringProvider.getString(R.string.event_status_sending_message))
+                text(host.stringProvider.getString(R.string.event_status_sending_message))
             }
         } else if (sendState == SendState.SENT) {
             bottomSheetSendStateItem {
                 id("send_state")
                 showProgress(false)
                 drawableStart(R.drawable.ic_message_sent)
-                text(stringProvider.getString(R.string.event_status_sent_message))
+                text(host.stringProvider.getString(R.string.event_status_sent_message))
             }
         }
 
         when (state.informationData.e2eDecoration) {
-            E2EDecoration.WARN_IN_CLEAR -> {
+            E2EDecoration.WARN_IN_CLEAR        -> {
                 bottomSheetSendStateItem {
                     id("e2e_clear")
                     showProgress(false)
-                    text(stringProvider.getString(R.string.unencrypted))
+                    text(host.stringProvider.getString(R.string.unencrypted))
                     drawableStart(R.drawable.ic_shield_warning_small)
                 }
             }
@@ -119,7 +119,7 @@ class MessageActionsEpoxyController @Inject constructor(
                 bottomSheetSendStateItem {
                     id("e2e_unverified")
                     showProgress(false)
-                    text(stringProvider.getString(R.string.encrypted_unverified))
+                    text(host.stringProvider.getString(R.string.encrypted_unverified))
                     drawableStart(R.drawable.ic_shield_warning_small)
                 }
             }
@@ -131,18 +131,18 @@ class MessageActionsEpoxyController @Inject constructor(
         // Quick reactions
         if (state.canReact() && state.quickStates is Success) {
             // Separator
-            dividerItem {
+            bottomSheetDividerItem {
                 id("reaction_separator")
             }
 
             bottomSheetQuickReactionsItem {
                 id("quick_reaction")
-                fontProvider(fontProvider)
+                fontProvider(host.fontProvider)
                 texts(state.quickStates()?.map { it.reaction }.orEmpty())
                 selecteds(state.quickStates.invoke().map { it.isSelected })
                 listener(object : BottomSheetQuickReactionsItem.Listener {
                     override fun didSelect(emoji: String, selected: Boolean) {
-                        listener?.didSelectMenuAction(EventSharedAction.QuickReact(state.eventId, emoji, selected))
+                        host.listener?.didSelectMenuAction(EventSharedAction.QuickReact(state.eventId, emoji, selected))
                     }
                 })
             }
@@ -150,7 +150,7 @@ class MessageActionsEpoxyController @Inject constructor(
 
         if (state.actions.isNotEmpty()) {
             // Separator
-            dividerItem {
+            bottomSheetDividerItem {
                 id("actions_separator")
             }
         }
@@ -158,7 +158,7 @@ class MessageActionsEpoxyController @Inject constructor(
         // Action
         state.actions.forEachIndexed { index, action ->
             if (action is EventSharedAction.Separator) {
-                dividerItem {
+                bottomSheetDividerItem {
                     id("separator_$index")
                 }
             } else {
@@ -168,7 +168,7 @@ class MessageActionsEpoxyController @Inject constructor(
                     textRes(action.titleRes)
                     showExpand(action is EventSharedAction.ReportContent)
                     expanded(state.expendedReportContentMenu)
-                    listener(View.OnClickListener { listener?.didSelectMenuAction(action) })
+                    listener { host.listener?.didSelectMenuAction(action) }
                     destructive(action.destructive)
                 }
 
@@ -184,7 +184,7 @@ class MessageActionsEpoxyController @Inject constructor(
                             subMenuItem(true)
                             iconRes(actionReport.iconResId)
                             textRes(actionReport.titleRes)
-                            listener(View.OnClickListener { listener?.didSelectMenuAction(actionReport) })
+                            listener { host.listener?.didSelectMenuAction(actionReport) }
                         }
                     }
                 }

@@ -20,7 +20,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
-import androidx.appcompat.widget.Toolbar
+import com.google.android.material.appbar.MaterialToolbar
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.MvRx
@@ -39,6 +39,7 @@ import im.vector.app.features.roomdirectory.RoomDirectorySharedActionViewModel
 import im.vector.app.features.roomdirectory.createroom.CreateRoomArgs
 import im.vector.app.features.roomdirectory.createroom.CreateRoomFragment
 import im.vector.app.features.roomprofile.RoomProfileArgs
+import im.vector.app.features.roomprofile.alias.RoomAliasFragment
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
@@ -155,6 +156,15 @@ class SpaceManageActivity : VectorBaseActivity<ActivitySimpleLoadingBinding>(),
                         )
                     }
                 }
+                SpaceManagedSharedViewEvents.NavigateToAliasSettings -> {
+                    args?.spaceId?.let { spaceId ->
+                        addFragmentToBackstack(
+                                R.id.simpleFragmentContainer,
+                                RoomAliasFragment::class.java,
+                                RoomProfileArgs(spaceId)
+                        )
+                    }
+                }
             }
         }
     }
@@ -169,7 +179,7 @@ class SpaceManageActivity : VectorBaseActivity<ActivitySimpleLoadingBinding>(),
 
     override fun create(initialState: SpaceManageViewState) = sharedViewModelFactory.create(initialState)
 
-    override fun configure(toolbar: Toolbar) {
+    override fun configure(toolbar: MaterialToolbar) {
         configureToolbar(toolbar)
     }
 }

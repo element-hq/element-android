@@ -10,120 +10,99 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/phoneBookToolbar"
-            style="@style/VectorToolbarStyle"
-            android:layout_width="0dp"
-            android:layout_height="?actionBarSize"
-            android:elevation="4dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/phoneBookToolbar"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="?actionBarSize">
 
-                <ImageView
-                    android:id="@+id/phoneBookClose"
-                    android:layout_width="@dimen/layout_touch_size"
-                    android:layout_height="@dimen/layout_touch_size"
-                    android:clickable="true"
-                    android:contentDescription="@string/action_close"
-                    android:focusable="true"
-                    android:foreground="?attr/selectableItemBackground"
-                    android:scaleType="center"
-                    android:src="@drawable/ic_x_18dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
-                <TextView
-                    android:id="@+id/phoneBookTitle"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:text="@string/contacts_book_title"
-                    android:textColor="?riotx_text_primary"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toEndOf="@+id/phoneBookClose"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    <ImageView
+                        android:id="@+id/phoneBookClose"
+                        android:layout_width="@dimen/layout_touch_size"
+                        android:layout_height="@dimen/layout_touch_size"
+                        android:clickable="true"
+                        android:contentDescription="@string/action_close"
+                        android:focusable="true"
+                        android:foreground="?attr/selectableItemBackground"
+                        android:scaleType="center"
+                        android:src="@drawable/ic_x_18dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:tint="?vctr_content_secondary"
+                        tools:ignore="MissingPrefix" />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    <TextView
+                        android:id="@+id/phoneBookTitle"
+                        style="@style/Widget.Vector.TextView.HeadlineMedium"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:text="@string/contacts_book_title"
+                        android:textColor="?vctr_content_primary"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toEndOf="@+id/phoneBookClose"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-        </androidx.appcompat.widget.Toolbar>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/phoneBookFilterContainer"
-            style="@style/VectorTextInputLayout"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/layout_horizontal_margin"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="@dimen/layout_horizontal_margin"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/phoneBookToolbar">
+            </com.google.android.material.appbar.MaterialToolbar>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/phoneBookFilter"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/phoneBookFilterContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/search" />
+                android:layout_marginStart="@dimen/layout_horizontal_margin"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="@dimen/layout_horizontal_margin">
 
-        </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/phoneBookFilter"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/search" />
 
-        <com.google.android.material.checkbox.MaterialCheckBox
-            android:id="@+id/phoneBookOnlyBoundContacts"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/layout_horizontal_margin"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="@dimen/layout_horizontal_margin"
-            android:text="@string/matrix_only_filter"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/phoneBookFilterContainer"
-            tools:visibility="visible" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/phoneBookSearchForMatrixContacts"
-            style="@style/VectorButtonStyleText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/layout_horizontal_margin"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="@dimen/layout_horizontal_margin"
-            android:text="@string/phone_book_perform_lookup"
-            android:visibility="gone"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/phoneBookFilterContainer"
-            tools:visibility="visible" />
+            <CheckBox
+                android:id="@+id/phoneBookOnlyBoundContacts"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/layout_horizontal_margin"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="@dimen/layout_horizontal_margin"
+                android:text="@string/matrix_only_filter"
+                android:visibility="gone"
+                tools:visibility="visible" />
 
-        <androidx.constraintlayout.widget.Barrier
-            android:id="@+id/phoneBookBottomBarrier"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:barrierDirection="bottom"
-            app:constraint_referenced_ids="phoneBookSearchForMatrixContacts,phoneBookOnlyBoundContacts" />
+            <Button
+                android:id="@+id/phoneBookSearchForMatrixContacts"
+                style="@style/Widget.Vector.Button.Text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/layout_horizontal_margin"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="@dimen/layout_horizontal_margin"
+                android:text="@string/phone_book_perform_lookup"
+                android:visibility="gone"
+                tools:visibility="visible" />
 
-        <View
-            android:id="@+id/phoneBookFilterDivider"
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_marginTop="4dp"
-            android:background="?attr/vctr_list_divider_color"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/phoneBookBottomBarrier" />
+        </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/phoneBookRecyclerView"
@@ -135,7 +114,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/phoneBookFilterDivider"
+            app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
             tools:listitem="@layout/item_contact_main" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

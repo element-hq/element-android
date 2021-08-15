@@ -34,7 +34,7 @@ import org.matrix.android.sdk.api.session.SessionLifecycleObserver
 import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.api.session.accountdata.UserAccountDataTypes
 import org.matrix.android.sdk.api.session.accountdata.UserAccountDataEvent
-import org.matrix.android.sdk.internal.session.user.accountdata.AccountDataDataSource
+import org.matrix.android.sdk.internal.session.user.accountdata.UserAccountDataDataSource
 import org.matrix.android.sdk.internal.session.user.accountdata.UpdateUserAccountDataTask
 import org.matrix.android.sdk.internal.session.widgets.helper.WidgetFactory
 import org.matrix.android.sdk.internal.session.widgets.helper.extractWidgetSequence
@@ -43,8 +43,8 @@ import javax.inject.Inject
 
 /**
  * The integration manager allows to
- *  - Get the Integration Manager that a user has explicitly set for its account (via account data)
- *  - Get the recommended/preferred Integration Manager list as defined by the HomeServer (via wellknown)
+ *  - Get the integration manager that a user has explicitly set for its account (via account data)
+ *  - Get the recommended/preferred integration manager list as defined by the homeserver (via wellknown)
  *  - Check if the user has disabled the integration manager feature
  *  - Allow / Disallow Integration manager (propagated to other riot clients)
  *
@@ -57,7 +57,7 @@ import javax.inject.Inject
 internal class IntegrationManager @Inject constructor(matrixConfiguration: MatrixConfiguration,
                                                       @SessionDatabase private val monarchy: Monarchy,
                                                       private val updateUserAccountDataTask: UpdateUserAccountDataTask,
-                                                      private val accountDataDataSource: AccountDataDataSource,
+                                                      private val accountDataDataSource: UserAccountDataDataSource,
                                                       private val widgetFactory: WidgetFactory)
     : SessionLifecycleObserver {
 

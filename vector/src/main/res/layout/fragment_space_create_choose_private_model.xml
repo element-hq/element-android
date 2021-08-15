@@ -13,23 +13,23 @@
 
         <TextView
             android:id="@+id/headerText"
+            style="@style/Widget.Vector.TextView.HeadlineMedium"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@string/create_spaces_who_are_you_working_with"
-            android:textColor="?riotx_text_primary"
-            android:textSize="20sp"
+            android:textColor="?vctr_content_primary"
             android:textStyle="bold"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/accessInfoHelpText"
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:gravity="center"
-            android:textColor="?riotx_text_secondary"
-            android:textSize="14sp"
+            android:textColor="?vctr_content_secondary"
             app:layout_constraintTop_toBottomOf="@id/headerText"
             tools:text="@string/create_spaces_make_sure_access" />
 
@@ -39,7 +39,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             app:icon="@drawable/ic_user_round"
-            app:iconTint="?riotx_text_secondary"
+            app:iconTint="?vctr_content_secondary"
             app:layout_constraintBottom_toTopOf="@id/teammatesButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -52,7 +52,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             app:icon="@drawable/ic_member_small"
-            app:iconTint="?riotx_text_secondary"
+            app:iconTint="?vctr_content_secondary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?riotx_background">
+    android:background="?android:colorBackground">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         style="@style/LoginFormScrollView"
@@ -20,24 +20,26 @@
 
         <TextView
             android:id="@+id/loginTermsTitle"
-            style="@style/TextAppearance.Vector.Login.Title"
+            style="@style/Widget.Vector.TextView.Title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="36dp"
             android:paddingStart="36dp"
             android:paddingEnd="36dp"
             android:text="@string/login_terms_title"
+            android:textColor="?vctr_content_primary"
             app:layout_constraintTop_toBottomOf="@id/loginLogo" />
 
         <TextView
             android:id="@+id/loginTermsNotice"
-            style="@style/TextAppearance.Vector.Login.Text.Small"
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:paddingStart="36dp"
             android:paddingEnd="36dp"
             android:text="@string/auth_accept_policies"
+            android:textColor="?vctr_content_secondary"
             app:layout_constraintTop_toBottomOf="@+id/loginTermsTitle" />
 
         <androidx.recyclerview.widget.RecyclerView
@@ -50,9 +52,11 @@
             app:layout_constraintTop_toBottomOf="@+id/loginTermsNotice"
             tools:listitem="@layout/item_policy" />
 
-        <com.google.android.material.button.MaterialButton
+        <Button
             android:id="@+id/loginTermsSubmit"
-            style="@style/Style.Vector.Login.Button"
+            style="@style/Widget.Vector.Button.Login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginEnd="36dp"
             android:text="@string/accept"
             app:layout_constraintBottom_toBottomOf="parent"

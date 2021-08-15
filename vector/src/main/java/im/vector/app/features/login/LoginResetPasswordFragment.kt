@@ -20,15 +20,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.isEmail
-import im.vector.app.core.extensions.showPassword
+import im.vector.app.core.extensions.hidePassword
 import im.vector.app.core.extensions.toReducedUrl
 import im.vector.app.databinding.FragmentLoginResetPasswordBinding
 import io.reactivex.Observable
@@ -41,8 +41,6 @@ import javax.inject.Inject
  */
 class LoginResetPasswordFragment @Inject constructor() : AbstractLoginFragment<FragmentLoginResetPasswordBinding>() {
 
-    private var passwordShown = false
-
     // Show warning only once
     private var showWarning = true
 
@@ -54,11 +52,10 @@ class LoginResetPasswordFragment @Inject constructor() : AbstractLoginFragment<F
         super.onViewCreated(view, savedInstanceState)
 
         setupSubmitButton()
-        setupPasswordReveal()
     }
 
     private fun setupUi(state: LoginViewState) {
-        views.resetPasswordTitle.text = getString(R.string.login_reset_password_on, state.homeServerUrl.toReducedUrl())
+        views.resetPasswordTitle.text = getString(R.string.login_reset_password_on, state.homeServerUrlFromUser.toReducedUrl())
     }
 
     private fun setupSubmitButton() {
@@ -86,7 +83,7 @@ class LoginResetPasswordFragment @Inject constructor() : AbstractLoginFragment<F
         if (showWarning) {
             showWarning = false
             // Display a warning as Riot-Web does first
-            AlertDialog.Builder(requireActivity())
+            MaterialAlertDialogBuilder(requireActivity())
                     .setTitle(R.string.login_reset_password_warning_title)
                     .setMessage(R.string.login_reset_password_warning_content)
                     .setPositiveButton(R.string.login_reset_password_warning_submit) { _, _ ->
@@ -112,23 +109,6 @@ class LoginResetPasswordFragment @Inject constructor() : AbstractLoginFragment<F
         views.passwordFieldTil.error = null
     }
 
-    private fun setupPasswordReveal() {
-        passwordShown = false
-
-        views.passwordReveal.setOnClickListener {
-            passwordShown = !passwordShown
-
-            renderPasswordField()
-        }
-
-        renderPasswordField()
-    }
-
-    private fun renderPasswordField() {
-        views.passwordField.showPassword(passwordShown)
-        views.passwordReveal.render(passwordShown)
-    }
-
     override fun resetViewModel() {
         loginViewModel.handle(LoginAction.ResetResetPassword)
     }
@@ -139,8 +119,7 @@ class LoginResetPasswordFragment @Inject constructor() : AbstractLoginFragment<F
         when (state.asyncResetPassword) {
             is Loading -> {
                 // Ensure new password is hidden
-                passwordShown = false
-                renderPasswordField()
+                views.passwordField.hidePassword()
             }
             is Fail    -> {
                 views.resetPasswordEmailTil.error = errorFormatter.toHumanReadable(state.asyncResetPassword.error)

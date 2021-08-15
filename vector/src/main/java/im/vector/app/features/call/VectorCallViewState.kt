@@ -39,19 +39,26 @@ data class VectorCallViewState(
         val availableDevices: Set<CallAudioManager.Device> = emptySet(),
         val callState: Async<CallState> = Uninitialized,
         val otherKnownCallInfo: CallInfo? = null,
-        val callInfo: CallInfo = CallInfo(callId),
+        val callInfo: CallInfo? = null,
         val formattedDuration: String = "",
-        val canOpponentBeTransferred: Boolean = false
+        val canOpponentBeTransferred: Boolean = false,
+        val transferee: TransfereeState = TransfereeState.NoTransferee
 ) : MvRxState {
+
+    sealed class TransfereeState {
+        object NoTransferee : TransfereeState()
+        data class KnownTransferee(val name: String) : TransfereeState()
+        object UnknownTransferee : TransfereeState()
+    }
 
     data class CallInfo(
             val callId: String,
-            val otherUserItem: MatrixItem? = null
+            val opponentUserItem: MatrixItem? = null
     )
 
-    constructor(callArgs: CallArgs): this(
+    constructor(callArgs: CallArgs) : this(
             callId = callArgs.callId,
-            roomId = callArgs.roomId,
+            roomId = callArgs.signalingRoomId,
             isVideoCall = callArgs.isVideoCall
     )
 }

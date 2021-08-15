@@ -12,23 +12,25 @@
 
         <TextView
             android:id="@+id/reset_title"
+            style="@style/Widget.Vector.TextView.HeadlineMedium"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:drawablePadding="8dp"
             android:text="@string/secure_backup_reset_all"
-            android:textColor="?riotx_text_primary"
-            android:textSize="20sp"
+            android:textColor="?vctr_content_primary"
             android:textStyle="bold"
-            android:tint="?riot_primary_text_color"
+            app:drawableStartCompat="@drawable/ic_alert_triangle"
+            app:drawableTint="?vctr_content_primary"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:drawableTint="?riot_primary_text_color"
-            app:drawableStartCompat="@drawable/ic_alert_triangle" />
+            app:tint="?vctr_content_primary"
+            tools:ignore="MissingPrefix" />
 
         <TextView
             android:id="@+id/ssss_reset_all_description"
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -36,13 +38,14 @@
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
             android:text="@string/secure_backup_reset_all_no_other_devices"
-            android:textColor="?riotx_text_primary"
+            android:textColor="?vctr_content_primary"
             app:layout_constraintBottom_toTopOf="@id/ssss_reset_other_devices"
             app:layout_constraintTop_toBottomOf="@id/reset_title" />
 
 
         <TextView
             android:id="@+id/ssss_reset_other_devices"
+            style="@style/Widget.Vector.TextView.Subtitle"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_marginStart="16dp"
@@ -50,29 +53,30 @@
             android:layout_marginEnd="16dp"
             android:drawablePadding="8dp"
             android:gravity="center_vertical"
-            android:textSize="17sp"
+            android:textColor="?vctr_content_secondary"
             android:visibility="gone"
+            app:drawableStartCompat="@drawable/ic_smartphone"
+            app:drawableTint="?vctr_content_secondary"
             app:layout_constraintTop_toBottomOf="@id/ssss_reset_all_description"
             tools:text="Show 2 devices you can verify with now"
-            tools:visibility="visible"
-            app:drawableStartCompat="@drawable/ic_smartphone" />
+            tools:visibility="visible" />
 
         <TextView
             android:id="@+id/ssss_reset_text3"
+            style="@style/Widget.Vector.TextView.Subtitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:text="@string/secure_backup_reset_if_you_reset_all"
-            android:textColor="@color/riotx_destructive_accent"
-            android:textSize="15sp"
+            android:textColor="?colorError"
             android:textStyle="bold"
-            android:tint="?riot_primary_text_color"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ssss_reset_other_devices" />
 
         <TextView
             android:id="@+id/ssss_reset_text4"
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -80,21 +84,20 @@
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
             android:text="@string/secure_backup_reset_no_history"
-            android:textColor="?riotx_text_primary"
-            android:textSize="15sp"
+            android:textColor="?vctr_content_primary"
             app:layout_constraintTop_toBottomOf="@id/ssss_reset_text3" />
 
-        <com.google.android.material.button.MaterialButton
+        <Button
             android:id="@+id/ssss_reset_button_cancel"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
+            style="@style/Widget.Vector.Button.Text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/cancel"
             tools:ignore="MissingConstraints" />
 
-        <com.google.android.material.button.MaterialButton
+        <Button
             android:id="@+id/ssss_reset_button_reset"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
+            style="@style/Widget.Vector.Button.Text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/reset"

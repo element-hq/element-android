@@ -5,7 +5,7 @@
     android:id="@+id/itemFormAdvancedToggleRootView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?riotx_background"
+    android:background="?android:colorBackground"
     android:clickable="true"
     android:focusable="true"
     android:foreground="?attr/selectableItemBackground"
@@ -18,17 +18,17 @@
 
     <TextView
         android:id="@+id/itemFormAdvancedToggleTitleView"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:ellipsize="end"
         android:gravity="center_vertical"
         android:maxLines="1"
-        android:textColor="?riotx_text_secondary"
-        android:textSize="14sp"
+        android:textColor="?vctr_content_secondary"
         android:textStyle="bold"
-        app:drawableTint="?riotx_text_secondary"
-        tools:drawableEnd="@drawable/ic_expand_more_white"
+        app:drawableTint="?vctr_content_secondary"
+        tools:drawableEnd="@drawable/ic_expand_more"
         tools:text="@string/show_advanced" />
 
 </LinearLayout>

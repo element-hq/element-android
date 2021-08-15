@@ -17,23 +17,22 @@
 
 package im.vector.app.features.roomprofile
 
-import android.content.DialogInterface
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.view.isVisible
+import androidx.fragment.app.setFragmentResultListener
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.animations.AppBarStateChangeListener
 import im.vector.app.core.animations.MatrixItemAppBarStateChangeListener
-import im.vector.app.core.dialogs.withColoredButton
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.copyOnLongClick
@@ -45,6 +44,9 @@ import im.vector.app.core.utils.startSharePlainTextIntent
 import im.vector.app.databinding.FragmentMatrixProfileBinding
 import im.vector.app.databinding.ViewStubRoomProfileHeaderBinding
 import im.vector.app.features.home.AvatarRenderer
+import im.vector.app.features.home.room.detail.RoomDetailPendingAction
+import im.vector.app.features.home.room.detail.RoomDetailPendingActionStore
+import im.vector.app.features.home.room.detail.upgrade.MigrateRoomBottomSheet
 import im.vector.app.features.home.room.list.actions.RoomListActionsArgs
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsBottomSheet
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedAction
@@ -63,6 +65,7 @@ data class RoomProfileArgs(
 class RoomProfileFragment @Inject constructor(
         private val roomProfileController: RoomProfileController,
         private val avatarRenderer: AvatarRenderer,
+        private val roomDetailPendingActionStore: RoomDetailPendingActionStore,
         val roomProfileViewModelFactory: RoomProfileViewModel.Factory
 ) :
         VectorBaseFragment<FragmentMatrixProfileBinding>(),
@@ -82,6 +85,16 @@ class RoomProfileFragment @Inject constructor(
     }
 
     override fun getMenuRes() = R.menu.vector_room_profile
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setFragmentResultListener(MigrateRoomBottomSheet.REQUEST_KEY) { _, bundle ->
+            bundle.getString(MigrateRoomBottomSheet.BUNDLE_KEY_REPLACEMENT_ROOM)?.let { replacementRoomId ->
+                roomDetailPendingActionStore.data = RoomDetailPendingAction.OpenRoom(replacementRoomId, closeCurrentRoom = true)
+                vectorBaseActivity.finish()
+            }
+        }
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -217,7 +230,7 @@ class RoomProfileFragment @Inject constructor(
     }
 
     override fun onEnableEncryptionClicked() {
-        AlertDialog.Builder(requireActivity())
+        MaterialAlertDialogBuilder(requireActivity())
                 .setTitle(R.string.room_settings_enable_encryption_dialog_title)
                 .setMessage(R.string.room_settings_enable_encryption_dialog_content)
                 .setNegativeButton(R.string.cancel, null)
@@ -268,7 +281,7 @@ class RoomProfileFragment @Inject constructor(
                 append(getString(R.string.room_participants_leave_private_warning))
             }
         }
-        AlertDialog.Builder(requireContext())
+        MaterialAlertDialogBuilder(requireContext(), if (isPublicRoom) 0 else R.style.ThemeOverlay_Vector_MaterialAlertDialog_Destructive)
                 .setTitle(R.string.room_participants_leave_prompt_title)
                 .setMessage(message)
                 .setPositiveButton(R.string.leave) { _, _ ->
@@ -276,11 +289,6 @@ class RoomProfileFragment @Inject constructor(
                 }
                 .setNegativeButton(R.string.cancel, null)
                 .show()
-                .apply {
-                    if (!isPublicRoom) {
-                        withColoredButton(DialogInterface.BUTTON_POSITIVE)
-                    }
-                }
     }
 
     override fun onRoomAliasesClicked() {
@@ -301,6 +309,11 @@ class RoomProfileFragment @Inject constructor(
 
     override fun onUrlInTopicLongClicked(url: String) {
         copyToClipboard(requireContext(), url, true)
+    }
+
+    override fun doMigrateToVersion(newVersion: String) {
+        MigrateRoomBottomSheet.newInstance(roomProfileArgs.roomId, newVersion)
+                .show(parentFragmentManager, "migrate")
     }
 
     private fun onShareRoomProfile(permalink: String) {

@@ -8,14 +8,14 @@
         android:id="@+id/attachmentsPreviewRemoveAction"
         android:icon="@drawable/ic_delete"
         android:title="@string/delete"
-        app:iconTint="?vctr_settings_icon_tint_color"
+        app:iconTint="?colorOnPrimary"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/attachmentsPreviewEditAction"
         android:icon="@drawable/ic_edit"
         android:title="@string/edit"
-        app:iconTint="?vctr_settings_icon_tint_color"
+        app:iconTint="?colorOnPrimary"
         app:showAsAction="always" />
 
 </menu>

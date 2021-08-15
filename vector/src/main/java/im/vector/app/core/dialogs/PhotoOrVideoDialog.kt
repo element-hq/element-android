@@ -17,8 +17,8 @@
 package im.vector.app.core.dialogs
 
 import android.app.Activity
-import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.databinding.DialogPhotoOrVideoBinding
 import im.vector.app.features.settings.VectorPreferences
@@ -51,7 +51,7 @@ class PhotoOrVideoDialog(
                 // Always default to photo
                 views.dialogPhotoOrVideoPhoto.isChecked = true
 
-                AlertDialog.Builder(activity)
+                MaterialAlertDialogBuilder(activity)
                         .setTitle(R.string.option_take_photo_video)
                         .setView(dialogLayout)
                         .setPositiveButton(R.string._continue) { _, _ ->
@@ -95,7 +95,7 @@ class PhotoOrVideoDialog(
         views.dialogPhotoOrVideoVideo.isChecked = currentMode == VectorPreferences.TAKE_PHOTO_VIDEO_MODE_VIDEO
         views.dialogPhotoOrVideoAlwaysAsk.isChecked = currentMode == VectorPreferences.TAKE_PHOTO_VIDEO_MODE_ALWAYS_ASK
 
-        AlertDialog.Builder(activity)
+        MaterialAlertDialogBuilder(activity)
                 .setTitle(R.string.option_take_photo_video)
                 .setView(dialogLayout)
                 .setPositiveButton(R.string.save) { _, _ ->

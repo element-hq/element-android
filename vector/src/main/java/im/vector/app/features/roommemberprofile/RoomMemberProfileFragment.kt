@@ -23,7 +23,6 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.Fail
@@ -32,6 +31,7 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.animations.AppBarStateChangeListener
 import im.vector.app.core.animations.MatrixItemAppBarStateChangeListener
@@ -166,7 +166,7 @@ class RoomMemberProfileFragment @Inject constructor(
                     .withArgs(roomId = null, otherUserId = startVerification.userId)
                     .show(parentFragmentManager, "VERIF")
         } else {
-            AlertDialog.Builder(requireContext())
+            MaterialAlertDialogBuilder(requireContext())
                     .setTitle(R.string.dialog_title_warning)
                     .setMessage(R.string.verify_cannot_cross_sign)
                     .setPositiveButton(R.string.verification_profile_verify) { _, _ ->
@@ -311,7 +311,7 @@ class RoomMemberProfileFragment @Inject constructor(
         val view = layoutInflater.inflate(R.layout.dialog_share_qr_code, null)
         val views = DialogShareQrCodeBinding.bind(view)
         views.itemShareQrCodeImage.setData(permalink)
-        AlertDialog.Builder(requireContext())
+        MaterialAlertDialogBuilder(requireContext())
             .setView(view)
             .setNeutralButton(R.string.ok, null)
             .setPositiveButton(R.string.share_by_text) { _, _ ->
@@ -333,14 +333,14 @@ class RoomMemberProfileFragment @Inject constructor(
         val layout = inflater.inflate(R.layout.dialog_base_edit_text, null)
         val views = DialogBaseEditTextBinding.bind(layout)
         val session = injector().activeSessionHolder().getActiveSession()
-        val overrideColorsSetting = session.getAccountDataEvent(UserAccountDataTypes.TYPE_OVERRIDE_COLORS)
+        val overrideColorsSetting = session.accountDataService().getUserAccountDataEvent(UserAccountDataTypes.TYPE_OVERRIDE_COLORS)
         val overrideColorSpecs = overrideColorsSetting?.content?.toMap().orEmpty()
         val userId = state.userId
-        val overrideColorSpec = overrideColorSpecs[userId]?.toString()
+        val overrideColorSpec : String? = overrideColorSpecs[userId]?.toString()
         views.editText.setText(overrideColorSpec)
         views.editText.hint = "#000000"
 
-        AlertDialog.Builder(requireActivity())
+        MaterialAlertDialogBuilder(requireContext())
                 .setTitle(R.string.room_member_override_nick_color)
                 .setView(layout)
                 .setPositiveButton(R.string.ok) { _, _ ->
@@ -353,7 +353,7 @@ class RoomMemberProfileFragment @Inject constructor(
                             newOverrideColorSpecs.remove(userId)
                         }
                         viewModel.viewModelScope.launch {
-                            session.updateAccountData(
+                            session.accountDataService().updateUserAccountData(
                                     type = UserAccountDataTypes.TYPE_OVERRIDE_COLORS,
                                     content = newOverrideColorSpecs)
                         }

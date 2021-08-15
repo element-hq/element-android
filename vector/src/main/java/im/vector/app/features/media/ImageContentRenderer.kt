@@ -245,7 +245,7 @@ class ImageContentRenderer @Inject constructor(private val localFilesHelper: Loc
             val contentUrlResolver = activeSessionHolder.getActiveSession().contentUrlResolver()
             val resolvedUrl = when (mode) {
                 Mode.FULL_SIZE,
-                Mode.STICKER -> resolveUrl(data)
+                Mode.STICKER   -> resolveUrl(data)
                 Mode.THUMBNAIL -> contentUrlResolver.resolveThumbnail(data.url, size.width, size.height, ContentUrlResolver.ThumbnailMethod.SCALE)
             }
             // Fallback to base url
@@ -313,7 +313,7 @@ class ImageContentRenderer @Inject constructor(private val localFilesHelper: Loc
                     finalHeight = min(maxImageWidth * height / width, maxImageHeight)
                     finalWidth = finalHeight * width / height
                 }
-                Mode.STICKER -> {
+                Mode.STICKER   -> {
                     // limit on width
                     val maxWidthDp = min(dimensionConverter.dpToPx(120), maxImageWidth / 2)
                     finalWidth = min(dimensionConverter.dpToPx(width), maxWidthDp)

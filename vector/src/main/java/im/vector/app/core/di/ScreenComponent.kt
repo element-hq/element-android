@@ -32,6 +32,7 @@ import im.vector.app.features.call.conference.VectorJitsiActivity
 import im.vector.app.features.call.transfer.CallTransferActivity
 import im.vector.app.features.createdirect.CreateDirectRoomActivity
 import im.vector.app.features.crypto.keysbackup.settings.KeysBackupManageActivity
+import im.vector.app.features.crypto.keysbackup.setup.KeysBackupSetupActivity
 import im.vector.app.features.crypto.quads.SharedSecureStorageActivity
 import im.vector.app.features.crypto.recover.BootstrapBottomSheet
 import im.vector.app.features.crypto.verification.VerificationBottomSheet
@@ -39,20 +40,24 @@ import im.vector.app.features.debug.DebugMenuActivity
 import im.vector.app.features.devtools.RoomDevToolActivity
 import im.vector.app.features.home.HomeActivity
 import im.vector.app.features.home.HomeModule
+import im.vector.app.features.home.room.detail.JoinReplacementRoomBottomSheet
 import im.vector.app.features.home.room.detail.RoomDetailActivity
 import im.vector.app.features.home.room.detail.readreceipts.DisplayReadReceiptsBottomSheet
 import im.vector.app.features.home.room.detail.search.SearchActivity
 import im.vector.app.features.home.room.detail.timeline.action.MessageActionsBottomSheet
 import im.vector.app.features.home.room.detail.timeline.edithistory.ViewEditHistoryBottomSheet
 import im.vector.app.features.home.room.detail.timeline.reactions.ViewReactionsBottomSheet
+import im.vector.app.features.home.room.detail.upgrade.MigrateRoomBottomSheet
 import im.vector.app.features.home.room.detail.widget.RoomWidgetsBottomSheet
 import im.vector.app.features.home.room.filtered.FilteredRoomsActivity
 import im.vector.app.features.home.room.list.RoomListModule
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsBottomSheet
+import im.vector.app.features.invite.AutoAcceptInvites
 import im.vector.app.features.invite.InviteUsersToRoomActivity
 import im.vector.app.features.invite.VectorInviteView
 import im.vector.app.features.link.LinkHandlerActivity
 import im.vector.app.features.login.LoginActivity
+import im.vector.app.features.login2.LoginActivity2
 import im.vector.app.features.matrixto.MatrixToBottomSheet
 import im.vector.app.features.media.BigImageViewerActivity
 import im.vector.app.features.media.VectorAttachmentViewerActivity
@@ -72,6 +77,7 @@ import im.vector.app.features.roommemberprofile.devices.DeviceListBottomSheet
 import im.vector.app.features.roomprofile.RoomProfileActivity
 import im.vector.app.features.roomprofile.alias.detail.RoomAliasBottomSheet
 import im.vector.app.features.roomprofile.settings.historyvisibility.RoomHistoryVisibilityBottomSheet
+import im.vector.app.features.roomprofile.settings.joinrule.RoomJoinRuleActivity
 import im.vector.app.features.roomprofile.settings.joinrule.RoomJoinRuleBottomSheet
 import im.vector.app.features.settings.VectorSettingsActivity
 import im.vector.app.features.settings.devices.DeviceVerificationInfoBottomSheet
@@ -120,6 +126,7 @@ interface ScreenComponent {
     fun errorFormatter(): ErrorFormatter
     fun uiStateRepository(): UiStateRepository
     fun unrecognizedCertificateDialog(): UnrecognizedCertificateDialog
+    fun autoAcceptInvites(): AutoAcceptInvites
 
     /* ==========================================================================================
      * Activities
@@ -133,9 +140,11 @@ interface ScreenComponent {
     fun inject(activity: KeysBackupManageActivity)
     fun inject(activity: EmojiReactionPickerActivity)
     fun inject(activity: LoginActivity)
+    fun inject(activity: LoginActivity2)
     fun inject(activity: LinkHandlerActivity)
     fun inject(activity: MainActivity)
     fun inject(activity: RoomDirectoryActivity)
+    fun inject(activity: KeysBackupSetupActivity)
     fun inject(activity: BugReportActivity)
     fun inject(activity: FilteredRoomsActivity)
     fun inject(activity: CreateRoomActivity)
@@ -161,6 +170,7 @@ interface ScreenComponent {
     fun inject(activity: SpaceCreationActivity)
     fun inject(activity: SpaceExploreActivity)
     fun inject(activity: SpaceManageActivity)
+    fun inject(activity: RoomJoinRuleActivity)
 
     /* ==========================================================================================
      * BottomSheets
@@ -187,6 +197,8 @@ interface ScreenComponent {
     fun inject(bottomSheet: SpaceSettingsMenuBottomSheet)
     fun inject(bottomSheet: InviteRoomSpaceChooserBottomSheet)
     fun inject(bottomSheet: SpaceInviteBottomSheet)
+    fun inject(bottomSheet: JoinReplacementRoomBottomSheet)
+    fun inject(bottomSheet: MigrateRoomBottomSheet)
 
     /* ==========================================================================================
      * Others

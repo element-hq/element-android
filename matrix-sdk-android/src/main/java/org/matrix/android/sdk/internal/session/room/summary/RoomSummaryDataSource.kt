@@ -36,7 +36,6 @@ import org.matrix.android.sdk.api.session.room.UpdatableLivePageResult
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.RoomType
-import org.matrix.android.sdk.api.session.room.model.VersioningState
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.spaceSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.summary.RoomAggregateNotificationCount
@@ -244,14 +243,14 @@ internal class RoomSummaryDataSource @Inject constructor(@SessionDatabase privat
         query.process(RoomSummaryEntityFields.DISPLAY_NAME, queryParams.displayName)
         query.process(RoomSummaryEntityFields.CANONICAL_ALIAS, queryParams.canonicalAlias)
         query.process(RoomSummaryEntityFields.MEMBERSHIP_STR, queryParams.memberships)
-        query.notEqualTo(RoomSummaryEntityFields.VERSIONING_STATE_STR, VersioningState.UPGRADED_ROOM_JOINED.name)
+        query.equalTo(RoomSummaryEntityFields.IS_HIDDEN_FROM_USER, false)
 
         queryParams.roomCategoryFilter?.let {
             when (it) {
-                RoomCategoryFilter.ONLY_DM -> query.equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
-                RoomCategoryFilter.ONLY_ROOMS -> query.equalTo(RoomSummaryEntityFields.IS_DIRECT, false)
+                RoomCategoryFilter.ONLY_DM                 -> query.equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
+                RoomCategoryFilter.ONLY_ROOMS              -> query.equalTo(RoomSummaryEntityFields.IS_DIRECT, false)
                 RoomCategoryFilter.ONLY_WITH_NOTIFICATIONS -> query.greaterThan(RoomSummaryEntityFields.NOTIFICATION_COUNT, 0)
-                RoomCategoryFilter.ALL -> {
+                RoomCategoryFilter.ALL                     -> {
                     // nop
                 }
             }
@@ -275,15 +274,15 @@ internal class RoomSummaryDataSource @Inject constructor(@SessionDatabase privat
             query.equalTo(RoomSummaryEntityFields.ROOM_TYPE, it)
         }
         when (queryParams.roomCategoryFilter) {
-            RoomCategoryFilter.ONLY_DM -> query.equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
-            RoomCategoryFilter.ONLY_ROOMS -> query.equalTo(RoomSummaryEntityFields.IS_DIRECT, false)
+            RoomCategoryFilter.ONLY_DM                 -> query.equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
+            RoomCategoryFilter.ONLY_ROOMS              -> query.equalTo(RoomSummaryEntityFields.IS_DIRECT, false)
             RoomCategoryFilter.ONLY_WITH_NOTIFICATIONS -> query.greaterThan(RoomSummaryEntityFields.NOTIFICATION_COUNT, 0)
-            RoomCategoryFilter.ALL -> Unit // nop
+            RoomCategoryFilter.ALL                     -> Unit // nop
         }
 
         // Timber.w("VAL: activeSpaceId : ${queryParams.activeSpaceId}")
         when (queryParams.activeSpaceFilter) {
-            is ActiveSpaceFilter.ActiveSpace -> {
+            is ActiveSpaceFilter.ActiveSpace  -> {
                 // It's annoying but for now realm java does not support querying in primitive list :/
                 // https://github.com/realm/realm-java/issues/5361
                 if (queryParams.activeSpaceFilter.currentSpaceId == null) {
@@ -301,8 +300,8 @@ internal class RoomSummaryDataSource @Inject constructor(@SessionDatabase privat
             }
         }
 
-        if (queryParams.activeGroupId != null) {
-            query.contains(RoomSummaryEntityFields.GROUP_IDS, queryParams.activeGroupId!!)
+        queryParams.activeGroupId?.let { activeGroupId ->
+            query.contains(RoomSummaryEntityFields.GROUP_IDS, activeGroupId)
         }
         return query
     }

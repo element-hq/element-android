@@ -854,4 +854,7 @@
 \nDescargando datos…</string>
     <string name="initial_sync_start_server_computing">Sincr. inicial:
 \nAgardando resposta do servidor…</string>
+    <string name="no_permissions_to_start_conf_call_in_direct_room">Non tes permisos para comezar unha chamada de conferencia nesta sala</string>
+    <string name="no_permissions_to_start_conf_call">Non tes permisos para comezar unha chamada de conferencia nesta sala</string>
+    <string name="event_status_sent_message">Mensaxe enviada</string>
 </resources>

@@ -8,14 +8,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
+    android:orientation="vertical">
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:theme="@style/AppTheme.Light">
+        android:theme="@style/Theme.Vector.Light">
 
         <include layout="@layout/demo_theme_sample" />
 
@@ -25,7 +24,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:theme="@style/AppTheme.Dark">
+        android:theme="@style/Theme.Vector.Dark">
 
         <include layout="@layout/demo_theme_sample" />
 
@@ -35,7 +34,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:theme="@style/AppTheme.Black">
+        android:theme="@style/Theme.Vector.Black">
 
         <include layout="@layout/demo_theme_sample" />
 

@@ -28,6 +28,8 @@ import androidx.core.view.updateLayoutParams
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.core.epoxy.ClickListener
+import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.extensions.setLeftDrawable
 import im.vector.app.core.extensions.setTextWithColoredPart
 import im.vector.app.features.home.AvatarRenderer
@@ -64,11 +66,11 @@ abstract class CallTileTimelineItem : AbsBaseMessageItem<CallTileTimelineItem.Ho
         }
         if (attributes.callStatus == CallStatus.INVITED && !attributes.informationData.sentByMe && attributes.isStillActive) {
             holder.acceptRejectViewGroup.isVisible = true
-            holder.acceptView.setOnClickListener {
+            holder.acceptView.onClick {
                 attributes.callback?.onTimelineItemAction(RoomDetailAction.AcceptCall(callId = attributes.callId))
             }
-            holder.rejectView.setLeftDrawable(R.drawable.ic_call_hangup, R.color.riotx_notice)
-            holder.rejectView.setOnClickListener {
+            holder.rejectView.setLeftDrawable(R.drawable.ic_call_hangup, R.attr.colorOnPrimary)
+            holder.rejectView.onClick {
                 attributes.callback?.onTimelineItemAction(RoomDetailAction.EndCall)
             }
             holder.statusView.isVisible = false
@@ -76,17 +78,17 @@ abstract class CallTileTimelineItem : AbsBaseMessageItem<CallTileTimelineItem.Ho
                 CallKind.CONFERENCE -> {
                     holder.rejectView.setText(R.string.ignore)
                     holder.acceptView.setText(R.string.join)
-                    holder.acceptView.setLeftDrawable(R.drawable.ic_call_audio_small, R.color.riotx_accent)
+                    holder.acceptView.setLeftDrawable(R.drawable.ic_call_audio_small, R.attr.colorOnPrimary)
                 }
                 CallKind.AUDIO      -> {
                     holder.rejectView.setText(R.string.call_notification_reject)
                     holder.acceptView.setText(R.string.call_notification_answer)
-                    holder.acceptView.setLeftDrawable(R.drawable.ic_call_audio_small, R.color.riotx_accent)
+                    holder.acceptView.setLeftDrawable(R.drawable.ic_call_audio_small, R.attr.colorOnPrimary)
                 }
                 CallKind.VIDEO      -> {
                     holder.rejectView.setText(R.string.call_notification_reject)
                     holder.acceptView.setText(R.string.call_notification_answer)
-                    holder.acceptView.setLeftDrawable(R.drawable.ic_call_video_small, R.color.riotx_accent)
+                    holder.acceptView.setLeftDrawable(R.drawable.ic_call_video_small, R.attr.colorOnPrimary)
                 }
                 else                -> {
                     Timber.w("Shouldn't be in that state")
@@ -147,7 +149,7 @@ abstract class CallTileTimelineItem : AbsBaseMessageItem<CallTileTimelineItem.Ho
             override val avatarRenderer: AvatarRenderer,
             override val messageColorProvider: MessageColorProvider,
             override val itemLongClickListener: View.OnLongClickListener? = null,
-            override val itemClickListener: View.OnClickListener? = null,
+            override val itemClickListener: ClickListener? = null,
             override val reactionPillCallback: TimelineEventController.ReactionPillCallback? = null,
             override val readReceiptsCallback: TimelineEventController.ReadReceiptsCallback? = null
     ) : AbsBaseMessageItem.Attributes

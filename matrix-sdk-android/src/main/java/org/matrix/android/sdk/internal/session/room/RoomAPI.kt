@@ -360,4 +360,24 @@ internal interface RoomAPI {
     suspend fun deleteTag(@Path("userId") userId: String,
                           @Path("roomId") roomId: String,
                           @Path("tag") tag: String)
+
+    /**
+     * Set an AccountData event to the room.
+     */
+    @PUT(NetworkConstants.URI_API_PREFIX_PATH_R0 + "user/{userId}/rooms/{roomId}/account_data/{type}")
+    suspend fun setRoomAccountData(@Path("userId") userId: String,
+                                   @Path("roomId") roomId: String,
+                                   @Path("type") type: String,
+                                   @Body content: JsonDict)
+
+    /**
+     * Upgrades the given room to a particular room version.
+     * Errors:
+     * 400, The request was invalid. One way this can happen is if the room version requested is not supported by the homeserver
+     * (M_UNSUPPORTED_ROOM_VERSION)
+     * 403: The user is not permitted to upgrade the room.(M_FORBIDDEN)
+     */
+    @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/upgrade")
+    suspend fun upgradeRoom(@Path("roomId") roomId: String,
+                            @Body body: RoomUpgradeBody): RoomUpgradeResponse
 }

@@ -65,7 +65,7 @@ class ScanUserCodeFragment @Inject constructor()
         }
     }
 
-    private val openCameraActivityResultLauncher = registerForPermissionsResult { allGranted ->
+    private val openCameraActivityResultLauncher = registerForPermissionsResult { allGranted, _ ->
         if (allGranted) {
             startCamera()
         } else {
@@ -112,7 +112,7 @@ class ScanUserCodeFragment @Inject constructor()
         super.onResume()
         // Register ourselves as a handler for scan results.
         views.userCodeScannerView.setResultHandler(this)
-        if (PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA)) {
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
             startCamera()
         }
     }

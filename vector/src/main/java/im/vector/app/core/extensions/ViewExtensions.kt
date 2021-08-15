@@ -40,13 +40,8 @@ fun SearchView.withoutLeftMargin() {
     }
 }
 
-fun EditText.showPassword(visible: Boolean, updateCursor: Boolean = true) {
-    if (visible) {
-        inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
-    } else {
-        inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
-    }
-    if (updateCursor) setSelection(text?.length ?: 0)
+fun EditText.hidePassword() {
+    inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
 }
 
 fun View.getMeasurements(): Pair<Int, Int> {

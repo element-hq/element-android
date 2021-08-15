@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.internal.database.mapper
 
+import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
 import org.matrix.android.sdk.api.session.room.model.SpaceParentInfo
@@ -90,7 +91,10 @@ internal class RoomSummaryMapper @Inject constructor(private val timelineEventMa
                             autoJoin = it.autoJoin ?: false,
                             viaServers = it.viaServers.toList(),
                             parentRoomId = roomSummaryEntity.roomId,
-                            suggested = it.suggested
+                            suggested = it.suggested,
+                            canonicalAlias = it.childSummaryEntity?.canonicalAlias,
+                            aliases = it.childSummaryEntity?.aliases?.toList(),
+                            worldReadable = it.childSummaryEntity?.joinRules == RoomJoinRules.PUBLIC
                     )
                 },
                 flattenParentIds = roomSummaryEntity.flattenParentIds?.split("|") ?: emptyList()

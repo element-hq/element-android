@@ -1,0 +1,2 @@
+此版本中的主要變動：佈景主題與樣式更新，以及修復視訊通話後當機的問題
+完整的變更紀錄：https://github.com/vector-im/element-android/releases/tag/v1.1.12

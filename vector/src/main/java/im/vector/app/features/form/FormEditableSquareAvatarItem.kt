@@ -49,10 +49,10 @@ abstract class FormEditableSquareAvatarItem : EpoxyModelWithHolder<FormEditableS
     @EpoxyAttribute
     var imageUri: Uri? = null
 
-    @EpoxyAttribute
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var clickListener: ClickListener? = null
 
-    @EpoxyAttribute
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var deleteListener: ClickListener? = null
 
     override fun bind(holder: Holder) {
@@ -71,7 +71,7 @@ abstract class FormEditableSquareAvatarItem : EpoxyModelWithHolder<FormEditableS
                         .into(holder.image)
             }
             matrixItem != null -> {
-                avatarRenderer?.renderSpace(matrixItem!!, holder.image)
+                avatarRenderer?.render(matrixItem!!, holder.image)
             }
             else               -> {
                 avatarRenderer?.clear(holder.image)

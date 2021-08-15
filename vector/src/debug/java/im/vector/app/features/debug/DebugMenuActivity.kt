@@ -30,15 +30,23 @@ import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
-import im.vector.app.core.utils.PERMISSION_REQUEST_CODE_LAUNCH_CAMERA
-import im.vector.app.core.utils.allGranted
 import im.vector.app.core.utils.checkPermissions
+import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.core.utils.toast
 import im.vector.app.databinding.ActivityDebugMenuBinding
 import im.vector.app.features.debug.sas.DebugSasEmojiActivity
 import im.vector.app.features.qrcode.QrCodeScannerActivity
+import im.vector.lib.ui.styles.debug.DebugMaterialThemeDarkDefaultActivity
+import im.vector.lib.ui.styles.debug.DebugMaterialThemeDarkTestActivity
+import im.vector.lib.ui.styles.debug.DebugMaterialThemeDarkVectorActivity
+import im.vector.lib.ui.styles.debug.DebugMaterialThemeLightDefaultActivity
+import im.vector.lib.ui.styles.debug.DebugMaterialThemeLightTestActivity
+import im.vector.lib.ui.styles.debug.DebugMaterialThemeLightVectorActivity
+import im.vector.lib.ui.styles.debug.DebugVectorButtonStylesDarkActivity
+import im.vector.lib.ui.styles.debug.DebugVectorButtonStylesLightActivity
+import im.vector.lib.ui.styles.debug.DebugVectorTextViewDarkActivity
+import im.vector.lib.ui.styles.debug.DebugVectorTextViewLightActivity
 import org.matrix.android.sdk.internal.crypto.verification.qrcode.toQrCodeData
-
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -71,12 +79,43 @@ class DebugMenuActivity : VectorBaseActivity<ActivityDebugMenuBinding>() {
 
     private fun setupViews() {
         views.debugTestTextViewLink.setOnClickListener { testTextViewLink() }
+        views.debugOpenButtonStylesLight.setOnClickListener {
+            startActivity(Intent(this, DebugVectorButtonStylesLightActivity::class.java))
+        }
+        views.debugOpenButtonStylesDark.setOnClickListener {
+            startActivity(Intent(this, DebugVectorButtonStylesDarkActivity::class.java))
+        }
+        views.debugTestTextViewLight.setOnClickListener {
+            startActivity(Intent(this, DebugVectorTextViewLightActivity::class.java))
+        }
+        views.debugTestTextViewDark.setOnClickListener {
+            startActivity(Intent(this, DebugVectorTextViewDarkActivity::class.java))
+        }
         views.debugShowSasEmoji.setOnClickListener { showSasEmoji() }
         views.debugTestNotification.setOnClickListener { testNotification() }
-        views.debugTestMaterialThemeLight.setOnClickListener { testMaterialThemeLight() }
-        views.debugTestMaterialThemeDark.setOnClickListener { testMaterialThemeDark() }
+        views.debugTestMaterialThemeLightDefault.setOnClickListener {
+            startActivity(Intent(this, DebugMaterialThemeLightDefaultActivity::class.java))
+        }
+        views.debugTestMaterialThemeLightTest.setOnClickListener {
+            startActivity(Intent(this, DebugMaterialThemeLightTestActivity::class.java))
+        }
+        views.debugTestMaterialThemeLightVector.setOnClickListener {
+            startActivity(Intent(this, DebugMaterialThemeLightVectorActivity::class.java))
+        }
+        views.debugTestMaterialThemeDarkDefault.setOnClickListener {
+            startActivity(Intent(this, DebugMaterialThemeDarkDefaultActivity::class.java))
+        }
+        views.debugTestMaterialThemeDarkTest.setOnClickListener {
+            startActivity(Intent(this, DebugMaterialThemeDarkTestActivity::class.java))
+        }
+        views.debugTestMaterialThemeDarkVector.setOnClickListener {
+            startActivity(Intent(this, DebugMaterialThemeDarkVectorActivity::class.java))
+        }
         views.debugTestCrash.setOnClickListener { testCrash() }
         views.debugScanQrCode.setOnClickListener { scanQRCode() }
+        views.debugPermission.setOnClickListener {
+            startActivity(Intent(this, DebugPermissionActivity::class.java))
+        }
     }
 
     private fun renderQrCode(text: String) {
@@ -174,28 +213,18 @@ class DebugMenuActivity : VectorBaseActivity<ActivityDebugMenuBinding>() {
         )
     }
 
-    private fun testMaterialThemeLight() {
-        startActivity(Intent(this, DebugMaterialThemeLightActivity::class.java))
-    }
-
-    private fun testMaterialThemeDark() {
-        startActivity(Intent(this, DebugMaterialThemeDarkActivity::class.java))
-    }
-
     private fun testCrash() {
         throw RuntimeException("Application crashed from user demand")
     }
 
     private fun scanQRCode() {
-        if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, this, PERMISSION_REQUEST_CODE_LAUNCH_CAMERA)) {
+        if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, this, permissionCameraLauncher)) {
             doScanQRCode()
         }
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
-        if (requestCode == PERMISSION_REQUEST_CODE_LAUNCH_CAMERA && allGranted(grantResults)) {
+    private val permissionCameraLauncher = registerForPermissionsResult { allGranted, _ ->
+        if (allGranted) {
             doScanQRCode()
         }
     }

@@ -134,6 +134,10 @@ internal class DefaultRoomService @Inject constructor(
         deleteRoomAliasTask.execute(DeleteRoomAliasTask.Params(roomAlias))
     }
 
+    override fun getChangeMemberships(roomIdOrAlias: String): ChangeMembershipState {
+        return roomChangeMembershipStateDataSource.getState(roomIdOrAlias)
+    }
+
     override fun getChangeMembershipsLive(): LiveData<Map<String, ChangeMembershipState>> {
         return roomChangeMembershipStateDataSource.getLiveStates()
     }

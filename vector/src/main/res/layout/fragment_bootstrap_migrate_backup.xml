@@ -9,24 +9,24 @@
 
     <TextView
         android:id="@+id/bootstrapDescriptionText"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:textColor="?riotx_text_primary"
-        android:textSize="14sp"
+        android:textColor="?vctr_content_primary"
         app:layout_constraintBottom_toTopOf="@id/bootstrapRecoveryKeyEnterTil"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@string/bootstrap_enter_recovery" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/bootstrapRecoveryKeyEnterTil"
-        style="@style/VectorTextInputLayout"
+        style="@style/Widget.Vector.TextInputLayout.Password"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="8dp"
         app:errorEnabled="true"
-        app:layout_constraintEnd_toStartOf="@id/bootstrapMigrateShowPassword"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/bootstrapDescriptionText">
 
@@ -37,24 +37,21 @@
             android:imeOptions="actionDone"
             android:maxLines="3"
             android:singleLine="false"
-            android:textColor="?android:textColorPrimary"
-            tools:hint="@string/keys_backup_restore_key_enter_hint"
-            tools:inputType="textPassword" />
+            tools:hint="@string/keys_backup_restore_key_enter_hint" />
 
-
-        <com.google.android.material.button.MaterialButton
+        <Button
             android:id="@+id/bootstrapMigrateUseFile"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
+            style="@style/Widget.Vector.Button.Text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/use_file"
-            android:textAllCaps="false"
             app:icon="@drawable/ic_file"
-            app:iconTint="@color/button_positive_text_color_selector"
+            tools:ignore="MissingPrefix"
             tools:visibility="visible" />
 
         <TextView
             android:id="@+id/bootstrapMigrateForgotPassphrase"
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="gone"
@@ -63,21 +60,11 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <im.vector.app.core.ui.views.RevealPasswordImageView
-        android:id="@+id/bootstrapMigrateShowPassword"
-        android:layout_width="@dimen/layout_touch_size"
-        android:layout_height="@dimen/layout_touch_size"
-        android:layout_marginTop="8dp"
-        android:background="?attr/selectableItemBackground"
-        android:scaleType="center"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/bootstrapRecoveryKeyEnterTil"
-        app:layout_constraintTop_toTopOf="@+id/bootstrapRecoveryKeyEnterTil"
-        app:tint="?colorAccent" />
-
-    <com.google.android.material.button.MaterialButton
+    <Button
         android:id="@+id/bootstrapMigrateContinueButton"
-        style="@style/VectorButtonStyleText"
+        style="@style/Widget.Vector.Button.Text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/layout_vertical_margin"
         android:text="@string/_continue"
         app:layout_constraintBottom_toBottomOf="parent"

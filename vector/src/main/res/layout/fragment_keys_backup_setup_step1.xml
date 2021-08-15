@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?riotx_background"
+    android:background="?android:colorBackground"
     tools:context=".features.crypto.keysbackup.setup.KeysBackupSetupStep1Fragment">
 
     <ImageView
@@ -20,18 +20,18 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.1"
         app:layout_constraintVertical_chainStyle="spread"
-        app:tint="?riotx_text_primary"
+        app:tint="?vctr_content_primary"
         tools:ignore="MissingPrefix" />
 
     <TextView
         android:id="@+id/keys_backup_setup_step1_title"
+        style="@style/Widget.Vector.TextView.HeadlineMedium"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:text="@string/keys_backup_setup_step1_title"
         android:textAlignment="center"
-        android:textColor="?riotx_text_primary"
-        android:textSize="18sp"
+        android:textColor="?vctr_content_primary"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/keys_backup_setup_step1_description"
         app:layout_constraintTop_toBottomOf="@+id/keys_backup_setup_step1_image"
@@ -39,20 +39,21 @@
 
     <TextView
         android:id="@+id/keys_backup_setup_step1_description"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:text="@string/keys_backup_setup_step1_description"
         android:textAlignment="center"
-        android:textColor="?riotx_text_secondary"
+        android:textColor="?vctr_content_secondary"
         app:layout_constraintBottom_toTopOf="@+id/keys_backup_setup_step1_button"
         app:layout_constraintTop_toBottomOf="@id/keys_backup_setup_step1_title" />
 
     <!-- Centered button -->
-    <com.google.android.material.button.MaterialButton
+    <Button
         android:id="@+id/keys_backup_setup_step1_button"
-        style="@style/VectorButtonStyle"
         android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:maxWidth="@dimen/button_max_width"
         android:minWidth="200dp"
@@ -65,6 +66,7 @@
 
     <TextView
         android:id="@+id/keys_backup_setup_step1_advanced_option_text"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/layout_horizontal_margin"
@@ -72,16 +74,18 @@
         android:layout_marginEnd="@dimen/layout_horizontal_margin"
         android:text="@string/keys_backup_setup_step1_advanced"
         android:textAlignment="center"
-        android:textColor="?riotx_text_secondary"
+        android:textColor="?vctr_content_secondary"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/keys_backup_setup_step1_button"
         tools:visibility="visible" />
 
-    <com.google.android.material.button.MaterialButton
+    <Button
         android:id="@+id/keys_backup_setup_step1_manual_export_button"
-        style="@style/VectorButtonStyleText"
+        style="@style/Widget.Vector.Button.Text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:layout_marginStart="@dimen/layout_horizontal_margin"
         android:layout_marginEnd="@dimen/layout_horizontal_margin"

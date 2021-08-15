@@ -23,7 +23,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
@@ -31,6 +30,7 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.dialogs.ExportKeysDialog
@@ -42,9 +42,7 @@ import im.vector.app.features.crypto.keysbackup.setup.KeysBackupSetupActivity
 import im.vector.app.features.crypto.recover.BootstrapBottomSheet
 import im.vector.app.features.crypto.recover.SetupMode
 
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupState
-import timber.log.Timber
 import javax.inject.Inject
 
 // TODO this needs to be refactored to current standard and remove legacy
@@ -89,7 +87,7 @@ class SignOutBottomSheetDialogFragment :
 
         views.exitAnywayButton.action = {
             context?.let {
-                AlertDialog.Builder(it)
+                MaterialAlertDialogBuilder(it)
                         .setTitle(R.string.are_you_sure)
                         .setMessage(R.string.sign_out_bottom_sheet_will_lose_secure_messages)
                         .setPositiveButton(R.string.backup, null)
@@ -112,31 +110,6 @@ class SignOutBottomSheetDialogFragment :
 
         views.setupMegolmBackupButton.action = {
             setupBackupActivityResultLauncher.launch(KeysBackupSetupActivity.intent(requireContext(), true))
-        }
-
-        viewModel.observeViewEvents {
-            when (it) {
-                is SignoutCheckViewModel.ViewEvents.ExportKeys -> {
-                    it.exporter
-                            .export(requireContext(),
-                                    it.passphrase,
-                                    it.uri,
-                                    object : MatrixCallback<Boolean> {
-                                        override fun onSuccess(data: Boolean) {
-                                            if (data) {
-                                                viewModel.handle(SignoutCheckViewModel.Actions.KeySuccessfullyManuallyExported)
-                                            } else {
-                                                viewModel.handle(SignoutCheckViewModel.Actions.KeyExportFailed)
-                                            }
-                                        }
-
-                                        override fun onFailure(failure: Throwable) {
-                                            Timber.e("## Failed to export manually keys ${failure.localizedMessage}")
-                                            viewModel.handle(SignoutCheckViewModel.Actions.KeyExportFailed)
-                                        }
-                                    })
-                }
-            }
         }
     }
 

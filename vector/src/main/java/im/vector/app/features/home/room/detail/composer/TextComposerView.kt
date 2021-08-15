@@ -24,6 +24,9 @@ import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.text.toSpannable
+import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
+import androidx.transition.AutoTransition
 import androidx.transition.ChangeBounds
 import androidx.transition.Fade
 import androidx.transition.Transition
@@ -31,12 +34,10 @@ import androidx.transition.TransitionManager
 import androidx.transition.TransitionSet
 import im.vector.app.R
 import im.vector.app.databinding.ComposerLayoutBinding
-
-import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
+import org.matrix.android.sdk.api.extensions.orFalse
 
 /**
  * Encapsulate the timeline composer UX.
- *
  */
 class TextComposerView @JvmOverloads constructor(
         context: Context,
@@ -60,6 +61,13 @@ class TextComposerView @JvmOverloads constructor(
     val text: Editable?
         get() = views.composerEditText.text
 
+    var alwaysShowSendButton = false
+        set(value) {
+            field = value
+            val shouldShowSendButton = currentConstraintSetId == R.layout.composer_layout_constraint_set_expanded || text?.isNotBlank().orFalse() || value
+            views.sendButton.isInvisible = !shouldShowSendButton
+        }
+
     init {
         inflate(context, R.layout.composer_layout, this)
         views = ComposerLayoutBinding.bind(this)
@@ -69,6 +77,19 @@ class TextComposerView @JvmOverloads constructor(
         views.composerEditText.callback = object : ComposerEditText.Callback {
             override fun onRichContentSelected(contentUri: Uri): Boolean {
                 return callback?.onRichContentSelected(contentUri) ?: false
+            }
+
+            override fun onTextBlankStateChanged(isBlank: Boolean) {
+                val shouldShowSendButton = currentConstraintSetId == R.layout.composer_layout_constraint_set_expanded || !isBlank || alwaysShowSendButton
+                TransitionManager.endTransitions(this@TextComposerView)
+                if (views.sendButton.isVisible != shouldShowSendButton) {
+                    TransitionManager.beginDelayedTransition(
+                            this@TextComposerView,
+                            AutoTransition().also { it.duration = 150 }
+                    )
+                    views.sendButton.isInvisible = !shouldShowSendButton
+                }
+                callback?.onTextBlankStateChanged(isBlank)
             }
         }
         views.composerRelatedMessageCloseButton.setOnClickListener {
@@ -93,6 +114,9 @@ class TextComposerView @JvmOverloads constructor(
         }
         currentConstraintSetId = R.layout.composer_layout_constraint_set_compact
         applyNewConstraintSet(animate, transitionComplete)
+
+        val shouldShowSendButton = !views.composerEditText.text.isNullOrEmpty() || alwaysShowSendButton
+        views.sendButton.isInvisible = !shouldShowSendButton
     }
 
     fun expand(animate: Boolean = true, transitionComplete: (() -> Unit)? = null) {
@@ -102,6 +126,7 @@ class TextComposerView @JvmOverloads constructor(
         }
         currentConstraintSetId = R.layout.composer_layout_constraint_set_expanded
         applyNewConstraintSet(animate, transitionComplete)
+        views.sendButton.isInvisible = false
     }
 
     private fun applyNewConstraintSet(animate: Boolean, transitionComplete: (() -> Unit)?) {
@@ -110,8 +135,6 @@ class TextComposerView @JvmOverloads constructor(
         }
         ConstraintSet().also {
             it.clone(context, currentConstraintSetId)
-            // in case shield is hidden, we will have glitch without this
-            it.getConstraint(R.id.composerShieldImageView).propertySet.visibility = views.composerShieldImageView.visibility
             it.applyTo(this)
         }
     }
@@ -139,13 +162,11 @@ class TextComposerView @JvmOverloads constructor(
         TransitionManager.beginDelayedTransition((parent as? ViewGroup ?: this), transition)
     }
 
-    fun setRoomEncrypted(isEncrypted: Boolean, roomEncryptionTrustLevel: RoomEncryptionTrustLevel?) {
+    fun setRoomEncrypted(isEncrypted: Boolean) {
         if (isEncrypted) {
             views.composerEditText.setHint(R.string.room_message_placeholder)
-            views.composerShieldImageView.render(roomEncryptionTrustLevel)
         } else {
             views.composerEditText.setHint(R.string.room_message_placeholder)
-            views.composerShieldImageView.render(null)
         }
     }
 }

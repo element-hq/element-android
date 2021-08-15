@@ -25,24 +25,26 @@ import com.airbnb.epoxy.EpoxyModelClass
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import im.vector.app.R
+import im.vector.app.core.epoxy.ClickListener
+import im.vector.app.core.epoxy.TextListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
-import im.vector.app.core.extensions.showPassword
+import im.vector.app.core.epoxy.addTextChangedListenerOnce
+import im.vector.app.core.epoxy.onClick
+import im.vector.app.core.epoxy.setValueOnce
 import im.vector.app.core.platform.SimpleTextWatcher
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.core.ui.views.RevealPasswordImageView
 
 @EpoxyModelClass(layout = R.layout.item_login_password_form)
 abstract class LoginPasswordFormItem : VectorEpoxyModel<LoginPasswordFormItem.Holder>() {
 
-    @EpoxyAttribute var passwordShown: Boolean = false
+    @EpoxyAttribute var passwordValue: String = ""
     @EpoxyAttribute var submitEnabled: Boolean = false
     @EpoxyAttribute var errorText: String? = null
     @EpoxyAttribute lateinit var stringProvider: StringProvider
-    @EpoxyAttribute var passwordRevealClickListener: (() -> Unit)? = null
-    @EpoxyAttribute var forgetPasswordClickListener: (() -> Unit)? = null
-    @EpoxyAttribute var submitClickListener: ((String) -> Unit)? = null
-    @EpoxyAttribute var onPasswordEdited: ((String) -> Unit)? = null
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var forgetPasswordClickListener: ClickListener? = null
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var submitClickListener: ClickListener? = null
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var onPasswordEdited: TextListener? = null
 
     private val textChangeListener = object : SimpleTextWatcher() {
         override fun afterTextChanged(s: Editable) {
@@ -55,12 +57,11 @@ abstract class LoginPasswordFormItem : VectorEpoxyModel<LoginPasswordFormItem.Ho
 
         setupAutoFill(holder)
         holder.passwordFieldTil.error = errorText
-        renderPasswordField(holder)
-        holder.passwordReveal.setOnClickListener { passwordRevealClickListener?.invoke() }
-        holder.forgetPassword.setOnClickListener { forgetPasswordClickListener?.invoke() }
+        holder.forgetPassword.onClick(forgetPasswordClickListener)
         holder.submit.isEnabled = submitEnabled
-        holder.submit.setOnClickListener { submitClickListener?.invoke(holder.passwordField.text.toString()) }
-        holder.passwordField.addTextChangedListener(textChangeListener)
+        holder.submit.onClick(submitClickListener)
+        holder.setValueOnce(holder.passwordField, passwordValue)
+        holder.passwordField.addTextChangedListenerOnce(textChangeListener)
     }
 
     override fun unbind(holder: Holder) {
@@ -74,15 +75,9 @@ abstract class LoginPasswordFormItem : VectorEpoxyModel<LoginPasswordFormItem.Ho
         }
     }
 
-    private fun renderPasswordField(holder: Holder) {
-        holder.passwordField.showPassword(passwordShown)
-        holder.passwordReveal.render(passwordShown)
-    }
-
     class Holder : VectorEpoxyHolder() {
         val passwordField by bind<TextInputEditText>(R.id.itemLoginPasswordFormPasswordField)
         val passwordFieldTil by bind<TextInputLayout>(R.id.itemLoginPasswordFormPasswordFieldTil)
-        val passwordReveal by bind<RevealPasswordImageView>(R.id.itemLoginPasswordFormPasswordReveal)
         val forgetPassword by bind<Button>(R.id.itemLoginPasswordFormForgetPasswordButton)
         val submit by bind<Button>(R.id.itemLoginPasswordFormSubmit)
     }

@@ -66,12 +66,13 @@ internal class DefaultSpaceService @Inject constructor(
         return createRoomTask.executeRetry(params, 3)
     }
 
-    override suspend fun createSpace(name: String, topic: String?, avatarUri: Uri?, isPublic: Boolean): String {
+    override suspend fun createSpace(name: String, topic: String?, avatarUri: Uri?, isPublic: Boolean, roomAliasLocalPart: String?): String {
         return createSpace(CreateSpaceParams().apply {
             this.name = name
             this.topic = topic
             this.avatarUri = avatarUri
             if (isPublic) {
+                this.roomAliasName = roomAliasLocalPart
                 this.powerLevelContentOverride = (powerLevelContentOverride ?: PowerLevelsContent()).copy(
                         invite = 0
                 )
@@ -81,7 +82,6 @@ internal class DefaultSpaceService @Inject constructor(
             } else {
                 this.preset = CreateRoomPreset.PRESET_PRIVATE_CHAT
                 visibility = RoomDirectoryVisibility.PRIVATE
-                enableEncryption()
             }
         })
     }
@@ -146,7 +146,10 @@ internal class DefaultSpaceService @Inject constructor(
                                                         viaServers = childStateEvContent.via.orEmpty(),
                                                         activeMemberCount = childSummary.numJoinedMembers,
                                                         parentRoomId = childStateEv.roomId,
-                                                        suggested = childStateEvContent.suggested
+                                                        suggested = childStateEvContent.suggested,
+                                                        canonicalAlias = childSummary.canonicalAlias,
+                                                        aliases = childSummary.aliases,
+                                                        worldReadable = childSummary.worldReadable
                                                 )
                                             }
                                         }.orEmpty()

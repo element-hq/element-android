@@ -26,7 +26,6 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
 import android.view.WindowManager
-import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import androidx.core.view.isInvisible
@@ -35,17 +34,19 @@ import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.viewModel
 import com.airbnb.mvrx.withState
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.PERMISSIONS_FOR_AUDIO_IP_CALL
 import im.vector.app.core.utils.PERMISSIONS_FOR_VIDEO_IP_CALL
-import im.vector.app.core.utils.allGranted
 import im.vector.app.core.utils.checkPermissions
+import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.databinding.ActivityCallBinding
 import im.vector.app.features.call.dialpad.CallDialPadBottomSheet
 import im.vector.app.features.call.dialpad.DialPadFragment
 import im.vector.app.features.call.utils.EglUtils
+import im.vector.app.features.call.webrtc.WebRtcCall
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.RoomDetailActivity
@@ -53,8 +54,8 @@ import im.vector.app.features.home.room.detail.RoomDetailArgs
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.extensions.orFalse
+import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.session.call.CallState
-import org.matrix.android.sdk.api.session.call.MxCallDetail
 import org.matrix.android.sdk.api.session.call.MxPeerConnectionState
 import org.matrix.android.sdk.api.session.call.TurnServerResponse
 import org.webrtc.EglBase
@@ -64,12 +65,14 @@ import javax.inject.Inject
 
 @Parcelize
 data class CallArgs(
-        val roomId: String,
+        val signalingRoomId: String,
         val callId: String,
         val participantUserId: String,
         val isIncomingCall: Boolean,
         val isVideoCall: Boolean
 ) : Parcelable
+
+private val loggerTag = LoggerTag("VectorCallActivity", LoggerTag.VOIP)
 
 class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallControlsView.InteractionListener {
 
@@ -113,11 +116,11 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
         if (intent.hasExtra(MvRx.KEY_ARG)) {
             callArgs = intent.getParcelableExtra(MvRx.KEY_ARG)!!
         } else {
-            Timber.e("## VOIP missing callArgs for VectorCall Activity")
+            Timber.tag(loggerTag.value).e("missing callArgs for VectorCall Activity")
             finish()
         }
 
-        Timber.v("## VOIP EXTRA_MODE is ${intent.getStringExtra(EXTRA_MODE)}")
+        Timber.tag(loggerTag.value).v("EXTRA_MODE is ${intent.getStringExtra(EXTRA_MODE)}")
         if (intent.getStringExtra(EXTRA_MODE) == INCOMING_RINGING) {
             turnScreenOnAndKeyguardOff()
         }
@@ -139,11 +142,11 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                 .disposeOnDestroy()
 
         if (callArgs.isVideoCall) {
-            if (checkPermissions(PERMISSIONS_FOR_VIDEO_IP_CALL, this, CAPTURE_PERMISSION_REQUEST_CODE, R.string.permissions_rationale_msg_camera_and_audio)) {
+            if (checkPermissions(PERMISSIONS_FOR_VIDEO_IP_CALL, this, permissionCameraLauncher, R.string.permissions_rationale_msg_camera_and_audio)) {
                 start()
             }
         } else {
-            if (checkPermissions(PERMISSIONS_FOR_AUDIO_IP_CALL, this, CAPTURE_PERMISSION_REQUEST_CODE, R.string.permissions_rationale_msg_record_audio)) {
+            if (checkPermissions(PERMISSIONS_FOR_AUDIO_IP_CALL, this, permissionCameraLauncher, R.string.permissions_rationale_msg_record_audio)) {
                 start()
             }
         }
@@ -160,7 +163,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
     }
 
     private fun renderState(state: VectorCallViewState) {
-        Timber.v("## VOIP renderState call $state")
+        Timber.tag(loggerTag.value).v("renderState call $state")
         if (state.callState is Fail) {
             finish()
             return
@@ -175,7 +178,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
         when (callState) {
             is CallState.Idle,
             is CallState.CreateOffer,
-            is CallState.Dialing     -> {
+            is CallState.Dialing      -> {
                 views.callVideoGroup.isInvisible = true
                 views.callInfoGroup.isVisible = true
                 views.callStatusText.setText(R.string.call_ring)
@@ -189,7 +192,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                 configureCallInfo(state)
             }
 
-            is CallState.Answering -> {
+            is CallState.Answering    -> {
                 views.callVideoGroup.isInvisible = true
                 views.callInfoGroup.isVisible = true
                 views.callStatusText.setText(R.string.call_connecting)
@@ -210,17 +213,28 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                             views.callStatusText.setText(R.string.call_held_by_you)
                         } else {
                             views.callActionText.isInvisible = true
-                            state.callInfo.otherUserItem?.let {
+                            state.callInfo?.opponentUserItem?.let {
                                 views.callStatusText.text = getString(R.string.call_held_by_user, it.getBestName())
                             }
                         }
+                    } else if (state.transferee !is VectorCallViewState.TransfereeState.NoTransferee) {
+                        val transfereeName = if (state.transferee is VectorCallViewState.TransfereeState.KnownTransferee) {
+                            state.transferee.name
+                        } else {
+                            getString(R.string.call_transfer_unknown_person)
+                        }
+                        views.callActionText.text = getString(R.string.call_transfer_transfer_to_title, transfereeName)
+                        views.callActionText.isVisible = true
+                        views.callActionText.setOnClickListener { callViewModel.handle(VectorCallViewActions.TransferCall) }
+                        views.callStatusText.text = state.formattedDuration
+                        configureCallInfo(state)
                     } else {
                         views.callStatusText.text = state.formattedDuration
                         configureCallInfo(state)
                         if (callArgs.isVideoCall) {
                             views.callVideoGroup.isVisible = true
                             views.callInfoGroup.isVisible = false
-                            views.pipRenderer.isVisible =  !state.isVideoCaptureInError && state.otherKnownCallInfo == null
+                            views.pipRenderer.isVisible = !state.isVideoCaptureInError && state.otherKnownCallInfo == null
                         } else {
                             views.callVideoGroup.isInvisible = true
                             views.callInfoGroup.isVisible = true
@@ -235,36 +249,41 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                     views.callConnectingProgress.isVisible = true
                 }
             }
-            is CallState.Terminated -> {
+            is CallState.Ended     -> {
                 finish()
             }
-            null -> {
+            null                   -> {
             }
         }
     }
 
     private fun configureCallInfo(state: VectorCallViewState, blurAvatar: Boolean = false) {
-        state.callInfo.otherUserItem?.let {
-            val colorFilter = ContextCompat.getColor(this, R.color.bg_call_screen)
-            avatarRenderer.renderBlur(it, views.bgCallView, sampling = 20, rounded = false, colorFilter = colorFilter)
-            views.participantNameText.text = it.getBestName()
+        state.callInfo?.opponentUserItem?.let {
+            val colorFilter = ContextCompat.getColor(this, R.color.bg_call_screen_blur)
+            avatarRenderer.renderBlur(it, views.bgCallView, sampling = 20, rounded = false, colorFilter = colorFilter, addPlaceholder = false)
+            if (state.transferee is VectorCallViewState.TransfereeState.NoTransferee) {
+                views.participantNameText.text = it.getBestName()
+            } else {
+                views.participantNameText.text = getString(R.string.call_transfer_consulting_with, it.getBestName())
+            }
             if (blurAvatar) {
-                avatarRenderer.renderBlur(it, views.otherMemberAvatar, sampling = 2, rounded = true, colorFilter = colorFilter)
+                avatarRenderer.renderBlur(it, views.otherMemberAvatar, sampling = 2, rounded = true, colorFilter = colorFilter, addPlaceholder = true)
             } else {
                 avatarRenderer.render(it, views.otherMemberAvatar)
             }
         }
-        if (state.otherKnownCallInfo?.otherUserItem == null) {
+        if (state.otherKnownCallInfo?.opponentUserItem == null) {
             views.otherKnownCallLayout.isVisible = false
         } else {
             val otherCall = callManager.getCallById(state.otherKnownCallInfo.callId)
-            val colorFilter = ContextCompat.getColor(this, R.color.bg_call_screen)
+            val colorFilter = ContextCompat.getColor(this, R.color.bg_call_screen_blur)
             avatarRenderer.renderBlur(
-                    matrixItem = state.otherKnownCallInfo.otherUserItem,
+                    matrixItem = state.otherKnownCallInfo.opponentUserItem,
                     imageView = views.otherKnownCallAvatarView,
                     sampling = 20,
-                    rounded = false,
-                    colorFilter = colorFilter
+                    rounded = true,
+                    colorFilter = colorFilter,
+                    addPlaceholder = true
             )
             views.otherKnownCallLayout.isVisible = true
             views.otherSmallIsHeldIcon.isVisible = otherCall?.let { it.isLocalOnHold || it.remoteOnHold }.orFalse()
@@ -273,18 +292,17 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
 
     private fun configureCallViews() {
         views.callControlsView.interactionListener = this
-        views.otherKnownCallAvatarView.setOnClickListener {
+        views.otherKnownCallLayout.setOnClickListener {
             withState(callViewModel) {
                 val otherCall = callManager.getCallById(it.otherKnownCallInfo?.callId ?: "") ?: return@withState
-                startActivity(newIntent(this, otherCall.mxCall, null))
+                startActivity(newIntent(this, otherCall, null))
                 finish()
             }
         }
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == CAPTURE_PERMISSION_REQUEST_CODE && allGranted(grantResults)) {
+    private val permissionCameraLauncher = registerForPermissionsResult { allGranted, _ ->
+        if (allGranted) {
             start()
         } else {
             // TODO display something
@@ -294,7 +312,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
 
     private fun start() {
         rootEglBase = EglUtils.rootEglBase ?: return Unit.also {
-            Timber.v("## VOIP rootEglBase is null")
+            Timber.tag(loggerTag.value).v("rootEglBase is null")
             finish()
         }
 
@@ -320,15 +338,15 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
     }
 
     private fun handleViewEvents(event: VectorCallViewEvents?) {
-        Timber.v("## VOIP handleViewEvents $event")
+        Timber.tag(loggerTag.value).v("handleViewEvents $event")
         when (event) {
-            VectorCallViewEvents.DismissNoCall -> {
+            VectorCallViewEvents.DismissNoCall             -> {
                 finish()
             }
-            is VectorCallViewEvents.ConnectionTimeout -> {
+            is VectorCallViewEvents.ConnectionTimeout      -> {
                 onErrorTimoutConnect(event.turn)
             }
-            is VectorCallViewEvents.ShowDialPad -> {
+            is VectorCallViewEvents.ShowDialPad            -> {
                 CallDialPadBottomSheet.newInstance(false).apply {
                     callback = dialPadCallback
                 }.show(supportFragmentManager, FRAGMENT_DIAL_PAD_TAG)
@@ -336,16 +354,15 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
             is VectorCallViewEvents.ShowCallTransferScreen -> {
                 navigator.openCallTransfer(this, callArgs.callId)
             }
-            null -> {
+            null                                           -> {
             }
         }
     }
 
     private fun onErrorTimoutConnect(turn: TurnServerResponse?) {
-        Timber.d("## VOIP onErrorTimoutConnect $turn")
+        Timber.tag(loggerTag.value).d("onErrorTimoutConnect $turn")
         // TODO ask to use default stun, etc...
-        AlertDialog
-                .Builder(this)
+        MaterialAlertDialogBuilder(this)
                 .setTitle(R.string.call_failed_no_connection)
                 .setMessage(getString(R.string.call_failed_no_connection_description))
                 .setNegativeButton(R.string.ok) { _, _ ->
@@ -355,8 +372,6 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
     }
 
     companion object {
-
-        private const val CAPTURE_PERMISSION_REQUEST_CODE = 1
         private const val EXTRA_MODE = "EXTRA_MODE"
         private const val FRAGMENT_DIAL_PAD_TAG = "FRAGMENT_DIAL_PAD_TAG"
 
@@ -364,18 +379,18 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
         const val INCOMING_RINGING = "INCOMING_RINGING"
         const val INCOMING_ACCEPT = "INCOMING_ACCEPT"
 
-        fun newIntent(context: Context, mxCall: MxCallDetail, mode: String?): Intent {
+        fun newIntent(context: Context, call: WebRtcCall, mode: String?): Intent {
             return Intent(context, VectorCallActivity::class.java).apply {
                 // what could be the best flags?
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                putExtra(MvRx.KEY_ARG, CallArgs(mxCall.roomId, mxCall.callId, mxCall.opponentUserId, !mxCall.isOutgoing, mxCall.isVideoCall))
+                putExtra(MvRx.KEY_ARG, CallArgs(call.nativeRoomId, call.callId, call.mxCall.opponentUserId, !call.mxCall.isOutgoing, call.mxCall.isVideoCall))
                 putExtra(EXTRA_MODE, mode)
             }
         }
 
         fun newIntent(context: Context,
                       callId: String,
-                      roomId: String,
+                      signalingRoomId: String,
                       otherUserId: String,
                       isIncomingCall: Boolean,
                       isVideoCall: Boolean,
@@ -383,7 +398,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
             return Intent(context, VectorCallActivity::class.java).apply {
                 // what could be the best flags?
                 flags = FLAG_ACTIVITY_CLEAR_TOP
-                putExtra(MvRx.KEY_ARG, CallArgs(roomId, callId, otherUserId, isIncomingCall, isVideoCall))
+                putExtra(MvRx.KEY_ARG, CallArgs(signalingRoomId, callId, otherUserId, isIncomingCall, isVideoCall))
                 putExtra(EXTRA_MODE, mode)
             }
         }
@@ -410,7 +425,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
     }
 
     override fun returnToChat() {
-        val args = RoomDetailArgs(callArgs.roomId)
+        val args = RoomDetailArgs(callArgs.signalingRoomId)
         val intent = RoomDetailActivity.newIntent(this, args).apply {
             flags = FLAG_ACTIVITY_CLEAR_TOP
         }
@@ -425,7 +440,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
 
     // Needed to let you answer call when phone is locked
     private fun turnScreenOnAndKeyguardOff() {
-        Timber.v("## VOIP turnScreenOnAndKeyguardOff")
+        Timber.tag(loggerTag.value).v("turnScreenOnAndKeyguardOff")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
             setShowWhenLocked(true)
             setTurnScreenOn(true)
@@ -446,7 +461,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
     }
 
     private fun turnScreenOffAndKeyguardOn() {
-        Timber.v("## VOIP turnScreenOnAndKeyguardOn")
+        Timber.tag(loggerTag.value).v("turnScreenOnAndKeyguardOn")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
             setShowWhenLocked(false)
             setTurnScreenOn(false)

@@ -9,7 +9,7 @@
         android:id="@+id/waiting_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?riotx_waiting_background_color"
+        android:background="?vctr_waiting_background_color"
         android:clickable="true"
         android:focusable="true"
         android:visibility="gone"
@@ -43,10 +43,11 @@
 
                 <TextView
                     android:id="@+id/waitingStatusText"
+                    style="@style/Widget.Vector.TextView.Body"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:textColor="?riotx_text_secondary"
+                    android:textColor="?vctr_content_secondary"
                     android:visibility="gone"
                     tools:text="Waiting status..."
                     tools:visibility="visible" />
@@ -55,7 +56,7 @@
 
             <ProgressBar
                 android:id="@+id/waitingHorizontalProgress"
-                style="?android:attr/progressBarStyleHorizontal"
+                style="@style/Widget.Vector.ProgressBar.Horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="20dp"
                 android:layout_marginTop="10dp"

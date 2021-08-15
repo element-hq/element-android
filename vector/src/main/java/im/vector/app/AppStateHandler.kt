@@ -63,7 +63,6 @@ class AppStateHandler @Inject constructor(
 ) : LifecycleObserver {
 
     private val compositeDisposable = CompositeDisposable()
-
     private val selectedSpaceDataSource = BehaviorDataSource<Option<RoomGroupingMethod>>(Option.empty())
 
     val selectedRoomGroupingObservable = selectedSpaceDataSource.observe()
@@ -100,11 +99,11 @@ class AppStateHandler @Inject constructor(
         }
     }
 
-    init {
+    private fun observeActiveSession() {
         sessionDataSource.observe()
                 .distinctUntilChanged()
                 .subscribe {
-                    // sessionDataSource could already return a session while acitveSession holder still returns null
+                    // sessionDataSource could already return a session while activeSession holder still returns null
                     it.orNull()?.let { session ->
                         if (uiStateRepository.isGroupingMethodSpace(session.sessionId)) {
                             setCurrentSpace(uiStateRepository.getSelectedSpace(session.sessionId), session)
@@ -128,6 +127,7 @@ class AppStateHandler @Inject constructor(
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     fun entersForeground() {
         observeUserAccountData()
+        observeActiveSession()
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
@@ -135,7 +135,7 @@ class AppStateHandler @Inject constructor(
         compositeDisposable.clear()
         val session = activeSessionHolder.getSafeActiveSession() ?: return
         when (val currentMethod = selectedSpaceDataSource.currentValue?.orNull() ?: RoomGroupingMethod.BySpace(null)) {
-            is RoomGroupingMethod.BySpace -> {
+            is RoomGroupingMethod.BySpace       -> {
                 uiStateRepository.storeGroupingMethod(true, session.sessionId)
                 uiStateRepository.storeSelectedSpace(currentMethod.spaceSummary?.roomId, session.sessionId)
             }
@@ -150,7 +150,7 @@ class AppStateHandler @Inject constructor(
         sessionDataSource.observe()
                 .observeOn(AndroidSchedulers.mainThread())
                 .switchMap {
-                    it.orNull()?.rx()?.liveAccountData(setOf(UserAccountDataTypes.TYPE_OVERRIDE_COLORS))
+                    it.orNull()?.rx()?.liveUserAccountData(setOf(UserAccountDataTypes.TYPE_OVERRIDE_COLORS))
                             ?: Observable.just(emptyList())
                 }
                 .distinctUntilChanged()

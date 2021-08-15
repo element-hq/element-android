@@ -34,14 +34,13 @@ class AutocompleteMemberController @Inject constructor() : TypedEpoxyController<
         if (data.isNullOrEmpty()) {
             return
         }
+        val host = this
         data.forEach { user ->
             autocompleteMatrixItem {
                 id(user.userId)
                 matrixItem(user.toMatrixItem())
-                avatarRenderer(avatarRenderer)
-                clickListener { _ ->
-                    listener?.onItemClick(user)
-                }
+                avatarRenderer(host.avatarRenderer)
+                clickListener { host.listener?.onItemClick(user) }
             }
         }
     }

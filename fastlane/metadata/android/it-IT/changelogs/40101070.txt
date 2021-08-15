@@ -1,0 +1,2 @@
+Modifiche principali in questa versione: supporto beta per gli Spazi. Compressione video prima dell'invio.
+Cronologia completa: https://github.com/vector-im/element-android/releases/tag/v1.1.7

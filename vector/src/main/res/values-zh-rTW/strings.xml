@@ -214,20 +214,20 @@
     <string name="room_displayname_3_members">%1$s, %2$s 與 %3$s</string>
     <string name="notice_room_server_acl_allow_is_empty">🎉 禁止所有伺服器參與！無法再使用此聊天室。</string>
     <string name="notice_room_server_acl_updated_no_change">無變更。</string>
-    <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• 禁止伺服器符合 IP 文字。</string>
-    <string name="notice_room_server_acl_updated_ip_literals_allowed">• 允許伺服器符合 IP 文字。</string>
-    <string name="notice_room_server_acl_updated_was_allowed">• 伺服器符合 %s 已從允許清單中移除。</string>
-    <string name="notice_room_server_acl_updated_allowed">• 允許伺服器符合 %s。</string>
-    <string name="notice_room_server_acl_updated_was_banned">• 伺服器符合 %s 已從禁止清單中移除。</string>
-    <string name="notice_room_server_acl_updated_banned">• 現在禁止伺服器符合 %s。</string>
+    <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• 禁止符合 IP 文字的伺服器。</string>
+    <string name="notice_room_server_acl_updated_ip_literals_allowed">• 允許符合 IP 文字的伺服器。</string>
+    <string name="notice_room_server_acl_updated_was_allowed">• 符合 %s 的伺服器已從允許清單中移除。</string>
+    <string name="notice_room_server_acl_updated_allowed">• 允許符合 %s 的伺服器。</string>
+    <string name="notice_room_server_acl_updated_was_banned">• 符合 %s 的伺服器已從禁止清單中移除。</string>
+    <string name="notice_room_server_acl_updated_banned">• 現在禁止符合 %s 的伺服器。</string>
     <string name="notice_room_server_acl_updated_title_by_you">您為此聊天室變更了伺服器 ACL。</string>
-    <string name="notice_room_server_acl_updated_title">%s 為此聊天是變更了伺服器 ACL。</string>
-    <string name="notice_room_server_acl_set_ip_literals_not_allowed">• 禁止伺服器符合 IP 文字。</string>
-    <string name="notice_room_server_acl_set_ip_literals_allowed">• 允許伺服器符合 IP 文字。</string>
-    <string name="notice_room_server_acl_set_allowed">• 已允許伺服器符合 %s。</string>
-    <string name="notice_room_server_acl_set_banned">• 已禁止伺服器符合 %s。</string>
-    <string name="notice_room_server_acl_set_title_by_you">您為此聊天是設定了伺服器 ACL。</string>
-    <string name="notice_room_server_acl_set_title">%s 為此聊天是設定了伺服器 ACL。</string>
+    <string name="notice_room_server_acl_updated_title">%s 為此聊天室變更了伺服器 ACL。</string>
+    <string name="notice_room_server_acl_set_ip_literals_not_allowed">• 禁止符合 IP 文字的伺服器。</string>
+    <string name="notice_room_server_acl_set_ip_literals_allowed">• 允許符合 IP 文字的伺服器。</string>
+    <string name="notice_room_server_acl_set_allowed">• 已允許符合 %s 的伺服器。</string>
+    <string name="notice_room_server_acl_set_banned">• 已禁止符合 %s 的伺服器。</string>
+    <string name="notice_room_server_acl_set_title_by_you">您為此聊天室設定了伺服器 ACL。</string>
+    <string name="notice_room_server_acl_set_title">%s 為此聊天室設定了伺服器 ACL。</string>
     <string name="notice_room_canonical_alias_no_change_by_you">您變更了此聊天室的地址。</string>
     <string name="notice_room_canonical_alias_no_change">%1$s 變更了此聊天室的地址。</string>
     <string name="notice_room_canonical_alias_main_and_alternative_changed_by_you">您為此聊天室變更了主要及備用地址。</string>
@@ -456,8 +456,8 @@
     <string name="room_info_room_name">聊天室名稱</string>
     <string name="room_info_room_topic">聊天室主題</string>
     <string name="call">通話</string>
-    <string name="call_connected">通話已連接</string>
-    <string name="call_connecting">通話正在連接…</string>
+    <string name="call_connected">通話已連線</string>
+    <string name="call_connecting">通話正在連線……</string>
     <string name="call_ended">通話結束</string>
     <string name="call_ring">正在通話…</string>
     <string name="incoming_call">來電</string>
@@ -502,7 +502,7 @@
     <string name="list_members">列出成員</string>
     <string name="open_chat_header">打開標頭</string>
     <string name="room_sync_in_progress">正在同步……</string>
-    <string name="room_jump_to_first_unread">跳到第一個未讀的訊息。</string>
+    <string name="room_jump_to_first_unread">跳到未讀</string>
     <string name="room_preview_invitation_format">你已經被 %s 邀請加入此聊天室</string>
     <string name="room_preview_unlinked_email_warning">邀請已經被傳送給 %s，但與此帳號沒有進行關連。 
 \n你也許希望以不同帳號登入，或將電子郵件加入到您的帳號。</string>
@@ -567,7 +567,7 @@
     <string name="room_resend_unsent_messages">重送沒送出的訊息</string>
     <string name="room_delete_unsent_messages">刪除沒送出的訊息</string>
     <string name="room_message_file_not_found">沒找到檔案</string>
-    <string name="room_do_not_have_permission_to_post">您沒有權限在此聊天室發言</string>
+    <string name="room_do_not_have_permission_to_post">您沒有權限在此聊天室發言。</string>
     <plurals name="room_new_messages_notification">
         <item quantity="other">%d 則新訊息</item>
     </plurals>
@@ -885,7 +885,7 @@
     <string name="select_room_directory">選擇一個聊天室目錄</string>
     <string name="directory_server_fail_to_retrieve_server">伺服器可能不可用或超載</string>
     <string name="directory_server_type_homeserver">輸入一個主伺服器來列出所有公開聊天室</string>
-    <string name="directory_server_placeholder">家伺服器 URL</string>
+    <string name="directory_server_placeholder">伺服器名稱</string>
     <string name="directory_server_all_rooms_on_server">在 %s 伺服器上的所有聊天室</string>
     <string name="directory_server_native_rooms">所有本地 %s 聊天室</string>
     <string name="lock_screen_hint">在此輸入…</string>
@@ -995,7 +995,7 @@
     <string name="command_description_nick">變更您的顯示暱稱</string>
     <string name="command_description_markdown">開啟／關閉 markdown</string>
     <string name="command_description_clear_scalar_token">為了修復 Matrix 應用程式管理</string>
-    <string name="room_tombstone_versioned_description">這個聊天室已被取代，且不再活躍</string>
+    <string name="room_tombstone_versioned_description">這個聊天室已被取代，且不再活躍。</string>
     <string name="room_tombstone_continuation_link">對話在此繼續</string>
     <string name="room_tombstone_continuation_description">這個聊天示是其他對話的延續</string>
     <string name="room_tombstone_predecessor_link">點選這裡以檢視更舊的訊息</string>
@@ -1971,7 +1971,7 @@
 \n- 任一裝置正在使用的網際網路連線
 \n
 \n我們建議您立刻在設定中變更您的密碼與復原金鑰。</string>
-    <string name="verify_cancelled_notice">透過設定驗證您的裝置。</string>
+    <string name="verify_cancelled_notice">已取消驗證。您可以再次開始驗證。</string>
     <string name="verification_cancelled">驗證已取消</string>
     <string name="recovery_passphrase">復原通關密語</string>
     <string name="message_key">訊息金鑰</string>
@@ -2336,7 +2336,7 @@
     <string name="template_settings_security_pin_code_grace_period_summary_on">未使用 ${app_name} 2分鐘後，要求輸入 PIN 碼。</string>
     <string name="settings_security_pin_code_grace_period_title">2分鐘後要求輸入 PIN 碼</string>
     <string name="settings_security_pin_code_notifications_summary_off">在簡易通知中僅顯示未讀訊息數量。</string>
-    <string name="settings_security_pin_code_notifications_summary_on">顯示如聊天是名稱與訊息內容等詳細資訊。</string>
+    <string name="settings_security_pin_code_notifications_summary_on">顯示如聊天室名稱與訊息內容等詳細資訊。</string>
     <string name="settings_security_pin_code_notifications_title">在通知中顯示內容</string>
     <string name="template_settings_security_pin_code_use_biometrics_summary_off">PIN 碼是解鎖 ${app_name} 的唯一方式。</string>
     <string name="settings_security_pin_code_use_biometrics_summary_on">啟用特定裝置的生物識別技術，如指紋與臉部辨識。</string>
@@ -2393,7 +2393,7 @@
     <string name="create_room_settings_section">聊天室設定</string>
     <string name="create_room_topic_hint">主題</string>
     <string name="create_room_topic_section">聊天室主題（選擇性）</string>
-    <string name="create_room_name_section">聊天是名稱</string>
+    <string name="create_room_name_section">聊天室名稱</string>
     <string name="settings_export_trail">匯出審核</string>
     <string name="room_member_open_or_create_dm">直接訊息</string>
     <string name="send_bug_report_include_key_share_history">傳送金鑰共享請求歷史</string>
@@ -2486,9 +2486,9 @@
     <string name="room_settings_room_read_history_dialog_subtitle">對可讀取歷史紀錄的人的變更將僅試用於此聊天室中的未來訊息。現有歷史紀錄的可見性將保持不便。</string>
     <string name="action_unpublish">取消發佈</string>
     <string name="action_add">新增</string>
-    <string name="default_message_emote_snow">傳送雪 ❄️</string>
+    <string name="default_message_emote_snow">傳送下雪特效 ❄️</string>
     <string name="default_message_emote_confetti">傳送五彩紙屑 🎉</string>
-    <string name="command_snow">與雪一同傳送指定的訊息</string>
+    <string name="command_snow">與下雪特效一同傳送指定的訊息</string>
     <string name="command_confetti">與五彩紙屑一同傳送指定的訊息</string>
     <string name="login_clear_homeserver_history">清除歷史紀錄</string>
     <string name="login_social_sso">單一登入</string>
@@ -2625,7 +2625,7 @@
     <string name="labs_use_restricted_join_rule_desc">警告需要伺服器支援與實驗性聊天室版本</string>
     <string name="labs_use_restricted_join_rule">實驗性空間 - 受限制的聊天室。</string>
     <string name="you_are_invited">您被邀請了</string>
-    <string name="spaces_beta_welcome_to_spaces_desc">空間是將聊天室與夥伴依工作、娛樂或是您自己的喜好分組的方式。</string>
+    <string name="spaces_beta_welcome_to_spaces_desc">空間是將聊天室與人們分組的新方式。</string>
     <string name="spaces_beta_welcome_to_spaces">歡迎使用空間！</string>
     <string name="space_add_existing_rooms">新增既有的聊天室與空間</string>
     <string name="space_leave_prompt_msg">您確定您想要離開空間嗎？</string>
@@ -2688,8 +2688,8 @@
     <string name="command_description_create_space">建立空間</string>
     <string name="a11y_unchecked">未檢查</string>
     <string name="search_hint_room_name">搜尋名稱</string>
-    <string name="room_settings_room_access_restricted_description">擁有此聊天室空間中的任何人都可以尋找並加入。僅此聊天是的管理員可以將其新增到空間中。</string>
-    <string name="room_settings_room_access_restricted_title">空間</string>
+    <string name="room_settings_room_access_restricted_description">擁有此聊天室空間中的任何人都可以尋找並加入。僅此聊天室的管理員可以將其新增到空間中。</string>
+    <string name="room_settings_room_access_restricted_title">僅空間成員</string>
     <string name="room_settings_room_access_public_description">任何人都可以尋找聊天室並加入</string>
     <string name="room_settings_room_access_public_title">公開</string>
     <string name="room_settings_room_access_private_description">僅被邀請的夥伴可以尋找並加入</string>
@@ -2700,4 +2700,129 @@
     <string name="spaces_header">空間</string>
     <string name="spaces_invited_header">邀請</string>
     <string name="suggested_header">建議的聊天室</string>
+    <string name="space_manage_rooms_and_spaces">管理聊天室與空間</string>
+    <string name="space_mark_as_not_suggested">標記為不建議</string>
+    <string name="space_mark_as_suggested">標記為建議</string>
+    <string name="space_suggested">建議</string>
+    <string name="make_this_space_public">讓此空間公開</string>
+    <string name="space_settings_manage_rooms">管理聊天室</string>
+    <string name="looking_for_someone_not_in_space">正在尋找不在 %s 中的人？</string>
+    <string name="user_invites_you">%s 邀請您</string>
+    <string name="a11y_public_room">此聊天室是公開的</string>
+    <string name="send_images_and_video_with_original_size">傳送原始大小的媒體</string>
+    <plurals name="send_videos_with_original_size">
+        <item quantity="other">傳送原始大小的影片</item>
+    </plurals>
+    <string name="error_file_too_big_simple">檔案太大了，無法上傳。</string>
+    <string name="send_file_step_compressing_video">正在壓縮影片 %d%%</string>
+    <string name="send_file_step_compressing_image">正在壓縮圖片……</string>
+    <string name="use_as_default_and_do_not_ask_again">預設使用，不再詢問</string>
+    <string name="option_always_ask">總是詢問</string>
+    <string name="this_space_has_no_rooms_admin">有些聊天室可能是隱藏的，因為其為私人聊天室，您需要邀請。</string>
+    <string name="this_space_has_no_rooms_not_admin">有些聊天室可能是隱藏的，因為其為私人聊天室，您需要邀請。
+\n您沒有權限新增聊天室。</string>
+    <string name="this_space_has_no_rooms">此空間沒有聊天室</string>
+    <string name="spaces_no_server_support_description">請聯絡您的家伺服器管理員以取得進一步的資訊</string>
+    <string name="spaces_no_server_support_title">看來您的家伺服器尚未支援空間</string>
+    <string name="spaces_feeling_experimental_subspace">想要做點實驗嗎？
+\n您可以將既有的空間新增至其他空間中。</string>
+    <string name="labs_space_show_orphan_in_home">實驗性空間，僅在首頁顯示無人看管的聊天室</string>
+    <string name="space_add_rooms">新增聊天室</string>
+    <string name="space_leave_prompt_msg_as_admin">您是此空間的管理員，請確保在您離開前已將管理權轉交給另一個成員。</string>
+    <string name="space_leave_prompt_msg_private">此空間並非公開。您將無法在無邀請的狀況下重新加入。</string>
+    <string name="space_leave_prompt_msg_only_you">您是這裡唯一的人。如果您離開，包含您在內的所有人都將無法加入。</string>
+    <string name="invite_to_space">邀請至 %s</string>
+    <string name="a11y_beta">此功能仍在測試版</string>
+    <string name="give_feedback">給予回饋</string>
+    <string name="feedback_failed">回饋傳送失敗 (%s)</string>
+    <string name="feedback_sent">謝謝，您的回饋已成功傳送</string>
+    <string name="you_may_contact_me">如果您有任何後續的問題，歡迎聯絡我</string>
+    <string name="send_feedback_space_info">您正在使用空間的測試版本。您的回饋有助於改善未來的版本。我們將會紀錄您的平台與使用者名稱以協助我們使用您的回饋。</string>
+    <string name="feedback">回饋</string>
+    <string name="send_feedback_space_title">空間回饋</string>
+    <string name="error_jitsi_join_conf">抱歉，嘗試加入會議時發生錯誤</string>
+    <string name="unnamed_room">未命名聊天室</string>
+    <string name="private_space">私人空間</string>
+    <string name="public_space">公開空間</string>
+    <string name="a11y_public_space">此空間是公開的</string>
+    <string name="call_transfer_unknown_person">未知的人</string>
+    <string name="call_transfer_transfer_to_title">轉移至 %1$s</string>
+    <string name="call_transfer_consulting_with">與 %1$s 進行諮詢</string>
+    <string name="directory_add_a_new_server_error_already_added">此伺服器已在清單中</string>
+    <string name="directory_add_a_new_server_error">找不到此伺服器或其聊天室清單</string>
+    <string name="directory_add_a_new_server_prompt">輸入您想要探索的新伺服器名稱。</string>
+    <string name="directory_add_a_new_server">加入新的伺服器</string>
+    <string name="directory_your_server">您的伺服器</string>
+    <string name="teammate_spaces_might_not_join">目前，人們可能無法加入您開啟的任何私人聊天室。
+\n
+\n作為測試版的一部分，我們會對此進行改善，但想先讓您知道。</string>
+    <string name="teammate_spaces_arent_quite_ready">隊友空間還沒有完全準備好，但您仍可以試試看</string>
+    <string name="continue_anyway">無論如何都要繼續</string>
+    <string name="error_failed_to_join_room">抱歉，試圖加入時發生錯誤：%s</string>
+    <string name="create_space_alias_hint">空間地址</string>
+    <string name="space_settings_alias_subtitle">檢視與管理此空間的地址。</string>
+    <string name="space_settings_alias_title">空間地址</string>
+    <string name="room_upgrade_to_recommended_version">升級到建議的聊天室版本</string>
+    <string name="room_using_unstable_room_version">此聊天室正在執行聊天室版本 %s，此家伺服器已被標記為不穩定。</string>
+    <string name="upgrade_room_no_power_to_manage">您需要升級聊天室的權限</string>
+    <string name="upgrade_room_update_parent_space">自動更新空間上層</string>
+    <string name="upgrade_room_auto_invite">自動邀請使用者</string>
+    <string name="upgrade_public_room_from_to">您將要把此聊天室從 %s 升級到 %s。</string>
+    <string name="upgrade_room_warning">升級聊天是是一項進階動作，通常建議在聊天室因臭蟲、缺少功能或安全漏洞而不穩定時使用。
+\n這通常只會影響聊天是在伺服器上的處理方式。</string>
+    <string name="upgrade_private_room">升級私人聊天室</string>
+    <string name="upgrade_public_room">升級公開聊天室</string>
+    <string name="upgrade">升級</string>
+    <string name="it_may_take_some_time">請耐心等待，這可能會需要一些時間。</string>
+    <string name="joining_replacement_room">加入取代的聊天室</string>
+    <string name="command_description_upgrade_room">升級聊天室到新版本</string>
+    <string name="settings_server_room_version_unstable">不穩定</string>
+    <string name="settings_server_room_version_stable">穩定</string>
+    <string name="settings_server_default_room_version">預設版本</string>
+    <string name="settings_server_room_versions">聊天室版本 👓</string>
+    <string name="verification_scan_self_emoji_subtitle">透過比較表情符號來驗證</string>
+    <string name="verification_scan_with_this_device">使用此裝置掃描</string>
+    <string name="verification_scan_self_notice">使用您的其他裝置掃描條碼或切換並使用此裝置掃描</string>
+    <string name="hs_client_url">家伺服器 API URL</string>
+    <string name="missing_permissions_title">缺少權限</string>
+    <string name="denied_permission_camera">要執行此動作，請從系統設定中授予「相機」權限。</string>
+    <string name="denied_permission_generic">缺少執行此動作的部份權限，請從系統設定中授予權限。</string>
+    <plurals name="missed_video_call">
+        <item quantity="other">%d 通未接聽通話</item>
+    </plurals>
+    <plurals name="missed_audio_call">
+        <item quantity="other">%d 通未接聽通話</item>
+    </plurals>
+    <string name="upgrade_room_for_restricted_note">請注意，升級會讓聊天室變為新的版本。目前的所有訊息都將保留在此被封存的聊天室中。</string>
+    <string name="upgrade_room_for_restricted_no_param">上層空間中的任何人都可以找到並加入此聊天室，不需要手動邀請所有人。您隨時都可以在聊天室設定中變更此設定。</string>
+    <string name="upgrade_room_for_restricted">任何在 %s 中的人都可以找到並加入此聊天室，不需要手動邀請所有人。您隨時都可以在聊天室設定中變更此設定。</string>
+    <string name="voice_message_reply_content">語音訊息 (%1$s)</string>
+    <string name="error_voice_message_cannot_reply_or_edit">語音訊息作用中時無法回覆或編輯</string>
+    <string name="error_voice_message_unable_to_record">無法錄製語音訊息</string>
+    <string name="error_voice_message_unable_to_play">無法播放此語音訊息</string>
+    <string name="labs_use_voice_message">啟用語音訊息</string>
+    <string name="voice_message_tap_to_stop_toast">點擊您的錄音以停止或收聽</string>
+    <string name="voice_message_n_seconds_warning_toast">剩下%1$d秒</string>
+    <string name="voice_message_release_to_send_toast">按住以錄製，放開以傳送</string>
+    <string name="a11y_delete_recorded_voice_message">刪除已錄製的語音訊息</string>
+    <string name="a11y_recording_voice_message">正在錄製語音訊息</string>
+    <string name="a11y_pause_voice_message">暫停語音訊息</string>
+    <string name="a11y_play_voice_message">播放語音訊息</string>
+    <string name="a11y_lock_voice_message">語音訊息鎖定</string>
+    <string name="voice_message_slide_to_cancel">滑動以取消</string>
+    <string name="a11y_start_voice_message">開始語音訊息</string>
+    <string name="allow_anyone_in_room_to_access">允許任何在 %s 中的人都可以找到並存取。您也可以選取其他空間。</string>
+    <string name="upgrade_required">必須升級</string>
+    <string name="sent_a_voice_message">語音</string>
+    <string name="other_spaces_or_rooms_you_might_not_know">您可能不知道的其他空間或聊天室</string>
+    <string name="space_you_know_that_contains_this_room">您所知的包含此聊天是的空間</string>
+    <string name="decide_who_can_find_and_join">決定誰可以找到並加入此聊天室。</string>
+    <string name="tap_to_edit_spaces">點擊以編輯空間</string>
+    <string name="select_spaces">選取空間</string>
+    <string name="decide_which_spaces_can_access">決定哪些空間可以存取此聊天室。若選取了某個空間，其成員就可以找到並加入此聊天室。</string>
+    <string name="spaces_which_can_access">可以存取的空間</string>
+    <string name="allow_space_member_to_find_and_access">允許空間成員尋找並存取。</string>
+    <string name="room_create_member_of_space_name_can_join">空間 %s 的成員可以找到、預覽並加入。</string>
+    <string name="room_settings_room_access_private_invite_only_title">私人（僅邀請）</string>
+    <string name="denied_permission_voice_message">要傳送語音訊息，請授予「麥克風」權限。</string>
 </resources>

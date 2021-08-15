@@ -22,12 +22,12 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.app.AlertDialog
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.viewModel
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.error.ErrorFormatter
@@ -38,11 +38,9 @@ import im.vector.app.core.platform.SimpleFragmentActivity
 import im.vector.app.core.platform.WaitingViewData
 import im.vector.app.core.utils.PERMISSIONS_FOR_MEMBERS_SEARCH
 import im.vector.app.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
-import im.vector.app.core.utils.PERMISSION_REQUEST_CODE_LAUNCH_CAMERA
-import im.vector.app.core.utils.PERMISSION_REQUEST_CODE_READ_CONTACTS
-import im.vector.app.core.utils.allGranted
 import im.vector.app.core.utils.checkPermissions
 import im.vector.app.core.utils.onPermissionDeniedSnackbar
+import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.features.contactsbook.ContactsBookFragment
 import im.vector.app.features.contactsbook.ContactsBookViewModel
 import im.vector.app.features.contactsbook.ContactsBookViewState
@@ -52,7 +50,6 @@ import im.vector.app.features.userdirectory.UserListSharedAction
 import im.vector.app.features.userdirectory.UserListSharedActionViewModel
 import im.vector.app.features.userdirectory.UserListViewModel
 import im.vector.app.features.userdirectory.UserListViewState
-
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.room.failure.CreateRoomFailure
 import java.net.HttpURLConnection
@@ -111,35 +108,31 @@ class CreateDirectRoomActivity : SimpleFragmentActivity(), UserListViewModel.Fac
     }
 
     private fun openAddByQrCode() {
-        if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, this, PERMISSION_REQUEST_CODE_LAUNCH_CAMERA, 0)) {
+        if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, this, permissionCameraLauncher)) {
             addFragment(R.id.container, CreateDirectRoomByQrCodeFragment::class.java)
         }
     }
 
     private fun openPhoneBook() {
         // Check permission first
-        if (checkPermissions(PERMISSIONS_FOR_MEMBERS_SEARCH,
-                        this,
-                        PERMISSION_REQUEST_CODE_READ_CONTACTS,
-                        0)) {
+        if (checkPermissions(PERMISSIONS_FOR_MEMBERS_SEARCH, this, permissionReadContactLauncher)) {
             addFragmentToBackstack(R.id.container, ContactsBookFragment::class.java)
         }
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (allGranted(grantResults)) {
-            if (requestCode == PERMISSION_REQUEST_CODE_READ_CONTACTS) {
-                doOnPostResume { addFragmentToBackstack(R.id.container, ContactsBookFragment::class.java) }
-            } else if (requestCode == PERMISSION_REQUEST_CODE_LAUNCH_CAMERA) {
-                addFragment(R.id.container, CreateDirectRoomByQrCodeFragment::class.java)
-            }
-        } else {
-            if (requestCode == PERMISSION_REQUEST_CODE_LAUNCH_CAMERA) {
-                onPermissionDeniedSnackbar(R.string.permissions_denied_qr_code)
-            } else if (requestCode == PERMISSION_REQUEST_CODE_READ_CONTACTS) {
-                onPermissionDeniedSnackbar(R.string.permissions_denied_add_contact)
-            }
+    private val permissionReadContactLauncher = registerForPermissionsResult { allGranted, deniedPermanently ->
+        if (allGranted) {
+            doOnPostResume { addFragmentToBackstack(R.id.container, ContactsBookFragment::class.java) }
+        } else if (deniedPermanently) {
+            onPermissionDeniedSnackbar(R.string.permissions_denied_add_contact)
+        }
+    }
+
+    private val permissionCameraLauncher = registerForPermissionsResult { allGranted, deniedPermanently ->
+        if (allGranted) {
+            addFragment(R.id.container, CreateDirectRoomByQrCodeFragment::class.java)
+        } else if (deniedPermanently) {
+            onPermissionDeniedSnackbar(R.string.permissions_denied_qr_code)
         }
     }
 
@@ -171,7 +164,7 @@ class CreateDirectRoomActivity : SimpleFragmentActivity(), UserListViewModel.Fac
                 finish()
             }
             is CreateRoomFailure.CreatedWithFederationFailure -> {
-                AlertDialog.Builder(this)
+                MaterialAlertDialogBuilder(this)
                         .setMessage(getString(R.string.create_room_federation_error, error.matrixError.message))
                         .setCancelable(false)
                         .setPositiveButton(R.string.ok) { _, _ -> finish() }
@@ -184,7 +177,7 @@ class CreateDirectRoomActivity : SimpleFragmentActivity(), UserListViewModel.Fac
                 } else {
                     errorFormatter.toHumanReadable(error)
                 }
-                AlertDialog.Builder(this)
+                MaterialAlertDialogBuilder(this)
                         .setMessage(message)
                         .setPositiveButton(R.string.ok, null)
                         .show()

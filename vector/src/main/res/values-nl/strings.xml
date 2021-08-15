@@ -2,7 +2,6 @@
 <resources>
     <string name="summary_message">%1$s: %2$s</string>
     <string name="summary_user_sent_image">%1$s heeft een afbeelding gestuurd.</string>
-
     <string name="notice_room_invite_no_invitee">Uitnodiging van %s</string>
     <string name="notice_room_invite">%1$s heeft %2$s uitgenodigd</string>
     <string name="notice_room_invite_you">%1$s heeft u uitgenodigd</string>
@@ -30,61 +29,45 @@
     <string name="notice_room_visibility_world_readable">iedereen.</string>
     <string name="notice_room_visibility_unknown">onbekend (%s).</string>
     <string name="notice_end_to_end">%1$s heeft eind-tot-eind-versleuteling aangezet (%2$s)</string>
-
     <string name="notice_requested_voip_conference">%1$s heeft een VoIP-vergadering aangevraagd</string>
     <string name="notice_voip_started">VoIP-vergadering gestart</string>
     <string name="notice_voip_finished">VoIP-vergadering gestopt</string>
-
     <string name="notice_avatar_changed_too">(avatar is ook veranderd)</string>
     <string name="notice_room_name_removed">%1$s heeft de gespreksnaam verwijderd</string>
     <string name="notice_room_topic_removed">%1$s heeft het gespreksonderwerp verwijderd</string>
     <string name="notice_profile_change_redacted">%1$s heeft zijn/haar profiel %2$s bijgewerkt</string>
     <string name="notice_room_third_party_invite">%1$s heeft een uitnodiging naar %2$s gestuurd om het gesprek toe te treden</string>
     <string name="notice_room_third_party_registered_invite">%1$s heeft de uitnodiging voor %2$s aanvaard</string>
-
     <string name="notice_crypto_unable_to_decrypt">** Kan niet ontsleutelen: %s **</string>
     <string name="notice_crypto_error_unkwown_inbound_session_id">Het apparaat van de afzender heeft geen sleutels voor dit bericht gestuurd.</string>
-
     <!-- Room Screen -->
     <string name="could_not_redact">Kon niet verwijderd worden</string>
     <string name="unable_to_send_message">Kan bericht niet verzenden</string>
-
     <string name="message_failed_to_upload">Uploaden van de afbeelding mislukt</string>
-
     <!-- general errors -->
     <string name="network_error">Netwerkfout</string>
     <string name="matrix_error">Matrix-fout</string>
-
     <!-- Home Screen -->
-
     <!-- Last seen time -->
-
     <!-- room error messages -->
     <string name="room_error_join_failed_empty_room">Het is momenteel niet mogelijk om een leeg gesprek opnieuw toe te treden.</string>
-
     <!-- medium friendly name -->
     <string name="medium_email">E-mailadres</string>
     <string name="medium_phone_number">Telefoonnummer</string>
-
     <string name="summary_user_sent_sticker">%1$s heeft een sticker gestuurd.</string>
-
     <!-- Room display name -->
     <string name="room_displayname_invite_from">Uitnodiging van %s</string>
     <string name="room_displayname_room_invite">Gespreksuitnodiging</string>
     <string name="room_displayname_two_members">%1$s en %2$s</string>
     <string name="room_displayname_empty_room">Leeg gesprek</string>
-
     <plurals name="room_displayname_three_and_more_members">
         <item quantity="one">%1$s en 1 andere</item>
         <item quantity="other">%1$s en %2$d anderen</item>
     </plurals>
-
-
     <string name="notice_event_redacted">Bericht verwijderd</string>
     <string name="notice_event_redacted_by">Bericht verwijderd door %1$s</string>
     <string name="notice_event_redacted_with_reason">Bericht verwijderd [reden: %1$s]</string>
     <string name="notice_event_redacted_by_with_reason">Bericht verwijderd door %1$s [reden: %2$s]</string>
-
     <string name="initial_sync_start_importing_account">Initiële synchronisatie:
 \nAccount wordt geïmporteerd…</string>
     <string name="initial_sync_start_importing_account_crypto">Initiële synchronisatie:
@@ -101,12 +84,9 @@
 \nGemeenschappen worden geïmporteerd</string>
     <string name="initial_sync_start_importing_account_data">Initiële synchronisatie:
 \nAccountgegevens worden geïmporteerd</string>
-
     <string name="notice_room_update">%s heeft dit gesprek opgewaardeerd.</string>
-
     <string name="event_status_sending_message">Bericht wordt verstuurd…</string>
     <string name="clear_timeline_send_queue">Uitgaande wachtrij legen</string>
-
     <string name="notice_room_third_party_revoked_invite">%1$s heeft de uitnodiging voor %2$s om het gesprek toe te treden ingetrokken</string>
     <string name="notice_room_invite_no_invitee_with_reason">Uitnodiging van %1$s. Reden: %2$s</string>
     <string name="notice_room_invite_with_reason">%1$s heeft %2$s uitgenodigd. Reden: %3$s</string>
@@ -121,25 +101,19 @@
     <string name="notice_room_third_party_revoked_invite_with_reason">%1$s heeft de uitnodiging voor %2$s ingetrokken. Reden: %3$s</string>
     <string name="notice_room_third_party_registered_invite_with_reason">%1$s heeft de uitnodiging voor %2$s aanvaard. Reden: %3$s</string>
     <string name="notice_room_withdraw_with_reason">%1$s heeft de uitnodiging van %2$s ingetrokken. Reden: %3$s</string>
-
     <plurals name="notice_room_aliases_added">
         <item quantity="one">%1$s heeft %2$s als gespreksadres toegevoegd.</item>
         <item quantity="other">%1$s heeft %2$s als gespreksadressen toegevoegd.</item>
     </plurals>
-
     <plurals name="notice_room_aliases_removed">
         <item quantity="one">%1$s heeft %2$s als gespreksadres verwijderd.</item>
         <item quantity="other">%1$s heeft %3$s als gespreksadressen verwijderd.</item>
     </plurals>
-
     <string name="notice_room_aliases_added_and_removed">%1$s heeft %2$s als gespreksadres toegevoegd en %3$s verwijderd.</string>
-
     <string name="notice_room_canonical_alias_set">%1$s heeft het hoofdadres voor dit gesprek ingesteld op %2$s.</string>
     <string name="notice_room_canonical_alias_unset">%1$s heeft het hoofdadres voor dit gesprek verwijderd.</string>
-
     <string name="notice_room_guest_access_can_join">%1$s heeft gasten de toegang tot het gesprek verleend.</string>
     <string name="notice_room_guest_access_forbidden">%1$s heeft gasten de toegang tot het gesprek verhinderd.</string>
-
     <string name="notice_end_to_end_ok">%1$s heeft eind-tot-eind-versleuteling ingeschakeld.</string>
     <string name="notice_end_to_end_unknown_algorithm">%1$s heeft eind-tot-eind-versleuteling ingeschakeld (onbekend algoritme %2$s).</string>
     <!-- titles -->
@@ -1471,4 +1445,98 @@
     <string name="create_room_public_description">Iedereen zal dit gesprek kunnen toetreden</string>
     <string name="pause_video">Pauzeren</string>
     <string name="play_video">Afspelen</string>
+    <string name="notice_room_canonical_alias_unset_by_you">Je hebt het hoofdadres voor dit gesprek verwijderd.</string>
+    <string name="notice_room_invite_with_reason_by_you">Je hebt %1$s uitgenodigd. Reden: %2$s</string>
+    <string name="notice_room_invite_no_invitee_with_reason_by_you">Jouw uitnodiging. Reden: %1$s</string>
+    <string name="event_status_sent_message">Bericht verstuurd</string>
+    <string name="initial_sync_start_downloading">Initiële synchronisatie:
+\nGegevens aan het downloaden…</string>
+    <string name="initial_sync_start_server_computing">Initiële synchronisatie:
+\nAan het wachten op een antwoord van de server…</string>
+    <string name="room_displayname_empty_room_was">Lege kamer (was %s)</string>
+    <string name="power_level_moderator">Moderator</string>
+    <string name="notice_direct_room_third_party_invite_by_you">Je hebt %1$s uitgenodigd</string>
+    <string name="notice_direct_room_third_party_invite">%1$s nodigde %2$s uit</string>
+    <string name="notice_room_server_acl_updated_no_change">Geen verandering.</string>
+    <string name="notice_end_to_end_by_you">Je hebt end-to-end encryptie ingeschakeld (%1$s)</string>
+    <string name="notice_made_future_direct_room_visibility_by_you">Je hebt toekomstige berichten zichtbaar gemaakt voor %1$s</string>
+    <string name="notice_made_future_direct_room_visibility">%1$s heeft toekomstige berichten zichtbaar gemaakt voor %2$s</string>
+    <string name="notice_ended_call_by_you">Je hebt de oproep beëindigd.</string>
+    <string name="notice_answered_call_by_you">Je hebt de oproep beantwoord.</string>
+    <string name="notice_display_name_changed_from_by_you">Je hebt je schermnaam gewijzigd van %1$s naar %2$s</string>
+    <string name="notice_display_name_set_by_you">Je hebt je schermnaam ingesteld op %1$s</string>
+    <string name="notice_avatar_url_changed_by_you">Je hebt je avatar aangepast</string>
+    <string name="notice_room_reject_by_you">Je hebt de uitnodiging geweigerd</string>
+    <string name="notice_direct_room_leave_by_you">Je hebt de kamer verlaten</string>
+    <string name="notice_direct_room_leave">%1$s heeft de kamer verlaten</string>
+    <string name="notice_room_leave_by_you">Je hebt de kamer verlaten</string>
+    <string name="notice_room_invite_by_you">Jij hebt %1$s uitgenodigd</string>
+    <string name="notice_direct_room_created_by_you">Jij hebt de discussie aangemaakt</string>
+    <string name="notice_direct_room_created">%1$s heeft de discussie aangemaakt</string>
+    <string name="notice_room_created_by_you">Jij hebt de kamer aangemaakt</string>
+    <string name="notice_room_created">%1$s heeft de kamer aangemaakt</string>
+    <string name="notice_room_invite_no_invitee_by_you">Jouw uitnodiging</string>
+    <string name="summary_you_sent_image">Je hebt een afbeelding gestuurd.</string>
+    <string name="notice_room_ban_with_reason_by_you">U heeft %1$s verbannen. Reden: %2$s</string>
+    <string name="notice_room_unban_with_reason_by_you">U heeft de verbanning van %1$s opgeheven. Reden: %2$s</string>
+    <string name="notice_room_kick_with_reason_by_you">U heeft %1$s eruit getrapt. Reden: %2$s</string>
+    <string name="notice_room_reject_with_reason_by_you">U heeft de uitnodiging geweigerd. Reden: %1$s</string>
+    <string name="notice_direct_room_leave_with_reason_by_you">U bent vertrokken. Reden: %1$s</string>
+    <string name="notice_direct_room_leave_with_reason">%1$s is vertrokken. Reden: %2$s</string>
+    <string name="notice_room_leave_with_reason_by_you">U heeft de ruimte verlaten. Reden: %1$s</string>
+    <string name="notice_direct_room_join_with_reason_by_you">U heeft zich aangesloten. Reden: %1$s</string>
+    <string name="notice_direct_room_join_with_reason">%1$s heeft zich aangesloten. Reden: %2$s</string>
+    <string name="notice_room_join_with_reason_by_you">U heeft zich aangesloten bij de kamer. Reden: %1$s</string>
+    <plurals name="room_displayname_four_and_more_members">
+        <item quantity="one">%1$s, %2$s, %3$s en %4$d andere</item>
+        <item quantity="other">%1$s, %2$s, %3$s en %4$d anderen</item>
+    </plurals>
+    <string name="room_displayname_4_members">%1$s, %2$s, %3$s en %4$s</string>
+    <string name="room_displayname_3_members">%1$s, %2$s en %3$s</string>
+    <string name="notice_power_level_diff">%1$s van %2$s naar %3$s</string>
+    <string name="notice_power_level_changed">%1$s heeft het machtigingsniveau van %2$s aangepast.</string>
+    <string name="notice_power_level_changed_by_you">U heeft het machtigingsniveau van %1$s aangepast.</string>
+    <string name="power_level_custom_no_value">Speciaal</string>
+    <string name="power_level_custom">Speciaal (%1$d)</string>
+    <string name="power_level_default">Standaardlid</string>
+    <string name="power_level_admin">Beheerder</string>
+    <string name="notice_widget_jitsi_modified_by_you">U heeft de videoconferentie aangepast</string>
+    <string name="notice_widget_jitsi_modified">Videoconferentie aangepast door %1$s</string>
+    <string name="notice_widget_jitsi_removed_by_you">U heeft de videoconferentie beëindigd</string>
+    <string name="notice_widget_jitsi_removed">Videoconferentie beëindigd door %1$s</string>
+    <string name="notice_widget_jitsi_added_by_you">U heeft een videoconferentie gestart</string>
+    <string name="notice_widget_jitsi_added">Videoconferentie gestart door %1$s</string>
+    <string name="notice_widget_modified_by_you">U heeft de widget %1$s aangepast</string>
+    <string name="notice_widget_modified">%1$s heeft de widget %2$s aangepast</string>
+    <string name="notice_widget_removed_by_you">U heeft de widget %1$s verwijderd</string>
+    <string name="notice_widget_removed">%1$s heeft de widget %2$s verwijderd</string>
+    <string name="notice_widget_added_by_you">U heeft de widget %1$s toegevoegd</string>
+    <string name="notice_widget_added">%1$s heeft de widget %2$s toegevoegd</string>
+    <string name="notice_room_third_party_registered_invite_by_you">U heeft de uitnodiging voor %1$s geaccepteerd</string>
+    <string name="notice_direct_room_third_party_revoked_invite_by_you">U heeft de uitnodiging voor %1$s ingetrokken</string>
+    <string name="notice_direct_room_third_party_revoked_invite">%1$s heeft de uitnodiging voor %2$s ingetrokken</string>
+    <string name="notice_room_third_party_revoked_invite_by_you">U heeft de uitnodiging voor %1$s ingetrokken om zich bij de kamer aan te sluiten</string>
+    <string name="notice_room_third_party_invite_by_you">U heeft een uitnodiging gestuurd naar %1$s om zich bij de kamer aan te sluiten</string>
+    <string name="notice_room_avatar_removed_by_you">U heeft de kameravatar verwijderd</string>
+    <string name="notice_room_avatar_removed">%1$s heeft de kameravatar verwijderd</string>
+    <string name="notice_room_topic_removed_by_you">U heeft het kameronderwerp verwijderd</string>
+    <string name="notice_room_name_removed_by_you">U heeft de kamernaam verwijderd</string>
+    <string name="notice_room_update_by_you">U heeft de ruimte geüpgradet.</string>
+    <string name="notice_call_candidates_by_you">U verstuurde data om het gesprek op te zetten.</string>
+    <string name="notice_call_candidates">%s verstuurde data om het gesprek op te zetten.</string>
+    <string name="notice_placed_voice_call_by_you">U heeft een audiogesprek geopend.</string>
+    <string name="notice_placed_video_call_by_you">U heeft een videogesprek geopend.</string>
+    <string name="notice_room_name_changed_by_you">U heeft de ruimtenaam veranderd naar: %1$s</string>
+    <string name="notice_room_avatar_changed_by_you">U heeft de ruimteavatar aangepast</string>
+    <string name="notice_room_avatar_changed">%1$s heeft de ruimteavatar aangepast</string>
+    <string name="notice_room_topic_changed_by_you">U heeft het onderwerp gewijzigd naar: %1$s</string>
+    <string name="notice_display_name_removed_by_you">U heeft uw weergavenaam verwijderd (voorheen %1$s)</string>
+    <string name="notice_room_withdraw_by_you">U heeft de uitnodiging van %1$s ingetrokken</string>
+    <string name="notice_room_ban_by_you">U heeft %1$s verbannen</string>
+    <string name="notice_room_unban_by_you">U heeft de verbanning van %1$s opgeheven</string>
+    <string name="notice_room_kick_by_you">U heeft %1$s eruit getrapt</string>
+    <string name="notice_direct_room_join_by_you">U sloot zich aan</string>
+    <string name="notice_direct_room_join">%1$s sluit aan</string>
+    <string name="notice_room_join_by_you">Je hebt de kamer betreden</string>
+    <string name="summary_you_sent_sticker">Je hebt een sticker verzonden.</string>
 </resources>

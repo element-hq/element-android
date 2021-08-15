@@ -314,6 +314,12 @@ internal class DefaultCryptoService @Inject constructor(
         cryptoCoroutineScope.launchToCallback(coroutineDispatchers.crypto, NoOpMatrixCallback()) {
             // Open the store
             cryptoStore.open()
+
+            if (!cryptoStore.areDeviceKeysUploaded()) {
+                // Schedule upload of OTK
+                oneTimeKeysUploader.updateOneTimeKeyCount(0)
+            }
+
             // this can throw if no network
             tryOrNull {
                 uploadDeviceKeys()
@@ -388,7 +394,7 @@ internal class DefaultCryptoService @Inject constructor(
         cryptoStore.close()
     }
 
-    // Aways enabled on RiotX
+    // Always enabled on Matrix Android SDK2
     override fun isCryptoEnabled() = true
 
     /**
@@ -905,7 +911,7 @@ internal class DefaultCryptoService @Inject constructor(
      * Upload my user's device keys.
      */
     private suspend fun uploadDeviceKeys() {
-        if (cryptoStore.getDeviceKeysUploaded()) {
+        if (cryptoStore.areDeviceKeysUploaded()) {
             Timber.d("Keys already uploaded, nothing to do")
             return
         }
@@ -928,14 +934,10 @@ internal class DefaultCryptoService @Inject constructor(
      * Export the crypto keys
      *
      * @param password the password
-     * @param callback the exported keys
+     * @return the exported keys
      */
-    override fun exportRoomKeys(password: String, callback: MatrixCallback<ByteArray>) {
-        cryptoCoroutineScope.launch(coroutineDispatchers.main) {
-            runCatching {
-                exportRoomKeys(password, MXMegolmExportEncryption.DEFAULT_ITERATION_COUNT)
-            }.foldToCallback(callback)
-        }
+    override suspend fun exportRoomKeys(password: String): ByteArray {
+        return exportRoomKeys(password, MXMegolmExportEncryption.DEFAULT_ITERATION_COUNT)
     }
 
     /**
@@ -963,42 +965,37 @@ internal class DefaultCryptoService @Inject constructor(
      * @param roomKeysAsArray  the room keys as array.
      * @param password         the password
      * @param progressListener the progress listener
-     * @param callback         the asynchronous callback.
+     * @return the result ImportRoomKeysResult
      */
-    override fun importRoomKeys(roomKeysAsArray: ByteArray,
-                                password: String,
-                                progressListener: ProgressListener?,
-                                callback: MatrixCallback<ImportRoomKeysResult>) {
-        cryptoCoroutineScope.launch(coroutineDispatchers.main) {
-            runCatching {
-                withContext(coroutineDispatchers.crypto) {
-                    Timber.v("## CRYPTO | importRoomKeys starts")
+    override suspend fun importRoomKeys(roomKeysAsArray: ByteArray,
+                                        password: String,
+                                        progressListener: ProgressListener?): ImportRoomKeysResult {
+        return withContext(coroutineDispatchers.crypto) {
+            Timber.v("## CRYPTO | importRoomKeys starts")
 
-                    val t0 = System.currentTimeMillis()
-                    val roomKeys = MXMegolmExportEncryption.decryptMegolmKeyFile(roomKeysAsArray, password)
-                    val t1 = System.currentTimeMillis()
+            val t0 = System.currentTimeMillis()
+            val roomKeys = MXMegolmExportEncryption.decryptMegolmKeyFile(roomKeysAsArray, password)
+            val t1 = System.currentTimeMillis()
 
-                    Timber.v("## CRYPTO | importRoomKeys : decryptMegolmKeyFile done in ${t1 - t0} ms")
+            Timber.v("## CRYPTO | importRoomKeys : decryptMegolmKeyFile done in ${t1 - t0} ms")
 
-                    val importedSessions = MoshiProvider.providesMoshi()
-                            .adapter<List<MegolmSessionData>>(Types.newParameterizedType(List::class.java, MegolmSessionData::class.java))
-                            .fromJson(roomKeys)
+            val importedSessions = MoshiProvider.providesMoshi()
+                    .adapter<List<MegolmSessionData>>(Types.newParameterizedType(List::class.java, MegolmSessionData::class.java))
+                    .fromJson(roomKeys)
 
-                    val t2 = System.currentTimeMillis()
+            val t2 = System.currentTimeMillis()
 
-                    Timber.v("## CRYPTO | importRoomKeys : JSON parsing ${t2 - t1} ms")
+            Timber.v("## CRYPTO | importRoomKeys : JSON parsing ${t2 - t1} ms")
 
-                    if (importedSessions == null) {
-                        throw Exception("Error")
-                    }
+            if (importedSessions == null) {
+                throw Exception("Error")
+            }
 
-                    megolmSessionDataImporter.handle(
-                            megolmSessionsData = importedSessions,
-                            fromBackup = false,
-                            progressListener = progressListener
-                    )
-                }
-            }.foldToCallback(callback)
+            megolmSessionDataImporter.handle(
+                    megolmSessionsData = importedSessions,
+                    fromBackup = false,
+                    progressListener = progressListener
+            )
         }
     }
 

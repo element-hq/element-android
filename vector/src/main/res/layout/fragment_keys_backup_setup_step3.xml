@@ -5,7 +5,7 @@
     android:id="@+id/keys_backup_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?riotx_background"
+    android:background="?android:colorBackground"
     tools:context=".features.crypto.keysbackup.setup.KeysBackupSetupStep3Fragment">
 
     <LinearLayout
@@ -22,11 +22,12 @@
             android:layout_marginTop="60dp"
             android:importantForAccessibility="no"
             android:src="@drawable/backup_keys"
-            app:tint="?riotx_text_primary"
+            app:tint="?vctr_content_primary"
             tools:ignore="MissingPrefix" />
 
         <TextView
             android:id="@+id/keys_backup_setup_step3_success_title"
+            style="@style/Widget.Vector.TextView.HeadlineMedium"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/layout_horizontal_margin"
@@ -34,8 +35,7 @@
             android:layout_marginEnd="@dimen/layout_horizontal_margin"
             android:text="@string/keys_backup_setup_step3_success_title"
             android:textAlignment="center"
-            android:textColor="?riotx_text_primary"
-            android:textSize="17sp"
+            android:textColor="?vctr_content_primary"
             android:textStyle="bold"
             android:visibility="gone"
             tools:visibility="visible" />
@@ -43,6 +43,7 @@
 
         <TextView
             android:id="@+id/keys_backup_setup_step3_line1_text"
+            style="@style/Widget.Vector.TextView.Subtitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/layout_horizontal_margin"
@@ -50,46 +51,48 @@
             android:layout_marginEnd="@dimen/layout_horizontal_margin"
             android:text="@string/keys_backup_setup_step3_text_line1"
             android:textAlignment="center"
-            android:textColor="?riotx_text_primary"
-            android:textSize="15sp" />
+            android:textColor="?vctr_content_primary" />
 
         <TextView
             android:id="@+id/keys_backup_setup_step3_label2"
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/layout_horizontal_margin"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="@dimen/layout_horizontal_margin"
             android:textAlignment="center"
-            android:textColor="?riotx_text_secondary"
-            android:textSize="15sp"
+            android:textColor="?vctr_content_secondary"
             tools:text="@string/keys_backup_setup_step3_text_line2" />
 
 
         <TextView
             android:id="@+id/keys_backup_setup_step3_recovery_key_text"
+            style="@style/Widget.Vector.TextView.Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/layout_horizontal_margin"
             android:fontFamily="monospace"
             android:textAlignment="center"
-            android:textColor="?riotx_text_primary"
-            android:textSize="20sp"
+            android:textColor="?vctr_content_primary"
             android:visibility="gone"
             tools:text="HHWJ Y8DK RDR4\nBQEN FQ4V M4F8\nBQEN FQ4V M4A8"
             tools:visibility="visible" />
 
 
-        <com.google.android.material.button.MaterialButton
+        <Button
             android:id="@+id/keys_backup_setup_step3_copy_button"
-            style="@style/VectorButtonStyleText"
+            style="@style/Widget.Vector.Button.Text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:maxWidth="@dimen/button_max_width"
             android:text="@string/keys_backup_setup_step3_copy_button_title" />
 
-        <com.google.android.material.button.MaterialButton
+        <Button
             android:id="@+id/keys_backup_setup_step3_finish_button"
-            style="@style/VectorButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/layout_vertical_margin"
             android:layout_marginBottom="@dimen/layout_vertical_margin"

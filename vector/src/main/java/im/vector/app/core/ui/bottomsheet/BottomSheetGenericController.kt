@@ -15,7 +15,6 @@
  */
 package im.vector.app.core.ui.bottomsheet
 
-import android.view.View
 import com.airbnb.epoxy.TypedEpoxyController
 
 /**
@@ -34,15 +33,16 @@ abstract class BottomSheetGenericController<State : BottomSheetGenericState, Act
 
     override fun buildModels(state: State?) {
         state ?: return
+        val host = this
         // Title
         getTitle()?.let { title ->
             bottomSheetTitleItem {
                 id("title")
                 title(title)
-                subTitle(getSubTitle())
+                subTitle(host.getSubTitle())
             }
 
-//            dividerItem {
+//            bottomSheetDividerItem {
 //                id("title_separator")
 //            }
         }
@@ -50,7 +50,7 @@ abstract class BottomSheetGenericController<State : BottomSheetGenericState, Act
         val actions = getActions(state)
         actions.forEach { action ->
             action.toRadioBottomSheetItem()
-                    .listener(View.OnClickListener { listener?.didSelectAction(action) })
+                    .listener { listener?.didSelectAction(action) }
                     .addTo(this)
         }
     }

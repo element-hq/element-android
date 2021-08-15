@@ -30,6 +30,7 @@ import im.vector.app.RoomGroupingMethod
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.features.invite.AutoAcceptInvites
 import im.vector.app.features.settings.VectorPreferences
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -49,7 +50,8 @@ class RoomListViewModel @Inject constructor(
         private val session: Session,
         private val stringProvider: StringProvider,
         private val appStateHandler: AppStateHandler,
-        private val vectorPreferences: VectorPreferences
+        private val vectorPreferences: VectorPreferences,
+        private val autoAcceptInvites: AutoAcceptInvites
 ) : VectorViewModel<RoomListViewState, RoomListAction, RoomListViewEvents>(initialState) {
 
     interface Factory {
@@ -118,36 +120,32 @@ class RoomListViewModel @Inject constructor(
         }
     }
 
-    val sections: List<RoomsSection> by lazy {
-        if (appStateHandler.getCurrentRoomGroupingMethod() is RoomGroupingMethod.BySpace) {
-            SpaceRoomListSectionBuilder(
-                    session,
-                    stringProvider,
-                    appStateHandler,
-                    viewModelScope,
-                    suggestedRoomJoiningState,
-                    {
-                        it.disposeOnClear()
-                    },
-                    {
-                        updatableQuery = it
-                    },
-                    vectorPreferences.labsSpacesOnlyOrphansInHome()
-            ).buildSections(initialState.displayMode)
-        } else {
-            GroupRoomListSectionBuilder(
-                    session,
-                    stringProvider,
-                    viewModelScope,
-                    appStateHandler,
-                    {
-                        it.disposeOnClear()
-                    },
-                    {
-                        updatableQuery = it
-                    }
-            ).buildSections(initialState.displayMode)
+    private val roomListSectionBuilder = if (appStateHandler.getCurrentRoomGroupingMethod() is RoomGroupingMethod.BySpace) {
+        RoomListSectionBuilderSpace(
+                session,
+                stringProvider,
+                appStateHandler,
+                viewModelScope,
+                autoAcceptInvites,
+                {
+                    updatableQuery = it
+                },
+                suggestedRoomJoiningState,
+                vectorPreferences.labsSpacesOnlyOrphansInHome()
+        )
+    } else {
+        RoomListSectionBuilderGroup(
+                session,
+                stringProvider,
+                appStateHandler,
+                autoAcceptInvites
+        ) {
+            updatableQuery = it
         }
+    }
+
+    val sections: List<RoomsSection> by lazy {
+        roomListSectionBuilder.buildSections(initialState.displayMode)
     }
 
     override fun handle(action: RoomListAction) {
@@ -161,6 +159,7 @@ class RoomListViewModel @Inject constructor(
             is RoomListAction.ToggleTag                   -> handleToggleTag(action)
             is RoomListAction.ToggleSection               -> handleToggleSection(action.section)
             is RoomListAction.JoinSuggestedRoom           -> handleJoinSuggestedRoom(action)
+            is RoomListAction.ShowRoomDetails             -> handleShowRoomDetails(action)
         }.exhaustive
     }
 
@@ -289,6 +288,12 @@ class RoomListViewModel @Inject constructor(
         }
     }
 
+    private fun handleShowRoomDetails(action: RoomListAction.ShowRoomDetails) {
+        session.permalinkService().createRoomPermalink(action.roomId, action.viaServers)?.let {
+            _viewEvents.post(RoomListViewEvents.NavigateToMxToBottomSheet(it))
+        }
+    }
+
     private fun handleToggleTag(action: RoomListAction.ToggleTag) {
         session.getRoom(action.roomId)?.let { room ->
             viewModelScope.launch(Dispatchers.IO) {
@@ -329,5 +334,10 @@ class RoomListViewModel @Inject constructor(
                     .fold({ RoomListViewEvents.Done }, { RoomListViewEvents.Failure(it) })
             _viewEvents.post(value)
         }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        roomListSectionBuilder.dispose()
     }
 }

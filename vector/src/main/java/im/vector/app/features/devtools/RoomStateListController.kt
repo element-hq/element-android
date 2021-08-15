@@ -21,7 +21,6 @@ import im.vector.app.R
 import im.vector.app.core.epoxy.noResultItem
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.core.ui.list.GenericItem
 import im.vector.app.core.ui.list.genericItem
 import me.gujun.android.span.span
 import org.json.JSONObject
@@ -35,6 +34,7 @@ class RoomStateListController @Inject constructor(
     var interactionListener: DevToolsInteractionListener? = null
 
     override fun buildModels(data: RoomDevToolViewState?) {
+        val host = this
         when (data?.displayMode) {
             RoomDevToolViewState.Mode.StateEventList -> {
                 val stateEventsGroups = data.stateEvents.invoke().orEmpty().groupBy { it.getClearType() }
@@ -42,19 +42,17 @@ class RoomStateListController @Inject constructor(
                 if (stateEventsGroups.isEmpty()) {
                     noResultItem {
                         id("no state events")
-                        text(stringProvider.getString(R.string.no_result_placeholder))
+                        text(host.stringProvider.getString(R.string.no_result_placeholder))
                     }
                 } else {
                     stateEventsGroups.forEach { entry ->
                         genericItem {
                             id(entry.key)
                             title(entry.key)
-                            description(stringProvider.getQuantityString(R.plurals.entries, entry.value.size, entry.value.size))
-                            itemClickAction(GenericItem.Action("view").apply {
-                                perform = Runnable {
-                                    interactionListener?.processAction(RoomDevToolAction.ShowStateEventType(entry.key))
-                                }
-                            })
+                            description(host.stringProvider.getQuantityString(R.plurals.entries, entry.value.size, entry.value.size))
+                            itemClickAction {
+                                host.interactionListener?.processAction(RoomDevToolAction.ShowStateEventType(entry.key))
+                            }
                         }
                     }
                 }
@@ -64,7 +62,7 @@ class RoomStateListController @Inject constructor(
                 if (stateEvents.isEmpty()) {
                     noResultItem {
                         id("no state events")
-                        text(stringProvider.getString(R.string.no_result_placeholder))
+                        text(host.stringProvider.getString(R.string.no_result_placeholder))
                     }
                 } else {
                     stateEvents.forEach { stateEvent ->
@@ -80,23 +78,21 @@ class RoomStateListController @Inject constructor(
                             title(span {
                                 +"Type: "
                                 span {
-                                    textColor = colorProvider.getColorFromAttribute(R.attr.riotx_text_secondary)
+                                    textColor = host.colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
                                     text = "\"${stateEvent.type}\""
                                     textStyle = "normal"
                                 }
                                 +"\nState Key: "
                                 span {
-                                    textColor = colorProvider.getColorFromAttribute(R.attr.riotx_text_secondary)
+                                    textColor = host.colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
                                     text = stateEvent.stateKey.let { "\"$it\"" }
                                     textStyle = "normal"
                                 }
                             })
                             description(contentJson)
-                            itemClickAction(GenericItem.Action("view").apply {
-                                perform = Runnable {
-                                    interactionListener?.processAction(RoomDevToolAction.ShowStateEvent(stateEvent))
-                                }
-                            })
+                            itemClickAction {
+                                host.interactionListener?.processAction(RoomDevToolAction.ShowStateEvent(stateEvent))
+                            }
                         }
                     }
                 }

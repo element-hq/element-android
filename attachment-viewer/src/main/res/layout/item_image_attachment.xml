@@ -1,22 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:layout_height="match_parent">
 
     <com.github.chrisbanes.photoview.PhotoView
         android:id="@+id/touchImageView"
-        android:visibility="visible"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent" />
 
     <ProgressBar
-        android:layout_centerInParent="true"
         android:id="@+id/imageLoaderProgress"
         style="?android:attr/progressBarStyle"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:visibility="visible"
-        tools:visibility="gone" />
+        android:layout_centerInParent="true" />
 
 </RelativeLayout>

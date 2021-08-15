@@ -35,6 +35,7 @@ import org.matrix.android.sdk.api.session.group.model.GroupSummary
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.pushers.Pusher
 import org.matrix.android.sdk.api.session.room.RoomSummaryQueryParams
+import org.matrix.android.sdk.api.session.room.accountdata.RoomAccountDataEvent
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
@@ -177,10 +178,17 @@ class RxSession(private val session: Session) {
                 }
     }
 
-    fun liveAccountData(types: Set<String>): Observable<List<UserAccountDataEvent>> {
-        return session.getLiveAccountDataEvents(types).asObservable()
+    fun liveUserAccountData(types: Set<String>): Observable<List<UserAccountDataEvent>> {
+        return session.accountDataService().getLiveUserAccountDataEvents(types).asObservable()
                 .startWithCallable {
-                    session.getAccountDataEvents(types)
+                    session.accountDataService().getUserAccountDataEvents(types)
+                }
+    }
+
+    fun liveRoomAccountData(types: Set<String>): Observable<List<RoomAccountDataEvent>> {
+        return session.accountDataService().getLiveRoomAccountDataEvents(types).asObservable()
+                .startWithCallable {
+                    session.accountDataService().getRoomAccountDataEvents(types)
                 }
     }
 
@@ -202,7 +210,7 @@ class RxSession(private val session: Session) {
 
     fun liveSecretSynchronisationInfo(): Observable<SecretsSynchronisationInfo> {
         return Observable.combineLatest<List<UserAccountDataEvent>, Optional<MXCrossSigningInfo>, Optional<PrivateKeysInfo>, SecretsSynchronisationInfo>(
-                liveAccountData(setOf(MASTER_KEY_SSSS_NAME, USER_SIGNING_KEY_SSSS_NAME, SELF_SIGNING_KEY_SSSS_NAME, KEYBACKUP_SECRET_SSSS_NAME)),
+                liveUserAccountData(setOf(MASTER_KEY_SSSS_NAME, USER_SIGNING_KEY_SSSS_NAME, SELF_SIGNING_KEY_SSSS_NAME, KEYBACKUP_SECRET_SSSS_NAME)),
                 liveCrossSigningInfo(session.myUserId),
                 liveCrossSigningPrivateKeys(),
                 Function3 { _, crossSigningInfo, pInfo ->

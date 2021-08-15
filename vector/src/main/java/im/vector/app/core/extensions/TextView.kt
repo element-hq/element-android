@@ -26,7 +26,6 @@ import android.text.style.UnderlineSpan
 import android.view.View
 import android.widget.TextView
 import androidx.annotation.AttrRes
-import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
@@ -54,15 +53,15 @@ fun TextView.setTextOrHide(newText: CharSequence?, hideWhenBlank: Boolean = true
  * Set text with a colored part
  * @param fullTextRes the resource id of the full text. Value MUST contains a parameter for string, which will be replaced by the colored part
  * @param coloredTextRes the resource id of the colored part of the text
- * @param colorAttribute attribute of the color. Default to colorAccent
+ * @param colorAttribute attribute of the color. Default to colorPrimary
  * @param underline true to also underline the text. Default to false
  * @param onClick attributes to handle click on the colored part if needed
  */
 fun TextView.setTextWithColoredPart(@StringRes fullTextRes: Int,
                                     @StringRes coloredTextRes: Int,
-                                    @AttrRes colorAttribute: Int = R.attr.colorAccent,
+                                    @AttrRes colorAttribute: Int = R.attr.colorPrimary,
                                     underline: Boolean = false,
-                                    onClick: (() -> Unit)?) {
+                                    onClick: (() -> Unit)? = null) {
     val coloredPart = resources.getString(coloredTextRes)
     // Insert colored part into the full text
     val fullText = resources.getString(fullTextRes, coloredPart)
@@ -95,9 +94,9 @@ fun TextView.setTextWithColoredPart(@StringRes fullTextRes: Int,
             }
 }
 
-fun TextView.setLeftDrawable(@DrawableRes iconRes: Int, @ColorRes tintColor: Int? = null) {
+fun TextView.setLeftDrawable(@DrawableRes iconRes: Int, @AttrRes tintColor: Int? = null) {
     val icon = if (tintColor != null) {
-        val tint = ContextCompat.getColor(context, tintColor)
+        val tint = ThemeUtils.getColor(context, tintColor)
         ContextCompat.getDrawable(context, iconRes)?.also {
             DrawableCompat.setTint(it.mutate(), tint)
         }

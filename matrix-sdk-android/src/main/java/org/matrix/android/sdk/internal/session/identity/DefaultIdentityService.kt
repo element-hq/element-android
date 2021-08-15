@@ -44,7 +44,7 @@ import org.matrix.android.sdk.internal.session.profile.BindThreePidsTask
 import org.matrix.android.sdk.internal.session.profile.UnbindThreePidsTask
 import org.matrix.android.sdk.internal.session.sync.model.accountdata.IdentityServerContent
 import org.matrix.android.sdk.api.session.accountdata.UserAccountDataTypes
-import org.matrix.android.sdk.internal.session.user.accountdata.AccountDataDataSource
+import org.matrix.android.sdk.internal.session.user.accountdata.UserAccountDataDataSource
 import org.matrix.android.sdk.internal.session.user.accountdata.UpdateUserAccountDataTask
 import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.internal.util.ensureProtocol
@@ -77,7 +77,7 @@ internal class DefaultIdentityService @Inject constructor(
         private val submitTokenForBindingTask: IdentitySubmitTokenForBindingTask,
         private val unbindThreePidsTask: UnbindThreePidsTask,
         private val identityApiProvider: IdentityApiProvider,
-        private val accountDataDataSource: AccountDataDataSource,
+        private val accountDataDataSource: UserAccountDataDataSource,
         private val homeServerCapabilitiesService: HomeServerCapabilitiesService,
         private val sessionParams: SessionParams
 ) : IdentityService, SessionLifecycleObserver {
@@ -191,7 +191,7 @@ internal class DefaultIdentityService @Inject constructor(
         } else {
             // Disconnect previous one if any, first, because the token will change.
             // In case of error when configuring the new identity server, this is not a big deal,
-            // we will ask for a new token on the previous Identity server
+            // we will ask for a new token on the previous identity server
             runCatching { identityDisconnectTask.execute(Unit) }
                     .onFailure { Timber.w(it, "Unable to disconnect identity server") }
 
@@ -241,7 +241,7 @@ internal class DefaultIdentityService @Inject constructor(
 
     override suspend fun getShareStatus(threePids: List<ThreePid>): Map<ThreePid, SharedState> {
         // Note: we do not require user consent here, because it is used for emails and phone numbers that the user has already sent
-        // to the home server, and not emails and phone numbers from the contact book of the user
+        // to the homeserver, and not emails and phone numbers from the contact book of the user
 
         if (threePids.isEmpty()) {
             return emptyMap()

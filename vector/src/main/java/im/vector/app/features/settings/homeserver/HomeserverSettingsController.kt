@@ -26,16 +26,20 @@ import im.vector.app.core.epoxy.errorWithRetryItem
 import im.vector.app.core.epoxy.loadingItem
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.core.ui.list.genericWithValueItem
 import im.vector.app.features.discovery.settingsCenteredImageItem
 import im.vector.app.features.discovery.settingsInfoItem
 import im.vector.app.features.discovery.settingsSectionTitleItem
+import im.vector.app.features.settings.VectorPreferences
 import org.matrix.android.sdk.api.federation.FederationVersion
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
+import org.matrix.android.sdk.api.session.homeserver.RoomVersionStatus
 import javax.inject.Inject
 
 class HomeserverSettingsController @Inject constructor(
         private val stringProvider: StringProvider,
-        private val errorFormatter: ErrorFormatter
+        private val errorFormatter: ErrorFormatter,
+        private val vectorPreferences: VectorPreferences
 ) : TypedEpoxyController<HomeServerSettingsViewState>() {
 
     var callback: Callback? = null
@@ -46,6 +50,7 @@ class HomeserverSettingsController @Inject constructor(
 
     override fun buildModels(data: HomeServerSettingsViewState?) {
         data ?: return
+        val host = this
 
         buildHeader(data)
         buildCapabilities(data)
@@ -58,8 +63,8 @@ class HomeserverSettingsController @Inject constructor(
             is Fail          ->
                 errorWithRetryItem {
                     id("error")
-                    text(errorFormatter.toHumanReadable(federationVersion.error))
-                    listener { callback?.retry() }
+                    text(host.errorFormatter.toHumanReadable(federationVersion.error))
+                    listener { host.callback?.retry() }
                 }
             is Success       ->
                 buildFederationVersion(federationVersion())
@@ -77,7 +82,17 @@ class HomeserverSettingsController @Inject constructor(
         }
         settingsInfoItem {
             id("urlValue")
-            helperText(state.baseUrl)
+            helperText(state.homeserverUrl)
+        }
+        if (vectorPreferences.developerMode()) {
+            settingsSectionTitleItem {
+                id("urlApiTitle")
+                titleResId(R.string.hs_client_url)
+            }
+            settingsInfoItem {
+                id("urlApiValue")
+                helperText(state.homeserverClientServerApiUrl)
+            }
         }
     }
 
@@ -101,6 +116,7 @@ class HomeserverSettingsController @Inject constructor(
     }
 
     private fun buildCapabilities(data: HomeServerSettingsViewState) {
+        val host = this
         settingsSectionTitleItem {
             id("uploadTitle")
             titleResId(R.string.settings_server_upload_size_title)
@@ -113,7 +129,38 @@ class HomeserverSettingsController @Inject constructor(
             if (limit == HomeServerCapabilities.MAX_UPLOAD_FILE_SIZE_UNKNOWN) {
                 helperTextResId(R.string.settings_server_upload_size_unknown)
             } else {
-                helperText(stringProvider.getString(R.string.settings_server_upload_size_content, "${limit / 1048576L} MB"))
+                helperText(host.stringProvider.getString(R.string.settings_server_upload_size_content, "${limit / 1048576L} MB"))
+            }
+        }
+
+        if (vectorPreferences.developerMode()) {
+            val roomCapabilities = data.homeServerCapabilities.roomVersions
+            if (roomCapabilities != null) {
+                settingsSectionTitleItem {
+                    id("room_versions")
+                    titleResId(R.string.settings_server_room_versions)
+                }
+
+                genericWithValueItem {
+                    id("room_version_default")
+                    title(host.stringProvider.getString(R.string.settings_server_default_room_version))
+                    value(roomCapabilities.defaultRoomVersion)
+                }
+
+                roomCapabilities.supportedVersion.forEach {
+                    genericWithValueItem {
+                        id("room_version_${it.version}")
+                        title(it.version)
+                        value(
+                                host.stringProvider.getString(
+                                        when (it.status) {
+                                            RoomVersionStatus.STABLE   -> R.string.settings_server_room_version_stable
+                                            RoomVersionStatus.UNSTABLE -> R.string.settings_server_room_version_unstable
+                                        }
+                                )
+                        )
+                    }
+                }
             }
         }
     }

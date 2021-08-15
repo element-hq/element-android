@@ -16,26 +16,26 @@
         android:paddingStart="2dp"
         android:paddingEnd="2dp"
         android:src="@drawable/ic_check_white_24dp"
-        app:tint="?riotx_text_secondary"
+        app:tint="?vctr_content_secondary"
         tools:ignore="MissingPrefix" />
 
     <TextView
         android:id="@+id/pollResultItemLabel"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_weight="1"
-        android:textColor="?riotx_text_primary"
-        android:textSize="14sp"
+        android:textColor="?vctr_content_primary"
         tools:text="Open a Github Issue" />
 
 
     <TextView
         android:id="@+id/pollResultItemPercent"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:textColor="?riotx_text_primary"
-        android:textSize="14sp"
+        android:textColor="?vctr_content_primary"
         tools:text="47%" />
 </merge>

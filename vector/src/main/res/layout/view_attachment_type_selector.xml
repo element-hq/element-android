@@ -2,17 +2,18 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:paddingStart="8dp"
+    android:paddingEnd="8dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
         android:background="@drawable/bg_attachment_type_selector"
         android:orientation="vertical"
         android:paddingTop="16dp"
-        android:paddingBottom="16dp">
+        android:paddingBottom="16dp"
+        tools:ignore="UselessParent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -34,7 +35,7 @@
                     style="@style/AttachmentTypeSelectorButton"
                     android:contentDescription="@string/attachment_type_camera"
                     android:src="@drawable/ic_attachment_camera_white_24dp"
-                    tools:background="@color/riotx_accent" />
+                    tools:background="?colorPrimary" />
 
                 <TextView
                     style="@style/AttachmentTypeSelectorLabel"
@@ -56,7 +57,7 @@
                     style="@style/AttachmentTypeSelectorButton"
                     android:contentDescription="@string/attachment_type_gallery"
                     android:src="@drawable/ic_attachment_gallery_white_24dp"
-                    tools:background="@color/riotx_accent" />
+                    tools:background="?colorPrimary" />
 
                 <TextView
                     style="@style/AttachmentTypeSelectorLabel"
@@ -78,7 +79,7 @@
                     style="@style/AttachmentTypeSelectorButton"
                     android:contentDescription="@string/attachment_type_file"
                     android:src="@drawable/ic_attachment_file_white_24dp"
-                    tools:background="@color/riotx_accent" />
+                    tools:background="?colorPrimary" />
 
                 <TextView
                     style="@style/AttachmentTypeSelectorLabel"
@@ -109,7 +110,7 @@
                     style="@style/AttachmentTypeSelectorButton"
                     android:contentDescription="@string/attachment_type_audio"
                     android:src="@drawable/ic_attachment_audio_white_24dp"
-                    tools:background="@color/riotx_accent" />
+                    tools:background="?colorPrimary" />
 
                 <TextView
                     style="@style/AttachmentTypeSelectorLabel"
@@ -131,7 +132,7 @@
                     style="@style/AttachmentTypeSelectorButton"
                     android:contentDescription="@string/attachment_type_contact"
                     android:src="@drawable/ic_attachment_contact_white_24dp"
-                    tools:background="@color/riotx_accent" />
+                    tools:background="?colorPrimary" />
 
                 <TextView
                     style="@style/AttachmentTypeSelectorLabel"
@@ -153,7 +154,7 @@
                     style="@style/AttachmentTypeSelectorButton"
                     android:contentDescription="@string/attachment_type_sticker"
                     android:src="@drawable/ic_attachment_stickers_white_24dp"
-                    tools:background="@color/riotx_accent" />
+                    tools:background="?colorPrimary" />
 
                 <TextView
                     style="@style/AttachmentTypeSelectorLabel"
@@ -162,7 +163,5 @@
 
             </LinearLayout>
         </LinearLayout>
-
     </LinearLayout>
-
 </FrameLayout>

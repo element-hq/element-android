@@ -30,12 +30,6 @@ data class EncryptedFileInfo(
         val url: String? = null,
 
         /**
-         * Not documented
-         */
-        @Json(name = "mimetype")
-        val mimetype: String? = null,
-
-        /**
          * Required. A JSON Web Key object.
          */
         @Json(name = "key")

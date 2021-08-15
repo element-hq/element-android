@@ -20,12 +20,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
@@ -68,7 +68,7 @@ class RoomBannedMemberListFragment @Inject constructor(
             when (it) {
                 is RoomBannedMemberListViewEvents.ShowBannedInfo -> {
                     val canBan = withState(viewModel) { state -> state.canUserBan }
-                    AlertDialog.Builder(requireActivity())
+                    MaterialAlertDialogBuilder(requireActivity())
                             .setTitle(getString(R.string.member_banned_by, it.bannedByUserId))
                             .setMessage(getString(R.string.reason_colon, it.banReason))
                             .setPositiveButton(R.string.ok, null)

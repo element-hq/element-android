@@ -20,51 +20,128 @@
             android:padding="@dimen/layout_horizontal_margin"
             android:showDividers="middle">
 
-            <com.google.android.material.button.MaterialButton
+            <Button
                 android:id="@+id/debug_test_text_view_link"
-                style="@style/VectorButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Test linkification" />
 
-            <com.google.android.material.button.MaterialButton
+            <Button
                 android:id="@+id/debug_test_notification"
-                style="@style/VectorButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Test Notification" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/debug_test_material_theme_light"
-                style="@style/VectorButtonStyle"
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Test Material theme Light" />
+                android:text="Light theme" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/debug_test_material_theme_dark"
-                style="@style/VectorButtonStyle"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/debug_test_material_theme_light_default"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:layout_weight="1"
+                    android:text="Default" />
+
+                <Button
+                    android:id="@+id/debug_test_material_theme_light_test"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:layout_weight="1"
+                    android:text="Test" />
+
+                <Button
+                    android:id="@+id/debug_test_material_theme_light_vector"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:layout_weight="1"
+                    android:text="Vector" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/debug_open_button_styles_light"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Test Material theme Dark" />
+                android:text="See button light" />
 
-            <com.google.android.material.button.MaterialButton
+            <Button
+                android:id="@+id/debug_test_text_view_light"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_margin="8dp"
+                android:layout_weight="1"
+                android:text="Text Views Light" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Dark theme" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/debug_test_material_theme_dark_default"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:layout_weight="1"
+                    android:text="Default" />
+
+                <Button
+                    android:id="@+id/debug_test_material_theme_dark_test"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:layout_weight="1"
+                    android:text="Test" />
+
+                <Button
+                    android:id="@+id/debug_test_material_theme_dark_vector"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:layout_weight="1"
+                    android:text="Vector" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/debug_open_button_styles_dark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="See button dark" />
+
+            <Button
+                android:id="@+id/debug_test_text_view_dark"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_margin="8dp"
+                android:layout_weight="1"
+                android:text="Text Views Dark" />
+
+            <Button
                 android:id="@+id/debug_show_sas_emoji"
-                style="@style/VectorButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Display all SAS emoji" />
 
-            <com.google.android.material.button.MaterialButton
+            <Button
                 android:id="@+id/debug_test_crash"
-                style="@style/VectorButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Crash the app" />
 
-            <com.google.android.material.button.MaterialButton
+            <Button
                 android:id="@+id/debug_scan_qr_code"
-                style="@style/VectorButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Scan QR-code" />
@@ -74,6 +151,12 @@
                 android:layout_width="200dp"
                 android:layout_height="200dp"
                 tools:src="@drawable/ic_qr_code_add" />
+
+            <Button
+                android:id="@+id/debug_permission"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Permissions" />
 
         </LinearLayout>
 

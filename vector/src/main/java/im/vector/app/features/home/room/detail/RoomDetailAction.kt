@@ -20,7 +20,7 @@ import android.net.Uri
 import android.view.View
 import im.vector.app.core.platform.VectorViewModelAction
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
-import org.matrix.android.sdk.api.session.events.model.Event
+import org.matrix.android.sdk.api.session.room.model.message.MessageAudioContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageStickerContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageWithAttachmentContent
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
@@ -44,7 +44,7 @@ sealed class RoomDetailAction : VectorViewModelAction {
     data class NavigateToEvent(val eventId: String, val highlight: Boolean) : RoomDetailAction()
     object MarkAllAsRead : RoomDetailAction()
     data class DownloadOrOpen(val eventId: String, val senderId: String?, val messageFileContent: MessageWithAttachmentContent) : RoomDetailAction()
-    data class HandleTombstoneEvent(val event: Event) : RoomDetailAction()
+    object JoinAndOpenReplacementRoom : RoomDetailAction()
     object AcceptInvite : RoomDetailAction()
     object RejectInvite : RoomDetailAction()
 
@@ -73,7 +73,6 @@ sealed class RoomDetailAction : VectorViewModelAction {
 
     object ResendAll : RoomDetailAction()
 
-    data class StartCallWithPhoneNumber(val phoneNumber: String, val videoCall: Boolean): RoomDetailAction()
     data class StartCall(val isVideo: Boolean) : RoomDetailAction()
     data class AcceptCall(val callId: String): RoomDetailAction()
     object EndCall : RoomDetailAction()
@@ -109,4 +108,14 @@ sealed class RoomDetailAction : VectorViewModelAction {
 
     // Failed messages
     object RemoveAllFailedMessages : RoomDetailAction()
+
+    data class RoomUpgradeSuccess(val replacementRoomId: String): RoomDetailAction()
+
+    // Voice Message
+    object StartRecordingVoiceMessage : RoomDetailAction()
+    data class EndRecordingVoiceMessage(val isCancelled: Boolean) : RoomDetailAction()
+    object PauseRecordingVoiceMessage : RoomDetailAction()
+    data class PlayOrPauseVoicePlayback(val eventId: String, val messageAudioContent: MessageAudioContent) : RoomDetailAction()
+    object PlayOrPauseRecordingPlayback : RoomDetailAction()
+    object EndAllVoiceActions : RoomDetailAction()
 }

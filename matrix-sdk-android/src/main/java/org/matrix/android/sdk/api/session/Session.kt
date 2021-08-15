@@ -24,7 +24,7 @@ import org.matrix.android.sdk.api.failure.GlobalError
 import org.matrix.android.sdk.api.federation.FederationService
 import org.matrix.android.sdk.api.pushrules.PushRuleService
 import org.matrix.android.sdk.api.session.account.AccountService
-import org.matrix.android.sdk.api.session.accountdata.AccountDataService
+import org.matrix.android.sdk.api.session.accountdata.SessionAccountDataService
 import org.matrix.android.sdk.api.session.cache.CacheService
 import org.matrix.android.sdk.api.session.call.CallSignalingService
 import org.matrix.android.sdk.api.session.content.ContentUploadStateTracker
@@ -39,6 +39,7 @@ import org.matrix.android.sdk.api.session.identity.IdentityService
 import org.matrix.android.sdk.api.session.initsync.InitialSyncProgressService
 import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerService
 import org.matrix.android.sdk.api.session.media.MediaService
+import org.matrix.android.sdk.api.session.openid.OpenIdService
 import org.matrix.android.sdk.api.session.permalinks.PermalinkService
 import org.matrix.android.sdk.api.session.profile.ProfileService
 import org.matrix.android.sdk.api.session.pushers.PushersService
@@ -77,7 +78,6 @@ interface Session :
         InitialSyncProgressService,
         HomeServerCapabilitiesService,
         SecureStorageService,
-        AccountDataService,
         AccountService {
 
     /**
@@ -234,6 +234,16 @@ interface Session :
     fun spaceService(): SpaceService
 
     /**
+     * Returns the open id service associated with the session
+     */
+    fun openIdService(): OpenIdService
+
+    /**
+     * Returns the account data service associated with the session
+     */
+    fun accountDataService(): SessionAccountDataService
+
+    /**
      * Add a listener to the session.
      * @param listener the listener to add.
      */
@@ -257,11 +267,16 @@ interface Session :
      */
     interface Listener : SessionLifecycleObserver {
         /**
+         * Called when the session received new invites to room so the client can react to it once.
+         */
+        fun onNewInvitedRoom(session: Session, roomId: String) = Unit
+
+        /**
          * Possible cases:
          * - The access token is not valid anymore,
          * - a M_CONSENT_NOT_GIVEN error has been received from the homeserver
          */
-        fun onGlobalError(session: Session, globalError: GlobalError)
+        fun onGlobalError(session: Session, globalError: GlobalError) = Unit
     }
 
     val sharedSecretStorageService: SharedSecretStorageService

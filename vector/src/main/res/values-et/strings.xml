@@ -222,10 +222,10 @@
     <string name="notice_room_server_acl_updated_no_change">Muudatusi ei ole.</string>
     <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• Nüüd on keelatud serverid, mille ip-aadress vastab mustrile.</string>
     <string name="notice_room_server_acl_updated_ip_literals_allowed">• Nüüd on lubatud serverid, mille ip-aadress vastab mustrile.</string>
-    <string name="notice_room_server_acl_updated_was_allowed">• Server, mille nimes leidub %s, eemaldati lubatud serverite loendist.</string>
+    <string name="notice_room_server_acl_updated_was_allowed">• Serverid, mille nimes leidub %s, eemaldati lubatud serverite loendist.</string>
     <string name="notice_room_server_acl_updated_allowed">• Nüüd on lubatud serverid, mille nimes leidub %s.</string>
-    <string name="notice_room_server_acl_updated_was_banned">• Server, mille nimes leidub %s eemaldati keeluloendist.</string>
-    <string name="notice_room_server_acl_updated_banned">• Keelatud on server, mille nimes leidub %s.</string>
+    <string name="notice_room_server_acl_updated_was_banned">• Serverid, mille nimes leidub %s eemaldati keeluloendist.</string>
+    <string name="notice_room_server_acl_updated_banned">• Keelatud on serverid, mille nimes leidub %s.</string>
     <string name="notice_room_server_acl_updated_title_by_you">Sina muutsid selle jututoa jaoks serverite pääsuloendit.</string>
     <string name="notice_room_server_acl_updated_title">%s muutis selle jututoa jaoks serverite pääsuloendit.</string>
     <string name="notice_room_server_acl_set_title_by_you">Sina kirjeldasid selle jututoa jaoks serverite pääsuloendi.</string>
@@ -533,7 +533,7 @@
     <string name="e2e_re_request_encryption_key">Küsi oma muudest sessioonidest krüptimisvõtmed uuesti.</string>
     <string name="e2e_re_request_encryption_key_sent">Võtmete jagamise päring on saadetud.</string>
     <string name="e2e_re_request_encryption_key_dialog_title">Päring on saadetud</string>
-    <string name="template_e2e_re_request_encryption_key_dialog_content">Palun käivita ${app_name} mõnes muus seadmes, mis suudab neid sõnumeid dekrüptoda ja seega saata krüptovõtmeid siia sessiooni.</string>
+    <string name="template_e2e_re_request_encryption_key_dialog_content">Palun käivita ${app_name} mõnes muus seadmes, mis suudab neid sõnumeid dekrüptida ja seega saata krüptovõtmeid siia sessiooni.</string>
     <string name="read_receipts_list">Lugemisteatiste loend</string>
     <string name="groups_list">Gruppide loend</string>
     <plurals name="membership_changes">
@@ -601,7 +601,7 @@
     <string name="preview">Eelvaade</string>
     <string name="reject">Hülga</string>
     <string name="room_sync_in_progress">Sünkroniseerin…</string>
-    <string name="room_jump_to_first_unread">Mine esimese lugemata sõnumi juurde.</string>
+    <string name="room_jump_to_first_unread">Mine lugemata sõnumite juurde</string>
     <string name="room_preview_invitation_format">Sa oled kutsutud siia jututuppa %s poolt</string>
     <string name="room_preview_unlinked_email_warning">Kutse saadeti %s e-posti aadressile, aga see ei ole seotud antud kasutajakontoga.
 \nSa kas peaksid logima sisse teise kontoga või lisama selle e-posti aadressi oma kasutajakontole.</string>
@@ -1197,7 +1197,7 @@
     <string name="room_resend_unsent_messages">Saada saatmata sõnumid uuesti</string>
     <string name="room_delete_unsent_messages">Kustuta saatmata sõnumid</string>
     <string name="room_message_file_not_found">Faili ei leidunud</string>
-    <string name="room_do_not_have_permission_to_post">Sul ei ole õigusi siia jututuppa kirjutamiseks</string>
+    <string name="room_do_not_have_permission_to_post">Sul ei ole õigusi siia jututuppa kirjutamiseks.</string>
     <plurals name="room_new_messages_notification">
         <item quantity="one">%d uus sõnum</item>
         <item quantity="other">%d uut sõnumit</item>
@@ -1514,7 +1514,7 @@
     <string name="select_room_directory">Vali jututubade loend</string>
     <string name="directory_server_fail_to_retrieve_server">Server kas pole kättesaadav või on ülekoormatud</string>
     <string name="directory_server_type_homeserver">Sisesta koduserveri nimi, mille avalike jututubade loendit soovid näha</string>
-    <string name="directory_server_placeholder">Koduserveri aadress</string>
+    <string name="directory_server_placeholder">Serveri aadress</string>
     <string name="directory_server_all_rooms_on_server">Kõik jututoad %s serveris</string>
     <string name="directory_server_native_rooms">Kõik %s jututoad</string>
     <string name="lock_screen_hint">Kirjuta siia…</string>
@@ -1608,7 +1608,7 @@
     <string name="deactivate_account_submit">Deaktiveeri konto</string>
     <string name="error_empty_field_enter_user_name">Palun sisesta kasutajanimi.</string>
     <string name="error_empty_field_your_password">Palun sisesta oma salasõna.</string>
-    <string name="room_tombstone_versioned_description">See jututuba on asendatud teise jututoaga ning ei ole enam kasutusel</string>
+    <string name="room_tombstone_versioned_description">See jututuba on asendatud teise jututoaga ning ei ole enam kasutusel.</string>
     <string name="room_tombstone_continuation_link">Vestlus jätkub siin</string>
     <string name="room_tombstone_continuation_description">See jututuba on järg varasemale vestlusele</string>
     <string name="room_tombstone_predecessor_link">Vanemate sõnumite nägemiseks klõpsi siin</string>
@@ -2289,7 +2289,7 @@
 \n - Sinu või teise osapoole internetiühendus
 \n
 \nPalun vaheta seadistuste lehelt koheselt oma kasutajakonto salasõna ja taastevõti.</string>
-    <string name="verify_cancelled_notice">Seadistuste lehelt verifitseeri oma seade.</string>
+    <string name="verify_cancelled_notice">Verifitseerimine on katkestatud. Soovi korral saad seda uuesti alustada.</string>
     <string name="verification_cancelled">Verifitseerimine on tühistatud</string>
     <string name="recovery_passphrase">Taastamiseks mõeldud paroolifraas</string>
     <string name="message_key">Sõnumite krüptovõti</string>
@@ -2676,7 +2676,7 @@
     <string name="labs_use_restricted_join_rule_desc">Hoiatus: eeldab serveripoolset tuge ning katselise jututoa versiooni kasutamist</string>
     <string name="labs_use_restricted_join_rule">Katseline kogukonnakeskus - ligipääs on piiratud.</string>
     <string name="you_are_invited">Sa oled saanud kutse</string>
-    <string name="spaces_beta_welcome_to_spaces_desc">Kogukonnakeskused on võimalus siduda jututubasid ja inimesi nii tööks, meelelahutuseks kui lihtsalt sinu jaoks.</string>
+    <string name="spaces_beta_welcome_to_spaces_desc">Kogukonnakeskused on uus võimalus siduda jututubasid ja inimesi.</string>
     <string name="spaces_beta_welcome_to_spaces">Tere tulemast kasutama kogukonnakeskuseid!</string>
     <string name="space_add_existing_rooms">Lisa olemasolevaid jututubasid ja kogukonnakeskuseid</string>
     <string name="space_leave_prompt_msg">Kas oled kindel, et soovid lahkuda kogukonnakeskusest\?</string>
@@ -2741,7 +2741,7 @@
     <string name="a11y_unchecked">Pole kontrollitud</string>
     <string name="search_hint_room_name">Otsi nime alusel</string>
     <string name="room_settings_room_access_restricted_description">Kõik sellise kogukonnakeskuse liikmed, kuhu see jututuba kuulub, võivad seda leida ja temaga liituda. Ainult selle jututoa haldajad võivad teda kogukonnakeskusesse liita.</string>
-    <string name="room_settings_room_access_restricted_title">Kogukonnakeskused</string>
+    <string name="room_settings_room_access_restricted_title">Vaid kogukonna liikmetele</string>
     <string name="room_settings_room_access_public_description">Kõik võivad jututuba leida ja sellega liituda</string>
     <string name="room_settings_room_access_public_title">Avalik</string>
     <string name="room_settings_room_access_private_description">Jututuba saab leida ja sellega liituda vaid kutsete alusel</string>
@@ -2752,4 +2752,112 @@
     <string name="spaces_header">Kogukonnakeskused</string>
     <string name="spaces_invited_header">Kutsed</string>
     <string name="suggested_header">Soovitatud jututoad</string>
+    <string name="space_manage_rooms_and_spaces">Halda jututubasid ja kogukonnakeskuseid</string>
+    <string name="space_mark_as_not_suggested">Eemalda soovitus</string>
+    <string name="space_mark_as_suggested">Märgi soovituseks</string>
+    <string name="space_suggested">Soovitatud</string>
+    <string name="make_this_space_public">Tee see jututuba avalikuks</string>
+    <string name="space_settings_manage_rooms">Halda jututubasid</string>
+    <string name="looking_for_someone_not_in_space">Kas sa otsid kedagi, kes ei leidu %s kogukonnas\?</string>
+    <string name="user_invites_you">%s kutsus sind</string>
+    <string name="a11y_public_room">See jututuba on avalik</string>
+    <string name="send_images_and_video_with_original_size">Saada meedia algses suuruses</string>
+    <plurals name="send_videos_with_original_size">
+        <item quantity="one">Saada videofail algses suuruses</item>
+        <item quantity="other">Saada videofailid algses suuruses</item>
+    </plurals>
+    <string name="error_file_too_big_simple">See fail on üleslaadimiseks liiga suur.</string>
+    <string name="send_file_step_compressing_video">Teen video väiksemaks %d%%</string>
+    <string name="send_file_step_compressing_image">Teen pildi väiksemaks…</string>
+    <string name="use_as_default_and_do_not_ask_again">Kasuta vaikeseadistusena ja ära küsi uuesti</string>
+    <string name="option_always_ask">Alati küsi</string>
+    <string name="this_space_has_no_rooms_admin">Mõned mitteavalikud jututoad võivad olla peidetud. Nendega liitumiseks vajad kutset.</string>
+    <string name="this_space_has_no_rooms_not_admin">Mõned mitteavalikud jututoad võivad olla peidetud. Nendega liitumiseks vajad kutset.
+\nUue jututubade lisamiseks sul õigused puuduvad.</string>
+    <string name="this_space_has_no_rooms">Selles kogukonnakeskuses pole jututube</string>
+    <string name="spaces_no_server_support_description">Lisateavet saad oma koduserveri haldajalt</string>
+    <string name="spaces_no_server_support_title">Tundub, et sinu koduserver veel ei võimalda kogukonnakeskuste kasutamist</string>
+    <string name="spaces_feeling_experimental_subspace">Kas sa tahad katsetada\?
+\nSa võid kogukonnakeskusele lisada ka teisi kogukonnakeskuseid.</string>
+    <string name="labs_space_show_orphan_in_home">Katseline kogukonnakeskus, mis näitab avalehel vaid hüljatud jututube</string>
+    <string name="space_add_rooms">Lisa jututube</string>
+    <string name="space_leave_prompt_msg_as_admin">Sa oled selle kogukonnakeskuse haldaja. Enne oma lahkumist palun lisa siia veel vähemalt üks uus haldaja.</string>
+    <string name="space_leave_prompt_msg_private">See ei ole avalik kogukonnakeskus. Ilma kutseta sa ei saa uuesti liituda.</string>
+    <string name="space_leave_prompt_msg_only_you">Sa oled siin viimane osaleja. Kui sa nüüd lahkud, siis mitte keegi, kaasa arvatud sa ise, ei saa hiljem enam liituda.</string>
+    <string name="invite_to_space">Kutse kogukonnakeskusesse %s</string>
+    <string name="a11y_beta">Tegemist on beeta-taseme funktsionaalsusega</string>
+    <string name="give_feedback">Jaga tagasisidet</string>
+    <string name="feedback_failed">Tagasiside saatmine ei õnnestunud (%s)</string>
+    <string name="feedback_sent">Tänud, sinu tagasiside saatmine õnnestus</string>
+    <string name="you_may_contact_me">Kui sul on lisaküsimusi, siis vastan neile hea meelega</string>
+    <string name="send_feedback_space_info">Sa kasutad kogukonnakeskuste beetaversiooni. Sinu saadetud teabe alusel saame teha parandusi selle järgmistes versioonides. Saadetud info parimaks kasutamiseks lisame sinna ka sinu kasutatava operatsioonisüsteemi nime ja sinu kasutajanime.</string>
+    <string name="feedback">Tagasiside</string>
+    <string name="send_feedback_space_title">Tagasiside kogukonnakeskuste kohta</string>
+    <string name="error_jitsi_join_conf">Vabandust, rühmakõnega liitumisel tekkis viga</string>
+    <string name="unnamed_room">Nimetu jututuba</string>
+    <string name="private_space">Privaatne kogukonnakeskus</string>
+    <string name="public_space">Avalik kogukonnakeskus</string>
+    <string name="a11y_public_space">See kogukonnakeskus on avalik</string>
+    <string name="call_transfer_unknown_person">Tundmatu isik</string>
+    <string name="call_transfer_transfer_to_title">Suuna kasutajale %1$s</string>
+    <string name="call_transfer_consulting_with">Pean nõu kasutajaga %1$s</string>
+    <string name="directory_add_a_new_server_error_already_added">See server on juba loendis olemas</string>
+    <string name="directory_add_a_new_server_error">Seda serverit kas ei leidu või seal puudub jututubade loend</string>
+    <string name="directory_add_a_new_server_prompt">Sisesta serveri nimi, mille sisu sa soovid uurida.</string>
+    <string name="directory_add_a_new_server">Lisa uus server</string>
+    <string name="directory_your_server">Sinu server</string>
+    <string name="teammate_spaces_arent_quite_ready">Kaasteeliste kogukonnakeskused pole veel päris valmis, aga sa võid neid juba proovida</string>
+    <string name="continue_anyway">Jätka ikkagi</string>
+    <string name="teammate_spaces_might_not_join">Hetkel teiste kasutajate liitumine sinu poolt tehtud privaatsete jututubadega ei pruugi õnnestuda.
+\n
+\nKuna tegemist on beetaversiooniga, siis me veel parandame seda funktsionaalsust, aga lihtsalt tahtsime sind teavitada.</string>
+    <string name="error_failed_to_join_room">Vabandust, liitumisel tekkis viga: %s</string>
+    <string name="create_space_alias_hint">Kogukonnakeskuse aadressid</string>
+    <string name="space_settings_alias_subtitle">Selle kogukonnakeskuse hallatud ja nähtavad aadressid.</string>
+    <string name="space_settings_alias_title">Kogukonnakeskuse aadressid</string>
+    <string name="settings_server_room_version_unstable">ebapüsiv</string>
+    <string name="settings_server_room_version_stable">stabiilne</string>
+    <string name="room_upgrade_to_recommended_version">Uuenda see jututoa versioon soovitatud versioonini</string>
+    <string name="room_using_unstable_room_version">Selle jututoa versioon on %s ning see koduserver on tema märkinud ebastabiilseks.</string>
+    <string name="upgrade_room_no_power_to_manage">Jututoa versiooni uuendamiseks on sul vaja õigusi</string>
+    <string name="upgrade_room_update_parent_space">Uuenda automaatselt ka kogukonnakeskust, kus jututuba osaleb</string>
+    <string name="upgrade_room_auto_invite">Kutsu automaatselt kasutajaid</string>
+    <string name="upgrade_public_room_from_to">Sa oled uuendamas jututoa versiooni: %s -&gt; %s.</string>
+    <string name="upgrade_room_warning">Jututoa versiooni uuendamine on erandlik tegevus ning soovitame seda vaid siis kui ta on vigade tõttu raskestikasutatav, tal puuduvad uued funktsionaalsused või temas leidub turvavigu.
+\nTavaliselt versiooniuuendus mõjutab vaid seda viisi kuidas andmeid töödeldakse serveris.</string>
+    <string name="upgrade_private_room">Uuenda omavaheline jututuba</string>
+    <string name="upgrade_public_room">Uuenda avalik jututuba</string>
+    <string name="upgrade">Uuenda</string>
+    <string name="it_may_take_some_time">Palun oota rahulikult. Selleks võib kuluda natuke aega.</string>
+    <string name="joining_replacement_room">Liitu asenduseks mõeldud jututoaga</string>
+    <string name="command_description_upgrade_room">Uuendab jututoa uue versioonini</string>
+    <string name="settings_server_default_room_version">Vaikimisi versioon</string>
+    <string name="settings_server_room_versions">Jututubade versioonid 👓</string>
+    <string name="verification_scan_self_emoji_subtitle">Selle asemel verifitseeri võrreldes emoji\'sid</string>
+    <string name="verification_scan_with_this_device">Skaneeri selle seadmega</string>
+    <string name="verification_scan_self_notice">Skaneeri koodi oma teise seadmega või vaheta pooli ning skaneeri selle seadmega</string>
+    <string name="hs_client_url">Koduserveri API aadress</string>
+    <string name="missing_permissions_title">Õigused on puudu</string>
+    <string name="denied_permission_camera">Selle tegevuse jaoks palun luba seadistustes sellele rakendusele kaamera kasutamine.</string>
+    <string name="denied_permission_generic">Selle tegevuse jaoks puuduvad sul õigused. Palun jaga vajalikud õigused süsteemi seadistustest.</string>
+    <plurals name="missed_video_call">
+        <item quantity="one">Vastamata videokõne</item>
+        <item quantity="other">%d vastamata videokõnet</item>
+    </plurals>
+    <plurals name="missed_audio_call">
+        <item quantity="one">Vastamata kõne</item>
+        <item quantity="other">%d vastamata kõnet</item>
+    </plurals>
+    <string name="upgrade_required">Vajalik on uuendus</string>
+    <string name="other_spaces_or_rooms_you_might_not_know">Muud kogukonnad ja jututoad, mida sa ei pruugi teada</string>
+    <string name="space_you_know_that_contains_this_room">Sulle teadaolevad kogukonnad, milles osaleb see jututuba</string>
+    <string name="room_create_member_of_space_name_can_join">%s kogukonna liikmed saavad leida, vaadata eelvaadet ja liituda.</string>
+    <string name="decide_who_can_find_and_join">Vali kes saavad seda kogukonda leida ja võivad temaga liituda.</string>
+    <string name="tap_to_edit_spaces">Kogukondade muutmiseks klõpsi</string>
+    <string name="select_spaces">Vali kogukonnad</string>
+    <string name="decide_which_spaces_can_access">Vali mis kogukonnad pääsevad ligi sellele jututoale. Valitud kogukonna liikmed saavad seda jututuba leida ja temaga liituda.</string>
+    <string name="spaces_which_can_access">Kogukonnad, mis pääsevad ligi</string>
+    <string name="allow_space_member_to_find_and_access">Luba kogukonna liikmetel leida ja vaadata.</string>
+    <string name="room_settings_room_access_private_invite_only_title">Privaatne (vaid kutse alusel)</string>
+    <string name="denied_permission_voice_message">Häälsõnumite saatmiseks palun anna rakendusele õigus mikrofoni kasutada.</string>
 </resources>

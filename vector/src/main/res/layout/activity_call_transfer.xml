@@ -9,71 +9,75 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/callTransferToolbar"
-            style="@style/VectorToolbarStyle"
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:elevation="4dp"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/callTransferTabLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/callTransferToolbar"
-            app:tabGravity="fill"
-            app:tabMaxWidth="0dp"
-            app:tabMode="fixed" />
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/callTransferToolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/callTransferTabLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:tabGravity="fill"
+                app:tabMaxWidth="0dp"
+                app:tabMode="fixed" />
+
+        </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/callTransferViewPager"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
             app:layout_constraintBottom_toTopOf="@+id/callTransferActionsLayout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/callTransferTabLayout"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+            app:layout_constraintTop_toBottomOf="@id/appBarLayout" />
 
         <RelativeLayout
-            android:background="?riotx_header_panel_background"
             android:id="@+id/callTransferActionsLayout"
             android:layout_width="match_parent"
-            android:paddingVertical="8dp"
+            android:layout_height="wrap_content"
+            android:background="?vctr_header_background"
             android:paddingHorizontal="16dp"
+            android:paddingVertical="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintStart_toEndOf="parent"
-            android:layout_height="wrap_content">
+            app:layout_constraintStart_toStartOf="parent">
 
             <CheckBox
                 android:id="@+id/callTransferConsultCheckBox"
                 android:layout_width="wrap_content"
-                android:layout_centerVertical="true"
+                android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
-                android:enabled="false"
-                android:layout_height="wrap_content"/>
+                android:layout_centerVertical="true" />
 
             <TextView
                 android:id="@+id/callTransferConsultTitle"
+                style="@style/Widget.Vector.TextView.Body"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_toEndOf="@id/callTransferConsultCheckBox"
-                android:layout_toStartOf="@+id/callTransferConnectAction"
                 android:layout_marginEnd="8dp"
+                android:layout_toStartOf="@+id/callTransferConnectAction"
+                android:layout_toEndOf="@id/callTransferConsultCheckBox"
                 android:ellipsize="end"
                 android:text="@string/call_transfer_consult_first" />
 
             <Button
                 android:id="@+id/callTransferConnectAction"
-                style="@style/VectorButtonStyleText"
+                style="@style/Widget.Vector.Button.Text"
                 android:layout_width="wrap_content"
-                android:layout_centerVertical="true"
+                android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:text="@string/call_transfer_connect_action"
-                android:layout_height="wrap_content"/>
+                android:layout_centerVertical="true"
+                android:text="@string/call_transfer_connect_action" />
 
         </RelativeLayout>
 

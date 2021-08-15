@@ -24,6 +24,7 @@ import androidx.core.widget.TextViewCompat
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.core.epoxy.onClick
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.tools.findPillsAndProcess
 import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlRetriever
@@ -39,6 +40,9 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
 
     @EpoxyAttribute
     var message: CharSequence? = null
+
+    @EpoxyAttribute
+    var canUseTextFuture: Boolean = true
 
     @EpoxyAttribute
     var useBigFont: Boolean = false
@@ -80,17 +84,26 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
                 it.bind(holder.messageView)
             }
         }
-        val textFuture = PrecomputedTextCompat.getTextFuture(
-                message ?: "",
-                TextViewCompat.getTextMetricsParams(holder.messageView),
-                null)
+        val textFuture = if (canUseTextFuture) {
+            PrecomputedTextCompat.getTextFuture(
+                    message ?: "",
+                    TextViewCompat.getTextMetricsParams(holder.messageView),
+                    null)
+        } else {
+            null
+        }
         super.bind(holder)
         holder.messageView.movementMethod = movementMethod
 
         renderSendState(holder.messageView, holder.messageView)
-        holder.messageView.setOnClickListener(attributes.itemClickListener)
+        holder.messageView.onClick(attributes.itemClickListener)
         holder.messageView.setOnLongClickListener(attributes.itemLongClickListener)
-        holder.messageView.setTextFuture(textFuture)
+
+        if (canUseTextFuture) {
+            holder.messageView.setTextFuture(textFuture)
+        } else {
+            holder.messageView.text = message
+        }
     }
 
     override fun unbind(holder: Holder) {

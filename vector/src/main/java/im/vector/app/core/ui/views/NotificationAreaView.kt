@@ -21,11 +21,12 @@ import android.graphics.Color
 import android.text.method.LinkMovementMethod
 import android.util.AttributeSet
 import android.view.View
-import android.widget.RelativeLayout
+import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import androidx.core.text.italic
 import im.vector.app.R
 import im.vector.app.core.error.ResourceLimitErrorFormatter
+import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.databinding.ViewNotificationAreaBinding
 import im.vector.app.features.themes.ThemeUtils
@@ -44,7 +45,7 @@ class NotificationAreaView @JvmOverloads constructor(
         context: Context,
         attrs: AttributeSet? = null,
         defStyleAttr: Int = 0
-) : RelativeLayout(context, attrs, defStyleAttr) {
+) : LinearLayout(context, attrs, defStyleAttr) {
 
     var delegate: Delegate? = null
     private var state: State = State.Initial
@@ -69,12 +70,13 @@ class NotificationAreaView @JvmOverloads constructor(
         cleanUp()
         state = newState
         when (newState) {
+            State.Initial                       -> Unit
             is State.Default                    -> renderDefault()
             is State.Hidden                     -> renderHidden()
             is State.NoPermissionToPost         -> renderNoPermissionToPost()
-            is State.Tombstone                  -> renderTombstone(newState)
+            is State.Tombstone                  -> renderTombstone()
             is State.ResourceLimitExceededError -> renderResourceLimitExceededError(newState)
-        }
+        }.exhaustive
     }
 
     // PRIVATE METHODS ****************************************************************************************************************************************
@@ -102,7 +104,7 @@ class NotificationAreaView @JvmOverloads constructor(
             }
         }
         views.roomNotificationMessage.text = message
-        views.roomNotificationMessage.setTextColor(ThemeUtils.getColor(context, R.attr.riotx_text_secondary))
+        views.roomNotificationMessage.setTextColor(ThemeUtils.getColor(context, R.attr.vctr_content_secondary))
     }
 
     private fun renderResourceLimitExceededError(state: State.ResourceLimitExceededError) {
@@ -125,15 +127,15 @@ class NotificationAreaView @JvmOverloads constructor(
         setBackgroundColor(ContextCompat.getColor(context, backgroundColor))
     }
 
-    private fun renderTombstone(state: State.Tombstone) {
+    private fun renderTombstone() {
         visibility = View.VISIBLE
-        views.roomNotificationIcon.setImageResource(R.drawable.error)
+        views.roomNotificationIcon.setImageResource(R.drawable.ic_warning_badge)
         val message = span {
             +resources.getString(R.string.room_tombstone_versioned_description)
             +"\n"
             span(resources.getString(R.string.room_tombstone_continuation_link)) {
                 textDecorationLine = "underline"
-                onClick = { delegate?.onTombstoneEventClicked(state.tombstoneEvent) }
+                onClick = { delegate?.onTombstoneEventClicked() }
             }
         }
         views.roomNotificationMessage.movementMethod = BetterLinkMovementMethod.getInstance()
@@ -177,6 +179,6 @@ class NotificationAreaView @JvmOverloads constructor(
      * An interface to delegate some actions to another object
      */
     interface Delegate {
-        fun onTombstoneEventClicked(tombstoneEvent: Event)
+        fun onTombstoneEventClicked()
     }
 }

@@ -56,7 +56,6 @@ import timber.log.Timber
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
-import java.lang.IllegalStateException
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -100,8 +99,8 @@ fun openUrlInChromeCustomTab(context: Context,
         CustomTabsIntent.Builder()
                 .setDefaultColorSchemeParams(
                         CustomTabColorSchemeParams.Builder()
-                                .setToolbarColor(ThemeUtils.getColor(context, R.attr.riotx_background))
-                                .setNavigationBarColor(ThemeUtils.getColor(context, R.attr.riotx_background))
+                                .setToolbarColor(ThemeUtils.getColor(context, android.R.attr.colorBackground))
+                                .setNavigationBarColor(ThemeUtils.getColor(context, android.R.attr.colorBackground))
                                 .build()
                 )
                 .setColorScheme(

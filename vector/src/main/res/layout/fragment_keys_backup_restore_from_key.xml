@@ -5,7 +5,7 @@
     android:id="@+id/keys_backup_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?riotx_background">
+    android:background="?android:colorBackground">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -21,18 +21,18 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:tint="?riotx_text_primary"
+            app:tint="?vctr_content_primary"
             tools:ignore="MissingPrefix" />
 
         <TextView
             android:id="@+id/keys_restore_with_key"
+            style="@style/Widget.Vector.TextView.Subtitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:text="@string/keys_backup_restore_with_recovery_key"
             android:textAlignment="center"
-            android:textColor="?riotx_text_primary"
-            android:textSize="16sp"
+            android:textColor="?vctr_content_primary"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -40,7 +40,6 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/key_input_layout"
-            style="@style/VectorTextInputLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -58,7 +57,6 @@
                 android:imeOptions="actionDone"
                 android:inputType="textNoSuggestions|textMultiLine"
                 android:maxLines="3"
-                android:textColor="?android:textColorPrimary"
                 tools:text="EsTy 7CiZ Zqpj eqFq Wjz1 kzfS 59DE uZyA wt7b rhBE viyt kb1p" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -74,24 +72,26 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/key_input_layout"
             app:layout_constraintTop_toTopOf="@id/key_input_layout"
-            app:tint="?attr/colorAccent"
+            app:tint="?colorSecondary"
             tools:ignore="MissingPrefix" />
 
         <TextView
             android:id="@+id/keys_restore_key_help_with_link"
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:text="@string/keys_backup_restore_with_key_helper"
             android:textAlignment="center"
-            android:textColor="?riotx_text_secondary"
+            android:textColor="?vctr_content_secondary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/key_input_layout" />
 
-        <com.google.android.material.button.MaterialButton
+        <Button
             android:id="@+id/keys_restore_button"
-            style="@style/VectorButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/layout_vertical_margin_big"
             android:layout_marginEnd="@dimen/layout_horizontal_margin"
             android:minWidth="200dp"

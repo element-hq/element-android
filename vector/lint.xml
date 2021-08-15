@@ -58,6 +58,9 @@
     <!-- Manifest -->
     <issue id="PermissionImpliesUnsupportedChromeOsHardware" severity="error" />
 
+    <!-- Performance -->
+    <issue id="UselessParent" severity="error" />
+
     <!-- Dependencies -->
     <issue id="KtxExtensionAvailable" severity="error" />
 
@@ -75,4 +78,8 @@
     <issue id="all">
         <ignore path="**/generated/resolved/**/resolved.xml" />
     </issue>
+
+    <!-- Bug in lint agp 4.1 incorrectly thinks kotlin forEach is using java 8 API's. -->
+    <!-- FIXME this workaround should be removed in a near future -->
+    <issue id="NewApi" severity="warning" />
 </lint>

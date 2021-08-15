@@ -23,7 +23,6 @@ data class ReAuthState(
         val session: String? = null,
         val flowType: String? = null,
         val ssoFallbackPageWasShown: Boolean = false,
-        val passwordVisible: Boolean = false,
         val lastErrorCode: String? = null,
         val resultKeyStoreAlias: String = ""
 ) : MvRxState {
