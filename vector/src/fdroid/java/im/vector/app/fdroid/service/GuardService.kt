@@ -46,7 +46,8 @@ class GuardService : Service() {
         if (running) {
             if (intent != null) {
                 val lifeLine = intent.getBooleanExtra(EXTRA_LIFELINE, false)
-                if (lifeLine) {//called from lifeLine?
+                if (lifeLine) {
+                    // called from lifeLine?
                     scheduleLifeLine()
                     return START_STICKY
                 }
@@ -88,7 +89,7 @@ class GuardService : Service() {
                     if (sessionId.isNullOrEmpty()) {
                         Timber.i("## Sync: timer still alive GuardService sessionId:nullOrEmpty")
                     } else {
-                        Timber.i("## Sync: timer still alive GuardService sessionId:${sessionId}")
+                        Timber.i("## Sync: timer still alive GuardService sessionId:$sessionId")
                         try {
                             val syncIntent = Intent(applicationContext, VectorSyncService::class.java)
                             syncIntent.putExtra(SyncService.EXTRA_SESSION_ID, sessionId)
