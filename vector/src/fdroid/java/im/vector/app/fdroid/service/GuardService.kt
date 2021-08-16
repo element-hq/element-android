@@ -45,8 +45,8 @@ class GuardService : Service() {
         Timber.i("## Sync: onStartCommand GuardService running:$running")
         if (running) {
             if (intent != null) {
-                val liveLine = intent.getBooleanExtra(EXTRA_LIFELINE, false)
-                if (liveLine) {//called from lifeLine?
+                val lifeLine = intent.getBooleanExtra(EXTRA_LIFELINE, false)
+                if (lifeLine) {//called from lifeLine?
                     scheduleLifeLine()
                     return START_STICKY
                 }
@@ -65,9 +65,9 @@ class GuardService : Service() {
             if (intent != null) {
                 sessionId = intent.getStringExtra(SyncService.EXTRA_SESSION_ID)
                 delayInSeconds = intent.getIntExtra(SyncService.EXTRA_DELAY_SECONDS, BackgroundSyncMode.DEFAULT_SYNC_DELAY_SECONDS)
-                val liveLine = intent.getBooleanExtra(EXTRA_LIFELINE, false)
-                if (liveLine) {
-                    Timber.i("## Sync: GuardService restarted by liveLine")
+                val lifeLine = intent.getBooleanExtra(EXTRA_LIFELINE, false)
+                if (lifeLine) {
+                    Timber.i("## Sync: GuardService restarted by lifeLine")
                 }
                 if (sessionId.isNullOrEmpty()) {
                     Timber.i("## Sync: GuardService getting sessionId from sharedPreferences")
