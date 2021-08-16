@@ -74,19 +74,19 @@
     <string name="notice_direct_room_update_by_you">You upgraded here.</string>
     <string name="notice_room_server_acl_set_title">%s set the server ACLs for this room.</string>
     <string name="notice_room_server_acl_set_title_by_you">You set the server ACLs for this room.</string>
-    <string name="notice_room_server_acl_set_banned">• Server matching %s are banned.</string>
-    <string name="notice_room_server_acl_set_allowed">• Server matching %s are allowed.</string>
-    <string name="notice_room_server_acl_set_ip_literals_allowed">• Server matching IP literals are allowed.</string>
-    <string name="notice_room_server_acl_set_ip_literals_not_allowed">• Server matching IP literals are banned.</string>
+    <string name="notice_room_server_acl_set_banned">• Servers matching %s are banned.</string>
+    <string name="notice_room_server_acl_set_allowed">• Servers matching %s are allowed.</string>
+    <string name="notice_room_server_acl_set_ip_literals_allowed">• Servers matching IP literals are allowed.</string>
+    <string name="notice_room_server_acl_set_ip_literals_not_allowed">• Servers matching IP literals are banned.</string>
 
     <string name="notice_room_server_acl_updated_title">%s changed the server ACLs for this room.</string>
     <string name="notice_room_server_acl_updated_title_by_you">You changed the server ACLs for this room.</string>
-    <string name="notice_room_server_acl_updated_banned">• Server matching %s are now banned.</string>
-    <string name="notice_room_server_acl_updated_was_banned">• Server matching %s were removed from the ban list.</string>
-    <string name="notice_room_server_acl_updated_allowed">• Server matching %s are now allowed.</string>
-    <string name="notice_room_server_acl_updated_was_allowed">• Server matching %s were removed from the allowed list.</string>
-    <string name="notice_room_server_acl_updated_ip_literals_allowed">• Server matching IP literals are now allowed.</string>
-    <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• Server matching IP literals are now banned.</string>
+    <string name="notice_room_server_acl_updated_banned">• Servers matching %s are now banned.</string>
+    <string name="notice_room_server_acl_updated_was_banned">• Servers matching %s were removed from the ban list.</string>
+    <string name="notice_room_server_acl_updated_allowed">• Servers matching %s are now allowed.</string>
+    <string name="notice_room_server_acl_updated_was_allowed">• Servers matching %s were removed from the allowed list.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_allowed">• Servers matching IP literals are now allowed.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• Servers matching IP literals are now banned.</string>
     <string name="notice_room_server_acl_updated_no_change">No change.</string>
     <string name="notice_room_server_acl_allow_is_empty">🎉 All servers are banned from participating! This room can no longer be used.</string>
 
@@ -386,12 +386,17 @@
     <string name="reset">Reset</string>
     <string name="start_chatting">Start Chatting</string>
 
+    <!-- Permissions denied forever -->
+    <string name="denied_permission_generic">Some permissions are missing to perform this action, please grant the permissions from the system settings.</string>
+    <string name="denied_permission_camera">To perform this action, please grant the Camera permission from the system settings.</string>
+    <string name="denied_permission_voice_message">To send voice messages, please grant the Microphone permission.</string>
 
     <!-- First param will be replace by the value of ongoing_conference_call_voice, and second one by the value of ongoing_conference_call_video -->
     <string name="ongoing_conference_call">Ongoing conference call.\nJoin as %1$s or %2$s</string>
     <string name="ongoing_conference_call_voice">Voice</string>
     <string name="ongoing_conference_call_video">Video</string>
     <string name="cannot_start_call">Cannot start the call, please try later</string>
+    <string name="missing_permissions_title">Missing permissions</string>
     <string name="missing_permissions_warning">"Due to missing permissions, some features may be missing…</string>
     <string name="missing_permissions_error">"Due to missing permissions, this action is not possible.</string>
     <string name="missing_permissions_to_start_conf_call">You need permission to invite to start a conference in this room</string>
@@ -539,7 +544,7 @@
     <string name="logout">Sign out</string>
     <string name="hs_url">Homeserver URL</string>
     <string name="hs_client_url">Homeserver API URL</string>
-    <string name="identity_url">Identity Server URL</string>
+    <string name="identity_url">Identity server URL</string>
     <string name="search">Search</string>
 
     <string name="start_new_chat">Start New Chat</string>
@@ -629,7 +634,7 @@
     <string name="auth_recaptcha_message">This homeserver would like to make sure you are not a robot</string>
     <string name="auth_username_in_use">Username in use</string>
     <string name="auth_home_server">Homeserver:</string>
-    <string name="auth_identity_server">Identity Server:</string>
+    <string name="auth_identity_server">Identity server:</string>
     <string name="auth_reset_password_next_step_button">I have verified my email address</string>
     <string name="auth_reset_password_message">To reset your password, enter the email address linked to your account:</string>
     <string name="auth_reset_password_missing_email">The email address linked to your account must be entered.</string>
@@ -723,6 +728,14 @@
     <string name="call_connected">Call connected</string>
     <string name="call_connecting">Call connecting…</string>
     <string name="call_ended">Call ended</string>
+    <plurals name="missed_audio_call">
+        <item quantity="one">Missed audio call</item>
+        <item quantity="other">%d missed audio calls</item>
+    </plurals>
+    <plurals name="missed_video_call">
+        <item quantity="one">Missed video call</item>
+        <item quantity="other">%d missed video calls</item>
+    </plurals>
     <string name="call_ring">Calling…</string>
     <string name="incoming_call">Incoming Call</string>
     <string name="incoming_video_call">Incoming Video Call</string>
@@ -927,7 +940,7 @@
     <string name="room_resend_unsent_messages">Resend unsent messages</string>
     <string name="room_delete_unsent_messages">Delete unsent messages</string>
     <string name="room_message_file_not_found">File not found</string>
-    <string name="room_do_not_have_permission_to_post">You do not have permission to post to this room</string>
+    <string name="room_do_not_have_permission_to_post">You do not have permission to post to this room.</string>
     <plurals name="room_new_messages_notification">
         <item quantity="one">%d new message</item>
         <item quantity="other">%d new messages</item>
@@ -1075,6 +1088,12 @@
     <string name="settings_notification_advanced">Advanced Notification Settings</string>
     <string name="settings_notification_by_event">Notification importance by event</string>
 
+    <string name="settings_notification_default">Default Notifications</string>
+    <string name="settings_notification_mentions_and_keywords">Mentions and Keywords</string>
+    <string name="settings_notification_other">Other</string>
+
+    <string name="settings_notification_notify_me_for">Notify me for</string>
+
     <string name="settings_notification_privacy">Notification privacy</string>
     <string name="settings_notification_troubleshoot">Troubleshoot Notifications</string>
     <string name="settings_troubleshoot_diagnostic">Troubleshooting diagnostics</string>
@@ -1140,8 +1159,8 @@
 
     <!-- FCM token, not used -->
     <string name="settings_troubleshoot_test_token_registration_title">Token Registration</string>
-    <string name="settings_troubleshoot_test_token_registration_success">FCM token successfully registered to HomeServer.</string>
-    <string name="settings_troubleshoot_test_token_registration_failed">Failed to register FCM token to HomeServer:\n%1$s</string>
+    <string name="settings_troubleshoot_test_token_registration_success">FCM token successfully registered to homeserver.</string>
+    <string name="settings_troubleshoot_test_token_registration_failed">Failed to register FCM token to homeserver:\n%1$s</string>
 
     <string name="settings_troubleshoot_test_push_loop_title">Test Push</string>
     <string name="settings_troubleshoot_test_push_loop_waiting_for_push">The application is waiting for the PUSH</string>
@@ -1183,7 +1202,7 @@
     <string name="settings_notification_privacy_normal">Normal</string>
     <string name="settings_notification_privacy_reduced">Reduced privacy</string>
     <string name="settings_notification_privacy_need_permission">The app needs permission to run in the background</string>
-    <string name="settings_notification_privacy_no_background_sync">The apps does <b>not</b> need to connect to the HomeServer in the background, it should reduce battery usage</string>
+    <string name="settings_notification_privacy_no_background_sync">The apps does <b>not</b> need to connect to the homeserver in the background, it should reduce battery usage</string>
     <string name="settings_notification_privacy_fcm">• Notifications are sent via Firebase Cloud Messaging</string>
     <string name="settings_notification_privacy_metadata">• Notifications only contain meta data</string>
     <string name="settings_notification_privacy_secure_message_content">• Message content of the notification is <b>located securely direct from the Matrix homeserver</b></string>
@@ -1199,14 +1218,27 @@
     <string name="settings_silent_notifications_preferences">Configure Silent Notifications</string>
     <string name="settings_system_preferences_summary">Choose LED color, vibration, sound…</string>
 
-
+    <string name="settings_messages_in_e2e_one_to_one">Encrypted messages in one-to-one chats</string>
+    <string name="settings_messages_in_e2e_group_chat">Encrypted messages in group chats</string>
+    <string name="settings_when_rooms_are_upgraded">When rooms are upgraded</string>
     <string name="settings_containing_my_display_name">Msgs containing my display name</string>
     <string name="settings_containing_my_user_name">Msgs containing my user name</string>
     <string name="settings_messages_in_one_to_one">Msgs in one-to-one chats</string>
     <string name="settings_messages_in_group_chat">Msgs in group chats</string>
     <string name="settings_invited_to_room">When I’m invited to a room</string>
-    <string name="settings_call_invitations">Call invitations</string>
     <string name="settings_messages_sent_by_bot">Messages sent by bot</string>
+
+    <string name="settings_messages_containing_display_name">Messages containing my display name</string>
+    <string name="settings_messages_containing_username">Messages containing my username</string>
+    <string name="settings_messages_direct_messages">Direct messages</string>
+    <string name="settings_encrypted_direct_messages">Encrypted direct messages</string>
+    <string name="settings_group_messages">Group messages</string>
+    <string name="settings_encrypted_group_messages">Encrypted group messages</string>
+    <string name="settings_messages_at_room">Messages containing @room</string>
+    <string name="settings_room_invitations">Room invitations</string>
+    <string name="settings_call_invitations">Call invitations</string>
+    <string name="settings_messages_by_bot">Messages by bot</string>
+    <string name="settings_room_upgrades">Room upgrades</string>
 
     <string name="settings_background_sync">Background synchronization</string>
     <string name="settings_background_fdroid_sync_mode">Background Sync Mode</string>
@@ -1248,7 +1280,7 @@
     <string name="settings_other">Other</string>
     <string name="settings_advanced">Advanced</string>
     <string name="settings_integrations">Integrations</string>
-    <string name="settings_integrations_summary">Use an Integration Manager to manage bots, bridges, widgets and sticker packs.\nIntegration Managers receive configuration data, and can modify widgets, send room invites and set power levels on your behalf.</string>
+    <string name="settings_integrations_summary">Use an integration manager to manage bots, bridges, widgets and sticker packs.\nIntegration managers receive configuration data, and can modify widgets, send room invites and set power levels on your behalf.</string>
     <string name="settings_cryptography">Cryptography</string>
     <string name="settings_cryptography_manage_keys">Cryptography Keys Management</string>
     <string name="settings_notifications_targets">Notification Targets</string>
@@ -1333,9 +1365,9 @@
 
     <string name="settings_logged_in">Logged in as</string>
     <string name="settings_home_server">Homeserver</string>
-    <string name="settings_identity_server">Identity Server</string>
+    <string name="settings_identity_server">Identity server</string>
     <string name="settings_integration_allow">Allow integrations</string>
-    <string name="settings_integration_manager">Integration Manager</string>
+    <string name="settings_integration_manager">Integration manager</string>
 
     <string name="disabled_integration_dialog_title">Integrations are disabled</string>
     <string name="disabled_integration_dialog_content">"Enable 'Allow integrations' in Settings to do this."</string>
@@ -1478,11 +1510,21 @@
     <string name="room_settings_room_access_entry_knock">Anyone can knock on the room, members can then accept or reject</string>
     <string name="room_settings_room_access_entry_unknown">Unknown access setting (%s)</string>
     <string name="room_settings_room_access_private_title">Private</string>
+    <string name="room_settings_room_access_private_invite_only_title">Private (Invite Only)</string>
     <string name="room_settings_room_access_private_description">Only people invited can find and join</string>
     <string name="room_settings_room_access_public_title">Public</string>
     <string name="room_settings_room_access_public_description">Anyone can find the room and join</string>
-    <string name="room_settings_room_access_restricted_title">Spaces</string>
+    <string name="room_settings_room_access_restricted_title">Space members only</string>
     <string name="room_settings_room_access_restricted_description">Anyone in a space with this room can find and join it. Only admins of this room can add it to a space.</string>
+    <string name="room_create_member_of_space_name_can_join">Members of Space %s can find, preview and join.</string>
+    <string name="allow_space_member_to_find_and_access">Allow space members to find and access.</string>
+    <string name="spaces_which_can_access">Spaces which can access</string>
+    <string name="decide_which_spaces_can_access">Decide which spaces can access this room. If a space is selected its members will be able to find and join Room name.</string>
+    <string name="select_spaces">Select spaces</string>
+    <string name="tap_to_edit_spaces">Tap to edit spaces</string>
+    <string name="decide_who_can_find_and_join">Decide who can find and join this room.</string>
+    <string name="space_you_know_that_contains_this_room">Space you know that contain this room</string>
+    <string name="other_spaces_or_rooms_you_might_not_know">Other spaces or rooms you might not know</string>
 
     <!-- Room settings: banned users -->
     <string name="room_settings_banned_users_title">Banned users</string>
@@ -1710,7 +1752,7 @@
     <string name="room_widget_webview_access_microphone">Use the microphone</string>
     <string name="room_widget_webview_read_protected_media">Read DRM protected Media</string>
 
-    <!-- Widget Integration Manager -->
+    <!-- Widget integration manager -->
 
     <string name="widget_integration_unable_to_create">Unable to create widget.</string>
     <string name="widget_integration_failed_to_send_request">Failed to send request.</string>
@@ -1837,7 +1879,7 @@
 
     <string name="error_empty_field_enter_user_name">Please enter a username.</string>
     <string name="error_empty_field_your_password">Please enter your password.</string>
-    <string name="room_tombstone_versioned_description">This room has been replaced and is no longer active</string>
+    <string name="room_tombstone_versioned_description">This room has been replaced and is no longer active.</string>
     <string name="room_tombstone_continuation_link">The conversation continues here</string>
     <string name="room_tombstone_continuation_description">This room is a continuation of another conversation</string>
     <string name="room_tombstone_predecessor_link">Click here to see older messages</string>
@@ -1921,7 +1963,7 @@
     <string name="recovery_key_export_saved_as_warning">The recovery key has been saved to \'%s\'.\n\nWarning: this file may be deleted if the application is uninstalled.</string>
     <string name="recovery_key_export_saved">The recovery key has been saved.</string>
 
-    <string name="keys_backup_setup_override_backup_prompt_tile">A backup already exist on your HomeServer</string>
+    <string name="keys_backup_setup_override_backup_prompt_tile">A backup already exist on your homeserver</string>
     <string name="keys_backup_setup_override_backup_prompt_description">It looks like you already have setup key backup from another session. Do you want to replace it with the one you’re creating?</string>
     <string name="keys_backup_setup_override_replace">Replace</string>
     <string name="keys_backup_setup_override_stop">Stop</string>
@@ -2087,7 +2129,7 @@
     <string name="sas_error_unknown">Unknown Error</string>
 
     <!-- Identity server -->
-    <string name="identity_server_not_defined">You are not using any Identity Server</string>
+    <string name="identity_server_not_defined">You are not using any identity server</string>
     <string name="identity_server_not_defined_for_password_reset">No identity server is configured, it is required to reset your password.</string>
 
     <string name="error_user_already_logged_in">It looks like you’re trying to connect to another homeserver. Do you want to sign out?</string>
@@ -2285,7 +2327,7 @@
     <string name="settings_discovery_consent_action_give_consent">Give consent</string>
 
     <string name="identity_server_consent_dialog_title">Send emails and phone numbers</string>
-    <string name="identity_server_consent_dialog_content">In order to discover existing contacts you know, do you accept to send your contact data (phone numbers and/or emails) to the configured Identity Server (%1$s)?\n\nFor more privacy, the sent data will be hashed before being sent.</string>
+    <string name="identity_server_consent_dialog_content">In order to discover existing contacts you know, do you accept to send your contact data (phone numbers and/or emails) to the configured identity server (%1$s)?\n\nFor more privacy, the sent data will be hashed before being sent.</string>
 
     <string name="settings_discovery_enter_identity_server">Enter an identity server URL</string>
     <string name="settings_discovery_bad_identity_server">Could not connect to identity server</string>
@@ -2626,6 +2668,7 @@
     <string name="sent_a_video">Video.</string>
     <string name="sent_an_image">Image.</string>
     <string name="sent_an_audio_file">Audio</string>
+    <string name="sent_a_voice_message">Voice</string>
     <string name="sent_a_file">File</string>
     <string name="send_a_sticker">Sticker</string>
     <string name="sent_a_poll">Poll</string>
@@ -2755,6 +2798,11 @@
     <string name="settings_server_upload_size_title">Server file upload limit</string>
     <string name="settings_server_upload_size_content">Your homeserver accepts attachments (files, media, etc.) with a size up to %s.</string>
     <string name="settings_server_upload_size_unknown">The limit is unknown.</string>
+    <!-- Please use the same emoji in the translations -->
+    <string name="settings_server_room_versions">Room Versions 👓</string>
+    <string name="settings_server_default_room_version">Default Version</string>
+    <string name="settings_server_room_version_stable">stable</string>
+    <string name="settings_server_room_version_unstable">unstable</string>
 
     <string name="settings_failed_to_get_crypto_device_info">No cryptographic information available</string>
 
@@ -2870,7 +2918,7 @@
         One of the following may be compromised:\n\n- Your password\n- Your homeserver\n- This device, or the other device\n- The internet connection either device is using\n\nWe recommend you change your password &amp; recovery key in Settings immediately.
     </string>
 
-    <string name="verify_cancelled_notice">Verify your devices from Settings.</string>
+    <string name="verify_cancelled_notice">Verification has been cancelled. You can start verification again.</string>
     <string name="verification_cancelled">Verification Cancelled</string>
 
     <string name="recovery_passphrase">Recovery Passphrase</string>
@@ -2953,10 +3001,6 @@
     <string name="error_failed_to_import_keys">Failed to import keys</string>
 
     <string name="settings_notification_configuration">Notifications configuration</string>
-    <string name="settings_messages_at_room">Messages containing @room</string>
-    <string name="settings_messages_in_e2e_one_to_one">Encrypted messages in one-to-one chats</string>
-    <string name="settings_messages_in_e2e_group_chat">Encrypted messages in group chats</string>
-    <string name="settings_when_rooms_are_upgraded">When rooms are upgraded</string>
     <string name="settings_troubleshoot_title">Troubleshoot</string>
     <string name="settings_notification_advanced_summary">Set notification importance by event</string>
 
@@ -3315,6 +3359,7 @@
     <string name="command_description_create_space">Create a Space</string>
     <string name="command_description_join_space">Join the Space with the given id</string>
     <string name="command_description_leave_room">Leave room with given id (or current room if null)</string>
+    <string name="command_description_upgrade_room">Upgrades a room to a new version</string>
 
     <string name="event_status_a11y_sending">Sending</string>
     <string name="event_status_a11y_sent">Sent</string>
@@ -3426,5 +3471,44 @@
 
     <string name="teammate_spaces_arent_quite_ready">"Teammate spaces aren’t quite ready but you can still give them a try"</string>
     <string name="teammate_spaces_might_not_join">"At the moment people might not be able to join any private rooms you make.\n\nWe’ll be improving this as part of the beta, but just wanted to let you know."</string>
+
+    <string name="joining_replacement_room">Join replacement room</string>
+    <string name="it_may_take_some_time">Please be patient, it may take some time.</string>
+
+    <string name="upgrade">Upgrade</string>
+    <string name="upgrade_required">Upgrade Required</string>
+    <string name="upgrade_public_room">Upgrade public room</string>
+    <string name="upgrade_private_room">Upgrade private room</string>
+    <string name="upgrade_room_warning">Upgrading a room is an advanced action and is usually recommended when a room is unstable due to bugs, missing features or security vulnerabilities.\nThis usually only affects how the room is processed on the server.</string>
+    <string name="upgrade_public_room_from_to">You\'ll upgrade this room from %s to %s.</string>
+    <string name="upgrade_room_auto_invite">Automatically invite users</string>
+    <string name="upgrade_room_update_parent_space">Automatically update space parent</string>
+    <string name="upgrade_room_no_power_to_manage">You need permission to upgrade a room</string>
+    <string name="allow_anyone_in_room_to_access">Allow anyone in %s to find and access. You can select other spaces too.</string>
+
+    <string name="room_using_unstable_room_version">This room is running room version %s, which this homeserver has marked as unstable.</string>
+    <string name="room_upgrade_to_recommended_version">Upgrade to the recommended room version</string>
+
     <string name="error_failed_to_join_room">Sorry, an error occurred while trying to join: %s</string>
+
+    <string name="a11y_start_voice_message">Start Voice Message</string>
+    <string name="voice_message_slide_to_cancel">Slide to cancel</string>
+    <string name="a11y_lock_voice_message">Voice Message Lock</string>
+    <string name="a11y_play_voice_message">Play Voice Message</string>
+    <string name="a11y_pause_voice_message">Pause Voice Message</string>
+    <string name="a11y_recording_voice_message">Recording voice message</string>
+    <string name="a11y_delete_recorded_voice_message">Delete recorded voice message</string>
+    <string name="voice_message_release_to_send_toast">Hold to record, release to send</string>
+    <string name="voice_message_n_seconds_warning_toast">%1$ds left</string>
+    <string name="voice_message_tap_to_stop_toast">Tap on your recording to stop or listen</string>
+    <string name="labs_use_voice_message">Enable voice message</string>
+    <string name="error_voice_message_unable_to_play">Cannot play this voice message</string>
+    <string name="error_voice_message_unable_to_record">Cannot record a voice message</string>
+    <string name="error_voice_message_cannot_reply_or_edit">Cannot reply or edit while voice message is active</string>
+    <string name="voice_message_reply_content">Voice Message (%1$s)</string>
+
+    <string name="upgrade_room_for_restricted">Anyone in %s will be able to find and join this room - no need to manually invite everyone. You’ll be able to change this in room settings anytime.</string>
+    <string name="upgrade_room_for_restricted_no_param">Anyone in a parent space will be able to find and join this room - no need to manually invite everyone. You’ll be able to change this in room settings anytime.</string>
+
+    <string name="upgrade_room_for_restricted_note">Please note upgrading will make a new version of the room. All current messages will stay in this archived room.</string>
 </resources>

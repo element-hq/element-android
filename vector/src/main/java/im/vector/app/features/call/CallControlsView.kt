@@ -118,7 +118,7 @@ class CallControlsView @JvmOverloads constructor(
                     views.connectedControls.isVisible = false
                 }
             }
-            is CallState.Terminated,
+            is CallState.Ended,
             null                      -> {
                 views.ringingControls.isVisible = false
                 views.connectedControls.isVisible = false

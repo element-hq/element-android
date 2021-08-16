@@ -475,7 +475,7 @@ internal interface IMXCryptoStore {
     fun getGossipingEvents(): List<Event>
 
     fun setDeviceKeysUploaded(uploaded: Boolean)
-    fun getDeviceKeysUploaded(): Boolean
+    fun areDeviceKeysUploaded(): Boolean
     fun tidyUpDataBase()
     fun logDbUsageInfo()
 }

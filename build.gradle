@@ -2,7 +2,7 @@
 
 buildscript {
     // Ref: https://kotlinlang.org/releases.html
-    ext.kotlin_version = '1.5.20'
+    ext.kotlin_version = '1.5.21'
     ext.kotlin_coroutines_version = "1.5.0"
     repositories {
         google()
@@ -50,6 +50,9 @@ allprojects {
                 // Chat effects
                 includeGroupByRegex 'com\\.github\\.jetradarmobile'
                 includeGroupByRegex 'nl\\.dionsegijn'
+
+                // Voice RecordView
+                includeGroupByRegex 'com\\.github\\.Armen101'
             }
         }
         maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }

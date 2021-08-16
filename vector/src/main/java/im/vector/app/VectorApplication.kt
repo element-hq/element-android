@@ -162,7 +162,6 @@ class VectorApplication :
             // Do not display the name change popup
             doNotShowDisclaimerDialog(this)
         }
-
         if (authenticationService.hasAuthenticatedSessions() && !activeSessionHolder.hasActiveSession()) {
             val lastAuthenticatedSession = authenticationService.getLastAuthenticatedSession()!!
             activeSessionHolder.setActiveSession(lastAuthenticatedSession)

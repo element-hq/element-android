@@ -25,8 +25,11 @@ import android.media.AudioManager
 import androidx.core.content.getSystemService
 import im.vector.app.core.services.BluetoothHeadsetReceiver
 import im.vector.app.core.services.WiredHeadsetStateReceiver
+import org.matrix.android.sdk.api.logger.LoggerTag
 import timber.log.Timber
 import java.util.HashSet
+
+private val loggerTag = LoggerTag("API21AudioDeviceDetector", LoggerTag.VOIP)
 
 internal class API21AudioDeviceDetector(private val context: Context,
                                         private val audioManager: AudioManager,
@@ -62,17 +65,17 @@ internal class API21AudioDeviceDetector(private val context: Context,
     }
 
     private fun isBluetoothHeadsetOn(): Boolean {
-        Timber.v("## VOIP: AudioManager isBluetoothHeadsetOn")
+        Timber.tag(loggerTag.value).v("AudioManager isBluetoothHeadsetOn")
         try {
             if (connectedBlueToothHeadset == null) return false.also {
-                Timber.v("## VOIP: AudioManager no connected bluetooth headset")
+                Timber.tag(loggerTag.value).v("AudioManager no connected bluetooth headset")
             }
             if (!audioManager.isBluetoothScoAvailableOffCall) return false.also {
-                Timber.v("## VOIP: AudioManager isBluetoothScoAvailableOffCall false")
+                Timber.tag(loggerTag.value).v("AudioManager isBluetoothScoAvailableOffCall false")
             }
             return true
         } catch (failure: Throwable) {
-            Timber.e("## VOIP: AudioManager isBluetoothHeadsetOn failure ${failure.localizedMessage}")
+            Timber.e("AudioManager isBluetoothHeadsetOn failure ${failure.localizedMessage}")
             return false
         }
     }
@@ -91,11 +94,11 @@ internal class API21AudioDeviceDetector(private val context: Context,
         bluetoothHeadsetStateReceiver = BluetoothHeadsetReceiver.createAndRegister(context, this)
         val bm: BluetoothManager? = context.getSystemService()
         val adapter = bm?.adapter
-        Timber.d("## VOIP Bluetooth adapter $adapter")
+        Timber.tag(loggerTag.value).d("Bluetooth adapter $adapter")
         bluetoothAdapter = adapter
         adapter?.getProfileProxy(context, object : BluetoothProfile.ServiceListener {
             override fun onServiceDisconnected(profile: Int) {
-                Timber.d("## VOIP onServiceDisconnected $profile")
+                Timber.tag(loggerTag.value).d("onServiceDisconnected $profile")
                 if (profile == BluetoothProfile.HEADSET) {
                     connectedBlueToothHeadset = null
                     onAudioDeviceChange()
@@ -103,7 +106,7 @@ internal class API21AudioDeviceDetector(private val context: Context,
             }
 
             override fun onServiceConnected(profile: Int, proxy: BluetoothProfile?) {
-                Timber.d("## VOIP onServiceConnected $profile , proxy:$proxy")
+                Timber.tag(loggerTag.value).d("onServiceConnected $profile , proxy:$proxy")
                 if (profile == BluetoothProfile.HEADSET) {
                     connectedBlueToothHeadset = proxy
                     onAudioDeviceChange()
@@ -122,12 +125,12 @@ internal class API21AudioDeviceDetector(private val context: Context,
     }
 
     override fun onHeadsetEvent(event: WiredHeadsetStateReceiver.HeadsetPlugEvent) {
-        Timber.v("onHeadsetEvent $event")
+        Timber.tag(loggerTag.value).v("onHeadsetEvent $event")
         onAudioDeviceChange()
     }
 
     override fun onBTHeadsetEvent(event: BluetoothHeadsetReceiver.BTHeadsetPlugEvent) {
-        Timber.v("onBTHeadsetEvent $event")
+        Timber.tag(loggerTag.value).v("onBTHeadsetEvent $event")
         onAudioDeviceChange()
     }
 }

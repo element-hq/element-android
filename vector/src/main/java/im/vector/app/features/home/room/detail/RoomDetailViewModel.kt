@@ -38,6 +38,7 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.mvrx.runCatchingToAsync
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.features.attachments.toContentAttachmentData
 import im.vector.app.features.call.conference.JitsiService
 import im.vector.app.features.call.lookup.CallProtocolsChecker
 import im.vector.app.features.call.webrtc.WebRtcCallManager
@@ -46,6 +47,7 @@ import im.vector.app.features.command.ParsedCommand
 import im.vector.app.features.createdirect.DirectRoomHelper
 import im.vector.app.features.crypto.keysrequest.OutboundSessionKeySharingStrategy
 import im.vector.app.features.crypto.verification.SupportedVerificationMethodsProvider
+import im.vector.app.features.home.room.detail.composer.VoiceMessageHelper
 import im.vector.app.features.home.room.detail.composer.rainbow.RainbowGenerator
 import im.vector.app.features.home.room.detail.sticker.StickerPickerActionHandler
 import im.vector.app.features.home.room.detail.timeline.factory.TimelineFactory
@@ -55,6 +57,7 @@ import im.vector.app.features.home.room.typing.TypingHelper
 import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
 import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.VectorPreferences
+import im.vector.app.features.voice.VoicePlayerHelper
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
@@ -118,6 +121,8 @@ class RoomDetailViewModel @AssistedInject constructor(
         private val chatEffectManager: ChatEffectManager,
         private val directRoomHelper: DirectRoomHelper,
         private val jitsiService: JitsiService,
+        private val voiceMessageHelper: VoiceMessageHelper,
+        private val voicePlayerHelper: VoicePlayerHelper,
         timelineFactory: TimelineFactory
 ) : VectorViewModel<RoomDetailViewState, RoomDetailAction, RoomDetailViewEvents>(initialState),
         Timeline.Listener, ChatEffectManager.Delegate, CallProtocolsChecker.Listener {
@@ -281,7 +286,7 @@ class RoomDetailViewModel @AssistedInject constructor(
             is RoomDetailAction.EnterReplyMode                   -> handleReplyAction(action)
             is RoomDetailAction.DownloadOrOpen                   -> handleOpenOrDownloadFile(action)
             is RoomDetailAction.NavigateToEvent                  -> handleNavigateToEvent(action)
-            is RoomDetailAction.HandleTombstoneEvent             -> handleTombstoneEvent(action)
+            is RoomDetailAction.JoinAndOpenReplacementRoom       -> handleJoinAndOpenReplacementRoom()
             is RoomDetailAction.ResendMessage                    -> handleResendEvent(action)
             is RoomDetailAction.RemoveFailedEcho                 -> handleRemove(action)
             is RoomDetailAction.MarkAllAsRead                    -> handleMarkAllAsRead()
@@ -320,6 +325,18 @@ class RoomDetailViewModel @AssistedInject constructor(
             is RoomDetailAction.DoNotShowPreviewUrlFor           -> handleDoNotShowPreviewUrlFor(action)
             RoomDetailAction.RemoveAllFailedMessages             -> handleRemoveAllFailedMessages()
             RoomDetailAction.ResendAll                           -> handleResendAll()
+            RoomDetailAction.StartRecordingVoiceMessage          -> handleStartRecordingVoiceMessage()
+            is RoomDetailAction.EndRecordingVoiceMessage         -> handleEndRecordingVoiceMessage(action.isCancelled)
+            is RoomDetailAction.PlayOrPauseVoicePlayback         -> handlePlayOrPauseVoicePlayback(action)
+            RoomDetailAction.PauseRecordingVoiceMessage          -> handlePauseRecordingVoiceMessage()
+            RoomDetailAction.PlayOrPauseRecordingPlayback        -> handlePlayOrPauseRecordingPlayback()
+            RoomDetailAction.EndAllVoiceActions                  -> handleEndAllVoiceActions()
+            is RoomDetailAction.RoomUpgradeSuccess               -> {
+                setState {
+                    copy(joinUpgradedRoomAsync = Success(action.replacementRoomId))
+                }
+                _viewEvents.post(RoomDetailViewEvents.OpenRoom(action.replacementRoomId, closeCurrentRoom = true))
+            }
         }.exhaustive
     }
 
@@ -573,27 +590,86 @@ class RoomDetailViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleTombstoneEvent(action: RoomDetailAction.HandleTombstoneEvent) {
-        val tombstoneContent = action.event.getClearContent().toModel<RoomTombstoneContent>() ?: return
+    private fun handleJoinAndOpenReplacementRoom() = withState { state ->
+        val tombstoneContent = state.tombstoneEvent?.getClearContent()?.toModel<RoomTombstoneContent>() ?: return@withState
 
         val roomId = tombstoneContent.replacementRoomId ?: ""
         val isRoomJoined = session.getRoom(roomId)?.roomSummary()?.membership == Membership.JOIN
         if (isRoomJoined) {
-            setState { copy(tombstoneEventHandling = Success(roomId)) }
+            setState { copy(joinUpgradedRoomAsync = Success(roomId)) }
+            _viewEvents.post(RoomDetailViewEvents.OpenRoom(roomId, closeCurrentRoom = true))
         } else {
-            val viaServers = MatrixPatterns.extractServerNameFromId(action.event.senderId)
+            val viaServers = MatrixPatterns.extractServerNameFromId(state.tombstoneEvent.senderId)
                     ?.let { listOf(it) }
                     .orEmpty()
+            // need to provide feedback as joining could take some time
+            _viewEvents.post(RoomDetailViewEvents.RoomReplacementStarted)
+            setState {
+                copy(joinUpgradedRoomAsync = Loading())
+            }
             viewModelScope.launch {
                 val result = runCatchingToAsync {
                     session.joinRoom(roomId, viaServers = viaServers)
                     roomId
                 }
                 setState {
-                    copy(tombstoneEventHandling = result)
+                    copy(joinUpgradedRoomAsync = result)
+                }
+                if (result is Success) {
+                    _viewEvents.post(RoomDetailViewEvents.OpenRoom(roomId, closeCurrentRoom = true))
                 }
             }
         }
+    }
+
+    private fun handleStartRecordingVoiceMessage() {
+        try {
+            voiceMessageHelper.startRecording()
+        } catch (failure: Throwable) {
+            _viewEvents.post(RoomDetailViewEvents.Failure(failure))
+        }
+    }
+
+    private fun handleEndRecordingVoiceMessage(isCancelled: Boolean) {
+        voiceMessageHelper.stopPlayback()
+        if (isCancelled) {
+            voiceMessageHelper.deleteRecording()
+        } else {
+            voiceMessageHelper.stopRecording()?.let { audioType ->
+                if (audioType.duration > 1000) {
+                    room.sendMedia(audioType.toContentAttachmentData(), false, emptySet())
+                } else {
+                    voiceMessageHelper.deleteRecording()
+                }
+            }
+        }
+    }
+
+    private fun handlePlayOrPauseVoicePlayback(action: RoomDetailAction.PlayOrPauseVoicePlayback) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                // Download can fail
+                val audioFile = session.fileService().downloadFile(action.messageAudioContent)
+                // Conversion can fail, fallback to the original file in this case and let the player fail for us
+                val convertedFile = voicePlayerHelper.convertFile(audioFile) ?: audioFile
+                // Play can fail
+                voiceMessageHelper.startOrPausePlayback(action.eventId, convertedFile)
+            } catch (failure: Throwable) {
+                _viewEvents.post(RoomDetailViewEvents.Failure(failure))
+            }
+        }
+    }
+
+    private fun handlePlayOrPauseRecordingPlayback() {
+        voiceMessageHelper.startOrPauseRecordingPlayback()
+    }
+
+    private fun handleEndAllVoiceActions() {
+        voiceMessageHelper.stopAllVoiceActions()
+    }
+
+    private fun handlePauseRecordingVoiceMessage() {
+        voiceMessageHelper.pauseRecording()
     }
 
     private fun isIntegrationEnabled() = session.integrationManagerService().isIntegrationEnabled()
@@ -813,6 +889,16 @@ class RoomDetailViewModel @AssistedInject constructor(
                                     _viewEvents.post(RoomDetailViewEvents.SlashCommandResultError(failure))
                                 }
                             }
+                            _viewEvents.post(RoomDetailViewEvents.SlashCommandHandled())
+                            popDraft()
+                        }
+                        is ParsedCommand.UpgradeRoom              -> {
+                            _viewEvents.post(
+                                    RoomDetailViewEvents.ShowRoomUpgradeDialog(
+                                            slashCommandResult.newVersion,
+                                            room.roomSummary()?.isPublic ?: false
+                                    )
+                            )
                             _viewEvents.post(RoomDetailViewEvents.SlashCommandHandled())
                             popDraft()
                         }

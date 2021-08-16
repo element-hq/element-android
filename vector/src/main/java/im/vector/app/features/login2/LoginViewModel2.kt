@@ -590,7 +590,7 @@ class LoginViewModel2 @AssistedInject constructor(
                 is WellknownResult.Prompt          ->
                     onWellknownSuccess(action, data, homeServerConnectionConfig)
                 is WellknownResult.FailPrompt      ->
-                    // Relax on IS discovery if home server is valid
+                    // Relax on IS discovery if homeserver is valid
                     if (data.homeServerUrl != null && data.wellKnown != null) {
                         onWellknownSuccess(action, WellknownResult.Prompt(data.homeServerUrl!!, null, data.wellKnown!!), homeServerConnectionConfig)
                     } else {

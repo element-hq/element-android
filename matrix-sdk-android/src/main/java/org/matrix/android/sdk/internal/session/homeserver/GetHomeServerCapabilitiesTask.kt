@@ -25,6 +25,7 @@ import org.matrix.android.sdk.internal.auth.version.Versions
 import org.matrix.android.sdk.internal.auth.version.isLoginAndRegistrationSupportedBySdk
 import org.matrix.android.sdk.internal.database.model.HomeServerCapabilitiesEntity
 import org.matrix.android.sdk.internal.database.query.getOrCreate
+import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
@@ -108,6 +109,10 @@ internal class DefaultGetHomeServerCapabilitiesTask @Inject constructor(
 
             if (getCapabilitiesResult != null) {
                 homeServerCapabilitiesEntity.canChangePassword = getCapabilitiesResult.canChangePassword()
+
+                homeServerCapabilitiesEntity.roomVersionsJson = getCapabilitiesResult.capabilities?.roomVersions?.let {
+                    MoshiProvider.providesMoshi().adapter(RoomVersions::class.java).toJson(it)
+                }
             }
 
             if (getMediaConfigResult != null) {

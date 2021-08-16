@@ -26,7 +26,7 @@
         app:layout_constraintEnd_toStartOf="@id/term_policy_arrow"
         app:layout_constraintStart_toEndOf="@id/term_accept_checkbox"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Integration Manager" />
+        tools:text="Integration manager" />
 
     <TextView
         android:id="@+id/term_description"

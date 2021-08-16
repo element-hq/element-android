@@ -42,7 +42,7 @@ internal interface IdentityAuthAPI {
     suspend fun ping()
 
     /**
-     * Ping v1 will be used to check outdated Identity server
+     * Ping v1 will be used to check outdated identity server
      */
     @GET("_matrix/identity/api/v1")
     suspend fun pingV1()
