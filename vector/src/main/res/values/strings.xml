@@ -1132,7 +1132,7 @@
     <string name="settings_troubleshoot_test_play_services_quickfix">Fix Play Services</string>
 
     <!-- Unifiedpush Endpoint -->
-    <string name="settings_troubleshoot_test_endpoint_title">Endpoint</string>
+    <string name="settings_troubleshoot_test_endpoint_title">Endpoint/FCM</string>
     <string name="settings_troubleshoot_test_endpoint_success">Endpoint successfully retrieved:\n%1$s</string>
     <string name="settings_troubleshoot_test_endpoint_failed">Failed to retrieved Endpoint.</string>
 
