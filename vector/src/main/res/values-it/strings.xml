@@ -2934,4 +2934,17 @@
     <string name="room_create_member_of_space_name_can_join">I membri dello spazio %s possono trovare, vedere l\'anteprima ed entrare.</string>
     <string name="room_settings_room_access_private_invite_only_title">Privata (solo a invito)</string>
     <string name="denied_permission_voice_message">Per inviare messaggi vocali, consenti l\'autorizzazione del microfono.</string>
+    <string name="settings_room_upgrades">Aggiornamenti stanza</string>
+    <string name="settings_messages_by_bot">Messaggi da bot</string>
+    <string name="settings_room_invitations">Inviti a stanze</string>
+    <string name="settings_encrypted_group_messages">Messaggi di gruppo cifrati</string>
+    <string name="settings_group_messages">Messaggi di gruppo</string>
+    <string name="settings_encrypted_direct_messages">Messaggi diretti cifrati</string>
+    <string name="settings_messages_direct_messages">Messaggi diretti</string>
+    <string name="settings_messages_containing_username">Messaggi contenenti il mio nome utente</string>
+    <string name="settings_messages_containing_display_name">Messaggi contenenti il mio nome mostrato</string>
+    <string name="settings_notification_notify_me_for">Notificami per</string>
+    <string name="settings_notification_other">Altro</string>
+    <string name="settings_notification_mentions_and_keywords">Menzioni e parole chiave</string>
+    <string name="settings_notification_default">Notifiche predefinite</string>
 </resources>
