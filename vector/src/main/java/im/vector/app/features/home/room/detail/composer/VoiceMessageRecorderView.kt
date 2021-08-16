@@ -88,6 +88,15 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
         initListeners()
     }
 
+    override fun onVisibilityChanged(changedView: View, visibility: Int) {
+        super.onVisibilityChanged(changedView, visibility)
+        if (changedView == this && visibility == VISIBLE) {
+            views.voiceMessageMicButton.contentDescription = context.getString(R.string.a11y_start_voice_message)
+        } else {
+            views.voiceMessageMicButton.contentDescription = ""
+        }
+    }
+
     fun initVoiceRecordingViews() {
         recordingState = RecordingState.NONE
 
@@ -210,6 +219,7 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
             }
             RecordingState.CANCELLED  -> {
                 hideRecordingViews(isCancelled = true)
+                vibrate(context)
             }
             RecordingState.LOCKED     -> {
                 if (isRecordingStateChanged) { // Do not update views if it was already in locked state.
@@ -221,6 +231,9 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
             }
             RecordingState.STARTED    -> {
                 showRecordingViews()
+                val translationAmount = distanceX.coerceAtMost(distanceToCancel)
+                views.voiceMessageMicButton.translationX = -translationAmount * rtlXMultiplier
+                views.voiceMessageSlideToCancel.translationX = -translationAmount / 2 * rtlXMultiplier
             }
             RecordingState.NONE       -> Timber.d("VoiceMessageRecorderView shouldn't be in NONE state while moving.")
             RecordingState.PLAYBACK   -> Timber.d("VoiceMessageRecorderView shouldn't be in PLAYBACK state while moving.")
@@ -236,9 +249,9 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
         if (recordingState == RecordingState.STARTED) {
             // Determine if cancelling or locking for the first move action.
             if (((currentX < firstX && rtlXMultiplier == 1) || (currentX > firstX && rtlXMultiplier == -1))
-                    && distanceX > distanceY) {
+                    && distanceX > distanceY && distanceX > lastDistanceX) {
                 recordingState = RecordingState.CANCELLING
-            } else if (currentY < firstY && distanceY > distanceX) {
+            } else if (currentY < firstY && distanceY > distanceX && distanceY > lastDistanceY) {
                 recordingState = RecordingState.LOCKING
             }
         } else if (recordingState == RecordingState.CANCELLING) {
@@ -327,11 +340,11 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
         }
     }
 
-    private fun renderRecordingWaveform(amplitudeList: List<Int>) {
-        views.voicePlaybackWaveform.apply {
-            post {
-                amplitudeList.forEach { amplitude ->
-                    update(amplitude)
+    private fun renderRecordingWaveform(amplitudeList: Array<Int>) {
+        post {
+            views.voicePlaybackWaveform.apply {
+                amplitudeList.iterator().forEach {
+                    update(it)
                 }
             }
         }
@@ -405,7 +418,7 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
                 scaleX = 1f
                 scaleY = 1f
                 translationX = 0f
-                translationY  = 0f
+                translationY = 0f
             }
             isCancelled?.let {
                 callback?.onVoiceRecordingEnded(it)
@@ -506,18 +519,18 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
     override fun onUpdate(state: VoiceMessagePlaybackTracker.Listener.State) {
         when (state) {
             is VoiceMessagePlaybackTracker.Listener.State.Recording -> {
-                renderRecordingWaveform(state.amplitudeList)
+                renderRecordingWaveform(state.amplitudeList.toTypedArray())
             }
             is VoiceMessagePlaybackTracker.Listener.State.Playing   -> {
                 views.voicePlaybackControlButton.setImageResource(R.drawable.ic_play_pause_pause)
-                views.voicePlaybackControlButton.contentDescription = resources.getString(R.string.a11y_pause_voice_message)
+                views.voicePlaybackControlButton.contentDescription = context.getString(R.string.a11y_pause_voice_message)
                 val formattedTimerText = DateUtils.formatElapsedTime((state.playbackTime / 1000).toLong())
                 views.voicePlaybackTime.text = formattedTimerText
             }
             is VoiceMessagePlaybackTracker.Listener.State.Paused,
             is VoiceMessagePlaybackTracker.Listener.State.Idle      -> {
                 views.voicePlaybackControlButton.setImageResource(R.drawable.ic_play_pause_play)
-                views.voicePlaybackControlButton.contentDescription = resources.getString(R.string.a11y_play_voice_message)
+                views.voicePlaybackControlButton.contentDescription = context.getString(R.string.a11y_play_voice_message)
             }
         }
     }

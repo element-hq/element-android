@@ -573,7 +573,7 @@
     <string name="room_resend_unsent_messages">Nicht gesendete Nachrichten erneut senden</string>
     <string name="room_delete_unsent_messages">Nicht gesendete Nachrichten löschen</string>
     <string name="room_message_file_not_found">Datei nicht gefunden</string>
-    <string name="room_do_not_have_permission_to_post">Du bist nicht berechtigt, in diesen Raum zu schreiben</string>
+    <string name="room_do_not_have_permission_to_post">Du bist nicht berechtigt, in diesen Raum zu schreiben.</string>
     <!-- unrecognized SSL certificate -->
     <string name="ssl_trust">Vertrauen</string>
     <string name="ssl_do_not_trust">Nicht vertrauen</string>
