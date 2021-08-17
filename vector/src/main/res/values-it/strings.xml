@@ -1185,8 +1185,7 @@
     <string name="open_settings">Apri le Impostazioni</string>
     <string name="settings_troubleshoot_test_account_settings_title">Impostazioni account.</string>
     <string name="settings_troubleshoot_test_account_settings_success">Le notifiche sono abilitate per il tuo account.</string>
-    <string name="settings_troubleshoot_test_account_settings_failed">Le notifiche sono disabilitate per il tuo account.
-\nControlla le impostazioni dell\'account.</string>
+    <string name="settings_troubleshoot_test_account_settings_failed">Le notifiche sono disabilitate per il tuo account.\nControlla le impostazioni dell\'account.</string>
     <string name="settings_troubleshoot_test_account_settings_quickfix">Abilita</string>
     <string name="settings_troubleshoot_test_device_settings_title">Impostazioni sessione.</string>
     <string name="settings_troubleshoot_test_device_settings_success">Le notifiche sono attive per questa sessione.</string>
