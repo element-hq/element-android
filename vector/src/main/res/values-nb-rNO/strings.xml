@@ -1700,4 +1700,26 @@
     <string name="summary_you_sent_image">Du sendte et bilde.</string>
     <string name="summary_user_sent_image">%1$s sendte et bilde.</string>
     <string name="summary_message">%1$s: %2$s</string>
+    <string name="this_space_has_no_rooms_admin">Noen rom kan være skjult fordi de er private, og du trenger en invitasjon.</string>
+    <string name="it_may_take_some_time">Vær tålmodig, det kan ta litt tid.</string>
+    <string name="upgrade">Oppgrader</string>
+    <string name="upgrade_room_auto_invite">Inviter brukere automatisk</string>
+    <string name="upgrade_room_no_power_to_manage">Du trenger tillatelse for å oppgradere et rom</string>
+    <string name="room_upgrade_to_recommended_version">Oppgrader til den anbefalte romversjonen</string>
+    <string name="error_failed_to_join_room">Beklager, det oppstod en feil under forsøk på å bli med: %s</string>
+    <string name="a11y_start_voice_message">Start talemelding</string>
+    <string name="voice_message_slide_to_cancel">Skyv for å avbryte</string>
+    <string name="a11y_play_voice_message">Spill av talemelding</string>
+    <string name="a11y_delete_recorded_voice_message">Slett innspilt talemelding</string>
+    <string name="voice_message_release_to_send_toast">Hold inne for å spille inn, slipp for å sende</string>
+    <string name="voice_message_tap_to_stop_toast">Trykk på innspillingen for å stoppe eller lytte</string>
+    <string name="labs_use_voice_message">Aktiver talemelding</string>
+    <string name="error_voice_message_unable_to_play">Kan ikke spille denne talemeldingen</string>
+    <string name="error_voice_message_unable_to_record">Kan ikke ta opp en talemelding</string>
+    <string name="error_voice_message_cannot_reply_or_edit">Kan ikke svare eller redigere mens talemeldingen er aktiv</string>
+    <string name="voice_message_reply_content">Talemelding (%1$s)</string>
+    <string name="upgrade_room_for_restricted_no_param">Alle i et forelderrom vil kunne finne og bli med i dette rommet - du trenger ikke å invitere alle manuelt. Du kan når som helst endre dette i rominnstillingene.</string>
+    <string name="upgrade_room_for_restricted_note">Vær oppmerksom på at oppgradering vil gjøre en ny versjon av rommet. Alle nåværende meldinger vil forbli i dette arkiverte rommet.</string>
+    <string name="notice_room_kick">%1$s sparket %2$s</string>
+    <string name="notice_room_invite_no_invitee_by_you">Din invitasjon</string>
 </resources>
