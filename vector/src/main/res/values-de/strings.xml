@@ -2947,4 +2947,5 @@
     <string name="denied_permission_voice_message">Um Sprachnachrichten zu senden, erlaube bitte Zugriff aufs Mikrofon.</string>
     <string name="denied_permission_camera">Um fortzufahren, erlaube bitte in den Systemeinstellungen Zugriff auf die Kamera.</string>
     <string name="denied_permission_generic">Für diese Aktion fehlen einige Berechtigungen, bitte erlaube diese in den Systemeinstellungen.</string>
+    <string name="voice_message_slide_to_cancel">Wische zum Abbrechen</string>
 </resources>
