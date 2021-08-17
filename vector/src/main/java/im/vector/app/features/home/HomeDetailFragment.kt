@@ -372,7 +372,7 @@ class HomeDetailFragment @Inject constructor(
                         add(R.id.roomListContainer, RoomListFragment::class.java, params.toMvRxBundle(), fragmentTag)
                     }
                     is HomeTab.DialPad  -> {
-                        add(R.id.roomListContainer, createDialPadFragment())
+                        add(R.id.roomListContainer, createDialPadFragment(), fragmentTag)
                     }
                 }
             } else {

@@ -2729,7 +2729,7 @@
     <string name="command_description_create_space">Krijoni një Hapësirë</string>
     <string name="search_hint_room_name">Kërko Për Emër</string>
     <string name="room_settings_room_access_restricted_description">Cilido në një hapësirë me këtë dhomë mund ta kërkojë dhe hyjë në të. Vetëm përgjegjësit e kësaj dhome mund ta shtojnë te një hapësirë.</string>
-    <string name="room_settings_room_access_restricted_title">Hapësira</string>
+    <string name="room_settings_room_access_restricted_title">Vetëm anëtarë të hapësirës</string>
     <string name="room_settings_room_access_public_description">Kushdo mund ta gjejë dhomën dhe të hyjë në të</string>
     <string name="room_settings_room_access_public_title">Publike</string>
     <string name="room_settings_room_access_private_description">Vetëm personat e ftuar mund ta gjejnë dhe hyjnë në të</string>
@@ -2838,4 +2838,36 @@
         <item quantity="one">Thirrje audio e humbur</item>
         <item quantity="other">%d thirrje audio të humbura</item>
     </plurals>
+    <string name="upgrade_room_for_restricted_note">Ju lutemi, kini parasysh se përmirësimi do të prodhojë një version të ri të dhomës. Krejt mesazhet e tanishëm do të mbeten në këtë dhomë të arkivuar.</string>
+    <string name="upgrade_room_for_restricted_no_param">Cilido në një hapësirë mëmë do të jetë në gjendje ta gjejë dhe hyjë në këtë dhomë - s’ka nevojë të ftohen dorazi një e nga një. Do të jeni në gjendje ta ndryshoni këtë te rregullimet e dhomës, në çfarëdo kohe.</string>
+    <string name="upgrade_room_for_restricted">Cilido te %s do të jetë në gjendje të gjejë dhe hyjë në këtë dhomë - s’ka nevojë të ftohen dorazi një e nga një. Do të jeni në gjendje ta ndryshoni këtë te rregullimet e kësaj dhome, në çfarëdo kohe.</string>
+    <string name="voice_message_reply_content">Mesazh Zanor (%1$s)</string>
+    <string name="error_voice_message_cannot_reply_or_edit">S’mund të përgjigjet ose përpunohet, ndërkohë që mesazhi zanor është aktiv</string>
+    <string name="error_voice_message_unable_to_record">S’incizohet dot një mesazh zanor</string>
+    <string name="error_voice_message_unable_to_play">Ky mesazh zanor s’mund të luhet</string>
+    <string name="labs_use_voice_message">Aktivizo mesazh zanor</string>
+    <string name="voice_message_tap_to_stop_toast">Që ta ndalni ose ta dëgjoni, prekni mbi incizimin tuaj</string>
+    <string name="voice_message_n_seconds_warning_toast">Edhe %1$ds</string>
+    <string name="voice_message_release_to_send_toast">Mbajeni, që të incizojë, lëshojeni që të dërgohet</string>
+    <string name="a11y_delete_recorded_voice_message">Fshije mesazhin zanor të incizuar</string>
+    <string name="a11y_recording_voice_message">Po incizohet mesazh zanor</string>
+    <string name="a11y_pause_voice_message">Ndalni Mesazh Zanor</string>
+    <string name="a11y_play_voice_message">Luani Mesazh Zanor</string>
+    <string name="a11y_lock_voice_message">Kyçje Mesazhi Zanor</string>
+    <string name="voice_message_slide_to_cancel">Rrëshqiteni që të anulohet</string>
+    <string name="a11y_start_voice_message">Nisni Mesazh Zanor</string>
+    <string name="allow_anyone_in_room_to_access">Lejo cilindo te %s ta gjejë dhe hyjë. Mund të përzgjidhni edhe hapësira të tjera.</string>
+    <string name="upgrade_required">Lypset Domosdo Përmirësim</string>
+    <string name="sent_a_voice_message">Zë</string>
+    <string name="other_spaces_or_rooms_you_might_not_know">Hapësira ose dhoma të tjera që mund të mos i dini</string>
+    <string name="space_you_know_that_contains_this_room">Hapësirë që e dini se përmban këtë dhomë</string>
+    <string name="decide_who_can_find_and_join">Vendosni se cilët mund të gjejnë dhe hyjnë në këtë dhomë.</string>
+    <string name="tap_to_edit_spaces">Që të përpunoni hapësira, prekeni</string>
+    <string name="select_spaces">Përzgjidhni hapësira</string>
+    <string name="decide_which_spaces_can_access">Vendosni se prej cilave hapësira mund të hyhet në këtë dhomë. Nëse përzgjidhet një hapësirë, anëtarët e saj do të mund ta gjejnë dhe hyjnë te emër Dhome.</string>
+    <string name="spaces_which_can_access">Hapësira nga të cilat mund të hyhet</string>
+    <string name="allow_space_member_to_find_and_access">Lejo anëtarë hapësirash ta gjejnë dhe hyjnë.</string>
+    <string name="room_create_member_of_space_name_can_join">Anëtarë të Hapësirës %s mund ta gjejnë, parashohin dhe hyjnë në të.</string>
+    <string name="room_settings_room_access_private_invite_only_title">Private (Vetëm Me Ftesa)</string>
+    <string name="denied_permission_voice_message">Për të dërguar mesazhe zanorë, ju lutemi, akordoni leje Mikrofoni.</string>
 </resources>

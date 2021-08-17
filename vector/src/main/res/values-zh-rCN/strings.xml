@@ -2708,7 +2708,7 @@
     <string name="jitsi_leave_conf_to_join_another_one_content">离开当前的回忆并切换至其他会议？</string>
     <string name="error_jitsi_join_conf">抱歉，在尝试加入会议时发生了错误</string>
     <string name="room_settings_room_access_restricted_description">所有在此空间中的人都可以找到并加入它。仅有此聊天室的管理员可以将其添加到空间中。</string>
-    <string name="room_settings_room_access_restricted_title">空间</string>
+    <string name="room_settings_room_access_restricted_title">仅空间成员</string>
     <string name="room_settings_room_access_public_description">任何人都能找到聊天室并加入</string>
     <string name="room_settings_room_access_public_title">公开</string>
     <string name="room_settings_room_access_private_description">仅有被邀请的人才能找到并加入</string>
@@ -2803,4 +2803,36 @@
     <plurals name="missed_audio_call">
         <item quantity="other">%d 个未接音频电话</item>
     </plurals>
+    <string name="upgrade_room_for_restricted_note">请注意，升级将使聊天室焕然一新。 所有当前消息都将保留在此存档的聊天室中。</string>
+    <string name="upgrade_room_for_restricted_no_param">主空间中的任何人都可以找到并加入此房间 - 无需手动邀请所有人。 您可以随时在聊天室设置中更改此设置。</string>
+    <string name="upgrade_room_for_restricted">%s 中的任何人将可以查找并加入此房间 - 无需手动邀请所有人。 您可以随时在聊天室设置中更改此设置。</string>
+    <string name="voice_message_reply_content">语音消息 (%1$s)</string>
+    <string name="error_voice_message_cannot_reply_or_edit">语音消息处于活动状态时无法回复或编辑</string>
+    <string name="error_voice_message_unable_to_record">无法录制语音消息</string>
+    <string name="error_voice_message_unable_to_play">无法播放此语音消息</string>
+    <string name="labs_use_voice_message">启用语音消息</string>
+    <string name="voice_message_tap_to_stop_toast">点按您的录音以停止或收听</string>
+    <string name="voice_message_n_seconds_warning_toast">剩余 %1$d秒</string>
+    <string name="voice_message_release_to_send_toast">按住录音，松开发送</string>
+    <string name="a11y_delete_recorded_voice_message">删除录制的语音消息</string>
+    <string name="a11y_recording_voice_message">录制语音消息</string>
+    <string name="a11y_pause_voice_message">暂停语音消息</string>
+    <string name="a11y_play_voice_message">播放语音消息</string>
+    <string name="a11y_lock_voice_message">语音消息锁</string>
+    <string name="voice_message_slide_to_cancel">滑动取消</string>
+    <string name="a11y_start_voice_message">开始语音消息</string>
+    <string name="allow_anyone_in_room_to_access">允许 %s 中的任何人查找和访问。 您也可以选择其他空间。</string>
+    <string name="upgrade_required">需要升级</string>
+    <string name="sent_a_voice_message">语音</string>
+    <string name="other_spaces_or_rooms_you_might_not_know">您可能不知道的其他空间或聊天室</string>
+    <string name="space_you_know_that_contains_this_room">你知道的包含这个聊天室的空间</string>
+    <string name="decide_who_can_find_and_join">决定谁能找到并加入这个聊天室。</string>
+    <string name="tap_to_edit_spaces">点按即可编辑空间</string>
+    <string name="select_spaces">选择空间</string>
+    <string name="decide_which_spaces_can_access">决定哪些空间可以进入这个房间。 如果选择了一个空间，其成员将能够找到并加入房间名称。</string>
+    <string name="spaces_which_can_access">可访问的空间</string>
+    <string name="allow_space_member_to_find_and_access">允许空间成员查找和访问。</string>
+    <string name="room_create_member_of_space_name_can_join">%s 空间的成员可找到、预览和加入。</string>
+    <string name="room_settings_room_access_private_invite_only_title">私人（仅限邀请）</string>
+    <string name="denied_permission_voice_message">要发送语音消息，请授予麦克风权限。</string>
 </resources>
