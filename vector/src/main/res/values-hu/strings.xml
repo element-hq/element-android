@@ -2879,4 +2879,23 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="settings_notification_mentions_and_keywords">Megemlítések és kulcsszavak</string>
     <string name="settings_notification_default">Alapértelmezett értesítések</string>
     <string name="denied_permission_voice_message">Hangüzenet küldéséhez engedélyezd a hozzáférést a mikrofonhoz.</string>
+    <string name="upgrade_room_for_restricted_note">Vedd figyelembe, hogy a fejlesztés a szoba új verzióját hozza létre. Minden jelenlegi üzenet itt marad az archivált szobában.</string>
+    <string name="upgrade_room_for_restricted_no_param">A szülő térből bárki megtalálhatja és beléphet ebbe a szobába - nem kell meghívni egyenként senkit. Ezt a beállítást bármikor megváltoztathatod a szoba beállításokban.</string>
+    <string name="upgrade_room_for_restricted">Itt: %s bárki megtalálhatja és beléphet ebbe a szobába - nem kell meghívni egyenként senkit. Ezt a beállítást bármikor megváltoztathatod a szoba beállításokban.</string>
+    <string name="voice_message_reply_content">Hang üzenet (%1$s)</string>
+    <string name="error_voice_message_cannot_reply_or_edit">Válaszolni vagy szerkeszteni nem lehet hang üzenet módban</string>
+    <string name="error_voice_message_unable_to_record">Hang üzenetet nem lehet felvenni</string>
+    <string name="error_voice_message_unable_to_play">Ezt a hangüzenetet nem lehet lejátszani</string>
+    <string name="labs_use_voice_message">Hang üzenetek engedélyezése</string>
+    <string name="voice_message_tap_to_stop_toast">Megállításhoz és visszajátszáshoz koppints a felvételre</string>
+    <string name="voice_message_n_seconds_warning_toast">vissza van: %1$d</string>
+    <string name="voice_message_release_to_send_toast">Felvételhez tartsd nyomva, a küldéshez engedd el</string>
+    <string name="a11y_delete_recorded_voice_message">Felvett hang üzenet törlése</string>
+    <string name="a11y_recording_voice_message">Hang üzenet felvétel</string>
+    <string name="a11y_pause_voice_message">Hang üzenet szüneteltetése</string>
+    <string name="a11y_play_voice_message">Hang üzenet lejátszása</string>
+    <string name="a11y_lock_voice_message">Hang üzenet kitartó rögzítése</string>
+    <string name="voice_message_slide_to_cancel">Elhúzás a megszakításhoz</string>
+    <string name="a11y_start_voice_message">Hang üzenet indítása</string>
+    <string name="allow_anyone_in_room_to_access">%s tér tagság megtalálhatja és hozzáférhet. Más tereket is beállíthatsz.</string>
 </resources>
