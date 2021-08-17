@@ -749,6 +749,9 @@
     <string name="call_held_by_user">%s held the call</string>
     <string name="call_held_by_you">You held the call</string>
 
+    <string name="call_ended_user_busy_title">User busy</string>
+    <string name="call_ended_user_busy_description">The user you called is busy."</string>
+    <string name="call_ended_invite_timeout_title">No answer</string>
     <string name="call_error_user_not_responding">The remote side failed to pick up.</string>
     <string name="call_error_ice_failed">Media Connection Failed</string>
     <string name="call_error_camera_init_failed">Cannot initialize the camera</string>
