@@ -910,7 +910,7 @@
 \nSync může být odložen v závislosti na zdrojích (baterie) nebo stavu zařízení (spánek).</string>
     <string name="settings_set_sync_delay">Prodleva mezi jednotlivými syncy</string>
     <string name="settings_version">Verze</string>
-    <string name="settings_olm_version">verze olm</string>
+    <string name="settings_olm_version">Verze olm</string>
     <string name="settings_app_term_conditions">Všeobecné podmínky</string>
     <string name="settings_third_party_notices">Oznámení třetích stran</string>
     <string name="settings_copyright">Vlastnická práva</string>
