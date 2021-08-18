@@ -562,7 +562,7 @@ class RoomListFragment @Inject constructor(
     }
 
     private fun persistExpandStatus() {
-        val spEdit = getSharedPreferences().edit()
+        val spEdit = getSharedPreferences()?.edit() ?: return
         roomListViewModel.sections.forEach{section ->
             val isExpanded = section.isExpanded.value
             if (isExpanded != null) {
@@ -580,14 +580,13 @@ class RoomListFragment @Inject constructor(
     }
 
     private fun shouldInitiallyExpand(section: RoomsSection): Boolean {
-        val sp = getSharedPreferences()
+        val sp = getSharedPreferences() ?: return true
         val pref = getRoomListExpandedPref(section)
         return sp.getBoolean(pref, true)
     }
 
-    private fun getSharedPreferences(): SharedPreferences {
-        return PreferenceManager.getDefaultSharedPreferences(context)
-    }
+    private fun getSharedPreferences() = context?.let { PreferenceManager.getDefaultSharedPreferences(it) }
+
     private fun getRoomListExpandedPref(section: RoomsSection): String {
         return "${ROOM_LIST_ROOM_EXPANDED_ANY_PREFIX}_${section.sectionName}_${roomListParams.displayMode}_${expandStatusSpaceId}"
     }

@@ -102,6 +102,19 @@
                     android:textColor="?vctr_content_secondary" />
 
                 <TextView
+                    android:id="@+id/bug_report_sc_extra"
+                    style="@style/Widget.Vector.TextView.Body"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:text="@string/send_bug_report_sc_extra"
+                    android:linksClickable="true"
+                    android:autoLink="web"
+                    android:textColor="?vctr_content_primary" />
+
+                <TextView
                     android:id="@+id/bug_report_logs_description"
                     style="@style/Widget.Vector.TextView.Body"
                     android:layout_width="match_parent"
@@ -139,6 +152,7 @@
                     android:checked="false"
                     android:text="@string/send_bug_report_include_key_share_history" />
 
+                <!--
                 <com.google.android.material.switchmaterial.SwitchMaterial
                     android:id="@+id/bug_report_button_contact_me"
                     android:layout_width="match_parent"
@@ -147,6 +161,7 @@
                     android:layout_marginEnd="10dp"
                     android:checked="false"
                     android:text="@string/you_may_contact_me" />
+                    -->
 
                 <com.google.android.material.switchmaterial.SwitchMaterial
                     android:id="@+id/bug_report_button_include_screenshot"

@@ -112,4 +112,6 @@
     <string name="sc_accent_blue">Blue</string>
     <!-- do not change this comment for accent generation -->
 
+    <string name="send_bug_report_sc_extra">To increase the visibility of your issue and to allow us to contact you, you may want to reference this report (by providing your matrix ID and the approximate time when it was sent) in an issue at https://github.com/SchildiChat/SchildiChat-android/issues (check first if one already exists for your issue, and only create a new one if there is not).</string>
+
 </resources>

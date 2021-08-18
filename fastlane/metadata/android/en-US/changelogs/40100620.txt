@@ -1,0 +1,6 @@
+- Update codebase to Element v1.2.0
+- Lab setting to load rooms at first unread message
+- Hide empty/failed url preview image
+- Properly theme verification request popup background
+- Setting to disable voice message recording button
+- Minor fixes and impovements

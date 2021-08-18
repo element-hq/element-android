@@ -147,7 +147,7 @@ class ImageContentRenderer @Inject constructor(private val localFilesHelper: Loc
                     }
 
                     override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
-                        if (resource != null && (data.width == null || data.height == null || data.width == 0 || data.height == 0)) {
+                        if (resource != null /*&& (data.width == null || data.height == null || data.width == 0 || data.height == 0)*/) {
                             val updatedData = data.copy(width = resource.intrinsicWidth, height = resource.intrinsicHeight)
                             val newSize = processSize(updatedData, mode)
                             imageView.updateLayoutParams {

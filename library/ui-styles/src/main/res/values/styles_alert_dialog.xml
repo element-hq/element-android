@@ -7,6 +7,8 @@
         <item name="buttonBarPositiveButtonStyle">@style/Widget.Vector.Button.TextButton.Dialog</item>
         <item name="buttonBarNegativeButtonStyle">@style/Widget.Vector.Button.TextButton.Dialog</item>
         <item name="buttonBarNeutralButtonStyle">@style/Widget.Vector.Button.TextButton.Dialog</item>
+
+        <item name="android:background">?colorBackgroundFloating</item>
     </style>
 
     <style name="ThemeOverlay.Vector.MaterialAlertDialog.Destructive">
