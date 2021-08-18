@@ -91,4 +91,5 @@
     <string name="sc_accent_denim">Džínová</string>
     <string name="settings_show_voice_message_recorder_ui">Hlasové zprávy</string>
     <string name="settings_show_voice_message_recorder_ui_summary">Zobrazit tlačítko pro nahrávání hlasových zpráv</string>
+    <string name="send_bug_report_sc_extra">Abyste zvýšili viditelnost svého problému a umožnili nám vás kontaktovat, můžete se na tuto zprávu odkázat (uvedením svého matrix ID a přibližného času, kdy byla odeslána) v problému na adrese https://github.com/SchildiChat/SchildiChat-android/issues (nejprve zkontrolujte, zda pro váš problém již neexistuje, a teprve pokud ne, vytvořte nový).</string>
 </resources>
