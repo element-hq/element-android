@@ -207,5 +207,8 @@ data class MatrixError(
 
         // Possible value for "limit_type"
         const val LIMIT_TYPE_MAU = "monthly_active_user"
+
+        /** The user account has expired. It has to be renewed by clicking on an email or by sending a renewal token. */
+        const val ORG_MATRIX_EXPIRED_ACCOUNT = "ORG_MATRIX_EXPIRED_ACCOUNT"
     }
 }

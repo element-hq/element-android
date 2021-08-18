@@ -38,6 +38,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.failure.Failure
+import org.matrix.android.sdk.api.failure.MatrixError
 import org.matrix.android.sdk.api.query.ActiveSpaceFilter
 import org.matrix.android.sdk.api.query.RoomCategoryFilter
 import org.matrix.android.sdk.api.session.Session
@@ -309,7 +310,8 @@ class TchapContactListViewModel @AssistedInject constructor(@Assisted initialSta
                                     .filterNot { it.value.deactivated }
                                     .keys
                         } catch (failure: Throwable) {
-                            if (failure is Failure.NetworkConnection) {
+                            if (failure is Failure.NetworkConnection
+                                    || (failure is Failure.ServerError && failure.error.code == MatrixError.ORG_MATRIX_EXPIRED_ACCOUNT)) {
                                 // Todo: maybe add a retry mechanism
                                 emptySet()
                             } else {

@@ -267,6 +267,8 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), HasSc
                         activeSessionHolder.getActiveSession().sessionParams.homeServerHost ?: "")
             is GlobalError.CertificateError     ->
                 handleCertificateError(globalError)
+            GlobalError.ExpiredAccount          ->
+                handleExpiredAccount()
         }.exhaustive
     }
 
@@ -306,6 +308,11 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), HasSc
                         isSoftLogout = globalError.softLogout
                 )
         )
+    }
+
+    private fun handleExpiredAccount() {
+        // Todo: display expiration dialog
+        toast("La durée de validité de votre compte a expiré. Un e-mail vous a été envoyé pour la renouveler.")
     }
 
     override fun onDestroy() {
