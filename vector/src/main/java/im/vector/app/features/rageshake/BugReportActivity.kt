@@ -71,14 +71,14 @@ class BugReportActivity : VectorBaseActivity<ActivityBugReportBinding>() {
         when (reportType) {
             ReportType.BUG_REPORT -> {
                 supportActionBar?.setTitle(R.string.title_activity_bug_report)
-                views.bugReportButtonContactMe.isVisible = true
+                //views.bugReportButtonContactMe.isVisible = true
             }
             ReportType.SUGGESTION -> {
                 supportActionBar?.setTitle(R.string.send_suggestion)
 
                 views.bugReportFirstText.setText(R.string.send_suggestion_content)
                 views.bugReportTextInputLayout.hint = getString(R.string.send_suggestion_report_placeholder)
-                views.bugReportButtonContactMe.isVisible = true
+                //views.bugReportButtonContactMe.isVisible = true
 
                 hideBugReportOptions()
             }
@@ -87,7 +87,7 @@ class BugReportActivity : VectorBaseActivity<ActivityBugReportBinding>() {
 
                 views.bugReportFirstText.setText(R.string.send_feedback_space_info)
                 views.bugReportTextInputLayout.hint = getString(R.string.feedback)
-                views.bugReportButtonContactMe.isVisible = true
+                //views.bugReportButtonContactMe.isVisible = true
 
                 hideBugReportOptions()
             }
@@ -162,7 +162,7 @@ class BugReportActivity : VectorBaseActivity<ActivityBugReportBinding>() {
                 views.bugReportButtonIncludeScreenshot.isChecked,
                 views.bugReportEditText.text.toString(),
                 state.serverVersion,
-                views.bugReportButtonContactMe.isChecked,
+                false, //views.bugReportButtonContactMe.isChecked,
                 object : BugReporter.IMXBugReportListener {
                     override fun onUploadFailed(reason: String?) {
                         try {
