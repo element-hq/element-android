@@ -37,6 +37,7 @@ import io.reactivex.Single
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.tryOrNull
+import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.query.ActiveSpaceFilter
 import org.matrix.android.sdk.api.query.RoomCategoryFilter
 import org.matrix.android.sdk.api.session.Session
@@ -302,21 +303,30 @@ class TchapContactListViewModel @AssistedInject constructor(@Assisted initialSta
                     val directUserIds = roomSummaries.mapNotNull { roomSummary -> roomSummary.directUserId }
 
                     viewModelScope.launch {
-                        val users: MutableMap<String, User> = session.usersInfoService().getUsersInfo(directUserIds)
-                                .filterValues {
-                                    !it.deactivated
-                                }.keys
-                                .map {
-                                    var user = session.getUser(it)
-                                    user = if (user == null) {
-                                        unresolvedThreePids.add(it)
-                                        User(it, TchapUtils.computeDisplayNameFromUserId(it), null)
-                                    } else {
-                                        user
+                        val activeUsersIds = try {
+                            session.usersInfoService()
+                                    .getUsersInfo(directUserIds)
+                                    .filterNot { it.value.deactivated }
+                                    .keys
+                        } catch (failure: Throwable) {
+                            if (failure is Failure.NetworkConnection) {
+                                // Todo: maybe add a retry mechanism
+                                emptySet()
+                            } else {
+                                // Other error, propagate it
+                                throw failure
+                            }
+                        }
+                        val users = activeUsersIds
+                                .map { userId ->
+                                    val user = session.getUser(userId) ?: run {
+                                        unresolvedThreePids.add(userId)
+                                        User(userId, TchapUtils.computeDisplayNameFromUserId(userId), null)
                                     }
-
-                                    it to user
-                                }.toMap().toMutableMap()
+                                    userId to user
+                                }
+                                .toMap()
+                                .toMutableMap()
 
                         roomSummariesUsers = users.values.toList()
 
