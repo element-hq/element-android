@@ -35,12 +35,22 @@ class TestNewEndpoint @Inject constructor(private val context: AppCompatActivity
 
         val endpoint = UPHelper.getUpEndpoint(context)
 
-        if (!endpoint.isNullOrEmpty()) {
-            status = TestStatus.SUCCESS
-            description = stringProvider.getString(R.string.settings_troubleshoot_test_endpoint_success, endpoint)
+        if (UPHelper.isEmbeddedDistributor(context)) {
+            if (!endpoint.isNullOrEmpty()) {
+                status = TestStatus.SUCCESS
+                description = stringProvider.getString(R.string.settings_troubleshoot_test_fcm_success, endpoint)
+            } else {
+                status = TestStatus.FAILED
+                description = stringProvider.getString(R.string.settings_troubleshoot_test_fcm_failed)
+            }
         } else {
-            status = TestStatus.FAILED
-            description = stringProvider.getString(R.string.settings_troubleshoot_test_endpoint_failed)
+            if (!endpoint.isNullOrEmpty()) {
+                status = TestStatus.SUCCESS
+                description = stringProvider.getString(R.string.settings_troubleshoot_test_endpoint_success, endpoint)
+            } else {
+                status = TestStatus.FAILED
+                description = stringProvider.getString(R.string.settings_troubleshoot_test_endpoint_failed)
+            }
         }
     }
 }
