@@ -45,7 +45,7 @@
         android:maxEms="10"
         android:minWidth="20dp"
         android:singleLine="true"
-        android:textColor="@color/emoji_color"
+        android:textColor="?vctr_content_primary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/reactionCount"
         app:layout_constraintHorizontal_chainStyle="packed"
