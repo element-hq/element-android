@@ -9,11 +9,12 @@
         android:title="@string/settings"
         app:showAsAction="never" />
 
+    <!--
     <item
         android:id="@+id/menu_home_suggestion"
         android:icon="@drawable/ic_material_bug_report"
-        android:title="@string/send_suggestion"
-        android:visible="false" />
+        android:title="@string/send_suggestion" />
+        -->
 
     <item
         android:id="@+id/menu_home_report_bug"
