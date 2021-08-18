@@ -93,7 +93,6 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
     }
 
     private val callViewModel: VectorCallViewModel by viewModel()
-    private lateinit var callArgs: CallArgs
 
     @Inject lateinit var callManager: WebRtcCallManager
     @Inject lateinit var viewModelFactory: VectorCallViewModel.Factory
@@ -123,13 +122,6 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
         window.navigationBarColor = Color.BLACK
         super.onCreate(savedInstanceState)
 
-        if (intent.hasExtra(MvRx.KEY_ARG)) {
-            callArgs = intent.getParcelableExtra(MvRx.KEY_ARG)!!
-        } else {
-            Timber.tag(loggerTag.value).e("missing callArgs for VectorCall Activity")
-            finish()
-        }
-
         Timber.tag(loggerTag.value).v("EXTRA_MODE is ${intent.getStringExtra(EXTRA_MODE)}")
         if (intent.getStringExtra(EXTRA_MODE) == INCOMING_RINGING) {
             turnScreenOnAndKeyguardOff()
@@ -152,15 +144,26 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                 }
                 .disposeOnDestroy()
 
-        if (callArgs.isVideoCall) {
-            if (checkPermissions(PERMISSIONS_FOR_VIDEO_IP_CALL, this, permissionCameraLauncher, R.string.permissions_rationale_msg_camera_and_audio)) {
-                start()
-            }
-        } else {
-            if (checkPermissions(PERMISSIONS_FOR_AUDIO_IP_CALL, this, permissionCameraLauncher, R.string.permissions_rationale_msg_record_audio)) {
-                start()
+        callViewModel.selectSubscribe(this, VectorCallViewState::callId, VectorCallViewState::isVideoCall) { _, isVideoCall ->
+            if (isVideoCall) {
+                if (checkPermissions(PERMISSIONS_FOR_VIDEO_IP_CALL, this, permissionCameraLauncher, R.string.permissions_rationale_msg_camera_and_audio)) {
+                    setupRenderersIfNeeded()
+                }
+            } else {
+                if (checkPermissions(PERMISSIONS_FOR_AUDIO_IP_CALL, this, permissionCameraLauncher, R.string.permissions_rationale_msg_record_audio)) {
+                    setupRenderersIfNeeded()
+                }
             }
         }
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        intent?.takeIf { it.hasExtra(MvRx.KEY_ARG) }
+                ?.let { intent.getParcelableExtra<CallArgs>(MvRx.KEY_ARG) }
+                ?.let {
+                    callViewModel.handle(VectorCallViewActions.SwitchCall(it))
+                }
     }
 
     override fun getMenuRes() = R.menu.vector_call
@@ -211,13 +214,19 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
     }
 
     override fun onDestroy() {
-        callManager.getCallById(callArgs.callId)?.detachRenderers(listOf(views.pipRenderer, views.fullscreenRenderer))
+        detachRenderersIfNeeded()
+        turnScreenOffAndKeyguardOn()
+        super.onDestroy()
+    }
+
+    private fun detachRenderersIfNeeded() {
+        val callId = withState(callViewModel) { it.callId }
+        callManager.getCallById(callId)?.detachRenderers(listOf(views.pipRenderer, views.fullscreenRenderer))
         if (surfaceRenderersAreInitialized) {
             views.pipRenderer.release()
             views.fullscreenRenderer.release()
+            surfaceRenderersAreInitialized = false
         }
-        turnScreenOffAndKeyguardOn()
-        super.onDestroy()
     }
 
     private fun renderState(state: VectorCallViewState) {
@@ -245,21 +254,21 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
             is CallState.Idle,
             is CallState.CreateOffer,
             is CallState.LocalRinging,
-            is CallState.Dialing    -> {
+            is CallState.Dialing   -> {
                 views.fullscreenRenderer.isVisible = false
                 views.pipRendererWrapper.isVisible = false
                 views.callInfoGroup.isVisible = true
                 views.callToolbar.setSubtitle(R.string.call_ringing)
                 configureCallInfo(state)
             }
-            is CallState.Answering  -> {
+            is CallState.Answering -> {
                 views.fullscreenRenderer.isVisible = false
                 views.pipRendererWrapper.isVisible = false
                 views.callInfoGroup.isVisible = true
                 views.callToolbar.setSubtitle(R.string.call_connecting)
                 configureCallInfo(state)
             }
-            is CallState.Connected  -> {
+            is CallState.Connected -> {
                 views.callToolbar.subtitle = state.formattedDuration
                 if (callState.iceConnectionState == MxPeerConnectionState.CONNECTED) {
                     if (state.isLocalOnHold || state.isRemoteOnHold) {
@@ -291,7 +300,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                         configureCallInfo(state)
                     } else {
                         configureCallInfo(state)
-                        if (callArgs.isVideoCall) {
+                        if (state.isVideoCall) {
                             views.fullscreenRenderer.isVisible = true
                             views.pipRendererWrapper.isVisible = true
                             views.callInfoGroup.isVisible = false
@@ -311,10 +320,10 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                     views.callToolbar.setSubtitle(R.string.call_connecting)
                 }
             }
-            is CallState.Ended -> {
+            is CallState.Ended     -> {
                 finish()
             }
-            null                    -> {
+            null                   -> {
             }
         }
     }
@@ -331,12 +340,12 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
             is CallState.CreateOffer,
             is CallState.LocalRinging,
             is CallState.Dialing,
-            is CallState.Answering  -> {
+            is CallState.Answering -> {
                 views.fullscreenRenderer.isVisible = false
                 views.callInfoGroup.isVisible = false
                 // showLoading()
             }
-            is CallState.Connected  -> {
+            is CallState.Connected -> {
                 if (callState.iceConnectionState == MxPeerConnectionState.CONNECTED) {
                     if (state.isLocalOnHold || state.isRemoteOnHold) {
                         views.smallIsHeldIcon.isVisible = true
@@ -403,9 +412,12 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
         views.otherKnownCallLayout.setOnClickListener {
             withState(callViewModel) {
                 val otherCall = callManager.getCallById(it.otherKnownCallInfo?.callId ?: "") ?: return@withState
-                startActivity(newIntent(this, otherCall, null))
-                finish()
+                val callArgs = CallArgs(otherCall.nativeRoomId, otherCall.callId, otherCall.mxCall.opponentUserId, !otherCall.mxCall.isOutgoing, otherCall.mxCall.isVideoCall)
+                callViewModel.handle(VectorCallViewActions.SwitchCall(callArgs))
             }
+        }
+        views.pipRendererWrapper.setOnClickListener {
+            callViewModel.handle(VectorCallViewActions.ToggleCamera)
         }
         pipDraggrableView = views.pipRendererWrapper.setupDraggable()
                 .setStickyMode(DraggableView.Mode.STICKY_XY)
@@ -418,14 +430,15 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
 
     private val permissionCameraLauncher = registerForPermissionsResult { allGranted, _ ->
         if (allGranted) {
-            start()
+            setupRenderersIfNeeded()
         } else {
             // TODO display something
             finish()
         }
     }
 
-    private fun start() {
+    private fun setupRenderersIfNeeded() {
+        detachRenderersIfNeeded()
         rootEglBase = EglUtils.rootEglBase ?: return Unit.also {
             Timber.tag(loggerTag.value).v("rootEglBase is null")
             finish()
@@ -443,11 +456,10 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
         views.fullscreenRenderer.setScalingType(RendererCommon.ScalingType.SCALE_ASPECT_FILL)
         views.fullscreenRenderer.setEnableHardwareScaler(true /* enabled */)
 
-        callManager.getCallById(callArgs.callId)?.attachViewRenderers(views.pipRenderer, views.fullscreenRenderer,
-                intent.getStringExtra(EXTRA_MODE)?.takeIf { isFirstCreation() })
-
-        views.pipRendererWrapper.setOnClickListener {
-            callViewModel.handle(VectorCallViewActions.ToggleCamera)
+        val callId = withState(callViewModel) { it.callId }
+        callManager.getCallById(callId)?.also { webRtcCall ->
+            webRtcCall.attachViewRenderers(views.pipRenderer, views.fullscreenRenderer, intent.getStringExtra(EXTRA_MODE))
+            intent.removeExtra(EXTRA_MODE)
         }
         surfaceRenderersAreInitialized = true
     }
@@ -467,7 +479,8 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                 }.show(supportFragmentManager, FRAGMENT_DIAL_PAD_TAG)
             }
             is VectorCallViewEvents.ShowCallTransferScreen -> {
-                navigator.openCallTransfer(this, callArgs.callId)
+                val callId = withState(callViewModel) { it.callId }
+                navigator.openCallTransfer(this, callId)
             }
             null                                           -> {
             }
@@ -484,39 +497,6 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                     callViewModel.handle(VectorCallViewActions.EndCall)
                 }
                 .show()
-    }
-
-    companion object {
-        private const val EXTRA_MODE = "EXTRA_MODE"
-        private const val FRAGMENT_DIAL_PAD_TAG = "FRAGMENT_DIAL_PAD_TAG"
-
-        const val OUTGOING_CREATED = "OUTGOING_CREATED"
-        const val INCOMING_RINGING = "INCOMING_RINGING"
-        const val INCOMING_ACCEPT = "INCOMING_ACCEPT"
-
-        fun newIntent(context: Context, call: WebRtcCall, mode: String?): Intent {
-            return Intent(context, VectorCallActivity::class.java).apply {
-                // what could be the best flags?
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                putExtra(MvRx.KEY_ARG, CallArgs(call.nativeRoomId, call.callId, call.mxCall.opponentUserId, !call.mxCall.isOutgoing, call.mxCall.isVideoCall))
-                putExtra(EXTRA_MODE, mode)
-            }
-        }
-
-        fun newIntent(context: Context,
-                      callId: String,
-                      signalingRoomId: String,
-                      otherUserId: String,
-                      isIncomingCall: Boolean,
-                      isVideoCall: Boolean,
-                      mode: String?): Intent {
-            return Intent(context, VectorCallActivity::class.java).apply {
-                // what could be the best flags?
-                flags = FLAG_ACTIVITY_CLEAR_TOP
-                putExtra(MvRx.KEY_ARG, CallArgs(signalingRoomId, callId, otherUserId, isIncomingCall, isVideoCall))
-                putExtra(EXTRA_MODE, mode)
-            }
-        }
     }
 
     override fun didTapAudioSettings() {
@@ -544,7 +524,8 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
     }
 
     private fun returnToChat() {
-        val args = RoomDetailArgs(callArgs.signalingRoomId)
+        val roomId = withState(callViewModel) { it.roomId }
+        val args = RoomDetailArgs(roomId)
         val intent = RoomDetailActivity.newIntent(this, args).apply {
             flags = FLAG_ACTIVITY_CLEAR_TOP
         }
@@ -590,6 +571,39 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                     WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
                             or WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
             )
+        }
+    }
+
+    companion object {
+        private const val EXTRA_MODE = "EXTRA_MODE"
+        private const val FRAGMENT_DIAL_PAD_TAG = "FRAGMENT_DIAL_PAD_TAG"
+
+        const val OUTGOING_CREATED = "OUTGOING_CREATED"
+        const val INCOMING_RINGING = "INCOMING_RINGING"
+        const val INCOMING_ACCEPT = "INCOMING_ACCEPT"
+
+        fun newIntent(context: Context, call: WebRtcCall, mode: String?): Intent {
+            return Intent(context, VectorCallActivity::class.java).apply {
+                // what could be the best flags?
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                putExtra(MvRx.KEY_ARG, CallArgs(call.nativeRoomId, call.callId, call.mxCall.opponentUserId, !call.mxCall.isOutgoing, call.mxCall.isVideoCall))
+                putExtra(EXTRA_MODE, mode)
+            }
+        }
+
+        fun newIntent(context: Context,
+                      callId: String,
+                      signalingRoomId: String,
+                      otherUserId: String,
+                      isIncomingCall: Boolean,
+                      isVideoCall: Boolean,
+                      mode: String?): Intent {
+            return Intent(context, VectorCallActivity::class.java).apply {
+                // what could be the best flags?
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                putExtra(MvRx.KEY_ARG, CallArgs(signalingRoomId, callId, otherUserId, isIncomingCall, isVideoCall))
+                putExtra(EXTRA_MODE, mode)
+            }
         }
     }
 }

@@ -348,7 +348,7 @@ class WebRtcCall(
 
     fun attachViewRenderers(localViewRenderer: SurfaceViewRenderer?, remoteViewRenderer: SurfaceViewRenderer, mode: String?) {
         sessionScope?.launch(dispatcher) {
-            Timber.tag(loggerTag.value).v("attachViewRenderers localRendeder $localViewRenderer / $remoteViewRenderer")
+            Timber.tag(loggerTag.value).v("attachViewRenderers localRenderer $localViewRenderer / $remoteViewRenderer")
             localSurfaceRenderers.addIfNeeded(localViewRenderer)
             remoteSurfaceRenderers.addIfNeeded(remoteViewRenderer)
             when (mode) {

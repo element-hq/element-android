@@ -174,7 +174,12 @@ class VectorCallViewModel @AssistedInject constructor(
     }
 
     init {
-        val webRtcCall = callManager.getCallById(initialState.callId)
+        setupCallWithCurrentState()
+    }
+
+    private fun setupCallWithCurrentState() = withState { state ->
+        call?.removeListener(callListener)
+        val webRtcCall = callManager.getCallById(state.callId)
         if (webRtcCall == null) {
             setState {
                 copy(callState = Fail(IllegalArgumentException("No call")))
@@ -229,6 +234,7 @@ class VectorCallViewModel @AssistedInject constructor(
     override fun onCleared() {
         callManager.removeCurrentCallListener(currentCallListener)
         call?.removeListener(callListener)
+        call = null
         proximityManager.stop()
         super.onCleared()
     }
@@ -306,8 +312,12 @@ class VectorCallViewModel @AssistedInject constructor(
                         VectorCallViewEvents.ShowCallTransferScreen
                 )
             }
-            VectorCallViewActions.TransferCall         -> {
+            VectorCallViewActions.TransferCall  -> {
                 handleCallTransfer()
+            }
+            is VectorCallViewActions.SwitchCall -> {
+                setState { VectorCallViewState(action.callArgs) }
+                setupCallWithCurrentState()
             }
         }.exhaustive
     }
