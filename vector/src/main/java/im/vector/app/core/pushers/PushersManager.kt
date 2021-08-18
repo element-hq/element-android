@@ -68,11 +68,10 @@ class PushersManager @Inject constructor(
     }
 
     private fun getPusherAppId(context: Context) : String {
-        val appId = stringProvider.getString(R.string.pusher_app_id)
         return if (UPHelper.isEmbeddedDistributor(context)) {
-            appId
+            stringProvider.getString(R.string.pusher_app_id)
         } else {
-            "$appId.up"
+            stringProvider.getString(R.string.up_pusher_app_id)
         }
     }
 
