@@ -23,7 +23,6 @@ import im.vector.app.features.home.room.detail.timeline.MessageColorProvider
 import im.vector.app.features.home.room.detail.timeline.helper.AvatarSizeProvider
 import im.vector.app.features.home.room.detail.timeline.helper.JitsiWidgetEventsGroup
 import im.vector.app.features.home.room.detail.timeline.helper.MessageInformationDataFactory
-import im.vector.app.features.home.room.detail.timeline.helper.RoomSummariesHolder
 import im.vector.app.features.home.room.detail.timeline.item.CallTileTimelineItem
 import im.vector.app.features.home.room.detail.timeline.item.CallTileTimelineItem_
 import org.matrix.android.sdk.api.session.events.model.toModel
@@ -38,9 +37,7 @@ class WidgetItemFactory @Inject constructor(
         private val avatarSizeProvider: AvatarSizeProvider,
         private val messageColorProvider: MessageColorProvider,
         private val avatarRenderer: AvatarRenderer,
-        private val userPreferencesProvider: UserPreferencesProvider,
-        private val roomSummariesHolder: RoomSummariesHolder
-) {
+        private val userPreferencesProvider: UserPreferencesProvider) {
 
     fun create(params: TimelineItemFactoryParams): VectorEpoxyModel<*>? {
         val event = params.event
@@ -56,9 +53,7 @@ class WidgetItemFactory @Inject constructor(
 
     private fun createJitsiItem(params: TimelineItemFactoryParams, widgetContent: WidgetContent): VectorEpoxyModel<*>? {
         val informationData = informationDataFactory.create(params)
-        val event = params.event
-        val roomId = event.roomId
-        val userOfInterest = roomSummariesHolder.get(roomId)?.toMatrixItem() ?: return null
+        val userOfInterest = params.partialState.roomSummary?.toMatrixItem() ?: return null
         val isActiveTile = widgetContent.isActive()
         val jitsiWidgetEventsGroup = params.eventsGroup?.let { JitsiWidgetEventsGroup(it) } ?: return null
         val isCallStillActive = jitsiWidgetEventsGroup.isStillActive()

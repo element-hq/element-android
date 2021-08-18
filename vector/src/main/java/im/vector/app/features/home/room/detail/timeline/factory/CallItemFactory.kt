@@ -17,19 +17,18 @@ package im.vector.app.features.home.room.detail.timeline.factory
 
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.resources.UserPreferencesProvider
-import im.vector.app.features.call.vectorCallService
 import im.vector.app.features.home.room.detail.timeline.MessageColorProvider
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.helper.AvatarSizeProvider
 import im.vector.app.features.home.room.detail.timeline.helper.CallSignalingEventsGroup
 import im.vector.app.features.home.room.detail.timeline.helper.MessageInformationDataFactory
 import im.vector.app.features.home.room.detail.timeline.helper.MessageItemAttributesFactory
-import im.vector.app.features.home.room.detail.timeline.helper.RoomSummariesHolder
 import im.vector.app.features.home.room.detail.timeline.item.CallTileTimelineItem
 import im.vector.app.features.home.room.detail.timeline.item.CallTileTimelineItem_
 import im.vector.app.features.home.room.detail.timeline.item.MessageInformationData
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
@@ -40,22 +39,21 @@ class CallItemFactory @Inject constructor(
         private val messageInformationDataFactory: MessageInformationDataFactory,
         private val messageItemAttributesFactory: MessageItemAttributesFactory,
         private val avatarSizeProvider: AvatarSizeProvider,
-        private val noticeItemFactory: NoticeItemFactory,
-        private val roomSummariesHolder: RoomSummariesHolder) {
+        private val noticeItemFactory: NoticeItemFactory) {
 
     fun create(params: TimelineItemFactoryParams): VectorEpoxyModel<*>? {
         val event = params.event
         if (event.root.eventId == null) return null
         val showHiddenEvents = userPreferencesProvider.shouldShowHiddenEvents()
         val callEventGrouper = params.eventsGroup?.let { CallSignalingEventsGroup(it) } ?: return null
-        val roomId = event.roomId
+        val roomSummary = params.partialState.roomSummary ?: return null
         val informationData = messageInformationDataFactory.create(params)
         val callKind = if (callEventGrouper.isVideo()) CallTileTimelineItem.CallKind.VIDEO else CallTileTimelineItem.CallKind.AUDIO
         val callItem = when (event.root.getClearType()) {
             EventType.CALL_ANSWER -> {
                 if (callEventGrouper.isInCall()) {
                     createCallTileTimelineItem(
-                            roomId = roomId,
+                            roomSummary = roomSummary,
                             callId = callEventGrouper.callId,
                             callStatus = CallTileTimelineItem.CallStatus.IN_CALL,
                             callKind = callKind,
@@ -72,7 +70,7 @@ class CallItemFactory @Inject constructor(
             EventType.CALL_INVITE -> {
                 if (callEventGrouper.isRinging()) {
                     createCallTileTimelineItem(
-                            roomId = roomId,
+                            roomSummary = roomSummary,
                             callId = callEventGrouper.callId,
                             callStatus = CallTileTimelineItem.CallStatus.INVITED,
                             callKind = callKind,
@@ -88,7 +86,7 @@ class CallItemFactory @Inject constructor(
             }
             EventType.CALL_REJECT -> {
                 createCallTileTimelineItem(
-                        roomId = roomId,
+                        roomSummary = roomSummary,
                         callId = callEventGrouper.callId,
                         callStatus = CallTileTimelineItem.CallStatus.REJECTED,
                         callKind = callKind,
@@ -101,7 +99,7 @@ class CallItemFactory @Inject constructor(
             }
             EventType.CALL_HANGUP -> {
                 createCallTileTimelineItem(
-                        roomId = roomId,
+                        roomSummary = roomSummary,
                         callId = callEventGrouper.callId,
                         callStatus = if (callEventGrouper.callWasMissed()) CallTileTimelineItem.CallStatus.MISSED else CallTileTimelineItem.CallStatus.ENDED,
                         callKind = callKind,
@@ -123,7 +121,7 @@ class CallItemFactory @Inject constructor(
     }
 
     private fun createCallTileTimelineItem(
-            roomId: String,
+            roomSummary: RoomSummary,
             callId: String,
             callKind: CallTileTimelineItem.CallKind,
             callStatus: CallTileTimelineItem.CallStatus,
@@ -133,8 +131,7 @@ class CallItemFactory @Inject constructor(
             formattedDuration: String,
             callback: TimelineEventController.Callback?
     ): CallTileTimelineItem? {
-        val correctedRoomId = session.vectorCallService.userMapper.nativeRoomForVirtualRoom(roomId) ?: roomId
-        val userOfInterest = roomSummariesHolder.get(correctedRoomId)?.toMatrixItem() ?: return null
+        val userOfInterest = roomSummary.toMatrixItem()
         val attributes = messageItemAttributesFactory.create(null, informationData, callback).let {
             CallTileTimelineItem.Attributes(
                     callId = callId,

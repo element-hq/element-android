@@ -52,7 +52,6 @@ import im.vector.app.features.home.room.detail.composer.VoiceMessageHelper
 import im.vector.app.features.home.room.detail.composer.rainbow.RainbowGenerator
 import im.vector.app.features.home.room.detail.sticker.StickerPickerActionHandler
 import im.vector.app.features.home.room.detail.timeline.factory.TimelineFactory
-import im.vector.app.features.home.room.detail.timeline.helper.RoomSummariesHolder
 import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlRetriever
 import im.vector.app.features.home.room.typing.TypingHelper
 import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
@@ -117,7 +116,6 @@ class RoomDetailViewModel @AssistedInject constructor(
         private val session: Session,
         private val supportedVerificationMethodsProvider: SupportedVerificationMethodsProvider,
         private val stickerPickerActionHandler: StickerPickerActionHandler,
-        private val roomSummariesHolder: RoomSummariesHolder,
         private val typingHelper: TypingHelper,
         private val callManager: WebRtcCallManager,
         private val chatEffectManager: ChatEffectManager,
@@ -1576,7 +1574,6 @@ class RoomDetailViewModel @AssistedInject constructor(
 
     private fun observeSummaryState() {
         asyncSubscribe(RoomDetailViewState::asyncRoomSummary) { summary ->
-            roomSummariesHolder.set(summary)
             setState {
                 val typingMessage = typingHelper.getTypingMessage(summary.typingUsers)
                 copy(
@@ -1624,7 +1621,6 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     override fun onCleared() {
-        roomSummariesHolder.remove(room.roomId)
         timeline.dispose()
         timeline.removeAllListeners()
         if (vectorPreferences.sendTypingNotifs()) {

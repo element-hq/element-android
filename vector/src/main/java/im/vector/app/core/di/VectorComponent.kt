@@ -40,7 +40,6 @@ import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.CurrentSpaceSuggestedRoomListDataSource
 import im.vector.app.features.home.room.detail.RoomDetailPendingActionStore
 import im.vector.app.features.home.room.detail.timeline.helper.MatrixItemColorProvider
-import im.vector.app.features.home.room.detail.timeline.helper.RoomSummariesHolder
 import im.vector.app.features.html.EventHtmlRenderer
 import im.vector.app.features.html.VectorHtmlCompressor
 import im.vector.app.features.invite.AutoAcceptInvites
@@ -66,7 +65,6 @@ import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.auth.HomeServerHistoryService
 import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.widgets.model.WidgetType
 import javax.inject.Singleton
 
 @Component(modules = [VectorModule::class])
@@ -166,8 +164,6 @@ interface VectorComponent {
     fun autoAcceptInvites(): AutoAcceptInvites
 
     fun webRtcCallManager(): WebRtcCallManager
-
-    fun roomSummaryHolder(): RoomSummariesHolder
 
     fun jitsiActiveConferenceHolder(): JitsiActiveConferenceHolder
 

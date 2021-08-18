@@ -64,6 +64,7 @@ import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.ReadReceipt
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
+import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.message.MessageAudioContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageImageInfoContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageVideoContent
@@ -91,13 +92,15 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
     data class PartialState(
             val unreadState: UnreadState = UnreadState.Unknown,
             val highlightedEventId: String? = null,
-            val jitsiState: JitsiState = JitsiState()
+            val jitsiState: JitsiState = JitsiState(),
+            val roomSummary: RoomSummary? = null
     ) {
 
         constructor(state: RoomDetailViewState) : this(
                 unreadState = state.unreadState,
                 highlightedEventId = state.highlightedEventId,
-                jitsiState = state.jitsiState
+                jitsiState = state.jitsiState,
+                roomSummary = state.asyncRoomSummary()
         )
     }
 
@@ -407,6 +410,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         val wantsDateSeparator = wantsDateSeparator(event, nextEvent)
         val mergedHeaderModel = mergedHeaderItemFactory.create(event,
                 nextEvent = nextEvent,
+                partialState = partialState,
                 items = this@TimelineEventController.currentSnapshot,
                 addDaySeparator = wantsDateSeparator,
                 currentPosition = position,
