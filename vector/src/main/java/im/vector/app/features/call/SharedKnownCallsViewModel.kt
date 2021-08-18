@@ -21,7 +21,6 @@ import androidx.lifecycle.ViewModel
 import im.vector.app.features.call.webrtc.WebRtcCall
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import org.matrix.android.sdk.api.session.call.MxCall
-import timber.log.Timber
 import javax.inject.Inject
 
 class SharedKnownCallsViewModel @Inject constructor(

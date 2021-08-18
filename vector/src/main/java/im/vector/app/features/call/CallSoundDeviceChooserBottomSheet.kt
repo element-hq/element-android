@@ -20,8 +20,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.airbnb.epoxy.SimpleEpoxyController
 import com.airbnb.mvrx.activityViewModel
-import im.vector.app.core.epoxy.bottomsheet.bottomSheetActionItem
+import im.vector.app.core.epoxy.bottomsheet.BottomSheetActionItem_
+import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.databinding.BottomSheetGenericListBinding
 import im.vector.app.features.call.audio.CallAudioManager
@@ -33,9 +35,11 @@ class CallSoundDeviceChooserBottomSheet : VectorBaseBottomSheetDialogFragment<Bo
     }
 
     private val callViewModel: VectorCallViewModel by activityViewModel()
+    private val controller = SimpleEpoxyController()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        views.bottomSheetRecyclerView.configureWith(controller, hasFixedSize = false)
         callViewModel.observeViewEvents {
             when (it) {
                 is VectorCallViewEvents.ShowSoundDeviceChooser -> {
@@ -49,14 +53,12 @@ class CallSoundDeviceChooserBottomSheet : VectorBaseBottomSheetDialogFragment<Bo
     }
 
     private fun render(available: Set<CallAudioManager.Device>, current: CallAudioManager.Device) {
-        views.bottomSheetRecyclerView.withModels {
-            available.forEach { device ->
-                val title = when (device) {
-                    is CallAudioManager.Device.WirelessHeadset -> device.name ?: getString(device.titleRes)
-                    else                                       -> getString(device.titleRes)
-                }
-
-            bottomSheetActionItem {
+        val models = available.map { device ->
+            val title = when (device) {
+                is CallAudioManager.Device.WirelessHeadset -> device.name ?: getString(device.titleRes)
+                else                                       -> getString(device.titleRes)
+            }
+            BottomSheetActionItem_().apply {
                 id(device.titleRes)
                 text(title)
                 iconRes(device.drawableRes)
@@ -67,12 +69,12 @@ class CallSoundDeviceChooserBottomSheet : VectorBaseBottomSheetDialogFragment<Bo
                 }
             }
         }
+        controller.setModels(models)
     }
-}
 
-companion object {
-    fun newInstance(): RoomListQuickActionsBottomSheet {
-        return RoomListQuickActionsBottomSheet()
+    companion object {
+        fun newInstance(): RoomListQuickActionsBottomSheet {
+            return RoomListQuickActionsBottomSheet()
+        }
     }
-}
 }

@@ -23,7 +23,6 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.core.content.getSystemService
 import im.vector.app.R
-import im.vector.app.core.resources.StringProvider
 import org.matrix.android.sdk.api.extensions.orFalse
 import timber.log.Timber
 import java.util.HashSet

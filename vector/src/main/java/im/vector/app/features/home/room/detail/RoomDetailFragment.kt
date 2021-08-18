@@ -219,9 +219,6 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import android.animation.ValueAnimator
 
-
-
-
 @Parcelize
 data class RoomDetailArgs(
         val roomId: String,

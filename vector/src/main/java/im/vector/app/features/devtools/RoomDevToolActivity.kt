@@ -147,10 +147,6 @@ class RoomDevToolActivity : SimpleFragmentActivity(), RoomDevToolViewModel.Facto
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == android.R.id.home) {
-            onBackPressed()
-            return true
-        }
         if (item.itemId == R.id.menuItemEdit) {
             viewModel.handle(RoomDevToolAction.MenuEdit)
             return true

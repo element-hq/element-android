@@ -23,7 +23,6 @@ import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.call.CallInviteContent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.widgets.model.WidgetContent
-import org.matrix.android.sdk.api.session.widgets.model.WidgetType
 import org.threeten.bp.Duration
 
 class TimelineEventsGroup(val groupId: String) {

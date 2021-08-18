@@ -243,9 +243,7 @@ class RoomDetailViewModel @AssistedInject constructor(
                     widgets.filter { it.isActive }
                 }
                 .execute { widgets ->
-                    copy(
-                            activeRoomWidgets = widgets,
-                    )
+                    copy(activeRoomWidgets = widgets)
                 }
 
         asyncSubscribe(RoomDetailViewState::activeRoomWidgets) { widgets ->

@@ -18,8 +18,6 @@ package im.vector.app.core.ui.views
 
 import androidx.core.view.isVisible
 import im.vector.app.features.call.webrtc.WebRtcCall
-import org.matrix.android.sdk.api.session.call.CallState
-import timber.log.Timber
 
 class CurrentCallsViewPresenter {
 

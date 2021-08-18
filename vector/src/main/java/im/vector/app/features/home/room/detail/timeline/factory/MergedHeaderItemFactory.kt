@@ -73,7 +73,7 @@ class MergedHeaderItemFactory @Inject constructor(private val activeSessionHolde
         } else if (!event.canBeMerged() || (nextEvent?.root?.getClearType() == event.root.getClearType() && !addDaySeparator)) {
             null
         } else {
-            buildMembershipEventsMergedSummary(currentPosition, items,partialState, event, eventIdToHighlight, requestModelBuild, callback)
+            buildMembershipEventsMergedSummary(currentPosition, items, partialState, event, eventIdToHighlight, requestModelBuild, callback)
         }
     }
 

@@ -358,7 +358,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                         views.callInfoGroup.isVisible = false
                     }
                 } else {
-                    //showLoading()
+                    // showLoading()
                 }
             }
             is CallState.Ended     -> {
@@ -412,7 +412,13 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
         views.otherKnownCallLayout.setOnClickListener {
             withState(callViewModel) {
                 val otherCall = callManager.getCallById(it.otherKnownCallInfo?.callId ?: "") ?: return@withState
-                val callArgs = CallArgs(otherCall.nativeRoomId, otherCall.callId, otherCall.mxCall.opponentUserId, !otherCall.mxCall.isOutgoing, otherCall.mxCall.isVideoCall)
+                val callArgs = CallArgs(
+                        signalingRoomId = otherCall.nativeRoomId,
+                        callId = otherCall.callId,
+                        participantUserId = otherCall.mxCall.opponentUserId,
+                        isIncomingCall = !otherCall.mxCall.isOutgoing,
+                        isVideoCall = otherCall.mxCall.isVideoCall
+                )
                 callViewModel.handle(VectorCallViewActions.SwitchCall(callArgs))
             }
         }

@@ -18,9 +18,7 @@ package im.vector.app.features.home.room.detail
 
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
-import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
-import im.vector.app.core.platform.ButtonStateView
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState

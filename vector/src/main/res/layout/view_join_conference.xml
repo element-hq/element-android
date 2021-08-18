@@ -6,7 +6,7 @@
     android:paddingStart="4dp"
     android:layout_width="wrap_content">
 
-    <com.google.android.material.button.MaterialButton
+    <Button
         android:id="@+id/join_conference_button"
         android:layout_width="56dp"
         android:layout_height="wrap_content"

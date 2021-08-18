@@ -16,7 +16,6 @@
 package im.vector.app.features.home.room.detail.timeline.item
 
 import android.content.res.Resources
-import android.telecom.Call
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
