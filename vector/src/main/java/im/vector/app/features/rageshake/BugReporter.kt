@@ -262,6 +262,7 @@ class BugReporter @Inject constructor(
                             .addFormDataPart("user_agent", Matrix.getInstance(context).getUserAgent())
                             .addFormDataPart("user_id", userId)
                             .addFormDataPart("can_contact", canContact.toString())
+                            .addFormDataPart("is_debug_build", BuildConfig.DEBUG.toString())
                             .addFormDataPart("device_id", deviceId)
                             .addFormDataPart("version", versionProvider.getVersion(longFormat = true, useBuildNumber = false))
                             .addFormDataPart("branch_name", context.getString(R.string.git_branch_name))
@@ -327,6 +328,9 @@ class BugReporter @Inject constructor(
                     builder.addFormDataPart("label", BuildConfig.FLAVOR_DESCRIPTION)
                     builder.addFormDataPart("label", context.getString(R.string.git_branch_name))
 
+                    if (BuildConfig.DEBUG) {
+                        builder.addFormDataPart("label", "debug_build")
+                    }
                     if (canContact) {
                         builder.addFormDataPart("label", "can contact")
                     }
