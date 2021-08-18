@@ -1251,7 +1251,7 @@
     <string name="room_filtering_footer_title">نمی‌توانید کسی که به دنبالش هستید را بیابید؟</string>
     <string name="room_filtering_footer_open_room_directory">مشاهدهٔ شاخهٔ اتاق</string>
     <string name="labs_show_unread_notifications_as_tab">افزودن زبانه‌ای اختصاصی روی صفحهٔ اصلی برای آگاهی‌های خوانده‌نشده.</string>
-    <string name="link_copied_to_clipboard">پیوند در تخته‌گیره رونشت شد</string>
+    <string name="link_copied_to_clipboard">پیوند در تخته‌گیره رونوشت شد</string>
     <string name="creating_direct_room">ایجاد کردن اتاق…</string>
     <string name="direct_room_start_search">برغای گرفتن نتایج، شروع به نوشتن کنید</string>
     <string name="joining_room">پیوستن به اتاق…</string>
