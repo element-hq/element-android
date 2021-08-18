@@ -11,7 +11,7 @@
         <item name="android:layout_height">60dp</item>
         <item name="android:layout_gravity">center_horizontal</item>
         <item name="android:layout_marginBottom">36dp</item>
-        <item name="android:src">@drawable/element_logo_green</item>
+        <item name="android:src">@drawable/ic_tchap_logo</item>
         <item name="android:transitionName">loginLogoTransition</item>
         <item name="android:importantForAccessibility">no</item>
     </style>

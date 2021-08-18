@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/expiredAccount"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?android:colorBackground">
+
+    <androidx.core.widget.NestedScrollView
+        style="@style/LoginFormScrollView"
+        tools:ignore="MissingConstraints">
+
+        <LinearLayout style="@style/LoginFormContainer">
+
+            <ImageView
+                style="@style/LoginLogo"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/titleView"
+                style="@style/Widget.Vector.TextView.Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:text="@string/tchap_expired_account_msg"
+                android:textColor="?vctr_content_primary" />
+
+            <Button
+                android:id="@+id/resumeButton"
+                style="@style/Widget.Vector.Button.Text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginTop="22dp"
+                android:text="@string/tchap_expired_account_resume_button" />
+
+            <Button
+                android:id="@+id/renewalEmailButton"
+                style="@style/Widget.Vector.Button.Text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:text="@string/tchap_request_renewal_email_button" />
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</FrameLayout>
+

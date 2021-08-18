@@ -310,9 +310,20 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), HasSc
         )
     }
 
-    private fun handleExpiredAccount() {
-        // Todo: display expiration dialog
-        toast("La durée de validité de votre compte a expiré. Un e-mail vous a été envoyé pour la renouveler.")
+    protected open fun handleExpiredAccount() {
+        Timber.w("Expired account event received")
+        if (mainActivityStarted) {
+            return
+        }
+
+        mainActivityStarted = true
+
+        MainActivity.restartApp(this,
+                MainActivityArgs(
+                        clearCache = true,
+                        isAccountExpired = true
+                )
+        )
     }
 
     override fun onDestroy() {

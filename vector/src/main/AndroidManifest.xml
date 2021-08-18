@@ -314,6 +314,8 @@
         <activity android:name=".features.spaces.SpaceCreationActivity" />
         <activity android:name=".features.spaces.manage.SpaceManageActivity" />
         <activity android:name=".features.spaces.people.SpacePeopleActivity" />
+        <activity android:name="fr.gouv.tchap.features.expired.ExpiredAccountActivity" />
+
         <!-- Services -->
 
         <service

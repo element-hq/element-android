@@ -24,13 +24,16 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import fr.gouv.tchap.features.expired.ExpiredAccountActivity
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.startSyncing
 import im.vector.app.core.platform.VectorBaseActivity
+import im.vector.app.core.pushers.PushersManager
 import im.vector.app.core.utils.deleteAllFiles
+import im.vector.app.core.utils.toast
 import im.vector.app.databinding.ActivityMainBinding
 import im.vector.app.features.home.HomeActivity
 import im.vector.app.features.home.ShortcutsHandler
@@ -45,10 +48,11 @@ import im.vector.app.features.signout.soft.SoftLogoutActivity
 import im.vector.app.features.signout.soft.SoftLogoutActivity2
 import im.vector.app.features.themes.ActivityOtherThemes
 import im.vector.app.features.ui.UiStateRepository
-import kotlinx.parcelize.Parcelize
+import im.vector.app.push.fcm.FcmHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.failure.GlobalError
 import timber.log.Timber
 import javax.inject.Inject
@@ -59,6 +63,7 @@ data class MainActivityArgs(
         val clearCredentials: Boolean = false,
         val isUserLoggedOut: Boolean = false,
         val isAccountDeactivated: Boolean = false,
+        val isAccountExpired: Boolean = false,
         val isSoftLogout: Boolean = false
 ) : Parcelable
 
@@ -97,6 +102,7 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
     @Inject lateinit var pinCodeStore: PinCodeStore
     @Inject lateinit var pinLocker: PinLocker
     @Inject lateinit var popupAlertManager: PopupAlertManager
+    @Inject lateinit var pushManager: PushersManager
 
     override fun injectWith(injector: ScreenComponent) {
         injector.inject(this)
@@ -108,8 +114,9 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
         if (args.clearCredentials || args.isUserLoggedOut || args.clearCache) {
             clearNotifications()
         }
+
         // Handle some wanted cleanup
-        if (args.clearCache || args.clearCredentials) {
+        if (args.clearCache || args.clearCredentials || args.isAccountExpired) {
             doCleanUp()
         } else {
             startNextActivityAndFinish()
@@ -137,6 +144,7 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
                 clearCredentials = argsFromIntent?.clearCredentials ?: false,
                 isUserLoggedOut = argsFromIntent?.isUserLoggedOut ?: false,
                 isAccountDeactivated = argsFromIntent?.isAccountDeactivated ?: false,
+                isAccountExpired = argsFromIntent?.isAccountExpired ?: false,
                 isSoftLogout = argsFromIntent?.isSoftLogout ?: false
         )
     }
@@ -147,37 +155,35 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
             startNextActivityAndFinish()
             return
         }
-        when {
-            args.isAccountDeactivated -> {
-                lifecycleScope.launch {
-                    // Just do the local cleanup
-                    Timber.w("Account deactivated, start app")
-                    sessionHolder.clearActiveSession()
-                    doLocalCleanup(clearPreferences = true)
-                    startNextActivityAndFinish()
-                }
-            }
-            args.clearCredentials     -> {
-                lifecycleScope.launch {
-                    try {
-                        session.signOut(!args.isUserLoggedOut)
-                    } catch (failure: Throwable) {
-                        displayError(failure)
-                        return@launch
+
+        clearFcmDataIfNeeded {
+            lifecycleScope.launch {
+                when {
+                    args.isAccountDeactivated -> {
+                        // Just do the local cleanup
+                        Timber.w("Account deactivated, start app")
+                        sessionHolder.clearActiveSession()
+                        doLocalCleanup(clearPreferences = true)
                     }
-                    Timber.w("SIGN_OUT: success, start app")
-                    sessionHolder.clearActiveSession()
-                    doLocalCleanup(clearPreferences = true)
-                    startNextActivityAndFinish()
+                    args.clearCredentials     -> {
+                        try {
+                            session.signOut(!args.isUserLoggedOut)
+                        } catch (failure: Throwable) {
+                            displayError(failure)
+                            return@launch
+                        }
+                        Timber.w("SIGN_OUT: success, start app")
+                        sessionHolder.clearActiveSession()
+                        doLocalCleanup(clearPreferences = true)
+                    }
+                    args.clearCache           -> {
+                        session.clearCache()
+                        doLocalCleanup(clearPreferences = false)
+                        session.startSyncing(applicationContext)
+                    }
                 }
-            }
-            args.clearCache           -> {
-                lifecycleScope.launch {
-                    session.clearCache()
-                    doLocalCleanup(clearPreferences = false)
-                    session.startSyncing(applicationContext)
-                    startNextActivityAndFinish()
-                }
+
+                startNextActivityAndFinish()
             }
         }
     }
@@ -203,6 +209,28 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
 
             // Also clear cache (Logs, etc...)
             deleteAllFiles(this@MainActivity.cacheDir)
+        }
+    }
+
+    private fun clearFcmDataIfNeeded(onDone: () -> Unit) {
+        if (!args.isAccountExpired) {
+            onDone(); return
+        }
+        val session = sessionHolder.getActiveSession()
+        FcmHelper.getFcmToken(this)?.let {
+            lifecycleScope.launch {
+                runCatching { pushManager.unregisterPusher(it) }
+                        .fold(
+                                {
+                                    session.refreshPushers()
+                                    onDone()
+                                },
+                                {
+                                    toast(R.string.unknown_error)
+                                    onDone()
+                                }
+                        )
+            }
         }
     }
 
@@ -233,6 +261,9 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
             args.isUserLoggedOut                                            ->
                 // the homeserver has invalidated the token (password changed, device deleted, other security reasons)
                 SignedOutActivity.newIntent(this)
+            args.isAccountExpired                                           ->
+                // user account has expired, request to renew it
+                ExpiredAccountActivity.newIntent(this)
             sessionHolder.hasActiveSession()                                ->
                 // We have a session.
                 // Check it can be opened
