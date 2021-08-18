@@ -102,8 +102,8 @@ class AttachmentTypeSelectorView(context: Context,
         contentView.doOnNextLayout {
             animateWindowInCircular(anchor, contentView)
         }
-        animateButtonIn(views.attachmentGalleryButton, ANIMATION_DURATION / 4)
-        animateButtonIn(views.attachmentCameraButton, ANIMATION_DURATION / 2)
+        animateButtonIn(views.attachmentGalleryButton, ANIMATION_DURATION / 2)
+        animateButtonIn(views.attachmentCameraButton, ANIMATION_DURATION / 4)
         animateButtonIn(views.attachmentFileButton, ANIMATION_DURATION / 2)
         animateButtonIn(views.attachmentAudioButton, 0)
         animateButtonIn(views.attachmentContactButton, ANIMATION_DURATION / 4)
