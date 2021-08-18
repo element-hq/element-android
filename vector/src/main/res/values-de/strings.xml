@@ -2805,7 +2805,7 @@
     <string name="add_space">Space hinzufügen</string>
     <string name="command_description_create_space">Space erstellen</string>
     <string name="room_settings_room_access_restricted_description">Jeder, der sich in einem Space mit diesem Raum befindet, kann diesen Raum finden und ihm beitreten. Nur die Administratoren des Raums können diesen zu einem Space hinzufügen.</string>
-    <string name="room_settings_room_access_restricted_title">Spaces</string>
+    <string name="room_settings_room_access_restricted_title">Nur Spaces Mitglieder</string>
     <plurals name="space_people_you_know">
         <item quantity="one">%d Person, die du kennst, ist bereits beigetreten</item>
         <item quantity="other">%d Personen, die du kennst, sind bereits beigetreten</item>
