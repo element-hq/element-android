@@ -27,7 +27,6 @@ import org.matrix.client.model.ResetPasswordMailConfirmed
 import org.matrix.client.model.SuccessResult
 import org.matrix.client.model.TokenLoginParams
 import org.matrix.client.model.ValidationCodeBody
-import org.matrix.client.model.Versions
 import org.matrix.client.model.WebClientConfig
 import org.matrix.client.utils.JsonDict
 import org.matrix.client.utils.NetworkConstants
@@ -54,12 +53,6 @@ internal interface AuthAPI {
      */
     @GET("config.json")
     suspend fun getWebClientConfig(): WebClientConfig
-
-    /**
-     * Get the version information of the homeserver
-     */
-    @GET(NetworkConstants.URI_API_PREFIX_PATH_ + "versions")
-    suspend fun versions(): Versions
 
     /**
      * Register to the homeserver, or get error 401 with a RegistrationFlowResponse object if registration is incomplete
