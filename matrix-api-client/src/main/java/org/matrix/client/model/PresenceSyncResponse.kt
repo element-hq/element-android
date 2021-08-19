@@ -17,7 +17,6 @@
 package org.matrix.client.model
 
 import com.squareup.moshi.JsonClass
-import org.matrix.android.sdk.api.session.events.model.Event
 
 //  PresenceSyncResponse represents the updates to the presence status of other users during server sync v2.
 @JsonClass(generateAdapter = true)

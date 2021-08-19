@@ -13,17 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.matrix.client.model
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
-// RoomInviteState represents the state of a room that the user has been invited to.
 @JsonClass(generateAdapter = true)
-internal data class RoomInviteState(
-
-        /**
-         * List of state events (array of MXEvent).
-         */
-        @Json(name = "events") val events: List<Event> = emptyList()
+internal data class UserAccountDataSync(
+        @Json(name = "events") val list: List<UserAccountDataEvent> = emptyList()
 )

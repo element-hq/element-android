@@ -18,8 +18,8 @@ package org.matrix.client.model
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import org.matrix.android.sdk.api.util.JsonDict
-import org.matrix.android.sdk.internal.network.parsing.ForceToBoolean
+import org.matrix.client.utils.ForceToBoolean
+import org.matrix.client.utils.JsonDict
 
 /**
  * Backup data for one key.

@@ -19,19 +19,26 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 /**
- * Class representing an room key request body content
+ * Interface representing an room key action request
+ * Note: this class cannot be abstract because of [org.matrix.androidsdk.core.JsonUtils.toRoomKeyShare]
  */
+interface GossipingToDeviceObject : SendToDeviceObject {
+
+    val action: String?
+
+    val requestingDeviceId: String?
+
+    val requestId: String?
+
+    companion object {
+        const val ACTION_SHARE_REQUEST = "request"
+        const val ACTION_SHARE_CANCELLATION = "request_cancellation"
+    }
+}
+
 @JsonClass(generateAdapter = true)
-data class RoomKeyRequestBody(
-        @Json(name = "algorithm")
-        val algorithm: String? = null,
-
-        @Json(name = "room_id")
-        val roomId: String? = null,
-
-        @Json(name = "sender_key")
-        val senderKey: String? = null,
-
-        @Json(name = "session_id")
-        val sessionId: String? = null
-)
+data class GossipingDefaultContent(
+        @Json(name = "action") override val action: String?,
+        @Json(name = "requesting_device_id") override val requestingDeviceId: String?,
+        @Json(name = "m.request_id") override val requestId: String? = null
+) : GossipingToDeviceObject

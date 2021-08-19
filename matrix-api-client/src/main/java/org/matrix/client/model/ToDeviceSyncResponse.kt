@@ -17,7 +17,6 @@
 package org.matrix.client.model
 
 import com.squareup.moshi.JsonClass
-import org.matrix.android.sdk.api.session.events.model.Event
 
 // ToDeviceSyncResponse represents the data directly sent to one of user's devices.
 @JsonClass(generateAdapter = true)

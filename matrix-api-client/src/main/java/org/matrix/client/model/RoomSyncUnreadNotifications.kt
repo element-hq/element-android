@@ -18,7 +18,6 @@ package org.matrix.client.model
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import org.matrix.android.sdk.api.session.events.model.Event
 
 /**
  * `MXRoomSyncUnreadNotifications` represents the unread counts for a room.

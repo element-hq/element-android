@@ -17,7 +17,6 @@
 package org.matrix.client.model
 
 import com.squareup.moshi.JsonClass
-import org.matrix.android.sdk.api.session.events.model.Event
 
 /**
  * Class representing a room from a JSON response from room or global initial sync.

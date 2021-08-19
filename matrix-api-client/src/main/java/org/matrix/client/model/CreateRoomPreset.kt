@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,14 +16,17 @@
 
 package org.matrix.client.model
 
-import org.matrix.android.sdk.api.session.identity.ThreePid
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
-internal data class PendingThreePid(
-        val threePid: ThreePid,
-        val clientSecret: String,
-        val sendAttempt: Int,
-        // For Msisdn and Email
-        val sid: String,
-        // For Msisdn only
-        val submitUrl: String?
-)
+@JsonClass(generateAdapter = false)
+enum class CreateRoomPreset {
+    @Json(name = "private_chat")
+    PRESET_PRIVATE_CHAT,
+
+    @Json(name = "public_chat")
+    PRESET_PUBLIC_CHAT,
+
+    @Json(name = "trusted_private_chat")
+    PRESET_TRUSTED_PRIVATE_CHAT
+}

@@ -16,25 +16,14 @@
 
 package org.matrix.client.model
 
-import org.matrix.client.utils.HttpHeaders
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.Header
-import retrofit2.http.POST
-import retrofit2.http.Url
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
-internal interface TermsAPI {
-    /**
-     * This request does not require authentication
-     */
-    @GET
-    suspend fun getTerms(@Url url: String): TermsResponse
-
-    /**
-     * This request requires authentication
-     */
-    @POST
-    suspend fun agreeToTerms(@Url url: String,
-                             @Body params: AcceptTermsBody,
-                             @Header(HttpHeaders.Authorization) token: String)
-}
+/**
+ * This is a simplified Event with just a type and a content.
+ */
+@JsonClass(generateAdapter = true)
+data class UserAccountDataEvent(
+        @Json(name = "type") val type: String,
+        @Json(name = "content") val content: Content
+)

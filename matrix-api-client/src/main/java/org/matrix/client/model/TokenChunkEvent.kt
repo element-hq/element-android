@@ -16,7 +16,6 @@
 
 package org.matrix.client.model
 
-import org.matrix.android.sdk.api.session.events.model.Event
 
 internal interface TokenChunkEvent {
     val start: String?

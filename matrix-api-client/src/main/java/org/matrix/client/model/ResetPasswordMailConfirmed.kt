@@ -17,7 +17,6 @@ package org.matrix.client.model
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import org.matrix.android.sdk.internal.auth.registration.AuthParams
 
 /**
  * Class to pass parameters to reset the password once a email has been validated.

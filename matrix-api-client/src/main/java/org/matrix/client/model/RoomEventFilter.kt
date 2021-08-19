@@ -17,7 +17,6 @@ package org.matrix.client.model
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import org.matrix.android.sdk.internal.di.MoshiProvider
 
 /**
  * Represents "RoomEventFilter" as mentioned in the SPEC
@@ -66,21 +65,4 @@ data class RoomEventFilter(
          * If true, enables lazy-loading of membership events. See Lazy-loading room members for more information. Defaults to false.
          */
         @Json(name = "lazy_load_members") val lazyLoadMembers: Boolean? = null
-) {
-
-    fun toJSONString(): String {
-        return MoshiProvider.providesMoshi().adapter(RoomEventFilter::class.java).toJson(this)
-    }
-
-    fun hasData(): Boolean {
-        return (limit != null
-                || notSenders != null
-                || notTypes != null
-                || senders != null
-                || types != null
-                || rooms != null
-                || notRooms != null
-                || containsUrl != null
-                || lazyLoadMembers != null)
-    }
-}
+)
