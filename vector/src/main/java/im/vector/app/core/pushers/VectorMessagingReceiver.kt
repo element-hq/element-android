@@ -64,6 +64,7 @@ data class Notification(
         val counts: Counts = Counts()
         )
 
+@JsonClass(generateAdapter = true)
 data class Counts(
         val unread: Int = 0
         )
