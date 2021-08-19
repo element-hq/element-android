@@ -1692,7 +1692,7 @@
     <string name="room_join_rules_invite">%1$s 将聊天室设为仅限邀请。</string>
     <string name="room_join_rules_invite_by_you">你将聊天室设为仅限邀请。</string>
     <string name="timeline_unread_messages">未读消息</string>
-    <string name="login_splash_title">这是你的对话。拥有它。</string>
+    <string name="login_splash_title">这是你的对话。它只属于你。</string>
     <string name="login_splash_text1">与人们私聊或群聊</string>
     <string name="login_splash_text2">通过加密保证对话私密</string>
     <string name="login_splash_text3">扩展 &amp; 自定义你的体验</string>
