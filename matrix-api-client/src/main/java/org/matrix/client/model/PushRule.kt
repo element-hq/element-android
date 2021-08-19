@@ -54,4 +54,4 @@ data class PushRule(
          */
         @Json(name = "pattern")
         val pattern: String? = null
-) 
+)

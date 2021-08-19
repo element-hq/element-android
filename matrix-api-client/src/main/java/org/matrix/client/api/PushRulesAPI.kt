@@ -24,7 +24,7 @@ import retrofit2.http.GET
 import retrofit2.http.PUT
 import retrofit2.http.Path
 
-internal interface PushRulesApi {
+internal interface PushRulesAPI {
     /**
      * Get all push rules
      */
