@@ -16,6 +16,7 @@
 
 package im.vector.app.features.settings
 
+import android.os.Build
 import androidx.preference.Preference
 import im.vector.app.R
 import im.vector.app.core.preference.VectorSwitchPreference
@@ -55,6 +56,8 @@ class VectorSettingsLabsFragment @Inject constructor(
          */
 
         findPreference<VectorSwitchPreference>(VectorPreferences.SETTINGS_ALLOW_URL_PREVIEW_IN_ENCRYPTED_ROOM_KEY)?.isEnabled = vectorPreferences.showUrlPreviews()
+
+        findPreference<VectorSwitchPreference>(VectorPreferences.SETTINGS_VOICE_MESSAGE)?.isEnabled = Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP
 
         findPreference<VectorSwitchPreference>(VectorPreferences.SETTINGS_LABS_SPACES_HOME_AS_ORPHAN)!!.let { pref ->
             pref.setOnPreferenceChangeListener { _, _ ->

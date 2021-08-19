@@ -90,10 +90,15 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
 
     override fun onVisibilityChanged(changedView: View, visibility: Int) {
         super.onVisibilityChanged(changedView, visibility)
-        if (changedView == this && visibility == VISIBLE) {
-            views.voiceMessageMicButton.contentDescription = context.getString(R.string.a11y_start_voice_message)
-        } else {
-            views.voiceMessageMicButton.contentDescription = ""
+        // On Android 5, this can cause a NPE for some unknown reason
+        try {
+            if (changedView == this && visibility == VISIBLE) {
+                views.voiceMessageMicButton.contentDescription = context.getString(R.string.a11y_start_voice_message)
+            } else {
+                views.voiceMessageMicButton.contentDescription = ""
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 

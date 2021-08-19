@@ -19,6 +19,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.media.RingtoneManager
 import android.net.Uri
+import android.os.Build
 import android.provider.MediaStore
 import androidx.core.content.edit
 import com.squareup.seismic.ShakeDetector
@@ -202,7 +203,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         private const val SETTINGS_USER_COLOR_MODE_DEFAULT = "SETTINGS_USER_COLOR_MODE_DEFAULT"
         private const val SETTINGS_USER_COLOR_MODE_PUBLIC_ROOM = "SETTINGS_USER_COLOR_MODE_PUBLIC_ROOM"
         private const val SETTINGS_OPEN_CHATS_AT_FIRST_UNREAD = "SETTINGS_OPEN_CHATS_AT_FIRST_UNREAD"
-        private const val SETTINGS_VOICE_MESSAGE = "SETTINGS_VOICE_MESSAGE"
+        const val SETTINGS_VOICE_MESSAGE = "SETTINGS_VOICE_MESSAGE"
 
         private const val DID_ASK_TO_ENABLE_SESSION_PUSH = "DID_ASK_TO_ENABLE_SESSION_PUSH"
 
@@ -1004,7 +1005,8 @@ class VectorPreferences @Inject constructor(private val context: Context) {
 
     // Element removed this, SC added it back (but this time, default to true)
     fun useVoiceMessage(): Boolean {
-        return defaultPrefs.getBoolean(SETTINGS_VOICE_MESSAGE, true)
+        // Voice messages crash on SDK 21
+        return Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP && defaultPrefs.getBoolean(SETTINGS_VOICE_MESSAGE, true)
     }
 
     /**
