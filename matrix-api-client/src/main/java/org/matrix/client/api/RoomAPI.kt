@@ -49,7 +49,7 @@ import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-internal interface RoomAPI {
+interface RoomAPI {
 
     /**
      * Lists the public rooms on the server, with optional filter.

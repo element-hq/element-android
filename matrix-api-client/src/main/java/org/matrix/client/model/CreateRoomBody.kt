@@ -23,7 +23,7 @@ import com.squareup.moshi.JsonClass
  * Parameter to create a room
  */
 @JsonClass(generateAdapter = true)
-internal data class CreateRoomBody(
+data class CreateRoomBody(
         /**
          * A public visibility indicates that the room will be shown in the published room list.
          * A private visibility will hide the room from the published room list.

@@ -22,7 +22,7 @@ import com.squareup.moshi.JsonClass
  * Container to store the data when a reset password is in the email validation step
  */
 @JsonClass(generateAdapter = true)
-internal data class ResetPasswordData(
+data class ResetPasswordData(
         val newPassword: String,
         val addThreePidRegistrationResponse: AddThreePidRegistrationResponse
 )

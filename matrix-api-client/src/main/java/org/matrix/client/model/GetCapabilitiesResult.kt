@@ -24,7 +24,7 @@ import org.matrix.client.utils.JsonDict
  * Ref: https://matrix.org/docs/spec/client_server/latest#get-matrix-client-r0-capabilities
  */
 @JsonClass(generateAdapter = true)
-internal data class GetCapabilitiesResult(
+data class GetCapabilitiesResult(
         /**
          * Required. The custom capabilities the server supports, using the Java package naming convention.
          */
@@ -33,7 +33,7 @@ internal data class GetCapabilitiesResult(
 )
 
 @JsonClass(generateAdapter = true)
-internal data class Capabilities(
+data class Capabilities(
         /**
          * Capability to indicate if the user can change their password.
          */
@@ -49,7 +49,7 @@ internal data class Capabilities(
 )
 
 @JsonClass(generateAdapter = true)
-internal data class ChangePassword(
+data class ChangePassword(
         /**
          * Required. True if the user can change their password, false otherwise.
          */
@@ -58,7 +58,7 @@ internal data class ChangePassword(
 )
 
 @JsonClass(generateAdapter = true)
-internal data class RoomVersions(
+data class RoomVersions(
         /**
          * Required. The default room version the server is using for new rooms.
          */

@@ -19,7 +19,7 @@ import org.matrix.client.model.WellKnown
 import retrofit2.http.GET
 import retrofit2.http.Path
 
-internal interface WellKnownAPI {
+interface WellKnownAPI {
     @GET("https://{domain}/.well-known/matrix/client")
     suspend fun getWellKnown(@Path("domain") domain: String): WellKnown
 }

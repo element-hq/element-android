@@ -16,8 +16,7 @@
 
 package org.matrix.client.utils
 
-object HttpHeaders {
-
+internal object HttpHeaders {
     const val Authorization = "Authorization"
     const val UserAgent = "User-Agent"
 }

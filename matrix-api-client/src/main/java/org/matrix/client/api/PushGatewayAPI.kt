@@ -21,7 +21,7 @@ import org.matrix.client.utils.NetworkConstants
 import retrofit2.http.Body
 import retrofit2.http.POST
 
-internal interface PushGatewayAPI {
+interface PushGatewayAPI {
     /**
      * Ask the Push Gateway to send a push to the current device.
      *

@@ -38,7 +38,7 @@ import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-internal interface CryptoAPI {
+interface CryptoAPI {
 
     /**
      * Get the devices list

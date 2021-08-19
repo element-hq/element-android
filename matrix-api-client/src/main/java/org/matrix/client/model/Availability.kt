@@ -20,7 +20,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-internal data class Availability(
+data class Availability(
         /**
          * A flag to indicate that the username is available. This should always be true when the server replies with 200 OK.
          */

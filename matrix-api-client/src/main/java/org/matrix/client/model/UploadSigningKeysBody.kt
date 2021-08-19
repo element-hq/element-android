@@ -19,7 +19,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-internal data class UploadSigningKeysBody(
+data class UploadSigningKeysBody(
         @Json(name = "master_key")
         val masterKey: RestKeyInfo? = null,
 

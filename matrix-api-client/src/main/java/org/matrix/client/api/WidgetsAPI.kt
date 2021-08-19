@@ -22,7 +22,7 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Query
 
-internal interface WidgetsAPI {
+interface WidgetsAPI {
 
     /**
      * register to the server

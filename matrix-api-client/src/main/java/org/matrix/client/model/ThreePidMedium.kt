@@ -16,7 +16,7 @@
 
 package org.matrix.client.model
 
-internal object ThreePidMedium {
+object ThreePidMedium {
     const val EMAIL = "email"
     const val MSISDN = "msisdn"
 }

@@ -41,7 +41,7 @@ import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Url
 
-internal interface ProfileAPI {
+interface ProfileAPI {
     /**
      * Get the combined profile information for this user.
      * This API may be used to fetch the user's own profile information or other users; either locally or on remote homeservers.

@@ -22,7 +22,7 @@ import org.matrix.client.utils.NetworkConstants
 import retrofit2.http.Body
 import retrofit2.http.POST
 
-internal interface SearchUserAPI {
+interface SearchUserAPI {
 
     /**
      * Perform a user search.

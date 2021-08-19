@@ -19,7 +19,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-internal data class ThirdPartyIdentifier(
+data class ThirdPartyIdentifier(
         /**
          * Required. The medium of the third party identifier. One of: ["email", "msisdn"]
          */

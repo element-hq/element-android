@@ -23,7 +23,7 @@ import com.squareup.moshi.JsonClass
  * `MXRoomSyncUnreadNotifications` represents the unread counts for a room.
  */
 @JsonClass(generateAdapter = true)
-internal data class RoomSyncUnreadNotifications(
+data class RoomSyncUnreadNotifications(
         /**
          * List of account data events (array of Event).
          */

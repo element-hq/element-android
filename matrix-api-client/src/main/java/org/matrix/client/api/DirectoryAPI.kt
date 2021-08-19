@@ -26,7 +26,7 @@ import retrofit2.http.GET
 import retrofit2.http.PUT
 import retrofit2.http.Path
 
-internal interface DirectoryAPI {
+interface DirectoryAPI {
     /**
      * Get the room ID associated to the room alias.
      *

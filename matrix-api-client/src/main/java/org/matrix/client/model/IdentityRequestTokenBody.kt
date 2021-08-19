@@ -32,7 +32,7 @@ private interface IdentityRequestTokenBody {
 }
 
 @JsonClass(generateAdapter = true)
-internal data class IdentityRequestTokenForEmailBody(
+data class IdentityRequestTokenForEmailBody(
         @Json(name = "client_secret")
         override val clientSecret: String,
 
@@ -54,7 +54,7 @@ internal data class IdentityRequestTokenForEmailBody(
 ) : IdentityRequestTokenBody
 
 @JsonClass(generateAdapter = true)
-internal data class IdentityRequestTokenForMsisdnBody(
+data class IdentityRequestTokenForMsisdnBody(
         @Json(name = "client_secret")
         override val clientSecret: String,
 

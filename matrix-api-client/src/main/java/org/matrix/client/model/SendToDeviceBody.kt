@@ -19,7 +19,7 @@ package org.matrix.client.model
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-internal data class SendToDeviceBody(
+data class SendToDeviceBody(
         /**
          * `Any` should implement [SendToDeviceObject], but we cannot use interface here because of Json serialization
          *

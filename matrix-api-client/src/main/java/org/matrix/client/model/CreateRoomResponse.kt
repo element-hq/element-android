@@ -20,11 +20,11 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-internal data class CreateRoomResponse(
+data class CreateRoomResponse(
         /**
          * Required. The created room's ID.
          */
         @Json(name = "room_id") val roomId: String
 )
 
-internal typealias JoinRoomResponse = CreateRoomResponse
+typealias JoinRoomResponse = CreateRoomResponse

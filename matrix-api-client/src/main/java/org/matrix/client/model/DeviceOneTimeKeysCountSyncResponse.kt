@@ -20,6 +20,6 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-internal data class DeviceOneTimeKeysCountSyncResponse(
+data class DeviceOneTimeKeysCountSyncResponse(
         @Json(name = "signed_curve25519") val signedCurve25519: Int? = null
 )

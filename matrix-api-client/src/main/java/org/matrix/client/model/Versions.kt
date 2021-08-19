@@ -38,7 +38,7 @@ import com.squareup.moshi.JsonClass
  * </pre>
  */
 @JsonClass(generateAdapter = true)
-internal data class Versions(
+data class Versions(
         @Json(name = "versions")
         val supportedVersions: List<String>? = null,
 

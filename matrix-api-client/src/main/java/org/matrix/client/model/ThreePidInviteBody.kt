@@ -20,7 +20,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-internal data class ThreePidInviteBody(
+data class ThreePidInviteBody(
         /**
          * Required. The hostname+port of the identity server which should be used for third party identifier lookups.
          */

@@ -20,7 +20,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-internal data class SpacesResponse(
+data class SpacesResponse(
         /** Its presence indicates that there are more results to return. */
         @Json(name = "next_batch") val nextBatch: String? = null,
         /** Rooms information like name/avatar/type ... */

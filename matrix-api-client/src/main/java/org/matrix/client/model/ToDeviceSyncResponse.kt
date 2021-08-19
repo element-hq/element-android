@@ -20,7 +20,7 @@ import com.squareup.moshi.JsonClass
 
 // ToDeviceSyncResponse represents the data directly sent to one of user's devices.
 @JsonClass(generateAdapter = true)
-internal data class ToDeviceSyncResponse(
+data class ToDeviceSyncResponse(
 
         /**
          * List of direct-to-device events.

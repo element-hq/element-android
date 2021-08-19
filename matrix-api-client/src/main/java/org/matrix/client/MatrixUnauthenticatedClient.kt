@@ -18,6 +18,4 @@ package org.matrix.client
 
 import okhttp3.OkHttpClient
 
-class MatrixUnauthenticatedClient(private val okHttpClient: OkHttpClient) {
-
-}
+class MatrixUnauthenticatedClient(private val okHttpClient: OkHttpClient)

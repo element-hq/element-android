@@ -20,7 +20,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-internal data class SearchRequestBody(
+data class SearchRequestBody(
         /**
          * Required. Describes which categories to search in and their criteria.
          */

@@ -20,7 +20,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-internal data class SearchRequestEventContext(
+data class SearchRequestEventContext(
         // How many events before the result are returned.
         @Json(name = "before_limit")
         val beforeLimit: Int? = null,

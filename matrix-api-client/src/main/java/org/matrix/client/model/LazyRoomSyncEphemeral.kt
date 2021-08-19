@@ -19,7 +19,7 @@ package org.matrix.client.model
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = false)
-internal sealed class LazyRoomSyncEphemeral {
+sealed class LazyRoomSyncEphemeral {
     data class Parsed(val _roomSyncEphemeral: RoomSyncEphemeral) : LazyRoomSyncEphemeral()
     object Stored : LazyRoomSyncEphemeral()
 }

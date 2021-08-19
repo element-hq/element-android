@@ -20,7 +20,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-internal data class DeactivateAccountParams(
+data class DeactivateAccountParams(
         // Set to true to erase all data of the account
         @Json(name = "erase")
         val erase: Boolean,

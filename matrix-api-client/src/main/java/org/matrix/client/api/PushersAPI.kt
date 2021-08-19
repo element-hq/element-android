@@ -22,7 +22,7 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 
-internal interface PushersAPI {
+interface PushersAPI {
 
     /**
      * Get the pushers for this user.

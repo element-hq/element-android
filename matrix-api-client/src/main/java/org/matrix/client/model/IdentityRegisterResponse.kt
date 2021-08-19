@@ -20,7 +20,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-internal data class IdentityRegisterResponse(
+data class IdentityRegisterResponse(
         /**
          * Required. An opaque string representing the token to authenticate future requests to the identity server with.
          */

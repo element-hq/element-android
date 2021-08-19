@@ -23,7 +23,7 @@ import com.squareup.moshi.JsonClass
  * Ref: https://github.com/matrix-org/matrix-doc/blob/hs/hash-identity/proposals/2134-identity-hash-lookup.md
  */
 @JsonClass(generateAdapter = true)
-internal data class IdentityLookUpParams(
+data class IdentityLookUpParams(
         /**
          * Required. The addresses to look up. The format of the entries here depend on the algorithm used.
          * Note that queries which have been incorrectly hashed or formatted will lead to no matches.

@@ -16,8 +16,7 @@
 
 package org.matrix.client.model
 
-
-internal interface TokenChunkEvent {
+interface TokenChunkEvent {
     val start: String?
     val end: String?
     val events: List<Event>

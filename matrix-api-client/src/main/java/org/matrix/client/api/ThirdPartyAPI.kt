@@ -23,7 +23,7 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.QueryMap
 
-internal interface ThirdPartyAPI {
+interface ThirdPartyAPI {
 
     /**
      * Get the third party server protocols.

@@ -24,7 +24,7 @@ import com.squareup.moshi.JsonClass
  * https://matrix.org/docs/spec/client_server/r0.3.0.html#post-matrix-client-r0-user-userid-filter
  */
 @JsonClass(generateAdapter = true)
-internal data class Filter(
+data class Filter(
         /**
          * List of event fields to include. If this list is absent then all fields are included. The entries may
          * include '.' characters to indicate sub-fields. So ['content.body'] will include the 'body' field of the

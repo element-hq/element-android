@@ -23,7 +23,7 @@ import com.squareup.moshi.JsonClass
  * Ref: https://matrix.org/docs/spec/client_server/latest#get-matrix-client-r0-pushrules
  */
 @JsonClass(generateAdapter = true)
-internal data class GetPushRulesResponse(
+data class GetPushRulesResponse(
         /**
          * Global rules, account level applying to all devices
          */

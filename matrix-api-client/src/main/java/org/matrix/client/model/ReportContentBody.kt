@@ -20,7 +20,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-internal data class ReportContentBody(
+data class ReportContentBody(
         /**
          * Required. The score to rate this content as where -100 is most offensive and 0 is inoffensive.
          */

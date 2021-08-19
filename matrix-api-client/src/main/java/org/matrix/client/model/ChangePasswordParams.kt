@@ -23,7 +23,7 @@ import com.squareup.moshi.JsonClass
  * Class to pass request parameters to update the password.
  */
 @JsonClass(generateAdapter = true)
-internal data class ChangePasswordParams(
+data class ChangePasswordParams(
         @Json(name = "auth")
         val auth: UserPasswordAuth? = null,
 

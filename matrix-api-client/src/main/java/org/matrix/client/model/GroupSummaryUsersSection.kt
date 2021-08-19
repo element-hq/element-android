@@ -24,7 +24,7 @@ import com.squareup.moshi.JsonClass
  */
 
 @JsonClass(generateAdapter = true)
-internal data class GroupSummaryUsersSection(
+data class GroupSummaryUsersSection(
 
         @Json(name = "total_user_count_estimate") val totalUserCountEstimate: Int,
 

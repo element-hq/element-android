@@ -35,7 +35,7 @@ import org.matrix.client.utils.JsonDict
  *     }
  * </pre>
  */
-internal interface KeysAlgorithmAndData {
+interface KeysAlgorithmAndData {
 
     /**
      * The algorithm used for storing backups. Currently, only "m.megolm_backup.v1.curve25519-aes-sha2" is defined
@@ -46,5 +46,4 @@ internal interface KeysAlgorithmAndData {
      * algorithm-dependent data, for "m.megolm_backup.v1.curve25519-aes-sha2" see [org.matrix.android.sdk.internal.crypto.keysbackup.MegolmBackupAuthData]
      */
     val authData: JsonDict
-
 }

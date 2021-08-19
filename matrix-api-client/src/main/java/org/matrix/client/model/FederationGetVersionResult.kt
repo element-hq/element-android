@@ -23,13 +23,13 @@ import com.squareup.moshi.JsonClass
  * Ref: https://matrix.org/docs/spec/server_server/latest#get-matrix-federation-v1-version
  */
 @JsonClass(generateAdapter = true)
-internal data class FederationGetVersionResult(
+data class FederationGetVersionResult(
         @Json(name = "server")
         val server: FederationGetVersionServer?
 )
 
 @JsonClass(generateAdapter = true)
-internal data class FederationGetVersionServer(
+data class FederationGetVersionServer(
         /**
          * Arbitrary name that identify this implementation.
          */

@@ -36,7 +36,7 @@ import retrofit2.http.Query
 /**
  * Ref: https://matrix.org/docs/spec/client_server/unstable#server-side-key-backups
  */
-internal interface RoomKeysAPI {
+interface RoomKeysAPI {
 
     /* ==========================================================================================
      * Backup versions management

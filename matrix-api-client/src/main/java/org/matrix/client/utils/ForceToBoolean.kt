@@ -24,10 +24,9 @@ import com.squareup.moshi.ToJson
 @JsonQualifier
 @Retention(AnnotationRetention.RUNTIME)
 @Target(AnnotationTarget.FIELD, AnnotationTarget.VALUE_PARAMETER, AnnotationTarget.FUNCTION)
-annotation class ForceToBoolean
+internal annotation class ForceToBoolean
 
-
-internal class ForceToBooleanJsonAdapter {
+class ForceToBooleanJsonAdapter {
     @ToJson
     fun toJson(@ForceToBoolean b: Boolean): Boolean {
         return b

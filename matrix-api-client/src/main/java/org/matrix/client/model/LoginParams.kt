@@ -16,6 +16,6 @@
 
 package org.matrix.client.model
 
-internal interface LoginParams {
+interface LoginParams {
     val type: String
 }

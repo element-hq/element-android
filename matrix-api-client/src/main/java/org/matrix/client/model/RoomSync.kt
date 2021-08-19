@@ -20,7 +20,7 @@ import com.squareup.moshi.JsonClass
 
 // RoomSync represents the response for a room during server sync v2.
 @JsonClass(generateAdapter = true)
-internal data class RoomSync(
+data class RoomSync(
         /**
          * The state updates for the room.
          */

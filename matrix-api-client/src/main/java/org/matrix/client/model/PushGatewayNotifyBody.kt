@@ -20,7 +20,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-internal data class PushGatewayNotifyBody(
+data class PushGatewayNotifyBody(
         /**
          * Required. Information about the push notification
          */

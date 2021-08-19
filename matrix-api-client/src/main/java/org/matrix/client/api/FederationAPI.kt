@@ -21,7 +21,7 @@ import org.matrix.client.model.FederationGetVersionResult
 import org.matrix.client.utils.NetworkConstants
 import retrofit2.http.GET
 
-internal interface FederationAPI {
+interface FederationAPI {
     @GET(NetworkConstants.URI_FEDERATION_PATH + "version")
     suspend fun getVersion(): FederationGetVersionResult
 }

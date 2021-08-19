@@ -23,7 +23,7 @@ import com.squareup.moshi.JsonClass
  * This class represent a list of urls of terms the user wants to accept
  */
 @JsonClass(generateAdapter = true)
-internal data class AcceptTermsBody(
+data class AcceptTermsBody(
         @Json(name = "user_accepts")
         val acceptedTermUrls: List<String>
 )

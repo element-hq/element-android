@@ -27,7 +27,7 @@ import retrofit2.http.POST
  * Ref: https://matrix.org/docs/spec/identity_service/latest
  * This contain the requests which do not need an identity server token
  */
-internal interface IdentityAuthAPI {
+interface IdentityAuthAPI {
 
     /**
      * https://matrix.org/docs/spec/client_server/r0.4.0.html#server-discovery

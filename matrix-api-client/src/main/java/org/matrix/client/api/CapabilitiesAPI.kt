@@ -21,7 +21,7 @@ import org.matrix.client.model.Versions
 import org.matrix.client.utils.NetworkConstants
 import retrofit2.http.GET
 
-internal interface CapabilitiesAPI {
+interface CapabilitiesAPI {
     /**
      * Request the homeserver capabilities
      */

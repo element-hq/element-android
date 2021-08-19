@@ -23,7 +23,7 @@ import com.squareup.moshi.JsonClass
  * Upload Signature response
  */
 @JsonClass(generateAdapter = true)
-internal data class SignatureUploadResponse(
+data class SignatureUploadResponse(
         /**
          * The response contains a failures property, which is a map of user ID to device ID to failure reason,
          * if any of the uploaded keys failed.
@@ -35,7 +35,7 @@ internal data class SignatureUploadResponse(
 )
 
 @JsonClass(generateAdapter = true)
-internal data class UploadResponseFailure(
+data class UploadResponseFailure(
         @Json(name = "status")
         val status: Int,
 

@@ -25,7 +25,7 @@ import com.squareup.moshi.JsonClass
  * - https://matrix.org/docs/spec/client_server/r0.5.0#identifier-types
  */
 @JsonClass(generateAdapter = true)
-internal data class PasswordLoginParams(
+data class PasswordLoginParams(
         @Json(name = "identifier") val identifier: Map<String, String>,
         @Json(name = "password") val password: String,
         @Json(name = "type") override val type: String,

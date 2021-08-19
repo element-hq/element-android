@@ -24,7 +24,7 @@ import retrofit2.http.GET
 import retrofit2.http.QueryMap
 import retrofit2.http.Streaming
 
-internal interface SyncAPI {
+interface SyncAPI {
     /**
      * Set all the timeouts to 1 minute by default
      */

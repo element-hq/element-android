@@ -23,7 +23,7 @@ import com.squareup.moshi.JsonClass
  * This class represents the summary of a community in the server response.
  */
 @JsonClass(generateAdapter = true)
-internal data class GroupSummaryResponse(
+data class GroupSummaryResponse(
         /**
          * The group profile.
          */

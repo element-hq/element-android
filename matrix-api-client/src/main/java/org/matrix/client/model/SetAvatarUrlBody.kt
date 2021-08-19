@@ -19,7 +19,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-internal data class SetAvatarUrlBody(
+data class SetAvatarUrlBody(
         /**
          * The new avatar url for this user.
          */

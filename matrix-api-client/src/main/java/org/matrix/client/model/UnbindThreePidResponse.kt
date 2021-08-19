@@ -19,7 +19,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-internal data class UnbindThreePidResponse(
+data class UnbindThreePidResponse(
         @Json(name = "id_server_unbind_result")
         val idServerUnbindResult: String?
 ) {

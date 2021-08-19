@@ -23,7 +23,7 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 import retrofit2.http.Path
 
-internal interface OpenIdAPI {
+interface OpenIdAPI {
 
     /**
      * Gets a bearer token from the homeserver that the user can

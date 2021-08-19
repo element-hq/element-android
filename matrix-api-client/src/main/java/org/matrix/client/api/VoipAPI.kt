@@ -20,7 +20,7 @@ import org.matrix.client.model.TurnServerResponse
 import org.matrix.client.utils.NetworkConstants
 import retrofit2.http.GET
 
-internal interface VoipAPI {
+interface VoipAPI {
 
     @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "voip/turnServer")
     suspend fun getTurnServer(): TurnServerResponse

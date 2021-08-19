@@ -20,7 +20,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-internal data class RoomDirectoryVisibilityJson(
+data class RoomDirectoryVisibilityJson(
         /**
          * The visibility of the room in the directory. One of: ["private", "public"]
          */

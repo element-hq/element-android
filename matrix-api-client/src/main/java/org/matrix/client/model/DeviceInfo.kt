@@ -22,7 +22,7 @@ import com.squareup.moshi.JsonClass
  * This class describes the device information
  */
 @JsonClass(generateAdapter = true)
-internal data class DeviceInfo(
+data class DeviceInfo(
         /**
          * The owner user id
          */

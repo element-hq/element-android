@@ -20,7 +20,7 @@ import com.squareup.moshi.JsonClass
 
 //  PresenceSyncResponse represents the updates to the presence status of other users during server sync v2.
 @JsonClass(generateAdapter = true)
-internal data class PresenceSyncResponse(
+data class PresenceSyncResponse(
 
         /**
          * List of presence events (array of Event with type m.presence).

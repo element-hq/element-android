@@ -20,7 +20,7 @@ import com.squareup.moshi.JsonClass
 
 // RoomInviteState represents the state of a room that the user has been invited to.
 @JsonClass(generateAdapter = true)
-internal data class RoomInviteState(
+data class RoomInviteState(
 
         /**
          * List of state events (array of MXEvent).

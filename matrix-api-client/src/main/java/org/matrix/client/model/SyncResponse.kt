@@ -21,7 +21,7 @@ import com.squareup.moshi.JsonClass
 
 // SyncResponse represents the request response for server sync v2.
 @JsonClass(generateAdapter = true)
-internal data class SyncResponse(
+data class SyncResponse(
         /**
          * The user private data.
          */

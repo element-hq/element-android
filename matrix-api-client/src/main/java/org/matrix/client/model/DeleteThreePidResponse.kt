@@ -19,7 +19,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-internal data class DeleteThreePidResponse(
+data class DeleteThreePidResponse(
         /**
          * Required. An indicator as to whether or not the homeserver was able to unbind the 3PID from
          * the identity server. success indicates that the identity server has unbound the identifier

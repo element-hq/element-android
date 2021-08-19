@@ -23,7 +23,7 @@ import com.squareup.moshi.JsonClass
  * Open class, parent to all possible authentication parameters
  */
 @JsonClass(generateAdapter = true)
-internal data class AuthParams(
+data class AuthParams(
         @Json(name = "type")
         val type: String,
 

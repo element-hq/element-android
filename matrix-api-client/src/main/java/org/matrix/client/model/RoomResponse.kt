@@ -22,7 +22,7 @@ import com.squareup.moshi.JsonClass
  * Class representing a room from a JSON response from room or global initial sync.
  */
 @JsonClass(generateAdapter = true)
-internal data class RoomResponse(
+data class RoomResponse(
         // The room identifier.
         val roomId: String? = null,
 

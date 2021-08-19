@@ -19,7 +19,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-internal class GetPushersResponse(
+class GetPushersResponse(
         @Json(name = "pushers")
         val pushers: List<JsonPusher>? = null
 )

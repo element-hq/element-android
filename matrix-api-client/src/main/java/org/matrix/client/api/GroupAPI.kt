@@ -23,7 +23,7 @@ import org.matrix.client.utils.NetworkConstants
 import retrofit2.http.GET
 import retrofit2.http.Path
 
-internal interface GroupAPI {
+interface GroupAPI {
 
     /**
      * Request a group summary

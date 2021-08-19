@@ -22,7 +22,7 @@ import com.squareup.moshi.JsonClass
  * Class representing the ThreePids response
  */
 @JsonClass(generateAdapter = true)
-internal data class AccountThreePidsResponse(
+data class AccountThreePidsResponse(
         @Json(name = "threepids")
         val threePids: List<ThirdPartyIdentifier>? = null
 )

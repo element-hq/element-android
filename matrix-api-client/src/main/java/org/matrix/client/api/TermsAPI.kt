@@ -25,7 +25,7 @@ import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.Url
 
-internal interface TermsAPI {
+interface TermsAPI {
     /**
      * This request does not require authentication
      */

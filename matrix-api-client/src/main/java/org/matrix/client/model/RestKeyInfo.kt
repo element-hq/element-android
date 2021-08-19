@@ -19,7 +19,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-internal data class RestKeyInfo(
+data class RestKeyInfo(
         /**
          * The user who owns the key
          */

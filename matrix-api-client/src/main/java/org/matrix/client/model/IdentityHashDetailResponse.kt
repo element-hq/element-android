@@ -23,7 +23,7 @@ import com.squareup.moshi.JsonClass
  * Ref: https://github.com/matrix-org/matrix-doc/blob/hs/hash-identity/proposals/2134-identity-hash-lookup.md
  */
 @JsonClass(generateAdapter = true)
-internal data class IdentityHashDetailResponse(
+data class IdentityHashDetailResponse(
         /**
          * Required. The pepper the client MUST use in hashing identifiers, and MUST supply to the /lookup endpoint when performing lookups.
          * Servers SHOULD rotate this string often.

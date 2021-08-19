@@ -21,7 +21,7 @@ import com.squareup.moshi.JsonClass
 
 // RoomSyncState represents the state updates for a room during server sync v2.
 @JsonClass(generateAdapter = true)
-internal data class RoomSyncState(
+data class RoomSyncState(
 
         /**
          * List of state events (array of Event). The resulting state corresponds to the *start* of the timeline.

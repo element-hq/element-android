@@ -22,7 +22,7 @@ import org.matrix.client.utils.NetworkConstants
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-internal interface MediaAPI {
+interface MediaAPI {
     /**
      * Retrieve the configuration of the content repository
      * Ref: https://matrix.org/docs/spec/client_server/r0.6.1#get-matrix-media-r0-config

@@ -22,7 +22,7 @@ import com.squareup.moshi.JsonClass
  * Class to pass parameters to reset the password once a email has been validated.
  */
 @JsonClass(generateAdapter = true)
-internal data class ResetPasswordMailConfirmed(
+data class ResetPasswordMailConfirmed(
         // authentication parameters
         @Json(name = "auth")
         val auth: AuthParams? = null,

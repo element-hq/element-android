@@ -22,7 +22,7 @@ import com.squareup.moshi.JsonClass
  * This class represents the response to /keys/upload request made by uploadKeys.
  */
 @JsonClass(generateAdapter = true)
-internal data class KeysUploadResponse(
+data class KeysUploadResponse(
         /**
          * Required. For each key algorithm, the number of unclaimed one-time keys
          * of that type currently held on the server for this device.

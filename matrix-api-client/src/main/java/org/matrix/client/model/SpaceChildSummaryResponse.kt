@@ -20,7 +20,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-internal data class SpaceChildSummaryResponse(
+data class SpaceChildSummaryResponse(
         /**
          * The total number of state events which point to or from this room (inbound/outbound edges).
          * This includes all m.space.child events in the room, in addition to m.room.parent events which point to this room as a parent.

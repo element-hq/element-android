@@ -20,7 +20,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-internal data class WebClientConfig(
+data class WebClientConfig(
         /**
          * This is now deprecated, but still used first, rather than value from "default_server_config"
          */
@@ -38,13 +38,13 @@ internal data class WebClientConfig(
 }
 
 @JsonClass(generateAdapter = true)
-internal data class WebClientConfigDefaultServerConfig(
+data class WebClientConfigDefaultServerConfig(
         @Json(name = "m.homeserver")
         val homeServer: WebClientConfigBaseConfig? = null
 )
 
 @JsonClass(generateAdapter = true)
-internal data class WebClientConfigBaseConfig(
+data class WebClientConfigBaseConfig(
         @Json(name = "base_url")
         val baseURL: String? = null
 )

@@ -20,7 +20,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-internal data class RoomSyncAccountData(
+data class RoomSyncAccountData(
         /**
          * List of account data events (array of Event).
          */

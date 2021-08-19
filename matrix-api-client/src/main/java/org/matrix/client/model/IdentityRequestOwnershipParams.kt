@@ -19,7 +19,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-internal data class IdentityRequestOwnershipParams(
+data class IdentityRequestOwnershipParams(
         /**
          * Required. The client secret that was supplied to the requestToken call.
          */

@@ -19,7 +19,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-internal data class JsonPusherData(
+data class JsonPusherData(
         /**
          * Required if kind is http. The URL to use to send notifications to.
          * MUST be an HTTPS URL with a path of /_matrix/push/v1/notify.

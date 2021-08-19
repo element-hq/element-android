@@ -20,7 +20,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-internal data class SearchResponseRoomEvents(
+data class SearchResponseRoomEvents(
         /**
          * List of results in the requested order.
          */

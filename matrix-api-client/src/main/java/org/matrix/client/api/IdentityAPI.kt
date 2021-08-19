@@ -35,7 +35,7 @@ import retrofit2.http.Path
  * Ref: https://matrix.org/docs/spec/identity_service/latest
  * This contain the requests which need an identity server token
  */
-internal interface IdentityAPI {
+interface IdentityAPI {
     /**
      * Gets information about what user owns the access token used in the request.
      * Will return a 403 for when terms are not signed

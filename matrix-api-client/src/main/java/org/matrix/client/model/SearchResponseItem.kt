@@ -20,7 +20,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-internal data class SearchResponseItem(
+data class SearchResponseItem(
         /**
          *  A number that describes how closely this result matches the search. Higher is closer.
          */

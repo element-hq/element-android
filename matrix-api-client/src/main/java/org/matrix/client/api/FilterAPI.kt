@@ -24,7 +24,7 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
 
-internal interface FilterAPI {
+interface FilterAPI {
 
     /**
      * Upload FilterBody to get a filter_id which can be used for /sync requests

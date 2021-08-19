@@ -40,7 +40,7 @@ import com.squareup.moshi.JsonClass
  * </code>
  */
 @JsonClass(generateAdapter = true)
-internal data class JsonPusher(
+data class JsonPusher(
         /**
          * Required. This is a unique identifier for this pusher. The value you should use for this is the routing or
          * destination address information for the notification, for example, the APNS token for APNS or the

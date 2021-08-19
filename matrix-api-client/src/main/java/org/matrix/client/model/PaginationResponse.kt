@@ -20,7 +20,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-internal data class PaginationResponse(
+data class PaginationResponse(
         /**
          * The token the pagination starts from. If dir=b this will be the token supplied in from.
          */

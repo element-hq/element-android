@@ -50,4 +50,3 @@ data class PushCondition(
         @Json(name = "is")
         val iz: String? = null
 )
-

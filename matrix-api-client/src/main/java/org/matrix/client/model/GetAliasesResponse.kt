@@ -20,7 +20,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-internal data class GetAliasesResponse(
+data class GetAliasesResponse(
         /**
          * Required. The server's local aliases on the room. Can be empty.
          */

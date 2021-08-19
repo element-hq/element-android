@@ -20,6 +20,6 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-internal data class UserAccountDataSync(
+data class UserAccountDataSync(
         @Json(name = "events") val list: List<UserAccountDataEvent> = emptyList()
 )

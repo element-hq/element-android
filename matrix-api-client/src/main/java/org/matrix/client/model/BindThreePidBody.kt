@@ -19,7 +19,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-internal data class BindThreePidBody(
+data class BindThreePidBody(
         /**
          * Required. The client secret used in the session with the identity server.
          */

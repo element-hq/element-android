@@ -20,7 +20,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-internal data class BackupKeysResult(
+data class BackupKeysResult(
         // The hash value which is an opaque string representing stored keys in the backup
         @Json(name = "etag")
         val hash: String,

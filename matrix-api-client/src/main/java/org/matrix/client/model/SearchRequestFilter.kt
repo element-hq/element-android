@@ -20,7 +20,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-internal data class SearchRequestFilter(
+data class SearchRequestFilter(
         // The maximum number of events to return.
         @Json(name = "limit")
         val limit: Int? = null,

@@ -21,6 +21,6 @@ import com.squareup.moshi.JsonClass
  * This class describes the
  */
 @JsonClass(generateAdapter = true)
-internal data class DevicesListResponse(
+data class DevicesListResponse(
         val devices: List<DeviceInfo>? = null
 )

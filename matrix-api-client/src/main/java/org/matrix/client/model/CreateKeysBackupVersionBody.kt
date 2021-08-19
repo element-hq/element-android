@@ -21,7 +21,7 @@ import com.squareup.moshi.JsonClass
 import org.matrix.client.utils.JsonDict
 
 @JsonClass(generateAdapter = true)
-internal data class CreateKeysBackupVersionBody(
+data class CreateKeysBackupVersionBody(
         /**
          * The algorithm used for storing backups. Currently, only "m.megolm_backup.v1.curve25519-aes-sha2" is defined
          */

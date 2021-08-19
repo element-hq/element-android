@@ -21,7 +21,7 @@ import com.squareup.moshi.JsonClass
 import org.matrix.client.utils.JsonDict
 
 @JsonClass(generateAdapter = true)
-internal data class SearchResponseEventContext(
+data class SearchResponseEventContext(
         // Events just before the result.
         @Json(name = "events_before")
         val eventsBefore: List<Event>,

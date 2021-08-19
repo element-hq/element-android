@@ -22,7 +22,7 @@ import org.matrix.client.utils.NetworkConstants
 import retrofit2.http.Body
 import retrofit2.http.POST
 
-internal interface AccountAPI {
+interface AccountAPI {
 
     /**
      * Ask the homeserver to change the password with the provided new password.

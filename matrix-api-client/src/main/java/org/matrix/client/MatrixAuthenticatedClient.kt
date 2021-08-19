@@ -19,10 +19,4 @@ package org.matrix.client
 import okhttp3.OkHttpClient
 
 class MatrixAuthenticatedClient(private val okHttpClient: OkHttpClient,
-                                private val accessToken: String) {
-
-
-
-
-
-}
+                                private val accessToken: String)

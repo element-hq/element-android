@@ -41,7 +41,7 @@ import retrofit2.http.Url
 /**
  * The login REST API.
  */
-internal interface AuthAPI {
+interface AuthAPI {
     /**
      * Get a Web client config file, using the name including the domain
      */

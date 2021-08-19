@@ -19,7 +19,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-internal data class DeleteThreePidBody(
+data class DeleteThreePidBody(
         /**
          * Required. The medium of the third party identifier being removed. One of: ["email", "msisdn"]
          */

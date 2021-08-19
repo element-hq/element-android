@@ -23,7 +23,7 @@ import com.squareup.moshi.JsonClass
  * Represents the order in which to search for results.
  */
 @JsonClass(generateAdapter = false)
-internal enum class SearchRequestOrder {
+enum class SearchRequestOrder {
     @Json(name = "rank") RANK,
     @Json(name = "recent") RECENT
 }

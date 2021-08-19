@@ -20,7 +20,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-internal data class LoginFlowResponse(
+data class LoginFlowResponse(
         /**
          * The homeserver's supported login types
          */
@@ -29,7 +29,7 @@ internal data class LoginFlowResponse(
 )
 
 @JsonClass(generateAdapter = true)
-internal data class LoginFlow(
+data class LoginFlow(
         /**
          * The login type. This is supplied as the type when logging in.
          */

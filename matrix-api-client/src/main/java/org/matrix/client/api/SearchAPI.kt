@@ -23,7 +23,7 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 import retrofit2.http.Query
 
-internal interface SearchAPI {
+interface SearchAPI {
 
     /**
      * Performs a full text search across different categories.

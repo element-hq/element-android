@@ -20,7 +20,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-internal data class SearchRequestRoomEvents(
+data class SearchRequestRoomEvents(
         /**
          * Required. The string to search events for.
          */
