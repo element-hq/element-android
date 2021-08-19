@@ -6,13 +6,13 @@
     android:background="?vctr_keys_backup_banner_accent_color"
     android:minHeight="48dp"
     android:orientation="horizontal"
-    android:padding="16dp">
+    android:paddingHorizontal="16dp">
 
     <ImageView
         android:id="@+id/roomNotificationIcon"
         android:layout_width="32dp"
         android:layout_height="32dp"
-        android:layout_gravity="top"
+        android:layout_gravity="center_vertical"
         android:importantForAccessibility="no"
         android:padding="5dp"
         tools:src="@drawable/ic_warning_badge" />
@@ -27,6 +27,7 @@
         android:gravity="start"
         android:paddingStart="4dp"
         android:paddingEnd="0dp"
+        android:paddingVertical="12dp"
         android:textColor="?vctr_content_primary"
         tools:text="@string/room_do_not_have_permission_to_post" />
 
