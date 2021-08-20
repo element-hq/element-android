@@ -30,13 +30,15 @@ pushd "$mydir" > /dev/null
 
 do_translation_pull=0
 
-if git remote get-url weblate > /dev/null; then
-    echo "Pulling translations..."
-    translation commit && do_translation_pull=1 || echo "translation tool not found, skipping forced commit"
-    git fetch weblate
-    git merge weblate/sc --no-edit
-else
-    echo "WARN: remote weblate not found, not updating translations"
+if [ "$release_type" = "normal" ] && [ "$preview" != 1 ]; then
+    if git remote get-url weblate > /dev/null; then
+        echo "Pulling translations..."
+        translation commit && do_translation_pull=1 || echo "translation tool not found, skipping forced commit"
+        git fetch weblate
+        git merge weblate/sc --no-edit
+    else
+        echo "WARN: remote weblate not found, not updating translations"
+    fi
 fi
 
 last_tag=`downstream_latest_tag`
