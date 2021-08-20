@@ -23,6 +23,7 @@ import android.provider.MediaStore
 import im.vector.lib.multipicker.entity.MultiPickerAudioType
 import im.vector.lib.multipicker.entity.MultiPickerImageType
 import im.vector.lib.multipicker.entity.MultiPickerVideoType
+import java.lang.RuntimeException
 
 internal fun Uri.toMultiPickerImageType(context: Context): MultiPickerImageType? {
     val projection = arrayOf(
@@ -88,7 +89,11 @@ internal fun Uri.toMultiPickerVideoType(context: Context): MultiPickerVideoType?
 
             context.contentResolver.openFileDescriptor(this, "r")?.use { pfd ->
                 val mediaMetadataRetriever = MediaMetadataRetriever()
-                mediaMetadataRetriever.setDataSource(pfd.fileDescriptor)
+                try {
+                    mediaMetadataRetriever.setDataSource(pfd.fileDescriptor)
+                } catch (e: RuntimeException) {
+                    e.printStackTrace()
+                }
                 duration = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)?.toLong() ?: 0L
                 width = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH)?.toInt() ?: 0
                 height = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT)?.toInt() ?: 0

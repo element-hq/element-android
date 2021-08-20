@@ -58,6 +58,7 @@ import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.content.ThumbnailExtractor
 import org.matrix.android.sdk.internal.session.permalinks.PermalinkFactory
 import org.matrix.android.sdk.internal.session.room.send.pills.TextPillsUtils
+import java.lang.RuntimeException
 import javax.inject.Inject
 
 /**
@@ -256,7 +257,11 @@ internal class LocalEchoEventFactory @Inject constructor(
 
     private fun createVideoEvent(roomId: String, attachment: ContentAttachmentData): Event {
         val mediaDataRetriever = MediaMetadataRetriever()
-        mediaDataRetriever.setDataSource(context, attachment.queryUri)
+        try {
+            mediaDataRetriever.setDataSource(context, attachment.queryUri)
+        } catch (e: RuntimeException) {
+            e.printStackTrace()
+        }
 
         // Use frame to calculate height and width as we are sure to get the right ones
         val firstFrame: Bitmap? = mediaDataRetriever.frameAtTime
