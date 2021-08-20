@@ -51,10 +51,10 @@ import org.matrix.client.utils.RetrofitFactory
 class MatrixAuthenticatedClient(private val okHttpClient: OkHttpClient,
                                 private val moshi: Moshi,
                                 private val baseUrl: String,
-                                private val accessToken: String) {
+                                private val accessTokenProvider: () -> String?) {
 
     private val retrofit by lazy {
-        RetrofitFactory(moshi).create(okHttpClient, baseUrl)
+        RetrofitFactory(moshi).create(okHttpClient, baseUrl, accessTokenProvider)
     }
 
     val accountAPI by lazy {

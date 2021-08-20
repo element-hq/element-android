@@ -16,6 +16,20 @@
 
 package org.matrix.client
 
+import com.squareup.moshi.Moshi
 import okhttp3.OkHttpClient
+import org.matrix.client.api.AuthAPI
+import org.matrix.client.utils.RetrofitFactory
 
-class MatrixUnauthenticatedClient(private val okHttpClient: OkHttpClient)
+class MatrixUnauthenticatedClient(private val okHttpClient: OkHttpClient,
+                                  private val moshi: Moshi,
+                                  private val baseUrl: String) {
+
+    private val retrofit by lazy {
+        RetrofitFactory(moshi).create(okHttpClient, baseUrl) { null }
+    }
+
+    val authAPI by lazy {
+        retrofit.create(AuthAPI::class.java)
+    }
+}

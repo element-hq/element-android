@@ -20,13 +20,24 @@ import com.squareup.moshi.Moshi
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import kotlin.reflect.KMutableProperty0
 
 internal class RetrofitFactory(private val moshi: Moshi) {
 
-    fun create(okHttpClient: OkHttpClient, baseUrl: String): Retrofit {
+    fun create(okHttpClient: OkHttpClient, baseUrl: String, accessTokenProvider: () -> String?): Retrofit {
+        val newOkHttpClient = okHttpClient.newBuilder().addInterceptor { chain ->
+            var request = chain.request()
+            // Add the access token to all requests if it is set
+            accessTokenProvider()?.let { token ->
+                val newRequestBuilder = request.newBuilder()
+                newRequestBuilder.header(HttpHeaders.Authorization, "Bearer $token")
+                request = newRequestBuilder.build()
+            }
+            chain.proceed(request)
+        }.build()
         return Retrofit.Builder()
                 .baseUrl(baseUrl.ensureTrailingSlash())
-                .client(okHttpClient)
+                .client(newOkHttpClient)
                 .addConverterFactory(UnitConverterFactory)
                 .addConverterFactory(MoshiConverterFactory.create(moshi))
                 .build()
