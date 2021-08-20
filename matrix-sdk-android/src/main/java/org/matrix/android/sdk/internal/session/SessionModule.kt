@@ -54,6 +54,7 @@ import org.matrix.android.sdk.internal.database.SessionRealmConfigurationFactory
 import org.matrix.android.sdk.internal.di.Authenticated
 import org.matrix.android.sdk.internal.di.CacheDirectory
 import org.matrix.android.sdk.internal.di.DeviceId
+import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.di.SessionDownloadsDirectory
 import org.matrix.android.sdk.internal.di.SessionFilesDirectory
@@ -96,6 +97,7 @@ import org.matrix.android.sdk.internal.session.typing.DefaultTypingUsersTracker
 import org.matrix.android.sdk.internal.session.user.accountdata.DefaultSessionAccountDataService
 import org.matrix.android.sdk.internal.session.widgets.DefaultWidgetURLFormatter
 import org.matrix.android.sdk.internal.util.md5
+import org.matrix.client.MatrixAuthenticatedClient
 import retrofit2.Retrofit
 import java.io.File
 import javax.inject.Provider
@@ -262,6 +264,20 @@ internal abstract class SessionModule {
                              retrofitFactory: RetrofitFactory): Retrofit {
             return retrofitFactory
                     .create(okHttpClient, sessionParams.homeServerConnectionConfig.homeServerUriBase.toString())
+        }
+
+        @JvmStatic
+        @Provides
+        @SessionScope
+        fun providesAuthenticatedMatrixClient(@UnauthenticatedWithCertificate okHttpClient: OkHttpClient,
+                                              @Authenticated accessTokenProvider: AccessTokenProvider,
+                                              sessionParams: SessionParams): MatrixAuthenticatedClient {
+            return MatrixAuthenticatedClient(
+                    okHttpClient = okHttpClient,
+                    moshi = MoshiProvider.providesMoshi(),
+                    baseUrl = sessionParams.homeServerConnectionConfig.homeServerUriBase.toString(),
+                    accessTokenProvider = accessTokenProvider::getToken
+            )
         }
 
         @JvmStatic
