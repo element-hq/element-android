@@ -1,0 +1,4 @@
+- Fix crash on opening rooms on Android 5
+- Fix reaction color for non-emojis on dark theme
+- Make composer notification (not allowing to send messages) more compact
+- More UI and crash fixes
