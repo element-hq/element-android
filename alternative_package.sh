@@ -103,13 +103,19 @@ sed -i "s|SchildiChat|$name_replace|g" `find "$fastlane_dir/metadata/android" -n
 
 
 if [ "$package_add" = "testing.foss" ]; then
-    find "$fastlane_dir" -name full_description.txt -exec cp "$fastlane_dir/../fastlane_testing/foss_full_description.txt" '{}' \;
-    find "$fastlane_dir" -name short_description.txt -exec cp "$fastlane_dir/../fastlane_testing/foss_short_description.txt" '{}' \;
+    find "$fastlane_dir" -name full_description.txt -exec cp "$fastlane_dir/../fastlane_alternatives/testing_foss_full_description.txt" '{}' \;
+    find "$fastlane_dir" -name short_description.txt -exec cp "$fastlane_dir/../fastlane_alternatives/testing_foss_short_description.txt" '{}' \;
     logo_beta
 elif [ "$package_add" = "testing.fcm" ]; then
-    find "$fastlane_dir" -name full_description.txt -exec cp "$fastlane_dir/../fastlane_testing/fcm_full_description.txt" '{}' \;
-    find "$fastlane_dir" -name short_description.txt -exec cp "$fastlane_dir/../fastlane_testing/fcm_short_description.txt" '{}' \;
+    find "$fastlane_dir" -name full_description.txt -exec cp "$fastlane_dir/../fastlane_alternatives/testing_fcm_full_description.txt" '{}' \;
+    find "$fastlane_dir" -name short_description.txt -exec cp "$fastlane_dir/../fastlane_alternatives/testing_fcm_short_description.txt" '{}' \;
     logo_beta
+elif [ "$package_add" = "foss" ]; then
+    find "$fastlane_dir" -name full_description.txt -exec cp "$fastlane_dir/../fastlane_alternatives/foss_full_description.txt" '{}' \;
+    find "$fastlane_dir" -name short_description.txt -exec cp "$fastlane_dir/../fastlane_alternatives/foss_short_description.txt" '{}' \;
+elif [ "$package_add" = "fcm" ]; then
+    find "$fastlane_dir" -name full_description.txt -exec cp "$fastlane_dir/../fastlane_alternatives/fcm_full_description.txt" '{}' \;
+    find "$fastlane_dir" -name short_description.txt -exec cp "$fastlane_dir/../fastlane_alternatives/fcm_short_description.txt" '{}' \;
 fi
 
 git add -A

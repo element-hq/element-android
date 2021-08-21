@@ -1,0 +1,1 @@
+FOSS variant of SchildiChat without proprietary push notifications
