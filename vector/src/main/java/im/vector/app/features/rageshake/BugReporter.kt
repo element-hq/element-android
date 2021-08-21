@@ -21,6 +21,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.os.Build
+import android.text.TextUtils
 import android.view.View
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
@@ -29,6 +30,7 @@ import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.extensions.getAllChildFragments
 import im.vector.app.core.extensions.toOnOff
+import im.vector.app.core.pushers.UPHelper
 import im.vector.app.features.settings.VectorLocale
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.devtools.GossipingEventsSerializer
@@ -55,6 +57,7 @@ import java.io.File
 import java.io.IOException
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
+import java.net.URL
 import java.util.Locale
 import java.util.zip.GZIPOutputStream
 import javax.inject.Inject
@@ -276,6 +279,13 @@ class BugReporter @Inject constructor(
                             .addFormDataPart("theme", ThemeUtils.getApplicationTheme(context))
                             .addFormDataPart("server_version", serverVersion)
 
+                    // UnifiedPush
+                    // Only include the UP endpoint base url to exclude private user tokens in the path or parameters
+                    builder.addFormDataPart("unifiedpush_endpoint", strippedUrl(UPHelper.getUpEndpoint(context)).toString())
+                            .addFormDataPart("unifiedpush_gateway", UPHelper.getPushGateway(context))
+                            .addFormDataPart("unifiedpush_distributor_exists", UPHelper.distributorExists(context).toString())
+                            .addFormDataPart("unifiedpush_is_embedded_distributor", UPHelper.isEmbeddedDistributor(context).toString())
+
                     val buildNumber = context.getString(R.string.build_number)
                     if (buildNumber.isNotEmpty() && buildNumber != "0") {
                         builder.addFormDataPart("build_number", buildNumber)
@@ -451,6 +461,16 @@ class BugReporter @Inject constructor(
                     }
                 }
             }
+        }
+    }
+
+    fun strippedUrl(url: String?): String? {
+        if (TextUtils.isEmpty(url)) return null
+        return try {
+            val parsed = URL(url)
+            "${parsed.protocol}://${parsed.host}"
+        } catch (e: Exception) {
+            "Malformed url"
         }
     }
 
