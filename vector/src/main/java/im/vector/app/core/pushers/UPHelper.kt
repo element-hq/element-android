@@ -26,6 +26,7 @@ import im.vector.app.push.fcm.FcmHelper
 import org.unifiedpush.android.connector.Registration
 import timber.log.Timber
 import java.net.URI
+import java.net.URL
 
 /**
  * This class store the UnifiedPush Endpoint in SharedPrefs and ensure this token is retrieved.
@@ -176,5 +177,17 @@ object UPHelper {
     fun isEmbeddedDistributor(context: Context) : Boolean {
         val up = Registration()
         return up.getDistributor(context) == context.packageName
+    }
+
+    fun getPrivacyFriendlyUpEndpoint(context: Context): String? {
+        val endpoint = getUpEndpoint(context)
+        if (endpoint.isNullOrEmpty()) return endpoint
+        return try {
+            val parsed = URL(endpoint)
+            "${parsed.protocol}://${parsed.host}"
+        } catch (e: Exception) {
+            Timber.e("Error parsing unifiedpush endpoint: $e")
+            null
+        }
     }
 }

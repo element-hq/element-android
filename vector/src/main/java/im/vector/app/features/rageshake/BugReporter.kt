@@ -21,7 +21,6 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.os.Build
-import android.text.TextUtils
 import android.view.View
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
@@ -57,7 +56,6 @@ import java.io.File
 import java.io.IOException
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
-import java.net.URL
 import java.util.Locale
 import java.util.zip.GZIPOutputStream
 import javax.inject.Inject
@@ -281,7 +279,7 @@ class BugReporter @Inject constructor(
 
                     // UnifiedPush
                     // Only include the UP endpoint base url to exclude private user tokens in the path or parameters
-                    builder.addFormDataPart("unifiedpush_endpoint", strippedUrl(UPHelper.getUpEndpoint(context)).toString())
+                    builder.addFormDataPart("unifiedpush_endpoint", UPHelper.getPrivacyFriendlyUpEndpoint(context).toString())
                             .addFormDataPart("unifiedpush_gateway", UPHelper.getPushGateway(context))
                             .addFormDataPart("unifiedpush_distributor_exists", UPHelper.distributorExists(context).toString())
                             .addFormDataPart("unifiedpush_is_embedded_distributor", UPHelper.isEmbeddedDistributor(context).toString())
@@ -461,16 +459,6 @@ class BugReporter @Inject constructor(
                     }
                 }
             }
-        }
-    }
-
-    fun strippedUrl(url: String?): String? {
-        if (TextUtils.isEmpty(url)) return null
-        return try {
-            val parsed = URL(url)
-            "${parsed.protocol}://${parsed.host}"
-        } catch (e: Exception) {
-            "Malformed url"
         }
     }
 

@@ -33,7 +33,8 @@ class TestNewEndpoint @Inject constructor(private val context: AppCompatActivity
     override fun perform(activityResultLauncher: ActivityResultLauncher<Intent>) {
         status = TestStatus.RUNNING
 
-        val endpoint = UPHelper.getUpEndpoint(context)
+        // Troubleshooters might send a screenshot of this, so use endpoint without token information
+        val endpoint = UPHelper.getPrivacyFriendlyUpEndpoint(context)
 
         if (UPHelper.isEmbeddedDistributor(context)) {
             if (!endpoint.isNullOrEmpty()) {
