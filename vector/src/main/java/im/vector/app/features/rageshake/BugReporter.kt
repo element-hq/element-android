@@ -332,6 +332,13 @@ class BugReporter @Inject constructor(
                     if (canContact) {
                         builder.addFormDataPart("label", "can contact")
                     }
+                    if (UPHelper.isEmbeddedDistributor(context)) {
+                        builder.addFormDataPart("label", "unifiedpush:fcm")
+                    } else if (UPHelper.hasEndpoint(context)) {
+                        builder.addFormDataPart("label", "unifiedpush:custom")
+                    } else {
+                        builder.addFormDataPart("label", "unifiedpush:none")
+                    }
 
                     // Special for Element
                     //builder.addFormDataPart("label", "[SchildiChat]")
