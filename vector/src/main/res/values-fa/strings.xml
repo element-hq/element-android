@@ -534,7 +534,7 @@
     <string name="room_sliding_menu_third_party_notices">تذکّرهای سوم‌شخص</string>
     <string name="room_sliding_menu_copyright">حق رونوشت</string>
     <string name="room_sliding_menu_privacy_policy">سیاست محرمانگی</string>
-    <string name="settings_profile_picture">عکس پروفایل</string>
+    <string name="settings_profile_picture">عکس نمایه</string>
     <string name="settings_display_name">نام نمایشی</string>
     <string name="settings_email_address">رایانامه</string>
     <string name="settings_add_email_address">افزودن نشانی رایانامه</string>
@@ -1156,7 +1156,7 @@
     <string name="room_widget_open_in_browser">گشودن در مرورگر</string>
     <string name="room_widget_revoke_access">ابطال دسترسی من</string>
     <string name="room_widget_permission_display_name">نام نمایشیتان</string>
-    <string name="room_widget_permission_avatar_url">نشانی اینترنتی آواتارتان</string>
+    <string name="room_widget_permission_avatar_url">نشانی اینترنتی چهرکتان</string>
     <string name="room_widget_permission_user_id">شناسهٔ کاربریتان</string>
     <string name="room_widget_permission_widget_id">شناسهٔ ابزارک</string>
     <string name="room_widget_permission_room_id">شناسهٔ اتاق</string>
@@ -1695,11 +1695,11 @@
     <string name="template_startup_notification_privacy_message">المنت می تواند در پس‌زمینه اجرا شده تا آگاهی‌هایتان را به صورت ایمن و محرمانه مدیریت کند. ممکن است بر مصرف باتری تأثیر بگذارد.</string>
     <string name="reset_secure_backup_warning">این کار کلید امنیتی قبلی شما را حذف می‌کند.</string>
     <string name="reset_secure_backup_title">یک کلید امنیتی جدید به صورت تصادفی ایجاد کنید یا یک عبارت امنیتی جدید برای فایل‌های پشتیبان موجود خود تنظیم کنید.</string>
-    <string name="settings_send_message_with_enter_summary">فشردن اینتر به جای رفتن به خط بعد، پیام را ارسال خواهد کرد</string>
-    <string name="settings_send_message_with_enter">ارسال با فشردن اینتر</string>
+    <string name="settings_send_message_with_enter_summary">دکمهٔ ورود صفحه‌کلید نرم، به جای افزودن یک شکست خط، پیام را خواهد فرستاد</string>
+    <string name="settings_send_message_with_enter">ارسال با فشردن ورود</string>
     <string name="settings_preview_media_before_sending">پیش‌نمایش محتوای چندرسانه‌ای قبل از ارسال</string>
     <string name="settings_vibrate_on_mention">لرزیدن گوشی در هنگام ذکر یک کاربر</string>
-    <string name="settings_show_avatar_display_name_changes_messages_summary">شامل مواردی مانند تغییر نام و تصویر پروفایل می‌شود.</string>
+    <string name="settings_show_avatar_display_name_changes_messages_summary">شامل تغییرات نام نمایشی و چهرک.</string>
     <string name="settings_show_avatar_display_name_changes_messages">نمایش پیام‌های مربوط به حساب کاربری</string>
     <string name="settings_show_join_leave_messages_summary">دعوت‌ها و حذف توسط مدیر به هر صورت نمایش داده می‌شوند.</string>
     <string name="settings_show_join_leave_messages">نمایش پیام‌های پیوستن و ترک اتاق</string>
@@ -2838,7 +2838,7 @@
     <string name="a11y_public_space">این فضا عمومی است</string>
     <string name="spaces_feeling_experimental_subspace">حس آزمایش دارید؟
 \nمی‌توانید فضاهای موجود را به فضایی بیفزایید.</string>
-    <string name="labs_space_show_orphan_in_home">فضای آزمایشی - فقط نمایش یتسم‌ها در خانه</string>
+    <string name="labs_space_show_orphan_in_home">فضای آزمایشی - فقط نمایش یتیم‌ها در خانه</string>
     <string name="call_transfer_consulting_with">مشاوره با %1$s</string>
     <string name="voice_message_reply_content">پیام صوتی (%1$s)</string>
     <string name="error_voice_message_cannot_reply_or_edit">نمی‌توان هنگام فعّال بودن پیام صوتی، پاسخ داد یا ویراست</string>
