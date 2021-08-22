@@ -29,7 +29,7 @@
         <item name="colorSecondary">?android:colorAccent</item>
         <item name="colorSurface">@color/background_sc_light</item>
         <item name="colorOnSurface">@color/text_color_primary_sc_light</item>
-        <item name="colorError">@color/element_alert_dark</item>
+        <item name="colorError">@color/element_alert_light</item>
         <!-- Default color for text View -->
         <item name="android:textColorTertiary">@color/text_color_primary_sc_light</item>
         <item name="android:textColorLink">@color/element_link_light</item>
