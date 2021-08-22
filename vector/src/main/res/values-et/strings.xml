@@ -2890,4 +2890,7 @@
     <string name="settings_notification_other">Muud</string>
     <string name="settings_notification_mentions_and_keywords">Mainimised ja võtmesõnad</string>
     <string name="settings_notification_default">Vaikimisi teaveitused</string>
+    <string name="allow_anyone_in_room_to_access">Kõik %s kogukonna liikmed saavad antud jututuba leida ja sellega liituda. Sa võid lisada ka teisi kogukondi.</string>
+    <string name="upgrade_room_for_restricted_no_param">Kõik hõlmava kogukonna liikmed saavad antud jututuba leida ja sellega liituda - sa ei pea kedagi ükshaaval kutsuma. Neid jututoa seadistusi saad igal hetkel muuta.</string>
+    <string name="upgrade_room_for_restricted">Kõik %s jututoa liikmed saavad antud jututuba leida ja sellega liituda - sa ei pea kedagi ükshaaval kutsuma. Neid jututoa seadistusi saad igal hetkel muuta.</string>
 </resources>
