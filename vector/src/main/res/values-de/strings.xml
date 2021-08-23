@@ -923,7 +923,7 @@
     <string name="start_voice_call_prompt_msg">Sicher, dass du einen Sprachanruf starten möchtest\?</string>
     <string name="start_video_call_prompt_msg">Sicher, dass du einen Videoanruf starten möchtest\?</string>
     <string name="groups_list">Gruppenliste</string>
-    <string name="room_participants_ban_prompt_msg">Ein Bann führt zu einem Ausschluss eines Nutzers von diesem Raum und verhindert einen erneuten Beitritt.</string>
+    <string name="room_participants_ban_prompt_msg">Ein Bann schließt die Person aus dem Raum aus und verhindert einen erneuten Beitritt.</string>
     <string name="room_settings_all_messages_noisy">Alle Nachrichten (laut)</string>
     <string name="room_settings_all_messages">Alle Nachrichten</string>
     <string name="room_settings_mention_only">Nur Erwähnungen</string>
