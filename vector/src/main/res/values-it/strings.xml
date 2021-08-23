@@ -1742,13 +1742,13 @@
     <string name="room_join_rules_public">%1$s ha reso la stanza pubblica. Ora è raggiungibile da chiunque ne conosca l\'indirizzo.</string>
     <string name="room_join_rules_invite">%1$s ha reso la stanza accessibile solo su invito.</string>
     <string name="timeline_unread_messages">Messaggi non letti</string>
-    <string name="login_splash_title">Le -tue- conversazioni appartengono solo a te.</string>
+    <string name="login_splash_title">Le tue conversazioni appartengono solo a te.</string>
     <string name="login_splash_text1">Scambia messaggi diretti o nei gruppi</string>
     <string name="login_splash_text2">Rendi sicure le tue conversazioni grazie alla crittografia</string>
     <string name="login_splash_text3">Estendi e personalizza la tua esperienza</string>
     <string name="login_splash_submit">Inizia</string>
     <string name="login_server_title">Seleziona un server</string>
-    <string name="login_server_text">Proprio come le email: puoi fare un account dove preferisci e interagire con tutti</string>
+    <string name="login_server_text">Proprio come con le email, puoi creare un account dove preferisci e interagire con chiunque</string>
     <string name="login_server_matrix_org_text">Unisciti gratuitamente a milioni di utenti sul più grande server pubblico</string>
     <string name="login_server_modular_text">Hosting premium per organizzazioni</string>
     <string name="login_server_modular_learn_more">Maggiori info</string>
