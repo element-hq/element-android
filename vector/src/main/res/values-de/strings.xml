@@ -2949,4 +2949,5 @@
     <string name="denied_permission_generic">Für diese Aktion fehlen einige Berechtigungen, bitte erlaube diese in den Systemeinstellungen.</string>
     <string name="voice_message_slide_to_cancel">Wische zum Abbrechen</string>
     <string name="spaces_which_can_access">Spaces mit Zugriff auf</string>
+    <string name="allow_space_member_to_find_and_access">Erlaube Spaces Mitgliedern das Auffinden und den Zugriff.</string>
 </resources>
