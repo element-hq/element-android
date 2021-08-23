@@ -540,6 +540,7 @@ class NotificationUtils @Inject constructor(private val context: Context,
 
         val channelID = if (roomInfo.shouldBing) NOISY_NOTIFICATION_CHANNEL_ID else SILENT_NOTIFICATION_CHANNEL_ID
         return NotificationCompat.Builder(context, channelID)
+                .setOnlyAlertOnce(true)
                 .setWhen(lastMessageTimestamp)
                 // MESSAGING_STYLE sets title and content for API 16 and above devices.
                 .setStyle(messageStyle)
@@ -641,6 +642,7 @@ class NotificationUtils @Inject constructor(private val context: Context,
         val channelID = if (inviteNotifiableEvent.noisy) NOISY_NOTIFICATION_CHANNEL_ID else SILENT_NOTIFICATION_CHANNEL_ID
 
         return NotificationCompat.Builder(context, channelID)
+                .setOnlyAlertOnce(true)
                 .setContentTitle(stringProvider.getString(R.string.app_name))
                 .setContentText(inviteNotifiableEvent.description)
                 .setGroup(stringProvider.getString(R.string.app_name))
@@ -704,6 +706,7 @@ class NotificationUtils @Inject constructor(private val context: Context,
         val channelID = if (simpleNotifiableEvent.noisy) NOISY_NOTIFICATION_CHANNEL_ID else SILENT_NOTIFICATION_CHANNEL_ID
 
         return NotificationCompat.Builder(context, channelID)
+                .setOnlyAlertOnce(true)
                 .setContentTitle(stringProvider.getString(R.string.app_name))
                 .setContentText(simpleNotifiableEvent.description)
                 .setGroup(stringProvider.getString(R.string.app_name))
