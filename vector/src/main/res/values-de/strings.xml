@@ -2572,7 +2572,7 @@
     <string name="create_room_disable_federation_title">Begrenze Zugang zu diesem Raum (für immer!) auf Mitglieder von %s</string>
     <string name="attachment_viewer_item_x_of_y">%1$d von %2$d</string>
     <string name="a11y_create_direct_message_by_qr_code">QR-Code scannen, um eine neue Direktnachricht schicken</string>
-    <string name="identity_server_consent_dialog_content">Um bestehende Kontakte zu finden, ist es notwendig, deine Kontaktdaten (Telefonnummern und/oder E-Mails) mit dem ausgewählten Identitätsserver (%1$s) zu teilen.
+    <string name="identity_server_consent_dialog_content">Um bestehende Kontakte zu finden, musst du deine Kontaktdaten (Telefonnummern und/oder E-Mails) mit dem ausgewählten Identitätsserver (%1$s) zu teilen.
 \n
 \nFür mehr Datenschutz werden die gesendeten Daten vor dem Versenden gehasht.</string>
     <string name="room_preview_no_preview_join">Keine Vorschau für diesen Raum verfügbar. Willst du direkt beitreten\?</string>
@@ -2949,5 +2949,9 @@
     <string name="denied_permission_generic">Für diese Aktion fehlen einige Berechtigungen, bitte erlaube diese in den Systemeinstellungen.</string>
     <string name="voice_message_slide_to_cancel">Wische zum Abbrechen</string>
     <string name="spaces_which_can_access">Spaces mit Zugriff auf</string>
-    <string name="allow_space_member_to_find_and_access">Erlaube Spaces Mitgliedern das Auffinden und den Zugriff.</string>
+    <string name="allow_space_member_to_find_and_access">Space-Mitgliedern Auffinden und Zugriff erlauben.</string>
+    <string name="upgrade_room_for_restricted_no_param">Alle im übergeordneten Space haben Zugriff auf den Raum - es ist nicht nötig jeden einzeln einzuladen. Du kannst dies in den Raumeinstellungen jederzeit ändern.</string>
+    <string name="allow_anyone_in_room_to_access">Allen in %s Zugriff erlauben. Du auch mehrere Spaces auswählen.</string>
+    <string name="other_spaces_or_rooms_you_might_not_know">Andere Spaces oder Räume die du kennst</string>
+    <string name="space_you_know_that_contains_this_room">Spaces mit diesem Raum und dir als Mitglied</string>
 </resources>
