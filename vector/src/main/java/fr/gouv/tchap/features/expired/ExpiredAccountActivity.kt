@@ -51,7 +51,7 @@ class ExpiredAccountActivity : VectorBaseActivity<ActivityTchapExpiredBinding>()
     override fun initUiAndData() {
         with(views) {
             resumeButton.debouncedClicks {
-                MainActivity.restartApp(this@ExpiredAccountActivity, MainActivityArgs())
+                MainActivity.restartApp(this@ExpiredAccountActivity, MainActivityArgs(clearCache = true))
             }
             renewalEmailButton.debouncedClicks {
                 viewModel.handle(ExpiredAccountAction.RequestSendingRenewalEmail)
