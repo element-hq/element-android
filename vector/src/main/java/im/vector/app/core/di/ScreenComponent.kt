@@ -21,6 +21,7 @@ import androidx.fragment.app.FragmentFactory
 import androidx.lifecycle.ViewModelProvider
 import dagger.BindsInstance
 import dagger.Component
+import fr.gouv.tchap.features.expired.ExpiredAccountActivity
 import fr.gouv.tchap.features.login.TchapLoginActivity
 import im.vector.app.core.dialogs.UnrecognizedCertificateDialog
 import im.vector.app.core.error.ErrorFormatter
@@ -171,6 +172,7 @@ interface ScreenComponent {
     fun inject(activity: SpaceCreationActivity)
     fun inject(activity: SpaceExploreActivity)
     fun inject(activity: SpaceManageActivity)
+    fun inject(activity: ExpiredAccountActivity)
 
     /* ==========================================================================================
      * BottomSheets

@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.session
 
 import dagger.BindsInstance
 import dagger.Component
+import fr.gouv.tchap.android.sdk.internal.auth.TchapAccountValidityModule
 import fr.gouv.tchap.android.sdk.internal.session.users.TchapUsersInfoModule
 import org.matrix.android.sdk.api.auth.data.SessionParams
 import org.matrix.android.sdk.api.session.Session
@@ -97,7 +98,8 @@ import org.matrix.android.sdk.internal.util.system.SystemModule
             SearchModule::class,
             ThirdPartyModule::class,
             SpaceModule::class,
-            TchapUsersInfoModule::class
+            TchapUsersInfoModule::class,
+            TchapAccountValidityModule::class
         ]
 )
 @SessionScope

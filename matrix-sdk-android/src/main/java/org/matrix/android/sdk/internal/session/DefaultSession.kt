@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.session
 
 import androidx.annotation.MainThread
 import dagger.Lazy
+import fr.gouv.tchap.android.sdk.api.auth.AccountValidityService
 import fr.gouv.tchap.android.sdk.api.session.userinfo.UsersInfoService
 import io.realm.RealmConfiguration
 import kotlinx.coroutines.NonCancellable
@@ -129,6 +130,7 @@ internal class DefaultSession @Inject constructor(
         private val spaceService: Lazy<SpaceService>,
         private val openIdService: Lazy<OpenIdService>,
         private val usersInfoService: Lazy<UsersInfoService>,
+        private val accountValidityService: Lazy<AccountValidityService>,
         @UnauthenticatedWithCertificate
         private val unauthenticatedWithCertificateOkHttpClient: Lazy<OkHttpClient>
 ) : Session,
@@ -297,6 +299,8 @@ internal class DefaultSession @Inject constructor(
     override fun accountDataService(): SessionAccountDataService = accountDataService.get()
 
     override fun usersInfoService(): UsersInfoService = usersInfoService.get()
+
+    override fun accountValidityService(): AccountValidityService = accountValidityService.get()
 
     override fun getOkHttpClient(): OkHttpClient {
         return unauthenticatedWithCertificateOkHttpClient.get()

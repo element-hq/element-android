@@ -20,19 +20,30 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import im.vector.app.R
+import im.vector.app.core.di.ActiveSessionHolder
+import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityTchapExpiredBinding
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
+import kotlinx.coroutines.launch
 import timber.log.Timber
+import javax.inject.Inject
 
 /**
  * In this screen, the user is viewing a message informing that his account has expired.
  */
 class ExpiredAccountActivity : VectorBaseActivity<ActivityTchapExpiredBinding>() {
 
+    @Inject internal lateinit var sessionHolder: ActiveSessionHolder
+
     override fun getBinding() = ActivityTchapExpiredBinding.inflate(layoutInflater)
+
+    override fun injectWith(injector: ScreenComponent) {
+        injector.inject(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,6 +57,7 @@ class ExpiredAccountActivity : VectorBaseActivity<ActivityTchapExpiredBinding>()
                 MainActivity.restartApp(this@ExpiredAccountActivity, MainActivityArgs())
             }
             renewalEmailButton.setOnClickListener {
+                lifecycleScope.launch { sessionHolder.getSafeActiveSession()?.accountValidityService()?.requestRenewalEmail() }
                 titleView.setText(R.string.tchap_expired_account_on_new_sent_email_msg)
                 renewalEmailButton.isVisible = false
             }

@@ -18,6 +18,7 @@ package org.matrix.android.sdk.api.session
 
 import androidx.annotation.MainThread
 import androidx.lifecycle.LiveData
+import fr.gouv.tchap.android.sdk.api.auth.AccountValidityService
 import fr.gouv.tchap.android.sdk.api.session.userinfo.UsersInfoService
 import okhttp3.OkHttpClient
 import org.matrix.android.sdk.api.auth.data.SessionParams
@@ -248,6 +249,11 @@ interface Session :
      * Returns the users info service associated with the session
      */
     fun usersInfoService(): UsersInfoService
+
+    /**
+     * Returns the account validity service associated with the session
+     */
+    fun accountValidityService(): AccountValidityService
 
     /**
      * Add a listener to the session.
