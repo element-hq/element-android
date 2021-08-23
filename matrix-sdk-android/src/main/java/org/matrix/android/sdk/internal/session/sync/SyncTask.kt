@@ -41,7 +41,7 @@ import java.io.File
 import java.net.SocketTimeoutException
 import javax.inject.Inject
 
-internal interface SyncTask : Task<SyncTask.Params, Unit> {
+internal interface SyncTask : Task<SyncTask.Params, SyncResponse> {
 
     data class Params(
             val timeout: Long,
@@ -69,13 +69,13 @@ internal class DefaultSyncTask @Inject constructor(
     private val workingDir = File(fileDirectory, "is")
     private val initialSyncStatusRepository: InitialSyncStatusRepository = FileInitialSyncStatusRepository(workingDir)
 
-    override suspend fun execute(params: SyncTask.Params) {
-        syncTaskSequencer.post {
+    override suspend fun execute(params: SyncTask.Params) : SyncResponse {
+        return syncTaskSequencer.post {
             doSync(params)
         }
     }
 
-    private suspend fun doSync(params: SyncTask.Params) {
+    private suspend fun doSync(params: SyncTask.Params): SyncResponse {
         Timber.v("Sync task started on Thread: ${Thread.currentThread().name}")
 
         val requestParams = HashMap<String, String>()
@@ -100,6 +100,7 @@ internal class DefaultSyncTask @Inject constructor(
 
         val readTimeOut = (params.timeout + TIMEOUT_MARGIN).coerceAtLeast(TimeOutInterceptor.DEFAULT_LONG_TIMEOUT)
 
+        var syncResponseToReturn: SyncResponse? = null
         if (isInitialSync) {
             Timber.d("INIT_SYNC with filter: ${requestParams["filter"]}")
             val initSyncStrategy = initialSyncStrategy
@@ -108,7 +109,7 @@ internal class DefaultSyncTask @Inject constructor(
                     roomSyncEphemeralTemporaryStore.reset()
                     workingDir.mkdirs()
                     val file = downloadInitSyncResponse(requestParams)
-                    reportSubtask(initialSyncProgressService, InitSyncStep.ImportingAccount, 1, 0.7F) {
+                    syncResponseToReturn = reportSubtask(initialSyncProgressService, InitSyncStep.ImportingAccount, 1, 0.7F) {
                         handleSyncFile(file, initSyncStrategy)
                     }
                     // Delete all files
@@ -122,10 +123,10 @@ internal class DefaultSyncTask @Inject constructor(
                             )
                         }
                     }
-
                     logDuration("INIT_SYNC Database insertion") {
                         syncResponseHandler.handleResponse(syncResponse, token, initialSyncProgressService)
                     }
+                    syncResponseToReturn = syncResponse
                 }
             }
             initialSyncProgressService.endAll()
@@ -137,8 +138,11 @@ internal class DefaultSyncTask @Inject constructor(
                 )
             }
             syncResponseHandler.handleResponse(syncResponse, token, null)
+            syncResponseToReturn = syncResponse
         }
         Timber.v("Sync task finished on Thread: ${Thread.currentThread().name}")
+        // Should throw if null as it's a mandatory value.
+        return syncResponseToReturn!!
     }
 
     private suspend fun downloadInitSyncResponse(requestParams: Map<String, String>): File {
@@ -195,8 +199,8 @@ internal class DefaultSyncTask @Inject constructor(
         }
     }
 
-    private suspend fun handleSyncFile(workingFile: File, initSyncStrategy: InitialSyncStrategy.Optimized) {
-        logDuration("INIT_SYNC handleSyncFile()") {
+    private suspend fun handleSyncFile(workingFile: File, initSyncStrategy: InitialSyncStrategy.Optimized): SyncResponse {
+        return logDuration("INIT_SYNC handleSyncFile()") {
             val syncResponse = logDuration("INIT_SYNC Read file and parse") {
                 syncResponseParser.parse(initSyncStrategy, workingFile)
             }
@@ -210,6 +214,7 @@ internal class DefaultSyncTask @Inject constructor(
                 syncResponseHandler.handleResponse(syncResponse, null, initialSyncProgressService)
             }
             initialSyncStatusRepository.setStep(InitialSyncStatus.STEP_SUCCESS)
+            syncResponse
         }
     }
 

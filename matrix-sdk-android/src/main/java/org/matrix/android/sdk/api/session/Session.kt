@@ -18,6 +18,7 @@ package org.matrix.android.sdk.api.session
 
 import androidx.annotation.MainThread
 import androidx.lifecycle.LiveData
+import kotlinx.coroutines.flow.SharedFlow
 import okhttp3.OkHttpClient
 import org.matrix.android.sdk.api.auth.data.SessionParams
 import org.matrix.android.sdk.api.failure.GlobalError
@@ -57,6 +58,7 @@ import org.matrix.android.sdk.api.session.thirdparty.ThirdPartyService
 import org.matrix.android.sdk.api.session.typing.TypingUsersTracker
 import org.matrix.android.sdk.api.session.user.UserService
 import org.matrix.android.sdk.api.session.widgets.WidgetService
+import org.matrix.android.sdk.api.session.sync.model.SyncResponse
 
 /**
  * This interface defines interactions with a session.
@@ -142,6 +144,11 @@ interface Session :
      * @return the current [SyncState].
      */
     fun getSyncState(): SyncState
+
+    /**
+     * This method returns a flow of SyncResponse. New value will be pushed through the sync thread.
+     */
+    fun syncFlow(): SharedFlow<SyncResponse>
 
     /**
      * This methods return true if an initial sync has been processed
