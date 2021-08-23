@@ -29,7 +29,7 @@ import org.matrix.android.sdk.internal.database.query.getOrCreate
 import org.matrix.android.sdk.internal.session.room.read.FullyReadContent
 import org.matrix.android.sdk.internal.session.sync.RoomFullyReadHandler
 import org.matrix.android.sdk.internal.session.sync.RoomTagHandler
-import org.matrix.android.sdk.internal.session.sync.model.RoomSyncAccountData
+import org.matrix.android.sdk.api.session.sync.model.RoomSyncAccountData
 import javax.inject.Inject
 
 internal class RoomSyncAccountDataHandler @Inject constructor(private val roomTagHandler: RoomTagHandler,

@@ -13,14 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.matrix.android.sdk.internal.session.sync.model
+
+package org.matrix.android.sdk.api.session.sync.model
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 // RoomSync represents the response for a room during server sync v2.
 @JsonClass(generateAdapter = true)
-internal data class RoomSync(
+data class RoomSync(
         /**
          * The state updates for the room.
          */

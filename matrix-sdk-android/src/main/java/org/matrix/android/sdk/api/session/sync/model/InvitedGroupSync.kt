@@ -13,26 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.matrix.android.sdk.internal.session.sync.model
+
+package org.matrix.android.sdk.api.session.sync.model
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
-// RoomsSyncResponse represents the rooms list in server sync v2 response.
 @JsonClass(generateAdapter = true)
-internal data class RoomsSyncResponse(
+data class InvitedGroupSync(
         /**
-         * Joined rooms: keys are rooms ids.
+         * The identifier of the inviter.
          */
-        @Json(name = "join") val join: Map<String, RoomSync> = emptyMap(),
+        @Json(name = "inviter") val inviter: String? = null,
 
         /**
-         * Invitations. The rooms that the user has been invited to: keys are rooms ids.
+         * The group profile.
          */
-        @Json(name = "invite") val invite: Map<String, InvitedRoomSync> = emptyMap(),
-
-        /**
-         * Left rooms. The rooms that the user has left or been banned from: keys are rooms ids.
-         */
-        @Json(name = "leave") val leave: Map<String, RoomSync> = emptyMap()
+        @Json(name = "profile") val profile: GroupSyncProfile? = null
 )

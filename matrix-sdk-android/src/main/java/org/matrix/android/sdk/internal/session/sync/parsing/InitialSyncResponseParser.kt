@@ -21,7 +21,7 @@ import okio.buffer
 import okio.source
 import org.matrix.android.sdk.internal.session.sync.InitialSyncStrategy
 import org.matrix.android.sdk.internal.session.sync.RoomSyncEphemeralTemporaryStore
-import org.matrix.android.sdk.internal.session.sync.model.SyncResponse
+import org.matrix.android.sdk.api.session.sync.model.SyncResponse
 import timber.log.Timber
 import java.io.File
 import javax.inject.Inject

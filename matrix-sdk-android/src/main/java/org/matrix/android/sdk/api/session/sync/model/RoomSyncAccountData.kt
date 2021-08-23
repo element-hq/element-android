@@ -14,20 +14,16 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.session.sync.model
+package org.matrix.android.sdk.api.session.sync.model
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import org.matrix.android.sdk.api.session.events.model.Event
 
 @JsonClass(generateAdapter = true)
-internal data class GroupSyncProfile(
+data class RoomSyncAccountData(
         /**
-         * The name of the group, if any. May be nil.
+         * List of account data events (array of Event).
          */
-        @Json(name = "name") val name: String? = null,
-
-        /**
-         * The URL for the group's avatar. May be nil.
-         */
-        @Json(name = "avatar_url") val avatarUrl: String? = null
+        @Json(name = "events") val events: List<Event>? = null
 )

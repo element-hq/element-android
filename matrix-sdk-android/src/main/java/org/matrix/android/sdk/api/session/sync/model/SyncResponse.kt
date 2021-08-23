@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.session.sync.model
+package org.matrix.android.sdk.api.session.sync.model
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
@@ -22,7 +22,7 @@ import org.matrix.android.sdk.internal.session.sync.model.accountdata.UserAccoun
 
 // SyncResponse represents the request response for server sync v2.
 @JsonClass(generateAdapter = true)
-internal data class SyncResponse(
+data class SyncResponse(
         /**
          * The user private data.
          */

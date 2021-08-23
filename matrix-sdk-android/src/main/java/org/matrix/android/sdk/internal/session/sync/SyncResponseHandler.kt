@@ -30,9 +30,9 @@ import org.matrix.android.sdk.internal.session.group.GetGroupDataWorker
 import org.matrix.android.sdk.internal.session.initsync.ProgressReporter
 import org.matrix.android.sdk.internal.session.initsync.reportSubtask
 import org.matrix.android.sdk.internal.session.notification.ProcessEventForPushTask
-import org.matrix.android.sdk.internal.session.sync.model.GroupsSyncResponse
-import org.matrix.android.sdk.internal.session.sync.model.RoomsSyncResponse
-import org.matrix.android.sdk.internal.session.sync.model.SyncResponse
+import org.matrix.android.sdk.api.session.sync.model.GroupsSyncResponse
+import org.matrix.android.sdk.api.session.sync.model.RoomsSyncResponse
+import org.matrix.android.sdk.api.session.sync.model.SyncResponse
 import org.matrix.android.sdk.internal.util.awaitTransaction
 import org.matrix.android.sdk.internal.worker.WorkerParamsFactory
 import timber.log.Timber

@@ -14,12 +14,17 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.session.sync.model
+package org.matrix.android.sdk.api.session.sync.model
 
-import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
+/**
+ * This class describes the device list response from a sync request
+ */
 @JsonClass(generateAdapter = true)
-internal data class DeviceOneTimeKeysCountSyncResponse(
-        @Json(name = "signed_curve25519") val signedCurve25519: Int? = null
+data class DeviceListResponse(
+        // user ids list which have new crypto devices
+        val changed: List<String> = emptyList(),
+        //  List of user ids who are no more tracked.
+        val left: List<String> = emptyList()
 )

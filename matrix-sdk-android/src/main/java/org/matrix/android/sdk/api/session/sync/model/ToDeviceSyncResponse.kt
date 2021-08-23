@@ -14,20 +14,17 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.session.sync.model
+package org.matrix.android.sdk.api.session.sync.model
 
-import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import org.matrix.android.sdk.api.session.events.model.Event
 
+// ToDeviceSyncResponse represents the data directly sent to one of user's devices.
 @JsonClass(generateAdapter = true)
-internal data class InvitedGroupSync(
-        /**
-         * The identifier of the inviter.
-         */
-        @Json(name = "inviter") val inviter: String? = null,
+data class ToDeviceSyncResponse(
 
         /**
-         * The group profile.
+         * List of direct-to-device events.
          */
-        @Json(name = "profile") val profile: GroupSyncProfile? = null
+        val events: List<Event>? = null
 )

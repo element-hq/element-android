@@ -28,7 +28,8 @@ import org.matrix.android.sdk.internal.session.filter.FilterRepository
 import org.matrix.android.sdk.internal.session.homeserver.GetHomeServerCapabilitiesTask
 import org.matrix.android.sdk.internal.session.initsync.DefaultInitialSyncProgressService
 import org.matrix.android.sdk.internal.session.initsync.reportSubtask
-import org.matrix.android.sdk.internal.session.sync.model.LazyRoomSyncEphemeral
+import org.matrix.android.sdk.api.session.sync.model.LazyRoomSyncEphemeral
+import org.matrix.android.sdk.api.session.sync.model.SyncResponse
 import org.matrix.android.sdk.internal.session.sync.parsing.InitialSyncResponseParser
 import org.matrix.android.sdk.internal.session.user.UserStore
 import org.matrix.android.sdk.internal.task.Task

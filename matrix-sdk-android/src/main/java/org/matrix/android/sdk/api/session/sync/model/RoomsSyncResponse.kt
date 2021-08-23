@@ -14,18 +14,26 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.session.sync.model
+package org.matrix.android.sdk.api.session.sync.model
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import org.matrix.android.sdk.api.session.events.model.Event
 
-// RoomSyncState represents the state updates for a room during server sync v2.
+// RoomsSyncResponse represents the rooms list in server sync v2 response.
 @JsonClass(generateAdapter = true)
-internal data class RoomSyncState(
+data class RoomsSyncResponse(
+        /**
+         * Joined rooms: keys are rooms ids.
+         */
+        @Json(name = "join") val join: Map<String, RoomSync> = emptyMap(),
 
         /**
-         * List of state events (array of Event). The resulting state corresponds to the *start* of the timeline.
+         * Invitations. The rooms that the user has been invited to: keys are rooms ids.
          */
-        @Json(name = "events") val events: List<Event>? = null
+        @Json(name = "invite") val invite: Map<String, InvitedRoomSync> = emptyMap(),
+
+        /**
+         * Left rooms. The rooms that the user has left or been banned from: keys are rooms ids.
+         */
+        @Json(name = "leave") val leave: Map<String, RoomSync> = emptyMap()
 )

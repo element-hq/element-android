@@ -14,28 +14,17 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.session.sync.model
+package org.matrix.android.sdk.api.session.sync.model
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import org.matrix.android.sdk.api.session.events.model.Event
 
-/**
- * `MXRoomSyncUnreadNotifications` represents the unread counts for a room.
- */
+// RoomSyncEphemeral represents the ephemeral events in the room that aren't recorded in the timeline or state of the room (e.g. typing).
 @JsonClass(generateAdapter = true)
-internal data class RoomSyncUnreadNotifications(
+data class RoomSyncEphemeral(
         /**
-         * List of account data events (array of Event).
+         * List of ephemeral events (array of Event).
          */
-        @Json(name = "events") val events: List<Event>? = null,
-
-        /**
-         * The number of unread messages that match the push notification rules.
-         */
-        @Json(name = "notification_count") val notificationCount: Int? = null,
-
-        /**
-         * The number of highlighted unread messages (subset of notifications).
-         */
-        @Json(name = "highlight_count") val highlightCount: Int? = null)
+        @Json(name = "events") val events: List<Event>? = null
+)

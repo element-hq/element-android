@@ -61,8 +61,8 @@ import org.matrix.android.sdk.internal.session.room.accountdata.RoomAccountDataD
 import org.matrix.android.sdk.internal.session.room.membership.RoomDisplayNameResolver
 import org.matrix.android.sdk.internal.session.room.membership.RoomMemberHelper
 import org.matrix.android.sdk.internal.session.room.relationship.RoomChildRelationInfo
-import org.matrix.android.sdk.internal.session.sync.model.RoomSyncSummary
-import org.matrix.android.sdk.internal.session.sync.model.RoomSyncUnreadNotifications
+import org.matrix.android.sdk.api.session.sync.model.RoomSyncSummary
+import org.matrix.android.sdk.api.session.sync.model.RoomSyncUnreadNotifications
 import timber.log.Timber
 import javax.inject.Inject
 import kotlin.system.measureTimeMillis
