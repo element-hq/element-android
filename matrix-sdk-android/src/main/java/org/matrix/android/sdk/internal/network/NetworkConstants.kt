@@ -36,4 +36,7 @@ internal object NetworkConstants {
 
     // Integration
     const val URI_INTEGRATION_MANAGER_PATH = "_matrix/integrations/v1/"
+
+    // Federation
+    const val URI_FEDERATION_PATH = "_matrix/federation/v1/"
 }

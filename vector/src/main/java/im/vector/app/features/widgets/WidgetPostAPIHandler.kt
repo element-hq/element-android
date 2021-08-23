@@ -17,11 +17,12 @@
 package im.vector.app.features.widgets
 
 import android.text.TextUtils
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
+import dagger.assisted.AssistedFactory
 import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
-import kotlinx.coroutines.GlobalScope
+import im.vector.app.features.session.coroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.query.QueryStringValue
@@ -45,7 +46,7 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
                                                        private val stringProvider: StringProvider,
                                                        private val session: Session) : WidgetPostAPIMediator.Handler {
 
-    @AssistedInject.Factory
+    @AssistedFactory
     interface Factory {
         fun create(roomId: String): WidgetPostAPIHandler
     }
@@ -282,18 +283,20 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
                             "type" to "m.widget"
                     )
             )
-            session.updateAccountData(
-                    type = UserAccountDataTypes.TYPE_WIDGETS,
-                    content = addUserWidgetBody,
-                    callback = createWidgetAPICallback(widgetPostAPIMediator, eventData)
-            )
+            launchWidgetAPIAction(widgetPostAPIMediator, eventData) {
+                session.accountDataService().updateUserAccountData(
+                        type = UserAccountDataTypes.TYPE_WIDGETS,
+                        content = addUserWidgetBody
+                )
+            }
         } else {
-            session.widgetService().createRoomWidget(
-                    roomId = roomId,
-                    widgetId = widgetId,
-                    content = widgetEventContent,
-                    callback = createWidgetAPICallback(widgetPostAPIMediator, eventData)
-            )
+            launchWidgetAPIAction(widgetPostAPIMediator, eventData) {
+                session.widgetService().createRoomWidget(
+                        roomId = roomId,
+                        widgetId = widgetId,
+                        content = widgetEventContent
+                )
+            }
         }
     }
 
@@ -385,7 +388,9 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
         if (member != null && member.membership == Membership.JOIN) {
             widgetPostAPIMediator.sendSuccess(eventData)
         } else {
-            room.invite(userId = userId, callback = createWidgetAPICallback(widgetPostAPIMediator, eventData))
+            launchWidgetAPIAction(widgetPostAPIMediator, eventData) {
+                room.invite(userId = userId)
+            }
         }
     }
 
@@ -459,12 +464,9 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
         return false
     }
 
-    private fun createWidgetAPICallback(widgetPostAPIMediator: WidgetPostAPIMediator, eventData: JsonDict): WidgetAPICallback {
-        return WidgetAPICallback(widgetPostAPIMediator, eventData, stringProvider)
-    }
-
     private fun launchWidgetAPIAction(widgetPostAPIMediator: WidgetPostAPIMediator, eventData: JsonDict, block: suspend () -> Unit): Job {
-        return GlobalScope.launch {
+        // We should probably use a scope tight to the lifecycle here...
+        return session.coroutineScope.launch {
             kotlin.runCatching {
                 block()
             }.fold(

@@ -17,14 +17,17 @@
 package im.vector.app.features.roomprofile.settings
 
 import androidx.core.net.toFile
+import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
+import im.vector.app.features.settings.VectorPreferences
 import io.reactivex.Completable
 import io.reactivex.Observable
 import org.matrix.android.sdk.api.extensions.tryOrNull
@@ -32,6 +35,7 @@ import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
 import org.matrix.android.sdk.api.session.room.model.RoomAvatarContent
 import org.matrix.android.sdk.api.session.room.model.RoomGuestAccessContent
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibilityContent
@@ -42,10 +46,11 @@ import org.matrix.android.sdk.rx.rx
 import org.matrix.android.sdk.rx.unwrap
 
 class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: RoomSettingsViewState,
+                                                        private val vectorPreferences: VectorPreferences,
                                                         private val session: Session)
     : VectorViewModel<RoomSettingsViewState, RoomSettingsAction, RoomSettingsViewEvents>(initialState) {
 
-    @AssistedInject.Factory
+    @AssistedFactory
     interface Factory {
         fun create(initialState: RoomSettingsViewState): RoomSettingsViewModel
     }
@@ -54,8 +59,11 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: RoomSettingsViewState): RoomSettingsViewModel? {
-            val fragment: RoomSettingsFragment = (viewModelContext as FragmentViewModelContext).fragment()
-            return fragment.viewModelFactory.create(state)
+            val factory = when (viewModelContext) {
+                is FragmentViewModelContext -> viewModelContext.fragment as? Factory
+                is ActivityViewModelContext -> viewModelContext.activity as? Factory
+            }
+            return factory?.create(state) ?: error("You should let your activity/fragment implements Factory interface")
         }
     }
 
@@ -68,6 +76,24 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
         observeGuestAccess()
         observeRoomAvatar()
         observeState()
+
+        val homeServerCapabilities = session.getHomeServerCapabilities()
+        val canUseRestricted = homeServerCapabilities
+                .isFeatureSupported(HomeServerCapabilities.ROOM_CAP_RESTRICTED, room.getRoomVersion())
+
+        val restrictedSupport = homeServerCapabilities.isFeatureSupported(HomeServerCapabilities.ROOM_CAP_RESTRICTED)
+        val couldUpgradeToRestricted = when (restrictedSupport) {
+            HomeServerCapabilities.RoomCapabilitySupport.SUPPORTED          -> true
+            HomeServerCapabilities.RoomCapabilitySupport.SUPPORTED_UNSTABLE -> vectorPreferences.labsUseExperimentalRestricted()
+            else                                                            -> false
+        }
+
+        setState {
+            copy(
+                    supportsRestricted = canUseRestricted,
+                    canUpgradeToRestricted = couldUpgradeToRestricted
+            )
+        }
     }
 
     private fun observeState() {
@@ -122,7 +148,9 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
                             canChangeJoinRule = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true,
                                     EventType.STATE_ROOM_JOIN_RULES)
                                     && powerLevelsHelper.isUserAllowedToSend(session.myUserId, true,
-                                    EventType.STATE_ROOM_GUEST_ACCESS)
+                                    EventType.STATE_ROOM_GUEST_ACCESS),
+                            canAddChildren = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true,
+                                    EventType.STATE_SPACE_CHILD)
                     )
                     setState { copy(actionPermissions = permissions) }
                 }
@@ -142,7 +170,7 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
                 .disposeOnClear()
     }
 
-    private fun observeGuestAccess() {
+    private fun observeJoinRule() {
         room.rx()
                 .liveStateEvent(EventType.STATE_ROOM_JOIN_RULES, QueryStringValue.NoCondition)
                 .mapOptional { it.content.toModel<RoomJoinRulesContent>() }
@@ -155,7 +183,7 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
                 .disposeOnClear()
     }
 
-    private fun observeJoinRule() {
+    private fun observeGuestAccess() {
         room.rx()
                 .liveStateEvent(EventType.STATE_ROOM_GUEST_ACCESS, QueryStringValue.NoCondition)
                 .mapOptional { it.content.toModel<RoomGuestAccessContent>() }
@@ -189,6 +217,7 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
             is RoomSettingsAction.SetRoomTopic             -> setState { copy(newTopic = action.newTopic) }
             is RoomSettingsAction.SetRoomHistoryVisibility -> setState { copy(newHistoryVisibility = action.visibility) }
             is RoomSettingsAction.SetRoomJoinRule          -> handleSetRoomJoinRule(action)
+            is RoomSettingsAction.SetRoomGuestAccess       -> handleSetGuestAccess(action)
             is RoomSettingsAction.Save                     -> saveSettings()
             is RoomSettingsAction.Cancel                   -> cancel()
         }.exhaustive
@@ -197,8 +226,17 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
     private fun handleSetRoomJoinRule(action: RoomSettingsAction.SetRoomJoinRule) = withState { state ->
         setState {
             copy(newRoomJoinRules = RoomSettingsViewState.NewJoinRule(
-                    action.roomJoinRule.takeIf { it != state.currentRoomJoinRules },
-                    action.roomGuestAccess.takeIf { it != state.currentGuestAccess }
+                    newJoinRules = action.roomJoinRule.takeIf { it != state.currentRoomJoinRules },
+                    newGuestAccess = state.newRoomJoinRules.newGuestAccess.takeIf { it != state.currentGuestAccess }
+            ))
+        }
+    }
+
+    private fun handleSetGuestAccess(action: RoomSettingsAction.SetRoomGuestAccess) = withState { state ->
+        setState {
+            copy(newRoomJoinRules = RoomSettingsViewState.NewJoinRule(
+                    newJoinRules = state.newRoomJoinRules.newJoinRules.takeIf { it != state.currentRoomJoinRules },
+                    newGuestAccess = action.guestAccess.takeIf { it != state.currentGuestAccess }
             ))
         }
     }

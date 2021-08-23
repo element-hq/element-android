@@ -16,8 +16,6 @@
 package org.matrix.android.sdk.api.session.pushers
 
 import androidx.lifecycle.LiveData
-import org.matrix.android.sdk.api.MatrixCallback
-import org.matrix.android.sdk.api.util.Cancelable
 import java.util.UUID
 
 interface PushersService {
@@ -68,23 +66,23 @@ interface PushersService {
 
     /**
      * Directly ask the push gateway to send a push to this device
+     * If successful, the push gateway has accepted the request. In this case, the app should receive a Push with the provided eventId.
+     * In case of error, PusherRejected will be thrown. In this case it means that the pushkey is not valid.
+     *
      * @param url the push gateway url (full path)
      * @param appId the application id
      * @param pushkey the FCM token
      * @param eventId the eventId which will be sent in the Push message. Use a fake eventId.
-     * @param callback callback to know if the push gateway has accepted the request. In this case, the app should receive a Push with the provided eventId.
-     *                 In case of error, PusherRejected failure can happen. In this case it means that the pushkey is not valid.
      */
-    fun testPush(url: String,
-                 appId: String,
-                 pushkey: String,
-                 eventId: String,
-                 callback: MatrixCallback<Unit>): Cancelable
+    suspend fun testPush(url: String,
+                         appId: String,
+                         pushkey: String,
+                         eventId: String)
 
     /**
      * Remove the http pusher
      */
-    fun removeHttpPusher(pushkey: String, appId: String, callback: MatrixCallback<Unit>): Cancelable
+    suspend fun removeHttpPusher(pushkey: String, appId: String)
 
     /**
      * Get the current pushers, as a LiveData

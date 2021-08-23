@@ -31,8 +31,8 @@ import androidx.core.view.updateLayoutParams
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.extensions.setTextOrHide
-import im.vector.app.core.utils.DebouncedClickListener
 import im.vector.app.core.utils.tappableMatchingText
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.RoomDetailAction
@@ -92,8 +92,6 @@ abstract class MergedRoomCreationItem : BasedMergedItem<MergedRoomCreationItem.H
             holder.summaryView.visibility = View.GONE
             holder.encryptionTile.isGone = true
         }
-        // No read receipt for this item
-        holder.readReceiptsView.isVisible = false
     }
 
     private fun bindEncryptionTile(holder: Holder, data: Data?) {
@@ -174,28 +172,28 @@ abstract class MergedRoomCreationItem : BasedMergedItem<MergedRoomCreationItem.H
         holder.roomAvatarImageView.isVisible = roomItem != null
         if (roomItem != null) {
             attributes.avatarRenderer.render(roomItem, holder.roomAvatarImageView)
-            holder.roomAvatarImageView.setOnClickListener(DebouncedClickListener({ view ->
+            holder.roomAvatarImageView.onClick { view ->
                 if (shouldSetAvatar) {
                     attributes.callback?.onTimelineItemAction(RoomDetailAction.QuickActionSetAvatar)
                 } else {
                     // Note: this is no op if there is no avatar on the room
                     attributes.callback?.onTimelineItemAction(RoomDetailAction.ShowRoomAvatarFullScreen(roomItem, view))
                 }
-            }))
+            }
         }
 
         holder.setAvatarButton.isVisible = shouldSetAvatar
         if (shouldSetAvatar) {
-            holder.setAvatarButton.setOnClickListener(DebouncedClickListener({ _ ->
+            holder.setAvatarButton.onClick {
                 attributes.callback?.onTimelineItemAction(RoomDetailAction.QuickActionSetAvatar)
-            }))
+            }
         }
 
         holder.addPeopleButton.isVisible = !isDirect
         if (!isDirect) {
-            holder.addPeopleButton.setOnClickListener(DebouncedClickListener({ _ ->
+            holder.addPeopleButton.onClick {
                 attributes.callback?.onTimelineItemAction(RoomDetailAction.QuickActionInvitePeople)
-            }))
+            }
         }
     }
 
@@ -223,7 +221,6 @@ abstract class MergedRoomCreationItem : BasedMergedItem<MergedRoomCreationItem.H
             override val isCollapsed: Boolean,
             override val mergeData: List<Data>,
             override val avatarRenderer: AvatarRenderer,
-            override val readReceiptsCallback: TimelineEventController.ReadReceiptsCallback? = null,
             override val onCollapsedStateChanged: (Boolean) -> Unit,
             val callback: TimelineEventController.Callback? = null,
             val currentUserId: String,

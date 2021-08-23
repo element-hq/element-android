@@ -22,6 +22,8 @@ import io.realm.kotlin.createObject
 import kotlinx.coroutines.TimeoutCancellationException
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.send.SendState
+import org.matrix.android.sdk.internal.crypto.CryptoSessionInfoProvider
+import org.matrix.android.sdk.internal.crypto.DeviceListManager
 import org.matrix.android.sdk.internal.database.awaitNotEmptyResult
 import org.matrix.android.sdk.internal.database.mapper.toEntity
 import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntity
@@ -57,6 +59,8 @@ internal class DefaultLoadRoomMembersTask @Inject constructor(
         private val syncTokenStore: SyncTokenStore,
         private val roomSummaryUpdater: RoomSummaryUpdater,
         private val roomMemberEventHandler: RoomMemberEventHandler,
+        private val cryptoSessionInfoProvider: CryptoSessionInfoProvider,
+        private val deviceListManager: DeviceListManager,
         private val globalErrorReceiver: GlobalErrorReceiver
 ) : LoadRoomMembersTask {
 
@@ -86,8 +90,8 @@ internal class DefaultLoadRoomMembersTask @Inject constructor(
 
         val lastToken = syncTokenStore.getLastToken()
         val response = try {
-            executeRequest<RoomMembersResponse>(globalErrorReceiver) {
-                apiCall = roomAPI.getMembers(params.roomId, lastToken, null, params.excludeMembership?.value)
+            executeRequest(globalErrorReceiver) {
+                roomAPI.getMembers(params.roomId, lastToken, null, params.excludeMembership)
             }
         } catch (throwable: Throwable) {
             // Revert status to NONE
@@ -105,12 +109,17 @@ internal class DefaultLoadRoomMembersTask @Inject constructor(
                     ?: realm.createObject(roomId)
             val now = System.currentTimeMillis()
             for (roomMemberEvent in response.roomMemberEvents) {
-                if (roomMemberEvent.eventId == null || roomMemberEvent.stateKey == null) {
+                if (roomMemberEvent.eventId == null || roomMemberEvent.stateKey == null || roomMemberEvent.type == null) {
                     continue
                 }
                 val ageLocalTs = roomMemberEvent.unsignedData?.age?.let { now - it }
                 val eventEntity = roomMemberEvent.toEntity(roomId, SendState.SYNCED, ageLocalTs).copyToRealmOrIgnore(realm, EventInsertType.PAGINATION)
-                CurrentStateEventEntity.getOrCreate(realm, roomId, roomMemberEvent.stateKey, roomMemberEvent.type).apply {
+                CurrentStateEventEntity.getOrCreate(
+                        realm,
+                        roomId,
+                        roomMemberEvent.stateKey,
+                        roomMemberEvent.type
+                ).apply {
                     eventId = roomMemberEvent.eventId
                     root = eventEntity
                 }
@@ -118,6 +127,10 @@ internal class DefaultLoadRoomMembersTask @Inject constructor(
             }
             roomEntity.membersLoadStatus = RoomMembersLoadStatusType.LOADED
             roomSummaryUpdater.update(realm, roomId, updateMembers = true)
+        }
+
+        if (cryptoSessionInfoProvider.isRoomEncrypted(roomId)) {
+            deviceListManager.onRoomMembersLoadedFor(roomId)
         }
     }
 

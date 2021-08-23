@@ -17,7 +17,6 @@
 package org.matrix.android.sdk.internal.session.filter
 
 import org.matrix.android.sdk.internal.network.NetworkConstants
-import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -32,8 +31,8 @@ internal interface FilterApi {
      * @param body   the Json representation of a FilterBody object
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "user/{userId}/filter")
-    fun uploadFilter(@Path("userId") userId: String,
-                     @Body body: Filter): Call<FilterResponse>
+    suspend fun uploadFilter(@Path("userId") userId: String,
+                             @Body body: Filter): FilterResponse
 
     /**
      * Gets a filter with a given filterId from the homeserver
@@ -43,6 +42,6 @@ internal interface FilterApi {
      * @return Filter
      */
     @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "user/{userId}/filter/{filterId}")
-    fun getFilterById(@Path("userId") userId: String,
-                      @Path("filterId") filterId: String): Call<Filter>
+    suspend fun getFilterById(@Path("userId") userId: String,
+                              @Path("filterId") filterId: String): Filter
 }

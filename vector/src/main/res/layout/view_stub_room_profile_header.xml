@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?riotx_background"
+    android:background="?android:colorBackground"
     android:padding="16dp">
 
     <ImageView
@@ -12,51 +12,49 @@
         android:layout_width="128dp"
         android:layout_height="128dp"
         android:layout_marginBottom="16dp"
+        android:contentDescription="@string/avatar"
         android:transitionName="roomProfileAvatarView"
         app:layout_constraintBottom_toTopOf="@+id/roomProfileNameView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@tools:sample/avatars" />
+        tools:src="@sample/room_round_avatars" />
 
-    <ImageView
+    <im.vector.app.core.ui.views.ShieldImageView
         android:id="@+id/roomProfileDecorationImageView"
         android:layout_width="48dp"
         android:layout_height="48dp"
         app:layout_constraintCircle="@+id/roomProfileAvatarView"
         app:layout_constraintCircleAngle="135"
         app:layout_constraintCircleRadius="64dp"
-        tools:ignore="MissingConstraints"
-        tools:src="@drawable/ic_shield_trusted" />
+        tools:ignore="MissingConstraints" />
 
     <TextView
         android:id="@+id/roomProfileNameView"
+        style="@style/Widget.Vector.TextView.Title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:textAppearance="@style/Vector.Toolbar.Title"
-        android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/roomProfileAliasView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/roomProfileAvatarView"
-        tools:text="@sample/matrix.json/data/roomName" />
+        tools:text="@sample/rooms.json/data/name" />
 
     <TextView
         android:id="@+id/roomProfileAliasView"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="16dp"
         android:gravity="center"
         android:singleLine="true"
-        android:textAppearance="@style/Vector.Toolbar.Title"
-        android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/roomProfileNameView"
-        tools:text="@sample/matrix.json/data/roomAlias" />
+        tools:text="@sample/rooms.json/data/alias" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

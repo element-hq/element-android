@@ -30,15 +30,16 @@
 
         <Button
             android:id="@+id/reviewTermsDecline"
-            style="@style/VectorButtonStyleText"
+            style="@style/Widget.Vector.Button.Text"
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:text="@string/decline" />
 
         <Button
             android:id="@+id/reviewTermsAccept"
-            style="@style/VectorButtonStyle"
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="@string/accept" />
 
     </LinearLayout>

@@ -19,6 +19,8 @@ package im.vector.app.features.home.room.detail.timeline.format
 import im.vector.app.ActiveSessionDataSource
 import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.features.home.room.detail.timeline.helper.RoomSummariesHolder
+import im.vector.app.features.roomprofile.permissions.RoleFormatter
 import im.vector.app.features.settings.VectorPreferences
 import org.matrix.android.sdk.api.extensions.appendNl
 import org.matrix.android.sdk.api.extensions.orFalse
@@ -54,7 +56,9 @@ import javax.inject.Inject
 class NoticeEventFormatter @Inject constructor(
         private val activeSessionDataSource: ActiveSessionDataSource,
         private val roomHistoryVisibilityFormatter: RoomHistoryVisibilityFormatter,
+        private val roleFormatter: RoleFormatter,
         private val vectorPreferences: VectorPreferences,
+        private val roomSummariesHolder: RoomSummariesHolder,
         private val sp: StringProvider
 ) {
 
@@ -65,7 +69,8 @@ class NoticeEventFormatter @Inject constructor(
 
     private fun RoomSummary?.isDm() = this?.isDirect.orFalse()
 
-    fun format(timelineEvent: TimelineEvent, rs: RoomSummary?): CharSequence? {
+    fun format(timelineEvent: TimelineEvent): CharSequence? {
+        val rs = roomSummariesHolder.get(timelineEvent.roomId)
         return when (val type = timelineEvent.root.getClearType()) {
             EventType.STATE_ROOM_JOIN_RULES         -> formatJoinRulesEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName, rs)
             EventType.STATE_ROOM_CREATE             -> formatRoomCreateEvent(timelineEvent.root, rs)
@@ -88,7 +93,11 @@ class NoticeEventFormatter @Inject constructor(
             EventType.CALL_INVITE,
             EventType.CALL_CANDIDATES,
             EventType.CALL_HANGUP,
+            EventType.CALL_REJECT,
             EventType.CALL_ANSWER                   -> formatCallEvent(type, timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
+            EventType.CALL_NEGOTIATE,
+            EventType.CALL_SELECT_ANSWER,
+            EventType.CALL_REPLACES,
             EventType.MESSAGE,
             EventType.REACTION,
             EventType.KEY_VERIFICATION_START,
@@ -98,6 +107,8 @@ class NoticeEventFormatter @Inject constructor(
             EventType.KEY_VERIFICATION_DONE,
             EventType.KEY_VERIFICATION_KEY,
             EventType.KEY_VERIFICATION_READY,
+            EventType.STATE_SPACE_CHILD,
+            EventType.STATE_SPACE_PARENT,
             EventType.REDACTION                     -> formatDebug(timelineEvent.root)
             else                                    -> {
                 Timber.v("Type $type not handled by this formatter")
@@ -110,15 +121,15 @@ class NoticeEventFormatter @Inject constructor(
         val powerLevelsContent: PowerLevelsContent = event.getClearContent().toModel() ?: return null
         val previousPowerLevelsContent: PowerLevelsContent = event.resolvedPrevContent().toModel() ?: return null
         val userIds = HashSet<String>()
-        userIds.addAll(powerLevelsContent.users.keys)
-        userIds.addAll(previousPowerLevelsContent.users.keys)
+        userIds.addAll(powerLevelsContent.users.orEmpty().keys)
+        userIds.addAll(previousPowerLevelsContent.users.orEmpty().keys)
         val diffs = ArrayList<String>()
         userIds.forEach { userId ->
             val from = PowerLevelsHelper(previousPowerLevelsContent).getUserRole(userId)
             val to = PowerLevelsHelper(powerLevelsContent).getUserRole(userId)
             if (from != to) {
-                val fromStr = sp.getString(from.res, from.value)
-                val toStr = sp.getString(to.res, to.value)
+                val fromStr = roleFormatter.format(from)
+                val toStr = roleFormatter.format(to)
                 val diff = sp.getString(R.string.notice_power_level_diff, userId, fromStr, toStr)
                 diffs.add(diff)
             }
@@ -140,12 +151,14 @@ class NoticeEventFormatter @Inject constructor(
         return if (widgetContent.isActive()) {
             val widgetName = widgetContent.getHumanName()
             if (previousWidgetContent?.isActive().orFalse()) {
+                // Widget has been modified
                 if (event.isSentByCurrentUser()) {
                     sp.getString(R.string.notice_widget_modified_by_you, widgetName)
                 } else {
                     sp.getString(R.string.notice_widget_modified, disambiguatedDisplayName, widgetName)
                 }
             } else {
+                // Widget has been added
                 if (event.isSentByCurrentUser()) {
                     sp.getString(R.string.notice_widget_added_by_you, widgetName)
                 } else {
@@ -153,6 +166,7 @@ class NoticeEventFormatter @Inject constructor(
                 }
             }
         } else {
+            // Widget has been removed
             val widgetName = previousWidgetContent?.getHumanName()
             if (event.isSentByCurrentUser()) {
                 sp.getString(R.string.notice_widget_removed_by_you, widgetName)
@@ -173,6 +187,7 @@ class NoticeEventFormatter @Inject constructor(
             EventType.STATE_ROOM_HISTORY_VISIBILITY -> formatRoomHistoryVisibilityEvent(event, senderName, rs)
             EventType.CALL_INVITE,
             EventType.CALL_HANGUP,
+            EventType.CALL_REJECT,
             EventType.CALL_ANSWER                   -> formatCallEvent(type, event, senderName)
             EventType.STATE_ROOM_TOMBSTONE          -> formatRoomTombstoneEvent(event, senderName, rs)
             else                                    -> {
@@ -340,6 +355,12 @@ class NoticeEventFormatter @Inject constructor(
                     sp.getString(R.string.notice_call_candidates_by_you)
                 } else {
                     sp.getString(R.string.notice_call_candidates, senderName)
+                }
+            EventType.CALL_REJECT     ->
+                if (event.isSentByCurrentUser()) {
+                    sp.getString(R.string.call_tile_you_declined, "")
+                } else {
+                    sp.getString(R.string.call_tile_other_declined, senderName)
                 }
             else                      -> null
         }

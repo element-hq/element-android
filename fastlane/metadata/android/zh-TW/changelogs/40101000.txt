@@ -1,0 +1,2 @@
+此版本的主要變更：VoIP（直接訊息中的音訊與視訊通話）改善與錯誤修復！
+完整變更紀錄：https://github.com/vector-im/element-android/releases/tag/v1.1.0

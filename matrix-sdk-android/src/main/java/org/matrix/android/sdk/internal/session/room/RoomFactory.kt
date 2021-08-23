@@ -19,6 +19,8 @@ package org.matrix.android.sdk.internal.session.room
 import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.room.Room
 import org.matrix.android.sdk.internal.session.SessionScope
+import org.matrix.android.sdk.internal.session.permalinks.ViaParameterFinder
+import org.matrix.android.sdk.internal.session.room.accountdata.DefaultRoomAccountDataService
 import org.matrix.android.sdk.internal.session.room.alias.DefaultAliasService
 import org.matrix.android.sdk.internal.session.room.call.DefaultRoomCallService
 import org.matrix.android.sdk.internal.session.room.draft.DefaultDraftService
@@ -35,8 +37,8 @@ import org.matrix.android.sdk.internal.session.room.tags.DefaultTagsService
 import org.matrix.android.sdk.internal.session.room.timeline.DefaultTimelineService
 import org.matrix.android.sdk.internal.session.room.typing.DefaultTypingService
 import org.matrix.android.sdk.internal.session.room.uploads.DefaultUploadsService
+import org.matrix.android.sdk.internal.session.room.version.DefaultRoomVersionService
 import org.matrix.android.sdk.internal.session.search.SearchTask
-import org.matrix.android.sdk.internal.task.TaskExecutor
 import javax.inject.Inject
 
 internal interface RoomFactory {
@@ -60,8 +62,10 @@ internal class DefaultRoomFactory @Inject constructor(private val cryptoService:
                                                       private val relationServiceFactory: DefaultRelationService.Factory,
                                                       private val membershipServiceFactory: DefaultMembershipService.Factory,
                                                       private val roomPushRuleServiceFactory: DefaultRoomPushRuleService.Factory,
-                                                      private val taskExecutor: TaskExecutor,
+                                                      private val roomVersionServiceFactory: DefaultRoomVersionService.Factory,
+                                                      private val roomAccountDataServiceFactory: DefaultRoomAccountDataService.Factory,
                                                       private val sendStateTask: SendStateTask,
+                                                      private val viaParameterFinder: ViaParameterFinder,
                                                       private val searchTask: SearchTask) :
         RoomFactory {
 
@@ -84,9 +88,11 @@ internal class DefaultRoomFactory @Inject constructor(private val cryptoService:
                 relationService = relationServiceFactory.create(roomId),
                 roomMembersService = membershipServiceFactory.create(roomId),
                 roomPushRuleService = roomPushRuleServiceFactory.create(roomId),
-                taskExecutor = taskExecutor,
+                roomAccountDataService = roomAccountDataServiceFactory.create(roomId),
+                roomVersionService = roomVersionServiceFactory.create(roomId),
                 sendStateTask = sendStateTask,
-                searchTask = searchTask
+                searchTask = searchTask,
+                viaParameterFinder = viaParameterFinder
         )
     }
 }

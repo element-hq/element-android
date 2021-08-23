@@ -25,8 +25,9 @@ import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.ViewModelContext
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
+import dagger.assisted.AssistedFactory
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.widgets.permissions.WidgetPermissionsHelper
@@ -40,7 +41,6 @@ import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerS
 import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.session.widgets.WidgetManagementFailure
-import org.matrix.android.sdk.internal.util.awaitCallback
 import org.matrix.android.sdk.rx.mapOptional
 import org.matrix.android.sdk.rx.rx
 import org.matrix.android.sdk.rx.unwrap
@@ -48,14 +48,14 @@ import timber.log.Timber
 import javax.net.ssl.HttpsURLConnection
 
 class WidgetViewModel @AssistedInject constructor(@Assisted val initialState: WidgetViewState,
-                                                  private val widgetPostAPIHandlerFactory: WidgetPostAPIHandler.Factory,
+                                                  widgetPostAPIHandlerFactory: WidgetPostAPIHandler.Factory,
                                                   private val stringProvider: StringProvider,
                                                   private val session: Session)
     : VectorViewModel<WidgetViewState, WidgetAction, WidgetViewEvents>(initialState),
         WidgetPostAPIHandler.NavigationCallback,
         IntegrationManagerService.Listener {
 
-    @AssistedInject.Factory
+    @AssistedFactory
     interface Factory {
         fun create(initialState: WidgetViewState): WidgetViewModel
     }
@@ -123,9 +123,11 @@ class WidgetViewModel @AssistedInject constructor(@Assisted val initialState: Wi
                 .unwrap()
                 .map {
                     PowerLevelsHelper(it).isUserAllowedToSend(session.myUserId, true, null)
-                }.subscribe {
+                }
+                .subscribe {
                     setState { copy(canManageWidgets = it) }
-                }.disposeOnClear()
+                }
+                .disposeOnClear()
     }
 
     private fun observeWidgetIfNeeded() {
@@ -172,10 +174,8 @@ class WidgetViewModel @AssistedInject constructor(@Assisted val initialState: Wi
         viewModelScope.launch {
             val widgetId = initialState.widgetId ?: return@launch
             try {
-                awaitCallback<Unit> {
-                    widgetService.destroyRoomWidget(initialState.roomId, widgetId, it)
-                    _viewEvents.post(WidgetViewEvents.Close())
-                }
+                widgetService.destroyRoomWidget(initialState.roomId, widgetId)
+                _viewEvents.post(WidgetViewEvents.Close())
             } catch (failure: Throwable) {
                 _viewEvents.post(WidgetViewEvents.Failure(failure))
             }

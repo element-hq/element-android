@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Widget.Vector.Toolbar.Base" parent="Widget.MaterialComponents.Toolbar">
+        <item name="android:background">?vctr_toolbar_background</item>
+        <item name="elevation">0dp</item>
+
+        <!-- main text -->
+        <item name="titleTextStyle">@style/Widget.Vector.TextView.ActionBarTitle</item>
+
+        <!-- sub text -->
+        <item name="subtitleTextStyle">@style/Widget.Vector.TextView.ActionBarSubTitle</item>
+    </style>
+
+    <!-- Default toolbar style -->
+    <style name="Widget.Vector.Toolbar" parent="Widget.Vector.Toolbar.Base">
+        <item name="contentInsetStartWithNavigation">0dp</item>
+    </style>
+
+    <!-- Toolbar for settings Activity (so we keep the default contentInsetStartWithNavigation here) -->
+    <style name="Widget.Vector.Toolbar.Settings" parent="Widget.Vector.Toolbar.Base" />
+
+    <!-- Toolbar text style -->
+    <!-- main text -->
+    <style name="Widget.Vector.TextView.ActionBarTitle" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textColor">?vctr_content_primary</item>
+        <item name="android:fontFamily">"sans-serif-medium"</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <!-- sub text -->
+    <style name="Widget.Vector.TextView.ActionBarSubTitle" parent="TextAppearance.AppCompat.Widget.ActionBar.Subtitle">
+        <item name="android:textColor">?vctr_content_primary</item>
+        <item name="android:fontFamily">"sans-serif-medium"</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+</resources>

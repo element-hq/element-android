@@ -16,8 +16,9 @@
 
 package org.matrix.android.sdk.internal.session.room.uploads
 
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
+import dagger.assisted.AssistedFactory
 import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.room.uploads.GetUploadsResult
 import org.matrix.android.sdk.api.session.room.uploads.UploadsService
@@ -28,9 +29,9 @@ internal class DefaultUploadsService @AssistedInject constructor(
         private val cryptoService: CryptoService
 ) : UploadsService {
 
-    @AssistedInject.Factory
+    @AssistedFactory
     interface Factory {
-        fun create(roomId: String): UploadsService
+        fun create(roomId: String): DefaultUploadsService
     }
 
     override suspend fun getUploads(numberOfEvents: Int, since: String?): GetUploadsResult {

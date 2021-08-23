@@ -19,16 +19,17 @@ package im.vector.app.features.login
 import android.os.Bundle
 import android.view.View
 import androidx.annotation.CallSuper
-import androidx.appcompat.app.AlertDialog
 import androidx.transition.TransitionInflater
 import androidx.viewbinding.ViewBinding
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.dialogs.UnrecognizedCertificateDialog
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
+import kotlinx.coroutines.CancellationException
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.MatrixError
 import javax.net.ssl.HttpsURLConnection
@@ -48,7 +49,9 @@ abstract class AbstractLoginFragment<VB: ViewBinding> : VectorBaseFragment<VB>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(android.R.transition.move)
+        context?.let {
+            sharedElementEnterTransition = TransitionInflater.from(it).inflateTransition(android.R.transition.move)
+        }
     }
 
     @CallSuper
@@ -76,13 +79,13 @@ abstract class AbstractLoginFragment<VB: ViewBinding> : VectorBaseFragment<VB>()
         }
 
         when (throwable) {
-            is Failure.Cancelled                      ->
+            is CancellationException                  ->
                 /* Ignore this error, user has cancelled the action */
                 Unit
             is Failure.ServerError                    ->
                 if (throwable.error.code == MatrixError.M_FORBIDDEN
                         && throwable.httpCode == HttpsURLConnection.HTTP_FORBIDDEN /* 403 */) {
-                    AlertDialog.Builder(requireActivity())
+                    MaterialAlertDialogBuilder(requireActivity())
                             .setTitle(R.string.dialog_title_error)
                             .setMessage(getString(R.string.login_registration_disabled))
                             .setPositiveButton(R.string.ok, null)
@@ -126,7 +129,7 @@ abstract class AbstractLoginFragment<VB: ViewBinding> : VectorBaseFragment<VB>()
         return when {
             displayCancelDialog && loginViewModel.isRegistrationStarted -> {
                 // Ask for confirmation before cancelling the registration
-                AlertDialog.Builder(requireActivity())
+                MaterialAlertDialogBuilder(requireActivity())
                         .setTitle(R.string.login_signup_cancel_confirmation_title)
                         .setMessage(R.string.login_signup_cancel_confirmation_content)
                         .setPositiveButton(R.string.yes) { _, _ ->
@@ -140,7 +143,7 @@ abstract class AbstractLoginFragment<VB: ViewBinding> : VectorBaseFragment<VB>()
             }
             displayCancelDialog && isResetPasswordStarted               -> {
                 // Ask for confirmation before cancelling the reset password
-                AlertDialog.Builder(requireActivity())
+                MaterialAlertDialogBuilder(requireActivity())
                         .setTitle(R.string.login_reset_password_cancel_confirmation_title)
                         .setMessage(R.string.login_reset_password_cancel_confirmation_content)
                         .setPositiveButton(R.string.yes) { _, _ ->

@@ -18,16 +18,18 @@ package im.vector.app.core.dialogs
 
 import android.app.Activity
 import android.net.Uri
-import androidx.appcompat.app.AlertDialog
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.yalantis.ucrop.UCrop
 import im.vector.app.R
+import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper.Listener
 import im.vector.app.core.extensions.insertBeforeLast
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
 import im.vector.app.core.utils.checkPermissions
+import im.vector.app.core.utils.onPermissionDeniedDialog
 import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.features.media.createUCropWithDefaultSettings
 import im.vector.lib.multipicker.MultiPicker
@@ -54,9 +56,11 @@ class GalleryOrCameraDialogHelper(
 
     private val listener = fragment as? Listener ?: error("Fragment must implement GalleryOrCameraDialogHelper.Listener")
 
-    private val takePhotoPermissionActivityResultLauncher = fragment.registerForPermissionsResult { allGranted ->
+    private val takePhotoPermissionActivityResultLauncher = fragment.registerForPermissionsResult { allGranted, deniedPermanently ->
         if (allGranted) {
             doOpenCamera()
+        } else if (deniedPermanently) {
+            activity.onPermissionDeniedDialog(R.string.denied_permission_camera)
         }
     }
 
@@ -101,7 +105,7 @@ class GalleryOrCameraDialogHelper(
     }
 
     fun show() {
-        AlertDialog.Builder(activity)
+        MaterialAlertDialogBuilder(activity)
                 .setTitle(R.string.attachment_type_dialog_title)
                 .setItems(arrayOf(
                         fragment.getString(R.string.attachment_type_camera),
@@ -115,7 +119,7 @@ class GalleryOrCameraDialogHelper(
 
     private fun onAvatarTypeSelected(type: Type) {
         when (type) {
-            Type.Camera ->
+            Type.Camera  ->
                 if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, activity, takePhotoPermissionActivityResultLauncher)) {
                     doOpenCamera()
                 }

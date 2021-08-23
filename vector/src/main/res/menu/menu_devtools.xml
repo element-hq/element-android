@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menuItemEdit"
+        android:visible="false"
+        tools:visible="true"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_edit"
+        android:title="@string/edit" />
+
+    <item
+        android:id="@+id/menuItemSend"
+        android:visible="false"
+        tools:visible="true"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_send"
+        android:title="@string/send" />
+
+</menu>

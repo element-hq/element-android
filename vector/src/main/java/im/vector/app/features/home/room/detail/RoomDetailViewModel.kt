@@ -19,48 +19,57 @@ package im.vector.app.features.home.room.detail
 import android.net.Uri
 import androidx.annotation.IdRes
 import androidx.lifecycle.viewModelScope
+import com.airbnb.mvrx.Async
+import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
+import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import com.jakewharton.rxrelay2.BehaviorRelay
 import com.jakewharton.rxrelay2.PublishRelay
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.extensions.exhaustive
+import im.vector.app.core.mvrx.runCatchingToAsync
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.features.call.WebRtcPeerConnectionManager
+import im.vector.app.features.attachments.toContentAttachmentData
+import im.vector.app.features.call.conference.JitsiService
+import im.vector.app.features.call.lookup.CallProtocolsChecker
+import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.command.CommandParser
 import im.vector.app.features.command.ParsedCommand
+import im.vector.app.features.createdirect.DirectRoomHelper
+import im.vector.app.features.crypto.keysrequest.OutboundSessionKeySharingStrategy
 import im.vector.app.features.crypto.verification.SupportedVerificationMethodsProvider
+import im.vector.app.features.home.room.detail.composer.VoiceMessageHelper
 import im.vector.app.features.home.room.detail.composer.rainbow.RainbowGenerator
 import im.vector.app.features.home.room.detail.sticker.StickerPickerActionHandler
-import im.vector.app.features.home.room.detail.timeline.helper.RoomSummaryHolder
-import im.vector.app.features.home.room.detail.timeline.helper.TimelineSettingsFactory
+import im.vector.app.features.home.room.detail.timeline.factory.TimelineFactory
+import im.vector.app.features.home.room.detail.timeline.helper.RoomSummariesHolder
 import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlRetriever
 import im.vector.app.features.home.room.typing.TypingHelper
 import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
-import im.vector.app.features.raw.wellknown.getElementWellknown
-import im.vector.app.features.settings.VectorLocale
+import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.VectorPreferences
+import im.vector.app.features.voice.VoicePlayerHelper
 import io.reactivex.Observable
-import io.reactivex.functions.BiFunction
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.commonmark.parser.Parser
 import org.commonmark.renderer.html.HtmlRenderer
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.MatrixPatterns
-import org.matrix.android.sdk.api.NoOpMatrixCallback
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.query.QueryStringValue
-import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -69,14 +78,13 @@ import org.matrix.android.sdk.api.session.events.model.isAttachmentMessage
 import org.matrix.android.sdk.api.session.events.model.isTextMessage
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
-import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
+import org.matrix.android.sdk.api.session.file.FileService
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.members.roomMemberQueryParams
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
-import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.model.message.OptionItem
 import org.matrix.android.sdk.api.session.room.model.message.getFileUrl
@@ -86,18 +94,16 @@ import org.matrix.android.sdk.api.session.room.read.ReadService
 import org.matrix.android.sdk.api.session.room.send.UserDraft
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
+import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
+import org.matrix.android.sdk.api.session.room.timeline.getRelationContent
 import org.matrix.android.sdk.api.session.room.timeline.getTextEditableContent
-import org.matrix.android.sdk.api.session.widgets.model.Widget
+import org.matrix.android.sdk.api.session.space.CreateSpaceParams
 import org.matrix.android.sdk.api.session.widgets.model.WidgetType
 import org.matrix.android.sdk.api.util.toOptional
-import org.matrix.android.sdk.internal.crypto.model.event.EncryptedEventContent
 import org.matrix.android.sdk.internal.crypto.model.event.WithHeldCode
-import org.matrix.android.sdk.internal.util.awaitCallback
 import org.matrix.android.sdk.rx.rx
 import org.matrix.android.sdk.rx.unwrap
 import timber.log.Timber
-import java.io.File
-import java.util.UUID
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -107,34 +113,42 @@ class RoomDetailViewModel @AssistedInject constructor(
         private val stringProvider: StringProvider,
         private val rainbowGenerator: RainbowGenerator,
         private val session: Session,
-        private val rawService: RawService,
         private val supportedVerificationMethodsProvider: SupportedVerificationMethodsProvider,
         private val stickerPickerActionHandler: StickerPickerActionHandler,
-        private val roomSummaryHolder: RoomSummaryHolder,
+        private val roomSummariesHolder: RoomSummariesHolder,
         private val typingHelper: TypingHelper,
-        private val webRtcPeerConnectionManager: WebRtcPeerConnectionManager,
+        private val callManager: WebRtcCallManager,
         private val chatEffectManager: ChatEffectManager,
-        timelineSettingsFactory: TimelineSettingsFactory
-) : VectorViewModel<RoomDetailViewState, RoomDetailAction, RoomDetailViewEvents>(initialState), Timeline.Listener, ChatEffectManager.Delegate {
+        private val directRoomHelper: DirectRoomHelper,
+        private val jitsiService: JitsiService,
+        private val voiceMessageHelper: VoiceMessageHelper,
+        private val voicePlayerHelper: VoicePlayerHelper,
+        timelineFactory: TimelineFactory
+) : VectorViewModel<RoomDetailViewState, RoomDetailAction, RoomDetailViewEvents>(initialState),
+        Timeline.Listener, ChatEffectManager.Delegate, CallProtocolsChecker.Listener {
 
     private val room = session.getRoom(initialState.roomId)!!
     private val eventId = initialState.eventId
     private val invisibleEventsObservable = BehaviorRelay.create<RoomDetailAction.TimelineEventTurnsInvisible>()
     private val visibleEventsObservable = BehaviorRelay.create<RoomDetailAction.TimelineEventTurnsVisible>()
-    private val timelineSettings = timelineSettingsFactory.create()
     private var timelineEvents = PublishRelay.create<List<TimelineEvent>>()
-    val timeline = room.createTimeline(eventId, timelineSettings)
+    val timeline = timelineFactory.createTimeline(viewModelScope, room, eventId)
 
     // Same lifecycle than the ViewModel (survive to screen rotation)
-    val previewUrlRetriever = PreviewUrlRetriever(session)
+    val previewUrlRetriever = PreviewUrlRetriever(session, viewModelScope)
 
     // Slot to keep a pending action during permission request
     var pendingAction: RoomDetailAction? = null
 
+    // Slot to keep a pending event during permission request
+    var pendingEvent: RoomDetailViewEvents? = null
+
     private var trackUnreadMessages = AtomicBoolean(false)
     private var mostRecentDisplayedEvent: TimelineEvent? = null
 
-    @AssistedInject.Factory
+    private var prepareToEncrypt: Async<Unit> = Uninitialized
+
+    @AssistedFactory
     interface Factory {
         fun create(initialState: RoomDetailViewState): RoomDetailViewModel
     }
@@ -166,10 +180,37 @@ class RoomDetailViewModel @AssistedInject constructor(
         observeActiveRoomWidgets()
         observePowerLevel()
         room.getRoomSummaryLive()
-        room.markAsRead(ReadService.MarkAsReadParams.READ_RECEIPT, NoOpMatrixCallback())
+        viewModelScope.launch(Dispatchers.IO) {
+            tryOrNull { room.markAsRead(ReadService.MarkAsReadParams.READ_RECEIPT) }
+        }
         // Inform the SDK that the room is displayed
-        session.onRoomDisplayed(initialState.roomId)
+        viewModelScope.launch(Dispatchers.IO) {
+            tryOrNull { session.onRoomDisplayed(initialState.roomId) }
+        }
+        callManager.addProtocolsCheckerListener(this)
+        callManager.checkForProtocolsSupportIfNeeded()
         chatEffectManager.delegate = this
+
+        // Ensure to share the outbound session keys with all members
+        if (OutboundSessionKeySharingStrategy.WhenEnteringRoom == BuildConfig.outboundSessionKeySharingStrategy && room.isEncrypted()) {
+            prepareForEncryption()
+        }
+    }
+
+    private fun prepareForEncryption() {
+        // check if there is not already a call made, or if there has been an error
+        if (prepareToEncrypt.shouldLoad) {
+            prepareToEncrypt = Loading()
+            viewModelScope.launch {
+                runCatching {
+                    room.prepareToEncrypt()
+                }.fold({
+                    prepareToEncrypt = Success(Unit)
+                }, {
+                    prepareToEncrypt = Fail(it)
+                })
+            }
+        }
     }
 
     private fun observePowerLevel() {
@@ -225,6 +266,7 @@ class RoomDetailViewModel @AssistedInject constructor(
     override fun handle(action: RoomDetailAction) {
         when (action) {
             is RoomDetailAction.UserIsTyping                     -> handleUserIsTyping(action)
+            is RoomDetailAction.ComposerFocusChange              -> handleComposerFocusChange(action)
             is RoomDetailAction.SaveDraft                        -> handleSaveDraft(action)
             is RoomDetailAction.SendMessage                      -> handleSendMessage(action)
             is RoomDetailAction.SendMedia                        -> handleSendMedia(action)
@@ -244,10 +286,9 @@ class RoomDetailViewModel @AssistedInject constructor(
             is RoomDetailAction.EnterReplyMode                   -> handleReplyAction(action)
             is RoomDetailAction.DownloadOrOpen                   -> handleOpenOrDownloadFile(action)
             is RoomDetailAction.NavigateToEvent                  -> handleNavigateToEvent(action)
-            is RoomDetailAction.HandleTombstoneEvent             -> handleTombstoneEvent(action)
+            is RoomDetailAction.JoinAndOpenReplacementRoom       -> handleJoinAndOpenReplacementRoom()
             is RoomDetailAction.ResendMessage                    -> handleResendEvent(action)
             is RoomDetailAction.RemoveFailedEcho                 -> handleRemove(action)
-            is RoomDetailAction.ResendAll                        -> handleResendAll()
             is RoomDetailAction.MarkAllAsRead                    -> handleMarkAllAsRead()
             is RoomDetailAction.ReportContent                    -> handleReportContent(action)
             is RoomDetailAction.IgnoreUser                       -> handleIgnoreUser(action)
@@ -263,6 +304,7 @@ class RoomDetailViewModel @AssistedInject constructor(
             is RoomDetailAction.SelectStickerAttachment          -> handleSelectStickerAttachment()
             is RoomDetailAction.OpenIntegrationManager           -> handleOpenIntegrationManager()
             is RoomDetailAction.StartCall                        -> handleStartCall(action)
+            is RoomDetailAction.AcceptCall                       -> handleAcceptCall(action)
             is RoomDetailAction.EndCall                          -> handleEndCall()
             is RoomDetailAction.ManageIntegrations               -> handleManageIntegrations()
             is RoomDetailAction.AddJitsiWidget                   -> handleAddJitsiConference(action)
@@ -281,7 +323,27 @@ class RoomDetailViewModel @AssistedInject constructor(
                 )
             }
             is RoomDetailAction.DoNotShowPreviewUrlFor           -> handleDoNotShowPreviewUrlFor(action)
+            RoomDetailAction.RemoveAllFailedMessages             -> handleRemoveAllFailedMessages()
+            RoomDetailAction.ResendAll                           -> handleResendAll()
+            RoomDetailAction.StartRecordingVoiceMessage          -> handleStartRecordingVoiceMessage()
+            is RoomDetailAction.EndRecordingVoiceMessage         -> handleEndRecordingVoiceMessage(action.isCancelled)
+            is RoomDetailAction.PlayOrPauseVoicePlayback         -> handlePlayOrPauseVoicePlayback(action)
+            RoomDetailAction.PauseRecordingVoiceMessage          -> handlePauseRecordingVoiceMessage()
+            RoomDetailAction.PlayOrPauseRecordingPlayback        -> handlePlayOrPauseRecordingPlayback()
+            RoomDetailAction.EndAllVoiceActions                  -> handleEndAllVoiceActions()
+            is RoomDetailAction.RoomUpgradeSuccess               -> {
+                setState {
+                    copy(joinUpgradedRoomAsync = Success(action.replacementRoomId))
+                }
+                _viewEvents.post(RoomDetailViewEvents.OpenRoom(action.replacementRoomId, closeCurrentRoom = true))
+            }
         }.exhaustive
+    }
+
+    private fun handleAcceptCall(action: RoomDetailAction.AcceptCall) {
+        callManager.getCallById(action.callId)?.also {
+            _viewEvents.post(RoomDetailViewEvents.DisplayAndAcceptCall(it))
+        }
     }
 
     private fun handleDoNotShowPreviewUrlFor(action: RoomDetailAction.DoNotShowPreviewUrlFor) {
@@ -308,18 +370,15 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private fun handleOpenOrCreateDm(action: RoomDetailAction.OpenOrCreateDm) {
-        val existingDmRoomId = session.getExistingDirectRoomWithUser(action.userId)
-        if (existingDmRoomId == null) {
-            // First create a direct room
-            viewModelScope.launch(Dispatchers.IO) {
-                val roomId = awaitCallback<String> {
-                    session.createDirectRoom(action.userId, it)
-                }
-                _viewEvents.post(RoomDetailViewEvents.OpenRoom(roomId))
+        viewModelScope.launch {
+            val roomId = try {
+                directRoomHelper.ensureDMExists(action.userId)
+            } catch (failure: Throwable) {
+                _viewEvents.post(RoomDetailViewEvents.ActionFailure(action, failure))
+                return@launch
             }
-        } else {
-            if (existingDmRoomId != initialState.roomId) {
-                _viewEvents.post(RoomDetailViewEvents.OpenRoom(existingDmRoomId))
+            if (roomId != initialState.roomId) {
+                _viewEvents.post(RoomDetailViewEvents.OpenRoom(roomId = roomId))
             }
         }
     }
@@ -334,13 +393,15 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private fun handleStartCall(action: RoomDetailAction.StartCall) {
-        room.roomSummary()?.otherMemberIds?.firstOrNull()?.let {
-            webRtcPeerConnectionManager.startOutgoingCall(room.roomId, it, action.isVideo)
+        viewModelScope.launch {
+            room.roomSummary()?.otherMemberIds?.firstOrNull()?.let {
+                callManager.startOutgoingCall(room.roomId, it, action.isVideo)
+            }
         }
     }
 
     private fun handleEndCall() {
-        webRtcPeerConnectionManager.endCall()
+        callManager.endCallForRoom(initialState.roomId)
     }
 
     private fun handleSelectStickerAttachment() {
@@ -376,55 +437,8 @@ class RoomDetailViewModel @AssistedInject constructor(
     private fun handleAddJitsiConference(action: RoomDetailAction.AddJitsiWidget) {
         _viewEvents.post(RoomDetailViewEvents.ShowWaitingView)
         viewModelScope.launch(Dispatchers.IO) {
-            // Build data for a jitsi widget
-            val widgetId: String = WidgetType.Jitsi.preferred + "_" + session.myUserId + "_" + System.currentTimeMillis()
-
-            // Create a random enough jitsi conference id
-            // Note: the jitsi server automatically creates conference when the conference
-            // id does not exist yet
-            var widgetSessionId = UUID.randomUUID().toString()
-
-            if (widgetSessionId.length > 8) {
-                widgetSessionId = widgetSessionId.substring(0, 7)
-            }
-            val roomId: String = room.roomId
-            val confId = roomId.substring(1, roomId.indexOf(":") - 1) + widgetSessionId.toLowerCase(VectorLocale.applicationLocale)
-
-            val preferredJitsiDomain = tryOrNull {
-                rawService.getElementWellknown(session.myUserId)
-                        ?.jitsiServer
-                        ?.preferredDomain
-            }
-            val jitsiDomain = preferredJitsiDomain ?: stringProvider.getString(R.string.preferred_jitsi_domain)
-
-            // We use the default element wrapper for this widget
-            // https://github.com/vector-im/element-web/blob/develop/docs/jitsi-dev.md
-            val url = "https://app.element.io/jitsi.html" +
-                    "?confId=$confId" +
-                    "#conferenceDomain=\$domain" +
-                    "&conferenceId=\$conferenceId" +
-                    "&isAudioOnly=${!action.withVideo}" +
-                    "&displayName=\$matrix_display_name" +
-                    "&avatarUrl=\$matrix_avatar_url" +
-                    "&userId=\$matrix_user_id"
-
-            val widgetEventContent = mapOf(
-                    "url" to url,
-                    "type" to WidgetType.Jitsi.legacy,
-                    "data" to mapOf(
-                            "conferenceId" to confId,
-                            "domain" to jitsiDomain,
-                            "isAudioOnly" to !action.withVideo
-                    ),
-                    "creatorUserId" to session.myUserId,
-                    "id" to widgetId,
-                    "name" to "jitsi"
-            )
-
             try {
-                val widget = awaitCallback<Widget> {
-                    session.widgetService().createRoomWidget(roomId, widgetId, widgetEventContent, it)
-                }
+                val widget = jitsiService.createJitsiWidget(room.roomId, action.withVideo)
                 _viewEvents.post(RoomDetailViewEvents.JoinJitsiConference(widget, action.withVideo))
             } catch (failure: Throwable) {
                 _viewEvents.post(RoomDetailViewEvents.ShowMessage(stringProvider.getString(R.string.failed_to_add_widget)))
@@ -438,7 +452,7 @@ class RoomDetailViewModel @AssistedInject constructor(
         _viewEvents.post(RoomDetailViewEvents.ShowWaitingView)
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                awaitCallback<Unit> { session.widgetService().destroyRoomWidget(room.roomId, widgetId, it) }
+                session.widgetService().destroyRoomWidget(room.roomId, widgetId)
                 // local echo
                 setState {
                     copy(
@@ -485,7 +499,9 @@ class RoomDetailViewModel @AssistedInject constructor(
     private fun stopTrackingUnreadMessages() {
         if (trackUnreadMessages.getAndSet(false)) {
             mostRecentDisplayedEvent?.root?.eventId?.also {
-                room.setReadMarker(it, callback = NoOpMatrixCallback())
+                session.coroutineScope.launch {
+                    tryOrNull { room.setReadMarker(it) }
+                }
             }
             mostRecentDisplayedEvent = null
         }
@@ -504,7 +520,7 @@ class RoomDetailViewModel @AssistedInject constructor(
      * Convert a send mode to a draft and save the draft
      */
     private fun handleSaveDraft(action: RoomDetailAction.SaveDraft) = withState {
-        viewModelScope.launch(NonCancellable) {
+        session.coroutineScope.launch {
             when {
                 it.sendMode is SendMode.REGULAR && !it.sendMode.fromSharing -> {
                     setState { copy(sendMode = it.sendMode.copy(action.draft)) }
@@ -564,24 +580,96 @@ class RoomDetailViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleTombstoneEvent(action: RoomDetailAction.HandleTombstoneEvent) {
-        val tombstoneContent = action.event.getClearContent().toModel<RoomTombstoneContent>() ?: return
+    private fun handleComposerFocusChange(action: RoomDetailAction.ComposerFocusChange) {
+        // Ensure outbound session keys
+        if (OutboundSessionKeySharingStrategy.WhenTyping == BuildConfig.outboundSessionKeySharingStrategy && room.isEncrypted()) {
+            if (action.focused) {
+                // Should we add some rate limit here, or do it only once per model lifecycle?
+                prepareForEncryption()
+            }
+        }
+    }
+
+    private fun handleJoinAndOpenReplacementRoom() = withState { state ->
+        val tombstoneContent = state.tombstoneEvent?.getClearContent()?.toModel<RoomTombstoneContent>() ?: return@withState
 
         val roomId = tombstoneContent.replacementRoomId ?: ""
         val isRoomJoined = session.getRoom(roomId)?.roomSummary()?.membership == Membership.JOIN
         if (isRoomJoined) {
-            setState { copy(tombstoneEventHandling = Success(roomId)) }
+            setState { copy(joinUpgradedRoomAsync = Success(roomId)) }
+            _viewEvents.post(RoomDetailViewEvents.OpenRoom(roomId, closeCurrentRoom = true))
         } else {
-            val viaServers = MatrixPatterns.extractServerNameFromId(action.event.senderId)
+            val viaServers = MatrixPatterns.extractServerNameFromId(state.tombstoneEvent.senderId)
                     ?.let { listOf(it) }
                     .orEmpty()
-            session.rx()
-                    .joinRoom(roomId, viaServers = viaServers)
-                    .map { roomId }
-                    .execute {
-                        copy(tombstoneEventHandling = it)
-                    }
+            // need to provide feedback as joining could take some time
+            _viewEvents.post(RoomDetailViewEvents.RoomReplacementStarted)
+            setState {
+                copy(joinUpgradedRoomAsync = Loading())
+            }
+            viewModelScope.launch {
+                val result = runCatchingToAsync {
+                    session.joinRoom(roomId, viaServers = viaServers)
+                    roomId
+                }
+                setState {
+                    copy(joinUpgradedRoomAsync = result)
+                }
+                if (result is Success) {
+                    _viewEvents.post(RoomDetailViewEvents.OpenRoom(roomId, closeCurrentRoom = true))
+                }
+            }
         }
+    }
+
+    private fun handleStartRecordingVoiceMessage() {
+        try {
+            voiceMessageHelper.startRecording()
+        } catch (failure: Throwable) {
+            _viewEvents.post(RoomDetailViewEvents.Failure(failure))
+        }
+    }
+
+    private fun handleEndRecordingVoiceMessage(isCancelled: Boolean) {
+        voiceMessageHelper.stopPlayback()
+        if (isCancelled) {
+            voiceMessageHelper.deleteRecording()
+        } else {
+            voiceMessageHelper.stopRecording()?.let { audioType ->
+                if (audioType.duration > 1000) {
+                    room.sendMedia(audioType.toContentAttachmentData(), false, emptySet())
+                } else {
+                    voiceMessageHelper.deleteRecording()
+                }
+            }
+        }
+    }
+
+    private fun handlePlayOrPauseVoicePlayback(action: RoomDetailAction.PlayOrPauseVoicePlayback) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                // Download can fail
+                val audioFile = session.fileService().downloadFile(action.messageAudioContent)
+                // Conversion can fail, fallback to the original file in this case and let the player fail for us
+                val convertedFile = voicePlayerHelper.convertFile(audioFile) ?: audioFile
+                // Play can fail
+                voiceMessageHelper.startOrPausePlayback(action.eventId, convertedFile)
+            } catch (failure: Throwable) {
+                _viewEvents.post(RoomDetailViewEvents.Failure(failure))
+            }
+        }
+    }
+
+    private fun handlePlayOrPauseRecordingPlayback() {
+        voiceMessageHelper.startOrPauseRecordingPlayback()
+    }
+
+    private fun handleEndAllVoiceActions() {
+        voiceMessageHelper.stopAllVoiceActions()
+    }
+
+    private fun handlePauseRecordingVoiceMessage() {
+        voiceMessageHelper.pauseRecording()
     }
 
     private fun isIntegrationEnabled() = session.integrationManagerService().isIntegrationEnabled()
@@ -591,15 +679,14 @@ class RoomDetailViewModel @AssistedInject constructor(
             return@withState false
         }
         when (itemId) {
-            R.id.resend_all       -> state.asyncRoomSummary()?.hasFailedSending == true
             R.id.timeline_setting -> true
             R.id.invite           -> state.canInvite
-            R.id.clear_all        -> state.asyncRoomSummary()?.hasFailedSending == true
             R.id.open_matrix_apps -> true
             R.id.voice_call,
-            R.id.video_call       -> true // always show for discoverability
-            R.id.hangup_call      -> webRtcPeerConnectionManager.currentCall != null
+            R.id.video_call       -> callManager.getCallsByRoomId(state.roomId).isEmpty()
+            R.id.hangup_call      -> callManager.getCallsByRoomId(state.roomId).isNotEmpty()
             R.id.search           -> true
+            R.id.dev_tools        -> vectorPreferences.developerMode()
             else                  -> false
         }
     }
@@ -713,7 +800,7 @@ class RoomDetailViewModel @AssistedInject constructor(
                             _viewEvents.post(RoomDetailViewEvents.SlashCommandHandled())
                             popDraft()
                         }
-                        is ParsedCommand.SendChatEffect            -> {
+                        is ParsedCommand.SendChatEffect           -> {
                             sendChatEffect(slashCommandResult)
                             _viewEvents.post(RoomDetailViewEvents.SlashCommandHandled())
                             popDraft()
@@ -744,24 +831,92 @@ class RoomDetailViewModel @AssistedInject constructor(
                                 )
                             }
                         }
+                        is ParsedCommand.CreateSpace              -> {
+                            viewModelScope.launch(Dispatchers.IO) {
+                                try {
+                                    val params = CreateSpaceParams().apply {
+                                        name = slashCommandResult.name
+                                        invitedUserIds.addAll(slashCommandResult.invitees)
+                                    }
+                                    val spaceId = session.spaceService().createSpace(params)
+                                    session.spaceService().getSpace(spaceId)
+                                            ?.addChildren(
+                                                    state.roomId,
+                                                    null,
+                                                    null,
+                                                    true
+                                            )
+                                } catch (failure: Throwable) {
+                                    _viewEvents.post(RoomDetailViewEvents.SlashCommandResultError(failure))
+                                }
+                            }
+                            _viewEvents.post(RoomDetailViewEvents.SlashCommandHandled())
+                            popDraft()
+                        }
+                        is ParsedCommand.AddToSpace               -> {
+                            viewModelScope.launch(Dispatchers.IO) {
+                                try {
+                                    session.spaceService().getSpace(slashCommandResult.spaceId)
+                                            ?.addChildren(
+                                                    room.roomId,
+                                                    null,
+                                                    null,
+                                                    false
+                                            )
+                                } catch (failure: Throwable) {
+                                    _viewEvents.post(RoomDetailViewEvents.SlashCommandResultError(failure))
+                                }
+                            }
+                            _viewEvents.post(RoomDetailViewEvents.SlashCommandHandled())
+                            popDraft()
+                        }
+                        is ParsedCommand.JoinSpace                -> {
+                            viewModelScope.launch(Dispatchers.IO) {
+                                try {
+                                    session.spaceService().joinSpace(slashCommandResult.spaceIdOrAlias)
+                                } catch (failure: Throwable) {
+                                    _viewEvents.post(RoomDetailViewEvents.SlashCommandResultError(failure))
+                                }
+                            }
+                            _viewEvents.post(RoomDetailViewEvents.SlashCommandHandled())
+                            popDraft()
+                        }
+                        is ParsedCommand.LeaveRoom                -> {
+                            viewModelScope.launch(Dispatchers.IO) {
+                                try {
+                                    session.getRoom(slashCommandResult.roomId)?.leave(null)
+                                } catch (failure: Throwable) {
+                                    _viewEvents.post(RoomDetailViewEvents.SlashCommandResultError(failure))
+                                }
+                            }
+                            _viewEvents.post(RoomDetailViewEvents.SlashCommandHandled())
+                            popDraft()
+                        }
+                        is ParsedCommand.UpgradeRoom              -> {
+                            _viewEvents.post(
+                                    RoomDetailViewEvents.ShowRoomUpgradeDialog(
+                                            slashCommandResult.newVersion,
+                                            room.roomSummary()?.isPublic ?: false
+                                    )
+                            )
+                            _viewEvents.post(RoomDetailViewEvents.SlashCommandHandled())
+                            popDraft()
+                        }
                     }.exhaustive
                 }
                 is SendMode.EDIT    -> {
                     // is original event a reply?
-                    val inReplyTo = state.sendMode.timelineEvent.root.getClearContent().toModel<MessageContent>()?.relatesTo?.inReplyTo?.eventId
-                            ?: state.sendMode.timelineEvent.root.content.toModel<EncryptedEventContent>()?.relatesTo?.inReplyTo?.eventId
+                    val inReplyTo = state.sendMode.timelineEvent.getRelationContent()?.inReplyTo?.eventId
                     if (inReplyTo != null) {
                         // TODO check if same content?
                         room.getTimeLineEvent(inReplyTo)?.let {
                             room.editReply(state.sendMode.timelineEvent, it, action.text.toString())
                         }
                     } else {
-                        val messageContent: MessageContent? =
-                                state.sendMode.timelineEvent.annotations?.editSummary?.aggregatedContent.toModel()
-                                        ?: state.sendMode.timelineEvent.root.getClearContent().toModel()
+                        val messageContent = state.sendMode.timelineEvent.getLastMessageContent()
                         val existingBody = messageContent?.body ?: ""
                         if (existingBody != action.text) {
-                            room.editTextMessage(state.sendMode.timelineEvent.root.eventId ?: "",
+                            room.editTextMessage(state.sendMode.timelineEvent,
                                     messageContent?.msgType ?: MessageType.MSGTYPE_TEXT,
                                     action.text,
                                     action.autoMarkdown)
@@ -773,9 +928,7 @@ class RoomDetailViewModel @AssistedInject constructor(
                     popDraft()
                 }
                 is SendMode.QUOTE   -> {
-                    val messageContent: MessageContent? =
-                            state.sendMode.timelineEvent.annotations?.editSummary?.aggregatedContent.toModel()
-                                    ?: state.sendMode.timelineEvent.root.getClearContent().toModel()
+                    val messageContent = state.sendMode.timelineEvent.getLastMessageContent()
                     val textMsg = messageContent?.body
 
                     val finalText = legacyRiotQuoteText(textMsg, action.text.toString())
@@ -811,7 +964,7 @@ class RoomDetailViewModel @AssistedInject constructor(
         if (sendChatEffect.message.isBlank()) {
             val defaultMessage = stringProvider.getString(when (sendChatEffect.chatEffect) {
                 ChatEffect.CONFETTI -> R.string.default_message_emote_confetti
-                ChatEffect.SNOW     -> R.string.default_message_emote_snow
+                ChatEffect.SNOWFALL -> R.string.default_message_emote_snow
             })
             room.sendTextMessage(defaultMessage, MessageType.MSGTYPE_EMOTE)
         } else {
@@ -833,19 +986,19 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private fun handleJoinToAnotherRoomSlashCommand(command: ParsedCommand.JoinRoom) {
-        session.joinRoom(command.roomAlias, command.reason, emptyList(), object : MatrixCallback<Unit> {
-            override fun onSuccess(data: Unit) {
-                session.getRoomSummary(command.roomAlias)
-                        ?.roomId
-                        ?.let {
-                            _viewEvents.post(RoomDetailViewEvents.JoinRoomCommandSuccess(it))
-                        }
-            }
-
-            override fun onFailure(failure: Throwable) {
+        viewModelScope.launch {
+            try {
+                session.joinRoom(command.roomAlias, command.reason, emptyList())
+            } catch (failure: Throwable) {
                 _viewEvents.post(RoomDetailViewEvents.SlashCommandResultError(failure))
+                return@launch
             }
-        })
+            session.getRoomSummary(command.roomAlias)
+                    ?.roomId
+                    ?.let {
+                        _viewEvents.post(RoomDetailViewEvents.JoinRoomCommandSuccess(it))
+                    }
+        }
     }
 
     private fun legacyRiotQuoteText(quotedText: String?, myText: String): String {
@@ -875,49 +1028,51 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private fun handleInviteSlashCommand(invite: ParsedCommand.Invite) {
-        launchSlashCommandFlow {
-            room.invite(invite.userId, invite.reason, it)
+        launchSlashCommandFlowSuspendable {
+            room.invite(invite.userId, invite.reason)
         }
     }
 
     private fun handleInvite3pidSlashCommand(invite: ParsedCommand.Invite3Pid) {
-        launchSlashCommandFlow {
-            room.invite3pid(invite.threePid, it)
+        launchSlashCommandFlowSuspendable {
+            room.invite3pid(invite.threePid)
         }
     }
 
     private fun handleSetUserPowerLevel(setUserPowerLevel: ParsedCommand.SetUserPowerLevel) {
-        val currentPowerLevelsContent = room.getStateEvent(EventType.STATE_ROOM_POWER_LEVELS)
+        val newPowerLevelsContent = room.getStateEvent(EventType.STATE_ROOM_POWER_LEVELS)
                 ?.content
-                ?.toModel<PowerLevelsContent>() ?: return
+                ?.toModel<PowerLevelsContent>()
+                ?.setUserPowerLevel(setUserPowerLevel.userId, setUserPowerLevel.powerLevel)
+                ?.toContent()
+                ?: return
 
         launchSlashCommandFlowSuspendable {
-            currentPowerLevelsContent.setUserPowerLevel(setUserPowerLevel.userId, setUserPowerLevel.powerLevel)
-            room.sendStateEvent(EventType.STATE_ROOM_POWER_LEVELS, null, currentPowerLevelsContent.toContent())
+            room.sendStateEvent(EventType.STATE_ROOM_POWER_LEVELS, null, newPowerLevelsContent)
         }
     }
 
     private fun handleChangeDisplayNameSlashCommand(changeDisplayName: ParsedCommand.ChangeDisplayName) {
-        launchSlashCommandFlow {
-            session.setDisplayName(session.myUserId, changeDisplayName.displayName, it)
+        launchSlashCommandFlowSuspendable {
+            session.setDisplayName(session.myUserId, changeDisplayName.displayName)
         }
     }
 
     private fun handleKickSlashCommand(kick: ParsedCommand.KickUser) {
-        launchSlashCommandFlow {
-            room.kick(kick.userId, kick.reason, it)
+        launchSlashCommandFlowSuspendable {
+            room.kick(kick.userId, kick.reason)
         }
     }
 
     private fun handleBanSlashCommand(ban: ParsedCommand.BanUser) {
-        launchSlashCommandFlow {
-            room.ban(ban.userId, ban.reason, it)
+        launchSlashCommandFlowSuspendable {
+            room.ban(ban.userId, ban.reason)
         }
     }
 
     private fun handleUnbanSlashCommand(unban: ParsedCommand.UnbanUser) {
-        launchSlashCommandFlow {
-            room.unban(unban.userId, unban.reason, it)
+        launchSlashCommandFlowSuspendable {
+            room.unban(unban.userId, unban.reason)
         }
     }
 
@@ -970,23 +1125,7 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private fun handleSendMedia(action: RoomDetailAction.SendMedia) {
-        val attachments = action.attachments
-        val homeServerCapabilities = session.getHomeServerCapabilities()
-        val maxUploadFileSize = homeServerCapabilities.maxUploadFileSize
-
-        if (maxUploadFileSize == HomeServerCapabilities.MAX_UPLOAD_FILE_SIZE_UNKNOWN) {
-            // Unknown limitation
-            room.sendMedias(attachments, action.compressBeforeSending, emptySet())
-        } else {
-            when (val tooBigFile = attachments.find { it.size > maxUploadFileSize }) {
-                null -> room.sendMedias(attachments, action.compressBeforeSending, emptySet())
-                else -> _viewEvents.post(RoomDetailViewEvents.FileTooBigError(
-                        tooBigFile.name ?: tooBigFile.queryUri.toString(),
-                        tooBigFile.size,
-                        maxUploadFileSize
-                ))
-            }
-        }
+        room.sendMedias(action.attachments, action.compressBeforeSending, emptySet())
     }
 
     private fun handleEventVisible(action: RoomDetailAction.TimelineEventTurnsVisible) {
@@ -1021,11 +1160,15 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private fun handleRejectInvite() {
-        room.leave(null, NoOpMatrixCallback())
+        viewModelScope.launch {
+            tryOrNull { room.leave(null) }
+        }
     }
 
     private fun handleAcceptInvite() {
-        room.join(callback = NoOpMatrixCallback())
+        viewModelScope.launch {
+            tryOrNull { room.join() }
+        }
     }
 
     private fun handleEditAction(action: RoomDetailAction.EnterEditMode) {
@@ -1054,60 +1197,56 @@ class RoomDetailViewModel @AssistedInject constructor(
         val mxcUrl = action.messageFileContent.getFileUrl() ?: return
         val isLocalSendingFile = action.senderId == session.myUserId
                 && mxcUrl.startsWith("content://")
-        val isDownloaded = session.fileService().isFileInCache(action.messageFileContent)
         if (isLocalSendingFile) {
             tryOrNull { Uri.parse(mxcUrl) }?.let {
                 _viewEvents.post(RoomDetailViewEvents.OpenFile(
-                        action.messageFileContent.mimeType,
                         it,
-                        null
-                ))
-            }
-        } else if (isDownloaded) {
-            // we can open it
-            session.fileService().getTemporarySharableURI(action.messageFileContent)?.let { uri ->
-                _viewEvents.post(RoomDetailViewEvents.OpenFile(
-                        action.messageFileContent.mimeType,
-                        uri,
-                        null
+                        action.messageFileContent.mimeType
                 ))
             }
         } else {
-            session.fileService().downloadFile(
-                    messageContent = action.messageFileContent,
-                    callback = object : MatrixCallback<File> {
-                        override fun onSuccess(data: File) {
-                            _viewEvents.post(RoomDetailViewEvents.DownloadFileState(
-                                    action.messageFileContent.mimeType,
-                                    data,
-                                    null
-                            ))
-                        }
+            viewModelScope.launch {
+                val fileState = session.fileService().fileState(action.messageFileContent)
+                var canOpen = fileState is FileService.FileState.InCache && fileState.decryptedFileInCache
+                if (!canOpen) {
+                    // First download, or download and decrypt, or decrypt from cache
+                    val result = runCatching {
+                        session.fileService().downloadFile(messageContent = action.messageFileContent)
+                    }
 
-                        override fun onFailure(failure: Throwable) {
-                            _viewEvents.post(RoomDetailViewEvents.DownloadFileState(
-                                    action.messageFileContent.mimeType,
-                                    null,
-                                    failure
-                            ))
-                        }
-                    })
+                    _viewEvents.post(RoomDetailViewEvents.DownloadFileState(
+                            action.messageFileContent.mimeType,
+                            result.getOrNull(),
+                            result.exceptionOrNull()
+                    ))
+                    canOpen = result.isSuccess
+                }
+
+                if (canOpen) {
+                    // We can now open the file
+                    session.fileService().getTemporarySharableURI(action.messageFileContent)?.let { uri ->
+                        _viewEvents.post(RoomDetailViewEvents.OpenFile(
+                                uri,
+                                action.messageFileContent.mimeType
+                        ))
+                    }
+                }
+            }
         }
     }
 
     private fun handleNavigateToEvent(action: RoomDetailAction.NavigateToEvent) {
         stopTrackingUnreadMessages()
         val targetEventId: String = action.eventId
-        val correctedEventId = timeline.getFirstDisplayableEventId(targetEventId) ?: targetEventId
-        val indexOfEvent = timeline.getIndexOfEvent(correctedEventId)
+        val indexOfEvent = timeline.getIndexOfEvent(targetEventId)
         if (indexOfEvent == null) {
             // Event is not already in RAM
             timeline.restartWithEventId(targetEventId)
         }
         if (action.highlight) {
-            setState { copy(highlightedEventId = correctedEventId) }
+            setState { copy(highlightedEventId = targetEventId) }
         }
-        _viewEvents.post(RoomDetailViewEvents.NavigateToEvent(correctedEventId))
+        _viewEvents.post(RoomDetailViewEvents.NavigateToEvent(targetEventId))
     }
 
     private fun handleResendEvent(action: RoomDetailAction.ResendMessage) {
@@ -1141,6 +1280,10 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private fun handleCancel(action: RoomDetailAction.CancelSend) {
+        if (action.force) {
+            room.cancelSend(action.eventId)
+            return
+        }
         val targetEventId = action.eventId
         room.getTimeLineEvent(targetEventId)?.let {
             // State must be in one of the sending states
@@ -1154,6 +1297,10 @@ class RoomDetailViewModel @AssistedInject constructor(
 
     private fun handleResendAll() {
         room.resendAllFailedMessages()
+    }
+
+    private fun handleRemoveAllFailedMessages() {
+        room.cancelAllFailedMessages()
     }
 
     private fun observeEventDisplayedActions() {
@@ -1173,14 +1320,19 @@ class RoomDetailViewModel @AssistedInject constructor(
                         }
                     }
                     bufferedMostRecentDisplayedEvent.root.eventId?.let { eventId ->
-                        room.setReadReceipt(eventId, callback = NoOpMatrixCallback())
+                        session.coroutineScope.launch {
+                            tryOrNull { room.setReadReceipt(eventId) }
+                        }
                     }
                 })
                 .disposeOnClear()
     }
 
     private fun handleMarkAllAsRead() {
-        room.markAsRead(ReadService.MarkAsReadParams.BOTH, NoOpMatrixCallback())
+        setState { copy(unreadState = UnreadState.HasNoUnread) }
+        viewModelScope.launch {
+            tryOrNull { room.markAsRead(ReadService.MarkAsReadParams.BOTH) }
+        }
     }
 
     private fun handleReportContent(action: RoomDetailAction.ReportContent) {
@@ -1200,15 +1352,15 @@ class RoomDetailViewModel @AssistedInject constructor(
             return
         }
 
-        session.ignoreUserIds(listOf(action.userId), object : MatrixCallback<Unit> {
-            override fun onSuccess(data: Unit) {
-                _viewEvents.post(RoomDetailViewEvents.ActionSuccess(action))
+        viewModelScope.launch {
+            val event = try {
+                session.ignoreUserIds(listOf(action.userId))
+                RoomDetailViewEvents.ActionSuccess(action)
+            } catch (failure: Throwable) {
+                RoomDetailViewEvents.ActionFailure(action, failure)
             }
-
-            override fun onFailure(failure: Throwable) {
-                _viewEvents.post(RoomDetailViewEvents.ActionFailure(action, failure))
-            }
-        })
+            _viewEvents.post(event)
+        }
     }
 
     private fun handleAcceptVerification(action: RoomDetailAction.AcceptVerificationRequest) {
@@ -1301,7 +1453,7 @@ class RoomDetailViewModel @AssistedInject constructor(
                 .combineLatest<List<TimelineEvent>, RoomSummary, UnreadState>(
                         timelineEvents.observeOn(Schedulers.computation()),
                         room.rx().liveRoomSummary().unwrap(),
-                        BiFunction { timelineEvents, roomSummary ->
+                        { timelineEvents, roomSummary ->
                             computeUnreadState(timelineEvents, roomSummary)
                         }
                 )
@@ -1322,15 +1474,12 @@ class RoomDetailViewModel @AssistedInject constructor(
     private fun computeUnreadState(events: List<TimelineEvent>, roomSummary: RoomSummary): UnreadState {
         if (events.isEmpty()) return UnreadState.Unknown
         val readMarkerIdSnapshot = roomSummary.readMarkerId ?: return UnreadState.Unknown
-        val firstDisplayableEventId = timeline.getFirstDisplayableEventId(readMarkerIdSnapshot)
-        val firstDisplayableEventIndex = timeline.getIndexOfEvent(firstDisplayableEventId)
-        if (firstDisplayableEventId == null || firstDisplayableEventIndex == null) {
-            return if (timeline.isLive) {
-                UnreadState.ReadMarkerNotLoaded(readMarkerIdSnapshot)
-            } else {
-                UnreadState.Unknown
-            }
-        }
+        val firstDisplayableEventIndex = timeline.getIndexOfEvent(readMarkerIdSnapshot)
+                ?: return if (timeline.isLive) {
+                    UnreadState.ReadMarkerNotLoaded(readMarkerIdSnapshot)
+                } else {
+                    UnreadState.Unknown
+                }
         for (i in (firstDisplayableEventIndex - 1) downTo 0) {
             val timelineEvent = events.getOrNull(i) ?: return UnreadState.Unknown
             val eventId = timelineEvent.root.eventId ?: return UnreadState.Unknown
@@ -1366,10 +1515,13 @@ class RoomDetailViewModel @AssistedInject constructor(
 
     private fun observeSummaryState() {
         asyncSubscribe(RoomDetailViewState::asyncRoomSummary) { summary ->
-            roomSummaryHolder.set(summary)
+            roomSummariesHolder.set(summary)
             setState {
                 val typingMessage = typingHelper.getTypingMessage(summary.typingUsers)
-                copy(typingMessage = typingMessage)
+                copy(
+                        typingMessage = typingMessage,
+                        hasFailedSending = summary.hasFailedSending
+                )
             }
             if (summary.membership == Membership.INVITE) {
                 summary.inviterId?.let { inviterId ->
@@ -1393,7 +1545,7 @@ class RoomDetailViewModel @AssistedInject constructor(
                 snapshot
                         .takeIf { state.asyncRoomSummary.invoke()?.isEncrypted == false }
                         ?.forEach {
-                            previewUrlRetriever.getPreviewUrl(it.root, viewModelScope)
+                            previewUrlRetriever.getPreviewUrl(it)
                         }
             }
         }
@@ -1411,7 +1563,7 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     override fun onCleared() {
-        roomSummaryHolder.clear()
+        roomSummariesHolder.remove(room.roomId)
         timeline.dispose()
         timeline.removeAllListeners()
         if (vectorPreferences.sendTypingNotifs()) {
@@ -1419,6 +1571,7 @@ class RoomDetailViewModel @AssistedInject constructor(
         }
         chatEffectManager.delegate = null
         chatEffectManager.dispose()
+        callManager.removeProtocolsCheckerListener(this)
         super.onCleared()
     }
 }

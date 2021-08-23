@@ -21,10 +21,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
-import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.viewModel
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.error.ErrorFormatter
@@ -33,12 +32,13 @@ import im.vector.app.core.extensions.addFragmentToBackstack
 import im.vector.app.core.platform.SimpleFragmentActivity
 import im.vector.app.core.platform.WaitingViewData
 import im.vector.app.core.utils.PERMISSIONS_FOR_MEMBERS_SEARCH
-import im.vector.app.core.utils.PERMISSION_REQUEST_CODE_READ_CONTACTS
-import im.vector.app.core.utils.allGranted
 import im.vector.app.core.utils.checkPermissions
+import im.vector.app.core.utils.onPermissionDeniedSnackbar
+import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.core.utils.toast
 import im.vector.app.features.contactsbook.ContactsBookFragment
 import im.vector.app.features.contactsbook.ContactsBookViewModel
+import im.vector.app.features.contactsbook.ContactsBookViewState
 import im.vector.app.features.userdirectory.UserListFragment
 import im.vector.app.features.userdirectory.UserListFragmentArgs
 import im.vector.app.features.userdirectory.UserListSharedAction
@@ -53,7 +53,7 @@ import javax.inject.Inject
 @Parcelize
 data class InviteUsersToRoomArgs(val roomId: String) : Parcelable
 
-class InviteUsersToRoomActivity : SimpleFragmentActivity(), UserListViewModel.Factory {
+class InviteUsersToRoomActivity : SimpleFragmentActivity(), UserListViewModel.Factory, ContactsBookViewModel.Factory, InviteUsersToRoomViewModel.Factory {
 
     private val viewModel: InviteUsersToRoomViewModel by viewModel()
     private lateinit var sharedActionViewModel: UserListSharedActionViewModel
@@ -67,9 +67,11 @@ class InviteUsersToRoomActivity : SimpleFragmentActivity(), UserListViewModel.Fa
         injector.inject(this)
     }
 
-    override fun create(initialState: UserListViewState): UserListViewModel {
-        return userListViewModelFactory.create(initialState)
-    }
+    override fun create(initialState: UserListViewState) = userListViewModelFactory.create(initialState)
+
+    override fun create(initialState: ContactsBookViewState) = contactsBookViewModelFactory.create(initialState)
+
+    override fun create(initialState: InviteUsersToRoomViewState) = inviteUsersToRoomViewModelFactory.create(initialState)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -92,7 +94,6 @@ class InviteUsersToRoomActivity : SimpleFragmentActivity(), UserListViewModel.Fa
                 }
                 .disposeOnDestroy()
         if (isFirstCreation()) {
-            val args: InviteUsersToRoomArgs? = intent.extras?.getParcelable(MvRx.KEY_ARG)
             addFragment(
                     R.id.container,
                     UserListFragment::class.java,
@@ -100,7 +101,7 @@ class InviteUsersToRoomActivity : SimpleFragmentActivity(), UserListViewModel.Fa
                             title = getString(R.string.invite_users_to_room_title),
                             menuResId = R.menu.vector_invite_users_to_room,
                             excludedUserIds = viewModel.getUserIdsOfRoomMembers(),
-                            existingRoomId = args?.roomId
+                            showInviteActions = false
                     )
             )
         }
@@ -110,28 +111,22 @@ class InviteUsersToRoomActivity : SimpleFragmentActivity(), UserListViewModel.Fa
 
     private fun onMenuItemSelected(action: UserListSharedAction.OnMenuItemSelected) {
         if (action.itemId == R.id.action_invite_users_to_room_invite) {
-            viewModel.handle(InviteUsersToRoomAction.InviteSelectedUsers(action.invitees))
+            viewModel.handle(InviteUsersToRoomAction.InviteSelectedUsers(action.selections))
         }
     }
 
     private fun openPhoneBook() {
         // Check permission first
-        if (checkPermissions(PERMISSIONS_FOR_MEMBERS_SEARCH,
-                        this,
-                        PERMISSION_REQUEST_CODE_READ_CONTACTS,
-                        0)) {
+        if (checkPermissions(PERMISSIONS_FOR_MEMBERS_SEARCH, this, permissionContactLauncher)) {
             addFragmentToBackstack(R.id.container, ContactsBookFragment::class.java)
         }
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (allGranted(grantResults)) {
-            if (requestCode == PERMISSION_REQUEST_CODE_READ_CONTACTS) {
-                doOnPostResume { addFragmentToBackstack(R.id.container, ContactsBookFragment::class.java) }
-            }
-        } else {
-            Toast.makeText(baseContext, R.string.missing_permissions_error, Toast.LENGTH_SHORT).show()
+    private val permissionContactLauncher = registerForPermissionsResult { allGranted, deniedPermanently ->
+        if (allGranted) {
+            doOnPostResume { addFragmentToBackstack(R.id.container, ContactsBookFragment::class.java) }
+        } else if (deniedPermanently) {
+            onPermissionDeniedSnackbar(R.string.permissions_denied_add_contact)
         }
     }
 
@@ -155,7 +150,7 @@ class InviteUsersToRoomActivity : SimpleFragmentActivity(), UserListViewModel.Fa
         } else {
             errorFormatter.toHumanReadable(error)
         }
-        AlertDialog.Builder(this)
+        MaterialAlertDialogBuilder(this)
                 .setMessage(message)
                 .setPositiveButton(R.string.ok, null)
                 .show()

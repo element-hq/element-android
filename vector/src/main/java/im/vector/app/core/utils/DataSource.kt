@@ -49,7 +49,7 @@ open class BehaviorDataSource<T>(private val defaultValue: T? = null) : MutableD
 
     private fun createRelay(): BehaviorRelay<T> {
         return if (defaultValue == null) {
-            BehaviorRelay.create<T>()
+            BehaviorRelay.create()
         } else {
             BehaviorRelay.createDefault(defaultValue)
         }

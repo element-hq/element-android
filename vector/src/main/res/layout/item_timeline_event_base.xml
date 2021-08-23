@@ -21,10 +21,12 @@
         android:layout_height="44dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="4dp"
-        tools:src="@tools:sample/avatars" />
+        android:contentDescription="@string/avatar"
+        tools:src="@sample/user_round_avatars" />
 
     <TextView
         android:id="@+id/messageMemberNameView"
+        style="@style/Widget.Vector.TextView.Subtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -35,21 +37,20 @@
         android:layout_toEndOf="@+id/messageStartGuideline"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textColor="?riotx_text_primary"
-        android:textSize="15sp"
+        android:textColor="?vctr_content_primary"
         android:textStyle="bold"
-        tools:text="@sample/matrix.json/data/displayName" />
+        tools:text="@sample/users.json/data/displayName" />
 
     <TextView
         android:id="@+id/messageTimeView"
+        style="@style/Widget.Vector.TextView.Caption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/messageMemberNameView"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:textColor="?riotx_text_secondary"
-        android:textSize="12sp"
+        android:textColor="?vctr_content_secondary"
         tools:text="@tools:sample/date/hhmm" />
 
     <View
@@ -64,7 +65,7 @@
         android:layout_height="8dp"
         android:layout_toEndOf="@id/messageStartGuideline" />
 
-    <ImageView
+    <im.vector.app.core.ui.views.ShieldImageView
         android:id="@+id/messageE2EDecoration"
         android:layout_width="16dp"
         android:layout_height="16dp"
@@ -72,7 +73,6 @@
         android:layout_alignEnd="@id/decorationSpace"
         android:layout_marginTop="7dp"
         android:visibility="gone"
-        tools:src="@drawable/ic_shield_warning"
         tools:visibility="visible" />
 
     <FrameLayout
@@ -80,6 +80,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/messageMemberNameView"
+        android:layout_toStartOf="@id/messageSendStateImageView"
         android:layout_toEndOf="@id/messageStartGuideline"
         android:addStatesFromChildren="true">
 
@@ -131,7 +132,44 @@
             android:layout_marginEnd="56dp"
             android:layout="@layout/item_timeline_event_option_buttons_stub" />
 
+        <ViewStub
+            android:id="@+id/messageContentVoiceStub"
+            style="@style/TimelineContentStubBaseParams"
+            android:layout_marginEnd="56dp"
+            android:layout="@layout/item_timeline_event_voice_stub"
+            tools:visibility="visible" />
+
     </FrameLayout>
+
+    <im.vector.app.core.ui.views.SendStateImageView
+        android:id="@+id/messageSendStateImageView"
+        android:layout_width="@dimen/item_event_message_state_size"
+        android:layout_height="@dimen/item_event_message_state_size"
+        android:layout_alignBottom="@+id/viewStubContainer"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="4dp"
+        android:contentDescription="@string/event_status_a11y_sending"
+        android:src="@drawable/ic_sending_message"
+        android:visibility="gone"
+        tools:tint="?vctr_content_tertiary"
+        tools:visibility="visible" />
+
+    <ProgressBar
+        android:id="@+id/eventSendingIndicator"
+        android:layout_width="@dimen/item_event_message_state_size"
+        android:layout_height="@dimen/item_event_message_state_size"
+        android:layout_alignBottom="@+id/viewStubContainer"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="4dp"
+        android:indeterminateTint="?vctr_content_secondary"
+        android:visibility="gone"
+        app:tint="?vctr_content_tertiary"
+        tools:ignore="MissingPrefix"
+        tools:visibility="visible" />
 
     <LinearLayout
         android:id="@+id/informationBottom"
@@ -160,15 +198,6 @@
                 android:layout_height="wrap_content" /-->
 
         </com.google.android.flexbox.FlexboxLayout>
-
-        <im.vector.app.core.ui.views.ReadReceiptsView
-            android:id="@+id/readReceiptsView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="4dp" />
-
     </LinearLayout>
 
 </RelativeLayout>

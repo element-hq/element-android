@@ -1,0 +1,2 @@
+Hlavné zmeny v tejto verzii: Podpora sociálneho prihlásenia.
+Celý zoznam zmien: https://github.com/vector-im/element-android/releases/tag/v1.0.15 and https://github.com/vector-im/element-android/releases/tag/v1.0.16

@@ -20,26 +20,22 @@ import android.content.Context
 import android.net.Uri
 import android.webkit.MimeTypeMap
 import androidx.core.content.FileProvider
-import arrow.core.Try
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.completeWith
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import org.matrix.android.sdk.api.MatrixCallback
-import org.matrix.android.sdk.api.extensions.tryOrNull
+import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.content.ContentUrlResolver
 import org.matrix.android.sdk.api.session.file.FileService
-import org.matrix.android.sdk.api.util.Cancelable
-import org.matrix.android.sdk.api.util.NoOpCancellable
 import org.matrix.android.sdk.internal.crypto.attachments.ElementToDecrypt
 import org.matrix.android.sdk.internal.crypto.attachments.MXEncryptedAttachments
 import org.matrix.android.sdk.internal.di.SessionDownloadsDirectory
 import org.matrix.android.sdk.internal.di.UnauthenticatedWithCertificateWithProgress
 import org.matrix.android.sdk.internal.session.download.DownloadProgressInterceptor.Companion.DOWNLOAD_PROGRESS_INTERCEPTOR_HEADER
-import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
+import org.matrix.android.sdk.internal.util.file.AtomicFileCreator
 import org.matrix.android.sdk.internal.util.md5
-import org.matrix.android.sdk.internal.util.toCancelable
 import org.matrix.android.sdk.internal.util.writeToFile
 import timber.log.Timber
 import java.io.File
@@ -53,14 +49,15 @@ internal class DefaultFileService @Inject constructor(
         private val contentUrlResolver: ContentUrlResolver,
         @UnauthenticatedWithCertificateWithProgress
         private val okHttpClient: OkHttpClient,
-        private val coroutineDispatchers: MatrixCoroutineDispatchers,
-        private val taskExecutor: TaskExecutor
+        private val coroutineDispatchers: MatrixCoroutineDispatchers
 ) : FileService {
 
     // Legacy folder, will be deleted
     private val legacyFolder = File(sessionCacheDirectory, "MF")
+
     // Folder to store downloaded files (not decrypted)
     private val downloadFolder = File(sessionCacheDirectory, "F")
+
     // Folder to store decrypted files
     private val decryptedFolder = File(downloadFolder, "D")
 
@@ -73,134 +70,135 @@ internal class DefaultFileService @Inject constructor(
      * Retain ongoing downloads to avoid re-downloading and already downloading file
      * map of mxCurl to callbacks
      */
-    private val ongoing = mutableMapOf<String, ArrayList<MatrixCallback<File>>>()
+    private val ongoing = mutableMapOf<String, CompletableDeferred<File>>()
 
     /**
      * Download file in the cache folder, and eventually decrypt it
      * TODO looks like files are copied 3 times
      */
-    override fun downloadFile(fileName: String,
-                              mimeType: String?,
-                              url: String?,
-                              elementToDecrypt: ElementToDecrypt?,
-                              callback: MatrixCallback<File>): Cancelable {
-        url ?: return NoOpCancellable.also {
-            callback.onFailure(IllegalArgumentException("url is null"))
-        }
+    override suspend fun downloadFile(fileName: String,
+                                      mimeType: String?,
+                                      url: String?,
+                                      elementToDecrypt: ElementToDecrypt?): File {
+        url ?: throw IllegalArgumentException("url is null")
 
         Timber.v("## FileService downloadFile $url")
 
-        synchronized(ongoing) {
+        // TODO: Remove use of `synchronized` in suspend function.
+        val existingDownload = synchronized(ongoing) {
             val existing = ongoing[url]
             if (existing != null) {
                 Timber.v("## FileService downloadFile is already downloading.. ")
-                existing.add(callback)
-                return NoOpCancellable
+                existing
             } else {
                 // mark as tracked
-                ongoing[url] = ArrayList()
+                ongoing[url] = CompletableDeferred()
                 // and proceed to download
+                null
             }
         }
 
-        return taskExecutor.executorScope.launch(coroutineDispatchers.main) {
-            withContext(coroutineDispatchers.io) {
-                Try {
-                    if (!decryptedFolder.exists()) {
-                        decryptedFolder.mkdirs()
-                    }
-                    // ensure we use unique file name by using URL (mapped to suitable file name)
-                    // Also we need to add extension for the FileProvider, if not it lot's of app that it's
-                    // shared with will not function well (even if mime type is passed in the intent)
-                    getFiles(url, fileName, mimeType, elementToDecrypt != null)
-                }.flatMap { cachedFiles ->
-                    if (!cachedFiles.file.exists()) {
-                        val resolvedUrl = contentUrlResolver.resolveFullSize(url) ?: return@flatMap Try.Failure(IllegalArgumentException("url is null"))
+        var atomicFileDownload: AtomicFileCreator? = null
+        var atomicFileDecrypt: AtomicFileCreator? = null
 
-                        val request = Request.Builder()
-                                .url(resolvedUrl)
-                                .header(DOWNLOAD_PROGRESS_INTERCEPTOR_HEADER, url)
-                                .build()
+        if (existingDownload != null) {
+            // FIXME If the first downloader cancels then we'll unfortunately be cancelled too.
+            return existingDownload.await()
+        }
 
-                        val response = try {
-                            okHttpClient.newCall(request).execute()
-                        } catch (e: Throwable) {
-                            return@flatMap Try.Failure(e)
-                        }
-
-                        if (!response.isSuccessful) {
-                            return@flatMap Try.Failure(IOException())
-                        }
-
-                        val source = response.body?.source()
-                                ?: return@flatMap Try.Failure(IOException())
-
-                        Timber.v("Response size ${response.body?.contentLength()} - Stream available: ${!source.exhausted()}")
-
-                        // Write the file to cache (encrypted version if the file is encrypted)
-                        writeToFile(source.inputStream(), cachedFiles.file)
-                        response.close()
-                    } else {
-                        Timber.v("## FileService: cache hit for $url")
-                    }
-
-                    Try.just(cachedFiles)
+        val result = runCatching {
+            val cachedFiles = withContext(coroutineDispatchers.io) {
+                if (!decryptedFolder.exists()) {
+                    decryptedFolder.mkdirs()
                 }
-            }.flatMap { cachedFiles ->
-                // Decrypt if necessary
-                if (cachedFiles.decryptedFile != null) {
-                    if (!cachedFiles.decryptedFile.exists()) {
-                        Timber.v("## FileService: decrypt file")
-                        // Ensure the parent folder exists
-                        cachedFiles.decryptedFile.parentFile?.mkdirs()
-                        val decryptSuccess = cachedFiles.file.inputStream().use { inputStream ->
-                            cachedFiles.decryptedFile.outputStream().buffered().use { outputStream ->
-                                MXEncryptedAttachments.decryptAttachment(
-                                        inputStream,
-                                        elementToDecrypt,
-                                        outputStream
-                                )
-                            }
+
+                // ensure we use unique file name by using URL (mapped to suitable file name)
+                // Also we need to add extension for the FileProvider, if not it lot's of app that it's
+                // shared with will not function well (even if mime type is passed in the intent)
+                val cachedFiles = getFiles(url, fileName, mimeType, elementToDecrypt != null)
+
+                if (!cachedFiles.file.exists()) {
+                    val resolvedUrl = contentUrlResolver.resolveFullSize(url) ?: throw IllegalArgumentException("url is null")
+
+                    val request = Request.Builder()
+                            .url(resolvedUrl)
+                            .header(DOWNLOAD_PROGRESS_INTERCEPTOR_HEADER, url)
+                            .build()
+
+                    val response = try {
+                        okHttpClient.newCall(request).execute()
+                    } catch (failure: Throwable) {
+                        throw if (failure is IOException) {
+                            Failure.NetworkConnection(failure)
+                        } else {
+                            failure
                         }
-                        if (!decryptSuccess) {
-                            return@flatMap Try.Failure(IllegalStateException("Decryption error"))
-                        }
-                    } else {
-                        Timber.v("## FileService: cache hit for decrypted file")
                     }
-                    Try.just(cachedFiles.decryptedFile)
+
+                    if (!response.isSuccessful) {
+                        throw Failure.NetworkConnection(IOException())
+                    }
+
+                    val source = response.body?.source() ?: throw Failure.NetworkConnection(IOException())
+
+                    Timber.v("Response size ${response.body?.contentLength()} - Stream available: ${!source.exhausted()}")
+
+                    // Write the file to cache (encrypted version if the file is encrypted)
+                    // Write to a part file first, so if we abort before done, we don't have a broken cached file
+                    val atomicFileCreator = AtomicFileCreator(cachedFiles.file).also { atomicFileDownload = it }
+                    writeToFile(source.inputStream(), atomicFileCreator.partFile)
+                    response.close()
+                    atomicFileCreator.commit()
                 } else {
-                    // Clear file
-                    Try.just(cachedFiles.file)
+                    Timber.v("## FileService: cache hit for $url")
                 }
-            }.fold(
-                    { throwable ->
-                        callback.onFailure(throwable)
-                        // notify concurrent requests
-                        val toNotify = synchronized(ongoing) {
-                            ongoing[url]?.also {
-                                ongoing.remove(url)
-                            }
-                        }
-                        toNotify?.forEach { otherCallbacks ->
-                            tryOrNull { otherCallbacks.onFailure(throwable) }
-                        }
-                    },
-                    { file ->
-                        callback.onSuccess(file)
-                        // notify concurrent requests
-                        val toNotify = synchronized(ongoing) {
-                            ongoing[url]?.also {
-                                ongoing.remove(url)
-                            }
-                        }
-                        Timber.v("## FileService additional to notify ${toNotify?.size ?: 0} ")
-                        toNotify?.forEach { otherCallbacks ->
-                            tryOrNull { otherCallbacks.onSuccess(file) }
+                cachedFiles
+            }
+
+            // Decrypt if necessary
+            if (cachedFiles.decryptedFile != null) {
+                if (!cachedFiles.decryptedFile.exists()) {
+                    Timber.v("## FileService: decrypt file")
+                    // Ensure the parent folder exists
+                    cachedFiles.decryptedFile.parentFile?.mkdirs()
+                    // Write to a part file first, so if we abort before done, we don't have a broken cached file
+                    val atomicFileCreator = AtomicFileCreator(cachedFiles.decryptedFile).also { atomicFileDecrypt = it }
+                    val decryptSuccess = cachedFiles.file.inputStream().use { inputStream ->
+                        atomicFileCreator.partFile.outputStream().buffered().use { outputStream ->
+                            MXEncryptedAttachments.decryptAttachment(
+                                    inputStream,
+                                    elementToDecrypt,
+                                    outputStream
+                            )
                         }
                     }
-            )
-        }.toCancelable()
+                    atomicFileCreator.commit()
+                    if (!decryptSuccess) {
+                        throw IllegalStateException("Decryption error")
+                    }
+                } else {
+                    Timber.v("## FileService: cache hit for decrypted file")
+                }
+                cachedFiles.decryptedFile
+            } else {
+                // Clear file
+                cachedFiles.file
+            }
+        }
+
+        // notify concurrent requests
+        val toNotify = synchronized(ongoing) { ongoing.remove(url) }
+        result.onSuccess {
+            Timber.v("## FileService additional to notify is > 0 ")
+        }
+        toNotify?.completeWith(result)
+
+        result.onFailure {
+            atomicFileDownload?.cancel()
+            atomicFileDecrypt?.cancel()
+        }
+
+        return result.getOrThrow()
     }
 
     fun storeDataFor(mxcUrl: String,
@@ -245,7 +243,7 @@ internal class DefaultFileService @Inject constructor(
                                fileName: String,
                                mimeType: String?,
                                elementToDecrypt: ElementToDecrypt?): Boolean {
-        return fileState(mxcUrl, fileName, mimeType, elementToDecrypt) == FileService.FileState.IN_CACHE
+        return fileState(mxcUrl, fileName, mimeType, elementToDecrypt) is FileService.FileState.InCache
     }
 
     internal data class CachedFiles(
@@ -282,12 +280,17 @@ internal class DefaultFileService @Inject constructor(
                            fileName: String,
                            mimeType: String?,
                            elementToDecrypt: ElementToDecrypt?): FileService.FileState {
-        mxcUrl ?: return FileService.FileState.UNKNOWN
-        if (getFiles(mxcUrl, fileName, mimeType, elementToDecrypt != null).file.exists()) return FileService.FileState.IN_CACHE
+        mxcUrl ?: return FileService.FileState.Unknown
+        val files = getFiles(mxcUrl, fileName, mimeType, elementToDecrypt != null)
+        if (files.file.exists()) {
+            return FileService.FileState.InCache(
+                    decryptedFileInCache = files.getClearFile().exists()
+            )
+        }
         val isDownloading = synchronized(ongoing) {
             ongoing[mxcUrl] != null
         }
-        return if (isDownloading) FileService.FileState.DOWNLOADING else FileService.FileState.UNKNOWN
+        return if (isDownloading) FileService.FileState.Downloading else FileService.FileState.Unknown
     }
 
     /**
@@ -312,7 +315,7 @@ internal class DefaultFileService @Inject constructor(
                     Timber.v("Get size of ${it.absolutePath}")
                     true
                 }
-                .sumBy { it.length().toInt() }
+                .sumOf { it.length().toInt() }
     }
 
     override fun clearCache() {
@@ -325,6 +328,7 @@ internal class DefaultFileService @Inject constructor(
 
     companion object {
         private const val ENCRYPTED_FILENAME = "encrypted.bin"
+
         // The extension would be added from the mimetype
         private const val DEFAULT_FILENAME = "file"
     }

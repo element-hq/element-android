@@ -47,3 +47,8 @@ internal open class DeviceInfoEntity(
 
     companion object
 }
+
+internal fun DeviceInfoEntity.deleteOnCascade() {
+    trustLevelEntity?.deleteFromRealm()
+    deleteFromRealm()
+}

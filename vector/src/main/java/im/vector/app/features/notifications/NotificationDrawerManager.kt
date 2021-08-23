@@ -26,6 +26,8 @@ import im.vector.app.ActiveSessionDataSource
 import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.core.utils.FirstThrottler
+import im.vector.app.features.invite.AutoAcceptInvites
 import im.vector.app.features.settings.VectorPreferences
 import me.gujun.android.span.span
 import org.matrix.android.sdk.api.session.Session
@@ -49,7 +51,8 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
                                                     private val activeSessionDataSource: ActiveSessionDataSource,
                                                     private val iconLoader: IconLoader,
                                                     private val bitmapLoader: BitmapLoader,
-                                                    private val outdatedDetector: OutdatedEventDetector?) {
+                                                    private val outdatedDetector: OutdatedEventDetector?,
+                                                    private val autoAcceptInvites: AutoAcceptInvites) {
 
     private val handlerThread: HandlerThread = HandlerThread("NotificationDrawerManager", Thread.MIN_PRIORITY)
     private var backgroundHandler: Handler
@@ -88,20 +91,23 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
         // If we support multi session, event list should be per userId
         // Currently only manage single session
         if (BuildConfig.LOW_PRIVACY_LOG_ENABLE) {
-            Timber.v("%%%%%%%% onNotifiableEventReceived $notifiableEvent")
+            Timber.d("onNotifiableEventReceived(): $notifiableEvent")
+        } else {
+            Timber.d("onNotifiableEventReceived(): is push: ${notifiableEvent.isPushGatewayEvent}")
         }
         synchronized(eventList) {
             val existing = eventList.firstOrNull { it.eventId == notifiableEvent.eventId }
             if (existing != null) {
                 if (existing.isPushGatewayEvent) {
                     // Use the event coming from the event stream as it may contains more info than
-                    // the fcm one (like type/content/clear text)
+                    // the fcm one (like type/content/clear text) (e.g when an encrypted message from
+                    // FCM should be update with clear text after a sync)
                     // In this case the message has already been notified, and might have done some noise
                     // So we want the notification to be updated even if it has already been displayed
-                    // But it should make no noise (e.g when an encrypted message from FCM should be
-                    // update with clear text after a sync)
+                    // Use setOnlyAlertOnce to ensure update notification does not interfere with sound
+                    // from first notify invocation as outlined in:
+                    // https://developer.android.com/training/notify-user/build-notification#Updating
                     notifiableEvent.hasBeenDisplayed = false
-                    notifiableEvent.noisy = false
                     eventList.remove(existing)
                     eventList.add(notifiableEvent)
                 } else {
@@ -194,10 +200,14 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
         notificationUtils.cancelNotificationMessage(roomId, ROOM_INVITATION_NOTIFICATION_ID)
     }
 
+    private var firstThrottler = FirstThrottler(200)
+
     fun refreshNotificationDrawer() {
         // Implement last throttler
-        Timber.v("refreshNotificationDrawer()")
+        val canHandle = firstThrottler.canHandle()
+        Timber.v("refreshNotificationDrawer(), delay: ${canHandle.waitMillis()} ms")
         backgroundHandler.removeCallbacksAndMessages(null)
+
         backgroundHandler.postDelayed(
                 {
                     try {
@@ -206,7 +216,8 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
                         // It can happen if for instance session has been destroyed. It's a bit ugly to try catch like this, but it's safer
                         Timber.w(throwable, "refreshNotificationDrawerBg failure")
                     }
-                }, 200)
+                },
+                canHandle.waitMillis())
     }
 
     @WorkerThread
@@ -245,7 +256,14 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
                             roomEvents.add(event)
                         }
                     }
-                    is InviteNotifiableEvent  -> invitationEvents.add(event)
+                    is InviteNotifiableEvent  -> {
+                        if (autoAcceptInvites.hideInvites) {
+                            // Forget this event
+                           eventIterator.remove()
+                        } else {
+                            invitationEvents.add(event)
+                        }
+                    }
                     is SimpleNotifiableEvent  -> simpleEvents.add(event)
                     else                      -> Timber.w("Type not handled")
                 }
@@ -544,7 +562,7 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
         return bitmapLoader.getRoomBitmap(roomAvatarPath)
     }
 
-    private fun shouldIgnoreMessageEventInRoom(roomId: String?): Boolean {
+    fun shouldIgnoreMessageEventInRoom(roomId: String?): Boolean {
         return currentRoomId != null && roomId == currentRoomId
     }
 

@@ -33,11 +33,13 @@ import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.internal.crypto.model.OlmInboundGroupSessionWrapper2
 import org.matrix.android.sdk.internal.crypto.model.OlmSessionWrapper
+import org.matrix.android.sdk.internal.crypto.model.OutboundGroupSessionWrapper
 import org.matrix.android.sdk.internal.crypto.model.event.RoomKeyWithHeldContent
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.rest.RoomKeyRequestBody
 import org.matrix.android.sdk.internal.crypto.store.db.model.KeysBackupDataEntity
 import org.matrix.olm.OlmAccount
+import org.matrix.olm.OlmOutboundGroupSession
 
 /**
  * the crypto data store
@@ -257,7 +259,7 @@ internal interface IMXCryptoStore {
      * @param deviceKey the public key of the other device.
      * @return A set of sessionId, or null if device is not known
      */
-    fun getDeviceSessionIds(deviceKey: String): Set<String>?
+    fun getDeviceSessionIds(deviceKey: String): List<String>?
 
     /**
      * Retrieve an end-to-end session between the logged-in user and another
@@ -292,6 +294,16 @@ internal interface IMXCryptoStore {
      * @return an inbound group session.
      */
     fun getInboundGroupSession(sessionId: String, senderKey: String): OlmInboundGroupSessionWrapper2?
+
+    /**
+     * Get the current outbound group session for this encrypted room
+     */
+    fun getCurrentOutboundGroupSessionForRoom(roomId: String): OutboundGroupSessionWrapper?
+
+    /**
+     * Get the current outbound group session for this encrypted room
+     */
+    fun storeCurrentOutboundGroupSessionForRoom(roomId: String, outboundGroupSession: OlmOutboundGroupSession?)
 
     /**
      * Remove an inbound group session
@@ -439,7 +451,15 @@ internal interface IMXCryptoStore {
     fun getWithHeldMegolmSession(roomId: String, sessionId: String): RoomKeyWithHeldContent?
 
     fun markedSessionAsShared(roomId: String?, sessionId: String, userId: String, deviceId: String, chainIndex: Int)
-    fun wasSessionSharedWithUser(roomId: String?, sessionId: String, userId: String, deviceId: String): SharedSessionResult
+
+    /**
+     * Query for information on this session sharing history.
+     * @return SharedSessionResult
+     * if found is true then this session was initialy shared with that user|device,
+     * in this case chainIndex is not nullindicates the ratchet position.
+     * In found is false, chainIndex is null
+     */
+    fun getSharedSessionInfo(roomId: String?, sessionId: String, userId: String, deviceId: String): SharedSessionResult
     data class SharedSessionResult(val found: Boolean, val chainIndex: Int?)
 
     fun getSharedWithInfo(roomId: String?, sessionId: String): MXUsersDevicesMap<Int>
@@ -455,7 +475,7 @@ internal interface IMXCryptoStore {
     fun getGossipingEvents(): List<Event>
 
     fun setDeviceKeysUploaded(uploaded: Boolean)
-    fun getDeviceKeysUploaded(): Boolean
+    fun areDeviceKeysUploaded(): Boolean
     fun tidyUpDataBase()
     fun logDbUsageInfo()
 }

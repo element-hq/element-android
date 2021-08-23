@@ -23,15 +23,15 @@ import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
+import dagger.assisted.AssistedFactory
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.accountdata.UserAccountDataEvent
-import org.matrix.android.sdk.internal.util.awaitCallback
 import org.matrix.android.sdk.rx.rx
 
 data class AccountDataViewState(
@@ -43,7 +43,7 @@ class AccountDataViewModel @AssistedInject constructor(@Assisted initialState: A
     : VectorViewModel<AccountDataViewState, AccountDataAction, EmptyViewEvents>(initialState) {
 
     init {
-        session.rx().liveAccountData(emptySet())
+        session.rx().liveUserAccountData(emptySet())
                 .execute {
                     copy(accountData = it)
                 }
@@ -57,13 +57,11 @@ class AccountDataViewModel @AssistedInject constructor(@Assisted initialState: A
 
     private fun handleDeleteAccountData(action: AccountDataAction.DeleteAccountData) {
         viewModelScope.launch {
-            awaitCallback {
-                session.updateAccountData(action.type, emptyMap(), it)
-            }
+            session.accountDataService().updateUserAccountData(action.type, emptyMap())
         }
     }
 
-    @AssistedInject.Factory
+    @AssistedFactory
     interface Factory {
         fun create(initialState: AccountDataViewState): AccountDataViewModel
     }

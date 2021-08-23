@@ -25,17 +25,24 @@ import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.ui.bottomsheet.BottomSheetGeneric
 import im.vector.app.core.ui.bottomsheet.BottomSheetGenericController
 import kotlinx.parcelize.Parcelize
-import org.matrix.android.sdk.api.session.room.model.GuestAccess
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 import javax.inject.Inject
 
 @Parcelize
-data class RoomJoinRuleBottomSheetArgs(
-        val currentRoomJoinRule: RoomJoinRules,
-        val currentGuestAccess: GuestAccess?
+data class JoinRulesOptionSupport(
+        val rule: RoomJoinRules,
+        val needUpgrade: Boolean = false
 ) : Parcelable
 
-class RoomJoinRuleBottomSheet : BottomSheetGeneric<RoomJoinRuleState, RoomJoinRuleAction>() {
+fun RoomJoinRules.toOption(needUpgrade: Boolean) = JoinRulesOptionSupport(this, needUpgrade)
+
+@Parcelize
+data class RoomJoinRuleBottomSheetArgs(
+        val currentRoomJoinRule: RoomJoinRules,
+        val allowedJoinedRules: List<JoinRulesOptionSupport>
+) : Parcelable
+
+class RoomJoinRuleBottomSheet : BottomSheetGeneric<RoomJoinRuleState, RoomJoinRuleRadioAction>() {
 
     private lateinit var roomJoinRuleSharedActionViewModel: RoomJoinRuleSharedActionViewModel
     @Inject lateinit var controller: RoomJoinRuleController
@@ -45,14 +52,14 @@ class RoomJoinRuleBottomSheet : BottomSheetGeneric<RoomJoinRuleState, RoomJoinRu
         injector.inject(this)
     }
 
-    override fun getController(): BottomSheetGenericController<RoomJoinRuleState, RoomJoinRuleAction> = controller
+    override fun getController(): BottomSheetGenericController<RoomJoinRuleState, RoomJoinRuleRadioAction> = controller
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         roomJoinRuleSharedActionViewModel = activityViewModelProvider.get(RoomJoinRuleSharedActionViewModel::class.java)
     }
 
-    override fun didSelectAction(action: RoomJoinRuleAction) {
+    override fun didSelectAction(action: RoomJoinRuleRadioAction) {
         roomJoinRuleSharedActionViewModel.post(action)
         dismiss()
     }
@@ -63,9 +70,15 @@ class RoomJoinRuleBottomSheet : BottomSheetGeneric<RoomJoinRuleState, RoomJoinRu
     }
 
     companion object {
-        fun newInstance(currentRoomJoinRule: RoomJoinRules, currentGuestAccess: GuestAccess?): RoomJoinRuleBottomSheet {
+        fun newInstance(currentRoomJoinRule: RoomJoinRules,
+                        allowedJoinedRules: List<JoinRulesOptionSupport> = listOf(
+                                RoomJoinRules.INVITE, RoomJoinRules.PUBLIC
+                        ).map { it.toOption(true) }
+        ): RoomJoinRuleBottomSheet {
             return RoomJoinRuleBottomSheet().apply {
-                setArguments(RoomJoinRuleBottomSheetArgs(currentRoomJoinRule, currentGuestAccess))
+                setArguments(
+                        RoomJoinRuleBottomSheetArgs(currentRoomJoinRule, allowedJoinedRules)
+                )
             }
         }
     }

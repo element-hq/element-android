@@ -1,0 +1,2 @@
+Hlavní změny v této verzi: nutné opravy pro 1.1.4
+Úplný záznam změn: https://github.com/vector-im/element-android/releases/tag/v1.1.5

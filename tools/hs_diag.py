@@ -48,7 +48,8 @@ print("Get information from " + baseUrl)
 items = [
     # [Title, URL, True for GET request and False for POST request]
     ["Well-known", baseUrl + ".well-known/matrix/client", True]
-    , ["Version", baseUrl + "_matrix/client/versions", True]
+    , ["API version", baseUrl + "_matrix/client/versions", True]
+    , ["Homeserver version", baseUrl + "_matrix/federation/v1/version", True]
     , ["Login flow", baseUrl + "_matrix/client/r0/login", True]
     , ["Registration flow", baseUrl + "_matrix/client/r0/register", False]
     # Useless , ["Username availability", baseUrl + "_matrix/client/r0/register/available?username=benoit", True]

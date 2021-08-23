@@ -24,7 +24,7 @@
         android:icon="@drawable/ic_video"
         android:title="@string/action_video_call"
         android:visible="false"
-        app:iconTint="@color/riotx_accent"
+        app:iconTint="?colorPrimary"
         app:showAsAction="always"
         tools:visible="true" />
 
@@ -33,7 +33,7 @@
         android:icon="@drawable/ic_phone"
         android:title="@string/call"
         android:visible="false"
-        app:iconTint="@color/riotx_accent"
+        app:iconTint="?colorPrimary"
         app:showAsAction="always"
         tools:visible="true" />
 
@@ -42,7 +42,7 @@
         android:icon="@drawable/ic_call_end"
         android:title="@string/call_notification_hangup"
         android:visible="false"
-        app:iconTint="@color/riotx_destructive_accent"
+        app:iconTint="?colorError"
         app:showAsAction="always"
         tools:visible="true" />
 
@@ -53,17 +53,9 @@
         app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/resend_all"
-        android:icon="@drawable/ic_refresh_cw"
-        android:title="@string/room_prompt_resend"
-        android:visible="false"
-        app:showAsAction="never"
-        tools:visible="true" />
-
-    <item
-        android:id="@+id/clear_all"
-        android:icon="@drawable/ic_trash"
-        android:title="@string/room_prompt_cancel"
+        android:id="@+id/dev_tools"
+        android:icon="@drawable/ic_settings_root_general"
+        android:title="@string/dev_tools_menu_name"
         android:visible="false"
         app:showAsAction="never"
         tools:visible="true" />

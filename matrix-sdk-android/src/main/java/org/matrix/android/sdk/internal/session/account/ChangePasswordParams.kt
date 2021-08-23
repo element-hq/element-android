@@ -18,7 +18,7 @@ package org.matrix.android.sdk.internal.session.account
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import org.matrix.android.sdk.internal.crypto.model.rest.UserPasswordAuth
+import org.matrix.android.sdk.api.auth.UserPasswordAuth
 
 /**
  * Class to pass request parameters to update the password.

@@ -30,7 +30,7 @@ import im.vector.app.features.webview.WebViewEventListener
 @SuppressLint("NewApi")
 fun WebView.setupForWidget(webViewEventListener: WebViewEventListener) {
     // xml value seems ignored
-    setBackgroundColor(ThemeUtils.getColor(context, R.attr.riotx_bottom_nav_background_color))
+    setBackgroundColor(ThemeUtils.getColor(context, R.attr.colorSurface))
 
     // clear caches
     clearHistory()
@@ -49,7 +49,9 @@ fun WebView.setupForWidget(webViewEventListener: WebViewEventListener) {
     // Allow use of Local Storage
     settings.domStorageEnabled = true
 
+    @Suppress("DEPRECATION")
     settings.allowFileAccessFromFileURLs = true
+    @Suppress("DEPRECATION")
     settings.allowUniversalAccessFromFileURLs = true
 
     settings.displayZoomControls = false
@@ -70,7 +72,6 @@ fun WebView.clearAfterWidget() {
     // Make sure you remove the WebView from its parent view before doing anything.
     (parent as? ViewGroup)?.removeAllViews()
     webChromeClient = null
-    webViewClient = null
     clearHistory()
     // Loading a blank page is optional, but will ensure that the WebView isn't doing anything when you destroy it.
     loadUrl("about:blank")

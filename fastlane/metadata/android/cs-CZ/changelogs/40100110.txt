@@ -1,0 +1,2 @@
+Tato nová verze obsahuje hlavně vylepšení v uživatelském rozhraní. Nyní můžete pozvat přátele a napsat DM velmi rychle skenem QR kódů.
+Plné znění změn: https://github.com/vector-im/element-android/releases/tag/v1.0.11

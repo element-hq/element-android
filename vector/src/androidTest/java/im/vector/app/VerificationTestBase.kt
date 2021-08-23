@@ -23,11 +23,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withTimeout
 import org.junit.Assert
 import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
-import org.matrix.android.sdk.api.auth.data.LoginFlowResult
 import org.matrix.android.sdk.api.auth.registration.RegistrationResult
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.sync.SyncState
@@ -47,22 +47,21 @@ abstract class VerificationTestBase {
                              withInitialSync: Boolean): Session {
         val hs = createHomeServerConfig()
 
-        doSync<LoginFlowResult> {
-            matrix.authenticationService()
-                    .getLoginFlow(hs, it)
+        runBlockingTest {
+            matrix.authenticationService().getLoginFlow(hs)
         }
 
-        doSync<RegistrationResult> {
+        runBlockingTest {
             matrix.authenticationService()
                     .getRegistrationWizard()
-                    .createAccount(userName, password, null, it)
+                    .createAccount(userName, password, null)
         }
 
         // Perform dummy step
-        val registrationResult = doSync<RegistrationResult> {
+        val registrationResult = runBlockingTest {
             matrix.authenticationService()
                     .getRegistrationWizard()
-                    .dummy(it)
+                    .dummy()
         }
 
         Assert.assertTrue(registrationResult is RegistrationResult.Success)
@@ -78,6 +77,14 @@ abstract class VerificationTestBase {
         return HomeServerConnectionConfig.Builder()
                 .withHomeServerUri(Uri.parse(homeServerUrl))
                 .build()
+    }
+
+    protected fun <T> runBlockingTest(timeout: Long = 20_000, block: suspend () -> T): T {
+        return runBlocking {
+            withTimeout(timeout) {
+                block()
+            }
+        }
     }
 
     // Transform a method with a MatrixCallback to a synchronous method

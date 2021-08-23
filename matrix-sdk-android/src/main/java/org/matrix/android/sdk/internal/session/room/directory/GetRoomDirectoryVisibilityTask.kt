@@ -20,7 +20,6 @@ import org.matrix.android.sdk.api.session.room.model.RoomDirectoryVisibility
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.directory.DirectoryAPI
-import org.matrix.android.sdk.internal.session.directory.RoomDirectoryVisibilityJson
 import org.matrix.android.sdk.internal.task.Task
 import javax.inject.Inject
 
@@ -36,8 +35,8 @@ internal class DefaultGetRoomDirectoryVisibilityTask @Inject constructor(
 ) : GetRoomDirectoryVisibilityTask {
 
     override suspend fun execute(params: GetRoomDirectoryVisibilityTask.Params): RoomDirectoryVisibility {
-        return executeRequest<RoomDirectoryVisibilityJson>(globalErrorReceiver) {
-            apiCall = directoryAPI.getRoomDirectoryVisibility(params.roomId)
+        return executeRequest(globalErrorReceiver) {
+            directoryAPI.getRoomDirectoryVisibility(params.roomId)
         }
                 .visibility
     }

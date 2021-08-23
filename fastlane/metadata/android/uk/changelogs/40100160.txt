@@ -1,0 +1,2 @@
+Основні зміни цієї версії: підтримка входу за допомогою суспільних мереж.
+Повний перелік змін: https://github.com/vector-im/element-android/releases/tag/v1.0.15 та https://github.com/vector-im/element-android/releases/tag/v1.0.16

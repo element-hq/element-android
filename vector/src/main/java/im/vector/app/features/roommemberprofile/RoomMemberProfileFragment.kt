@@ -23,7 +23,6 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Incomplete
@@ -31,6 +30,7 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.animations.AppBarStateChangeListener
 import im.vector.app.core.animations.MatrixItemAppBarStateChangeListener
@@ -53,6 +53,7 @@ import im.vector.app.features.home.room.detail.RoomDetailPendingActionStore
 import im.vector.app.features.roommemberprofile.devices.DeviceListBottomSheet
 import im.vector.app.features.roommemberprofile.powerlevel.EditPowerLevelDialogs
 import kotlinx.parcelize.Parcelize
+import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.session.room.powerlevels.Role
 import org.matrix.android.sdk.api.util.MatrixItem
 import javax.inject.Inject
@@ -159,7 +160,7 @@ class RoomMemberProfileFragment @Inject constructor(
                     .withArgs(roomId = null, otherUserId = startVerification.userId)
                     .show(parentFragmentManager, "VERIF")
         } else {
-            AlertDialog.Builder(requireContext())
+            MaterialAlertDialogBuilder(requireContext())
                     .setTitle(R.string.dialog_title_warning)
                     .setMessage(R.string.verify_cannot_cross_sign)
                     .setPositiveButton(R.string.verification_profile_verify) { _, _ ->
@@ -205,31 +206,28 @@ class RoomMemberProfileFragment @Inject constructor(
 
                 if (state.isRoomEncrypted) {
                     headerViews.memberProfileDecorationImageView.isVisible = true
-                    if (state.userMXCrossSigningInfo != null) {
+                    val trustLevel = if (state.userMXCrossSigningInfo != null) {
                         // Cross signing is enabled for this user
-                        val icon = if (state.userMXCrossSigningInfo.isTrusted()) {
+                        if (state.userMXCrossSigningInfo.isTrusted()) {
                             // User is trusted
                             if (state.allDevicesAreCrossSignedTrusted) {
-                                R.drawable.ic_shield_trusted
+                                RoomEncryptionTrustLevel.Trusted
                             } else {
-                                R.drawable.ic_shield_warning
+                                RoomEncryptionTrustLevel.Warning
                             }
                         } else {
-                            R.drawable.ic_shield_black
+                            RoomEncryptionTrustLevel.Default
                         }
-
-                        headerViews.memberProfileDecorationImageView.setImageResource(icon)
-                        views.matrixProfileDecorationToolbarAvatarImageView.setImageResource(icon)
                     } else {
                         // Legacy
                         if (state.allDevicesAreTrusted) {
-                            headerViews.memberProfileDecorationImageView.setImageResource(R.drawable.ic_shield_trusted)
-                            views.matrixProfileDecorationToolbarAvatarImageView.setImageResource(R.drawable.ic_shield_trusted)
+                            RoomEncryptionTrustLevel.Trusted
                         } else {
-                            headerViews.memberProfileDecorationImageView.setImageResource(R.drawable.ic_shield_warning)
-                            views.matrixProfileDecorationToolbarAvatarImageView.setImageResource(R.drawable.ic_shield_warning)
+                            RoomEncryptionTrustLevel.Warning
                         }
                     }
+                    headerViews.memberProfileDecorationImageView.render(trustLevel)
+                    views.matrixProfileDecorationToolbarAvatarImageView.render(trustLevel)
                 } else {
                     headerViews.memberProfileDecorationImageView.isVisible = false
                 }
@@ -306,7 +304,7 @@ class RoomMemberProfileFragment @Inject constructor(
         val view = layoutInflater.inflate(R.layout.dialog_share_qr_code, null)
         val views = DialogShareQrCodeBinding.bind(view)
         views.itemShareQrCodeImage.setData(permalink)
-        AlertDialog.Builder(requireContext())
+        MaterialAlertDialogBuilder(requireContext())
             .setView(view)
             .setNeutralButton(R.string.ok, null)
             .setPositiveButton(R.string.share_by_text) { _, _ ->
@@ -324,7 +322,7 @@ class RoomMemberProfileFragment @Inject constructor(
     }
 
     override fun onEditPowerLevel(currentRole: Role) {
-        EditPowerLevelDialogs.showChoice(requireActivity(), currentRole) { newPowerLevel ->
+        EditPowerLevelDialogs.showChoice(requireActivity(), R.string.power_level_edit_title, currentRole) { newPowerLevel ->
             viewModel.handle(RoomMemberProfileAction.SetPowerLevel(currentRole.value, newPowerLevel, true))
         }
     }

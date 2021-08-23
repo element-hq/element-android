@@ -16,6 +16,7 @@
 
 package im.vector.app.features.roomprofile.uploads.media
 
+import android.os.Build
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.LayoutInflater
@@ -49,6 +50,7 @@ import im.vector.app.features.roomprofile.uploads.RoomUploadsViewState
 import org.matrix.android.sdk.api.session.room.model.message.MessageImageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageVideoContent
 import org.matrix.android.sdk.api.session.room.model.message.getFileUrl
+import org.matrix.android.sdk.api.session.room.model.message.getThumbnailUrl
 import org.matrix.android.sdk.internal.crypto.attachments.toElementToDecrypt
 import javax.inject.Inject
 
@@ -78,9 +80,14 @@ class RoomUploadsMediaFragment @Inject constructor(
         controller.listener = this
     }
 
+    @Suppress("DEPRECATION")
     private fun getNumberOfColumns(): Int {
         val displayMetrics = DisplayMetrics()
-        requireActivity().windowManager.defaultDisplay.getMetrics(displayMetrics)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            requireContext().display?.getMetrics(displayMetrics)
+        } else {
+            requireActivity().windowManager.defaultDisplay.getMetrics(displayMetrics)
+        }
         return dimensionConverter.pxToDp(displayMetrics.widthPixels) / IMAGE_SIZE_DP
     }
 
@@ -135,8 +142,7 @@ class RoomUploadsMediaFragment @Inject constructor(
                             eventId = it.eventId,
                             filename = content.body,
                             mimeType = content.mimeType,
-                            url = content.videoInfo?.thumbnailFile?.url
-                                    ?: content.videoInfo?.thumbnailUrl,
+                            url = content.videoInfo?.getThumbnailUrl(),
                             elementToDecrypt = content.videoInfo?.thumbnailFile?.toElementToDecrypt(),
                             height = content.videoInfo?.height,
                             maxHeight = -1,

@@ -253,7 +253,7 @@ internal object CertUtil {
         val list = ArrayList<ConnectionSpec>()
         list.add(builder.build())
         // TODO: we should display a warning if user enter an http url
-        if (hsConfig.allowHttpExtension || hsConfig.homeServerUri.toString().startsWith("http://")) {
+        if (hsConfig.allowHttpExtension || hsConfig.homeServerUriBase.toString().startsWith("http://")) {
             list.add(ConnectionSpec.CLEARTEXT)
         }
         return list

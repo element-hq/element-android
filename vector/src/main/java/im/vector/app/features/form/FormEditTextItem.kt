@@ -18,15 +18,18 @@ package im.vector.app.features.form
 
 import android.text.Editable
 import android.view.View
-import androidx.core.view.isVisible
+import android.view.inputmethod.EditorInfo
+import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import im.vector.app.R
+import im.vector.app.core.epoxy.TextListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
-import im.vector.app.core.extensions.setTextSafe
+import im.vector.app.core.epoxy.addTextChangedListenerOnce
+import im.vector.app.core.epoxy.setValueOnce
 import im.vector.app.core.platform.SimpleTextWatcher
 
 @EpoxyModelClass(layout = R.layout.item_form_text_input)
@@ -39,7 +42,7 @@ abstract class FormEditTextItem : VectorEpoxyModel<FormEditTextItem.Holder>() {
     var value: String? = null
 
     @EpoxyAttribute
-    var showBottomSeparator: Boolean = true
+    var forceUpdateValue: Boolean = false
 
     @EpoxyAttribute
     var errorMessage: String? = null
@@ -51,7 +54,28 @@ abstract class FormEditTextItem : VectorEpoxyModel<FormEditTextItem.Holder>() {
     var inputType: Int? = null
 
     @EpoxyAttribute
-    var onTextChange: ((String) -> Unit)? = null
+    var singleLine: Boolean = true
+
+    @EpoxyAttribute
+    var imeOptions: Int? = null
+
+    @EpoxyAttribute
+    var endIconMode: Int? = null
+
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
+    var onTextChange: TextListener? = null
+
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
+    var editorActionListener: TextView.OnEditorActionListener? = null
+
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
+    var onFocusChange: ((Boolean) -> Unit)? = null
+
+    @EpoxyAttribute
+    var prefixText: String? = null
+
+    @EpoxyAttribute
+    var suffixText: String? = null
 
     private val onTextChangeListener = object : SimpleTextWatcher() {
         override fun afterTextChanged(s: Editable) {
@@ -59,19 +83,32 @@ abstract class FormEditTextItem : VectorEpoxyModel<FormEditTextItem.Holder>() {
         }
     }
 
+    private val onFocusChangedListener = View.OnFocusChangeListener { _, hasFocus -> onFocusChange?.invoke(hasFocus) }
+
     override fun bind(holder: Holder) {
         super.bind(holder)
         holder.textInputLayout.isEnabled = enabled
         holder.textInputLayout.hint = hint
         holder.textInputLayout.error = errorMessage
+        holder.textInputLayout.endIconMode = endIconMode ?: TextInputLayout.END_ICON_NONE
 
-        // Update only if text is different and value is not null
-        holder.textInputEditText.setTextSafe(value)
+        holder.textInputLayout.prefixText = prefixText
+        holder.textInputLayout.suffixText = suffixText
+
+        if (forceUpdateValue) {
+            holder.textInputEditText.setText(value)
+        } else {
+            holder.setValueOnce(holder.textInputEditText, value)
+        }
+
         holder.textInputEditText.isEnabled = enabled
         inputType?.let { holder.textInputEditText.inputType = it }
+        holder.textInputEditText.isSingleLine = singleLine
+        holder.textInputEditText.imeOptions = imeOptions ?: EditorInfo.IME_ACTION_NONE
 
-        holder.textInputEditText.addTextChangedListener(onTextChangeListener)
-        holder.bottomSeparator.isVisible = showBottomSeparator
+        holder.textInputEditText.addTextChangedListenerOnce(onTextChangeListener)
+        holder.textInputEditText.setOnEditorActionListener(editorActionListener)
+        holder.textInputEditText.onFocusChangeListener = onFocusChangedListener
     }
 
     override fun shouldSaveViewState(): Boolean {
@@ -86,6 +123,5 @@ abstract class FormEditTextItem : VectorEpoxyModel<FormEditTextItem.Holder>() {
     class Holder : VectorEpoxyHolder() {
         val textInputLayout by bind<TextInputLayout>(R.id.formTextInputTextInputLayout)
         val textInputEditText by bind<TextInputEditText>(R.id.formTextInputTextInputEditText)
-        val bottomSeparator by bind<View>(R.id.formTextInputDivider)
     }
 }

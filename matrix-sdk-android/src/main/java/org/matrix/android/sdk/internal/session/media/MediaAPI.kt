@@ -18,7 +18,6 @@ package org.matrix.android.sdk.internal.session.media
 
 import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.internal.network.NetworkConstants
-import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -28,7 +27,7 @@ internal interface MediaAPI {
      * Ref: https://matrix.org/docs/spec/client_server/r0.6.1#get-matrix-media-r0-config
      */
     @GET(NetworkConstants.URI_API_MEDIA_PREFIX_PATH_R0 + "config")
-    fun getMediaConfig(): Call<GetMediaConfigResult>
+    suspend fun getMediaConfig(): GetMediaConfigResult
 
     /**
      * Get information about a URL for the client. Typically this is called when a client
@@ -39,5 +38,5 @@ internal interface MediaAPI {
      * if it does not have the requested version available.
      */
     @GET(NetworkConstants.URI_API_MEDIA_PREFIX_PATH_R0 + "preview_url")
-    fun getPreviewUrlData(@Query("url") url: String, @Query("ts") ts: Long?): Call<JsonDict>
+    suspend fun getPreviewUrlData(@Query("url") url: String, @Query("ts") ts: Long?): JsonDict
 }

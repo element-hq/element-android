@@ -22,7 +22,7 @@ import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
 import im.vector.app.core.platform.ConfigurationViewModel
-import im.vector.app.features.call.SharedActiveCallViewModel
+import im.vector.app.features.call.SharedKnownCallsViewModel
 import im.vector.app.features.crypto.keysbackup.restore.KeysBackupRestoreFromKeyViewModel
 import im.vector.app.features.crypto.keysbackup.restore.KeysBackupRestoreFromPassphraseViewModel
 import im.vector.app.features.crypto.keysbackup.restore.KeysBackupRestoreSharedViewModel
@@ -38,6 +38,8 @@ import im.vector.app.features.roomprofile.RoomProfileSharedActionViewModel
 import im.vector.app.features.roomprofile.alias.detail.RoomAliasBottomSheetSharedActionViewModel
 import im.vector.app.features.roomprofile.settings.historyvisibility.RoomHistoryVisibilitySharedActionViewModel
 import im.vector.app.features.roomprofile.settings.joinrule.RoomJoinRuleSharedActionViewModel
+import im.vector.app.features.spaces.SpacePreviewSharedActionViewModel
+import im.vector.app.features.spaces.people.SpacePeopleSharedActionViewModel
 import im.vector.app.features.userdirectory.UserListSharedActionViewModel
 
 @Module
@@ -85,8 +87,8 @@ interface ViewModelModule {
 
     @Binds
     @IntoMap
-    @ViewModelKey(SharedActiveCallViewModel::class)
-    fun bindSharedActiveCallViewModel(viewModel: SharedActiveCallViewModel): ViewModel
+    @ViewModelKey(SharedKnownCallsViewModel::class)
+    fun bindSharedActiveCallViewModel(viewModel: SharedKnownCallsViewModel): ViewModel
 
     @Binds
     @IntoMap
@@ -142,4 +144,14 @@ interface ViewModelModule {
     @IntoMap
     @ViewModelKey(DiscoverySharedViewModel::class)
     fun bindDiscoverySharedViewModel(viewModel: DiscoverySharedViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(SpacePreviewSharedActionViewModel::class)
+    fun bindSpacePreviewSharedActionViewModel(viewModel: SpacePreviewSharedActionViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(SpacePeopleSharedActionViewModel::class)
+    fun bindSpacePeopleSharedActionViewModel(viewModel: SpacePeopleSharedActionViewModel): ViewModel
 }

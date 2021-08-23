@@ -16,7 +16,6 @@
 package org.matrix.android.sdk.internal.session.pushers
 
 import org.matrix.android.sdk.internal.network.NetworkConstants
-import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -29,7 +28,7 @@ internal interface PushersAPI {
      * Ref: https://matrix.org/docs/spec/client_server/latest#get-matrix-client-r0-pushers
      */
     @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "pushers")
-    fun getPushers(): Call<GetPushersResponse>
+    suspend fun getPushers(): GetPushersResponse
 
     /**
      * This endpoint allows the creation, modification and deletion of pushers for this user ID.
@@ -38,5 +37,5 @@ internal interface PushersAPI {
      * Ref: https://matrix.org/docs/spec/client_server/latest#post-matrix-client-r0-pushers-set
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "pushers/set")
-    fun setPusher(@Body jsonPusher: JsonPusher): Call<Unit>
+    suspend fun setPusher(@Body jsonPusher: JsonPusher)
 }

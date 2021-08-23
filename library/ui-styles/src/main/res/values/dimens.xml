@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="layout_touch_size">48dp</dimen>
+
+    <dimen name="layout_horizontal_margin">16dp</dimen>
+    <dimen name="layout_vertical_margin">16dp</dimen>
+    <dimen name="layout_vertical_margin_big">32dp</dimen>
+
+    <dimen name="profile_avatar_size">50dp</dimen>
+    <dimen name="floating_action_button_margin">16dp</dimen>
+    <dimen name="navigation_view_height">196dp</dimen>
+    <dimen name="navigation_avatar_top_margin">44dp</dimen>
+    <dimen name="item_decoration_left_margin">72dp</dimen>
+    <dimen name="item_event_message_state_size">16dp</dimen>
+
+    <dimen name="chat_avatar_size">40dp</dimen>
+    <dimen name="member_list_avatar_size">60dp</dimen>
+
+    <dimen name="quote_width">4dp</dimen>
+    <dimen name="quote_gap">8dp</dimen>
+    <dimen name="drawable_padding_small">8dp</dimen>
+
+    <item name="dialog_width_ratio" format="float" type="dimen">0.75</item>
+
+    <dimen name="pill_avatar_size">16dp</dimen>
+    <dimen name="pill_min_height">20dp</dimen>
+    <dimen name="pill_text_padding">4dp</dimen>
+
+
+    <dimen name="item_form_min_height">76dp</dimen>
+
+    <!-- Max width for some buttons -->
+    <dimen name="button_max_width">280dp</dimen>
+
+    <!-- Navigation Drawer -->
+    <dimen name="navigation_drawer_max_width">320dp</dimen>
+
+</resources>

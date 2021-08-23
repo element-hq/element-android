@@ -16,63 +16,62 @@
 
 package im.vector.app.features.call.conference
 
-import android.net.Uri
+import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
-import im.vector.app.core.resources.StringProvider
-import org.jitsi.meet.sdk.JitsiMeetUserInfo
+import io.reactivex.disposables.Disposable
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.widgets.model.Widget
 import org.matrix.android.sdk.api.session.widgets.model.WidgetType
-import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.rx.asObservable
-import java.net.URL
 
 class JitsiCallViewModel @AssistedInject constructor(
         @Assisted initialState: JitsiCallViewState,
-        @Assisted val args: VectorJitsiActivity.Args,
         private val session: Session,
-        private val stringProvider: StringProvider
+        private val jitsiService: JitsiService
 ) : VectorViewModel<JitsiCallViewState, JitsiCallViewActions, JitsiCallViewEvents>(initialState) {
 
-    @AssistedInject.Factory
+    @AssistedFactory
     interface Factory {
-        fun create(initialState: JitsiCallViewState, args: VectorJitsiActivity.Args): JitsiCallViewModel
+        fun create(initialState: JitsiCallViewState): JitsiCallViewModel
     }
 
+    private var currentWidgetObserver: Disposable? = null
+    private val widgetService = session.widgetService()
+
+    private var confIsJoined = false
+    private var pendingArgs: VectorJitsiActivity.Args? = null
+
     init {
-        val me = session.getRoomMember(session.myUserId, args.roomId)?.toMatrixItem()
-        val userInfo = JitsiMeetUserInfo().apply {
-            displayName = me?.getBestName()
-            avatar = me?.avatarUrl?.let { session.contentUrlResolver().resolveFullSize(it) }?.let { URL(it) }
-        }
-        val roomName = session.getRoomSummary(args.roomId)?.displayName
+        observeWidget(initialState.roomId, initialState.widgetId)
+    }
 
-        setState {
-            copy(userInfo = userInfo)
-        }
-
-        session.widgetService().getRoomWidgetsLive(args.roomId, QueryStringValue.Equals(args.widgetId), WidgetType.Jitsi.values())
+    private fun observeWidget(roomId: String, widgetId: String) {
+        confIsJoined = false
+        currentWidgetObserver?.dispose()
+        currentWidgetObserver = widgetService.getRoomWidgetsLive(roomId, QueryStringValue.Equals(widgetId), WidgetType.Jitsi.values())
                 .asObservable()
                 .distinctUntilChanged()
                 .subscribe {
                     val jitsiWidget = it.firstOrNull()
                     if (jitsiWidget != null) {
-                        val uri = Uri.parse(jitsiWidget.computedUrl)
-                        val confId = uri.getQueryParameter("confId")
-                        val ppt = jitsiWidget.computedUrl?.let { url -> JitsiWidgetProperties(url, stringProvider) }
                         setState {
-                            copy(
-                                    widget = Success(jitsiWidget),
-                                    jitsiUrl = "https://${ppt?.domain}",
-                                    confId = confId ?: "",
-                                    subject = roomName ?: ""
-                            )
+                            copy(widget = Success(jitsiWidget))
+                        }
+                        if (!confIsJoined) {
+                            confIsJoined = true
+                            joinConference(jitsiWidget)
                         }
                     } else {
                         setState {
@@ -85,7 +84,60 @@ class JitsiCallViewModel @AssistedInject constructor(
                 .disposeOnClear()
     }
 
+    private fun joinConference(jitsiWidget: Widget) = withState { state ->
+        viewModelScope.launch {
+            try {
+                val joinConference = jitsiService.joinConference(state.roomId, jitsiWidget, state.enableVideo)
+                _viewEvents.post(joinConference)
+            } catch (throwable: Throwable) {
+                _viewEvents.post(JitsiCallViewEvents.FailJoiningConference)
+            }
+        }
+    }
+
     override fun handle(action: JitsiCallViewActions) {
+        when (action) {
+            is JitsiCallViewActions.SwitchTo      -> handleSwitchTo(action)
+            JitsiCallViewActions.OnConferenceLeft -> handleOnConferenceLeft()
+        }.exhaustive
+    }
+
+    private fun handleSwitchTo(action: JitsiCallViewActions.SwitchTo) = withState { state ->
+        // Check if it is the same conf
+        if (action.args.roomId != state.roomId
+                || action.args.widgetId != state.widgetId) {
+            if (action.withConfirmation) {
+                // Ask confirmation to switch, but wait a bit for the Activity to quit the PiP mode
+                viewModelScope.launch {
+                    delay(500)
+                    _viewEvents.post(JitsiCallViewEvents.ConfirmSwitchingConference(action.args))
+                }
+            } else {
+                // Ask the view to leave the conf, then the view will tell us when it's done, to join the new conf
+                pendingArgs = action.args
+                _viewEvents.post(JitsiCallViewEvents.LeaveConference)
+            }
+        }
+    }
+
+    private fun handleOnConferenceLeft() {
+        val safePendingArgs = pendingArgs
+        pendingArgs = null
+
+        if (safePendingArgs == null) {
+            // Quit
+            _viewEvents.post(JitsiCallViewEvents.Finish)
+        } else {
+            setState {
+                copy(
+                        roomId = safePendingArgs.roomId,
+                        widgetId = safePendingArgs.widgetId,
+                        enableVideo = safePendingArgs.enableVideo,
+                        widget = Uninitialized
+                )
+            }
+            observeWidget(safePendingArgs.roomId, safePendingArgs.widgetId)
+        }
     }
 
     companion object : MvRxViewModelFactory<JitsiCallViewModel, JitsiCallViewState> {
@@ -95,8 +147,7 @@ class JitsiCallViewModel @AssistedInject constructor(
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: JitsiCallViewState): JitsiCallViewModel? {
             val callActivity: VectorJitsiActivity = viewModelContext.activity()
-            val callArgs: VectorJitsiActivity.Args = viewModelContext.args()
-            return callActivity.viewModelFactory.create(state, callArgs)
+            return callActivity.viewModelFactory.create(state)
         }
 
         override fun initialState(viewModelContext: ViewModelContext): JitsiCallViewState? {

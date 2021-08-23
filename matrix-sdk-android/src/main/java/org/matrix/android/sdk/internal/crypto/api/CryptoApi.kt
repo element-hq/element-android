@@ -30,7 +30,6 @@ import org.matrix.android.sdk.internal.crypto.model.rest.SignatureUploadResponse
 import org.matrix.android.sdk.internal.crypto.model.rest.UpdateDeviceInfoBody
 import org.matrix.android.sdk.internal.crypto.model.rest.UploadSigningKeysBody
 import org.matrix.android.sdk.internal.network.NetworkConstants
-import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.HTTP
@@ -46,14 +45,14 @@ internal interface CryptoApi {
      * Doc: https://matrix.org/docs/spec/client_server/latest#get-matrix-client-r0-devices
      */
     @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "devices")
-    fun getDevices(): Call<DevicesListResponse>
+    suspend fun getDevices(): DevicesListResponse
 
     /**
      * Get the device info by id
      * Doc: https://matrix.org/docs/spec/client_server/latest#get-matrix-client-r0-devices-deviceid
      */
     @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "devices/{deviceId}")
-    fun getDeviceInfo(@Path("deviceId") deviceId: String): Call<DeviceInfo>
+    suspend fun getDeviceInfo(@Path("deviceId") deviceId: String): DeviceInfo
 
     /**
      * Upload device and/or one-time keys.
@@ -62,7 +61,7 @@ internal interface CryptoApi {
      * @param body the keys to be sent.
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "keys/upload")
-    fun uploadKeys(@Body body: KeysUploadBody): Call<KeysUploadResponse>
+    suspend fun uploadKeys(@Body body: KeysUploadBody): KeysUploadResponse
 
     /**
      * Download device keys.
@@ -71,7 +70,7 @@ internal interface CryptoApi {
      * @param params the params.
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "keys/query")
-    fun downloadKeysForUsers(@Body params: KeysQueryBody): Call<KeysQueryResponse>
+    suspend fun downloadKeysForUsers(@Body params: KeysQueryBody): KeysQueryResponse
 
     /**
      * CrossSigning - Uploading signing keys
@@ -79,7 +78,7 @@ internal interface CryptoApi {
      * This endpoint requires UI Auth.
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "keys/device_signing/upload")
-    fun uploadSigningKeys(@Body params: UploadSigningKeysBody): Call<KeysQueryResponse>
+    suspend fun uploadSigningKeys(@Body params: UploadSigningKeysBody): KeysQueryResponse
 
     /**
      *  CrossSigning - Uploading signatures
@@ -98,7 +97,7 @@ internal interface CryptoApi {
      * However, signatures made for other users' keys, made by her user-signing key, will not be included.
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "keys/signatures/upload")
-    fun uploadSignatures(@Body params: Map<String, @JvmSuppressWildcards Any>?): Call<SignatureUploadResponse>
+    suspend fun uploadSignatures(@Body params: Map<String, @JvmSuppressWildcards Any>?): SignatureUploadResponse
 
     /**
      * Claim one-time keys.
@@ -107,7 +106,7 @@ internal interface CryptoApi {
      * @param params the params.
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "keys/claim")
-    fun claimOneTimeKeysForUsersDevices(@Body body: KeysClaimBody): Call<KeysClaimResponse>
+    suspend fun claimOneTimeKeysForUsersDevices(@Body body: KeysClaimBody): KeysClaimResponse
 
     /**
      * Send an event to a specific list of devices
@@ -118,9 +117,9 @@ internal interface CryptoApi {
      * @param body          the body
      */
     @PUT(NetworkConstants.URI_API_PREFIX_PATH_R0 + "sendToDevice/{eventType}/{txnId}")
-    fun sendToDevice(@Path("eventType") eventType: String,
-                     @Path("txnId") transactionId: String,
-                     @Body body: SendToDeviceBody): Call<Unit>
+    suspend fun sendToDevice(@Path("eventType") eventType: String,
+                             @Path("txnId") transactionId: String,
+                             @Body body: SendToDeviceBody)
 
     /**
      * Delete a device.
@@ -130,8 +129,8 @@ internal interface CryptoApi {
      * @param params   the deletion parameters
      */
     @HTTP(path = NetworkConstants.URI_API_PREFIX_PATH_R0 + "devices/{device_id}", method = "DELETE", hasBody = true)
-    fun deleteDevice(@Path("device_id") deviceId: String,
-                     @Body params: DeleteDeviceParams): Call<Unit>
+    suspend fun deleteDevice(@Path("device_id") deviceId: String,
+                             @Body params: DeleteDeviceParams)
 
     /**
      * Update the device information.
@@ -141,8 +140,8 @@ internal interface CryptoApi {
      * @param params   the params
      */
     @PUT(NetworkConstants.URI_API_PREFIX_PATH_R0 + "devices/{device_id}")
-    fun updateDeviceInfo(@Path("device_id") deviceId: String,
-                         @Body params: UpdateDeviceInfoBody): Call<Unit>
+    suspend fun updateDeviceInfo(@Path("device_id") deviceId: String,
+                                 @Body params: UpdateDeviceInfoBody)
 
     /**
      * Get the update devices list from two sync token.
@@ -152,6 +151,6 @@ internal interface CryptoApi {
      * @param newToken the up-to token.
      */
     @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "keys/changes")
-    fun getKeyChanges(@Query("from") oldToken: String,
-                      @Query("to") newToken: String): Call<KeyChangesResponse>
+    suspend fun getKeyChanges(@Query("from") oldToken: String,
+                              @Query("to") newToken: String): KeyChangesResponse
 }

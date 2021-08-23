@@ -19,8 +19,9 @@ package im.vector.app.features.roommemberprofile.powerlevel
 import android.app.Activity
 import android.content.DialogInterface
 import android.view.KeyEvent
-import androidx.appcompat.app.AlertDialog
+import androidx.annotation.StringRes
 import androidx.core.view.isVisible
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.databinding.DialogEditPowerLevelBinding
@@ -29,7 +30,10 @@ import org.matrix.android.sdk.api.session.room.powerlevels.Role
 
 object EditPowerLevelDialogs {
 
-    fun showChoice(activity: Activity, currentRole: Role, listener: (Int) -> Unit) {
+    fun showChoice(activity: Activity,
+                   @StringRes titleRes: Int,
+                   currentRole: Role,
+                   listener: (Int) -> Unit) {
         val dialogLayout = activity.layoutInflater.inflate(R.layout.dialog_edit_power_level, null)
         val views = DialogEditPowerLevelBinding.bind(dialogLayout)
         views.powerLevelRadioGroup.setOnCheckedChangeListener { _, checkedId ->
@@ -44,8 +48,8 @@ object EditPowerLevelDialogs {
             else           -> views.powerLevelCustomRadio.isChecked = true
         }
 
-        AlertDialog.Builder(activity)
-                .setTitle(R.string.power_level_edit_title)
+        MaterialAlertDialogBuilder(activity)
+                .setTitle(titleRes)
                 .setView(dialogLayout)
                 .setPositiveButton(R.string.edit) { _, _ ->
                     val newValue = when (views.powerLevelRadioGroup.checkedRadioButtonId) {
@@ -76,7 +80,7 @@ object EditPowerLevelDialogs {
 
     fun showValidation(activity: Activity, onValidate: () -> Unit) {
         // Ask to the user the confirmation to upgrade.
-        AlertDialog.Builder(activity)
+        MaterialAlertDialogBuilder(activity)
                 .setMessage(R.string.room_participants_power_level_prompt)
                 .setPositiveButton(R.string.yes) { _, _ ->
                     onValidate()
@@ -87,7 +91,7 @@ object EditPowerLevelDialogs {
 
     fun showDemoteWarning(activity: Activity, onValidate: () -> Unit) {
         // Ask to the user the confirmation to downgrade his own role.
-        AlertDialog.Builder(activity)
+        MaterialAlertDialogBuilder(activity)
                 .setTitle(R.string.room_participants_power_level_demote_warning_title)
                 .setMessage(R.string.room_participants_power_level_demote_warning_prompt)
                 .setPositiveButton(R.string.room_participants_power_level_demote) { _, _ ->

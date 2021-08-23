@@ -296,9 +296,47 @@ object CommandParser {
                     val message = textMessage.substring(Command.CONFETTI.command.length).trim()
                     ParsedCommand.SendChatEffect(ChatEffect.CONFETTI, message)
                 }
-                Command.SNOW.command               -> {
-                    val message = textMessage.substring(Command.SNOW.command.length).trim()
-                    ParsedCommand.SendChatEffect(ChatEffect.SNOW, message)
+                Command.SNOWFALL.command               -> {
+                    val message = textMessage.substring(Command.SNOWFALL.command.length).trim()
+                    ParsedCommand.SendChatEffect(ChatEffect.SNOWFALL, message)
+                }
+                Command.CREATE_SPACE.command           -> {
+                    val rawCommand = textMessage.substring(Command.CREATE_SPACE.command.length).trim()
+                    val split = rawCommand.split(" ").map { it.trim() }
+                    if (split.isEmpty()) {
+                        ParsedCommand.ErrorSyntax(Command.CREATE_SPACE)
+                    } else {
+                        ParsedCommand.CreateSpace(
+                                split[0],
+                                split.subList(1, split.size)
+                        )
+                    }
+                }
+                Command.ADD_TO_SPACE.command           -> {
+                    val rawCommand = textMessage.substring(Command.ADD_TO_SPACE.command.length).trim()
+                    ParsedCommand.AddToSpace(
+                            rawCommand
+                    )
+                }
+                Command.JOIN_SPACE.command             -> {
+                    val spaceIdOrAlias = textMessage.substring(Command.JOIN_SPACE.command.length).trim()
+                    ParsedCommand.JoinSpace(
+                            spaceIdOrAlias
+                    )
+                }
+                Command.LEAVE_ROOM.command             -> {
+                    val spaceIdOrAlias = textMessage.substring(Command.LEAVE_ROOM.command.length).trim()
+                    ParsedCommand.LeaveRoom(
+                            spaceIdOrAlias
+                    )
+                }
+                Command.UPGRADE_ROOM.command           -> {
+                    val newVersion = textMessage.substring(Command.UPGRADE_ROOM.command.length).trim()
+                    if (newVersion.isEmpty()) {
+                        ParsedCommand.ErrorSyntax(Command.UPGRADE_ROOM)
+                    } else {
+                        ParsedCommand.UpgradeRoom(newVersion)
+                    }
                 }
                 else                                   -> {
                     // Unknown command

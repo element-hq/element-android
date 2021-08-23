@@ -5,7 +5,7 @@
     android:id="@+id/memberProfileInfoContainer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?riotx_background"
+    android:background="?android:colorBackground"
     android:padding="16dp">
 
     <!-- I cannot do what I want using layer-list, do it manually here-->
@@ -13,7 +13,8 @@
         android:id="@+id/itemEditableAvatarImageContainer"
         android:layout_width="128dp"
         android:layout_height="128dp"
-        android:background="@drawable/header_panel_round_background"
+        android:background="@drawable/placeholder_round_background"
+        android:contentDescription="@string/a11y_change_avatar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -23,15 +24,17 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_gravity="center"
+            android:importantForAccessibility="no"
             android:src="@drawable/ic_add_image" />
 
         <ImageView
             android:id="@+id/itemEditableAvatarImage"
             android:layout_width="128dp"
             android:layout_height="128dp"
+            android:importantForAccessibility="no"
             android:scaleType="center"
             tools:alpha="0.3"
-            tools:src="@tools:sample/avatars" />
+            tools:src="@sample/user_round_avatars" />
 
     </FrameLayout>
 
@@ -40,12 +43,13 @@
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:background="@drawable/header_panel_round_background"
+        android:contentDescription="@string/a11y_delete_avatar"
         android:scaleType="center"
         android:src="@drawable/ic_delete"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="@+id/itemEditableAvatarImageContainer"
         app:layout_constraintTop_toTopOf="@+id/itemEditableAvatarImageContainer"
-        app:tint="@color/riotx_destructive_accent"
+        app:tint="?colorError"
         tools:ignore="MissingPrefix"
         tools:visibility="visible" />
 

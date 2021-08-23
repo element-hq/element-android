@@ -16,6 +16,7 @@
 
 package im.vector.app.features.settings.ignored
 
+import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
@@ -25,11 +26,12 @@ import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
+import dagger.assisted.AssistedFactory
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.platform.VectorViewModelAction
-import org.matrix.android.sdk.api.MatrixCallback
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.user.model.User
 import org.matrix.android.sdk.rx.rx
@@ -47,7 +49,7 @@ class IgnoredUsersViewModel @AssistedInject constructor(@Assisted initialState: 
                                                         private val session: Session)
     : VectorViewModel<IgnoredUsersViewState, IgnoredUsersAction, IgnoredUsersViewEvents>(initialState) {
 
-    @AssistedInject.Factory
+    @AssistedFactory
     interface Factory {
         fun create(initialState: IgnoredUsersViewState): IgnoredUsersViewModel
     }
@@ -88,24 +90,14 @@ class IgnoredUsersViewModel @AssistedInject constructor(@Assisted initialState: 
             )
         }
 
-        session.unIgnoreUserIds(listOf(action.userId), object : MatrixCallback<Unit> {
-            override fun onFailure(failure: Throwable) {
-                setState {
-                    copy(
-                            unIgnoreRequest = Fail(failure)
-                    )
-                }
-
-                _viewEvents.post(IgnoredUsersViewEvents.Failure(failure))
+        viewModelScope.launch {
+            val result = runCatching { session.unIgnoreUserIds(listOf(action.userId)) }
+            setState {
+                copy(
+                        unIgnoreRequest = result.fold(::Success, ::Fail)
+                )
             }
-
-            override fun onSuccess(data: Unit) {
-                setState {
-                    copy(
-                            unIgnoreRequest = Success(data)
-                    )
-                }
-            }
-        })
+            result.onFailure { _viewEvents.post(IgnoredUsersViewEvents.Failure(it)) }
+        }
     }
 }

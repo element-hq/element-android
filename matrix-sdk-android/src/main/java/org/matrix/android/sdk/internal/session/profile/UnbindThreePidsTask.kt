@@ -39,8 +39,8 @@ internal class DefaultUnbindThreePidsTask @Inject constructor(private val profil
         val identityServerUrlWithoutProtocol = identityStore.getIdentityServerUrlWithoutProtocol()
                 ?: throw IdentityServiceError.NoIdentityServerConfigured
 
-        return executeRequest<UnbindThreePidResponse>(globalErrorReceiver) {
-            apiCall = profileAPI.unbindThreePid(
+        return executeRequest(globalErrorReceiver) {
+            profileAPI.unbindThreePid(
                     UnbindThreePidBody(
                             identityServerUrlWithoutProtocol,
                             params.threePid.toMedium(),

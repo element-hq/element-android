@@ -19,14 +19,18 @@ import android.content.Intent
 import androidx.activity.result.ActivityResultLauncher
 import androidx.appcompat.app.AppCompatActivity
 import im.vector.app.R
+import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.pushers.PushersManager
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.troubleshoot.TroubleshootTest
 import im.vector.app.push.fcm.FcmHelper
-import org.matrix.android.sdk.api.MatrixCallback
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.session.pushers.PushGatewayFailure
-import org.matrix.android.sdk.api.util.Cancelable
 import javax.inject.Inject
 
 /**
@@ -35,35 +39,51 @@ import javax.inject.Inject
 class TestPushFromPushGateway @Inject constructor(private val context: AppCompatActivity,
                                                   private val stringProvider: StringProvider,
                                                   private val errorFormatter: ErrorFormatter,
-                                                  private val pushersManager: PushersManager)
+                                                  private val pushersManager: PushersManager,
+                                                  private val activeSessionHolder: ActiveSessionHolder)
     : TroubleshootTest(R.string.settings_troubleshoot_test_push_loop_title) {
 
-    private var action: Cancelable? = null
+    private var action: Job? = null
+    private var pushReceived: Boolean = false
 
     override fun perform(activityResultLauncher: ActivityResultLauncher<Intent>) {
+        pushReceived = false
         val fcmToken = FcmHelper.getFcmToken(context) ?: run {
             status = TestStatus.FAILED
             return
         }
-        action = pushersManager.testPush(fcmToken, object : MatrixCallback<Unit> {
-            override fun onFailure(failure: Throwable) {
-                description = if (failure is PushGatewayFailure.PusherRejected) {
-                    stringProvider.getString(R.string.settings_troubleshoot_test_push_loop_failed)
-                } else {
-                    errorFormatter.toHumanReadable(failure)
-                }
-                status = TestStatus.FAILED
-            }
+        action = activeSessionHolder.getActiveSession().coroutineScope.launch {
+            val result = runCatching { pushersManager.testPush(fcmToken) }
 
-            override fun onSuccess(data: Unit) {
-                // Wait for the push to be received
-                description = stringProvider.getString(R.string.settings_troubleshoot_test_push_loop_waiting_for_push)
-                status = TestStatus.RUNNING
+            withContext(Dispatchers.Main) {
+                status = result
+                        .fold(
+                                {
+                                    if (pushReceived) {
+                                        // Push already received (race condition)
+                                        description = stringProvider.getString(R.string.settings_troubleshoot_test_push_loop_success)
+                                        TestStatus.SUCCESS
+                                    } else {
+                                        // Wait for the push to be received
+                                        description = stringProvider.getString(R.string.settings_troubleshoot_test_push_loop_waiting_for_push)
+                                        TestStatus.RUNNING
+                                    }
+                                },
+                                {
+                                    description = if (it is PushGatewayFailure.PusherRejected) {
+                                        stringProvider.getString(R.string.settings_troubleshoot_test_push_loop_failed)
+                                    } else {
+                                        errorFormatter.toHumanReadable(it)
+                                    }
+                                    TestStatus.FAILED
+                                }
+                        )
             }
-        })
+        }
     }
 
     override fun onPushReceived() {
+        pushReceived = true
         description = stringProvider.getString(R.string.settings_troubleshoot_test_push_loop_success)
         status = TestStatus.SUCCESS
     }

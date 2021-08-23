@@ -17,7 +17,6 @@
 package org.matrix.android.sdk.internal.raw
 
 import com.zhuinden.monarchy.Monarchy
-import okhttp3.ResponseBody
 import org.matrix.android.sdk.api.cache.CacheStrategy
 import org.matrix.android.sdk.internal.database.model.RawCacheEntity
 import org.matrix.android.sdk.internal.database.query.get
@@ -58,8 +57,8 @@ internal class DefaultGetUrlTask @Inject constructor(
     }
 
     private suspend fun doRequest(url: String): String {
-        return executeRequest<ResponseBody>(null) {
-            apiCall = rawAPI.getUrl(url)
+        return executeRequest(null) {
+            rawAPI.getUrl(url)
         }
                 .string()
     }

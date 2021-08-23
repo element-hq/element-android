@@ -18,7 +18,8 @@ package im.vector.app.features.link
 
 import android.content.Intent
 import android.net.Uri
-import androidx.appcompat.app.AlertDialog
+import androidx.lifecycle.lifecycleScope
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.ScreenComponent
@@ -26,11 +27,10 @@ import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.toast
 import im.vector.app.databinding.ActivityProgressBinding
-import im.vector.app.features.login.LoginActivity
 import im.vector.app.features.login.LoginConfig
 import im.vector.app.features.permalink.PermalinkHandler
 import io.reactivex.android.schedulers.AndroidSchedulers
-import org.matrix.android.sdk.api.MatrixCallback
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.permalinks.PermalinkService
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
@@ -122,12 +122,14 @@ class LinkHandlerActivity : VectorBaseActivity<ActivityProgressBinding>() {
     }
 
     /**
-     * Start the login screen with identity server and home server pre-filled
+     * Start the login screen with identity server and homeserver pre-filled
      */
     private fun startLoginActivity(uri: Uri) {
-        val intent = LoginActivity.newIntent(this, LoginConfig.parse(uri))
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-        startActivity(intent)
+        navigator.openLogin(
+                context = this,
+                loginConfig = LoginConfig.parse(uri),
+                flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+        )
         finish()
     }
 
@@ -135,29 +137,36 @@ class LinkHandlerActivity : VectorBaseActivity<ActivityProgressBinding>() {
      * Propose to disconnect from a previous HS, when clicking on an auto config link
      */
     private fun displayAlreadyLoginPopup(uri: Uri) {
-        AlertDialog.Builder(this)
+        MaterialAlertDialogBuilder(this)
                 .setTitle(R.string.dialog_title_warning)
                 .setMessage(R.string.error_user_already_logged_in)
                 .setCancelable(false)
-                .setPositiveButton(R.string.logout) { _, _ ->
-                    sessionHolder.getSafeActiveSession()?.signOut(true, object : MatrixCallback<Unit> {
-                        override fun onFailure(failure: Throwable) {
-                            displayError(failure)
-                        }
-
-                        override fun onSuccess(data: Unit) {
-                            Timber.d("## displayAlreadyLoginPopup(): logout succeeded")
-                            sessionHolder.clearActiveSession()
-                            startLoginActivity(uri)
-                        }
-                    }) ?: finish()
-                }
+                .setPositiveButton(R.string.logout) { _, _ -> safeSignout(uri) }
                 .setNegativeButton(R.string.cancel) { _, _ -> finish() }
                 .show()
     }
 
+    private fun safeSignout(uri: Uri) {
+        val session = sessionHolder.getSafeActiveSession()
+        if (session == null) {
+            // Should not happen
+            startLoginActivity(uri)
+        } else {
+            lifecycleScope.launch {
+                try {
+                    session.signOut(true)
+                    Timber.d("## displayAlreadyLoginPopup(): logout succeeded")
+                    sessionHolder.clearActiveSession()
+                    startLoginActivity(uri)
+                } catch (failure: Throwable) {
+                    displayError(failure)
+                }
+            }
+        }
+    }
+
     private fun displayError(failure: Throwable) {
-        AlertDialog.Builder(this)
+        MaterialAlertDialogBuilder(this)
                 .setTitle(R.string.dialog_title_error)
                 .setMessage(errorFormatter.toHumanReadable(failure))
                 .setCancelable(false)

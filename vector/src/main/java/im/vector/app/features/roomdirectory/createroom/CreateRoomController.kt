@@ -20,6 +20,8 @@ import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import im.vector.app.R
+import im.vector.app.core.epoxy.dividerItem
+import im.vector.app.core.epoxy.profiles.buildProfileAction
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.discovery.settingsSectionTitleItem
 import im.vector.app.features.form.formAdvancedToggleItem
@@ -28,6 +30,7 @@ import im.vector.app.features.form.formEditableAvatarItem
 import im.vector.app.features.form.formSubmitButtonItem
 import im.vector.app.features.form.formSwitchItem
 import org.matrix.android.sdk.api.session.room.failure.CreateRoomFailure
+import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 import javax.inject.Inject
 
 class CreateRoomController @Inject constructor(
@@ -45,12 +48,13 @@ class CreateRoomController @Inject constructor(
     }
 
     private fun buildForm(viewState: CreateRoomViewState, enableFormElement: Boolean) {
+        val host = this
         formEditableAvatarItem {
             id("avatar")
             enabled(enableFormElement)
             imageUri(viewState.avatarUri)
-            clickListener { listener?.onAvatarChange() }
-            deleteListener { listener?.onAvatarDelete() }
+            clickListener { host.listener?.onAvatarChange() }
+            deleteListener { host.listener?.onAvatarDelete() }
         }
         settingsSectionTitleItem {
             id("nameSection")
@@ -60,10 +64,10 @@ class CreateRoomController @Inject constructor(
             id("name")
             enabled(enableFormElement)
             value(viewState.roomName)
-            hint(stringProvider.getString(R.string.create_room_name_hint))
+            hint(host.stringProvider.getString(R.string.create_room_name_hint))
 
             onTextChange { text ->
-                listener?.onNameChange(text)
+                host.listener?.onNameChange(text)
             }
         }
         settingsSectionTitleItem {
@@ -74,85 +78,125 @@ class CreateRoomController @Inject constructor(
             id("topic")
             enabled(enableFormElement)
             value(viewState.roomTopic)
-            hint(stringProvider.getString(R.string.create_room_topic_hint))
+            singleLine(false)
+            hint(host.stringProvider.getString(R.string.create_room_topic_hint))
 
             onTextChange { text ->
-                listener?.onTopicChange(text)
+                host.listener?.onTopicChange(text)
             }
         }
+
+        settingsSectionTitleItem {
+            id("visibility")
+            titleResId(R.string.room_settings_room_access_title)
+        }
+
+        when (viewState.roomJoinRules) {
+            RoomJoinRules.INVITE     -> {
+                buildProfileAction(
+                        id = "joinRule",
+                        title = stringProvider.getString(R.string.room_settings_room_access_private_title),
+                        subtitle = stringProvider.getString(R.string.room_settings_room_access_private_description),
+                        divider = false,
+                        editable = true,
+                        action = { host.listener?.selectVisibility() }
+                )
+            }
+            RoomJoinRules.PUBLIC     -> {
+                buildProfileAction(
+                        id = "joinRule",
+                        title = stringProvider.getString(R.string.room_settings_room_access_public_title),
+                        subtitle = stringProvider.getString(R.string.room_settings_room_access_public_description),
+                        divider = false,
+                        editable = true,
+                        action = { host.listener?.selectVisibility() }
+                )
+            }
+            RoomJoinRules.RESTRICTED -> {
+                buildProfileAction(
+                        id = "joinRule",
+                        title = stringProvider.getString(R.string.room_settings_room_access_restricted_title),
+                        subtitle = stringProvider.getString(R.string.room_create_member_of_space_name_can_join, viewState.parentSpaceSummary?.displayName),
+                        divider = false,
+                        editable = true,
+                        action = { host.listener?.selectVisibility() }
+                )
+            }
+            else                     -> {
+                // not yet supported
+            }
+        }
+
         settingsSectionTitleItem {
             id("settingsSection")
             titleResId(R.string.create_room_settings_section)
         }
-        formSwitchItem {
-            id("public")
-            enabled(enableFormElement)
-            title(stringProvider.getString(R.string.create_room_public_title))
-            summary(stringProvider.getString(R.string.create_room_public_description))
-            switchChecked(viewState.roomType is CreateRoomViewState.RoomType.Public)
-            showDivider(viewState.roomType !is CreateRoomViewState.RoomType.Public)
 
-            listener { value ->
-                listener?.setIsPublic(value)
-            }
-        }
-        if (viewState.roomType is CreateRoomViewState.RoomType.Public) {
+        if (viewState.roomJoinRules == RoomJoinRules.PUBLIC) {
             // Room alias for public room
-            roomAliasEditItem {
+            formEditTextItem {
                 id("alias")
                 enabled(enableFormElement)
-                value(viewState.roomType.aliasLocalPart)
-                homeServer(":" + viewState.homeServerName)
+                value(viewState.aliasLocalPart)
+                suffixText(":" + viewState.homeServerName)
+                prefixText("#")
+                hint(host.stringProvider.getString(R.string.room_alias_address_hint))
                 errorMessage(
-                        roomAliasErrorFormatter.format(
+                        host.roomAliasErrorFormatter.format(
                                 (((viewState.asyncCreateRoomRequest as? Fail)?.error) as? CreateRoomFailure.AliasError)?.aliasError)
                 )
                 onTextChange { value ->
-                    listener?.setAliasLocalPart(value)
+                    host.listener?.setAliasLocalPart(value)
                 }
             }
         } else {
+            dividerItem {
+                id("divider0")
+            }
             // Room encryption for private room
             formSwitchItem {
                 id("encryption")
                 enabled(enableFormElement)
-                title(stringProvider.getString(R.string.create_room_encryption_title))
+                title(host.stringProvider.getString(R.string.create_room_encryption_title))
                 summary(
                         if (viewState.hsAdminHasDisabledE2E) {
-                            stringProvider.getString(R.string.settings_hs_admin_e2e_disabled)
+                            host.stringProvider.getString(R.string.settings_hs_admin_e2e_disabled)
                         } else {
-                            stringProvider.getString(R.string.create_room_encryption_description)
+                            host.stringProvider.getString(R.string.create_room_encryption_description)
                         }
                 )
                 switchChecked(viewState.isEncrypted)
 
                 listener { value ->
-                    listener?.setIsEncrypted(value)
+                    host.listener?.setIsEncrypted(value)
                 }
             }
         }
+
+//        dividerItem {
+//            id("divider1")
+//        }
         formAdvancedToggleItem {
             id("showAdvanced")
-            title(stringProvider.getString(if (viewState.showAdvanced) R.string.hide_advanced else R.string.show_advanced))
+            title(host.stringProvider.getString(if (viewState.showAdvanced) R.string.hide_advanced else R.string.show_advanced))
             expanded(!viewState.showAdvanced)
-            listener { listener?.toggleShowAdvanced() }
+            listener { host.listener?.toggleShowAdvanced() }
         }
         if (viewState.showAdvanced) {
             formSwitchItem {
                 id("federation")
                 enabled(enableFormElement)
-                title(stringProvider.getString(R.string.create_room_disable_federation_title, viewState.homeServerName))
-                summary(stringProvider.getString(R.string.create_room_disable_federation_description))
+                title(host.stringProvider.getString(R.string.create_room_disable_federation_title, viewState.homeServerName))
+                summary(host.stringProvider.getString(R.string.create_room_disable_federation_description))
                 switchChecked(viewState.disableFederation)
-                showDivider(false)
-                listener { value -> listener?.setDisableFederation(value) }
+                listener { value -> host.listener?.setDisableFederation(value) }
             }
         }
         formSubmitButtonItem {
             id("submit")
             enabled(enableFormElement)
             buttonTitleId(R.string.create_room_action_create)
-            buttonClickListener { listener?.submit() }
+            buttonClickListener { host.listener?.submit() }
         }
     }
 
@@ -161,7 +205,7 @@ class CreateRoomController @Inject constructor(
         fun onAvatarChange()
         fun onNameChange(newName: String)
         fun onTopicChange(newTopic: String)
-        fun setIsPublic(isPublic: Boolean)
+        fun selectVisibility()
         fun setAliasLocalPart(aliasLocalPart: String)
         fun setIsEncrypted(isEncrypted: Boolean)
         fun toggleShowAdvanced()

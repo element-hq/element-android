@@ -1,0 +1,30 @@
+Element, şu özelliklere sahip yeni bir tür mesajlaşma ve işbirliği uygulamasıdır:
+
+1. Gizliliğinizi korumak için kontrolü size verir
+2. Matrix ağındaki herkesle ve hatta Slack gibi uygulamalarla entegre olarak iletişim kurmanızı sağlar
+3. Sizi reklamlardan, veri madenciliğinden ve walled gardenlardan korur
+4. Başkalarını doğrulamak için çapraz imzalama ile uçtan uca şifreleme yoluyla güvenliğinizi sağlar
+
+Element, dağıtık (decentralized) ve açık kaynak olduğu için diğer mesajlaşma ve işbirliği uygulamalarından tamamen farklıdır.
+
+Element kendi sunucunuzu kurmanıza yada bir sunucu seçmenizi izin verir, böylece verilerinizin ve sohbetlerinizin gizliliğine ve kontrolüne sahip olursunuz. Size açık bir ağa erişim sağlar; yani yalnızca diğer Element kullanıcılarıyla konuşmak zorunda kalmazsınız. Ve çok güvenlidir.
+
+Element, açık, merkezi olmayan iletişim standardı olan Matrix üzerinde çalıştığı için tüm bunları yapabilir.
+
+Element, konuşmalarınızın sunucusunu seçmenize izin vererek kontrolü size verir. Element uygulamasından, farklı şekillerde sunucu seçebilirsiniz:
+
+1. Matrix geliştiricilerinin sahip olduğu matrix.org genel sunucusunda ücretsiz bir hesap edinin veya gönüllüler tarafından barındırılan binlerce genel sunucu arasından seçim yapın
+2. Kendi donanımınız üzerinde bir sunucu çalıştırarak kendi hesabınızı barındırın
+3. Element Matrix Hizmetleri sunucu platformuna abone olarak özel bir sunucuda hesap oluşturun
+
+<b>Neden Element'i Seçmelisiniz</b>
+
+<b>KENDİ VERİLERİNİZE SAHİP OLUN </b>: Verilerinizi ve mesajlarınızı nerede saklayacağınıza siz karar verirsiniz. Verilerinize madencilik yapan veya üçüncü şahıslara erişim sağlayan bir BÜYÜKŞİRKETE verilerinizi vermiyorsunuz, onlara sahipsiniz ve kontrol ediyorsunuz.
+
+<b>AÇIK MESAJLAŞMA VE İŞBİRLİĞİ</b>: Element veya başka bir Matrix uygulamalarını kullanmaları fark etmeksizin, hatta Slack, IRC yada XMPP gibi farklı mesajlaşma uygulamaları kullanıyor olsalar bile, Matrix sunucusundaki herhangi biriyle konuşabilirsiniz
+
+<b>SÜPER GÜVENLİ</b>: Gerçek uçtan uca şifreleme (yalnızca görüştüğünüz kişiler mesajların şifresini çözebilir) ve konuşma katılımcılarının cihazlarını doğrulamak için çapraz imzalama.
+
+<b>TAM İLETİŞİM</b>: Mesajlaşma, sesli ve görüntülü aramalar, dosya paylaşımı, ekran paylaşımı ve bir sürü entegrasyon, bot ve widgetlar. Odalar, topluluklar oluşturun, iletişimde kalın ve işlerinizi halledin.
+
+<b>OLDUĞUNUZ HER YERDE</b>: Nerede olursanız olun, tüm cihazlarınızda ve internette https://app.element.io adresinden tam senkronize mesaj geçmişiyle iletişimde kalın

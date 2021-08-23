@@ -26,15 +26,19 @@
       <w>pkcs</w>
       <w>previewable</w>
       <w>previewables</w>
+      <w>pstn</w>
       <w>riotx</w>
       <w>signin</w>
       <w>signout</w>
       <w>signup</w>
+      <w>snackbar</w>
       <w>ssss</w>
       <w>sygnal</w>
       <w>threepid</w>
       <w>unpublish</w>
       <w>unwedging</w>
+      <w>vctr</w>
+      <w>wellknown</w>
     </words>
   </dictionary>
 </component>

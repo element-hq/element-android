@@ -34,14 +34,13 @@ class AutocompleteGroupController @Inject constructor() : TypedEpoxyController<L
         if (data.isNullOrEmpty()) {
             return
         }
+        val host = this
         data.forEach { groupSummary ->
             autocompleteMatrixItem {
                 id(groupSummary.groupId)
                 matrixItem(groupSummary.toMatrixItem())
-                avatarRenderer(avatarRenderer)
-                clickListener { _ ->
-                    listener?.onItemClick(groupSummary)
-                }
+                avatarRenderer(host.avatarRenderer)
+                clickListener { host.listener?.onItemClick(groupSummary) }
             }
         }
     }

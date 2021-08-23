@@ -25,14 +25,14 @@ import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
+import dagger.assisted.AssistedFactory
 import im.vector.app.R
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.Session
@@ -159,7 +159,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
         super.onCleared()
     }
 
-    @AssistedInject.Factory
+    @AssistedFactory
     interface Factory {
         fun create(initialState: VerificationBottomSheetViewState,
                    args: VerificationBottomSheet.VerificationArgs): VerificationBottomSheetViewModel
@@ -248,32 +248,34 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                                 pendingRequest = Loading()
                         )
                     }
-                    session.createDirectRoom(otherUserId, object : MatrixCallback<String> {
-                        override fun onSuccess(data: String) {
-                            setState {
-                                copy(
-                                        roomId = data,
-                                        pendingRequest = Success(
-                                                session
-                                                        .cryptoService()
-                                                        .verificationService()
-                                                        .requestKeyVerificationInDMs(
-                                                                supportedVerificationMethodsProvider.provide(),
-                                                                otherUserId,
-                                                                data,
-                                                                pendingLocalId
-                                                        )
+                    viewModelScope.launch {
+                        val result = runCatching { session.createDirectRoom(otherUserId) }
+                        result.fold(
+                                { data ->
+                                    setState {
+                                        copy(
+                                                roomId = data,
+                                                pendingRequest = Success(
+                                                        session
+                                                                .cryptoService()
+                                                                .verificationService()
+                                                                .requestKeyVerificationInDMs(
+                                                                        supportedVerificationMethodsProvider.provide(),
+                                                                        otherUserId,
+                                                                        data,
+                                                                        pendingLocalId
+                                                                )
+                                                )
                                         )
-                                )
-                            }
-                        }
-
-                        override fun onFailure(failure: Throwable) {
-                            setState {
-                                copy(pendingRequest = Fail(failure))
-                            }
-                        }
-                    })
+                                    }
+                                },
+                                { failure ->
+                                    setState {
+                                        copy(pendingRequest = Fail(failure))
+                                    }
+                                }
+                        )
+                    }
                 } else {
                     setState {
                         copy(
@@ -304,8 +306,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                             transactionId = action.pendingRequestTransactionId,
                             roomId = roomId,
                             otherUserId = request.otherUserId,
-                            otherDeviceId = otherDevice ?: "",
-                            callback = null
+                            otherDeviceId = otherDevice ?: ""
                     )
                 }
                 Unit
@@ -425,7 +426,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
     }
 
     private fun tentativeRestoreBackup(res: Map<String, String>?) {
-        GlobalScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 val secret = res?.get(KEYBACKUP_SECRET_SSSS_NAME) ?: return@launch Unit.also {
                     Timber.v("## Keybackup secret not restored from SSSS")

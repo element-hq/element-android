@@ -15,9 +15,7 @@
  */
 package im.vector.app.features.home.room.detail.timeline.helper
 
-import android.view.View
 import im.vector.app.EmojiCompatFontProvider
-import im.vector.app.core.utils.DebouncedClickListener
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.MessageColorProvider
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
@@ -39,15 +37,15 @@ class MessageItemAttributesFactory @Inject constructor(
                 informationData = informationData,
                 avatarRenderer = avatarRenderer,
                 messageColorProvider = messageColorProvider,
-                itemLongClickListener = View.OnLongClickListener { view ->
+                itemLongClickListener = { view ->
                     callback?.onEventLongClicked(informationData, messageContent, view) ?: false
                 },
-                itemClickListener = DebouncedClickListener(View.OnClickListener { view ->
+                itemClickListener = { view ->
                     callback?.onEventCellClicked(informationData, messageContent, view)
-                }),
-                memberClickListener = DebouncedClickListener(View.OnClickListener {
+                },
+                memberClickListener = {
                     callback?.onMemberNameClicked(informationData)
-                }),
+                },
                 reactionPillCallback = callback,
                 avatarCallback = callback,
                 readReceiptsCallback = callback,

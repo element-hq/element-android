@@ -17,7 +17,6 @@
 package org.matrix.android.sdk.internal.auth.login
 
 import dagger.Lazy
-import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.Session
@@ -51,7 +50,7 @@ internal class DefaultDirectLoginTask @Inject constructor(
 
     override suspend fun execute(params: DirectLoginTask.Params): Session {
         val client = buildClient(params.homeServerConnectionConfig)
-        val homeServerUrl = params.homeServerConnectionConfig.homeServerUri.toString()
+        val homeServerUrl = params.homeServerConnectionConfig.homeServerUriBase.toString()
 
         val authAPI = retrofitFactory.create(client, homeServerUrl)
                 .create(AuthAPI::class.java)
@@ -59,19 +58,16 @@ internal class DefaultDirectLoginTask @Inject constructor(
         val loginParams = PasswordLoginParams.userIdentifier(params.userId, params.password, params.deviceName)
 
         val credentials = try {
-            executeRequest<Credentials>(null) {
-                apiCall = authAPI.login(loginParams)
+            executeRequest(null) {
+                authAPI.login(loginParams)
             }
         } catch (throwable: Throwable) {
-            when (throwable) {
-                is UnrecognizedCertificateException -> {
-                    throw Failure.UnrecognizedCertificateFailure(
-                            homeServerUrl,
-                            throwable.fingerprint
-                    )
-                }
-                else                                ->
-                    throw throwable
+            throw when (throwable) {
+                is UnrecognizedCertificateException -> Failure.UnrecognizedCertificateFailure(
+                        homeServerUrl,
+                        throwable.fingerprint
+                )
+                else                                -> throwable
             }
         }
 

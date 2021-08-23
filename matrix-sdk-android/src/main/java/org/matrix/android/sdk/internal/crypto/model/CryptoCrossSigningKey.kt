@@ -63,7 +63,7 @@ data class CryptoCrossSigningKey(
         )
     }
 
-    data class Builder(
+    internal data class Builder(
             val userId: String,
             val usage: KeyUsage,
             private var base64Pkey: String? = null,
@@ -97,7 +97,7 @@ data class CryptoCrossSigningKey(
     }
 }
 
-enum class KeyUsage(val value: String) {
+internal enum class KeyUsage(val value: String) {
     MASTER("master"),
     SELF_SIGNING("self_signing"),
     USER_SIGNING("user_signing")

@@ -18,19 +18,13 @@ package org.matrix.android.sdk.internal.session.permalinks
 
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.permalinks.PermalinkService.Companion.MATRIX_TO_URL_BASE
-import org.matrix.android.sdk.api.session.room.members.roomMemberQueryParams
-import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.internal.di.UserId
-import org.matrix.android.sdk.internal.session.room.RoomGetter
-import java.net.URLEncoder
 import javax.inject.Inject
-import javax.inject.Provider
 
 internal class PermalinkFactory @Inject constructor(
         @UserId
         private val userId: String,
-        // Use a provider to fix circular Dagger dependency
-        private val roomGetterProvider: Provider<RoomGetter>
+        private val viaParameterFinder: ViaParameterFinder
 ) {
 
     fun createPermalink(event: Event): String? {
@@ -46,16 +40,23 @@ internal class PermalinkFactory @Inject constructor(
         } else MATRIX_TO_URL_BASE + escape(id)
     }
 
-    fun createRoomPermalink(roomId: String): String? {
+    fun createRoomPermalink(roomId: String, via: List<String>? = null): String? {
         return if (roomId.isEmpty()) {
             null
         } else {
-            MATRIX_TO_URL_BASE + escape(roomId) + computeViaParams(userId, roomId)
+            buildString {
+                append(MATRIX_TO_URL_BASE)
+                append(escape(roomId))
+                append(
+                        via?.takeIf { it.isNotEmpty() }?.let { viaParameterFinder.asUrlViaParameters(it) }
+                                ?: viaParameterFinder.computeViaParams(userId, roomId)
+                )
+            }
         }
     }
 
     fun createPermalink(roomId: String, eventId: String): String {
-        return MATRIX_TO_URL_BASE + escape(roomId) + "/" + escape(eventId) + computeViaParams(userId, roomId)
+        return MATRIX_TO_URL_BASE + escape(roomId) + "/" + escape(eventId) + viaParameterFinder.computeViaParams(userId, roomId)
     }
 
     fun getLinkedId(url: String): String? {
@@ -64,25 +65,6 @@ internal class PermalinkFactory @Inject constructor(
         return if (isSupported) {
             url.substring(MATRIX_TO_URL_BASE.length)
         } else null
-    }
-
-    /**
-     * Compute the via parameters.
-     * Take up to 3 homeserver domains, taking the most representative one regarding room members and including the
-     * current user one.
-     */
-    private fun computeViaParams(userId: String, roomId: String): String {
-        val userHomeserver = userId.substringAfter(":")
-        return getUserIdsOfJoinedMembers(roomId)
-                .map { it.substringAfter(":") }
-                .groupBy { it }
-                .mapValues { it.value.size }
-                .toMutableMap()
-                // Ensure the user homeserver will be included
-                .apply { this[userHomeserver] = Int.MAX_VALUE }
-                .let { map -> map.keys.sortedByDescending { map[it] } }
-                .take(3)
-                .joinToString(prefix = "?via=", separator = "&via=") { URLEncoder.encode(it, "utf-8") }
     }
 
     /**
@@ -103,16 +85,5 @@ internal class PermalinkFactory @Inject constructor(
      */
     private fun unescape(id: String): String {
         return id.replace("%2F", "/")
-    }
-
-    /**
-     * Get a set of userIds of joined members of a room
-     */
-    private fun getUserIdsOfJoinedMembers(roomId: String): Set<String> {
-        return roomGetterProvider.get().getRoom(roomId)
-                ?.getRoomMembers(roomMemberQueryParams { memberships = listOf(Membership.JOIN) })
-                ?.map { it.userId }
-                .orEmpty()
-                .toSet()
     }
 }

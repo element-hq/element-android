@@ -20,8 +20,9 @@ import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
+import dagger.assisted.AssistedFactory
 import im.vector.app.R
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
@@ -38,7 +39,6 @@ import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
-import org.matrix.android.sdk.internal.util.awaitCallback
 import org.matrix.android.sdk.rx.rx
 import org.matrix.android.sdk.rx.unwrap
 
@@ -47,7 +47,7 @@ class RoomBannedMemberListViewModel @AssistedInject constructor(@Assisted initia
                                                                 private val session: Session)
     : VectorViewModel<RoomBannedMemberListViewState, RoomBannedMemberListAction, RoomBannedMemberListViewEvents>(initialState) {
 
-    @AssistedInject.Factory
+    @AssistedFactory
     interface Factory {
         fun create(initialState: RoomBannedMemberListViewState): RoomBannedMemberListViewModel
     }
@@ -72,10 +72,12 @@ class RoomBannedMemberListViewModel @AssistedInject constructor(@Assisted initia
 
         val powerLevelsContentLive = PowerLevelsObservableFactory(room).createObservable()
 
-        powerLevelsContentLive.subscribe {
-            val powerLevelsHelper = PowerLevelsHelper(it)
-            setState { copy(canUserBan = powerLevelsHelper.isUserAbleToBan(session.myUserId)) }
-        }.disposeOnClear()
+        powerLevelsContentLive
+                .subscribe {
+                    val powerLevelsHelper = PowerLevelsHelper(it)
+                    setState { copy(canUserBan = powerLevelsHelper.isUserAbleToBan(session.myUserId)) }
+                }
+                .disposeOnClear()
     }
 
     companion object : MvRxViewModelFactory<RoomBannedMemberListViewModel, RoomBannedMemberListViewState> {
@@ -123,9 +125,7 @@ class RoomBannedMemberListViewModel @AssistedInject constructor(@Assisted initia
         }
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                awaitCallback<Unit> {
-                    room.unban(roomMemberSummary.userId, null, it)
-                }
+                room.unban(roomMemberSummary.userId, null)
             } catch (failure: Throwable) {
                 _viewEvents.post(RoomBannedMemberListViewEvents.ToastError(stringProvider.getString(R.string.failed_to_unban)))
             } finally {

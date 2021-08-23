@@ -20,6 +20,7 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.paging.PagedList
 import org.matrix.android.sdk.api.MatrixCallback
+import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.listeners.ProgressListener
 import org.matrix.android.sdk.api.session.crypto.crosssigning.CrossSigningService
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupService
@@ -41,7 +42,6 @@ import org.matrix.android.sdk.internal.crypto.model.event.RoomKeyWithHeldContent
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.rest.DevicesListResponse
 import org.matrix.android.sdk.internal.crypto.model.rest.RoomKeyRequestBody
-import kotlin.jvm.Throws
 
 interface CryptoService {
 
@@ -53,9 +53,7 @@ interface CryptoService {
 
     fun setDeviceName(deviceId: String, deviceName: String, callback: MatrixCallback<Unit>)
 
-    fun deleteDevice(deviceId: String, callback: MatrixCallback<Unit>)
-
-    fun deleteDeviceWithUserPassword(deviceId: String, authSession: String?, password: String, callback: MatrixCallback<Unit>)
+    fun deleteDevice(deviceId: String, userInteractiveAuthInterceptor: UserInteractiveAuthInterceptor, callback: MatrixCallback<Unit>)
 
     fun getCryptoVersion(context: Context, longFormat: Boolean): String
 
@@ -83,9 +81,11 @@ interface CryptoService {
 
     fun getDeviceTrackingStatus(userId: String): Int
 
-    fun importRoomKeys(roomKeysAsArray: ByteArray, password: String, progressListener: ProgressListener?, callback: MatrixCallback<ImportRoomKeysResult>)
+    suspend fun importRoomKeys(roomKeysAsArray: ByteArray,
+                               password: String,
+                               progressListener: ProgressListener?): ImportRoomKeysResult
 
-    fun exportRoomKeys(password: String, callback: MatrixCallback<ByteArray>)
+    suspend fun exportRoomKeys(password: String): ByteArray
 
     fun setRoomBlacklistUnverifiedDevices(roomId: String)
 
@@ -157,4 +157,10 @@ interface CryptoService {
     fun getWithHeldMegolmSession(roomId: String, sessionId: String): RoomKeyWithHeldContent?
 
     fun logDbUsageInfo()
+
+    /**
+     * Perform any background tasks that can be done before a message is ready to
+     * send, in order to speed up sending of the message.
+     */
+    fun prepareToEncrypt(roomId: String, callback: MatrixCallback<Unit>)
 }

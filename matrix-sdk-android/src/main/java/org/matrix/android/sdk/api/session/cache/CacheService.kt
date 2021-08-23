@@ -16,8 +16,6 @@
 
 package org.matrix.android.sdk.api.session.cache
 
-import org.matrix.android.sdk.api.MatrixCallback
-
 /**
  * This interface defines a method to clear the cache. It's implemented at the session level.
  */
@@ -26,5 +24,5 @@ interface CacheService {
     /**
      * Clear the whole cached data, except credentials. Once done, the sync has to be restarted by the sdk user.
      */
-    fun clearCache(callback: MatrixCallback<Unit>)
+    suspend fun clearCache()
 }

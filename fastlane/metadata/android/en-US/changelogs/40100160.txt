@@ -1,0 +1,2 @@
+Main changes in this version: Social Login support.
+Full changelog: https://github.com/vector-im/element-android/releases/tag/v1.0.15 and https://github.com/vector-im/element-android/releases/tag/v1.0.16

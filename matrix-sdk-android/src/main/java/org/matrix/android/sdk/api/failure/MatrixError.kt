@@ -18,6 +18,8 @@ package org.matrix.android.sdk.api.failure
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import org.matrix.android.sdk.api.util.JsonDict
+import org.matrix.android.sdk.internal.auth.data.InteractiveAuthenticationFlow
 
 /**
  * This data class holds the error defined by the matrix specifications.
@@ -39,10 +41,20 @@ data class MatrixError(
         // For M_LIMIT_EXCEEDED
         @Json(name = "retry_after_ms") val retryAfterMillis: Long? = null,
         // For M_UNKNOWN_TOKEN
-        @Json(name = "soft_logout") val isSoftLogout: Boolean = false,
+        @Json(name = "soft_logout") val isSoftLogout: Boolean? = null,
         // For M_INVALID_PEPPER
         // {"error": "pepper does not match 'erZvr'", "lookup_pepper": "pQgMS", "algorithm": "sha256", "errcode": "M_INVALID_PEPPER"}
-        @Json(name = "lookup_pepper") val newLookupPepper: String? = null
+        @Json(name = "lookup_pepper") val newLookupPepper: String? = null,
+
+        // For M_FORBIDDEN UIA
+        @Json(name = "session")
+        val session: String? = null,
+        @Json(name = "completed")
+        val completedStages: List<String>? = null,
+        @Json(name = "flows")
+        val flows: List<InteractiveAuthenticationFlow>? = null,
+        @Json(name = "params")
+        val params: JsonDict? = null
 ) {
 
     companion object {

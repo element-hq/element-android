@@ -66,8 +66,8 @@ class TimelineForwardPaginationTest : InstrumentedTest {
                 numberOfMessagesToSend)
 
         // Alice clear the cache
-        commonTestHelper.doSync<Unit> {
-            aliceSession.clearCache(it)
+        commonTestHelper.runBlockingTest {
+            aliceSession.clearCache()
         }
 
         // And restarts the sync

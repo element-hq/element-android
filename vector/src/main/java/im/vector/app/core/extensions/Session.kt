@@ -29,23 +29,28 @@ import timber.log.Timber
 fun Session.configureAndStart(context: Context) {
     Timber.i("Configure and start session for $myUserId")
     open()
-    setFilter(FilterService.FilterPreset.RiotFilter)
+    setFilter(FilterService.FilterPreset.ElementFilter)
     startSyncing(context)
     refreshPushers()
+    context.vectorComponent().webRtcCallManager().checkForProtocolsSupportIfNeeded()
 }
 
 fun Session.startSyncing(context: Context) {
     val applicationContext = context.applicationContext
     if (!hasAlreadySynced()) {
         // initial sync is done as a service so it can continue below app lifecycle
-        VectorSyncService.newOneShotIntent(applicationContext, sessionId, 0).also {
-            try {
-                ContextCompat.startForegroundService(applicationContext, it)
-            } catch (ex: Throwable) {
-                // TODO
-                Timber.e(ex)
-            }
-        }
+        VectorSyncService.newOneShotIntent(
+                context = applicationContext,
+                sessionId = sessionId
+        )
+                .let {
+                    try {
+                        ContextCompat.startForegroundService(applicationContext, it)
+                    } catch (ex: Throwable) {
+                        // TODO
+                        Timber.e(ex)
+                    }
+                }
     } else {
         val isAtLeastStarted = ProcessLifecycleOwner.get().lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)
         Timber.v("--> is at least started? $isAtLeastStarted")

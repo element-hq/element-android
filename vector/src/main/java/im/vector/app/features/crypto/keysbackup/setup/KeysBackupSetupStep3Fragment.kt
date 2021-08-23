@@ -23,11 +23,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
-import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import arrow.core.Try
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseFragment
@@ -38,7 +38,6 @@ import im.vector.app.core.utils.startSharePlainTextIntent
 import im.vector.app.databinding.FragmentKeysBackupSetupStep3Binding
 
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.IOException
@@ -61,7 +60,7 @@ class KeysBackupSetupStep3Fragment @Inject constructor() : VectorBaseFragment<Fr
 
         viewModel.shouldPromptOnBack = false
 
-        viewModel.passphrase.observe(viewLifecycleOwner, Observer {
+        viewModel.passphrase.observe(viewLifecycleOwner) {
             if (it.isNullOrBlank()) {
                 // Recovery was generated, so show key and options to save
                 views.keysBackupSetupStep3Label2.text = getString(R.string.keys_backup_setup_step3_text_line2_no_passphrase)
@@ -81,7 +80,7 @@ class KeysBackupSetupStep3Fragment @Inject constructor() : VectorBaseFragment<Fr
                 views.keysBackupSetupStep3FinishButton.text = getString(R.string.keys_backup_setup_step3_button_title)
                 views.keysBackupSetupStep3RecoveryKeyText.isVisible = false
             }
-        })
+        }
 
         setupViews()
     }
@@ -164,7 +163,7 @@ class KeysBackupSetupStep3Fragment @Inject constructor() : VectorBaseFragment<Fr
     }
 
     private fun exportRecoveryKeyToFile(uri: Uri, data: String) {
-        GlobalScope.launch(Dispatchers.Main) {
+        lifecycleScope.launch(Dispatchers.Main) {
             Try {
                 withContext(Dispatchers.IO) {
                     requireContext().contentResolver.openOutputStream(uri)
@@ -178,7 +177,7 @@ class KeysBackupSetupStep3Fragment @Inject constructor() : VectorBaseFragment<Fr
                     .fold(
                             { throwable ->
                                 activity?.let {
-                                    AlertDialog.Builder(it)
+                                    MaterialAlertDialogBuilder(it)
                                             .setTitle(R.string.dialog_title_error)
                                             .setMessage(errorFormatter.toHumanReadable(throwable))
                                 }
@@ -186,7 +185,7 @@ class KeysBackupSetupStep3Fragment @Inject constructor() : VectorBaseFragment<Fr
                             {
                                 viewModel.copyHasBeenMade = true
                                 activity?.let {
-                                    AlertDialog.Builder(it)
+                                    MaterialAlertDialogBuilder(it)
                                             .setTitle(R.string.dialog_title_success)
                                             .setMessage(R.string.recovery_key_export_saved)
                                 }

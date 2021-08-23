@@ -35,5 +35,5 @@ object MessageType {
     const val MSGTYPE_STICKER_LOCAL = "org.matrix.android.sdk.sticker"
 
     const val MSGTYPE_CONFETTI = "nic.custom.confetti"
-    const val MSGTYPE_SNOW = "nic.custom.snow"
+    const val MSGTYPE_SNOWFALL = "io.element.effect.snowfall"
 }

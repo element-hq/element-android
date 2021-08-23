@@ -16,6 +16,7 @@
 package im.vector.app.features.settings
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.media.RingtoneManager
 import android.net.Uri
 import android.provider.MediaStore
@@ -98,6 +99,10 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         private const val SETTINGS_VIBRATE_ON_MENTION_KEY = "SETTINGS_VIBRATE_ON_MENTION_KEY"
         private const val SETTINGS_SEND_MESSAGE_WITH_ENTER = "SETTINGS_SEND_MESSAGE_WITH_ENTER"
         private const val SETTINGS_ENABLE_CHAT_EFFECTS = "SETTINGS_ENABLE_CHAT_EFFECTS"
+        private const val SETTINGS_SHOW_EMOJI_KEYBOARD = "SETTINGS_SHOW_EMOJI_KEYBOARD"
+
+        // Room directory
+        private const val SETTINGS_ROOM_DIRECTORY_SHOW_ALL_PUBLIC_ROOMS = "SETTINGS_ROOM_DIRECTORY_SHOW_ALL_PUBLIC_ROOMS"
 
         // Help
         private const val SETTINGS_SHOULD_SHOW_HELP_ON_ROOM_LIST_KEY = "SETTINGS_SHOULD_SHOW_HELP_ON_ROOM_LIST_KEY"
@@ -146,6 +151,8 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         private const val SETTINGS_ENABLE_SEND_VOICE_FEATURE_PREFERENCE_KEY = "SETTINGS_ENABLE_SEND_VOICE_FEATURE_PREFERENCE_KEY"
 
         const val SETTINGS_LABS_ALLOW_EXTENDED_LOGS = "SETTINGS_LABS_ALLOW_EXTENDED_LOGS"
+        const val SETTINGS_LABS_USE_RESTRICTED_JOIN_RULE = "SETTINGS_LABS_USE_RESTRICTED_JOIN_RULE"
+        const val SETTINGS_LABS_SPACES_HOME_AS_ORPHAN = "SETTINGS_LABS_SPACES_HOME_AS_ORPHAN"
 
         private const val SETTINGS_DEVELOPER_MODE_PREFERENCE_KEY = "SETTINGS_DEVELOPER_MODE_PREFERENCE_KEY"
         private const val SETTINGS_LABS_SHOW_HIDDEN_EVENTS_PREFERENCE_KEY = "SETTINGS_LABS_SHOW_HIDDEN_EVENTS_PREFERENCE_KEY"
@@ -188,6 +195,13 @@ class VectorPreferences @Inject constructor(private val context: Context) {
 
         private const val SETTINGS_UNKNOWN_DEVICE_DISMISSED_LIST = "SETTINGS_UNKNWON_DEVICE_DISMISSED_LIST"
 
+        private const val TAKE_PHOTO_VIDEO_MODE = "TAKE_PHOTO_VIDEO_MODE"
+
+        // Possible values for TAKE_PHOTO_VIDEO_MODE
+        const val TAKE_PHOTO_VIDEO_MODE_ALWAYS_ASK = 0
+        const val TAKE_PHOTO_VIDEO_MODE_PHOTO = 1
+        const val TAKE_PHOTO_VIDEO_MODE_VIDEO = 2
+
         // Background sync modes
 
         // some preferences keys must be kept after a logout
@@ -207,6 +221,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
                 SETTINGS_MEDIA_SAVING_PERIOD_SELECTED_KEY,
                 SETTINGS_PREVIEW_MEDIA_BEFORE_SENDING_KEY,
                 SETTINGS_SEND_MESSAGE_WITH_ENTER,
+                SETTINGS_SHOW_EMOJI_KEYBOARD,
 
                 SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY,
                 SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY,
@@ -229,6 +244,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
                 SETTINGS_DEVELOPER_MODE_PREFERENCE_KEY,
                 SETTINGS_LABS_SHOW_HIDDEN_EVENTS_PREFERENCE_KEY,
                 SETTINGS_LABS_ALLOW_EXTENDED_LOGS,
+                SETTINGS_LABS_USE_RESTRICTED_JOIN_RULE,
                 SETTINGS_DEVELOPER_MODE_FAIL_FAST_PREFERENCE_KEY,
 
                 SETTINGS_USE_RAGE_SHAKE_KEY,
@@ -239,12 +255,25 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     private val defaultPrefs = DefaultSharedPreferences.getInstance(context)
 
     /**
+     * Allow subscribing and unsubscribing to configuration changes. This is
+     * particularly useful when you need to be notified of a configuration change
+     * in a background service, e.g. for the P2P demos.
+     */
+    fun subscribeToChanges(listener: SharedPreferences.OnSharedPreferenceChangeListener) {
+        defaultPrefs.registerOnSharedPreferenceChangeListener(listener)
+    }
+
+    fun unsubscribeToChanges(listener: SharedPreferences.OnSharedPreferenceChangeListener) {
+        defaultPrefs.unregisterOnSharedPreferenceChangeListener(listener)
+    }
+
+    /**
      * Clear the preferences.
      */
     fun clearPreferences() {
         val keysToKeep = HashSet(mKeysToKeepAfterLogout)
 
-        // home server urls
+        // homeserver urls
         keysToKeep.add(ServerUrlsRepository.HOME_SERVER_URL_PREF)
         keysToKeep.add(ServerUrlsRepository.IDENTITY_SERVER_URL_PREF)
 
@@ -353,15 +382,6 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     }
 
     /**
-     * Tells if all room member state events should be shown in the messages list.
-     *
-     * @return true all room member state events should be shown in the messages list.
-     */
-    fun showRoomMemberStateEvents(): Boolean {
-        return defaultPrefs.getBoolean(SETTINGS_SHOW_ROOM_MEMBER_STATE_EVENTS_KEY, true)
-    }
-
-    /**
      * Tells if the join and leave membership events should be shown in the messages list.
      *
      * @return true if the join and leave membership events should be shown in the messages list
@@ -395,6 +415,13 @@ class VectorPreferences @Inject constructor(private val context: Context) {
      */
     fun isSendVoiceFeatureEnabled(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_ENABLE_SEND_VOICE_FEATURE_PREFERENCE_KEY, false)
+    }
+
+    /**
+     * Show all rooms in room directory
+     */
+    fun showAllPublicRooms(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_ROOM_DIRECTORY_SHOW_ALL_PUBLIC_ROOMS, false)
     }
 
     /**
@@ -823,6 +850,15 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     }
 
     /**
+     * Tells if the emoji keyboard button should be visible or not.
+     *
+     * @return true to show emoji keyboard button.
+     */
+    fun showEmojiKeyboard(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_SHOW_EMOJI_KEYBOARD, true)
+    }
+
+    /**
      * Tells if the rage shake is used.
      *
      * @return true if the rage shake is used
@@ -928,6 +964,27 @@ class VectorPreferences @Inject constructor(private val context: Context) {
             BackgroundSyncMode.values().firstOrNull { it.name == strPref } ?: BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_BATTERY
         } catch (e: Throwable) {
             BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_BATTERY
+        }
+    }
+
+    fun labsUseExperimentalRestricted(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_LABS_USE_RESTRICTED_JOIN_RULE, false)
+    }
+
+    fun labsSpacesOnlyOrphansInHome(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_LABS_SPACES_HOME_AS_ORPHAN, false)
+    }
+
+    /*
+     * Photo / video picker
+     */
+    fun getTakePhotoVideoMode(): Int {
+        return defaultPrefs.getInt(TAKE_PHOTO_VIDEO_MODE, TAKE_PHOTO_VIDEO_MODE_ALWAYS_ASK)
+    }
+
+    fun setTakePhotoVideoMode(mode: Int) {
+        return defaultPrefs.edit {
+            putInt(TAKE_PHOTO_VIDEO_MODE, mode)
         }
     }
 }

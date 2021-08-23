@@ -39,5 +39,7 @@ internal open class RoomMemberSummaryEntity(@PrimaryKey var primaryKey: String =
             membershipStr = value.name
         }
 
+    fun getBestName() = displayName?.takeIf { it.isNotBlank() } ?: userId
+
     companion object
 }

@@ -4,9 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <com.google.android.material.button.MaterialButton
+    <Button
         android:id="@+id/itemLoginCenteredButton"
-        style="@style/Style.Vector.Login.Button"
+        style="@style/Widget.Vector.Button.Login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"

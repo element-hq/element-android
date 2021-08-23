@@ -12,10 +12,11 @@
 
     <TextView
         android:id="@+id/itemBottomSheetTitleTitle"
+        style="@style/Widget.Vector.TextView.HeadlineMedium"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textColor="?riotx_text_primary"
-        android:textSize="18sp"
+        android:textColor="?vctr_content_primary"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/itemBottomSheetTitleSubtitle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -24,11 +25,11 @@
 
     <TextView
         android:id="@+id/itemBottomSheetTitleSubtitle"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:textColor="?riotx_text_primary"
-        android:textSize="15sp"
+        android:textColor="?vctr_content_primary"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

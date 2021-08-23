@@ -21,36 +21,44 @@ import android.content.pm.ShortcutManager
 import android.os.Build
 import androidx.core.content.getSystemService
 import androidx.core.content.pm.ShortcutManagerCompat
-import io.reactivex.Observable
+import im.vector.app.core.di.ActiveSessionHolder
 import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.disposables.Disposables
+import org.matrix.android.sdk.api.query.RoomTagQueryFilter
+import org.matrix.android.sdk.api.session.room.model.Membership
+import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
+import org.matrix.android.sdk.rx.asObservable
 import javax.inject.Inject
 
 class ShortcutsHandler @Inject constructor(
         private val context: Context,
-        private val homeRoomListStore: HomeRoomListDataSource,
-        private val shortcutCreator: ShortcutCreator
+        private val shortcutCreator: ShortcutCreator,
+        private val activeSessionHolder: ActiveSessionHolder
 ) {
 
     fun observeRoomsAndBuildShortcuts(): Disposable {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N_MR1) {
             // No op
-            return Observable.empty<Unit>().subscribe()
+            return Disposables.empty()
         }
 
-        return homeRoomListStore
-                .observe()
-                .distinctUntilChanged()
-                .observeOn(Schedulers.computation())
-                .subscribe { rooms ->
+        return activeSessionHolder.getSafeActiveSession()
+                ?.getPagedRoomSummariesLive(
+                        roomSummaryQueryParams {
+                            memberships = listOf(Membership.JOIN)
+                            roomTagQueryFilter = RoomTagQueryFilter(isFavorite = true, null, null)
+                        }
+                )
+                ?.asObservable()
+                ?.subscribe { rooms ->
                     val shortcuts = rooms
-                            .filter { room -> room.isFavorite }
                             .take(n = 4) // Android only allows us to create 4 shortcuts
                             .map { shortcutCreator.create(it) }
 
                     ShortcutManagerCompat.removeAllDynamicShortcuts(context)
                     ShortcutManagerCompat.addDynamicShortcuts(context, shortcuts)
                 }
+                ?: Disposables.empty()
     }
 
     fun clearShortcuts() {

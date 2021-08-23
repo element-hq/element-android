@@ -21,6 +21,7 @@ import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
 import im.vector.app.R
+import im.vector.app.core.platform.GenericIdArgs
 import im.vector.app.features.roomprofile.RoomProfileArgs
 import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.session.events.model.Event
@@ -38,6 +39,8 @@ data class RoomMemberListViewState(
 ) : MvRxState {
 
     constructor(args: RoomProfileArgs) : this(roomId = args.roomId)
+
+    constructor(args: GenericIdArgs) : this(roomId = args.id)
 }
 
 data class ActionPermissions(

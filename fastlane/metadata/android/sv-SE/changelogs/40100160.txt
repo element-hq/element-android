@@ -1,0 +1,2 @@
+Huvudsakliga ändringar i den här versionen: Stöd för social inloggning.
+Full ändringslogg: https://github.com/vector-im/element-android/releases/tag/v1.0.15 och https://github.com/vector-im/element-android/releases/tag/v1.0.16

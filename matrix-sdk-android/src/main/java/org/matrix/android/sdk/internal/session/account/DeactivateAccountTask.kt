@@ -16,7 +16,9 @@
 
 package org.matrix.android.sdk.internal.session.account
 
-import org.matrix.android.sdk.internal.di.UserId
+import org.matrix.android.sdk.api.auth.UIABaseAuth
+import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
+import org.matrix.android.sdk.internal.auth.registration.handleUIA
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.cleanup.CleanupSession
@@ -27,30 +29,49 @@ import javax.inject.Inject
 
 internal interface DeactivateAccountTask : Task<DeactivateAccountTask.Params, Unit> {
     data class Params(
-            val password: String,
-            val eraseAllData: Boolean
+            val eraseAllData: Boolean,
+            val userInteractiveAuthInterceptor: UserInteractiveAuthInterceptor,
+            val userAuthParam: UIABaseAuth? = null
     )
 }
 
 internal class DefaultDeactivateAccountTask @Inject constructor(
         private val accountAPI: AccountAPI,
         private val globalErrorReceiver: GlobalErrorReceiver,
-        @UserId private val userId: String,
         private val identityDisconnectTask: IdentityDisconnectTask,
         private val cleanupSession: CleanupSession
 ) : DeactivateAccountTask {
 
     override suspend fun execute(params: DeactivateAccountTask.Params) {
-        val deactivateAccountParams = DeactivateAccountParams.create(userId, params.password, params.eraseAllData)
+        val deactivateAccountParams = DeactivateAccountParams.create(params.userAuthParam, params.eraseAllData)
 
-        executeRequest<Unit>(globalErrorReceiver) {
-            apiCall = accountAPI.deactivate(deactivateAccountParams)
+        val canCleanup = try {
+            executeRequest(globalErrorReceiver) {
+                accountAPI.deactivate(deactivateAccountParams)
+            }
+            true
+        } catch (throwable: Throwable) {
+            if (!handleUIA(
+                            failure = throwable,
+                            interceptor = params.userInteractiveAuthInterceptor,
+                            retryBlock = { authUpdate ->
+                                execute(params.copy(userAuthParam = authUpdate))
+                            }
+                    )
+            ) {
+                Timber.d("## UIA: propagate failure")
+                throw throwable
+            } else {
+                false
+            }
         }
 
-        // Logout from identity server if any, ignoring errors
-        runCatching { identityDisconnectTask.execute(Unit) }
-                .onFailure { Timber.w(it, "Unable to disconnect identity server") }
+        if (canCleanup) {
+            // Logout from identity server if any, ignoring errors
+            runCatching { identityDisconnectTask.execute(Unit) }
+                    .onFailure { Timber.w(it, "Unable to disconnect identity server") }
 
-        cleanupSession.handle()
+            cleanupSession.handle()
+        }
     }
 }

@@ -24,6 +24,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.app.R
@@ -35,7 +36,6 @@ import im.vector.app.core.utils.toast
 import im.vector.app.databinding.FragmentBootstrapSaveKeyBinding
 
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -52,9 +52,9 @@ class BootstrapSaveRecoveryKeyFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        views.recoverySave.views.itemVerificationClickableZone.debouncedClicks { downloadRecoveryKey() }
-        views.recoveryCopy.views.itemVerificationClickableZone.debouncedClicks { shareRecoveryKey() }
-        views.recoveryContinue.views.itemVerificationClickableZone.debouncedClicks {
+        views.recoverySave.views.bottomSheetActionClickableZone.debouncedClicks { downloadRecoveryKey() }
+        views.recoveryCopy.views.bottomSheetActionClickableZone.debouncedClicks { shareRecoveryKey() }
+        views.recoveryContinue.views.bottomSheetActionClickableZone.debouncedClicks {
             // We do not display the final Fragment anymore
             // TODO Do some cleanup
             // sharedViewModel.handle(BootstrapActions.GoToCompleted)
@@ -62,8 +62,7 @@ class BootstrapSaveRecoveryKeyFragment @Inject constructor(
         }
     }
 
-    private fun downloadRecoveryKey() = withState(sharedViewModel) { _ ->
-
+    private fun downloadRecoveryKey() {
         val intent = Intent(Intent.ACTION_CREATE_DOCUMENT)
         intent.addCategory(Intent.CATEGORY_OPENABLE)
         intent.type = "text/plain"
@@ -81,7 +80,7 @@ class BootstrapSaveRecoveryKeyFragment @Inject constructor(
     private val saveStartForActivityResult = registerStartForActivityResult { activityResult ->
         if (activityResult.resultCode == Activity.RESULT_OK) {
             val uri = activityResult.data?.data ?: return@registerStartForActivityResult
-            GlobalScope.launch(Dispatchers.IO) {
+            lifecycleScope.launch(Dispatchers.IO) {
                 try {
                     sharedViewModel.handle(BootstrapActions.SaveKeyToUri(requireContext().contentResolver!!.openOutputStream(uri)!!))
                 } catch (failure: Throwable) {

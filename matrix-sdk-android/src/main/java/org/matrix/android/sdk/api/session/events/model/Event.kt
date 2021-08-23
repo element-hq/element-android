@@ -28,6 +28,8 @@ import org.matrix.android.sdk.internal.crypto.algorithms.olm.OlmDecryptionResult
 import org.matrix.android.sdk.internal.crypto.model.event.EncryptedEventContent
 import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.json.JSONObject
+import org.matrix.android.sdk.api.extensions.tryOrNull
+import org.matrix.android.sdk.api.failure.MatrixError
 import timber.log.Timber
 
 typealias Content = JsonDict
@@ -66,7 +68,7 @@ inline fun <reified T> T.toContent(): Content {
  */
 @JsonClass(generateAdapter = true)
 data class Event(
-        @Json(name = "type") val type: String,
+        @Json(name = "type") val type: String? = null,
         @Json(name = "event_id") val eventId: String? = null,
         @Json(name = "content") val content: Content? = null,
         @Json(name = "prev_content") val prevContent: Content? = null,
@@ -90,13 +92,36 @@ data class Event(
     @Transient
     var sendState: SendState = SendState.UNKNOWN
 
+    @Transient
+    var sendStateDetails: String? = null
+
+    fun sendStateError(): MatrixError? {
+        return sendStateDetails?.let {
+            val matrixErrorAdapter = MoshiProvider.providesMoshi().adapter(MatrixError::class.java)
+            tryOrNull { matrixErrorAdapter.fromJson(it) }
+        }
+    }
+
     /**
      * The `age` value transcoded in a timestamp based on the device clock when the SDK received
-     * the event from the home server.
+     * the event from the homeserver.
      * Unlike `age`, this value is static.
      */
     @Transient
     var ageLocalTs: Long? = null
+
+    /**
+     * Copy all fields, including transient fields
+     */
+    fun copyAll(): Event {
+        return copy().also {
+            it.mxDecryptionResult = mxDecryptionResult
+            it.mCryptoError = mCryptoError
+            it.mCryptoErrorReason = mCryptoErrorReason
+            it.sendState = sendState
+            it.ageLocalTs = ageLocalTs
+        }
+    }
 
     /**
      * Check if event is a state event.
@@ -135,7 +160,7 @@ data class Event(
      * @return the event type
      */
     fun getClearType(): String {
-        return mxDecryptionResult?.payload?.get("type")?.toString() ?: type
+        return mxDecryptionResult?.payload?.get("type")?.toString() ?: type ?: EventType.MISSING_TYPE
     }
 
     /**
@@ -275,4 +300,8 @@ fun Event.getRelationContent(): RelationDefaultContent? {
 
 fun Event.isReply(): Boolean {
     return getRelationContent()?.inReplyTo?.eventId != null
+}
+
+fun Event.isEdition(): Boolean {
+    return getRelationContent()?.takeIf { it.type == RelationType.REPLACE }?.eventId != null
 }

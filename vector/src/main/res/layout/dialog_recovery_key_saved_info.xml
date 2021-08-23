@@ -29,11 +29,12 @@
                 android:importantForAccessibility="no"
                 android:scaleType="fitCenter"
                 android:src="@drawable/ic_security_key_24dp"
-                app:tint="?riotx_text_primary"
+                app:tint="?vctr_content_primary"
                 tools:ignore="MissingPrefix" />
 
             <TextView
                 android:id="@+id/bootstrapTitleText"
+                style="@style/Widget.Vector.TextView.HeadlineMedium"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -41,17 +42,16 @@
                 android:ellipsize="end"
                 android:maxLines="2"
                 android:text="@string/keep_it_safe"
-                android:textColor="?riotx_text_primary"
-                android:textSize="20sp"
+                android:textColor="?vctr_content_primary"
                 android:textStyle="bold" />
         </LinearLayout>
 
         <TextView
             android:id="@+id/keepItSafeText"
+            style="@style/Widget.Vector.TextView.Subtitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="?riotx_text_secondary"
-            android:textSize="16sp"
+            android:textColor="?vctr_content_secondary"
             tools:text="@string/bootstrap_crosssigning_save_usb" />
 
     </LinearLayout>

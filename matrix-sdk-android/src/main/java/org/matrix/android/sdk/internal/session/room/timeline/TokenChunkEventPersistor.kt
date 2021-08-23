@@ -22,16 +22,16 @@ import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
 import org.matrix.android.sdk.api.session.room.send.SendState
-import org.matrix.android.sdk.internal.database.helper.addOrUpdate
+import org.matrix.android.sdk.internal.database.helper.addIfNecessary
 import org.matrix.android.sdk.internal.database.helper.addStateEvent
 import org.matrix.android.sdk.internal.database.helper.addTimelineEvent
-import org.matrix.android.sdk.internal.database.helper.deleteOnCascade
 import org.matrix.android.sdk.internal.database.helper.merge
 import org.matrix.android.sdk.internal.database.mapper.toEntity
 import org.matrix.android.sdk.internal.database.model.ChunkEntity
 import org.matrix.android.sdk.internal.database.model.EventInsertType
 import org.matrix.android.sdk.internal.database.model.RoomEntity
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
+import org.matrix.android.sdk.internal.database.model.deleteOnCascade
 import org.matrix.android.sdk.internal.database.query.copyToRealmOrIgnore
 import org.matrix.android.sdk.internal.database.query.create
 import org.matrix.android.sdk.internal.database.query.find
@@ -149,14 +149,14 @@ internal class TokenChunkEventPersistor @Inject constructor(@SessionDatabase pri
                     }
                             ?: ChunkEntity.create(realm, prevToken, nextToken)
 
-                    if (receivedChunk.events.isEmpty() && !receivedChunk.hasMore()) {
+                    if (receivedChunk.events.isNullOrEmpty() && !receivedChunk.hasMore()) {
                         handleReachEnd(realm, roomId, direction, currentChunk)
                     } else {
                         handlePagination(realm, roomId, direction, receivedChunk, currentChunk)
                     }
                 }
         return if (receivedChunk.events.isEmpty()) {
-            if (receivedChunk.start != receivedChunk.end) {
+            if (receivedChunk.hasMore()) {
                 Result.SHOULD_FETCH_MORE
             } else {
                 Result.REACHED_END
@@ -172,7 +172,7 @@ internal class TokenChunkEventPersistor @Inject constructor(@SessionDatabase pri
             val currentLastForwardChunk = ChunkEntity.findLastForwardChunkOfRoom(realm, roomId)
             if (currentChunk != currentLastForwardChunk) {
                 currentChunk.isLastForward = true
-                currentLastForwardChunk?.deleteOnCascade()
+                currentLastForwardChunk?.deleteOnCascade(deleteStateEvents = false, canDeleteRoot = false)
                 RoomSummaryEntity.where(realm, roomId).findFirst()?.apply {
                     latestPreviewableEvent = RoomSummaryEventsHelper.getLatestPreviewableEvent(realm, roomId)
                 }
@@ -196,7 +196,7 @@ internal class TokenChunkEventPersistor @Inject constructor(@SessionDatabase pri
 
         val now = System.currentTimeMillis()
 
-        for (stateEvent in stateEvents) {
+        stateEvents?.forEach { stateEvent ->
             val ageLocalTs = stateEvent.unsignedData?.age?.let { now - it }
             val stateEventEntity = stateEvent.toEntity(roomId, SendState.SYNCED, ageLocalTs).copyToRealmOrIgnore(realm, EventInsertType.PAGINATION)
             currentChunk.addStateEvent(roomId, stateEventEntity, direction)
@@ -205,9 +205,9 @@ internal class TokenChunkEventPersistor @Inject constructor(@SessionDatabase pri
             }
         }
         val eventIds = ArrayList<String>(eventList.size)
-        for (event in eventList) {
+        eventList.forEach { event ->
             if (event.eventId == null || event.senderId == null) {
-                continue
+                return@forEach
             }
             val ageLocalTs = event.unsignedData?.age?.let { now - it }
             eventIds.add(event.eventId)
@@ -235,7 +235,7 @@ internal class TokenChunkEventPersistor @Inject constructor(@SessionDatabase pri
             }
         }
         chunksToDelete.forEach {
-            it.deleteOnCascade()
+            it.deleteOnCascade(deleteStateEvents = false, canDeleteRoot = false)
         }
         val roomSummaryEntity = RoomSummaryEntity.getOrCreate(realm, roomId)
         val shouldUpdateSummary = roomSummaryEntity.latestPreviewableEvent == null
@@ -244,7 +244,7 @@ internal class TokenChunkEventPersistor @Inject constructor(@SessionDatabase pri
             roomSummaryEntity.latestPreviewableEvent = RoomSummaryEventsHelper.getLatestPreviewableEvent(realm, roomId)
         }
         if (currentChunk.isValid) {
-            RoomEntity.where(realm, roomId).findFirst()?.addOrUpdate(currentChunk)
+            RoomEntity.where(realm, roomId).findFirst()?.addIfNecessary(currentChunk)
         }
     }
 }

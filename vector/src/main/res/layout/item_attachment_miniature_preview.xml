@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
@@ -17,4 +18,15 @@
         android:scaleType="centerCrop"
         tools:src="@tools:sample/backgrounds/scenic" />
 
-</androidx.cardview.widget.CardView>
+    <ImageView
+        android:id="@+id/attachmentMiniatureVideoIndicator"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_gravity="center"
+        android:alpha="0.75"
+        android:contentDescription="@string/a11y_video"
+        app:srcCompat="@drawable/ic_play_arrow"
+        app:tint="@android:color/white"
+        tools:ignore="MissingPrefix" />
+
+</com.google.android.material.card.MaterialCardView>

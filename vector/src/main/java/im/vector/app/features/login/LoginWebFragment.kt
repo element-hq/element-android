@@ -30,8 +30,8 @@ import android.view.ViewGroup
 import android.webkit.SslErrorHandler
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import androidx.appcompat.app.AlertDialog
 import com.airbnb.mvrx.activityViewModel
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.utils.AssetReader
 import im.vector.app.databinding.FragmentLoginWebBinding
@@ -123,7 +123,7 @@ class LoginWebFragment @Inject constructor(
         views.loginWebWebView.webViewClient = object : WebViewClient() {
             override fun onReceivedSslError(view: WebView, handler: SslErrorHandler,
                                             error: SslError) {
-                AlertDialog.Builder(requireActivity())
+                MaterialAlertDialogBuilder(requireActivity())
                         .setMessage(R.string.ssl_could_not_verify)
                         .setPositiveButton(R.string.ssl_trust) { _, _ -> handler.proceed() }
                         .setNegativeButton(R.string.ssl_do_not_trust) { _, _ -> handler.cancel() }
@@ -155,18 +155,15 @@ class LoginWebFragment @Inject constructor(
                 // avoid infinite onPageFinished call
                 if (url.startsWith("http")) {
                     // Generic method to make a bridge between JS and the UIWebView
-                    val mxcJavascriptSendObjectMessage = assetReader.readAssetFile("sendObject.js")
-                    view.loadUrl(mxcJavascriptSendObjectMessage)
+                    assetReader.readAssetFile("sendObject.js")?.let { view.loadUrl(it) }
 
                     if (state.signMode == SignMode.SignIn) {
                         // The function the fallback page calls when the login is complete
-                        val mxcJavascriptOnLogin = assetReader.readAssetFile("onLogin.js")
-                        view.loadUrl(mxcJavascriptOnLogin)
+                        assetReader.readAssetFile("onLogin.js")?.let { view.loadUrl(it) }
                     } else {
                         // MODE_REGISTER
                         // The function the fallback page calls when the registration is complete
-                        val mxcJavascriptOnRegistered = assetReader.readAssetFile("onRegistered.js")
-                        view.loadUrl(mxcJavascriptOnRegistered)
+                        assetReader.readAssetFile("onRegistered.js")?.let { view.loadUrl(it) }
                     }
                 }
             }

@@ -22,15 +22,15 @@ import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.ViewModelContext
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
+import dagger.assisted.AssistedFactory
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.roomdirectory.JoinState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
@@ -38,7 +38,6 @@ import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.peeking.PeekResult
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
-import org.matrix.android.sdk.internal.util.awaitCallback
 import org.matrix.android.sdk.rx.rx
 import timber.log.Timber
 
@@ -46,7 +45,7 @@ class RoomPreviewViewModel @AssistedInject constructor(@Assisted private val ini
                                                        private val session: Session)
     : VectorViewModel<RoomPreviewViewState, RoomPreviewAction, EmptyViewEvents>(initialState) {
 
-    @AssistedInject.Factory
+    @AssistedFactory
     interface Factory {
         fun create(initialState: RoomPreviewViewState): RoomPreviewViewModel
     }
@@ -76,30 +75,40 @@ class RoomPreviewViewModel @AssistedInject constructor(@Assisted private val ini
         }
         viewModelScope.launch(Dispatchers.IO) {
             val peekResult = tryOrNull {
-                awaitCallback<PeekResult> {
-                    session.peekRoom(initialState.roomAlias ?: initialState.roomId, it)
-                }
+                session.peekRoom(initialState.roomAlias ?: initialState.roomId)
             }
 
             when (peekResult) {
                 is PeekResult.Success           -> {
                     setState {
+                        // Do not override what we had from the permalink
+                        val newHomeServers = if (homeServers.isEmpty()) {
+                            peekResult.viaServers.take(3)
+                        } else {
+                            homeServers
+                        }
                         copy(
                                 roomId = peekResult.roomId,
                                 avatarUrl = peekResult.avatarUrl,
                                 roomAlias = peekResult.alias ?: initialState.roomAlias,
                                 roomTopic = peekResult.topic,
-                                homeServers = peekResult.viaServers,
+                                homeServers = newHomeServers,
                                 peekingState = Success(PeekingState.FOUND)
                         )
                     }
                 }
                 is PeekResult.PeekingNotAllowed -> {
                     setState {
+                        // Do not override what we had from the permalink
+                        val newHomeServers = if (homeServers.isEmpty()) {
+                            peekResult.viaServers.take(3)
+                        } else {
+                            homeServers
+                        }
                         copy(
                                 roomId = peekResult.roomId,
                                 roomAlias = peekResult.alias ?: initialState.roomAlias,
-                                homeServers = peekResult.viaServers,
+                                homeServers = newHomeServers,
                                 peekingState = Success(PeekingState.NO_ACCESS)
                         )
                     }
@@ -164,15 +173,14 @@ class RoomPreviewViewModel @AssistedInject constructor(@Assisted private val ini
             Timber.w("Try to join an already joining room. Should not happen")
             return@withState
         }
-        session.joinRoom(state.roomId, viaServers = state.homeServers, callback = object : MatrixCallback<Unit> {
-            override fun onSuccess(data: Unit) {
+        viewModelScope.launch {
+            try {
+                session.joinRoom(state.roomId, viaServers = state.homeServers)
                 // We do not update the joiningRoomsIds here, because, the room is not joined yet regarding the sync data.
                 // Instead, we wait for the room to be joined
-            }
-
-            override fun onFailure(failure: Throwable) {
+            } catch (failure: Throwable) {
                 setState { copy(lastError = failure) }
             }
-        })
+        }
     }
 }

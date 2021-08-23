@@ -23,30 +23,29 @@ import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.ViewModelContext
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.room.Room
 import org.matrix.android.sdk.api.session.search.SearchResult
-import org.matrix.android.sdk.api.util.Cancelable
-import org.matrix.android.sdk.internal.util.awaitCallback
 
 class SearchViewModel @AssistedInject constructor(
         @Assisted private val initialState: SearchViewState,
         session: Session
 ) : VectorViewModel<SearchViewState, SearchAction, SearchViewEvents>(initialState) {
 
-    private var room: Room? = session.getRoom(initialState.roomId)
+    private val room = session.getRoom(initialState.roomId)
 
-    private var currentTask: Cancelable? = null
+    private var currentTask: Job? = null
 
     private var nextBatch: String? = null
 
-    @AssistedInject.Factory
+    @AssistedFactory
     interface Factory {
         fun create(initialState: SearchViewState): SearchViewModel
     }
@@ -91,6 +90,7 @@ class SearchViewModel @AssistedInject constructor(
     }
 
     private fun startSearching(isNextBatch: Boolean) = withState { state ->
+        if (room == null) return@withState
         if (state.searchTerm == null) return@withState
 
         // There is no batch to retrieve
@@ -107,23 +107,20 @@ class SearchViewModel @AssistedInject constructor(
 
         currentTask?.cancel()
 
-        viewModelScope.launch {
+        currentTask = viewModelScope.launch {
             try {
-                val result = awaitCallback<SearchResult> {
-                    currentTask = room?.search(
-                            searchTerm = state.searchTerm,
-                            nextBatch = nextBatch,
-                            orderByRecent = true,
-                            beforeLimit = 0,
-                            afterLimit = 0,
-                            includeProfile = true,
-                            limit = 20,
-                            callback = it
-                    )
-                }
+                val result = room.search(
+                        searchTerm = state.searchTerm,
+                        nextBatch = nextBatch,
+                        orderByRecent = true,
+                        beforeLimit = 0,
+                        afterLimit = 0,
+                        includeProfile = true,
+                        limit = 20
+                )
                 onSearchResultSuccess(result)
             } catch (failure: Throwable) {
-                if (failure is Failure.Cancelled) return@launch
+                if (failure is CancellationException) return@launch
 
                 _viewEvents.post(SearchViewEvents.Failure(failure))
                 setState {

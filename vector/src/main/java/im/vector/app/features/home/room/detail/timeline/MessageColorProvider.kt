@@ -50,17 +50,8 @@ class MessageColorProvider @Inject constructor(
                 SendState.FAILED_UNKNOWN_DEVICES -> colorProvider.getColorFromAttribute(R.attr.vctr_unsent_message_text_color)
             }
         } else {
-            // When not in developer mode, we do not use special color for the encrypting state
-            when (sendState) {
-                SendState.UNKNOWN,
-                SendState.UNSENT,
-                SendState.ENCRYPTING,
-                SendState.SENDING                -> colorProvider.getColorFromAttribute(R.attr.vctr_sending_message_text_color)
-                SendState.SENT,
-                SendState.SYNCED                 -> colorProvider.getColorFromAttribute(R.attr.vctr_message_text_color)
-                SendState.UNDELIVERED,
-                SendState.FAILED_UNKNOWN_DEVICES -> colorProvider.getColorFromAttribute(R.attr.vctr_unsent_message_text_color)
-            }
+            // When not in developer mode, we use only one color
+            colorProvider.getColorFromAttribute(R.attr.vctr_message_text_color)
         }
     }
 }

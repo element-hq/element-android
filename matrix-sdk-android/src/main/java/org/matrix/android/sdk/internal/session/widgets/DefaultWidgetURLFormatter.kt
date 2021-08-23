@@ -17,14 +17,16 @@
 package org.matrix.android.sdk.internal.session.widgets
 
 import org.matrix.android.sdk.api.MatrixConfiguration
+import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerConfig
 import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerService
 import org.matrix.android.sdk.api.session.widgets.WidgetURLFormatter
-import org.matrix.android.sdk.internal.session.SessionLifecycleObserver
+import org.matrix.android.sdk.api.util.appendParamToUrl
+import org.matrix.android.sdk.api.util.appendParamsToUrl
+import org.matrix.android.sdk.api.session.SessionLifecycleObserver
 import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.internal.session.integrationmanager.IntegrationManager
 import org.matrix.android.sdk.internal.session.widgets.token.GetScalarTokenTask
-import java.net.URLEncoder
 import javax.inject.Inject
 
 @SessionScope
@@ -36,12 +38,12 @@ internal class DefaultWidgetURLFormatter @Inject constructor(private val integra
     private lateinit var currentConfig: IntegrationManagerConfig
     private var whiteListedUrls: List<String> = emptyList()
 
-    override fun onStart() {
+    override fun onSessionStarted(session: Session) {
         setupWithConfiguration()
         integrationManager.addListener(this)
     }
 
-    override fun onStop() {
+    override fun onSessionStopped(session: Session) {
         integrationManager.removeListener(this)
     }
 
@@ -89,26 +91,5 @@ internal class DefaultWidgetURLFormatter @Inject constructor(private val integra
             }
         }
         return false
-    }
-
-    private fun StringBuilder.appendParamsToUrl(params: Map<String, String>): StringBuilder {
-        params.forEach { (param, value) ->
-            appendParamToUrl(param, value)
-        }
-        return this
-    }
-
-    private fun StringBuilder.appendParamToUrl(param: String, value: String): StringBuilder {
-        if (contains("?")) {
-            append("&")
-        } else {
-            append("?")
-        }
-
-        append(param)
-        append("=")
-        append(URLEncoder.encode(value, "utf-8"))
-
-        return this
     }
 }

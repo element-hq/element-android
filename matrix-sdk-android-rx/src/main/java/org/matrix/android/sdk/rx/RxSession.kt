@@ -20,6 +20,7 @@ import androidx.paging.PagedList
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.functions.Function3
+import kotlinx.coroutines.rx2.rxSingle
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
@@ -34,10 +35,12 @@ import org.matrix.android.sdk.api.session.group.model.GroupSummary
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.pushers.Pusher
 import org.matrix.android.sdk.api.session.room.RoomSummaryQueryParams
+import org.matrix.android.sdk.api.session.room.accountdata.RoomAccountDataEvent
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
+import org.matrix.android.sdk.api.session.space.SpaceSummaryQueryParams
 import org.matrix.android.sdk.api.session.sync.SyncState
 import org.matrix.android.sdk.api.session.user.model.User
 import org.matrix.android.sdk.api.session.widgets.model.Widget
@@ -62,6 +65,13 @@ class RxSession(private val session: Session) {
         return session.getGroupSummariesLive(queryParams).asObservable()
                 .startWithCallable {
                     session.getGroupSummaries(queryParams)
+                }
+    }
+
+    fun liveSpaceSummaries(queryParams: SpaceSummaryQueryParams): Observable<List<RoomSummary>> {
+        return session.spaceService().getSpaceSummariesLive(queryParams).asObservable()
+                .startWithCallable {
+                    session.spaceService().getSpaceSummaries(queryParams)
                 }
     }
 
@@ -123,29 +133,29 @@ class RxSession(private val session: Session) {
                 .startWithCallable { session.getPendingThreePids() }
     }
 
-    fun createRoom(roomParams: CreateRoomParams): Single<String> = singleBuilder {
-        session.createRoom(roomParams, it)
+    fun createRoom(roomParams: CreateRoomParams): Single<String> = rxSingle {
+        session.createRoom(roomParams)
     }
 
     fun searchUsersDirectory(search: String,
                              limit: Int,
-                             excludedUserIds: Set<String>): Single<List<User>> = singleBuilder {
-        session.searchUsersDirectory(search, limit, excludedUserIds, it)
+                             excludedUserIds: Set<String>): Single<List<User>> = rxSingle {
+        session.searchUsersDirectory(search, limit, excludedUserIds)
     }
 
     fun joinRoom(roomIdOrAlias: String,
                  reason: String? = null,
-                 viaServers: List<String> = emptyList()): Single<Unit> = singleBuilder {
-        session.joinRoom(roomIdOrAlias, reason, viaServers, it)
+                 viaServers: List<String> = emptyList()): Single<Unit> = rxSingle {
+        session.joinRoom(roomIdOrAlias, reason, viaServers)
     }
 
     fun getRoomIdByAlias(roomAlias: String,
-                         searchOnServer: Boolean): Single<Optional<RoomAliasDescription>> = singleBuilder {
-        session.getRoomIdByAlias(roomAlias, searchOnServer, it)
+                         searchOnServer: Boolean): Single<Optional<RoomAliasDescription>> = rxSingle {
+        session.getRoomIdByAlias(roomAlias, searchOnServer)
     }
 
-    fun getProfileInfo(userId: String): Single<JsonDict> = singleBuilder {
-        session.getProfile(userId, it)
+    fun getProfileInfo(userId: String): Single<JsonDict> = rxSingle {
+        session.getProfile(userId)
     }
 
     fun liveUserCryptoDevices(userId: String): Observable<List<CryptoDeviceInfo>> {
@@ -168,10 +178,17 @@ class RxSession(private val session: Session) {
                 }
     }
 
-    fun liveAccountData(types: Set<String>): Observable<List<UserAccountDataEvent>> {
-        return session.getLiveAccountDataEvents(types).asObservable()
+    fun liveUserAccountData(types: Set<String>): Observable<List<UserAccountDataEvent>> {
+        return session.accountDataService().getLiveUserAccountDataEvents(types).asObservable()
                 .startWithCallable {
-                    session.getAccountDataEvents(types)
+                    session.accountDataService().getUserAccountDataEvents(types)
+                }
+    }
+
+    fun liveRoomAccountData(types: Set<String>): Observable<List<RoomAccountDataEvent>> {
+        return session.accountDataService().getLiveRoomAccountDataEvents(types).asObservable()
+                .startWithCallable {
+                    session.accountDataService().getRoomAccountDataEvents(types)
                 }
     }
 
@@ -193,7 +210,7 @@ class RxSession(private val session: Session) {
 
     fun liveSecretSynchronisationInfo(): Observable<SecretsSynchronisationInfo> {
         return Observable.combineLatest<List<UserAccountDataEvent>, Optional<MXCrossSigningInfo>, Optional<PrivateKeysInfo>, SecretsSynchronisationInfo>(
-                liveAccountData(setOf(MASTER_KEY_SSSS_NAME, USER_SIGNING_KEY_SSSS_NAME, SELF_SIGNING_KEY_SSSS_NAME, KEYBACKUP_SECRET_SSSS_NAME)),
+                liveUserAccountData(setOf(MASTER_KEY_SSSS_NAME, USER_SIGNING_KEY_SSSS_NAME, SELF_SIGNING_KEY_SSSS_NAME, KEYBACKUP_SECRET_SSSS_NAME)),
                 liveCrossSigningInfo(session.myUserId),
                 liveCrossSigningPrivateKeys(),
                 Function3 { _, crossSigningInfo, pInfo ->

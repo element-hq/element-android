@@ -39,7 +39,7 @@ internal class DefaultGetKeyChangesTask @Inject constructor(
 
     override suspend fun execute(params: GetKeyChangesTask.Params): KeyChangesResponse {
         return executeRequest(globalErrorReceiver) {
-            apiCall = cryptoApi.getKeyChanges(params.from, params.to)
+            cryptoApi.getKeyChanges(params.from, params.to)
         }
     }
 }

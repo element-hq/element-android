@@ -19,9 +19,8 @@ package org.matrix.android.sdk.api.session.profile
 
 import android.net.Uri
 import androidx.lifecycle.LiveData
-import org.matrix.android.sdk.api.MatrixCallback
+import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.session.identity.ThreePid
-import org.matrix.android.sdk.api.util.Cancelable
 import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.api.util.Optional
 
@@ -40,14 +39,14 @@ interface ProfileService {
      * @param userId the userId param to look for
      *
      */
-    fun getDisplayName(userId: String, matrixCallback: MatrixCallback<Optional<String>>): Cancelable
+    suspend fun getDisplayName(userId: String): Optional<String>
 
     /**
      * Update the display name for this user
      * @param userId the userId to update the display name of
      * @param newDisplayName the new display name of the user
      */
-    fun setDisplayName(userId: String, newDisplayName: String, matrixCallback: MatrixCallback<Unit>): Cancelable
+    suspend fun setDisplayName(userId: String, newDisplayName: String)
 
     /**
      * Update the avatar for this user
@@ -55,22 +54,23 @@ interface ProfileService {
      * @param newAvatarUri the new avatar uri of the user
      * @param fileName the fileName of selected image
      */
-    fun updateAvatar(userId: String, newAvatarUri: Uri, fileName: String, matrixCallback: MatrixCallback<Unit>): Cancelable
+    suspend fun updateAvatar(userId: String, newAvatarUri: Uri, fileName: String)
 
     /**
      * Return the current avatarUrl for this user.
      * @param userId the userId param to look for
      *
      */
-    fun getAvatarUrl(userId: String, matrixCallback: MatrixCallback<Optional<String>>): Cancelable
+    suspend fun getAvatarUrl(userId: String): Optional<String>
 
     /**
      * Get the combined profile information for this user.
      * This may return keys which are not limited to displayname or avatar_url.
+     * If server is configured as limit_profile_requests_to_users_who_share_rooms: true then response can be HTTP 403.
      * @param userId the userId param to look for
      *
      */
-    fun getProfile(userId: String, matrixCallback: MatrixCallback<JsonDict>): Cancelable
+    suspend fun getProfile(userId: String): JsonDict
 
     /**
      * Get the current user 3Pids
@@ -96,29 +96,26 @@ interface ProfileService {
     /**
      * Add a 3Pids. This is the first step to add a ThreePid to an account. Then the threePid will be added to the pending threePid list.
      */
-    fun addThreePid(threePid: ThreePid, matrixCallback: MatrixCallback<Unit>): Cancelable
+    suspend fun addThreePid(threePid: ThreePid)
 
     /**
      * Validate a code received by text message
      */
-    fun submitSmsCode(threePid: ThreePid.Msisdn, code: String, matrixCallback: MatrixCallback<Unit>): Cancelable
+    suspend fun submitSmsCode(threePid: ThreePid.Msisdn, code: String)
 
     /**
      * Finalize adding a 3Pids. Call this method once the user has validated that he owns the ThreePid
      */
-    fun finalizeAddingThreePid(threePid: ThreePid,
-                               uiaSession: String?,
-                               accountPassword: String?,
-                               matrixCallback: MatrixCallback<Unit>): Cancelable
+    suspend fun finalizeAddingThreePid(threePid: ThreePid,
+                                       userInteractiveAuthInterceptor: UserInteractiveAuthInterceptor)
 
     /**
      * Cancel adding a threepid. It will remove locally stored data about this ThreePid
      */
-    fun cancelAddingThreePid(threePid: ThreePid,
-                             matrixCallback: MatrixCallback<Unit>): Cancelable
+    suspend fun cancelAddingThreePid(threePid: ThreePid)
 
     /**
      * Remove a 3Pid from the Matrix account.
      */
-    fun deleteThreePid(threePid: ThreePid, matrixCallback: MatrixCallback<Unit>): Cancelable
+    suspend fun deleteThreePid(threePid: ThreePid)
 }

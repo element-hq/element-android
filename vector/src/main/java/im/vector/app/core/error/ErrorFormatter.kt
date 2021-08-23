@@ -18,8 +18,11 @@ package im.vector.app.core.error
 
 import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.features.call.dialpad.DialPadLookup
+import im.vector.app.features.voice.VoiceFailure
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.MatrixError
+import org.matrix.android.sdk.api.failure.MatrixIdFailure
 import org.matrix.android.sdk.api.failure.isInvalidPassword
 import org.matrix.android.sdk.api.session.identity.IdentityServiceError
 import java.net.HttpURLConnection
@@ -38,9 +41,9 @@ class DefaultErrorFormatter @Inject constructor(
 
     override fun toHumanReadable(throwable: Throwable?): String {
         return when (throwable) {
-            null                         -> null
-            is IdentityServiceError      -> identityServerError(throwable)
-            is Failure.NetworkConnection -> {
+            null                                   -> null
+            is IdentityServiceError                -> identityServerError(throwable)
+            is Failure.NetworkConnection           -> {
                 when (throwable.ioException) {
                     is SocketTimeoutException     ->
                         stringProvider.getString(R.string.error_network_timeout)
@@ -53,7 +56,7 @@ class DefaultErrorFormatter @Inject constructor(
                         stringProvider.getString(R.string.error_no_network)
                 }
             }
-            is Failure.ServerError       -> {
+            is Failure.ServerError                 -> {
                 when {
                     throwable.error.code == MatrixError.M_CONSENT_NOT_GIVEN          -> {
                         // Special case for terms and conditions
@@ -76,6 +79,9 @@ class DefaultErrorFormatter @Inject constructor(
                     }
                     throwable.error.code == MatrixError.M_LIMIT_EXCEEDED             -> {
                         limitExceededError(throwable.error)
+                    }
+                    throwable.error.code == MatrixError.M_TOO_LARGE                  -> {
+                        stringProvider.getString(R.string.error_file_too_big_simple)
                     }
                     throwable.error.code == MatrixError.M_THREEPID_NOT_FOUND         -> {
                         stringProvider.getString(R.string.login_reset_password_error_not_found)
@@ -100,19 +106,35 @@ class DefaultErrorFormatter @Inject constructor(
                     }
                 }
             }
-            is Failure.OtherServerError  -> {
+            is Failure.OtherServerError            -> {
                 when (throwable.httpCode) {
-                    HttpURLConnection.HTTP_NOT_FOUND ->
+                    HttpURLConnection.HTTP_NOT_FOUND    ->
                         // homeserver not found
                         stringProvider.getString(R.string.login_error_no_homeserver_found)
-                    else                             ->
+                    HttpURLConnection.HTTP_UNAUTHORIZED ->
+                        // uia errors?
+                        stringProvider.getString(R.string.error_unauthorized)
+                    else                                ->
                         throwable.localizedMessage
                 }
             }
-            is SsoFlowNotSupportedYet    -> stringProvider.getString(R.string.error_sso_flow_not_supported_yet)
-            else                         -> throwable.localizedMessage
+            is DialPadLookup.Failure.NumberIsYours ->
+                stringProvider.getString(R.string.cannot_call_yourself)
+            is DialPadLookup.Failure.NoResult      ->
+                stringProvider.getString(R.string.call_dial_pad_lookup_error)
+            is MatrixIdFailure.InvalidMatrixId     ->
+                stringProvider.getString(R.string.login_signin_matrix_id_error_invalid_matrix_id)
+            is VoiceFailure                        -> voiceMessageError(throwable)
+            else                                   -> throwable.localizedMessage
         }
                 ?: stringProvider.getString(R.string.unknown_error)
+    }
+
+    private fun voiceMessageError(throwable: VoiceFailure): String {
+        return when (throwable) {
+            is VoiceFailure.UnableToPlay   -> stringProvider.getString(R.string.error_voice_message_unable_to_play)
+            is VoiceFailure.UnableToRecord -> stringProvider.getString(R.string.error_voice_message_unable_to_record)
+        }
     }
 
     private fun limitExceededError(error: MatrixError): String {

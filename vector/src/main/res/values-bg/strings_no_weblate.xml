@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="resources_language">bg</string>
+    <string name="resources_country_code">BG</string>
+    <string name="resources_script">Cyrl</string>
+
+</resources>

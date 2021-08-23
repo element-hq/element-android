@@ -1,0 +1,2 @@
+Denne nye versjonen inneholder hovedsakelig forbedringer av brukergrensesnittet og brukeropplevelsen. Nå kan du invitere venner og opprette DM veldig raskt ved å skanne QR-koder.
+Full endringslogg: https://github.com/vector-im/element-android/releases/tag/v1.0.11

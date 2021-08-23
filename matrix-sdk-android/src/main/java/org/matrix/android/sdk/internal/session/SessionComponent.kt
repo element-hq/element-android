@@ -27,7 +27,7 @@ import org.matrix.android.sdk.internal.crypto.SendGossipWorker
 import org.matrix.android.sdk.internal.crypto.crosssigning.UpdateTrustWorker
 import org.matrix.android.sdk.internal.crypto.verification.SendVerificationMessageWorker
 import org.matrix.android.sdk.internal.di.MatrixComponent
-import org.matrix.android.sdk.internal.di.SessionAssistedInjectModule
+import org.matrix.android.sdk.internal.federation.FederationModule
 import org.matrix.android.sdk.internal.network.NetworkConnectivityChecker
 import org.matrix.android.sdk.internal.session.account.AccountModule
 import org.matrix.android.sdk.internal.session.cache.CacheModule
@@ -52,16 +52,19 @@ import org.matrix.android.sdk.internal.session.room.send.RedactEventWorker
 import org.matrix.android.sdk.internal.session.room.send.SendEventWorker
 import org.matrix.android.sdk.internal.session.search.SearchModule
 import org.matrix.android.sdk.internal.session.signout.SignOutModule
+import org.matrix.android.sdk.internal.session.space.SpaceModule
 import org.matrix.android.sdk.internal.session.sync.SyncModule
 import org.matrix.android.sdk.internal.session.sync.SyncTask
 import org.matrix.android.sdk.internal.session.sync.SyncTokenStore
 import org.matrix.android.sdk.internal.session.sync.job.SyncWorker
 import org.matrix.android.sdk.internal.session.terms.TermsModule
+import org.matrix.android.sdk.internal.session.thirdparty.ThirdPartyModule
 import org.matrix.android.sdk.internal.session.user.UserModule
 import org.matrix.android.sdk.internal.session.user.accountdata.AccountDataModule
 import org.matrix.android.sdk.internal.session.widgets.WidgetModule
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
+import org.matrix.android.sdk.internal.util.system.SystemModule
 
 @Component(dependencies = [MatrixComponent::class],
         modules = [
@@ -78,6 +81,7 @@ import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
             CacheModule::class,
             MediaModule::class,
             CryptoModule::class,
+            SystemModule::class,
             PushersModule::class,
             OpenIdModule::class,
             WidgetModule::class,
@@ -86,10 +90,12 @@ import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
             TermsModule::class,
             AccountDataModule::class,
             ProfileModule::class,
-            SessionAssistedInjectModule::class,
             AccountModule::class,
+            FederationModule::class,
             CallModule::class,
-            SearchModule::class
+            SearchModule::class,
+            ThirdPartyModule::class,
+            SpaceModule::class
         ]
 )
 @SessionScope

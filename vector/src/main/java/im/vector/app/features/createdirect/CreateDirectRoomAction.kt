@@ -17,11 +17,11 @@
 package im.vector.app.features.createdirect
 
 import im.vector.app.core.platform.VectorViewModelAction
-import im.vector.app.features.userdirectory.PendingInvitee
+import im.vector.app.features.userdirectory.PendingSelection
 
 sealed class CreateDirectRoomAction : VectorViewModelAction {
     data class CreateRoomAndInviteSelectedUsers(
-            val invitees: Set<PendingInvitee>,
+            val selections: Set<PendingSelection>,
             val existingDmRoomId: String?
     ) : CreateDirectRoomAction()
 }

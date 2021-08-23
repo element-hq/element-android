@@ -17,10 +17,13 @@
 package im.vector.app.features.popup
 
 import android.app.Activity
+import android.view.View
+import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
-import org.matrix.android.sdk.api.util.MatrixItem
+import androidx.annotation.LayoutRes
+import im.vector.app.R
 import java.lang.ref.WeakReference
 
 interface VectorAlert {
@@ -28,6 +31,9 @@ interface VectorAlert {
     val title: String
     val description: String
     val iconId: Int?
+    val priority: Int
+    val dismissOnClick: Boolean
+    val isLight: Boolean
     val shouldBeDisplayedIn: ((Activity) -> Boolean)
 
     data class Button(val title: String, val action: Runnable, val autoClose: Boolean)
@@ -47,22 +53,33 @@ interface VectorAlert {
         actions.add(Button(title, action, autoClose))
     }
 
+    var viewBinder: ViewBinder?
+
+    val layoutRes: Int
+
     var colorRes: Int?
 
     var colorInt: Int?
+
+    var colorAttribute: Int?
+
+    interface ViewBinder {
+        fun bind(view: View)
+    }
 }
 
 /**
  * Dataclass to describe an important alert with actions.
  */
-open class DefaultVectorAlert(override val uid: String,
-                              override val title: String,
-                              override val description: String,
-                              @DrawableRes override val iconId: Int?,
-                              /**
-                               * Alert are displayed by default, but let this lambda return false to prevent displaying
-                               */
-                              override val shouldBeDisplayedIn: ((Activity) -> Boolean) = { true }
+open class DefaultVectorAlert(
+        override val uid: String,
+        override val title: String,
+        override val description: String,
+        @DrawableRes override val iconId: Int?,
+        /**
+         * Alert are displayed by default, but let this lambda return false to prevent displaying
+         */
+        override val shouldBeDisplayedIn: ((Activity) -> Boolean) = { true }
 ) : VectorAlert {
 
     // will be set by manager, and accessible by actions at runtime
@@ -76,26 +93,23 @@ open class DefaultVectorAlert(override val uid: String,
     /** If this timestamp is after current time, this alert will be skipped */
     override var expirationTimestamp: Long? = null
 
-    override fun addButton(title: String, action: Runnable, autoClose: Boolean) {
-        actions.add(VectorAlert.Button(title, action, autoClose))
-    }
+    @LayoutRes
+    override val layoutRes = R.layout.alerter_alert_default_layout
+
+    override val dismissOnClick: Boolean = true
+
+    override val priority: Int = 0
+
+    override val isLight: Boolean = false
 
     @ColorRes
     override var colorRes: Int? = null
 
     @ColorInt
     override var colorInt: Int? = null
-}
 
-class VerificationVectorAlert(uid: String,
-                              title: String,
-                              override val description: String,
-                              @DrawableRes override val iconId: Int?,
-                              /**
-                               * Alert are displayed by default, but let this lambda return false to prevent displaying
-                               */
-                              override val shouldBeDisplayedIn: ((Activity) -> Boolean) = { true },
-                              val matrixItem: MatrixItem?
-) : DefaultVectorAlert(
-        uid, title, description, iconId, shouldBeDisplayedIn
-)
+    @AttrRes
+    override var colorAttribute: Int? = null
+
+    override var viewBinder: VectorAlert.ViewBinder? = null
+}

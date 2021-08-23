@@ -23,21 +23,29 @@ import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import im.vector.app.R
-import im.vector.app.core.error.SsoFlowNotSupportedYet
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.ReadOnceTrue
+import im.vector.app.features.auth.ReAuthActivity
 import kotlinx.coroutines.launch
-import org.matrix.android.sdk.api.MatrixCallback
-import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
-import org.matrix.android.sdk.api.failure.Failure
+import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
+import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.identity.ThreePid
+import org.matrix.android.sdk.internal.crypto.crosssigning.fromBase64
+import org.matrix.android.sdk.internal.crypto.model.rest.DefaultBaseAuth
+import org.matrix.android.sdk.api.auth.UIABaseAuth
+import org.matrix.android.sdk.api.auth.UserPasswordAuth
 import org.matrix.android.sdk.rx.rx
+import timber.log.Timber
+import kotlin.coroutines.Continuation
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 
 class ThreePidsSettingsViewModel @AssistedInject constructor(
         @Assisted initialState: ThreePidsSettingsViewState,
@@ -47,38 +55,20 @@ class ThreePidsSettingsViewModel @AssistedInject constructor(
 
     // UIA session
     private var pendingThreePid: ThreePid? = null
-    private var pendingSession: String? = null
+//    private var pendingSession: String? = null
 
-    private val loadingCallback: MatrixCallback<Unit> = object : MatrixCallback<Unit> {
-        override fun onFailure(failure: Throwable) {
-            isLoading(false)
-
-            if (failure is Failure.RegistrationFlowError) {
-                var isPasswordRequestFound = false
-
-                // We only support LoginFlowTypes.PASSWORD
-                // Check if we can provide the user password
-                failure.registrationFlowResponse.flows?.forEach { interactiveAuthenticationFlow ->
-                    isPasswordRequestFound = isPasswordRequestFound || interactiveAuthenticationFlow.stages?.any { it == LoginFlowTypes.PASSWORD } == true
-                }
-
-                if (isPasswordRequestFound) {
-                    pendingSession = failure.registrationFlowResponse.session
-                    _viewEvents.post(ThreePidsSettingsViewEvents.RequestPassword)
-                } else {
-                    // LoginFlowTypes.PASSWORD not supported, and this is the only one Element supports so far...
-                    _viewEvents.post(ThreePidsSettingsViewEvents.Failure(SsoFlowNotSupportedYet()))
-                }
-            } else {
-                _viewEvents.post(ThreePidsSettingsViewEvents.Failure(failure))
-            }
-        }
-
-        override fun onSuccess(data: Unit) {
-            pendingThreePid = null
-            pendingSession = null
-            isLoading(false)
-        }
+    private suspend fun loadingSuspendable(block: suspend () -> Unit) {
+        runCatching { block() }
+                .fold(
+                        {
+                            pendingThreePid = null
+                            isLoading(false)
+                        },
+                        {
+                            isLoading(false)
+                            _viewEvents.post(ThreePidsSettingsViewEvents.Failure(it))
+                        }
+                )
     }
 
     private fun isLoading(isLoading: Boolean) {
@@ -89,7 +79,7 @@ class ThreePidsSettingsViewModel @AssistedInject constructor(
         }
     }
 
-    @AssistedInject.Factory
+    @AssistedFactory
     interface Factory {
         fun create(initialState: ThreePidsSettingsViewState): ThreePidsSettingsViewModel
     }
@@ -141,14 +131,48 @@ class ThreePidsSettingsViewModel @AssistedInject constructor(
 
     override fun handle(action: ThreePidsSettingsAction) {
         when (action) {
-            is ThreePidsSettingsAction.AddThreePid      -> handleAddThreePid(action)
+            is ThreePidsSettingsAction.AddThreePid -> handleAddThreePid(action)
             is ThreePidsSettingsAction.ContinueThreePid -> handleContinueThreePid(action)
-            is ThreePidsSettingsAction.SubmitCode       -> handleSubmitCode(action)
-            is ThreePidsSettingsAction.CancelThreePid   -> handleCancelThreePid(action)
-            is ThreePidsSettingsAction.AccountPassword  -> handleAccountPassword(action)
-            is ThreePidsSettingsAction.DeleteThreePid   -> handleDeleteThreePid(action)
-            is ThreePidsSettingsAction.ChangeUiState    -> handleChangeUiState(action)
+            is ThreePidsSettingsAction.SubmitCode -> handleSubmitCode(action)
+            is ThreePidsSettingsAction.CancelThreePid -> handleCancelThreePid(action)
+            is ThreePidsSettingsAction.DeleteThreePid -> handleDeleteThreePid(action)
+            is ThreePidsSettingsAction.ChangeUiState -> handleChangeUiState(action)
+            ThreePidsSettingsAction.SsoAuthDone -> {
+                Timber.d("## UIA - FallBack success")
+                if (pendingAuth != null) {
+                    uiaContinuation?.resume(pendingAuth!!)
+                } else {
+                    uiaContinuation?.resumeWithException(IllegalArgumentException())
+                }
+            }
+            is ThreePidsSettingsAction.PasswordAuthDone -> {
+                val decryptedPass = session.loadSecureSecret<String>(action.password.fromBase64().inputStream(), ReAuthActivity.DEFAULT_RESULT_KEYSTORE_ALIAS)
+                uiaContinuation?.resume(
+                        UserPasswordAuth(
+                                session = pendingAuth?.session,
+                                password = decryptedPass,
+                                user = session.myUserId
+                        )
+                )
+            }
+            ThreePidsSettingsAction.ReAuthCancelled -> {
+                Timber.d("## UIA - Reauth cancelled")
+                uiaContinuation?.resumeWithException(Exception())
+                uiaContinuation = null
+                pendingAuth = null
+            }
         }.exhaustive
+    }
+
+    var uiaContinuation: Continuation<UIABaseAuth>? = null
+    var pendingAuth: UIABaseAuth? = null
+
+    private val uiaInterceptor = object : UserInteractiveAuthInterceptor {
+        override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
+            _viewEvents.post(ThreePidsSettingsViewEvents.RequestReAuth(flowResponse, errCode))
+            pendingAuth = DefaultBaseAuth(session = flowResponse.session)
+            uiaContinuation = promise
+        }
     }
 
     private fun handleSubmitCode(action: ThreePidsSettingsAction.SubmitCode) {
@@ -163,24 +187,23 @@ class ThreePidsSettingsViewModel @AssistedInject constructor(
 
         viewModelScope.launch {
             // First submit the code
-            session.submitSmsCode(action.threePid, action.code, object : MatrixCallback<Unit> {
-                override fun onSuccess(data: Unit) {
-                    // then finalize
-                    pendingThreePid = action.threePid
-                    session.finalizeAddingThreePid(action.threePid, null, null, loadingCallback)
+            try {
+                session.submitSmsCode(action.threePid, action.code)
+            } catch (failure: Throwable) {
+                isLoading(false)
+                setState {
+                    copy(
+                            msisdnValidationRequests = msisdnValidationRequests.toMutableMap().apply {
+                                put(action.threePid.value, Fail(failure))
+                            }
+                    )
                 }
+                return@launch
+            }
 
-                override fun onFailure(failure: Throwable) {
-                    isLoading(false)
-                    setState {
-                        copy(
-                                msisdnValidationRequests = msisdnValidationRequests.toMutableMap().apply {
-                                    put(action.threePid.value, Fail(failure))
-                                }
-                        )
-                    }
-                }
-            })
+            // then finalize
+            pendingThreePid = action.threePid
+            loadingSuspendable { session.finalizeAddingThreePid(action.threePid, uiaInterceptor) }
         }
     }
 
@@ -207,21 +230,15 @@ class ThreePidsSettingsViewModel @AssistedInject constructor(
                 ))))
             } else {
                 viewModelScope.launch {
-                    session.addThreePid(action.threePid, object : MatrixCallback<Unit> {
-                        override fun onSuccess(data: Unit) {
-                            // Also reset the state
-                            setState {
-                                copy(
-                                        uiState = ThreePidsSettingsUiState.Idle
-                                )
-                            }
-                            loadingCallback.onSuccess(data)
+                    loadingSuspendable {
+                        session.addThreePid(action.threePid)
+                        // Also reset the state
+                        setState {
+                            copy(
+                                    uiState = ThreePidsSettingsUiState.Idle
+                            )
                         }
-
-                        override fun onFailure(failure: Throwable) {
-                            loadingCallback.onFailure(failure)
-                        }
-                    })
+                    }
                 }
             }
         }
@@ -231,32 +248,30 @@ class ThreePidsSettingsViewModel @AssistedInject constructor(
         isLoading(true)
         pendingThreePid = action.threePid
         viewModelScope.launch {
-            session.finalizeAddingThreePid(action.threePid, null, null, loadingCallback)
+            loadingSuspendable { session.finalizeAddingThreePid(action.threePid, uiaInterceptor) }
         }
     }
 
     private fun handleCancelThreePid(action: ThreePidsSettingsAction.CancelThreePid) {
         isLoading(true)
         viewModelScope.launch {
-            session.cancelAddingThreePid(action.threePid, loadingCallback)
+            loadingSuspendable { session.cancelAddingThreePid(action.threePid) }
         }
     }
 
-    private fun handleAccountPassword(action: ThreePidsSettingsAction.AccountPassword) {
-        val safeSession = pendingSession ?: return Unit
-                .also { _viewEvents.post(ThreePidsSettingsViewEvents.Failure(IllegalStateException("No pending session"))) }
-        val safeThreePid = pendingThreePid ?: return Unit
-                .also { _viewEvents.post(ThreePidsSettingsViewEvents.Failure(IllegalStateException("No pending threePid"))) }
-        isLoading(true)
-        viewModelScope.launch {
-            session.finalizeAddingThreePid(safeThreePid, safeSession, action.password, loadingCallback)
-        }
-    }
+//    private fun handleAccountPassword(action: ThreePidsSettingsAction.AccountPassword) {
+//        val safeThreePid = pendingThreePid ?: return Unit
+//                .also { _viewEvents.post(ThreePidsSettingsViewEvents.Failure(IllegalStateException("No pending threePid"))) }
+//        isLoading(true)
+//        viewModelScope.launch {
+//            session.finalizeAddingThreePid(safeThreePid, uiaInterceptor, loadingCallback)
+//        }
+//    }
 
     private fun handleDeleteThreePid(action: ThreePidsSettingsAction.DeleteThreePid) {
         isLoading(true)
         viewModelScope.launch {
-            session.deleteThreePid(action.threePid, loadingCallback)
+            loadingSuspendable { session.deleteThreePid(action.threePid) }
         }
     }
 }

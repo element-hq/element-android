@@ -19,7 +19,6 @@ package org.matrix.android.sdk.internal.session.profile
 import com.zhuinden.monarchy.Monarchy
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.identity.ThreePid
-import org.matrix.android.sdk.internal.auth.registration.SuccessResult
 import org.matrix.android.sdk.internal.auth.registration.ValidationCodeBody
 import org.matrix.android.sdk.internal.database.model.PendingThreePidEntity
 import org.matrix.android.sdk.internal.di.SessionDatabase
@@ -58,8 +57,8 @@ internal class DefaultValidateSmsCodeTask @Inject constructor(
                 sid = pendingThreePids.sid,
                 code = params.code
         )
-        val result = executeRequest<SuccessResult>(globalErrorReceiver) {
-            apiCall = profileAPI.validateMsisdn(url, body)
+        val result = executeRequest(globalErrorReceiver) {
+            profileAPI.validateMsisdn(url, body)
         }
 
         if (!result.isSuccess()) {

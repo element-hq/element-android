@@ -32,10 +32,13 @@ import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.data.SessionParams
 import org.matrix.android.sdk.api.auth.data.sessionId
 import org.matrix.android.sdk.api.crypto.MXCryptoConfig
-import org.matrix.android.sdk.api.session.InitialSyncProgressService
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.accountdata.AccountDataService
+import org.matrix.android.sdk.api.session.SessionLifecycleObserver
+import org.matrix.android.sdk.api.session.accountdata.SessionAccountDataService
+import org.matrix.android.sdk.api.session.events.EventService
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilitiesService
+import org.matrix.android.sdk.api.session.initsync.InitialSyncProgressService
+import org.matrix.android.sdk.api.session.openid.OpenIdService
 import org.matrix.android.sdk.api.session.permalinks.PermalinkService
 import org.matrix.android.sdk.api.session.securestorage.SecureStorageService
 import org.matrix.android.sdk.api.session.securestorage.SharedSecretStorageService
@@ -75,17 +78,22 @@ import org.matrix.android.sdk.internal.network.token.AccessTokenProvider
 import org.matrix.android.sdk.internal.network.token.HomeserverAccessTokenProvider
 import org.matrix.android.sdk.internal.session.call.CallEventProcessor
 import org.matrix.android.sdk.internal.session.download.DownloadProgressInterceptor
+import org.matrix.android.sdk.internal.session.events.DefaultEventService
 import org.matrix.android.sdk.internal.session.homeserver.DefaultHomeServerCapabilitiesService
 import org.matrix.android.sdk.internal.session.identity.DefaultIdentityService
+import org.matrix.android.sdk.internal.session.initsync.DefaultInitialSyncProgressService
 import org.matrix.android.sdk.internal.session.integrationmanager.IntegrationManager
+import org.matrix.android.sdk.internal.session.openid.DefaultOpenIdService
 import org.matrix.android.sdk.internal.session.permalinks.DefaultPermalinkService
 import org.matrix.android.sdk.internal.session.room.EventRelationsAggregationProcessor
 import org.matrix.android.sdk.internal.session.room.create.RoomCreateEventProcessor
 import org.matrix.android.sdk.internal.session.room.prune.RedactionEventProcessor
+import org.matrix.android.sdk.internal.session.room.send.queue.EventSenderProcessor
+import org.matrix.android.sdk.internal.session.room.send.queue.EventSenderProcessorCoroutine
 import org.matrix.android.sdk.internal.session.room.tombstone.RoomTombstoneEventProcessor
 import org.matrix.android.sdk.internal.session.securestorage.DefaultSecureStorageService
 import org.matrix.android.sdk.internal.session.typing.DefaultTypingUsersTracker
-import org.matrix.android.sdk.internal.session.user.accountdata.DefaultAccountDataService
+import org.matrix.android.sdk.internal.session.user.accountdata.DefaultSessionAccountDataService
 import org.matrix.android.sdk.internal.session.widgets.DefaultWidgetURLFormatter
 import org.matrix.android.sdk.internal.util.md5
 import retrofit2.Retrofit
@@ -253,7 +261,7 @@ internal abstract class SessionModule {
                              sessionParams: SessionParams,
                              retrofitFactory: RetrofitFactory): Retrofit {
             return retrofitFactory
-                    .create(okHttpClient, sessionParams.homeServerConnectionConfig.homeServerUri.toString())
+                    .create(okHttpClient, sessionParams.homeServerConnectionConfig.homeServerUriBase.toString())
         }
 
         @JvmStatic
@@ -339,6 +347,14 @@ internal abstract class SessionModule {
     abstract fun bindRealmSessionProvider(provider: RealmSessionProvider): SessionLifecycleObserver
 
     @Binds
+    @IntoSet
+    abstract fun bindSessionCoroutineScopeHolder(holder: SessionCoroutineScopeHolder): SessionLifecycleObserver
+
+    @Binds
+    @IntoSet
+    abstract fun bindEventSenderProcessorAsSessionLifecycleObserver(processor: EventSenderProcessorCoroutine): SessionLifecycleObserver
+
+    @Binds
     abstract fun bindInitialSyncProgressService(service: DefaultInitialSyncProgressService): InitialSyncProgressService
 
     @Binds
@@ -348,7 +364,10 @@ internal abstract class SessionModule {
     abstract fun bindHomeServerCapabilitiesService(service: DefaultHomeServerCapabilitiesService): HomeServerCapabilitiesService
 
     @Binds
-    abstract fun bindAccountDataService(service: DefaultAccountDataService): AccountDataService
+    abstract fun bindSessionAccountDataService(service: DefaultSessionAccountDataService): SessionAccountDataService
+
+    @Binds
+    abstract fun bindEventService(service: DefaultEventService): EventService
 
     @Binds
     abstract fun bindSharedSecretStorageService(service: DefaultSharedSecretStorageService): SharedSecretStorageService
@@ -357,8 +376,14 @@ internal abstract class SessionModule {
     abstract fun bindPermalinkService(service: DefaultPermalinkService): PermalinkService
 
     @Binds
+    abstract fun bindOpenIdTokenService(service: DefaultOpenIdService): OpenIdService
+
+    @Binds
     abstract fun bindTypingUsersTracker(tracker: DefaultTypingUsersTracker): TypingUsersTracker
 
     @Binds
     abstract fun bindRedactEventTask(task: DefaultRedactEventTask): RedactEventTask
+
+    @Binds
+    abstract fun bindEventSenderProcessor(processor: EventSenderProcessorCoroutine): EventSenderProcessor
 }

@@ -35,3 +35,10 @@ fun StringBuilder.appendParamToUrl(param: String, value: String): StringBuilder 
 
     return this
 }
+
+fun StringBuilder.appendParamsToUrl(params: Map<String, String>): StringBuilder {
+    params.forEach { (param, value) ->
+        appendParamToUrl(param, value)
+    }
+    return this
+}

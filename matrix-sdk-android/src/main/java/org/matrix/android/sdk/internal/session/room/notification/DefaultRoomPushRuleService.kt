@@ -18,8 +18,9 @@ package org.matrix.android.sdk.internal.session.room.notification
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
+import dagger.assisted.AssistedFactory
 import com.zhuinden.monarchy.Monarchy
 import org.matrix.android.sdk.api.pushrules.RuleScope
 import org.matrix.android.sdk.api.session.room.notification.RoomNotificationState
@@ -33,9 +34,9 @@ internal class DefaultRoomPushRuleService @AssistedInject constructor(@Assisted 
                                                                       @SessionDatabase private val monarchy: Monarchy)
     : RoomPushRuleService {
 
-    @AssistedInject.Factory
+    @AssistedFactory
     interface Factory {
-        fun create(roomId: String): RoomPushRuleService
+        fun create(roomId: String): DefaultRoomPushRuleService
     }
 
     override fun getLiveRoomNotificationState(): LiveData<RoomNotificationState> {

@@ -17,7 +17,6 @@ package org.matrix.android.sdk.internal.session.profile
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import org.matrix.android.sdk.internal.crypto.model.rest.UserPasswordAuth
 
 @JsonClass(generateAdapter = true)
 internal data class FinalizeAddThreePidBody(
@@ -37,5 +36,5 @@ internal data class FinalizeAddThreePidBody(
          * Additional authentication information for the user-interactive authentication API.
          */
         @Json(name = "auth")
-        val auth: UserPasswordAuth?
+        val auth: Map<String, *>? = null
 )

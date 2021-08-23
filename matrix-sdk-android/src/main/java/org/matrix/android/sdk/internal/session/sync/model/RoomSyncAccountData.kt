@@ -25,5 +25,5 @@ internal data class RoomSyncAccountData(
         /**
          * List of account data events (array of Event).
          */
-        @Json(name = "events") val events: List<Event> = emptyList()
+        @Json(name = "events") val events: List<Event>? = null
 )

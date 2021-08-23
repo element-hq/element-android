@@ -76,13 +76,4 @@ internal class MXOlmEncryption(
         deviceListManager.downloadKeys(users, false)
         ensureOlmSessionsForUsersAction.handle(users)
     }
-
-    override fun discardSessionKey() {
-        // No need for olm
-    }
-
-    override suspend fun reshareKey(sessionId: String, userId: String, deviceId: String, senderKey: String): Boolean {
-        // No need for olm
-        return false
-    }
 }

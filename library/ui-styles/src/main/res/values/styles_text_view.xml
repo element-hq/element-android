@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--
+        Source: https://www.figma.com/file/X4XTH9iS2KGJ2wFKDqkyed/Compound?node-id=1336%3A17796
+    -->
+
+    <style name="Widget.Vector.TextView" parent="Widget.MaterialComponents.TextView" />
+
+    <!-- Note: lineHeight attribute cannot be added in textAppearance style -->
+    <style name="Widget.Vector.TextView.Title">
+        <item name="android:textAppearance">@style/TextAppearance.Vector.Title</item>
+        <item name="lineHeight">32sp</item>
+    </style>
+
+    <style name="Widget.Vector.TextView.Title.Medium">
+        <item name="android:textAppearance">@style/TextAppearance.Vector.Title.Medium</item>
+    </style>
+
+    <style name="Widget.Vector.TextView.HeadlineMedium">
+        <item name="android:textAppearance">@style/TextAppearance.Vector.Headline.Medium</item>
+    </style>
+
+    <style name="Widget.Vector.TextView.Subtitle">
+        <item name="android:textAppearance">@style/TextAppearance.Vector.Subtitle</item>
+    </style>
+
+    <style name="Widget.Vector.TextView.Subtitle.Medium">
+        <item name="android:textAppearance">@style/TextAppearance.Vector.Subtitle.Medium</item>
+    </style>
+
+    <style name="Widget.Vector.TextView.Body">
+        <item name="android:textAppearance">@style/TextAppearance.Vector.Body</item>
+        <item name="lineHeight">20sp</item>
+    </style>
+
+    <style name="Widget.Vector.TextView.Body.Medium">
+        <item name="android:textAppearance">@style/TextAppearance.Vector.Body.Medium</item>
+    </style>
+
+    <style name="Widget.Vector.TextView.Caption">
+        <item name="android:textAppearance">@style/TextAppearance.Vector.Caption</item>
+        <item name="lineHeight">16sp</item>
+    </style>
+
+    <style name="Widget.Vector.TextView.Micro">
+        <item name="android:textAppearance">@style/TextAppearance.Vector.Micro</item>
+        <item name="lineHeight">16sp</item>
+    </style>
+
+</resources>

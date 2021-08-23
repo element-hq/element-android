@@ -13,7 +13,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.material.button.MaterialButton
+    <Button
         android:id="@+id/userCodeMyCodeButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -24,14 +24,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <com.google.android.material.button.MaterialButton
+    <Button
         android:id="@+id/userCodeOpenGalleryButton"
         style="@style/Widget.MaterialComponents.Button.Icon"
         android:layout_width="34dp"
         android:layout_height="34dp"
         android:layout_marginTop="2dp"
         android:layout_marginEnd="@dimen/layout_horizontal_margin"
-        android:backgroundTint="?riotx_bottom_nav_background_color"
+        android:backgroundTint="?colorSurface"
         android:elevation="0dp"
         android:insetLeft="0dp"
         android:insetTop="0dp"
@@ -43,7 +43,7 @@
         app:iconGravity="textStart"
         app:iconPadding="0dp"
         app:iconSize="20dp"
-        app:iconTint="@color/riotx_accent"
+        app:iconTint="?colorPrimary"
         app:layout_constraintBottom_toBottomOf="@id/userCodeMyCodeButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintEnd_toStartOf="@id/userCodeMyCodeButton"

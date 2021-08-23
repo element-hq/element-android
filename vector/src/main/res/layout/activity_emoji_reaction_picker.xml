@@ -25,12 +25,10 @@
         tools:visibility="visible" />
 
     <com.google.android.material.appbar.AppBarLayout
-        style="@style/VectorAppBarLayoutStyle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:elevation="4dp">
+        android:layout_height="wrap_content">
 
-        <androidx.appcompat.widget.Toolbar
+        <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/emojiPickerToolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
@@ -41,9 +39,10 @@
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabs"
             android:layout_width="match_parent"
-            android:layout_height="40dp" />
+            android:layout_height="40dp"
+            app:tabPaddingEnd="0dp"
+            app:tabPaddingStart="0dp" />
 
     </com.google.android.material.appbar.AppBarLayout>
-
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

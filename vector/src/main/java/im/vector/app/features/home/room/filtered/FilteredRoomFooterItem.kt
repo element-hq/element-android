@@ -22,22 +22,22 @@ import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
-import im.vector.app.features.home.room.list.widget.NotifsFabMenuView
+import im.vector.app.core.epoxy.onClick
 
 @EpoxyModelClass(layout = R.layout.item_room_filter_footer)
 abstract class FilteredRoomFooterItem : VectorEpoxyModel<FilteredRoomFooterItem.Holder>() {
 
     @EpoxyAttribute
-    var listener: FilteredRoomFooterItemListener? = null
+    var listener: Listener? = null
 
     @EpoxyAttribute
     var currentFilter: String = ""
 
     override fun bind(holder: Holder) {
         super.bind(holder)
-        holder.createRoomButton.setOnClickListener { listener?.createRoom(currentFilter) }
-        holder.createDirectChat.setOnClickListener { listener?.createDirectChat() }
-        holder.openRoomDirectory.setOnClickListener { listener?.openRoomDirectory(currentFilter) }
+        holder.createRoomButton.onClick { listener?.createRoom(currentFilter) }
+        holder.createDirectChat.onClick { listener?.createDirectChat() }
+        holder.openRoomDirectory.onClick { listener?.openRoomDirectory(currentFilter) }
     }
 
     class Holder : VectorEpoxyHolder() {
@@ -46,7 +46,9 @@ abstract class FilteredRoomFooterItem : VectorEpoxyModel<FilteredRoomFooterItem.
         val openRoomDirectory by bind<Button>(R.id.roomFilterFooterOpenRoomDirectory)
     }
 
-    interface FilteredRoomFooterItemListener : NotifsFabMenuView.Listener {
+    interface Listener {
         fun createRoom(initialName: String)
+        fun createDirectChat()
+        fun openRoomDirectory(initialFilter: String)
     }
 }

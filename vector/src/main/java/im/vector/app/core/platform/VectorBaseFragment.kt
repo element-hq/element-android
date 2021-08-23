@@ -14,11 +14,8 @@
  * limitations under the License.
  */
 
-@file:Suppress("DEPRECATION")
-
 package im.vector.app.core.platform
 
-import android.app.ProgressDialog
 import android.content.Context
 import android.os.Bundle
 import android.os.Parcelable
@@ -30,12 +27,12 @@ import android.view.ViewGroup
 import androidx.annotation.CallSuper
 import androidx.annotation.MainThread
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewbinding.ViewBinding
 import com.airbnb.mvrx.BaseMvRxFragment
 import com.bumptech.glide.util.Util.assertMainThread
-import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.jakewharton.rxbinding3.view.clicks
 import im.vector.app.R
 import im.vector.app.core.di.DaggerScreenComponent
@@ -45,14 +42,14 @@ import im.vector.app.core.dialogs.UnrecognizedCertificateDialog
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.toMvRxBundle
 import im.vector.app.features.navigation.Navigator
+import im.vector.lib.ui.styles.dialogs.MaterialProgressDialog
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
-
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
-abstract class VectorBaseFragment<VB: ViewBinding> : BaseMvRxFragment(), HasScreenInjector {
+abstract class VectorBaseFragment<VB : ViewBinding> : BaseMvRxFragment(), HasScreenInjector {
 
     protected val vectorBaseActivity: VectorBaseActivity<*> by lazy {
         activity as VectorBaseActivity<*>
@@ -68,7 +65,7 @@ abstract class VectorBaseFragment<VB: ViewBinding> : BaseMvRxFragment(), HasScre
     protected lateinit var errorFormatter: ErrorFormatter
     protected lateinit var unrecognizedCertificateDialog: UnrecognizedCertificateDialog
 
-    private var progress: ProgressDialog? = null
+    private var progress: AlertDialog? = null
 
     /* ==========================================================================================
      * View model
@@ -129,6 +126,12 @@ abstract class VectorBaseFragment<VB: ViewBinding> : BaseMvRxFragment(), HasScre
     }
 
     @CallSuper
+    override fun onPause() {
+        super.onPause()
+        Timber.i("onPause Fragment ${javaClass.simpleName}")
+    }
+
+    @CallSuper
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Timber.i("onViewCreated Fragment ${javaClass.simpleName}")
@@ -150,7 +153,9 @@ abstract class VectorBaseFragment<VB: ViewBinding> : BaseMvRxFragment(), HasScre
         super.onDestroyView()
     }
 
+    @CallSuper
     override fun onDestroy() {
+        Timber.i("onDestroy Fragment ${javaClass.simpleName}")
         uiDisposables.dispose()
         super.onDestroy()
     }
@@ -193,19 +198,13 @@ abstract class VectorBaseFragment<VB: ViewBinding> : BaseMvRxFragment(), HasScre
     }
 
     protected fun showErrorInSnackbar(throwable: Throwable) {
-        vectorBaseActivity.getCoordinatorLayout()?.let {
-            Snackbar.make(it, errorFormatter.toHumanReadable(throwable), Snackbar.LENGTH_SHORT)
-                    .show()
-        }
+        vectorBaseActivity.getCoordinatorLayout()?.showOptimizedSnackbar(errorFormatter.toHumanReadable(throwable))
     }
 
-    protected fun showLoadingDialog(message: CharSequence? = null, cancelable: Boolean = false) {
-        progress = ProgressDialog(requireContext()).apply {
-            setCancelable(cancelable)
-            setMessage(message ?: getString(R.string.please_wait))
-            setProgressStyle(ProgressDialog.STYLE_SPINNER)
-            show()
-        }
+    protected fun showLoadingDialog(message: CharSequence? = null) {
+        progress?.dismiss()
+        progress = MaterialProgressDialog(requireContext())
+                .show(message ?: getString(R.string.please_wait))
     }
 
     protected fun dismissLoadingDialog() {
@@ -219,7 +218,7 @@ abstract class VectorBaseFragment<VB: ViewBinding> : BaseMvRxFragment(), HasScre
     /**
      * Configure the Toolbar.
      */
-    protected fun setupToolbar(toolbar: Toolbar) {
+    protected fun setupToolbar(toolbar: MaterialToolbar) {
         val parentActivity = vectorBaseActivity
         if (parentActivity is ToolbarConfigurable) {
             parentActivity.configure(toolbar)
@@ -285,7 +284,7 @@ abstract class VectorBaseFragment<VB: ViewBinding> : BaseMvRxFragment(), HasScre
      * ========================================================================================== */
 
     protected fun displayErrorDialog(throwable: Throwable) {
-        AlertDialog.Builder(requireActivity())
+        MaterialAlertDialogBuilder(requireActivity())
                 .setTitle(R.string.dialog_title_error)
                 .setMessage(errorFormatter.toHumanReadable(throwable))
                 .setPositiveButton(R.string.ok, null)

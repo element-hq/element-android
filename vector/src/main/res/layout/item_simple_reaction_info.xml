@@ -12,19 +12,19 @@
 
     <TextView
         android:id="@+id/itemSimpleReactionInfoKey"
+        style="@style/Widget.Vector.TextView.HeadlineMedium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:gravity="center"
         android:lines="1"
-        android:textColor="@color/black"
-        android:textSize="18sp"
+        android:textColor="@color/emoji_color"
         tools:text="@sample/reactions.json/data/reaction" />
 
     <TextView
         android:id="@+id/itemSimpleReactionInfoMemberName"
         style="@style/BottomSheetItemTextMain"
-        tools:text="@sample/matrix.json/data/displayName" />
+        tools:text="@sample/users.json/data/displayName" />
 
     <TextView
         android:id="@+id/itemSimpleReactionInfoTime"

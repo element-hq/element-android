@@ -16,6 +16,8 @@
 
 package org.matrix.android.sdk.internal.crypto
 
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.internal.crypto.crosssigning.DeviceTrustLevel
@@ -28,7 +30,7 @@ import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.internal.session.sync.SyncTokenStore
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
-import kotlinx.coroutines.launch
+import org.matrix.android.sdk.internal.util.logLimit
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -39,8 +41,9 @@ internal class DeviceListManager @Inject constructor(private val cryptoStore: IM
                                                      private val syncTokenStore: SyncTokenStore,
                                                      private val credentials: Credentials,
                                                      private val downloadKeysForUsersTask: DownloadKeysForUsersTask,
+                                                     private val cryptoSessionInfoProvider: CryptoSessionInfoProvider,
                                                      coroutineDispatchers: MatrixCoroutineDispatchers,
-                                                     taskExecutor: TaskExecutor) {
+                                                     private val taskExecutor: TaskExecutor) {
 
     interface UserDevicesUpdateListener {
         fun onUsersDeviceUpdate(userIds: List<String>)
@@ -75,8 +78,10 @@ internal class DeviceListManager @Inject constructor(private val cryptoStore: IM
     // HS not ready for retry
     private val notReadyToRetryHS = mutableSetOf<String>()
 
+    private val cryptoCoroutineContext = coroutineDispatchers.crypto
+
     init {
-        taskExecutor.executorScope.launch(coroutineDispatchers.crypto) {
+        taskExecutor.executorScope.launch(cryptoCoroutineContext) {
             var isUpdated = false
             val deviceTrackingStatuses = cryptoStore.getDeviceTrackingStatuses().toMutableMap()
             for ((userId, status) in deviceTrackingStatuses) {
@@ -104,10 +109,10 @@ internal class DeviceListManager @Inject constructor(private val cryptoStore: IM
         if (':' in userId) {
             try {
                 synchronized(notReadyToRetryHS) {
-                    res = !notReadyToRetryHS.contains(userId.substringAfterLast(':'))
+                    res = !notReadyToRetryHS.contains(userId.substringAfter(':'))
                 }
             } catch (e: Exception) {
-                Timber.e(e, "## CRYPTO | canRetryKeysDownload() failed")
+                Timber.e(e, "## CRYPTO | canRetryKeysDownload() failed")
             }
         }
 
@@ -123,28 +128,37 @@ internal class DeviceListManager @Inject constructor(private val cryptoStore: IM
         }
     }
 
+    fun onRoomMembersLoadedFor(roomId: String) {
+        taskExecutor.executorScope.launch(cryptoCoroutineContext) {
+            if (cryptoSessionInfoProvider.isRoomEncrypted(roomId)) {
+                // It's OK to track also device for invited users
+                val userIds = cryptoSessionInfoProvider.getRoomUserIds(roomId, true)
+                startTrackingDeviceList(userIds)
+                refreshOutdatedDeviceLists()
+            }
+        }
+    }
+
     /**
      * Mark the cached device list for the given user outdated
      * flag the given user for device-list tracking, if they are not already.
      *
      * @param userIds the user ids list
      */
-    fun startTrackingDeviceList(userIds: List<String>?) {
-        if (null != userIds) {
-            var isUpdated = false
-            val deviceTrackingStatuses = cryptoStore.getDeviceTrackingStatuses().toMutableMap()
+    fun startTrackingDeviceList(userIds: List<String>) {
+        var isUpdated = false
+        val deviceTrackingStatuses = cryptoStore.getDeviceTrackingStatuses().toMutableMap()
 
-            for (userId in userIds) {
-                if (!deviceTrackingStatuses.containsKey(userId) || TRACKING_STATUS_NOT_TRACKED == deviceTrackingStatuses[userId]) {
-                    Timber.v("## CRYPTO | startTrackingDeviceList() : Now tracking device list for $userId")
-                    deviceTrackingStatuses[userId] = TRACKING_STATUS_PENDING_DOWNLOAD
-                    isUpdated = true
-                }
+        for (userId in userIds) {
+            if (!deviceTrackingStatuses.containsKey(userId) || TRACKING_STATUS_NOT_TRACKED == deviceTrackingStatuses[userId]) {
+                Timber.v("## CRYPTO | startTrackingDeviceList() : Now tracking device list for $userId")
+                deviceTrackingStatuses[userId] = TRACKING_STATUS_PENDING_DOWNLOAD
+                isUpdated = true
             }
+        }
 
-            if (isUpdated) {
-                cryptoStore.saveDeviceTrackingStatuses(deviceTrackingStatuses)
-            }
+        if (isUpdated) {
+            cryptoStore.saveDeviceTrackingStatuses(deviceTrackingStatuses)
         }
     }
 
@@ -155,13 +169,17 @@ internal class DeviceListManager @Inject constructor(private val cryptoStore: IM
      * @param left    the user ids list which left a room
      */
     fun handleDeviceListsChanges(changed: Collection<String>, left: Collection<String>) {
-        Timber.v("## CRYPTO: handleDeviceListsChanges changed:$changed / left:$left")
+        Timber.v("## CRYPTO: handleDeviceListsChanges changed: ${changed.logLimit()} / left: ${left.logLimit()}")
         var isUpdated = false
         val deviceTrackingStatuses = cryptoStore.getDeviceTrackingStatuses().toMutableMap()
 
+        if (changed.isNotEmpty() || left.isNotEmpty()) {
+            clearUnavailableServersList()
+        }
+
         for (userId in changed) {
             if (deviceTrackingStatuses.containsKey(userId)) {
-                Timber.v("## CRYPTO | invalidateUserDeviceList() : Marking device list outdated for $userId")
+                Timber.v("## CRYPTO | handleDeviceListsChanges() : Marking device list outdated for $userId")
                 deviceTrackingStatuses[userId] = TRACKING_STATUS_PENDING_DOWNLOAD
                 isUpdated = true
             }
@@ -169,7 +187,7 @@ internal class DeviceListManager @Inject constructor(private val cryptoStore: IM
 
         for (userId in left) {
             if (deviceTrackingStatuses.containsKey(userId)) {
-                Timber.v("## CRYPTO | invalidateUserDeviceList() : No longer tracking device list for $userId")
+                Timber.v("## CRYPTO | handleDeviceListsChanges() : No longer tracking device list for $userId")
                 deviceTrackingStatuses[userId] = TRACKING_STATUS_NOT_TRACKED
                 isUpdated = true
             }
@@ -259,7 +277,7 @@ internal class DeviceListManager @Inject constructor(private val cryptoStore: IM
      * @param forceDownload Always download the keys even if cached.
      */
     suspend fun downloadKeys(userIds: List<String>?, forceDownload: Boolean): MXUsersDevicesMap<CryptoDeviceInfo> {
-        Timber.v("## CRYPTO | downloadKeys() : forceDownload $forceDownload : $userIds")
+        Timber.v("## CRYPTO | downloadKeys() : forceDownload $forceDownload : $userIds")
         // Map from userId -> deviceId -> MXDeviceInfo
         val stored = MXUsersDevicesMap<CryptoDeviceInfo>()
 
@@ -288,13 +306,13 @@ internal class DeviceListManager @Inject constructor(private val cryptoStore: IM
             }
         }
         return if (downloadUsers.isEmpty()) {
-            Timber.v("## CRYPTO | downloadKeys() : no new user device")
+            Timber.v("## CRYPTO | downloadKeys() : no new user device")
             stored
         } else {
-            Timber.v("## CRYPTO | downloadKeys() : starts")
+            Timber.v("## CRYPTO | downloadKeys() : starts")
             val t0 = System.currentTimeMillis()
             val result = doKeyDownloadForUsers(downloadUsers)
-            Timber.v("## CRYPTO | downloadKeys() : doKeyDownloadForUsers succeeds after ${System.currentTimeMillis() - t0} ms")
+            Timber.v("## CRYPTO | downloadKeys() : doKeyDownloadForUsers succeeds after ${System.currentTimeMillis() - t0} ms")
             result.also {
                 it.addEntriesFromMap(stored)
             }
@@ -307,7 +325,7 @@ internal class DeviceListManager @Inject constructor(private val cryptoStore: IM
      * @param downloadUsers the user ids list
      */
     private suspend fun doKeyDownloadForUsers(downloadUsers: List<String>): MXUsersDevicesMap<CryptoDeviceInfo> {
-        Timber.v("## CRYPTO | doKeyDownloadForUsers() : doKeyDownloadForUsers $downloadUsers")
+        Timber.v("## CRYPTO | doKeyDownloadForUsers() : doKeyDownloadForUsers ${downloadUsers.logLimit()}")
         // get the user ids which did not already trigger a keys download
         val filteredUsers = downloadUsers.filter { MatrixPatterns.isUserId(it) }
         if (filteredUsers.isEmpty()) {
@@ -318,16 +336,21 @@ internal class DeviceListManager @Inject constructor(private val cryptoStore: IM
         val response = try {
             downloadKeysForUsersTask.execute(params)
         } catch (throwable: Throwable) {
-            Timber.e(throwable, "## CRYPTO | doKeyDownloadForUsers(): error")
-            onKeysDownloadFailed(filteredUsers)
+            Timber.e(throwable, "## CRYPTO | doKeyDownloadForUsers(): error")
+            if (throwable is CancellationException) {
+                // the crypto module is getting closed, so we cannot access the DB anymore
+                Timber.w("The crypto module is closed, ignoring this error")
+            } else {
+                onKeysDownloadFailed(filteredUsers)
+            }
             throw throwable
         }
-        Timber.v("## CRYPTO | doKeyDownloadForUsers() : Got keys for " + filteredUsers.size + " users")
+        Timber.v("## CRYPTO | doKeyDownloadForUsers() : Got keys for " + filteredUsers.size + " users")
         for (userId in filteredUsers) {
             // al devices =
             val models = response.deviceKeys?.get(userId)?.mapValues { entry -> CryptoInfoMapper.map(entry.value) }
 
-            Timber.v("## CRYPTO | doKeyDownloadForUsers() : Got keys for $userId : $models")
+            Timber.v("## CRYPTO | doKeyDownloadForUsers() : Got keys for $userId : $models")
             if (!models.isNullOrEmpty()) {
                 val workingCopy = models.toMutableMap()
                 for ((deviceId, deviceInfo) in models) {
@@ -360,13 +383,13 @@ internal class DeviceListManager @Inject constructor(private val cryptoStore: IM
             }
 
             val masterKey = response.masterKeys?.get(userId)?.toCryptoModel().also {
-                Timber.v("## CRYPTO | CrossSigning : Got keys for $userId : MSK ${it?.unpaddedBase64PublicKey}")
+                Timber.v("## CRYPTO | CrossSigning : Got keys for $userId : MSK ${it?.unpaddedBase64PublicKey}")
             }
             val selfSigningKey = response.selfSigningKeys?.get(userId)?.toCryptoModel()?.also {
-                Timber.v("## CRYPTO | CrossSigning : Got keys for $userId : SSK ${it.unpaddedBase64PublicKey}")
+                Timber.v("## CRYPTO | CrossSigning : Got keys for $userId : SSK ${it.unpaddedBase64PublicKey}")
             }
             val userSigningKey = response.userSigningKeys?.get(userId)?.toCryptoModel()?.also {
-                Timber.v("## CRYPTO | CrossSigning : Got keys for $userId : USK ${it.unpaddedBase64PublicKey}")
+                Timber.v("## CRYPTO | CrossSigning : Got keys for $userId : USK ${it.unpaddedBase64PublicKey}")
             }
             cryptoStore.storeUserCrossSigningKeys(
                     userId,
@@ -394,28 +417,28 @@ internal class DeviceListManager @Inject constructor(private val cryptoStore: IM
      */
     private fun validateDeviceKeys(deviceKeys: CryptoDeviceInfo?, userId: String, deviceId: String, previouslyStoredDeviceKeys: CryptoDeviceInfo?): Boolean {
         if (null == deviceKeys) {
-            Timber.e("## CRYPTO | validateDeviceKeys() : deviceKeys is null from $userId:$deviceId")
+            Timber.e("## CRYPTO | validateDeviceKeys() : deviceKeys is null from $userId:$deviceId")
             return false
         }
 
         if (null == deviceKeys.keys) {
-            Timber.e("## CRYPTO | validateDeviceKeys() : deviceKeys.keys is null from $userId:$deviceId")
+            Timber.e("## CRYPTO | validateDeviceKeys() : deviceKeys.keys is null from $userId:$deviceId")
             return false
         }
 
         if (null == deviceKeys.signatures) {
-            Timber.e("## CRYPTO | validateDeviceKeys() : deviceKeys.signatures is null from $userId:$deviceId")
+            Timber.e("## CRYPTO | validateDeviceKeys() : deviceKeys.signatures is null from $userId:$deviceId")
             return false
         }
 
         // Check that the user_id and device_id in the received deviceKeys are correct
         if (deviceKeys.userId != userId) {
-            Timber.e("## CRYPTO | validateDeviceKeys() : Mismatched user_id ${deviceKeys.userId} from $userId:$deviceId")
+            Timber.e("## CRYPTO | validateDeviceKeys() : Mismatched user_id ${deviceKeys.userId} from $userId:$deviceId")
             return false
         }
 
         if (deviceKeys.deviceId != deviceId) {
-            Timber.e("## CRYPTO | validateDeviceKeys() : Mismatched device_id ${deviceKeys.deviceId} from $userId:$deviceId")
+            Timber.e("## CRYPTO | validateDeviceKeys() : Mismatched device_id ${deviceKeys.deviceId} from $userId:$deviceId")
             return false
         }
 
@@ -423,21 +446,21 @@ internal class DeviceListManager @Inject constructor(private val cryptoStore: IM
         val signKey = deviceKeys.keys[signKeyId]
 
         if (null == signKey) {
-            Timber.e("## CRYPTO | validateDeviceKeys() : Device $userId:${deviceKeys.deviceId} has no ed25519 key")
+            Timber.e("## CRYPTO | validateDeviceKeys() : Device $userId:${deviceKeys.deviceId} has no ed25519 key")
             return false
         }
 
         val signatureMap = deviceKeys.signatures[userId]
 
         if (null == signatureMap) {
-            Timber.e("## CRYPTO | validateDeviceKeys() : Device $userId:${deviceKeys.deviceId} has no map for $userId")
+            Timber.e("## CRYPTO | validateDeviceKeys() : Device $userId:${deviceKeys.deviceId} has no map for $userId")
             return false
         }
 
         val signature = signatureMap[signKeyId]
 
         if (null == signature) {
-            Timber.e("## CRYPTO | validateDeviceKeys() : Device $userId:${deviceKeys.deviceId} is not signed")
+            Timber.e("## CRYPTO | validateDeviceKeys() : Device $userId:${deviceKeys.deviceId} is not signed")
             return false
         }
 
@@ -452,7 +475,7 @@ internal class DeviceListManager @Inject constructor(private val cryptoStore: IM
         }
 
         if (!isVerified) {
-            Timber.e("## CRYPTO | validateDeviceKeys() : Unable to verify signature on device " + userId + ":"
+            Timber.e("## CRYPTO | validateDeviceKeys() : Unable to verify signature on device " + userId + ":"
                     + deviceKeys.deviceId + " with error " + errorMessage)
             return false
         }
@@ -463,12 +486,12 @@ internal class DeviceListManager @Inject constructor(private val cryptoStore: IM
                 // best off sticking with the original keys.
                 //
                 // Should we warn the user about it somehow?
-                Timber.e("## CRYPTO | validateDeviceKeys() : WARNING:Ed25519 key for device " + userId + ":"
+                Timber.e("## CRYPTO | validateDeviceKeys() : WARNING:Ed25519 key for device " + userId + ":"
                         + deviceKeys.deviceId + " has changed : "
                         + previouslyStoredDeviceKeys.fingerprint() + " -> " + signKey)
 
-                Timber.e("## CRYPTO | validateDeviceKeys() : $previouslyStoredDeviceKeys -> $deviceKeys")
-                Timber.e("## CRYPTO | validateDeviceKeys() : ${previouslyStoredDeviceKeys.keys} -> ${deviceKeys.keys}")
+                Timber.e("## CRYPTO | validateDeviceKeys() : $previouslyStoredDeviceKeys -> $deviceKeys")
+                Timber.e("## CRYPTO | validateDeviceKeys() : ${previouslyStoredDeviceKeys.keys} -> ${deviceKeys.keys}")
 
                 return false
             }
@@ -482,7 +505,7 @@ internal class DeviceListManager @Inject constructor(private val cryptoStore: IM
      * This method must be called on getEncryptingThreadHandler() thread.
      */
     suspend fun refreshOutdatedDeviceLists() {
-        Timber.v("## CRYPTO | refreshOutdatedDeviceLists()")
+        Timber.v("## CRYPTO | refreshOutdatedDeviceLists()")
         val deviceTrackingStatuses = cryptoStore.getDeviceTrackingStatuses().toMutableMap()
 
         val users = deviceTrackingStatuses.keys.filterTo(mutableListOf()) { userId ->
@@ -501,10 +524,10 @@ internal class DeviceListManager @Inject constructor(private val cryptoStore: IM
             doKeyDownloadForUsers(users)
         }.fold(
                 {
-                    Timber.v("## CRYPTO | refreshOutdatedDeviceLists() : done")
+                    Timber.v("## CRYPTO | refreshOutdatedDeviceLists() : done")
                 },
                 {
-                    Timber.e(it, "## CRYPTO | refreshOutdatedDeviceLists() : ERROR updating device keys for users $users")
+                    Timber.e(it, "## CRYPTO | refreshOutdatedDeviceLists() : ERROR updating device keys for users $users")
                 }
         )
     }

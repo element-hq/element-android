@@ -17,10 +17,14 @@
 package im.vector.app.features.widgets
 
 import im.vector.app.core.di.ActiveSessionHolder
+import im.vector.app.features.themes.ThemeProvider
 import org.matrix.android.sdk.api.session.widgets.model.Widget
 import javax.inject.Inject
 
-class WidgetArgsBuilder @Inject constructor(private val sessionHolder: ActiveSessionHolder) {
+class WidgetArgsBuilder @Inject constructor(
+        private val sessionHolder: ActiveSessionHolder,
+        private val themeProvider: ThemeProvider
+) {
 
     @Suppress("UNCHECKED_CAST")
     fun buildIntegrationManagerArgs(roomId: String, integId: String?, screen: String?): WidgetArgs {
@@ -38,7 +42,8 @@ class WidgetArgsBuilder @Inject constructor(private val sessionHolder: ActiveSes
                 urlParams = mapOf(
                         "screen" to normalizedScreen,
                         "integ_id" to integId,
-                        "room_id" to roomId
+                        "room_id" to roomId,
+                        "theme" to getTheme()
                 ).filterNotNull()
         )
     }
@@ -46,7 +51,8 @@ class WidgetArgsBuilder @Inject constructor(private val sessionHolder: ActiveSes
     @Suppress("UNCHECKED_CAST")
     fun buildStickerPickerArgs(roomId: String, widget: Widget): WidgetArgs {
         val widgetId = widget.widgetId
-        val baseUrl = widget.computedUrl ?: throw IllegalStateException()
+        val baseUrl = sessionHolder.getActiveSession().widgetService()
+                .getWidgetComputedUrl(widget, themeProvider.isLightTheme()) ?: throw IllegalStateException()
         return WidgetArgs(
                 baseUrl = baseUrl,
                 kind = WidgetKind.STICKER_PICKER,
@@ -54,14 +60,16 @@ class WidgetArgsBuilder @Inject constructor(private val sessionHolder: ActiveSes
                 widgetId = widgetId,
                 urlParams = mapOf(
                         "widgetId" to widgetId,
-                        "room_id" to roomId
+                        "room_id" to roomId,
+                        "theme" to getTheme()
                 ).filterNotNull()
         )
     }
 
     fun buildRoomWidgetArgs(roomId: String, widget: Widget): WidgetArgs {
         val widgetId = widget.widgetId
-        val baseUrl = widget.computedUrl ?: throw IllegalStateException()
+        val baseUrl = sessionHolder.getActiveSession().widgetService()
+                .getWidgetComputedUrl(widget, themeProvider.isLightTheme()) ?: throw IllegalStateException()
         return WidgetArgs(
                 baseUrl = baseUrl,
                 kind = WidgetKind.ROOM,
@@ -73,5 +81,13 @@ class WidgetArgsBuilder @Inject constructor(private val sessionHolder: ActiveSes
     @Suppress("UNCHECKED_CAST")
     private fun Map<String, String?>.filterNotNull(): Map<String, String> {
         return filterValues { it != null } as Map<String, String>
+    }
+
+    private fun getTheme(): String {
+        return if (themeProvider.isLightTheme()) {
+            "light"
+        } else {
+            "dark"
+        }
     }
 }

@@ -6,10 +6,13 @@
 
     <TextView
         android:id="@+id/event_content_text_view"
+        style="@style/Widget.Vector.TextView.Caption"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:textSize="12sp"
         android:fontFamily="monospace"
-        android:textIsSelectable="true" />
+        android:textColor="?vctr_content_primary"
+        android:textIsSelectable="true"
+        tools:text="Event content" />
+
 </ScrollView>

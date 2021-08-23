@@ -16,18 +16,16 @@
 
 package im.vector.app.features.settings.threepids
 
-import android.content.DialogInterface
+import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
-import im.vector.app.core.dialogs.PromptPasswordDialog
-import im.vector.app.core.dialogs.withColoredButton
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.exhaustive
@@ -35,10 +33,12 @@ import im.vector.app.core.extensions.getFormattedValue
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.isEmail
 import im.vector.app.core.extensions.isMsisdn
+import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentGenericRecyclerBinding
-
+import im.vector.app.features.auth.ReAuthActivity
+import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import javax.inject.Inject
 
@@ -64,15 +64,36 @@ class ThreePidsSettingsFragment @Inject constructor(
 
         viewModel.observeViewEvents {
             when (it) {
-                is ThreePidsSettingsViewEvents.Failure      -> displayErrorDialog(it.throwable)
-                ThreePidsSettingsViewEvents.RequestPassword -> askUserPassword()
+                is ThreePidsSettingsViewEvents.Failure -> displayErrorDialog(it.throwable)
+                is ThreePidsSettingsViewEvents.RequestReAuth -> askAuthentication(it)
             }.exhaustive
         }
     }
 
-    private fun askUserPassword() {
-        PromptPasswordDialog().show(requireActivity()) { password ->
-            viewModel.handle(ThreePidsSettingsAction.AccountPassword(password))
+    private fun askAuthentication(event: ThreePidsSettingsViewEvents.RequestReAuth) {
+        ReAuthActivity.newIntent(requireContext(),
+                event.registrationFlowResponse,
+                event.lastErrorCode,
+                getString(R.string.settings_add_email_address)).let { intent ->
+            reAuthActivityResultLauncher.launch(intent)
+        }
+    }
+    private val reAuthActivityResultLauncher = registerStartForActivityResult { activityResult ->
+        if (activityResult.resultCode == Activity.RESULT_OK) {
+            when (activityResult.data?.extras?.getString(ReAuthActivity.RESULT_FLOW_TYPE)) {
+                LoginFlowTypes.SSO -> {
+                    viewModel.handle(ThreePidsSettingsAction.SsoAuthDone)
+                }
+                LoginFlowTypes.PASSWORD -> {
+                    val password = activityResult.data?.extras?.getString(ReAuthActivity.RESULT_VALUE) ?: ""
+                    viewModel.handle(ThreePidsSettingsAction.PasswordAuthDone(password))
+                }
+                else                    -> {
+                    viewModel.handle(ThreePidsSettingsAction.ReAuthCancelled)
+                }
+            }
+        } else {
+            viewModel.handle(ThreePidsSettingsAction.ReAuthCancelled)
         }
     }
 
@@ -163,14 +184,13 @@ class ThreePidsSettingsFragment @Inject constructor(
     }
 
     override fun deleteThreePid(threePid: ThreePid) {
-        AlertDialog.Builder(requireActivity())
+        MaterialAlertDialogBuilder(requireActivity(), R.style.ThemeOverlay_Vector_MaterialAlertDialog_Destructive)
                 .setMessage(getString(R.string.settings_remove_three_pid_confirmation_content, threePid.getFormattedValue()))
                 .setPositiveButton(R.string.remove) { _, _ ->
                     viewModel.handle(ThreePidsSettingsAction.DeleteThreePid(threePid))
                 }
                 .setNegativeButton(R.string.cancel, null)
                 .show()
-                .withColoredButton(DialogInterface.BUTTON_POSITIVE)
     }
 
     override fun onBackPressed(toolbarButton: Boolean): Boolean {

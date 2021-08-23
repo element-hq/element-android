@@ -30,9 +30,9 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.args
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.utils.AssetReader
 import im.vector.app.databinding.FragmentLoginCaptchaBinding
@@ -107,7 +107,7 @@ class LoginCaptchaFragment @Inject constructor(
                     return
                 }
 
-                AlertDialog.Builder(requireActivity())
+                MaterialAlertDialogBuilder(requireActivity())
                         .setMessage(R.string.ssl_could_not_verify)
                         .setPositiveButton(R.string.ssl_trust) { _, _ ->
                             Timber.d("## onReceivedSslError() : the user trusted")

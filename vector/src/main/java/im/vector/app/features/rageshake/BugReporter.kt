@@ -18,10 +18,8 @@ package im.vector.app.features.rageshake
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.os.AsyncTask
 import android.os.Build
 import android.view.View
 import androidx.fragment.app.DialogFragment
@@ -37,6 +35,11 @@ import im.vector.app.features.settings.devtools.GossipingEventsSerializer
 import im.vector.app.features.settings.locale.SystemLocaleProvider
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.version.VersionProvider
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.Call
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
@@ -98,6 +101,8 @@ class BugReporter @Inject constructor(
     var screenshot: Bitmap? = null
         private set
 
+    private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
+
     private val LOGCAT_CMD_ERROR = arrayOf("logcat", // /< Run 'logcat' command
             "-d", // /< Dump the log rather than continue outputting it
             "-v", // formatting
@@ -143,7 +148,7 @@ class BugReporter @Inject constructor(
      * Send a bug report.
      *
      * @param context           the application context
-     * @param forSuggestion     true to send a suggestion
+     * @param reportType        The report type (bug, suggestion, feedback)
      * @param withDevicesLogs   true to include the device log
      * @param withCrashLogs     true to include the crash logs
      * @param withKeyRequestHistory true to include the crash logs
@@ -153,20 +158,22 @@ class BugReporter @Inject constructor(
      */
     @SuppressLint("StaticFieldLeak")
     fun sendBugReport(context: Context,
-                      forSuggestion: Boolean,
+                      reportType: ReportType,
                       withDevicesLogs: Boolean,
                       withCrashLogs: Boolean,
                       withKeyRequestHistory: Boolean,
                       withScreenshot: Boolean,
                       theBugDescription: String,
+                      serverVersion: String,
+                      canContact: Boolean = false,
                       listener: IMXBugReportListener?) {
-        object : AsyncTask<Void, Int, String>() {
-            // enumerate files to delete
-            val mBugReportFiles: MutableList<File> = ArrayList()
+        // enumerate files to delete
+        val mBugReportFiles: MutableList<File> = ArrayList()
 
-            override fun doInBackground(vararg voids: Void?): String? {
+        coroutineScope.launch {
+            var serverError: String? = null
+            withContext(Dispatchers.IO) {
                 var bugDescription = theBugDescription
-                var serverError: String? = null
                 val crashCallStack = getCrashDescription(context)
 
                 if (null != crashCallStack) {
@@ -239,13 +246,11 @@ class BugReporter @Inject constructor(
                 }
 
                 if (!mIsCancelled) {
-                    val text = "[Element] " +
-                            if (forSuggestion) {
-                                "[Suggestion] "
-                            } else {
-                                ""
-                            } +
-                            bugDescription
+                    val text = when (reportType) {
+                        ReportType.BUG_REPORT -> "[Element] $bugDescription"
+                        ReportType.SUGGESTION -> "[Element] [Suggestion] $bugDescription"
+                        ReportType.SPACE_BETA_FEEDBACK -> "[Element] [spaces-feedback] $bugDescription"
+                    }
 
                     // build the multi part request
                     val builder = BugReporterMultipartBody.Builder()
@@ -253,6 +258,7 @@ class BugReporter @Inject constructor(
                             .addFormDataPart("app", "riot-android")
                             .addFormDataPart("user_agent", Matrix.getInstance(context).getUserAgent())
                             .addFormDataPart("user_id", userId)
+                            .addFormDataPart("can_contact", canContact.toString())
                             .addFormDataPart("device_id", deviceId)
                             .addFormDataPart("version", versionProvider.getVersion(longFormat = true, useBuildNumber = false))
                             .addFormDataPart("branch_name", context.getString(R.string.git_branch_name))
@@ -267,6 +273,7 @@ class BugReporter @Inject constructor(
                             .addFormDataPart("app_language", VectorLocale.applicationLocale.toString())
                             .addFormDataPart("default_app_language", systemLocaleProvider.getSystemLocale().toString())
                             .addFormDataPart("theme", ThemeUtils.getApplicationTheme(context))
+                            .addFormDataPart("server_version", serverVersion)
 
                     val buildNumber = context.getString(R.string.build_number)
                     if (buildNumber.isNotEmpty() && buildNumber != "0") {
@@ -310,12 +317,15 @@ class BugReporter @Inject constructor(
                     builder.addFormDataPart("label", BuildConfig.FLAVOR_DESCRIPTION)
                     builder.addFormDataPart("label", context.getString(R.string.git_branch_name))
 
-                    // Special for RiotX
+                    // Special for Element
                     builder.addFormDataPart("label", "[Element]")
 
-                    // Suggestion
-                    if (forSuggestion) {
-                        builder.addFormDataPart("label", "[Suggestion]")
+                    when (reportType) {
+                        ReportType.BUG_REPORT -> {
+                            /* nop */
+                        }
+                        ReportType.SUGGESTION -> builder.addFormDataPart("label", "[Suggestion]")
+                        ReportType.SPACE_BETA_FEEDBACK -> builder.addFormDataPart("label", "spaces-feedback")
                     }
 
                     if (getCrashFile(context).exists()) {
@@ -342,7 +352,11 @@ class BugReporter @Inject constructor(
                         }
 
                         Timber.v("## onWrite() : $percentage%")
-                        publishProgress(percentage)
+                        try {
+                            listener?.onProgress(percentage)
+                        } catch (e: Exception) {
+                            Timber.e(e, "## onProgress() : failed")
+                        }
                     }
 
                     // build the request
@@ -369,7 +383,7 @@ class BugReporter @Inject constructor(
                     if (responseCode != HttpURLConnection.HTTP_OK) {
                         if (null != errorMessage) {
                             serverError = "Failed with error $errorMessage"
-                        } else if (null == response || null == response.body) {
+                        } else if (response?.body == null) {
                             serverError = "Failed with error $responseCode"
                         } else {
                             try {
@@ -386,11 +400,13 @@ class BugReporter @Inject constructor(
                                 }
 
                                 // check if the error message
-                                try {
-                                    val responseJSON = JSONObject(serverError)
-                                    serverError = responseJSON.getString("error")
-                                } catch (e: JSONException) {
-                                    Timber.e(e, "doInBackground ; Json conversion failed")
+                                serverError?.let {
+                                    try {
+                                        val responseJSON = JSONObject(it)
+                                        serverError = responseJSON.getString("error")
+                                    } catch (e: JSONException) {
+                                        Timber.e(e, "doInBackground ; Json conversion failed")
+                                    }
                                 }
 
                                 // should never happen
@@ -403,21 +419,9 @@ class BugReporter @Inject constructor(
                         }
                     }
                 }
-
-                return serverError
             }
 
-            override fun onProgressUpdate(vararg progress: Int?) {
-                if (null != listener) {
-                    try {
-                        listener.onProgress(progress[0] ?: 0)
-                    } catch (e: Exception) {
-                        Timber.e(e, "## onProgress() : failed")
-                    }
-                }
-            }
-
-            override fun onPostExecute(reason: String?) {
+            withContext(Dispatchers.Main) {
                 mBugReportCall = null
 
                 // delete when the bug report has been successfully sent
@@ -429,37 +433,35 @@ class BugReporter @Inject constructor(
                     try {
                         if (mIsCancelled) {
                             listener.onUploadCancelled()
-                        } else if (null == reason) {
+                        } else if (null == serverError) {
                             listener.onUploadSucceed()
                         } else {
-                            listener.onUploadFailed(reason)
+                            listener.onUploadFailed(serverError)
                         }
                     } catch (e: Exception) {
                         Timber.e(e, "## onPostExecute() : failed")
                     }
                 }
             }
-        }.execute()
+        }
     }
 
     /**
      * Send a bug report either with email or with Vector.
      */
-    fun openBugReportScreen(activity: FragmentActivity, forSuggestion: Boolean = false) {
+    fun openBugReportScreen(activity: FragmentActivity, reportType: ReportType = ReportType.BUG_REPORT) {
         screenshot = takeScreenshot(activity)
         activeSessionHolder.getSafeActiveSession()?.let {
             it.logDbUsageInfo()
             it.cryptoService().logDbUsageInfo()
         }
 
-        val intent = Intent(activity, BugReportActivity::class.java)
-        intent.putExtra("FOR_SUGGESTION", forSuggestion)
-        activity.startActivity(intent)
+        activity.startActivity(BugReportActivity.intent(activity, reportType))
     }
 
-    // ==============================================================================================================
-    // crash report management
-    // ==============================================================================================================
+// ==============================================================================================================
+// crash report management
+// ==============================================================================================================
 
     /**
      * Provides the crash file
@@ -529,9 +531,9 @@ class BugReporter @Inject constructor(
         return null
     }
 
-    // ==============================================================================================================
-    // Screenshot management
-    // ==============================================================================================================
+// ==============================================================================================================
+// Screenshot management
+// ==============================================================================================================
 
     /**
      * Take a screenshot of the display.
@@ -598,9 +600,9 @@ class BugReporter @Inject constructor(
         }
     }
 
-    // ==============================================================================================================
-    // Logcat management
-    // ==============================================================================================================
+// ==============================================================================================================
+// Logcat management
+// ==============================================================================================================
 
     /**
      * Save the logcat
@@ -660,9 +662,9 @@ class BugReporter @Inject constructor(
         }
     }
 
-    // ==============================================================================================================
-    // File compression management
-    // ==============================================================================================================
+// ==============================================================================================================
+// File compression management
+// ==============================================================================================================
 
     /**
      * GZip a file

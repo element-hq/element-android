@@ -105,7 +105,7 @@ internal class DefaultUpdateUserAccountDataTask @Inject constructor(
 
     override suspend fun execute(params: UpdateUserAccountDataTask.Params) {
         return executeRequest(globalErrorReceiver) {
-            apiCall = accountDataApi.setAccountData(userId, params.type, params.getData())
+            accountDataApi.setAccountData(userId, params.type, params.getData())
         }
     }
 }

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- BottomSheet theming -->
+    <style name="Theme.Vector.BottomSheetDialog.Light" parent="Theme.MaterialComponents.Light.BottomSheetDialog">
+        <item name="colorPrimary">@color/element_accent_light</item>
+        <item name="colorSecondary">@color/palette_element_green</item>
+        <item name="colorSurface">@color/element_background_light</item>
+        <item name="colorOnSurface">@color/element_content_primary_light</item>
+        <item name="colorError">@color/element_alert_light</item>
+        <!-- Default color for text View -->
+        <item name="android:textColorTertiary">@color/element_content_primary_light</item>
+        <item name="android:textColorLink">@color/element_link_light</item>
+    </style>
+
+    <style name="Theme.Vector.BottomSheetDialog.Dark" parent="Theme.MaterialComponents.BottomSheetDialog">
+        <item name="colorPrimary">@color/element_accent_dark</item>
+        <item name="colorSecondary">@color/palette_element_green</item>
+        <item name="colorSurface">@color/element_background_dark</item>
+        <item name="colorOnSurface">@color/element_content_primary_dark</item>
+        <item name="colorError">@color/element_alert_dark</item>
+        <!-- Default color for text View -->
+        <item name="android:textColorTertiary">@color/element_content_primary_dark</item>
+        <item name="android:textColorLink">@color/element_link_dark</item>
+    </style>
+
+    <style name="Theme.Vector.BottomSheetDialog.Black" parent="Theme.Vector.BottomSheetDialog.Dark">
+        <item name="colorSurface">@color/element_background_black</item>
+    </style>
+
+    <!-- BottomSheet style -->
+    <style name="BottomSheetItemTextMain">
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:lines">1</item>
+        <item name="android:textColor">?vctr_content_primary</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="BottomSheetItemTextSecondary">
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:textColor">?vctr_content_secondary</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="BottomSheetItemTime">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:lines">1</item>
+        <item name="android:textColor">?vctr_content_secondary</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+</resources>

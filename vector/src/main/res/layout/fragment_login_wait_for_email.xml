@@ -4,7 +4,7 @@
     android:id="@+id/login_fragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?riotx_background">
+    android:background="?android:colorBackground">
 
     <androidx.core.widget.NestedScrollView style="@style/LoginFormScrollView">
 
@@ -16,18 +16,20 @@
 
             <TextView
                 android:id="@+id/loginWaitForEmailTitle"
+                style="@style/Widget.Vector.TextView.Title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/login_wait_for_email_title"
-                android:textAppearance="@style/TextAppearance.Vector.Login.Title" />
+                android:textColor="?vctr_content_primary" />
 
             <TextView
                 android:id="@+id/loginWaitForEmailNotice"
+                style="@style/Widget.Vector.TextView.Body"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/layout_vertical_margin"
                 android:gravity="start"
-                android:textAppearance="@style/TextAppearance.Vector.Login.Text"
+                android:textColor="?vctr_content_secondary"
                 tools:text="@string/login_wait_for_email_notice" />
 
             <ProgressBar

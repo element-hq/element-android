@@ -19,7 +19,6 @@ package org.matrix.android.sdk.internal.session.directory
 import org.matrix.android.sdk.internal.network.NetworkConstants
 import org.matrix.android.sdk.internal.session.room.alias.AddRoomAliasBody
 import org.matrix.android.sdk.internal.session.room.alias.RoomAliasDescription
-import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -33,7 +32,7 @@ internal interface DirectoryAPI {
      * @param roomAlias the room alias.
      */
     @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "directory/room/{roomAlias}")
-    fun getRoomIdByAlias(@Path("roomAlias") roomAlias: String): Call<RoomAliasDescription>
+    suspend fun getRoomIdByAlias(@Path("roomAlias") roomAlias: String): RoomAliasDescription
 
     /**
      * Get the room directory visibility.
@@ -41,7 +40,7 @@ internal interface DirectoryAPI {
      * @param roomId the room id.
      */
     @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "directory/list/room/{roomId}")
-    fun getRoomDirectoryVisibility(@Path("roomId") roomId: String): Call<RoomDirectoryVisibilityJson>
+    suspend fun getRoomDirectoryVisibility(@Path("roomId") roomId: String): RoomDirectoryVisibilityJson
 
     /**
      * Set the room directory visibility.
@@ -50,21 +49,21 @@ internal interface DirectoryAPI {
      * @param body the body containing the new directory visibility
      */
     @PUT(NetworkConstants.URI_API_PREFIX_PATH_R0 + "directory/list/room/{roomId}")
-    fun setRoomDirectoryVisibility(@Path("roomId") roomId: String,
-                                   @Body body: RoomDirectoryVisibilityJson): Call<Unit>
+    suspend fun setRoomDirectoryVisibility(@Path("roomId") roomId: String,
+                                           @Body body: RoomDirectoryVisibilityJson)
 
     /**
      * Add alias to the room.
      * @param roomAlias the room alias.
      */
     @PUT(NetworkConstants.URI_API_PREFIX_PATH_R0 + "directory/room/{roomAlias}")
-    fun addRoomAlias(@Path("roomAlias") roomAlias: String,
-                     @Body body: AddRoomAliasBody): Call<Unit>
+    suspend fun addRoomAlias(@Path("roomAlias") roomAlias: String,
+                             @Body body: AddRoomAliasBody)
 
     /**
      * Delete a room alias
      * @param roomAlias the room alias.
      */
     @DELETE(NetworkConstants.URI_API_PREFIX_PATH_R0 + "directory/room/{roomAlias}")
-    fun deleteRoomAlias(@Path("roomAlias") roomAlias: String): Call<Unit>
+    suspend fun deleteRoomAlias(@Path("roomAlias") roomAlias: String)
 }

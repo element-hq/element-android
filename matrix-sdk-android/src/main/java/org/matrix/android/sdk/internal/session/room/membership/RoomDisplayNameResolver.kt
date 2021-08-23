@@ -17,7 +17,8 @@
 package org.matrix.android.sdk.internal.session.room.membership
 
 import io.realm.Realm
-import org.matrix.android.sdk.R
+import org.matrix.android.sdk.api.MatrixConfiguration
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.Membership
@@ -32,16 +33,17 @@ import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
 import org.matrix.android.sdk.internal.database.query.getOrNull
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.UserId
-import org.matrix.android.sdk.internal.util.StringProvider
 import javax.inject.Inject
 
 /**
  * This class computes room display name
  */
 internal class RoomDisplayNameResolver @Inject constructor(
-        private val stringProvider: StringProvider,
+        matrixConfiguration: MatrixConfiguration,
         @UserId private val userId: String
 ) {
+
+    private val roomDisplayNameFallbackProvider = matrixConfiguration.roomDisplayNameFallbackProvider
 
     /**
      * Compute the room display name
@@ -50,14 +52,14 @@ internal class RoomDisplayNameResolver @Inject constructor(
      * @param roomId: the roomId to resolve the name of.
      * @return the room display name
      */
-    fun resolve(realm: Realm, roomId: String): CharSequence {
+    fun resolve(realm: Realm, roomId: String): String {
         // this algorithm is the one defined in
         // https://github.com/matrix-org/matrix-js-sdk/blob/develop/lib/models/room.js#L617
         // calculateRoomName(room, userId)
 
         // For Lazy Loaded room, see algorithm here:
         // https://docs.google.com/document/d/11i14UI1cUz-OJ0knD5BFu7fmT6Fo327zvMYqfSAR7xs/edit#heading=h.qif6pkqyjgzn
-        var name: CharSequence?
+        var name: String?
         val roomEntity = RoomEntity.where(realm, roomId = roomId).findFirst()
         val roomName = CurrentStateEventEntity.getOrNull(realm, roomId, type = EventType.STATE_ROOM_NAME, stateKey = "")?.root
         name = ContentMapper.map(roomName?.content).toModel<RoomNameContent>()?.name
@@ -76,14 +78,14 @@ internal class RoomDisplayNameResolver @Inject constructor(
         if (roomEntity?.membership == Membership.INVITE) {
             val inviteMeEvent = roomMembers.getLastStateEvent(userId)
             val inviterId = inviteMeEvent?.sender
-            name = if (inviterId != null) {
-                activeMembers.where()
-                        .equalTo(RoomMemberSummaryEntityFields.USER_ID, inviterId)
-                        .findFirst()
-                        ?.displayName
-            } else {
-                stringProvider.getString(R.string.room_displayname_room_invite)
-            }
+            name = inviterId
+                    ?.let {
+                        activeMembers.where()
+                                .equalTo(RoomMemberSummaryEntityFields.USER_ID, it)
+                                .findFirst()
+                                ?.getBestName()
+                    }
+                    ?: roomDisplayNameFallbackProvider.getNameForRoomInvite()
         } else if (roomEntity?.membership == Membership.JOIN) {
             val roomSummary = RoomSummaryEntity.where(realm, roomId).findFirst()
             val invitedCount = roomSummary?.invitedMembersCount ?: 0
@@ -104,25 +106,32 @@ internal class RoomDisplayNameResolver @Inject constructor(
             val otherMembersCount = otherMembersSubset.count()
             name = when (otherMembersCount) {
                 0    -> {
-                    stringProvider.getString(R.string.room_displayname_empty_room)
-                    // TODO (was xx and yyy) ...
+                    // Get left members if any
+                    val leftMembersNames = roomMembers.queryLeftRoomMembersEvent()
+                            .findAll()
+                            .map { it.getBestName() }
+                    roomDisplayNameFallbackProvider.getNameForEmptyRoom(roomSummary?.isDirect.orFalse(), leftMembersNames)
                 }
-                1    -> resolveRoomMemberName(otherMembersSubset[0], roomMembers)
+                1    -> {
+                    roomDisplayNameFallbackProvider.getNameFor1member(
+                            resolveRoomMemberName(otherMembersSubset[0], roomMembers)
+                    )
+                }
                 2    -> {
-                    stringProvider.getString(R.string.room_displayname_two_members,
+                    roomDisplayNameFallbackProvider.getNameFor2members(
                             resolveRoomMemberName(otherMembersSubset[0], roomMembers),
                             resolveRoomMemberName(otherMembersSubset[1], roomMembers)
                     )
                 }
                 3    -> {
-                    stringProvider.getString(R.string.room_displayname_3_members,
+                    roomDisplayNameFallbackProvider.getNameFor3members(
                             resolveRoomMemberName(otherMembersSubset[0], roomMembers),
                             resolveRoomMemberName(otherMembersSubset[1], roomMembers),
                             resolveRoomMemberName(otherMembersSubset[2], roomMembers)
                     )
                 }
                 4    -> {
-                    stringProvider.getString(R.string.room_displayname_4_members,
+                    roomDisplayNameFallbackProvider.getNameFor4members(
                             resolveRoomMemberName(otherMembersSubset[0], roomMembers),
                             resolveRoomMemberName(otherMembersSubset[1], roomMembers),
                             resolveRoomMemberName(otherMembersSubset[2], roomMembers),
@@ -131,9 +140,7 @@ internal class RoomDisplayNameResolver @Inject constructor(
                 }
                 else -> {
                     val remainingCount = invitedCount + joinedCount - otherMembersCount + 1
-                    stringProvider.getQuantityString(
-                            R.plurals.room_displayname_four_and_more_members,
-                            remainingCount,
+                    roomDisplayNameFallbackProvider.getNameFor4membersAndMore(
                             resolveRoomMemberName(otherMembersSubset[0], roomMembers),
                             resolveRoomMemberName(otherMembersSubset[1], roomMembers),
                             resolveRoomMemberName(otherMembersSubset[2], roomMembers),
@@ -146,12 +153,11 @@ internal class RoomDisplayNameResolver @Inject constructor(
     }
 
     /** See [org.matrix.android.sdk.api.session.room.sender.SenderInfo.disambiguatedDisplayName] */
-    private fun resolveRoomMemberName(roomMemberSummary: RoomMemberSummaryEntity?,
-                                      roomMemberHelper: RoomMemberHelper): String? {
-        if (roomMemberSummary == null) return null
+    private fun resolveRoomMemberName(roomMemberSummary: RoomMemberSummaryEntity,
+                                      roomMemberHelper: RoomMemberHelper): String {
         val isUnique = roomMemberHelper.isUniqueDisplayName(roomMemberSummary.displayName)
         return if (isUnique) {
-            roomMemberSummary.displayName
+            roomMemberSummary.getBestName()
         } else {
             "${roomMemberSummary.displayName} (${roomMemberSummary.userId})"
         }

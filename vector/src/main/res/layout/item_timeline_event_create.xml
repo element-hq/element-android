@@ -7,17 +7,17 @@
 
     <TextView
         android:id="@+id/roomCreateItemDescription"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
-        android:background="?attr/riotx_keys_backup_banner_accent_color"
+        android:background="?vctr_keys_backup_banner_accent_color"
         android:drawablePadding="16dp"
         android:gravity="center|start"
         android:minHeight="80dp"
         android:padding="16dp"
-        tools:text="This room is continuation…"
-        app:drawableStartCompat="@drawable/error" />
+        app:drawableStartCompat="@drawable/ic_warning_badge"
+        tools:text="This room is continuation…" />
 
 </FrameLayout>

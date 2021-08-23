@@ -38,19 +38,16 @@ class CoroutineSequencersTest: MatrixTest {
 
         val jobs = listOf(
                 GlobalScope.launch(dispatcher) {
-                    sequencer.post { suspendingMethod("#1") }.also {
-                        results.add(it)
-                    }
+                    sequencer.post { suspendingMethod("#1") }
+                            .also { results.add(it) }
                 },
                 GlobalScope.launch(dispatcher) {
-                    sequencer.post { suspendingMethod("#2") }.also {
-                        results.add(it)
-                    }
+                    sequencer.post { suspendingMethod("#2") }
+                            .also { results.add(it) }
                 },
                 GlobalScope.launch(dispatcher) {
-                    sequencer.post { suspendingMethod("#3") }.also {
-                        results.add(it)
-                    }
+                    sequencer.post { suspendingMethod("#3") }
+                            .also { results.add(it) }
                 }
         )
         runBlocking {
@@ -70,19 +67,16 @@ class CoroutineSequencersTest: MatrixTest {
         val results = ArrayList<String>()
         val jobs = listOf(
                 GlobalScope.launch(dispatcher) {
-                    sequencer1.post { suspendingMethod("#1") }.also {
-                        results.add(it)
-                    }
+                    sequencer1.post { suspendingMethod("#1") }
+                            .also { results.add(it) }
                 },
                 GlobalScope.launch(dispatcher) {
-                    sequencer2.post { suspendingMethod("#2") }.also {
-                        results.add(it)
-                    }
+                    sequencer2.post { suspendingMethod("#2") }
+                            .also { results.add(it) }
                 },
                 GlobalScope.launch(dispatcher) {
-                    sequencer3.post { suspendingMethod("#3") }.also {
-                        results.add(it)
-                    }
+                    sequencer3.post { suspendingMethod("#3") }
+                            .also { results.add(it) }
                 }
         )
         runBlocking {
@@ -97,20 +91,17 @@ class CoroutineSequencersTest: MatrixTest {
         val results = ArrayList<String>()
         val jobs = listOf(
                 GlobalScope.launch(dispatcher) {
-                    sequencer.post { suspendingMethod("#1") }.also {
-                        results.add(it)
-                    }
+                    sequencer.post { suspendingMethod("#1") }
+                            .also { results.add(it) }
                 },
                 GlobalScope.launch(dispatcher) {
-                    val result = sequencer.post { suspendingMethod("#2") }.also {
-                        results.add(it)
-                    }
-                    println("Result: $result")
+                    sequencer.post { suspendingMethod("#2") }
+                            .also { results.add(it) }
+                            .also { println("Result: $it") }
                 },
                 GlobalScope.launch(dispatcher) {
-                    sequencer.post { suspendingMethod("#3") }.also {
-                        results.add(it)
-                    }
+                    sequencer.post { suspendingMethod("#3") }
+                            .also { results.add(it) }
                 }
         )
         // We are canceling the second job

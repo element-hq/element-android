@@ -25,6 +25,11 @@ sealed class ThreePidsSettingsAction : VectorViewModelAction {
     data class SubmitCode(val threePid: ThreePid.Msisdn, val code: String) : ThreePidsSettingsAction()
     data class ContinueThreePid(val threePid: ThreePid) : ThreePidsSettingsAction()
     data class CancelThreePid(val threePid: ThreePid) : ThreePidsSettingsAction()
-    data class AccountPassword(val password: String) : ThreePidsSettingsAction()
+
+    //    data class AccountPassword(val password: String) : ThreePidsSettingsAction()
     data class DeleteThreePid(val threePid: ThreePid) : ThreePidsSettingsAction()
+
+    object SsoAuthDone : ThreePidsSettingsAction()
+    data class PasswordAuthDone(val password: String) : ThreePidsSettingsAction()
+    object ReAuthCancelled : ThreePidsSettingsAction()
 }

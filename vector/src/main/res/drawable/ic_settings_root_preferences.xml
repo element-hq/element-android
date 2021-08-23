@@ -5,6 +5,6 @@
     android:viewportHeight="25">
   <path
       android:pathData="M8.5,4.5C4.0817,4.5 0.5,8.0817 0.5,12.5C0.5,16.9183 4.0817,20.5 8.5,20.5H16.5C20.9183,20.5 24.5,16.9183 24.5,12.5C24.5,8.0817 20.9183,4.5 16.5,4.5H8.5ZM13.5,12.5C13.5,15.2614 11.2614,17.5 8.5,17.5C5.7386,17.5 3.5,15.2614 3.5,12.5C3.5,9.7386 5.7386,7.5 8.5,7.5C11.2614,7.5 13.5,9.7386 13.5,12.5Z"
-      android:fillColor="@color/riotx_header_panel_text_secondary_light"
+      android:fillColor="#000000"
       android:fillType="evenOdd"/>
 </vector>

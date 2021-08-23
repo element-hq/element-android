@@ -4,19 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?riotx_background"
+    android:background="?android:colorBackground"
     android:foreground="?attr/selectableItemBackground"
     android:minHeight="@dimen/item_form_min_height">
 
     <TextView
         android:id="@+id/formSwitchTitle"
+        style="@style/Widget.Vector.TextView.Subtitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/layout_horizontal_margin"
         android:layout_marginEnd="@dimen/layout_horizontal_margin"
         android:duplicateParentState="true"
-        android:textColor="?riotx_text_primary"
-        android:textSize="15sp"
+        android:textColor="?vctr_content_primary"
         app:layout_constraintBottom_toTopOf="@+id/formSwitchSummary"
         app:layout_constraintEnd_toStartOf="@+id/formSwitchSwitch"
         app:layout_constraintStart_toStartOf="parent"
@@ -26,12 +26,12 @@
 
     <TextView
         android:id="@+id/formSwitchSummary"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:textColor="?riotx_text_secondary"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toTopOf="@+id/formSwitchDivider"
+        android:textColor="?vctr_content_secondary"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/formSwitchSwitch"
         app:layout_constraintStart_toStartOf="@+id/formSwitchTitle"
         app:layout_constraintTop_toBottomOf="@+id/formSwitchTitle"
@@ -42,17 +42,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="19dp"
-        app:layout_constraintBottom_toTopOf="@+id/formSwitchDivider"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <View
-        android:id="@+id/formSwitchDivider"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:background="?riotx_header_panel_border_mobile"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

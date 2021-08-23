@@ -22,6 +22,11 @@ package org.matrix.android.sdk.api.session.homeserver
 interface HomeServerCapabilitiesService {
 
     /**
+     * Force a refresh of the stored data
+     */
+    suspend fun refreshHomeServerCapabilities()
+
+    /**
      * Get the HomeServer capabilities
      */
     fun getHomeServerCapabilities(): HomeServerCapabilities

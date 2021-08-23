@@ -71,15 +71,15 @@ class SearchFragment @Inject constructor(
 
     private fun configureRecyclerView() {
         views.searchResultRecycler.trackItemsVisibilityChange()
-        views.searchResultRecycler.configureWith(controller, showDivider = false)
+        views.searchResultRecycler.configureWith(controller)
         (views.searchResultRecycler.layoutManager as? LinearLayoutManager)?.stackFromEnd = true
         controller.listener = this
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
         views.searchResultRecycler.cleanup()
         controller.listener = null
+        super.onDestroyView()
     }
 
     override fun invalidate() = withState(searchViewModel) { state ->

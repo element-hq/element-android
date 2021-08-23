@@ -81,8 +81,8 @@ internal class AddHttpPusherWorker(context: Context, params: WorkerParameters)
     }
 
     private suspend fun setPusher(pusher: JsonPusher) {
-        executeRequest<Unit>(globalErrorReceiver) {
-            apiCall = pushersAPI.setPusher(pusher)
+        executeRequest(globalErrorReceiver) {
+            pushersAPI.setPusher(pusher)
         }
         monarchy.awaitTransaction { realm ->
             val echo = PusherEntity.where(realm, pusher.pushKey).findFirst()

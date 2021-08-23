@@ -25,16 +25,9 @@ import com.squareup.moshi.JsonClass
  */
 @JsonClass(generateAdapter = false)
 enum class RoomJoinRules(val value: String) {
-
-    @Json(name = "public")
-    PUBLIC("public"),
-
-    @Json(name = "invite")
-    INVITE("invite"),
-
-    @Json(name = "knock")
-    KNOCK("knock"),
-
-    @Json(name = "private")
-    PRIVATE("private")
+    @Json(name = "public") PUBLIC("public"),
+    @Json(name = "invite") INVITE("invite"),
+    @Json(name = "knock") KNOCK("knock"),
+    @Json(name = "private") PRIVATE("private"),
+    @Json(name = "restricted") RESTRICTED("restricted")
 }

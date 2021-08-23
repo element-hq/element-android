@@ -56,10 +56,10 @@ class ReadReceiptsView @JvmOverloads constructor(
 
     private fun setupView() {
         inflate(context, R.layout.view_read_receipts, this)
+        contentDescription = context.getString(R.string.a11y_view_read_receipts)
     }
 
-    fun render(readReceipts: List<ReadReceiptData>, avatarRenderer: AvatarRenderer, clickListener: OnClickListener) {
-        setOnClickListener(clickListener)
+    fun render(readReceipts: List<ReadReceiptData>, avatarRenderer: AvatarRenderer) {
         if (readReceipts.isNotEmpty()) {
             isVisible = true
             for (index in 0 until MAX_RECEIPT_DISPLAYED) {
