@@ -18,26 +18,25 @@ package fr.gouv.tchap.features.expired
 
 import android.content.Context
 import android.content.Intent
-import android.os.Bundle
 import androidx.core.view.isVisible
-import androidx.lifecycle.lifecycleScope
+import com.airbnb.mvrx.viewModel
 import im.vector.app.R
-import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityTchapExpiredBinding
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
-import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
 /**
  * In this screen, the user is viewing a message informing that his account has expired.
  */
-class ExpiredAccountActivity : VectorBaseActivity<ActivityTchapExpiredBinding>() {
+class ExpiredAccountActivity : VectorBaseActivity<ActivityTchapExpiredBinding>(), ExpiredAccountViewModel.Factory {
 
-    @Inject internal lateinit var sessionHolder: ActiveSessionHolder
+    @Inject lateinit var expiredAccountFactory: ExpiredAccountViewModel.Factory
+
+    private val viewModel: ExpiredAccountViewModel by viewModel()
 
     override fun getBinding() = ActivityTchapExpiredBinding.inflate(layoutInflater)
 
@@ -45,28 +44,37 @@ class ExpiredAccountActivity : VectorBaseActivity<ActivityTchapExpiredBinding>()
         injector.inject(this)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        setupViews()
+    override fun create(initialState: ExpiredAccountViewState): ExpiredAccountViewModel {
+        return expiredAccountFactory.create(initialState)
     }
 
-    private fun setupViews() {
+    override fun initUiAndData() {
         with(views) {
-            resumeButton.setOnClickListener {
+            resumeButton.debouncedClicks {
                 MainActivity.restartApp(this@ExpiredAccountActivity, MainActivityArgs())
             }
-            renewalEmailButton.setOnClickListener {
-                lifecycleScope.launch { sessionHolder.getSafeActiveSession()?.accountValidityService()?.requestRenewalEmail() }
-                titleView.setText(R.string.tchap_expired_account_on_new_sent_email_msg)
-                renewalEmailButton.isVisible = false
+            renewalEmailButton.debouncedClicks {
+                viewModel.handle(ExpiredAccountAction.RequestSendingRenewalEmail)
             }
         }
+        viewModel.subscribe(this) { renderState(it) }
     }
 
     override fun handleExpiredAccount() {
         // No op here
         Timber.w("Ignoring expired account global error")
+    }
+
+    private fun renderState(state: ExpiredAccountViewState) {
+        with(views) {
+            if (state.isRenewalEmailSent) {
+                titleView.setText(R.string.tchap_expired_account_on_new_sent_email_msg)
+                renewalEmailButton.isVisible = false
+            } else {
+                titleView.setText(R.string.tchap_expired_account_msg)
+                renewalEmailButton.isVisible = true
+            }
+        }
     }
 
     companion object {
