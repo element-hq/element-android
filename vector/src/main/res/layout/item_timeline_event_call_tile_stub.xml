@@ -11,7 +11,7 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_gravity="center_horizontal"
-        android:contentDescription="@string/avatar"
+        android:importantForAccessibility="no"
         tools:src="@sample/user_round_avatars" />
 
     <TextView

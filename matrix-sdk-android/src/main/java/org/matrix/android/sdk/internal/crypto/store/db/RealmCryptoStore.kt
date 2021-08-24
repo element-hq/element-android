@@ -27,7 +27,6 @@ import io.realm.Sort
 import io.realm.kotlin.where
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MXCrossSigningInfo
 import org.matrix.android.sdk.api.session.events.model.Event
-import org.matrix.android.sdk.api.session.events.model.LocalEcho
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.api.util.toOptional
@@ -88,6 +87,7 @@ import org.matrix.android.sdk.internal.crypto.store.db.query.delete
 import org.matrix.android.sdk.internal.crypto.store.db.query.get
 import org.matrix.android.sdk.internal.crypto.store.db.query.getById
 import org.matrix.android.sdk.internal.crypto.store.db.query.getOrCreate
+import org.matrix.android.sdk.internal.crypto.util.RequestIdHelper
 import org.matrix.android.sdk.internal.database.mapper.ContentMapper
 import org.matrix.android.sdk.internal.database.tools.RealmDebugTools
 import org.matrix.android.sdk.internal.di.CryptoDatabase
@@ -1121,7 +1121,7 @@ internal class RealmCryptoStore @Inject constructor(
 
             if (existing == null) {
                 request = realm.createObject(OutgoingGossipingRequestEntity::class.java).apply {
-                    this.requestId = LocalEcho.createLocalEchoId()
+                    this.requestId = RequestIdHelper.createUniqueRequestId()
                     this.setRecipients(recipients)
                     this.requestState = OutgoingGossipingRequestState.UNSENT
                     this.type = GossipRequestType.KEY
@@ -1151,7 +1151,7 @@ internal class RealmCryptoStore @Inject constructor(
                     this.type = GossipRequestType.SECRET
                     setRecipients(recipients)
                     this.requestState = OutgoingGossipingRequestState.UNSENT
-                    this.requestId = LocalEcho.createLocalEchoId()
+                    this.requestId = RequestIdHelper.createUniqueRequestId()
                     this.requestedInfoStr = secretName
                 }.toOutgoingGossipingRequest() as? OutgoingSecretRequest
             } else {

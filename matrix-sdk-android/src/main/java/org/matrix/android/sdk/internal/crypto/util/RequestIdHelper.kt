@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.session.sync
+package org.matrix.android.sdk.internal.crypto.util
 
-internal class SyncResponsePostTreatmentAggregator {
-    // List of RoomId
-    val ephemeralFilesToDelete = mutableListOf<String>()
-    // Map of roomId to directUserId
-    val directChatsToCheck = mutableMapOf<String, String>()
+import java.util.UUID
+
+internal object RequestIdHelper {
+    fun createUniqueRequestId() = UUID.randomUUID().toString()
 }

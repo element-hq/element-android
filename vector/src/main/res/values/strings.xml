@@ -3333,7 +3333,7 @@
     <string name="a11y_change_avatar">Change avatar</string>
     <string name="a11y_delete_avatar">Delete avatar</string>
     <string name="a11y_error_some_message_not_sent">Some messages have not been sent</string>
-    <string name="a11y_unsent_draft">This room has unsent draft</string>
+    <string name="a11y_unsent_draft">has unsent draft</string>
     <string name="a11y_video">Video</string>
     <string name="a11y_selected">Selected</string>
     <string name="a11y_trust_level_default">Default trust level</string>
@@ -3348,8 +3348,8 @@
     <string name="a11y_rule_notify_silent">Notify without sound</string>
     <string name="a11y_rule_notify_off">Do not notify</string>
     <string name="a11y_view_read_receipts">View read receipts</string>
-    <string name="a11y_public_room">This room is public</string>
-    <string name="a11y_public_space">This Space is public</string>
+    <string name="a11y_public_room">Public room</string>
+    <string name="a11y_public_space">Public space</string>
 
     <string name="dev_tools_menu_name">Dev Tools</string>
     <string name="dev_tools_explore_room_state">Explore Room State</string>
