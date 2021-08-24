@@ -251,7 +251,7 @@ class HomeActivity :
                     if (it.canUserManageSpace && !popupAlertManager.hasAlertsToShow()) {
                         if (!vectorPreferences.didPromoteNewRestrictedFeature()) {
                             vectorPreferences.setDidPromoteNewRestrictedFeature()
-                            RestrictedPromoBottomSheet().show(supportFragmentManager, "FOO")
+                            RestrictedPromoBottomSheet().show(supportFragmentManager, "RestrictedPromoBottomSheet")
                         }
                     }
                 }
