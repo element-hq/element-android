@@ -143,7 +143,7 @@ android {
         resValue "bool", "useLoginV2", "false"
 
         // NotificationSettingsV2 is disabled. To be released in conjunction with iOS/Web
-        def useNotificationSettingsV2 = true
+        def useNotificationSettingsV2 = false
         buildConfigField "Boolean", "USE_NOTIFICATION_SETTINGS_V2", "${useNotificationSettingsV2}"
         resValue "bool", "useNotificationSettingsV1", "${!useNotificationSettingsV2}"
         resValue "bool", "useNotificationSettingsV2", "${useNotificationSettingsV2}"

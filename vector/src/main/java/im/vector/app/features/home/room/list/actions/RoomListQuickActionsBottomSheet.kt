@@ -32,7 +32,6 @@ import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
-import im.vector.app.core.platform.showOptimizedSnackbar
 import im.vector.app.databinding.BottomSheetGenericListBinding
 import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.roomprofile.notifications.RoomNotificationSettingsAction
