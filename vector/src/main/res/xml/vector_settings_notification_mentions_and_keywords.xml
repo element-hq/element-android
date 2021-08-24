@@ -28,5 +28,10 @@
             android:key="SETTINGS_KEYWORD_EDIT"
             />
 
+        <im.vector.app.core.preference.VectorPreference
+            android:key="SETTINGS_KEYWORDS_FOOTER"
+            android:focusable="false"
+            android:summary="@string/settings_mentions_and_keywords_encryption_notice" />
+
     </im.vector.app.core.preference.VectorPreferenceCategory>
 </androidx.preference.PreferenceScreen>

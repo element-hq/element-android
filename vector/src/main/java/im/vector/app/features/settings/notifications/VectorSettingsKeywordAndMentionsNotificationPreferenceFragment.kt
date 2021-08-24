@@ -23,6 +23,7 @@ import androidx.preference.Preference
 import im.vector.app.R
 import im.vector.app.core.preference.KeywordPreference
 import im.vector.app.core.preference.VectorCheckboxPreference
+import im.vector.app.core.preference.VectorPreference
 import im.vector.app.core.preference.VectorPreferenceCategory
 import im.vector.app.core.utils.toast
 import kotlinx.coroutines.Dispatchers
@@ -63,11 +64,14 @@ class VectorSettingsKeywordAndMentionsNotificationPreferenceFragment
         keywordPreference.isIconSpaceReserved = false
         keywordPreference.isChecked = anyEnabledKeywords
 
+        val footerPreference = findPreference<VectorPreference>("SETTINGS_KEYWORDS_FOOTER")!!
+        footerPreference.isIconSpaceReserved = false
+
         keywordPreference.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
             val keywords = editKeywordPreference.keywords
             val newChecked = newValue as Boolean
             displayLoadingView()
-            updateKeywordPushRules(keywords, newChecked){  result ->
+            updateKeywordPushRules(keywords, newChecked) {  result ->
                 hideLoadingView()
                 if (!isAdded) {
                     return@updateKeywordPushRules
@@ -95,7 +99,6 @@ class VectorSettingsKeywordAndMentionsNotificationPreferenceFragment
                 scrollToPreference(editKeywordPreference)
             }
         }
-
     }
 
     fun updateKeywordPushRules(keywords: Set<String>, checked: Boolean, completion: (Result<Unit>) -> Unit) {
@@ -116,7 +119,7 @@ class VectorSettingsKeywordAndMentionsNotificationPreferenceFragment
                 }
             }
             val firstError = results.firstNotNullOfOrNull(Result<Unit>::exceptionOrNull)
-            if (firstError == null){
+            if (firstError == null) {
                 completion(Result.success(Unit))
             } else {
                 completion(Result.failure(firstError))
@@ -124,7 +127,7 @@ class VectorSettingsKeywordAndMentionsNotificationPreferenceFragment
         }
     }
 
-    fun updateWithKeywords (keywords: Set<String>) {
+    fun updateWithKeywords(keywords: Set<String>) {
         val editKeywordPreference = findPreference<KeywordPreference>("SETTINGS_KEYWORD_EDIT") ?: return
         editKeywordPreference.keywords = keywords
     }

@@ -92,7 +92,7 @@ class KeywordPreference : VectorPreference {
                 return@setOnEditorActionListener false
             }
             val keyword = chipEditText.text.toString().trim()
-            if (keyword.isEmpty()){
+            if (keyword.isEmpty()) {
                 return@setOnEditorActionListener false
             }
             _keywords.add(keyword)
@@ -102,7 +102,6 @@ class KeywordPreference : VectorPreference {
             chipEditText.text = null
             return@setOnEditorActionListener true
         }
-
     }
 
     private fun addChipToGroup(keyword: String, chipGroup: ChipGroup) {
@@ -114,8 +113,9 @@ class KeywordPreference : VectorPreference {
         chipGroup.addView(chip)
 
         chip.setOnCloseIconClickListener {
-            if (!keywordsEnabled)
+            if (!keywordsEnabled) {
                 return@setOnCloseIconClickListener
+            }
             _keywords.remove(keyword)
             listener?.didRemoveKeyword(keyword)
             onPreferenceChangeListener?.onPreferenceChange(this, _keywords)

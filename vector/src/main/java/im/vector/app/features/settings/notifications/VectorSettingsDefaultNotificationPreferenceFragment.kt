@@ -16,9 +16,7 @@
 
 package im.vector.app.features.settings.notifications
 
-import androidx.preference.PreferenceCategory
 import im.vector.app.R
-import im.vector.app.core.preference.VectorCheckboxPreference
 import im.vector.app.core.preference.VectorPreferenceCategory
 import org.matrix.android.sdk.api.pushrules.RuleIds
 

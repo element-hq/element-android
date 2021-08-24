@@ -43,7 +43,7 @@ abstract class VectorSettingsPushRuleNotificationPreferenceFragment
                 val initialIndex = ruleAndKind.pushRule.notificationIndex
                 preference.isChecked = initialIndex != NotificationIndex.OFF
                 preference.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
-                    updatePushRule(ruleAndKind.pushRule.ruleId, ruleAndKind.kind,newValue as Boolean, preference)
+                    updatePushRule(ruleAndKind.pushRule.ruleId, ruleAndKind.kind, newValue as Boolean, preference)
                     false
                 }
             }

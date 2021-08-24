@@ -1227,6 +1227,7 @@
     <string name="settings_call_invitations">Call invitations</string>
     <string name="settings_messages_by_bot">Messages by bot</string>
     <string name="settings_room_upgrades">Room upgrades</string>
+    <string name="settings_mentions_and_keywords_encryption_notice">You won’t get notifications for mentions &amp; keywords in encrypted rooms on mobile.</string>
 
     <string name="settings_background_sync">Background synchronization</string>
     <string name="settings_background_fdroid_sync_mode">Background Sync Mode</string>
