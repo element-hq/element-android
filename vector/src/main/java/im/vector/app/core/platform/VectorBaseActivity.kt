@@ -318,12 +318,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), HasSc
 
         mainActivityStarted = true
 
-        MainActivity.restartApp(this,
-                MainActivityArgs(
-                        clearCache = true,
-                        isAccountExpired = true
-                )
-        )
+        MainActivity.restartApp(this, MainActivityArgs(isAccountExpired = true))
     }
 
     override fun onDestroy() {

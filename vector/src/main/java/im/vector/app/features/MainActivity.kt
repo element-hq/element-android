@@ -33,7 +33,6 @@ import im.vector.app.core.extensions.startSyncing
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.pushers.PushersManager
 import im.vector.app.core.utils.deleteAllFiles
-import im.vector.app.core.utils.toast
 import im.vector.app.databinding.ActivityMainBinding
 import im.vector.app.features.home.HomeActivity
 import im.vector.app.features.home.ShortcutsHandler
@@ -48,7 +47,6 @@ import im.vector.app.features.signout.soft.SoftLogoutActivity
 import im.vector.app.features.signout.soft.SoftLogoutActivity2
 import im.vector.app.features.themes.ActivityOtherThemes
 import im.vector.app.features.ui.UiStateRepository
-import im.vector.app.push.fcm.FcmHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -156,35 +154,40 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
             return
         }
 
-        clearFcmDataIfNeeded {
-            lifecycleScope.launch {
-                when {
-                    args.isAccountDeactivated -> {
-                        // Just do the local cleanup
-                        Timber.w("Account deactivated, start app")
-                        sessionHolder.clearActiveSession()
-                        doLocalCleanup(clearPreferences = true)
-                    }
-                    args.clearCredentials     -> {
-                        try {
-                            session.signOut(!args.isUserLoggedOut)
-                        } catch (failure: Throwable) {
-                            displayError(failure)
-                            return@launch
-                        }
-                        Timber.w("SIGN_OUT: success, start app")
-                        sessionHolder.clearActiveSession()
-                        doLocalCleanup(clearPreferences = true)
-                    }
-                    args.clearCache           -> {
-                        session.clearCache()
-                        doLocalCleanup(clearPreferences = false)
-                        session.startSyncing(applicationContext)
-                    }
+        lifecycleScope.launch {
+            when {
+                args.isAccountDeactivated -> {
+                    // Just do the local cleanup
+                    Timber.w("Account deactivated, start app")
+                    sessionHolder.clearActiveSession()
+                    doLocalCleanup(clearPreferences = true)
                 }
-
-                startNextActivityAndFinish()
+                args.isAccountExpired     -> {
+                    // Keep session but clear cache and do local cleanup,
+                    // do not start syncing until account is expired
+                    Timber.w("Account expired, start app")
+                    session.clearCache()
+                    doLocalCleanup(clearPreferences = false)
+                }
+                args.clearCredentials     -> {
+                    try {
+                        session.signOut(!args.isUserLoggedOut)
+                    } catch (failure: Throwable) {
+                        displayError(failure)
+                        return@launch
+                    }
+                    Timber.w("SIGN_OUT: success, start app")
+                    sessionHolder.clearActiveSession()
+                    doLocalCleanup(clearPreferences = true)
+                }
+                args.clearCache           -> {
+                    session.clearCache()
+                    doLocalCleanup(clearPreferences = false)
+                    session.startSyncing(applicationContext)
+                }
             }
+
+            startNextActivityAndFinish()
         }
     }
 
@@ -209,28 +212,6 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
 
             // Also clear cache (Logs, etc...)
             deleteAllFiles(this@MainActivity.cacheDir)
-        }
-    }
-
-    private fun clearFcmDataIfNeeded(onDone: () -> Unit) {
-        if (!args.isAccountExpired) {
-            onDone(); return
-        }
-        val session = sessionHolder.getActiveSession()
-        FcmHelper.getFcmToken(this)?.let {
-            lifecycleScope.launch {
-                runCatching { pushManager.unregisterPusher(it) }
-                        .fold(
-                                {
-                                    session.refreshPushers()
-                                    onDone()
-                                },
-                                {
-                                    toast(R.string.unknown_error)
-                                    onDone()
-                                }
-                        )
-            }
         }
     }
 
