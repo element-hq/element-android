@@ -14,12 +14,11 @@
         android:layout_marginStart="@dimen/layout_horizontal_margin"
         android:layout_marginEnd="@dimen/layout_horizontal_margin"
         app:errorEnabled="false"
-        app:hintEnabled="true"
+        app:hintEnabled="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:placeholderText="@string/settings_notification_new_keyword">
+        app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/chipEditText"
@@ -28,7 +27,7 @@
             android:singleLine="true"
             android:inputType="text"
             android:imeOptions="actionDone"
-            android:hint="@string/settings_notification_your_keywords" />
+            android:hint="@string/settings_notification_new_keyword" />
 
     </com.google.android.material.textfield.TextInputLayout>
 

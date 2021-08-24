@@ -96,6 +96,7 @@ abstract class VectorSettingsPushRuleNotificationPreferenceFragment
     override fun bindPref() {
         for (preferenceKey in prefKeyToPushRuleId.keys) {
             val preference = findPreference<VectorCheckboxPreference>(preferenceKey)!!
+            preference.isIconSpaceReserved = false
             val ruleAndKind: PushRuleAndKind? = session.getPushRules().findDefaultRule(prefKeyToPushRuleId[preferenceKey])
             if (ruleAndKind == null) {
                 // The rule is not defined, hide the preference

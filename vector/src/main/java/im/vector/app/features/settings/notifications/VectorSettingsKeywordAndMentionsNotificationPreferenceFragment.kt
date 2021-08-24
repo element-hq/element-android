@@ -24,6 +24,7 @@ import androidx.preference.Preference
 import im.vector.app.R
 import im.vector.app.core.preference.KeywordPreference
 import im.vector.app.core.preference.VectorCheckboxPreference
+import im.vector.app.core.preference.VectorPreferenceCategory
 import im.vector.app.core.utils.toast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -31,9 +32,7 @@ import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.pushrules.RuleIds
 import org.matrix.android.sdk.api.pushrules.RuleKind
 import org.matrix.android.sdk.api.pushrules.rest.PushRule
-import org.matrix.android.sdk.api.pushrules.rest.PushRuleAndKind
 import org.matrix.android.sdk.api.pushrules.toJson
-import org.matrix.android.sdk.rx.rx
 
 class VectorSettingsKeywordAndMentionsNotificationPreferenceFragment
     : VectorSettingsPushRuleNotificationPreferenceFragment() {
@@ -49,10 +48,14 @@ class VectorSettingsKeywordAndMentionsNotificationPreferenceFragment
 
     override fun bindPref() {
         super.bindPref()
+        val mentionCategory = findPreference<VectorPreferenceCategory>("SETTINGS_KEYWORDS_AND_MENTIONS")!!
+        mentionCategory.isIconSpaceReserved = false
+        val yourKeywordsCategory = findPreference<VectorPreferenceCategory>("SETTINGS_YOUR_KEYWORDS")!!
+        yourKeywordsCategory.isIconSpaceReserved = false
         val keywordRules = session.getPushRules().content?.filter { !it.ruleId.startsWith(".") }.orEmpty()
         val editKeywordPreference = findPreference<KeywordPreference>("SETTINGS_KEYWORD_EDIT")!!
         val keywordPreference = findPreference<VectorCheckboxPreference>("SETTINGS_PUSH_RULE_MESSAGES_CONTAINING_KEYWORDS_PREFERENCE_KEY")!!
-
+        keywordPreference.isIconSpaceReserved = false
         val anyEnabledKeywords = keywordRules.any(PushRule::enabled)
         keywordPreference.isChecked = anyEnabledKeywords
         editKeywordPreference.isEnabled = anyEnabledKeywords

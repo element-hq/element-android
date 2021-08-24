@@ -34,22 +34,23 @@ class KeywordPreference : VectorPreference {
         fun didRemoveKeyword(keyword: String)
     }
 
+    private var keywordsEnabled = true
+
+    private var _keywords: LinkedHashSet<String> = linkedSetOf()
+
     var keywords: Set<String>
         get() {
             return _keywords
         }
         set(value) {
-            val newLinkedSet:LinkedHashSet<String> = linkedSetOf()
-            newLinkedSet.addAll(value.sorted())
-            _keywords = newLinkedSet
+            // Updates existing `LinkedHashSet` vs assign a new set.
+            // This preserves the order added while on the screen (avoids keywords jumping around).
+            _keywords.removeAll(_keywords.filter { !value.contains(it) })
+            _keywords.addAll(value.sorted())
             notifyChanged()
         }
 
     var listener: Listener? = null
-
-    var keywordsEnabled = true
-
-    private var _keywords: LinkedHashSet<String> = linkedSetOf()
 
     constructor(context: Context) : super(context)
 
