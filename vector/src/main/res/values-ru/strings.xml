@@ -2850,7 +2850,6 @@
     <string name="spaces_no_server_support_title">Похоже, что ваш домашний сервер пока не поддерживает пространства</string>
     <string name="spaces_feeling_experimental_subspace">Чувствуете себя экспериментатором\?
 \nВы можете добавить существующие пространства в пространство.</string>
-    <string name="labs_space_show_orphan_in_home">Экспериментальное пространство - показывать в Главной только сирот</string>
     <string name="space_manage_rooms_and_spaces">Управление комнатами и пространствами</string>
     <string name="space_mark_as_not_suggested">Отметить как не рекомендуется</string>
     <string name="space_mark_as_suggested">Отметить как рекомендуется</string>

@@ -2838,7 +2838,6 @@
     <string name="a11y_public_space">این فضا عمومی است</string>
     <string name="spaces_feeling_experimental_subspace">حس آزمایش دارید؟
 \nمی‌توانید فضاهای موجود را به فضایی بیفزایید.</string>
-    <string name="labs_space_show_orphan_in_home">فضای آزمایشی - فقط نمایش یتسم‌ها در خانه</string>
     <string name="call_transfer_consulting_with">مشاوره با %1$s</string>
     <string name="voice_message_reply_content">پیام صوتی (%1$s)</string>
     <string name="error_voice_message_cannot_reply_or_edit">نمی‌توان هنگام فعّال بودن پیام صوتی، پاسخ داد یا ویراست</string>

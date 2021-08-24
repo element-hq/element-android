@@ -2842,7 +2842,6 @@
     <string name="this_space_has_no_rooms_not_admin">Möglicherweise musst du extra eingeladen werden, damit du die Räume siehst.
 \nDie fehlt die Berechtigung, Räume hinzuzufügen.</string>
     <string name="spaces_feeling_experimental_subspace">Du kannst Unterspaces zu einem Space hinzufügen.</string>
-    <string name="labs_space_show_orphan_in_home">Experimentelle Spaces - Nur verweiste Räume auf Startseite</string>
     <string name="error_jitsi_join_conf">Leider ist ein Fehler beim Betreten der Konferenz aufgetreten</string>
     <string name="unnamed_room">Unbenannter Raum</string>
     <string name="this_space_has_no_rooms">Dieser Space hat noch keine Räume</string>

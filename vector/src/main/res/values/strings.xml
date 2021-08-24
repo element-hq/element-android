@@ -385,6 +385,7 @@
     <string name="dismiss">Dismiss</string>
     <string name="reset">Reset</string>
     <string name="start_chatting">Start Chatting</string>
+    <string name="spaces">Spaces</string>
 
     <!-- Permissions denied forever -->
     <string name="denied_permission_generic">Some permissions are missing to perform this action, please grant the permissions from the system settings.</string>
