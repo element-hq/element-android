@@ -59,15 +59,8 @@ class RoomNotificationSettingsViewModel @AssistedInject constructor(
     private val room = session.getRoom(initialState.roomId)!!
 
     init {
-        initEncrypted()
         observeSummary()
         observeNotificationState()
-    }
-
-    private fun initEncrypted() {
-        setState {
-            copy(roomEncrypted = room.isEncrypted())
-        }
     }
 
     private fun observeSummary() {
@@ -96,10 +89,19 @@ class RoomNotificationSettingsViewModel @AssistedInject constructor(
         setState { copy(isLoading = true) }
         viewModelScope.launch {
             runCatching {  room.setRoomNotificationState(action.notificationState) }
-                    .onFailure { _viewEvents.post(RoomNotificationSettingsViewEvents.Failure(it)) }
-            setState {
-                copy(isLoading = false, notificationState = Success(action.notificationState))
-            }
+                    .fold(
+                            {
+                                setState {
+                                    copy(isLoading = false, notificationState = Success(action.notificationState))
+                                }
+                            },
+                            {
+                                setState {
+                                    copy(isLoading = false)
+                                }
+                                _viewEvents.post(RoomNotificationSettingsViewEvents.Failure(it))
+                            }
+                    )
         }
     }
 }

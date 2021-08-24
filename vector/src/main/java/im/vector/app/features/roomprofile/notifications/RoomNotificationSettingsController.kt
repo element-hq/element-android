@@ -59,7 +59,7 @@ class RoomNotificationSettingsController @Inject constructor() : TypedEpoxyContr
         }
         notificationSettingsFooterItem {
             id("roomNotificationSettingsFooter")
-            encrypted(data.roomEncrypted)
+            encrypted(data.roomSummary()?.isEncrypted == true)
             clickListener {
                 host.callback?.didSelectAccountSettingsLink()
             }

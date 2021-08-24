@@ -29,24 +29,18 @@ data class RoomNotificationSettingsViewState(
         val roomId: String,
         val roomSummary: Async<RoomSummary> = Uninitialized,
         val isLoading: Boolean = false,
-        val roomEncrypted: Boolean = false,
         val notificationState: Async<RoomNotificationState> = Uninitialized
 )  : MvRxState {
     constructor(args: RoomProfileArgs) : this(roomId = args.roomId)
     constructor(args: RoomListActionsArgs) : this(roomId = args.roomId)
 }
 
-data class AvatarData(
-        val displayName: String,
-        val avatarUrl: String
-)
-
 /**
  * Used to map this old room notification settings to the new options in v2.
  */
 val RoomNotificationSettingsViewState.notificationStateMapped: Async<RoomNotificationState>
     get() {
-        if ((roomEncrypted && notificationState() == RoomNotificationState.MENTIONS_ONLY) || notificationState() == RoomNotificationState.ALL_MESSAGES) {
+        if ((roomSummary()?.isEncrypted == true && notificationState() == RoomNotificationState.MENTIONS_ONLY) || notificationState() == RoomNotificationState.ALL_MESSAGES) {
             /** if in an encrypted room, mentions notifications are not supported so show "All Messages" as selected.
              * Also in the new settings there is no notion of notifications without sound so it maps to noisy also
              */
@@ -59,7 +53,7 @@ val RoomNotificationSettingsViewState.notificationStateMapped: Async<RoomNotific
  */
 val RoomNotificationSettingsViewState.notificationOptions: List<RoomNotificationState>
     get() {
-        return if (roomEncrypted) {
+        return if (roomSummary()?.isEncrypted == true) {
             listOf(RoomNotificationState.ALL_MESSAGES_NOISY, RoomNotificationState.MUTE)
         } else {
             listOf(RoomNotificationState.ALL_MESSAGES_NOISY, RoomNotificationState.MENTIONS_ONLY, RoomNotificationState.MUTE)

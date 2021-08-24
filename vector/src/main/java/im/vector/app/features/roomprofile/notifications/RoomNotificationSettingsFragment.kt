@@ -24,10 +24,12 @@ import androidx.core.view.isVisible
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.app.R
+import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentRoomSettingGenericBinding
 import im.vector.app.features.home.AvatarRenderer
+import im.vector.app.features.settings.VectorSettingsActivity
 import org.matrix.android.sdk.api.session.room.notification.RoomNotificationState
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
@@ -53,6 +55,13 @@ class RoomNotificationSettingsFragment @Inject constructor(
         setupWaitingView()
         observeViewEvents()
     }
+
+    override fun onDestroyView() {
+        views.roomSettingsRecyclerView.cleanup()
+        roomNotificationSettingsController.callback = null
+        super.onDestroyView()
+    }
+
     private fun setupWaitingView() {
         views.waitingView.waitingStatusText.setText(R.string.please_wait)
         views.waitingView.waitingStatusText.isVisible = true
@@ -77,7 +86,7 @@ class RoomNotificationSettingsFragment @Inject constructor(
     }
 
     override fun didSelectAccountSettingsLink() {
-        navigator.openSettings(requireContext())
+        navigator.openSettings(requireContext(), VectorSettingsActivity.EXTRA_DIRECT_ACCESS_NOTIFICATIONS)
     }
 
     private fun renderRoomSummary(state: RoomNotificationSettingsViewState) {

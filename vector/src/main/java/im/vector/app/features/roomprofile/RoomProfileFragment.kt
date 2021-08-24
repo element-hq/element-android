@@ -255,7 +255,7 @@ class RoomProfileFragment @Inject constructor(
 
     override fun onNotificationsClicked() {
         if (BuildConfig.USE_NOTIFICATION_SETTINGS_V2) {
-            roomProfileSharedActionViewModel.post(RoomProfileSharedAction.OpenRoomNotificaitonSettings)
+            roomProfileSharedActionViewModel.post(RoomProfileSharedAction.OpenRoomNotificationSettings)
         } else {
             RoomListQuickActionsBottomSheet
                     .newInstance(roomProfileArgs.roomId, RoomListActionsArgs.Mode.NOTIFICATIONS)

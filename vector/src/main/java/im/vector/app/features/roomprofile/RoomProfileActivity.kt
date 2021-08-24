@@ -113,8 +113,8 @@ class RoomProfileActivity :
                         RoomProfileSharedAction.OpenRoomAliasesSettings         -> openRoomAlias()
                         RoomProfileSharedAction.OpenRoomPermissionsSettings     -> openRoomPermissions()
                         RoomProfileSharedAction.OpenRoomUploads                 -> openRoomUploads()
-                        RoomProfileSharedAction.OpenBannedRoomMembers           -> openBannedRoomMembers()
-                        RoomProfileSharedAction.OpenRoomNotificaitonSettings    -> openRoomNotificationSettings()
+                        RoomProfileSharedAction.OpenBannedRoomMembers        -> openBannedRoomMembers()
+                        RoomProfileSharedAction.OpenRoomNotificationSettings -> openRoomNotificationSettings()
                     }.exhaustive
                 }
                 .disposeOnDestroy()

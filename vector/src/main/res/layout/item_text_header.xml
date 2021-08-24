@@ -1,25 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/headerText"
+    style="@style/Widget.Vector.TextView.Subtitle"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:paddingVertical="@dimen/layout_vertical_margin"
-    android:paddingHorizontal="@dimen/layout_horizontal_margin">
-
-    <TextView
-        android:id="@+id/headerText"
-        style="@style/Widget.Vector.TextView.Subtitle"
-        android:textStyle="bold"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="start"
-        android:textColor="?vctr_content_secondary"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintHorizontal_bias="0"
-        tools:text="@string/room_settings_room_notifications_notify_me" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    android:paddingStart="@dimen/layout_horizontal_margin"
+    android:paddingTop="@dimen/layout_vertical_margin"
+    android:paddingEnd="@dimen/layout_horizontal_margin"
+    android:paddingBottom="@dimen/layout_vertical_margin"
+    android:textColor="?vctr_content_secondary"
+    android:textStyle="bold"
+    tools:text="@string/room_settings_room_notifications_notify_me" />
