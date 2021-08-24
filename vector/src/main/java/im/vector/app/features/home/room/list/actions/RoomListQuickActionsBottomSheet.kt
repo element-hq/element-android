@@ -25,10 +25,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
+import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
+import im.vector.app.core.platform.showOptimizedSnackbar
 import im.vector.app.databinding.BottomSheetGenericListBinding
 import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.roomprofile.notifications.RoomNotificationSettingsAction
@@ -57,20 +61,17 @@ class RoomListQuickActionsBottomSheet :
         VectorBaseBottomSheetDialogFragment<BottomSheetGenericListBinding>(),
         RoomListQuickActionsEpoxyController.Listener {
 
-    interface Listener {
-        fun handleFailure(throwable: Throwable)
-    }
     private lateinit var sharedActionViewModel: RoomListQuickActionsSharedActionViewModel
     @Inject lateinit var sharedViewPool: RecyclerView.RecycledViewPool
     @Inject lateinit var roomNotificationSettingsViewModelFactory: RoomNotificationSettingsViewModel.Factory
     @Inject lateinit var roomListActionsEpoxyController: RoomListQuickActionsEpoxyController
     @Inject lateinit var navigator: Navigator
+    @Inject lateinit var errorFormatter: ErrorFormatter
 
     private val roomListActionsArgs: RoomListActionsArgs by args()
     private val viewModel: RoomNotificationSettingsViewModel by fragmentViewModel(RoomNotificationSettingsViewModel::class)
 
     override val showExpanded = true
-    var listener: Listener? = null
 
     override fun injectWith(injector: ScreenComponent) {
         injector.inject(this)
@@ -93,7 +94,7 @@ class RoomListQuickActionsBottomSheet :
 
         viewModel.observeViewEvents {
             when (it) {
-                is RoomNotificationSettingsViewEvents.Failure -> listener?.handleFailure(it.throwable)
+                is RoomNotificationSettingsViewEvents.Failure -> displayErrorDialog(it.throwable)
             }
         }
     }
@@ -133,5 +134,13 @@ class RoomListQuickActionsBottomSheet :
                 setArguments(RoomListActionsArgs(roomId, mode))
             }
         }
+    }
+
+    private fun displayErrorDialog(throwable: Throwable) {
+        MaterialAlertDialogBuilder(requireActivity())
+                .setTitle(R.string.dialog_title_error)
+                .setMessage(errorFormatter.toHumanReadable(throwable))
+                .setPositiveButton(R.string.ok, null)
+                .show()
     }
 }

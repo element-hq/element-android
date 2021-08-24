@@ -473,16 +473,9 @@ class RoomListFragment @Inject constructor(
             // refresh footer
             footerController.setData(it)
         }
-        val bottomSheet = RoomListQuickActionsBottomSheet
+        RoomListQuickActionsBottomSheet
                 .newInstance(room.roomId, RoomListActionsArgs.Mode.FULL)
-        bottomSheet.listener = object : RoomListQuickActionsBottomSheet.Listener {
-            override fun handleFailure(throwable: Throwable) {
-                showFailure(throwable)
-            }
-        }
-
-        bottomSheet.show(childFragmentManager, "ROOM_LIST_QUICK_ACTIONS")
-
+                .show(childFragmentManager, "ROOM_LIST_QUICK_ACTIONS")
         return true
     }
 
