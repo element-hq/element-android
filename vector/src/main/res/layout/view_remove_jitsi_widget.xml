@@ -65,6 +65,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:src="@drawable/ic_arrow_right"
+            tools:ignore="ContentDescription"
             app:tint="?vctr_content_quaternary" />
 
         <ImageView
@@ -73,6 +74,7 @@
             android:layout_marginStart="8dp"
             android:alpha="0.5"
             android:src="@drawable/ic_arrow_right"
+            tools:ignore="ContentDescription"
             app:tint="?vctr_content_quaternary" />
 
         <ImageView
@@ -81,6 +83,7 @@
             android:layout_marginStart="8dp"
             android:alpha="0.2"
             android:src="@drawable/ic_arrow_right"
+            tools:ignore="ContentDescription"
             app:tint="?vctr_content_quaternary" />
 
     </LinearLayout>
@@ -99,6 +102,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            tools:ignore="ContentDescription"
             android:src="@drawable/ic_call_hangup" />
 
     </FrameLayout>
