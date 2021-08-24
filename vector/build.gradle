@@ -143,8 +143,8 @@ android {
         resValue "bool", "useLoginV2", "false"
 
         // NotificationSettingsV2 is disabled. To be released in conjunction with iOS/Web
-        resValue "bool", "useNotificationSettingsV1", "false"
-        resValue "bool", "useNotificationSettingsV2", "true"
+        resValue "bool", "useNotificationSettingsV1", "true"
+        resValue "bool", "useNotificationSettingsV2", "false"
 
         buildConfigField "im.vector.app.features.crypto.keysrequest.OutboundSessionKeySharingStrategy", "outboundSessionKeySharingStrategy", "im.vector.app.features.crypto.keysrequest.OutboundSessionKeySharingStrategy.WhenTyping"
 

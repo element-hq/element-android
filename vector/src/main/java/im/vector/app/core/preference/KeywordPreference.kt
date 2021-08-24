@@ -25,7 +25,6 @@ import androidx.preference.PreferenceViewHolder
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import im.vector.app.R
-import java.util.SortedSet
 
 class KeywordPreference : VectorPreference {
 
@@ -112,7 +111,6 @@ class KeywordPreference : VectorPreference {
         chip.isClickable = true
         chip.isCheckable = false
         chip.isCloseIconVisible = true
-        chip.clipBounds
         chipGroup.addView(chip)
 
         chip.setOnCloseIconClickListener {

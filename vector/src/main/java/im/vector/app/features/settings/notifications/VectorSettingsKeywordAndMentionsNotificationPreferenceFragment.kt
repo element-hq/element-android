@@ -19,7 +19,6 @@ package im.vector.app.features.settings.notifications
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.lifecycleScope
-import androidx.preference.CheckBoxPreference
 import androidx.preference.Preference
 import im.vector.app.R
 import im.vector.app.core.preference.KeywordPreference
@@ -50,20 +49,24 @@ class VectorSettingsKeywordAndMentionsNotificationPreferenceFragment
         super.bindPref()
         val mentionCategory = findPreference<VectorPreferenceCategory>("SETTINGS_KEYWORDS_AND_MENTIONS")!!
         mentionCategory.isIconSpaceReserved = false
+
         val yourKeywordsCategory = findPreference<VectorPreferenceCategory>("SETTINGS_YOUR_KEYWORDS")!!
         yourKeywordsCategory.isIconSpaceReserved = false
+
         val keywordRules = session.getPushRules().content?.filter { !it.ruleId.startsWith(".") }.orEmpty()
+        val anyEnabledKeywords = keywordRules.any(PushRule::enabled)
+
         val editKeywordPreference = findPreference<KeywordPreference>("SETTINGS_KEYWORD_EDIT")!!
+        editKeywordPreference.isEnabled = anyEnabledKeywords
+
         val keywordPreference = findPreference<VectorCheckboxPreference>("SETTINGS_PUSH_RULE_MESSAGES_CONTAINING_KEYWORDS_PREFERENCE_KEY")!!
         keywordPreference.isIconSpaceReserved = false
-        val anyEnabledKeywords = keywordRules.any(PushRule::enabled)
         keywordPreference.isChecked = anyEnabledKeywords
-        editKeywordPreference.isEnabled = anyEnabledKeywords
+
         keywordPreference.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
             val keywords = editKeywordPreference.keywords
             val newChecked = newValue as Boolean
             displayLoadingView()
-            session.getKeywords()
             updateKeywordPushRules(keywords, newChecked){  result ->
                 hideLoadingView()
                 if (!isAdded) {
@@ -81,8 +84,6 @@ class VectorSettingsKeywordAndMentionsNotificationPreferenceFragment
             false
         }
 
-
-        editKeywordPreference.keywords = session.getKeywords().value.orEmpty()
         editKeywordPreference.listener  = object: KeywordPreference.Listener {
             override fun didAddKeyword(keyword: String) {
                 addKeyword(keyword)

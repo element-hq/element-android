@@ -216,6 +216,7 @@ internal class DefaultPushRuleService @Inject constructor(
     }
 
     override fun getKeywords(): LiveData<Set<String>> {
+        // Keywords are all content rules that don't start with '.'
         val liveData = monarchy.findAllMappedWithChanges(
                 { realm ->
                     PushRulesEntity.where(realm, RuleScope.GLOBAL, RuleSetKey.CONTENT)
