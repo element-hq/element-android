@@ -20,6 +20,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
+import androidx.core.view.children
 import androidx.preference.PreferenceViewHolder
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
@@ -46,6 +47,8 @@ class KeywordPreference : VectorPreference {
 
     var listener: Listener? = null
 
+    var keywordsEnabled = true
+
     private var _keywords: LinkedHashSet<String> = linkedSetOf()
 
     constructor(context: Context) : super(context)
@@ -56,6 +59,12 @@ class KeywordPreference : VectorPreference {
 
     init {
         layoutResource = R.layout.vector_preference_chip_group
+    }
+
+    override fun setEnabled(enabled: Boolean) {
+        super.setEnabled(enabled)
+        keywordsEnabled = enabled
+        notifyChanged()
     }
 
     override fun onBindViewHolder(holder: PreferenceViewHolder) {
@@ -73,6 +82,10 @@ class KeywordPreference : VectorPreference {
         keywords.forEach {
             addChipToGroup(it, chipGroup)
         }
+
+        chipEditText.isEnabled = keywordsEnabled
+        chipGroup.isEnabled = keywordsEnabled
+        chipGroup.children.forEach { it.isEnabled = keywordsEnabled }
 
         chipEditText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId != EditorInfo.IME_ACTION_DONE) {
@@ -102,6 +115,8 @@ class KeywordPreference : VectorPreference {
         chipGroup.addView(chip)
 
         chip.setOnCloseIconClickListener {
+            if (!keywordsEnabled)
+                return@setOnCloseIconClickListener
             _keywords.remove(keyword)
             listener?.didRemoveKeyword(keyword)
             onPreferenceChangeListener?.onPreferenceChange(this, _keywords)

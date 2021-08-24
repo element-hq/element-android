@@ -50,15 +50,14 @@ class VectorSettingsKeywordAndMentionsNotificationPreferenceFragment
     override fun bindPref() {
         super.bindPref()
         val keywordRules = session.getPushRules().content?.filter { !it.ruleId.startsWith(".") }.orEmpty()
-//        val keywords = keywordRules.map(PushRule::ruleId).toSortedSet()
-
+        val editKeywordPreference = findPreference<KeywordPreference>("SETTINGS_KEYWORD_EDIT")!!
         val keywordPreference = findPreference<VectorCheckboxPreference>("SETTINGS_PUSH_RULE_MESSAGES_CONTAINING_KEYWORDS_PREFERENCE_KEY")!!
+
         val anyEnabledKeywords = keywordRules.any(PushRule::enabled)
         keywordPreference.isChecked = anyEnabledKeywords
-        keywordPreference.isEnabled = keywordRules.isNotEmpty()
-        var currentChecked = anyEnabledKeywords
+        editKeywordPreference.isEnabled = anyEnabledKeywords
         keywordPreference.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
-            val keywords = session.getKeywords().value ?: return@OnPreferenceChangeListener false
+            val keywords = editKeywordPreference.keywords
             val newChecked = newValue as Boolean
             displayLoadingView()
             session.getKeywords()
@@ -68,8 +67,8 @@ class VectorSettingsKeywordAndMentionsNotificationPreferenceFragment
                     return@updateKeywordPushRules
                 }
                 result.onSuccess {
-                    currentChecked = newChecked
                     keywordPreference.isChecked = newChecked
+                    editKeywordPreference.isEnabled = newChecked
                 }
                 result.onFailure {
                     refreshDisplay()
@@ -79,11 +78,11 @@ class VectorSettingsKeywordAndMentionsNotificationPreferenceFragment
             false
         }
 
-        val editKeywordPreference = findPreference<KeywordPreference>("SETTINGS_KEYWORD_EDIT")!!
+
         editKeywordPreference.keywords = session.getKeywords().value.orEmpty()
         editKeywordPreference.listener  = object: KeywordPreference.Listener {
             override fun didAddKeyword(keyword: String) {
-                addKeyword(keyword, currentChecked)
+                addKeyword(keyword)
                 scrollToPreference(editKeywordPreference)
             }
 
@@ -126,9 +125,8 @@ class VectorSettingsKeywordAndMentionsNotificationPreferenceFragment
         editKeywordPreference.keywords = keywords
     }
 
-    fun addKeyword(keyword: String, checked: Boolean) {
-        val newIndex = if (checked) NotificationIndex.NOISY else NotificationIndex.OFF
-        val standardAction = getStandardAction(RuleIds.RULE_ID_KEYWORDS, newIndex) ?: return
+    fun addKeyword(keyword: String) {
+        val standardAction = getStandardAction(RuleIds.RULE_ID_KEYWORDS, NotificationIndex.NOISY) ?: return
         val enabled = standardAction != StandardActions.Disabled
         val newActions = standardAction.actions ?: return
         val newRule = PushRule(actions = newActions.toJson(), pattern = keyword, enabled = enabled, ruleId = keyword)
