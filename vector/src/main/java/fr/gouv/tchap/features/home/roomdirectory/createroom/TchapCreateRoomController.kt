@@ -18,7 +18,6 @@ package fr.gouv.tchap.features.home.roomdirectory.createroom
 
 import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.Loading
-import fr.gouv.tchap.android.sdk.api.session.room.model.RoomAccessRules
 import fr.gouv.tchap.core.utils.RoomUtils
 import fr.gouv.tchap.core.utils.TchapRoomType
 import im.vector.app.R
@@ -26,7 +25,6 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.discovery.settingsSectionTitleItem
 import im.vector.app.features.form.formSubmitButtonItem
 import im.vector.app.features.roomdirectory.createroom.CreateRoomViewState
-import im.vector.app.features.roomdirectory.createroom.CreateRoomViewState.RoomVisibilityType
 import javax.inject.Inject
 
 class TchapCreateRoomController @Inject constructor(
