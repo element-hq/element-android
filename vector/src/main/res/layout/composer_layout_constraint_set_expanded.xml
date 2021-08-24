@@ -33,7 +33,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
-        android:contentDescription="@string/avatar"
+        android:importantForAccessibility="no"
         app:layout_constraintBottom_toTopOf="@id/composerRelatedMessageActionIcon"
         app:layout_constraintEnd_toStartOf="@+id/composerRelatedMessageTitle"
         app:layout_constraintStart_toStartOf="parent"

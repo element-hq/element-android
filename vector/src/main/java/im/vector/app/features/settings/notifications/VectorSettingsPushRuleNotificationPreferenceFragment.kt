@@ -22,76 +22,13 @@ import im.vector.app.core.preference.VectorCheckboxPreference
 import im.vector.app.core.utils.toast
 import im.vector.app.features.settings.VectorSettingsBaseFragment
 import kotlinx.coroutines.launch
-import org.matrix.android.sdk.api.pushrules.Action
-import org.matrix.android.sdk.api.pushrules.RuleIds
 import org.matrix.android.sdk.api.pushrules.RuleKind
-import org.matrix.android.sdk.api.pushrules.RuleSetKey
-import org.matrix.android.sdk.api.pushrules.rest.PushRule
 import org.matrix.android.sdk.api.pushrules.rest.PushRuleAndKind
 
 abstract class VectorSettingsPushRuleNotificationPreferenceFragment
     : VectorSettingsBaseFragment() {
 
     abstract val prefKeyToPushRuleId: Map<String, String>
-
-    /**
-     * Create a push rule with the updated checkbox status.
-     *
-     * @param status boolean checkbox status
-     * @return a push rule with the updated flags
-     */
-    fun createNewRule(ruleAndKind: PushRuleAndKind, status: Boolean): PushRule {
-        val safeRule = ruleAndKind.pushRule
-        val safeKind = ruleAndKind.kind
-        val ruleStatusIndex = ruleStatusIndexFor(ruleAndKind)
-
-        return if (status != ruleStatusIndex) {
-            if (safeRule.ruleId == RuleIds.RULE_ID_SUPPRESS_BOTS_NOTIFICATIONS) {
-                if (status) {
-                    safeRule.copy(enabled = true)
-                            .setNotify(true)
-                            .setNotificationSound()
-                } else {
-                    safeRule.copy(enabled = true)
-                            .setNotify(false)
-                            .removeNotificationSound()
-                }
-            } else {
-                if (status) {
-                    safeRule.copy(enabled = true)
-                            .setNotify(true)
-                            .setHighlight(safeKind != RuleSetKey.UNDERRIDE
-                                    && safeRule.ruleId != RuleIds.RULE_ID_INVITE_ME)
-                            .setNotificationSound(
-                                    if (safeRule.ruleId == RuleIds.RULE_ID_CALL) {
-                                        Action.ACTION_OBJECT_VALUE_VALUE_RING
-                                    } else {
-                                        Action.ACTION_OBJECT_VALUE_VALUE_DEFAULT
-                                    }
-                            )
-                } else {
-                    if (safeKind == RuleSetKey.UNDERRIDE || safeRule.ruleId == RuleIds.RULE_ID_SUPPRESS_BOTS_NOTIFICATIONS) {
-                        safeRule.setNotify(false)
-                    } else {
-                        safeRule.copy(enabled = false)
-                    }
-                }
-            }
-        } else {
-            safeRule
-        }
-    }
-
-    /**
-     * @return the bing rule status boolean
-     */
-    private fun ruleStatusIndexFor(ruleAndKind: PushRuleAndKind): Boolean {
-        val rule = ruleAndKind.pushRule
-        if (rule.ruleId == RuleIds.RULE_ID_SUPPRESS_BOTS_NOTIFICATIONS) {
-            return rule.shouldNotify() || rule.shouldNotNotify() && !rule.enabled
-        }
-        return rule.enabled && !rule.shouldNotNotify()
-    }
 
     override fun bindPref() {
         for (preferenceKey in prefKeyToPushRuleId.keys) {

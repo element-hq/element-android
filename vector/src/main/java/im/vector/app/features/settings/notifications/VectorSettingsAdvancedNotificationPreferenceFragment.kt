@@ -38,7 +38,6 @@ class VectorSettingsAdvancedNotificationPreferenceFragment @Inject constructor()
         for (preferenceKey in prefKeyToPushRuleId.keys) {
             val preference = findPreference<VectorPreference>(preferenceKey)
             if (preference is PushRulePreference) {
-                // preference.isEnabled = null != rules && isConnected && pushManager.areDeviceNotificationsAllowed()
                 val ruleAndKind: PushRuleAndKind? = session.getPushRules().findDefaultRule(prefKeyToPushRuleId[preferenceKey])
 
                 if (ruleAndKind == null) {

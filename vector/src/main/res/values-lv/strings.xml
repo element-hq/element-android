@@ -1903,18 +1903,18 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="settings_room_directory_show_all_rooms">Rādīt istabas ar vecuma ierobežojumu</string>
     <string name="notice_room_server_acl_allow_is_empty">🎉 Visi serveri ir aizliegti piedalīties! Šo istabu vairs nevar izmantot.</string>
     <string name="notice_room_server_acl_updated_no_change">Nekas nemainīts.</string>
-    <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• Servers ar vienādu IP tagad ir aizliegts.</string>
-    <string name="notice_room_server_acl_updated_ip_literals_allowed">• Servers ar vienādu IP ir atļauts.</string>
-    <string name="notice_room_server_acl_updated_was_allowed">• Servers vienāds ar %s tika noņemts no atļautā saraksta.</string>
-    <string name="notice_room_server_acl_updated_allowed">• Servers vienāds ar %s tagad ir atļauts.</string>
-    <string name="notice_room_server_acl_updated_was_banned">• Servers vienāds ar %s tika noņemts no aizliegtā saraksta.</string>
-    <string name="notice_room_server_acl_updated_banned">• Servers vienāds ar %s tagad ir aizliegts.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• Serveri ar atbilstošu IP tagad ir aizliegti.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_allowed">• Serveri ar atbilstošu IP ir atļauti.</string>
+    <string name="notice_room_server_acl_updated_was_allowed">• Serveri, kuri atbilst %s tika izņemti no atļauto saraksta.</string>
+    <string name="notice_room_server_acl_updated_allowed">• Serveri, kuri atbilst %s tagad ir atļauti.</string>
+    <string name="notice_room_server_acl_updated_was_banned">• Serveri, kuri atbilst %s tika noņemti no aizliegto/nobanoto saraksta.</string>
+    <string name="notice_room_server_acl_updated_banned">• Serveri, kuri atbilst %s tagad ir aizliegti.</string>
     <string name="notice_room_server_acl_updated_title_by_you">Jūs nomainījāt servera ACL šai istabai.</string>
     <string name="notice_room_server_acl_updated_title">%s nomainīja servera ACL šai istabai.</string>
-    <string name="notice_room_server_acl_set_ip_literals_not_allowed">• Servers ar vienādu IP ir aizliegts.</string>
-    <string name="notice_room_server_acl_set_ip_literals_allowed">• Servers ar vienādu IP ir atļauts.</string>
-    <string name="notice_room_server_acl_set_allowed">• Servers vienāds ar %s ir atļauts.</string>
-    <string name="notice_room_server_acl_set_banned">• Servers vienāds ar %s ir aizliegts.</string>
+    <string name="notice_room_server_acl_set_ip_literals_not_allowed">• Serveri ar vienādām IP ir aizliegti.</string>
+    <string name="notice_room_server_acl_set_ip_literals_allowed">• Serveri ar vienādām IP ir atļauti.</string>
+    <string name="notice_room_server_acl_set_allowed">• Serveri, kuri atbilst %s ir atļauti.</string>
+    <string name="notice_room_server_acl_set_banned">• Serveri, kuri atbilst %s ir nobanoti.</string>
     <string name="notice_room_server_acl_set_title_by_you">Jūs iestatījāt servera ACL šai istabai.</string>
     <string name="notice_room_server_acl_set_title">%s iestatīja servera ACL šai istabai.</string>
     <string name="notice_direct_room_update_by_you">Jūs atjauninājāt šeit.</string>
@@ -2333,4 +2333,10 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
         <item quantity="one">%ds</item>
         <item quantity="other">%di</item>
     </plurals>
+    <string name="missing_permissions_title">Trūkst atļauju</string>
+    <string name="denied_permission_camera">Lai veiktu šo darbību, lūdzu, piešķiriet kamerai atļauju sistēmas iestatījumos.</string>
+    <string name="denied_permission_generic">Lai veiktu šo darbību, trūkst dažu atļauju. Lūdzu, sistēmas Iestatījumos piešķiriet atļaujas.</string>
+    <string name="spaces_header">Vietnes</string>
+    <string name="spaces_invited_header">Uzaicinājumi</string>
+    <string name="suggested_header">Ieteiktās telpas</string>
 </resources>

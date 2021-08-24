@@ -19,4 +19,6 @@ package org.matrix.android.sdk.internal.session.sync
 internal class SyncResponsePostTreatmentAggregator {
     // List of RoomId
     val ephemeralFilesToDelete = mutableListOf<String>()
+    // Map of roomId to directUserId
+    val directChatsToCheck = mutableMapOf<String, String>()
 }

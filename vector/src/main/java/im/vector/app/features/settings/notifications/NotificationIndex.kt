@@ -19,16 +19,16 @@ package im.vector.app.features.settings.notifications
 import org.matrix.android.sdk.api.pushrules.rest.PushRule
 import org.matrix.android.sdk.api.pushrules.toJson
 
-enum class NotificationIndex(val index: Int) {
-    OFF(0),
-    SILENT(1),
-    NOISY(2);
-
-    companion object {
-        fun fromInt(index: Int) = values().first { it.index == index }
-    }
+enum class NotificationIndex {
+    OFF,
+    SILENT,
+    NOISY;
 }
 
+/**
+ * Given a push rule determine the NotificationIndex by comparing it to the static push rule definitions.
+ * Used when determining the selected state of the PushRulePreference.
+ */
 val PushRule.notificationIndex: NotificationIndex? get() =
     NotificationIndex.values().firstOrNull {
         // Get the actions for the index
@@ -39,6 +39,9 @@ val PushRule.notificationIndex: NotificationIndex? get() =
         ruleMatches(this, targetRule)
     }
 
+/**
+ * A check to determine if two push rules should be considered a match.
+ */
 private fun ruleMatches(rule: PushRule, targetRule: PushRule): Boolean {
     // Rules match if both are disabled, or if both are enabled and their highlight/sound/notify actions match up.
     return (!rule.enabled && !targetRule.enabled)
