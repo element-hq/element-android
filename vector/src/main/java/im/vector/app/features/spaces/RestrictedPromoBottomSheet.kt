@@ -66,7 +66,6 @@ class RestrictedPromoBottomSheet : VectorBaseBottomSheetDialogFragment<BottomShe
             views.imageHint.isVisible = false
             views.bottomDescription.isVisible = false
             views.skipButton.isVisible = true
-            views.learnMore.isVisible = true
             views.learnMore.text = getString(R.string.learn_more)
         }
     }

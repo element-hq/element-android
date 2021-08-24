@@ -46,17 +46,17 @@ data class ActiveSpaceViewState(
 class PromoteRestrictedViewModel @AssistedInject constructor(
         @Assisted initialState: ActiveSpaceViewState,
         private val activeSessionHolder: ActiveSessionHolder,
-        private val appStateHandler: AppStateHandler
+        appStateHandler: AppStateHandler
 ) : VectorViewModel<ActiveSpaceViewState, EmptyAction, EmptyViewEvents>(initialState) {
 
     init {
-        appStateHandler.selectedRoomGroupingObservable.distinctUntilChanged().execute {
-            val groupingMethod = it.invoke()?.orNull()
+        appStateHandler.selectedRoomGroupingObservable.distinctUntilChanged().execute { state ->
+            val groupingMethod = state.invoke()?.orNull()
             val isSpaceMode = groupingMethod is RoomGroupingMethod.BySpace
             val currentSpace = (groupingMethod as? RoomGroupingMethod.BySpace)?.spaceSummary
             val canManage = currentSpace?.roomId?.let { roomId ->
                 activeSessionHolder.getSafeActiveSession()
-                        ?.getRoom(currentSpace.roomId)
+                        ?.getRoom(roomId)
                         ?.getStateEvent(EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.NoCondition)
                         ?.content?.toModel<PowerLevelsContent>()?.let {
                             PowerLevelsHelper(it).isUserAllowedToSend(activeSessionHolder.getActiveSession().myUserId, true, EventType.STATE_SPACE_CHILD)
