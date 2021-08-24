@@ -495,9 +495,9 @@
     <string name="view_decrypted_source">مشاهده منبع رمزگشایی شده</string>
     <string name="action_historical">تاریخی</string>
     <string name="auth_invalid_user_name">نام کاربری تنها می‌تواند شامل حروف انگلیسی، اعداد، نقطه، خط زیر و خط تیره باشد</string>
-    <string name="auth_threepid_warning_message">ثبت‌نام با ورود همزمان ایمیل و شماره تلفن در حال حاضر پشتیبانی نمی‌شود. تنها شماره تلفن شما برای حساب‌تان ثبت خواهد شد.
+    <string name="auth_threepid_warning_message">تا هنگام ایجاد رابط برنامه‌نویسی، هنوز ثبت‌نام هم‌زمان با رایانامه و شماره تلفن پشتیبانی نمی‌شود. تنها شماره تلفنتان برای حساب ثبت خواهد شد.
 \n
-\nمی‌توانید در ادامه ایمیل خود را در تنظیمات برنامه به پروفایل خود اضافه کنید.</string>
+\nمی‌توانید در تنظیمات، رایانامه‌تان را به نمایه‌تان بیفزایید.</string>
     <string name="auth_recaptcha_message">این کارساز خانگی می‌خواهد مطمئن شود که روبات نیستید</string>
     <string name="auth_username_in_use">نام کاربری قبلاً استفاده شده است</string>
     <string name="e2e_re_request_encryption_key"><u>بازدرخواست کلیدهای رمزنگاری</u> از دیگر نشست‌هایتان.</string>
@@ -1880,7 +1880,7 @@
 \n- اتصال اینترنت دستگاه
 \n
 \nما توصیه می‌کنیم گذرواژه و کلید بازیابی خود را بلافاصله در تنظیمات تغییر دهید.</string>
-    <string name="verify_cancel_other">اگر اکنون انصراف دهید، %1$s (%2$s) را تأیید نخواهید کرد. البته می‌توانید از طریق پروفایل کاربری آنها نیز این کار را انجام دهید.</string>
+    <string name="verify_cancel_other">اگر اکنون انصراف دهید، %1$s (%2$s) را تأیید نخواهید کرد. دوباره در نمایه‌اش آغاز کنید.</string>
     <string name="verify_cancel_self_verification_from_trusted">اگر لغو کنید، نمی توانید پیام های رمزگذاری شده را در دستگاه جدید خود بخوانید و سایر کاربران به آن اعتماد نخواهند کرد</string>
     <string name="verify_cancel_self_verification_from_untrusted">در صورت لغو ، نمی توانید پیام های رمزشده را در این دستگاه بخوانید و سایر کاربران به آن اعتماد نخواهند کرد</string>
     <string name="verify_new_session_compromized">ممکن است اکانت شما هک شده باشد</string>
