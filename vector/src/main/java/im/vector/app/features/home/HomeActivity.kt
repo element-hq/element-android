@@ -143,6 +143,8 @@ class HomeActivity :
         }
     }
 
+    override fun getCoordinatorLayout() = views.coordinatorLayout
+
     override fun getBinding() = ActivityHomeBinding.inflate(layoutInflater)
 
     override fun injectWith(injector: ScreenComponent) {
