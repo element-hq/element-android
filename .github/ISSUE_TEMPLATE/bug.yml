@@ -56,6 +56,14 @@ body:
       placeholder: e.g. Element version 1.7.34, olm version 3.2.3 from F-Droid
     validations:
       required: false
+  - type: input
+    id: homeserver
+    attributes:
+      label: Homeserver
+      description: Which server is your account registered on?
+      placeholder: e.g. matrix.org
+    validations:
+      required: false
   - type: dropdown
     id: rageshake
     attributes:
