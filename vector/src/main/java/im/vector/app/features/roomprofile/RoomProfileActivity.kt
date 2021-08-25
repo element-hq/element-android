@@ -39,6 +39,7 @@ import im.vector.app.features.roomprofile.banned.RoomBannedMemberListFragment
 import im.vector.app.features.roomprofile.members.RoomMemberListFragment
 import im.vector.app.features.roomprofile.settings.RoomSettingsFragment
 import im.vector.app.features.roomprofile.alias.RoomAliasFragment
+import im.vector.app.features.roomprofile.notifications.RoomNotificationSettingsFragment
 import im.vector.app.features.roomprofile.permissions.RoomPermissionsFragment
 import im.vector.app.features.roomprofile.uploads.RoomUploadsFragment
 import javax.inject.Inject
@@ -107,12 +108,13 @@ class RoomProfileActivity :
                 .observe()
                 .subscribe { sharedAction ->
                     when (sharedAction) {
-                        RoomProfileSharedAction.OpenRoomMembers             -> openRoomMembers()
-                        RoomProfileSharedAction.OpenRoomSettings            -> openRoomSettings()
-                        RoomProfileSharedAction.OpenRoomAliasesSettings     -> openRoomAlias()
-                        RoomProfileSharedAction.OpenRoomPermissionsSettings -> openRoomPermissions()
-                        RoomProfileSharedAction.OpenRoomUploads             -> openRoomUploads()
-                        RoomProfileSharedAction.OpenBannedRoomMembers       -> openBannedRoomMembers()
+                        RoomProfileSharedAction.OpenRoomMembers                 -> openRoomMembers()
+                        RoomProfileSharedAction.OpenRoomSettings                -> openRoomSettings()
+                        RoomProfileSharedAction.OpenRoomAliasesSettings         -> openRoomAlias()
+                        RoomProfileSharedAction.OpenRoomPermissionsSettings     -> openRoomPermissions()
+                        RoomProfileSharedAction.OpenRoomUploads                 -> openRoomUploads()
+                        RoomProfileSharedAction.OpenBannedRoomMembers        -> openBannedRoomMembers()
+                        RoomProfileSharedAction.OpenRoomNotificationSettings -> openRoomNotificationSettings()
                     }.exhaustive
                 }
                 .disposeOnDestroy()
@@ -160,6 +162,10 @@ class RoomProfileActivity :
 
     private fun openBannedRoomMembers() {
         addFragmentToBackstack(R.id.simpleFragmentContainer, RoomBannedMemberListFragment::class.java, roomProfileArgs)
+    }
+
+    private fun openRoomNotificationSettings() {
+        addFragmentToBackstack(R.id.simpleFragmentContainer, RoomNotificationSettingsFragment::class.java, roomProfileArgs)
     }
 
     override fun configure(toolbar: MaterialToolbar) {

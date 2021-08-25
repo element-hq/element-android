@@ -1046,6 +1046,8 @@
     <string name="room_settings_all_messages">All messages</string>
     <string name="room_settings_mention_only">Mentions only</string>
     <string name="room_settings_mute">Mute</string>
+    <string name="room_settings_mention_and_keyword_only">Mentions &amp; Keywords only</string>
+    <string name="room_settings_none">None</string>
     <string name="room_settings_favourite">Favourite</string>
     <string name="room_settings_de_prioritize">De-prioritize</string>
     <string name="room_settings_direct_chat">Direct Chat</string>
@@ -1441,6 +1443,10 @@
     <string name="room_settings_category_access_visibility_title">Access and visibility</string>
     <string name="room_settings_directory_visibility">List this room in room directory</string>
     <string name="room_settings_room_notifications_title">Notifications</string>
+    <string name="room_settings_room_notifications_notify_me">Notify me for</string>
+    <string name="room_settings_room_notifications_encryption_notice">Please note that mentions &amp; keyword notifications are not available in encrypted rooms on mobile.</string>
+    <string name="room_settings_room_notifications_manage_notifications">You can manage notifications in %1$s.</string>
+    <string name="room_settings_room_notifications_account_settings">Account settings</string>
     <string name="room_settings_room_access_rules_pref_title">Room Access</string>
     <string name="room_settings_room_read_history_rules_pref_title">Room History Readability</string>
     <string name="room_settings_room_read_history_rules_pref_dialog_title">Who can read history?</string>
