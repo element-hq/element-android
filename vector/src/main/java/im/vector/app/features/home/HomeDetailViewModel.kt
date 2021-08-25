@@ -281,21 +281,16 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
 
         viewModelScope.launch {
             if (!token.isNullOrEmpty()) {
-                try {
-                    room.sendStateEvent(
-                            eventType = EventType.STATE_ROOM_THIRD_PARTY_INVITE,
-                            stateKey = token,
-                            body = emptyMap()
-                    )
-
-                    room.leave()
-                } catch (failure: Throwable) {
-                    throw failure
-                }
+                room.sendStateEvent(
+                        eventType = EventType.STATE_ROOM_THIRD_PARTY_INVITE,
+                        stateKey = token,
+                        body = emptyMap()
+                )
             } else {
                 Timber.d("unable to revoke invite (no pending invite)")
-                tryOrNull { room.leave() }
             }
+
+            room.leave()
         }
     }
 
