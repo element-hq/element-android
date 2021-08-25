@@ -45,7 +45,7 @@ private val loggerTag = LoggerTag("WebRtcCallManager", LoggerTag.VOIP)
 @Singleton
 @Suppress("UNUSED_PARAMETER")
 class WebRtcCallManager @Inject constructor(
-        context: Context,
+        context: Context
 ) : CallListener, LifecycleObserver {
 
     interface CurrentCallListener {

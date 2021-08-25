@@ -45,7 +45,7 @@ class JitsiService @Inject constructor(
                 "type" to WidgetType.Jitsi.legacy,
                 "data" to mapOf(
                         "domain" to jitsiDomain,
-                        "isAudioOnly" to !withVideo,
+                        "isAudioOnly" to !withVideo
                 ),
                 "creatorUserId" to session.myUserId,
                 "id" to widgetId,

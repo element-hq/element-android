@@ -31,7 +31,7 @@ class WebRtcCall(
         val mxCall: MxCall,
         // This is where the call is placed from an ui perspective.
         // In case of virtual room, it can differs from the signalingRoomId.
-        val nativeRoomId: String,
+        val nativeRoomId: String
 ) : MxCall.StateListener {
 
     interface Listener : MxCall.StateListener {
