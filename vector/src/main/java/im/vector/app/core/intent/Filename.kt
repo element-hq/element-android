@@ -25,7 +25,8 @@ fun getFilenameFromUri(context: Context?, uri: Uri): String? {
         val cursor = context.contentResolver.query(uri, null, null, null, null)
         cursor?.use {
             if (it.moveToFirst()) {
-                return it.getString(it.getColumnIndex(OpenableColumns.DISPLAY_NAME))
+                val index = it.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+                if (index >= 0) return it.getString(index)
             }
         }
     }

@@ -2873,7 +2873,7 @@
     <string name="upgrade_room_no_power_to_manage">Ti serve il permesso per aggiornare una stanza</string>
     <string name="upgrade_room_update_parent_space">Aggiorna il padre dello spazio automaticamente</string>
     <string name="upgrade_room_auto_invite">Invita utenti automaticamente</string>
-    <string name="upgrade_public_room_from_to">Aggiornerai questa stanza dalla %s alla %s.</string>
+    <string name="upgrade_public_room_from_to">Aggiornerai questa stanza dalla %1$s alla %2$s.</string>
     <string name="upgrade_room_warning">L\'aggiornamento di una stanza è un\'azione avanzata e solitamente è consigliata quando una stanza è instabile a causa di errori, funzionalità mancanti o vulnerabilità di sicurezza.
 \nDi solito influisce solo su come la stanza viene elaborata sul server.</string>
     <string name="upgrade_private_room">Aggiorna stanza privata</string>

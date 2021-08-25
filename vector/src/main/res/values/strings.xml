@@ -3470,7 +3470,7 @@
     <string name="upgrade_public_room">Upgrade public room</string>
     <string name="upgrade_private_room">Upgrade private room</string>
     <string name="upgrade_room_warning">Upgrading a room is an advanced action and is usually recommended when a room is unstable due to bugs, missing features or security vulnerabilities.\nThis usually only affects how the room is processed on the server.</string>
-    <string name="upgrade_public_room_from_to">You\'ll upgrade this room from %s to %s.</string>
+    <string name="upgrade_public_room_from_to">You\'ll upgrade this room from %1$s to %2$s.</string>
     <string name="upgrade_room_auto_invite">Automatically invite users</string>
     <string name="upgrade_room_update_parent_space">Automatically update space parent</string>
     <string name="upgrade_room_no_power_to_manage">You need permission to upgrade a room</string>

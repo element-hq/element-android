@@ -2890,7 +2890,7 @@
     <string name="upgrade_room_no_power_to_manage">Você precisa de permissão para fazer upgrade de uma sala</string>
     <string name="upgrade_room_update_parent_space">Fazer update de pai de espaço automaticamente</string>
     <string name="upgrade_room_auto_invite">Convidar usuárias(os) automaticamente</string>
-    <string name="upgrade_public_room_from_to">Você vai fazer upgrade desta sala de %s para %s.</string>
+    <string name="upgrade_public_room_from_to">Você vai fazer upgrade desta sala de %1$s para %2$s.</string>
     <string name="upgrade_room_warning">Fazer upgrade de uma sala é uma ação avançada e é geralmente recomendado quando uma sala está instável devido a bugs, funcionalidades faltando ou vulnerabilidades de segurança.
 \nIsto geralmente só afeta como a sala é processada no servidor.</string>
     <string name="upgrade_private_room">Fazer upgrade de sala privada</string>

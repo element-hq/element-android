@@ -2827,7 +2827,7 @@
     <string name="upgrade_room_no_power_to_manage">Vous devez avoir le droit de mettre à jour ce salon</string>
     <string name="upgrade_room_update_parent_space">Mettre à jour automatiquement l’espace parent</string>
     <string name="upgrade_room_auto_invite">Inviter automatiquement des utilisateurs</string>
-    <string name="upgrade_public_room_from_to">Vous allez mettre à jour ce salon de %s à %s.</string>
+    <string name="upgrade_public_room_from_to">Vous allez mettre à jour ce salon de %1$s à %2$s.</string>
     <string name="upgrade_room_warning">La mise-à-jour d’un salon est une action avancée et n’est normalement recommandé que si un salon est instable à cause de bogues, fonctionnalités manquantes, ou failles de sécurité.
 \nCela n’affecte normalement que la manière dont le salon est géré par le serveur.</string>
     <string name="upgrade_private_room">Mettre à jour un salon privé</string>

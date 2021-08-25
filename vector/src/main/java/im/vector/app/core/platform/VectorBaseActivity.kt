@@ -16,6 +16,7 @@
 
 package im.vector.app.core.platform
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.res.Configuration
@@ -425,6 +426,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), HasSc
      * Force to render the activity in fullscreen
      */
     @Suppress("DEPRECATION")
+    @SuppressLint("WrongConstant")
     private fun setFullScreen() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             // New API instead of SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN and SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION

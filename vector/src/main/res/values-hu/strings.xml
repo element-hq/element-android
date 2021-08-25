@@ -2825,7 +2825,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="upgrade_room_no_power_to_manage">A szoba fejlesztéséhez engedélyre van szükséged</string>
     <string name="upgrade_room_update_parent_space">Szülő tér automatikus frissítése</string>
     <string name="upgrade_room_auto_invite">Felhasználók automatikus meghívása</string>
-    <string name="upgrade_public_room_from_to">A szobát fejleszted %s verzióról %s verzióra.</string>
+    <string name="upgrade_public_room_from_to">A szobát fejleszted %1$s verzióról %2$s verzióra.</string>
     <string name="upgrade_room_warning">A szoba fejlesztése haladó művelet és általában akkor ajánlott, ha a szoba valami hiba miatt instabil, hiányzik belőle valamilyen funkció vagy biztonsági hiányosság van benne.
 \nEz általában a szoba szerveren való feldolgozásának módját érinti.</string>
     <string name="upgrade_private_room">Privát szoba fejlesztése</string>
