@@ -58,7 +58,7 @@ class ShortcutCreator @Inject constructor(
     }
 
     @WorkerThread
-    fun create(roomSummary: RoomSummary): ShortcutInfoCompat {
+    fun create(roomSummary: RoomSummary, rank: Int = 1): ShortcutInfoCompat {
         val intent = RoomDetailActivity.shortcutIntent(context, roomSummary.roomId)
         val bitmap = try {
             avatarRenderer.shortcutDrawable(GlideApp.with(context), roomSummary.toMatrixItem(), iconSize)
@@ -70,6 +70,7 @@ class ShortcutCreator @Inject constructor(
                 .setIcon(bitmap?.toProfileImageIcon())
                 .setIntent(intent)
                 .setLongLived(true)
+                .setRank(rank)
 
                 // Make it show up in the direct share menu
                 .setCategories(setOf(

@@ -58,9 +58,9 @@ class ShortcutsHandler @Inject constructor(
                             .filter { !roomIds.contains(it) }
                     ShortcutManagerCompat.removeLongLivedShortcuts(context, deadShortcutIds)
 
-                    val shortcuts = rooms
-                            .asReversed()
-                            .map { shortcutCreator.create(it) }
+                    val shortcuts = rooms.mapIndexed { index, room ->
+                        shortcutCreator.create(room, index)
+                    }
 
                     shortcuts.forEach { shortcut ->
                         ShortcutManagerCompat.pushDynamicShortcut(context, shortcut)
