@@ -294,7 +294,7 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
                 }
             } else {
                 Timber.d("unable to revoke invite (no pending invite)")
-                room.leave()
+                tryOrNull { room.leave() }
             }
         }
     }
