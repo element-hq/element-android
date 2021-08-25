@@ -288,7 +288,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
         MaterialAlertDialogBuilder(this)
                 .setTitle(title)
                 .setMessage(description)
-                .setNegativeButton(R.string.ok) { _, _ -> }
+                .setNegativeButton(R.string.ok, null)
                 .setOnDismissListener {
                     finish()
                 }
