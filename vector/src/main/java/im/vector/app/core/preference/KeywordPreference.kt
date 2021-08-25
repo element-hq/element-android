@@ -107,9 +107,6 @@ class KeywordPreference : VectorPreference {
     private fun addChipToGroup(keyword: String, chipGroup: ChipGroup) {
         val chip = Chip(context, null, R.attr.vctr_keyword_style)
         chip.text = keyword
-        chip.isClickable = true
-        chip.isCheckable = false
-        chip.isCloseIconVisible = true
         chipGroup.addView(chip)
 
         chip.setOnCloseIconClickListener {
