@@ -137,9 +137,7 @@ class VectorCallViewModel @AssistedInject constructor(
     private val currentCallListener = object : WebRtcCallManager.CurrentCallListener {
 
         override fun onCurrentCallChange(call: WebRtcCall?) {
-            if (call == null) {
-                _viewEvents.post(VectorCallViewEvents.DismissNoCall)
-            } else {
+            if (call != null) {
                 updateOtherKnownCall(call)
             }
         }

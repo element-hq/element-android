@@ -77,7 +77,7 @@ internal class LocalEchoRepository @Inject constructor(@SessionDatabase private 
         val timelineEvent = timelineEventMapper.map(timelineEventEntity)
         timelineInput.onLocalEchoCreated(roomId = roomId, timelineEvent = timelineEvent)
         taskExecutor.executorScope.asyncTransaction(monarchy) { realm ->
-            val eventInsertEntity = EventInsertEntity(event.eventId, event.type).apply {
+            val eventInsertEntity = EventInsertEntity(event.eventId, event.type, canBeProcessed = true).apply {
                 this.insertType = EventInsertType.LOCAL_ECHO
             }
             realm.insert(eventInsertEntity)

@@ -106,6 +106,7 @@ import im.vector.app.features.roomprofile.RoomProfileFragment
 import im.vector.app.features.roomprofile.alias.RoomAliasFragment
 import im.vector.app.features.roomprofile.banned.RoomBannedMemberListFragment
 import im.vector.app.features.roomprofile.members.RoomMemberListFragment
+import im.vector.app.features.roomprofile.notifications.RoomNotificationSettingsFragment
 import im.vector.app.features.roomprofile.permissions.RoomPermissionsFragment
 import im.vector.app.features.roomprofile.settings.RoomSettingsFragment
 import im.vector.app.features.roomprofile.settings.joinrule.RoomJoinRuleChooseRestrictedFragment
@@ -716,6 +717,11 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(RoomBannedMemberListFragment::class)
     fun bindRoomBannedMemberListFragment(fragment: RoomBannedMemberListFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(RoomNotificationSettingsFragment::class)
+    fun bindRoomNotificationSettingsFragment(fragment: RoomNotificationSettingsFragment): Fragment
 
     @Binds
     @IntoMap

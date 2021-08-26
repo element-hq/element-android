@@ -30,6 +30,7 @@ import android.util.Rational
 import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
+import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import androidx.core.view.isInvisible
@@ -66,6 +67,7 @@ import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.session.call.CallState
 import org.matrix.android.sdk.api.session.call.MxPeerConnectionState
 import org.matrix.android.sdk.api.session.call.TurnServerResponse
+import org.matrix.android.sdk.api.session.room.model.call.EndCallReason
 import org.webrtc.EglBase
 import org.webrtc.RendererCommon
 import timber.log.Timber
@@ -134,6 +136,12 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
 
         callViewModel.subscribe(this) {
             renderState(it)
+        }
+
+        callViewModel.asyncSubscribe(this, VectorCallViewState::callState) {
+            if (it is CallState.Ended) {
+                handleCallEnded(it)
+            }
         }
 
         callViewModel.viewEvents
@@ -321,9 +329,16 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                 }
             }
             is CallState.Ended     -> {
-                finish()
+                views.fullscreenRenderer.isVisible = false
+                views.pipRendererWrapper.isVisible = false
+                views.callInfoGroup.isVisible = true
+                views.callToolbar.setSubtitle(R.string.call_ended)
+                configureCallInfo(state)
             }
-            null                   -> {
+            else                   -> {
+                views.fullscreenRenderer.isVisible = false
+                views.pipRendererWrapper.isVisible = false
+                views.callInfoGroup.isInvisible = true
             }
         }
     }
@@ -343,7 +358,6 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
             is CallState.Answering -> {
                 views.fullscreenRenderer.isVisible = false
                 views.callInfoGroup.isVisible = false
-                // showLoading()
             }
             is CallState.Connected -> {
                 if (callState.iceConnectionState == MxPeerConnectionState.CONNECTED) {
@@ -358,15 +372,45 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                         views.callInfoGroup.isVisible = false
                     }
                 } else {
-                    // showLoading()
+                    views.callInfoGroup.isVisible = false
                 }
             }
-            is CallState.Ended     -> {
-                finish()
-            }
-            null                   -> {
+            else                   -> {
+                views.fullscreenRenderer.isVisible = false
+                views.callInfoGroup.isVisible = false
             }
         }
+    }
+
+    private fun handleCallEnded(callState: CallState.Ended) {
+        if (isInPictureInPictureModeSafe()) {
+            val startIntent = Intent(this, VectorCallActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
+            }
+            startActivity(startIntent)
+        }
+        when (callState.reason) {
+            EndCallReason.USER_BUSY      -> {
+                showEndCallDialog(R.string.call_ended_user_busy_title, R.string.call_ended_user_busy_description)
+            }
+            EndCallReason.INVITE_TIMEOUT -> {
+                showEndCallDialog(R.string.call_ended_invite_timeout_title, R.string.call_error_user_not_responding)
+            }
+            else                         -> {
+                finish()
+            }
+        }
+    }
+
+    private fun showEndCallDialog(@StringRes title: Int, @StringRes description: Int) {
+        MaterialAlertDialogBuilder(this)
+                .setTitle(title)
+                .setMessage(description)
+                .setNegativeButton(R.string.ok, null)
+                .setOnDismissListener {
+                    finish()
+                }
+                .show()
     }
 
     private fun configureCallInfo(state: VectorCallViewState, blurAvatar: Boolean = false) {
@@ -473,9 +517,6 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
     private fun handleViewEvents(event: VectorCallViewEvents?) {
         Timber.tag(loggerTag.value).v("handleViewEvents $event")
         when (event) {
-            VectorCallViewEvents.DismissNoCall             -> {
-                finish()
-            }
             is VectorCallViewEvents.ConnectionTimeout      -> {
                 onErrorTimoutConnect(event.turn)
             }
@@ -498,7 +539,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
         // TODO ask to use default stun, etc...
         MaterialAlertDialogBuilder(this)
                 .setTitle(R.string.call_failed_no_connection)
-                .setMessage(getString(R.string.call_failed_no_connection_description))
+                .setMessage(R.string.call_failed_no_connection_description)
                 .setNegativeButton(R.string.ok) { _, _ ->
                     callViewModel.handle(VectorCallViewActions.EndCall)
                 }
