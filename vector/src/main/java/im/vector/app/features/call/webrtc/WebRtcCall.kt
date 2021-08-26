@@ -39,7 +39,9 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.ReplaySubject
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -91,6 +93,7 @@ private const val STREAM_ID = "userMedia"
 private const val AUDIO_TRACK_ID = "${STREAM_ID}a0"
 private const val VIDEO_TRACK_ID = "${STREAM_ID}v0"
 private val DEFAULT_AUDIO_CONSTRAINTS = MediaConstraints()
+private const val INVITE_TIMEOUT_IN_MS = 60_000L
 
 private val loggerTag = LoggerTag("WebRtcCall", LoggerTag.VOIP)
 
@@ -164,6 +167,8 @@ class WebRtcCall(
             }
         }
     }
+
+    private var inviteTimeout: Deferred<Unit>? = null
 
     // Mute status
     var micMuted = false
@@ -239,6 +244,10 @@ class WebRtcCall(
                 if (mxCall.state == CallState.CreateOffer) {
                     // send offer to peer
                     mxCall.offerSdp(sessionDescription.description)
+                    inviteTimeout = async {
+                        delay(INVITE_TIMEOUT_IN_MS)
+                        endCall(EndCallReason.INVITE_TIMEOUT)
+                    }
                 } else {
                     mxCall.negotiate(sessionDescription.description, SdpType.OFFER)
                 }
@@ -807,7 +816,7 @@ class WebRtcCall(
                 return@launch
             }
             val reject = mxCall.state is CallState.LocalRinging
-            terminate(EndCallReason.USER_HANGUP, reject)
+            terminate(reason, reject)
             if (reject) {
                 mxCall.reject()
             } else {
@@ -824,6 +833,8 @@ class WebRtcCall(
             val cameraManager = context.getSystemService<CameraManager>()!!
             cameraManager.unregisterAvailabilityCallback(cameraAvailabilityCallback)
         }
+        inviteTimeout?.cancel()
+        inviteTimeout = null
         mxCall.state = CallState.Ended(reason ?: EndCallReason.USER_HANGUP)
         release()
         onCallEnded(callId, reason ?: EndCallReason.USER_HANGUP, rejected)
@@ -845,6 +856,8 @@ class WebRtcCall(
     }
 
     fun onCallAnswerReceived(callAnswerContent: CallAnswerContent) {
+        inviteTimeout?.cancel()
+        inviteTimeout = null
         sessionScope?.launch(dispatcher) {
             Timber.tag(loggerTag.value).v("onCallAnswerReceived ${callAnswerContent.callId}")
             val sdp = SessionDescription(SessionDescription.Type.ANSWER, callAnswerContent.answer.sdp)
