@@ -31,7 +31,7 @@ internal abstract class TchapAccountValidityModule {
         @JvmStatic
         @Provides
         @SessionScope
-        fun providesUsersInfoAPI(retrofit: Retrofit): AccountValidityAPI {
+        fun providesAccountValidityAPI(retrofit: Retrofit): AccountValidityAPI {
             return retrofit.create(AccountValidityAPI::class.java)
         }
     }
