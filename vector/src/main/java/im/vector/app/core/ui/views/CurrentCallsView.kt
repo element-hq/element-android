@@ -69,7 +69,7 @@ class CurrentCallsView @JvmOverloads constructor(
                 }
             }
         } else {
-            resources.getString(R.string.call_multiple_active, calls.size)
+            resources.getQuantityString(R.plurals.call_active_status, calls.size, calls.size)
         }
         views.currentCallsInfo.text = resources.getString(R.string.call_tap_to_return, tapToReturnFormat)
     }

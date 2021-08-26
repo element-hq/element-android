@@ -326,7 +326,7 @@ class RoomDetailFragment @Inject constructor(
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        lifecycle.addObserver(JitsiBroadcastEventObserver(vectorBaseActivity, this::onBroadcastEvent))
+        lifecycle.addObserver(JitsiBroadcastEventObserver(vectorBaseActivity, this::onBroadcastJitsiEvent))
         super.onViewCreated(view, savedInstanceState)
         sharedActionViewModel = activityViewModelProvider.get(MessageSharedActionViewModel::class.java)
         knownCallsViewModel = activityViewModelProvider.get(SharedKnownCallsViewModel::class.java)
@@ -459,8 +459,8 @@ class RoomDetailFragment @Inject constructor(
         JitsiBroadcastEmitter(vectorBaseActivity).emitConferenceEnded()
     }
 
-    private fun onBroadcastEvent(event: BroadcastEvent) {
-        roomDetailViewModel.handle(RoomDetailAction.UpdateJoinJitsiCallStatus(event))
+    private fun onBroadcastJitsiEvent(jitsiEvent: BroadcastEvent) {
+        roomDetailViewModel.handle(RoomDetailAction.UpdateJoinJitsiCallStatus(jitsiEvent))
     }
 
     private fun onCannotRecord() {
@@ -872,8 +872,7 @@ class RoomDetailFragment @Inject constructor(
         joinConfItem.actionView.findViewById<MaterialButton>(R.id.join_conference_button).also { joinButton ->
             joinButton.setOnClickListener { roomDetailViewModel.handle(RoomDetailAction.JoinJitsiCall) }
             val colorFrom = ContextCompat.getColor(joinButton.context, R.color.palette_element_green)
-            // This is a special color, not defined in the palette
-            val colorTo = Color.parseColor("#0BAC7E")
+            val colorTo = ContextCompat.getColor(joinButton.context, R.color.join_conference_animated_color)
             // Animate button color to highlight
             ValueAnimator.ofObject(ArgbEvaluator(), colorFrom, colorTo).apply {
                 repeatMode = ValueAnimator.REVERSE

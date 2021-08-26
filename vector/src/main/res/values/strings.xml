@@ -3302,12 +3302,10 @@
         <item quantity="other">1 active call (%1$s) · %2$d paused calls</item>
     </plurals>
     <plurals name="call_active_status">
-        <item quantity="one">Active call (%1$s)</item>
-        <item quantity="other">%1$d active calls</item>
+        <item quantity="one">Active call ·</item>
+        <item quantity="other">%1$d active calls ·</item>
     </plurals>
-
     <string name="call_one_active">Active call (%1$s) ·</string>
-    <string name="call_multiple_active">%1$d active calls ·</string>
     <string name="call_tap_to_return">%1$s Tap to return</string>
 
     <string name="call_transfer_consult_first">Consult first</string>

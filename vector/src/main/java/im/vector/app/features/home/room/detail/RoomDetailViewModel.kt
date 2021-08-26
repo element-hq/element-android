@@ -368,7 +368,7 @@ class RoomDetailViewModel @AssistedInject constructor(
             }
             return@withState
         }
-        when (action.broadcastEvent.type) {
+        when (action.jitsiEvent.type) {
             BroadcastEvent.Type.CONFERENCE_JOINED,
             BroadcastEvent.Type.CONFERENCE_TERMINATED -> {
                 setState { copy(jitsiState = jitsiState.copy(hasJoined = activeConferenceHolder.isJoined(jitsiState.confId))) }
