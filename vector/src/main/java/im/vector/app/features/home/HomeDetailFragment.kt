@@ -18,6 +18,7 @@ package im.vector.app.features.home
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
@@ -117,6 +118,12 @@ class HomeDetailFragment @Inject constructor(
         }
 
     override fun getMenuRes() = R.menu.tchap_menu_home
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        super.onPrepareOptionsMenu(menu)
+        val isSearchMode = views.homeSearchView.isVisible
+        menu.findItem(R.id.menu_home_search_action)?.setIcon(if(isSearchMode) 0 else R.drawable.ic_search)
+    }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
@@ -287,7 +294,7 @@ class HomeDetailFragment @Inject constructor(
     }
 
     private fun closeSearchView() {
-        views.groupToolbar.menu?.findItem(R.id.menu_home_search_action)?.setIcon(R.drawable.ic_tchap_search)
+        views.groupToolbar.menu?.findItem(R.id.menu_home_search_action)?.setIcon(R.drawable.ic_search)
         views.homeSearchView.isVisible = false
         views.homeToolbarContent.isVisible = true
         views.groupToolbarAvatarImageView.isVisible = true
