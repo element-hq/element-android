@@ -27,8 +27,7 @@ class JitsiWidgetPropertiesFactory @Inject constructor(
         private val stringProvider: StringProvider
 ) {
     fun create(url: String): JitsiWidgetProperties {
-        val configString = tryOrNull { Uri.parse(url) }?.fragment
-
+        val configString = tryOrNull { Uri.parse(url) }?.encodedQuery
         val configs = configString?.split("&")
                 ?.map { it.split("=") }
                 ?.filter { it.size == 2 }
@@ -38,7 +37,7 @@ class JitsiWidgetPropertiesFactory @Inject constructor(
 
         return JitsiWidgetProperties(
                 domain = configs["conferenceDomain"] ?: stringProvider.getString(R.string.preferred_jitsi_domain),
-                confId = configs["conferenceId"],
+                confId = configs["conferenceId"] ?: configs["confId"],
                 displayName = configs["displayName"],
                 avatarUrl = configs["avatarUrl"]
         )
