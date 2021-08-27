@@ -91,12 +91,10 @@ class VectorSettingsKeywordAndMentionsNotificationPreferenceFragment
         editKeywordPreference.listener  = object: KeywordPreference.Listener {
             override fun didAddKeyword(keyword: String) {
                 addKeyword(keyword)
-                scrollToPreference(editKeywordPreference)
             }
 
             override fun didRemoveKeyword(keyword: String) {
                 removeKeyword(keyword)
-                scrollToPreference(editKeywordPreference)
             }
         }
     }
@@ -130,6 +128,7 @@ class VectorSettingsKeywordAndMentionsNotificationPreferenceFragment
     fun updateWithKeywords(keywords: Set<String>) {
         val editKeywordPreference = findPreference<KeywordPreference>("SETTINGS_KEYWORD_EDIT") ?: return
         editKeywordPreference.keywords = keywords
+        scrollToPreference(editKeywordPreference)
     }
 
     fun addKeyword(keyword: String) {
