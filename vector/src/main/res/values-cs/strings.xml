@@ -2832,7 +2832,6 @@
     <string name="spaces_no_server_support_title">Vypadá to, že váš domovský server zatím Prostory nepodporuje</string>
     <string name="spaces_feeling_experimental_subspace">Chcete experimentovat\?
 \nDo prostoru můžete přidat existující prostory.</string>
-    <string name="labs_space_show_orphan_in_home">Experimentální prostor - Zobrazit pouze sirotky v Domově</string>
     <string name="space_add_rooms">Přidat místnosti</string>
     <string name="space_leave_prompt_msg_as_admin">Jste administrátorem tohoto prostoru, ujistěte se, že jste před odchodem převedli administrátorská práva na jiného člena.</string>
     <string name="space_leave_prompt_msg_private">Tento prostor není veřejný. Bez pozvánky se do něj nebudete moci znovu připojit.</string>

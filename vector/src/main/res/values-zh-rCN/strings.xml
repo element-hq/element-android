@@ -2583,7 +2583,6 @@
     <string name="spaces_no_server_support_title">看来你的主服务器尚未支持空间</string>
     <string name="spaces_feeling_experimental_subspace">想要做点实验？
 \n你可以将现有的空间添加到其他空间中。</string>
-    <string name="labs_space_show_orphan_in_home">实验性空间 - 仅在首页显示无人看管的聊天室</string>
     <string name="space_manage_rooms_and_spaces">管理聊天室和空间</string>
     <string name="space_mark_as_not_suggested">标记为不建议</string>
     <string name="space_mark_as_suggested">标记为建议</string>

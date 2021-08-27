@@ -122,6 +122,12 @@ class JitsiService @Inject constructor(
         )
     }
 
+    fun extractJitsiWidgetData(widget: Widget): JitsiWidgetData? {
+        return tryOrNull {
+            jitsiWidgetDataFactory.create(widget)
+        }
+    }
+
     private fun JitsiWidgetData.isOpenIdJWTAuthenticationRequired(): Boolean {
         return auth == JITSI_OPEN_ID_TOKEN_JWT_AUTH
     }

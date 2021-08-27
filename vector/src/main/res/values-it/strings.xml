@@ -2838,7 +2838,6 @@
     <string name="space_leave_prompt_msg_as_admin">Sei l\'Amministratore di questo Spazio. Assicurati di aver nominato un altro amministratore prima di uscire.</string>
     <string name="space_leave_prompt_msg_only_you">Sei l\'unico utente di questo Spazio. Se esci nessuno potrà più entrarci. Nemmeno tu.</string>
     <string name="space_add_rooms">Aggiungi stanze</string>
-    <string name="labs_space_show_orphan_in_home">Spazio sperimentale - Mostra solo stanze orfane nella Home</string>
     <string name="this_space_has_no_rooms_admin">Alcune stanze potrebbero essere nascoste perché sono private e ti serve il loro invito.</string>
     <string name="this_space_has_no_rooms_not_admin">Alcune stanze potrebbero essere nascoste perché sono private e ti serve il loro invito.
 \nNon hai il permesso di aggiungere stanze.</string>

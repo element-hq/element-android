@@ -2779,7 +2779,6 @@
     <string name="spaces_no_server_support_title">Tundub, et sinu koduserver veel ei võimalda kogukonnakeskuste kasutamist</string>
     <string name="spaces_feeling_experimental_subspace">Kas sa tahad katsetada\?
 \nSa võid kogukonnakeskusele lisada ka teisi kogukonnakeskuseid.</string>
-    <string name="labs_space_show_orphan_in_home">Katseline kogukonnakeskus, mis näitab avalehel vaid hüljatud jututube</string>
     <string name="space_add_rooms">Lisa jututube</string>
     <string name="space_leave_prompt_msg_as_admin">Sa oled selle kogukonnakeskuse haldaja. Enne oma lahkumist palun lisa siia veel vähemalt üks uus haldaja.</string>
     <string name="space_leave_prompt_msg_private">See ei ole avalik kogukonnakeskus. Ilma kutseta sa ei saa uuesti liituda.</string>

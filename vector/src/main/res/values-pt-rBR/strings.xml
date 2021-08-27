@@ -2803,7 +2803,6 @@
     <string name="spaces_no_server_support_title">Parece que seu servidorcasa não suporta Espaços ainda</string>
     <string name="spaces_feeling_experimental_subspace">Se sentindo experimental\?
 \nVocê pode adicionar espaços existentes a um espaço.</string>
-    <string name="labs_space_show_orphan_in_home">Espaço Experimental - Somente mostrar órfãos em Home</string>
     <string name="space_manage_rooms_and_spaces">Gerenciar salas e espaços</string>
     <string name="make_this_space_public">Fazer este espaço público</string>
     <string name="space_settings_manage_rooms">Gerenciar salas</string>

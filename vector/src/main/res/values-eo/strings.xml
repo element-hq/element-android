@@ -2656,7 +2656,6 @@
     <string name="spaces_no_server_support_title">Ŝajnas, ke via hejmservilo ankoraŭ ne subtenas arojn</string>
     <string name="spaces_feeling_experimental_subspace">Ĉu vi eksperimentemas\?
 \nVi povas arigi jamajn arojn.</string>
-    <string name="labs_space_show_orphan_in_home">Eksperimenta aro – montri nur orfojn en la Hejmo</string>
     <string name="space_manage_rooms_and_spaces">Administri ĉambrojn kaj arojn</string>
     <string name="space_mark_as_not_suggested">Marki nerekomendita</string>
     <string name="space_mark_as_suggested">Marki rekomendita</string>

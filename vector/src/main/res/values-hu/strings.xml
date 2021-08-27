@@ -2472,7 +2472,6 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="spaces_no_server_support_title">Úgy látszik a matrix szervered nem támogatja egyelőre a Tereket</string>
     <string name="spaces_feeling_experimental_subspace">Szeretsz kísérletezni\?
 \nTereket adhatsz terekhez.</string>
-    <string name="labs_space_show_orphan_in_home">Kísérleti tér - Csak árvák mutatása a Kezdőlapon</string>
     <string name="space_manage_rooms_and_spaces">Szobák és terek kezelése</string>
     <string name="space_mark_as_not_suggested">Nem javasoltnak jelölés</string>
     <string name="space_mark_as_suggested">Javasoltnak jelölés</string>

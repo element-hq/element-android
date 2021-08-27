@@ -18,7 +18,9 @@ package im.vector.app.core.ui.views
 
 import android.content.Context
 import android.util.AttributeSet
-import android.widget.RelativeLayout
+import android.util.TypedValue
+import android.widget.FrameLayout
+import androidx.appcompat.content.res.AppCompatResources
 import im.vector.app.R
 import im.vector.app.databinding.ViewCurrentCallsBinding
 import im.vector.app.features.call.webrtc.WebRtcCall
@@ -29,7 +31,7 @@ class CurrentCallsView @JvmOverloads constructor(
         context: Context,
         attrs: AttributeSet? = null,
         defStyleAttr: Int = 0
-) : RelativeLayout(context, attrs, defStyleAttr) {
+) : FrameLayout(context, attrs, defStyleAttr) {
 
     interface Callback {
         fun onTapToReturnToCall()
@@ -42,25 +44,33 @@ class CurrentCallsView @JvmOverloads constructor(
         inflate(context, R.layout.view_current_calls, this)
         views = ViewCurrentCallsBinding.bind(this)
         setBackgroundColor(ThemeUtils.getColor(context, R.attr.colorPrimary))
+        val outValue = TypedValue().also {
+            context.theme.resolveAttribute(android.R.attr.selectableItemBackground, it, true)
+        }
+        foreground = AppCompatResources.getDrawable(context, outValue.resourceId)
         setOnClickListener { callback?.onTapToReturnToCall() }
     }
 
     fun render(calls: List<WebRtcCall>, formattedDuration: String) {
-        val connectedCalls = calls.filter {
-            it.mxCall.state is CallState.Connected
-        }
-        val heldCalls = connectedCalls.filter {
-            it.isLocalOnHold || it.remoteOnHold
-        }
-        if (connectedCalls.isEmpty()) return
-        views.currentCallsInfo.text = if (connectedCalls.size == heldCalls.size) {
-            resources.getQuantityString(R.plurals.call_only_paused, heldCalls.size, heldCalls.size)
-        } else {
-            if (heldCalls.isEmpty()) {
-                resources.getString(R.string.call_only_active, formattedDuration)
-            } else {
-                resources.getQuantityString(R.plurals.call_one_active_and_other_paused, heldCalls.size, formattedDuration, heldCalls.size)
+        val tapToReturnFormat = if (calls.size == 1) {
+            val firstCall = calls.first()
+            when (firstCall.mxCall.state) {
+                is CallState.Idle,
+                is CallState.CreateOffer,
+                is CallState.LocalRinging,
+                is CallState.Dialing   -> {
+                    resources.getString(R.string.call_ringing)
+                }
+                is CallState.Answering -> {
+                    resources.getString(R.string.call_connecting)
+                }
+                else                   -> {
+                    resources.getString(R.string.call_one_active, formattedDuration)
+                }
             }
+        } else {
+            resources.getQuantityString(R.plurals.call_active_status, calls.size, calls.size)
         }
+        views.currentCallsInfo.text = resources.getString(R.string.call_tap_to_return, tapToReturnFormat)
     }
 }
