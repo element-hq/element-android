@@ -39,7 +39,11 @@ internal class DefaultUpdatePushRuleActionsTask @Inject constructor(
 
     override suspend fun execute(params: UpdatePushRuleActionsTask.Params) {
             executeRequest(globalErrorReceiver) {
-                pushRulesApi.updateEnableRuleStatus(params.kind.value, params.ruleId, enable = params.enable)
+                pushRulesApi.updateEnableRuleStatus(
+                        params.kind.value,
+                        params.ruleId,
+                        EnabledBody(params.enable)
+                )
             }
             if (params.actions != null) {
                 val body = mapOf("actions" to params.actions.toJson())
