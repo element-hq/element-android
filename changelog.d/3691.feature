@@ -1,0 +1,1 @@
+ Support accept 3pid invite when email is not bound to account
