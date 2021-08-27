@@ -110,7 +110,8 @@ class RoomPreviewNoPreviewFragment @Inject constructor(
                     PeekingState.FOUND     -> {
                         // show join buttons
                         views.roomPreviewNoPreviewJoin.isVisible = true
-                        renderState(bestName, state.matrixItem(), state.roomTopic, state.roomType)
+                        renderState(bestName, state.matrixItem(), state.roomTopic
+                                /**, state.roomType*/)
                         if (state.fromEmailInvite != null && !state.isEmailBoundToAccount) {
                             views.roomPreviewNoPreviewLabel.text =
                                     span {
@@ -151,13 +152,15 @@ class RoomPreviewNoPreviewFragment @Inject constructor(
                         views.roomPreviewNoPreviewJoin.isVisible = true
                         views.roomPreviewNoPreviewLabel.isVisible = true
                         views.roomPreviewNoPreviewLabel.setText(R.string.room_preview_no_preview_join)
-                        renderState(bestName, state.matrixItem().takeIf { state.roomAlias != null }, state.roomTopic, state.roomType)
+                        renderState(bestName, state.matrixItem().takeIf { state.roomAlias != null }, state.roomTopic
+                                /**, state.roomType*/)
                     }
                     else                   -> {
                         views.roomPreviewNoPreviewJoin.isVisible = false
                         views.roomPreviewNoPreviewLabel.isVisible = true
                         views.roomPreviewNoPreviewLabel.setText(R.string.room_preview_not_found)
-                        renderState(bestName, null, state.roomTopic, state.roomType)
+                        renderState(bestName, null, state.roomTopic
+                                /**, state.roomType*/)
                     }
                 }
             }
