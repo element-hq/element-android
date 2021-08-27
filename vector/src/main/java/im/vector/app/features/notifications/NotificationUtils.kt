@@ -168,7 +168,7 @@ class NotificationUtils @Inject constructor(private val context: Context,
          * intrude.
          */
         notificationManager.createNotificationChannel(NotificationChannel(NOISY_NOTIFICATION_CHANNEL_ID,
-                stringProvider.getString(R.string.notification_noisy_notifications),
+                stringProvider.getString(R.string.notification_noisy_notifications).ifEmpty { "Noisy notifications" },
                 NotificationManager.IMPORTANCE_DEFAULT)
                 .apply {
                     description = stringProvider.getString(R.string.notification_noisy_notifications)
@@ -181,7 +181,7 @@ class NotificationUtils @Inject constructor(private val context: Context,
          * Low notification importance: shows everywhere, but is not intrusive.
          */
         notificationManager.createNotificationChannel(NotificationChannel(SILENT_NOTIFICATION_CHANNEL_ID,
-                stringProvider.getString(R.string.notification_silent_notifications),
+                stringProvider.getString(R.string.notification_silent_notifications).ifEmpty { "Silent notifications" },
                 NotificationManager.IMPORTANCE_LOW)
                 .apply {
                     description = stringProvider.getString(R.string.notification_silent_notifications)
@@ -191,7 +191,7 @@ class NotificationUtils @Inject constructor(private val context: Context,
                 })
 
         notificationManager.createNotificationChannel(NotificationChannel(LISTENING_FOR_EVENTS_NOTIFICATION_CHANNEL_ID,
-                stringProvider.getString(R.string.notification_listening_for_events),
+                stringProvider.getString(R.string.notification_listening_for_events).ifEmpty { "Listening for events" },
                 NotificationManager.IMPORTANCE_MIN)
                 .apply {
                     description = stringProvider.getString(R.string.notification_listening_for_events)
@@ -200,7 +200,7 @@ class NotificationUtils @Inject constructor(private val context: Context,
                 })
 
         notificationManager.createNotificationChannel(NotificationChannel(CALL_NOTIFICATION_CHANNEL_ID,
-                stringProvider.getString(R.string.call),
+                stringProvider.getString(R.string.call).ifEmpty { "Call" },
                 NotificationManager.IMPORTANCE_HIGH)
                 .apply {
                     description = stringProvider.getString(R.string.call)
