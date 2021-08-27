@@ -65,17 +65,19 @@ class ShortcutCreator @Inject constructor(
         } catch (failure: Throwable) {
             null
         }
+        val categories = if (Build.VERSION.SDK_INT >= 25) {
+            setOf(directShareCategory, ShortcutInfo.SHORTCUT_CATEGORY_CONVERSATION)
+        } else {
+            setOf(directShareCategory)
+        }
+
         return ShortcutInfoCompat.Builder(context, roomSummary.roomId)
                 .setShortLabel(roomSummary.displayName)
                 .setIcon(bitmap?.toProfileImageIcon())
                 .setIntent(intent)
                 .setLongLived(true)
                 .setRank(rank)
-
-                // Make it show up in the direct share menu
-                .setCategories(setOf(
-                        directShareCategory,
-                        ShortcutInfo.SHORTCUT_CATEGORY_CONVERSATION))
+                .setCategories(categories)
 
                 .build()
     }
