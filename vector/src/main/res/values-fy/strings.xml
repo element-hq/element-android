@@ -935,7 +935,7 @@
     <string name="media_slider_saved">Opslein</string>
     <string name="media_picker_both_capture_title">In foto as fideo meitsje</string>
     <string name="media_picker_cannot_record_video">Kin gjin fideo opnimme</string>
-    <string name="call"/>
+    <string name="call">Belje</string>
     <string name="attachment_remaining_time_minutes">%1$dm %2$ds</string>
     <string name="attachment_remaining_time_seconds">%d s</string>
     <string name="attachment_cancel_download">It delheljen ôfbrekke\?</string>
