@@ -19,6 +19,7 @@ package im.vector.app.core.preference
 import android.content.Context
 import android.util.AttributeSet
 import android.view.inputmethod.EditorInfo
+import android.widget.Button
 import android.widget.EditText
 import androidx.core.view.children
 import androidx.preference.PreferenceViewHolder
@@ -75,6 +76,7 @@ class KeywordPreference : VectorPreference {
 
         val chipEditText = holder.findViewById(R.id.chipEditText) as? EditText ?: return
         val chipGroup = holder.findViewById(R.id.chipGroup) as? ChipGroup ?: return
+        val addKeywordButton = holder.findViewById(R.id.addKeywordButton) as? Button ?: return
 
         chipEditText.text = null
         chipGroup.removeAllViews()
@@ -87,20 +89,28 @@ class KeywordPreference : VectorPreference {
         chipGroup.isEnabled = keywordsEnabled
         chipGroup.children.forEach { it.isEnabled = keywordsEnabled }
 
-        chipEditText.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId != EditorInfo.IME_ACTION_DONE) {
-                return@setOnEditorActionListener false
-            }
+        fun addKeyword(): Boolean {
             val keyword = chipEditText.text.toString().trim()
             if (keyword.isEmpty()) {
-                return@setOnEditorActionListener false
+                return false
             }
             _keywords.add(keyword)
             listener?.didAddKeyword(keyword)
             onPreferenceChangeListener?.onPreferenceChange(this, _keywords)
             notifyChanged()
             chipEditText.text = null
-            return@setOnEditorActionListener true
+            return true
+        }
+
+        chipEditText.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId != EditorInfo.IME_ACTION_DONE) {
+                return@setOnEditorActionListener false
+            }
+            return@setOnEditorActionListener addKeyword()
+        }
+
+        addKeywordButton.setOnClickListener {
+            addKeyword()
         }
     }
 

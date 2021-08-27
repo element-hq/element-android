@@ -55,14 +55,14 @@ class VectorSettingsKeywordAndMentionsNotificationPreferenceFragment
         yourKeywordsCategory.isIconSpaceReserved = false
 
         val keywordRules = session.getPushRules().content?.filter { !it.ruleId.startsWith(".") }.orEmpty()
-        val anyEnabledKeywords = keywordRules.any(PushRule::enabled)
+        val enableKeywords = keywordRules.isEmpty() || keywordRules.any(PushRule::enabled)
 
         val editKeywordPreference = findPreference<KeywordPreference>("SETTINGS_KEYWORD_EDIT")!!
-        editKeywordPreference.isEnabled = anyEnabledKeywords
+        editKeywordPreference.isEnabled = enableKeywords
 
         val keywordPreference = findPreference<VectorCheckboxPreference>("SETTINGS_PUSH_RULE_MESSAGES_CONTAINING_KEYWORDS_PREFERENCE_KEY")!!
         keywordPreference.isIconSpaceReserved = false
-        keywordPreference.isChecked = anyEnabledKeywords
+        keywordPreference.isChecked = enableKeywords
 
         val footerPreference = findPreference<VectorPreference>("SETTINGS_KEYWORDS_FOOTER")!!
         footerPreference.isIconSpaceReserved = false
