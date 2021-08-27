@@ -25,7 +25,6 @@ import im.vector.app.core.preference.KeywordPreference
 import im.vector.app.core.preference.VectorCheckboxPreference
 import im.vector.app.core.preference.VectorPreference
 import im.vector.app.core.preference.VectorPreferenceCategory
-import im.vector.app.core.utils.toast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -68,7 +67,7 @@ class VectorSettingsKeywordAndMentionsNotificationPreferenceFragment
 
         val footerPreference = findPreference<VectorPreference>("SETTINGS_KEYWORDS_FOOTER")!!
         footerPreference.isIconSpaceReserved = false
-
+        val host = this
         keywordPreference.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
             val keywords = editKeywordPreference.keywords
             val newChecked = newValue as Boolean
@@ -82,17 +81,15 @@ class VectorSettingsKeywordAndMentionsNotificationPreferenceFragment
                     keywordPreference.isChecked = newChecked
                     editKeywordPreference.isEnabled = newChecked
                 }
-                result.onFailure {
+                result.onFailure { failure ->
                     refreshDisplay()
-                    activity?.toast(errorFormatter.toHumanReadable(it))
+                    host.displayErrorDialog(failure)
                 }
             }
             false
         }
 
-        val host = this
         editKeywordPreference.listener  = object: KeywordPreference.Listener {
-
             override fun onFocusDidChange(hasFocus: Boolean) {
                 host.keywordsHasFocus = true
             }
@@ -147,37 +144,35 @@ class VectorSettingsKeywordAndMentionsNotificationPreferenceFragment
         val newActions = standardAction.actions ?: return
         val newRule = PushRule(actions = newActions.toJson(), pattern = keyword, enabled = enabled, ruleId = keyword)
         displayLoadingView()
+        val host = this
         lifecycleScope.launch {
             val result = runCatching {
                 session.addPushRule(RuleKind.CONTENT, newRule)
             }
+            hideLoadingView()
             if (!isAdded) {
                 return@launch
             }
-            hideLoadingView()
             // Already added to UI, no-op on success
-            result.onFailure {
-                // Just display an error on failure, keywords have not been added to the UI
-                activity?.toast(errorFormatter.toHumanReadable(it))
-            }
+
+            result.onFailure(host::displayErrorDialog)
         }
     }
 
     fun removeKeyword(keyword: String) {
         displayLoadingView()
+        val host = this
         lifecycleScope.launch {
             val result = runCatching {
                 session.removePushRule(RuleKind.CONTENT, keyword)
             }
+            hideLoadingView()
             if (!isAdded) {
                 return@launch
             }
-            hideLoadingView()
             // Already added to UI, no-op on success
-            result.onFailure {
-                // Just display an error on failure, keywords have not been added to the UI
-                activity?.toast(errorFormatter.toHumanReadable(it))
-            }
+
+            result.onFailure(host::displayErrorDialog)
         }
     }
 

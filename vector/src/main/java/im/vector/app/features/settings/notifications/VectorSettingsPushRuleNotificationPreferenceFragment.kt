@@ -19,7 +19,6 @@ package im.vector.app.features.settings.notifications
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.Preference
 import im.vector.app.core.preference.VectorCheckboxPreference
-import im.vector.app.core.utils.toast
 import im.vector.app.features.settings.VectorSettingsBaseFragment
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.pushrules.RuleKind
@@ -57,6 +56,7 @@ abstract class VectorSettingsPushRuleNotificationPreferenceFragment
         val newActions = standardAction.actions
         displayLoadingView()
 
+        val host = this
         lifecycleScope.launch {
             val result = runCatching {
                 session.updatePushRuleActions(kind,
@@ -64,17 +64,17 @@ abstract class VectorSettingsPushRuleNotificationPreferenceFragment
                         enabled,
                         newActions)
             }
+            hideLoadingView()
             if (!isAdded) {
                 return@launch
             }
-            hideLoadingView()
             result.onSuccess {
                 preference.isChecked = checked
             }
             result.onFailure { failure ->
                 // Restore the previous value
                 refreshDisplay()
-                activity?.toast(errorFormatter.toHumanReadable(failure))
+                host.displayErrorDialog(failure)
             }
         }
     }
