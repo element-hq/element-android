@@ -66,40 +66,7 @@ object PermalinkParser {
             MatrixPatterns.isUserId(identifier)    -> PermalinkData.UserLink(userId = identifier)
             MatrixPatterns.isGroupId(identifier)   -> PermalinkData.GroupLink(groupId = identifier)
             MatrixPatterns.isRoomId(identifier)    -> {
-                // Can't rely on built in parsing because it's messing around the signurl
-                val paramList = safeExtractParams(fragment)
-                val signUrl = paramList.firstOrNull { it.first == "signurl" }?.second
-                val email = paramList.firstOrNull { it.first == "email" }?.second
-                if (signUrl.isNullOrEmpty().not() && email.isNullOrEmpty().not()) {
-                    try {
-                        val signValidUri = Uri.parse(signUrl)
-                        val identityServerHost = signValidUri.authority ?: throw IllegalArgumentException()
-                        val token = signValidUri.getQueryParameter("token") ?: throw IllegalArgumentException()
-                        val privateKey = signValidUri.getQueryParameter("private_key") ?: throw IllegalArgumentException()
-                        PermalinkData.RoomEmailInviteLink(
-                                roomId = identifier,
-                                email = email!!,
-                                signUrl = signUrl!!,
-                                roomName = paramList.firstOrNull { it.first == "room_name" }?.second,
-                                inviterName = paramList.firstOrNull { it.first == "inviter_name" }?.second,
-                                roomAvatarUrl = paramList.firstOrNull { it.first == "room_avatar_url" }?.second,
-                                roomType = paramList.firstOrNull { it.first == "room_type" }?.second,
-                                identityServer = identityServerHost,
-                                token = token,
-                                privateKey = privateKey
-                        )
-                    } catch (failure: Throwable) {
-                        Timber.i("## Permalink: Failed to parse permalink $signUrl")
-                        PermalinkData.FallbackLink(uri)
-                    }
-                } else {
-                    PermalinkData.RoomLink(
-                            roomIdOrAlias = identifier,
-                            isRoomAlias = false,
-                            eventId = extraParameter.takeIf { !it.isNullOrEmpty() && MatrixPatterns.isEventId(it) },
-                            viaParameters = viaQueryParameters
-                    )
-                }
+                handleRoomIdCase(fragment, identifier, uri, extraParameter, viaQueryParameters)
             }
             MatrixPatterns.isRoomAlias(identifier) -> {
                 PermalinkData.RoomLink(
@@ -110,6 +77,43 @@ object PermalinkParser {
                 )
             }
             else                                   -> PermalinkData.FallbackLink(uri)
+        }
+    }
+
+    private fun handleRoomIdCase(fragment: String, identifier: String, uri: Uri, extraParameter: String?, viaQueryParameters: List<String>): PermalinkData {
+        // Can't rely on built in parsing because it's messing around the signurl
+        val paramList = safeExtractParams(fragment)
+        val signUrl = paramList.firstOrNull { it.first == "signurl" }?.second
+        val email = paramList.firstOrNull { it.first == "email" }?.second
+        return if (signUrl.isNullOrEmpty().not() && email.isNullOrEmpty().not()) {
+            try {
+                val signValidUri = Uri.parse(signUrl)
+                val identityServerHost = signValidUri.authority ?: throw IllegalArgumentException()
+                val token = signValidUri.getQueryParameter("token") ?: throw IllegalArgumentException()
+                val privateKey = signValidUri.getQueryParameter("private_key") ?: throw IllegalArgumentException()
+                PermalinkData.RoomEmailInviteLink(
+                        roomId = identifier,
+                        email = email!!,
+                        signUrl = signUrl!!,
+                        roomName = paramList.firstOrNull { it.first == "room_name" }?.second,
+                        inviterName = paramList.firstOrNull { it.first == "inviter_name" }?.second,
+                        roomAvatarUrl = paramList.firstOrNull { it.first == "room_avatar_url" }?.second,
+                        roomType = paramList.firstOrNull { it.first == "room_type" }?.second,
+                        identityServer = identityServerHost,
+                        token = token,
+                        privateKey = privateKey
+                )
+            } catch (failure: Throwable) {
+                Timber.i("## Permalink: Failed to parse permalink $signUrl")
+                PermalinkData.FallbackLink(uri)
+            }
+        } else {
+            PermalinkData.RoomLink(
+                    roomIdOrAlias = identifier,
+                    isRoomAlias = false,
+                    eventId = extraParameter.takeIf { !it.isNullOrEmpty() && MatrixPatterns.isEventId(it) },
+                    viaParameters = viaQueryParameters
+            )
         }
     }
 

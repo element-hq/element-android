@@ -41,8 +41,8 @@ internal class DefaultSign3pidInvitationTask @Inject constructor(
 ) : Sign3pidInvitationTask {
 
     override suspend fun execute(params: Sign3pidInvitationTask.Params): SignInvitationResult {
-        val identityAPI = params.url
-                .let { retrofitFactory.create(okHttpClient, "https://$it") }
+        val identityAPI = retrofitFactory
+                .create(okHttpClient, "https://${params.url}")
                 .create(IdentityAPI::class.java)
         return identityAPI.signInvitationDetails(params.token, params.privateKey, userId)
     }
