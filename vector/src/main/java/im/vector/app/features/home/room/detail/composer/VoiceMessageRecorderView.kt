@@ -96,7 +96,7 @@ class VoiceMessageRecorderView: ConstraintLayout, VoiceMessagePlaybackTracker.Li
 
     override fun onVisibilityChanged(changedView: View, visibility: Int) {
         super.onVisibilityChanged(changedView, visibility)
-        // onVisibilityChanged is called before constructor on api 21 and 22.
+        // onVisibilityChanged is called by constructor on api 21 and 22.
         if (!this::views.isInitialized) return
 
         if (changedView == this && visibility == VISIBLE) {
