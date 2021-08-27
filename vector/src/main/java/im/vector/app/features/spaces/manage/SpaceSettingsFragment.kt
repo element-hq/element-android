@@ -133,12 +133,6 @@ class SpaceSettingsFragment @Inject constructor(
 
         state.roomSummary()?.let {
             views.roomSettingsToolbarTitleView.text = it.displayName
-            views.roomSettingsToolbarTitleView.setCompoundDrawablesWithIntrinsicBounds(
-                    null,
-                    null,
-                    drawableProvider.getDrawable(R.drawable.ic_beta_pill),
-                    null
-            )
             avatarRenderer.render(it.toMatrixItem(), views.roomSettingsToolbarAvatarImageView)
             views.roomSettingsDecorationToolbarAvatarImageView.render(it.roomEncryptionTrustLevel)
         }
