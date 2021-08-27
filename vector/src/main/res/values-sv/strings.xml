@@ -2779,7 +2779,6 @@
     <string name="spaces_no_server_support_title">Det verkar som att din hemserver inte stöder utrymmen än</string>
     <string name="spaces_feeling_experimental_subspace">Känner du dig äventyrlig\?
 \nDu kan lägga till existerande utrymmen till ett utrymme.</string>
-    <string name="labs_space_show_orphan_in_home">Experimentellt utrymme - Visa bara övergivna i Hem</string>
     <string name="space_add_rooms">Lägg till rum</string>
     <string name="space_leave_prompt_msg_as_admin">Du är administratör för det här utrymmet, se till att du har överfört administratörsrättigheter till en annan medlem innan du lämnar.</string>
     <string name="space_leave_prompt_msg_private">Det här utrymmet är inte offentligt. Du kommer inte att kunna gå med igen utan en inbjudan.</string>

@@ -2769,7 +2769,6 @@
     <string name="spaces_no_server_support_title">Duket sikur shërbyesi juaj Home nuk mbulon ende Hapësira</string>
     <string name="spaces_feeling_experimental_subspace">Ndiheni eksperimentues\?
 \nMund të shtoni te një hapësirë hapësira ekzistuese.</string>
-    <string name="labs_space_show_orphan_in_home">Hapësirë Eksperimentale - Shfaq jetimë te Kreu</string>
     <string name="space_add_rooms">Shtoni dhoma</string>
     <string name="space_leave_prompt_msg_as_admin">Jeni përgjegjës i kësaj hapësirë, sigurohuni se keni shpërngulur të drejt përgjegjësi te një anëtar tjetër, përpara braktisjes.</string>
     <string name="space_leave_prompt_msg_private">Kjo hapësirë s’është publike. S’do të jeni në gjendje të rihyni pa një ftesë.</string>

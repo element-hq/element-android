@@ -385,6 +385,7 @@
     <string name="dismiss">Dismiss</string>
     <string name="reset">Reset</string>
     <string name="start_chatting">Start Chatting</string>
+    <string name="spaces">Spaces</string>
 
     <!-- Permissions denied forever -->
     <string name="denied_permission_generic">Some permissions are missing to perform this action, please grant the permissions from the system settings.</string>
@@ -3451,7 +3452,10 @@
     <string name="space_manage_rooms_and_spaces">Manage rooms and spaces</string>
 
 
-    <string name="labs_space_show_orphan_in_home">Experimental Space - Only show orphans in Home</string>
+
+    <string name="preference_show_all_rooms_in_home">Show all rooms in Home</string>
+    <string name="all_rooms_youre_in_will_be_shown_in_home">All rooms you’re in will be shown in Home.</string>
+
     <string name="spaces_feeling_experimental_subspace">Feeling experimental?\nYou can add existing spaces to a space.</string>
     <string name="spaces_no_server_support_title">It looks like your homeserver does not support Spaces yet</string>
     <string name="spaces_no_server_support_description">Please contact your homeserver admin for further information</string>
