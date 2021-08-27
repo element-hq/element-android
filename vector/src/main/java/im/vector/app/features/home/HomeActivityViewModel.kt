@@ -247,15 +247,15 @@ class HomeActivityViewModel @AssistedInject constructor(
 
     private fun updateIdentityServer(session: Session) {
         viewModelScope.launch {
-            try {
-                if (session.identityService().getCurrentIdentityServerUrl() == null) {
-                    val identityServerUrl = session.sessionParams.homeServerUrl
+            val currentIdentityServerUrl = tryOrNull {
+                session.identityService().getCurrentIdentityServerUrl()
+            }
 
-                    session.identityService().setNewIdentityServer(identityServerUrl)
-                    Timber.d("## updateIdentityServer succeeded ($identityServerUrl)")
-                }
-            } catch (failure: Throwable) {
-                Timber.e(failure, "## updateIdentityServer failed ")
+            if (currentIdentityServerUrl == null) {
+                val identityServerUrl = session.sessionParams.homeServerUrl
+
+                session.identityService().setNewIdentityServer(identityServerUrl)
+                Timber.d("## updateIdentityServer succeeded ($identityServerUrl)")
             }
         }
     }

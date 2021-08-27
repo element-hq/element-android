@@ -234,13 +234,8 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
                 // Revoke the pending invite and leave this empty discussion, we will invite again this email.
                 // We don't have a way for the moment to check if the invite expired or not...
                 viewModelScope.launch {
-                    try {
-                        revokePendingInviteAndLeave(it.existingRoom)
-                        createDirectMessage(it.inviteEmail)
-                    } catch (failure: Throwable) {
-                        // Ignore the error, notify the user that the invite has been already sent
-                        _viewEvents.post(HomeDetailViewEvents.InviteIgnoredForExistingRoom(it.inviteEmail))
-                    }
+                    revokePendingInviteAndLeave(it.existingRoom)
+                    createDirectMessage(it.inviteEmail)
                 }
             } else {
                 // Notify the user that the invite has been already sent
@@ -274,27 +269,24 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
         )
     }
 
-    private suspend fun revokePendingInviteAndLeave(roomId: String) = withState {
-        val room = session.getRoom(roomId) ?: return@withState
-        val event = room.getStateEvent(EventType.STATE_ROOM_THIRD_PARTY_INVITE) ?: return@withState
-        val token = event.stateKey
+    private suspend fun revokePendingInviteAndLeave(roomId: String) {
+        session.getRoom(roomId)?.let { room ->
+            val token = room.getStateEvent(EventType.STATE_ROOM_THIRD_PARTY_INVITE)?.stateKey
 
-        viewModelScope.launch {
-            if (!token.isNullOrEmpty()) {
-                try {
+            try {
+                if (!token.isNullOrEmpty()) {
                     room.sendStateEvent(
                             eventType = EventType.STATE_ROOM_THIRD_PARTY_INVITE,
                             stateKey = token,
                             body = emptyMap()
                     )
-
-                    room.leave()
-                } catch (failure: Throwable) {
-                    throw failure
+                } else {
+                    Timber.d("unable to revoke invite (no pending invite)")
                 }
-            } else {
-                Timber.d("unable to revoke invite (no pending invite)")
+
                 room.leave()
+            } catch (failure: Throwable) {
+                _viewEvents.post(HomeDetailViewEvents.Failure(failure))
             }
         }
     }

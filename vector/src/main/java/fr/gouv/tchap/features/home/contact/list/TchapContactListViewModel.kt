@@ -37,8 +37,6 @@ import io.reactivex.Single
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.tryOrNull
-import org.matrix.android.sdk.api.failure.Failure
-import org.matrix.android.sdk.api.failure.MatrixError
 import org.matrix.android.sdk.api.query.ActiveSpaceFilter
 import org.matrix.android.sdk.api.query.RoomCategoryFilter
 import org.matrix.android.sdk.api.session.Session
@@ -303,43 +301,35 @@ class TchapContactListViewModel @AssistedInject constructor(@Assisted initialSta
                     val unresolvedThreePids = mutableListOf<String>()
                     val directUserIds = roomSummaries.mapNotNull { roomSummary -> roomSummary.directUserId }
 
-                    viewModelScope.launch {
-                        val activeUsersIds = try {
-                            session.usersInfoService()
-                                    .getUsersInfo(directUserIds)
-                                    .filterNot { it.value.deactivated }
-                                    .keys
-                        } catch (failure: Throwable) {
-                            if (failure is Failure.NetworkConnection
-                                    || (failure is Failure.ServerError && failure.error.code == MatrixError.ORG_MATRIX_EXPIRED_ACCOUNT)) {
-                                // Todo: maybe add a retry mechanism
-                                emptySet()
-                            } else {
-                                // Other error, propagate it
-                                throw failure
-                            }
-                        }
-                        val users = activeUsersIds
-                                .map { userId ->
-                                    val user = session.getUser(userId) ?: run {
-                                        unresolvedThreePids.add(userId)
-                                        User(userId, TchapUtils.computeDisplayNameFromUserId(userId), null)
+                    if (directUserIds.isNotEmpty()) {
+                        viewModelScope.launch {
+                            val usersInfo = tryOrNull { session.usersInfoService().getUsersInfo(directUserIds) }
+                            val activeUsersIds = usersInfo?.filterNot { it.value.deactivated }?.keys ?: directUserIds
+                            val users = activeUsersIds
+                                    .map { userId ->
+                                        val user = session.getUser(userId) ?: run {
+                                            unresolvedThreePids.add(userId)
+                                            User(userId, TchapUtils.computeDisplayNameFromUserId(userId), null)
+                                        }
+                                        userId to user
                                     }
-                                    userId to user
-                                }
-                                .toMap()
-                                .toMutableMap()
+                                    .toMap()
+                                    .toMutableMap()
 
-                        roomSummariesUsers = users.values.toList()
+                            roomSummariesUsers = users.values.toList()
 
-                        updateFilteredContacts()
+                            updateFilteredContacts()
 
-                        unresolvedThreePids.mapNotNull {
-                            tryOrNull { session.resolveUser(it) }
-                        }.forEach { user -> users[user.userId] = user }
+                            unresolvedThreePids.mapNotNull {
+                                tryOrNull { session.resolveUser(it) }
+                            }.forEach { user -> users[user.userId] = user }
 
-                        roomSummariesUsers = users.values.toList()
+                            roomSummariesUsers = users.values.toList()
 
+                            updateFilteredContacts()
+                        }
+                    } else {
+                        roomSummariesUsers = emptyList()
                         updateFilteredContacts()
                     }
                 }.disposeOnClear()

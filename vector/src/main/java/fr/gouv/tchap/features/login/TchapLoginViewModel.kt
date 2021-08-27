@@ -33,7 +33,6 @@ import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.extensions.configureAndStart
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
-import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.login.HomeServerConnectionConfigFactory
 import im.vector.app.features.login.LoginConfig
 import im.vector.app.features.login.LoginMode
@@ -62,8 +61,7 @@ class TchapLoginViewModel @AssistedInject constructor(
         private val authenticationService: AuthenticationService,
         private val activeSessionHolder: ActiveSessionHolder,
         private val homeServerConnectionConfigFactory: HomeServerConnectionConfigFactory,
-        private val reAuthHelper: ReAuthHelper,
-        private val stringProvider: StringProvider
+        private val reAuthHelper: ReAuthHelper
 ) : VectorViewModel<LoginViewState, TchapLoginAction, TchapLoginViewEvents>(initialState) {
 
     @AssistedFactory
@@ -447,6 +445,7 @@ class TchapLoginViewModel @AssistedInject constructor(
             setState {
                 copy(
                         asyncHomeServerLoginFlowRequest = Uninitialized,
+                        homeServerUrlFromUser = homeServerConnectionConfig.homeServerUri.toString(),
                         homeServerUrl = data.homeServerUrl,
                         loginMode = loginMode,
                         loginModeSupportedTypes = data.supportedLoginTypes.toList()
