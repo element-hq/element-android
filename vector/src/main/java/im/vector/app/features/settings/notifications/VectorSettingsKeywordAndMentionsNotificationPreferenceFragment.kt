@@ -67,7 +67,6 @@ class VectorSettingsKeywordAndMentionsNotificationPreferenceFragment
 
         val footerPreference = findPreference<VectorPreference>("SETTINGS_KEYWORDS_FOOTER")!!
         footerPreference.isIconSpaceReserved = false
-        val host = this
         keywordPreference.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
             val keywords = editKeywordPreference.keywords
             val newChecked = newValue as Boolean
@@ -83,7 +82,7 @@ class VectorSettingsKeywordAndMentionsNotificationPreferenceFragment
                 }
                 result.onFailure { failure ->
                     refreshDisplay()
-                    host.displayErrorDialog(failure)
+                    displayErrorDialog(failure)
                 }
             }
             false
@@ -91,7 +90,7 @@ class VectorSettingsKeywordAndMentionsNotificationPreferenceFragment
 
         editKeywordPreference.listener  = object: KeywordPreference.Listener {
             override fun onFocusDidChange(hasFocus: Boolean) {
-                host.keywordsHasFocus = true
+                keywordsHasFocus = true
             }
 
             override fun didAddKeyword(keyword: String) {
@@ -144,7 +143,6 @@ class VectorSettingsKeywordAndMentionsNotificationPreferenceFragment
         val newActions = standardAction.actions ?: return
         val newRule = PushRule(actions = newActions.toJson(), pattern = keyword, enabled = enabled, ruleId = keyword)
         displayLoadingView()
-        val host = this
         lifecycleScope.launch {
             val result = runCatching {
                 session.addPushRule(RuleKind.CONTENT, newRule)
@@ -155,13 +153,12 @@ class VectorSettingsKeywordAndMentionsNotificationPreferenceFragment
             }
             // Already added to UI, no-op on success
 
-            result.onFailure(host::displayErrorDialog)
+            result.onFailure(::displayErrorDialog)
         }
     }
 
     fun removeKeyword(keyword: String) {
         displayLoadingView()
-        val host = this
         lifecycleScope.launch {
             val result = runCatching {
                 session.removePushRule(RuleKind.CONTENT, keyword)
@@ -172,7 +169,7 @@ class VectorSettingsKeywordAndMentionsNotificationPreferenceFragment
             }
             // Already added to UI, no-op on success
 
-            result.onFailure(host::displayErrorDialog)
+            result.onFailure(::displayErrorDialog)
         }
     }
 

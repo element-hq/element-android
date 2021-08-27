@@ -56,7 +56,6 @@ abstract class VectorSettingsPushRuleNotificationPreferenceFragment
         val newActions = standardAction.actions
         displayLoadingView()
 
-        val host = this
         lifecycleScope.launch {
             val result = runCatching {
                 session.updatePushRuleActions(kind,
@@ -74,7 +73,7 @@ abstract class VectorSettingsPushRuleNotificationPreferenceFragment
             result.onFailure { failure ->
                 // Restore the previous value
                 refreshDisplay()
-                host.displayErrorDialog(failure)
+                displayErrorDialog(failure)
             }
         }
     }
