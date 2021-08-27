@@ -81,6 +81,7 @@ class BottomSheetActionButton @JvmOverloads constructor(
         set(value) {
             field = value
             views.bottomSheetActionIcon.setImageDrawable(value)
+            views.bottomSheetActionIcon.isVisible = field != null
         }
 
     var tint: Int? = null
@@ -93,6 +94,12 @@ class BottomSheetActionButton @JvmOverloads constructor(
         set(value) {
             field = value
             value?.let { views.bottomSheetActionTitle.setTextColor(it) }
+        }
+
+    var isBetaAction: Boolean? = null
+        set(value) {
+            field = value
+            views.bottomSheetActionBeta.isVisible = field ?: false
         }
 
     init {
@@ -109,6 +116,8 @@ class BottomSheetActionButton @JvmOverloads constructor(
 
             tint = getColor(R.styleable.BottomSheetActionButton_tint, ThemeUtils.getColor(context, android.R.attr.textColor))
             titleTextColor = getColor(R.styleable.BottomSheetActionButton_titleTextColor, ThemeUtils.getColor(context, R.attr.colorPrimary))
+
+            isBetaAction = getBoolean(R.styleable.BottomSheetActionButton_betaAction, false)
         }
     }
 }

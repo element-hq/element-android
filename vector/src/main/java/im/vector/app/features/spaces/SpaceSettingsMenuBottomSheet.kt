@@ -33,7 +33,6 @@ import im.vector.app.databinding.BottomSheetSpaceSettingsBinding
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.rageshake.BugReporter
-import im.vector.app.features.rageshake.ReportType
 import im.vector.app.features.roomprofile.RoomProfileActivity
 import im.vector.app.features.spaces.manage.ManageType
 import im.vector.app.features.spaces.manage.SpaceManageActivity
@@ -79,10 +78,6 @@ class SpaceSettingsMenuBottomSheet : VectorBaseBottomSheetDialogFragment<BottomS
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        views.spaceBetaTag.debouncedClicks {
-            bugReporter.openBugReportScreen(requireActivity(), ReportType.SPACE_BETA_FEEDBACK)
-        }
-
         views.invitePeople.views.bottomSheetActionClickableZone.debouncedClicks {
             dismiss()
             interactionListener?.onShareSpaceSelected(spaceArgs.spaceId)
@@ -104,6 +99,11 @@ class SpaceSettingsMenuBottomSheet : VectorBaseBottomSheetDialogFragment<BottomS
         views.addRooms.views.bottomSheetActionClickableZone.debouncedClicks {
             dismiss()
             startActivity(SpaceManageActivity.newIntent(requireActivity(), spaceArgs.spaceId, ManageType.AddRooms))
+        }
+
+        views.addSpaces.views.bottomSheetActionClickableZone.debouncedClicks {
+            dismiss()
+            startActivity(SpaceManageActivity.newIntent(requireActivity(), spaceArgs.spaceId, ManageType.AddRoomsOnlySpaces))
         }
 
         views.leaveSpace.views.bottomSheetActionClickableZone.debouncedClicks {
@@ -128,6 +128,7 @@ class SpaceSettingsMenuBottomSheet : VectorBaseBottomSheetDialogFragment<BottomS
 
         views.invitePeople.isVisible = state.canInvite || state.spaceSummary?.isPublic.orFalse()
         views.addRooms.isVisible = state.canAddChild
+        views.addSpaces.isVisible = state.canAddChild
     }
 
     companion object {

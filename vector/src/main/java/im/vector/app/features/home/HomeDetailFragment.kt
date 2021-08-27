@@ -29,6 +29,7 @@ import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.badge.BadgeDrawable
+import im.vector.app.AppStateHandler
 import im.vector.app.R
 import im.vector.app.RoomGroupingMethod
 import im.vector.app.core.extensions.commitTransaction
@@ -69,7 +70,8 @@ class HomeDetailFragment @Inject constructor(
         private val colorProvider: ColorProvider,
         private val alertManager: PopupAlertManager,
         private val callManager: WebRtcCallManager,
-        private val vectorPreferences: VectorPreferences
+        private val vectorPreferences: VectorPreferences,
+        private val appStateHandler: AppStateHandler
 ) : VectorBaseFragment<FragmentHomeDetailBinding>(),
         KeysBackupBanner.Delegate,
         CurrentCallsView.Callback,
@@ -204,6 +206,18 @@ class HomeDetailFragment @Inject constructor(
         // update notification tab if needed
         updateTabVisibilitySafely(R.id.bottom_action_notification, vectorPreferences.labAddNotificationTab())
         callManager.checkForProtocolsSupportIfNeeded()
+
+        // Current space/group is not live so at least refresh toolbar on resume
+        appStateHandler.getCurrentRoomGroupingMethod()?.let { roomGroupingMethod ->
+            when (roomGroupingMethod) {
+                is RoomGroupingMethod.ByLegacyGroup -> {
+                    onGroupChange(roomGroupingMethod.groupSummary)
+                }
+                is RoomGroupingMethod.BySpace       -> {
+                    onSpaceChange(roomGroupingMethod.spaceSummary)
+                }
+            }
+        }
     }
 
     private fun promptForNewUnknownDevices(uid: String, state: UnknownDevicesState, newest: DeviceInfo) {

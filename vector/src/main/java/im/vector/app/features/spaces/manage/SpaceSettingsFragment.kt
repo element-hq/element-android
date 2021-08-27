@@ -47,7 +47,7 @@ import im.vector.app.features.roomprofile.settings.RoomSettingsAction
 import im.vector.app.features.roomprofile.settings.RoomSettingsViewEvents
 import im.vector.app.features.roomprofile.settings.RoomSettingsViewModel
 import im.vector.app.features.roomprofile.settings.RoomSettingsViewState
-import im.vector.app.features.roomprofile.settings.joinrule.RoomJoinRuleBottomSheet
+import im.vector.app.features.roomprofile.settings.joinrule.RoomJoinRuleActivity
 import im.vector.app.features.roomprofile.settings.joinrule.RoomJoinRuleSharedActionViewModel
 import org.matrix.android.sdk.api.session.room.model.GuestAccess
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
@@ -199,10 +199,8 @@ class SpaceSettingsFragment @Inject constructor(
         // N/A for space settings screen
     }
 
-    override fun onJoinRuleClicked() = withState(viewModel) { state ->
-        val currentJoinRule = state.newRoomJoinRules.newJoinRules ?: state.currentRoomJoinRules
-        RoomJoinRuleBottomSheet.newInstance(currentJoinRule)
-                .show(childFragmentManager, "RoomJoinRuleBottomSheet")
+    override fun onJoinRuleClicked() {
+        startActivity(RoomJoinRuleActivity.newIntent(requireContext(), roomProfileArgs.roomId))
     }
 
     override fun onToggleGuestAccess() = withState(viewModel) { state ->
