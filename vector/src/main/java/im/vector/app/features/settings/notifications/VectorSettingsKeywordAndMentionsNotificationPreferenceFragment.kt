@@ -41,6 +41,8 @@ class VectorSettingsKeywordAndMentionsNotificationPreferenceFragment
 
     override val preferenceXmlRes = R.xml.vector_settings_notification_mentions_and_keywords
 
+    private var keywordsHasFocus = false
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         session.getKeywords().observe(viewLifecycleOwner, this::updateWithKeywords)
@@ -88,7 +90,13 @@ class VectorSettingsKeywordAndMentionsNotificationPreferenceFragment
             false
         }
 
+        val host = this
         editKeywordPreference.listener  = object: KeywordPreference.Listener {
+
+            override fun onFocusDidChange(hasFocus: Boolean) {
+                host.keywordsHasFocus = true
+            }
+
             override fun didAddKeyword(keyword: String) {
                 addKeyword(keyword)
             }
@@ -128,7 +136,9 @@ class VectorSettingsKeywordAndMentionsNotificationPreferenceFragment
     fun updateWithKeywords(keywords: Set<String>) {
         val editKeywordPreference = findPreference<KeywordPreference>("SETTINGS_KEYWORD_EDIT") ?: return
         editKeywordPreference.keywords = keywords
-        scrollToPreference(editKeywordPreference)
+        if (keywordsHasFocus) {
+            scrollToPreference(editKeywordPreference)
+        }
     }
 
     fun addKeyword(keyword: String) {

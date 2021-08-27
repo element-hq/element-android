@@ -30,6 +30,7 @@ import im.vector.app.R
 class KeywordPreference : VectorPreference {
 
     interface Listener {
+        fun onFocusDidChange(hasFocus: Boolean)
         fun didAddKeyword(keyword: String)
         fun didRemoveKeyword(keyword: String)
     }
@@ -106,6 +107,9 @@ class KeywordPreference : VectorPreference {
                 return@setOnEditorActionListener false
             }
             return@setOnEditorActionListener addKeyword()
+        }
+        chipEditText.setOnFocusChangeListener { _, hasFocus ->
+            listener?.onFocusDidChange(hasFocus)
         }
 
         addKeywordButton.setOnClickListener {
