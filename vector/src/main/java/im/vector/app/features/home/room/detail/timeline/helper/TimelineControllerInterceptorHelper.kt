@@ -19,12 +19,8 @@ package im.vector.app.features.home.room.detail.timeline.helper
 import com.airbnb.epoxy.EpoxyModel
 import com.airbnb.epoxy.VisibilityState
 import im.vector.app.core.epoxy.LoadingItem_
-import im.vector.app.core.epoxy.TimelineEmptyItem_
-import im.vector.app.core.resources.UserPreferencesProvider
-import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.home.room.detail.UnreadState
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
-import im.vector.app.features.home.room.detail.timeline.item.CallTileTimelineItem
 import im.vector.app.features.home.room.detail.timeline.item.DaySeparatorItem
 import im.vector.app.features.home.room.detail.timeline.item.ItemWithEvents
 import im.vector.app.features.home.room.detail.timeline.item.TimelineReadMarkerItem_
@@ -34,9 +30,7 @@ import kotlin.reflect.KMutableProperty0
 private const val DEFAULT_PREFETCH_THRESHOLD = 30
 
 class TimelineControllerInterceptorHelper(private val positionOfReadMarker: KMutableProperty0<Int?>,
-                                          private val adapterPositionMapping: MutableMap<String, Int>,
-                                          private val userPreferencesProvider: UserPreferencesProvider,
-                                          private val callManager: WebRtcCallManager
+                                          private val adapterPositionMapping: MutableMap<String, Int>
 ) {
 
     private var previousModelsSize = 0
@@ -50,14 +44,12 @@ class TimelineControllerInterceptorHelper(private val positionOfReadMarker: KMut
     ) {
         positionOfReadMarker.set(null)
         adapterPositionMapping.clear()
-        val callIds = mutableSetOf<String>()
 
         // Add some prefetch loader if needed
         models.addBackwardPrefetchIfNeeded(timeline, callback)
         models.addForwardPrefetchIfNeeded(timeline, callback)
 
         val modelsIterator = models.listIterator()
-        val showHiddenEvents = userPreferencesProvider.shouldShowHiddenEvents()
         var index = 0
         val firstUnreadEventId = (unreadState as? UnreadState.HasUnread)?.firstUnreadEventId
         var atLeastOneVisibleItemSinceLastDaySeparator = false
@@ -83,11 +75,6 @@ class TimelineControllerInterceptorHelper(private val positionOfReadMarker: KMut
                     return@forEach
                 }
                 atLeastOneVisibleItemSinceLastDaySeparator = false
-            } else if (epoxyModel is CallTileTimelineItem) {
-                val hasBeenRemoved = modelsIterator.removeCallItemIfNeeded(epoxyModel, callIds, showHiddenEvents)
-                if (!hasBeenRemoved) {
-                    atLeastOneVisibleItemSinceLastDaySeparator = true
-                }
             }
             if (appendReadMarker) {
                 modelsIterator.addReadMarkerItem(callback)
@@ -107,29 +94,6 @@ class TimelineControllerInterceptorHelper(private val positionOfReadMarker: KMut
                     it.setOnVisibilityStateChanged(ReadMarkerVisibilityStateChangedListener(callback))
                 }
         add(readMarker)
-    }
-
-    private fun MutableListIterator<EpoxyModel<*>>.removeCallItemIfNeeded(
-            epoxyModel: CallTileTimelineItem,
-            callIds: MutableSet<String>,
-            showHiddenEvents: Boolean
-    ): Boolean {
-        val callId = epoxyModel.attributes.callId
-        // We should remove the call tile if we already have one for this call or
-        // if this is an active call tile without an actual call (which can happen with permalink)
-        val shouldRemoveCallItem = callIds.contains(callId)
-                || (!callManager.getAdvertisedCalls().contains(callId) && epoxyModel.attributes.callStatus.isActive())
-        val removed = shouldRemoveCallItem && !showHiddenEvents
-        if (removed) {
-            remove()
-            val emptyItem = TimelineEmptyItem_()
-                    .id(epoxyModel.id())
-                    .eventId(epoxyModel.attributes.informationData.eventId)
-                    .notBlank(false)
-            add(emptyItem)
-        }
-        callIds.add(callId)
-        return removed
     }
 
     private fun MutableList<EpoxyModel<*>>.addBackwardPrefetchIfNeeded(timeline: Timeline?, callback: TimelineEventController.Callback?) {

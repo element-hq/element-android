@@ -16,34 +16,28 @@
 
 package im.vector.app.features.home.room.detail.timeline.factory
 
-import im.vector.app.ActiveSessionDataSource
-import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyModel
-import im.vector.app.core.resources.StringProvider
+import im.vector.app.core.resources.UserPreferencesProvider
+import im.vector.app.features.home.AvatarRenderer
+import im.vector.app.features.home.room.detail.timeline.MessageColorProvider
 import im.vector.app.features.home.room.detail.timeline.helper.AvatarSizeProvider
+import im.vector.app.features.home.room.detail.timeline.helper.JitsiWidgetEventsGroup
 import im.vector.app.features.home.room.detail.timeline.helper.MessageInformationDataFactory
-import im.vector.app.features.home.room.detail.timeline.helper.MessageItemAttributesFactory
-import im.vector.app.features.home.room.detail.timeline.item.WidgetTileTimelineItem
-import im.vector.app.features.home.room.detail.timeline.item.WidgetTileTimelineItem_
-import org.matrix.android.sdk.api.extensions.orFalse
-import org.matrix.android.sdk.api.session.events.model.Event
+import im.vector.app.features.home.room.detail.timeline.item.CallTileTimelineItem
+import im.vector.app.features.home.room.detail.timeline.item.CallTileTimelineItem_
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.widgets.model.WidgetContent
 import org.matrix.android.sdk.api.session.widgets.model.WidgetType
+import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
 class WidgetItemFactory @Inject constructor(
-        private val sp: StringProvider,
-        private val messageItemAttributesFactory: MessageItemAttributesFactory,
         private val informationDataFactory: MessageInformationDataFactory,
         private val noticeItemFactory: NoticeItemFactory,
         private val avatarSizeProvider: AvatarSizeProvider,
-        private val activeSessionDataSource: ActiveSessionDataSource
-) {
-    private val currentUserId: String?
-        get() = activeSessionDataSource.currentValue?.orNull()?.myUserId
-
-    private fun Event.isSentByCurrentUser() = senderId != null && senderId == currentUserId
+        private val messageColorProvider: MessageColorProvider,
+        private val avatarRenderer: AvatarRenderer,
+        private val userPreferencesProvider: UserPreferencesProvider) {
 
     fun create(params: TimelineItemFactoryParams): VectorEpoxyModel<*>? {
         val event = params.event
@@ -51,62 +45,54 @@ class WidgetItemFactory @Inject constructor(
         val previousWidgetContent: WidgetContent? = event.root.resolvedPrevContent().toModel()
 
         return when (WidgetType.fromString(widgetContent.type ?: previousWidgetContent?.type ?: "")) {
-            WidgetType.Jitsi -> createJitsiItem(params, widgetContent, previousWidgetContent)
+            WidgetType.Jitsi -> createJitsiItem(params, widgetContent)
             // There is lot of other widget types we could improve here
             else             -> noticeItemFactory.create(params)
         }
     }
 
-    private fun createJitsiItem(params: TimelineItemFactoryParams,
-                                widgetContent: WidgetContent,
-                                previousWidgetContent: WidgetContent?): VectorEpoxyModel<*> {
-        val timelineEvent = params.event
+    private fun createJitsiItem(params: TimelineItemFactoryParams, widgetContent: WidgetContent): VectorEpoxyModel<*>? {
         val informationData = informationDataFactory.create(params)
-        val attributes = messageItemAttributesFactory.create(null, informationData, params.callback)
-
-        val disambiguatedDisplayName = timelineEvent.senderInfo.disambiguatedDisplayName
-        val message = if (widgetContent.isActive()) {
-            val widgetName = widgetContent.getHumanName()
-            if (previousWidgetContent?.isActive().orFalse()) {
-                // Widget has been modified
-                if (timelineEvent.root.isSentByCurrentUser()) {
-                    sp.getString(R.string.notice_widget_jitsi_modified_by_you, widgetName)
-                } else {
-                    sp.getString(R.string.notice_widget_jitsi_modified, disambiguatedDisplayName, widgetName)
-                }
+        val userOfInterest = params.partialState.roomSummary?.toMatrixItem() ?: return null
+        val isActiveTile = widgetContent.isActive()
+        val jitsiWidgetEventsGroup = params.eventsGroup?.let { JitsiWidgetEventsGroup(it) } ?: return null
+        val isCallStillActive = jitsiWidgetEventsGroup.isStillActive()
+        val showHiddenEvents = userPreferencesProvider.shouldShowHiddenEvents()
+        if (isActiveTile && !isCallStillActive) {
+            return if (showHiddenEvents) {
+                noticeItemFactory.create(params)
             } else {
-                // Widget has been added
-                if (timelineEvent.root.isSentByCurrentUser()) {
-                    sp.getString(R.string.notice_widget_jitsi_added_by_you, widgetName)
-                } else {
-                    sp.getString(R.string.notice_widget_jitsi_added, disambiguatedDisplayName, widgetName)
-                }
-            }
-        } else {
-            // Widget has been removed
-            val widgetName = previousWidgetContent?.getHumanName()
-            if (timelineEvent.root.isSentByCurrentUser()) {
-                sp.getString(R.string.notice_widget_jitsi_removed_by_you, widgetName)
-            } else {
-                sp.getString(R.string.notice_widget_jitsi_removed, disambiguatedDisplayName, widgetName)
+                null
             }
         }
-
-        return WidgetTileTimelineItem_()
-                .attributes(
-                        WidgetTileTimelineItem.Attributes(
-                                title = message,
-                                drawableStart = R.drawable.ic_video,
-                                informationData = informationData,
-                                avatarRenderer = attributes.avatarRenderer,
-                                messageColorProvider = attributes.messageColorProvider,
-                                itemLongClickListener = attributes.itemLongClickListener,
-                                itemClickListener = attributes.itemClickListener,
-                                reactionPillCallback = attributes.reactionPillCallback,
-                                readReceiptsCallback = attributes.readReceiptsCallback,
-                                emojiTypeFace = attributes.emojiTypeFace
-                        )
-                )
+        val callStatus = if (isActiveTile && params.event.root.stateKey == params.partialState.jitsiState.widgetId) {
+            if (params.partialState.jitsiState.hasJoined) {
+                CallTileTimelineItem.CallStatus.IN_CALL
+            } else {
+                CallTileTimelineItem.CallStatus.INVITED
+            }
+        } else {
+            CallTileTimelineItem.CallStatus.ENDED
+        }
+        val attributes = CallTileTimelineItem.Attributes(
+                callId = jitsiWidgetEventsGroup.callId,
+                callKind = CallTileTimelineItem.CallKind.CONFERENCE,
+                callStatus = callStatus,
+                informationData = informationData,
+                avatarRenderer = avatarRenderer,
+                messageColorProvider = messageColorProvider,
+                itemClickListener = null,
+                itemLongClickListener = null,
+                reactionPillCallback = params.callback,
+                readReceiptsCallback = params.callback,
+                userOfInterest = userOfInterest,
+                callback = params.callback,
+                isStillActive = isCallStillActive,
+                formattedDuration = ""
+        )
+        return CallTileTimelineItem_()
+                .attributes(attributes)
+                .highlighted(params.isHighlighted)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
     }
 }

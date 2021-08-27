@@ -60,7 +60,7 @@ class VectorCallViewModel @AssistedInject constructor(
             setState {
                 copy(
                         isLocalOnHold = call?.isLocalOnHold ?: false,
-                        isRemoteOnHold = call?.remoteOnHold ?: false
+                        isRemoteOnHold = call?.isRemoteOnHold ?: false
                 )
             }
         }
@@ -144,7 +144,7 @@ class VectorCallViewModel @AssistedInject constructor(
 
         override fun onAudioDevicesChange() {
             val currentSoundDevice = callManager.audioManager.selectedDevice ?: return
-            if (currentSoundDevice == CallAudioManager.Device.PHONE) {
+            if (currentSoundDevice == CallAudioManager.Device.Phone) {
                 proximityManager.start()
             } else {
                 proximityManager.stop()
@@ -172,7 +172,12 @@ class VectorCallViewModel @AssistedInject constructor(
     }
 
     init {
-        val webRtcCall = callManager.getCallById(initialState.callId)
+        setupCallWithCurrentState()
+    }
+
+    private fun setupCallWithCurrentState() = withState { state ->
+        call?.removeListener(callListener)
+        val webRtcCall = callManager.getCallById(state.callId)
         if (webRtcCall == null) {
             setState {
                 copy(callState = Fail(IllegalArgumentException("No call")))
@@ -182,17 +187,19 @@ class VectorCallViewModel @AssistedInject constructor(
             callManager.addCurrentCallListener(currentCallListener)
             webRtcCall.addListener(callListener)
             val currentSoundDevice = callManager.audioManager.selectedDevice
-            if (currentSoundDevice == CallAudioManager.Device.PHONE) {
+            if (currentSoundDevice == CallAudioManager.Device.Phone) {
                 proximityManager.start()
             }
             setState {
                 copy(
+                        isAudioMuted = webRtcCall.micMuted,
+                        isVideoEnabled = !webRtcCall.videoMuted,
                         isVideoCall = webRtcCall.mxCall.isVideoCall,
                         callState = Success(webRtcCall.mxCall.state),
                         callInfo = webRtcCall.extractCallInfo(),
-                        device = currentSoundDevice ?: CallAudioManager.Device.PHONE,
+                        device = currentSoundDevice ?: CallAudioManager.Device.Phone,
                         isLocalOnHold = webRtcCall.isLocalOnHold,
-                        isRemoteOnHold = webRtcCall.remoteOnHold,
+                        isRemoteOnHold = webRtcCall.isRemoteOnHold,
                         availableDevices = callManager.audioManager.availableDevices,
                         isFrontCamera = webRtcCall.currentCameraType() == CameraType.FRONT,
                         canSwitchCamera = webRtcCall.canSwitchCamera(),
@@ -225,6 +232,7 @@ class VectorCallViewModel @AssistedInject constructor(
     override fun onCleared() {
         callManager.removeCurrentCallListener(currentCallListener)
         call?.removeListener(callListener)
+        call = null
         proximityManager.stop()
         super.onCleared()
     }
@@ -302,8 +310,12 @@ class VectorCallViewModel @AssistedInject constructor(
                         VectorCallViewEvents.ShowCallTransferScreen
                 )
             }
-            VectorCallViewActions.TransferCall         -> {
+            VectorCallViewActions.TransferCall  -> {
                 handleCallTransfer()
+            }
+            is VectorCallViewActions.SwitchCall -> {
+                setState { VectorCallViewState(action.callArgs) }
+                setupCallWithCurrentState()
             }
         }.exhaustive
     }

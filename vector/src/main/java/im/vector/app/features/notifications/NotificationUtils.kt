@@ -360,7 +360,7 @@ class NotificationUtils @Inject constructor(private val context: Context,
         val builder = NotificationCompat.Builder(context, SILENT_NOTIFICATION_CHANNEL_ID)
                 .setContentTitle(ensureTitleNotEmpty(title))
                 .apply {
-                    setContentText(stringProvider.getString(R.string.call_ring))
+                    setContentText(stringProvider.getString(R.string.call_ringing))
                     if (call.mxCall.isVideoCall) {
                         setSmallIcon(R.drawable.ic_call_answer_video)
                     } else {

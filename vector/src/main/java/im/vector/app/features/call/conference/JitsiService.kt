@@ -108,8 +108,7 @@ class JitsiService @Inject constructor(
             this.avatar = userAvatar?.let { URL(it) }
         }
         val roomName = session.getRoomSummary(roomId)?.displayName
-        val properties = session.widgetService().getWidgetComputedUrl(jitsiWidget, themeProvider.isLightTheme())
-                ?.let { url -> jitsiWidgetPropertiesFactory.create(url) } ?: throw IllegalStateException()
+        val properties = extractProperties(jitsiWidget) ?: throw IllegalStateException()
 
         val token = if (jitsiWidget.isOpenIdJWTAuthenticationRequired()) {
             getOpenIdJWTToken(roomId, properties.domain, userDisplayName ?: session.myUserId, userAvatar ?: "")
@@ -124,6 +123,11 @@ class JitsiService @Inject constructor(
                 userInfo = userInfo,
                 token = token
         )
+    }
+
+    fun extractProperties(jitsiWidget: Widget): JitsiWidgetProperties? {
+        return session.widgetService().getWidgetComputedUrl(jitsiWidget, themeProvider.isLightTheme())
+                ?.let { url -> jitsiWidgetPropertiesFactory.create(url) }
     }
 
     private fun Widget.isOpenIdJWTAuthenticationRequired(): Boolean {
