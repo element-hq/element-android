@@ -165,13 +165,16 @@ class RoomPreviewNoPreviewFragment @Inject constructor(
                 // Render with initial state, no peeking
                 views.roomPreviewPeekingProgress.isVisible = false
                 views.roomPreviewNoPreviewJoin.isVisible = true
-                renderState(bestName, state.matrixItem(), state.roomTopic, state.roomType)
+                renderState(bestName, state.matrixItem(), state.roomTopic
+                        /**, state.roomType*/)
                 views.roomPreviewNoPreviewLabel.isVisible = false
             }
         }
     }
 
-    private fun renderState(roomName: String, matrixItem: MatrixItem?, topic: String?, roomType: String?) {
+    private fun renderState(roomName: String, matrixItem: MatrixItem?, topic: String?
+            /**, roomType: String?*/
+    ) {
         // Toolbar
         if (matrixItem != null) {
             views.roomPreviewNoPreviewToolbarAvatar.isVisible = true
