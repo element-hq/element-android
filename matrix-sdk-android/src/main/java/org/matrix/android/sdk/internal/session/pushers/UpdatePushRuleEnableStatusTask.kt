@@ -35,7 +35,11 @@ internal class DefaultUpdatePushRuleEnableStatusTask @Inject constructor(
 
     override suspend fun execute(params: UpdatePushRuleEnableStatusTask.Params) {
         return executeRequest(globalErrorReceiver) {
-            pushRulesApi.updateEnableRuleStatus(params.kind.value, params.pushRule.ruleId, params.enabled)
+            pushRulesApi.updateEnableRuleStatus(
+                    params.kind.value,
+                    params.pushRule.ruleId,
+                    EnabledBody(params.enabled)
+            )
         }
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Matrix.org Foundation C.I.C.
+ * Copyright 2021 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-internal data class GetPushersResponse(
-        @Json(name = "pushers")
-        val pushers: List<JsonPusher>? = null
+internal data class EnabledBody(
+        @Json(name = "enabled")
+        val enabled: Boolean
 )
