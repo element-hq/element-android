@@ -51,6 +51,7 @@
 
     <TextView
         android:id="@+id/knownUserName"
+        style="@style/Widget.Vector.TextView.Subtitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
@@ -59,7 +60,6 @@
         android:ellipsize="end"
         android:maxLines="1"
         android:textColor="?vctr_content_primary"
-        android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/knownUserDomain"
         app:layout_constraintStart_toEndOf="@id/knownUserAvatarContainer"
@@ -68,13 +68,12 @@
 
     <TextView
         android:id="@+id/knownUserDomain"
+        style="@style/Widget.Vector.TextView.Caption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_marginStart="12dp"
         android:fontFamily="sans-serif-medium"
-        android:textColor="?vctr_content_secondary"
-        android:textSize="11sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"

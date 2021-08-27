@@ -6,13 +6,13 @@
     android:layout_height="match_parent">
 
     <TextView
+        style="@style/Widget.Vector.TextView.Title"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-light"
         android:gravity="center_horizontal"
         android:text="@string/start_message"
         android:textColor="?colorPrimaryVariant"
-        android:textSize="23.8sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -31,13 +31,12 @@
 
     <TextView
         android:id="@+id/fragment_tchap_welcome_register_button"
+        style="@style/Widget.Vector.Button.Text.Login"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:fontFamily="sans-serif"
         android:gravity="center"
         android:text="@string/tchap_has_account_no"
         android:textColor="?colorPrimaryVariant"
-        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="@id/fragment_tchap_welcome_separator"
         app:layout_constraintEnd_toEndOf="@id/fragment_tchap_welcome_separator"
         app:layout_constraintStart_toStartOf="parent"
@@ -45,13 +44,12 @@
 
     <TextView
         android:id="@+id/fragment_tchap_welcome_login_button"
+        style="@style/Widget.Vector.Button.Text.Login"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:fontFamily="sans-serif"
         android:gravity="center"
         android:text="@string/tchap_has_account_yes"
         android:textColor="?colorPrimaryVariant"
-        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="@id/fragment_tchap_welcome_separator"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@id/fragment_tchap_welcome_separator"

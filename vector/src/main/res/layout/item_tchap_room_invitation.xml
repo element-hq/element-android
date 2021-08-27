@@ -45,11 +45,12 @@
         android:layout_width="0dp"
         android:layout_height="12dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/roomInvitationAvatarContainer"
+        app:layout_constraintTop_toBottomOf="@+id/roomInvitationAvatarContainer"
         tools:layout_marginStart="20dp" />
 
     <TextView
         android:id="@+id/roomInvitationNameView"
+        style="@style/Widget.Vector.TextView.Subtitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/layout_horizontal_margin"
@@ -59,28 +60,27 @@
         android:ellipsize="end"
         android:maxLines="1"
         android:textColor="?vctr_content_primary"
-        android:textSize="15sp"
         app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toEndOf="@id/roomInvitationAvatarContainer"
+        app:layout_constraintStart_toEndOf="@+id/roomInvitationAvatarContainer"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@sample/users.json/data/displayName" />
 
     <TextView
         android:id="@+id/roomInvitationSubTitle"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="3dp"
         android:ellipsize="end"
         android:maxLines="2"
         android:textColor="?vctr_content_secondary"
-        android:textSize="15sp"
-        app:layout_constraintEnd_toEndOf="@id/roomInvitationNameView"
-        app:layout_constraintStart_toStartOf="@id/roomInvitationNameView"
-        app:layout_constraintTop_toBottomOf="@id/roomInvitationNameView"
-        tools:text="@sample/messages.json/data/message" />
+        app:layout_constraintEnd_toEndOf="@+id/roomInvitationNameView"
+        app:layout_constraintStart_toStartOf="@+id/roomInvitationNameView"
+        app:layout_constraintTop_toBottomOf="@+id/roomInvitationNameView"
+        tools:text="@sample/rooms.json/data/topic" />
 
     <!-- Margin bottom does not work, so I use space -->
     <Space
@@ -88,7 +88,7 @@
         android:layout_width="0dp"
         android:layout_height="7dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/roomInvitationSubTitle"
+        app:layout_constraintTop_toBottomOf="@+id/roomInvitationSubTitle"
         tools:layout_marginStart="120dp" />
 
     <im.vector.app.core.platform.ButtonStateView
@@ -100,8 +100,8 @@
         app:bsv_button_text="@string/accept"
         app:bsv_loaded_image_src="@drawable/ic_tick"
         app:bsv_use_flat_button="false"
-        app:layout_constraintEnd_toEndOf="@id/roomInvitationNameView"
-        app:layout_constraintTop_toBottomOf="@id/roomLastEventBottomSpace" />
+        app:layout_constraintEnd_toEndOf="@+id/roomInvitationNameView"
+        app:layout_constraintTop_toBottomOf="@+id/roomLastEventBottomSpace" />
 
     <im.vector.app.core.platform.ButtonStateView
         android:id="@+id/roomInvitationReject"
@@ -112,18 +112,19 @@
         app:bsv_button_text="@string/reject"
         app:bsv_loaded_image_src="@drawable/ic_tick"
         app:bsv_use_flat_button="false"
-        app:layout_constraintEnd_toStartOf="@id/roomInvitationAccept"
-        app:layout_constraintTop_toTopOf="@id/roomInvitationAccept" />
+        app:layout_constraintEnd_toStartOf="@+id/roomInvitationAccept"
+        app:layout_constraintTop_toTopOf="@+id/roomInvitationAccept" />
 
+    <!-- We use vctr_list_separator_system here for a better rendering -->
     <View
         android:id="@+id/roomInvitationDividerView"
         android:layout_width="0dp"
         android:layout_height="1dp"
         android:layout_marginTop="5dp"
-        android:background="?vctr_list_separator"
+        android:background="?vctr_list_separator_system"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/roomInvitationAccept" />
+        app:layout_constraintTop_toBottomOf="@+id/roomInvitationAccept" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -29,26 +29,6 @@
 
             <include layout="@layout/fragment_tchap_message_button" />
 
-            <LinearLayout
-                android:id="@+id/main_input_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginTop="19dp"
-                android:orientation="vertical">
-
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/flow_progress_message_textview"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:textSize="16sp"
-                android:visibility="gone"
-                tools:text="A text here" />
-
         </LinearLayout>
 
     </ScrollView>

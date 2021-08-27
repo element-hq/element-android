@@ -12,6 +12,7 @@
 
     <TextView
         android:id="@+id/fragment_tchap_message_button_notice"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -26,7 +27,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/fragment_tchap_message_button_notice"
         tools:text="@string/auth_reset_password_next_step_button" />
