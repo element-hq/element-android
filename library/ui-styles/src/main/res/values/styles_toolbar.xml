@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Widget.Vector.Toolbar.Base" parent="Widget.MaterialComponents.Toolbar.Primary">
+    <style name="Widget.Vector.Toolbar.Base" parent="Widget.MaterialComponents.Toolbar">
+        <item name="android:background">?vctr_toolbar_background</item>
         <item name="elevation">0dp</item>
 
         <!-- main text -->
@@ -9,10 +10,10 @@
 
         <!-- sub text -->
         <item name="subtitleTextAppearance">@style/Widget.Vector.TextView.ActionBarSubTitle</item>
-        <item name="subtitleTextColor">?attr/colorOnPrimary</item>
+        <item name="subtitleTextColor">?vctr_content_primary</item>
 
         <!-- navigation icon -->
-        <item name="navigationIconTint">?attr/colorOnPrimary</item>
+        <item name="navigationIconTint">?vctr_content_primary</item>
     </style>
 
     <!-- Default toolbar style -->

@@ -81,8 +81,4 @@
         <item name="android:letterSpacing">0.02</item>
     </style>
 
-    <style name="TextAppearance.Tchap.Toolbar.Title" parent="Widget.Vector.TextView.ActionBarTitle">
-        <item name="android:textColor">?attr/colorOnPrimary</item>
-    </style>
-
 </resources>

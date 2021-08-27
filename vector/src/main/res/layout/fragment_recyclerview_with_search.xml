@@ -37,7 +37,7 @@
 
                 <TextView
                     android:id="@+id/appBarTitle"
-                    style="@style/TextAppearance.Tchap.Toolbar.Title"
+                    style="@style/Widget.Vector.TextView.ActionBarTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"

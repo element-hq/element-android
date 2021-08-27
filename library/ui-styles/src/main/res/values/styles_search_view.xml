@@ -3,8 +3,10 @@
 
     <style name="Widget.Vector.SearchView" parent="Widget.AppCompat.SearchView">
         <item name="searchIcon">@drawable/ic_search</item>
+        <item name="searchHintIcon">@drawable/ic_search</item>
         <item name="closeIcon">@drawable/ic_x_gray</item>
         <item name="iconifiedByDefault">false</item>
+        <item name="android:textSize">14sp</item>
     </style>
 
 </resources>

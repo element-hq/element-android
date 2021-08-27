@@ -55,11 +55,6 @@
     <color name="element_room_02">@color/palette_azure</color>
     <color name="element_room_03">@color/palette_grape</color>
 
-    <!-- SearchView in toolbar -->
-    <color name="tchap_toolbar_search_hint">@color/palette_tchap_white_alpha24</color>
-    <color name="tchap_toolbar_search_bg">@color/palette_tchap_white_alpha15</color>
-    <color name="tchap_toolbar_search_stroke">@color/palette_tchap_white_alpha24</color>
-
     <!-- Tchap room type color -->
     <color name="tchap_room_encrypted">@color/palette_tchap_greyish_brown</color>
     <color name="tchap_room_private">@color/palette_tchap_coral</color>

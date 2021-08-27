@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-
-    <style name="Theme.Tchap.ActionButton.Overflow" parent="Widget.AppCompat.ActionButton.Overflow">
-        <item name="android:tint">?attr/colorOnPrimary</item>
-    </style>
-
-</resources>

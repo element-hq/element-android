@@ -67,7 +67,6 @@
 
                 <androidx.appcompat.widget.SearchView
                     android:id="@+id/homeSearchView"
-                    style="@style/Widget.Tchap.SearchView.Toolbar"
                     android:layout_width="0dp"
                     android:layout_height="34dp"
                     android:layout_marginEnd="4dp"
@@ -88,7 +87,7 @@
 
                     <TextView
                         android:id="@+id/groupToolbarTitleView"
-                        style="@style/TextAppearance.Tchap.Toolbar.Title"
+                        style="@style/Widget.Vector.TextView.ActionBarTitle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:ellipsize="end"

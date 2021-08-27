@@ -48,10 +48,4 @@
         <item name="lineHeight">16sp</item>
     </style>
 
-    <style name="Widget.Tchap.Toolbar.TextView" parent="Widget.MaterialComponents.TextView" />
-
-    <style name="Widget.Tchap.Toolbar.TextView.Title">
-        <item name="android:textAppearance">@style/TextAppearance.Tchap.Toolbar.Title</item>
-    </style>
-
 </resources>

@@ -28,7 +28,6 @@
 
             <androidx.appcompat.widget.SearchView
                 android:id="@+id/publicRoomsFilter"
-                android:theme="@style/AppTheme.Toolbar.SearchView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:queryHint="@string/room_directory_search_hint" />

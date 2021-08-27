@@ -30,7 +30,7 @@
         <item name="vctr_reaction_background_on">@color/vctr_reaction_background_on_light</item>
         <item name="vctr_waiting_background_color">@color/vctr_waiting_background_color_light</item>
         <item name="vctr_chat_effect_snow_background">@color/vctr_chat_effect_snow_background_light</item>
-        <item name="vctr_toolbar_background">@color/element_accent_light</item>
+        <item name="vctr_toolbar_background">@color/element_background_light</item>
         <item name="tchap_bottom_navigation_background">@color/element_background_light</item>
 
         <!-- room message colors -->
@@ -86,7 +86,6 @@
         <item name="snackbarButtonStyle">@style/Widget.Vector.SnackBar.Button</item>
         <item name="snackbarTextViewStyle">@style/Widget.Vector.SnackBar.TextView</item>
         <item name="actionModeStyle">@style/Widget.Vector.ActionMode</item>
-        <item name="actionOverflowButtonStyle">@style/Theme.Tchap.ActionButton.Overflow</item>
 
         <!-- Default theme -->
         <item name="bottomSheetDialogTheme">@style/Theme.Vector.BottomSheetDialog.Light</item>
@@ -95,7 +94,7 @@
         <item name="android:textColorLink">@color/element_link_light</item>
 
         <!-- Menu text color -->
-        <item name="android:actionMenuTextColor">?colorOnPrimary</item>
+        <item name="android:actionMenuTextColor">?colorSecondary</item>
 
         <!-- Default color for text View -->
         <item name="android:textColorTertiary">@color/element_content_primary_light</item>

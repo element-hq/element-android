@@ -48,7 +48,7 @@
 
                 <TextView
                     android:id="@+id/roomSettingsToolbarTitleView"
-                    style="@style/Widget.Tchap.Toolbar.TextView.Title"
+                    style="@style/Widget.Vector.TextView.ActionBarTitle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
