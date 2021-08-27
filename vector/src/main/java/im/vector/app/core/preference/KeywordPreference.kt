@@ -94,7 +94,6 @@ class KeywordPreference : VectorPreference {
             if (keyword.isEmpty()) {
                 return false
             }
-            _keywords.add(keyword)
             listener?.didAddKeyword(keyword)
             onPreferenceChangeListener?.onPreferenceChange(this, _keywords)
             notifyChanged()
@@ -123,7 +122,6 @@ class KeywordPreference : VectorPreference {
             if (!keywordsEnabled) {
                 return@setOnCloseIconClickListener
             }
-            _keywords.remove(keyword)
             listener?.didRemoveKeyword(keyword)
             onPreferenceChangeListener?.onPreferenceChange(this, _keywords)
             notifyChanged()

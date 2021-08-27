@@ -148,7 +148,7 @@ class VectorSettingsKeywordAndMentionsNotificationPreferenceFragment
             hideLoadingView()
             // Already added to UI, no-op on success
             result.onFailure {
-                // Just display an error on failure, keywords will update when push rules refreshed
+                // Just display an error on failure, keywords have not been added to the UI
                 activity?.toast(errorFormatter.toHumanReadable(it))
             }
         }
@@ -166,7 +166,7 @@ class VectorSettingsKeywordAndMentionsNotificationPreferenceFragment
             hideLoadingView()
             // Already added to UI, no-op on success
             result.onFailure {
-                // Just display an error on failure, keywords will update when push rules refreshed
+                // Just display an error on failure, keywords have not been added to the UI
                 activity?.toast(errorFormatter.toHumanReadable(it))
             }
         }
