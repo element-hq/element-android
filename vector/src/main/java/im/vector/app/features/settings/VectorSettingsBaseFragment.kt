@@ -178,5 +178,4 @@ abstract class VectorSettingsBaseFragment : PreferenceFragmentCompat(), HasScree
                 .setPositiveButton(R.string.ok, null)
                 .show()
     }
-
 }
