@@ -25,7 +25,12 @@ Runs all the tests
 ```
 fastlane android deploy
 ```
-Deploy a new version to the Google Play
+Deploy a new version to Google Play
+### android deploy_beta
+```
+fastlane android deploy_beta
+```
+Deploy a beta to Google Play
 
 ----
 
