@@ -2152,7 +2152,7 @@
         <item quantity="other">Enviar imagens com o tamanho original</item>
     </plurals>
     <string name="delete_event_dialog_title">Confirmar Remoção</string>
-    <string name="delete_event_dialog_content">Você tem certeza que você deseja remover (deletar) este evento\? Note que se você deletar um nome de sala ou mudança de tópico, poderia desfazer a mudança.</string>
+    <string name="delete_event_dialog_content">Você tem certeza que você deseja remover (deletar) este evento\? Note que se você deletar um nome de sala ou mudança de tópico, isto poderia desfazer a mudança.</string>
     <string name="delete_event_dialog_reason_checkbox">Incluir uma razão</string>
     <string name="delete_event_dialog_reason_hint">Razão para redigir</string>
     <string name="event_redacted_by_user_reason_with_reason">Evento deletado por usuária(o), razão: %1$s</string>
