@@ -23,12 +23,14 @@ import timber.log.Timber
 import java.net.URLDecoder
 
 /**
- * This class turns an uri to a [PermalinkData]
+ * This class turns a uri to a [PermalinkData]
+ * element-based domains (e.g. https://app.element.io/#/user/@chagai95:matrix.org) permalinks or matrix.to permalinks (e.g. https://matrix.to/#/@chagai95:matrix.org)
+ * 
  */
 object PermalinkParser {
 
     /**
-     * Turns an uri string to a [PermalinkData]
+     * Turns a uri string to a [PermalinkData]
      */
     fun parse(uriString: String): PermalinkData {
         val uri = Uri.parse(uriString)
@@ -36,7 +38,7 @@ object PermalinkParser {
     }
 
     /**
-     * Turns an uri to a [PermalinkData]
+     * Turns a uri to a [PermalinkData]
      * https://github.com/matrix-org/matrix-doc/blob/master/proposals/1704-matrix.to-permalinks.md
      */
     fun parse(uri: Uri): PermalinkData {
@@ -59,7 +61,12 @@ object PermalinkParser {
                 .map { URLDecoder.decode(it, "UTF-8") }
                 .take(2)
 
-        val identifier = params.getOrNull(0)
+        // the element-based domain permalinks (e.g. https://app.element.io/#/user/@chagai95:matrix.org) don't have the mxid in the first param (like matrix.to does - https://matrix.to/#/@chagai95:matrix.org) but rather in the second after /user/ so /user/mxid
+        var identifier = params.getOrNull(0);
+        if (identifier.equals("user")) {
+            identifier = params.getOrNull(1)
+        }
+
         val extraParameter = params.getOrNull(1)
         return when {
             identifier.isNullOrEmpty()             -> PermalinkData.FallbackLink(uri)
