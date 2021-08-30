@@ -116,7 +116,7 @@ You should consider adding Unit tests with your PR, and also integration tests (
 
 ### Internationalisation
 
-When adding new string resources, please only add new entries in file `value/strings.xml`. Translations will be added later by the community of translators with a specific tool named [Weblate](https://translate.riot.im/projects/riot-android/).
+When adding new string resources, please only add new entries in file `value/strings.xml`. Translations will be added later by the community of translators with a dedicated tool named [Weblate](https://translate.element.io/projects/element-android/).
 Do not hesitate to use plurals when appropriate.
 
 ### Accessibility
