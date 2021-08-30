@@ -132,7 +132,7 @@ Do not hesitate to use plurals when appropriate.
 
 Two cases:
 - If the meaning stays the same, it's OK to edit the original string (i.e. the English version).
-- If the meaning is not the same, please create a new string and do not remove the existing string. See below for instructions to remove existing sting.
+- If the meaning is not the same, please create a new string and do not remove the existing string. See below for instructions to remove existing string.
 
 #### Removing existing strings
 
