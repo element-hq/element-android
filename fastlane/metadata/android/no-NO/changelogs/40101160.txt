@@ -1,0 +1,2 @@
+Hovedendringer i denne versjonen: Løs feil ved sending av kryptert melding hvis noen i rommet logger av.
+Full endringslogg: https://github.com/vector-im/element-android/releases/tag/v1.1.16

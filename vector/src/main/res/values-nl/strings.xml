@@ -1539,4 +1539,17 @@
     <string name="notice_direct_room_join">%1$s sluit aan</string>
     <string name="notice_room_join_by_you">Je hebt de kamer betreden</string>
     <string name="summary_you_sent_sticker">Je hebt een sticker verzonden.</string>
+    <string name="voice_message_tap_to_stop_toast">Druk op je opname om te stoppen of om te luisteren</string>
+    <string name="voice_message_release_to_send_toast">Houd ingedrukt om op te nemen, laat los om te verzenden</string>
+    <string name="a11y_delete_recorded_voice_message">Verwijder opgenomen stembericht</string>
+    <string name="a11y_recording_voice_message">Stembericht aan het opnemen</string>
+    <string name="a11y_pause_voice_message">Pauzeer stembericht</string>
+    <string name="a11y_play_voice_message">Speel stembericht af</string>
+    <string name="upgrade_room_for_restricted">Iedereen in %s kan de ruimte vinden en betreden - het is niet nodig om iedereen handmatig uit te nodigen. Je kan dit op elk moment aanpassen in de ruimte-instellingen.</string>
+    <string name="voice_message_reply_content">Stembericht (%1$s)</string>
+    <string name="error_voice_message_cannot_reply_or_edit">Kan niet antwoorden of aanpassen als stembericht actief is</string>
+    <string name="error_voice_message_unable_to_record">Kan stembericht niet opnemen</string>
+    <string name="error_voice_message_unable_to_play">Kan stembericht niet afspelen</string>
+    <string name="notice_profile_change_redacted_by_you">Je hebt je profiel geüpdatet %1$s</string>
+    <string name="notice_requested_voip_conference_by_you">Je hebt een VoIP-vergadering aangevraagd</string>
 </resources>

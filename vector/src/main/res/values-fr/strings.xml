@@ -2886,4 +2886,17 @@
     <string name="room_create_member_of_space_name_can_join">Les membres de l’espace %s peuvent trouver, prévisualiser et venir.</string>
     <string name="room_settings_room_access_private_invite_only_title">Privé (seulement sur invitation)</string>
     <string name="denied_permission_voice_message">Pour envoyer des messages vocaux, veuillez accorder la permission Microphone.</string>
+    <string name="settings_room_upgrades">Les mises-à-jour de salon</string>
+    <string name="settings_messages_by_bot">Les messages envoyés par un robot</string>
+    <string name="settings_room_invitations">Les invitations à des salons</string>
+    <string name="settings_encrypted_group_messages">Les conversations de groupe chiffrées</string>
+    <string name="settings_group_messages">Les conversations de groupe</string>
+    <string name="settings_encrypted_direct_messages">Les conversations privées chiffrées</string>
+    <string name="settings_messages_direct_messages">Les conversations privées</string>
+    <string name="settings_messages_containing_username">Les messages contenant mon nom d’utilisateur</string>
+    <string name="settings_messages_containing_display_name">Les messages contenant mon nom d’affichage</string>
+    <string name="settings_notification_notify_me_for">Me notifier pour</string>
+    <string name="settings_notification_other">Autre</string>
+    <string name="settings_notification_mentions_and_keywords">Mentions et mots-clés</string>
+    <string name="settings_notification_default">Notifications par défaut</string>
 </resources>
