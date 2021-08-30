@@ -250,7 +250,7 @@ class RoomDetailViewModel @AssistedInject constructor(
             setState {
                 val jitsiWidget = widgets.firstOrNull { it.type == WidgetType.Jitsi }
                 val jitsiConfId = jitsiWidget?.let {
-                    jitsiService.extractProperties(it)?.confId
+                    jitsiService.extractJitsiWidgetData(it)?.confId
                 }
                 copy(
                         jitsiState = jitsiState.copy(

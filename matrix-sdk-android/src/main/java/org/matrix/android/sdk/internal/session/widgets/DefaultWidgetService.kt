@@ -52,7 +52,7 @@ internal class DefaultWidgetService @Inject constructor(private val widgetManage
         return widgetManager.getWidgetComputedUrl(widget, isLightTheme)
     }
 
-    override fun getRoomWidgetsLive(
+override fun getRoomWidgetsLive(
             roomId: String,
             widgetId: QueryStringValue,
             widgetTypes: Set<String>?,
