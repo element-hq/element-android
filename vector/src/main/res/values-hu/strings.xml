@@ -467,7 +467,7 @@
     <string name="room_resend_unsent_messages">El nem küldött üzenetek újraküldése</string>
     <string name="room_delete_unsent_messages">El nem küldött üzenetek törlése</string>
     <string name="room_message_file_not_found">Fájl nem található</string>
-    <string name="room_do_not_have_permission_to_post">Nincs engedélyed hogy üzenetet hagyj ebbe a szobában</string>
+    <string name="room_do_not_have_permission_to_post">Nincs engedélyed hogy üzenetet hagyj ebbe a szobában.</string>
     <string name="ssl_trust">Megbízom benne</string>
     <string name="ssl_do_not_trust">Nem bízom meg benne</string>
     <string name="ssl_logout_account">Kijelentkezés</string>
@@ -949,7 +949,7 @@ Matrixban az üzenetek láthatósága hasonlít az e-mailre. Az üzenet törlés
     <string name="command_description_nick">Becenév megváltoztatása</string>
     <string name="command_description_markdown">Markdown ki-,bekapcsolása</string>
     <string name="command_description_clear_scalar_token">Matrix-kisalkalmazás-token törlése</string>
-    <string name="room_tombstone_versioned_description">Ez a szoba le lett cserélve és már nem aktív</string>
+    <string name="room_tombstone_versioned_description">Ez a szoba le lett cserélve és már nem aktív.</string>
     <string name="room_tombstone_continuation_link">A beszélgetés itt folytatódik</string>
     <string name="room_tombstone_continuation_description">Ez a szoba egy másik beszélgetés folytatása</string>
     <string name="room_tombstone_predecessor_link">Régebbi üzenetek megjelenítéséhez kattints ide</string>
@@ -1943,7 +1943,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
 \n- Valamelyik eszköz által használt internet elérés
 \n
 \nJavasoljuk, hogy azonnal cseréld le a jelszavadat és a visszaállítási kulcsot a Beállításokban.</string>
-    <string name="verify_cancelled_notice">Ellenőrizd az eszközödet a Beállításokból.</string>
+    <string name="verify_cancelled_notice">Ellenőrzés megszakítva. Újrakezdheted az ellenőrzést.</string>
     <string name="verification_cancelled">Ellenőrzés megszakítva</string>
     <string name="recovery_passphrase">Visszaállítási jelmondat</string>
     <string name="message_key">Üzenet Kulcs</string>
@@ -2472,7 +2472,6 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="spaces_no_server_support_title">Úgy látszik a matrix szervered nem támogatja egyelőre a Tereket</string>
     <string name="spaces_feeling_experimental_subspace">Szeretsz kísérletezni\?
 \nTereket adhatsz terekhez.</string>
-    <string name="labs_space_show_orphan_in_home">Kísérleti tér - Csak árvák mutatása a Kezdőlapon</string>
     <string name="space_manage_rooms_and_spaces">Szobák és terek kezelése</string>
     <string name="space_mark_as_not_suggested">Nem javasoltnak jelölés</string>
     <string name="space_mark_as_suggested">Javasoltnak jelölés</string>
@@ -2754,7 +2753,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
         <item quantity="other">%d meghívó</item>
     </plurals>
     <string name="room_settings_room_version_title">Szoba verzió</string>
-    <string name="room_settings_room_access_restricted_title">Terek</string>
+    <string name="room_settings_room_access_restricted_title">Csak Tér tagoknak</string>
     <string name="room_settings_room_access_public_description">Bárki rátalálhat és beléphet a szobába</string>
     <string name="room_settings_room_access_public_title">Nyilvános</string>
     <string name="room_settings_room_access_private_description">Csak a meghívott személyek találják meg és tudnak belépni</string>
@@ -2820,4 +2819,82 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="create_space_alias_hint">Tér cím</string>
     <string name="space_settings_alias_subtitle">Tér címek megjelenítése és kezelése.</string>
     <string name="space_settings_alias_title">Tér címek</string>
+    <string name="room_upgrade_to_recommended_version">A szoba fejlesztése a javasolt verzióra</string>
+    <string name="room_using_unstable_room_version">A szoba verziója: %s, amelyet a Matrix-kiszolgáló instabilnak tekint.</string>
+    <string name="upgrade_room_no_power_to_manage">A szoba fejlesztéséhez engedélyre van szükséged</string>
+    <string name="upgrade_room_update_parent_space">Szülő tér automatikus frissítése</string>
+    <string name="upgrade_room_auto_invite">Felhasználók automatikus meghívása</string>
+    <string name="upgrade_public_room_from_to">A szobát fejleszted %1$s verzióról %2$s verzióra.</string>
+    <string name="upgrade_room_warning">A szoba fejlesztése haladó művelet és általában akkor ajánlott, ha a szoba valami hiba miatt instabil, hiányzik belőle valamilyen funkció vagy biztonsági hiányosság van benne.
+\nEz általában a szoba szerveren való feldolgozásának módját érinti.</string>
+    <string name="upgrade_private_room">Privát szoba fejlesztése</string>
+    <string name="upgrade_public_room">Nyilvános szoba fejlesztése</string>
+    <string name="upgrade">Fejlesztés</string>
+    <string name="it_may_take_some_time">Kérlek légy türelmes, hosszabb ideig is eltarthat.</string>
+    <string name="joining_replacement_room">Belépés a csere szobába</string>
+    <string name="command_description_upgrade_room">Szoba fejlesztése új verzióra</string>
+    <string name="settings_server_room_version_unstable">instabil</string>
+    <string name="settings_server_room_version_stable">stabil</string>
+    <string name="settings_server_default_room_version">Alapértelmezett verzió</string>
+    <string name="settings_server_room_versions">Szoba verziók 👓</string>
+    <string name="verification_scan_self_emoji_subtitle">Ellenőrzés inkább emodzsik összehasonlításával</string>
+    <string name="verification_scan_with_this_device">Beolvasás ezzel az eszközzel</string>
+    <string name="verification_scan_self_notice">Olvasd be a kódot egy másik eszközöddel vagy válts és olvasd be ezzel az eszközzel</string>
+    <string name="hs_client_url">Matrix szerver API URL</string>
+    <string name="missing_permissions_title">Hiányzó engedélyek</string>
+    <string name="denied_permission_camera">A művelethez a rendszer beállításokban engedélyezni kell a kamera használatát.</string>
+    <string name="denied_permission_generic">Ehhez a művelethez néhány engedély hiányzik amit a rendszer beállításokban lehet megadni.</string>
+    <plurals name="missed_video_call">
+        <item quantity="one">Nem fogadott videóhívás</item>
+        <item quantity="other">%d nem fogadott videóhívás</item>
+    </plurals>
+    <plurals name="missed_audio_call">
+        <item quantity="one">Nem fogadott hanghívás</item>
+        <item quantity="other">%d nem fogadott hanghívás</item>
+    </plurals>
+    <string name="upgrade_required">Fejlesztés szükséges</string>
+    <string name="sent_a_voice_message">Hanggal</string>
+    <string name="other_spaces_or_rooms_you_might_not_know">Más terek vagy szobák melyről lehet, hogy nem tudsz</string>
+    <string name="space_you_know_that_contains_this_room">Tér melyről tudod, hogy ezt a szobát tartalmazza</string>
+    <string name="decide_who_can_find_and_join">Döntsd el ki találhatja meg és léphet be ebbe a szobába.</string>
+    <string name="tap_to_edit_spaces">A terek szerkesztéséhez koppints</string>
+    <string name="select_spaces">Terek kiválasztása</string>
+    <string name="decide_which_spaces_can_access">Döntsd el melyik terek férhetnek hozzá ehhez a szobához. Ha a tér ki van választva a tagsága megtalálhatja és beléphet ebbe a szobába.</string>
+    <string name="spaces_which_can_access">A tér ezekhez fér hozzá:</string>
+    <string name="allow_space_member_to_find_and_access">Tér tagoknak engedélyezett a megtalálás és a hozzáférés.</string>
+    <string name="room_create_member_of_space_name_can_join">%s tér tagjai találhatják meg, kaphatnak bepillantást és csatlakozhatnak.</string>
+    <string name="room_settings_room_access_private_invite_only_title">Privát (csak meghívóval)</string>
+    <string name="settings_room_upgrades">Szoba fejlesztések</string>
+    <string name="settings_messages_by_bot">Üzenetek robotoktól</string>
+    <string name="settings_room_invitations">Szoba meghívók</string>
+    <string name="settings_encrypted_group_messages">Titkosított csoport beszélgetések</string>
+    <string name="settings_group_messages">Csoport üzenetek</string>
+    <string name="settings_encrypted_direct_messages">Titkosított közvetlen beszélgetések</string>
+    <string name="settings_messages_direct_messages">Közvetlen beszélgetések</string>
+    <string name="settings_messages_containing_username">Üzenetek amik a nevemet tartalmazzák</string>
+    <string name="settings_messages_containing_display_name">A profilnevemet tartalmazó üzenetek</string>
+    <string name="settings_notification_notify_me_for">Értesítés ezért:</string>
+    <string name="settings_notification_other">Más</string>
+    <string name="settings_notification_mentions_and_keywords">Megemlítések és kulcsszavak</string>
+    <string name="settings_notification_default">Alapértelmezett értesítések</string>
+    <string name="denied_permission_voice_message">Hangüzenet küldéséhez engedélyezd a hozzáférést a mikrofonhoz.</string>
+    <string name="upgrade_room_for_restricted_note">Vedd figyelembe, hogy a fejlesztés a szoba új verzióját hozza létre. Minden jelenlegi üzenet itt marad az archivált szobában.</string>
+    <string name="upgrade_room_for_restricted_no_param">A szülő térből bárki megtalálhatja és beléphet ebbe a szobába - nem kell meghívni egyenként senkit. Ezt a beállítást bármikor megváltoztathatod a szoba beállításokban.</string>
+    <string name="upgrade_room_for_restricted">Itt: %s bárki megtalálhatja és beléphet ebbe a szobába - nem kell meghívni egyenként senkit. Ezt a beállítást bármikor megváltoztathatod a szoba beállításokban.</string>
+    <string name="voice_message_reply_content">Hang üzenet (%1$s)</string>
+    <string name="error_voice_message_cannot_reply_or_edit">Válaszolni vagy szerkeszteni nem lehet hang üzenet módban</string>
+    <string name="error_voice_message_unable_to_record">Hang üzenetet nem lehet felvenni</string>
+    <string name="error_voice_message_unable_to_play">Ezt a hangüzenetet nem lehet lejátszani</string>
+    <string name="labs_use_voice_message">Hang üzenetek engedélyezése</string>
+    <string name="voice_message_tap_to_stop_toast">Megállításhoz és visszajátszáshoz koppints a felvételre</string>
+    <string name="voice_message_n_seconds_warning_toast">vissza van: %1$d</string>
+    <string name="voice_message_release_to_send_toast">Felvételhez tartsd nyomva, a küldéshez engedd el</string>
+    <string name="a11y_delete_recorded_voice_message">Felvett hang üzenet törlése</string>
+    <string name="a11y_recording_voice_message">Hang üzenet felvétel</string>
+    <string name="a11y_pause_voice_message">Hang üzenet szüneteltetése</string>
+    <string name="a11y_play_voice_message">Hang üzenet lejátszása</string>
+    <string name="a11y_lock_voice_message">Hang üzenet kitartó rögzítése</string>
+    <string name="voice_message_slide_to_cancel">Elhúzás a megszakításhoz</string>
+    <string name="a11y_start_voice_message">Hang üzenet indítása</string>
+    <string name="allow_anyone_in_room_to_access">%s tér tagság megtalálhatja és hozzáférhet. Más tereket is beállíthatsz.</string>
 </resources>

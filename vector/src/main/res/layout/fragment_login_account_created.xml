@@ -60,7 +60,7 @@
                     android:id="@+id/loginAccountCreatedAvatar"
                     android:layout_width="44dp"
                     android:layout_height="44dp"
-                    android:contentDescription="@string/avatar"
+                    android:importantForAccessibility="no"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:src="@tools:sample/avatars" />

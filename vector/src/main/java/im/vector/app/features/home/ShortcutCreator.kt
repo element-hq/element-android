@@ -17,7 +17,9 @@
 package im.vector.app.features.home
 
 import android.content.Context
+import android.content.pm.ShortcutInfo
 import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.os.Build
 import androidx.annotation.WorkerThread
 import androidx.core.content.pm.ShortcutInfoCompat
@@ -45,7 +47,7 @@ class ShortcutCreator @Inject constructor(
     private val adaptiveIconOuterSides = dimensionConverter.dpToPx(adaptiveIconOuterSidesDp)
     private val iconSize by lazy {
         if (useAdaptiveIcon) {
-            adaptiveIconSize - adaptiveIconOuterSides
+            adaptiveIconSize - (adaptiveIconOuterSides * 2)
         } else {
             dimensionConverter.dpToPx(72)
         }
@@ -56,27 +58,37 @@ class ShortcutCreator @Inject constructor(
     }
 
     @WorkerThread
-    fun create(roomSummary: RoomSummary): ShortcutInfoCompat {
+    fun create(roomSummary: RoomSummary, rank: Int = 1): ShortcutInfoCompat {
         val intent = RoomDetailActivity.shortcutIntent(context, roomSummary.roomId)
         val bitmap = try {
             avatarRenderer.shortcutDrawable(GlideApp.with(context), roomSummary.toMatrixItem(), iconSize)
         } catch (failure: Throwable) {
             null
         }
+        val categories = if (Build.VERSION.SDK_INT >= 25) {
+            setOf(directShareCategory, ShortcutInfo.SHORTCUT_CATEGORY_CONVERSATION)
+        } else {
+            setOf(directShareCategory)
+        }
+
         return ShortcutInfoCompat.Builder(context, roomSummary.roomId)
                 .setShortLabel(roomSummary.displayName)
                 .setIcon(bitmap?.toProfileImageIcon())
                 .setIntent(intent)
-
-                // Make it show up in the direct share menu
-                .setCategories(setOf(directShareCategory))
+                .setLongLived(true)
+                .setRank(rank)
+                .setCategories(categories)
 
                 .build()
     }
 
     private fun Bitmap.toProfileImageIcon(): IconCompat {
         return if (useAdaptiveIcon) {
-            IconCompat.createWithAdaptiveBitmap(this)
+            val insetBmp = Bitmap.createBitmap(adaptiveIconSize, adaptiveIconSize, Bitmap.Config.ARGB_8888)
+            val canvas = Canvas(insetBmp)
+            canvas.drawBitmap(this, adaptiveIconOuterSides.toFloat(), adaptiveIconOuterSides.toFloat(), null)
+
+            IconCompat.createWithAdaptiveBitmap(insetBmp)
         } else {
             IconCompat.createWithBitmap(this)
         }

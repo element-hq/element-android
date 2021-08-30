@@ -35,6 +35,7 @@ import org.matrix.android.sdk.internal.crypto.model.rest.GossipingDefaultContent
 import org.matrix.android.sdk.internal.crypto.model.rest.GossipingToDeviceObject
 import org.matrix.android.sdk.internal.crypto.model.rest.RoomKeyRequestBody
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
+import org.matrix.android.sdk.internal.crypto.tasks.createUniqueTxnId
 import org.matrix.android.sdk.internal.di.SessionId
 import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
@@ -356,7 +357,8 @@ internal class IncomingGossipingRequestManager @Inject constructor(
                         secretValue = secretValue,
                         requestUserId = request.userId,
                         requestDeviceId = request.deviceId,
-                        requestId = request.requestId
+                        requestId = request.requestId,
+                        txnId = createUniqueTxnId()
                 )
 
                 cryptoStore.updateGossipingRequestState(request, GossipingRequestState.ACCEPTING)
@@ -376,13 +378,13 @@ internal class IncomingGossipingRequestManager @Inject constructor(
         }
 
         request.share = { secretValue ->
-
             val params = SendGossipWorker.Params(
                     sessionId = userId,
                     secretValue = secretValue,
                     requestUserId = request.userId,
                     requestDeviceId = request.deviceId,
-                    requestId = request.requestId
+                    requestId = request.requestId,
+                    txnId = createUniqueTxnId()
             )
 
             cryptoStore.updateGossipingRequestState(request, GossipingRequestState.ACCEPTING)

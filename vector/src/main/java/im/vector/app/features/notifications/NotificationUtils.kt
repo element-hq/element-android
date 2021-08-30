@@ -168,7 +168,7 @@ class NotificationUtils @Inject constructor(private val context: Context,
          * intrude.
          */
         notificationManager.createNotificationChannel(NotificationChannel(NOISY_NOTIFICATION_CHANNEL_ID,
-                stringProvider.getString(R.string.notification_noisy_notifications),
+                stringProvider.getString(R.string.notification_noisy_notifications).ifEmpty { "Noisy notifications" },
                 NotificationManager.IMPORTANCE_DEFAULT)
                 .apply {
                     description = stringProvider.getString(R.string.notification_noisy_notifications)
@@ -181,7 +181,7 @@ class NotificationUtils @Inject constructor(private val context: Context,
          * Low notification importance: shows everywhere, but is not intrusive.
          */
         notificationManager.createNotificationChannel(NotificationChannel(SILENT_NOTIFICATION_CHANNEL_ID,
-                stringProvider.getString(R.string.notification_silent_notifications),
+                stringProvider.getString(R.string.notification_silent_notifications).ifEmpty { "Silent notifications" },
                 NotificationManager.IMPORTANCE_LOW)
                 .apply {
                     description = stringProvider.getString(R.string.notification_silent_notifications)
@@ -191,7 +191,7 @@ class NotificationUtils @Inject constructor(private val context: Context,
                 })
 
         notificationManager.createNotificationChannel(NotificationChannel(LISTENING_FOR_EVENTS_NOTIFICATION_CHANNEL_ID,
-                stringProvider.getString(R.string.notification_listening_for_events),
+                stringProvider.getString(R.string.notification_listening_for_events).ifEmpty { "Listening for events" },
                 NotificationManager.IMPORTANCE_MIN)
                 .apply {
                     description = stringProvider.getString(R.string.notification_listening_for_events)
@@ -200,7 +200,7 @@ class NotificationUtils @Inject constructor(private val context: Context,
                 })
 
         notificationManager.createNotificationChannel(NotificationChannel(CALL_NOTIFICATION_CHANNEL_ID,
-                stringProvider.getString(R.string.call),
+                stringProvider.getString(R.string.call).ifEmpty { "Call" },
                 NotificationManager.IMPORTANCE_HIGH)
                 .apply {
                     description = stringProvider.getString(R.string.call)
@@ -360,7 +360,7 @@ class NotificationUtils @Inject constructor(private val context: Context,
         val builder = NotificationCompat.Builder(context, SILENT_NOTIFICATION_CHANNEL_ID)
                 .setContentTitle(ensureTitleNotEmpty(title))
                 .apply {
-                    setContentText(stringProvider.getString(R.string.call_ring))
+                    setContentText(stringProvider.getString(R.string.call_ringing))
                     if (call.mxCall.isVideoCall) {
                         setSmallIcon(R.drawable.ic_call_answer_video)
                     } else {
@@ -540,6 +540,7 @@ class NotificationUtils @Inject constructor(private val context: Context,
 
         val channelID = if (roomInfo.shouldBing) NOISY_NOTIFICATION_CHANNEL_ID else SILENT_NOTIFICATION_CHANNEL_ID
         return NotificationCompat.Builder(context, channelID)
+                .setOnlyAlertOnce(true)
                 .setWhen(lastMessageTimestamp)
                 // MESSAGING_STYLE sets title and content for API 16 and above devices.
                 .setStyle(messageStyle)
@@ -548,6 +549,9 @@ class NotificationUtils @Inject constructor(private val context: Context,
                 // For example, alarm notifications should display before promo notifications, or message from known contact
                 // that can be displayed in not disturb mode if white listed (the later will need compat28.x)
                 .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+
+                // ID of the corresponding shortcut, for conversation features under API 30+
+                .setShortcutId(roomInfo.roomId)
 
                 // Title for API < 16 devices.
                 .setContentTitle(roomInfo.roomDisplayName)
@@ -641,6 +645,7 @@ class NotificationUtils @Inject constructor(private val context: Context,
         val channelID = if (inviteNotifiableEvent.noisy) NOISY_NOTIFICATION_CHANNEL_ID else SILENT_NOTIFICATION_CHANNEL_ID
 
         return NotificationCompat.Builder(context, channelID)
+                .setOnlyAlertOnce(true)
                 .setContentTitle(stringProvider.getString(R.string.app_name))
                 .setContentText(inviteNotifiableEvent.description)
                 .setGroup(stringProvider.getString(R.string.app_name))
@@ -704,6 +709,7 @@ class NotificationUtils @Inject constructor(private val context: Context,
         val channelID = if (simpleNotifiableEvent.noisy) NOISY_NOTIFICATION_CHANNEL_ID else SILENT_NOTIFICATION_CHANNEL_ID
 
         return NotificationCompat.Builder(context, channelID)
+                .setOnlyAlertOnce(true)
                 .setContentTitle(stringProvider.getString(R.string.app_name))
                 .setContentText(simpleNotifiableEvent.description)
                 .setGroup(stringProvider.getString(R.string.app_name))

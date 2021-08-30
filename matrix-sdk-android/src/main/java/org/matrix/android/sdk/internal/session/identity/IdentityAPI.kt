@@ -26,10 +26,12 @@ import org.matrix.android.sdk.internal.session.identity.model.IdentityRequestOwn
 import org.matrix.android.sdk.internal.session.identity.model.IdentityRequestTokenForEmailBody
 import org.matrix.android.sdk.internal.session.identity.model.IdentityRequestTokenForMsisdnBody
 import org.matrix.android.sdk.internal.session.identity.model.IdentityRequestTokenResponse
+import org.matrix.android.sdk.internal.session.identity.model.SignInvitationResult
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 /**
  * Ref: https://matrix.org/docs/spec/identity_service/latest
@@ -95,4 +97,16 @@ internal interface IdentityAPI {
     @POST(NetworkConstants.URI_IDENTITY_PATH_V2 + "validate/{medium}/submitToken")
     suspend fun submitToken(@Path("medium") medium: String,
                             @Body body: IdentityRequestOwnershipParams): SuccessResult
+
+    /**
+     * https://matrix.org/docs/spec/identity_service/r0.3.0#post-matrix-identity-v2-sign-ed25519
+     *
+     * Have to rely on V1 for now
+     */
+    @POST(NetworkConstants.URI_IDENTITY_PATH_V1 + "sign-ed25519")
+    suspend fun signInvitationDetails(
+            @Query("token") token: String,
+            @Query("private_key") privateKey: String,
+            @Query("mxid") mxid: String
+    ): SignInvitationResult
 }

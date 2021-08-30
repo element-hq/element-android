@@ -18,7 +18,6 @@
         android:layout_marginStart="@dimen/layout_horizontal_margin"
         android:background="@drawable/rounded_rect_shape_8"
         android:backgroundTint="?colorPrimary"
-        android:contentDescription="@string/avatar"
         android:duplicateParentState="true"
         android:importantForAccessibility="no"
         android:padding="10dp"

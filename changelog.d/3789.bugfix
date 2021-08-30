@@ -1,0 +1,1 @@
+Send an empty body for POST rooms/{roomId}/receipt/{receiptType}/{eventId}

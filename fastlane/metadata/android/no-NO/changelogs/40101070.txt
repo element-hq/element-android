@@ -1,0 +1,2 @@
+Hovedendringer i denne versjonen: beta støtte for Mellomrom. Komprimer video før du sender.
+Full endringslogg: https://github.com/vector-im/element-android/releases/tag/v1.1.7

@@ -1,0 +1,2 @@
+Principais mudanças nesta versão: atualização de tema e estilo e consertar um crash depois de chamada de vídeo
+Changelog completo: https://github.com/vector-im/element-android/releases/tag/v1.1.12

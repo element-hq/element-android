@@ -21,7 +21,7 @@
             android:id="@+id/roomAvatarImageView"
             android:layout_width="56dp"
             android:layout_height="56dp"
-            android:contentDescription="@string/avatar"
+            android:importantForAccessibility="no"
             tools:src="@sample/room_round_avatars" />
 
     </FrameLayout>

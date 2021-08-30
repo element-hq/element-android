@@ -28,6 +28,10 @@
     <dimen name="pill_min_height">20dp</dimen>
     <dimen name="pill_text_padding">4dp</dimen>
 
+    <dimen name="call_pip_height">128dp</dimen>
+    <dimen name="call_pip_width">88dp</dimen>
+    <dimen name="call_pip_radius">8dp</dimen>
+
 
     <dimen name="item_form_min_height">76dp</dimen>
 

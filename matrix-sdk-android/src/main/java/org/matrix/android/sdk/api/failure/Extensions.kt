@@ -29,7 +29,9 @@ fun Throwable.is401() =
 
 fun Throwable.isTokenError() =
         this is Failure.ServerError
-                && (error.code == MatrixError.M_UNKNOWN_TOKEN || error.code == MatrixError.M_MISSING_TOKEN)
+                && (error.code == MatrixError.M_UNKNOWN_TOKEN
+                || error.code == MatrixError.M_MISSING_TOKEN
+                || error.code == MatrixError.ORG_MATRIX_EXPIRED_ACCOUNT)
 
 fun Throwable.shouldBeRetried(): Boolean {
     return this is Failure.NetworkConnection

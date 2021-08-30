@@ -8,7 +8,7 @@
     <string name="notice_room_join">%1$s hat den Raum betreten</string>
     <string name="notice_room_leave">%1$s hat den Raum verlassen</string>
     <string name="notice_room_reject">%1$s hat die Einladung abgelehnt</string>
-    <string name="notice_room_kick">%1$s hat %2$s gekickt</string>
+    <string name="notice_room_kick">%1$s hat %2$s entfernt</string>
     <string name="notice_room_unban">%1$s hat den Bann von %2$s aufgehoben</string>
     <string name="notice_room_ban">%1$s hat %2$s gebannt</string>
     <string name="notice_room_withdraw">%1$s hat die Einladung für %2$s zurückgezogen</string>
@@ -95,7 +95,7 @@
     <string name="notice_room_join_with_reason">%1$s ist dem Raum beigetreten. Grund: %2$s</string>
     <string name="notice_room_leave_with_reason">%1$s hat den Raum verlassen. Grund: %2$s</string>
     <string name="notice_room_reject_with_reason">%1$s hat die Einladung abgelehnt. Grund: %2$s</string>
-    <string name="notice_room_kick_with_reason">%1$s hat %2$s gekickt. Grund: %3$s</string>
+    <string name="notice_room_kick_with_reason">%1$s hat %2$s entfernt. Grund: %3$s</string>
     <string name="notice_room_unban_with_reason">%1$s hat Sperre von %2$s aufgehoben. Grund: %3$s</string>
     <string name="notice_room_ban_with_reason">%1$s hat %2$s verbannt. Grund: %3$s</string>
     <string name="notice_room_third_party_invite_with_reason">%1$s hat eine Einladung an %2$s gesandt um diesem Raum beizutreten. Grund: %3$s</string>
@@ -252,9 +252,9 @@
     <string name="notice_room_server_acl_updated_no_change">Keine Änderung.</string>
     <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• Server, die mit IPs übereinstimmen, sind jetzt gesperrt.</string>
     <string name="notice_room_server_acl_updated_ip_literals_allowed">• Server, die mit IPs übereinstimmen, sind nicht erlaubt.</string>
-    <string name="notice_room_server_acl_updated_was_allowed">• Server, die mit %s übereinstimmen, wurden von der Erlaubten-Liste entfernt.</string>
+    <string name="notice_room_server_acl_updated_was_allowed">• Server, die mit %s übereinstimmen, wurden von der Liste der Erlaubten entfernt.</string>
     <string name="notice_room_server_acl_updated_allowed">• Server, die mit %s übereinstimmen, sind jetzt erlaubt.</string>
-    <string name="notice_room_server_acl_updated_was_banned">• Server, die mit %s übereinstimmen, werden von der Sperrliste entfernt.</string>
+    <string name="notice_room_server_acl_updated_was_banned">• Server, die mit %s übereinstimmen, wurden von der Sperrliste entfernt.</string>
     <string name="notice_room_server_acl_updated_banned">• Server, die mit %s übereinstimmen, sind jetzt gesperrt.</string>
     <string name="notice_room_server_acl_updated_title_by_you">Du hast die Server-ACL für diesen Raum geändert.</string>
     <string name="notice_room_server_acl_updated_title">%s hat die Server-Zugriffssteuerungsliste (ACL) für diesen Raum geändert.</string>
@@ -317,7 +317,7 @@
     <string name="action_video_call">Videoanruf</string>
     <string name="action_global_search">Globale Suche</string>
     <string name="action_mark_all_as_read">Alle als gelesen markieren</string>
-    <string name="action_historical">Historisch</string>
+    <string name="action_historical">Archiv</string>
     <string name="action_quick_reply">Antworten</string>
     <string name="action_open">Öffnen</string>
     <string name="action_close">Schließen</string>
@@ -573,7 +573,7 @@
     <string name="room_resend_unsent_messages">Nicht gesendete Nachrichten erneut senden</string>
     <string name="room_delete_unsent_messages">Nicht gesendete Nachrichten löschen</string>
     <string name="room_message_file_not_found">Datei nicht gefunden</string>
-    <string name="room_do_not_have_permission_to_post">Du bist nicht berechtigt, in diesen Raum zu schreiben</string>
+    <string name="room_do_not_have_permission_to_post">Du bist nicht berechtigt, in diesen Raum zu schreiben.</string>
     <!-- unrecognized SSL certificate -->
     <string name="ssl_trust">Vertrauen</string>
     <string name="ssl_do_not_trust">Nicht vertrauen</string>
@@ -923,7 +923,7 @@
     <string name="start_voice_call_prompt_msg">Sicher, dass du einen Sprachanruf starten möchtest\?</string>
     <string name="start_video_call_prompt_msg">Sicher, dass du einen Videoanruf starten möchtest\?</string>
     <string name="groups_list">Gruppenliste</string>
-    <string name="room_participants_ban_prompt_msg">Ein Bann führt zu einem Ausschluss eines Nutzers von diesem Raum und verhindert einen erneuten Beitritt.</string>
+    <string name="room_participants_ban_prompt_msg">Ein Bann schließt die Person aus dem Raum aus und verhindert einen erneuten Beitritt.</string>
     <string name="room_settings_all_messages_noisy">Alle Nachrichten (laut)</string>
     <string name="room_settings_all_messages">Alle Nachrichten</string>
     <string name="room_settings_mention_only">Nur Erwähnungen</string>
@@ -952,7 +952,7 @@
     <string name="filter_group_members">Filter Gruppen-Mitglieder</string>
     <string name="filter_group_rooms">Filter Gruppen-Räume</string>
     <string name="group_no_long_description">Der Community-Administrator hat keine lange Beschreibung für diese Community zur Verfügung gestellt.</string>
-    <string name="has_been_kicked">Du wurdest von %2$s aus %1$s gekickt</string>
+    <string name="has_been_kicked">Du wurdest von %2$s aus %1$s entfernt</string>
     <string name="has_been_banned">Du wurdest von %2$s aus %1$s verbannt</string>
     <string name="reason_colon">Grund: %1$s</string>
     <string name="rejoin">Erneut beitreten</string>
@@ -1075,11 +1075,11 @@
     <string name="command_description_join_room">Tritt dem Raum mit angegebenen Alias bei</string>
     <string name="command_description_part_room">Verlasse Raum</string>
     <string name="command_description_topic">Raumthema ändern</string>
-    <string name="command_description_kick_user">Kickt Benutzer mit angegebener ID</string>
+    <string name="command_description_kick_user">Entfernt die Person angegebener ID</string>
     <string name="command_description_nick">Ändert deinen Anzeigenamen</string>
     <string name="command_description_markdown">(De-)Aktiviert Markdown</string>
     <string name="command_description_clear_scalar_token">Um das Matrix-App-Management zu reparieren</string>
-    <string name="room_tombstone_versioned_description">Dieser Raum wurde ersetzt und ist nicht länger aktiv</string>
+    <string name="room_tombstone_versioned_description">Dieser Raum wurde ersetzt und ist nicht länger aktiv.</string>
     <string name="room_tombstone_continuation_link">Die Konversation wird hier fortgesetzt</string>
     <string name="room_tombstone_continuation_description">Dieser Raum ist die Fortsetzung einer anderen Konversation</string>
     <string name="room_tombstone_predecessor_link">Klicke hier um die älteren Nachrichten zu sehen</string>
@@ -1199,8 +1199,8 @@
 \n%1$s</string>
     <string name="settings_troubleshoot_test_fcm_failed">Abfragen des FCM-Tokens fehlgeschlagen:
 \n%1$s</string>
-    <string name="settings_troubleshoot_test_token_registration_success">FCM-Token erfolgreich beim Home-Server registriert.</string>
-    <string name="settings_troubleshoot_test_token_registration_failed">FCM-Token konnte nicht beim Home-Server registriert werden:
+    <string name="settings_troubleshoot_test_token_registration_success">FCM-Token erfolgreich beim Homeserver registriert.</string>
+    <string name="settings_troubleshoot_test_token_registration_failed">FCM-Token konnte nicht beim Homeserver registriert werden:
 \n%1$s</string>
     <string name="settings_troubleshoot_test_foreground_service_started_title">Benachrichtigungsdienst</string>
     <string name="settings_troubleshoot_test_foreground_service_startedt_success">Benachrichtigungsdienst läuft.</string>
@@ -1409,7 +1409,7 @@
     <string name="media_source_choose">Wählen</string>
     <string name="settings_play_shutter_sound">Auslöseton abspielen</string>
     <string name="action_mark_room_read">Als gelesen markieren</string>
-    <string name="settings_notification_privacy_no_background_sync">Die App braucht sich <b>nicht</b> im Hintergrund mit dem Home-Server verbinden, dies sollte die Akkunutzung reduzieren</string>
+    <string name="settings_notification_privacy_no_background_sync">Die App muss sich <b>nicht</b> im Hintergrund mit dem Homeserver verbinden, dies sollte die Akkunutzung reduzieren</string>
     <plurals name="notification_compat_summary_line_for_room">
         <item quantity="one">%1$s: %2$d Nachricht</item>
         <item quantity="other">%1$s: %2$d Nachrichten</item>
@@ -1438,7 +1438,7 @@
     <string name="start_verification_short_label">Verifizieren</string>
     <string name="share_without_verifying_short_label">Teilen</string>
     <string name="ignore_request_short_label">Ignorieren</string>
-    <string name="keys_backup_setup_override_backup_prompt_tile">Auf deinem Home-Server existiert bereits eine Sicherung</string>
+    <string name="keys_backup_setup_override_backup_prompt_tile">Auf deinem Homeserver existiert bereits ein Backup</string>
     <string name="keys_backup_setup_override_replace">Ersetzen</string>
     <string name="keys_backup_setup_override_stop">Stopp</string>
     <string name="keys_backup_settings_checking_backup_state">Überprüfe Sicherungsstatus</string>
@@ -2074,7 +2074,7 @@
 \n- Die Internetverbindung, die von den Geräten genutzt wird
 \n
 \nWir empfehlen dir dein Passwort &amp; Wiederherstellungsschlüssel in den Einstellungen sofort zu ändern.</string>
-    <string name="verify_cancelled_notice">Verifiziere deine Geräte in den Einstellungen.</string>
+    <string name="verify_cancelled_notice">Verifizierung abgebrochen. Du kannst sie erneut starten.</string>
     <string name="verification_cancelled">Verifizierung abgebrochen</string>
     <string name="generate_message_key">Generiere einen Nachrichtenschlüssel</string>
     <string name="confirm_recovery_passphrase">Bestätige %s</string>
@@ -2236,9 +2236,9 @@
     <string name="room_participants_action_cancel_invite_prompt_msg">Bist du dir sicher, dass du die Einladung für diesen Benutzer zurückziehen möchtest\?</string>
     <string name="room_participants_kick_title">Benutzer entfernen</string>
     <string name="room_participants_kick_reason">Grund für das Entfernen</string>
-    <string name="room_participants_kick_prompt_msg">Das Entfernen wird den Benutzer von diesem Raum ausschließen.
+    <string name="room_participants_kick_prompt_msg">Du entfernst diese Person aus dem Raum.
 \n
-\nUm einen erneuten Beitritt zu verhindern, solltest du ihn stattdessen bannen.</string>
+\nBanne sie stattdessen, um erneutes Beitreten zu verhindern.</string>
     <string name="room_participants_ban_title">Benutzer bannen</string>
     <string name="room_participants_ban_reason">Grund für den Bann</string>
     <string name="room_participants_unban_title">Bann des Benutzers aufheben</string>
@@ -2572,7 +2572,7 @@
     <string name="create_room_disable_federation_title">Begrenze Zugang zu diesem Raum (für immer!) auf Mitglieder von %s</string>
     <string name="attachment_viewer_item_x_of_y">%1$d von %2$d</string>
     <string name="a11y_create_direct_message_by_qr_code">QR-Code scannen, um eine neue Direktnachricht schicken</string>
-    <string name="identity_server_consent_dialog_content">Um bestehende Kontakte zu finden, ist es notwendig, Ihre Kontaktdaten (Telefonnummern und/oder E-Mails) mit dem ausgewählten Identitätsserver (%1$s) zu teilen.
+    <string name="identity_server_consent_dialog_content">Um bestehende Kontakte zu finden, musst du deine Kontaktdaten (Telefonnummern und/oder E-Mails) mit dem ausgewählten Identitätsserver (%1$s) zu teilen.
 \n
 \nFür mehr Datenschutz werden die gesendeten Daten vor dem Versenden gehasht.</string>
     <string name="room_preview_no_preview_join">Keine Vorschau für diesen Raum verfügbar. Willst du direkt beitreten\?</string>
@@ -2628,7 +2628,7 @@
     <string name="login_social_continue_with">Mit %s weitermachen</string>
     <string name="settings_show_emoji_keyboard_summary">Knopf zum Nachrichteneditor hinzufügen, der die Emoji-Tastatur öffnet</string>
     <string name="settings_show_emoji_keyboard">Emoji-Tastatur anzeigen</string>
-    <string name="settings_chat_effects_description">Nutze /confetti Kommando oder sende Nachrichten, die ❄️ oder 🎉 enthalten</string>
+    <string name="settings_chat_effects_description">Nutze /confetti oder sende Nachrichten mit ❄️ oder 🎉</string>
     <string name="settings_chat_effects_title">Chateffekte</string>
     <string name="room_permissions_change_topic">Thema ändern</string>
     <string name="room_permissions_upgrade_the_room">Raum aktualisieren</string>
@@ -2805,7 +2805,7 @@
     <string name="add_space">Space hinzufügen</string>
     <string name="command_description_create_space">Space erstellen</string>
     <string name="room_settings_room_access_restricted_description">Jeder, der sich in einem Space mit diesem Raum befindet, kann diesen Raum finden und ihm beitreten. Nur die Administratoren des Raums können diesen zu einem Space hinzufügen.</string>
-    <string name="room_settings_room_access_restricted_title">Spaces</string>
+    <string name="room_settings_room_access_restricted_title">Nur Space-Mitglieder</string>
     <plurals name="space_people_you_know">
         <item quantity="one">%d Person, die du kennst, ist bereits beigetreten</item>
         <item quantity="other">%d Personen, die du kennst, sind bereits beigetreten</item>
@@ -2842,7 +2842,6 @@
     <string name="this_space_has_no_rooms_not_admin">Möglicherweise musst du extra eingeladen werden, damit du die Räume siehst.
 \nDie fehlt die Berechtigung, Räume hinzuzufügen.</string>
     <string name="spaces_feeling_experimental_subspace">Du kannst Unterspaces zu einem Space hinzufügen.</string>
-    <string name="labs_space_show_orphan_in_home">Experimentelle Spaces - Nur verweiste Räume auf Startseite</string>
     <string name="error_jitsi_join_conf">Leider ist ein Fehler beim Betreten der Konferenz aufgetreten</string>
     <string name="unnamed_room">Unbenannter Raum</string>
     <string name="this_space_has_no_rooms">Dieser Space hat noch keine Räume</string>
@@ -2877,4 +2876,81 @@
     <string name="space_settings_alias_subtitle">Adressen des Spaces anzeigen und verwalten.</string>
     <string name="create_space_alias_hint">Space-Adressen</string>
     <string name="error_failed_to_join_room">Beim Versuch %s beizutreten, ist leider ein Fehler aufgetreten</string>
+    <string name="room_upgrade_to_recommended_version">Zur empfohlenen Raumversion upgraden</string>
+    <string name="joining_replacement_room">Ersatzraum betreten</string>
+    <string name="command_description_upgrade_room">Raum zu neuer Version upgraden</string>
+    <string name="settings_server_room_version_stable">stabil</string>
+    <string name="settings_server_room_version_unstable">instabil</string>
+    <string name="settings_server_room_versions">Raumversionen 👓</string>
+    <string name="missing_permissions_title">Fehlende Berechtigungen</string>
+    <string name="upgrade_room_for_restricted_note">Beachte, dass das Raumupgrade einen neuen Raum erstellt. Alte Nachrichten verbleiben in diesem archivierten Raum.</string>
+    <string name="upgrade_room_for_restricted">Alle in %s können diesen Raum finden und betreten - du musst niemanden mehr manuell einladen. Du kannst dies jederzeit in den Raumeinstellungen ändern.</string>
+    <string name="voice_message_reply_content">Sprachnachricht (%1$s)</string>
+    <string name="error_voice_message_cannot_reply_or_edit">Antworten und Bearbeiten ist während einer aktiven Sprachnachricht nicht möglich</string>
+    <string name="error_voice_message_unable_to_record">Fehler beim Aufnehmen der Sprachnachricht</string>
+    <string name="error_voice_message_unable_to_play">Sprachnachricht kann nicht abgespielt werden</string>
+    <string name="labs_use_voice_message">Sprachnachrichten</string>
+    <string name="voice_message_tap_to_stop_toast">Klicke, um die Aufnahme zu starten oder stoppen</string>
+    <string name="voice_message_n_seconds_warning_toast">%1$ds übrig</string>
+    <string name="voice_message_release_to_send_toast">Zum Aufnehmen drücken, zum Senden loslassen</string>
+    <string name="a11y_delete_recorded_voice_message">Aufgenommene Sprachnachricht löschen</string>
+    <string name="a11y_recording_voice_message">Sprachnachricht wird aufgenommen</string>
+    <string name="a11y_pause_voice_message">Sprachnachricht pausieren</string>
+    <string name="a11y_play_voice_message">Sprachnachricht abspielen</string>
+    <string name="a11y_lock_voice_message">Sprachnachricht einrasten</string>
+    <string name="a11y_start_voice_message">Sprachnachricht starten</string>
+    <string name="room_using_unstable_room_version">Dieser Raum verwendet die Raumversion %s, die von diesem Heimserver als instabil markiert ist.</string>
+    <string name="upgrade_room_no_power_to_manage">Du benötigst die Berechtigung, um einen Raum upzugraden</string>
+    <string name="upgrade_room_update_parent_space">Übergeordneten Space automatisch updaten</string>
+    <string name="upgrade_room_auto_invite">Benutzer automatisch einladen</string>
+    <string name="upgrade_public_room_from_to">Du upgradest diesen Raum von %1$s zu %2$s.</string>
+    <string name="upgrade_room_warning">Das Raumupgrade ist eine erweiterte Option und ist empfohlen wenn sich der Raum instabil verhält, von Sicherheitslücken betroffen ist oder Features fehlen.
+\nNormalerweise ändert sich dadurch nur wie der Raum am Server verarbeitet wird.</string>
+    <string name="upgrade_private_room">Privaten Raum upgraden</string>
+    <string name="upgrade_public_room">Öffentlichen Raum upgraden</string>
+    <string name="upgrade_required">Upgrade benötigt</string>
+    <string name="upgrade">Upgraden</string>
+    <string name="it_may_take_some_time">Bitte hab Geduld, dies kann einige Zeit dauern.</string>
+    <string name="settings_server_default_room_version">Vorgeschlagene Version</string>
+    <string name="verification_scan_self_emoji_subtitle">Stattdessen mit Emojis vergleichen</string>
+    <string name="verification_scan_with_this_device">Mit diesem Gerät scannen</string>
+    <string name="verification_scan_self_notice">Scanne den Code mit einem anderen Gerät oder umgekehrt</string>
+    <string name="sent_a_voice_message">Sprachnachricht</string>
+    <string name="decide_who_can_find_and_join">Lege fest, wer diesen Raum finden und betreten kann.</string>
+    <string name="tap_to_edit_spaces">Klicke, um die Spaces zu bearbeiten</string>
+    <string name="select_spaces">Spaces auswählen</string>
+    <string name="room_create_member_of_space_name_can_join">Mitglieder von %s können Räume finden, betrachten und betreten.</string>
+    <string name="room_settings_room_access_private_invite_only_title">Privat (Zutritt nur mit Einladung)</string>
+    <string name="settings_room_upgrades">Raumupgrades</string>
+    <string name="settings_messages_by_bot">Nachrichten von Bots</string>
+    <string name="settings_room_invitations">Raumeinladungen</string>
+    <string name="settings_encrypted_group_messages">Verschlüsselten Gruppenchats</string>
+    <string name="settings_group_messages">Gruppenchats</string>
+    <string name="settings_encrypted_direct_messages">Verschlüsselten Direktnachrichten</string>
+    <string name="settings_messages_direct_messages">Direktnachrichten</string>
+    <string name="settings_messages_containing_username">Nachrichten mit meinem Benutzernamen</string>
+    <string name="settings_messages_containing_display_name">Nachrichten mit meinem Anzeigenamen</string>
+    <string name="settings_notification_notify_me_for">Benachrichtige mich bei</string>
+    <string name="settings_notification_other">Andere</string>
+    <string name="settings_notification_mentions_and_keywords">Erwähnungen und Schlüsselwörter</string>
+    <string name="settings_notification_default">Normale Benachrichtigungen</string>
+    <plurals name="missed_video_call">
+        <item quantity="one">Verpasster Videoanruf</item>
+        <item quantity="other">%d verpasste Videoanrufe</item>
+    </plurals>
+    <plurals name="missed_audio_call">
+        <item quantity="one">Verpasster Sprachanruf</item>
+        <item quantity="other">%d verpasste Sprachanrufe</item>
+    </plurals>
+    <string name="hs_client_url">Heimserver API URL</string>
+    <string name="denied_permission_voice_message">Um Sprachnachrichten zu senden, erlaube bitte Zugriff aufs Mikrofon.</string>
+    <string name="denied_permission_camera">Um fortzufahren, erlaube bitte in den Systemeinstellungen Zugriff auf die Kamera.</string>
+    <string name="denied_permission_generic">Für diese Aktion fehlen einige Berechtigungen, bitte erlaube diese in den Systemeinstellungen.</string>
+    <string name="voice_message_slide_to_cancel">Wische zum Abbrechen</string>
+    <string name="spaces_which_can_access">Spaces mit Zugriff auf</string>
+    <string name="allow_space_member_to_find_and_access">Space-Mitgliedern Auffinden und Zugriff erlauben.</string>
+    <string name="upgrade_room_for_restricted_no_param">Alle im übergeordneten Space haben Zugriff auf den Raum - es ist nicht nötig jeden einzeln einzuladen. Du kannst dies in den Raumeinstellungen jederzeit ändern.</string>
+    <string name="allow_anyone_in_room_to_access">Allen in %s Zugriff erlauben. Du auch mehrere Spaces auswählen.</string>
+    <string name="other_spaces_or_rooms_you_might_not_know">Andere Spaces oder Räume die du kennst</string>
+    <string name="space_you_know_that_contains_this_room">Spaces mit diesem Raum und dir als Mitglied</string>
 </resources>

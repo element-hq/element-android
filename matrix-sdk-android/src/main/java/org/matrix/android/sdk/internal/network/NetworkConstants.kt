@@ -30,6 +30,7 @@ internal object NetworkConstants {
     // Identity server
     const val URI_IDENTITY_PREFIX_PATH = "_matrix/identity/v2"
     const val URI_IDENTITY_PATH_V2 = "$URI_IDENTITY_PREFIX_PATH/"
+    const val URI_IDENTITY_PATH_V1 = "_matrix/identity/api/v1/"
 
     // Push Gateway
     const val URI_PUSH_GATEWAY_PREFIX_PATH = "_matrix/push/v1/"

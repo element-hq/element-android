@@ -36,6 +36,7 @@ import im.vector.app.features.html.VectorHtmlCompressor
 import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
 import im.vector.app.features.reactions.data.EmojiDataSource
 import im.vector.app.features.settings.VectorPreferences
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupState
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -207,7 +208,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                     EventType.CALL_CANDIDATES,
                     EventType.CALL_HANGUP,
                     EventType.CALL_ANSWER -> {
-                        noticeEventFormatter.format(timelineEvent)
+                        noticeEventFormatter.format(timelineEvent, room?.roomSummary()?.isDirect.orFalse())
                     }
                     else                  -> null
                 }

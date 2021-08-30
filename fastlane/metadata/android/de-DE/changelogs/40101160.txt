@@ -1,0 +1,2 @@
+Hauptänderungen in dieser Version: Fehler beim Senden verschlüsselter Nachrichten behoben.
+Alle Änderungen: https://github.com/vector-im/element-android/releases/tag/v1.1.16

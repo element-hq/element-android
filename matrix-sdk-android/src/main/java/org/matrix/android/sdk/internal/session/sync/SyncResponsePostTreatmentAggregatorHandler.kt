@@ -16,18 +16,54 @@
 
 package org.matrix.android.sdk.internal.session.sync
 
+import org.matrix.android.sdk.api.MatrixPatterns
+import org.matrix.android.sdk.internal.session.sync.model.accountdata.toMutable
+import org.matrix.android.sdk.internal.session.user.accountdata.DirectChatsHelper
+import org.matrix.android.sdk.internal.session.user.accountdata.UpdateUserAccountDataTask
 import javax.inject.Inject
 
 internal class SyncResponsePostTreatmentAggregatorHandler @Inject constructor(
-        private val ephemeralTemporaryStore: RoomSyncEphemeralTemporaryStore
+        private val directChatsHelper: DirectChatsHelper,
+        private val ephemeralTemporaryStore: RoomSyncEphemeralTemporaryStore,
+        private val updateUserAccountDataTask: UpdateUserAccountDataTask
 ) {
-    fun handle(synResHaResponsePostTreatmentAggregator: SyncResponsePostTreatmentAggregator) {
+    suspend fun handle(synResHaResponsePostTreatmentAggregator: SyncResponsePostTreatmentAggregator) {
         cleanupEphemeralFiles(synResHaResponsePostTreatmentAggregator.ephemeralFilesToDelete)
+        updateDirectUserIds(synResHaResponsePostTreatmentAggregator.directChatsToCheck)
     }
 
     private fun cleanupEphemeralFiles(ephemeralFilesToDelete: List<String>) {
         ephemeralFilesToDelete.forEach {
             ephemeralTemporaryStore.delete(it)
+        }
+    }
+
+    private suspend fun updateDirectUserIds(directUserIdsToUpdate: Map<String, String>) {
+        val directChats = directChatsHelper.getLocalDirectMessages().toMutable()
+        var hasUpdate = false
+        directUserIdsToUpdate.forEach { (roomId, candidateUserId) ->
+            // consider room is a DM if referenced in the DM dictionary
+            val currentDirectUserId = directChats.firstNotNullOfOrNull { (userId, roomIds) -> userId.takeIf { roomId in roomIds } }
+            // update directUserId with the given candidateUserId if it mismatches the current one
+            if (currentDirectUserId != null && !MatrixPatterns.isUserId(currentDirectUserId)) {
+                // link roomId with the matrix id
+                directChats
+                        .getOrPut(candidateUserId) { arrayListOf() }
+                        .apply {
+                            if (!contains(roomId)) {
+                                hasUpdate = true
+                                add(roomId)
+                            }
+                        }
+
+                // remove roomId from currentDirectUserId entry
+                hasUpdate = hasUpdate or(directChats[currentDirectUserId]?.remove(roomId) == true)
+                // remove currentDirectUserId entry if there is no attached room anymore
+                hasUpdate = hasUpdate or(directChats.takeIf { it[currentDirectUserId].isNullOrEmpty() }?.remove(currentDirectUserId) != null)
+            }
+        }
+        if (hasUpdate) {
+            updateUserAccountDataTask.execute(UpdateUserAccountDataTask.DirectChatParams(directMessages = directChats))
         }
     }
 }

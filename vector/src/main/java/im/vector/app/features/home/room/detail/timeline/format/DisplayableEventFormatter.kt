@@ -23,6 +23,7 @@ import im.vector.app.core.resources.StringProvider
 import me.gujun.android.span.span
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.room.model.message.MessageAudioContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageOptionsContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.model.message.OPTION_TYPE_BUTTONS
@@ -40,7 +41,7 @@ class DisplayableEventFormatter @Inject constructor(
         private val noticeEventFormatter: NoticeEventFormatter
 ) {
 
-    fun format(timelineEvent: TimelineEvent, appendAuthor: Boolean): CharSequence {
+    fun format(timelineEvent: TimelineEvent, isDm: Boolean, appendAuthor: Boolean): CharSequence {
         if (timelineEvent.root.isRedacted()) {
             return noticeEventFormatter.formatRedactedEvent(timelineEvent.root)
         }
@@ -72,7 +73,11 @@ class DisplayableEventFormatter @Inject constructor(
                             return simpleFormat(senderName, stringProvider.getString(R.string.sent_an_image), appendAuthor)
                         }
                         MessageType.MSGTYPE_AUDIO                -> {
-                            return simpleFormat(senderName, stringProvider.getString(R.string.sent_an_audio_file), appendAuthor)
+                            if ((messageContent as? MessageAudioContent)?.voiceMessageIndicator != null) {
+                                return simpleFormat(senderName, stringProvider.getString(R.string.sent_a_voice_message), appendAuthor)
+                            } else {
+                                return simpleFormat(senderName, stringProvider.getString(R.string.sent_an_audio_file), appendAuthor)
+                            }
                         }
                         MessageType.MSGTYPE_VIDEO                -> {
                             return simpleFormat(senderName, stringProvider.getString(R.string.sent_a_video), appendAuthor)
@@ -130,7 +135,7 @@ class DisplayableEventFormatter @Inject constructor(
             }
             else                            -> {
                 return span {
-                    text = noticeEventFormatter.format(timelineEvent) ?: ""
+                    text = noticeEventFormatter.format(timelineEvent, isDm) ?: ""
                     textStyle = "italic"
                 }
             }
