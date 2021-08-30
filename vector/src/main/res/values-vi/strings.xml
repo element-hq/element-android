@@ -280,10 +280,10 @@
     <string name="settings_discovery_category">Khám phá</string>
     <string name="settings_deactivate_my_account">Vô hiệu hoá tài khoản của tôi</string>
     <string name="settings_deactivate_account_section">Vô hiệu hoá tài khoản</string>
-    <string name="notice_room_server_acl_updated_was_allowed">• Máy chủ khớp với %s đã bị xoá khỏi danh sách được cho phép.</string>
-    <string name="notice_room_server_acl_updated_allowed">• Máy chủ khớp với %s bây giờ sẽ được cho phép.</string>
-    <string name="notice_room_server_acl_updated_was_banned">• Máy chủ khớp với %s đã được xoá khỏi danh sách cấm.</string>
-    <string name="notice_room_server_acl_updated_banned">• Máy chủ khớp với %s bây giờ sẽ bị cấm.</string>
+    <string name="notice_room_server_acl_updated_was_allowed">• Những máy chủ khớp với %s đã bị xoá khỏi danh sách được cho phép.</string>
+    <string name="notice_room_server_acl_updated_allowed">• Những máy chủ khớp với %s bây giờ sẽ được cho phép.</string>
+    <string name="notice_room_server_acl_updated_was_banned">• Những máy chủ khớp với %s đã được xoá khỏi danh sách cấm.</string>
+    <string name="notice_room_server_acl_updated_banned">• Những máy chủ khớp với %s bây giờ sẽ bị cấm.</string>
     <string name="template_re_authentication_default_confirm_text">${app_name} yêu cầu bạn nhập thông tin của bạn để thực hiện hành động này.</string>
     <string name="re_authentication_activity_title">Cần xác thực lại</string>
     <string name="call_transfer_users_tab_title">Người dùng</string>
@@ -376,8 +376,8 @@
     <string name="notice_room_server_acl_updated_no_change">Không có thay đổi.</string>
     <string name="notice_room_server_acl_updated_title_by_you">Bạn đã thay đổi ACL máy chủ cho phòng này.</string>
     <string name="notice_room_server_acl_updated_title">%s đã thay đổi ACL máy chủ cho phòng này.</string>
-    <string name="notice_room_server_acl_set_allowed">• Máy chủ khớp với %s được cho phép.</string>
-    <string name="notice_room_server_acl_set_banned">• Máy chủ khớp với %s bị cấm.</string>
+    <string name="notice_room_server_acl_set_allowed">• Những máy chủ khớp với %s được cho phép.</string>
+    <string name="notice_room_server_acl_set_banned">• Những máy chủ khớp với %s bị cấm.</string>
     <string name="notice_room_server_acl_set_title_by_you">Bạn đã đặt ACL máy chủ cho phòng này.</string>
     <string name="notice_room_server_acl_set_title">%s đã đặt ACL máy chủ cho phòng này.</string>
     <string name="notice_direct_room_update_by_you">Bạn đã nâng cấp ở đây.</string>
@@ -579,7 +579,7 @@
     <string name="room_preview_unlinked_email_warning">Lời mời này đã được gửi đến %s, nó không được liên kết với tài khoản này.
 \nBạn có thể muốn đăng nhập bằng một tài khoản khác, hoặc thêm email này vào tài khoản của bạn.</string>
     <string name="room_preview_invitation_format">Bạn đã được %s mời tham gia phòng này</string>
-    <string name="room_jump_to_first_unread">Nhảy đến tin nhắn chưa đọc đầu tiên.</string>
+    <string name="room_jump_to_first_unread">Nhảy đến tin nhắn chưa đọc.</string>
     <string name="room_sync_in_progress">Đang đồng bộ…</string>
     <string name="open_chat_header">Mở tiêu đề</string>
     <string name="list_members">Liệt kê các thành viên</string>
@@ -783,8 +783,56 @@
     <string name="room_displayname_two_members">%1$s và %2$s</string>
     <string name="room_displayname_room_invite">Lời mời vào phòng</string>
     <string name="room_displayname_invite_from">Lời mời từ %s</string>
-    <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• Máy chủ khớp với IP bây giờ sẽ bị cấm.</string>
-    <string name="notice_room_server_acl_updated_ip_literals_allowed">• Máy chủ khớp với IP bây giờ sẽ được cho phép.</string>
-    <string name="notice_room_server_acl_set_ip_literals_not_allowed">• Máy chủ khớp với IP bị cấm.</string>
-    <string name="notice_room_server_acl_set_ip_literals_allowed">• Máy chủ khớp với IP được cho phép.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• Những máy chủ khớp với IP bây giờ sẽ bị cấm.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_allowed">• Những máy chủ khớp với IP bây giờ sẽ được cho phép.</string>
+    <string name="notice_room_server_acl_set_ip_literals_not_allowed">• Những máy chủ khớp với IP bị cấm.</string>
+    <string name="notice_room_server_acl_set_ip_literals_allowed">• Những máy chủ khớp với IP được cho phép.</string>
+    <string name="room_participants_action_unignore_title">Hủy bỏ qua người dùng</string>
+    <string name="room_participants_action_ignore">Bỏ qua</string>
+    <string name="room_participants_action_ignore_prompt_msg">Bỏ qua người dùng này sẽ xóa những tin nhắn của họ khỏi những phòng bạn chia sẻ.
+\n
+\nBạn có thể đảo ngược hành động này bất cứ lúc nào trong cài đặt chung.</string>
+    <string name="room_participants_action_ignore_title">Bỏ qua người dùng</string>
+    <string name="room_participants_power_level_demote">Giáng cấp</string>
+    <string name="room_participants_power_level_demote_warning_prompt">Bạn sẽ không thể hoàn tác thay đổi này vì bạn đang tự giáng cấp bản thân, nếu bạn là người dùng cuối cùng có đặc quyền trong phòng, nó sẽ không thể lấy lại đặc quyền.</string>
+    <string name="room_participants_power_level_demote_warning_title">Giáng cấp bản thân\?</string>
+    <string name="room_participants_power_level_prompt">Bạn sẽ không thể hoàn tác thay đổi này vì bạn đang thăng cấp người dùng có cùng cấp quyền như của bạn.
+\nBạn có chắc không\?</string>
+    <string name="room_participants_action_devices_list">Hiển thị danh sách phiên</string>
+    <string name="room_participants_action_mention">Nhắc đến</string>
+    <string name="room_participants_invite_search_another_user">ID người dùng, Tên hoặc email</string>
+    <string name="room_participants_action_set_admin">Làm quản trị viên</string>
+    <string name="room_participants_action_set_moderator">Làm điều hành viên</string>
+    <string name="room_participants_action_set_default_power_level">Đặt lại thành người dùng bình thường</string>
+    <string name="room_participants_action_kick">Đá</string>
+    <string name="room_participants_action_unban">Bỏ cấm</string>
+    <string name="room_participants_action_ban">Cấm</string>
+    <string name="room_participants_action_remove">Xóa khỏi phòng này</string>
+    <string name="room_participants_action_leave">Rời khỏi phòng này</string>
+    <string name="room_participants_action_cancel_invite">Hủy mời</string>
+    <string name="room_participants_action_invite">Mời</string>
+    <string name="room_participants_header_devices">Phiên</string>
+    <string name="room_participants_header_direct_chats">Tin nhắn trực tiếp</string>
+    <string name="room_participants_header_call">Cuộc gọi</string>
+    <string name="room_participants_header_admin_tools">Những công cụ quản trị viên</string>
+    <string name="room_participants_ago">cách đây %1$s%2$s</string>
+    <string name="room_participants_now">%1$s bây giờ</string>
+    <string name="room_participants_idle">Nhàn rỗi</string>
+    <string name="room_participants_offline">Ngoại tuyến</string>
+    <string name="room_participants_online">Trực tuyến</string>
+    <string name="room_participants_create">Tạo</string>
+    <string name="room_participants_remove_prompt_msg">Bạn có chắc muốn xóa %s khỏi cuộc trò chuyện này\?</string>
+    <string name="room_participants_leave_private_warning">Phòng này không công khai. Bạn sẽ không thể tham gia lại nếu không có lời mời.</string>
+    <string name="continue_anyway">Vẫn tiếp tục</string>
+    <plurals name="missed_video_call">
+        <item quantity="other">%d cuộc gọi video bị nhỡ</item>
+    </plurals>
+    <plurals name="missed_audio_call">
+        <item quantity="other">%d cuộc gọi thoại bị nhỡ</item>
+    </plurals>
+    <string name="hs_client_url">URL API máy chủ nhà</string>
+    <string name="missing_permissions_title">Thiếu quyền</string>
+    <string name="denied_permission_voice_message">Để gửi những tin nhắn thoại, vui lòng cấp quyền Microphone.</string>
+    <string name="denied_permission_camera">Để thực hiện hành động này, vui lòng cấp quyền Camera từ cài đặt hệ thống.</string>
+    <string name="denied_permission_generic">Vài quyền đang thiếu để thực hiện hành vi này, vui lòng cấp quyền từ cài đặt hệ thống.</string>
 </resources>
