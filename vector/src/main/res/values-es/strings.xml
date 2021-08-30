@@ -2853,7 +2853,6 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="spaces_no_server_support_title">Parece que tu homeserver no soporta Espacios todavía</string>
     <string name="spaces_feeling_experimental_subspace">¿Con ganas de experimentar\?
 \nPuedes añadir espacios ya existentes a otros.</string>
-    <string name="labs_space_show_orphan_in_home">Espacio experimental - Mostrar huérfanos únicamente en Inicio</string>
     <string name="space_manage_rooms_and_spaces">Gestionar salas y espacios</string>
     <string name="space_settings_manage_rooms">Gestionar salas</string>
     <string name="looking_for_someone_not_in_space">¿Buscas a alguien que no está en %s\?</string>
