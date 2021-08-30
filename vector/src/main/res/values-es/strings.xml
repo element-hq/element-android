@@ -2836,7 +2836,7 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="upgrade_room_no_power_to_manage">Necesitas permiso para actualizar una sala</string>
     <string name="upgrade_room_update_parent_space">Actualizar el espacio padre automáticamente</string>
     <string name="upgrade_room_auto_invite">Invitar usuarios automáticamente</string>
-    <string name="upgrade_public_room_from_to">Actualizarás esta sala de %s a %s.</string>
+    <string name="upgrade_public_room_from_to">Actualizarás esta sala de %1$s a %2$s.</string>
     <string name="upgrade_room_warning">Actualizar una sala es una acción avanzada y normalmente recomendada cuando una sala es inestable debido a errores, falta de funciones o vulnerabilidades en la seguridad.
 \nÉsto normalmente sólo afecta en cómo la sala es procesada en el servidor.</string>
     <string name="upgrade_private_room">Actualizar sala privada</string>

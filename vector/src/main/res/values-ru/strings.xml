@@ -2829,7 +2829,7 @@
     <string name="upgrade_room_no_power_to_manage">Для обновления комнаты необходимо разрешение</string>
     <string name="upgrade_room_update_parent_space">Автоматическое обновление родительского пространства</string>
     <string name="upgrade_room_auto_invite">Автоматическое приглашение пользователей</string>
-    <string name="upgrade_public_room_from_to">Вы обновили эту комнату с %s до %s.</string>
+    <string name="upgrade_public_room_from_to">Вы обновили эту комнату с %1$s до %2$s.</string>
     <string name="upgrade_room_warning">Обновление комнаты - это расширенное действие, которое обычно рекомендуется, когда комната работает нестабильно из-за ошибок, отсутствующих функций или уязвимостей безопасности.
 \nОбычно это влияет только на то, как комната обрабатывается на сервере.</string>
     <string name="upgrade_private_room">Модернизировать приватную комнату</string>

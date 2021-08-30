@@ -72,7 +72,7 @@ class MigrateRoomBottomSheet :
 
         if (state.migrationReason == MigrationReason.MANUAL) {
             views.descriptionText.text = getString(R.string.upgrade_room_warning)
-            views.upgradeFromTo.text = getString(R.string.upgrade_public_room_from_to_version, state.currentVersion, state.newVersion)
+            views.upgradeFromTo.text = getString(R.string.upgrade_public_room_from_to, state.currentVersion, state.newVersion)
         } else if (state.migrationReason == MigrationReason.FOR_RESTRICTED) {
             views.descriptionText.setTextOrHide(state.customDescription)
             views.upgradeFromTo.text = getString(R.string.upgrade_room_for_restricted_note)

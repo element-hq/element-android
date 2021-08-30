@@ -2766,7 +2766,7 @@
     <string name="upgrade_room_no_power_to_manage">您需要升級聊天室的權限</string>
     <string name="upgrade_room_update_parent_space">自動更新空間上層</string>
     <string name="upgrade_room_auto_invite">自動邀請使用者</string>
-    <string name="upgrade_public_room_from_to">您將要把此聊天室從 %s 升級到 %s。</string>
+    <string name="upgrade_public_room_from_to">您將要把此聊天室從 %1$s 升級到 %2$s。</string>
     <string name="upgrade_room_warning">升級聊天是是一項進階動作，通常建議在聊天室因臭蟲、缺少功能或安全漏洞而不穩定時使用。
 \n這通常只會影響聊天是在伺服器上的處理方式。</string>
     <string name="upgrade_private_room">升級私人聊天室</string>

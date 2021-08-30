@@ -2799,7 +2799,7 @@
     <string name="allow_anyone_in_room_to_access">Rajtigi ĉiun en %s trovi kaj aliri. Vi povas elekti ankaŭ aliajn arojn.</string>
     <string name="upgrade_room_no_power_to_manage">Vi bezonas permeson gradaltigi ĉambron</string>
     <string name="upgrade_room_auto_invite">Memage inviti uzantojn</string>
-    <string name="upgrade_public_room_from_to">Vi gradaltigos ĉi tiun ĉambron de %s al %s.</string>
+    <string name="upgrade_public_room_from_to">Vi gradaltigos ĉi tiun ĉambron de %1$s al %2$s.</string>
     <string name="upgrade_room_warning">Gradaltigo de ĉambro estas altnivela ago, kiu ofte estas rekomendata kiam ĉambro malfirmas pro eraroj, manko de funkcioj, aŭ sekurecaj misoj.
 \nĈi tio kutime nur influas la servilflankan traktadon de la ĉambro.</string>
     <string name="upgrade_private_room">Gradaltigi privatan ĉambron</string>

@@ -2837,7 +2837,7 @@
     <string name="upgrade_room_no_power_to_manage">Du behöver behörighet för att uppgradera ett rum</string>
     <string name="upgrade_room_update_parent_space">Uppdatera automatiskt utrymmesförälder</string>
     <string name="upgrade_room_auto_invite">Bjud in användare automatiskt</string>
-    <string name="upgrade_public_room_from_to">Du kommer att uppgradera det här rummet från %s till %s.</string>
+    <string name="upgrade_public_room_from_to">Du kommer att uppgradera det här rummet från %1$s till %2$s.</string>
     <string name="upgrade_room_warning">Att uppgradera ett rum är en avancerad handling och rekommenderas normal när ett rum är instabilt på grund av buggar, saknade funktioner eller säkerhetsproblem.
 \nDet här påverkar normalt bara hur ett rum hanteras på servern.</string>
     <string name="upgrade_private_room">Uppgradera privat rum</string>

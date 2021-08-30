@@ -2809,7 +2809,7 @@
     <string name="upgrade_room_no_power_to_manage">Ju duhen leje për të përmirësua një dhomë</string>
     <string name="upgrade_room_update_parent_space">Përditëso automatikisht mëmë hapësire</string>
     <string name="upgrade_room_auto_invite">Fto përdorues automatikisht</string>
-    <string name="upgrade_public_room_from_to">Do ta përmirësoni këtë dhomë nga %s në %s.</string>
+    <string name="upgrade_public_room_from_to">Do ta përmirësoni këtë dhomë nga %1$s në %2$s.</string>
     <string name="upgrade_room_warning">Përmirësimi i një dhome është një veprim i thelluar dhe zakonisht i rekomanduar kur një dhomë është e paqëndrueshme për shkak të metash, veçorish që mungojnë ose cenueshmëri sigurie.
 \nZakonisht kjo prek vetëm mënyrën se si trajtohet dhoma te shërbyesi.</string>
     <string name="upgrade_private_room">Përmirësoni dhomë private</string>

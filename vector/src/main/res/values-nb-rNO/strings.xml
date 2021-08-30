@@ -1750,7 +1750,7 @@
     <string name="upgrade_private_room">Oppgrader privat rom</string>
     <string name="upgrade_room_warning">Oppgradering av et rom er en avansert handling og anbefales vanligvis når et rom er ustabilt på grunn av feil, manglende funksjoner eller sikkerhetsproblemer.
 \nDette påvirker vanligvis bare hvordan rommet behandles på serveren.</string>
-    <string name="upgrade_public_room_from_to">Du oppgraderer dette rommet fra %s til %s.</string>
+    <string name="upgrade_public_room_from_to">Du oppgraderer dette rommet fra %1$s til %2$s.</string>
     <string name="allow_anyone_in_room_to_access">La alle i %s finne og få tilgang. Du kan også velge andre mellomrom.</string>
     <string name="room_using_unstable_room_version">Dette rommet kjører romversjon %s, som denne hjemmeserveren har merket som ustabil.</string>
     <string name="a11y_lock_voice_message">Lås for talemeldinger</string>

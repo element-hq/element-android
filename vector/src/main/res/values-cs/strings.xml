@@ -2872,7 +2872,7 @@
     <string name="upgrade_room_no_power_to_manage">K aktualizaci místnosti potřebujete oprávnění</string>
     <string name="upgrade_room_update_parent_space">Automaticky aktualizovat mateřský prostor</string>
     <string name="upgrade_room_auto_invite">Automaticky pozvat uživatele</string>
-    <string name="upgrade_public_room_from_to">Budete aktualizovat tuto místnost z %s na %s.</string>
+    <string name="upgrade_public_room_from_to">Budete aktualizovat tuto místnost z %1$s na %2$s.</string>
     <string name="upgrade_room_warning">Aktualizace místnosti je pokročilá akce a obvykle se doporučuje tehdy, je-li místnost nestabilní kvůli chybám, chybějícím funkcím nebo slabým místům v zabezpečení.
 \nObvykle má vliv pouze na to, jak server místnost zpracovává.</string>
     <string name="upgrade_private_room">Aktualizovat soukromou místnost</string>

@@ -2903,7 +2903,7 @@
     <string name="upgrade_room_no_power_to_manage">Du benötigst die Berechtigung, um einen Raum upzugraden</string>
     <string name="upgrade_room_update_parent_space">Übergeordneten Space automatisch updaten</string>
     <string name="upgrade_room_auto_invite">Benutzer automatisch einladen</string>
-    <string name="upgrade_public_room_from_to">Du upgradest diesen Raum von %s zu %s.</string>
+    <string name="upgrade_public_room_from_to">Du upgradest diesen Raum von %1$s zu %2$s.</string>
     <string name="upgrade_room_warning">Das Raumupgrade ist eine erweiterte Option und ist empfohlen wenn sich der Raum instabil verhält, von Sicherheitslücken betroffen ist oder Features fehlen.
 \nNormalerweise ändert sich dadurch nur wie der Raum am Server verarbeitet wird.</string>
     <string name="upgrade_private_room">Privaten Raum upgraden</string>

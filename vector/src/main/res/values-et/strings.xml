@@ -2821,7 +2821,7 @@
     <string name="upgrade_room_no_power_to_manage">Jututoa versiooni uuendamiseks on sul vaja õigusi</string>
     <string name="upgrade_room_update_parent_space">Uuenda automaatselt ka kogukonnakeskust, kus jututuba osaleb</string>
     <string name="upgrade_room_auto_invite">Kutsu automaatselt kasutajaid</string>
-    <string name="upgrade_public_room_from_to">Sa oled uuendamas jututoa versiooni: %s -&gt; %s.</string>
+    <string name="upgrade_public_room_from_to">Sa oled uuendamas jututoa versiooni: %1$s -&gt; %2$s.</string>
     <string name="upgrade_room_warning">Jututoa versiooni uuendamine on erandlik tegevus ning soovitame seda vaid siis kui ta on vigade tõttu raskestikasutatav, tal puuduvad uued funktsionaalsused või temas leidub turvavigu.
 \nTavaliselt versiooniuuendus mõjutab vaid seda viisi kuidas andmeid töödeldakse serveris.</string>
     <string name="upgrade_private_room">Uuenda omavaheline jututuba</string>

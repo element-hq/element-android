@@ -2809,7 +2809,6 @@
     <string name="upgrade_room_no_power_to_manage">برای ارتقای اتاق نیاز به اجازه دارید</string>
     <string name="upgrade_room_update_parent_space">به‌روز رسانی خودکار والد فضا</string>
     <string name="upgrade_room_auto_invite">دعوت خودکار کاربران</string>
-    <string name="upgrade_public_room_from_to">این اتاق را از %s به %s ارتقا خواهید داد.</string>
     <string name="upgrade_room_warning">ارتقای اتاق، عملی پیش‌رفته است و معمولاً هنگامی که اتاقی به خاطر اشکال‌ها، کمبود ویژگی‌ها یا آسیب‌پذیری‌های امنیتی ناپایدار است، پیشنهاد می‌شود.
 \nاین عمل معمولاً فقط روی چگونگی فراوری اتاق روی کارساز اثر می‌گذارد.</string>
     <string name="upgrade_private_room">ارتقای اتاق خصوصی</string>
