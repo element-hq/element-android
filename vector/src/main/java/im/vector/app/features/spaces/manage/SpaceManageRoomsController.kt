@@ -80,7 +80,10 @@ class SpaceManageRoomsController @Inject constructor(
             filteredResult.forEach { childInfo ->
                 roomManageSelectionItem {
                     id(childInfo.childRoomId)
-                    matrixItem(childInfo.toMatrixItem())
+                    matrixItem(
+                            data.knownRoomSummaries.firstOrNull { it.roomId == childInfo.childRoomId }?.toMatrixItem()
+                                    ?: childInfo.toMatrixItem()
+                    )
                     avatarRenderer(host.avatarRenderer)
                     suggested(childInfo.suggested ?: false)
                     selected(data.selectedRooms.contains(childInfo.childRoomId))

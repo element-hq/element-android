@@ -51,9 +51,7 @@ class SpaceManageRoomsViewModel @AssistedInject constructor(
             )
         }
 
-        viewModelScope.launch(Dispatchers.IO) {
-            refreshSummaryAPI()
-        }
+        refreshSummaryAPI()
     }
 
     @AssistedFactory
@@ -163,7 +161,10 @@ class SpaceManageRoomsViewModel @AssistedInject constructor(
             setState {
                 copy(
                         childrenInfo = apiResult,
-                        paginationStatus = Uninitialized
+                        paginationStatus = Uninitialized,
+                        knownRoomSummaries = apiResult.invoke()?.children?.mapNotNull {
+                            session.getRoomSummary(it.childRoomId)
+                        }.orEmpty()
                 )
             }
         }
@@ -195,6 +196,7 @@ class SpaceManageRoomsViewModel @AssistedInject constructor(
                         knownStateList = knownResults.childrenState.orEmpty(),
                         limit = paginationLimit
                 )
+                val newKnown = apiResult.children.mapNotNull { session.getRoomSummary(it.childRoomId) }
                 setState {
                     copy(
                             childrenInfo = Success(
@@ -203,7 +205,8 @@ class SpaceManageRoomsViewModel @AssistedInject constructor(
                                             nextToken = apiResult.nextToken
                                     )
                             ),
-                            paginationStatus = Success(Unit)
+                            paginationStatus = Success(Unit),
+                            knownRoomSummaries = (state.knownRoomSummaries + newKnown).distinctBy { it.roomId }
                     )
                 }
             } catch (failure: Throwable) {
