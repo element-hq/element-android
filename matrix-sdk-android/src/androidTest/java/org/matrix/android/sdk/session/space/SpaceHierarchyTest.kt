@@ -181,7 +181,7 @@ class SpaceHierarchyTest : InstrumentedTest {
                 Triple("A2", true, true)
         ))
 
-        val spaceBInfo = createPublicSpace(session, "SpaceB", listOf(
+        /* val spaceBInfo = */ createPublicSpace(session, "SpaceB", listOf(
                 Triple("B1", true /*auto-join*/, true/*canonical*/),
                 Triple("B2", true, true),
                 Triple("B3", true, true)
@@ -438,7 +438,7 @@ class SpaceHierarchyTest : InstrumentedTest {
     fun testRootSpaces() {
         val session = commonTestHelper.createAccount("John", SessionTestParams(true))
 
-        val spaceAInfo = createPublicSpace(session, "SpaceA", listOf(
+        /* val spaceAInfo = */ createPublicSpace(session, "SpaceA", listOf(
                 Triple("A1", true /*auto-join*/, true/*canonical*/),
                 Triple("A2", true, true)
         ))
