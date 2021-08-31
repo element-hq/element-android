@@ -125,7 +125,7 @@ class SpaceDirectoryViewModel @AssistedInject constructor(
                             paginationStatus = state.paginationStatus.toMutableMap().apply {
                                 this[spaceId] = Uninitialized
                             }.toMap(),
-                            knownRoomSummaries = (state.knownRoomSummaries + knownSummaries).distinctBy { it.roomId },
+                            knownRoomSummaries = (state.knownRoomSummaries + knownSummaries).distinctBy { it.roomId }
                     )
                 }
             } catch (failure: Throwable) {
@@ -288,7 +288,7 @@ class SpaceDirectoryViewModel @AssistedInject constructor(
                 cachedResults[currentRootId] = Success(
                         currentResponse.copy(
                                 children = currentResponse.children + query.children,
-                                nextToken = query.nextToken,
+                                nextToken = query.nextToken
                         )
                 )
                 setState {

@@ -20,15 +20,16 @@ import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
-import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
+import org.matrix.android.sdk.internal.session.space.SpaceHierarchySummary
 
 data class SpaceManageRoomViewState(
         val spaceId: String,
         val spaceSummary: Async<RoomSummary> = Uninitialized,
-        val childrenInfo: Async<List<SpaceChildInfo>> = Uninitialized,
+        val childrenInfo: Async<SpaceHierarchySummary> = Uninitialized,
         val selectedRooms: List<String> = emptyList(),
         val currentFilter: String = "",
-        val actionState: Async<Unit> = Uninitialized
+        val actionState: Async<Unit> = Uninitialized,
+        val paginationStatus: Async<Unit> = Uninitialized
 ) : MvRxState {
     constructor(args: SpaceManageArgs) : this(
             spaceId = args.spaceId

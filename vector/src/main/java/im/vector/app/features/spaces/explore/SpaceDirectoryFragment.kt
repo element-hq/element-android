@@ -213,5 +213,4 @@ class SpaceDirectoryFragment @Inject constructor(
         // nothing?
         return false
     }
-
 }
