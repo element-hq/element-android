@@ -10,6 +10,7 @@ jobs:
     name: Integration Tests (Synapse)
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         api-level: [21, 30]
     steps:
