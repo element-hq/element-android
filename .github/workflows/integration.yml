@@ -30,7 +30,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        api-level: [21, 30]
+        api-level: [21, 28, 30]
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python 3.8
