@@ -88,7 +88,7 @@ internal class RoomSummaryMapper @Inject constructor(private val timelineEventMa
                             avatarUrl = it.childSummaryEntity?.avatarUrl,
                             activeMemberCount = it.childSummaryEntity?.joinedMembersCount,
                             order = it.order,
-                            autoJoin = it.autoJoin ?: false,
+//                            autoJoin = it.autoJoin ?: false,
                             viaServers = it.viaServers.toList(),
                             parentRoomId = roomSummaryEntity.roomId,
                             suggested = it.suggested,

@@ -19,7 +19,6 @@ package org.matrix.android.sdk.internal.session.space
 import io.realm.RealmConfiguration
 import kotlinx.coroutines.TimeoutCancellationException
 import org.matrix.android.sdk.api.session.room.model.Membership
-import org.matrix.android.sdk.api.session.room.model.RoomType
 import org.matrix.android.sdk.api.session.space.JoinSpaceResult
 import org.matrix.android.sdk.internal.database.awaitNotEmptyResult
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
@@ -84,39 +83,39 @@ internal class DefaultJoinSpaceTask @Inject constructor(
         // after that i should have the children (? do I need to paginate to get state)
         val summary = roomSummaryDataSource.getSpaceSummary(params.roomIdOrAlias)
         Timber.v("## Space: Found space summary Name:[${summary?.name}] children: ${summary?.spaceChildren?.size}")
-        summary?.spaceChildren?.forEach {
+//        summary?.spaceChildren?.forEach {
 //            val childRoomSummary = it.roomSummary ?: return@forEach
-            Timber.v("## Space: Processing child :[${it.childRoomId}] autoJoin:${it.autoJoin}")
-            if (it.autoJoin) {
-                // I should try to join as well
-                if (it.roomType == RoomType.SPACE) {
-                    // recursively join auto-joined child of this space?
-                    when (val subspaceJoinResult = execute(JoinSpaceTask.Params(it.childRoomId, null, it.viaServers))) {
-                        JoinSpaceResult.Success           -> {
-                            // nop
-                        }
-                        is JoinSpaceResult.Fail           -> {
-                            errors[it.childRoomId] = subspaceJoinResult.error
-                        }
-                        is JoinSpaceResult.PartialSuccess -> {
-                            errors.putAll(subspaceJoinResult.failedRooms)
-                        }
-                    }
-                } else {
-                    try {
-                        Timber.v("## Space: Joining room child ${it.childRoomId}")
-                        joinRoomTask.execute(JoinRoomTask.Params(
-                                roomIdOrAlias = it.childRoomId,
-                                reason = "Auto-join parent space",
-                                viaServers = it.viaServers
-                        ))
-                    } catch (failure: Throwable) {
-                        errors[it.childRoomId] = failure
-                        Timber.e("## Space: Failed to join room child ${it.childRoomId}")
-                    }
-                }
-            }
-        }
+//            Timber.v("## Space: Processing child :[${it.childRoomId}] suggested:${it.suggested}")
+//            if (it.autoJoin) {
+//                // I should try to join as well
+//                if (it.roomType == RoomType.SPACE) {
+//                    // recursively join auto-joined child of this space?
+//                    when (val subspaceJoinResult = execute(JoinSpaceTask.Params(it.childRoomId, null, it.viaServers))) {
+//                        JoinSpaceResult.Success           -> {
+//                            // nop
+//                        }
+//                        is JoinSpaceResult.Fail           -> {
+//                            errors[it.childRoomId] = subspaceJoinResult.error
+//                        }
+//                        is JoinSpaceResult.PartialSuccess -> {
+//                            errors.putAll(subspaceJoinResult.failedRooms)
+//                        }
+//                    }
+//                } else {
+//                    try {
+//                        Timber.v("## Space: Joining room child ${it.childRoomId}")
+//                        joinRoomTask.execute(JoinRoomTask.Params(
+//                                roomIdOrAlias = it.childRoomId,
+//                                reason = "Auto-join parent space",
+//                                viaServers = it.viaServers
+//                        ))
+//                    } catch (failure: Throwable) {
+//                        errors[it.childRoomId] = failure
+//                        Timber.e("## Space: Failed to join room child ${it.childRoomId}")
+//                    }
+//                }
+//            }
+//        }
 
         return if (errors.isEmpty()) {
             JoinSpaceResult.Success

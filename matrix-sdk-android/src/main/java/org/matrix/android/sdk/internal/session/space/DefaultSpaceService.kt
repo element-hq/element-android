@@ -19,6 +19,7 @@ package org.matrix.android.sdk.internal.session.space
 import android.net.Uri
 import androidx.lifecycle.LiveData
 import org.matrix.android.sdk.api.query.QueryStringValue
+import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
@@ -27,6 +28,7 @@ import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
 import org.matrix.android.sdk.api.session.room.model.RoomDirectoryVisibility
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
+import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomPreset
@@ -108,53 +110,65 @@ internal class DefaultSpaceService @Inject constructor(
 
     override suspend fun querySpaceChildren(spaceId: String,
                                             suggestedOnly: Boolean?,
-                                            autoJoinedOnly: Boolean?): Pair<RoomSummary, List<SpaceChildInfo>> {
-        return resolveSpaceInfoTask.execute(ResolveSpaceInfoTask.Params.withId(spaceId, suggestedOnly, autoJoinedOnly)).let { response ->
+                                            limit: Int?,
+                                            from: String?,
+                                            knownStateList: List<Event>?): SpaceHierarchySummary {
+        return resolveSpaceInfoTask.execute(
+                ResolveSpaceInfoTask.Params(
+                        spaceId = spaceId, limit = limit, maxDepth = 1, from = from, suggestedOnly = suggestedOnly
+                )
+        ).let { response ->
             val spaceDesc = response.rooms?.firstOrNull { it.roomId == spaceId }
-            Pair(
-                    first = RoomSummary(
-                            roomId = spaceDesc?.roomId ?: spaceId,
-                            roomType = spaceDesc?.roomType,
-                            name = spaceDesc?.name ?: "",
-                            displayName = spaceDesc?.name ?: "",
-                            topic = spaceDesc?.topic ?: "",
-                            joinedMembersCount = spaceDesc?.numJoinedMembers,
-                            avatarUrl = spaceDesc?.avatarUrl ?: "",
-                            encryptionEventTs = null,
-                            typingUsers = emptyList(),
-                            isEncrypted = false,
-                            flattenParentIds = emptyList()
-                    ),
-                    second = response.rooms
-                            ?.filter { it.roomId != spaceId }
-                            ?.flatMap { childSummary ->
-                                response.events
-                                        ?.filter { it.stateKey == childSummary.roomId && it.type == EventType.STATE_SPACE_CHILD }
-                                        ?.mapNotNull { childStateEv ->
-                                            // create a child entry for everytime this room is the child of a space
-                                            // beware that a room could appear then twice in this list
-                                            childStateEv.content.toModel<SpaceChildContent>()?.let { childStateEvContent ->
-                                                SpaceChildInfo(
-                                                        childRoomId = childSummary.roomId,
-                                                        isKnown = true,
-                                                        roomType = childSummary.roomType,
-                                                        name = childSummary.name,
-                                                        topic = childSummary.topic,
-                                                        avatarUrl = childSummary.avatarUrl,
-                                                        order = childStateEvContent.order,
-                                                        autoJoin = childStateEvContent.autoJoin ?: false,
-                                                        viaServers = childStateEvContent.via.orEmpty(),
-                                                        activeMemberCount = childSummary.numJoinedMembers,
-                                                        parentRoomId = childStateEv.roomId,
-                                                        suggested = childStateEvContent.suggested,
-                                                        canonicalAlias = childSummary.canonicalAlias,
-                                                        aliases = childSummary.aliases,
-                                                        worldReadable = childSummary.worldReadable
-                                                )
-                                            }
-                                        }.orEmpty()
-                            }
-                            .orEmpty()
+            val root = RoomSummary(
+                    roomId = spaceDesc?.roomId ?: spaceId,
+                    roomType = spaceDesc?.roomType,
+                    name = spaceDesc?.name ?: "",
+                    displayName = spaceDesc?.name ?: "",
+                    topic = spaceDesc?.topic ?: "",
+                    joinedMembersCount = spaceDesc?.numJoinedMembers,
+                    avatarUrl = spaceDesc?.avatarUrl ?: "",
+                    encryptionEventTs = null,
+                    typingUsers = emptyList(),
+                    isEncrypted = false,
+                    flattenParentIds = emptyList(),
+                    canonicalAlias = spaceDesc?.canonicalAlias,
+                    joinRules = RoomJoinRules.PUBLIC.takeIf { spaceDesc?.worldReadable == true }
+            )
+            val children = response.rooms
+                    ?.filter { it.roomId != spaceId }
+                    ?.flatMap { childSummary ->
+                        (spaceDesc?.childrenState ?: knownStateList)
+                                ?.filter { it.stateKey == childSummary.roomId && it.type == EventType.STATE_SPACE_CHILD }
+                                ?.mapNotNull { childStateEv ->
+                                    // create a child entry for everytime this room is the child of a space
+                                    // beware that a room could appear then twice in this list
+                                    childStateEv.content.toModel<SpaceChildContent>()?.let { childStateEvContent ->
+                                        SpaceChildInfo(
+                                                childRoomId = childSummary.roomId,
+                                                isKnown = true,
+                                                roomType = childSummary.roomType,
+                                                name = childSummary.name,
+                                                topic = childSummary.topic,
+                                                avatarUrl = childSummary.avatarUrl,
+                                                order = childStateEvContent.order,
+//                                                        autoJoin = childStateEvContent.autoJoin ?: false,
+                                                viaServers = childStateEvContent.via.orEmpty(),
+                                                activeMemberCount = childSummary.numJoinedMembers,
+                                                parentRoomId = childStateEv.roomId,
+                                                suggested = childStateEvContent.suggested,
+                                                canonicalAlias = childSummary.canonicalAlias,
+                                                aliases = childSummary.aliases,
+                                                worldReadable = childSummary.worldReadable
+                                        )
+                                    }
+                                }.orEmpty()
+                    }
+                    .orEmpty()
+            SpaceHierarchySummary(
+                    rootSummary = root,
+                    children = children,
+                    childrenState = spaceDesc?.childrenState.orEmpty(),
+                    nextToken = response.nextBatch
             )
         }
     }

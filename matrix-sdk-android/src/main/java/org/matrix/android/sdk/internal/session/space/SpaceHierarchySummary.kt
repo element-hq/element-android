@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2021 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,13 @@
 
 package org.matrix.android.sdk.internal.session.space
 
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
+import org.matrix.android.sdk.api.session.events.model.Event
+import org.matrix.android.sdk.api.session.room.model.RoomSummary
+import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
 
-@JsonClass(generateAdapter = true)
-internal data class SpacesResponse(
-        /** Its presence indicates that there are more results to return. */
-        @Json(name = "next_batch") val nextBatch: String? = null,
-        /** Rooms information like name/avatar/type ... */
-        @Json(name = "rooms") val rooms: List<SpaceChildSummaryResponse>? = null
+data class SpaceHierarchySummary(
+        val rootSummary: RoomSummary,
+        val children: List<SpaceChildInfo>,
+        val childrenState: List<Event>,
+        val nextToken: String? = null
 )

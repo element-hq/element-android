@@ -50,7 +50,7 @@ class SpaceManageRoomsViewModel @AssistedInject constructor(
 
         viewModelScope.launch(Dispatchers.IO) {
             val apiResult = runCatchingToAsync {
-                session.spaceService().querySpaceChildren(spaceId = initialState.spaceId).second
+                session.spaceService().querySpaceChildren(spaceId = initialState.spaceId).children
             }
             setState {
                 copy(
@@ -131,8 +131,8 @@ class SpaceManageRoomsViewModel @AssistedInject constructor(
                             roomId = info.childRoomId,
                             viaServers = info.viaServers,
                             order = info.order,
-                            suggested = suggested,
-                            autoJoin = info.autoJoin
+                            suggested = suggested
+//                            autoJoin = info.autoJoin
                     )
                 } catch (failure: Throwable) {
                     errorList.add(failure)
@@ -156,7 +156,7 @@ class SpaceManageRoomsViewModel @AssistedInject constructor(
         }
         viewModelScope.launch(Dispatchers.IO) {
             val apiResult = runCatchingToAsync {
-                session.spaceService().querySpaceChildren(spaceId = initialState.spaceId).second
+                session.spaceService().querySpaceChildren(spaceId = initialState.spaceId).children
             }
             setState {
                 copy(
