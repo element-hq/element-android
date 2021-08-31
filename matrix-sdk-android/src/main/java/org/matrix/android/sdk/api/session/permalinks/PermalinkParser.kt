@@ -24,8 +24,8 @@ import java.net.URLDecoder
 
 /**
  * This class turns a uri to a [PermalinkData]
- * element-based domains (e.g. https://app.element.io/#/user/@chagai95:matrix.org) permalinks or matrix.to permalinks (e.g. https://matrix.to/#/@chagai95:matrix.org)
- * 
+ * element-based domains (e.g. https://app.element.io/#/user/@chagai95:matrix.org) permalinks
+ * or matrix.to permalinks (e.g. https://matrix.to/#/@chagai95:matrix.org)
  */
 object PermalinkParser {
 
@@ -61,8 +61,9 @@ object PermalinkParser {
                 .map { URLDecoder.decode(it, "UTF-8") }
                 .take(2)
 
-        // the element-based domain permalinks (e.g. https://app.element.io/#/user/@chagai95:matrix.org) don't have the mxid in the first param (like matrix.to does - https://matrix.to/#/@chagai95:matrix.org) but rather in the second after /user/ so /user/mxid
-        var identifier = params.getOrNull(0);
+        // the element-based domain permalinks (e.g. https://app.element.io/#/user/@chagai95:matrix.org) don't have the
+        // mxid in the first param (like matrix.to does - https://matrix.to/#/@chagai95:matrix.org) but rather in the second after /user/ so /user/mxid
+        var identifier = params.getOrNull(0)
         if (identifier.equals("user")) {
             identifier = params.getOrNull(1)
         }
