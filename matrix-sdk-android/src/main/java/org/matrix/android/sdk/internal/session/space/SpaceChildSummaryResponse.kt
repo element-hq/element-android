@@ -23,16 +23,12 @@ import org.matrix.android.sdk.api.session.events.model.Event
 /**
  * The fields are the same as those returned by /publicRooms (see spec), with the addition of:
  *       room_type: the value of the m.type field from the room's m.room.create event, if any.
- *       children_state: The m.space.child events of the room. For each event, only the following fields are included1: type, state_key, content, room_id, sender, with the addition of:
- *       origin_server_ts: This is required for sorting of rooms as specified below.
+ *       children_state: The m.space.child events of the room.
+ *       For each event, only the following fields are included1: type, state_key, content, room_id, sender,
+ *       with the addition of: origin_server_ts: This is required for sorting of rooms as specified below.
  */
 @JsonClass(generateAdapter = true)
 internal data class SpaceChildSummaryResponse(
-//        /**
-//         * The total number of state events which point to or from this room (inbound/outbound edges).
-//         * This includes all m.space.child events in the room, in addition to m.room.parent events which point to this room as a parent.
-//         */
-//        @Json(name = "num_refs") val numRefs: Int? = null,
 
         /**
          * The room type, which is m.space for subspaces.
@@ -41,7 +37,7 @@ internal data class SpaceChildSummaryResponse(
         @Json(name = "room_type") val roomType: String? = null,
 
         /**  The m.space.child events of the room. For each event, only the following fields are included:
-         *  type, state_key, content, room_id, sender, with the addition of origin_server_ts: This is required for sorting of rooms as specified below.
+         *  type, state_key, content, room_id, sender, with the addition of origin_server_ts.
          */
         @Json(name = "children_state") val childrenState: List<Event>? = null,
 
