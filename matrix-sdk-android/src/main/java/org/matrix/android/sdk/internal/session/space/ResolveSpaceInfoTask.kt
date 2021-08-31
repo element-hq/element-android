@@ -24,25 +24,12 @@ import javax.inject.Inject
 internal interface ResolveSpaceInfoTask : Task<ResolveSpaceInfoTask.Params, SpacesResponse> {
     data class Params(
             val spaceId: String,
-//            val maxRoomPerSpace: Int?,
             val limit: Int?,
             val maxDepth: Int?,
             val from: String?,
             val suggestedOnly: Boolean?
 //            val autoJoinOnly: Boolean?
-    ) {
-//        companion object {
-//            fun withId(spaceId: String, suggestedOnly: Boolean?) =
-//                    Params(
-//                            spaceId = spaceId,
-// //                            maxRoomPerSpace = 10,
-//                            limit = 20,
-//                            from = null,
-//                            suggestedOnly = suggestedOnly
-// //                            autoJoinOnly = autoJoinOnly
-//                    )
-//        }
-    }
+    )
 }
 
 internal class DefaultResolveSpaceInfoTask @Inject constructor(
