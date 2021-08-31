@@ -50,6 +50,7 @@ class SpaceCreationTest : InstrumentedTest {
     private val commonTestHelper = CommonTestHelper(context())
 
     @Test
+    @Suppress("EXPERIMENTAL_API_USAGE")
     fun createSimplePublicSpace() {
         val session = commonTestHelper.createAccount("Hubble", SessionTestParams(true))
         val roomName = "My Space"
@@ -133,6 +134,7 @@ class SpaceCreationTest : InstrumentedTest {
     }
 
     @Test
+    @Suppress("EXPERIMENTAL_API_USAGE")
     fun testSimplePublicSpaceWithChildren() {
         val aliceSession = commonTestHelper.createAccount("alice", SessionTestParams(true))
         val bobSession = commonTestHelper.createAccount("bob", SessionTestParams(true))
