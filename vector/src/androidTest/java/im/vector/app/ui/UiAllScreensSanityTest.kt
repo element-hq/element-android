@@ -235,6 +235,8 @@ class UiAllScreensSanityTest {
         // Wait a bit for the keyboard layout to update
         sleep(30)
         clickOn(R.id.sendButton)
+        // Wait for the UI to update
+        sleep(1000)
         // Open edit history
         longClickOnMessage("Hello universe! (edited)")
         clickOn(R.string.message_view_edit_history)
