@@ -42,6 +42,7 @@ import com.adevinta.android.barista.interaction.BaristaListInteractions.clickLis
 import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild
 import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.clickMenu
 import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu
+import im.vector.app.BuildConfig
 import im.vector.app.EspressoHelper
 import im.vector.app.R
 import im.vector.app.SleepViewAction
@@ -458,8 +459,18 @@ class UiAllScreensSanityTest {
     }
 
     private fun navigateToSettingsNotifications() {
-        clickOn(R.string.settings_notification_advanced)
-        pressBack()
+        if (BuildConfig.USE_NOTIFICATION_SETTINGS_V2) {
+            clickOn(R.string.settings_notification_default)
+            pressBack()
+            clickOn(R.string.settings_notification_mentions_and_keywords)
+            // TODO Test adding a keyword?
+            pressBack()
+            clickOn(R.string.settings_notification_other)
+            pressBack()
+        } else {
+            clickOn(R.string.settings_notification_advanced)
+            pressBack()
+        }
         /*
         clickOn(R.string.settings_noisy_notifications_preferences)
         TODO Cannot go back
