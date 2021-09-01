@@ -253,10 +253,7 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted private val init
                             state.parentSpaceId?.let {
                                 featurePreset = RestrictedRoomPreset(
                                         session.getHomeServerCapabilities(),
-                                        listOf(RoomJoinRulesAllowEntry(
-                                                state.parentSpaceId,
-                                                listOf(state.homeServerName)
-                                        ))
+                                        listOf(RoomJoinRulesAllowEntry.restrictedToRoom(state.parentSpaceId))
                                 )
                             }
                         }
