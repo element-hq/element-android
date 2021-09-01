@@ -37,6 +37,7 @@ import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.longClickOn
 import com.adevinta.android.barista.interaction.BaristaDialogInteractions.clickDialogNegativeButton
 import com.adevinta.android.barista.interaction.BaristaDialogInteractions.clickDialogPositiveButton
+import com.adevinta.android.barista.interaction.BaristaDrawerInteractions.openDrawer
 import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
 import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem
 import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild
@@ -170,9 +171,13 @@ class UiAllScreensSanityTest {
         }
         clickOn(R.string.create_new_room)
 
+        // Room access bottom sheet
+        clickOn(R.string.room_settings_room_access_private_title)
+        pressBack()
+
         // Create
-        assertListItemCount(R.id.createRoomForm, 10)
-        clickListItemChild(R.id.createRoomForm, 9, R.id.form_submit_button)
+        assertListItemCount(R.id.createRoomForm, 12)
+        clickListItemChild(R.id.createRoomForm, 11, R.id.form_submit_button)
 
         waitUntilActivityVisible<RoomDetailActivity> {
             assertDisplayed(R.id.roomDetailContainer)
@@ -356,7 +361,8 @@ class UiAllScreensSanityTest {
     }
 
     private fun navigateToSettings() {
-        clickOn(R.id.groupToolbarAvatarImageView)
+        // clickOn(R.id.groupToolbarAvatarImageView)
+        openDrawer()
         clickOn(R.id.homeDrawerHeaderSettingsView)
 
         clickOn(R.string.settings_general_title)
