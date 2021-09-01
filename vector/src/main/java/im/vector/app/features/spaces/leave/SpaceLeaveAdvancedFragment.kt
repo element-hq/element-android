@@ -25,7 +25,6 @@ import com.airbnb.mvrx.withState
 import com.jakewharton.rxbinding3.appcompat.queryTextChanges
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
-import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentSpaceLeaveAdvancedBinding
 import io.reactivex.rxkotlin.subscribeBy
@@ -36,7 +35,6 @@ import javax.inject.Inject
 class SpaceLeaveAdvancedFragment @Inject constructor(
         val controller: SelectChildrenController
 ) : VectorBaseFragment<FragmentSpaceLeaveAdvancedBinding>(),
-        OnBackPressed,
         SelectChildrenController.Listener {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?) =
@@ -76,10 +74,5 @@ class SpaceLeaveAdvancedFragment @Inject constructor(
 
     override fun onItemSelected(roomSummary: RoomSummary) {
         viewModel.handle(SpaceLeaveAdvanceViewAction.ToggleSelection(roomSummary.roomId))
-    }
-
-    override fun onBackPressed(toolbarButton: Boolean): Boolean {
-        requireActivity().finish()
-        return true
     }
 }

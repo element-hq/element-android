@@ -26,6 +26,7 @@ import android.view.ViewGroup
 import androidx.core.text.toSpannable
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
+import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.parentFragmentViewModel
@@ -33,6 +34,7 @@ import com.airbnb.mvrx.withState
 import com.jakewharton.rxbinding3.widget.checkedChanges
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
+import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
@@ -55,6 +57,7 @@ class LeaveSpaceBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetLea
     }
 
     @Inject lateinit var colorProvider: ColorProvider
+    @Inject lateinit var errorFormatter: ErrorFormatter
 
     override fun injectWith(injector: ScreenComponent) {
         injector.inject(this)
@@ -74,7 +77,7 @@ class LeaveSpaceBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetLea
             // nothing actually?
         } else {
             // move back to default
-            settingsViewModel.handle(SpaceMenuViewAction.SetAutoLeaveAll)
+            settingsViewModel.handle(SpaceLeaveViewAction.SetAutoLeaveAll)
         }
     }
 
@@ -85,13 +88,13 @@ class LeaveSpaceBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetLea
                 .subscribe {
                     when (it) {
                         views.leaveAll.id      -> {
-                            settingsViewModel.handle(SpaceMenuViewAction.SetAutoLeaveAll)
+                            settingsViewModel.handle(SpaceLeaveViewAction.SetAutoLeaveAll)
                         }
                         views.leaveNone.id     -> {
-                            settingsViewModel.handle(SpaceMenuViewAction.SetAutoLeaveNone)
+                            settingsViewModel.handle(SpaceLeaveViewAction.SetAutoLeaveNone)
                         }
                         views.leaveSelected.id -> {
-                            settingsViewModel.handle(SpaceMenuViewAction.SetAutoLeaveSelected)
+                            settingsViewModel.handle(SpaceLeaveViewAction.SetAutoLeaveSelected)
                             // launch dedicated activity
                             cherryPickLeaveActivityResult.launch(
                                     SpaceLeaveAdvancedActivity.newIntent(requireContext(), spaceArgs.spaceId)
@@ -102,7 +105,7 @@ class LeaveSpaceBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetLea
                 .disposeOnDestroyView()
 
         views.leaveButton.debouncedClicks {
-            settingsViewModel.handle(SpaceMenuViewAction.LeaveSpace)
+            settingsViewModel.handle(SpaceLeaveViewAction.LeaveSpace)
         }
 
         views.cancelButton.debouncedClicks {
@@ -115,7 +118,7 @@ class LeaveSpaceBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetLea
 
         val spaceSummary = state.spaceSummary ?: return@withState
         val bestName = spaceSummary.toMatrixItem().getBestName()
-        val commonText = getString(R.string.space_leave_prompt_msg, bestName)
+        val commonText = getString(R.string.space_leave_prompt_msg_with_name, bestName)
                 .toSpannable().styleMatchingText(bestName, Typeface.BOLD)
 
         val warningMessage: CharSequence = if (spaceSummary.otherMemberIds.isEmpty()) {
@@ -148,6 +151,7 @@ class LeaveSpaceBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetLea
 
         views.bottomLeaveSpaceWarningText.setTextOrHide(warningMessage)
 
+        views.inlineErrorText.setTextOrHide(null)
         if (state.leavingState is Loading) {
             views.leaveButton.isInvisible = true
             views.cancelButton.isInvisible = true
@@ -156,6 +160,9 @@ class LeaveSpaceBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetLea
             views.leaveButton.isInvisible = false
             views.cancelButton.isInvisible = false
             views.leaveProgress.isVisible = false
+            if (state.leavingState is Fail) {
+                views.inlineErrorText.setTextOrHide(errorFormatter.toHumanReadable(state.leavingState.error))
+            }
         }
 
         val hasChildren = (spaceSummary.spaceChildren?.size ?: 0) > 0

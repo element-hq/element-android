@@ -2737,6 +2737,7 @@
     <string name="you_are_invited">Jste zváni</string>
     <string name="spaces_beta_welcome_to_spaces">Vítejte v prostorech!</string>
     <string name="space_add_existing_rooms">Přidat existující místnosti a prostor</string>
+    <!-- TO BE REMOVED -->
     <string name="space_leave_prompt_msg">Jste si jisti, že chcete opustit tento prostor\?</string>
     <string name="leave_space">Opustit prostor</string>
     <string name="space_add_child_title">Přidat místnosti</string>

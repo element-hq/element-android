@@ -2619,6 +2619,7 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="labs_use_restricted_join_rule">Espacio Experimental - Sala Restringida.</string>
     <string name="you_are_invited">Estas invitado</string>
     <string name="space_add_rooms">Añadir salas</string>
+    <!-- TO BE REMOVED -->
     <string name="space_leave_prompt_msg">Estas seguro de que quieres salir de este espacio\?</string>
     <string name="leave_space">Salir de este espacio</string>
     <string name="space_add_child_title">Añadir salas</string>

@@ -23,6 +23,7 @@ import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -31,6 +32,7 @@ import im.vector.app.AppStateHandler
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import kotlinx.coroutines.launch
+import okhttp3.internal.toImmutableList
 import org.matrix.android.sdk.api.query.ActiveSpaceFilter
 import org.matrix.android.sdk.api.query.RoomCategoryFilter
 import org.matrix.android.sdk.api.session.Session
@@ -56,7 +58,7 @@ class SpaceLeaveAdvancedViewModel @AssistedInject constructor(
                 }
                 setState {
                     copy(
-                            selectedRooms = existing.toList()
+                            selectedRooms = existing.toImmutableList()
                     )
                 }
             }
@@ -67,20 +69,24 @@ class SpaceLeaveAdvancedViewModel @AssistedInject constructor(
                 setState { copy(leaveState = Loading()) }
                 viewModelScope.launch {
                     try {
-                        try {
-                            state.selectedRooms.forEach {
+                        state.selectedRooms.forEach {
+                            try {
                                 session.getRoom(it)?.leave(null)
+                            } catch (failure: Throwable) {
+                                // silently ignore?
+                                Timber.e(failure, "Fail to leave sub rooms/spaces")
                             }
-                        } catch (failure: Throwable) {
-                            // silently ignore?
-                            Timber.e(failure, "Fail to leave sub rooms/spaces")
                         }
+
                         session.getRoom(initialState.spaceId)?.leave(null)
                         // We observe the membership and to dismiss when we have remote echo of leaving
                     } catch (failure: Throwable) {
                         setState { copy(leaveState = Fail(failure)) }
                     }
                 }
+            }
+            SpaceLeaveAdvanceViewAction.ClearError         -> {
+                setState { copy(leaveState = Uninitialized) }
             }
         }
     }

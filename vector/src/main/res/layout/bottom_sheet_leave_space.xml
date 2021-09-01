@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?colorSurface"
+    android:background="?android:colorBackground"
     android:orientation="vertical">
 
     <TextView
@@ -16,7 +16,7 @@
         android:layout_marginEnd="@dimen/layout_horizontal_margin"
         android:layout_marginBottom="8dp"
         android:textColor="?vctr_content_primary"
-        tools:text="@string/space_leave_prompt_msg" />
+        tools:text="@string/space_leave_prompt_msg_with_name" />
 
     <RadioGroup
         android:id="@+id/autoLeaveRadioGroup"
@@ -59,7 +59,9 @@
         android:layout_marginStart="@dimen/layout_horizontal_margin"
         android:layout_marginTop="4dp"
         android:layout_marginEnd="@dimen/layout_horizontal_margin"
-        android:textColor="?vctr_content_secondary"
+        android:textColor="?colorError"
+        tools:visibility="visible"
+        tools:text="@string/error_no_network"
         android:visibility="gone" />
 
     <FrameLayout

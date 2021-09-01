@@ -27,11 +27,13 @@ import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.viewModel
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.commitTransaction
 import im.vector.app.core.extensions.hideKeyboard
+import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivitySimpleLoadingBinding
@@ -63,8 +65,7 @@ class SpaceLeaveAdvancedActivity : VectorBaseActivity<ActivitySimpleLoadingBindi
     }
 
     override fun hideWaitingView() {
-        views.waitingView.waitingStatusText.text = null
-        views.waitingView.waitingStatusText.isGone = true
+        views.waitingView.waitingStatusText.setTextOrHide(null)
         views.waitingView.waitingHorizontalProgress.progress = 0
         views.waitingView.waitingHorizontalProgress.isVisible = false
         super.hideWaitingView()
@@ -104,7 +105,13 @@ class SpaceLeaveAdvancedActivity : VectorBaseActivity<ActivitySimpleLoadingBindi
                 }
                 is Fail    -> {
                     hideWaitingView()
-                    showSnackbar(errorFormatter.toHumanReadable(state.leaveState.error))
+                    MaterialAlertDialogBuilder(this)
+                            .setTitle(R.string.dialog_title_error)
+                            .setMessage(errorFormatter.toHumanReadable(state.leaveState.error))
+                            .setPositiveButton(R.string.ok) { _, _ ->
+                                leaveViewModel.handle(SpaceLeaveAdvanceViewAction.ClearError)
+                            }
+                            .show()
                 }
                 else       -> {
                     hideWaitingView()

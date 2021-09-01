@@ -2679,6 +2679,7 @@
     <string name="spaces_beta_welcome_to_spaces_desc">فضاها شیوه‌ای جدید برای گروه‌بندی اتاق‌ها و افراد است.</string>
     <string name="spaces_beta_welcome_to_spaces">به فضاها خوش آمدید!</string>
     <string name="space_add_existing_rooms">افزودن فضا و اتاق‌های موجود</string>
+    <!-- TO BE REMOVED -->
     <string name="space_leave_prompt_msg">مطمئنید که می‌خواهید فضا را ترک کنید؟</string>
     <string name="leave_space">ترک فضا</string>
     <string name="space_add_child_title">افزودن اتاق</string>

@@ -22,6 +22,7 @@ import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -46,7 +47,7 @@ class SpaceMenuViewModel @AssistedInject constructor(
         @Assisted val initialState: SpaceMenuState,
         val session: Session,
         val appStateHandler: AppStateHandler
-) : VectorViewModel<SpaceMenuState, SpaceMenuViewAction, EmptyViewEvents>(initialState) {
+) : VectorViewModel<SpaceMenuState, SpaceLeaveViewAction, EmptyViewEvents>(initialState) {
 
     @AssistedFactory
     interface Factory {
@@ -84,7 +85,8 @@ class SpaceMenuViewModel @AssistedInject constructor(
                         }
                     }
                 }
-            }
+            }.disposeOnClear()
+
             PowerLevelsObservableFactory(room)
                     .createObservable()
                     .subscribe {
@@ -117,12 +119,18 @@ class SpaceMenuViewModel @AssistedInject constructor(
         }
     }
 
-    override fun handle(action: SpaceMenuViewAction) {
+    override fun handle(action: SpaceLeaveViewAction) {
         when (action) {
-            SpaceMenuViewAction.SetAutoLeaveAll      -> setState { copy(leaveMode = SpaceMenuState.LeaveMode.LEAVE_ALL) }
-            SpaceMenuViewAction.SetAutoLeaveNone     -> setState { copy(leaveMode = SpaceMenuState.LeaveMode.LEAVE_NONE) }
-            SpaceMenuViewAction.SetAutoLeaveSelected -> setState { copy(leaveMode = SpaceMenuState.LeaveMode.LEAVE_SELECTED) }
-            SpaceMenuViewAction.LeaveSpace           -> handleLeaveSpace()
+            SpaceLeaveViewAction.SetAutoLeaveAll      -> setState {
+                copy(leaveMode = SpaceMenuState.LeaveMode.LEAVE_ALL, leavingState = Uninitialized)
+            }
+            SpaceLeaveViewAction.SetAutoLeaveNone     -> setState {
+                copy(leaveMode = SpaceMenuState.LeaveMode.LEAVE_NONE, leavingState = Uninitialized)
+            }
+            SpaceLeaveViewAction.SetAutoLeaveSelected -> setState {
+                copy(leaveMode = SpaceMenuState.LeaveMode.LEAVE_SELECTED, leavingState = Uninitialized)
+            }
+            SpaceLeaveViewAction.LeaveSpace           -> handleLeaveSpace()
         }
     }
 
@@ -136,19 +144,20 @@ class SpaceMenuViewModel @AssistedInject constructor(
                     session.getRoom(initialState.spaceId)?.leave(null)
                 } else if (state.leaveMode == SpaceMenuState.LeaveMode.LEAVE_ALL) {
                     // need to find all child rooms that i have joined
-                    try {
-                        session.getRoomSummaries(
-                                roomSummaryQueryParams {
-                                    excludeType = null
-                                    activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(initialState.spaceId)
-                                    memberships = listOf(Membership.JOIN)
-                                }
-                        ).forEach {
+
+                    session.getRoomSummaries(
+                            roomSummaryQueryParams {
+                                excludeType = null
+                                activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(initialState.spaceId)
+                                memberships = listOf(Membership.JOIN)
+                            }
+                    ).forEach {
+                        try {
                             session.getRoom(it.roomId)?.leave(null)
+                        } catch (failure: Throwable) {
+                            // silently ignore?
+                            Timber.e(failure, "Fail to leave sub rooms/spaces")
                         }
-                    } catch (failure: Throwable) {
-                        // silently ignore?
-                        Timber.e(failure, "Fail to leave sub rooms/spaces")
                     }
                     session.getRoom(initialState.spaceId)?.leave(null)
                 }

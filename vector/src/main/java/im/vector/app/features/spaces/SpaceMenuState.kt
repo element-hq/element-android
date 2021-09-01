@@ -28,7 +28,7 @@ data class SpaceMenuState(
         val canInvite: Boolean = false,
         val canAddChild: Boolean = false,
         val isLastAdmin: Boolean = false,
-        val leaveMode: LeaveMode = LeaveMode.LEAVE_ALL,
+        val leaveMode: LeaveMode = LeaveMode.LEAVE_NONE,
         val leavingState: Async<Unit> = Uninitialized
 ) : MvRxState {
     constructor(args: SpaceBottomSheetSettingsArgs) : this(spaceId = args.spaceId)
