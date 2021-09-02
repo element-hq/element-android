@@ -24,6 +24,7 @@ import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.discovery.settingsSectionTitleItem
 import im.vector.app.features.form.formSubmitButtonItem
+import im.vector.app.features.roomdirectory.createroom.CreateRoomController
 import im.vector.app.features.roomdirectory.createroom.CreateRoomViewState
 import javax.inject.Inject
 
@@ -48,7 +49,7 @@ class TchapCreateRoomController @Inject constructor(
             imageUri(viewState.avatarUri)
             clickListener { host.listener?.onAvatarChange() }
             deleteListener { host.listener?.onAvatarDelete() }
-            roomType(RoomUtils.getRoomType(viewState.roomVisibilityType, viewState.roomAccessRules))
+            roomType(RoomUtils.getRoomType(viewState.roomJoinRules, viewState.roomAccessRules))
 
             value(viewState.roomName)
             hint(host.stringProvider.getString(R.string.create_room_name_hint))
@@ -63,32 +64,23 @@ class TchapCreateRoomController @Inject constructor(
 
         tchapRoomTypePrivateItem {
             id("privateRoomItem")
-            selected(RoomUtils.getRoomType(viewState.roomVisibilityType, viewState.roomAccessRules) == TchapRoomType.PRIVATE)
-            clickListener {
-                host.listener?.setIsPublic(isPublic = false)
-                host.listener?.setRoomAccessRules(isRestricted = true)
-            }
+            selected(RoomUtils.getRoomType(viewState.roomJoinRules, viewState.roomAccessRules) == TchapRoomType.PRIVATE)
+            clickListener { host.listener?.setTchapRoomType(TchapRoomType.PRIVATE) }
         }
 
         tchapRoomTypeExternalItem {
             id("externalRoomItem")
-            selected(RoomUtils.getRoomType(viewState.roomVisibilityType, viewState.roomAccessRules) == TchapRoomType.EXTERNAL)
-            clickListener {
-                host.listener?.setIsPublic(isPublic = false)
-                host.listener?.setRoomAccessRules(isRestricted = false)
-            }
+            selected(RoomUtils.getRoomType(viewState.roomJoinRules, viewState.roomAccessRules) == TchapRoomType.EXTERNAL)
+            clickListener { host.listener?.setTchapRoomType(TchapRoomType.EXTERNAL) }
         }
 
         tchapRoomTypeForumItem {
             id("forumRoomItem")
             userDomain(viewState.userDomain)
-            selected(RoomUtils.getRoomType(viewState.roomVisibilityType, viewState.roomAccessRules) == TchapRoomType.FORUM)
+            selected(RoomUtils.getRoomType(viewState.roomJoinRules, viewState.roomAccessRules) == TchapRoomType.FORUM)
             checked(viewState.disableFederation)
             switchVisible(viewState.isFederationSettingAvailable)
-            clickListener {
-                host.listener?.setIsPublic(isPublic = true)
-                host.listener?.setRoomAccessRules(isRestricted = true)
-            }
+            clickListener { host.listener?.setTchapRoomType(TchapRoomType.FORUM) }
             checkListener { _, isChecked -> host.listener?.setDisableFederation(isChecked) }
         }
 
@@ -100,17 +92,7 @@ class TchapCreateRoomController @Inject constructor(
         }
     }
 
-    interface Listener {
-        fun onAvatarDelete()
-        fun onAvatarChange()
-        fun onNameChange(newName: String)
-        fun onTopicChange(newTopic: String)
-        fun setIsPublic(isPublic: Boolean)
-        fun setRoomAccessRules(isRestricted: Boolean)
-        fun setAliasLocalPart(aliasLocalPart: String)
-        fun setIsEncrypted(isEncrypted: Boolean)
-        fun toggleShowAdvanced()
-        fun setDisableFederation(disableFederation: Boolean)
-        fun submit()
+    interface Listener : CreateRoomController.Listener {
+        fun setTchapRoomType(roomType: TchapRoomType)
     }
 }

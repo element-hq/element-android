@@ -113,7 +113,7 @@ class TchapRoomSummaryItemFactory @Inject constructor(private val displayableEve
         var latestEventTime: CharSequence = ""
         val latestEvent = roomSummary.latestPreviewableEvent
         if (latestEvent != null) {
-            latestFormattedEvent = displayableEventFormatter.format(latestEvent, roomSummary.isDirect.not())
+            latestFormattedEvent = displayableEventFormatter.format(latestEvent, roomSummary.isDirect, roomSummary.isDirect.not())
             latestEventTime = dateFormatter.format(latestEvent.root.originServerTs, DateFormatKind.ROOM_LIST)
         }
         val typingMessage = typingHelper.getTypingMessage(roomSummary.typingUsers)

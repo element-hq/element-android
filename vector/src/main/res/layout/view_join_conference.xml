@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="wrap_content"
+    android:paddingEnd="4dp"
+    android:paddingStart="4dp"
+    android:layout_width="wrap_content">
+
+    <Button
+        android:id="@+id/join_conference_button"
+        android:layout_width="56dp"
+        android:layout_height="wrap_content"
+        android:minHeight="32dp"
+        app:iconPadding="0dp"
+        app:iconGravity="textStart"
+        app:icon="@drawable/ic_call_video_small"
+        app:iconTint="@color/element_background_light" />
+
+</FrameLayout>

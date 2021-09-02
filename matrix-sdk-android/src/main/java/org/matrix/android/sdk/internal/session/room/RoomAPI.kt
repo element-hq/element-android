@@ -159,7 +159,8 @@ internal interface RoomAPI {
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/receipt/{receiptType}/{eventId}")
     suspend fun sendReceipt(@Path("roomId") roomId: String,
                             @Path("receiptType") receiptType: String,
-                            @Path("eventId") eventId: String)
+                            @Path("eventId") eventId: String,
+                            @Body body: JsonDict = emptyMap())
 
     /**
      * Invite a user to the given room.
@@ -253,7 +254,7 @@ internal interface RoomAPI {
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "join/{roomIdOrAlias}")
     suspend fun join(@Path("roomIdOrAlias") roomIdOrAlias: String,
                      @Query("server_name") viaServers: List<String>,
-                     @Body params: Map<String, String?>): JoinRoomResponse
+                     @Body params:  JsonDict): JoinRoomResponse
 
     /**
      * Leave the given room.

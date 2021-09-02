@@ -29,6 +29,7 @@ import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import fr.gouv.tchap.core.utils.TchapRoomType
 import fr.gouv.tchap.features.home.roomdirectory.createroom.TchapCreateRoomController
 import im.vector.app.R
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
@@ -41,8 +42,12 @@ import im.vector.app.core.resources.ColorProvider
 import im.vector.app.databinding.FragmentCreateRoomBinding
 import im.vector.app.features.roomdirectory.RoomDirectorySharedAction
 import im.vector.app.features.roomdirectory.RoomDirectorySharedActionViewModel
+import im.vector.app.features.roomprofile.settings.joinrule.RoomJoinRuleBottomSheet
+import im.vector.app.features.roomprofile.settings.joinrule.RoomJoinRuleSharedActionViewModel
+import im.vector.app.features.roomprofile.settings.joinrule.toOption
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.session.room.failure.CreateRoomFailure
+import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 import javax.inject.Inject
 
 @Parcelize
@@ -64,6 +69,8 @@ class CreateRoomFragment @Inject constructor(
     private val viewModel: CreateRoomViewModel by fragmentViewModel()
     private val args: CreateRoomArgs by args()
 
+    private lateinit var roomJoinRuleSharedActionViewModel: RoomJoinRuleSharedActionViewModel
+
     private val galleryOrCameraDialogHelper = GalleryOrCameraDialogHelper(this, colorProvider)
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentCreateRoomBinding {
@@ -74,6 +81,7 @@ class CreateRoomFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
         vectorBaseActivity.setSupportActionBar(views.createRoomToolbar)
         sharedActionViewModel = activityViewModelProvider.get(RoomDirectorySharedActionViewModel::class.java)
+        setupRoomJoinRuleSharedActionViewModel()
         setupWaitingView()
         setupRecyclerView()
         views.createRoomClose.debouncedClicks {
@@ -85,6 +93,16 @@ class CreateRoomFragment @Inject constructor(
                 is CreateRoomViewEvents.Failure -> showFailure(it.throwable)
             }.exhaustive
         }
+    }
+
+    private fun setupRoomJoinRuleSharedActionViewModel() {
+        roomJoinRuleSharedActionViewModel = activityViewModelProvider.get(RoomJoinRuleSharedActionViewModel::class.java)
+        roomJoinRuleSharedActionViewModel
+                .observe()
+                .subscribe { action ->
+                    viewModel.handle(CreateRoomAction.SetVisibility(action.roomJoinRule))
+                }
+                .disposeOnDestroyView()
     }
 
     override fun showFailure(throwable: Throwable) {
@@ -130,12 +148,22 @@ class CreateRoomFragment @Inject constructor(
         viewModel.handle(CreateRoomAction.SetTopic(newTopic))
     }
 
-    override fun setIsPublic(isPublic: Boolean) {
-        viewModel.handle(CreateRoomAction.SetIsPublic(isPublic))
-    }
+    override fun selectVisibility() = withState(viewModel) { state ->
+        val allowed = if (state.supportsRestricted) {
+            listOf(RoomJoinRules.INVITE, RoomJoinRules.PUBLIC, RoomJoinRules.RESTRICTED)
+        } else {
+            listOf(RoomJoinRules.INVITE, RoomJoinRules.PUBLIC)
+        }
 
-    override fun setRoomAccessRules(isRestricted: Boolean) {
-        viewModel.handle(CreateRoomAction.SetRoomAccessRules(isRestricted))
+        RoomJoinRuleBottomSheet.newInstance(state.roomJoinRules, allowed.map { it.toOption(false) })
+                .show(childFragmentManager, "RoomJoinRuleBottomSheet")
+    }
+//    override fun setIsPublic(isPublic: Boolean) {
+//        viewModel.handle(CreateRoomAction.SetIsPublic(isPublic))
+//    }
+
+    override fun setTchapRoomType(roomType: TchapRoomType) {
+        viewModel.handle(CreateRoomAction.SetTchapRoomType(roomType))
     }
 
     override fun setAliasLocalPart(aliasLocalPart: String) {
@@ -155,7 +183,7 @@ class CreateRoomFragment @Inject constructor(
     }
 
     override fun submit() {
-         viewModel.handle(CreateRoomAction.Create)
+        viewModel.handle(CreateRoomAction.Create)
     }
 
     override fun onBackPressed(toolbarButton: Boolean): Boolean {

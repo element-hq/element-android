@@ -145,7 +145,7 @@ class RoomListViewModel @Inject constructor(
                     updatableQueries.add(it)
                 },
                 suggestedRoomJoiningState,
-                vectorPreferences.labsSpacesOnlyOrphansInHome()
+                !vectorPreferences.prefSpacesShowAllRoomInHome()
         )
     } else {
         RoomListSectionBuilderGroup(

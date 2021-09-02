@@ -22,7 +22,7 @@
             android:layout_height="40dp"
             android:layout_marginStart="@dimen/layout_horizontal_margin"
             android:layout_marginTop="24dp"
-            android:contentDescription="@string/avatar"
+            android:importantForAccessibility="no"
             android:transitionName="profile"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"

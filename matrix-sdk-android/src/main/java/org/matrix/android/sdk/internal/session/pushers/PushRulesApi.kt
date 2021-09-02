@@ -41,7 +41,7 @@ internal interface PushRulesApi {
     @PUT(NetworkConstants.URI_API_PREFIX_PATH_R0 + "pushrules/global/{kind}/{ruleId}/enabled")
     suspend fun updateEnableRuleStatus(@Path("kind") kind: String,
                                        @Path("ruleId") ruleId: String,
-                                       @Body enable: Boolean?)
+                                       @Body enabledBody: EnabledBody)
 
     /**
      * Update the ruleID action

@@ -49,6 +49,8 @@ internal class DefaultSessionCreator @Inject constructor(
                 // remove trailing "/"
                 ?.trim { it == '/' }
                 ?.takeIf { it.isNotBlank() }
+                // It can be the same value, so in this case, do not check again the validity
+                ?.takeIf { it != homeServerConnectionConfig.homeServerUriBase.toString() }
                 ?.also { Timber.d("Overriding homeserver url to $it (will check if valid)") }
                 ?.let { Uri.parse(it) }
                 ?.takeIf {

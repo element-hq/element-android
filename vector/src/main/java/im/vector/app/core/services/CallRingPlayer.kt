@@ -98,13 +98,10 @@ class CallRingPlayerOutgoing(
     private var player: MediaPlayer? = null
 
     fun start() {
-        val audioManager: AudioManager? = applicationContext.getSystemService()
+        applicationContext.getSystemService<AudioManager>()?.mode = AudioManager.MODE_IN_COMMUNICATION
         player?.release()
         player = createPlayer()
-
-        // Check if sound is enabled
-        val ringerMode = audioManager?.ringerMode
-        if (player != null && ringerMode == AudioManager.RINGER_MODE_NORMAL) {
+        if (player != null) {
             try {
                 if (player?.isPlaying == false) {
                     player?.start()
@@ -116,8 +113,6 @@ class CallRingPlayerOutgoing(
                 Timber.e(failure, "## VOIP Failed to start ringing outgoing")
                 player = null
             }
-        } else {
-            Timber.v("## VOIP Can't play $player ode $ringerMode")
         }
     }
 
@@ -136,6 +131,9 @@ class CallRingPlayerOutgoing(
                 mediaPlayer.setAudioAttributes(AudioAttributes.Builder()
                         .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
                         .setUsage(AudioAttributes.USAGE_VOICE_COMMUNICATION)
+                        // TODO Change to ?
+                        // .setContentType(AudioAttributes.CONTENT_TYPE_UNKNOWN)
+                        // .setUsage(AudioAttributes.USAGE_NOTIFICATION_RINGTONE)
                         .build())
             } else {
                 @Suppress("DEPRECATION")

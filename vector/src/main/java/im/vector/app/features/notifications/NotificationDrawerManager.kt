@@ -100,13 +100,14 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
             if (existing != null) {
                 if (existing.isPushGatewayEvent) {
                     // Use the event coming from the event stream as it may contains more info than
-                    // the fcm one (like type/content/clear text)
+                    // the fcm one (like type/content/clear text) (e.g when an encrypted message from
+                    // FCM should be update with clear text after a sync)
                     // In this case the message has already been notified, and might have done some noise
                     // So we want the notification to be updated even if it has already been displayed
-                    // But it should make no noise (e.g when an encrypted message from FCM should be
-                    // update with clear text after a sync)
+                    // Use setOnlyAlertOnce to ensure update notification does not interfere with sound
+                    // from first notify invocation as outlined in:
+                    // https://developer.android.com/training/notify-user/build-notification#Updating
                     notifiableEvent.hasBeenDisplayed = false
-                    notifiableEvent.noisy = false
                     eventList.remove(existing)
                     eventList.add(notifiableEvent)
                 } else {
