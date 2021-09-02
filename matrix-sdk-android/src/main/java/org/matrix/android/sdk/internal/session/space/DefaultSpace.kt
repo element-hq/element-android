@@ -21,6 +21,7 @@ import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.Room
+import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.space.Space
 import org.matrix.android.sdk.api.session.space.model.SpaceChildContent
@@ -53,12 +54,21 @@ internal class DefaultSpace(
                                      autoJoin: Boolean,
                                      suggested: Boolean?) {
         // Find best via
+        val bestVia = viaServers
+                ?: (spaceSummaryDataSource.getRoomSummary(roomId)
+                        ?.takeIf { it.joinRules == RoomJoinRules.RESTRICTED }
+                        ?.let {
+                            // for restricted room, best to take via from users that can invite in the
+                            // child room
+                            viaParameterFinder.computeViaParamsForRestricted(roomId, 3)
+                        }
+                        ?: viaParameterFinder.computeViaParams(roomId, 3))
 
         room.sendStateEvent(
                 eventType = EventType.STATE_SPACE_CHILD,
                 stateKey = roomId,
                 body = SpaceChildContent(
-                        via = viaServers ?: viaParameterFinder.computeViaParams(roomId, 3),
+                        via = bestVia,
                         autoJoin = autoJoin,
                         order = order,
                         suggested = suggested

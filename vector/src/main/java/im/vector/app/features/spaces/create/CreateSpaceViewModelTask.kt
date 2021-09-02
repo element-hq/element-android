@@ -111,10 +111,7 @@ class CreateSpaceViewModelTask @Inject constructor(
                                         this.featurePreset = RestrictedRoomPreset(
                                                 homeServerCapabilities,
                                                 listOf(
-                                                        RoomJoinRulesAllowEntry(
-                                                                spaceID = spaceID,
-                                                                via = session.sessionParams.homeServerHost?.let { listOf(it) } ?: emptyList()
-                                                        )
+                                                        RoomJoinRulesAllowEntry.restrictedToRoom(spaceID)
                                                 )
                                         )
                                         if (e2eByDefault) {
