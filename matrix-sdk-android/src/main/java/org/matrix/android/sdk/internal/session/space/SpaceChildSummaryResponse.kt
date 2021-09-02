@@ -24,7 +24,7 @@ import org.matrix.android.sdk.api.session.events.model.Event
  * The fields are the same as those returned by /publicRooms (see spec), with the addition of:
  *       room_type: the value of the m.type field from the room's m.room.create event, if any.
  *       children_state: The m.space.child events of the room.
- *       For each event, only the following fields are included1: type, state_key, content, room_id, sender,
+ *       For each event, only the following fields are included: type, state_key, content, room_id, sender,
  *       with the addition of: origin_server_ts: This is required for sorting of rooms as specified below.
  */
 @JsonClass(generateAdapter = true)

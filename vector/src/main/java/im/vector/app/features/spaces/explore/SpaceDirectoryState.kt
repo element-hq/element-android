@@ -21,13 +21,13 @@ import com.airbnb.mvrx.MvRxState
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
-import org.matrix.android.sdk.internal.session.space.SpaceHierarchySummary
+import org.matrix.android.sdk.api.session.space.SpaceHierarchyData
 
 data class SpaceDirectoryState(
         // The current filter
         val spaceId: String,
         val currentFilter: String = "",
-        val apiResults: Map<String, Async<SpaceHierarchySummary>> = emptyMap(),
+        val apiResults: Map<String, Async<SpaceHierarchyData>> = emptyMap(),
         val currentRootSummary: RoomSummary? = null,
         val childList: List<SpaceChildInfo> = emptyList(),
         val hierarchyStack: List<String> = emptyList(),
@@ -37,7 +37,7 @@ data class SpaceDirectoryState(
         val changeMembershipStates: Map<String, ChangeMembershipState> = emptyMap(),
         val canAddRooms: Boolean = false,
         // cached room summaries of known rooms, we use it because computed room name would be better using it
-        val knownRoomSummaries : List<RoomSummary> = emptyList(),
+        val knownRoomSummaries: List<RoomSummary> = emptyList(),
         val paginationStatus: Map<String, Async<Unit>> = emptyMap()
 ) : MvRxState {
     constructor(args: SpaceDirectoryArgs) : this(

@@ -175,7 +175,7 @@ class SpaceDirectoryController @Inject constructor(
                     errorWithRetryItem {
                         id("error_${currentRootId}_${hierarchySummary.nextToken}")
                         text(host.errorFormatter.toHumanReadable(paginationStatus.error))
-                        listener { host.listener?.retry() }
+                        listener { host.listener?.loadAdditionalItemsIfNeeded() }
                     }
                 } else {
                     loadingItem {

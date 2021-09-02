@@ -21,7 +21,6 @@ import androidx.lifecycle.LiveData
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.RoomSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
-import org.matrix.android.sdk.internal.session.space.SpaceHierarchySummary
 import org.matrix.android.sdk.internal.session.space.peeking.SpacePeekResult
 
 typealias SpaceSummaryQueryParams = RoomSummaryQueryParams
@@ -61,7 +60,6 @@ interface SpaceService {
      * Get's information of a space by querying the server
      * @param suggestedOnly If true, return only child events and rooms where the m.space.child event has suggested: true.
      * @param limit a client-defined limit to the maximum number of rooms to return per page. Must be a non-negative integer.
-     * @param maxDepth: Optional: The maximum depth in the tree (from the root room) to return.
      * @param from: Optional. Pagination token given to retrieve the next set of rooms. Note that if a pagination token is provided,
      * then the parameters given for suggested_only and max_depth must be the same.
      */
@@ -70,7 +68,7 @@ interface SpaceService {
                                    limit: Int? = null,
                                    from: String? = null,
                                    // when paginating, pass back the m.space.child state events
-                                   knownStateList: List<Event>? = null): SpaceHierarchySummary
+                                   knownStateList: List<Event>? = null): SpaceHierarchyData
 
     /**
      * Get a live list of space summaries. This list is refreshed as soon as the data changes.

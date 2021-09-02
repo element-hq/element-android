@@ -36,6 +36,7 @@ import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.session.space.CreateSpaceParams
 import org.matrix.android.sdk.api.session.space.JoinSpaceResult
 import org.matrix.android.sdk.api.session.space.Space
+import org.matrix.android.sdk.api.session.space.SpaceHierarchyData
 import org.matrix.android.sdk.api.session.space.SpaceService
 import org.matrix.android.sdk.api.session.space.SpaceSummaryQueryParams
 import org.matrix.android.sdk.api.session.space.model.SpaceChildContent
@@ -112,7 +113,7 @@ internal class DefaultSpaceService @Inject constructor(
                                             suggestedOnly: Boolean?,
                                             limit: Int?,
                                             from: String?,
-                                            knownStateList: List<Event>?): SpaceHierarchySummary {
+                                            knownStateList: List<Event>?): SpaceHierarchyData {
         return resolveSpaceInfoTask.execute(
                 ResolveSpaceInfoTask.Params(
                         spaceId = spaceId, limit = limit, maxDepth = 1, from = from, suggestedOnly = suggestedOnly
@@ -164,7 +165,7 @@ internal class DefaultSpaceService @Inject constructor(
                                 }.orEmpty()
                     }
                     .orEmpty()
-            SpaceHierarchySummary(
+            SpaceHierarchyData(
                     rootSummary = root,
                     children = children,
                     childrenState = spaceDesc?.childrenState.orEmpty(),

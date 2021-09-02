@@ -20,7 +20,7 @@ import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
 
-data class SpaceHierarchySummary(
+data class SpaceHierarchyData(
         val rootSummary: RoomSummary,
         val children: List<SpaceChildInfo>,
         val childrenState: List<Event>,

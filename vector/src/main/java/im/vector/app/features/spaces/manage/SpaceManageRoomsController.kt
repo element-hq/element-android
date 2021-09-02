@@ -101,7 +101,7 @@ class SpaceManageRoomsController @Inject constructor(
                 errorWithRetryItem {
                     id("error_$nextToken")
                     text(host.errorFormatter.toHumanReadable(paginationStatus.error))
-                    listener { host.listener?.retry() }
+                    listener { host.listener?.loadAdditionalItemsIfNeeded() }
                 }
             } else {
                 loadingItem {
