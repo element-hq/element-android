@@ -51,7 +51,7 @@ internal class DefaultSpace(
     override suspend fun addChildren(roomId: String,
                                      viaServers: List<String>?,
                                      order: String?,
-                                     autoJoin: Boolean,
+//                                     autoJoin: Boolean,
                                      suggested: Boolean?) {
         // Find best via
         val bestVia = viaServers
@@ -69,7 +69,6 @@ internal class DefaultSpace(
                 stateKey = roomId,
                 body = SpaceChildContent(
                         via = bestVia,
-                        autoJoin = autoJoin,
                         order = order,
                         suggested = suggested
                 ).toContent()
@@ -90,7 +89,7 @@ internal class DefaultSpace(
                 body = SpaceChildContent(
                         order = null,
                         via = null,
-                        autoJoin = null,
+//                        autoJoin = null,
                         suggested = null
                 ).toContent()
         )
@@ -115,35 +114,35 @@ internal class DefaultSpace(
                 body = SpaceChildContent(
                         order = order,
                         via = existing.via,
-                        autoJoin = existing.autoJoin,
+//                        autoJoin = existing.autoJoin,
                         suggested = existing.suggested
                 ).toContent()
         )
     }
 
-    override suspend fun setChildrenAutoJoin(roomId: String, autoJoin: Boolean) {
-        val existing = room.getStateEvents(setOf(EventType.STATE_SPACE_CHILD), QueryStringValue.Equals(roomId))
-                .firstOrNull()
-                ?.content.toModel<SpaceChildContent>()
-                ?: throw IllegalArgumentException("$roomId is not a child of this space")
-
-        if (existing.autoJoin == autoJoin) {
-            // nothing to do?
-            return
-        }
-
-        // edit state event and set via to null
-        room.sendStateEvent(
-                eventType = EventType.STATE_SPACE_CHILD,
-                stateKey = roomId,
-                body = SpaceChildContent(
-                        order = existing.order,
-                        via = existing.via,
-                        autoJoin = autoJoin,
-                        suggested = existing.suggested
-                ).toContent()
-        )
-    }
+//    override suspend fun setChildrenAutoJoin(roomId: String, autoJoin: Boolean) {
+//        val existing = room.getStateEvents(setOf(EventType.STATE_SPACE_CHILD), QueryStringValue.Equals(roomId))
+//                .firstOrNull()
+//                ?.content.toModel<SpaceChildContent>()
+//                ?: throw IllegalArgumentException("$roomId is not a child of this space")
+//
+//        if (existing.autoJoin == autoJoin) {
+//            // nothing to do?
+//            return
+//        }
+//
+//        // edit state event and set via to null
+//        room.sendStateEvent(
+//                eventType = EventType.STATE_SPACE_CHILD,
+//                stateKey = roomId,
+//                body = SpaceChildContent(
+//                        order = existing.order,
+//                        via = existing.via,
+//                        autoJoin = autoJoin,
+//                        suggested = existing.suggested
+//                ).toContent()
+//        )
+//    }
 
     override suspend fun setChildrenSuggested(roomId: String, suggested: Boolean) {
         val existing = room.getStateEvents(setOf(EventType.STATE_SPACE_CHILD), QueryStringValue.Equals(roomId))
@@ -162,7 +161,7 @@ internal class DefaultSpace(
                 body = SpaceChildContent(
                         order = existing.order,
                         via = existing.via,
-                        autoJoin = existing.autoJoin,
+//                        autoJoin = existing.autoJoin,
                         suggested = suggested
                 ).toContent()
         )
