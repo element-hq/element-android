@@ -1,0 +1,2 @@
+此版本的主要变化：修复有关加密消息的问题。
+完整更新日志：https://github.com/vector-im/element-android/releases/tag/v1.1.14

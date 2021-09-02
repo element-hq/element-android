@@ -19,7 +19,7 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_marginTop="20dp"
-            android:contentDescription="@string/avatar"
+            android:importantForAccessibility="no"
             android:elevation="4dp"
             android:transitionName="profile"
             app:layout_constraintEnd_toEndOf="parent"

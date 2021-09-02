@@ -38,6 +38,8 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.mvrx.runCatchingToAsync
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.features.attachments.toContentAttachmentData
+import im.vector.app.features.call.conference.JitsiActiveConferenceHolder
 import im.vector.app.features.call.conference.JitsiService
 import im.vector.app.features.call.lookup.CallProtocolsChecker
 import im.vector.app.features.call.webrtc.WebRtcCallManager
@@ -46,15 +48,16 @@ import im.vector.app.features.command.ParsedCommand
 import im.vector.app.features.createdirect.DirectRoomHelper
 import im.vector.app.features.crypto.keysrequest.OutboundSessionKeySharingStrategy
 import im.vector.app.features.crypto.verification.SupportedVerificationMethodsProvider
+import im.vector.app.features.home.room.detail.composer.VoiceMessageHelper
 import im.vector.app.features.home.room.detail.composer.rainbow.RainbowGenerator
 import im.vector.app.features.home.room.detail.sticker.StickerPickerActionHandler
 import im.vector.app.features.home.room.detail.timeline.factory.TimelineFactory
-import im.vector.app.features.home.room.detail.timeline.helper.RoomSummariesHolder
 import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlRetriever
 import im.vector.app.features.home.room.typing.TypingHelper
 import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
 import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.VectorPreferences
+import im.vector.app.features.voice.VoicePlayerHelper
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
@@ -63,6 +66,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.commonmark.parser.Parser
 import org.commonmark.renderer.html.HtmlRenderer
+import org.jitsi.meet.sdk.BroadcastEvent
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.extensions.tryOrNull
@@ -112,12 +116,14 @@ class RoomDetailViewModel @AssistedInject constructor(
         private val session: Session,
         private val supportedVerificationMethodsProvider: SupportedVerificationMethodsProvider,
         private val stickerPickerActionHandler: StickerPickerActionHandler,
-        private val roomSummariesHolder: RoomSummariesHolder,
         private val typingHelper: TypingHelper,
         private val callManager: WebRtcCallManager,
         private val chatEffectManager: ChatEffectManager,
         private val directRoomHelper: DirectRoomHelper,
         private val jitsiService: JitsiService,
+        private val activeConferenceHolder: JitsiActiveConferenceHolder,
+        private val voiceMessageHelper: VoiceMessageHelper,
+        private val voicePlayerHelper: VoicePlayerHelper,
         timelineFactory: TimelineFactory
 ) : VectorViewModel<RoomDetailViewState, RoomDetailAction, RoomDetailViewEvents>(initialState),
         Timeline.Listener, ChatEffectManager.Delegate, CallProtocolsChecker.Listener {
@@ -236,9 +242,25 @@ class RoomDetailViewModel @AssistedInject constructor(
                 .map { widgets ->
                     widgets.filter { it.isActive }
                 }
-                .execute {
-                    copy(activeRoomWidgets = it)
+                .execute { widgets ->
+                    copy(activeRoomWidgets = widgets)
                 }
+
+        asyncSubscribe(RoomDetailViewState::activeRoomWidgets) { widgets ->
+            setState {
+                val jitsiWidget = widgets.firstOrNull { it.type == WidgetType.Jitsi }
+                val jitsiConfId = jitsiWidget?.let {
+                    jitsiService.extractJitsiWidgetData(it)?.confId
+                }
+                copy(
+                        jitsiState = jitsiState.copy(
+                                confId = jitsiConfId,
+                                widgetId = jitsiWidget?.widgetId,
+                                hasJoined = activeConferenceHolder.isJoined(jitsiConfId)
+                        )
+                )
+            }
+        }
     }
 
     private fun observeMyRoomMember() {
@@ -303,6 +325,9 @@ class RoomDetailViewModel @AssistedInject constructor(
             is RoomDetailAction.EndCall                          -> handleEndCall()
             is RoomDetailAction.ManageIntegrations               -> handleManageIntegrations()
             is RoomDetailAction.AddJitsiWidget                   -> handleAddJitsiConference(action)
+            is RoomDetailAction.UpdateJoinJitsiCallStatus        -> handleJitsiCallJoinStatus(action)
+            is RoomDetailAction.JoinJitsiCall                    -> handleJoinJitsiCall()
+            is RoomDetailAction.LeaveJitsiCall                   -> handleLeaveJitsiCall()
             is RoomDetailAction.RemoveWidget                     -> handleDeleteWidget(action.widgetId)
             is RoomDetailAction.EnsureNativeWidgetAllowed        -> handleCheckWidgetAllowed(action)
             is RoomDetailAction.CancelSend                       -> handleCancel(action)
@@ -320,6 +345,12 @@ class RoomDetailViewModel @AssistedInject constructor(
             is RoomDetailAction.DoNotShowPreviewUrlFor           -> handleDoNotShowPreviewUrlFor(action)
             RoomDetailAction.RemoveAllFailedMessages             -> handleRemoveAllFailedMessages()
             RoomDetailAction.ResendAll                           -> handleResendAll()
+            RoomDetailAction.StartRecordingVoiceMessage          -> handleStartRecordingVoiceMessage()
+            is RoomDetailAction.EndRecordingVoiceMessage         -> handleEndRecordingVoiceMessage(action.isCancelled)
+            is RoomDetailAction.PlayOrPauseVoicePlayback         -> handlePlayOrPauseVoicePlayback(action)
+            RoomDetailAction.PauseRecordingVoiceMessage          -> handlePauseRecordingVoiceMessage()
+            RoomDetailAction.PlayOrPauseRecordingPlayback        -> handlePlayOrPauseRecordingPlayback()
+            RoomDetailAction.EndAllVoiceActions                  -> handleEndAllVoiceActions()
             is RoomDetailAction.RoomUpgradeSuccess               -> {
                 setState {
                     copy(joinUpgradedRoomAsync = Success(action.replacementRoomId))
@@ -327,6 +358,33 @@ class RoomDetailViewModel @AssistedInject constructor(
                 _viewEvents.post(RoomDetailViewEvents.OpenRoom(action.replacementRoomId, closeCurrentRoom = true))
             }
         }.exhaustive
+    }
+
+    private fun handleJitsiCallJoinStatus(action: RoomDetailAction.UpdateJoinJitsiCallStatus) = withState { state ->
+        if (state.jitsiState.confId == null) {
+            // If jitsi widget is removed while on the call
+            if (state.jitsiState.hasJoined) {
+                setState { copy(jitsiState = jitsiState.copy(hasJoined = false)) }
+            }
+            return@withState
+        }
+        when (action.jitsiEvent.type) {
+            BroadcastEvent.Type.CONFERENCE_JOINED,
+            BroadcastEvent.Type.CONFERENCE_TERMINATED -> {
+                setState { copy(jitsiState = jitsiState.copy(hasJoined = activeConferenceHolder.isJoined(jitsiState.confId))) }
+            }
+            else                                      -> Unit
+        }
+    }
+
+    private fun handleLeaveJitsiCall() {
+        _viewEvents.post(RoomDetailViewEvents.LeaveJitsiConference)
+    }
+
+    private fun handleJoinJitsiCall() = withState { state ->
+        val jitsiWidget = state.activeRoomWidgets()?.firstOrNull { it.widgetId == state.jitsiState.widgetId } ?: return@withState
+        val action = RoomDetailAction.EnsureNativeWidgetAllowed(jitsiWidget, false, RoomDetailViewEvents.JoinJitsiConference(jitsiWidget, true))
+        handleCheckWidgetAllowed(action)
     }
 
     private fun handleAcceptCall(action: RoomDetailAction.AcceptCall) {
@@ -437,10 +495,15 @@ class RoomDetailViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleDeleteWidget(widgetId: String) {
-        _viewEvents.post(RoomDetailViewEvents.ShowWaitingView)
+    private fun handleDeleteWidget(widgetId: String) = withState { state ->
+        val isJitsiWidget = state.jitsiState.widgetId == widgetId
         viewModelScope.launch(Dispatchers.IO) {
             try {
+                if (isJitsiWidget) {
+                    setState { copy(jitsiState = jitsiState.copy(deleteWidgetInProgress = true)) }
+                } else {
+                    _viewEvents.post(RoomDetailViewEvents.ShowWaitingView)
+                }
                 session.widgetService().destroyRoomWidget(room.roomId, widgetId)
                 // local echo
                 setState {
@@ -456,7 +519,11 @@ class RoomDetailViewModel @AssistedInject constructor(
             } catch (failure: Throwable) {
                 _viewEvents.post(RoomDetailViewEvents.ShowMessage(stringProvider.getString(R.string.failed_to_remove_widget)))
             } finally {
-                _viewEvents.post(RoomDetailViewEvents.HideWaitingView)
+                if (isJitsiWidget) {
+                    setState { copy(jitsiState = jitsiState.copy(deleteWidgetInProgress = false)) }
+                } else {
+                    _viewEvents.post(RoomDetailViewEvents.HideWaitingView)
+                }
             }
         }
     }
@@ -611,6 +678,56 @@ class RoomDetailViewModel @AssistedInject constructor(
         }
     }
 
+    private fun handleStartRecordingVoiceMessage() {
+        try {
+            voiceMessageHelper.startRecording()
+        } catch (failure: Throwable) {
+            _viewEvents.post(RoomDetailViewEvents.Failure(failure))
+        }
+    }
+
+    private fun handleEndRecordingVoiceMessage(isCancelled: Boolean) {
+        voiceMessageHelper.stopPlayback()
+        if (isCancelled) {
+            voiceMessageHelper.deleteRecording()
+        } else {
+            voiceMessageHelper.stopRecording()?.let { audioType ->
+                if (audioType.duration > 1000) {
+                    room.sendMedia(audioType.toContentAttachmentData(), false, emptySet())
+                } else {
+                    voiceMessageHelper.deleteRecording()
+                }
+            }
+        }
+    }
+
+    private fun handlePlayOrPauseVoicePlayback(action: RoomDetailAction.PlayOrPauseVoicePlayback) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                // Download can fail
+                val audioFile = session.fileService().downloadFile(action.messageAudioContent)
+                // Conversion can fail, fallback to the original file in this case and let the player fail for us
+                val convertedFile = voicePlayerHelper.convertFile(audioFile) ?: audioFile
+                // Play can fail
+                voiceMessageHelper.startOrPausePlayback(action.eventId, convertedFile)
+            } catch (failure: Throwable) {
+                _viewEvents.post(RoomDetailViewEvents.Failure(failure))
+            }
+        }
+    }
+
+    private fun handlePlayOrPauseRecordingPlayback() {
+        voiceMessageHelper.startOrPauseRecordingPlayback()
+    }
+
+    private fun handleEndAllVoiceActions() {
+        voiceMessageHelper.stopAllVoiceActions()
+    }
+
+    private fun handlePauseRecordingVoiceMessage() {
+        voiceMessageHelper.pauseRecording()
+    }
+
     private fun isIntegrationEnabled() = session.integrationManagerService().isIntegrationEnabled()
 
     fun isMenuItemVisible(@IdRes itemId: Int): Boolean = com.airbnb.mvrx.withState(this) { state ->
@@ -620,10 +737,12 @@ class RoomDetailViewModel @AssistedInject constructor(
         when (itemId) {
             R.id.timeline_setting -> true
             R.id.invite           -> state.canInvite
-            R.id.open_matrix_apps -> false
-            R.id.voice_call,
-            R.id.video_call       -> BuildConfig.IS_VOIP_SUPPORTED && callManager.getCallsByRoomId(state.roomId).isEmpty()
-            R.id.hangup_call      -> callManager.getCallsByRoomId(state.roomId).isNotEmpty()
+            R.id.open_matrix_apps -> true
+            R.id.voice_call       -> BuildConfig.IS_VOIP_SUPPORTED && state.isWebRTCCallOptionAvailable()
+            R.id.video_call       -> BuildConfig.IS_VOIP_SUPPORTED
+                    && (state.isWebRTCCallOptionAvailable() || state.jitsiState.confId == null || state.jitsiState.hasJoined)
+            // Show Join conference button only if there is an active conf id not joined. Otherwise fallback to default video disabled. ^
+            R.id.join_conference  -> !state.isWebRTCCallOptionAvailable() && state.jitsiState.confId != null && !state.jitsiState.hasJoined
             R.id.search           -> true
             R.id.dev_tools        -> vectorPreferences.developerMode()
             else                  -> false
@@ -1454,7 +1573,6 @@ class RoomDetailViewModel @AssistedInject constructor(
 
     private fun observeSummaryState() {
         asyncSubscribe(RoomDetailViewState::asyncRoomSummary) { summary ->
-            roomSummariesHolder.set(summary)
             setState {
                 val typingMessage = typingHelper.getTypingMessage(summary.typingUsers)
                 copy(
@@ -1502,7 +1620,6 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     override fun onCleared() {
-        roomSummariesHolder.remove(room.roomId)
         timeline.dispose()
         timeline.removeAllListeners()
         if (vectorPreferences.sendTypingNotifs()) {

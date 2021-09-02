@@ -29,7 +29,7 @@
         android:id="@+id/composerRelatedMessageAvatar"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:contentDescription="@string/avatar"
+        android:importantForAccessibility="no"
         tools:ignore="MissingConstraints" />
 
     <TextView
@@ -130,5 +130,17 @@
         android:contentDescription="@string/send"
         android:src="@drawable/ic_send"
         tools:ignore="MissingConstraints" />
+
+    <!--
+    <ImageButton
+        android:id="@+id/voiceMessageMicButton"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="12dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:contentDescription="@string/a11y_start_voice_message"
+        android:src="@drawable/ic_voice_mic" />
+    -->
 
 </merge>

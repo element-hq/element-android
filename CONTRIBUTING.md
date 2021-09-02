@@ -109,6 +109,10 @@ You should consider adding Unit tests with your PR, and also integration tests (
 When adding new string resources, please only add new entries in the 2 files: `value/strings_tchap.xml` and `values-fr/strings_tchap.xml`.
 Do not hesitate to use plurals when appropriate.
 
+### Accessibility
+
+Please consider accessibility as an important point. As a minimum requirement, in layout XML files please use attributes such as `android:contentDescription` and `android:importantForAccessibility`, and test with a screen reader if it's working well. You can add new string resources, dedicated to accessibility, in this case, please prefix theirs id with `a11y_`.
+
 ### Layout
 
 Also please check that the colors are ok for all the current themes of Tchap. Please use `?attr` instead of `@color` to reference colors in the layout. You can check this in the layout editor preview by selecting all the main themes (`AppTheme.Status`, `AppTheme.Dark`, etc.).

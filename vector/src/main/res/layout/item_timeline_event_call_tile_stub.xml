@@ -11,7 +11,7 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_gravity="center_horizontal"
-        android:contentDescription="@string/avatar"
+        android:importantForAccessibility="no"
         tools:src="@sample/user_round_avatars" />
 
     <TextView
@@ -20,28 +20,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="8dp"
         android:drawablePadding="6dp"
         android:gravity="center"
         android:textColor="?vctr_content_primary"
         android:textStyle="bold"
         tools:text="@sample/users.json/data/displayName" />
-
-
-    <TextView
-        android:id="@+id/itemCallKindTextView"
-        style="@style/Widget.Vector.TextView.Caption"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="12dp"
-        android:drawablePadding="4dp"
-        android:gravity="center"
-        android:textColor="?vctr_content_primary"
-        tools:text="@string/action_video_call" />
 
     <TextView
         android:id="@+id/itemCallStatusTextView"
@@ -49,12 +33,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_marginTop="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="12dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="12dp"
+        android:layout_marginBottom="16dp"
+        android:gravity="center"
         android:textColor="?vctr_content_secondary"
-        tools:text="@string/video_call_in_progress" />
+        android:maxLines="3"
+        android:drawablePadding="8dp"
+        tools:drawableLeft="@drawable/ic_missed_video_call"
+        tools:text="@string/call_tile_video_incoming" />
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -80,7 +68,6 @@
             style="@style/Widget.Vector.Button.Destructive"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:layout_marginEnd="4dp"
             android:minWidth="120dp"
             app:layout_constraintEnd_toStartOf="@+id/itemCallAcceptView"

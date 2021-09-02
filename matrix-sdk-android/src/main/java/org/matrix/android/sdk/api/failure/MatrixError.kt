@@ -208,7 +208,11 @@ data class MatrixError(
         // Possible value for "limit_type"
         const val LIMIT_TYPE_MAU = "monthly_active_user"
 
-        /** The user account has expired. It has to be renewed by clicking on an email or by sending a renewal token. */
+        /**
+         * The user account has expired. It has to be renewed by clicking on an email or by sending a renewal token.
+         *
+         * More documentation can be found in the dedicated Synapse plugin module repository: https://github.com/matrix-org/synapse-email-account-validity
+         */
         const val ORG_MATRIX_EXPIRED_ACCOUNT = "ORG_MATRIX_EXPIRED_ACCOUNT"
     }
 }

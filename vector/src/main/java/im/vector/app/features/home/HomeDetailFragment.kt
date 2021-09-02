@@ -55,8 +55,8 @@ import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.ui.views.CurrentCallsView
+import im.vector.app.core.ui.views.CurrentCallsViewPresenter
 import im.vector.app.core.ui.views.KeysBackupBanner
-import im.vector.app.core.ui.views.KnownCallsViewHolder
 import im.vector.app.databinding.FragmentHomeDetailBinding
 import im.vector.app.features.call.SharedKnownCallsViewModel
 import im.vector.app.features.call.VectorCallActivity
@@ -141,7 +141,7 @@ class HomeDetailFragment @Inject constructor(
         return FragmentHomeDetailBinding.inflate(inflater, container, false)
     }
 
-    private val activeCallViewHolder = KnownCallsViewHolder()
+    private val currentCallsViewPresenter = CurrentCallsViewPresenter()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -232,7 +232,7 @@ class HomeDetailFragment @Inject constructor(
         sharedCallActionViewModel
                 .liveKnownCalls
                 .observe(viewLifecycleOwner, {
-                    activeCallViewHolder.updateCall(callManager.getCurrentCall(), callManager.getCalls())
+                    currentCallsViewPresenter.updateCall(callManager.getCurrentCall(), callManager.getCalls())
                     invalidateOptionsMenu()
                 })
 
@@ -263,6 +263,11 @@ class HomeDetailFragment @Inject constructor(
                 }
             }.exhaustive
         }
+    }
+
+    override fun onDestroyView() {
+        currentCallsViewPresenter.unBind()
+        super.onDestroyView()
     }
 
     override fun onResume() {
@@ -416,12 +421,7 @@ class HomeDetailFragment @Inject constructor(
     }
 
     private fun setupActiveCallView() {
-        activeCallViewHolder.bind(
-                views.activeCallPiP,
-                views.activeCallView,
-                views.activeCallPiPWrap,
-                this
-        )
+        currentCallsViewPresenter.bind(views.currentCallsView, this)
     }
 
     private fun setupToolbar() {
@@ -511,7 +511,7 @@ class HomeDetailFragment @Inject constructor(
                         add(R.id.roomListContainer, RoomListFragment::class.java, params.toMvRxBundle(), fragmentTag)
                     }
                     is HomeTab.DialPad     -> {
-                        add(R.id.roomListContainer, createDialPadFragment())
+                        add(R.id.roomListContainer, createDialPadFragment(), fragmentTag)
                     }
                     is HomeTab.ContactList -> {
                         val params = TchapContactListFragmentArgs(title = getString(R.string.invite_users_to_room_title))

@@ -1,0 +1,1 @@
+- Add mxid to autocomplete suggestion if more than one user in a room has the same displayname

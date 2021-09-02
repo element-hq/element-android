@@ -1,0 +1,1 @@
+Fix a crash at start-up if translated string is empty

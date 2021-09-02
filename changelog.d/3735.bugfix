@@ -1,0 +1,1 @@
+the element-based domain permalinks (e.g. https://app.element.io/#/user/@chagai95:matrix.org) don't have the mxid in the first param (like matrix.to does - https://matrix.to/#/@chagai95:matrix.org) but rather in the second after /user/ so /user/mxid

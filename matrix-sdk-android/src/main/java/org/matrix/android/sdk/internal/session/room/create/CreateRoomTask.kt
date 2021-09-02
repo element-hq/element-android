@@ -123,7 +123,7 @@ internal class DefaultCreateRoomTask @Inject constructor(
                 this.isDirect = true
             }
         }
-        val directChats = directChatsHelper.getLocalUserAccount()
+        val directChats = directChatsHelper.getLocalDirectMessages()
         updateUserAccountDataTask.execute(UpdateUserAccountDataTask.DirectChatParams(directMessages = directChats))
     }
 

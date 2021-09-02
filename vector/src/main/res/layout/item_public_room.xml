@@ -21,6 +21,7 @@
         android:background="@android:color/transparent"
         android:contentDescription="@string/avatar"
         android:scaleType="centerCrop"
+        android:importantForAccessibility="no"
         app:layout_constraintBottom_toTopOf="@+id/itemPublicRoomBottomSeparator"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"

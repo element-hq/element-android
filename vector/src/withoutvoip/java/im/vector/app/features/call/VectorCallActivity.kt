@@ -29,8 +29,6 @@ import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityCallBinding
 import im.vector.app.features.call.webrtc.WebRtcCall
-import im.vector.app.features.home.room.detail.RoomDetailActivity
-import im.vector.app.features.home.room.detail.RoomDetailArgs
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.logger.LoggerTag
 import timber.log.Timber
@@ -107,6 +105,8 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
         }
     }
 
+    override fun didTapAudioSettings() = Unit
+
     override fun didAcceptIncomingCall() = Unit
 
     override fun didDeclineIncomingCall() = Unit
@@ -116,16 +116,6 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
     override fun didTapToggleMute() = Unit
 
     override fun didTapToggleVideo() = Unit
-
-    override fun returnToChat() {
-        val args = RoomDetailArgs(callArgs.signalingRoomId)
-        val intent = RoomDetailActivity.newIntent(this, args).apply {
-            flags = FLAG_ACTIVITY_CLEAR_TOP
-        }
-        startActivity(intent)
-        // is it needed?
-        finish()
-    }
 
     override fun didTapMore() = Unit
 }

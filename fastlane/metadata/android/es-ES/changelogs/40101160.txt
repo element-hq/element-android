@@ -1,0 +1,2 @@
+Principales cambios en esta versión: Solucionado error al enviar mensajes encriptados si alguien en la sala cierra la sesión.
+Conjunto de cambios completo: https://github.com/vector-im/element-android/releases/tag/v1.1.16

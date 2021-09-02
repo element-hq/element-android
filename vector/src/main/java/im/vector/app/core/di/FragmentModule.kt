@@ -111,17 +111,20 @@ import im.vector.app.features.roomprofile.RoomProfileFragment
 import im.vector.app.features.roomprofile.alias.RoomAliasFragment
 import im.vector.app.features.roomprofile.banned.RoomBannedMemberListFragment
 import im.vector.app.features.roomprofile.members.RoomMemberListFragment
+import im.vector.app.features.roomprofile.notifications.RoomNotificationSettingsFragment
 import im.vector.app.features.roomprofile.permissions.RoomPermissionsFragment
 import im.vector.app.features.roomprofile.settings.RoomSettingsFragment
+import im.vector.app.features.roomprofile.settings.joinrule.RoomJoinRuleChooseRestrictedFragment
+import im.vector.app.features.roomprofile.settings.joinrule.RoomJoinRuleFragment
 import im.vector.app.features.roomprofile.uploads.RoomUploadsFragment
 import im.vector.app.features.roomprofile.uploads.files.RoomUploadsFilesFragment
 import im.vector.app.features.roomprofile.uploads.media.RoomUploadsMediaFragment
-import im.vector.app.features.settings.VectorSettingsAdvancedNotificationPreferenceFragment
+import im.vector.app.features.settings.notifications.VectorSettingsAdvancedNotificationPreferenceFragment
 import im.vector.app.features.settings.VectorSettingsGeneralFragment
 import im.vector.app.features.settings.VectorSettingsHelpAboutFragment
 import im.vector.app.features.settings.VectorSettingsLabsFragment
-import im.vector.app.features.settings.VectorSettingsNotificationPreferenceFragment
-import im.vector.app.features.settings.VectorSettingsNotificationsTroubleshootFragment
+import im.vector.app.features.settings.notifications.VectorSettingsNotificationPreferenceFragment
+import im.vector.app.features.settings.notifications.VectorSettingsNotificationsTroubleshootFragment
 import im.vector.app.features.settings.VectorSettingsPinFragment
 import im.vector.app.features.settings.VectorSettingsPreferencesFragment
 import im.vector.app.features.settings.VectorSettingsSecurityPrivacyFragment
@@ -722,6 +725,11 @@ interface FragmentModule {
 
     @Binds
     @IntoMap
+    @FragmentKey(RoomNotificationSettingsFragment::class)
+    fun bindRoomNotificationSettingsFragment(fragment: RoomNotificationSettingsFragment): Fragment
+
+    @Binds
+    @IntoMap
     @FragmentKey(SearchFragment::class)
     fun bindSearchFragment(fragment: SearchFragment): Fragment
 
@@ -834,4 +842,14 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(SpaceManageRoomsFragment::class)
     fun bindSpaceManageRoomsFragment(fragment: SpaceManageRoomsFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(RoomJoinRuleFragment::class)
+    fun bindRoomJoinRuleFragment(fragment: RoomJoinRuleFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(RoomJoinRuleChooseRestrictedFragment::class)
+    fun bindRoomJoinRuleChooseRestrictedFragment(fragment: RoomJoinRuleChooseRestrictedFragment): Fragment
 }

@@ -65,6 +65,23 @@ fun TextView.setTextWithColoredPart(@StringRes fullTextRes: Int,
     val coloredPart = resources.getString(coloredTextRes)
     // Insert colored part into the full text
     val fullText = resources.getString(fullTextRes, coloredPart)
+
+    setTextWithColoredPart(fullText, coloredPart, colorAttribute, underline, onClick)
+}
+
+/**
+ * Set text with a colored part
+ * @param fullText The full text.
+ * @param coloredPart The colored part of the text
+ * @param colorAttribute attribute of the color. Default to colorPrimary
+ * @param underline true to also underline the text. Default to false
+ * @param onClick attributes to handle click on the colored part if needed
+ */
+fun TextView.setTextWithColoredPart(fullText: String,
+                                    coloredPart: String,
+                                    @AttrRes colorAttribute: Int = R.attr.colorPrimary,
+                                    underline: Boolean = false,
+                                    onClick: (() -> Unit)? = null) {
     val color = ThemeUtils.getColor(context, colorAttribute)
 
     val foregroundSpan = ForegroundColorSpan(color)

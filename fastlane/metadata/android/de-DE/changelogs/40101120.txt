@@ -1,0 +1,2 @@
+Hauptänderungen in dieser Version: Überarbeitetes Design, Crash nach Videoanruf gefixt
+Alle Änderungen: https://github.com/vector-im/element-android/releases/tag/v1.1.12
