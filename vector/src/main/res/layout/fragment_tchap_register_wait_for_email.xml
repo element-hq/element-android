@@ -17,6 +17,7 @@
 
     <TextView
         android:id="@+id/fragment_tchap_register_wait_for_email_title"
+        style="@style/Widget.Vector.TextView.HeadlineMedium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -26,13 +27,13 @@
         android:paddingRight="22dp"
         android:text="@string/tchap_register_wait_for_email_title"
         android:textColor="?colorPrimaryVariant"
-        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
     <TextView
         android:id="@+id/fragment_tchap_register_wait_for_email_email"
+        style="@style/Widget.Vector.TextView.Caption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -40,8 +41,6 @@
         android:gravity="center_horizontal"
         android:paddingLeft="22dp"
         android:paddingRight="22dp"
-        android:textColor="?vctr_content_secondary"
-        android:textSize="12.5sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fragment_tchap_register_wait_for_email_title"
@@ -49,6 +48,7 @@
 
     <TextView
         android:id="@+id/fragment_tchap_register_wait_for_email_subtitle"
+        style="@style/Widget.Vector.TextView.HeadlineMedium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="37dp"
@@ -58,7 +58,6 @@
         android:paddingRight="22dp"
         android:text="@string/tchap_register_wait_for_email_subtitle"
         android:textColor="?colorPrimaryVariant"
-        android:textSize="17.5sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fragment_tchap_register_wait_for_email_email" />
@@ -77,16 +76,16 @@
 
     <TextView
         android:id="@+id/fragment_tchap_register_wait_for_email_back"
+        style="@style/Widget.Vector.Button.Text.Login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="26dp"
         android:fontFamily="sans-serif-light"
-        android:gravity="center_horizontal"
+        android:gravity="center"
         android:padding="8dp"
         android:paddingLeft="22dp"
         android:paddingRight="22dp"
         android:text="@string/tchap_register_wait_for_email_no_email"
-        android:textSize="17.5sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

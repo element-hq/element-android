@@ -629,7 +629,7 @@
     <string name="auth_missing_email_or_phone">Missing email address or phone number</string>
     <string name="auth_invalid_token">Invalid token</string>
     <string name="auth_password_dont_match">Passwords don’t match</string>
-    <string name="auth_forgot_password">Forgot password?</string>
+    <string name="auth_forgot_password">I have forgotten my password</string>
     <string name="auth_use_server_options">Use custom server options (advanced)</string>
     <string name="auth_email_validation_message">Please check your email to continue registration</string>
     <string name="auth_threepid_warning_message">Registration with email and phone number at once is not supported yet until the api exists. Only the phone number will be taken into account.\n\nYou may add your email to your profile in settings.</string>

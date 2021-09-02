@@ -30,7 +30,6 @@
         android:ellipsize="end"
         android:maxLines="1"
         android:textColor="?colorPrimaryVariant"
-        android:textSize="15sp"
         tools:text="@string/search_in_my_contacts" />
 
 </LinearLayout>

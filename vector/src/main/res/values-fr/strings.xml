@@ -346,7 +346,7 @@
     <string name="auth_missing_email_or_phone">Adresse e\u2011mail ou numéro de téléphone manquant</string>
     <string name="auth_invalid_token">Jeton non valide</string>
     <string name="auth_password_dont_match">Les mots de passe ne correspondent pas</string>
-    <string name="auth_forgot_password">Mot de passe oublié \?</string>
+    <string name="auth_forgot_password">J’ai oublié mon mot de passe</string>
     <string name="auth_use_server_options">Utiliser des options de serveur personnalisées (avancé)</string>
     <string name="auth_username_in_use">Nom d’utilisateur déjà utilisé</string>
     <string name="auth_home_server">Serveur d’accueil :</string>

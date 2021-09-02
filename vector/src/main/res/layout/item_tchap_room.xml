@@ -122,6 +122,7 @@
 <!--        todo fix color -->
         <TextView
             android:id="@+id/roomNameView"
+            style="@style/Widget.Vector.TextView.Subtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:duplicateParentState="true"
@@ -130,7 +131,6 @@
             android:maxLines="1"
             android:padding="0dp"
             android:textColor="?vctr_content_primary"
-            android:textSize="15sp"
             android:textStyle="bold"
             app:layout_constrainedWidth="true"
             app:layout_constraintEnd_toStartOf="@+id/roomDisabledNotificationsBadge"
@@ -170,6 +170,7 @@
     <!--        todo fix color -->
     <TextView
         android:id="@+id/roomDomainNameView"
+        style="@style/Widget.Vector.TextView.Caption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="12dp"
@@ -177,7 +178,6 @@
         android:gravity="end"
         android:includeFontPadding="false"
         android:textColor="?vctr_content_primary"
-        android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="@+id/roomNameContainer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/roomAvatarContainer"
@@ -192,8 +192,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/roomDomainNameView">
 
-        <androidx.appcompat.widget.AppCompatTextView
+        <TextView
             android:id="@+id/roomUnreadCounterBadgeView"
+            style="@style/Widget.Vector.TextView.Micro"
             android:layout_width="wrap_content"
             android:layout_height="16dp"
             android:background="@drawable/bg_unread_notification"
@@ -202,7 +203,6 @@
             android:paddingStart="4dp"
             android:paddingEnd="4dp"
             android:textColor="@android:color/white"
-            android:textSize="10sp"
             android:textStyle="bold"
             android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
@@ -210,8 +210,9 @@
             tools:text="4"
             tools:visibility="visible" />
 
-        <androidx.appcompat.widget.AppCompatTextView
+        <TextView
             android:id="@+id/roomExpectedActionBadgeView"
+            style="@style/Widget.Vector.TextView.Micro"
             android:layout_width="wrap_content"
             android:layout_height="16dp"
             android:layout_marginEnd="4dp"
@@ -220,7 +221,6 @@
             android:minWidth="16dp"
             android:text="@string/tchap_exclamation_mark"
             android:textColor="@android:color/white"
-            android:textSize="10sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toStartOf="@+id/roomUnreadCounterBadgeView"
             app:layout_constraintTop_toTopOf="parent" />
@@ -228,29 +228,27 @@
 
     <TextView
         android:id="@+id/roomLastEventTimeView"
+        style="@style/Widget.Vector.TextView.Micro"
         android:layout_width="66dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="12dp"
         android:gravity="end"
         android:includeFontPadding="false"
-        android:textColor="?vctr_content_secondary"
-        android:textSize="10sp"
         app:layout_constraintBottom_toBottomOf="@+id/roomAvatarContainer"
         app:layout_constraintEnd_toEndOf="parent"
         tools:text="@tools:sample/date/hhmm" />
 
     <TextView
         android:id="@+id/roomLastEventView"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:ellipsize="end"
         android:includeFontPadding="false"
-        android:lineSpacingExtra="3sp"
         android:maxLines="2"
         android:minLines="2"
         android:textColor="?vctr_content_secondary"
-        android:textSize="13sp"
         app:layout_constraintBottom_toBottomOf="@+id/roomAvatarContainer"
         app:layout_constraintEnd_toStartOf="@+id/roomLastEventTimeView"
         app:layout_constraintStart_toStartOf="@+id/roomNameContainer"
@@ -258,15 +256,13 @@
 
     <TextView
         android:id="@+id/roomTypingView"
+        style="@style/Widget.Vector.TextView.Body.Medium"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="1dp"
         android:layout_marginEnd="8dp"
         android:ellipsize="end"
-        android:fontFamily="sans-serif-medium"
         android:maxLines="2"
-        android:textColor="?vctr_content_primary"
-        android:textSize="14sp"
         app:layout_constraintEnd_toStartOf="@+id/roomLastEventTimeView"
         app:layout_constraintStart_toStartOf="@+id/roomNameContainer"
         app:layout_constraintTop_toBottomOf="@+id/roomNameContainer"

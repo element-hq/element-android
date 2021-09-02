@@ -122,7 +122,7 @@ class HomeDetailFragment @Inject constructor(
     override fun onPrepareOptionsMenu(menu: Menu) {
         super.onPrepareOptionsMenu(menu)
         val isSearchMode = views.homeSearchView.isVisible
-        menu.findItem(R.id.menu_home_search_action)?.setIcon(if(isSearchMode) 0 else R.drawable.ic_search)
+        menu.findItem(R.id.menu_home_search_action)?.setIcon(if (isSearchMode) 0 else R.drawable.ic_search)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

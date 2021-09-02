@@ -135,7 +135,6 @@
     <string name="tchap_connection_password">Mot de passe Tchap</string>
     <string name="tchap_connection_password_help">Votre mot de passe doit contenir au moins 8 caractères, avec au moins un caractère de chaque type : majuscule, minuscule, chiffre, caractère spécial.</string>
     <string name="tchap_connection_password_confirm">Confirmer le mot de passe</string>
-    <string name="tchap_connection_forgotten_email">J’ai oublié mon mot de passe</string>
     <string name="tchap_register_warning_for_external_title">Information concernant votre inscription</string>
     <string name="tchap_register_warning_for_external">Le domaine de votre adresse e\u2011mail n’est pas déclaré dans Tchap. Si vous avez reçu une invitation, vous allez pouvoir créer un compte Tchap « invité », permettant uniquement de participer aux échanges privés auxquels vous êtes convié.</string>
     <string name="tchap_register_warning_for_external_proceed">Poursuivre</string>
