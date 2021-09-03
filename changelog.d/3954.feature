@@ -1,0 +1,2 @@
+Upgrade AGP to 7.0.2.
+When compiling using command line, make sure to use the JDK 11 by adding for instance `-Dorg.gradle.java.home=/Applications/Android\ Studio\ Preview.app/Contents/jre/Contents/Home` or by setting JAVA_HOME.
