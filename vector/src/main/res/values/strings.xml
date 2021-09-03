@@ -3477,6 +3477,7 @@
 
     <string name="a11y_start_voice_message">Record Voice Message</string>
     <string name="voice_message_slide_to_cancel">Slide to cancel</string>
+    <string name="a11y_lock_voice_message">Voice Message Lock</string>
     <string name="a11y_play_voice_message">Play Voice Message</string>
     <string name="a11y_pause_voice_message">Pause Voice Message</string>
     <string name="a11y_stop_voice_message">Stop Recording</string>
