@@ -21,17 +21,14 @@ body:
     validations:
       required: true
   - type: textarea
-    id: expected-result
-    attributes:
-      label: What did you expect?
-      placeholder: Tell us what you expected to happen in as much detail as you can.
-    validations:
-      required: true
-  - type: textarea
-    id: actual-result
+    id: result
     attributes:
       label: What happened?
       placeholder: Tell us what went wrong
+      value: |
+        ### What did you expect?
+
+        ### What happened?
     validations:
       required: true
   - type: input
