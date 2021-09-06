@@ -32,6 +32,7 @@ class CoroutineSequencersTest: MatrixTest {
     private val dispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
 
     @Test
+    @Suppress("EXPERIMENTAL_API_USAGE")
     fun sequencer_should_run_sequential() {
         val sequencer = SemaphoreCoroutineSequencer()
         val results = ArrayList<String>()
@@ -60,6 +61,7 @@ class CoroutineSequencersTest: MatrixTest {
     }
 
     @Test
+    @Suppress("EXPERIMENTAL_API_USAGE")
     fun sequencer_should_run_parallel() {
         val sequencer1 = SemaphoreCoroutineSequencer()
         val sequencer2 = SemaphoreCoroutineSequencer()
@@ -86,6 +88,7 @@ class CoroutineSequencersTest: MatrixTest {
     }
 
     @Test
+    @Suppress("EXPERIMENTAL_API_USAGE")
     fun sequencer_should_jump_to_next_when_current_job_canceled() {
         val sequencer = SemaphoreCoroutineSequencer()
         val results = ArrayList<String>()
