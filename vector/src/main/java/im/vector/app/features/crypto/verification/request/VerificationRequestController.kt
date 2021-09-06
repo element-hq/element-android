@@ -21,6 +21,7 @@ import com.airbnb.epoxy.EpoxyController
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
+import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.epoxy.bottomSheetDividerItem
 import im.vector.app.core.resources.ColorProvider
@@ -68,7 +69,7 @@ class VerificationRequestController @Inject constructor(
                 }
             }
 
-            if (state.quadSContainsSecrets) {
+            if (BuildConfig.IS_KEY_BACKUP_SUPPORTED && state.quadSContainsSecrets) {
                 val subtitle = if (state.hasAnyOtherSession) {
                     stringProvider.getString(R.string.verification_use_passphrase)
                 } else {

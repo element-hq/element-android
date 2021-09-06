@@ -148,8 +148,10 @@
     <string name="tchap_register_user_already_logged_in_prompt">Il semblerait que vous essayez de vous connecter avec un autre compte. Voulez-vous vous déconnecter \?</string>
     <string name="tchap_email_validation_succeeded">Votre e\u2011mail a été validé, vous pouvez poursuivre l’opération qui attendait cette validation.</string>
     <string name="tchap_email_validation_failed">La validation de l’e\u2011mail a échouée. Le lien a expiré, ou il n’est pas valide.</string>
-
     <string name="tchap_change_password_help">Votre nouveau mot de passe doit contenir au moins 8 caractères, avec au moins un caractère de chaque type : majuscule, minuscule, chiffre, caractère spécial.</string>
+
+    <!-- Logout Tchap -->
+    <string name="tchap_action_sign_out_confirmation">Pour des raisons de sécurité, la déconnexion supprimera toutes les clés de chiffrement de bout en bout, rendant l’historique des conversations chiffrées inaccessible lorsque vous vous reconnecterez. Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
 
     <string name="tchap_dialog_user_consent_homeserver_name">Tchap</string>
 </resources>

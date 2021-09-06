@@ -149,8 +149,10 @@
     <string name="tchap_register_user_already_logged_in_prompt">It looks like you’re trying to connect with another account. Do you want to sign out?</string>
     <string name="tchap_email_validation_succeeded">The email has been validated. You may pursue the related operation.</string>
     <string name="tchap_email_validation_failed">The email validation failed. The link has expired, or it is not valid.</string>
-
     <string name="tchap_change_password_help">Your new password must include a lower-case letter, an upper-case letter, a number and a symbol and be at a minimum 8 characters in length.</string>
+
+    <!-- Logout Tchap -->
+    <string name="tchap_action_sign_out_confirmation">For security, logging out will delete any end-to-end encryption keys making previous encrypted chat history unreadable if you log back in.\nSelect export to backup them before signing out.</string>
 
     <string name="tchap_dialog_user_consent_homeserver_name">Tchap</string>
 </resources>

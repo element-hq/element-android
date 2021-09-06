@@ -303,6 +303,8 @@ android {
 
             applicationId "fr.gouv.tchap"
             versionName "${versionMajor}.${versionMinor}.${versionPatch}${getTchapVersionSuffix()}"
+
+            buildConfigField "Boolean", "IS_KEY_BACKUP_SUPPORTED", "false"
         }
 
         preprod {
@@ -312,6 +314,8 @@ android {
 
             applicationId "fr.gouv.rie.tchap"
             versionName "${versionMajor}.${versionMinor}.${versionPatch}${getTchapVersionSuffix()}" + "_b"
+
+            buildConfigField "Boolean", "IS_KEY_BACKUP_SUPPORTED", "true"
         }
 
         agent {
@@ -321,6 +325,8 @@ android {
 
             applicationId "fr.gouv.tchap.a"
             versionName "${versionMajor}.${versionMinor}.${versionPatch}${getTchapVersionSuffix()}" + "_a"
+
+            buildConfigField "Boolean", "IS_KEY_BACKUP_SUPPORTED", "false"
         }
     }
 

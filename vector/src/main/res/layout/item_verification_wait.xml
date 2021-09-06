@@ -88,6 +88,7 @@
 
     <TextView
         style="@style/Widget.Vector.TextView.Caption"
+        android:id="@+id/otherMxClientCaption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"

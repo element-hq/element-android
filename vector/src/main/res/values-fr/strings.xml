@@ -1977,8 +1977,8 @@
     <string name="verify_new_session_notice">Utilisez cette session pour vérifiez la nouvelle, ce qui lui permettra d’avoir accès aux messages chiffrés.</string>
     <string name="verify_new_session_was_not_me">Ce n’était pas moi</string>
     <string name="verify_new_session_compromized">Votre compte est peut-être compromis</string>
-    <string name="verify_cancel_self_verification_from_untrusted">Si vous annulez, vous ne pourrez pas lire les messages chiffrés sur cet appareil, et les autres utilisateurs ne lui feront pas confiance</string>
-    <string name="verify_cancel_self_verification_from_trusted">Si vous annulez, vous ne pourrez pas lire les messages chiffrés sur votre nouvel appareil, et les autres utilisateurs ne lui feront pas confiance</string>
+    <string name="verify_cancel_self_verification_from_untrusted">Si vous annulez, vous ne pourrez pas lire les anciens messages chiffrés sur cet appareil</string>
+    <string name="verify_cancel_self_verification_from_trusted">Si vous annulez, vous ne pourrez pas lire les anciens messages chiffrés sur votre nouvel appareil</string>
     <string name="verify_cancel_other">Vous ne vérifierez pas %1$s (%2$s) si vous annulez maintenant. Recommencez sur son profil utilisateur.</string>
     <string name="verify_not_me_self_verification">Un des éléments suivants est peut-être compromis :
 \n

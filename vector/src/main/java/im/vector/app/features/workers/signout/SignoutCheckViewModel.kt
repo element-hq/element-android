@@ -30,6 +30,7 @@ import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.BuildConfig
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
@@ -50,7 +51,8 @@ data class SignoutCheckViewState(
         val backupIsSetup: Boolean = false,
         val crossSigningSetupAllKeysKnown: Boolean = false,
         val keysBackupState: KeysBackupState = KeysBackupState.Unknown,
-        val hasBeenExportedToFile: Async<Boolean> = Uninitialized
+        val hasBeenExportedToFile: Async<Boolean> = Uninitialized,
+        val isKeyBackupSupported: Boolean = BuildConfig.IS_KEY_BACKUP_SUPPORTED
 ) : MvRxState
 
 class SignoutCheckViewModel @AssistedInject constructor(
@@ -82,6 +84,14 @@ class SignoutCheckViewModel @AssistedInject constructor(
     }
 
     init {
+        withState { state ->
+            if (state.isKeyBackupSupported) {
+                init()
+            }
+        }
+    }
+
+    fun init() {
         session.cryptoService().keysBackupService().addListener(this)
         session.cryptoService().keysBackupService().checkAndStartKeysBackup()
 
@@ -108,7 +118,11 @@ class SignoutCheckViewModel @AssistedInject constructor(
     }
 
     override fun onCleared() {
-        session.cryptoService().keysBackupService().removeListener(this)
+        withState { state ->
+            if (state.isKeyBackupSupported) {
+                session.cryptoService().keysBackupService().removeListener(this)
+            }
+        }
         super.onCleared()
     }
 
@@ -121,7 +135,7 @@ class SignoutCheckViewModel @AssistedInject constructor(
     }
 
     fun refreshRemoteStateIfNeeded() = withState { state ->
-        if (state.keysBackupState == KeysBackupState.Disabled) {
+        if (state.isKeyBackupSupported && state.keysBackupState == KeysBackupState.Disabled) {
             session.cryptoService().keysBackupService().checkAndStartKeysBackup()
         }
     }

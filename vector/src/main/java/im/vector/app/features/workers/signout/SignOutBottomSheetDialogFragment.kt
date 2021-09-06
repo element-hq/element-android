@@ -41,7 +41,6 @@ import im.vector.app.databinding.BottomSheetLogoutAndBackupBinding
 import im.vector.app.features.crypto.keysbackup.setup.KeysBackupSetupActivity
 import im.vector.app.features.crypto.recover.BootstrapBottomSheet
 import im.vector.app.features.crypto.recover.SetupMode
-
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupState
 import javax.inject.Inject
 
@@ -115,7 +114,14 @@ class SignOutBottomSheetDialogFragment :
 
     override fun invalidate() = withState(viewModel) { state ->
         views.signoutExportingLoading.isVisible = false
-        if (state.crossSigningSetupAllKeysKnown && !state.backupIsSetup) {
+
+        if (!state.isKeyBackupSupported) {
+            views.bottomSheetSignoutWarningText.text = getString(R.string.tchap_action_sign_out_confirmation)
+
+            views.setupRecoveryButton.isVisible = false
+            views.exportManuallyButton.isVisible = true
+            views.exitAnywayButton.isVisible = true
+        } else if (state.crossSigningSetupAllKeysKnown && !state.backupIsSetup) {
             views.bottomSheetSignoutWarningText.text = getString(R.string.sign_out_bottom_sheet_warning_no_backup)
             views.backingUpStatusGroup.isVisible = false
             // we should show option to setup 4S

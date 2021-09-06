@@ -32,6 +32,7 @@ import androidx.preference.PreferenceCategory
 import androidx.preference.SwitchPreference
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.dialogs.ExportKeysDialog
@@ -183,8 +184,9 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
     private fun refresh4SSection(info: SecretsSynchronisationInfo) {
         // it's a lot of if / else if / else
         // But it's not yet clear how to manage all cases
-        if (!info.isCrossSigningEnabled) {
-            // There is not cross signing, so we can remove the section
+        val isKeyBackupSupported: Boolean = BuildConfig.IS_KEY_BACKUP_SUPPORTED
+        if (!isKeyBackupSupported || !info.isCrossSigningEnabled) {
+            // Key backup is not supported or there is not cross signing, so we can remove the section
             secureBackupCategory.isVisible = false
         } else {
             if (!info.isBackupSetup) {

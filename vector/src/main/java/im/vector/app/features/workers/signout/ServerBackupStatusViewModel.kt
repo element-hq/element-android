@@ -25,8 +25,9 @@ import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import im.vector.app.BuildConfig
 import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
@@ -94,6 +95,13 @@ class ServerBackupStatusViewModel @AssistedInject constructor(@Assisted initialS
     private val keyBackupPublishSubject: PublishSubject<KeysBackupState> = PublishSubject.create()
 
     init {
+        // if key backup is not supported, do nothing
+        if (BuildConfig.IS_KEY_BACKUP_SUPPORTED) {
+            init()
+        }
+    }
+
+    fun init() {
         session.cryptoService().keysBackupService().addListener(this)
 
         keysBackupState.value = session.cryptoService().keysBackupService().state

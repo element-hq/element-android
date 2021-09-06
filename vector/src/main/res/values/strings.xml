@@ -2919,8 +2919,8 @@
     <string name="verify_new_session_was_not_me">This wasn’t me</string>
     <string name="verify_new_session_compromized">Your account may be compromised</string>
 
-    <string name="verify_cancel_self_verification_from_untrusted">If you cancel, you won’t be able to read encrypted messages on this device, and other users won’t trust it</string>
-    <string name="verify_cancel_self_verification_from_trusted">If you cancel, you won’t be able to read encrypted messages on your new device, and other users won’t trust it</string>
+    <string name="verify_cancel_self_verification_from_untrusted">If you cancel, you won’t be able to read previous encrypted messages on this device</string>
+    <string name="verify_cancel_self_verification_from_trusted">If you cancel, you won’t be able to read previous encrypted messages on your new device</string>
     <string name="verify_cancel_other">You won’t verify %1$s (%2$s) if you cancel now. Start again in their user profile.</string>
 
     <string name="verify_not_me_self_verification">
