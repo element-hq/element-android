@@ -190,8 +190,9 @@ abstract class MergedRoomCreationItem : BasedMergedItem<MergedRoomCreationItem.H
             }
         }
 
-        holder.addPeopleButton.isVisible = !isDirect
-        if (!isDirect) {
+        val canInvite = attributes.canInvite && !isDirect
+        holder.addPeopleButton.isVisible = canInvite
+        if (canInvite) {
             holder.addPeopleButton.onClick {
                 attributes.callback?.onTimelineItemAction(RoomDetailAction.QuickActionInvitePeople)
             }
@@ -228,6 +229,7 @@ abstract class MergedRoomCreationItem : BasedMergedItem<MergedRoomCreationItem.H
             val hasEncryptionEvent: Boolean,
             val isEncryptionAlgorithmSecure: Boolean,
             val roomSummary: RoomSummary?,
+            val canInvite: Boolean = false,
             val canChangeAvatar: Boolean = false,
             val canChangeName: Boolean = false,
             val canChangeTopic: Boolean = false
