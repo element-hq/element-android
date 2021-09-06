@@ -1,0 +1,1 @@
+Check power level before displaying actions in the room details' timeline
