@@ -143,7 +143,8 @@ abstract class MergedRoomCreationItem : BasedMergedItem<MergedRoomCreationItem.H
         val topic = roomSummary?.topic
         if (topic.isNullOrBlank()) {
             // do not show hint for DMs or group DMs
-            if (!isDirect) {
+            val canSetTopic = attributes.canChangeTopic && !isDirect
+            if (canSetTopic) {
                 val addTopicLink = holder.view.resources.getString(R.string.add_a_topic_link_text)
                 val styledText = SpannableString(holder.view.resources.getString(R.string.room_created_summary_no_topic_creation_text, addTopicLink))
                 holder.roomTopicText.setTextOrHide(styledText.tappableMatchingText(addTopicLink, object : ClickableSpan() {
