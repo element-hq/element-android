@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2021 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,8 @@
 
 package org.matrix.android.sdk.internal.session.room.timeline
 
-internal data class TimelineState(
-        val hasReachedEnd: Boolean = false,
-        val hasMoreInCache: Boolean = true,
-        val isPaginating: Boolean = false,
-        val requestedPaginationCount: Int = 0
-)
+internal enum class LoadMoreResult {
+    REACHED_END,
+    SUCCESS,
+    FAILURE
+}

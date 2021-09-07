@@ -65,17 +65,14 @@ internal class DefaultTimelineService @AssistedInject constructor(
                 roomId = roomId,
                 initialEventId = eventId,
                 realmConfiguration = monarchy.realmConfiguration,
-                taskExecutor = taskExecutor,
-                contextOfEventTask = contextOfEventTask,
                 paginationTask = paginationTask,
                 timelineEventMapper = timelineEventMapper,
-                settings = settings,
                 timelineInput = timelineInput,
                 eventDecryptor = eventDecryptor,
                 fetchTokenAndPaginateTask = fetchTokenAndPaginateTask,
-                realmSessionProvider = realmSessionProvider,
                 loadRoomMembersTask = loadRoomMembersTask,
-                readReceiptHandler = readReceiptHandler
+                readReceiptHandler = readReceiptHandler,
+                getEventTask = contextOfEventTask
         )
     }
 

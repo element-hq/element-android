@@ -16,22 +16,13 @@
 
 package org.matrix.android.sdk.internal.database
 
-import io.realm.Realm
 import io.realm.RealmConfiguration
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.internal.database.helper.nextDisplayIndex
-import org.matrix.android.sdk.internal.database.model.ChunkEntity
-import org.matrix.android.sdk.internal.database.model.ChunkEntityFields
-import org.matrix.android.sdk.internal.database.model.EventEntity
-import org.matrix.android.sdk.internal.database.model.RoomEntity
-import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
-import org.matrix.android.sdk.internal.database.model.TimelineEventEntityFields
-import org.matrix.android.sdk.internal.database.model.deleteOnCascade
-import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.api.session.SessionLifecycleObserver
-import org.matrix.android.sdk.internal.session.room.timeline.PaginationDirection
+import org.matrix.android.sdk.internal.database.model.RoomEntity
+import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import timber.log.Timber
 import javax.inject.Inject
@@ -53,11 +44,12 @@ internal class DatabaseCleaner @Inject constructor(@SessionDatabase private val 
             awaitTransaction(realmConfiguration) { realm ->
                 val allRooms = realm.where(RoomEntity::class.java).findAll()
                 Timber.v("There are ${allRooms.size} rooms in this session")
-                cleanUp(realm, MAX_NUMBER_OF_EVENTS_IN_DB / 2L)
+                //cleanUp(realm, MAX_NUMBER_OF_EVENTS_IN_DB / 2L)
             }
         }
     }
 
+    /*
     private fun cleanUp(realm: Realm, threshold: Long) {
         val numberOfEvents = realm.where(EventEntity::class.java).findAll().size
         val numberOfTimelineEvents = realm.where(TimelineEventEntity::class.java).findAll().size
@@ -75,7 +67,7 @@ internal class DatabaseCleaner @Inject constructor(@SessionDatabase private val 
                 val thresholdDisplayIndex = maxDisplayIndex - threshold
                 val eventsToRemove = chunk.timelineEvents.where().lessThan(TimelineEventEntityFields.DISPLAY_INDEX, thresholdDisplayIndex).findAll()
                 Timber.v("There are ${eventsToRemove.size} events to clean in chunk: ${chunk.identifier()} from room ${chunk.room?.first()?.roomId}")
-                chunk.numberOfTimelineEvents = chunk.numberOfTimelineEvents - eventsToRemove.size
+                //chunk.numberOfTimelineEvents = chunk.numberOfTimelineEvents - eventsToRemove.size
                 eventsToRemove.forEach {
                     val canDeleteRoot = it.root?.stateKey == null
                     it.deleteOnCascade(canDeleteRoot)
@@ -86,4 +78,6 @@ internal class DatabaseCleaner @Inject constructor(@SessionDatabase private val 
             cleanUp(realm, (threshold / 1.5).toLong())
         }
     }
+
+     */
 }

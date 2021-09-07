@@ -70,13 +70,12 @@ internal class UIEchoManager(
         return existingState != sendState
     }
 
-    fun onLocalEchoCreated(timelineEvent: TimelineEvent)  {
-        // Manage some ui echos (do it before filter because actual event could be filtered out)
+    fun onLocalEchoCreated(timelineEvent: TimelineEvent): Boolean  {
         when (timelineEvent.root.getClearType()) {
             EventType.REDACTION -> {
             }
             EventType.REACTION -> {
-                val content = timelineEvent.root.content?.toModel<ReactionContent>()
+                val content: ReactionContent? = timelineEvent.root.content?.toModel<ReactionContent>()
                 if (RelationType.ANNOTATION == content?.relatesTo?.type) {
                     val reaction = content.relatesTo.key
                     val relatedEventID = content.relatesTo.eventId
@@ -96,11 +95,12 @@ internal class UIEchoManager(
         }
         Timber.v("On local echo created: ${timelineEvent.eventId}")
         inMemorySendingEvents.add(0, timelineEvent)
+        return true
     }
 
-    fun decorateEventWithReactionUiEcho(timelineEvent: TimelineEvent): TimelineEvent? {
+    fun decorateEventWithReactionUiEcho(timelineEvent: TimelineEvent): TimelineEvent {
         val relatedEventID = timelineEvent.eventId
-        val contents = inMemoryReactions[relatedEventID] ?: return null
+        val contents = inMemoryReactions[relatedEventID] ?: return timelineEvent
 
         var existingAnnotationSummary = timelineEvent.annotations ?: EventAnnotationsSummary(
                 relatedEventID

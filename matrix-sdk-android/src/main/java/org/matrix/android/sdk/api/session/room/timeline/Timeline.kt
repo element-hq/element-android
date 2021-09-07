@@ -95,6 +95,8 @@ interface Timeline {
      */
     fun getTimelineEventWithId(eventId: String?): TimelineEvent?
 
+    fun getPaginationState(direction: Direction): PaginationState
+
     interface Listener {
         /**
          * Call when the timeline has been updated through pagination or sync.
@@ -112,7 +114,20 @@ interface Timeline {
          * Called when new events come through the sync
          */
         fun onNewTimelineEvents(eventIds: List<String>)
+
+        fun onStateUpdated() {
+            //NOOP
+        }
     }
+
+    /**
+     * Pagination state
+     */
+    data class PaginationState(
+            val hasMoreToLoad: Boolean = true,
+            val loading: Boolean = false,
+            val inError: Boolean = false
+    )
 
     /**
      * This is used to paginate in one or another direction.
