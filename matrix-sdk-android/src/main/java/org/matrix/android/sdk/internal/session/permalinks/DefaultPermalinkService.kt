@@ -18,7 +18,6 @@ package org.matrix.android.sdk.internal.session.permalinks
 
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.permalinks.PermalinkService
-import org.matrix.android.sdk.api.session.permalinks.PermalinkService.Companion.MATRIX_TO_URL_BASE
 import javax.inject.Inject
 
 internal class DefaultPermalinkService @Inject constructor(
@@ -42,9 +41,6 @@ internal class DefaultPermalinkService @Inject constructor(
     }
 
     override fun getLinkedId(url: String): String? {
-        return url
-                .takeIf { it.startsWith(MATRIX_TO_URL_BASE) }
-                ?.substring(MATRIX_TO_URL_BASE.length)
-                ?.substringBeforeLast("?")
+        return permalinkFactory.getLinkedId(url)
     }
 }

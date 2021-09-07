@@ -60,11 +60,10 @@ internal class PermalinkFactory @Inject constructor(
     }
 
     fun getLinkedId(url: String): String? {
-        val isSupported = url.startsWith(MATRIX_TO_URL_BASE)
-
-        return if (isSupported) {
-            url.substring(MATRIX_TO_URL_BASE.length)
-        } else null
+        return url
+                .takeIf { it.startsWith(MATRIX_TO_URL_BASE) }
+                ?.substring(MATRIX_TO_URL_BASE.length)
+                ?.substringBeforeLast("?")
     }
 
     /**
