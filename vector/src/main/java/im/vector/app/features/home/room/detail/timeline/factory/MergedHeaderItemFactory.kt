@@ -206,6 +206,7 @@ class MergedHeaderItemFactory @Inject constructor(private val activeSessionHolde
                     callback = callback,
                     currentUserId = currentUserId,
                     roomSummary = partialState.roomSummary,
+                    canInvite = powerLevelsHelper?.isUserAbleToInvite(currentUserId) ?: false,
                     canChangeAvatar = powerLevelsHelper?.isUserAllowedToSend(currentUserId, true, EventType.STATE_ROOM_AVATAR) ?: false,
                     canChangeTopic = powerLevelsHelper?.isUserAllowedToSend(currentUserId, true, EventType.STATE_ROOM_TOPIC) ?: false,
                     canChangeName = powerLevelsHelper?.isUserAllowedToSend(currentUserId, true, EventType.STATE_ROOM_NAME) ?: false
