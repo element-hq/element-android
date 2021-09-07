@@ -445,7 +445,7 @@
     <string name="room_participants_action_set_moderator">Зробити модератором</string>
     <string name="room_participants_action_set_admin">Зробити адміністратором</string>
     <string name="room_participants_action_ignore">Нехтувати</string>
-    <string name="room_participants_action_unignore">Рознехтувати</string>
+    <string name="room_participants_action_unignore">Не нехтувати</string>
     <string name="room_participants_invite_search_another_user">ID користувача, ім\'я або email</string>
     <string name="room_participants_action_mention">Згадати</string>
     <string name="room_participants_action_devices_list">Показати Список Пристроїв</string>
