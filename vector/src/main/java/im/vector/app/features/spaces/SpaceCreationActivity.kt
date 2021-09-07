@@ -56,17 +56,20 @@ class SpaceCreationActivity : SimpleFragmentActivity(), CreateSpaceViewModel.Fac
         super.onCreate(savedInstanceState)
         if (isFirstCreation()) {
             when (withState(viewModel) { it.step }) {
-                CreateSpaceState.Step.ChooseType        -> {
+                CreateSpaceState.Step.ChooseType         -> {
                     navigateToFragment(ChooseSpaceTypeFragment::class.java)
                 }
-                CreateSpaceState.Step.SetDetails        -> {
+                CreateSpaceState.Step.SetDetails         -> {
                     navigateToFragment(ChooseSpaceTypeFragment::class.java)
                 }
-                CreateSpaceState.Step.AddRooms          -> {
+                CreateSpaceState.Step.AddRooms           -> {
                     navigateToFragment(CreateSpaceDefaultRoomsFragment::class.java)
                 }
-                CreateSpaceState.Step.ChoosePrivateType -> {
+                CreateSpaceState.Step.ChoosePrivateType  -> {
                     navigateToFragment(ChoosePrivateSpaceTypeFragment::class.java)
+                }
+                CreateSpaceState.Step.AddEmailsOrInvites -> {
+                    navigateToFragment(CreateSpaceAdd3pidInvitesFragment::class.java)
                 }
             }
         }
