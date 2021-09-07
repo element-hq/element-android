@@ -34,13 +34,17 @@ data class CreateSpaceState(
         val aliasVerificationTask: Async<Boolean> = Uninitialized,
         val nameInlineError: String? = null,
         val defaultRooms: Map<Int /** position in form */, String?>? = null,
-        val creationResult: Async<String> = Uninitialized
+        val default3pidInvite: Map<Int /** position in form */, String?>? = null,
+        val emailValidationResult: Map<Int /** position in form */, Boolean>? = null,
+        val creationResult: Async<String> = Uninitialized,
+        val canInviteByMail: Boolean = false
 ) : MvRxState {
 
     enum class Step {
         ChooseType,
         SetDetails,
         AddRooms,
-        ChoosePrivateType
+        ChoosePrivateType,
+        AddEmailsOrInvites
     }
 }
