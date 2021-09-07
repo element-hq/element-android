@@ -1613,7 +1613,7 @@
     <string name="room_participants_kick_title">Викинути користувача</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Ви впевнені, що бажаєте скасувати запрошення для цього користувача\?</string>
     <string name="room_participants_action_cancel_invite_title">Скасувати запрошення</string>
-    <string name="room_participants_action_unignore_prompt_msg">Зняття ігнорування з цього користувача знову покаже всі повідомлення від нього.</string>
+    <string name="room_participants_action_unignore_prompt_msg">Рознехтування цього користувача знову покаже всі повідомлення від нього.</string>
     <string name="room_participants_action_unignore_title">Рознехтувати користувача</string>
     <string name="room_participants_action_ignore_prompt_msg">Нехтування цього користувача призведе до видалення його повідомлень з усіх кімнат, де ви обидва є учасниками.
 \n
