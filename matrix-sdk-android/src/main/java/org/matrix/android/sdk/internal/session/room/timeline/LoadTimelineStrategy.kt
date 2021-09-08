@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 New Vector Ltd
+ * Copyright (c) 2021 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,6 @@ import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
-import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
 import org.matrix.android.sdk.internal.database.mapper.TimelineEventMapper
 import org.matrix.android.sdk.internal.database.model.ChunkEntity
 import org.matrix.android.sdk.internal.database.model.ChunkEntityFields
@@ -59,7 +58,8 @@ internal class LoadTimelineStrategy(
             val getContextOfEventTask: GetContextOfEventTask,
             val timelineInput: TimelineInput,
             val timelineEventMapper: TimelineEventMapper,
-            val onEventsUpdated: () -> Unit
+            val onEventsUpdated: () -> Unit,
+            val onNewTimelineEvents: (List<String>) -> Unit
     )
 
     private var chunkEntity: RealmResults<ChunkEntity>? = null
@@ -86,6 +86,7 @@ internal class LoadTimelineStrategy(
                 return
             }
             if (uiEchoManager.onLocalEchoCreated(timelineEvent)) {
+                dependencies.onNewTimelineEvents(listOf(timelineEvent.eventId))
                 dependencies.onEventsUpdated()
             }
         }
@@ -98,9 +99,16 @@ internal class LoadTimelineStrategy(
                 dependencies.onEventsUpdated()
             }
         }
+
+        override fun onNewTimelineEvents(roomId: String, eventIds: List<String>) {
+            super.onNewTimelineEvents(roomId, eventIds)
+            if (mode == Mode.Default && roomId == this@LoadTimelineStrategy.roomId) {
+                dependencies.onNewTimelineEvents(eventIds)
+            }
+        }
     }
 
-    private val uiEchoManager = UIEchoManager(TimelineSettings(10), uiEchoManagerListener)
+    private val uiEchoManager = UIEchoManager(uiEchoManagerListener)
     private val sendingEventsDataSource: SendingEventsDataSource = RealmSendingEventsDataSource(
             roomId = roomId,
             realm = dependencies.realm,
@@ -118,7 +126,7 @@ internal class LoadTimelineStrategy(
             it.addChangeListener(chunkEntityListener)
             timelineChunk = it.createTimelineChunk()
         }
-        if(mode is Mode.Default){
+        if (mode is Mode.Default) {
             loadMore(10, Timeline.Direction.BACKWARDS)
         }
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 New Vector Ltd
+ * Copyright (c) 2021 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,17 +41,17 @@ import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicReference
 
-class DefaultTimeline internal constructor(private val roomId: String,
-                                           private val initialEventId: String?,
-                                           private val realmConfiguration: RealmConfiguration,
-                                           private val loadRoomMembersTask: LoadRoomMembersTask,
-                                           private val readReceiptHandler: ReadReceiptHandler,
-                                           paginationTask: PaginationTask,
-                                           getEventTask: GetContextOfEventTask,
-                                           fetchTokenAndPaginateTask: FetchTokenAndPaginateTask,
-                                           timelineEventMapper: TimelineEventMapper,
-                                           timelineInput: TimelineInput,
-                                           eventDecryptor: TimelineEventDecryptor) : Timeline {
+internal class DefaultTimeline internal constructor(private val roomId: String,
+                                                    private val initialEventId: String?,
+                                                    private val realmConfiguration: RealmConfiguration,
+                                                    private val loadRoomMembersTask: LoadRoomMembersTask,
+                                                    private val readReceiptHandler: ReadReceiptHandler,
+                                                    paginationTask: PaginationTask,
+                                                    getEventTask: GetContextOfEventTask,
+                                                    fetchTokenAndPaginateTask: FetchTokenAndPaginateTask,
+                                                    timelineEventMapper: TimelineEventMapper,
+                                                    timelineInput: TimelineInput,
+                                                    eventDecryptor: TimelineEventDecryptor) : Timeline {
 
     companion object {
         val BACKGROUND_HANDLER = createBackgroundHandler("SimpleTimeline_Thread")
@@ -77,8 +77,10 @@ class DefaultTimeline internal constructor(private val roomId: String,
             timelineEventMapper = timelineEventMapper,
             realm = backgroundRealm,
             getContextOfEventTask = getEventTask,
-            onEventsUpdated = this::postSnapshot
+            onEventsUpdated = this::postSnapshot,
+            onNewTimelineEvents = this::onNewTimelineEvents
     )
+
     private var strategy: LoadTimelineStrategy = buildStrategy(LoadTimelineStrategy.Mode.Default)
 
     override val isLive: Boolean
@@ -227,6 +229,14 @@ class DefaultTimeline internal constructor(private val roomId: String,
                 listeners.forEach {
                     tryOrNull { it.onTimelineUpdated(snapshot) }
                 }
+            }
+        }
+    }
+
+    private fun onNewTimelineEvents(eventIds: List<String>) {
+        timelineScope.launch(Dispatchers.Main) {
+            listeners.forEach {
+                tryOrNull { it.onNewTimelineEvents(eventIds) }
             }
         }
     }

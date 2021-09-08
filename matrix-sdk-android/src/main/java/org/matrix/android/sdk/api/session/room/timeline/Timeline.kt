@@ -115,9 +115,7 @@ interface Timeline {
          */
         fun onNewTimelineEvents(eventIds: List<String>)
 
-        fun onStateUpdated() {
-            //NOOP
-        }
+        fun onStateUpdated() = Unit
     }
 
     /**

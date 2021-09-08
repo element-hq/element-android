@@ -28,10 +28,7 @@ import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
 import timber.log.Timber
 import java.util.Collections
 
-internal class UIEchoManager(
-        private val settings: TimelineSettings,
-        private val listener: Listener
-) {
+internal class UIEchoManager(private val listener: Listener) {
 
     interface Listener {
         fun rebuildEvent(eventId: String, builder: (TimelineEvent) -> TimelineEvent?): Boolean
