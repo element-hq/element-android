@@ -36,7 +36,7 @@ data class ContentAttachmentData(
         val queryUri: Uri,
         val mimeType: String?,
         val type: Type,
-        val waveform: List<Int>? = null
+        val waveform: List<Int?>? = null
 ) : Parcelable {
 
     @JsonClass(generateAdapter = false)
