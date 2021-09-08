@@ -33,7 +33,7 @@ internal class WaveFormSanitizer @Inject constructor() {
      * The array should have no less than 30 elements and no more than 120.
      * List of integers between zero and 1024, inclusive.
      */
-    fun sanitize(waveForm: List<Int?>?): List<Int>? {
+    fun sanitize(waveForm: List<Int>?): List<Int>? {
         if (waveForm.isNullOrEmpty()) {
             return null
         }
@@ -46,7 +46,7 @@ internal class WaveFormSanitizer @Inject constructor() {
                 val repeatTimes = ceil(MIN_NUMBER_OF_VALUES / waveForm.size.toDouble()).toInt()
                 waveForm.map { value ->
                     repeat(repeatTimes) {
-                        sizeInRangeList.add(value ?: 0)
+                        sizeInRangeList.add(value)
                     }
                 }
             }
@@ -54,12 +54,12 @@ internal class WaveFormSanitizer @Inject constructor() {
                 val keepOneOf = ceil(waveForm.size.toDouble() / MAX_NUMBER_OF_VALUES).toInt()
                 waveForm.mapIndexed { idx, value ->
                     if (idx % keepOneOf == 0) {
-                        sizeInRangeList.add(value ?: 0)
+                        sizeInRangeList.add(value)
                     }
                 }
             }
             else                                 -> {
-                sizeInRangeList.addAll(waveForm.filterNotNull())
+                sizeInRangeList.addAll(waveForm)
             }
         }
 
