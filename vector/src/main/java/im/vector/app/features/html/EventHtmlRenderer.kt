@@ -24,6 +24,7 @@ import im.vector.app.features.settings.VectorPreferences
 import io.noties.markwon.AbstractMarkwonPlugin
 import io.noties.markwon.Markwon
 import io.noties.markwon.MarkwonPlugin
+import io.noties.markwon.PrecomputedFutureTextSetterCompat
 import io.noties.markwon.ext.latex.JLatexMathPlugin
 import io.noties.markwon.ext.latex.JLatexMathTheme
 import io.noties.markwon.html.HtmlPlugin
@@ -61,7 +62,7 @@ class EventHtmlRenderer @Inject constructor(htmlConfigure: MatrixHtmlPluginConfi
                 })
     } else {
         builder
-    }.build()
+    }.textSetter(PrecomputedFutureTextSetterCompat.create()).build()
 
     val plugins: List<MarkwonPlugin> = markwon.plugins
 
