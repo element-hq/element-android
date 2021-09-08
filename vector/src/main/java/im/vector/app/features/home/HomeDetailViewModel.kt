@@ -23,6 +23,7 @@ import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import fr.gouv.tchap.core.utils.TchapUtils
 import im.vector.app.AppStateHandler
 import im.vector.app.RoomGroupingMethod
 import im.vector.app.core.di.HasScreenInjector
@@ -47,6 +48,7 @@ import org.matrix.android.sdk.api.session.room.RoomSortOrder
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
+import org.matrix.android.sdk.api.session.user.model.User
 import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.rx.asObservable
 import org.matrix.android.sdk.rx.rx
@@ -192,7 +194,8 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
             } else {
                 val userId = data.find { it.threePid.value == action.email }?.matrixId
                 userId?.let {
-                    session.getUser(userId)?.let { _viewEvents.post(HomeDetailViewEvents.InviteIgnoredForDiscoveredUser(it)) }
+                    val user = tryOrNull { session.resolveUser(it) } ?: User(it, TchapUtils.computeDisplayNameFromUserId(it), null)
+                    _viewEvents.post(HomeDetailViewEvents.InviteIgnoredForDiscoveredUser(user))
                 }
             }
         }
