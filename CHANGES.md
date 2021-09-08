@@ -29,7 +29,7 @@ Bugfixes 🐛
  - the element-based domain permalinks (e.g. https://app.element.io/#/user/@chagai95:matrix.org) don't have the mxid in the first param (like matrix.to does - https://matrix.to/#/@chagai95:matrix.org) but rather in the second after /user/ so /user/mxid ([#3735](https://github.com/vector-im/element-android/issues/3735))
  - Update the AccountData with the users' matrix Id instead of their email for those invited by email in a direct chat ([#3743](https://github.com/vector-im/element-android/issues/3743))
  - Send an empty body for POST rooms/{roomId}/receipt/{receiptType}/{eventId} ([#3789](https://github.com/vector-im/element-android/issues/3789))
- - Fix order in which the items of the attachement menu appear ([#3793](https://github.com/vector-im/element-android/issues/3793))
+ - Fix order in which the items of the attachment menu appear ([#3793](https://github.com/vector-im/element-android/issues/3793))
  - Authenticated Jitsi not working in release ([#3841](https://github.com/vector-im/element-android/issues/3841))
  - Home: Dial pad lost entry when config changes ([#3845](https://github.com/vector-im/element-android/issues/3845))
  - Message edition is not rendered in e2e rooms after pagination ([#3887](https://github.com/vector-im/element-android/issues/3887))
