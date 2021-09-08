@@ -109,7 +109,6 @@ class DefaultTimeline internal constructor(private val roomId: String,
                     ensureReadReceiptAreLoaded(realm)
                     backgroundRealm.set(realm)
                     openAround(initialEventId)
-                    strategy.onStart()
                 }
             }
         }

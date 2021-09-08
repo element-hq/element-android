@@ -58,6 +58,7 @@ import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlRetriever
 import im.vector.app.features.media.ImageContentRenderer
 import im.vector.app.features.media.VideoContentRenderer
 import im.vector.app.features.settings.VectorPreferences
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
@@ -355,7 +356,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
                 timelineEventVisibilityHelper.shouldShowEvent(it, partialState.highlightedEventId)
             }
             // Should be build if not cached or if model should be refreshed
-            if (modelCache[position] == null || modelCache[position]?.isCacheable == false) {
+            if (modelCache[position] == null || modelCache[position]?.isCacheable(partialState).orFalse()) {
                 val timelineEventsGroup = timelineEventsGroups.getOrNull(event)
                 val params = TimelineItemFactoryParams(
                         event = event,
@@ -537,6 +538,10 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
             val eventModel: EpoxyModel<*>? = null,
             val mergedHeaderModel: BasedMergedItem<*>? = null,
             val formattedDayModel: DaySeparatorItem? = null,
-            val isCacheable: Boolean = true
-    )
+            private val isCacheable: Boolean = true
+    ) {
+        fun isCacheable(partialState: PartialState): Boolean {
+            return isCacheable || partialState.highlightedEventId == eventId
+        }
+    }
 }
