@@ -32,8 +32,12 @@ data class MatrixConfiguration(
                 "https://scalar-staging.riot.im/scalar/api"
         ),
         /**
-         * Optional proxy to connect to the matrix servers
-         * You can create one using for instance Proxy(proxyType, InetSocketAddress.createUnresolved(hostname, port)
+         * Optional base url to create client permalinks instead of Matrix ones (matrix.to links).
+         */
+        val clientPermalinkBaseUrl: String? = null,
+        /**
+         * Optional proxy to connect to the matrix servers.
+         * You can create one using for instance Proxy(proxyType, InetSocketAddress.createUnresolved(hostname, port).
          */
         val proxy: Proxy? = null,
         /**
@@ -47,7 +51,7 @@ data class MatrixConfiguration(
 ) {
 
     /**
-     * Can be implemented by your Application class
+     * Can be implemented by your Application class.
      */
     interface Provider {
         fun providesMatrixConfiguration(): MatrixConfiguration
