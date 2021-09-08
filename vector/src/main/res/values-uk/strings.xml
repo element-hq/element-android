@@ -94,10 +94,10 @@
     <string name="power_level_default">Типовий</string>
     <string name="power_level_moderator">Модератор</string>
     <string name="power_level_admin">Адміністратор</string>
-    <string name="notice_widget_removed_by_you">Ви вилучили %1$s віджет</string>
-    <string name="notice_widget_removed">%1$s вилучає %2$s віджет</string>
-    <string name="notice_widget_added_by_you">Ви додали %1$s віджет</string>
-    <string name="notice_widget_added">%1$s додає %2$s віджет</string>
+    <string name="notice_widget_removed_by_you">Ви вилучили %1$s розширення</string>
+    <string name="notice_widget_removed">%1$s вилучає %2$s розширення</string>
+    <string name="notice_widget_added_by_you">Ви додали %1$s розширення</string>
+    <string name="notice_widget_added">%1$s додає %2$s розширення</string>
     <string name="notice_room_third_party_registered_invite_by_you">Ви прийняли запрошення до %1$s</string>
     <string name="notice_room_third_party_invite_by_you">Ви надіслали запрошення для %1$s приєднатися до кімнати</string>
     <string name="notice_profile_change_redacted_by_you">Ви оновили свій профіль %1$s</string>
@@ -158,8 +158,8 @@
     <string name="room_displayname_empty_room_was">Порожня кімната (була %s)</string>
     <string name="power_level_custom_no_value">Не типовий</string>
     <string name="power_level_custom">Не типовий (%1$d)</string>
-    <string name="notice_widget_modified_by_you">Ви змінили віджет %1$s</string>
-    <string name="notice_widget_modified">%1$s змінює віджет %2$s</string>
+    <string name="notice_widget_modified_by_you">Ви змінили розширення %1$s</string>
+    <string name="notice_widget_modified">%1$s змінює розширення %2$s</string>
     <string name="notice_direct_room_update_by_you">Ви оновили кімнату.</string>
     <string name="notice_made_future_room_visibility_by_you">Ви зробили майбутню історію кімнати видимою для %1$s</string>
     <string name="notice_made_future_direct_room_visibility_by_you">Ви зробили майбутні повідомлення видимими для %1$s</string>
@@ -771,16 +771,16 @@
     <string name="largest">Найбільший</string>
     <string name="huge">Величезний</string>
     <!-- Widget-->
-    <string name="widget_no_power_to_manage">Для керування віджетами у цій кімнаті потрібен дозвіл</string>
-    <string name="widget_creation_failure">Помилка створення віджета</string>
+    <string name="widget_no_power_to_manage">Вам потрібен дозвіл, щоб керувати розширеннями у цій кімнаті</string>
+    <string name="widget_creation_failure">Помилка створення розширення</string>
     <string name="settings_labs_create_conference_with_jitsi">Здійснювати конференц дзвінки через Jitsi</string>
-    <string name="widget_delete_message_confirmation">Ви впевнені, що бажаєте видалити віджет з цієї кімнати\?</string>
+    <string name="widget_delete_message_confirmation">Ви впевнені, що бажаєте видалити розширення з цієї кімнати\?</string>
     <!-- Widget Integration Manager -->
-    <string name="widget_integration_unable_to_create">Не вдалося створити віджет.</string>
+    <string name="widget_integration_unable_to_create">Не вдалося створити розширення.</string>
     <string name="widget_integration_failed_to_send_request">Не вдалося надіслати запит.</string>
-    <string name="widget_integration_positive_power_level">Рівень доступу має бути більше 0.</string>
+    <string name="widget_integration_positive_power_level">Рівень доступу має бути цілим додатним числом.</string>
     <string name="widget_integration_must_be_in_room">Ви не перебуваєте в цій кімнаті.</string>
-    <string name="widget_integration_no_permission_in_room">Ви не маєте дозволу на виконання даної дії у цій кімнаті.</string>
+    <string name="widget_integration_no_permission_in_room">Ви не маєте дозволу виконувати цю дію у цій кімнаті.</string>
     <string name="widget_integration_missing_room_id">У запиті відсутній room_id.</string>
     <string name="widget_integration_missing_user_id">У запиті відсутній user_id.</string>
     <string name="widget_integration_room_not_visible">Кімната %s невидима.</string>
@@ -976,18 +976,18 @@
     </plurals>
     <string name="notification_unread_notified_messages_in_room">%1$s у %2$s</string>
     <plurals name="active_widgets">
-        <item quantity="one">%d активний віджет</item>
-        <item quantity="few">%d активні віджети</item>
-        <item quantity="many">%d активних віджетів</item>
-        <item quantity="other">%d активних віджетів</item>
+        <item quantity="one">%d активне розширення</item>
+        <item quantity="few">%d активні розширення</item>
+        <item quantity="many">%d активних розширень</item>
+        <item quantity="other">%d активних розширень</item>
     </plurals>
     <string name="widget_integration_missing_parameter">Пропущено обов’язковий параметр.</string>
     <string name="widget_integration_invalid_parameter">Недійсний параметр.</string>
     <string name="settings_labs_keyboard_options_to_send_message">Надсилати повідомлення клавішею Enter</string>
     <string name="settings_labs_enable_send_voice">Надсилати голосові повідомлення</string>
     <string name="conference_call_warning_message">Конференц-зв’язок перебуває в розробці та може бути ненадійним.</string>
-    <string name="command_description_emote">Відобразити дію</string>
-    <string name="command_description_ban_user">Блокувати користувача із вказаним ID</string>
+    <string name="command_description_emote">Показує дію</string>
+    <string name="command_description_ban_user">Заблокувати користувача із вказаним ID</string>
     <string name="command_description_unban_user">Розблокувати користувача із вказаним ID</string>
     <string name="command_description_op_user">Визначити рівень доступу користувача</string>
     <string name="command_description_deop_user">Скинути рівень доступу користувача із вказаним ID</string>
@@ -1150,8 +1150,8 @@
     <string name="abort">Перервати</string>
     <string name="done">Готово</string>
     <string name="skip">Пропустити</string>
-    <string name="failed_to_remove_widget">Не вдалося видалити віджет</string>
-    <string name="failed_to_add_widget">Не вдалося додати віджет</string>
+    <string name="failed_to_remove_widget">Не вдалося видалити розширення</string>
+    <string name="failed_to_add_widget">Не вдалося додати розширення</string>
     <string name="cannot_call_yourself">Ви не можете здійснити дзвінок із самим собою</string>
     <string name="audio_meeting">Почати аудіо-зустріч</string>
     <string name="video_meeting">Почати відеозустріч</string>
@@ -1384,7 +1384,7 @@
 \nОстанні відвідини: %2$s
 \nЯкщо ви не ввійшли в інший сеанс, знехтуйте цим запитом.</string>
     <string name="widget_integration_review_terms">Для продовження потрібно прийняти Умови користування цією службою.</string>
-    <string name="room_no_active_widgets">Немає активних віджетів</string>
+    <string name="room_no_active_widgets">Немає активних розширень</string>
     <string name="room_manage_integrations">Керувати інтеграціями</string>
     <string name="integration_manager_not_configured">Менеджер інтеграції не налаштовано.</string>
     <string name="room_widget_webview_read_protected_media">Читати медіа захищені DRM</string>
@@ -1392,25 +1392,25 @@
     <string name="room_widget_webview_access_camera">Використовувати камеру</string>
     <string name="room_widget_resource_decline_permission">Заблокувати все</string>
     <string name="room_widget_resource_grant_permission">Дозволити</string>
-    <string name="room_widget_resource_permission_title">Цей віджет хоче використовувати такі ресурси:</string>
+    <string name="room_widget_resource_permission_title">Це розширення хоче використовувати такі ресурси:</string>
     <string name="error_jitsi_not_supported_on_old_device">На жаль, конференц-дзвінки з Jitsi не підтримуються на старих пристроях (пристрої з ОС Android нижче 6.0)</string>
-    <string name="room_widget_permission_room_id">Ідентифікатор кімнати</string>
-    <string name="room_widget_permission_widget_id">Ідентифікатор віджета</string>
+    <string name="room_widget_permission_room_id">ID кімнати</string>
+    <string name="room_widget_permission_widget_id">ID розширення</string>
     <string name="room_widget_permission_theme">Ваша тема</string>
     <string name="room_widget_permission_user_id">Ваш ідентифікатор користувача</string>
     <string name="room_widget_permission_avatar_url">URL-адреса аватара</string>
     <string name="room_widget_permission_display_name">Ваше показуване ім\'я</string>
     <string name="room_widget_revoke_access">Скасувати доступ для мене</string>
     <string name="room_widget_open_in_browser">Відкрити в переглядачі</string>
-    <string name="room_widget_reload">Перезавантажити віджет</string>
-    <string name="room_widget_failed_to_load">Не вдалося завантажити віджет.
+    <string name="room_widget_reload">Перезавантажити розширення</string>
+    <string name="room_widget_failed_to_load">Не вдалося завантажити розширення.
 \n%s</string>
     <string name="room_widget_permission_shared_info_title">Використання може спричинити обмін даними з %s:</string>
     <string name="room_widget_permission_webview_shared_info_title">За його використання може бути встановлено файли cookie та відбуватися обмін даними з %s:</string>
-    <string name="room_widget_permission_added_by">Цей віджет додав:</string>
-    <string name="room_widget_permission_title">Завантажити віджет</string>
-    <string name="room_widget_activity_title">Віджет</string>
-    <string name="active_widgets_title">Активні віджети</string>
+    <string name="room_widget_permission_added_by">Це розширення додає:</string>
+    <string name="room_widget_permission_title">Завантажити розширення</string>
+    <string name="room_widget_activity_title">Розширення</string>
+    <string name="active_widgets_title">Активні розширення</string>
     <string name="active_widget_view_action">ПОДАННЯ</string>
     <string name="notification_ticker_text_group">%1$s: %2$s %3$s</string>
     <string name="notification_ticker_text_dm">%1$s: %2$s</string>
@@ -1516,8 +1516,8 @@
     <string name="settings_show_room_member_state_events_summary">Включає події запрошення/приєднання/виходу/викидання/блокування та зміни аватарів/показуваних імен.</string>
     <string name="settings_show_room_member_state_events">Показати стан подій учасників кімнати</string>
     <string name="settings_cryptography_manage_keys">Керування криптографічними ключами</string>
-    <string name="settings_integrations_summary">Використовуйте менеджер інтеграції для керування ботами, мостами, віджетами та пакунками наліпок.
-\nМенеджери інтеграції отримують дані конфігурації та можуть змінювати віджети, надсилати запрошення до кімнати та надавати права від вашого імені.</string>
+    <string name="settings_integrations_summary">Використовуйте менеджер інтеграції для керування ботами, мостами, розширеннями та пакунками наліпок.
+\nМенеджери інтеграції отримують дані конфігурації та можуть змінювати розширення, надсилати запрошення до кімнати та надавати права від вашого імені.</string>
     <string name="settings_integrations">Інтеграції</string>
     <plurals name="seconds">
         <item quantity="one">%d секунда</item>
@@ -1613,7 +1613,7 @@
     <string name="room_participants_kick_title">Викинути користувача</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Ви впевнені, що бажаєте скасувати запрошення для цього користувача\?</string>
     <string name="room_participants_action_cancel_invite_title">Скасувати запрошення</string>
-    <string name="room_participants_action_unignore_prompt_msg">Рознехтування цього користувача знову покаже всі повідомлення від нього.</string>
+    <string name="room_participants_action_unignore_prompt_msg">Якщо перестати нехтувати цього користувача, усі його повідомлення стануть знову видимими.</string>
     <string name="room_participants_action_unignore_title">Рознехтувати користувача</string>
     <string name="room_participants_action_ignore_prompt_msg">Нехтування цього користувача призведе до видалення його повідомлень з усіх кімнат, де ви обидва є учасниками.
 \n
@@ -1696,7 +1696,7 @@
     <string name="please_wait">Просимо зачекати…</string>
     <string name="crosssigning_verify_session">Перевірка входу</string>
     <string name="settings_active_sessions_signout_device">Вийти з цього сеансу</string>
-    <string name="verify_new_session_was_not_me">Це був не я</string>
+    <string name="verify_new_session_was_not_me">Це не я</string>
     <string name="room_profile_not_encrypted_subtitle">Повідомлення в цій кімнаті не захищено наскрізним шифруванням.</string>
     <string name="direct_room_profile_not_encrypted_subtitle">Повідомлення тут не захищено наскрізним шифруванням.</string>
     <string name="room_settings_enable_encryption">Увімкнути наскрізне шифрування…</string>
@@ -1753,7 +1753,7 @@
     <string name="room_permissions_enable_room_encryption">Вмикати шифрування кімнати</string>
     <string name="room_permissions_change_main_address_for_the_room">Змінювати основну адресу кімнати</string>
     <string name="room_permissions_change_room_avatar">Змінювати аватар кімнати</string>
-    <string name="room_permissions_modify_widgets">Змінити віджети</string>
+    <string name="room_permissions_modify_widgets">Змінити розширення</string>
     <string name="room_permissions_notify_everyone">Сповіщати всіх</string>
     <string name="room_permissions_remove_messages_sent_by_others">Вилучати повідомлення, надіслані іншими</string>
     <string name="room_permissions_ban_users">Блокувати користувачів</string>
@@ -1781,7 +1781,7 @@
     <string name="signed_out_title">Ви вийшли</string>
     <string name="message_action_item_redact">Вилучити…</string>
     <string name="send_a_sticker">Наліпка</string>
-    <string name="terms_description_for_integration_manager">Використовувати ботів, мости, віджети та пакунки наліпок</string>
+    <string name="terms_description_for_integration_manager">Використовувати ботів, мости, розширення та пакунки наліпок</string>
     <string name="no_connectivity_to_the_server_indicator">Зв\'язок із сервером втрачено</string>
     <string name="no_message_edits_found">Не знайдено жодної правки</string>
     <string name="message_edits">Історія правок</string>
@@ -2428,11 +2428,85 @@
     <string name="notice_room_server_acl_updated_ip_literals_allowed">• Сервери з відповідними літералам IP тепер дозволено.</string>
     <string name="notice_room_server_acl_updated_was_allowed">• Відповідні сервери %s було вилучено зі списку дозволених.</string>
     <string name="notice_room_server_acl_updated_allowed">• Відповідні сервери %s тепер дозволено.</string>
-    <string name="a11y_open_widget">Відкрити віджети</string>
+    <string name="a11y_open_widget">Відкрити розширення</string>
     <string name="notice_room_server_acl_updated_title">%s змінює ACL сервера для цієї кімнати.</string>
     <string name="call_remove_jitsi_widget_progress">Завершення виклику…</string>
     <string name="notice_room_server_acl_set_ip_literals_allowed">• Сервери, що з відповідними літералам IP дозволено.</string>
     <string name="notice_room_server_acl_set_allowed">• Відповідні сервери %s дозволено.</string>
     <string name="notice_room_server_acl_set_title_by_you">Ви встановили ACL сервера для цієї кімнати.</string>
     <string name="notice_room_server_acl_set_title">%s встановлює ACL сервера для цієї кімнати.</string>
+    <string name="room_list_quick_actions_room_settings">Налаштування кімнати</string>
+    <string name="attachment_viewer_item_x_of_y">%1$d з %2$d</string>
+    <string name="rotate_and_crop_screen_title">Обернути й обрізати</string>
+    <string name="error_file_too_big">Файл «%1$s» (%2$s) завеликий для вивантаження. Обмеження %3$s.</string>
+    <string name="error_file_too_big_simple">Цей файл завеликий для вивантаження.</string>
+    <string name="a11y_beta">Це бета-можливість</string>
+    <string name="a11y_hide_password">Сховати пароль</string>
+    <string name="a11y_show_password">Показати пароль</string>
+    <string name="a11y_create_room">Створити нову кімнату</string>
+    <string name="a11y_create_direct_message">Створити нову особисту бесіду</string>
+    <string name="a11y_create_menu_close">Закрити меню створення кімнати…</string>
+    <string name="a11y_create_menu_open">Відкрити меню створення кімнати</string>
+    <string name="a11y_open_drawer">Відкрити панель навігації</string>
+    <string name="send_attachment">Надіслати вкладення</string>
+    <string name="settings_text_message_sent_wrong_code">Хибний код підтвердження.</string>
+    <string name="settings_text_message_sent_hint">Код</string>
+    <string name="link_copied_to_clipboard">Посилання скопійовано в буфер обміну</string>
+    <string name="room_filtering_footer_title">Не вдалося знайти те, що ви шукаєте\?</string>
+    <string name="send_file_step_compressing_video">Стиснення відео %d%%</string>
+    <string name="send_file_step_compressing_image">Стиснення зображення…</string>
+    <string name="send_file_step_sending_thumbnail">Надсилання мініатюри (%1$s / %2$s)</string>
+    <string name="send_file_step_encrypting_thumbnail">Шифрування мініатюри…</string>
+    <string name="send_file_step_idle">Очікування…</string>
+    <string name="feedback_failed">Не вдалося надіслати відгук (%s)</string>
+    <string name="feedback_sent">Спасибі, відгук успішно надіслано</string>
+    <string name="send_feedback_space_title">Відгук про Простори</string>
+    <string name="feedback">Відгук</string>
+    <string name="push_gateway_item_format">Формат:</string>
+    <string name="push_gateway_item_url">Url:</string>
+    <string name="push_gateway_item_device_name">session_name:</string>
+    <string name="push_gateway_item_app_display_name">app_display_name:</string>
+    <string name="push_gateway_item_push_key">push_key:</string>
+    <string name="push_gateway_item_app_id">app_id:</string>
+    <string name="settings_expert">Експерт</string>
+    <string name="settings_sdk_version">Версія Matrix SDK</string>
+    <string name="create_room_federation_error">Кімнату створено, але деякі запрошення не надіслано з такої причини:
+\n
+\n%s</string>
+    <string name="create_room_public_description">Будь-хто зможе приєднатися до цієї кімнати</string>
+    <string name="event_redacted_by_admin_reason">Подія модерована адміністратором кімнати</string>
+    <string name="reactions">Реакції</string>
+    <string name="send_you_invite">Надсилає вам запрошення</string>
+    <string name="sas_error_unknown">Невідома помилка</string>
+    <string name="sas_error_m_invalid_message">Отримано хибне повідомлення</string>
+    <string name="sas_error_m_unexpected_message">Сеанс отримав несподіване повідомлення</string>
+    <string name="sas_error_m_mismatched_sas">SAS не збігається</string>
+    <string name="sas_error_m_user">Користувач скасовує перевірку</string>
+    <string name="sas_incoming_request_notif_content">%s хоче звірити сеанс</string>
+    <string name="sas_incoming_request_notif_title">Запит перевірки</string>
+    <string name="verification_request">Запит перевірки</string>
+    <string name="sas_verification_request_notification_channel">Інтерактивна перевірка сеансу</string>
+    <string name="sas_cancelled_by_me">Перевірку скасовано.
+\nПричина: %s</string>
+    <string name="sas_cancelled_by_other">Перевірку скасовано іншою стороною.
+\n%s</string>
+    <string name="sas_cancelled_dialog_title">Запит скасовано</string>
+    <string name="sas_legacy_verification_button_title">Використати застарілу перевірку.</string>
+    <string name="sas_verifying_keys">Нічого не з\'являється\? Ще не всі клієнти підтримують інтерактивну перевірку. Використовуйте застарілу перевірку.</string>
+    <string name="sas_got_it">Зрозуміло</string>
+    <string name="sas_waiting_for_partner">Очікування підтвердження партнером…</string>
+    <string name="sas_view_request_action">Переглянути запит</string>
+    <string name="sas_incoming_verification_request_dialog">Ви отримали вхідний запит перевірки.</string>
+    <string name="sas_incoming_request_title">Вхідний запит перевірки</string>
+    <string name="sas_verify_start_button_title">Почати перевірку</string>
+    <string name="keys_backup_info_keys_all_backup_up">Резервні копії всіх ключів створено</string>
+    <string name="keys_backup_banner_in_progress">Резервне копіювання ключів. Це може тривати кілька хвилин…</string>
+    <string name="verify_new_session_compromized">Ваш обліковий запис може бути зламано</string>
+    <string name="verification_scan_self_emoji_subtitle">Перевірити, порівнявши емоджі натомість</string>
+    <string name="verification_scan_emoji_title">Не вдалося сканувати</string>
+    <string name="verification_scan_with_this_device">Сканувати за допомогою цього пристрою</string>
+    <string name="verify_by_emoji_description">Якщо ви не можете сканувати код вгорі, перевірте, порівнявши короткий унікальний набір емоджі.</string>
+    <string name="verification_scan_their_code">Сканувати їхній код</string>
+    <string name="verification_scan_self_notice">Скануйте код за допомогою іншого пристрою або перемкніться та скануйте за допомогою цього пристрою</string>
+    <string name="verification_scan_notice">Зіскануйте код за допомогою пристрою іншого користувача, щоб надійно перевірити одне одного</string>
 </resources>
