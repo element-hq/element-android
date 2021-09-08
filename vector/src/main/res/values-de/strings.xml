@@ -2953,4 +2953,9 @@
     <string name="allow_anyone_in_room_to_access">Allen in %s Zugriff erlauben. Du auch mehrere Spaces auswählen.</string>
     <string name="other_spaces_or_rooms_you_might_not_know">Andere Spaces oder Räume die du kennst</string>
     <string name="space_you_know_that_contains_this_room">Spaces mit diesem Raum und dir als Mitglied</string>
+    <string name="room_settings_mention_and_keyword_only">Nur Erwähnungen &amp; Schlüsselwörter</string>
+    <string name="call_remove_jitsi_widget_progress">Auflegen…</string>
+    <string name="audio_call_with_participant">Sprachanruf mit %s</string>
+    <string name="video_call_with_participant">Videoanruf mit %s</string>
+    <string name="learn_more">Mehr erfahren</string>
 </resources>
