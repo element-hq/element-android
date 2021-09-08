@@ -903,11 +903,14 @@
     <string name="room_participants_kick_title">Kick user</string>
     <string name="room_participants_kick_reason">Reason to kick</string>
     <string name="room_participants_kick_prompt_msg">kicking user will remove them from this room.\n\nTo prevent them from joining again, you should ban them instead.</string>
+    <string name="space_participants_kick_prompt_msg">kicking user will remove them from this space.\n\nTo prevent them from joining again, you should ban them instead.</string>
     <string name="room_participants_ban_title">Ban user</string>
     <string name="room_participants_ban_reason">Reason to ban</string>
     <string name="room_participants_unban_title">Unban user</string>
     <string name="room_participants_ban_prompt_msg">Banning user will kick them from this room and prevent them from joining again.</string>
+    <string name="space_participants_ban_prompt_msg">Banning user will kick them from this space and prevent them from joining again.</string>
     <string name="room_participants_unban_prompt_msg">Unbanning user will allow them to join the room again.</string>
+    <string name="space_participants_unban_prompt_msg">Unbanning user will allow them to join the space again.</string>
 
     <string name="reason_hint">Reason</string>
 
