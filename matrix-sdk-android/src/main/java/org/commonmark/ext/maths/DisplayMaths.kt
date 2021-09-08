@@ -13,20 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.commonmark.ext.maths
 
-package org.commonmark.ext.maths;
+import org.commonmark.node.CustomBlock
 
-import org.commonmark.node.CustomBlock;
-
-public class DisplayMaths extends CustomBlock {
-    public enum DisplayDelimiter {
-        DOUBLE_DOLLAR,
-        SQUARE_BRACKET_ESCAPED
-    };
-
-    private DisplayDelimiter delimiter;
-
-    public DisplayMaths(DisplayDelimiter delimiter) {
-        this.delimiter = delimiter;
+class DisplayMaths(private val delimiter: DisplayDelimiter) : CustomBlock() {
+    enum class DisplayDelimiter {
+        DOUBLE_DOLLAR, SQUARE_BRACKET_ESCAPED
     }
 }

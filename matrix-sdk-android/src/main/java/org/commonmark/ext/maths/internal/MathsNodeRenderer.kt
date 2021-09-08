@@ -13,23 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.commonmark.ext.maths.internal
 
-package org.commonmark.ext.maths.internal;
+import org.commonmark.ext.maths.InlineMaths
+import org.commonmark.ext.maths.DisplayMaths
+import org.commonmark.ext.maths.internal.MathsNodeRenderer
+import org.commonmark.node.Node
+import org.commonmark.renderer.NodeRenderer
+import java.util.HashSet
 
-import org.commonmark.ext.maths.DisplayMaths;
-import org.commonmark.ext.maths.InlineMaths;
-import org.commonmark.node.Node;
-import org.commonmark.renderer.NodeRenderer;
-
-import java.util.HashSet;
-import java.util.Set;
-
-abstract class MathsNodeRenderer implements NodeRenderer {
-    @Override
-    public Set<Class<? extends Node>> getNodeTypes() {
-        final Set<Class<? extends Node>> types = new HashSet<Class<? extends Node>>();
-        types.add(InlineMaths.class);
-        types.add(DisplayMaths.class);
-        return types;
+abstract class MathsNodeRenderer : NodeRenderer {
+    override fun getNodeTypes(): Set<Class<out Node>> {
+        val types: MutableSet<Class<out Node>> = HashSet()
+        types.add(InlineMaths::class.java)
+        types.add(DisplayMaths::class.java)
+        return types
     }
 }
