@@ -5,6 +5,12 @@ on:
   push:
     branches: [ main, develop ]
 
+# Enrich gradle.properties for CI/CD
+env:
+  CI_GRADLE_ARG_PROPERTIES: >
+    -Porg.gradle.jvmargs=-Xmx2g
+    -Porg.gradle.parallel=false
+
 jobs:
   integration-tests:
     name: Sanity Tests (Synapse)
@@ -46,5 +52,5 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
-          script: ./gradlew -PallWarningsAsErrors=false connectedGplayDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=im.vector.app.ui.UiAllScreensSanityTest
+          script: ./gradlew $CI_GRADLE_ARG_PROPERTIES -PallWarningsAsErrors=false connectedGplayDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=im.vector.app.ui.UiAllScreensSanityTest
 
