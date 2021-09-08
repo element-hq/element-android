@@ -40,11 +40,7 @@ import kotlin.math.floor
 /**
  * Encapsulates the voice message recording view and animations.
  */
-class VoiceMessageRecorderView @JvmOverloads constructor(
-        context: Context,
-        attrs: AttributeSet? = null,
-        defStyleAttr: Int = 0
-) : ConstraintLayout(context, attrs, defStyleAttr), VoiceMessagePlaybackTracker.Listener {
+class VoiceMessageRecorderView: ConstraintLayout, VoiceMessagePlaybackTracker.Listener {
 
     interface Callback {
         // Return true if the recording is started
@@ -54,7 +50,7 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
         fun onVoicePlaybackButtonClicked()
     }
 
-    private val views: ViewVoiceMessageRecorderBinding
+    private lateinit var views: ViewVoiceMessageRecorderBinding
 
     var callback: Callback? = null
     var voiceMessagePlaybackTracker: VoiceMessagePlaybackTracker? = null
@@ -80,7 +76,17 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
     private val distanceToCancel = dimensionConverter.dpToPx(120).toFloat()
     private val rtlXMultiplier = context.resources.getInteger(R.integer.rtl_x_multiplier)
 
-    init {
+    // Don't convert to primary constructor.
+    // We need to define views as lateinit var to be able to check if initialized for the bug fix on api 21 and 22.
+    @JvmOverloads constructor(
+            context: Context,
+            attrs: AttributeSet? = null,
+            defStyleAttr: Int = 0
+    ) : super(context, attrs, defStyleAttr) {
+        initialize()
+    }
+
+    fun initialize() {
         inflate(context, R.layout.view_voice_message_recorder, this)
         views = ViewVoiceMessageRecorderBinding.bind(this)
 
@@ -90,6 +96,9 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
 
     override fun onVisibilityChanged(changedView: View, visibility: Int) {
         super.onVisibilityChanged(changedView, visibility)
+        // onVisibilityChanged is called by constructor on api 21 and 22.
+        if (!this::views.isInitialized) return
+
         if (changedView == this && visibility == VISIBLE) {
             views.voiceMessageMicButton.contentDescription = context.getString(R.string.a11y_start_voice_message)
         } else {

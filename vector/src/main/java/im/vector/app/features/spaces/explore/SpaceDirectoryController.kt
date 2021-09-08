@@ -18,8 +18,10 @@ package im.vector.app.features.spaces.explore
 
 import android.view.View
 import com.airbnb.epoxy.TypedEpoxyController
+import com.airbnb.epoxy.VisibilityState
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Incomplete
+import com.airbnb.mvrx.Uninitialized
 import im.vector.app.R
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.errorWithRetryItem
@@ -54,13 +56,15 @@ class SpaceDirectoryController @Inject constructor(
         fun onRoomClick(spaceChildInfo: SpaceChildInfo)
         fun retry()
         fun addExistingRooms(spaceId: String)
+        fun loadAdditionalItemsIfNeeded()
     }
 
     var listener: InteractionListener? = null
 
     override fun buildModels(data: SpaceDirectoryState?) {
         val host = this
-        val results = data?.spaceSummaryApiResult
+        val currentRootId = data?.hierarchyStack?.lastOrNull() ?: data?.spaceId ?: return
+        val results = data?.apiResults?.get(currentRootId)
 
         if (results is Incomplete) {
             loadingItem {
@@ -94,7 +98,9 @@ class SpaceDirectoryController @Inject constructor(
                 }
             }
         } else {
-            val flattenChildInfo = results?.invoke()
+            val hierarchySummary = results?.invoke()
+            val flattenChildInfo = hierarchySummary
+                    ?.children
                     ?.filter {
                         it.parentRoomId == (data.hierarchyStack.lastOrNull() ?: data.spaceId)
                     }
@@ -132,6 +138,7 @@ class SpaceDirectoryController @Inject constructor(
                     // if it's known use that matrixItem because it would have a better computed name
                     val matrixItem = data?.knownRoomSummaries?.find { it.roomId == info.childRoomId }?.toMatrixItem()
                             ?: info.toMatrixItem()
+
                     spaceChildInfoItem {
                         id(info.childRoomId)
                         matrixItem(matrixItem)
@@ -159,6 +166,28 @@ class SpaceDirectoryController @Inject constructor(
                             }
                         }
                         buttonClickListener { host.listener?.onButtonClick(info) }
+                    }
+                }
+            }
+            if (hierarchySummary?.nextToken != null) {
+                val paginationStatus = data.paginationStatus[currentRootId] ?: Uninitialized
+                if (paginationStatus is Fail) {
+                    errorWithRetryItem {
+                        id("error_${currentRootId}_${hierarchySummary.nextToken}")
+                        text(host.errorFormatter.toHumanReadable(paginationStatus.error))
+                        listener { host.listener?.loadAdditionalItemsIfNeeded() }
+                    }
+                } else {
+                    loadingItem {
+                        id("pagination_${currentRootId}_${hierarchySummary.nextToken}")
+                        showLoader(true)
+                        onVisibilityStateChanged { _, _, visibilityState ->
+                            // Do something with the new visibility state
+                            if (visibilityState == VisibilityState.VISIBLE) {
+                                // we can trigger a seamless load of additional items
+                                host.listener?.loadAdditionalItemsIfNeeded()
+                            }
+                        }
                     }
                 }
             }

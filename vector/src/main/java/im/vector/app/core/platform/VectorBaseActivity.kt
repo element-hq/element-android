@@ -267,6 +267,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), HasSc
                         activeSessionHolder.getActiveSession().sessionParams.homeServerHost ?: "")
             is GlobalError.CertificateError     ->
                 handleCertificateError(globalError)
+            GlobalError.ExpiredAccount          -> Unit // TODO Handle account expiration
         }.exhaustive
     }
 

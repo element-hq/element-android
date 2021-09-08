@@ -26,6 +26,7 @@ import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityVectorSettingsBinding
+import im.vector.app.features.discovery.DiscoverySettingsFragment
 import im.vector.app.features.settings.devices.VectorSettingsDevicesFragment
 import im.vector.app.features.settings.notifications.VectorSettingsNotificationPreferenceFragment
 
@@ -78,6 +79,9 @@ class VectorSettingsActivity : VectorBaseActivity<ActivityVectorSettingsBinding>
                 EXTRA_DIRECT_ACCESS_NOTIFICATIONS                    -> {
                     requestHighlightPreferenceKeyOnResume(VectorPreferences.SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY)
                     replaceFragment(R.id.vector_settings_page, VectorSettingsNotificationPreferenceFragment::class.java, null, FRAGMENT_TAG)
+                }
+                EXTRA_DIRECT_ACCESS_DISCOVERY_SETTINGS                    -> {
+                    replaceFragment(R.id.vector_settings_page, DiscoverySettingsFragment::class.java, null, FRAGMENT_TAG)
                 }
 
                 else                                                 ->
@@ -160,6 +164,7 @@ class VectorSettingsActivity : VectorBaseActivity<ActivityVectorSettingsBinding>
         const val EXTRA_DIRECT_ACCESS_SECURITY_PRIVACY_MANAGE_SESSIONS = 3
         const val EXTRA_DIRECT_ACCESS_GENERAL = 4
         const val EXTRA_DIRECT_ACCESS_NOTIFICATIONS = 5
+        const val EXTRA_DIRECT_ACCESS_DISCOVERY_SETTINGS = 6
 
         private const val FRAGMENT_TAG = "VectorSettingsPreferencesFragment"
     }

@@ -84,6 +84,7 @@ class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
     /**
      * @return alice and bob sessions
      */
+    @Suppress("EXPERIMENTAL_API_USAGE")
     fun doE2ETestWithAliceAndBobInARoom(encryptedRoom: Boolean = true): CryptoTestData {
         val cryptoTestData = doE2ETestWithAliceInARoom(encryptedRoom)
         val aliceSession = cryptoTestData.firstSession
@@ -255,6 +256,7 @@ class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
         )
     }
 
+    @Suppress("EXPERIMENTAL_API_USAGE")
     fun createDM(alice: Session, bob: Session): String {
         val roomId = mTestHelper.runBlockingTest {
             alice.createDirectRoom(bob.myUserId)

@@ -18,6 +18,7 @@ package im.vector.app.features.spaces.manage
 
 import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.ActivityViewModelContext
+import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MvRxViewModelFactory
@@ -39,6 +40,8 @@ class SpaceManageRoomsViewModel @AssistedInject constructor(
         private val session: Session
 ) : VectorViewModel<SpaceManageRoomViewState, SpaceManageRoomViewAction, SpaceManageRoomViewEvents>(initialState) {
 
+    private val paginationLimit = 10
+
     init {
         val spaceSummary = session.getRoomSummary(initialState.spaceId)
         setState {
@@ -48,16 +51,7 @@ class SpaceManageRoomsViewModel @AssistedInject constructor(
             )
         }
 
-        viewModelScope.launch(Dispatchers.IO) {
-            val apiResult = runCatchingToAsync {
-                session.spaceService().querySpaceChildren(spaceId = initialState.spaceId).second
-            }
-            setState {
-                copy(
-                        childrenInfo = apiResult
-                )
-            }
-        }
+        refreshSummaryAPI()
     }
 
     @AssistedFactory
@@ -77,21 +71,24 @@ class SpaceManageRoomsViewModel @AssistedInject constructor(
 
     override fun handle(action: SpaceManageRoomViewAction) {
         when (action) {
-            is SpaceManageRoomViewAction.ToggleSelection -> handleToggleSelection(action)
-            is SpaceManageRoomViewAction.UpdateFilter -> {
+            is SpaceManageRoomViewAction.ToggleSelection          -> handleToggleSelection(action)
+            is SpaceManageRoomViewAction.UpdateFilter             -> {
                 setState { copy(currentFilter = action.filter) }
             }
-            SpaceManageRoomViewAction.ClearSelection -> {
+            SpaceManageRoomViewAction.ClearSelection              -> {
                 setState { copy(selectedRooms = emptyList()) }
             }
-            SpaceManageRoomViewAction.BulkRemove -> {
+            SpaceManageRoomViewAction.BulkRemove                  -> {
                 handleBulkRemove()
             }
-            is SpaceManageRoomViewAction.MarkAllAsSuggested -> {
+            is SpaceManageRoomViewAction.MarkAllAsSuggested       -> {
                 handleBulkMarkAsSuggested(action.suggested)
             }
-            SpaceManageRoomViewAction.RefreshFromServer -> {
+            SpaceManageRoomViewAction.RefreshFromServer           -> {
                 refreshSummaryAPI()
+            }
+            SpaceManageRoomViewAction.LoadAdditionalItemsIfNeeded -> {
+                paginateIfNeeded()
             }
         }
     }
@@ -120,7 +117,7 @@ class SpaceManageRoomsViewModel @AssistedInject constructor(
 
     private fun handleBulkMarkAsSuggested(suggested: Boolean) = withState { state ->
         setState { copy(actionState = Loading()) }
-        val selection = state.childrenInfo.invoke()?.filter {
+        val selection = state.childrenInfo.invoke()?.children?.filter {
             state.selectedRooms.contains(it.childRoomId)
         }.orEmpty()
         session.coroutineScope.launch(Dispatchers.IO) {
@@ -131,8 +128,8 @@ class SpaceManageRoomsViewModel @AssistedInject constructor(
                             roomId = info.childRoomId,
                             viaServers = info.viaServers,
                             order = info.order,
-                            suggested = suggested,
-                            autoJoin = info.autoJoin
+                            suggested = suggested
+//                            autoJoin = info.autoJoin
                     )
                 } catch (failure: Throwable) {
                     errorList.add(failure)
@@ -156,12 +153,68 @@ class SpaceManageRoomsViewModel @AssistedInject constructor(
         }
         viewModelScope.launch(Dispatchers.IO) {
             val apiResult = runCatchingToAsync {
-                session.spaceService().querySpaceChildren(spaceId = initialState.spaceId).second
+                session.spaceService().querySpaceChildren(
+                        spaceId = initialState.spaceId,
+                        limit = paginationLimit
+                )
             }
             setState {
                 copy(
-                        childrenInfo = apiResult
+                        childrenInfo = apiResult,
+                        paginationStatus = Uninitialized,
+                        knownRoomSummaries = apiResult.invoke()?.children?.mapNotNull {
+                            session.getRoomSummary(it.childRoomId)
+                        }.orEmpty()
                 )
+            }
+        }
+    }
+
+    private fun paginateIfNeeded() = withState { state ->
+        if (state.paginationStatus is Loading) return@withState
+        val knownResults = state.childrenInfo.invoke()
+        val nextToken = knownResults?.nextToken
+        if (knownResults == null || nextToken == null) {
+            setState {
+                copy(
+                        paginationStatus = Uninitialized
+                )
+            }
+            return@withState
+        }
+        setState {
+            copy(
+                    paginationStatus = Loading()
+            )
+        }
+
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val apiResult = session.spaceService().querySpaceChildren(
+                        spaceId = initialState.spaceId,
+                        from = nextToken,
+                        knownStateList = knownResults.childrenState.orEmpty(),
+                        limit = paginationLimit
+                )
+                val newKnown = apiResult.children.mapNotNull { session.getRoomSummary(it.childRoomId) }
+                setState {
+                    copy(
+                            childrenInfo = Success(
+                                    knownResults.copy(
+                                            children = knownResults.children + apiResult.children,
+                                            nextToken = apiResult.nextToken
+                                    )
+                            ),
+                            paginationStatus = Success(Unit),
+                            knownRoomSummaries = (state.knownRoomSummaries + newKnown).distinctBy { it.roomId }
+                    )
+                }
+            } catch (failure: Throwable) {
+                setState {
+                    copy(
+                            paginationStatus = Fail(failure)
+                    )
+                }
             }
         }
     }

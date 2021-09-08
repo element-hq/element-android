@@ -17,6 +17,7 @@
 package im.vector.app.features.home.room.detail.timeline.factory
 
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
+import im.vector.app.features.home.room.detail.timeline.helper.TimelineEventsGroup
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 
 data class TimelineItemFactoryParams(
@@ -24,9 +25,14 @@ data class TimelineItemFactoryParams(
         val prevEvent: TimelineEvent? = null,
         val nextEvent: TimelineEvent? = null,
         val nextDisplayableEvent: TimelineEvent? = null,
-        val highlightedEventId: String? = null,
+        val partialState: TimelineEventController.PartialState = TimelineEventController.PartialState(),
         val lastSentEventIdWithoutReadReceipts: String? = null,
-        val callback: TimelineEventController.Callback? = null
+        val callback: TimelineEventController.Callback? = null,
+        val eventsGroup: TimelineEventsGroup? = null
 ) {
+
+    val highlightedEventId: String?
+        get() = partialState.highlightedEventId
+
     val isHighlighted = highlightedEventId == event.eventId
 }

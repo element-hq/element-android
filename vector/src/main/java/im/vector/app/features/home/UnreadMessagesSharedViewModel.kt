@@ -147,7 +147,7 @@ class UnreadMessagesSharedViewModel @AssistedInject constructor(@Assisted initia
                                     roomSummaryQueryParams {
                                         this.memberships = listOf(Membership.JOIN)
                                         this.activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(null).takeIf {
-                                            vectorPreferences.labsSpacesOnlyOrphansInHome()
+                                            !vectorPreferences.prefSpacesShowAllRoomInHome()
                                         } ?: ActiveSpaceFilter.None
                                     }
                             )

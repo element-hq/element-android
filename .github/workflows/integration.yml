@@ -6,12 +6,31 @@ on:
     branches: [ main, develop ]
 
 jobs:
+  # Temporary add build of Android tests, which cannot be run on the CI right now, but they need to at least compile
+  # So it will be mandatory for this action to be successful on every PRs
+  compile-android-test:
+    name: Compile Android tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+      - name: Compile Android tests
+        run: ./gradlew clean assembleAndroidTest --stacktrace -PallWarningsAsErrors=false
+
   integration-tests:
     name: Integration Tests (Synapse)
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
-        api-level: [21, 30]
+        api-level: [21, 28, 30]
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python 3.8

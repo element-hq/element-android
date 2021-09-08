@@ -11,6 +11,15 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent">
 
+        <im.vector.app.core.ui.views.CurrentCallsView
+            android:id="@+id/currentCallsView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/homeKeysBackupBanner"
+            tools:visibility="visible" />
+
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/groupToolbar"
             android:layout_width="match_parent"
@@ -128,41 +137,12 @@
         app:layout_constraintTop_toBottomOf="@id/syncStateView"
         tools:visibility="visible" />
 
-    <im.vector.app.core.ui.views.CurrentCallsView
-        android:id="@+id/activeCallView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/homeKeysBackupBanner"
-        tools:visibility="visible" />
-
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/roomListContainer"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
-        app:layout_constraintTop_toBottomOf="@+id/activeCallView" />
-
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/activeCallPiPWrap"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:clickable="true"
-        android:focusable="true"
-        app:cardCornerRadius="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/activeCallView">
-
-        <org.webrtc.SurfaceViewRenderer
-            android:id="@+id/activeCallPiP"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:visibility="gone"
-            tools:visibility="visible" />
-
-    </com.google.android.material.card.MaterialCardView>
+        app:layout_constraintTop_toBottomOf="@+id/homeKeysBackupBanner" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"

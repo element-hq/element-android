@@ -53,7 +53,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/layout_horizontal_margin"
         android:layout_marginEnd="@dimen/layout_horizontal_margin"
-        android:contentDescription="@string/avatar"
+        android:contentDescription="@string/remove"
         android:padding="8dp"
         android:src="@drawable/ic_delete"
         android:visibility="gone"

@@ -45,7 +45,7 @@ internal class DefaultSetRoomNotificationStateTask @Inject constructor(@SessionD
             PushRuleEntity.where(it, scope = RuleScope.GLOBAL, ruleId = params.roomId).findFirst()?.toRoomPushRule()
         }
         if (currentRoomPushRule != null) {
-            removePushRuleTask.execute(RemovePushRuleTask.Params(currentRoomPushRule.kind, currentRoomPushRule.rule))
+            removePushRuleTask.execute(RemovePushRuleTask.Params(currentRoomPushRule.kind, currentRoomPushRule.rule.ruleId))
         }
         val newRoomPushRule = params.roomNotificationState.toRoomPushRule(params.roomId)
         if (newRoomPushRule != null) {

@@ -183,6 +183,7 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
                 // not yet supported
                 _viewEvents.post(MatrixToViewEvents.Dismiss)
             }
+            is PermalinkData.RoomEmailInviteLink,
             is PermalinkData.FallbackLink -> {
                 _viewEvents.post(MatrixToViewEvents.Dismiss)
             }

@@ -30,6 +30,7 @@ import im.vector.app.features.roomdirectory.RoomDirectoryData
 import im.vector.app.features.roomdirectory.roompreview.RoomPreviewData
 import im.vector.app.features.settings.VectorSettingsActivity
 import im.vector.app.features.share.SharedData
+import org.matrix.android.sdk.api.session.permalinks.PermalinkData
 import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoom
 import org.matrix.android.sdk.api.session.terms.TermsService
 import org.matrix.android.sdk.api.session.widgets.model.Widget
@@ -65,7 +66,7 @@ interface Navigator {
 
     fun openRoomPreview(context: Context, publicRoom: PublicRoom, roomDirectoryData: RoomDirectoryData)
 
-    fun openRoomPreview(context: Context, roomPreviewData: RoomPreviewData)
+    fun openRoomPreview(context: Context, roomPreviewData: RoomPreviewData, fromEmailInviteLink: PermalinkData.RoomEmailInviteLink? = null)
 
     fun openMatrixToBottomSheet(context: Context, link: String)
 

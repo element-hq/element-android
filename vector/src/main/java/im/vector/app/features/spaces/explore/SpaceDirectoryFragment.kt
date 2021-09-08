@@ -25,6 +25,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.text.toSpannable
 import androidx.core.view.isVisible
+import com.airbnb.epoxy.EpoxyVisibilityTracker
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -72,6 +73,7 @@ class SpaceDirectoryFragment @Inject constructor(
             FragmentSpaceDirectoryBinding.inflate(layoutInflater, container, false)
 
     private val viewModel by activityViewModel(SpaceDirectoryViewModel::class)
+    private val epoxyVisibilityTracker = EpoxyVisibilityTracker()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -84,6 +86,7 @@ class SpaceDirectoryFragment @Inject constructor(
         }
         epoxyController.listener = this
         views.spaceDirectoryList.configureWith(epoxyController)
+        epoxyVisibilityTracker.attach(views.spaceDirectoryList)
 
         viewModel.selectSubscribe(this, SpaceDirectoryState::canAddRooms) {
             invalidateOptionsMenu()
@@ -95,6 +98,7 @@ class SpaceDirectoryFragment @Inject constructor(
 
     override fun onDestroyView() {
         epoxyController.listener = null
+        epoxyVisibilityTracker.detach(views.spaceDirectoryList)
         views.spaceDirectoryList.cleanup()
         super.onDestroyView()
     }
@@ -102,21 +106,20 @@ class SpaceDirectoryFragment @Inject constructor(
     override fun invalidate() = withState(viewModel) { state ->
         epoxyController.setData(state)
 
-        val currentParent = state.hierarchyStack.lastOrNull()?.let { currentParent ->
-            state.spaceSummaryApiResult.invoke()?.firstOrNull { it.childRoomId == currentParent }
-        }
+        val currentParentId = state.hierarchyStack.lastOrNull()
 
-        if (currentParent == null) {
+        if (currentParentId == null) {
+            // it's the root
             val title = getString(R.string.space_explore_activity_title)
             views.toolbar.title = title
-
-            spaceCardRenderer.render(state.spaceSummary.invoke(), emptyList(), this, views.spaceCard)
         } else {
-            val title = currentParent.name ?: currentParent.canonicalAlias ?: getString(R.string.space_explore_activity_title)
+            val title = state.currentRootSummary?.name
+                    ?: state.currentRootSummary?.canonicalAlias
+                    ?: getString(R.string.space_explore_activity_title)
             views.toolbar.title = title
-
-            spaceCardRenderer.render(currentParent, emptyList(), this, views.spaceCard)
         }
+
+        spaceCardRenderer.render(state.currentRootSummary, emptyList(), this, views.spaceCard)
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) = withState(viewModel) { state ->
@@ -170,6 +173,10 @@ class SpaceDirectoryFragment @Inject constructor(
         addExistingRoomActivityResult.launch(SpaceManageActivity.newIntent(requireContext(), spaceId, ManageType.AddRooms))
     }
 
+    override fun loadAdditionalItemsIfNeeded() {
+        viewModel.handle(SpaceDirectoryViewAction.LoadAdditionalItemsIfNeeded)
+    }
+
     override fun onUrlClicked(url: String, title: String): Boolean {
         permalinkHandler
                 .launch(requireActivity(), url, null)
@@ -206,7 +213,4 @@ class SpaceDirectoryFragment @Inject constructor(
         // nothing?
         return false
     }
-//    override fun navigateToRoom(roomId: String) {
-//        viewModel.handle(SpaceDirectoryViewAction.NavigateToRoom(roomId))
-//    }
 }

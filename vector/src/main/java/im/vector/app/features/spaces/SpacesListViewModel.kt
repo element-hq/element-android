@@ -121,7 +121,7 @@ class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: Sp
                 roomSummaryQueryParams {
                     this.memberships = listOf(Membership.JOIN)
                     this.activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(null).takeIf {
-                        vectorPreferences.labsSpacesOnlyOrphansInHome()
+                        !vectorPreferences.prefSpacesShowAllRoomInHome()
                     } ?: ActiveSpaceFilter.None
                 }, sortOrder = RoomSortOrder.NONE
         ).asObservable()
@@ -139,7 +139,7 @@ class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: Sp
                             roomSummaryQueryParams {
                                 this.memberships = listOf(Membership.JOIN)
                                 this.activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(null).takeIf {
-                                    vectorPreferences.labsSpacesOnlyOrphansInHome()
+                                    !vectorPreferences.prefSpacesShowAllRoomInHome()
                                 } ?: ActiveSpaceFilter.None
                             }
                     )
