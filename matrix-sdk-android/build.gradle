@@ -14,12 +14,12 @@ buildscript {
 }
 
 android {
-    compileSdkVersion 30
+    compileSdk 30
     testOptions.unitTests.includeAndroidResources = true
 
     defaultConfig {
-        minSdkVersion 21
-        targetSdkVersion 30
+        minSdk 21
+        targetSdk 30
 
         // Multidex is useful for tests
         multiDexEnabled true
