@@ -622,11 +622,13 @@ class MessageItemFactory @Inject constructor(
                 .highlighted(highlight)
     }
 
-    private fun List<Int>?.toFft(): List<Int>? {
-        return this?.map {
-            // Value comes from AudioRecordView.maxReportableAmp, and 1024 is the max value in the Matrix spec
-            it * 22760 / 1024
-        }
+    private fun List<Int?>?.toFft(): List<Int>? {
+        return this
+                ?.filterNotNull()
+                ?.map {
+                    // Value comes from AudioRecordView.maxReportableAmp, and 1024 is the max value in the Matrix spec
+                    it * 22760 / 1024
+                }
     }
 
     companion object {

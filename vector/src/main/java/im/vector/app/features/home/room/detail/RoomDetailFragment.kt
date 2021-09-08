@@ -16,7 +16,6 @@
 
 package im.vector.app.features.home.room.detail
 
-import android.animation.ArgbEvaluator
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
@@ -66,7 +65,6 @@ import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
-import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.jakewharton.rxbinding3.view.focusChanges
 import com.jakewharton.rxbinding3.widget.textChanges
@@ -93,6 +91,7 @@ import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.ui.views.CurrentCallsView
 import im.vector.app.core.ui.views.CurrentCallsViewPresenter
 import im.vector.app.core.ui.views.FailedMessagesWarningView
+import im.vector.app.core.ui.views.JoinConferenceView
 import im.vector.app.core.ui.views.NotificationAreaView
 import im.vector.app.core.utils.Debouncer
 import im.vector.app.core.utils.DimensionConverter
@@ -217,7 +216,6 @@ import java.net.URL
 import java.util.UUID
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
-import android.animation.ValueAnimator
 
 @Parcelize
 data class RoomDetailArgs(
@@ -869,20 +867,8 @@ class RoomDetailFragment @Inject constructor(
             }
         }
         val joinConfItem = menu.findItem(R.id.join_conference)
-        joinConfItem.actionView.findViewById<MaterialButton>(R.id.join_conference_button).also { joinButton ->
-            joinButton.setOnClickListener { roomDetailViewModel.handle(RoomDetailAction.JoinJitsiCall) }
-            val colorFrom = ContextCompat.getColor(joinButton.context, R.color.palette_element_green)
-            val colorTo = ContextCompat.getColor(joinButton.context, R.color.join_conference_animated_color)
-            // Animate button color to highlight
-            ValueAnimator.ofObject(ArgbEvaluator(), colorFrom, colorTo).apply {
-                repeatMode = ValueAnimator.REVERSE
-                repeatCount = ValueAnimator.INFINITE
-                duration = 500
-                addUpdateListener { animator ->
-                    val color = animator.animatedValue as Int
-                    joinButton.setBackgroundColor(color)
-                }
-            }.start()
+        (joinConfItem.actionView as? JoinConferenceView)?.onJoinClicked = {
+            roomDetailViewModel.handle(RoomDetailAction.JoinJitsiCall)
         }
     }
 
