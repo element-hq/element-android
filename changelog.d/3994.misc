@@ -1,0 +1,1 @@
+Better support for Sdk2 version. Also slight change in the default user agent: `MatrixAndroidSDK_X` is replaced by `MatrixAndroidSdk2`
