@@ -56,9 +56,9 @@ platform :android do
     upload_to_play_store(
         # apk: lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH]
         track: 'beta',
-        skip_upload_metadata = false,
-        skip_upload_images = true,
-        skip_upload_screenshots = true
+        skip_upload_metadata: false,
+        skip_upload_images: true,
+        skip_upload_screenshots: true
     )
   end
 end
