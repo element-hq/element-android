@@ -19,6 +19,7 @@ package im.vector.app.features.home.room.detail
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
@@ -26,6 +27,7 @@ import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.sync.SyncState
 import org.matrix.android.sdk.api.session.widgets.model.Widget
+import org.matrix.android.sdk.api.session.widgets.model.WidgetType
 
 /**
  * Describes the current send mode:
@@ -55,6 +57,14 @@ sealed class UnreadState {
     data class HasUnread(val firstUnreadEventId: String) : UnreadState()
 }
 
+data class JitsiState(
+        val hasJoined: Boolean = false,
+        // Not null if we have an active jitsi widget on the room
+        val confId: String? = null,
+        val widgetId: String? = null,
+        val deleteWidgetInProgress: Boolean = false
+)
+
 data class RoomDetailViewState(
         val roomId: String,
         val eventId: String?,
@@ -75,7 +85,8 @@ data class RoomDetailViewState(
         val canInvite: Boolean = true,
         val isAllowedToManageWidgets: Boolean = false,
         val isAllowedToStartWebRTCCall: Boolean = true,
-        val hasFailedSending: Boolean = false
+        val hasFailedSending: Boolean = false,
+        val jitsiState: JitsiState = JitsiState()
 ) : MvRxState {
 
     constructor(args: RoomDetailArgs) : this(
@@ -84,6 +95,12 @@ data class RoomDetailViewState(
             // Also highlight the target event, if any
             highlightedEventId = args.eventId
     )
+
+    fun isWebRTCCallOptionAvailable() = (asyncRoomSummary.invoke()?.joinedMembersCount ?: 0) <= 2
+
+    // This checks directly on the active room widgets.
+    // It can differs for a short period of time on the JitsiState as its computed async.
+    fun hasActiveJitsiWidget() = activeRoomWidgets()?.any { it.type == WidgetType.Jitsi && it.isActive }.orFalse()
 
     fun isDm() = asyncRoomSummary()?.isDirect == true
 }

@@ -15,6 +15,8 @@
  */
 package org.matrix.android.sdk.internal.session.notification
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Transformations
 import com.zhuinden.monarchy.Monarchy
 import org.matrix.android.sdk.api.pushrules.Action
 import org.matrix.android.sdk.api.pushrules.PushRuleService
@@ -26,6 +28,7 @@ import org.matrix.android.sdk.api.pushrules.rest.PushRule
 import org.matrix.android.sdk.api.pushrules.rest.RuleSet
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.internal.database.mapper.PushRulesMapper
+import org.matrix.android.sdk.internal.database.model.PushRuleEntity
 import org.matrix.android.sdk.internal.database.model.PushRulesEntity
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase
@@ -117,8 +120,8 @@ internal class DefaultPushRuleService @Inject constructor(
         updatePushRuleActionsTask.execute(UpdatePushRuleActionsTask.Params(kind, ruleId, enable, actions))
     }
 
-    override suspend fun removePushRule(kind: RuleKind, pushRule: PushRule) {
-        removePushRuleTask.execute(RemovePushRuleTask.Params(kind, pushRule))
+    override suspend fun removePushRule(kind: RuleKind, ruleId: String) {
+        removePushRuleTask.execute(RemovePushRuleTask.Params(kind, ruleId))
     }
 
     override fun removePushRuleListener(listener: PushRuleService.PushRuleListener) {
@@ -209,6 +212,21 @@ internal class DefaultPushRuleService @Inject constructor(
                     Timber.e(e, "Error while dispatching finish")
                 }
             }
+        }
+    }
+
+    override fun getKeywords(): LiveData<Set<String>> {
+        // Keywords are all content rules that don't start with '.'
+        val liveData = monarchy.findAllMappedWithChanges(
+                { realm ->
+                    PushRulesEntity.where(realm, RuleScope.GLOBAL, RuleSetKey.CONTENT)
+                },
+                { result ->
+                    result.pushRules.map(PushRuleEntity::ruleId).filter { !it.startsWith(".") }
+                }
+        )
+        return Transformations.map(liveData) { results ->
+            results.firstOrNull().orEmpty().toSet()
         }
     }
 }

@@ -88,10 +88,10 @@ import im.vector.app.core.intent.getMimeTypeFromUri
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.platform.showOptimizedSnackbar
 import im.vector.app.core.resources.ColorProvider
-import im.vector.app.core.ui.views.ActiveConferenceView
 import im.vector.app.core.ui.views.CurrentCallsView
+import im.vector.app.core.ui.views.CurrentCallsViewPresenter
 import im.vector.app.core.ui.views.FailedMessagesWarningView
-import im.vector.app.core.ui.views.KnownCallsViewHolder
+import im.vector.app.core.ui.views.JoinConferenceView
 import im.vector.app.core.ui.views.NotificationAreaView
 import im.vector.app.core.utils.Debouncer
 import im.vector.app.core.utils.DimensionConverter
@@ -123,6 +123,8 @@ import im.vector.app.features.attachments.preview.AttachmentsPreviewArgs
 import im.vector.app.features.attachments.toGroupedContentAttachmentData
 import im.vector.app.features.call.SharedKnownCallsViewModel
 import im.vector.app.features.call.VectorCallActivity
+import im.vector.app.features.call.conference.JitsiBroadcastEmitter
+import im.vector.app.features.call.conference.JitsiBroadcastEventObserver
 import im.vector.app.features.call.conference.JitsiCallViewModel
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.command.Command
@@ -184,6 +186,7 @@ import nl.dionsegijn.konfetti.models.Shape
 import nl.dionsegijn.konfetti.models.Size
 import org.billcarsonfr.jsonviewer.JSonViewerDialog
 import org.commonmark.parser.Parser
+import org.jitsi.meet.sdk.BroadcastEvent
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
@@ -311,7 +314,7 @@ class RoomDetailFragment @Inject constructor(
     private lateinit var attachmentTypeSelector: AttachmentTypeSelectorView
 
     private var lockSendButton = false
-    private val knownCallsViewHolder = KnownCallsViewHolder()
+    private val currentCallsViewPresenter = CurrentCallsViewPresenter()
 
     private lateinit var emojiPopup: EmojiPopup
 
@@ -325,6 +328,7 @@ class RoomDetailFragment @Inject constructor(
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        lifecycle.addObserver(JitsiBroadcastEventObserver(vectorBaseActivity, this::onBroadcastJitsiEvent))
         super.onViewCreated(view, savedInstanceState)
         sharedActionViewModel = activityViewModelProvider.get(MessageSharedActionViewModel::class.java)
         knownCallsViewModel = activityViewModelProvider.get(SharedKnownCallsViewModel::class.java)
@@ -348,9 +352,9 @@ class RoomDetailFragment @Inject constructor(
         setupJumpToReadMarkerView()
         setupActiveCallView()
         setupJumpToBottomView()
-        setupConfBannerView()
         setupEmojiPopup()
         setupFailedMessagesWarningView()
+        setupRemoveJitsiWidgetView()
         setupVoiceMessageView()
 
         views.roomToolbarContentView.debouncedClicks {
@@ -367,7 +371,7 @@ class RoomDetailFragment @Inject constructor(
         knownCallsViewModel
                 .liveKnownCalls
                 .observe(viewLifecycleOwner, {
-                    knownCallsViewHolder.updateCall(callManager.getCurrentCall(), it)
+                    currentCallsViewPresenter.updateCall(callManager.getCurrentCall(), it)
                     invalidateOptionsMenu()
                 })
 
@@ -416,6 +420,7 @@ class RoomDetailFragment @Inject constructor(
                 RoomDetailViewEvents.OpenActiveWidgetBottomSheet         -> onViewWidgetsClicked()
                 is RoomDetailViewEvents.ShowInfoOkDialog                 -> showDialogWithMessage(it.message)
                 is RoomDetailViewEvents.JoinJitsiConference              -> joinJitsiRoom(it.widget, it.withVideo)
+                RoomDetailViewEvents.LeaveJitsiConference                -> leaveJitsiConference()
                 RoomDetailViewEvents.ShowWaitingView                     -> vectorBaseActivity.showWaitingView()
                 RoomDetailViewEvents.HideWaitingView                     -> vectorBaseActivity.hideWaitingView()
                 is RoomDetailViewEvents.RequestNativeWidgetPermission    -> requestNativeWidgetPermission(it)
@@ -438,6 +443,26 @@ class RoomDetailFragment @Inject constructor(
             handleShareData()
             handleSpaceShare()
         }
+    }
+
+    private fun setupRemoveJitsiWidgetView() {
+        views.removeJitsiWidgetView.onCompleteSliding = {
+            withState(roomDetailViewModel) {
+                val jitsiWidgetId = it.jitsiState.widgetId ?: return@withState
+                if (it.jitsiState.hasJoined) {
+                    leaveJitsiConference()
+                }
+                roomDetailViewModel.handle(RoomDetailAction.RemoveWidget(jitsiWidgetId))
+            }
+        }
+    }
+
+    private fun leaveJitsiConference() {
+        JitsiBroadcastEmitter(vectorBaseActivity).emitConferenceEnded()
+    }
+
+    private fun onBroadcastJitsiEvent(jitsiEvent: BroadcastEvent) {
+        roomDetailViewModel.handle(RoomDetailAction.UpdateJoinJitsiCallStatus(jitsiEvent))
     }
 
     private fun onCannotRecord() {
@@ -561,31 +586,6 @@ class RoomDetailFragment @Inject constructor(
                 integId = null,
                 screen = screen
         )
-    }
-
-    private fun setupConfBannerView() {
-        views.activeConferenceView.callback = object : ActiveConferenceView.Callback {
-            override fun onTapJoinAudio(jitsiWidget: Widget) {
-                // need to check if allowed first
-                roomDetailViewModel.handle(RoomDetailAction.EnsureNativeWidgetAllowed(
-                        widget = jitsiWidget,
-                        userJustAccepted = false,
-                        grantedEvents = RoomDetailViewEvents.JoinJitsiConference(jitsiWidget, false))
-                )
-            }
-
-            override fun onTapJoinVideo(jitsiWidget: Widget) {
-                roomDetailViewModel.handle(RoomDetailAction.EnsureNativeWidgetAllowed(
-                        widget = jitsiWidget,
-                        userJustAccepted = false,
-                        grantedEvents = RoomDetailViewEvents.JoinJitsiConference(jitsiWidget, true))
-                )
-            }
-
-            override fun onDelete(jitsiWidget: Widget) {
-                roomDetailViewModel.handle(RoomDetailAction.RemoveWidget(jitsiWidget.widgetId))
-            }
-        }
     }
 
     private fun setupEmojiPopup() {
@@ -773,7 +773,7 @@ class RoomDetailFragment @Inject constructor(
     override fun onDestroyView() {
         timelineEventController.callback = null
         timelineEventController.removeModelBuildListener(modelBuildListener)
-        views.activeCallView.callback = null
+        currentCallsViewPresenter.unBind()
         modelBuildListener = null
         autoCompleter.clear()
         debouncer.cancelAll()
@@ -784,7 +784,6 @@ class RoomDetailFragment @Inject constructor(
     }
 
     override fun onDestroy() {
-        knownCallsViewHolder.unBind()
         roomDetailViewModel.handle(RoomDetailAction.ExitTrackingUnreadMessagesState)
         super.onDestroy()
     }
@@ -821,12 +820,7 @@ class RoomDetailFragment @Inject constructor(
     }
 
     private fun setupActiveCallView() {
-        knownCallsViewHolder.bind(
-                views.activeCallPiP,
-                views.activeCallView,
-                views.activeCallPiPWrap,
-                this
-        )
+        currentCallsViewPresenter.bind(views.currentCallsView, this)
     }
 
     private fun navigateToEvent(action: RoomDetailViewEvents.NavigateToEvent) {
@@ -882,6 +876,10 @@ class RoomDetailFragment @Inject constructor(
                 onOptionsItemSelected(menuItem)
             }
         }
+        val joinConfItem = menu.findItem(R.id.join_conference)
+        (joinConfItem.actionView as? JoinConferenceView)?.onJoinClicked = {
+            roomDetailViewModel.handle(RoomDetailAction.JoinJitsiCall)
+        }
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
@@ -890,7 +888,8 @@ class RoomDetailFragment @Inject constructor(
         }
         withState(roomDetailViewModel) { state ->
             // Set the visual state of the call buttons (voice/video) to enabled/disabled according to user permissions
-            val callButtonsEnabled = when (state.asyncRoomSummary.invoke()?.joinedMembersCount) {
+            val hasCallInRoom = callManager.getCallsByRoomId(state.roomId).isNotEmpty() || state.jitsiState.hasJoined
+            val callButtonsEnabled = !hasCallInRoom && when (state.asyncRoomSummary.invoke()?.joinedMembersCount) {
                 1    -> false
                 2    -> state.isAllowedToStartWebRTCCall
                 else -> state.isAllowedToManageWidgets
@@ -901,14 +900,8 @@ class RoomDetailFragment @Inject constructor(
 
             val matrixAppsMenuItem = menu.findItem(R.id.open_matrix_apps)
             val widgetsCount = state.activeRoomWidgets.invoke()?.size ?: 0
-            if (widgetsCount > 0) {
-                val actionView = matrixAppsMenuItem.actionView
-                actionView
-                        .findViewById<ImageView>(R.id.action_view_icon_image)
-                        .setColorFilter(colorProvider.getColorFromAttribute(R.attr.colorPrimary))
-                actionView.findViewById<TextView>(R.id.cart_badge).setTextOrHide("$widgetsCount")
-                matrixAppsMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
-            } else {
+            val hasOnlyJitsiWidget = widgetsCount == 1 && state.hasActiveJitsiWidget()
+            if (widgetsCount == 0 || hasOnlyJitsiWidget) {
                 // icon should be default color no badge
                 val actionView = matrixAppsMenuItem.actionView
                 actionView
@@ -916,6 +909,13 @@ class RoomDetailFragment @Inject constructor(
                         .setColorFilter(ThemeUtils.getColor(requireContext(), R.attr.vctr_content_secondary))
                 actionView.findViewById<TextView>(R.id.cart_badge).isVisible = false
                 matrixAppsMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
+            } else {
+                val actionView = matrixAppsMenuItem.actionView
+                actionView
+                        .findViewById<ImageView>(R.id.action_view_icon_image)
+                        .setColorFilter(colorProvider.getColorFromAttribute(R.attr.colorPrimary))
+                actionView.findViewById<TextView>(R.id.cart_badge).setTextOrHide("$widgetsCount")
+                matrixAppsMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
             }
         }
     }
@@ -940,10 +940,6 @@ class RoomDetailFragment @Inject constructor(
             }
             R.id.video_call       -> {
                 callActionsHandler.onVideoCallClicked()
-                true
-            }
-            R.id.hangup_call      -> {
-                roomDetailViewModel.handle(RoomDetailAction.EndCall)
                 true
             }
             R.id.show_participants -> {
@@ -1391,7 +1387,7 @@ class RoomDetailFragment @Inject constructor(
         invalidateOptionsMenu()
         val summary = state.asyncRoomSummary()
         renderToolbar(summary, state.typingMessage)
-        views.activeConferenceView.render(state)
+        views.removeJitsiWidgetView.render(state)
         views.failedMessagesWarningView.render(state.hasFailedSending)
         val inviter = state.asyncInviter()
         if (summary?.membership == Membership.JOIN) {

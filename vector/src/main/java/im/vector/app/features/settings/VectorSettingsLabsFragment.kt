@@ -58,12 +58,5 @@ class VectorSettingsLabsFragment @Inject constructor(
         findPreference<VectorSwitchPreference>(VectorPreferences.SETTINGS_ALLOW_URL_PREVIEW_IN_ENCRYPTED_ROOM_KEY)?.isEnabled = vectorPreferences.showUrlPreviews()
 
         findPreference<VectorSwitchPreference>(VectorPreferences.SETTINGS_VOICE_MESSAGE)?.isEnabled = Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP
-
-        findPreference<VectorSwitchPreference>(VectorPreferences.SETTINGS_LABS_SPACES_HOME_AS_ORPHAN)!!.let { pref ->
-            pref.setOnPreferenceChangeListener { _, _ ->
-                MainActivity.restartApp(requireActivity(), MainActivityArgs(clearCache = false))
-                true
-            }
-        }
     }
 }

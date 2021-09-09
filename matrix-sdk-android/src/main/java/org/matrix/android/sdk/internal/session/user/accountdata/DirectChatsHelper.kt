@@ -21,6 +21,7 @@ import org.matrix.android.sdk.internal.database.query.getDirectRooms
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import io.realm.Realm
 import io.realm.RealmConfiguration
+import org.matrix.android.sdk.internal.session.sync.model.accountdata.DirectMessagesContent
 import javax.inject.Inject
 
 internal class DirectChatsHelper @Inject constructor(@SessionDatabase
@@ -29,7 +30,7 @@ internal class DirectChatsHelper @Inject constructor(@SessionDatabase
     /**
      * @return a map of userId <-> list of roomId
      */
-    fun getLocalUserAccount(filterRoomId: String? = null): MutableMap<String, MutableList<String>> {
+    fun getLocalDirectMessages(filterRoomId: String? = null): DirectMessagesContent {
         return Realm.getInstance(realmConfiguration).use { realm ->
             // Makes sure we have the latest realm updates, this is important as we sent this information to the server.
             realm.refresh()

@@ -29,7 +29,9 @@ import timber.log.Timber
 data class RoomJoinRulesContent(
         @Json(name = "join_rule") val _joinRules: String? = null,
         /**
-         * If the allow key is an empty list (or not a list at all), then the room reverts to standard public join rules
+         * If the allow key is an empty list (or not a list at all),
+         * then no users are allowed to join without an invite.
+         * Each entry is expected to be an object with the following keys:
          */
         @Json(name = "allow") val allowList: List<RoomJoinRulesAllowEntry>? = null
 ) {

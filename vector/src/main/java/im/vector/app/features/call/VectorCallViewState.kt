@@ -35,7 +35,7 @@ data class VectorCallViewState(
         val isHD: Boolean = false,
         val isFrontCamera: Boolean = true,
         val canSwitchCamera: Boolean = true,
-        val device: CallAudioManager.Device = CallAudioManager.Device.PHONE,
+        val device: CallAudioManager.Device = CallAudioManager.Device.Phone,
         val availableDevices: Set<CallAudioManager.Device> = emptySet(),
         val callState: Async<CallState> = Uninitialized,
         val otherKnownCallInfo: CallInfo? = null,

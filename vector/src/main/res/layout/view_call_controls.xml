@@ -58,23 +58,25 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="16dp"
-        android:paddingStart="32dp"
-        android:paddingEnd="32dp"
+        android:paddingStart="0dp"
+        android:paddingEnd="0dp"
         android:visibility="gone"
         tools:background="@color/password_strength_bar_low"
         tools:layout_marginTop="120dp"
         tools:visibility="visible">
 
         <ImageView
-            android:id="@+id/openChatIcon"
-            android:layout_width="@dimen/layout_touch_size"
-            android:layout_height="@dimen/layout_touch_size"
+            android:id="@+id/audioSettingsIcon"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
             android:background="@drawable/bg_rounded_button"
             android:clickable="true"
-            android:contentDescription="@string/a11y_open_chat"
+            android:contentDescription="@string/call_select_sound_device"
             android:focusable="true"
             android:scaleType="center"
-            android:src="@drawable/ic_call_pip"
+            android:src="@drawable/ic_call_audio_settings"
+            app:backgroundTint="?android:colorBackground"
+            app:tint="?vctr_content_primary"
             tools:ignore="MissingConstraints,MissingPrefix" />
 
         <ImageView
@@ -85,8 +87,23 @@
             android:clickable="true"
             android:contentDescription="@string/a11y_mute_microphone"
             android:focusable="true"
-            android:padding="16dp"
-            android:src="@drawable/ic_microphone_off"
+            android:padding="12dp"
+            android:src="@drawable/ic_mic_off"
+            app:backgroundTint="?android:colorBackground"
+            app:tint="?vctr_content_primary"
+            tools:ignore="MissingConstraints,MissingPrefix" />
+
+
+        <ImageView
+            android:id="@+id/videoToggleIcon"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:background="@drawable/bg_rounded_button"
+            android:clickable="true"
+            android:contentDescription="@string/a11y_stop_camera"
+            android:focusable="true"
+            android:padding="12dp"
+            android:src="@drawable/ic_video"
             app:backgroundTint="?android:colorBackground"
             app:tint="?vctr_content_primary"
             tools:ignore="MissingConstraints,MissingPrefix" />
@@ -106,23 +123,10 @@
             tools:ignore="MissingConstraints,MissingPrefix" />
 
         <ImageView
-            android:id="@+id/videoToggleIcon"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:background="@drawable/bg_rounded_button"
-            android:clickable="true"
-            android:contentDescription="@string/a11y_stop_camera"
-            android:focusable="true"
-            android:padding="16dp"
-            android:src="@drawable/ic_call_videocam_off_default"
-            app:backgroundTint="?android:colorBackground"
-            app:tint="?vctr_content_primary"
-            tools:ignore="MissingConstraints,MissingPrefix" />
-
-        <ImageView
             android:id="@+id/moreIcon"
             android:layout_width="@dimen/layout_touch_size"
             android:layout_height="@dimen/layout_touch_size"
+            android:layout_marginTop="8dp"
             android:background="@drawable/bg_rounded_button"
             android:clickable="true"
             android:contentDescription="@string/settings"
@@ -135,9 +139,10 @@
         <androidx.constraintlayout.helper.widget.Flow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:constraint_referenced_ids="openChatIcon, muteIcon, endCallIcon,videoToggleIcon,moreIcon"
+            app:constraint_referenced_ids="videoToggleIcon, audioSettingsIcon, muteIcon, endCallIcon, moreIcon"
             app:flow_horizontalGap="16dp"
             app:flow_horizontalStyle="packed"
+            app:flow_wrapMode="chain"
             tools:ignore="MissingConstraints" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -39,6 +39,7 @@ import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.members.roomMemberQueryParams
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.ReferencesAggregatedContent
+import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.message.MessageVerificationRequestContent
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
@@ -54,7 +55,6 @@ import javax.inject.Inject
  * This class compute if data of an event (such has avatar, display name, ...) should be displayed, depending on the previous event in the timeline
  */
 class MessageInformationDataFactory @Inject constructor(private val session: Session,
-                                                        private val roomSummariesHolder: RoomSummariesHolder,
                                                         private val powerLevelsHolder: PowerLevelsHolder,
                                                         private val dateFormatter: VectorDateFormatter,
                                                         private val context: Context,
@@ -82,12 +82,12 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
                         || nextDisplayableEvent.isEdition()
 
         val time = dateFormatter.format(event.root.originServerTs, DateFormatKind.MESSAGE_SIMPLE)
-        val e2eDecoration = getE2EDecoration(event)
+        val roomSummary = params.partialState.roomSummary
+        val e2eDecoration = getE2EDecoration(roomSummary, event)
 
         // Sometimes, member information is not available at this point yet, so let's completely rely on the DM flag for now.
         // Since this can change while processing multiple messages in the same chat, we want to stick to information that is always available,
         // instead of mixing different layouts in the same chat.
-        val roomSummary = roomSummariesHolder.get(event.roomId)
         if (roomSummary == null) {
             Timber.e("Room summary not available for determining DM status")
         }
@@ -198,8 +198,7 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
         }
     }
 
-    private fun getE2EDecoration(event: TimelineEvent): E2EDecoration {
-        val roomSummary = roomSummariesHolder.get(event.roomId)
+    private fun getE2EDecoration(roomSummary: RoomSummary?, event: TimelineEvent): E2EDecoration {
         return if (
                 event.root.sendState == SendState.SYNCED
                 && roomSummary?.isEncrypted.orFalse()

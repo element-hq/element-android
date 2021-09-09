@@ -52,6 +52,7 @@ import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.internal.session.identity.model.SignInvitationResult
 import timber.log.Timber
 import javax.inject.Inject
 import javax.net.ssl.HttpsURLConnection
@@ -79,6 +80,7 @@ internal class DefaultIdentityService @Inject constructor(
         private val identityApiProvider: IdentityApiProvider,
         private val accountDataDataSource: UserAccountDataDataSource,
         private val homeServerCapabilitiesService: HomeServerCapabilitiesService,
+        private val sign3pidInvitationTask: DefaultSign3pidInvitationTask,
         private val sessionParams: SessionParams
 ) : IdentityService, SessionLifecycleObserver {
 
@@ -288,6 +290,14 @@ internal class DefaultIdentityService @Inject constructor(
         val token = identityRegisterTask.execute(IdentityRegisterTask.Params(api, openIdToken))
 
         return token.token
+    }
+
+    override suspend fun sign3pidInvitation(identiyServer: String, token: String, secret: String): SignInvitationResult {
+        return sign3pidInvitationTask.execute(Sign3pidInvitationTask.Params(
+                url = identiyServer,
+                token = token,
+                privateKey = secret
+        ))
     }
 
     override fun addListener(listener: IdentityServiceListener) {

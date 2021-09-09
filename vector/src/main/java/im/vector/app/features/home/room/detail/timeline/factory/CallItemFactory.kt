@@ -16,127 +16,122 @@
 package im.vector.app.features.home.room.detail.timeline.factory
 
 import im.vector.app.core.epoxy.VectorEpoxyModel
-import im.vector.app.features.call.vectorCallService
-import im.vector.app.features.call.webrtc.WebRtcCallManager
+import im.vector.app.core.resources.UserPreferencesProvider
 import im.vector.app.features.home.room.detail.timeline.MessageColorProvider
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.helper.AvatarSizeProvider
+import im.vector.app.features.home.room.detail.timeline.helper.CallSignalingEventsGroup
 import im.vector.app.features.home.room.detail.timeline.helper.MessageInformationDataFactory
 import im.vector.app.features.home.room.detail.timeline.helper.MessageItemAttributesFactory
-import im.vector.app.features.home.room.detail.timeline.helper.RoomSummariesHolder
 import im.vector.app.features.home.room.detail.timeline.item.CallTileTimelineItem
 import im.vector.app.features.home.room.detail.timeline.item.CallTileTimelineItem_
 import im.vector.app.features.home.room.detail.timeline.item.MessageInformationData
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
-import org.matrix.android.sdk.api.session.events.model.toModel
-import org.matrix.android.sdk.api.session.room.model.call.CallAnswerContent
-import org.matrix.android.sdk.api.session.room.model.call.CallHangupContent
-import org.matrix.android.sdk.api.session.room.model.call.CallInviteContent
-import org.matrix.android.sdk.api.session.room.model.call.CallRejectContent
-import org.matrix.android.sdk.api.session.room.model.call.CallSignalingContent
-import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
+import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
 class CallItemFactory @Inject constructor(
         private val session: Session,
+        private val userPreferencesProvider: UserPreferencesProvider,
         private val messageColorProvider: MessageColorProvider,
         private val messageInformationDataFactory: MessageInformationDataFactory,
         private val messageItemAttributesFactory: MessageItemAttributesFactory,
         private val avatarSizeProvider: AvatarSizeProvider,
-        private val roomSummariesHolder: RoomSummariesHolder,
-        private val callManager: WebRtcCallManager
-) {
+        private val noticeItemFactory: NoticeItemFactory) {
 
     fun create(params: TimelineItemFactoryParams): VectorEpoxyModel<*>? {
         val event = params.event
         if (event.root.eventId == null) return null
-        val roomId = event.roomId
+        val showHiddenEvents = userPreferencesProvider.shouldShowHiddenEvents()
+        val callEventGrouper = params.eventsGroup?.let { CallSignalingEventsGroup(it) } ?: return null
+        val roomSummary = params.partialState.roomSummary ?: return null
         val informationData = messageInformationDataFactory.create(params)
-        val callSignalingContent = event.getCallSignalingContent() ?: return null
-        val callId = callSignalingContent.callId ?: return null
-        val call = callManager.getCallById(callId)
-        val callKind = when {
-            call == null            -> CallTileTimelineItem.CallKind.UNKNOWN
-            call.mxCall.isVideoCall -> CallTileTimelineItem.CallKind.VIDEO
-            else                    -> CallTileTimelineItem.CallKind.AUDIO
-        }
-        return when (event.root.getClearType()) {
+        val callKind = if (callEventGrouper.isVideo()) CallTileTimelineItem.CallKind.VIDEO else CallTileTimelineItem.CallKind.AUDIO
+        val callItem = when (event.root.getClearType()) {
             EventType.CALL_ANSWER -> {
-                createCallTileTimelineItem(
-                        roomId = roomId,
-                        callId = callId,
-                        callStatus = CallTileTimelineItem.CallStatus.IN_CALL,
-                        callKind = callKind,
-                        callback = params.callback,
-                        highlight = params.isHighlighted,
-                        informationData = informationData,
-                        isStillActive = call != null
-                )
+                if (callEventGrouper.isInCall()) {
+                    createCallTileTimelineItem(
+                            roomSummary = roomSummary,
+                            callId = callEventGrouper.callId,
+                            callStatus = CallTileTimelineItem.CallStatus.IN_CALL,
+                            callKind = callKind,
+                            callback = params.callback,
+                            highlight = params.isHighlighted,
+                            informationData = informationData,
+                            isStillActive = callEventGrouper.isInCall(),
+                            formattedDuration = callEventGrouper.formattedDuration()
+                    )
+                } else {
+                    null
+                }
             }
             EventType.CALL_INVITE -> {
-                createCallTileTimelineItem(
-                        roomId = roomId,
-                        callId = callId,
-                        callStatus = CallTileTimelineItem.CallStatus.INVITED,
-                        callKind = callKind,
-                        callback = params.callback,
-                        highlight = params.isHighlighted,
-                        informationData = informationData,
-                        isStillActive = call != null
-                )
+                if (callEventGrouper.isRinging()) {
+                    createCallTileTimelineItem(
+                            roomSummary = roomSummary,
+                            callId = callEventGrouper.callId,
+                            callStatus = CallTileTimelineItem.CallStatus.INVITED,
+                            callKind = callKind,
+                            callback = params.callback,
+                            highlight = params.isHighlighted,
+                            informationData = informationData,
+                            isStillActive = callEventGrouper.isRinging(),
+                            formattedDuration = callEventGrouper.formattedDuration()
+                    )
+                } else {
+                    null
+                }
             }
             EventType.CALL_REJECT -> {
                 createCallTileTimelineItem(
-                        roomId = roomId,
-                        callId = callId,
+                        roomSummary = roomSummary,
+                        callId = callEventGrouper.callId,
                         callStatus = CallTileTimelineItem.CallStatus.REJECTED,
                         callKind = callKind,
                         callback = params.callback,
                         highlight = params.isHighlighted,
                         informationData = informationData,
-                        isStillActive = false
+                        isStillActive = false,
+                        formattedDuration = callEventGrouper.formattedDuration()
                 )
             }
             EventType.CALL_HANGUP -> {
                 createCallTileTimelineItem(
-                        roomId = roomId,
-                        callId = callId,
-                        callStatus = CallTileTimelineItem.CallStatus.ENDED,
+                        roomSummary = roomSummary,
+                        callId = callEventGrouper.callId,
+                        callStatus = if (callEventGrouper.callWasMissed()) CallTileTimelineItem.CallStatus.MISSED else CallTileTimelineItem.CallStatus.ENDED,
                         callKind = callKind,
                         callback = params.callback,
                         highlight = params.isHighlighted,
                         informationData = informationData,
-                        isStillActive = false
+                        isStillActive = false,
+                        formattedDuration = callEventGrouper.formattedDuration()
                 )
             }
             else                  -> null
         }
-    }
-
-    private fun TimelineEvent.getCallSignalingContent(): CallSignalingContent? {
-        return when (root.getClearType()) {
-            EventType.CALL_INVITE -> root.getClearContent().toModel<CallInviteContent>()
-            EventType.CALL_HANGUP -> root.getClearContent().toModel<CallHangupContent>()
-            EventType.CALL_REJECT -> root.getClearContent().toModel<CallRejectContent>()
-            EventType.CALL_ANSWER -> root.getClearContent().toModel<CallAnswerContent>()
-            else                  -> null
+        return if (callItem == null && showHiddenEvents) {
+            // Fallback to notice item for showing hidden events
+            noticeItemFactory.create(params)
+        } else {
+            callItem
         }
     }
 
     private fun createCallTileTimelineItem(
-            roomId: String,
+            roomSummary: RoomSummary,
             callId: String,
             callKind: CallTileTimelineItem.CallKind,
             callStatus: CallTileTimelineItem.CallStatus,
             informationData: MessageInformationData,
             highlight: Boolean,
             isStillActive: Boolean,
+            formattedDuration: String,
             callback: TimelineEventController.Callback?
     ): CallTileTimelineItem? {
-        val correctedRoomId = session.vectorCallService.userMapper.nativeRoomForVirtualRoom(roomId) ?: roomId
-        val userOfInterest = roomSummariesHolder.get(correctedRoomId)?.toMatrixItem() ?: return null
+        val userOfInterest = roomSummary.toMatrixItem()
         val attributes = messageItemAttributesFactory.create(null, informationData, callback).let {
             CallTileTimelineItem.Attributes(
                     callId = callId,
@@ -144,6 +139,7 @@ class CallItemFactory @Inject constructor(
                     callStatus = callStatus,
                     informationData = informationData,
                     avatarRenderer = it.avatarRenderer,
+                    formattedDuration = formattedDuration,
                     messageColorProvider = messageColorProvider,
                     itemClickListener = it.itemClickListener,
                     itemLongClickListener = it.itemLongClickListener,

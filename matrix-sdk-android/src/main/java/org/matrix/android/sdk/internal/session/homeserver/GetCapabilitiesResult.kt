@@ -84,7 +84,7 @@ internal data class RoomVersions(
          *      }
          * }
          */
-        @Json(name = "room_capabilities")
+        @Json(name = "org.matrix.msc3244.room_capabilities")
         val roomCapabilities: JsonDict? = null
 )
 
