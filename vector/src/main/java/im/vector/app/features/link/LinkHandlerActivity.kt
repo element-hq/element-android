@@ -63,7 +63,7 @@ class LinkHandlerActivity : VectorBaseActivity<ActivityProgressBinding>() {
 
         if (uri.getQueryParameter(LoginConfig.CONFIG_HS_PARAMETER) != null) {
             handleConfigUrl(uri)
-        } else if (SUPPORTED_HOSTS.contains(uri.host)) {
+        } else if (resources.getStringArray(R.array.permalink_supported_hosts).contains(uri.host)) {
             handleSupportedHostUrl(uri)
         } else {
             // Other links are not yet handled, but should not come here (manifest configuration error?)
@@ -175,15 +175,6 @@ class LinkHandlerActivity : VectorBaseActivity<ActivityProgressBinding>() {
     }
 
     companion object {
-        private val SUPPORTED_HOSTS = listOf(
-                // Regular Element Web instance
-                "app.element.io",
-                // Other known instances of Element Web
-                "develop.element.io",
-                "staging.element.io",
-                // Previous Web instance, kept for compatibility reason
-                "riot.im"
-        )
         private val SUPPORTED_PATHS = listOf(
                 "/#/room/",
                 "/#/user/",
