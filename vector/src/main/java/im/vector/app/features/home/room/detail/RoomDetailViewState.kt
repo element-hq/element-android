@@ -24,6 +24,7 @@ import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
+import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.sync.SyncState
 import org.matrix.android.sdk.api.session.widgets.model.Widget
@@ -71,6 +72,7 @@ data class RoomDetailViewState(
         val myRoomMember: Async<RoomMemberSummary> = Uninitialized,
         val asyncInviter: Async<RoomMemberSummary> = Uninitialized,
         val asyncRoomSummary: Async<RoomSummary> = Uninitialized,
+        val powerLevelsHelper: PowerLevelsHelper? = null,
         val activeRoomWidgets: Async<List<Widget>> = Uninitialized,
         val typingMessage: String? = null,
         val sendMode: SendMode = SendMode.REGULAR("", false),

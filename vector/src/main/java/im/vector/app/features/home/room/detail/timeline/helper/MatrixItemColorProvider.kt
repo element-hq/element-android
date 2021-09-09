@@ -99,9 +99,9 @@ class MatrixItemColorProvider @Inject constructor(
         }
 
         // Same values as in R.array.user_color_mode_values
-        private const val USER_COLORING_UNIFORM = "uniform"
-        private const val USER_COLORING_FROM_ID = "from-id"
-        private const val USER_COLORING_FROM_PL = "from-pl"
+        public const val USER_COLORING_UNIFORM = "uniform"
+        public const val USER_COLORING_FROM_ID = "from-id"
+        public const val USER_COLORING_FROM_PL = "from-pl"
         const val USER_COLORING_DEFAULT = USER_COLORING_UNIFORM
     }
 

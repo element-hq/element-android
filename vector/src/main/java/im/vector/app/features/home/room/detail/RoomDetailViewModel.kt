@@ -52,7 +52,6 @@ import im.vector.app.features.home.room.detail.composer.VoiceMessageHelper
 import im.vector.app.features.home.room.detail.composer.rainbow.RainbowGenerator
 import im.vector.app.features.home.room.detail.sticker.StickerPickerActionHandler
 import im.vector.app.features.home.room.detail.timeline.factory.TimelineFactory
-import im.vector.app.features.home.room.detail.timeline.helper.PowerLevelsHolder
 import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlRetriever
 import im.vector.app.features.home.room.typing.TypingHelper
 import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
@@ -118,7 +117,6 @@ class RoomDetailViewModel @AssistedInject constructor(
         private val session: Session,
         private val supportedVerificationMethodsProvider: SupportedVerificationMethodsProvider,
         private val stickerPickerActionHandler: StickerPickerActionHandler,
-        private val powerLevelsHolder: PowerLevelsHolder,
         private val typingHelper: TypingHelper,
         private val callManager: WebRtcCallManager,
         private val chatEffectManager: ChatEffectManager,
@@ -175,7 +173,6 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     init {
-        powerLevelsHolder.clear(room.roomId)
         timeline.start()
         timeline.addListener(this)
         observeRoomSummary()
@@ -231,7 +228,6 @@ class RoomDetailViewModel @AssistedInject constructor(
         PowerLevelsObservableFactory(room).createObservable()
                 .subscribe {
                     val powerLevelsHelper = PowerLevelsHelper(it)
-                    powerLevelsHolder.set(room.roomId, powerLevelsHelper)
                     val canSendMessage = powerLevelsHelper.isUserAllowedToSend(session.myUserId, false, EventType.MESSAGE)
                     val canInvite = powerLevelsHelper.isUserAbleToInvite(session.myUserId)
                     val isAllowedToManageWidgets = session.widgetService().hasPermissionsToHandleWidgets(room.roomId)
@@ -241,7 +237,8 @@ class RoomDetailViewModel @AssistedInject constructor(
                                 canSendMessage = canSendMessage,
                                 canInvite = canInvite,
                                 isAllowedToManageWidgets = isAllowedToManageWidgets,
-                                isAllowedToStartWebRTCCall = isAllowedToStartWebRTCCall
+                                isAllowedToStartWebRTCCall = isAllowedToStartWebRTCCall,
+                                powerLevelsHelper = powerLevelsHelper
                         )
                     }
                 }

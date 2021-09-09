@@ -40,7 +40,6 @@ import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.CurrentSpaceSuggestedRoomListDataSource
 import im.vector.app.features.home.room.detail.RoomDetailPendingActionStore
 import im.vector.app.features.home.room.detail.timeline.helper.MatrixItemColorProvider
-import im.vector.app.features.home.room.detail.timeline.helper.PowerLevelsHolder
 import im.vector.app.features.html.EventHtmlRenderer
 import im.vector.app.features.html.VectorHtmlCompressor
 import im.vector.app.features.invite.AutoAcceptInvites
@@ -167,8 +166,6 @@ interface VectorComponent {
     fun webRtcCallManager(): WebRtcCallManager
 
     fun jitsiActiveConferenceHolder(): JitsiActiveConferenceHolder
-
-    fun powerLevelsHolder(): PowerLevelsHolder
 
     @Component.Factory
     interface Factory {

@@ -55,7 +55,6 @@ import javax.inject.Inject
  * This class compute if data of an event (such has avatar, display name, ...) should be displayed, depending on the previous event in the timeline
  */
 class MessageInformationDataFactory @Inject constructor(private val session: Session,
-                                                        private val powerLevelsHolder: PowerLevelsHolder,
                                                         private val dateFormatter: VectorDateFormatter,
                                                         private val context: Context,
                                                         private val visibilityHelper: TimelineEventVisibilityHelper,
@@ -126,11 +125,7 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
         }
 
         // Sender power level
-        /*
-        val powerLevelsHelper = session.getRoom(event.roomId)?.getStateEvent(EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.NoCondition)?.content.toModel<PowerLevelsContent>()?.let { PowerLevelsHelper(it) }
-        val senderPowerLevel = powerLevelsHelper?.getUserPowerLevelValue(event.senderInfo.userId)
-         */
-        val senderPowerLevel = powerLevelsHolder.get(event.roomId)?.getUserPowerLevelValue(event.senderInfo.userId)
+        val senderPowerLevel = params.partialState.powerLevelsHelper?.getUserPowerLevelValue(event.senderInfo.userId)
 
         return MessageInformationData(
                 eventId = eventId,

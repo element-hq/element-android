@@ -43,6 +43,7 @@ import im.vector.app.features.home.room.detail.timeline.helper.TimelineEventsGro
 import im.vector.app.features.home.room.detail.timeline.helper.ContentDownloadStateTrackerBinder
 import im.vector.app.features.home.room.detail.timeline.helper.ContentUploadStateTrackerBinder
 import im.vector.app.features.home.room.detail.timeline.helper.InvalidateTimelineEventDiffUtilCallback
+import im.vector.app.features.home.room.detail.timeline.helper.MatrixItemColorProvider
 import im.vector.app.features.home.room.detail.timeline.helper.TimelineControllerInterceptorHelper
 import im.vector.app.features.home.room.detail.timeline.helper.TimelineEventDiffUtilCallback
 import im.vector.app.features.home.room.detail.timeline.helper.TimelineEventVisibilityHelper
@@ -69,6 +70,7 @@ import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.message.MessageAudioContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageImageInfoContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageVideoContent
+import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import javax.inject.Inject
@@ -94,14 +96,16 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
             val unreadState: UnreadState = UnreadState.Unknown,
             val highlightedEventId: String? = null,
             val jitsiState: JitsiState = JitsiState(),
-            val roomSummary: RoomSummary? = null
+            val roomSummary: RoomSummary? = null,
+            val powerLevelsHelper: PowerLevelsHelper? = null
     ) {
 
         constructor(state: RoomDetailViewState) : this(
                 unreadState = state.unreadState,
                 highlightedEventId = state.highlightedEventId,
                 jitsiState = state.jitsiState,
-                roomSummary = state.asyncRoomSummary()
+                roomSummary = state.asyncRoomSummary(),
+                powerLevelsHelper = state.powerLevelsHelper,
         )
     }
 
@@ -247,11 +251,22 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
 
     fun update(viewState: RoomDetailViewState) = synchronized(modelCache) {
         val newPartialState = PartialState(viewState)
+        // Full list rebuild if isDirect changed to apply new layout
         if (partialState.roomSummary?.isDirect != newPartialState.roomSummary?.isDirect) {
             partialState = newPartialState
             invalidateFullTimeline()
             // This already called requestModelBuild
             return
+        }
+        // Full list rebuild if power levels changed and username colors depend on power levels
+        if (partialState.powerLevelsHelper != newPartialState.powerLevelsHelper) {
+            val coloringMode = vectorPreferences.userColorMode(newPartialState.roomSummary?.isDirect ?: false, newPartialState.roomSummary?.isPublic ?: false)
+            if (coloringMode == MatrixItemColorProvider.USER_COLORING_FROM_PL) {
+                partialState = newPartialState
+                invalidateFullTimeline()
+                // This already called requestModelBuild
+                return
+            }
         }
         if (partialState.highlightedEventId != newPartialState.highlightedEventId) {
             // Clear cache to force a refresh
