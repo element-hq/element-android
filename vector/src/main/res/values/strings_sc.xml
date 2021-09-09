@@ -114,4 +114,18 @@
 
     <string name="send_bug_report_sc_extra">To increase the visibility of your issue and to allow us to contact you, you may want to reference this report (by providing your matrix ID and the approximate time when it was sent) in an issue at https://github.com/SchildiChat/SchildiChat-android/issues (check first if one already exists for your issue, and only create a new one if there is not).</string>
 
+    <!-- Unifiedpush Endpoint -->
+    <string name="settings_troubleshoot_test_endpoint_title">Endpoint/FCM</string>
+    <string name="settings_troubleshoot_test_endpoint_success">Endpoint successfully retrieved:\n%1$s</string>
+    <string name="settings_troubleshoot_test_endpoint_failed">Failed to retrieve Endpoint.</string>
+
+    <!-- UnifiedPush Distributor Picker Dialog -->
+    <string name="unifiedpush_getdistributors_dialog_title">Choose a distributor</string>
+    <string name="unifiedpush_getdistributors_dialog_fcm_fallback">FCM Fallback</string>
+
+    <!-- Pusher registration -->
+    <string name="settings_troubleshoot_test_pusher_registration_title">Pusher Registration</string>
+    <string name="settings_troubleshoot_test_pusher_registration_success">Pusher successfully registered to HomeServer.</string>
+    <string name="settings_troubleshoot_test_pusher_registration_failed">Failed to register pusher to HomeServer:\n%1$s</string>
+
 </resources>
