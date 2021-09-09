@@ -157,8 +157,6 @@ class RoomDetailViewModel @AssistedInject constructor(
 
     private var prepareToEncrypt: Async<Unit> = Uninitialized
 
-    private var previousSummary: RoomSummary? = null
-
     @AssistedFactory
     interface Factory {
         fun create(initialState: RoomDetailViewState): RoomDetailViewModel
@@ -1612,11 +1610,6 @@ class RoomDetailViewModel @AssistedInject constructor(
             room.getStateEvent(EventType.STATE_ROOM_TOMBSTONE)?.also {
                 setState { copy(tombstoneEvent = it) }
             }
-            val safePreviousSummary = previousSummary
-            if (safePreviousSummary == null || safePreviousSummary.isDirect != summary.isDirect) {
-                timeline.onDmStateChanged()
-            }
-            previousSummary = summary
         }
     }
 
@@ -1656,9 +1649,5 @@ class RoomDetailViewModel @AssistedInject constructor(
         chatEffectManager.dispose()
         callManager.removeProtocolsCheckerListener(this)
         super.onCleared()
-    }
-
-    override fun onDmStateChanged() {
-        // No-op
     }
 }

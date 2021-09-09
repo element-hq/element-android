@@ -247,6 +247,12 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
 
     fun update(viewState: RoomDetailViewState) = synchronized(modelCache) {
         val newPartialState = PartialState(viewState)
+        if (partialState.roomSummary?.isDirect != newPartialState.roomSummary?.isDirect) {
+            partialState = newPartialState
+            invalidateFullTimeline()
+            // This already called requestModelBuild
+            return
+        }
         if (partialState.highlightedEventId != newPartialState.highlightedEventId) {
             // Clear cache to force a refresh
             for (i in 0 until modelCache.size) {
@@ -313,7 +319,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         // no-op, already handled
     }
 
-    override fun onDmStateChanged() {
+    private fun invalidateFullTimeline() {
         backgroundHandler.post {
             inSubmitList = true
             // Invalidate all timeline events to rebuild the whole Room/DM layout

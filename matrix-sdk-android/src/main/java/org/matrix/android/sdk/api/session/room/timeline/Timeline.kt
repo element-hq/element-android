@@ -115,11 +115,6 @@ interface Timeline {
      */
     fun getTimelineEventWithId(eventId: String?): TimelineEvent?
 
-    /**
-     * Called when the DM flag of the room is changed
-     */
-    fun onDmStateChanged()
-
     interface Listener {
         /**
          * Call when the timeline has been updated through pagination or sync.
@@ -138,10 +133,6 @@ interface Timeline {
          */
         fun onNewTimelineEvents(eventIds: List<String>)
 
-        /**
-         * Called when the DM flag of the room is changed
-         */
-        fun onDmStateChanged()
     }
 
     /**
