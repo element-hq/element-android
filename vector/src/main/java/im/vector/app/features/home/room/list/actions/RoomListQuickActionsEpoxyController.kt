@@ -15,6 +15,7 @@
  */
 package im.vector.app.features.home.room.list.actions
 
+import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.app.BuildConfig
@@ -22,6 +23,7 @@ import im.vector.app.R
 import im.vector.app.core.epoxy.bottomSheetDividerItem
 import im.vector.app.core.epoxy.bottomsheet.bottomSheetActionItem
 import im.vector.app.core.epoxy.bottomsheet.bottomSheetRoomPreviewItem
+import im.vector.app.core.epoxy.profiles.notifications.bottomSheetRadioButtonItem
 import im.vector.app.core.epoxy.profiles.notifications.radioButtonItem
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
@@ -91,9 +93,11 @@ class RoomListQuickActionsEpoxyController @Inject constructor(
         if (isV2) {
             notificationViewState.notificationOptions.forEach {  notificationState ->
                 val title = titleForNotificationState(notificationState)
-                radioButtonItem {
+                val icon = iconForNotificationState(notificationState)
+                bottomSheetRadioButtonItem {
                     id(notificationState.name)
                     titleRes(title)
+                    iconRes(icon)
                     selected(notificationViewState.notificationStateMapped() == notificationState)
                     listener {
                     host.listener?.didSelectRoomNotificationState(notificationState)
@@ -109,7 +113,7 @@ class RoomListQuickActionsEpoxyController @Inject constructor(
         }
 
         if (showFull) {
-            RoomListQuickActionsSharedAction.Leave(roomSummary.roomId, showIcon = !isV2).toBottomSheetItem(5)
+            RoomListQuickActionsSharedAction.Leave(roomSummary.roomId, showIcon = true /*!isV2*/).toBottomSheetItem(5)
         }
     }
 
@@ -120,6 +124,16 @@ class RoomListQuickActionsEpoxyController @Inject constructor(
         RoomNotificationState.MUTE               -> R.string.room_settings_none
         else -> null
     }
+
+    @DrawableRes
+    private fun iconForNotificationState(notificationState: RoomNotificationState): Int? = when (notificationState) {
+        RoomNotificationState.ALL_MESSAGES_NOISY -> R.drawable.ic_room_actions_notifications_all_noisy
+        RoomNotificationState.ALL_MESSAGES       -> R.drawable.ic_room_actions_notifications_all
+        RoomNotificationState.MENTIONS_ONLY      -> R.drawable.ic_room_actions_notifications_mentions
+        RoomNotificationState.MUTE               -> R.drawable.ic_room_actions_notifications_mutes
+        else -> null
+    }
+
     private fun RoomListQuickActionsSharedAction.toBottomSheetItem(index: Int, roomNotificationState: RoomNotificationState? = null) {
         val host = this@RoomListQuickActionsEpoxyController
         val selected = when (this) {

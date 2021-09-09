@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/actionLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true"
+    android:minHeight="50dp"
+    android:foreground="?attr/selectableItemBackground"
+    android:paddingStart="@dimen/layout_horizontal_margin"
+    android:paddingTop="8dp"
+    android:paddingEnd="@dimen/layout_horizontal_margin"
+    android:paddingBottom="8dp">
+
+    <!-- Used for sub items -->
+    <Space
+        android:id="@+id/actionStartSpace"
+        android:layout_width="32dp"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
+
+    <ImageView
+        android:id="@+id/actionIcon"
+        android:layout_width="26dp"
+        android:layout_height="26dp"
+        android:layout_marginEnd="16dp"
+        android:layout_toEndOf="@id/actionStartSpace"
+        android:importantForAccessibility="no"
+        android:scaleType="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/actionTitleContainer"
+        app:layout_constraintStart_toEndOf="@+id/actionStartSpace"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="?vctr_content_secondary"
+        tools:ignore="MissingPrefix"
+        tools:src="@drawable/ic_room_actions_notifications_all" />
+
+    <FrameLayout
+        android:id="@+id/actionTitleContainer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/radioIcon"
+        app:layout_constraintStart_toEndOf="@id/actionIcon"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/actionTitle"
+            style="@style/Widget.Vector.TextView.Subtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:drawablePadding="16dp"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textColor="?vctr_content_secondary"
+            tools:drawableEnd="@drawable/ic_expand_more"
+            tools:drawableTint="?vctr_content_secondary"
+            tools:text="kdqsksqdk" />
+
+    </FrameLayout>
+
+    <ImageView
+        android:id="@+id/radioIcon"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:contentDescription="@string/a11y_checked"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:ignore="MissingPrefix"
+        tools:src="@drawable/ic_radio_on" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
