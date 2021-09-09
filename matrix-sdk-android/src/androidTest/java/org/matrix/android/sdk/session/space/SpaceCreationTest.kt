@@ -28,12 +28,9 @@ import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 import org.junit.runners.MethodSorters
 import org.matrix.android.sdk.InstrumentedTest
-import org.matrix.android.sdk.api.query.ActiveSpaceFilter
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
-import org.matrix.android.sdk.api.session.room.RoomSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.model.GuestAccess
-import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
 import org.matrix.android.sdk.api.session.room.model.RoomGuestAccessContent
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
@@ -42,7 +39,6 @@ import org.matrix.android.sdk.api.session.room.model.RoomType
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomPreset
 import org.matrix.android.sdk.api.session.room.model.create.RoomCreateContent
-import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.api.session.space.JoinSpaceResult
 import org.matrix.android.sdk.common.CommonTestHelper
 import org.matrix.android.sdk.common.SessionTestParams
@@ -54,6 +50,7 @@ class SpaceCreationTest : InstrumentedTest {
     private val commonTestHelper = CommonTestHelper(context())
 
     @Test
+    @Suppress("EXPERIMENTAL_API_USAGE")
     fun createSimplePublicSpace() {
         val session = commonTestHelper.createAccount("Hubble", SessionTestParams(true))
         val roomName = "My Space"
@@ -137,6 +134,7 @@ class SpaceCreationTest : InstrumentedTest {
     }
 
     @Test
+    @Suppress("EXPERIMENTAL_API_USAGE")
     fun testSimplePublicSpaceWithChildren() {
         val aliceSession = commonTestHelper.createAccount("alice", SessionTestParams(true))
         val bobSession = commonTestHelper.createAccount("bob", SessionTestParams(true))
@@ -162,7 +160,7 @@ class SpaceCreationTest : InstrumentedTest {
 
         commonTestHelper.waitWithLatch {
             GlobalScope.launch {
-                syncedSpace?.addChildren(firstChild!!, listOf(aliceSession.sessionParams.homeServerHost ?: ""), "a", true, suggested = true)
+                syncedSpace?.addChildren(firstChild!!, listOf(aliceSession.sessionParams.homeServerHost ?: ""), "a", suggested = true)
                 it.countDown()
             }
         }
@@ -181,7 +179,7 @@ class SpaceCreationTest : InstrumentedTest {
 
         commonTestHelper.waitWithLatch {
             GlobalScope.launch {
-                syncedSpace?.addChildren(secondChild!!, listOf(aliceSession.sessionParams.homeServerHost ?: ""), "b", false, suggested = true)
+                syncedSpace?.addChildren(secondChild!!, listOf(aliceSession.sessionParams.homeServerHost ?: ""), "b", suggested = true)
                 it.countDown()
             }
         }
@@ -202,19 +200,20 @@ class SpaceCreationTest : InstrumentedTest {
         assertEquals("Room name should be set", roomName, spaceBobPov?.asRoom()?.roomSummary()?.name)
         assertEquals("Room topic should be set", topic, spaceBobPov?.asRoom()?.roomSummary()?.topic)
 
+        // /!\ AUTO_JOIN has been descoped
         // check if bob has joined automatically the first room
 
-        val bobMembershipFirstRoom = bobSession.getRoomSummary(firstChild!!)?.membership
-        assertEquals("Bob should have joined this room", Membership.JOIN, bobMembershipFirstRoom)
-        RoomSummaryQueryParams.Builder()
-
-        val childCount = bobSession.getRoomSummaries(
-                roomSummaryQueryParams {
-                    activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(spaceId)
-                }
-        ).size
-
-        assertEquals("Unexpected number of joined children", 1, childCount)
+//        val bobMembershipFirstRoom = bobSession.getRoomSummary(firstChild!!)?.membership
+//        assertEquals("Bob should have joined this room", Membership.JOIN, bobMembershipFirstRoom)
+//        RoomSummaryQueryParams.Builder()
+//
+//        val childCount = bobSession.getRoomSummaries(
+//                roomSummaryQueryParams {
+//                    activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(spaceId)
+//                }
+//        ).size
+//
+//        assertEquals("Unexpected number of joined children", 1, childCount)
 
         commonTestHelper.signOutAndClose(aliceSession)
         commonTestHelper.signOutAndClose(bobSession)

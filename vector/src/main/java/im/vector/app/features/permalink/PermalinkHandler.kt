@@ -22,6 +22,7 @@ import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.utils.toast
 import im.vector.app.features.navigation.Navigator
+import im.vector.app.features.roomdirectory.roompreview.RoomPreviewData
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -77,7 +78,7 @@ class PermalinkHandler @Inject constructor(private val activeSessionHolder: Acti
             buildTask: Boolean
     ): Single<Boolean> {
         return when (permalinkData) {
-            is PermalinkData.RoomLink -> {
+            is PermalinkData.RoomLink            -> {
                 permalinkData.getRoomId()
                         .observeOn(AndroidSchedulers.mainThread())
                         .map {
@@ -94,18 +95,29 @@ class PermalinkHandler @Inject constructor(private val activeSessionHolder: Acti
                             true
                         }
             }
-            is PermalinkData.GroupLink -> {
+            is PermalinkData.GroupLink           -> {
                 navigator.openGroupDetail(permalinkData.groupId, context, buildTask)
                 Single.just(true)
             }
-            is PermalinkData.UserLink -> {
+            is PermalinkData.UserLink            -> {
                 if (navigationInterceptor?.navToMemberProfile(permalinkData.userId, rawLink) != true) {
                     navigator.openRoomMemberProfile(userId = permalinkData.userId, roomId = null, context = context, buildTask = buildTask)
                 }
                 Single.just(true)
             }
-            is PermalinkData.FallbackLink -> {
+            is PermalinkData.FallbackLink        -> {
                 Single.just(false)
+            }
+            is PermalinkData.RoomEmailInviteLink -> {
+                val data = RoomPreviewData(
+                        roomId = permalinkData.roomId,
+                        roomName = permalinkData.roomName,
+                        avatarUrl = permalinkData.roomAvatarUrl,
+                        fromEmailInvite = permalinkData,
+                        roomType = permalinkData.roomType
+                )
+                navigator.openRoomPreview(context, data)
+                Single.just(true)
             }
         }
     }

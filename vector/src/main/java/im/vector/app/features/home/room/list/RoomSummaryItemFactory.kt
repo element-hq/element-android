@@ -116,7 +116,7 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
         var latestEventTime: CharSequence = ""
         val latestEvent = roomSummary.scLatestPreviewableEvent(scSdkPreferences)
         if (latestEvent != null) {
-            latestFormattedEvent = displayableEventFormatter.format(latestEvent, roomSummary.isDirect.not())
+            latestFormattedEvent = displayableEventFormatter.format(latestEvent, roomSummary.isDirect, roomSummary.isDirect.not())
             latestEventTime = dateFormatter.format(latestEvent.root.originServerTs, DateFormatKind.ROOM_LIST)
         }
         val typingMessage = typingHelper.getTypingMessage(roomSummary.typingUsers)

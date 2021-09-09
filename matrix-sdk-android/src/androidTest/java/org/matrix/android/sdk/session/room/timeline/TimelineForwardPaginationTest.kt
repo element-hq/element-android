@@ -139,7 +139,7 @@ class TimelineForwardPaginationTest : InstrumentedTest {
                 // Alice can see the first event of the room (so Back pagination has worked)
                 snapshot.lastOrNull()?.root?.getClearType() == EventType.STATE_ROOM_CREATE
                         // 6 for room creation item (backward pagination), 1 for the context, and 50 for the forward pagination
-                        && snapshot.size == 6 + 1 + 50
+                        && snapshot.size == 57 // 6 + 1 + 50
             }
 
             aliceTimeline.addListener(aliceEventsListener)

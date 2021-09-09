@@ -2829,7 +2829,7 @@
     <string name="upgrade_room_no_power_to_manage">Для обновления комнаты необходимо разрешение</string>
     <string name="upgrade_room_update_parent_space">Автоматическое обновление родительского пространства</string>
     <string name="upgrade_room_auto_invite">Автоматическое приглашение пользователей</string>
-    <string name="upgrade_public_room_from_to">Вы обновили эту комнату с %s до %s.</string>
+    <string name="upgrade_public_room_from_to">Вы обновили эту комнату с %1$s до %2$s.</string>
     <string name="upgrade_room_warning">Обновление комнаты - это расширенное действие, которое обычно рекомендуется, когда комната работает нестабильно из-за ошибок, отсутствующих функций или уязвимостей безопасности.
 \nОбычно это влияет только на то, как комната обрабатывается на сервере.</string>
     <string name="upgrade_private_room">Модернизировать приватную комнату</string>
@@ -2850,7 +2850,6 @@
     <string name="spaces_no_server_support_title">Похоже, что ваш домашний сервер пока не поддерживает пространства</string>
     <string name="spaces_feeling_experimental_subspace">Чувствуете себя экспериментатором\?
 \nВы можете добавить существующие пространства в пространство.</string>
-    <string name="labs_space_show_orphan_in_home">Экспериментальное пространство - показывать в Главной только сирот</string>
     <string name="space_manage_rooms_and_spaces">Управление комнатами и пространствами</string>
     <string name="space_mark_as_not_suggested">Отметить как не рекомендуется</string>
     <string name="space_mark_as_suggested">Отметить как рекомендуется</string>
@@ -3004,4 +3003,49 @@
     <string name="missing_permissions_title">Отсутствующие разрешения</string>
     <string name="denied_permission_camera">Для выполнения этого действия, пожалуйста, предоставьте разрешение Камеры в настройках системы.</string>
     <string name="denied_permission_generic">Для выполнения этого действия отсутствуют некоторые разрешения, пожалуйста, предоставьте разрешения в настройках системы.</string>
+    <string name="upgrade_room_for_restricted_note">Обратите внимание, что при обновлении будет создана новая версия комнаты. Все текущие сообщения останутся в этой архивной комнате.</string>
+    <string name="upgrade_room_for_restricted_no_param">Любой человек в родительском пространстве сможет найти и присоединиться к этой комнате - нет необходимости вручную приглашать всех. Вы сможете изменить это в настройках комнаты в любое время.</string>
+    <string name="upgrade_room_for_restricted">Любой человек в %s сможет найти и присоединиться к этой комнате - нет необходимости вручную приглашать всех. Вы сможете изменить это в настройках комнаты в любое время.</string>
+    <string name="voice_message_reply_content">Голосовое сообщение (%1$s)</string>
+    <string name="error_voice_message_cannot_reply_or_edit">Вы не можете отвечать или редактировать, пока активно голосовое сообщение</string>
+    <string name="error_voice_message_unable_to_record">Не удалось записать голосовое сообщение</string>
+    <string name="error_voice_message_unable_to_play">Не удалось воспроизвести это голосовое сообщение</string>
+    <string name="labs_use_voice_message">Включить голосовые сообщения</string>
+    <string name="voice_message_tap_to_stop_toast">Нажмите на запись, чтобы остановить или прослушать ее</string>
+    <string name="voice_message_n_seconds_warning_toast">%1$d осталось</string>
+    <string name="voice_message_release_to_send_toast">Удерживайте для записи, отпустите для отправки</string>
+    <string name="a11y_delete_recorded_voice_message">Удалить записанное голосовое сообщение</string>
+    <string name="a11y_recording_voice_message">Запись голосового сообщения</string>
+    <string name="a11y_pause_voice_message">Приостановить голосовое сообщение</string>
+    <string name="a11y_play_voice_message">Прослушать голосовое сообщение</string>
+    <string name="a11y_lock_voice_message">Заблокировать голосовое сообщение</string>
+    <string name="voice_message_slide_to_cancel">Проведите для отмены</string>
+    <string name="a11y_start_voice_message">Начать голосовое сообщение</string>
+    <string name="allow_anyone_in_room_to_access">Разрешить любому человеку в %s найти и получить доступ. Можно выбрать и другие пространства.</string>
+    <string name="upgrade_required">Требуется обновление</string>
+    <string name="sent_a_voice_message">Голосовое сообщение</string>
+    <string name="other_spaces_or_rooms_you_might_not_know">Другие пространства или комнаты, которые вы могли не знать</string>
+    <string name="space_you_know_that_contains_this_room">Пространство, которое вы знаете, содержит эту комнату</string>
+    <string name="decide_who_can_find_and_join">Решите, кто может найти и присоединиться к этой комнате.</string>
+    <string name="tap_to_edit_spaces">Нажмите для изменения пространств</string>
+    <string name="select_spaces">Выбрать пространства</string>
+    <string name="decide_which_spaces_can_access">Определите, какие пространства могут получить доступ к этой комнате. Если пространство выбрано, его участники смогут найти и присоединиться к комнате.</string>
+    <string name="spaces_which_can_access">Пространства, к которым есть доступ</string>
+    <string name="allow_space_member_to_find_and_access">Разрешить участникам пространства находить и получать доступ.</string>
+    <string name="room_create_member_of_space_name_can_join">Участники пространства %s могут находить, просматривать и присоединяться.</string>
+    <string name="room_settings_room_access_private_invite_only_title">Приватная (только по приглашению)</string>
+    <string name="settings_room_upgrades">Обновлениях комнаты</string>
+    <string name="settings_messages_by_bot">Сообщениях от бота</string>
+    <string name="settings_room_invitations">Приглашениях в комнату</string>
+    <string name="settings_encrypted_group_messages">Зашифрованных групповых сообщениях</string>
+    <string name="settings_group_messages">Групповых сообщениях</string>
+    <string name="settings_encrypted_direct_messages">Зашифрованных диалогах</string>
+    <string name="settings_messages_direct_messages">Диалогах</string>
+    <string name="settings_messages_containing_username">Сообщениях, содержащие мое имя пользователя</string>
+    <string name="settings_messages_containing_display_name">Сообщениях с моим именем</string>
+    <string name="settings_notification_notify_me_for">Уведомлять меня о</string>
+    <string name="settings_notification_other">Другое</string>
+    <string name="settings_notification_mentions_and_keywords">Упоминания и ключевые слова</string>
+    <string name="settings_notification_default">Уведомления по умолчанию</string>
+    <string name="denied_permission_voice_message">Чтобы отправлять голосовые сообщения, предоставьте разрешение на Микрофон.</string>
 </resources>

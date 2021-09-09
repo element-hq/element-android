@@ -182,6 +182,24 @@ data class MatrixError(
         /** (Not documented yet) */
         const val M_WEAK_PASSWORD = "M_WEAK_PASSWORD"
 
+        /** The provided password's length is shorter than the minimum length required by the server. */
+        const val M_PASSWORD_TOO_SHORT = "M_PASSWORD_TOO_SHORT"
+
+        /** The password doesn't contain any digit but the server requires at least one. */
+        const val M_PASSWORD_NO_DIGIT = "M_PASSWORD_NO_DIGIT"
+
+        /** The password doesn't contain any uppercase letter but the server requires at least one. */
+        const val M_PASSWORD_NO_UPPERCASE = "M_PASSWORD_NO_UPPERCASE"
+
+        /** The password doesn't contain any lowercase letter but the server requires at least one. */
+        const val M_PASSWORD_NO_LOWERCASE = "M_PASSWORD_NO_LOWERCASE"
+
+        /** The password doesn't contain any symbol but the server requires at least one. */
+        const val M_PASSWORD_NO_SYMBOL = "M_PASSWORD_NO_SYMBOL"
+
+        /** The password was found in a dictionary, and is not acceptable. */
+        const val M_PASSWORD_IN_DICTIONARY = "M_PASSWORD_IN_DICTIONARY"
+
         const val M_TERMS_NOT_SIGNED = "M_TERMS_NOT_SIGNED"
 
         // For identity service
@@ -189,5 +207,12 @@ data class MatrixError(
 
         // Possible value for "limit_type"
         const val LIMIT_TYPE_MAU = "monthly_active_user"
+
+        /**
+         * The user account has expired. It has to be renewed by clicking on an email or by sending a renewal token.
+         *
+         * More documentation can be found in the dedicated Synapse plugin module repository: https://github.com/matrix-org/synapse-email-account-validity
+         */
+        const val ORG_MATRIX_EXPIRED_ACCOUNT = "ORG_MATRIX_EXPIRED_ACCOUNT"
     }
 }

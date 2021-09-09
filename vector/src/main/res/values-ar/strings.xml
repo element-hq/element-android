@@ -1178,7 +1178,6 @@
     <string name="space_mark_as_suggested">علم كمقترحة</string>
     <string name="space_mark_as_not_suggested">علم كغير مقترحة</string>
     <string name="space_manage_rooms_and_spaces">إدارة الغُرف والمساحات</string>
-    <string name="labs_space_show_orphan_in_home">مساحة تجريبية - فقط أعرض المُيتِّمة في الصفحة الرئيسية</string>
     <string name="spaces_feeling_experimental_subspace">تشعر بالتجربة؟
 \nيمكنك إضافة مساحات موجودة إلى مساحة.</string>
     <string name="spaces_no_server_support_description">يرجى الاتصال بمسؤول الخادم الخاص بك للحصول على مزيد من المعلومات</string>

@@ -151,7 +151,7 @@ class SpacePreviewViewModel @AssistedInject constructor(
         setState {
             copy(
                     spaceInfo = Success(
-                            resolveResult.first.let {
+                            resolveResult.rootSummary.let {
                                 ChildInfo(
                                         roomId = it.roomId,
                                         avatarUrl = it.avatarUrl,
@@ -165,7 +165,7 @@ class SpacePreviewViewModel @AssistedInject constructor(
                             }
                     ),
                     childInfoList = Success(
-                            resolveResult.second.map {
+                            resolveResult.children.map {
                                 ChildInfo(
                                         roomId = it.childRoomId,
                                         avatarUrl = it.avatarUrl,

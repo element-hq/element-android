@@ -32,14 +32,12 @@ class SharedKnownCallsViewModel @Inject constructor(
     val callListener = object : WebRtcCall.Listener {
 
         override fun onStateUpdate(call: MxCall) {
-            // post it-self
-            liveKnownCalls.postValue(liveKnownCalls.value)
+            liveKnownCalls.postValue(callManager.getCalls())
         }
 
         override fun onHoldUnhold() {
             super.onHoldUnhold()
-            // post it-self
-            liveKnownCalls.postValue(liveKnownCalls.value)
+            liveKnownCalls.postValue(callManager.getCalls())
         }
     }
 

@@ -29,6 +29,8 @@ import im.vector.app.core.preference.VectorListPreference
 import im.vector.app.core.preference.VectorPreference
 import im.vector.app.core.preference.VectorSwitchPreference
 import im.vector.app.databinding.DialogSelectTextSizeBinding
+import im.vector.app.features.MainActivity
+import im.vector.app.features.MainActivityArgs
 import im.vector.app.features.configuration.VectorConfiguration
 import im.vector.app.features.themes.BubbleThemeUtils
 import im.vector.app.features.themes.BubbleThemeUtils.BUBBLE_TIME_BOTTOM
@@ -120,6 +122,14 @@ class VectorSettingsPreferencesFragment @Inject constructor(
                 bubbleStyle = bubbleStylePreference.value,
                 bubbleTimeLocation = BUBBLE_TIME_BOTTOM //bubbleTimeLocationPref!!.value
         )
+
+        findPreference<VectorSwitchPreference>(VectorPreferences.SETTINGS_PREF_SPACE_SHOW_ALL_ROOM_IN_HOME)!!.let { pref ->
+            pref.isChecked = vectorPreferences.prefSpacesShowAllRoomInHome()
+            pref.setOnPreferenceChangeListener { _, _ ->
+                MainActivity.restartApp(requireActivity(), MainActivityArgs(clearCache = false))
+                true
+            }
+        }
 
         // Url preview
         /*

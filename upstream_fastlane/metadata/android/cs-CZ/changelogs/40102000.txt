@@ -1,0 +1,2 @@
+Hlavní změny v této verzi: Hlasové zprávy jsou povoleny ve výchozím nastavení.
+Úplný seznam změn: https://github.com/vector-im/element-android/releases/tag/v1.2.0

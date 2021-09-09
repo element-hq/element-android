@@ -1,0 +1,2 @@
+Modifiche principali in questa versione: corretto errore nell'invio di messaggi cifrati se qualcuno nella stanza si disconnette.
+Cronologia completa: https://github.com/vector-im/element-android/releases/tag/v1.1.16

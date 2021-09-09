@@ -38,6 +38,7 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.mvrx.runCatchingToAsync
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.features.call.conference.JitsiActiveConferenceHolder
 import im.vector.app.features.attachments.toContentAttachmentData
 import im.vector.app.features.call.conference.JitsiService
 import im.vector.app.features.call.lookup.CallProtocolsChecker
@@ -52,7 +53,6 @@ import im.vector.app.features.home.room.detail.composer.rainbow.RainbowGenerator
 import im.vector.app.features.home.room.detail.sticker.StickerPickerActionHandler
 import im.vector.app.features.home.room.detail.timeline.factory.TimelineFactory
 import im.vector.app.features.home.room.detail.timeline.helper.PowerLevelsHolder
-import im.vector.app.features.home.room.detail.timeline.helper.RoomSummariesHolder
 import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlRetriever
 import im.vector.app.features.home.room.typing.TypingHelper
 import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
@@ -68,6 +68,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.commonmark.parser.Parser
 import org.commonmark.renderer.html.HtmlRenderer
+import org.jitsi.meet.sdk.BroadcastEvent
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.extensions.tryOrNull
@@ -117,13 +118,13 @@ class RoomDetailViewModel @AssistedInject constructor(
         private val session: Session,
         private val supportedVerificationMethodsProvider: SupportedVerificationMethodsProvider,
         private val stickerPickerActionHandler: StickerPickerActionHandler,
-        private val roomSummariesHolder: RoomSummariesHolder,
         private val powerLevelsHolder: PowerLevelsHolder,
         private val typingHelper: TypingHelper,
         private val callManager: WebRtcCallManager,
         private val chatEffectManager: ChatEffectManager,
         private val directRoomHelper: DirectRoomHelper,
         private val jitsiService: JitsiService,
+        private val activeConferenceHolder: JitsiActiveConferenceHolder,
         private val voiceMessageHelper: VoiceMessageHelper,
         private val voicePlayerHelper: VoicePlayerHelper,
         timelineFactory: TimelineFactory
@@ -155,6 +156,8 @@ class RoomDetailViewModel @AssistedInject constructor(
     private var mostRecentDisplayedEvent: TimelineEvent? = null
 
     private var prepareToEncrypt: Async<Unit> = Uninitialized
+
+    private var previousSummary: RoomSummary? = null
 
     @AssistedFactory
     interface Factory {
@@ -256,9 +259,25 @@ class RoomDetailViewModel @AssistedInject constructor(
                 .map { widgets ->
                     widgets.filter { it.isActive }
                 }
-                .execute {
-                    copy(activeRoomWidgets = it)
+                .execute { widgets ->
+                    copy(activeRoomWidgets = widgets)
                 }
+
+        asyncSubscribe(RoomDetailViewState::activeRoomWidgets) { widgets ->
+            setState {
+                val jitsiWidget = widgets.firstOrNull { it.type == WidgetType.Jitsi }
+                val jitsiConfId = jitsiWidget?.let {
+                    jitsiService.extractJitsiWidgetData(it)?.confId
+                }
+                copy(
+                        jitsiState = jitsiState.copy(
+                                confId = jitsiConfId,
+                                widgetId = jitsiWidget?.widgetId,
+                                hasJoined = activeConferenceHolder.isJoined(jitsiConfId)
+                        )
+                )
+            }
+        }
     }
 
     private fun observeMyRoomMember() {
@@ -323,6 +342,9 @@ class RoomDetailViewModel @AssistedInject constructor(
             is RoomDetailAction.EndCall                          -> handleEndCall()
             is RoomDetailAction.ManageIntegrations               -> handleManageIntegrations()
             is RoomDetailAction.AddJitsiWidget                   -> handleAddJitsiConference(action)
+            is RoomDetailAction.UpdateJoinJitsiCallStatus        -> handleJitsiCallJoinStatus(action)
+            is RoomDetailAction.JoinJitsiCall                    -> handleJoinJitsiCall()
+            is RoomDetailAction.LeaveJitsiCall                   -> handleLeaveJitsiCall()
             is RoomDetailAction.RemoveWidget                     -> handleDeleteWidget(action.widgetId)
             is RoomDetailAction.EnsureNativeWidgetAllowed        -> handleCheckWidgetAllowed(action)
             is RoomDetailAction.CancelSend                       -> handleCancel(action)
@@ -353,6 +375,33 @@ class RoomDetailViewModel @AssistedInject constructor(
                 _viewEvents.post(RoomDetailViewEvents.OpenRoom(action.replacementRoomId, closeCurrentRoom = true))
             }
         }.exhaustive
+    }
+
+    private fun handleJitsiCallJoinStatus(action: RoomDetailAction.UpdateJoinJitsiCallStatus) = withState { state ->
+        if (state.jitsiState.confId == null) {
+            // If jitsi widget is removed while on the call
+            if (state.jitsiState.hasJoined) {
+                setState { copy(jitsiState = jitsiState.copy(hasJoined = false)) }
+            }
+            return@withState
+        }
+        when (action.jitsiEvent.type) {
+            BroadcastEvent.Type.CONFERENCE_JOINED,
+            BroadcastEvent.Type.CONFERENCE_TERMINATED -> {
+                setState { copy(jitsiState = jitsiState.copy(hasJoined = activeConferenceHolder.isJoined(jitsiState.confId))) }
+            }
+            else                                      -> Unit
+        }
+    }
+
+    private fun handleLeaveJitsiCall() {
+        _viewEvents.post(RoomDetailViewEvents.LeaveJitsiConference)
+    }
+
+    private fun handleJoinJitsiCall() = withState { state ->
+        val jitsiWidget = state.activeRoomWidgets()?.firstOrNull { it.widgetId == state.jitsiState.widgetId } ?: return@withState
+        val action = RoomDetailAction.EnsureNativeWidgetAllowed(jitsiWidget, false, RoomDetailViewEvents.JoinJitsiConference(jitsiWidget, true))
+        handleCheckWidgetAllowed(action)
     }
 
     private fun handleAcceptCall(action: RoomDetailAction.AcceptCall) {
@@ -463,10 +512,15 @@ class RoomDetailViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleDeleteWidget(widgetId: String) {
-        _viewEvents.post(RoomDetailViewEvents.ShowWaitingView)
+    private fun handleDeleteWidget(widgetId: String) = withState { state ->
+        val isJitsiWidget = state.jitsiState.widgetId == widgetId
         viewModelScope.launch(Dispatchers.IO) {
             try {
+                if (isJitsiWidget) {
+                    setState { copy(jitsiState = jitsiState.copy(deleteWidgetInProgress = true)) }
+                } else {
+                    _viewEvents.post(RoomDetailViewEvents.ShowWaitingView)
+                }
                 session.widgetService().destroyRoomWidget(room.roomId, widgetId)
                 // local echo
                 setState {
@@ -482,7 +536,11 @@ class RoomDetailViewModel @AssistedInject constructor(
             } catch (failure: Throwable) {
                 _viewEvents.post(RoomDetailViewEvents.ShowMessage(stringProvider.getString(R.string.failed_to_remove_widget)))
             } finally {
-                _viewEvents.post(RoomDetailViewEvents.HideWaitingView)
+                if (isJitsiWidget) {
+                    setState { copy(jitsiState = jitsiState.copy(deleteWidgetInProgress = false)) }
+                } else {
+                    _viewEvents.post(RoomDetailViewEvents.HideWaitingView)
+                }
             }
         }
     }
@@ -700,9 +758,11 @@ class RoomDetailViewModel @AssistedInject constructor(
             R.id.timeline_setting -> false // replaced by show_room_info (downstream)
             R.id.invite           -> false // state.canInvite // SC: disabled, we can do that over show_participants as well
             R.id.open_matrix_apps -> session.integrationManagerService().isIntegrationEnabled()
-            R.id.voice_call,
-            R.id.video_call       -> callManager.getCallsByRoomId(state.roomId).isEmpty()
-            R.id.hangup_call      -> callManager.getCallsByRoomId(state.roomId).isNotEmpty()
+
+            R.id.voice_call       -> state.isWebRTCCallOptionAvailable()
+            R.id.video_call       -> state.isWebRTCCallOptionAvailable() || state.jitsiState.confId == null || state.jitsiState.hasJoined
+            // Show Join conference button only if there is an active conf id not joined. Otherwise fallback to default video disabled. ^
+            R.id.join_conference  -> !state.isWebRTCCallOptionAvailable() && state.jitsiState.confId != null && !state.jitsiState.hasJoined
             R.id.show_room_info   -> true
             R.id.show_participants -> true
             R.id.search           -> true
@@ -1535,8 +1595,6 @@ class RoomDetailViewModel @AssistedInject constructor(
 
     private fun observeSummaryState() {
         asyncSubscribe(RoomDetailViewState::asyncRoomSummary) { summary ->
-            val previousSummary = roomSummariesHolder.get(summary.roomId)
-            roomSummariesHolder.set(summary)
             setState {
                 val typingMessage = typingHelper.getTypingMessage(summary.typingUsers)
                 copy(
@@ -1554,9 +1612,11 @@ class RoomDetailViewModel @AssistedInject constructor(
             room.getStateEvent(EventType.STATE_ROOM_TOMBSTONE)?.also {
                 setState { copy(tombstoneEvent = it) }
             }
-            if (previousSummary == null || previousSummary.isDirect != summary.isDirect) {
+            val safePreviousSummary = previousSummary
+            if (safePreviousSummary == null || safePreviousSummary.isDirect != summary.isDirect) {
                 timeline.onDmStateChanged()
             }
+            previousSummary = summary
         }
     }
 
@@ -1587,7 +1647,6 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     override fun onCleared() {
-        roomSummariesHolder.remove(room.roomId)
         timeline.dispose()
         timeline.removeAllListeners()
         if (vectorPreferences.sendTypingNotifs()) {

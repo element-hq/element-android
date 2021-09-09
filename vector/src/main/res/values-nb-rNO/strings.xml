@@ -1700,4 +1700,61 @@
     <string name="summary_you_sent_image">Du sendte et bilde.</string>
     <string name="summary_user_sent_image">%1$s sendte et bilde.</string>
     <string name="summary_message">%1$s: %2$s</string>
+    <string name="this_space_has_no_rooms_admin">Noen rom kan være skjult fordi de er private, og du trenger en invitasjon.</string>
+    <string name="it_may_take_some_time">Vær tålmodig, det kan ta litt tid.</string>
+    <string name="upgrade">Oppgrader</string>
+    <string name="upgrade_room_auto_invite">Inviter brukere automatisk</string>
+    <string name="upgrade_room_no_power_to_manage">Du trenger tillatelse for å oppgradere et rom</string>
+    <string name="room_upgrade_to_recommended_version">Oppgrader til den anbefalte romversjonen</string>
+    <string name="error_failed_to_join_room">Beklager, det oppstod en feil under forsøk på å bli med: %s</string>
+    <string name="a11y_start_voice_message">Start talemelding</string>
+    <string name="voice_message_slide_to_cancel">Skyv for å avbryte</string>
+    <string name="a11y_play_voice_message">Spill av talemelding</string>
+    <string name="a11y_delete_recorded_voice_message">Slett innspilt talemelding</string>
+    <string name="voice_message_release_to_send_toast">Hold inne for å spille inn, slipp for å sende</string>
+    <string name="voice_message_tap_to_stop_toast">Trykk på innspillingen for å stoppe eller lytte</string>
+    <string name="labs_use_voice_message">Aktiver talemelding</string>
+    <string name="error_voice_message_unable_to_play">Kan ikke spille denne talemeldingen</string>
+    <string name="error_voice_message_unable_to_record">Kan ikke ta opp en talemelding</string>
+    <string name="error_voice_message_cannot_reply_or_edit">Kan ikke svare eller redigere mens talemeldingen er aktiv</string>
+    <string name="voice_message_reply_content">Talemelding (%1$s)</string>
+    <string name="upgrade_room_for_restricted_no_param">Alle i et forelderrom vil kunne finne og bli med i dette rommet - du trenger ikke å invitere alle manuelt. Du kan når som helst endre dette i rominnstillingene.</string>
+    <string name="upgrade_room_for_restricted_note">Vær oppmerksom på at oppgradering vil gjøre en ny versjon av rommet. Alle nåværende meldinger vil forbli i dette arkiverte rommet.</string>
+    <string name="notice_room_kick">%1$s sparket %2$s</string>
+    <string name="notice_room_invite_no_invitee_by_you">Din invitasjon</string>
+    <string name="suggested_rooms_pills_on_empty_header">Velkommen til %1$s, %2$s.</string>
+    <string name="space_add_rooms">Legg til rom</string>
+    <string name="spaces_beta_welcome_to_spaces">Velkommen til Mellomrom!</string>
+    <string name="spaces_beta_welcome_to_spaces_desc">Mellomrom er en ny måte å gruppere rom og mennesker på.</string>
+    <string name="you_are_invited">Du er invitert</string>
+    <string name="labs_use_restricted_join_rule_desc">Advarsel krever serverstøtte og eksperimentell romversjon</string>
+    <string name="user_invites_you">%s inviterer deg</string>
+    <string name="looking_for_someone_not_in_space">Leter du etter noen som ikke er i %s\?</string>
+    <string name="space_settings_manage_rooms">Administrer rom</string>
+    <string name="make_this_space_public">Gjør dette rommet offentlig</string>
+    <string name="space_suggested">Foreslått</string>
+    <string name="space_mark_as_suggested">Merk som foreslått</string>
+    <string name="space_mark_as_not_suggested">Merk som ikke foreslått</string>
+    <string name="space_manage_rooms_and_spaces">Administrer rom og mellomrom</string>
+    <string name="spaces_feeling_experimental_subspace">Føler du deg eksperimentell\?
+\nDu kan legge til eksisterende mellomrom i et mellomrom.</string>
+    <string name="spaces_no_server_support_title">Det ser ut til at hjemmeserveren din ikke støtter Mellomrom ennå</string>
+    <string name="spaces_no_server_support_description">Ta kontakt med din hjemmetjener -administrator for mer informasjon</string>
+    <string name="this_space_has_no_rooms_not_admin">Noen rom kan være skjult fordi de er private, og du trenger en invitasjon.
+\nDu har ikke tillatelse til å legge til rom.</string>
+    <string name="teammate_spaces_might_not_join">For øyeblikket er det ikke sikkert at folk kan bli med i private rom du lager.
+\n
+\nVi vil forbedre dette som en del av betaen, men ville bare gi deg beskjed.</string>
+    <string name="upgrade_required">Oppgradering kreves</string>
+    <string name="upgrade_public_room">Oppgrader offentlig rom</string>
+    <string name="upgrade_private_room">Oppgrader privat rom</string>
+    <string name="upgrade_room_warning">Oppgradering av et rom er en avansert handling og anbefales vanligvis når et rom er ustabilt på grunn av feil, manglende funksjoner eller sikkerhetsproblemer.
+\nDette påvirker vanligvis bare hvordan rommet behandles på serveren.</string>
+    <string name="upgrade_public_room_from_to">Du oppgraderer dette rommet fra %1$s til %2$s.</string>
+    <string name="allow_anyone_in_room_to_access">La alle i %s finne og få tilgang. Du kan også velge andre mellomrom.</string>
+    <string name="room_using_unstable_room_version">Dette rommet kjører romversjon %s, som denne hjemmeserveren har merket som ustabil.</string>
+    <string name="a11y_lock_voice_message">Lås for talemeldinger</string>
+    <string name="a11y_pause_voice_message">Pause talemelding</string>
+    <string name="a11y_recording_voice_message">Tar opp talemelding</string>
+    <string name="upgrade_room_for_restricted">Alle i %s vil kunne finne og bli med i dette rommet - du trenger ikke å invitere alle manuelt. Du kan når som helst endre dette i rominnstillingene.</string>
 </resources>

@@ -234,7 +234,7 @@ internal class RoomSummaryUpdater @Inject constructor(
                                     this.childRoomId = child.roomId
                                     this.childSummaryEntity = RoomSummaryEntity.where(realm, child.roomId).findFirst()
                                     this.order = child.order
-                                    this.autoJoin = child.autoJoin
+//                                    this.autoJoin = child.autoJoin
                                     this.viaServers.addAll(child.viaServers)
                                 }
                         )

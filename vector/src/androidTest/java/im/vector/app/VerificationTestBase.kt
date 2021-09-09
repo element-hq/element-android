@@ -107,6 +107,7 @@ abstract class VerificationTestBase {
         return result!!
     }
 
+    @Suppress("EXPERIMENTAL_API_USAGE")
     private fun syncSession(session: Session) {
         val lock = CountDownLatch(1)
 

@@ -20,11 +20,11 @@ import androidx.test.espresso.Espresso.closeSoftKeyboard
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.matcher.ViewMatchers.isRoot
 import androidx.test.espresso.matcher.ViewMatchers.withId
-import com.schibsted.spain.barista.assertion.BaristaEnabledAssertions.assertDisabled
-import com.schibsted.spain.barista.assertion.BaristaEnabledAssertions.assertEnabled
-import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
-import com.schibsted.spain.barista.interaction.BaristaClickInteractions.clickOn
-import com.schibsted.spain.barista.interaction.BaristaEditTextInteractions.writeTo
+import com.adevinta.android.barista.assertion.BaristaEnabledAssertions.assertDisabled
+import com.adevinta.android.barista.assertion.BaristaEnabledAssertions.assertEnabled
+import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
+import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
+import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
 import im.vector.app.R
 import im.vector.app.espresso.tools.waitUntilActivityVisible
 import im.vector.app.features.home.HomeActivity

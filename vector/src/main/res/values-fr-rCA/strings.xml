@@ -2730,7 +2730,6 @@
     <string name="spaces_no_server_support_title">Il semble que votre serveur d’accueil ne prend pas encore en charge les espaces</string>
     <string name="spaces_feeling_experimental_subspace">Envie d’expérimenter\?
 \nVous pouvez ajouter des espaces existants à un espace.</string>
-    <string name="labs_space_show_orphan_in_home">Espace expérimental – afficher seulement les orphelins dans Accueil</string>
     <string name="space_manage_rooms_and_spaces">Gérer les salons et les espaces</string>
     <string name="space_mark_as_not_suggested">Marquer comme non recommandé</string>
     <string name="space_mark_as_suggested">Marquer comme recommandé</string>

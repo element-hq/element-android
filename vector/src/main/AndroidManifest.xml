@@ -282,7 +282,11 @@
             android:name=".features.attachments.preview.AttachmentsPreviewActivity"
             android:theme="@style/AppTheme.AttachmentsPreview.SC" />
         <activity
+            android:supportsPictureInPicture="true"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:name=".features.call.VectorCallActivity"
+            android:launchMode="singleTask"
+            android:taskAffinity=".features.call.VectorCallActivity"
             android:excludeFromRecents="true" />
         <!-- PIP Support https://developer.android.com/guide/topics/ui/picture-in-picture -->
         <activity

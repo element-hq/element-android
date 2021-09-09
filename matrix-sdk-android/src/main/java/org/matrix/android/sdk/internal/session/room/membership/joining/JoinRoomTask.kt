@@ -19,6 +19,7 @@ package org.matrix.android.sdk.internal.session.room.membership.joining
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import kotlinx.coroutines.TimeoutCancellationException
+import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.room.failure.JoinRoomFailure
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.Membership
@@ -29,6 +30,7 @@ import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
+import org.matrix.android.sdk.internal.session.identity.model.SignInvitationResult
 import org.matrix.android.sdk.internal.session.room.RoomAPI
 import org.matrix.android.sdk.internal.session.room.membership.RoomChangeMembershipStateDataSource
 import org.matrix.android.sdk.internal.session.room.read.SetReadMarkersTask
@@ -40,7 +42,8 @@ internal interface JoinRoomTask : Task<JoinRoomTask.Params, Unit> {
     data class Params(
             val roomIdOrAlias: String,
             val reason: String?,
-            val viaServers: List<String> = emptyList()
+            val viaServers: List<String> = emptyList(),
+            val thirdPartySigned : SignInvitationResult? = null
     )
 }
 
@@ -59,12 +62,16 @@ internal class DefaultJoinRoomTask @Inject constructor(
             return
         }
         roomChangeMembershipStateDataSource.updateState(params.roomIdOrAlias, ChangeMembershipState.Joining)
+        val extraParams = mutableMapOf<String, Any>().apply {
+            params.reason?.let { this["reason"] = it }
+            params.thirdPartySigned?.let { this["third_party_signed"] = it.toContent() }
+        }
         val joinRoomResponse = try {
             executeRequest(globalErrorReceiver) {
                 roomAPI.join(
                         roomIdOrAlias = params.roomIdOrAlias,
                         viaServers = params.viaServers.take(3),
-                        params = mapOf("reason" to params.reason)
+                        params = extraParams
                 )
             }
         } catch (failure: Throwable) {
