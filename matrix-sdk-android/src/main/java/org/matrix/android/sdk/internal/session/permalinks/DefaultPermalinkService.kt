@@ -24,20 +24,20 @@ internal class DefaultPermalinkService @Inject constructor(
         private val permalinkFactory: PermalinkFactory
 ) : PermalinkService {
 
-    override fun createPermalink(event: Event): String? {
-        return permalinkFactory.createPermalink(event)
+    override fun createPermalink(event: Event, forceMatrixTo: Boolean): String? {
+        return permalinkFactory.createPermalink(event, forceMatrixTo)
     }
 
-    override fun createPermalink(id: String): String? {
-        return permalinkFactory.createPermalink(id)
+    override fun createPermalink(id: String, forceMatrixTo: Boolean): String? {
+        return permalinkFactory.createPermalink(id, forceMatrixTo)
     }
 
-    override fun createRoomPermalink(roomId: String, viaServers: List<String>?): String? {
-        return permalinkFactory.createRoomPermalink(roomId, viaServers)
+    override fun createRoomPermalink(roomId: String, viaServers: List<String>?, forceMatrixTo: Boolean): String? {
+        return permalinkFactory.createRoomPermalink(roomId, viaServers, forceMatrixTo)
     }
 
-    override fun createPermalink(roomId: String, eventId: String): String {
-        return permalinkFactory.createPermalink(roomId, eventId)
+    override fun createPermalink(roomId: String, eventId: String, forceMatrixTo: Boolean): String {
+        return permalinkFactory.createPermalink(roomId, eventId, forceMatrixTo)
     }
 
     override fun getLinkedId(url: String): String? {
