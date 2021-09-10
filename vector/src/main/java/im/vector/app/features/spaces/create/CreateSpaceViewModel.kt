@@ -383,7 +383,7 @@ class CreateSpaceViewModel @AssistedInject constructor(
                         )
                 )
                 when (result) {
-                    is CreateSpaceTaskResult.Success             -> {
+                    is  CreateSpaceTaskResult.Success             -> {
                         setState {
                             copy(creationResult = Success(result.spaceId))
                         }

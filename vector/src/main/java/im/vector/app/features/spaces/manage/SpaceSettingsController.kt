@@ -53,6 +53,7 @@ class SpaceSettingsController @Inject constructor(
         fun onManageRooms()
         fun setIsPublic(public: Boolean)
         fun onRoomAliasesClicked()
+        fun onRoomPermissionsClicked()
     }
 
     var callback: Callback? = null
@@ -134,7 +135,7 @@ class SpaceSettingsController @Inject constructor(
                 id = "manage_rooms",
                 title = stringProvider.getString(R.string.space_settings_manage_rooms),
                 // subtitle = data.getJoinRuleWording(stringProvider),
-                divider = vectorPreferences.developerMode() || isPublic,
+                divider = true,
                 editable = data.actionPermissions.canAddChildren,
                 action = {
                     if (data.actionPermissions.canAddChildren) callback?.onManageRooms()
@@ -146,11 +147,20 @@ class SpaceSettingsController @Inject constructor(
                     id = "alias",
                     title = stringProvider.getString(R.string.space_settings_alias_title),
                     subtitle = stringProvider.getString(R.string.space_settings_alias_subtitle),
-                    divider = vectorPreferences.developerMode(),
+                    divider = true,
                     editable = true,
                     action = { callback?.onRoomAliasesClicked() }
             )
         }
+
+        buildProfileAction(
+                id = "permissions",
+                title = stringProvider.getString(R.string.space_settings_permissions_title),
+                subtitle = stringProvider.getString(R.string.space_settings_permissions_subtitle),
+                divider = vectorPreferences.developerMode(),
+                editable = true,
+                action = { callback?.onRoomPermissionsClicked() }
+        )
 
         if (vectorPreferences.developerMode()) {
             buildProfileAction(

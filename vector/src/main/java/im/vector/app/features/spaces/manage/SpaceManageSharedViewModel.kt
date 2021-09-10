@@ -57,6 +57,7 @@ class SpaceManageSharedViewModel @AssistedInject constructor(
             SpaceManagedSharedAction.CreateRoom ->  _viewEvents.post(SpaceManagedSharedViewEvents.NavigateToCreateRoom)
             SpaceManagedSharedAction.ManageRooms -> _viewEvents.post(SpaceManagedSharedViewEvents.NavigateToManageRooms)
             SpaceManagedSharedAction.OpenSpaceAliasesSettings -> _viewEvents.post(SpaceManagedSharedViewEvents.NavigateToAliasSettings)
+            SpaceManagedSharedAction.OpenRoomPermissionSettings -> _viewEvents.post(SpaceManagedSharedViewEvents.NavigateToPermissionSettings)
         }
     }
 }

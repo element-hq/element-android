@@ -25,4 +25,5 @@ sealed class SpaceManagedSharedAction : VectorViewModelAction {
     object CreateRoom : SpaceManagedSharedAction()
     object ManageRooms : SpaceManagedSharedAction()
     object OpenSpaceAliasesSettings : SpaceManagedSharedAction()
+    object OpenRoomPermissionSettings : SpaceManagedSharedAction()
 }
