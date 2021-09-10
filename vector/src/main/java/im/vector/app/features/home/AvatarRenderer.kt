@@ -138,13 +138,13 @@ class AvatarRenderer @Inject constructor(private val activeSessionHolder: Active
                target: Target<Drawable>) {
         val placeholder = getPlaceholderDrawable(matrixItem)
         glideRequests.loadResolvedUrl(matrixItem.avatarUrl)
-                .apply {
+                .let {
                     when (matrixItem) {
                         is MatrixItem.SpaceItem -> {
-                            transform(MultiTransformation(CenterCrop(), RoundedCorners(dimensionConverter.dpToPx(8))))
+                            it.transform(MultiTransformation(CenterCrop(), RoundedCorners(dimensionConverter.dpToPx(8))))
                         }
                         else                    -> {
-                            apply(RequestOptions.circleCropTransform())
+                            it.apply(RequestOptions.circleCropTransform())
                         }
                     }
                 }
@@ -157,13 +157,13 @@ class AvatarRenderer @Inject constructor(private val activeSessionHolder: Active
     fun shortcutDrawable(glideRequests: GlideRequests, matrixItem: MatrixItem, iconSize: Int): Bitmap {
         return glideRequests
                 .asBitmap()
-                .apply {
+                .let {
                     val resolvedUrl = resolvedUrl(matrixItem.avatarUrl)
                     if (resolvedUrl != null) {
-                        load(resolvedUrl)
+                        it.load(resolvedUrl)
                     } else {
                         val avatarColor = matrixItemColorProvider.getColor(matrixItem)
-                        load(TextDrawable.builder()
+                        it.load(TextDrawable.builder()
                                 .beginConfig()
                                 .bold()
                                 .endConfig()
