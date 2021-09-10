@@ -30,6 +30,7 @@ internal open class SharedSessionEntity(
         @Index var sessionId: String? = null,
         @Index var userId: String? = null,
         @Index var deviceId: String? = null,
+        @Index var deviceIdentityKey: String? = null,
         var chainIndex: Int? = null
 ) : RealmObject() {
 

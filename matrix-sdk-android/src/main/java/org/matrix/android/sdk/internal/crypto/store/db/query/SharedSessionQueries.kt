@@ -16,15 +16,20 @@
 
 package org.matrix.android.sdk.internal.crypto.store.db.query
 
-import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
-import org.matrix.android.sdk.internal.crypto.store.db.model.SharedSessionEntity
-import org.matrix.android.sdk.internal.crypto.store.db.model.SharedSessionEntityFields
 import io.realm.Realm
 import io.realm.RealmResults
 import io.realm.kotlin.createObject
 import io.realm.kotlin.where
+import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
+import org.matrix.android.sdk.internal.crypto.store.db.model.SharedSessionEntity
+import org.matrix.android.sdk.internal.crypto.store.db.model.SharedSessionEntityFields
 
-internal fun SharedSessionEntity.Companion.get(realm: Realm, roomId: String?, sessionId: String, userId: String, deviceId: String)
+internal fun SharedSessionEntity.Companion.get(realm: Realm,
+                                               roomId: String?,
+                                               sessionId: String,
+                                               userId: String,
+                                               deviceId: String,
+                                               deviceIdentityKey: String?)
         : SharedSessionEntity? {
     return realm.where<SharedSessionEntity>()
             .equalTo(SharedSessionEntityFields.ROOM_ID, roomId)
@@ -32,6 +37,7 @@ internal fun SharedSessionEntity.Companion.get(realm: Realm, roomId: String?, se
             .equalTo(SharedSessionEntityFields.ALGORITHM, MXCRYPTO_ALGORITHM_MEGOLM)
             .equalTo(SharedSessionEntityFields.USER_ID, userId)
             .equalTo(SharedSessionEntityFields.DEVICE_ID, deviceId)
+            .equalTo(SharedSessionEntityFields.DEVICE_IDENTITY_KEY, deviceIdentityKey)
             .findFirst()
 }
 
@@ -44,7 +50,12 @@ internal fun SharedSessionEntity.Companion.get(realm: Realm, roomId: String?, se
             .findAll()
 }
 
-internal fun SharedSessionEntity.Companion.create(realm: Realm, roomId: String?, sessionId: String, userId: String, deviceId: String, chainIndex: Int)
+internal fun SharedSessionEntity.Companion.create(realm: Realm, roomId: String?,
+                                                  sessionId: String,
+                                                  userId: String,
+                                                  deviceId: String,
+                                                  deviceIdentityKey: String,
+                                                  chainIndex: Int)
         : SharedSessionEntity {
     return realm.createObject<SharedSessionEntity>().apply {
         this.roomId = roomId
@@ -52,6 +63,7 @@ internal fun SharedSessionEntity.Companion.create(realm: Realm, roomId: String?,
         this.sessionId = sessionId
         this.userId = userId
         this.deviceId = deviceId
+        this.deviceIdentityKey = deviceIdentityKey
         this.chainIndex = chainIndex
     }
 }
