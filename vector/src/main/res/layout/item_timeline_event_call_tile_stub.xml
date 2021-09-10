@@ -41,6 +41,7 @@
         android:textColor="?vctr_content_secondary"
         android:maxLines="3"
         android:drawablePadding="8dp"
+        app:drawableTint="?vctr_content_secondary"
         tools:drawableLeft="@drawable/ic_missed_video_call"
         tools:text="@string/call_tile_video_incoming" />
 

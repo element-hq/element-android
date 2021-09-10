@@ -11,6 +11,7 @@ require_clean_git
 # Color corrections | TODO more?
 sed -i 's|"@color/riotx_accent"|"?colorAccent"|g' vector/src/*/res/layout/*
 sed -i 's|"@style/VectorButtonStyle"|"?materialButtonStyle"|g' vector/src/*/res/layout/*
+sed -i 's|"@color/element_background_light"|"?backgroundColorLight"|g' vector/src/*/res/layout/*
 uncommitted=`git status --porcelain`
 if [ -z "$uncommitted" ]; then
     echo "Seems like colors are still fine :)"

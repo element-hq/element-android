@@ -135,6 +135,9 @@
         <item name="user_color_pl_100">@color/user_color_element_pl_100</item>
         <item name="voice_message_playback_background_color">?vctr_content_quinary</item>
         <item name="verification_request_background">?vctr_notice_secondary</item>
+        <item name="backgroundColorLight">@color/element_background_light</item>
+        <item name="conference_animation_from">@color/palette_element_green</item>
+        <item name="conference_animation_to">@color/join_conference_animated_color</item>
 
         <item name="android:statusBarColor">@color/android_status_bar_background_dark</item>
         <item name="android:navigationBarColor">@color/android_navigation_bar_background_dark</item>

@@ -23,9 +23,9 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
 import android.widget.FrameLayout
-import androidx.core.content.ContextCompat
 import im.vector.app.R
 import im.vector.app.databinding.ViewJoinConferenceBinding
+import im.vector.app.features.themes.ThemeUtils
 
 class JoinConferenceView @JvmOverloads constructor(
         context: Context,
@@ -46,8 +46,8 @@ class JoinConferenceView @JvmOverloads constructor(
         super.onAttachedToWindow()
         views = ViewJoinConferenceBinding.bind(this)
         views?.joinConferenceButton?.setOnClickListener { onJoinClicked?.invoke() }
-        val colorFrom = ContextCompat.getColor(context, R.color.palette_element_green)
-        val colorTo = ContextCompat.getColor(context, R.color.join_conference_animated_color)
+        val colorFrom = ThemeUtils.getColor(context, R.attr.conference_animation_from)
+        val colorTo = ThemeUtils.getColor(context, R.attr.conference_animation_to)
         // Animate button color to highlight
         backgroundAnimator = ValueAnimator.ofObject(ArgbEvaluator(), colorFrom, colorTo).apply {
             repeatMode = ValueAnimator.REVERSE

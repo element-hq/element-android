@@ -7,6 +7,7 @@
         <attr name="sc_message_bg_outgoing" format="color" />
 
         <attr name="colorAccentPale" format="color" />
+        <attr name="backgroundColorLight" format="color" />
 
         <attr name="riotx_unread_unimportant_room_badge" format="color" />
 
@@ -28,6 +29,8 @@
         <attr name="user_color_pl_0" format="color" />
 
         <attr name="verification_request_background" format="color" />
+        <attr name="conference_animation_from" format="color" />
+        <attr name="conference_animation_to" format="color" />
 
     </declare-styleable>
 

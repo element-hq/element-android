@@ -16,6 +16,6 @@
         app:icon="@drawable/ic_call_video_small"
         app:iconGravity="textStart"
         app:iconPadding="0dp"
-        app:iconTint="@color/element_background_light" />
+        app:iconTint="?backgroundColorLight" />
 
 </merge>
