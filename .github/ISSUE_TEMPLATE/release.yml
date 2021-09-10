@@ -36,6 +36,7 @@ body:
         - [ ] Push `main` and the new tag `v1.1.10` to origin
         - [ ] Checkout `develop`
         - [ ] Increase version in `./vector/build.gradle`
+        - [ ] Change the value of SDK_VERSION in the file `./matrix-sdk-android/build.gradle`
         - [ ] Commit and push `develop`
         - [ ] Wait for [Buildkite](https://buildkite.com/matrix-dot-org/element-android/builds?branch=main) to build the `main` branch.
         - [ ] Run the script `~/scripts/releaseElement.sh`. It will download the APKs from Buildkite check them and sign them.

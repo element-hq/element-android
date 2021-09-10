@@ -14,14 +14,13 @@ buildscript {
 }
 
 android {
-    compileSdkVersion 30
+    compileSdk 30
     testOptions.unitTests.includeAndroidResources = true
 
     defaultConfig {
-        minSdkVersion 21
-        targetSdkVersion 30
-        versionCode 1
-        versionName "0.0.1"
+        minSdk 21
+        targetSdk 30
+
         // Multidex is useful for tests
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -31,9 +30,7 @@ android {
         // that the app's state is completely cleared between tests.
         testInstrumentationRunnerArguments clearPackageData: 'true'
 
-        // Seems that the build tools 4.1.0 does not generate BuildConfig.VERSION_NAME anymore.
-        // Add it manually here. We may remove this trick in the future
-        buildConfigField "String", "VERSION_NAME", "\"0.0.1\""
+        buildConfigField "String", "SDK_VERSION", "\"1.2.2\""
 
         buildConfigField "String", "GIT_SDK_REVISION", "\"${gitRevision()}\""
         resValue "string", "git_sdk_revision", "\"${gitRevision()}\""
