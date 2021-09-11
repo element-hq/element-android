@@ -759,7 +759,7 @@
     <string name="directory_server_type_homeserver">Введіть сервер для показу каталогу публічних кімнат</string>
     <string name="directory_server_placeholder">Ім\'я сервера</string>
     <string name="directory_server_all_rooms_on_server">Всі кімнати на сервері %s</string>
-    <string name="directory_server_native_rooms">Всі місцеві кімнати %s</string>
+    <string name="directory_server_native_rooms">Усі кімнати сервера %s</string>
     <!-- historical -->
     <string name="historical_placeholder">Пошук в історії</string>
     <!-- text size selection -->
@@ -2483,7 +2483,7 @@
     <string name="sas_error_m_unexpected_message">Сеанс отримав несподіване повідомлення</string>
     <string name="sas_error_m_mismatched_sas">SAS не збігається</string>
     <string name="sas_error_m_user">Користувач скасовує перевірку</string>
-    <string name="sas_incoming_request_notif_content">%s хоче звірити сеанс</string>
+    <string name="sas_incoming_request_notif_content">%s хоче звірити ваш сеанс</string>
     <string name="sas_incoming_request_notif_title">Запит перевірки</string>
     <string name="verification_request">Запит перевірки</string>
     <string name="sas_verification_request_notification_channel">Інтерактивна перевірка сеансу</string>
