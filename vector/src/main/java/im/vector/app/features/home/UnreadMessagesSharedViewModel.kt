@@ -139,7 +139,7 @@ class UnreadMessagesSharedViewModel @AssistedInject constructor(@Assisted initia
                             )
                         }
                         is RoomGroupingMethod.BySpace       -> {
-                            val selectedSpace = appStateHandler.safeActiveSpaceId()
+                            //val selectedSpace = appStateHandler.safeActiveSpaceId()
 
                             val inviteCount = if (autoAcceptInvites.hideInvites) {
                                 0
@@ -148,11 +148,12 @@ class UnreadMessagesSharedViewModel @AssistedInject constructor(@Assisted initia
                                         roomSummaryQueryParams { this.memberships = listOf(Membership.INVITE) }
                                 ).size
                             }
+                            val spacesShowAllRoomsInHome = vectorPreferences.prefSpacesShowAllRoomInHome()
                             val totalCount = session.getNotificationCountForRooms(
                                     roomSummaryQueryParams {
                                         this.memberships = listOf(Membership.JOIN)
                                         this.activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(null).takeIf {
-                                            !vectorPreferences.prefSpacesShowAllRoomInHome()
+                                            !spacesShowAllRoomsInHome
                                         } ?: ActiveSpaceFilter.None
                                     },
                                     scSdkPreferences
@@ -164,6 +165,31 @@ class UnreadMessagesSharedViewModel @AssistedInject constructor(@Assisted initia
                                     totalCount.unreadCount,
                                     totalCount.markedUnreadCount
                             )
+
+                            // SC: count total room notifications for drawer badge, instead of filtering for others like Element does,
+                            // to prevent counting rooms multiple times
+                            val topLevelTotalCount = if (spacesShowAllRoomsInHome) {
+                                totalCount
+                            } else {
+                                session.getNotificationCountForRooms(
+                                        roomSummaryQueryParams {
+                                            this.memberships = listOf(Membership.JOIN)
+                                            this.activeSpaceFilter = ActiveSpaceFilter.None
+                                        },
+                                        scSdkPreferences
+                                )
+                            }
+
+                            val topLevelCounts = RoomAggregateNotificationCount(
+                                    topLevelTotalCount.notificationCount + inviteCount,
+                                    topLevelTotalCount.highlightCount + inviteCount,
+                                    topLevelTotalCount.unreadCount,
+                                    topLevelTotalCount.markedUnreadCount
+                            )
+
+                            CountInfo(homeCount = counts, otherCount = topLevelCounts)
+
+                            /*
                             val rootCounts = session.spaceService().getRootSpaceSummaries()
                                     .filter {
                                         // filter out current selection
@@ -187,6 +213,7 @@ class UnreadMessagesSharedViewModel @AssistedInject constructor(@Assisted initia
                                             }) + (counts.markedUnreadCount.takeIf { selectedSpace != null } ?: 0)
                                     )
                             )
+                             */
                         }
                         null                                -> {
                             CountInfo(
