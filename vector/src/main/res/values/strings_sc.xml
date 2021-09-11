@@ -128,4 +128,8 @@
     <string name="settings_troubleshoot_test_pusher_registration_success">Pusher successfully registered to HomeServer.</string>
     <string name="settings_troubleshoot_test_pusher_registration_failed">Failed to register pusher to HomeServer:\n%1$s</string>
 
+    <string name="settings_apply_sc_default_settings">Do not click this setting</string>
+    <string name="settings_apply_sc_default_settings_dialog_title">Mess up settings</string>
+    <string name="settings_apply_sc_default_settings_dialog_summary">If you continue, this will mess with your app settings!</string>
+
 </resources>

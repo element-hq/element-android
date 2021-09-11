@@ -86,6 +86,12 @@
             android:title="@string/settings_key_requests"
             app:fragment="im.vector.app.features.settings.devtools.KeyRequestsFragment" />
 
+
+        <im.vector.app.core.preference.VectorPreference
+            android:key="SETTINGS_APPLY_SC_DEFAULT_SETTINGS"
+            android:persistent="false"
+            android:title="@string/settings_apply_sc_default_settings" />
+
     </im.vector.app.core.preference.VectorPreferenceCategory>
 
 </androidx.preference.PreferenceScreen>

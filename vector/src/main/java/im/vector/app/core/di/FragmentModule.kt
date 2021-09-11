@@ -114,6 +114,7 @@ import im.vector.app.features.roomprofile.settings.joinrule.RoomJoinRuleFragment
 import im.vector.app.features.roomprofile.uploads.RoomUploadsFragment
 import im.vector.app.features.roomprofile.uploads.files.RoomUploadsFilesFragment
 import im.vector.app.features.roomprofile.uploads.media.RoomUploadsMediaFragment
+import im.vector.app.features.settings.VectorSettingsAdvancedSettingsFragment
 import im.vector.app.features.settings.notifications.VectorSettingsAdvancedNotificationPreferenceFragment
 import im.vector.app.features.settings.VectorSettingsGeneralFragment
 import im.vector.app.features.settings.VectorSettingsHelpAboutFragment
@@ -452,6 +453,11 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(VectorSettingsDevicesFragment::class)
     fun bindVectorSettingsDevicesFragment(fragment: VectorSettingsDevicesFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(VectorSettingsAdvancedSettingsFragment::class)
+    fun bindVectorSettingsAdvancedSettingsFragment(fragment: VectorSettingsAdvancedSettingsFragment): Fragment
 
     @Binds
     @IntoMap

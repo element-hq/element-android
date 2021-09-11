@@ -1022,6 +1022,29 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     }
 
     /**
+     * I likely do more fresh installs of the app than anyone else, so a shortcut to change some of the default settings to
+     * my preferred values can safe me some time
+     */
+    fun applyScDefaultValues() {
+        defaultPrefs.edit()
+                .putBoolean(SETTINGS_SIMPLIFIED_MODE, false)
+                .putString(SETTINGS_USER_COLOR_MODE_PUBLIC_ROOM, MatrixItemColorProvider.USER_COLORING_FROM_PL)
+                .putString(SETTINGS_USER_COLOR_MODE_DEFAULT, MatrixItemColorProvider.USER_COLORING_FROM_PL)
+                .putString(SETTINGS_USER_COLOR_MODE_DM, MatrixItemColorProvider.USER_COLORING_UNIFORM)
+                .putString(SETTINGS_ROOM_UNREAD_KIND_DM, RoomSummary.UNREAD_KIND_ORIGINAL_CONTENT.toString())
+                .putString(SETTINGS_ROOM_UNREAD_KIND_GROUP, RoomSummary.UNREAD_KIND_ORIGINAL_CONTENT.toString())
+                .putBoolean(SETTINGS_UNIMPORTANT_COUNTER_BADGE, true)
+                .putBoolean(SETTINGS_PREF_SPACE_SHOW_ALL_ROOM_IN_HOME, true)
+                .putBoolean(SETTINGS_OPEN_CHATS_AT_FIRST_UNREAD, true)
+                .putBoolean(SETTINGS_ALLOW_URL_PREVIEW_IN_ENCRYPTED_ROOM_KEY, true)
+                .putBoolean(SETTINGS_LABS_ALLOW_MARK_UNREAD, true)
+                .putBoolean(SETTINGS_LABS_ENABLE_SWIPE_TO_REPLY, false)
+                .putBoolean(SETTINGS_VOICE_MESSAGE, false)
+                .putBoolean(SETTINGS_USE_RAGE_SHAKE_KEY, true)
+                .apply()
+    }
+
+    /**
      * The user enable protecting app access with pin code.
      * Currently we use the pin code store to know if the pin is enabled, so this is not used
      */

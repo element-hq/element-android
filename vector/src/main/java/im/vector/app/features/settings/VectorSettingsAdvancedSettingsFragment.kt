@@ -18,12 +18,17 @@ package im.vector.app.features.settings
 
 import androidx.preference.Preference
 import androidx.preference.SeekBarPreference
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseActivity
+import im.vector.app.core.preference.VectorPreference
 import im.vector.app.core.preference.VectorSwitchPreference
 import im.vector.app.features.rageshake.RageShake
+import javax.inject.Inject
 
-class VectorSettingsAdvancedSettingsFragment : VectorSettingsBaseFragment() {
+class VectorSettingsAdvancedSettingsFragment @Inject constructor(
+        private val vectorPreferences: VectorPreferences
+): VectorSettingsBaseFragment() {
 
     override var titleRes = R.string.settings_advanced_settings
     override val preferenceXmlRes = R.xml.vector_settings_advanced_settings
@@ -73,6 +78,18 @@ class VectorSettingsAdvancedSettingsFragment : VectorSettingsBaseFragment() {
             }
         } else {
             findPreference<VectorSwitchPreference>("SETTINGS_RAGE_SHAKE_CATEGORY_KEY")!!.isVisible = false
+        }
+
+        findPreference<VectorPreference>("SETTINGS_APPLY_SC_DEFAULT_SETTINGS")?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            MaterialAlertDialogBuilder(requireContext())
+                    .setTitle(R.string.settings_apply_sc_default_settings_dialog_title)
+                    .setMessage(R.string.settings_apply_sc_default_settings_dialog_summary)
+                    .setPositiveButton(R.string._continue) { _, _ ->
+                        vectorPreferences.applyScDefaultValues()
+                    }
+                    .setNegativeButton(R.string.cancel) { _, _ -> /* Just close dialog */ }
+                    .show()
+            true
         }
     }
 }
