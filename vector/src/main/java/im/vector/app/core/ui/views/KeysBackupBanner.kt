@@ -178,11 +178,14 @@ class KeysBackupBanner @JvmOverloads constructor(
     }
 
     private fun renderBackingUp() {
+        isVisible = false
+        /*
         isVisible = true
         views.viewKeysBackupBannerText1.setText(R.string.secure_backup_banner_setup_line1)
         views.viewKeysBackupBannerText2.isVisible = true
         views.viewKeysBackupBannerText2.setText(R.string.keys_backup_banner_in_progress)
         views.viewKeysBackupBannerLoading.isVisible = true
+         */
     }
 
     /**
