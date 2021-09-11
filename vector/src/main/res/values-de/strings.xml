@@ -2958,4 +2958,28 @@
     <string name="audio_call_with_participant">Sprachanruf mit %s</string>
     <string name="video_call_with_participant">Videoanruf mit %s</string>
     <string name="learn_more">Mehr erfahren</string>
+    <string name="call_jitsi_started">Gruppenanruf gestartet</string>
+    <string name="all_rooms_youre_in_will_be_shown_in_home">Alle beigetretenen Räume werden auf der Startseite angezeigt.</string>
+    <string name="preference_show_all_rooms_in_home">Alle Räume auf der Startseite anzeigen</string>
+    <string name="call_slide_to_end_conference">Wische, um den Anruf zu beenden</string>
+    <string name="call_one_active">Aktiver Anruf (%1$s) ·</string>
+    <plurals name="call_active_status">
+        <item quantity="one">Aktiver Anruf ·</item>
+        <item quantity="other">%1$d aktive Anrufe ·</item>
+    </plurals>
+    <string name="call_tile_connection_failed">Verbindung fehlgeschlagen</string>
+    <string name="call_tile_video_declined">Videoanruf abgelehnt</string>
+    <string name="call_tile_voice_declined">Sprachanruf abgelehnt</string>
+    <string name="call_tile_video_call_has_ended">Videoanruf beendet • %1$s</string>
+    <string name="call_tile_voice_call_has_ended">Sprachanruf beendet • %1$s</string>
+    <string name="room_settings_room_notifications_notify_me">Benachrichtige mich bei</string>
+    <string name="settings_mentions_at_room">\@room</string>
+    <string name="settings_notification_keyword_contains_invalid_character">Schlüsselwörter können nicht \"%s\" enthalten</string>
+    <string name="settings_notification_keyword_contains_dot">Schlüsselwörter können nicht mit einem Punkt beginnen</string>
+    <string name="room_settings_none">Nichts</string>
+    <string name="call_ended_invite_timeout_title">Nicht erreicht</string>
+    <string name="call_ended_user_busy_description">Die angerufene Person ist beschäftigt.</string>
+    <string name="call_ended_user_busy_title">Person beschäftigt</string>
+    <string name="call_ringing">Klingeln…</string>
+    <string name="spaces">Spaces</string>
 </resources>
