@@ -15,7 +15,7 @@
         <item quantity="other">%d người dùng</item>
     </plurals>
     <string name="no_room_placeholder">Không có phòng</string>
-    <string name="rooms_directory_header">Thư mục phòng</string>
+    <string name="rooms_directory_header">Danh sách phòng</string>
     <string name="rooms_header">Phòng</string>
     <string name="no_more_results">Không còn kết quả nào nữa</string>
     <string name="home_filter_placeholder_favorites">Lọc danh sách yêu thích</string>
@@ -25,7 +25,7 @@
     <string name="template_no_contact_access_placeholder">Bạn chưa cho phép ${app_name} truy cập danh bạ của bạn</string>
     <string name="no_conversation_placeholder">Không có cuộc trò chuyện nào</string>
     <string name="matrix_only_filter">Chỉ những liên hệ Matrix</string>
-    <string name="user_directory_header">Thư mục người dùng</string>
+    <string name="user_directory_header">Danh sách người dùng</string>
     <string name="local_address_book_header">Sổ địa chỉ địa phương</string>
     <string name="direct_chats_header">Cuộc trò chuyện</string>
     <string name="system_alerts_header">Cảnh báo hệ thống</string>
@@ -670,7 +670,7 @@
     <string name="auth_reset_password_error_unauthorized">Xác minh địa chỉ email thất bại: hãy chắc chắn là bạn đã nhấn vào liên kết trong email</string>
     <string name="settings_room_directory_show_all_rooms_summary">Hiện tất cả phòng trong thư mục phòng, bao gồm cả các phòng có nội dung phản cảm.</string>
     <string name="settings_room_directory_show_all_rooms">Hiện các phòng có nội dung phản cảm</string>
-    <string name="settings_category_room_directory">Thư mục phòng</string>
+    <string name="settings_category_room_directory">Danh sách phòng</string>
     <string name="system_theme">Mặc định hệ thống</string>
     <string name="notice_end_to_end_unknown_algorithm_by_you">Bạn đã bật mã hoá đầu cuối (thuật toán không được nhận ra %1$s).</string>
     <string name="notice_end_to_end_unknown_algorithm">%1$s đã bật mã hoá đầu cuối (thuật toán không được nhận ra %2$s).</string>
@@ -1279,4 +1279,84 @@
     <string name="settings_set_sync_delay">Thời gian chờ giữa 2 lần đồng bộ</string>
     <string name="settings_set_workmanager_delay_summary">%s
 \nTiến trình đồng bộ có thể bị gián đoạn tùy thuộc vào lượng pin và trạng thái hoạt động của thiết bị.</string>
+    <string name="login_validation_code_is_not_correct">Mã nhập vào không hợp lệ. Vui lòng kiểm tra.</string>
+    <string name="login_wait_for_email_notice">Chúng tôi vừa gửi email tới %1$s.
+\nClick vào đường link trong email để tiếp tục quá trình tạo tài khoản.</string>
+    <string name="login_wait_for_email_title">Hãy kiểm tra email của bạn</string>
+    <string name="login_terms_title">Chấp nhận điều khoản để tiếp tục</string>
+    <string name="login_a11y_captcha_container">Hãy thực hiện thách thức captcha</string>
+    <string name="login_a11y_choose_other">Chọn một máy chủ khác</string>
+    <string name="login_a11y_choose_modular">Chọn Dịch vụ Element Matrix</string>
+    <string name="login_a11y_choose_matrix_org">Chọn matrix.org</string>
+    <string name="login_signup_cancel_confirmation_content">Tài khoản của bạn chưa được tạo.
+\n
+\nBạn muốn ngừng tiến trình đăng ký\?</string>
+    <string name="login_signup_cancel_confirmation_title">Cảnh báo</string>
+    <string name="login_signup_error_user_in_use">Tên đăng nhập này đã được đăng ký</string>
+    <string name="login_signup_submit">Tiếp</string>
+    <string name="login_signup_password_hint">Mật khẩu</string>
+    <string name="login_signup_username_hint">Tên đăng nhập</string>
+    <string name="login_signin_username_hint">Username hoặc email</string>
+    <string name="login_signup_to">Đăng ký với %1$s</string>
+    <string name="login_msisdn_error_other">Số điện thoại có vẻ không hợp lệ. Hãy kiểm tra lại</string>
+    <string name="login_msisdn_error_not_international">Số điện thoại quốc tế phải bắt đầu với dấu \'+\'</string>
+    <string name="login_msisdn_notice">Vui lòng dùng định dạng quốc tế (số điện thoại bắt đầu với \'+\')</string>
+    <string name="login_msisdn_confirm_submit">Tiếp</string>
+    <string name="login_msisdn_confirm_send_again">Gửi lại</string>
+    <string name="login_msisdn_confirm_hint">Nhập mã</string>
+    <string name="login_msisdn_confirm_notice">Chúng tôi vừa gửi mã tới %1$s. Nhập mã để xác thực.</string>
+    <string name="login_msisdn_confirm_title">Xác nhận số điện thoại</string>
+    <string name="login_set_msisdn_submit">Tiếp</string>
+    <string name="login_set_msisdn_optional_hint">Số điện thoại (tùy chọn)</string>
+    <string name="login_set_msisdn_mandatory_hint">Số điện thoại</string>
+    <string name="login_set_msisdn_notice2">Vui lòng sử dụng mẫu quốc tế.</string>
+    <string name="login_set_msisdn_notice">Thêm số điện thoại để tùy chọn cho phép người khác tìm bạn qua số điện thoại.</string>
+    <string name="login_set_msisdn_title">Thêm số điện thoại</string>
+    <string name="login_set_email_submit">Tiếp</string>
+    <string name="login_set_email_optional_hint">Email (tùy chọn)</string>
+    <string name="login_set_email_mandatory_hint">Email</string>
+    <string name="login_set_email_notice">Thêm địa chỉ email để phục hồi tài khoản. Sau này bạn có thể tùy chọn cho phép người khác tìm mình qua email.</string>
+    <string name="login_set_email_title">Thêm địa chỉ email</string>
+    <string name="login_reset_password_cancel_confirmation_content">Mật khẩu chưa được thay đổi.
+\n
+\nBạn muốn ngừng tiến trình đổi mật khẩu\?</string>
+    <string name="login_reset_password_cancel_confirmation_title">Cảnh báo</string>
+    <string name="login_reset_password_success_submit">Trở lại Đăng nhập</string>
+    <string name="login_reset_password_success_notice_2">Bạn vừa đăng xuất tất cả phiên đăng nhập và không còn nhận được thông báo đẩy. Đăng nhập lại để nhận thông báo trên thiết bị.</string>
+    <string name="login_reset_password_success_notice">Mật khẩu của bạn đã được đặt lại.</string>
+    <string name="login_reset_password_success_title">Thành công!</string>
+    <string name="login_reset_password_mail_confirmation_submit">Tôi đã xác minh địa chỉ email</string>
+    <string name="login_reset_password_mail_confirmation_notice_2">Nhấp vào đường dẫn để xác nhận mật khẩu mới. Sau khi bạn nhâp vào đường dẫn, hãy nhấp vào bên dưới.</string>
+    <string name="login_reset_password_mail_confirmation_notice">Email xác thực đã được gửi tới %1$s.</string>
+    <string name="login_reset_password_mail_confirmation_title">Kiểm tra mailbox</string>
+    <string name="login_reset_password_error_not_found">Email này không gắn với tài khoản nào</string>
+    <string name="login_reset_password_warning_submit">Tiếp tục</string>
+    <string name="login_reset_password_warning_content">Đổi mật khẩu sẽ đặt lại tất cả khóa bảo mật trên tất cả phiên của bạn, làm cho lịch sử chat mã hóa không đọc được. Vui lòng Sao lưu Khóa hoặc xuất khẩu tất cả khóa bảo mật các phòng từ một phiên đăng nhập khác trước khi đặt lại mật khẩu.</string>
+    <string name="login_reset_password_warning_title">Cảnh báo!</string>
+    <string name="login_reset_password_password_hint">Mật khẩu mới</string>
+    <string name="login_reset_password_email_hint">Email</string>
+    <string name="login_reset_password_submit">Tiếp</string>
+    <string name="login_reset_password_notice">Email xác thực thông tin đã được gửi tới bạn để xác nhận đặt lại mật khẩu mới.</string>
+    <string name="login_reset_password_on">Đặt lại mật khẩu ở %1$s</string>
+    <string name="login_login_with_email_error">Địa chỉ email này không có trong hệ thống.</string>
+    <string name="login_server_url_form_other_hint">Địa chỉ</string>
+    <string name="login_server_url_form_modular_hint">Địa chỉ Dịch vụ Element Matrix</string>
+    <string name="login_clear_homeserver_history">Xóa lịch sử</string>
+    <string name="login_signin_sso">Tiếp tục với SSO</string>
+    <string name="login_signin">Đăng Nhập</string>
+    <string name="login_signup">Đăng Ký</string>
+    <string name="login_signin_to">Đăng nhập vào %1$s</string>
+    <string name="login_connect_to_a_custom_server">Kết nối tới máy chủ dịch vụ khác</string>
+    <string name="login_connect_to_modular">Kết nối tới máy chủ dịch vụ</string>
+    <string name="login_connect_to">Kết nố tới %1$s</string>
+    <string name="login_continue">Tiếp tục</string>
+    <string name="login_social_sso">Single Sign-On</string>
+    <string name="login_social_signin_with">Đăng nhập với %s</string>
+    <string name="login_social_signup_with">Tạo tài khoản với %s</string>
+    <string name="login_social_continue_with">Tiếp tục với %s</string>
+    <string name="login_social_continue">Hoặc</string>
+    <string name="login_server_other_text">Thiết lập tùy chỉnh và nâng cao</string>
+    <string name="login_server_other_title">Khác</string>
+    <string name="login_server_modular_learn_more">Xem thêm</string>
+    <string name="login_server_text">Giống như email, tài khoản cần có nhà riêng, dù bạn có thể nói chuyện với bất kỳ ai</string>
 </resources>
