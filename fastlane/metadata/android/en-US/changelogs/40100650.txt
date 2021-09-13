@@ -1,0 +1,4 @@
+- Update codebase to Element v1.2.2
+- Improve power-level based name-color updating
+- Hide secure backup "backing up keys" banner
+- Drawer unread count badge: use total count
