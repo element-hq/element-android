@@ -85,7 +85,7 @@ class CreateSpaceViewModel @AssistedInject constructor(
     }
 
     private fun stopListenToIdentityManager() {
-        identityService.addListener(identityServerManagerListener)
+        identityService.removeListener(identityServerManagerListener)
     }
 
     override fun onCleared() {

@@ -22,6 +22,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.airbnb.mvrx.activityViewModel
 import im.vector.app.R
+import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.platform.OnBackPressed
@@ -68,6 +69,12 @@ class CreateSpaceAdd3pidInvitesFragment @Inject constructor(
         } else {
             getString(R.string.next_pf)
         }
+    }
+
+    override fun onDestroyView() {
+        views.recyclerView.cleanup()
+        epoxyController.listener = null
+        super.onDestroyView()
     }
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?) =
