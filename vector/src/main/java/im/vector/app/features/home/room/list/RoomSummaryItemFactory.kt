@@ -45,13 +45,20 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
     fun create(roomSummary: RoomSummary,
                roomChangeMembershipStates: Map<String, ChangeMembershipState>,
                selectedRoomIds: Set<String>,
+               compact: Boolean = false,
                listener: RoomListListener?): VectorEpoxyModel<*> {
         return when (roomSummary.membership) {
             Membership.INVITE -> {
                 val changeMembershipState = roomChangeMembershipStates[roomSummary.roomId] ?: ChangeMembershipState.Unknown
                 createInvitationItem(roomSummary, changeMembershipState, listener)
             }
-            else              -> createRoomItem(roomSummary, selectedRoomIds, listener?.let { it::onRoomClicked }, listener?.let { it::onRoomLongClicked })
+            else              -> createRoomItem(
+                    roomSummary,
+                    selectedRoomIds,
+                    compact,
+                    listener?.let { it::onRoomClicked },
+                    listener?.let { it::onRoomLongClicked }
+            )
         }
     }
 
@@ -104,6 +111,7 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
     fun createRoomItem(
             roomSummary: RoomSummary,
             selectedRoomIds: Set<String>,
+            compact: Boolean,
             onClick: ((RoomSummary) -> Unit)?,
             onLongClick: ((RoomSummary) -> Boolean)?
     ): VectorEpoxyModel<*> {
@@ -118,28 +126,52 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
             latestEventTime = dateFormatter.format(latestEvent.root.originServerTs, DateFormatKind.ROOM_LIST)
         }
         val typingMessage = typingHelper.getTypingMessage(roomSummary.typingUsers)
-        return RoomSummaryItem_()
-                .id(roomSummary.roomId)
-                .avatarRenderer(avatarRenderer)
-                // We do not display shield in the room list anymore
-                // .encryptionTrustLevel(roomSummary.roomEncryptionTrustLevel)
-                .izPublic(roomSummary.isPublic)
-                .showPresence(roomSummary.isDirect)
-                .userPresence(roomSummary.directUserPresence)
-                .matrixItem(roomSummary.toMatrixItem())
-                .lastEventTime(latestEventTime)
-                .typingMessage(typingMessage)
-                .lastEvent(latestFormattedEvent.toString())
-                .lastFormattedEvent(latestFormattedEvent)
-                .showHighlighted(showHighlighted)
-                .showSelected(showSelected)
-                .hasFailedSending(roomSummary.hasFailedSending)
-                .unreadNotificationCount(unreadCount)
-                .hasUnreadMessage(roomSummary.hasUnreadMessages)
-                .hasDraft(roomSummary.userDrafts.isNotEmpty())
-                .itemLongClickListener { _ ->
-                    onLongClick?.invoke(roomSummary) ?: false
-                }
-                .itemClickListener { onClick?.invoke(roomSummary) }
+        return if (compact) {
+            RoomSummaryCompactItem_()
+                    .id(roomSummary.roomId)
+                    .avatarRenderer(avatarRenderer)
+                    // We do not display shield in the room list anymore
+                    // .encryptionTrustLevel(roomSummary.roomEncryptionTrustLevel)
+                    .izPublic(roomSummary.isPublic)
+                    .showPresence(roomSummary.isDirect)
+                    .userPresence(roomSummary.directUserPresence)
+                    .matrixItem(roomSummary.toMatrixItem())
+                    .lastEventTime(latestEventTime)
+                    .lastFormattedEvent(latestFormattedEvent)
+                    .showHighlighted(showHighlighted)
+                    .showSelected(showSelected)
+                    .hasFailedSending(roomSummary.hasFailedSending)
+                    .unreadNotificationCount(unreadCount)
+                    .hasUnreadMessage(roomSummary.hasUnreadMessages)
+                    .hasDraft(roomSummary.userDrafts.isNotEmpty())
+                    .itemLongClickListener { _ ->
+                        onLongClick?.invoke(roomSummary) ?: false
+                    }
+                    .itemClickListener { onClick?.invoke(roomSummary) }
+        } else {
+            RoomSummaryItem_()
+                    .id(roomSummary.roomId)
+                    .avatarRenderer(avatarRenderer)
+                    // We do not display shield in the room list anymore
+                    // .encryptionTrustLevel(roomSummary.roomEncryptionTrustLevel)
+                    .showPresence(roomSummary.isDirect)
+                    .userPresence(roomSummary.directUserPresence)
+                    .izPublic(roomSummary.isPublic)
+                    .matrixItem(roomSummary.toMatrixItem())
+                    .lastEventTime(latestEventTime)
+                    .typingMessage(typingMessage)
+                    .lastEvent(latestFormattedEvent.toString())
+                    .lastFormattedEvent(latestFormattedEvent)
+                    .showHighlighted(showHighlighted)
+                    .showSelected(showSelected)
+                    .hasFailedSending(roomSummary.hasFailedSending)
+                    .unreadNotificationCount(unreadCount)
+                    .hasUnreadMessage(roomSummary.hasUnreadMessages)
+                    .hasDraft(roomSummary.userDrafts.isNotEmpty())
+                    .itemLongClickListener { _ ->
+                        onLongClick?.invoke(roomSummary) ?: false
+                    }
+                    .itemClickListener { onClick?.invoke(roomSummary) }
+        }
     }
 }

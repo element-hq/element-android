@@ -42,6 +42,7 @@ import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.query.ActiveSpaceFilter
 import org.matrix.android.sdk.api.query.RoomCategoryFilter
+import org.matrix.android.sdk.api.query.RoomTagQueryFilter
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.initsync.SyncStatusService
 import org.matrix.android.sdk.api.session.room.RoomSortOrder
@@ -253,6 +254,7 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
                                     roomSummaryQueryParams {
                                         memberships = listOf(Membership.JOIN)
                                         roomCategoryFilter = RoomCategoryFilter.ONLY_DM
+                                        roomTagQueryFilter = RoomTagQueryFilter(false, null, null)
                                         activeSpaceFilter = activeSpaceRoomId?.let { ActiveSpaceFilter.ActiveSpace(it) } ?: ActiveSpaceFilter.None
                                     }
                             )
@@ -261,18 +263,27 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
                                     roomSummaryQueryParams {
                                         memberships = listOf(Membership.JOIN)
                                         roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
+                                        roomTagQueryFilter = RoomTagQueryFilter(false, null, null)
+                                        activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(groupingMethod.spaceSummary?.roomId)
+                                    }
+                            )
+
+                            val favRooms = session.getNotificationCountForRooms(
+                                    roomSummaryQueryParams {
+                                        memberships = listOf(Membership.JOIN)
+                                        roomTagQueryFilter = RoomTagQueryFilter(true, null, null)
                                         activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(groupingMethod.spaceSummary?.roomId)
                                     }
                             )
 
                             setState {
                                 copy(
-                                        notificationCountCatchup = dmRooms.totalCount + otherRooms.totalCount + roomsInvite + dmInvites,
-                                        notificationHighlightCatchup = dmRooms.isHighlight || otherRooms.isHighlight || (dmInvites + roomsInvite) > 0,
-                                        notificationCountPeople = dmRooms.totalCount + dmInvites,
-                                        notificationHighlightPeople = dmRooms.isHighlight || dmInvites > 0,
+                                        notificationCountHome = roomsInvite + dmInvites + favRooms.totalCount,
+                                        notificationHighlightHome = dmInvites + roomsInvite > 0 || favRooms.totalCount > 0,
+                                        notificationCountPeople = dmRooms.totalCount,
+                                        notificationHighlightPeople = dmRooms.isHighlight,
                                         notificationCountRooms = otherRooms.totalCount + roomsInvite,
-                                        notificationHighlightRooms = otherRooms.isHighlight || roomsInvite > 0,
+                                        notificationHighlightRooms = otherRooms.isHighlight,
                                         hasUnreadMessages = dmRooms.totalCount + otherRooms.totalCount > 0
                                 )
                             }

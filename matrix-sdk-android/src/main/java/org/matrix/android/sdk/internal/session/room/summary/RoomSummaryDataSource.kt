@@ -250,6 +250,22 @@ internal class RoomSummaryDataSource @Inject constructor(@SessionDatabase privat
                 RoomCategoryFilter.ONLY_DM                 -> query.equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
                 RoomCategoryFilter.ONLY_ROOMS              -> query.equalTo(RoomSummaryEntityFields.IS_DIRECT, false)
                 RoomCategoryFilter.ONLY_WITH_NOTIFICATIONS -> query.greaterThan(RoomSummaryEntityFields.NOTIFICATION_COUNT, 0)
+                RoomCategoryFilter.UNREAD_NOTIFICATION_DMS    ->  {
+                    query.equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
+                    query.greaterThan(RoomSummaryEntityFields.NOTIFICATION_COUNT, 0)
+                }
+                RoomCategoryFilter.UNREAD_NOTIFICATION_ROOMS  ->  {
+                    query.equalTo(RoomSummaryEntityFields.IS_DIRECT, false)
+                    query.greaterThan(RoomSummaryEntityFields.NOTIFICATION_COUNT, 0)
+                }
+                RoomCategoryFilter.ROOMS_WITH_NO_NOTIFICATION -> {
+                    query.equalTo(RoomSummaryEntityFields.IS_DIRECT, false)
+                    query.equalTo(RoomSummaryEntityFields.NOTIFICATION_COUNT, 0.toInt())
+                }
+                RoomCategoryFilter.DMS_WITH_NO_NOTIFICATION -> {
+                    query.equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
+                    query.equalTo(RoomSummaryEntityFields.NOTIFICATION_COUNT, 0.toInt())
+                }
                 RoomCategoryFilter.ALL                     -> {
                     // nop
                 }
@@ -272,12 +288,6 @@ internal class RoomSummaryDataSource @Inject constructor(@SessionDatabase privat
         }
         queryParams.includeType?.forEach {
             query.equalTo(RoomSummaryEntityFields.ROOM_TYPE, it)
-        }
-        when (queryParams.roomCategoryFilter) {
-            RoomCategoryFilter.ONLY_DM                 -> query.equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
-            RoomCategoryFilter.ONLY_ROOMS              -> query.equalTo(RoomSummaryEntityFields.IS_DIRECT, false)
-            RoomCategoryFilter.ONLY_WITH_NOTIFICATIONS -> query.greaterThan(RoomSummaryEntityFields.NOTIFICATION_COUNT, 0)
-            RoomCategoryFilter.ALL                     -> Unit // nop
         }
 
         // Timber.w("VAL: activeSpaceId : ${queryParams.activeSpaceId}")

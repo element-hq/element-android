@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2021 The Matrix.org Foundation C.I.C.
+ * Copyright 2021 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,15 +14,14 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.api.query
+package im.vector.app.features.home.room.list
 
-enum class RoomCategoryFilter {
-    ONLY_DM,
-    ONLY_ROOMS,
-    ONLY_WITH_NOTIFICATIONS,
-    UNREAD_NOTIFICATION_DMS,
-    UNREAD_NOTIFICATION_ROOMS,
-    ROOMS_WITH_NO_NOTIFICATION,
-    DMS_WITH_NO_NOTIFICATION,
-    ALL
+import com.airbnb.epoxy.EpoxyModelClass
+import im.vector.app.R
+import im.vector.app.core.epoxy.VectorEpoxyHolder
+import im.vector.app.core.epoxy.VectorEpoxyModel
+
+@EpoxyModelClass(layout = R.layout.item_room_compact_placeholder)
+abstract class RoomSummaryItemCompactPlaceHolder : VectorEpoxyModel<RoomSummaryItemCompactPlaceHolder.Holder>() {
+    class Holder : VectorEpoxyHolder()
 }

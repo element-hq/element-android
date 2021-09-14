@@ -27,7 +27,7 @@ class RoomSummaryPagedController(
 ) : PagedListEpoxyController<RoomSummary>(
         // Important it must match the PageList builder notify Looper
         modelBuildingHandler = createUIHandler()
-), CollapsableControllerExtension {
+), CollapsableControllerExtension, CompactModeControllerExtension {
 
     var listener: RoomListListener? = null
 
@@ -46,6 +46,14 @@ class RoomSummaryPagedController(
             }
         }
 
+    override var compactModeOn: Boolean = false
+        set(value) {
+            if (field != value) {
+                field = value
+                requestForcedModelBuild()
+            }
+        }
+
     override fun addModels(models: List<EpoxyModel<*>>) {
         if (collapsed) {
             super.addModels(emptyList())
@@ -56,7 +64,11 @@ class RoomSummaryPagedController(
 
     override fun buildItemModel(currentPosition: Int, item: RoomSummary?): EpoxyModel<*> {
         // for place holder if enabled
-        item ?: return RoomSummaryItemPlaceHolder_().apply { id(currentPosition) }
-        return roomSummaryItemFactory.create(item, roomChangeMembershipStates.orEmpty(), emptySet(), listener)
+        item ?: return if (compactModeOn) {
+            RoomSummaryItemCompactPlaceHolder_().apply { id(currentPosition) }
+        } else {
+            RoomSummaryItemPlaceHolder_().apply { id(currentPosition) }
+        }
+        return roomSummaryItemFactory.create(item, roomChangeMembershipStates.orEmpty(), emptySet(), compactModeOn, listener)
     }
 }

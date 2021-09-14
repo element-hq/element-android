@@ -20,7 +20,7 @@ import androidx.annotation.StringRes
 import im.vector.app.R
 
 enum class RoomListDisplayMode(@StringRes val titleRes: Int) {
-    NOTIFICATIONS(R.string.bottom_action_notification),
+    HOME(R.string.bottom_action_home),
     PEOPLE(R.string.bottom_action_people_x),
     ROOMS(R.string.bottom_action_rooms),
     FILTERED(/* Not used */ 0)

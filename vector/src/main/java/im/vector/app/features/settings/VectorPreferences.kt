@@ -165,7 +165,6 @@ class VectorPreferences @Inject constructor(private val context: Context) {
 
         // SETTINGS_LABS_HIDE_TECHNICAL_E2E_ERRORS
         private const val SETTINGS_LABS_SHOW_COMPLETE_HISTORY_IN_ENCRYPTED_ROOM = "SETTINGS_LABS_SHOW_COMPLETE_HISTORY_IN_ENCRYPTED_ROOM"
-        const val SETTINGS_LABS_UNREAD_NOTIFICATIONS_AS_TAB = "SETTINGS_LABS_UNREAD_NOTIFICATIONS_AS_TAB"
 
         // analytics
         const val SETTINGS_USE_ANALYTICS_KEY = "SETTINGS_USE_ANALYTICS_KEY"
@@ -333,10 +332,6 @@ class VectorPreferences @Inject constructor(private val context: Context) {
 
     fun labAllowedExtendedLogging(): Boolean {
         return developerMode() && defaultPrefs.getBoolean(SETTINGS_LABS_ALLOW_EXTENDED_LOGS, false)
-    }
-
-    fun labAddNotificationTab(): Boolean {
-        return defaultPrefs.getBoolean(SETTINGS_LABS_UNREAD_NOTIFICATIONS_AS_TAB, false)
     }
 
     fun failFast(): Boolean {

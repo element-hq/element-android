@@ -179,10 +179,10 @@ class RoomListFragment @Inject constructor(
 
     private fun setupCreateRoomButton() {
         when (roomListParams.displayMode) {
-            RoomListDisplayMode.NOTIFICATIONS -> views.createChatFabMenu.isVisible = true
-            RoomListDisplayMode.PEOPLE        -> views.createChatRoomButton.isVisible = true
-            RoomListDisplayMode.ROOMS         -> views.createGroupRoomButton.isVisible = true
-            else                              -> Unit // No button in this mode
+            RoomListDisplayMode.HOME   -> views.createChatFabMenu.isVisible = true
+            RoomListDisplayMode.PEOPLE -> views.createChatRoomButton.isVisible = true
+            RoomListDisplayMode.ROOMS  -> views.createGroupRoomButton.isVisible = true
+            else                       -> Unit // No button in this mode
         }
 
         views.createChatRoomButton.debouncedClicks {
@@ -205,10 +205,10 @@ class RoomListFragment @Inject constructor(
                             RecyclerView.SCROLL_STATE_DRAGGING,
                             RecyclerView.SCROLL_STATE_SETTLING -> {
                                 when (roomListParams.displayMode) {
-                                    RoomListDisplayMode.NOTIFICATIONS -> views.createChatFabMenu.hide()
-                                    RoomListDisplayMode.PEOPLE        -> views.createChatRoomButton.hide()
-                                    RoomListDisplayMode.ROOMS         -> views.createGroupRoomButton.hide()
-                                    else                              -> Unit
+                                    RoomListDisplayMode.HOME   -> views.createChatFabMenu.hide()
+                                    RoomListDisplayMode.PEOPLE -> views.createChatRoomButton.hide()
+                                    RoomListDisplayMode.ROOMS  -> views.createGroupRoomButton.hide()
+                                    else                       -> Unit
                                 }
                             }
                         }
@@ -266,7 +266,11 @@ class RoomListFragment @Inject constructor(
             val contentAdapter =
                     when {
                         section.livePages != null     -> {
-                            pagedControllerFactory.createRoomSummaryPagedController()
+                            if (section.isCompact) {
+                                pagedControllerFactory.createCompactRoomSummaryPagedController()
+                            } else {
+                                pagedControllerFactory.createRoomSummaryPagedController()
+                            }
                                     .also { controller ->
                                         section.livePages.observe(viewLifecycleOwner) { pl ->
                                             controller.submitList(pl)
@@ -306,7 +310,11 @@ class RoomListFragment @Inject constructor(
                                     }
                         }
                         else                          -> {
-                            pagedControllerFactory.createRoomSummaryListController()
+                            if (section.isCompact) {
+                                pagedControllerFactory.createCompactRoomSummaryListController()
+                            } else {
+                                pagedControllerFactory.createRoomSummaryListController()
+                            }
                                     .also { controller ->
                                         section.liveList?.observe(viewLifecycleOwner) { list ->
                                             controller.setData(list)
@@ -354,10 +362,10 @@ class RoomListFragment @Inject constructor(
     private val showFabRunnable = Runnable {
         if (isAdded) {
             when (roomListParams.displayMode) {
-                RoomListDisplayMode.NOTIFICATIONS -> views.createChatFabMenu.show()
-                RoomListDisplayMode.PEOPLE        -> views.createChatRoomButton.show()
-                RoomListDisplayMode.ROOMS         -> views.createGroupRoomButton.show()
-                else                              -> Unit
+                RoomListDisplayMode.HOME   -> views.createChatFabMenu.show()
+                RoomListDisplayMode.PEOPLE -> views.createChatRoomButton.show()
+                RoomListDisplayMode.ROOMS  -> views.createGroupRoomButton.show()
+                else                       -> Unit
             }
         }
     }
@@ -419,27 +427,27 @@ class RoomListFragment @Inject constructor(
                 !adapterInfosList.any { it.sectionHeaderAdapter.roomsSectionData.isLoading }
         if (shouldShowEmpty) {
             val emptyState = when (roomListParams.displayMode) {
-                RoomListDisplayMode.NOTIFICATIONS -> {
+                RoomListDisplayMode.HOME   -> {
                     StateView.State.Empty(
                             title = getString(R.string.room_list_catchup_empty_title),
                             image = ContextCompat.getDrawable(requireContext(), R.drawable.ic_noun_party_popper),
                             message = getString(R.string.room_list_catchup_empty_body))
                 }
-                RoomListDisplayMode.PEOPLE        ->
+                RoomListDisplayMode.PEOPLE ->
                     StateView.State.Empty(
                             title = getString(R.string.room_list_people_empty_title),
                             image = ContextCompat.getDrawable(requireContext(), R.drawable.empty_state_dm),
                             isBigImage = true,
                             message = getString(R.string.room_list_people_empty_body)
                     )
-                RoomListDisplayMode.ROOMS         ->
+                RoomListDisplayMode.ROOMS  ->
                     StateView.State.Empty(
                             title = getString(R.string.room_list_rooms_empty_title),
                             image = ContextCompat.getDrawable(requireContext(), R.drawable.empty_state_room),
                             isBigImage = true,
                             message = getString(R.string.room_list_rooms_empty_body)
                     )
-                else                              ->
+                else                       ->
                     // Always display the content in this mode, because if the footer
                     StateView.State.Content
             }

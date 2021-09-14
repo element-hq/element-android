@@ -20,5 +20,6 @@ enum class RoomSortOrder {
     NAME,
     ACTIVITY,
     PRIORITY_AND_ACTIVITY,
+    UNREAD,
     NONE
 }

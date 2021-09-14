@@ -210,7 +210,7 @@ class HomeDetailFragment @Inject constructor(
     override fun onResume() {
         super.onResume()
         // update notification tab if needed
-        updateTabVisibilitySafely(R.id.bottom_action_notification, vectorPreferences.labAddNotificationTab())
+//        updateTabVisibilitySafely(R.id.bottom_action_notification, vectorPreferences.labAddNotificationTab())
         callManager.checkForProtocolsSupportIfNeeded()
 
         // Current space/group is not live so at least refresh toolbar on resume
@@ -345,12 +345,11 @@ class HomeDetailFragment @Inject constructor(
     }
 
     private fun setupBottomNavigationView() {
-        views.bottomNavigationView.menu.findItem(R.id.bottom_action_notification).isVisible = vectorPreferences.labAddNotificationTab()
         views.bottomNavigationView.setOnItemSelectedListener {
             val tab = when (it.itemId) {
                 R.id.bottom_action_people       -> HomeTab.RoomList(RoomListDisplayMode.PEOPLE)
                 R.id.bottom_action_rooms        -> HomeTab.RoomList(RoomListDisplayMode.ROOMS)
-                R.id.bottom_action_notification -> HomeTab.RoomList(RoomListDisplayMode.NOTIFICATIONS)
+                R.id.bottom_action_home -> HomeTab.RoomList(RoomListDisplayMode.HOME)
                 else                            -> HomeTab.DialPad
             }
             viewModel.handle(HomeDetailAction.SwitchTab(tab))
@@ -447,7 +446,7 @@ class HomeDetailFragment @Inject constructor(
 //        Timber.v(it.toString())
         views.bottomNavigationView.getOrCreateBadge(R.id.bottom_action_people).render(it.notificationCountPeople, it.notificationHighlightPeople)
         views.bottomNavigationView.getOrCreateBadge(R.id.bottom_action_rooms).render(it.notificationCountRooms, it.notificationHighlightRooms)
-        views.bottomNavigationView.getOrCreateBadge(R.id.bottom_action_notification).render(it.notificationCountCatchup, it.notificationHighlightCatchup)
+        views.bottomNavigationView.getOrCreateBadge(R.id.bottom_action_home).render(it.notificationCountHome, it.notificationHighlightHome)
         views.syncStateView.render(
                 it.syncState,
                 it.incrementalSyncStatus,
@@ -474,7 +473,7 @@ class HomeDetailFragment @Inject constructor(
         is HomeTab.RoomList -> when (displayMode) {
             RoomListDisplayMode.PEOPLE -> R.id.bottom_action_people
             RoomListDisplayMode.ROOMS  -> R.id.bottom_action_rooms
-            else                       -> R.id.bottom_action_notification
+            else                       -> R.id.bottom_action_home
         }
     }
 

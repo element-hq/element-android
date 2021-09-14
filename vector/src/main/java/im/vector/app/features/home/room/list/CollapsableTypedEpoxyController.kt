@@ -18,13 +18,23 @@ package im.vector.app.features.home.room.list
 
 import com.airbnb.epoxy.EpoxyController
 
-abstract class CollapsableTypedEpoxyController<T> :
-    EpoxyController(), CollapsableControllerExtension {
+abstract class CollapsableTypedEpoxyController<T>
+    : EpoxyController(), CollapsableControllerExtension, CompactModeControllerExtension {
 
     private var currentData: T? = null
     private var allowModelBuildRequests = false
 
     override var collapsed: Boolean = false
+        set(value) {
+            if (field != value) {
+                field = value
+                allowModelBuildRequests = true
+                requestModelBuild()
+                allowModelBuildRequests = false
+            }
+        }
+
+    override var compactModeOn: Boolean = false
         set(value) {
             if (field != value) {
                 field = value

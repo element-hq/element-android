@@ -26,7 +26,7 @@ class RoomSummaryListController(
 
     override fun buildModels(data: List<RoomSummary>?) {
         data?.forEach {
-            add(roomSummaryItemFactory.create(it, emptyMap(), emptySet(), listener))
+            add(roomSummaryItemFactory.create(it, emptyMap(), emptySet(), compactModeOn, listener))
         }
     }
 }

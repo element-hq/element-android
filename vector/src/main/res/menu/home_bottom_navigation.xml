@@ -2,6 +2,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/bottom_action_home"
+        android:enabled="true"
+        android:icon="@drawable/ic_home_bottom_catchup"
+        android:title="@string/bottom_action_home"
+        android:visible="true" />
+
+    <item
         android:id="@+id/bottom_action_people"
         android:enabled="true"
         android:icon="@drawable/ic_home_bottom_chat"
@@ -12,13 +19,6 @@
         android:enabled="true"
         android:icon="@drawable/ic_home_bottom_group"
         android:title="@string/bottom_action_rooms" />
-
-    <item
-        android:id="@+id/bottom_action_notification"
-        android:enabled="true"
-        android:icon="@drawable/ic_settings_root_notification"
-        android:title="@string/bottom_action_notification"
-        android:visible="false" />
 
     <item
         android:id="@+id/bottom_action_dial_pad"

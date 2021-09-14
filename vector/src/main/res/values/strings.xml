@@ -471,6 +471,8 @@
     <string name="bottom_action_people">People</string>
     <string name="bottom_action_rooms">Rooms</string>
     <string name="bottom_action_groups">Communities</string>
+    <string name="room_list_section_unread_dm">Unread Messages</string>
+    <string name="room_list_section_unread_rooms">Unread Rooms</string>
 
     <!-- Home screen -->
     <string name="home_filter_placeholder_home">Filter room names</string>

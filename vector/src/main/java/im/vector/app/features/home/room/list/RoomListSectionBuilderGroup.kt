@@ -58,7 +58,7 @@ class RoomListSectionBuilderGroup(
                 // 5 sections invites / Fav / Rooms / Low Priority / Server notice
                 buildRoomsSections(sections, activeGroupAwareQueries, actualGroupId)
             }
-            RoomListDisplayMode.FILTERED      -> {
+            RoomListDisplayMode.FILTERED -> {
                 // Used when searching for rooms
                 withQueryParams(
                         {
@@ -74,7 +74,7 @@ class RoomListSectionBuilderGroup(
                         }
                 )
             }
-            RoomListDisplayMode.NOTIFICATIONS -> {
+            RoomListDisplayMode.HOME     -> {
                 if (autoAcceptInvites.showInvites()) {
                     addSection(
                             sections,
@@ -91,11 +91,33 @@ class RoomListSectionBuilderGroup(
                 addSection(
                         sections,
                         activeGroupAwareQueries,
+                        R.string.room_list_section_unread_dm,
+                        false
+                ) {
+                    it.memberships = listOf(Membership.JOIN)
+                    it.roomCategoryFilter = RoomCategoryFilter.UNREAD_NOTIFICATION_DMS
+                    it.activeGroupId = actualGroupId
+                }
+
+                addSection(
+                        sections,
+                        activeGroupAwareQueries,
+                        R.string.room_list_section_unread_rooms,
+                        false
+                ) {
+                    it.memberships = listOf(Membership.JOIN)
+                    it.roomCategoryFilter = RoomCategoryFilter.UNREAD_NOTIFICATION_ROOMS
+                    it.activeGroupId = actualGroupId
+                }
+
+                addSection(
+                        sections,
+                        activeGroupAwareQueries,
                         R.string.bottom_action_rooms,
                         false
                 ) {
                     it.memberships = listOf(Membership.JOIN)
-                    it.roomCategoryFilter = RoomCategoryFilter.ONLY_WITH_NOTIFICATIONS
+                    it.roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
                     it.activeGroupId = actualGroupId
                 }
             }

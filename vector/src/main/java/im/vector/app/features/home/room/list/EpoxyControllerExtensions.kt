@@ -30,3 +30,15 @@ fun EpoxyController.setCollapsed(collapsed: Boolean) {
 interface CollapsableControllerExtension {
     var collapsed: Boolean
 }
+
+fun EpoxyController.setCompactMode(compactModeOn: Boolean) {
+    if (this is CompactModeControllerExtension) {
+        this.compactModeOn = compactModeOn
+    } else {
+        Timber.w("Try to set compact mode on a controller that do not support compact mode")
+    }
+}
+
+interface CompactModeControllerExtension {
+    var compactModeOn: Boolean
+}

@@ -40,11 +40,7 @@ class SharedPreferencesUiStateRepository @Inject constructor(
         return when (sharedPreferences.getInt(KEY_DISPLAY_MODE, VALUE_DISPLAY_MODE_CATCHUP)) {
             VALUE_DISPLAY_MODE_PEOPLE -> RoomListDisplayMode.PEOPLE
             VALUE_DISPLAY_MODE_ROOMS  -> RoomListDisplayMode.ROOMS
-            else                      -> if (vectorPreferences.labAddNotificationTab()) {
-                RoomListDisplayMode.NOTIFICATIONS
-            } else {
-                RoomListDisplayMode.PEOPLE
-            }
+            else                      -> RoomListDisplayMode.HOME
         }
     }
 

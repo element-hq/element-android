@@ -53,7 +53,7 @@ class IncomingShareController @Inject constructor(private val roomSummaryItemFac
         } else {
             roomSummaries.forEach { roomSummary ->
                 roomSummaryItemFactory
-                        .createRoomItem(roomSummary, data.selectedRoomIds, callback?.let { it::onRoomClicked }, callback?.let { it::onRoomLongClicked })
+                        .createRoomItem(roomSummary, data.selectedRoomIds, false, callback?.let { it::onRoomClicked }, callback?.let { it::onRoomLongClicked })
                         .addTo(this)
             }
         }
