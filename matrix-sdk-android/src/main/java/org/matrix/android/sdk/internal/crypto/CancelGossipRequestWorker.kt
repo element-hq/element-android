@@ -23,12 +23,12 @@ import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.api.failure.shouldBeRetried
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
-import org.matrix.android.sdk.api.session.events.model.LocalEcho
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.internal.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.internal.crypto.model.rest.ShareRequestCancellation
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.crypto.tasks.SendToDeviceTask
+import org.matrix.android.sdk.internal.crypto.tasks.createUniqueTxnId
 import org.matrix.android.sdk.internal.session.SessionComponent
 import org.matrix.android.sdk.internal.worker.SessionSafeCoroutineWorker
 import org.matrix.android.sdk.internal.worker.SessionWorkerParams
@@ -43,6 +43,9 @@ internal class CancelGossipRequestWorker(context: Context,
             override val sessionId: String,
             val requestId: String,
             val recipients: Map<String, List<String>>,
+            // The txnId for the sendToDevice request. Nullable for compatibility reasons, but MUST always be provided
+            // to use the same value if this worker is retried.
+            val txnId: String? = null,
             override val lastFailureMessage: String? = null
     ) : SessionWorkerParams {
         companion object {
@@ -51,6 +54,7 @@ internal class CancelGossipRequestWorker(context: Context,
                         sessionId = sessionId,
                         requestId = request.requestId,
                         recipients = request.recipients,
+                        txnId = createUniqueTxnId(),
                         lastFailureMessage = null
                 )
             }
@@ -66,7 +70,10 @@ internal class CancelGossipRequestWorker(context: Context,
     }
 
     override suspend fun doSafeWork(params: Params): Result {
-        val localId = LocalEcho.createLocalEchoId()
+        // params.txnId should be provided in all cases now. But Params can be deserialized by
+        // the WorkManager from data serialized in a previous version of the application, so without the txnId field.
+        // So if not present, we create a txnId
+        val txnId = params.txnId ?: createUniqueTxnId()
         val contentMap = MXUsersDevicesMap<Any>()
         val toDeviceContent = ShareRequestCancellation(
                 requestingDeviceId = credentials.deviceId,
@@ -92,7 +99,7 @@ internal class CancelGossipRequestWorker(context: Context,
                     SendToDeviceTask.Params(
                             eventType = EventType.ROOM_KEY_REQUEST,
                             contentMap = contentMap,
-                            transactionId = localId
+                            transactionId = txnId
                     )
             )
             cryptoStore.updateOutgoingGossipingRequestState(params.requestId, OutgoingGossipingRequestState.CANCELLED)

@@ -22,7 +22,6 @@ import org.matrix.android.sdk.api.session.call.TurnServerResponse
 
 sealed class VectorCallViewEvents : VectorViewEvents {
 
-    object DismissNoCall : VectorCallViewEvents()
     data class ConnectionTimeout(val turn: TurnServerResponse?) : VectorCallViewEvents()
     data class ShowSoundDeviceChooser(
             val available: Set<CallAudioManager.Device>,

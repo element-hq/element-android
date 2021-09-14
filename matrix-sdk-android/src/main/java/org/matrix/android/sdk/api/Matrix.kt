@@ -64,9 +64,7 @@ class Matrix private constructor(context: Context, matrixConfiguration: MatrixCo
         if (context.applicationContext !is Configuration.Provider) {
             WorkManager.initialize(context, Configuration.Builder().setExecutor(Executors.newCachedThreadPool()).build())
         }
-        GlobalScope.launch(Dispatchers.Main) {
-            ProcessLifecycleOwner.get().lifecycle.addObserver(backgroundDetectionObserver)
-        }
+        ProcessLifecycleOwner.get().lifecycle.addObserver(backgroundDetectionObserver)
     }
 
     fun getUserAgent() = userAgentHolder.userAgent
@@ -117,7 +115,7 @@ class Matrix private constructor(context: Context, matrixConfiguration: MatrixCo
         }
 
         fun getSdkVersion(): String {
-            return BuildConfig.VERSION_NAME + " (" + BuildConfig.GIT_SDK_REVISION + ")"
+            return BuildConfig.SDK_VERSION + " (" + BuildConfig.GIT_SDK_REVISION + ")"
         }
     }
 }

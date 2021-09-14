@@ -108,7 +108,7 @@ internal class OneTimeKeysUploader @Inject constructor(
 
     private suspend fun fetchOtkCount(): Int? {
         return tryOrNull("Unable to get OTK count") {
-            val result = uploadKeysTask.execute(UploadKeysTask.Params(null, null))
+            val result = uploadKeysTask.execute(UploadKeysTask.Params(null, null, null))
             result.oneTimeKeyCountsForAlgorithm(MXKey.KEY_SIGNED_CURVE_25519_TYPE)
         }
     }

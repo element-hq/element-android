@@ -116,8 +116,33 @@ You should consider adding Unit tests with your PR, and also integration tests (
 
 ### Internationalisation
 
-When adding new string resources, please only add new entries in file `value/strings.xml`. Translations will be added later by the community of translators with a specific tool named [Weblate](https://translate.riot.im/projects/riot-android/).
+Translations are handled using an external tool: [Weblate](https://translate.element.io/projects/element-android/)
+
+As a general rule, please never edit or add or remove translations to the project in a Pull Request. It can lead to merge conflict if the translations are also modified in Weblate side.
+
+#### Adding new string
+
+When adding new string resources, please only add new entries in file `value/strings.xml`. Translations will be added later by the community of translators using Weblate.
+
+New strings can be added anywhere in the file `value/strings.xml`, not necessarily at the end of the file. Generally, it's even better to add the new strings in some dedicated section per feature, and not at the end of the file, to avoid merge conflict between 2 PR adding strings at the end of the same file.
+
 Do not hesitate to use plurals when appropriate.
+
+#### Editing existing strings
+
+Two cases:
+- If the meaning stays the same, it's OK to edit the original string (i.e. the English version).
+- If the meaning is not the same, please create a new string and do not remove the existing string. See below for instructions to remove existing string.
+
+#### Removing existing strings
+
+If a string is not used anymore, it should be removed from the resource, but please do not remove the strings or its translations in the PR. It can lead to merge conflict with Weblate, and to lint error if new translations from deleted strings are added with Weblate.
+
+Instead, please comment the original string with:
+```xml
+<!-- TO BE REMOVED -->
+```
+The string will be removed during the next sync with Weblate.
 
 ### Accessibility
 

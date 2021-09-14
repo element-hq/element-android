@@ -312,6 +312,7 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
                             _viewEvents.post(RoomSettingsViewEvents.Failure(it))
                         }
                 )
+                .disposeOnClear()
     }
 
     private fun postLoading(isLoading: Boolean) {

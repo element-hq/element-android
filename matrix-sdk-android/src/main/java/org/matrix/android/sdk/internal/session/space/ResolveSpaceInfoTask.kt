@@ -24,24 +24,12 @@ import javax.inject.Inject
 internal interface ResolveSpaceInfoTask : Task<ResolveSpaceInfoTask.Params, SpacesResponse> {
     data class Params(
             val spaceId: String,
-            val maxRoomPerSpace: Int?,
-            val limit: Int,
-            val batchToken: String?,
-            val suggestedOnly: Boolean?,
-            val autoJoinOnly: Boolean?
-    ) {
-        companion object {
-            fun withId(spaceId: String, suggestedOnly: Boolean?, autoJoinOnly: Boolean?) =
-                    Params(
-                            spaceId = spaceId,
-                            maxRoomPerSpace = 10,
-                            limit = 20,
-                            batchToken = null,
-                            suggestedOnly = suggestedOnly,
-                            autoJoinOnly = autoJoinOnly
-                    )
-        }
-    }
+            val limit: Int?,
+            val maxDepth: Int?,
+            val from: String?,
+            val suggestedOnly: Boolean?
+//            val autoJoinOnly: Boolean?
+    )
 }
 
 internal class DefaultResolveSpaceInfoTask @Inject constructor(
@@ -49,15 +37,13 @@ internal class DefaultResolveSpaceInfoTask @Inject constructor(
         private val globalErrorReceiver: GlobalErrorReceiver
 ) : ResolveSpaceInfoTask {
     override suspend fun execute(params: ResolveSpaceInfoTask.Params): SpacesResponse {
-        val body = SpaceSummaryParams(
-                maxRoomPerSpace = params.maxRoomPerSpace,
-                limit = params.limit,
-                batch = params.batchToken ?: "",
-                autoJoinedOnly = params.autoJoinOnly,
-                suggestedOnly = params.suggestedOnly
-        )
         return executeRequest(globalErrorReceiver) {
-            spaceApi.getSpaces(params.spaceId, body)
+            spaceApi.getSpaceHierarchy(
+                    spaceId = params.spaceId,
+                    suggestedOnly = params.suggestedOnly,
+                    limit = params.limit,
+                    maxDepth = params.maxDepth,
+                    from = params.from)
         }
     }
 }

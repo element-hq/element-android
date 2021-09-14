@@ -369,7 +369,7 @@
     <string name="send_bug_report_app_crashed">O aplicativo tem crashado da última vez. Você gostaria de abrir a tela de reporte de crash\?</string>
     <string name="send_files_in">Enviar para</string>
     <string name="read_receipt">Lida</string>
-    <string name="join_room">Juntar-se a Sala</string>
+    <string name="join_room">Juntar-Se a Sala</string>
     <string name="username">Nome de Usuária(o)</string>
     <string name="create_account">Criar Conta</string>
     <string name="login">Fazer Login</string>
@@ -517,8 +517,8 @@
     <!-- Room -->
     <string name="room_jump_to_first_unread">Pular para não-lida(s)</string>
     <!-- Room Preview -->
-    <string name="room_preview_invitation_format">Você tem sido convidada(o) a juntar-se a esta sala por %s</string>
-    <string name="room_preview_unlinked_email_warning">Este convite foi enviado para %s, que não está associada(o) a esta conta.
+    <string name="room_preview_invitation_format">Você tem sido convidada(o) para se juntar a esta sala por %s</string>
+    <string name="room_preview_unlinked_email_warning">Este convite foi enviado para %s, que não está associada(o) com esta conta.
 \nVocê pode desejar fazer login com uma conta diferente, ou adicionar este email a sua conta.</string>
     <string name="room_preview_try_join_an_unknown_room">Você está tentando acessar %s. Você gostaria de se juntar a fim de participar na discussão\?</string>
     <string name="room_preview_try_join_an_unknown_room_default">uma sala</string>
@@ -656,7 +656,7 @@
     <string name="settings_turn_screen_on">Ligar a tela por 3 segundos</string>
     <string name="settings_messages_in_one_to_one">Mnsgns em chats um-a-um</string>
     <string name="settings_messages_in_group_chat">Mnsgns em chats de grupo</string>
-    <string name="settings_invited_to_room">Quando eu sou convidada(o) a uma sala</string>
+    <string name="settings_invited_to_room">Quando eu sou convidada(o) para uma sala</string>
     <string name="settings_call_invitations">Convites de chamada</string>
     <string name="settings_messages_sent_by_bot">Mensagens enviadas por bot</string>
     <string name="settings_background_sync">Sincronização no background</string>
@@ -1845,7 +1845,7 @@
     <string name="login_server_text">Assim como email, contas têm uma casa, embora você pode falar com qualquer pessoa</string>
     <string name="login_server_matrix_org_text">Junte-se a milhões de graça no maior servidor público</string>
     <string name="login_server_modular_text">Hospedagem premium para organizações</string>
-    <string name="login_server_modular_learn_more">Saiba mais</string>
+    <string name="login_server_modular_learn_more">Saber mais</string>
     <string name="login_server_other_title">Outro</string>
     <string name="login_server_other_text">Configurações personalizadas &amp; avançadas</string>
     <string name="login_continue">Continuar</string>
@@ -1869,7 +1869,7 @@
     <string name="login_registration_not_supported">O aplicativo não é capaz de criar uma conta neste servidorcasa.
 \n
 \nVocê quer fazer signup usando um cliente web\?</string>
-    <string name="login_login_with_email_error">Este email não está associado a nenhuma conta.</string>
+    <string name="login_login_with_email_error">Este email não está associado com nenhuma conta.</string>
     <string name="login_reset_password_on">Resettar senha em %1$s</string>
     <string name="login_reset_password_notice">Um email de verificação vai ser enviado para sua inbox para confirmar definição de sua nova senha.</string>
     <string name="login_reset_password_submit">Próximo</string>
@@ -2038,7 +2038,7 @@
 \n
 \nSuas mensagens são asseguradas com cadeados e somente você e a/o recipente têm as chaves únicas para as destrancar.</string>
     <string name="room_profile_section_security">Segurança</string>
-    <string name="room_profile_section_security_learn_more">Saiba mais</string>
+    <string name="room_profile_section_security_learn_more">Saber mais</string>
     <string name="room_profile_section_more">Mais</string>
     <string name="room_profile_section_admin">Ações de Admin</string>
     <string name="room_profile_section_more_settings">Configurações de sala</string>
@@ -2152,7 +2152,7 @@
         <item quantity="other">Enviar imagens com o tamanho original</item>
     </plurals>
     <string name="delete_event_dialog_title">Confirmar Remoção</string>
-    <string name="delete_event_dialog_content">Você tem certeza que você deseja remover (deletar) este evento\? Note que se você deletar um nome de sala ou mudança de tópico, poderia desfazer a mudança.</string>
+    <string name="delete_event_dialog_content">Você tem certeza que você deseja remover (deletar) este evento\? Note que se você deletar um nome de sala ou mudança de tópico, isto poderia desfazer a mudança.</string>
     <string name="delete_event_dialog_reason_checkbox">Incluir uma razão</string>
     <string name="delete_event_dialog_reason_hint">Razão para redigir</string>
     <string name="event_redacted_by_user_reason_with_reason">Evento deletado por usuária(o), razão: %1$s</string>
@@ -2666,7 +2666,7 @@
     <string name="call_tile_call_back">Chamar de volta</string>
     <string name="call_tile_ended">Esta chamada tem terminado</string>
     <string name="call_tile_other_declined">%1$s declinou esta chamada</string>
-    <string name="call_tile_you_declined">Você declinou esta chamada %1$s</string>
+    <string name="call_tile_you_declined">Você declinou esta chamada %s</string>
     <string name="call_tile_in_call">Você está atualmente nesta chamada</string>
     <string name="call_tile_other_started_call">%1$s começou uma chamada</string>
     <string name="call_tile_you_started_call">Você começou uma chamada</string>
@@ -2736,7 +2736,7 @@
     <string name="a11y_checked">Checado</string>
     <string name="a11y_close_emoji_picker">Fechar Seletor de Emoji</string>
     <string name="a11y_open_emoji_picker">Abrir seletor de Emoji</string>
-    <string name="a11y_unsent_draft">Esta sala tem rascunho não-enviado</string>
+    <string name="a11y_unsent_draft">tem rascunho não-enviado</string>
     <plurals name="entries">
         <item quantity="one">%d entrada</item>
         <item quantity="other">%d entradas</item>
@@ -2771,7 +2771,7 @@
     <string name="send_feedback_space_title">Feedback de espaços</string>
     <string name="error_jitsi_join_conf">Desculpe, um erro ocorreu enquanto tentando se juntar à conferência</string>
     <string name="command_description_join_space">Juntar-se ao Espaço com a dada id</string>
-    <string name="a11y_public_room">Esta sala é pública</string>
+    <string name="a11y_public_room">Sala pública</string>
     <string name="a11y_unchecked">Não-checado</string>
     <string name="call_transfer_unknown_person">Pessoa desconhecida</string>
     <string name="call_transfer_transfer_to_title">Transferir para %1$s</string>
@@ -2803,7 +2803,6 @@
     <string name="spaces_no_server_support_title">Parece que seu servidorcasa não suporta Espaços ainda</string>
     <string name="spaces_feeling_experimental_subspace">Se sentindo experimental\?
 \nVocê pode adicionar espaços existentes a um espaço.</string>
-    <string name="labs_space_show_orphan_in_home">Espaço Experimental - Somente mostrar órfãos em Home</string>
     <string name="space_manage_rooms_and_spaces">Gerenciar salas e espaços</string>
     <string name="make_this_space_public">Fazer este espaço público</string>
     <string name="space_settings_manage_rooms">Gerenciar salas</string>
@@ -2828,10 +2827,10 @@
     <string name="create_space">Criar Espaço</string>
     <string name="share_space_link_message">Junte-se a meu espaço %1$s %2$s</string>
     <string name="invite_to_space_with_name_desc">Elas vão ser capazes de explorar %s</string>
-    <string name="invite_to_space_with_name">Convidar a %s</string>
+    <string name="invite_to_space_with_name">Convidar para %s</string>
     <string name="invite_people_to_your_space_desc">É só você no momento. %s vai ser ainda melhor com outras(os).</string>
-    <string name="invite_to_space">Convidar a %s</string>
-    <string name="invite_people_to_your_space">Convidar pessoas a seu espaço</string>
+    <string name="invite_to_space">Convidar para %s</string>
+    <string name="invite_people_to_your_space">Convidar pessoas para seu espaço</string>
     <string name="create_space_topic_hint">Descrição</string>
     <string name="create_spaces_loading_message">Criando Espaço…</string>
     <string name="create_spaces_default_public_random_room_name">Aleatório</string>
@@ -2864,7 +2863,7 @@
     <string name="private_space">Espaço privado</string>
     <string name="public_space">Espaço público</string>
     <string name="command_description_create_space">Criar um Espaço</string>
-    <string name="a11y_public_space">Este Espaço é público</string>
+    <string name="a11y_public_space">Espaço público</string>
     <string name="command_description_leave_room">Sair de sala com dada id (ou sala atual se nula)</string>
     <string name="directory_add_a_new_server_error_already_added">Este servidor já está presente na lista</string>
     <string name="directory_add_a_new_server_error">Não dá para encontrar este servidor ou sua lista de salas</string>
@@ -2890,7 +2889,7 @@
     <string name="upgrade_room_no_power_to_manage">Você precisa de permissão para fazer upgrade de uma sala</string>
     <string name="upgrade_room_update_parent_space">Fazer update de pai de espaço automaticamente</string>
     <string name="upgrade_room_auto_invite">Convidar usuárias(os) automaticamente</string>
-    <string name="upgrade_public_room_from_to">Você vai fazer upgrade desta sala de %s para %s.</string>
+    <string name="upgrade_public_room_from_to">Você vai fazer upgrade desta sala de %1$s para %2$s.</string>
     <string name="upgrade_room_warning">Fazer upgrade de uma sala é uma ação avançada e é geralmente recomendado quando uma sala está instável devido a bugs, funcionalidades faltando ou vulnerabilidades de segurança.
 \nIsto geralmente só afeta como a sala é processada no servidor.</string>
     <string name="upgrade_private_room">Fazer upgrade de sala privada</string>
@@ -2950,4 +2949,71 @@
     <string name="room_create_member_of_space_name_can_join">Membros de Escpaço %s podem encontrar, previsualizar e juntar-se.</string>
     <string name="room_settings_room_access_private_invite_only_title">Privada (Convite Somente)</string>
     <string name="denied_permission_voice_message">Para enviar mensagens de voz, por favor conceda a permissão Microfone.</string>
+    <string name="settings_notification_notify_me_for">Notifique-me para</string>
+    <string name="settings_room_upgrades">Upgrades de sala</string>
+    <string name="settings_messages_by_bot">Mensagens por bot</string>
+    <string name="settings_room_invitations">Convites de sala</string>
+    <string name="settings_encrypted_group_messages">Mensagens de grupo encriptadas</string>
+    <string name="settings_group_messages">Mensagens de grupo</string>
+    <string name="settings_encrypted_direct_messages">Mensagens diretas encriptadas</string>
+    <string name="settings_messages_direct_messages">Mensagens diretas</string>
+    <string name="settings_messages_containing_username">Meu nome de usuária(o)</string>
+    <string name="settings_messages_containing_display_name">Meu nome de exibição</string>
+    <string name="settings_notification_other">Outras</string>
+    <string name="settings_notification_mentions_and_keywords">Menções e Palavrachaves</string>
+    <string name="settings_notification_default">Notificações Default</string>
+    <string name="link_this_email_with_your_account">%s em Configurações para receber convites diretamente em Element.</string>
+    <string name="link_this_email_settings_link">Linkar este email com sua conta</string>
+    <string name="this_invite_to_this_space_was_sent">Este convite para este espaço foi enviado para %s que não está associado com sua conta</string>
+    <string name="this_invite_to_this_room_was_sent">Este convite para esta sala foi enviado para %s que não está associado com sua conta</string>
+    <string name="to_help_space_members_find_and_join">Para ajudar membros de espaço encontrarem e se juntarem uma sala privada, vá para as configurações dessa sala ao tocar no avatar.</string>
+    <string name="help_space_members">Ajude membros de espaço encontrarem salas privadas</string>
+    <string name="this_makes_it_easy_for_rooms_to_stay_private_to_a_space">Isto facilita salas ficarem privadas a um espaço, enquanto deixa pessoas no espaço encontrarem e se juntarem a elas. Todas as salas novas em um espaço vão ter esta opção disponível.</string>
+    <string name="help_people_in_spaces_find_and_join">Ajude pessoas em espaços a elas mesmas encontrarem e se juntarem a salas privadas, sem necessidade de manualmente convidar todo mundo.</string>
+    <string name="new_let_people_in_spaces_find_and_join">Novo: Deixe pessoas em espaços encontrarem e se juntarem a salas privadas</string>
+    <string name="call_jitsi_started">Chamada de grupo começada</string>
+    <string name="all_rooms_youre_in_will_be_shown_in_home">Todas as salas em que você está vão ser mostradas em Home.</string>
+    <string name="preference_show_all_rooms_in_home">Mostrar todas as salas em Home</string>
+    <string name="call_slide_to_end_conference">Deslize para terminar a chamada</string>
+    <string name="call_tap_to_return">%1$s Toque para retornar</string>
+    <string name="call_one_active">Chamada ativa (%1$s) ·</string>
+    <plurals name="call_active_status">
+        <item quantity="one">Chamada ativa ·</item>
+        <item quantity="other">%1$d chamadas ativas ·</item>
+    </plurals>
+    <string name="call_tile_connection_failed">Conexão falhou</string>
+    <string name="call_tile_no_answer">Sem resposta</string>
+    <string name="call_tile_video_missed">Chamada de vídeo perdida</string>
+    <string name="call_tile_voice_missed">Chamada de voz perdida</string>
+    <string name="call_tile_video_declined">Chamada de vídeo declinada</string>
+    <string name="call_tile_voice_declined">Chamada de voz declinada</string>
+    <string name="call_tile_video_call_has_ended">Chamada de vídeo terminada • %1$s</string>
+    <string name="call_tile_voice_call_has_ended">Chamada de voz terminada • %1$s</string>
+    <string name="call_tile_video_active">Chamada de vídeo ativa</string>
+    <string name="call_tile_voice_active">Chamada de voz ativa</string>
+    <string name="call_tile_video_incoming">Chamada de vídeo entrante</string>
+    <string name="call_tile_voice_incoming">Chamada de voz entrante</string>
+    <string name="call_tile_you_declined_this_call">Você declinou esta chamada</string>
+    <string name="room_settings_room_notifications_account_settings">Configurações de conta</string>
+    <string name="room_settings_room_notifications_manage_notifications">Você pode gerenciar notificações em %1$s.</string>
+    <string name="room_settings_room_notifications_encryption_notice">Por favor note que notificações de menções &amp; palavrachave não estão disponíveis em salas encriptadas no celular.</string>
+    <string name="room_settings_room_notifications_notify_me">Notifique-me por</string>
+    <string name="settings_mentions_and_keywords_encryption_notice">Você não vai ter notificações para menções &amp; palavrachaves em salas encriptadas no celular.</string>
+    <string name="settings_messages_containing_keywords">Palavrachaves</string>
+    <string name="settings_mentions_at_room">\@room</string>
+    <string name="settings_notification_keyword_contains_invalid_character">Palavrachaves não podem conter \'%s\'</string>
+    <string name="settings_notification_keyword_contains_dot">Palavrachaves não podem começar com \'.\'</string>
+    <string name="settings_notification_new_keyword">Adicionar nova palavrachave</string>
+    <string name="settings_notification_your_keywords">Suas palavachaves</string>
+    <string name="room_settings_none">Nenhuma</string>
+    <string name="room_settings_mention_and_keyword_only">Menções &amp; Palavrachaves somente</string>
+    <string name="call_remove_jitsi_widget_progress">Terminando chamada…</string>
+    <string name="call_ended_invite_timeout_title">Sem resposta</string>
+    <string name="call_ended_user_busy_description">A/o usuária(o) que você chamou está ocupada(o).</string>
+    <string name="call_ended_user_busy_title">Usuária(o) ocupada(o)</string>
+    <string name="audio_call_with_participant">Chamada de áudio com %s</string>
+    <string name="video_call_with_participant">Chamada de vídeo com %s</string>
+    <string name="call_ringing">Chamada tocando…</string>
+    <string name="spaces">Espaços</string>
+    <string name="learn_more">Saber Mais</string>
 </resources>

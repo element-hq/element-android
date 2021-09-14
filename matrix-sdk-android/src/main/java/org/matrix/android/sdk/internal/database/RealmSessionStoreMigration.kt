@@ -29,6 +29,7 @@ import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntityFie
 import org.matrix.android.sdk.internal.database.model.EditAggregatedSummaryEntityFields
 import org.matrix.android.sdk.internal.database.model.EditionOfEventFields
 import org.matrix.android.sdk.internal.database.model.EventEntityFields
+import org.matrix.android.sdk.internal.database.model.EventInsertEntityFields
 import org.matrix.android.sdk.internal.database.model.HomeServerCapabilitiesEntityFields
 import org.matrix.android.sdk.internal.database.model.PendingThreePidEntityFields
 import org.matrix.android.sdk.internal.database.model.PreviewUrlCacheEntityFields
@@ -46,7 +47,7 @@ import timber.log.Timber
 
 internal object RealmSessionStoreMigration : RealmMigration {
 
-    const val SESSION_STORE_SCHEMA_VERSION = 16L
+    const val SESSION_STORE_SCHEMA_VERSION = 17L
 
     override fun migrate(realm: DynamicRealm, oldVersion: Long, newVersion: Long) {
         Timber.v("Migrating Realm Session from $oldVersion to $newVersion")
@@ -67,6 +68,7 @@ internal object RealmSessionStoreMigration : RealmMigration {
         if (oldVersion <= 13) migrateTo14(realm)
         if (oldVersion <= 14) migrateTo15(realm)
         if (oldVersion <= 15) migrateTo16(realm)
+        if (oldVersion <= 16) migrateTo17(realm)
     }
 
     private fun migrateTo1(realm: DynamicRealm) {
@@ -329,5 +331,11 @@ internal object RealmSessionStoreMigration : RealmMigration {
                     // Schedule a refresh of the capabilities
                     obj.setLong(HomeServerCapabilitiesEntityFields.LAST_UPDATED_TIMESTAMP, 0)
                 }
+    }
+
+    private fun migrateTo17(realm: DynamicRealm) {
+        Timber.d("Step 16 -> 17")
+        realm.schema.get("EventInsertEntity")
+                ?.addField(EventInsertEntityFields.CAN_BE_PROCESSED, Boolean::class.java)
     }
 }

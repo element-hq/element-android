@@ -47,6 +47,7 @@ class SpaceHierarchyTest : InstrumentedTest {
     private val commonTestHelper = CommonTestHelper(context())
 
     @Test
+    @Suppress("EXPERIMENTAL_API_USAGE")
     fun createCanonicalChildRelation() {
         val session = commonTestHelper.createAccount("John", SessionTestParams(true))
         val spaceName = "My Space"
@@ -171,6 +172,7 @@ class SpaceHierarchyTest : InstrumentedTest {
 //    }
 
     @Test
+    @Suppress("EXPERIMENTAL_API_USAGE")
     fun testFilteringBySpace() {
         val session = commonTestHelper.createAccount("John", SessionTestParams(true))
 
@@ -179,7 +181,7 @@ class SpaceHierarchyTest : InstrumentedTest {
                 Triple("A2", true, true)
         ))
 
-        val spaceBInfo = createPublicSpace(session, "SpaceB", listOf(
+        /* val spaceBInfo = */ createPublicSpace(session, "SpaceB", listOf(
                 Triple("B1", true /*auto-join*/, true/*canonical*/),
                 Triple("B2", true, true),
                 Triple("B3", true, true)
@@ -254,6 +256,7 @@ class SpaceHierarchyTest : InstrumentedTest {
     }
 
     @Test
+    @Suppress("EXPERIMENTAL_API_USAGE")
     fun testBreakCycle() {
         val session = commonTestHelper.createAccount("John", SessionTestParams(true))
 
@@ -301,6 +304,7 @@ class SpaceHierarchyTest : InstrumentedTest {
     }
 
     @Test
+    @Suppress("EXPERIMENTAL_API_USAGE")
     fun testLiveFlatChildren() {
         val session = commonTestHelper.createAccount("John", SessionTestParams(true))
 
@@ -389,6 +393,7 @@ class SpaceHierarchyTest : InstrumentedTest {
             val roomIds: List<String>
     )
 
+    @Suppress("EXPERIMENTAL_API_USAGE")
     private fun createPublicSpace(session: Session,
                                   spaceName: String,
                                   childInfo: List<Triple<String, Boolean, Boolean?>>
@@ -433,7 +438,7 @@ class SpaceHierarchyTest : InstrumentedTest {
     fun testRootSpaces() {
         val session = commonTestHelper.createAccount("John", SessionTestParams(true))
 
-        val spaceAInfo = createPublicSpace(session, "SpaceA", listOf(
+        /* val spaceAInfo = */ createPublicSpace(session, "SpaceA", listOf(
                 Triple("A1", true /*auto-join*/, true/*canonical*/),
                 Triple("A2", true, true)
         ))

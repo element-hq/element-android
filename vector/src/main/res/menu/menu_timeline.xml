@@ -37,14 +37,11 @@
         app:showAsAction="always"
         tools:visible="true" />
 
-    <item
-        android:id="@+id/hangup_call"
-        android:icon="@drawable/ic_call_end"
-        android:title="@string/call_notification_hangup"
-        android:visible="false"
-        app:iconTint="?colorError"
+    <item android:id="@+id/join_conference"
+        android:title="@string/join"
+        app:actionLayout="@layout/layout_join_conference_action"
         app:showAsAction="always"
-        tools:visible="true" />
+        />
 
     <item
         android:id="@+id/open_matrix_apps"
