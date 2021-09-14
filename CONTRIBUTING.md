@@ -148,6 +148,8 @@ The string will be removed during the next sync with Weblate.
 
 Please consider accessibility as an important point. As a minimum requirement, in layout XML files please use attributes such as `android:contentDescription` and `android:importantForAccessibility`, and test with a screen reader if it's working well. You can add new string resources, dedicated to accessibility, in this case, please prefix theirs id with `a11y_`.
 
+For instance, when updating the image `src` of an ImageView, please also consider updating its `contentDescription`. A good example is a play pause button.
+
 ### Layout
 
 When adding or editing layouts, make sure the layout will render correctly if device uses a RTL (Right To Left) language.
