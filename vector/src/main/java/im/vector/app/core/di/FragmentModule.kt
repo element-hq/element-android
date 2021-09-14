@@ -142,6 +142,7 @@ import im.vector.app.features.signout.soft.SoftLogoutFragment
 import im.vector.app.features.spaces.SpaceListFragment
 import im.vector.app.features.spaces.create.ChoosePrivateSpaceTypeFragment
 import im.vector.app.features.spaces.create.ChooseSpaceTypeFragment
+import im.vector.app.features.spaces.create.CreateSpaceAdd3pidInvitesFragment
 import im.vector.app.features.spaces.create.CreateSpaceDefaultRoomsFragment
 import im.vector.app.features.spaces.create.CreateSpaceDetailsFragment
 import im.vector.app.features.spaces.explore.SpaceDirectoryFragment
@@ -792,6 +793,11 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(ChoosePrivateSpaceTypeFragment::class)
     fun bindChoosePrivateSpaceTypeFragment(fragment: ChoosePrivateSpaceTypeFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(CreateSpaceAdd3pidInvitesFragment::class)
+    fun bindCreateSpaceAdd3pidInvitesFragment(fragment: CreateSpaceAdd3pidInvitesFragment): Fragment
 
     @Binds
     @IntoMap
