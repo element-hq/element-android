@@ -123,8 +123,9 @@ import im.vector.app.features.attachments.preview.AttachmentsPreviewArgs
 import im.vector.app.features.attachments.toGroupedContentAttachmentData
 import im.vector.app.features.call.SharedKnownCallsViewModel
 import im.vector.app.features.call.VectorCallActivity
-import im.vector.app.features.call.conference.JitsiBroadcastEmitter
-import im.vector.app.features.call.conference.JitsiBroadcastEventObserver
+import im.vector.app.features.call.conference.ConferenceEvent
+import im.vector.app.features.call.conference.ConferenceEventEmitter
+import im.vector.app.features.call.conference.ConferenceEventObserver
 import im.vector.app.features.call.conference.JitsiCallViewModel
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.command.Command
@@ -184,7 +185,6 @@ import nl.dionsegijn.konfetti.models.Shape
 import nl.dionsegijn.konfetti.models.Size
 import org.billcarsonfr.jsonviewer.JSonViewerDialog
 import org.commonmark.parser.Parser
-import org.jitsi.meet.sdk.BroadcastEvent
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
@@ -324,7 +324,7 @@ class RoomDetailFragment @Inject constructor(
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        lifecycle.addObserver(JitsiBroadcastEventObserver(vectorBaseActivity, this::onBroadcastJitsiEvent))
+        lifecycle.addObserver(ConferenceEventObserver(vectorBaseActivity, this::onBroadcastJitsiEvent))
         super.onViewCreated(view, savedInstanceState)
         sharedActionViewModel = activityViewModelProvider.get(MessageSharedActionViewModel::class.java)
         knownCallsViewModel = activityViewModelProvider.get(SharedKnownCallsViewModel::class.java)
@@ -366,10 +366,10 @@ class RoomDetailFragment @Inject constructor(
 
         knownCallsViewModel
                 .liveKnownCalls
-                .observe(viewLifecycleOwner, {
+                .observe(viewLifecycleOwner) {
                     currentCallsViewPresenter.updateCall(callManager.getCurrentCall(), it)
                     invalidateOptionsMenu()
-                })
+                }
 
         roomDetailViewModel.selectSubscribe(RoomDetailViewState::canShowJumpToReadMarker, RoomDetailViewState::unreadState) { _, _ ->
             updateJumpToReadMarkerViewVisibility()
@@ -454,11 +454,11 @@ class RoomDetailFragment @Inject constructor(
     }
 
     private fun leaveJitsiConference() {
-        JitsiBroadcastEmitter(vectorBaseActivity).emitConferenceEnded()
+        ConferenceEventEmitter(vectorBaseActivity).emitConferenceEnded()
     }
 
-    private fun onBroadcastJitsiEvent(jitsiEvent: BroadcastEvent) {
-        roomDetailViewModel.handle(RoomDetailAction.UpdateJoinJitsiCallStatus(jitsiEvent))
+    private fun onBroadcastJitsiEvent(conferenceEvent: ConferenceEvent) {
+        roomDetailViewModel.handle(RoomDetailAction.UpdateJoinJitsiCallStatus(conferenceEvent))
     }
 
     private fun onCannotRecord() {
