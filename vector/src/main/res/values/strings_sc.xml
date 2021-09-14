@@ -127,6 +127,7 @@
     <string name="settings_troubleshoot_test_pusher_registration_title">Pusher Registration</string>
     <string name="settings_troubleshoot_test_pusher_registration_success">Pusher successfully registered to HomeServer.</string>
     <string name="settings_troubleshoot_test_pusher_registration_failed">Failed to register pusher to HomeServer:\n%1$s</string>
+    <string name="settings_troubleshoot_test_fcm_failed_sc">Failed to retrieve FCM token</string>
 
     <string name="settings_apply_sc_default_settings">Do not click this setting</string>
     <string name="settings_apply_sc_default_settings_dialog_title">Mess up settings</string>

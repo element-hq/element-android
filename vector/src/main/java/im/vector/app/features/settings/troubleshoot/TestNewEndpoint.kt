@@ -42,7 +42,7 @@ class TestNewEndpoint @Inject constructor(private val context: AppCompatActivity
                 description = stringProvider.getString(R.string.settings_troubleshoot_test_fcm_success, endpoint)
             } else {
                 status = TestStatus.FAILED
-                description = stringProvider.getString(R.string.settings_troubleshoot_test_fcm_failed)
+                description = stringProvider.getString(R.string.settings_troubleshoot_test_fcm_failed_sc)
             }
         } else {
             if (!endpoint.isNullOrEmpty()) {
