@@ -42,13 +42,13 @@ internal class TchapRoomGetter @Inject constructor(
                     .equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
                     .equalTo(RoomSummaryEntityFields.DIRECT_USER_ID, otherUserId)
                     .findAll()
-        }
                 // convert to Room objects
                 .map { roomFactory.create(it.roomId) }
                 // sort from the oldest to the most recent
                 .sortedBy { it.getStateEvent(STATE_ROOM_CREATE)?.originServerTs }
                 // convert to DirectRoomMemberships objects
                 .map { DirectRoomMemberships(it.roomId, it.roomSummary()?.membership, it.getRoomMember(otherUserId)?.membership) }
+        }
 
         // In the description of the memberships, we display first the current user status and the other member in second.
         // We review all the direct chats by considering the memberships in the following priorities:
