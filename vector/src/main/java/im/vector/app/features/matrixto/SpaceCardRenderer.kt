@@ -62,7 +62,7 @@ class SpaceCardRenderer @Inject constructor(
                 inCard.matrixToAccessImage.isVisible = true
                 inCard.matrixToAccessImage.setImageResource(R.drawable.ic_room_private)
             }
-            val memberCount = spaceSummary.otherMemberIds.size
+            val memberCount = spaceSummary.joinedMembersCount ?: 0
             if (memberCount != 0) {
                 inCard.matrixToMemberPills.isVisible = true
                 inCard.spaceChildMemberCountText.text = stringProvider.getQuantityString(R.plurals.room_title_members, memberCount, memberCount)

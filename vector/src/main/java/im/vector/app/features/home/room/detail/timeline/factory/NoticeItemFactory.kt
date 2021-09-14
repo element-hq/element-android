@@ -22,6 +22,7 @@ import im.vector.app.features.home.room.detail.timeline.helper.AvatarSizeProvide
 import im.vector.app.features.home.room.detail.timeline.helper.MessageInformationDataFactory
 import im.vector.app.features.home.room.detail.timeline.item.NoticeItem
 import im.vector.app.features.home.room.detail.timeline.item.NoticeItem_
+import org.matrix.android.sdk.api.extensions.orFalse
 import javax.inject.Inject
 
 class NoticeItemFactory @Inject constructor(private val eventFormatter: NoticeEventFormatter,
@@ -31,7 +32,7 @@ class NoticeItemFactory @Inject constructor(private val eventFormatter: NoticeEv
 
     fun create(params: TimelineItemFactoryParams): NoticeItem? {
         val event = params.event
-        val formattedText = eventFormatter.format(event) ?: return null
+        val formattedText = eventFormatter.format(event, isDm = params.partialState.roomSummary?.isDirect.orFalse()) ?: return null
         val informationData = informationDataFactory.create(params)
         val attributes = NoticeItem.Attributes(
                 avatarRenderer = avatarRenderer,

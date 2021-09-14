@@ -21,7 +21,7 @@
     <string name="notice_placed_video_call">%s heeft een video-oproep gemaakt.</string>
     <string name="notice_placed_voice_call">%s heeft een spraakoproep gemaakt.</string>
     <string name="notice_answered_call">%s heeft de oproep beantwoord.</string>
-    <string name="notice_ended_call">%s heeft opgehangen.</string>
+    <string name="notice_ended_call">%s heeft de oproep beëindigd.</string>
     <string name="notice_made_future_room_visibility">%1$s heeft de toekomstige gespreksgeschiedenis zichtbaar gemaakt voor %2$s</string>
     <string name="notice_room_visibility_invited">alle deelnemers aan het gesprek, vanaf het punt dat ze zijn uitgenodigd.</string>
     <string name="notice_room_visibility_joined">alle deelnemers aan het gesprek, vanaf het punt dat ze zijn toegetreden.</string>
@@ -84,7 +84,7 @@
 \nGemeenschappen worden geïmporteerd</string>
     <string name="initial_sync_start_importing_account_data">Initiële synchronisatie:
 \nAccountgegevens worden geïmporteerd</string>
-    <string name="notice_room_update">%s heeft dit gesprek opgewaardeerd.</string>
+    <string name="notice_room_update">%s heeft dit gesprek geüpgraded.</string>
     <string name="event_status_sending_message">Bericht wordt verstuurd…</string>
     <string name="clear_timeline_send_queue">Uitgaande wachtrij legen</string>
     <string name="notice_room_third_party_revoked_invite">%1$s heeft de uitnodiging voor %2$s om het gesprek toe te treden ingetrokken</string>
@@ -107,12 +107,12 @@
     </plurals>
     <plurals name="notice_room_aliases_removed">
         <item quantity="one">%1$s heeft %2$s als gespreksadres verwijderd.</item>
-        <item quantity="other">%1$s heeft %3$s als gespreksadressen verwijderd.</item>
+        <item quantity="other">%1$s heeft %2$s als gespreksadressen verwijderd.</item>
     </plurals>
     <string name="notice_room_aliases_added_and_removed">%1$s heeft %2$s als gespreksadres toegevoegd en %3$s verwijderd.</string>
     <string name="notice_room_canonical_alias_set">%1$s heeft het hoofdadres voor dit gesprek ingesteld op %2$s.</string>
     <string name="notice_room_canonical_alias_unset">%1$s heeft het hoofdadres voor dit gesprek verwijderd.</string>
-    <string name="notice_room_guest_access_can_join">%1$s heeft gasten de toegang tot het gesprek verleend.</string>
+    <string name="notice_room_guest_access_can_join">%1$s heeft gasten de toegang tot deze kamer verleend.</string>
     <string name="notice_room_guest_access_forbidden">%1$s heeft gasten de toegang tot het gesprek verhinderd.</string>
     <string name="notice_end_to_end_ok">%1$s heeft eind-tot-eind-versleuteling ingeschakeld.</string>
     <string name="notice_end_to_end_unknown_algorithm">%1$s heeft eind-tot-eind-versleuteling ingeschakeld (onbekend algoritme %2$s).</string>
@@ -358,7 +358,7 @@
     <string name="preview">Voorvertoning</string>
     <string name="reject">Afwijzen</string>
     <!-- Room -->
-    <string name="room_jump_to_first_unread">Ga naar het eerste ongelezen bericht.</string>
+    <string name="room_jump_to_first_unread">Ga naar ongelezen</string>
     <!-- Room Preview -->
     <string name="room_preview_invitation_format">%s heeft u uitgenodigd in dit gesprek</string>
     <string name="room_preview_unlinked_email_warning">Deze uitnodiging is naar %s verstuurd, maar die is niet geassocieerd met deze account.
@@ -420,7 +420,7 @@
     <string name="room_resend_unsent_messages">Onverstuurde berichten opnieuw versturen</string>
     <string name="room_delete_unsent_messages">Onverstuurde berichten verwijderen</string>
     <string name="room_message_file_not_found">Bestand niet gevonden</string>
-    <string name="room_do_not_have_permission_to_post">U heeft geen toestemming om dit naar dit gesprek te sturen</string>
+    <string name="room_do_not_have_permission_to_post">U heeft geen toestemming om dit naar dit gesprek te sturen.</string>
     <!-- unrecognized SSL certificate -->
     <string name="ssl_trust">Vertrouwen</string>
     <string name="ssl_do_not_trust">Niet vertrouwen</string>
@@ -684,7 +684,7 @@
     <string name="select_room_directory">Kies een gesprekscatalogus</string>
     <string name="directory_server_fail_to_retrieve_server">Het kan zijn dat de server niet beschikbaar of overbelast is</string>
     <string name="directory_server_type_homeserver">Voer een thuisserver in om de publieke gesprekken ervan weer te geven</string>
-    <string name="directory_server_placeholder">Thuisserver-URL</string>
+    <string name="directory_server_placeholder">Thuisserver-naam</string>
     <string name="directory_server_all_rooms_on_server">Alle gesprekken op server %s</string>
     <string name="directory_server_native_rooms">Alle lokale gesprekken op %s</string>
     <!-- historical -->
@@ -789,7 +789,7 @@
         <item quantity="one">%d deelnemer</item>
         <item quantity="other">%d deelnemers</item>
     </plurals>
-    <string name="room_participants_ban_prompt_msg">Weet u zeker dat u deze gebruiker uit dit gesprek wilt verbannen\?</string>
+    <string name="room_participants_ban_prompt_msg">Als een gebruiker wordt verbannen, wordt deze uit deze kamer verwijderd en wordt er voorkomen dat hij opnieuw lid wordt.</string>
     <plurals name="room_new_messages_notification">
         <item quantity="one">%d nieuw bericht</item>
         <item quantity="other">%d nieuwe berichten</item>
@@ -927,7 +927,7 @@
     <string name="command_description_kick_user">Stuurt gebruiker met gegeven ID eruit</string>
     <string name="command_description_nick">Wijzigt uw weergavenaam</string>
     <string name="command_description_markdown">Markdown aan/uit</string>
-    <string name="room_tombstone_versioned_description">Dit gesprek is vervangen en is niet langer actief</string>
+    <string name="room_tombstone_versioned_description">Dit gesprek is vervangen en is niet langer actief.</string>
     <string name="room_tombstone_continuation_link">Het gesprek wordt hier voortgezet</string>
     <string name="room_tombstone_continuation_description">Dit gesprek is een voortzetting van een ander gesprek</string>
     <string name="room_tombstone_predecessor_link">Klik hier om oudere berichten te zien</string>
@@ -1445,7 +1445,7 @@
     <string name="create_room_public_description">Iedereen zal dit gesprek kunnen toetreden</string>
     <string name="pause_video">Pauzeren</string>
     <string name="play_video">Afspelen</string>
-    <string name="notice_room_canonical_alias_unset_by_you">Je hebt het hoofdadres voor dit gesprek verwijderd.</string>
+    <string name="notice_room_canonical_alias_unset_by_you">U heeft het hoofdadres voor dit gesprek verwijderd.</string>
     <string name="notice_room_invite_with_reason_by_you">Je hebt %1$s uitgenodigd. Reden: %2$s</string>
     <string name="notice_room_invite_no_invitee_with_reason_by_you">Jouw uitnodiging. Reden: %1$s</string>
     <string name="event_status_sent_message">Bericht verstuurd</string>
@@ -1458,25 +1458,25 @@
     <string name="notice_direct_room_third_party_invite_by_you">Je hebt %1$s uitgenodigd</string>
     <string name="notice_direct_room_third_party_invite">%1$s nodigde %2$s uit</string>
     <string name="notice_room_server_acl_updated_no_change">Geen verandering.</string>
-    <string name="notice_end_to_end_by_you">Je hebt end-to-end encryptie ingeschakeld (%1$s)</string>
-    <string name="notice_made_future_direct_room_visibility_by_you">Je hebt toekomstige berichten zichtbaar gemaakt voor %1$s</string>
+    <string name="notice_end_to_end_by_you">U heeft eind-tot-eind-versleuteling ingeschakeld (%1$s)</string>
+    <string name="notice_made_future_direct_room_visibility_by_you">U heeft toekomstige berichten zichtbaar gemaakt voor %1$s</string>
     <string name="notice_made_future_direct_room_visibility">%1$s heeft toekomstige berichten zichtbaar gemaakt voor %2$s</string>
-    <string name="notice_ended_call_by_you">Je hebt de oproep beëindigd.</string>
-    <string name="notice_answered_call_by_you">Je hebt de oproep beantwoord.</string>
-    <string name="notice_display_name_changed_from_by_you">Je hebt je schermnaam gewijzigd van %1$s naar %2$s</string>
-    <string name="notice_display_name_set_by_you">Je hebt je schermnaam ingesteld op %1$s</string>
-    <string name="notice_avatar_url_changed_by_you">Je hebt je avatar aangepast</string>
-    <string name="notice_room_reject_by_you">Je hebt de uitnodiging geweigerd</string>
-    <string name="notice_direct_room_leave_by_you">Je hebt de kamer verlaten</string>
+    <string name="notice_ended_call_by_you">U hebt de oproep beëindigd.</string>
+    <string name="notice_answered_call_by_you">U hebt de oproep beantwoord.</string>
+    <string name="notice_display_name_changed_from_by_you">U heeft uw schermnaam gewijzigd van %1$s naar %2$s</string>
+    <string name="notice_display_name_set_by_you">U heeft uw schermnaam ingesteld op %1$s</string>
+    <string name="notice_avatar_url_changed_by_you">U heeft uw avatar aangepast</string>
+    <string name="notice_room_reject_by_you">U heeft de uitnodiging geweigerd</string>
+    <string name="notice_direct_room_leave_by_you">U heeft de kamer verlaten</string>
     <string name="notice_direct_room_leave">%1$s heeft de kamer verlaten</string>
-    <string name="notice_room_leave_by_you">Je hebt de kamer verlaten</string>
-    <string name="notice_room_invite_by_you">Jij hebt %1$s uitgenodigd</string>
-    <string name="notice_direct_room_created_by_you">Jij hebt de discussie aangemaakt</string>
+    <string name="notice_room_leave_by_you">U heeft de kamer verlaten</string>
+    <string name="notice_room_invite_by_you">U heeft %1$s uitgenodigd</string>
+    <string name="notice_direct_room_created_by_you">U heeft de discussie aangemaakt</string>
     <string name="notice_direct_room_created">%1$s heeft de discussie aangemaakt</string>
-    <string name="notice_room_created_by_you">Jij hebt de kamer aangemaakt</string>
+    <string name="notice_room_created_by_you">U heeft de kamer aangemaakt</string>
     <string name="notice_room_created">%1$s heeft de kamer aangemaakt</string>
-    <string name="notice_room_invite_no_invitee_by_you">Jouw uitnodiging</string>
-    <string name="summary_you_sent_image">Je hebt een afbeelding gestuurd.</string>
+    <string name="notice_room_invite_no_invitee_by_you">Uw uitnodiging</string>
+    <string name="summary_you_sent_image">U heeft een afbeelding gestuurd.</string>
     <string name="notice_room_ban_with_reason_by_you">U heeft %1$s verbannen. Reden: %2$s</string>
     <string name="notice_room_unban_with_reason_by_you">U heeft de verbanning van %1$s opgeheven. Reden: %2$s</string>
     <string name="notice_room_kick_with_reason_by_you">U heeft %1$s eruit getrapt. Reden: %2$s</string>
@@ -1521,14 +1521,14 @@
     <string name="notice_room_avatar_removed">%1$s heeft de kameravatar verwijderd</string>
     <string name="notice_room_topic_removed_by_you">U heeft het kameronderwerp verwijderd</string>
     <string name="notice_room_name_removed_by_you">U heeft de kamernaam verwijderd</string>
-    <string name="notice_room_update_by_you">U heeft de ruimte geüpgradet.</string>
+    <string name="notice_room_update_by_you">U heeft de kamer geüpgraded.</string>
     <string name="notice_call_candidates_by_you">U verstuurde data om het gesprek op te zetten.</string>
     <string name="notice_call_candidates">%s verstuurde data om het gesprek op te zetten.</string>
     <string name="notice_placed_voice_call_by_you">U heeft een audiogesprek geopend.</string>
     <string name="notice_placed_video_call_by_you">U heeft een videogesprek geopend.</string>
-    <string name="notice_room_name_changed_by_you">U heeft de ruimtenaam veranderd naar: %1$s</string>
-    <string name="notice_room_avatar_changed_by_you">U heeft de ruimteavatar aangepast</string>
-    <string name="notice_room_avatar_changed">%1$s heeft de ruimteavatar aangepast</string>
+    <string name="notice_room_name_changed_by_you">U heeft de kamernaam veranderd naar: %1$s</string>
+    <string name="notice_room_avatar_changed_by_you">U heeft de kamer afbeelding aangepast</string>
+    <string name="notice_room_avatar_changed">%1$s heeft de kamer afbeelding aangepast</string>
     <string name="notice_room_topic_changed_by_you">U heeft het onderwerp gewijzigd naar: %1$s</string>
     <string name="notice_display_name_removed_by_you">U heeft uw weergavenaam verwijderd (voorheen %1$s)</string>
     <string name="notice_room_withdraw_by_you">U heeft de uitnodiging van %1$s ingetrokken</string>
@@ -1537,6 +1537,52 @@
     <string name="notice_room_kick_by_you">U heeft %1$s eruit getrapt</string>
     <string name="notice_direct_room_join_by_you">U sloot zich aan</string>
     <string name="notice_direct_room_join">%1$s sluit aan</string>
-    <string name="notice_room_join_by_you">Je hebt de kamer betreden</string>
-    <string name="summary_you_sent_sticker">Je hebt een sticker verzonden.</string>
+    <string name="notice_room_join_by_you">U heeft de kamer betreden</string>
+    <string name="summary_you_sent_sticker">U heeft een sticker verzonden.</string>
+    <string name="voice_message_tap_to_stop_toast">Druk op je opname om te stoppen of om te luisteren</string>
+    <string name="voice_message_release_to_send_toast">Houd ingedrukt om op te nemen, laat los om te verzenden</string>
+    <string name="a11y_delete_recorded_voice_message">Verwijder opgenomen stembericht</string>
+    <string name="a11y_recording_voice_message">Stembericht aan het opnemen</string>
+    <string name="a11y_pause_voice_message">Pauzeer stembericht</string>
+    <string name="a11y_play_voice_message">Speel stembericht af</string>
+    <string name="upgrade_room_for_restricted">Iedereen in %s kan de ruimte vinden en betreden - het is niet nodig om iedereen handmatig uit te nodigen. Je kan dit op elk moment aanpassen in de ruimte-instellingen.</string>
+    <string name="voice_message_reply_content">Stembericht (%1$s)</string>
+    <string name="error_voice_message_cannot_reply_or_edit">Kan niet antwoorden of aanpassen als stembericht actief is</string>
+    <string name="error_voice_message_unable_to_record">Kan stembericht niet opnemen</string>
+    <string name="error_voice_message_unable_to_play">Kan stembericht niet afspelen</string>
+    <string name="notice_profile_change_redacted_by_you">Je hebt je profiel geüpdatet %1$s</string>
+    <string name="notice_requested_voip_conference_by_you">Je hebt een VoIP-vergadering aangevraagd</string>
+    <string name="notice_room_guest_access_can_join_by_you">U heeft gasten de toegang tot deze kamer verleend.</string>
+    <string name="notice_room_canonical_alias_set_by_you">U heeft het hoofdadres voor dit gesprek ingesteld op %1$s.</string>
+    <string name="notice_room_aliases_added_and_removed_by_you">U heeft %1$s als gespreksadres toegevoegd en %2$s verwijderd.</string>
+    <plurals name="notice_room_aliases_removed_by_you">
+        <item quantity="one">U heeft %1$s als gespreksadres verwijderd.</item>
+        <item quantity="other">U heeft %1$s als gespreksadressen verwijderd.</item>
+    </plurals>
+    <plurals name="notice_room_aliases_added_by_you">
+        <item quantity="one">U heeft %1$s als gespreksadres toegevoegd.</item>
+        <item quantity="other">U heeft %1$s als gespreksadressen toegevoegd.</item>
+    </plurals>
+    <string name="notice_room_withdraw_with_reason_by_you">U heeft de uitnodiging van %1$s ingetrokken. Reden: %2$s</string>
+    <string name="notice_room_third_party_registered_invite_with_reason_by_you">U heeft de uitnodiging voor %1$s aanvaard. Reden: %2$s</string>
+    <string name="notice_room_third_party_revoked_invite_with_reason_by_you">U heeft de uitnodiging voor %1$s ingetrokken. Reden: %2$s</string>
+    <string name="notice_room_third_party_invite_with_reason_by_you">U heeft %1$s een uitnodiging voor het gesprek gestuurd. Reden: %2$s</string>
+    <string name="notice_room_server_acl_allow_is_empty">🎉 Alle servers zijn uitgesloten van deelname! Deze kamer kan niet meer gebruikt worden.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• Servers die overeenkomen met IP-tekens zijn nu verbannen.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_allowed">• Servers die overeenkomen met IP-tekens zijn nu toegestaan.</string>
+    <string name="notice_room_server_acl_set_ip_literals_not_allowed">• Servers die overeenkomen met IP-letters zijn verbannen.</string>
+    <string name="notice_room_server_acl_set_ip_literals_allowed">• Servers die overeenkomen met IP-tekens zijn toegestaan.</string>
+    <string name="notice_room_server_acl_set_title">%s heeft de server ACL\'s voor deze kamer ingesteld.</string>
+    <string name="notice_room_server_acl_set_title_by_you">U heeft de server ACL\'s voor deze kamer ingesteld.</string>
+    <string name="notice_room_server_acl_updated_title_by_you">U heeft de server ACL\'s voor deze kamer aangepast.</string>
+    <string name="notice_room_server_acl_updated_title">%s heeft de server ACL\'s voor deze kamer aangepast.</string>
+    <string name="notice_room_server_acl_updated_was_allowed">• Servers die overeenkomen met %s zijn verwijderd uit de toegestane lijst.</string>
+    <string name="notice_room_server_acl_updated_allowed">• Servers die overeenkomen met %s zijn nu toegestaan.</string>
+    <string name="notice_room_server_acl_updated_was_banned">• Servers die overeenkomen met %s zijn verwijderd uit de banlijst.</string>
+    <string name="notice_room_server_acl_updated_banned">• Servers die overeenkomen met %s zijn nu verbannen.</string>
+    <string name="notice_room_server_acl_set_allowed">• Servers die overeenkomen met %s zijn toegestaan.</string>
+    <string name="notice_room_server_acl_set_banned">• Servers die overeenkomen met %s zijn verbannen.</string>
+    <string name="notice_direct_room_update_by_you">U heeft hier geüpgraded.</string>
+    <string name="notice_direct_room_update">%s heeft hier geüpgraded.</string>
+    <string name="notice_made_future_room_visibility_by_you">U heeft toekomstige kamergeschiedenis zichtbaar gemaakt voor %1$s</string>
 </resources>

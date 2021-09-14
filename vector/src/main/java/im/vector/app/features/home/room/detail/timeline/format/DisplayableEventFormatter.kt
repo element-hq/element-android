@@ -41,7 +41,7 @@ class DisplayableEventFormatter @Inject constructor(
         private val noticeEventFormatter: NoticeEventFormatter
 ) {
 
-    fun format(timelineEvent: TimelineEvent, appendAuthor: Boolean): CharSequence {
+    fun format(timelineEvent: TimelineEvent, isDm: Boolean, appendAuthor: Boolean): CharSequence {
         if (timelineEvent.root.isRedacted()) {
             return noticeEventFormatter.formatRedactedEvent(timelineEvent.root)
         }
@@ -135,7 +135,7 @@ class DisplayableEventFormatter @Inject constructor(
             }
             else                            -> {
                 return span {
-                    text = noticeEventFormatter.format(timelineEvent) ?: ""
+                    text = noticeEventFormatter.format(timelineEvent, isDm) ?: ""
                     textStyle = "italic"
                 }
             }

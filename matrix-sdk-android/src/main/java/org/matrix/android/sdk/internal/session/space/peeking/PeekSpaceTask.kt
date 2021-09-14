@@ -103,7 +103,7 @@ internal class DefaultPeekSpaceTask @Inject constructor(
                     // can't peek :/
                     spaceChildResults.add(
                             SpaceChildPeekResult(
-                                    childId, childPeek, entry.second?.autoJoin, entry.second?.order
+                                    childId, childPeek, entry.second?.order
                             )
                     )
                     // continue to next child
@@ -116,7 +116,7 @@ internal class DefaultPeekSpaceTask @Inject constructor(
                             SpaceSubChildPeekResult(
                                     childId,
                                     childPeek,
-                                    entry.second?.autoJoin,
+//                                    entry.second?.autoJoin,
                                     entry.second?.order,
                                     peekChildren(childStateEvents, depth + 1, maxDepth)
                             )
@@ -127,7 +127,7 @@ internal class DefaultPeekSpaceTask @Inject constructor(
                     Timber.v("## SPACE_PEEK: room child $entry")
                     spaceChildResults.add(
                             SpaceChildPeekResult(
-                                    childId, childPeek, entry.second?.autoJoin, entry.second?.order
+                                    childId, childPeek, entry.second?.order
                             )
                     )
                 }

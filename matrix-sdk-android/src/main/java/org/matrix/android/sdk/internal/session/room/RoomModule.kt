@@ -28,6 +28,8 @@ import org.matrix.android.sdk.api.session.space.SpaceService
 import org.matrix.android.sdk.internal.session.DefaultFileService
 import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.internal.session.directory.DirectoryAPI
+import org.matrix.android.sdk.internal.session.identity.DefaultSign3pidInvitationTask
+import org.matrix.android.sdk.internal.session.identity.Sign3pidInvitationTask
 import org.matrix.android.sdk.internal.session.room.accountdata.DefaultUpdateRoomAccountDataTask
 import org.matrix.android.sdk.internal.session.room.accountdata.UpdateRoomAccountDataTask
 import org.matrix.android.sdk.internal.session.room.alias.AddRoomAliasTask
@@ -248,4 +250,7 @@ internal abstract class RoomModule {
 
     @Binds
     abstract fun bindRoomVersionUpgradeTask(task: DefaultRoomVersionUpgradeTask): RoomVersionUpgradeTask
+
+    @Binds
+    abstract fun bindSign3pidInvitationTask(task: DefaultSign3pidInvitationTask): Sign3pidInvitationTask
 }

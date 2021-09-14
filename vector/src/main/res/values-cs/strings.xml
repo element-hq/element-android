@@ -29,7 +29,7 @@
     <string name="notice_room_visibility_shared">všechny členy místnosti.</string>
     <string name="notice_room_visibility_world_readable">kohokoliv.</string>
     <string name="notice_room_visibility_unknown">neznámým (%s).</string>
-    <string name="notice_end_to_end">%1$s zapnuli end-to-end šifrování (%2$s)</string>
+    <string name="notice_end_to_end">%1$s zapnuli koncové šifrování (%2$s)</string>
     <string name="notice_requested_voip_conference">%1$s požádali o VoIP konferenci</string>
     <string name="notice_voip_started">Začala VoIP konference</string>
     <string name="notice_voip_finished">VoIP konference skončila</string>
@@ -113,7 +113,7 @@
     <string name="notice_answered_call_by_you">Přijali jste hovor.</string>
     <string name="notice_ended_call_by_you">Ukončili jste hovor.</string>
     <string name="notice_made_future_room_visibility_by_you">Učinili jste budoucí historii místnosti viditelnou pro %1$s</string>
-    <string name="notice_end_to_end_by_you">Zapnuli jste end-to-end šifrování (%1$s)</string>
+    <string name="notice_end_to_end_by_you">Zapnuli jste koncové šifrování (%1$s)</string>
     <string name="notice_room_update_by_you">Povýšili jste tuto místnost.</string>
     <string name="notice_requested_voip_conference_by_you">Požádali jste o VoIP konferenci</string>
     <string name="notice_room_name_removed_by_you">Odstranili jste jméno místnosti</string>
@@ -190,10 +190,10 @@
     <string name="notice_room_guest_access_can_join_by_you">Povolili jste hostům vstoupit do místnosti.</string>
     <string name="notice_room_guest_access_forbidden">%1$s zamezili hostům vstoupit do místnosti.</string>
     <string name="notice_room_guest_access_forbidden_by_you">Zamezili jste hostům vstoupit do místnosti.</string>
-    <string name="notice_end_to_end_ok">%1$s zapnuli end-to-end šifrování.</string>
-    <string name="notice_end_to_end_ok_by_you">Zapnuli jste end-to-end šifrování.</string>
-    <string name="notice_end_to_end_unknown_algorithm">%1$s zapnuli end-to-end šifrování (neznámý algoritmus %2$s).</string>
-    <string name="notice_end_to_end_unknown_algorithm_by_you">Zapnuli jste end-to-end šifrování (neznámý algoritmus %1$s).</string>
+    <string name="notice_end_to_end_ok">%1$s zapnuli koncové šifrování.</string>
+    <string name="notice_end_to_end_ok_by_you">Zapnuli jste koncové šifrování.</string>
+    <string name="notice_end_to_end_unknown_algorithm">%1$s zapnuli koncové šifrování (neznámý algoritmus %2$s).</string>
+    <string name="notice_end_to_end_unknown_algorithm_by_you">Zapnuli jste koncové šifrování (neznámý algoritmus %1$s).</string>
     <string name="notice_direct_room_guest_access_forbidden_by_you">Zamezili jste hostům vstoupit do této místnosti.</string>
     <string name="notice_direct_room_guest_access_forbidden">%1$s zamezil hostům vstoupit do této místnosti.</string>
     <string name="notice_direct_room_guest_access_can_join_by_you">Povolili jste hostům vstoupit.</string>
@@ -910,7 +910,7 @@
 \nSync může být odložen v závislosti na zdrojích (baterie) nebo stavu zařízení (spánek).</string>
     <string name="settings_set_sync_delay">Prodleva mezi jednotlivými syncy</string>
     <string name="settings_version">Verze</string>
-    <string name="settings_olm_version">verze olm</string>
+    <string name="settings_olm_version">Verze olm</string>
     <string name="settings_app_term_conditions">Všeobecné podmínky</string>
     <string name="settings_third_party_notices">Oznámení třetích stran</string>
     <string name="settings_copyright">Vlastnická práva</string>
@@ -1067,8 +1067,8 @@
     <string name="room_settings_addresses_pref_title">Adresa</string>
     <string name="room_settings_labs_pref_title">Experimentální funkce</string>
     <string name="room_settings_labs_warning_message">Toto jsou experimentální funkce, které mohou selhat neočekávanými způsoby. Použijte obezřetně.</string>
-    <string name="room_settings_labs_end_to_end">Šifrování end-to-end</string>
-    <string name="room_settings_labs_end_to_end_is_active">Šifrování end-to-end je aktivní</string>
+    <string name="room_settings_labs_end_to_end">Koncové šifrování</string>
+    <string name="room_settings_labs_end_to_end_is_active">Koncové šifrování je aktivní</string>
     <string name="room_settings_labs_end_to_end_warnings">Pro aktivaci šifrování se musíte odhlásit.</string>
     <string name="room_settings_never_send_to_unverified_devices_title">Šifruj pouze do ověřených relací</string>
     <string name="room_settings_never_send_to_unverified_devices_summary">Nikdy neposílejte šifrované zprávy do neověřených relací v této místnosti z této relace.</string>
@@ -1093,7 +1093,7 @@
     <string name="directory_title">Adresář</string>
     <string name="settings_theme">Motiv vzhledu</string>
     <string name="failed_to_load_timeline_position">%s se pokusil načíst určitý okamžik v historii této místnosti, ale nemohl jej najít.</string>
-    <string name="encryption_information_title">Informace o šifrování end-to-end</string>
+    <string name="encryption_information_title">Informace o koncovém šifrování</string>
     <string name="encryption_information_device_info">Informace of události</string>
     <string name="encryption_information_user_id">Uživatelské id</string>
     <string name="encryption_information_curve25519_identity_key">Identifikační klíč Curve25519</string>
@@ -1393,7 +1393,7 @@
     <string name="template_keys_backup_passphrase_not_empty_error_message">Prosím, smažte přístupovou frázi, přejete-li si, aby ${app_name} generoval klíč pro obnovu.</string>
     <string name="keys_backup_no_session_error">Žádná relace Matrix není dostupná</string>
     <string name="keys_backup_setup_step1_title">Nikdy neztraťte šifrované zprávy</string>
-    <string name="keys_backup_setup_step1_description">Zprávy v šifrovaných místnostech jsou zabezpečeny pomocí end-to-end šifrováním. Pouze Vy a adresát(i) máte klíče ke čtení těchto zpráv.
+    <string name="keys_backup_setup_step1_description">Zprávy v šifrovaných místnostech jsou zabezpečeny pomocí koncového šifrování. Pouze Vy a adresát(i) máte klíče ke čtení těchto zpráv.
 \n
 \nKlíče bezpečně zálohujte, abyste je neztratili.</string>
     <string name="keys_backup_setup">Začít používat zálohu klíčů</string>
@@ -1490,7 +1490,7 @@
     <string name="sas_security_advise">Pro nejvyšší bezpečnost doporučujeme, abyste to provedli osobně nebo jiným způsobem důvěryhodné komunikace.</string>
     <string name="sas_verify_start_button_title">Začít ověření</string>
     <string name="sas_incoming_request_title">Příchozí požadavek na ověření</string>
-    <string name="sas_incoming_request_description">Ověřuji tuto relaci, abych ji označil za důvěryhodnou. Důvěřování relacím partnerů Vám dodá více klidu mysli, používáte-li end-to-end šifrované zprávy.</string>
+    <string name="sas_incoming_request_description">Ověřuji tuto relaci, abych ji označil za důvěryhodnou. Ověřování relací uživatelů vám dává větší jistotu, že je komunikace důvěrná.</string>
     <string name="sas_incoming_request_description_2">Ověření této relace ji označí za důvěryhodnou a také označí Vaši relaci důvěryhodnou Vašemu partnerovi.</string>
     <string name="sas_emoji_description">Ověřit tuto relaci potvrzením, že se následující emoji ukáže na obrazovce partnera</string>
     <string name="sas_decimal_description">Ověřit tuto relaci potvrzením, že se následující čísla ukážou na obrazovce partnera</string>
@@ -1499,7 +1499,7 @@
     <string name="sas_waiting_for_partner">Čekám na potvrzení od partnera…</string>
     <string name="sas_verified">Ověřeno!</string>
     <string name="sas_verified_successful">Úspěšně jste ověřili tuto relaci.</string>
-    <string name="sas_verified_successful_description">Zabezpečené zprávy s tímto uživatelem jsou end-to-end šifrovány a nemohou být čteny třetími stranami.</string>
+    <string name="sas_verified_successful_description">Zabezpečené zprávy s tímto uživatelem jsou koncově šifrovány a nemohou být čteny třetími stranami.</string>
     <string name="sas_got_it">Rozumím</string>
     <string name="sas_verifying_keys">Nic se neukazuje\? Dosud nepodporují všichni klienti interaktivní ověření. Použijte tradiční ověření.</string>
     <string name="sas_legacy_verification_button_title">Použijte tradiční ověření.</string>
@@ -1575,7 +1575,7 @@
     <string name="quick_reactions">Rychlé reakce</string>
     <string name="settings_general_title">Obecná</string>
     <string name="settings_preferences">Možnosti</string>
-    <string name="settings_security_and_privacy">Bezpečí a soukromí</string>
+    <string name="settings_security_and_privacy">Zabezpečení a soukromí</string>
     <string name="settings_expert">Expert</string>
     <string name="settings_push_rules">Push pravidla</string>
     <string name="settings_push_rules_no_rules">Žádná push pravidla nejsou definována</string>
@@ -1705,7 +1705,7 @@
     <string name="room_list_quick_actions_notifications_all_noisy">Všechny zprávy (hlučné)</string>
     <string name="room_list_quick_actions_notifications_all">Všechny zprávy</string>
     <string name="room_list_quick_actions_notifications_mentions">Pouze zmínky</string>
-    <string name="room_list_quick_actions_notifications_mute">Utišit</string>
+    <string name="room_list_quick_actions_notifications_mute">Ztlumit</string>
     <string name="room_list_quick_actions_settings">Nastavení</string>
     <string name="room_list_quick_actions_leave">Opustit místnost</string>
     <string name="notice_member_no_changes">%1$s neučinil žádné změny</string>
@@ -1756,7 +1756,7 @@
     <string name="login_reset_password_email_hint">Email</string>
     <string name="login_reset_password_password_hint">Nové heslo</string>
     <string name="login_reset_password_warning_title">Varování!</string>
-    <string name="login_reset_password_warning_content">Změna hesla přenastaví všechny end-to-end šifrovací klíče pro všechny Vaše relace, a tak učiní zašifrovanou historii chatů nečitelnou. Nastavte zálohu klíčů nebo exportujte své klíče místností z jiné relace, než se rozhodnete pokračovat.</string>
+    <string name="login_reset_password_warning_content">Změna hesla přenastaví všechny šifrovací klíče pro všechny Vaše relace, a tak učiní zašifrovanou historii chatů nečitelnou. Nastavte zálohu klíčů nebo exportujte své klíče místností z jiné relace, než se rozhodnete pokračovat.</string>
     <string name="login_reset_password_warning_submit">Pokračovat</string>
     <string name="login_reset_password_error_not_found">Tato emailová adresa se nevztahuje k žádnému účtu</string>
     <string name="login_reset_password_mail_confirmation_title">Nahlédněte do inboxu</string>
@@ -1856,7 +1856,7 @@
     <string name="devices_other_devices">Jiné relace</string>
     <string name="autocomplete_limited_results">Ukazuji jen první výsledky, zadejte více znaků…</string>
     <string name="settings_developer_mode_fail_fast_title">Fail-fast</string>
-    <string name="template_settings_developer_mode_fail_fast_summary">${app_name} se může zbořit častěji, když se objeví neočekávané chyby</string>
+    <string name="template_settings_developer_mode_fail_fast_summary">${app_name} může spadnout častěji, když se objeví neočekávané chyby</string>
     <string name="command_description_shrug">Předsune ¯\\_(ツ)_/¯ do textové zprávy</string>
     <string name="create_room_encryption_title">Zapnout šifrování</string>
     <string name="create_room_encryption_description">Jakmile zapnuto, šifrování nelze vypnout.</string>
@@ -1902,8 +1902,8 @@
     <string name="verification_request_alert_description">Pro vyšší zabezpečení ověřte %s kontrolou jednorázového kódu na obou zařízeních.
 \n
 \nPro nejvyšší zabezpečení proveďte osobně.</string>
-    <string name="room_profile_not_encrypted_subtitle">Zprávy v této místnosti nejsou šifrovány end-to-end.</string>
-    <string name="room_profile_encrypted_subtitle">Zprávy v této místnosti jsou šifrovány end-to-end.
+    <string name="room_profile_not_encrypted_subtitle">Zprávy v této místnosti nejsou koncově šifrovány.</string>
+    <string name="room_profile_encrypted_subtitle">Zprávy v této místnosti jsou koncově šifrovány.
 \n
 \nVaše zprávy jsou zabezpečeny zámky a pouze Vy a příjemce máte jedinečné klíče k jejich odemknutí.</string>
     <string name="room_profile_section_security">Zabezpečení</string>
@@ -1940,7 +1940,7 @@
     <string name="command_description_rainbow_emote">Odešle daný emote zabarvený jako duha</string>
     <string name="settings_category_timeline">Časová osa</string>
     <string name="settings_category_composer">Editor zpráv</string>
-    <string name="room_settings_enable_encryption">Zapnout šifrování end-to-end…</string>
+    <string name="room_settings_enable_encryption">Zapnout koncové šifrování…</string>
     <string name="room_settings_enable_encryption_warning">Jakmile zapnuto, šifrování nelze vypnout.</string>
     <string name="room_settings_enable_encryption_dialog_title">Zapnout šifrování\?</string>
     <string name="room_settings_enable_encryption_dialog_content">Jakmile zapnuto, šifrování místnosti nelze vypnout. Zprávy odeslané v zašifrované místnosti nemohou být čteny serverem, ale pouze účastníky místnosti. Zapnutím šifrování mohou boty a můstky přestat správně pracovat.</string>
@@ -1949,7 +1949,7 @@
     <string name="verification_request_start_notice">Za účelem bezpečnosti to proveďte osobně nebo použijte jiný způsob komunikace.</string>
     <string name="verification_emoji_notice">Porovnejte jedinečná emoji a ujistěte se, že se ukážou ve stejném pořadí.</string>
     <string name="verification_code_notice">Porovnejte kód s tím na obrazovce druhého uživatele.</string>
-    <string name="verification_conclusion_ok_notice">Zprávy s tímto uživatelem jsou zašifrovány end-to-end a nemohou být čteny třetími stranami.</string>
+    <string name="verification_conclusion_ok_notice">Zprávy s tímto uživatelem jsou koncově šifrovány a nemohou být čteny třetími stranami.</string>
     <string name="verification_conclusion_ok_self_notice">Vaše nová relace je nyní ověřena. Má přístup k Vašim zašifrovaným zprávám a ostatní uživatelé ji uvidi jako důvěryhodnou.</string>
     <string name="encryption_information_cross_signing_state">Křížový podpis</string>
     <string name="encryption_information_dg_xsigning_complete">Křížový podpis je zapnut.
@@ -2086,7 +2086,7 @@
 \nPokud nechcete nastavit bezpečnostní frázi pro zprávy, založte klíč pro zprávy.</string>
     <string name="bootstrap_skip_text_no_gen_key">Nastavení přístupové fráze pro obnovení Vám umožní zabezpečit a odemknout zašifrované zprávy a důvěryhodnost.</string>
     <string name="encryption_enabled">Šifrování zapnuto</string>
-    <string name="encryption_enabled_tile_description">Zprávy v této místnosti jsou end-to-end šifrovány. Zjistěte více a ověřte uživatele v jejich profilech.</string>
+    <string name="encryption_enabled_tile_description">Zprávy v této místnosti jsou koncově šifrovány. Zjistěte více a ověřte uživatele v jejich profilech.</string>
     <string name="encryption_not_enabled">Šifrování není zapnuto</string>
     <string name="encryption_unknown_algorithm_tile_description">Šifrování použité v této místnosti není podporováno</string>
     <string name="room_created_summary_item">%s založil a nastavil tuto místnost.</string>
@@ -2326,7 +2326,7 @@
     <string name="send_a_sticker">Nálepka</string>
     <string name="room_profile_section_admin">Akce správce</string>
     <string name="room_member_power_level_default_in">Výchozí v %1$s</string>
-    <string name="settings_hs_admin_e2e_disabled">Správce Vašeho serveru vypnul end-to-end šifrování jako výchozí v soukromých místnostech a přímých zprávách.</string>
+    <string name="settings_hs_admin_e2e_disabled">Správce vašeho serveru vypnul ve výchozím nastavení koncové šifrování v soukromých místnostech a přímých zprávách.</string>
     <string name="bootstrap_info_text_2">Zadejte přístupovou frázi, jež znáte pouze Vy, k zabezpečení klíčů na vašem serveru.</string>
     <string name="bootstrap_cancel_text">Pokud nyní přerušíte, mohli byste přijít o šifrované zprávy &amp; data, pokud ztratíte přístup k Vašemu účtu.
 \n
@@ -2365,7 +2365,7 @@
     <string name="notice_crypto_unable_to_decrypt_final">Nemůžete číst tuto zprávu</string>
     <string name="notice_crypto_unable_to_decrypt_friendly">Čekám na tuto zprávu, může to chvíli trvat</string>
     <string name="crypto_utd">Nelze dešifrovat</string>
-    <string name="notice_crypto_unable_to_decrypt_friendly_desc">Kvůli end-to-end šifrování se může stát, že budete muset počkat, než zpráva dorazí, protože šifrovací klíče Vám nebyly řádně zaslány.</string>
+    <string name="notice_crypto_unable_to_decrypt_friendly_desc">Kvůli koncovému šifrování se může stát, že budete muset počkat, než zpráva dorazí, protože šifrovací klíče Vám nebyly řádně zaslány.</string>
     <string name="crypto_error_withheld_blacklisted">Nemůžete číst tuto zprávu, protože odesílatel Vás blokuje</string>
     <string name="crypto_error_withheld_unverified">Nemůžete číst tuto zprávu, protože Vaše relace není pro odesílatele důvěryhodná</string>
     <string name="crypto_error_withheld_generic">Nemůžete číst tuto zprávu, protože odesílatel účelově neposlal klíče</string>
@@ -2451,13 +2451,13 @@
     <string name="bad_passphrase_key_reset_all_action">Zapomněli nebo ztratili jste možnosti obnovení\? Resetovat vše</string>
     <string name="direct_room_created_summary_item_by_you">Vstoupili jste.</string>
     <string name="direct_room_created_summary_item">%s vstoupil.</string>
-    <string name="direct_room_encryption_enabled_tile_description">Zprávy v této místnosti jsou e2e šifrovány.</string>
+    <string name="direct_room_encryption_enabled_tile_description">Zprávy v této místnosti jsou koncově šifrovány.</string>
     <string name="direct_room_profile_section_more_leave">Odejít</string>
     <string name="direct_room_profile_section_more_settings">Nastavení</string>
-    <string name="direct_room_profile_encrypted_subtitle">Zprávy zde jsou e2e šifrovány.
+    <string name="direct_room_profile_encrypted_subtitle">Zprávy zde jsou koncově šifrovány.
 \n
 \nVaše zprávy jsou zabezpečeny zámky a pouze Vy a příjemce máte jedinečné klíče k jejich odemknutí.</string>
-    <string name="direct_room_profile_not_encrypted_subtitle">Zprávy zde nejsou e2e šifrovány.</string>
+    <string name="direct_room_profile_not_encrypted_subtitle">Zprávy zde nejsou koncově šifrovány.</string>
     <string name="login_error_outdated_homeserver_warning_content">Tento domovský server používá starou verzi. Požádejte správce svého domovského serveru o aktualizaci. Můžete pokračovat, ale některé funkce možná nebudou správně pracovat.</string>
     <string name="direct_room_join_rules_invite_by_you">Omezili jste na pouze pro pozvané.</string>
     <string name="direct_room_join_rules_invite">%1$s omezili na pouze pro pozvané.</string>
@@ -2647,7 +2647,7 @@
     <string name="call_tile_call_back">Zavolat zpět</string>
     <string name="call_tile_ended">Tento hovor skončil</string>
     <string name="call_tile_other_declined">%1$s odmítl tento hovor</string>
-    <string name="call_tile_you_declined">Odmítli jste tento hovor %1$s</string>
+    <string name="call_tile_you_declined">Odmítli jste tento hovor %s</string>
     <string name="call_tile_in_call">Aktuálně jste v tomto hovoru</string>
     <string name="call_tile_other_started_call">%1$s zahájil hovor</string>
     <string name="call_tile_you_started_call">Zahájili jste hovor</string>
@@ -2687,7 +2687,7 @@
     <string name="a11y_trust_level_default">Výchozí úroveň důvěryhodnosti</string>
     <string name="a11y_selected">Vybrané</string>
     <string name="a11y_video">Video</string>
-    <string name="a11y_unsent_draft">Tato místnost má neodeslaný koncept</string>
+    <string name="a11y_unsent_draft">má neodeslaný koncept</string>
     <string name="a11y_error_some_message_not_sent">Některé zprávy nebyly odeslány</string>
     <string name="a11y_delete_avatar">Smazat avatar</string>
     <string name="a11y_change_avatar">Změnit avatar</string>
@@ -2812,7 +2812,7 @@
     <string name="space_settings_manage_rooms">Správa místností</string>
     <string name="looking_for_someone_not_in_space">Hledáte někoho, kdo není v %s\?</string>
     <string name="user_invites_you">%s Vás zve</string>
-    <string name="a11y_public_room">Tato místnosti je veřejná</string>
+    <string name="a11y_public_room">Veřejná místnost</string>
     <string name="send_images_and_video_with_original_size">Poslat media v původní velikosti</string>
     <plurals name="send_videos_with_original_size">
         <item quantity="one">Poslat video v původní velikosti</item>
@@ -2832,7 +2832,6 @@
     <string name="spaces_no_server_support_title">Vypadá to, že váš domovský server zatím Prostory nepodporuje</string>
     <string name="spaces_feeling_experimental_subspace">Chcete experimentovat\?
 \nDo prostoru můžete přidat existující prostory.</string>
-    <string name="labs_space_show_orphan_in_home">Experimentální prostor - Zobrazit pouze sirotky v Domově</string>
     <string name="space_add_rooms">Přidat místnosti</string>
     <string name="space_leave_prompt_msg_as_admin">Jste administrátorem tohoto prostoru, ujistěte se, že jste před odchodem převedli administrátorská práva na jiného člena.</string>
     <string name="space_leave_prompt_msg_private">Tento prostor není veřejný. Bez pozvánky se do něj nebudete moci znovu připojit.</string>
@@ -2850,7 +2849,7 @@
     <string name="unnamed_room">Nepojmenovaná místnost</string>
     <string name="private_space">Soukromý prostor</string>
     <string name="public_space">Veřejný prostor</string>
-    <string name="a11y_public_space">Tento Prostor je veřejný</string>
+    <string name="a11y_public_space">Veřejný prostor</string>
     <string name="call_transfer_unknown_person">Neznámá osoba</string>
     <string name="call_transfer_transfer_to_title">Převod na %1$s</string>
     <string name="call_transfer_consulting_with">Konzultace s %1$s</string>
@@ -2873,7 +2872,7 @@
     <string name="upgrade_room_no_power_to_manage">K aktualizaci místnosti potřebujete oprávnění</string>
     <string name="upgrade_room_update_parent_space">Automaticky aktualizovat mateřský prostor</string>
     <string name="upgrade_room_auto_invite">Automaticky pozvat uživatele</string>
-    <string name="upgrade_public_room_from_to">Budete aktualizovat tuto místnost z %s na %s.</string>
+    <string name="upgrade_public_room_from_to">Budete aktualizovat tuto místnost z %1$s na %2$s.</string>
     <string name="upgrade_room_warning">Aktualizace místnosti je pokročilá akce a obvykle se doporučuje tehdy, je-li místnost nestabilní kvůli chybám, chybějícím funkcím nebo slabým místům v zabezpečení.
 \nObvykle má vliv pouze na to, jak server místnost zpracovává.</string>
     <string name="upgrade_private_room">Aktualizovat soukromou místnost</string>
@@ -2935,4 +2934,72 @@
     <string name="room_create_member_of_space_name_can_join">Členové prostoru %s mohou vyhledávat, prohlížet a připojovat se.</string>
     <string name="room_settings_room_access_private_invite_only_title">Soukromé (pouze pro pozvané)</string>
     <string name="denied_permission_voice_message">Chcete-li odesílat hlasové zprávy, povolte oprávnění mikrofonu.</string>
+    <string name="settings_room_upgrades">Aktualizace místnosti</string>
+    <string name="settings_messages_by_bot">Zprávy od bota</string>
+    <string name="settings_room_invitations">Pozvánky do místnosti</string>
+    <string name="settings_encrypted_group_messages">Šifrované skupinové zprávy</string>
+    <string name="settings_group_messages">Skupinové zprávy</string>
+    <string name="settings_encrypted_direct_messages">Šifrované přímé zprávy</string>
+    <string name="settings_messages_direct_messages">Přímé zprávy</string>
+    <string name="settings_messages_containing_username">Mé uživatelské jméno</string>
+    <string name="settings_messages_containing_display_name">Mé zobrazované jméno</string>
+    <string name="settings_notification_notify_me_for">Upozorněte mě na</string>
+    <string name="settings_notification_other">Další</string>
+    <string name="settings_notification_mentions_and_keywords">Zmínky a klíčová slova</string>
+    <string name="settings_notification_default">Výchozí oznámení</string>
+    <string name="link_this_email_with_your_account">%s v Nastavení pro příjem pozvánek přímo v Elementu.</string>
+    <string name="link_this_email_settings_link">Propojte tento e-mail se svým účtem</string>
+    <string name="this_invite_to_this_room_was_sent">Pozvánka do této místnosti byla odeslána na adresu %s, která není spojena s vaším účtem</string>
+    <string name="this_invite_to_this_space_was_sent">Pozvánka do tohoto prostoru byla odeslána na adresu %s, která není spojena s vaším účtem</string>
+    <string name="to_help_space_members_find_and_join">Chcete-li členům prostoru pomoci najít soukromou místnost a připojit se k ní, přejděte do nastavení dané místnosti klepnutím na avatar.</string>
+    <string name="help_space_members">Pomozte členům prostoru najít soukromé místnosti</string>
+    <string name="this_makes_it_easy_for_rooms_to_stay_private_to_a_space">Díky tomu mohou místnosti zůstat soukromé a zároveň je mohou lidé v prostoru najít a připojit se k nim. Všechny nové místnosti v prostoru budou mít tuto možnost k dispozici.</string>
+    <string name="help_people_in_spaces_find_and_join">Pomozte lidem v prostorech, aby sami našli soukromé místnosti a připojili se k nim, není třeba všechny zvát ručně.</string>
+    <string name="new_let_people_in_spaces_find_and_join">Novinka: Nechat lidi v prostorech najít a připojit se k soukromým místnostem</string>
+    <string name="call_jitsi_started">Skupinový hovor zahájen</string>
+    <string name="all_rooms_youre_in_will_be_shown_in_home">Všechny místnosti, ve kterých se nacházíte, se zobrazí v domovském zobrazení.</string>
+    <string name="preference_show_all_rooms_in_home">Zobrazit všechny místnosti v domovském zobrazení</string>
+    <string name="call_slide_to_end_conference">Posunutím ukončíte hovor</string>
+    <string name="call_tap_to_return">%1$s Klepněte pro návrat</string>
+    <string name="call_one_active">Probíhající hovor (%1$s) ·</string>
+    <plurals name="call_active_status">
+        <item quantity="one">Probíhající hovor ·</item>
+        <item quantity="few">%1$d probíhající hovory ·</item>
+        <item quantity="other">%1$d probíhajících hovorů ·</item>
+    </plurals>
+    <string name="call_tile_connection_failed">Připojení se nezdařilo</string>
+    <string name="call_tile_no_answer">Žádná odpověď</string>
+    <string name="call_tile_video_missed">Zmeškaný videohovor</string>
+    <string name="call_tile_voice_missed">Zmeškaný hlasový hovor</string>
+    <string name="call_tile_video_declined">Videohovor odmítnut</string>
+    <string name="call_tile_voice_declined">Hlasový hovor odmítnut</string>
+    <string name="call_tile_video_call_has_ended">Videohovor ukončen • %1$s</string>
+    <string name="call_tile_voice_call_has_ended">Hlasový hovor ukončen • %1$s</string>
+    <string name="call_tile_video_active">Probíhající videohovor</string>
+    <string name="call_tile_voice_active">Probíhající hlasový hovor</string>
+    <string name="call_tile_video_incoming">Příchozí videohovor</string>
+    <string name="call_tile_voice_incoming">Příchozí hlasový hovor</string>
+    <string name="call_tile_you_declined_this_call">Tento hovor jste odmítli</string>
+    <string name="room_settings_room_notifications_account_settings">Nastavení účtu</string>
+    <string name="room_settings_room_notifications_manage_notifications">Oznámení můžete spravovat v %1$s.</string>
+    <string name="room_settings_room_notifications_encryption_notice">Upozorňujeme, že upozornění na zmínky a klíčová slova nejsou v zašifrovaných místnostech k dispozici na mobilním zařízení.</string>
+    <string name="room_settings_room_notifications_notify_me">Upozorněte mě na</string>
+    <string name="settings_mentions_and_keywords_encryption_notice">Na mobilním zařízení nedostanete upozornění na zmínky a klíčová slova v zašifrovaných místnostech.</string>
+    <string name="settings_messages_containing_keywords">Klíčová slova</string>
+    <string name="settings_mentions_at_room">\@místnost</string>
+    <string name="settings_notification_keyword_contains_invalid_character">Klíčová slova nemohou obsahovat \'%s\'</string>
+    <string name="settings_notification_keyword_contains_dot">Klíčová slova nemohou začínat znakem \'.\'</string>
+    <string name="settings_notification_new_keyword">Přidat nové klíčové slovo</string>
+    <string name="settings_notification_your_keywords">Vaše klíčová slova</string>
+    <string name="room_settings_none">Žádné</string>
+    <string name="room_settings_mention_and_keyword_only">Pouze zmínky a klíčová slova</string>
+    <string name="call_remove_jitsi_widget_progress">Ukončení hovoru…</string>
+    <string name="call_ended_invite_timeout_title">Žádná odpověď</string>
+    <string name="call_ended_user_busy_description">Volaný uživatel je zaneprázdněn.</string>
+    <string name="call_ended_user_busy_title">Uživatel zaneprázdněn</string>
+    <string name="audio_call_with_participant">Hlasový hovor s %s</string>
+    <string name="video_call_with_participant">Videohovor s %s</string>
+    <string name="call_ringing">Vyzvánění…</string>
+    <string name="spaces">Prostory</string>
+    <string name="learn_more">Dozvědět se více</string>
 </resources>

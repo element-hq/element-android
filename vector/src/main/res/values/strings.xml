@@ -385,6 +385,8 @@
     <string name="dismiss">Dismiss</string>
     <string name="reset">Reset</string>
     <string name="start_chatting">Start Chatting</string>
+    <string name="learn_more">Learn More</string>
+    <string name="spaces">Spaces</string>
 
     <!-- Permissions denied forever -->
     <string name="denied_permission_generic">Some permissions are missing to perform this action, please grant the permissions from the system settings.</string>
@@ -727,6 +729,7 @@
     <string name="call">Call</string>
     <string name="call_connected">Call connected</string>
     <string name="call_connecting">Call connecting…</string>
+    <string name="call_ringing">Call ringing…</string>
     <string name="call_ended">Call ended</string>
     <plurals name="missed_audio_call">
         <item quantity="one">Missed audio call</item>
@@ -742,6 +745,8 @@
     <string name="incoming_voice_call">Incoming Voice Call</string>
     <string name="call_in_progress">Call In Progress…</string>
     <string name="video_call_in_progress">Video Call In Progress…</string>
+    <string name="video_call_with_participant">Video call with %s</string>
+    <string name="audio_call_with_participant">Audio call with %s</string>
     <string name="active_call_with_duration">Active Call (%s)</string>
     <string name="return_to_call">Return to call</string>
     <string name="call_resume_action">Resume</string>
@@ -749,10 +754,15 @@
     <string name="call_held_by_user">%s held the call</string>
     <string name="call_held_by_you">You held the call</string>
 
+    <string name="call_ended_user_busy_title">User busy</string>
+    <string name="call_ended_user_busy_description">The user you called is busy."</string>
+    <string name="call_ended_invite_timeout_title">No answer</string>
     <string name="call_error_user_not_responding">The remote side failed to pick up.</string>
     <string name="call_error_ice_failed">Media Connection Failed</string>
     <string name="call_error_camera_init_failed">Cannot initialize the camera</string>
     <string name="call_error_answered_elsewhere">call answered elsewhere</string>
+
+    <string name="call_remove_jitsi_widget_progress">Ending call…</string>
 
     <!-- medias picker string -->
     <string name="media_picker_both_capture_title">Take a picture or a video"</string>
@@ -1046,6 +1056,8 @@
     <string name="room_settings_all_messages">All messages</string>
     <string name="room_settings_mention_only">Mentions only</string>
     <string name="room_settings_mute">Mute</string>
+    <string name="room_settings_mention_and_keyword_only">Mentions &amp; Keywords only</string>
+    <string name="room_settings_none">None</string>
     <string name="room_settings_favourite">Favourite</string>
     <string name="room_settings_de_prioritize">De-prioritize</string>
     <string name="room_settings_direct_chat">Direct Chat</string>
@@ -1093,6 +1105,10 @@
     <string name="settings_notification_other">Other</string>
 
     <string name="settings_notification_notify_me_for">Notify me for</string>
+    <string name="settings_notification_your_keywords">Your keywords</string>
+    <string name="settings_notification_new_keyword">Add new keyword</string>
+    <string name="settings_notification_keyword_contains_dot">Keywords cannot start with \'.\'</string>
+    <string name="settings_notification_keyword_contains_invalid_character">Keywords cannot contain \'%s\'</string>
 
     <string name="settings_notification_privacy">Notification privacy</string>
     <string name="settings_notification_troubleshoot">Troubleshoot Notifications</string>
@@ -1211,18 +1227,21 @@
     <string name="settings_messages_in_group_chat">Msgs in group chats</string>
     <string name="settings_invited_to_room">When I’m invited to a room</string>
     <string name="settings_messages_sent_by_bot">Messages sent by bot</string>
+    <string name="settings_messages_at_room">Messages containing @room</string>
 
-    <string name="settings_messages_containing_display_name">Messages containing my display name</string>
-    <string name="settings_messages_containing_username">Messages containing my username</string>
+    <string name="settings_messages_containing_display_name">My display name</string>
+    <string name="settings_messages_containing_username">My username</string>
     <string name="settings_messages_direct_messages">Direct messages</string>
     <string name="settings_encrypted_direct_messages">Encrypted direct messages</string>
     <string name="settings_group_messages">Group messages</string>
     <string name="settings_encrypted_group_messages">Encrypted group messages</string>
-    <string name="settings_messages_at_room">Messages containing @room</string>
+    <string name="settings_mentions_at_room">\@room</string>
+    <string name="settings_messages_containing_keywords">Keywords</string>
     <string name="settings_room_invitations">Room invitations</string>
     <string name="settings_call_invitations">Call invitations</string>
     <string name="settings_messages_by_bot">Messages by bot</string>
     <string name="settings_room_upgrades">Room upgrades</string>
+    <string name="settings_mentions_and_keywords_encryption_notice">You won’t get notifications for mentions &amp; keywords in encrypted rooms on mobile.</string>
 
     <string name="settings_background_sync">Background synchronization</string>
     <string name="settings_background_fdroid_sync_mode">Background Sync Mode</string>
@@ -1436,6 +1455,10 @@
     <string name="room_settings_category_access_visibility_title">Access and visibility</string>
     <string name="room_settings_directory_visibility">List this room in room directory</string>
     <string name="room_settings_room_notifications_title">Notifications</string>
+    <string name="room_settings_room_notifications_notify_me">Notify me for</string>
+    <string name="room_settings_room_notifications_encryption_notice">Please note that mentions &amp; keyword notifications are not available in encrypted rooms on mobile.</string>
+    <string name="room_settings_room_notifications_manage_notifications">You can manage notifications in %1$s.</string>
+    <string name="room_settings_room_notifications_account_settings">Account settings</string>
     <string name="room_settings_room_access_rules_pref_title">Room Access</string>
     <string name="room_settings_room_read_history_rules_pref_title">Room History Readability</string>
     <string name="room_settings_room_read_history_rules_pref_dialog_title">Who can read history?</string>
@@ -3264,11 +3287,24 @@
     <string name="call_tile_you_started_call">You started a call</string>
     <string name="call_tile_other_started_call">%1$s started a call</string>
     <string name="call_tile_in_call">You\'re currently in this call</string>
-    <!-- Pattern can be replaced by the value of string call_tile_call_back -->
-    <string name="call_tile_you_declined">You declined this call %1$s</string>
+    <string name="call_tile_you_declined">You declined this call %s</string>
+    <string name="call_tile_you_declined_this_call">You declined this call</string>
     <string name="call_tile_other_declined">%1$s declined this call</string>
     <string name="call_tile_ended">This call has ended</string>
     <string name="call_tile_call_back">Call back</string>
+
+    <string name="call_tile_voice_incoming">Incoming voice call</string>
+    <string name="call_tile_video_incoming">Incoming video call</string>
+    <string name="call_tile_voice_active">Active voice call</string>
+    <string name="call_tile_video_active">Active video call</string>
+    <string name="call_tile_voice_call_has_ended">Voice call ended • %1$s</string>
+    <string name="call_tile_video_call_has_ended">Video call ended • %1$s</string>
+    <string name="call_tile_voice_declined">Voice call declined</string>
+    <string name="call_tile_video_declined">Video call declined</string>
+    <string name="call_tile_voice_missed">Missed voice call</string>
+    <string name="call_tile_video_missed">Missed video call</string>
+    <string name="call_tile_no_answer">No answer</string>
+    <string name="call_tile_connection_failed">Connection failed</string>
 
     <string name="call_dial_pad_title">Dial pad</string>
     <string name="call_dial_pad_lookup_error">"There was an error looking up the phone number"</string>
@@ -3283,6 +3319,12 @@
         <item quantity="one">1 active call (%1$s) · 1 paused call</item>
         <item quantity="other">1 active call (%1$s) · %2$d paused calls</item>
     </plurals>
+    <plurals name="call_active_status">
+        <item quantity="one">Active call ·</item>
+        <item quantity="other">%1$d active calls ·</item>
+    </plurals>
+    <string name="call_one_active">Active call (%1$s) ·</string>
+    <string name="call_tap_to_return">%1$s Tap to return</string>
 
     <string name="call_transfer_consult_first">Consult first</string>
     <string name="call_transfer_connect_action">Connect</string>
@@ -3292,6 +3334,8 @@
     <string name="call_transfer_consulting_with">Consulting with %1$s</string>
     <string name="call_transfer_transfer_to_title">Transfer to %1$s</string>
     <string name="call_transfer_unknown_person">Unknown person</string>
+
+    <string name="call_slide_to_end_conference">Slide to end the call</string>
 
     <string name="re_authentication_activity_title">Re-Authentication Needed</string>
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
@@ -3305,7 +3349,7 @@
     <string name="a11y_change_avatar">Change avatar</string>
     <string name="a11y_delete_avatar">Delete avatar</string>
     <string name="a11y_error_some_message_not_sent">Some messages have not been sent</string>
-    <string name="a11y_unsent_draft">This room has unsent draft</string>
+    <string name="a11y_unsent_draft">has unsent draft</string>
     <string name="a11y_video">Video</string>
     <string name="a11y_selected">Selected</string>
     <string name="a11y_trust_level_default">Default trust level</string>
@@ -3320,8 +3364,8 @@
     <string name="a11y_rule_notify_silent">Notify without sound</string>
     <string name="a11y_rule_notify_off">Do not notify</string>
     <string name="a11y_view_read_receipts">View read receipts</string>
-    <string name="a11y_public_room">This room is public</string>
-    <string name="a11y_public_space">This Space is public</string>
+    <string name="a11y_public_room">Public room</string>
+    <string name="a11y_public_space">Public space</string>
 
     <string name="dev_tools_menu_name">Dev Tools</string>
     <string name="dev_tools_explore_room_state">Explore Room State</string>
@@ -3442,7 +3486,10 @@
     <string name="space_manage_rooms_and_spaces">Manage rooms and spaces</string>
 
 
-    <string name="labs_space_show_orphan_in_home">Experimental Space - Only show orphans in Home</string>
+
+    <string name="preference_show_all_rooms_in_home">Show all rooms in Home</string>
+    <string name="all_rooms_youre_in_will_be_shown_in_home">All rooms you’re in will be shown in Home.</string>
+
     <string name="spaces_feeling_experimental_subspace">Feeling experimental?\nYou can add existing spaces to a space.</string>
     <string name="spaces_no_server_support_title">It looks like your homeserver does not support Spaces yet</string>
     <string name="spaces_no_server_support_description">Please contact your homeserver admin for further information</string>
@@ -3464,7 +3511,7 @@
     <string name="upgrade_public_room">Upgrade public room</string>
     <string name="upgrade_private_room">Upgrade private room</string>
     <string name="upgrade_room_warning">Upgrading a room is an advanced action and is usually recommended when a room is unstable due to bugs, missing features or security vulnerabilities.\nThis usually only affects how the room is processed on the server.</string>
-    <string name="upgrade_public_room_from_to">You\'ll upgrade this room from %s to %s.</string>
+    <string name="upgrade_public_room_from_to">You\'ll upgrade this room from %1$s to %2$s.</string>
     <string name="upgrade_room_auto_invite">Automatically invite users</string>
     <string name="upgrade_room_update_parent_space">Automatically update space parent</string>
     <string name="upgrade_room_no_power_to_manage">You need permission to upgrade a room</string>
@@ -3474,6 +3521,7 @@
     <string name="room_upgrade_to_recommended_version">Upgrade to the recommended room version</string>
 
     <string name="error_failed_to_join_room">Sorry, an error occurred while trying to join: %s</string>
+    <string name="call_jitsi_started">Group call started</string>
 
     <string name="a11y_start_voice_message">Start Voice Message</string>
     <string name="voice_message_slide_to_cancel">Slide to cancel</string>
@@ -3495,4 +3543,19 @@
     <string name="upgrade_room_for_restricted_no_param">Anyone in a parent space will be able to find and join this room - no need to manually invite everyone. You’ll be able to change this in room settings anytime.</string>
 
     <string name="upgrade_room_for_restricted_note">Please note upgrading will make a new version of the room. All current messages will stay in this archived room.</string>
+
+    <string name="new_let_people_in_spaces_find_and_join">New: Let people in spaces find and join private rooms</string>
+    <string name="help_people_in_spaces_find_and_join">Help people in spaces to find and join private rooms themselves, no need to manually invite everyone.</string>
+    <string name="this_makes_it_easy_for_rooms_to_stay_private_to_a_space">This makes it easy for rooms to stay private to a space, while letting people in the space find and join them. All new rooms in a space will have this option available.</string>
+    <string name="help_space_members">Help space members find private rooms</string>
+    <string name="to_help_space_members_find_and_join">To help space members find and join a private room, go to that room’s settings by tapping on the avatar.</string>
+
+    <!-- %s will be replaced by an email at runtime -->
+    <string name="this_invite_to_this_room_was_sent">This invite to this room was sent to %s which is not associated with your account</string>
+    <!-- %s will be replaced by an email at runtime -->
+    <string name="this_invite_to_this_space_was_sent">This invite to this space was sent to %s which is not associated with your account</string>
+
+    <string name="link_this_email_settings_link">Link this email with your account</string>
+    <!-- %s will be replaced by the value of link_this_email_settings_link and styled as a link -->
+    <string name="link_this_email_with_your_account">%s in Settings to receive invites directly in Element.</string>
 </resources>

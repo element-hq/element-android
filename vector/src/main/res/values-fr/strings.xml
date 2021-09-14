@@ -2778,7 +2778,6 @@
         <item quantity="one">Envoyer la vidéo en taille originale</item>
         <item quantity="other">Envoyer les vidéos en taille originale</item>
     </plurals>
-    <string name="labs_space_show_orphan_in_home">Espace expérimental – afficher seulement les orphelins dans Accueil</string>
     <string name="space_leave_prompt_msg_as_admin">Vous êtes administrateur de cet espace, assurez-vous d’avoir transféré les droits d’administration à un autre membre avant de partir.</string>
     <string name="send_feedback_space_info">Vous utilisez une version bêta des espaces. Vos remarques aideront à concevoir les prochaines versions. Votre plateforme et votre nom d’utilisateur seront marqués pour nous aider à utiliser vos remarques autant que possible.</string>
     <string name="this_space_has_no_rooms_admin">Il se peut que certains salons soient masqués parce qu’ils sont privés et vous avez besoin d’une invitation.</string>
@@ -2827,7 +2826,7 @@
     <string name="upgrade_room_no_power_to_manage">Vous devez avoir le droit de mettre à jour ce salon</string>
     <string name="upgrade_room_update_parent_space">Mettre à jour automatiquement l’espace parent</string>
     <string name="upgrade_room_auto_invite">Inviter automatiquement des utilisateurs</string>
-    <string name="upgrade_public_room_from_to">Vous allez mettre à jour ce salon de %s à %s.</string>
+    <string name="upgrade_public_room_from_to">Vous allez mettre à jour ce salon de %1$s à %2$s.</string>
     <string name="upgrade_room_warning">La mise-à-jour d’un salon est une action avancée et n’est normalement recommandé que si un salon est instable à cause de bogues, fonctionnalités manquantes, ou failles de sécurité.
 \nCela n’affecte normalement que la manière dont le salon est géré par le serveur.</string>
     <string name="upgrade_private_room">Mettre à jour un salon privé</string>
@@ -2887,4 +2886,17 @@
     <string name="room_create_member_of_space_name_can_join">Les membres de l’espace %s peuvent trouver, prévisualiser et venir.</string>
     <string name="room_settings_room_access_private_invite_only_title">Privé (seulement sur invitation)</string>
     <string name="denied_permission_voice_message">Pour envoyer des messages vocaux, veuillez accorder la permission Microphone.</string>
+    <string name="settings_room_upgrades">Les mises-à-jour de salon</string>
+    <string name="settings_messages_by_bot">Les messages envoyés par un robot</string>
+    <string name="settings_room_invitations">Les invitations à des salons</string>
+    <string name="settings_encrypted_group_messages">Les conversations de groupe chiffrées</string>
+    <string name="settings_group_messages">Les conversations de groupe</string>
+    <string name="settings_encrypted_direct_messages">Les conversations privées chiffrées</string>
+    <string name="settings_messages_direct_messages">Les conversations privées</string>
+    <string name="settings_messages_containing_username">Les messages contenant mon nom d’utilisateur</string>
+    <string name="settings_messages_containing_display_name">Les messages contenant mon nom d’affichage</string>
+    <string name="settings_notification_notify_me_for">Me notifier pour</string>
+    <string name="settings_notification_other">Autre</string>
+    <string name="settings_notification_mentions_and_keywords">Mentions et mots-clés</string>
+    <string name="settings_notification_default">Notifications par défaut</string>
 </resources>

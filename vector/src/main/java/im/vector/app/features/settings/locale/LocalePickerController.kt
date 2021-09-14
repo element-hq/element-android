@@ -37,7 +37,6 @@ class LocalePickerController @Inject constructor(
 
     var listener: Listener? = null
 
-    @ExperimentalStdlibApi
     override fun buildModels(data: LocalePickerViewState?) {
         val list = data?.locales ?: return
         val host = this

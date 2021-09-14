@@ -32,7 +32,7 @@
         android:id="@+id/composerRelatedMessageAvatar"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:contentDescription="@string/avatar"
+        android:importantForAccessibility="no"
         android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="parent"
         app:layout_constraintEnd_toStartOf="parent" />

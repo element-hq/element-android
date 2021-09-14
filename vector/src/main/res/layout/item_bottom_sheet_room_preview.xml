@@ -16,7 +16,6 @@
         android:layout_marginBottom="8dp"
         android:adjustViewBounds="true"
         android:background="@drawable/circle"
-        android:contentDescription="@string/avatar"
         android:importantForAccessibility="no"
         android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"

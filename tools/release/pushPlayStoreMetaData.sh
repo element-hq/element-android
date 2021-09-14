@@ -29,7 +29,8 @@ mv ./fastlane/metadata/android/ga  ./fastlane_tmp
 mv ./fastlane/metadata/android/kab ./fastlane_tmp
 mv ./fastlane/metadata/android/nb  ./fastlane_tmp
 
-# Fastlane / PlayStore require longDescription and shortDescription file to be set, so copy the default one for
+# Fastlane / PlayStore require longDescription and shortDescription file to be set, so copy the default
+# one for languages where they are missing
 echo "Copying default description when missing"
 if [[ -f "./fastlane/metadata/android/ro/full_description.txt" ]]; then
   echo "It appears that file ./fastlane/metadata/android/ro/full_description.txt now exists. This can be removed."
@@ -56,6 +57,24 @@ else
   echo "Copy default short description to ./fastlane/metadata/android/si-LK"
   cp ./fastlane/metadata/android/en-US/short_description.txt ./fastlane/metadata/android/si-LK
   removeShortDes_si=1
+fi
+
+if [[ -f "./fastlane/metadata/android/sq/short_description.txt" ]]; then
+  echo "It appears that file ./fastlane/metadata/android/sq/short_description.txt now exists. This can be removed."
+  removeShortDes_sq=0
+else
+  echo "Copy default short description to ./fastlane/metadata/android/sq"
+  cp ./fastlane/metadata/android/en-US/short_description.txt ./fastlane/metadata/android/sq
+  removeShortDes_sq=1
+fi
+
+if [[ -f "./fastlane/metadata/android/sq/full_description.txt" ]]; then
+  echo "It appears that file ./fastlane/metadata/android/sq/full_description.txt now exists. This can be removed."
+  removeFullDes_sq=0
+else
+  echo "Copy default full description to ./fastlane/metadata/android/sq"
+  cp ./fastlane/metadata/android/en-US/full_description.txt ./fastlane/metadata/android/sq
+  removeFullDes_sq=1
 fi
 
 if [[ -f "./fastlane/metadata/android/th/full_description.txt" ]]; then
@@ -98,8 +117,16 @@ if [[ ${removeShortDes_si} -eq 1 ]]; then
   rm ./fastlane/metadata/android/si-LK/short_description.txt
 fi
 
+if [[ ${removeShortDes_sq} -eq 1 ]]; then
+  rm ./fastlane/metadata/android/sq/short_description.txt
+fi
+
 if [[ ${removeFullDes_th} -eq 1 ]]; then
   rm ./fastlane/metadata/android/th/full_description.txt
+fi
+
+if [[ ${removeFullDes_sq} -eq 1 ]]; then
+  rm ./fastlane/metadata/android/sq/full_description.txt
 fi
 
 if [[ ${removeFullDes_vi} -eq 1 ]]; then
