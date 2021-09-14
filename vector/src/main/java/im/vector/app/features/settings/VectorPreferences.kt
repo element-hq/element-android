@@ -205,6 +205,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         private const val SETTINGS_USER_COLOR_MODE_PUBLIC_ROOM = "SETTINGS_USER_COLOR_MODE_PUBLIC_ROOM"
         private const val SETTINGS_OPEN_CHATS_AT_FIRST_UNREAD = "SETTINGS_OPEN_CHATS_AT_FIRST_UNREAD"
         const val SETTINGS_VOICE_MESSAGE = "SETTINGS_VOICE_MESSAGE"
+        const val SETTINGS_UNIFIED_PUSH_FORCE_CUSTOM_GATEWAY = "SETTINGS_UNIFIED_PUSH_FORCE_CUSTOM_GATEWAY"
 
         private const val DID_ASK_TO_ENABLE_SESSION_PUSH = "DID_ASK_TO_ENABLE_SESSION_PUSH"
         private const val DID_PROMOTE_NEW_RESTRICTED_JOIN_RULE = "DID_PROMOTE_NEW_RESTRICTED_JOIN_RULE"
@@ -1021,6 +1022,10 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         return Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP && defaultPrefs.getBoolean(SETTINGS_VOICE_MESSAGE, true)
     }
 
+    fun forceUsCustomUpGateway(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_UNIFIED_PUSH_FORCE_CUSTOM_GATEWAY, false)
+    }
+
     /**
      * I likely do more fresh installs of the app than anyone else, so a shortcut to change some of the default settings to
      * my preferred values can safe me some time
@@ -1041,6 +1046,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
                 .putBoolean(SETTINGS_LABS_ENABLE_SWIPE_TO_REPLY, false)
                 .putBoolean(SETTINGS_VOICE_MESSAGE, false)
                 .putBoolean(SETTINGS_USE_RAGE_SHAKE_KEY, true)
+                .putBoolean(SETTINGS_UNIFIED_PUSH_FORCE_CUSTOM_GATEWAY, true)
                 .apply()
     }
 

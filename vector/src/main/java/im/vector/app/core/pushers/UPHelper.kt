@@ -22,6 +22,7 @@ import androidx.core.content.edit
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.di.DefaultSharedPreferences
+import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.push.fcm.FcmHelper
 import org.unifiedpush.android.connector.Registration
 import timber.log.Timber
@@ -158,6 +159,10 @@ object UPHelper {
              * if GET custom returns """{"unifiedpush":{"gateway":"matrix"}}"""
              * return custom
              */
+            val vectorPreferences = VectorPreferences(context)
+            if (vectorPreferences.forceUsCustomUpGateway()) {
+                return custom
+            }
         }
         return default
     }

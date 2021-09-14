@@ -132,4 +132,8 @@
     <string name="settings_apply_sc_default_settings_dialog_title">Mess up settings</string>
     <string name="settings_apply_sc_default_settings_dialog_summary">If you continue, this will mess with your app settings!</string>
 
+    <string name="settings_unifiedpush">UnifiedPush</string>
+    <string name="settings_unifiedpush_force_custom_gateway">Force custom push gateway</string>
+    <string name="settings_unifiedpush_force_custom_gateway_summary">Only enable this if your push endpoint does not require an external gateway.</string>
+
 </resources>
