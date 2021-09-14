@@ -21,12 +21,12 @@
     <!-- Accessibility -->
     <issue id="LabelFor" severity="error" />
     <issue id="ContentDescription" severity="error" />
+    <issue id="SpUsage" severity="error" />
 
     <!-- Layout -->
     <issue id="UnknownIdInLayout" severity="error" />
     <issue id="StringFormatCount" severity="error" />
     <issue id="HardcodedText" severity="error" />
-    <issue id="SpUsage" severity="error" />
     <issue id="ObsoleteLayoutParam" severity="error" />
     <issue id="InefficientWeight" severity="error" />
     <issue id="DisableBaselineAlignment" severity="error" />
