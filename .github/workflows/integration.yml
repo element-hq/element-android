@@ -32,13 +32,11 @@ jobs:
 
   integration-tests:
     name: Integration Tests (Synapse)
-#    env:
-#      JAVA_HOME: $JAVA_HOME_11_X64
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        api-level: [21,23, 28, 30]
+        api-level: [28]
     steps:
       - uses: actions/checkout@v2
       - uses: gradle/wrapper-validation-action@v1
