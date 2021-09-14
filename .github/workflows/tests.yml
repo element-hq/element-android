@@ -32,4 +32,3 @@ jobs:
         if: always()
         with:
           files: ./**/build/test-results/**/*.xml
-         # files: test-results/**/*.xml

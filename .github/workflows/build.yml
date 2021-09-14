@@ -45,8 +45,6 @@ jobs:
     if: github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v2
-#      - name: Generate CI gradle.properties
-#        run: echo "$CI_GRADLE_PROPERTIES" > gradle.properties
       - uses: actions/cache@v2
         with:
           path: |

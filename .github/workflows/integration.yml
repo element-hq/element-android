@@ -41,8 +41,6 @@ jobs:
         api-level: [21,23, 28, 30]
     steps:
       - uses: actions/checkout@v2
-#      - name: Generate CI gradle.properties
-#        run: echo "$CI_GRADLE_PROPERTIES" > gradle.properties
       - uses: gradle/wrapper-validation-action@v1
       - uses: actions/setup-java@v2
         with:
