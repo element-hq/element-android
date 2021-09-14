@@ -53,7 +53,7 @@ import timber.log.Timber
 
 @JsonClass(generateAdapter = true)
 data class UnifiedPushMessage(
-        val notification: Notification
+        val notification: Notification = Notification()
         )
 
 @JsonClass(generateAdapter = true)
