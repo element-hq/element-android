@@ -100,6 +100,14 @@
         <item name="backgroundColorLight">@color/background_sc_light</item>
         <item name="conference_animation_from">?colorAccent</item>
         <item name="conference_animation_to">?colorAccentPale</item>
+        <item name="user_color_hash_01">@color/user_color_sc_mxid_1</item>
+        <item name="user_color_hash_02">@color/user_color_sc_mxid_2</item>
+        <item name="user_color_hash_03">@color/user_color_sc_mxid_3</item>
+        <item name="user_color_hash_04">@color/user_color_sc_mxid_4</item>
+        <item name="user_color_hash_05">@color/user_color_sc_mxid_5</item>
+        <item name="user_color_hash_06">@color/user_color_sc_mxid_6</item>
+        <item name="user_color_hash_07">@color/user_color_sc_mxid_7</item>
+        <item name="user_color_hash_08">@color/user_color_sc_mxid_8</item>
 
         <item name="android:statusBarColor">@color/background_black_sc</item>
         <item name="android:navigationBarColor">@color/background_black_sc</item>

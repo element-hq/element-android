@@ -16,13 +16,13 @@
 
 package im.vector.app.features.home.room.detail.timeline.helper
 
+import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
 import androidx.annotation.VisibleForTesting
 import im.vector.app.R
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.features.settings.VectorPreferences
-import im.vector.app.features.themes.ThemeUtils
 import org.matrix.android.sdk.api.util.MatrixItem
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -55,10 +55,10 @@ class MatrixItemColorProvider @Inject constructor(
             }
             USER_COLORING_FROM_ID -> {
                 return cache.getOrPut(matrixItem.id) {
-                    colorProvider.getColor(
+                    colorProvider.getColorFromAttribute(
                             when (matrixItem) {
-                                is MatrixItem.UserItem -> getColorFromUserId(matrixItem.id)
-                                else                   -> getColorFromRoomId(matrixItem.id)
+                                is MatrixItem.UserItem -> getColorAttrFromUserId(matrixItem.id)
+                                else                   -> getColorAttrFromRoomId(matrixItem.id)
                             }
                     )
                 }
@@ -69,9 +69,37 @@ class MatrixItemColorProvider @Inject constructor(
         }
     }
 
+    @AttrRes
+    fun getColorAttrFromUserId(userId: String?): Int {
+        var hash = 0
+
+        userId?.toList()?.map { chr -> hash = (hash shl 5) - hash + chr.code }
+
+        return when (abs(hash) % 8) {
+            1    -> R.attr.user_color_hash_02
+            2    -> R.attr.user_color_hash_03
+            3    -> R.attr.user_color_hash_04
+            4    -> R.attr.user_color_hash_05
+            5    -> R.attr.user_color_hash_06
+            6    -> R.attr.user_color_hash_07
+            7    -> R.attr.user_color_hash_08
+            else -> R.attr.user_color_hash_01
+        }
+    }
+
+    @AttrRes
+    private fun getColorAttrFromRoomId(roomId: String?): Int {
+        return when ((roomId?.toList()?.sumOf { it.code } ?: 0) % 3) {
+            1    -> R.attr.room_color_hash_02
+            2    -> R.attr.room_color_hash_03
+            else -> R.attr.room_color_hash_01
+        }
+    }
+
     companion object {
         @ColorRes
         @VisibleForTesting
+        @Deprecated("Use getColorAttrFromUserId")
         fun getColorFromUserId(userId: String?): Int {
             var hash = 0
 
@@ -90,6 +118,7 @@ class MatrixItemColorProvider @Inject constructor(
         }
 
         @ColorRes
+        @Deprecated("Use getColorAttrFromRoomId")
         private fun getColorFromRoomId(roomId: String?): Int {
             return when ((roomId?.toList()?.sumOf { it.code } ?: 0) % 3) {
                 1    -> R.color.element_room_02

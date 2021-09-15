@@ -138,6 +138,17 @@
         <item name="backgroundColorLight">@color/element_background_light</item>
         <item name="conference_animation_from">@color/palette_element_green</item>
         <item name="conference_animation_to">@color/join_conference_animated_color</item>
+        <item name="user_color_hash_01">@color/element_name_01</item>
+        <item name="user_color_hash_02">@color/element_name_02</item>
+        <item name="user_color_hash_03">@color/element_name_03</item>
+        <item name="user_color_hash_04">@color/element_name_04</item>
+        <item name="user_color_hash_05">@color/element_name_05</item>
+        <item name="user_color_hash_06">@color/element_name_06</item>
+        <item name="user_color_hash_07">@color/element_name_07</item>
+        <item name="user_color_hash_08">@color/element_name_08</item>
+        <item name="room_color_hash_01">@color/element_room_01</item>
+        <item name="room_color_hash_02">@color/element_room_02</item>
+        <item name="room_color_hash_03">@color/element_room_03</item>
 
         <!-- Use dark color, to have enough contrast with icons color. windowLightStatusBar is only available in API 23+ -->
         <item name="android:statusBarColor">@color/android_status_bar_background_dark</item>

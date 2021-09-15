@@ -75,6 +75,14 @@
     <color name="user_color_sc_pl_1">#03A9F4</color>
     <color name="user_color_sc_pl_0">#8bc34a</color>
     -->
+    <color name="user_color_sc_mxid_1">#4189c9</color>
+    <color name="user_color_sc_mxid_2">#aa43a7</color>
+    <color name="user_color_sc_mxid_3">#48a188</color>
+    <color name="user_color_sc_mxid_4">#b3526d</color>
+    <color name="user_color_sc_mxid_5">#be6a31</color>
+    <color name="user_color_sc_mxid_6">#299ea0</color>
+    <color name="user_color_sc_mxid_7">#5c57df</color>
+    <color name="user_color_sc_mxid_8">#69a011</color>
 
     <!-- Code background colors -->
     <color name="code_background_sc">#121212</color>

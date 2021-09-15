@@ -28,6 +28,18 @@
         <attr name="user_color_pl_1" format="color" />
         <attr name="user_color_pl_0" format="color" />
 
+        <attr name="user_color_hash_01" format="color" />
+        <attr name="user_color_hash_02" format="color" />
+        <attr name="user_color_hash_03" format="color" />
+        <attr name="user_color_hash_04" format="color" />
+        <attr name="user_color_hash_05" format="color" />
+        <attr name="user_color_hash_06" format="color" />
+        <attr name="user_color_hash_07" format="color" />
+        <attr name="user_color_hash_08" format="color" />
+        <attr name="room_color_hash_01" format="color" />
+        <attr name="room_color_hash_02" format="color" />
+        <attr name="room_color_hash_03" format="color" />
+
         <attr name="verification_request_background" format="color" />
         <attr name="conference_animation_from" format="color" />
         <attr name="conference_animation_to" format="color" />
