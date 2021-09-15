@@ -54,9 +54,9 @@ dependencies {
     implementation libs.rx.rxAndroid
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:${versions.kotlin}"
-    implementation 'androidx.core:core-ktx:1.6.0'
+    implementation libs.androidx.core
     implementation libs.androidx.appCompat
-    implementation "androidx.recyclerview:recyclerview:1.2.1"
+    implementation libs.androidx.recyclerview
 
     implementation 'com.google.android.material:material:1.4.0'
 }

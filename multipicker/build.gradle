@@ -40,8 +40,8 @@ android {
 dependencies {
     implementation libs.jetbrains.kotlinStdlib
     implementation libs.androidx.appCompat
-    implementation "androidx.fragment:fragment-ktx:1.3.6"
-    implementation 'androidx.exifinterface:exifinterface:1.3.3'
+    implementation libs.androidx.fragmentKtx
+    implementation libs.androidx.exifinterface
 
     // Log
     implementation libs.jakewharton.timber
