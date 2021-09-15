@@ -78,7 +78,7 @@ internal class DefaultSpaceService @Inject constructor(
             if (isPublic) {
                 this.roomAliasName = roomAliasLocalPart
                 this.powerLevelContentOverride = (powerLevelContentOverride ?: PowerLevelsContent()).copy(
-                        invite = if (isPublic) 0 else Role.Moderator.value
+                        invite = if (isPublic) Role.Default.value else Role.Moderator.value
                 )
                 this.preset = CreateRoomPreset.PRESET_PUBLIC_CHAT
                 this.historyVisibility = RoomHistoryVisibility.WORLD_READABLE

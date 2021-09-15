@@ -238,7 +238,7 @@ class SpaceSettingsFragment @Inject constructor(
     }
 
     override fun onRoomPermissionsClicked() {
-        sharedViewModel.handle(SpaceManagedSharedAction.OpenRoomPermissionSettings)
+        sharedViewModel.handle(SpaceManagedSharedAction.OpenSpacePermissionSettings)
     }
 
     override fun onImageReady(uri: Uri?) {

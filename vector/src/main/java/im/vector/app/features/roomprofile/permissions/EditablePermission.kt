@@ -77,6 +77,7 @@ sealed class EditablePermission(@StringRes val labelResId: Int, @StringRes val s
 
     class UpgradeTheRoom : EventTypeEditablePermission(
             EventType.STATE_ROOM_TOMBSTONE,
+            R.string.room_permissions_upgrade_the_room,
             R.string.room_permissions_upgrade_the_space
     )
 

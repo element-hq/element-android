@@ -75,7 +75,7 @@ class CreateSpaceViewModelTask @Inject constructor(
                 if (params.isPublic) {
                     this.roomAliasName = params.spaceAlias
                     this.powerLevelContentOverride = (powerLevelContentOverride ?: PowerLevelsContent()).copy(
-                            invite = 0
+                            invite = Role.Default.value
                     )
                     this.preset = CreateRoomPreset.PRESET_PUBLIC_CHAT
                     this.historyVisibility = RoomHistoryVisibility.WORLD_READABLE
