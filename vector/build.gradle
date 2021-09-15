@@ -156,6 +156,14 @@ android {
         //  This *must* only be set in trusted environments.
         buildConfigField "Boolean", "handleCallAssertedIdentityEvents", "false"
 
+        // Key Backup is not supported
+        buildConfigField "Boolean", "IS_KEY_BACKUP_SUPPORTED", "false"
+
+        // CrossSigning initialization is disabled
+        def enableCrossSigning = false
+        buildConfigField "Boolean", "ENABLE_CROSS_SIGNING", "${enableCrossSigning}"
+        resValue "bool", "enable_cross_signing", "${enableCrossSigning}"
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         // Keep abiFilter for the universalApk
@@ -303,8 +311,6 @@ android {
 
             applicationId "fr.gouv.tchap"
             versionName "${versionMajor}.${versionMinor}.${versionPatch}${getTchapVersionSuffix()}"
-
-            buildConfigField "Boolean", "IS_KEY_BACKUP_SUPPORTED", "false"
         }
 
         preprod {
@@ -314,8 +320,6 @@ android {
 
             applicationId "fr.gouv.rie.tchap"
             versionName "${versionMajor}.${versionMinor}.${versionPatch}${getTchapVersionSuffix()}" + "_b"
-
-            buildConfigField "Boolean", "IS_KEY_BACKUP_SUPPORTED", "true"
         }
 
         agent {
@@ -325,8 +329,6 @@ android {
 
             applicationId "fr.gouv.tchap.a"
             versionName "${versionMajor}.${versionMinor}.${versionPatch}${getTchapVersionSuffix()}" + "_a"
-
-            buildConfigField "Boolean", "IS_KEY_BACKUP_SUPPORTED", "false"
         }
     }
 
