@@ -92,4 +92,21 @@
     <string name="settings_show_voice_message_recorder_ui">Hlasové zprávy</string>
     <string name="settings_show_voice_message_recorder_ui_summary">Zobrazit tlačítko pro nahrávání hlasových zpráv</string>
     <string name="send_bug_report_sc_extra">Abyste zvýšili viditelnost svého problému a umožnili nám vás kontaktovat, můžete se na tuto zprávu odkázat (uvedením svého matrix ID a přibližného času, kdy byla odeslána) v problému na adrese https://github.com/SchildiChat/SchildiChat-android/issues (nejprve zkontrolujte, zda pro váš problém již neexistuje, a teprve pokud ne, vytvořte nový).</string>
+    <string name="settings_unifiedpush">UnifiedPush</string>
+    <string name="settings_unifiedpush_force_custom_gateway">Vynutit vlastní push bránu</string>
+    <string name="settings_troubleshoot_test_fcm_failed_sc">Nepodařilo se získat token FCM</string>
+    <string name="settings_unifiedpush_force_custom_gateway_summary">Tuto funkci povolte pouze v případě, že váš koncový bod push nevyžaduje externí bránu.</string>
+    <string name="settings_troubleshoot_test_endpoint_title">Koncový bod/FCM</string>
+    <string name="settings_troubleshoot_test_endpoint_success">Koncový bod byl úspěšně získán:
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_endpoint_failed">Nepodařilo se získat koncový bod.</string>
+    <string name="unifiedpush_getdistributors_dialog_title">Vybrat distributora</string>
+    <string name="unifiedpush_getdistributors_dialog_fcm_fallback">Náhradní FCM</string>
+    <string name="settings_troubleshoot_test_pusher_registration_title">Registrace pusheru</string>
+    <string name="settings_troubleshoot_test_pusher_registration_success">Pusher byl úspěšně zaregistrován na domovském serveru.</string>
+    <string name="settings_troubleshoot_test_pusher_registration_failed">Nepodařilo se zaregistrovat pushher na domovském serveru:
+\n%1$s</string>
+    <string name="settings_apply_sc_default_settings_dialog_title">Pokazí nastavení</string>
+    <string name="settings_apply_sc_default_settings_dialog_summary">Pokud budete pokračovat, dojde k narušení nastavení aplikace!</string>
+    <string name="settings_apply_sc_default_settings">Na toto nastavení neklikejte</string>
 </resources>
