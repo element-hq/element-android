@@ -1,0 +1,49 @@
+ext.versions = [
+
+        'minSdk'            : 21,
+        'compileSdk'        : 30,
+        'targetSdk'         : 30,
+        'sourceCompat'      : JavaVersion.VERSION_11,
+        'targetCompat'      : JavaVersion.VERSION_11,
+
+        'kotlin'           : '1.5.30',
+        'kotlinCoroutines' : '1.5.1',
+        'dagger'           : '2.38.1',
+        'timber'           : '5.0.1',
+        'work'             : '2.5.0',
+        'lifecycle'        : '2.2.0',
+        'moshi'            : '1.12.0',
+        'arch'             : '2.1.0',
+        'markwon'          : '4.6.2',
+        'arrow'            : '0.8.2',
+        'rxKotlin'         : '2.4.0',
+        'rxAndroid'        : '2.1.1',
+
+]
+
+ext.libs = [
+        gradle       : [
+                'gradlePlugin'            : "com.android.tools.build:gradle:7.0.2",
+                'kotlinPlugin'            : "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin"
+        ],
+        jetbrains    : [
+                'kotlinStdlib'            : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${versions.kotlin}",
+                'coroutinesCore'          : "org.jetbrains.kotlinx:kotlinx-coroutines-core:${versions.kotlinCoroutines}",
+                'coroutinesAndroid'       : "org.jetbrains.kotlinx:kotlinx-coroutines-android:${versions.kotlinCoroutines}",
+                'coroutinesRx2'           : "org.jetbrains.kotlinx:kotlinx-coroutines-rx2:${versions.kotlinCoroutines}"
+        ],
+        androidx   : [
+                'appCompat'               : "androidx.appcompat:appcompat:1.3.1"
+        ],
+        dagger       : [
+                'dagger'                  : "com.google.dagger:dagger:${versions.dagger}",
+                'daggerCompiler'          : "com.google.dagger:dagger-compiler:${versions.dagger}"
+        ],
+        rx           : [
+                'rxKotlin'               : "io.reactivex.rxjava2:rxkotlin:${versions.rxKotlin}",
+                'rxAndroid'              : "io.reactivex.rxjava2:rxandroid:${versions.rxAndroid}"
+        ],
+        jakewharton  : [
+                'timber'                 : "com.jakewharton.timber:timber:${versions.timber}",
+        ]
+]
