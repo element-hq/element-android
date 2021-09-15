@@ -264,7 +264,7 @@ internal class RoomSummaryUpdater @Inject constructor(
                                 .map { parentInfo ->
                                     // Is it a valid parent relation?
                                     // Check if it's a child of the parent?
-                                    var isValidRelation = false
+                                    val isValidRelation: Boolean
                                     val parent = lookupMap.firstNotNullOfOrNull { if (it.key.roomId == parentInfo.roomId) it.value else null }
                                     if (parent?.firstOrNull { it.roomId == lookedUp.roomId } != null) {
                                         // there is a corresponding m.space.child event in the claimed parent
