@@ -25,4 +25,5 @@ sealed class SpaceManagedSharedViewEvents : VectorViewEvents {
     object NavigateToCreateRoom : SpaceManagedSharedViewEvents()
     object NavigateToManageRooms : SpaceManagedSharedViewEvents()
     object NavigateToAliasSettings : SpaceManagedSharedViewEvents()
+    object NavigateToPermissionSettings : SpaceManagedSharedViewEvents()
 }

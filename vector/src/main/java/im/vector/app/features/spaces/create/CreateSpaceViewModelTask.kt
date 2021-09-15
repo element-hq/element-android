@@ -35,6 +35,8 @@ import org.matrix.android.sdk.api.session.room.model.RoomJoinRulesAllowEntry
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomPreset
 import org.matrix.android.sdk.api.session.room.model.create.RestrictedRoomPreset
+
+import org.matrix.android.sdk.api.session.room.powerlevels.Role
 import org.matrix.android.sdk.api.session.space.CreateSpaceParams
 import timber.log.Timber
 import javax.inject.Inject
@@ -73,7 +75,7 @@ class CreateSpaceViewModelTask @Inject constructor(
                 if (params.isPublic) {
                     this.roomAliasName = params.spaceAlias
                     this.powerLevelContentOverride = (powerLevelContentOverride ?: PowerLevelsContent()).copy(
-                            invite = 0
+                            invite = Role.Default.value
                     )
                     this.preset = CreateRoomPreset.PRESET_PUBLIC_CHAT
                     this.historyVisibility = RoomHistoryVisibility.WORLD_READABLE
@@ -85,6 +87,9 @@ class CreateSpaceViewModelTask @Inject constructor(
                             params.defaultEmailToInvite.map {
                                 ThreePid.Email(it)
                             }
+                    )
+                    this.powerLevelContentOverride = (powerLevelContentOverride ?: PowerLevelsContent()).copy(
+                            invite = Role.Moderator.value
                     )
                 }
             })

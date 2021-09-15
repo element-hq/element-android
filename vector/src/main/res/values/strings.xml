@@ -974,11 +974,15 @@
 
     <!-- Room Permissions -->
     <string name="room_settings_permissions_title">Room permissions</string>
+    <string name="space_settings_permissions_title">Space permissions</string>
     <string name="room_settings_permissions_subtitle">View and update the roles required to change various parts of the room.</string>
+    <string name="space_settings_permissions_subtitle">View and update the roles required to change various parts of the space.</string>
 
     <string name="room_permissions_title">"Permissions"</string>
     <string name="room_permissions_notice">"Select the roles required to change various parts of the room"</string>
+    <string name="space_permissions_notice">"Select the roles required to change various parts of this space"</string>
     <string name="room_permissions_notice_read_only">"You don't have permission to update the roles required to change various parts of the room"</string>
+    <string name="space_permissions_notice_read_only">"You don't have permission to update the roles required to change various parts of this space"</string>
 
     <string name="room_permissions_default_role">Default role</string>
     <string name="room_permissions_send_messages">Send messages</string>
@@ -990,13 +994,18 @@
     <string name="room_permissions_notify_everyone">Notify everyone</string>
     <string name="room_permissions_modify_widgets">Modify widgets</string>
     <string name="room_permissions_change_room_avatar">Change room avatar</string>
+    <string name="room_permissions_change_space_avatar">Change space avatar</string>
     <string name="room_permissions_change_main_address_for_the_room">Change main address for the room</string>
+    <string name="room_permissions_change_main_address_for_the_space">Change main address for the space</string>
     <string name="room_permissions_enable_room_encryption">Enable room encryption</string>
+    <string name="room_permissions_enable_space_encryption">Enable space encryption</string>
     <string name="room_permissions_change_history_visibility">Change history visibility</string>
     <string name="room_permissions_change_room_name">Change room name</string>
+    <string name="room_permissions_change_space_name">Change space name</string>
     <string name="room_permissions_change_permissions">Change permissions</string>
     <string name="room_permissions_send_m_room_server_acl_events">Send m.room.server_acl events</string>
     <string name="room_permissions_upgrade_the_room">Upgrade the room</string>
+    <string name="room_permissions_upgrade_the_space">Upgrade the space</string>
     <string name="room_permissions_change_topic">Change topic</string>
 
     <!-- Room Details -->
