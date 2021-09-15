@@ -389,7 +389,7 @@ internal interface RoomAPI {
      * as well as if the user is already a member of that room.
      * https://github.com/deepbluev7/matrix-doc/blob/room-summaries/proposals/3266-room-summary.md
      */
-    @GET(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "im.nheko.summary/rooms/{roomidOrAlias}/summary")
-    suspend fun getRoomSummary(@Path("roomidOrAlias") roomidOrAlias: String,
+    @GET(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "im.nheko.summary/rooms/{roomIdOrAlias}/summary")
+    suspend fun getRoomSummary(@Path("roomIdOrAlias") roomidOrAlias: String,
                                @Query("via") viaServers: List<String>?): RoomStrippedState
 }

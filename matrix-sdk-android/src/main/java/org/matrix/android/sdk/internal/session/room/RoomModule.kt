@@ -255,5 +255,5 @@ internal abstract class RoomModule {
     abstract fun bindSign3pidInvitationTask(task: DefaultSign3pidInvitationTask): Sign3pidInvitationTask
 
     @Binds
-    abstract fun bindSGetRoomSummaryTask(task: DefaultGetRoomSummaryTask): GetRoomSummaryTask
+    abstract fun bindGetRoomSummaryTask(task: DefaultGetRoomSummaryTask): GetRoomSummaryTask
 }
