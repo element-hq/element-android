@@ -424,7 +424,11 @@ class WebRtcCallManager @Inject constructor(
 
     override fun onCallManagedByOtherSession(callId: String) {
         Timber.tag(loggerTag.value).v("onCallManagedByOtherSession: $callId")
-        onCallEnded(callId, EndCallReason.ANSWERED_ELSEWHERE, false)
+        val call = callsByCallId[callId]
+                ?: return Unit.also {
+                    Timber.tag(loggerTag.value).w("onCallManagedByOtherSession for non active call? $callId")
+                }
+        call.endCall(EndCallReason.ANSWERED_ELSEWHERE, sendSignaling = false)
     }
 
     override fun onCallAssertedIdentityReceived(callAssertedIdentityContent: CallAssertedIdentityContent) {
