@@ -2602,6 +2602,7 @@
     <string name="space_leave_prompt_msg_as_admin">你是此空间的管理员，请确保你在离开前已将管理权限转让给另一位成员。</string>
     <string name="space_leave_prompt_msg_private">此空间并非公开空间。你将无法在没有邀请的情况下重新加入。</string>
     <string name="space_leave_prompt_msg_only_you">你是这唯一的人。如果你离开，包括你在内的所有人都将无法加入此空间。</string>
+    <!-- TO BE REMOVED -->
     <string name="space_leave_prompt_msg">你确定你想要离开此空间吗？</string>
     <string name="leave_space">离开空间</string>
     <string name="space_add_child_title">添加聊天室</string>

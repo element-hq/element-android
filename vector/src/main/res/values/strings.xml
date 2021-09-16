@@ -3479,11 +3479,17 @@
     <string name="space_explore_activity_title">Explore rooms</string>
     <string name="space_add_child_title">Add rooms</string>
     <string name="leave_space">Leave Space</string>
+    <string name="space_leave_prompt_msg_with_name">Are you sure you want to leave %s?</string>
+    <!-- TO BE REMOVED -->
     <string name="space_leave_prompt_msg">Are you sure you want to leave the space?</string>
     <string name="space_leave_prompt_msg_only_you">You are the only person here. If you leave, no one will be able to join in the future, including you.</string>
-    <string name="space_leave_prompt_msg_private">This space is not public. You will not be able to rejoin without an invite.</string>
-    <string name="space_leave_prompt_msg_as_admin">You are admin of this space, ensure that you have transferred admin right to another member before leaving.</string>
-
+    <string name="space_leave_prompt_msg_private">You won\'t be able to rejoin unless you are re-invited.</string>
+    <string name="space_leave_prompt_msg_as_admin">You\'re the only admin of this space. Leaving it will mean no one has control over it.</string>
+    <string name="leave_all_rooms_and_spaces">Leave all rooms and spaces</string>
+    <string name="you_will_leave_all_in">You will leave all rooms and spaces in %s.</string>
+    <string name="dont_leave_any">Don’t leave any rooms and spaces</string>
+    <string name="leave_specific_ones">Leave specific rooms and spaces…</string>
+    <string name="pick_tings_to_leave">Pick things to leave</string>
 
     <string name="space_add_existing_rooms">Add existing rooms and space</string>
     <string name="space_add_rooms">Add rooms</string>

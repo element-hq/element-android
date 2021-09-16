@@ -2748,6 +2748,7 @@
     <string name="space_leave_prompt_msg_as_admin">Vous êtes admin de cet espace, assurez-vous d’avoir transféré les droits d’admin à un autre membre avant de partir.</string>
     <string name="space_leave_prompt_msg_private">Cet espace n’est pas public. Vous ne pourrez pas le rejoindre sans invitation.</string>
     <string name="space_leave_prompt_msg_only_you">Vous êtes la seule personne ici. Si vous partez, personne ne pourra entrer à l’avenir, même pas vous.</string>
+    <!-- TO BE REMOVED -->
     <string name="space_leave_prompt_msg">Voulez-vous vraiment quitter l’espace\?</string>
     <string name="leave_space">Quitter l’espace</string>
     <string name="space_add_child_title">Ajouter des salons</string>

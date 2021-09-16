@@ -1,0 +1,1 @@
+Allow to also leave rooms when leaving a space

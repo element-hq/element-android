@@ -2732,6 +2732,7 @@
     <string name="spaces_beta_welcome_to_spaces_desc">Gli Spazi sono un nuovo modo per raggruppare stanze e contatti.</string>
     <string name="spaces_beta_welcome_to_spaces">Benvenuto negli Spazi!</string>
     <string name="space_add_existing_rooms">Aggiungi stanze e Spazi esistenti</string>
+    <!-- TO BE REMOVED -->
     <string name="space_leave_prompt_msg">Vuoi veramente uscire dallo Spazio\?</string>
     <string name="leave_space">Esci dallo Spazio</string>
     <string name="space_add_child_title">Aggiungi stanze</string>
