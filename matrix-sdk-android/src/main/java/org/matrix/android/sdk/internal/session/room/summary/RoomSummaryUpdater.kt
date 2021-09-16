@@ -257,7 +257,8 @@ internal class RoomSummaryUpdater @Inject constructor(
                          * clients could ignore such m.space.parent events unless either
                          * (a) there is a corresponding m.space.child event in the claimed parent, or
                          * (b) the sender of the m.space.child event has a sufficient power-level to send such an m.space.child event in the parent.
-                         * (It is not necessarily required that that user currently be a member of the parent room - only the m.room.power_levels event is inspected.)
+                         * (It is not necessarily required that that user currently be a member of the parent room -
+                         * only the m.room.power_levels event is inspected.)
                          * [Checking the power-level rather than requiring an actual m.space.child event in the parent allows for "secret" rooms (see below).]
                          */
                         RoomChildRelationInfo(realm, lookedUp.roomId).getParentDescriptions()
