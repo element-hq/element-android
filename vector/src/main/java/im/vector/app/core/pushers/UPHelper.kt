@@ -17,6 +17,7 @@ package im.vector.app.core.pushers
 
 import android.content.Context
 import android.content.pm.PackageManager
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.edit
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -83,9 +84,15 @@ object UPHelper {
         }
     }
 
-    fun registerUnifiedPush(context: Context) {
+    fun registerUnifiedPush(context: Context, forceShowSelection: Boolean = false, onDoneRunnable: Runnable? = null) {
         val up = Registration()
-        if (up.getDistributor(context).isNotEmpty()) {
+        if (forceShowSelection) {
+            // Un-register first
+            up.unregisterApp(context)
+            up.saveDistributor(context, "")
+            storeUpEndpoint(context, null)
+            storePushGateway(context, null)
+        } else if (up.getDistributor(context).isNotEmpty()) {
             up.registerApp(context)
             return
         }
@@ -101,10 +108,18 @@ object UPHelper {
                 /**
                  * Fallback with sync service
                  */
+                if (forceShowSelection) {
+                    Toast.makeText(context.applicationContext, R.string.toast_unifiedpush_no_push_distributor, Toast.LENGTH_LONG).show()
+                }
+                onDoneRunnable?.run()
             }
             1 -> {
+                if (forceShowSelection) {
+                    Toast.makeText(context.applicationContext, context.getString(R.string.toast_unifiedpush_one_push_distributor, distributors.first()), Toast.LENGTH_LONG).show()
+                }
                 up.saveDistributor(context, distributors.first())
                 up.registerApp(context)
+                onDoneRunnable?.run()
             }
             else -> {
                 val builder: AlertDialog.Builder = MaterialAlertDialogBuilder(context)
@@ -128,6 +143,13 @@ object UPHelper {
                     up.saveDistributor(context, distributor)
                     Timber.i("Saving distributor: $distributor")
                     up.registerApp(context)
+                    onDoneRunnable?.run()
+                }
+                builder.setOnDismissListener {
+                    onDoneRunnable?.run()
+                }
+                builder.setOnCancelListener {
+                    onDoneRunnable?.run()
                 }
                 val dialog: AlertDialog = builder.create()
                 dialog.show()

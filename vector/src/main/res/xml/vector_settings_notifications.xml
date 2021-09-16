@@ -130,4 +130,25 @@
         android:key="SETTINGS_NOTIFICATIONS_TARGETS_PREFERENCE_KEY"
         android:title="@string/settings_notifications_targets" /-->
 
+    <im.vector.app.core.preference.VectorPreferenceCategory
+        android:title="@string/settings_unifiedpush">
+
+        <im.vector.app.core.preference.VectorPreference
+            android:persistent="false"
+            android:key="SETTINGS_UNIFIED_PUSH_RE_REGISTER"
+            android:title="@string/settings_unifiedpush_reregister" />
+
+        <im.vector.app.core.preference.VectorSwitchPreference
+            android:key="SETTINGS_UNIFIED_PUSH_FORCE_CUSTOM_GATEWAY"
+            android:title="@string/settings_unifiedpush_force_custom_gateway"
+            android:summary="@string/settings_unifiedpush_force_custom_gateway_summary"
+            android:defaultValue="false" />
+
+        <im.vector.app.core.preference.VectorPreference
+            android:persistent="false"
+            android:title="@string/settings_notifications_targets"
+            app:fragment="im.vector.app.features.settings.push.PushGatewaysFragment" />
+
+    </im.vector.app.core.preference.VectorPreferenceCategory>
+
 </androidx.preference.PreferenceScreen>

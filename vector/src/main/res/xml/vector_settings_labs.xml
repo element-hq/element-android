@@ -82,15 +82,5 @@
         android:summary="@string/labs_use_restricted_join_rule_desc"/>
     <!--</im.vector.app.core.preference.VectorPreferenceCategory>-->
 
-    <im.vector.app.core.preference.VectorPreferenceCategory
-        android:title="@string/settings_unifiedpush">
-        <im.vector.app.core.preference.VectorSwitchPreference
-            android:key="SETTINGS_UNIFIED_PUSH_FORCE_CUSTOM_GATEWAY"
-            android:title="@string/settings_unifiedpush_force_custom_gateway"
-            android:summary="@string/settings_unifiedpush_force_custom_gateway_summary"
-            android:defaultValue="false" />
-
-    </im.vector.app.core.preference.VectorPreferenceCategory>
-
 
 </androidx.preference.PreferenceScreen>

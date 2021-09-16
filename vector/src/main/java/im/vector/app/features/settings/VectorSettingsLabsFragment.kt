@@ -17,15 +17,9 @@
 package im.vector.app.features.settings
 
 import android.os.Build
-import android.os.Handler
-import android.os.Looper
-import androidx.preference.Preference
 import im.vector.app.R
 import im.vector.app.core.preference.VectorSwitchPreference
-import im.vector.app.core.pushers.UPHelper
 import im.vector.app.features.themes.ThemeUtils
-import im.vector.app.features.MainActivity
-import im.vector.app.features.MainActivityArgs
 import javax.inject.Inject
 
 class VectorSettingsLabsFragment @Inject constructor(
@@ -62,9 +56,5 @@ class VectorSettingsLabsFragment @Inject constructor(
 
         findPreference<VectorSwitchPreference>(VectorPreferences.SETTINGS_VOICE_MESSAGE)?.isEnabled = Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP
 
-        findPreference<VectorSwitchPreference>(VectorPreferences.SETTINGS_UNIFIED_PUSH_FORCE_CUSTOM_GATEWAY)?.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, _ ->
-            Handler(Looper.getMainLooper()).postDelayed({ context?.let { UPHelper.registerUnifiedPush(it)} } , 1000)
-            true
-        }
     }
 }
