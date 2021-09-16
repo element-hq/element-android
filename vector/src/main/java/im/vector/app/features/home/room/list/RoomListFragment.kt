@@ -179,6 +179,7 @@ class RoomListFragment @Inject constructor(
 
     private fun setupCreateRoomButton() {
         when (roomListParams.displayMode) {
+            RoomListDisplayMode.ALL_IN_ONE,
             RoomListDisplayMode.HOME   -> views.createChatFabMenu.isVisible = true
             RoomListDisplayMode.PEOPLE -> views.createChatRoomButton.isVisible = true
             RoomListDisplayMode.ROOMS  -> views.createGroupRoomButton.isVisible = true
@@ -205,6 +206,7 @@ class RoomListFragment @Inject constructor(
                             RecyclerView.SCROLL_STATE_DRAGGING,
                             RecyclerView.SCROLL_STATE_SETTLING -> {
                                 when (roomListParams.displayMode) {
+                                    RoomListDisplayMode.ALL_IN_ONE,
                                     RoomListDisplayMode.HOME   -> views.createChatFabMenu.hide()
                                     RoomListDisplayMode.PEOPLE -> views.createChatRoomButton.hide()
                                     RoomListDisplayMode.ROOMS  -> views.createGroupRoomButton.hide()
@@ -362,6 +364,7 @@ class RoomListFragment @Inject constructor(
     private val showFabRunnable = Runnable {
         if (isAdded) {
             when (roomListParams.displayMode) {
+                RoomListDisplayMode.ALL_IN_ONE,
                 RoomListDisplayMode.HOME   -> views.createChatFabMenu.show()
                 RoomListDisplayMode.PEOPLE -> views.createChatRoomButton.show()
                 RoomListDisplayMode.ROOMS  -> views.createGroupRoomButton.show()
