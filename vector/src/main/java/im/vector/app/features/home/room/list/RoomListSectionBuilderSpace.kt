@@ -298,7 +298,7 @@ class RoomListSectionBuilderSpace(
         addSection(
                 sections = sections,
                 activeSpaceUpdaters = activeSpaceAwareQueries,
-                nameRes = R.string.bottom_action_rooms,
+                nameRes = R.string.bottom_action_discussions,
                 notifyOfLocalEcho = false,
                 spaceFilterStrategy =  filterStrat
         ) {

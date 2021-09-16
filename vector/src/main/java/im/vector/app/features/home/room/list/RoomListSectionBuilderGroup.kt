@@ -50,11 +50,11 @@ class RoomListSectionBuilderGroup(
         val actualGroupId = appStateHandler.safeActiveGroupId()
 
         when (mode) {
-            RoomListDisplayMode.PEOPLE        -> {
+            RoomListDisplayMode.PEOPLE   -> {
                 // 4 sections Invites / Fav / Dms / Low Priority
                 buildPeopleSections(sections, activeGroupAwareQueries, actualGroupId)
             }
-            RoomListDisplayMode.ROOMS         -> {
+            RoomListDisplayMode.ROOMS    -> {
                 // 5 sections invites / Fav / Rooms / Low Priority / Server notice
                 buildRoomsSections(sections, activeGroupAwareQueries, actualGroupId)
             }
@@ -75,51 +75,11 @@ class RoomListSectionBuilderGroup(
                 )
             }
             RoomListDisplayMode.HOME     -> {
-                if (autoAcceptInvites.showInvites()) {
-                    addSection(
-                            sections,
-                            activeGroupAwareQueries,
-                            R.string.invitations_header,
-                            true
-                    ) {
-                        it.memberships = listOf(Membership.INVITE)
-                        it.roomCategoryFilter = RoomCategoryFilter.ALL
-                        it.activeGroupId = actualGroupId
-                    }
-                }
+                buildHomeSection(sections, activeGroupAwareQueries, actualGroupId)
+            }
 
-                addSection(
-                        sections,
-                        activeGroupAwareQueries,
-                        R.string.room_list_section_unread_dm,
-                        false
-                ) {
-                    it.memberships = listOf(Membership.JOIN)
-                    it.roomCategoryFilter = RoomCategoryFilter.UNREAD_NOTIFICATION_DMS
-                    it.activeGroupId = actualGroupId
-                }
-
-                addSection(
-                        sections,
-                        activeGroupAwareQueries,
-                        R.string.room_list_section_unread_rooms,
-                        false
-                ) {
-                    it.memberships = listOf(Membership.JOIN)
-                    it.roomCategoryFilter = RoomCategoryFilter.UNREAD_NOTIFICATION_ROOMS
-                    it.activeGroupId = actualGroupId
-                }
-
-                addSection(
-                        sections,
-                        activeGroupAwareQueries,
-                        R.string.bottom_action_rooms,
-                        false
-                ) {
-                    it.memberships = listOf(Membership.JOIN)
-                    it.roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
-                    it.activeGroupId = actualGroupId
-                }
+            RoomListDisplayMode.ALL_IN_ONE     -> {
+                buildAllInOneSection(sections, activeGroupAwareQueries, actualGroupId)
             }
         }
 
@@ -139,33 +99,137 @@ class RoomListSectionBuilderGroup(
         return sections
     }
 
-    private fun buildRoomsSections(sections: MutableList<RoomsSection>,
-                                   activeSpaceAwareQueries: MutableList<UpdatableLivePageResult>,
-                                   actualGroupId: String?) {
+    private fun buildHomeSection(sections: MutableList<RoomsSection>, activeGroupAwareQueries: MutableList<UpdatableLivePageResult>, actualGroupId: String?) {
+        if (autoAcceptInvites.showInvites()) {
+            addSection(
+                    sections = sections,
+                    activeSpaceUpdaters = activeGroupAwareQueries,
+                    nameRes = R.string.invitations_header,
+                    notifyOfLocalEcho = true,
+                    compactMode = true
+            ) {
+                it.memberships = listOf(Membership.INVITE)
+                it.roomCategoryFilter = RoomCategoryFilter.ALL
+                it.activeGroupId = actualGroupId
+            }
+        }
+
+        addSection(
+                sections = sections,
+                activeSpaceUpdaters = activeGroupAwareQueries,
+                nameRes = R.string.bottom_action_favourites,
+                notifyOfLocalEcho = false,
+                compactMode = true
+        ) {
+            it.memberships = listOf(Membership.JOIN)
+            it.roomCategoryFilter = RoomCategoryFilter.ALL
+            it.roomTagQueryFilter = RoomTagQueryFilter(true, null, null)
+            it.activeGroupId = actualGroupId
+        }
+
+        addSection(
+                sections = sections,
+                activeSpaceUpdaters = activeGroupAwareQueries,
+                nameRes = R.string.room_list_section_unread_dm,
+                notifyOfLocalEcho = false,
+                compactMode = true
+        ) {
+            it.memberships = listOf(Membership.JOIN)
+            it.roomCategoryFilter = RoomCategoryFilter.UNREAD_NOTIFICATION_DMS
+            it.activeGroupId = actualGroupId
+        }
+
+        addSection(
+                sections = sections,
+                activeSpaceUpdaters = activeGroupAwareQueries,
+                nameRes = R.string.room_list_section_unread_rooms,
+                notifyOfLocalEcho = false,
+                compactMode = true
+        ) {
+            it.memberships = listOf(Membership.JOIN)
+            it.roomCategoryFilter = RoomCategoryFilter.UNREAD_NOTIFICATION_ROOMS
+            it.activeGroupId = actualGroupId
+        }
+
+        addSection(
+                sections = sections,
+                activeSpaceUpdaters = activeGroupAwareQueries,
+                nameRes = R.string.bottom_action_rooms,
+                notifyOfLocalEcho = false,
+                compactMode = true
+        ) {
+            it.memberships = listOf(Membership.JOIN)
+            it.roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
+            it.activeGroupId = actualGroupId
+        }
+    }
+
+    private fun buildAllInOneSection(sections: MutableList<RoomsSection>, activeGroupAwareQueries: MutableList<UpdatableLivePageResult>, actualGroupId: String?) {
         if (autoAcceptInvites.showInvites()) {
             addSection(
                     sections,
-                    activeSpaceAwareQueries,
+                    activeGroupAwareQueries,
                     R.string.invitations_header,
-                    true
+                    true,
             ) {
                 it.memberships = listOf(Membership.INVITE)
-                it.roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
+                it.roomCategoryFilter = RoomCategoryFilter.ALL
                 it.activeGroupId = actualGroupId
             }
         }
 
         addSection(
                 sections,
-                activeSpaceAwareQueries,
+                activeGroupAwareQueries,
                 R.string.bottom_action_favourites,
                 false
         ) {
             it.memberships = listOf(Membership.JOIN)
-            it.roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
+            it.roomCategoryFilter = RoomCategoryFilter.ALL
             it.roomTagQueryFilter = RoomTagQueryFilter(true, null, null)
             it.activeGroupId = actualGroupId
         }
+
+        addSection(
+                sections,
+                activeGroupAwareQueries,
+                R.string.bottom_action_rooms,
+                false
+        ) {
+            it.memberships = listOf(Membership.JOIN)
+            it.roomCategoryFilter = RoomCategoryFilter.ALL
+            it.roomTagQueryFilter = RoomTagQueryFilter(false, null, null)
+            it.activeGroupId = actualGroupId
+        }
+    }
+
+    private fun buildRoomsSections(sections: MutableList<RoomsSection>,
+                                   activeSpaceAwareQueries: MutableList<UpdatableLivePageResult>,
+                                   actualGroupId: String?) {
+//        if (autoAcceptInvites.showInvites()) {
+//            addSection(
+//                    sections,
+//                    activeSpaceAwareQueries,
+//                    R.string.invitations_header,
+//                    true
+//            ) {
+//                it.memberships = listOf(Membership.INVITE)
+//                it.roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
+//                it.activeGroupId = actualGroupId
+//            }
+//        }
+
+//        addSection(
+//                sections,
+//                activeSpaceAwareQueries,
+//                R.string.bottom_action_favourites,
+//                false
+//        ) {
+//            it.memberships = listOf(Membership.JOIN)
+//            it.roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
+//            it.roomTagQueryFilter = RoomTagQueryFilter(true, null, null)
+//            it.activeGroupId = actualGroupId
+//        }
 
         addSection(
                 sections,
@@ -262,6 +326,7 @@ class RoomListSectionBuilderGroup(
                            activeSpaceUpdaters: MutableList<UpdatableLivePageResult>,
                            @StringRes nameRes: Int,
                            notifyOfLocalEcho: Boolean = false,
+                           compactMode: Boolean = false,
                            query: (RoomSummaryQueryParams.Builder) -> Unit) {
         withQueryParams(
                 { query.invoke(it) },
@@ -287,7 +352,8 @@ class RoomListSectionBuilderGroup(
                                         RoomsSection(
                                                 sectionName = name,
                                                 livePages = livePagedList,
-                                                notifyOfLocalEcho = notifyOfLocalEcho
+                                                notifyOfLocalEcho = notifyOfLocalEcho,
+                                                isCompact = compactMode
                                         )
                                 )
                             }
