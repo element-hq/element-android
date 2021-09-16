@@ -2441,7 +2441,7 @@
     <string name="rotate_and_crop_screen_title">Обернути й обрізати</string>
     <string name="error_file_too_big">Файл «%1$s» (%2$s) завеликий для вивантаження. Обмеження %3$s.</string>
     <string name="error_file_too_big_simple">Цей файл завеликий для вивантаження.</string>
-    <string name="a11y_beta">Це бета-можливість</string>
+    <string name="a11y_beta">Це бета-функція</string>
     <string name="a11y_hide_password">Сховати пароль</string>
     <string name="a11y_show_password">Показати пароль</string>
     <string name="a11y_create_room">Створити нову кімнату</string>
@@ -2516,4 +2516,48 @@
     <string name="verification_request_you_cancelled">Ви скасували</string>
     <string name="verification_request_other_cancelled">%s скасовано</string>
     <string name="sas_verification_request_notification_channel_title">Перевірка ключа</string>
+    <string name="read_at">Читати у</string>
+    <string name="direct_room_no_known_users">Нічого не знайдено, натисніть Додати за matrix-ID для пошуку на сервері.</string>
+    <string name="search_hint_room_name">Пошук за назвою</string>
+    <string name="send_feedback_space_info">Ви користуєтеся бета-версією просторів. Ваш відгук допоможе поліпшити наступні версії. Ваша платформа та ім’я користувача будуть зазначені, щоб допомогти нам використати ваш відгук якнайефективніше.</string>
+    <string name="settings_troubleshoot_test_token_registration_quick_fix">Зареєструвати токен</string>
+    <string name="settings_push_gateway_no_pushers">Немає зареєстрованих push-шлюзів</string>
+    <string name="settings_push_rules_no_rules">Правила push-сповіщень не визначені</string>
+    <string name="settings_push_rules">Правила push-сповіщень</string>
+    <string name="navigate_to_room_when_already_in_the_room">Ви вже переглядаєте цю кімнату!</string>
+    <string name="settings_other_third_party_notices">Інші примітки про треті сторони</string>
+    <string name="import_e2e_keys_from_file">Імпорт ключів e2e з файлу «%1$s».</string>
+    <string name="keys_backup_unable_to_get_keys_backup_data">Сталася помилка отримання ключів резервних копій даних</string>
+    <string name="keys_backup_unable_to_get_trust_info">Під час отримання інформації про довіру сталася помилка</string>
+    <string name="room_preview_no_preview_join">Попередній перегляд цієї кімнати недоступний. Бажаєте приєднатися до неї\?</string>
+    <string name="room_preview_not_found">Зараз ця кімната недоступна.
+\nПовторіть спробу пізніше або попросіть адміністратора кімнати перевірити, чи маєте ви доступ.</string>
+    <string name="room_preview_no_preview">Попередній перегляд цієї кімнати недоступний</string>
+    <string name="error_no_network">Немає мережі. Перевірте інтернет-з\'єднання.</string>
+    <string name="malformed_message">Хибна подія, неможливо показати</string>
+    <string name="message_view_reaction">Перегляд реакцій</string>
+    <string name="room_list_rooms_empty_body">Тут буде показано ваші кімнати. Натисніть + унизу праворуч, щоб знайти наявні або створити власні.</string>
+    <string name="room_list_empty">Приєднайтеся до кімнати, щоб почати користуватися застосунком.</string>
+    <string name="error_user_already_logged_in">Схоже, ви намагаєтесь під\'єднатися до іншого домашнього сервера. Бажаєте вийти\?</string>
+    <string name="sas_error_m_user_error">Користувачі відрізняються</string>
+    <string name="sas_error_m_key_mismatch">Ключі відрізняються</string>
+    <string name="sas_error_m_mismatched_commitment">Отриманий хеш не збігається</string>
+    <string name="sas_error_m_unknown_method">Сеанс не може узгодити ключі, хеш, MAC або метод SAS</string>
+    <string name="sas_error_m_unknown_transaction">Сеанс не розпізнає про цю транзакцію</string>
+    <string name="sas_error_m_timeout">Час перевірки минув</string>
+    <string name="sas_verify_title">Перевірте, порівнявши короткий текстовий рядок.</string>
+    <string name="invalid_or_expired_credentials">Ви вийшли з облікового запису через хибні або застарілі облікові дані.</string>
+    <string name="autodiscover_well_known_autofill_confirm">Використати конфігурацію</string>
+    <string name="template_autodiscover_well_known_autofill_dialog_message">${app_name} виявив користувацьку конфігурацію сервера для вашого userID домену «%1$s»:
+\n%2$s</string>
+    <string name="autodiscover_well_known_autofill_dialog_title">Параметри сервера автозаповнення</string>
+    <plurals name="keys_backup_info_keys_backing_up">
+        <item quantity="one">Резервне копіювання %d ключа…</item>
+        <item quantity="few">Резервне копіювання %d ключів…</item>
+        <item quantity="many">Резервне копіювання %d ключів…</item>
+        <item quantity="other">Резервне копіювання %d ключів…</item>
+    </plurals>
+    <string name="new_recovery_method_popup_description">Виявлено нову резервну копію ключа зашифрованих повідомлень.
+\n
+\nЯкщо ви не налаштовували новий метод відновлення, можливо, зловмисник намагається отримати доступ до вашого облікового запису. Змініть пароль свого облікового запису та негайно визначте новий спосіб відновлення в Налаштуваннях.</string>
 </resources>
