@@ -134,6 +134,14 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
             true
         }
 
+        findPreference<VectorSwitchPreference>(VectorPreferences.SETTINGS_FORCE_ALLOW_BACKGROUND_SYNC)?.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
+            if (newValue != true && UPHelper.hasEndpoint(requireContext())) {
+                onOptionSelected(BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_DISABLED)
+            }
+            Handler(Looper.getMainLooper()).postDelayed({ refreshBackgroundSyncPrefs() } , 500)
+            true
+        }
+
         refreshBackgroundSyncPrefs()
 
         handleSystemPreference()
@@ -168,7 +176,7 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
         }
 
         findPreference<VectorPreferenceCategory>(VectorPreferences.SETTINGS_BACKGROUND_SYNC_PREFERENCE_KEY)?.let {
-            it.isVisible = !UPHelper.hasEndpoint(requireContext())
+            it.isVisible = UPHelper.allowBackgroundSync(requireContext())
         }
 
         findPreference<VectorEditTextPreference>(VectorPreferences.SETTINGS_SET_SYNC_TIMEOUT_PREFERENCE_KEY)?.let {
@@ -272,7 +280,7 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
 
     private fun refreshPref() {
         // This pref may have change from troubleshoot pref fragment
-        if (!UPHelper.hasEndpoint(requireContext())) {
+        if (UPHelper.allowBackgroundSync(requireContext())) {
             findPreference<VectorSwitchPreference>(VectorPreferences.SETTINGS_START_ON_BOOT_PREFERENCE_KEY)
                     ?.isChecked = vectorPreferences.autoStartOnBoot()
         }

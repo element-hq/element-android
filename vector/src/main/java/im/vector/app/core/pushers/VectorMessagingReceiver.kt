@@ -169,8 +169,10 @@ val upHandler = object: MessagingReceiverHandler {
                 Timber.i("onNewEndpoint: skipped")
             }
         }
-        val mode = BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_DISABLED
-        vectorPreferences.setFdroidSyncBackgroundMode(mode)
+        if (!UPHelper.allowBackgroundSync(context)) {
+            val mode = BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_DISABLED
+            vectorPreferences.setFdroidSyncBackgroundMode(mode)
+        }
     }
 
     override fun onRegistrationFailed(context: Context?, instance: String) {

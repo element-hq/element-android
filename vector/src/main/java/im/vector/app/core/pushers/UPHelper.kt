@@ -182,7 +182,7 @@ object UPHelper {
              * return custom
              */
             val vectorPreferences = VectorPreferences(context)
-            if (vectorPreferences.forceUsCustomUpGateway()) {
+            if (vectorPreferences.forceUseCustomUpGateway()) {
                 return custom
             }
         }
@@ -194,6 +194,14 @@ object UPHelper {
             return true
         }
         return false
+    }
+
+    fun allowBackgroundSync(context: Context): Boolean {
+        if (!hasEndpoint(context)) {
+            return true
+        }
+        val vectorPreferences = VectorPreferences(context)
+        return vectorPreferences.forceAllowBackgroundSync()
     }
 
     fun distributorExists(context: Context): Boolean {
