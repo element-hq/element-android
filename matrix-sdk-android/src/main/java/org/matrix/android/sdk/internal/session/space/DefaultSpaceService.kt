@@ -222,4 +222,23 @@ internal class DefaultSpaceService @Inject constructor(
                 ).toContent()
         )
     }
+
+    override suspend fun removeSpaceParent(childRoomId: String, parentSpaceId: String) {
+        val room = roomGetter.getRoom(childRoomId)
+                ?: throw IllegalArgumentException("Unknown Room $childRoomId")
+
+        val existingEvent = room.getStateEvent(EventType.STATE_SPACE_PARENT, QueryStringValue.Equals(parentSpaceId))
+        if (existingEvent != null) {
+            // Should i check if it was sent by me?
+            // we don't check power level, it will throw if you cannot do that
+            room.sendStateEvent(
+                    eventType = EventType.STATE_SPACE_PARENT,
+                    stateKey = parentSpaceId,
+                    body = SpaceParentContent(
+                            via = null,
+                            canonical = null
+                    ).toContent()
+            )
+        }
+    }
 }
