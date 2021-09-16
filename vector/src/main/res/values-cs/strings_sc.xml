@@ -109,4 +109,9 @@
     <string name="settings_apply_sc_default_settings_dialog_title">Pokazí nastavení</string>
     <string name="settings_apply_sc_default_settings_dialog_summary">Pokud budete pokračovat, dojde k narušení nastavení aplikace!</string>
     <string name="settings_apply_sc_default_settings">Na toto nastavení neklikejte</string>
+    <string name="settings_unifiedpush_reregister">Přeregistrace push distributora</string>
+    <string name="settings_force_allow_background_sync_summary">Má význam pouze při ladění nastavení funkce push!</string>
+    <string name="toast_unifiedpush_one_push_distributor">Registrovaný push distributor %1$s</string>
+    <string name="settings_force_allow_background_sync">Povolit synchronizaci na pozadí včetně funkce push</string>
+    <string name="toast_unifiedpush_no_push_distributor">Nebyl nalezen žádný push distributor!</string>
 </resources>
