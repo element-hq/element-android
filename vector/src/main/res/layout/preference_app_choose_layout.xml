@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingStart="60dp"
+    android:paddingTop="8dp"
+    android:paddingEnd="16dp"
+    android:paddingBottom="8dp">
+
+    <TextView
+        android:id="@+id/preferenceTitle"
+        style="@style/Widget.Vector.TextView.Subtitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:text="@string/settings_main_layout"
+        android:textColor="?vctr_content_primary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/bg_composer_edit_text"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/preferenceTitle">
+
+
+        <RadioGroup
+            android:id="@+id/chooseLayoutRadioGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp">
+
+            <RadioButton
+                android:id="@+id/simpleLayoutRadioButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="4dp"
+                android:drawableEnd="@drawable/ic_simple_layout"
+                android:text="@string/settings_home_layout_simple"
+                tools:checked="true" />
+
+            <RadioButton
+                android:id="@+id/proLayoutRadioButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="4dp"
+                android:checked="false"
+                android:drawableEnd="@drawable/ic_pro_layout"
+                android:text="@string/settings_home_layout_pro" />
+
+        </RadioGroup>
+
+        <!--        <LinearLayout-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:orientation="horizontal"-->
+        <!--            android:padding="2dp">-->
+
+        <!--            <RadioButton-->
+        <!--                android:id="@+id/simpleLayoutRadioButton"-->
+        <!--                android:layout_width="0dp"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:layout_gravity="center_vertical"-->
+        <!--                android:layout_weight="1"-->
+        <!--                android:drawableEnd="@drawable/ic_simple_layout"-->
+        <!--                android:text="@string/settings_home_layout_simple"-->
+        <!--                tools:checked="true" />-->
+
+        <!--            &lt;!&ndash;            <ImageView&ndash;&gt;-->
+        <!--            &lt;!&ndash;                android:id="@+id/simpleLayoutPreview"&ndash;&gt;-->
+        <!--            &lt;!&ndash;                android:layout_width="60dp"&ndash;&gt;-->
+        <!--            &lt;!&ndash;                android:layout_height="wrap_content"&ndash;&gt;-->
+        <!--            &lt;!&ndash;                android:layout_marginEnd="20dp"&ndash;&gt;-->
+        <!--            &lt;!&ndash;                android:importantForAccessibility="no"&ndash;&gt;-->
+        <!--            &lt;!&ndash;                android:src="@drawable/ic_simple_layout"&ndash;&gt;-->
+        <!--            &lt;!&ndash;                app:layout_constraintEnd_toEndOf="parent"&ndash;&gt;-->
+        <!--            &lt;!&ndash;                app:layout_constraintTop_toTopOf="parent" />&ndash;&gt;-->
+
+        <!--        </LinearLayout>-->
+
+
+        <!--        <LinearLayout-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:orientation="horizontal"-->
+        <!--            android:padding="2dp">-->
+
+        <!--            <RadioButton-->
+        <!--                android:id="@+id/proLayoutRadioButton"-->
+        <!--                android:layout_width="0dp"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:layout_gravity="center_vertical"-->
+        <!--                android:layout_weight="1"-->
+        <!--                android:drawableEnd="@drawable/ic_pro_layout"-->
+        <!--                android:text="@string/settings_home_layout_pro"-->
+        <!--                tools:checked="false" />-->
+
+        <!--            &lt;!&ndash;            <ImageView&ndash;&gt;-->
+        <!--            &lt;!&ndash;                android:id="@+id/proLayoutPreview"&ndash;&gt;-->
+        <!--            &lt;!&ndash;                android:layout_width="60dp"&ndash;&gt;-->
+        <!--            &lt;!&ndash;                android:layout_height="wrap_content"&ndash;&gt;-->
+        <!--            &lt;!&ndash;                android:layout_marginEnd="20dp"&ndash;&gt;-->
+        <!--            &lt;!&ndash;                android:importantForAccessibility="no"&ndash;&gt;-->
+        <!--            &lt;!&ndash;                android:src="@drawable/ic_pro_layout" />&ndash;&gt;-->
+        <!--        </LinearLayout>-->
+    </FrameLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

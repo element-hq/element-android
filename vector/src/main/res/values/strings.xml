@@ -470,6 +470,7 @@
     <string name="bottom_action_favourites">Favourites</string>
     <string name="bottom_action_people">People</string>
     <string name="bottom_action_rooms">Rooms</string>
+    <string name="bottom_action_discussions">Discussions</string>
     <string name="bottom_action_groups">Communities</string>
     <string name="room_list_section_unread_dm">Unread Messages</string>
     <string name="room_list_section_unread_rooms">Unread Rooms</string>
@@ -1110,6 +1111,13 @@
     <string name="settings_phone_numbers">Phone numbers</string>
     <string name="settings_remove_three_pid_confirmation_content">Remove %s?</string>
     <string name="error_threepid_auth_failed">Ensure that you have clicked on the link in the email we have sent to you.</string>
+
+
+    <string name="settings_home_layout_simple">Simple</string>
+    <string name="settings_home_layout_pro">Pro</string>
+    <string name="settings_main_layout">Main Layout</string>
+
+
 
     <string name="settings_notification_advanced">Advanced Notification Settings</string>
     <string name="settings_notification_by_event">Notification importance by event</string>

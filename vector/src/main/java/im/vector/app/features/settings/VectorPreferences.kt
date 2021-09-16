@@ -101,6 +101,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         private const val SETTINGS_SEND_MESSAGE_WITH_ENTER = "SETTINGS_SEND_MESSAGE_WITH_ENTER"
         private const val SETTINGS_ENABLE_CHAT_EFFECTS = "SETTINGS_ENABLE_CHAT_EFFECTS"
         private const val SETTINGS_SHOW_EMOJI_KEYBOARD = "SETTINGS_SHOW_EMOJI_KEYBOARD"
+        const val SETTINGS_LAYOUT_MODE = "SETTINGS_LAYOUT_MODE"
 
         // Room directory
         private const val SETTINGS_ROOM_DIRECTORY_SHOW_ALL_PUBLIC_ROOMS = "SETTINGS_ROOM_DIRECTORY_SHOW_ALL_PUBLIC_ROOMS"
@@ -1005,6 +1006,23 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     fun setTakePhotoVideoMode(mode: Int) {
         return defaultPrefs.edit {
             putInt(TAKE_PHOTO_VIDEO_MODE, mode)
+        }
+    }
+
+    // Layout
+
+    fun getLayoutMode(): LayoutMode {
+        return defaultPrefs.getString(SETTINGS_LAYOUT_MODE, LayoutMode.PRODUCTIVITY.name).let {
+            when (it) {
+                LayoutMode.SIMPLE.name -> LayoutMode.SIMPLE
+                else                   -> LayoutMode.PRODUCTIVITY
+            }
+        }
+    }
+
+    fun setLayoutMode(mode: LayoutMode) {
+        return defaultPrefs.edit {
+            putString(SETTINGS_LAYOUT_MODE, mode.name)
         }
     }
 }

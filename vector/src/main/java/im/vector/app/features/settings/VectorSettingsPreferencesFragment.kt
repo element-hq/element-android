@@ -25,6 +25,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.dialogs.PhotoOrVideoDialog
 import im.vector.app.core.extensions.restart
+import im.vector.app.core.preference.LayoutPreference
 import im.vector.app.core.preference.VectorListPreference
 import im.vector.app.core.preference.VectorPreference
 import im.vector.app.core.preference.VectorSwitchPreference
@@ -53,6 +54,10 @@ class VectorSettingsPreferencesFragment @Inject constructor(
         findPreference<VectorPreference>("SETTINGS_INTERFACE_TAKE_PHOTO_VIDEO")!!
     }
 
+    private val mainLayoutPreference by lazy {
+        findPreference<LayoutPreference>(VectorPreferences.SETTINGS_LAYOUT_MODE)!!
+    }
+
     override fun bindPref() {
         // user interface preferences
         setUserInterfacePreferences()
@@ -75,6 +80,14 @@ class VectorSettingsPreferencesFragment @Inject constructor(
             pref.setOnPreferenceChangeListener { _, _ ->
                 MainActivity.restartApp(requireActivity(), MainActivityArgs(clearCache = false))
                 true
+            }
+        }
+
+        mainLayoutPreference.selectedLayoutMode = vectorPreferences.getLayoutMode()
+
+        mainLayoutPreference.listener = object : LayoutPreference.LayoutModeChangeListener {
+            override fun onLayoutModeChange(mode: LayoutMode) {
+                vectorPreferences.setLayoutMode(mode)
             }
         }
 

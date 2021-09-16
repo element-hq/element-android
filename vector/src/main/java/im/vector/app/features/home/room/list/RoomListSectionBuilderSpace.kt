@@ -98,6 +98,9 @@ class RoomListSectionBuilderSpace(
             RoomListDisplayMode.HOME     -> {
                 buildHomeSections(sections, activeSpaceAwareQueries)
             }
+            RoomListDisplayMode.ALL_IN_ONE     -> {
+                buildAllInOneSections(sections, activeSpaceAwareQueries)
+            }
         }
 
         appStateHandler.selectedRoomGroupingObservable
@@ -207,6 +210,127 @@ class RoomListSectionBuilderSpace(
         ) {
             it.memberships = listOf(Membership.JOIN)
             it.roomCategoryFilter = RoomCategoryFilter.DMS_WITH_NO_NOTIFICATION
+        }
+
+        val suggestedRoomsObservable = // MutableLiveData<List<SpaceChildInfo>>()
+                appStateHandler.selectedRoomGroupingObservable
+                        .distinctUntilChanged()
+                        .switchMap { groupingMethod ->
+                            val selectedSpace = groupingMethod.orNull()?.space()
+                            if (selectedSpace == null) {
+                                Observable.just(emptyList())
+                            } else {
+                                liveData(context = viewModelScope.coroutineContext + Dispatchers.IO) {
+                                    val spaceSum = tryOrNull {
+                                        session.spaceService()
+                                                .querySpaceChildren(selectedSpace.roomId, suggestedOnly = true, null, null)
+                                    }
+                                    val value = spaceSum?.children.orEmpty().distinctBy { it.childRoomId }
+                                    // i need to check if it's already joined.
+                                    val filtered = value.filter {
+                                        session.getRoomSummary(it.childRoomId)?.membership?.isActive() != true
+                                    }
+                                    emit(filtered)
+                                }.asObservable()
+                            }
+                        }
+
+        val liveSuggestedRooms = MutableLiveData<SuggestedRoomInfo>()
+        Observables.combineLatest(
+                suggestedRoomsObservable,
+                suggestedRoomJoiningState.asObservable()
+        ) { rooms, joinStates ->
+            SuggestedRoomInfo(
+                    rooms,
+                    joinStates
+            )
+        }.subscribe {
+            liveSuggestedRooms.postValue(it)
+        }.also {
+            disposables.add(it)
+        }
+        sections.add(
+                RoomsSection(
+                        sectionName = stringProvider.getString(R.string.suggested_header),
+                        liveSuggested = liveSuggestedRooms,
+                        notifyOfLocalEcho = false
+                )
+        )
+    }
+
+    private fun buildAllInOneSections(sections: MutableList<RoomsSection>, activeSpaceAwareQueries: MutableList<RoomListViewModel.ActiveSpaceQueryUpdater>) {
+        if (autoAcceptInvites.showInvites()) {
+            addSection(
+                    sections = sections,
+                    activeSpaceUpdaters = activeSpaceAwareQueries,
+                    nameRes = R.string.invitations_header,
+                    notifyOfLocalEcho = true,
+                    spaceFilterStrategy = if (onlyOrphansInHome) {
+                        RoomListViewModel.SpaceFilterStrategy.ORPHANS_IF_SPACE_NULL
+                    } else {
+                        RoomListViewModel.SpaceFilterStrategy.ALL_IF_SPACE_NULL
+                    },
+                    countRoomAsNotif = true
+            ) {
+                it.memberships = listOf(Membership.INVITE)
+                it.roomCategoryFilter = RoomCategoryFilter.ALL
+            }
+        }
+
+        addSection(
+                sections = sections,
+                activeSpaceUpdaters = activeSpaceAwareQueries,
+                nameRes = R.string.bottom_action_favourites,
+                notifyOfLocalEcho = false,
+                isCompact = false,
+                spaceFilterStrategy = RoomListViewModel.SpaceFilterStrategy.ALL_IF_SPACE_NULL
+        ) {
+            it.memberships = listOf(Membership.JOIN)
+            it.roomCategoryFilter = RoomCategoryFilter.ALL
+            it.roomTagQueryFilter = RoomTagQueryFilter(true, null, null)
+        }
+
+        val filterStrat = if (onlyOrphansInHome) {
+            RoomListViewModel.SpaceFilterStrategy.ORPHANS_IF_SPACE_NULL
+        } else {
+            RoomListViewModel.SpaceFilterStrategy.ALL_IF_SPACE_NULL
+        }
+        addSection(
+                sections = sections,
+                activeSpaceUpdaters = activeSpaceAwareQueries,
+                nameRes = R.string.bottom_action_rooms,
+                notifyOfLocalEcho = false,
+                spaceFilterStrategy =  filterStrat
+        ) {
+            it.memberships = listOf(Membership.JOIN)
+            it.roomTagQueryFilter = RoomTagQueryFilter(null, false, false)
+        }
+
+        addSection(
+                sections = sections,
+                activeSpaceUpdaters = activeSpaceAwareQueries,
+                nameRes = R.string.low_priority_header,
+                notifyOfLocalEcho = false,
+                isCompact = false,
+                spaceFilterStrategy = filterStrat
+
+        ) {
+            it.memberships = listOf(Membership.JOIN)
+            it.roomCategoryFilter = RoomCategoryFilter.ROOMS_WITH_NO_NOTIFICATION
+            it.roomTagQueryFilter = RoomTagQueryFilter(null, true, null)
+        }
+
+        addSection(
+                sections = sections,
+                activeSpaceUpdaters = activeSpaceAwareQueries,
+                nameRes = R.string.system_alerts_header,
+                notifyOfLocalEcho = false,
+                isCompact = false,
+                spaceFilterStrategy = filterStrat
+        ) {
+            it.memberships = listOf(Membership.JOIN)
+            it.roomCategoryFilter = RoomCategoryFilter.ALL
+            it.roomTagQueryFilter = RoomTagQueryFilter(null, null, true)
         }
 
         val suggestedRoomsObservable = // MutableLiveData<List<SpaceChildInfo>>()

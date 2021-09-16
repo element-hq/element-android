@@ -247,14 +247,14 @@ internal class RoomSummaryDataSource @Inject constructor(@SessionDatabase privat
 
         queryParams.roomCategoryFilter?.let {
             when (it) {
-                RoomCategoryFilter.ONLY_DM                 -> query.equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
-                RoomCategoryFilter.ONLY_ROOMS              -> query.equalTo(RoomSummaryEntityFields.IS_DIRECT, false)
-                RoomCategoryFilter.ONLY_WITH_NOTIFICATIONS -> query.greaterThan(RoomSummaryEntityFields.NOTIFICATION_COUNT, 0)
-                RoomCategoryFilter.UNREAD_NOTIFICATION_DMS    ->  {
+                RoomCategoryFilter.ONLY_DM                    -> query.equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
+                RoomCategoryFilter.ONLY_ROOMS                 -> query.equalTo(RoomSummaryEntityFields.IS_DIRECT, false)
+                RoomCategoryFilter.ONLY_WITH_NOTIFICATIONS    -> query.greaterThan(RoomSummaryEntityFields.NOTIFICATION_COUNT, 0)
+                RoomCategoryFilter.UNREAD_NOTIFICATION_DMS    -> {
                     query.equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
                     query.greaterThan(RoomSummaryEntityFields.NOTIFICATION_COUNT, 0)
                 }
-                RoomCategoryFilter.UNREAD_NOTIFICATION_ROOMS  ->  {
+                RoomCategoryFilter.UNREAD_NOTIFICATION_ROOMS  -> {
                     query.equalTo(RoomSummaryEntityFields.IS_DIRECT, false)
                     query.greaterThan(RoomSummaryEntityFields.NOTIFICATION_COUNT, 0)
                 }
@@ -262,11 +262,11 @@ internal class RoomSummaryDataSource @Inject constructor(@SessionDatabase privat
                     query.equalTo(RoomSummaryEntityFields.IS_DIRECT, false)
                     query.equalTo(RoomSummaryEntityFields.NOTIFICATION_COUNT, 0.toInt())
                 }
-                RoomCategoryFilter.DMS_WITH_NO_NOTIFICATION -> {
+                RoomCategoryFilter.DMS_WITH_NO_NOTIFICATION   -> {
                     query.equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
                     query.equalTo(RoomSummaryEntityFields.NOTIFICATION_COUNT, 0.toInt())
                 }
-                RoomCategoryFilter.ALL                     -> {
+                RoomCategoryFilter.ALL                        -> {
                     // nop
                 }
             }
@@ -296,8 +296,12 @@ internal class RoomSummaryDataSource @Inject constructor(@SessionDatabase privat
                 // It's annoying but for now realm java does not support querying in primitive list :/
                 // https://github.com/realm/realm-java/issues/5361
                 if (queryParams.activeSpaceFilter.currentSpaceId == null) {
-                    // orphan rooms
-                    query.isNull(RoomSummaryEntityFields.FLATTEN_PARENT_IDS)
+                    // orphan rooms -keep all dms, no concept of orphan DMs-
+                    query.beginGroup()
+                            .isNull(RoomSummaryEntityFields.FLATTEN_PARENT_IDS)
+                            .or()
+                            .equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
+                            .endGroup()
                 } else {
                     query.contains(RoomSummaryEntityFields.FLATTEN_PARENT_IDS, queryParams.activeSpaceFilter.currentSpaceId)
                 }

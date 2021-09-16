@@ -21,6 +21,12 @@
         android:title="@string/bottom_action_rooms" />
 
     <item
+        android:id="@+id/bottom_action_all_in_one"
+        android:enabled="true"
+        android:icon="@drawable/ic_home_bottom_chat"
+        android:title="@string/bottom_action_discussions" />
+
+    <item
         android:id="@+id/bottom_action_dial_pad"
         android:enabled="true"
         android:icon="@drawable/ic_call_dial_pad"

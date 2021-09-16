@@ -51,6 +51,7 @@ import im.vector.app.features.home.room.list.RoomListParams
 import im.vector.app.features.home.room.list.UnreadCounterBadgeView
 import im.vector.app.features.popup.PopupAlertManager
 import im.vector.app.features.popup.VerificationVectorAlert
+import im.vector.app.features.settings.LayoutMode
 import im.vector.app.features.settings.VectorLocale
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.VectorSettingsActivity.Companion.EXTRA_DIRECT_ACCESS_SECURITY_PRIVACY_MANAGE_SESSIONS
@@ -149,8 +150,8 @@ class HomeDetailFragment @Inject constructor(
             updateUIForTab(currentTab)
         }
 
-        viewModel.onEach(HomeDetailViewState::showDialPadTab) { showDialPadTab ->
-            updateTabVisibilitySafely(R.id.bottom_action_dial_pad, showDialPadTab)
+        viewModel.selectSubscribe(this, HomeDetailViewState::showDialPadTab, HomeDetailViewState::layoutMode) { showDialPadTab, layoutMode ->
+            updateTabNavigationSafely(layoutMode, showDialPadTab)
         }
 
         viewModel.observeViewEvents { viewEvent ->
@@ -209,9 +210,8 @@ class HomeDetailFragment @Inject constructor(
 
     override fun onResume() {
         super.onResume()
-        // update notification tab if needed
-//        updateTabVisibilitySafely(R.id.bottom_action_notification, vectorPreferences.labAddNotificationTab())
         callManager.checkForProtocolsSupportIfNeeded()
+        viewModel.handle(HomeDetailAction.ViewResumed)
 
         // Current space/group is not live so at least refresh toolbar on resume
         appStateHandler.getCurrentRoomGroupingMethod()?.let { roomGroupingMethod ->
@@ -347,25 +347,15 @@ class HomeDetailFragment @Inject constructor(
     private fun setupBottomNavigationView() {
         views.bottomNavigationView.setOnItemSelectedListener {
             val tab = when (it.itemId) {
-                R.id.bottom_action_people       -> HomeTab.RoomList(RoomListDisplayMode.PEOPLE)
-                R.id.bottom_action_rooms        -> HomeTab.RoomList(RoomListDisplayMode.ROOMS)
-                R.id.bottom_action_home -> HomeTab.RoomList(RoomListDisplayMode.HOME)
-                else                            -> HomeTab.DialPad
+                R.id.bottom_action_people     -> HomeTab.RoomList(RoomListDisplayMode.PEOPLE)
+                R.id.bottom_action_rooms      -> HomeTab.RoomList(RoomListDisplayMode.ROOMS)
+                R.id.bottom_action_home       -> HomeTab.RoomList(RoomListDisplayMode.HOME)
+                R.id.bottom_action_all_in_one -> HomeTab.RoomList(RoomListDisplayMode.ALL_IN_ONE)
+                else                          -> HomeTab.DialPad
             }
             viewModel.handle(HomeDetailAction.SwitchTab(tab))
             true
         }
-
-//        val menuView = bottomNavigationView.getChildAt(0) as BottomNavigationMenuView
-
-//        bottomNavigationView.getOrCreateBadge()
-//        menuView.forEachIndexed { index, view ->
-//            val itemView = view as BottomNavigationItemView
-//            val badgeLayout = LayoutInflater.from(requireContext()).inflate(R.layout.vector_home_badge_unread_layout, menuView, false)
-//            val unreadCounterBadgeView: UnreadCounterBadgeView = badgeLayout.findViewById(R.id.actionUnreadCounterBadgeView)
-//            itemView.addView(badgeLayout)
-//            unreadCounterBadgeViews.add(index, unreadCounterBadgeView)
-//        }
     }
 
     private fun updateUIForTab(tab: HomeTab) {
@@ -417,14 +407,54 @@ class HomeDetailFragment @Inject constructor(
         }
     }
 
-    private fun updateTabVisibilitySafely(tabId: Int, isVisible: Boolean) {
-        val wasVisible = views.bottomNavigationView.menu.findItem(tabId).isVisible
-        views.bottomNavigationView.menu.findItem(tabId).isVisible = isVisible
-        if (wasVisible && !isVisible) {
-            // As we hide it check if it's not the current item!
-            withState(viewModel) {
-                if (it.currentTab.toMenuId() == tabId) {
-                    viewModel.handle(HomeDetailAction.SwitchTab(HomeTab.RoomList(RoomListDisplayMode.PEOPLE)))
+    private fun updateTabNavigationSafely(layoutMode: LayoutMode, dialPadVisible: Boolean) = withState(viewModel) { state ->
+
+        when (layoutMode) {
+            LayoutMode.SIMPLE       -> {
+                views.bottomNavigationView.menu.findItem(R.id.bottom_action_home).isVisible = false
+                views.bottomNavigationView.menu.findItem(R.id.bottom_action_people).isVisible = false
+                views.bottomNavigationView.menu.findItem(R.id.bottom_action_rooms).isVisible = false
+                views.bottomNavigationView.menu.findItem(R.id.bottom_action_all_in_one).isVisible = true
+            }
+            LayoutMode.PRODUCTIVITY -> {
+                views.bottomNavigationView.menu.findItem(R.id.bottom_action_home).isVisible = true
+                views.bottomNavigationView.menu.findItem(R.id.bottom_action_people).isVisible = true
+                views.bottomNavigationView.menu.findItem(R.id.bottom_action_rooms).isVisible = true
+                views.bottomNavigationView.menu.findItem(R.id.bottom_action_all_in_one).isVisible = false
+            }
+        }
+
+        views.bottomNavigationView.menu.findItem(R.id.bottom_action_dial_pad).isVisible = dialPadVisible
+
+        val tabs = listOf(
+                R.id.bottom_action_home,
+                R.id.bottom_action_people,
+                R.id.bottom_action_rooms,
+                R.id.bottom_action_all_in_one,
+                R.id.bottom_action_dial_pad
+        )
+        val numberOfVisibleTabs = tabs.fold(0) { acc, id ->
+            val increment = if (views.bottomNavigationView.menu.findItem(id).isVisible) 1 else 0
+            acc + increment
+        }
+
+        views.bottomNavigationView.isVisible = numberOfVisibleTabs > 1
+
+        // We should ensure that the current selected display mode is active, and if not switch!
+        if (!views.bottomNavigationView.menu.findItem(state.currentTab.toMenuId()).isVisible) {
+            // switch to the first visible one?
+            tabs.firstOrNull() {
+                views.bottomNavigationView.menu.findItem(it).isVisible
+            }?.let { tabId ->
+                when (tabId) {
+                    R.id.bottom_action_home       -> HomeTab.RoomList(RoomListDisplayMode.HOME)
+                    R.id.bottom_action_people     -> HomeTab.RoomList(RoomListDisplayMode.PEOPLE)
+                    R.id.bottom_action_rooms      -> HomeTab.RoomList(RoomListDisplayMode.ROOMS)
+                    R.id.bottom_action_all_in_one -> HomeTab.RoomList(RoomListDisplayMode.ALL_IN_ONE)
+                    R.id.bottom_action_dial_pad   -> HomeTab.DialPad
+                    else                          -> null
+                }?.let { tab ->
+                    viewModel.handle(HomeDetailAction.SwitchTab(tab))
                 }
             }
         }
@@ -444,9 +474,18 @@ class HomeDetailFragment @Inject constructor(
 
     override fun invalidate() = withState(viewModel) {
 //        Timber.v(it.toString())
-        views.bottomNavigationView.getOrCreateBadge(R.id.bottom_action_people).render(it.notificationCountPeople, it.notificationHighlightPeople)
-        views.bottomNavigationView.getOrCreateBadge(R.id.bottom_action_rooms).render(it.notificationCountRooms, it.notificationHighlightRooms)
-        views.bottomNavigationView.getOrCreateBadge(R.id.bottom_action_home).render(it.notificationCountHome, it.notificationHighlightHome)
+        views.bottomNavigationView
+                .getOrCreateBadge(R.id.bottom_action_people)
+                .render(it.notificationCountPeople, it.notificationHighlightPeople)
+        views.bottomNavigationView
+                .getOrCreateBadge(R.id.bottom_action_rooms)
+                .render(it.notificationCountRooms, it.notificationHighlightRooms)
+        views.bottomNavigationView
+                .getOrCreateBadge(R.id.bottom_action_home)
+                .render(it.notificationCountHome, it.notificationHighlightHome)
+        views.bottomNavigationView
+                .getOrCreateBadge(R.id.bottom_action_all_in_one)
+                .render(it.notificationCountAllInOne, it.notificationHighlightAllInOne)
         views.syncStateView.render(
                 it.syncState,
                 it.incrementalSyncStatus,
@@ -471,9 +510,10 @@ class HomeDetailFragment @Inject constructor(
     private fun HomeTab.toMenuId() = when (this) {
         is HomeTab.DialPad  -> R.id.bottom_action_dial_pad
         is HomeTab.RoomList -> when (displayMode) {
-            RoomListDisplayMode.PEOPLE -> R.id.bottom_action_people
-            RoomListDisplayMode.ROOMS  -> R.id.bottom_action_rooms
-            else                       -> R.id.bottom_action_home
+            RoomListDisplayMode.PEOPLE     -> R.id.bottom_action_people
+            RoomListDisplayMode.ROOMS      -> R.id.bottom_action_rooms
+            RoomListDisplayMode.ALL_IN_ONE -> R.id.bottom_action_all_in_one
+            else                           -> R.id.bottom_action_home
         }
     }
 
