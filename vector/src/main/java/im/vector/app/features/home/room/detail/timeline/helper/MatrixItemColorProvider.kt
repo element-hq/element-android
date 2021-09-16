@@ -33,6 +33,7 @@ class MatrixItemColorProvider @Inject constructor(
         private val vectorPreferences: VectorPreferences,
         private val colorProvider: ColorProvider
 ) {
+    // Note: compared to Element, we do not cache the actual color, but the color-attr, to remain theme-safe
     private val cache = mutableMapOf<String, Int>()
 
     @ColorInt
@@ -54,14 +55,14 @@ class MatrixItemColorProvider @Inject constructor(
                 )
             }
             USER_COLORING_FROM_ID -> {
-                return cache.getOrPut(matrixItem.id) {
-                    colorProvider.getColorFromAttribute(
+                return colorProvider.getColorFromAttribute(
+                        cache.getOrPut(matrixItem.id) {
                             when (matrixItem) {
                                 is MatrixItem.UserItem -> getColorAttrFromUserId(matrixItem.id)
                                 else                   -> getColorAttrFromRoomId(matrixItem.id)
                             }
-                    )
-                }
+                        }
+                )
             }
             else -> {
                 colorProvider.getColorFromAttribute(android.R.attr.colorAccent)
