@@ -298,7 +298,7 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
                                         notificationHighlightRooms = otherRooms.isHighlight,
                                         hasUnreadMessages = dmRooms.totalCount + otherRooms.totalCount > 0,
                                         notificationCountAllInOne = roomsInvite + dmInvites + favRooms.totalCount + otherRooms.totalCount,
-                                        notificationHighlightAllInOne = dmInvites + roomsInvite > 0 || favRooms.totalCount > 0 || otherRooms.totalCount > 0
+                                        notificationHighlightAllInOne = dmInvites + roomsInvite > 0 || favRooms.isHighlight || otherRooms.isHighlight
                                 )
                             }
                         }
