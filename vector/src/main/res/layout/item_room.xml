@@ -84,6 +84,21 @@
         app:layout_constraintCircleAngle="135"
         app:layout_constraintCircleRadius="28dp"
         tools:ignore="MissingConstraints"
+        tools:visibility="gone" />
+
+    <im.vector.app.core.ui.views.PresenceStateImageView
+        android:id="@+id/roomAvatarPresenceImageView"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:background="@drawable/background_circle"
+        android:importantForAccessibility="no"
+        android:padding="2dp"
+        android:visibility="gone"
+        app:layout_constraintCircle="@id/roomAvatarContainer"
+        app:layout_constraintCircleAngle="135"
+        app:layout_constraintCircleRadius="28dp"
+        tools:ignore="MissingConstraints"
+        tools:src="@drawable/ic_presence_offline"
         tools:visibility="visible" />
 
     <!-- Margin bottom does not work, so I use space -->

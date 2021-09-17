@@ -133,4 +133,8 @@
     <color name="vctr_voice_message_toast_background_light">@color/palette_black_900</color>
     <color name="vctr_voice_message_toast_background_dark">@color/palette_gray_400</color>
 
+    <!-- Presence Indicator colors -->
+    <attr name="vctr_presence_indicator_offline" format="color" />
+    <color name="vctr_presence_indicator_offline_light">@color/palette_gray_100</color>
+    <color name="vctr_presence_indicator_offline_dark">@color/palette_gray_450</color>
 </resources>

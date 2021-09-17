@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.session.sync
+package org.matrix.android.sdk.internal.session.sync.handler.room
 
 import io.realm.Realm
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -23,6 +23,8 @@ import org.matrix.android.sdk.internal.database.model.ReadReceiptsSummaryEntity
 import org.matrix.android.sdk.internal.database.query.createUnmanaged
 import org.matrix.android.sdk.internal.database.query.getOrCreate
 import org.matrix.android.sdk.internal.database.query.where
+import org.matrix.android.sdk.internal.session.sync.RoomSyncEphemeralTemporaryStore
+import org.matrix.android.sdk.internal.session.sync.SyncResponsePostTreatmentAggregator
 import timber.log.Timber
 import javax.inject.Inject
 

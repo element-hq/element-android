@@ -21,6 +21,7 @@ import io.realm.annotations.Index
 import io.realm.annotations.PrimaryKey
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.util.MatrixItem
+import org.matrix.android.sdk.internal.database.model.presence.UserPresenceEntity
 
 internal open class RoomMemberSummaryEntity(@PrimaryKey var primaryKey: String = "",
                                             @Index var userId: String = "",
@@ -40,6 +41,12 @@ internal open class RoomMemberSummaryEntity(@PrimaryKey var primaryKey: String =
             membershipStr = value.name
         }
 
+    var userPresenceEntity: UserPresenceEntity? = null
+        set(value) {
+            if (value != field) field = value
+        }
+
+    fun getBestName() = displayName?.takeIf { it.isNotBlank() } ?: userId
     fun toMatrixItem() = MatrixItem.UserItem(userId, displayName, avatarUrl)
 
     companion object

@@ -27,6 +27,7 @@ import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.VersioningState
 import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
+import org.matrix.android.sdk.internal.database.model.presence.UserPresenceEntity
 
 internal open class RoomSummaryEntity(
         @PrimaryKey var roomId: String = "",
@@ -200,6 +201,11 @@ internal open class RoomSummaryEntity(
         }
 
     var inviterId: String? = null
+        set(value) {
+            if (value != field) field = value
+        }
+
+    var directUserPresence: UserPresenceEntity? = null
         set(value) {
             if (value != field) field = value
         }

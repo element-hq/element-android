@@ -21,6 +21,7 @@ import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
 import org.matrix.android.sdk.api.session.room.send.UserDraft
 import org.matrix.android.sdk.api.session.room.sender.SenderInfo
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
+import org.matrix.android.sdk.internal.session.presence.model.UserPresence
 
 /**
  * This class holds some data of a room.
@@ -38,6 +39,7 @@ data class RoomSummary(
         val joinRules: RoomJoinRules? = null,
         val isDirect: Boolean = false,
         val directUserId: String? = null,
+        val directUserPresence: UserPresence? = null,
         val joinedMembersCount: Int? = 0,
         val invitedMembersCount: Int? = 0,
         val latestPreviewableEvent: TimelineEvent? = null,

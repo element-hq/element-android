@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.session.sync
+package org.matrix.android.sdk.internal.session.sync.handler.room
 
 import io.realm.Realm
 import io.realm.kotlin.createObject
@@ -62,6 +62,9 @@ import org.matrix.android.sdk.internal.session.room.summary.RoomSummaryUpdater
 import org.matrix.android.sdk.internal.session.room.timeline.PaginationDirection
 import org.matrix.android.sdk.internal.session.room.timeline.TimelineInput
 import org.matrix.android.sdk.internal.session.room.typing.TypingEventContent
+import org.matrix.android.sdk.internal.session.sync.InitialSyncStrategy
+import org.matrix.android.sdk.internal.session.sync.SyncResponsePostTreatmentAggregator
+import org.matrix.android.sdk.internal.session.sync.initialSyncStrategy
 import org.matrix.android.sdk.internal.session.sync.parsing.RoomSyncAccountDataHandler
 import org.matrix.android.sdk.internal.util.computeBestChunkSize
 import timber.log.Timber

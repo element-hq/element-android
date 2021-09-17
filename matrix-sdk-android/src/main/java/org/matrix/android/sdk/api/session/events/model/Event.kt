@@ -30,6 +30,7 @@ import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.internal.crypto.algorithms.olm.OlmDecryptionResult
 import org.matrix.android.sdk.internal.crypto.model.event.EncryptedEventContent
 import org.matrix.android.sdk.internal.di.MoshiProvider
+import org.matrix.android.sdk.internal.session.presence.model.PresenceContent
 import timber.log.Timber
 
 typealias Content = JsonDict
@@ -304,4 +305,8 @@ fun Event.isReply(): Boolean {
 
 fun Event.isEdition(): Boolean {
     return getRelationContent()?.takeIf { it.type == RelationType.REPLACE }?.eventId != null
+}
+
+fun Event.getPresenceContent(): PresenceContent? {
+    return content.toModel<PresenceContent>()
 }

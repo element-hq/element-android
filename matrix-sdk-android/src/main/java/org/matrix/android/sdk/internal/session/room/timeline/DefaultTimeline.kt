@@ -42,7 +42,7 @@ import org.matrix.android.sdk.internal.database.query.findAllInRoomWithSendState
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.database.query.whereRoomId
 import org.matrix.android.sdk.internal.session.room.membership.LoadRoomMembersTask
-import org.matrix.android.sdk.internal.session.sync.ReadReceiptHandler
+import org.matrix.android.sdk.internal.session.sync.handler.room.ReadReceiptHandler
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.task.configureWith
 import org.matrix.android.sdk.internal.util.Debouncer

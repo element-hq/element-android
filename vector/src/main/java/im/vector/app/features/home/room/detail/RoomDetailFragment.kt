@@ -1430,9 +1430,9 @@ class RoomDetailFragment @Inject constructor(
             views.roomToolbarContentView.isClickable = roomSummary.membership == Membership.JOIN
             views.roomToolbarTitleView.text = roomSummary.displayName
             avatarRenderer.render(roomSummary.toMatrixItem(), views.roomToolbarAvatarImageView)
-
             renderSubTitle(typingMessage, roomSummary.topic)
             views.roomToolbarDecorationImageView.render(roomSummary.roomEncryptionTrustLevel)
+            views.roomToolbarPresenceImageView.render(roomSummary.isDirect, roomSummary.directUserPresence)
         }
     }
 
