@@ -21,7 +21,7 @@ import android.net.Uri
 /**
  * Mapping of an input URI to a matrix.to compliant URI.
  */
-object MatrixToMapper {
+object MatrixToConverter {
 
     /**
      * Try to convert a URL from an element web instance or from a client permalink to a matrix.to url.
@@ -31,7 +31,7 @@ object MatrixToMapper {
      * - https://app.element.io/#/room/#element-android:matrix.org   ->  https://matrix.to/#/#element-android:matrix.org
      * - https://www.example.org/#/room/#element-android:matrix.org  ->  https://matrix.to/#/#element-android:matrix.org
      */
-    fun map(uri: Uri): Uri? {
+    fun convert(uri: Uri): Uri? {
         val uriString = uri.toString()
 
         return when {

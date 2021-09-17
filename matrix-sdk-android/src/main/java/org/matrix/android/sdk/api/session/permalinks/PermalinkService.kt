@@ -20,6 +20,7 @@ import org.matrix.android.sdk.api.session.events.model.Event
 
 /**
  * Useful methods to create permalink (like matrix.to links or client permalinks).
+ * See [org.matrix.android.sdk.api.MatrixConfiguration.clientPermalinkBaseUrl] to setup a custom permalink base url.
  */
 interface PermalinkService {
 

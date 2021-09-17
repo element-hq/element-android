@@ -105,8 +105,8 @@
         <activity android:name=".features.home.HomeActivity" />
         <activity
             android:name=".features.login.LoginActivity"
-            android:launchMode="singleTask"
             android:enabled="@bool/useLoginV1"
+            android:launchMode="singleTask"
             android:windowSoftInputMode="adjustResize">
             <!-- Add intent filter to handle redirection URL after SSO login in external browser -->
             <intent-filter>
@@ -122,8 +122,8 @@
         </activity>
         <activity
             android:name=".features.login2.LoginActivity2"
-            android:launchMode="singleTask"
             android:enabled="@bool/useLoginV2"
+            android:launchMode="singleTask"
             android:windowSoftInputMode="adjustResize">
             <!-- Add intent filter to handle redirection URL after SSO login in external browser -->
             <intent-filter>
@@ -180,8 +180,11 @@
         <activity android:name=".features.createdirect.CreateDirectRoomActivity" />
         <activity android:name=".features.invite.InviteUsersToRoomActivity" />
         <activity android:name=".features.webview.VectorWebViewActivity" />
+
+        <!-- Activity to intercept links coming from a web instance -->
         <activity
             android:name=".features.link.LinkHandlerActivity"
+            android:enabled="true"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -198,8 +201,10 @@
             </intent-filter>
         </activity>
 
+        <!-- Activity alias for matrix.to or element permalinks -->
         <activity-alias
             android:name=".features.permalink.PermalinkHandlerActivity"
+            android:enabled="true"
             android:exported="true"
             android:launchMode="singleTask"
             android:targetActivity=".features.link.LinkHandlerActivity">
