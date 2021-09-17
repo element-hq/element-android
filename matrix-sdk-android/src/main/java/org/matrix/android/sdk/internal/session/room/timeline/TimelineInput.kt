@@ -23,6 +23,9 @@ import javax.inject.Inject
 
 @SessionScope
 internal class TimelineInput @Inject constructor() {
+
+    val listeners = mutableSetOf<Listener>()
+
     fun onLocalEchoCreated(roomId: String, timelineEvent: TimelineEvent) {
         listeners.toSet().forEach { it.onLocalEchoCreated(roomId, timelineEvent) }
     }
@@ -34,8 +37,6 @@ internal class TimelineInput @Inject constructor() {
     fun onNewTimelineEvents(roomId: String, eventIds: List<String>) {
         listeners.toSet().forEach { it.onNewTimelineEvents(roomId, eventIds) }
     }
-
-    val listeners = mutableSetOf<Listener>()
 
     internal interface Listener {
         fun onLocalEchoCreated(roomId: String, timelineEvent: TimelineEvent) = Unit

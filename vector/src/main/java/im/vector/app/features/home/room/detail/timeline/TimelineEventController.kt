@@ -58,7 +58,6 @@ import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlRetriever
 import im.vector.app.features.media.ImageContentRenderer
 import im.vector.app.features.media.VideoContentRenderer
 import im.vector.app.features.settings.VectorPreferences
-import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
@@ -71,7 +70,9 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageImageInfoCon
 import org.matrix.android.sdk.api.session.room.model.message.MessageVideoContent
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
+import timber.log.Timber
 import javax.inject.Inject
+import kotlin.system.measureTimeMillis
 
 class TimelineEventController @Inject constructor(private val dateFormatter: VectorDateFormatter,
                                                   private val vectorPreferences: VectorPreferences,
@@ -321,7 +322,10 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
     }
 
     private fun getModels(): List<EpoxyModel<*>> {
-        buildCacheItemsIfNeeded()
+        val timeForBuilding = measureTimeMillis {
+            buildCacheItemsIfNeeded()
+        }
+        Timber.v("Time for building cache items: $timeForBuilding ms")
         return modelCache
                 .map { cacheItemData ->
                     val eventModel = if (cacheItemData == null || mergedHeaderItemFactory.isCollapsed(cacheItemData.localId)) {
@@ -346,7 +350,11 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         if (modelCache.isEmpty()) {
             return
         }
-        preprocessReverseEvents()
+        val preprocessEventsTiming = measureTimeMillis {
+            preprocessReverseEvents()
+        }
+        Timber.v("Preprocess events took $preprocessEventsTiming ms")
+        var numberOfEventsToBuild = 0
         val lastSentEventWithoutReadReceipts = searchLastSentEventWithoutReadReceipts(receiptsByEvent)
         (0 until modelCache.size).forEach { position ->
             val event = currentSnapshot[position]
@@ -356,7 +364,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
                 timelineEventVisibilityHelper.shouldShowEvent(it, partialState.highlightedEventId)
             }
             // Should be build if not cached or if model should be refreshed
-            if (modelCache[position] == null || modelCache[position]?.isCacheable(partialState).orFalse()) {
+            if (modelCache[position] == null || modelCache[position]?.isCacheable(partialState) == false) {
                 val timelineEventsGroup = timelineEventsGroups.getOrNull(event)
                 val params = TimelineItemFactoryParams(
                         event = event,
@@ -369,11 +377,13 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
                         eventsGroup = timelineEventsGroup
                 )
                 modelCache[position] = buildCacheItem(params)
+                numberOfEventsToBuild++
             }
             val itemCachedData = modelCache[position] ?: return@forEach
             // Then update with additional models if needed
             modelCache[position] = itemCachedData.enrichWithModels(event, nextEvent, position, receiptsByEvent)
         }
+        Timber.v("Number of events to rebuild: $numberOfEventsToBuild on ${modelCache.size} total events")
     }
 
     private fun buildCacheItem(params: TimelineItemFactoryParams): CacheItemData {
@@ -386,7 +396,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
             it.id(event.localId)
             it.setOnVisibilityStateChanged(TimelineEventVisibilityStateChangedListener(callback, event))
         }
-        val isCacheable = eventModel is ItemWithEvents && eventModel.isCacheable() && !params.isHighlighted
+        val isCacheable = (eventModel !is ItemWithEvents || eventModel.isCacheable()) && !params.isHighlighted
         return CacheItemData(
                 localId = event.localId,
                 eventId = event.root.eventId,
@@ -541,7 +551,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
             private val isCacheable: Boolean = true
     ) {
         fun isCacheable(partialState: PartialState): Boolean {
-            return isCacheable || partialState.highlightedEventId == eventId
+            return isCacheable && partialState.highlightedEventId != eventId
         }
     }
 }
