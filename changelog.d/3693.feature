@@ -1,1 +1,0 @@
-Space summary pagination

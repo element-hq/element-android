@@ -23,6 +23,7 @@ import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import org.matrix.android.sdk.api.session.Session
 
@@ -48,15 +49,17 @@ class SpaceManageSharedViewModel @AssistedInject constructor(
 
     override fun handle(action: SpaceManagedSharedAction) {
         when (action) {
-            SpaceManagedSharedAction.HandleBack -> {
+            SpaceManagedSharedAction.HandleBack                  -> {
                 // for now finish
                 _viewEvents.post(SpaceManagedSharedViewEvents.Finish)
             }
-            SpaceManagedSharedAction.HideLoading -> _viewEvents.post(SpaceManagedSharedViewEvents.HideLoading)
-            SpaceManagedSharedAction.ShowLoading -> _viewEvents.post(SpaceManagedSharedViewEvents.ShowLoading)
-            SpaceManagedSharedAction.CreateRoom ->  _viewEvents.post(SpaceManagedSharedViewEvents.NavigateToCreateRoom)
-            SpaceManagedSharedAction.ManageRooms -> _viewEvents.post(SpaceManagedSharedViewEvents.NavigateToManageRooms)
-            SpaceManagedSharedAction.OpenSpaceAliasesSettings -> _viewEvents.post(SpaceManagedSharedViewEvents.NavigateToAliasSettings)
-        }
+            SpaceManagedSharedAction.HideLoading                 -> _viewEvents.post(SpaceManagedSharedViewEvents.HideLoading)
+            SpaceManagedSharedAction.ShowLoading                 -> _viewEvents.post(SpaceManagedSharedViewEvents.ShowLoading)
+            SpaceManagedSharedAction.CreateRoom                  -> _viewEvents.post(SpaceManagedSharedViewEvents.NavigateToCreateRoom)
+            SpaceManagedSharedAction.CreateSpace                 -> _viewEvents.post(SpaceManagedSharedViewEvents.NavigateToCreateSpace)
+            SpaceManagedSharedAction.ManageRooms                 -> _viewEvents.post(SpaceManagedSharedViewEvents.NavigateToManageRooms)
+            SpaceManagedSharedAction.OpenSpaceAliasesSettings    -> _viewEvents.post(SpaceManagedSharedViewEvents.NavigateToAliasSettings)
+            SpaceManagedSharedAction.OpenSpacePermissionSettings -> _viewEvents.post(SpaceManagedSharedViewEvents.NavigateToPermissionSettings)
+        }.exhaustive
     }
 }

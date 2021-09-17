@@ -1165,6 +1165,7 @@
     <string name="space_explore_activity_title">استكشِف الغُرف</string>
     <string name="space_add_child_title">أضف غُرف</string>
     <string name="leave_space">غادر المساحة</string>
+    <!-- TO BE REMOVED -->
     <string name="space_leave_prompt_msg">هل أنت متأكد أنك تريد مغادرة المساحة؟</string>
     <string name="space_leave_prompt_msg_only_you">انت الشخص الوحيد هنا إذا غادرت، فلن يتمكن أي شخص من الانضمام في المستقبل، بما في ذلك أنت.</string>
     <string name="space_leave_prompt_msg_private">هذه المساحة ليست عامة. لن تتمكن من الانضمام مرة أخرى بدون دعوة.</string>

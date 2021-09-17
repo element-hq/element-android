@@ -39,13 +39,13 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityJitsiBinding
 import kotlinx.parcelize.Parcelize
-import org.jitsi.meet.sdk.BroadcastEvent
 import org.jitsi.meet.sdk.JitsiMeet
 import org.jitsi.meet.sdk.JitsiMeetActivityDelegate
 import org.jitsi.meet.sdk.JitsiMeetActivityInterface
 import org.jitsi.meet.sdk.JitsiMeetConferenceOptions
 import org.jitsi.meet.sdk.JitsiMeetView
 import org.matrix.android.sdk.api.extensions.tryOrNull
+import org.matrix.android.sdk.api.util.JsonDict
 import timber.log.Timber
 import java.net.URL
 import javax.inject.Inject
@@ -87,7 +87,7 @@ class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMee
                 JitsiCallViewEvents.LeaveConference               -> handleLeaveConference()
             }.exhaustive
         }
-        lifecycle.addObserver(JitsiBroadcastEventObserver(this, this::onBroadcastEvent))
+        lifecycle.addObserver(ConferenceEventObserver(this, this::onBroadcastEvent))
     }
 
     override fun onResume() {
@@ -113,7 +113,7 @@ class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMee
         jitsiMeetView?.dispose()
         // Fake emitting CONFERENCE_TERMINATED event when currentConf is not null (probably when closing the PiP screen).
         if (currentConf != null) {
-            JitsiBroadcastEmitter(this).emitConferenceEnded()
+            ConferenceEventEmitter(this).emitConferenceEnded()
         }
         JitsiMeetActivityDelegate.onHostDestroy(this)
         super.onDestroy()
@@ -223,15 +223,15 @@ class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMee
         JitsiMeetActivityDelegate.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
-    private fun onBroadcastEvent(event: BroadcastEvent) {
-        Timber.v("Broadcast received: ${event.type}")
-        when (event.type) {
-            BroadcastEvent.Type.CONFERENCE_TERMINATED -> onConferenceTerminated(event.data)
-            else                                      -> Unit
+    private fun onBroadcastEvent(event: ConferenceEvent) {
+        Timber.v("Broadcast received: $event")
+        when (event) {
+            is ConferenceEvent.Terminated -> onConferenceTerminated(event.data)
+            else                          -> Unit
         }
     }
 
-    private fun onConferenceTerminated(data: Map<String, Any>) {
+    private fun onConferenceTerminated(data: JsonDict) {
         Timber.v("JitsiMeetViewListener.onConferenceTerminated()")
         // Do not finish if there is an error
         if (data["error"] == null) {

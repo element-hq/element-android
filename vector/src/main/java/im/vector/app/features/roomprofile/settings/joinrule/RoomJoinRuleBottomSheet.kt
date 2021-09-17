@@ -39,7 +39,9 @@ fun RoomJoinRules.toOption(needUpgrade: Boolean) = JoinRulesOptionSupport(this, 
 @Parcelize
 data class RoomJoinRuleBottomSheetArgs(
         val currentRoomJoinRule: RoomJoinRules,
-        val allowedJoinedRules: List<JoinRulesOptionSupport>
+        val allowedJoinedRules: List<JoinRulesOptionSupport>,
+        val isSpace: Boolean = false,
+        val parentSpaceName: String?
 ) : Parcelable
 
 class RoomJoinRuleBottomSheet : BottomSheetGeneric<RoomJoinRuleState, RoomJoinRuleRadioAction>() {
@@ -73,11 +75,13 @@ class RoomJoinRuleBottomSheet : BottomSheetGeneric<RoomJoinRuleState, RoomJoinRu
         fun newInstance(currentRoomJoinRule: RoomJoinRules,
                         allowedJoinedRules: List<JoinRulesOptionSupport> = listOf(
                                 RoomJoinRules.INVITE, RoomJoinRules.PUBLIC
-                        ).map { it.toOption(true) }
+                        ).map { it.toOption(true) },
+                        isSpace: Boolean = false,
+                        parentSpaceName: String? = null
         ): RoomJoinRuleBottomSheet {
             return RoomJoinRuleBottomSheet().apply {
                 setArguments(
-                        RoomJoinRuleBottomSheetArgs(currentRoomJoinRule, allowedJoinedRules)
+                        RoomJoinRuleBottomSheetArgs(currentRoomJoinRule, allowedJoinedRules, isSpace, parentSpaceName)
                 )
             }
         }

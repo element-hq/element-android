@@ -48,6 +48,7 @@ import org.matrix.android.sdk.api.session.room.members.roomMemberQueryParams
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
+import org.matrix.android.sdk.api.session.room.model.RoomType
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.session.room.powerlevels.Role
 import org.matrix.android.sdk.api.util.MatrixItem
@@ -86,7 +87,8 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
             copy(
                     isMine = session.myUserId == this.userId,
                     userMatrixItem = room?.getRoomMember(initialState.userId)?.toMatrixItem()?.let { Success(it) } ?: Uninitialized,
-                    hasReadReceipt = room?.getUserReadReceipt(initialState.userId) != null
+                    hasReadReceipt = room?.getUserReadReceipt(initialState.userId) != null,
+                    isSpace = room?.roomSummary()?.roomType == RoomType.SPACE
             )
         }
         observeIgnoredState()

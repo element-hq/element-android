@@ -450,7 +450,8 @@ internal interface IMXCryptoStore {
     fun addWithHeldMegolmSession(withHeldContent: RoomKeyWithHeldContent)
     fun getWithHeldMegolmSession(roomId: String, sessionId: String): RoomKeyWithHeldContent?
 
-    fun markedSessionAsShared(roomId: String?, sessionId: String, userId: String, deviceId: String, chainIndex: Int)
+    fun markedSessionAsShared(roomId: String?, sessionId: String, userId: String, deviceId: String,
+                              deviceIdentityKey: String, chainIndex: Int)
 
     /**
      * Query for information on this session sharing history.
@@ -459,7 +460,7 @@ internal interface IMXCryptoStore {
      * in this case chainIndex is not nullindicates the ratchet position.
      * In found is false, chainIndex is null
      */
-    fun getSharedSessionInfo(roomId: String?, sessionId: String, userId: String, deviceId: String): SharedSessionResult
+    fun getSharedSessionInfo(roomId: String?, sessionId: String, deviceInfo: CryptoDeviceInfo): SharedSessionResult
     data class SharedSessionResult(val found: Boolean, val chainIndex: Int?)
 
     fun getSharedWithInfo(roomId: String?, sessionId: String): MXUsersDevicesMap<Int>

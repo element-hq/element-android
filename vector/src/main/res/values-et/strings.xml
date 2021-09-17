@@ -2679,6 +2679,7 @@
     <string name="spaces_beta_welcome_to_spaces_desc">Kogukonnakeskused on uus võimalus siduda jututubasid ja inimesi.</string>
     <string name="spaces_beta_welcome_to_spaces">Tere tulemast kasutama kogukonnakeskuseid!</string>
     <string name="space_add_existing_rooms">Lisa olemasolevaid jututubasid ja kogukonnakeskuseid</string>
+    <!-- TO BE REMOVED -->
     <string name="space_leave_prompt_msg">Kas oled kindel, et soovid lahkuda kogukonnakeskusest\?</string>
     <string name="leave_space">Lahku kogukonnakeskusest</string>
     <string name="space_add_child_title">Lisa jututuba</string>

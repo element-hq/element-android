@@ -12,7 +12,7 @@
 
     <ImageView
         android:id="@+id/itemGenericPillImage"
-        android:layout_width="20dp"
+        android:layout_width="wrap_content"
         android:layout_height="20dp"
         android:importantForAccessibility="no"
         android:src="@drawable/ic_info"

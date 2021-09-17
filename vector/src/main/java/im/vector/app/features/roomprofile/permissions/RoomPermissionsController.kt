@@ -26,6 +26,7 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.discovery.settingsInfoItem
 import im.vector.app.features.form.formAdvancedToggleItem
 import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
+import org.matrix.android.sdk.api.session.room.model.RoomType
 import org.matrix.android.sdk.api.session.room.model.banOrDefault
 import org.matrix.android.sdk.api.session.room.model.eventsDefaultOrDefault
 import org.matrix.android.sdk.api.session.room.model.inviteOrDefault
@@ -57,6 +58,13 @@ class RoomPermissionsController @Inject constructor(
             EditablePermission.ChangeTopic()
     )
 
+    private val usefulEditablePermissionsForSpace = listOf(
+            EditablePermission.ChangeRoomAvatar(),
+            EditablePermission.ChangeRoomName(),
+            EditablePermission.ChangeTopic(),
+            EditablePermission.InviteUsers()
+    )
+
     private val advancedEditablePermissions = listOf(
             EditablePermission.ChangeMainAddressForTheRoom(),
 
@@ -76,6 +84,27 @@ class RoomPermissionsController @Inject constructor(
             EditablePermission.ChangePermissions(),
             EditablePermission.SendRoomServerAclEvents(),
             EditablePermission.EnableRoomEncryption(),
+            EditablePermission.UpgradeTheRoom()
+    )
+
+    private val advancedEditablePermissionsForSpace = listOf(
+            EditablePermission.ChangeMainAddressForTheRoom(),
+
+            EditablePermission.DefaultRole(),
+            EditablePermission.KickUsers(),
+            EditablePermission.BanUsers(),
+
+            EditablePermission.SendMessages(),
+
+            EditablePermission.RemoveMessagesSentByOthers(),
+            EditablePermission.NotifyEveryone(),
+
+            EditablePermission.ChangeSettings(),
+//            EditablePermission.ModifyWidgets(),
+            EditablePermission.ChangeHistoryVisibility(),
+            EditablePermission.ChangePermissions(),
+            EditablePermission.SendRoomServerAclEvents(),
+//            EditablePermission.EnableRoomEncryption(),
             EditablePermission.UpgradeTheRoom()
     )
 
@@ -103,13 +132,24 @@ class RoomPermissionsController @Inject constructor(
     private fun buildPermissions(data: RoomPermissionsViewState, content: PowerLevelsContent) {
         val host = this
         val editable = data.actionPermissions.canChangePowerLevels
+        val isSpace = data.roomSummary.invoke()?.roomType == RoomType.SPACE
+
         settingsInfoItem {
             id("notice")
-            helperText(host.stringProvider.getString(if (editable) R.string.room_permissions_notice else R.string.room_permissions_notice_read_only))
+            helperText(host.stringProvider.getString(
+                    if (editable) {
+                        if (isSpace) R.string.space_permissions_notice else R.string.room_permissions_notice
+                    } else {
+                        if (isSpace) R.string.space_permissions_notice_read_only else R.string.room_permissions_notice_read_only
+                    }))
         }
 
         // Useful permissions
-        usefulEditablePermissions.forEach { buildPermission(it, content, editable) }
+        if (isSpace) {
+            usefulEditablePermissionsForSpace.forEach { buildPermission(it, content, editable, true) }
+        } else {
+            usefulEditablePermissions.forEach { buildPermission(it, content, editable, false) }
+        }
 
         // Toggle
         formAdvancedToggleItem {
@@ -121,15 +161,24 @@ class RoomPermissionsController @Inject constructor(
 
         // Advanced permissions
         if (data.showAdvancedPermissions) {
-            advancedEditablePermissions.forEach { buildPermission(it, content, editable) }
+            if (isSpace) {
+                advancedEditablePermissionsForSpace.forEach { buildPermission(it, content, editable, true) }
+            } else {
+                advancedEditablePermissions.forEach { buildPermission(it, content, editable, false) }
+            }
         }
     }
 
-    private fun buildPermission(editablePermission: EditablePermission, content: PowerLevelsContent, editable: Boolean) {
+    private fun buildPermission(editablePermission: EditablePermission,
+                                content: PowerLevelsContent,
+                                editable: Boolean,
+                                isSpace: Boolean) {
         val currentRole = getCurrentRole(editablePermission, content)
         buildProfileAction(
                 id = editablePermission.labelResId.toString(),
-                title = stringProvider.getString(editablePermission.labelResId),
+                title = stringProvider.getString(
+                        if (isSpace) editablePermission.spaceLabelResId else editablePermission.labelResId
+                ),
                 subtitle = roleFormatter.format(currentRole),
                 divider = true,
                 editable = editable,

@@ -19,7 +19,7 @@ package im.vector.app.features.home.room.detail
 import android.net.Uri
 import android.view.View
 import im.vector.app.core.platform.VectorViewModelAction
-import org.jitsi.meet.sdk.BroadcastEvent
+import im.vector.app.features.call.conference.ConferenceEvent
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import org.matrix.android.sdk.api.session.room.model.message.MessageAudioContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageStickerContent
@@ -97,7 +97,7 @@ sealed class RoomDetailAction : VectorViewModelAction {
     data class EnsureNativeWidgetAllowed(val widget: Widget,
                                          val userJustAccepted: Boolean,
                                          val grantedEvents: RoomDetailViewEvents) : RoomDetailAction()
-    data class UpdateJoinJitsiCallStatus(val jitsiEvent: BroadcastEvent): RoomDetailAction()
+    data class UpdateJoinJitsiCallStatus(val conferenceEvent: ConferenceEvent): RoomDetailAction()
 
     data class OpenOrCreateDm(val userId: String) : RoomDetailAction()
     data class JumpToReadReceipt(val userId: String) : RoomDetailAction()
