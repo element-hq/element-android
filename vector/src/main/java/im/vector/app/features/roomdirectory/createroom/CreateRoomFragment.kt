@@ -53,7 +53,7 @@ import javax.inject.Inject
 data class CreateRoomArgs(
         val initialName: String,
         val parentSpaceId: String? = null,
-        val isSubSpace: Boolean = false
+        val isSpace: Boolean = false
 ) : Parcelable
 
 class CreateRoomFragment @Inject constructor(
@@ -98,7 +98,7 @@ class CreateRoomFragment @Inject constructor(
 
     override fun onResume() {
         super.onResume()
-        views.createRoomTitle.text = getString(if (args.isSubSpace) R.string.create_new_space else R.string.create_new_room)
+        views.createRoomTitle.text = getString(if (args.isSpace) R.string.create_new_space else R.string.create_new_room)
     }
 
     private fun setupRoomJoinRuleSharedActionViewModel() {
@@ -121,7 +121,7 @@ class CreateRoomFragment @Inject constructor(
     private fun setupWaitingView() {
         views.waitingView.waitingStatusText.isVisible = true
         views.waitingView.waitingStatusText.setText(
-                if (args.isSubSpace) R.string.create_space_in_progress else R.string.create_room_in_progress
+                if (args.isSpace) R.string.create_space_in_progress else R.string.create_room_in_progress
         )
     }
 
@@ -133,7 +133,7 @@ class CreateRoomFragment @Inject constructor(
     }
 
     private fun setupRecyclerView() {
-        if (args.isSubSpace) {
+        if (args.isSpace) {
             views.createRoomForm.configureWith(createSpaceController)
             createSpaceController.listener = this
         } else {
@@ -236,7 +236,7 @@ class CreateRoomFragment @Inject constructor(
             sharedActionViewModel.post(RoomDirectorySharedAction.Close)
         } else {
             // Populate list with Epoxy
-            if (args.isSubSpace) {
+            if (args.isSpace) {
                 createSpaceController.setData(state)
             } else {
                 createRoomController.setData(state)

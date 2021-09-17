@@ -55,7 +55,7 @@ class CreateRoomActivity : VectorBaseActivity<ActivitySimpleBinding>(), ToolbarC
                     CreateRoomFragment::class.java,
                     CreateRoomArgs(
                             intent?.getStringExtra(INITIAL_NAME) ?: "",
-                            isSubSpace = intent?.getBooleanExtra(IS_SPACE, false) ?: false
+                            isSpace = intent?.getBooleanExtra(IS_SPACE, false) ?: false
                     )
             )
         }

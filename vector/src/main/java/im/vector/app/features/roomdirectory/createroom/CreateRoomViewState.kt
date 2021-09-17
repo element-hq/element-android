@@ -44,7 +44,7 @@ data class CreateRoomViewState(
     constructor(args: CreateRoomArgs) : this(
             roomName = args.initialName,
             parentSpaceId = args.parentSpaceId,
-            isSubSpace = args.isSubSpace
+            isSubSpace = args.isSpace
     )
 
     /**

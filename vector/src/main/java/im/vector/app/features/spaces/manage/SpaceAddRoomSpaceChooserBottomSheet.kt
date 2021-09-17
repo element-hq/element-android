@@ -17,26 +17,16 @@
 package im.vector.app.features.spaces.manage
 
 import android.os.Bundle
-import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.setFragmentResult
-import com.airbnb.mvrx.args
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.databinding.BottomSheetAddRoomsOrSpacesToSpaceBinding
-import kotlinx.parcelize.Parcelize
 
 class SpaceAddRoomSpaceChooserBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetAddRoomsOrSpacesToSpaceBinding>() {
 
-    @Parcelize
-    data class Args(
-            val spaceId: String
-    ) : Parcelable
-
     override val showExpanded = true
-
-    private val addSubRoomsArgs: Args by args()
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?) =
             BottomSheetAddRoomsOrSpacesToSpaceBinding.inflate(inflater, container, false)
@@ -68,9 +58,7 @@ class SpaceAddRoomSpaceChooserBottomSheet : VectorBaseBottomSheetDialogFragment<
 
         fun newInstance(spaceId: String)
                 : SpaceAddRoomSpaceChooserBottomSheet {
-            return SpaceAddRoomSpaceChooserBottomSheet().apply {
-                setArguments(Args(spaceId))
-            }
+            return SpaceAddRoomSpaceChooserBottomSheet()
         }
     }
 }

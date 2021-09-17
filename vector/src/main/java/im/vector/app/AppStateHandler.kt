@@ -67,11 +67,10 @@ class AppStateHandler @Inject constructor(
         return selectedSpaceDataSource.currentValue?.orNull()?.let {
             if (it is RoomGroupingMethod.BySpace) {
                 // try to refresh sum?
-                return it.spaceSummary?.roomId?.let { activeSessionHolder.getSafeActiveSession()?.getRoomSummary(it) }?.let {
+                it.spaceSummary?.roomId?.let { activeSessionHolder.getSafeActiveSession()?.getRoomSummary(it) }?.let {
                     RoomGroupingMethod.BySpace(it)
                 } ?: it
-            }
-            return it
+            } else it
         }
     }
 

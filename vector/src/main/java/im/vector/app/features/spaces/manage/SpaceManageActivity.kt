@@ -153,7 +153,7 @@ class SpaceManageActivity : VectorBaseActivity<ActivitySimpleLoadingBinding>(),
                     addFragmentToBackstack(
                             R.id.simpleFragmentContainer,
                             CreateRoomFragment::class.java,
-                            CreateRoomArgs("", parentSpaceId = args?.spaceId, isSubSpace = true)
+                            CreateRoomArgs("", parentSpaceId = args?.spaceId, isSpace = true)
                     )
                 }
                 SpaceManagedSharedViewEvents.NavigateToManageRooms -> {

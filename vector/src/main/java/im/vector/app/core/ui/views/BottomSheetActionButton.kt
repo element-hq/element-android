@@ -26,6 +26,7 @@ import androidx.core.view.isGone
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import im.vector.app.R
+import im.vector.app.core.extensions.setDrawableOrHide
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.databinding.ViewBottomSheetActionButtonBinding
 import im.vector.app.features.themes.ThemeUtils
@@ -80,8 +81,7 @@ class BottomSheetActionButton @JvmOverloads constructor(
     var rightIcon: Drawable? = null
         set(value) {
             field = value
-            views.bottomSheetActionIcon.setImageDrawable(value)
-            views.bottomSheetActionIcon.isVisible = field != null
+            views.bottomSheetActionIcon.setDrawableOrHide(value)
         }
 
     var tint: Int? = null

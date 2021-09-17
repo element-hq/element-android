@@ -47,13 +47,11 @@ class CreateSubSpaceController @Inject constructor(
     private fun buildForm(data: CreateRoomViewState, enableFormElement: Boolean) {
         val host = this
 
-        if (data.isSubSpace) {
-            genericPillItem {
-                id("beta")
-                imageRes(R.drawable.ic_beta_pill)
-                tintIcon(false)
-                text(host.stringProvider.getString(R.string.space_add_space_to_any_space_you_manage))
-            }
+        genericPillItem {
+            id("beta")
+            imageRes(R.drawable.ic_beta_pill)
+            tintIcon(false)
+            text(host.stringProvider.getString(R.string.space_add_space_to_any_space_you_manage))
         }
 
         formEditableSquareAvatarItem {
