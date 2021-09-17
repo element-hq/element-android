@@ -152,7 +152,7 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
             if (BuildConfig.LOW_PRIVACY_LOG_ENABLE) {
                 Timber.d("## onMessageReceivedInternal() : $data")
             } else {
-                Timber.d("## onMessageReceivedInternal() : $data")
+                Timber.d("## onMessageReceivedInternal()")
             }
 
             // update the badge counter
