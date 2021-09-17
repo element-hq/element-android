@@ -104,13 +104,9 @@ internal class TimelineChunk constructor(private val chunkEntity: ChunkEntity,
         return if (direction == Timeline.Direction.FORWARDS) {
             val nextChunkEntity = chunkEntity.nextChunk
             if (nextChunkEntity == null) {
-                val token = chunkEntity.nextToken ?: return LoadMoreResult.REACHED_END  // TODO handle previous live chunk
-                try {
-                    fetchFromServer(token, direction)
-                } catch (failure: Throwable) {
-                    Timber.v("Failed to fetch from server: $failure")
-                    LoadMoreResult.FAILURE
-                }
+                // Fetch next chunk from server if not in the db
+                val token = chunkEntity.nextToken
+                fetchFromServer(token, direction)
             } else {
                 // otherwise we delegate to the next chunk
                 if (nextChunk == null) {
@@ -121,13 +117,9 @@ internal class TimelineChunk constructor(private val chunkEntity: ChunkEntity,
         } else {
             val prevChunkEntity = chunkEntity.prevChunk
             if (prevChunkEntity == null) {
-                val token = chunkEntity.prevToken ?: return LoadMoreResult.REACHED_END
-                try {
-                    fetchFromServer(token, direction)
-                } catch (failure: Throwable) {
-                    Timber.v("Failed to fetch from server: $failure")
-                    LoadMoreResult.FAILURE
-                }
+                // Fetch prev chunk from server if not in the db
+                val token = chunkEntity.prevToken
+                fetchFromServer(token, direction)
             } else {
                 // otherwise we delegate to the prev chunk
                 if (prevChunk == null) {
@@ -193,10 +185,26 @@ internal class TimelineChunk constructor(private val chunkEntity: ChunkEntity,
         )
     }
 
-    private suspend fun fetchFromServer(token: String, direction: Timeline.Direction): LoadMoreResult {
-        val paginationParams = PaginationTask.Params(roomId, token, direction.toPaginationDirection(), PAGINATION_COUNT)
-        val paginationResult = paginationTask.execute(paginationParams)
-        return when (paginationResult) {
+    private suspend fun fetchFromServer(token: String?, direction: Timeline.Direction): LoadMoreResult {
+        val paginationResult = try {
+            if (token == null) {
+                if (direction == Timeline.Direction.BACKWARDS || !chunkEntity.hasBeenALastForwardChunk()) return LoadMoreResult.REACHED_END
+                val lastKnownEventId = chunkEntity.sortedTimelineEvents().firstOrNull()?.eventId ?: return LoadMoreResult.FAILURE
+                val taskParams = FetchTokenAndPaginateTask.Params(roomId, lastKnownEventId, direction.toPaginationDirection(), PAGINATION_COUNT)
+                fetchTokenAndPaginateTask.execute(taskParams)
+            } else {
+                val taskParams = PaginationTask.Params(roomId, token, direction.toPaginationDirection(), PAGINATION_COUNT)
+                paginationTask.execute(taskParams)
+            }
+        } catch (failure: Throwable) {
+            Timber.e("Failed to fetch from server: $failure", failure)
+            return LoadMoreResult.FAILURE
+        }
+        return paginationResult.toLoadMoreResult()
+    }
+
+    private fun TokenChunkEventPersistor.Result.toLoadMoreResult(): LoadMoreResult {
+        return when (this) {
             TokenChunkEventPersistor.Result.REACHED_END -> LoadMoreResult.REACHED_END
             TokenChunkEventPersistor.Result.SHOULD_FETCH_MORE,
             TokenChunkEventPersistor.Result.SUCCESS     -> LoadMoreResult.SUCCESS
