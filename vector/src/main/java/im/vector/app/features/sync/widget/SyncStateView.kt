@@ -75,6 +75,7 @@ class SyncStateView @JvmOverloads constructor(context: Context, attrs: Attribute
         return when (this) {
             InitialSyncProgressService.Status.IncrementalSyncIdle       -> "Idle"
             is InitialSyncProgressService.Status.IncrementalSyncParsing -> "Parsing ${this.rooms} room(s) ${this.toDevice} toDevice(s)"
+            InitialSyncProgressService.Status.IncrementalSyncError      -> "Error"
             InitialSyncProgressService.Status.IncrementalSyncDone       -> "Done"
             else                                                        -> "?"
         }

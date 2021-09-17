@@ -131,11 +131,16 @@ internal class DefaultSyncTask @Inject constructor(
             initialSyncProgressService.endAll()
         } else {
             initialSyncProgressService.setStatus(InitialSyncProgressService.Status.IncrementalSyncIdle)
-            val syncResponse = executeRequest(globalErrorReceiver) {
-                syncAPI.sync(
-                        params = requestParams,
-                        readTimeOut = readTimeOut
-                )
+            val syncResponse = try {
+                executeRequest(globalErrorReceiver) {
+                    syncAPI.sync(
+                            params = requestParams,
+                            readTimeOut = readTimeOut
+                    )
+                }
+            } catch (throwable: Throwable) {
+                initialSyncProgressService.setStatus(InitialSyncProgressService.Status.IncrementalSyncError)
+                throw throwable
             }
             initialSyncProgressService.setStatus(InitialSyncProgressService.Status.IncrementalSyncParsing(
                     rooms = syncResponse.rooms?.invite.orEmpty().size + syncResponse.rooms?.join.orEmpty().size + syncResponse.rooms?.leave.orEmpty().size,
