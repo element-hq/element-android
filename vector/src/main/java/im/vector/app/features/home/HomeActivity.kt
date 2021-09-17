@@ -309,10 +309,10 @@ class HomeActivity :
 
     private fun renderState(state: HomeActivityViewState) {
         when (val status = state.initialSyncProgressServiceStatus) {
-            is InitialSyncProgressService.Status.Idle        -> {
+            is InitialSyncProgressService.Status.Idle                  -> {
                 views.waitingView.root.isVisible = false
             }
-            is InitialSyncProgressService.Status.Progressing -> {
+            is InitialSyncProgressService.Status.Progressing           -> {
                 val initSyncStepStr = initSyncStepFormatter.format(status.initSyncStep)
                 Timber.v("$initSyncStepStr ${status.percentProgress}")
                 views.waitingView.root.setOnClickListener {
@@ -330,6 +330,7 @@ class HomeActivity :
                 }
                 views.waitingView.root.isVisible = true
             }
+            is InitialSyncProgressService.Status.IncrementalSyncStatus -> Unit
         }.exhaustive
     }
 

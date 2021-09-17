@@ -17,6 +17,7 @@ package org.matrix.android.sdk.api.session.initsync
 
 import androidx.lifecycle.LiveData
 
+// TODO Rename or since we also observe classical sync here
 interface InitialSyncProgressService {
 
     fun getInitialSyncProgressStatus(): LiveData<Status>
@@ -27,5 +28,11 @@ interface InitialSyncProgressService {
                 val initSyncStep: InitSyncStep,
                 val percentProgress: Int = 0
         ) : Status()
+
+        abstract class IncrementalSyncStatus: Status()
+
+        object IncrementalSyncIdle : IncrementalSyncStatus()
+        object IncrementalSyncParsing : IncrementalSyncStatus()
+        object IncrementalSyncDone : IncrementalSyncStatus()
     }
 }

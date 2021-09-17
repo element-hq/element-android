@@ -80,6 +80,7 @@ import org.matrix.android.sdk.api.session.events.model.isTextMessage
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.file.FileService
+import org.matrix.android.sdk.api.session.initsync.InitialSyncProgressService
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.members.roomMemberQueryParams
 import org.matrix.android.sdk.api.session.room.model.Membership
@@ -102,6 +103,7 @@ import org.matrix.android.sdk.api.session.space.CreateSpaceParams
 import org.matrix.android.sdk.api.session.widgets.model.WidgetType
 import org.matrix.android.sdk.api.util.toOptional
 import org.matrix.android.sdk.internal.crypto.model.event.WithHeldCode
+import org.matrix.android.sdk.rx.asObservable
 import org.matrix.android.sdk.rx.rx
 import org.matrix.android.sdk.rx.unwrap
 import timber.log.Timber
@@ -1490,6 +1492,17 @@ class RoomDetailViewModel @AssistedInject constructor(
                 .subscribe { syncState ->
                     setState {
                         copy(syncState = syncState)
+                    }
+                }
+                .disposeOnClear()
+
+        session.getInitialSyncProgressStatus()
+                .asObservable()
+                .subscribe { it ->
+                    if(it is InitialSyncProgressService.Status.IncrementalSyncStatus) {
+                        setState {
+                            copy(incrementalSyncStatus = it)
+                        }
                     }
                 }
                 .disposeOnClear()

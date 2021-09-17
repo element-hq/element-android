@@ -35,6 +35,11 @@ internal class DefaultInitialSyncProgressService @Inject constructor()
         return status
     }
 
+    // Only to be used for incremental sync
+    fun setStatus(newStatus: InitialSyncProgressService.Status) {
+        status.postValue(newStatus)
+    }
+
     /**
      * Create a rootTask
      */

@@ -387,8 +387,11 @@ class RoomDetailFragment @Inject constructor(
             }
         }
 
-        roomDetailViewModel.selectSubscribe(RoomDetailViewState::syncState) { syncState ->
-            views.syncStateView.render(syncState)
+        roomDetailViewModel.selectSubscribe(
+                RoomDetailViewState::syncState,
+                RoomDetailViewState::incrementalSyncStatus
+        ) { syncState, incrementalSyncStatus ->
+            views.syncStateView.render(syncState, incrementalSyncStatus, vectorPreferences.developerMode())
         }
 
         roomDetailViewModel.observeViewEvents {

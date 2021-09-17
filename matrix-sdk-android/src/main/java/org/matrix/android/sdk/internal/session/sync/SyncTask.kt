@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.session.sync
 
 import okhttp3.ResponseBody
 import org.matrix.android.sdk.api.session.initsync.InitSyncStep
+import org.matrix.android.sdk.api.session.initsync.InitialSyncProgressService
 import org.matrix.android.sdk.internal.di.SessionFilesDirectory
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
@@ -129,13 +130,16 @@ internal class DefaultSyncTask @Inject constructor(
             }
             initialSyncProgressService.endAll()
         } else {
+            initialSyncProgressService.setStatus(InitialSyncProgressService.Status.IncrementalSyncIdle)
             val syncResponse = executeRequest(globalErrorReceiver) {
                 syncAPI.sync(
                         params = requestParams,
                         readTimeOut = readTimeOut
                 )
             }
+            initialSyncProgressService.setStatus(InitialSyncProgressService.Status.IncrementalSyncParsing)
             syncResponseHandler.handleResponse(syncResponse, token, null)
+            initialSyncProgressService.setStatus(InitialSyncProgressService.Status.IncrementalSyncDone)
         }
         Timber.v("Sync task finished on Thread: ${Thread.currentThread().name}")
     }

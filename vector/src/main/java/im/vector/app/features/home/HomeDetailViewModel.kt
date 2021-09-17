@@ -40,6 +40,7 @@ import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.query.ActiveSpaceFilter
 import org.matrix.android.sdk.api.query.RoomCategoryFilter
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.initsync.InitialSyncProgressService
 import org.matrix.android.sdk.api.session.room.RoomSortOrder
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
@@ -59,7 +60,7 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
                                                       private val callManager: WebRtcCallManager,
                                                       private val directRoomHelper: DirectRoomHelper,
                                                       private val appStateHandler: AppStateHandler,
-private val autoAcceptInvites: AutoAcceptInvites)
+                                                      private val autoAcceptInvites: AutoAcceptInvites)
     : VectorViewModel<HomeDetailViewState, HomeDetailAction, HomeDetailViewEvents>(initialState),
         CallProtocolsChecker.Listener {
 
@@ -170,6 +171,17 @@ private val autoAcceptInvites: AutoAcceptInvites)
                 .subscribe { syncState ->
                     setState {
                         copy(syncState = syncState)
+                    }
+                }
+                .disposeOnClear()
+
+        session.getInitialSyncProgressStatus()
+                .asObservable()
+                .subscribe {
+                    if (it is InitialSyncProgressService.Status.IncrementalSyncStatus) {
+                        setState {
+                            copy(incrementalSyncStatus = it)
+                        }
                     }
                 }
                 .disposeOnClear()

@@ -7,6 +7,15 @@
     tools:orientation="vertical"
     tools:parentTag="android.widget.LinearLayout">
 
+    <TextView
+        android:id="@+id/syncStateDebugInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="monospace"
+        android:visibility="gone"
+        tools:text="debug info"
+        tools:visibility="visible" />
+
     <!-- Trick to remove surrounding padding (clip from wrapping frame) -->
     <FrameLayout
         android:id="@+id/syncStateProgressBar"

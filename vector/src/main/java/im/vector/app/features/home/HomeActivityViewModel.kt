@@ -136,6 +136,7 @@ class HomeActivityViewModel @AssistedInject constructor(
                                 maybeBootstrapCrossSigningAfterInitialSync()
                             }
                         }
+                        else                                             -> Unit
                     }
 
                     setState {
