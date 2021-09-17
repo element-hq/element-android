@@ -34,7 +34,7 @@ class WizardButtonView @JvmOverloads constructor(context: Context, attrs: Attrib
 
     private val views: ViewSpaceTypeButtonBinding
 
-    var title: String? = null
+    var title: CharSequence? = null
         set(value) {
             if (value != title) {
                 field = value

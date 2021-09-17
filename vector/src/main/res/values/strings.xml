@@ -1476,7 +1476,9 @@
     <string name="room_settings_room_read_history_rules_pref_dialog_title">Who can read history?</string>
     <string name="room_settings_room_read_history_dialog_subtitle">Changes to who can read history will only apply to future messages in this room. The visibility of existing history will be unchanged.</string>
     <string name="room_settings_room_access_rules_pref_dialog_title">Who can access this room?</string>
+    <string name="room_settings_access_rules_pref_dialog_title">Who can access?</string>
     <string name="room_settings_room_access_title">Room access</string>
+    <string name="room_settings_space_access_title">Space access</string>
     <string name="room_settings_guest_access_title">Allow guests to join</string>
 
     <!-- room settings : alias -->
@@ -1533,6 +1535,7 @@
     <string name="room_settings_room_access_private_description">Only people invited can find and join</string>
     <string name="room_settings_room_access_public_title">Public</string>
     <string name="room_settings_room_access_public_description">Anyone can find the room and join</string>
+    <string name="room_settings_space_access_public_description">Anyone can find the space and join</string>
     <string name="room_settings_room_access_restricted_title">Space members only</string>
     <string name="room_settings_room_access_restricted_description">Anyone in a space with this room can find and join it. Only admins of this room can add it to a space.</string>
     <string name="room_create_member_of_space_name_can_join">Members of Space %s can find, preview and join.</string>
@@ -2187,6 +2190,7 @@
 
     <string name="malformed_message">Malformed event, cannot display</string>
     <string name="create_new_room">Create New Room</string>
+    <string name="create_new_space">Create New Space</string>
     <string name="error_no_network">No network. Please check your Internet connection.</string>
     <string name="action_change">"Change"</string>
     <string name="change_room_directory_network">"Change network"</string>
@@ -2672,6 +2676,7 @@
     <string name="create_room_alias_empty">Please provide a room address</string>
     <string name="create_room_alias_invalid">Some characters are not allowed</string>
     <string name="create_room_in_progress">Creating room…</string>
+    <string name="create_space_in_progress">Creating space…</string>
 
     <string name="login_error_threepid_denied">Your email domain is not authorized to register on this server</string>
 
@@ -3493,6 +3498,9 @@
     <string name="pick_tings_to_leave">Pick things to leave</string>
 
     <string name="space_add_existing_rooms">Add existing rooms and space</string>
+    <string name="space_add_existing_rooms_only">Add existing rooms</string>
+    <string name="space_add_existing_spaces">Add existing spaces</string>
+    <string name="space_add_space_to_any_space_you_manage">Add a space to any space you manage.</string>
     <string name="space_add_rooms">Add rooms</string>
     <string name="spaces_beta_welcome_to_spaces">Welcome to Spaces!</string>
     <string name="spaces_beta_welcome_to_spaces_desc">Spaces are a new way to group rooms and people.</string>
