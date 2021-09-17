@@ -101,29 +101,29 @@ static def gitRevisionDate() {
 
 dependencies {
 
-    implementation libs.jetbrains.kotlinStdlib
+    implementation libs.jetbrains.kotlinStdlibJdk7
     implementation libs.jetbrains.coroutinesCore
     implementation libs.jetbrains.coroutinesAndroid
 
     implementation libs.androidx.appCompat
     implementation libs.androidx.core
 
-    implementation "androidx.lifecycle:lifecycle-extensions:${versions.lifecycle}"
-    implementation "androidx.lifecycle:lifecycle-common-java8:${versions.lifecycle}"
+    implementation libs.androidx.lifecycleExtensions
+    implementation  libs.androidx.lifecycleJava8
 
     // Network
-    implementation "com.squareup.retrofit2:retrofit:${versions.retrofit}"
-    implementation "com.squareup.retrofit2:converter-moshi:${versions.retrofit}"
+    implementation libs.squareup.retrofit
+    implementation libs.squareup.retrofitMoshi
 
     implementation(platform("com.squareup.okhttp3:okhttp-bom:4.9.1"))
     implementation 'com.squareup.okhttp3:okhttp'
     implementation 'com.squareup.okhttp3:logging-interceptor'
     implementation 'com.squareup.okhttp3:okhttp-urlconnection'
 
-    implementation "com.squareup.moshi:moshi-adapters:${versions.moshi}"
-    kapt "com.squareup.moshi:moshi-kotlin-codegen:${versions.moshi}"
+    implementation libs.squareup.moshi
+    kapt libs.squareup.moshiKotlin
 
-    implementation "io.noties.markwon:core:${versions.markwon}"
+    implementation libs.markwon.core
 
     // Image
     implementation libs.androidx.exifinterface
@@ -136,8 +136,8 @@ dependencies {
     implementation libs.androidx.work
 
     // FP
-    implementation "io.arrow-kt:arrow-core:${versions.arrow}"
-    implementation "io.arrow-kt:arrow-instances-core:${versions.arrow}"
+    implementation libs.arrow.core
+    implementation libs.arrow.instances
 
     // olm lib is now hosted by jitpack: https://jitpack.io/#org.matrix.gitlab.matrix-org/olm
     implementation 'org.matrix.gitlab.matrix-org:olm:3.2.4'
@@ -160,24 +160,24 @@ dependencies {
     testImplementation 'org.robolectric:robolectric:4.6.1'
     //testImplementation 'org.robolectric:shadows-support-v4:3.0'
     // Note: version sticks to 1.9.2 due to https://github.com/mockk/mockk/issues/281
-    testImplementation 'io.mockk:mockk:1.12.0'
-    testImplementation 'org.amshove.kluent:kluent-android:1.68'
+    testImplementation libs.mockk.mockk
+    testImplementation libs.tests.kluent
     implementation libs.jetbrains.coroutinesAndroid
     // Plant Timber tree for test
     testImplementation 'net.lachlanmckee:timber-junit-rule:1.0.1'
 
     kaptAndroidTest libs.dagger.daggerCompiler
-    androidTestImplementation "androidx.test:core:${versions.androidxTest}"
-    androidTestImplementation "androidx.test:runner:${versions.androidxTest}"
-    androidTestImplementation "androidx.test:rules:${versions.androidxTest}"
+    androidTestImplementation libs.androidx.testCore
+    androidTestImplementation libs.androidx.testRunner
+    androidTestImplementation libs.androidx.testRules
     androidTestImplementation libs.androidx.junit
-    androidTestImplementation "androidx.test.espresso:espresso-core:${versions.espresso}"
-    androidTestImplementation 'org.amshove.kluent:kluent-android:1.68'
-    androidTestImplementation 'io.mockk:mockk-android:1.12.0'
-    androidTestImplementation "androidx.arch.core:core-testing:${versions.arch}"
+    androidTestImplementation libs.androidx.espressoCore
+    androidTestImplementation libs.tests.kluent
+    androidTestImplementation libs.mockk.mockkAndroid
+    androidTestImplementation libs.androidx.coreTesting
     androidTestImplementation libs.jetbrains.coroutinesAndroid
     // Plant Timber tree for test
-    androidTestImplementation 'net.lachlanmckee:timber-junit-rule:1.0.1'
+    androidTestImplementation libs.tests.timberJunitRule
 
     androidTestUtil 'androidx.test:orchestrator:1.4.0'
 }

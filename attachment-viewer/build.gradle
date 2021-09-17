@@ -53,10 +53,10 @@ dependencies {
     implementation libs.rx.rxKotlin
     implementation libs.rx.rxAndroid
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:${versions.kotlin}"
+    implementation libs.jetbrains.kotlinStdlib
     implementation libs.androidx.core
     implementation libs.androidx.appCompat
     implementation libs.androidx.recyclerview
 
-    implementation 'com.google.android.material:material:1.4.0'
+    implementation libs.google.material
 }

@@ -32,6 +32,7 @@ android {
 }
 
 dependencies {
+
     implementation project(":matrix-sdk-android")
     implementation libs.androidx.appCompat
     implementation libs.rx.rxKotlin
@@ -39,7 +40,7 @@ dependencies {
     implementation libs.jetbrains.coroutinesRx2
 
     // Paging
-    implementation "androidx.paging:paging-runtime-ktx:2.1.2"
+    implementation libs.androidx.pagingRuntimeKtx
 
     // Logging
     implementation libs.jakewharton.timber

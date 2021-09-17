@@ -324,7 +324,7 @@ dependencies {
     implementation project(":library:ui-styles")
     implementation 'androidx.multidex:multidex:2.0.1'
 
-    implementation libs.jetbrains.kotlinStdlib
+    implementation libs.jetbrains.kotlinStdlibJdk7
     implementation libs.jetbrains.coroutinesCore
     implementation libs.jetbrains.coroutinesAndroid
 
@@ -340,10 +340,11 @@ dependencies {
     implementation "org.threeten:threetenbp:1.4.0:no-tzdb"
     implementation "com.gabrielittner.threetenbp:lazythreetenbp:0.9.0"
 
-    implementation "com.squareup.moshi:moshi-adapters:${versions.moshi}"
-    implementation "androidx.lifecycle:lifecycle-extensions:${versions.lifecycle}"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.3.1"
-    kapt "com.squareup.moshi:moshi-kotlin-codegen:${versions.moshi}"
+    implementation libs.squareup.moshi
+    kapt libs.squareup.moshiKotlin
+    implementation libs.androidx.lifecycleExtensions
+    implementation libs.androidx.lifecycleLivedata
+
 
     // Log
     implementation libs.jakewharton.timber
@@ -359,34 +360,34 @@ dependencies {
     implementation libs.rx.rxAndroid
     implementation 'com.jakewharton.rxrelay2:rxrelay:2.1.1'
     // RXBinding
-    implementation "com.jakewharton.rxbinding3:rxbinding:${versions.rxBinding}"
-    implementation "com.jakewharton.rxbinding3:rxbinding-appcompat:${versions.rxBinding}"
-    implementation "com.jakewharton.rxbinding3:rxbinding-material:${versions.rxBinding}"
+    implementation libs.jakewharton.rxbinding
+    implementation libs.jakewharton.rxbindingAppcompat
+    implementation libs.jakewharton.rxbindingMaterial
 
-    implementation("com.airbnb.android:epoxy:${versions.epoxy}")
-    implementation "com.airbnb.android:epoxy-glide-preloading:${versions.epoxy}"
-    kapt "com.airbnb.android:epoxy-processor:${versions.epoxy}"
-    implementation "com.airbnb.android:epoxy-paging:${versions.epoxy}"
-    implementation 'com.airbnb.android:mvrx:1.5.1'
+    implementation libs.airbnb.epoxy
+    implementation libs.airbnb.epoxyGlide
+    kapt libs.airbnb.epoxyProcessor
+    implementation libs.airbnb.epoxyPaging
+    implementation libs.airbnb.mvrx
 
     // Work
     implementation libs.androidx.work
 
     // Paging
-    implementation "androidx.paging:paging-runtime-ktx:2.1.2"
+    implementation libs.androidx.pagingRuntimeKtx
 
     // Functional Programming
-    implementation "io.arrow-kt:arrow-core:${versions.arrow}"
+    implementation libs.arrow.core
 
     // Pref
-    implementation 'androidx.preference:preference-ktx:1.1.1'
+    implementation libs.androidx.preferenceKtx
 
     // UI
     implementation 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
-    implementation 'com.google.android.material:material:1.4.0'
+    implementation libs.google.material
     implementation 'me.gujun.android:span:1.7'
-    implementation "io.noties.markwon:core:${versions.markwon}"
-    implementation "io.noties.markwon:html:${versions.markwon}"
+    implementation libs.markwon.core
+    implementation libs.markwon.html
     implementation 'com.googlecode.htmlcompressor:htmlcompressor:1.5.2'
     implementation 'me.saket:better-link-movement-method:2.2.0'
     implementation 'com.google.android:flexbox:2.0.1'
@@ -414,16 +415,16 @@ dependencies {
     implementation 'com.squareup:seismic:1.0.2'
 
     // Image Loading
-    implementation "com.github.piasy:BigImageViewer:${versions.bigImageViwer}"
-    implementation "com.github.piasy:GlideImageLoader:${versions.bigImageViwer}"
-    implementation "com.github.piasy:ProgressPieIndicator:${versions.bigImageViwer}"
-    implementation "com.github.piasy:GlideImageViewFactory:${versions.bigImageViwer}"
+    implementation libs.github.bigImageViewer
+    implementation libs.github.glideImageLoader
+    implementation libs.github.progressPieIndicator
+    implementation libs.github.glideImageViewFactory
 
     // implementation 'com.github.MikeOrtiz:TouchImageView:3.0.2'
     implementation 'com.github.chrisbanes:PhotoView:2.3.0'
 
-    implementation "com.github.bumptech.glide:glide:${versions.glide}"
-    kapt "com.github.bumptech.glide:compiler:${versions.glide}"
+    implementation libs.github.glide
+    kapt libs.github.glideCompiler
     implementation 'com.danikula:videocache:2.7.1'
     implementation 'com.github.yalantis:ucrop:2.2.7'
 
@@ -475,9 +476,9 @@ dependencies {
     implementation 'im.dlg:android-dialer:1.2.5'
 
     // JWT
-    api "io.jsonwebtoken:jjwt-api:${versions.jjwt}"
-    runtimeOnly "io.jsonwebtoken:jjwt-impl:${versions.jjwt}"
-    runtimeOnly("io.jsonwebtoken:jjwt-orgjson:${versions.jjwt}") {
+    api libs.jsonwebtoken.jjwtApi
+    runtimeOnly libs.jsonwebtoken.jjwtImpl
+    runtimeOnly(libs.jsonwebtoken.jjwtOrgjson) {
         exclude group: 'org.json', module: 'json' //provided by Android natively
     }
     implementation 'commons-codec:commons-codec:1.15'
@@ -485,24 +486,24 @@ dependencies {
 
     // TESTS
     testImplementation libs.tests.junit
-    testImplementation "org.amshove.kluent:kluent-android:${versions.kluent}"
+    testImplementation libs.tests.kluent
     // Plant Timber tree for test
-    testImplementation 'net.lachlanmckee:timber-junit-rule:1.0.1'
+    testImplementation libs.tests.timberJunitRule
 
     // Activate when you want to check for leaks, from time to time.
     //debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.3'
 
-    androidTestImplementation "androidx.test:core:${versions.androidxTest}"
-    androidTestImplementation "androidx.test:runner:${versions.androidxTest}"
-    androidTestImplementation "androidx.test:rules:${versions.androidxTest}"
+    androidTestImplementation libs.androidx.testCore
+    androidTestImplementation libs.androidx.testRunner
+    androidTestImplementation libs.androidx.testRules
     androidTestImplementation libs.androidx.junit
-    androidTestImplementation "androidx.test.espresso:espresso-core:${versions.espresso}"
-    androidTestImplementation "androidx.test.espresso:espresso-contrib:${versions.espresso}"
-    androidTestImplementation "androidx.test.espresso:espresso-intents:${versions.espresso}"
-    androidTestImplementation "org.amshove.kluent:kluent-android:${versions.kluent}"
-    androidTestImplementation "androidx.arch.core:core-testing:${versions.arch}"
+    androidTestImplementation libs.androidx.espressoCore
+    androidTestImplementation libs.androidx.espressoContrib
+    androidTestImplementation libs.androidx.espressoIntents
+    androidTestImplementation libs.tests.kluent
+    androidTestImplementation libs.androidx.coreTesting
     // Plant Timber tree for test
-    androidTestImplementation 'net.lachlanmckee:timber-junit-rule:1.0.1'
+    androidTestImplementation libs.tests.timberJunitRule
     // "The one who serves a great Espresso"
     androidTestImplementation('com.adevinta.android:barista:4.1.0') {
         exclude group: 'org.jetbrains.kotlin'
