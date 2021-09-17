@@ -291,7 +291,7 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
                                         // On home we don't count DMs or Other rooms as it will be already highlighted in
                                         // their respected tabs
                                         notificationCountHome = roomsInvite + dmInvites + favRooms.totalCount,
-                                        notificationHighlightHome = dmInvites + roomsInvite > 0 || favRooms.totalCount > 0,
+                                        notificationHighlightHome = dmInvites + roomsInvite > 0 || favRooms.isHighlight,
                                         notificationCountPeople = dmRooms.totalCount,
                                         notificationHighlightPeople = dmRooms.isHighlight,
                                         notificationCountRooms = otherRooms.totalCount + roomsInvite,

@@ -162,7 +162,7 @@ class RoomListSectionBuilderSpace(
         ) {
             it.memberships = listOf(Membership.JOIN)
             it.roomCategoryFilter = RoomCategoryFilter.UNREAD_NOTIFICATION_DMS
-            it.roomTagQueryFilter = RoomTagQueryFilter(false, null, null)
+            it.roomTagQueryFilter = RoomTagQueryFilter(false, false, false)
         }
 
         addSection(
@@ -179,7 +179,7 @@ class RoomListSectionBuilderSpace(
         ) {
             it.memberships = listOf(Membership.JOIN)
             it.roomCategoryFilter = RoomCategoryFilter.UNREAD_NOTIFICATION_ROOMS
-            it.roomTagQueryFilter = RoomTagQueryFilter(false, null, null)
+            it.roomTagQueryFilter = RoomTagQueryFilter(false, false, false)
         }
 
         addSection(
@@ -197,7 +197,7 @@ class RoomListSectionBuilderSpace(
         ) {
             it.memberships = listOf(Membership.JOIN)
             it.roomCategoryFilter = RoomCategoryFilter.ROOMS_WITH_NO_NOTIFICATION
-            it.roomTagQueryFilter = RoomTagQueryFilter(false, null, null)
+            it.roomTagQueryFilter = RoomTagQueryFilter(false, false, false)
         }
 
         addSection(
@@ -211,6 +211,43 @@ class RoomListSectionBuilderSpace(
             it.memberships = listOf(Membership.JOIN)
             it.roomCategoryFilter = RoomCategoryFilter.DMS_WITH_NO_NOTIFICATION
         }
+
+        addSection(
+                sections = sections,
+                activeSpaceUpdaters = activeSpaceAwareQueries,
+                nameRes = R.string.low_priority_header,
+                notifyOfLocalEcho = false,
+                isCompact = true,
+                spaceFilterStrategy = if (onlyOrphansInHome) {
+                    RoomListViewModel.SpaceFilterStrategy.ORPHANS_IF_SPACE_NULL
+                } else {
+                    RoomListViewModel.SpaceFilterStrategy.ALL_IF_SPACE_NULL
+                }
+
+        ) {
+            it.memberships = listOf(Membership.JOIN)
+            it.roomCategoryFilter = RoomCategoryFilter.ALL
+            it.roomTagQueryFilter = RoomTagQueryFilter(null, true, null)
+        }
+
+        addSection(
+                sections = sections,
+                activeSpaceUpdaters = activeSpaceAwareQueries,
+                nameRes = R.string.system_alerts_header,
+                notifyOfLocalEcho = false,
+                isCompact = true,
+                spaceFilterStrategy = if (onlyOrphansInHome) {
+                    RoomListViewModel.SpaceFilterStrategy.ORPHANS_IF_SPACE_NULL
+                } else {
+                    RoomListViewModel.SpaceFilterStrategy.ALL_IF_SPACE_NULL
+                }
+
+        ) {
+            it.memberships = listOf(Membership.JOIN)
+            it.roomCategoryFilter = RoomCategoryFilter.ALL
+            it.roomTagQueryFilter = RoomTagQueryFilter(null, null, true)
+        }
+
 
         val suggestedRoomsObservable = // MutableLiveData<List<SpaceChildInfo>>()
                 appStateHandler.selectedRoomGroupingObservable
@@ -303,7 +340,7 @@ class RoomListSectionBuilderSpace(
                 spaceFilterStrategy =  filterStrat
         ) {
             it.memberships = listOf(Membership.JOIN)
-            it.roomTagQueryFilter = RoomTagQueryFilter(null, false, false)
+            it.roomTagQueryFilter = RoomTagQueryFilter(false, false, false)
         }
 
         addSection(
