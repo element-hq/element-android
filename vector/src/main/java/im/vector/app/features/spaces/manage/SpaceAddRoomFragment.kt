@@ -117,6 +117,8 @@ class SpaceAddRoomFragment @Inject constructor(
             spaceEpoxyController.disabled = !it
             roomEpoxyController.disabled = it
             views.createNewRoom.text = if (it) getString(R.string.create_space) else getString(R.string.create_new_room)
+            val title = if (it) getString(R.string.space_add_existing_spaces) else getString(R.string.space_add_existing_rooms_only)
+            views.appBarTitle.text = title
         }.disposeOnDestroyView()
 
         views.createNewRoom.debouncedClicks {
@@ -149,14 +151,6 @@ class SpaceAddRoomFragment @Inject constructor(
                     sharedViewModel.handle(SpaceManagedSharedAction.HandleBack)
                 }
             }
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        withState(viewModel) { state ->
-            val title = if (state.onlyShowSpaces) getString(R.string.space_add_existing_spaces) else getString(R.string.space_add_existing_rooms_only)
-            views.appBarTitle.text = title
         }
     }
 
