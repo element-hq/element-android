@@ -81,7 +81,7 @@
     <string name="sc_accent_indigo">Indigoblau</string>
     <string name="sc_accent_lava">Lava</string>
     <string name="sc_accent_blue">Blau</string>
-    <string name="user_colors_from_pl">Basierend auf dem Akkustand</string>
+    <string name="user_colors_from_pl">Basierend auf dem Berechtigungslevel</string>
     <string name="user_colors_from_id">Basierend auf Matrix-ID</string>
     <string name="settings_advanced_theme_settings">Erweiterte Themen-Einstellungen</string>
     <string name="settings_user_colors">Nutzerfarben</string>
