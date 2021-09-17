@@ -72,7 +72,6 @@ internal class SessionRealmConfigurationFactory @Inject constructor(
                 .modules(SessionRealmModule())
                 .schemaVersion(RealmSessionStoreMigration.SESSION_STORE_SCHEMA_VERSION)
                 .migration(RealmSessionStoreMigration)
-                .deleteRealmIfMigrationNeeded()
                 .build()
 
         // Try creating a realm instance and if it succeeds we can clear the flag

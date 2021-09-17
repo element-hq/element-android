@@ -25,6 +25,7 @@ import org.matrix.android.sdk.api.session.room.model.RoomJoinRulesContent
 import org.matrix.android.sdk.api.session.room.model.VersioningState
 import org.matrix.android.sdk.api.session.room.model.create.RoomCreateContent
 import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
+import org.matrix.android.sdk.internal.database.model.ChunkEntityFields
 import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntityFields
 import org.matrix.android.sdk.internal.database.model.EditAggregatedSummaryEntityFields
 import org.matrix.android.sdk.internal.database.model.EditionOfEventFields
@@ -47,7 +48,7 @@ import timber.log.Timber
 
 internal object RealmSessionStoreMigration : RealmMigration {
 
-    const val SESSION_STORE_SCHEMA_VERSION = 17L
+    const val SESSION_STORE_SCHEMA_VERSION = 18L
 
     override fun migrate(realm: DynamicRealm, oldVersion: Long, newVersion: Long) {
         Timber.v("Migrating Realm Session from $oldVersion to $newVersion")
@@ -69,6 +70,7 @@ internal object RealmSessionStoreMigration : RealmMigration {
         if (oldVersion <= 14) migrateTo15(realm)
         if (oldVersion <= 15) migrateTo16(realm)
         if (oldVersion <= 16) migrateTo17(realm)
+        if (oldVersion <= 17) migrateTo18(realm)
     }
 
     private fun migrateTo1(realm: DynamicRealm) {
@@ -337,5 +339,25 @@ internal object RealmSessionStoreMigration : RealmMigration {
         Timber.d("Step 16 -> 17")
         realm.schema.get("EventInsertEntity")
                 ?.addField(EventInsertEntityFields.CAN_BE_PROCESSED, Boolean::class.java)
+    }
+
+    private fun migrateTo18(realm: DynamicRealm) {
+        Timber.d("Step 17 -> 18")
+        realm.schema.get("ChunkEntity")?.apply {
+            removeField("numberOfTimelineEvents")
+            var cleanOldChunks = false
+            if (!hasField(ChunkEntityFields.NEXT_CHUNK.`$`)) {
+                cleanOldChunks = true
+                addRealmObjectField(ChunkEntityFields.NEXT_CHUNK.`$`, this)
+            }
+            if (!hasField(ChunkEntityFields.PREV_CHUNK.`$`)) {
+                cleanOldChunks = true
+                addRealmObjectField(ChunkEntityFields.PREV_CHUNK.`$`, this)
+            }
+            if (cleanOldChunks) {
+                val chunkEntities = realm.where("ChunkEntity").equalTo(ChunkEntityFields.IS_LAST_FORWARD, false).findAll()
+                chunkEntities.deleteAllFromRealm()
+            }
+        }
     }
 }
