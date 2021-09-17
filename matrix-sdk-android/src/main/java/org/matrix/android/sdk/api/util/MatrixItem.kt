@@ -84,9 +84,6 @@ sealed class MatrixItem(
             if (BuildConfig.DEBUG) checkId()
         }
 
-        // Best name is the id, and we keep the displayName of the room for the case we need the first letter
-        override fun getBestName() = id
-
         override fun updateAvatar(newAvatar: String?) = copy(avatarUrl = newAvatar)
     }
 
@@ -98,14 +95,7 @@ sealed class MatrixItem(
             if (BuildConfig.DEBUG) checkId()
         }
 
-        // Best name is the id, and we keep the displayName of the room for the case we need the first letter
-        override fun getBestName() = id
-
         override fun updateAvatar(newAvatar: String?) = copy(avatarUrl = newAvatar)
-    }
-
-    open fun getBestName(): String {
-        return displayName?.takeIf { it.isNotBlank() } ?: id
     }
 
     protected fun checkId() {

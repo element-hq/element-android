@@ -45,6 +45,7 @@ import im.vector.app.features.crypto.verification.emoji.VerificationEmojiCodeFra
 import im.vector.app.features.crypto.verification.qrconfirmation.VerificationQRWaitingFragment
 import im.vector.app.features.crypto.verification.qrconfirmation.VerificationQrScannedByOtherFragment
 import im.vector.app.features.crypto.verification.request.VerificationRequestFragment
+import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.settings.VectorSettingsActivity
 import kotlinx.parcelize.Parcelize

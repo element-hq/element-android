@@ -49,6 +49,10 @@ data class MatrixConfiguration(
          */
         val supportsCallTransfer: Boolean = false,
         /**
+         * MatrixItemDisplayNameFallbackProvider to provide default display name for MatrixItem. By default, the id will be used
+         */
+        val matrixItemDisplayNameFallbackProvider: MatrixItemDisplayNameFallbackProvider? = null,
+        /**
          * RoomDisplayNameFallbackProvider to provide default room display name.
          */
         val roomDisplayNameFallbackProvider: RoomDisplayNameFallbackProvider

@@ -1,0 +1,1 @@
+Add a fallback for user displayName when this one is null or empty

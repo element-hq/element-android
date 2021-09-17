@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2021 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,17 +14,15 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.api.session.user.model
+package im.vector.app.features.displayname
 
-/**
- * Data class which holds information about a user.
- * It can be retrieved with [org.matrix.android.sdk.api.session.user.UserService]
- */
-data class User(
-        val userId: String,
-        /**
-         * For usage in UI, consider converting to MatrixItem and call getBestName()
-         */
-        val displayName: String? = null,
-        val avatarUrl: String? = null
-)
+import org.matrix.android.sdk.api.MatrixItemDisplayNameFallbackProvider
+import org.matrix.android.sdk.api.util.MatrixItem
+
+// Used to provide the fallback to the MatrixSDK, in the MatrixConfiguration
+object VectorMatrixItemDisplayNameFallbackProvider: MatrixItemDisplayNameFallbackProvider {
+    override fun getDefaultName(matrixItem: MatrixItem): String {
+        // Can customize something from the id if necessary here
+        return matrixItem.id
+    }
+}

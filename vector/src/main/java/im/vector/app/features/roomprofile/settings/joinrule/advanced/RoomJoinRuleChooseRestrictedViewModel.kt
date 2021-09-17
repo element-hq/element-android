@@ -35,6 +35,7 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.styleMatchingText
+import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.roomprofile.settings.joinrule.toOption
 import im.vector.app.features.settings.VectorPreferences
 import kotlinx.coroutines.launch

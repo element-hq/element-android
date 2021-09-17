@@ -33,6 +33,7 @@ import im.vector.app.core.intent.getFilenameFromUri
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.databinding.DialogBaseEditTextBinding
 import im.vector.app.databinding.FragmentLoginAccountCreatedBinding
+import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.helper.MatrixItemColorProvider
 import im.vector.app.features.login2.AbstractLoginFragment2

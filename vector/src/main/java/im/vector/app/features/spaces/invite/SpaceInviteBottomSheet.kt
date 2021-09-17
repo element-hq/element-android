@@ -36,6 +36,7 @@ import im.vector.app.core.platform.ButtonStateView
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.core.utils.toast
 import im.vector.app.databinding.BottomSheetInvitedToSpaceBinding
+import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.matrixto.SpaceCardRenderer
 import kotlinx.parcelize.Parcelize

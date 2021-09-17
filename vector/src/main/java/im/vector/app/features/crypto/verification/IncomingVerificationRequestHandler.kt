@@ -18,6 +18,7 @@ package im.vector.app.features.crypto.verification
 import android.content.Context
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseActivity
+import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.RoomDetailActivity
 import im.vector.app.features.home.room.detail.RoomDetailArgs
@@ -63,7 +64,7 @@ class IncomingVerificationRequestHandler @Inject constructor(
             is VerificationTxState.OnStarted -> {
                 // Add a notification for every incoming request
                 val user = session?.getUser(tx.otherUserId)
-                val name = user?.getBestName() ?: tx.otherUserId
+                val name = user?.toMatrixItem()?.getBestName() ?: tx.otherUserId
                 val alert = VerificationVectorAlert(
                         uid,
                         context.getString(R.string.sas_incoming_request_notif_title),
