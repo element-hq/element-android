@@ -56,7 +56,7 @@ class SpaceAddRoomSpaceChooserBottomSheet : VectorBaseBottomSheetDialogFragment<
         const val ACTION_ADD_ROOMS = "Action.AddRoom"
         const val ACTION_ADD_SPACES = "Action.AddSpaces"
 
-        fun newInstance(spaceId: String)
+        fun newInstance()
                 : SpaceAddRoomSpaceChooserBottomSheet {
             return SpaceAddRoomSpaceChooserBottomSheet()
         }

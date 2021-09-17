@@ -192,7 +192,7 @@ class SpaceDirectoryFragment @Inject constructor(
     }
 
     override fun addExistingRooms(spaceId: String) {
-        SpaceAddRoomSpaceChooserBottomSheet.newInstance(spaceId).show(childFragmentManager, "SpaceAddRoomSpaceChooserBottomSheet")
+        SpaceAddRoomSpaceChooserBottomSheet.newInstance().show(childFragmentManager, "SpaceAddRoomSpaceChooserBottomSheet")
     }
 
     override fun loadAdditionalItemsIfNeeded() {
