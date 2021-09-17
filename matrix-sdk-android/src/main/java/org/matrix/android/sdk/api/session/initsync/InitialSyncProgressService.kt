@@ -32,7 +32,10 @@ interface InitialSyncProgressService {
         abstract class IncrementalSyncStatus: Status()
 
         object IncrementalSyncIdle : IncrementalSyncStatus()
-        object IncrementalSyncParsing : IncrementalSyncStatus()
+        data class IncrementalSyncParsing(
+                val rooms: Int,
+                val toDevice: Int
+        ) : IncrementalSyncStatus()
         object IncrementalSyncDone : IncrementalSyncStatus()
     }
 }

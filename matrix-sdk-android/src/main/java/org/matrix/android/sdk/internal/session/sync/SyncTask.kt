@@ -137,7 +137,10 @@ internal class DefaultSyncTask @Inject constructor(
                         readTimeOut = readTimeOut
                 )
             }
-            initialSyncProgressService.setStatus(InitialSyncProgressService.Status.IncrementalSyncParsing)
+            initialSyncProgressService.setStatus(InitialSyncProgressService.Status.IncrementalSyncParsing(
+                    rooms = syncResponse.rooms?.invite.orEmpty().size + syncResponse.rooms?.join.orEmpty().size + syncResponse.rooms?.leave.orEmpty().size,
+                    toDevice = syncResponse.toDevice?.events.orEmpty().size
+            ))
             syncResponseHandler.handleResponse(syncResponse, token, null)
             initialSyncProgressService.setStatus(InitialSyncProgressService.Status.IncrementalSyncDone)
         }

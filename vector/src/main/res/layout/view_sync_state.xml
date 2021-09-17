@@ -9,9 +9,11 @@
 
     <TextView
         android:id="@+id/syncStateDebugInfo"
+        style="@style/Widget.Vector.TextView.Caption"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="monospace"
+        android:padding="2dp"
         android:visibility="gone"
         tools:text="debug info"
         tools:visibility="visible" />
