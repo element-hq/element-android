@@ -1,0 +1,4 @@
+- Add setting to use UnifiedPush endpoint as gateway directly
+- Setting to force UnifiedPush re-registration
+- Add option to force background sync in addition to push
+- Fix installation on some old devices
