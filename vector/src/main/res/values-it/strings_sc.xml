@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_simplified_mode">Modalità facile</string>
+    <string name="prompt_simplified_mode_title">Seleziona interfaccia utente</string>
+    <string name="sc_accent_turquoise">Turchese</string>
+    <string name="sc_accent_yellow">Giallo</string>
+    <string name="sc_accent_blue">Blu</string>
+    <string name="settings_troubleshoot_test_pusher_registration_failed">Registrazione all\'homeserver fallita</string>
+    <string name="normal_priority_header">Priorità normale</string>
+    <string name="settings_room_unread_kind_default">Visualizza tutti gli eventi</string>
+    <string name="settings_simplified_mode_summary">Nascondi funzionalità avanzate, incluse stanze pubbliche e impostazioni di crittografia delle chat</string>
+    <string name="prompt_simplified_mode_text">Potrai cambiarlo più tardi nelle impostazioni.</string>
+    <string name="settings_light_theme">Tema chiaro</string>
+    <string name="settings_single_overview_summary">Visualizza messaggi diretti e stanze in un unica pagina</string>
+</resources>
