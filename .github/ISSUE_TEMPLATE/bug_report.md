@@ -28,7 +28,8 @@ If applicable, add screenshots to help explain your problem.
  - OS: [e.g. Android 6.0]
 
 **Additional context**
- - App version and store [e.g. 1.0.0 - F-Droid]
+ - App version: [Look it up in Settings / Help & About. Click "Version" there to copy it. "Latest version" is not a valid version!]
+ - Store: [e.g. F-Droid, Google Play, SpiritCroc's F-Droid]
  - Homeserver: [e.g. matrix.org]
 
 **Upstream relevance**
