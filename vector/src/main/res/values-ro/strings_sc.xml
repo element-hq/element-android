@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="settings_home_overview"></string>
+    <string name="settings_home_overview">Vedere de ansamblu</string>
     <string name="settings_single_overview_summary">Afișează mesajele directe si camerele într-o singură pagină</string>
     <string name="settings_room_unread_kind_default">Arată toate evenimentele</string>
     <string name="settings_room_unread_kind_original_content">Ascunde schimbările membrilor și reacțiile</string>
@@ -90,4 +90,7 @@
     <string name="sc_accent_turquoise">Turcoaz</string>
     <string name="sc_accent_denim">Denim</string>
     <string name="unifiedpush_getdistributors_dialog_title">Alege un distribuitor</string>
+    <string name="settings_single_overview">Vedere de ansamblu combinată</string>
+    <string name="settings_room_unread_kind_dm">Previzualizarea conținutului chatului direct</string>
+    <string name="settings_room_unread_kind_group">Previzualizarea conținutului chatului de grup</string>
 </resources>
