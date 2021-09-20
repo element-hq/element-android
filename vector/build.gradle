@@ -167,6 +167,9 @@ android {
         buildConfigField "Boolean", "ENABLE_CROSS_SIGNING", "${enableCrossSigning}"
         resValue "bool", "enable_cross_signing", "${enableCrossSigning}"
 
+        // Spaces feature is hidden
+        buildConfigField "Boolean", "SHOW_SPACES", "false"
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         // Keep abiFilter for the universalApk
