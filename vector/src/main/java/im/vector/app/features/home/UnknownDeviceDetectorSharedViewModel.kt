@@ -35,6 +35,7 @@ import io.reactivex.Observable
 import org.matrix.android.sdk.api.NoOpMatrixCallback
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.crypto.crosssigning.MXCrossSigningInfo
 import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.api.util.toMatrixItem
@@ -98,11 +99,12 @@ class UnknownDeviceDetectorSharedViewModel @AssistedInject constructor(@Assisted
                 }
         )
 
-        Observable.combineLatest<List<CryptoDeviceInfo>, List<DeviceInfo>, Optional<PrivateKeysInfo>, List<DeviceDetectionInfo>>(
+        Observable.combineLatest<List<CryptoDeviceInfo>, List<DeviceInfo>, Optional<PrivateKeysInfo>, Optional<MXCrossSigningInfo>, List<DeviceDetectionInfo>>(
                 session.rx().liveUserCryptoDevices(session.myUserId),
                 session.rx().liveMyDevicesInfo(),
                 session.rx().liveCrossSigningPrivateKeys(),
-                { cryptoList, infoList, pInfo ->
+                session.rx().liveCrossSigningInfo(session.myUserId),
+                { cryptoList, infoList, pInfo, xInfo ->
                     //                    Timber.v("## Detector trigger ${cryptoList.map { "${it.deviceId} ${it.trustLevel}" }}")
 //                    Timber.v("## Detector trigger canCrossSign ${pInfo.get().selfSigned != null}")
                     infoList
@@ -118,7 +120,7 @@ class UnknownDeviceDetectorSharedViewModel @AssistedInject constructor(@Assisted
                                 DeviceDetectionInfo(
                                         deviceInfo,
                                         deviceKnownSince > currentSessionTs + 60_000, // short window to avoid false positive,
-                                        pInfo.getOrNull()?.selfSigned != null // adding this to pass distinct when cross sign change
+                                        xInfo.getOrNull() == null || pInfo.getOrNull()?.selfSigned != null // adding this to pass distinct when cross sign change
                                 )
                             }
                 }

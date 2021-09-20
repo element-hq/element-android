@@ -32,7 +32,6 @@ import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxStat
 import org.matrix.android.sdk.internal.crypto.IncomingRequestCancellation
 import org.matrix.android.sdk.internal.crypto.IncomingRoomKeyRequest
 import org.matrix.android.sdk.internal.crypto.IncomingSecretShareRequest
-import org.matrix.android.sdk.internal.crypto.crosssigning.DeviceTrustLevel
 import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
@@ -115,20 +114,20 @@ class KeyRequestHandler @Inject constructor(
                     return
                 }
 
-                if (deviceInfo.isUnknown) {
-                    session?.cryptoService()?.setDeviceVerification(DeviceTrustLevel(crossSigningVerified = false, locallyVerified = false), userId, deviceId)
-
-                    deviceInfo.trustLevel = DeviceTrustLevel(crossSigningVerified = false, locallyVerified = false)
-
-                    // can we get more info on this device?
-                    session?.cryptoService()?.getMyDevicesInfo()?.firstOrNull { it.deviceId == deviceId }?.let {
-                        postAlert(context, userId, deviceId, true, deviceInfo, it)
-                    } ?: run {
-                        postAlert(context, userId, deviceId, true, deviceInfo)
-                    }
-                } else {
-                    postAlert(context, userId, deviceId, false, deviceInfo)
-                }
+//                if (deviceInfo.isUnknown) {
+//                    session?.cryptoService()?.setDeviceVerification(DeviceTrustLevel(crossSigningVerified = false, locallyVerified = false), userId, deviceId)
+//
+//                    deviceInfo.trustLevel = DeviceTrustLevel(crossSigningVerified = false, locallyVerified = false)
+//
+//                    // can we get more info on this device?
+//                    session?.cryptoService()?.getMyDevicesInfo()?.firstOrNull { it.deviceId == deviceId }?.let {
+//                        postAlert(context, userId, deviceId, true, deviceInfo, it)
+//                    } ?: run {
+//                        postAlert(context, userId, deviceId, true, deviceInfo)
+//                    }
+//                } else {
+//                    postAlert(context, userId, deviceId, false, deviceInfo)
+//                }
             }
 
             override fun onFailure(failure: Throwable) {
