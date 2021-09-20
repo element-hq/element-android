@@ -104,4 +104,11 @@
     <string name="login_server_other_text_sc">Ange serveradress för att logga in eller registrera dig</string>
     <string name="footer_read_receipt_content_description">Meddelandestatus</string>
     <string name="send_bug_report_sc_extra">För att öka synligheten för ditt problem och för att vi ska kunna kontakta dig kan du referera till denna rapport (genom att ange ditt matrix-ID och ungefärlig tid då det skickades) i ett problem på https://github.com/SchildiChat /SchildiChat-android/issues (kontrollera först om det redan finns ett för ditt problem och skapa bara en ny om det inte finns).</string>
+    <string name="login_server_other_title_sc">Custom server</string>
+    <string name="settings_user_colors_in_public_rooms">Användarfärger i offentliga rum</string>
+    <string name="settings_force_allow_background_sync_summary">Bara meningsfullt när du felsöker din push-inställning!</string>
+    <string name="toast_unifiedpush_one_push_distributor">Registrerad push-distributör %1$s</string>
+    <string name="settings_unifiedpush_reregister">Registrera om push-distributören</string>
+    <string name="settings_force_allow_background_sync">Tillåt bakgrundssynkronisering utöver push</string>
+    <string name="toast_unifiedpush_no_push_distributor">Ingen push-distributör hittades!</string>
 </resources>
