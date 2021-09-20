@@ -773,7 +773,7 @@ class NotificationUtils @Inject constructor(private val context: Context,
     }
 
     private fun buildOpenRoomIntent(roomId: String): PendingIntent? {
-        val roomIntentTap = RoomDetailActivity.newIntent(context, RoomDetailArgs(roomId))
+        val roomIntentTap = RoomDetailActivity.newIntent(context, RoomDetailArgs(roomId = roomId, switchToParentSpace = true))
         roomIntentTap.action = TAP_TO_VIEW_ACTION
         // pending intent get reused by system, this will mess up the extra params, so put unique info to avoid that
         roomIntentTap.data = createIgnoredUri("openRoom?$roomId")

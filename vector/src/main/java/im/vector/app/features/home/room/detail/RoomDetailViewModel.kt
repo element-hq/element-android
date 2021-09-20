@@ -28,6 +28,7 @@ import com.airbnb.mvrx.Uninitialized
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.AppStateHandler
 import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
@@ -55,6 +56,7 @@ import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.VectorDataStore
 import im.vector.app.features.settings.VectorPreferences
+import im.vector.app.space
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.combine
@@ -114,7 +116,8 @@ class RoomDetailViewModel @AssistedInject constructor(
         private val jitsiService: JitsiService,
         private val activeConferenceHolder: JitsiActiveConferenceHolder,
         private val decryptionFailureTracker: DecryptionFailureTracker,
-        timelineFactory: TimelineFactory
+        timelineFactory: TimelineFactory,
+        appStateHandler: AppStateHandler
 ) : VectorViewModel<RoomDetailViewState, RoomDetailAction, RoomDetailViewEvents>(initialState),
         Timeline.Listener, ChatEffectManager.Delegate, CallProtocolsChecker.Listener {
 
@@ -178,6 +181,24 @@ class RoomDetailViewModel @AssistedInject constructor(
         // Ensure to share the outbound session keys with all members
         if (OutboundSessionKeySharingStrategy.WhenEnteringRoom == BuildConfig.outboundSessionKeySharingStrategy && room.isEncrypted()) {
             prepareForEncryption()
+        }
+
+        if (initialState.switchToParentSpace) {
+            // We are coming from a notification, try to switch to the most relevant space
+            // so that when hitting back the room will appear in the list
+            appStateHandler.getCurrentRoomGroupingMethod()?.space().let { currentSpace ->
+                val currentRoomSummary = room.roomSummary() ?: return@let
+                // nothing we are good
+                if (currentSpace == null || !currentRoomSummary.flattenParentIds.contains(currentSpace.roomId)) {
+                    // take first one or switch to home
+                    appStateHandler.setCurrentSpace(
+                            currentRoomSummary
+                                    .flattenParentIds.firstOrNull { it.isNotBlank() },
+                            // force persist, because if not on resume the AppStateHandler will resume
+                            // the current space from what was persisted on enter background
+                            persistNow = true)
+                }
+            }
         }
     }
 
