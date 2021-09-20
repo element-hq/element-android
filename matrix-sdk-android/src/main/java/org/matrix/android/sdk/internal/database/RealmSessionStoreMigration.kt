@@ -344,7 +344,9 @@ internal object RealmSessionStoreMigration : RealmMigration {
     private fun migrateTo18(realm: DynamicRealm) {
         Timber.d("Step 17 -> 18")
         realm.schema.get("ChunkEntity")?.apply {
-            removeField("numberOfTimelineEvents")
+            if (hasField("numberOfTimelineEvents")) {
+                removeField("numberOfTimelineEvents")
+            }
             var cleanOldChunks = false
             if (!hasField(ChunkEntityFields.NEXT_CHUNK.`$`)) {
                 cleanOldChunks = true
