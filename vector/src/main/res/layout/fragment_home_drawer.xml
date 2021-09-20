@@ -91,6 +91,7 @@
             android:padding="0dp"
             android:text="@string/invite_friends"
             android:textAllCaps="false"
+            android:visibility="gone"
             app:icon="@drawable/ic_share"
             app:iconGravity="textStart"
             app:iconSize="20dp"
@@ -118,6 +119,7 @@
         android:id="@+id/homeDrawerHeaderSeparator"
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:layout_marginTop="8dp"
         android:background="?vctr_list_separator"
         app:layout_constraintTop_toBottomOf="@+id/homeDrawerHeader" />
 
