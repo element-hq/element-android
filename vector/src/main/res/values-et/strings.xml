@@ -267,7 +267,7 @@
     <string name="black_theme">Must teema</string>
     <string name="notification_sync_init">Käivitan teenuse</string>
     <string name="notification_sync_in_progress">Sünkroniseerin…</string>
-    <string name="notification_listening_for_events">Kuulan, kas leidub sündmusi</string>
+    <string name="notification_listening_for_events">Vaatan serverist uut teavet</string>
     <string name="notification_noisy_notifications">Lärmakad teavitused</string>
     <string name="notification_silent_notifications">Vaiksed teavitused</string>
     <string name="title_activity_home">Sõnumid</string>
