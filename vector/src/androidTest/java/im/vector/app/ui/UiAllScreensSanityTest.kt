@@ -30,18 +30,20 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
-import com.schibsted.spain.barista.assertion.BaristaListAssertions.assertListItemCount
-import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
-import com.schibsted.spain.barista.interaction.BaristaClickInteractions.clickBack
-import com.schibsted.spain.barista.interaction.BaristaClickInteractions.clickOn
-import com.schibsted.spain.barista.interaction.BaristaClickInteractions.longClickOn
-import com.schibsted.spain.barista.interaction.BaristaDialogInteractions.clickDialogNegativeButton
-import com.schibsted.spain.barista.interaction.BaristaDialogInteractions.clickDialogPositiveButton
-import com.schibsted.spain.barista.interaction.BaristaEditTextInteractions.writeTo
-import com.schibsted.spain.barista.interaction.BaristaListInteractions.clickListItem
-import com.schibsted.spain.barista.interaction.BaristaListInteractions.clickListItemChild
-import com.schibsted.spain.barista.interaction.BaristaMenuClickInteractions.clickMenu
-import com.schibsted.spain.barista.interaction.BaristaMenuClickInteractions.openMenu
+import com.adevinta.android.barista.assertion.BaristaListAssertions.assertListItemCount
+import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
+import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickBack
+import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
+import com.adevinta.android.barista.interaction.BaristaClickInteractions.longClickOn
+import com.adevinta.android.barista.interaction.BaristaDialogInteractions.clickDialogNegativeButton
+import com.adevinta.android.barista.interaction.BaristaDialogInteractions.clickDialogPositiveButton
+import com.adevinta.android.barista.interaction.BaristaDrawerInteractions.openDrawer
+import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
+import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem
+import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild
+import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.clickMenu
+import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu
+import im.vector.app.BuildConfig
 import im.vector.app.EspressoHelper
 import im.vector.app.R
 import im.vector.app.SleepViewAction
@@ -169,9 +171,13 @@ class UiAllScreensSanityTest {
         }
         clickOn(R.string.create_new_room)
 
+        // Room access bottom sheet
+        clickOn(R.string.room_settings_room_access_private_title)
+        pressBack()
+
         // Create
-        assertListItemCount(R.id.createRoomForm, 10)
-        clickListItemChild(R.id.createRoomForm, 9, R.id.form_submit_button)
+        assertListItemCount(R.id.createRoomForm, 12)
+        clickListItemChild(R.id.createRoomForm, 11, R.id.form_submit_button)
 
         waitUntilActivityVisible<RoomDetailActivity> {
             assertDisplayed(R.id.roomDetailContainer)
@@ -229,6 +235,8 @@ class UiAllScreensSanityTest {
         // Wait a bit for the keyboard layout to update
         sleep(30)
         clickOn(R.id.sendButton)
+        // Wait for the UI to update
+        sleep(1000)
         // Open edit history
         longClickOnMessage("Hello universe! (edited)")
         clickOn(R.string.message_view_edit_history)
@@ -355,7 +363,8 @@ class UiAllScreensSanityTest {
     }
 
     private fun navigateToSettings() {
-        clickOn(R.id.groupToolbarAvatarImageView)
+        // clickOn(R.id.groupToolbarAvatarImageView)
+        openDrawer()
         clickOn(R.id.homeDrawerHeaderSettingsView)
 
         clickOn(R.string.settings_general_title)
@@ -458,8 +467,18 @@ class UiAllScreensSanityTest {
     }
 
     private fun navigateToSettingsNotifications() {
-        clickOn(R.string.settings_notification_advanced)
-        pressBack()
+        if (BuildConfig.USE_NOTIFICATION_SETTINGS_V2) {
+            clickOn(R.string.settings_notification_default)
+            pressBack()
+            clickOn(R.string.settings_notification_mentions_and_keywords)
+            // TODO Test adding a keyword?
+            pressBack()
+            clickOn(R.string.settings_notification_other)
+            pressBack()
+        } else {
+            clickOn(R.string.settings_notification_advanced)
+            pressBack()
+        }
         /*
         clickOn(R.string.settings_noisy_notifications_preferences)
         TODO Cannot go back

@@ -170,7 +170,7 @@ internal class MXMegolmEncryption(
             val deviceIds = devicesInRoom.getUserDeviceIds(userId)
             for (deviceId in deviceIds!!) {
                 val deviceInfo = devicesInRoom.getObject(userId, deviceId)
-                if (deviceInfo != null && !cryptoStore.getSharedSessionInfo(roomId, safeSession.sessionId, userId, deviceId).found) {
+                if (deviceInfo != null && !cryptoStore.getSharedSessionInfo(roomId, safeSession.sessionId, deviceInfo).found) {
                     val devices = shareMap.getOrPut(userId) { ArrayList() }
                     devices.add(deviceInfo)
                 }
@@ -270,8 +270,8 @@ internal class MXMegolmEncryption(
         // for dead devices on every message.
         val gossipingEventBuffer = arrayListOf<Event>()
         for ((userId, devicesToShareWith) in devicesByUser) {
-            for ((deviceId) in devicesToShareWith) {
-                session.sharedWithHelper.markedSessionAsShared(userId, deviceId, chainIndex)
+            for (deviceInfo in devicesToShareWith) {
+                session.sharedWithHelper.markedSessionAsShared(deviceInfo, chainIndex)
                 gossipingEventBuffer.add(
                         Event(
                                 type = EventType.ROOM_KEY,
@@ -279,7 +279,7 @@ internal class MXMegolmEncryption(
                                 content = submap.apply {
                                     this["session_key"] = ""
                                     // we add a fake key for trail
-                                    this["_dest"] = "$userId|$deviceId"
+                                    this["_dest"] = "$userId|${deviceInfo.deviceId}"
                                 }
                         ))
             }
@@ -429,7 +429,7 @@ internal class MXMegolmEncryption(
                 .also { Timber.w("## Crypto reshareKey: Device not found") }
 
         // Get the chain index of the key we previously sent this device
-        val wasSessionSharedWithUser = cryptoStore.getSharedSessionInfo(roomId, sessionId, userId, deviceId)
+        val wasSessionSharedWithUser = cryptoStore.getSharedSessionInfo(roomId, sessionId, deviceInfo)
         if (!wasSessionSharedWithUser.found) {
             // This session was never shared with this user
             // Send a room key with held

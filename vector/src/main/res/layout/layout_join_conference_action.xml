@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<im.vector.app.core.ui.views.JoinConferenceView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingStart="4dp"
+    android:paddingEnd="4dp" />

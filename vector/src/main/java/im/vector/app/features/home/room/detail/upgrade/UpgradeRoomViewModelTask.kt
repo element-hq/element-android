@@ -80,7 +80,7 @@ class UpgradeRoomViewModelTask @Inject constructor(
                                 roomId = updatedRoomId,
                                 viaServers = currentInfo.via,
                                 order = currentInfo.order,
-                                autoJoin = currentInfo.autoJoin ?: false,
+//                                autoJoin = currentInfo.autoJoin ?: false,
                                 suggested = currentInfo.suggested
                         )
 
