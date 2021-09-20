@@ -82,7 +82,7 @@ import org.matrix.android.sdk.api.session.events.model.isTextMessage
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.file.FileService
-import org.matrix.android.sdk.api.session.initsync.InitialSyncProgressService
+import org.matrix.android.sdk.api.session.initsync.SyncStatusService
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.members.roomMemberQueryParams
 import org.matrix.android.sdk.api.session.room.model.Membership
@@ -1512,10 +1512,10 @@ class RoomDetailViewModel @AssistedInject constructor(
                 }
                 .disposeOnClear()
 
-        session.getInitialSyncProgressStatus()
+        session.getSyncStatusLive()
                 .asObservable()
                 .subscribe { it ->
-                    if(it is InitialSyncProgressService.Status.IncrementalSyncStatus) {
+                    if(it is SyncStatusService.Status.IncrementalSyncStatus) {
                         setState {
                             copy(incrementalSyncStatus = it)
                         }

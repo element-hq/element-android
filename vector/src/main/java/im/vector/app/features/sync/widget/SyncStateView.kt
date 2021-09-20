@@ -24,7 +24,7 @@ import androidx.core.view.isVisible
 import im.vector.app.R
 import im.vector.app.core.utils.isAirplaneModeOn
 import im.vector.app.databinding.ViewSyncStateBinding
-import org.matrix.android.sdk.api.session.initsync.InitialSyncProgressService
+import org.matrix.android.sdk.api.session.initsync.SyncStatusService
 import org.matrix.android.sdk.api.session.sync.SyncState
 
 class SyncStateView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0)
@@ -40,7 +40,7 @@ class SyncStateView @JvmOverloads constructor(context: Context, attrs: Attribute
 
     @SuppressLint("SetTextI18n")
     fun render(newState: SyncState,
-               incrementalSyncStatus: InitialSyncProgressService.Status.IncrementalSyncStatus,
+               incrementalSyncStatus: SyncStatusService.Status.IncrementalSyncStatus,
                pushCounter: Int,
                showDebugInfo: Boolean
     ) {
@@ -75,13 +75,13 @@ class SyncStateView @JvmOverloads constructor(context: Context, attrs: Attribute
         }
     }
 
-    private fun InitialSyncProgressService.Status.IncrementalSyncStatus.toHumanReadable(): String {
+    private fun SyncStatusService.Status.IncrementalSyncStatus.toHumanReadable(): String {
         return when (this) {
-            InitialSyncProgressService.Status.IncrementalSyncIdle       -> "Idle"
-            is InitialSyncProgressService.Status.IncrementalSyncParsing -> "Parsing ${this.rooms} room(s) ${this.toDevice} toDevice(s)"
-            InitialSyncProgressService.Status.IncrementalSyncError      -> "Error"
-            InitialSyncProgressService.Status.IncrementalSyncDone       -> "Done"
-            else                                                        -> "?"
+            SyncStatusService.Status.IncrementalSyncIdle       -> "Idle"
+            is SyncStatusService.Status.IncrementalSyncParsing -> "Parsing ${this.rooms} room(s) ${this.toDevice} toDevice(s)"
+            SyncStatusService.Status.IncrementalSyncError      -> "Error"
+            SyncStatusService.Status.IncrementalSyncDone       -> "Done"
+            else                                               -> "?"
         }
     }
 }

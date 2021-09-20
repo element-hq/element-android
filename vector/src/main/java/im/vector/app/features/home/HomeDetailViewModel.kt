@@ -42,7 +42,7 @@ import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.query.ActiveSpaceFilter
 import org.matrix.android.sdk.api.query.RoomCategoryFilter
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.initsync.InitialSyncProgressService
+import org.matrix.android.sdk.api.session.initsync.SyncStatusService
 import org.matrix.android.sdk.api.session.room.RoomSortOrder
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
@@ -191,10 +191,10 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
                 }
                 .disposeOnClear()
 
-        session.getInitialSyncProgressStatus()
+        session.getSyncStatusLive()
                 .asObservable()
                 .subscribe {
-                    if (it is InitialSyncProgressService.Status.IncrementalSyncStatus) {
+                    if (it is SyncStatusService.Status.IncrementalSyncStatus) {
                         setState {
                             copy(incrementalSyncStatus = it)
                         }
