@@ -57,12 +57,14 @@ import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlRetriever
 import im.vector.app.features.home.room.typing.TypingHelper
 import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
 import im.vector.app.features.session.coroutineScope
+import im.vector.app.features.settings.VectorDataStore
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.voice.VoicePlayerHelper
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.commonmark.parser.Parser
@@ -113,6 +115,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 class RoomDetailViewModel @AssistedInject constructor(
         @Assisted private val initialState: RoomDetailViewState,
         private val vectorPreferences: VectorPreferences,
+        private val vectorDataStore: VectorDataStore,
         private val stringProvider: StringProvider,
         private val rainbowGenerator: RainbowGenerator,
         private val session: Session,
@@ -176,6 +179,7 @@ class RoomDetailViewModel @AssistedInject constructor(
         observeSummaryState()
         getUnreadState()
         observeSyncState()
+        observeDataStore()
         observeEventDisplayedActions()
         loadDraftIfAny()
         observeUnreadState()
@@ -197,6 +201,18 @@ class RoomDetailViewModel @AssistedInject constructor(
         // Ensure to share the outbound session keys with all members
         if (OutboundSessionKeySharingStrategy.WhenEnteringRoom == BuildConfig.outboundSessionKeySharingStrategy && room.isEncrypted()) {
             prepareForEncryption()
+        }
+    }
+
+    private fun observeDataStore() {
+        viewModelScope.launch {
+            vectorDataStore.pushCounterFlow.collect { nbOfPush ->
+                setState {
+                    copy(
+                            pushCounter = nbOfPush
+                    )
+                }
+            }
         }
     }
 

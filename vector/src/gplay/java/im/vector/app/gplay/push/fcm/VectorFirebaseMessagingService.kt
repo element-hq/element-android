@@ -39,11 +39,13 @@ import im.vector.app.features.notifications.NotifiableMessageEvent
 import im.vector.app.features.notifications.NotificationDrawerManager
 import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.features.notifications.SimpleNotifiableEvent
+import im.vector.app.features.settings.VectorDataStore
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.push.fcm.FcmHelper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.pushrules.Action
 import org.matrix.android.sdk.api.session.Session
@@ -60,6 +62,7 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
     private lateinit var pusherManager: PushersManager
     private lateinit var activeSessionHolder: ActiveSessionHolder
     private lateinit var vectorPreferences: VectorPreferences
+    private lateinit var vectorDataStore: VectorDataStore
     private lateinit var wifiDetector: WifiDetector
 
     private val coroutineScope = CoroutineScope(SupervisorJob())
@@ -77,6 +80,7 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
             pusherManager = pusherManager()
             activeSessionHolder = activeSessionHolder()
             vectorPreferences = vectorPreferences()
+            vectorDataStore = vectorDataStore()
             wifiDetector = wifiDetector()
         }
     }
@@ -91,6 +95,10 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
             Timber.d("## onMessageReceived() %s", message.data.toString())
         }
         Timber.d("## onMessageReceived() from FCM with priority %s", message.priority)
+
+        runBlocking {
+            vectorDataStore.incrementPushCounter()
+        }
 
         // Diagnostic Push
         if (message.data["event_id"] == PushersManager.TEST_EVENT_ID) {

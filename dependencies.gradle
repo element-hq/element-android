@@ -55,6 +55,8 @@ ext.libs = [
                 'lifecycleExtensions'     : "androidx.lifecycle:lifecycle-extensions:$lifecycle",
                 'lifecycleJava8'          : "androidx.lifecycle:lifecycle-common-java8:$lifecycle",
                 'lifecycleLivedata'       : "androidx.lifecycle:lifecycle-livedata-ktx:2.3.1",
+                'datastore'               : "androidx.datastore:datastore:1.0.0",
+                'datastorepreferences'    : "androidx.datastore:datastore-preferences:1.0.0",
                 'pagingRuntimeKtx'        : "androidx.paging:paging-runtime-ktx:2.1.2",
                 'coreTesting'             : "androidx.arch.core:core-testing:2.1.0",
                 'testCore'                : "androidx.test:core:$androidxTest",

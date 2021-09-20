@@ -41,6 +41,7 @@ data class HomeDetailViewState(
         val hasUnreadMessages: Boolean = false,
         val syncState: SyncState = SyncState.Idle,
         val incrementalSyncStatus: InitialSyncProgressService.Status.IncrementalSyncStatus = InitialSyncProgressService.Status.IncrementalSyncIdle,
+        val pushCounter: Int = 0,
         val showDialPadTab: Boolean = false
 ) : MvRxState
 

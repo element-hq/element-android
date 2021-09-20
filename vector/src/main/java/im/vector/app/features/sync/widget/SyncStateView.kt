@@ -41,11 +41,15 @@ class SyncStateView @JvmOverloads constructor(context: Context, attrs: Attribute
     @SuppressLint("SetTextI18n")
     fun render(newState: SyncState,
                incrementalSyncStatus: InitialSyncProgressService.Status.IncrementalSyncStatus,
-               showDebugInfo: Boolean) {
+               pushCounter: Int,
+               showDebugInfo: Boolean
+    ) {
         views.syncStateDebugInfo.isVisible = showDebugInfo
         if (showDebugInfo) {
-            views.syncStateDebugInfo.text =
+            views.syncStateDebugInfoText.text =
                     "Sync thread : ${newState.toHumanReadable()}\nSync request: ${incrementalSyncStatus.toHumanReadable()}"
+            views.syncStateDebugInfoPushCounter.text =
+                    "Push: $pushCounter"
         }
         views.syncStateProgressBar.isVisible = newState is SyncState.Running && newState.afterPause
 

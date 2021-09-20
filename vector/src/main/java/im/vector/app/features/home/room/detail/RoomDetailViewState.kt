@@ -79,6 +79,7 @@ data class RoomDetailViewState(
         val joinUpgradedRoomAsync: Async<String> = Uninitialized,
         val syncState: SyncState = SyncState.Idle,
         val incrementalSyncStatus: InitialSyncProgressService.Status.IncrementalSyncStatus = InitialSyncProgressService.Status.IncrementalSyncIdle,
+        val pushCounter: Int = 0,
         val highlightedEventId: String? = null,
         val unreadState: UnreadState = UnreadState.Unknown,
         val canShowJumpToReadMarker: Boolean = true,
