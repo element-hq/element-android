@@ -31,6 +31,13 @@ import org.matrix.android.sdk.internal.database.query.findAllIncludingEvents
 import org.matrix.android.sdk.internal.database.query.where
 import java.util.concurrent.atomic.AtomicReference
 
+/**
+ * This class is responsible for keeping an instance of chunkEntity and timelineChunk according to the strategy.
+ * There is 2 different mode: Default and Permalink.
+ * In Default, we will query for the live chunk (isLastForward = true).
+ * In Permalink, we will query for the chunk including the eventId we are looking for.
+ * Once we got a ChunkEntity we wrap it with TimelineChunk class so we dispatch any methods for loading data.
+ */
 internal class LoadTimelineStrategy(
         private val roomId: String,
         private val timelineId: String,

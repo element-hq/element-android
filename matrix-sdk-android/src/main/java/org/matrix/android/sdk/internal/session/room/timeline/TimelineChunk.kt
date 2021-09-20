@@ -38,6 +38,11 @@ import java.util.Collections
  */
 private const val PAGINATION_COUNT = 50
 
+/**
+ * This is a wrapper around a ChunkEntity in the database.
+ * It does mainly listen to the db timeline events.
+ * It also triggers pagination to the server when needed, or dispatch to the prev or next chunk if any.
+ */
 internal class TimelineChunk constructor(private val chunkEntity: ChunkEntity,
                                          private val roomId: String,
                                          private val timelineId: String,
@@ -56,7 +61,7 @@ internal class TimelineChunk constructor(private val chunkEntity: ChunkEntity,
     private val timelineEventCollectionListener = OrderedRealmCollectionChangeListener { results: RealmResults<TimelineEventEntity>, changeSet: OrderedCollectionChangeSet ->
         val frozenResults = results.freeze()
         Timber.v("on timeline event changed: $changeSet")
-        handleChangeSet(frozenResults, changeSet)
+        handleDatabaseChangeSet(frozenResults, changeSet)
     }
 
     private var timelineEventEntities: RealmResults<TimelineEventEntity> = chunkEntity.sortedTimelineEvents()
@@ -128,6 +133,82 @@ internal class TimelineChunk constructor(private val chunkEntity: ChunkEntity,
                 prevChunk?.loadMore(offsetCount, direction) ?: LoadMoreResult.FAILURE
             }
         }
+    }
+
+    fun getBuiltEventIndex(eventId: String, searchInNext: Boolean, searchInPrev: Boolean): Int? {
+        val builtEventIndex = builtEventsIndexes[eventId]
+        if (builtEventIndex != null) {
+            return getOffsetIndex() + builtEventIndex
+        }
+        if (searchInNext) {
+            val nextBuiltEventIndex = nextChunk?.getBuiltEventIndex(eventId, searchInNext = true, searchInPrev = false)
+            if (nextBuiltEventIndex != null) {
+                return nextBuiltEventIndex
+            }
+        }
+        if (searchInPrev) {
+            val prevBuiltEventIndex = prevChunk?.getBuiltEventIndex(eventId, searchInNext = false, searchInPrev = true)
+            if (prevBuiltEventIndex != null) {
+                return prevBuiltEventIndex
+            }
+        }
+        return null
+    }
+
+    fun getBuiltEvent(eventId: String, searchInNext: Boolean, searchInPrev: Boolean): TimelineEvent? {
+        val builtEventIndex = builtEventsIndexes[eventId]
+        if (builtEventIndex != null) {
+            return builtEvents.getOrNull(builtEventIndex)
+        }
+        if (searchInNext) {
+            val nextBuiltEvent = nextChunk?.getBuiltEvent(eventId, searchInNext = true, searchInPrev = false)
+            if (nextBuiltEvent != null) {
+                return nextBuiltEvent
+            }
+        }
+        if (searchInPrev) {
+            val prevBuiltEvent = prevChunk?.getBuiltEvent(eventId, searchInNext = false, searchInPrev = true)
+            if (prevBuiltEvent != null) {
+                return prevBuiltEvent
+            }
+        }
+        return null
+    }
+
+    fun rebuildEvent(eventId: String, builder: (TimelineEvent) -> TimelineEvent?, searchInNext: Boolean, searchInPrev: Boolean): Boolean {
+        return tryOrNull {
+            val builtIndex = getBuiltEventIndex(eventId, searchInNext = false, searchInPrev = false)
+            if (builtIndex == null) {
+                val foundInPrev = searchInPrev && prevChunk?.rebuildEvent(eventId, builder, searchInNext = false, searchInPrev = true).orFalse()
+                if (foundInPrev) {
+                    return true
+                }
+                if (searchInNext) {
+                    return prevChunk?.rebuildEvent(eventId, builder, searchInPrev = false, searchInNext = true).orFalse()
+                }
+                return false
+            }
+            // Update the relation of existing event
+            builtEvents.getOrNull(builtIndex)?.let { te ->
+                val rebuiltEvent = builder(te)
+                builtEvents[builtIndex] = rebuiltEvent!!
+                true
+            }
+        }
+                ?: false
+    }
+
+    fun close(closeNext: Boolean, closePrev: Boolean) {
+        if (closeNext) {
+            nextChunk?.close(closeNext = true, closePrev = false)
+        }
+        if (closePrev) {
+            prevChunk?.close(closeNext = false, closePrev = true)
+        }
+        nextChunk = null
+        prevChunk = null
+        chunkEntity.removeChangeListener(chunkObjectListener)
+        timelineEventEntities.removeChangeListener(timelineEventCollectionListener)
     }
 
     private fun loadFromDb(count: Long, direction: Timeline.Direction): Long {
@@ -211,46 +292,6 @@ internal class TimelineChunk constructor(private val chunkEntity: ChunkEntity,
         }
     }
 
-    fun getBuiltEventIndex(eventId: String, searchInNext: Boolean, searchInPrev: Boolean): Int? {
-        val builtEventIndex = builtEventsIndexes[eventId]
-        if (builtEventIndex != null) {
-            return getOffsetIndex() + builtEventIndex
-        }
-        if (searchInNext) {
-            val nextBuiltEventIndex = nextChunk?.getBuiltEventIndex(eventId, searchInNext = true, searchInPrev = false)
-            if (nextBuiltEventIndex != null) {
-                return nextBuiltEventIndex
-            }
-        }
-        if (searchInPrev) {
-            val prevBuiltEventIndex = prevChunk?.getBuiltEventIndex(eventId, searchInNext = false, searchInPrev = true)
-            if (prevBuiltEventIndex != null) {
-                return prevBuiltEventIndex
-            }
-        }
-        return null
-    }
-
-    fun getBuiltEvent(eventId: String, searchInNext: Boolean, searchInPrev: Boolean): TimelineEvent? {
-        val builtEventIndex = builtEventsIndexes[eventId]
-        if (builtEventIndex != null) {
-            return builtEvents.getOrNull(builtEventIndex)
-        }
-        if (searchInNext) {
-            val nextBuiltEvent = nextChunk?.getBuiltEvent(eventId, searchInNext = true, searchInPrev = false)
-            if (nextBuiltEvent != null) {
-                return nextBuiltEvent
-            }
-        }
-        if (searchInPrev) {
-            val prevBuiltEvent = prevChunk?.getBuiltEvent(eventId, searchInNext = false, searchInPrev = true)
-            if (prevBuiltEvent != null) {
-                return prevBuiltEvent
-            }
-        }
-        return null
-    }
-
     private fun getOffsetIndex(): Int {
         var offset = 0
         var currentNextChunk = nextChunk
@@ -261,7 +302,7 @@ internal class TimelineChunk constructor(private val chunkEntity: ChunkEntity,
         return offset
     }
 
-    private fun handleChangeSet(frozenResults: RealmResults<TimelineEventEntity>, changeSet: OrderedCollectionChangeSet) {
+    private fun handleDatabaseChangeSet(frozenResults: RealmResults<TimelineEventEntity>, changeSet: OrderedCollectionChangeSet) {
         val insertions = changeSet.insertionRanges
         for (range in insertions) {
             val newItems = frozenResults
@@ -288,42 +329,6 @@ internal class TimelineChunk constructor(private val chunkEntity: ChunkEntity,
         if (insertions.isNotEmpty() || modifications.isNotEmpty()) {
             onBuiltEvents()
         }
-    }
-
-    fun rebuildEvent(eventId: String, builder: (TimelineEvent) -> TimelineEvent?, searchInNext: Boolean, searchInPrev: Boolean): Boolean {
-        return tryOrNull {
-            val builtIndex = getBuiltEventIndex(eventId, searchInNext = false, searchInPrev = false)
-            if (builtIndex == null) {
-                val foundInPrev = searchInPrev && prevChunk?.rebuildEvent(eventId, builder, searchInNext = false, searchInPrev = true).orFalse()
-                if (foundInPrev) {
-                    return true
-                }
-                if (searchInNext) {
-                    return prevChunk?.rebuildEvent(eventId, builder, searchInPrev = false, searchInNext = true).orFalse()
-                }
-                return false
-            }
-            // Update the relation of existing event
-            builtEvents.getOrNull(builtIndex)?.let { te ->
-                val rebuiltEvent = builder(te)
-                builtEvents[builtIndex] = rebuiltEvent!!
-                true
-            }
-        }
-                ?: false
-    }
-
-    fun close(closeNext: Boolean, closePrev: Boolean) {
-        if (closeNext) {
-            nextChunk?.close(closeNext = true, closePrev = false)
-        }
-        if (closePrev) {
-            prevChunk?.close(closeNext = false, closePrev = true)
-        }
-        nextChunk = null
-        prevChunk = null
-        chunkEntity.removeChangeListener(chunkObjectListener)
-        timelineEventEntities.removeChangeListener(timelineEventCollectionListener)
     }
 
     private fun getNextDisplayIndex(direction: Timeline.Direction): Int? {

@@ -40,72 +40,9 @@ import timber.log.Timber
 import javax.inject.Inject
 
 /**
- * Insert Chunk in DB, and eventually merge with existing chunk event
+ * Insert Chunk in DB, and eventually link next and previous chunk in db.
  */
 internal class TokenChunkEventPersistor @Inject constructor(@SessionDatabase private val monarchy: Monarchy) {
-
-    /**
-     * <pre>
-     * ========================================================================================================
-     * | Backward case                                                                                        |
-     * ========================================================================================================
-     *
-     *                               *--------------------------*        *--------------------------*
-     *                               | startToken1              |        | startToken1              |
-     *                               *--------------------------*        *--------------------------*
-     *                               |                          |        |                          |
-     *                               |                          |        |                          |
-     *                               |  receivedChunk backward  |        |                          |
-     *                               |         Events           |        |                          |
-     *                               |                          |        |                          |
-     *                               |                          |        |                          |
-     *                               |                          |        |                          |
-     * *--------------------------*  *--------------------------*        |                          |
-     * | startToken0              |  | endToken1                |   =>   |       Merged chunk       |
-     * *--------------------------*  *--------------------------*        |          Events          |
-     * |                          |                                      |                          |
-     * |                          |                                      |                          |
-     * |      Current Chunk       |                                      |                          |
-     * |         Events           |                                      |                          |
-     * |                          |                                      |                          |
-     * |                          |                                      |                          |
-     * |                          |                                      |                          |
-     * *--------------------------*                                      *--------------------------*
-     * | endToken0                |                                      | endToken0                |
-     * *--------------------------*                                      *--------------------------*
-     *
-     *
-     * ========================================================================================================
-     * | Forward case                                                                                         |
-     * ========================================================================================================
-     *
-     * *--------------------------*                                      *--------------------------*
-     * | startToken0              |                                      | startToken0              |
-     * *--------------------------*                                      *--------------------------*
-     * |                          |                                      |                          |
-     * |                          |                                      |                          |
-     * |      Current Chunk       |                                      |                          |
-     * |         Events           |                                      |                          |
-     * |                          |                                      |                          |
-     * |                          |                                      |                          |
-     * |                          |                                      |                          |
-     * *--------------------------*  *--------------------------*        |                          |
-     * | endToken0                |  | startToken1              |   =>   |       Merged chunk       |
-     * *--------------------------*  *--------------------------*        |          Events          |
-     *                               |                          |        |                          |
-     *                               |                          |        |                          |
-     *                               |  receivedChunk forward   |        |                          |
-     *                               |         Events           |        |                          |
-     *                               |                          |        |                          |
-     *                               |                          |        |                          |
-     *                               |                          |        |                          |
-     *                               *--------------------------*        *--------------------------*
-     *                               | endToken1                |        | endToken1                |
-     *                               *--------------------------*        *--------------------------*
-     *
-     * ========================================================================================================
-     * </pre>
-     */
 
     enum class Result {
         SHOULD_FETCH_MORE,
@@ -191,38 +128,39 @@ internal class TokenChunkEventPersistor @Inject constructor(@SessionDatabase pri
                 roomMemberContentsByUser[stateEvent.stateKey] = stateEvent.content.toModel<RoomMemberContent>()
             }
         }
-        val eventIds = ArrayList<String>(eventList.size)
-        eventList.forEach { event ->
-            if (event.eventId == null || event.senderId == null) {
-                return@forEach
-            }
-            //We check for the timeline event with this id
-            val eventId = event.eventId
-            val existingTimelineEvent = TimelineEventEntity.where(realm, roomId, eventId).findFirst()
-            // If it exists, we want to skip here
-            val existingChunk = existingTimelineEvent?.chunk?.firstOrNull()
-            if (existingChunk != null) {
-                if (direction == PaginationDirection.BACKWARDS) {
-                    currentChunk.prevChunk = existingChunk
-                    existingChunk.nextChunk = currentChunk
-                } else if (direction == PaginationDirection.FORWARDS) {
-                    currentChunk.nextChunk = existingChunk
-                    existingChunk.prevChunk = currentChunk
+        run processTimelineEvents@ {
+            eventList.forEach { event ->
+                if (event.eventId == null || event.senderId == null) {
+                    return@forEach
                 }
-                return@forEach
-            }
-            val ageLocalTs = event.unsignedData?.age?.let { now - it }
-            eventIds.add(event.eventId)
-            val eventEntity = event.toEntity(roomId, SendState.SYNCED, ageLocalTs).copyToRealmOrIgnore(realm, EventInsertType.PAGINATION)
-            if (event.type == EventType.STATE_ROOM_MEMBER && event.stateKey != null) {
-                val contentToUse = if (direction == PaginationDirection.BACKWARDS) {
-                    event.prevContent
-                } else {
-                    event.content
+                //We check for the timeline event with this id
+                val eventId = event.eventId
+                val existingTimelineEvent = TimelineEventEntity.where(realm, roomId, eventId).findFirst()
+                // If it exists, we want to stop here, just link the prevChunk
+                val existingChunk = existingTimelineEvent?.chunk?.firstOrNull()
+                if (existingChunk != null) {
+                    if (direction == PaginationDirection.BACKWARDS) {
+                        currentChunk.prevChunk = existingChunk
+                        existingChunk.nextChunk = currentChunk
+                    } else if (direction == PaginationDirection.FORWARDS) {
+                        currentChunk.nextChunk = existingChunk
+                        existingChunk.prevChunk = currentChunk
+                    }
+                    // Stop processing here
+                    return@processTimelineEvents
                 }
-                roomMemberContentsByUser[event.stateKey] = contentToUse.toModel<RoomMemberContent>()
+                val ageLocalTs = event.unsignedData?.age?.let { now - it }
+                val eventEntity = event.toEntity(roomId, SendState.SYNCED, ageLocalTs).copyToRealmOrIgnore(realm, EventInsertType.PAGINATION)
+                if (event.type == EventType.STATE_ROOM_MEMBER && event.stateKey != null) {
+                    val contentToUse = if (direction == PaginationDirection.BACKWARDS) {
+                        event.prevContent
+                    } else {
+                        event.content
+                    }
+                    roomMemberContentsByUser[event.stateKey] = contentToUse.toModel<RoomMemberContent>()
+                }
+                currentChunk.addTimelineEvent(roomId, eventEntity, direction, roomMemberContentsByUser)
             }
-            currentChunk.addTimelineEvent(roomId, eventEntity, direction, roomMemberContentsByUser)
         }
         if (currentChunk.isValid) {
             RoomEntity.where(realm, roomId).findFirst()?.addIfNecessary(currentChunk)
