@@ -81,7 +81,8 @@ import javax.inject.Inject
 @Parcelize
 data class HomeActivityArgs(
         val clearNotification: Boolean,
-        val accountCreation: Boolean
+        val accountCreation: Boolean,
+        val inviteNotificationRoomId: String? = null
 ) : Parcelable
 
 class HomeActivity :
@@ -228,6 +229,11 @@ class HomeActivity :
 
         if (args?.clearNotification == true) {
             notificationDrawerManager.clearAllEvents()
+        }
+        if (args?.inviteNotificationRoomId != null) {
+            activeSessionHolder.getSafeActiveSession()?.permalinkService()?.createPermalink(args.inviteNotificationRoomId)?.let {
+                navigator.openMatrixToBottomSheet(this, it)
+            }
         }
 
         homeActivityViewModel.observeViewEvents {
@@ -422,8 +428,16 @@ class HomeActivity :
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
-        if (intent?.getParcelableExtra<HomeActivityArgs>(MvRx.KEY_ARG)?.clearNotification == true) {
+        val parcelableExtra = intent?.getParcelableExtra<HomeActivityArgs>(MvRx.KEY_ARG)
+        if (parcelableExtra?.clearNotification == true) {
             notificationDrawerManager.clearAllEvents()
+        }
+        if (parcelableExtra?.inviteNotificationRoomId != null) {
+            activeSessionHolder.getSafeActiveSession()
+                    ?.permalinkService()
+                    ?.createPermalink(parcelableExtra.inviteNotificationRoomId)?.let {
+                        navigator.openMatrixToBottomSheet(this, it)
+                    }
         }
         handleIntent(intent)
     }
@@ -548,10 +562,15 @@ class HomeActivity :
     }
 
     companion object {
-        fun newIntent(context: Context, clearNotification: Boolean = false, accountCreation: Boolean = false): Intent {
+        fun newIntent(context: Context,
+                      clearNotification: Boolean = false,
+                      accountCreation: Boolean = false,
+                      inviteNotificationRoomId: String? = null
+        ): Intent {
             val args = HomeActivityArgs(
                     clearNotification = clearNotification,
-                    accountCreation = accountCreation
+                    accountCreation = accountCreation,
+                    inviteNotificationRoomId = inviteNotificationRoomId
             )
 
             return Intent(context, HomeActivity::class.java)
