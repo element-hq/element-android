@@ -1,0 +1,1 @@
+Push and syncs: add debug info on room list and on room detail screen and improves the log format.
