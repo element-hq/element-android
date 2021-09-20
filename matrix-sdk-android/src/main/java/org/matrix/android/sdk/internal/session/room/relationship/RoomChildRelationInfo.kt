@@ -43,7 +43,7 @@ internal class RoomChildRelationInfo(
     data class SpaceChildInfo(
             val roomId: String,
             val order: String?,
-            val autoJoin: Boolean,
+//            val autoJoin: Boolean,
             val viaServers: List<String>
     )
 
@@ -71,7 +71,7 @@ internal class RoomChildRelationInfo(
                             SpaceChildInfo(
                                     roomId = it.stateKey,
                                     order = scc.validOrder(),
-                                    autoJoin = scc.autoJoin ?: false,
+//                                    autoJoin = scc.autoJoin ?: false,
                                     viaServers = via
                             )
                         }

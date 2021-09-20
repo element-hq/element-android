@@ -111,10 +111,7 @@ class CreateSpaceViewModelTask @Inject constructor(
                                         this.featurePreset = RestrictedRoomPreset(
                                                 homeServerCapabilities,
                                                 listOf(
-                                                        RoomJoinRulesAllowEntry(
-                                                                spaceID = spaceID,
-                                                                via = session.sessionParams.homeServerHost?.let { listOf(it) } ?: emptyList()
-                                                        )
+                                                        RoomJoinRulesAllowEntry.restrictedToRoom(spaceID)
                                                 )
                                         )
                                         if (e2eByDefault) {
@@ -137,7 +134,7 @@ class CreateSpaceViewModelTask @Inject constructor(
                             timeout.roomID
                         }
                         val via = session.sessionParams.homeServerHost?.let { listOf(it) } ?: emptyList()
-                        createdSpace!!.addChildren(roomId, via, null, autoJoin = false, suggested = true)
+                        createdSpace!!.addChildren(roomId, via, null, suggested = true)
                         // set canonical
                         session.spaceService().setSpaceParent(
                                 roomId,

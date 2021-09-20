@@ -182,22 +182,22 @@ data class MatrixError(
         /** (Not documented yet) */
         const val M_WEAK_PASSWORD = "M_WEAK_PASSWORD"
 
-        /** (Not documented yet) */
+        /** The provided password's length is shorter than the minimum length required by the server. */
         const val M_PASSWORD_TOO_SHORT = "M_PASSWORD_TOO_SHORT"
 
-        /** (Not documented yet) */
+        /** The password doesn't contain any digit but the server requires at least one. */
         const val M_PASSWORD_NO_DIGIT = "M_PASSWORD_NO_DIGIT"
 
-        /** (Not documented yet) */
+        /** The password doesn't contain any uppercase letter but the server requires at least one. */
         const val M_PASSWORD_NO_UPPERCASE = "M_PASSWORD_NO_UPPERCASE"
 
-        /** (Not documented yet) */
+        /** The password doesn't contain any lowercase letter but the server requires at least one. */
         const val M_PASSWORD_NO_LOWERCASE = "M_PASSWORD_NO_LOWERCASE"
 
-        /** (Not documented yet) */
+        /** The password doesn't contain any symbol but the server requires at least one. */
         const val M_PASSWORD_NO_SYMBOL = "M_PASSWORD_NO_SYMBOL"
 
-        /** (Not documented yet) */
+        /** The password was found in a dictionary, and is not acceptable. */
         const val M_PASSWORD_IN_DICTIONARY = "M_PASSWORD_IN_DICTIONARY"
 
         const val M_TERMS_NOT_SIGNED = "M_TERMS_NOT_SIGNED"
