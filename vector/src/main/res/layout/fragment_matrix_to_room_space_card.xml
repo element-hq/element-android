@@ -28,18 +28,6 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:src="@sample/room_round_avatars" />
 
-        <ImageView
-            android:id="@+id/matrixToBetaTag"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/layout_vertical_margin_big"
-            android:contentDescription="@string/a11y_beta"
-            android:src="@drawable/ic_beta_pill"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:visibility="visible" />
-
         <TextView
             android:id="@+id/matrixToCardNameText"
             style="@style/Widget.Vector.TextView.Subtitle"

@@ -28,7 +28,7 @@ data class MessageAudioContent(
         /**
          * Required. Must be 'm.audio'.
          */
-        @Json(name = "msgtype") override val msgType: String,
+        @Json(name = MessageContent.MSG_TYPE_JSON_KEY) override val msgType: String,
 
         /**
          * Required. A description of the audio e.g. 'Bee Gees - Stayin' Alive', or some kind of content description for accessibility e.g. 'audio attachment'.

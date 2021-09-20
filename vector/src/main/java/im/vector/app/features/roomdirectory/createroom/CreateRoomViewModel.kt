@@ -48,10 +48,12 @@ import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
 import org.matrix.android.sdk.api.session.room.alias.RoomAliasError
 import org.matrix.android.sdk.api.session.room.failure.CreateRoomFailure
+import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
 import org.matrix.android.sdk.api.session.room.model.RoomDirectoryVisibility
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRulesAllowEntry
+import org.matrix.android.sdk.api.session.room.model.RoomType
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomPreset
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomStateEvent
@@ -280,6 +282,18 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted private val init
                     name = state.roomName.takeIf { it.isNotBlank() }
                     topic = state.roomTopic.takeIf { it.isNotBlank() }
                     avatarUri = state.avatarUri
+
+                    if (state.isSubSpace) {
+                        // Space-rooms are distinguished from regular messaging rooms by the m.room.type of m.space
+                        roomType = RoomType.SPACE
+
+                        // Space-rooms should be created with a power level for events_default of 100,
+                        // to prevent the rooms accidentally/maliciously clogging up with messages from random members of the space.
+                        powerLevelContentOverride = PowerLevelsContent(
+                                eventsDefault = 100
+                        )
+                    }
+
                     when (state.roomJoinRules) {
                         RoomJoinRules.PUBLIC     -> {
                             // Directory visibility

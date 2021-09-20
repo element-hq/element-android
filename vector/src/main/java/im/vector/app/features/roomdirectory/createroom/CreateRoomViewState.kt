@@ -41,12 +41,14 @@ data class CreateRoomViewState(
         val parentSpaceId: String?,
         val parentSpaceSummary: RoomSummary? = null,
         val supportsRestricted: Boolean = false,
-        val aliasLocalPart: String? = null
+        val aliasLocalPart: String? = null,
+        val isSubSpace: Boolean = false
 ) : MvRxState {
 
     constructor(args: CreateRoomArgs) : this(
             roomName = args.initialName,
-            parentSpaceId = args.parentSpaceId
+            parentSpaceId = args.parentSpaceId,
+            isSubSpace = args.isSpace
     )
 
     /**

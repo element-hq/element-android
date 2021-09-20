@@ -32,10 +32,19 @@ import org.junit.runners.JUnit4
 import org.junit.runners.MethodSorters
 import org.matrix.android.sdk.InstrumentedTest
 import org.matrix.android.sdk.api.query.ActiveSpaceFilter
+import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.toContent
+import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
+import org.matrix.android.sdk.api.session.room.model.RoomJoinRulesAllowEntry
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.RoomType
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
+import org.matrix.android.sdk.api.session.room.model.create.RestrictedRoomPreset
+import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
+import org.matrix.android.sdk.api.session.room.powerlevels.Role
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.common.CommonTestHelper
 import org.matrix.android.sdk.common.SessionTestParams
@@ -386,6 +395,8 @@ class SpaceHierarchyTest : InstrumentedTest {
             // The room should have disapear from flat children
             GlobalScope.launch(Dispatchers.Main) { flatAChildren.observeForever(childObserver) }
         }
+
+        commonTestHelper.signOutAndClose(session)
     }
 
     data class TestSpaceCreationResult(
@@ -416,6 +427,57 @@ class SpaceHierarchyTest : InstrumentedTest {
                     commonTestHelper.waitWithLatch {
                         GlobalScope.launch {
                             roomId = session.createRoom(CreateRoomParams().apply { name = entry.first })
+                            it.countDown()
+                        }
+                    }
+                    roomId
+                }
+
+        roomIds.forEachIndexed { index, roomId ->
+            runBlocking {
+                syncedSpace!!.addChildren(roomId, viaServers, null, childInfo[index].second)
+                val canonical = childInfo[index].third
+                if (canonical != null) {
+                    session.spaceService().setSpaceParent(roomId, spaceId, canonical, viaServers)
+                }
+            }
+        }
+        return TestSpaceCreationResult(spaceId, roomIds)
+    }
+
+    @Suppress("EXPERIMENTAL_API_USAGE")
+    private fun createPrivateSpace(session: Session,
+                                   spaceName: String,
+                                   childInfo: List<Triple<String, Boolean, Boolean?>>
+            /** Name, auto-join, canonical*/
+    ): TestSpaceCreationResult {
+        var spaceId = ""
+        commonTestHelper.waitWithLatch {
+            GlobalScope.launch {
+                spaceId = session.spaceService().createSpace(spaceName, "My Private Space", null, false)
+                it.countDown()
+            }
+        }
+
+        val syncedSpace = session.spaceService().getSpace(spaceId)
+        val viaServers = listOf(session.sessionParams.homeServerHost ?: "")
+
+        val roomIds =
+                childInfo.map { entry ->
+                    var roomId = ""
+                    commonTestHelper.waitWithLatch {
+                        GlobalScope.launch {
+                            val homeServerCapabilities = session
+                                    .getHomeServerCapabilities()
+                            roomId = session.createRoom(CreateRoomParams().apply {
+                                name = entry.first
+                                this.featurePreset = RestrictedRoomPreset(
+                                        homeServerCapabilities,
+                                        listOf(
+                                                RoomJoinRulesAllowEntry.restrictedToRoom(spaceId)
+                                        )
+                                )
+                            })
                             it.countDown()
                         }
                     }
@@ -473,5 +535,111 @@ class SpaceHierarchyTest : InstrumentedTest {
         val rootSpaces = session.spaceService().getRootSpaceSummaries()
 
         assertEquals("Unexpected number of root spaces ${rootSpaces.map { it.name }}", 2, rootSpaces.size)
+
+        commonTestHelper.signOutAndClose(session)
+    }
+
+    @Test
+    fun testParentRelation() {
+        val aliceSession = commonTestHelper.createAccount("Alice", SessionTestParams(true))
+        val bobSession = commonTestHelper.createAccount("Bib", SessionTestParams(true))
+
+        val spaceAInfo = createPrivateSpace(aliceSession, "Private Space A", listOf(
+                Triple("General", true /*suggested*/, true/*canonical*/),
+                Triple("Random", true, true)
+        ))
+
+        commonTestHelper.runBlockingTest {
+            aliceSession.getRoom(spaceAInfo.spaceId)!!.invite(bobSession.myUserId, null)
+        }
+
+        commonTestHelper.runBlockingTest {
+            bobSession.joinRoom(spaceAInfo.spaceId, null, emptyList())
+        }
+
+        var bobRoomId = ""
+        commonTestHelper.waitWithLatch {
+            GlobalScope.launch {
+                bobRoomId = bobSession.createRoom(CreateRoomParams().apply { name = "A Bob Room" })
+                bobSession.getRoom(bobRoomId)!!.invite(aliceSession.myUserId)
+                it.countDown()
+            }
+        }
+
+        commonTestHelper.runBlockingTest {
+            aliceSession.joinRoom(bobRoomId)
+        }
+
+        commonTestHelper.waitWithLatch { latch ->
+            commonTestHelper.retryPeriodicallyWithLatch(latch) {
+                aliceSession.getRoomSummary(bobRoomId)?.membership?.isActive() == true
+            }
+        }
+
+        commonTestHelper.waitWithLatch {
+            GlobalScope.launch {
+                bobSession.spaceService().setSpaceParent(bobRoomId, spaceAInfo.spaceId, false, listOf(bobSession.sessionParams.homeServerHost ?: ""))
+                it.countDown()
+            }
+        }
+
+        commonTestHelper.waitWithLatch { latch ->
+            commonTestHelper.retryPeriodicallyWithLatch(latch) {
+                val stateEvent = aliceSession.getRoom(bobRoomId)!!.getStateEvent(EventType.STATE_SPACE_PARENT, QueryStringValue.Equals(spaceAInfo.spaceId))
+                stateEvent != null
+            }
+        }
+
+        // This should be an invalid space parent relation, because no opposite child and bob is not admin of the space
+        commonTestHelper.runBlockingTest {
+            // we can see the state event
+            // but it is not valid and room is not in hierarchy
+            assertTrue("Bob Room should not be listed as a child of the space", aliceSession.getRoomSummary(bobRoomId)?.flattenParentIds?.isEmpty() == true)
+        }
+
+        // Let's now try to make alice admin of the room
+
+        commonTestHelper.waitWithLatch {
+            GlobalScope.launch {
+                val room = bobSession.getRoom(bobRoomId)!!
+                val currentPLContent = room
+                        .getStateEvent(EventType.STATE_ROOM_POWER_LEVELS)
+                        ?.let { it.content.toModel<PowerLevelsContent>() }
+
+                val newPowerLevelsContent = currentPLContent
+                        ?.setUserPowerLevel(aliceSession.myUserId, Role.Admin.value)
+                        ?.toContent()
+
+                room.sendStateEvent(EventType.STATE_ROOM_POWER_LEVELS, null, newPowerLevelsContent!!)
+                it.countDown()
+            }
+        }
+
+        commonTestHelper.waitWithLatch { latch ->
+            commonTestHelper.retryPeriodicallyWithLatch(latch) {
+                val powerLevelsHelper = aliceSession.getRoom(bobRoomId)!!
+                        .getStateEvent(EventType.STATE_ROOM_POWER_LEVELS)
+                        ?.content
+                        ?.toModel<PowerLevelsContent>()
+                        ?.let { PowerLevelsHelper(it) }
+                powerLevelsHelper!!.isUserAllowedToSend(aliceSession.myUserId, true, EventType.STATE_SPACE_PARENT)
+            }
+        }
+
+        commonTestHelper.waitWithLatch {
+            GlobalScope.launch {
+                aliceSession.spaceService().setSpaceParent(bobRoomId, spaceAInfo.spaceId, false, listOf(bobSession.sessionParams.homeServerHost ?: ""))
+                it.countDown()
+            }
+        }
+
+        commonTestHelper.waitWithLatch { latch ->
+            commonTestHelper.retryPeriodicallyWithLatch(latch) {
+                bobSession.getRoomSummary(bobRoomId)?.flattenParentIds?.contains(spaceAInfo.spaceId) == true
+            }
+        }
+
+        commonTestHelper.signOutAndClose(aliceSession)
+        commonTestHelper.signOutAndClose(bobSession)
     }
 }

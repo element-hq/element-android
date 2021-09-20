@@ -127,7 +127,7 @@ class SpaceAddRoomsViewModel @AssistedInject constructor(
             copy(
                     spaceName = spaceSummary?.displayName ?: "",
                     ignoreRooms = (spaceSummary?.flattenParentIds ?: emptyList()) + listOf(initialState.spaceId),
-                    shouldShowDMs = spaceSummary?.isPublic == false
+                    shouldShowDMs = !onlyShowSpaces && spaceSummary?.isPublic == false
             )
         }
     }

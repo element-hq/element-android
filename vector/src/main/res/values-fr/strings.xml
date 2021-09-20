@@ -2710,6 +2710,7 @@
     <string name="spaces_beta_welcome_to_spaces_desc">Les espaces sont une nouvelle manière de regrouper les salons et les gens.</string>
     <string name="spaces_beta_welcome_to_spaces">Bienvenue dans les espaces !</string>
     <string name="space_add_existing_rooms">Ajouter des salons et espaces existants</string>
+    <!-- TO BE REMOVED -->
     <string name="space_leave_prompt_msg">Voulez-vous vraiment quitter l’espace \?</string>
     <string name="leave_space">Quitter l’espace</string>
     <string name="space_add_child_title">Ajouter des salons</string>
