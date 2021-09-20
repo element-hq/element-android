@@ -41,6 +41,7 @@ import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.utils.styleMatchingText
 import im.vector.app.databinding.BottomSheetLeaveSpaceBinding
+import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.spaces.leave.SpaceLeaveAdvancedActivity
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.parcelize.Parcelize
