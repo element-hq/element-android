@@ -16,6 +16,7 @@
 
 package im.vector.app.features.settings.push
 
+import android.view.View
 import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
@@ -29,6 +30,9 @@ abstract class PushGatewayItem : EpoxyModelWithHolder<PushGatewayItem.Holder>() 
 
     @EpoxyAttribute
     lateinit var pusher: Pusher
+
+    @EpoxyAttribute
+    lateinit var interactions: PushGatewayItemInteractions
 
     override fun bind(holder: Holder) {
         super.bind(holder)
@@ -45,6 +49,9 @@ abstract class PushGatewayItem : EpoxyModelWithHolder<PushGatewayItem.Holder>() 
         holder.url.text = pusher.data.url
         holder.format.text = pusher.data.format
         holder.deviceName.text = pusher.deviceDisplayName
+        holder.removeButton.setOnClickListener {
+            interactions.onRemovePushTapped(pusher)
+        }
     }
 
     class Holder : VectorEpoxyHolder() {
@@ -55,7 +62,12 @@ abstract class PushGatewayItem : EpoxyModelWithHolder<PushGatewayItem.Holder>() 
         val url by bind<TextView>(R.id.pushGatewayURLValue)
         val appName by bind<TextView>(R.id.pushGatewayAppNameValue)
         val appId by bind<TextView>(R.id.pushGatewayAppIdValue)
+        val removeButton by bind<View>(R.id.pushGatewayDeleteButton)
     }
+}
+
+interface PushGatewayItemInteractions {
+    fun onRemovePushTapped(pusher: Pusher)
 }
 
 //

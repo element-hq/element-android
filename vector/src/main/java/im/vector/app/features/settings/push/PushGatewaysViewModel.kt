@@ -16,6 +16,7 @@
 
 package im.vector.app.features.settings.push
 
+import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxState
@@ -28,6 +29,7 @@ import dagger.assisted.AssistedFactory
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.pushers.Pusher
 import org.matrix.android.sdk.rx.RxSession
@@ -70,8 +72,15 @@ class PushGatewaysViewModel @AssistedInject constructor(@Assisted initialState: 
 
     override fun handle(action: PushGatewayAction) {
         when (action) {
-            is PushGatewayAction.Refresh -> handleRefresh()
+            is PushGatewayAction.Refresh      -> handleRefresh()
+            is PushGatewayAction.RemovePusher -> removePusher(action.pusher)
         }.exhaustive
+    }
+
+    private fun removePusher(pusher: Pusher) {
+        viewModelScope.launch {
+            session.removeHttpPusher(pusher.pushKey, pusher.appId)
+        }
     }
 
     private fun handleRefresh() {
