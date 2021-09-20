@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <!--<im.vector.app.core.preference.VectorPreferenceCategory-->
     <!--android:key="SETTINGS_LABS_PREFERENCE_KEY"-->
@@ -49,7 +50,8 @@
         android:defaultValue="false"
         android:key="SETTINGS_LABS_USE_RESTRICTED_JOIN_RULE"
         android:title="@string/labs_use_restricted_join_rule"
-        android:summary="@string/labs_use_restricted_join_rule_desc"/>
+        android:summary="@string/labs_use_restricted_join_rule_desc"
+        app:isPreferenceVisible="@bool/show_spaces" />
     <!--</im.vector.app.core.preference.VectorPreferenceCategory>-->
 
 

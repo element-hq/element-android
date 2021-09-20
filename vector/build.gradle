@@ -168,7 +168,9 @@ android {
         resValue "bool", "enable_cross_signing", "${enableCrossSigning}"
 
         // Spaces feature is hidden
-        buildConfigField "Boolean", "SHOW_SPACES", "false"
+        def showSpaces = false
+        buildConfigField "Boolean", "SHOW_SPACES", "${showSpaces}"
+        resValue "bool", "show_spaces", "${showSpaces}"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
