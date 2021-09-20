@@ -2659,6 +2659,9 @@
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
     <string name="template_settings_developer_mode_fail_fast_summary">${app_name} may crash more often when an unexpected error occurs</string>
 
+    <string name="settings_developer_mode_show_info_on_screen_title">Show debug info on screen</string>
+    <string name="settings_developer_mode_show_info_on_screen_summary">Show some useful info to help debugging the application</string>
+
     <string name="command_description_shrug">Prepends ¯\\_(ツ)_/¯ to a plain-text message</string>
 
     <string name="create_room_encryption_title">"Enable encryption"</string>

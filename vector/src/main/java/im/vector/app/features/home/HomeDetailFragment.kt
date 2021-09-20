@@ -440,7 +440,7 @@ class HomeDetailFragment @Inject constructor(
         views.bottomNavigationView.getOrCreateBadge(R.id.bottom_action_people).render(it.notificationCountPeople, it.notificationHighlightPeople)
         views.bottomNavigationView.getOrCreateBadge(R.id.bottom_action_rooms).render(it.notificationCountRooms, it.notificationHighlightRooms)
         views.bottomNavigationView.getOrCreateBadge(R.id.bottom_action_notification).render(it.notificationCountCatchup, it.notificationHighlightCatchup)
-        views.syncStateView.render(it.syncState, it.incrementalSyncStatus, vectorPreferences.developerMode())
+        views.syncStateView.render(it.syncState, it.incrementalSyncStatus, vectorPreferences.developerShowDebugInfo())
 
         hasUnreadRooms = it.hasUnreadMessages
     }
