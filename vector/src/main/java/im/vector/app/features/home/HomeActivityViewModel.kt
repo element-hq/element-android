@@ -23,6 +23,7 @@ import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.BuildConfig
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
@@ -128,8 +129,10 @@ class HomeActivityViewModel @AssistedInject constructor(
                 .subscribe { status ->
                     when (status) {
                         is InitialSyncProgressService.Status.Progressing -> {
-                            // Schedule a check of the bootstrap when the init sync will be finished
-                            checkBootstrap = true
+                            if (BuildConfig.ENABLE_CROSS_SIGNING) {
+                                // Schedule a check of the bootstrap when the init sync will be finished
+                                checkBootstrap = true
+                            }
                         }
                         is InitialSyncProgressService.Status.Idle        -> {
                             updateIdentityServer(session)
