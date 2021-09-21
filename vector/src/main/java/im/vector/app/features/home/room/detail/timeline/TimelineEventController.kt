@@ -39,13 +39,13 @@ import im.vector.app.features.home.room.detail.timeline.factory.MergedHeaderItem
 import im.vector.app.features.home.room.detail.timeline.factory.ReadReceiptsItemFactory
 import im.vector.app.features.home.room.detail.timeline.factory.TimelineItemFactory
 import im.vector.app.features.home.room.detail.timeline.factory.TimelineItemFactoryParams
-import im.vector.app.features.home.room.detail.timeline.helper.TimelineEventsGroups
 import im.vector.app.features.home.room.detail.timeline.helper.ContentDownloadStateTrackerBinder
 import im.vector.app.features.home.room.detail.timeline.helper.ContentUploadStateTrackerBinder
 import im.vector.app.features.home.room.detail.timeline.helper.TimelineControllerInterceptorHelper
 import im.vector.app.features.home.room.detail.timeline.helper.TimelineEventDiffUtilCallback
 import im.vector.app.features.home.room.detail.timeline.helper.TimelineEventVisibilityHelper
 import im.vector.app.features.home.room.detail.timeline.helper.TimelineEventVisibilityStateChangedListener
+import im.vector.app.features.home.room.detail.timeline.helper.TimelineEventsGroups
 import im.vector.app.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
 import im.vector.app.features.home.room.detail.timeline.item.BasedMergedItem
 import im.vector.app.features.home.room.detail.timeline.item.DaySeparatorItem
@@ -276,6 +276,10 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
     }
 
     override fun buildModels() {
+        // Don't build anything if membership is not joined
+        if (partialState.roomSummary?.membership != Membership.JOIN) {
+            return
+        }
         val timestamp = System.currentTimeMillis()
 
         val showingForwardLoader = LoadingItem_()

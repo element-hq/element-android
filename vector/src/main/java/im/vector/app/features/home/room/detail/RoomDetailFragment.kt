@@ -76,6 +76,7 @@ import im.vector.app.core.epoxy.LayoutManagerStateRestorer
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.hideKeyboard
+import im.vector.app.core.extensions.inflateIfNeeded
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.extensions.showKeyboard
@@ -312,6 +313,7 @@ class RoomDetailFragment @Inject constructor(
     private var lockSendButton = false
     private val currentCallsViewPresenter = CurrentCallsViewPresenter()
 
+    private var inviteView: VectorInviteView? = null
     private lateinit var emojiPopup: EmojiPopup
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -343,7 +345,6 @@ class RoomDetailFragment @Inject constructor(
         setupToolbar(views.roomToolbar)
         setupRecyclerView()
         setupComposer()
-        setupInviteView()
         setupNotificationView()
         setupJumpToReadMarkerView()
         setupActiveCallView()
@@ -1350,10 +1351,6 @@ class RoomDetailFragment @Inject constructor(
         return isHandled
     }
 
-    private fun setupInviteView() {
-        views.inviteView.callback = this
-    }
-
     override fun invalidate() = withState(roomDetailViewModel) { state ->
         invalidateOptionsMenu()
         val summary = state.asyncRoomSummary()
@@ -1365,7 +1362,7 @@ class RoomDetailFragment @Inject constructor(
             views.jumpToBottomView.count = summary.notificationCount
             views.jumpToBottomView.drawBadge = summary.hasUnreadMessages
             timelineEventController.update(state)
-            views.inviteView.isVisible = false
+            inviteView?.isVisible = false
             if (state.tombstoneEvent == null) {
                 if (state.canSendMessage) {
                     if (!views.voiceMessageRecorderView.isActive()) {
@@ -1386,10 +1383,18 @@ class RoomDetailFragment @Inject constructor(
                 views.notificationAreaView.render(NotificationAreaView.State.Tombstone(state.tombstoneEvent))
             }
         } else if (summary?.membership == Membership.INVITE && inviter != null) {
-            views.inviteView.isVisible = true
-            views.inviteView.render(inviter, VectorInviteView.Mode.LARGE, state.changeMembershipState)
-            // Intercept click event
-            views.inviteView.setOnClickListener { }
+            views.inviteViewStub.inflateIfNeeded<VectorInviteView> {
+                inviteView = it
+            }
+            views.composerLayout.isVisible = false
+            views.voiceMessageRecorderView.isVisible = false
+            inviteView?.apply {
+                callback = this@RoomDetailFragment
+                isVisible = true
+                render(inviter, VectorInviteView.Mode.LARGE, state.changeMembershipState)
+                setOnClickListener { }
+            }
+            Unit
         } else if (state.asyncInviter.complete) {
             vectorBaseActivity.finish()
         }
