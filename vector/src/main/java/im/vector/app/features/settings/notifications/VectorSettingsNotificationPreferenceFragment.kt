@@ -386,8 +386,8 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
 }
 
 private fun SwitchPreference.setTransactionalSwitchChangeListener(scope: CoroutineScope, transaction: suspend (Boolean) -> Unit) {
-    val originalState = this.isChecked
     this.setOnPreferenceChangeListener { switchPreference, isChecked ->
+        val originalState = this.isChecked
         scope.launch {
             try {
                 transaction(isChecked as Boolean)
