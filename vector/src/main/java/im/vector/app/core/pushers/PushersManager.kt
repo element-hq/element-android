@@ -63,10 +63,12 @@ class PushersManager @Inject constructor(
 
     fun registerEmailForPush(email: String) {
         val currentSession = activeSessionHolder.getActiveSession()
+        val appName = appNameProvider.getAppName()
         currentSession.addEmailPusher(
                 email = email,
                 lang = localeProvider.current().language,
-                appDisplayName = appNameProvider.getAppName(),
+                emailBranding = appName,
+                appDisplayName = appName,
                 deviceDisplayName = currentSession.sessionParams.deviceId ?: "MOBILE",
                 append = true,
         )

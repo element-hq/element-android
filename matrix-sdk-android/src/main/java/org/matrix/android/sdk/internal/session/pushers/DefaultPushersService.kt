@@ -81,15 +81,16 @@ internal class DefaultPushersService @Inject constructor(
             )
     )
 
-    override fun addEmailPusher(email: String, lang: String, appDisplayName: String, deviceDisplayName: String, append: Boolean) = addPusher(
-            JsonPusher(pushKey = email,
+    override fun addEmailPusher(email: String, lang: String, emailBranding: String, appDisplayName: String, deviceDisplayName: String, append: Boolean) = addPusher(
+            JsonPusher(
+                    pushKey = email,
                     kind = "email",
                     appId = "m.email",
                     profileTag = "",
                     lang = lang,
                     appDisplayName = appDisplayName,
                     deviceDisplayName = deviceDisplayName,
-                    data = JsonPusherData(brand = appDisplayName),
+                    data = JsonPusherData(brand = emailBranding),
                     append = append
             )
     )

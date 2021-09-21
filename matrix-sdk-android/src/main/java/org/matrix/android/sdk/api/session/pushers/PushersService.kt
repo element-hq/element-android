@@ -70,6 +70,7 @@ interface PushersService {
      * @param email             The email address to send notifications to.
      *                          If the kind is "email", this is the email address to send notifications to.
      * @param lang              The preferred language for receiving notifications (e.g. "en" or "en-US").
+     * @param emailBranding     The branding placeholder to include in the email communications.
      * @param appDisplayName    A human readable string that will allow the user to identify what application owns this pusher.
      * @param deviceDisplayName A human readable string that will allow the user to identify what device owns this pusher.
      * @param append            If true, the homeserver should add another pusher with the given pushkey and App ID in addition
@@ -81,6 +82,7 @@ interface PushersService {
      */
     fun addEmailPusher(email: String,
                        lang: String,
+                       emailBranding: String,
                        appDisplayName: String,
                        deviceDisplayName: String,
                        append: Boolean): UUID
