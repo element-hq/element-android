@@ -99,14 +99,10 @@ interface PushersService {
                          eventId: String)
 
     /**
-     * Remove the http pusher
+     * Remove the pusher
+     * When the appId is m.email then an email address is expected in the pushkey
      */
-    suspend fun removeHttpPusher(pushkey: String, appId: String)
-
-    /**
-     * Remove the email pusher for a given email
-     */
-    suspend fun removeEmailPusher(email: String)
+    suspend fun removePusher(pushkey: String, appId: String)
 
     /**
      * Get the current pushers, as a LiveData

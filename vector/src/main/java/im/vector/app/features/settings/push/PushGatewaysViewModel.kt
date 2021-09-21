@@ -79,7 +79,7 @@ class PushGatewaysViewModel @AssistedInject constructor(@Assisted initialState: 
 
     private fun removePusher(pusher: Pusher) {
         viewModelScope.launch {
-            session.removeHttpPusher(pusher.pushKey, pusher.appId)
+            session.removePusher(pusher.pushKey, pusher.appId)
         }
     }
 
