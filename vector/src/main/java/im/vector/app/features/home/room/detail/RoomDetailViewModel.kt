@@ -39,6 +39,7 @@ import im.vector.app.core.mvrx.runCatchingToAsync
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.attachments.toContentAttachmentData
+import im.vector.app.features.call.conference.ConferenceEvent
 import im.vector.app.features.call.conference.JitsiActiveConferenceHolder
 import im.vector.app.features.call.conference.JitsiService
 import im.vector.app.features.call.lookup.CallProtocolsChecker
@@ -66,7 +67,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.commonmark.parser.Parser
 import org.commonmark.renderer.html.HtmlRenderer
-import org.jitsi.meet.sdk.BroadcastEvent
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.extensions.tryOrNull
@@ -368,12 +368,12 @@ class RoomDetailViewModel @AssistedInject constructor(
             }
             return@withState
         }
-        when (action.jitsiEvent.type) {
-            BroadcastEvent.Type.CONFERENCE_JOINED,
-            BroadcastEvent.Type.CONFERENCE_TERMINATED -> {
+        when (action.conferenceEvent) {
+            is ConferenceEvent.Joined,
+            is ConferenceEvent.Terminated -> {
                 setState { copy(jitsiState = jitsiState.copy(hasJoined = activeConferenceHolder.isJoined(jitsiState.confId))) }
             }
-            else                                      -> Unit
+            else                          -> Unit
         }
     }
 

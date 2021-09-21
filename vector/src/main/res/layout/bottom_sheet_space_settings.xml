@@ -38,21 +38,12 @@
             android:textStyle="bold"
             app:layout_constrainedWidth="true"
             app:layout_constraintBottom_toTopOf="@+id/spaceDescription"
-            app:layout_constraintEnd_toStartOf="@id/spaceBetaTag"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/spaceAvatarImageView"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_chainStyle="packed"
             tools:text="@sample/spaces.json/data/name" />
 
-        <ImageView
-            android:id="@+id/spaceBetaTag"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:contentDescription="@string/a11y_beta"
-            android:src="@drawable/ic_beta_pill"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/spaceDescription"
@@ -129,6 +120,16 @@
         app:titleTextColor="?vctr_content_primary"
         tools:actionDescription="" />
 
+    <im.vector.app.core.ui.views.BottomSheetActionButton
+        android:id="@+id/addSpaces"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:actionTitle="@string/add_space"
+        app:leftIcon="@drawable/ic_fab_add"
+        app:tint="?vctr_content_primary"
+        app:titleTextColor="?vctr_content_primary"
+        app:betaAction="true"
+        tools:actionDescription="" />
 
     <im.vector.app.core.ui.views.BottomSheetActionButton
         android:id="@+id/leaveSpace"

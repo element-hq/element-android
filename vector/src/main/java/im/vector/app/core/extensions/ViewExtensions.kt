@@ -16,11 +16,14 @@
 
 package im.vector.app.core.extensions
 
+import android.graphics.drawable.Drawable
 import android.text.InputType
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.ImageView
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.isVisible
 import im.vector.app.R
 
 /**
@@ -49,4 +52,9 @@ fun View.getMeasurements(): Pair<Int, Int> {
     val width = measuredWidth
     val height = measuredHeight
     return width to height
+}
+
+fun ImageView.setDrawableOrHide(drawableRes: Drawable?) {
+    setImageDrawable(drawableRes)
+    isVisible = drawableRes != null
 }

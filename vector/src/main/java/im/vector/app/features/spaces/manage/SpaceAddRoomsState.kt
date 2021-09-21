@@ -27,10 +27,12 @@ data class SpaceAddRoomsState(
         val spaceName: String = "",
         val ignoreRooms: List<String> = emptyList(),
         val isSaving: Async<List<String>> = Uninitialized,
-        val shouldShowDMs : Boolean = false
+        val shouldShowDMs: Boolean = false,
+        val onlyShowSpaces: Boolean = false
 //        val selectionList: Map<String, Boolean> = emptyMap()
 ) : MvRxState {
     constructor(args: SpaceManageArgs) : this(
-            spaceId = args.spaceId
+            spaceId = args.spaceId,
+            onlyShowSpaces = args.manageType == ManageType.AddRoomsOnlySpaces
     )
 }

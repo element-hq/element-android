@@ -115,7 +115,7 @@ class Matrix private constructor(context: Context, matrixConfiguration: MatrixCo
         }
 
         fun getSdkVersion(): String {
-            return BuildConfig.VERSION_NAME + " (" + BuildConfig.GIT_SDK_REVISION + ")"
+            return BuildConfig.SDK_VERSION + " (" + BuildConfig.GIT_SDK_REVISION + ")"
         }
     }
 }

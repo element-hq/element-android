@@ -54,4 +54,7 @@ class JitsiService @Inject constructor(
 
         return session.widgetService().createRoomWidget(roomId, widgetId, widgetEventContent)
     }
+
+    @Suppress("UNUSED_PARAMETER")
+    fun extractJitsiWidgetData(widget: Widget): JitsiWidgetData? = null
 }

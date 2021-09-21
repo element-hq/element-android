@@ -53,7 +53,11 @@ class WebRtcCall(
     val signalingRoomId = mxCall.roomId
 
     // Mute status
-    var remoteOnHold = false
+    var micMuted = false
+        private set
+    var videoMuted = false
+        private set
+    var isRemoteOnHold = false
         private set
     var isLocalOnHold = false
         private set

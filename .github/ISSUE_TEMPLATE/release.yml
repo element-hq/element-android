@@ -36,6 +36,7 @@ body:
         - [ ] Push `main` and the new tag `v1.1.10` to origin
         - [ ] Checkout `develop`
         - [ ] Increase version in `./vector/build.gradle`
+        - [ ] Change the value of SDK_VERSION in the file `./matrix-sdk-android/build.gradle`
         - [ ] Commit and push `develop`
         - [ ] Wait for [Buildkite](https://buildkite.com/matrix-dot-org/element-android/builds?branch=main) to build the `main` branch.
         - [ ] Run the script `~/scripts/releaseElement.sh`. It will download the APKs from Buildkite check them and sign them.
@@ -72,9 +73,25 @@ body:
         - [ ] Create a release with GitFlow
         - [ ] Update the files `./build.gradle` and `./gradle/gradle-wrapper.properties` manually, to use the latest version for the dependency. You can get inspired by the same files on Element Android project.
         - [ ] Run the script `./tools/import_from_element.sh`
-        - [ ] Update the version in `./matrix-sdk-android/build.gradle` and let the script finish to build the library
+        - [ ] Update the version in `./matrix-sdk-android/build.gradle`
+        - [ ] Check the diff on this file and restore what may have been erased (in particular the line `apply plugin: "com.vanniktech.maven.publish"`)
+        - [ ] Let the script finish to build the library
         - [ ] Update the file `CHANGES.md`
+        - [ ] Update the value of VERSION_NAME in the file gradle.properties
         - [ ] Finish the release using GitFlow
+
+        ##### Release on MavenCentral
+
+        - [ ] Run the command `./gradlew publish --no-daemon --no-parallel`. You'll need some non-public element to do so
+        - [ ] Connect to https://s01.oss.sonatype.org
+        - [ ] Click on Staging Repositories and check the the files have been uploaded
+        - [ ] Click on close
+        - [ ] Wait (check Activity tab until step "Repository closed" is displayed)
+        - [ ] Click on release. The staging repository will disappear
+        - [ ] Check that the release is available in https://repo1.maven.org/maven2/org/matrix/android/matrix-android-sdk2/ (it can take a few minutes)
+
+        ##### Release on GitHub
+
         - [ ] Create the release on GitHub from [the tag](https://github.com/matrix-org/matrix-android-sdk2/tags)
         - [ ] Upload the AAR on the GitHub release
 
@@ -82,7 +99,7 @@ body:
 
         https://github.com/matrix-org/matrix-android-sdk2-sample
 
-        - [ ] Update the dependency to the new version of the SDK2. Jitpack will have to build the AAR, it can take a few minutes. You can check status on https://jitpack.io/#matrix-org/matrix-android-sdk2
+        - [ ] Update the dependency to the new version of the SDK2. It can take some time for MavenCentral to make the librarie available. You can check status on https://repo1.maven.org/maven2/org/matrix/android/matrix-android-sdk2/
         - [ ] Build and run the sample, you may have to fix some API break
         - [ ] Commit and push directly on `main`
     validations:

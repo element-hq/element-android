@@ -44,6 +44,7 @@ import fr.gouv.tchap.features.platform.PlatformViewModel
 import fr.gouv.tchap.features.platform.PlatformViewState
 import fr.gouv.tchap.features.userdirectory.TchapContactListSharedAction
 import fr.gouv.tchap.features.userdirectory.TchapContactListSharedActionViewModel
+import im.vector.app.AppStateHandler
 import im.vector.app.R
 import im.vector.app.RoomGroupingMethod
 import im.vector.app.core.extensions.commitTransaction
@@ -90,7 +91,8 @@ class HomeDetailFragment @Inject constructor(
         private val colorProvider: ColorProvider,
         private val alertManager: PopupAlertManager,
         private val callManager: WebRtcCallManager,
-        private val vectorPreferences: VectorPreferences
+        private val vectorPreferences: VectorPreferences,
+        private val appStateHandler: AppStateHandler
 ) : VectorBaseFragment<FragmentHomeDetailBinding>(),
         KeysBackupBanner.Delegate,
         CurrentCallsView.Callback,
@@ -276,7 +278,17 @@ class HomeDetailFragment @Inject constructor(
         updateTabVisibilitySafely(R.id.bottom_action_notification, vectorPreferences.labAddNotificationTab())
         callManager.checkForProtocolsSupportIfNeeded()
 
-        checkNotificationTabStatus()
+        // Current space/group is not live so at least refresh toolbar on resume
+        appStateHandler.getCurrentRoomGroupingMethod()?.let { roomGroupingMethod ->
+            when (roomGroupingMethod) {
+                is RoomGroupingMethod.ByLegacyGroup -> {
+                    onGroupChange(roomGroupingMethod.groupSummary)
+                }
+                is RoomGroupingMethod.BySpace       -> {
+                    onSpaceChange(roomGroupingMethod.spaceSummary)
+                }
+            }
+        }
     }
 
     private fun toggleSearchView() {
@@ -308,20 +320,6 @@ class HomeDetailFragment @Inject constructor(
 
     private fun cancelSearch() {
         view?.doOnNextLayout { closeSearchView() }
-    }
-
-    private fun checkNotificationTabStatus() {
-        val wasVisible = views.bottomNavigationView.menu.findItem(R.id.bottom_action_notification).isVisible
-        views.bottomNavigationView.menu.findItem(R.id.bottom_action_notification).isVisible = vectorPreferences.labAddNotificationTab()
-        if (wasVisible && !vectorPreferences.labAddNotificationTab()) {
-            // As we hide it check if it's not the current item!
-            withState(viewModel) {
-                val tab = it.currentTab
-                if (tab is HomeTab.RoomList && tab.toMenuId() == R.id.bottom_action_notification) {
-                    viewModel.handle(HomeDetailAction.SwitchTab(HomeTab.ContactList))
-                }
-            }
-        }
     }
 
     private fun promptForNewUnknownDevices(uid: String, state: UnknownDevicesState, newest: DeviceInfo) {

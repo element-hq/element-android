@@ -25,6 +25,7 @@ import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.accountdata.RoomAccountDataTypes
 import org.matrix.android.sdk.api.session.room.model.Membership
+import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
 import org.matrix.android.sdk.api.session.room.model.RoomAliasesContent
 import org.matrix.android.sdk.api.session.room.model.RoomCanonicalAliasContent
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRulesContent
@@ -33,6 +34,7 @@ import org.matrix.android.sdk.api.session.room.model.RoomTopicContent
 import org.matrix.android.sdk.api.session.room.model.RoomType
 import org.matrix.android.sdk.api.session.room.model.VersioningState
 import org.matrix.android.sdk.api.session.room.model.create.RoomCreateContent
+import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.internal.crypto.EventDecryptor
 import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
@@ -211,63 +213,102 @@ internal class RoomSummaryUpdater @Inject constructor(
                     }
                     .toMap()
 
-            lookupMap.keys.forEach { lookedUp ->
-                if (lookedUp.roomType == RoomType.SPACE) {
-                    // get childrens
+            // First handle child relations
+            lookupMap.keys.asSequence()
+                    .filter { it.roomType == RoomType.SPACE }
+                    .forEach { lookedUp ->
+                        // get childrens
 
-                    lookedUp.children.clearWith { it.deleteFromRealm() }
+                        lookedUp.children.clearWith { it.deleteFromRealm() }
 
-                    RoomChildRelationInfo(realm, lookedUp.roomId).getDirectChildrenDescriptions().forEach { child ->
+                        RoomChildRelationInfo(realm, lookedUp.roomId).getDirectChildrenDescriptions().forEach { child ->
 
-                        lookedUp.children.add(
-                                realm.createObject<SpaceChildSummaryEntity>().apply {
-                                    this.childRoomId = child.roomId
-                                    this.childSummaryEntity = RoomSummaryEntity.where(realm, child.roomId).findFirst()
-                                    this.order = child.order
+                            lookedUp.children.add(
+                                    realm.createObject<SpaceChildSummaryEntity>().apply {
+                                        this.childRoomId = child.roomId
+                                        this.childSummaryEntity = RoomSummaryEntity.where(realm, child.roomId).findFirst()
+                                        this.order = child.order
 //                                    this.autoJoin = child.autoJoin
-                                    this.viaServers.addAll(child.viaServers)
-                                }
-                        )
+                                        this.viaServers.addAll(child.viaServers)
+                                    }
+                            )
 
-                        RoomSummaryEntity.where(realm, child.roomId)
-                                .process(RoomSummaryEntityFields.MEMBERSHIP_STR, Membership.activeMemberships())
-                                .findFirst()
-                                ?.let { childSum ->
-                                    lookupMap.entries.firstOrNull { it.key.roomId == lookedUp.roomId }?.let { entry ->
-                                        if (entry.value.indexOfFirst { it.roomId == childSum.roomId } == -1) {
-                                            // add looked up as a parent
-                                            entry.value.add(childSum)
+                            RoomSummaryEntity.where(realm, child.roomId)
+                                    .process(RoomSummaryEntityFields.MEMBERSHIP_STR, Membership.activeMemberships())
+                                    .findFirst()
+                                    ?.let { childSum ->
+                                        lookupMap.entries.firstOrNull { it.key.roomId == lookedUp.roomId }?.let { entry ->
+                                            if (entry.value.indexOfFirst { it.roomId == childSum.roomId } == -1) {
+                                                // add looked up as a parent
+                                                entry.value.add(childSum)
+                                            }
                                         }
+                                    }
+                        }
+                    }
+
+            // Now let's check parent relations
+
+            lookupMap.keys
+                    .forEach { lookedUp ->
+                        lookedUp.parents.clearWith { it.deleteFromRealm() }
+                        // can we check parent relations here??
+                        /**
+                         * rooms can claim parents via the m.space.parent state event.
+                         * canonical determines whether this is the main parent for the space.
+                         *
+                         * To avoid abuse where a room admin falsely claims that a room is part of a space that it should not be,
+                         * clients could ignore such m.space.parent events unless either
+                         * (a) there is a corresponding m.space.child event in the claimed parent, or
+                         * (b) the sender of the m.space.child event has a sufficient power-level to send such an m.space.child event in the parent.
+                         * (It is not necessarily required that that user currently be a member of the parent room -
+                         * only the m.room.power_levels event is inspected.)
+                         * [Checking the power-level rather than requiring an actual m.space.child event in the parent allows for "secret" rooms (see below).]
+                         */
+                        RoomChildRelationInfo(realm, lookedUp.roomId).getParentDescriptions()
+                                .map { parentInfo ->
+                                    // Is it a valid parent relation?
+                                    // Check if it's a child of the parent?
+                                    val isValidRelation: Boolean
+                                    val parent = lookupMap.firstNotNullOfOrNull { if (it.key.roomId == parentInfo.roomId) it.value else null }
+                                    if (parent?.firstOrNull { it.roomId == lookedUp.roomId } != null) {
+                                        // there is a corresponding m.space.child event in the claimed parent
+                                        isValidRelation = true
+                                    } else {
+                                        // check if sender can post child relation in parent?
+                                        val senderId = parentInfo.stateEventSender
+                                        val parentRoomId = parentInfo.roomId
+                                        val powerLevelsHelper = CurrentStateEventEntity
+                                                .getOrNull(realm, parentRoomId, "", EventType.STATE_ROOM_POWER_LEVELS)
+                                                ?.root
+                                                ?.let { ContentMapper.map(it.content).toModel<PowerLevelsContent>() }
+                                                ?.let { PowerLevelsHelper(it) }
+
+                                        isValidRelation = powerLevelsHelper?.isUserAllowedToSend(senderId, true, EventType.STATE_SPACE_CHILD) ?: false
+                                    }
+
+                                    if (isValidRelation) {
+                                        lookedUp.parents.add(
+                                                realm.createObject<SpaceParentSummaryEntity>().apply {
+                                                    this.parentRoomId = parentInfo.roomId
+                                                    this.parentSummaryEntity = RoomSummaryEntity.where(realm, parentInfo.roomId).findFirst()
+                                                    this.canonical = parentInfo.canonical
+                                                    this.viaServers.addAll(parentInfo.viaServers)
+                                                }
+                                        )
+
+                                        RoomSummaryEntity.where(realm, parentInfo.roomId)
+                                                .process(RoomSummaryEntityFields.MEMBERSHIP_STR, Membership.activeMemberships())
+                                                .findFirst()
+                                                ?.let { parentSum ->
+                                                    if (lookupMap[parentSum]?.indexOfFirst { it.roomId == lookedUp.roomId } == -1) {
+                                                        // add lookedup as a parent
+                                                        lookupMap[parentSum]?.add(lookedUp)
+                                                    }
+                                                }
                                     }
                                 }
                     }
-                } else {
-                    lookedUp.parents.clearWith { it.deleteFromRealm() }
-                    // can we check parent relations here??
-                    RoomChildRelationInfo(realm, lookedUp.roomId).getParentDescriptions()
-                            .map { parentInfo ->
-
-                                lookedUp.parents.add(
-                                        realm.createObject<SpaceParentSummaryEntity>().apply {
-                                            this.parentRoomId = parentInfo.roomId
-                                            this.parentSummaryEntity = RoomSummaryEntity.where(realm, parentInfo.roomId).findFirst()
-                                            this.canonical = parentInfo.canonical
-                                            this.viaServers.addAll(parentInfo.viaServers)
-                                        }
-                                )
-
-                                RoomSummaryEntity.where(realm, parentInfo.roomId)
-                                        .process(RoomSummaryEntityFields.MEMBERSHIP_STR, Membership.activeMemberships())
-                                        .findFirst()
-                                        ?.let { parentSum ->
-                                            if (lookupMap[parentSum]?.indexOfFirst { it.roomId == lookedUp.roomId } == -1) {
-                                                // add lookedup as a parent
-                                                lookupMap[parentSum]?.add(lookedUp)
-                                            }
-                                        }
-                            }
-                }
-            }
 
             // Simple algorithm to break cycles
             // Need more work to decide how to break, probably need to be as consistent as possible

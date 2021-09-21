@@ -903,11 +903,14 @@
     <string name="room_participants_kick_title">Kick user</string>
     <string name="room_participants_kick_reason">Reason to kick</string>
     <string name="room_participants_kick_prompt_msg">kicking user will remove them from this room.\n\nTo prevent them from joining again, you should ban them instead.</string>
+    <string name="space_participants_kick_prompt_msg">kicking user will remove them from this space.\n\nTo prevent them from joining again, you should ban them instead.</string>
     <string name="room_participants_ban_title">Ban user</string>
     <string name="room_participants_ban_reason">Reason to ban</string>
     <string name="room_participants_unban_title">Unban user</string>
     <string name="room_participants_ban_prompt_msg">Banning user will kick them from this room and prevent them from joining again.</string>
+    <string name="space_participants_ban_prompt_msg">Banning user will kick them from this space and prevent them from joining again.</string>
     <string name="room_participants_unban_prompt_msg">Unbanning user will allow them to join the room again.</string>
+    <string name="space_participants_unban_prompt_msg">Unbanning user will allow them to join the space again.</string>
 
     <string name="reason_hint">Reason</string>
 
@@ -971,11 +974,15 @@
 
     <!-- Room Permissions -->
     <string name="room_settings_permissions_title">Room permissions</string>
+    <string name="space_settings_permissions_title">Space permissions</string>
     <string name="room_settings_permissions_subtitle">View and update the roles required to change various parts of the room.</string>
+    <string name="space_settings_permissions_subtitle">View and update the roles required to change various parts of the space.</string>
 
     <string name="room_permissions_title">"Permissions"</string>
     <string name="room_permissions_notice">"Select the roles required to change various parts of the room"</string>
+    <string name="space_permissions_notice">"Select the roles required to change various parts of this space"</string>
     <string name="room_permissions_notice_read_only">"You don't have permission to update the roles required to change various parts of the room"</string>
+    <string name="space_permissions_notice_read_only">"You don't have permission to update the roles required to change various parts of this space"</string>
 
     <string name="room_permissions_default_role">Default role</string>
     <string name="room_permissions_send_messages">Send messages</string>
@@ -987,13 +994,18 @@
     <string name="room_permissions_notify_everyone">Notify everyone</string>
     <string name="room_permissions_modify_widgets">Modify widgets</string>
     <string name="room_permissions_change_room_avatar">Change room avatar</string>
+    <string name="room_permissions_change_space_avatar">Change space avatar</string>
     <string name="room_permissions_change_main_address_for_the_room">Change main address for the room</string>
+    <string name="room_permissions_change_main_address_for_the_space">Change main address for the space</string>
     <string name="room_permissions_enable_room_encryption">Enable room encryption</string>
+    <string name="room_permissions_enable_space_encryption">Enable space encryption</string>
     <string name="room_permissions_change_history_visibility">Change history visibility</string>
     <string name="room_permissions_change_room_name">Change room name</string>
+    <string name="room_permissions_change_space_name">Change space name</string>
     <string name="room_permissions_change_permissions">Change permissions</string>
     <string name="room_permissions_send_m_room_server_acl_events">Send m.room.server_acl events</string>
     <string name="room_permissions_upgrade_the_room">Upgrade the room</string>
+    <string name="room_permissions_upgrade_the_space">Upgrade the space</string>
     <string name="room_permissions_change_topic">Change topic</string>
 
     <!-- Room Details -->
@@ -1464,7 +1476,9 @@
     <string name="room_settings_room_read_history_rules_pref_dialog_title">Who can read history?</string>
     <string name="room_settings_room_read_history_dialog_subtitle">Changes to who can read history will only apply to future messages in this room. The visibility of existing history will be unchanged.</string>
     <string name="room_settings_room_access_rules_pref_dialog_title">Who can access this room?</string>
+    <string name="room_settings_access_rules_pref_dialog_title">Who can access?</string>
     <string name="room_settings_room_access_title">Room access</string>
+    <string name="room_settings_space_access_title">Space access</string>
     <string name="room_settings_guest_access_title">Allow guests to join</string>
 
     <!-- room settings : alias -->
@@ -1521,6 +1535,7 @@
     <string name="room_settings_room_access_private_description">Only people invited can find and join</string>
     <string name="room_settings_room_access_public_title">Public</string>
     <string name="room_settings_room_access_public_description">Anyone can find the room and join</string>
+    <string name="room_settings_space_access_public_description">Anyone can find the space and join</string>
     <string name="room_settings_room_access_restricted_title">Space members only</string>
     <string name="room_settings_room_access_restricted_description">Anyone in a space with this room can find and join it. Only admins of this room can add it to a space.</string>
     <string name="room_create_member_of_space_name_can_join">Members of Space %s can find, preview and join.</string>
@@ -2177,6 +2192,7 @@
 
     <string name="malformed_message">Malformed event, cannot display</string>
     <string name="create_new_room">Create New Room</string>
+    <string name="create_new_space">Create New Space</string>
     <string name="error_no_network">No network. Please check your Internet connection.</string>
     <string name="action_change">"Change"</string>
     <string name="change_room_directory_network">"Change network"</string>
@@ -2318,6 +2334,7 @@
     <string name="identity_server">Identity server</string>
     <string name="disconnect_identity_server">Disconnect identity server</string>
     <string name="add_identity_server">Configure identity server</string>
+    <string name="open_discovery_settings">Open Discovery Settings</string>
     <string name="change_identity_server">Change identity server</string>
     <string name="settings_discovery_identity_server_info">You are currently using %1$s to discover and be discoverable by existing contacts you know.</string>
     <string name="settings_discovery_identity_server_info_none">You are not currently using an identity server. To discover and be discoverable by existing contacts you know, configure one below.</string>
@@ -2540,6 +2557,7 @@
     <string name="login_set_email_mandatory_hint">Email</string>
     <string name="login_set_email_optional_hint">Email (optional)</string>
     <string name="login_set_email_submit">Next</string>
+    <string name="does_not_look_like_valid_email">Doesn\'t look like a valid email address</string>
 
     <string name="login_set_msisdn_title">Set phone number</string>
     <string name="login_set_msisdn_notice">Set a phone number to optionally allow people you know to discover you.</string>
@@ -2660,6 +2678,7 @@
     <string name="create_room_alias_empty">Please provide a room address</string>
     <string name="create_room_alias_invalid">Some characters are not allowed</string>
     <string name="create_room_in_progress">Creating room…</string>
+    <string name="create_space_in_progress">Creating space…</string>
 
     <string name="login_error_threepid_denied">Your email domain is not authorized to register on this server</string>
 
@@ -3387,6 +3406,7 @@
     <string name="dev_tools_event_content_hint">Event content</string>
 
     <string name="command_description_create_space">Create a Space</string>
+    <string name="command_description_add_to_space">Add to the given Space</string>
     <string name="command_description_join_space">Join the Space with the given id</string>
     <string name="command_description_leave_room">Leave room with given id (or current room if null)</string>
     <string name="command_description_upgrade_room">Upgrades a room to a new version</string>
@@ -3425,6 +3445,8 @@
     <string name="create_space_error_empty_field_space_name">Give it a name to continue.</string>
     <string name="create_spaces_room_public_header">What are some discussions you want to have in %s?</string>
     <string name="create_spaces_room_public_header_desc">We’ll create rooms for them. You can add more later too.</string>
+    <string name="create_spaces_invite_public_header">Who are your teammates?</string>
+    <string name="create_spaces_invite_public_header_desc">Ensure the right people have access to %s company. You can invite more later.</string>
     <string name="create_spaces_room_private_header">What things are you working on?</string>
     <string name="create_spaces_room_private_header_desc">Let’s create a room for each of them. You can add more later too, including already existing ones.</string>
     <string name="create_spaces_default_public_room_name">General</string>
@@ -3450,6 +3472,9 @@
     <string name="join_anyway">Join Anyway</string>
     <string name="room_alias_preview_not_found">This alias is not accessible at this time.\nTry again later, or ask a room admin to check if you have access.</string>
 
+
+    <string name="create_space_identity_server_info_none">You are not currently using an identity server. In order to invite teammates and be discoverable by them, configure one below.</string>
+
     <string name="suggested_rooms_pills_on_empty_text">You’re not in any rooms yet. Below are some suggested rooms, but you can see more with the green button bottom right.</string>
     <!-- First one is the space name, and the second one is user name -->
     <string name="suggested_rooms_pills_on_empty_header">Welcome to %1$s, %2$s.</string>
@@ -3462,13 +3487,22 @@
     <string name="space_explore_activity_title">Explore rooms</string>
     <string name="space_add_child_title">Add rooms</string>
     <string name="leave_space">Leave Space</string>
+    <string name="space_leave_prompt_msg_with_name">Are you sure you want to leave %s?</string>
+    <!-- TO BE REMOVED -->
     <string name="space_leave_prompt_msg">Are you sure you want to leave the space?</string>
     <string name="space_leave_prompt_msg_only_you">You are the only person here. If you leave, no one will be able to join in the future, including you.</string>
-    <string name="space_leave_prompt_msg_private">This space is not public. You will not be able to rejoin without an invite.</string>
-    <string name="space_leave_prompt_msg_as_admin">You are admin of this space, ensure that you have transferred admin right to another member before leaving.</string>
-
+    <string name="space_leave_prompt_msg_private">You won\'t be able to rejoin unless you are re-invited.</string>
+    <string name="space_leave_prompt_msg_as_admin">You\'re the only admin of this space. Leaving it will mean no one has control over it.</string>
+    <string name="leave_all_rooms_and_spaces">Leave all rooms and spaces</string>
+    <string name="you_will_leave_all_in">You will leave all rooms and spaces in %s.</string>
+    <string name="dont_leave_any">Don’t leave any rooms and spaces</string>
+    <string name="leave_specific_ones">Leave specific rooms and spaces…</string>
+    <string name="pick_tings_to_leave">Pick things to leave</string>
 
     <string name="space_add_existing_rooms">Add existing rooms and space</string>
+    <string name="space_add_existing_rooms_only">Add existing rooms</string>
+    <string name="space_add_existing_spaces">Add existing spaces</string>
+    <string name="space_add_space_to_any_space_you_manage">Add a space to any space you manage.</string>
     <string name="space_add_rooms">Add rooms</string>
     <string name="spaces_beta_welcome_to_spaces">Welcome to Spaces!</string>
     <string name="spaces_beta_welcome_to_spaces_desc">Spaces are a new way to group rooms and people.</string>
