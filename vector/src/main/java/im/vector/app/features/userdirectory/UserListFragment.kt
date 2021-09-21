@@ -67,10 +67,6 @@ class UserListFragment @Inject constructor(
 
     override fun getMenuRes() = args.menuResId
 
-    override fun onResume() {
-        super.onResume()
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         sharedActionViewModel = activityViewModelProvider.get(UserListSharedActionViewModel::class.java)

@@ -47,7 +47,6 @@ import java.util.concurrent.TimeUnit
 
 private typealias KnownUsersSearch = String
 private typealias DirectoryUsersSearch = String
-private typealias IdentityServerUserSearch = String
 
 data class ThreePidUser(
         val email: String,
