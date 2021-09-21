@@ -33,7 +33,6 @@ interface PushersService {
      *                          this is the routing or destination address information for the notification,
      *                          for example, the APNS token for APNS or the Registration ID for GCM. If your
      *                          notification client has no such concept, use any unique identifier. Max length, 512 chars.
-     *                          If the kind is "email", this is the email address to send notifications to.
      * @param appId             the application id
      *                          This is a reverse-DNS style identifier for the application. It is recommended
      *                          that this end with the platform, such that different platform versions get
@@ -68,7 +67,6 @@ interface PushersService {
      * Ref: https://matrix.org/docs/spec/client_server/latest#post-matrix-client-r0-pushers-set
      *
      * @param email             The email address to send notifications to.
-     *                          If the kind is "email", this is the email address to send notifications to.
      * @param lang              The preferred language for receiving notifications (e.g. "en" or "en-US").
      * @param emailBranding     The branding placeholder to include in the email communications.
      * @param appDisplayName    A human readable string that will allow the user to identify what application owns this pusher.
