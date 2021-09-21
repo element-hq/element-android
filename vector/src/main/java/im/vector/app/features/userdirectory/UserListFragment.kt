@@ -31,6 +31,7 @@ import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.chip.Chip
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
@@ -42,6 +43,7 @@ import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.core.utils.startSharePlainTextIntent
 import im.vector.app.databinding.FragmentUserListBinding
 import im.vector.app.features.homeserver.HomeServerCapabilitiesViewModel
+import im.vector.app.features.settings.VectorSettingsActivity
 
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.user.model.User
@@ -64,6 +66,10 @@ class UserListFragment @Inject constructor(
     }
 
     override fun getMenuRes() = args.menuResId
+
+    override fun onResume() {
+        super.onResume()
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -131,7 +137,7 @@ class UserListFragment @Inject constructor(
 
     private fun setupSearchView() {
         withState(viewModel) {
-            views.userListSearch.hint = getString(R.string.user_directory_search_hint)
+            views.userListSearch.hint = getString(R.string.user_directory_search_hint_2)
         }
         views.userListSearch
                 .textChanges()
@@ -215,6 +221,26 @@ class UserListFragment @Inject constructor(
     override fun onThreePidClick(threePid: ThreePid) {
         view?.hideKeyboard()
         viewModel.handle(UserListAction.AddPendingSelection(PendingSelection.ThreePidPendingSelection(threePid)))
+    }
+
+    override fun onSetupDiscovery() {
+        navigator.openSettings(
+                requireContext(),
+                VectorSettingsActivity.EXTRA_DIRECT_ACCESS_DISCOVERY_SETTINGS
+        )
+    }
+
+    override fun giveIdentityServerConsent() {
+        withState(viewModel) { state ->
+            MaterialAlertDialogBuilder(requireActivity())
+                    .setTitle(R.string.identity_server_consent_dialog_title)
+                    .setMessage(getString(R.string.identity_server_consent_dialog_content, state.configuredIdentityServer ?: ""))
+                    .setPositiveButton(R.string.yes) { _, _ ->
+                        viewModel.handle(UserListAction.UpdateUserConsent(true))
+                    }
+                    .setNegativeButton(R.string.no, null)
+                    .show()
+        }
     }
 
     override fun onUseQRCode() {

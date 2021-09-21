@@ -2295,7 +2295,9 @@
     <string name="room_filtering_footer_open_room_directory">View the room directory</string>
 
     <string name="room_directory_search_hint">Name or ID (#example:matrix.org)</string>
+    <!-- TO BE REMOVED -->
     <string name="user_directory_search_hint">Search by name or ID</string>
+    <string name="user_directory_search_hint_2">Search by name, ID or mail</string>
 
     <string name="search_hint_room_name">Search Name</string>
 
@@ -3460,6 +3462,7 @@
     <string name="invite_people_to_your_space_desc">It’s just you at the moment.  %s will be even better with others.</string>
     <string name="invite_by_email">Invite by email</string>
     <string name="invite_by_mxid">Invite by username</string>
+    <string name="invite_by_mxid_or_mail">Invite by username or mail</string>
     <string name="invite_by_link">Share link</string>
     <string name="invite_to_space_with_name">Invite to %s</string>
     <string name="invite_to_space_with_name_desc">"They’ll be able to explore %s"</string>
@@ -3475,6 +3478,13 @@
 
 
     <string name="create_space_identity_server_info_none">You are not currently using an identity server. In order to invite teammates and be discoverable by them, configure one below.</string>
+
+
+    <string name="finish_setting_up_discovery">Finish setting up discovery.</string>
+    <string name="discovery_invite">Invite by email, find contacts and more…</string>
+    <string name="finish_setup">Finish setup</string>
+    <string name="discovery_section">Discovery (%s)</string>
+
 
     <string name="suggested_rooms_pills_on_empty_text">You’re not in any rooms yet. Below are some suggested rooms, but you can see more with the green button bottom right.</string>
     <!-- First one is the space name, and the second one is user name -->
