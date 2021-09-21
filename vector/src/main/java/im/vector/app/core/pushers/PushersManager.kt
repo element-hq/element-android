@@ -70,7 +70,6 @@ class PushersManager @Inject constructor(
                 emailBranding = appName,
                 appDisplayName = appName,
                 deviceDisplayName = currentSession.sessionParams.deviceId ?: "MOBILE",
-                append = true,
         )
     }
 
