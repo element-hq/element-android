@@ -69,7 +69,7 @@ class PushersManager @Inject constructor(
                 lang = localeProvider.current().language,
                 emailBranding = appName,
                 appDisplayName = appName,
-                deviceDisplayName = currentSession.sessionParams.deviceId ?: "MOBILE",
+                deviceDisplayName = currentSession.sessionParams.deviceId ?: "MOBILE"
         )
     }
 
