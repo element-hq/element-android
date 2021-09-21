@@ -94,10 +94,11 @@
         android:layout_width="wrap_content"
         android:layout_height="14dp"
         android:adjustViewBounds="true"
+        android:importantForAccessibility="no"
         android:src="@drawable/ic_tchap_people"
         app:layout_constraintBottom_toBottomOf="@+id/itemPublicRoomMembersCount"
-        app:layout_constraintTop_toTopOf="@+id/itemPublicRoomMembersCount"
         app:layout_constraintEnd_toEndOf="@+id/itemPublicRoomDomain"
+        app:layout_constraintTop_toTopOf="@+id/itemPublicRoomMembersCount"
         app:tint="?vctr_content_secondary" />
 
     <TextView

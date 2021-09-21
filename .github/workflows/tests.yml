@@ -26,7 +26,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
       - name: Run unit tests
-        run: ./gradlew clean TestGplayPreprodWithvoipWithoutpinningDebugUnitTest $CI_GRADLE_ARG_PROPERTIES -PallWarningsAsErrors=false --stacktrace
+        run: ./gradlew clean TestGplayPreprodWithoutvoipWithoutpinningDebugUnitTest $CI_GRADLE_ARG_PROPERTIES -PallWarningsAsErrors=false --stacktrace
       - name: Publish Unit Test Results
         uses: EnricoMi/publish-unit-test-result-action@v1
         if: always()

@@ -55,7 +55,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: [ GplayPreprodWithvoipWithoutpinning, FdroidPreprodWithvoipWithoutpinning ]
+        target: [ GplayPreprodWithoutvoipWithoutpinning, FdroidPreprodWithoutvoipWithoutpinning ]
     steps:
       - uses: actions/checkout@v2
       - uses: actions/cache@v2
