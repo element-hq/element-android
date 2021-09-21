@@ -61,6 +61,22 @@ class PushersManager @Inject constructor(
         )
     }
 
+    fun registerEmailForPush(email: String) {
+        val currentSession = activeSessionHolder.getActiveSession()
+        currentSession.addEmailPusher(
+                email = email,
+                lang = localeProvider.current().language,
+                appDisplayName = appNameProvider.getAppName(),
+                deviceDisplayName = currentSession.sessionParams.deviceId ?: "MOBILE",
+                append = true,
+        )
+    }
+
+    suspend fun unregisterEmailPusher(email: String) {
+        val currentSession = activeSessionHolder.getSafeActiveSession() ?: return
+        currentSession.removeEmailPusher(email)
+    }
+
     suspend fun unregisterPusher(pushKey: String) {
         val currentSession = activeSessionHolder.getSafeActiveSession() ?: return
         currentSession.removeHttpPusher(pushKey, stringProvider.getString(R.string.pusher_app_id))

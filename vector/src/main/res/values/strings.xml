@@ -1112,6 +1112,10 @@
     <string name="settings_notification_advanced">Advanced Notification Settings</string>
     <string name="settings_notification_by_event">Notification importance by event</string>
 
+    <string name="settings_notification_emails_category">Email notification</string>
+    <string name="settings_notification_emails_no_emails">To receive email with notification, please associate an email to your Matrix account</string>
+    <string name="settings_notification_emails_enable_for_email">Enable email notifications for %s</string>
+
     <string name="settings_notification_default">Default Notifications</string>
     <string name="settings_notification_mentions_and_keywords">Mentions and Keywords</string>
     <string name="settings_notification_other">Other</string>

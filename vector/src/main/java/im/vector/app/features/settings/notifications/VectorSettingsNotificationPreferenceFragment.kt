@@ -47,6 +47,9 @@ import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.pushrules.RuleIds
 import org.matrix.android.sdk.api.pushrules.RuleKind
+import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.identity.ThreePid
+import org.matrix.android.sdk.api.session.pushers.Pusher
 import javax.inject.Inject
 
 // Referenced in vector_settings_preferences_root.xml
@@ -116,9 +119,49 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
             }
         }
 
+        bindEmailNotifications()
         refreshBackgroundSyncPrefs()
 
         handleSystemPreference()
+    }
+
+    private fun bindEmailNotifications() {
+        val emails = session.getEmailsWithPushInformation()
+        findPreference<VectorPreferenceCategory>(VectorPreferences.SETTINGS_EMAIL_NOTIFICATION_CATEGORY_PREFERENCE_KEY)?.let { category ->
+            if (emails.isEmpty()) {
+                val vectorPreference = VectorPreference(requireContext())
+                vectorPreference.title = resources.getString(R.string.settings_notification_emails_no_emails)
+                category.addPreference(vectorPreference)
+                vectorPreference.setOnPreferenceClickListener {
+                    interactionListener?.navigateToEmailAndPhoneNumbers()
+                    true
+                }
+            } else {
+                emails.forEach { (emailPid, pusher) ->
+                    val pref = VectorSwitchPreference(requireContext())
+                    pref.title = resources.getString(R.string.settings_notification_emails_enable_for_email, emailPid.email)
+                    pref.isChecked = pusher != null
+                    pref.setOnPreferenceChangeListener { _, newValue ->
+                        if (newValue as Boolean) {
+                            pushManager.registerEmailForPush(emailPid.email)
+                        } else {
+                            lifecycleScope.launch {
+                                pushManager.unregisterEmailPusher(emailPid.email)
+                            }
+                        }
+                        true
+                    }
+                    category.addPreference(pref)
+                }
+            }
+        }
+    }
+
+    private fun Session.getEmailsWithPushInformation(): List<Pair<ThreePid.Email, Pusher?>> {
+        val emailPushers = this.getPushers().filter { it.kind == "email" }
+        return this.getThreePids()
+                .filterIsInstance<ThreePid.Email>()
+                .map { it to emailPushers.firstOrNull { pusher -> pusher.pushKey == it.email } }
     }
 
     private val batteryStartForActivityResult = registerStartForActivityResult {
