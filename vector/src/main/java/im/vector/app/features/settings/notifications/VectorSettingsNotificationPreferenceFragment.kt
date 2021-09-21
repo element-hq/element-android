@@ -85,6 +85,21 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
             (pref as SwitchPreference).isChecked = areNotifEnabledAtAccountLevel
         }
 
+        findPreference<SwitchPreference>(VectorPreferences.SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY)?.let {
+            it.setTransactionalSwitchChangeListener(lifecycleScope) { isChecked ->
+                if (isChecked) {
+                    FcmHelper.getFcmToken(requireContext())?.let {
+                        pushManager.registerPusherWithFcmKey(it)
+                    }
+                } else {
+                    FcmHelper.getFcmToken(requireContext())?.let {
+                        pushManager.unregisterPusher(it)
+                        session.refreshPushers()
+                    }
+                }
+            }
+        }
+
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_FDROID_BACKGROUND_SYNC_MODE)?.let {
             it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 val initialMode = vectorPreferences.getFdroidSyncBackgroundMode()
@@ -324,42 +339,12 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
 
     override fun onPreferenceTreeClick(preference: Preference?): Boolean {
         return when (preference?.key) {
-            VectorPreferences.SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY -> {
-                updateEnabledForDevice(preference)
-                true
-            }
             VectorPreferences.SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY   -> {
                 updateEnabledForAccount(preference)
                 true
             }
             else                                                         -> {
                 return super.onPreferenceTreeClick(preference)
-            }
-        }
-    }
-
-    private fun updateEnabledForDevice(preference: Preference?) {
-        val switchPref = preference as SwitchPreference
-        if (switchPref.isChecked) {
-            FcmHelper.getFcmToken(requireContext())?.let {
-                pushManager.registerPusherWithFcmKey(it)
-            }
-        } else {
-            FcmHelper.getFcmToken(requireContext())?.let {
-                lifecycleScope.launch {
-                    runCatching { pushManager.unregisterPusher(it) }
-                            .fold(
-                                    { session.refreshPushers() },
-                                    {
-                                        if (!isAdded) {
-                                            return@fold
-                                        }
-                                        // revert the check box
-                                        switchPref.isChecked = !switchPref.isChecked
-                                        Toast.makeText(activity, R.string.unknown_error, Toast.LENGTH_SHORT).show()
-                                    }
-                            )
-                }
             }
         }
     }

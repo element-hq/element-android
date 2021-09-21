@@ -58,56 +58,25 @@ internal class DefaultPushersService @Inject constructor(
                 .executeBy(taskExecutor)
     }
 
-    override fun enqueueAddHttpPusher(pushkey: String,
-                                      appId: String,
-                                      profileTag: String,
-                                      lang: String,
-                                      appDisplayName: String,
-                                      deviceDisplayName: String,
-                                      url: String,
-                                      append: Boolean,
-                                      withEventIdOnly: Boolean
-    ): UUID {
-        return enqueueAddPusher(
-                JsonPusher(
-                        pushKey = pushkey,
-                        kind = "http",
-                        appId = appId,
-                        profileTag = profileTag,
-                        lang = lang,
-                        appDisplayName = appDisplayName,
-                        deviceDisplayName = deviceDisplayName,
-                        data = JsonPusherData(url, EVENT_ID_ONLY.takeIf { withEventIdOnly }),
-                        append = append
-                )
-        )
+    override fun enqueueAddHttpPusher(httpPusher: PushersService.HttpPusher): UUID {
+        return enqueueAddPusher(httpPusher.toJsonPusher())
     }
 
-    override suspend fun addHttpPusher(pushkey: String,
-                                       appId: String,
-                                       profileTag: String,
-                                       lang: String,
-                                       appDisplayName: String,
-                                       deviceDisplayName: String,
-                                       url: String,
-                                       append: Boolean,
-                                       withEventIdOnly: Boolean) {
-        addPusherTask.execute(
-                AddPusherTask.Params(
-                        JsonPusher(
-                                pushKey = pushkey,
-                                kind = "http",
-                                appId = appId,
-                                profileTag = profileTag,
-                                lang = lang,
-                                appDisplayName = appDisplayName,
-                                deviceDisplayName = deviceDisplayName,
-                                data = JsonPusherData(url, EVENT_ID_ONLY.takeIf { withEventIdOnly }),
-                                append = append
-                        )
-                )
-        )
+    override suspend fun addHttpPusher(httpPusher: PushersService.HttpPusher) {
+        addPusherTask.execute(AddPusherTask.Params(httpPusher.toJsonPusher()))
     }
+
+    private fun PushersService.HttpPusher.toJsonPusher() = JsonPusher(
+            pushKey = pushkey,
+            kind = "http",
+            appId = appId,
+            profileTag = profileTag,
+            lang = lang,
+            appDisplayName = appDisplayName,
+            deviceDisplayName = deviceDisplayName,
+            data = JsonPusherData(url, EVENT_ID_ONLY.takeIf { withEventIdOnly }),
+            append = append
+    )
 
     override suspend fun addEmailPusher(email: String,
                                         lang: String,
