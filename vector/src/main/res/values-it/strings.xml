@@ -1036,11 +1036,11 @@
     <string name="dialog_user_consent_content">Per continuare ad usare l\'Home Server %1$s devi leggerne e accettarne i termini di servizio.</string>
     <string name="dialog_user_consent_submit">Leggi ora</string>
     <string name="deactivate_account_title">Disattiva l\'account</string>
-    <string name="deactivate_account_content">Ciò renderà il tuo account inutilizzabile per l\'eternità. Non potrai più accederci e nessuno potrà ri-registrare lo stesso ID utente. Il tuo account uscirà da tutte le stanze in cui si trova attualmente e di dettagli del tuo account saranno rimossi dall\'Identity Server. <b>Questa azione è irreversibile</b>. 
+    <string name="deactivate_account_content">Ciò renderà il tuo account inutilizzabile per sempre. Non potrai più accedervi e nessuno potrà ri-registrare lo stesso ID utente. Il tuo account uscirà da tutte le stanze in cui si trova attualmente e i dettagli del tuo account saranno rimossi dal server d\'identità. <b>Questa azione è irreversibile</b>.
 \n
 \nDisattivare il tuo account <b>non eliminerà i messaggi che hai inviato</b>. Se vuoi che i tuoi messaggi siano dimenticati seleziona la casella qua sotto.
 \n
-\nLa visibilità dei messaggi in Matrix è simile alle email. Questo vuol dire che se chiedi di \"dimenticare i tuoi messaggi\", quelli che hai inviato finora non verranno mai più condivisi con alcun nuovo utente, ma gli utenti che hanno già avuto accesso ai tuoi messaggi continueranno a potervi accedere.</string>
+\nLa visibilità dei messaggi in Matrix è simile alle email. Questo vuol dire che se chiedi di \"dimenticare i tuoi messaggi\", quelli che hai inviato finora non verranno mai più condivisi con nuovi utenti, ma gli utenti che hanno già avuto accesso ai tuoi messaggi continueranno a poterli leggere.</string>
     <string name="deactivate_account_delete_checkbox">Per favore dimenticate tutti i messaggi che ho inviato fino al momento della disattivazione del mio account (Attenzione: in questo modo i nuovi utenti potrebbero vedere delle conversazioni incomplete)</string>
     <string name="deactivate_account_prompt_password">Per continuare, inserisci la tua password:</string>
     <string name="deactivate_account_submit">Disattiva l\'account</string>
