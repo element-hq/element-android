@@ -47,7 +47,6 @@ abstract class TchapRoomSummaryItem : VectorEpoxyModel<TchapRoomSummaryItem.Hold
     @EpoxyAttribute lateinit var typingMessage: CharSequence
     @EpoxyAttribute lateinit var avatarRenderer: AvatarRenderer
     @EpoxyAttribute lateinit var matrixItem: MatrixItem
-    @EpoxyAttribute @JvmField var isDirect: Boolean = false
     @EpoxyAttribute @JvmField var isEncrypted: Boolean = false
     @EpoxyAttribute @JvmField var isPinned: Boolean = false
     @EpoxyAttribute lateinit var roomType: TchapRoomType
@@ -114,17 +113,17 @@ abstract class TchapRoomSummaryItem : VectorEpoxyModel<TchapRoomSummaryItem.Hold
     }
 
     private fun renderAvatar(holder: Holder) {
-        holder.avatarImageView.visibility = if (isDirect) View.VISIBLE else View.GONE
-        holder.avatarHexagonImageView.visibility = if (isDirect) View.GONE else View.VISIBLE
+        if (roomType == TchapRoomType.DIRECT) {
+            holder.avatarImageView.visibility = View.VISIBLE
+            holder.avatarHexagonImageView.visibility = View.GONE
 
-        avatarRenderer.render(
-                matrixItem,
-                if (isDirect) {
-                    holder.avatarImageView
-                } else {
-                    holder.avatarHexagonImageView
-                }
-        )
+            avatarRenderer.render(matrixItem, holder.avatarImageView)
+        } else {
+            holder.avatarImageView.visibility = View.GONE
+            holder.avatarHexagonImageView.visibility = View.VISIBLE
+
+            avatarRenderer.render(matrixItem, holder.avatarHexagonImageView)
+        }
     }
 
     private fun renderRoomType(holder: Holder) {

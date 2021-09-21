@@ -123,7 +123,6 @@ class TchapRoomSummaryItemFactory @Inject constructor(private val displayableEve
                 // We do not display shield in the room list anymore
                 // .encryptionTrustLevel(roomSummary.roomEncryptionTrustLevel)
                 .matrixItem(roomSummary.toMatrixItem())
-                .isDirect(roomSummary.isDirect)
                 .isEncrypted(roomSummary.isEncrypted)
                 .isPinned(roomSummary.isFavorite)
                 .roomType(RoomUtils.getRoomType(roomSummary))
