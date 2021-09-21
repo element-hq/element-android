@@ -43,6 +43,7 @@ import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.VectorSettingsBaseFragment
 import im.vector.app.features.settings.VectorSettingsFragmentInteractionListener
 import im.vector.app.push.fcm.FcmHelper
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.pushrules.RuleIds
@@ -141,15 +142,12 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
                     val pref = VectorSwitchPreference(requireContext())
                     pref.title = resources.getString(R.string.settings_notification_emails_enable_for_email, emailPid.email)
                     pref.isChecked = pusher != null
-                    pref.setOnPreferenceChangeListener { _, newValue ->
-                        if (newValue as Boolean) {
+                    pref.setTransactionalSwitchChangeListener(lifecycleScope) { isChecked ->
+                        if (isChecked) {
                             pushManager.registerEmailForPush(emailPid.email)
                         } else {
-                            lifecycleScope.launch {
-                                pushManager.unregisterEmailPusher(emailPid.email)
-                            }
+                            pushManager.unregisterEmailPusher(emailPid.email)
                         }
-                        true
                     }
                     category.addPreference(pref)
                 }
@@ -384,5 +382,21 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
                         }
                     }
                 }
+    }
+}
+
+private fun SwitchPreference.setTransactionalSwitchChangeListener(scope: CoroutineScope, transaction: suspend (Boolean) -> Unit) {
+    val originalState = this.isChecked
+    this.setOnPreferenceChangeListener { switchPreference, isChecked ->
+        scope.launch {
+            try {
+                transaction(isChecked as Boolean)
+            } catch (failure: Throwable) {
+                require(switchPreference is SwitchPreference)
+                switchPreference.isChecked = originalState
+                Toast.makeText(switchPreference.context, R.string.unknown_error, Toast.LENGTH_SHORT).show()
+            }
+        }
+        true
     }
 }
