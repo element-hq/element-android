@@ -1404,7 +1404,7 @@ class RoomDetailFragment @Inject constructor(
             avatarRenderer.render(roomSummary.toMatrixItem(), views.roomToolbarAvatarImageView)
 
             renderSubTitle(typingMessage, roomSummary.topic)
-            views.roomToolbarDecorationImageView.render(roomSummary.roomEncryptionTrustLevel)
+            views.roomToolbarDecorationImageView.render(null) // Tchap does not display encryption trust level
         }
     }
 

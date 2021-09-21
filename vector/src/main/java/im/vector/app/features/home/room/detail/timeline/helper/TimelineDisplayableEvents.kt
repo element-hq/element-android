@@ -43,7 +43,6 @@ object TimelineDisplayableEvents {
             EventType.CALL_REJECT,
             EventType.ENCRYPTED,
             EventType.STATE_ROOM_ENCRYPTION,
-            EventType.STATE_ROOM_GUEST_ACCESS,
             EventType.STATE_ROOM_THIRD_PARTY_INVITE,
             EventType.STICKER,
             EventType.STATE_ROOM_CREATE,
@@ -60,7 +59,6 @@ fun TimelineEvent.canBeMerged(): Boolean {
 
 fun TimelineEvent.isRoomConfiguration(roomCreatorUserId: String?): Boolean {
     return root.isStateEvent() && when (root.getClearType()) {
-        EventType.STATE_ROOM_GUEST_ACCESS,
         EventType.STATE_ROOM_HISTORY_VISIBILITY,
         EventType.STATE_ROOM_JOIN_RULES,
         EventType.STATE_ROOM_NAME,

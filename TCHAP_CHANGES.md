@@ -30,6 +30,7 @@ Improvements 🙌:
  - Set up the application icon (Btchap/Tchap/Tchap secure) #102
  - [Home screen] Set up the (+) button on the rooms list #109
  - Set up the variant Tchap without voip #161
+ - Adjust the design in the room details screen #168
 
 
 =======================================================
