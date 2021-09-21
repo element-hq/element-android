@@ -21,6 +21,7 @@ import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.resources.AppNameProvider
 import im.vector.app.core.resources.LocaleProvider
 import im.vector.app.core.resources.StringProvider
+import org.matrix.android.sdk.api.session.pushers.PushersService
 import java.util.UUID
 import javax.inject.Inject
 import kotlin.math.abs
@@ -44,22 +45,27 @@ class PushersManager @Inject constructor(
         )
     }
 
-    fun registerPusherWithFcmKey(pushKey: String): UUID {
+    fun enqueueRegisterPusherWithFcmKey(pushKey: String): UUID {
         val currentSession = activeSessionHolder.getActiveSession()
-        val profileTag = DEFAULT_PUSHER_FILE_TAG + "_" + abs(currentSession.myUserId.hashCode())
-
-        return currentSession.enqueueAddHttpPusher(
-                pushKey,
-                stringProvider.getString(R.string.pusher_app_id),
-                profileTag,
-                localeProvider.current().language,
-                appNameProvider.getAppName(),
-                currentSession.sessionParams.deviceId ?: "MOBILE",
-                stringProvider.getString(R.string.pusher_http_url),
-                append = false,
-                withEventIdOnly = true
-        )
+        return currentSession.enqueueAddHttpPusher(httpPusher(pushKey))
     }
+
+    suspend fun registerPusherWithFcmKey(pushKey: String) {
+        val currentSession = activeSessionHolder.getActiveSession()
+        currentSession.addHttpPusher(httpPusher(pushKey))
+    }
+
+    private fun httpPusher(pushKey: String) = PushersService.HttpPusher(
+            pushKey,
+            stringProvider.getString(R.string.pusher_app_id),
+            profileTag = DEFAULT_PUSHER_FILE_TAG + "_" + abs(activeSessionHolder.getActiveSession().myUserId.hashCode()),
+            localeProvider.current().language,
+            appNameProvider.getAppName(),
+            activeSessionHolder.getActiveSession().sessionParams.deviceId ?: "MOBILE",
+            stringProvider.getString(R.string.pusher_http_url),
+            append = false,
+            withEventIdOnly = true
+    )
 
     suspend fun registerEmailForPush(email: String) {
         val currentSession = activeSessionHolder.getActiveSession()
