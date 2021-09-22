@@ -28,6 +28,7 @@ import io.realm.RealmModel
 import io.realm.RealmQuery
 import io.realm.kotlin.where
 import kotlinx.coroutines.runBlocking
+import org.amshove.kluent.internal.assertFailsWith
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Test
 import org.matrix.android.sdk.api.failure.GlobalError
@@ -35,6 +36,7 @@ import org.matrix.android.sdk.api.session.pushers.PusherState
 import org.matrix.android.sdk.internal.database.model.PusherEntity
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.util.awaitTransaction
+import java.net.SocketException
 
 private val A_JSON_PUSHER = JsonPusher(
         pushKey = "push-key",
@@ -60,16 +62,52 @@ class DefaultAddPusherTaskTest {
     )
 
     @Test
-    fun `given no persisted pusher when running task then fetches from api and inserts result with Registered state`() = runBlocking {
+    fun `given no persisted pusher when adding Pusher then updates api and inserts result with Registered state`() {
         monarchy.givenWhereReturns<PusherEntity>(result = null)
 
-        addPusherTask.execute(AddPusherTask.Params(A_JSON_PUSHER))
+        runBlocking { addPusherTask.execute(AddPusherTask.Params(A_JSON_PUSHER)) }
 
         pushersAPI.verifySetPusher(A_JSON_PUSHER)
         monarchy.verifyInsertOrUpdate<PusherEntity> {
             withArg { actual ->
                 actual.state shouldBeEqualTo PusherState.REGISTERED
             }
+        }
+    }
+
+    @Test
+    fun `given a persisted pusher when adding Pusher then updates api and mutates persisted result with Registered state`() {
+        val realmResult = PusherEntity(appDisplayName = null)
+        monarchy.givenWhereReturns(result = realmResult)
+
+        runBlocking { addPusherTask.execute(AddPusherTask.Params(A_JSON_PUSHER)) }
+
+        pushersAPI.verifySetPusher(A_JSON_PUSHER)
+
+        realmResult.appDisplayName shouldBeEqualTo A_JSON_PUSHER.appDisplayName
+        realmResult.state shouldBeEqualTo PusherState.REGISTERED
+    }
+
+    @Test
+    fun `given a persisted push entity and SetPush API fails when adding Pusher then mutates persisted result with Failed registration state and rethrows error`() {
+        val realmResult = PusherEntity()
+        monarchy.givenWhereReturns(result = realmResult)
+        pushersAPI.givenSetPusherErrors(SocketException())
+
+        assertFailsWith<SocketException> {
+            runBlocking { addPusherTask.execute(AddPusherTask.Params(A_JSON_PUSHER)) }
+        }
+
+        realmResult.state shouldBeEqualTo PusherState.FAILED_TO_REGISTER
+    }
+
+    @Test
+    fun `given no persisted push entity and SetPush API fails when adding Pusher then rethrows error`() {
+        monarchy.givenWhereReturns<PusherEntity>(result = null)
+        pushersAPI.givenSetPusherErrors(SocketException())
+
+        assertFailsWith<SocketException> {
+            runBlocking { addPusherTask.execute(AddPusherTask.Params(A_JSON_PUSHER)) }
         }
     }
 }
