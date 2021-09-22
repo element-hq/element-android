@@ -23,7 +23,6 @@ import org.matrix.android.sdk.internal.database.model.PusherEntity
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
-import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.task.Task
 import org.matrix.android.sdk.internal.util.awaitTransaction
 import javax.inject.Inject
@@ -35,6 +34,7 @@ internal interface AddPusherTask : Task<AddPusherTask.Params, Unit> {
 internal class DefaultAddPusherTask @Inject constructor(
         private val pushersAPI: PushersAPI,
         @SessionDatabase private val monarchy: Monarchy,
+        private val requestExecutor: RequestExecutor,
         private val globalErrorReceiver: GlobalErrorReceiver
 ) : AddPusherTask {
     override suspend fun execute(params: AddPusherTask.Params) {
@@ -52,7 +52,7 @@ internal class DefaultAddPusherTask @Inject constructor(
     }
 
     private suspend fun setPusher(pusher: JsonPusher) {
-        executeRequest(globalErrorReceiver) {
+        requestExecutor.executeRequest(globalErrorReceiver) {
             pushersAPI.setPusher(pusher)
         }
         monarchy.awaitTransaction { realm ->
@@ -73,5 +73,19 @@ internal class DefaultAddPusherTask @Inject constructor(
                 }
             }
         }
+    }
+}
+
+internal interface RequestExecutor {
+    suspend fun <DATA> executeRequest(globalErrorReceiver: GlobalErrorReceiver?,
+                                      canRetry: Boolean = false,
+                                      maxDelayBeforeRetry: Long = 32_000L,
+                                      maxRetriesCount: Int = 4,
+                                      requestBlock: suspend () -> DATA): DATA
+}
+
+internal object DefaultRequestExecutor : RequestExecutor {
+    override suspend fun <DATA> executeRequest(globalErrorReceiver: GlobalErrorReceiver?, canRetry: Boolean, maxDelayBeforeRetry: Long, maxRetriesCount: Int, requestBlock: suspend () -> DATA): DATA {
+        return executeRequest(globalErrorReceiver, canRetry, maxDelayBeforeRetry, maxRetriesCount, requestBlock)
     }
 }
