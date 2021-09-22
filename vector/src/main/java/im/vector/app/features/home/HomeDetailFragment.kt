@@ -32,6 +32,7 @@ import com.google.android.material.badge.BadgeDrawable
 import im.vector.app.R
 import im.vector.app.RoomGroupingMethod
 import im.vector.app.core.extensions.commitTransaction
+import im.vector.app.core.extensions.restart
 import im.vector.app.core.extensions.toMvRxBundle
 import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
@@ -82,6 +83,9 @@ class HomeDetailFragment @Inject constructor(
 
     private lateinit var sharedActionViewModel: HomeSharedActionViewModel
     private lateinit var sharedCallActionViewModel: SharedKnownCallsViewModel
+
+    // When this changes, restart the activity for changes to apply
+    private val shouldShowUnimportantCounterBadge = vectorPreferences.shouldShowUnimportantCounterBadge()
 
     private var hasUnreadRooms = false
         set(value) {
@@ -201,6 +205,12 @@ class HomeDetailFragment @Inject constructor(
 
     override fun onResume() {
         super.onResume()
+
+        if (vectorPreferences.shouldShowUnimportantCounterBadge() != shouldShowUnimportantCounterBadge) {
+            activity?.restart()
+            return
+        }
+
         // update notification tab if needed
 
         //updateTabVisibilitySafely(R.id.bottom_action_notification, vectorPreferences.labAddNotificationTab())
