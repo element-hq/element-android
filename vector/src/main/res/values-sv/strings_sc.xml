@@ -28,8 +28,6 @@
     <string name="bubble_time_location">Tidsstämpelplats</string>
     <string name="bubble_time_location_top">Topp</string>
     <string name="bubble_time_location_bottom">Botten</string>
-    <string name="settings_unimportant_counter_badge">Räkna oviktiga chattevenemang</string>
-    <string name="settings_unimportant_counter_badge_summary">Inkludera chattar utan aviseringar i kategorin olästa räknare</string>
     <string name="labs_mark_rooms_unread">Markera chattar som olästa</string>
     <string name="url_previews_in_encrypted_rooms">URL-förhandsgranskningar i krypterade chattar</string>
     <string name="url_previews_in_encrypted_rooms_summary">Detta kommer att läcka webbadresser från dina meddelanden till din hemserver!</string>

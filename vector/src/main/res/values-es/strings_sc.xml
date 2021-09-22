@@ -33,8 +33,6 @@
     <string name="login_mobile_device_sc">SchildiChat para Android</string>
     <string name="bottom_action_all">General</string>
     <string name="url_previews_in_encrypted_rooms">Previsualización de URLs en chats encriptados</string>
-    <string name="settings_unimportant_counter_badge">Contar chats de eventos no importantes</string>
-    <string name="settings_unimportant_counter_badge_summary">Incluir chat sin notificaciones en el contador de la categoría de no leídos</string>
     <string name="settings_home_overview">Vista general</string>
     <string name="show_participants_sc">Participantes</string>
     <string name="show_room_info_sc">Detalles de la sala</string>

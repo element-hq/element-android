@@ -9,8 +9,6 @@
     <string name="url_previews_in_encrypted_rooms">URL-i eelvaade krüpteeritud vestlustes</string>
     <string name="labs_mark_rooms_unread_summary">Luba märkida vestlused lugemata. Teised maatrikskliendid ei pruugi seda funktsiooni veel toetada.</string>
     <string name="labs_mark_rooms_unread">Märgista vestlused lugemata</string>
-    <string name="settings_unimportant_counter_badge_summary">Kaasa arvatud vestlused ilma teavitusteta kategooria lugemata loendurisse</string>
-    <string name="settings_unimportant_counter_badge">Lugege ebaolulisi vestlussündmusi</string>
     <string name="bubble_time_location_bottom">Altpoolt</string>
     <string name="bubble_time_location">Ajatempli asukoht</string>
     <string name="bubble_style_both">Mõlemad pooled</string>

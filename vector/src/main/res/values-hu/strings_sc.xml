@@ -24,7 +24,6 @@
     <string name="url_previews_in_encrypted_rooms">URL előnézetek titkosított csevegésekben</string>
     <string name="labs_mark_rooms_unread_summary">Lehetővé teszi a csevegések olvasatlanként való megjelölését. Más mátrixkliensek még nem feltétlenül támogatják ezt a funkciót.</string>
     <string name="labs_mark_rooms_unread">A csevegések olvashatatlannak jelölése</string>
-    <string name="settings_unimportant_counter_badge_summary">Értesítések nélküli csevegések felvétele az olvasatlan kategóriák számlálójába</string>
     <string name="bubble_time_location">Időbélyegző hely</string>
     <string name="bubble_style_both">Mindkét oldal</string>
     <string name="bubble_style_start">Ugyanazon oldal</string>
@@ -32,7 +31,6 @@
     <string name="bubble_style">Üzenet buborék</string>
     <string name="settings_system_dark_theme_pre_ten_summary">Külön témabeállítások biztosítása a világos és sötét témákhoz. Előfordulhat, hogy az Ön jelenlegi Android verziója nem támogatja a világos és sötét témák közötti váltást!</string>
     <string name="settings_system_dark_theme_pre_ten">Kövesse a rendszer sötét téma</string>
-    <string name="settings_unimportant_counter_badge">Számolja a nem fontos csevegési eseményeket</string>
     <string name="bubble_time_location_bottom">Alul</string>
     <string name="bubble_time_location_top">Legjobb</string>
     <string name="sc_dark_colored_theme">SC Sötét, színes buborékok</string>

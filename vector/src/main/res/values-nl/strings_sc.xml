@@ -21,8 +21,6 @@
     <string name="bubble_style_both">Beide zijden</string>
     <string name="bubble_time_location">Tijdstempel locatie</string>
     <string name="bubble_time_location_bottom">Bodem</string>
-    <string name="settings_unimportant_counter_badge">Onbelangrijke chatgebeurtenissen tellen</string>
-    <string name="settings_unimportant_counter_badge_summary">Chats zonder meldingen opnemen in de categorie ongelezen teller</string>
     <string name="labs_mark_rooms_unread">Markeer chats als ongelezen</string>
     <string name="show_participants_sc">Deelnemers</string>
     <string name="show_room_info_sc">Details van de kamer</string>

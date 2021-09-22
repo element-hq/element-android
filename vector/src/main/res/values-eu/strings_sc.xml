@@ -2,7 +2,6 @@
 <resources>
     <string name="login_connect_using_matrix_id_text_sc">adibidez, @user:domain.com</string>
     <string name="url_previews_in_encrypted_rooms_summary">Hau izango da leak Url zure mezuak zure homeserver!</string>
-    <string name="settings_unimportant_counter_badge_summary">Besteak beste, hitzaldian gabe jakinarazpenak kategorian irakurri gabeko counter</string>
     <string name="normal_priority_header">Normala lehentasuna</string>
     <string name="settings_system_dark_theme_pre_ten">Jarraitu sistema dark gaia</string>
     <string name="settings_dark_theme">Dark gaia</string>
@@ -29,7 +28,6 @@
     <string name="url_previews_in_encrypted_rooms">URL aurrebistak enkriptatutako hitzaldian</string>
     <string name="labs_mark_rooms_unread_summary">Baimendu markatzeko hitzaldian bezala irakurri gabe. Beste matrize bezeroei agian ez laguntza funtzionalitate hau oraindik.</string>
     <string name="labs_mark_rooms_unread">Mark hitzaldian irakurri gabeko gisa</string>
-    <string name="settings_unimportant_counter_badge">Zenbatu garrantzirik chat ekitaldiak</string>
     <string name="bubble_time_location_bottom">Behean</string>
     <string name="bubble_time_location">Denbora-marka kokapena</string>
     <string name="bubble_style_both">Bi aldeetan</string>

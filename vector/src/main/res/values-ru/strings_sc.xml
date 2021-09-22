@@ -18,8 +18,6 @@
     <string name="bubble_style_none">Нет</string>
     <string name="bubble_style_start">На той же стороне</string>
     <string name="bubble_style_both">С обеих сторон</string>
-    <string name="settings_unimportant_counter_badge">Счётчик неважных событий чата</string>
-    <string name="settings_unimportant_counter_badge_summary">Отобразить чаты без уведомлений в счётчике непрочитанных сообщений</string>
     <string name="login_mobile_device_sc">SchildiChat Android</string>
     <string name="bottom_action_all">Обзор</string>
     <string name="all_list_rooms_empty_title">SchildiChat</string>

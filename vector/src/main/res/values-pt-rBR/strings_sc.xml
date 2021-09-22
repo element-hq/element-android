@@ -23,7 +23,6 @@
     <string name="bubble_style_both">Ambos os lados</string>
     <string name="bubble_time_location_top">Acima</string>
     <string name="bubble_time_location_bottom">Abaixo</string>
-    <string name="settings_unimportant_counter_badge">Contar eventos de conversas sem importância</string>
     <string name="labs_mark_rooms_unread">Marcar conversas como não lidas</string>
     <string name="labs_mark_rooms_unread_summary">Permite marcar conversas como não lidas. Outros clientes matrix podem não suportar ainda esta funcionalidade.</string>
     <string name="url_previews_in_encrypted_rooms">Prévia de URL em coversas encriptadas</string>
@@ -40,7 +39,6 @@
     <string name="room_list_quick_actions_mark_room_unread">Marcar como não lido</string>
     <string name="room_list_quick_actions_mark_room_read">Marcar como lido</string>
     <string name="footer_read_receipt_content_description">Status da mensagem</string>
-    <string name="settings_unimportant_counter_badge_summary">Incluir conversas com notificações desativadas na categoria de não lidos</string>
     <string name="settings_room_unread_kind_group">Prévia de conteúdo de mensagem de grupo</string>
     <string name="settings_simplified_mode_summary">Esconde funcionalidades avançadas, incluindo lista de salas públicas e configurações de criptografia</string>
     <string name="prompt_simplified_mode_on_text">Eu planejo apenas conversar com pessoas que conheço e considero confusas as opções extras.</string>

@@ -23,7 +23,6 @@
     <string name="bubble_style_start">Aceeași parte</string>
     <string name="bubble_style_both">Ambele părți</string>
     <string name="bubble_time_location_bottom">Fund</string>
-    <string name="settings_unimportant_counter_badge_summary">Include chaturile fără notificări în categoria celor necitite</string>
     <string name="labs_mark_rooms_unread">Marchează chaturile ca necitit</string>
     <string name="url_previews_in_encrypted_rooms">Previzualizare URL-uri in chaturile criptate</string>
     <string name="url_previews_in_encrypted_rooms_summary">Asta va dezvălui URL-urile din mesajele tale către homeserver-ul tău!</string>
@@ -86,7 +85,6 @@
     <string name="bubble_time_location_top">Vârf</string>
     <string name="settings_open_chats_at_first_unread_summary">Deschide chatul la primul mesaj necitit în loc de capăt.</string>
     <string name="sc_accent_greenlight">Verde deschis</string>
-    <string name="settings_unimportant_counter_badge">Ia în considerare evenimentele de chat neimportante</string>
     <string name="sc_accent_turquoise">Turcoaz</string>
     <string name="sc_accent_denim">Denim</string>
     <string name="unifiedpush_getdistributors_dialog_title">Alege un distribuitor</string>

@@ -31,7 +31,6 @@
     <string name="bubble_style_both">Begge sider</string>
     <string name="bubble_time_location_top">Topp</string>
     <string name="bubble_time_location_bottom">Bunn</string>
-    <string name="settings_unimportant_counter_badge">Tell uviktige sludringshendelser</string>
     <string name="labs_mark_rooms_unread">Marker sludringer som ulest</string>
     <string name="url_previews_in_encrypted_rooms_summary">Dette vil lekke nettadresser fra dine meldinger til din hjemmetjener.</string>
     <string name="login_mobile_device_sc">SchildiChat for Android</string>
@@ -56,7 +55,6 @@
     <string name="prompt_simplified_mode_off_text">Jeg vil ha all funksjonalitet, inkludert oppdaging av offentlige rom og finslepne rom- og krypteringsinnstillinger.</string>
     <string name="sc_dark_colored_theme">SC-mørk, fargede bobler</string>
     <string name="bubble_time_location">Tidsstempelsposisjon</string>
-    <string name="settings_unimportant_counter_badge_summary">Inkluder sludringer uten merknader i kategoriopptellingen for uleste</string>
     <string name="labs_mark_rooms_unread_summary">Tillat å markere sludringer som uelst. Det kan hende andre Matrix-klienter ikke støtter dette enda.</string>
     <string name="url_previews_in_encrypted_rooms">Nettadresseforhåndsvisninger i krypterte sludringer</string>
     <string name="all_list_rooms_empty_body">Sludringer vil bli vist her</string>

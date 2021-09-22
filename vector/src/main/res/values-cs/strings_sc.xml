@@ -34,8 +34,6 @@
     <string name="bubble_time_location">Umístění časové značky</string>
     <string name="bubble_time_location_top">Nahoře</string>
     <string name="bubble_time_location_bottom">Dole</string>
-    <string name="settings_unimportant_counter_badge">Počítadlo nedůležitých událostí chatu</string>
-    <string name="settings_unimportant_counter_badge_summary">Zahrnout chaty bez oznámení do počítadla nepřečtených zpráv</string>
     <string name="labs_mark_rooms_unread">Označit chaty jako nepřečtené</string>
     <string name="labs_mark_rooms_unread_summary">Umožňuje označit chaty jako nepřečtené. Jiní klienti Matrixu to zatím nemusí podporovat.</string>
     <string name="url_previews_in_encrypted_rooms">Náhledy URL v šifrovaných chatech</string>
