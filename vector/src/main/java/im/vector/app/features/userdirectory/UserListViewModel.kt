@@ -101,9 +101,7 @@ class UserListViewModel @AssistedInject constructor(@Assisted initialState: User
     }
 
     private fun cleanISURL(url: String?): String? {
-        return if (url?.startsWith("https://") == true) {
-            url.substring("https://".length)
-        } else url
+        return url?.removePrefix("https://")
     }
 
     override fun onCleared() {
@@ -186,15 +184,13 @@ class UserListViewModel @AssistedInject constructor(@Assisted initialState: User
                                                                 displayName = json[ProfileService.DISPLAY_NAME_KEY] as? String,
                                                                 avatarUrl = json[ProfileService.AVATAR_URL_KEY] as? String
                                                         )
-                                                ).toOptional()
+                                                )
                                             }
                                             .onErrorResumeNext {
-                                                Single.just(ThreePidUser(email = search, user = User(foundThreePid.matrixId)).toOptional())
+                                                Single.just(ThreePidUser(email = search, user = User(foundThreePid.matrixId)))
                                             }
-                                } ?: Single.just(ThreePidUser(email = search, user = null).toOptional())
+                                } ?: Single.just(ThreePidUser(email = search, user = null))
                             }
-                                    .map { it.getOrNull() }
-
                     stream.toAsync {
                         copy(matchingEmail = it)
                     }
