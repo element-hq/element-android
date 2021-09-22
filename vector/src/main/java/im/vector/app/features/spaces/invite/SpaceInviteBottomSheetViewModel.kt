@@ -16,6 +16,7 @@
 
 package im.vector.app.features.spaces.invite
 
+import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
@@ -32,7 +33,10 @@ import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.session.coroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.room.model.Membership
+import org.matrix.android.sdk.api.session.room.peeking.PeekResult
 
 class SpaceInviteBottomSheetViewModel @AssistedInject constructor(
         @Assisted private val initialState: SpaceInviteBottomSheetState,
@@ -56,6 +60,37 @@ class SpaceInviteBottomSheetViewModel @AssistedInject constructor(
                         inviterUser = roomSummary.inviterId?.let { session.getUser(it) }?.let { Success(it) } ?: Uninitialized,
                         peopleYouKnow = Success(peopleYouKnow)
                 )
+            }
+
+            if (roomSummary.membership == Membership.INVITE) {
+                // we can try to query the room summary api to get more info?
+                viewModelScope.launch {
+                    tryOrNull { session.peekRoom(roomSummary.roomId) }?.let { peekResult ->
+                        when (peekResult) {
+                            is PeekResult.Success -> {
+                                setState {
+                                    copy(
+                                            summary = Success(
+                                                    roomSummary.copy(
+                                                            joinedMembersCount = peekResult.numJoinedMembers,
+                                                            // it's also possible that the name/avatar did change since the invite..
+                                                            // if it's null keep the old one as summary API might not be available
+                                                            // and peek result could be null for other reasons (not peekable)
+                                                            avatarUrl = peekResult.avatarUrl ?: roomSummary.avatarUrl,
+                                                            displayName = peekResult.name ?: roomSummary.displayName,
+                                                            topic = peekResult.topic ?: roomSummary.topic
+                                                            // maybe use someMembers field later?
+                                                    )
+                                            )
+                                    )
+                                }
+                            }
+                            else                  -> {
+                                //
+                            }
+                        }
+                    }
+                }
             }
         }
     }
