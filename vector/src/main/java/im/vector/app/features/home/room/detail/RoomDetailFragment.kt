@@ -354,7 +354,6 @@ class RoomDetailFragment @Inject constructor(
         setupActiveCallView()
         setupJumpToBottomView()
         setupEmojiButton()
-        setupFailedMessagesWarningView()
         setupRemoveJitsiWidgetView()
         setupVoiceMessageView()
 
@@ -615,8 +614,16 @@ class RoomDetailFragment @Inject constructor(
                 .build(views.composerLayout.views.composerEditText)
     }
 
-    private fun setupFailedMessagesWarningView() {
-        views.failedMessagesWarningView.callback = object : FailedMessagesWarningView.Callback {
+    private val permissionVoiceMessageLauncher = registerForPermissionsResult { allGranted, deniedPermanently ->
+        if (allGranted) {
+            // In this case, let the user start again the gesture
+        } else if (deniedPermanently) {
+            vectorBaseActivity.onPermissionDeniedSnackbar(R.string.denied_permission_voice_message)
+        }
+    }
+
+    private fun createFailedMessagesWarningCallback(): FailedMessagesWarningView.Callback {
+        return object : FailedMessagesWarningView.Callback {
             override fun onDeleteAllClicked() {
                 MaterialAlertDialogBuilder(requireContext())
                         .setTitle(R.string.event_status_delete_all_failed_dialog_title)
@@ -631,14 +638,6 @@ class RoomDetailFragment @Inject constructor(
             override fun onRetryClicked() {
                 roomDetailViewModel.handle(RoomDetailAction.ResendAll)
             }
-        }
-    }
-
-    private val permissionVoiceMessageLauncher = registerForPermissionsResult { allGranted, deniedPermanently ->
-        if (allGranted) {
-            // In this case, let the user start again the gesture
-        } else if (deniedPermanently) {
-            vectorBaseActivity.onPermissionDeniedSnackbar(R.string.denied_permission_voice_message)
         }
     }
 
@@ -1361,13 +1360,17 @@ class RoomDetailFragment @Inject constructor(
         val summary = state.asyncRoomSummary()
         renderToolbar(summary, state.typingMessage)
         views.removeJitsiWidgetView.render(state)
-        views.failedMessagesWarningView.render(state.hasFailedSending)
+        if (state.hasFailedSending) {
+            lazyLoadedViews.failedMessagesWarningView(inflateIfNeeded = true, createFailedMessagesWarningCallback())?.isVisible = true
+        } else {
+            lazyLoadedViews.failedMessagesWarningView(inflateIfNeeded = false)?.isVisible = false
+        }
         val inviter = state.asyncInviter()
         if (summary?.membership == Membership.JOIN) {
             views.jumpToBottomView.count = summary.notificationCount
             views.jumpToBottomView.drawBadge = summary.hasUnreadMessages
             timelineEventController.update(state)
-            lazyLoadedViews.inviteView?.isVisible = false
+            lazyLoadedViews.inviteView(false)?.isVisible = false
             if (state.tombstoneEvent == null) {
                 if (state.canSendMessage) {
                     if (!views.voiceMessageRecorderView.isActive()) {
@@ -1390,7 +1393,7 @@ class RoomDetailFragment @Inject constructor(
         } else if (summary?.membership == Membership.INVITE && inviter != null) {
             views.composerLayout.isVisible = false
             views.voiceMessageRecorderView.isVisible = false
-            lazyLoadedViews.inviteView?.apply {
+            lazyLoadedViews.inviteView(true)?.apply {
                 callback = this@RoomDetailFragment
                 isVisible = true
                 render(inviter, VectorInviteView.Mode.LARGE, state.changeMembershipState)

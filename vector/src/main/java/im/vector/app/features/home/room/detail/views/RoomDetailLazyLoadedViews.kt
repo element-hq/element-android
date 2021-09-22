@@ -16,9 +16,13 @@
 
 package im.vector.app.features.home.room.detail.views
 
-import im.vector.app.core.extensions.inflateIfNeeded
+import android.view.View
+import android.view.ViewStub
+import im.vector.app.core.ui.views.FailedMessagesWarningView
 import im.vector.app.databinding.FragmentRoomDetailBinding
+import im.vector.app.features.home.room.detail.composer.VoiceMessageRecorderView
 import im.vector.app.features.invite.VectorInviteView
+import kotlin.reflect.KMutableProperty0
 
 /**
  * This is an holder for lazy loading some views of the RoomDetail screen.
@@ -28,14 +32,8 @@ class RoomDetailLazyLoadedViews {
 
     private var roomDetailBinding: FragmentRoomDetailBinding? = null
 
-    var inviteView: VectorInviteView? = null
-        private set
-        get() {
-            roomDetailBinding?.inviteViewStub?.inflateIfNeeded<VectorInviteView> {
-                inviteView = it
-            }
-            return field
-        }
+    private var failedMessagesWarningView: FailedMessagesWarningView? = null
+    private var inviteView: VectorInviteView? = null
 
     fun bind(roomDetailBinding: FragmentRoomDetailBinding) {
         this.roomDetailBinding = roomDetailBinding
@@ -44,5 +42,23 @@ class RoomDetailLazyLoadedViews {
     fun unBind() {
         roomDetailBinding = null
         inviteView = null
+        failedMessagesWarningView = null
+    }
+
+    fun failedMessagesWarningView(inflateIfNeeded: Boolean, callback: FailedMessagesWarningView.Callback? = null): FailedMessagesWarningView? {
+        return getOrInflate(inflateIfNeeded, roomDetailBinding?.failedMessagesWarningStub, this::failedMessagesWarningView)?.apply {
+            this.callback = callback
+        }
+    }
+
+    fun inviteView(inflateIfNeeded: Boolean): VectorInviteView? {
+        return getOrInflate(inflateIfNeeded, roomDetailBinding?.inviteViewStub, this::inviteView)
+    }
+
+    private inline fun <reified T : View> getOrInflate(inflateIfNeeded: Boolean, stub: ViewStub?, reference: KMutableProperty0<T?>): T? {
+        if (!inflateIfNeeded || stub == null || stub.parent == null) return reference.get()
+        val inflatedView = stub.inflate() as T
+        reference.set(inflatedView)
+        return inflatedView
     }
 }

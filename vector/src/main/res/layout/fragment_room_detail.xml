@@ -155,15 +155,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <im.vector.app.core.ui.views.FailedMessagesWarningView
-        android:id="@+id/failedMessagesWarningView"
+    <ViewStub
+        android:id="@+id/failedMessagesWarningStub"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"
+        android:inflatedId="@layout/view_stub_failed_message_warning_layout"
         app:layout_constraintBottom_toTopOf="@id/composerLayout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:visibility="visible" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <im.vector.app.features.home.room.detail.composer.TextComposerView
         android:id="@+id/composerLayout"
@@ -204,7 +203,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:barrierDirection="top"
-        app:constraint_referenced_ids="composerLayout,notificationAreaView, failedMessagesWarningView" />
+        app:constraint_referenced_ids="composerLayout,notificationAreaView, failedMessagesWarningStub" />
 
     <im.vector.app.core.platform.BadgeFloatingActionButton
         android:id="@+id/jumpToBottomView"
