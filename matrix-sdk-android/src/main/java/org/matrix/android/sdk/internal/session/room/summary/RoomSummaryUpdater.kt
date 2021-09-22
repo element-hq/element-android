@@ -400,7 +400,7 @@ internal class RoomSummaryUpdater @Inject constructor(
                                     highlightCount += it.highlightCount
                                     notificationCount += it.notificationCount
                                     unreadCount += it.unreadCount
-                                    aggregateNotificationCount += min(it.highlightCount, 1)
+                                    aggregateNotificationCount += min(it.notificationCount, 1)
                                     aggregateUnreadCount += min(it.unreadCount, 1)
                                     markedUnreadCount += if (it.markedUnread) 1 else 0
                                 }
