@@ -165,6 +165,8 @@ object MatrixPatterns {
     fun candidateAliasFromRoomName(name: String): String {
         return Regex("\\s").replace(name.lowercase(), "_").let {
             "[^a-z0-9._%#@=+-]".toRegex().replace(it, "")
+        }.let { alias ->
+            if (alias.length > 255) alias.substring(0, 255) else alias
         }
     }
 

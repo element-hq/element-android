@@ -94,6 +94,8 @@ class SpaceDetailEpoxyController @Inject constructor(
                 hint(host.stringProvider.getString(R.string.create_space_alias_hint))
                 suffixText(":" + data.homeServerName)
                 prefixText("#")
+                // spaces alias are limited to 255
+                maxLength(255)
                 onFocusChange { hasFocus ->
                     host.aliasTextIsFocused = hasFocus
                 }

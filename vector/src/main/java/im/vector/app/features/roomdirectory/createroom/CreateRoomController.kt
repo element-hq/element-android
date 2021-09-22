@@ -141,6 +141,7 @@ class CreateRoomController @Inject constructor(
                 value(viewState.aliasLocalPart)
                 suffixText(":" + viewState.homeServerName)
                 prefixText("#")
+                maxLength(255)
                 hint(host.stringProvider.getString(R.string.room_alias_address_hint))
                 errorMessage(
                         host.roomAliasErrorFormatter.format(
