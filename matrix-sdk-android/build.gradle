@@ -130,6 +130,8 @@ dependencies {
 
     // Database
     implementation 'com.github.Zhuinden:realm-monarchy:0.7.1'
+    testImplementation libs.rx.rxKotlin
+
     kapt 'dk.ilios:realmfieldnameshelper:2.0.0'
 
     // Work
