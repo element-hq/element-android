@@ -44,7 +44,6 @@ internal class DefaultAddPusherTask @Inject constructor(
         } catch (error: Throwable) {
             monarchy.awaitTransaction { realm ->
                 PusherEntity.where(realm, pusher.pushKey).findFirst()?.let {
-                    // update it
                     it.state = PusherState.FAILED_TO_REGISTER
                 }
             }
@@ -59,7 +58,6 @@ internal class DefaultAddPusherTask @Inject constructor(
         monarchy.awaitTransaction { realm ->
             val echo = PusherEntity.where(realm, pusher.pushKey).findFirst()
             if (echo != null) {
-                // update it
                 echo.appDisplayName = pusher.appDisplayName
                 echo.appId = pusher.appId
                 echo.kind = pusher.kind
