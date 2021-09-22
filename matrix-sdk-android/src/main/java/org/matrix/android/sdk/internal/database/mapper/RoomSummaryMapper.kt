@@ -63,6 +63,8 @@ internal class RoomSummaryMapper @Inject constructor(private val timelineEventMa
                 highlightCount = roomSummaryEntity.highlightCount,
                 notificationCount = roomSummaryEntity.notificationCount,
                 unreadCount = roomSummaryEntity.unreadCount,
+                aggregatedUnreadCount = roomSummaryEntity.aggregatedUnreadCount,
+                aggregatedNotificationCount = roomSummaryEntity.aggregatedNotificationCount,
                 hasUnreadMessages = roomSummaryEntity.hasUnreadMessages,
                 hasUnreadContentMessages = roomSummaryEntity.hasUnreadContentMessages,
                 hasUnreadOriginalContentMessages = roomSummaryEntity.hasUnreadOriginalContentMessages,

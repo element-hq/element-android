@@ -119,6 +119,16 @@ internal open class RoomSummaryEntity(
             return field
         }
 
+    var aggregatedUnreadCount: Int = 0
+        set(value) {
+            if (value != field) field = value
+        }
+
+    var aggregatedNotificationCount: Int = 0
+        set(value) {
+            if (value != field) field = value
+        }
+
     var readMarkerId: String? = null
         set(value) {
             if (value != field) field = value

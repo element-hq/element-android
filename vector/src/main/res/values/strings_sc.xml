@@ -44,8 +44,11 @@
     <string name="bubble_time_location_top">Top</string>
     <string name="bubble_time_location_bottom">Bottom</string>
 
+    <string name="settings_unread_counter">Unread counter</string>
     <string name="settings_unimportant_counter_badge_v2">Count muted messages</string>
     <string name="settings_unimportant_counter_badge_summary_v2">Show counts for muted messages in the chat overview</string>
+    <string name="settings_aggregate_unread_counts">Count chats instead of messages</string>
+    <string name="settings_aggregate_unread_counts_summary">Whether to count unread chats instead of individual messages in spaces and room categories</string>
 
     <string name="labs_mark_rooms_unread">Mark chats as unread</string>
     <string name="labs_mark_rooms_unread_summary">Allow marking chats as unread. Other Matrix clients might not support this yet.</string>

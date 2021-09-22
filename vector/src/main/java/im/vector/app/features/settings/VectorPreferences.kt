@@ -197,6 +197,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         private const val SETTINGS_ROOM_UNREAD_KIND_DM = "SETTINGS_ROOM_UNREAD_KIND_DM"
         private const val SETTINGS_ROOM_UNREAD_KIND_GROUP = "SETTINGS_ROOM_UNREAD_KIND_GROUP"
         const val SETTINGS_UNIMPORTANT_COUNTER_BADGE = "SETTINGS_UNIMPORTANT_COUNTER_BADGE"
+        const val SETTINGS_AGGREGATE_UNREAD_COUNTS = "SETTINGS_AGGREGATE_UNREAD_COUNTS"
         private const val SETTINGS_SIMPLIFIED_MODE = "SETTINGS_SIMPLIFIED_MODE"
         private const val SETTINGS_LABS_ALLOW_MARK_UNREAD = "SETTINGS_LABS_ALLOW_MARK_UNREAD"
         const val SETTINGS_ALLOW_URL_PREVIEW_IN_ENCRYPTED_ROOM_KEY = "SETTINGS_ALLOW_URL_PREVIEW_IN_ENCRYPTED_ROOM_KEY"
@@ -967,6 +968,11 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     // SC addition
     fun shouldShowUnimportantCounterBadge(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_UNIMPORTANT_COUNTER_BADGE, true)
+    }
+
+    // SC additions - for spaces/categories: whether to count unread chats, or messages
+    fun useAggregateCounts(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_AGGREGATE_UNREAD_COUNTS, true)
     }
 
     // SC addition

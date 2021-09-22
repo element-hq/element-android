@@ -86,6 +86,7 @@ class HomeDetailFragment @Inject constructor(
 
     // When this changes, restart the activity for changes to apply
     private val shouldShowUnimportantCounterBadge = vectorPreferences.shouldShowUnimportantCounterBadge()
+    private val useAggregateCounts = vectorPreferences.useAggregateCounts()
 
     private var hasUnreadRooms = false
         set(value) {
@@ -206,7 +207,8 @@ class HomeDetailFragment @Inject constructor(
     override fun onResume() {
         super.onResume()
 
-        if (vectorPreferences.shouldShowUnimportantCounterBadge() != shouldShowUnimportantCounterBadge) {
+        if (vectorPreferences.shouldShowUnimportantCounterBadge() != shouldShowUnimportantCounterBadge ||
+                vectorPreferences.useAggregateCounts() != useAggregateCounts) {
             activity?.restart()
             return
         }

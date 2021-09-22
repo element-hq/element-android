@@ -52,6 +52,8 @@ data class RoomSummary(
         val hasUnreadOriginalContentMessages: Boolean = false,
         val unreadCount: Int? = 0,
         val markedUnread: Boolean = false,
+        val aggregatedUnreadCount: Int = 0,
+        val aggregatedNotificationCount: Int = 0,
         val tags: List<RoomTag> = emptyList(),
         val membership: Membership = Membership.NONE,
         val versioningState: VersioningState = VersioningState.NONE,
@@ -156,6 +158,7 @@ data class RoomSummary(
     // SC addition
     interface RoomSummaryPreferenceProvider {
         fun getUnreadKind(isDirect: Boolean): Int
+        fun aggregateUnreadRoomCounts(): Boolean
         fun getUnreadRoomSummaryField(isDirect: Boolean): String {
             return when(getUnreadKind(isDirect)) {
                 UNREAD_KIND_ORIGINAL_CONTENT -> RoomSummaryEntityFields.HAS_UNREAD_ORIGINAL_CONTENT_MESSAGES

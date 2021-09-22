@@ -49,7 +49,7 @@ internal object RealmSessionStoreMigration : RealmMigration {
 
     // SC-specific DB changes on top of Element
     // 1: added markedUnread field
-    const val SESSION_STORE_SCHEMA_SC_VERSION = 2L
+    const val SESSION_STORE_SCHEMA_SC_VERSION = 3L
     const val SESSION_STORE_SCHEMA_SC_VERSION_OFFSET = (1L shl 12)
 
     const val SESSION_STORE_SCHEMA_VERSION = 17L +
@@ -82,6 +82,7 @@ internal object RealmSessionStoreMigration : RealmMigration {
 
         if (oldScVersion <= 0) migrateToSc1(realm)
         if (oldScVersion <= 1) migrateToSc2(realm)
+        if (oldScVersion <= 2) migrateToSc3(realm)
     }
 
     // SC Version 1L added markedUnread
@@ -96,6 +97,14 @@ internal object RealmSessionStoreMigration : RealmMigration {
         Timber.d("Step SC 1 -> 2")
         realm.schema.get("RoomSummaryEntity")
                 ?.addField(RoomSummaryEntityFields.UNREAD_COUNT, Int::class.java)
+    }
+
+    // SC Version 3L added aggregated counts
+    private fun migrateToSc3(realm: DynamicRealm) {
+        Timber.d("Step SC 2 -> 3")
+        realm.schema.get("RoomSummaryEntity")
+                ?.addField(RoomSummaryEntityFields.AGGREGATED_UNREAD_COUNT, Int::class.java)
+                ?.addField(RoomSummaryEntityFields.AGGREGATED_NOTIFICATION_COUNT, Int::class.java)
     }
 
 

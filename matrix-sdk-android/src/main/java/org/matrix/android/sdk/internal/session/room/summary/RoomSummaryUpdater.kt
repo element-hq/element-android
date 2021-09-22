@@ -65,6 +65,7 @@ import org.matrix.android.sdk.internal.session.sync.model.RoomSyncSummary
 import org.matrix.android.sdk.internal.session.sync.model.RoomSyncUnreadNotifications
 import timber.log.Timber
 import javax.inject.Inject
+import kotlin.math.min
 import kotlin.system.measureTimeMillis
 
 internal class RoomSummaryUpdater @Inject constructor(
@@ -99,6 +100,8 @@ internal class RoomSummaryUpdater @Inject constructor(
         roomSummaryEntity.highlightCount = unreadNotifications?.highlightCount ?: 0
         roomSummaryEntity.notificationCount = unreadNotifications?.notificationCount ?: 0
         roomSummaryEntity.unreadCount = unreadCount ?: 0
+        roomSummaryEntity.aggregatedNotificationCount = roomSummaryEntity.notificationCount
+        roomSummaryEntity.aggregatedUnreadCount = roomSummaryEntity.unreadCount
 
         if (membership != null) {
             roomSummaryEntity.membership = membership
@@ -385,6 +388,8 @@ internal class RoomSummaryUpdater @Inject constructor(
                         var notificationCount = 0
                         var unreadCount = 0
                         var markedUnreadCount = 0
+                        var aggregateUnreadCount = 0
+                        var aggregateNotificationCount = 0
                         realm.where(RoomSummaryEntity::class.java)
                                 .process(RoomSummaryEntityFields.MEMBERSHIP_STR, listOf(Membership.JOIN))
                                 .notEqualTo(RoomSummaryEntityFields.ROOM_TYPE, RoomType.SPACE)
@@ -395,12 +400,16 @@ internal class RoomSummaryUpdater @Inject constructor(
                                     highlightCount += it.highlightCount
                                     notificationCount += it.notificationCount
                                     unreadCount += it.unreadCount
+                                    aggregateNotificationCount += min(it.highlightCount, 1)
+                                    aggregateUnreadCount += min(it.unreadCount, 1)
                                     markedUnreadCount += if (it.markedUnread) 1 else 0
                                 }
 
                         space.highlightCount = highlightCount
                         space.notificationCount = notificationCount + markedUnreadCount
                         space.unreadCount = unreadCount
+                        space.aggregatedUnreadCount = aggregateUnreadCount
+                        space.aggregatedNotificationCount = aggregateNotificationCount
                     }
             // xxx invites??
 

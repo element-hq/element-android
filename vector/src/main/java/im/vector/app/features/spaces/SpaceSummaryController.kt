@@ -28,6 +28,7 @@ import im.vector.app.features.grouplist.homeSpaceSummaryItem
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.ScSdkPreferences
 import im.vector.app.features.home.room.list.UnreadCounterBadgeView
+import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.group
 import im.vector.app.space
 import org.matrix.android.sdk.api.session.group.model.GroupSummary
@@ -40,7 +41,7 @@ import java.util.Locale
 import javax.inject.Inject
 
 class SpaceSummaryController @Inject constructor(
-        private val scSdkPreferences: ScSdkPreferences,
+        private val vectorPreferences: VectorPreferences,
         private val avatarRenderer: AvatarRenderer,
         private val colorProvider: ColorProvider,
         private val stringProvider: StringProvider) : EpoxyController() {
@@ -142,6 +143,8 @@ class SpaceSummaryController @Inject constructor(
             listener { host.callback?.onSpaceSelected(null) }
         }
 
+        val useAggregateCounts = vectorPreferences.useAggregateCounts()
+
         rootSpaces
                 ?.forEach { groupSummary ->
                     val isSelected = selected is RoomGroupingMethod.BySpace && groupSummary.roomId == selected.space()?.roomId
@@ -168,9 +171,9 @@ class SpaceSummaryController @Inject constructor(
                         toggleExpand { host.callback?.onToggleExpand(groupSummary) }
                         countState(
                                 UnreadCounterBadgeView.State(
-                                        groupSummary.notificationCount,
+                                        if (useAggregateCounts) groupSummary.aggregatedNotificationCount else groupSummary.notificationCount,
                                         groupSummary.highlightCount > 0,
-                                        groupSummary.safeUnreadCount,
+                                        if (useAggregateCounts) groupSummary.aggregatedUnreadCount else groupSummary.safeUnreadCount,
                                         groupSummary.markedUnread
                                 )
                         )
@@ -204,6 +207,8 @@ class SpaceSummaryController @Inject constructor(
         val expanded = expandedStates[childSummary.roomId] == true
         val isSelected = selected is RoomGroupingMethod.BySpace && childSummary.roomId == selected.space()?.roomId
 
+        val useAggregateCounts = vectorPreferences.useAggregateCounts()
+
         subSpaceSummaryItem {
             avatarRenderer(host.avatarRenderer)
             id(childSummary.roomId)
@@ -217,9 +222,9 @@ class SpaceSummaryController @Inject constructor(
             indent(currentDepth)
             countState(
                     UnreadCounterBadgeView.State(
-                            childSummary.notificationCount,
+                            if (useAggregateCounts) childSummary.aggregatedNotificationCount else childSummary.notificationCount,
                             childSummary.highlightCount > 0,
-                            childSummary.safeUnreadCount,
+                            if (useAggregateCounts) childSummary.aggregatedUnreadCount else childSummary.safeUnreadCount,
                             childSummary.markedUnread
                     )
             )

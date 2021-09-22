@@ -96,11 +96,23 @@
             android:summary="%s"
             android:title="@string/settings_room_unread_kind_group" />
 
+    </im.vector.app.core.preference.VectorPreferenceCategory>
+
+    <im.vector.app.core.preference.VectorPreferenceCategory
+        android:key="SETTINGS_UNREAD_COUNTER"
+        android:title="@string/settings_unread_counter">
+
         <im.vector.app.core.preference.VectorSwitchPreference
             android:defaultValue="true"
             android:key="SETTINGS_UNIMPORTANT_COUNTER_BADGE"
-            android:summary="@string/settings_unimportant_counter_badge_summary_v2"
-            android:title="@string/settings_unimportant_counter_badge_v2" />
+            android:title="@string/settings_unimportant_counter_badge_v2"
+            android:summary="@string/settings_unimportant_counter_badge_summary_v2" />
+
+        <im.vector.app.core.preference.VectorSwitchPreference
+            android:defaultValue="true"
+            android:key="SETTINGS_AGGREGATE_UNREAD_COUNTS"
+            android:title="@string/settings_aggregate_unread_counts"
+            android:summary="@string/settings_aggregate_unread_counts_summary" />
 
     </im.vector.app.core.preference.VectorPreferenceCategory>
 
