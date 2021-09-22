@@ -76,7 +76,6 @@ import im.vector.app.core.epoxy.LayoutManagerStateRestorer
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.hideKeyboard
-import im.vector.app.core.extensions.inflateIfNeeded
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.extensions.showKeyboard
@@ -155,6 +154,7 @@ import im.vector.app.features.home.room.detail.timeline.item.ReadReceiptData
 import im.vector.app.features.home.room.detail.timeline.reactions.ViewReactionsBottomSheet
 import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlRetriever
 import im.vector.app.features.home.room.detail.upgrade.MigrateRoomBottomSheet
+import im.vector.app.features.home.room.detail.views.RoomDetailLazyLoadedViews
 import im.vector.app.features.home.room.detail.widget.RoomWidgetsBottomSheet
 import im.vector.app.features.html.EventHtmlRenderer
 import im.vector.app.features.html.PillImageSpan
@@ -314,7 +314,7 @@ class RoomDetailFragment @Inject constructor(
     private var lockSendButton = false
     private val currentCallsViewPresenter = CurrentCallsViewPresenter()
 
-    private var inviteView: VectorInviteView? = null
+    private val lazyLoadedViews = RoomDetailLazyLoadedViews()
     private val emojiPopup: EmojiPopup by lifecycleAwareLazy {
         createEmojiPopup()
     }
@@ -325,9 +325,6 @@ class RoomDetailFragment @Inject constructor(
             bundle.getString(MigrateRoomBottomSheet.BUNDLE_KEY_REPLACEMENT_ROOM)?.let { replacementRoomId ->
                 roomDetailViewModel.handle(RoomDetailAction.RoomUpgradeSuccess(replacementRoomId))
             }
-        }
-        lifecycleScope.launchWhenResumed {
-
         }
     }
 
@@ -348,6 +345,7 @@ class RoomDetailFragment @Inject constructor(
                 onTapToReturnToCall = ::onTapToReturnToCall
         )
         keyboardStateUtils = KeyboardStateUtils(requireActivity())
+        lazyLoadedViews.bind(views)
         setupToolbar(views.roomToolbar)
         setupRecyclerView()
         setupComposer()
@@ -776,6 +774,7 @@ class RoomDetailFragment @Inject constructor(
     }
 
     override fun onDestroyView() {
+        lazyLoadedViews.unBind()
         timelineEventController.callback = null
         timelineEventController.removeModelBuildListener(modelBuildListener)
         currentCallsViewPresenter.unBind()
@@ -1368,7 +1367,7 @@ class RoomDetailFragment @Inject constructor(
             views.jumpToBottomView.count = summary.notificationCount
             views.jumpToBottomView.drawBadge = summary.hasUnreadMessages
             timelineEventController.update(state)
-            inviteView?.isVisible = false
+            lazyLoadedViews.inviteView?.isVisible = false
             if (state.tombstoneEvent == null) {
                 if (state.canSendMessage) {
                     if (!views.voiceMessageRecorderView.isActive()) {
@@ -1389,12 +1388,9 @@ class RoomDetailFragment @Inject constructor(
                 views.notificationAreaView.render(NotificationAreaView.State.Tombstone(state.tombstoneEvent))
             }
         } else if (summary?.membership == Membership.INVITE && inviter != null) {
-            views.inviteViewStub.inflateIfNeeded<VectorInviteView> {
-                inviteView = it
-            }
             views.composerLayout.isVisible = false
             views.voiceMessageRecorderView.isVisible = false
-            inviteView?.apply {
+            lazyLoadedViews.inviteView?.apply {
                 callback = this@RoomDetailFragment
                 isVisible = true
                 render(inviter, VectorInviteView.Mode.LARGE, state.changeMembershipState)
