@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="item_tchap_room_type_forum" type="layout">@layout/item_tchap_room_type</item>
+    <item name="item_tchap_room_type_external" type="layout">@layout/item_tchap_room_type</item>
+    <item name="item_tchap_room_type_private" type="layout">@layout/item_tchap_room_type</item>
+</resources>
