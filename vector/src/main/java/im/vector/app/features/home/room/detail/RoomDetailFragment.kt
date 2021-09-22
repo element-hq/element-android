@@ -87,6 +87,7 @@ import im.vector.app.core.hardware.vibrate
 import im.vector.app.core.intent.getFilenameFromUri
 import im.vector.app.core.intent.getMimeTypeFromUri
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.core.platform.lifecycleAwareLazy
 import im.vector.app.core.platform.showOptimizedSnackbar
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.ui.views.CurrentCallsView
@@ -314,7 +315,9 @@ class RoomDetailFragment @Inject constructor(
     private val currentCallsViewPresenter = CurrentCallsViewPresenter()
 
     private var inviteView: VectorInviteView? = null
-    private lateinit var emojiPopup: EmojiPopup
+    private val emojiPopup: EmojiPopup by lifecycleAwareLazy {
+        createEmojiPopup()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -322,6 +325,9 @@ class RoomDetailFragment @Inject constructor(
             bundle.getString(MigrateRoomBottomSheet.BUNDLE_KEY_REPLACEMENT_ROOM)?.let { replacementRoomId ->
                 roomDetailViewModel.handle(RoomDetailAction.RoomUpgradeSuccess(replacementRoomId))
             }
+        }
+        lifecycleScope.launchWhenResumed {
+
         }
     }
 
@@ -349,7 +355,7 @@ class RoomDetailFragment @Inject constructor(
         setupJumpToReadMarkerView()
         setupActiveCallView()
         setupJumpToBottomView()
-        setupEmojiPopup()
+        setupEmojiButton()
         setupFailedMessagesWarningView()
         setupRemoveJitsiWidgetView()
         setupVoiceMessageView()
@@ -585,8 +591,14 @@ class RoomDetailFragment @Inject constructor(
         )
     }
 
-    private fun setupEmojiPopup() {
-        emojiPopup = EmojiPopup
+    private fun setupEmojiButton() {
+        views.composerLayout.views.composerEmojiButton.debouncedClicks {
+            emojiPopup.toggle()
+        }
+    }
+
+    private fun createEmojiPopup(): EmojiPopup {
+        return EmojiPopup
                 .Builder
                 .fromRootView(views.rootConstraintLayout)
                 .setKeyboardAnimationStyle(R.style.emoji_fade_animation_style)
@@ -603,10 +615,6 @@ class RoomDetailFragment @Inject constructor(
                     }
                 }
                 .build(views.composerLayout.views.composerEditText)
-
-        views.composerLayout.views.composerEmojiButton.debouncedClicks {
-            emojiPopup.toggle()
-        }
     }
 
     private fun setupFailedMessagesWarningView() {
@@ -775,8 +783,6 @@ class RoomDetailFragment @Inject constructor(
         autoCompleter.clear()
         debouncer.cancelAll()
         views.timelineRecyclerView.cleanup()
-        emojiPopup.dismiss()
-
         super.onDestroyView()
     }
 
