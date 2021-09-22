@@ -252,6 +252,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                 Membership.JOIN,
                 roomSync.summary,
                 roomSync.unreadNotifications,
+                roomSync.unreadCount,
                 updateMembers = hasRoomMember
         )
         return roomEntity

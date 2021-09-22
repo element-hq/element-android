@@ -47,6 +47,11 @@ internal data class RoomSync(
         @Json(name = "unread_notifications") val unreadNotifications: RoomSyncUnreadNotifications? = null,
 
         /**
+         * The unread count for the room.
+         */
+        @Json(name = "org.matrix.msc2654.unread_count") val unreadCount: Int? = null,
+
+        /**
          * The room summary
          */
         @Json(name = "summary") val summary: RoomSyncSummary? = null

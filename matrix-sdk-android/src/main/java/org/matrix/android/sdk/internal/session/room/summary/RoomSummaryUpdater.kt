@@ -80,6 +80,7 @@ internal class RoomSummaryUpdater @Inject constructor(
                membership: Membership? = null,
                roomSummary: RoomSyncSummary? = null,
                unreadNotifications: RoomSyncUnreadNotifications? = null,
+               unreadCount: Int? = null,
                updateMembers: Boolean = false,
                inviterId: String? = null) {
         val roomSummaryEntity = RoomSummaryEntity.getOrCreate(realm, roomId)
@@ -97,6 +98,7 @@ internal class RoomSummaryUpdater @Inject constructor(
         }
         roomSummaryEntity.highlightCount = unreadNotifications?.highlightCount ?: 0
         roomSummaryEntity.notificationCount = unreadNotifications?.notificationCount ?: 0
+        roomSummaryEntity.unreadCount = unreadCount ?: 0
 
         if (membership != null) {
             roomSummaryEntity.membership = membership
@@ -132,16 +134,18 @@ internal class RoomSummaryUpdater @Inject constructor(
             roomSummaryEntity.lastActivityTime = lastActivityFromEvent
         }
 
+        // If unreadCount == null, the server likely just doesn't support MSC 2654, so we need to check manually either way
+        val hasUnreadEvents = unreadCount == null || unreadCount > 0
         roomSummaryEntity.hasUnreadMessages = roomSummaryEntity.notificationCount > 0
-                // avoid this call if we are sure there are unread events
-                || !isEventRead(realm.configuration, userId, roomId, latestPreviewableEvent?.eventId)
+                // avoid this call if we are sure there are (no) unread events
+                || (hasUnreadEvents && !isEventRead(realm.configuration, userId, roomId, latestPreviewableEvent?.eventId))
         roomSummaryEntity.hasUnreadContentMessages = roomSummaryEntity.notificationCount > 0
-                // avoid this call if we are sure there are unread events
-                || (latestPreviewableContentEvent != null
+                // avoid this call if we are sure there are (no) unread events
+                || (hasUnreadEvents && latestPreviewableContentEvent != null
                     && !isEventRead(realm.configuration, userId, roomId, latestPreviewableContentEvent.eventId))
         roomSummaryEntity.hasUnreadOriginalContentMessages = roomSummaryEntity.notificationCount > 0
-                // avoid this call if we are sure there are unread events
-                || (latestPreviewableOriginalContentEvent != null
+                // avoid this call if we are sure there are (no) unread events
+                || (hasUnreadEvents && latestPreviewableOriginalContentEvent != null
                     && !isEventRead(realm.configuration, userId, roomId, latestPreviewableOriginalContentEvent.eventId))
 
         roomSummaryEntity.displayName = roomDisplayNameResolver.resolve(realm, roomId)
