@@ -248,7 +248,6 @@ class RoomListSectionBuilderSpace(
             it.roomTagQueryFilter = RoomTagQueryFilter(null, null, true)
         }
 
-
         val suggestedRoomsObservable = // MutableLiveData<List<SpaceChildInfo>>()
                 appStateHandler.selectedRoomGroupingObservable
                         .distinctUntilChanged()

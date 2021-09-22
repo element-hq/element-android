@@ -170,7 +170,7 @@ class RoomListSectionBuilderGroup(
                     sections,
                     activeGroupAwareQueries,
                     R.string.invitations_header,
-                    true,
+                    true
             ) {
                 it.memberships = listOf(Membership.INVITE)
                 it.roomCategoryFilter = RoomCategoryFilter.ALL

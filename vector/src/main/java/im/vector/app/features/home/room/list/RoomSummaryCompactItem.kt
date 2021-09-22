@@ -74,10 +74,10 @@ abstract class RoomSummaryCompactItem : VectorEpoxyModel<RoomSummaryCompactItem.
             itemLongClickListener?.onLongClick(it) ?: false
         }
         holder.titleView.text = matrixItem.getBestName()
-        holder.lastEventTimeView.text = lastEventTime
+//        holder.lastEventTimeView.text = lastEventTime
 //        holder.lastEventView.text = lastFormattedEvent
         holder.unreadCounterBadgeView.render(UnreadCounterBadgeView.State(unreadNotificationCount, showHighlighted))
-        holder.unreadIndentIndicator.isVisible = hasUnreadMessage
+        holder.unreadIndentIndicator.isVisible = (unreadNotificationCount == 0) && hasUnreadMessage
         holder.draftView.isVisible = hasDraft
         avatarRenderer.render(matrixItem, holder.avatarImageView)
         holder.roomAvatarDecorationImageView.render(encryptionTrustLevel)
@@ -116,7 +116,7 @@ abstract class RoomSummaryCompactItem : VectorEpoxyModel<RoomSummaryCompactItem.
         //        val lastEventView by bind<TextView>(R.id.roomLastEventView)
 //        val typingView by bind<TextView>(R.id.roomTypingView)
         val draftView by bind<ImageView>(R.id.roomDraftBadge)
-        val lastEventTimeView by bind<TextView>(R.id.roomLastEventTimeView)
+//        val lastEventTimeView by bind<TextView>(R.id.roomLastEventTimeView)
         val avatarCheckedImageView by bind<ImageView>(R.id.roomAvatarCheckedImageView)
         val avatarImageView by bind<ImageView>(R.id.roomAvatarImageView)
         val roomAvatarDecorationImageView by bind<ShieldImageView>(R.id.roomAvatarDecorationImageView)
