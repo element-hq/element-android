@@ -57,7 +57,12 @@ internal class DefaultAddPusherTask @Inject constructor(
         }
         monarchy.awaitTransaction { realm ->
             val echo = PusherEntity.where(realm, pusher.pushKey).findFirst()
-            if (echo != null) {
+            if (echo == null) {
+                pusher.toEntity().also {
+                    it.state = PusherState.REGISTERED
+                    realm.insertOrUpdate(it)
+                }
+            } else {
                 echo.appDisplayName = pusher.appDisplayName
                 echo.appId = pusher.appId
                 echo.kind = pusher.kind
@@ -66,11 +71,6 @@ internal class DefaultAddPusherTask @Inject constructor(
                 echo.data?.format = pusher.data?.format
                 echo.data?.url = pusher.data?.url
                 echo.state = PusherState.REGISTERED
-            } else {
-                pusher.toEntity().also {
-                    it.state = PusherState.REGISTERED
-                    realm.insertOrUpdate(it)
-                }
             }
         }
     }
