@@ -41,10 +41,6 @@ class UserPreferencesProvider @Inject constructor(private val vectorPreferences:
         vectorPreferences.neverShowLongClickOnRoomHelpAgain()
     }
 
-    fun shouldShowUnimportantCounterBadge(): Boolean {
-        return vectorPreferences.shouldShowUnimportantCounterBadge()
-    }
-
     fun shouldShowJoinLeaves(): Boolean {
         return vectorPreferences.showJoinLeaveMessages()
     }

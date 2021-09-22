@@ -52,6 +52,7 @@ import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.query.process
 import org.matrix.android.sdk.internal.util.fetchCopyMap
 import javax.inject.Inject
+import kotlin.math.max
 
 internal class RoomSummaryDataSource @Inject constructor(@SessionDatabase private val monarchy: Monarchy,
                                                          private val roomSummaryMapper: RoomSummaryMapper) {
@@ -230,8 +231,12 @@ internal class RoomSummaryDataSource @Inject constructor(@SessionDatabase privat
             val roomSummariesQuery = roomSummariesQuery(realm, queryParams)
             val notifCount = roomSummariesQuery.sum(RoomSummaryEntityFields.NOTIFICATION_COUNT).toInt()
             val highlightCount = roomSummariesQuery.sum(RoomSummaryEntityFields.HIGHLIGHT_COUNT).toInt()
-            // TODO-SC-merge: respect setting for selecting right field here (HAS_UNREAD_CONTENT_MESSAGES, HAS_UNREAD_MESSAGES, HAS_UNREAD_ORIGINAL_CONTENT_MESSAGES)
-            val unreadCount = if (preferenceProvider.shouldShowUnimportantCounterBadge()) roomSummariesQuery(realm, queryParams).equalTo(preferenceProvider.getUnreadRoomSummaryField(false), true).count().toInt() else 0
+            val unreadCount = max(
+                    // Preferred since MSC 2654
+                    roomSummariesQuery.sum(RoomSummaryEntityFields.UNREAD_COUNT).toInt(),
+                    // TODO-SC-merge: properly use dm/non-dm flag? (note that this will be likely overwritten either way by above field from MSC 2654)
+                    roomSummariesQuery(realm, queryParams).equalTo(preferenceProvider.getUnreadRoomSummaryField(false), true).count().toInt()
+            )
             val markedUnreadCount = roomSummariesQuery(realm, queryParams).equalTo(RoomSummaryEntityFields.MARKED_UNREAD, true).count().toInt()
             notificationCount = RoomAggregateNotificationCount(
                     notifCount,

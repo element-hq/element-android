@@ -137,6 +137,7 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
                 .unreadNotificationCount(unreadCount)
                 .hasUnreadMessage(roomSummary.scIsUnread(scSdkPreferences))
                 .markedUnread(roomSummary.markedUnread)
+                .unreadCount(roomSummary.unreadCount ?: 0)
                 .hasDraft(roomSummary.userDrafts.isNotEmpty())
                 .itemLongClickListener { _ ->
                     onLongClick?.invoke(roomSummary) ?: false

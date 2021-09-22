@@ -99,8 +99,8 @@
         <im.vector.app.core.preference.VectorSwitchPreference
             android:defaultValue="true"
             android:key="SETTINGS_UNIMPORTANT_COUNTER_BADGE"
-            android:summary="@string/settings_unimportant_counter_badge_summary"
-            android:title="@string/settings_unimportant_counter_badge" />
+            android:summary="@string/settings_unimportant_counter_badge_summary_v2"
+            android:title="@string/settings_unimportant_counter_badge_v2" />
 
     </im.vector.app.core.preference.VectorPreferenceCategory>
 

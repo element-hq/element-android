@@ -170,7 +170,7 @@ class SpaceSummaryController @Inject constructor(
                                 UnreadCounterBadgeView.State(
                                         groupSummary.notificationCount,
                                         groupSummary.highlightCount > 0,
-                                        groupSummary.scUnreadCount(host.scSdkPreferences),
+                                        groupSummary.safeUnreadCount,
                                         groupSummary.markedUnread
                                 )
                         )
@@ -219,7 +219,7 @@ class SpaceSummaryController @Inject constructor(
                     UnreadCounterBadgeView.State(
                             childSummary.notificationCount,
                             childSummary.highlightCount > 0,
-                            childSummary.scUnreadCount(host.scSdkPreferences),
+                            childSummary.safeUnreadCount,
                             childSummary.markedUnread
                     )
             )

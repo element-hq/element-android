@@ -131,14 +131,6 @@ data class RoomSummary(
         }
     }
 
-    fun scUnreadCount(preferenceProvider: RoomSummaryPreferenceProvider?): Int {
-        return if (preferenceProvider?.shouldShowUnimportantCounterBadge() == true) {
-            safeUnreadCount
-        } else {
-            0
-        }
-    }
-
     fun scNotificationCountWithManualUnread(): Int {
         return when {
             notificationCount > 0 -> {
@@ -164,7 +156,6 @@ data class RoomSummary(
     // SC addition
     interface RoomSummaryPreferenceProvider {
         fun getUnreadKind(isDirect: Boolean): Int
-        fun shouldShowUnimportantCounterBadge(): Boolean
         fun getUnreadRoomSummaryField(isDirect: Boolean): String {
             return when(getUnreadKind(isDirect)) {
                 UNREAD_KIND_ORIGINAL_CONTENT -> RoomSummaryEntityFields.HAS_UNREAD_ORIGINAL_CONTENT_MESSAGES
