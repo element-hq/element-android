@@ -1112,12 +1112,9 @@
     <string name="settings_remove_three_pid_confirmation_content">Remove %s?</string>
     <string name="error_threepid_auth_failed">Ensure that you have clicked on the link in the email we have sent to you.</string>
 
-
-    <string name="settings_home_layout_simple">Simple</string>
-    <string name="settings_home_layout_pro">Pro</string>
+    <string name="settings_home_layout_simple">Basic</string>
+    <string name="settings_home_layout_pro">Tabbed</string>
     <string name="settings_main_layout">Main Layout</string>
-
-
 
     <string name="settings_notification_advanced">Advanced Notification Settings</string>
     <string name="settings_notification_by_event">Notification importance by event</string>
