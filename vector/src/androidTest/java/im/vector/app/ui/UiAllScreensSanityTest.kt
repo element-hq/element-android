@@ -283,6 +283,7 @@ class UiAllScreensSanityTest {
         clickListItem(R.id.matrixProfileRecyclerView, 9)
         // File tab
         clickOn(R.string.uploads_files_title)
+        sleep(1000)
         pressBack()
 
         assertDisplayed(R.id.roomProfileAvatarView)
@@ -334,6 +335,7 @@ class UiAllScreensSanityTest {
     private fun navigateToRoomPeople() {
         // Open first user
         clickListItem(R.id.roomSettingsRecyclerView, 1)
+        sleep(1000)
         assertDisplayed(R.id.memberProfilePowerLevelView)
 
         // Verification
@@ -342,8 +344,9 @@ class UiAllScreensSanityTest {
 
         // Role
         clickListItem(R.id.matrixProfileRecyclerView, 3)
+        sleep(1000)
         clickDialogNegativeButton()
-
+        sleep(1000)
         clickBack()
     }
 
