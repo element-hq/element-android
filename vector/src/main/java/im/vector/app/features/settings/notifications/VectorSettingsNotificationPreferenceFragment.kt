@@ -23,7 +23,10 @@ import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Parcelable
 import android.widget.Toast
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.map
 import androidx.preference.Preference
 import androidx.preference.SwitchPreference
 import im.vector.app.R
@@ -127,8 +130,18 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
     }
 
     private fun bindEmailNotifications() {
-        val emails = session.getEmailsWithPushInformation()
+        val initialEmails = session.getEmailsWithPushInformation()
+        bindEmailNotificationCategory(initialEmails)
+        session.getEmailsWithPushInformationLive().observe(this) { emails ->
+            if (initialEmails != emails) {
+                bindEmailNotificationCategory(emails)
+            }
+        }
+    }
+
+    private fun bindEmailNotificationCategory(emails: List<Pair<ThreePid.Email, Boolean>>) {
         findPreference<VectorPreferenceCategory>(VectorPreferences.SETTINGS_EMAIL_NOTIFICATION_CATEGORY_PREFERENCE_KEY)?.let { category ->
+            category.removeAll()
             if (emails.isEmpty()) {
                 val vectorPreference = VectorPreference(requireContext())
                 vectorPreference.title = resources.getString(R.string.settings_notification_emails_no_emails)
@@ -138,10 +151,10 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
                     true
                 }
             } else {
-                emails.forEach { (emailPid, pusher) ->
+                emails.forEach { (emailPid, isEnabled) ->
                     val pref = VectorSwitchPreference(requireContext())
                     pref.title = resources.getString(R.string.settings_notification_emails_enable_for_email, emailPid.email)
-                    pref.isChecked = pusher != null
+                    pref.isChecked = isEnabled
                     pref.setTransactionalSwitchChangeListener(lifecycleScope) { isChecked ->
                         if (isChecked) {
                             pushManager.registerEmailForPush(emailPid.email)
@@ -395,15 +408,25 @@ private fun SwitchPreference.setTransactionalSwitchChangeListener(scope: Corouti
 }
 
 /**
- * Fetches the current users 3pid emails and pairs them with pushers with same email as the push key.
- * If no pusher is available for a given emails we can infer that push is not registered for the email.
- * @return a list of ThreePid emails paired with its associated Pusher or null.
+ * Fetches the current users 3pid emails and pairs them with their enabled state.
+ * If no pusher is available for a given email we can infer that push is not registered for the email.
+ * @return a list of ThreePid emails paired with the email notification enabled state. true if email notifications are enabled, false if not.
  * @see ThreePid.Email
- * @see Pusher
  */
-private fun Session.getEmailsWithPushInformation(): List<Pair<ThreePid.Email, Pusher?>> {
-    val emailPushers = getPushers().filter { it.kind == "email" }
+private fun Session.getEmailsWithPushInformation(): List<Pair<ThreePid.Email, Boolean>> {
+    val emailPushers = getPushers().filter { it.kind == Pusher.KIND_EMAIL }
     return getThreePids()
             .filterIsInstance<ThreePid.Email>()
-            .map { it to emailPushers.firstOrNull { pusher -> pusher.pushKey == it.email } }
+            .map { it to emailPushers.any { pusher -> pusher.pushKey == it.email } }
+}
+
+private fun Session.getEmailsWithPushInformationLive(): LiveData<List<Pair<ThreePid.Email, Boolean>>> {
+    return getThreePidsLive(refreshData = false)
+            .distinctUntilChanged()
+            .map { threePids ->
+                val emailPushers = getPushers().filter { it.kind == Pusher.KIND_EMAIL }
+                threePids
+                        .filterIsInstance<ThreePid.Email>()
+                        .map { it to emailPushers.any { pusher -> pusher.pushKey == it.email } }
+            }
 }
