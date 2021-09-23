@@ -72,7 +72,7 @@ class PushGatewaysFragment @Inject constructor(
         }
         views.genericRecyclerView.configureWith(epoxyController, dividerDrawable = R.drawable.divider_horizontal)
         viewModel.observeViewEvents {
-            when(it) {
+            when (it) {
                 is PushGatewayViewEvents.RemovePusherFailed -> {
                     MaterialAlertDialogBuilder(requireContext())
                             .setTitle(R.string.dialog_title_error)

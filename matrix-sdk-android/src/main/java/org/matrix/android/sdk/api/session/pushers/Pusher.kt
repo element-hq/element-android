@@ -32,7 +32,6 @@ data class Pusher(
         const val KIND_EMAIL = "email"
         const val KIND_HTTP = "http"
         const val APP_ID_EMAIL = "m.email"
-
     }
 }
 
