@@ -1722,7 +1722,7 @@ class RoomDetailFragment @Inject constructor(
 
     override fun onEventLongClicked(informationData: MessageInformationData, messageContent: Any?, view: View): Boolean {
         view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
-        val roomId = roomDetailViewModel.timeline.getTimelineEventWithId(informationData.eventId)?.roomId ?: return false
+        val roomId = roomDetailArgs.roomId
         this.view?.hideKeyboard()
 
         MessageActionsBottomSheet
