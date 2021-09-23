@@ -37,10 +37,9 @@ abstract class PushGatewayItem : EpoxyModelWithHolder<PushGatewayItem.Holder>() 
     override fun bind(holder: Holder) {
         super.bind(holder)
         holder.kind.text = when (pusher.kind) {
-            // TODO Create const
-            "http" -> "Http Pusher"
-            "mail" -> "Email Pusher"
-            else   -> pusher.kind
+            Pusher.KIND_HTTP  -> "Http Pusher"
+            Pusher.KIND_EMAIL -> "Email Pusher"
+            else              -> pusher.kind
         }
 
         holder.appId.text = pusher.appId

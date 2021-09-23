@@ -70,7 +70,7 @@ internal class DefaultPushersService @Inject constructor(
     ) = addPusher(
             JsonPusher(
                     pushKey = pushkey,
-                    kind = "http",
+                    kind = Pusher.KIND_HTTP,
                     appId = appId,
                     profileTag = profileTag,
                     lang = lang,
@@ -84,8 +84,8 @@ internal class DefaultPushersService @Inject constructor(
     override fun addEmailPusher(email: String, lang: String, emailBranding: String, appDisplayName: String, deviceDisplayName: String) = addPusher(
             JsonPusher(
                     pushKey = email,
-                    kind = "email",
-                    appId = "m.email",
+                    kind = Pusher.KIND_EMAIL,
+                    appId = Pusher.APP_ID_EMAIL,
                     profileTag = "",
                     lang = lang,
                     appDisplayName = appDisplayName,
