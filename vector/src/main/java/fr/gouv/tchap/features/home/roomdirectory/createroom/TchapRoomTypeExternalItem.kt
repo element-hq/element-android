@@ -26,7 +26,7 @@ import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.onClick
 
-@EpoxyModelClass(layout = R.layout.item_tchap_room_type)
+@EpoxyModelClass(layout = R.layout.item_tchap_room_type_external)
 abstract class TchapRoomTypeExternalItem : EpoxyModelWithHolder<TchapRoomTypeExternalItem.Holder>() {
 
     @EpoxyAttribute
