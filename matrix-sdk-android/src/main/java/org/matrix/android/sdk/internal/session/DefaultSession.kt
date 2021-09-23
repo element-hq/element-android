@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.internal.session
 
+import android.util.Base64
 import androidx.annotation.MainThread
 import dagger.Lazy
 import io.realm.RealmConfiguration
@@ -80,6 +81,7 @@ import org.matrix.android.sdk.internal.session.sync.job.SyncThread
 import org.matrix.android.sdk.internal.session.sync.job.SyncWorker
 import org.matrix.android.sdk.internal.util.createUIHandler
 import timber.log.Timber
+import java.nio.charset.Charset
 import javax.inject.Inject
 import javax.inject.Provider
 
@@ -338,15 +340,13 @@ internal class DefaultSession @Inject constructor(
         exportedOlmDeviceToImport = exportedOlmDevice
     }
 
-    override suspend fun dehydrateDevice(): DehydrationResult {
-        return dehydrationManager.get().dehydrateDevice("Backup device", getDehydrationKey())
+    override suspend fun dehydrateDevice(dehydrationKey: String): DehydrationResult {
+        val decodedDehydrationKey = Base64.decode(dehydrationKey, Base64.DEFAULT)
+        return dehydrationManager.get().dehydrateDevice("Backup device", decodedDehydrationKey)
     }
 
-    override suspend fun rehydrateDevice(): RehydrationResult {
-        return dehydrationManager.get().rehydrateDevice(getDehydrationKey())
-    }
-
-    private fun getDehydrationKey(): ByteArray {
-        return "6fXK17pQFUrFqOnxt3wrqz8RHkQUT9vQ".toByteArray(Charsets.UTF_8)
+    override suspend fun rehydrateDevice(dehydrationKey: String): RehydrationResult {
+        val decodedDehydrationKey = Base64.decode(dehydrationKey, Base64.DEFAULT)
+        return dehydrationManager.get().rehydrateDevice(decodedDehydrationKey)
     }
 }

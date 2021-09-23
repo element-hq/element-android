@@ -94,10 +94,12 @@ internal class DehydrationManager @Inject constructor(
     suspend fun dehydrateDevice(deviceDisplayName: String, dehydrationKey: ByteArray): DehydrationResult {
         //TODO manage key here
 
+        /*
         if (!isSessionOpen) {
             Timber.e("[DehydrationManager] dehydrateDevice: Cannot dehydrate device if session is not open.")
             return DehydrationResult.Canceled
         }
+         */
 
         val account = OlmAccount()
         val e2eKeys = account.identityKeys()
@@ -105,7 +107,7 @@ internal class DehydrationManager @Inject constructor(
         val maxKeys = account.maxOneTimeKeys().toInt()
         account.generateOneTimeKeys(maxKeys / 2)
 
-        //account.generateFallbackKey()
+        account.generateFallbackKey()
 
         Timber.d("[DehydrationManager] dehydrateDevice: account created $e2eKeys")
 
@@ -197,7 +199,7 @@ internal class DehydrationManager @Inject constructor(
             }
 
             val account = OlmAccount()
-            account.unpickle(dehydratedDevice.deviceData.account.toByteArray(Charsets.UTF_8), dehydrationKey)
+            account.unpickle(dehydratedDevice.deviceData.account.toByteArray(), dehydrationKey)
 
             Timber.d("[DehydrationManager] rehydrateDevice: account unpickled ${account.identityKeys()}")
 
