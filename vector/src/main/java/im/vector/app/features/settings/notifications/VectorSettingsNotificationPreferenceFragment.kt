@@ -155,13 +155,6 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
         }
     }
 
-    private fun Session.getEmailsWithPushInformation(): List<Pair<ThreePid.Email, Pusher?>> {
-        val emailPushers = getPushers().filter { it.kind == "email" }
-        return getThreePids()
-                .filterIsInstance<ThreePid.Email>()
-                .map { it to emailPushers.firstOrNull { pusher -> pusher.pushKey == it.email } }
-    }
-
     private val batteryStartForActivityResult = registerStartForActivityResult {
         // Noop
     }
@@ -399,4 +392,18 @@ private fun SwitchPreference.setTransactionalSwitchChangeListener(scope: Corouti
         }
         true
     }
+}
+
+/**
+ * Fetches the current users 3pid emails and pairs them with pushers with same email as the push key.
+ * If no pusher is available for a given emails we can infer that push is not registered for the email.
+ * @return a list of ThreePid emails paired with its associated Pusher or null.
+ * @see ThreePid.Email
+ * @see Pusher
+ */
+private fun Session.getEmailsWithPushInformation(): List<Pair<ThreePid.Email, Pusher?>> {
+    val emailPushers = getPushers().filter { it.kind == "email" }
+    return getThreePids()
+            .filterIsInstance<ThreePid.Email>()
+            .map { it to emailPushers.firstOrNull { pusher -> pusher.pushKey == it.email } }
 }
