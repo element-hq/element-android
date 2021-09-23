@@ -35,7 +35,7 @@ internal interface DehydrationApi {
      * Ref: https://github.com/uhoreg/matrix-doc/blob/dehydration/proposals/2697-device-dehydration.md#dehydrating-a-device
      */
     @PUT(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "org.matrix.msc2697.v2/dehydrated_device")
-    fun setDehydratedDevice(@Body device: DehydratedDevice): DeviceDehydrationResponse
+    suspend fun setDehydratedDevice(@Body device: DehydratedDevice): DeviceDehydrationResponse
 
     /**
      * Get current dehydrated device of the account.
@@ -43,7 +43,7 @@ internal interface DehydrationApi {
      * Ref: https://github.com/uhoreg/matrix-doc/blob/dehydration/proposals/2697-device-dehydration.md#rehydrating-a-device
      */
     @GET(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "org.matrix.msc2697.v2/dehydrated_device")
-    fun getDehydratedDevice(): GetDehydratedDeviceResponse
+    suspend fun getDehydratedDevice(): GetDehydratedDeviceResponse
 
     /**
      * claim the current dehydrated device.
@@ -51,5 +51,5 @@ internal interface DehydrationApi {
      * Ref: https://github.com/uhoreg/matrix-doc/blob/dehydration/proposals/2697-device-dehydration.md#rehydrating-a-device
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "org.matrix.msc2697.v2/dehydrated_device/claim")
-    fun claimDehydratedDevice(): ClaimDehydratedDeviceResponse
+    suspend fun claimDehydratedDevice(deviceId: String): ClaimDehydratedDeviceResponse
 }

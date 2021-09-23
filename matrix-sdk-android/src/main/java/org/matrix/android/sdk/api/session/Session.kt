@@ -294,7 +294,7 @@ interface Session :
 
     fun importOlmDevice(deviceId: String, exportedOlmDevice: MXExportedOlmDevice)
 
-    suspend fun dehydrateDevice(): DehydrationResult
+    suspend fun dehydrateDevice(dehydrationKey: String): DehydrationResult
 
-    suspend fun rehydrateDevice(): RehydrationResult
+    suspend fun rehydrateDevice(dehydrationKey: String): RehydrationResult
 }
