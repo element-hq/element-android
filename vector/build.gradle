@@ -508,4 +508,5 @@ dependencies {
     androidTestImplementation('com.adevinta.android:barista:4.1.0') {
         exclude group: 'org.jetbrains.kotlin'
     }
+    androidTestUtil 'androidx.test:orchestrator:1.4.0'
 }
