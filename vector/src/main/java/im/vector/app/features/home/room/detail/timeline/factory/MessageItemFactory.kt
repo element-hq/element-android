@@ -272,6 +272,7 @@ class MessageItemFactory @Inject constructor(
                 .contentDownloadStateTrackerBinder(contentDownloadStateTrackerBinder)
                 .highlighted(highlight)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
+                .filename(messageContent.body)
     }
 
     private fun buildVerificationRequestMessageItem(messageContent: MessageVerificationRequestContent,

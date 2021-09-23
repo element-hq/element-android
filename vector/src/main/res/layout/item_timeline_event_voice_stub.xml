@@ -59,6 +59,21 @@
             app:layout_constraintStart_toEndOf="@id/voicePlaybackTime"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <TextView
+            android:id="@+id/voiceMessageName"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
+            android:autoLink="none"
+            android:gravity="center"
+            android:singleLine="true"
+            android:ellipsize="middle"
+            app:layout_constraintStart_toStartOf="@id/voicePlaybackWaveform"
+            app:layout_constraintEnd_toEndOf="@id/voicePlaybackWaveform"
+            app:layout_constraintTop_toTopOf="@id/voicePlaybackWaveform"
+            app:layout_constraintBottom_toBottomOf="@id/voicePlaybackWaveform" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

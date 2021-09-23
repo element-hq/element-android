@@ -18,10 +18,13 @@ package im.vector.app.features.home.room.detail.timeline.item
 
 import android.content.Context
 import android.text.format.DateUtils
+import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.isGone
+import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
@@ -56,6 +59,9 @@ abstract class MessageVoiceItem : AbsMessageItem<MessageVoiceItem.Holder>() {
     var izDownloaded = false
 
     @EpoxyAttribute
+    var filename: CharSequence? = null
+
+    @EpoxyAttribute
     lateinit var contentUploadStateTrackerBinder: ContentUploadStateTrackerBinder
 
     @EpoxyAttribute
@@ -84,6 +90,16 @@ abstract class MessageVoiceItem : AbsMessageItem<MessageVoiceItem.Holder>() {
             holder.voicePlaybackWaveform.recreate()
             waveform.forEach { amplitude ->
                 holder.voicePlaybackWaveform.update(amplitude)
+            }
+
+            // SC: fallback audio name if no waveform (we also use this for audio messages!)
+            if (waveform.isEmpty() && !filename.isNullOrBlank()) {
+                holder.voicePlaybackWaveform.isInvisible = true
+                holder.voiceMessageName.isVisible = true
+                holder.voiceMessageName.text = filename
+            } else {
+                holder.voicePlaybackWaveform.isVisible = true
+                holder.voiceMessageName.isGone = true
             }
         }
 
@@ -136,6 +152,7 @@ abstract class MessageVoiceItem : AbsMessageItem<MessageVoiceItem.Holder>() {
         val voicePlaybackWaveform by bind<AudioRecordView>(R.id.voicePlaybackWaveform)
         val progressLayout by bind<ViewGroup>(R.id.messageFileUploadProgressLayout)
         val voicePlaybackLayout by bind<ConstraintLayout>(R.id.voicePlaybackLayout)
+        val voiceMessageName by bind<TextView>(R.id.voiceMessageName)
     }
 
     companion object {
