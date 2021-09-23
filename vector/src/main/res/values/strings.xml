@@ -1114,6 +1114,8 @@
 
     <string name="settings_notification_emails_category">Email notification</string>
     <string name="settings_notification_emails_no_emails">To receive email with notification, please associate an email to your Matrix account</string>
+
+    <!-- The variable is a single email address, eg Enable email notifications for example@matrix.org -->
     <string name="settings_notification_emails_enable_for_email">Enable email notifications for %s</string>
 
     <string name="settings_notification_default">Default Notifications</string>
