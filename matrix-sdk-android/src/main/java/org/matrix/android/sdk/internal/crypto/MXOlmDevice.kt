@@ -577,7 +577,6 @@ internal class MXOlmDevice @Inject constructor(
         session.keysClaimed = keysClaimed
         session.forwardingCurve25519KeyChain = forwardingCurve25519KeyChain
 
-
         inboundGroupSessionStore.storeInBoundGroupSession(session, sessionId, senderKey)
 //        store.storeInboundGroupSessions(listOf(session))
 
