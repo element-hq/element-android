@@ -38,9 +38,9 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.mvrx.runCatchingToAsync
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.features.call.conference.JitsiActiveConferenceHolder
 import im.vector.app.features.attachments.toContentAttachmentData
 import im.vector.app.features.call.conference.ConferenceEvent
+import im.vector.app.features.call.conference.JitsiActiveConferenceHolder
 import im.vector.app.features.call.conference.JitsiService
 import im.vector.app.features.call.lookup.CallProtocolsChecker
 import im.vector.app.features.call.webrtc.WebRtcCallManager
@@ -1515,7 +1515,7 @@ class RoomDetailViewModel @AssistedInject constructor(
         session.getSyncStatusLive()
                 .asObservable()
                 .subscribe { it ->
-                    if(it is SyncStatusService.Status.IncrementalSyncStatus) {
+                    if (it is SyncStatusService.Status.IncrementalSyncStatus) {
                         setState {
                             copy(incrementalSyncStatus = it)
                         }
