@@ -30,7 +30,6 @@ import org.matrix.android.sdk.internal.session.pushers.gateway.PushGatewayNotify
 import org.matrix.android.sdk.internal.session.room.notification.DefaultSetRoomNotificationStateTask
 import org.matrix.android.sdk.internal.session.room.notification.SetRoomNotificationStateTask
 import retrofit2.Retrofit
-import javax.inject.Singleton
 
 @Module
 internal abstract class PushersModule {

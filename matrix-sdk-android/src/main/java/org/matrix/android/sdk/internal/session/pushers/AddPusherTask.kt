@@ -85,7 +85,11 @@ internal interface RequestExecutor {
 }
 
 internal object DefaultRequestExecutor : RequestExecutor {
-    override suspend fun <DATA> executeRequest(globalErrorReceiver: GlobalErrorReceiver?, canRetry: Boolean, maxDelayBeforeRetry: Long, maxRetriesCount: Int, requestBlock: suspend () -> DATA): DATA {
+    override suspend fun <DATA> executeRequest(globalErrorReceiver: GlobalErrorReceiver?,
+                                               canRetry: Boolean,
+                                               maxDelayBeforeRetry: Long,
+                                               maxRetriesCount: Int,
+                                               requestBlock: suspend () -> DATA): DATA {
         return executeRequest(globalErrorReceiver, canRetry, maxDelayBeforeRetry, maxRetriesCount, requestBlock)
     }
 }
