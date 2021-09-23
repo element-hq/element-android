@@ -151,7 +151,7 @@ dependencies {
     implementation 'com.facebook.stetho:stetho-okhttp3:1.6.0'
 
     // Video compression
-    implementation 'com.otaliastudios:transcoder:0.10.3'
+    implementation 'com.otaliastudios:transcoder:0.10.4'
 
     // Phone number https://github.com/google/libphonenumber
     implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.33'
