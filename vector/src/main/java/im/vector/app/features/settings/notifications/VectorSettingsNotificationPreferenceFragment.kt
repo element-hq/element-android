@@ -156,8 +156,8 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
     }
 
     private fun Session.getEmailsWithPushInformation(): List<Pair<ThreePid.Email, Pusher?>> {
-        val emailPushers = this.getPushers().filter { it.kind == "email" }
-        return this.getThreePids()
+        val emailPushers = getPushers().filter { it.kind == "email" }
+        return getThreePids()
                 .filterIsInstance<ThreePid.Email>()
                 .map { it to emailPushers.firstOrNull { pusher -> pusher.pushKey == it.email } }
     }
@@ -386,13 +386,13 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
 }
 
 private fun SwitchPreference.setTransactionalSwitchChangeListener(scope: CoroutineScope, transaction: suspend (Boolean) -> Unit) {
-    this.setOnPreferenceChangeListener { switchPreference, isChecked ->
-        val originalState = this.isChecked
+    setOnPreferenceChangeListener { switchPreference, isChecked ->
+        require(switchPreference is SwitchPreference)
+        val originalState = switchPreference.isChecked
         scope.launch {
             try {
                 transaction(isChecked as Boolean)
             } catch (failure: Throwable) {
-                require(switchPreference is SwitchPreference)
                 switchPreference.isChecked = originalState
                 Toast.makeText(switchPreference.context, R.string.unknown_error, Toast.LENGTH_SHORT).show()
             }

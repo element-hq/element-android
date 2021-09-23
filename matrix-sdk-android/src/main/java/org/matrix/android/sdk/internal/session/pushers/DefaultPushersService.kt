@@ -109,9 +109,9 @@ internal class DefaultPushersService @Inject constructor(
 
     private fun JsonPusher.validateParameters() {
         // Do some parameter checks. It's ok to throw Exception, to inform developer of the problem
-        if (this.pushKey.length > 512) throw InvalidParameterException("pushkey should not exceed 512 chars")
-        if (this.appId.length > 64) throw InvalidParameterException("appId should not exceed 64 chars")
-        this.data?.url?.let { url -> if ("/_matrix/push/v1/notify" !in url) throw InvalidParameterException("url should contain '/_matrix/push/v1/notify'") }
+        if (pushKey.length > 512) throw InvalidParameterException("pushkey should not exceed 512 chars")
+        if (appId.length > 64) throw InvalidParameterException("appId should not exceed 64 chars")
+        data?.url?.let { url -> if ("/_matrix/push/v1/notify" !in url) throw InvalidParameterException("url should contain '/_matrix/push/v1/notify'") }
     }
 
     override suspend fun removePusher(pushkey: String, appId: String) {
