@@ -32,7 +32,6 @@ import androidx.transition.AutoTransition
 import androidx.transition.TransitionManager
 import im.vector.app.R
 import im.vector.app.features.reactions.data.EmojiData
-import im.vector.app.features.reactions.data.EmojiDataSource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -64,7 +63,7 @@ class EmojiRecyclerAdapter @Inject constructor() :
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun update(emojiData: EmojiData){
+    fun update(emojiData: EmojiData) {
         rawData = emojiData
         notifyDataSetChanged()
     }

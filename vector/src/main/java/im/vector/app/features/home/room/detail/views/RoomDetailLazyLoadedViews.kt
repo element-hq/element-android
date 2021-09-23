@@ -20,7 +20,6 @@ import android.view.View
 import android.view.ViewStub
 import im.vector.app.core.ui.views.FailedMessagesWarningView
 import im.vector.app.databinding.FragmentRoomDetailBinding
-import im.vector.app.features.home.room.detail.composer.VoiceMessageRecorderView
 import im.vector.app.features.invite.VectorInviteView
 import kotlin.reflect.KMutableProperty0
 

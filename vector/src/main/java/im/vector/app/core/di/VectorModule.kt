@@ -34,9 +34,7 @@ import im.vector.app.features.pin.SharedPrefPinCodeStore
 import im.vector.app.features.ui.SharedPreferencesUiStateRepository
 import im.vector.app.features.ui.UiStateRepository
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.SupervisorJob
 import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.auth.AuthenticationService
@@ -107,7 +105,6 @@ abstract class VectorModule {
         fun providesApplicationCoroutineScope(): CoroutineScope {
             return CoroutineScope(SupervisorJob() + Dispatchers.Main)
         }
-
     }
 
     @Binds
