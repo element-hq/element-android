@@ -23,6 +23,7 @@ import com.airbnb.epoxy.EpoxyModelClass
 import com.airbnb.epoxy.EpoxyModelWithHolder
 import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyHolder
+import im.vector.app.core.extensions.setText
 import org.matrix.android.sdk.api.session.pushers.Pusher
 
 @EpoxyModelClass(layout = R.layout.item_pushgateway)
@@ -45,8 +46,8 @@ abstract class PushGatewayItem : EpoxyModelWithHolder<PushGatewayItem.Holder>() 
         holder.appId.text = pusher.appId
         holder.pushKey.text = pusher.pushKey
         holder.appName.text = pusher.appDisplayName
-        holder.url.text = pusher.data.url
-        holder.format.text = pusher.data.format
+        holder.url.setText(pusher.data.url, nullVisibility = View.GONE, holder.urlTitle)
+        holder.format.setText(pusher.data.format, nullVisibility = View.GONE, holder.formatTitle)
         holder.deviceName.text = pusher.deviceDisplayName
         holder.removeButton.setOnClickListener {
             interactions.onRemovePushTapped(pusher)
@@ -57,7 +58,9 @@ abstract class PushGatewayItem : EpoxyModelWithHolder<PushGatewayItem.Holder>() 
         val kind by bind<TextView>(R.id.pushGatewayKind)
         val pushKey by bind<TextView>(R.id.pushGatewayKeyValue)
         val deviceName by bind<TextView>(R.id.pushGatewayDeviceNameValue)
+        val formatTitle by bind<View>(R.id.pushGatewayFormat)
         val format by bind<TextView>(R.id.pushGatewayFormatValue)
+        val urlTitle by bind<View>(R.id.pushGatewayURL)
         val url by bind<TextView>(R.id.pushGatewayURLValue)
         val appName by bind<TextView>(R.id.pushGatewayAppNameValue)
         val appId by bind<TextView>(R.id.pushGatewayAppIdValue)

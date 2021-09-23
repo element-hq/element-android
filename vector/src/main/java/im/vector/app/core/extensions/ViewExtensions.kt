@@ -22,6 +22,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import im.vector.app.R
@@ -57,4 +58,15 @@ fun View.getMeasurements(): Pair<Int, Int> {
 fun ImageView.setDrawableOrHide(drawableRes: Drawable?) {
     setImageDrawable(drawableRes)
     isVisible = drawableRes != null
+}
+
+fun TextView.setText(text: String?, nullVisibility: Int, vararg relatedViews: View) {
+    if (text == null) {
+        visibility = nullVisibility
+        relatedViews.forEach { it.visibility = nullVisibility }
+    } else {
+        visibility = View.VISIBLE
+        relatedViews.forEach { it.visibility = View.VISIBLE }
+        this.text = text
+    }
 }
