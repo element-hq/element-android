@@ -58,6 +58,7 @@ import im.vector.app.features.rageshake.VectorFileLogger
 import im.vector.app.features.rageshake.VectorUncaughtExceptionHandler
 import im.vector.app.features.reactions.data.EmojiDataSource
 import im.vector.app.features.session.SessionListener
+import im.vector.app.features.settings.VectorDataStore
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.ui.UiStateRepository
 import org.matrix.android.sdk.api.Matrix
@@ -144,6 +145,8 @@ interface VectorComponent {
     fun notifiableEventResolver(): NotifiableEventResolver
 
     fun vectorPreferences(): VectorPreferences
+
+    fun vectorDataStore(): VectorDataStore
 
     fun wifiDetector(): WifiDetector
 

@@ -70,7 +70,7 @@ import im.vector.app.features.workers.signout.ServerBackupStatusViewState
 import im.vector.app.push.fcm.FcmHelper
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.parcelize.Parcelize
-import org.matrix.android.sdk.api.session.initsync.InitialSyncProgressService
+import org.matrix.android.sdk.api.session.initsync.SyncStatusService
 import org.matrix.android.sdk.api.session.permalinks.PermalinkService
 import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.internal.session.sync.InitialSyncStrategy
@@ -308,11 +308,11 @@ class HomeActivity :
     }
 
     private fun renderState(state: HomeActivityViewState) {
-        when (val status = state.initialSyncProgressServiceStatus) {
-            is InitialSyncProgressService.Status.Idle        -> {
+        when (val status = state.syncStatusServiceStatus) {
+            is SyncStatusService.Status.Idle                  -> {
                 views.waitingView.root.isVisible = false
             }
-            is InitialSyncProgressService.Status.Progressing -> {
+            is SyncStatusService.Status.Progressing           -> {
                 val initSyncStepStr = initSyncStepFormatter.format(status.initSyncStep)
                 Timber.v("$initSyncStepStr ${status.percentProgress}")
                 views.waitingView.root.setOnClickListener {
@@ -330,6 +330,7 @@ class HomeActivity :
                 }
                 views.waitingView.root.isVisible = true
             }
+            else                                              -> Unit
         }.exhaustive
     }
 
@@ -474,8 +475,8 @@ class HomeActivity :
     override fun getMenuRes() = R.menu.home
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        menu.findItem(R.id.menu_home_init_sync_legacy)?.isVisible = vectorPreferences.developerMode()
-        menu.findItem(R.id.menu_home_init_sync_optimized)?.isVisible = vectorPreferences.developerMode()
+        menu.findItem(R.id.menu_home_init_sync_legacy).isVisible = vectorPreferences.developerMode()
+        menu.findItem(R.id.menu_home_init_sync_optimized).isVisible = vectorPreferences.developerMode()
         return super.onPrepareOptionsMenu(menu)
     }
 

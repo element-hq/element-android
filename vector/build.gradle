@@ -345,6 +345,9 @@ dependencies {
     implementation libs.androidx.lifecycleExtensions
     implementation libs.androidx.lifecycleLivedata
 
+    implementation libs.androidx.datastore
+    implementation libs.androidx.datastorepreferences
+
 
     // Log
     implementation libs.jakewharton.timber
@@ -406,7 +409,7 @@ dependencies {
     // To convert voice message on old platforms
     implementation 'com.arthenica:ffmpeg-kit-audio:4.4.LTS'
 
-    //Alerter
+    // Alerter
     implementation 'com.tapadoo.android:alerter:7.0.1'
 
     implementation 'com.otaliastudios:autocomplete:1.1.0'
