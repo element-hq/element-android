@@ -19,8 +19,8 @@ package im.vector.app.features.autocomplete.member
 import android.content.Context
 import androidx.recyclerview.widget.RecyclerView
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import im.vector.app.features.autocomplete.AutocompleteClickListener
 import im.vector.app.features.autocomplete.RecyclerViewPresenter
 import org.matrix.android.sdk.api.query.QueryStringValue
@@ -35,7 +35,7 @@ class AutocompleteMemberPresenter @AssistedInject constructor(context: Context,
                                                               private val controller: AutocompleteMemberController
 ) : RecyclerViewPresenter<RoomMemberSummary>(context), AutocompleteClickListener<RoomMemberSummary> {
 
-    private val room = session.getRoom(roomId)!!
+    private val room by lazy { session.getRoom(roomId)!! }
 
     init {
         controller.listener = this

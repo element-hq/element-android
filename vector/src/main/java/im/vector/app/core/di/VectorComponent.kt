@@ -61,6 +61,7 @@ import im.vector.app.features.session.SessionListener
 import im.vector.app.features.settings.VectorDataStore
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.ui.UiStateRepository
+import kotlinx.coroutines.CoroutineScope
 import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.auth.HomeServerHistoryService
@@ -167,6 +168,8 @@ interface VectorComponent {
     fun autoAcceptInvites(): AutoAcceptInvites
 
     fun webRtcCallManager(): WebRtcCallManager
+
+    fun appCoroutineScope(): CoroutineScope
 
     fun jitsiActiveConferenceHolder(): JitsiActiveConferenceHolder
 
