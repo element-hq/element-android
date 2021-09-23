@@ -41,14 +41,14 @@ class EmojiChooserFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = activityViewModelProvider.get(EmojiChooserViewModel::class.java)
-
         emojiRecyclerAdapter.reactionClickListener = this
         emojiRecyclerAdapter.interactionListener = this
-
         views.emojiRecyclerView.adapter = emojiRecyclerAdapter
-
         viewModel.moveToSection.observe(viewLifecycleOwner) { section ->
             emojiRecyclerAdapter.scrollToSection(section)
+        }
+        viewModel.emojiData.observe(viewLifecycleOwner) {
+            emojiRecyclerAdapter.update(it)
         }
     }
 

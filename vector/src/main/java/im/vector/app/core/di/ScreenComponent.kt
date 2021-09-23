@@ -98,6 +98,7 @@ import im.vector.app.features.usercode.UserCodeActivity
 import im.vector.app.features.widgets.WidgetActivity
 import im.vector.app.features.widgets.permissions.RoomWidgetPermissionBottomSheet
 import im.vector.app.features.workers.signout.SignOutBottomSheetDialogFragment
+import kotlinx.coroutines.CoroutineScope
 
 @Component(
         dependencies = [
@@ -129,6 +130,7 @@ interface ScreenComponent {
     fun uiStateRepository(): UiStateRepository
     fun unrecognizedCertificateDialog(): UnrecognizedCertificateDialog
     fun autoAcceptInvites(): AutoAcceptInvites
+    fun appCoroutineScope(): CoroutineScope
 
     /* ==========================================================================================
      * Activities
