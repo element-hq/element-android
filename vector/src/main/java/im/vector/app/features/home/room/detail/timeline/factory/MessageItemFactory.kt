@@ -160,7 +160,7 @@ class MessageItemFactory @Inject constructor(
             is MessageVideoContent               -> buildVideoMessageItem(messageContent, informationData, highlight, callback, attributes)
             is MessageFileContent                -> buildFileMessageItem(messageContent, highlight, attributes)
             is MessageAudioContent               -> {
-                if (messageContent.voiceMessageIndicator != null) {
+                if (true || messageContent.voiceMessageIndicator != null) {
                     buildVoiceMessageItem(params, messageContent, informationData, highlight, attributes)
                 } else {
                     buildAudioMessageItem(messageContent, informationData, highlight, attributes)
