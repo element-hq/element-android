@@ -330,7 +330,7 @@ class HomeActivity :
                 }
                 views.waitingView.root.isVisible = true
             }
-            is SyncStatusService.Status.IncrementalSyncStatus -> Unit
+            else                                              -> Unit
         }.exhaustive
     }
 
