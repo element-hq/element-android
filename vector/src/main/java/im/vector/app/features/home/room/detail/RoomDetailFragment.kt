@@ -791,15 +791,8 @@ class RoomDetailFragment @Inject constructor(
     private fun setupJumpToBottomView() {
         views.jumpToBottomView.visibility = View.INVISIBLE
         views.jumpToBottomView.debouncedClicks {
-            roomDetailViewModel.handle(RoomDetailAction.ExitTrackingUnreadMessagesState)
             views.jumpToBottomView.visibility = View.INVISIBLE
-            if (!roomDetailViewModel.timeline.isLive) {
-                scrollOnNewMessageCallback.forceScrollOnNextUpdate()
-                roomDetailViewModel.timeline.restartWithEventId(null)
-            } else {
-                roomDetailViewModel.timeline.setInitialEventId(null)
-                layoutManager.scrollToPositionWithOffset(0, 0)
-            }
+            doJumpToBottom()
         }
 
         jumpToBottomViewVisibilityManager = JumpToBottomViewVisibilityManager(
@@ -808,6 +801,17 @@ class RoomDetailFragment @Inject constructor(
                 views.timelineRecyclerView,
                 layoutManager
         )
+    }
+
+    private fun doJumpToBottom() {
+        roomDetailViewModel.handle(RoomDetailAction.ExitTrackingUnreadMessagesState)
+        if (!roomDetailViewModel.timeline.isLive) {
+            scrollOnNewMessageCallback.forceScrollOnNextUpdate()
+            roomDetailViewModel.timeline.restartWithEventId(null)
+        } else {
+            roomDetailViewModel.timeline.setInitialEventId(null)
+            layoutManager.scrollToPositionWithOffset(0, 0)
+        }
     }
 
     private fun setupJumpToReadMarkerView() {
@@ -1349,6 +1353,8 @@ class RoomDetailFragment @Inject constructor(
             lockSendButton = true
             roomDetailViewModel.handle(RoomDetailAction.SendMessage(text, vectorPreferences.isMarkdownEnabled()))
             emojiPopup.dismiss()
+
+            doJumpToBottom()
         }
     }
 
