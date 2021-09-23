@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.internal.crypto.dehydration
 
+import org.matrix.android.sdk.internal.crypto.dehydration.model.ClaimDehydratedDeviceParams
 import org.matrix.android.sdk.internal.crypto.dehydration.model.ClaimDehydratedDeviceResponse
 import org.matrix.android.sdk.internal.crypto.dehydration.model.DehydratedDevice
 import org.matrix.android.sdk.internal.crypto.dehydration.model.DeviceDehydrationResponse
@@ -51,5 +52,5 @@ internal interface DehydrationApi {
      * Ref: https://github.com/uhoreg/matrix-doc/blob/dehydration/proposals/2697-device-dehydration.md#rehydrating-a-device
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "org.matrix.msc2697.v2/dehydrated_device/claim")
-    suspend fun claimDehydratedDevice(deviceId: String): ClaimDehydratedDeviceResponse
+    suspend fun claimDehydratedDevice(@Body claimDehydratedDeviceParams: ClaimDehydratedDeviceParams): ClaimDehydratedDeviceResponse
 }

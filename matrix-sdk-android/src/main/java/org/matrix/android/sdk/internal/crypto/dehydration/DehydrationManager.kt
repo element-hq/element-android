@@ -203,7 +203,9 @@ internal class DehydrationManager @Inject constructor(
 
             Timber.d("[DehydrationManager] rehydrateDevice: account unpickled ${account.identityKeys()}")
 
-            val claimResponse = claimDehydratedDeviceTask.get().execute(Unit)
+            val claimResponse = claimDehydratedDeviceTask.get().execute(
+                    ClaimDehydratedDeviceTask.Params(dehydratedDevice.deviceId)
+            )
             try {
                 if (!claimResponse.success) {
                     Timber.d("[DehydrationManager] rehydrateDevice: device already claimed.")

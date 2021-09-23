@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.internal.crypto.dehydration
 
+import org.matrix.android.sdk.internal.crypto.dehydration.model.ClaimDehydratedDeviceParams
 import org.matrix.android.sdk.internal.crypto.dehydration.model.ClaimDehydratedDeviceResponse
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
@@ -23,7 +24,11 @@ import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.internal.task.Task
 import javax.inject.Inject
 
-internal interface ClaimDehydratedDeviceTask : Task<Unit, ClaimDehydratedDeviceResponse>
+internal interface ClaimDehydratedDeviceTask : Task<ClaimDehydratedDeviceTask.Params, ClaimDehydratedDeviceResponse> {
+    data class Params (
+        val deviceId: String
+    )
+}
 
 @SessionScope
 internal class DefaultClaimDehydratedDeviceTaskFactory @Inject constructor(
@@ -31,9 +36,13 @@ internal class DefaultClaimDehydratedDeviceTaskFactory @Inject constructor(
         private val globalErrorReceiver: GlobalErrorReceiver
 ) : ClaimDehydratedDeviceTask {
 
-    override suspend fun execute(params: Unit): ClaimDehydratedDeviceResponse {
+    override suspend fun execute(params: ClaimDehydratedDeviceTask.Params): ClaimDehydratedDeviceResponse {
         return executeRequest(globalErrorReceiver) {
-            dehydrationApi.claimDehydratedDevice()
+            dehydrationApi.claimDehydratedDevice(
+                    ClaimDehydratedDeviceParams(
+                            deviceId = params.deviceId
+                    )
+            )
         }
     }
 }
