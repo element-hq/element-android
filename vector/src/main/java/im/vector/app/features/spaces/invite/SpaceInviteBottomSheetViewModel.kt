@@ -36,6 +36,7 @@ import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.model.Membership
+import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.peeking.PeekResult
 
 class SpaceInviteBottomSheetViewModel @AssistedInject constructor(
@@ -46,7 +47,6 @@ class SpaceInviteBottomSheetViewModel @AssistedInject constructor(
 
     init {
         session.getRoomSummary(initialState.spaceId)?.let { roomSummary ->
-
             val knownMembers = roomSummary.otherMemberIds.filter {
                 session.getExistingDirectRoomWithUser(it) != null
             }.mapNotNull { session.getUser(it) }
@@ -61,34 +61,35 @@ class SpaceInviteBottomSheetViewModel @AssistedInject constructor(
                         peopleYouKnow = Success(peopleYouKnow)
                 )
             }
+            refreshInviteSummaryIfNeeded(roomSummary)
+        }
+    }
 
-            if (roomSummary.membership == Membership.INVITE) {
-                // we can try to query the room summary api to get more info?
-                viewModelScope.launch {
-                    tryOrNull { session.peekRoom(roomSummary.roomId) }?.let { peekResult ->
-                        when (peekResult) {
-                            is PeekResult.Success -> {
-                                setState {
-                                    copy(
-                                            summary = Success(
-                                                    roomSummary.copy(
-                                                            joinedMembersCount = peekResult.numJoinedMembers,
-                                                            // it's also possible that the name/avatar did change since the invite..
-                                                            // if it's null keep the old one as summary API might not be available
-                                                            // and peek result could be null for other reasons (not peekable)
-                                                            avatarUrl = peekResult.avatarUrl ?: roomSummary.avatarUrl,
-                                                            displayName = peekResult.name ?: roomSummary.displayName,
-                                                            topic = peekResult.topic ?: roomSummary.topic
-                                                            // maybe use someMembers field later?
-                                                    )
+    private fun refreshInviteSummaryIfNeeded(roomSummary: RoomSummary) {
+        if (roomSummary.membership == Membership.INVITE) {
+            // we can try to query the room summary api to get more info?
+            viewModelScope.launch(Dispatchers.IO) {
+                when (val peekResult = tryOrNull { session.peekRoom(roomSummary.roomId) }) {
+                    is PeekResult.Success -> {
+                        setState {
+                            copy(
+                                    summary = Success(
+                                            roomSummary.copy(
+                                                    joinedMembersCount = peekResult.numJoinedMembers,
+                                                    // it's also possible that the name/avatar did change since the invite..
+                                                    // if it's null keep the old one as summary API might not be available
+                                                    // and peek result could be null for other reasons (not peekable)
+                                                    avatarUrl = peekResult.avatarUrl ?: roomSummary.avatarUrl,
+                                                    displayName = peekResult.name ?: roomSummary.displayName,
+                                                    topic = peekResult.topic ?: roomSummary.topic
+                                                    // maybe use someMembers field later?
                                             )
                                     )
-                                }
-                            }
-                            else                  -> {
-                                //
-                            }
+                            )
                         }
+                    }
+                    else                  -> {
+                        // nop
                     }
                 }
             }
