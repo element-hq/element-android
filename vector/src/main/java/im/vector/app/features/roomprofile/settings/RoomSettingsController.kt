@@ -17,10 +17,14 @@
 package im.vector.app.features.roomprofile.settings
 
 import com.airbnb.epoxy.TypedEpoxyController
+import com.airbnb.mvrx.Success
+import fr.gouv.tchap.core.utils.RoomUtils
+import fr.gouv.tchap.core.utils.TchapRoomType
 import im.vector.app.R
 import im.vector.app.core.epoxy.dividerItem
 import im.vector.app.core.epoxy.profiles.buildProfileAction
 import im.vector.app.core.epoxy.profiles.buildProfileSection
+import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.verticalMarginItem
 import im.vector.app.core.utils.DimensionConverter
@@ -31,6 +35,7 @@ import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.format.RoomHistoryVisibilityFormatter
 import im.vector.app.features.settings.VectorPreferences
 import org.matrix.android.sdk.api.session.room.model.GuestAccess
+import org.matrix.android.sdk.api.session.room.model.RoomDirectoryVisibility
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
@@ -40,6 +45,7 @@ class RoomSettingsController @Inject constructor(
         private val avatarRenderer: AvatarRenderer,
         private val dimensionConverter: DimensionConverter,
         private val roomHistoryVisibilityFormatter: RoomHistoryVisibilityFormatter,
+        private val errorFormatter: ErrorFormatter,
         private val vectorPreferences: VectorPreferences
 ) : TypedEpoxyController<RoomSettingsViewState>() {
 
@@ -52,6 +58,7 @@ class RoomSettingsController @Inject constructor(
         fun onHistoryVisibilityClicked()
         fun onJoinRuleClicked()
         fun onToggleGuestAccess()
+        fun onRemoveFromRoomsDirectory()
     }
 
     var callback: Callback? = null
@@ -114,6 +121,7 @@ class RoomSettingsController @Inject constructor(
         dividerItem {
             id("topicDivider")
         }
+
         buildProfileAction(
                 id = "historyReadability",
                 title = stringProvider.getString(R.string.room_settings_room_read_history_rules_pref_title),
@@ -132,6 +140,16 @@ class RoomSettingsController @Inject constructor(
                 action = { if (data.actionPermissions.canChangeJoinRule) callback?.onJoinRuleClicked() }
         )
 
+        RoomUtils.getRoomType(roomSummary).let {
+            if (data.actionPermissions.canRemoveFromRoomsDirectory
+                    && (it == TchapRoomType.FORUM
+                            || (it == TchapRoomType.UNKNOWN
+                            && data.roomDirectoryVisibility is Success
+                            && data.roomDirectoryVisibility() == RoomDirectoryVisibility.PUBLIC))) {
+                buildRemoveFromRoomsDirectory()
+            }
+        }
+
         val isPublic = (data.newRoomJoinRules.newJoinRules ?: data.currentRoomJoinRules) == RoomJoinRules.PUBLIC
         if (vectorPreferences.developerMode() && isPublic) {
             val guestAccess = data.newRoomJoinRules.newGuestAccess ?: data.currentGuestAccess
@@ -148,5 +166,17 @@ class RoomSettingsController @Inject constructor(
                 id("guestAccessDivider")
             }
         }
+    }
+
+    private fun buildRemoveFromRoomsDirectory() {
+        val host = this
+        buildProfileAction(
+                id = "removeFromRoomsDirectory",
+                title = stringProvider.getString(R.string.tchap_room_settings_remove_from_directory),
+                divider = true,
+                destructive = true,
+                editable = false,
+                action = { host.callback?.onRemoveFromRoomsDirectory() }
+        )
     }
 }

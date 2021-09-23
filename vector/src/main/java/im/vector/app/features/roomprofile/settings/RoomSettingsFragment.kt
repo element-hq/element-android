@@ -189,6 +189,17 @@ class RoomSettingsFragment @Inject constructor(
         viewModel.handle(RoomSettingsAction.SetRoomGuestAccess(toggled))
     }
 
+    override fun onRemoveFromRoomsDirectory() {
+        MaterialAlertDialogBuilder(requireContext(), R.style.ThemeOverlay_Vector_MaterialAlertDialog_Destructive)
+                .setTitle(R.string.dialog_title_warning)
+                .setMessage(getString(R.string.tchap_room_settings_remove_from_directory_prompt_msg))
+                .setPositiveButton(R.string.yes) { _, _ ->
+                    viewModel.handle(RoomSettingsAction.RemoveFromRoomsDirectory)
+                }
+                .setNegativeButton(R.string.cancel, null)
+                .show()
+    }
+
     override fun onImageReady(uri: Uri?) {
         uri ?: return
         viewModel.handle(

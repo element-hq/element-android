@@ -24,6 +24,7 @@ import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.roomprofile.RoomProfileArgs
 import org.matrix.android.sdk.api.session.room.model.GuestAccess
+import org.matrix.android.sdk.api.session.room.model.RoomDirectoryVisibility
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
@@ -45,7 +46,8 @@ data class RoomSettingsViewState(
         val showSaveAction: Boolean = false,
         val actionPermissions: ActionPermissions = ActionPermissions(),
         val supportsRestricted: Boolean = false,
-        val canUpgradeToRestricted: Boolean = false
+        val canUpgradeToRestricted: Boolean = false,
+        val roomDirectoryVisibility: Async<RoomDirectoryVisibility> = Uninitialized
 ) : MvRxState {
 
     constructor(args: RoomProfileArgs) : this(roomId = args.roomId)
@@ -56,7 +58,8 @@ data class RoomSettingsViewState(
             val canChangeTopic: Boolean = false,
             val canChangeHistoryVisibility: Boolean = false,
             val canChangeJoinRule: Boolean = false,
-            val canAddChildren: Boolean = false
+            val canAddChildren: Boolean = false,
+            val canRemoveFromRoomsDirectory: Boolean = false
     )
 
     sealed class AvatarAction {
