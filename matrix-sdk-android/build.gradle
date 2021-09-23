@@ -179,5 +179,5 @@ dependencies {
     // Plant Timber tree for test
     androidTestImplementation libs.tests.timberJunitRule
 
-    androidTestUtil 'androidx.test:orchestrator:1.4.0'
+    androidTestUtil libs.androidx.orchestrator
 }
