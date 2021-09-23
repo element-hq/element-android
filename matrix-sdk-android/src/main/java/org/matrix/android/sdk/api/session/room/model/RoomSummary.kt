@@ -50,7 +50,7 @@ data class RoomSummary(
         val hasUnreadMessages: Boolean = false,
         val hasUnreadContentMessages: Boolean = false,
         val hasUnreadOriginalContentMessages: Boolean = false,
-        val unreadCount: Int? = 0,
+        val unreadCount: Int? = null,
         val markedUnread: Boolean = false,
         val aggregatedUnreadCount: Int = 0,
         val aggregatedNotificationCount: Int = 0,

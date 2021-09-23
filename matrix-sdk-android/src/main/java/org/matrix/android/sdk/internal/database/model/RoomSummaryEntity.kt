@@ -108,16 +108,27 @@ internal open class RoomSummaryEntity(
             if (value != field) field = value
         }
 
-    var unreadCount: Int = 0
+    var unreadCount: Int? = null
         set(value) {
             if (value != field) field = value
         }
+        /* -> safeUnreadCount
         get() {
             if (field == 0 && hasUnreadOriginalContentMessages) {
                 return 1
             }
             return field
         }
+         */
+
+    fun safeUnreadCount(): Int {
+        val safeUnreadCount = unreadCount
+        return if (safeUnreadCount == null || safeUnreadCount <= 0) {
+            if (hasUnreadOriginalContentMessages) 1 else 0
+        } else {
+            safeUnreadCount
+        }
+    }
 
     var aggregatedUnreadCount: Int = 0
         set(value) {

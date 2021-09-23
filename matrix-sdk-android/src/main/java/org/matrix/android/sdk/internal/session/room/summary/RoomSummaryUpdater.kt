@@ -99,9 +99,9 @@ internal class RoomSummaryUpdater @Inject constructor(
         }
         roomSummaryEntity.highlightCount = unreadNotifications?.highlightCount ?: 0
         roomSummaryEntity.notificationCount = unreadNotifications?.notificationCount ?: 0
-        roomSummaryEntity.unreadCount = unreadCount ?: 0
+        roomSummaryEntity.unreadCount = unreadCount
         roomSummaryEntity.aggregatedNotificationCount = roomSummaryEntity.notificationCount
-        roomSummaryEntity.aggregatedUnreadCount = roomSummaryEntity.unreadCount
+        roomSummaryEntity.aggregatedUnreadCount = roomSummaryEntity.safeUnreadCount()
 
         if (membership != null) {
             roomSummaryEntity.membership = membership
@@ -399,9 +399,9 @@ internal class RoomSummaryUpdater @Inject constructor(
                                 .findAll().forEach {
                                     highlightCount += it.highlightCount
                                     notificationCount += it.notificationCount
-                                    unreadCount += it.unreadCount
+                                    unreadCount += it.safeUnreadCount()
                                     aggregateNotificationCount += min(it.notificationCount, 1)
-                                    aggregateUnreadCount += min(it.unreadCount, 1)
+                                    aggregateUnreadCount += min(it.safeUnreadCount(), 1)
                                     markedUnreadCount += if (it.markedUnread) 1 else 0
                                 }
 

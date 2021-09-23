@@ -57,7 +57,7 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
     @EpoxyAttribute var unreadNotificationCount: Int = 0
     @EpoxyAttribute var hasUnreadMessage: Boolean = false
     @EpoxyAttribute var markedUnread: Boolean = false
-    @EpoxyAttribute var unreadCount: Int = 0
+    @EpoxyAttribute var unreadCount: Int? = null
     @EpoxyAttribute var hasDraft: Boolean = false
     @EpoxyAttribute var showHighlighted: Boolean = false
     @EpoxyAttribute var hasFailedSending: Boolean = false
@@ -75,7 +75,7 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
         holder.titleView.text = matrixItem.getBestName()
         holder.lastEventTimeView.text = lastEventTime
         holder.lastEventView.text = lastFormattedEvent
-        holder.unreadCounterBadgeView.render(UnreadCounterBadgeView.State(unreadNotificationCount, showHighlighted, unreadCount, markedUnread))
+        holder.unreadCounterBadgeView.render(UnreadCounterBadgeView.State(unreadNotificationCount, showHighlighted, unreadCount ?: 0, markedUnread))
         holder.unreadIndentIndicator.isVisible = hasUnreadMessage
         holder.draftView.isVisible = hasDraft
         avatarRenderer.render(matrixItem, holder.avatarImageView)
