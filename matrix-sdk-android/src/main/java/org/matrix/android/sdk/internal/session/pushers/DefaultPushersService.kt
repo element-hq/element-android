@@ -85,7 +85,8 @@ internal class DefaultPushersService @Inject constructor(
                                 lang: String,
                                 emailBranding: String,
                                 appDisplayName: String,
-                                deviceDisplayName: String
+                                deviceDisplayName: String,
+                                append: Boolean
     ) = addPusher(
             JsonPusher(
                     pushKey = email,
@@ -96,7 +97,7 @@ internal class DefaultPushersService @Inject constructor(
                     appDisplayName = appDisplayName,
                     deviceDisplayName = deviceDisplayName,
                     data = JsonPusherData(brand = emailBranding),
-                    append = true
+                    append = append
             )
     )
 

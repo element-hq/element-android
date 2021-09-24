@@ -71,6 +71,10 @@ interface PushersService {
      * @param emailBranding     The branding placeholder to include in the email communications.
      * @param appDisplayName    A human readable string that will allow the user to identify what application owns this pusher.
      * @param deviceDisplayName A human readable string that will allow the user to identify what device owns this pusher.
+     * @param append            If true, the homeserver should add another pusher with the given pushkey and App ID in addition
+     *                          to any others with different user IDs. Otherwise, the homeserver must remove any other pushers
+     *                          with the same App ID and pushkey for different users. Typically We always want to append for
+     *                          email pushers since we don't want to stop other accounts notifying to the same email address.
      * @return                  A work request uuid. Can be used to listen to the status
      *                          (LiveData<WorkInfo> status = workManager.getWorkInfoByIdLiveData(<UUID>))
      * @throws [InvalidParameterException] if a parameter is not correct
@@ -79,7 +83,8 @@ interface PushersService {
                        lang: String,
                        emailBranding: String,
                        appDisplayName: String,
-                       deviceDisplayName: String): UUID
+                       deviceDisplayName: String,
+                       append: Boolean = true): UUID
 
     /**
      * Directly ask the push gateway to send a push to this device
