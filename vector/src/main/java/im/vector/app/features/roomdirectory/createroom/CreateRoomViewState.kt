@@ -20,7 +20,7 @@ import android.net.Uri
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
-import fr.gouv.tchap.android.sdk.api.session.room.model.RoomAccessRules
+import fr.gouv.tchap.core.utils.TchapRoomType
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 
@@ -29,7 +29,7 @@ data class CreateRoomViewState(
         val roomName: String = "",
         val roomTopic: String = "",
         val roomJoinRules: RoomJoinRules = RoomJoinRules.INVITE,
-        val roomAccessRules: RoomAccessRules = RoomAccessRules.RESTRICTED,
+        val roomType: TchapRoomType = TchapRoomType.PRIVATE,
         val isEncrypted: Boolean = false,
         val showAdvanced: Boolean = false,
         val disableFederation: Boolean = true,

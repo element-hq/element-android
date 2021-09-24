@@ -18,7 +18,6 @@ package fr.gouv.tchap.features.home.roomdirectory.createroom
 
 import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.Loading
-import fr.gouv.tchap.core.utils.RoomUtils
 import fr.gouv.tchap.core.utils.TchapRoomType
 import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
@@ -49,7 +48,7 @@ class TchapCreateRoomController @Inject constructor(
             imageUri(viewState.avatarUri)
             clickListener { host.listener?.onAvatarChange() }
             deleteListener { host.listener?.onAvatarDelete() }
-            roomType(RoomUtils.getRoomType(viewState.roomJoinRules, viewState.roomAccessRules))
+            roomType(viewState.roomType)
 
             value(viewState.roomName)
             hint(host.stringProvider.getString(R.string.create_room_name_hint))
@@ -64,20 +63,20 @@ class TchapCreateRoomController @Inject constructor(
 
         tchapRoomTypePrivateItem {
             id("privateRoomItem")
-            selected(RoomUtils.getRoomType(viewState.roomJoinRules, viewState.roomAccessRules) == TchapRoomType.PRIVATE)
+            selected(viewState.roomType == TchapRoomType.PRIVATE)
             clickListener { host.listener?.setTchapRoomType(TchapRoomType.PRIVATE) }
         }
 
         tchapRoomTypeExternalItem {
             id("externalRoomItem")
-            selected(RoomUtils.getRoomType(viewState.roomJoinRules, viewState.roomAccessRules) == TchapRoomType.EXTERNAL)
+            selected(viewState.roomType == TchapRoomType.EXTERNAL)
             clickListener { host.listener?.setTchapRoomType(TchapRoomType.EXTERNAL) }
         }
 
         tchapRoomTypeForumItem {
             id("forumRoomItem")
             userDomain(viewState.userDomain)
-            selected(RoomUtils.getRoomType(viewState.roomJoinRules, viewState.roomAccessRules) == TchapRoomType.FORUM)
+            selected(viewState.roomType == TchapRoomType.FORUM)
             checked(viewState.disableFederation)
             switchVisible(viewState.isFederationSettingAvailable)
             clickListener { host.listener?.setTchapRoomType(TchapRoomType.FORUM) }

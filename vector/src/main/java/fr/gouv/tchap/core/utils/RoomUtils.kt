@@ -17,7 +17,6 @@
 package fr.gouv.tchap.core.utils
 
 import fr.gouv.tchap.android.sdk.api.session.room.model.RoomAccessRules
-import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 
 enum class TchapRoomType {
@@ -40,18 +39,6 @@ object RoomUtils {
             }
             roomSummary.isPublic    -> TchapRoomType.FORUM
             else                    -> TchapRoomType.UNKNOWN
-        }
-    }
-
-    fun getRoomType(roomJoinRules: RoomJoinRules, accessRules: RoomAccessRules): TchapRoomType {
-        return when (roomJoinRules) {
-            RoomJoinRules.PUBLIC     -> TchapRoomType.FORUM
-            else -> when (accessRules) {
-                RoomAccessRules.RESTRICTED   -> TchapRoomType.PRIVATE
-                RoomAccessRules.UNRESTRICTED -> TchapRoomType.EXTERNAL
-                RoomAccessRules.DIRECT       -> TchapRoomType.DIRECT
-                else                         -> TchapRoomType.UNKNOWN
-            }
         }
     }
 }

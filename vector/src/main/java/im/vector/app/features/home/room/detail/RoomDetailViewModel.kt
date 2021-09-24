@@ -737,7 +737,7 @@ class RoomDetailViewModel @AssistedInject constructor(
         when (itemId) {
             R.id.timeline_setting -> true
             R.id.invite           -> state.canInvite
-            R.id.open_matrix_apps -> true
+            R.id.open_matrix_apps -> false
             R.id.voice_call       -> BuildConfig.IS_VOIP_SUPPORTED && state.isWebRTCCallOptionAvailable()
             R.id.video_call       -> BuildConfig.IS_VOIP_SUPPORTED
                     && (state.isWebRTCCallOptionAvailable() || state.jitsiState.confId == null || state.jitsiState.hasJoined)
