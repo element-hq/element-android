@@ -51,8 +51,12 @@ class EventHtmlRenderer @Inject constructor(htmlConfigure: MatrixHtmlPluginConfi
                 .usePlugin(object : AbstractMarkwonPlugin() { // Markwon expects maths to be in a specific format: https://noties.io/Markwon/docs/v4/ext-latex
                     override fun processMarkdown(markdown: String): String {
                         return markdown
-                                .replace(Regex("""<span\s+data-mx-maths="([^"]*)">.*?</span>""")) { matchResult -> "$$" + matchResult.groupValues[1] + "$$" }
-                                .replace(Regex("""<div\s+data-mx-maths="([^"]*)">.*?</div>""")) { matchResult -> "\n$$\n" + matchResult.groupValues[1] + "\n$$\n" }
+                                .replace(Regex("""<span\s+data-mx-maths="([^"]*)">.*?</span>""")) {
+                                    matchResult -> "$$" + matchResult.groupValues[1] + "$$"
+                                }
+                                .replace(Regex("""<div\s+data-mx-maths="([^"]*)">.*?</div>""")) {
+                                    matchResult -> "\n$$\n" + matchResult.groupValues[1] + "\n$$\n"
+                                }
                     }
                 })
                 .usePlugin(MarkwonInlineParserPlugin.create())
