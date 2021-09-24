@@ -45,7 +45,7 @@ fun Context.showIdentityServerConsentDialog(configuredIdentityServer: String?, c
             .setTitle(R.string.identity_server_consent_dialog_title)
             .setMessage(getString(R.string.identity_server_consent_dialog_content, configuredIdentityServer ?: ""))
             .setPositiveButton(R.string.yes) { _, _ ->
-                consentCallBack?.invoke()
+                consentCallBack.invoke()
             }
             .setNegativeButton(R.string.no, null)
             .show()
