@@ -56,5 +56,10 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
+          arch: x86
+          profile: Nexus 5X
+          force-avd-creation: false
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          emulator-build: 7425822
           script: ./gradlew $CI_GRADLE_ARG_PROPERTIES -PallWarningsAsErrors=false connectedGplayDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=im.vector.app.ui.UiAllScreensSanityTest
 
