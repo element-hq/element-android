@@ -47,7 +47,7 @@ jobs:
           source .synapse/bin/activate
           pip install synapse matrix-synapse
           curl -sL https://raw.githubusercontent.com/matrix-org/synapse/develop/demo/start.sh --no-rate-limit \
-            | sed s/127.0.0.1/0.0.0.0/g | bash
+            | sed s/127.0.0.1/0.0.0.0/g | sed 's/http:\/\/localhost/http:\/\/10.0.2.2/g' | bash
       - uses: actions/setup-java@v2
         with:
           distribution: 'adopt'
