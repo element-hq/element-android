@@ -1694,7 +1694,7 @@
 \nVoulez-vous vous inscrire en utilisant un client web \?</string>
     <string name="login_login_with_email_error">Cet e\u2011mail n’est associé à aucun compte.</string>
     <string name="login_reset_password_on">Réinitialiser le mot de passe sur %1$s</string>
-    <string name="login_reset_password_notice">Un e\u2011mail de vérification sera envoyé à votre adresse pour confirmer la configuration de votre nouveau mot de passe.</string>
+    <string name="login_reset_password_notice">Pour réinitialiser votre mot de passe, saisissez l’adresse e\u2011mail associée à votre compte :</string>
     <string name="login_reset_password_submit">Suivant</string>
     <string name="login_reset_password_email_hint">E\u2011mail</string>
     <string name="login_reset_password_password_hint">Nouveau mot de passe</string>
