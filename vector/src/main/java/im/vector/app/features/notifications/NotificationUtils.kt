@@ -597,10 +597,12 @@ class NotificationUtils @Inject constructor(private val context: Context,
                     val markRoomReadPendingIntent = PendingIntent.getBroadcast(context, System.currentTimeMillis().toInt(), markRoomReadIntent,
                             PendingIntent.FLAG_UPDATE_CURRENT)
 
-                    addAction(NotificationCompat.Action(
-                            R.drawable.ic_material_done_all_white,
-                            stringProvider.getString(R.string.action_mark_room_read),
-                            markRoomReadPendingIntent))
+                    NotificationCompat.Action.Builder(R.drawable.ic_material_done_all_white,
+                            stringProvider.getString(R.string.action_mark_room_read), markRoomReadPendingIntent)
+                            .setSemanticAction(NotificationCompat.Action.SEMANTIC_ACTION_MARK_AS_READ)
+                            .setShowsUserInterface(false)
+                            .build()
+                            .let { addAction(it) }
 
                     // Quick reply
                     if (!roomInfo.hasSmartReplyError) {
@@ -611,6 +613,8 @@ class NotificationUtils @Inject constructor(private val context: Context,
                             NotificationCompat.Action.Builder(R.drawable.vector_notification_quick_reply,
                                     stringProvider.getString(R.string.action_quick_reply), replyPendingIntent)
                                     .addRemoteInput(remoteInput)
+                                    .setSemanticAction(NotificationCompat.Action.SEMANTIC_ACTION_REPLY)
+                                    .setShowsUserInterface(false)
                                     .build()
                                     .let { addAction(it) }
                         }
