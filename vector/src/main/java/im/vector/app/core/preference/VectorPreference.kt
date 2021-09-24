@@ -24,10 +24,13 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.Typeface
 import android.util.AttributeSet
+import android.util.TypedValue
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.animation.doOnEnd
+import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
 import androidx.core.widget.ImageViewCompat
 import androidx.preference.Preference
 import androidx.preference.PreferenceViewHolder
@@ -138,7 +141,9 @@ open class VectorPreference : Preference {
                     start()
                 }
             } else {
-                itemView.setBackgroundColor(Color.TRANSPARENT)
+                val bgDrawable = TypedValue()
+                context.theme.resolveAttribute(android.R.attr.selectableItemBackground, bgDrawable, true)
+                ViewCompat.setBackground(itemView, ContextCompat.getDrawable(context, bgDrawable.resourceId))
             }
         } catch (e: Exception) {
             Timber.e(e, "onBindView")

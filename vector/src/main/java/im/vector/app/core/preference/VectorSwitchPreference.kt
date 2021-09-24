@@ -22,8 +22,11 @@ import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Color
 import android.util.AttributeSet
+import android.util.TypedValue
 import android.widget.TextView
 import androidx.core.animation.doOnEnd
+import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
 import androidx.preference.PreferenceViewHolder
 import androidx.preference.SwitchPreference
 import im.vector.app.R
@@ -88,7 +91,9 @@ class VectorSwitchPreference : SwitchPreference {
                 start()
             }
         } else {
-            itemView.setBackgroundColor(Color.TRANSPARENT)
+            val bgDrawable = TypedValue()
+            context.theme.resolveAttribute(android.R.attr.selectableItemBackground, bgDrawable, true)
+            ViewCompat.setBackground(itemView, ContextCompat.getDrawable(context, bgDrawable.resourceId))
         }
 
         super.onBindViewHolder(holder)
