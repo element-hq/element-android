@@ -89,7 +89,6 @@ class SpaceInviteBottomSheetViewModel @AssistedInject constructor(
                         )
                 )
             }
-
         }
     }
 
