@@ -16,7 +16,6 @@
 
 package im.vector.app.features.userdirectory
 
-import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
@@ -32,7 +31,6 @@ import im.vector.app.core.extensions.toggle
 import im.vector.app.core.platform.VectorViewModel
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
-import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.identity.IdentityServiceListener
@@ -42,7 +40,6 @@ import org.matrix.android.sdk.api.session.user.model.User
 import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.api.util.toOptional
 import org.matrix.android.sdk.rx.rx
-import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 private typealias KnownUsersSearch = String
@@ -121,12 +118,9 @@ class UserListViewModel @AssistedInject constructor(@Assisted initialState: User
     }
 
     private fun handleISUpdateConsent(action: UserListAction.UpdateUserConsent) {
-        viewModelScope.launch {
-            try {
-                session.identityService().setUserConsent(action.consent)
-            } catch (failure: Throwable) {
-                Timber.d("Failed to update IS consent", failure)
-            }
+        session.identityService().setUserConsent(action.consent)
+        withState {
+            identityServerUsersSearch.accept(it.searchTerm)
         }
     }
 

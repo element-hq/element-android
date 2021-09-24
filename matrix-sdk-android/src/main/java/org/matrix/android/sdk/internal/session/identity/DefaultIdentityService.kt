@@ -229,8 +229,6 @@ internal class DefaultIdentityService @Inject constructor(
 
     override fun setUserConsent(newValue: Boolean) {
         identityStore.setUserConsent(newValue)
-        // notify listeners
-        listeners.toList().forEach { tryOrNull { it.onIdentityServerChange() } }
     }
 
     override suspend fun lookUp(threePids: List<ThreePid>): List<FoundThreePid> {
