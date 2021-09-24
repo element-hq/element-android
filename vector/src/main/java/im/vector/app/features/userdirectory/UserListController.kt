@@ -93,45 +93,46 @@ class UserListController @Inject constructor(private val session: Session,
 
         when (val matchingEmail = currentState.matchingEmail) {
             is Success -> {
-                userListHeaderItem {
-                    id("is_matching")
-                    header(host.stringProvider.getString(R.string.discovery_section, currentState.configuredIdentityServer ?: ""))
-                }
-                val invoke = matchingEmail()
-                val isSelected = currentState.pendingSelections.indexOfFirst { pendingSelection ->
-                    when (pendingSelection) {
-                        is PendingSelection.ThreePidPendingSelection -> {
-                            when (pendingSelection.threePid) {
-                                is ThreePid.Email  -> pendingSelection.threePid.email == invoke?.email
-                                is ThreePid.Msisdn -> false
+                matchingEmail()?.let { threePidUser ->
+                    userListHeaderItem {
+                        id("identity_server_result_header")
+                        header(host.stringProvider.getString(R.string.discovery_section, currentState.configuredIdentityServer ?: ""))
+                    }
+                    val isSelected = currentState.pendingSelections.any { pendingSelection ->
+                        when (pendingSelection) {
+                            is PendingSelection.ThreePidPendingSelection -> {
+                                when (pendingSelection.threePid) {
+                                    is ThreePid.Email  -> pendingSelection.threePid.email == threePidUser.email
+                                    is ThreePid.Msisdn -> false
+                                }
+                            }
+                            is PendingSelection.UserPendingSelection     -> {
+                                threePidUser.user != null && threePidUser.user.userId == pendingSelection.user.userId
                             }
                         }
-                        is PendingSelection.UserPendingSelection     -> {
-                            invoke?.user != null && invoke.user.userId == pendingSelection.user.userId
-                        }
                     }
-                }  != -1
-                if (invoke?.user == null) {
-                    foundThreePidItem {
-                        id("email_${invoke?.email}")
-                        foundItem(invoke!!)
-                        selected(isSelected)
-                        clickListener {
-                            host.callback?.onThreePidClick(ThreePid.Email(invoke.email))
+                    if (threePidUser.user == null) {
+                        inviteByEmailItem {
+                            id("email_${threePidUser.email}")
+                            foundItem(threePidUser)
+                            selected(isSelected)
+                            clickListener {
+                                host.callback?.onThreePidClick(ThreePid.Email(threePidUser.email))
+                            }
                         }
-                    }
-                } else {
-                    userDirectoryUserItem {
-                        id(invoke.user.userId)
-                        selected(isSelected)
-                        matrixItem(invoke.user.toMatrixItem().let {
-                            it.copy(
-                                    displayName = "${it.displayName} [${invoke.email}]"
-                            )
-                        })
-                        avatarRenderer(host.avatarRenderer)
-                        clickListener {
-                            host.callback?.onItemClick(invoke.user)
+                    } else {
+                        userDirectoryUserItem {
+                            id(threePidUser.user.userId)
+                            selected(isSelected)
+                            matrixItem(threePidUser.user.toMatrixItem().let {
+                                it.copy(
+                                        displayName = "${it.getBestName()} [${threePidUser.email}]"
+                                )
+                            })
+                            avatarRenderer(host.avatarRenderer)
+                            clickListener {
+                                host.callback?.onItemClick(threePidUser.user)
+                            }
                         }
                     }
                 }
@@ -191,7 +192,7 @@ class UserListController @Inject constructor(private val session: Session,
             }
             is Loading -> {
                 userListHeaderItem {
-                    id("is_matching")
+                    id("identity_server_result_header_loading")
                     header(host.stringProvider.getString(R.string.discovery_section, currentState.configuredIdentityServer ?: ""))
                 }
                 loadingItem {

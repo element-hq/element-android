@@ -3483,6 +3483,7 @@
     <string name="finish_setting_up_discovery">Finish setting up discovery.</string>
     <string name="discovery_invite">Invite by email, find contacts and more…</string>
     <string name="finish_setup">Finish setup</string>
+    <!-- %s will be replaced by the user identity server domain, e.g vector.im -->
     <string name="discovery_section">Discovery (%s)</string>
 
 

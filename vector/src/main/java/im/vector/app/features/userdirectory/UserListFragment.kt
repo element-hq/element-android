@@ -31,7 +31,6 @@ import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.chip.Chip
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
@@ -40,6 +39,7 @@ import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.setupAsSearch
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.DimensionConverter
+import im.vector.app.core.utils.showIdentityServerConsentDialog
 import im.vector.app.core.utils.startSharePlainTextIntent
 import im.vector.app.databinding.FragmentUserListBinding
 import im.vector.app.features.homeserver.HomeServerCapabilitiesViewModel
@@ -228,14 +228,9 @@ class UserListFragment @Inject constructor(
 
     override fun giveIdentityServerConsent() {
         withState(viewModel) { state ->
-            MaterialAlertDialogBuilder(requireActivity())
-                    .setTitle(R.string.identity_server_consent_dialog_title)
-                    .setMessage(getString(R.string.identity_server_consent_dialog_content, state.configuredIdentityServer ?: ""))
-                    .setPositiveButton(R.string.yes) { _, _ ->
-                        viewModel.handle(UserListAction.UpdateUserConsent(true))
-                    }
-                    .setNegativeButton(R.string.no, null)
-                    .show()
+            requireContext().showIdentityServerConsentDialog(state.configuredIdentityServer) {
+                viewModel.handle(UserListAction.UpdateUserConsent(true))
+            }
         }
     }
 

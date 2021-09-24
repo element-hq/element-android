@@ -202,6 +202,8 @@ internal class DefaultIdentityService @Inject constructor(
 
             identityStore.setUrl(urlCandidate)
             identityStore.setToken(token)
+            // could we remember if it was previously given?
+            identityStore.setUserConsent(false)
             updateIdentityAPI(urlCandidate)
 
             updateAccountData(urlCandidate)
