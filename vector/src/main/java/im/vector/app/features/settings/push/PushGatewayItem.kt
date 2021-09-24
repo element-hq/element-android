@@ -23,7 +23,7 @@ import com.airbnb.epoxy.EpoxyModelClass
 import com.airbnb.epoxy.EpoxyModelWithHolder
 import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyHolder
-import im.vector.app.core.extensions.setText
+import im.vector.app.core.extensions.setTextOrHide
 import org.matrix.android.sdk.api.session.pushers.Pusher
 
 @EpoxyModelClass(layout = R.layout.item_pushgateway)
@@ -46,8 +46,8 @@ abstract class PushGatewayItem : EpoxyModelWithHolder<PushGatewayItem.Holder>() 
         holder.appId.text = pusher.appId
         holder.pushKey.text = pusher.pushKey
         holder.appName.text = pusher.appDisplayName
-        holder.url.setText(pusher.data.url, nullVisibility = View.GONE, holder.urlTitle)
-        holder.format.setText(pusher.data.format, nullVisibility = View.GONE, holder.formatTitle)
+        holder.url.setTextOrHide(pusher.data.url, hideWhenBlank = true, holder.urlTitle)
+        holder.format.setTextOrHide(pusher.data.format, hideWhenBlank = true, holder.formatTitle)
         holder.deviceName.text = pusher.deviceDisplayName
         holder.removeButton.setOnClickListener {
             interactions.onRemovePushTapped(pusher)
