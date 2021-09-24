@@ -133,6 +133,7 @@ internal class DefaultSetReadMarkersTask @Inject constructor(
                         ?: return@awaitTransaction
                 roomSummary.notificationCount = 0
                 roomSummary.highlightCount = 0
+                roomSummary.unreadCount = 0
                 roomSummary.hasUnreadMessages = false
                 roomSummary.hasUnreadContentMessages = false
                 roomSummary.hasUnreadOriginalContentMessages = false
