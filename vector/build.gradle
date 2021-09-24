@@ -508,7 +508,7 @@ dependencies {
     // Plant Timber tree for test
     androidTestImplementation libs.tests.timberJunitRule
     // "The one who serves a great Espresso"
-    androidTestImplementation('com.adevinta.android:barista:4.1.0') {
+    androidTestImplementation('com.adevinta.android:barista:4.2.0') {
         exclude group: 'org.jetbrains.kotlin'
     }
     androidTestUtil libs.androidx.orchestrator
