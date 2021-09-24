@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
+ * Copyright (c) 2021 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,8 @@
 
 package im.vector.app.features.settings.push
 
-import im.vector.app.core.platform.VectorViewModelAction
-import org.matrix.android.sdk.api.session.pushers.Pusher
+import im.vector.app.core.platform.VectorViewEvents
 
-sealed class PushGatewayAction : VectorViewModelAction {
-    object Refresh : PushGatewayAction()
-    data class RemovePusher(val pusher: Pusher) : PushGatewayAction()
+sealed class PushGatewayViewEvents : VectorViewEvents {
+    data class RemovePusherFailed(val cause: Throwable): PushGatewayViewEvents()
 }

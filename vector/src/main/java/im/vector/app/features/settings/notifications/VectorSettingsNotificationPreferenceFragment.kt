@@ -23,7 +23,10 @@ import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Parcelable
 import android.widget.Toast
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.map
 import androidx.preference.Preference
 import androidx.preference.SwitchPreference
 import im.vector.app.R
@@ -43,10 +46,14 @@ import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.VectorSettingsBaseFragment
 import im.vector.app.features.settings.VectorSettingsFragmentInteractionListener
 import im.vector.app.push.fcm.FcmHelper
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.pushrules.RuleIds
 import org.matrix.android.sdk.api.pushrules.RuleKind
+import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.identity.ThreePid
+import org.matrix.android.sdk.api.session.pushers.Pusher
 import javax.inject.Inject
 
 // Referenced in vector_settings_preferences_root.xml
@@ -116,9 +123,49 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
             }
         }
 
+        bindEmailNotifications()
         refreshBackgroundSyncPrefs()
 
         handleSystemPreference()
+    }
+
+    private fun bindEmailNotifications() {
+        val initialEmails = session.getEmailsWithPushInformation()
+        bindEmailNotificationCategory(initialEmails)
+        session.getEmailsWithPushInformationLive().observe(this) { emails ->
+            if (initialEmails != emails) {
+                bindEmailNotificationCategory(emails)
+            }
+        }
+    }
+
+    private fun bindEmailNotificationCategory(emails: List<Pair<ThreePid.Email, Boolean>>) {
+        findPreference<VectorPreferenceCategory>(VectorPreferences.SETTINGS_EMAIL_NOTIFICATION_CATEGORY_PREFERENCE_KEY)?.let { category ->
+            category.removeAll()
+            if (emails.isEmpty()) {
+                val vectorPreference = VectorPreference(requireContext())
+                vectorPreference.title = resources.getString(R.string.settings_notification_emails_no_emails)
+                category.addPreference(vectorPreference)
+                vectorPreference.setOnPreferenceClickListener {
+                    interactionListener?.navigateToEmailAndPhoneNumbers()
+                    true
+                }
+            } else {
+                emails.forEach { (emailPid, isEnabled) ->
+                    val pref = VectorSwitchPreference(requireContext())
+                    pref.title = resources.getString(R.string.settings_notification_emails_enable_for_email, emailPid.email)
+                    pref.isChecked = isEnabled
+                    pref.setTransactionalSwitchChangeListener(lifecycleScope) { isChecked ->
+                        if (isChecked) {
+                            pushManager.registerEmailForPush(emailPid.email)
+                        } else {
+                            pushManager.unregisterEmailPusher(emailPid.email)
+                        }
+                    }
+                    category.addPreference(pref)
+                }
+            }
+        }
     }
 
     private val batteryStartForActivityResult = registerStartForActivityResult {
@@ -342,4 +389,44 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
                     }
                 }
     }
+}
+
+private fun SwitchPreference.setTransactionalSwitchChangeListener(scope: CoroutineScope, transaction: suspend (Boolean) -> Unit) {
+    setOnPreferenceChangeListener { switchPreference, isChecked ->
+        require(switchPreference is SwitchPreference)
+        val originalState = switchPreference.isChecked
+        scope.launch {
+            try {
+                transaction(isChecked as Boolean)
+            } catch (failure: Throwable) {
+                switchPreference.isChecked = originalState
+                Toast.makeText(switchPreference.context, R.string.unknown_error, Toast.LENGTH_SHORT).show()
+            }
+        }
+        true
+    }
+}
+
+/**
+ * Fetches the current users 3pid emails and pairs them with their enabled state.
+ * If no pusher is available for a given email we can infer that push is not registered for the email.
+ * @return a list of ThreePid emails paired with the email notification enabled state. true if email notifications are enabled, false if not.
+ * @see ThreePid.Email
+ */
+private fun Session.getEmailsWithPushInformation(): List<Pair<ThreePid.Email, Boolean>> {
+    val emailPushers = getPushers().filter { it.kind == Pusher.KIND_EMAIL }
+    return getThreePids()
+            .filterIsInstance<ThreePid.Email>()
+            .map { it to emailPushers.any { pusher -> pusher.pushKey == it.email } }
+}
+
+private fun Session.getEmailsWithPushInformationLive(): LiveData<List<Pair<ThreePid.Email, Boolean>>> {
+    return getThreePidsLive(refreshData = false)
+            .distinctUntilChanged()
+            .map { threePids ->
+                val emailPushers = getPushers().filter { it.kind == Pusher.KIND_EMAIL }
+                threePids
+                        .filterIsInstance<ThreePid.Email>()
+                        .map { it to emailPushers.any { pusher -> pusher.pushKey == it.email } }
+            }
 }
