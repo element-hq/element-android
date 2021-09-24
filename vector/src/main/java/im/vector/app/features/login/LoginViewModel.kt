@@ -30,6 +30,7 @@ import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import fr.gouv.tchap.features.login.TchapLoginActivity
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.extensions.configureAndStart
@@ -76,21 +77,12 @@ class LoginViewModel @AssistedInject constructor(
         fun create(initialState: LoginViewState): LoginViewModel
     }
 
-    init {
-        getKnownCustomHomeServersUrls()
-    }
-
-    private fun getKnownCustomHomeServersUrls() {
-        setState {
-            copy(knownCustomHomeServersUrls = homeServerHistoryService.getKnownServersUrls())
-        }
-    }
-
     companion object : MvRxViewModelFactory<LoginViewModel, LoginViewState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: LoginViewState): LoginViewModel? {
             return when (val activity: FragmentActivity = (viewModelContext as ActivityViewModelContext).activity()) {
+                is TchapLoginActivity -> activity.loginViewModelFactory.create(state)
                 is LoginActivity      -> activity.loginViewModelFactory.create(state)
                 is SoftLogoutActivity -> activity.loginViewModelFactory.create(state)
                 else                  -> error("Invalid Activity")
@@ -169,12 +161,10 @@ class LoginViewModel @AssistedInject constructor(
 
     private fun rememberHomeServer(homeServerUrl: String) {
         homeServerHistoryService.addHomeServerToHistory(homeServerUrl)
-        getKnownCustomHomeServersUrls()
     }
 
     private fun handleClearHomeServerHistory() {
         homeServerHistoryService.clearHistory()
-        getKnownCustomHomeServersUrls()
     }
 
     private fun handleLoginWithToken(action: LoginAction.LoginWithToken) {
@@ -335,10 +325,13 @@ class LoginViewModel @AssistedInject constructor(
     private fun handleRegisterWith(action: LoginAction.LoginOrRegister) {
         reAuthHelper.data = action.password
         currentJob = executeRegistrationStep {
+            // Tchap registration doesn't require userName.
+            // The initialDeviceDisplayName is useless because the account will be actually created after the email validation (eventually on another device).
+            // This first register request will link the account password with the returned session id (used in the following steps).
             it.createAccount(
-                    action.username,
+                    null,
                     action.password,
-                    action.initialDeviceName
+                    null
             )
         }
     }
@@ -417,8 +410,8 @@ class LoginViewModel @AssistedInject constructor(
         }
 
         when (action.signMode) {
-            SignMode.SignUp             -> startRegistrationFlow()
-            SignMode.SignIn             -> startAuthenticationFlow()
+            SignMode.SignUp             -> _viewEvents.post(LoginViewEvents.OnSignModeSelected(SignMode.SignUp))
+            SignMode.SignIn             -> _viewEvents.post(LoginViewEvents.OnSignModeSelected(SignMode.SignIn))
             SignMode.SignInWithMatrixId -> _viewEvents.post(LoginViewEvents.OnSignModeSelected(SignMode.SignInWithMatrixId))
             SignMode.Unknown            -> Unit
         }
@@ -802,6 +795,8 @@ class LoginViewModel @AssistedInject constructor(
                     || data.isOutdatedHomeserver) {
                 // Notify the UI
                 _viewEvents.post(LoginViewEvents.OutdatedHomeserver)
+            } else {
+                _viewEvents.post(LoginViewEvents.OnLoginFlowRetrieved)
             }
         }
     }

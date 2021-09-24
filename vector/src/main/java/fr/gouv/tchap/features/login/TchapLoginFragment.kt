@@ -34,6 +34,9 @@ import im.vector.app.R
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.isEmail
 import im.vector.app.databinding.FragmentTchapLoginBinding
+import im.vector.app.features.login.AbstractLoginFragment
+import im.vector.app.features.login.LoginAction
+import im.vector.app.features.login.LoginViewEvents
 import im.vector.app.features.login.LoginViewState
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.MatrixError
@@ -47,7 +50,7 @@ import javax.inject.Inject
  */
 class TchapLoginFragment @Inject constructor(
         private val platformViewModelFactory: PlatformViewModel.Factory
-) : TchapAbstractLoginFragment<FragmentTchapLoginBinding>(), PlatformViewModel.Factory {
+) : AbstractLoginFragment<FragmentTchapLoginBinding>(), PlatformViewModel.Factory {
 
     private val viewModel: PlatformViewModel by fragmentViewModel()
     private lateinit var login: String
@@ -62,6 +65,8 @@ class TchapLoginFragment @Inject constructor(
         setupToolbar(views.groupToolbar)
         views.groupToolbar.setTitle(R.string.tchap_connection_title)
 
+        setupForgottenPasswordButton()
+
         viewModel.observeViewEvents {
             when (it) {
                 is PlatformViewEvents.Loading -> showLoading(it.message)
@@ -74,8 +79,8 @@ class TchapLoginFragment @Inject constructor(
 
         loginViewModel.observeViewEvents {
             when (it) {
-                TchapLoginViewEvents.OnLoginFlowRetrieved ->
-                    loginViewModel.handle(TchapLoginAction.LoginOrRegister(login, password, getString(R.string.login_default_session_public_name)))
+                LoginViewEvents.OnLoginFlowRetrieved ->
+                    loginViewModel.handle(LoginAction.LoginOrRegister(login, password, getString(R.string.login_default_session_public_name)))
                 else                                      ->
                     // This is handled by the Activity
                     Unit
@@ -94,6 +99,10 @@ class TchapLoginFragment @Inject constructor(
         }
 
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun setupForgottenPasswordButton() {
+        views.forgetPasswordButton.setOnClickListener { forgetPasswordClicked() }
     }
 
     private fun submit() {
@@ -125,11 +134,15 @@ class TchapLoginFragment @Inject constructor(
     }
 
     private fun updateHomeServer(platform: Platform) {
-        loginViewModel.handle(TchapLoginAction.UpdateHomeServer(getString(R.string.server_url_prefix) + platform.hs))
+        loginViewModel.handle(LoginAction.UpdateHomeServer(getString(R.string.server_url_prefix) + platform.hs))
+    }
+
+    private fun forgetPasswordClicked() {
+        loginViewModel.handle(LoginAction.PostViewEvent(LoginViewEvents.OnForgetPasswordClicked))
     }
 
     override fun resetViewModel() {
-        loginViewModel.handle(TchapLoginAction.ResetLogin)
+        loginViewModel.handle(LoginAction.ResetLogin)
     }
 
     override fun onError(throwable: Throwable) {

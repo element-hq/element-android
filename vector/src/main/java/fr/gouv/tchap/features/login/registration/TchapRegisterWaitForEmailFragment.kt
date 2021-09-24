@@ -22,11 +22,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.airbnb.mvrx.args
-import fr.gouv.tchap.features.login.TchapAbstractLoginFragment
-import fr.gouv.tchap.features.login.TchapLoginAction
-import fr.gouv.tchap.features.login.TchapLoginViewEvents
 import im.vector.app.R
 import im.vector.app.databinding.FragmentTchapRegisterWaitForEmailBinding
+import im.vector.app.features.login.AbstractLoginFragment
+import im.vector.app.features.login.LoginAction
+import im.vector.app.features.login.LoginViewEvents
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
@@ -38,7 +38,7 @@ data class TchapRegisterWaitForEmailFragmentArgument(
 /**
  * In this screen, the user is asked to check his emails
  */
-class TchapRegisterWaitForEmailFragment @Inject constructor() : TchapAbstractLoginFragment<FragmentTchapRegisterWaitForEmailBinding>() {
+class TchapRegisterWaitForEmailFragment @Inject constructor() : AbstractLoginFragment<FragmentTchapRegisterWaitForEmailBinding>() {
 
     private val params: TchapRegisterWaitForEmailFragmentArgument by args()
 
@@ -62,10 +62,10 @@ class TchapRegisterWaitForEmailFragment @Inject constructor() : TchapAbstractLog
     }
 
     override fun resetViewModel() {
-        loginViewModel.handle(TchapLoginAction.ResetLogin)
+        loginViewModel.handle(LoginAction.ResetLogin)
     }
 
     private fun signIn() {
-        loginViewModel.handle(TchapLoginAction.PostViewEvent(TchapLoginViewEvents.OnGoToSignInClicked))
+        loginViewModel.handle(LoginAction.PostViewEvent(LoginViewEvents.OnGoToSignInClicked))
     }
 }
