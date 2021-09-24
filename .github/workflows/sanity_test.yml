@@ -14,7 +14,7 @@ env:
 jobs:
   integration-tests:
     name: Sanity Tests (Synapse)
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
