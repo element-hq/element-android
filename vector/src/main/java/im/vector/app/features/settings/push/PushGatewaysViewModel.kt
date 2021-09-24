@@ -79,7 +79,7 @@ class PushGatewaysViewModel @AssistedInject constructor(@Assisted initialState: 
     private fun removePusher(pusher: Pusher) {
         viewModelScope.launch {
             kotlin.runCatching {
-                session.removePusher(pusher.pushKey, pusher.appId)
+                session.removePusher(pusher)
             }.onFailure {
                 _viewEvents.post(PushGatewayViewEvents.RemovePusherFailed(it))
             }

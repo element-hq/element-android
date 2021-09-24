@@ -75,12 +75,12 @@ class PushersManager @Inject constructor(
 
     suspend fun unregisterEmailPusher(email: String) {
         val currentSession = activeSessionHolder.getSafeActiveSession() ?: return
-        currentSession.removePusher(email, appId = "m.email")
+        currentSession.removeEmailPusher(email)
     }
 
     suspend fun unregisterPusher(pushKey: String) {
         val currentSession = activeSessionHolder.getSafeActiveSession() ?: return
-        currentSession.removePusher(pushKey, stringProvider.getString(R.string.pusher_app_id))
+        currentSession.removeHttpPusher(pushKey, stringProvider.getString(R.string.pusher_app_id))
     }
 
     companion object {

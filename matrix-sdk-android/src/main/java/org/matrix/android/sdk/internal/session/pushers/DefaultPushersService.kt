@@ -120,8 +120,20 @@ internal class DefaultPushersService @Inject constructor(
         data?.url?.let { url -> if ("/_matrix/push/v1/notify" !in url) throw InvalidParameterException("url should contain '/_matrix/push/v1/notify'") }
     }
 
-    override suspend fun removePusher(pushkey: String, appId: String) {
-        val params = RemovePusherTask.Params(pushkey, appId)
+    override suspend fun removePusher(pusher: Pusher) {
+        removePusher(pusher.pushKey, pusher.appId)
+    }
+
+    override suspend fun removeHttpPusher(pushkey: String, appId: String) {
+        removePusher(pushkey, appId)
+    }
+
+    override suspend fun removeEmailPusher(email: String) {
+        removePusher(pushKey = email, Pusher.APP_ID_EMAIL)
+    }
+
+    private suspend fun removePusher(pushKey: String, pushAppId: String) {
+        val params = RemovePusherTask.Params(pushKey, pushAppId)
         removePusherTask.execute(params)
     }
 
