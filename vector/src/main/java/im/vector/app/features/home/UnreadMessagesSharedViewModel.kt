@@ -177,13 +177,11 @@ class UnreadMessagesSharedViewModel @AssistedInject constructor(@Assisted initia
                             CountInfo(
                                     homeCount = counts,
                                     otherCount = RoomAggregateNotificationCount(
-                                            rootCounts.fold(0, { acc, rs ->
-                                                acc + rs.notificationCount
-                                            }) + (counts.notificationCount.takeIf { selectedSpace != null } ?: 0)
+                                            notificationCount = rootCounts.fold(0, { acc, rs -> acc + rs.notificationCount })
+                                                    + (counts.notificationCount.takeIf { selectedSpace != null } ?: 0)
                                                     + spaceInviteCount,
-                                            rootCounts.fold(0, { acc, rs ->
-                                                acc + rs.highlightCount
-                                            }) + (counts.highlightCount.takeIf { selectedSpace != null } ?: 0)
+                                            highlightCount = rootCounts.fold(0, { acc, rs -> acc + rs.highlightCount })
+                                                    + (counts.highlightCount.takeIf { selectedSpace != null } ?: 0)
                                                     + spaceInviteCount
                                     )
                             )
