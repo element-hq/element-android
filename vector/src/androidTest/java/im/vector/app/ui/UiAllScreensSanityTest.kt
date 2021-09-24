@@ -290,8 +290,9 @@ class UiAllScreensSanityTest {
 
         // Leave
         clickListItem(R.id.matrixProfileRecyclerView, 13)
+        sleep(1000)
         clickDialogNegativeButton()
-
+        sleep(1000)
         // Advanced
         // Room addresses
         clickListItem(R.id.matrixProfileRecyclerView, 15)
@@ -352,6 +353,7 @@ class UiAllScreensSanityTest {
 
     private fun createDm() {
         clickOn(R.id.createChatRoomButton)
+        sleep(1000)
 
         withIdlingResource(activityIdlingResource(CreateDirectRoomActivity::class.java)) {
             onView(withId(R.id.userListRecyclerView))
@@ -362,6 +364,7 @@ class UiAllScreensSanityTest {
 
         closeSoftKeyboard()
         pressBack()
+        sleep(500)
         pressBack()
     }
 
