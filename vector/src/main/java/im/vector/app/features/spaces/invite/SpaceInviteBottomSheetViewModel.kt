@@ -61,38 +61,35 @@ class SpaceInviteBottomSheetViewModel @AssistedInject constructor(
                         peopleYouKnow = Success(peopleYouKnow)
                 )
             }
-            refreshInviteSummaryIfNeeded(roomSummary)
+            if (roomSummary.membership == Membership.INVITE) {
+                getLatestRoomSummary(roomSummary)
+            }
         }
     }
 
-    private fun refreshInviteSummaryIfNeeded(roomSummary: RoomSummary) {
-        if (roomSummary.membership == Membership.INVITE) {
-            // we can try to query the room summary api to get more info?
-            viewModelScope.launch(Dispatchers.IO) {
-                when (val peekResult = tryOrNull { session.peekRoom(roomSummary.roomId) }) {
-                    is PeekResult.Success -> {
-                        setState {
-                            copy(
-                                    summary = Success(
-                                            roomSummary.copy(
-                                                    joinedMembersCount = peekResult.numJoinedMembers,
-                                                    // it's also possible that the name/avatar did change since the invite..
-                                                    // if it's null keep the old one as summary API might not be available
-                                                    // and peek result could be null for other reasons (not peekable)
-                                                    avatarUrl = peekResult.avatarUrl ?: roomSummary.avatarUrl,
-                                                    displayName = peekResult.name ?: roomSummary.displayName,
-                                                    topic = peekResult.topic ?: roomSummary.topic
-                                                    // maybe use someMembers field later?
-                                            )
-                                    )
-                            )
-                        }
-                    }
-                    else                  -> {
-                        // nop
-                    }
-                }
+    /**
+     * Try to request the room summary api to get more info
+     */
+    private fun getLatestRoomSummary(roomSummary: RoomSummary) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val peekResult = tryOrNull { session.peekRoom(roomSummary.roomId) } as? PeekResult.Success ?: return@launch
+            setState {
+                copy(
+                        summary = Success(
+                                roomSummary.copy(
+                                        joinedMembersCount = peekResult.numJoinedMembers,
+                                        // it's also possible that the name/avatar did change since the invite..
+                                        // if it's null keep the old one as summary API might not be available
+                                        // and peek result could be null for other reasons (not peekable)
+                                        avatarUrl = peekResult.avatarUrl ?: roomSummary.avatarUrl,
+                                        displayName = peekResult.name ?: roomSummary.displayName,
+                                        topic = peekResult.topic ?: roomSummary.topic
+                                        // maybe use someMembers field later?
+                                )
+                        )
+                )
             }
+
         }
     }
 
