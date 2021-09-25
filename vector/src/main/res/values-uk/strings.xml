@@ -2560,4 +2560,22 @@
     <string name="new_recovery_method_popup_description">Виявлено нову резервну копію ключа зашифрованих повідомлень.
 \n
 \nЯкщо ви не налаштовували новий метод відновлення, можливо, зловмисник намагається отримати доступ до вашого облікового запису. Змініть пароль свого облікового запису та негайно визначте новий спосіб відновлення в Налаштуваннях.</string>
+    <string name="space_add_existing_rooms">Додати наявну кімнату до простору</string>
+    <string name="activity_create_space_title">Створити простір</string>
+    <string name="create_spaces_just_me">Лише я</string>
+    <string name="command_description_create_space">Створити простір</string>
+    <string name="dev_tools_event_content_hint">Вміст події</string>
+    <string name="dev_tools_form_hint_event_content">Вміст події</string>
+    <string name="dev_tools_error_no_content">Немає вмісту</string>
+    <string name="dev_tools_form_hint_type">Тип</string>
+    <string name="dev_tools_edit_content">Редагувати вміст</string>
+    <string name="a11y_trust_level_warning">Попередження про рівень довіри</string>
+    <string name="call_dial_pad_lookup_error">Сталася помилка пошуку номера телефона</string>
+    <string name="call_tile_connection_failed">Не вдалося встановити з\'єднання</string>
+    <string name="call_tile_you_declined_this_call">Ви відхилили цей виклик</string>
+    <string name="matrix_to_card_title">Посилання Matrix</string>
+    <string name="empty_contact_book">Ваша книга контактів порожня</string>
+    <string name="search_in_my_contacts">Шукати у моїх контактах</string>
+    <string name="phone_book_title">Телефонна книга</string>
+    <string name="crypto_utd">Не вдалося розшифрувати</string>
 </resources>
