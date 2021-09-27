@@ -165,7 +165,11 @@ class CreateRoomController @Inject constructor(
                             host.stringProvider.getString(R.string.create_room_encryption_description)
                         }
                 )
-                switchChecked(viewState.isEncrypted)
+                if (viewState.isEncrypted != null) {
+                    switchChecked(viewState.isEncrypted)
+                } else {
+                    switchChecked(viewState.defaultEncrypted[viewState.roomJoinRules] ?: false)
+                }
 
                 listener { value ->
                     host.listener?.setIsEncrypted(value)

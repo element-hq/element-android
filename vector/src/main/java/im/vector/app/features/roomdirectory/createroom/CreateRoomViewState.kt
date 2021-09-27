@@ -28,7 +28,7 @@ data class CreateRoomViewState(
         val roomName: String = "",
         val roomTopic: String = "",
         val roomJoinRules: RoomJoinRules = RoomJoinRules.INVITE,
-        val isEncrypted: Boolean = false,
+        val isEncrypted: Boolean? = null,
         val showAdvanced: Boolean = false,
         val disableFederation: Boolean = false,
         val homeServerName: String = "",
@@ -38,7 +38,8 @@ data class CreateRoomViewState(
         val parentSpaceSummary: RoomSummary? = null,
         val supportsRestricted: Boolean = false,
         val aliasLocalPart: String? = null,
-        val isSubSpace: Boolean = false
+        val isSubSpace: Boolean = false,
+        val defaultEncrypted: Map<RoomJoinRules, Boolean> = emptyMap()
 ) : MvRxState {
 
     constructor(args: CreateRoomArgs) : this(

@@ -109,8 +109,13 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted private val init
 
             setState {
                 copy(
-                        isEncrypted = RoomJoinRules.INVITE == roomJoinRules && adminE2EByDefault,
-                        hsAdminHasDisabledE2E = !adminE2EByDefault
+                        hsAdminHasDisabledE2E = !adminE2EByDefault,
+                        defaultEncrypted = mapOf(
+                                RoomJoinRules.INVITE to adminE2EByDefault,
+                                RoomJoinRules.PUBLIC to false,
+                                RoomJoinRules.RESTRICTED to adminE2EByDefault
+                        )
+
                 )
             }
         }
@@ -286,8 +291,17 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted private val init
                     disableFederation = state.disableFederation
 
                     // Encryption
-                    if (state.isEncrypted) {
-                        enableEncryption()
+                    // we ignore the isEncrypted for public room as the switch is hidden in this case
+                    if (state.roomJoinRules != RoomJoinRules.PUBLIC && state.isEncrypted != null) {
+                        // the user explicitly switch the toggle
+                        if (state.isEncrypted) {
+                            enableEncryption()
+                        }
+                    } else {
+                        // based on default
+                        if (state.defaultEncrypted[state.roomJoinRules] == true) {
+                            enableEncryption()
+                        }
                     }
                 }
 
