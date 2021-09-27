@@ -165,6 +165,12 @@ class EmojiReactionPickerActivity : VectorBaseActivity<ActivityEmojiReactionPick
                 }
             })
 
+            searchView.setOnCloseListener {
+                currentFocus?.clearFocus()
+                searchItem.collapseActionView()
+                true
+            }
+
             searchView.queryTextChanges()
                     .throttleWithTimeout(600, TimeUnit.MILLISECONDS)
                     .doOnError { err -> Timber.e(err) }
@@ -174,6 +180,7 @@ class EmojiReactionPickerActivity : VectorBaseActivity<ActivityEmojiReactionPick
                     }
                     .disposeOnDestroy()
         }
+        searchItem.expandActionView()
         return true
     }
 
