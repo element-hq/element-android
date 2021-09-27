@@ -493,7 +493,7 @@
     <string name="template_permissions_rationale_msg_camera_and_audio">${app_name} deve essere autorizzato ad accedere a fotocamera e microfono per poter fare chiamate video.
 \n
 \nNel prossimo pop-up concedi le autorizzazioni per poter fare la chiamata.</string>
-    <string name="template_permissions_rationale_msg_contacts">${app_name} può usare tua Rubrica locale per trovare altri utenti Matrix grazie alle loro email e numeri di telefono. Se ti sta bene comunicare i dati di tutti i tuoi contatti all\'Identity Server, puoi concedere l\'autorizzazione nel prossimo pop-up.</string>
+    <string name="template_permissions_rationale_msg_contacts">${app_name} può usare tua rubrica per trovare altri utenti Matrix grazie alle loro email e numeri di telefono. Se accetti di condividere la tua rubrica per questo scopo, puoi concedere l\'autorizzazione nella prossima finestra.</string>
     <string name="template_permissions_msg_contacts_warning_other_androids">${app_name} può usare tua Rubrica locale per trovare altri utenti Matrix grazie alle loro email e numeri di telefono.
 \n
 \nTi sta bene comunicare i dati di tutti i tuoi contatti per questo scopo\?</string>
@@ -1394,7 +1394,7 @@
     <string name="keys_backup_info_title_version">Versione</string>
     <string name="keys_backup_info_title_algorithm">Algoritmo</string>
     <string name="keys_backup_info_title_signature">Firma</string>
-    <string name="autodiscover_invalid_response">Risposta Home Server non valida</string>
+    <string name="autodiscover_invalid_response">Risposta home server non valida</string>
     <string name="autodiscover_well_known_autofill_dialog_title">Opzioni autocompletamento server</string>
     <string name="template_autodiscover_well_known_autofill_dialog_message">${app_name} ha rilevato una configurazione server personalizzata per il tuo dominio userID \"%1$s\":
 \n%2$s</string>
@@ -1586,7 +1586,7 @@
     <string name="none">Nessuno</string>
     <string name="revoke">Revoca</string>
     <string name="disconnect">Disconnetti</string>
-    <string name="people_no_identity_server">Non è stato configurato alcun Identity Server.</string>
+    <string name="people_no_identity_server">Non è stato configurato alcun server d\'identità.</string>
     <string name="call_failed_no_ice_title">Chiamata fallita a causa di un\'errata configurazione del server</string>
     <string name="call_failed_no_ice_description">Chiedi all\'amministratore del tuo Home Server (%1$s) di configurare un server TURN affinché le chiamate funzionino in modo affidabile. 
 \n 
@@ -1600,7 +1600,7 @@
     <string name="login_error_homeserver_not_found">Non è stato trovato alcun Home Server seguendo questo URL. Per favore, controllalo</string>
     <string name="settings_call_ringtone_use_default_stun">Permetti chiamate dal Server di appoggio</string>
     <string name="settings_call_ringtone_use_default_stun_sum">Verrà usato %s come server d\'appoggio quando il tuo homeserver non ha uno proprio (il tuo indirizzo IP verrà esposto durante una chiamata)</string>
-    <string name="invite_no_identity_server_error">Per poterlo fare, aggiungi un Identity Server nelle Impostazioni.</string>
+    <string name="invite_no_identity_server_error">Per poterlo fare, aggiungi un server d\'identità nelle Impostazioni.</string>
     <string name="settings_background_fdroid_sync_mode">Modalità sync in background</string>
     <string name="settings_background_fdroid_sync_mode_battery">Ottimizzato per la batteria</string>
     <string name="template_settings_background_fdroid_sync_mode_battery_description">${app_name} si sincronizzerà in background in modo da non consumare la poca batteria disponibile.
@@ -1615,33 +1615,33 @@
     <string name="settings_set_workmanager_delay_summary">%s
 \nLa sincronizzazione può essere ritardata a seconda delle risorse (batteria) o dello stato del dispositivo (sospensione).</string>
     <string name="settings_discovery_category">Farsi trovare</string>
-    <string name="settings_discovery_manage">Configura l\'Identity Server per trovare e farsi trovare dagli altri utenti.</string>
+    <string name="settings_discovery_manage">Gestisci le impostazioni per farsi trovare.</string>
     <string name="encryption_information_device_name_with_warning">Nome pubblico (visibile alle persone con cui comunichi)</string>
     <string name="device_name_warning">Il nome pubblico di una sessione è visibile alle persone con cui comunichi</string>
     <string name="identity_server_not_defined">Non stai usando alcun server di identità</string>
-    <string name="identity_server_not_defined_for_password_reset">Nessun Identity Server configurato. E\' necessario per poter ripristinare la tua password.</string>
+    <string name="identity_server_not_defined_for_password_reset">Nessun server d\'identità configurato, è necessario per poter ripristinare la password.</string>
     <string name="error_user_already_logged_in">Pare che tu stia provando a connetterti ad un altro homeserver. Vuoi disconnetterti da qui\?</string>
-    <string name="identity_server">Identity Server</string>
-    <string name="disconnect_identity_server">Disconnetti Identity Server</string>
-    <string name="add_identity_server">Configura Identity Server</string>
-    <string name="change_identity_server">Cambia Identity Server</string>
-    <string name="settings_discovery_identity_server_info">Stai usando l\'Identity Server %1$s per trovare altri utenti e essere a tua volta rintracciabile da loro.</string>
-    <string name="settings_discovery_identity_server_info_none">In questo momento non stai usando alcun Identity Server. Per trovare e farti rintracciare dagli altri utenti, configurane uno qua sotto.</string>
+    <string name="identity_server">Server d\'identità</string>
+    <string name="disconnect_identity_server">Disconnetti server d\'identità</string>
+    <string name="add_identity_server">Configura server d\'identità</string>
+    <string name="change_identity_server">Cambia server d\'identità</string>
+    <string name="settings_discovery_identity_server_info">Attualmente stai usando %1$s per trovare altri utenti ed essere a tua volta rintracciabile da loro.</string>
+    <string name="settings_discovery_identity_server_info_none">Attualmente non stai usando alcun server d\'identità. Per trovare e farti rintracciare dagli altri utenti, configurane uno qua sotto.</string>
     <string name="settings_discovery_emails_title">Indirizzi email visibili pubblicamente</string>
-    <string name="settings_discovery_no_mails">Le opzioni su come farsi trovare da altri utenti appariranno dopo che avrai aggiunto un\'email.</string>
-    <string name="settings_discovery_no_msisdn">Le opzioni su come farsi trovare da altri utenti appariranno dopo che avrai aggiunto un numero di telefono.</string>
-    <string name="settings_discovery_disconnect_identity_server_info">Se ti disconnetti dall\'Identity Server gli altri utenti non potranno trovarti e tu non potrai invitarli tramite le loro email e numeri di telefono.</string>
+    <string name="settings_discovery_no_mails">Le opzioni su come farsi trovare appariranno dopo che avrai aggiunto un\'email.</string>
+    <string name="settings_discovery_no_msisdn">Le opzioni su come farsi trovare appariranno dopo che avrai aggiunto un numero di telefono.</string>
+    <string name="settings_discovery_disconnect_identity_server_info">Se ti disconnetti dal server d\'identità gli altri utenti non potranno trovarti e tu non potrai invitarli tramite le loro email o numeri di telefono.</string>
     <string name="settings_discovery_msisdn_title">Numeri di telefono visibili pubblicamente</string>
-    <string name="settings_discovery_confirm_mail">Abbiamo inviato un\'email di conferma a %s. Controlla l\'email e clicca sul link di conferma</string>
+    <string name="settings_discovery_confirm_mail">Abbiamo inviato un\'email di conferma a %s, controlla la tua posta e clicca sul link di conferma</string>
     <string name="settings_discovery_mail_pending">In attesa</string>
-    <string name="settings_discovery_enter_identity_server">Inserisci l\'URL di un Identity Server</string>
-    <string name="settings_discovery_bad_identity_server">Impossibile connettersi all\'Identity Server</string>
-    <string name="settings_discovery_please_enter_server">Inserisci l\'URL dell\'Identity Server</string>
-    <string name="settings_discovery_no_terms_title">L\'Identity Server non ha reso noti i propri termini di servizio</string>
-    <string name="settings_discovery_no_terms">L\'Identity Server che hai scelto non ha reso noti i propri termini di servizio. Continua solo se ti fidi</string>
+    <string name="settings_discovery_enter_identity_server">Inserisci un URL di un server d\'identità</string>
+    <string name="settings_discovery_bad_identity_server">Impossibile connettersi al server d\'identità</string>
+    <string name="settings_discovery_please_enter_server">Inserisci l\'URL del server d\'identità</string>
+    <string name="settings_discovery_no_terms_title">Il server d\'identità non ha reso noti i propri termini di servizio</string>
+    <string name="settings_discovery_no_terms">Il server d\'identità che hai scelto non ha reso noti i propri termini di servizio. Continua solo se ti fidi del proprietario del servizio</string>
     <string name="settings_text_message_sent">È stato inviato un messaggio a %s. Inserisci il codice di verifica che contiene.</string>
-    <string name="settings_discovery_disconnect_with_bound_pid">In questo momento stai condividendo i tuoi indirizzi email o numeri di telefono sull\'Identity Server %1$s. Dovrai riconnetterti a %2$s per interromperne la condivisione.</string>
-    <string name="settings_agree_to_terms">Accetta i termini di servizio dell\'Identity Server (%s) per permettere ad altri utenti di trovarti tramite la tua email o numero di telefono.</string>
+    <string name="settings_discovery_disconnect_with_bound_pid">Attualmente stai condividendo i tuoi indirizzi email o numeri di telefono sul server d\'identità %1$s. Dovrai riconnetterti a %2$s per interromperne la condivisione.</string>
+    <string name="settings_agree_to_terms">Accetta i termini di servizio del server d\'identità (%s) per permettere ad altri utenti di trovarti tramite la tua email o numero di telefono.</string>
     <string name="labs_allow_extended_logging">Attiva i log dettagliati.</string>
     <string name="labs_allow_extended_logging_summary">I log dettagliati aiuteranno gli sviluppatori fornendo loro molte più informazioni nelle segnalazioni che invii scuotendo il dispositivo. Anche se attivi i log dettagliati, Element non registra mai i contenuti dei messaggi o altri dati personali.</string>
     <string name="error_terms_not_accepted">Riprova dopo avere accettato i termini di servizio del tuo Home Server.</string>
@@ -2192,7 +2192,7 @@
     <string name="event_redacted">Messaggio eliminato</string>
     <string name="settings_show_redacted">Mostra messaggi rimossi</string>
     <string name="settings_show_redacted_summary">Mostra un segnaposto per i messaggi rimossi</string>
-    <string name="settings_discovery_confirm_mail_not_clicked">Ti abbiamo inviato un\'email di conferma a %s. Per proseguire controlla la tua posta e clicca sul link di conferma</string>
+    <string name="settings_discovery_confirm_mail_not_clicked">Ti abbiamo inviato un\'email di conferma a %s, controlla la tua posta e clicca il link di conferma</string>
     <string name="settings_text_message_sent_wrong_code">Il codice di verifica non è corretto.</string>
     <string name="uploads_media_title">MEDIA</string>
     <string name="uploads_media_no_result">In questa stanza non ci sono file multimediali</string>
@@ -2211,18 +2211,18 @@
     <string name="choose_locale_other_locales_title">Altre lingue disponibili</string>
     <string name="choose_locale_loading_locales">Caricamento lingue disponibili…</string>
     <string name="open_terms_of">Apri condizioni di %s</string>
-    <string name="disconnect_identity_server_dialog_content">Disconnettere dall\'Identity Server %s\?</string>
-    <string name="template_identity_server_error_outdated_identity_server">Questo Identity Server è obsoleto. ${app_name} supporta solo API V2.</string>
+    <string name="disconnect_identity_server_dialog_content">Disconnettere dal server d\'identità %s\?</string>
+    <string name="template_identity_server_error_outdated_identity_server">Questo server d\'identità è obsoleto. ${app_name} supporta solo API V2.</string>
     <string name="identity_server_error_outdated_home_server">Questa operazione non è possibile. L\'Home Server è obsoleto.</string>
-    <string name="identity_server_error_no_identity_server_configured">Prima configura un Identity Server.</string>
-    <string name="identity_server_error_terms_not_signed">Prima accetta le condizioni dell\'Identity Server nelle impostazioni.</string>
+    <string name="identity_server_error_no_identity_server_configured">Prima configura un server d\'identità.</string>
+    <string name="identity_server_error_terms_not_signed">Prima accetta le condizioni del server d\'identità nelle impostazioni.</string>
     <string name="template_identity_server_error_bulk_sha256_not_supported">Per la tua privacy, ${app_name} supporta solo l\'invio di email e numeri di telefono degli utenti in modalità oscurata (hash).</string>
     <string name="identity_server_error_binding_error">L\'associazione è fallita.</string>
     <string name="identity_server_error_no_current_binding_error">Non c\'è alcuna associazione con questo identificativo.</string>
-    <string name="identity_server_set_default_notice">Il tuo Home Server (%1$s) propone di usare %2$s come tuo Identity Server</string>
+    <string name="identity_server_set_default_notice">Il tuo home server (%1$s) propone di usare %2$s come tuo server d\'identità</string>
     <string name="identity_server_set_default_submit">Usa %1$s</string>
-    <string name="identity_server_set_alternative_notice">In alternativa, puoi inserire l\'URL di un qualsiasi altro Identity Server</string>
-    <string name="identity_server_set_alternative_notice_no_default">Inserisci l\'URL di un Identity Server</string>
+    <string name="identity_server_set_alternative_notice">In alternativa, puoi inserire l\'URL di un qualsiasi altro server d\'identità</string>
+    <string name="identity_server_set_alternative_notice_no_default">Inserisci l\'URL di un server d\'identità</string>
     <string name="identity_server_set_alternative_submit">Invia</string>
     <string name="play_video">Avvia</string>
     <string name="pause_video">Pausa</string>
@@ -2539,10 +2539,10 @@
 \n
 \nPer garantire la privacy, i dati verranno inviati in forma oscurata (hashing).</string>
     <string name="identity_server_consent_dialog_title">Invio di email e numeri di telefono</string>
-    <string name="settings_discovery_consent_action_give_consent">Accetta</string>
+    <string name="settings_discovery_consent_action_give_consent">Dai il consenso</string>
     <string name="settings_discovery_consent_action_revoke">Revoca il mio consenso</string>
-    <string name="settings_discovery_consent_notice_off">Non hai acconsentito ad inviare email e numeri di telefono a questo Identity Server per poter rintracciare altri utenti tra i tuoi contatti.</string>
-    <string name="settings_discovery_consent_notice_on">Hai acconsentito ad inviare email e numeri di telefono a questo Identity Server per poter rintracciare altri utenti tra i tuoi contatti.</string>
+    <string name="settings_discovery_consent_notice_off">Non hai acconsentito ad inviare email e numeri di telefono a questo server d\'identità per poter rintracciare altri utenti tra i tuoi contatti.</string>
+    <string name="settings_discovery_consent_notice_on">Hai acconsentito ad inviare email e numeri di telefono a questo server d\'identità per poter rintracciare altri utenti tra i tuoi contatti.</string>
     <string name="settings_discovery_consent_title">Invia email e numeri di telefono</string>
     <string name="direct_room_user_list_suggestions_title">Suggerimenti</string>
     <string name="direct_room_user_list_contacts_title">Contatti</string>
@@ -2836,7 +2836,7 @@
     <string name="feedback">Feedback</string>
     <string name="send_feedback_space_title">Feedback sugli Spazi</string>
     <string name="error_jitsi_join_conf">Ops! Qualcosa è andato storto nel cercar di entrare nella conferenza</string>
-    <string name="space_leave_prompt_msg_as_admin">Sei l\'Amministratore di questo Spazio. Assicurati di aver nominato un altro amministratore prima di uscire.</string>
+    <string name="space_leave_prompt_msg_as_admin">Sei l\'unico amministratore di questo spazio. Abbandonarlo significa che nessuno ne avrà il controllo.</string>
     <string name="space_leave_prompt_msg_only_you">Sei l\'unico utente di questo Spazio. Se esci nessuno potrà più entrarci. Nemmeno tu.</string>
     <string name="space_add_rooms">Aggiungi stanze</string>
     <string name="this_space_has_no_rooms_admin">Alcune stanze potrebbero essere nascoste perché sono private e ti serve il loro invito.</string>
@@ -2846,7 +2846,7 @@
     <string name="spaces_no_server_support_title">Pare che il tuo Home Server non supporti ancora gli Spazi</string>
     <string name="spaces_feeling_experimental_subspace">Ti piace sperimentare\?
 \nProva ad inserire uno Spazio all\'interno di un altro Spazio.</string>
-    <string name="space_leave_prompt_msg_private">Questo non è uno Spazio pubblico. Senza un invito non potrai più rientrare.</string>
+    <string name="space_leave_prompt_msg_private">Non potrai più rientrare a meno che non ti invitino di nuovo.</string>
     <string name="unnamed_room">Stanza senza nome</string>
     <string name="private_space">Spazio privato</string>
     <string name="public_space">Spazio pubblico</string>
@@ -3000,4 +3000,49 @@
     <string name="call_ringing">Sta squillando…</string>
     <string name="spaces">Spazi</string>
     <string name="learn_more">Maggiori informazioni</string>
+    <string name="open_discovery_settings">Apri impostazioni di rintracciabilità</string>
+    <string name="discovery_section">Farsi trovare (%s)</string>
+    <string name="finish_setting_up_discovery">Termina la configurazione della rintracciabilità.</string>
+    <string name="space_add_space_to_any_space_you_manage">Aggiungi uno spazio ad un altro che gestisci.</string>
+    <string name="space_add_existing_spaces">Aggiungi spazi esistenti</string>
+    <string name="space_add_existing_rooms_only">Aggiungi stanze esistenti</string>
+    <string name="pick_tings_to_leave">Scegli da cosa uscire</string>
+    <string name="leave_specific_ones">Esci da stanze e spazi specifici…</string>
+    <string name="dont_leave_any">Non uscire da alcuna stanza e spazio</string>
+    <string name="you_will_leave_all_in">Uscirai da tutte le stanze e gli spazi in %s.</string>
+    <string name="leave_all_rooms_and_spaces">Esci da tutte le stanze e gli spazi</string>
+    <string name="space_leave_prompt_msg_with_name">Vuoi davvero uscire da %s\?</string>
+    <string name="finish_setup">Termina configurazione</string>
+    <string name="discovery_invite">Invita per email, trova contatti e altro…</string>
+    <string name="create_space_identity_server_info_none">Attualmente non stai usando un server d\'identità. Per poter invitare compagni ed essere individuabile da loro, configurane uno sotto.</string>
+    <string name="invite_by_mxid_or_mail">Invita per nome utente o email</string>
+    <string name="create_spaces_invite_public_header_desc">Assicurati che le persone giuste abbiano accesso a %s. Puoi invitarne altre dopo.</string>
+    <string name="create_spaces_invite_public_header">Chi sono i tuoi compagni di squadra\?</string>
+    <string name="command_description_add_to_space">Aggiungi allo spazio scelto</string>
+    <string name="create_space_in_progress">Creazione spazio…</string>
+    <string name="settings_developer_mode_show_info_on_screen_summary">Mostra alcune informazioni utili per aiutare il debug dell\'applicazione</string>
+    <string name="settings_developer_mode_show_info_on_screen_title">Mostra info di debug su schermo</string>
+    <string name="does_not_look_like_valid_email">Non sembra essere un indirizzo email valido</string>
+    <string name="user_directory_search_hint_2">Cerca per nome, ID o email</string>
+    <string name="create_new_space">Crea nuovo spazio</string>
+    <string name="room_settings_space_access_public_description">Chiunque può trovare lo spazio ed entrarvi</string>
+    <string name="room_settings_space_access_title">Accesso allo spazio</string>
+    <string name="room_settings_access_rules_pref_dialog_title">Chi può accedervi\?</string>
+    <string name="settings_notification_emails_enable_for_email">Attiva notifiche email per %s</string>
+    <string name="settings_notification_emails_no_emails">Per ricevere email con le notifiche, associa un indirizzo di posta al tuo profilo Matrix</string>
+    <string name="settings_notification_emails_category">Notifica email</string>
+    <string name="room_permissions_upgrade_the_space">Aggiorna lo spazio</string>
+    <string name="room_permissions_change_space_name">Cambia il nome dello spazio</string>
+    <string name="room_permissions_enable_space_encryption">Attiva la crittografia dello spazio</string>
+    <string name="room_permissions_change_main_address_for_the_space">Cambia l\'indirizzo principale dello spazio</string>
+    <string name="room_permissions_change_space_avatar">Cambia avatar dello spazio</string>
+    <string name="space_permissions_notice_read_only">Non hai l\'autorizzazione di aggiornare i ruoli necessari per cambiare diverse parti dello spazio</string>
+    <string name="space_settings_permissions_title">Autorizzazioni dello spazio</string>
+    <string name="space_permissions_notice">Seleziona i ruoli necessari per cambiare varie parti dello spazio</string>
+    <string name="space_settings_permissions_subtitle">Vedi e aggiorna i ruoli necessari per cambiare varie parti dello spazio.</string>
+    <string name="space_participants_unban_prompt_msg">Riammettere l\'utente gli permetterà di rientrare nello spazio.</string>
+    <string name="space_participants_ban_prompt_msg">Bandire l\'utente lo espellerà da questo spazio e gli impedirà di rientrare.</string>
+    <string name="space_participants_kick_prompt_msg">buttando fuori l\'utente verrà rimosso da questo spazio.
+\n
+\nPer impedire che possa rientrare, dovresti invece bandirlo.</string>
 </resources>
