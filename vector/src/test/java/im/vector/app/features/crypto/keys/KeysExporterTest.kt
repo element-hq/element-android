@@ -1,0 +1,137 @@
+/*
+ * Copyright (c) 2021 New Vector Ltd
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package im.vector.app.features.crypto.keys
+
+import android.content.ContentResolver
+import android.content.Context
+import android.net.Uri
+import android.os.ParcelFileDescriptor
+import im.vector.app.core.dispatchers.CoroutineDispatchers
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.verify
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
+import org.amshove.kluent.internal.assertFailsWith
+import org.junit.Before
+import org.junit.Test
+import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.crypto.CryptoService
+import java.io.OutputStream
+
+private val A_URI = mockk<Uri>()
+private val A_ROOM_KEYS_EXPORT = ByteArray(size = 111)
+private const val A_PASSWORD = "a password"
+
+class KeysExporterTest {
+
+    private val cryptoService = FakeCryptoService()
+    private val context = FakeContext()
+    private val keysExporter = KeysExporter(
+            session = FakeSession(cryptoService = cryptoService),
+            context = context.instance,
+            dispatchers = CoroutineDispatchers(Dispatchers.Unconfined),
+    )
+
+    @Before
+    fun setUp() {
+        cryptoService.roomKeysExport = A_ROOM_KEYS_EXPORT
+    }
+
+    @Test
+    fun `when exporting then writes exported keys to context output stream`() {
+        givenFileDescriptorWithSize(size = A_ROOM_KEYS_EXPORT.size.toLong())
+        val outputStream = context.givenOutputStreamFor(A_URI)
+
+        runBlocking { keysExporter.export(A_PASSWORD, A_URI) }
+
+        verify { outputStream.write(A_ROOM_KEYS_EXPORT) }
+    }
+
+    @Test
+    fun `given different file size returned for export when exporting then throws UnexpectedExportKeysFileSizeException`() {
+        givenFileDescriptorWithSize(size = 110)
+        context.givenOutputStreamFor(A_URI)
+
+        assertFailsWith<UnexpectedExportKeysFileSizeException> {
+            runBlocking { keysExporter.export(A_PASSWORD, A_URI) }
+        }
+    }
+
+    @Test
+    fun `given output stream is unavailable for exporting to when exporting then throws IllegalStateException`() {
+        context.givenMissingOutputStreamFor(A_URI)
+
+        assertFailsWith<IllegalStateException>(message = "Unable to open file for writing") {
+            runBlocking { keysExporter.export(A_PASSWORD, A_URI) }
+        }
+    }
+
+    @Test
+    fun `given exported file is missing after export when exporting then throws IllegalStateException`() {
+        context.givenFileDescriptor(A_URI, mode = "r") { null }
+        context.givenOutputStreamFor(A_URI)
+
+        assertFailsWith<IllegalStateException>(message = "Exported file not found") {
+            runBlocking { keysExporter.export(A_PASSWORD, A_URI) }
+        }
+    }
+
+    private fun givenFileDescriptorWithSize(size: Long) {
+        context.givenFileDescriptor(A_URI, mode = "r") {
+            mockk<ParcelFileDescriptor>().also { every { it.statSize } returns size }
+        }
+    }
+}
+
+class FakeContext {
+
+    private val contentResolver = mockk<ContentResolver>()
+    val instance = mockk<Context>()
+
+    init {
+        every { instance.contentResolver } returns contentResolver
+    }
+
+    fun givenFileDescriptor(uri: Uri, mode: String, factory: () -> ParcelFileDescriptor?) {
+        val fileDescriptor = factory()
+        every { contentResolver.openFileDescriptor(uri, mode, null) } returns fileDescriptor
+    }
+
+    fun givenOutputStreamFor(uri: Uri): OutputStream {
+        val outputStream = mockk<OutputStream>(relaxed = true)
+        every { contentResolver.openOutputStream(uri) } returns outputStream
+        return outputStream
+    }
+
+    fun givenMissingOutputStreamFor(uri: Uri) {
+        every { contentResolver.openOutputStream(uri) } returns null
+    }
+}
+
+class FakeSession(
+        private val cryptoService: CryptoService = FakeCryptoService()
+) : Session by mockk(relaxed = true) {
+    override fun cryptoService() = cryptoService
+}
+
+class FakeCryptoService : CryptoService by mockk() {
+
+    var roomKeysExport = ByteArray(size = 1)
+
+    override suspend fun exportRoomKeys(password: String) = roomKeysExport
+}
