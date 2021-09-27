@@ -474,7 +474,7 @@ dependencies {
 
     // Emoji Keyboard
     implementation 'com.vanniktech:emoji-material:0.7.0'
-    implementation 'com.vanniktech:emoji-google:0.7.0'
+    implementation 'com.vanniktech:emoji-google:0.8.0'
 
     implementation 'im.dlg:android-dialer:1.2.5'
 
