@@ -277,7 +277,7 @@
     <string name="send">Invia</string>
     <string name="resend">Rispedisci</string>
     <string name="redact">Rimuovi</string>
-    <string name="quote">Citazione</string>
+    <string name="quote">Cita</string>
     <string name="share">Condividi</string>
     <string name="later">Ultimi</string>
     <string name="forward">Inoltra</string>
@@ -930,7 +930,7 @@
     </plurals>
     <string name="room_settings_all_messages_noisy">Tutti i messaggi (rumoroso)</string>
     <string name="room_settings_all_messages">Tutti i messaggi</string>
-    <string name="room_settings_mention_only">Solo le citazioni</string>
+    <string name="room_settings_mention_only">Solo le menzioni</string>
     <string name="room_settings_mute">Silenzioso</string>
     <string name="room_settings_add_homescreen_shortcut">Aggiungi alla schermata iniziale</string>
     <string name="settings_inline_url_preview">Anteprima degli URL</string>
@@ -1036,11 +1036,11 @@
     <string name="dialog_user_consent_content">Per continuare ad usare l\'Home Server %1$s devi leggerne e accettarne i termini di servizio.</string>
     <string name="dialog_user_consent_submit">Leggi ora</string>
     <string name="deactivate_account_title">Disattiva l\'account</string>
-    <string name="deactivate_account_content">Ciò renderà il tuo account inutilizzabile per l\'eternità. Non potrai più accederci e nessuno potrà ri-registrare lo stesso ID utente. Il tuo account uscirà da tutte le stanze in cui si trova attualmente e di dettagli del tuo account saranno rimossi dall\'Identity Server. <b>Questa azione è irreversibile</b>. 
+    <string name="deactivate_account_content">Ciò renderà il tuo account inutilizzabile per sempre. Non potrai più accedervi e nessuno potrà ri-registrare lo stesso ID utente. Il tuo account uscirà da tutte le stanze in cui si trova attualmente e i dettagli del tuo account saranno rimossi dal server d\'identità. <b>Questa azione è irreversibile</b>.
 \n
 \nDisattivare il tuo account <b>non eliminerà i messaggi che hai inviato</b>. Se vuoi che i tuoi messaggi siano dimenticati seleziona la casella qua sotto.
 \n
-\nLa visibilità dei messaggi in Matrix è simile alle email. Questo vuol dire che se chiedi di \"dimenticare i tuoi messaggi\", quelli che hai inviato finora non verranno mai più condivisi con alcun nuovo utente, ma gli utenti che hanno già avuto accesso ai tuoi messaggi continueranno a potervi accedere.</string>
+\nLa visibilità dei messaggi in Matrix è simile alle email. Questo vuol dire che se chiedi di \"dimenticare i tuoi messaggi\", quelli che hai inviato finora non verranno mai più condivisi con nuovi utenti, ma gli utenti che hanno già avuto accesso ai tuoi messaggi continueranno a poterli leggere.</string>
     <string name="deactivate_account_delete_checkbox">Per favore dimenticate tutti i messaggi che ho inviato fino al momento della disattivazione del mio account (Attenzione: in questo modo i nuovi utenti potrebbero vedere delle conversazioni incomplete)</string>
     <string name="deactivate_account_prompt_password">Per continuare, inserisci la tua password:</string>
     <string name="deactivate_account_submit">Disattiva l\'account</string>
@@ -1728,7 +1728,7 @@
     <string name="message_ignore_user">Ignora utente</string>
     <string name="room_list_quick_actions_notifications_all_noisy">Tutti i messaggi (rumoroso)</string>
     <string name="room_list_quick_actions_notifications_all">Tutti i messaggi</string>
-    <string name="room_list_quick_actions_notifications_mentions">Solo citazioni</string>
+    <string name="room_list_quick_actions_notifications_mentions">Solo menzioni</string>
     <string name="room_list_quick_actions_notifications_mute">Silenzioso</string>
     <string name="room_list_quick_actions_settings">Impostazioni</string>
     <string name="room_list_quick_actions_leave">Esci dalla stanza</string>

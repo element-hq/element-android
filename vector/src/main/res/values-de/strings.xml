@@ -2824,7 +2824,7 @@
 \nVersuche es später noch einmal oder kontaktiere einen Admin.</string>
     <string name="create_spaces_room_private_header_desc">Wir erstellen dir für jedes einen Raum. Du kannst jederzeit neue oder existierende Räume hinzufügen.</string>
     <string name="create_spaces_room_private_header">An welchen Projekten arbeitest du gerade\?</string>
-    <string name="a11y_public_room">Dieser Raum ist öffentlich</string>
+    <string name="a11y_public_room">Öffentlicher Raum</string>
     <string name="send_images_and_video_with_original_size">Mediendatei in Originalgröße senden</string>
     <plurals name="send_videos_with_original_size">
         <item quantity="one">Video in Originalauflösung senden</item>
@@ -2855,7 +2855,7 @@
     <string name="invite_to_space">Einladen in %s</string>
     <string name="private_space">Privater Space</string>
     <string name="public_space">Öffentlicher Space</string>
-    <string name="a11y_public_space">Dieser Space ist öffentlich</string>
+    <string name="a11y_public_space">Öffentlicher Space</string>
     <string name="call_transfer_unknown_person">Unbekannte Person</string>
     <string name="a11y_beta">Dieses Feature ist in der Beta</string>
     <string name="give_feedback">Feedback geben</string>
@@ -2929,8 +2929,8 @@
     <string name="settings_group_messages">Gruppenchats</string>
     <string name="settings_encrypted_direct_messages">Verschlüsselten Direktnachrichten</string>
     <string name="settings_messages_direct_messages">Direktnachrichten</string>
-    <string name="settings_messages_containing_username">Nachrichten mit meinem Benutzernamen</string>
-    <string name="settings_messages_containing_display_name">Nachrichten mit meinem Anzeigenamen</string>
+    <string name="settings_messages_containing_username">Mein Benutzername</string>
+    <string name="settings_messages_containing_display_name">Mein Anzeigename</string>
     <string name="settings_notification_notify_me_for">Benachrichtige mich bei</string>
     <string name="settings_notification_other">Andere</string>
     <string name="settings_notification_mentions_and_keywords">Erwähnungen und Schlüsselwörter</string>
@@ -2959,4 +2959,43 @@
     <string name="audio_call_with_participant">Sprachanruf mit %s</string>
     <string name="video_call_with_participant">Videoanruf mit %s</string>
     <string name="learn_more">Mehr erfahren</string>
+    <string name="call_jitsi_started">Gruppenanruf gestartet</string>
+    <string name="all_rooms_youre_in_will_be_shown_in_home">Alle beigetretenen Räume werden auf der Startseite angezeigt.</string>
+    <string name="preference_show_all_rooms_in_home">Alle Räume auf der Startseite anzeigen</string>
+    <string name="call_slide_to_end_conference">Wische, um den Anruf zu beenden</string>
+    <string name="call_one_active">Aktiver Anruf (%1$s) ·</string>
+    <plurals name="call_active_status">
+        <item quantity="one">Aktiver Anruf ·</item>
+        <item quantity="other">%1$d aktive Anrufe ·</item>
+    </plurals>
+    <string name="call_tile_connection_failed">Verbindung fehlgeschlagen</string>
+    <string name="call_tile_video_declined">Videoanruf abgelehnt</string>
+    <string name="call_tile_voice_declined">Sprachanruf abgelehnt</string>
+    <string name="call_tile_video_call_has_ended">Videoanruf beendet • %1$s</string>
+    <string name="call_tile_voice_call_has_ended">Sprachanruf beendet • %1$s</string>
+    <string name="room_settings_room_notifications_notify_me">Benachrichtige mich bei</string>
+    <string name="settings_mentions_at_room">\@room</string>
+    <string name="settings_notification_keyword_contains_invalid_character">Schlüsselwörter dürfen kein \"%s\" enthalten</string>
+    <string name="settings_notification_keyword_contains_dot">Schlüsselwörter können nicht mit einem Punkt beginnen</string>
+    <string name="room_settings_none">Nichts</string>
+    <string name="call_ended_invite_timeout_title">Nicht erreicht</string>
+    <string name="call_ended_user_busy_description">Die angerufene Person ist beschäftigt.</string>
+    <string name="call_ended_user_busy_title">Person beschäftigt</string>
+    <string name="call_ringing">Klingeln…</string>
+    <string name="spaces">Spaces</string>
+    <string name="call_tile_video_missed">Verpasster Videoanruf</string>
+    <string name="call_tile_voice_missed">Verpasster Sprachanruf</string>
+    <string name="call_tile_video_active">Aktiver Videoanruf</string>
+    <string name="call_tile_voice_active">Aktiver Sprachanruf</string>
+    <string name="call_tile_video_incoming">Eingehender Videoanruf</string>
+    <string name="call_tile_voice_incoming">Eingehender Sprachanruf</string>
+    <string name="call_tile_you_declined_this_call">Du hast diesen Anruf abgelehnt</string>
+    <string name="room_settings_room_notifications_account_settings">Kontoeinstellungen</string>
+    <string name="settings_messages_containing_keywords">Schlüsselwörter</string>
+    <string name="settings_notification_new_keyword">Neues Schlüsselwort hinzufügen</string>
+    <string name="settings_notification_your_keywords">Deine Schlüsselwörter</string>
+    <string name="link_this_email_settings_link">Verknüpfe diese E-Mail-Adresse mit deinem Konto</string>
+    <string name="this_invite_to_this_room_was_sent">Die Einladung zu diesem Raum wurde an %s gesendet, welche nicht mit deinem Konto verknüpft ist</string>
+    <string name="help_space_members">Hilf Space-Mitgliedern private Räume zu finden</string>
+    <string name="settings_mentions_and_keywords_encryption_notice">Auf deinem Mobilgerät wirst du keine Benachrichtigungen für Erwähnungen und Schlüsselwörter in verschlüsselten Räumen erhalten.</string>
 </resources>
