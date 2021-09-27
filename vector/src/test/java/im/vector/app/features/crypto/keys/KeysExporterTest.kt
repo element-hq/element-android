@@ -16,11 +16,12 @@
 
 package im.vector.app.features.crypto.keys
 
-import android.content.ContentResolver
-import android.content.Context
 import android.net.Uri
 import android.os.ParcelFileDescriptor
 import im.vector.app.core.dispatchers.CoroutineDispatchers
+import im.vector.app.test.fakes.FakeContext
+import im.vector.app.test.fakes.FakeCryptoService
+import im.vector.app.test.fakes.FakeSession
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -29,9 +30,6 @@ import kotlinx.coroutines.runBlocking
 import org.amshove.kluent.internal.assertFailsWith
 import org.junit.Before
 import org.junit.Test
-import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.crypto.CryptoService
-import java.io.OutputStream
 
 private val A_URI = mockk<Uri>()
 private val A_ROOM_KEYS_EXPORT = ByteArray(size = 111)
@@ -96,42 +94,4 @@ class KeysExporterTest {
             mockk<ParcelFileDescriptor>().also { every { it.statSize } returns size }
         }
     }
-}
-
-class FakeContext {
-
-    private val contentResolver = mockk<ContentResolver>()
-    val instance = mockk<Context>()
-
-    init {
-        every { instance.contentResolver } returns contentResolver
-    }
-
-    fun givenFileDescriptor(uri: Uri, mode: String, factory: () -> ParcelFileDescriptor?) {
-        val fileDescriptor = factory()
-        every { contentResolver.openFileDescriptor(uri, mode, null) } returns fileDescriptor
-    }
-
-    fun givenOutputStreamFor(uri: Uri): OutputStream {
-        val outputStream = mockk<OutputStream>(relaxed = true)
-        every { contentResolver.openOutputStream(uri) } returns outputStream
-        return outputStream
-    }
-
-    fun givenMissingOutputStreamFor(uri: Uri) {
-        every { contentResolver.openOutputStream(uri) } returns null
-    }
-}
-
-class FakeSession(
-        private val cryptoService: CryptoService = FakeCryptoService()
-) : Session by mockk(relaxed = true) {
-    override fun cryptoService() = cryptoService
-}
-
-class FakeCryptoService : CryptoService by mockk() {
-
-    var roomKeysExport = ByteArray(size = 1)
-
-    override suspend fun exportRoomKeys(password: String) = roomKeysExport
 }
