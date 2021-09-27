@@ -19,7 +19,6 @@ package im.vector.app.features.crypto.keys
 import android.content.Context
 import android.net.Uri
 import im.vector.app.core.dispatchers.CoroutineDispatchers
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.session.Session
 import javax.inject.Inject
@@ -49,7 +48,7 @@ class KeysExporter @Inject constructor(
             output.statSize != expectedSize -> {
                 throw UnexpectedExportKeysFileSizeException(
                         expectedFileSize = output.statSize,
-                        actualFileSize = expectedSize,
+                        actualFileSize = expectedSize
                 )
             }
         }
