@@ -1573,7 +1573,7 @@
     <string name="settings_other_third_party_notices">Jiná oznámení třetích stran</string>
     <string name="navigate_to_room_when_already_in_the_room">Již se díváte do této místnosti!</string>
     <string name="quick_reactions">Rychlé reakce</string>
-    <string name="settings_general_title">Obecná</string>
+    <string name="settings_general_title">Obecné</string>
     <string name="settings_preferences">Možnosti</string>
     <string name="settings_security_and_privacy">Zabezpečení a soukromí</string>
     <string name="settings_expert">Expert</string>
@@ -2726,16 +2726,16 @@
     <string name="event_status_sent_message">Zpráva odeslána</string>
     <string name="a11y_unchecked">Neoznačeno</string>
     <string name="labs_use_restricted_join_rule">Experimentální, prostor - omezená místnost.</string>
-    <string name="spaces_beta_welcome_to_spaces_desc">Prostory představují nový způsob seskupování místností a osob.</string>
+    <string name="spaces_beta_welcome_to_spaces_desc">Spaces představují nový způsob seskupování místností a osob.</string>
     <string name="create_spaces_room_private_header_desc">Založme pro každé místnost. Později můžete přidat i další, včetně již existujících.</string>
     <string name="create_spaces_room_private_header">Na jakých tématech pracujete\?</string>
     <string name="create_spaces_room_public_header_desc">Založíme pro ně místnosti. Můžete přidat další později.</string>
     <string name="create_spaces_details_private_header">Doplňte nějaké podrobnosti, aby jej lidé mohli identifikovat. Můžete je kdykoli změnit.</string>
-    <string name="create_spaces_type_header">Prostory jsou nový způsob organizace místností a lidí</string>
-    <string name="spaces_header">Prostory</string>
+    <string name="create_spaces_type_header">Spaces jsou nový způsob organizace místností a lidí</string>
+    <string name="spaces_header">Spaces</string>
     <string name="labs_use_restricted_join_rule_desc">Varování, nutná podpora serveru a experimentální verze místnosti</string>
     <string name="you_are_invited">Jste zváni</string>
-    <string name="spaces_beta_welcome_to_spaces">Vítejte v prostorech!</string>
+    <string name="spaces_beta_welcome_to_spaces">Vítejte ve Spaces!</string>
     <string name="space_add_existing_rooms">Přidat existující místnosti a prostor</string>
     <!-- TO BE REMOVED -->
     <string name="space_leave_prompt_msg">Jste si jisti, že chcete opustit tento prostor\?</string>
@@ -2767,26 +2767,26 @@
     <string name="invite_people_menu">Pozvat lidi</string>
     <string name="invite_people_to_your_space">Pozvěte do svého prostoru lidi</string>
     <string name="create_space_topic_hint">Popis</string>
-    <string name="create_spaces_loading_message">Zakládám prostor…</string>
+    <string name="create_spaces_loading_message">Zakládám Space…</string>
     <string name="create_spaces_default_public_random_room_name">Nahodilé</string>
     <string name="create_spaces_default_public_room_name">Obecné</string>
     <string name="create_spaces_room_public_header">Jaké diskuse si přejete vést v %s\?</string>
     <string name="create_space_error_empty_field_space_name">Dejte prostoru jméno a pokračujte.</string>
-    <string name="create_spaces_details_public_header">Doplňte nějaké podrobnosti, aby prostor zaujal. Můžete je kdykoli změnit.</string>
+    <string name="create_spaces_details_public_header">Doplňte nějaké podrobnosti, aby zaujal. Můžete je kdykoli změnit.</string>
     <string name="activity_create_space_title">Založit prostor</string>
     <string name="space_type_private_desc">Pouze na pozvání, nejlepší pro Vás nebo týmy</string>
     <string name="space_type_private">Privátní</string>
     <string name="space_type_public_desc">Otevřený pro všechny, nejlepší pro komunity</string>
     <string name="space_type_public">Veřejný</string>
-    <string name="create_spaces_private_teammates">Privátní prostor pro Vás a Vaše kolegy</string>
+    <string name="create_spaces_private_teammates">Privátní Space pro Vás a Vaše kolegy</string>
     <string name="create_spaces_me_and_teammates">Já a kolegové</string>
-    <string name="create_spaces_organise_rooms">Privátní prostor k organizaci Vašich místností</string>
+    <string name="create_spaces_organise_rooms">Privátní Space k organizaci Vašich místností</string>
     <string name="create_spaces_just_me">Jen já</string>
     <string name="create_spaces_make_sure_access">Ujistěte se, že ti správní lidé mají přístup do %s. Můžete změnit později.</string>
     <string name="create_spaces_who_are_you_working_with">S kým pracujete\?</string>
-    <string name="create_spaces_join_info_help">K vstupu do existujícího prostoru potřebujete pozvání.</string>
+    <string name="create_spaces_join_info_help">K vstupu do existujícího Space potřebujete pozvání.</string>
     <string name="create_spaces_you_can_change_later">Můžete změnit později</string>
-    <string name="create_spaces_choose_type_label">Jaký typ prostoru chcete založit\?</string>
+    <string name="create_spaces_choose_type_label">Jaký typ Space chcete založit\?</string>
     <string name="your_private_space">Váš privátní prostor</string>
     <string name="your_public_space">Váš veřejný prostor</string>
     <string name="add_space">Přidat prostor</string>
@@ -2805,7 +2805,7 @@
     <string name="room_settings_guest_access_title">Dovolit hostům vstoupit</string>
     <string name="spaces_invited_header">Pozvání</string>
     <string name="suggested_header">Doporučené místnosti</string>
-    <string name="space_manage_rooms_and_spaces">Správa místností a prostorů</string>
+    <string name="space_manage_rooms_and_spaces">Správa místností a Spaces</string>
     <string name="space_mark_as_not_suggested">Označit za nikoli doporučené</string>
     <string name="space_mark_as_suggested">Označit za doporučené</string>
     <string name="space_suggested">Doporučeno</string>
@@ -2830,9 +2830,9 @@
 \nK přidávání místností nemáte oprávnění.</string>
     <string name="this_space_has_no_rooms">Tento prostor nemá žádné místnosti</string>
     <string name="spaces_no_server_support_description">Další informace získáte od správce domovského serveru</string>
-    <string name="spaces_no_server_support_title">Vypadá to, že váš domovský server zatím Prostory nepodporuje</string>
+    <string name="spaces_no_server_support_title">Vypadá to, že váš domovský server zatím Spaces nepodporuje</string>
     <string name="spaces_feeling_experimental_subspace">Chcete experimentovat\?
-\nDo prostoru můžete přidat existující prostory.</string>
+\nDo Spaceu můžete přidat existující Spaces.</string>
     <string name="space_add_rooms">Přidat místnosti</string>
     <string name="space_leave_prompt_msg_as_admin">Jste administrátorem tohoto prostoru, ujistěte se, že jste před odchodem převedli administrátorská práva na jiného člena.</string>
     <string name="space_leave_prompt_msg_private">Tento prostor není veřejný. Bez pozvánky se do něj nebudete moci znovu připojit.</string>
@@ -2843,9 +2843,9 @@
     <string name="feedback_failed">Zpětnou vazbu se nepodařilo odeslat (%s)</string>
     <string name="feedback_sent">Děkujeme, vaše zpětná vazba byla úspěšně odeslána</string>
     <string name="you_may_contact_me">V případě dalších dotazů se na mě můžete obrátit</string>
-    <string name="send_feedback_space_info">Používáte beta verzi prostorů. Vaše zpětná vazba pomůže při tvorbě dalších verzí. Vaše platforma a uživatelské jméno budou zaznamenány, abychom mohli vaši zpětnou vazbu co nejlépe využít.</string>
+    <string name="send_feedback_space_info">Používáte beta verzi Spaces. Váš feedback pomůže při tvorbě dalších verzí. Vaše platforma a uživatelské jméno budou zaznamenány, abychom mohli Váš feedback co nejlépe využít.</string>
     <string name="feedback">Zpětná vazba</string>
-    <string name="send_feedback_space_title">Zpětná vazba prostorů</string>
+    <string name="send_feedback_space_title">Feedback na Spaces</string>
     <string name="error_jitsi_join_conf">Omlouváme se, při pokusu o připojení ke konferenci došlo k chybě</string>
     <string name="unnamed_room">Nepojmenovaná místnost</string>
     <string name="private_space">Soukromý prostor</string>
@@ -2863,7 +2863,7 @@
     <string name="teammate_spaces_might_not_join">V současné době se lidé nemohou připojit k soukromým místnostem, které jste vytvořili.
 \n
 \nV rámci beta verze to zlepšíme, ale jen jsme vás chtěli informovat.</string>
-    <string name="teammate_spaces_arent_quite_ready">Prostory pro spolupracovníky nejsou ještě zcela připravené, ale přesto je můžete vyzkoušet</string>
+    <string name="teammate_spaces_arent_quite_ready">Spaces pro spolupracovníky nejsou ještě zcela připravené, ale přesto je můžete vyzkoušet</string>
     <string name="error_failed_to_join_room">Omlouváme se, došlo k chybě během pokusu o přistoupení: %s</string>
     <string name="create_space_alias_hint">Adresa prostoru</string>
     <string name="space_settings_alias_subtitle">Prohlédnout a spravovat adresy tohoto prostoru.</string>
@@ -2903,17 +2903,17 @@
         <item quantity="few">%d zmeškané hlasové hovory</item>
         <item quantity="other">%d zmeškaných hlasových hovorů</item>
     </plurals>
-    <string name="decide_which_spaces_can_access">Rozhodněte, které prostory mají přístup do této místnosti. Pokud je vybrán prostor, jeho členové budou moci najít název místnosti a připojit se k ní.</string>
-    <string name="other_spaces_or_rooms_you_might_not_know">Další prostory nebo místnosti, které možná neznáte</string>
+    <string name="decide_which_spaces_can_access">Rozhodněte, které Spaces mají přístup do této místnosti. Pokud je vybrán prostor, jeho členové budou moci najít název místnosti a připojit se k ní.</string>
+    <string name="other_spaces_or_rooms_you_might_not_know">Další Spaces nebo místnosti, které možná neznáte</string>
     <string name="space_you_know_that_contains_this_room">Prostor, o kterém víte, že obsahuje tuto místnost</string>
     <string name="decide_who_can_find_and_join">Rozhodněte, kdo může tuto místnost najít a připojit se k ní.</string>
-    <string name="tap_to_edit_spaces">Klepnutím upravíte prostory</string>
-    <string name="allow_anyone_in_room_to_access">Povolit vyhledání a přístup komukoli v %s. Můžete vybrat i další prostory.</string>
+    <string name="tap_to_edit_spaces">Klepnutím upravíte Spaces</string>
+    <string name="allow_anyone_in_room_to_access">Povolit vyhledání a přístup komukoli v %s. Můžete vybrat i další Spaces.</string>
     <string name="upgrade_required">Vyžadována aktualizace</string>
     <string name="upgrade_room_for_restricted_no_param">Každý, kdo se nachází v nadřazeném prostoru, bude moci tuto místnost najít a připojit se k ní - není třeba všechny zvát ručně. Tuto možnost budete moci kdykoli změnit v nastavení místnosti.</string>
     <string name="upgrade_room_for_restricted">Kdokoli v %s bude moci tuto místnost najít a připojit se k ní - není třeba všechny zvát ručně. Toto nastavení budete moci kdykoli změnit v nastavení místnosti.</string>
     <string name="voice_message_tap_to_stop_toast">Klepnutím na nahrávku ji zastavíte nebo posloucháte</string>
-    <string name="select_spaces">Vybrat prostory</string>
+    <string name="select_spaces">Vybrat Spaces</string>
     <string name="upgrade_room_for_restricted_note">Upozorňujeme, že aktualizací vznikne nová verze místnosti. Všechny aktuální zprávy zůstanou v této archivované místnosti.</string>
     <string name="voice_message_reply_content">Hlasová zpráva (%1$s)</string>
     <string name="error_voice_message_cannot_reply_or_edit">Nelze odpovídat ani upravovat, když je hlasová zpráva aktivní</string>
@@ -2930,7 +2930,7 @@
     <string name="voice_message_slide_to_cancel">Posunutím zrušíte</string>
     <string name="a11y_start_voice_message">Zahájení hlasové zprávy</string>
     <string name="sent_a_voice_message">Hlasová zpráva</string>
-    <string name="spaces_which_can_access">Prostory, které mají přístup</string>
+    <string name="spaces_which_can_access">Spaces, které mají přístup</string>
     <string name="allow_space_member_to_find_and_access">Umožněte členům prostoru ho najít a zpřístupnit.</string>
     <string name="room_create_member_of_space_name_can_join">Členové prostoru %s mohou vyhledávat, prohlížet a připojovat se.</string>
     <string name="room_settings_room_access_private_invite_only_title">Soukromé (pouze pro pozvané)</string>
@@ -2955,8 +2955,8 @@
     <string name="to_help_space_members_find_and_join">Chcete-li členům prostoru pomoci najít soukromou místnost a připojit se k ní, přejděte do nastavení dané místnosti klepnutím na avatar.</string>
     <string name="help_space_members">Pomozte členům prostoru najít soukromé místnosti</string>
     <string name="this_makes_it_easy_for_rooms_to_stay_private_to_a_space">Díky tomu mohou místnosti zůstat soukromé a zároveň je mohou lidé v prostoru najít a připojit se k nim. Všechny nové místnosti v prostoru budou mít tuto možnost k dispozici.</string>
-    <string name="help_people_in_spaces_find_and_join">Pomozte lidem v prostorech, aby sami našli soukromé místnosti a připojili se k nim, není třeba všechny zvát ručně.</string>
-    <string name="new_let_people_in_spaces_find_and_join">Novinka: Nechat lidi v prostorech najít a připojit se k soukromým místnostem</string>
+    <string name="help_people_in_spaces_find_and_join">Pomozte lidem ve Spaces, aby sami našli soukromé místnosti a připojili se k nim, není třeba všechny zvát ručně.</string>
+    <string name="new_let_people_in_spaces_find_and_join">Novinka: Nechat lidi v Spaces vyhledat a připojit se k soukromým místnostem</string>
     <string name="call_jitsi_started">Skupinový hovor zahájen</string>
     <string name="all_rooms_youre_in_will_be_shown_in_home">Všechny místnosti, ve kterých se nacházíte, se zobrazí v domovském zobrazení.</string>
     <string name="preference_show_all_rooms_in_home">Zobrazit všechny místnosti v domovském zobrazení</string>
@@ -3001,6 +3001,6 @@
     <string name="audio_call_with_participant">Hlasový hovor s %s</string>
     <string name="video_call_with_participant">Videohovor s %s</string>
     <string name="call_ringing">Vyzvánění…</string>
-    <string name="spaces">Prostory</string>
+    <string name="spaces">Spaces</string>
     <string name="learn_more">Dozvědět se více</string>
 </resources>
