@@ -2668,6 +2668,7 @@
     <string name="you_are_invited">Jeni ftuar</string>
     <string name="spaces_beta_welcome_to_spaces">Mirë se vini te Hapësira!</string>
     <string name="space_add_existing_rooms">Shtoni dhoma ekzistuese dhe hapësira</string>
+    <!-- TO BE REMOVED -->
     <string name="space_leave_prompt_msg">Jeni i sigurt se doni të dilni nga hapësira\?</string>
     <string name="leave_space">Braktiseni Hapësirën</string>
     <string name="space_add_child_title">Shtoni dhoma</string>

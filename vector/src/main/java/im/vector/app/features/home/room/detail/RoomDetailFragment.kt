@@ -86,6 +86,7 @@ import im.vector.app.core.hardware.vibrate
 import im.vector.app.core.intent.getFilenameFromUri
 import im.vector.app.core.intent.getMimeTypeFromUri
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.core.platform.lifecycleAwareLazy
 import im.vector.app.core.platform.showOptimizedSnackbar
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.ui.views.CurrentCallsView
@@ -123,8 +124,9 @@ import im.vector.app.features.attachments.preview.AttachmentsPreviewArgs
 import im.vector.app.features.attachments.toGroupedContentAttachmentData
 import im.vector.app.features.call.SharedKnownCallsViewModel
 import im.vector.app.features.call.VectorCallActivity
-import im.vector.app.features.call.conference.JitsiBroadcastEmitter
-import im.vector.app.features.call.conference.JitsiBroadcastEventObserver
+import im.vector.app.features.call.conference.ConferenceEvent
+import im.vector.app.features.call.conference.ConferenceEventEmitter
+import im.vector.app.features.call.conference.ConferenceEventObserver
 import im.vector.app.features.call.conference.JitsiCallViewModel
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.command.Command
@@ -152,6 +154,7 @@ import im.vector.app.features.home.room.detail.timeline.item.ReadReceiptData
 import im.vector.app.features.home.room.detail.timeline.reactions.ViewReactionsBottomSheet
 import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlRetriever
 import im.vector.app.features.home.room.detail.upgrade.MigrateRoomBottomSheet
+import im.vector.app.features.home.room.detail.views.RoomDetailLazyLoadedViews
 import im.vector.app.features.home.room.detail.widget.RoomWidgetsBottomSheet
 import im.vector.app.features.html.EventHtmlRenderer
 import im.vector.app.features.html.PillImageSpan
@@ -184,7 +187,6 @@ import nl.dionsegijn.konfetti.models.Shape
 import nl.dionsegijn.konfetti.models.Size
 import org.billcarsonfr.jsonviewer.JSonViewerDialog
 import org.commonmark.parser.Parser
-import org.jitsi.meet.sdk.BroadcastEvent
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
@@ -312,7 +314,10 @@ class RoomDetailFragment @Inject constructor(
     private var lockSendButton = false
     private val currentCallsViewPresenter = CurrentCallsViewPresenter()
 
-    private lateinit var emojiPopup: EmojiPopup
+    private val lazyLoadedViews = RoomDetailLazyLoadedViews()
+    private val emojiPopup: EmojiPopup by lifecycleAwareLazy {
+        createEmojiPopup()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -324,7 +329,7 @@ class RoomDetailFragment @Inject constructor(
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        lifecycle.addObserver(JitsiBroadcastEventObserver(vectorBaseActivity, this::onBroadcastJitsiEvent))
+        lifecycle.addObserver(ConferenceEventObserver(vectorBaseActivity, this::onBroadcastJitsiEvent))
         super.onViewCreated(view, savedInstanceState)
         sharedActionViewModel = activityViewModelProvider.get(MessageSharedActionViewModel::class.java)
         knownCallsViewModel = activityViewModelProvider.get(SharedKnownCallsViewModel::class.java)
@@ -340,16 +345,15 @@ class RoomDetailFragment @Inject constructor(
                 onTapToReturnToCall = ::onTapToReturnToCall
         )
         keyboardStateUtils = KeyboardStateUtils(requireActivity())
+        lazyLoadedViews.bind(views)
         setupToolbar(views.roomToolbar)
         setupRecyclerView()
         setupComposer()
-        setupInviteView()
         setupNotificationView()
         setupJumpToReadMarkerView()
         setupActiveCallView()
         setupJumpToBottomView()
-        setupEmojiPopup()
-        setupFailedMessagesWarningView()
+        setupEmojiButton()
         setupRemoveJitsiWidgetView()
         setupVoiceMessageView()
 
@@ -366,10 +370,10 @@ class RoomDetailFragment @Inject constructor(
 
         knownCallsViewModel
                 .liveKnownCalls
-                .observe(viewLifecycleOwner, {
+                .observe(viewLifecycleOwner) {
                     currentCallsViewPresenter.updateCall(callManager.getCurrentCall(), it)
                     invalidateOptionsMenu()
-                })
+                }
 
         roomDetailViewModel.selectSubscribe(RoomDetailViewState::canShowJumpToReadMarker, RoomDetailViewState::unreadState) { _, _ ->
             updateJumpToReadMarkerViewVisibility()
@@ -387,8 +391,17 @@ class RoomDetailFragment @Inject constructor(
             }
         }
 
-        roomDetailViewModel.selectSubscribe(RoomDetailViewState::syncState) { syncState ->
-            views.syncStateView.render(syncState)
+        roomDetailViewModel.selectSubscribe(
+                RoomDetailViewState::syncState,
+                RoomDetailViewState::incrementalSyncStatus,
+                RoomDetailViewState::pushCounter
+        ) { syncState, incrementalSyncStatus, pushCounter ->
+            views.syncStateView.render(
+                    syncState,
+                    incrementalSyncStatus,
+                    pushCounter,
+                    vectorPreferences.developerShowDebugInfo()
+            )
         }
 
         roomDetailViewModel.observeViewEvents {
@@ -454,11 +467,11 @@ class RoomDetailFragment @Inject constructor(
     }
 
     private fun leaveJitsiConference() {
-        JitsiBroadcastEmitter(vectorBaseActivity).emitConferenceEnded()
+        ConferenceEventEmitter(vectorBaseActivity).emitConferenceEnded()
     }
 
-    private fun onBroadcastJitsiEvent(jitsiEvent: BroadcastEvent) {
-        roomDetailViewModel.handle(RoomDetailAction.UpdateJoinJitsiCallStatus(jitsiEvent))
+    private fun onBroadcastJitsiEvent(conferenceEvent: ConferenceEvent) {
+        roomDetailViewModel.handle(RoomDetailAction.UpdateJoinJitsiCallStatus(conferenceEvent))
     }
 
     private fun onCannotRecord() {
@@ -584,8 +597,14 @@ class RoomDetailFragment @Inject constructor(
         )
     }
 
-    private fun setupEmojiPopup() {
-        emojiPopup = EmojiPopup
+    private fun setupEmojiButton() {
+        views.composerLayout.views.composerEmojiButton.debouncedClicks {
+            emojiPopup.toggle()
+        }
+    }
+
+    private fun createEmojiPopup(): EmojiPopup {
+        return EmojiPopup
                 .Builder
                 .fromRootView(views.rootConstraintLayout)
                 .setKeyboardAnimationStyle(R.style.emoji_fade_animation_style)
@@ -602,14 +621,18 @@ class RoomDetailFragment @Inject constructor(
                     }
                 }
                 .build(views.composerLayout.views.composerEditText)
+    }
 
-        views.composerLayout.views.composerEmojiButton.debouncedClicks {
-            emojiPopup.toggle()
+    private val permissionVoiceMessageLauncher = registerForPermissionsResult { allGranted, deniedPermanently ->
+        if (allGranted) {
+            // In this case, let the user start again the gesture
+        } else if (deniedPermanently) {
+            vectorBaseActivity.onPermissionDeniedSnackbar(R.string.denied_permission_voice_message)
         }
     }
 
-    private fun setupFailedMessagesWarningView() {
-        views.failedMessagesWarningView.callback = object : FailedMessagesWarningView.Callback {
+    private fun createFailedMessagesWarningCallback(): FailedMessagesWarningView.Callback {
+        return object : FailedMessagesWarningView.Callback {
             override fun onDeleteAllClicked() {
                 MaterialAlertDialogBuilder(requireContext())
                         .setTitle(R.string.event_status_delete_all_failed_dialog_title)
@@ -624,14 +647,6 @@ class RoomDetailFragment @Inject constructor(
             override fun onRetryClicked() {
                 roomDetailViewModel.handle(RoomDetailAction.ResendAll)
             }
-        }
-    }
-
-    private val permissionVoiceMessageLauncher = registerForPermissionsResult { allGranted, deniedPermanently ->
-        if (allGranted) {
-            // In this case, let the user start again the gesture
-        } else if (deniedPermanently) {
-            vectorBaseActivity.onPermissionDeniedSnackbar(R.string.denied_permission_voice_message)
         }
     }
 
@@ -767,6 +782,7 @@ class RoomDetailFragment @Inject constructor(
     }
 
     override fun onDestroyView() {
+        lazyLoadedViews.unBind()
         timelineEventController.callback = null
         timelineEventController.removeModelBuildListener(modelBuildListener)
         currentCallsViewPresenter.unBind()
@@ -774,8 +790,6 @@ class RoomDetailFragment @Inject constructor(
         autoCompleter.clear()
         debouncer.cancelAll()
         views.timelineRecyclerView.cleanup()
-        emojiPopup.dismiss()
-
         super.onDestroyView()
     }
 
@@ -1350,22 +1364,22 @@ class RoomDetailFragment @Inject constructor(
         return isHandled
     }
 
-    private fun setupInviteView() {
-        views.inviteView.callback = this
-    }
-
     override fun invalidate() = withState(roomDetailViewModel) { state ->
         invalidateOptionsMenu()
         val summary = state.asyncRoomSummary()
         renderToolbar(summary, state.typingMessage)
         views.removeJitsiWidgetView.render(state)
-        views.failedMessagesWarningView.render(state.hasFailedSending)
+        if (state.hasFailedSending) {
+            lazyLoadedViews.failedMessagesWarningView(inflateIfNeeded = true, createFailedMessagesWarningCallback())?.isVisible = true
+        } else {
+            lazyLoadedViews.failedMessagesWarningView(inflateIfNeeded = false)?.isVisible = false
+        }
         val inviter = state.asyncInviter()
         if (summary?.membership == Membership.JOIN) {
             views.jumpToBottomView.count = summary.notificationCount
             views.jumpToBottomView.drawBadge = summary.hasUnreadMessages
             timelineEventController.update(state)
-            views.inviteView.isVisible = false
+            lazyLoadedViews.inviteView(false)?.isVisible = false
             if (state.tombstoneEvent == null) {
                 if (state.canSendMessage) {
                     if (!views.voiceMessageRecorderView.isActive()) {
@@ -1386,10 +1400,15 @@ class RoomDetailFragment @Inject constructor(
                 views.notificationAreaView.render(NotificationAreaView.State.Tombstone(state.tombstoneEvent))
             }
         } else if (summary?.membership == Membership.INVITE && inviter != null) {
-            views.inviteView.isVisible = true
-            views.inviteView.render(inviter, VectorInviteView.Mode.LARGE, state.changeMembershipState)
-            // Intercept click event
-            views.inviteView.setOnClickListener { }
+            views.composerLayout.isVisible = false
+            views.voiceMessageRecorderView.isVisible = false
+            lazyLoadedViews.inviteView(true)?.apply {
+                callback = this@RoomDetailFragment
+                isVisible = true
+                render(inviter, VectorInviteView.Mode.LARGE, state.changeMembershipState)
+                setOnClickListener { }
+            }
+            Unit
         } else if (state.asyncInviter.complete) {
             vectorBaseActivity.finish()
         }
@@ -1713,7 +1732,7 @@ class RoomDetailFragment @Inject constructor(
 
     override fun onEventLongClicked(informationData: MessageInformationData, messageContent: Any?, view: View): Boolean {
         view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
-        val roomId = roomDetailViewModel.timeline.getTimelineEventWithId(informationData.eventId)?.roomId ?: return false
+        val roomId = roomDetailArgs.roomId
         this.view?.hideKeyboard()
 
         MessageActionsBottomSheet

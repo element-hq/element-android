@@ -305,16 +305,16 @@ class RoomMemberProfileFragment @Inject constructor(
         val views = DialogShareQrCodeBinding.bind(view)
         views.itemShareQrCodeImage.setData(permalink)
         MaterialAlertDialogBuilder(requireContext())
-            .setView(view)
-            .setNeutralButton(R.string.ok, null)
-            .setPositiveButton(R.string.share_by_text) { _, _ ->
-                startSharePlainTextIntent(
-                        fragment = this,
-                        activityResultLauncher = null,
-                        chooserTitle = null,
-                        text = permalink
-                )
-            }.show()
+                .setView(view)
+                .setNeutralButton(R.string.ok, null)
+                .setPositiveButton(R.string.share_by_text) { _, _ ->
+                    startSharePlainTextIntent(
+                            fragment = this,
+                            activityResultLauncher = null,
+                            chooserTitle = null,
+                            text = permalink
+                    )
+                }.show()
     }
 
     private fun onAvatarClicked(view: View, userMatrixItem: MatrixItem) {
@@ -327,12 +327,13 @@ class RoomMemberProfileFragment @Inject constructor(
         }
     }
 
-    override fun onKickClicked() {
+    override fun onKickClicked(isSpace: Boolean) {
         ConfirmationDialogBuilder
                 .show(
                         activity = requireActivity(),
                         askForReason = true,
-                        confirmationRes = R.string.room_participants_kick_prompt_msg,
+                        confirmationRes = if (isSpace) R.string.space_participants_kick_prompt_msg
+                        else R.string.room_participants_kick_prompt_msg,
                         positiveRes = R.string.room_participants_action_kick,
                         reasonHintRes = R.string.room_participants_kick_reason,
                         titleRes = R.string.room_participants_kick_title
@@ -341,16 +342,18 @@ class RoomMemberProfileFragment @Inject constructor(
                 }
     }
 
-    override fun onBanClicked(isUserBanned: Boolean) {
+    override fun onBanClicked(isSpace: Boolean, isUserBanned: Boolean) {
         val titleRes: Int
         val positiveButtonRes: Int
         val confirmationRes: Int
         if (isUserBanned) {
-            confirmationRes = R.string.room_participants_unban_prompt_msg
+            confirmationRes = if (isSpace) R.string.space_participants_unban_prompt_msg
+            else R.string.room_participants_unban_prompt_msg
             titleRes = R.string.room_participants_unban_title
             positiveButtonRes = R.string.room_participants_action_unban
         } else {
-            confirmationRes = R.string.room_participants_ban_prompt_msg
+            confirmationRes = if (isSpace) R.string.space_participants_ban_prompt_msg
+            else R.string.room_participants_ban_prompt_msg
             titleRes = R.string.room_participants_ban_title
             positiveButtonRes = R.string.room_participants_action_ban
         }

@@ -27,10 +27,12 @@ data class UserListViewState(
         val excludedUserIds: Set<String>? = null,
         val knownUsers: Async<PagedList<User>> = Uninitialized,
         val directoryUsers: Async<List<User>> = Uninitialized,
+        val matchingEmail: Async<ThreePidUser?> = Uninitialized,
         val filteredMappedContacts: List<MappedContact> = emptyList(),
         val pendingSelections: Set<PendingSelection> = emptySet(),
         val searchTerm: String = "",
         val singleSelection: Boolean,
+        val configuredIdentityServer: String? = null,
         private val showInviteActions: Boolean,
         val showContactBookAction: Boolean
 ) : MvRxState {

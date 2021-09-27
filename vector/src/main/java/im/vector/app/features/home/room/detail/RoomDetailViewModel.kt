@@ -38,8 +38,9 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.mvrx.runCatchingToAsync
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.features.call.conference.JitsiActiveConferenceHolder
 import im.vector.app.features.attachments.toContentAttachmentData
+import im.vector.app.features.call.conference.ConferenceEvent
+import im.vector.app.features.call.conference.JitsiActiveConferenceHolder
 import im.vector.app.features.call.conference.JitsiService
 import im.vector.app.features.call.lookup.CallProtocolsChecker
 import im.vector.app.features.call.webrtc.WebRtcCallManager
@@ -56,17 +57,18 @@ import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlRetriever
 import im.vector.app.features.home.room.typing.TypingHelper
 import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
 import im.vector.app.features.session.coroutineScope
+import im.vector.app.features.settings.VectorDataStore
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.voice.VoicePlayerHelper
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.commonmark.parser.Parser
 import org.commonmark.renderer.html.HtmlRenderer
-import org.jitsi.meet.sdk.BroadcastEvent
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.extensions.tryOrNull
@@ -80,6 +82,7 @@ import org.matrix.android.sdk.api.session.events.model.isTextMessage
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.file.FileService
+import org.matrix.android.sdk.api.session.initsync.SyncStatusService
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.members.roomMemberQueryParams
 import org.matrix.android.sdk.api.session.room.model.Membership
@@ -102,6 +105,7 @@ import org.matrix.android.sdk.api.session.space.CreateSpaceParams
 import org.matrix.android.sdk.api.session.widgets.model.WidgetType
 import org.matrix.android.sdk.api.util.toOptional
 import org.matrix.android.sdk.internal.crypto.model.event.WithHeldCode
+import org.matrix.android.sdk.rx.asObservable
 import org.matrix.android.sdk.rx.rx
 import org.matrix.android.sdk.rx.unwrap
 import timber.log.Timber
@@ -111,6 +115,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 class RoomDetailViewModel @AssistedInject constructor(
         @Assisted private val initialState: RoomDetailViewState,
         private val vectorPreferences: VectorPreferences,
+        private val vectorDataStore: VectorDataStore,
         private val stringProvider: StringProvider,
         private val rainbowGenerator: RainbowGenerator,
         private val session: Session,
@@ -174,6 +179,7 @@ class RoomDetailViewModel @AssistedInject constructor(
         observeSummaryState()
         getUnreadState()
         observeSyncState()
+        observeDataStore()
         observeEventDisplayedActions()
         loadDraftIfAny()
         observeUnreadState()
@@ -195,6 +201,18 @@ class RoomDetailViewModel @AssistedInject constructor(
         // Ensure to share the outbound session keys with all members
         if (OutboundSessionKeySharingStrategy.WhenEnteringRoom == BuildConfig.outboundSessionKeySharingStrategy && room.isEncrypted()) {
             prepareForEncryption()
+        }
+    }
+
+    private fun observeDataStore() {
+        viewModelScope.launch {
+            vectorDataStore.pushCounterFlow.collect { nbOfPush ->
+                setState {
+                    copy(
+                            pushCounter = nbOfPush
+                    )
+                }
+            }
         }
     }
 
@@ -368,12 +386,12 @@ class RoomDetailViewModel @AssistedInject constructor(
             }
             return@withState
         }
-        when (action.jitsiEvent.type) {
-            BroadcastEvent.Type.CONFERENCE_JOINED,
-            BroadcastEvent.Type.CONFERENCE_TERMINATED -> {
+        when (action.conferenceEvent) {
+            is ConferenceEvent.Joined,
+            is ConferenceEvent.Terminated -> {
                 setState { copy(jitsiState = jitsiState.copy(hasJoined = activeConferenceHolder.isJoined(jitsiState.confId))) }
             }
-            else                                      -> Unit
+            else                          -> Unit
         }
     }
 
@@ -1490,6 +1508,17 @@ class RoomDetailViewModel @AssistedInject constructor(
                 .subscribe { syncState ->
                     setState {
                         copy(syncState = syncState)
+                    }
+                }
+                .disposeOnClear()
+
+        session.getSyncStatusLive()
+                .asObservable()
+                .subscribe { it ->
+                    if (it is SyncStatusService.Status.IncrementalSyncStatus) {
+                        setState {
+                            copy(incrementalSyncStatus = it)
+                        }
                     }
                 }
                 .disposeOnClear()

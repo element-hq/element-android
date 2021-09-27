@@ -486,7 +486,7 @@ Lūdzu dod piekļuves atļauju nākamajā uznirstošajā logā, lai būtu iespē
     <string name="join">Pievienoties</string>
     <string name="preview">Piekšskatījums</string>
     <string name="reject">Noraidīt</string>
-    <string name="room_jump_to_first_unread">Pāriet uz pirmo neizlasīto ziņu.</string>
+    <string name="room_jump_to_first_unread">Pāriet uz pirmo neizlasīto ziņu</string>
     <string name="room_preview_invitation_format">%s jūs uzaicināja pievienoties šai istabai</string>
     <string name="room_preview_unlinked_email_warning">Uzaicinājums tika nosūtīts uz %s, kura nav piesaistīta šim kontam. 
 \nJūs varat pierakstīties ar citu kontu vai arī pievienot šo epastu šim kontam.</string>
@@ -545,7 +545,7 @@ Lūdzu dod piekļuves atļauju nākamajā uznirstošajā logā, lai būtu iespē
     <string name="room_resend_unsent_messages">Nosūtīt nenosūtītās ziņas</string>
     <string name="room_delete_unsent_messages">Dzēst nenosūtītās ziņas</string>
     <string name="room_message_file_not_found">Fails nav atrasts</string>
-    <string name="room_do_not_have_permission_to_post">Tev nav tiesību rakstīt ziņas šajā istabā</string>
+    <string name="room_do_not_have_permission_to_post">Tev nav tiesību rakstīt ziņas šajā istabā.</string>
     <string name="ssl_trust">Uzticēties</string>
     <string name="ssl_do_not_trust">Neuzticēties</string>
     <string name="ssl_logout_account">Izrakstīties</string>
@@ -1390,7 +1390,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="room_tombstone_predecessor_link">Nospiediet šeit, lai redzētu vecākas ziņas</string>
     <string name="room_tombstone_continuation_description">Šī istabas ir citas sarakstes turpinājums</string>
     <string name="room_tombstone_continuation_link">Sarakste turpinās šeit</string>
-    <string name="room_tombstone_versioned_description">Šī istaba ir aizvietota un vairs nav aktīva</string>
+    <string name="room_tombstone_versioned_description">Šī istaba ir aizvietota un vairs nav aktīva.</string>
     <string name="dialog_user_consent_submit">Pārskatīt tagad</string>
     <string name="dialog_user_consent_content">Lai turpinātu izmantot %1$s bāzes serveri, jums ir jāpārskata un jāpiekrīt noteikumiem un nosacījumiem.</string>
     <string name="notification_silent">Kluss</string>
@@ -2049,7 +2049,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="settings_show_emoji_keyboard">Rādīt Emoji tastatūru</string>
     <string name="settings_send_message_with_enter_summary">Tastatūras Enter poga sūtīs ziņu, tā vietā lai pievienotu jaunu rindkopu</string>
     <string name="settings_send_message_with_enter">Sūtīt ziņu ar Enter</string>
-    <string name="settings_show_avatar_display_name_changes_messages_summary">Iekļauj avatāra un vārda maiņas</string>
+    <string name="settings_show_avatar_display_name_changes_messages_summary">Iekļauj avatara un parādāmā vārda izmaiņas.</string>
     <string name="settings_show_avatar_display_name_changes_messages">Rādīt konta notikumus</string>
     <string name="settings_show_join_leave_messages">Rādīt cilvēku pievienošanos vai iziešanu</string>
     <string name="settings_show_room_member_state_events_summary">Ietver uzaicinājumus/pievienošanos/aiziešanu/izmešanu/noteikumu pārkāpšanas/profila bildes izmaiņas.</string>
@@ -2214,7 +2214,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="a11y_create_room">Izveidot jaunu telpu</string>
     <string name="error_terms_not_accepted">Lūdzu, mēģiniet vēlreiz, tiklīdz esat piekritis sava servera noteikumiem un nosacījumiem.</string>
     <string name="settings_discovery_disconnect_with_bound_pid">Pašlaik jūs kopīgojat e-pasta adreses vai tālruņa numurus identitātes serverī %1$s. Lai pārtrauktu to koplietošanu, jums būs jāpārveido savienojums ar %2$s.</string>
-    <string name="settings_discovery_no_terms">Jūsu izvēlētajam identitātes serverim nav pakalpojumu sniegšanas noteikumu. Turpiniet tikai tad, ja uzticaties pakalpojuma īpašniekam.</string>
+    <string name="settings_discovery_no_terms">Jūsu izvēlētajam identitātes serverim nav pakalpojumu sniegšanas noteikumu. Turpiniet tikai tad, ja uzticaties pakalpojuma īpašniekam</string>
     <string name="settings_discovery_no_terms_title">Identitātes serverim nav pakalpojumu sniegšanas noteikumu</string>
     <string name="settings_discovery_please_enter_server">Lūdzu, ievadiet identitātes servera url</string>
     <string name="settings_discovery_enter_identity_server">Ievadiet identitātes servera URL</string>

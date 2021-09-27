@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2021 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,19 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.matrix.android.sdk.api.session.initsync
 
-import androidx.lifecycle.LiveData
+package im.vector.app.features.spaces
 
-interface InitialSyncProgressService {
+import im.vector.app.core.platform.VectorViewModelAction
 
-    fun getInitialSyncProgressStatus(): LiveData<Status>
-
-    sealed class Status {
-        object Idle : Status()
-        data class Progressing(
-                val initSyncStep: InitSyncStep,
-                val percentProgress: Int = 0
-        ) : Status()
-    }
+sealed class SpaceLeaveViewAction : VectorViewModelAction {
+    object SetAutoLeaveAll : SpaceLeaveViewAction()
+    object SetAutoLeaveNone : SpaceLeaveViewAction()
+    object SetAutoLeaveSelected : SpaceLeaveViewAction()
+    object LeaveSpace : SpaceLeaveViewAction()
 }

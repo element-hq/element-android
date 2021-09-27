@@ -29,6 +29,7 @@ import im.vector.app.databinding.ActivityVectorSettingsBinding
 import im.vector.app.features.discovery.DiscoverySettingsFragment
 import im.vector.app.features.settings.devices.VectorSettingsDevicesFragment
 import im.vector.app.features.settings.notifications.VectorSettingsNotificationPreferenceFragment
+import im.vector.app.features.settings.threepids.ThreePidsSettingsFragment
 
 import org.matrix.android.sdk.api.failure.GlobalError
 import org.matrix.android.sdk.api.session.Session
@@ -134,6 +135,10 @@ class VectorSettingsActivity : VectorBaseActivity<ActivityVectorSettingsBinding>
 
     override fun requestedKeyToHighlight(): String? {
         return keyToHighlight
+    }
+
+    override fun navigateToEmailAndPhoneNumbers() {
+        navigateTo(ThreePidsSettingsFragment::class.java)
     }
 
     override fun handleInvalidToken(globalError: GlobalError.InvalidToken) {

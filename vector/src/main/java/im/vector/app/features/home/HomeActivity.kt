@@ -70,7 +70,7 @@ import im.vector.app.features.workers.signout.ServerBackupStatusViewState
 import im.vector.app.push.fcm.FcmHelper
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.parcelize.Parcelize
-import org.matrix.android.sdk.api.session.initsync.InitialSyncProgressService
+import org.matrix.android.sdk.api.session.initsync.SyncStatusService
 import org.matrix.android.sdk.api.session.permalinks.PermalinkService
 import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.internal.session.sync.InitialSyncStrategy
@@ -81,7 +81,8 @@ import javax.inject.Inject
 @Parcelize
 data class HomeActivityArgs(
         val clearNotification: Boolean,
-        val accountCreation: Boolean
+        val accountCreation: Boolean,
+        val inviteNotificationRoomId: String? = null
 ) : Parcelable
 
 class HomeActivity :
@@ -229,6 +230,11 @@ class HomeActivity :
         if (args?.clearNotification == true) {
             notificationDrawerManager.clearAllEvents()
         }
+        if (args?.inviteNotificationRoomId != null) {
+            activeSessionHolder.getSafeActiveSession()?.permalinkService()?.createPermalink(args.inviteNotificationRoomId)?.let {
+                navigator.openMatrixToBottomSheet(this, it)
+            }
+        }
 
         homeActivityViewModel.observeViewEvents {
             when (it) {
@@ -302,11 +308,11 @@ class HomeActivity :
     }
 
     private fun renderState(state: HomeActivityViewState) {
-        when (val status = state.initialSyncProgressServiceStatus) {
-            is InitialSyncProgressService.Status.Idle        -> {
+        when (val status = state.syncStatusServiceStatus) {
+            is SyncStatusService.Status.Idle                  -> {
                 views.waitingView.root.isVisible = false
             }
-            is InitialSyncProgressService.Status.Progressing -> {
+            is SyncStatusService.Status.Progressing           -> {
                 val initSyncStepStr = initSyncStepFormatter.format(status.initSyncStep)
                 Timber.v("$initSyncStepStr ${status.percentProgress}")
                 views.waitingView.root.setOnClickListener {
@@ -324,6 +330,7 @@ class HomeActivity :
                 }
                 views.waitingView.root.isVisible = true
             }
+            else                                              -> Unit
         }.exhaustive
     }
 
@@ -422,8 +429,16 @@ class HomeActivity :
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
-        if (intent?.getParcelableExtra<HomeActivityArgs>(MvRx.KEY_ARG)?.clearNotification == true) {
+        val parcelableExtra = intent?.getParcelableExtra<HomeActivityArgs>(MvRx.KEY_ARG)
+        if (parcelableExtra?.clearNotification == true) {
             notificationDrawerManager.clearAllEvents()
+        }
+        if (parcelableExtra?.inviteNotificationRoomId != null) {
+            activeSessionHolder.getSafeActiveSession()
+                    ?.permalinkService()
+                    ?.createPermalink(parcelableExtra.inviteNotificationRoomId)?.let {
+                        navigator.openMatrixToBottomSheet(this, it)
+                    }
         }
         handleIntent(intent)
     }
@@ -460,8 +475,8 @@ class HomeActivity :
     override fun getMenuRes() = R.menu.home
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        menu.findItem(R.id.menu_home_init_sync_legacy)?.isVisible = vectorPreferences.developerMode()
-        menu.findItem(R.id.menu_home_init_sync_optimized)?.isVisible = vectorPreferences.developerMode()
+        menu.findItem(R.id.menu_home_init_sync_legacy).isVisible = vectorPreferences.developerMode()
+        menu.findItem(R.id.menu_home_init_sync_optimized).isVisible = vectorPreferences.developerMode()
         return super.onPrepareOptionsMenu(menu)
     }
 
@@ -548,10 +563,15 @@ class HomeActivity :
     }
 
     companion object {
-        fun newIntent(context: Context, clearNotification: Boolean = false, accountCreation: Boolean = false): Intent {
+        fun newIntent(context: Context,
+                      clearNotification: Boolean = false,
+                      accountCreation: Boolean = false,
+                      inviteNotificationRoomId: String? = null
+        ): Intent {
             val args = HomeActivityArgs(
                     clearNotification = clearNotification,
-                    accountCreation = accountCreation
+                    accountCreation = accountCreation,
+                    inviteNotificationRoomId = inviteNotificationRoomId
             )
 
             return Intent(context, HomeActivity::class.java)

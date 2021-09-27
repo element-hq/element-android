@@ -19,6 +19,8 @@ package org.matrix.android.sdk.common
 import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.Observer
+import androidx.test.internal.runner.junit4.statement.UiThreadStatement
+import androidx.test.internal.runner.junit4.statement.UiThreadStatement.runOnUiThread
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -59,13 +61,15 @@ class CommonTestHelper(context: Context) {
     fun getTestInterceptor(session: Session): MockOkHttpInterceptor? = TestNetworkModule.interceptorForSession(session.sessionId) as? MockOkHttpInterceptor
 
     init {
-        Matrix.initialize(
-                context,
-                MatrixConfiguration(
-                        applicationFlavor = "TestFlavor",
-                        roomDisplayNameFallbackProvider = TestRoomDisplayNameFallbackProvider()
-                )
-        )
+        UiThreadStatement.runOnUiThread {
+            Matrix.initialize(
+                    context,
+                    MatrixConfiguration(
+                            applicationFlavor = "TestFlavor",
+                            roomDisplayNameFallbackProvider = TestRoomDisplayNameFallbackProvider()
+                    )
+            )
+        }
         matrix = Matrix.getInstance(context)
     }
 

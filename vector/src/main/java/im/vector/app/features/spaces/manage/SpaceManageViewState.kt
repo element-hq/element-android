@@ -20,6 +20,7 @@ import com.airbnb.mvrx.MvRxState
 
 enum class ManageType {
     AddRooms,
+    AddRoomsOnlySpaces,
     Settings,
     ManageRooms
 }

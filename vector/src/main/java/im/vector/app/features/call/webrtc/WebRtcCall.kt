@@ -810,17 +810,19 @@ class WebRtcCall(
         }
     }
 
-    fun endCall(reason: EndCallReason = EndCallReason.USER_HANGUP) {
+    fun endCall(reason: EndCallReason = EndCallReason.USER_HANGUP, sendSignaling: Boolean = true) {
         sessionScope?.launch(dispatcher) {
             if (mxCall.state is CallState.Ended) {
                 return@launch
             }
             val reject = mxCall.state is CallState.LocalRinging
             terminate(reason, reject)
-            if (reject) {
-                mxCall.reject()
-            } else {
-                mxCall.hangUp(reason)
+            if (sendSignaling) {
+                if (reject) {
+                    mxCall.reject()
+                } else {
+                    mxCall.hangUp(reason)
+                }
             }
         }
     }

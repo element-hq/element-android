@@ -18,21 +18,26 @@ package org.matrix.android.sdk.internal.session.initsync
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import org.matrix.android.sdk.api.session.initsync.InitSyncStep
-import org.matrix.android.sdk.api.session.initsync.InitialSyncProgressService
+import org.matrix.android.sdk.api.session.initsync.SyncStatusService
 import org.matrix.android.sdk.internal.session.SessionScope
 import javax.inject.Inject
 
 @SessionScope
-internal class DefaultInitialSyncProgressService @Inject constructor()
-    : InitialSyncProgressService,
+internal class DefaultSyncStatusService @Inject constructor()
+    : SyncStatusService,
         ProgressReporter {
 
-    private val status = MutableLiveData<InitialSyncProgressService.Status>()
+    private val status = MutableLiveData<SyncStatusService.Status>()
 
     private var rootTask: TaskInfo? = null
 
-    override fun getInitialSyncProgressStatus(): LiveData<InitialSyncProgressService.Status> {
+    override fun getSyncStatusLive(): LiveData<SyncStatusService.Status> {
         return status
+    }
+
+    // Only to be used for incremental sync
+    fun setStatus(newStatus: SyncStatusService.Status.IncrementalSyncStatus) {
+        status.postValue(newStatus)
     }
 
     /**
@@ -67,7 +72,7 @@ internal class DefaultInitialSyncProgressService @Inject constructor()
                 // Update the progress of the leaf and all its parents
                 leaf.setProgress(progress)
                 // Then update the live data using leaf wording and root progress
-                status.postValue(InitialSyncProgressService.Status.Progressing(leaf.initSyncStep, root.currentProgress.toInt()))
+                status.postValue(SyncStatusService.Status.Progressing(leaf.initSyncStep, root.currentProgress.toInt()))
             }
         }
     }
@@ -82,13 +87,13 @@ internal class DefaultInitialSyncProgressService @Inject constructor()
                 // And close it
                 endedTask.parent.child = null
             } else {
-                status.postValue(InitialSyncProgressService.Status.Idle)
+                status.postValue(SyncStatusService.Status.Idle)
             }
         }
     }
 
     fun endAll() {
         rootTask = null
-        status.postValue(InitialSyncProgressService.Status.Idle)
+        status.postValue(SyncStatusService.Status.Idle)
     }
 }

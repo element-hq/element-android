@@ -28,20 +28,21 @@ import com.facebook.react.bridge.JavaOnlyMap
 import org.jitsi.meet.sdk.BroadcastEmitter
 import org.jitsi.meet.sdk.BroadcastEvent
 import org.jitsi.meet.sdk.JitsiMeet
-import org.matrix.android.sdk.api.extensions.tryOrNull
+import timber.log.Timber
 
 private const val CONFERENCE_URL_DATA_KEY = "url"
 
-fun BroadcastEvent.extractConferenceUrl(): String? {
-    return when (type) {
-        BroadcastEvent.Type.CONFERENCE_TERMINATED,
-        BroadcastEvent.Type.CONFERENCE_WILL_JOIN,
-        BroadcastEvent.Type.CONFERENCE_JOINED -> data[CONFERENCE_URL_DATA_KEY] as? String
-        else                                  -> null
+sealed class ConferenceEvent(open val data: Map<String, Any>) {
+    data class Terminated(override val data: Map<String, Any>) : ConferenceEvent(data)
+    data class WillJoin(override val data: Map<String, Any>) : ConferenceEvent(data)
+    data class Joined(override val data: Map<String, Any>) : ConferenceEvent(data)
+
+    fun extractConferenceUrl(): String? {
+        return data[CONFERENCE_URL_DATA_KEY] as? String
     }
 }
 
-class JitsiBroadcastEmitter(private val context: Context) {
+class ConferenceEventEmitter(private val context: Context)  {
 
     fun emitConferenceEnded() {
         val broadcastEventData = JavaOnlyMap.of(CONFERENCE_URL_DATA_KEY, JitsiMeet.getCurrentConference())
@@ -49,8 +50,9 @@ class JitsiBroadcastEmitter(private val context: Context) {
     }
 }
 
-class JitsiBroadcastEventObserver(private val context: Context,
-                                  private val onBroadcastEvent: (BroadcastEvent) -> Unit) : LifecycleObserver {
+class ConferenceEventObserver(private val context: Context,
+                              private val onBroadcastEvent: (ConferenceEvent) -> Unit)
+    : LifecycleObserver {
 
     // See https://jitsi.github.io/handbook/docs/dev-guide/dev-guide-android-sdk#listening-for-broadcasted-events
     private val broadcastReceiver = object : BroadcastReceiver() {
@@ -61,8 +63,10 @@ class JitsiBroadcastEventObserver(private val context: Context,
 
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     fun unregisterForBroadcastMessages() {
-        tryOrNull("Unable to unregister receiver") {
+        try {
             LocalBroadcastManager.getInstance(context).unregisterReceiver(broadcastReceiver)
+        } catch (throwable: Throwable) {
+            Timber.v("Unable to unregister receiver")
         }
     }
 
@@ -72,13 +76,23 @@ class JitsiBroadcastEventObserver(private val context: Context,
         for (type in BroadcastEvent.Type.values()) {
             intentFilter.addAction(type.action)
         }
-        tryOrNull("Unable to register receiver") {
+        try {
             LocalBroadcastManager.getInstance(context).registerReceiver(broadcastReceiver, intentFilter)
+        } catch (throwable: Throwable) {
+            Timber.v("Unable to register receiver")
         }
     }
 
     private fun onBroadcastReceived(intent: Intent) {
         val event = BroadcastEvent(intent)
-        onBroadcastEvent(event)
+        val conferenceEvent = when (event.type) {
+            BroadcastEvent.Type.CONFERENCE_JOINED     -> ConferenceEvent.Joined(event.data)
+            BroadcastEvent.Type.CONFERENCE_TERMINATED -> ConferenceEvent.Terminated(event.data)
+            BroadcastEvent.Type.CONFERENCE_WILL_JOIN  -> ConferenceEvent.WillJoin(event.data)
+            else                                      -> null
+        }
+        if (conferenceEvent != null) {
+            onBroadcastEvent(conferenceEvent)
+        }
     }
 }

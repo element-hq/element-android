@@ -66,27 +66,45 @@ internal class DefaultPushersService @Inject constructor(
                                deviceDisplayName: String,
                                url: String,
                                append: Boolean,
-                               withEventIdOnly: Boolean)
-            : UUID {
-        // Do some parameter checks. It's ok to throw Exception, to inform developer of the problem
-        if (pushkey.length > 512) throw InvalidParameterException("pushkey should not exceed 512 chars")
-        if (appId.length > 64) throw InvalidParameterException("appId should not exceed 64 chars")
-        if ("/_matrix/push/v1/notify" !in url) throw InvalidParameterException("url should contain '/_matrix/push/v1/notify'")
+                               withEventIdOnly: Boolean
+    ) = addPusher(
+            JsonPusher(
+                    pushKey = pushkey,
+                    kind = Pusher.KIND_HTTP,
+                    appId = appId,
+                    profileTag = profileTag,
+                    lang = lang,
+                    appDisplayName = appDisplayName,
+                    deviceDisplayName = deviceDisplayName,
+                    data = JsonPusherData(url, EVENT_ID_ONLY.takeIf { withEventIdOnly }),
+                    append = append
+            )
+    )
 
-        val pusher = JsonPusher(
-                pushKey = pushkey,
-                kind = "http",
-                appId = appId,
-                appDisplayName = appDisplayName,
-                deviceDisplayName = deviceDisplayName,
-                profileTag = profileTag,
-                lang = lang,
-                data = JsonPusherData(url, EVENT_ID_ONLY.takeIf { withEventIdOnly }),
-                append = append)
+    override fun addEmailPusher(email: String,
+                                lang: String,
+                                emailBranding: String,
+                                appDisplayName: String,
+                                deviceDisplayName: String,
+                                append: Boolean
+    ) = addPusher(
+            JsonPusher(
+                    pushKey = email,
+                    kind = Pusher.KIND_EMAIL,
+                    appId = Pusher.APP_ID_EMAIL,
+                    profileTag = "",
+                    lang = lang,
+                    appDisplayName = appDisplayName,
+                    deviceDisplayName = deviceDisplayName,
+                    data = JsonPusherData(brand = emailBranding),
+                    append = append
+            )
+    )
 
-        val params = AddHttpPusherWorker.Params(sessionId, pusher)
-
-        val request = workManagerProvider.matrixOneTimeWorkRequestBuilder<AddHttpPusherWorker>()
+    private fun addPusher(pusher: JsonPusher): UUID {
+        pusher.validateParameters()
+        val params = AddPusherWorker.Params(sessionId, pusher)
+        val request = workManagerProvider.matrixOneTimeWorkRequestBuilder<AddPusherWorker>()
                 .setConstraints(WorkManagerProvider.workConstraints)
                 .setInputData(WorkerParamsFactory.toData(params))
                 .setBackoffCriteria(BackoffPolicy.LINEAR, WorkManagerProvider.BACKOFF_DELAY_MILLIS, TimeUnit.MILLISECONDS)
@@ -95,8 +113,27 @@ internal class DefaultPushersService @Inject constructor(
         return request.id
     }
 
+    private fun JsonPusher.validateParameters() {
+        // Do some parameter checks. It's ok to throw Exception, to inform developer of the problem
+        if (pushKey.length > 512) throw InvalidParameterException("pushkey should not exceed 512 chars")
+        if (appId.length > 64) throw InvalidParameterException("appId should not exceed 64 chars")
+        data?.url?.let { url -> if ("/_matrix/push/v1/notify" !in url) throw InvalidParameterException("url should contain '/_matrix/push/v1/notify'") }
+    }
+
+    override suspend fun removePusher(pusher: Pusher) {
+        removePusher(pusher.pushKey, pusher.appId)
+    }
+
     override suspend fun removeHttpPusher(pushkey: String, appId: String) {
-        val params = RemovePusherTask.Params(pushkey, appId)
+        removePusher(pushkey, appId)
+    }
+
+    override suspend fun removeEmailPusher(email: String) {
+        removePusher(pushKey = email, Pusher.APP_ID_EMAIL)
+    }
+
+    private suspend fun removePusher(pushKey: String, pushAppId: String) {
+        val params = RemovePusherTask.Params(pushKey, pushAppId)
         removePusherTask.execute(params)
     }
 

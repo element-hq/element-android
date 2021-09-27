@@ -2737,6 +2737,7 @@
     <string name="spaces_beta_welcome_to_spaces_desc">Utrymmen är ett nytt sätt att gruppera rum och personer.</string>
     <string name="spaces_beta_welcome_to_spaces">Välkommen till utrymmen!</string>
     <string name="space_add_existing_rooms">Lägg till existerande rum och utrymme</string>
+    <!-- TO BE REMOVED -->
     <string name="space_leave_prompt_msg">Är du säker på att du vill lämna utrymmet\?</string>
     <string name="leave_space">Lämna utrymme</string>
     <string name="space_add_child_title">Lägg till rum</string>

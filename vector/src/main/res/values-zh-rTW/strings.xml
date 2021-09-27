@@ -2628,6 +2628,7 @@
     <string name="spaces_beta_welcome_to_spaces_desc">空間是將聊天室與人們分組的新方式。</string>
     <string name="spaces_beta_welcome_to_spaces">歡迎使用空間！</string>
     <string name="space_add_existing_rooms">新增既有的聊天室與空間</string>
+    <!-- TO BE REMOVED -->
     <string name="space_leave_prompt_msg">您確定您想要離開空間嗎？</string>
     <string name="leave_space">離開空間</string>
     <string name="space_add_child_title">新增聊天室</string>
