@@ -1,0 +1,4 @@
+Added changes that will make SearchView in search bar focused by default on opening reaction picker.
+
+When tapping close icon of SearchView, the SearchView did not collapse therefore added the on close listener
+which will collapse the SearchView on close.
