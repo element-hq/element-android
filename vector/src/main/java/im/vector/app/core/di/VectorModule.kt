@@ -23,6 +23,7 @@ import android.content.res.Resources
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
+import im.vector.app.core.dispatchers.CoroutineDispatchers
 import im.vector.app.core.error.DefaultErrorFormatter
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.features.invite.AutoAcceptInvites
@@ -33,6 +34,7 @@ import im.vector.app.features.pin.PinCodeStore
 import im.vector.app.features.pin.SharedPrefPinCodeStore
 import im.vector.app.features.ui.SharedPreferencesUiStateRepository
 import im.vector.app.features.ui.UiStateRepository
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -104,6 +106,12 @@ abstract class VectorModule {
         @Singleton
         fun providesApplicationCoroutineScope(): CoroutineScope {
             return CoroutineScope(SupervisorJob() + Dispatchers.Main)
+        }
+
+        @Provides
+        @JvmStatic
+        fun providesCoroutineDispatchers(): CoroutineDispatchers {
+            return CoroutineDispatchers(io = Dispatchers.IO)
         }
     }
 

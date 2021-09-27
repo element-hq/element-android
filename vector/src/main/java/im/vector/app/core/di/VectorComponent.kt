@@ -26,6 +26,7 @@ import im.vector.app.EmojiCompatFontProvider
 import im.vector.app.EmojiCompatWrapper
 import im.vector.app.VectorApplication
 import im.vector.app.core.dialogs.UnrecognizedCertificateDialog
+import im.vector.app.core.dispatchers.CoroutineDispatchers
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.network.WifiDetector
 import im.vector.app.core.pushers.PushersManager
@@ -170,6 +171,8 @@ interface VectorComponent {
     fun webRtcCallManager(): WebRtcCallManager
 
     fun appCoroutineScope(): CoroutineScope
+
+    fun coroutineDispatchers(): CoroutineDispatchers
 
     fun jitsiActiveConferenceHolder(): JitsiActiveConferenceHolder
 
