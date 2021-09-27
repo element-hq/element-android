@@ -47,8 +47,8 @@ class KeysExporter @Inject constructor(
             output == null                  -> throw IllegalStateException("Exported file not found")
             output.statSize != expectedSize -> {
                 throw UnexpectedExportKeysFileSizeException(
-                        expectedFileSize = output.statSize,
-                        actualFileSize = expectedSize
+                        expectedFileSize = expectedSize,
+                        actualFileSize = output.statSize
                 )
             }
         }
