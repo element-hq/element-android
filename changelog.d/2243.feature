@@ -1,1 +1,0 @@
-Adds email notification registration to Settings
