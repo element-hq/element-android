@@ -134,27 +134,29 @@ class RoomListViewModel @Inject constructor(
         }
     }
 
-    private val roomListSectionBuilder = if (appStateHandler.getCurrentRoomGroupingMethod() is RoomGroupingMethod.BySpace) {
-        RoomListSectionBuilderSpace(
-                session,
-                stringProvider,
-                appStateHandler,
-                viewModelScope,
-                autoAcceptInvites,
-                {
-                    updatableQueries.add(it)
-                },
-                suggestedRoomJoiningState,
-                !vectorPreferences.prefSpacesShowAllRoomInHome()
-        )
-    } else {
-        RoomListSectionBuilderGroup(
-                session,
-                stringProvider,
-                appStateHandler,
-                autoAcceptInvites
-        ) {
-            updatableQueries.add(it)
+    private val roomListSectionBuilder by lazy {
+        if (appStateHandler.getCurrentRoomGroupingMethod() is RoomGroupingMethod.BySpace) {
+            RoomListSectionBuilderSpace(
+                    session,
+                    stringProvider,
+                    appStateHandler,
+                    viewModelScope,
+                    autoAcceptInvites,
+                    {
+                        updatableQueries.add(it)
+                    },
+                    suggestedRoomJoiningState,
+                    !vectorPreferences.prefSpacesShowAllRoomInHome()
+            )
+        } else {
+            RoomListSectionBuilderGroup(
+                    session,
+                    stringProvider,
+                    appStateHandler,
+                    autoAcceptInvites
+            ) {
+                updatableQueries.add(it)
+            }
         }
     }
 
