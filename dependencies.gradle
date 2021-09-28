@@ -22,6 +22,7 @@ def epoxy = "4.6.2"
 def glide = "4.12.0"
 def bigImageViewer = "1.8.1"
 def jjwt = "0.11.2"
+def vanniktechEmoji = "0.7.0"
 
 // Testing
 def mockk = "1.12.0"
@@ -121,6 +122,10 @@ ext.libs = [
                 'jjwtApi'                : "io.jsonwebtoken:jjwt-api:$jjwt",
                 'jjwtImpl'               : "io.jsonwebtoken:jjwt-impl:$jjwt",
                 'jjwtOrgjson'            : "io.jsonwebtoken:jjwt-orgjson:$jjwt"
+        ],
+        vanniktech: [
+                'emojiMaterial'          : "com.vanniktech:emoji-material:$vanniktechEmoji",
+                'emojiGoogle'            : "com.vanniktech:emoji-google:$vanniktechEmoji"
         ],
         tests       : [
                 'kluent'                 : "org.amshove.kluent:kluent-android:1.68",
