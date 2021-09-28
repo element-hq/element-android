@@ -314,6 +314,11 @@ android {
     }
 }
 
+configurations {
+    // videocache includes a sl4j logger which causes mockk to attempt to call the static android Log
+    testImplementation.exclude group: 'org.slf4j', module: 'slf4j-android'
+}
+
 dependencies {
 
     implementation project(":matrix-sdk-android")
@@ -490,6 +495,7 @@ dependencies {
     // TESTS
     testImplementation libs.tests.junit
     testImplementation libs.tests.kluent
+    testImplementation libs.mockk.mockk
     // Plant Timber tree for test
     testImplementation libs.tests.timberJunitRule
 
