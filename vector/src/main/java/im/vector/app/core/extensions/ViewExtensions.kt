@@ -18,11 +18,17 @@ package im.vector.app.core.extensions
 
 import android.graphics.drawable.Drawable
 import android.text.InputType
+import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageView
+import androidx.annotation.AttrRes
+import androidx.annotation.DimenRes
+import androidx.annotation.DrawableRes
 import androidx.appcompat.widget.SearchView
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.view.isVisible
 import im.vector.app.R
 
@@ -57,4 +63,16 @@ fun View.getMeasurements(): Pair<Int, Int> {
 fun ImageView.setDrawableOrHide(drawableRes: Drawable?) {
     setImageDrawable(drawableRes)
     isVisible = drawableRes != null
+}
+
+fun View.setAttributeTintedBackground(@DrawableRes drawableRes: Int, @AttrRes tint: Int) {
+    val drawable = ContextCompat.getDrawable(context, drawableRes)!!
+    DrawableCompat.setTint(drawable, context.fetchThemeColor(tint))
+    background = drawable
+}
+
+fun View.setAttributeBackground(@AttrRes attributeId: Int) {
+    val typedValue = TypedValue()
+    context.theme.resolveAttribute(attributeId, typedValue, true)
+    setBackgroundResource(typedValue.resourceId)
 }

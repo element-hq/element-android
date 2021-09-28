@@ -17,6 +17,8 @@
 package im.vector.app.core.extensions
 
 import android.content.Context
+import android.util.TypedValue
+import androidx.annotation.AttrRes
 import im.vector.app.core.di.HasVectorInjector
 import im.vector.app.core.di.VectorComponent
 
@@ -27,4 +29,12 @@ fun Context.vectorComponent(): VectorComponent {
     } else {
         throw IllegalStateException("Your application context doesn't implement HasVectorInjector")
     }
+}
+
+fun Context.fetchThemeColor(@AttrRes themeColorResId: Int): Int {
+    val typedValue = TypedValue()
+    val a = obtainStyledAttributes(typedValue.data, intArrayOf(themeColorResId))
+    val color = a.getColor(0, 0)
+    a.recycle()
+    return color
 }
