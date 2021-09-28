@@ -29,6 +29,7 @@ import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.extensions.setAttributeBackground
 import im.vector.app.core.extensions.setAttributeTintedBackground
+import im.vector.app.core.extensions.setAttributeTintedImageResource
 import im.vector.app.core.hardware.vibrate
 import im.vector.app.core.utils.CountUpTimer
 import im.vector.app.core.utils.DimensionConverter
@@ -219,7 +220,7 @@ class VoiceMessageRecorderView: ConstraintLayout, VoiceMessagePlaybackTracker.Li
                 views.voiceMessageLockArrow.translationY = 0F
             }
             RecordingState.LOCKING    -> {
-                views.voiceMessageLockImage.setImageResource(R.drawable.ic_voice_message_locked)
+                views.voiceMessageLockImage.setAttributeTintedImageResource(R.drawable.ic_voice_message_locked, R.attr.colorPrimary)
                 val translationAmount = -distanceY.coerceIn(0F, distanceToLock)
                 views.voiceMessageMicButton.translationY = translationAmount
                 views.voiceMessageLockArrow.translationY = translationAmount

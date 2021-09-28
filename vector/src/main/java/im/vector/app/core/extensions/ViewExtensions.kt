@@ -71,6 +71,12 @@ fun View.setAttributeTintedBackground(@DrawableRes drawableRes: Int, @AttrRes ti
     background = drawable
 }
 
+fun ImageView.setAttributeTintedImageResource(@DrawableRes drawableRes: Int, @AttrRes tint: Int) {
+    val drawable = ContextCompat.getDrawable(context, drawableRes)!!
+    DrawableCompat.setTint(drawable, context.fetchThemeColor(tint))
+    setImageDrawable(drawable)
+}
+
 fun View.setAttributeBackground(@AttrRes attributeId: Int) {
     val typedValue = TypedValue()
     context.theme.resolveAttribute(attributeId, typedValue, true)
