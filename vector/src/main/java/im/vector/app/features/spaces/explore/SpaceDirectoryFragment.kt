@@ -89,6 +89,9 @@ class SpaceDirectoryFragment @Inject constructor(
                     SpaceAddRoomSpaceChooserBottomSheet.ACTION_ADD_SPACES -> {
                         addExistingRoomActivityResult.launch(SpaceManageActivity.newIntent(requireContext(), spaceId, ManageType.AddRoomsOnlySpaces))
                     }
+                    SpaceAddRoomSpaceChooserBottomSheet.ACTION_CREATE_ROOM -> {
+                        viewModel.handle(SpaceDirectoryViewAction.CreateNewRoom)
+                    }
                     else                                                  -> {
                         // nop
                     }
@@ -112,6 +115,12 @@ class SpaceDirectoryFragment @Inject constructor(
 
         viewModel.onEach(SpaceDirectoryState::canAddRooms) {
             invalidateOptionsMenu()
+        }
+
+        views.addOrCreateChatRoomButton.debouncedClicks {
+            withState(viewModel) {
+                addExistingRooms(it.spaceId)
+            }
         }
 
         views.spaceCard.matrixToCardMainButton.isVisible = false
@@ -142,6 +151,7 @@ class SpaceDirectoryFragment @Inject constructor(
         }
 
         spaceCardRenderer.render(state.currentRootSummary, emptyList(), this, views.spaceCard)
+        views.addOrCreateChatRoomButton.isVisible = state.canAddRooms
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) = withState(viewModel) { state ->

@@ -16,10 +16,12 @@
 
 package im.vector.app.features.roomdirectory.createroom
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
+import com.airbnb.mvrx.Mavericks
 import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.addFragment
@@ -49,13 +51,11 @@ class CreateRoomActivity : VectorBaseActivity<ActivitySimpleBinding>(), ToolbarC
 
     override fun initUiAndData() {
         if (isFirstCreation()) {
+            val fragmentArgs: CreateRoomArgs = intent?.extras?.getParcelable(Mavericks.KEY_ARG) ?: return
             addFragment(
                     views.simpleFragmentContainer,
                     CreateRoomFragment::class.java,
-                    CreateRoomArgs(
-                            intent?.getStringExtra(INITIAL_NAME) ?: "",
-                            isSpace = intent?.getBooleanExtra(IS_SPACE, false) ?: false
-                    )
+                    fragmentArgs
             )
         }
     }
@@ -68,20 +68,35 @@ class CreateRoomActivity : VectorBaseActivity<ActivitySimpleBinding>(), ToolbarC
                 .onEach { sharedAction ->
                     when (sharedAction) {
                         is RoomDirectorySharedAction.Back,
-                        is RoomDirectorySharedAction.Close -> finish()
+                        is RoomDirectorySharedAction.Close             -> finish()
+                        is RoomDirectorySharedAction.CreateRoomSuccess -> {
+                            setResult(Activity.RESULT_OK, Intent().apply { putExtra(RESULT_CREATED_ROOM_ID, sharedAction.createdRoomId) })
+                            finish()
+                        }
+                        else                                           -> {
+                            // nop
+                        }
                     }
                 }
                 .launchIn(lifecycleScope)
     }
 
     companion object {
-        private const val INITIAL_NAME = "INITIAL_NAME"
-        private const val IS_SPACE = "IS_SPACE"
 
-        fun getIntent(context: Context, initialName: String = "", isSpace: Boolean = false): Intent {
+        const val RESULT_CREATED_ROOM_ID = "RESULT_CREATED_ROOM_ID"
+
+        fun getIntent(context: Context,
+                      initialName: String = "",
+                      isSpace: Boolean = false,
+                      openAfterCreate: Boolean = true,
+                      currentSpaceId: String? = null): Intent {
             return Intent(context, CreateRoomActivity::class.java).apply {
-                putExtra(INITIAL_NAME, initialName)
-                putExtra(IS_SPACE, isSpace)
+                putExtra(Mavericks.KEY_ARG, CreateRoomArgs(
+                        initialName = initialName,
+                        isSpace = isSpace,
+                        openAfterCreate = openAfterCreate,
+                        parentSpaceId = currentSpaceId
+                ))
             }
         }
     }
