@@ -420,7 +420,7 @@ dependencies {
     implementation 'com.otaliastudios:autocomplete:1.1.0'
 
     // Shake detection
-    implementation 'com.squareup:seismic:1.0.2'
+    implementation 'com.squareup:seismic:1.0.3'
 
     // Image Loading
     implementation libs.github.bigImageViewer
