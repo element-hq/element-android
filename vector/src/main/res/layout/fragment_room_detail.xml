@@ -139,6 +139,7 @@
         android:text="@string/room_jump_to_first_unread"
         android:visibility="invisible"
         app:chipIcon="@drawable/ic_jump_to_unread"
+        app:chipIconTint="?colorPrimary"
         app:closeIcon="@drawable/ic_close_24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
