@@ -98,7 +98,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:barrierDirection="top"
-        app:constraint_referenced_ids="composerLayout,notificationAreaView,failedMessagesWarningView" />
+        app:constraint_referenced_ids="composerLayout,notificationAreaView,failedMessagesWarningStub" />
 
     <im.vector.app.features.sync.widget.SyncStateView
         android:id="@+id/syncStateView"
@@ -159,7 +159,8 @@
         android:id="@+id/failedMessagesWarningStub"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inflatedId="@layout/view_stub_failed_message_warning_layout"
+        android:inflatedId="@+id/failedMessagesWarningStub"
+        android:layout="@layout/view_stub_failed_message_warning_layout"
         app:layout_constraintBottom_toTopOf="@id/composerLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
