@@ -66,8 +66,6 @@ sealed class RoomDetailViewEvents : VectorViewEvents {
             val mimeType: String?
     ) : RoomDetailViewEvents()
 
-    abstract class SendMessageResult : RoomDetailViewEvents()
-
     data class DisplayAndAcceptCall(val call: WebRtcCall): RoomDetailViewEvents()
 
     object DisplayPromptForIntegrationManager : RoomDetailViewEvents()
@@ -82,19 +80,7 @@ sealed class RoomDetailViewEvents : VectorViewEvents {
                                              val domain: String,
                                              val grantedEvents: RoomDetailViewEvents) : RoomDetailViewEvents()
 
-    object MessageSent : SendMessageResult()
-    data class JoinRoomCommandSuccess(val roomId: String) : SendMessageResult()
-    class SlashCommandError(val command: Command) : SendMessageResult()
-    class SlashCommandUnknown(val command: String) : SendMessageResult()
-    data class SlashCommandHandled(@StringRes val messageRes: Int? = null) : SendMessageResult()
-    object SlashCommandResultOk : SendMessageResult()
-    class SlashCommandResultError(val throwable: Throwable) : SendMessageResult()
-
-    // TODO Remove
-    object SlashCommandNotImplemented : SendMessageResult()
-
     data class StartChatEffect(val type: ChatEffect) : RoomDetailViewEvents()
     object StopChatEffects : RoomDetailViewEvents()
     object RoomReplacementStarted : RoomDetailViewEvents()
-    data class ShowRoomUpgradeDialog(val newVersion: String, val isPublic: Boolean): RoomDetailViewEvents()
 }
