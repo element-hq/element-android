@@ -1,3 +1,13 @@
+Changes in Element v1.3.1 (2021-09-29)
+======================================
+
+Bugfixes 🐛
+----------
+ - Verifying exported E2E keys to provide user feedback when the output is malformed ([#4082](https://github.com/vector-im/element-android/issues/4082))
+ - Fix settings crash when accelerometer not available ([#4103](https://github.com/vector-im/element-android/issues/4103))
+ - Crash while rendering failed message warning ([#4110](https://github.com/vector-im/element-android/issues/4110))
+
+
 Changes in Element v1.3.0 (2021-09-27)
 ======================================
 
