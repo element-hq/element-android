@@ -29,6 +29,7 @@ import org.matrix.android.sdk.internal.crypto.verification.SendVerificationMessa
 import org.matrix.android.sdk.internal.di.MatrixComponent
 import org.matrix.android.sdk.internal.federation.FederationModule
 import org.matrix.android.sdk.internal.network.NetworkConnectivityChecker
+import org.matrix.android.sdk.internal.network.RequestModule
 import org.matrix.android.sdk.internal.session.account.AccountModule
 import org.matrix.android.sdk.internal.session.cache.CacheModule
 import org.matrix.android.sdk.internal.session.call.CallModule
@@ -94,7 +95,8 @@ import org.matrix.android.sdk.internal.util.system.SystemModule
             CallModule::class,
             SearchModule::class,
             ThirdPartyModule::class,
-            SpaceModule::class
+            SpaceModule::class,
+            RequestModule::class
         ]
 )
 @SessionScope
