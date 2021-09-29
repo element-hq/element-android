@@ -2781,8 +2781,8 @@
     <string name="spaces_feeling_experimental_subspace">Kas sa tahad katsetada\?
 \nSa võid kogukonnakeskusele lisada ka teisi kogukonnakeskuseid.</string>
     <string name="space_add_rooms">Lisa jututube</string>
-    <string name="space_leave_prompt_msg_as_admin">Sa oled selle kogukonnakeskuse haldaja. Enne oma lahkumist palun lisa siia veel vähemalt üks uus haldaja.</string>
-    <string name="space_leave_prompt_msg_private">See ei ole avalik kogukonnakeskus. Ilma kutseta sa ei saa uuesti liituda.</string>
+    <string name="space_leave_prompt_msg_as_admin">Sa oled selle kogukonna ainus haldaja. Kui lahkud, siis ei leidu enam kedagi, kellel oleks seal haldusõigusi.</string>
+    <string name="space_leave_prompt_msg_private">Ilma uue kutseta sa ei saa uuesti liituda.</string>
     <string name="space_leave_prompt_msg_only_you">Sa oled siin viimane osaleja. Kui sa nüüd lahkud, siis mitte keegi, kaasa arvatud sa ise, ei saa hiljem enam liituda.</string>
     <string name="invite_to_space">Kutse kogukonnakeskusesse %s</string>
     <string name="a11y_beta">Tegemist on beeta-taseme funktsionaalsusega</string>
@@ -2947,4 +2947,49 @@
     <string name="call_ended_user_busy_title">Kasutaja on hõivatud</string>
     <string name="spaces">Kogukonnakeskused</string>
     <string name="learn_more">Lisateave</string>
+    <string name="space_add_space_to_any_space_you_manage">Lisa kogukond ükspuha millisesse kogukonda, mida sa juba haldad.</string>
+    <string name="space_add_existing_spaces">Lisa olemasolevaid kogukondi</string>
+    <string name="space_add_existing_rooms_only">Lisa olemasolevaid jututubasid</string>
+    <string name="pick_tings_to_leave">Vali, kust soovid lahkuda</string>
+    <string name="leave_specific_ones">Lahku neist jututubadest ja kogukondadest…</string>
+    <string name="dont_leave_any">Ära lahku ainsamastki jututoast ega kogukonnast</string>
+    <string name="you_will_leave_all_in">Sa lahkud kõikidest %s jututubadest ja kogukondadest.</string>
+    <string name="leave_all_rooms_and_spaces">Lahku kõikidest jututubadest ja kogukondadest</string>
+    <string name="space_leave_prompt_msg_with_name">Kas oled kindel, et soovid lahkuda %s kogukonnast\?</string>
+    <string name="discovery_section">Isikutuvastuse server (%s)</string>
+    <string name="finish_setup">Lõpeta seadistamine</string>
+    <string name="discovery_invite">Kutsu e-posti aadressi alusel, leia tuttavaid, jne…</string>
+    <string name="finish_setting_up_discovery">Lõpeta leitavuse seadistamine.</string>
+    <string name="create_space_identity_server_info_none">Hetkel sa ei kasuta isikutuvastusserverit. Kaaslastele kutse saatmiseks ning end teistele leitavaks tegemiseks palun seadista ta alljärgnevalt.</string>
+    <string name="invite_by_mxid_or_mail">Kutsu kasutajanime või e-posti aadressi alusel</string>
+    <string name="create_spaces_invite_public_header_desc">Kontrolli, et vajalikel inimestel oleks ligipääs %s kogukonda. Teistele võid kutse saata ka hiljem.</string>
+    <string name="create_spaces_invite_public_header">Kes on su kaasteelised\?</string>
+    <string name="command_description_add_to_space">Lisa näidatud kogukonnakeskusesse</string>
+    <string name="create_space_in_progress">Loon kogukonnakeskust…</string>
+    <string name="settings_developer_mode_show_info_on_screen_summary">Näita sellist teavet, millest võib kasu olla rakenduse silumisel ja veaotsingul</string>
+    <string name="settings_developer_mode_show_info_on_screen_title">Näita ekraanil silumisteateid</string>
+    <string name="does_not_look_like_valid_email">See ei tundu olema e-posti aadressi moodi</string>
+    <string name="open_discovery_settings">Ava leitavuse seadistused</string>
+    <string name="user_directory_search_hint_2">Otsi nime, Matrixi kasutajatunnuse või e-posti aadressi alusel</string>
+    <string name="create_new_space">Loo kogukonnakeskus</string>
+    <string name="room_settings_space_access_public_description">Kõik võivad kogukonda leida ja sellega liituda</string>
+    <string name="room_settings_space_access_title">Ligipääs siia kogukonda</string>
+    <string name="room_settings_access_rules_pref_dialog_title">Kes pääsevad ligi siia jututuppa\?</string>
+    <string name="settings_notification_emails_enable_for_email">Saada teavitusi %s e-posti aadressile</string>
+    <string name="settings_notification_emails_no_emails">Kui soovi e-posti teel saada teavitusi, siis palun seosta oma e-posti aadress oma Matrix\'i kasutajakontoga</string>
+    <string name="settings_notification_emails_category">E-posti teel saadetavad teavitused</string>
+    <string name="room_permissions_upgrade_the_space">Uuenda kogukonda</string>
+    <string name="room_permissions_change_space_name">Muuda kogukonna nime</string>
+    <string name="room_permissions_enable_space_encryption">Võta kogukonnas kasutusele krüptimine</string>
+    <string name="room_permissions_change_main_address_for_the_space">Muuda kogukonna põhiaadressi</string>
+    <string name="room_permissions_change_space_avatar">Muuda kogukonna tunnuspilti</string>
+    <string name="space_permissions_notice_read_only">Sul pole õigust uuenda rolle, mis on vajalikud kogukonna eri osade muutmiseks</string>
+    <string name="space_permissions_notice">Vali rollid, mis on vajalikud kogukonna eri osade muutmiseks</string>
+    <string name="space_settings_permissions_subtitle">Vaata ja uuenda rolle, mis on vajalikud kogukonnakeskuse eri osade muutmiseks.</string>
+    <string name="space_settings_permissions_title">Õigused kogukonnakeskuses</string>
+    <string name="space_participants_unban_prompt_msg">Suhtluskeelu eemaldamine võimaldab kogukonnaga uuesti liituda.</string>
+    <string name="space_participants_ban_prompt_msg">Sellele kasutajale suhtluskeelu seadmine tõstab ta kogukonnast välja ning ei võimalda uuesti liitumist.</string>
+    <string name="space_participants_kick_prompt_msg">kogukonnast välja müksamine eemaldab ta praeguseks sellest kogukonnast.
+\n
+\nKui soovid, et ta ei saaks uuesti liituda, siis peaksid seadma suhtluskeelu.</string>
 </resources>
