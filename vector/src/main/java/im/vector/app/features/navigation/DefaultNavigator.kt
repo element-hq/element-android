@@ -28,9 +28,10 @@ import androidx.core.app.ActivityOptionsCompat
 import androidx.core.app.TaskStackBuilder
 import androidx.core.util.Pair
 import androidx.core.view.ViewCompat
-import fr.gouv.tchap.features.login.TchapLoginActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import fr.gouv.tchap.features.login.TchapLoginActivity
 import im.vector.app.AppStateHandler
+import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.RoomGroupingMethod
 import im.vector.app.core.di.ActiveSessionHolder
@@ -91,6 +92,7 @@ import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoom
 import org.matrix.android.sdk.api.session.terms.TermsService
 import org.matrix.android.sdk.api.session.widgets.model.Widget
 import org.matrix.android.sdk.api.session.widgets.model.WidgetType
+import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -126,6 +128,10 @@ class DefaultNavigator @Inject constructor(
     override fun switchToSpace(context: Context, spaceId: String, postSwitchSpaceAction: Navigator.PostSwitchSpaceAction) {
         if (sessionHolder.getSafeActiveSession()?.getRoomSummary(spaceId) == null) {
             fatalError("Trying to open an unknown space $spaceId", vectorPreferences.failFast())
+            return
+        }
+        if (!BuildConfig.SHOW_SPACES) {
+            Timber.w("Spaces are not available in this version, navigation aborted")
             return
         }
         appStateHandler.setCurrentSpace(spaceId)
