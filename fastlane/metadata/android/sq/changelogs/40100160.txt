@@ -1,0 +1,2 @@
+Ndryshimet kryesore në këtë version: Mbulim Hyrjesh nga rrjete shoqërorë.
+Regjistër i plotë ndryshimesh: https://github.com/vector-im/element-android/releases/tag/v1.0.15 dhe https://github.com/vector-im/element-android/releases/tag/v1.0.16

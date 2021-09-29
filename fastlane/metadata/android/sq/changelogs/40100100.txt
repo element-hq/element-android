@@ -1,0 +1,2 @@
+Ky version i ri përmban kryesisht ndreqje të metash dhe përmirësime. Dërgimi i një mesazhi tani është shumë i shpejtë.
+Regjistër i plotë ndryshimesh: https://github.com/vector-im/element-android/releases/tag/v1.0.10

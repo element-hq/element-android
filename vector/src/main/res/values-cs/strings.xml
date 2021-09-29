@@ -2834,8 +2834,8 @@
     <string name="spaces_feeling_experimental_subspace">Chcete experimentovat\?
 \nDo Spaceu můžete přidat existující Spaces.</string>
     <string name="space_add_rooms">Přidat místnosti</string>
-    <string name="space_leave_prompt_msg_as_admin">Jste administrátorem tohoto prostoru, ujistěte se, že jste před odchodem převedli administrátorská práva na jiného člena.</string>
-    <string name="space_leave_prompt_msg_private">Tento prostor není veřejný. Bez pozvánky se do něj nebudete moci znovu připojit.</string>
+    <string name="space_leave_prompt_msg_as_admin">Jste jediným správcem tohoto prostoru. Jeho opuštění bude znamenat, že nad ním nebude mít nikdo kontrolu.</string>
+    <string name="space_leave_prompt_msg_private">Pokud nebudete znovu pozváni, nebudete se moci připojit.</string>
     <string name="space_leave_prompt_msg_only_you">Jste tu jediný člověk. Pokud odejdete, nikdo se k vám v budoucnu nebude moci připojit, včetně vás.</string>
     <string name="invite_to_space">Pozvat do %s</string>
     <string name="a11y_beta">Tato funkce je ve fázi beta</string>
@@ -3003,4 +3003,49 @@
     <string name="call_ringing">Vyzvánění…</string>
     <string name="spaces">Spaces</string>
     <string name="learn_more">Dozvědět se více</string>
+    <string name="space_add_space_to_any_space_you_manage">Přidejte prostor do jakéhokoli prostoru, který spravujete.</string>
+    <string name="space_add_existing_spaces">Přidat stávající prostory</string>
+    <string name="space_add_existing_rooms_only">Přidat stávající místnosti</string>
+    <string name="pick_tings_to_leave">Vyberte místa, která chcete opustit</string>
+    <string name="leave_specific_ones">Opustit konkrétní místnosti a prostory…</string>
+    <string name="dont_leave_any">Neopouštět žádné místnosti a prostory</string>
+    <string name="you_will_leave_all_in">Opustíte všechny místnosti a prostory v %s.</string>
+    <string name="leave_all_rooms_and_spaces">Opustit všechny místnosti a prostory</string>
+    <string name="space_leave_prompt_msg_with_name">Opravdu chcete opustit %s\?</string>
+    <string name="discovery_section">Objevování (%s)</string>
+    <string name="finish_setup">Dokončit nastavení</string>
+    <string name="discovery_invite">Pozvání e-mailem, vyhledávání kontaktů a další…</string>
+    <string name="finish_setting_up_discovery">Dokončit nastavení objevování.</string>
+    <string name="create_space_identity_server_info_none">V současné době nepoužíváte server identit. Chcete-li pozvat kolegy a být pro ně zjistitelní, nakonfigurujte jej níže.</string>
+    <string name="invite_by_mxid_or_mail">Pozvat pomocí uživatelského jména nebo e-mailu</string>
+    <string name="create_spaces_invite_public_header_desc">Zajistěte, aby měli do společnosti %s přístup ti správní lidé. Další můžete pozvat později.</string>
+    <string name="create_spaces_invite_public_header">Kdo jsou vaši kolegové\?</string>
+    <string name="command_description_add_to_space">Přidat do daného prostoru</string>
+    <string name="create_space_in_progress">Vytváření prostoru…</string>
+    <string name="settings_developer_mode_show_info_on_screen_summary">Zobrazit užitečné informace, které pomohou při ladění aplikace</string>
+    <string name="settings_developer_mode_show_info_on_screen_title">Zobrazení ladících informací na obrazovce</string>
+    <string name="does_not_look_like_valid_email">Nevypadá to jako platná e-mailová adresa</string>
+    <string name="open_discovery_settings">Otevřít nastavení objevování</string>
+    <string name="user_directory_search_hint_2">Vyhledávání podle jména, ID nebo emailu</string>
+    <string name="create_new_space">Vytvořit nový prostor</string>
+    <string name="room_settings_space_access_public_description">Každý může prostor najít a připojit se k němu</string>
+    <string name="room_settings_space_access_title">Adresa prostoru</string>
+    <string name="room_settings_access_rules_pref_dialog_title">Kdo má přístup\?</string>
+    <string name="settings_notification_emails_enable_for_email">Povolit e-mailová oznámení pro %s</string>
+    <string name="settings_notification_emails_no_emails">Pro obdržení e-mailu s upozorněním, přiřaďte e-mail ke svému Matrix účtu</string>
+    <string name="settings_notification_emails_category">Oznámení e-mailem</string>
+    <string name="room_permissions_upgrade_the_space">Povýšit prostor</string>
+    <string name="room_permissions_change_space_name">Změnit název prostoru</string>
+    <string name="room_permissions_enable_space_encryption">Povolit šifrování prostoru</string>
+    <string name="room_permissions_change_space_avatar">Změnit avatar prostoru</string>
+    <string name="room_permissions_change_main_address_for_the_space">Změnit hlavní adresu prostoru</string>
+    <string name="space_permissions_notice_read_only">Nemáte oprávnění k aktualizaci rolí potřebných ke změně různých částí tohoto prostoru</string>
+    <string name="space_permissions_notice">Vyberte role potřebné ke změně různých částí tohoto prostoru</string>
+    <string name="space_settings_permissions_subtitle">Zobrazit a aktualizovat role potřebné ke změně různých částí prostoru.</string>
+    <string name="space_settings_permissions_title">Oprávnění prostoru</string>
+    <string name="space_participants_unban_prompt_msg">Zrušením vykázání uživateli umožní znovu se připojit do prostoru.</string>
+    <string name="space_participants_ban_prompt_msg">Vykázáním uživatele z tohoto prostoru vykopnete a zabráníte mu v dalším připojení.</string>
+    <string name="space_participants_kick_prompt_msg">vykopnutí uživatele je z tohoto prostoru odstraní.
+\n
+\nAbyste jim zabránili v dalším vstupu, měli byste je raději vykázat.</string>
 </resources>

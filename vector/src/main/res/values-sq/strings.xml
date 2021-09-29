@@ -2771,8 +2771,8 @@
     <string name="spaces_feeling_experimental_subspace">Ndiheni eksperimentues\?
 \nMund të shtoni te një hapësirë hapësira ekzistuese.</string>
     <string name="space_add_rooms">Shtoni dhoma</string>
-    <string name="space_leave_prompt_msg_as_admin">Jeni përgjegjës i kësaj hapësirë, sigurohuni se keni shpërngulur të drejt përgjegjësi te një anëtar tjetër, përpara braktisjes.</string>
-    <string name="space_leave_prompt_msg_private">Kjo hapësirë s’është publike. S’do të jeni në gjendje të rihyni pa një ftesë.</string>
+    <string name="space_leave_prompt_msg_as_admin">Jeni përgjegjësi i vetëm i kësaj hapësire. Braktisja e saj do të thotë se askush s’do të ketë kontroll mbi të.</string>
+    <string name="space_leave_prompt_msg_private">S’do të jeni në gjendje të rihyni pa një ftesë.</string>
     <string name="space_leave_prompt_msg_only_you">Jeni personi i vetëm këtu. Nëse ikni, askush s’do të jetë në gjendje të marrë pjesë në të ardhmen, përfshi ju.</string>
     <string name="invite_to_space">Ftojeni te %s</string>
     <string name="a11y_beta">Kjo veçori është në fazë beta</string>
@@ -2936,4 +2936,49 @@
     <string name="call_ringing">Po i bihet ziles…</string>
     <string name="spaces">Hapësira</string>
     <string name="learn_more">Mësoni Më Tepër</string>
+    <string name="space_add_space_to_any_space_you_manage">Shtoni një hapësirë te cilado hapësirë që administroni.</string>
+    <string name="space_add_existing_spaces">Shtoni hapësira ekzistuese</string>
+    <string name="space_add_existing_rooms_only">Shtoni dhoma ekzistuese</string>
+    <string name="pick_tings_to_leave">Zgjidhni gjëra që duhen braktisur</string>
+    <string name="leave_specific_ones">Braktisni dhoma dhe hapësira të përcaktuara…</string>
+    <string name="dont_leave_any">Mos braktis ndonjë dhomë dhe hapësirë</string>
+    <string name="you_will_leave_all_in">Do të braktisni krejt dhomat dhe hapësirat te %s.</string>
+    <string name="leave_all_rooms_and_spaces">Braktis krejt dhomat dhe hapësirat</string>
+    <string name="space_leave_prompt_msg_with_name">Jeni i sigurt se doni të dilni nga \'%s\?</string>
+    <string name="discovery_section">Zbulim (%S)</string>
+    <string name="finish_setup">Përfundoje ujdisjen</string>
+    <string name="discovery_invite">Ftoni me email, gjeni kontakte, etj…</string>
+    <string name="finish_setting_up_discovery">Përfundo ujdisjen e zbulimit.</string>
+    <string name="create_space_identity_server_info_none">Aktualisht nuk përdorni ndonjë shërbyes identitetesh. Që të ftoni shokë të ekipit dhe të jeni i zbulueshëm prej tyre, formësoni një të tillë më poshtë.</string>
+    <string name="invite_by_mxid_or_mail">Ftoni me emër përdoruesi ose email</string>
+    <string name="create_spaces_invite_public_header_desc">Sigurohuni se te %s e shoqërisë kanë hyrje personat e duhur. Më vonë mund të ftoni të tjerë.</string>
+    <string name="create_spaces_invite_public_header">Cilët janë shokët tuaj të ekipit\?</string>
+    <string name="command_description_add_to_space">Shtoni te Hapësira e dhënë</string>
+    <string name="create_space_in_progress">Po krijohet hapësirë…</string>
+    <string name="settings_developer_mode_show_info_on_screen_summary">Shfaqni ca hollësira të dobishme, për të ndihmuar në diagnostikimin e aplikacionit</string>
+    <string name="settings_developer_mode_show_info_on_screen_title">Shfaq në ekran të dhëna diagnostikimi</string>
+    <string name="does_not_look_like_valid_email">S’duket si adresë email e vlefshme</string>
+    <string name="open_discovery_settings">Hapni Rregullime Zbulimi</string>
+    <string name="user_directory_search_hint_2">Kërkoni sipas emri , ID-je ose email-i</string>
+    <string name="create_new_space">Krijoni Hapësirë të Re</string>
+    <string name="room_settings_space_access_public_description">Hapësirën mund ta gjejë kushdo dhe hyjë në të</string>
+    <string name="room_settings_space_access_title">Hyrje në hapësirë</string>
+    <string name="room_settings_access_rules_pref_dialog_title">Kush mund të hyjë\?</string>
+    <string name="settings_notification_emails_enable_for_email">Aktivizo njoftime me email për %s</string>
+    <string name="settings_notification_emails_no_emails">Që të merrni email me njoftim, ju lutemi, përshoqërojini llogarisë tuaj Matrix një email</string>
+    <string name="settings_notification_emails_category">Njoftim me email</string>
+    <string name="room_permissions_upgrade_the_space">Të përmirësojë hapësirën</string>
+    <string name="room_permissions_change_space_name">Të ndryshojë emrin e hapësirës</string>
+    <string name="room_permissions_enable_space_encryption">Të aktivizojë fshehtëzimin e hapësirës</string>
+    <string name="room_permissions_change_main_address_for_the_space">Të ndryshojë adresë kryesore për hapësirën</string>
+    <string name="room_permissions_change_space_avatar">Të ndryshojë avatarin e hapësirës</string>
+    <string name="space_permissions_notice_read_only">S’keni leje të përditësoni rolet e domosdoshëm për të ndryshuar anë të ndryshme të kësaj hapësire</string>
+    <string name="space_permissions_notice">Të përzgjedhë rolet e domosdoshme për të ndryshuar anë të ndryshme të kësaj hapësire</string>
+    <string name="space_settings_permissions_subtitle">Të shohë dhe përditësojë role të domosdoshëm për të ndryshuar anë të ndryshme të hapësirës.</string>
+    <string name="space_settings_permissions_title">Leje hapësire</string>
+    <string name="space_participants_unban_prompt_msg">Heqja e dëbimit përdoruesit do t’i lejojë të marrë pjesë sërish në hapësirë.</string>
+    <string name="space_participants_ban_prompt_msg">Dëbimi i përdoruesit do ta përzërë atë nga kjo hapësirë dhe do t’i pengojë atij rihyrjen.</string>
+    <string name="space_participants_kick_prompt_msg">Përzënia e përdoruesit do ta heqë prej kësaj hapësire.
+\n
+\nQë të pengohet pjesëmarrja sërish e tij, duhet ta dëboni.</string>
 </resources>

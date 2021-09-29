@@ -2599,8 +2599,8 @@
     <string name="spaces_beta_welcome_to_spaces">欢迎来到空间！</string>
     <string name="space_add_rooms">添加聊天室</string>
     <string name="space_add_existing_rooms">添加现有聊天室和空间</string>
-    <string name="space_leave_prompt_msg_as_admin">你是此空间的管理员，请确保你在离开前已将管理权限转让给另一位成员。</string>
-    <string name="space_leave_prompt_msg_private">此空间并非公开空间。你将无法在没有邀请的情况下重新加入。</string>
+    <string name="space_leave_prompt_msg_as_admin">你是此空间唯一的管理员。离开就意味着没人能控制它。</string>
+    <string name="space_leave_prompt_msg_private">除非你被重新邀请，否则你将无法重新加入。</string>
     <string name="space_leave_prompt_msg_only_you">你是这唯一的人。如果你离开，包括你在内的所有人都将无法加入此空间。</string>
     <!-- TO BE REMOVED -->
     <string name="space_leave_prompt_msg">你确定你想要离开此空间吗？</string>
@@ -2901,4 +2901,49 @@
     <string name="call_ringing">来电响铃中…</string>
     <string name="spaces">空间</string>
     <string name="learn_more">了解更多</string>
+    <string name="space_add_space_to_any_space_you_manage">将一个空间添加到您管理的任何空间。</string>
+    <string name="space_add_existing_spaces">添加现有空间</string>
+    <string name="space_add_existing_rooms_only">添加现有聊天室</string>
+    <string name="pick_tings_to_leave">选择要离开的项目</string>
+    <string name="leave_specific_ones">离开特定聊天室和空间…</string>
+    <string name="dont_leave_any">不要离开任何聊天室和空间</string>
+    <string name="you_will_leave_all_in">你将离开 %s 中的所有聊天室和空间。</string>
+    <string name="leave_all_rooms_and_spaces">离开所有聊天室和空间</string>
+    <string name="space_leave_prompt_msg_with_name">你确定要离开 %s 吗？</string>
+    <string name="discovery_section">发现 (%s)</string>
+    <string name="finish_setup">完成设置</string>
+    <string name="discovery_invite">通过电子邮件邀请、寻找联系人和更多…</string>
+    <string name="finish_setting_up_discovery">设置“发现”已毕。</string>
+    <string name="create_space_identity_server_info_none">您目前没有使用身份服务器。为了邀请队友并被他们发现，请在下方配置一个这样的服务器。</string>
+    <string name="invite_by_mxid_or_mail">通过用户名或邮件邀请</string>
+    <string name="create_spaces_invite_public_header_desc">确保只有合适的人能访问 %s 空间。稍后你可以邀请更多的人加入。</string>
+    <string name="create_spaces_invite_public_header">谁是你的队友？</string>
+    <string name="command_description_add_to_space">添加至规定的空间</string>
+    <string name="create_space_in_progress">创建空间中…</string>
+    <string name="settings_developer_mode_show_info_on_screen_summary">显示一些有用的信息以帮助调试应用程序</string>
+    <string name="settings_developer_mode_show_info_on_screen_title">在屏幕商显示调试信息</string>
+    <string name="does_not_look_like_valid_email">看起来不像是有效的邮箱地址</string>
+    <string name="open_discovery_settings">打开“发现”设置</string>
+    <string name="user_directory_search_hint_2">按名称、ID或邮箱搜索</string>
+    <string name="create_new_space">创建新空间</string>
+    <string name="room_settings_space_access_public_description">任何人均可找到此空间并加入</string>
+    <string name="room_settings_space_access_title">空间访问</string>
+    <string name="room_settings_access_rules_pref_dialog_title">谁可以访问？</string>
+    <string name="settings_notification_emails_enable_for_email">启用 %s 的电邮通知</string>
+    <string name="settings_notification_emails_no_emails">要接收通知邮件，请将一个电子邮箱关联到你的 Matrix 账户</string>
+    <string name="settings_notification_emails_category">电子邮件通知</string>
+    <string name="room_permissions_upgrade_the_space">升级空间</string>
+    <string name="room_permissions_change_space_name">更改空间名称</string>
+    <string name="room_permissions_enable_space_encryption">启用空间加密</string>
+    <string name="room_permissions_change_main_address_for_the_space">更改空间主地址</string>
+    <string name="room_permissions_change_space_avatar">更改空间头像</string>
+    <string name="space_permissions_notice_read_only">您没有权限更新更改该空间的各个部分所需的角色</string>
+    <string name="space_permissions_notice">选择更改该空间的各个部分所需的角色</string>
+    <string name="space_settings_permissions_subtitle">查看和更新更改空间的各个部分所需的角色。</string>
+    <string name="space_settings_permissions_title">空间权限</string>
+    <string name="space_participants_unban_prompt_msg">解除禁令将允许被封禁的用户再次加入空间。</string>
+    <string name="space_participants_ban_prompt_msg">封禁用户将把他们踢出这个空间，并阻止他们再次加入。</string>
+    <string name="space_participants_kick_prompt_msg">把用户踢出也会从这个空间删除他们。
+\n
+\n为了防止他们再次加入，你应该封禁他们。</string>
 </resources>
