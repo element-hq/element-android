@@ -65,13 +65,8 @@ class MatrixToBottomSheet :
     private val viewModel by fragmentViewModel(MatrixToBottomSheetViewModel::class)
 
     interface InteractionListener {
-        fun navigateToRoom(roomId: String)
-        fun switchToSpace(spaceId: String) {}
-    }
-
-    override fun onDestroyView() {
-        interactionListener = null
-        super.onDestroyView()
+        fun mxToBottomSheetNavigateToRoom(roomId: String)
+        fun mxToBottomSheetSwitchToSpace(spaceId: String)
     }
 
     override fun invalidate() = withState(viewModel) { state ->
@@ -110,12 +105,12 @@ class MatrixToBottomSheet :
         viewModel.observeViewEvents {
             when (it) {
                 is MatrixToViewEvents.NavigateToRoom -> {
-                    interactionListener?.navigateToRoom(it.roomId)
+                    interactionListener?.mxToBottomSheetNavigateToRoom(it.roomId)
                     dismiss()
                 }
                 MatrixToViewEvents.Dismiss -> dismiss()
                 is MatrixToViewEvents.NavigateToSpace -> {
-                    interactionListener?.switchToSpace(it.spaceId)
+                    interactionListener?.mxToBottomSheetSwitchToSpace(it.spaceId)
                     dismiss()
                 }
                 is MatrixToViewEvents.ShowModalError -> {
@@ -129,14 +124,13 @@ class MatrixToBottomSheet :
     }
 
     companion object {
-        fun withLink(matrixToLink: String, listener: InteractionListener?): MatrixToBottomSheet {
+        fun withLink(matrixToLink: String): MatrixToBottomSheet {
             return MatrixToBottomSheet().apply {
                 arguments = Bundle().apply {
                     putParcelable(MvRx.KEY_ARG, MatrixToArgs(
                             matrixToLink = matrixToLink
                     ))
                 }
-                interactionListener = listener
             }
         }
     }
