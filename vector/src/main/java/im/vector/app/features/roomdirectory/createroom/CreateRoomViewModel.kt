@@ -46,18 +46,14 @@ import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
-import org.matrix.android.sdk.api.session.room.alias.RoomAliasError
-import org.matrix.android.sdk.api.session.room.failure.CreateRoomFailure
 import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
 import org.matrix.android.sdk.api.session.room.model.RoomDirectoryVisibility
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
-import org.matrix.android.sdk.api.session.room.model.RoomJoinRulesAllowEntry
 import org.matrix.android.sdk.api.session.room.model.RoomType
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomPreset
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomStateEvent
-import org.matrix.android.sdk.api.session.room.model.create.RestrictedRoomPreset
 import timber.log.Timber
 
 class CreateRoomViewModel @AssistedInject constructor(@Assisted private val initialState: CreateRoomViewState,
@@ -203,16 +199,11 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted private val init
     private fun setVisibility(action: CreateRoomAction.SetVisibility) = setState {
         when (action.rule) {
             RoomJoinRules.PUBLIC     -> {
-                val userHSDomain = TchapUtils.getHomeServerDisplayNameFromMXIdentifier(session.myUserId)
-                val isAgentServerDomain = userHSDomain.equals(AGENT_SERVER_DOMAIN, ignoreCase = true)
                 copy(
                         roomJoinRules = RoomJoinRules.PUBLIC,
                         // Reset any error in the form about alias
                         asyncCreateRoomRequest = Uninitialized,
-                        isEncrypted = false,
-                        // Public rooms are not federated by default except for agent server domain
-                        disableFederation = !isAgentServerDomain,
-                        isFederationSettingAvailable = !isAgentServerDomain
+                        isEncrypted = false
                 )
             }
             RoomJoinRules.RESTRICTED -> {
@@ -230,22 +221,27 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted private val init
                 // default to invite
                 copy(
                         roomJoinRules = RoomJoinRules.INVITE,
-                        isEncrypted = adminE2EByDefault,
-                        // Private rooms are all federated
-                        disableFederation = false,
-                        isFederationSettingAvailable = false
+                        isEncrypted = adminE2EByDefault
                 )
             }
         }
     }
 
     private fun setTchapRoomType(action: CreateRoomAction.SetTchapRoomType) = setState {
-        val roomAccessRules = if (action.roomType == TchapRoomType.EXTERNAL) RoomAccessRules.UNRESTRICTED else RoomAccessRules.RESTRICTED
-        val roomJoinRules = if (action.roomType == TchapRoomType.FORUM) RoomJoinRules.PUBLIC else RoomJoinRules.INVITE
-        copy(
-                roomAccessRules = roomAccessRules,
-                roomJoinRules = roomJoinRules
-        )
+        if (action.roomType == TchapRoomType.FORUM) {
+            val userHSDomain = TchapUtils.getHomeServerDisplayNameFromMXIdentifier(session.myUserId)
+            val isAgentServerDomain = userHSDomain.equals(AGENT_SERVER_DOMAIN, ignoreCase = true)
+            copy(
+                    roomType = action.roomType,
+                    disableFederation = !isAgentServerDomain,
+                    isFederationSettingAvailable = !isAgentServerDomain
+            )
+        } else {
+            copy(
+                    roomType = action.roomType,
+                    disableFederation = false
+            )
+        }
     }
 
     private fun setRoomAliasLocalPart(action: CreateRoomAction.SetRoomAliasLocalPart) {
@@ -262,14 +258,6 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted private val init
 
     private fun doCreateRoom() = withState { state ->
         if (state.asyncCreateRoomRequest is Loading || state.asyncCreateRoomRequest is Success) {
-            return@withState
-        }
-
-        if (state.roomJoinRules == RoomJoinRules.PUBLIC && state.aliasLocalPart.isNullOrBlank()) {
-            // we require an alias for public rooms
-            setState {
-                copy(asyncCreateRoomRequest = Fail(CreateRoomFailure.AliasError(RoomAliasError.AliasIsBlank)))
-            }
             return@withState
         }
 
@@ -294,48 +282,36 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted private val init
                         )
                     }
 
-                    when (state.roomJoinRules) {
-                        RoomJoinRules.PUBLIC     -> {
-                            // Directory visibility
-                            visibility = RoomDirectoryVisibility.PUBLIC
-                            // Preset
-                            preset = CreateRoomPreset.PRESET_PUBLIC_CHAT
-                            // In case of a public room, the room alias is mandatory.
-                            // That's why, we deduce the room alias from the room name.
-                            roomAliasName = TchapUtils.createRoomAliasName(state.roomName)
-                            historyVisibility = RoomHistoryVisibility.WORLD_READABLE
-                        }
-                        RoomJoinRules.RESTRICTED -> {
-                            state.parentSpaceId?.let {
-                                featurePreset = RestrictedRoomPreset(
-                                        session.getHomeServerCapabilities(),
-                                        listOf(RoomJoinRulesAllowEntry.restrictedToRoom(state.parentSpaceId))
-                                )
-                            }
-                        }
-//                        RoomJoinRules.KNOCK      ->
-//                        RoomJoinRules.PRIVATE    ->
-//                        RoomJoinRules.INVITE
-                        else                     -> {
-                            // by default create invite only
-                            // Directory visibility
-                            visibility = RoomDirectoryVisibility.PRIVATE
-                            // Preset
-                            preset = CreateRoomPreset.PRESET_PRIVATE_CHAT
-                            // Hide the encrypted messages sent before the member is invited.
-                            historyVisibility = RoomHistoryVisibility.INVITED
-                        }
-                    }.exhaustive
-                    // Disabling federation
-                    disableFederation = state.disableFederation
-
-                    // Encryption
-                    if (state.isEncrypted) {
+                    if (state.roomType == TchapRoomType.FORUM) {
+                        // Directory visibility
+                        visibility = RoomDirectoryVisibility.PUBLIC
+                        // Preset
+                        preset = CreateRoomPreset.PRESET_PUBLIC_CHAT
+                        // In case of a public room, the room alias is mandatory.
+                        // That's why, we deduce the room alias from the room name.
+                        roomAliasName = TchapUtils.createRoomAliasName(state.roomName)
+                        historyVisibility = RoomHistoryVisibility.WORLD_READABLE
+                    } else {
+                        // Directory visibility
+                        visibility = RoomDirectoryVisibility.PRIVATE
+                        // Preset
+                        preset = CreateRoomPreset.PRESET_PRIVATE_CHAT
+                        // Hide the encrypted messages sent before the member is invited.
+                        historyVisibility = RoomHistoryVisibility.INVITED
+                        // Encryption
                         enableEncryption()
                     }
 
-                    // Room access rule
-                    setRoomAccessRulesInInitialStates(this, state.roomAccessRules)
+                    if (state.roomType == TchapRoomType.EXTERNAL) {
+                        // Room access rule
+                        setRoomAccessRulesInInitialStates(this, RoomAccessRules.UNRESTRICTED)
+                    } else {
+                        // Room access rule
+                        setRoomAccessRulesInInitialStates(this, RoomAccessRules.RESTRICTED)
+                    }
+
+                    // Disabling federation
+                    disableFederation = state.disableFederation
                 }
 
         // TODO: Should this be non-cancellable?
