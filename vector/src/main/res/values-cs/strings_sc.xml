@@ -112,4 +112,9 @@
     <string name="toast_unifiedpush_one_push_distributor">Registrovaný push distributor %1$s</string>
     <string name="settings_force_allow_background_sync">Povolit synchronizaci na pozadí včetně funkce push</string>
     <string name="toast_unifiedpush_no_push_distributor">Nebyl nalezen žádný push distributor!</string>
+    <string name="settings_unread_counter">Počítadlo nepřečtených</string>
+    <string name="settings_unimportant_counter_badge_v2">Počítat ztlumené zprávy</string>
+    <string name="settings_unimportant_counter_badge_summary_v2">Zobrazovat počet ztlumených zpráv v přehledu chatu</string>
+    <string name="settings_aggregate_unread_counts">Počítat chaty namísto zpráv</string>
+    <string name="settings_aggregate_unread_counts_summary">Zda počítat nepřečtené chaty místo jednotlivých zpráv v kategoriích prostorů a místností</string>
 </resources>
