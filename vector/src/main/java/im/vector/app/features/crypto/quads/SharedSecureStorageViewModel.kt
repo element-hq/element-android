@@ -76,7 +76,6 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
     }
 
     init {
-
         setState {
             copy(userId = session.myUserId)
         }
@@ -167,10 +166,14 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
         if (state.checkingSSSSAction is Loading) return@withState // ignore
         when (state.step) {
             SharedSecureStorageViewState.Step.EnterKey -> {
-                setState {
-                    copy(
-                            step = SharedSecureStorageViewState.Step.EnterPassphrase
-                    )
+                if (state.hasPassphrase) {
+                    setState {
+                        copy(
+                                step = SharedSecureStorageViewState.Step.EnterPassphrase
+                        )
+                    }
+                } else {
+                    _viewEvents.post(SharedSecureStorageViewEvent.Dismiss)
                 }
             }
             SharedSecureStorageViewState.Step.ResetAll -> {

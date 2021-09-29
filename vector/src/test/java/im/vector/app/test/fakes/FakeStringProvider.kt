@@ -16,13 +16,17 @@
 
 package im.vector.app.test.fakes
 
+import im.vector.app.core.resources.StringProvider
+import io.mockk.every
 import io.mockk.mockk
-import org.matrix.android.sdk.api.session.Session
 
-class FakeSession(
-        val fakeCryptoService: FakeCryptoService = FakeCryptoService(),
-        val fakeSharedSecretStorageService: FakeSharedSecretStorageService = FakeSharedSecretStorageService()
-) : Session by mockk(relaxed = true) {
-    override fun cryptoService() = fakeCryptoService
-    override val sharedSecretStorageService = fakeSharedSecretStorageService
+class FakeStringProvider {
+
+    val instance = mockk<StringProvider>()
+
+    init {
+        every { instance.getString(any()) } answers {
+            "test-${args[0]}"
+        }
+    }
 }

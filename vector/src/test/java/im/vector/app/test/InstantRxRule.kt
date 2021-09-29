@@ -14,15 +14,19 @@
  * limitations under the License.
  */
 
-package im.vector.app.test.fakes
+package im.vector.app.test
 
-import io.mockk.mockk
-import org.matrix.android.sdk.api.session.Session
+import io.reactivex.android.plugins.RxAndroidPlugins
+import io.reactivex.plugins.RxJavaPlugins
+import io.reactivex.schedulers.Schedulers
+import org.junit.rules.TestRule
+import org.junit.runner.Description
+import org.junit.runners.model.Statement
 
-class FakeSession(
-        val fakeCryptoService: FakeCryptoService = FakeCryptoService(),
-        val fakeSharedSecretStorageService: FakeSharedSecretStorageService = FakeSharedSecretStorageService()
-) : Session by mockk(relaxed = true) {
-    override fun cryptoService() = fakeCryptoService
-    override val sharedSecretStorageService = fakeSharedSecretStorageService
+class InstantRxRule : TestRule {
+    override fun apply(base: Statement, description: Description?): Statement {
+        RxJavaPlugins.setInitNewThreadSchedulerHandler { Schedulers.trampoline() }
+        RxAndroidPlugins.setInitMainThreadSchedulerHandler { Schedulers.trampoline() }
+        return base
+    }
 }
