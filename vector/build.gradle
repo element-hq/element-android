@@ -412,7 +412,7 @@ dependencies {
     implementation 'com.nulab-inc:zxcvbn:1.5.2'
 
     // To convert voice message on old platforms
-    implementation 'com.arthenica:ffmpeg-kit-audio:4.5.LTS'
+    implementation 'com.arthenica:ffmpeg-kit-audio:4.5'
 
     // Alerter
     implementation 'com.tapadoo.android:alerter:7.0.1'
