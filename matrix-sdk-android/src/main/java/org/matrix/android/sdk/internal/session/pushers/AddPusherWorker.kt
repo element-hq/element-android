@@ -33,8 +33,8 @@ import org.matrix.android.sdk.internal.worker.SessionSafeCoroutineWorker
 import org.matrix.android.sdk.internal.worker.SessionWorkerParams
 import javax.inject.Inject
 
-internal class AddHttpPusherWorker(context: Context, params: WorkerParameters)
-    : SessionSafeCoroutineWorker<AddHttpPusherWorker.Params>(context, params, Params::class.java) {
+internal class AddPusherWorker(context: Context, params: WorkerParameters)
+    : SessionSafeCoroutineWorker<AddPusherWorker.Params>(context, params, Params::class.java) {
 
     @JsonClass(generateAdapter = true)
     internal data class Params(

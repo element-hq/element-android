@@ -134,7 +134,15 @@ class VectorCallViewModel @AssistedInject constructor(
         } ?: VectorCallViewState.TransfereeState.UnknownTransferee
     }
 
-    private val currentCallListener = object : WebRtcCallManager.CurrentCallListener {
+    private val callManagerListener = object : WebRtcCallManager.Listener {
+
+        override fun onCallEnded(callId: String) {
+            withState { state ->
+                if (state.otherKnownCallInfo?.callId == callId) {
+                    setState { copy(otherKnownCallInfo = null) }
+                }
+            }
+        }
 
         override fun onCurrentCallChange(call: WebRtcCall?) {
             if (call != null) {
@@ -159,15 +167,19 @@ class VectorCallViewModel @AssistedInject constructor(
     }
 
     private fun updateOtherKnownCall(currentCall: WebRtcCall) {
-        val otherCall = callManager.getCalls().firstOrNull {
-            it.callId != currentCall.callId && it.mxCall.state is CallState.Connected
-        }
+        val otherCall = getOtherKnownCall(currentCall)
         setState {
             if (otherCall == null) {
                 copy(otherKnownCallInfo = null)
             } else {
                 copy(otherKnownCallInfo = otherCall.extractCallInfo())
             }
+        }
+    }
+
+    private fun getOtherKnownCall(currentCall: WebRtcCall): WebRtcCall? {
+        return callManager.getCalls().firstOrNull {
+            it.callId != currentCall.callId && it.mxCall.state is CallState.Connected
         }
     }
 
@@ -184,7 +196,7 @@ class VectorCallViewModel @AssistedInject constructor(
             }
         } else {
             call = webRtcCall
-            callManager.addCurrentCallListener(currentCallListener)
+            callManager.addListener(callManagerListener)
             webRtcCall.addListener(callListener)
             val currentSoundDevice = callManager.audioManager.selectedDevice
             if (currentSoundDevice == CallAudioManager.Device.Phone) {
@@ -230,7 +242,7 @@ class VectorCallViewModel @AssistedInject constructor(
     }
 
     override fun onCleared() {
-        callManager.removeCurrentCallListener(currentCallListener)
+        callManager.removeListener(callManagerListener)
         call?.removeListener(callListener)
         call = null
         proximityManager.stop()
@@ -310,10 +322,10 @@ class VectorCallViewModel @AssistedInject constructor(
                         VectorCallViewEvents.ShowCallTransferScreen
                 )
             }
-            VectorCallViewActions.TransferCall  -> {
+            VectorCallViewActions.TransferCall         -> {
                 handleCallTransfer()
             }
-            is VectorCallViewActions.SwitchCall -> {
+            is VectorCallViewActions.SwitchCall        -> {
                 setState { VectorCallViewState(action.callArgs) }
                 setupCallWithCurrentState()
             }

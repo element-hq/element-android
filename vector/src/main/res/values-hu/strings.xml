@@ -2490,6 +2490,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="space_leave_prompt_msg_as_admin">Most te vagy a tér adminisztrátora, bizonyosodj meg arról, hogy kineveztél mást adminisztrátornak mielőtt elhagyod.</string>
     <string name="space_leave_prompt_msg_private">Ez a tér nem nyilvános. Kilépés után csak újabb meghívóval lehet újra belépni.</string>
     <string name="space_leave_prompt_msg_only_you">Csak te van itt. Ha kilépsz, akkor a jövőben senki nem tud majd ide belépni, beleértve téged is.</string>
+    <!-- TO BE REMOVED -->
     <string name="space_leave_prompt_msg">Biztos el akarod hagyni a teret\?</string>
     <string name="leave_space">Tér elhagyása</string>
     <string name="space_add_child_title">Szobák hozzáadása</string>

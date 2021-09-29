@@ -39,6 +39,7 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.RoomSortOrder
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
+import org.matrix.android.sdk.api.session.room.spaceSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.summary.RoomAggregateNotificationCount
 import org.matrix.android.sdk.rx.asObservable
 import java.util.concurrent.TimeUnit
@@ -148,7 +149,19 @@ class UnreadMessagesSharedViewModel @AssistedInject constructor(@Assisted initia
                                         roomSummaryQueryParams { this.memberships = listOf(Membership.INVITE) }
                                 ).size
                             }
+
                             val spacesShowAllRoomsInHome = vectorPreferences.prefSpacesShowAllRoomInHome()
+
+                            val spaceInviteCount = if (autoAcceptInvites.hideInvites) {
+                                0
+                            } else {
+                                session.getRoomSummaries(
+                                        spaceSummaryQueryParams {
+                                            this.memberships = listOf(Membership.INVITE)
+                                        }
+                                ).size
+                            }
+
                             val totalCount = session.getNotificationCountForRooms(
                                     roomSummaryQueryParams {
                                         this.memberships = listOf(Membership.JOIN)
@@ -181,8 +194,8 @@ class UnreadMessagesSharedViewModel @AssistedInject constructor(@Assisted initia
                             }
 
                             val topLevelCounts = RoomAggregateNotificationCount(
-                                    topLevelTotalCount.notificationCount + inviteCount,
-                                    topLevelTotalCount.highlightCount + inviteCount,
+                                    topLevelTotalCount.notificationCount + inviteCount + spaceInviteCount,
+                                    topLevelTotalCount.highlightCount + inviteCount + spaceInviteCount,
                                     topLevelTotalCount.unreadCount,
                                     topLevelTotalCount.markedUnreadCount
                             )
@@ -195,22 +208,22 @@ class UnreadMessagesSharedViewModel @AssistedInject constructor(@Assisted initia
                                         // filter out current selection
                                         it.roomId != selectedSpace
                                     }
+
                             CountInfo(
                                     homeCount = counts,
                                     otherCount = RoomAggregateNotificationCount(
-                                            rootCounts.fold(0, { acc, rs ->
-                                                acc + rs.notificationCount
-                                            }) + (counts.notificationCount.takeIf { selectedSpace != null } ?: 0),
-                                            rootCounts.fold(0, { acc, rs ->
-                                                acc + rs.highlightCount
-                                            }) + (counts.highlightCount.takeIf { selectedSpace != null } ?: 0),
+                                            notificationCount = rootCounts.fold(0, { acc, rs -> acc + rs.notificationCount })
+                                                    + (counts.notificationCount.takeIf { selectedSpace != null } ?: 0)
+                                                    + spaceInviteCount,
+                                            highlightCount = rootCounts.fold(0, { acc, rs -> acc + rs.highlightCount })
+                                                    + (counts.highlightCount.takeIf { selectedSpace != null } ?: 0)
+                                                    + spaceInviteCount,
 
-                                            rootCounts.fold(0, { acc, rs ->
-                                                acc + (if (rs.scIsUnread(scSdkPreferences)) 1 else 0)
-                                            }) + (counts.unreadCount.takeIf { selectedSpace != null } ?: 0),
-                                            rootCounts.fold(0, { acc, rs ->
-                                                acc + (if (rs.markedUnread) 1 else 0)
-                                            }) + (counts.markedUnreadCount.takeIf { selectedSpace != null } ?: 0)
+                                            unreadCount = rootCounts.fold(0, { acc, rs -> acc + (if (rs.scIsUnread(scSdkPreferences)) 1 else 0) })
+                                                    + (counts.unreadCount.takeIf { selectedSpace != null } ?: 0)
+                                                    + spaceInviteCount,
+                                            markedUnreadCount = rootCounts.fold(0, { acc, rs -> acc + (if (rs.markedUnread) 1 else 0) })
+                                                    + (counts.markedUnreadCount.takeIf { selectedSpace != null } ?: 0)
                                     )
                             )
                              */

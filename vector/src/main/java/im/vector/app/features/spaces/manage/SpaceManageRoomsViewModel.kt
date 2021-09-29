@@ -33,6 +33,7 @@ import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.session.coroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.Session
 
 class SpaceManageRoomsViewModel @AssistedInject constructor(
@@ -103,6 +104,10 @@ class SpaceManageRoomsViewModel @AssistedInject constructor(
                     session.spaceService().getSpace(state.spaceId)?.removeChildren(it)
                 } catch (failure: Throwable) {
                     errorList.add(failure)
+                }
+                tryOrNull {
+                    // also remove space parent if any? and if I can
+                    session.spaceService().removeSpaceParent(it, state.spaceId)
                 }
             }
             if (errorList.isEmpty()) {

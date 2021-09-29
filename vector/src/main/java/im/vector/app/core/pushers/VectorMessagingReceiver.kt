@@ -40,12 +40,14 @@ import im.vector.app.features.notifications.NotifiableEventResolver
 import im.vector.app.features.notifications.NotificationDrawerManager
 import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.features.settings.BackgroundSyncMode
+import im.vector.app.features.settings.VectorDataStore
 import im.vector.app.features.settings.VectorPreferences
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.matrix.android.sdk.api.extensions.tryOrNull
+import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.session.Session
 import org.unifiedpush.android.connector.MessagingReceiver
 import org.unifiedpush.android.connector.MessagingReceiverHandler
@@ -69,6 +71,8 @@ data class Counts(
         val unread: Int = 0
         )
 
+private val loggerTag = LoggerTag("Push", LoggerTag.SYNC)
+
 /**
  * UnifiedPush handler.
  */
@@ -79,6 +83,7 @@ val upHandler = object: MessagingReceiverHandler {
     private lateinit var pusherManager: PushersManager
     private lateinit var activeSessionHolder: ActiveSessionHolder
     private lateinit var vectorPreferences: VectorPreferences
+    private lateinit var vectorDataStore: VectorDataStore
     private lateinit var wifiDetector: WifiDetector
 
     private val coroutineScope = CoroutineScope(SupervisorJob())
@@ -95,6 +100,7 @@ val upHandler = object: MessagingReceiverHandler {
             pusherManager = pusherManager()
             activeSessionHolder = activeSessionHolder()
             vectorPreferences = vectorPreferences()
+            vectorDataStore = vectorDataStore()
             wifiDetector = wifiDetector()
         }
     }
@@ -108,9 +114,14 @@ val upHandler = object: MessagingReceiverHandler {
     override fun onMessage(context: Context?, message: String, instance: String) {
         initVar(context!!)
         if (BuildConfig.LOW_PRIVACY_LOG_ENABLE) {
-            Timber.d("## onMessageReceived() %s", message)
+            Timber.tag(loggerTag.value).d("## onMessageReceived() %s", message)
+        } else {
+            Timber.tag(loggerTag.value).d("## onMessageReceived()")
         }
-        Timber.d("## onMessage() received")
+
+        runBlocking {
+            vectorDataStore.incrementPushCounter()
+        }
 
         val moshi: Moshi = Moshi.Builder()
                 .add(KotlinJsonAdapterFactory())
@@ -127,6 +138,7 @@ val upHandler = object: MessagingReceiverHandler {
             notification.unread = notification.counts.unread
         }
 
+
         // Diagnostic Push
         if (notification.eventId == PushersManager.TEST_EVENT_ID) {
             val intent = Intent(NotificationUtils.PUSH_ACTION)
@@ -135,14 +147,14 @@ val upHandler = object: MessagingReceiverHandler {
         }
 
         if (!vectorPreferences.areNotificationEnabledForDevice()) {
-            Timber.i("Notification are disabled for this device")
+            Timber.tag(loggerTag.value).i("Notification are disabled for this device")
             return
         }
 
         mUIHandler.post {
             if (ProcessLifecycleOwner.get().lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
                 // we are in foreground, let the sync do the things?
-                Timber.d("PUSH received in a foreground state, ignore")
+                Timber.tag(loggerTag.value).d("PUSH received in a foreground state, ignore")
             } else {
                 onMessageReceivedInternal(context, notification)
             }
@@ -157,7 +169,7 @@ val upHandler = object: MessagingReceiverHandler {
      */
     override fun onNewEndpoint(context: Context?, endpoint: String, instance: String) {
         initVar(context!!)
-        Timber.i("onNewEndpoint: adding $endpoint")
+        Timber.tag(loggerTag.value).i("onNewEndpoint: adding $endpoint")
         if (vectorPreferences.areNotificationEnabledForDevice() && activeSessionHolder.hasActiveSession()) {
             val gateway = UPHelper.customOrDefaultGateway(context, endpoint)
             if (UPHelper.getUpEndpoint(context) != endpoint
@@ -166,7 +178,7 @@ val upHandler = object: MessagingReceiverHandler {
                 UPHelper.storeUpEndpoint(context, endpoint)
                 pusherManager.registerPusher(context, endpoint, gateway)
             } else {
-                Timber.i("onNewEndpoint: skipped")
+                Timber.tag(loggerTag.value).i("onNewEndpoint: skipped")
             }
         }
         if (!UPHelper.allowBackgroundSync(context)) {
@@ -184,7 +196,7 @@ val upHandler = object: MessagingReceiverHandler {
     }
 
     override fun onUnregistered(context: Context?, instance: String) {
-        Timber.d("Unifiedpush: Unregistered")
+        Timber.tag(loggerTag.value).d("Unifiedpush: Unregistered")
         initVar(context!!)
         val mode = BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_BATTERY
         vectorPreferences.setFdroidSyncBackgroundMode(mode)
@@ -192,7 +204,7 @@ val upHandler = object: MessagingReceiverHandler {
             try {
                 pusherManager.unregisterPusher(context, UPHelper.getUpEndpoint(context)!!)
             } catch (e: Exception) {
-                Timber.d("Probably unregistering a non existant pusher")
+                Timber.tag(loggerTag.value).d("Probably unregistering a non existant pusher")
             }
         }
     }
@@ -205,7 +217,9 @@ val upHandler = object: MessagingReceiverHandler {
     private fun onMessageReceivedInternal(context: Context, notification: Notification) {
         try {
             if (BuildConfig.LOW_PRIVACY_LOG_ENABLE) {
-                Timber.d("## onMessageReceivedInternal() : $notification")
+                Timber.tag(loggerTag.value).d("## onMessageReceivedInternal() : $notification")
+            } else {
+                Timber.tag(loggerTag.value).d("## onMessageReceivedInternal()")
             }
 
             // update the badge counter
@@ -214,21 +228,21 @@ val upHandler = object: MessagingReceiverHandler {
             val session = activeSessionHolder.getSafeActiveSession()
 
             if (session == null) {
-                Timber.w("## Can't sync from push, no current session")
+                Timber.tag(loggerTag.value).w("## Can't sync from push, no current session")
             } else {
                 if (isEventAlreadyKnown(notification.eventId, notification.roomId)) {
-                    Timber.d("Ignoring push, event already known")
+                    Timber.tag(loggerTag.value).d("Ignoring push, event already known")
                 } else {
                     // Try to get the Event content faster
-                    Timber.d("Requesting event in fast lane")
+                    Timber.tag(loggerTag.value).d("Requesting event in fast lane")
                     getEventFastLane(session, notification.roomId, notification.eventId)
 
-                    Timber.d("Requesting background sync")
+                    Timber.tag(loggerTag.value).d("Requesting background sync")
                     session.requireBackgroundSync()
                 }
             }
         } catch (e: Exception) {
-            Timber.e(e, "## onMessageReceivedInternal() failed")
+            Timber.tag(loggerTag.value).e(e, "## onMessageReceivedInternal() failed")
         }
     }
 
@@ -242,18 +256,18 @@ val upHandler = object: MessagingReceiverHandler {
         }
 
         if (wifiDetector.isConnectedToWifi().not()) {
-            Timber.d("No WiFi network, do not get Event")
+            Timber.tag(loggerTag.value).d("No WiFi network, do not get Event")
             return
         }
 
         coroutineScope.launch {
-            Timber.d("Fast lane: start request")
+            Timber.tag(loggerTag.value).d("Fast lane: start request")
             val event = tryOrNull { session.getEvent(roomId, eventId) } ?: return@launch
 
             val resolvedEvent = notifiableEventResolver.resolveInMemoryEvent(session, event)
 
             resolvedEvent
-                    ?.also { Timber.d("Fast lane: notify drawer") }
+                    ?.also { Timber.tag(loggerTag.value).d("Fast lane: notify drawer") }
                     ?.let {
                         it.isPushGatewayEvent = true
                         notificationDrawerManager.onNotifiableEventReceived(it)
@@ -271,7 +285,7 @@ val upHandler = object: MessagingReceiverHandler {
                 val room = session.getRoom(roomId) ?: return false
                 return room.getTimeLineEvent(eventId) != null
             } catch (e: Exception) {
-                Timber.e(e, "## isEventAlreadyKnown() : failed to check if the event was already defined")
+                Timber.tag(loggerTag.value).e(e, "## isEventAlreadyKnown() : failed to check if the event was already defined")
             }
         }
         return false

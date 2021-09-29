@@ -15,8 +15,7 @@
         android:layout_marginTop="8dp"
         android:text="@string/spaces_header"
         android:textColor="?vctr_content_primary"
-        android:textStyle="bold"
-        app:drawableEndCompat="@drawable/ic_beta_pill" />
+        android:textStyle="bold" />
 
     <TextView
         style="@style/Widget.Vector.TextView.Body"

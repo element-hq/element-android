@@ -84,9 +84,10 @@ class WebRtcCallManager @Inject constructor(
     private val sessionScope: CoroutineScope?
         get() = currentSession?.coroutineScope
 
-    interface CurrentCallListener {
-        fun onCurrentCallChange(call: WebRtcCall?) {}
-        fun onAudioDevicesChange() {}
+    interface Listener {
+        fun onCallEnded(callId: String) = Unit
+        fun onCurrentCallChange(call: WebRtcCall?) = Unit
+        fun onAudioDevicesChange() = Unit
     }
 
     val supportedPSTNProtocol: String?
@@ -106,13 +107,13 @@ class WebRtcCallManager @Inject constructor(
         protocolsChecker?.removeListener(listener)
     }
 
-    private val currentCallsListeners = CopyOnWriteArrayList<CurrentCallListener>()
+    private val currentCallsListeners = CopyOnWriteArrayList<Listener>()
 
-    fun addCurrentCallListener(listener: CurrentCallListener) {
+    fun addListener(listener: Listener) {
         currentCallsListeners.add(listener)
     }
 
-    fun removeCurrentCallListener(listener: CurrentCallListener) {
+    fun removeListener(listener: Listener) {
         currentCallsListeners.remove(listener)
     }
 
@@ -250,9 +251,12 @@ class WebRtcCallManager @Inject constructor(
         callsByRoomId[webRtcCall.signalingRoomId]?.remove(webRtcCall)
         callsByRoomId[webRtcCall.nativeRoomId]?.remove(webRtcCall)
         transferees.remove(callId)
-        if (getCurrentCall()?.callId == callId) {
+        if (currentCall.get()?.callId == callId) {
             val otherCall = getCalls().lastOrNull()
             currentCall.setAndNotify(otherCall)
+        }
+        tryOrNull {
+            currentCallsListeners.forEach { it.onCallEnded(callId) }
         }
         // There is no active calls
         if (getCurrentCall() == null) {
@@ -424,7 +428,11 @@ class WebRtcCallManager @Inject constructor(
 
     override fun onCallManagedByOtherSession(callId: String) {
         Timber.tag(loggerTag.value).v("onCallManagedByOtherSession: $callId")
-        onCallEnded(callId, EndCallReason.ANSWERED_ELSEWHERE, false)
+        val call = callsByCallId[callId]
+                ?: return Unit.also {
+                    Timber.tag(loggerTag.value).w("onCallManagedByOtherSession for non active call? $callId")
+                }
+        call.endCall(EndCallReason.ANSWERED_ELSEWHERE, sendSignaling = false)
     }
 
     override fun onCallAssertedIdentityReceived(callAssertedIdentityContent: CallAssertedIdentityContent) {

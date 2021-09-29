@@ -41,7 +41,7 @@ class SharedKnownCallsViewModel @Inject constructor(
         }
     }
 
-    private val currentCallListener = object : WebRtcCallManager.CurrentCallListener {
+    private val callManagerListener = object : WebRtcCallManager.Listener {
         override fun onCurrentCallChange(call: WebRtcCall?) {
             val knownCalls = callManager.getCalls()
             liveKnownCalls.postValue(knownCalls)
@@ -50,12 +50,17 @@ class SharedKnownCallsViewModel @Inject constructor(
                 it.addListener(callListener)
             }
         }
+
+        override fun onCallEnded(callId: String) {
+            val knownCalls = callManager.getCalls()
+            liveKnownCalls.postValue(knownCalls)
+        }
     }
 
     init {
         val knownCalls = callManager.getCalls()
         liveKnownCalls.postValue(knownCalls)
-        callManager.addCurrentCallListener(currentCallListener)
+        callManager.addListener(callManagerListener)
         knownCalls.forEach {
             it.addListener(callListener)
         }
@@ -65,7 +70,7 @@ class SharedKnownCallsViewModel @Inject constructor(
         callManager.getCalls().forEach {
             it.removeListener(callListener)
         }
-        callManager.removeCurrentCallListener(currentCallListener)
+        callManager.removeListener(callManagerListener)
         super.onCleared()
     }
 }

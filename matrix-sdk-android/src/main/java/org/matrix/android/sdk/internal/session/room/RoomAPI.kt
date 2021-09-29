@@ -19,6 +19,7 @@ package org.matrix.android.sdk.internal.session.room
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.model.Membership
+import org.matrix.android.sdk.api.session.room.model.RoomStrippedState
 import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoomsParams
 import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoomsResponse
 import org.matrix.android.sdk.api.util.JsonDict
@@ -254,7 +255,7 @@ internal interface RoomAPI {
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "join/{roomIdOrAlias}")
     suspend fun join(@Path("roomIdOrAlias") roomIdOrAlias: String,
                      @Query("server_name") viaServers: List<String>,
-                     @Body params:  JsonDict): JoinRoomResponse
+                     @Body params: JsonDict): JoinRoomResponse
 
     /**
      * Leave the given room.
@@ -381,4 +382,14 @@ internal interface RoomAPI {
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/upgrade")
     suspend fun upgradeRoom(@Path("roomId") roomId: String,
                             @Body body: RoomUpgradeBody): RoomUpgradeResponse
+
+    /**
+     * The API returns the summary of the specified room, if the room could be found and the client should be able to view
+     * its contents according to the join_rules, history visibility, space membership and similar rules outlined in MSC3173
+     * as well as if the user is already a member of that room.
+     * https://github.com/deepbluev7/matrix-doc/blob/room-summaries/proposals/3266-room-summary.md
+     */
+    @GET(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "im.nheko.summary/rooms/{roomIdOrAlias}/summary")
+    suspend fun getRoomSummary(@Path("roomIdOrAlias") roomidOrAlias: String,
+                               @Query("via") viaServers: List<String>?): RoomStrippedState
 }

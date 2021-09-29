@@ -29,6 +29,7 @@ import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.badge.BadgeDrawable
+import im.vector.app.AppStateHandler
 import im.vector.app.R
 import im.vector.app.RoomGroupingMethod
 import im.vector.app.core.extensions.commitTransaction
@@ -70,7 +71,8 @@ class HomeDetailFragment @Inject constructor(
         private val colorProvider: ColorProvider,
         private val alertManager: PopupAlertManager,
         private val callManager: WebRtcCallManager,
-        private val vectorPreferences: VectorPreferences
+        private val vectorPreferences: VectorPreferences,
+        private val appStateHandler: AppStateHandler
 ) : VectorBaseFragment<FragmentHomeDetailBinding>(),
         KeysBackupBanner.Delegate,
         CurrentCallsView.Callback,
@@ -218,6 +220,18 @@ class HomeDetailFragment @Inject constructor(
         //updateTabVisibilitySafely(R.id.bottom_action_notification, vectorPreferences.labAddNotificationTab())
         checkNotificationTabStatus()
         callManager.checkForProtocolsSupportIfNeeded()
+
+        // Current space/group is not live so at least refresh toolbar on resume
+        appStateHandler.getCurrentRoomGroupingMethod()?.let { roomGroupingMethod ->
+            when (roomGroupingMethod) {
+                is RoomGroupingMethod.ByLegacyGroup -> {
+                    onGroupChange(roomGroupingMethod.groupSummary)
+                }
+                is RoomGroupingMethod.BySpace       -> {
+                    onSpaceChange(roomGroupingMethod.spaceSummary)
+                }
+            }
+        }
     }
 
     private fun checkNotificationTabStatus(enableDialPad: Boolean? = null) {
@@ -503,7 +517,11 @@ class HomeDetailFragment @Inject constructor(
         views.bottomNavigationView.getOrCreateBadge(R.id.bottom_action_rooms).render(it.notificationCountRooms, it.notificationHighlightRooms)
         views.bottomNavigationView.getOrCreateBadge(R.id.bottom_action_notification).render(it.notificationCountCatchup, it.notificationHighlightCatchup)
         views.bottomNavigationView.getOrCreateBadge(R.id.bottom_action_all).render(it.notificationCountCatchup, it.notificationHighlightCatchup)
-        views.syncStateView.render(it.syncState)
+        views.syncStateView.render(
+                it.syncState,
+                it.incrementalSyncStatus,
+                it.pushCounter,
+                vectorPreferences.developerShowDebugInfo())
 
         hasUnreadRooms = it.hasUnreadMessages
     }

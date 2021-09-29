@@ -19,14 +19,11 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-parcelize'
 
 android {
-    compileSdkVersion 30
+    compileSdk versions.compileSdk
 
     defaultConfig {
-        minSdkVersion 19
-        targetSdkVersion 30
-        versionCode 1
-        versionName "1.0"
-
+        minSdk versions.minSdk
+        targetSdk versions.targetSdk
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
     }
@@ -41,11 +38,11 @@ android {
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.appcompat:appcompat:1.3.1'
-    implementation "androidx.fragment:fragment-ktx:1.3.6"
-    implementation 'androidx.exifinterface:exifinterface:1.3.3'
+    implementation libs.jetbrains.kotlinStdlibJdk7
+    implementation libs.androidx.appCompat
+    implementation libs.androidx.fragmentKtx
+    implementation libs.androidx.exifinterface
 
     // Log
-    implementation 'com.jakewharton.timber:timber:5.0.1'
+    implementation libs.jakewharton.timber
 }

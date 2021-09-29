@@ -12,7 +12,7 @@
     <string name="summary_user_sent_sticker">%1$s надсилає наліпку.</string>
     <string name="notice_room_invite_you">%1$s запрошує вас</string>
     <string name="notice_room_join">%1$s приєднується</string>
-    <string name="notice_room_leave">%1$s залишає кімнату</string>
+    <string name="notice_room_leave">%1$s виходить з кімнати</string>
     <string name="notice_room_reject">%1$s відхиляє запрошення</string>
     <string name="notice_room_kick">%1$s викидає %2$s</string>
     <string name="notice_room_unban">%1$s розблоковує %2$s</string>
@@ -68,15 +68,15 @@
 \nІмпортування даних облікового запису</string>
     <string name="notice_direct_room_leave_with_reason_by_you">Ви вийшли. Причина: %1$s</string>
     <string name="notice_direct_room_leave_with_reason">%1$s виходить. Причина: %2$s</string>
-    <string name="notice_room_leave_with_reason_by_you">Ви залишили кімнату. Причина: %1$s</string>
-    <string name="notice_room_leave_with_reason">%1$s залишає кімнату. Причина: %2$s</string>
-    <string name="notice_direct_room_leave">%1$s залишає кімнату</string>
-    <string name="notice_direct_room_leave_by_you">Ви залишили кімнату</string>
-    <string name="notice_room_leave_by_you">Ви залишили кімнату</string>
+    <string name="notice_room_leave_with_reason_by_you">Ви вийшли з кімнати. Причина: %1$s</string>
+    <string name="notice_room_leave_with_reason">%1$s виходить з кімнати. Причина: %2$s</string>
+    <string name="notice_direct_room_leave">%1$s виходить з кімнати</string>
+    <string name="notice_direct_room_leave_by_you">Ви вийшли з кімнати</string>
+    <string name="notice_room_leave_by_you">Ви вийшли з кімнати</string>
     <string name="notice_room_canonical_alias_no_change_by_you">Ви змінили адреси цієї кімнати.</string>
     <string name="notice_room_canonical_alias_main_and_alternative_changed_by_you">Ви змінили основну та альтернативну адреси цієї кімнати.</string>
     <string name="notice_room_canonical_alias_alternative_changed_by_you">Ви змінили альтернативні адреси для цієї кімнати.</string>
-    <string name="notice_power_level_changed_by_you">Ви змінили рівень доступу на %1$s.</string>
+    <string name="notice_power_level_changed_by_you">Ви змінили рівень повноважень %1$s.</string>
     <string name="notice_room_server_acl_updated_title_by_you">Ви змінили серверні списки контролю доступу для цієї кімнати.</string>
     <string name="notice_room_name_changed_by_you">Ви змінили назву кімнати на: %1$s</string>
     <string name="notice_room_avatar_changed_by_you">Ви змінили аватар кімнати</string>
@@ -190,7 +190,7 @@
     <string name="ok">Гаразд</string>
     <string name="cancel">Скасувати</string>
     <string name="save">Зберегти</string>
-    <string name="leave">Залишити</string>
+    <string name="leave">Вийти</string>
     <string name="send">Надіслати</string>
     <string name="resend">Надіслати ще раз</string>
     <string name="redact">Прибрати</string>
@@ -425,8 +425,8 @@
     <string name="room_creation_add_member">Додати учасника</string>
     <string name="room_title_one_member">1 учасник</string>
     <!--  Chat participants -->
-    <string name="room_participants_leave_prompt_title">Залишити кімнату</string>
-    <string name="room_participants_leave_prompt_msg">Ви впевнені, що бажаєте залишити кімнату\?</string>
+    <string name="room_participants_leave_prompt_title">Вийти з кімнати</string>
+    <string name="room_participants_leave_prompt_msg">Ви впевнені, що хочете вийти з кімнати\?</string>
     <string name="room_participants_remove_prompt_msg">Ви впевнені, що бажаєте вилучити %s з цієї кімнати\?</string>
     <string name="room_participants_create">Створити</string>
     <string name="room_participants_online">Online</string>
@@ -437,7 +437,7 @@
     <string name="room_participants_header_direct_chats">Особисті повідомлення</string>
     <string name="room_participants_header_devices">СЕАНСИ</string>
     <string name="room_participants_action_invite">Запросити</string>
-    <string name="room_participants_action_leave">Залишити цю кімнату</string>
+    <string name="room_participants_action_leave">Вийти з цієї кімнати</string>
     <string name="room_participants_action_remove">Вилучити з цієї кімнати</string>
     <string name="room_participants_action_ban">Заблокувати</string>
     <string name="room_participants_action_unban">Розблокувати</string>
@@ -449,7 +449,8 @@
     <string name="room_participants_invite_search_another_user">ID користувача, ім\'я або email</string>
     <string name="room_participants_action_mention">Згадати</string>
     <string name="room_participants_action_devices_list">Показати Список Пристроїв</string>
-    <string name="room_participants_power_level_prompt">Ви не зможете скасувати цю дію, оскільки надаєте користувачу той же рівень доступу, що й у вас.\nВи впевнені?</string>
+    <string name="room_participants_power_level_prompt">Ви не зможете скасувати цю дію, оскільки надаєте користувачу той же рівень повноважень, що й у вас.
+\nВи впевнені\?</string>
     <string name="room_participants_invite_prompt_msg">Ви впевнені, що бажаєте запросити %s до цієї кімнати\?</string>
     <!-- invitation -->
     <string name="people_search_invite_by_id"><u>Запросити за ID</u></string>
@@ -529,7 +530,7 @@
     <string name="room_settings_favourite">Обране</string>
     <string name="room_settings_de_prioritize">Не терміново</string>
     <string name="room_settings_direct_chat">Особиста бесіда</string>
-    <string name="room_settings_leave_conversation">Залишити бесіду</string>
+    <string name="room_settings_leave_conversation">Вийти з бесіди</string>
     <string name="room_settings_forget">Забути</string>
     <!-- home sliding menu -->
     <string name="room_sliding_menu_messages">Повідомлення</string>
@@ -758,7 +759,7 @@
     <string name="directory_server_type_homeserver">Введіть сервер для показу каталогу публічних кімнат</string>
     <string name="directory_server_placeholder">Ім\'я сервера</string>
     <string name="directory_server_all_rooms_on_server">Всі кімнати на сервері %s</string>
-    <string name="directory_server_native_rooms">Всі місцеві кімнати %s</string>
+    <string name="directory_server_native_rooms">Усі кімнати сервера %s</string>
     <!-- historical -->
     <string name="historical_placeholder">Пошук в історії</string>
     <!-- text size selection -->
@@ -778,7 +779,7 @@
     <!-- Widget Integration Manager -->
     <string name="widget_integration_unable_to_create">Не вдалося створити розширення.</string>
     <string name="widget_integration_failed_to_send_request">Не вдалося надіслати запит.</string>
-    <string name="widget_integration_positive_power_level">Рівень доступу має бути цілим додатним числом.</string>
+    <string name="widget_integration_positive_power_level">Рівень повноважень має бути цілим додатним числом.</string>
     <string name="widget_integration_must_be_in_room">Ви не перебуваєте в цій кімнаті.</string>
     <string name="widget_integration_no_permission_in_room">Ви не маєте дозволу виконувати цю дію у цій кімнаті.</string>
     <string name="widget_integration_missing_room_id">У запиті відсутній room_id.</string>
@@ -989,11 +990,11 @@
     <string name="command_description_emote">Показує дію</string>
     <string name="command_description_ban_user">Заблокувати користувача із вказаним ID</string>
     <string name="command_description_unban_user">Розблокувати користувача із вказаним ID</string>
-    <string name="command_description_op_user">Визначити рівень доступу користувача</string>
+    <string name="command_description_op_user">Визначити рівень повноважень користувача</string>
     <string name="command_description_deop_user">Скинути рівень доступу користувача із вказаним ID</string>
     <string name="command_description_invite_user">Запросити користувача із вказаним ID до поточної кімнати</string>
     <string name="command_description_join_room">Приєднатися до кімнати із вказаним псевдонімом</string>
-    <string name="command_description_part_room">Покинути кімнату</string>
+    <string name="command_description_part_room">Вийти з кімнати</string>
     <string name="command_description_topic">Встановити тему кімнати</string>
     <string name="command_description_kick_user">Копнути користувача із вказаним ID</string>
     <string name="command_description_nick">Змінити Ваш псевдонім</string>
@@ -1217,7 +1218,7 @@
     <string name="a11y_mute_microphone">Вимкнути мікрофон</string>
     <string name="a11y_open_chat">Відерити бесіду</string>
     <string name="power_level_title">Роль</string>
-    <string name="power_level_edit_title">Призначити роль</string>
+    <string name="power_level_edit_title">Визначити роль</string>
     <string name="identity_server_set_alternative_submit">Надіслати</string>
     <string name="settings_phone_numbers">Номери телефонів</string>
     <string name="settings_emails">Електронні адреси</string>
@@ -1517,7 +1518,7 @@
     <string name="settings_show_room_member_state_events">Показати стан подій учасників кімнати</string>
     <string name="settings_cryptography_manage_keys">Керування криптографічними ключами</string>
     <string name="settings_integrations_summary">Використовуйте менеджер інтеграції для керування ботами, мостами, розширеннями та пакунками наліпок.
-\nМенеджери інтеграції отримують дані конфігурації та можуть змінювати розширення, надсилати запрошення до кімнати та надавати права від вашого імені.</string>
+\nМенеджери інтеграції отримують дані конфігурації та можуть змінювати розширення, надсилати запрошення до кімнати та надавати рівень повноважень від вашого імені.</string>
     <string name="settings_integrations">Інтеграції</string>
     <plurals name="seconds">
         <item quantity="one">%d секунда</item>
@@ -1540,7 +1541,7 @@
     <string name="settings_background_fdroid_sync_mode">Режим фонової синхронізації</string>
     <string name="settings_notification_privacy_no_background_sync">Застосунки <b>не</b> потребують з\'єднання з homeserver у фоновому режимі, це має скоротити споживання батареї</string>
     <string name="settings_troubleshoot_test_battery_quickfix">Нехтувати оптимізацією</string>
-    <string name="settings_troubleshoot_test_battery_failed">Якщо користувач залишає пристрій від\'єднаним та нерухомим впродовж певного часу з вимкненим екраном, пристрій переходить у режим дрімання. Це запобігає доступу програм до мережі та відкладає їх завдання, синхронізацію та стандартні сигнали тривоги.</string>
+    <string name="settings_troubleshoot_test_battery_failed">Якщо користувач залишає пристрій від\'єднаним та нерухомим впродовж певного часу з вимкненим екраном, пристрій переходить у режим сну. Це запобігає доступу застосунків до мережі та відкладає їхні завдання, синхронізацію та стандартні попередження.</string>
     <string name="template_settings_troubleshoot_test_battery_success">Оптимізація акумулятора не впливає на ${app_name}.</string>
     <string name="settings_troubleshoot_test_battery_title">Оптимізація акумулятора</string>
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">Вимкнути обмеження</string>
@@ -1766,10 +1767,10 @@
     <string name="room_permissions_notice">Виберіть ролі, необхідні для зміни різних частин кімнати</string>
     <string name="room_permissions_title">Дозволи</string>
     <string name="room_settings_permissions_subtitle">Перегляд та оновлення ролей, необхідних для зміни різних частин кімнати.</string>
-    <string name="room_list_quick_actions_leave">Залишити кімнату</string>
-    <string name="room_profile_section_more_leave">Залишити кімнату</string>
-    <string name="direct_room_profile_section_more_leave">Залишити</string>
-    <string name="jitsi_leave_conf_to_join_another_one_content">Залишити поточну конференцію та перейти до іншої\?</string>
+    <string name="room_list_quick_actions_leave">Вийти з кімнати</string>
+    <string name="room_profile_section_more_leave">Вийти з кімнати</string>
+    <string name="direct_room_profile_section_more_leave">Вийти</string>
+    <string name="jitsi_leave_conf_to_join_another_one_content">Вийти з поточної конференції та перейти до іншої\?</string>
     <string name="room_participants_leave_private_warning">Це не загальнодоступна кімната. Ви не зможете знову приєднатися без запрошення.</string>
     <string name="room_settings_enable_encryption_no_permission">У вас немає дозволу на ввімкнення шифрування в цій кімнаті.</string>
     <string name="room_settings_permissions_title">Дозволи кімнати</string>
@@ -2069,7 +2070,7 @@
     <string name="room_member_power_level_custom_in">Не типовий (%1$d) у %2$s</string>
     <string name="room_member_power_level_custom">Не типовий</string>
     <string name="notice_power_level_diff">%1$s з %2$s до %3$s</string>
-    <string name="notice_power_level_changed">%1$s змінює рівень доступу %2$s.</string>
+    <string name="notice_power_level_changed">%1$s змінює рівень повноважень %2$s.</string>
     <string name="notice_widget_jitsi_modified_by_you">Ви змінили відеоконференцію</string>
     <string name="notice_widget_jitsi_modified">%1$s змінює відеоконференцію</string>
     <string name="notice_widget_jitsi_removed_by_you">Ви завершили відеоконфернцію</string>
@@ -2080,7 +2081,7 @@
     <string name="room_member_power_level_invites">Запрошення</string>
     <string name="room_member_power_level_moderators">Модератори</string>
     <string name="room_member_power_level_admins">Адміністратори</string>
-    <string name="room_profile_leaving_room">Залишення кімнати…</string>
+    <string name="room_profile_leaving_room">Вихід з кімнати…</string>
     <string name="room_member_power_level_default_in">Типово у %1$s</string>
     <string name="room_member_power_level_moderator_in">Модератор у %1$s</string>
     <string name="room_member_power_level_admin_in">Адміністратор у %1$s</string>
@@ -2201,8 +2202,8 @@
     <string name="voice_message_slide_to_cancel">Проведіть пальцем, щоб скасувати</string>
     <string name="a11y_start_voice_message">Розпочати голосове повідомлення</string>
     <string name="call_jitsi_started">Розпочато груповий виклик</string>
-    <string name="space_leave_prompt_msg">Ви впевнені, що хочете залишити простір\?</string>
-    <string name="leave_space">Залишити простір</string>
+    <string name="space_leave_prompt_msg">Ви впевнені, що хочете вийти з простору\?</string>
+    <string name="leave_space">Вийти з простору</string>
     <string name="space_settings_manage_rooms">Керувати кімнатами</string>
     <string name="user_invites_you">%s запрошує вас</string>
     <string name="you_are_invited">Вас запрошено</string>
@@ -2440,7 +2441,7 @@
     <string name="rotate_and_crop_screen_title">Обернути й обрізати</string>
     <string name="error_file_too_big">Файл «%1$s» (%2$s) завеликий для вивантаження. Обмеження %3$s.</string>
     <string name="error_file_too_big_simple">Цей файл завеликий для вивантаження.</string>
-    <string name="a11y_beta">Це бета-можливість</string>
+    <string name="a11y_beta">Це бета-функція</string>
     <string name="a11y_hide_password">Сховати пароль</string>
     <string name="a11y_show_password">Показати пароль</string>
     <string name="a11y_create_room">Створити нову кімнату</string>
@@ -2482,7 +2483,7 @@
     <string name="sas_error_m_unexpected_message">Сеанс отримав несподіване повідомлення</string>
     <string name="sas_error_m_mismatched_sas">SAS не збігається</string>
     <string name="sas_error_m_user">Користувач скасовує перевірку</string>
-    <string name="sas_incoming_request_notif_content">%s хоче звірити сеанс</string>
+    <string name="sas_incoming_request_notif_content">%s хоче звірити ваш сеанс</string>
     <string name="sas_incoming_request_notif_title">Запит перевірки</string>
     <string name="verification_request">Запит перевірки</string>
     <string name="sas_verification_request_notification_channel">Інтерактивна перевірка сеансу</string>
@@ -2509,4 +2510,72 @@
     <string name="verification_scan_their_code">Сканувати їхній код</string>
     <string name="verification_scan_self_notice">Скануйте код за допомогою іншого пристрою або перемкніться та скануйте за допомогою цього пристрою</string>
     <string name="verification_scan_notice">Зіскануйте код за допомогою пристрою іншого користувача, щоб надійно перевірити одне одного</string>
+    <string name="verification_request_waiting_for">Очікування на %s…</string>
+    <string name="verification_request_you_accepted">Ви прийняли</string>
+    <string name="verification_request_other_accepted">%s прийнято</string>
+    <string name="verification_request_you_cancelled">Ви скасували</string>
+    <string name="verification_request_other_cancelled">%s скасовано</string>
+    <string name="sas_verification_request_notification_channel_title">Перевірка ключа</string>
+    <string name="read_at">Читати у</string>
+    <string name="direct_room_no_known_users">Нічого не знайдено, натисніть Додати за matrix-ID для пошуку на сервері.</string>
+    <string name="search_hint_room_name">Пошук за назвою</string>
+    <string name="send_feedback_space_info">Ви користуєтеся бета-версією просторів. Ваш відгук допоможе поліпшити наступні версії. Ваша платформа та ім’я користувача будуть зазначені, щоб допомогти нам використати ваш відгук якнайефективніше.</string>
+    <string name="settings_troubleshoot_test_token_registration_quick_fix">Зареєструвати токен</string>
+    <string name="settings_push_gateway_no_pushers">Немає зареєстрованих push-шлюзів</string>
+    <string name="settings_push_rules_no_rules">Правила push-сповіщень не визначені</string>
+    <string name="settings_push_rules">Правила push-сповіщень</string>
+    <string name="navigate_to_room_when_already_in_the_room">Ви вже переглядаєте цю кімнату!</string>
+    <string name="settings_other_third_party_notices">Інші примітки про треті сторони</string>
+    <string name="import_e2e_keys_from_file">Імпорт ключів e2e з файлу «%1$s».</string>
+    <string name="keys_backup_unable_to_get_keys_backup_data">Сталася помилка отримання ключів резервних копій даних</string>
+    <string name="keys_backup_unable_to_get_trust_info">Під час отримання інформації про довіру сталася помилка</string>
+    <string name="room_preview_no_preview_join">Попередній перегляд цієї кімнати недоступний. Бажаєте приєднатися до неї\?</string>
+    <string name="room_preview_not_found">Зараз ця кімната недоступна.
+\nПовторіть спробу пізніше або попросіть адміністратора кімнати перевірити, чи маєте ви доступ.</string>
+    <string name="room_preview_no_preview">Попередній перегляд цієї кімнати недоступний</string>
+    <string name="error_no_network">Немає мережі. Перевірте інтернет-з\'єднання.</string>
+    <string name="malformed_message">Хибна подія, неможливо показати</string>
+    <string name="message_view_reaction">Перегляд реакцій</string>
+    <string name="room_list_rooms_empty_body">Тут буде показано ваші кімнати. Натисніть + унизу праворуч, щоб знайти наявні або створити власні.</string>
+    <string name="room_list_empty">Приєднайтеся до кімнати, щоб почати користуватися застосунком.</string>
+    <string name="error_user_already_logged_in">Схоже, ви намагаєтесь під\'єднатися до іншого домашнього сервера. Бажаєте вийти\?</string>
+    <string name="sas_error_m_user_error">Користувачі відрізняються</string>
+    <string name="sas_error_m_key_mismatch">Ключі відрізняються</string>
+    <string name="sas_error_m_mismatched_commitment">Отриманий хеш не збігається</string>
+    <string name="sas_error_m_unknown_method">Сеанс не може узгодити ключі, хеш, MAC або метод SAS</string>
+    <string name="sas_error_m_unknown_transaction">Сеанс не розпізнає про цю транзакцію</string>
+    <string name="sas_error_m_timeout">Час перевірки минув</string>
+    <string name="sas_verify_title">Перевірте, порівнявши короткий текстовий рядок.</string>
+    <string name="invalid_or_expired_credentials">Ви вийшли з облікового запису через хибні або застарілі облікові дані.</string>
+    <string name="autodiscover_well_known_autofill_confirm">Використати конфігурацію</string>
+    <string name="template_autodiscover_well_known_autofill_dialog_message">${app_name} виявив користувацьку конфігурацію сервера для вашого userID домену «%1$s»:
+\n%2$s</string>
+    <string name="autodiscover_well_known_autofill_dialog_title">Параметри сервера автозаповнення</string>
+    <plurals name="keys_backup_info_keys_backing_up">
+        <item quantity="one">Резервне копіювання %d ключа…</item>
+        <item quantity="few">Резервне копіювання %d ключів…</item>
+        <item quantity="many">Резервне копіювання %d ключів…</item>
+        <item quantity="other">Резервне копіювання %d ключів…</item>
+    </plurals>
+    <string name="new_recovery_method_popup_description">Виявлено нову резервну копію ключа зашифрованих повідомлень.
+\n
+\nЯкщо ви не налаштовували новий метод відновлення, можливо, зловмисник намагається отримати доступ до вашого облікового запису. Змініть пароль свого облікового запису та негайно визначте новий спосіб відновлення в Налаштуваннях.</string>
+    <string name="space_add_existing_rooms">Додати наявну кімнату до простору</string>
+    <string name="activity_create_space_title">Створити простір</string>
+    <string name="create_spaces_just_me">Лише я</string>
+    <string name="command_description_create_space">Створити простір</string>
+    <string name="dev_tools_event_content_hint">Вміст події</string>
+    <string name="dev_tools_form_hint_event_content">Вміст події</string>
+    <string name="dev_tools_error_no_content">Немає вмісту</string>
+    <string name="dev_tools_form_hint_type">Тип</string>
+    <string name="dev_tools_edit_content">Редагувати вміст</string>
+    <string name="a11y_trust_level_warning">Попередження про рівень довіри</string>
+    <string name="call_dial_pad_lookup_error">Сталася помилка пошуку номера телефона</string>
+    <string name="call_tile_connection_failed">Не вдалося встановити з\'єднання</string>
+    <string name="call_tile_you_declined_this_call">Ви відхилили цей виклик</string>
+    <string name="matrix_to_card_title">Посилання Matrix</string>
+    <string name="empty_contact_book">Ваша книга контактів порожня</string>
+    <string name="search_in_my_contacts">Шукати у моїх контактах</string>
+    <string name="phone_book_title">Телефонна книга</string>
+    <string name="crypto_utd">Не вдалося розшифрувати</string>
 </resources>

@@ -73,18 +73,12 @@ class ShareSpaceBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetSpa
             views.descriptionText.setTextOrHide(null)
         }
 
-        views.inviteByMailButton.isVisible = false // not yet implemented
         views.inviteByLinkButton.isVisible = state.canShareLink
         views.inviteByMxidButton.isVisible = state.canInviteByMxId
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        // XXX enable back when supported
-        views.inviteByMailButton.isVisible = false
-        views.inviteByMailButton.debouncedClicks {
-        }
 
         views.inviteByMxidButton.debouncedClicks {
             viewModel.handle(ShareSpaceAction.InviteByMxId)

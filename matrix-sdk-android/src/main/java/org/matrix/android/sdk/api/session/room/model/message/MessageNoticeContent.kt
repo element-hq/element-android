@@ -26,7 +26,7 @@ data class MessageNoticeContent(
         /**
          * Required. Must be 'm.notice'.
          */
-        @Json(name = "msgtype") override val msgType: String,
+        @Json(name = MessageContent.MSG_TYPE_JSON_KEY) override val msgType: String,
 
         /**
          * Required. The notice text to send.

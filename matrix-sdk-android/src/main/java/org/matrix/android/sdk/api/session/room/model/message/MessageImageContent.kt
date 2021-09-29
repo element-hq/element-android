@@ -27,7 +27,7 @@ data class MessageImageContent(
         /**
          * Required. Must be 'm.image'.
          */
-        @Json(name = "msgtype") override val msgType: String,
+        @Json(name = MessageContent.MSG_TYPE_JSON_KEY) override val msgType: String,
 
         /**
          * Required. A textual representation of the image. This could be the alt text of the image, the filename of the image,

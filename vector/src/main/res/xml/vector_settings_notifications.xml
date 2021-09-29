@@ -56,6 +56,10 @@
     </im.vector.app.core.preference.VectorPreferenceCategory>
 
     <im.vector.app.core.preference.VectorPreferenceCategory
+        android:key="SETTINGS_EMAIL_NOTIFICATION_CATEGORY_PREFERENCE_KEY"
+        android:title="@string/settings_notification_emails_category"/>
+
+    <im.vector.app.core.preference.VectorPreferenceCategory
         android:persistent="false"
         android:title="@string/settings_notification_configuration">
 
@@ -113,7 +117,6 @@
             android:defaultValue="true"
             android:key="SETTINGS_START_ON_BOOT_PREFERENCE_KEY"
             android:title="@string/settings_start_on_boot" />
-
 
     </im.vector.app.core.preference.VectorPreferenceCategory>
 
