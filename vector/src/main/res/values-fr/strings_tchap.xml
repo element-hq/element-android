@@ -153,5 +153,8 @@
     <!-- Logout Tchap -->
     <string name="tchap_action_sign_out_confirmation">Pour des raisons de sécurité, la déconnexion supprimera toutes les clés de chiffrement de bout en bout, rendant l’historique des conversations chiffrées inaccessible lorsque vous vous reconnecterez. Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>
 
+    <!-- Call -->
+    <string name="template_tchap_call_not_supported">${app_name} ne supporte pas encore les appels</string>
+
     <string name="tchap_dialog_user_consent_homeserver_name">Tchap</string>
 </resources>

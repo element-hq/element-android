@@ -154,5 +154,8 @@
     <!-- Logout Tchap -->
     <string name="tchap_action_sign_out_confirmation">For security, logging out will delete any end-to-end encryption keys making previous encrypted chat history unreadable if you log back in.\nSelect export to backup them before signing out.</string>
 
+    <!-- Call -->
+    <string name="template_tchap_call_not_supported">${app_name} does not support calls yet</string>
+
     <string name="tchap_dialog_user_consent_homeserver_name">Tchap</string>
 </resources>

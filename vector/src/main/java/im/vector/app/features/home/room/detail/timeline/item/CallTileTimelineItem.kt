@@ -28,10 +28,12 @@ import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
+import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.extensions.setLeftDrawable
+import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.RoomDetailAction
 import im.vector.app.features.home.room.detail.timeline.MessageColorProvider
@@ -66,6 +68,7 @@ abstract class CallTileTimelineItem : AbsBaseMessageItem<CallTileTimelineItem.Ho
             CallStatus.MISSED   -> renderMissedStatus(holder)
         }
         renderSendState(holder.view, null, holder.failedToSendIndicator)
+        renderCallSupportState(holder)
     }
 
     private fun renderMissedStatus(holder: Holder) {
@@ -220,6 +223,14 @@ abstract class CallTileTimelineItem : AbsBaseMessageItem<CallTileTimelineItem.Ho
         }
     }
 
+    private fun renderCallSupportState(holder: Holder) {
+        val isCallSupported = BuildConfig.IS_VOIP_SUPPORTED
+        val error = if (!isCallSupported) holder.resources.getString(R.string.tchap_call_not_supported) else null
+        holder.acceptView.isEnabled = isCallSupported
+        holder.rejectView.isEnabled = isCallSupported
+        holder.errorView.setTextOrHide(error)
+    }
+
     private fun TextView.setStatus(@StringRes statusRes: Int, @DrawableRes drawableRes: Int? = null) {
         val status = resources.getString(statusRes)
         setStatus(status, drawableRes)
@@ -237,6 +248,7 @@ abstract class CallTileTimelineItem : AbsBaseMessageItem<CallTileTimelineItem.Ho
         val creatorAvatarView by bind<ImageView>(R.id.itemCallCreatorAvatar)
         val creatorNameView by bind<TextView>(R.id.itemCallCreatorNameTextView)
         val statusView by bind<TextView>(R.id.itemCallStatusTextView)
+        val errorView by bind<TextView>(R.id.itemCallErrorTextView)
         val endGuideline by bind<View>(R.id.messageEndGuideline)
         val failedToSendIndicator by bind<ImageView>(R.id.messageFailToSendIndicator)
 
