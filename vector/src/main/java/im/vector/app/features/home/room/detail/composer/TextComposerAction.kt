@@ -27,4 +27,6 @@ sealed class TextComposerAction : VectorViewModelAction {
     data class EnterReplyMode(val eventId: String, val text: String) : TextComposerAction()
     data class EnterRegularMode(val text: String, val fromSharing: Boolean) : TextComposerAction()
     data class UserIsTyping(val isTyping: Boolean) : TextComposerAction()
+    data class OnTextChanged(val text: CharSequence) : TextComposerAction()
+    data class OnVoiceRecordingStateChanged(val isRecording: Boolean) : TextComposerAction()
 }

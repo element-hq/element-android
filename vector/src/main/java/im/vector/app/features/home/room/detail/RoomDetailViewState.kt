@@ -30,26 +30,6 @@ import org.matrix.android.sdk.api.session.sync.SyncState
 import org.matrix.android.sdk.api.session.widgets.model.Widget
 import org.matrix.android.sdk.api.session.widgets.model.WidgetType
 
-/**
- * Describes the current send mode:
- * REGULAR: sends the text as a regular message
- * QUOTE: User is currently quoting a message
- * EDIT: User is currently editing an existing message
- *
- * Depending on the state the bottom toolbar will change (icons/preview/actions...)
- */
-sealed class SendMode(open val text: String) {
-    data class REGULAR(
-            override val text: String,
-            val fromSharing: Boolean,
-            // This is necessary for forcing refresh on selectSubscribe
-            private val ts: Long = System.currentTimeMillis()
-    ) : SendMode(text)
-
-    data class QUOTE(val timelineEvent: TimelineEvent, override val text: String) : SendMode(text)
-    data class EDIT(val timelineEvent: TimelineEvent, override val text: String) : SendMode(text)
-    data class REPLY(val timelineEvent: TimelineEvent, override val text: String) : SendMode(text)
-}
 
 sealed class UnreadState {
     object Unknown : UnreadState()
@@ -74,7 +54,6 @@ data class RoomDetailViewState(
         val asyncRoomSummary: Async<RoomSummary> = Uninitialized,
         val activeRoomWidgets: Async<List<Widget>> = Uninitialized,
         val formattedTypingUsers: String? = null,
-        val sendMode: SendMode = SendMode.REGULAR("", false),
         val tombstoneEvent: Event? = null,
         val joinUpgradedRoomAsync: Async<String> = Uninitialized,
         val syncState: SyncState = SyncState.Idle,

@@ -17,29 +17,20 @@
 package im.vector.app.features.home.room.detail.composer
 
 import androidx.lifecycle.viewModelScope
-import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MvRxViewModelFactory
-import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.command.CommandParser
 import im.vector.app.features.command.ParsedCommand
-import im.vector.app.features.crypto.keysrequest.OutboundSessionKeySharingStrategy
 import im.vector.app.features.home.room.detail.ChatEffect
-import im.vector.app.features.home.room.detail.RoomDetailAction
 import im.vector.app.features.home.room.detail.RoomDetailFragment
-import im.vector.app.features.home.room.detail.SendMode
 import im.vector.app.features.home.room.detail.composer.rainbow.RainbowGenerator
 import im.vector.app.features.home.room.detail.toMessageType
 import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
@@ -74,22 +65,55 @@ class TextComposerViewModel @AssistedInject constructor(
 
     private val room = session.getRoom(initialState.roomId)!!
 
+    // Keep it out of state to avoid invalidate being called
+    private var currentComposerText: CharSequence = ""
+
     init {
         loadDraftIfAny()
         observePowerLevel()
+        subscribeToStateInternal()
     }
 
     override fun handle(action: TextComposerAction) {
         Timber.v("Handle action: $action")
         when (action) {
-            is TextComposerAction.EnterEditMode    -> handleEnterEditMode(action)
-            is TextComposerAction.EnterQuoteMode   -> handleEnterQuoteMode(action)
-            is TextComposerAction.EnterRegularMode -> handleEnterRegularMode(action)
-            is TextComposerAction.EnterReplyMode   -> handleEnterReplyMode(action)
-            is TextComposerAction.SaveDraft        -> handleSaveDraft(action)
-            is TextComposerAction.SendMessage      -> handleSendMessage(action)
-            is TextComposerAction.UserIsTyping     -> handleUserIsTyping(action)
+            is TextComposerAction.EnterEditMode                -> handleEnterEditMode(action)
+            is TextComposerAction.EnterQuoteMode               -> handleEnterQuoteMode(action)
+            is TextComposerAction.EnterRegularMode             -> handleEnterRegularMode(action)
+            is TextComposerAction.EnterReplyMode               -> handleEnterReplyMode(action)
+            is TextComposerAction.SaveDraft                    -> handleSaveDraft(action)
+            is TextComposerAction.SendMessage                  -> handleSendMessage(action)
+            is TextComposerAction.UserIsTyping                 -> handleUserIsTyping(action)
+            is TextComposerAction.OnTextChanged                -> handleOnTextChanged(action)
+            is TextComposerAction.OnVoiceRecordingStateChanged -> handleOnVoiceRecordingStateChanged(action)
         }
+    }
+
+    private fun handleOnVoiceRecordingStateChanged(action: TextComposerAction.OnVoiceRecordingStateChanged) = setState {
+        copy(isVoiceRecording = action.isRecording)
+    }
+
+    private fun handleOnTextChanged(action: TextComposerAction.OnTextChanged) {
+        setState {
+            // Makes sure currentComposerText is upToDate when accessing further setState
+            currentComposerText = action.text
+            this
+        }
+        updateIsSendButtonVisibility()
+    }
+
+    private fun subscribeToStateInternal() {
+        selectSubscribe(TextComposerViewState::sendMode, TextComposerViewState::canSendMessage, TextComposerViewState::isVoiceRecording) { _, _, _ ->
+            updateIsSendButtonVisibility()
+        }
+    }
+
+    private fun updateIsSendButtonVisibility() = setState {
+        val isSendButtonVisible = isComposerVisible && (sendMode !is SendMode.REGULAR || currentComposerText.isNotBlank())
+        if (this.isSendButtonVisible != isSendButtonVisible) {
+            _viewEvents.post(TextComposerViewEvents.OnSendButtonVisibilityChanged(isSendButtonVisible))
+        }
+        copy(isSendButtonVisible = isSendButtonVisible)
     }
 
     private fun handleEnterRegularMode(action: TextComposerAction.EnterRegularMode) = setState {
@@ -442,7 +466,6 @@ class TextComposerViewModel @AssistedInject constructor(
         }
     }
 
-
     private fun sendChatEffect(sendChatEffect: ParsedCommand.SendChatEffect) {
         // If message is blank, convert to an emote, with default message
         if (sendChatEffect.message.isBlank()) {
@@ -572,7 +595,6 @@ class TextComposerViewModel @AssistedInject constructor(
             }
         }
     }
-
 
     private fun launchSlashCommandFlowSuspendable(block: suspend () -> Unit) {
         _viewEvents.post(TextComposerViewEvents.SlashCommandHandled())
