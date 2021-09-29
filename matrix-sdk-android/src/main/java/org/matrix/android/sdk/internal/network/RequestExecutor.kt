@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2021 The Matrix.org Foundation C.I.C.
+ * Copyright 2021 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,18 +14,23 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.test.fakes
+package org.matrix.android.sdk.internal.network
+import org.matrix.android.sdk.internal.network.executeRequest as internalExecuteRequest
 
-import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
-import org.matrix.android.sdk.internal.network.RequestExecutor
+internal interface RequestExecutor {
+    suspend fun <DATA> executeRequest(globalErrorReceiver: GlobalErrorReceiver?,
+                                      canRetry: Boolean = false,
+                                      maxDelayBeforeRetry: Long = 32_000L,
+                                      maxRetriesCount: Int = 4,
+                                      requestBlock: suspend () -> DATA): DATA
+}
 
-internal class FakeRequestExecutor : RequestExecutor {
-
+internal object DefaultRequestExecutor : RequestExecutor {
     override suspend fun <DATA> executeRequest(globalErrorReceiver: GlobalErrorReceiver?,
                                                canRetry: Boolean,
                                                maxDelayBeforeRetry: Long,
                                                maxRetriesCount: Int,
                                                requestBlock: suspend () -> DATA): DATA {
-        return requestBlock()
+        return internalExecuteRequest(globalErrorReceiver, canRetry, maxDelayBeforeRetry, maxRetriesCount, requestBlock)
     }
 }

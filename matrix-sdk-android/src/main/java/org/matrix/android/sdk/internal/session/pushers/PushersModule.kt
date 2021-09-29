@@ -48,12 +48,6 @@ internal abstract class PushersModule {
         fun providesPushRulesApi(retrofit: Retrofit): PushRulesApi {
             return retrofit.create(PushRulesApi::class.java)
         }
-
-        @Provides
-        @JvmStatic
-        fun providesRequestExecutor(): RequestExecutor {
-            return DefaultRequestExecutor
-        }
     }
 
     @Binds
