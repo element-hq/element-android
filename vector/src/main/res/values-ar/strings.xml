@@ -53,11 +53,11 @@
     <string name="room_displayname_two_members">%1$s وَ %2$s</string>
     <string name="room_displayname_room_invite">دَعوة غُرفة</string>
     <plurals name="room_displayname_three_and_more_members">
-        <item quantity="zero"/>
+        <item quantity="zero">لا أحد</item>
         <item quantity="one">%1$s وواحد آخر</item>
         <item quantity="two">%1$s و%2$d آخران</item>
-        <item quantity="few">%1$s و%2$d آخرين</item>
-        <item quantity="many">%1$s و%2$d آخرون</item>
+        <item quantity="few">%1$s و%2$d آخرون</item>
+        <item quantity="many">%1$s و%2$d آخرًا</item>
         <item quantity="other">%1$s و%2$d آخرون</item>
     </plurals>
     <string name="summary_you_sent_image">أرسلتَ صورةً.</string>
@@ -122,17 +122,17 @@
     <string name="notice_room_server_acl_allow_is_empty">🎉 جميع الخوادِم محظورة مِنَ المُشاركة! لم يعُد من المُمكِن استخدام هذه الغُرفة.</string>
     <string name="notice_room_server_acl_updated_no_change">لا تغيير.</string>
     <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• خوادِم مُطابقة IP الحرفية محظورة الآن.</string>
-    <string name="notice_room_server_acl_updated_was_allowed">• الخادِم المُطابق لـ %s قد أُزيل مِن قائمة السماح.</string>
-    <string name="notice_room_server_acl_updated_allowed">• الخادِم المُطابق لـ %s مسموح الآن.</string>
-    <string name="notice_room_server_acl_updated_was_banned">• الخادِم المُطابق لـ %s قد أُزيل مِن قائمة الحظر.</string>
-    <string name="notice_room_server_acl_updated_banned">• الخادِم المُطابق لـ %s محظور الآن.</string>
+    <string name="notice_room_server_acl_updated_was_allowed">• الخوادِم المُطابقة لـ %s أُزيلت مِن قائمة السماح.</string>
+    <string name="notice_room_server_acl_updated_allowed">• الخوادِم المُطابقة لـ %s مسموحة الآن.</string>
+    <string name="notice_room_server_acl_updated_was_banned">• الخوادِم المُطابقة لـ %s أُزيلت مِن قائمة الحظر.</string>
+    <string name="notice_room_server_acl_updated_banned">• الخوادِم المُطابقة لـ %s محظورة الآن.</string>
     <string name="notice_room_server_acl_updated_ip_literals_allowed">• خوادِم مُطابقة IP الحرفية مسموحة الآن.</string>
     <string name="notice_room_server_acl_updated_title_by_you">أنتَ قد غيَّرتَ خادِم الـACLs لهذه الغُرفة.</string>
     <string name="notice_room_server_acl_updated_title">إنَّ %s قد غيَّرَ خادِم الـACLs لهذه الغُرفة.</string>
-    <string name="notice_room_server_acl_set_ip_literals_not_allowed">• الخادِم يحظُر مُطابقة القيم الحرفية للـIP.</string>
-    <string name="notice_room_server_acl_set_allowed">• الخادِم المُطابق لـ %s مسموح.</string>
-    <string name="notice_room_server_acl_set_banned">• الخادِم المُطابق لـ %s محظور.</string>
-    <string name="notice_room_server_acl_set_ip_literals_allowed">• الخادِم يسمح بمُطابقة القيم الحرفية للـIP.</string>
+    <string name="notice_room_server_acl_set_ip_literals_not_allowed">• الخوادِم تحظُر مُطابقة القيم الحرفية للـIP.</string>
+    <string name="notice_room_server_acl_set_allowed">• الخوادِم المُطابقة لـ %s مسموحة.</string>
+    <string name="notice_room_server_acl_set_banned">• الخوادِم المُطابقة لـ %s محظورة.</string>
+    <string name="notice_room_server_acl_set_ip_literals_allowed">• الخوادِم تسمح بمُطابقة القيم الحرفية للـIP.</string>
     <string name="notice_room_server_acl_set_title_by_you">أنتَ قد عيَّنتَ خادِم الـACLs لهذه الغُرفة.</string>
     <string name="notice_room_server_acl_set_title">إنَّ %s قد عيَّنَ خادِم الـACLs لهذه الغُرفة.</string>
     <string name="notice_direct_room_update_by_you">أنتَ قد قمتَ بالترقية هُنا.</string>
@@ -216,7 +216,7 @@
     <string name="light_theme">السمة الفاتحة</string>
     <string name="dark_theme">السمة الداكنة</string>
     <string name="black_theme">السمة السوداء</string>
-    <string name="notification_sync_in_progress">يُزامن</string>
+    <string name="notification_sync_in_progress">يُزامن…</string>
     <string name="notification_listening_for_events">يستمع للأحداث</string>
     <string name="title_activity_home">الرسائل</string>
     <string name="title_activity_settings">الإعدادات</string>
@@ -588,7 +588,7 @@
     <string name="command_error">خطأ في الأمر</string>
     <string name="unrecognized_command">لم يُفهم الأمر: ⁨%s⁩</string>
     <!-- notification statuses -->
-    <string name="redact">هذّب</string>
+    <string name="redact">أزل</string>
     <string name="missing_permissions_to_start_conf_call">تحتاج تصريح الدعوة لبدء اجتماع في هذه الغرفة</string>
     <string name="or">أو</string>
     <string name="action_quick_reply">ردّ سريع</string>
@@ -1104,11 +1104,11 @@
     <string name="room_sliding_menu_version_x">الإصدار %s</string>
     <string name="settings_notification_advanced">الإعدادات المتقدمة للإشعارات</string>
     <string name="title_activity_verify_device">توثق من الجهاز</string>
-    <string name="keys_backup_is_not_finished_please_wait">تأمين المفاتيح لم ينته، يرجى الانتظار</string>
+    <string name="keys_backup_is_not_finished_please_wait">النسخ الاحتياطي المفاتيح لم ينته، يرجى الانتظار…</string>
     <string name="sign_out_bottom_sheet_warning_no_backup">عند تسجيل الخروج الآن ستخسر مفاتيحك</string>
-    <string name="sign_out_bottom_sheet_warning_backing_up">تأمين المفاتيح ما زال جاريا. في حال خروجك الآن لن تتمكن لاحقا من قراءة الرسائل المشفرة</string>
-    <string name="sign_out_bottom_sheet_warning_backup_not_active">تأكد من تفعيل تأمين المفاتيح على كل أجهزتك كي لا تخسر رسائلك المشفرة</string>
-    <string name="sign_out_bottom_sheet_backing_up_keys">يتم تأمين المفاتيح</string>
+    <string name="sign_out_bottom_sheet_warning_backing_up">النسخ الاحتياطي المفاتيح ما زال جاريا. في حال خروجك الآن لن تتمكن لاحقا من قراءة الرسائل المشفرة.</string>
+    <string name="sign_out_bottom_sheet_warning_backup_not_active">تأكد من تفعيل النسخ الاحتياطي للمفاتيح على كل أجهزتك كي لا تخسر رسائلك المشفرة</string>
+    <string name="sign_out_bottom_sheet_backing_up_keys">ينسخ احتياطيا المفاتيح…</string>
     <string name="no_permissions_to_start_conf_call_in_direct_room">لا يوجد لديك أذن لبدء مكالمة إجتماع</string>
     <string name="no_permissions_to_start_conf_call">لا يوجد لديك أذن لبدء إجتماع في هذه الغرفة</string>
     <string name="start_chatting">إبدأ بالمحادثة</string>
@@ -1123,7 +1123,7 @@
     <string name="sign_out_bottom_sheet_will_lose_secure_messages">ستفقد الوصول إلى رسائلك المشفرة إلا إذا أخذت نسخة إحتياطية من مفاتيحك قبل تسجيلك للخروج.</string>
     <string name="backup">نسخة إحتياطية</string>
     <string name="are_you_sure">هل أنت متأكد؟</string>
-    <string name="keys_backup_activate">إستخدم المفتاح الإحتياطي</string>
+    <string name="keys_backup_activate">إستخدم النسخة الإحتياطية للمفتاح</string>
     <string name="sign_out_bottom_sheet_dont_want_secure_messages">لا أريد رسائلي المشفرة</string>
     <string name="title_activity_keys_backup_setup">نسخ إحتياطي للمفتاح</string>
     <string name="notification_sync_init">جاري إعداد الخدمة</string>
@@ -1229,5 +1229,27 @@
         <item quantity="few">أنت أضفت %1$s كعناوين لهذه الغرفة.</item>
         <item quantity="many">أنت أضفت %1$s كعناوين لهذه الغرفة.</item>
         <item quantity="other">أنت أضفت %1$s كعناوين لهذه الغرفة.</item>
+    </plurals>
+    <string name="denied_permission_generic">لإكمال الاجراء امنح الصلاحيات الناقصة عبر إعدادات النظام.</string>
+    <string name="spaces">الفضاءات</string>
+    <string name="notice_direct_room_guest_access_forbidden_by_you">منعتَ الزوار من دخول الغرفة.</string>
+    <string name="notice_room_guest_access_forbidden">منع %1$s الزوار من دخول الغرفة.</string>
+    <string name="notice_direct_room_guest_access_can_join_by_you">سمحت للزوار بدخول هنا.</string>
+    <string name="notice_direct_room_guest_access_can_join">سمح %1$s للزوار بدخول الغرفة.</string>
+    <string name="notice_room_guest_access_can_join_by_you">سمحتَ للزوار بدخول الغرفة.</string>
+    <string name="notice_room_guest_access_can_join">سمح %1$s للزوار بدخول الغرفة.</string>
+    <string name="notice_room_canonical_alias_no_change_by_you">غيرتَ عناوين الغرفة.</string>
+    <string name="notice_room_canonical_alias_no_change">غّير %1$s عناوين الغرفة.</string>
+    <string name="notice_room_canonical_alias_main_and_alternative_changed_by_you">غيرتَ العناوين الرئيسية والبديلة للغرفة.</string>
+    <string name="notice_room_canonical_alias_alternative_changed_by_you">غيّرت العناوين البديلة للغرفة.</string>
+    <string name="notice_direct_room_guest_access_forbidden">منع %1$s الزوار من دخول الغرفة.</string>
+    <string name="notice_room_guest_access_forbidden_by_you">منعتَ الزوار من دخول الغرفة.</string>
+    <plurals name="notice_room_canonical_alias_alternative_added_by_you">
+        <item quantity="zero">لم تضف أي رابط بديل.</item>
+        <item quantity="one">أضفت الرابط البديل %1$s للغرفة.</item>
+        <item quantity="two">أضفت الرابطين البديلين %1$s للغرفة.</item>
+        <item quantity="few">أضفت الروابط البديلة %1$s للغرفة.</item>
+        <item quantity="many">أضفت الروابط البديلة %1$s للغرفة.</item>
+        <item quantity="other">أضفت الروابط البديلة %1$s للغرفة.</item>
     </plurals>
 </resources>
