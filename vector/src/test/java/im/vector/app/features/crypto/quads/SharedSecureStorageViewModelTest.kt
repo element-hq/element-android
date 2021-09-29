@@ -17,12 +17,11 @@
 package im.vector.app.features.crypto.quads
 
 import com.airbnb.mvrx.Uninitialized
+import im.vector.app.test.InstantRxRule
 import im.vector.app.test.fakes.FakeSession
 import im.vector.app.test.fakes.FakeStringProvider
 import im.vector.app.test.test
-import io.reactivex.android.plugins.RxAndroidPlugins
-import io.reactivex.plugins.RxJavaPlugins
-import io.reactivex.schedulers.Schedulers
+import org.junit.Rule
 import org.junit.Test
 import org.matrix.android.sdk.api.session.securestorage.IntegrityResult
 import org.matrix.android.sdk.api.session.securestorage.KeyInfo
@@ -39,13 +38,11 @@ private val KEY_INFO_WITHOUT_PASSPHRASE = KeyInfo(id = "id", content = SecretSto
 
 class SharedSecureStorageViewModelTest {
 
+    @get:Rule
+    val instantRx = InstantRxRule()
+
     private val stringProvider = FakeStringProvider()
     private val session = FakeSession()
-
-    init {
-        RxJavaPlugins.setInitNewThreadSchedulerHandler { Schedulers.trampoline() }
-        RxAndroidPlugins.setInitMainThreadSchedulerHandler { Schedulers.trampoline() }
-    }
 
     @Test
     fun `given a key info with passphrase when initialising then step is EnterPassphrase`() {
