@@ -217,6 +217,9 @@ object UPHelper {
     fun getPrivacyFriendlyUpEndpoint(context: Context): String? {
         val endpoint = getUpEndpoint(context)
         if (endpoint.isNullOrEmpty()) return endpoint
+        if (isEmbeddedDistributor(context)) {
+            return endpoint
+        }
         return try {
             val parsed = URL(endpoint)
             "${parsed.protocol}://${parsed.host}"
