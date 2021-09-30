@@ -23,6 +23,9 @@ import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
 import io.realm.Realm
 import io.realm.RealmConfiguration
 
+private const val MARK_OLD_EVENT_AS_READ = true
+private const val MARK_UNREAD_DUE_TO_FASTLANE = false
+
 internal fun isEventRead(realmConfiguration: RealmConfiguration,
                          userId: String?,
                          roomId: String?,
@@ -39,10 +42,7 @@ internal fun isEventRead(realmConfiguration: RealmConfiguration,
         val liveChunk = ChunkEntity.findLastForwardChunkOfRoom(realm, roomId) ?: return@use
         val eventToCheck = liveChunk.timelineEvents.find(eventId)
         isEventRead = when {
-            eventToCheck == null                -> {
-                // This can happen in case of fast lane Event
-                false
-            }
+            eventToCheck == null                -> handleMissingEvent(realm, liveChunk, roomId, userId, eventId)
             eventToCheck.root?.sender == userId -> true
             else                                -> {
                 val readReceipt = ReadReceiptEntity.where(realm, roomId, userId).findFirst()
@@ -58,6 +58,26 @@ internal fun isEventRead(realmConfiguration: RealmConfiguration,
 
     return isEventRead
 }
+
+private fun handleMissingEvent(realm: Realm, latestChunkEntity: ChunkEntity, roomId: String, userId: String, eventId: String): Boolean {
+    return if (realm.doesEventExistInChunkHistory(eventId) && realm.hasReadReceiptInLatestChunk(latestChunkEntity, roomId, userId)) {
+        MARK_OLD_EVENT_AS_READ
+    } else {
+        // This can happen when fast lane events are displayed before the database finishes updating
+        MARK_UNREAD_DUE_TO_FASTLANE
+    }
+}
+
+private fun Realm.doesEventExistInChunkHistory(eventId: String): Boolean {
+    return ChunkEntity.findIncludingEvent(this, eventId) != null
+}
+
+private fun Realm.hasReadReceiptInLatestChunk(latestChunkEntity: ChunkEntity, roomId: String, userId: String) : Boolean {
+    return ReadReceiptEntity.where(this, roomId, userId).findFirst()?.let {
+        latestChunkEntity.timelineEvents.find(it.eventId)
+    } != null
+}
+
 
 internal fun isReadMarkerMoreRecent(realmConfiguration: RealmConfiguration,
                                     roomId: String?,
