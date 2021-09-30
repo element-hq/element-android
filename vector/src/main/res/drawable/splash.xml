@@ -11,7 +11,7 @@
     <!-- Centered logo -->
     <item
         android:bottom="300dp"
-        android:drawable="@drawable/ic_tchap_logo"
+        android:drawable="@drawable/ic_tchap_splashscreen_logo"
         android:gravity="center" />
 
     <!-- Centered title -->
