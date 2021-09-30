@@ -1,7 +1,7 @@
 name: Release checklist
 description: Checklist for each release. This template is only for the core team.
 title: "[Release] Element Android v"
-labels: [\U0001F680 Release]
+labels: [🚀 Release]
 assignees:
   - bmarty
 

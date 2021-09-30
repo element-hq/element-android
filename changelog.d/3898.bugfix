@@ -1,0 +1,2 @@
+Fixes the passphrase screen being incorrectly shown when pressing back on the key verification screen.
+When the user doesn't have a passphrase set we don't show the passphrase screen. 

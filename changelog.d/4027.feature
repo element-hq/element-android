@@ -1,0 +1,1 @@
+Add client base url config to customize permalinks

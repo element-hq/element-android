@@ -51,6 +51,9 @@ import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.notifications.NotificationDrawerManager
 import im.vector.app.features.permalink.NavigationInterceptor
 import im.vector.app.features.permalink.PermalinkHandler
+import im.vector.app.features.permalink.PermalinkHandler.Companion.MATRIX_TO_CUSTOM_SCHEME_URL_BASE
+import im.vector.app.features.permalink.PermalinkHandler.Companion.ROOM_LINK_PREFIX
+import im.vector.app.features.permalink.PermalinkHandler.Companion.USER_LINK_PREFIX
 import im.vector.app.features.popup.DefaultVectorAlert
 import im.vector.app.features.popup.PopupAlertManager
 import im.vector.app.features.popup.VerificationVectorAlert
@@ -272,20 +275,19 @@ class HomeActivity :
     private fun handleIntent(intent: Intent?) {
         intent?.dataString?.let { deepLink ->
             val resolvedLink = when {
-                deepLink.startsWith(PermalinkService.MATRIX_TO_URL_BASE) -> deepLink
-                deepLink.startsWith(MATRIX_TO_CUSTOM_SCHEME_URL_BASE)    -> {
-                    // This is a bit ugly, but for now just convert to matrix.to link for compatibility
-                    when {
+                // Element custom scheme is not handled by the sdk, convert it to matrix.to link for compatibility
+                deepLink.startsWith(MATRIX_TO_CUSTOM_SCHEME_URL_BASE) -> {
+                    val let = when {
                         deepLink.startsWith(USER_LINK_PREFIX) -> deepLink.substring(USER_LINK_PREFIX.length)
                         deepLink.startsWith(ROOM_LINK_PREFIX) -> deepLink.substring(ROOM_LINK_PREFIX.length)
                         else                                  -> null
-                    }?.let {
-                        activeSessionHolder.getSafeActiveSession()?.permalinkService()?.createPermalink(it)
+                    }?.let { permalinkId ->
+                        activeSessionHolder.getSafeActiveSession()?.permalinkService()?.createPermalink(permalinkId)
                     }
+                    let
                 }
-                else                                                     -> return@let
+                else                                                  -> deepLink
             }
-
             permalinkHandler.launch(
                     context = this,
                     deepLink = resolvedLink,
@@ -296,9 +298,11 @@ class HomeActivity :
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe { isHandled ->
                         if (!isHandled) {
+                            val isMatrixToLink = deepLink.startsWith(PermalinkService.MATRIX_TO_URL_BASE)
+                                    || deepLink.startsWith(MATRIX_TO_CUSTOM_SCHEME_URL_BASE)
                             MaterialAlertDialogBuilder(this)
                                     .setTitle(R.string.dialog_title_error)
-                                    .setMessage(R.string.permalink_malformed)
+                                    .setMessage(if (isMatrixToLink) R.string.permalink_malformed else R.string.universal_link_malformed)
                                     .setPositiveButton(R.string.ok, null)
                                     .show()
                         }
@@ -579,10 +583,6 @@ class HomeActivity :
                         putExtra(MvRx.KEY_ARG, args)
                     }
         }
-
-        private const val MATRIX_TO_CUSTOM_SCHEME_URL_BASE = "element://"
-        private const val ROOM_LINK_PREFIX = "${MATRIX_TO_CUSTOM_SCHEME_URL_BASE}room/"
-        private const val USER_LINK_PREFIX = "${MATRIX_TO_CUSTOM_SCHEME_URL_BASE}user/"
     }
 
     override fun create(initialState: ActiveSpaceViewState) = promoteRestrictedViewModelFactory.create(initialState)
