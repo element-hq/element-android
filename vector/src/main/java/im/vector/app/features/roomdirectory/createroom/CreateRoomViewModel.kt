@@ -36,6 +36,7 @@ import im.vector.app.features.settings.VectorPreferences
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixPatterns.getDomain
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
@@ -291,17 +292,13 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted private val init
                     disableFederation = state.disableFederation
 
                     // Encryption
-                    // we ignore the isEncrypted for public room as the switch is hidden in this case
-                    if (state.roomJoinRules != RoomJoinRules.PUBLIC && state.isEncrypted != null) {
-                        // the user explicitly switch the toggle
-                        if (state.isEncrypted) {
-                            enableEncryption()
-                        }
-                    } else {
-                        // based on default
-                        if (state.defaultEncrypted[state.roomJoinRules] == true) {
-                            enableEncryption()
-                        }
+                    val shouldEncrypt = when (state.roomJoinRules) {
+                        // we ignore the isEncrypted for public room as the switch is hidden in this case
+                        RoomJoinRules.PUBLIC -> false
+                        else                 -> state.isEncrypted ?: state.defaultEncrypted[state.roomJoinRules].orFalse()
+                    }
+                    if (shouldEncrypt) {
+                        enableEncryption()
                     }
                 }
 
