@@ -17,7 +17,6 @@
 package im.vector.app.features.home.room.detail.composer
 
 import im.vector.app.core.platform.VectorViewModelAction
-import im.vector.app.features.home.room.detail.RoomDetailAction
 
 sealed class TextComposerAction : VectorViewModelAction {
     data class SaveDraft(val draft: String) : TextComposerAction()

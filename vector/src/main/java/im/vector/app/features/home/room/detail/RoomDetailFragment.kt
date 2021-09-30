@@ -1393,7 +1393,7 @@ class RoomDetailFragment @Inject constructor(
                 views.voiceMessageRecorderView.isVisible = !textComposerState.isSendButtonVisible
                 views.composerLayout.views.sendButton.isInvisible = !textComposerState.isSendButtonVisible
                 views.composerLayout.setRoomEncrypted(summary.isEncrypted)
-                //views.composerLayout.alwaysShowSendButton = false
+                // views.composerLayout.alwaysShowSendButton = false
                 if (textComposerState.canSendMessage) {
                     views.notificationAreaView.render(NotificationAreaView.State.Hidden)
                 } else {

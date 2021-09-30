@@ -24,7 +24,6 @@ import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.text.toSpannable
-import androidx.core.view.isInvisible
 import androidx.transition.ChangeBounds
 import androidx.transition.Fade
 import androidx.transition.Transition
@@ -107,12 +106,12 @@ class TextComposerView @JvmOverloads constructor(
         applyNewConstraintSet(animate, transitionComplete)
     }
 
-    fun setTextIfDifferent(text: CharSequence?): Boolean{
+    fun setTextIfDifferent(text: CharSequence?): Boolean {
         return views.composerEditText.setTextIfDifferent(text)
     }
 
     private fun applyNewConstraintSet(animate: Boolean, transitionComplete: (() -> Unit)?) {
-        //val wasSendButtonInvisible = views.sendButton.isInvisible
+        // val wasSendButtonInvisible = views.sendButton.isInvisible
         if (animate) {
             configureAndBeginTransition(transitionComplete)
         }
@@ -121,7 +120,7 @@ class TextComposerView @JvmOverloads constructor(
             it.applyTo(this)
         }
         // Might be updated by view state just after, but avoid blinks
-        //views.sendButton.isInvisible = wasSendButtonInvisible
+        // views.sendButton.isInvisible = wasSendButtonInvisible
     }
 
     private fun configureAndBeginTransition(transitionComplete: (() -> Unit)? = null) {
