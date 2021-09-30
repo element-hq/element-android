@@ -78,7 +78,6 @@ private fun Realm.hasReadReceiptInLatestChunk(latestChunkEntity: ChunkEntity, ro
     } != null
 }
 
-
 internal fun isReadMarkerMoreRecent(realmConfiguration: RealmConfiguration,
                                     roomId: String?,
                                     eventId: String?): Boolean {
