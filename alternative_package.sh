@@ -97,7 +97,7 @@ case "$package_add" in
     ;;
 esac
 
-sed -i "s|SchildiChat|$name_replace|g" "$build_gradle"
+sed -i "s|\"SchildiChat|\"$name_replace|g" "$build_gradle"
 sed -i "s|de.spiritcroc.riotx|de.spiritcroc.riotx.$package_add|g" "$build_gradle" `find "$src_dir" -name google-services.json`
 sed -i "s|SchildiChat|$name_replace|g" `find "$fastlane_dir/metadata/android" -name "title.txt"`
 
