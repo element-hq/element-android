@@ -18,7 +18,6 @@ package org.matrix.android.sdk.api.session.sync.model
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import org.matrix.android.sdk.internal.session.sync.model.accountdata.UserAccountDataSync
 
 // SyncResponse represents the request response for server sync v2.
 @JsonClass(generateAdapter = true)

@@ -52,7 +52,7 @@ import org.matrix.android.sdk.api.session.sync.model.InvitedRoomSync
 import org.matrix.android.sdk.internal.session.sync.model.accountdata.BreadcrumbsContent
 import org.matrix.android.sdk.internal.session.sync.model.accountdata.DirectMessagesContent
 import org.matrix.android.sdk.internal.session.sync.model.accountdata.IgnoredUsersContent
-import org.matrix.android.sdk.internal.session.sync.model.accountdata.UserAccountDataSync
+import org.matrix.android.sdk.api.session.sync.model.UserAccountDataSync
 import org.matrix.android.sdk.internal.session.sync.model.accountdata.toMutable
 import org.matrix.android.sdk.internal.session.user.accountdata.DirectChatsHelper
 import org.matrix.android.sdk.internal.session.user.accountdata.UpdateUserAccountDataTask
