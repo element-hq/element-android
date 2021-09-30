@@ -91,17 +91,17 @@ class SpaceAddRoomFragment @Inject constructor(
             invalidateOptionsMenu()
         }
 
-        viewModel.selectSubscribe(this, SpaceAddRoomsState::spaceName) {
+        viewModel.selectSubscribe(SpaceAddRoomsState::spaceName) {
             views.appBarSpaceInfo.text = it
         }.disposeOnDestroyView()
 
-        viewModel.selectSubscribe(this, SpaceAddRoomsState::ignoreRooms) {
+        viewModel.selectSubscribe(SpaceAddRoomsState::ignoreRooms) {
             spaceEpoxyController.ignoreRooms = it
             roomEpoxyController.ignoreRooms = it
             dmEpoxyController.ignoreRooms = it
         }.disposeOnDestroyView()
 
-        viewModel.selectSubscribe(this, SpaceAddRoomsState::isSaving) {
+        viewModel.selectSubscribe(SpaceAddRoomsState::isSaving) {
             if (it is Loading) {
                 sharedViewModel.handle(SpaceManagedSharedAction.ShowLoading)
             } else {
@@ -109,11 +109,11 @@ class SpaceAddRoomFragment @Inject constructor(
             }
         }.disposeOnDestroyView()
 
-        viewModel.selectSubscribe(this, SpaceAddRoomsState::shouldShowDMs) {
+        viewModel.selectSubscribe(SpaceAddRoomsState::shouldShowDMs) {
             dmEpoxyController.disabled = !it
         }.disposeOnDestroyView()
 
-        viewModel.selectSubscribe(this, SpaceAddRoomsState::onlyShowSpaces) {
+        viewModel.selectSubscribe(SpaceAddRoomsState::onlyShowSpaces) {
             spaceEpoxyController.disabled = !it
             roomEpoxyController.disabled = it
             views.createNewRoom.text = if (it) getString(R.string.create_space) else getString(R.string.create_new_room)

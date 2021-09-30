@@ -78,7 +78,7 @@ class RoomJoinRuleActivity : VectorBaseActivity<ActivitySimpleBinding>(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel.selectSubscribe(this, RoomJoinRuleChooseRestrictedState::updatingStatus) {
+        viewModel.selectSubscribe(RoomJoinRuleChooseRestrictedState::updatingStatus) {
             when (it) {
                 Uninitialized -> {
                     // nop

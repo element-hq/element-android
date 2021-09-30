@@ -28,7 +28,7 @@ import io.reactivex.Observable
 import io.reactivex.Single
 
 abstract class VectorViewModel<S : MvRxState, VA : VectorViewModelAction, VE : VectorViewEvents>(initialState: S)
-    : BaseMvRxViewModel<S>(initialState, false) {
+    : BaseMvRxViewModel<S>(initialState) {
 
     interface Factory<S : MvRxState> {
         fun create(state: S): BaseMvRxViewModel<S>

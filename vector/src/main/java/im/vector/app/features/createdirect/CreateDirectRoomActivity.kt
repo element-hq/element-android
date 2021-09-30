@@ -102,7 +102,7 @@ class CreateDirectRoomActivity : SimpleFragmentActivity(), UserListViewModel.Fac
                     )
             )
         }
-        viewModel.selectSubscribe(this, CreateDirectRoomViewState::createAndInviteState) {
+        viewModel.selectSubscribe(CreateDirectRoomViewState::createAndInviteState) {
             renderCreateAndInviteState(it)
         }
     }

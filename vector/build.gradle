@@ -376,7 +376,8 @@ dependencies {
     implementation libs.airbnb.epoxyGlide
     kapt libs.airbnb.epoxyProcessor
     implementation libs.airbnb.epoxyPaging
-    implementation libs.airbnb.mvrx
+    implementation libs.airbnb.mavericks
+    implementation libs.airbnb.mavericksRx
 
     // Work
     implementation libs.androidx.work
@@ -458,7 +459,9 @@ dependencies {
 
     implementation "androidx.emoji:emoji-appcompat:1.1.0"
 
-    implementation 'com.github.BillCarsonFr:JsonViewer:0.6'
+    implementation ('com.github.BillCarsonFr:JsonViewer:0.6'){
+        exclude group: 'com.airbnb.android'
+    }
 
     // WebRTC
     // org.webrtc:google-webrtc is for development purposes only

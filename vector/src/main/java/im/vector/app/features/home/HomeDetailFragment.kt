@@ -134,7 +134,7 @@ class HomeDetailFragment @Inject constructor(
             views.bottomNavigationView.selectedItemId = it.currentTab.toMenuId()
         }
 
-        viewModel.selectSubscribe(this, HomeDetailViewState::roomGroupingMethod) { roomGroupingMethod ->
+        viewModel.selectSubscribe(HomeDetailViewState::roomGroupingMethod) { roomGroupingMethod ->
             when (roomGroupingMethod) {
                 is RoomGroupingMethod.ByLegacyGroup -> {
                     onGroupChange(roomGroupingMethod.groupSummary)
@@ -145,11 +145,11 @@ class HomeDetailFragment @Inject constructor(
             }
         }
 
-        viewModel.selectSubscribe(this, HomeDetailViewState::currentTab) { currentTab ->
+        viewModel.selectSubscribe(HomeDetailViewState::currentTab) { currentTab ->
             updateUIForTab(currentTab)
         }
 
-        viewModel.selectSubscribe(this, HomeDetailViewState::showDialPadTab) { showDialPadTab ->
+        viewModel.selectSubscribe(HomeDetailViewState::showDialPadTab) { showDialPadTab ->
             updateTabVisibilitySafely(R.id.bottom_action_dial_pad, showDialPadTab)
         }
 

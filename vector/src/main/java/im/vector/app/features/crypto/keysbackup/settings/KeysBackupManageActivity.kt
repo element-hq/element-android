@@ -55,7 +55,7 @@ class KeysBackupManageActivity : SimpleFragmentActivity() {
         }
 
         // Observe the deletion of keys backup
-        viewModel.selectSubscribe(this, KeysBackupSettingViewState::deleteBackupRequest) { asyncDelete ->
+        viewModel.selectSubscribe(KeysBackupSettingViewState::deleteBackupRequest) { asyncDelete ->
             when (asyncDelete) {
                 is Fail    -> {
                     updateWaitingView(null)

@@ -29,7 +29,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.viewbinding.ViewBinding
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.MvRxView
-import com.airbnb.mvrx.MvRxViewId
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -48,8 +47,6 @@ import java.util.concurrent.TimeUnit
  */
 abstract class VectorBaseBottomSheetDialogFragment<VB : ViewBinding> : BottomSheetDialogFragment(), MvRxView {
 
-    private val mvrxViewIdProperty = MvRxViewId()
-    final override val mvrxViewId: String by mvrxViewIdProperty
     private lateinit var screenComponent: ScreenComponent
 
     /* ==========================================================================================
@@ -133,11 +130,6 @@ abstract class VectorBaseBottomSheetDialogFragment<VB : ViewBinding> : BottomShe
 
     protected open fun injectWith(injector: ScreenComponent) = Unit
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        mvrxViewIdProperty.restoreFrom(savedInstanceState)
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onResume() {
         super.onResume()
         Timber.i("onResume BottomSheet ${javaClass.simpleName}")
@@ -152,11 +144,6 @@ abstract class VectorBaseBottomSheetDialogFragment<VB : ViewBinding> : BottomShe
                 bottomSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
             }
         }
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        mvrxViewIdProperty.saveTo(outState)
     }
 
     override fun onStart() {

@@ -19,10 +19,10 @@ package im.vector.app.features.widgets
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import com.google.android.material.appbar.MaterialToolbar
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.viewModel
+import com.google.android.material.appbar.MaterialToolbar
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.addFragment
@@ -33,7 +33,6 @@ import im.vector.app.features.widgets.permissions.RoomWidgetPermissionBottomShee
 import im.vector.app.features.widgets.permissions.RoomWidgetPermissionViewEvents
 import im.vector.app.features.widgets.permissions.RoomWidgetPermissionViewModel
 import im.vector.app.features.widgets.permissions.RoomWidgetPermissionViewState
-
 import org.matrix.android.sdk.api.session.events.model.Content
 import java.io.Serializable
 import javax.inject.Inject
@@ -103,7 +102,7 @@ class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>(),
             }
         }
 
-        viewModel.selectSubscribe(this, WidgetViewState::status) { ws ->
+        viewModel.selectSubscribe(WidgetViewState::status) { ws ->
             when (ws) {
                 WidgetStatus.UNKNOWN            -> {
                 }
@@ -125,11 +124,11 @@ class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>(),
             }
         }
 
-        viewModel.selectSubscribe(this, WidgetViewState::widgetName) { name ->
+        viewModel.selectSubscribe(WidgetViewState::widgetName) { name ->
             supportActionBar?.title = name
         }
 
-        viewModel.selectSubscribe(this, WidgetViewState::canManageWidgets) {
+        viewModel.selectSubscribe(WidgetViewState::canManageWidgets) {
             invalidateOptionsMenu()
         }
     }
