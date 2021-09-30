@@ -17,6 +17,8 @@
 package org.matrix.android.sdk.api.session.permalinks
 
 import android.net.Uri
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 
 /**
  * This sealed class represents all the permalink cases.
@@ -30,6 +32,25 @@ sealed class PermalinkData {
             val eventId: String?,
             val viaParameters: List<String>
     ) : PermalinkData()
+
+    /**
+     * &room_name=Team2
+        &room_avatar_url=mxc:
+         &inviter_name=bob
+     */
+    @Parcelize
+    data class RoomEmailInviteLink(
+        val roomId: String,
+        val email: String,
+        val signUrl: String,
+        val roomName: String?,
+        val roomAvatarUrl: String?,
+        val inviterName: String?,
+        val identityServer: String,
+        val token: String,
+        val privateKey: String,
+        val roomType: String?
+    ) : PermalinkData(), Parcelable
 
     data class UserLink(val userId: String) : PermalinkData()
 

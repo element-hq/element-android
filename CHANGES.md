@@ -1,3 +1,113 @@
+Changes in Element v1.3.1 (2021-09-29)
+======================================
+
+Bugfixes 🐛
+----------
+ - Verifying exported E2E keys to provide user feedback when the output is malformed ([#4082](https://github.com/vector-im/element-android/issues/4082))
+ - Fix settings crash when accelerometer not available ([#4103](https://github.com/vector-im/element-android/issues/4103))
+ - Crash while rendering failed message warning ([#4110](https://github.com/vector-im/element-android/issues/4110))
+
+
+Changes in Element v1.3.0 (2021-09-27)
+======================================
+
+Features ✨
+----------
+ - Spaces!
+ - Adds email notification registration to Settings ([#2243](https://github.com/vector-im/element-android/issues/2243))
+ - Spaces | M3.23 Invite by email in create private space flow ([#3678](https://github.com/vector-im/element-android/issues/3678))
+ - Improve space invite bottom sheet ([#4057](https://github.com/vector-im/element-android/issues/4057))
+ - Allow to also leave rooms when leaving a space ([#3692](https://github.com/vector-im/element-android/issues/3692))
+ - Better expose adding spaces as Subspaces ([#3752](https://github.com/vector-im/element-android/issues/3752))
+ - Push and syncs: add debug info on room list and on room detail screen and improves the log format. ([#4046](https://github.com/vector-im/element-android/issues/4046))
+
+Bugfixes 🐛
+----------
+ - Remove the "Teammate spaces aren't quite ready" bottom sheet ([#3945](https://github.com/vector-im/element-android/issues/3945))
+ - Restricted Room previews aren't working ([#3946](https://github.com/vector-im/element-android/issues/3946))
+ - A removed room from a space can't be re-added as it won't be shown in add-room ([#3947](https://github.com/vector-im/element-android/issues/3947))
+ - "Non-Admin" user able to invite others to Private Space (by default) ([#3951](https://github.com/vector-im/element-android/issues/3951))
+ - Kick user dialog for spaces talks about rooms ([#3956](https://github.com/vector-im/element-android/issues/3956))
+ - Messages are displayed as unable to decrypt then decrypted a few seconds later ([#4011](https://github.com/vector-im/element-android/issues/4011))
+ - Fix DTMF not working ([#4015](https://github.com/vector-im/element-android/issues/4015))
+ - Fix sticky end call notification ([#4019](https://github.com/vector-im/element-android/issues/4019))
+ - Fix call screen stuck with some hanging up scenarios ([#4026](https://github.com/vector-im/element-android/issues/4026))
+ - Fix other call not always refreshed when ended ([#4028](https://github.com/vector-im/element-android/issues/4028))
+ - Private space invite bottomsheet only offering inviting by username not by email ([#4042](https://github.com/vector-im/element-android/issues/4042))
+ - Spaces invitation system notifications don't take me to the join space toast ([#4043](https://github.com/vector-im/element-android/issues/4043))
+ - Space Invites are not lighting up the drawer menu ([#4059](https://github.com/vector-im/element-android/issues/4059))
+ - MessageActionsBottomSheet not being shown on local echos ([#4068](https://github.com/vector-im/element-android/issues/4068))
+
+SDK API changes ⚠️
+------------------
+ - InitialSyncProgressService has been renamed to SyncStatusService and its function getInitialSyncProgressStatus() has been renamed to getSyncStatusLive() ([#4046](https://github.com/vector-im/element-android/issues/4046))
+
+Other changes
+-------------
+ - Better support for Sdk2 version. Also slight change in the default user agent: `MatrixAndroidSDK_X` is replaced by `MatrixAndroidSdk2` ([#3994](https://github.com/vector-im/element-android/issues/3994))
+ - Introduces ConferenceEvent to abstract usage of Jitsi BroadcastEvent class. ([#4014](https://github.com/vector-im/element-android/issues/4014))
+ - Improve performances on RoomDetail screen ([#4065](https://github.com/vector-im/element-android/issues/4065))
+
+
+Changes in Element v1.2.2 (2021-09-13)
+======================================
+
+Bugfixes 🐛
+----------
+
+- Fix a security issue with message key sharing. See https://matrix.org/blog/2021/09/13/vulnerability-disclosure-key-sharing for details.
+
+
+Changes in Element v1.2.1 (2021-09-08)
+======================================
+
+Features ✨
+----------
+ - Support Android 11 Conversation features ([#1809](https://github.com/vector-im/element-android/issues/1809))
+ - Introduces AutoAcceptInvites which can be enabled at compile time. ([#3531](https://github.com/vector-im/element-android/issues/3531))
+ - New call designs ([#3599](https://github.com/vector-im/element-android/issues/3599))
+ - Restricted Join Rule | Inform admins of new option ([#3631](https://github.com/vector-im/element-android/issues/3631))
+ - Mention and Keyword Notification Settings: Turn on/off keyword notifications and edit keywords. ([#3650](https://github.com/vector-im/element-android/issues/3650))
+ - Support accept 3pid invite when email is not bound to account ([#3691](https://github.com/vector-im/element-android/issues/3691))
+ - Space summary pagination ([#3693](https://github.com/vector-im/element-android/issues/3693))
+ - Update Email invite to be aware of spaces ([#3695](https://github.com/vector-im/element-android/issues/3695))
+ - M11.12 Spaces | Default to 'Home' in settings ([#3754](https://github.com/vector-im/element-android/issues/3754))
+ - Call: show dialog for some ended reasons. ([#3853](https://github.com/vector-im/element-android/issues/3853))
+ - Add expired account error code in the matrix SDK ([#3900](https://github.com/vector-im/element-android/issues/3900))
+ - Add password errors in the matrix SDK ([#3927](https://github.com/vector-im/element-android/issues/3927))
+ - Upgrade AGP to 7.0.2.
+  When compiling using command line, make sure to use the JDK 11 by adding for instance `-Dorg.gradle.java.home=/Applications/Android\ Studio\ Preview.app/Contents/jre/Contents/Home` or by setting JAVA_HOME. ([#3954](https://github.com/vector-im/element-android/issues/3954))
+ - Check power level before displaying actions in the room details' timeline ([#3959](https://github.com/vector-im/element-android/issues/3959))
+
+Bugfixes 🐛
+----------
+ - Add mxid to autocomplete suggestion if more than one user in a room has the same displayname ([#1823](https://github.com/vector-im/element-android/issues/1823))
+ - Use WebView cache for widgets to avoid excessive data use ([#2648](https://github.com/vector-im/element-android/issues/2648))
+ - Jitsi-hosted jitsi conferences not loading ([#2846](https://github.com/vector-im/element-android/issues/2846))
+ - Space Explore Rooms no feedback on failed to join ([#3207](https://github.com/vector-im/element-android/issues/3207))
+ - Notifications - Fix missing sound on notifications. ([#3243](https://github.com/vector-im/element-android/issues/3243))
+ - the element-based domain permalinks (e.g. https://app.element.io/#/user/@chagai95:matrix.org) don't have the mxid in the first param (like matrix.to does - https://matrix.to/#/@chagai95:matrix.org) but rather in the second after /user/ so /user/mxid ([#3735](https://github.com/vector-im/element-android/issues/3735))
+ - Update the AccountData with the users' matrix Id instead of their email for those invited by email in a direct chat ([#3743](https://github.com/vector-im/element-android/issues/3743))
+ - Send an empty body for POST rooms/{roomId}/receipt/{receiptType}/{eventId} ([#3789](https://github.com/vector-im/element-android/issues/3789))
+ - Fix order in which the items of the attachment menu appear ([#3793](https://github.com/vector-im/element-android/issues/3793))
+ - Authenticated Jitsi not working in release ([#3841](https://github.com/vector-im/element-android/issues/3841))
+ - Home: Dial pad lost entry when config changes ([#3845](https://github.com/vector-im/element-android/issues/3845))
+ - Message edition is not rendered in e2e rooms after pagination ([#3887](https://github.com/vector-im/element-android/issues/3887))
+ - Crash on opening a room on Android 5.0 and 5.1 - Regression with Voice message ([#3897](https://github.com/vector-im/element-android/issues/3897))
+ - Fix a crash at start-up if translated string is empty ([#3910](https://github.com/vector-im/element-android/issues/3910))
+ - PushRule enabling request is not following the spec ([#3911](https://github.com/vector-im/element-android/issues/3911))
+ - Enable image preview in Android's share sheet (Android 11+) ([#3965](https://github.com/vector-im/element-android/issues/3965))
+ - Voice Message - Cannot render voice message if the waveform data is corrupted ([#3983](https://github.com/vector-im/element-android/issues/3983))
+ - Fix memory leak on RoomDetailFragment (ValueAnimator) ([#3990](https://github.com/vector-im/element-android/issues/3990))
+
+Other changes
+-------------
+ - VoIP: Merge virtual room timeline in corresponding native room (call events only). ([#3520](https://github.com/vector-im/element-android/issues/3520))
+ - Issue templates: modernise and sync with element-web ([#3883](https://github.com/vector-im/element-android/issues/3883))
+ - Issue templates: modernise SDK and release checklists, and add homeserver question for bugs ([#3889](https://github.com/vector-im/element-android/issues/3889))
+ - Issue templates: merge expected and actual results ([#3960](https://github.com/vector-im/element-android/issues/3960))
+
+
 Changes in Element v1.2.0 (2021-08-12)
 ======================================
 

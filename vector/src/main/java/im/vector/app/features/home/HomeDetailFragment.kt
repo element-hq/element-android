@@ -22,7 +22,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.get
 import androidx.core.view.isVisible
 import androidx.core.view.iterator
 import androidx.fragment.app.Fragment
@@ -30,6 +29,7 @@ import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.badge.BadgeDrawable
+import im.vector.app.AppStateHandler
 import im.vector.app.R
 import im.vector.app.RoomGroupingMethod
 import im.vector.app.core.extensions.commitTransaction
@@ -39,8 +39,8 @@ import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.ui.views.CurrentCallsView
+import im.vector.app.core.ui.views.CurrentCallsViewPresenter
 import im.vector.app.core.ui.views.KeysBackupBanner
-import im.vector.app.core.ui.views.KnownCallsViewHolder
 import im.vector.app.databinding.FragmentHomeDetailBinding
 import im.vector.app.features.call.SharedKnownCallsViewModel
 import im.vector.app.features.call.VectorCallActivity
@@ -70,7 +70,8 @@ class HomeDetailFragment @Inject constructor(
         private val colorProvider: ColorProvider,
         private val alertManager: PopupAlertManager,
         private val callManager: WebRtcCallManager,
-        private val vectorPreferences: VectorPreferences
+        private val vectorPreferences: VectorPreferences,
+        private val appStateHandler: AppStateHandler
 ) : VectorBaseFragment<FragmentHomeDetailBinding>(),
         KeysBackupBanner.Delegate,
         CurrentCallsView.Callback,
@@ -117,7 +118,7 @@ class HomeDetailFragment @Inject constructor(
         return FragmentHomeDetailBinding.inflate(inflater, container, false)
     }
 
-    private val activeCallViewHolder = KnownCallsViewHolder()
+    private val currentCallsViewPresenter = CurrentCallsViewPresenter()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -190,9 +191,14 @@ class HomeDetailFragment @Inject constructor(
         sharedCallActionViewModel
                 .liveKnownCalls
                 .observe(viewLifecycleOwner, {
-                    activeCallViewHolder.updateCall(callManager.getCurrentCall(), callManager.getCalls())
+                    currentCallsViewPresenter.updateCall(callManager.getCurrentCall(), callManager.getCalls())
                     invalidateOptionsMenu()
                 })
+    }
+
+    override fun onDestroyView() {
+        currentCallsViewPresenter.unBind()
+        super.onDestroyView()
     }
 
     override fun onResume() {
@@ -200,6 +206,18 @@ class HomeDetailFragment @Inject constructor(
         // update notification tab if needed
         updateTabVisibilitySafely(R.id.bottom_action_notification, vectorPreferences.labAddNotificationTab())
         callManager.checkForProtocolsSupportIfNeeded()
+
+        // Current space/group is not live so at least refresh toolbar on resume
+        appStateHandler.getCurrentRoomGroupingMethod()?.let { roomGroupingMethod ->
+            when (roomGroupingMethod) {
+                is RoomGroupingMethod.ByLegacyGroup -> {
+                    onGroupChange(roomGroupingMethod.groupSummary)
+                }
+                is RoomGroupingMethod.BySpace       -> {
+                    onSpaceChange(roomGroupingMethod.spaceSummary)
+                }
+            }
+        }
     }
 
     private fun promptForNewUnknownDevices(uid: String, state: UnknownDevicesState, newest: DeviceInfo) {
@@ -291,12 +309,7 @@ class HomeDetailFragment @Inject constructor(
     }
 
     private fun setupActiveCallView() {
-        activeCallViewHolder.bind(
-                views.activeCallPiP,
-                views.activeCallView,
-                views.activeCallPiPWrap,
-                this
-        )
+        currentCallsViewPresenter.bind(views.currentCallsView, this)
     }
 
     private fun setupToolbar() {
@@ -427,7 +440,11 @@ class HomeDetailFragment @Inject constructor(
         views.bottomNavigationView.getOrCreateBadge(R.id.bottom_action_people).render(it.notificationCountPeople, it.notificationHighlightPeople)
         views.bottomNavigationView.getOrCreateBadge(R.id.bottom_action_rooms).render(it.notificationCountRooms, it.notificationHighlightRooms)
         views.bottomNavigationView.getOrCreateBadge(R.id.bottom_action_notification).render(it.notificationCountCatchup, it.notificationHighlightCatchup)
-        views.syncStateView.render(it.syncState)
+        views.syncStateView.render(
+                it.syncState,
+                it.incrementalSyncStatus,
+                it.pushCounter,
+                vectorPreferences.developerShowDebugInfo())
 
         hasUnreadRooms = it.hasUnreadMessages
     }

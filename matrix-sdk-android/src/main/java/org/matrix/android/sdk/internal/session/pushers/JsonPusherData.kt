@@ -32,5 +32,8 @@ internal data class JsonPusherData(
          * Currently the only format available is 'event_id_only'.
          */
         @Json(name = "format")
-        val format: String? = null
+        val format: String? = null,
+
+        @Json(name = "brand")
+        val brand: String? = null
 )

@@ -182,7 +182,7 @@ internal class DefaultStateService @AssistedInject constructor(@Assisted private
     override suspend fun setJoinRuleRestricted(allowList: List<String>) {
         // we need to compute correct via parameters and check if PL are correct
         val allowEntries = allowList.map { spaceId ->
-            RoomJoinRulesAllowEntry(spaceId, viaParameterFinder.computeViaParamsForRestricted(spaceId, 3))
+            RoomJoinRulesAllowEntry.restrictedToRoom(spaceId)
         }
         updateJoinRule(RoomJoinRules.RESTRICTED, null, allowEntries)
     }

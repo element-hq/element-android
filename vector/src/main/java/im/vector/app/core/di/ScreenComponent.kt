@@ -62,7 +62,6 @@ import im.vector.app.features.matrixto.MatrixToBottomSheet
 import im.vector.app.features.media.BigImageViewerActivity
 import im.vector.app.features.media.VectorAttachmentViewerActivity
 import im.vector.app.features.navigation.Navigator
-import im.vector.app.features.permalink.PermalinkHandlerActivity
 import im.vector.app.features.pin.PinLocker
 import im.vector.app.features.qrcode.QrCodeScannerActivity
 import im.vector.app.features.rageshake.BugReportActivity
@@ -84,10 +83,12 @@ import im.vector.app.features.settings.devices.DeviceVerificationInfoBottomSheet
 import im.vector.app.features.share.IncomingShareActivity
 import im.vector.app.features.signout.soft.SoftLogoutActivity
 import im.vector.app.features.spaces.InviteRoomSpaceChooserBottomSheet
+import im.vector.app.features.spaces.LeaveSpaceBottomSheet
 import im.vector.app.features.spaces.SpaceCreationActivity
 import im.vector.app.features.spaces.SpaceExploreActivity
 import im.vector.app.features.spaces.SpaceSettingsMenuBottomSheet
 import im.vector.app.features.spaces.invite.SpaceInviteBottomSheet
+import im.vector.app.features.spaces.leave.SpaceLeaveAdvancedActivity
 import im.vector.app.features.spaces.manage.SpaceManageActivity
 import im.vector.app.features.spaces.share.ShareSpaceBottomSheet
 import im.vector.app.features.terms.ReviewTermsActivity
@@ -96,6 +97,7 @@ import im.vector.app.features.usercode.UserCodeActivity
 import im.vector.app.features.widgets.WidgetActivity
 import im.vector.app.features.widgets.permissions.RoomWidgetPermissionBottomSheet
 import im.vector.app.features.workers.signout.SignOutBottomSheetDialogFragment
+import kotlinx.coroutines.CoroutineScope
 
 @Component(
         dependencies = [
@@ -127,6 +129,7 @@ interface ScreenComponent {
     fun uiStateRepository(): UiStateRepository
     fun unrecognizedCertificateDialog(): UnrecognizedCertificateDialog
     fun autoAcceptInvites(): AutoAcceptInvites
+    fun appCoroutineScope(): CoroutineScope
 
     /* ==========================================================================================
      * Activities
@@ -151,7 +154,6 @@ interface ScreenComponent {
     fun inject(activity: CreateDirectRoomActivity)
     fun inject(activity: IncomingShareActivity)
     fun inject(activity: SoftLogoutActivity)
-    fun inject(activity: PermalinkHandlerActivity)
     fun inject(activity: QrCodeScannerActivity)
     fun inject(activity: DebugMenuActivity)
     fun inject(activity: SharedSecureStorageActivity)
@@ -171,6 +173,7 @@ interface ScreenComponent {
     fun inject(activity: SpaceExploreActivity)
     fun inject(activity: SpaceManageActivity)
     fun inject(activity: RoomJoinRuleActivity)
+    fun inject(activity: SpaceLeaveAdvancedActivity)
 
     /* ==========================================================================================
      * BottomSheets
@@ -199,6 +202,7 @@ interface ScreenComponent {
     fun inject(bottomSheet: SpaceInviteBottomSheet)
     fun inject(bottomSheet: JoinReplacementRoomBottomSheet)
     fun inject(bottomSheet: MigrateRoomBottomSheet)
+    fun inject(bottomSheet: LeaveSpaceBottomSheet)
 
     /* ==========================================================================================
      * Others

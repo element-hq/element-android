@@ -1,0 +1,2 @@
+Ndryshimet kryesore në këtë version: Ndreqje gabimi, kur dërgohet mesazh i fshehtëzuar, nëse dikush nga dhoma bën dalje prej saj.
+Regjistër i plotë ndryshimesh: https://github.com/vector-im/element-android/releases/tag/v1.1.16

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    tools:parentTag="android.widget.FrameLayout"
+    android:paddingStart="4dp"
+    android:paddingEnd="4dp">
+
+    <Button
+        android:id="@+id/join_conference_button"
+        android:layout_width="56dp"
+        android:layout_height="wrap_content"
+        android:minHeight="32dp"
+        app:icon="@drawable/ic_call_video_small"
+        app:iconGravity="textStart"
+        app:iconPadding="0dp"
+        app:iconTint="@color/element_background_light" />
+
+</merge>

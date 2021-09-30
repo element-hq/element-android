@@ -221,7 +221,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                 }
                 // Give info to crypto module
                 cryptoService.onStateEvent(roomId, event)
-                roomMemberEventHandler.handle(realm, roomId, event)
+                roomMemberEventHandler.handle(realm, roomId, event, aggregator)
             }
         }
         if (roomSync.timeline?.events?.isNotEmpty() == true) {
@@ -233,7 +233,8 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                     roomSync.timeline.prevToken,
                     roomSync.timeline.limited,
                     insertType,
-                    syncLocalTimestampMillis
+                    syncLocalTimestampMillis,
+                    aggregator
             )
             roomEntity.addIfNecessary(chunkEntity)
         }
@@ -337,7 +338,8 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                                      prevToken: String? = null,
                                      isLimited: Boolean = true,
                                      insertType: EventInsertType,
-                                     syncLocalTimestampMillis: Long): ChunkEntity {
+                                     syncLocalTimestampMillis: Long,
+                                     aggregator: SyncResponsePostTreatmentAggregator): ChunkEntity {
         val lastChunk = ChunkEntity.findLastForwardChunkOfRoom(realm, roomEntity.roomId)
         val chunkEntity = if (!isLimited && lastChunk != null) {
             lastChunk
@@ -371,7 +373,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                 if (event.type == EventType.STATE_ROOM_MEMBER) {
                     val fixedContent = event.getFixedRoomMemberContent()
                     roomMemberContentsByUser[event.stateKey] = fixedContent
-                    roomMemberEventHandler.handle(realm, roomEntity.roomId, event.stateKey, fixedContent)
+                    roomMemberEventHandler.handle(realm, roomEntity.roomId, event.stateKey, fixedContent, aggregator)
                 }
             }
             roomMemberContentsByUser.getOrPut(event.senderId) {

@@ -21,6 +21,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.annotation.CallSuper
 import androidx.preference.PreferenceFragmentCompat
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.di.DaggerScreenComponent
 import im.vector.app.core.di.HasScreenInjector
@@ -160,9 +161,21 @@ abstract class VectorSettingsBaseFragment : PreferenceFragmentCompat(), HasScree
         }
         activity?.runOnUiThread {
             if (errorMessage != null && errorMessage.isNotBlank()) {
-                activity?.toast(errorMessage)
+                displayErrorDialog(errorMessage)
             }
             hideLoadingView()
         }
+    }
+
+    protected fun displayErrorDialog(throwable: Throwable) {
+        displayErrorDialog(errorFormatter.toHumanReadable(throwable))
+    }
+
+    protected fun displayErrorDialog(errorMessage: String) {
+        MaterialAlertDialogBuilder(requireActivity())
+                .setTitle(R.string.dialog_title_error)
+                .setMessage(errorMessage)
+                .setPositiveButton(R.string.ok, null)
+                .show()
     }
 }

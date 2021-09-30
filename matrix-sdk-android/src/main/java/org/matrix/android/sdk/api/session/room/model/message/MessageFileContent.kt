@@ -28,7 +28,7 @@ data class MessageFileContent(
         /**
          * Required. Must be 'm.file'.
          */
-        @Json(name = "msgtype") override val msgType: String,
+        @Json(name = MessageContent.MSG_TYPE_JSON_KEY) override val msgType: String,
 
         /**
          * Required. A human-readable description of the file. This is recommended to be the filename of the original upload.

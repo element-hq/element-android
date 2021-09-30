@@ -20,22 +20,30 @@ import io.realm.Realm
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
+import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.events.getFixedRoomMemberContent
+import org.matrix.android.sdk.internal.session.sync.SyncResponsePostTreatmentAggregator
 import org.matrix.android.sdk.internal.session.user.UserEntityFactory
 import javax.inject.Inject
 
-internal class RoomMemberEventHandler @Inject constructor() {
+internal class RoomMemberEventHandler @Inject constructor(
+        @UserId private val myUserId: String
+) {
 
-    fun handle(realm: Realm, roomId: String, event: Event): Boolean {
+    fun handle(realm: Realm, roomId: String, event: Event, aggregator: SyncResponsePostTreatmentAggregator? = null): Boolean {
         if (event.type != EventType.STATE_ROOM_MEMBER) {
             return false
         }
         val userId = event.stateKey ?: return false
         val roomMember = event.getFixedRoomMemberContent()
-        return handle(realm, roomId, userId, roomMember)
+        return handle(realm, roomId, userId, roomMember, aggregator)
     }
 
-    fun handle(realm: Realm, roomId: String, userId: String, roomMember: RoomMemberContent?): Boolean {
+    fun handle(realm: Realm,
+               roomId: String,
+               userId: String,
+               roomMember: RoomMemberContent?,
+               aggregator: SyncResponsePostTreatmentAggregator? = null): Boolean {
         if (roomMember == null) {
             return false
         }
@@ -45,6 +53,14 @@ internal class RoomMemberEventHandler @Inject constructor() {
             val userEntity = UserEntityFactory.create(userId, roomMember)
             realm.insertOrUpdate(userEntity)
         }
+
+        // check whether this new room member event may be used to update the directs dictionary in account data
+        // this is required to handle correctly invite by email in DM
+        val mxId = roomMember.thirdPartyInvite?.signed?.mxid
+        if (mxId != null && mxId != myUserId) {
+            aggregator?.directChatsToCheck?.put(roomId, mxId)
+        }
+
         return true
     }
 }

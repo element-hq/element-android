@@ -8,10 +8,10 @@ Element adalah perpesanan yang aman dan aplikasi kolaborasi tim produktivitas ya
 - Obrolan video dengan VoIP dan berbagi layar
 - Integrasi yang mudah dengan alat kolaborasi online favorit Anda, alat manajemen proyek, layanan VoIP dan aplikasi perpesanan tim lainnya
 
-Element benar-benar berbeda dari aplikasi perpesanan dan kolaborasi lainnya. Ini beroperasi pada Matrix, jaringan terbuka untuk pengiriman pesan yang aman dan komunikasi terdesentralisasi. Ini memungkinkan hosting sendiri untuk memberi pengguna kepemilikan maksimum dan kontrol data dan pesan mereka.
+Element benar-benar berbeda dari aplikasi perpesanan dan kolaborasi lainnya. Element beroperasi pada Matrix, jaringan terbuka untuk pengiriman pesan yang aman dan komunikasi terdesentralisasi. Matrix memungkinkan hosting sendiri untuk memberi pengguna kepemilikan maksimum dan kontrol data dan pesan mereka.
 
 <b>Pesan privasi dan terenkripsi</b>
-Element melindungi Anda dari iklan yang tidak diinginkan, data penambangan dan taman berdinding. Ini juga mengamankan semua data Anda, komunikasi video dan suara satu-ke-satu melalui enkripsi ujung-ke-ujung dan verifikasi perangkat yang di-cross-signed.
+Element melindungi Anda dari iklan yang tidak diinginkan, data penambangan dan taman berdinding. Element juga mengamankan semua data Anda, komunikasi video dan suara satu-ke-satu melalui enkripsi ujung-ke-ujung dan verifikasi perangkat yang ditanda tangani silang.
 
 Element memberi Anda kendali atas privasi Anda sambil memungkinkan Anda untuk berkomunikasi dengan aman dengan siapa pun di jaringan Matrix, atau alat kolaborasi bisnis lainnya dengan mengintegrasikan dengan aplikasi seperti Slack.
 
@@ -30,7 +30,7 @@ Element menempatkan Anda dalam kendali dengan cara yang berbeda:
 Anda dapat mengobrol dengan siapa saja di jaringan Matrix, apakah mereka menggunakan Element, aplikasi Matrix lain atau bahkan jika mereka menggunakan aplikasi perpesanan yang berbeda.
 
 <b>Sangat aman</b>
-Enkripsi ujung-ke-ujung beneran (hanya mereka yang dalam percakapan dapat mendekripsi pesan), dan verifikasi perangkat yang di-cross-signed.
+Enkripsi ujung-ke-ujung beneran (hanya mereka yang dalam percakapan dapat mendekripsi pesan), dan verifikasi perangkat yang ditanda tangani silang.
 
 <b>Komunikasi dan integrasi lengkap</b>
 Perpesanan, panggilan suara dan video, berbagi file, berbagi layar dan banyak integrasi, bot dan widget. Buat ruangan, komunitas, tetap terhubung dan selesaikan hal-hal.

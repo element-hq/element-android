@@ -20,12 +20,12 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
-import com.google.android.material.appbar.MaterialToolbar
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.viewModel
 import com.airbnb.mvrx.withState
+import com.google.android.material.appbar.MaterialToolbar
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.addFragmentToBackstack
@@ -40,6 +40,7 @@ import im.vector.app.features.roomdirectory.createroom.CreateRoomArgs
 import im.vector.app.features.roomdirectory.createroom.CreateRoomFragment
 import im.vector.app.features.roomprofile.RoomProfileArgs
 import im.vector.app.features.roomprofile.alias.RoomAliasFragment
+import im.vector.app.features.roomprofile.permissions.RoomPermissionsFragment
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
@@ -98,7 +99,8 @@ class SpaceManageActivity : VectorBaseActivity<ActivitySimpleLoadingBinding>(),
         if (isFirstCreation()) {
             withState(sharedViewModel) {
                 when (it.manageType) {
-                    ManageType.AddRooms -> {
+                    ManageType.AddRooms,
+                    ManageType.AddRoomsOnlySpaces -> {
                         val simpleName = SpaceAddRoomFragment::class.java.simpleName
                         if (supportFragmentManager.findFragmentByTag(simpleName) == null) {
                             supportFragmentManager.commitTransaction {
@@ -110,7 +112,7 @@ class SpaceManageActivity : VectorBaseActivity<ActivitySimpleLoadingBinding>(),
                             }
                         }
                     }
-                    ManageType.Settings -> {
+                    ManageType.Settings    -> {
                         val simpleName = SpaceSettingsFragment::class.java.simpleName
                         if (supportFragmentManager.findFragmentByTag(simpleName) == null && args?.spaceId != null) {
                             supportFragmentManager.commitTransaction {
@@ -131,20 +133,27 @@ class SpaceManageActivity : VectorBaseActivity<ActivitySimpleLoadingBinding>(),
 
         sharedViewModel.observeViewEvents {
             when (it) {
-                SpaceManagedSharedViewEvents.Finish -> {
+                SpaceManagedSharedViewEvents.Finish                       -> {
                     finish()
                 }
-                SpaceManagedSharedViewEvents.HideLoading -> {
+                SpaceManagedSharedViewEvents.HideLoading                  -> {
                     hideWaitingView()
                 }
-                SpaceManagedSharedViewEvents.ShowLoading -> {
+                SpaceManagedSharedViewEvents.ShowLoading                  -> {
                     showWaitingView()
                 }
-                SpaceManagedSharedViewEvents.NavigateToCreateRoom -> {
+                SpaceManagedSharedViewEvents.NavigateToCreateRoom         -> {
                     addFragmentToBackstack(
                             R.id.simpleFragmentContainer,
                             CreateRoomFragment::class.java,
                             CreateRoomArgs("", parentSpaceId = args?.spaceId)
+                    )
+                }
+                SpaceManagedSharedViewEvents.NavigateToCreateSpace -> {
+                    addFragmentToBackstack(
+                            R.id.simpleFragmentContainer,
+                            CreateRoomFragment::class.java,
+                            CreateRoomArgs("", parentSpaceId = args?.spaceId, isSpace = true)
                     )
                 }
                 SpaceManagedSharedViewEvents.NavigateToManageRooms -> {
@@ -156,11 +165,19 @@ class SpaceManageActivity : VectorBaseActivity<ActivitySimpleLoadingBinding>(),
                         )
                     }
                 }
-                SpaceManagedSharedViewEvents.NavigateToAliasSettings -> {
+                SpaceManagedSharedViewEvents.NavigateToAliasSettings      -> {
                     args?.spaceId?.let { spaceId ->
                         addFragmentToBackstack(
                                 R.id.simpleFragmentContainer,
                                 RoomAliasFragment::class.java,
+                                RoomProfileArgs(spaceId)
+                        )
+                    }
+                }
+                SpaceManagedSharedViewEvents.NavigateToPermissionSettings -> {
+                    args?.spaceId?.let { spaceId ->
+                        addFragmentToBackstack(
+                                R.id.simpleFragmentContainer, RoomPermissionsFragment::class.java,
                                 RoomProfileArgs(spaceId)
                         )
                     }

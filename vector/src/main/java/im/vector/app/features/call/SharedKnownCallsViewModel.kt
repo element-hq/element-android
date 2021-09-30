@@ -32,18 +32,16 @@ class SharedKnownCallsViewModel @Inject constructor(
     val callListener = object : WebRtcCall.Listener {
 
         override fun onStateUpdate(call: MxCall) {
-            // post it-self
-            liveKnownCalls.postValue(liveKnownCalls.value)
+            liveKnownCalls.postValue(callManager.getCalls())
         }
 
         override fun onHoldUnhold() {
             super.onHoldUnhold()
-            // post it-self
-            liveKnownCalls.postValue(liveKnownCalls.value)
+            liveKnownCalls.postValue(callManager.getCalls())
         }
     }
 
-    private val currentCallListener = object : WebRtcCallManager.CurrentCallListener {
+    private val callManagerListener = object : WebRtcCallManager.Listener {
         override fun onCurrentCallChange(call: WebRtcCall?) {
             val knownCalls = callManager.getCalls()
             liveKnownCalls.postValue(knownCalls)
@@ -52,12 +50,17 @@ class SharedKnownCallsViewModel @Inject constructor(
                 it.addListener(callListener)
             }
         }
+
+        override fun onCallEnded(callId: String) {
+            val knownCalls = callManager.getCalls()
+            liveKnownCalls.postValue(knownCalls)
+        }
     }
 
     init {
         val knownCalls = callManager.getCalls()
         liveKnownCalls.postValue(knownCalls)
-        callManager.addCurrentCallListener(currentCallListener)
+        callManager.addListener(callManagerListener)
         knownCalls.forEach {
             it.addListener(callListener)
         }
@@ -67,7 +70,7 @@ class SharedKnownCallsViewModel @Inject constructor(
         callManager.getCalls().forEach {
             it.removeListener(callListener)
         }
-        callManager.removeCurrentCallListener(currentCallListener)
+        callManager.removeListener(callManagerListener)
         super.onCleared()
     }
 }

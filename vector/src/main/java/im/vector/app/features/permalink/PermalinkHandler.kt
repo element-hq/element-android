@@ -22,12 +22,14 @@ import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.utils.toast
 import im.vector.app.features.navigation.Navigator
+import im.vector.app.features.roomdirectory.roompreview.RoomPreviewData
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.permalinks.PermalinkData
 import org.matrix.android.sdk.api.session.permalinks.PermalinkParser
+import org.matrix.android.sdk.api.session.permalinks.PermalinkService
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomType
 import org.matrix.android.sdk.api.util.Optional
@@ -54,7 +56,7 @@ class PermalinkHandler @Inject constructor(private val activeSessionHolder: Acti
             navigationInterceptor: NavigationInterceptor? = null,
             buildTask: Boolean = false
     ): Single<Boolean> {
-        if (deepLink == null) {
+        if (deepLink == null || !isPermalinkSupported(context, deepLink.toString())) {
             return Single.just(false)
         }
         return Single
@@ -77,7 +79,7 @@ class PermalinkHandler @Inject constructor(private val activeSessionHolder: Acti
             buildTask: Boolean
     ): Single<Boolean> {
         return when (permalinkData) {
-            is PermalinkData.RoomLink -> {
+            is PermalinkData.RoomLink            -> {
                 permalinkData.getRoomId()
                         .observeOn(AndroidSchedulers.mainThread())
                         .map {
@@ -94,19 +96,37 @@ class PermalinkHandler @Inject constructor(private val activeSessionHolder: Acti
                             true
                         }
             }
-            is PermalinkData.GroupLink -> {
+            is PermalinkData.GroupLink           -> {
                 navigator.openGroupDetail(permalinkData.groupId, context, buildTask)
                 Single.just(true)
             }
-            is PermalinkData.UserLink -> {
+            is PermalinkData.UserLink            -> {
                 if (navigationInterceptor?.navToMemberProfile(permalinkData.userId, rawLink) != true) {
                     navigator.openRoomMemberProfile(userId = permalinkData.userId, roomId = null, context = context, buildTask = buildTask)
                 }
                 Single.just(true)
             }
-            is PermalinkData.FallbackLink -> {
+            is PermalinkData.FallbackLink        -> {
                 Single.just(false)
             }
+            is PermalinkData.RoomEmailInviteLink -> {
+                val data = RoomPreviewData(
+                        roomId = permalinkData.roomId,
+                        roomName = permalinkData.roomName,
+                        avatarUrl = permalinkData.roomAvatarUrl,
+                        fromEmailInvite = permalinkData,
+                        roomType = permalinkData.roomType
+                )
+                navigator.openRoomPreview(context, data)
+                Single.just(true)
+            }
+        }
+    }
+
+    private fun isPermalinkSupported(context: Context, url: String): Boolean {
+        return url.startsWith(PermalinkService.MATRIX_TO_URL_BASE)
+                || context.resources.getStringArray(R.array.permalink_supported_hosts).any {
+            url.startsWith(it)
         }
     }
 
@@ -166,6 +186,12 @@ class PermalinkHandler @Inject constructor(private val activeSessionHolder: Acti
                 navigator.openMatrixToBottomSheet(context, rawLink.toString())
             }
         }
+    }
+
+    companion object {
+        const val MATRIX_TO_CUSTOM_SCHEME_URL_BASE = "element://"
+        const val ROOM_LINK_PREFIX = "${MATRIX_TO_CUSTOM_SCHEME_URL_BASE}room/"
+        const val USER_LINK_PREFIX = "${MATRIX_TO_CUSTOM_SCHEME_URL_BASE}user/"
     }
 }
 

@@ -20,8 +20,6 @@ import im.vector.app.R
 import im.vector.app.core.resources.DrawableProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.bottomsheet.BottomSheetGenericController
-import me.gujun.android.span.image
-import me.gujun.android.span.span
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 import javax.inject.Inject
 
@@ -30,7 +28,11 @@ class RoomJoinRuleController @Inject constructor(
         private val drawableProvider: DrawableProvider
 ) : BottomSheetGenericController<RoomJoinRuleState, RoomJoinRuleRadioAction>() {
 
-    override fun getTitle() = stringProvider.getString(R.string.room_settings_room_access_rules_pref_dialog_title)
+    override fun getTitle() =
+            stringProvider.getString(
+                    // generic title for both room and space
+                    R.string.room_settings_access_rules_pref_dialog_title
+            )
 
     override fun getActions(state: RoomJoinRuleState): List<RoomJoinRuleRadioAction> {
         return listOf(
@@ -42,21 +44,21 @@ class RoomJoinRuleController @Inject constructor(
                 ),
                 RoomJoinRuleRadioAction(
                         roomJoinRule = RoomJoinRules.PUBLIC,
-                        description = stringProvider.getString(R.string.room_settings_room_access_public_description),
+                        description = stringProvider.getString(
+                                if (state.isSpace) R.string.room_settings_space_access_public_description
+                                else R.string.room_settings_room_access_public_description
+                        ),
                         title = stringProvider.getString(R.string.room_settings_room_access_public_title),
                         isSelected = state.currentRoomJoinRule == RoomJoinRules.PUBLIC
                 ),
                 RoomJoinRuleRadioAction(
                         roomJoinRule = RoomJoinRules.RESTRICTED,
-                        description = stringProvider.getString(R.string.room_settings_room_access_restricted_description),
-                        title = span {
-                            +stringProvider.getString(R.string.room_settings_room_access_restricted_title)
-                            +" "
-                            image(
-                                    drawableProvider.getDrawable(R.drawable.ic_beta_pill)!!,
-                                    "bottom"
-                            )
+                        description = if (state.parentSpaceName != null) {
+                            stringProvider.getString(R.string.room_create_member_of_space_name_can_join, state.parentSpaceName)
+                        } else {
+                            stringProvider.getString(R.string.room_settings_room_access_restricted_description)
                         },
+                        title = stringProvider.getString(R.string.room_settings_room_access_restricted_title),
                         isSelected = state.currentRoomJoinRule == RoomJoinRules.RESTRICTED
                 )
         ).filter { state.allowedJoinedRules.map { it.rule }.contains(it.roomJoinRule) }

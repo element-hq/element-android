@@ -23,9 +23,12 @@ import org.matrix.android.sdk.api.session.events.model.EventType
 /**
  * Change on each permission has an effect on the power level event. Try to sort the effect by category.
  */
-sealed class EditablePermission(@StringRes val labelResId: Int) {
+sealed class EditablePermission(@StringRes val labelResId: Int, @StringRes val spaceLabelResId: Int = labelResId) {
     // Updates `content.events.[eventType]`
-    open class EventTypeEditablePermission(val eventType: String, @StringRes labelResId: Int) : EditablePermission(labelResId)
+    open class EventTypeEditablePermission(val eventType: String,
+                                           @StringRes labelResId: Int,
+                                           @StringRes spaceLabelResId: Int = labelResId
+    ) : EditablePermission(labelResId, spaceLabelResId)
 
     class ModifyWidgets : EventTypeEditablePermission(
             // Note: Element Web still use legacy value
@@ -35,17 +38,20 @@ sealed class EditablePermission(@StringRes val labelResId: Int) {
 
     class ChangeRoomAvatar : EventTypeEditablePermission(
             EventType.STATE_ROOM_AVATAR,
-            R.string.room_permissions_change_room_avatar
+            R.string.room_permissions_change_room_avatar,
+            R.string.room_permissions_change_space_avatar
     )
 
     class ChangeMainAddressForTheRoom : EventTypeEditablePermission(
             EventType.STATE_ROOM_CANONICAL_ALIAS,
-            R.string.room_permissions_change_main_address_for_the_room
+            R.string.room_permissions_change_main_address_for_the_room,
+            R.string.room_permissions_change_main_address_for_the_space
     )
 
     class EnableRoomEncryption : EventTypeEditablePermission(
             EventType.STATE_ROOM_ENCRYPTION,
-            R.string.room_permissions_enable_room_encryption
+            R.string.room_permissions_enable_room_encryption,
+            R.string.room_permissions_enable_space_encryption
     )
 
     class ChangeHistoryVisibility : EventTypeEditablePermission(
@@ -55,7 +61,8 @@ sealed class EditablePermission(@StringRes val labelResId: Int) {
 
     class ChangeRoomName : EventTypeEditablePermission(
             EventType.STATE_ROOM_NAME,
-            R.string.room_permissions_change_room_name
+            R.string.room_permissions_change_room_name,
+            R.string.room_permissions_change_space_name
     )
 
     class ChangePermissions : EventTypeEditablePermission(
@@ -70,7 +77,8 @@ sealed class EditablePermission(@StringRes val labelResId: Int) {
 
     class UpgradeTheRoom : EventTypeEditablePermission(
             EventType.STATE_ROOM_TOMBSTONE,
-            R.string.room_permissions_upgrade_the_room
+            R.string.room_permissions_upgrade_the_room,
+            R.string.room_permissions_upgrade_the_space
     )
 
     class ChangeTopic : EventTypeEditablePermission(

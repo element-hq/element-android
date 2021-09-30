@@ -60,6 +60,7 @@ class QuadSTests : InstrumentedTest {
     }
 
     @Test
+    @Suppress("EXPERIMENTAL_API_USAGE")
     fun test_Generate4SKey() {
         val aliceSession = mTestHelper.createAccount(TestConstants.USER_ALICE, SessionTestParams(true))
 
@@ -275,6 +276,7 @@ class QuadSTests : InstrumentedTest {
         mTestHelper.signOutAndClose(aliceSession)
     }
 
+    @Suppress("EXPERIMENTAL_API_USAGE")
     private fun assertAccountData(session: Session, type: String): UserAccountDataEvent {
         val accountDataLock = CountDownLatch(1)
         var accountData: UserAccountDataEvent? = null

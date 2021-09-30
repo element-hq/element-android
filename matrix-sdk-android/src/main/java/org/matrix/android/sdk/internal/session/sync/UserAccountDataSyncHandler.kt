@@ -53,6 +53,7 @@ import org.matrix.android.sdk.internal.session.sync.model.accountdata.Breadcrumb
 import org.matrix.android.sdk.internal.session.sync.model.accountdata.DirectMessagesContent
 import org.matrix.android.sdk.internal.session.sync.model.accountdata.IgnoredUsersContent
 import org.matrix.android.sdk.internal.session.sync.model.accountdata.UserAccountDataSync
+import org.matrix.android.sdk.internal.session.sync.model.accountdata.toMutable
 import org.matrix.android.sdk.internal.session.user.accountdata.DirectChatsHelper
 import org.matrix.android.sdk.internal.session.user.accountdata.UpdateUserAccountDataTask
 import timber.log.Timber
@@ -83,7 +84,7 @@ internal class UserAccountDataSyncHandler @Inject constructor(
     // If we get some direct chat invites, we synchronize the user account data including those.
     suspend fun synchronizeWithServerIfNeeded(invites: Map<String, InvitedRoomSync>) {
         if (invites.isNullOrEmpty()) return
-        val directChats = directChatsHelper.getLocalUserAccount()
+        val directChats = directChatsHelper.getLocalDirectMessages().toMutable()
         var hasUpdate = false
         monarchy.doWithRealm { realm ->
             invites.forEach { (roomId, _) ->

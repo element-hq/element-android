@@ -26,7 +26,7 @@ data class MessageEmoteContent(
         /**
          * Required. Must be 'm.emote'.
          */
-        @Json(name = "msgtype") override val msgType: String,
+        @Json(name = MessageContent.MSG_TYPE_JSON_KEY) override val msgType: String,
 
         /**
          * Required. The emote action to perform.

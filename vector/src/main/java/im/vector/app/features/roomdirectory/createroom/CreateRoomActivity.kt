@@ -53,7 +53,10 @@ class CreateRoomActivity : VectorBaseActivity<ActivitySimpleBinding>(), ToolbarC
             addFragment(
                     R.id.simpleFragmentContainer,
                     CreateRoomFragment::class.java,
-                    CreateRoomArgs(intent?.getStringExtra(INITIAL_NAME) ?: "")
+                    CreateRoomArgs(
+                            intent?.getStringExtra(INITIAL_NAME) ?: "",
+                            isSpace = intent?.getBooleanExtra(IS_SPACE, false) ?: false
+                    )
             )
         }
     }
@@ -74,10 +77,12 @@ class CreateRoomActivity : VectorBaseActivity<ActivitySimpleBinding>(), ToolbarC
 
     companion object {
         private const val INITIAL_NAME = "INITIAL_NAME"
+        private const val IS_SPACE = "IS_SPACE"
 
-        fun getIntent(context: Context, initialName: String = ""): Intent {
+        fun getIntent(context: Context, initialName: String = "", isSpace: Boolean = false): Intent {
             return Intent(context, CreateRoomActivity::class.java).apply {
                 putExtra(INITIAL_NAME, initialName)
+                putExtra(IS_SPACE, isSpace)
             }
         }
     }

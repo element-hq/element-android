@@ -59,7 +59,20 @@ class AppStateHandler @Inject constructor(
 
     val selectedRoomGroupingObservable = selectedSpaceDataSource.observe()
 
-    fun getCurrentRoomGroupingMethod(): RoomGroupingMethod? = selectedSpaceDataSource.currentValue?.orNull()
+    fun getCurrentRoomGroupingMethod(): RoomGroupingMethod? {
+        // XXX we should somehow make it live :/ just a work around
+        // For example just after creating a space and switching to it the
+        // name in the app Bar could show Empty Room, and it will not update unless you
+        // switch space
+        return selectedSpaceDataSource.currentValue?.orNull()?.let {
+            if (it is RoomGroupingMethod.BySpace) {
+                // try to refresh sum?
+                it.spaceSummary?.roomId?.let { activeSessionHolder.getSafeActiveSession()?.getRoomSummary(it) }?.let {
+                    RoomGroupingMethod.BySpace(it)
+                } ?: it
+            } else it
+        }
+    }
 
     fun setCurrentSpace(spaceId: String?, session: Session? = null) {
         val uSession = session ?: activeSessionHolder.getSafeActiveSession() ?: return

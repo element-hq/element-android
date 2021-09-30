@@ -27,6 +27,9 @@ import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import im.vector.app.BuildConfig
 import im.vector.app.R
+import im.vector.app.core.extensions.setAttributeBackground
+import im.vector.app.core.extensions.setAttributeTintedBackground
+import im.vector.app.core.extensions.setAttributeTintedImageResource
 import im.vector.app.core.hardware.vibrate
 import im.vector.app.core.utils.CountUpTimer
 import im.vector.app.core.utils.DimensionConverter
@@ -40,11 +43,7 @@ import kotlin.math.floor
 /**
  * Encapsulates the voice message recording view and animations.
  */
-class VoiceMessageRecorderView @JvmOverloads constructor(
-        context: Context,
-        attrs: AttributeSet? = null,
-        defStyleAttr: Int = 0
-) : ConstraintLayout(context, attrs, defStyleAttr), VoiceMessagePlaybackTracker.Listener {
+class VoiceMessageRecorderView: ConstraintLayout, VoiceMessagePlaybackTracker.Listener {
 
     interface Callback {
         // Return true if the recording is started
@@ -54,7 +53,7 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
         fun onVoicePlaybackButtonClicked()
     }
 
-    private val views: ViewVoiceMessageRecorderBinding
+    private lateinit var views: ViewVoiceMessageRecorderBinding
 
     var callback: Callback? = null
     var voiceMessagePlaybackTracker: VoiceMessagePlaybackTracker? = null
@@ -80,7 +79,17 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
     private val distanceToCancel = dimensionConverter.dpToPx(120).toFloat()
     private val rtlXMultiplier = context.resources.getInteger(R.integer.rtl_x_multiplier)
 
-    init {
+    // Don't convert to primary constructor.
+    // We need to define views as lateinit var to be able to check if initialized for the bug fix on api 21 and 22.
+    @JvmOverloads constructor(
+            context: Context,
+            attrs: AttributeSet? = null,
+            defStyleAttr: Int = 0
+    ) : super(context, attrs, defStyleAttr) {
+        initialize()
+    }
+
+    fun initialize() {
         inflate(context, R.layout.view_voice_message_recorder, this)
         views = ViewVoiceMessageRecorderBinding.bind(this)
 
@@ -90,6 +99,9 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
 
     override fun onVisibilityChanged(changedView: View, visibility: Int) {
         super.onVisibilityChanged(changedView, visibility)
+        // onVisibilityChanged is called by constructor on api 21 and 22.
+        if (!this::views.isInitialized) return
+
         if (changedView == this && visibility == VISIBLE) {
             views.voiceMessageMicButton.contentDescription = context.getString(R.string.a11y_start_voice_message)
         } else {
@@ -208,7 +220,7 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
                 views.voiceMessageLockArrow.translationY = 0F
             }
             RecordingState.LOCKING    -> {
-                views.voiceMessageLockImage.setImageResource(R.drawable.ic_voice_message_locked)
+                views.voiceMessageLockImage.setAttributeTintedImageResource(R.drawable.ic_voice_message_locked, R.attr.colorPrimary)
                 val translationAmount = -distanceY.coerceIn(0F, distanceToLock)
                 views.voiceMessageMicButton.translationY = translationAmount
                 views.voiceMessageLockArrow.translationY = translationAmount
@@ -357,6 +369,7 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
 
     private fun showRecordingViews() {
         views.voiceMessageMicButton.setImageResource(R.drawable.ic_voice_mic_recording)
+        views.voiceMessageMicButton.setAttributeTintedBackground(R.drawable.circle_with_halo, R.attr.colorPrimary)
         views.voiceMessageMicButton.updateLayoutParams<MarginLayoutParams> {
             setMargins(0, 0, 0, 0)
         }
@@ -434,6 +447,7 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
     private fun resetMicButtonUi() {
         views.voiceMessageMicButton.isVisible = true
         views.voiceMessageMicButton.setImageResource(R.drawable.ic_voice_mic)
+        views.voiceMessageMicButton.setAttributeBackground(android.R.attr.selectableItemBackgroundBorderless)
         views.voiceMessageMicButton.updateLayoutParams<MarginLayoutParams> {
             if (rtlXMultiplier == -1) {
                 // RTL
