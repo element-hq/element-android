@@ -52,6 +52,8 @@ allprojects {
 
                 // UnifiedPush
                 includeGroupByRegex 'com\\.github\\.UnifiedPush'
+                // SchildiChat
+                includeGroupByRegex 'com\\.github\\.SchildiChat'
 
                 // Chat effects
                 includeGroupByRegex 'com\\.github\\.jetradarmobile'
