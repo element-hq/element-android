@@ -26,6 +26,7 @@ import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.data.LoginFlowResult
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
+import org.matrix.android.sdk.api.auth.data.PasswordPolicy
 import org.matrix.android.sdk.api.auth.login.LoginWizard
 import org.matrix.android.sdk.api.auth.registration.RegistrationWizard
 import org.matrix.android.sdk.api.auth.wellknown.WellknownResult
@@ -390,6 +391,14 @@ internal class DefaultAuthenticationService @Inject constructor(
                                               password: String,
                                               initialDeviceName: String): Session {
         return directLoginTask.execute(DirectLoginTask.Params(homeServerConnectionConfig, matrixId, password, initialDeviceName))
+    }
+
+    override suspend fun getPasswordPolicy(homeServerConnectionConfig: HomeServerConnectionConfig): PasswordPolicy {
+        val authAPI = buildAuthAPI(homeServerConnectionConfig)
+
+        return executeRequest(null) {
+            authAPI.getPasswordPolicy()
+        }
     }
 
     private fun buildAuthAPI(homeServerConnectionConfig: HomeServerConnectionConfig): AuthAPI {

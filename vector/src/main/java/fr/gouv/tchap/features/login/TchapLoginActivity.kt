@@ -34,6 +34,7 @@ import fr.gouv.tchap.features.login.registration.TchapRegisterWaitForEmailFragme
 import fr.gouv.tchap.features.login.registration.TchapRegisterWaitForEmailFragmentArgument
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
+import im.vector.app.core.extensions.POP_BACK_STACK_EXCLUSIVE
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.extensions.addFragmentToBackstack
 import im.vector.app.core.extensions.exhaustive
@@ -45,6 +46,8 @@ import im.vector.app.features.login.LoginAction
 import im.vector.app.features.login.LoginConfig
 import im.vector.app.features.login.LoginFragment
 import im.vector.app.features.login.LoginResetPasswordFragment
+import im.vector.app.features.login.LoginResetPasswordMailConfirmationFragment
+import im.vector.app.features.login.LoginResetPasswordSuccessFragment
 import im.vector.app.features.login.LoginViewEvents
 import im.vector.app.features.login.LoginViewModel
 import im.vector.app.features.login.LoginViewState
@@ -154,6 +157,22 @@ open class TchapLoginActivity : VectorBaseActivity<ActivityLoginBinding>(), Tool
                 addFragmentToBackstack(R.id.loginFragmentContainer,
                         LoginResetPasswordFragment::class.java,
                         option = commonOption)
+            is LoginViewEvents.OnResetPasswordSendThreePidDone            -> {
+                supportFragmentManager.popBackStack(FRAGMENT_LOGIN_TAG, POP_BACK_STACK_EXCLUSIVE)
+                addFragmentToBackstack(R.id.loginFragmentContainer,
+                        LoginResetPasswordMailConfirmationFragment::class.java,
+                        option = commonOption)
+            }
+            is LoginViewEvents.OnResetPasswordMailConfirmationSuccess     -> {
+                supportFragmentManager.popBackStack(FRAGMENT_LOGIN_TAG, POP_BACK_STACK_EXCLUSIVE)
+                addFragmentToBackstack(R.id.loginFragmentContainer,
+                        LoginResetPasswordSuccessFragment::class.java,
+                        option = commonOption)
+            }
+            is LoginViewEvents.OnResetPasswordMailConfirmationSuccessDone -> {
+                // Go back to the login fragment
+                supportFragmentManager.popBackStack(FRAGMENT_LOGIN_TAG, POP_BACK_STACK_EXCLUSIVE)
+            }
             is LoginViewEvents.OnSendEmailSuccess                         ->
                 addFragmentToBackstack(R.id.loginFragmentContainer,
                         TchapRegisterWaitForEmailFragment::class.java,

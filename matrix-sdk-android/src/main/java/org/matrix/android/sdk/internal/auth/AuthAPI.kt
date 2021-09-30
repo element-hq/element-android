@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.internal.auth
 
 import org.matrix.android.sdk.api.auth.data.Credentials
+import org.matrix.android.sdk.api.auth.data.PasswordPolicy
 import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.internal.auth.data.Availability
 import org.matrix.android.sdk.internal.auth.data.LoginFlowResponse
@@ -132,4 +133,10 @@ internal interface AuthAPI {
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "account/password")
     suspend fun resetPasswordMailConfirmed(@Body params: ResetPasswordMailConfirmed)
+
+    /**
+     * Get the password policy of the homeserver
+     */
+    @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "password_policy")
+    suspend fun getPasswordPolicy(): PasswordPolicy
 }

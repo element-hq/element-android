@@ -52,6 +52,7 @@ import org.matrix.android.sdk.api.auth.registration.RegistrationResult
 import org.matrix.android.sdk.api.auth.registration.RegistrationWizard
 import org.matrix.android.sdk.api.auth.registration.Stage
 import org.matrix.android.sdk.api.auth.wellknown.WellknownResult
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.MatrixIdFailure
 import org.matrix.android.sdk.api.session.Session
@@ -134,6 +135,7 @@ class LoginViewModel @AssistedInject constructor(
             is LoginAction.SetupSsoForSessionRecovery -> handleSetupSsoForSessionRecovery(action)
             is LoginAction.UserAcceptCertificate      -> handleUserAcceptCertificate(action)
             LoginAction.ClearHomeServerHistory        -> handleClearHomeServerHistory()
+            is LoginAction.CheckPasswordPolicy        -> handleCheckPasswordPolicy(action)
             is LoginAction.PostViewEvent              -> _viewEvents.post(action.viewEvent)
         }.exhaustive
     }
@@ -447,6 +449,33 @@ class LoginViewModel @AssistedInject constructor(
         } catch (e: Throwable) {
             // NOOP. API is designed to use wizards in a login/registration flow,
             // but we need to check the state anyway.
+        }
+    }
+
+    private fun handleCheckPasswordPolicy(action: LoginAction.CheckPasswordPolicy) = withState { state ->
+        val homeServerConnectionConfig = homeServerConnectionConfigFactory.create(state.homeServerUrl)
+        if (homeServerConnectionConfig == null) {
+            // This is invalid
+            _viewEvents.post(LoginViewEvents.Failure(Throwable("Unable to create a HomeServerConnectionConfig")))
+        } else {
+            currentJob = viewModelScope.launch {
+                val passwordPolicy = tryOrNull { authenticationService.getPasswordPolicy(homeServerConnectionConfig) }
+                val isValid = if (passwordPolicy != null) {
+                    passwordPolicy.minLength?.let { it <= action.newPassword.length } ?: true
+                            && passwordPolicy.requireDigit?.let { it && action.newPassword.any { char -> char.isDigit() } } ?: true
+                            && passwordPolicy.requireLowercase?.let { it && action.newPassword.any { char -> char.isLetter() && char.isLowerCase() } } ?: true
+                            && passwordPolicy.requireUppercase?.let { it && action.newPassword.any { char -> char.isLetter() && char.isUpperCase() } } ?: true
+                            && passwordPolicy.requireSymbol?.let { it && action.newPassword.any { char -> !char.isLetter() && !char.isDigit()} } ?: true
+                } else {
+                    true
+                }
+
+                if (!isValid) {
+                    _viewEvents.post(LoginViewEvents.Failure(Throwable(stringProvider.getString(R.string.tchap_password_weak_pwd_error))))
+                } else {
+                    _viewEvents.post(LoginViewEvents.OnPasswordValidated)
+                }
+            }
         }
     }
 

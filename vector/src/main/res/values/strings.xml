@@ -641,7 +641,7 @@
     <string name="auth_reset_password_message">To reset your password, enter the email address linked to your account:</string>
     <string name="auth_reset_password_missing_email">The email address linked to your account must be entered.</string>
     <string name="auth_reset_password_missing_password">A new password must be entered.</string>
-    <string name="template_auth_reset_password_email_validation_message">An email has been sent to %s. Once you’ve followed the link it contains, click below.</string>
+    <string name="auth_reset_password_email_validation_message">An email has been sent to %s. Once you’ve followed the link it contains, click below.</string>
     <string name="auth_reset_password_error_unauthorized">Failed to verify email address: make sure you clicked the link in the email</string>
     <string name="auth_reset_password_success_message">Your password has been reset.\n\nYou have been logged out of all devices and will no longer receive push notifications. To re-enable notifications, re-log in on each device.</string>
     <string name="auth_accept_policies">"Please review and accept the policies of this homeserver:"</string>
@@ -2534,7 +2534,7 @@
     <string name="login_login_with_email_error">This email is not associated to any account.</string>
 
     <!-- Replaced string is the homeserver url -->
-    <string name="login_reset_password_on">Reset password on %1$s</string>
+    <string name="login_reset_password_on">Reset password</string>
     <string name="login_reset_password_notice">A verification email will be sent to your inbox to confirm setting your new password.</string>
     <string name="login_reset_password_submit">Next</string>
     <string name="login_reset_password_email_hint">Email</string>
@@ -2548,7 +2548,7 @@
 
     <string name="login_reset_password_mail_confirmation_title">Check your inbox</string>
     <!-- Replaced string is an email -->
-    <string name="login_reset_password_mail_confirmation_notice">A verification email was sent to %1$s.</string>
+    <string name="template_login_reset_password_mail_confirmation_notice">If a ${app_name} account exists, an e\u2011mail was sent to : %1$s.</string>
     <string name="login_reset_password_mail_confirmation_notice_2">Tap on the link to confirm your new password. Once you\'ve followed the link it contains, click below.</string>
     <string name="login_reset_password_mail_confirmation_submit">I have verified my email address</string>
 

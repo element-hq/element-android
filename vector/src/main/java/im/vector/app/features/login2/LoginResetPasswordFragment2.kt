@@ -27,9 +27,8 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
-import im.vector.app.core.extensions.isEmail
 import im.vector.app.core.extensions.hidePassword
-import im.vector.app.core.extensions.toReducedUrl
+import im.vector.app.core.extensions.isEmail
 import im.vector.app.core.utils.autoResetTextInputLayoutErrors
 import im.vector.app.databinding.FragmentLoginResetPassword2Binding
 import io.reactivex.Observable
@@ -72,9 +71,9 @@ class LoginResetPasswordFragment2 @Inject constructor() : AbstractLoginFragment2
         }
     }
 
-    private fun setupUi(state: LoginViewState2) {
-        views.resetPasswordTitle.text = getString(R.string.login_reset_password_on, state.homeServerUrlFromUser.toReducedUrl())
-    }
+//    private fun setupUi(state: LoginViewState2) {
+//        views.resetPasswordTitle.text = getString(R.string.login_reset_password_on, state.homeServerUrlFromUser.toReducedUrl())
+//    }
 
     private fun setupSubmitButton() {
         views.resetPasswordSubmit.setOnClickListener { submit() }
@@ -153,7 +152,7 @@ class LoginResetPasswordFragment2 @Inject constructor() : AbstractLoginFragment2
     }
 
     override fun updateWithState(state: LoginViewState2) {
-        setupUi(state)
+//        setupUi(state)
 
         if (state.isLoading) {
             // Ensure new password is hidden

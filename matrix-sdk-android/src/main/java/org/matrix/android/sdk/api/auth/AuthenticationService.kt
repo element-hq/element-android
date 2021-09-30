@@ -19,6 +19,7 @@ package org.matrix.android.sdk.api.auth
 import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.data.LoginFlowResult
+import org.matrix.android.sdk.api.auth.data.PasswordPolicy
 import org.matrix.android.sdk.api.auth.login.LoginWizard
 import org.matrix.android.sdk.api.auth.registration.RegistrationWizard
 import org.matrix.android.sdk.api.auth.wellknown.WellknownResult
@@ -110,4 +111,9 @@ interface AuthenticationService {
                                      matrixId: String,
                                      password: String,
                                      initialDeviceName: String): Session
+
+    /**
+     * Get password policy.
+     */
+    suspend fun getPasswordPolicy(homeServerConnectionConfig: HomeServerConnectionConfig): PasswordPolicy
 }

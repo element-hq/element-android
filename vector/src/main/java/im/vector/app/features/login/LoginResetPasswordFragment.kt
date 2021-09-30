@@ -23,23 +23,32 @@ import android.view.ViewGroup
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.fragmentViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.jakewharton.rxbinding3.widget.textChanges
+import fr.gouv.tchap.android.sdk.internal.services.threepidplatformdiscover.model.Platform
+import fr.gouv.tchap.features.platform.PlatformAction
+import fr.gouv.tchap.features.platform.PlatformViewEvents
+import fr.gouv.tchap.features.platform.PlatformViewModel
+import fr.gouv.tchap.features.platform.PlatformViewState
 import im.vector.app.R
+import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.hideKeyboard
-import im.vector.app.core.extensions.isEmail
 import im.vector.app.core.extensions.hidePassword
-import im.vector.app.core.extensions.toReducedUrl
+import im.vector.app.core.extensions.isEmail
 import im.vector.app.databinding.FragmentLoginResetPasswordBinding
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.subscribeBy
-
 import javax.inject.Inject
 
 /**
  * In this screen, the user is asked for email and new password to reset his password
  */
-class LoginResetPasswordFragment @Inject constructor() : AbstractLoginFragment<FragmentLoginResetPasswordBinding>() {
+class LoginResetPasswordFragment @Inject constructor(
+        private val platformViewModelFactory: PlatformViewModel.Factory
+) : AbstractLoginFragment<FragmentLoginResetPasswordBinding>(), PlatformViewModel.Factory {
+
+    private val viewModel: PlatformViewModel by fragmentViewModel()
 
     // Show warning only once
     private var showWarning = true
@@ -52,14 +61,32 @@ class LoginResetPasswordFragment @Inject constructor() : AbstractLoginFragment<F
         super.onViewCreated(view, savedInstanceState)
 
         setupSubmitButton()
-    }
 
-    private fun setupUi(state: LoginViewState) {
-        views.resetPasswordTitle.text = getString(R.string.login_reset_password_on, state.homeServerUrlFromUser.toReducedUrl())
+        viewModel.observeViewEvents {
+            when (it) {
+                is PlatformViewEvents.Loading -> showLoading(it.message)
+                is PlatformViewEvents.Failure -> {
+                    // Dialog is displayed by the Activity
+                }
+                is PlatformViewEvents.Success -> updateHomeServer(it.platform)
+            }.exhaustive
+        }
+
+        loginViewModel.observeViewEvents { loginViewEvents ->
+            when (loginViewEvents) {
+                LoginViewEvents.OnLoginFlowRetrieved ->
+                    loginViewModel.handle(LoginAction.CheckPasswordPolicy(views.passwordField.text.toString()))
+                LoginViewEvents.OnPasswordValidated  ->
+                    submit()
+                else                                 -> Unit // This is handled by the Activity
+            }.exhaustive
+        }
     }
 
     private fun setupSubmitButton() {
-        views.resetPasswordSubmit.setOnClickListener { submit() }
+        views.resetPasswordSubmit.setOnClickListener {
+            viewModel.handle(PlatformAction.DiscoverTchapPlatform(views.resetPasswordEmail.text.toString()))
+        }
 
         Observable
                 .combineLatest(
@@ -109,13 +136,15 @@ class LoginResetPasswordFragment @Inject constructor() : AbstractLoginFragment<F
         views.passwordFieldTil.error = null
     }
 
+    private fun updateHomeServer(platform: Platform) {
+        loginViewModel.handle(LoginAction.UpdateHomeServer(getString(R.string.server_url_prefix) + platform.hs))
+    }
+
     override fun resetViewModel() {
         loginViewModel.handle(LoginAction.ResetResetPassword)
     }
 
     override fun updateWithState(state: LoginViewState) {
-        setupUi(state)
-
         when (state.asyncResetPassword) {
             is Loading -> {
                 // Ensure new password is hidden
@@ -126,5 +155,9 @@ class LoginResetPasswordFragment @Inject constructor() : AbstractLoginFragment<F
             }
             is Success -> Unit
         }
+    }
+
+    override fun create(initialState: PlatformViewState): PlatformViewModel {
+        return platformViewModelFactory.create(initialState)
     }
 }
