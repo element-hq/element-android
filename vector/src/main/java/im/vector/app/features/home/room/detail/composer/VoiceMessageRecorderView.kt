@@ -27,6 +27,9 @@ import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import im.vector.app.BuildConfig
 import im.vector.app.R
+import im.vector.app.core.extensions.setAttributeBackground
+import im.vector.app.core.extensions.setAttributeTintedBackground
+import im.vector.app.core.extensions.setAttributeTintedImageResource
 import im.vector.app.core.hardware.vibrate
 import im.vector.app.core.utils.CountUpTimer
 import im.vector.app.core.utils.DimensionConverter
@@ -219,7 +222,7 @@ class VoiceMessageRecorderView: ConstraintLayout, VoiceMessagePlaybackTracker.Li
                 views.voiceMessageLockArrow.translationY = 0F
             }
             RecordingState.LOCKING    -> {
-                views.voiceMessageLockImage.setImageResource(R.drawable.ic_voice_message_locked)
+                views.voiceMessageLockImage.setAttributeTintedImageResource(R.drawable.ic_voice_message_locked, R.attr.colorPrimary)
                 val translationAmount = -distanceY.coerceIn(0F, distanceToLock)
                 views.voiceMessageMicButton.translationY = translationAmount
                 views.voiceMessageLockArrow.translationY = translationAmount
@@ -368,6 +371,7 @@ class VoiceMessageRecorderView: ConstraintLayout, VoiceMessagePlaybackTracker.Li
 
     private fun showRecordingViews() {
         views.voiceMessageMicButton.setImageResource(R.drawable.ic_voice_mic_recording)
+        views.voiceMessageMicButton.setAttributeTintedBackground(R.drawable.circle_with_halo, R.attr.colorPrimary)
         views.voiceMessageMicButton.isVisible = true
         /* This is a no-op for SchildiChat
         views.voiceMessageMicButton.updateLayoutParams<MarginLayoutParams> {
@@ -450,6 +454,7 @@ class VoiceMessageRecorderView: ConstraintLayout, VoiceMessagePlaybackTracker.Li
             views.voiceMessageMicButton.isVisible = true
         }
         views.voiceMessageMicButton.setImageResource(R.drawable.ic_voice_mic)
+        views.voiceMessageMicButton.setAttributeBackground(android.R.attr.selectableItemBackgroundBorderless)
         /* This is from Element, and I have no idea why they just didn't make it symmetric from the layout... well I did!
         // Also, SchildiChat layout doesn't need any margin there, and doesn't enlarge the icon during recording, so no code needed here
         views.voiceMessageMicButton.updateLayoutParams<MarginLayoutParams> {

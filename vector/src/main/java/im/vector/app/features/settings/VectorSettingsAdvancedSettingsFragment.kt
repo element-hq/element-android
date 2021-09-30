@@ -22,6 +22,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.preference.VectorPreference
+import im.vector.app.core.preference.VectorPreferenceCategory
 import im.vector.app.core.preference.VectorSwitchPreference
 import im.vector.app.features.rageshake.RageShake
 import javax.inject.Inject
@@ -77,7 +78,7 @@ class VectorSettingsAdvancedSettingsFragment @Inject constructor(
                 true
             }
         } else {
-            findPreference<VectorSwitchPreference>("SETTINGS_RAGE_SHAKE_CATEGORY_KEY")!!.isVisible = false
+            findPreference<VectorPreferenceCategory>("SETTINGS_RAGE_SHAKE_CATEGORY_KEY")!!.isVisible = false
         }
 
         findPreference<VectorPreference>("SETTINGS_APPLY_SC_DEFAULT_SETTINGS")?.onPreferenceClickListener = Preference.OnPreferenceClickListener {

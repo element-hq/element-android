@@ -2998,4 +2998,36 @@
     <string name="this_invite_to_this_room_was_sent">Die Einladung zu diesem Raum wurde an %s gesendet, welche nicht mit deinem Konto verknüpft ist</string>
     <string name="help_space_members">Hilf Space-Mitgliedern private Räume zu finden</string>
     <string name="settings_mentions_and_keywords_encryption_notice">Auf deinem Mobilgerät wirst du keine Benachrichtigungen für Erwähnungen und Schlüsselwörter in verschlüsselten Räumen erhalten.</string>
+    <string name="space_add_existing_spaces">Existierende Spaces hinzufügen</string>
+    <string name="space_add_existing_rooms_only">Existierende Räume hinzufügen</string>
+    <string name="leave_specific_ones">Ausgewählte Räume oder Spaces verlassen…</string>
+    <string name="dont_leave_any">Keine Räume und Spaces verlassen</string>
+    <string name="you_will_leave_all_in">Du wirst alle Räume und Spaces in %s verlassen.</string>
+    <string name="leave_all_rooms_and_spaces">Alle Räume und Spaces verlassen</string>
+    <string name="space_leave_prompt_msg_with_name">Willst du %s wirklich verlassen\?</string>
+    <string name="invite_by_mxid_or_mail">Mit Benutzername oder E-Mail einladen</string>
+    <string name="command_description_add_to_space">Zum ausgewählten Space hinzufügen</string>
+    <string name="create_space_in_progress">Erstelle Space…</string>
+    <string name="settings_developer_mode_show_info_on_screen_summary">Hilfreiche Informationen zur Fehlersuche anzeigen</string>
+    <string name="settings_developer_mode_show_info_on_screen_title">Debug-Info anzeigen</string>
+    <string name="does_not_look_like_valid_email">Das schaut nicht nach einer gültigen E-Mail-Adresse aus</string>
+    <string name="user_directory_search_hint_2">Nach Name, ID oder E-Mail suchen</string>
+    <string name="create_new_space">Neuen Space erstellen</string>
+    <string name="room_settings_space_access_title">Zugriff</string>
+    <string name="room_settings_access_rules_pref_dialog_title">Wer hat Zugriff\?</string>
+    <string name="settings_notification_emails_enable_for_email">Benachrichtigungen per Email für %s aktivieren</string>
+    <string name="settings_notification_emails_no_emails">Um Benachrichtigungen per E-Mail zu empfangen, musst du einen E-Mail-Adresse hinzufügen</string>
+    <string name="settings_notification_emails_category">Emailbenachrichtigungen</string>
+    <string name="room_permissions_upgrade_the_space">Space upgraden</string>
+    <string name="room_permissions_change_space_name">Namen vom Space ändern</string>
+    <string name="room_permissions_enable_space_encryption">Space verschlüsseln</string>
+    <string name="room_permissions_change_main_address_for_the_space">Hauptadresse vom Space ändern</string>
+    <string name="room_permissions_change_space_avatar">Space-Icon ändern</string>
+    <string name="space_permissions_notice_read_only">Du hast nicht die Berechtigung, Rollenrechte zu bearbeiten</string>
+    <string name="space_settings_permissions_title">Space-Berechtigungen</string>
+    <string name="space_participants_unban_prompt_msg">Wenn du die Person entbannst, kann sie wieder beitreten.</string>
+    <string name="space_participants_ban_prompt_msg">Wenn du eine Person bannst, kann sie nicht erneut beitreten.</string>
+    <string name="space_participants_kick_prompt_msg">Kicken entfernt die Person aus dem Space
+\n
+\nUm sie für immer zu entfernen, solltest du sie bannen.</string>
 </resources>

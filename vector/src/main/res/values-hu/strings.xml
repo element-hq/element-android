@@ -2487,8 +2487,8 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="spaces_beta_welcome_to_spaces">Üdv a Terekben!</string>
     <string name="space_add_rooms">Szobák hozzáadása</string>
     <string name="space_add_existing_rooms">Létező szobák és tér hozzáadása</string>
-    <string name="space_leave_prompt_msg_as_admin">Most te vagy a tér adminisztrátora, bizonyosodj meg arról, hogy kineveztél mást adminisztrátornak mielőtt elhagyod.</string>
-    <string name="space_leave_prompt_msg_private">Ez a tér nem nyilvános. Kilépés után csak újabb meghívóval lehet újra belépni.</string>
+    <string name="space_leave_prompt_msg_as_admin">Ön az egyetlen adminisztrátora a térnek. Ha kilép, senki nem tudja irányítani.</string>
+    <string name="space_leave_prompt_msg_private">Amíg nem hívnak meg újra nem tudsz újracsatlakozni.</string>
     <string name="space_leave_prompt_msg_only_you">Csak te van itt. Ha kilépsz, akkor a jövőben senki nem tud majd ide belépni, beleértve téged is.</string>
     <!-- TO BE REMOVED -->
     <string name="space_leave_prompt_msg">Biztos el akarod hagyni a teret\?</string>
@@ -2952,4 +2952,49 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="call_ringing">Hívás kicseng…</string>
     <string name="spaces">Terek</string>
     <string name="learn_more">Tudj meg többet</string>
+    <string name="space_add_space_to_any_space_you_manage">Add hozzá a teret bármelyik általad kezelt térhez.</string>
+    <string name="space_add_existing_spaces">Meglévő terek hozzáadása</string>
+    <string name="space_add_existing_rooms_only">Létező szobák hozzáadása</string>
+    <string name="pick_tings_to_leave">Válaszd ki ahonnan kilépsz</string>
+    <string name="leave_specific_ones">Kilépés a megadott szobákból és terekből…</string>
+    <string name="dont_leave_any">Nem lépek ki egyetlen szobából vagy térből sem</string>
+    <string name="you_will_leave_all_in">Az összes szobát és teret elhagyod itt: %s.</string>
+    <string name="leave_all_rooms_and_spaces">Minden szoba és tér elhagyása</string>
+    <string name="space_leave_prompt_msg_with_name">Biztos, hogy ki akarsz lépni innen: %s\?</string>
+    <string name="discovery_section">Felderítés (%s)</string>
+    <string name="finish_setup">Beállítás befejezése</string>
+    <string name="discovery_invite">E-mail alapú meghívás, kapcsolatok megtalálása és sok más…</string>
+    <string name="finish_setting_up_discovery">Felderíthetőségi beállítás befejezése.</string>
+    <string name="create_space_identity_server_info_none">Jelenleg nem használsz azonosítási szolgáltatást. Ahhoz, hogy a csoporttársaidat meghívd vagy megtaláljanak állíts be egyet alább.</string>
+    <string name="invite_by_mxid_or_mail">Meghívás felhasználói névvel vagy e-mail címmel</string>
+    <string name="create_spaces_invite_public_header_desc">Ellenőrizd, hogy a megfelelő személyeknek van hozzáférése ehhez a céghez: %s. Később meghívhatsz másokat is.</string>
+    <string name="create_spaces_invite_public_header">Kik a csoporttársaid\?</string>
+    <string name="command_description_add_to_space">A megadott térhez adás</string>
+    <string name="create_space_in_progress">Tér készítése…</string>
+    <string name="settings_developer_mode_show_info_on_screen_summary">Néhány hasznos információ megjelenítése az alkalmazás hibakeresés segítéséért</string>
+    <string name="settings_developer_mode_show_info_on_screen_title">Hibakeresési információk megjelenítése a képernyőn</string>
+    <string name="does_not_look_like_valid_email">Az e-mail cím nem tűnik érvényesnek</string>
+    <string name="open_discovery_settings">Felderíthetőségi Beállítások megnyitása</string>
+    <string name="user_directory_search_hint_2">Keresés név, azonosító vagy e-mail alapján</string>
+    <string name="create_new_space">Új tér készítése</string>
+    <string name="room_settings_space_access_public_description">Bárki rátalálhat és beléphet a térre</string>
+    <string name="room_settings_space_access_title">Tér hozzáférés</string>
+    <string name="room_settings_access_rules_pref_dialog_title">Kinek van hozzáférése\?</string>
+    <string name="settings_notification_emails_enable_for_email">E-mail értesítés engedélyezése ehhez az e-mail címhez: %s</string>
+    <string name="settings_notification_emails_no_emails">E-mail alapú értesítések fogadásához, kérlek társíts egy e-mail címet a Matrix fiókodhoz</string>
+    <string name="settings_notification_emails_category">E-mail értesítés</string>
+    <string name="room_permissions_upgrade_the_space">Tér frissítése</string>
+    <string name="room_permissions_change_space_name">Tér nevének megváltoztatása</string>
+    <string name="room_permissions_enable_space_encryption">Tér titkosításának bekapcsolása</string>
+    <string name="room_permissions_change_main_address_for_the_space">Tér elsődleges címének megváltoztatása</string>
+    <string name="room_permissions_change_space_avatar">Tér profilkép megváltoztatása</string>
+    <string name="space_permissions_notice_read_only">Nincs jogosultságod a szerepek megváltoztatásához, amik szükségesek a tér bizonyos részeinek megváltoztatásához</string>
+    <string name="space_permissions_notice">A tér bizonyos beállításainak megváltoztatásához szükséges szerep kiválasztása</string>
+    <string name="space_settings_permissions_subtitle">Szerepek megjelenítése és megváltoztatása, amik szükségesek a tér bizonyos részeinek megváltoztatásához.</string>
+    <string name="space_settings_permissions_title">Tér jogosultságok</string>
+    <string name="space_participants_unban_prompt_msg">A felhasználó tiltásának visszavonása lehetővé teszi, hogy újra belépjen a térbe.</string>
+    <string name="space_participants_ban_prompt_msg">A felhasználó kitiltása eltávolítja őt a térből és megakadályozza, hogy visszajöjjön.</string>
+    <string name="space_participants_kick_prompt_msg">a felhasználó kirúgása eltávolítja a térből.
+\n
+\nHa meg akarja akadályozni, hogy újra csatlakozzon, akkor inkább tiltsa ki.</string>
 </resources>

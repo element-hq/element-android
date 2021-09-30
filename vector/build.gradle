@@ -14,7 +14,7 @@ kapt {
 // Note: 2 digits max for each value
 ext.versionMajor = 1
 ext.versionMinor = 3
-ext.versionPatch = 0
+ext.versionPatch = 1
 
 ext.scVersion = 44
 
@@ -323,6 +323,11 @@ android {
     }
 }
 
+configurations {
+    // videocache includes a sl4j logger which causes mockk to attempt to call the static android Log
+    testImplementation.exclude group: 'org.slf4j', module: 'slf4j-android'
+}
+
 dependencies {
 
     implementation project(":matrix-sdk-android")
@@ -426,7 +431,7 @@ dependencies {
     implementation 'com.otaliastudios:autocomplete:1.1.0'
 
     // Shake detection
-    implementation 'com.squareup:seismic:1.0.2'
+    implementation 'com.squareup:seismic:1.0.3'
 
     // Image Loading
     implementation libs.github.bigImageViewer
@@ -486,8 +491,8 @@ dependencies {
     implementation 'me.dm7.barcodescanner:zxing:1.9.13'
 
     // Emoji Keyboard
-    implementation 'com.vanniktech:emoji-material:0.7.0'
-    implementation 'com.vanniktech:emoji-google:0.7.0'
+    implementation libs.vanniktech.emojiMaterial
+    implementation libs.vanniktech.emojiGoogle
 
     implementation 'im.dlg:android-dialer:1.2.5'
 
@@ -503,6 +508,7 @@ dependencies {
     // TESTS
     testImplementation libs.tests.junit
     testImplementation libs.tests.kluent
+    testImplementation libs.mockk.mockk
     // Plant Timber tree for test
     testImplementation libs.tests.timberJunitRule
 

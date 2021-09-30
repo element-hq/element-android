@@ -2728,8 +2728,8 @@
     <string name="spaces_feeling_experimental_subspace">想要做點實驗嗎？
 \n您可以將既有的空間新增至其他空間中。</string>
     <string name="space_add_rooms">新增聊天室</string>
-    <string name="space_leave_prompt_msg_as_admin">您是此空間的管理員，請確保在您離開前已將管理權轉交給另一個成員。</string>
-    <string name="space_leave_prompt_msg_private">此空間並非公開。您將無法在無邀請的狀況下重新加入。</string>
+    <string name="space_leave_prompt_msg_as_admin">您是此空間唯一的管理員。若離開將意味著沒有人可以控制它。</string>
+    <string name="space_leave_prompt_msg_private">除非被重新邀請，否則您將無法重新加入。</string>
     <string name="space_leave_prompt_msg_only_you">您是這裡唯一的人。如果您離開，包含您在內的所有人都將無法加入。</string>
     <string name="invite_to_space">邀請至 %s</string>
     <string name="a11y_beta">此功能仍在測試版</string>
@@ -2891,4 +2891,49 @@
     <string name="call_ringing">通話響鈴中……</string>
     <string name="spaces">空間</string>
     <string name="learn_more">取得更多資訊</string>
+    <string name="space_add_space_to_any_space_you_manage">新增空間至您管理的任何空間。</string>
+    <string name="space_add_existing_spaces">新增既有的空間</string>
+    <string name="space_add_existing_rooms_only">新增既有的聊天室</string>
+    <string name="pick_tings_to_leave">挑選要離開的對象</string>
+    <string name="leave_specific_ones">離開特定的聊天室與空間……</string>
+    <string name="dont_leave_any">不要離開任何聊天室與空間</string>
+    <string name="you_will_leave_all_in">您將離開所有 %s 中的聊天室與空間。</string>
+    <string name="leave_all_rooms_and_spaces">離開所有聊天室與空間</string>
+    <string name="space_leave_prompt_msg_with_name">您確定您想要離開 %s？</string>
+    <string name="discovery_section">探索 (%s)</string>
+    <string name="finish_setup">結束設定</string>
+    <string name="discovery_invite">透過電子郵件邀請、尋找聯絡人以及更多……</string>
+    <string name="finish_setting_up_discovery">完成探索設定。</string>
+    <string name="create_space_identity_server_info_none">您目前並未使用身份認證伺服器。為了邀請隊友並被他們探索，請在下方設定一個。</string>
+    <string name="invite_by_mxid_or_mail">透過使用者名稱或電子郵件邀請</string>
+    <string name="create_spaces_invite_public_header_desc">確保合適的人可以存取 %s 公司。您可以稍後再邀請。</string>
+    <string name="create_spaces_invite_public_header">誰是您的隊友？</string>
+    <string name="command_description_add_to_space">新增至指定的空間</string>
+    <string name="create_space_in_progress">正在建立空間……</string>
+    <string name="settings_developer_mode_show_info_on_screen_summary">顯示一些有用的資訊以協助應用程式除錯</string>
+    <string name="settings_developer_mode_show_info_on_screen_title">在畫面上顯示除錯資訊</string>
+    <string name="does_not_look_like_valid_email">看起來不是有效的電子郵件地址</string>
+    <string name="open_discovery_settings">開啟探索設定</string>
+    <string name="user_directory_search_hint_2">以名稱、ID 或電子郵件搜尋</string>
+    <string name="create_new_space">建立新空間</string>
+    <string name="room_settings_space_access_public_description">任何人都可以找到空間並加入</string>
+    <string name="room_settings_space_access_title">空間存取</string>
+    <string name="room_settings_access_rules_pref_dialog_title">誰可以存取？</string>
+    <string name="settings_notification_emails_enable_for_email">啟用 %s 的電子郵件通知</string>
+    <string name="settings_notification_emails_no_emails">要收到通知用的電子郵件，請將電子郵件關聯至您的 Matrix 帳號</string>
+    <string name="settings_notification_emails_category">電子郵件通知</string>
+    <string name="room_permissions_upgrade_the_space">升級空間</string>
+    <string name="room_permissions_change_space_name">變更空間名稱</string>
+    <string name="room_permissions_enable_space_encryption">啟用空間加密</string>
+    <string name="room_permissions_change_main_address_for_the_space">變更空間的主要位置</string>
+    <string name="room_permissions_change_space_avatar">變更空間大頭照</string>
+    <string name="space_permissions_notice_read_only">您無權更新變更此空間各部份所需角色的權限</string>
+    <string name="space_permissions_notice">選取變更此空間各部份所需的角色</string>
+    <string name="space_settings_permissions_subtitle">檢視並更新變更空間各部份所需的角色。</string>
+    <string name="space_settings_permissions_title">空間權限</string>
+    <string name="space_participants_unban_prompt_msg">取消封鎖使用者將讓他們可以再次加入空間。</string>
+    <string name="space_participants_ban_prompt_msg">封鎖使用者會將他們踢出此空間並防止他們再次加入。</string>
+    <string name="space_participants_kick_prompt_msg">踢除使用者將會將他們從此空間中移除。
+\n
+\n為了防止他們再加入，您應該封鎖他們。</string>
 </resources>
