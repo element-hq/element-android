@@ -99,19 +99,19 @@ class TextComposerViewModel @AssistedInject constructor(
             currentComposerText = action.text
             this
         }
-        updateIsSendButtonVisibility()
+        updateIsSendButtonVisibility(true)
     }
 
     private fun subscribeToStateInternal() {
         selectSubscribe(TextComposerViewState::sendMode, TextComposerViewState::canSendMessage, TextComposerViewState::isVoiceRecording) { _, _, _ ->
-            updateIsSendButtonVisibility()
+            updateIsSendButtonVisibility(false)
         }
     }
 
-    private fun updateIsSendButtonVisibility() = setState {
+    private fun updateIsSendButtonVisibility(triggerAnimation: Boolean) = setState {
         val isSendButtonVisible = isComposerVisible && (sendMode !is SendMode.REGULAR || currentComposerText.isNotBlank())
-        if (this.isSendButtonVisible != isSendButtonVisible) {
-            _viewEvents.post(TextComposerViewEvents.OnSendButtonVisibilityChanged(isSendButtonVisible))
+        if (this.isSendButtonVisible != isSendButtonVisible && triggerAnimation) {
+            _viewEvents.post(TextComposerViewEvents.AnimateSendButtonVisibility(isSendButtonVisible))
         }
         copy(isSendButtonVisible = isSendButtonVisible)
     }

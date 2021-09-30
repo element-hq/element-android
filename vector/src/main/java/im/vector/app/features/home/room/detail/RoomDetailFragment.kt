@@ -416,8 +416,8 @@ class RoomDetailFragment @Inject constructor(
                 is TextComposerViewEvents.JoinRoomCommandSuccess        -> handleJoinedToAnotherRoom(it)
                 is TextComposerViewEvents.SendMessageResult             -> renderSendMessageResult(it)
                 is TextComposerViewEvents.ShowMessage                   -> showSnackWithMessage(it.message)
-                is TextComposerViewEvents.ShowRoomUpgradeDialog         -> handleShowRoomUpgradeDialog(it)
-                is TextComposerViewEvents.OnSendButtonVisibilityChanged -> handleOnSendButtonVisibilityChanged(it)
+                is TextComposerViewEvents.ShowRoomUpgradeDialog       -> handleShowRoomUpgradeDialog(it)
+                is TextComposerViewEvents.AnimateSendButtonVisibility -> handleSendButtonVisibilityChanged(it)
             }.exhaustive
         }
 
@@ -468,8 +468,7 @@ class RoomDetailFragment @Inject constructor(
         }
     }
 
-    private fun handleOnSendButtonVisibilityChanged(event: TextComposerViewEvents.OnSendButtonVisibilityChanged) {
-        Timber.v("Handle on SendButtonVisibility: $event")
+    private fun handleSendButtonVisibilityChanged(event: TextComposerViewEvents.AnimateSendButtonVisibility) {
         if (event.isVisible) {
             views.voiceMessageRecorderView.isVisible = false
             views.composerLayout.views.sendButton.alpha = 0f

@@ -22,7 +22,7 @@ import im.vector.app.features.command.Command
 
 sealed class TextComposerViewEvents : VectorViewEvents {
 
-    data class OnSendButtonVisibilityChanged(val isVisible: Boolean): TextComposerViewEvents()
+    data class AnimateSendButtonVisibility(val isVisible: Boolean): TextComposerViewEvents()
 
     data class ShowMessage(val message: String) : TextComposerViewEvents()
 
