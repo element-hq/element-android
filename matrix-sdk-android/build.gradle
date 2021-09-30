@@ -31,7 +31,7 @@ android {
         // that the app's state is completely cleared between tests.
         testInstrumentationRunnerArguments clearPackageData: 'true'
 
-        buildConfigField "String", "SDK_VERSION", "\"1.2.2\""
+        buildConfigField "String", "SDK_VERSION", "\"1.3.1\""
 
         buildConfigField "String", "GIT_SDK_REVISION", "\"${gitRevision()}\""
         resValue "string", "git_sdk_revision", "\"${gitRevision()}\""
@@ -151,10 +151,10 @@ dependencies {
     implementation 'com.facebook.stetho:stetho-okhttp3:1.6.0'
 
     // Video compression
-    implementation 'com.otaliastudios:transcoder:0.10.3'
+    implementation 'com.otaliastudios:transcoder:0.10.4'
 
     // Phone number https://github.com/google/libphonenumber
-    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.32'
+    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.33'
 
     testImplementation libs.tests.junit
     testImplementation 'org.robolectric:robolectric:4.6.1'
@@ -179,5 +179,5 @@ dependencies {
     // Plant Timber tree for test
     androidTestImplementation libs.tests.timberJunitRule
 
-    androidTestUtil 'androidx.test:orchestrator:1.4.0'
+    androidTestUtil libs.androidx.orchestrator
 }

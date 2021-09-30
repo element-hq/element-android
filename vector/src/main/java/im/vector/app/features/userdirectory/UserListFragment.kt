@@ -39,9 +39,11 @@ import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.setupAsSearch
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.DimensionConverter
+import im.vector.app.core.utils.showIdentityServerConsentDialog
 import im.vector.app.core.utils.startSharePlainTextIntent
 import im.vector.app.databinding.FragmentUserListBinding
 import im.vector.app.features.homeserver.HomeServerCapabilitiesViewModel
+import im.vector.app.features.settings.VectorSettingsActivity
 
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.user.model.User
@@ -131,7 +133,7 @@ class UserListFragment @Inject constructor(
 
     private fun setupSearchView() {
         withState(viewModel) {
-            views.userListSearch.hint = getString(R.string.user_directory_search_hint)
+            views.userListSearch.hint = getString(R.string.user_directory_search_hint_2)
         }
         views.userListSearch
                 .textChanges()
@@ -215,6 +217,21 @@ class UserListFragment @Inject constructor(
     override fun onThreePidClick(threePid: ThreePid) {
         view?.hideKeyboard()
         viewModel.handle(UserListAction.AddPendingSelection(PendingSelection.ThreePidPendingSelection(threePid)))
+    }
+
+    override fun onSetupDiscovery() {
+        navigator.openSettings(
+                requireContext(),
+                VectorSettingsActivity.EXTRA_DIRECT_ACCESS_DISCOVERY_SETTINGS
+        )
+    }
+
+    override fun giveIdentityServerConsent() {
+        withState(viewModel) { state ->
+            requireContext().showIdentityServerConsentDialog(state.configuredIdentityServer) {
+                viewModel.handle(UserListAction.UpdateUserConsent(true))
+            }
+        }
     }
 
     override fun onUseQRCode() {

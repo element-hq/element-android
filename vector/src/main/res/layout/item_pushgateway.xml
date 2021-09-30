@@ -120,7 +120,6 @@
         android:text="@string/push_gateway_item_format"
         android:textStyle="bold" />
 
-
     <TextView
         android:id="@+id/pushGatewayFormatValue"
         style="@style/Widget.Vector.TextView.Body"
@@ -130,5 +129,11 @@
         android:textStyle=""
         tools:text="event_id_only" />
 
+    <Button
+        android:id="@+id/pushGatewayDeleteButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/remove" />
 
 </LinearLayout>

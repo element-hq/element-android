@@ -468,7 +468,6 @@ class NotificationUtils @Inject constructor(private val context: Context,
                         setSmallIcon(R.drawable.ic_call_answer)
                     }
                 }
-                // This is a trick to make the previous notification with same id disappear as cancel notification is not working with Foreground Service.
                 .setTimeoutAfter(1)
                 .setColor(ThemeUtils.getColor(context, android.R.attr.colorPrimary))
                 .setCategory(NotificationCompat.CATEGORY_CALL)
@@ -679,7 +678,7 @@ class NotificationUtils @Inject constructor(private val context: Context,
                             stringProvider.getString(R.string.join),
                             joinIntentPendingIntent)
 
-                    val contentIntent = HomeActivity.newIntent(context)
+                    val contentIntent = HomeActivity.newIntent(context, inviteNotificationRoomId = inviteNotifiableEvent.roomId)
                     contentIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
                     // pending intent get reused by system, this will mess up the extra params, so put unique info to avoid that
                     contentIntent.data = Uri.parse("foobar://" + inviteNotifiableEvent.eventId)

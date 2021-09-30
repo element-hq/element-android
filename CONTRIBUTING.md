@@ -113,6 +113,8 @@ Do not hesitate to use plurals when appropriate.
 
 Please consider accessibility as an important point. As a minimum requirement, in layout XML files please use attributes such as `android:contentDescription` and `android:importantForAccessibility`, and test with a screen reader if it's working well. You can add new string resources, dedicated to accessibility, in this case, please prefix theirs id with `a11y_`.
 
+For instance, when updating the image `src` of an ImageView, please also consider updating its `contentDescription`. A good example is a play pause button.
+
 ### Layout
 
 Also please check that the colors are ok for all the current themes of Tchap. Please use `?attr` instead of `@color` to reference colors in the layout. You can check this in the layout editor preview by selecting all the main themes (`AppTheme.Status`, `AppTheme.Dark`, etc.).
