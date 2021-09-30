@@ -37,7 +37,7 @@ import org.matrix.android.sdk.api.session.SessionLifecycleObserver
 import org.matrix.android.sdk.api.session.accountdata.SessionAccountDataService
 import org.matrix.android.sdk.api.session.events.EventService
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilitiesService
-import org.matrix.android.sdk.api.session.initsync.InitialSyncProgressService
+import org.matrix.android.sdk.api.session.initsync.SyncStatusService
 import org.matrix.android.sdk.api.session.openid.OpenIdService
 import org.matrix.android.sdk.api.session.permalinks.PermalinkService
 import org.matrix.android.sdk.api.session.securestorage.SecureStorageService
@@ -81,7 +81,7 @@ import org.matrix.android.sdk.internal.session.download.DownloadProgressIntercep
 import org.matrix.android.sdk.internal.session.events.DefaultEventService
 import org.matrix.android.sdk.internal.session.homeserver.DefaultHomeServerCapabilitiesService
 import org.matrix.android.sdk.internal.session.identity.DefaultIdentityService
-import org.matrix.android.sdk.internal.session.initsync.DefaultInitialSyncProgressService
+import org.matrix.android.sdk.internal.session.initsync.DefaultSyncStatusService
 import org.matrix.android.sdk.internal.session.integrationmanager.IntegrationManager
 import org.matrix.android.sdk.internal.session.openid.DefaultOpenIdService
 import org.matrix.android.sdk.internal.session.permalinks.DefaultPermalinkService
@@ -355,7 +355,7 @@ internal abstract class SessionModule {
     abstract fun bindEventSenderProcessorAsSessionLifecycleObserver(processor: EventSenderProcessorCoroutine): SessionLifecycleObserver
 
     @Binds
-    abstract fun bindInitialSyncProgressService(service: DefaultInitialSyncProgressService): InitialSyncProgressService
+    abstract fun bindSyncStatusService(service: DefaultSyncStatusService): SyncStatusService
 
     @Binds
     abstract fun bindSecureStorageService(service: DefaultSecureStorageService): SecureStorageService

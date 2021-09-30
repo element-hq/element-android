@@ -48,9 +48,10 @@ class WebRtcCallManager @Inject constructor(
         context: Context
 ) : CallListener, LifecycleObserver {
 
-    interface CurrentCallListener {
-        fun onCurrentCallChange(call: WebRtcCall?) {}
-        fun onAudioDevicesChange() {}
+    interface Listener {
+        fun onCallEnded(callId: String) = Unit
+        fun onCurrentCallChange(call: WebRtcCall?) = Unit
+        fun onAudioDevicesChange() = Unit
     }
 
     val supportedPSTNProtocol: String? = null
@@ -63,9 +64,9 @@ class WebRtcCallManager @Inject constructor(
 
     fun removeProtocolsCheckerListener(listener: CallProtocolsChecker.Listener) = Unit
 
-    fun addCurrentCallListener(listener: CurrentCallListener) = Unit
+    fun addListener(listener: Listener) = Unit
 
-    fun removeCurrentCallListener(listener: CurrentCallListener) = Unit
+    fun removeListener(listener: Listener) = Unit
 
     val audioManager = CallAudioManager(context, null)
 
@@ -80,11 +81,6 @@ class WebRtcCallManager @Inject constructor(
     fun getCalls(): List<WebRtcCall> = emptyList()
 
     fun checkForProtocolsSupportIfNeeded() = Unit
-
-    /**
-     * @return a set of all advertised call during the lifetime of the app.
-     */
-    fun getAdvertisedCalls(): HashSet<String> = hashSetOf()
 
     fun headSetButtonTapped() {
         Timber.tag(loggerTag.value).v("headSetButtonTapped")

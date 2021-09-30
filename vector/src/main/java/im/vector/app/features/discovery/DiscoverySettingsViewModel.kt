@@ -65,7 +65,7 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
             setState {
                 copy(
                         identityServer = Success(identityServerUrl),
-                        userConsent = false
+                        userConsent = identityService.getUserConsent()
                 )
             }
             if (currentIS != identityServerUrl) retrieveBinding()

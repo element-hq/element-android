@@ -21,6 +21,7 @@ import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.events.model.Event
+import org.matrix.android.sdk.api.session.initsync.SyncStatusService
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
@@ -77,6 +78,8 @@ data class RoomDetailViewState(
         val tombstoneEvent: Event? = null,
         val joinUpgradedRoomAsync: Async<String> = Uninitialized,
         val syncState: SyncState = SyncState.Idle,
+        val incrementalSyncStatus: SyncStatusService.Status.IncrementalSyncStatus = SyncStatusService.Status.IncrementalSyncIdle,
+        val pushCounter: Int = 0,
         val highlightedEventId: String? = null,
         val unreadState: UnreadState = UnreadState.Unknown,
         val canShowJumpToReadMarker: Boolean = true,

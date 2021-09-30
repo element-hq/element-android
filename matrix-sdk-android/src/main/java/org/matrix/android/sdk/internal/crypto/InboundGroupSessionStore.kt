@@ -71,10 +71,16 @@ internal class InboundGroupSessionStore @Inject constructor(
     }
 
     @Synchronized
-    fun storeInBoundGroupSession(wrapper: OlmInboundGroupSessionWrapper2) {
+    fun storeInBoundGroupSession(wrapper: OlmInboundGroupSessionWrapper2, sessionId: String, senderKey: String) {
         Timber.v("## Inbound: getInboundGroupSession mark as dirty ${wrapper.roomId}-${wrapper.senderKey}")
         // We want to batch this a bit for performances
         dirtySession.add(wrapper)
+
+        if (sessionCache[CacheKey(sessionId, senderKey)] == null) {
+            // first time seen, put it in memory cache while waiting for batch insert
+            // If it's already known, no need to update cache it's already there
+            sessionCache.put(CacheKey(sessionId, senderKey), wrapper)
+        }
 
         timerTask?.cancel()
         timerTask = object : TimerTask() {
@@ -82,7 +88,7 @@ internal class InboundGroupSessionStore @Inject constructor(
                 batchSave()
             }
         }
-        timer.schedule(timerTask!!, 2_000)
+        timer.schedule(timerTask!!, 300)
     }
 
     @Synchronized

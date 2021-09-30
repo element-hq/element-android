@@ -20,6 +20,7 @@ import androidx.preference.Preference
 import androidx.preference.SeekBarPreference
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseActivity
+import im.vector.app.core.preference.VectorPreferenceCategory
 import im.vector.app.core.preference.VectorSwitchPreference
 import im.vector.app.features.rageshake.RageShake
 
@@ -72,7 +73,7 @@ class VectorSettingsAdvancedSettingsFragment : VectorSettingsBaseFragment() {
                 true
             }
         } else {
-            findPreference<VectorSwitchPreference>("SETTINGS_RAGE_SHAKE_CATEGORY_KEY")!!.isVisible = false
+            findPreference<VectorPreferenceCategory>("SETTINGS_RAGE_SHAKE_CATEGORY_KEY")!!.isVisible = false
         }
     }
 }

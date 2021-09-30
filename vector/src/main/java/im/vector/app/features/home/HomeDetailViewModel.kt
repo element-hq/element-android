@@ -34,9 +34,11 @@ import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.createdirect.DirectRoomHelper
 import im.vector.app.features.invite.AutoAcceptInvites
 import im.vector.app.features.invite.showInvites
+import im.vector.app.features.settings.VectorDataStore
 import im.vector.app.features.ui.UiStateRepository
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.query.ActiveSpaceFilter
@@ -44,6 +46,7 @@ import org.matrix.android.sdk.api.query.RoomCategoryFilter
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.identity.ThreePid
+import org.matrix.android.sdk.api.session.initsync.SyncStatusService
 import org.matrix.android.sdk.api.session.room.RoomSortOrder
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
@@ -62,6 +65,7 @@ import java.util.concurrent.TimeUnit
 class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: HomeDetailViewState,
                                                       private val session: Session,
                                                       private val uiStateRepository: UiStateRepository,
+                                                      private val vectorDataStore: VectorDataStore,
                                                       private val callManager: WebRtcCallManager,
                                                       private val directRoomHelper: DirectRoomHelper,
                                                       private val appStateHandler: AppStateHandler,
@@ -95,11 +99,24 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
         observeRoomGroupingMethod()
         observeRoomSummaries()
         updateShowDialPadTab()
+        observeDataStore()
         callManager.addProtocolsCheckerListener(this)
         session.rx().liveUser(session.myUserId).execute {
             copy(
                     myMatrixItem = it.invoke()?.getOrNull()?.toMatrixItem()
             )
+        }
+    }
+
+    private fun observeDataStore() {
+        viewModelScope.launch {
+            vectorDataStore.pushCounterFlow.collect { nbOfPush ->
+                setState {
+                    copy(
+                            pushCounter = nbOfPush
+                    )
+                }
+            }
         }
     }
 
@@ -300,6 +317,17 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
                 .subscribe { syncState ->
                     setState {
                         copy(syncState = syncState)
+                    }
+                }
+                .disposeOnClear()
+
+        session.getSyncStatusLive()
+                .asObservable()
+                .subscribe {
+                    if (it is SyncStatusService.Status.IncrementalSyncStatus) {
+                        setState {
+                            copy(incrementalSyncStatus = it)
+                        }
                     }
                 }
                 .disposeOnClear()
