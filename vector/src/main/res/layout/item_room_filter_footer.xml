@@ -12,6 +12,7 @@
         android:layout_gravity="center"
         android:layout_marginTop="56dp"
         android:text="@string/room_filtering_footer_title"
+        android:layout_marginBottom="@dimen/layout_vertical_margin"
         android:textColor="?vctr_content_secondary" />
 
     <Button
@@ -20,7 +21,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="@dimen/layout_vertical_margin"
         android:text="@string/room_filtering_footer_create_new_room" />
 
     <Button
