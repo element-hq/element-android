@@ -126,7 +126,9 @@ class RoomProfileController @Inject constructor(
             centered(false)
             text(host.stringProvider.getString(learnMoreSubtitle))
         }
-        buildEncryptionAction(data.actionPermissions, roomSummary)
+
+        // Hidden in Tchap
+        // buildEncryptionAction(data.actionPermissions, roomSummary)
 
         // More
         buildProfileSection(stringProvider.getString(R.string.room_profile_section_more))
@@ -204,6 +206,7 @@ class RoomProfileController @Inject constructor(
             // Advanced
             buildProfileSection(stringProvider.getString(R.string.room_settings_category_advanced_title))
 
+            // Hidden in Tchap
 //            buildProfileAction(
 //                    id = "alias",
 //                    title = stringProvider.getString(R.string.room_settings_alias_title),
