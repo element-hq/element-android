@@ -20,7 +20,7 @@ import androidx.lifecycle.MutableLiveData
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
@@ -49,7 +49,7 @@ import java.util.concurrent.TimeUnit
 
 data class ServerBackupStatusViewState(
         val bannerState: Async<BannerState> = Uninitialized
-) : MvRxState
+) : MavericksState
 
 /**
  * The state representing the view

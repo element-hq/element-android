@@ -19,7 +19,7 @@ import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
@@ -48,7 +48,7 @@ data class VerificationEmojiCodeViewState(
         val emojiDescription: Async<List<EmojiRepresentation>> = Uninitialized,
         val decimalDescription: Async<String> = Uninitialized,
         val isWaitingFromOther: Boolean = false
-) : MvRxState
+) : MavericksState
 
 class VerificationEmojiCodeViewModel @AssistedInject constructor(
         @Assisted initialState: VerificationEmojiCodeViewState,

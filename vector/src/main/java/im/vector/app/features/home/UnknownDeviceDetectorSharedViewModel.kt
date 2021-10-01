@@ -19,7 +19,7 @@ package im.vector.app.features.home
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
@@ -48,7 +48,7 @@ import java.util.concurrent.TimeUnit
 data class UnknownDevicesState(
         val myMatrixItem: MatrixItem.UserItem? = null,
         val unknownSessions: Async<List<DeviceDetectionInfo>> = Uninitialized
-) : MvRxState
+) : MavericksState
 
 data class DeviceDetectionInfo(
         val deviceInfo: DeviceInfo,

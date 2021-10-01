@@ -21,7 +21,7 @@ import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MvRx
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
@@ -55,7 +55,7 @@ data class SharedSecureStorageViewState(
         val activeDeviceCount: Int = 0,
         val showResetAllAction: Boolean = false,
         val userId: String = ""
-) : MvRxState {
+) : MavericksState {
     enum class Step {
         EnterPassphrase,
         EnterKey,

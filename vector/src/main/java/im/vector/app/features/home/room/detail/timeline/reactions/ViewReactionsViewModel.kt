@@ -18,7 +18,7 @@ package im.vector.app.features.home.room.detail.timeline.reactions
 
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
@@ -42,7 +42,7 @@ data class DisplayReactionsViewState(
         val eventId: String,
         val roomId: String,
         val mapReactionKeyToMemberList: Async<List<ReactionInfo>> = Uninitialized)
-    : MvRxState {
+    : MavericksState {
 
     constructor(args: TimelineEventFragmentArgs) : this(roomId = args.roomId, eventId = args.eventId)
 }

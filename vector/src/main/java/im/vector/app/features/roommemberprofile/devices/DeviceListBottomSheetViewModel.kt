@@ -19,7 +19,7 @@ package im.vector.app.features.roommemberprofile.devices
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
@@ -42,7 +42,7 @@ data class DeviceListViewState(
         val memberCrossSigningKey: MXCrossSigningInfo? = null,
         val cryptoDevices: Async<List<CryptoDeviceInfo>> = Loading(),
         val selectedDevice: CryptoDeviceInfo? = null
-) : MvRxState
+) : MavericksState
 
 class DeviceListBottomSheetViewModel @AssistedInject constructor(@Assisted private val initialState: DeviceListViewState,
                                                                  @Assisted private val args: DeviceListBottomSheet.Args,

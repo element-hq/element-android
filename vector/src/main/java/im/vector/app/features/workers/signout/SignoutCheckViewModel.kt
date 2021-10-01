@@ -22,7 +22,7 @@ import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
@@ -51,7 +51,7 @@ data class SignoutCheckViewState(
         val crossSigningSetupAllKeysKnown: Boolean = false,
         val keysBackupState: KeysBackupState = KeysBackupState.Unknown,
         val hasBeenExportedToFile: Async<Boolean> = Uninitialized
-) : MvRxState
+) : MavericksState
 
 class SignoutCheckViewModel @AssistedInject constructor(
         @Assisted initialState: SignoutCheckViewState,

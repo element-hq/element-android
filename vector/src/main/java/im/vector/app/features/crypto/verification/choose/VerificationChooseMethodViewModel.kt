@@ -16,7 +16,7 @@
 package im.vector.app.features.crypto.verification.choose
 
 import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
@@ -43,7 +43,7 @@ data class VerificationChooseMethodViewState(
         val sasModeAvailable: Boolean = false,
         val isMe: Boolean = false,
         val canCrossSign: Boolean = false
-) : MvRxState
+) : MavericksState
 
 class VerificationChooseMethodViewModel @AssistedInject constructor(
         @Assisted initialState: VerificationChooseMethodViewState,

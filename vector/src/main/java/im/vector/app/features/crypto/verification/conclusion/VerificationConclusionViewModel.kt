@@ -15,7 +15,7 @@
  */
 package im.vector.app.features.crypto.verification.conclusion
 
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import im.vector.app.core.platform.EmptyAction
@@ -27,7 +27,7 @@ import org.matrix.android.sdk.api.session.crypto.verification.safeValueOf
 data class VerificationConclusionViewState(
         val conclusionState: ConclusionState = ConclusionState.CANCELLED,
         val isSelfVerification: Boolean = false
-) : MvRxState
+) : MavericksState
 
 enum class ConclusionState {
     SUCCESS,

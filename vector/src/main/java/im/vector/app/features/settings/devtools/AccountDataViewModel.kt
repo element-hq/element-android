@@ -19,7 +19,7 @@ package im.vector.app.features.settings.devtools
 import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
@@ -36,7 +36,7 @@ import org.matrix.android.sdk.rx.rx
 
 data class AccountDataViewState(
         val accountData: Async<List<UserAccountDataEvent>> = Uninitialized
-) : MvRxState
+) : MavericksState
 
 class AccountDataViewModel @AssistedInject constructor(@Assisted initialState: AccountDataViewState,
                                                        private val session: Session)

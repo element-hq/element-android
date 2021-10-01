@@ -21,7 +21,7 @@ import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
@@ -75,7 +75,7 @@ data class DevicesViewState(
         val request: Async<Unit> = Uninitialized,
         val hasAccountCrossSigning: Boolean = false,
         val accountCrossSigningIsTrusted: Boolean = false
-) : MvRxState
+) : MavericksState
 
 data class DeviceFullInfo(
         val deviceInfo: DeviceInfo,

@@ -20,7 +20,7 @@ import androidx.paging.PagedList
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
@@ -36,7 +36,7 @@ import org.matrix.android.sdk.rx.asObservable
 
 data class GossipingEventsPaperTrailState(
         val events: Async<PagedList<Event>> = Uninitialized
-) : MvRxState
+) : MavericksState
 
 class GossipingEventsPaperTrailViewModel @AssistedInject constructor(@Assisted initialState: GossipingEventsPaperTrailState,
                                                                      private val session: Session)

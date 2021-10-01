@@ -21,7 +21,7 @@ import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
@@ -39,7 +39,7 @@ import org.matrix.android.sdk.rx.rx
 data class IgnoredUsersViewState(
         val ignoredUsers: List<User> = emptyList(),
         val unIgnoreRequest: Async<Unit> = Uninitialized
-) : MvRxState
+) : MavericksState
 
 sealed class IgnoredUsersAction : VectorViewModelAction {
     data class UnIgnore(val userId: String) : IgnoredUsersAction()

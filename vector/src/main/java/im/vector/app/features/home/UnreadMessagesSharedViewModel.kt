@@ -18,7 +18,7 @@ package im.vector.app.features.home
 
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
@@ -46,7 +46,7 @@ import java.util.concurrent.TimeUnit
 data class UnreadMessagesState(
         val homeSpaceUnread: RoomAggregateNotificationCount = RoomAggregateNotificationCount(0, 0),
         val otherSpacesUnread: RoomAggregateNotificationCount = RoomAggregateNotificationCount(0, 0)
-) : MvRxState
+) : MavericksState
 
 data class CountInfo(
         val homeCount: RoomAggregateNotificationCount,

@@ -20,7 +20,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagedList
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
@@ -39,7 +39,7 @@ import org.matrix.android.sdk.rx.asObservable
 data class KeyRequestListViewState(
         val incomingRequests: Async<PagedList<IncomingRoomKeyRequest>> = Uninitialized,
         val outgoingRoomKeyRequests: Async<PagedList<OutgoingRoomKeyRequest>> = Uninitialized
-) : MvRxState
+) : MavericksState
 
 class KeyRequestListViewModel @AssistedInject constructor(@Assisted initialState: KeyRequestListViewState,
                                                           private val session: Session)

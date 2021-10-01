@@ -18,7 +18,7 @@ package im.vector.app.features.home
 
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
@@ -41,7 +41,7 @@ data class ActiveSpaceViewState(
         val isInSpaceMode: Boolean = false,
         val activeSpaceSummary: RoomSummary? = null,
         val canUserManageSpace: Boolean = false
-) : MvRxState
+) : MavericksState
 
 class PromoteRestrictedViewModel @AssistedInject constructor(
         @Assisted initialState: ActiveSpaceViewState,
