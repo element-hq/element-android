@@ -27,7 +27,7 @@ import android.view.MenuItem
 import androidx.core.view.GravityCompat
 import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
-import com.airbnb.mvrx.MvRx
+import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -228,7 +228,7 @@ class HomeActivity :
                 }
                 .disposeOnDestroy()
 
-        val args = intent.getParcelableExtra<HomeActivityArgs>(MvRx.KEY_ARG)
+        val args = intent.getParcelableExtra<HomeActivityArgs>(Mavericks.KEY_ARG)
 
         if (args?.clearNotification == true) {
             notificationDrawerManager.clearAllEvents()
@@ -433,7 +433,7 @@ class HomeActivity :
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
-        val parcelableExtra = intent?.getParcelableExtra<HomeActivityArgs>(MvRx.KEY_ARG)
+        val parcelableExtra = intent?.getParcelableExtra<HomeActivityArgs>(Mavericks.KEY_ARG)
         if (parcelableExtra?.clearNotification == true) {
             notificationDrawerManager.clearAllEvents()
         }
@@ -580,7 +580,7 @@ class HomeActivity :
 
             return Intent(context, HomeActivity::class.java)
                     .apply {
-                        putExtra(MvRx.KEY_ARG, args)
+                        putExtra(Mavericks.KEY_ARG, args)
                     }
         }
     }

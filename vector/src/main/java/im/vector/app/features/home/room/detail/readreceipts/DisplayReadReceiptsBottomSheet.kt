@@ -21,7 +21,7 @@ import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.airbnb.mvrx.MvRx
+import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.args
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
@@ -88,7 +88,7 @@ class DisplayReadReceiptsBottomSheet :
             val parcelableArgs = DisplayReadReceiptArgs(
                     readReceipts
             )
-            args.putParcelable(MvRx.KEY_ARG, parcelableArgs)
+            args.putParcelable(Mavericks.KEY_ARG, parcelableArgs)
             return DisplayReadReceiptsBottomSheet().apply { arguments = args }
         }
     }

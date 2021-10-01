@@ -36,7 +36,7 @@ import androidx.core.content.getSystemService
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.MvRx
+import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.card.MaterialCardView
@@ -167,8 +167,8 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
-        intent?.takeIf { it.hasExtra(MvRx.KEY_ARG) }
-                ?.let { intent.getParcelableExtra<CallArgs>(MvRx.KEY_ARG) }
+        intent?.takeIf { it.hasExtra(Mavericks.KEY_ARG) }
+                ?.let { intent.getParcelableExtra<CallArgs>(Mavericks.KEY_ARG) }
                 ?.let {
                     callViewModel.handle(VectorCallViewActions.SwitchCall(it))
                 }
@@ -633,7 +633,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
             return Intent(context, VectorCallActivity::class.java).apply {
                 // what could be the best flags?
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                putExtra(MvRx.KEY_ARG, CallArgs(call.nativeRoomId, call.callId, call.mxCall.opponentUserId, !call.mxCall.isOutgoing, call.mxCall.isVideoCall))
+                putExtra(Mavericks.KEY_ARG, CallArgs(call.nativeRoomId, call.callId, call.mxCall.opponentUserId, !call.mxCall.isOutgoing, call.mxCall.isVideoCall))
                 putExtra(EXTRA_MODE, mode)
             }
         }
@@ -648,7 +648,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
             return Intent(context, VectorCallActivity::class.java).apply {
                 // what could be the best flags?
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                putExtra(MvRx.KEY_ARG, CallArgs(signalingRoomId, callId, otherUserId, isIncomingCall, isVideoCall))
+                putExtra(Mavericks.KEY_ARG, CallArgs(signalingRoomId, callId, otherUserId, isIncomingCall, isVideoCall))
                 putExtra(EXTRA_MODE, mode)
             }
         }

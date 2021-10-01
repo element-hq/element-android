@@ -24,7 +24,7 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import com.airbnb.mvrx.MvRx
+import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
 import com.airbnb.mvrx.withState
 import im.vector.app.R
@@ -128,7 +128,7 @@ class UserCodeActivity : VectorBaseActivity<ActivitySimpleBinding>(),
     companion object {
         fun newIntent(context: Context, userId: String): Intent {
             return Intent(context, UserCodeActivity::class.java).apply {
-                putExtra(MvRx.KEY_ARG, Args(userId))
+                putExtra(Mavericks.KEY_ARG, Args(userId))
             }
         }
     }

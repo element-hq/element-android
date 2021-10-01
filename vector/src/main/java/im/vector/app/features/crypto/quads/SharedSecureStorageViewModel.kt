@@ -20,7 +20,7 @@ import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRx
+import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
@@ -327,7 +327,7 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: SharedSecureStorageViewState): SharedSecureStorageViewModel? {
             val activity: SharedSecureStorageActivity = viewModelContext.activity()
-            val args: SharedSecureStorageActivity.Args = activity.intent.getParcelableExtra(MvRx.KEY_ARG) ?: error("Missing args")
+            val args: SharedSecureStorageActivity.Args = activity.intent.getParcelableExtra(Mavericks.KEY_ARG) ?: error("Missing args")
             return activity.viewModelFactory.create(state, args)
         }
     }

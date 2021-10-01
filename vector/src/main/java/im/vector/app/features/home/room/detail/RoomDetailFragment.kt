@@ -61,7 +61,7 @@ import com.airbnb.epoxy.EpoxyModel
 import com.airbnb.epoxy.OnModelBuildFinishedListener
 import com.airbnb.epoxy.addGlidePreloader
 import com.airbnb.epoxy.glidePreloader
-import com.airbnb.mvrx.MvRx
+import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
@@ -1582,7 +1582,7 @@ class RoomDetailFragment @Inject constructor(
                 val otherUserId = data.otherUserId ?: return
                 VerificationBottomSheet().apply {
                     arguments = Bundle().apply {
-                        putParcelable(MvRx.KEY_ARG, VerificationBottomSheet.VerificationArgs(
+                        putParcelable(Mavericks.KEY_ARG, VerificationBottomSheet.VerificationArgs(
                                 otherUserId, data.transactionId, roomId = roomDetailArgs.roomId))
                     }
                 }.show(parentFragmentManager, "REQ")

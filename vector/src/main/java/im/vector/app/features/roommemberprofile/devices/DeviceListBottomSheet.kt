@@ -24,7 +24,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.airbnb.mvrx.MvRx
+import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.app.R
@@ -122,7 +122,7 @@ class DeviceListBottomSheet :
     companion object {
         fun newInstance(userId: String, allowDeviceAction: Boolean = true): DeviceListBottomSheet {
             val args = Bundle()
-            args.putParcelable(MvRx.KEY_ARG, Args(userId, allowDeviceAction))
+            args.putParcelable(Mavericks.KEY_ARG, Args(userId, allowDeviceAction))
             return DeviceListBottomSheet().apply { arguments = args }
         }
     }

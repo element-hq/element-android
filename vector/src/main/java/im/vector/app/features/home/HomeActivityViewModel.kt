@@ -17,7 +17,7 @@
 package im.vector.app.features.home
 
 import androidx.lifecycle.viewModelScope
-import com.airbnb.mvrx.MvRx
+import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
@@ -72,7 +72,7 @@ class HomeActivityViewModel @AssistedInject constructor(
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: HomeActivityViewState): HomeActivityViewModel? {
             val activity: HomeActivity = viewModelContext.activity()
-            val args: HomeActivityArgs? = activity.intent.getParcelableExtra(MvRx.KEY_ARG)
+            val args: HomeActivityArgs? = activity.intent.getParcelableExtra(Mavericks.KEY_ARG)
             return activity.viewModelFactory.create(state, args ?: HomeActivityArgs(clearNotification = false, accountCreation = false))
         }
     }

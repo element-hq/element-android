@@ -20,7 +20,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import androidx.core.view.isVisible
-import com.airbnb.mvrx.MvRx
+import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
 import com.google.android.material.appbar.MaterialToolbar
 import im.vector.app.R
@@ -50,7 +50,7 @@ class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>(),
 
         fun newIntent(context: Context, args: WidgetArgs): Intent {
             return Intent(context, WidgetActivity::class.java).apply {
-                putExtra(MvRx.KEY_ARG, args)
+                putExtra(Mavericks.KEY_ARG, args)
             }
         }
 
@@ -83,7 +83,7 @@ class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>(),
     }
 
     override fun initUiAndData() {
-        val widgetArgs: WidgetArgs? = intent?.extras?.getParcelable(MvRx.KEY_ARG)
+        val widgetArgs: WidgetArgs? = intent?.extras?.getParcelable(Mavericks.KEY_ARG)
         if (widgetArgs == null) {
             finish()
             return
