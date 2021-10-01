@@ -20,6 +20,8 @@ import okhttp3.ResponseBody
 import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.session.initsync.InitSyncStep
 import org.matrix.android.sdk.api.session.initsync.SyncStatusService
+import org.matrix.android.sdk.api.session.sync.model.LazyRoomSyncEphemeral
+import org.matrix.android.sdk.api.session.sync.model.SyncResponse
 import org.matrix.android.sdk.internal.di.SessionFilesDirectory
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
@@ -30,8 +32,6 @@ import org.matrix.android.sdk.internal.session.filter.FilterRepository
 import org.matrix.android.sdk.internal.session.homeserver.GetHomeServerCapabilitiesTask
 import org.matrix.android.sdk.internal.session.initsync.DefaultSyncStatusService
 import org.matrix.android.sdk.internal.session.initsync.reportSubtask
-import org.matrix.android.sdk.api.session.sync.model.LazyRoomSyncEphemeral
-import org.matrix.android.sdk.api.session.sync.model.SyncResponse
 import org.matrix.android.sdk.internal.session.sync.parsing.InitialSyncResponseParser
 import org.matrix.android.sdk.internal.session.user.UserStore
 import org.matrix.android.sdk.internal.task.Task
@@ -73,7 +73,7 @@ internal class DefaultSyncTask @Inject constructor(
     private val workingDir = File(fileDirectory, "is")
     private val initialSyncStatusRepository: InitialSyncStatusRepository = FileInitialSyncStatusRepository(workingDir)
 
-    override suspend fun execute(params: SyncTask.Params) : SyncResponse {
+    override suspend fun execute(params: SyncTask.Params): SyncResponse {
         return syncTaskSequencer.post {
             doSync(params)
         }

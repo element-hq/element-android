@@ -35,10 +35,10 @@ import org.matrix.android.sdk.api.failure.isTokenError
 import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.session.call.MxCall
 import org.matrix.android.sdk.api.session.sync.SyncState
+import org.matrix.android.sdk.api.session.sync.model.SyncResponse
 import org.matrix.android.sdk.internal.network.NetworkConnectivityChecker
 import org.matrix.android.sdk.internal.session.call.ActiveCallHandler
 import org.matrix.android.sdk.internal.session.sync.SyncPresence
-import org.matrix.android.sdk.api.session.sync.model.SyncResponse
 import org.matrix.android.sdk.internal.session.sync.SyncTask
 import org.matrix.android.sdk.internal.util.BackgroundDetectionObserver
 import org.matrix.android.sdk.internal.util.Debouncer
