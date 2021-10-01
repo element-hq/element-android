@@ -1126,7 +1126,10 @@ internal class DefaultVerificationService @Inject constructor(
         }
     }
 
-    override fun requestKeyVerificationInDMs(methods: List<VerificationMethod>, otherUserId: String, roomId: String, localId: String?): PendingVerificationRequest {
+    override fun requestKeyVerificationInDMs(methods: List<VerificationMethod>,
+                                             otherUserId: String,
+                                             roomId: String,
+                                             localId: String?): PendingVerificationRequest {
         Timber.i("## SAS Requesting verification to user: $otherUserId in room $roomId")
 
         val requestsForUser = pendingRequests.getOrPut(otherUserId) { mutableListOf() }
