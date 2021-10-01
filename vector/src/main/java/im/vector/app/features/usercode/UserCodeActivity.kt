@@ -68,7 +68,7 @@ class UserCodeActivity : VectorBaseActivity<ActivitySimpleBinding>(),
             showFragment(ShowUserCodeFragment::class, Bundle.EMPTY)
         }
 
-        sharedViewModel.selectSubscribe(UserCodeState::mode) { mode ->
+        sharedViewModel.onEach(UserCodeState::mode) { mode ->
             when (mode) {
                 UserCodeState.Mode.SHOW      -> showFragment(ShowUserCodeFragment::class, Bundle.EMPTY)
                 UserCodeState.Mode.SCAN      -> showFragment(ScanUserCodeFragment::class, Bundle.EMPTY)

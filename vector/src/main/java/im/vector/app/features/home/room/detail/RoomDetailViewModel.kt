@@ -1576,7 +1576,7 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private fun observeUnreadState() {
-        selectSubscribe(RoomDetailViewState::unreadState) {
+        onEach(RoomDetailViewState::unreadState) {
             Timber.v("Unread state: $it")
             if (it is UnreadState.HasNoUnread) {
                 startTrackingUnreadMessages()

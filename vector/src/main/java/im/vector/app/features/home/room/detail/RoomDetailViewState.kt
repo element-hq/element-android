@@ -42,7 +42,7 @@ sealed class SendMode(open val text: String) {
     data class REGULAR(
             override val text: String,
             val fromSharing: Boolean,
-            // This is necessary for forcing refresh on selectSubscribe
+            // This is necessary for forcing refresh on onEach
             private val ts: Long = System.currentTimeMillis()
     ) : SendMode(text)
 

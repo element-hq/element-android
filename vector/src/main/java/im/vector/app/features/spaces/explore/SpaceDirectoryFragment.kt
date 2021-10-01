@@ -110,7 +110,7 @@ class SpaceDirectoryFragment @Inject constructor(
         views.spaceDirectoryList.configureWith(epoxyController)
         epoxyVisibilityTracker.attach(views.spaceDirectoryList)
 
-        viewModel.selectSubscribe(SpaceDirectoryState::canAddRooms) {
+        viewModel.onEach(SpaceDirectoryState::canAddRooms) {
             invalidateOptionsMenu()
         }
 

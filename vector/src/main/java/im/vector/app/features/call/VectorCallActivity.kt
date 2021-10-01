@@ -152,7 +152,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                 }
                 .disposeOnDestroy()
 
-        callViewModel.selectSubscribe(VectorCallViewState::callId, VectorCallViewState::isVideoCall) { _, isVideoCall ->
+        callViewModel.onEach(VectorCallViewState::callId, VectorCallViewState::isVideoCall) { _, isVideoCall ->
             if (isVideoCall) {
                 if (checkPermissions(PERMISSIONS_FOR_VIDEO_IP_CALL, this, permissionCameraLauncher, R.string.permissions_rationale_msg_camera_and_audio)) {
                     setupRenderersIfNeeded()

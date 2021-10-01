@@ -375,13 +375,13 @@ class RoomDetailFragment @Inject constructor(
                     invalidateOptionsMenu()
                 }
 
-        roomDetailViewModel.selectSubscribe(RoomDetailViewState::canShowJumpToReadMarker, RoomDetailViewState::unreadState) { _, _ ->
+        roomDetailViewModel.onEach(RoomDetailViewState::canShowJumpToReadMarker, RoomDetailViewState::unreadState) { _, _ ->
             updateJumpToReadMarkerViewVisibility()
         }
 
-        roomDetailViewModel.selectSubscribe(RoomDetailViewState::sendMode, RoomDetailViewState::canSendMessage) { mode, canSend ->
+        roomDetailViewModel.onEach(RoomDetailViewState::sendMode, RoomDetailViewState::canSendMessage) { mode, canSend ->
             if (!canSend) {
-                return@selectSubscribe
+                return@onEach
             }
             when (mode) {
                 is SendMode.REGULAR -> renderRegularMode(mode.text)
@@ -391,7 +391,7 @@ class RoomDetailFragment @Inject constructor(
             }
         }
 
-        roomDetailViewModel.selectSubscribe(
+        roomDetailViewModel.onEach(
                 RoomDetailViewState::syncState,
                 RoomDetailViewState::incrementalSyncStatus,
                 RoomDetailViewState::pushCounter

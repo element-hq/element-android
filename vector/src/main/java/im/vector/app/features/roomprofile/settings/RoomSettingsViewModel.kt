@@ -101,7 +101,7 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
     }
 
     private fun observeState() {
-        selectSubscribe(
+        onEach(
                 RoomSettingsViewState::avatarAction,
                 RoomSettingsViewState::newName,
                 RoomSettingsViewState::newTopic,

@@ -85,7 +85,7 @@ class UserListFragment @Inject constructor(
             views.userListE2EbyDefaultDisabled.isVisible = !it.isE2EByDefault
         }
 
-        viewModel.selectSubscribe(UserListViewState::pendingSelections) {
+        viewModel.onEach(UserListViewState::pendingSelections) {
             renderSelectedUsers(it)
         }
 

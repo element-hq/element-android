@@ -102,14 +102,14 @@ class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>(),
             }
         }
 
-        viewModel.selectSubscribe(WidgetViewState::status) { ws ->
+        viewModel.onEach(WidgetViewState::status) { ws ->
             when (ws) {
                 WidgetStatus.UNKNOWN            -> {
                 }
                 WidgetStatus.WIDGET_NOT_ALLOWED -> {
                     val dFrag = supportFragmentManager.findFragmentByTag(WIDGET_PERMISSION_FRAGMENT_TAG) as? RoomWidgetPermissionBottomSheet
                     if (dFrag != null && dFrag.dialog?.isShowing == true && !dFrag.isRemoving) {
-                        return@selectSubscribe
+                        return@onEach
                     } else {
                         RoomWidgetPermissionBottomSheet
                                 .newInstance(widgetArgs)
@@ -124,11 +124,11 @@ class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>(),
             }
         }
 
-        viewModel.selectSubscribe(WidgetViewState::widgetName) { name ->
+        viewModel.onEach(WidgetViewState::widgetName) { name ->
             supportActionBar?.title = name
         }
 
-        viewModel.selectSubscribe(WidgetViewState::canManageWidgets) {
+        viewModel.onEach(WidgetViewState::canManageWidgets) {
             invalidateOptionsMenu()
         }
     }

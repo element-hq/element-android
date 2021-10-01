@@ -66,7 +66,7 @@ class RoomDirectoryPickerViewModel @AssistedInject constructor(
     }
 
     private fun observeAndCompute() {
-        selectSubscribe(
+        onEach(
                 RoomDirectoryPickerViewState::asyncThirdPartyRequest,
                 RoomDirectoryPickerViewState::customHomeservers
         ) { async, custom ->

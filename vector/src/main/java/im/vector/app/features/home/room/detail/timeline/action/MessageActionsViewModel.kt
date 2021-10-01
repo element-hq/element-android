@@ -163,8 +163,8 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
     }
 
     private fun observeTimelineEventState() {
-        selectSubscribe(MessageActionState::timelineEvent, MessageActionState::actionPermissions) { timelineEvent, permissions ->
-            val nonNullTimelineEvent = timelineEvent() ?: return@selectSubscribe
+        onEach(MessageActionState::timelineEvent, MessageActionState::actionPermissions) { timelineEvent, permissions ->
+            val nonNullTimelineEvent = timelineEvent() ?: return@onEach
             eventIdFlow.tryEmit(nonNullTimelineEvent.eventId)
             setState {
                 copy(

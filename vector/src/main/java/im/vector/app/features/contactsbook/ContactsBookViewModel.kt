@@ -66,7 +66,7 @@ class ContactsBookViewModel @AssistedInject constructor(@Assisted
     init {
         loadContacts()
 
-        selectSubscribe(ContactsBookViewState::searchTerm, ContactsBookViewState::onlyBoundContacts) { _, _ ->
+        onEach(ContactsBookViewState::searchTerm, ContactsBookViewState::onlyBoundContacts) { _, _ ->
             updateFilteredMappedContacts()
         }
     }
