@@ -138,7 +138,7 @@ class VectorApplication :
         }
         logInfo()
         LazyThreeTen.init(this)
-        Mavericks.initialize(this)
+        Mavericks.initialize(debugMode = false)
         EpoxyController.defaultDiffingHandler = EpoxyAsyncUtil.getAsyncBackgroundHandler()
         EpoxyController.defaultModelBuildingHandler = EpoxyAsyncUtil.getAsyncBackgroundHandler()
         registerActivityLifecycleCallbacks(VectorActivityLifecycleCallbacks(popupAlertManager))
