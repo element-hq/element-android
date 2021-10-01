@@ -9,25 +9,6 @@ insert_final_newline=true
 # it's automatically set to 100 on `ktlint --android ...` (per Android Kotlin Style Guide)
 max_line_length=off
 
-# Comma-separated list of rules to disable (Since 0.34.0)
-# Note that rules in any ruleset other than the standard ruleset will need to be prefixed
-# by the ruleset identifier.
-disabled_rules=no-multi-spaces,colon-spacing,chain-wrapping,import-ordering,experimental:annotation
-
-# The following (so far identified) rules are kept:
-# no-blank-line-before-rbrace
-# final-newline
-# no-consecutive-blank-lines
-# comment-spacing
-# filename
-# comma-spacing
-# paren-spacing
-# op-spacing
-# string-template
-# no-unused-imports
-# curly-spacing
-# no-semi
-# no-empty-class-body
-# experimental:multiline-if-else
-# experimental:no-empty-first-line-in-method-block
-# no-wildcard-imports
+# From https://github.com/pinterest/ktlint#custom-ktlint-specific-editorconfig-properties
+# default IntelliJ IDEA style, same as alphabetical, but with "java", "javax", "kotlin" and alias imports in the end of the imports list
+ij_kotlin_imports_layout=*,java.**,javax.**,kotlin.**,^

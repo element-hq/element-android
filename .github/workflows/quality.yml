@@ -21,8 +21,12 @@ jobs:
       - uses: actions/checkout@v2
       - name: Run klint
         run: |
-          curl -sSLO https://github.com/pinterest/ktlint/releases/download/0.36.0/ktlint && chmod a+x ktlint
-          ./ktlint --android --experimental -v
+          ./gradlew ktlintCheck --continue
+      - name: Upload reports
+        uses: actions/upload-artifact@v2
+        with:
+          name: ktlinting-report
+          path: vector/build/reports/ktlint/*.*
 
 # Lint for main module and all the other modules
   android-lint:

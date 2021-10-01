@@ -80,14 +80,13 @@ Make sure the following commands execute without any error:
 #### ktlint
 
 <pre>
-curl -sSLO https://github.com/pinterest/ktlint/releases/download/0.34.2/ktlint && chmod a+x ktlint
-./ktlint --android --experimental -v
+./gradlew ktlintCheck --continue
 </pre>
 
 Note that you can run
 
 <pre>
-./ktlint --android --experimental -v -F
+./gradlew ktlintFormat
 </pre>
 
 For ktlint to fix some detected errors for you (you still have to check and commit the fix of course)
