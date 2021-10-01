@@ -41,7 +41,6 @@ import im.vector.app.databinding.BottomSheetLogoutAndBackupBinding
 import im.vector.app.features.crypto.keysbackup.setup.KeysBackupSetupActivity
 import im.vector.app.features.crypto.recover.BootstrapBottomSheet
 import im.vector.app.features.crypto.recover.SetupMode
-
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupState
 import javax.inject.Inject
 

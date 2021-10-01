@@ -15,6 +15,7 @@
  */
 package org.matrix.android.sdk.internal.crypto.verification
 
+import io.realm.Realm
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
 import org.matrix.android.sdk.api.session.events.model.Event
@@ -27,13 +28,12 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.model.message.MessageVerificationReadyContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageVerificationRequestContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageVerificationStartContent
+import org.matrix.android.sdk.internal.crypto.EventDecryptor
 import org.matrix.android.sdk.internal.crypto.algorithms.olm.OlmDecryptionResult
 import org.matrix.android.sdk.internal.database.model.EventInsertType
 import org.matrix.android.sdk.internal.di.DeviceId
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.EventInsertLiveProcessor
-import io.realm.Realm
-import org.matrix.android.sdk.internal.crypto.EventDecryptor
 import timber.log.Timber
 import java.util.ArrayList
 import javax.inject.Inject

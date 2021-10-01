@@ -27,13 +27,12 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
-import im.vector.app.core.extensions.isEmail
 import im.vector.app.core.extensions.hidePassword
+import im.vector.app.core.extensions.isEmail
 import im.vector.app.core.extensions.toReducedUrl
 import im.vector.app.databinding.FragmentLoginResetPasswordBinding
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.subscribeBy
-
 import javax.inject.Inject
 
 /**

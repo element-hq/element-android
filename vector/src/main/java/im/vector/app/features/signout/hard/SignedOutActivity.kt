@@ -23,7 +23,6 @@ import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivitySignedOutBinding
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
-
 import org.matrix.android.sdk.api.failure.GlobalError
 import timber.log.Timber
 

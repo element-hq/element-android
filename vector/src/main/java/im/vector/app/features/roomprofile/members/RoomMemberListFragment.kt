@@ -34,7 +34,6 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentRoomMemberListBinding
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.roomprofile.RoomProfileArgs
-
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary

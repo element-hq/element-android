@@ -24,8 +24,8 @@ import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.mvrx.runCatchingToAsync
 import im.vector.app.core.platform.VectorViewModel
@@ -41,8 +41,8 @@ import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
                                                             initialState: CreateDirectRoomViewState,
                                                             private val rawService: RawService,
-                                                            val session: Session)
-    : VectorViewModel<CreateDirectRoomViewState, CreateDirectRoomAction, CreateDirectRoomViewEvents>(initialState) {
+                                                            val session: Session) :
+    VectorViewModel<CreateDirectRoomViewState, CreateDirectRoomAction, CreateDirectRoomViewEvents>(initialState) {
 
     @AssistedFactory
     interface Factory {

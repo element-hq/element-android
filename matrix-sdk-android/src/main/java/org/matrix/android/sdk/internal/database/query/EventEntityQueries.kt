@@ -16,15 +16,15 @@
 
 package org.matrix.android.sdk.internal.database.query
 
-import org.matrix.android.sdk.internal.database.model.EventEntity
-import org.matrix.android.sdk.internal.database.model.EventEntityFields
-import org.matrix.android.sdk.internal.database.model.EventInsertEntity
-import org.matrix.android.sdk.internal.database.model.EventInsertType
 import io.realm.Realm
 import io.realm.RealmList
 import io.realm.RealmQuery
 import io.realm.kotlin.where
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.internal.database.model.EventEntity
+import org.matrix.android.sdk.internal.database.model.EventEntityFields
+import org.matrix.android.sdk.internal.database.model.EventInsertEntity
+import org.matrix.android.sdk.internal.database.model.EventInsertType
 
 internal fun EventEntity.copyToRealmOrIgnore(realm: Realm, insertType: EventInsertType): EventEntity {
     val eventEntity = realm.where<EventEntity>()

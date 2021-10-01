@@ -1294,10 +1294,10 @@ class RoomDetailFragment @Inject constructor(
                 true
             }
             // Add external keyboard functionality (to send messages)
-            else if (null != keyEvent
-                    && !keyEvent.isShiftPressed
-                    && keyEvent.keyCode == KeyEvent.KEYCODE_ENTER
-                    && resources.configuration.keyboard != Configuration.KEYBOARD_NOKEYS) {
+            else if (null != keyEvent &&
+                    !keyEvent.isShiftPressed &&
+                    keyEvent.keyCode == KeyEvent.KEYCODE_ENTER &&
+                    resources.configuration.keyboard != Configuration.KEYBOARD_NOKEYS) {
                 sendTextMessage(v.text)
                 true
             } else false
@@ -1873,8 +1873,8 @@ class RoomDetailFragment @Inject constructor(
     }
 
     private fun onSaveActionClicked(action: EventSharedAction.Save) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q
-                && !checkPermissions(PERMISSIONS_FOR_WRITING_FILES, requireActivity(), saveActionActivityResultLauncher)) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q &&
+                !checkPermissions(PERMISSIONS_FOR_WRITING_FILES, requireActivity(), saveActionActivityResultLauncher)) {
             sharedActionViewModel.pendingAction = action
             return
         }
@@ -2026,8 +2026,8 @@ class RoomDetailFragment @Inject constructor(
     private fun insertUserDisplayNameInTextEditor(userId: String) {
         val startToCompose = views.composerLayout.text.isNullOrBlank()
 
-        if (startToCompose
-                && userId == session.myUserId) {
+        if (startToCompose &&
+                userId == session.myUserId) {
             // Empty composer, current user: start an emote
             views.composerLayout.views.composerEditText.setText(Command.EMOTE.command + " ")
             views.composerLayout.views.composerEditText.setSelection(Command.EMOTE.length)

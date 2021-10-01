@@ -20,10 +20,10 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
-import com.google.android.material.appbar.MaterialToolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.airbnb.mvrx.viewModel
+import com.google.android.material.appbar.MaterialToolbar
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.hideKeyboard
@@ -38,7 +38,6 @@ import im.vector.app.features.room.RequireActiveMembershipViewModel
 import im.vector.app.features.room.RequireActiveMembershipViewState
 import im.vector.app.features.widgets.permissions.RoomWidgetPermissionViewModel
 import im.vector.app.features.widgets.permissions.RoomWidgetPermissionViewState
-
 import javax.inject.Inject
 
 class RoomDetailActivity :

@@ -24,8 +24,8 @@ import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import kotlinx.coroutines.launch
@@ -38,8 +38,8 @@ data class PushGatewayViewState(
 ) : MvRxState
 
 class PushGatewaysViewModel @AssistedInject constructor(@Assisted initialState: PushGatewayViewState,
-                                                        private val session: Session)
-    : VectorViewModel<PushGatewayViewState, PushGatewayAction, PushGatewayViewEvents>(initialState) {
+                                                        private val session: Session) :
+    VectorViewModel<PushGatewayViewState, PushGatewayAction, PushGatewayViewEvents>(initialState) {
 
     @AssistedFactory
     interface Factory {

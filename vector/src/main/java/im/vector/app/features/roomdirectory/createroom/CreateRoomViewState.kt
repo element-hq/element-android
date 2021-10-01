@@ -51,8 +51,8 @@ data class CreateRoomViewState(
     /**
      * Return true if there is not important input from user
      */
-    fun isEmpty() = avatarUri == null
-            && roomName.isEmpty()
-            && roomTopic.isEmpty()
-            && aliasLocalPart.isNullOrEmpty()
+    fun isEmpty() = avatarUri == null &&
+            roomName.isEmpty() &&
+            roomTopic.isEmpty() &&
+            aliasLocalPart.isNullOrEmpty()
 }

@@ -366,8 +366,8 @@ class DefaultNavigator @Inject constructor(
     override fun openKeysBackupSetup(context: Context, showManualExport: Boolean) {
         // if cross signing is enabled and trusted or not set up at all we should propose full 4S
         sessionHolder.getSafeActiveSession()?.let { session ->
-            if (session.cryptoService().crossSigningService().getMyCrossSigningKeys() == null
-                    || session.cryptoService().crossSigningService().canCrossSign()) {
+            if (session.cryptoService().crossSigningService().getMyCrossSigningKeys() == null ||
+                    session.cryptoService().crossSigningService().canCrossSign()) {
                 (context as? AppCompatActivity)?.let {
                     BootstrapBottomSheet.show(it.supportFragmentManager, SetupMode.NORMAL)
                 }

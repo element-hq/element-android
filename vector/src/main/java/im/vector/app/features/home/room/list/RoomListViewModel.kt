@@ -72,11 +72,13 @@ class RoomListViewModel @Inject constructor(
          * If current space is null, will return orphan rooms only
          */
         ORPHANS_IF_SPACE_NULL,
+
         /**
          * Special case when we don't want to discriminate rooms when current space is null.
          * In this case return all.
          */
         ALL_IF_SPACE_NULL,
+
         /** Do not filter based on space*/
         NONE
     }

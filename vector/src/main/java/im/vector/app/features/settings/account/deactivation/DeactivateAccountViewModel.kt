@@ -27,14 +27,14 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.auth.ReAuthActivity
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.auth.UIABaseAuth
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
+import org.matrix.android.sdk.api.auth.UserPasswordAuth
+import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.api.failure.isInvalidUIAAuth
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.internal.crypto.crosssigning.fromBase64
 import org.matrix.android.sdk.internal.crypto.model.rest.DefaultBaseAuth
-import org.matrix.android.sdk.api.auth.UIABaseAuth
-import org.matrix.android.sdk.api.auth.UserPasswordAuth
 import timber.log.Timber
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
@@ -45,8 +45,8 @@ data class DeactivateAccountViewState(
 ) : MvRxState
 
 class DeactivateAccountViewModel @AssistedInject constructor(@Assisted private val initialState: DeactivateAccountViewState,
-                                                             private val session: Session)
-    : VectorViewModel<DeactivateAccountViewState, DeactivateAccountAction, DeactivateAccountViewEvents>(initialState) {
+                                                             private val session: Session) :
+    VectorViewModel<DeactivateAccountViewState, DeactivateAccountAction, DeactivateAccountViewEvents>(initialState) {
 
     @AssistedFactory
     interface Factory {

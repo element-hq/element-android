@@ -119,9 +119,9 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
                     // This is an edition
                     val eventBeforeEdition = eventList.firstOrNull {
                         // Edition of an event
-                        it.eventId == notifiableEvent.editedEventId
+                        it.eventId == notifiableEvent.editedEventId ||
                                 // or edition of an edition
-                                || it.editedEventId == notifiableEvent.editedEventId
+                                it.editedEventId == notifiableEvent.editedEventId
                     }
 
                     if (eventBeforeEdition != null) {

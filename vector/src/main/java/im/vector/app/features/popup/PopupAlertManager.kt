@@ -52,7 +52,7 @@ class PopupAlertManager @Inject constructor() {
 
     private val alertQueue = mutableListOf<VectorAlert>()
 
-    fun hasAlertsToShow() : Boolean {
+    fun hasAlertsToShow(): Boolean {
         return currentAlerter != null || alertQueue.isNotEmpty()
     }
 
@@ -298,10 +298,10 @@ class PopupAlertManager @Inject constructor() {
     }
 
     private fun shouldBeDisplayedIn(alert: VectorAlert?, activity: Activity): Boolean {
-        return alert != null
-                && activity !is PinActivity
-                && activity !is SignedOutActivity
-                && activity is VectorBaseActivity<*>
-                && alert.shouldBeDisplayedIn.invoke(activity)
+        return alert != null &&
+                activity !is PinActivity &&
+                activity !is SignedOutActivity &&
+                activity is VectorBaseActivity<*> &&
+                alert.shouldBeDisplayedIn.invoke(activity)
     }
 }

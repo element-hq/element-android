@@ -30,13 +30,12 @@ import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.databinding.BottomSheetGenericListWithTitleBinding
 import im.vector.app.features.home.room.detail.timeline.action.TimelineEventFragmentArgs
 import im.vector.app.features.home.room.detail.timeline.item.MessageInformationData
-
 import javax.inject.Inject
 
 /**
  * Bottom sheet displaying list of edits for a given event ordered by timestamp
  */
-class ViewEditHistoryBottomSheet:
+class ViewEditHistoryBottomSheet :
         VectorBaseBottomSheetDialogFragment<BottomSheetGenericListWithTitleBinding>() {
 
     private val viewModel: ViewEditHistoryViewModel by fragmentViewModel(ViewEditHistoryViewModel::class)

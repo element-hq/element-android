@@ -15,13 +15,13 @@
  */
 package org.matrix.android.sdk.internal.database.query
 
+import io.realm.Realm
+import io.realm.RealmConfiguration
 import org.matrix.android.sdk.api.session.events.model.LocalEcho
 import org.matrix.android.sdk.internal.database.model.ChunkEntity
 import org.matrix.android.sdk.internal.database.model.ReadMarkerEntity
 import org.matrix.android.sdk.internal.database.model.ReadReceiptEntity
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
-import io.realm.Realm
-import io.realm.RealmConfiguration
 
 internal fun isEventRead(realmConfiguration: RealmConfiguration,
                          userId: String?,

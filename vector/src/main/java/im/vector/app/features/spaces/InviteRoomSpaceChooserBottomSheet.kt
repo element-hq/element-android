@@ -89,8 +89,7 @@ class InviteRoomSpaceChooserBottomSheet : VectorBaseBottomSheetDialogFragment<Bo
 
     companion object {
 
-        fun newInstance(spaceId: String, roomId: String, interactionListener: InteractionListener)
-                : InviteRoomSpaceChooserBottomSheet {
+        fun newInstance(spaceId: String, roomId: String, interactionListener: InteractionListener): InviteRoomSpaceChooserBottomSheet {
             return InviteRoomSpaceChooserBottomSheet().apply {
                 this.interactionListener = interactionListener
                 setArguments(Args(spaceId, roomId))

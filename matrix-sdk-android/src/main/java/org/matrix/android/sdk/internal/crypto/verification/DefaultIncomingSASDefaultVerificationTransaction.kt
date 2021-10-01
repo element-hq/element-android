@@ -114,8 +114,8 @@ internal class DefaultIncomingSASDefaultVerificationTransaction(
         // No common key sharing/hashing/hmac/SAS methods.
         // If a device is unable to complete the verification because the devices are unable to find a common key sharing,
         // hashing, hmac, or SAS method, then it should send a m.key.verification.cancel message
-        if (listOf(agreedProtocol, agreedHash, agreedMac).any { it.isNullOrBlank() }
-                || agreedShortCode.isNullOrEmpty()) {
+        if (listOf(agreedProtocol, agreedHash, agreedMac).any { it.isNullOrBlank() } ||
+                agreedShortCode.isNullOrEmpty()) {
             // Failed to find agreement
             Timber.e("## SAS Failed to find agreement ")
             cancel(CancelCode.UnknownMethod)
@@ -241,12 +241,12 @@ internal class DefaultIncomingSASDefaultVerificationTransaction(
     override fun onKeyVerificationMac(vMac: ValidVerificationInfoMac) {
         Timber.v("## SAS I: received mac for request id:$transactionId")
         // Check for state?
-        if (state != VerificationTxState.SendingKey
-                && state != VerificationTxState.KeySent
-                && state != VerificationTxState.ShortCodeReady
-                && state != VerificationTxState.ShortCodeAccepted
-                && state != VerificationTxState.SendingMac
-                && state != VerificationTxState.MacSent) {
+        if (state != VerificationTxState.SendingKey &&
+                state != VerificationTxState.KeySent &&
+                state != VerificationTxState.ShortCodeReady &&
+                state != VerificationTxState.ShortCodeAccepted &&
+                state != VerificationTxState.SendingMac &&
+                state != VerificationTxState.MacSent) {
             Timber.e("## SAS I: received key from invalid state $state")
             cancel(CancelCode.UnexpectedMessage)
             return

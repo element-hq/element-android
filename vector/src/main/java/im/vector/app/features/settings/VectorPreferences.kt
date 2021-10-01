@@ -932,8 +932,8 @@ class VectorPreferences @Inject constructor(private val context: Context) {
      * Return true if Pin code is disabled, or if user set the settings to see full notification content
      */
     fun useCompleteNotificationFormat(): Boolean {
-        return !useFlagPinCode()
-                || defaultPrefs.getBoolean(SETTINGS_SECURITY_USE_COMPLETE_NOTIFICATIONS_FLAG, true)
+        return !useFlagPinCode() ||
+                defaultPrefs.getBoolean(SETTINGS_SECURITY_USE_COMPLETE_NOTIFICATIONS_FLAG, true)
     }
 
     fun backgroundSyncTimeOut(): Int {

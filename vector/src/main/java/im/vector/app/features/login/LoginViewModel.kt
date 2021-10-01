@@ -692,8 +692,8 @@ class LoginViewModel @AssistedInject constructor(
 
     private fun onFlowResponse(flowResult: FlowResult) {
         // If dummy stage is mandatory, and password is already sent, do the dummy stage now
-        if (isRegistrationStarted
-                && flowResult.missingStages.any { it is Stage.Dummy && it.mandatory }) {
+        if (isRegistrationStarted &&
+                flowResult.missingStages.any { it is Stage.Dummy && it.mandatory }) {
             handleRegisterDummy()
         } else {
             // Notify the user
@@ -798,8 +798,8 @@ class LoginViewModel @AssistedInject constructor(
                         loginModeSupportedTypes = data.supportedLoginTypes.toList()
                 )
             }
-            if ((loginMode == LoginMode.Password && !data.isLoginAndRegistrationSupported)
-                    || data.isOutdatedHomeserver) {
+            if ((loginMode == LoginMode.Password && !data.isLoginAndRegistrationSupported) ||
+                    data.isOutdatedHomeserver) {
                 // Notify the UI
                 _viewEvents.post(LoginViewEvents.OutdatedHomeserver)
             }

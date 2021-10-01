@@ -159,9 +159,9 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetV
         state.otherUserMxItem?.let { matrixItem ->
             if (state.isMe) {
                 avatarRenderer.render(matrixItem, views.otherUserAvatarImageView)
-                if (state.sasTransactionState == VerificationTxState.Verified
-                        || state.qrTransactionState == VerificationTxState.Verified
-                        || state.verifiedFromPrivateKeys) {
+                if (state.sasTransactionState == VerificationTxState.Verified ||
+                        state.qrTransactionState == VerificationTxState.Verified ||
+                        state.verifiedFromPrivateKeys) {
                     views.otherUserShield.render(RoomEncryptionTrustLevel.Trusted)
                 } else {
                     views.otherUserShield.render(RoomEncryptionTrustLevel.Warning)

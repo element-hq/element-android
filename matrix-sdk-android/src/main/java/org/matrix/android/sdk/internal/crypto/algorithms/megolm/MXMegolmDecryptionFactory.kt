@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.internal.crypto.algorithms.megolm
 
+import kotlinx.coroutines.CoroutineScope
 import org.matrix.android.sdk.internal.crypto.DeviceListManager
 import org.matrix.android.sdk.internal.crypto.MXOlmDevice
 import org.matrix.android.sdk.internal.crypto.OutgoingGossipingRequestManager
@@ -25,7 +26,6 @@ import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.crypto.tasks.SendToDeviceTask
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
-import kotlinx.coroutines.CoroutineScope
 import javax.inject.Inject
 
 internal class MXMegolmDecryptionFactory @Inject constructor(

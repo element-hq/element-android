@@ -53,8 +53,8 @@ private const val ANIMATION_DURATION = 250
  */
 class AttachmentTypeSelectorView(context: Context,
                                  inflater: LayoutInflater,
-                                 var callback: Callback?)
-    : PopupWindow(context) {
+                                 var callback: Callback?) :
+    PopupWindow(context) {
 
     interface Callback {
         fun onTypeSelected(type: Type)

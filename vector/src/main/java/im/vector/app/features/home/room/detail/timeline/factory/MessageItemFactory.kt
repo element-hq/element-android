@@ -142,8 +142,8 @@ class MessageItemFactory @Inject constructor(
             val malformedText = stringProvider.getString(R.string.malformed_message)
             return defaultItemFactory.create(malformedText, informationData, highlight, callback)
         }
-        if (messageContent.relatesTo?.type == RelationType.REPLACE
-                || event.isEncrypted() && event.root.content.toModel<EncryptedEventContent>()?.relatesTo?.type == RelationType.REPLACE
+        if (messageContent.relatesTo?.type == RelationType.REPLACE ||
+                event.isEncrypted() && event.root.content.toModel<EncryptedEventContent>()?.relatesTo?.type == RelationType.REPLACE
         ) {
             // This is an edit event, we should display it when debugging as a notice event
             return noticeItemFactory.create(params)

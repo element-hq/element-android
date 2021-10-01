@@ -25,7 +25,6 @@ import com.airbnb.mvrx.Success
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.databinding.FragmentLoginResetPasswordMailConfirmationBinding
-
 import org.matrix.android.sdk.api.failure.is401
 import javax.inject.Inject
 

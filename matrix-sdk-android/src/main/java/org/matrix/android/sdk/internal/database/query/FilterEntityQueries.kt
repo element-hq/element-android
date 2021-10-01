@@ -16,11 +16,11 @@
 
 package org.matrix.android.sdk.internal.database.query
 
-import org.matrix.android.sdk.internal.database.model.FilterEntity
-import org.matrix.android.sdk.internal.session.filter.FilterFactory
 import io.realm.Realm
 import io.realm.kotlin.createObject
 import io.realm.kotlin.where
+import org.matrix.android.sdk.internal.database.model.FilterEntity
+import org.matrix.android.sdk.internal.session.filter.FilterFactory
 
 /**
  * Get the current filter

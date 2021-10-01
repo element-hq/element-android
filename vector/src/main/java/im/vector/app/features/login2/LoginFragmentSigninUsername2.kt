@@ -95,9 +95,9 @@ class LoginFragmentSigninUsername2 @Inject constructor() : AbstractLoginFragment
     }
 
     override fun onError(throwable: Throwable) {
-        if (throwable is Failure.ServerError
-                && throwable.error.code == MatrixError.M_FORBIDDEN
-                && throwable.error.message.isEmpty()) {
+        if (throwable is Failure.ServerError &&
+                throwable.error.code == MatrixError.M_FORBIDDEN &&
+                throwable.error.message.isEmpty()) {
             // Login with email, but email unknown
             views.loginFieldTil.error = getString(R.string.login_login_with_email_error)
         } else {
