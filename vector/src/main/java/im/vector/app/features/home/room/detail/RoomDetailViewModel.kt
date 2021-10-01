@@ -18,7 +18,7 @@ package im.vector.app.features.home.room.detail
 
 import android.net.Uri
 import androidx.annotation.IdRes
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.asFlow
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
@@ -65,6 +65,10 @@ import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.filterIsInstance
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.commonmark.parser.Parser
@@ -104,8 +108,9 @@ import org.matrix.android.sdk.api.session.room.timeline.getTextEditableContent
 import org.matrix.android.sdk.api.session.space.CreateSpaceParams
 import org.matrix.android.sdk.api.session.widgets.model.WidgetType
 import org.matrix.android.sdk.api.util.toOptional
+import org.matrix.android.sdk.flow.flow
+import org.matrix.android.sdk.flow.unwrap
 import org.matrix.android.sdk.internal.crypto.model.event.WithHeldCode
-import org.matrix.android.sdk.rx.asObservable
 import org.matrix.android.sdk.rx.rx
 import org.matrix.android.sdk.rx.unwrap
 import timber.log.Timber
@@ -252,7 +257,7 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private fun observeActiveRoomWidgets() {
-        session.rx()
+        session.flow()
                 .liveRoomWidgets(
                         roomId = initialState.roomId,
                         widgetId = QueryStringValue.NoCondition
@@ -285,7 +290,7 @@ class RoomDetailViewModel @AssistedInject constructor(
         val queryParams = roomMemberQueryParams {
             this.userId = QueryStringValue.Equals(session.myUserId, QueryStringValue.Case.SENSITIVE)
         }
-        room.rx()
+        room.flow()
                 .liveRoomMembers(queryParams)
                 .map {
                     it.firstOrNull().toOptional()
@@ -1503,29 +1508,22 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private fun observeSyncState() {
-        session.rx()
+        session.flow()
                 .liveSyncState()
-                .subscribe { syncState ->
-                    setState {
-                        copy(syncState = syncState)
-                    }
+                .setOnEach { syncState ->
+                    copy(syncState = syncState)
                 }
-                .disposeOnClear()
 
         session.getSyncStatusLive()
-                .asObservable()
-                .subscribe { it ->
-                    if (it is SyncStatusService.Status.IncrementalSyncStatus) {
-                        setState {
-                            copy(incrementalSyncStatus = it)
-                        }
-                    }
+                .asFlow()
+                .filterIsInstance<SyncStatusService.Status.IncrementalSyncStatus>()
+                .setOnEach {
+                    copy(incrementalSyncStatus = it)
                 }
-                .disposeOnClear()
     }
 
     private fun observeRoomSummary() {
-        room.rx().liveRoomSummary()
+        room.flow().liveRoomSummary()
                 .unwrap()
                 .execute { async ->
                     copy(
@@ -1587,16 +1585,15 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private fun observeMembershipChanges() {
-        session.rx()
+        session.flow()
                 .liveRoomChangeMembershipState()
                 .map {
                     it[initialState.roomId] ?: ChangeMembershipState.Unknown
                 }
                 .distinctUntilChanged()
-                .subscribe {
-                    setState { copy(changeMembershipState = it) }
+                .setOnEach {
+                    copy(changeMembershipState = it)
                 }
-                .disposeOnClear()
     }
 
     private fun observeSummaryState() {

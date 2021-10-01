@@ -40,6 +40,7 @@ import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.util.JsonDict
+import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.rx.rx
 
@@ -69,7 +70,7 @@ class RoomDevToolViewModel @AssistedInject constructor(
 
     init {
         session.getRoom(initialState.roomId)
-                ?.rx()
+                ?.flow()
                 ?.liveStateEvents(emptySet())
                 ?.execute { async ->
                     copy(stateEvents = async)

@@ -36,6 +36,11 @@ import im.vector.app.features.html.VectorHtmlCompressor
 import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
 import im.vector.app.features.reactions.data.EmojiDataSource
 import im.vector.app.features.settings.VectorPreferences
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.switchMap
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupState
@@ -54,8 +59,9 @@ import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
 import org.matrix.android.sdk.api.session.room.timeline.hasBeenEdited
+import org.matrix.android.sdk.flow.flow
+import org.matrix.android.sdk.flow.unwrap
 import org.matrix.android.sdk.rx.rx
-import org.matrix.android.sdk.rx.unwrap
 import java.util.ArrayList
 
 /**
@@ -79,7 +85,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
         pillsPostProcessorFactory.create(initialState.roomId)
     }
 
-    private val eventIdObservable = BehaviorRelay.createDefault(initialState.eventId)
+    private val eventIdFlow = MutableStateFlow(initialState.eventId)
 
     @AssistedFactory
     interface Factory {
@@ -135,7 +141,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
 
     private fun observeEvent() {
         if (room == null) return
-        room.rx()
+        room.flow()
                 .liveTimelineEvent(initialState.eventId)
                 .unwrap()
                 .execute {
@@ -145,9 +151,9 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
 
     private fun observeReactions() {
         if (room == null) return
-        eventIdObservable
-                .switchMap { eventId ->
-                    room.rx()
+        eventIdFlow
+                .flatMapLatest { eventId ->
+                    room.flow()
                             .liveAnnotationSummary(eventId)
                             .map { annotations ->
                                 EmojiDataSource.quickEmojis.map { emoji ->
@@ -163,7 +169,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
     private fun observeTimelineEventState() {
         selectSubscribe(MessageActionState::timelineEvent, MessageActionState::actionPermissions) { timelineEvent, permissions ->
             val nonNullTimelineEvent = timelineEvent() ?: return@selectSubscribe
-            eventIdObservable.accept(nonNullTimelineEvent.eventId)
+            eventIdFlow.tryEmit(nonNullTimelineEvent.eventId)
             setState {
                 copy(
                         eventId = nonNullTimelineEvent.eventId,
