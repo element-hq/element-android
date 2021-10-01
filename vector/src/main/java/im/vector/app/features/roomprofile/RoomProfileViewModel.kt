@@ -17,7 +17,6 @@
 
 package im.vector.app.features.roomprofile
 
-import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
@@ -29,7 +28,7 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.home.ShortcutCreator
-import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
+import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.query.QueryStringValue
@@ -109,16 +108,15 @@ class RoomProfileViewModel @AssistedInject constructor(
     }
 
     private fun observePermissions() {
-        PowerLevelsObservableFactory(room)
-                .createObservable()
-                .subscribe {
+        PowerLevelsFlowFactory(room)
+                .createFlow()
+                .setOnEach {
                     val powerLevelsHelper = PowerLevelsHelper(it)
                     val permissions = RoomProfileViewState.ActionPermissions(
                             canEnableEncryption = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_ENCRYPTION)
                     )
-                    setState { copy(actionPermissions = permissions) }
+                    copy(actionPermissions = permissions)
                 }
-                .disposeOnClear()
     }
 
     override fun handle(action: RoomProfileAction) {

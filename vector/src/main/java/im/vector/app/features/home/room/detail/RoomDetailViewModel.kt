@@ -55,7 +55,7 @@ import im.vector.app.features.home.room.detail.sticker.StickerPickerActionHandle
 import im.vector.app.features.home.room.detail.timeline.factory.TimelineFactory
 import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlRetriever
 import im.vector.app.features.home.room.typing.TypingHelper
-import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
+import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.VectorDataStore
 import im.vector.app.features.settings.VectorPreferences
@@ -66,9 +66,10 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterIsInstance
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.commonmark.parser.Parser
@@ -238,8 +239,8 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private fun observePowerLevel() {
-        PowerLevelsObservableFactory(room).createObservable()
-                .subscribe {
+        PowerLevelsFlowFactory(room).createFlow()
+                .onEach {
                     val canSendMessage = PowerLevelsHelper(it).isUserAllowedToSend(session.myUserId, false, EventType.MESSAGE)
                     val canInvite = PowerLevelsHelper(it).isUserAbleToInvite(session.myUserId)
                     val isAllowedToManageWidgets = session.widgetService().hasPermissionsToHandleWidgets(room.roomId)
@@ -252,8 +253,7 @@ class RoomDetailViewModel @AssistedInject constructor(
                                 isAllowedToStartWebRTCCall = isAllowedToStartWebRTCCall
                         )
                     }
-                }
-                .disposeOnClear()
+                }.launchIn(viewModelScope)
     }
 
     private fun observeActiveRoomWidgets() {

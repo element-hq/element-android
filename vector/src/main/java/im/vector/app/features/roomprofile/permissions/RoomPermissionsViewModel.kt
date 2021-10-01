@@ -25,7 +25,9 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
-import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
+import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -71,9 +73,9 @@ class RoomPermissionsViewModel @AssistedInject constructor(@Assisted initialStat
     }
 
     private fun observePowerLevel() {
-        PowerLevelsObservableFactory(room)
-                .createObservable()
-                .subscribe { powerLevelContent ->
+        PowerLevelsFlowFactory(room)
+                .createFlow()
+                .onEach { powerLevelContent ->
                     val powerLevelsHelper = PowerLevelsHelper(powerLevelContent)
                     val permissions = RoomPermissionsViewState.ActionPermissions(
                             canChangePowerLevels = powerLevelsHelper.isUserAllowedToSend(
@@ -88,8 +90,7 @@ class RoomPermissionsViewModel @AssistedInject constructor(@Assisted initialStat
                                 currentPowerLevelsContent = Success(powerLevelContent)
                         )
                     }
-                }
-                .disposeOnClear()
+                }.launchIn(viewModelScope)
     }
 
     override fun handle(action: RoomPermissionsAction) {

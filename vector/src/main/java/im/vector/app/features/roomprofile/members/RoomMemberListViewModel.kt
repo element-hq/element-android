@@ -16,7 +16,6 @@
 
 package im.vector.app.features.roomprofile.members
 
-import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
@@ -27,9 +26,11 @@ import dagger.assisted.AssistedInject
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
-import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
+import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.extensions.orFalse
@@ -129,8 +130,8 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
     }
 
     private fun observePowerLevel() {
-        PowerLevelsObservableFactory(room).createObservable()
-                .subscribe {
+        PowerLevelsFlowFactory(room).createFlow()
+                .onEach {
                     val permissions = ActionPermissions(
                             canInvite = PowerLevelsHelper(it).isUserAbleToInvite(session.myUserId),
                             canRevokeThreePidInvite = PowerLevelsHelper(it).isUserAllowedToSend(
@@ -142,8 +143,7 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
                     setState {
                         copy(actionsPermissions = permissions)
                     }
-                }
-                .disposeOnClear()
+                }.launchIn(viewModelScope)
     }
 
     private fun observeRoomSummary() {
@@ -192,7 +192,7 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
     override fun handle(action: RoomMemberListAction) {
         when (action) {
             is RoomMemberListAction.RevokeThreePidInvite -> handleRevokeThreePidInvite(action)
-            is RoomMemberListAction.FilterMemberList -> handleFilterMemberList(action)
+            is RoomMemberListAction.FilterMemberList     -> handleFilterMemberList(action)
         }.exhaustive
     }
 

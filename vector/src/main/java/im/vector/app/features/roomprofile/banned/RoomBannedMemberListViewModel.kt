@@ -16,7 +16,6 @@
 
 package im.vector.app.features.roomprofile.banned
 
-import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
@@ -27,7 +26,7 @@ import im.vector.app.R
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
+import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.query.QueryStringValue
@@ -70,14 +69,13 @@ class RoomBannedMemberListViewModel @AssistedInject constructor(@Assisted initia
                     )
                 }
 
-        val powerLevelsContentLive = PowerLevelsObservableFactory(room).createObservable()
+        val powerLevelsContentLive = PowerLevelsFlowFactory(room).createFlow()
 
         powerLevelsContentLive
-                .subscribe {
+                .setOnEach {
                     val powerLevelsHelper = PowerLevelsHelper(it)
-                    setState { copy(canUserBan = powerLevelsHelper.isUserAbleToBan(session.myUserId)) }
+                    copy(canUserBan = powerLevelsHelper.isUserAbleToBan(session.myUserId))
                 }
-                .disposeOnClear()
     }
 
     companion object : MvRxViewModelFactory<RoomBannedMemberListViewModel, RoomBannedMemberListViewState> {

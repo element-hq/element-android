@@ -16,7 +16,6 @@
 
 package im.vector.app.features.roomprofile.alias
 
-import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
@@ -29,7 +28,9 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
-import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
+import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixPatterns.getDomain
 import org.matrix.android.sdk.api.query.QueryStringValue
@@ -38,7 +39,9 @@ import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.RoomCanonicalAliasContent
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
-import org.matrix.android.sdk.rx.mapOptional
+import org.matrix.android.sdk.flow.flow
+import org.matrix.android.sdk.flow.mapOptional
+import org.matrix.android.sdk.flow.unwrap
 import org.matrix.android.sdk.rx.rx
 import org.matrix.android.sdk.rx.unwrap
 
@@ -138,9 +141,9 @@ class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: Roo
     }
 
     private fun observePowerLevel() {
-        PowerLevelsObservableFactory(room)
-                .createObservable()
-                .subscribe {
+        PowerLevelsFlowFactory(room)
+                .createFlow()
+                .onEach {
                     val powerLevelsHelper = PowerLevelsHelper(it)
                     val permissions = RoomAliasViewState.ActionPermissions(
                             canChangeCanonicalAlias = powerLevelsHelper.isUserAllowedToSend(
@@ -163,27 +166,23 @@ class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: Roo
                                 publishManuallyState = newPublishManuallyState
                         )
                     }
-                }
-                .disposeOnClear()
+                }.launchIn(viewModelScope)
     }
 
     /**
      * We do not want to use the fallback avatar url, which can be the other user avatar, or the current user avatar.
      */
     private fun observeRoomCanonicalAlias() {
-        room.rx()
+        room.flow()
                 .liveStateEvent(EventType.STATE_ROOM_CANONICAL_ALIAS, QueryStringValue.NoCondition)
                 .mapOptional { it.content.toModel<RoomCanonicalAliasContent>() }
                 .unwrap()
-                .subscribe {
-                    setState {
-                        copy(
-                                canonicalAlias = it.canonicalAlias,
-                                alternativeAliases = it.alternativeAliases.orEmpty().sorted()
-                        )
-                    }
+                .setOnEach {
+                    copy(
+                            canonicalAlias = it.canonicalAlias,
+                            alternativeAliases = it.alternativeAliases.orEmpty().sorted()
+                    )
                 }
-                .disposeOnClear()
     }
 
     override fun handle(action: RoomAliasAction) {

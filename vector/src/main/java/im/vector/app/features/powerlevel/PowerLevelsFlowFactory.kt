@@ -16,23 +16,24 @@
 
 package im.vector.app.features.powerlevel
 
-import io.reactivex.Observable
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOn
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.Room
 import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
-import org.matrix.android.sdk.rx.mapOptional
-import org.matrix.android.sdk.rx.rx
-import org.matrix.android.sdk.rx.unwrap
+import org.matrix.android.sdk.flow.flow
+import org.matrix.android.sdk.flow.mapOptional
+import org.matrix.android.sdk.flow.unwrap
 
-class PowerLevelsObservableFactory(private val room: Room) {
+class PowerLevelsFlowFactory(private val room: Room) {
 
-    fun createObservable(): Observable<PowerLevelsContent> {
-        return room.rx()
+    fun createFlow(): Flow<PowerLevelsContent> {
+        return room.flow()
                 .liveStateEvent(EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.NoCondition)
-                .observeOn(Schedulers.computation())
+                .flowOn(Dispatchers.Default)
                 .mapOptional { it.content.toModel<PowerLevelsContent>() }
                 .unwrap()
     }

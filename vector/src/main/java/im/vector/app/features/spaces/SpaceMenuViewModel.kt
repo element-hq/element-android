@@ -30,8 +30,10 @@ import dagger.assisted.AssistedInject
 import im.vector.app.AppStateHandler
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
-import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
+import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import im.vector.app.features.session.coroutineScope
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.query.ActiveSpaceFilter
 import org.matrix.android.sdk.api.session.Session
@@ -87,9 +89,9 @@ class SpaceMenuViewModel @AssistedInject constructor(
                 }
             }.disposeOnClear()
 
-            PowerLevelsObservableFactory(room)
-                    .createObservable()
-                    .subscribe {
+            PowerLevelsFlowFactory(room)
+                    .createFlow()
+                    .onEach {
                         val powerLevelsHelper = PowerLevelsHelper(it)
 
                         val canInvite = powerLevelsHelper.isUserAbleToInvite(session.myUserId)
@@ -114,8 +116,7 @@ class SpaceMenuViewModel @AssistedInject constructor(
                                     isLastAdmin = isLastAdmin
                             )
                         }
-                    }
-                    .disposeOnClear()
+                    }.launchIn(viewModelScope)
         }
     }
 

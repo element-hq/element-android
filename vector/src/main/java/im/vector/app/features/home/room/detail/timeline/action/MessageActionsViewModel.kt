@@ -18,7 +18,6 @@ package im.vector.app.features.home.room.detail.timeline.action
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
-import com.jakewharton.rxrelay2.BehaviorRelay
 import dagger.Lazy
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -33,14 +32,14 @@ import im.vector.app.features.home.room.detail.timeline.format.NoticeEventFormat
 import im.vector.app.features.html.EventHtmlRenderer
 import im.vector.app.features.html.PillsPostProcessor
 import im.vector.app.features.html.VectorHtmlCompressor
-import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
+import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import im.vector.app.features.reactions.data.EmojiDataSource
 import im.vector.app.features.settings.VectorPreferences
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.switchMap
+import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupState
@@ -61,8 +60,6 @@ import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
 import org.matrix.android.sdk.api.session.room.timeline.hasBeenEdited
 import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.flow.unwrap
-import org.matrix.android.sdk.rx.rx
-import java.util.ArrayList
 
 /**
  * Information related to an event and used to display preview in contextual bottom sheet.
@@ -125,8 +122,8 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
         if (room == null) {
             return
         }
-        PowerLevelsObservableFactory(room).createObservable()
-                .subscribe {
+        PowerLevelsFlowFactory(room).createFlow()
+                .onEach {
                     val powerLevelsHelper = PowerLevelsHelper(it)
                     val canReact = powerLevelsHelper.isUserAllowedToSend(session.myUserId, false, EventType.REACTION)
                     val canRedact = powerLevelsHelper.isUserAbleToRedact(session.myUserId)
@@ -135,8 +132,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                     setState {
                         copy(actionPermissions = permissions)
                     }
-                }
-                .disposeOnClear()
+                }.launchIn(viewModelScope)
     }
 
     private fun observeEvent() {

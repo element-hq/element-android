@@ -16,7 +16,6 @@
 
 package im.vector.app.features.spaces.explore
 
-import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
@@ -29,8 +28,10 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.core.platform.VectorViewModel
-import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
+import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -83,17 +84,17 @@ class SpaceDirectoryViewModel @AssistedInject constructor(
     private fun observePermissions() {
         val room = session.getRoom(initialState.spaceId) ?: return
 
-        val powerLevelsContentLive = PowerLevelsObservableFactory(room).createObservable()
+        val powerLevelsContentLive = PowerLevelsFlowFactory(room).createFlow()
 
         powerLevelsContentLive
-                .subscribe {
+                .onEach {
                     val powerLevelsHelper = PowerLevelsHelper(it)
                     setState {
                         copy(canAddRooms = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true,
                                 EventType.STATE_SPACE_CHILD))
                     }
                 }
-                .disposeOnClear()
+                .launchIn(viewModelScope)
     }
 
     private fun refreshFromApi(rootId: String?) = withState { state ->
