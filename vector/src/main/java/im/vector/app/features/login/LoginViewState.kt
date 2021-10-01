@@ -17,6 +17,7 @@
 package im.vector.app.features.login
 
 import com.airbnb.mvrx.Async
+import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.PersistState
 import com.airbnb.mvrx.Success

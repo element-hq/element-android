@@ -17,6 +17,7 @@
 package im.vector.app.features.signout.soft
 
 import com.airbnb.mvrx.Async
+import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
