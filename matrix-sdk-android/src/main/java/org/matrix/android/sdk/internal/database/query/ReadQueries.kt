@@ -23,9 +23,6 @@ import org.matrix.android.sdk.internal.database.model.ReadMarkerEntity
 import org.matrix.android.sdk.internal.database.model.ReadReceiptEntity
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
 
-private const val MARK_OLD_EVENT_AS_READ = true
-private const val MARK_UNREAD_DUE_TO_FASTLANE = false
-
 internal fun isEventRead(realmConfiguration: RealmConfiguration,
                          userId: String?,
                          roomId: String?,
@@ -42,7 +39,7 @@ internal fun isEventRead(realmConfiguration: RealmConfiguration,
         val liveChunk = ChunkEntity.findLastForwardChunkOfRoom(realm, roomId) ?: return@use
         val eventToCheck = liveChunk.timelineEvents.find(eventId)
         isEventRead = when {
-            eventToCheck == null                -> handleMissingEvent(
+            eventToCheck == null                -> hasReadMissingEvent(
                     realm = realm,
                     latestChunkEntity = liveChunk,
                     roomId = roomId,
@@ -50,7 +47,7 @@ internal fun isEventRead(realmConfiguration: RealmConfiguration,
                     eventId = eventId
             )
             eventToCheck.root?.sender == userId -> true
-            else -> {
+            else                                -> {
                 val readReceipt = ReadReceiptEntity.where(realm, roomId, userId).findFirst() ?: return@use
                 val readReceiptIndex = liveChunk.timelineEvents.find(readReceipt.eventId)?.displayIndex ?: Int.MIN_VALUE
                 eventToCheck.displayIndex <= readReceiptIndex
@@ -61,13 +58,12 @@ internal fun isEventRead(realmConfiguration: RealmConfiguration,
     return isEventRead
 }
 
-private fun handleMissingEvent(realm: Realm, latestChunkEntity: ChunkEntity, roomId: String, userId: String, eventId: String): Boolean {
-    return if (realm.doesEventExistInChunkHistory(eventId) && realm.hasReadReceiptInLatestChunk(latestChunkEntity, roomId, userId)) {
-        MARK_OLD_EVENT_AS_READ
-    } else {
-        // This can happen when fast lane events are displayed before the database finishes updating
-        MARK_UNREAD_DUE_TO_FASTLANE
-    }
+/**
+ * Missing events can be caused by the latest timeline chunk no longer contain an older event or
+ * by fast lane eagerly displaying events before the database has finished updating
+ */
+private fun hasReadMissingEvent(realm: Realm, latestChunkEntity: ChunkEntity, roomId: String, userId: String, eventId: String): Boolean {
+    return realm.doesEventExistInChunkHistory(eventId) && realm.hasReadReceiptInLatestChunk(latestChunkEntity, roomId, userId)
 }
 
 private fun Realm.doesEventExistInChunkHistory(eventId: String): Boolean {
