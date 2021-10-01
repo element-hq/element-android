@@ -48,7 +48,7 @@ sealed class BootstrapActions : VectorViewModelAction {
     data class DoMigrateWithPassphrase(val passphrase: String) : BootstrapActions()
     data class DoMigrateWithRecoveryKey(val recoveryKey: String) : BootstrapActions()
 
-    object SsoAuthDone: BootstrapActions()
-    data class PasswordAuthDone(val password: String): BootstrapActions()
-    object ReAuthCancelled: BootstrapActions()
+    object SsoAuthDone : BootstrapActions()
+    data class PasswordAuthDone(val password: String) : BootstrapActions()
+    object ReAuthCancelled : BootstrapActions()
 }

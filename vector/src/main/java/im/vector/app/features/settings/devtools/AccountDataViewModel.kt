@@ -39,8 +39,8 @@ data class AccountDataViewState(
 ) : MvRxState
 
 class AccountDataViewModel @AssistedInject constructor(@Assisted initialState: AccountDataViewState,
-                                                       private val session: Session)
-    : VectorViewModel<AccountDataViewState, AccountDataAction, EmptyViewEvents>(initialState) {
+                                                       private val session: Session) :
+    VectorViewModel<AccountDataViewState, AccountDataAction, EmptyViewEvents>(initialState) {
 
     init {
         session.rx().liveUserAccountData(emptySet())

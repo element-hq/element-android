@@ -91,8 +91,7 @@ class DeviceVerificationInfoBottomSheetViewModel @AssistedInject constructor(@As
     companion object : MvRxViewModelFactory<DeviceVerificationInfoBottomSheetViewModel, DeviceVerificationInfoBottomSheetViewState> {
 
         @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: DeviceVerificationInfoBottomSheetViewState)
-                : DeviceVerificationInfoBottomSheetViewModel? {
+        override fun create(viewModelContext: ViewModelContext, state: DeviceVerificationInfoBottomSheetViewState): DeviceVerificationInfoBottomSheetViewModel? {
             val fragment: DeviceVerificationInfoBottomSheet = (viewModelContext as FragmentViewModelContext).fragment()
             val args = viewModelContext.args<DeviceVerificationInfoArgs>()
             return fragment.deviceVerificationInfoViewModelFactory.create(state, args.deviceId)

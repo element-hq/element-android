@@ -75,7 +75,7 @@ sealed class RoomDetailAction : VectorViewModelAction {
     object ResendAll : RoomDetailAction()
 
     data class StartCall(val isVideo: Boolean) : RoomDetailAction()
-    data class AcceptCall(val callId: String): RoomDetailAction()
+    data class AcceptCall(val callId: String) : RoomDetailAction()
     object EndCall : RoomDetailAction()
 
     data class AcceptVerificationRequest(val transactionId: String, val otherUserId: String) : RoomDetailAction()
@@ -91,13 +91,13 @@ sealed class RoomDetailAction : VectorViewModelAction {
     data class AddJitsiWidget(val withVideo: Boolean) : RoomDetailAction()
     data class RemoveWidget(val widgetId: String) : RoomDetailAction()
 
-    object JoinJitsiCall: RoomDetailAction()
-    object LeaveJitsiCall: RoomDetailAction()
+    object JoinJitsiCall : RoomDetailAction()
+    object LeaveJitsiCall : RoomDetailAction()
 
     data class EnsureNativeWidgetAllowed(val widget: Widget,
                                          val userJustAccepted: Boolean,
                                          val grantedEvents: RoomDetailViewEvents) : RoomDetailAction()
-    data class UpdateJoinJitsiCallStatus(val conferenceEvent: ConferenceEvent): RoomDetailAction()
+    data class UpdateJoinJitsiCallStatus(val conferenceEvent: ConferenceEvent) : RoomDetailAction()
 
     data class OpenOrCreateDm(val userId: String) : RoomDetailAction()
     data class JumpToReadReceipt(val userId: String) : RoomDetailAction()
@@ -115,7 +115,7 @@ sealed class RoomDetailAction : VectorViewModelAction {
     // Failed messages
     object RemoveAllFailedMessages : RoomDetailAction()
 
-    data class RoomUpgradeSuccess(val replacementRoomId: String): RoomDetailAction()
+    data class RoomUpgradeSuccess(val replacementRoomId: String) : RoomDetailAction()
 
     // Voice Message
     object StartRecordingVoiceMessage : RoomDetailAction()

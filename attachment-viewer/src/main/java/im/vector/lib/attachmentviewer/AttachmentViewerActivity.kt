@@ -290,8 +290,8 @@ abstract class AttachmentViewerActivity : AppCompatActivity(), AttachmentEventLi
     private fun calculateTranslationAlpha(translationY: Float, translationLimit: Int): Float =
             1.0f - 1.0f / translationLimit.toFloat() / 4f * abs(translationY)
 
-    private fun createSwipeToDismissHandler()
-            : SwipeToDismissHandler = SwipeToDismissHandler(
+    private fun createSwipeToDismissHandler(): SwipeToDismissHandler =
+            SwipeToDismissHandler(
             swipeView = views.dismissContainer,
             shouldAnimateDismiss = { shouldAnimateDismiss() },
             onDismiss = { animateClose() },

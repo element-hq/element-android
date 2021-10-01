@@ -43,7 +43,7 @@ import kotlin.math.floor
 /**
  * Encapsulates the voice message recording view and animations.
  */
-class VoiceMessageRecorderView: ConstraintLayout, VoiceMessagePlaybackTracker.Listener {
+class VoiceMessageRecorderView : ConstraintLayout, VoiceMessagePlaybackTracker.Listener {
 
     interface Callback {
         // Return true if the recording is started

@@ -24,7 +24,7 @@ import org.matrix.android.sdk.MatrixTest
 import org.matrix.android.sdk.api.pushrules.rest.PushRule
 import org.matrix.android.sdk.internal.di.MoshiProvider
 
-class PushRuleActionsTest: MatrixTest {
+class PushRuleActionsTest : MatrixTest {
 
     @Test
     fun test_action_parsing() {

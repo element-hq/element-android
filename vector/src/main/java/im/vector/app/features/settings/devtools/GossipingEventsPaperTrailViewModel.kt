@@ -39,8 +39,8 @@ data class GossipingEventsPaperTrailState(
 ) : MvRxState
 
 class GossipingEventsPaperTrailViewModel @AssistedInject constructor(@Assisted initialState: GossipingEventsPaperTrailState,
-                                                                     private val session: Session)
-    : VectorViewModel<GossipingEventsPaperTrailState, EmptyAction, EmptyViewEvents>(initialState) {
+                                                                     private val session: Session) :
+    VectorViewModel<GossipingEventsPaperTrailState, EmptyAction, EmptyViewEvents>(initialState) {
 
     init {
         refresh()

@@ -24,7 +24,7 @@ import org.junit.runners.MethodSorters
 import org.matrix.android.sdk.MatrixTest
 
 @FixMethodOrder(MethodSorters.JVM)
-class Base58Test: MatrixTest {
+class Base58Test : MatrixTest {
 
     @Test
     fun encode() {

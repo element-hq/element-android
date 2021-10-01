@@ -29,8 +29,8 @@ import javax.inject.Inject
 private val loggerTag = LoggerTag("CallEventProcessor", LoggerTag.VOIP)
 
 @SessionScope
-internal class CallEventProcessor @Inject constructor(private val callSignalingHandler: CallSignalingHandler)
-    : EventInsertLiveProcessor {
+internal class CallEventProcessor @Inject constructor(private val callSignalingHandler: CallSignalingHandler) :
+    EventInsertLiveProcessor {
 
     private val allowedTypes = listOf(
             EventType.CALL_ANSWER,

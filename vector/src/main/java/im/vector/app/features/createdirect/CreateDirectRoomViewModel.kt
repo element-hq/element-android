@@ -41,8 +41,8 @@ import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
                                                             initialState: CreateDirectRoomViewState,
                                                             private val rawService: RawService,
-                                                            val session: Session)
-    : VectorViewModel<CreateDirectRoomViewState, CreateDirectRoomAction, CreateDirectRoomViewEvents>(initialState) {
+                                                            val session: Session) :
+    VectorViewModel<CreateDirectRoomViewState, CreateDirectRoomAction, CreateDirectRoomViewEvents>(initialState) {
 
     @AssistedFactory
     interface Factory {

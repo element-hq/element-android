@@ -34,8 +34,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-class BootstrapConfirmPassphraseFragment @Inject constructor()
-    : VectorBaseFragment<FragmentBootstrapEnterPassphraseBinding>() {
+class BootstrapConfirmPassphraseFragment @Inject constructor() :
+    VectorBaseFragment<FragmentBootstrapEnterPassphraseBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentBootstrapEnterPassphraseBinding {
         return FragmentBootstrapEnterPassphraseBinding.inflate(inflater, container, false)

@@ -29,8 +29,7 @@ internal fun CurrentStateEventEntity.Companion.whereType(realm: Realm, roomId: S
             .equalTo(CurrentStateEventEntityFields.TYPE, type)
 }
 
-internal fun CurrentStateEventEntity.Companion.whereStateKey(realm: Realm, roomId: String, type: String, stateKey: String)
-        : RealmQuery<CurrentStateEventEntity> {
+internal fun CurrentStateEventEntity.Companion.whereStateKey(realm: Realm, roomId: String, type: String, stateKey: String): RealmQuery<CurrentStateEventEntity> {
     return whereType(realm = realm, roomId = roomId, type = type)
             .equalTo(CurrentStateEventEntityFields.STATE_KEY, stateKey)
 }

@@ -35,7 +35,7 @@ import javax.inject.Inject
 /**
  * Bottom sheet displaying list of edits for a given event ordered by timestamp
  */
-class ViewEditHistoryBottomSheet:
+class ViewEditHistoryBottomSheet :
         VectorBaseBottomSheetDialogFragment<BottomSheetGenericListWithTitleBinding>() {
 
     private val viewModel: ViewEditHistoryViewModel by fragmentViewModel(ViewEditHistoryViewModel::class)

@@ -47,8 +47,8 @@ import org.matrix.android.sdk.rx.unwrap
 
 class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: RoomSettingsViewState,
                                                         private val vectorPreferences: VectorPreferences,
-                                                        private val session: Session)
-    : VectorViewModel<RoomSettingsViewState, RoomSettingsAction, RoomSettingsViewEvents>(initialState) {
+                                                        private val session: Session) :
+    VectorViewModel<RoomSettingsViewState, RoomSettingsAction, RoomSettingsViewEvents>(initialState) {
 
     @AssistedFactory
     interface Factory {

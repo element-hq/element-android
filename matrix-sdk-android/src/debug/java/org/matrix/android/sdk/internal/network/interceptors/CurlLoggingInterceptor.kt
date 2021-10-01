@@ -36,8 +36,8 @@ import javax.inject.Inject
  * non-production environment.
  */
 @MatrixScope
-internal class CurlLoggingInterceptor @Inject constructor()
-    : Interceptor {
+internal class CurlLoggingInterceptor @Inject constructor() :
+    Interceptor {
 
     /**
      * Set any additional curl command options (see 'curl --help').

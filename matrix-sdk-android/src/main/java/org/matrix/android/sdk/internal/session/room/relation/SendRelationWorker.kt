@@ -33,8 +33,8 @@ import org.matrix.android.sdk.internal.worker.SessionWorkerParams
 import javax.inject.Inject
 
 // TODO This is not used. Delete?
-internal class SendRelationWorker(context: Context, params: WorkerParameters)
-    : SessionSafeCoroutineWorker<SendRelationWorker.Params>(context, params, Params::class.java) {
+internal class SendRelationWorker(context: Context, params: WorkerParameters) :
+    SessionSafeCoroutineWorker<SendRelationWorker.Params>(context, params, Params::class.java) {
 
     @JsonClass(generateAdapter = true)
     internal data class Params(

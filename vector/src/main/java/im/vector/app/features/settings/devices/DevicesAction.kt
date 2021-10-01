@@ -32,7 +32,7 @@ sealed class DevicesAction : VectorViewModelAction {
     object CompleteSecurity : DevicesAction()
     data class MarkAsManuallyVerified(val cryptoDeviceInfo: CryptoDeviceInfo) : DevicesAction()
 
-    object SsoAuthDone: DevicesAction()
-    data class PasswordAuthDone(val password: String): DevicesAction()
-    object ReAuthCancelled: DevicesAction()
+    object SsoAuthDone : DevicesAction()
+    data class PasswordAuthDone(val password: String) : DevicesAction()
+    object ReAuthCancelled : DevicesAction()
 }

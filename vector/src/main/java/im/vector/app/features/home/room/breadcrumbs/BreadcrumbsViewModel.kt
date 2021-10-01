@@ -33,8 +33,8 @@ import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.rx.rx
 
 class BreadcrumbsViewModel @AssistedInject constructor(@Assisted initialState: BreadcrumbsViewState,
-                                                       private val session: Session)
-    : VectorViewModel<BreadcrumbsViewState, EmptyAction, EmptyViewEvents>(initialState) {
+                                                       private val session: Session) :
+    VectorViewModel<BreadcrumbsViewState, EmptyAction, EmptyViewEvents>(initialState) {
 
     @AssistedFactory
     interface Factory {

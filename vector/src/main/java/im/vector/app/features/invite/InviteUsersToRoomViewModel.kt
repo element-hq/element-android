@@ -34,8 +34,8 @@ import org.matrix.android.sdk.rx.rx
 class InviteUsersToRoomViewModel @AssistedInject constructor(@Assisted
                                                              initialState: InviteUsersToRoomViewState,
                                                              session: Session,
-                                                             val stringProvider: StringProvider)
-    : VectorViewModel<InviteUsersToRoomViewState, InviteUsersToRoomAction, InviteUsersToRoomViewEvents>(initialState) {
+                                                             val stringProvider: StringProvider) :
+    VectorViewModel<InviteUsersToRoomViewState, InviteUsersToRoomAction, InviteUsersToRoomViewEvents>(initialState) {
 
     private val room = session.getRoom(initialState.roomId)!!
 

@@ -31,8 +31,8 @@ import org.matrix.android.sdk.internal.di.SessionDatabase
 
 internal class DefaultRoomPushRuleService @AssistedInject constructor(@Assisted private val roomId: String,
                                                                       private val setRoomNotificationStateTask: SetRoomNotificationStateTask,
-                                                                      @SessionDatabase private val monarchy: Monarchy)
-    : RoomPushRuleService {
+                                                                      @SessionDatabase private val monarchy: Monarchy) :
+    RoomPushRuleService {
 
     @AssistedFactory
     interface Factory {

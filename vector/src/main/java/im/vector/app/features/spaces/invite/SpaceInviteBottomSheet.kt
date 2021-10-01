@@ -175,8 +175,7 @@ class SpaceInviteBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetIn
 
     companion object {
 
-        fun newInstance(spaceId: String)
-                : SpaceInviteBottomSheet {
+        fun newInstance(spaceId: String): SpaceInviteBottomSheet {
             return SpaceInviteBottomSheet().apply {
                 setArguments(Args(spaceId))
             }

@@ -27,7 +27,7 @@ import org.junit.Test
 import org.matrix.android.sdk.MatrixTest
 import java.util.concurrent.Executors
 
-class CoroutineSequencersTest: MatrixTest {
+class CoroutineSequencersTest : MatrixTest {
 
     private val dispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
 

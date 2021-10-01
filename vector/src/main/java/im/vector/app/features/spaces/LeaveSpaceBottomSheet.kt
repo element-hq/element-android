@@ -186,8 +186,7 @@ class LeaveSpaceBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetLea
 
     companion object {
 
-        fun newInstance(spaceId: String)
-                : LeaveSpaceBottomSheet {
+        fun newInstance(spaceId: String): LeaveSpaceBottomSheet {
             return LeaveSpaceBottomSheet().apply {
                 setArguments(SpaceBottomSheetSettingsArgs(spaceId))
             }

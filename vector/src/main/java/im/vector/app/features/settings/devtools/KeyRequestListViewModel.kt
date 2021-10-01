@@ -42,8 +42,8 @@ data class KeyRequestListViewState(
 ) : MvRxState
 
 class KeyRequestListViewModel @AssistedInject constructor(@Assisted initialState: KeyRequestListViewState,
-                                                          private val session: Session)
-    : VectorViewModel<KeyRequestListViewState, EmptyAction, EmptyViewEvents>(initialState) {
+                                                          private val session: Session) :
+    VectorViewModel<KeyRequestListViewState, EmptyAction, EmptyViewEvents>(initialState) {
 
     init {
         refresh()

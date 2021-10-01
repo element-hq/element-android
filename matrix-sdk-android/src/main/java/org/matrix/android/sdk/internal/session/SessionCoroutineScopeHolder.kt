@@ -25,7 +25,7 @@ import org.matrix.android.sdk.api.session.SessionLifecycleObserver
 import javax.inject.Inject
 
 @SessionScope
-internal class SessionCoroutineScopeHolder @Inject constructor(): SessionLifecycleObserver {
+internal class SessionCoroutineScopeHolder @Inject constructor() : SessionLifecycleObserver {
 
     val scope: CoroutineScope = CoroutineScope(SupervisorJob())
 

@@ -24,8 +24,8 @@ import im.vector.app.databinding.FragmentQrCodeScannerBinding
 import me.dm7.barcodescanner.zxing.ZXingScannerView
 import javax.inject.Inject
 
-class QrCodeScannerFragment @Inject constructor()
-    : VectorBaseFragment<FragmentQrCodeScannerBinding>(),
+class QrCodeScannerFragment @Inject constructor() :
+    VectorBaseFragment<FragmentQrCodeScannerBinding>(),
         ZXingScannerView.ResultHandler {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentQrCodeScannerBinding {

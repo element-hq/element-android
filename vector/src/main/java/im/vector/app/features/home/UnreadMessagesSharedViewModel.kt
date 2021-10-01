@@ -57,8 +57,8 @@ class UnreadMessagesSharedViewModel @AssistedInject constructor(@Assisted initia
                                                                 session: Session,
                                                                 private val vectorPreferences: VectorPreferences,
                                                                 appStateHandler: AppStateHandler,
-                                                                private val autoAcceptInvites: AutoAcceptInvites)
-    : VectorViewModel<UnreadMessagesState, EmptyAction, EmptyViewEvents>(initialState) {
+                                                                private val autoAcceptInvites: AutoAcceptInvites) :
+    VectorViewModel<UnreadMessagesState, EmptyAction, EmptyViewEvents>(initialState) {
 
     @AssistedFactory
     interface Factory {

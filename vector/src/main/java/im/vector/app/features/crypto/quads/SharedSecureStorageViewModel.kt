@@ -67,8 +67,8 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
         @Assisted initialState: SharedSecureStorageViewState,
         @Assisted val args: SharedSecureStorageActivity.Args,
         private val stringProvider: StringProvider,
-        private val session: Session)
-    : VectorViewModel<SharedSecureStorageViewState, SharedSecureStorageAction, SharedSecureStorageViewEvent>(initialState) {
+        private val session: Session) :
+    VectorViewModel<SharedSecureStorageViewState, SharedSecureStorageAction, SharedSecureStorageViewEvent>(initialState) {
 
     @AssistedFactory
     interface Factory {

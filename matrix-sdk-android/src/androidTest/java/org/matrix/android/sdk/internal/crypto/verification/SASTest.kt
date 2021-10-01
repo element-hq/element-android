@@ -551,7 +551,7 @@ class SASTest : InstrumentedTest {
                 cryptoTestData.roomId
         )
 
-        var requestID : String? = null
+        var requestID: String? = null
 
         mTestHelper.waitWithLatch {
             mTestHelper.retryPeriodicallyWithLatch(it) {

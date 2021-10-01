@@ -392,8 +392,7 @@ class RoomJoinRuleChooseRestrictedViewModel @AssistedInject constructor(
 
     companion object : MvRxViewModelFactory<RoomJoinRuleChooseRestrictedViewModel, RoomJoinRuleChooseRestrictedState> {
 
-        override fun create(viewModelContext: ViewModelContext, state: RoomJoinRuleChooseRestrictedState)
-                : RoomJoinRuleChooseRestrictedViewModel? {
+        override fun create(viewModelContext: ViewModelContext, state: RoomJoinRuleChooseRestrictedState): RoomJoinRuleChooseRestrictedViewModel? {
             val factory = when (viewModelContext) {
                 is FragmentViewModelContext -> viewModelContext.fragment as? Factory
                 is ActivityViewModelContext -> viewModelContext.activity as? Factory

@@ -37,7 +37,7 @@ class ReadReceiptsView @JvmOverloads constructor(
         defStyleAttr: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr) {
 
-    private val views : ViewReadReceiptsBinding
+    private val views: ViewReadReceiptsBinding
 
     init {
         setupView()

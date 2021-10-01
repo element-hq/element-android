@@ -63,8 +63,8 @@ private data class NewAttachmentAttributes(
  * Possible previous worker: None
  * Possible next worker    : Always [MultipleEventSendingDispatcherWorker]
  */
-internal class UploadContentWorker(val context: Context, params: WorkerParameters)
-    : SessionSafeCoroutineWorker<UploadContentWorker.Params>(context, params, Params::class.java) {
+internal class UploadContentWorker(val context: Context, params: WorkerParameters) :
+    SessionSafeCoroutineWorker<UploadContentWorker.Params>(context, params, Params::class.java) {
 
     @JsonClass(generateAdapter = true)
     internal data class Params(

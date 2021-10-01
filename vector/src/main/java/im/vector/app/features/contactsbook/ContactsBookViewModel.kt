@@ -41,8 +41,8 @@ import timber.log.Timber
 class ContactsBookViewModel @AssistedInject constructor(@Assisted
                                                         initialState: ContactsBookViewState,
                                                         private val contactsDataSource: ContactsDataSource,
-                                                        private val session: Session)
-    : VectorViewModel<ContactsBookViewState, ContactsBookAction, EmptyViewEvents>(initialState) {
+                                                        private val session: Session) :
+    VectorViewModel<ContactsBookViewState, ContactsBookAction, EmptyViewEvents>(initialState) {
 
     @AssistedFactory
     interface Factory {

@@ -68,7 +68,7 @@ sealed class RoomDetailViewEvents : VectorViewEvents {
 
     abstract class SendMessageResult : RoomDetailViewEvents()
 
-    data class DisplayAndAcceptCall(val call: WebRtcCall): RoomDetailViewEvents()
+    data class DisplayAndAcceptCall(val call: WebRtcCall) : RoomDetailViewEvents()
 
     object DisplayPromptForIntegrationManager : RoomDetailViewEvents()
 
@@ -96,5 +96,5 @@ sealed class RoomDetailViewEvents : VectorViewEvents {
     data class StartChatEffect(val type: ChatEffect) : RoomDetailViewEvents()
     object StopChatEffects : RoomDetailViewEvents()
     object RoomReplacementStarted : RoomDetailViewEvents()
-    data class ShowRoomUpgradeDialog(val newVersion: String, val isPublic: Boolean): RoomDetailViewEvents()
+    data class ShowRoomUpgradeDialog(val newVersion: String, val isPublic: Boolean) : RoomDetailViewEvents()
 }

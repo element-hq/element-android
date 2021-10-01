@@ -20,7 +20,7 @@ import org.matrix.android.sdk.api.session.SessionLifecycleObserver
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.util.Cancelable
 
-internal interface EventSenderProcessor: SessionLifecycleObserver {
+internal interface EventSenderProcessor : SessionLifecycleObserver {
 
     fun postEvent(event: Event): Cancelable
 

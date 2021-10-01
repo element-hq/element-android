@@ -35,8 +35,8 @@ import org.matrix.android.sdk.api.util.toMatrixItem
 class PillsPostProcessor @AssistedInject constructor(@Assisted private val roomId: String?,
                                                      private val context: Context,
                                                      private val avatarRenderer: AvatarRenderer,
-                                                     private val sessionHolder: ActiveSessionHolder)
-    : EventHtmlRenderer.PostProcessor {
+                                                     private val sessionHolder: ActiveSessionHolder) :
+    EventHtmlRenderer.PostProcessor {
 
     @AssistedFactory
     interface Factory {

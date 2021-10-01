@@ -50,7 +50,7 @@ class PopupAlertManager @Inject constructor() {
 
     private val alertQueue = mutableListOf<VectorAlert>()
 
-    fun hasAlertsToShow() : Boolean {
+    fun hasAlertsToShow(): Boolean {
         return currentAlerter != null || alertQueue.isNotEmpty()
     }
 

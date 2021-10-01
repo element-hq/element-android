@@ -49,7 +49,7 @@ class NotificationAreaView @JvmOverloads constructor(
     var delegate: Delegate? = null
     private var state: State = State.Initial
 
-    private lateinit var views : ViewNotificationAreaBinding
+    private lateinit var views: ViewNotificationAreaBinding
 
     init {
         setupView()
