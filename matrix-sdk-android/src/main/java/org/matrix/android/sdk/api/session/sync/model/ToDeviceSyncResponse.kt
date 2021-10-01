@@ -14,13 +14,17 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.session.sync.model.accountdata
+package org.matrix.android.sdk.api.session.sync.model
 
-import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import org.matrix.android.sdk.api.session.accountdata.UserAccountDataEvent
+import org.matrix.android.sdk.api.session.events.model.Event
 
+// ToDeviceSyncResponse represents the data directly sent to one of user's devices.
 @JsonClass(generateAdapter = true)
-internal data class UserAccountDataSync(
-        @Json(name = "events") val list: List<UserAccountDataEvent> = emptyList()
+data class ToDeviceSyncResponse(
+
+        /**
+         * List of direct-to-device events.
+         */
+        val events: List<Event>? = null
 )

@@ -14,17 +14,28 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.session.sync.model
+package org.matrix.android.sdk.api.session.sync.model
 
+import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import org.matrix.android.sdk.api.session.events.model.Event
 
-// ToDeviceSyncResponse represents the data directly sent to one of user's devices.
+/**
+ * `MXRoomSyncUnreadNotifications` represents the unread counts for a room.
+ */
 @JsonClass(generateAdapter = true)
-internal data class ToDeviceSyncResponse(
+data class RoomSyncUnreadNotifications(
+        /**
+         * List of account data events (array of Event).
+         */
+        @Json(name = "events") val events: List<Event>? = null,
 
         /**
-         * List of direct-to-device events.
+         * The number of unread messages that match the push notification rules.
          */
-        val events: List<Event>? = null
-)
+        @Json(name = "notification_count") val notificationCount: Int? = null,
+
+        /**
+         * The number of highlighted unread messages (subset of notifications).
+         */
+        @Json(name = "highlight_count") val highlightCount: Int? = null)

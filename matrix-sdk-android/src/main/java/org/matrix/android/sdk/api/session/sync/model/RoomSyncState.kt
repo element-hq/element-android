@@ -14,17 +14,18 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.session.sync.model
+package org.matrix.android.sdk.api.session.sync.model
 
+import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import org.matrix.android.sdk.api.session.events.model.Event
 
-//  PresenceSyncResponse represents the updates to the presence status of other users during server sync v2.
+// RoomSyncState represents the state updates for a room during server sync v2.
 @JsonClass(generateAdapter = true)
-internal data class PresenceSyncResponse(
+data class RoomSyncState(
 
         /**
-         * List of presence events (array of Event with type m.presence).
+         * List of state events (array of Event). The resulting state corresponds to the *start* of the timeline.
          */
-        val events: List<Event>? = null
+        @Json(name = "events") val events: List<Event>? = null
 )

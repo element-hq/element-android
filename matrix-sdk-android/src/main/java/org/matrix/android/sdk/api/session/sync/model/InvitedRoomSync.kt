@@ -13,14 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.matrix.android.sdk.internal.session.sync.model
+
+package org.matrix.android.sdk.api.session.sync.model
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 // InvitedRoomSync represents a room invitation during server sync v2.
 @JsonClass(generateAdapter = true)
-internal data class InvitedRoomSync(
+data class InvitedRoomSync(
 
         /**
          * The state of a room that the user has been invited to. These state events may only have the 'sender', 'type', 'state_key'

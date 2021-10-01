@@ -14,25 +14,18 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.session.sync.model
+package org.matrix.android.sdk.api.session.sync.model
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import org.matrix.android.sdk.api.session.events.model.Event
 
+// RoomInviteState represents the state of a room that the user has been invited to.
 @JsonClass(generateAdapter = true)
-internal data class GroupsSyncResponse(
-        /**
-         * Joined groups: An array of groups ids.
-         */
-        @Json(name = "join") val join: Map<String, Any> = emptyMap(),
+data class RoomInviteState(
 
         /**
-         * Invitations. The groups that the user has been invited to: keys are groups ids.
+         * List of state events (array of MXEvent).
          */
-        @Json(name = "invite") val invite: Map<String, InvitedGroupSync> = emptyMap(),
-
-        /**
-         * Left groups. An array of groups ids: the groups that the user has left or been banned from.
-         */
-        @Json(name = "leave") val leave: Map<String, Any> = emptyMap()
+        @Json(name = "events") val events: List<Event> = emptyList()
 )

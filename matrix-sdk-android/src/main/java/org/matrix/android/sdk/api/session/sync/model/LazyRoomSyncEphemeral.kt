@@ -14,20 +14,12 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.session.sync.model
+package org.matrix.android.sdk.api.session.sync.model
 
-import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
-@JsonClass(generateAdapter = true)
-internal data class InvitedGroupSync(
-        /**
-         * The identifier of the inviter.
-         */
-        @Json(name = "inviter") val inviter: String? = null,
-
-        /**
-         * The group profile.
-         */
-        @Json(name = "profile") val profile: GroupSyncProfile? = null
-)
+@JsonClass(generateAdapter = false)
+sealed class LazyRoomSyncEphemeral {
+    data class Parsed(val _roomSyncEphemeral: RoomSyncEphemeral) : LazyRoomSyncEphemeral()
+    object Stored : LazyRoomSyncEphemeral()
+}
