@@ -18,7 +18,7 @@ package im.vector.app.features.call.conference
 
 import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
@@ -140,7 +140,7 @@ class JitsiCallViewModel @AssistedInject constructor(
         }
     }
 
-    companion object : MvRxViewModelFactory<JitsiCallViewModel, JitsiCallViewState> {
+    companion object : MavericksViewModelFactory<JitsiCallViewModel, JitsiCallViewState> {
 
         const val ENABLE_VIDEO_OPTION = "ENABLE_VIDEO_OPTION"
 

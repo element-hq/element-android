@@ -22,7 +22,7 @@ import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksState
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
@@ -54,7 +54,7 @@ class IgnoredUsersViewModel @AssistedInject constructor(@Assisted initialState: 
         fun create(initialState: IgnoredUsersViewState): IgnoredUsersViewModel
     }
 
-    companion object : MvRxViewModelFactory<IgnoredUsersViewModel, IgnoredUsersViewState> {
+    companion object : MavericksViewModelFactory<IgnoredUsersViewModel, IgnoredUsersViewState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: IgnoredUsersViewState): IgnoredUsersViewModel? {

@@ -19,7 +19,7 @@ package im.vector.app.features.spaces
 import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
@@ -71,7 +71,7 @@ class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: Sp
         fun create(initialState: SpaceListViewState): SpacesListViewModel
     }
 
-    companion object : MvRxViewModelFactory<SpacesListViewModel, SpaceListViewState> {
+    companion object : MavericksViewModelFactory<SpacesListViewModel, SpaceListViewState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: SpaceListViewState): SpacesListViewModel {

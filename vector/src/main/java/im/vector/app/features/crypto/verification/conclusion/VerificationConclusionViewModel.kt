@@ -16,7 +16,7 @@
 package im.vector.app.features.crypto.verification.conclusion
 
 import com.airbnb.mvrx.MavericksState
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.EmptyViewEvents
@@ -38,7 +38,7 @@ enum class ConclusionState {
 class VerificationConclusionViewModel(initialState: VerificationConclusionViewState)
     : VectorViewModel<VerificationConclusionViewState, EmptyAction, EmptyViewEvents>(initialState) {
 
-    companion object : MvRxViewModelFactory<VerificationConclusionViewModel, VerificationConclusionViewState> {
+    companion object : MavericksViewModelFactory<VerificationConclusionViewModel, VerificationConclusionViewState> {
 
         override fun initialState(viewModelContext: ViewModelContext): VerificationConclusionViewState? {
             val args = viewModelContext.args<VerificationConclusionFragment.Args>()

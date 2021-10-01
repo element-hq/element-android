@@ -20,7 +20,7 @@ import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksState
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
@@ -155,7 +155,7 @@ class VerificationEmojiCodeViewModel @AssistedInject constructor(
         fun create(initialState: VerificationEmojiCodeViewState): VerificationEmojiCodeViewModel
     }
 
-    companion object : MvRxViewModelFactory<VerificationEmojiCodeViewModel, VerificationEmojiCodeViewState> {
+    companion object : MavericksViewModelFactory<VerificationEmojiCodeViewModel, VerificationEmojiCodeViewState> {
 
         override fun create(viewModelContext: ViewModelContext, state: VerificationEmojiCodeViewState): VerificationEmojiCodeViewModel? {
             val factory = (viewModelContext as FragmentViewModelContext).fragment<VerificationEmojiCodeFragment>().viewModelFactory

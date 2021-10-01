@@ -20,7 +20,7 @@ import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
@@ -552,7 +552,7 @@ class BootstrapSharedViewModel @AssistedInject constructor(
     // Companion, view model assisted creation
     // ======================================
 
-    companion object : MvRxViewModelFactory<BootstrapSharedViewModel, BootstrapViewState> {
+    companion object : MavericksViewModelFactory<BootstrapSharedViewModel, BootstrapViewState> {
 
         override fun create(viewModelContext: ViewModelContext, state: BootstrapViewState): BootstrapSharedViewModel? {
             val fragment: BootstrapBottomSheet = (viewModelContext as FragmentViewModelContext).fragment()

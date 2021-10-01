@@ -21,7 +21,7 @@ import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -84,7 +84,7 @@ class ThreePidsSettingsViewModel @AssistedInject constructor(
         fun create(initialState: ThreePidsSettingsViewState): ThreePidsSettingsViewModel
     }
 
-    companion object : MvRxViewModelFactory<ThreePidsSettingsViewModel, ThreePidsSettingsViewState> {
+    companion object : MavericksViewModelFactory<ThreePidsSettingsViewModel, ThreePidsSettingsViewState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: ThreePidsSettingsViewState): ThreePidsSettingsViewModel? {

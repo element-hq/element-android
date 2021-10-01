@@ -22,7 +22,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -86,7 +86,7 @@ class LoginViewModel2 @AssistedInject constructor(
         }
     }
 
-    companion object : MvRxViewModelFactory<LoginViewModel2, LoginViewState2> {
+    companion object : MavericksViewModelFactory<LoginViewModel2, LoginViewState2> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: LoginViewState2): LoginViewModel2? {

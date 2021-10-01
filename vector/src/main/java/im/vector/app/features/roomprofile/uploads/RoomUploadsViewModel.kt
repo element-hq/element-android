@@ -21,7 +21,7 @@ import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
@@ -45,7 +45,7 @@ class RoomUploadsViewModel @AssistedInject constructor(
         fun create(initialState: RoomUploadsViewState): RoomUploadsViewModel
     }
 
-    companion object : MvRxViewModelFactory<RoomUploadsViewModel, RoomUploadsViewState> {
+    companion object : MavericksViewModelFactory<RoomUploadsViewModel, RoomUploadsViewState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: RoomUploadsViewState): RoomUploadsViewModel? {

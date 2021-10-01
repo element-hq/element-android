@@ -20,7 +20,7 @@ import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MavericksState
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
@@ -46,7 +46,7 @@ class PushGatewaysViewModel @AssistedInject constructor(@Assisted initialState: 
         fun create(initialState: PushGatewayViewState): PushGatewaysViewModel
     }
 
-    companion object : MvRxViewModelFactory<PushGatewaysViewModel, PushGatewayViewState> {
+    companion object : MavericksViewModelFactory<PushGatewaysViewModel, PushGatewayViewState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: PushGatewayViewState): PushGatewaysViewModel? {

@@ -20,7 +20,7 @@ import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.ViewModelContext
 import com.airbnb.mvrx.appendAt
@@ -53,7 +53,7 @@ class RoomDirectoryViewModel @AssistedInject constructor(
         fun create(initialState: PublicRoomsViewState): RoomDirectoryViewModel
     }
 
-    companion object : MvRxViewModelFactory<RoomDirectoryViewModel, PublicRoomsViewState> {
+    companion object : MavericksViewModelFactory<RoomDirectoryViewModel, PublicRoomsViewState> {
         private const val PUBLIC_ROOMS_LIMIT = 20
 
         @JvmStatic

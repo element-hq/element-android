@@ -18,7 +18,7 @@ package im.vector.app.features.spaces.share
 
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
@@ -42,7 +42,7 @@ class ShareSpaceViewModel @AssistedInject constructor(
         fun create(initialState: ShareSpaceViewState): ShareSpaceViewModel
     }
 
-    companion object : MvRxViewModelFactory<ShareSpaceViewModel, ShareSpaceViewState> {
+    companion object : MavericksViewModelFactory<ShareSpaceViewModel, ShareSpaceViewState> {
         override fun create(viewModelContext: ViewModelContext, state: ShareSpaceViewState): ShareSpaceViewModel? {
             val factory = when (viewModelContext) {
                 is FragmentViewModelContext -> viewModelContext.fragment as? Factory

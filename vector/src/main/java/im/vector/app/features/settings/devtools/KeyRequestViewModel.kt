@@ -23,7 +23,7 @@ import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksState
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
@@ -60,7 +60,7 @@ class KeyRequestViewModel @AssistedInject constructor(
         fun create(initialState: KeyRequestViewState): KeyRequestViewModel
     }
 
-    companion object : MvRxViewModelFactory<KeyRequestViewModel, KeyRequestViewState> {
+    companion object : MavericksViewModelFactory<KeyRequestViewModel, KeyRequestViewState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: KeyRequestViewState): KeyRequestViewModel? {

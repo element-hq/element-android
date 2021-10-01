@@ -17,7 +17,7 @@ package im.vector.app.features.settings.devices
 
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
@@ -88,7 +88,7 @@ class DeviceVerificationInfoBottomSheetViewModel @AssistedInject constructor(@As
                 }
     }
 
-    companion object : MvRxViewModelFactory<DeviceVerificationInfoBottomSheetViewModel, DeviceVerificationInfoBottomSheetViewState> {
+    companion object : MavericksViewModelFactory<DeviceVerificationInfoBottomSheetViewModel, DeviceVerificationInfoBottomSheetViewState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: DeviceVerificationInfoBottomSheetViewState)

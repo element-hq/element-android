@@ -19,7 +19,7 @@ package im.vector.app.features.settings.locale
 import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
@@ -53,7 +53,7 @@ class LocalePickerViewModel @AssistedInject constructor(
         }
     }
 
-    companion object : MvRxViewModelFactory<LocalePickerViewModel, LocalePickerViewState> {
+    companion object : MavericksViewModelFactory<LocalePickerViewModel, LocalePickerViewState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: LocalePickerViewState): LocalePickerViewModel? {

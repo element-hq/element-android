@@ -20,7 +20,7 @@ import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksState
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
@@ -108,7 +108,7 @@ class DeviceListBottomSheetViewModel @AssistedInject constructor(@Assisted priva
         }
     }
 
-    companion object : MvRxViewModelFactory<DeviceListBottomSheetViewModel, DeviceListViewState> {
+    companion object : MavericksViewModelFactory<DeviceListBottomSheetViewModel, DeviceListViewState> {
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: DeviceListViewState): DeviceListBottomSheetViewModel? {
             val fragment: DeviceListBottomSheet = (viewModelContext as FragmentViewModelContext).fragment()

@@ -18,7 +18,7 @@ package im.vector.app.features.home
 
 import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.MvRx
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -67,7 +67,7 @@ class HomeActivityViewModel @AssistedInject constructor(
         fun create(initialState: HomeActivityViewState, args: HomeActivityArgs): HomeActivityViewModel
     }
 
-    companion object : MvRxViewModelFactory<HomeActivityViewModel, HomeActivityViewState> {
+    companion object : MavericksViewModelFactory<HomeActivityViewModel, HomeActivityViewState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: HomeActivityViewState): HomeActivityViewModel? {

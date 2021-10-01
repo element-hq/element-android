@@ -18,7 +18,7 @@ package im.vector.app.features.room
 
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import com.jakewharton.rxrelay2.BehaviorRelay
 import dagger.assisted.Assisted
@@ -54,7 +54,7 @@ class RequireActiveMembershipViewModel @AssistedInject constructor(
         fun create(initialState: RequireActiveMembershipViewState): RequireActiveMembershipViewModel
     }
 
-    companion object : MvRxViewModelFactory<RequireActiveMembershipViewModel, RequireActiveMembershipViewState> {
+    companion object : MavericksViewModelFactory<RequireActiveMembershipViewModel, RequireActiveMembershipViewState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: RequireActiveMembershipViewState): RequireActiveMembershipViewModel? {

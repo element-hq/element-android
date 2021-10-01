@@ -21,7 +21,7 @@ import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MavericksState
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
@@ -75,7 +75,7 @@ class ServerBackupStatusViewModel @AssistedInject constructor(@Assisted initialS
         fun create(initialState: ServerBackupStatusViewState): ServerBackupStatusViewModel
     }
 
-    companion object : MvRxViewModelFactory<ServerBackupStatusViewModel, ServerBackupStatusViewState> {
+    companion object : MavericksViewModelFactory<ServerBackupStatusViewModel, ServerBackupStatusViewState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: ServerBackupStatusViewState): ServerBackupStatusViewModel? {

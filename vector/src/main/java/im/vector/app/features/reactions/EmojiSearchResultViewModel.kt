@@ -18,7 +18,7 @@ package im.vector.app.features.reactions
 import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.MavericksState
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -44,7 +44,7 @@ class EmojiSearchResultViewModel @AssistedInject constructor(
         fun create(initialState: EmojiSearchResultViewState): EmojiSearchResultViewModel
     }
 
-    companion object : MvRxViewModelFactory<EmojiSearchResultViewModel, EmojiSearchResultViewState> {
+    companion object : MavericksViewModelFactory<EmojiSearchResultViewModel, EmojiSearchResultViewState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: EmojiSearchResultViewState): EmojiSearchResultViewModel? {

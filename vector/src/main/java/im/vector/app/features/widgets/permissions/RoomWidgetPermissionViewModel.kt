@@ -18,7 +18,7 @@ package im.vector.app.features.widgets.permissions
 import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
@@ -144,7 +144,7 @@ class RoomWidgetPermissionViewModel @AssistedInject constructor(@Assisted val in
         fun create(initialState: RoomWidgetPermissionViewState): RoomWidgetPermissionViewModel
     }
 
-    companion object : MvRxViewModelFactory<RoomWidgetPermissionViewModel, RoomWidgetPermissionViewState> {
+    companion object : MavericksViewModelFactory<RoomWidgetPermissionViewModel, RoomWidgetPermissionViewState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: RoomWidgetPermissionViewState): RoomWidgetPermissionViewModel? {

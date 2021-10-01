@@ -18,7 +18,7 @@ package im.vector.app.features.call.transfer
 
 import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.ActivityViewModelContext
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -45,7 +45,7 @@ class CallTransferViewModel @AssistedInject constructor(@Assisted initialState: 
         fun create(initialState: CallTransferViewState): CallTransferViewModel
     }
 
-    companion object : MvRxViewModelFactory<CallTransferViewModel, CallTransferViewState> {
+    companion object : MavericksViewModelFactory<CallTransferViewModel, CallTransferViewState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: CallTransferViewState): CallTransferViewModel? {

@@ -19,7 +19,7 @@ package im.vector.app.features.roomprofile.alias
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
@@ -54,7 +54,7 @@ class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: Roo
         fun create(initialState: RoomAliasViewState): RoomAliasViewModel
     }
 
-    companion object : MvRxViewModelFactory<RoomAliasViewModel, RoomAliasViewState> {
+    companion object : MavericksViewModelFactory<RoomAliasViewModel, RoomAliasViewState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: RoomAliasViewState): RoomAliasViewModel? {

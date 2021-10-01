@@ -21,7 +21,7 @@ import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksState
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
@@ -63,7 +63,7 @@ class GossipingEventsPaperTrailViewModel @AssistedInject constructor(@Assisted i
         fun create(initialState: GossipingEventsPaperTrailState): GossipingEventsPaperTrailViewModel
     }
 
-    companion object : MvRxViewModelFactory<GossipingEventsPaperTrailViewModel, GossipingEventsPaperTrailState> {
+    companion object : MavericksViewModelFactory<GossipingEventsPaperTrailViewModel, GossipingEventsPaperTrailState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: GossipingEventsPaperTrailState): GossipingEventsPaperTrailViewModel? {

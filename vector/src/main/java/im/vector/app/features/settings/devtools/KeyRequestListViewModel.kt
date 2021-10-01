@@ -21,7 +21,7 @@ import androidx.paging.PagedList
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MavericksState
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
@@ -71,7 +71,7 @@ class KeyRequestListViewModel @AssistedInject constructor(@Assisted initialState
         fun create(initialState: KeyRequestListViewState): KeyRequestListViewModel
     }
 
-    companion object : MvRxViewModelFactory<KeyRequestListViewModel, KeyRequestListViewState> {
+    companion object : MavericksViewModelFactory<KeyRequestListViewModel, KeyRequestListViewState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: KeyRequestListViewState): KeyRequestListViewModel? {

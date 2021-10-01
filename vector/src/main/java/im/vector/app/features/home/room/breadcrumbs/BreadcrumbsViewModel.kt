@@ -17,7 +17,7 @@
 package im.vector.app.features.home.room.breadcrumbs
 
 import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
@@ -41,7 +41,7 @@ class BreadcrumbsViewModel @AssistedInject constructor(@Assisted initialState: B
         fun create(initialState: BreadcrumbsViewState): BreadcrumbsViewModel
     }
 
-    companion object : MvRxViewModelFactory<BreadcrumbsViewModel, BreadcrumbsViewState> {
+    companion object : MavericksViewModelFactory<BreadcrumbsViewModel, BreadcrumbsViewState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: BreadcrumbsViewState): BreadcrumbsViewModel? {

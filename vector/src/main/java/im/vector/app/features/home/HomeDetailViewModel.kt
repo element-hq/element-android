@@ -18,7 +18,7 @@ package im.vector.app.features.home
 
 import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -72,7 +72,7 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
         fun create(initialState: HomeDetailViewState): HomeDetailViewModel
     }
 
-    companion object : MvRxViewModelFactory<HomeDetailViewModel, HomeDetailViewState> {
+    companion object : MavericksViewModelFactory<HomeDetailViewModel, HomeDetailViewState> {
 
         override fun initialState(viewModelContext: ViewModelContext): HomeDetailViewState? {
             val uiStateRepository = (viewModelContext.activity as HasScreenInjector).injector().uiStateRepository()

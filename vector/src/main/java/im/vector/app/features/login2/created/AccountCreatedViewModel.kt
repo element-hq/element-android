@@ -18,7 +18,7 @@ package im.vector.app.features.login2.created
 
 import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -43,7 +43,7 @@ class AccountCreatedViewModel @AssistedInject constructor(
         fun create(initialState: AccountCreatedViewState): AccountCreatedViewModel
     }
 
-    companion object : MvRxViewModelFactory<AccountCreatedViewModel, AccountCreatedViewState> {
+    companion object : MavericksViewModelFactory<AccountCreatedViewModel, AccountCreatedViewState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: AccountCreatedViewState): AccountCreatedViewModel? {

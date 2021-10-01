@@ -18,7 +18,7 @@ package im.vector.app.features.roomprofile.notifications
 
 import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
@@ -41,7 +41,7 @@ class RoomNotificationSettingsViewModel @AssistedInject constructor(
         fun create(initialState: RoomNotificationSettingsViewState): RoomNotificationSettingsViewModel
     }
 
-    companion object : MvRxViewModelFactory<RoomNotificationSettingsViewModel, RoomNotificationSettingsViewState> {
+    companion object : MavericksViewModelFactory<RoomNotificationSettingsViewModel, RoomNotificationSettingsViewState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: RoomNotificationSettingsViewState): RoomNotificationSettingsViewModel {

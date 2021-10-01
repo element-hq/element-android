@@ -23,7 +23,7 @@ import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
@@ -165,7 +165,7 @@ class RoomDetailViewModel @AssistedInject constructor(
         fun create(initialState: RoomDetailViewState): RoomDetailViewModel
     }
 
-    companion object : MvRxViewModelFactory<RoomDetailViewModel, RoomDetailViewState> {
+    companion object : MavericksViewModelFactory<RoomDetailViewModel, RoomDetailViewState> {
 
         const val PAGINATION_COUNT = 50
 

@@ -18,7 +18,7 @@ package im.vector.app.features.roomprofile.members
 
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -60,7 +60,7 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
         fun create(initialState: RoomMemberListViewState): RoomMemberListViewModel
     }
 
-    companion object : MvRxViewModelFactory<RoomMemberListViewModel, RoomMemberListViewState> {
+    companion object : MavericksViewModelFactory<RoomMemberListViewModel, RoomMemberListViewState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: RoomMemberListViewState): RoomMemberListViewModel? {

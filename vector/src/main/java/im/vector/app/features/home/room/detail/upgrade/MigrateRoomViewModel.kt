@@ -19,7 +19,7 @@ package im.vector.app.features.home.room.detail.upgrade
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
@@ -55,7 +55,7 @@ class MigrateRoomViewModel @AssistedInject constructor(
         fun create(initialState: MigrateRoomViewState): MigrateRoomViewModel
     }
 
-    companion object : MvRxViewModelFactory<MigrateRoomViewModel, MigrateRoomViewState> {
+    companion object : MavericksViewModelFactory<MigrateRoomViewModel, MigrateRoomViewState> {
 
         override fun create(viewModelContext: ViewModelContext, state: MigrateRoomViewState): MigrateRoomViewModel? {
             val factory = when (viewModelContext) {

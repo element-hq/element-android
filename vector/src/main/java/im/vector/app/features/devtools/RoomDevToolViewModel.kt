@@ -21,7 +21,7 @@ import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.moshi.Types
@@ -56,7 +56,7 @@ class RoomDevToolViewModel @AssistedInject constructor(
         fun create(initialState: RoomDevToolViewState): RoomDevToolViewModel
     }
 
-    companion object : MvRxViewModelFactory<RoomDevToolViewModel, RoomDevToolViewState> {
+    companion object : MavericksViewModelFactory<RoomDevToolViewModel, RoomDevToolViewState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: RoomDevToolViewState): RoomDevToolViewModel {

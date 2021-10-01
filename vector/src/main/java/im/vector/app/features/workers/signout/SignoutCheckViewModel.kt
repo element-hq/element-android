@@ -23,7 +23,7 @@ import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksState
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
@@ -69,7 +69,7 @@ class SignoutCheckViewModel @AssistedInject constructor(
         fun create(initialState: SignoutCheckViewState): SignoutCheckViewModel
     }
 
-    companion object : MvRxViewModelFactory<SignoutCheckViewModel, SignoutCheckViewState> {
+    companion object : MavericksViewModelFactory<SignoutCheckViewModel, SignoutCheckViewState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: SignoutCheckViewState): SignoutCheckViewModel? {

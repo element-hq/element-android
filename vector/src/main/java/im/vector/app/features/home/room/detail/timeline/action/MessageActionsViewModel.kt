@@ -16,7 +16,7 @@
 package im.vector.app.features.home.room.detail.timeline.action
 
 import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import dagger.Lazy
 import dagger.assisted.Assisted
@@ -89,7 +89,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
         fun create(initialState: MessageActionState): MessageActionsViewModel
     }
 
-    companion object : MvRxViewModelFactory<MessageActionsViewModel, MessageActionState> {
+    companion object : MavericksViewModelFactory<MessageActionsViewModel, MessageActionState> {
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: MessageActionState): MessageActionsViewModel? {
             val fragment: MessageActionsBottomSheet = (viewModelContext as FragmentViewModelContext).fragment()

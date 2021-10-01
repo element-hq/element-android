@@ -18,7 +18,7 @@ package im.vector.app.features.rageshake
 
 import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.ActivityViewModelContext
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -40,7 +40,7 @@ class BugReportViewModel @AssistedInject constructor(
         fun create(initialState: BugReportState): BugReportViewModel
     }
 
-    companion object : MvRxViewModelFactory<BugReportViewModel, BugReportState> {
+    companion object : MavericksViewModelFactory<BugReportViewModel, BugReportState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: BugReportState): BugReportViewModel? {

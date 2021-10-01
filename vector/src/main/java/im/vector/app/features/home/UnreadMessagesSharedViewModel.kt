@@ -19,7 +19,7 @@ package im.vector.app.features.home
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MavericksState
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -65,7 +65,7 @@ class UnreadMessagesSharedViewModel @AssistedInject constructor(@Assisted initia
         fun create(initialState: UnreadMessagesState): UnreadMessagesSharedViewModel
     }
 
-    companion object : MvRxViewModelFactory<UnreadMessagesSharedViewModel, UnreadMessagesState> {
+    companion object : MavericksViewModelFactory<UnreadMessagesSharedViewModel, UnreadMessagesState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: UnreadMessagesState): UnreadMessagesSharedViewModel? {

@@ -19,7 +19,7 @@ package im.vector.app.features.roomprofile.settings
 import androidx.core.net.toFile
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -59,7 +59,7 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
         fun create(initialState: RoomSettingsViewState): RoomSettingsViewModel
     }
 
-    companion object : MvRxViewModelFactory<RoomSettingsViewModel, RoomSettingsViewState> {
+    companion object : MavericksViewModelFactory<RoomSettingsViewModel, RoomSettingsViewState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: RoomSettingsViewState): RoomSettingsViewModel? {

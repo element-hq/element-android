@@ -19,7 +19,7 @@ package im.vector.app.features.home.room.detail.timeline.reactions
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MavericksState
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
@@ -74,7 +74,7 @@ class ViewReactionsViewModel @AssistedInject constructor(@Assisted
         fun create(initialState: DisplayReactionsViewState): ViewReactionsViewModel
     }
 
-    companion object : MvRxViewModelFactory<ViewReactionsViewModel, DisplayReactionsViewState> {
+    companion object : MavericksViewModelFactory<ViewReactionsViewModel, DisplayReactionsViewState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: DisplayReactionsViewState): ViewReactionsViewModel? {

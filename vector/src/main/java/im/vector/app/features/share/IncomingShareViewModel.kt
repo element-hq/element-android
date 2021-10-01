@@ -17,7 +17,7 @@
 package im.vector.app.features.share
 
 import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import com.jakewharton.rxrelay2.BehaviorRelay
 import dagger.assisted.Assisted
@@ -48,7 +48,7 @@ class IncomingShareViewModel @AssistedInject constructor(
         fun create(initialState: IncomingShareViewState): IncomingShareViewModel
     }
 
-    companion object : MvRxViewModelFactory<IncomingShareViewModel, IncomingShareViewState> {
+    companion object : MavericksViewModelFactory<IncomingShareViewModel, IncomingShareViewState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: IncomingShareViewState): IncomingShareViewModel? {

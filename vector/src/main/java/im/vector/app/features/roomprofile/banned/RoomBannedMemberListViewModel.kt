@@ -17,7 +17,7 @@
 package im.vector.app.features.roomprofile.banned
 
 import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
@@ -78,7 +78,7 @@ class RoomBannedMemberListViewModel @AssistedInject constructor(@Assisted initia
                 }
     }
 
-    companion object : MvRxViewModelFactory<RoomBannedMemberListViewModel, RoomBannedMemberListViewState> {
+    companion object : MavericksViewModelFactory<RoomBannedMemberListViewModel, RoomBannedMemberListViewState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: RoomBannedMemberListViewState): RoomBannedMemberListViewModel? {

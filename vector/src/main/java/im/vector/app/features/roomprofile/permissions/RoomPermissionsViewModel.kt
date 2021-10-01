@@ -17,7 +17,7 @@
 package im.vector.app.features.roomprofile.permissions
 
 import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
@@ -46,7 +46,7 @@ class RoomPermissionsViewModel @AssistedInject constructor(@Assisted initialStat
         fun create(initialState: RoomPermissionsViewState): RoomPermissionsViewModel
     }
 
-    companion object : MvRxViewModelFactory<RoomPermissionsViewModel, RoomPermissionsViewState> {
+    companion object : MavericksViewModelFactory<RoomPermissionsViewModel, RoomPermissionsViewState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: RoomPermissionsViewState): RoomPermissionsViewModel? {

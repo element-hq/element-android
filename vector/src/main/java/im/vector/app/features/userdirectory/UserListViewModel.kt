@@ -18,7 +18,7 @@ package im.vector.app.features.userdirectory
 
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import com.jakewharton.rxrelay2.BehaviorRelay
@@ -63,7 +63,7 @@ class UserListViewModel @AssistedInject constructor(@Assisted initialState: User
         fun create(initialState: UserListViewState): UserListViewModel
     }
 
-    companion object : MvRxViewModelFactory<UserListViewModel, UserListViewState> {
+    companion object : MavericksViewModelFactory<UserListViewModel, UserListViewState> {
 
         override fun create(viewModelContext: ViewModelContext, state: UserListViewState): UserListViewModel? {
             val factory = when (viewModelContext) {
