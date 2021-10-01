@@ -51,9 +51,9 @@ data class LoginViewState(
         // Network result
         @PersistState
         val loginMode: LoginMode = LoginMode.Unknown,
-        @PersistState
         // Supported types for the login. We cannot use a sealed class for LoginType because it is not serializable
-        val loginModeSupportedTypes: List<String> = emptyList(),
+        @PersistState
+val loginModeSupportedTypes: List<String> = emptyList(),
         val knownCustomHomeServersUrls: List<String> = emptyList()
 ) : MvRxState {
 

@@ -21,7 +21,6 @@ import android.view.ViewGroup
 import com.google.zxing.Result
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentQrCodeScannerBinding
-
 import me.dm7.barcodescanner.zxing.ZXingScannerView
 import javax.inject.Inject
 

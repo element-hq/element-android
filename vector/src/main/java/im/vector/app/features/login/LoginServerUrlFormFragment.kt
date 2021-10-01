@@ -33,7 +33,6 @@ import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.utils.ensureProtocol
 import im.vector.app.core.utils.openUrlInChromeCustomTab
 import im.vector.app.databinding.FragmentLoginServerUrlFormBinding
-
 import org.matrix.android.sdk.api.failure.Failure
 import java.net.UnknownHostException
 import javax.inject.Inject

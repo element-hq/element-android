@@ -18,8 +18,8 @@ package org.matrix.android.sdk.internal.session.room.draft
 
 import androidx.lifecycle.LiveData
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.session.room.send.DraftService
 import org.matrix.android.sdk.api.session.room.send.UserDraft

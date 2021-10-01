@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.internal.session.room.notification
 
 import com.zhuinden.monarchy.Monarchy
+import io.realm.Realm
 import org.matrix.android.sdk.api.pushrules.RuleScope
 import org.matrix.android.sdk.api.session.room.notification.RoomNotificationState
 import org.matrix.android.sdk.internal.database.model.PushRuleEntity
@@ -25,7 +26,6 @@ import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.session.pushers.AddPushRuleTask
 import org.matrix.android.sdk.internal.session.pushers.RemovePushRuleTask
 import org.matrix.android.sdk.internal.task.Task
-import io.realm.Realm
 import javax.inject.Inject
 
 internal interface SetRoomNotificationStateTask : Task<SetRoomNotificationStateTask.Params, Unit> {

@@ -28,6 +28,7 @@ data class SpacePeekSummary(
 interface ISpaceChild {
     val id: String
     val roomPeekResult: PeekResult
+
 //    val default: Boolean?
     val order: String?
 }

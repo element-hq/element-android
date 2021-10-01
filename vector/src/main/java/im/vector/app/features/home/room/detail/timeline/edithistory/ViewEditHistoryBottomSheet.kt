@@ -30,7 +30,6 @@ import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.databinding.BottomSheetGenericListWithTitleBinding
 import im.vector.app.features.home.room.detail.timeline.action.TimelineEventFragmentArgs
 import im.vector.app.features.home.room.detail.timeline.item.MessageInformationData
-
 import javax.inject.Inject
 
 /**

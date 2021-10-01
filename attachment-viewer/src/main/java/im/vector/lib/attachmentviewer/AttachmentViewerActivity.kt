@@ -39,7 +39,6 @@ import androidx.core.view.updatePadding
 import androidx.transition.TransitionManager
 import androidx.viewpager2.widget.ViewPager2
 import im.vector.lib.attachmentviewer.databinding.ActivityAttachmentViewerBinding
-
 import java.lang.ref.WeakReference
 import kotlin.math.abs
 

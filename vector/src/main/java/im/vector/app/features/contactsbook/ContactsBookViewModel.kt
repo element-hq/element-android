@@ -24,8 +24,8 @@ import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import im.vector.app.core.contacts.ContactsDataSource
 import im.vector.app.core.contacts.MappedContact
 import im.vector.app.core.extensions.exhaustive

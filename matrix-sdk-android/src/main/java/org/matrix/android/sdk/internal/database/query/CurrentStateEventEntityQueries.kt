@@ -17,11 +17,11 @@
 
 package org.matrix.android.sdk.internal.database.query
 
-import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntity
-import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntityFields
 import io.realm.Realm
 import io.realm.RealmQuery
 import io.realm.kotlin.createObject
+import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntity
+import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntityFields
 
 internal fun CurrentStateEventEntity.Companion.whereType(realm: Realm, roomId: String, type: String): RealmQuery<CurrentStateEventEntity> {
     return realm.where(CurrentStateEventEntity::class.java)

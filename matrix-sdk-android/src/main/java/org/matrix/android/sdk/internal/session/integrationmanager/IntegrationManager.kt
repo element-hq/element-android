@@ -22,6 +22,9 @@ import androidx.lifecycle.LifecycleRegistry
 import com.zhuinden.monarchy.Monarchy
 import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.SessionLifecycleObserver
+import org.matrix.android.sdk.api.session.accountdata.UserAccountDataEvent
+import org.matrix.android.sdk.api.session.accountdata.UserAccountDataTypes
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerConfig
 import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerService
@@ -30,12 +33,9 @@ import org.matrix.android.sdk.api.session.widgets.model.WidgetType
 import org.matrix.android.sdk.internal.database.model.WellknownIntegrationManagerConfigEntity
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.extensions.observeNotNull
-import org.matrix.android.sdk.api.session.SessionLifecycleObserver
 import org.matrix.android.sdk.internal.session.SessionScope
-import org.matrix.android.sdk.api.session.accountdata.UserAccountDataTypes
-import org.matrix.android.sdk.api.session.accountdata.UserAccountDataEvent
-import org.matrix.android.sdk.internal.session.user.accountdata.UserAccountDataDataSource
 import org.matrix.android.sdk.internal.session.user.accountdata.UpdateUserAccountDataTask
+import org.matrix.android.sdk.internal.session.user.accountdata.UserAccountDataDataSource
 import org.matrix.android.sdk.internal.session.widgets.helper.WidgetFactory
 import org.matrix.android.sdk.internal.session.widgets.helper.extractWidgetSequence
 import timber.log.Timber

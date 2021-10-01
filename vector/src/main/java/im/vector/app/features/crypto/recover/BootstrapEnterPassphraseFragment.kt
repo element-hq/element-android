@@ -30,7 +30,6 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentBootstrapEnterPassphraseBinding
 import im.vector.app.features.settings.VectorLocale
 import io.reactivex.android.schedulers.AndroidSchedulers
-
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 

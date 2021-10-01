@@ -16,7 +16,6 @@
 
 package org.matrix.android.sdk.internal.task
 
-import org.matrix.android.sdk.MatrixTest
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.delay
@@ -25,6 +24,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Test
+import org.matrix.android.sdk.MatrixTest
 import java.util.concurrent.Executors
 
 class CoroutineSequencersTest: MatrixTest {

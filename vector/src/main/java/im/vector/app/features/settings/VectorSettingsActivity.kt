@@ -30,7 +30,6 @@ import im.vector.app.features.discovery.DiscoverySettingsFragment
 import im.vector.app.features.settings.devices.VectorSettingsDevicesFragment
 import im.vector.app.features.settings.notifications.VectorSettingsNotificationPreferenceFragment
 import im.vector.app.features.settings.threepids.ThreePidsSettingsFragment
-
 import org.matrix.android.sdk.api.failure.GlobalError
 import org.matrix.android.sdk.api.session.Session
 import timber.log.Timber

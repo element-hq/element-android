@@ -21,7 +21,6 @@ import androidx.core.view.isVisible
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.databinding.ActivityBinding
-
 import org.matrix.android.sdk.api.session.Session
 
 /**

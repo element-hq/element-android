@@ -36,7 +36,6 @@ import im.vector.app.core.utils.showIdentityServerConsentDialog
 import im.vector.app.databinding.FragmentGenericRecyclerBinding
 import im.vector.app.features.discovery.change.SetIdentityServerFragment
 import im.vector.app.features.settings.VectorSettingsActivity
-
 import org.matrix.android.sdk.api.session.identity.SharedState
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.terms.TermsService

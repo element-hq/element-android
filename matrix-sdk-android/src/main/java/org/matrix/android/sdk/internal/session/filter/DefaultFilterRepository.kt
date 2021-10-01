@@ -17,14 +17,14 @@
 package org.matrix.android.sdk.internal.session.filter
 
 import com.zhuinden.monarchy.Monarchy
+import io.realm.Realm
+import io.realm.kotlin.where
 import org.matrix.android.sdk.internal.database.model.FilterEntity
 import org.matrix.android.sdk.internal.database.model.FilterEntityFields
 import org.matrix.android.sdk.internal.database.query.get
 import org.matrix.android.sdk.internal.database.query.getOrCreate
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.util.awaitTransaction
-import io.realm.Realm
-import io.realm.kotlin.where
 import javax.inject.Inject
 
 internal class DefaultFilterRepository @Inject constructor(@SessionDatabase private val monarchy: Monarchy) : FilterRepository {

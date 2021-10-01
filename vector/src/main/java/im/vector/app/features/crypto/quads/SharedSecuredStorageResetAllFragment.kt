@@ -27,7 +27,6 @@ import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentSsssResetAllBinding
 import im.vector.app.features.roommemberprofile.devices.DeviceListBottomSheet
-
 import javax.inject.Inject
 
 class SharedSecuredStorageResetAllFragment @Inject constructor()

@@ -16,11 +16,11 @@
 
 package org.matrix.android.sdk.internal.crypto.keysbackup
 
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupService
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupState
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupStateListener
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNull
 import java.util.concurrent.CountDownLatch
 
 /**

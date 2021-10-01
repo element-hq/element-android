@@ -18,10 +18,10 @@ package org.matrix.android.sdk.internal.session.room.notification
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
-import dagger.assisted.AssistedFactory
 import com.zhuinden.monarchy.Monarchy
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import org.matrix.android.sdk.api.pushrules.RuleScope
 import org.matrix.android.sdk.api.session.room.notification.RoomNotificationState
 import org.matrix.android.sdk.api.session.room.notification.RoomPushRuleService

@@ -17,8 +17,6 @@
 package org.matrix.android.sdk.internal.database
 
 import com.zhuinden.monarchy.Monarchy
-import org.matrix.android.sdk.api.session.SessionLifecycleObserver
-import org.matrix.android.sdk.internal.util.createBackgroundHandler
 import io.realm.Realm
 import io.realm.RealmChangeListener
 import io.realm.RealmConfiguration
@@ -29,6 +27,8 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.android.asCoroutineDispatcher
 import kotlinx.coroutines.cancelChildren
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.SessionLifecycleObserver
+import org.matrix.android.sdk.internal.util.createBackgroundHandler
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicReference
 

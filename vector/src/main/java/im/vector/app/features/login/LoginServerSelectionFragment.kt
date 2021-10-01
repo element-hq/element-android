@@ -23,7 +23,6 @@ import android.view.ViewGroup
 import im.vector.app.R
 import im.vector.app.core.utils.openUrlInChromeCustomTab
 import im.vector.app.databinding.FragmentLoginServerSelectionBinding
-
 import me.gujun.android.span.span
 import javax.inject.Inject
 

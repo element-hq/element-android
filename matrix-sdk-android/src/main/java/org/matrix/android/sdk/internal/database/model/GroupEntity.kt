@@ -16,9 +16,9 @@
 
 package org.matrix.android.sdk.internal.database.model
 
-import org.matrix.android.sdk.api.session.room.model.Membership
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
+import org.matrix.android.sdk.api.session.room.model.Membership
 
 /**
  * This class is used to store group info (groupId and membership) from the sync response.

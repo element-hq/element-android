@@ -21,8 +21,8 @@ import androidx.annotation.MainThread
 import com.zhuinden.monarchy.Monarchy
 import io.realm.Realm
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.api.session.SessionLifecycleObserver
+import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.session.SessionScope
 import javax.inject.Inject
 import kotlin.concurrent.getOrSet

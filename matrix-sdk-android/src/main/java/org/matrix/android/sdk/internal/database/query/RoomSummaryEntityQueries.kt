@@ -16,13 +16,13 @@
 
 package org.matrix.android.sdk.internal.database.query
 
-import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
-import org.matrix.android.sdk.internal.database.model.RoomSummaryEntityFields
 import io.realm.Realm
 import io.realm.RealmQuery
 import io.realm.RealmResults
 import io.realm.kotlin.createObject
 import io.realm.kotlin.where
+import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
+import org.matrix.android.sdk.internal.database.model.RoomSummaryEntityFields
 
 internal fun RoomSummaryEntity.Companion.where(realm: Realm, roomId: String? = null): RealmQuery<RoomSummaryEntity> {
     val query = realm.where<RoomSummaryEntity>()

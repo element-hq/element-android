@@ -25,7 +25,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.databinding.DialogEditPowerLevelBinding
-
 import org.matrix.android.sdk.api.session.room.powerlevels.Role
 
 object EditPowerLevelDialogs {

@@ -16,9 +16,9 @@
 
 package org.matrix.android.sdk.internal.session
 
+import io.realm.Realm
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.internal.database.model.EventInsertType
-import io.realm.Realm
 
 internal interface EventInsertLiveProcessor {
 

@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.internal.crypto.store.db
 
+import io.realm.annotations.RealmModule
 import org.matrix.android.sdk.internal.crypto.store.db.model.CrossSigningInfoEntity
 import org.matrix.android.sdk.internal.crypto.store.db.model.CryptoMetadataEntity
 import org.matrix.android.sdk.internal.crypto.store.db.model.CryptoRoomEntity
@@ -27,13 +28,12 @@ import org.matrix.android.sdk.internal.crypto.store.db.model.KeysBackupDataEntit
 import org.matrix.android.sdk.internal.crypto.store.db.model.MyDeviceLastSeenInfoEntity
 import org.matrix.android.sdk.internal.crypto.store.db.model.OlmInboundGroupSessionEntity
 import org.matrix.android.sdk.internal.crypto.store.db.model.OlmSessionEntity
+import org.matrix.android.sdk.internal.crypto.store.db.model.OutboundGroupSessionInfoEntity
 import org.matrix.android.sdk.internal.crypto.store.db.model.OutgoingGossipingRequestEntity
 import org.matrix.android.sdk.internal.crypto.store.db.model.SharedSessionEntity
 import org.matrix.android.sdk.internal.crypto.store.db.model.TrustLevelEntity
 import org.matrix.android.sdk.internal.crypto.store.db.model.UserEntity
 import org.matrix.android.sdk.internal.crypto.store.db.model.WithHeldSessionEntity
-import io.realm.annotations.RealmModule
-import org.matrix.android.sdk.internal.crypto.store.db.model.OutboundGroupSessionInfoEntity
 
 /**
  * Realm module for Crypto store classes

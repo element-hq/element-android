@@ -49,6 +49,7 @@ val RoomNotificationSettingsViewState.notificationStateMapped: Async<RoomNotific
         }
         return  notificationState
     }
+
 /**
  * Used to enumerate the new settings in notification settings v2. Notifications without sound and mentions in encrypted rooms not supported.
  */

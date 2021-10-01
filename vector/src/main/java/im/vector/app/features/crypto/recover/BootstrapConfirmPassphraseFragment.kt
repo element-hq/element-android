@@ -31,7 +31,6 @@ import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentBootstrapEnterPassphraseBinding
 import io.reactivex.android.schedulers.AndroidSchedulers
-
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 

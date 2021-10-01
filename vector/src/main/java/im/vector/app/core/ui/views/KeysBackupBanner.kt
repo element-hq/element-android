@@ -25,7 +25,6 @@ import androidx.core.view.isVisible
 import im.vector.app.R
 import im.vector.app.core.di.DefaultSharedPreferences
 import im.vector.app.databinding.ViewKeysBackupBannerBinding
-
 import timber.log.Timber
 
 /**

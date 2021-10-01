@@ -17,10 +17,10 @@
 package org.matrix.android.sdk.internal.session.call
 
 import io.realm.Realm
+import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.internal.database.model.EventInsertType
-import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.internal.session.EventInsertLiveProcessor
 import org.matrix.android.sdk.internal.session.SessionScope
 import timber.log.Timber
