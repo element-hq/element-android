@@ -52,15 +52,33 @@ interface PushersService {
      *                          (LiveData<WorkInfo> status = workManager.getWorkInfoByIdLiveData(<UUID>))
      * @throws [InvalidParameterException] if a parameter is not correct
      */
-    fun addHttpPusher(pushkey: String,
-                      appId: String,
-                      profileTag: String,
-                      lang: String,
-                      appDisplayName: String,
-                      deviceDisplayName: String,
-                      url: String,
-                      append: Boolean,
-                      withEventIdOnly: Boolean): UUID
+    suspend fun addHttpPusher(pushkey: String,
+                              appId: String,
+                              profileTag: String,
+                              lang: String,
+                              appDisplayName: String,
+                              deviceDisplayName: String,
+                              url: String,
+                              append: Boolean,
+                              withEventIdOnly: Boolean)
+
+    /**
+     * Enqueues a new HTTP pusher via the WorkManager API.
+     * Ref: https://matrix.org/docs/spec/client_server/latest#post-matrix-client-r0-pushers-set
+     *
+     * @return A work request uuid. Can be used to listen to the status
+     *         (LiveData<WorkInfo> status = workManager.getWorkInfoByIdLiveData(<UUID>))
+     * @throws [InvalidParameterException] if a parameter is not correct
+     */
+    fun enqueueAddHttpPusher(pushkey: String,
+                             appId: String,
+                             profileTag: String,
+                             lang: String,
+                             appDisplayName: String,
+                             deviceDisplayName: String,
+                             url: String,
+                             append: Boolean,
+                             withEventIdOnly: Boolean): UUID
 
     /**
      * Add a new Email pusher.
@@ -75,16 +93,14 @@ interface PushersService {
      *                          to any others with different user IDs. Otherwise, the homeserver must remove any other pushers
      *                          with the same App ID and pushkey for different users. Typically We always want to append for
      *                          email pushers since we don't want to stop other accounts notifying to the same email address.
-     * @return                  A work request uuid. Can be used to listen to the status
-     *                          (LiveData<WorkInfo> status = workManager.getWorkInfoByIdLiveData(<UUID>))
      * @throws [InvalidParameterException] if a parameter is not correct
      */
-    fun addEmailPusher(email: String,
-                       lang: String,
-                       emailBranding: String,
-                       appDisplayName: String,
-                       deviceDisplayName: String,
-                       append: Boolean = true): UUID
+    suspend fun addEmailPusher(email: String,
+                               lang: String,
+                               emailBranding: String,
+                               appDisplayName: String,
+                               deviceDisplayName: String,
+                               append: Boolean = true)
 
     /**
      * Directly ask the push gateway to send a push to this device

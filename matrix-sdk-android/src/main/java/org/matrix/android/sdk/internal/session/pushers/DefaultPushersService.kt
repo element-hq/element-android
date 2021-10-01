@@ -30,7 +30,6 @@ import org.matrix.android.sdk.internal.session.pushers.gateway.PushGatewayNotify
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.task.configureWith
 import org.matrix.android.sdk.internal.worker.WorkerParamsFactory
-import java.security.InvalidParameterException
 import java.util.UUID
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -41,6 +40,7 @@ internal class DefaultPushersService @Inject constructor(
         @SessionId private val sessionId: String,
         private val getPusherTask: GetPushersTask,
         private val pushGatewayNotifyTask: PushGatewayNotifyTask,
+        private val addPusherTask: AddPusherTask,
         private val removePusherTask: RemovePusherTask,
         private val taskExecutor: TaskExecutor
 ) : PushersService {
@@ -58,51 +58,79 @@ internal class DefaultPushersService @Inject constructor(
                 .executeBy(taskExecutor)
     }
 
-    override fun addHttpPusher(pushkey: String,
-                               appId: String,
-                               profileTag: String,
-                               lang: String,
-                               appDisplayName: String,
-                               deviceDisplayName: String,
-                               url: String,
-                               append: Boolean,
-                               withEventIdOnly: Boolean
-    ) = addPusher(
-            JsonPusher(
-                    pushKey = pushkey,
-                    kind = Pusher.KIND_HTTP,
-                    appId = appId,
-                    profileTag = profileTag,
-                    lang = lang,
-                    appDisplayName = appDisplayName,
-                    deviceDisplayName = deviceDisplayName,
-                    data = JsonPusherData(url, EVENT_ID_ONLY.takeIf { withEventIdOnly }),
-                    append = append
-            )
-    )
+    override fun enqueueAddHttpPusher(pushkey: String,
+                                      appId: String,
+                                      profileTag: String,
+                                      lang: String,
+                                      appDisplayName: String,
+                                      deviceDisplayName: String,
+                                      url: String,
+                                      append: Boolean,
+                                      withEventIdOnly: Boolean
+    ): UUID {
+        return enqueueAddPusher(
+                JsonPusher(
+                        pushKey = pushkey,
+                        kind = "http",
+                        appId = appId,
+                        profileTag = profileTag,
+                        lang = lang,
+                        appDisplayName = appDisplayName,
+                        deviceDisplayName = deviceDisplayName,
+                        data = JsonPusherData(url, EVENT_ID_ONLY.takeIf { withEventIdOnly }),
+                        append = append
+                )
+        )
+    }
 
-    override fun addEmailPusher(email: String,
-                                lang: String,
-                                emailBranding: String,
-                                appDisplayName: String,
-                                deviceDisplayName: String,
-                                append: Boolean
-    ) = addPusher(
-            JsonPusher(
-                    pushKey = email,
-                    kind = Pusher.KIND_EMAIL,
-                    appId = Pusher.APP_ID_EMAIL,
-                    profileTag = "",
-                    lang = lang,
-                    appDisplayName = appDisplayName,
-                    deviceDisplayName = deviceDisplayName,
-                    data = JsonPusherData(brand = emailBranding),
-                    append = append
-            )
-    )
+    override suspend fun addHttpPusher(pushkey: String,
+                                       appId: String,
+                                       profileTag: String,
+                                       lang: String,
+                                       appDisplayName: String,
+                                       deviceDisplayName: String,
+                                       url: String,
+                                       append: Boolean,
+                                       withEventIdOnly: Boolean) {
+        addPusherTask.execute(
+                AddPusherTask.Params(
+                        JsonPusher(
+                                pushKey = pushkey,
+                                kind = "http",
+                                appId = appId,
+                                profileTag = profileTag,
+                                lang = lang,
+                                appDisplayName = appDisplayName,
+                                deviceDisplayName = deviceDisplayName,
+                                data = JsonPusherData(url, EVENT_ID_ONLY.takeIf { withEventIdOnly }),
+                                append = append
+                        )
+                )
+        )
+    }
 
-    private fun addPusher(pusher: JsonPusher): UUID {
-        pusher.validateParameters()
+    override suspend fun addEmailPusher(email: String,
+                                        lang: String,
+                                        emailBranding: String,
+                                        appDisplayName: String,
+                                        deviceDisplayName: String,
+                                        append: Boolean) {
+        addPusherTask.execute(
+                AddPusherTask.Params(JsonPusher(
+                        pushKey = email,
+                        kind = Pusher.KIND_EMAIL,
+                        appId = Pusher.APP_ID_EMAIL,
+                        profileTag = "",
+                        lang = lang,
+                        appDisplayName = appDisplayName,
+                        deviceDisplayName = deviceDisplayName,
+                        data = JsonPusherData(brand = emailBranding),
+                        append = append
+                ))
+        )
+    }
+
+    private fun enqueueAddPusher(pusher: JsonPusher): UUID {
         val params = AddPusherWorker.Params(sessionId, pusher)
         val request = workManagerProvider.matrixOneTimeWorkRequestBuilder<AddPusherWorker>()
                 .setConstraints(WorkManagerProvider.workConstraints)
@@ -111,13 +139,6 @@ internal class DefaultPushersService @Inject constructor(
                 .build()
         workManagerProvider.workManager.enqueue(request)
         return request.id
-    }
-
-    private fun JsonPusher.validateParameters() {
-        // Do some parameter checks. It's ok to throw Exception, to inform developer of the problem
-        if (pushKey.length > 512) throw InvalidParameterException("pushkey should not exceed 512 chars")
-        if (appId.length > 64) throw InvalidParameterException("appId should not exceed 64 chars")
-        data?.url?.let { url -> if ("/_matrix/push/v1/notify" !in url) throw InvalidParameterException("url should contain '/_matrix/push/v1/notify'") }
     }
 
     override suspend fun removePusher(pusher: Pusher) {

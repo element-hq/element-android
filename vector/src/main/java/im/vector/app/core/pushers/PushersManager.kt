@@ -48,7 +48,7 @@ class PushersManager @Inject constructor(
         val currentSession = activeSessionHolder.getActiveSession()
         val profileTag = DEFAULT_PUSHER_FILE_TAG + "_" + abs(currentSession.myUserId.hashCode())
 
-        return currentSession.addHttpPusher(
+        return currentSession.enqueueAddHttpPusher(
                 pushKey,
                 stringProvider.getString(R.string.pusher_app_id),
                 profileTag,
@@ -61,7 +61,7 @@ class PushersManager @Inject constructor(
         )
     }
 
-    fun registerEmailForPush(email: String) {
+    suspend fun registerEmailForPush(email: String) {
         val currentSession = activeSessionHolder.getActiveSession()
         val appName = appNameProvider.getAppName()
         currentSession.addEmailPusher(
