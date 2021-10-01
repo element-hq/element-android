@@ -38,7 +38,6 @@ import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.copyOnLongClick
 import im.vector.app.core.extensions.exhaustive
-import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.copyToClipboard
 import im.vector.app.core.utils.startSharePlainTextIntent
@@ -210,7 +209,8 @@ class RoomProfileFragment @Inject constructor(
             } else {
                 headerViews.roomProfileNameView.text = it.displayName
                 views.matrixProfileToolbarTitleView.text = it.displayName
-                headerViews.roomProfileAliasView.setTextOrHide(it.canonicalAlias)
+//                headerViews.roomProfileAliasView.setTextOrHide(it.canonicalAlias)
+                headerViews.roomProfileAliasView.isVisible = false // Hidden in Tchap
                 val matrixItem = it.toMatrixItem()
                 avatarRenderer.render(matrixItem, headerViews.roomProfileAvatarView)
                 avatarRenderer.render(matrixItem, views.matrixProfileToolbarAvatarImageView)
