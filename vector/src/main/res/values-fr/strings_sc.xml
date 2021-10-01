@@ -87,4 +87,6 @@
     <string name="sc_accent_cyan">Cyan</string>
     <string name="sc_accent_gold">Or</string>
     <string name="sc_accent_turquoise">Turquoise</string>
+    <string name="settings_unread_counter">Compteur des non lus</string>
+    <string name="settings_apply_sc_default_settings">Ne pas cliquer sur ce paramètre</string>
 </resources>
