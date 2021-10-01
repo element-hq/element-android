@@ -73,8 +73,8 @@ internal interface VerificationInfoStart : VerificationInfo<ValidVerificationInf
                 val validHashes = hashes?.takeIf { it.contains("sha256") } ?: return null
                 val validMessageAuthenticationCodes = messageAuthenticationCodes
                         ?.takeIf {
-                            it.contains(SASDefaultVerificationTransaction.SAS_MAC_SHA256)
-                                    || it.contains(SASDefaultVerificationTransaction.SAS_MAC_SHA256_LONGKDF)
+                            it.contains(SASDefaultVerificationTransaction.SAS_MAC_SHA256) ||
+                                    it.contains(SASDefaultVerificationTransaction.SAS_MAC_SHA256_LONGKDF)
                         }
                         ?: return null
                 val validShortAuthenticationStrings = shortAuthenticationStrings?.takeIf { it.contains(SasMode.DECIMAL) } ?: return null

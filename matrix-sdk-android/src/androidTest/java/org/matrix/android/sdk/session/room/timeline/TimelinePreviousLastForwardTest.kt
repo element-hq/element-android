@@ -107,8 +107,8 @@ class TimelinePreviousLastForwardTest : InstrumentedTest {
                 }
 
                 // Ok, we have the 10 last messages from Alice. This will be our future previous lastForward chunk
-                snapshot.size == 10
-                        && snapshot.all { it.root.content.toModel<MessageContent>()?.body?.startsWith(firstMessage).orFalse() }
+                snapshot.size == 10 &&
+                        snapshot.all { it.root.content.toModel<MessageContent>()?.body?.startsWith(firstMessage).orFalse() }
             }
 
             bobTimeline.addListener(eventsListener)
@@ -141,8 +141,8 @@ class TimelinePreviousLastForwardTest : InstrumentedTest {
                 }
 
                 // Ok, we have the 10 last messages from Alice. This will be our future previous lastForward chunk
-                snapshot.size == 10
-                        && snapshot.all { it.root.content.toModel<MessageContent>()?.body?.startsWith(secondMessage).orFalse() }
+                snapshot.size == 10 &&
+                        snapshot.all { it.root.content.toModel<MessageContent>()?.body?.startsWith(secondMessage).orFalse() }
             }
 
             bobTimeline.addListener(eventsListener)
@@ -216,11 +216,11 @@ class TimelinePreviousLastForwardTest : InstrumentedTest {
                 }
 
                 // Bob can see the first event of the room (so Back pagination has worked)
-                snapshot.lastOrNull()?.root?.getClearType() == EventType.STATE_ROOM_CREATE
+                snapshot.lastOrNull()?.root?.getClearType() == EventType.STATE_ROOM_CREATE &&
                         // 8 for room creation item 60 message from Alice
-                        && snapshot.size == 68 // 8 + 60
-                        && snapshot.checkSendOrder(secondMessage, 30, 0)
-                        && snapshot.checkSendOrder(firstMessage, 30, 30)
+                        snapshot.size == 68 && // 8 + 60
+                        snapshot.checkSendOrder(secondMessage, 30, 0) &&
+                        snapshot.checkSendOrder(firstMessage, 30, 30)
             }
 
             bobTimeline.addListener(eventsListener)

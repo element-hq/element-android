@@ -44,16 +44,16 @@ internal class KeysBackupStateManager(private val uiHandler: Handler) {
         }
 
     val isEnabled: Boolean
-        get() = state == KeysBackupState.ReadyToBackUp
-                || state == KeysBackupState.WillBackUp
-                || state == KeysBackupState.BackingUp
+        get() = state == KeysBackupState.ReadyToBackUp ||
+                state == KeysBackupState.WillBackUp ||
+                state == KeysBackupState.BackingUp
 
     // True if unknown or bad state
     val isStucked: Boolean
-        get() = state == KeysBackupState.Unknown
-                || state == KeysBackupState.Disabled
-                || state == KeysBackupState.WrongBackUpVersion
-                || state == KeysBackupState.NotTrusted
+        get() = state == KeysBackupState.Unknown ||
+                state == KeysBackupState.Disabled ||
+                state == KeysBackupState.WrongBackUpVersion ||
+                state == KeysBackupState.NotTrusted
 
     fun addListener(listener: KeysBackupStateListener) {
         synchronized(listeners) {

@@ -82,8 +82,8 @@ internal class DefaultSetReadMarkersTask @Inject constructor(
                 markers[READ_MARKER] = fullyReadEventId
             }
         }
-        if (readReceiptEventId != null
-                && !isEventRead(monarchy.realmConfiguration, userId, params.roomId, readReceiptEventId)) {
+        if (readReceiptEventId != null &&
+                !isEventRead(monarchy.realmConfiguration, userId, params.roomId, readReceiptEventId)) {
             if (LocalEcho.isLocalEchoId(readReceiptEventId)) {
                 Timber.w("Can't set read receipt for local event $readReceiptEventId")
             } else {

@@ -17,7 +17,6 @@
 package im.vector.app.features.login
 
 import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.PersistState
 import com.airbnb.mvrx.Success
@@ -58,13 +57,13 @@ val loginModeSupportedTypes: List<String> = emptyList(),
 ) : MvRxState {
 
     fun isLoading(): Boolean {
-        return asyncLoginAction is Loading
-                || asyncHomeServerLoginFlowRequest is Loading
-                || asyncResetPassword is Loading
-                || asyncResetMailConfirmed is Loading
-                || asyncRegistration is Loading
+        return asyncLoginAction is Loading ||
+                asyncHomeServerLoginFlowRequest is Loading ||
+                asyncResetPassword is Loading ||
+                asyncResetMailConfirmed is Loading ||
+                asyncRegistration is Loading ||
                 // Keep loading when it is success because of the delay to switch to the next Activity
-                || asyncLoginAction is Success
+                asyncLoginAction is Success
     }
 
     fun isUserLogged(): Boolean {

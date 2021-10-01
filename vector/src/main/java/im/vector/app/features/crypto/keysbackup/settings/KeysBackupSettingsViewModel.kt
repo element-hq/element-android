@@ -163,7 +163,7 @@ class KeysBackupSettingsViewModel @AssistedInject constructor(@Assisted initialS
     fun canExit(): Boolean {
         val currentBackupState = keysBackupService.state
 
-        return currentBackupState == KeysBackupState.Unknown
-                || currentBackupState == KeysBackupState.CheckingBackUpOnHomeserver
+        return currentBackupState == KeysBackupState.Unknown ||
+                currentBackupState == KeysBackupState.CheckingBackUpOnHomeserver
     }
 }

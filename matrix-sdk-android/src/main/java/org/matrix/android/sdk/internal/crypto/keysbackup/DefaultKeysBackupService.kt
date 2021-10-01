@@ -860,8 +860,8 @@ internal class DefaultKeysBackupService @Inject constructor(
                         }
 
                         override fun onFailure(failure: Throwable) {
-                            if (failure is Failure.ServerError
-                                    && failure.error.code == MatrixError.M_NOT_FOUND) {
+                            if (failure is Failure.ServerError &&
+                                    failure.error.code == MatrixError.M_NOT_FOUND) {
                                 // Workaround because the homeserver currently returns M_NOT_FOUND when there is no key backup
                                 callback.onSuccess(null)
                             } else {
@@ -883,8 +883,8 @@ internal class DefaultKeysBackupService @Inject constructor(
                         }
 
                         override fun onFailure(failure: Throwable) {
-                            if (failure is Failure.ServerError
-                                    && failure.error.code == MatrixError.M_NOT_FOUND) {
+                            if (failure is Failure.ServerError &&
+                                    failure.error.code == MatrixError.M_NOT_FOUND) {
                                 // Workaround because the homeserver currently returns M_NOT_FOUND when there is no key backup
                                 callback.onSuccess(null)
                             } else {
@@ -1042,8 +1042,8 @@ internal class DefaultKeysBackupService @Inject constructor(
             return null
         }
 
-        if (authData.privateKeySalt.isNullOrBlank()
-                || authData.privateKeyIterations == null) {
+        if (authData.privateKeySalt.isNullOrBlank() ||
+                authData.privateKeyIterations == null) {
             Timber.w("recoveryKeyFromPassword: Salt and/or iterations not found in key backup auth data")
 
             return null

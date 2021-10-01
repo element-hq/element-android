@@ -82,9 +82,9 @@ internal class MXMegolmDecryption(private val userId: String,
         val encryptedEventContent = event.content.toModel<EncryptedEventContent>()
                 ?: throw MXCryptoError.Base(MXCryptoError.ErrorType.MISSING_FIELDS, MXCryptoError.MISSING_FIELDS_REASON)
 
-        if (encryptedEventContent.senderKey.isNullOrBlank()
-                || encryptedEventContent.sessionId.isNullOrBlank()
-                || encryptedEventContent.ciphertext.isNullOrBlank()) {
+        if (encryptedEventContent.senderKey.isNullOrBlank() ||
+                encryptedEventContent.sessionId.isNullOrBlank() ||
+                encryptedEventContent.ciphertext.isNullOrBlank()) {
             throw MXCryptoError.Base(MXCryptoError.ErrorType.MISSING_FIELDS, MXCryptoError.MISSING_FIELDS_REASON)
         }
 

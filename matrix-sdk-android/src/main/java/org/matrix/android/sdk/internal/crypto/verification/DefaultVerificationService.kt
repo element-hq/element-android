@@ -537,8 +537,8 @@ internal class DefaultVerificationService @Inject constructor(
                     // as we are the one requesting in first place (or we accepted the request)
                     // I need to check if the pending request was related to this device also
                     val autoAccept = getExistingVerificationRequests(otherUserId).any {
-                        it.transactionId == startReq.transactionId
-                                && (it.requestInfo?.fromDevice == this.deviceId || it.readyInfo?.fromDevice == this.deviceId)
+                        it.transactionId == startReq.transactionId &&
+                                (it.requestInfo?.fromDevice == this.deviceId || it.readyInfo?.fromDevice == this.deviceId)
                     }
                     val tx = DefaultIncomingSASDefaultVerificationTransaction(
 //                            this,
@@ -1278,8 +1278,8 @@ internal class DefaultVerificationService @Inject constructor(
     private fun updatePendingRequest(updated: PendingVerificationRequest) {
         val requestsForUser = pendingRequests.getOrPut(updated.otherUserId) { mutableListOf() }
         val index = requestsForUser.indexOfFirst {
-            it.transactionId == updated.transactionId
-                    || it.transactionId == null && it.localId == updated.localId
+            it.transactionId == updated.transactionId ||
+                    it.transactionId == null && it.localId == updated.localId
         }
         if (index != -1) {
             requestsForUser.removeAt(index)

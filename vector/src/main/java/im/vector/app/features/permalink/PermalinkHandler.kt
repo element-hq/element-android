@@ -124,8 +124,8 @@ class PermalinkHandler @Inject constructor(private val activeSessionHolder: Acti
     }
 
     private fun isPermalinkSupported(context: Context, url: String): Boolean {
-        return url.startsWith(PermalinkService.MATRIX_TO_URL_BASE)
-                || context.resources.getStringArray(R.array.permalink_supported_hosts).any {
+        return url.startsWith(PermalinkService.MATRIX_TO_URL_BASE) ||
+                context.resources.getStringArray(R.array.permalink_supported_hosts).any {
             url.startsWith(it)
         }
     }

@@ -238,8 +238,8 @@ data class Event(
 }
 
 fun Event.isTextMessage(): Boolean {
-    return getClearType() == EventType.MESSAGE
-            && when (getClearContent()?.get(MessageContent.MSG_TYPE_JSON_KEY)) {
+    return getClearType() == EventType.MESSAGE &&
+            when (getClearContent()?.get(MessageContent.MSG_TYPE_JSON_KEY)) {
         MessageType.MSGTYPE_TEXT,
         MessageType.MSGTYPE_EMOTE,
         MessageType.MSGTYPE_NOTICE -> true
@@ -248,40 +248,40 @@ fun Event.isTextMessage(): Boolean {
 }
 
 fun Event.isImageMessage(): Boolean {
-    return getClearType() == EventType.MESSAGE
-            && when (getClearContent()?.get(MessageContent.MSG_TYPE_JSON_KEY)) {
+    return getClearType() == EventType.MESSAGE &&
+            when (getClearContent()?.get(MessageContent.MSG_TYPE_JSON_KEY)) {
         MessageType.MSGTYPE_IMAGE -> true
         else                      -> false
     }
 }
 
 fun Event.isVideoMessage(): Boolean {
-    return getClearType() == EventType.MESSAGE
-            && when (getClearContent()?.get(MessageContent.MSG_TYPE_JSON_KEY)) {
+    return getClearType() == EventType.MESSAGE &&
+            when (getClearContent()?.get(MessageContent.MSG_TYPE_JSON_KEY)) {
         MessageType.MSGTYPE_VIDEO -> true
         else                      -> false
     }
 }
 
 fun Event.isAudioMessage(): Boolean {
-    return getClearType() == EventType.MESSAGE
-            && when (getClearContent()?.get(MessageContent.MSG_TYPE_JSON_KEY)) {
+    return getClearType() == EventType.MESSAGE &&
+            when (getClearContent()?.get(MessageContent.MSG_TYPE_JSON_KEY)) {
         MessageType.MSGTYPE_AUDIO -> true
         else                      -> false
     }
 }
 
 fun Event.isFileMessage(): Boolean {
-    return getClearType() == EventType.MESSAGE
-            && when (getClearContent()?.get(MessageContent.MSG_TYPE_JSON_KEY)) {
+    return getClearType() == EventType.MESSAGE &&
+            when (getClearContent()?.get(MessageContent.MSG_TYPE_JSON_KEY)) {
         MessageType.MSGTYPE_FILE -> true
         else                     -> false
     }
 }
 
 fun Event.isAttachmentMessage(): Boolean {
-    return getClearType() == EventType.MESSAGE
-            && when (getClearContent()?.get(MessageContent.MSG_TYPE_JSON_KEY)) {
+    return getClearType() == EventType.MESSAGE &&
+            when (getClearContent()?.get(MessageContent.MSG_TYPE_JSON_KEY)) {
         MessageType.MSGTYPE_IMAGE,
         MessageType.MSGTYPE_AUDIO,
         MessageType.MSGTYPE_VIDEO,

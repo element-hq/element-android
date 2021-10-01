@@ -71,8 +71,8 @@ internal class DefaultFinalizeAddingThreePidTask @Inject constructor(
                 }
                 true
             } catch (throwable: Throwable) {
-                if (params.userInteractiveAuthInterceptor == null
-                        || !handleUIA(
+                if (params.userInteractiveAuthInterceptor == null ||
+                        !handleUIA(
                                 failure = throwable,
                                 interceptor = params.userInteractiveAuthInterceptor,
                                 retryBlock = { authUpdate ->

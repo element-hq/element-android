@@ -156,8 +156,8 @@ class ContactsBookViewModel @AssistedInject constructor(@Assisted
         val filteredMappedContacts = mappedContacts
                 .filter { it.displayName.contains(state.searchTerm, true) }
                 .filter { contactModel ->
-                    !state.onlyBoundContacts
-                            || contactModel.emails.any { it.matrixId != null } || contactModel.msisdns.any { it.matrixId != null }
+                    !state.onlyBoundContacts ||
+                            contactModel.emails.any { it.matrixId != null } || contactModel.msisdns.any { it.matrixId != null }
                 }
 
         setState {

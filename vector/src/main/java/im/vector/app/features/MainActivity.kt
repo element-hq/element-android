@@ -220,8 +220,8 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
 
     private fun startNextActivityAndFinish(ignoreClearCredentials: Boolean = false) {
         val intent = when {
-            args.clearCredentials
-                    && !ignoreClearCredentials
+            args.clearCredentials &&
+                    !ignoreClearCredentials
                     && (!args.isUserLoggedOut || args.isAccountDeactivated) -> {
                 // User has explicitly asked to log out or deactivated his account
                 navigator.openLogin(this, null)

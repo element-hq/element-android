@@ -40,8 +40,8 @@ import im.vector.app.features.themes.ThemeUtils
  * Set a text in the TextView, or set visibility to GONE if the text is null
  */
 fun TextView.setTextOrHide(newText: CharSequence?, hideWhenBlank: Boolean = true, vararg relatedViews: View = emptyArray()) {
-    if (newText == null
-            || (newText.isBlank() && hideWhenBlank)) {
+    if (newText == null ||
+            (newText.isBlank() && hideWhenBlank)) {
         isVisible = false
         relatedViews.forEach { it.isVisible = false }
     } else {

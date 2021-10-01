@@ -550,8 +550,8 @@ class RoomDetailViewModel @AssistedInject constructor(
         val widget = action.widget
         val domain = action.widget.widgetContent.data["domain"] as? String ?: ""
         val isAllowed = action.userJustAccepted || if (widget.type == WidgetType.Jitsi) {
-            widget.senderInfo?.userId == session.myUserId
-                    || session.integrationManagerService().isNativeWidgetDomainAllowed(
+            widget.senderInfo?.userId == session.myUserId ||
+                    session.integrationManagerService().isNativeWidgetDomainAllowed(
                     action.widget.type.preferred,
                     domain
             )
@@ -1270,8 +1270,8 @@ class RoomDetailViewModel @AssistedInject constructor(
 
     private fun handleOpenOrDownloadFile(action: RoomDetailAction.DownloadOrOpen) {
         val mxcUrl = action.messageFileContent.getFileUrl() ?: return
-        val isLocalSendingFile = action.senderId == session.myUserId
-                && mxcUrl.startsWith("content://")
+        val isLocalSendingFile = action.senderId == session.myUserId &&
+                mxcUrl.startsWith("content://")
         if (isLocalSendingFile) {
             tryOrNull { Uri.parse(mxcUrl) }?.let {
                 _viewEvents.post(RoomDetailViewEvents.OpenFile(

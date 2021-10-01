@@ -136,8 +136,8 @@ class KeysBackupBanner @JvmOverloads constructor(
     }
 
     private fun renderSetup(nbOfKeys: Int) {
-        if (nbOfKeys == 0
-                || DefaultSharedPreferences.getInstance(context).getBoolean(BANNER_SETUP_DO_NOT_SHOW_AGAIN, false)) {
+        if (nbOfKeys == 0 ||
+                DefaultSharedPreferences.getInstance(context).getBoolean(BANNER_SETUP_DO_NOT_SHOW_AGAIN, false)) {
             // Do not display the setup banner if there is no keys to backup, or if the user has already closed it
             isVisible = false
         } else {

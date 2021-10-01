@@ -65,8 +65,8 @@ class MergedHeaderItemFactory @Inject constructor(private val activeSessionHolde
                callback: TimelineEventController.Callback?,
                requestModelBuild: () -> Unit)
             : BasedMergedItem<*>? {
-        return if (nextEvent?.root?.getClearType() == EventType.STATE_ROOM_CREATE
-                && event.isRoomConfiguration(nextEvent.root.getClearContent()?.toModel<RoomCreateContent>()?.creator)) {
+        return if (nextEvent?.root?.getClearType() == EventType.STATE_ROOM_CREATE &&
+                event.isRoomConfiguration(nextEvent.root.getClearContent()?.toModel<RoomCreateContent>()?.creator)) {
             // It's the first item before room.create
             // Collapse all room configuration events
             buildRoomCreationMergedSummary(currentPosition, items, partialState, event, eventIdToHighlight, requestModelBuild, callback)

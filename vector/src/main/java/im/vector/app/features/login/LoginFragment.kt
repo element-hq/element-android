@@ -250,8 +250,8 @@ class LoginFragment @Inject constructor() : AbstractSSOLoginFragment<FragmentLog
 
     override fun onError(throwable: Throwable) {
         // Show M_WEAK_PASSWORD error in the password field
-        if (throwable is Failure.ServerError
-                && throwable.error.code == MatrixError.M_WEAK_PASSWORD) {
+        if (throwable is Failure.ServerError &&
+                throwable.error.code == MatrixError.M_WEAK_PASSWORD) {
             views.passwordFieldTil.error = errorFormatter.toHumanReadable(throwable)
         } else {
             views.loginFieldTil.error = errorFormatter.toHumanReadable(throwable)
@@ -274,9 +274,9 @@ class LoginFragment @Inject constructor() : AbstractSSOLoginFragment<FragmentLog
             }
             is Fail    -> {
                 val error = state.asyncLoginAction.error
-                if (error is Failure.ServerError
-                        && error.error.code == MatrixError.M_FORBIDDEN
-                        && error.error.message.isEmpty()) {
+                if (error is Failure.ServerError &&
+                        error.error.code == MatrixError.M_FORBIDDEN &&
+                        error.error.message.isEmpty()) {
                     // Login with email, but email unknown
                     views.loginFieldTil.error = getString(R.string.login_login_with_email_error)
                 } else {

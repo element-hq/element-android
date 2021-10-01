@@ -112,9 +112,8 @@ internal class OutgoingGossipingRequestManager @Inject constructor(
      * @param andResend   true to resend the key request
      */
     private fun cancelRoomKeyRequest(requestBody: RoomKeyRequestBody, andResend: Boolean) {
-        val req = cryptoStore.getOutgoingRoomKeyRequest(requestBody)
-                ?: // no request was made for this key
-                return Unit.also {
+        val req = cryptoStore.getOutgoingRoomKeyRequest(requestBody) // no request was made for this key
+                ?: return Unit.also {
                     Timber.v("## CRYPTO - GOSSIP cancelRoomKeyRequest() Unknown request $requestBody")
                 }
 

@@ -437,9 +437,9 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                         }
                     }
                     is BootstrapResult.Failure                 -> {
-                        if (bootstrapResult is BootstrapResult.GenericError
-                                && bootstrapResult.failure is Failure.OtherServerError
-                                && bootstrapResult.failure.httpCode == 401) {
+                        if (bootstrapResult is BootstrapResult.GenericError &&
+                                bootstrapResult.failure is Failure.OtherServerError &&
+                                bootstrapResult.failure.httpCode == 401) {
                             // Ignore this error
                         } else {
                             _viewEvents.post(BootstrapViewEvents.ModalError(bootstrapResult.error ?: stringProvider.getString(R.string.matrix_error)))

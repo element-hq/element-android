@@ -33,9 +33,9 @@ internal class DefaultFilterRepository @Inject constructor(@SessionDatabase priv
         return Realm.getInstance(monarchy.realmConfiguration).use { realm ->
             val filterEntity = FilterEntity.get(realm)
             // Filter has changed, or no filter Id yet
-            filterEntity == null
-                    || filterEntity.filterBodyJson != filter.toJSONString()
-                    || filterEntity.filterId.isBlank()
+            filterEntity == null ||
+                    filterEntity.filterBodyJson != filter.toJSONString() ||
+                    filterEntity.filterId.isBlank()
         }.also { hasChanged ->
             if (hasChanged) {
                 // Filter is new or has changed, store it and reset the filter Id.

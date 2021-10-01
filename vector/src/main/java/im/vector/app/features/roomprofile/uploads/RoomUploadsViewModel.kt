@@ -91,8 +91,8 @@ class RoomUploadsViewModel @AssistedInject constructor(
 
                 val groupedUploadEvents = result.uploadEvents
                         .groupBy {
-                            it.contentWithAttachmentContent.msgType == MessageType.MSGTYPE_IMAGE
-                                    || it.contentWithAttachmentContent.msgType == MessageType.MSGTYPE_VIDEO
+                            it.contentWithAttachmentContent.msgType == MessageType.MSGTYPE_IMAGE ||
+                                    it.contentWithAttachmentContent.msgType == MessageType.MSGTYPE_VIDEO
                         }
 
                 setState {

@@ -260,8 +260,8 @@ class VoiceMessageRecorderView: ConstraintLayout, VoiceMessagePlaybackTracker.Li
         val previousRecordingState = recordingState
         if (recordingState == RecordingState.STARTED) {
             // Determine if cancelling or locking for the first move action.
-            if (((currentX < firstX && rtlXMultiplier == 1) || (currentX > firstX && rtlXMultiplier == -1))
-                    && distanceX > distanceY && distanceX > lastDistanceX) {
+            if (((currentX < firstX && rtlXMultiplier == 1) || (currentX > firstX && rtlXMultiplier == -1)) &&
+                    distanceX > distanceY && distanceX > lastDistanceX) {
                 recordingState = RecordingState.CANCELLING
             } else if (currentY < firstY && distanceY > distanceX && distanceY > lastDistanceY) {
                 recordingState = RecordingState.LOCKING

@@ -282,8 +282,8 @@ class DiscoverySettingsController @Inject constructor(
                 val error = pidInfo.finalRequest.error
                 // Deal with error 500
                 // Ref: https://github.com/matrix-org/sydent/issues/292
-                if (error is Failure.ServerError
-                        && error.httpCode == HttpsURLConnection.HTTP_INTERNAL_ERROR /* 500 */) {
+                if (error is Failure.ServerError &&
+                        error.httpCode == HttpsURLConnection.HTTP_INTERNAL_ERROR /* 500 */) {
                     stringProvider.getString(R.string.settings_text_message_sent_wrong_code)
                 } else {
                     errorFormatter.toHumanReadable(error)

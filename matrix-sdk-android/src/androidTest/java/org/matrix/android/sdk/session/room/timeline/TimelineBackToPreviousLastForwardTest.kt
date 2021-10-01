@@ -111,8 +111,8 @@ class TimelineBackToPreviousLastForwardTest : InstrumentedTest {
                 }
 
                 // Ok, we have the 10 last messages from Alice.
-                snapshot.size == 10
-                        && snapshot.all { it.root.content.toModel<MessageContent>()?.body?.startsWith(messageRoot).orFalse() }
+                snapshot.size == 10 &&
+                        snapshot.all { it.root.content.toModel<MessageContent>()?.body?.startsWith(messageRoot).orFalse() }
             }
 
             bobTimeline.addListener(eventsListener)
@@ -160,10 +160,10 @@ class TimelineBackToPreviousLastForwardTest : InstrumentedTest {
                 }
 
                 // Bob can see the first event of the room (so Back pagination has worked)
-                snapshot.lastOrNull()?.root?.getClearType() == EventType.STATE_ROOM_CREATE
+                snapshot.lastOrNull()?.root?.getClearType() == EventType.STATE_ROOM_CREATE &&
                         // 8 for room creation item, and 30 for the forward pagination
-                        && snapshot.size == 38
-                        && snapshot.checkSendOrder(messageRoot, 30, 0)
+                        snapshot.size == 38 &&
+                        snapshot.checkSendOrder(messageRoot, 30, 0)
             }
 
             bobTimeline.addListener(eventsListener)

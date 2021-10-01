@@ -46,8 +46,8 @@ internal class DefaultDeleteDeviceTask @Inject constructor(
                 cryptoApi.deleteDevice(params.deviceId, DeleteDeviceParams(params.userAuthParam?.asMap()))
             }
         } catch (throwable: Throwable) {
-            if (params.userInteractiveAuthInterceptor == null
-                    || !handleUIA(
+            if (params.userInteractiveAuthInterceptor == null ||
+                    !handleUIA(
                             failure = throwable,
                             interceptor = params.userInteractiveAuthInterceptor,
                             retryBlock = { authUpdate ->

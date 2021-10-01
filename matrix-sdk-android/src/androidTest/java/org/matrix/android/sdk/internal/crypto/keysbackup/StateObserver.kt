@@ -91,8 +91,8 @@ internal class StateObserver(private val keysBackup: KeysBackupService,
         stateList.add(newState)
 
         // Check that state transition is valid
-        if (stateList.size >= 2
-                && !allowedStateTransitions.contains(stateList[stateList.size - 2] to newState)) {
+        if (stateList.size >= 2 &&
+                !allowedStateTransitions.contains(stateList[stateList.size - 2] to newState)) {
             // Forbidden transition detected
             lastTransitionError = "Forbidden transition detected from " + stateList[stateList.size - 2] + " to " + newState
         }

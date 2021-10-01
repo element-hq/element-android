@@ -172,9 +172,9 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
             }
         } else {
             // if the verification is already done you can't cancel anymore
-            if (state.pendingRequest.invoke()?.cancelConclusion != null
-                    || state.sasTransactionState is VerificationTxState.TerminalTxState
-                    || state.verifyingFrom4S) {
+            if (state.pendingRequest.invoke()?.cancelConclusion != null ||
+                    state.sasTransactionState is VerificationTxState.TerminalTxState ||
+                    state.verifyingFrom4S) {
                 // you cannot cancel anymore
             } else {
                 setState {
@@ -537,9 +537,9 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
             }
         }
 
-        if (pr.localId == state.pendingLocalId
-                || pr.localId == state.pendingRequest.invoke()?.localId
-                || state.pendingRequest.invoke()?.transactionId == pr.transactionId) {
+        if (pr.localId == state.pendingLocalId ||
+                pr.localId == state.pendingRequest.invoke()?.localId ||
+                state.pendingRequest.invoke()?.transactionId == pr.transactionId) {
             setState {
                 copy(
                         transactionId = args.verificationId ?: pr.transactionId,

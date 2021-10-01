@@ -78,9 +78,9 @@ class RoomJoinRuleChooseRestrictedViewModel @AssistedInject constructor(
             val unknownAllowedOrRooms = mutableListOf<MatrixItem>()
             initialAllowList.orEmpty().forEach { entry ->
                 val summary = entry.roomId?.let { session.getRoomSummary(it) }
-                if (summary == null // it's not known by me
-                        || summary.roomType != RoomType.SPACE // it's not a space
-                        || !roomSummary.flattenParentIds.contains(summary.roomId) // it's not a parent space
+                if (summary == null || // it's not known by me
+                        summary.roomType != RoomType.SPACE || // it's not a space
+                        !roomSummary.flattenParentIds.contains(summary.roomId) // it's not a parent space
                 ) {
                     (summary?.toMatrixItem() ?: entry.roomId?.let { MatrixItem.RoomItem(it, null, null) })?.let {
                         unknownAllowedOrRooms.add(it)
@@ -104,8 +104,8 @@ class RoomJoinRuleChooseRestrictedViewModel @AssistedInject constructor(
             // server is not really checking that, just to be sure let's check
             val restrictedSupportedByThisVersion = homeServerCapabilities
                     .isFeatureSupported(HomeServerCapabilities.ROOM_CAP_RESTRICTED, room.getRoomVersion())
-            if (safeRule == RoomJoinRules.RESTRICTED
-                    && !restrictedSupportedByThisVersion) {
+            if (safeRule == RoomJoinRules.RESTRICTED &&
+                    !restrictedSupportedByThisVersion) {
                 safeRule = RoomJoinRules.INVITE
             }
 

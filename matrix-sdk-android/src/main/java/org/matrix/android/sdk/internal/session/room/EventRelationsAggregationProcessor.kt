@@ -131,8 +131,8 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
                 EventType.ENCRYPTED            -> {
                     // Relation type is in clear
                     val encryptedEventContent = event.content.toModel<EncryptedEventContent>()
-                    if (encryptedEventContent?.relatesTo?.type == RelationType.REPLACE
-                            || encryptedEventContent?.relatesTo?.type == RelationType.RESPONSE
+                    if (encryptedEventContent?.relatesTo?.type == RelationType.REPLACE ||
+                            encryptedEventContent?.relatesTo?.type == RelationType.RESPONSE
                     ) {
                         event.getClearContent().toModel<MessageContent>()?.let {
                             if (encryptedEventContent.relatesTo.type == RelationType.REPLACE) {
