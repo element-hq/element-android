@@ -204,14 +204,14 @@ class RoomProfileController @Inject constructor(
             // Advanced
             buildProfileSection(stringProvider.getString(R.string.room_settings_category_advanced_title))
 
-            buildProfileAction(
-                    id = "alias",
-                    title = stringProvider.getString(R.string.room_settings_alias_title),
-                    subtitle = stringProvider.getString(R.string.room_settings_alias_subtitle),
-                    divider = true,
-                    editable = true,
-                    action = { callback?.onRoomAliasesClicked() }
-            )
+//            buildProfileAction(
+//                    id = "alias",
+//                    title = stringProvider.getString(R.string.room_settings_alias_title),
+//                    subtitle = stringProvider.getString(R.string.room_settings_alias_subtitle),
+//                    divider = true,
+//                    editable = true,
+//                    action = { callback?.onRoomAliasesClicked() }
+//            )
 
             buildProfileAction(
                     id = "permissions",
