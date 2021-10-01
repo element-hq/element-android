@@ -280,7 +280,7 @@ class BugReporter @Inject constructor(
                     // UnifiedPush
                     // Only include the UP endpoint base url to exclude private user tokens in the path or parameters
                     builder.addFormDataPart("unifiedpush_endpoint", UPHelper.getPrivacyFriendlyUpEndpoint(context).toString())
-                            .addFormDataPart("unifiedpush_gateway", UPHelper.getPushGateway(context))
+                            .addFormDataPart("unifiedpush_gateway", UPHelper.getPushGateway(context).toString())
                             .addFormDataPart("unifiedpush_distributor_exists", UPHelper.distributorExists(context).toString())
                             .addFormDataPart("unifiedpush_is_embedded_distributor", UPHelper.isEmbeddedDistributor(context).toString())
 
