@@ -5,7 +5,7 @@
       Source: https://www.figma.com/file/X4XTH9iS2KGJ2wFKDqkyed/Compound?node-id=1521%3A23026 -->
 
     <color name="element_accent_light">@color/palette_tchap_dark_blue</color>
-    <color name="element_accent_dark">@color/palette_tchap_dark_blue</color>
+    <color name="element_accent_dark">@color/palette_tchap_light_blue</color>
 
     <color name="element_alert_light">@color/palette_tchap_coral</color>
     <color name="element_alert_dark">@color/palette_tchap_coral</color>

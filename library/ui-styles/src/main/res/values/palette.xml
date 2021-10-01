@@ -38,27 +38,30 @@
     <color name="palette_black_800">#15191E</color>
     <color name="palette_black_950">#21262C</color>
 
+    <!-- For dark themes Tchap -->
+    <color name="palette_tchap_light_blue">#2F80ED</color>
+
     <!-- For all themes Tchap -->
-    <color name="palette_tchap_dark_blue">#162d58</color>
-    <color name="palette_tchap_dark_blue_alpha25">#3f162d58</color>
-    <color name="palette_tchap_dark_grey_blue">#374c72</color>
-    <color name="palette_tchap_light_navy">#124a9d</color>
-    <color name="palette_tchap_light_navy_alpha60">#99124a9d</color>
-    <color name="palette_tchap_greyish_purple">#8b8999</color>
+    <color name="palette_tchap_dark_blue">#162D58</color>
+    <color name="palette_tchap_dark_blue_alpha25">#3F162D58</color>
+    <color name="palette_tchap_dark_grey_blue">#374C72</color>
+    <color name="palette_tchap_light_navy">#124A9D</color>
+    <color name="palette_tchap_light_navy_alpha60">#99124A9D</color>
+    <color name="palette_tchap_greyish_purple">#8B8999</color>
     <color name="palette_tchap_warm_grey">#858585</color>
-    <color name="palette_tchap_light_grey">#f0f0f0</color>
-    <color name="palette_tchap_light_grey_alpha50">#7fb2b2b2</color>
-    <color name="palette_tchap_dark_grey">#cccccc</color>
-    <color name="palette_tchap_pale_grey">#f2f5f8</color>
-    <color name="palette_tchap_coral">#eb5757</color>
-    <color name="palette_tchap_coral_alpha70">#b2eb5757</color>
+    <color name="palette_tchap_light_grey">#F0F0F0</color>
+    <color name="palette_tchap_light_grey_alpha50">#7FB2B2B2</color>
+    <color name="palette_tchap_dark_grey">#CCCCCC</color>
+    <color name="palette_tchap_pale_grey">#F2F5F8</color>
+    <color name="palette_tchap_coral">#EB5757</color>
+    <color name="palette_tchap_coral_alpha70">#B2EB5757</color>
     <color name="palette_tchap_pumpkin_orange">#EF8425</color>
-    <color name="palette_tchap_pumpkin_orange_alpha70">#b2EF8425</color>
-    <color name="palette_tchap_jade_green">#27ae60</color>
-    <color name="palette_tchap_jade_green_alpha70">#b227ae60</color>
-    <color name="palette_tchap_greyish_brown">#4f4f4f</color>
-    <color name="palette_tchap_white_alpha15">#26ffffff</color>
-    <color name="palette_tchap_white_alpha24">#3Dffffff</color>
-    <color name="palette_tchap_dark_red">#ff7f0d15</color>
+    <color name="palette_tchap_pumpkin_orange_alpha70">#B2EF8425</color>
+    <color name="palette_tchap_jade_green">#27AE60</color>
+    <color name="palette_tchap_jade_green_alpha70">#B227AE60</color>
+    <color name="palette_tchap_greyish_brown">#4F4F4F</color>
+    <color name="palette_tchap_white_alpha15">#26FFFFFF</color>
+    <color name="palette_tchap_white_alpha24">#3DFFFFFF</color>
+    <color name="palette_tchap_dark_red">#FF7F0D15</color>
 
 </resources>
