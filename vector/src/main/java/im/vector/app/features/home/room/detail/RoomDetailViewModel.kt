@@ -269,7 +269,7 @@ class RoomDetailViewModel @AssistedInject constructor(
                     copy(activeRoomWidgets = widgets)
                 }
 
-        asyncSubscribe(RoomDetailViewState::activeRoomWidgets) { widgets ->
+        onAsync(RoomDetailViewState::activeRoomWidgets) { widgets ->
             setState {
                 val jitsiWidget = widgets.firstOrNull { it.type == WidgetType.Jitsi }
                 val jitsiConfId = jitsiWidget?.let {
@@ -1597,7 +1597,7 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private fun observeSummaryState() {
-        asyncSubscribe(RoomDetailViewState::asyncRoomSummary) { summary ->
+        onAsync(RoomDetailViewState::asyncRoomSummary) { summary ->
             setState {
                 val typingMessage = typingHelper.getTypingMessage(summary.typingUsers)
                 copy(

@@ -138,7 +138,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
             renderState(it)
         }
 
-        callViewModel.asyncSubscribe(VectorCallViewState::callState) {
+        callViewModel.onAsync(VectorCallViewState::callState) {
             if (it is CallState.Ended) {
                 handleCallEnded(it)
             }

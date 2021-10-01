@@ -101,7 +101,7 @@ class WidgetViewModel @AssistedInject constructor(@Assisted val initialState: Wi
     }
 
     private fun subscribeToWidget() {
-        asyncSubscribe(WidgetViewState::asyncWidget) {
+        onAsync(WidgetViewState::asyncWidget) {
             setState { copy(widgetName = it.name) }
         }
     }
