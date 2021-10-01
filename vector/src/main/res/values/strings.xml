@@ -3182,7 +3182,7 @@
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
     <string name="template_identity_server_error_bulk_sha256_not_supported">For your privacy, ${app_name} only supports sending hashed user emails and phone number.</string>
     <string name="identity_server_error_binding_error">The association has failed.</string>
-    <string name="identity_server_error_no_current_binding_error">The is no current association with this identifier.</string>
+    <string name="identity_server_error_no_current_binding_error">There is no current association with this identifier.</string>
     <string name="identity_server_user_consent_not_provided">The user consent has not been provided.</string>
 
     <string name="identity_server_set_default_notice">Your homeserver (%1$s) proposes to use %2$s for your identity server</string>
