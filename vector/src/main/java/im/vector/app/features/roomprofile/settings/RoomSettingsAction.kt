@@ -28,6 +28,7 @@ sealed class RoomSettingsAction : VectorViewModelAction {
     data class SetRoomHistoryVisibility(val visibility: RoomHistoryVisibility) : RoomSettingsAction()
     data class SetRoomJoinRule(val roomJoinRule: RoomJoinRules) : RoomSettingsAction()
     data class SetRoomGuestAccess(val guestAccess: GuestAccess) : RoomSettingsAction()
+    object RemoveFromRoomsDirectory : RoomSettingsAction()
 
     object Save : RoomSettingsAction()
     object Cancel : RoomSettingsAction()
