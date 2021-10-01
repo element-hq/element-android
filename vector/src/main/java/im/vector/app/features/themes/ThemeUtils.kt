@@ -71,8 +71,8 @@ object ThemeUtils {
      */
     fun isLightTheme(context: Context): Boolean {
         val theme = getApplicationTheme(context)
-        return theme == THEME_LIGHT_VALUE
-                || (theme == SYSTEM_THEME_VALUE && !isSystemDarkTheme(context.resources))
+        return theme == THEME_LIGHT_VALUE ||
+                (theme == SYSTEM_THEME_VALUE && !isSystemDarkTheme(context.resources))
     }
 
     /**

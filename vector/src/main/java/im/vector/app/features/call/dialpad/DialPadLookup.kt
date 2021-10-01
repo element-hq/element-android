@@ -30,8 +30,8 @@ class DialPadLookup @Inject constructor(
         private val directRoomHelper: DirectRoomHelper
 ) {
     sealed class Failure : Throwable() {
-        object NoResult: Failure()
-        object NumberIsYours: Failure()
+        object NoResult : Failure()
+        object NumberIsYours : Failure()
     }
 
     data class Result(val userId: String, val roomId: String)

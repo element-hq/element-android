@@ -16,12 +16,12 @@
 
 package org.matrix.android.sdk.internal.crypto.store.db.query
 
-import org.matrix.android.sdk.internal.crypto.store.db.model.DeviceInfoEntity
-import org.matrix.android.sdk.internal.crypto.store.db.model.DeviceInfoEntityFields
-import org.matrix.android.sdk.internal.crypto.store.db.model.createPrimaryKey
 import io.realm.Realm
 import io.realm.kotlin.createObject
 import io.realm.kotlin.where
+import org.matrix.android.sdk.internal.crypto.store.db.model.DeviceInfoEntity
+import org.matrix.android.sdk.internal.crypto.store.db.model.DeviceInfoEntityFields
+import org.matrix.android.sdk.internal.crypto.store.db.model.createPrimaryKey
 
 /**
  * Get or create a device info

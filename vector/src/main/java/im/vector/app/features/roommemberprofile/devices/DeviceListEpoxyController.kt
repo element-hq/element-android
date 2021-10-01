@@ -39,8 +39,8 @@ import javax.inject.Inject
 class DeviceListEpoxyController @Inject constructor(private val stringProvider: StringProvider,
                                                     private val colorProvider: ColorProvider,
                                                     private val dimensionConverter: DimensionConverter,
-                                                    private val vectorPreferences: VectorPreferences)
-    : TypedEpoxyController<DeviceListViewState>() {
+                                                    private val vectorPreferences: VectorPreferences) :
+    TypedEpoxyController<DeviceListViewState>() {
 
     interface InteractionListener {
         fun onDeviceSelected(device: CryptoDeviceInfo)

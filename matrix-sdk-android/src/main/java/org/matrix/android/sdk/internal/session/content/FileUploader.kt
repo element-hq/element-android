@@ -67,8 +67,8 @@ internal class FileUploader @Inject constructor(
         // Check size limit
         val maxUploadFileSize = homeServerCapabilitiesService.getHomeServerCapabilities().maxUploadFileSize
 
-        if (maxUploadFileSize != HomeServerCapabilities.MAX_UPLOAD_FILE_SIZE_UNKNOWN
-                && file.length() > maxUploadFileSize) {
+        if (maxUploadFileSize != HomeServerCapabilities.MAX_UPLOAD_FILE_SIZE_UNKNOWN &&
+                file.length() > maxUploadFileSize) {
             // Known limitation and file too big for the server, save the pain to upload it
             throw Failure.ServerError(
                     error = MatrixError(

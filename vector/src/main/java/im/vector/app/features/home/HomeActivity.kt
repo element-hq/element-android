@@ -254,8 +254,8 @@ class HomeActivity :
 
         if (!vectorPreferences.didPromoteNewRestrictedFeature()) {
             promoteRestrictedViewModel.subscribe(this) {
-                if (it.activeSpaceSummary != null && !it.activeSpaceSummary.isPublic
-                        && it.activeSpaceSummary.otherMemberIds.isNotEmpty()) {
+                if (it.activeSpaceSummary != null && !it.activeSpaceSummary.isPublic &&
+                        it.activeSpaceSummary.otherMemberIds.isNotEmpty()) {
                     // It's a private space with some members show this once
                     if (it.canUserManageSpace && !popupAlertManager.hasAlertsToShow()) {
                         if (!vectorPreferences.didPromoteNewRestrictedFeature()) {
@@ -298,8 +298,8 @@ class HomeActivity :
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe { isHandled ->
                         if (!isHandled) {
-                            val isMatrixToLink = deepLink.startsWith(PermalinkService.MATRIX_TO_URL_BASE)
-                                    || deepLink.startsWith(MATRIX_TO_CUSTOM_SCHEME_URL_BASE)
+                            val isMatrixToLink = deepLink.startsWith(PermalinkService.MATRIX_TO_URL_BASE) ||
+                                    deepLink.startsWith(MATRIX_TO_CUSTOM_SCHEME_URL_BASE)
                             MaterialAlertDialogBuilder(this)
                                     .setTitle(R.string.dialog_title_error)
                                     .setMessage(if (isMatrixToLink) R.string.permalink_malformed else R.string.universal_link_malformed)
@@ -313,10 +313,7 @@ class HomeActivity :
 
     private fun renderState(state: HomeActivityViewState) {
         when (val status = state.syncStatusServiceStatus) {
-            is SyncStatusService.Status.Idle                  -> {
-                views.waitingView.root.isVisible = false
-            }
-            is SyncStatusService.Status.Progressing           -> {
+            is SyncStatusService.Status.Progressing -> {
                 val initSyncStepStr = initSyncStepFormatter.format(status.initSyncStep)
                 Timber.v("$initSyncStepStr ${status.percentProgress}")
                 views.waitingView.root.setOnClickListener {
@@ -334,7 +331,10 @@ class HomeActivity :
                 }
                 views.waitingView.root.isVisible = true
             }
-            else                                              -> Unit
+            else                                    -> {
+                // Idle or Incremental sync status
+                views.waitingView.root.isVisible = false
+            }
         }.exhaustive
     }
 

@@ -25,8 +25,8 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import kotlinx.coroutines.launch
@@ -39,8 +39,8 @@ import org.matrix.android.sdk.rx.rx
 
 class DiscoverySettingsViewModel @AssistedInject constructor(
         @Assisted initialState: DiscoverySettingsState,
-        private val session: Session)
-    : VectorViewModel<DiscoverySettingsState, DiscoverySettingsAction, DiscoverySettingsViewEvents>(initialState) {
+        private val session: Session) :
+    VectorViewModel<DiscoverySettingsState, DiscoverySettingsAction, DiscoverySettingsViewEvents>(initialState) {
 
     @AssistedFactory
     interface Factory {

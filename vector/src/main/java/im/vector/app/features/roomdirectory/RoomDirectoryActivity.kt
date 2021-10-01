@@ -28,8 +28,8 @@ import im.vector.app.core.extensions.addFragmentToBackstack
 import im.vector.app.core.extensions.popBackstack
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivitySimpleBinding
-import im.vector.app.features.roomdirectory.createroom.CreateRoomFragment
 import im.vector.app.features.roomdirectory.createroom.CreateRoomArgs
+import im.vector.app.features.roomdirectory.createroom.CreateRoomFragment
 import im.vector.app.features.roomdirectory.picker.RoomDirectoryPickerFragment
 import javax.inject.Inject
 

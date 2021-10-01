@@ -48,8 +48,8 @@ class VectorGlideModelLoaderFactory(private val context: Context) : ModelLoaderF
     }
 }
 
-class VectorGlideModelLoader(private val context: Context)
-    : ModelLoader<ImageContentRenderer.Data, InputStream> {
+class VectorGlideModelLoader(private val context: Context) :
+    ModelLoader<ImageContentRenderer.Data, InputStream> {
     override fun handles(model: ImageContentRenderer.Data): Boolean {
         // Always handle
         return true
@@ -63,8 +63,8 @@ class VectorGlideModelLoader(private val context: Context)
 class VectorGlideDataFetcher(context: Context,
                              private val data: ImageContentRenderer.Data,
                              private val width: Int,
-                             private val height: Int)
-    : DataFetcher<InputStream> {
+                             private val height: Int) :
+    DataFetcher<InputStream> {
 
     private val localFilesHelper = LocalFilesHelper(context)
     private val activeSessionHolder = context.vectorComponent().activeSessionHolder()

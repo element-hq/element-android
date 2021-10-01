@@ -24,8 +24,8 @@ import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
@@ -39,8 +39,8 @@ data class AccountDataViewState(
 ) : MvRxState
 
 class AccountDataViewModel @AssistedInject constructor(@Assisted initialState: AccountDataViewState,
-                                                       private val session: Session)
-    : VectorViewModel<AccountDataViewState, AccountDataAction, EmptyViewEvents>(initialState) {
+                                                       private val session: Session) :
+    VectorViewModel<AccountDataViewState, AccountDataAction, EmptyViewEvents>(initialState) {
 
     init {
         session.rx().liveUserAccountData(emptySet())

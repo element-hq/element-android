@@ -36,7 +36,6 @@ import im.vector.app.features.userdirectory.UserListAction
 import im.vector.app.features.userdirectory.UserListSharedAction
 import im.vector.app.features.userdirectory.UserListSharedActionViewModel
 import im.vector.app.features.userdirectory.UserListViewModel
-
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.user.model.User
 import java.util.concurrent.TimeUnit

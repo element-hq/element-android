@@ -40,8 +40,8 @@ class TestPushFromPushGateway @Inject constructor(private val context: AppCompat
                                                   private val stringProvider: StringProvider,
                                                   private val errorFormatter: ErrorFormatter,
                                                   private val pushersManager: PushersManager,
-                                                  private val activeSessionHolder: ActiveSessionHolder)
-    : TroubleshootTest(R.string.settings_troubleshoot_test_push_loop_title) {
+                                                  private val activeSessionHolder: ActiveSessionHolder) :
+    TroubleshootTest(R.string.settings_troubleshoot_test_push_loop_title) {
 
     private var action: Job? = null
     private var pushReceived: Boolean = false

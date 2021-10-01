@@ -922,8 +922,8 @@ class NotificationUtils @Inject constructor(private val context: Context,
         // We cannot use NotificationManagerCompat here.
         val setting = context.getSystemService<NotificationManager>()!!.currentInterruptionFilter
 
-        return setting == NotificationManager.INTERRUPTION_FILTER_NONE
-                || setting == NotificationManager.INTERRUPTION_FILTER_ALARMS
+        return setting == NotificationManager.INTERRUPTION_FILTER_NONE ||
+                setting == NotificationManager.INTERRUPTION_FILTER_ALARMS
     }
 
     private fun getActionText(@StringRes stringRes: Int, @AttrRes colorRes: Int): Spannable {

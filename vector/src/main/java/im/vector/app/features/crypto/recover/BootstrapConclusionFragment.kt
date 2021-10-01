@@ -28,7 +28,6 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.utils.colorizeMatchingText
 import im.vector.app.databinding.FragmentBootstrapConclusionBinding
-
 import javax.inject.Inject
 
 class BootstrapConclusionFragment @Inject constructor(

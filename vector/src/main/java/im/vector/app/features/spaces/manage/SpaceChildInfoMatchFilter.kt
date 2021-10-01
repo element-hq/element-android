@@ -30,8 +30,8 @@ class SpaceChildInfoMatchFilter : Predicate<SpaceChildInfo> {
         }
         // if filter is "Jo Do", it should match "John Doe"
         return filter.split(" ").all {
-            spaceChildInfo.name?.contains(it, ignoreCase = true).orFalse()
-                    || spaceChildInfo.topic?.contains(it, ignoreCase = true).orFalse()
+            spaceChildInfo.name?.contains(it, ignoreCase = true).orFalse() ||
+                    spaceChildInfo.topic?.contains(it, ignoreCase = true).orFalse()
         }
     }
 }

@@ -51,8 +51,8 @@ data class ThreePidUser(
 )
 
 class UserListViewModel @AssistedInject constructor(@Assisted initialState: UserListViewState,
-                                                    private val session: Session)
-    : VectorViewModel<UserListViewState, UserListAction, UserListViewEvents>(initialState) {
+                                                    private val session: Session) :
+    VectorViewModel<UserListViewState, UserListAction, UserListViewEvents>(initialState) {
 
     private val knownUsersSearch = BehaviorRelay.create<KnownUsersSearch>()
     private val directoryUsersSearch = BehaviorRelay.create<DirectoryUsersSearch>()

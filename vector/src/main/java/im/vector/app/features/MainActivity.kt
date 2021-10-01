@@ -45,10 +45,10 @@ import im.vector.app.features.signout.soft.SoftLogoutActivity
 import im.vector.app.features.signout.soft.SoftLogoutActivity2
 import im.vector.app.features.themes.ActivityOtherThemes
 import im.vector.app.features.ui.UiStateRepository
-import kotlinx.parcelize.Parcelize
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.failure.GlobalError
 import timber.log.Timber
 import javax.inject.Inject
@@ -220,8 +220,8 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
 
     private fun startNextActivityAndFinish(ignoreClearCredentials: Boolean = false) {
         val intent = when {
-            args.clearCredentials
-                    && !ignoreClearCredentials
+            args.clearCredentials &&
+                    !ignoreClearCredentials
                     && (!args.isUserLoggedOut || args.isAccountDeactivated) -> {
                 // User has explicitly asked to log out or deactivated his account
                 navigator.openLogin(this, null)

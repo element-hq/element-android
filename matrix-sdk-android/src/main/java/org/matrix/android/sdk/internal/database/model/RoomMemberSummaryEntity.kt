@@ -16,10 +16,10 @@
 
 package org.matrix.android.sdk.internal.database.model
 
-import org.matrix.android.sdk.api.session.room.model.Membership
 import io.realm.RealmObject
 import io.realm.annotations.Index
 import io.realm.annotations.PrimaryKey
+import org.matrix.android.sdk.api.session.room.model.Membership
 
 internal open class RoomMemberSummaryEntity(@PrimaryKey var primaryKey: String = "",
                                             @Index var userId: String = "",

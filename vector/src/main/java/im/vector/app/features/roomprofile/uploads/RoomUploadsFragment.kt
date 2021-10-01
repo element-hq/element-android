@@ -38,7 +38,6 @@ import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.features.roomprofile.RoomProfileArgs
 import kotlinx.coroutines.launch
-
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 

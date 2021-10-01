@@ -16,11 +16,11 @@
 
 package org.matrix.android.sdk.internal.session.sync
 
+import io.realm.Realm
 import org.matrix.android.sdk.internal.database.model.ReadMarkerEntity
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
 import org.matrix.android.sdk.internal.database.query.getOrCreate
 import org.matrix.android.sdk.internal.session.room.read.FullyReadContent
-import io.realm.Realm
 import timber.log.Timber
 import javax.inject.Inject
 

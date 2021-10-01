@@ -36,6 +36,7 @@ import im.vector.app.features.settings.VectorPreferences
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixPatterns.getDomain
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
@@ -109,8 +110,13 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted private val init
 
             setState {
                 copy(
-                        isEncrypted = RoomJoinRules.INVITE == roomJoinRules && adminE2EByDefault,
-                        hsAdminHasDisabledE2E = !adminE2EByDefault
+                        hsAdminHasDisabledE2E = !adminE2EByDefault,
+                        defaultEncrypted = mapOf(
+                                RoomJoinRules.INVITE to adminE2EByDefault,
+                                RoomJoinRules.PUBLIC to false,
+                                RoomJoinRules.RESTRICTED to adminE2EByDefault
+                        )
+
                 )
             }
         }
@@ -286,7 +292,12 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted private val init
                     disableFederation = state.disableFederation
 
                     // Encryption
-                    if (state.isEncrypted) {
+                    val shouldEncrypt = when (state.roomJoinRules) {
+                        // we ignore the isEncrypted for public room as the switch is hidden in this case
+                        RoomJoinRules.PUBLIC -> false
+                        else                 -> state.isEncrypted ?: state.defaultEncrypted[state.roomJoinRules].orFalse()
+                    }
+                    if (shouldEncrypt) {
                         enableEncryption()
                     }
                 }

@@ -24,8 +24,8 @@ import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import im.vector.app.core.contacts.ContactsDataSource
 import im.vector.app.core.contacts.MappedContact
 import im.vector.app.core.extensions.exhaustive
@@ -41,8 +41,8 @@ import timber.log.Timber
 class ContactsBookViewModel @AssistedInject constructor(@Assisted
                                                         initialState: ContactsBookViewState,
                                                         private val contactsDataSource: ContactsDataSource,
-                                                        private val session: Session)
-    : VectorViewModel<ContactsBookViewState, ContactsBookAction, EmptyViewEvents>(initialState) {
+                                                        private val session: Session) :
+    VectorViewModel<ContactsBookViewState, ContactsBookAction, EmptyViewEvents>(initialState) {
 
     @AssistedFactory
     interface Factory {
@@ -156,8 +156,8 @@ class ContactsBookViewModel @AssistedInject constructor(@Assisted
         val filteredMappedContacts = mappedContacts
                 .filter { it.displayName.contains(state.searchTerm, true) }
                 .filter { contactModel ->
-                    !state.onlyBoundContacts
-                            || contactModel.emails.any { it.matrixId != null } || contactModel.msisdns.any { it.matrixId != null }
+                    !state.onlyBoundContacts ||
+                            contactModel.emails.any { it.matrixId != null } || contactModel.msisdns.any { it.matrixId != null }
                 }
 
         setState {

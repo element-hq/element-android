@@ -38,7 +38,6 @@ import im.vector.app.databinding.ActivityEmojiReactionPickerBinding
 import im.vector.app.features.reactions.data.EmojiDataSource
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.coroutines.launch
-
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject

@@ -26,7 +26,7 @@ sealed class CallState {
     /**
      * CreateOffer. Intermediate state between Idle and Dialing.
      */
-    object CreateOffer: CallState()
+    object CreateOffer : CallState()
 
     /** Dialing.  Outgoing call is signaling the remote peer */
     object Dialing : CallState()

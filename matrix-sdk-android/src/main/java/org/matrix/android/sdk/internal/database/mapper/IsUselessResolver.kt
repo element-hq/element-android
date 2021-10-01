@@ -29,8 +29,8 @@ internal object IsUselessResolver {
         return when (event.type) {
             EventType.STATE_ROOM_MEMBER -> {
                 // Call toContent(), to filter out null value
-                event.content != null
-                        && event.content.toContent() == event.resolvedPrevContent()?.toContent()
+                event.content != null &&
+                        event.content.toContent() == event.resolvedPrevContent()?.toContent()
             }
             else                        -> false
         }

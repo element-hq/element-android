@@ -28,8 +28,8 @@ import javax.inject.Inject
  * Checks if notifications are enable in the system settings for this app.
  */
 class TestSystemSettings @Inject constructor(private val context: Context,
-                                             private val stringProvider: StringProvider)
-    : TroubleshootTest(R.string.settings_troubleshoot_test_system_settings_title) {
+                                             private val stringProvider: StringProvider) :
+    TroubleshootTest(R.string.settings_troubleshoot_test_system_settings_title) {
 
     override fun perform(activityResultLauncher: ActivityResultLauncher<Intent>) {
         if (NotificationManagerCompat.from(context).areNotificationsEnabled()) {

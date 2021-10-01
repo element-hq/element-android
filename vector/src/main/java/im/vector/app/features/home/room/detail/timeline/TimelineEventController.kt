@@ -249,8 +249,8 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         if (partialState.highlightedEventId != newPartialState.highlightedEventId) {
             // Clear cache to force a refresh
             for (i in 0 until modelCache.size) {
-                if (modelCache[i]?.eventId == viewState.highlightedEventId
-                        || modelCache[i]?.eventId == partialState.highlightedEventId) {
+                if (modelCache[i]?.eventId == viewState.highlightedEventId ||
+                        modelCache[i]?.eventId == partialState.highlightedEventId) {
                     modelCache[i] = null
                 }
             }
@@ -498,8 +498,8 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         if (vectorPreferences.labShowCompleteHistoryInEncryptedRoom()) {
             return
         }
-        if (event.root.type == EventType.STATE_ROOM_MEMBER
-                && event.root.stateKey == session.myUserId) {
+        if (event.root.type == EventType.STATE_ROOM_MEMBER &&
+                event.root.stateKey == session.myUserId) {
             val content = event.root.content.toModel<RoomMemberContent>()
             if (content?.membership == Membership.INVITE) {
                 hasReachedInvite = true

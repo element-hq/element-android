@@ -59,8 +59,8 @@ class SnapOnScrollListener(
     }
 
     override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-        if (behavior == Behavior.NOTIFY_ON_SCROLL_STATE_IDLE
-                && newState == RecyclerView.SCROLL_STATE_IDLE) {
+        if (behavior == Behavior.NOTIFY_ON_SCROLL_STATE_IDLE &&
+                newState == RecyclerView.SCROLL_STATE_IDLE) {
             maybeNotifySnapPositionChange(recyclerView)
         }
     }

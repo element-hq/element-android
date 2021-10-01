@@ -24,8 +24,8 @@ import im.vector.app.R
 
 private const val DEFAULT_MAX_HEIGHT = 200
 
-class MaxHeightScrollView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0)
-    : NestedScrollView(context, attrs, defStyle) {
+class MaxHeightScrollView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0) :
+    NestedScrollView(context, attrs, defStyle) {
 
     var maxHeight: Int = 0
         set(value) {

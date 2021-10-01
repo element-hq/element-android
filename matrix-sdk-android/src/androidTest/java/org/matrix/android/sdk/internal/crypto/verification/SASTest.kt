@@ -18,6 +18,16 @@ package org.matrix.android.sdk.internal.crypto.verification
 
 import android.util.Log
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
+import org.junit.Assert.fail
+import org.junit.FixMethodOrder
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.junit.runners.MethodSorters
 import org.matrix.android.sdk.InstrumentedTest
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.verification.CancelCode
@@ -38,16 +48,6 @@ import org.matrix.android.sdk.internal.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.internal.crypto.model.rest.KeyVerificationCancel
 import org.matrix.android.sdk.internal.crypto.model.rest.KeyVerificationStart
 import org.matrix.android.sdk.internal.crypto.model.rest.toValue
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertNotNull
-import org.junit.Assert.assertNull
-import org.junit.Assert.assertTrue
-import org.junit.Assert.fail
-import org.junit.FixMethodOrder
-import org.junit.Test
-import org.junit.runner.RunWith
-import org.junit.runners.MethodSorters
 import java.util.concurrent.CountDownLatch
 
 @RunWith(AndroidJUnit4::class)
@@ -551,7 +551,7 @@ class SASTest : InstrumentedTest {
                 cryptoTestData.roomId
         )
 
-        var requestID : String? = null
+        var requestID: String? = null
 
         mTestHelper.waitWithLatch {
             mTestHelper.retryPeriodicallyWithLatch(it) {
