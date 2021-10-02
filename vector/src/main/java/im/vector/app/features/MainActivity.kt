@@ -221,19 +221,19 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
     private fun startNextActivityAndFinish(ignoreClearCredentials: Boolean = false) {
         val intent = when {
             args.clearCredentials &&
-                    !ignoreClearCredentials
-                    && (!args.isUserLoggedOut || args.isAccountDeactivated) -> {
+                    !ignoreClearCredentials &&
+                    (!args.isUserLoggedOut || args.isAccountDeactivated) -> {
                 // User has explicitly asked to log out or deactivated his account
                 navigator.openLogin(this, null)
                 null
             }
-            args.isSoftLogout                                               ->
+            args.isSoftLogout                                            ->
                 // The homeserver has invalidated the token, with a soft logout
                 getSoftLogoutActivityIntent()
-            args.isUserLoggedOut                                            ->
+            args.isUserLoggedOut                                         ->
                 // the homeserver has invalidated the token (password changed, device deleted, other security reasons)
                 SignedOutActivity.newIntent(this)
-            sessionHolder.hasActiveSession()                                ->
+            sessionHolder.hasActiveSession()                             ->
                 // We have a session.
                 // Check it can be opened
                 if (sessionHolder.getActiveSession().isOpenable) {
@@ -242,7 +242,7 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
                     // The token is still invalid
                     getSoftLogoutActivityIntent()
                 }
-            else                                                            -> {
+            else                                                         -> {
                 // First start, or no active session
                 navigator.openLogin(this, null)
                 null
