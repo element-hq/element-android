@@ -1754,7 +1754,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="terms_description_for_identity_server">Bisa ditemukan oleh lain</string>
     <string name="review_terms">Lihat Persyaratan</string>
     <string name="terms_of_service">Persyaratan Layanan</string>
-    <string name="message_view_edit_history">Tampilkan Sejarah Suntingan</string>
+    <string name="message_view_edit_history">Tampilkan Sejarah Editan</string>
     <string name="joining_room">Menggabung ruangan…</string>
     <string name="direct_room_user_list_suggestions_title">Saran</string>
     <string name="direct_room_user_list_contacts_title">Kontak</string>
@@ -1778,7 +1778,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="room_filtering_footer_title">Tidak bisa menemukan apa yang Anda cari\?</string>
     <string name="room_filtering_filter_hint">Saring obrolan…</string>
     <string name="no_message_edits_found">Tidak ada suntingan yang ditemukan</string>
-    <string name="message_edits">Suntingan Pesan</string>
+    <string name="message_edits">Editan Pesan</string>
     <string name="edited_suffix">(diedit)</string>
     <string name="downloaded_file">File %1$s telah diunduh!</string>
     <string name="send_file_step_compressing_video">Mengompresi video %d%%</string>
@@ -1819,7 +1819,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="room_list_empty">Gabung ruangan untuk memulai menggunakan aplikasi.</string>
     <string name="global_retry">Coba Lagi</string>
     <string name="reply">Balas</string>
-    <string name="edit">Sunting</string>
+    <string name="edit">Edit</string>
     <string name="error_user_already_logged_in">Sepertinya Anda mencoba menyambung ke homeserver lain. Apakah Anda ingin keluar\?</string>
     <string name="identity_server_not_defined_for_password_reset">Tidak ada server identitas yang dikonfigurasikan, dibutuhkan untuk mengatur ulang kata sandi Anda.</string>
     <string name="identity_server_not_defined">Anda tidak menggunakan server identitas apapun</string>
