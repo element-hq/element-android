@@ -215,7 +215,7 @@
         android:contentDescription="@string/a11y_jump_to_bottom"
         android:src="@drawable/ic_expand_more"
         app:backgroundTint="?android:colorAccent"
-        app:badgeBackgroundColor="?colorAccent"
+        app:badgeBackgroundColor="?riotx_unread_unimportant_room_badge"
         app:badgeTextColor="@android:color/white"
         app:badgeTextPadding="2dp"
         app:badgeTextSize="10sp"
