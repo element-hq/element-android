@@ -504,12 +504,14 @@ class VoiceMessageRecorderView : ConstraintLayout, VoiceMessagePlaybackTracker.L
         views.voiceMessagePlaybackTimerIndicator.isVisible = true
         views.voicePlaybackControlButton.isVisible = false
         views.voiceMessageSendButton.isVisible = true
+        views.voicePlaybackWaveform.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_YES
         renderToast(context.getString(R.string.voice_message_tap_to_stop_toast))
     }
 
     private fun showPlaybackViews() {
         views.voiceMessagePlaybackTimerIndicator.isVisible = false
         views.voicePlaybackControlButton.isVisible = true
+        views.voicePlaybackWaveform.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
         callback?.onVoiceRecordingPlaybackModeOn()
     }
 

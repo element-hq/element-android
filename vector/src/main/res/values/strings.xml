@@ -3577,13 +3577,14 @@
     <string name="error_failed_to_join_room">Sorry, an error occurred while trying to join: %s</string>
     <string name="call_jitsi_started">Group call started</string>
 
-    <string name="a11y_start_voice_message">Start Voice Message</string>
+    <string name="a11y_start_voice_message">Record Voice Message</string>
     <string name="voice_message_slide_to_cancel">Slide to cancel</string>
     <string name="a11y_lock_voice_message">Voice Message Lock</string>
     <string name="a11y_play_voice_message">Play Voice Message</string>
     <string name="a11y_pause_voice_message">Pause Voice Message</string>
+    <string name="a11y_stop_voice_message">Stop Recording</string>
     <string name="a11y_recording_voice_message">Recording voice message</string>
-    <string name="a11y_delete_recorded_voice_message">Delete recorded voice message</string>
+    <string name="a11y_delete_recorded_voice_message">Delete recording</string>
     <string name="voice_message_release_to_send_toast">Hold to record, release to send</string>
     <string name="voice_message_n_seconds_warning_toast">%1$ds left</string>
     <string name="voice_message_tap_to_stop_toast">Tap on your recording to stop or listen</string>
