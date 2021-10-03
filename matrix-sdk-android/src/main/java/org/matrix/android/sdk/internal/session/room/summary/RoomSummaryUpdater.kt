@@ -201,6 +201,21 @@ internal class RoomSummaryUpdater @Inject constructor(
         }
     }
 
+    fun updateRoomPreviews(realm: Realm) {
+        RoomSummaryEntity.where(realm).findAll().forEach { entity ->
+            val previewEvent = entity.latestPreviewableOriginalContentEvent
+            val root = previewEvent?.root
+            if (root?.type == EventType.ENCRYPTED && root.decryptionResultJson == null) {
+                Timber.v("Retry decrypt ${previewEvent.eventId}")
+                // mmm i want to decrypt now or is it ok to do it async?
+                tryOrNull {
+                    eventDecryptor.decryptEvent(root.asDomain(), "")
+                }
+                        ?.let { root.setDecryptionResult(it) }
+            }
+        }
+    }
+
     private fun RoomSummaryEntity.updateHasFailedSending() {
         hasFailedSending = TimelineEventEntity.findAllInRoomWithSendStates(realm, roomId, SendState.HAS_FAILED_STATES).isNotEmpty()
     }
