@@ -214,6 +214,7 @@ class VectorPreferences @Inject constructor(private val context: Context): Stati
         const val SETTINGS_FORCE_ALLOW_BACKGROUND_SYNC = "SETTINGS_FORCE_ALLOW_BACKGROUND_SYNC"
         private const val SETTINGS_JUMP_TO_BOTTOM_ON_SEND = "SETTINGS_JUMP_TO_BOTTOM_ON_SEND"
         private const val SETTINGS_SPACE_MEMBERS_IN_SPACE_ROOMS = "SETTINGS_SPACE_MEMBERS_IN_SPACE_ROOMS"
+        private const val SETTINGS_ENABLE_SPACE_PAGER = "SETTINGS_ENABLE_SPACE_PAGER"
 
         private const val DID_ASK_TO_ENABLE_SESSION_PUSH = "DID_ASK_TO_ENABLE_SESSION_PUSH"
         private const val DID_PROMOTE_NEW_RESTRICTED_JOIN_RULE = "DID_PROMOTE_NEW_RESTRICTED_JOIN_RULE"
@@ -1043,16 +1044,24 @@ class VectorPreferences @Inject constructor(private val context: Context): Stati
         return Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP && defaultPrefs.getBoolean(SETTINGS_VOICE_MESSAGE, true)
     }
 
+    // SC addition
     fun jumpToBottomOnSend(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_JUMP_TO_BOTTOM_ON_SEND, true)
     }
 
+    // SC addition
     fun forceUseCustomUpGateway(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_UNIFIED_PUSH_FORCE_CUSTOM_GATEWAY, false)
     }
 
+    // SC addition
     fun forceAllowBackgroundSync(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_FORCE_ALLOW_BACKGROUND_SYNC, false)
+    }
+
+    // SC addition
+    fun enableSpacePager(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_ENABLE_SPACE_PAGER, false)
     }
 
     /**
@@ -1077,6 +1086,7 @@ class VectorPreferences @Inject constructor(private val context: Context): Stati
                 .putBoolean(SETTINGS_USE_RAGE_SHAKE_KEY, true)
                 .putBoolean(SETTINGS_UNIFIED_PUSH_FORCE_CUSTOM_GATEWAY, true)
                 .putBoolean(SETTINGS_AGGREGATE_UNREAD_COUNTS, false)
+                .putBoolean(SETTINGS_ENABLE_SPACE_PAGER, true)
                 .apply()
     }
 

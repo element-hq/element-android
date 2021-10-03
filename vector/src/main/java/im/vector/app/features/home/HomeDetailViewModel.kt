@@ -38,19 +38,26 @@ import im.vector.app.features.invite.showInvites
 import im.vector.app.features.settings.VectorDataStore
 import im.vector.app.features.ui.UiStateRepository
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.query.ActiveSpaceFilter
+import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.query.RoomCategoryFilter
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.initsync.SyncStatusService
 import org.matrix.android.sdk.api.session.room.RoomSortOrder
+import org.matrix.android.sdk.api.session.room.accountdata.RoomAccountDataTypes
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
+import org.matrix.android.sdk.api.session.space.model.SpaceOrderContent
+import org.matrix.android.sdk.api.session.space.model.TopLevelSpaceComparator
 import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.flow.flow
 import timber.log.Timber
@@ -92,6 +99,7 @@ class HomeDetailViewModel @AssistedInject constructor(
         observeRoomSummaries()
         updatePstnSupportFlag()
         observeDataStore()
+        observeRootSpaces()
         callManager.addProtocolsCheckerListener(this)
         session.flow().liveUser(session.myUserId).execute {
             copy(
@@ -275,5 +283,47 @@ class HomeDetailViewModel @AssistedInject constructor(
                     }
                 }
                 .launchIn(viewModelScope)
+    }
+
+    // Taken from SpaceListViewModel.observeSpaceSummaries()
+    private fun observeRootSpaces() {
+        val spaceSummaryQueryParams = roomSummaryQueryParams {
+            memberships = listOf(Membership.JOIN, Membership.INVITE)
+            displayName = QueryStringValue.IsNotEmpty
+            excludeType = listOf(/**RoomType.MESSAGING,$*/
+                    null)
+        }
+
+        val flowSession = session.flow()
+
+        combine(
+                flowSession
+                        .liveUser(session.myUserId)
+                        .map {
+                            it.getOrNull()
+                        },
+                flowSession
+                        .liveSpaceSummaries(spaceSummaryQueryParams),
+                session
+                        .accountDataService()
+                        .getLiveRoomAccountDataEvents(setOf(RoomAccountDataTypes.EVENT_TYPE_SPACE_ORDER))
+                        .asFlow()
+        ) { _, communityGroups, _ ->
+            communityGroups
+        }
+                .execute { //async ->
+                    val rootSpaces = session.spaceService().getRootSpaceSummaries()
+                    val orders = rootSpaces.map {
+                        it.roomId to session.getRoom(it.roomId)
+                                ?.getAccountDataEvent(RoomAccountDataTypes.EVENT_TYPE_SPACE_ORDER)
+                                ?.content.toModel<SpaceOrderContent>()
+                                ?.safeOrder()
+                    }.toMap()
+                    copy(
+                            //asyncSpaces = async,
+                            rootSpacesOrdered = rootSpaces.sortedWith(TopLevelSpaceComparator(orders)),
+                            //spaceOrderInfo = orders
+                    )
+                }
     }
 }

@@ -74,6 +74,12 @@
         android:key="SETTINGS_LABS_UNREAD_NOTIFICATIONS_AS_TAB"
         android:title="@string/labs_show_unread_notifications_as_tab" />
 
+    <im.vector.app.core.preference.VectorSwitchPreference
+        android:defaultValue="false"
+        android:key="SETTINGS_ENABLE_SPACE_PAGER"
+        android:title="@string/settings_enable_space_pager"
+        android:summary="@string/settings_enable_space_pager_summary" />
+
 
     <im.vector.app.core.preference.VectorSwitchPreference
         android:defaultValue="false"

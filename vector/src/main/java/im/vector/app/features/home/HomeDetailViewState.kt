@@ -32,6 +32,7 @@ data class HomeDetailViewState(
         val myMatrixItem: MatrixItem? = null,
         val asyncRooms: Async<List<RoomSummary>> = Uninitialized,
         val currentTab: HomeTab = HomeTab.RoomList(RoomListDisplayMode.ALL),
+        val rootSpacesOrdered: List<RoomSummary>? = null,
         val notificationCountCatchup: Int = 0,
         val notificationHighlightCatchup: Boolean = false,
         val notificationCountPeople: Int = 0,

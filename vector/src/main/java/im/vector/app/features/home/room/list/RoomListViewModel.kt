@@ -146,7 +146,7 @@ class RoomListViewModel @AssistedInject constructor(
     }
 
     val sections: List<RoomsSection> by lazy {
-        roomListSectionBuilder.buildSections(initialState.displayMode)
+        roomListSectionBuilder.buildSections(initialState.displayMode, initialState.explicitSpaceId)
     }
 
     override fun handle(action: RoomListAction) {

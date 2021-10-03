@@ -47,6 +47,7 @@ import im.vector.app.core.resources.UserPreferencesProvider
 import im.vector.app.databinding.FragmentRoomListBinding
 import im.vector.app.features.home.RoomListDisplayMode
 import im.vector.app.features.home.room.filtered.FilteredRoomFooterItem
+import im.vector.app.features.home.room.list.RoomListSectionBuilderSpace.Companion.SPACE_ID_FOLLOW_APP
 import im.vector.app.features.home.room.list.actions.RoomListActionsArgs
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsBottomSheet
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedAction
@@ -66,7 +67,8 @@ import javax.inject.Inject
 
 @Parcelize
 data class RoomListParams(
-        val displayMode: RoomListDisplayMode
+        val displayMode: RoomListDisplayMode,
+        val explicitSpaceId: String? = SPACE_ID_FOLLOW_APP
 ) : Parcelable
 
 class RoomListFragment @Inject constructor(
@@ -559,6 +561,9 @@ class RoomListFragment @Inject constructor(
     }
 
     override fun onSwitchSpace(spaceId: String?) {
+        if (roomListParams.explicitSpaceId == SPACE_ID_FOLLOW_APP) {
+            return
+        }
         if (spaceId != expandStatusSpaceId) {
             persistExpandStatus()
             expandStatusSpaceId = spaceId

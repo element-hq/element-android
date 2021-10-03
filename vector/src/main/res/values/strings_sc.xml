@@ -151,4 +151,7 @@
     <string name="settings_include_space_members_as_rooms">Show people in spaces</string>
     <string name="settings_include_space_members_as_rooms_summary">If disabled, you can still add Direct Messages to Personal Spaces. If enabled, you\'ll automatically see everyone who is a member of the Space.</string>
 
+    <string name="settings_enable_space_pager">Swipe chat list to switch space</string>
+    <string name="settings_enable_space_pager_summary">Allow to switch between root spaces by swiping horizontally in the chat list</string>
+
 </resources>

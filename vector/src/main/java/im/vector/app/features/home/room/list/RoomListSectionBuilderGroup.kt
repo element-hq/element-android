@@ -47,7 +47,7 @@ class RoomListSectionBuilderGroup(
         private val onUpdatable: (UpdatableLivePageResult) -> Unit
 ) : RoomListSectionBuilder {
 
-    override fun buildSections(mode: RoomListDisplayMode): List<RoomsSection> {
+    override fun buildSections(mode: RoomListDisplayMode, explicitSpaceId: String?): List<RoomsSection> {
         val activeGroupAwareQueries = mutableListOf<UpdatableLivePageResult>()
         val sections = mutableListOf<RoomsSection>()
         val actualGroupId = appStateHandler.safeActiveGroupId()
