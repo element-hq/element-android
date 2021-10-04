@@ -100,6 +100,8 @@ class CreateDirectRoomActivity : SimpleFragmentActivity(), UserListViewModel.Fac
                             title = getString(R.string.fab_menu_create_chat),
                             menuResId = R.menu.vector_create_direct_room,
                             singleSelection = true,
+                            showContactBookAction = false,
+                            showInviteActions = false
                     )
             )
         }
