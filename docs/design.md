@@ -34,7 +34,7 @@ Some of them depend on the theme, so ensure to use theme attributes and not colo
  - ensure that the correct layer is selected. Sometimes the parent layer has to be selected on the left panel
  - on the right panel, click on "export"
  - select SVG
- - you cqn check the preview of what will be exported
+ - you can check the preview of what will be exported
  - click on "export" and save the file locally
  - unzip the file if necessary
 
