@@ -175,6 +175,7 @@ class RoomAliasController @Inject constructor(
                 formEditTextItem {
                     id("publishManuallyEdit")
                     value(data.publishManuallyState.value)
+                    maxLength(MatrixConstants.ALIAS_MAX_LENGTH)
                     hint(host.stringProvider.getString(R.string.room_alias_address_hint))
                     inputType(InputType.TYPE_CLASS_TEXT)
                     onTextChange { text ->
