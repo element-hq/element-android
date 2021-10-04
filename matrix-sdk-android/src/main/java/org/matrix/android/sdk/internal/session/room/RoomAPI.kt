@@ -217,22 +217,6 @@ internal interface RoomAPI {
     suspend fun getRoomState(@Path("roomId") roomId: String): List<Event>
 
     /**
-     * Send a relation event to a room.
-     *
-     * @param txId      the transaction Id
-     * @param roomId    the room id
-     * @param eventType the event type
-     * @param content   the event content
-     */
-    @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/send_relation/{parent_id}/{relation_type}/{event_type}")
-    suspend fun sendRelation(@Path("roomId") roomId: String,
-                             @Path("parent_id") parentId: String,
-                             @Path("relation_type") relationType: String,
-                             @Path("event_type") eventType: String,
-                             @Body content: Content?
-    ): SendResponse
-
-    /**
      * Paginate relations for event based in normal topological order
      *
      * @param relationType filter for this relation type
