@@ -68,7 +68,13 @@ sealed class RoomDetailViewEvents : VectorViewEvents {
 
     abstract class SendMessageResult : RoomDetailViewEvents()
 
-    data class DisplayAndAcceptCall(val call: WebRtcCall): RoomDetailViewEvents()
+    object DisplayPromptForIntegrationManager : RoomDetailViewEvents()
+
+    object DisplayEnableIntegrationsWarning : RoomDetailViewEvents()
+
+    data class OpenRoomMemberProfile(val userId: String) : RoomDetailViewEvents()
+
+  data class DisplayAndAcceptCall(val call: WebRtcCall): RoomDetailViewEvents()
 
     object DisplayPromptForIntegrationManager : RoomDetailViewEvents()
 
