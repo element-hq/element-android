@@ -25,20 +25,17 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import im.vector.app.R
 import im.vector.app.core.mvrx.runCatchingToAsync
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
-import io.reactivex.Observable
-import io.reactivex.functions.BiFunction
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.combineLatest
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -50,8 +47,6 @@ import org.matrix.android.sdk.api.session.profile.ProfileService
 import org.matrix.android.sdk.api.session.room.Room
 import org.matrix.android.sdk.api.session.room.members.roomMemberQueryParams
 import org.matrix.android.sdk.api.session.room.model.Membership
-import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
-import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.RoomType
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.session.room.powerlevels.Role
@@ -60,8 +55,6 @@ import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.api.util.toOptional
 import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.flow.unwrap
-import org.matrix.android.sdk.rx.rx
-import org.matrix.android.sdk.rx.unwrap
 
 class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private val initialState: RoomMemberProfileViewState,
                                                              private val stringProvider: StringProvider,
@@ -114,7 +107,7 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
             }
         }
 
-        session.rx().liveUserCryptoDevices(initialState.userId)
+        session.flow().liveUserCryptoDevices(initialState.userId)
                 .map {
                     Pair(
                             it.fold(true, { prev, dev -> prev && dev.isVerified }),
@@ -128,14 +121,14 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
                     )
                 }
 
-        session.rx().liveCrossSigningInfo(initialState.userId)
+        session.flow().liveCrossSigningInfo(initialState.userId)
                 .execute {
                     copy(userMXCrossSigningInfo = it.invoke()?.getOrNull())
                 }
     }
 
     private fun observeIgnoredState() {
-        session.rx().liveIgnoredUsers()
+        session.flow().liveIgnoredUsers()
                 .map { ignored ->
                     ignored.find {
                         it.userId == initialState.userId
@@ -252,7 +245,7 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
         val queryParams = roomMemberQueryParams {
             this.userId = QueryStringValue.Equals(initialState.userId, QueryStringValue.Case.SENSITIVE)
         }
-        room.rx().liveRoomMembers(queryParams)
+        room.flow().liveRoomMembers(queryParams)
                 .map { it.firstOrNull().toOptional() }
                 .unwrap()
                 .execute {
@@ -312,7 +305,7 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
         roomSummaryLive.execute {
             copy(isRoomEncrypted = it.invoke()?.isEncrypted == true)
         }
-        roomSummaryLive.combine(powerLevelsContentLive){roomSummary, powerLevelsContent ->
+        roomSummaryLive.combine(powerLevelsContentLive) { roomSummary, powerLevelsContent ->
             val roomName = roomSummary.toMatrixItem().getBestName()
             val powerLevelsHelper = PowerLevelsHelper(powerLevelsContent)
             when (val userPowerLevel = powerLevelsHelper.getUserRole(initialState.userId)) {

@@ -25,7 +25,9 @@ import dagger.assisted.AssistedFactory
 import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
+import kotlinx.coroutines.flow.map
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
 import org.matrix.android.sdk.rx.rx
 
@@ -48,7 +50,7 @@ class DeviceVerificationInfoBottomSheetViewModel @AssistedInject constructor(@As
                     isRecoverySetup = session.sharedSecretStorageService.isRecoverySetup()
             )
         }
-        session.rx().liveCrossSigningInfo(session.myUserId)
+        session.flow().liveCrossSigningInfo(session.myUserId)
                 .execute {
                     copy(
                             hasAccountCrossSigning = it.invoke()?.getOrNull() != null,
@@ -56,7 +58,7 @@ class DeviceVerificationInfoBottomSheetViewModel @AssistedInject constructor(@As
                     )
                 }
 
-        session.rx().liveUserCryptoDevices(session.myUserId)
+        session.flow().liveUserCryptoDevices(session.myUserId)
                 .map { list ->
                     list.firstOrNull { it.deviceId == deviceId }
                 }
@@ -67,7 +69,7 @@ class DeviceVerificationInfoBottomSheetViewModel @AssistedInject constructor(@As
                     )
                 }
 
-        session.rx().liveUserCryptoDevices(session.myUserId)
+        session.flow().liveUserCryptoDevices(session.myUserId)
                 .map { it.size }
                 .execute {
                     copy(
@@ -79,7 +81,7 @@ class DeviceVerificationInfoBottomSheetViewModel @AssistedInject constructor(@As
             copy(deviceInfo = Loading())
         }
 
-        session.rx().liveMyDevicesInfo()
+        session.flow().liveMyDevicesInfo()
                 .map { devices ->
                     devices.firstOrNull { it.deviceId == deviceId } ?: DeviceInfo(deviceId = deviceId)
                 }

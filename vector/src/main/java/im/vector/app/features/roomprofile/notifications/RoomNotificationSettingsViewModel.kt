@@ -28,6 +28,8 @@ import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsBottomSheet
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.flow.flow
+import org.matrix.android.sdk.flow.unwrap
 import org.matrix.android.sdk.rx.rx
 import org.matrix.android.sdk.rx.unwrap
 
@@ -64,7 +66,7 @@ class RoomNotificationSettingsViewModel @AssistedInject constructor(
     }
 
     private fun observeSummary() {
-        room.rx().liveRoomSummary()
+        room.flow().liveRoomSummary()
                 .unwrap()
                 .execute { async ->
                     copy(roomSummary = async)

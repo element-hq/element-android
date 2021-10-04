@@ -16,6 +16,7 @@
 
 package im.vector.app.features.roomprofile.members
 
+import androidx.lifecycle.asFlow
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MavericksViewModelFactory
@@ -27,10 +28,16 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
-import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.switchMap
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.extensions.orFalse
@@ -44,10 +51,9 @@ import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.session.room.powerlevels.Role
-import org.matrix.android.sdk.rx.asObservable
-import org.matrix.android.sdk.rx.mapOptional
-import org.matrix.android.sdk.rx.rx
-import org.matrix.android.sdk.rx.unwrap
+import org.matrix.android.sdk.flow.flow
+import org.matrix.android.sdk.flow.mapOptional
+import org.matrix.android.sdk.flow.unwrap
 import timber.log.Timber
 
 class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState: RoomMemberListViewState,
@@ -87,28 +93,28 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
             memberships = Membership.activeMemberships()
         }
 
-        Observable
-                .combineLatest<List<RoomMemberSummary>, PowerLevelsContent, RoomMemberSummaries>(
-                        room.rx().liveRoomMembers(roomMemberQueryParams),
-                        room.rx()
-                                .liveStateEvent(EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.NoCondition)
-                                .mapOptional { it.content.toModel<PowerLevelsContent>() }
-                                .unwrap(),
-                        { roomMembers, powerLevelsContent ->
-                            buildRoomMemberSummaries(powerLevelsContent, roomMembers)
-                        }
-                )
+        combine(
+                room.flow().liveRoomMembers(roomMemberQueryParams),
+                room.flow()
+                        .liveStateEvent(EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.NoCondition)
+                        .mapOptional { it.content.toModel<PowerLevelsContent>() }
+                        .unwrap()
+        )
+        { roomMembers, powerLevelsContent ->
+            buildRoomMemberSummaries(powerLevelsContent, roomMembers)
+        }
+
                 .execute { async ->
                     copy(roomMemberSummaries = async)
                 }
 
         if (room.isEncrypted()) {
-            room.rx().liveRoomMembers(roomMemberQueryParams)
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .switchMap { membersSummary ->
+            room.flow().liveRoomMembers(roomMemberQueryParams)
+                    .flowOn(Dispatchers.Main)
+                    .flatMapLatest { membersSummary ->
                         session.cryptoService().getLiveCryptoDeviceInfo(membersSummary.map { it.userId })
-                                .asObservable()
-                                .doOnError { Timber.e(it) }
+                                .asFlow()
+                                .catch { Timber.e(it) }
                                 .map { deviceList ->
                                     // If any key change, emit the userIds list
                                     deviceList.groupBy { it.userId }.mapValues {
@@ -147,7 +153,7 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
     }
 
     private fun observeRoomSummary() {
-        room.rx().liveRoomSummary()
+        room.flow().liveRoomSummary()
                 .unwrap()
                 .execute { async ->
                     copy(roomSummary = async)
@@ -155,7 +161,7 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
     }
 
     private fun observeThirdPartyInvites() {
-        room.rx().liveStateEvents(setOf(EventType.STATE_ROOM_THIRD_PARTY_INVITE))
+        room.flow().liveStateEvents(setOf(EventType.STATE_ROOM_THIRD_PARTY_INVITE))
                 .execute { async ->
                     copy(threePidInvites = async)
                 }

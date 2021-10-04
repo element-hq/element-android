@@ -42,6 +42,7 @@ import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.session.room.powerlevels.Role
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
+import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.rx.rx
 import timber.log.Timber
 
@@ -77,7 +78,7 @@ class SpaceMenuViewModel @AssistedInject constructor(
 
         session.getRoom(initialState.spaceId)?.let { room ->
 
-            room.rx().liveRoomSummary().subscribe {
+            room.flow().liveRoomSummary().onEach {
                 it.getOrNull()?.let {
                     if (it.membership == Membership.LEAVE) {
                         setState { copy(leavingState = Success(Unit)) }
@@ -87,7 +88,7 @@ class SpaceMenuViewModel @AssistedInject constructor(
                         }
                     }
                 }
-            }.disposeOnClear()
+            }.launchIn(viewModelScope)
 
             PowerLevelsFlowFactory(room)
                     .createFlow()

@@ -34,6 +34,7 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
+import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.rx.rx
 import java.util.concurrent.TimeUnit
 
@@ -68,7 +69,7 @@ class IncomingShareViewModel @AssistedInject constructor(
             memberships = listOf(Membership.JOIN)
         }
         session
-                .rx().liveRoomSummaries(queryParams)
+                .flow().liveRoomSummaries(queryParams)
                 .execute {
                     copy(roomSummaries = it)
                 }

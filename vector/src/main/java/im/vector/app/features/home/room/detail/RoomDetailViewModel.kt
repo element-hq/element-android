@@ -28,7 +28,6 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import com.jakewharton.rxrelay2.BehaviorRelay
-import com.jakewharton.rxrelay2.PublishRelay
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -60,11 +59,11 @@ import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.VectorDataStore
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.voice.VoicePlayerHelper
-import io.reactivex.Observable
 import io.reactivex.rxkotlin.subscribeBy
-import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.launchIn
@@ -112,8 +111,6 @@ import org.matrix.android.sdk.api.util.toOptional
 import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.flow.unwrap
 import org.matrix.android.sdk.internal.crypto.model.event.WithHeldCode
-import org.matrix.android.sdk.rx.rx
-import org.matrix.android.sdk.rx.unwrap
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
@@ -143,7 +140,7 @@ class RoomDetailViewModel @AssistedInject constructor(
     private val eventId = initialState.eventId
     private val invisibleEventsObservable = BehaviorRelay.create<RoomDetailAction.TimelineEventTurnsInvisible>()
     private val visibleEventsObservable = BehaviorRelay.create<RoomDetailAction.TimelineEventTurnsVisible>()
-    private var timelineEvents = PublishRelay.create<List<TimelineEvent>>()
+    private var timelineEvents = MutableSharedFlow<List<TimelineEvent>>(0)
     val timeline = timelineFactory.createTimeline(viewModelScope, room, eventId)
 
     // Same lifecycle than the ViewModel (survive to screen rotation)
@@ -1533,14 +1530,12 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private fun getUnreadState() {
-        Observable
-                .combineLatest<List<TimelineEvent>, RoomSummary, UnreadState>(
-                        timelineEvents.observeOn(Schedulers.computation()),
-                        room.rx().liveRoomSummary().unwrap(),
-                        { timelineEvents, roomSummary ->
-                            computeUnreadState(timelineEvents, roomSummary)
-                        }
-                )
+        combine(
+                timelineEvents,
+                room.flow().liveRoomSummary().unwrap()
+        ) { timelineEvents, roomSummary ->
+            computeUnreadState(timelineEvents, roomSummary)
+        }
                 // We don't want live update of unread so we skip when we already had a HasUnread or HasNoUnread
                 .distinctUntilChanged { previous, current ->
                     when {
@@ -1549,10 +1544,9 @@ class RoomDetailViewModel @AssistedInject constructor(
                         else                                                                           -> false
                     }
                 }
-                .subscribe {
-                    setState { copy(unreadState = it) }
+                .setOnEach {
+                    copy(unreadState = it)
                 }
-                .disposeOnClear()
     }
 
     private fun computeUnreadState(events: List<TimelineEvent>, roomSummary: RoomSummary): UnreadState {
@@ -1619,7 +1613,7 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     override fun onTimelineUpdated(snapshot: List<TimelineEvent>) {
-        timelineEvents.accept(snapshot)
+        timelineEvents.tryEmit(snapshot)
 
         // PreviewUrl
         if (vectorPreferences.showUrlPreviews()) {

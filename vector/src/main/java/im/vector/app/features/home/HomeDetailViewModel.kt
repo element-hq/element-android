@@ -16,7 +16,6 @@
 
 package im.vector.app.features.home
 
-import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
@@ -47,6 +46,7 @@ import org.matrix.android.sdk.api.session.room.RoomSortOrder
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.api.util.toMatrixItem
+import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.rx.asObservable
 import org.matrix.android.sdk.rx.rx
 import timber.log.Timber
@@ -95,7 +95,7 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
         updateShowDialPadTab()
         observeDataStore()
         callManager.addProtocolsCheckerListener(this)
-        session.rx().liveUser(session.myUserId).execute {
+        session.flow().liveUser(session.myUserId).execute {
             copy(
                     myMatrixItem = it.invoke()?.getOrNull()?.toMatrixItem()
             )
