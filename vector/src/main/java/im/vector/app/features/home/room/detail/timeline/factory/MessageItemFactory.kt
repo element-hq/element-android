@@ -69,6 +69,7 @@ import im.vector.app.features.media.ImageContentRenderer
 import im.vector.app.features.media.VideoContentRenderer
 import me.gujun.android.span.span
 import org.commonmark.node.Document
+import org.matrix.android.sdk.api.MatrixUrls.isMxcUrl
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.RelationType
 import org.matrix.android.sdk.api.session.events.model.toModel
@@ -213,7 +214,7 @@ class MessageItemFactory @Inject constructor(
             if (informationData.sentByMe && !informationData.sendState.isSent()) {
                 it
             } else {
-                it.takeIf { it.startsWith("mxc://") }
+                it.takeIf { it.isMxcUrl() }
             }
         } ?: ""
         return MessageFileItem_()
@@ -244,7 +245,7 @@ class MessageItemFactory @Inject constructor(
             if (informationData.sentByMe && !informationData.sendState.isSent()) {
                 it
             } else {
-                it.takeIf { it.startsWith("mxc://") }
+                it.takeIf { it.isMxcUrl() }
             }
         } ?: ""
 

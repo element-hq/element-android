@@ -20,6 +20,7 @@ import im.vector.app.core.extensions.isEmail
 import im.vector.app.core.extensions.isMsisdn
 import im.vector.app.features.home.room.detail.ChatEffect
 import org.matrix.android.sdk.api.MatrixPatterns
+import org.matrix.android.sdk.api.MatrixUrls.isMxcUrl
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import timber.log.Timber
 
@@ -92,7 +93,7 @@ object CommandParser {
                     if (messageParts.size == 2) {
                         val url = messageParts[1]
 
-                        if (url.startsWith("mxc://")) {
+                        if (url.isMxcUrl()) {
                             ParsedCommand.ChangeRoomAvatar(url)
                         } else {
                             ParsedCommand.ErrorSyntax(Command.ROOM_AVATAR)
@@ -105,7 +106,7 @@ object CommandParser {
                     if (messageParts.size == 2) {
                         val url = messageParts[1]
 
-                        if (url.startsWith("mxc://")) {
+                        if (url.isMxcUrl()) {
                             ParsedCommand.ChangeAvatarForRoom(url)
                         } else {
                             ParsedCommand.ErrorSyntax(Command.CHANGE_AVATAR_FOR_ROOM)
