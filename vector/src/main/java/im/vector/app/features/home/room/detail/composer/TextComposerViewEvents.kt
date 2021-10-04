@@ -19,7 +19,6 @@ package im.vector.app.features.home.room.detail.composer
 import androidx.annotation.StringRes
 import im.vector.app.core.platform.VectorViewEvents
 import im.vector.app.features.command.Command
-import im.vector.app.features.home.room.detail.RoomDetailViewEvents
 
 sealed class TextComposerViewEvents : VectorViewEvents {
 

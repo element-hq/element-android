@@ -45,7 +45,6 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
-import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
 import org.matrix.android.sdk.api.session.room.model.RoomAvatarContent
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
@@ -607,15 +606,20 @@ class TextComposerViewModel @AssistedInject constructor(
         }
     }
 
-    private fun getLastMemberEvent(): RoomMemberContent {
+    private fun getMyRoomMemberContent(): RoomMemberContent? {
         return room.getStateEvent(EventType.STATE_ROOM_MEMBER, QueryStringValue.Equals(session.myUserId))
-                ?.content?.toModel<RoomMemberContent>()
-                ?: RoomMemberContent(membership = Membership.JOIN)
+                ?.content
+                ?.toModel<RoomMemberContent>()
     }
 
     private fun handleChangeDisplayNameForRoomSlashCommand(changeDisplayName: ParsedCommand.ChangeDisplayNameForRoom) {
         launchSlashCommandFlowSuspendable {
-            room.sendStateEvent(EventType.STATE_ROOM_MEMBER, session.myUserId, getLastMemberEvent().copy(displayName = changeDisplayName.displayName).toContent())
+            getMyRoomMemberContent()
+                    ?.copy(displayName = changeDisplayName.displayName)
+                    ?.toContent()
+                    ?.let {
+                        room.sendStateEvent(EventType.STATE_ROOM_MEMBER, session.myUserId, it)
+                    }
         }
     }
 
@@ -627,7 +631,12 @@ class TextComposerViewModel @AssistedInject constructor(
 
     private fun handleChangeAvatarForRoomSlashCommand(changeAvatar: ParsedCommand.ChangeAvatarForRoom) {
         launchSlashCommandFlowSuspendable {
-            room.sendStateEvent(EventType.STATE_ROOM_MEMBER, session.myUserId, getLastMemberEvent().copy(avatarUrl = changeAvatar.url).toContent())
+            getMyRoomMemberContent()
+                    ?.copy(avatarUrl = changeAvatar.url)
+                    ?.toContent()
+                    ?.let {
+                        room.sendStateEvent(EventType.STATE_ROOM_MEMBER, session.myUserId, it)
+                    }
         }
     }
 
