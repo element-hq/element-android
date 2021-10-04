@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,6 +25,9 @@ import java.io.InputStream
  */
 @WorkerThread
 fun writeToFile(inputStream: InputStream, outputFile: File) {
+    // Ensure the parent folder exists, else it will crash
+    outputFile.parentFile?.mkdirs()
+
     outputFile.outputStream().use {
         inputStream.copyTo(it)
     }

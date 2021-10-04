@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,6 +20,7 @@ import io.realm.RealmObject
 import io.realm.RealmResults
 import io.realm.annotations.Index
 import io.realm.annotations.LinkingObjects
+import org.matrix.android.sdk.internal.extensions.assertIsManaged
 
 internal open class TimelineEventEntity(var localId: Long = 0,
                                         @Index var eventId: String = "",
@@ -39,4 +39,14 @@ internal open class TimelineEventEntity(var localId: Long = 0,
     val chunk: RealmResults<ChunkEntity>? = null
 
     companion object
+}
+
+internal fun TimelineEventEntity.deleteOnCascade(canDeleteRoot: Boolean) {
+    assertIsManaged()
+    if (canDeleteRoot) {
+        root?.deleteFromRealm()
+    }
+    annotations?.deleteOnCascade()
+    readReceipts?.deleteOnCascade()
+    deleteFromRealm()
 }

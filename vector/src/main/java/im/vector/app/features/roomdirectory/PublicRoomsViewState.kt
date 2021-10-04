@@ -21,7 +21,6 @@ import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoom
-import org.matrix.android.sdk.api.session.room.model.thirdparty.RoomDirectoryData
 
 data class PublicRoomsViewState(
         // The current filter
@@ -29,7 +28,7 @@ data class PublicRoomsViewState(
         // Store cumul of pagination result
         val publicRooms: List<PublicRoom> = emptyList(),
         // Current pagination request
-        val asyncPublicRoomsRequest: Async<List<PublicRoom>> = Uninitialized,
+        val asyncPublicRoomsRequest: Async<Unit> = Uninitialized,
         // True if more result are available server side
         val hasMore: Boolean = false,
         // Set of joined roomId,

@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,6 +27,10 @@ import io.realm.kotlin.where
 internal fun RoomEntity.Companion.where(realm: Realm, roomId: String): RealmQuery<RoomEntity> {
     return realm.where<RoomEntity>()
             .equalTo(RoomEntityFields.ROOM_ID, roomId)
+}
+
+internal fun RoomEntity.Companion.getOrCreate(realm: Realm, roomId: String): RoomEntity {
+    return where(realm, roomId).findFirst() ?: realm.createObject(RoomEntity::class.java, roomId)
 }
 
 internal fun RoomEntity.Companion.where(realm: Realm, membership: Membership? = null): RealmQuery<RoomEntity> {

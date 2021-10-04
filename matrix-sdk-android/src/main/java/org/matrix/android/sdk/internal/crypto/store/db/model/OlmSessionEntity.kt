@@ -1,5 +1,4 @@
 /*
- * Copyright 2018 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,10 +26,10 @@ internal fun OlmSessionEntity.Companion.createPrimaryKey(sessionId: String, devi
 
 // olmSessionData is a serialized OlmSession
 internal open class OlmSessionEntity(@PrimaryKey var primaryKey: String = "",
-                            var sessionId: String? = null,
-                            var deviceKey: String? = null,
-                            var olmSessionData: String? = null,
-                            var lastReceivedMessageTs: Long = 0)
+                                     var sessionId: String? = null,
+                                     var deviceKey: String? = null,
+                                     var olmSessionData: String? = null,
+                                     var lastReceivedMessageTs: Long = 0)
     : RealmObject() {
 
     fun getOlmSession(): OlmSession? {

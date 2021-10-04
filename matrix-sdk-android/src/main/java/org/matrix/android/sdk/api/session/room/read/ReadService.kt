@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,7 +17,6 @@
 package org.matrix.android.sdk.api.session.room.read
 
 import androidx.lifecycle.LiveData
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.room.model.ReadReceipt
 import org.matrix.android.sdk.api.util.Optional
 
@@ -36,17 +34,17 @@ interface ReadService {
     /**
      * Force the read marker to be set on the latest event.
      */
-    fun markAsRead(params: MarkAsReadParams = MarkAsReadParams.BOTH, callback: MatrixCallback<Unit>)
+    suspend fun markAsRead(params: MarkAsReadParams = MarkAsReadParams.BOTH)
 
     /**
      * Set the read receipt on the event with provided eventId.
      */
-    fun setReadReceipt(eventId: String, callback: MatrixCallback<Unit>)
+    suspend fun setReadReceipt(eventId: String)
 
     /**
      * Set the read marker on the event with provided eventId.
      */
-    fun setReadMarker(fullyReadEventId: String, callback: MatrixCallback<Unit>)
+    suspend fun setReadMarker(fullyReadEventId: String)
 
     /**
      * Check if an event is already read, ie. your read receipt is set on a more recent event.
@@ -62,6 +60,14 @@ interface ReadService {
      * Returns a live read receipt id for the room.
      */
     fun getMyReadReceiptLive(): LiveData<Optional<String>>
+
+    /**
+     * Get the eventId where the read receipt for the provided user is
+     * @param userId the id of the user to look for
+     *
+     * @return the eventId where the read receipt for the provided user is attached, or null if not found
+     */
+    fun getUserReadReceipt(userId: String): String?
 
     /**
      * Returns a live list of read receipts for a given event

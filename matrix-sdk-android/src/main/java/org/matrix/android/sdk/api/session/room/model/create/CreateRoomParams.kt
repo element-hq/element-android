@@ -1,5 +1,4 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,14 +16,15 @@
 
 package org.matrix.android.sdk.api.session.room.model.create
 
+import android.net.Uri
 import org.matrix.android.sdk.api.session.identity.ThreePid
+import org.matrix.android.sdk.api.session.room.model.GuestAccess
 import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
 import org.matrix.android.sdk.api.session.room.model.RoomDirectoryVisibility
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
 import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 
-// TODO Give a way to include other initial states
-class CreateRoomParams {
+open class CreateRoomParams {
     /**
      * A public visibility indicates that the room will be shown in the published room list.
      * A private visibility will hide the room from the published room list.
@@ -53,6 +53,11 @@ class CreateRoomParams {
     var topic: String? = null
 
     /**
+     * If this is not null, the image uri will be sent to the media server and will be set as a room avatar.
+     */
+    var avatarUri: Uri? = null
+
+    /**
      * A list of user IDs to invite to the room.
      * This will tell the server to invite everyone in the list to the newly created room.
      */
@@ -62,6 +67,11 @@ class CreateRoomParams {
      * A list of objects representing third party IDs to invite into the room.
      */
     val invite3pids = mutableListOf<ThreePid>()
+
+    /**
+     * Initial Guest Access
+     */
+    var guestAccess: GuestAccess? = null
 
     /**
      * If set to true, when the room will be created, if cross-signing is enabled and we can get keys for every invited users,
@@ -89,7 +99,40 @@ class CreateRoomParams {
      * The server will clobber the following keys: creator.
      * Future versions of the specification may allow the server to clobber other keys.
      */
-    var creationContent: Any? = null
+    val creationContent = mutableMapOf<String, Any>()
+
+    /**
+     * A list of state events to set in the new room. This allows the user to override the default state events
+     * set in the new room. The expected format of the state events are an object with type, state_key and content keys set.
+     * Takes precedence over events set by preset, but gets overridden by name and topic keys.
+     */
+    val initialStates = mutableListOf<CreateRoomStateEvent>()
+
+    /**
+     * Set to true to disable federation of this room.
+     * Default: false
+     */
+    var disableFederation = false
+        set(value) {
+            field = value
+            if (value) {
+                creationContent[CREATION_CONTENT_KEY_M_FEDERATE] = false
+            } else {
+                // This is the default value, we remove the field
+                creationContent.remove(CREATION_CONTENT_KEY_M_FEDERATE)
+            }
+        }
+
+    var roomType: String? = null // RoomType.MESSAGING
+        set(value) {
+            field = value
+            if (value != null) {
+                creationContent[CREATION_CONTENT_KEY_ROOM_TYPE] = value
+            } else {
+                // This is the default value, we remove the field
+                creationContent.remove(CREATION_CONTENT_KEY_ROOM_TYPE)
+            }
+        }
 
     /**
      * The power level content to override in the default power level event
@@ -114,5 +157,14 @@ class CreateRoomParams {
 
     fun enableEncryption() {
         algorithm = MXCRYPTO_ALGORITHM_MEGOLM
+    }
+
+    var roomVersion: String? = null
+
+    var featurePreset: RoomFeaturePreset? = null
+
+    companion object {
+        private const val CREATION_CONTENT_KEY_M_FEDERATE = "m.federate"
+        private const val CREATION_CONTENT_KEY_ROOM_TYPE = "type"
     }
 }

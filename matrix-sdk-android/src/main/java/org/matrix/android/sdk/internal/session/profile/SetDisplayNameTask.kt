@@ -1,5 +1,4 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,9 +16,9 @@
 
 package org.matrix.android.sdk.internal.session.profile
 
+import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.task.Task
-import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
 internal abstract class SetDisplayNameTask : Task<SetDisplayNameTask.Params, Unit> {
@@ -31,14 +30,14 @@ internal abstract class SetDisplayNameTask : Task<SetDisplayNameTask.Params, Uni
 
 internal class DefaultSetDisplayNameTask @Inject constructor(
         private val profileAPI: ProfileAPI,
-        private val eventBus: EventBus) : SetDisplayNameTask() {
+        private val globalErrorReceiver: GlobalErrorReceiver) : SetDisplayNameTask() {
 
     override suspend fun execute(params: Params) {
-        return executeRequest(eventBus) {
-            val body = SetDisplayNameBody(
-                    displayName = params.newDisplayName
-            )
-            apiCall = profileAPI.setDisplayName(params.userId, body)
+        val body = SetDisplayNameBody(
+                displayName = params.newDisplayName
+        )
+        return executeRequest(globalErrorReceiver) {
+            profileAPI.setDisplayName(params.userId, body)
         }
     }
 }

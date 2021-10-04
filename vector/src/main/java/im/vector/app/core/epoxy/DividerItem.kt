@@ -15,25 +15,10 @@
  */
 package im.vector.app.core.epoxy
 
-import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
 
-/**
- * Default background color is for the bottom sheets (R.attr.vctr_list_bottom_sheet_divider_color).
- * To use in fragment, set color using R.attr.riotx_list_divider_color
- */
 @EpoxyModelClass(layout = R.layout.item_divider)
 abstract class DividerItem : VectorEpoxyModel<DividerItem.Holder>() {
-
-    @EpoxyAttribute var color: Int = -1
-
-    override fun bind(holder: Holder) {
-        super.bind(holder)
-        if (color != -1) {
-            holder.view.setBackgroundColor(color)
-        }
-    }
-
     class Holder : VectorEpoxyHolder()
 }

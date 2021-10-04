@@ -21,6 +21,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.view.isInvisible
@@ -29,8 +30,10 @@ import androidx.core.widget.ImageViewCompat
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
+import im.vector.app.core.epoxy.onClick
 import im.vector.app.features.themes.ThemeUtils
 
 /**
@@ -42,42 +45,59 @@ abstract class BottomSheetActionItem : VectorEpoxyModel<BottomSheetActionItem.Ho
     @EpoxyAttribute
     @DrawableRes
     var iconRes: Int = 0
+
+    @EpoxyAttribute
+    var showIcon = true
+
+    @EpoxyAttribute
+    var text: String? = null
+
+    @StringRes
     @EpoxyAttribute
     var textRes: Int = 0
+
     @EpoxyAttribute
     var showExpand = false
+
     @EpoxyAttribute
     var expanded = false
+
     @EpoxyAttribute
     var selected = false
+
     @EpoxyAttribute
     var subMenuItem = false
+
     @EpoxyAttribute
     var destructive = false
-    @EpoxyAttribute
-    lateinit var listener: View.OnClickListener
+
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
+    lateinit var listener: ClickListener
 
     override fun bind(holder: Holder) {
         super.bind(holder)
-        holder.view.setOnClickListener {
-            listener.onClick(it)
-        }
+        holder.view.onClick(listener)
         holder.startSpace.isVisible = subMenuItem
         val tintColor = if (destructive) {
-            ContextCompat.getColor(holder.view.context, R.color.riotx_notice)
+            ThemeUtils.getColor(holder.view.context, R.attr.colorError)
         } else {
-            ThemeUtils.getColor(holder.view.context, R.attr.riotx_text_secondary)
+            ThemeUtils.getColor(holder.view.context, R.attr.vctr_content_secondary)
         }
+        holder.icon.isVisible = showIcon
         holder.icon.setImageResource(iconRes)
         ImageViewCompat.setImageTintList(holder.icon, ColorStateList.valueOf(tintColor))
-        holder.text.setText(textRes)
+        if (text != null) {
+            holder.text.text = text
+        } else {
+            holder.text.setText(textRes)
+        }
         holder.text.setTextColor(tintColor)
         holder.selected.isInvisible = !selected
         if (showExpand) {
             val expandDrawable = if (expanded) {
-                ContextCompat.getDrawable(holder.view.context, R.drawable.ic_material_expand_less_black)
+                ContextCompat.getDrawable(holder.view.context, R.drawable.ic_expand_less)
             } else {
-                ContextCompat.getDrawable(holder.view.context, R.drawable.ic_material_expand_more_black)
+                ContextCompat.getDrawable(holder.view.context, R.drawable.ic_expand_more)
             }
             expandDrawable?.also {
                 DrawableCompat.setTint(it, tintColor)

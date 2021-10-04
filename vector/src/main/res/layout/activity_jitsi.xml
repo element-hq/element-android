@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/jitsi_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/black">
 
-    <!-- Note: A org.jitsi.meet.sdk.JitsiMeetView will be added here -->
+    <!-- Note: A org.jitsi.meet.sdk.JitsiMeetView will be added here and so add tools:ignore="UselessParent" -->
 
     <LinearLayout
         android:id="@+id/jitsi_progress_layout"
@@ -13,7 +14,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        tools:ignore="UselessParent">
 
         <ProgressBar
             android:layout_width="40dp"

@@ -1,5 +1,4 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  * Copyright (C) 2015 Square, Inc.
  *
@@ -58,7 +57,7 @@ object HkdfSha256 {
 
         /*
           The output OKM is calculated as follows:
-          Notation | -> When the message is composed of several elements we use concatenation (denoted |) in the second argument;
+          Notation | -> When the message is composed of several elements we use concatenation (denoted |) in the second argument;
 
 
            N = ceil(L/HashLen)

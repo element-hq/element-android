@@ -1,0 +1,2 @@
+Principais mudanças nesta versão: Mensagem de Voz está habilitada por default.
+Changelog completo: https://github.com/vector-im/element-android/releases/tag/v1.2.0

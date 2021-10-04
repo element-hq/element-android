@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,18 +16,15 @@
 
 package org.matrix.android.sdk.internal.crypto.tasks
 
-import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import org.matrix.android.sdk.api.failure.Failure
-import org.matrix.android.sdk.api.failure.toRegistrationFlowResponse
 import org.matrix.android.sdk.internal.crypto.api.CryptoApi
 import org.matrix.android.sdk.internal.crypto.model.CryptoCrossSigningKey
-import org.matrix.android.sdk.internal.crypto.model.rest.KeysQueryResponse
+import org.matrix.android.sdk.api.auth.UIABaseAuth
 import org.matrix.android.sdk.internal.crypto.model.rest.UploadSigningKeysBody
-import org.matrix.android.sdk.internal.crypto.model.rest.UserPasswordAuth
 import org.matrix.android.sdk.internal.crypto.model.toRest
+import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.task.Task
-import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
 internal interface UploadSigningKeysTask : Task<UploadSigningKeysTask.Params, Unit> {
@@ -40,15 +36,9 @@ internal interface UploadSigningKeysTask : Task<UploadSigningKeysTask.Params, Un
             // the SSK
             val selfSignedKey: CryptoCrossSigningKey,
             /**
-             * - If null:
-             *    - no retry will be performed
-             * - If not null, it may or may not contain a sessionId:
-             *    - If sessionId is null:
-             *       - password should not be null: the task will perform a first request to get a sessionId, and then a second one
-             *    - If sessionId is not null:
-             *       - password should not be null as well, and no retry will be performed
+             * Authorisation info (User Interactive flow)
              */
-            val userPasswordAuth: UserPasswordAuth?
+            val userAuthParam: UIABaseAuth?
     )
 }
 
@@ -56,40 +46,22 @@ data class UploadSigningKeys(val failures: Map<String, Any>?) : Failure.FeatureF
 
 internal class DefaultUploadSigningKeysTask @Inject constructor(
         private val cryptoApi: CryptoApi,
-        private val eventBus: EventBus
+        private val globalErrorReceiver: GlobalErrorReceiver
 ) : UploadSigningKeysTask {
 
     override suspend fun execute(params: UploadSigningKeysTask.Params) {
-        val paramsHaveSessionId = params.userPasswordAuth?.session != null
-
         val uploadQuery = UploadSigningKeysBody(
                 masterKey = params.masterKey.toRest(),
                 userSigningKey = params.userKey.toRest(),
                 selfSigningKey = params.selfSignedKey.toRest(),
-                // If sessionId is provided, use the userPasswordAuth
-                auth = params.userPasswordAuth.takeIf { paramsHaveSessionId }
+                auth = params.userAuthParam?.asMap()
         )
-        try {
-            doRequest(uploadQuery)
-        } catch (throwable: Throwable) {
-            val registrationFlowResponse = throwable.toRegistrationFlowResponse()
-            if (registrationFlowResponse != null
-                    && registrationFlowResponse.flows.orEmpty().any { it.stages?.contains(LoginFlowTypes.PASSWORD) == true }
-                    && params.userPasswordAuth?.password != null
-                    && !paramsHaveSessionId
-            ) {
-                // Retry with authentication
-                doRequest(uploadQuery.copy(auth = params.userPasswordAuth.copy(session = registrationFlowResponse.session)))
-            } else {
-                // Other error
-                throw throwable
-            }
-        }
+        doRequest(uploadQuery)
     }
 
     private suspend fun doRequest(uploadQuery: UploadSigningKeysBody) {
-        val keysQueryResponse = executeRequest<KeysQueryResponse>(eventBus) {
-            apiCall = cryptoApi.uploadSigningKeys(uploadQuery)
+        val keysQueryResponse = executeRequest(globalErrorReceiver) {
+            cryptoApi.uploadSigningKeys(uploadQuery)
         }
         if (keysQueryResponse.failures?.isNotEmpty() == true) {
             throw UploadSigningKeys(keysQueryResponse.failures)

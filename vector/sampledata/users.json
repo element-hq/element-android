@@ -1,0 +1,28 @@
+{
+  "data": [
+    {
+      "displayName": "Amandine",
+      "id": "@amandine:matrix.org"
+    },
+    {
+      "displayName": "Benoit",
+      "id": "@benoit:matrix.org"
+    },
+    {
+      "displayName": "Gaelle",
+      "id": "@gawa:matrix.org"
+    },
+    {
+      "displayName": "Manu",
+      "id": "@manu:matrix.org"
+    },
+    {
+      "displayName": "Matthew",
+      "id": "@matthew:matrix.org"
+    },
+    {
+      "displayName": "Nad",
+      "id": "@nadonomy:matrix.org"
+    }
+  ]
+}

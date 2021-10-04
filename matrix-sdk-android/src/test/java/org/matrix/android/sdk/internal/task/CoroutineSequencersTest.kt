@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,25 +32,23 @@ class CoroutineSequencersTest: MatrixTest {
     private val dispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
 
     @Test
+    @Suppress("EXPERIMENTAL_API_USAGE")
     fun sequencer_should_run_sequential() {
         val sequencer = SemaphoreCoroutineSequencer()
         val results = ArrayList<String>()
 
         val jobs = listOf(
                 GlobalScope.launch(dispatcher) {
-                    sequencer.post { suspendingMethod("#1") }.also {
-                        results.add(it)
-                    }
+                    sequencer.post { suspendingMethod("#1") }
+                            .also { results.add(it) }
                 },
                 GlobalScope.launch(dispatcher) {
-                    sequencer.post { suspendingMethod("#2") }.also {
-                        results.add(it)
-                    }
+                    sequencer.post { suspendingMethod("#2") }
+                            .also { results.add(it) }
                 },
                 GlobalScope.launch(dispatcher) {
-                    sequencer.post { suspendingMethod("#3") }.also {
-                        results.add(it)
-                    }
+                    sequencer.post { suspendingMethod("#3") }
+                            .also { results.add(it) }
                 }
         )
         runBlocking {
@@ -63,6 +61,7 @@ class CoroutineSequencersTest: MatrixTest {
     }
 
     @Test
+    @Suppress("EXPERIMENTAL_API_USAGE")
     fun sequencer_should_run_parallel() {
         val sequencer1 = SemaphoreCoroutineSequencer()
         val sequencer2 = SemaphoreCoroutineSequencer()
@@ -70,19 +69,16 @@ class CoroutineSequencersTest: MatrixTest {
         val results = ArrayList<String>()
         val jobs = listOf(
                 GlobalScope.launch(dispatcher) {
-                    sequencer1.post { suspendingMethod("#1") }.also {
-                        results.add(it)
-                    }
+                    sequencer1.post { suspendingMethod("#1") }
+                            .also { results.add(it) }
                 },
                 GlobalScope.launch(dispatcher) {
-                    sequencer2.post { suspendingMethod("#2") }.also {
-                        results.add(it)
-                    }
+                    sequencer2.post { suspendingMethod("#2") }
+                            .also { results.add(it) }
                 },
                 GlobalScope.launch(dispatcher) {
-                    sequencer3.post { suspendingMethod("#3") }.also {
-                        results.add(it)
-                    }
+                    sequencer3.post { suspendingMethod("#3") }
+                            .also { results.add(it) }
                 }
         )
         runBlocking {
@@ -92,25 +88,23 @@ class CoroutineSequencersTest: MatrixTest {
     }
 
     @Test
+    @Suppress("EXPERIMENTAL_API_USAGE")
     fun sequencer_should_jump_to_next_when_current_job_canceled() {
         val sequencer = SemaphoreCoroutineSequencer()
         val results = ArrayList<String>()
         val jobs = listOf(
                 GlobalScope.launch(dispatcher) {
-                    sequencer.post { suspendingMethod("#1") }.also {
-                        results.add(it)
-                    }
+                    sequencer.post { suspendingMethod("#1") }
+                            .also { results.add(it) }
                 },
                 GlobalScope.launch(dispatcher) {
-                    val result = sequencer.post { suspendingMethod("#2") }.also {
-                        results.add(it)
-                    }
-                    println("Result: $result")
+                    sequencer.post { suspendingMethod("#2") }
+                            .also { results.add(it) }
+                            .also { println("Result: $it") }
                 },
                 GlobalScope.launch(dispatcher) {
-                    sequencer.post { suspendingMethod("#3") }.also {
-                        results.add(it)
-                    }
+                    sequencer.post { suspendingMethod("#3") }
+                            .also { results.add(it) }
                 }
         )
         // We are canceling the second job

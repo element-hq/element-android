@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:parentTag="android.widget.FrameLayout">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/bottomSheetActionClickableZone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?colorSurface"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackground"
+        android:minHeight="64dp"
+        android:paddingStart="@dimen/layout_horizontal_margin"
+        android:paddingTop="8dp"
+        android:paddingEnd="@dimen/layout_horizontal_margin"
+        android:paddingBottom="8dp">
+
+        <ImageView
+            android:id="@+id/bottomSheetActionLeftIcon"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:importantForAccessibility="no"
+            android:scaleType="center"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="?vctr_content_primary"
+            tools:ignore="MissingPrefix"
+            tools:src="@drawable/ic_share"
+            tools:visibility="visible" />
+
+
+        <TextView
+            android:id="@+id/bottomSheetActionTitle"
+            style="@style/Widget.Vector.TextView.Subtitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:textColor="?colorPrimary"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintBottom_toTopOf="@+id/bottomSheetActionSubTitle"
+            app:layout_constraintEnd_toStartOf="@+id/bottomSheetActionBeta"
+            app:layout_constraintStart_toEndOf="@+id/bottomSheetActionLeftIcon"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:layout_goneMarginStart="0dp"
+            tools:text="@string/start_verification" />
+
+        <TextView
+            android:id="@+id/bottomSheetActionSubTitle"
+            style="@style/Widget.Vector.TextView.Body"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textColor="?vctr_content_secondary"
+            android:visibility="gone"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/bottomSheetActionBeta"
+            app:layout_constraintStart_toStartOf="@+id/bottomSheetActionTitle"
+            app:layout_constraintTop_toBottomOf="@+id/bottomSheetActionTitle"
+            tools:text="For maximum security, do this in person"
+            tools:visibility="visible" />
+
+        <ImageView
+            android:id="@+id/bottomSheetActionBeta"
+            android:layout_width="48dp"
+            android:layout_height="wrap_content"
+            android:importantForAccessibility="no"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/bottomSheetActionIcon"
+            app:layout_constraintStart_toEndOf="@+id/bottomSheetActionTitle"
+            app:layout_constraintTop_toTopOf="parent"
+            android:src="@drawable/ic_beta_pill" />
+
+        <ImageView
+            android:id="@+id/bottomSheetActionIcon"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:importantForAccessibility="no"
+            android:scaleType="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="?vctr_content_primary"
+            tools:ignore="MissingPrefix"
+            tools:src="@drawable/ic_arrow_right" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</merge>

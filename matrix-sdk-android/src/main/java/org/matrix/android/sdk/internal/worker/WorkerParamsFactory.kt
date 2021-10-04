@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -47,7 +46,7 @@ internal object WorkerParamsFactory {
 
     inline fun <reified T> fromData(data: Data) = fromData(T::class.java, data)
 
-    fun <T> fromData(clazz: Class<T>, data: Data): T? = tryOrNull("Unable to parse work parameters") {
+    fun <T> fromData(clazz: Class<T>, data: Data): T? = tryOrNull<T?>("Unable to parse work parameters") {
         val json = data.getString(KEY)
         return if (json == null) {
             null

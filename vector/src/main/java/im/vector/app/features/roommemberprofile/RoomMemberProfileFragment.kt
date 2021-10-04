@@ -19,9 +19,10 @@ package im.vector.app.features.roommemberprofile
 
 import android.os.Bundle
 import android.os.Parcelable
+import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
-import androidx.appcompat.app.AlertDialog
+import android.view.ViewGroup
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Incomplete
@@ -29,6 +30,7 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.animations.AppBarStateChangeListener
 import im.vector.app.core.animations.MatrixItemAppBarStateChangeListener
@@ -41,13 +43,17 @@ import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.StateView
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.startSharePlainTextIntent
+import im.vector.app.databinding.DialogShareQrCodeBinding
+import im.vector.app.databinding.FragmentMatrixProfileBinding
+import im.vector.app.databinding.ViewStubRoomMemberProfileHeaderBinding
 import im.vector.app.features.crypto.verification.VerificationBottomSheet
 import im.vector.app.features.home.AvatarRenderer
+import im.vector.app.features.home.room.detail.RoomDetailPendingAction
+import im.vector.app.features.home.room.detail.RoomDetailPendingActionStore
 import im.vector.app.features.roommemberprofile.devices.DeviceListBottomSheet
 import im.vector.app.features.roommemberprofile.powerlevel.EditPowerLevelDialogs
-import kotlinx.android.parcel.Parcelize
-import kotlinx.android.synthetic.main.fragment_matrix_profile.*
-import kotlinx.android.synthetic.main.view_stub_room_member_profile_header.*
+import kotlinx.parcelize.Parcelize
+import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.session.room.powerlevels.Role
 import org.matrix.android.sdk.api.util.MatrixItem
 import javax.inject.Inject
@@ -61,41 +67,48 @@ data class RoomMemberProfileArgs(
 class RoomMemberProfileFragment @Inject constructor(
         val viewModelFactory: RoomMemberProfileViewModel.Factory,
         private val roomMemberProfileController: RoomMemberProfileController,
-        private val avatarRenderer: AvatarRenderer
-) : VectorBaseFragment(), RoomMemberProfileController.Callback {
+        private val avatarRenderer: AvatarRenderer,
+        private val roomDetailPendingActionStore: RoomDetailPendingActionStore
+) : VectorBaseFragment<FragmentMatrixProfileBinding>(),
+        RoomMemberProfileController.Callback {
+
+    private lateinit var headerViews: ViewStubRoomMemberProfileHeaderBinding
 
     private val fragmentArgs: RoomMemberProfileArgs by args()
     private val viewModel: RoomMemberProfileViewModel by fragmentViewModel()
 
     private var appBarStateChangeListener: AppBarStateChangeListener? = null
 
-    override fun getLayoutResId() = R.layout.fragment_matrix_profile
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentMatrixProfileBinding {
+        return FragmentMatrixProfileBinding.inflate(inflater, container, false)
+    }
 
     override fun getMenuRes() = R.menu.vector_room_member_profile
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupToolbar(matrixProfileToolbar)
-        val headerView = matrixProfileHeaderView.let {
+        setupToolbar(views.matrixProfileToolbar)
+        val headerView = views.matrixProfileHeaderView.let {
             it.layoutResource = R.layout.view_stub_room_member_profile_header
             it.inflate()
         }
-        memberProfileStateView.eventCallback = object : StateView.EventCallback {
+        headerViews = ViewStubRoomMemberProfileHeaderBinding.bind(headerView)
+        headerViews.memberProfileStateView.eventCallback = object : StateView.EventCallback {
             override fun onRetryClicked() {
                 viewModel.handle(RoomMemberProfileAction.RetryFetchingInfo)
             }
         }
-        memberProfileStateView.contentView = memberProfileInfoContainer
-        matrixProfileRecyclerView.configureWith(roomMemberProfileController, hasFixedSize = true, disableItemAnimation = true)
+        headerViews.memberProfileStateView.contentView = headerViews.memberProfileInfoContainer
+        views.matrixProfileRecyclerView.configureWith(roomMemberProfileController, hasFixedSize = true, disableItemAnimation = true)
         roomMemberProfileController.callback = this
         appBarStateChangeListener = MatrixItemAppBarStateChangeListener(headerView,
                 listOf(
-                        matrixProfileToolbarAvatarImageView,
-                        matrixProfileToolbarTitleView,
-                        matrixProfileDecorationToolbarAvatarImageView
+                        views.matrixProfileToolbarAvatarImageView,
+                        views.matrixProfileToolbarTitleView,
+                        views.matrixProfileDecorationToolbarAvatarImageView
                 )
         )
-        matrixProfileAppBarLayout.addOnOffsetChangedListener(appBarStateChangeListener)
+        views.matrixProfileAppBarLayout.addOnOffsetChangedListener(appBarStateChangeListener)
         viewModel.observeViewEvents {
             when (it) {
                 is RoomMemberProfileViewEvents.Loading                     -> showLoading(it.message)
@@ -115,8 +128,8 @@ class RoomMemberProfileFragment @Inject constructor(
     }
 
     private fun setupLongClicks() {
-        memberProfileNameView.copyOnLongClick()
-        memberProfileIdView.copyOnLongClick()
+        headerViews.memberProfileNameView.copyOnLongClick()
+        headerViews.memberProfileIdView.copyOnLongClick()
     }
 
     private fun handleShowPowerLevelDemoteWarning(event: RoomMemberProfileViewEvents.ShowPowerLevelDemoteWarning) {
@@ -147,7 +160,7 @@ class RoomMemberProfileFragment @Inject constructor(
                     .withArgs(roomId = null, otherUserId = startVerification.userId)
                     .show(parentFragmentManager, "VERIF")
         } else {
-            AlertDialog.Builder(requireContext())
+            MaterialAlertDialogBuilder(requireContext())
                     .setTitle(R.string.dialog_title_warning)
                     .setMessage(R.string.verify_cannot_cross_sign)
                     .setPositiveButton(R.string.verification_profile_verify) { _, _ ->
@@ -161,76 +174,73 @@ class RoomMemberProfileFragment @Inject constructor(
     }
 
     override fun onDestroyView() {
-        matrixProfileAppBarLayout.removeOnOffsetChangedListener(appBarStateChangeListener)
+        views.matrixProfileAppBarLayout.removeOnOffsetChangedListener(appBarStateChangeListener)
         roomMemberProfileController.callback = null
         appBarStateChangeListener = null
-        matrixProfileRecyclerView.cleanup()
+        views.matrixProfileRecyclerView.cleanup()
         super.onDestroyView()
     }
 
     override fun invalidate() = withState(viewModel) { state ->
         when (val asyncUserMatrixItem = state.userMatrixItem) {
             is Incomplete -> {
-                matrixProfileToolbarTitleView.text = state.userId
-                avatarRenderer.render(MatrixItem.UserItem(state.userId, null, null), matrixProfileToolbarAvatarImageView)
-                memberProfileStateView.state = StateView.State.Loading
+                views.matrixProfileToolbarTitleView.text = state.userId
+                avatarRenderer.render(MatrixItem.UserItem(state.userId, null, null), views.matrixProfileToolbarAvatarImageView)
+                headerViews.memberProfileStateView.state = StateView.State.Loading
             }
             is Fail       -> {
-                avatarRenderer.render(MatrixItem.UserItem(state.userId, null, null), matrixProfileToolbarAvatarImageView)
-                matrixProfileToolbarTitleView.text = state.userId
+                avatarRenderer.render(MatrixItem.UserItem(state.userId, null, null), views.matrixProfileToolbarAvatarImageView)
+                views.matrixProfileToolbarTitleView.text = state.userId
                 val failureMessage = errorFormatter.toHumanReadable(asyncUserMatrixItem.error)
-                memberProfileStateView.state = StateView.State.Error(failureMessage)
+                headerViews.memberProfileStateView.state = StateView.State.Error(failureMessage)
             }
             is Success    -> {
                 val userMatrixItem = asyncUserMatrixItem()
-                memberProfileStateView.state = StateView.State.Content
-                memberProfileIdView.text = userMatrixItem.id
+                headerViews.memberProfileStateView.state = StateView.State.Content
+                headerViews.memberProfileIdView.text = userMatrixItem.id
                 val bestName = userMatrixItem.getBestName()
-                memberProfileNameView.text = bestName
-                matrixProfileToolbarTitleView.text = bestName
-                avatarRenderer.render(userMatrixItem, memberProfileAvatarView)
-                avatarRenderer.render(userMatrixItem, matrixProfileToolbarAvatarImageView)
+                headerViews.memberProfileNameView.text = bestName
+                views.matrixProfileToolbarTitleView.text = bestName
+                avatarRenderer.render(userMatrixItem, headerViews.memberProfileAvatarView)
+                avatarRenderer.render(userMatrixItem, views.matrixProfileToolbarAvatarImageView)
 
                 if (state.isRoomEncrypted) {
-                    memberProfileDecorationImageView.isVisible = true
-                    if (state.userMXCrossSigningInfo != null) {
+                    headerViews.memberProfileDecorationImageView.isVisible = true
+                    val trustLevel = if (state.userMXCrossSigningInfo != null) {
                         // Cross signing is enabled for this user
-                        val icon = if (state.userMXCrossSigningInfo.isTrusted()) {
+                        if (state.userMXCrossSigningInfo.isTrusted()) {
                             // User is trusted
                             if (state.allDevicesAreCrossSignedTrusted) {
-                                R.drawable.ic_shield_trusted
+                                RoomEncryptionTrustLevel.Trusted
                             } else {
-                                R.drawable.ic_shield_warning
+                                RoomEncryptionTrustLevel.Warning
                             }
                         } else {
-                            R.drawable.ic_shield_black
+                            RoomEncryptionTrustLevel.Default
                         }
-
-                        memberProfileDecorationImageView.setImageResource(icon)
-                        matrixProfileDecorationToolbarAvatarImageView.setImageResource(icon)
                     } else {
                         // Legacy
                         if (state.allDevicesAreTrusted) {
-                            memberProfileDecorationImageView.setImageResource(R.drawable.ic_shield_trusted)
-                            matrixProfileDecorationToolbarAvatarImageView.setImageResource(R.drawable.ic_shield_trusted)
+                            RoomEncryptionTrustLevel.Trusted
                         } else {
-                            memberProfileDecorationImageView.setImageResource(R.drawable.ic_shield_warning)
-                            matrixProfileDecorationToolbarAvatarImageView.setImageResource(R.drawable.ic_shield_warning)
+                            RoomEncryptionTrustLevel.Warning
                         }
                     }
+                    headerViews.memberProfileDecorationImageView.render(trustLevel)
+                    views.matrixProfileDecorationToolbarAvatarImageView.render(trustLevel)
                 } else {
-                    memberProfileDecorationImageView.isVisible = false
+                    headerViews.memberProfileDecorationImageView.isVisible = false
                 }
 
-                memberProfileAvatarView.setOnClickListener { view ->
+                headerViews.memberProfileAvatarView.setOnClickListener { view ->
                     onAvatarClicked(view, userMatrixItem)
                 }
-                matrixProfileToolbarAvatarImageView.setOnClickListener { view ->
+                views.matrixProfileToolbarAvatarImageView.setOnClickListener { view ->
                     onAvatarClicked(view, userMatrixItem)
                 }
             }
         }
-        memberProfilePowerLevelView.setTextOrHide(state.userPowerLevelString())
+        headerViews.memberProfilePowerLevelView.setTextOrHide(state.userPowerLevelString())
         roomMemberProfileController.setData(state)
     }
 
@@ -275,16 +285,36 @@ class RoomMemberProfileFragment @Inject constructor(
         DeviceListBottomSheet.newInstance(it.userId).show(parentFragmentManager, "DEV_LIST")
     }
 
+    override fun onOpenDmClicked() {
+        roomDetailPendingActionStore.data = RoomDetailPendingAction.OpenOrCreateDm(fragmentArgs.userId)
+        vectorBaseActivity.finish()
+    }
+
     override fun onJumpToReadReceiptClicked() {
-        vectorBaseActivity.notImplemented("Jump to read receipts")
+        roomDetailPendingActionStore.data = RoomDetailPendingAction.JumpToReadReceipt(fragmentArgs.userId)
+        vectorBaseActivity.finish()
     }
 
     override fun onMentionClicked() {
-        vectorBaseActivity.notImplemented("Mention")
+        roomDetailPendingActionStore.data = RoomDetailPendingAction.MentionUser(fragmentArgs.userId)
+        vectorBaseActivity.finish()
     }
 
     private fun handleShareRoomMemberProfile(permalink: String) {
-        startSharePlainTextIntent(fragment = this, chooserTitle = null, text = permalink)
+        val view = layoutInflater.inflate(R.layout.dialog_share_qr_code, null)
+        val views = DialogShareQrCodeBinding.bind(view)
+        views.itemShareQrCodeImage.setData(permalink)
+        MaterialAlertDialogBuilder(requireContext())
+                .setView(view)
+                .setNeutralButton(R.string.ok, null)
+                .setPositiveButton(R.string.share_by_text) { _, _ ->
+                    startSharePlainTextIntent(
+                            fragment = this,
+                            activityResultLauncher = null,
+                            chooserTitle = null,
+                            text = permalink
+                    )
+                }.show()
     }
 
     private fun onAvatarClicked(view: View, userMatrixItem: MatrixItem) {
@@ -292,17 +322,18 @@ class RoomMemberProfileFragment @Inject constructor(
     }
 
     override fun onEditPowerLevel(currentRole: Role) {
-        EditPowerLevelDialogs.showChoice(requireActivity(), currentRole) { newPowerLevel ->
+        EditPowerLevelDialogs.showChoice(requireActivity(), R.string.power_level_edit_title, currentRole) { newPowerLevel ->
             viewModel.handle(RoomMemberProfileAction.SetPowerLevel(currentRole.value, newPowerLevel, true))
         }
     }
 
-    override fun onKickClicked() {
+    override fun onKickClicked(isSpace: Boolean) {
         ConfirmationDialogBuilder
                 .show(
                         activity = requireActivity(),
                         askForReason = true,
-                        confirmationRes = R.string.room_participants_kick_prompt_msg,
+                        confirmationRes = if (isSpace) R.string.space_participants_kick_prompt_msg
+                        else R.string.room_participants_kick_prompt_msg,
                         positiveRes = R.string.room_participants_action_kick,
                         reasonHintRes = R.string.room_participants_kick_reason,
                         titleRes = R.string.room_participants_kick_title
@@ -311,16 +342,18 @@ class RoomMemberProfileFragment @Inject constructor(
                 }
     }
 
-    override fun onBanClicked(isUserBanned: Boolean) {
+    override fun onBanClicked(isSpace: Boolean, isUserBanned: Boolean) {
         val titleRes: Int
         val positiveButtonRes: Int
         val confirmationRes: Int
         if (isUserBanned) {
-            confirmationRes = R.string.room_participants_unban_prompt_msg
+            confirmationRes = if (isSpace) R.string.space_participants_unban_prompt_msg
+            else R.string.room_participants_unban_prompt_msg
             titleRes = R.string.room_participants_unban_title
             positiveButtonRes = R.string.room_participants_action_unban
         } else {
-            confirmationRes = R.string.room_participants_ban_prompt_msg
+            confirmationRes = if (isSpace) R.string.space_participants_ban_prompt_msg
+            else R.string.room_participants_ban_prompt_msg
             titleRes = R.string.room_participants_ban_title
             positiveButtonRes = R.string.room_participants_action_ban
         }

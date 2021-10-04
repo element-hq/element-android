@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,7 +16,6 @@
 
 package org.matrix.android.sdk.api.session.crypto.verification
 
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.LocalEcho
 
@@ -42,7 +40,7 @@ interface VerificationService {
 
     fun getExistingTransaction(otherUserId: String, tid: String): VerificationTransaction?
 
-    fun getExistingVerificationRequest(otherUserId: String): List<PendingVerificationRequest>?
+    fun getExistingVerificationRequests(otherUserId: String): List<PendingVerificationRequest>
 
     fun getExistingVerificationRequest(otherUserId: String, tid: String?): PendingVerificationRequest?
 
@@ -54,7 +52,7 @@ interface VerificationService {
                              transactionId: String?): String?
 
     /**
-     * Request a key verification from another user using toDevice events.
+     * Request key verification with another user via room events (instead of the to-device API)
      */
     fun requestKeyVerificationInDMs(methods: List<VerificationMethod>,
                                     otherUserId: String,
@@ -80,8 +78,7 @@ interface VerificationService {
                                   transactionId: String,
                                   roomId: String,
                                   otherUserId: String,
-                                  otherDeviceId: String,
-                                  callback: MatrixCallback<String>?): String?
+                                  otherDeviceId: String): String
 
     /**
      * Returns false if the request is unknown

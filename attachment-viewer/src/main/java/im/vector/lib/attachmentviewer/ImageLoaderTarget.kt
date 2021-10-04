@@ -44,29 +44,29 @@ internal class DefaultImageLoaderTarget(val holder: AnimatedImageViewHolder, pri
 
     override fun onResourceLoading(uid: String, placeholder: Drawable?) {
         if (holder.boundResourceUid != uid) return
-        holder.imageLoaderProgress.isVisible = true
+        holder.views.imageLoaderProgress.isVisible = true
     }
 
     override fun onLoadFailed(uid: String, errorDrawable: Drawable?) {
         if (holder.boundResourceUid != uid) return
-        holder.imageLoaderProgress.isVisible = false
-        holder.touchImageView.setImageDrawable(errorDrawable)
+        holder.views.imageLoaderProgress.isVisible = false
+        holder.views.imageView.setImageDrawable(errorDrawable)
     }
 
     override fun onResourceCleared(uid: String, placeholder: Drawable?) {
         if (holder.boundResourceUid != uid) return
-        holder.touchImageView.setImageDrawable(placeholder)
+        holder.views.imageView.setImageDrawable(placeholder)
     }
 
     override fun onResourceReady(uid: String, resource: Drawable) {
         if (holder.boundResourceUid != uid) return
-        holder.imageLoaderProgress.isVisible = false
+        holder.views.imageLoaderProgress.isVisible = false
         // Glide mess up the view size :/
-        holder.touchImageView.updateLayoutParams {
+        holder.views.imageView.updateLayoutParams {
             width = LinearLayout.LayoutParams.MATCH_PARENT
             height = LinearLayout.LayoutParams.MATCH_PARENT
         }
-        holder.touchImageView.setImageDrawable(resource)
+        holder.views.imageView.setImageDrawable(resource)
         if (resource is Animatable) {
             resource.start()
         }
@@ -77,30 +77,30 @@ internal class DefaultImageLoaderTarget(val holder: AnimatedImageViewHolder, pri
 
         override fun onResourceLoading(uid: String, placeholder: Drawable?) {
             if (holder.boundResourceUid != uid) return
-            holder.imageLoaderProgress.isVisible = true
-            holder.touchImageView.setImageDrawable(placeholder)
+            holder.views.imageLoaderProgress.isVisible = true
+            holder.views.touchImageView.setImageDrawable(placeholder)
         }
 
         override fun onLoadFailed(uid: String, errorDrawable: Drawable?) {
             if (holder.boundResourceUid != uid) return
-            holder.imageLoaderProgress.isVisible = false
-            holder.touchImageView.setImageDrawable(errorDrawable)
+            holder.views.imageLoaderProgress.isVisible = false
+            holder.views.touchImageView.setImageDrawable(errorDrawable)
         }
 
         override fun onResourceCleared(uid: String, placeholder: Drawable?) {
             if (holder.boundResourceUid != uid) return
-            holder.touchImageView.setImageDrawable(placeholder)
+            holder.views.touchImageView.setImageDrawable(placeholder)
         }
 
         override fun onResourceReady(uid: String, resource: Drawable) {
             if (holder.boundResourceUid != uid) return
-            holder.imageLoaderProgress.isVisible = false
+            holder.views.imageLoaderProgress.isVisible = false
             // Glide mess up the view size :/
-            holder.touchImageView.updateLayoutParams {
+            holder.views.touchImageView.updateLayoutParams {
                 width = LinearLayout.LayoutParams.MATCH_PARENT
                 height = LinearLayout.LayoutParams.MATCH_PARENT
             }
-            holder.touchImageView.setImageDrawable(resource)
+            holder.views.touchImageView.setImageDrawable(resource)
         }
     }
 }

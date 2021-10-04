@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,16 +25,9 @@ import com.squareup.moshi.JsonClass
  */
 @JsonClass(generateAdapter = false)
 enum class RoomJoinRules(val value: String) {
-
-    @Json(name = "public")
-    PUBLIC("public"),
-
-    @Json(name = "invite")
-    INVITE("invite"),
-
-    @Json(name = "knock")
-    KNOCK("knock"),
-
-    @Json(name = "private")
-    PRIVATE("private")
+    @Json(name = "public") PUBLIC("public"),
+    @Json(name = "invite") INVITE("invite"),
+    @Json(name = "knock") KNOCK("knock"),
+    @Json(name = "private") PRIVATE("private"),
+    @Json(name = "restricted") RESTRICTED("restricted")
 }

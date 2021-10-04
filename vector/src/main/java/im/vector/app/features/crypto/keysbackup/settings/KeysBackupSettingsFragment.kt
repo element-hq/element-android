@@ -16,36 +16,41 @@
 package im.vector.app.features.crypto.keysbackup.settings
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
-import androidx.appcompat.app.AlertDialog
+import android.view.ViewGroup
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.databinding.FragmentKeysBackupSettingsBinding
 import im.vector.app.features.crypto.keysbackup.restore.KeysBackupRestoreActivity
 import im.vector.app.features.crypto.keysbackup.setup.KeysBackupSetupActivity
-import kotlinx.android.synthetic.main.fragment_keys_backup_settings.*
+
 import javax.inject.Inject
 
 class KeysBackupSettingsFragment @Inject constructor(private val keysBackupSettingsRecyclerViewController: KeysBackupSettingsRecyclerViewController)
-    : VectorBaseFragment(),
+    : VectorBaseFragment<FragmentKeysBackupSettingsBinding>(),
         KeysBackupSettingsRecyclerViewController.Listener {
 
-    override fun getLayoutResId() = R.layout.fragment_keys_backup_settings
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentKeysBackupSettingsBinding {
+        return FragmentKeysBackupSettingsBinding.inflate(inflater, container, false)
+    }
 
     private val viewModel: KeysBackupSettingsViewModel by activityViewModel()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        keysBackupSettingsRecyclerView.configureWith(keysBackupSettingsRecyclerViewController)
+        views.keysBackupSettingsRecyclerView.configureWith(keysBackupSettingsRecyclerViewController)
         keysBackupSettingsRecyclerViewController.listener = this
     }
 
     override fun onDestroyView() {
         keysBackupSettingsRecyclerViewController.listener = null
-        keysBackupSettingsRecyclerView.cleanup()
+        views.keysBackupSettingsRecyclerView.cleanup()
         super.onDestroyView()
     }
 
@@ -67,7 +72,7 @@ class KeysBackupSettingsFragment @Inject constructor(private val keysBackupSetti
 
     override fun didSelectDeleteSetupMessageRecovery() {
         activity?.let {
-            AlertDialog.Builder(it)
+            MaterialAlertDialogBuilder(it)
                     .setTitle(R.string.keys_backup_settings_delete_confirm_title)
                     .setMessage(R.string.keys_backup_settings_delete_confirm_message)
                     .setCancelable(false)

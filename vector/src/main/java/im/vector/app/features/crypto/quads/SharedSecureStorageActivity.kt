@@ -22,10 +22,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentOnAttachListener
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.viewModel
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.error.ErrorFormatter
@@ -33,12 +35,14 @@ import im.vector.app.core.extensions.commitTransaction
 import im.vector.app.core.platform.SimpleFragmentActivity
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.features.crypto.recover.SetupMode
-import kotlinx.android.parcel.Parcelize
-import kotlinx.android.synthetic.main.activity.*
+import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 import kotlin.reflect.KClass
 
-class SharedSecureStorageActivity : SimpleFragmentActivity(), VectorBaseBottomSheetDialogFragment.ResultListener {
+class SharedSecureStorageActivity :
+        SimpleFragmentActivity(),
+        VectorBaseBottomSheetDialogFragment.ResultListener,
+        FragmentOnAttachListener {
 
     @Parcelize
     data class Args(
@@ -58,11 +62,18 @@ class SharedSecureStorageActivity : SimpleFragmentActivity(), VectorBaseBottomSh
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        toolbar.visibility = View.GONE
+        supportFragmentManager.addFragmentOnAttachListener(this)
+
+        views.toolbar.visibility = View.GONE
 
         viewModel.observeViewEvents { observeViewEvents(it) }
 
         viewModel.subscribe(this) { renderState(it) }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        supportFragmentManager.removeFragmentOnAttachListener(this)
     }
 
     override fun onBackPressed() {
@@ -87,7 +98,7 @@ class SharedSecureStorageActivity : SimpleFragmentActivity(), VectorBaseBottomSh
                 finish()
             }
             is SharedSecureStorageViewEvent.Error                -> {
-                AlertDialog.Builder(this)
+                MaterialAlertDialogBuilder(this)
                         .setTitle(getString(R.string.dialog_title_error))
                         .setMessage(it.message)
                         .setCancelable(false)
@@ -119,9 +130,8 @@ class SharedSecureStorageActivity : SimpleFragmentActivity(), VectorBaseBottomSh
         }
     }
 
-    override fun onAttachFragment(fragment: Fragment) {
-        super.onAttachFragment(fragment)
-        if (fragment is VectorBaseBottomSheetDialogFragment) {
+    override fun onAttachFragment(fragmentManager: FragmentManager, fragment: Fragment) {
+        if (fragment is VectorBaseBottomSheetDialogFragment<*>) {
             fragment.resultListener = this
         }
     }

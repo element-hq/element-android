@@ -16,69 +16,24 @@
 
 package im.vector.lib.multipicker
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.provider.MediaStore
 import im.vector.lib.multipicker.entity.MultiPickerImageType
-import im.vector.lib.multipicker.utils.ImageUtils
+import im.vector.lib.multipicker.utils.toMultiPickerImageType
 
 /**
  * Image Picker implementation
  */
-class ImagePicker(override val requestCode: Int) : Picker<MultiPickerImageType>(requestCode) {
+class ImagePicker : Picker<MultiPickerImageType>() {
 
     /**
      * Call this function from onActivityResult(int, int, Intent).
-     * Returns selected image files or empty list if request code is wrong
-     * or result code is not Activity.RESULT_OK
-     * or user did not select any files.
+     * Returns selected image files or empty list if user did not select any files.
      */
-    override fun getSelectedFiles(context: Context, requestCode: Int, resultCode: Int, data: Intent?): List<MultiPickerImageType> {
-        if (requestCode != this.requestCode && resultCode != Activity.RESULT_OK) {
-            return emptyList()
+    override fun getSelectedFiles(context: Context, data: Intent?): List<MultiPickerImageType> {
+        return getSelectedUriList(data).mapNotNull { selectedUri ->
+            selectedUri.toMultiPickerImageType(context)
         }
-
-        val imageList = mutableListOf<MultiPickerImageType>()
-
-        getSelectedUriList(data).forEach { selectedUri ->
-            val projection = arrayOf(
-                    MediaStore.Images.Media.DISPLAY_NAME,
-                    MediaStore.Images.Media.SIZE
-            )
-
-            context.contentResolver.query(
-                    selectedUri,
-                    projection,
-                    null,
-                    null,
-                    null
-            )?.use { cursor ->
-                val nameColumn = cursor.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME)
-                val sizeColumn = cursor.getColumnIndex(MediaStore.Images.Media.SIZE)
-
-                if (cursor.moveToNext()) {
-                    val name = cursor.getString(nameColumn)
-                    val size = cursor.getLong(sizeColumn)
-
-                    val bitmap = ImageUtils.getBitmap(context, selectedUri)
-                    val orientation = ImageUtils.getOrientation(context, selectedUri)
-
-                    imageList.add(
-                            MultiPickerImageType(
-                                    name,
-                                    size,
-                                    context.contentResolver.getType(selectedUri),
-                                    selectedUri,
-                                    bitmap?.width ?: 0,
-                                    bitmap?.height ?: 0,
-                                    orientation
-                            )
-                    )
-                }
-            }
-        }
-        return imageList
     }
 
     override fun createIntent(): Intent {

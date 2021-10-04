@@ -1,5 +1,4 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,7 +18,7 @@ package org.matrix.android.sdk.internal.session.account
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import org.matrix.android.sdk.internal.crypto.model.rest.UserPasswordAuth
+import org.matrix.android.sdk.api.auth.UserPasswordAuth
 
 /**
  * Class to pass request parameters to update the password.

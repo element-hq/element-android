@@ -26,7 +26,7 @@ import androidx.annotation.DrawableRes
 import im.vector.app.R
 import im.vector.app.core.platform.SimpleTextWatcher
 
-fun EditText.setupAsSearch(@DrawableRes searchIconRes: Int = R.drawable.ic_filter,
+fun EditText.setupAsSearch(@DrawableRes searchIconRes: Int = R.drawable.ic_search,
                            @DrawableRes clearIconRes: Int = R.drawable.ic_x_gray) {
     addTextChangedListener(object : SimpleTextWatcher() {
         override fun afterTextChanged(s: Editable) {

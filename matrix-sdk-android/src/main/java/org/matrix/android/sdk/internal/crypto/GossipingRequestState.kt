@@ -1,5 +1,4 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,7 +28,8 @@ enum class GossipingRequestState {
     ACCEPTING,
     ACCEPTED,
     FAILED_TO_ACCEPTED,
-   // USER_REJECTED,
+
+    // USER_REJECTED,
     UNABLE_TO_PROCESS,
     CANCELLED_BY_REQUESTER,
     RE_REQUESTED

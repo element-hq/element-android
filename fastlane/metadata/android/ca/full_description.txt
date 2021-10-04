@@ -1,0 +1,30 @@
+Element és un nou tipus d'aplicació de missatgeria i col·laboració que:
+
+1. Et dóna a tu el control per preservar la teva privadesa
+2. Et permet comunicar-te amb qualsevol persona de la xarxa Matrix i, fins i tot més enllà gràcies a integracions amb altres aplicacions com Slack
+3. Et protegeix de la publicitat, l'obtenció no desitjada de dades i dels navegadors amb accés controlat
+4. T'assegura a tu mitjançant l'encriptació d'extrem a extrem i amb signatures creuades per verificar els altres
+
+Element és completament diferent a les altres aplicacions de missatgeria i col·laboració ja que és descentralitzat i de codi obert.
+
+Element et deixa triar l'allotjament perquè disposis de privadesa, propietat i control de les teves dades i converses. Et dóna accés a una xarxa oberta perquè no et quedis únicament parlant amb els usuaris d'Element.
+
+Element pot fer tot això ja que opera sobre Matrix - l'estàndard per a les comunicacions obertes i descentralitzades.
+
+Element et dóna el control perquè et deixa escollir qui vols que allotgi les teves converses. Des de l'aplicació d'Element, pots triar l'allotjament de diferents maneres:
+
+1. Crea un compte gratuït al servidor públic de matrix.org allotjat pels desenvolupadors de Matrix o tria'n un entre els milers de servidors públics creats per voluntaris
+2. Allotja tu mateix el teu compte en el teu propi servidor
+3. Registra el compte en un servidor personalitzat subscrivint-te a la plataforma d'Element Matrix Services (EMS)
+
+<b>Per què escollir Element?</b>
+
+<b>PROPIETAT DE LES TEVES DADES</b>: Tu decideixes a on desar les teves dades i missatges. Tu les controles i n'ets el propietari, no una mega-corporació que s'aprofita de les teves dades o les cedeix a tercers.
+
+<b>MISSATGERIA I COL·LABORACIÓ OBERTA</b>: Pots parlar amb qualsevol que estigui a la xarxa Matrix, ja sigui amb Element o amb qualsevol altre aplicació Matrix, fins i tot encara que utilitzin sistemes de missatgeria diferents com Slack, IRC o XMPP.
+
+<b>SUPER-SEGUR</b>: Encriptació d'extrem a extrem real (només qui està conversant pot desxifrar els missatges), i amb signatures creuades per a verificar els dispositius dels participants en les converses.
+
+<b>COMUNICACIÓ COMPLETA</b>: Missatgeria, veu i video-trucades, compartició de fitxers, compartició de pantalla i un munt d'integracions, bots i ginys. Crea sales, comunitats, mantén-te en contacte i enllesteix el que et proposes.
+
+<b>A TOT ARREU</b>: Mantingues el contacte des de qualsevol lloc on siguis, amb un historial de missatges totalment sincronitzat entre tots els teus dispositius i també a la web: https://app.element.io.

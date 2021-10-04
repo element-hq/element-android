@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -35,7 +34,7 @@ internal data class RoomSync(
         /**
          * The ephemeral events in the room that aren't recorded in the timeline or state of the room (e.g. typing, receipts).
          */
-        @Json(name = "ephemeral") val ephemeral: RoomSyncEphemeral? = null,
+        @Json(name = "ephemeral") val ephemeral: LazyRoomSyncEphemeral? = null,
 
         /**
          * The account data events for the room (e.g. tags).

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--
+    Source: https://www.figma.com/file/X4XTH9iS2KGJ2wFKDqkyed/Compound?node-id=1336%3A17796
+
+    Doc: https://medium.com/androiddevelopers/whats-your-text-s-appearance-f3a1729192d
+    List of supported attributes for a TextAppearance:
+    https://android.googlesource.com/platform/frameworks/base/+/refs/heads/master/core/res/res/values/attrs.xml#4723
+
+    Do not use TextAppearance directly, use Widget.Vector.TextView style instead
+    -->
+
+    <style name="TextAppearance.Vector.Title" parent="TextAppearance.MaterialComponents.Headline3">
+        <item name="fontFamily">sans-serif</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textSize">@dimen/text_size_title</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:textColor">?vctr_content_primary</item>
+    </style>
+
+    <style name="TextAppearance.Vector.Title.Medium">
+        <item name="fontFamily">sans-serif-medium</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+
+    <style name="TextAppearance.Vector.Headline.Medium" parent="TextAppearance.MaterialComponents.Headline1">
+        <item name="fontFamily">sans-serif-medium</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textSize">@dimen/text_size_headline</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:textColor">?vctr_content_primary</item>
+    </style>
+
+    <style name="TextAppearance.Vector.Subtitle" parent="TextAppearance.MaterialComponents.Subtitle1">
+        <item name="fontFamily">sans-serif</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textSize">@dimen/text_size_subtitle</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:textColor">?vctr_content_secondary</item>
+    </style>
+
+    <style name="TextAppearance.Vector.Subtitle.Medium">
+        <item name="fontFamily">sans-serif-medium</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+
+    <!-- Note: this is the default text appearance for all the TextViews -->
+    <style name="TextAppearance.Vector.Body" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="fontFamily">sans-serif</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textSize">@dimen/text_size_body</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:textColor">?vctr_content_primary</item>
+    </style>
+
+    <style name="TextAppearance.Vector.Body.Medium">
+        <item name="fontFamily">sans-serif-medium</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+
+    <style name="TextAppearance.Vector.Caption" parent="TextAppearance.MaterialComponents.Caption">
+        <item name="fontFamily">sans-serif</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textSize">@dimen/text_size_caption</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:textColor">?vctr_content_secondary</item>
+    </style>
+
+    <style name="TextAppearance.Vector.Micro" parent="TextAppearance.MaterialComponents.Caption">
+        <item name="fontFamily">sans-serif</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textSize">@dimen/text_size_micro</item>
+        <item name="android:letterSpacing">0</item>
+    </style>
+
+    <style name="TextAppearance.Vector.Button" parent="TextAppearance.MaterialComponents.Button">
+        <item name="fontFamily">sans-serif-medium</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textSize">@dimen/text_size_button</item>
+        <item name="android:letterSpacing">0.02</item>
+    </style>
+
+</resources>

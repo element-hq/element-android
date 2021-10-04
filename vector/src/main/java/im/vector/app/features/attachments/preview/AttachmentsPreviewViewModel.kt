@@ -17,30 +17,11 @@
 
 package im.vector.app.features.attachments.preview
 
-import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxViewModelFactory
-import com.airbnb.mvrx.ViewModelContext
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 
-class AttachmentsPreviewViewModel @AssistedInject constructor(@Assisted initialState: AttachmentsPreviewViewState)
+class AttachmentsPreviewViewModel(initialState: AttachmentsPreviewViewState)
     : VectorViewModel<AttachmentsPreviewViewState, AttachmentsPreviewAction, AttachmentsPreviewViewEvents>(initialState) {
-
-    @AssistedInject.Factory
-    interface Factory {
-        fun create(initialState: AttachmentsPreviewViewState): AttachmentsPreviewViewModel
-    }
-
-    companion object : MvRxViewModelFactory<AttachmentsPreviewViewModel, AttachmentsPreviewViewState> {
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: AttachmentsPreviewViewState): AttachmentsPreviewViewModel? {
-            val fragment: AttachmentsPreviewFragment = (viewModelContext as FragmentViewModelContext).fragment()
-            return fragment.viewModelFactory.create(state)
-        }
-    }
 
     override fun handle(action: AttachmentsPreviewAction) {
         when (action) {

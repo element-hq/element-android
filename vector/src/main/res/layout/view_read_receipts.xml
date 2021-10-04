@@ -8,64 +8,65 @@
 
     <TextView
         android:id="@+id/receiptMore"
+        style="@style/Widget.Vector.TextView.Caption"
         android:layout_width="wrap_content"
-        android:layout_height="18dp"
+        android:layout_height="@dimen/item_event_message_state_size"
         android:background="@drawable/pill_receipt"
         android:gravity="center"
         android:importantForAccessibility="no"
         android:paddingStart="4dp"
         android:paddingEnd="4dp"
-        android:textSize="12sp"
+        android:textColor="?vctr_content_primary"
         tools:text="999+" />
 
     <ImageView
         android:id="@+id/receiptAvatar5"
-        android:layout_width="18dp"
-        android:layout_height="18dp"
+        android:layout_width="@dimen/item_event_message_state_size"
+        android:layout_height="@dimen/item_event_message_state_size"
         android:layout_marginStart="2dp"
         android:adjustViewBounds="true"
         android:importantForAccessibility="no"
         android:scaleType="centerCrop"
-        tools:src="@tools:sample/avatars" />
+        tools:src="@sample/user_round_avatars" />
 
     <ImageView
         android:id="@+id/receiptAvatar4"
-        android:layout_width="18dp"
-        android:layout_height="18dp"
+        android:layout_width="@dimen/item_event_message_state_size"
+        android:layout_height="@dimen/item_event_message_state_size"
         android:layout_marginStart="2dp"
         android:adjustViewBounds="true"
         android:importantForAccessibility="no"
         android:scaleType="centerCrop"
-        tools:src="@tools:sample/avatars" />
+        tools:src="@sample/user_round_avatars" />
 
     <ImageView
         android:id="@+id/receiptAvatar3"
-        android:layout_width="18dp"
-        android:layout_height="18dp"
+        android:layout_width="@dimen/item_event_message_state_size"
+        android:layout_height="@dimen/item_event_message_state_size"
         android:layout_marginStart="2dp"
         android:adjustViewBounds="true"
         android:importantForAccessibility="no"
         android:scaleType="centerCrop"
-        tools:src="@tools:sample/avatars" />
+        tools:src="@sample/user_round_avatars" />
 
     <ImageView
         android:id="@+id/receiptAvatar2"
-        android:layout_width="18dp"
-        android:layout_height="18dp"
+        android:layout_width="@dimen/item_event_message_state_size"
+        android:layout_height="@dimen/item_event_message_state_size"
         android:layout_marginStart="2dp"
         android:adjustViewBounds="true"
         android:importantForAccessibility="no"
         android:scaleType="centerCrop"
-        tools:src="@tools:sample/avatars" />
+        tools:src="@sample/user_round_avatars" />
 
     <ImageView
         android:id="@+id/receiptAvatar1"
-        android:layout_width="18dp"
-        android:layout_height="18dp"
+        android:layout_width="@dimen/item_event_message_state_size"
+        android:layout_height="@dimen/item_event_message_state_size"
         android:layout_marginStart="2dp"
         android:adjustViewBounds="true"
         android:importantForAccessibility="no"
         android:scaleType="centerCrop"
-        tools:src="@tools:sample/avatars" />
+        tools:src="@sample/user_round_avatars" />
 
 </merge>

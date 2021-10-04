@@ -1,5 +1,4 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -75,8 +74,8 @@ internal data class CreateRoomBody(
         val invite3pids: List<ThreePidInviteBody>?,
 
         /**
-         * Extra keys to be added to the content of the m.room.create.
-         * The server will clobber the following keys: creator.
+         * Extra keys, such as m.federate, to be added to the content of the m.room.create event.
+         * The server will clobber the following keys: creator, room_version.
          * Future versions of the specification may allow the server to clobber other keys.
          */
         @Json(name = "creation_content")
@@ -112,5 +111,12 @@ internal data class CreateRoomBody(
          * The power level content to override in the default power level event
          */
         @Json(name = "power_level_content_override")
-        val powerLevelContentOverride: PowerLevelsContent?
+        val powerLevelContentOverride: PowerLevelsContent?,
+
+        /**
+         * The room version to set for the room. If not provided, the homeserver is to use its configured default.
+         * If provided, the homeserver will return a 400 error with the errcode M_UNSUPPORTED_ROOM_VERSION if it does not support the room version.
+         */
+        @Json(name = "room_version")
+        val roomVersion: String?
 )

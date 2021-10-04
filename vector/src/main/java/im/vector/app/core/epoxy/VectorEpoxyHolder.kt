@@ -36,7 +36,7 @@ abstract class VectorEpoxyHolder : EpoxyHolder() {
     protected fun <V : View> bind(id: Int): ReadOnlyProperty<VectorEpoxyHolder, V> =
             Lazy { holder: VectorEpoxyHolder, prop ->
                 holder.view.findViewById(id) as V?
-                ?: throw IllegalStateException("View ID $id for '${prop.name}' not found.")
+                        ?: throw IllegalStateException("View ID $id for '${prop.name}' not found.")
             }
 
     /**

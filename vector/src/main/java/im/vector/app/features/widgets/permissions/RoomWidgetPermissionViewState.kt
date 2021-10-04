@@ -19,8 +19,8 @@ package im.vector.app.features.widgets.permissions
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
-import org.matrix.android.sdk.api.session.widgets.model.Widget
 import im.vector.app.features.widgets.WidgetArgs
+import org.matrix.android.sdk.api.session.widgets.model.Widget
 
 data class RoomWidgetPermissionViewState(
         val roomId: String,

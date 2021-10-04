@@ -1,5 +1,4 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -39,7 +38,7 @@ import timber.log.Timber;
 public class LoginStorage {
     private static final String PREFS_LOGIN = "Vector.LoginStorage";
 
-    // multi accounts + home server config
+    // multi accounts + homeserver config
     private static final String PREFS_KEY_CONNECTION_CONFIGS = "PREFS_KEY_CONNECTION_CONFIGS";
 
     private final Context mContext;
@@ -50,7 +49,7 @@ public class LoginStorage {
     }
 
     /**
-     * @return the list of home server configurations.
+     * @return the list of homeserver configurations.
      */
     public List<HomeServerConnectionConfig> getCredentialsList() {
         SharedPreferences prefs = mContext.getSharedPreferences(PREFS_LOGIN, Context.MODE_PRIVATE);
@@ -86,7 +85,7 @@ public class LoginStorage {
     /**
      * Add a credentials to the credentials list
      *
-     * @param config the home server config to add.
+     * @param config the homeserver config to add.
      */
     public void addCredentials(HomeServerConnectionConfig config) {
         if (null != config && config.getCredentials() != null) {

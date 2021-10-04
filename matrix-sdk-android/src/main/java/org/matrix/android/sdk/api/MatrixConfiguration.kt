@@ -1,5 +1,4 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -36,7 +35,15 @@ data class MatrixConfiguration(
          * Optional proxy to connect to the matrix servers
          * You can create one using for instance Proxy(proxyType, InetSocketAddress.createUnresolved(hostname, port)
          */
-        val proxy: Proxy? = null
+        val proxy: Proxy? = null,
+        /**
+         * True to advertise support for call transfers to other parties on Matrix calls.
+         */
+        val supportsCallTransfer: Boolean = false,
+        /**
+         * RoomDisplayNameFallbackProvider to provide default room display name.
+         */
+        val roomDisplayNameFallbackProvider: RoomDisplayNameFallbackProvider
 ) {
 
     /**

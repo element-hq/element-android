@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -33,5 +32,8 @@ internal data class JsonPusherData(
          * Currently the only format available is 'event_id_only'.
          */
         @Json(name = "format")
-        val format: String? = null
+        val format: String? = null,
+
+        @Json(name = "brand")
+        val brand: String? = null
 )

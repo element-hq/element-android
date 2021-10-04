@@ -3,8 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/search"
-        android:icon="@drawable/ic_search_white"
-        app:iconTint="?riotx_text_primary"
+        android:icon="@drawable/ic_search"
+        app:iconTint="?vctr_content_primary"
         android:title="@string/search"
         app:actionViewClass="android.widget.SearchView"
         app:showAsAction="collapseActionView|ifRoom" />

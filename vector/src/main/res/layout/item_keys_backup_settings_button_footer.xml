@@ -8,21 +8,22 @@
     android:orientation="vertical"
     android:padding="16dp">
 
-    <com.google.android.material.button.MaterialButton
+    <Button
         android:id="@+id/keys_backup_settings_footer_button1"
-        style="@style/VectorButtonStyle"
         android:layout_width="@dimen/button_max_width"
+        android:layout_height="wrap_content"
         android:visibility="gone"
         tools:text="@string/keys_backup_settings_restore_backup_button"
         tools:visibility="visible" />
 
-    <com.google.android.material.button.MaterialButton
+    <Button
         android:id="@+id/keys_backup_settings_footer_button2"
-        style="@style/VectorButtonStyle"
+        style="@style/Widget.Vector.Button"
         android:layout_width="@dimen/button_max_width"
+        android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:visibility="gone"
-        app:backgroundTint="@color/vector_warning_color"
+        app:backgroundTint="?colorError"
         tools:text="@string/keys_backup_settings_delete_backup_button"
         tools:visibility="visible" />
 

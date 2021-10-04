@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,9 +18,9 @@ package org.matrix.android.sdk.internal.crypto.tasks
 
 import org.matrix.android.sdk.internal.crypto.api.CryptoApi
 import org.matrix.android.sdk.internal.crypto.model.rest.UpdateDeviceInfoBody
+import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.task.Task
-import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
 internal interface SetDeviceNameTask : Task<SetDeviceNameTask.Params, Unit> {
@@ -35,15 +34,15 @@ internal interface SetDeviceNameTask : Task<SetDeviceNameTask.Params, Unit> {
 
 internal class DefaultSetDeviceNameTask @Inject constructor(
         private val cryptoApi: CryptoApi,
-        private val eventBus: EventBus
+        private val globalErrorReceiver: GlobalErrorReceiver
 ) : SetDeviceNameTask {
 
     override suspend fun execute(params: SetDeviceNameTask.Params) {
         val body = UpdateDeviceInfoBody(
                 displayName = params.deviceName
         )
-        return executeRequest(eventBus) {
-            apiCall = cryptoApi.updateDeviceInfo(params.deviceId, body)
+        return executeRequest(globalErrorReceiver) {
+            cryptoApi.updateDeviceInfo(params.deviceId, body)
         }
     }
 }

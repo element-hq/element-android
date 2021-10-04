@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -34,7 +33,7 @@ import org.matrix.android.sdk.internal.session.sync.RoomFullyReadHandler
 import org.matrix.android.sdk.internal.task.Task
 import org.matrix.android.sdk.internal.util.awaitTransaction
 import io.realm.Realm
-import org.greenrobot.eventbus.EventBus
+import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import timber.log.Timber
 import javax.inject.Inject
 import kotlin.collections.set
@@ -59,11 +58,11 @@ internal class DefaultSetReadMarkersTask @Inject constructor(
         private val roomFullyReadHandler: RoomFullyReadHandler,
         private val readReceiptHandler: ReadReceiptHandler,
         @UserId private val userId: String,
-        private val eventBus: EventBus
+        private val globalErrorReceiver: GlobalErrorReceiver
 ) : SetReadMarkersTask {
 
     override suspend fun execute(params: SetReadMarkersTask.Params) {
-        val markers = HashMap<String, String>()
+        val markers = mutableMapOf<String, String>()
         Timber.v("Execute set read marker with params: $params")
         val latestSyncedEventId = latestSyncedEventId(params.roomId)
         val fullyReadEventId = if (params.forceReadMarker) {
@@ -97,9 +96,18 @@ internal class DefaultSetReadMarkersTask @Inject constructor(
             updateDatabase(params.roomId, markers, shouldUpdateRoomSummary)
         }
         if (markers.isNotEmpty()) {
-            executeRequest<Unit>(eventBus) {
-                isRetryable = true
-                apiCall = roomAPI.sendReadMarker(params.roomId, markers)
+            executeRequest(
+                    globalErrorReceiver,
+                    canRetry = true
+            ) {
+                if (markers[READ_MARKER] == null) {
+                    if (readReceiptEventId != null) {
+                        roomAPI.sendReceipt(params.roomId, READ_RECEIPT, readReceiptEventId)
+                    }
+                } else {
+                    // "m.fully_read" value is mandatory to make this call
+                    roomAPI.sendReadMarker(params.roomId, markers)
+                }
             }
         }
     }
@@ -109,7 +117,7 @@ internal class DefaultSetReadMarkersTask @Inject constructor(
                 TimelineEventEntity.latestEvent(realm, roomId = roomId, includesSending = false)?.eventId
             }
 
-    private suspend fun updateDatabase(roomId: String, markers: HashMap<String, String>, shouldUpdateRoomSummary: Boolean) {
+    private suspend fun updateDatabase(roomId: String, markers: Map<String, String>, shouldUpdateRoomSummary: Boolean) {
         monarchy.awaitTransaction { realm ->
             val readMarkerId = markers[READ_MARKER]
             val readReceiptId = markers[READ_RECEIPT]
@@ -118,7 +126,7 @@ internal class DefaultSetReadMarkersTask @Inject constructor(
             }
             if (readReceiptId != null) {
                 val readReceiptContent = ReadReceiptHandler.createContent(userId, readReceiptId)
-                readReceiptHandler.handle(realm, roomId, readReceiptContent, false)
+                readReceiptHandler.handle(realm, roomId, readReceiptContent, false, null)
             }
             if (shouldUpdateRoomSummary) {
                 val roomSummary = RoomSummaryEntity.where(realm, roomId).findFirst()

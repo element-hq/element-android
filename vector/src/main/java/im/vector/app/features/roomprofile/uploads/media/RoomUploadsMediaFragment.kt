@@ -16,9 +16,12 @@
 
 package im.vector.app.features.roomprofile.uploads.media
 
+import android.os.Build
 import android.os.Bundle
 import android.util.DisplayMetrics
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.util.Pair
 import androidx.core.view.ViewCompat
@@ -29,16 +32,13 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.appbar.AppBarLayout
-import org.matrix.android.sdk.api.session.room.model.message.MessageImageContent
-import org.matrix.android.sdk.api.session.room.model.message.MessageVideoContent
-import org.matrix.android.sdk.api.session.room.model.message.getFileUrl
-import org.matrix.android.sdk.internal.crypto.attachments.toElementToDecrypt
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.trackItemsVisibilityChange
 import im.vector.app.core.platform.StateView
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.DimensionConverter
+import im.vector.app.databinding.FragmentGenericStateViewRecyclerBinding
 import im.vector.app.features.media.AttachmentData
 import im.vector.app.features.media.ImageContentRenderer
 import im.vector.app.features.media.VideoContentRenderer
@@ -46,45 +46,55 @@ import im.vector.app.features.roomprofile.uploads.RoomUploadsAction
 import im.vector.app.features.roomprofile.uploads.RoomUploadsFragment
 import im.vector.app.features.roomprofile.uploads.RoomUploadsViewModel
 import im.vector.app.features.roomprofile.uploads.RoomUploadsViewState
-import kotlinx.android.synthetic.main.fragment_generic_state_view_recycler.*
-import kotlinx.android.synthetic.main.fragment_room_uploads.*
+
+import org.matrix.android.sdk.api.session.room.model.message.MessageImageContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageVideoContent
+import org.matrix.android.sdk.api.session.room.model.message.getFileUrl
+import org.matrix.android.sdk.api.session.room.model.message.getThumbnailUrl
+import org.matrix.android.sdk.internal.crypto.attachments.toElementToDecrypt
 import javax.inject.Inject
 
 class RoomUploadsMediaFragment @Inject constructor(
         private val controller: UploadsMediaController,
         private val dimensionConverter: DimensionConverter
-) : VectorBaseFragment(),
+) : VectorBaseFragment<FragmentGenericStateViewRecyclerBinding>(),
         UploadsMediaController.Listener,
         StateView.EventCallback {
 
     private val uploadsViewModel by parentFragmentViewModel(RoomUploadsViewModel::class)
 
-    override fun getLayoutResId() = R.layout.fragment_generic_state_view_recycler
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentGenericStateViewRecyclerBinding {
+        return FragmentGenericStateViewRecyclerBinding.inflate(inflater, container, false)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        genericStateViewListStateView.contentView = genericStateViewListRecycler
-        genericStateViewListStateView.eventCallback = this
-
-        genericStateViewListRecycler.trackItemsVisibilityChange()
-        genericStateViewListRecycler.layoutManager = GridLayoutManager(context, getNumberOfColumns())
-        genericStateViewListRecycler.adapter = controller.adapter
-        genericStateViewListRecycler.setHasFixedSize(true)
+        views.genericStateViewListStateView.contentView = views.genericStateViewListRecycler
+        views.genericStateViewListStateView.eventCallback = this
+        views.genericStateViewListRecycler.trackItemsVisibilityChange()
+        views.genericStateViewListRecycler.layoutManager = GridLayoutManager(context, getNumberOfColumns())
+        views.genericStateViewListRecycler.adapter = controller.adapter
+        views.genericStateViewListRecycler.setHasFixedSize(true)
 
         controller.listener = this
     }
 
+    @Suppress("DEPRECATION")
     private fun getNumberOfColumns(): Int {
         val displayMetrics = DisplayMetrics()
-        requireActivity().windowManager.defaultDisplay.getMetrics(displayMetrics)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            requireContext().display?.getMetrics(displayMetrics)
+        } else {
+            requireActivity().windowManager.defaultDisplay.getMetrics(displayMetrics)
+        }
         return dimensionConverter.pxToDp(displayMetrics.widthPixels) / IMAGE_SIZE_DP
     }
 
     override fun onDestroyView() {
-        super.onDestroyView()
-        genericStateViewListRecycler.cleanup()
+        views.genericStateViewListRecycler.cleanup()
         controller.listener = null
+        super.onDestroyView()
     }
 
     // It's very strange i can't just access
@@ -132,8 +142,7 @@ class RoomUploadsMediaFragment @Inject constructor(
                             eventId = it.eventId,
                             filename = content.body,
                             mimeType = content.mimeType,
-                            url = content.videoInfo?.thumbnailFile?.url
-                                    ?: content.videoInfo?.thumbnailUrl,
+                            url = content.videoInfo?.getThumbnailUrl(),
                             elementToDecrypt = content.videoInfo?.thumbnailFile?.toElementToDecrypt(),
                             height = content.videoInfo?.height,
                             maxHeight = -1,
@@ -181,17 +190,17 @@ class RoomUploadsMediaFragment @Inject constructor(
         if (state.mediaEvents.isEmpty()) {
             when (state.asyncEventsRequest) {
                 is Loading -> {
-                    genericStateViewListStateView.state = StateView.State.Loading
+                    views.genericStateViewListStateView.state = StateView.State.Loading
                 }
                 is Fail    -> {
-                    genericStateViewListStateView.state = StateView.State.Error(errorFormatter.toHumanReadable(state.asyncEventsRequest.error))
+                    views.genericStateViewListStateView.state = StateView.State.Error(errorFormatter.toHumanReadable(state.asyncEventsRequest.error))
                 }
                 is Success -> {
                     if (state.hasMore) {
                         // We need to load more items
                         loadMore()
                     } else {
-                        genericStateViewListStateView.state = StateView.State.Empty(
+                        views.genericStateViewListStateView.state = StateView.State.Empty(
                                 title = getString(R.string.uploads_media_no_result),
                                 image = ContextCompat.getDrawable(requireContext(), R.drawable.ic_image)
                         )
@@ -199,7 +208,7 @@ class RoomUploadsMediaFragment @Inject constructor(
                 }
             }
         } else {
-            genericStateViewListStateView.state = StateView.State.Content
+            views.genericStateViewListStateView.state = StateView.State.Content
             controller.setData(state)
         }
     }

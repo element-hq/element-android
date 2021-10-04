@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
+ * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -189,7 +189,7 @@ class TimelinePreviousLastForwardTest : InstrumentedTest {
                     Timber.w(" event ${it.root}")
                 }
 
-                snapshot.size == 8 + 1 + 35
+                snapshot.size == 44 // 8 + 1 + 35
             }
 
             bobTimeline.addListener(eventsListener)
@@ -218,7 +218,7 @@ class TimelinePreviousLastForwardTest : InstrumentedTest {
                 // Bob can see the first event of the room (so Back pagination has worked)
                 snapshot.lastOrNull()?.root?.getClearType() == EventType.STATE_ROOM_CREATE
                         // 8 for room creation item 60 message from Alice
-                        && snapshot.size == 8 + 60
+                        && snapshot.size == 68 // 8 + 60
                         && snapshot.checkSendOrder(secondMessage, 30, 0)
                         && snapshot.checkSendOrder(firstMessage, 30, 30)
             }

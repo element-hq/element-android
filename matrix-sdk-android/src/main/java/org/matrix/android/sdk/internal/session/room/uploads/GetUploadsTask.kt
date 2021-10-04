@@ -1,5 +1,4 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -32,15 +31,14 @@ import org.matrix.android.sdk.internal.database.model.EventEntityFields
 import org.matrix.android.sdk.internal.database.query.TimelineEventFilter
 import org.matrix.android.sdk.internal.database.query.whereType
 import org.matrix.android.sdk.internal.di.SessionDatabase
+import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.filter.FilterFactory
 import org.matrix.android.sdk.internal.session.room.RoomAPI
 import org.matrix.android.sdk.internal.session.room.membership.RoomMemberHelper
 import org.matrix.android.sdk.internal.session.room.timeline.PaginationDirection
-import org.matrix.android.sdk.internal.session.room.timeline.PaginationResponse
 import org.matrix.android.sdk.internal.session.sync.SyncTokenStore
 import org.matrix.android.sdk.internal.task.Task
-import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
 internal interface GetUploadsTask : Task<GetUploadsTask.Params, GetUploadsResult> {
@@ -57,8 +55,8 @@ internal class DefaultGetUploadsTask @Inject constructor(
         private val roomAPI: RoomAPI,
         private val tokenStore: SyncTokenStore,
         @SessionDatabase private val monarchy: Monarchy,
-        private val eventBus: EventBus)
-    : GetUploadsTask {
+        private val globalErrorReceiver: GlobalErrorReceiver
+) : GetUploadsTask {
 
     override suspend fun execute(params: GetUploadsTask.Params): GetUploadsResult {
         val result: GetUploadsResult
@@ -87,8 +85,8 @@ internal class DefaultGetUploadsTask @Inject constructor(
             val since = params.since ?: tokenStore.getLastToken() ?: throw IllegalStateException("No token available")
 
             val filter = FilterFactory.createUploadsFilter(params.numberOfEvents).toJSONString()
-            val chunk = executeRequest<PaginationResponse>(eventBus) {
-                apiCall = roomAPI.getRoomMessagesFrom(params.roomId, since, PaginationDirection.BACKWARDS.value, params.numberOfEvents, filter)
+            val chunk = executeRequest(globalErrorReceiver) {
+                roomAPI.getRoomMessagesFrom(params.roomId, since, PaginationDirection.BACKWARDS.value, params.numberOfEvents, filter)
             }
 
             result = GetUploadsResult(

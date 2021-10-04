@@ -1,0 +1,36 @@
+name: Test
+
+on:
+  pull_request: {}
+  push:
+    branches: [main, develop]
+
+# Enrich gradle.properties for CI/CD
+env:
+  CI_GRADLE_ARG_PROPERTIES: >
+    -Porg.gradle.jvmargs=-Xmx2g
+    -Porg.gradle.parallel=false
+
+jobs:
+  unit-tests:
+    name: Run Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+      - name: Run unit tests
+        run: ./gradlew clean test $CI_GRADLE_ARG_PROPERTIES -PallWarningsAsErrors=false --stacktrace
+      - name: Publish Unit Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v1
+        if: always() &&
+          github.event.sender.login != 'dependabot[bot]' &&
+          ( github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository )
+        with:
+          files: ./**/build/test-results/**/*.xml

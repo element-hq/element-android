@@ -17,34 +17,42 @@
 package im.vector.app.features.roomprofile.settings
 
 import com.airbnb.epoxy.TypedEpoxyController
-import org.matrix.android.sdk.api.session.events.model.Event
-import org.matrix.android.sdk.api.session.events.model.toModel
-import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibilityContent
-import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import im.vector.app.R
+import im.vector.app.core.epoxy.dividerItem
 import im.vector.app.core.epoxy.profiles.buildProfileAction
 import im.vector.app.core.epoxy.profiles.buildProfileSection
-import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.core.ui.list.verticalMarginItem
+import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.features.form.formEditTextItem
+import im.vector.app.features.form.formEditableAvatarItem
+import im.vector.app.features.form.formSwitchItem
+import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.format.RoomHistoryVisibilityFormatter
+import im.vector.app.features.settings.VectorPreferences
+import org.matrix.android.sdk.api.session.room.model.GuestAccess
+import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
+import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
 class RoomSettingsController @Inject constructor(
         private val stringProvider: StringProvider,
+        private val avatarRenderer: AvatarRenderer,
+        private val dimensionConverter: DimensionConverter,
         private val roomHistoryVisibilityFormatter: RoomHistoryVisibilityFormatter,
-        colorProvider: ColorProvider
+        private val vectorPreferences: VectorPreferences
 ) : TypedEpoxyController<RoomSettingsViewState>() {
 
     interface Callback {
-        fun onEnableEncryptionClicked()
+        // Delete the avatar, or cancel an avatar change
+        fun onAvatarDelete()
+        fun onAvatarChange()
         fun onNameChanged(name: String)
         fun onTopicChanged(topic: String)
         fun onHistoryVisibilityClicked()
-        fun onAliasChanged(alias: String)
+        fun onJoinRuleClicked()
+        fun onToggleGuestAccess()
     }
-
-    private val dividerColor = colorProvider.getColorFromAttribute(R.attr.vctr_list_divider_color)
 
     var callback: Callback? = null
 
@@ -54,87 +62,91 @@ class RoomSettingsController @Inject constructor(
 
     override fun buildModels(data: RoomSettingsViewState?) {
         val roomSummary = data?.roomSummary?.invoke() ?: return
+        val host = this
 
-        val historyVisibility = data.historyVisibilityEvent?.let { formatRoomHistoryVisibilityEvent(it) } ?: ""
-        val newHistoryVisibility = data.newHistoryVisibility?.let { roomHistoryVisibilityFormatter.format(it) }
+        formEditableAvatarItem {
+            id("avatar")
+            enabled(data.actionPermissions.canChangeAvatar)
+            when (val avatarAction = data.avatarAction) {
+                RoomSettingsViewState.AvatarAction.None            -> {
+                    // Use the current value
+                    avatarRenderer(host.avatarRenderer)
+                    // We do not want to use the fallback avatar url, which can be the other user avatar, or the current user avatar.
+                    matrixItem(roomSummary.toMatrixItem().updateAvatar(data.currentRoomAvatarUrl))
+                }
+                RoomSettingsViewState.AvatarAction.DeleteAvatar    -> imageUri(null)
+                is RoomSettingsViewState.AvatarAction.UpdateAvatar -> imageUri(avatarAction.newAvatarUri)
+            }
+            clickListener { host.callback?.onAvatarChange() }
+            deleteListener { host.callback?.onAvatarDelete() }
+        }
 
         buildProfileSection(
                 stringProvider.getString(R.string.settings)
         )
 
+        verticalMarginItem {
+            id("margin")
+            heightInPx(host.dimensionConverter.dpToPx(16))
+        }
+
         formEditTextItem {
             id("name")
             enabled(data.actionPermissions.canChangeName)
             value(data.newName ?: roomSummary.displayName)
-            hint(stringProvider.getString(R.string.room_settings_name_hint))
+            hint(host.stringProvider.getString(R.string.room_settings_name_hint))
 
             onTextChange { text ->
-                callback?.onNameChanged(text)
+                host.callback?.onNameChanged(text)
             }
         }
-
         formEditTextItem {
             id("topic")
             enabled(data.actionPermissions.canChangeTopic)
             value(data.newTopic ?: roomSummary.topic)
-            hint(stringProvider.getString(R.string.room_settings_topic_hint))
+            singleLine(false)
+            hint(host.stringProvider.getString(R.string.room_settings_topic_hint))
 
             onTextChange { text ->
-                callback?.onTopicChanged(text)
+                host.callback?.onTopicChanged(text)
             }
         }
-
-        formEditTextItem {
-            id("alias")
-            enabled(data.actionPermissions.canChangeCanonicalAlias)
-            value(data.newCanonicalAlias ?: roomSummary.canonicalAlias)
-            hint(stringProvider.getString(R.string.room_settings_addresses_add_new_address))
-
-            onTextChange { text ->
-                callback?.onAliasChanged(text)
-            }
+        dividerItem {
+            id("topicDivider")
         }
-
         buildProfileAction(
                 id = "historyReadability",
                 title = stringProvider.getString(R.string.room_settings_room_read_history_rules_pref_title),
-                subtitle = newHistoryVisibility ?: historyVisibility,
-                dividerColor = dividerColor,
-                divider = false,
-                editable = data.actionPermissions.canChangeHistoryReadability,
-                action = { if (data.actionPermissions.canChangeHistoryReadability) callback?.onHistoryVisibilityClicked() }
+                subtitle = roomHistoryVisibilityFormatter.getSetting(data.newHistoryVisibility ?: data.currentHistoryVisibility),
+                divider = true,
+                editable = data.actionPermissions.canChangeHistoryVisibility,
+                action = { if (data.actionPermissions.canChangeHistoryVisibility) callback?.onHistoryVisibilityClicked() }
         )
 
-        buildEncryptionAction(data.actionPermissions, roomSummary)
-    }
+        buildProfileAction(
+                id = "joinRule",
+                title = stringProvider.getString(R.string.room_settings_room_access_title),
+                subtitle = data.getJoinRuleWording(stringProvider),
+                divider = true,
+                editable = data.actionPermissions.canChangeJoinRule,
+                action = { if (data.actionPermissions.canChangeJoinRule) callback?.onJoinRuleClicked() }
+        )
 
-    private fun buildEncryptionAction(actionPermissions: RoomSettingsViewState.ActionPermissions, roomSummary: RoomSummary) {
-        if (!actionPermissions.canEnableEncryption) {
-            return
+        val isPublic = (data.newRoomJoinRules.newJoinRules ?: data.currentRoomJoinRules) == RoomJoinRules.PUBLIC
+        if (vectorPreferences.developerMode() && isPublic) {
+            val guestAccess = data.newRoomJoinRules.newGuestAccess ?: data.currentGuestAccess
+            // add guest access option?
+            formSwitchItem {
+                id("guest_access")
+                title(host.stringProvider.getString(R.string.room_settings_guest_access_title))
+                switchChecked(guestAccess == GuestAccess.CanJoin)
+                listener {
+                    host.callback?.onToggleGuestAccess()
+                }
+            }
+            dividerItem {
+                id("guestAccessDivider")
+            }
         }
-        if (roomSummary.isEncrypted) {
-            buildProfileAction(
-                    id = "encryption",
-                    title = stringProvider.getString(R.string.room_settings_addresses_e2e_enabled),
-                    dividerColor = dividerColor,
-                    divider = false,
-                    editable = false
-            )
-        } else {
-            buildProfileAction(
-                    id = "encryption",
-                    title = stringProvider.getString(R.string.room_settings_enable_encryption),
-                    subtitle = stringProvider.getString(R.string.room_settings_enable_encryption_warning),
-                    dividerColor = dividerColor,
-                    divider = false,
-                    editable = true,
-                    action = { callback?.onEnableEncryptionClicked() }
-            )
-        }
-    }
-
-    private fun formatRoomHistoryVisibilityEvent(event: Event): String? {
-        val historyVisibility = event.getClearContent().toModel<RoomHistoryVisibilityContent>()?.historyVisibility ?: return null
-        return roomHistoryVisibilityFormatter.format(historyVisibility)
     }
 }

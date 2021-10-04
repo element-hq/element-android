@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,7 +45,7 @@ internal class DefaultSetRoomNotificationStateTask @Inject constructor(@SessionD
             PushRuleEntity.where(it, scope = RuleScope.GLOBAL, ruleId = params.roomId).findFirst()?.toRoomPushRule()
         }
         if (currentRoomPushRule != null) {
-            removePushRuleTask.execute(RemovePushRuleTask.Params(currentRoomPushRule.kind, currentRoomPushRule.rule))
+            removePushRuleTask.execute(RemovePushRuleTask.Params(currentRoomPushRule.kind, currentRoomPushRule.rule.ruleId))
         }
         val newRoomPushRule = params.roomNotificationState.toRoomPushRule(params.roomId)
         if (newRoomPushRule != null) {

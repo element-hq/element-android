@@ -20,8 +20,10 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import androidx.activity.result.ActivityResultLauncher
+import im.vector.app.core.dialogs.PhotoOrVideoDialog
 import im.vector.app.core.platform.Restorable
+import im.vector.app.features.settings.VectorPreferences
 import im.vector.lib.multipicker.MultiPicker
 import org.matrix.android.sdk.BuildConfig
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
@@ -48,6 +50,7 @@ class AttachmentsHelper(val context: Context, val callback: Callback) : Restorab
 
     // Capture path allows to handle camera image picking. It must be restored if the activity gets killed.
     private var captureUri: Uri? = null
+
     // The pending type is set if we have to handle permission request. It must be restored if the activity gets killed.
     var pendingType: AttachmentTypeSelectorView.Type? = null
 
@@ -72,99 +75,116 @@ class AttachmentsHelper(val context: Context, val callback: Callback) : Restorab
     /**
      * Starts the process for handling file picking
      */
-    fun selectFile(fragment: Fragment) {
-        MultiPicker.get(MultiPicker.FILE).startWith(fragment)
+    fun selectFile(activityResultLauncher: ActivityResultLauncher<Intent>) {
+        MultiPicker.get(MultiPicker.FILE).startWith(activityResultLauncher)
     }
 
     /**
-     * Starts the process for handling image picking
+     * Starts the process for handling image/video picking
      */
-    fun selectGallery(fragment: Fragment) {
-        MultiPicker.get(MultiPicker.IMAGE).startWith(fragment)
+    fun selectGallery(activityResultLauncher: ActivityResultLauncher<Intent>) {
+        MultiPicker.get(MultiPicker.MEDIA).startWith(activityResultLauncher)
     }
 
     /**
      * Starts the process for handling audio picking
      */
-    fun selectAudio(fragment: Fragment) {
-        MultiPicker.get(MultiPicker.AUDIO).startWith(fragment)
+    fun selectAudio(activityResultLauncher: ActivityResultLauncher<Intent>) {
+        MultiPicker.get(MultiPicker.AUDIO).startWith(activityResultLauncher)
     }
 
     /**
-     * Starts the process for handling capture image picking
+     * Starts the process for handling image/video capture. Can open a dialog
      */
-    fun openCamera(fragment: Fragment) {
-        captureUri = MultiPicker.get(MultiPicker.CAMERA).startWithExpectingFile(fragment)
+    fun openCamera(activity: Activity,
+                   vectorPreferences: VectorPreferences,
+                   cameraActivityResultLauncher: ActivityResultLauncher<Intent>,
+                   cameraVideoActivityResultLauncher: ActivityResultLauncher<Intent>) {
+        PhotoOrVideoDialog(activity, vectorPreferences).show(object : PhotoOrVideoDialog.PhotoOrVideoDialogListener {
+            override fun takePhoto() {
+                captureUri = MultiPicker.get(MultiPicker.CAMERA).startWithExpectingFile(context, cameraActivityResultLauncher)
+            }
+
+            override fun takeVideo() {
+                captureUri = MultiPicker.get(MultiPicker.CAMERA_VIDEO).startWithExpectingFile(context, cameraVideoActivityResultLauncher)
+            }
+        })
     }
 
     /**
      * Starts the process for handling contact picking
      */
-    fun selectContact(fragment: Fragment) {
-        MultiPicker.get(MultiPicker.CONTACT).startWith(fragment)
+    fun selectContact(activityResultLauncher: ActivityResultLauncher<Intent>) {
+        MultiPicker.get(MultiPicker.CONTACT).startWith(activityResultLauncher)
     }
 
     /**
-     * This methods aims to handle on activity result data.
-     *
-     * @return true if it can handle the data, false otherwise
+     * This methods aims to handle the result data.
      */
-    fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?): Boolean {
-        if (resultCode == Activity.RESULT_OK) {
-            when (requestCode) {
-                MultiPicker.REQUEST_CODE_PICK_FILE    -> {
-                    callback.onContentAttachmentsReady(
-                            MultiPicker.get(MultiPicker.FILE)
-                                    .getSelectedFiles(context, requestCode, resultCode, data)
-                                    .map { it.toContentAttachmentData() }
-                    )
+    fun onFileResult(data: Intent?) {
+        callback.onContentAttachmentsReady(
+                MultiPicker.get(MultiPicker.FILE)
+                        .getSelectedFiles(context, data)
+                        .map { it.toContentAttachmentData() }
+        )
+    }
+
+    fun onAudioResult(data: Intent?) {
+        callback.onContentAttachmentsReady(
+                MultiPicker.get(MultiPicker.AUDIO)
+                        .getSelectedFiles(context, data)
+                        .map { it.toContentAttachmentData() }
+        )
+    }
+
+    fun onContactResult(data: Intent?) {
+        MultiPicker.get(MultiPicker.CONTACT)
+                .getSelectedFiles(context, data)
+                .firstOrNull()
+                ?.toContactAttachment()
+                ?.let {
+                    callback.onContactAttachmentReady(it)
                 }
-                MultiPicker.REQUEST_CODE_PICK_AUDIO   -> {
-                    callback.onContentAttachmentsReady(
-                            MultiPicker.get(MultiPicker.AUDIO)
-                                    .getSelectedFiles(context, requestCode, resultCode, data)
-                                    .map { it.toContentAttachmentData() }
-                    )
-                }
-                MultiPicker.REQUEST_CODE_PICK_CONTACT -> {
-                    MultiPicker.get(MultiPicker.CONTACT)
-                            .getSelectedFiles(context, requestCode, resultCode, data)
-                            .firstOrNull()
-                            ?.toContactAttachment()
-                            ?.let {
-                                callback.onContactAttachmentReady(it)
-                            }
-                }
-                MultiPicker.REQUEST_CODE_PICK_IMAGE   -> {
-                    callback.onContentAttachmentsReady(
-                            MultiPicker.get(MultiPicker.IMAGE)
-                                    .getSelectedFiles(context, requestCode, resultCode, data)
-                                    .map { it.toContentAttachmentData() }
-                    )
-                }
-                MultiPicker.REQUEST_CODE_TAKE_PHOTO   -> {
-                    captureUri?.let { captureUri ->
-                        MultiPicker.get(MultiPicker.CAMERA)
-                                .getTakenPhoto(context, requestCode, resultCode, captureUri)
-                                ?.let {
-                                    callback.onContentAttachmentsReady(
-                                            listOf(it).map { it.toContentAttachmentData() }
-                                    )
-                                }
+    }
+
+    fun onMediaResult(data: Intent?) {
+        callback.onContentAttachmentsReady(
+                MultiPicker.get(MultiPicker.MEDIA)
+                        .getSelectedFiles(context, data)
+                        .map { it.toContentAttachmentData() }
+        )
+    }
+
+    fun onCameraResult() {
+        captureUri?.let { captureUri ->
+            MultiPicker.get(MultiPicker.CAMERA)
+                    .getTakenPhoto(context, captureUri)
+                    ?.let {
+                        callback.onContentAttachmentsReady(
+                                listOf(it).map { it.toContentAttachmentData() }
+                        )
                     }
-                }
-                MultiPicker.REQUEST_CODE_PICK_VIDEO   -> {
-                    callback.onContentAttachmentsReady(
-                            MultiPicker.get(MultiPicker.VIDEO)
-                                    .getSelectedFiles(context, requestCode, resultCode, data)
-                                    .map { it.toContentAttachmentData() }
-                    )
-                }
-                else                                  -> return false
-            }
-            return true
         }
-        return false
+    }
+
+    fun onCameraVideoResult() {
+        captureUri?.let { captureUri ->
+            MultiPicker.get(MultiPicker.CAMERA_VIDEO)
+                    .getTakenVideo(context, captureUri)
+                    ?.let {
+                        callback.onContentAttachmentsReady(
+                                listOf(it).map { it.toContentAttachmentData() }
+                        )
+                    }
+        }
+    }
+
+    fun onVideoResult(data: Intent?) {
+        callback.onContentAttachmentsReady(
+                MultiPicker.get(MultiPicker.VIDEO)
+                        .getSelectedFiles(context, data)
+                        .map { it.toContentAttachmentData() }
+        )
     }
 
     /**

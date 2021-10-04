@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -52,13 +51,18 @@ data class SessionParams(
     val deviceId = credentials.deviceId
 
     /**
-     * The current homeserver Url. It can be different that the homeserver url entered
-     * during login phase, because a redirection may have occurred
+     * The homeserver Url entered by the user during the login phase.
      */
     val homeServerUrl = homeServerConnectionConfig.homeServerUri.toString()
 
     /**
-     * The current homeserver host
+     * The current homeserver Url for client-server API. It can be different that the homeserver url entered
+     * during login phase, because a redirection may have occurred
+     */
+    val homeServerUrlBase = homeServerConnectionConfig.homeServerUriBase.toString()
+
+    /**
+     * The current homeserver host, using what has been entered by the user during login phase
      */
     val homeServerHost = homeServerConnectionConfig.homeServerUri.host
 

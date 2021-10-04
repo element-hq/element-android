@@ -1,5 +1,4 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,10 +25,10 @@ import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntityFie
 import org.matrix.android.sdk.internal.database.query.whereStateKey
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.di.UserId
+import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.room.RoomAPI
 import org.matrix.android.sdk.internal.task.Task
-import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
 internal interface CreateWidgetTask : Task<CreateWidgetTask.Params, Unit> {
@@ -44,11 +43,11 @@ internal interface CreateWidgetTask : Task<CreateWidgetTask.Params, Unit> {
 internal class DefaultCreateWidgetTask @Inject constructor(@SessionDatabase private val monarchy: Monarchy,
                                                            private val roomAPI: RoomAPI,
                                                            @UserId private val userId: String,
-                                                           private val eventBus: EventBus) : CreateWidgetTask {
+                                                           private val globalErrorReceiver: GlobalErrorReceiver) : CreateWidgetTask {
 
     override suspend fun execute(params: CreateWidgetTask.Params) {
-        executeRequest<Unit>(eventBus) {
-            apiCall = roomAPI.sendStateEvent(
+        executeRequest(globalErrorReceiver) {
+            roomAPI.sendStateEvent(
                     roomId = params.roomId,
                     stateEventType = EventType.STATE_ROOM_WIDGET_LEGACY,
                     stateKey = params.widgetId,

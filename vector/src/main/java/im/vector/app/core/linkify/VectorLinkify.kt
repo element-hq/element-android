@@ -121,7 +121,7 @@ object VectorLinkify {
                     remove = if (a.important) i + 1 else i
                 } else {
                     when {
-                        b.end <= a.end ->
+                        b.end <= a.end                    ->
                             // b is inside a -> b should be removed
                             remove = i + 1
                         a.end - a.start > b.end - b.start ->

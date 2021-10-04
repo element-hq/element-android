@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,10 +18,10 @@ package org.matrix.android.sdk.internal.session.room.directory
 
 import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoomsParams
 import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoomsResponse
+import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.room.RoomAPI
 import org.matrix.android.sdk.internal.task.Task
-import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
 internal interface GetPublicRoomTask : Task<GetPublicRoomTask.Params, PublicRoomsResponse> {
@@ -34,12 +33,12 @@ internal interface GetPublicRoomTask : Task<GetPublicRoomTask.Params, PublicRoom
 
 internal class DefaultGetPublicRoomTask @Inject constructor(
         private val roomAPI: RoomAPI,
-        private val eventBus: EventBus
+        private val globalErrorReceiver: GlobalErrorReceiver
 ) : GetPublicRoomTask {
 
     override suspend fun execute(params: GetPublicRoomTask.Params): PublicRoomsResponse {
-        return executeRequest(eventBus) {
-            apiCall = roomAPI.publicRooms(params.server, params.publicRoomsParams)
+        return executeRequest(globalErrorReceiver) {
+            roomAPI.publicRooms(params.server, params.publicRoomsParams)
         }
     }
 }

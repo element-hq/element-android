@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,10 +17,10 @@
 package org.matrix.android.sdk.internal.session.room.state
 
 import org.matrix.android.sdk.api.util.JsonDict
+import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.room.RoomAPI
 import org.matrix.android.sdk.internal.task.Task
-import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
 internal interface SendStateTask : Task<SendStateTask.Params, Unit> {
@@ -35,12 +34,12 @@ internal interface SendStateTask : Task<SendStateTask.Params, Unit> {
 
 internal class DefaultSendStateTask @Inject constructor(
         private val roomAPI: RoomAPI,
-        private val eventBus: EventBus
+        private val globalErrorReceiver: GlobalErrorReceiver
 ) : SendStateTask {
 
     override suspend fun execute(params: SendStateTask.Params) {
-        return executeRequest(eventBus) {
-            apiCall = if (params.stateKey == null) {
+        return executeRequest(globalErrorReceiver) {
+            if (params.stateKey == null) {
                 roomAPI.sendStateEvent(
                         roomId = params.roomId,
                         stateEventType = params.eventType,

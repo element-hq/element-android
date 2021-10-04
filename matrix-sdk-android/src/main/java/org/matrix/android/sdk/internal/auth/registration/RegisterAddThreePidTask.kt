@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -36,7 +35,7 @@ internal class DefaultRegisterAddThreePidTask(
 
     override suspend fun execute(params: RegisterAddThreePidTask.Params): AddThreePidRegistrationResponse {
         return executeRequest(null) {
-            apiCall = authAPI.add3Pid(params.threePid.toPath(), AddThreePidRegistrationParams.from(params))
+            authAPI.add3Pid(params.threePid.toPath(), AddThreePidRegistrationParams.from(params))
         }
     }
 

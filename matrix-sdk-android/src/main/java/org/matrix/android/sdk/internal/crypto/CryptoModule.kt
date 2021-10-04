@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -62,7 +61,6 @@ import org.matrix.android.sdk.internal.crypto.store.db.RealmCryptoStoreModule
 import org.matrix.android.sdk.internal.crypto.tasks.ClaimOneTimeKeysForUsersDeviceTask
 import org.matrix.android.sdk.internal.crypto.tasks.DefaultClaimOneTimeKeysForUsersDevice
 import org.matrix.android.sdk.internal.crypto.tasks.DefaultDeleteDeviceTask
-import org.matrix.android.sdk.internal.crypto.tasks.DefaultDeleteDeviceWithUserPasswordTask
 import org.matrix.android.sdk.internal.crypto.tasks.DefaultDownloadKeysForUsers
 import org.matrix.android.sdk.internal.crypto.tasks.DefaultEncryptEventTask
 import org.matrix.android.sdk.internal.crypto.tasks.DefaultGetDeviceInfoTask
@@ -76,7 +74,6 @@ import org.matrix.android.sdk.internal.crypto.tasks.DefaultUploadKeysTask
 import org.matrix.android.sdk.internal.crypto.tasks.DefaultUploadSignaturesTask
 import org.matrix.android.sdk.internal.crypto.tasks.DefaultUploadSigningKeysTask
 import org.matrix.android.sdk.internal.crypto.tasks.DeleteDeviceTask
-import org.matrix.android.sdk.internal.crypto.tasks.DeleteDeviceWithUserPasswordTask
 import org.matrix.android.sdk.internal.crypto.tasks.DownloadKeysForUsersTask
 import org.matrix.android.sdk.internal.crypto.tasks.EncryptEventTask
 import org.matrix.android.sdk.internal.crypto.tasks.GetDeviceInfoTask
@@ -115,7 +112,6 @@ internal abstract class CryptoModule {
         @SessionScope
         fun providesRealmConfiguration(@SessionFilesDirectory directory: File,
                                        @UserMd5 userMd5: String,
-                                       realmCryptoStoreMigration: RealmCryptoStoreMigration,
                                        realmKeysUtils: RealmKeysUtils): RealmConfiguration {
             return RealmConfiguration.Builder()
                     .directory(directory)
@@ -124,8 +120,9 @@ internal abstract class CryptoModule {
                     }
                     .name("crypto_store.realm")
                     .modules(RealmCryptoStoreModule())
+                    .allowWritesOnUiThread(true)
                     .schemaVersion(RealmCryptoStoreMigration.CRYPTO_STORE_SCHEMA_VERSION)
-                    .migration(realmCryptoStoreMigration)
+                    .migration(RealmCryptoStoreMigration)
                     .build()
         }
 
@@ -239,9 +236,6 @@ internal abstract class CryptoModule {
 
     @Binds
     abstract fun bindClaimOneTimeKeysForUsersDeviceTask(task: DefaultClaimOneTimeKeysForUsersDevice): ClaimOneTimeKeysForUsersDeviceTask
-
-    @Binds
-    abstract fun bindDeleteDeviceWithUserPasswordTask(task: DefaultDeleteDeviceWithUserPasswordTask): DeleteDeviceWithUserPasswordTask
 
     @Binds
     abstract fun bindCrossSigningService(service: DefaultCrossSigningService): CrossSigningService

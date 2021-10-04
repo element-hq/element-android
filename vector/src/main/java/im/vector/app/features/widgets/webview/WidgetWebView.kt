@@ -21,7 +21,6 @@ import android.view.ViewGroup
 import android.webkit.CookieManager
 import android.webkit.PermissionRequest
 import android.webkit.WebChromeClient
-import android.webkit.WebSettings
 import android.webkit.WebView
 import im.vector.app.R
 import im.vector.app.features.themes.ThemeUtils
@@ -31,15 +30,11 @@ import im.vector.app.features.webview.WebViewEventListener
 @SuppressLint("NewApi")
 fun WebView.setupForWidget(webViewEventListener: WebViewEventListener) {
     // xml value seems ignored
-    setBackgroundColor(ThemeUtils.getColor(context, R.attr.riotx_bottom_nav_background_color))
+    setBackgroundColor(ThemeUtils.getColor(context, R.attr.colorSurface))
 
     // clear caches
     clearHistory()
     clearFormData()
-    clearCache(true)
-
-    // does not cache the data
-    settings.cacheMode = WebSettings.LOAD_NO_CACHE
 
     // Enable Javascript
     settings.javaScriptEnabled = true
@@ -54,7 +49,9 @@ fun WebView.setupForWidget(webViewEventListener: WebViewEventListener) {
     // Allow use of Local Storage
     settings.domStorageEnabled = true
 
+    @Suppress("DEPRECATION")
     settings.allowFileAccessFromFileURLs = true
+    @Suppress("DEPRECATION")
     settings.allowUniversalAccessFromFileURLs = true
 
     settings.displayZoomControls = false
@@ -75,10 +72,7 @@ fun WebView.clearAfterWidget() {
     // Make sure you remove the WebView from its parent view before doing anything.
     (parent as? ViewGroup)?.removeAllViews()
     webChromeClient = null
-    webViewClient = null
     clearHistory()
-    // NOTE: clears RAM cache, if you pass true, it will also clear the disk cache.
-    clearCache(true)
     // Loading a blank page is optional, but will ensure that the WebView isn't doing anything when you destroy it.
     loadUrl("about:blank")
     removeAllViews()

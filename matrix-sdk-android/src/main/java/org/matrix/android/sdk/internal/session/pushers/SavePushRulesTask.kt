@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,6 +21,7 @@ import org.matrix.android.sdk.api.pushrules.RuleSetKey
 import org.matrix.android.sdk.api.pushrules.rest.GetPushRulesResponse
 import org.matrix.android.sdk.internal.database.mapper.PushRulesMapper
 import org.matrix.android.sdk.internal.database.model.PushRulesEntity
+import org.matrix.android.sdk.internal.database.model.deleteOnCascade
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.task.Task
 import org.matrix.android.sdk.internal.util.awaitTransaction
@@ -41,7 +41,7 @@ internal class DefaultSavePushRulesTask @Inject constructor(@SessionDatabase pri
             // clear current push rules
             realm.where(PushRulesEntity::class.java)
                     .findAll()
-                    .deleteAllFromRealm()
+                    .forEach { it.deleteOnCascade() }
 
             // Save only global rules for the moment
             val globalRules = params.pushRules.global

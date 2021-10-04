@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,7 +18,6 @@ package org.matrix.android.sdk.internal.database.query
 
 import org.matrix.android.sdk.internal.database.model.ChunkEntity
 import org.matrix.android.sdk.internal.database.model.ChunkEntityFields
-import org.matrix.android.sdk.internal.database.model.RoomEntityFields
 import io.realm.Realm
 import io.realm.RealmQuery
 import io.realm.RealmResults
@@ -28,7 +26,7 @@ import io.realm.kotlin.where
 
 internal fun ChunkEntity.Companion.where(realm: Realm, roomId: String): RealmQuery<ChunkEntity> {
     return realm.where<ChunkEntity>()
-            .equalTo("${ChunkEntityFields.ROOM}.${RoomEntityFields.ROOM_ID}", roomId)
+            .equalTo(ChunkEntityFields.ROOM.ROOM_ID, roomId)
 }
 
 internal fun ChunkEntity.Companion.find(realm: Realm, roomId: String, prevToken: String? = null, nextToken: String? = null): ChunkEntity? {

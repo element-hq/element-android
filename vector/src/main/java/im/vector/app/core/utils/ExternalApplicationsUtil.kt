@@ -29,24 +29,30 @@ import android.os.Build
 import android.os.Environment
 import android.provider.Browser
 import android.provider.MediaStore
+import android.provider.Settings
 import android.webkit.MimeTypeMap
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.browser.customtabs.CustomTabsSession
-import androidx.core.content.ContextCompat
+import androidx.core.app.ShareCompat
 import androidx.core.content.FileProvider
 import androidx.core.content.getSystemService
-import androidx.fragment.app.Fragment
 import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.features.notifications.NotificationUtils
-import org.matrix.android.sdk.api.extensions.tryOrNull
+import im.vector.app.features.themes.ThemeUtils
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okio.buffer
 import okio.sink
 import okio.source
+import org.matrix.android.sdk.api.extensions.tryOrNull
+import org.matrix.android.sdk.api.util.MimeTypes
+import org.matrix.android.sdk.api.util.MimeTypes.isMimeTypeAudio
+import org.matrix.android.sdk.api.util.MimeTypes.isMimeTypeImage
+import org.matrix.android.sdk.api.util.MimeTypes.isMimeTypeVideo
 import timber.log.Timber
 import java.io.File
 import java.io.FileInputStream
@@ -87,17 +93,24 @@ fun openUrlInExternalBrowser(context: Context, uri: Uri?) {
  * If several compatible browsers are installed, the user will be proposed to choose one.
  * Ref: https://developer.chrome.com/multidevice/android/customtabs
  */
-fun openUrlInChromeCustomTab(context: Context, session: CustomTabsSession?, url: String) {
+fun openUrlInChromeCustomTab(context: Context,
+                             session: CustomTabsSession?,
+                             url: String) {
     try {
         CustomTabsIntent.Builder()
-                .setToolbarColor(ContextCompat.getColor(context, R.color.riotx_background_light))
-                .apply {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
-                        setNavigationBarColor(ContextCompat.getColor(context, R.color.riotx_header_panel_background_light))
-                    }
-                }
-                .setNavigationBarColor(ContextCompat.getColor(context, R.color.riotx_background_light))
-                .setColorScheme(CustomTabsIntent.COLOR_SCHEME_LIGHT)
+                .setDefaultColorSchemeParams(
+                        CustomTabColorSchemeParams.Builder()
+                                .setToolbarColor(ThemeUtils.getColor(context, android.R.attr.colorBackground))
+                                .setNavigationBarColor(ThemeUtils.getColor(context, android.R.attr.colorBackground))
+                                .build()
+                )
+                .setColorScheme(
+                        when {
+                            ThemeUtils.isSystemTheme(context) -> CustomTabsIntent.COLOR_SCHEME_SYSTEM
+                            ThemeUtils.isLightTheme(context)  -> CustomTabsIntent.COLOR_SCHEME_LIGHT
+                            else                              -> CustomTabsIntent.COLOR_SCHEME_DARK
+                        }
+                )
                 // Note: setting close button icon does not work
                 .setCloseButtonIcon(BitmapFactory.decodeResource(context.resources, R.drawable.ic_back_24dp))
                 .setStartAnimations(context, R.anim.enter_fade_in, R.anim.exit_fade_out)
@@ -130,18 +143,18 @@ fun openSoundRecorder(activity: Activity, requestCode: Int) {
  * Open file selection activity
  */
 fun openFileSelection(activity: Activity,
-                      fragment: Fragment?,
+                      activityResultLauncher: ActivityResultLauncher<Intent>?,
                       allowMultipleSelection: Boolean,
                       requestCode: Int) {
     val fileIntent = Intent(Intent.ACTION_GET_CONTENT)
     fileIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, allowMultipleSelection)
 
     fileIntent.addCategory(Intent.CATEGORY_OPENABLE)
-    fileIntent.type = "*/*"
+    fileIntent.type = MimeTypes.Any
 
     try {
-        fragment
-                ?.startActivityForResult(fileIntent, requestCode)
+        activityResultLauncher
+                ?.launch(fileIntent)
                 ?: run {
                     activity.startActivityForResult(fileIntent, requestCode)
                 }
@@ -181,7 +194,7 @@ fun openCamera(activity: Activity, titlePrefix: String, requestCode: Int): Strin
     // The Galaxy S not only requires the name of the file to output the image to, but will also not
     // set the mime type of the picture it just took (!!!). We assume that the Galaxy S takes image/jpegs
     // so the attachment uploader doesn't freak out about there being no mimetype in the content database.
-    values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
+    values.put(MediaStore.Images.Media.MIME_TYPE, MimeTypes.Jpeg)
     var dummyUri: Uri? = null
     try {
         dummyUri = activity.contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
@@ -285,26 +298,35 @@ fun openMedia(activity: Activity, savedMediaPath: String, mimeType: String) {
 }
 
 fun shareMedia(context: Context, file: File, mediaMimeType: String?) {
-    var mediaUri: Uri? = null
-    try {
-        mediaUri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".fileProvider", file)
+    val mediaUri = try {
+        FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".fileProvider", file)
     } catch (e: Exception) {
         Timber.e(e, "onMediaAction Selected File cannot be shared")
+        return
     }
 
-    if (null != mediaUri) {
-        val sendIntent = Intent()
-        sendIntent.action = Intent.ACTION_SEND
-        // Grant temporary read permission to the content URI
-        sendIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        sendIntent.type = mediaMimeType
-        sendIntent.putExtra(Intent.EXTRA_STREAM, mediaUri)
+    val sendIntent = ShareCompat.IntentBuilder(context)
+            .setType(mediaMimeType)
+            .setStream(mediaUri)
+            .getIntent()
 
-        try {
-            context.startActivity(sendIntent)
-        } catch (activityNotFoundException: ActivityNotFoundException) {
-            context.toast(R.string.error_no_external_application_found)
-        }
+    sendShareIntent(context, sendIntent)
+}
+
+fun shareText(context: Context, text: String) {
+    val sendIntent = Intent()
+    sendIntent.action = Intent.ACTION_SEND
+    sendIntent.type = "text/plain"
+    sendIntent.putExtra(Intent.EXTRA_TEXT, text)
+
+    sendShareIntent(context, sendIntent)
+}
+
+private fun sendShareIntent(context: Context, intent: Intent) {
+    try {
+        context.startActivity(Intent.createChooser(intent, context.getString(R.string.share)))
+    } catch (activityNotFoundException: ActivityNotFoundException) {
+        context.toast(R.string.error_no_external_application_found)
     }
 }
 
@@ -318,90 +340,93 @@ private fun appendTimeToFilename(name: String): String {
     return """${filename}_$dateExtension.$fileExtension"""
 }
 
-fun saveMedia(context: Context, file: File, title: String, mediaMimeType: String?, notificationUtils: NotificationUtils) {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-        val filename = appendTimeToFilename(title)
+suspend fun saveMedia(context: Context, file: File, title: String, mediaMimeType: String?, notificationUtils: NotificationUtils) {
+    withContext(Dispatchers.IO) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            val filename = appendTimeToFilename(title)
 
-        val values = ContentValues().apply {
-            put(MediaStore.Images.Media.TITLE, filename)
-            put(MediaStore.Images.Media.DISPLAY_NAME, filename)
-            put(MediaStore.Images.Media.MIME_TYPE, mediaMimeType)
-            put(MediaStore.Images.Media.DATE_ADDED, System.currentTimeMillis())
-            put(MediaStore.Images.Media.DATE_TAKEN, System.currentTimeMillis())
-        }
-        val externalContentUri = when {
-            mediaMimeType?.startsWith("image/") == true -> MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-            mediaMimeType?.startsWith("video/") == true -> MediaStore.Video.Media.EXTERNAL_CONTENT_URI
-            mediaMimeType?.startsWith("audio/") == true -> MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
-            else                                        -> MediaStore.Downloads.EXTERNAL_CONTENT_URI
-        }
+            val values = ContentValues().apply {
+                put(MediaStore.Images.Media.TITLE, filename)
+                put(MediaStore.Images.Media.DISPLAY_NAME, filename)
+                put(MediaStore.Images.Media.MIME_TYPE, mediaMimeType)
+                put(MediaStore.Images.Media.DATE_ADDED, System.currentTimeMillis())
+                put(MediaStore.Images.Media.DATE_TAKEN, System.currentTimeMillis())
+            }
+            val externalContentUri = when {
+                mediaMimeType?.isMimeTypeImage() == true -> MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+                mediaMimeType?.isMimeTypeVideo() == true -> MediaStore.Video.Media.EXTERNAL_CONTENT_URI
+                mediaMimeType?.isMimeTypeAudio() == true -> MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
+                else                                     -> MediaStore.Downloads.EXTERNAL_CONTENT_URI
+            }
 
-        val uri = context.contentResolver.insert(externalContentUri, values)
-        if (uri == null) {
-            Toast.makeText(context, R.string.error_saving_media_file, Toast.LENGTH_LONG).show()
-        } else {
-            val source = file.inputStream().source().buffer()
-            context.contentResolver.openOutputStream(uri)?.sink()?.buffer()?.let { sink ->
-                source.use { input ->
-                    sink.use { output ->
-                        output.writeAll(input)
+            val uri = context.contentResolver.insert(externalContentUri, values)
+            if (uri == null) {
+                Toast.makeText(context, R.string.error_saving_media_file, Toast.LENGTH_LONG).show()
+                throw IllegalStateException(context.getString(R.string.error_saving_media_file))
+            } else {
+                val source = file.inputStream().source().buffer()
+                context.contentResolver.openOutputStream(uri)?.sink()?.buffer()?.let { sink ->
+                    source.use { input ->
+                        sink.use { output ->
+                            output.writeAll(input)
+                        }
                     }
                 }
+                notificationUtils.buildDownloadFileNotification(
+                        uri,
+                        filename,
+                        mediaMimeType ?: MimeTypes.OctetStream
+                ).let { notification ->
+                    notificationUtils.showNotificationMessage("DL", uri.hashCode(), notification)
+                }
             }
-            notificationUtils.buildDownloadFileNotification(
-                    uri,
-                    filename,
-                    mediaMimeType ?: "application/octet-stream"
-            ).let { notification ->
-                notificationUtils.showNotificationMessage("DL", uri.hashCode(), notification)
-            }
+        } else {
+            saveMediaLegacy(context, mediaMimeType, title, file)
         }
-    } else {
-        saveMediaLegacy(context, mediaMimeType, title, file)
     }
 }
 
 @Suppress("DEPRECATION")
-private fun saveMediaLegacy(context: Context, mediaMimeType: String?, title: String, file: File) {
+private fun saveMediaLegacy(context: Context,
+                            mediaMimeType: String?,
+                            title: String,
+                            file: File) {
     val state = Environment.getExternalStorageState()
     if (Environment.MEDIA_MOUNTED != state) {
         context.toast(context.getString(R.string.error_saving_media_file))
-        return
+        throw IllegalStateException(context.getString(R.string.error_saving_media_file))
     }
 
-    GlobalScope.launch(Dispatchers.IO) {
-        val dest = when {
-            mediaMimeType?.startsWith("image/") == true -> Environment.DIRECTORY_PICTURES
-            mediaMimeType?.startsWith("video/") == true -> Environment.DIRECTORY_MOVIES
-            mediaMimeType?.startsWith("audio/") == true -> Environment.DIRECTORY_MUSIC
-            else                                        -> Environment.DIRECTORY_DOWNLOADS
+    val dest = when {
+        mediaMimeType?.isMimeTypeImage() == true -> Environment.DIRECTORY_PICTURES
+        mediaMimeType?.isMimeTypeVideo() == true -> Environment.DIRECTORY_MOVIES
+        mediaMimeType?.isMimeTypeAudio() == true -> Environment.DIRECTORY_MUSIC
+        else                                     -> Environment.DIRECTORY_DOWNLOADS
+    }
+    val downloadDir = Environment.getExternalStoragePublicDirectory(dest)
+    try {
+        val outputFilename = if (title.substringAfterLast('.', "").isEmpty()) {
+            val extension = mediaMimeType?.let { MimeTypeMap.getSingleton().getExtensionFromMimeType(it) }
+            "$title.$extension"
+        } else {
+            title
         }
-        val downloadDir = Environment.getExternalStoragePublicDirectory(dest)
-        try {
-            val outputFilename = if (title.substringAfterLast('.', "").isEmpty()) {
-                val extension = mediaMimeType?.let { MimeTypeMap.getSingleton().getExtensionFromMimeType(it) }
-                "$title.$extension"
-            } else {
-                title
-            }
-            val savedFile = saveFileIntoLegacy(file, downloadDir, outputFilename)
-            if (savedFile != null) {
-                val downloadManager = context.getSystemService<DownloadManager>()
-                downloadManager?.addCompletedDownload(
-                        savedFile.name,
-                        title,
-                        true,
-                        mediaMimeType ?: "application/octet-stream",
-                        savedFile.absolutePath,
-                        savedFile.length(),
-                        true)
-                addToGallery(savedFile, mediaMimeType, context)
-            }
-        } catch (error: Throwable) {
-            GlobalScope.launch(Dispatchers.Main) {
-                context.toast(context.getString(R.string.error_saving_media_file))
-            }
+        val savedFile = saveFileIntoLegacy(file, downloadDir, outputFilename)
+        if (savedFile != null) {
+            val downloadManager = context.getSystemService<DownloadManager>()
+            downloadManager?.addCompletedDownload(
+                    savedFile.name,
+                    title,
+                    true,
+                    mediaMimeType ?: MimeTypes.OctetStream,
+                    savedFile.absolutePath,
+                    savedFile.length(),
+                    true)
+            addToGallery(savedFile, mediaMimeType, context)
         }
+    } catch (error: Throwable) {
+        context.toast(context.getString(R.string.error_saving_media_file))
+        throw error
     }
 }
 
@@ -435,15 +460,27 @@ fun openPlayStore(activity: Activity, appId: String = BuildConfig.APPLICATION_ID
     }
 }
 
+fun openAppSettingsPage(activity: Activity) {
+    try {
+        activity.startActivity(
+                Intent().apply {
+                    action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    data = Uri.fromParts("package", activity.packageName, null)
+                })
+    } catch (activityNotFoundException: ActivityNotFoundException) {
+        activity.toast(R.string.error_no_external_application_found)
+    }
+}
+
 /**
  * Ask the user to select a location and a file name to write in
  */
 fun selectTxtFileToWrite(
         activity: Activity,
-        fragment: Fragment?,
+        activityResultLauncher: ActivityResultLauncher<Intent>,
         defaultFileName: String,
-        chooserHint: String,
-        requestCode: Int
+        chooserHint: String
 ) {
     val intent = Intent(Intent.ACTION_CREATE_DOCUMENT)
     intent.addCategory(Intent.CATEGORY_OPENABLE)
@@ -452,11 +489,7 @@ fun selectTxtFileToWrite(
 
     try {
         val chooserIntent = Intent.createChooser(intent, chooserHint)
-        if (fragment != null) {
-            fragment.startActivityForResult(chooserIntent, requestCode)
-        } else {
-            activity.startActivityForResult(chooserIntent, requestCode)
-        }
+        activityResultLauncher.launch(chooserIntent)
     } catch (activityNotFoundException: ActivityNotFoundException) {
         activity.toast(R.string.error_no_external_application_found)
     }
@@ -475,12 +508,12 @@ fun selectTxtFileToWrite(
  * @param sourceFile     the file source path
  * @param dstDirPath     the dst path
  * @param outputFilename optional the output filename
- * @param callback       the asynchronous callback
+ * @return               the created file
  */
 @Suppress("DEPRECATION")
 fun saveFileIntoLegacy(sourceFile: File, dstDirPath: File, outputFilename: String?): File? {
     // defines another name for the external media
-    val dstFileName: String
+    var dstFileName: String
 
     // build a filename is not provided
     if (null == outputFilename) {
@@ -494,6 +527,9 @@ fun saveFileIntoLegacy(sourceFile: File, dstDirPath: File, outputFilename: Strin
     } else {
         dstFileName = outputFilename
     }
+
+    // remove dangerous characters from the filename
+    dstFileName = dstFileName.replace(Regex("""[/\\]"""), "_")
 
     var dstFile = File(dstDirPath, dstFileName)
 

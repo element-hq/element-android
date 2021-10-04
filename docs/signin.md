@@ -165,7 +165,7 @@ In this case, the user can click on "Sign in with SSO" and the native web browse
 
 > https://homeserver.with.sso/_matrix/client/r0/login/sso/redirect?redirectUrl=element%3A%2F%element
 
-The parameter `redirectUrl` is set to `element://element`.
+The parameter `redirectUrl` is set to `element://connect`.
 
 ChromeCustomTabs are an intermediate way to display a WebPage, between a WebView and using the external browser. More info can be found [here](https://developer.chrome.com/multidevice/android/customtabs)
 
@@ -175,7 +175,7 @@ During the process, user may be asked to validate an email by clicking on a link
 
 Once the process is finished, the web page will call the `redirectUrl` with an extra parameter `loginToken`
 
-> element://element?loginToken=MDAxOWxvY2F0aW9uIG1vemlsbGEub3JnCjAwMTNpZGVudGlmaWVy
+> element://connect?loginToken=MDAxOWxvY2F0aW9uIG1vemlsbGEub3JnCjAwMTNpZGVudGlmaWVy
 
 This navigation is intercepted by Element by the `LoginActivity`, which will then ask the homeserver to convert this `loginToken` to an access token
 

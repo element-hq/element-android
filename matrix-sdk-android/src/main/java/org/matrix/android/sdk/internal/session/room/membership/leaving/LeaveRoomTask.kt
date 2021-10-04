@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,13 +21,13 @@ import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.create.RoomCreateContent
+import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.room.RoomAPI
 import org.matrix.android.sdk.internal.session.room.membership.RoomChangeMembershipStateDataSource
 import org.matrix.android.sdk.internal.session.room.state.StateEventDataSource
 import org.matrix.android.sdk.internal.session.room.summary.RoomSummaryDataSource
 import org.matrix.android.sdk.internal.task.Task
-import org.greenrobot.eventbus.EventBus
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -41,7 +40,7 @@ internal interface LeaveRoomTask : Task<LeaveRoomTask.Params, Unit> {
 
 internal class DefaultLeaveRoomTask @Inject constructor(
         private val roomAPI: RoomAPI,
-        private val eventBus: EventBus,
+        private val globalErrorReceiver: GlobalErrorReceiver,
         private val stateEventDataSource: StateEventDataSource,
         private val roomSummaryDataSource: RoomSummaryDataSource,
         private val roomChangeMembershipStateDataSource: RoomChangeMembershipStateDataSource
@@ -69,8 +68,8 @@ internal class DefaultLeaveRoomTask @Inject constructor(
             leaveRoom(predecessorRoomId, reason)
         }
         try {
-            executeRequest<Unit>(eventBus) {
-                apiCall = roomAPI.leave(roomId, mapOf("reason" to reason))
+            executeRequest(globalErrorReceiver) {
+                roomAPI.leave(roomId, mapOf("reason" to reason))
             }
         } catch (failure: Throwable) {
             roomChangeMembershipStateDataSource.updateState(roomId, ChangeMembershipState.FailedLeaving(failure))

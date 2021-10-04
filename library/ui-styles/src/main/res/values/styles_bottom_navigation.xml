@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="BottomNavigation.Vector" parent="Widget.MaterialComponents.BottomNavigationView">
+        <item name="android:background">@drawable/bg_bottom_navigation</item>
+        <item name="itemBackground">@drawable/bg_bottom_navigation</item>
+        <item name="itemIconSize">20dp</item>
+        <item name="itemIconTint">@color/bottom_navigation_icon_tint_selector</item>
+        <item name="labelVisibilityMode">unlabeled</item>
+    </style>
+
+</resources>

@@ -18,11 +18,11 @@ package im.vector.app.features.crypto.keysbackup.restore
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AlertDialog
-import androidx.lifecycle.Observer
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.extensions.addFragmentToBackstack
 import im.vector.app.core.extensions.observeEvent
+import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.SimpleFragmentActivity
 import im.vector.app.core.ui.views.KeysBackupBanner
@@ -32,8 +32,6 @@ import org.matrix.android.sdk.api.session.crypto.crosssigning.KEYBACKUP_SECRET_S
 class KeysBackupRestoreActivity : SimpleFragmentActivity() {
 
     companion object {
-
-        private const val REQUEST_4S_SECRET = 100
         const val SECRET_ALIAS = SharedSecureStorageActivity.DEFAULT_RESULT_KEYSTORE_ALIAS
 
         fun intent(context: Context): Intent {
@@ -55,7 +53,7 @@ class KeysBackupRestoreActivity : SimpleFragmentActivity() {
         viewModel = viewModelProvider.get(KeysBackupRestoreSharedViewModel::class.java)
         viewModel.initSession(session)
 
-        viewModel.keySourceModel.observe(this, Observer { keySource ->
+        viewModel.keySourceModel.observe(this) { keySource ->
             if (keySource != null && !keySource.isInQuadS && supportFragmentManager.fragments.isEmpty()) {
                 val isBackupCreatedFromPassphrase =
                         viewModel.keyVersionResult.value?.getAuthDataAsMegolmBackupAuthData()?.privateKeySalt != null
@@ -65,10 +63,10 @@ class KeysBackupRestoreActivity : SimpleFragmentActivity() {
                     replaceFragment(R.id.container, KeysBackupRestoreFromKeyFragment::class.java)
                 }
             }
-        })
+        }
 
         viewModel.keyVersionResultError.observeEvent(this) { message ->
-            AlertDialog.Builder(this)
+            MaterialAlertDialogBuilder(this)
                     .setTitle(R.string.unknown_error)
                     .setMessage(message)
                     .setCancelable(false)
@@ -99,7 +97,7 @@ class KeysBackupRestoreActivity : SimpleFragmentActivity() {
                     launch4SActivity()
                 }
                 KeysBackupRestoreSharedViewModel.NAVIGATE_FAILED_TO_LOAD_4S   -> {
-                    AlertDialog.Builder(this)
+                    MaterialAlertDialogBuilder(this)
                             .setTitle(R.string.unknown_error)
                             .setMessage(R.string.error_failed_to_import_keys)
                             .setCancelable(false)
@@ -112,9 +110,9 @@ class KeysBackupRestoreActivity : SimpleFragmentActivity() {
             }
         }
 
-        viewModel.loadingEvent.observe(this, Observer {
+        viewModel.loadingEvent.observe(this) {
             updateWaitingView(it)
-        })
+        }
 
         viewModel.importRoomKeysFinishWithResult.observeEvent(this) {
             // set data?
@@ -130,22 +128,19 @@ class KeysBackupRestoreActivity : SimpleFragmentActivity() {
                 requestedSecrets = listOf(KEYBACKUP_SECRET_SSSS_NAME),
                 resultKeyStoreAlias = SECRET_ALIAS
         ).let {
-            startActivityForResult(it, REQUEST_4S_SECRET)
+            secretStartForActivityResult.launch(it)
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == REQUEST_4S_SECRET) {
-            val extraResult = data?.getStringExtra(SharedSecureStorageActivity.EXTRA_DATA_RESULT)
-            if (resultCode == Activity.RESULT_OK && extraResult != null) {
-                viewModel.handleGotSecretFromSSSS(
-                        extraResult,
-                        SECRET_ALIAS
-                )
-            } else {
-                finish()
-            }
+    private val secretStartForActivityResult = registerStartForActivityResult { activityResult ->
+        val extraResult = activityResult.data?.getStringExtra(SharedSecureStorageActivity.EXTRA_DATA_RESULT)
+        if (activityResult.resultCode == Activity.RESULT_OK && extraResult != null) {
+            viewModel.handleGotSecretFromSSSS(
+                    extraResult,
+                    SECRET_ALIAS
+            )
+        } else {
+            finish()
         }
-        super.onActivityResult(requestCode, resultCode, data)
     }
 }

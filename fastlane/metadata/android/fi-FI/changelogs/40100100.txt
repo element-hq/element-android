@@ -1,0 +1,2 @@
+Tämä versio sisältää virheenkorjauksia ja muita parannuksia. Viestien lähettäminen on nyt paljon nopeampaa.
+Täysi muutosloki: https://github.com/vector-im/element-android/releases/tag/v1.0.10

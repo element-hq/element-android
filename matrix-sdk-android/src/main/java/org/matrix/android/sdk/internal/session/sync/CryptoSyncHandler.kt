@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,8 +24,9 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.internal.crypto.DefaultCryptoService
 import org.matrix.android.sdk.internal.crypto.MXEventDecryptionResult
 import org.matrix.android.sdk.internal.crypto.algorithms.olm.OlmDecryptionResult
+import org.matrix.android.sdk.internal.crypto.model.event.OlmEventContent
 import org.matrix.android.sdk.internal.crypto.verification.DefaultVerificationService
-import org.matrix.android.sdk.internal.session.DefaultInitialSyncProgressService
+import org.matrix.android.sdk.internal.session.initsync.ProgressReporter
 import org.matrix.android.sdk.internal.session.sync.model.SyncResponse
 import org.matrix.android.sdk.internal.session.sync.model.ToDeviceSyncResponse
 import timber.log.Timber
@@ -35,11 +35,12 @@ import javax.inject.Inject
 internal class CryptoSyncHandler @Inject constructor(private val cryptoService: DefaultCryptoService,
                                                      private val verificationService: DefaultVerificationService) {
 
-    fun handleToDevice(toDevice: ToDeviceSyncResponse, initialSyncProgressService: DefaultInitialSyncProgressService? = null) {
+    fun handleToDevice(toDevice: ToDeviceSyncResponse, progressReporter: ProgressReporter? = null) {
         val total = toDevice.events?.size ?: 0
         toDevice.events?.forEachIndexed { index, event ->
-            initialSyncProgressService?.reportProgress(((index / total.toFloat()) * 100).toInt())
+            progressReporter?.reportProgress(index * 100F / total)
             // Decrypt event if necessary
+            Timber.i("## CRYPTO | To device event from ${event.senderId} of type:${event.type}")
             decryptToDeviceEvent(event, null)
             if (event.getClearType() == EventType.MESSAGE
                     && event.getClearContent()?.toModel<MessageContent>()?.msgType == "m.bad.encrypted") {
@@ -63,14 +64,19 @@ internal class CryptoSyncHandler @Inject constructor(private val cryptoService: 
      * @return true if the event has been decrypted
      */
     private fun decryptToDeviceEvent(event: Event, timelineId: String?): Boolean {
-        Timber.v("## CRYPTO | decryptToDeviceEvent")
+        Timber.v("## CRYPTO | decryptToDeviceEvent")
         if (event.getClearType() == EventType.ENCRYPTED) {
             var result: MXEventDecryptionResult? = null
             try {
                 result = cryptoService.decryptEvent(event, timelineId ?: "")
             } catch (exception: MXCryptoError) {
                 event.mCryptoError = (exception as? MXCryptoError.Base)?.errorType // setCryptoError(exception.cryptoError)
-                Timber.e("## CRYPTO | Failed to decrypt to device event: ${event.mCryptoError ?: exception}")
+                val senderKey = event.content.toModel<OlmEventContent>()?.senderKey ?: "<unknown sender key>"
+                // try to find device id to ease log reading
+                val deviceId = cryptoService.getCryptoDeviceInfo(event.senderId!!).firstOrNull {
+                    it.identityKey() == senderKey
+                }?.deviceId ?: senderKey
+                Timber.e("## CRYPTO | Failed to decrypt to device event from ${event.senderId}|$deviceId reason:<${event.mCryptoError ?: exception}>")
             }
 
             if (null != result) {
@@ -81,6 +87,9 @@ internal class CryptoSyncHandler @Inject constructor(private val cryptoService: 
                         forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain
                 )
                 return true
+            } else {
+                // should not happen
+                Timber.e("## CRYPTO | ERROR NULL DECRYPTION RESULT from ${event.senderId}")
             }
         }
 

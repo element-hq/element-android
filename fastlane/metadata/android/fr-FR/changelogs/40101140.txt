@@ -1,0 +1,2 @@
+Principaux changements pour cette version : correction d’un problème concernant les messages chiffrés.
+Intégralité des changements : https://github.com/vector-im/element-android/releases/tag/v1.1.14

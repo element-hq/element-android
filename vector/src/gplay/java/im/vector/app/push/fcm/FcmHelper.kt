@@ -1,6 +1,4 @@
 /*
- * Copyright 2014 OpenMarket Ltd
- * Copyright 2017 Vector Creations Ltd
  * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,7 +21,7 @@ import android.widget.Toast
 import androidx.core.content.edit
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
-import com.google.firebase.iid.FirebaseInstanceId
+import com.google.firebase.messaging.FirebaseMessaging
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.DefaultSharedPreferences
@@ -73,14 +71,16 @@ object FcmHelper {
         // 'app should always check the device for a compatible Google Play services APK before accessing Google Play services features'
         if (checkPlayServices(activity)) {
             try {
-                FirebaseInstanceId.getInstance().instanceId
-                        .addOnSuccessListener(activity) { instanceIdResult ->
-                            storeFcmToken(activity, instanceIdResult.token)
+                FirebaseMessaging.getInstance().token
+                        .addOnSuccessListener { token ->
+                            storeFcmToken(activity, token)
                             if (registerPusher) {
-                                pushersManager.registerPusherWithFcmKey(instanceIdResult.token)
+                                pushersManager.registerPusherWithFcmKey(token)
                             }
                         }
-                        .addOnFailureListener(activity) { e -> Timber.e(e, "## ensureFcmTokenIsRetrieved() : failed") }
+                        .addOnFailureListener { e ->
+                            Timber.e(e, "## ensureFcmTokenIsRetrieved() : failed")
+                        }
             } catch (e: Throwable) {
                 Timber.e(e, "## ensureFcmTokenIsRetrieved() : failed")
             }

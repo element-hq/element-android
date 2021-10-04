@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -125,11 +124,6 @@ interface SendService {
     fun deleteFailedEcho(localEcho: TimelineEvent)
 
     /**
-     * Delete all the events in one of the sending states
-     */
-    fun clearSendingQueue()
-
-    /**
      * Cancel sending a specific event. It has to be in one of the sending states
      */
     fun cancelSend(eventId: String)
@@ -138,4 +132,9 @@ interface SendService {
      * Resend all failed messages one by one (and keep order)
      */
     fun resendAllFailedMessages()
+
+    /**
+     * Cancel all failed messages
+     */
+    fun cancelAllFailedMessages()
 }

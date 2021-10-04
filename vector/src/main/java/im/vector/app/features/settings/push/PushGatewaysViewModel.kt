@@ -16,20 +16,22 @@
 
 package im.vector.app.features.settings.push
 
+import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
+import dagger.assisted.AssistedFactory
+import im.vector.app.core.extensions.exhaustive
+import im.vector.app.core.platform.VectorViewModel
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.pushers.Pusher
 import org.matrix.android.sdk.rx.RxSession
-import im.vector.app.core.extensions.exhaustive
-import im.vector.app.core.platform.EmptyViewEvents
-import im.vector.app.core.platform.VectorViewModel
 
 data class PushGatewayViewState(
         val pushGateways: Async<List<Pusher>> = Uninitialized
@@ -37,9 +39,9 @@ data class PushGatewayViewState(
 
 class PushGatewaysViewModel @AssistedInject constructor(@Assisted initialState: PushGatewayViewState,
                                                         private val session: Session)
-    : VectorViewModel<PushGatewayViewState, PushGatewayAction, EmptyViewEvents>(initialState) {
+    : VectorViewModel<PushGatewayViewState, PushGatewayAction, PushGatewayViewEvents>(initialState) {
 
-    @AssistedInject.Factory
+    @AssistedFactory
     interface Factory {
         fun create(initialState: PushGatewayViewState): PushGatewaysViewModel
     }
@@ -69,8 +71,19 @@ class PushGatewaysViewModel @AssistedInject constructor(@Assisted initialState: 
 
     override fun handle(action: PushGatewayAction) {
         when (action) {
-            is PushGatewayAction.Refresh -> handleRefresh()
+            is PushGatewayAction.Refresh      -> handleRefresh()
+            is PushGatewayAction.RemovePusher -> removePusher(action.pusher)
         }.exhaustive
+    }
+
+    private fun removePusher(pusher: Pusher) {
+        viewModelScope.launch {
+            kotlin.runCatching {
+                session.removePusher(pusher)
+            }.onFailure {
+                _viewEvents.post(PushGatewayViewEvents.RemovePusherFailed(it))
+            }
+        }
     }
 
     private fun handleRefresh() {

@@ -1,0 +1,2 @@
+Põhilised muutused selles versioonis: jõudluse parandused ja pisikohendused.
+Kogu ingliskeelne muudatuste logi: https://github.com/vector-im/element-android/releases/tag/v1.1.5

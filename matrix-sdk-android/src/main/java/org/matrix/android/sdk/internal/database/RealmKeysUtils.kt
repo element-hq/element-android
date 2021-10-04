@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,6 +18,7 @@ package org.matrix.android.sdk.internal.database
 import android.content.Context
 import android.util.Base64
 import androidx.core.content.edit
+import io.realm.Realm
 import org.matrix.android.sdk.BuildConfig
 import org.matrix.android.sdk.internal.session.securestorage.SecretStoringUtils
 import io.realm.RealmConfiguration
@@ -47,7 +47,7 @@ internal class RealmKeysUtils @Inject constructor(context: Context,
     private val sharedPreferences = context.getSharedPreferences("im.vector.matrix.android.keys", Context.MODE_PRIVATE)
 
     private fun generateKeyForRealm(): ByteArray {
-        val keyForRealm = ByteArray(RealmConfiguration.KEY_LENGTH)
+        val keyForRealm = ByteArray(Realm.ENCRYPTION_KEY_LENGTH)
         rng.nextBytes(keyForRealm)
         return keyForRealm
     }
@@ -71,7 +71,7 @@ internal class RealmKeysUtils @Inject constructor(context: Context,
         val encodedKey = Base64.encodeToString(key, Base64.NO_PADDING)
         val toStore = secretStoringUtils.securelyStoreString(encodedKey, alias)
         sharedPreferences.edit {
-            putString("${ENCRYPTED_KEY_PREFIX}_$alias", Base64.encodeToString(toStore!!, Base64.NO_PADDING))
+            putString("${ENCRYPTED_KEY_PREFIX}_$alias", Base64.encodeToString(toStore, Base64.NO_PADDING))
         }
         return key
     }
@@ -84,7 +84,7 @@ internal class RealmKeysUtils @Inject constructor(context: Context,
         val encryptedB64 = sharedPreferences.getString("${ENCRYPTED_KEY_PREFIX}_$alias", null)
         val encryptedKey = Base64.decode(encryptedB64, Base64.NO_PADDING)
         val b64 = secretStoringUtils.loadSecureSecret(encryptedKey, alias)
-        return Base64.decode(b64!!, Base64.NO_PADDING)
+        return Base64.decode(b64, Base64.NO_PADDING)
     }
 
     fun configureEncryption(realmConfigurationBuilder: RealmConfiguration.Builder, alias: String) {
@@ -94,7 +94,7 @@ internal class RealmKeysUtils @Inject constructor(context: Context,
     }
 
     // Expose to handle Realm migration to riotX
-    fun getRealmEncryptionKey(alias: String) : ByteArray {
+    fun getRealmEncryptionKey(alias: String): ByteArray {
         val key = if (hasKeyForDatabase(alias)) {
             Timber.i("Found key for alias:$alias")
             extractKeyForDatabase(alias)

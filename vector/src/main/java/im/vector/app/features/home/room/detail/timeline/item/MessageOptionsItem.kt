@@ -23,6 +23,7 @@ import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.google.android.material.button.MaterialButton
 import im.vector.app.R
+import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.features.home.room.detail.RoomDetailAction
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
@@ -59,7 +60,7 @@ abstract class MessageOptionsItem : AbsMessageItem<MessageOptionsItem.Holder>() 
                     as MaterialButton
             holder.buttonContainer.addView(materialButton, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
             materialButton.text = option.label
-            materialButton.setOnClickListener {
+            materialButton.onClick {
                 callback?.onTimelineItemAction(RoomDetailAction.ReplyToOptions(relatedEventId, index, option.value ?: "$index"))
             }
         }

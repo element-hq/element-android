@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,7 +18,7 @@ package org.matrix.android.sdk.api.session.room.model
 import org.matrix.android.sdk.api.session.events.model.Content
 
 data class EditAggregatedSummary(
-        val aggregatedContent: Content? = null,
+        val latestContent: Content? = null,
         // The list of the eventIDs used to build the summary (might be out of sync if chunked received from message chunk)
         val sourceEvents: List<String>,
         val localEchos: List<String>,

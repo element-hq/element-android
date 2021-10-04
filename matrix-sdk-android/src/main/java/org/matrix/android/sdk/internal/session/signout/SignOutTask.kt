@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,11 +18,11 @@ package org.matrix.android.sdk.internal.session.signout
 
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.MatrixError
+import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.cleanup.CleanupSession
 import org.matrix.android.sdk.internal.session.identity.IdentityDisconnectTask
 import org.matrix.android.sdk.internal.task.Task
-import org.greenrobot.eventbus.EventBus
 import timber.log.Timber
 import java.net.HttpURLConnection
 import javax.inject.Inject
@@ -36,7 +35,7 @@ internal interface SignOutTask : Task<SignOutTask.Params, Unit> {
 
 internal class DefaultSignOutTask @Inject constructor(
         private val signOutAPI: SignOutAPI,
-        private val eventBus: EventBus,
+        private val globalErrorReceiver: GlobalErrorReceiver,
         private val identityDisconnectTask: IdentityDisconnectTask,
         private val cleanupSession: CleanupSession
 ) : SignOutTask {
@@ -46,8 +45,8 @@ internal class DefaultSignOutTask @Inject constructor(
         if (params.signOutFromHomeserver) {
             Timber.d("SignOut: send request...")
             try {
-                executeRequest<Unit>(eventBus) {
-                    apiCall = signOutAPI.signOut()
+                executeRequest(globalErrorReceiver) {
+                    signOutAPI.signOut()
                 }
             } catch (throwable: Throwable) {
                 // Maybe due to https://github.com/matrix-org/synapse/issues/5756

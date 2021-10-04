@@ -16,37 +16,43 @@
 package im.vector.app.features.reactions
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
-import androidx.lifecycle.observe
-import im.vector.app.R
+import android.view.ViewGroup
+import androidx.lifecycle.lifecycleScope
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.platform.VectorBaseFragment
-import kotlinx.android.synthetic.main.emoji_chooser_fragment.*
+import im.vector.app.databinding.EmojiChooserFragmentBinding
+
 import javax.inject.Inject
 
 class EmojiChooserFragment @Inject constructor(
         private val emojiRecyclerAdapter: EmojiRecyclerAdapter
-) : VectorBaseFragment(),
+) : VectorBaseFragment<EmojiChooserFragmentBinding>(),
         EmojiRecyclerAdapter.InteractionListener,
         ReactionClickListener {
 
-    override fun getLayoutResId() = R.layout.emoji_chooser_fragment
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): EmojiChooserFragmentBinding {
+        return EmojiChooserFragmentBinding.inflate(inflater, container, false)
+    }
 
     private lateinit var viewModel: EmojiChooserViewModel
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = activityViewModelProvider.get(EmojiChooserViewModel::class.java)
-
         emojiRecyclerAdapter.reactionClickListener = this
         emojiRecyclerAdapter.interactionListener = this
-
-        emojiRecyclerView.adapter = emojiRecyclerAdapter
-
+        views.emojiRecyclerView.adapter = emojiRecyclerAdapter
         viewModel.moveToSection.observe(viewLifecycleOwner) { section ->
             emojiRecyclerAdapter.scrollToSection(section)
         }
+        viewModel.emojiData.observe(viewLifecycleOwner) {
+            emojiRecyclerAdapter.update(it)
+        }
     }
+
+    override fun getCoroutineScope() = lifecycleScope
 
     override fun firstVisibleSectionChange(section: Int) {
         viewModel.setCurrentSection(section)
@@ -57,7 +63,7 @@ class EmojiChooserFragment @Inject constructor(
     }
 
     override fun onDestroyView() {
-        emojiRecyclerView.cleanup()
+        views.emojiRecyclerView.cleanup()
         emojiRecyclerAdapter.reactionClickListener = null
         emojiRecyclerAdapter.interactionListener = null
         super.onDestroyView()

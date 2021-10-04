@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,36 +18,36 @@ package org.matrix.android.sdk.internal.session.room.state
 
 import android.net.Uri
 import androidx.lifecycle.LiveData
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
-import org.matrix.android.sdk.api.MatrixCallback
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.toContent
+import org.matrix.android.sdk.api.session.room.model.GuestAccess
+import org.matrix.android.sdk.api.session.room.model.RoomCanonicalAliasContent
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
+import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
+import org.matrix.android.sdk.api.session.room.model.RoomJoinRulesAllowEntry
+import org.matrix.android.sdk.api.session.room.model.RoomJoinRulesContent
 import org.matrix.android.sdk.api.session.room.state.StateService
-import org.matrix.android.sdk.api.util.Cancelable
 import org.matrix.android.sdk.api.util.JsonDict
+import org.matrix.android.sdk.api.util.MimeTypes
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.session.content.FileUploader
-import org.matrix.android.sdk.internal.session.room.alias.AddRoomAliasTask
-import org.matrix.android.sdk.internal.task.TaskExecutor
-import org.matrix.android.sdk.internal.task.configureWith
-import org.matrix.android.sdk.internal.task.launchToCallback
-import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
+import org.matrix.android.sdk.internal.session.permalinks.ViaParameterFinder
 
 internal class DefaultStateService @AssistedInject constructor(@Assisted private val roomId: String,
                                                                private val stateEventDataSource: StateEventDataSource,
-                                                               private val taskExecutor: TaskExecutor,
                                                                private val sendStateTask: SendStateTask,
-                                                               private val coroutineDispatchers: MatrixCoroutineDispatchers,
                                                                private val fileUploader: FileUploader,
-                                                               private val addRoomAliasTask: AddRoomAliasTask
+                                                               private val viaParameterFinder: ViaParameterFinder
 ) : StateService {
 
-    @AssistedInject.Factory
+    @AssistedFactory
     interface Factory {
-        fun create(roomId: String): StateService
+        fun create(roomId: String): DefaultStateService
     }
 
     override fun getStateEvent(eventType: String, stateKey: QueryStringValue): Event? {
@@ -67,78 +66,124 @@ internal class DefaultStateService @AssistedInject constructor(@Assisted private
         return stateEventDataSource.getStateEventsLive(roomId, eventTypes, stateKey)
     }
 
-    override fun sendStateEvent(
+    override suspend fun sendStateEvent(
             eventType: String,
             stateKey: String?,
-            body: JsonDict,
-            callback: MatrixCallback<Unit>
-    ): Cancelable {
+            body: JsonDict
+    ) {
         val params = SendStateTask.Params(
                 roomId = roomId,
                 stateKey = stateKey,
                 eventType = eventType,
-                body = body
+                body = body.toSafeJson(eventType)
         )
-        return sendStateTask
-                .configureWith(params) {
-                    this.callback = callback
-                }
-                .executeBy(taskExecutor)
+        sendStateTask.executeRetry(params, 3)
     }
 
-    override fun updateTopic(topic: String, callback: MatrixCallback<Unit>): Cancelable {
-        return sendStateEvent(
+    private fun JsonDict.toSafeJson(eventType: String): JsonDict {
+        // Safe treatment for PowerLevelContent
+        return when (eventType) {
+            EventType.STATE_ROOM_POWER_LEVELS -> toSafePowerLevelsContentDict()
+            else                              -> this
+        }
+    }
+
+    override suspend fun updateTopic(topic: String) {
+        sendStateEvent(
                 eventType = EventType.STATE_ROOM_TOPIC,
                 body = mapOf("topic" to topic),
-                callback = callback,
                 stateKey = null
         )
     }
 
-    override fun updateName(name: String, callback: MatrixCallback<Unit>): Cancelable {
-        return sendStateEvent(
+    override suspend fun updateName(name: String) {
+        sendStateEvent(
                 eventType = EventType.STATE_ROOM_NAME,
                 body = mapOf("name" to name),
-                callback = callback,
                 stateKey = null
         )
     }
 
-    override fun addRoomAlias(roomAlias: String, callback: MatrixCallback<Unit>): Cancelable {
-        return addRoomAliasTask
-                .configureWith(AddRoomAliasTask.Params(roomId, roomAlias)) {
-                    this.callback = callback
-                }
-                .executeBy(taskExecutor)
-    }
-
-    override fun updateCanonicalAlias(alias: String, callback: MatrixCallback<Unit>): Cancelable {
-        return sendStateEvent(
+    override suspend fun updateCanonicalAlias(alias: String?, altAliases: List<String>) {
+        sendStateEvent(
                 eventType = EventType.STATE_ROOM_CANONICAL_ALIAS,
-                body = mapOf("alias" to alias),
-                callback = callback,
+                body = RoomCanonicalAliasContent(
+                        canonicalAlias = alias,
+                        alternativeAliases = altAliases
+                                // Ensure there is no duplicate
+                                .distinct()
+                                // Ensure the canonical alias is not also included in the alt alias
+                                .minus(listOfNotNull(alias))
+                                // Sort for the cleanup
+                                .sorted()
+                ).toContent(),
                 stateKey = null
         )
     }
 
-    override fun updateHistoryReadability(readability: RoomHistoryVisibility, callback: MatrixCallback<Unit>): Cancelable {
-        return sendStateEvent(
+    override suspend fun updateHistoryReadability(readability: RoomHistoryVisibility) {
+        sendStateEvent(
                 eventType = EventType.STATE_ROOM_HISTORY_VISIBILITY,
                 body = mapOf("history_visibility" to readability),
-                callback = callback,
                 stateKey = null
         )
     }
 
-    override fun updateAvatar(avatarUri: Uri, fileName: String, callback: MatrixCallback<Unit>): Cancelable {
-        return taskExecutor.executorScope.launchToCallback(coroutineDispatchers.main, callback) {
-            val response = fileUploader.uploadFromUri(avatarUri, fileName, "image/jpeg")
+    override suspend fun updateJoinRule(joinRules: RoomJoinRules?, guestAccess: GuestAccess?, allowList: List<RoomJoinRulesAllowEntry>?) {
+        if (joinRules != null) {
+            val body = if (joinRules == RoomJoinRules.RESTRICTED) {
+                RoomJoinRulesContent(
+                        _joinRules = RoomJoinRules.RESTRICTED.value,
+                        allowList = allowList
+                ).toContent()
+            } else {
+                mapOf("join_rule" to joinRules)
+            }
             sendStateEvent(
-                    eventType = EventType.STATE_ROOM_AVATAR,
-                    body = mapOf("url" to response.contentUri),
-                    callback = callback,
+                    eventType = EventType.STATE_ROOM_JOIN_RULES,
+                    body = body,
                     stateKey = null
             )
         }
+        if (guestAccess != null) {
+            sendStateEvent(
+                    eventType = EventType.STATE_ROOM_GUEST_ACCESS,
+                    body = mapOf("guest_access" to guestAccess),
+                    stateKey = null
+            )
+        }
+    }
+
+    override suspend fun updateAvatar(avatarUri: Uri, fileName: String) {
+        val response = fileUploader.uploadFromUri(avatarUri, fileName, MimeTypes.Jpeg)
+        sendStateEvent(
+                eventType = EventType.STATE_ROOM_AVATAR,
+                body = mapOf("url" to response.contentUri),
+                stateKey = null
+        )
+    }
+
+    override suspend fun deleteAvatar() {
+        sendStateEvent(
+                eventType = EventType.STATE_ROOM_AVATAR,
+                body = emptyMap(),
+                stateKey = null
+        )
+    }
+
+    override suspend fun setJoinRulePublic() {
+        updateJoinRule(RoomJoinRules.PUBLIC, null)
+    }
+
+    override suspend fun setJoinRuleInviteOnly() {
+        updateJoinRule(RoomJoinRules.INVITE, null)
+    }
+
+    override suspend fun setJoinRuleRestricted(allowList: List<String>) {
+        // we need to compute correct via parameters and check if PL are correct
+        val allowEntries = allowList.map { spaceId ->
+            RoomJoinRulesAllowEntry.restrictedToRoom(spaceId)
+        }
+        updateJoinRule(RoomJoinRules.RESTRICTED, null, allowEntries)
     }
 }

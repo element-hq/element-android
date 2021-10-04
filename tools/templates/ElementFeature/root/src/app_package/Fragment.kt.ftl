@@ -3,7 +3,7 @@ package ${escapeKotlinIdentifiers(packageName)}
 import android.os.Bundle
 <#if createFragmentArgs>
 import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 import com.airbnb.mvrx.args
 </#if>
 import android.view.View
@@ -36,8 +36,8 @@ class ${fragmentClass} @Inject constructor(
     }
 
     override fun onDestroyView() {
-        super.onDestroyView()
 		// Clear your view, unsubscribe...
+        super.onDestroyView()
     }
 
     override fun invalidate() = withState(viewModel) { state ->

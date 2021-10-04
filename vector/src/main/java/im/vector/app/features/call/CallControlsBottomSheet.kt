@@ -17,18 +17,20 @@
 package im.vector.app.features.call
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
-import androidx.appcompat.app.AlertDialog
+import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.activityViewModel
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
-import kotlinx.android.synthetic.main.bottom_sheet_call_controls.*
-import me.gujun.android.span.span
+import im.vector.app.databinding.BottomSheetCallControlsBinding
 
-class CallControlsBottomSheet : VectorBaseBottomSheetDialogFragment() {
-    override fun getLayoutResId() = R.layout.bottom_sheet_call_controls
+class CallControlsBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetCallControlsBinding>() {
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): BottomSheetCallControlsBinding {
+        return BottomSheetCallControlsBinding.inflate(inflater, container, false)
+    }
 
     private val callViewModel: VectorCallViewModel by activityViewModel()
 
@@ -39,100 +41,57 @@ class CallControlsBottomSheet : VectorBaseBottomSheetDialogFragment() {
             renderState(it)
         }
 
-        callControlsSoundDevice.clickableView.debouncedClicks {
-            callViewModel.handle(VectorCallViewActions.SwitchSoundDevice)
-        }
-
-        callControlsSwitchCamera.clickableView.debouncedClicks {
+        views.callControlsSwitchCamera.views.bottomSheetActionClickableZone.debouncedClicks {
             callViewModel.handle(VectorCallViewActions.ToggleCamera)
             dismiss()
         }
 
-        callControlsToggleSDHD.clickableView.debouncedClicks {
+        views.callControlsToggleSDHD.views.bottomSheetActionClickableZone.debouncedClicks {
             callViewModel.handle(VectorCallViewActions.ToggleHDSD)
             dismiss()
         }
 
-        callViewModel.observeViewEvents {
-            when (it) {
-                is VectorCallViewEvents.ShowSoundDeviceChooser -> {
-                    showSoundDeviceChooser(it.available, it.current)
-                }
-                else                                           -> {
-                }
-            }
+        views.callControlsToggleHoldResume.views.bottomSheetActionClickableZone.debouncedClicks {
+            callViewModel.handle(VectorCallViewActions.ToggleHoldResume)
+            dismiss()
         }
-    }
 
-    private fun showSoundDeviceChooser(available: List<CallAudioManager.SoundDevice>, current: CallAudioManager.SoundDevice) {
-        val soundDevices = available.map {
-            when (it) {
-                CallAudioManager.SoundDevice.WIRELESS_HEADSET -> span {
-                    text = getString(R.string.sound_device_wireless_headset)
-                    textStyle = if (current == it) "bold" else "normal"
-                }
-                CallAudioManager.SoundDevice.PHONE            -> span {
-                    text = getString(R.string.sound_device_phone)
-                    textStyle = if (current == it) "bold" else "normal"
-                }
-                CallAudioManager.SoundDevice.SPEAKER          -> span {
-                    text = getString(R.string.sound_device_speaker)
-                    textStyle = if (current == it) "bold" else "normal"
-                }
-                CallAudioManager.SoundDevice.HEADSET          -> span {
-                    text = getString(R.string.sound_device_headset)
-                    textStyle = if (current == it) "bold" else "normal"
-                }
-            }
+        views.callControlsOpenDialPad.views.bottomSheetActionClickableZone.debouncedClicks {
+            callViewModel.handle(VectorCallViewActions.OpenDialPad)
         }
-        AlertDialog.Builder(requireContext())
-                .setItems(soundDevices.toTypedArray()) { d, n ->
-                    d.cancel()
-                    when (soundDevices[n].toString()) {
-                        // TODO Make an adapter and handle multiple Bluetooth headsets. Also do not use translations.
-                        getString(R.string.sound_device_phone)            -> {
-                            callViewModel.handle(VectorCallViewActions.ChangeAudioDevice(CallAudioManager.SoundDevice.PHONE))
-                        }
-                        getString(R.string.sound_device_speaker)          -> {
-                            callViewModel.handle(VectorCallViewActions.ChangeAudioDevice(CallAudioManager.SoundDevice.SPEAKER))
-                        }
-                        getString(R.string.sound_device_headset)          -> {
-                            callViewModel.handle(VectorCallViewActions.ChangeAudioDevice(CallAudioManager.SoundDevice.HEADSET))
-                        }
-                        getString(R.string.sound_device_wireless_headset) -> {
-                            callViewModel.handle(VectorCallViewActions.ChangeAudioDevice(CallAudioManager.SoundDevice.WIRELESS_HEADSET))
-                        }
-                    }
-                }
-                .setNegativeButton(R.string.cancel, null)
-                .show()
+
+        views.callControlsTransfer.views.bottomSheetActionClickableZone.debouncedClicks {
+            callViewModel.handle(VectorCallViewActions.InitiateCallTransfer)
+            dismiss()
+        }
     }
 
     private fun renderState(state: VectorCallViewState) {
-        callControlsSoundDevice.title = getString(R.string.call_select_sound_device)
-        callControlsSoundDevice.subTitle = when (state.soundDevice) {
-            CallAudioManager.SoundDevice.PHONE            -> getString(R.string.sound_device_phone)
-            CallAudioManager.SoundDevice.SPEAKER          -> getString(R.string.sound_device_speaker)
-            CallAudioManager.SoundDevice.HEADSET          -> getString(R.string.sound_device_headset)
-            CallAudioManager.SoundDevice.WIRELESS_HEADSET -> getString(R.string.sound_device_wireless_headset)
-        }
-
-        callControlsSwitchCamera.isVisible = state.isVideoCall && state.canSwitchCamera
-        callControlsSwitchCamera.subTitle = getString(if (state.isFrontCamera) R.string.call_camera_front else R.string.call_camera_back)
-
+        views.callControlsSwitchCamera.isVisible = state.isVideoCall && state.canSwitchCamera
+        views.callControlsSwitchCamera.subTitle = getString(if (state.isFrontCamera) R.string.call_camera_front else R.string.call_camera_back)
         if (state.isVideoCall) {
-            callControlsToggleSDHD.isVisible = true
+            views.callControlsToggleSDHD.isVisible = true
             if (state.isHD) {
-                callControlsToggleSDHD.title = getString(R.string.call_format_turn_hd_off)
-                callControlsToggleSDHD.subTitle = null
-                callControlsToggleSDHD.leftIcon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_hd_disabled)
+                views.callControlsToggleSDHD.title = getString(R.string.call_format_turn_hd_off)
+                views.callControlsToggleSDHD.subTitle = null
+                views.callControlsToggleSDHD.leftIcon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_hd_disabled)
             } else {
-                callControlsToggleSDHD.title = getString(R.string.call_format_turn_hd_on)
-                callControlsToggleSDHD.subTitle = null
-                callControlsToggleSDHD.leftIcon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_hd)
+                views.callControlsToggleSDHD.title = getString(R.string.call_format_turn_hd_on)
+                views.callControlsToggleSDHD.subTitle = null
+                views.callControlsToggleSDHD.leftIcon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_hd)
             }
         } else {
-            callControlsToggleSDHD.isVisible = false
+            views.callControlsToggleSDHD.isVisible = false
         }
+        if (state.isRemoteOnHold) {
+            views.callControlsToggleHoldResume.title = getString(R.string.call_resume_action)
+            views.callControlsToggleHoldResume.subTitle = null
+            views.callControlsToggleHoldResume.leftIcon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_call_resume_action)
+        } else {
+            views.callControlsToggleHoldResume.title = getString(R.string.call_hold_action)
+            views.callControlsToggleHoldResume.subTitle = null
+            views.callControlsToggleHoldResume.leftIcon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_call_hold_action)
+        }
+        views.callControlsTransfer.isVisible = state.canOpponentBeTransferred
     }
 }

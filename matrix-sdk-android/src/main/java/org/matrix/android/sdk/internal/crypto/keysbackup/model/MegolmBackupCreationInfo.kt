@@ -1,5 +1,4 @@
 /*
- * Copyright 2018 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,15 +23,15 @@ data class MegolmBackupCreationInfo(
         /**
          * The algorithm used for storing backups [org.matrix.androidsdk.crypto.MXCRYPTO_ALGORITHM_MEGOLM_BACKUP].
          */
-        val algorithm: String = "",
+        val algorithm: String,
 
         /**
          * Authentication data.
          */
-        val authData: MegolmBackupAuthData? = null,
+        val authData: MegolmBackupAuthData,
 
         /**
          * The Base58 recovery key.
          */
-        val recoveryKey: String = ""
+        val recoveryKey: String
 )

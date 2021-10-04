@@ -16,22 +16,23 @@
 
 package im.vector.app.features.signout.soft
 
-import android.content.DialogInterface
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
-import androidx.appcompat.app.AlertDialog
+import android.view.ViewGroup
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
-import im.vector.app.core.dialogs.withColoredButton
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.hideKeyboard
+import im.vector.app.databinding.FragmentGenericRecyclerBinding
 import im.vector.app.features.login.AbstractLoginFragment
 import im.vector.app.features.login.LoginAction
 import im.vector.app.features.login.LoginMode
 import im.vector.app.features.login.LoginViewEvents
-import kotlinx.android.synthetic.main.fragment_generic_recycler.*
+
 import javax.inject.Inject
 
 /**
@@ -41,11 +42,14 @@ import javax.inject.Inject
  */
 class SoftLogoutFragment @Inject constructor(
         private val softLogoutController: SoftLogoutController
-) : AbstractLoginFragment(), SoftLogoutController.Listener {
+) : AbstractLoginFragment<FragmentGenericRecyclerBinding>(),
+        SoftLogoutController.Listener {
 
     private val softLogoutViewModel: SoftLogoutViewModel by activityViewModel()
 
-    override fun getLayoutResId() = R.layout.fragment_generic_recycler
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentGenericRecyclerBinding {
+        return FragmentGenericRecyclerBinding.inflate(inflater, container, false)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -54,14 +58,27 @@ class SoftLogoutFragment @Inject constructor(
 
         softLogoutViewModel.subscribe(this) { softLogoutViewState ->
             softLogoutController.update(softLogoutViewState)
-
-            when (softLogoutViewState.asyncHomeServerLoginFlowRequest.invoke()) {
-                LoginMode.Sso,
+            when (val mode = softLogoutViewState.asyncHomeServerLoginFlowRequest.invoke()) {
+                is LoginMode.SsoAndPassword -> {
+                    loginViewModel.handle(LoginAction.SetupSsoForSessionRecovery(
+                            softLogoutViewState.homeServerUrl,
+                            softLogoutViewState.deviceId,
+                            mode.ssoIdentityProviders
+                    ))
+                }
+                is LoginMode.Sso -> {
+                    loginViewModel.handle(LoginAction.SetupSsoForSessionRecovery(
+                            softLogoutViewState.homeServerUrl,
+                            softLogoutViewState.deviceId,
+                            mode.ssoIdentityProviders
+                    ))
+                }
                 LoginMode.Unsupported -> {
                     // Prepare the loginViewModel for a SSO/login fallback recovery
                     loginViewModel.handle(LoginAction.SetupSsoForSessionRecovery(
                             softLogoutViewState.homeServerUrl,
-                            softLogoutViewState.deviceId
+                            softLogoutViewState.deviceId,
+                            null
                     ))
                 }
                 else                  -> Unit
@@ -70,12 +87,12 @@ class SoftLogoutFragment @Inject constructor(
     }
 
     private fun setupRecyclerView() {
-        recyclerView.configureWith(softLogoutController)
+        views.genericRecyclerView.configureWith(softLogoutController)
         softLogoutController.listener = this
     }
 
     override fun onDestroyView() {
-        recyclerView.cleanup()
+        views.genericRecyclerView.cleanup()
         softLogoutController.listener = null
         super.onDestroyView()
     }
@@ -88,9 +105,9 @@ class SoftLogoutFragment @Inject constructor(
         softLogoutViewModel.handle(SoftLogoutAction.PasswordChanged(password))
     }
 
-    override fun signinSubmit(password: String) {
+    override fun submit() = withState(softLogoutViewModel) { state ->
         cleanupUi()
-        softLogoutViewModel.handle(SoftLogoutAction.SignInAgain(password))
+        softLogoutViewModel.handle(SoftLogoutAction.SignInAgain(state.enteredPassword))
     }
 
     override fun signinFallbackSubmit() = withState(loginViewModel) { state ->
@@ -108,7 +125,7 @@ class SoftLogoutFragment @Inject constructor(
                 R.string.soft_logout_clear_data_dialog_content
             }
 
-            AlertDialog.Builder(requireActivity())
+            MaterialAlertDialogBuilder(requireActivity(), R.style.ThemeOverlay_Vector_MaterialAlertDialog_Destructive)
                     .setTitle(R.string.soft_logout_clear_data_dialog_title)
                     .setMessage(messageResId)
                     .setNegativeButton(R.string.cancel, null)
@@ -116,20 +133,15 @@ class SoftLogoutFragment @Inject constructor(
                         softLogoutViewModel.handle(SoftLogoutAction.ClearData)
                     }
                     .show()
-                    .withColoredButton(DialogInterface.BUTTON_POSITIVE)
         }
     }
 
     private fun cleanupUi() {
-        recyclerView.hideKeyboard()
+        views.genericRecyclerView.hideKeyboard()
     }
 
     override fun forgetPasswordClicked() {
         loginViewModel.handle(LoginAction.PostViewEvent(LoginViewEvents.OnForgetPasswordClicked))
-    }
-
-    override fun revealPasswordClicked() {
-        softLogoutViewModel.handle(SoftLogoutAction.TogglePassword)
     }
 
     override fun resetViewModel() {

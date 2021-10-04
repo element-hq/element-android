@@ -25,13 +25,15 @@ import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
+import dagger.assisted.AssistedFactory
 import im.vector.app.R
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.crosssigning.KEYBACKUP_SECRET_SSSS_NAME
@@ -48,7 +50,6 @@ import org.matrix.android.sdk.api.session.crypto.verification.VerificationServic
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
 import org.matrix.android.sdk.api.session.events.model.LocalEcho
-import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.internal.crypto.crosssigning.fromBase64
@@ -57,7 +58,6 @@ import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersionR
 import org.matrix.android.sdk.internal.crypto.keysbackup.util.computeRecoveryKey
 import org.matrix.android.sdk.internal.crypto.model.ImportRoomKeysResult
 import org.matrix.android.sdk.internal.util.awaitCallback
-import kotlinx.coroutines.launch
 import timber.log.Timber
 
 data class VerificationBottomSheetViewState(
@@ -71,12 +71,14 @@ data class VerificationBottomSheetViewState(
         // true when we display the loading and we wait for the other (incoming request)
         val selfVerificationMode: Boolean = false,
         val verifiedFromPrivateKeys: Boolean = false,
+        val verifyingFrom4S: Boolean = false,
         val isMe: Boolean = false,
         val currentDeviceCanCrossSign: Boolean = false,
         val userWantsToCancel: Boolean = false,
         val userThinkItsNotHim: Boolean = false,
         val quadSContainsSecrets: Boolean = true,
-        val quadSHasBeenReset: Boolean = false
+        val quadSHasBeenReset: Boolean = false,
+        val hasAnyOtherSession: Boolean = false
 ) : MvRxState
 
 class VerificationBottomSheetViewModel @AssistedInject constructor(
@@ -99,8 +101,8 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
         val pr = if (selfVerificationMode) {
             // See if active tx for this user and take it
 
-            session.cryptoService().verificationService().getExistingVerificationRequest(args.otherUserId)
-                    ?.lastOrNull { !it.isFinished }
+            session.cryptoService().verificationService().getExistingVerificationRequests(args.otherUserId)
+                    .lastOrNull { !it.isFinished }
                     ?.also { verificationRequest ->
                         if (verificationRequest.isIncoming && !verificationRequest.isReady) {
                             // auto ready in this case, as we are waiting
@@ -119,6 +121,12 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
             session.cryptoService().verificationService().getExistingTransaction(args.otherUserId, it) as? QrCodeVerificationTransaction
         }
 
+        val hasAnyOtherSession = session.cryptoService()
+                .getCryptoDeviceInfo(session.myUserId)
+                .any {
+                    it.deviceId != session.sessionParams.deviceId
+                }
+
         setState {
             copy(
                     otherUserMxItem = userItem?.toMatrixItem(),
@@ -130,7 +138,8 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                     roomId = args.roomId,
                     isMe = args.otherUserId == session.myUserId,
                     currentDeviceCanCrossSign = session.cryptoService().crossSigningService().canCrossSign(),
-                    quadSContainsSecrets = session.sharedSecretStorageService.isRecoverySetup()
+                    quadSContainsSecrets = session.sharedSecretStorageService.isRecoverySetup(),
+                    hasAnyOtherSession = hasAnyOtherSession
             )
         }
 
@@ -150,7 +159,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
         super.onCleared()
     }
 
-    @AssistedInject.Factory
+    @AssistedFactory
     interface Factory {
         fun create(initialState: VerificationBottomSheetViewState,
                    args: VerificationBottomSheet.VerificationArgs): VerificationBottomSheetViewModel
@@ -163,7 +172,9 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
             }
         } else {
             // if the verification is already done you can't cancel anymore
-            if (state.pendingRequest.invoke()?.cancelConclusion != null || state.sasTransactionState is VerificationTxState.TerminalTxState) {
+            if (state.pendingRequest.invoke()?.cancelConclusion != null
+                    || state.sasTransactionState is VerificationTxState.TerminalTxState
+                    || state.verifyingFrom4S) {
                 // you cannot cancel anymore
             } else {
                 setState {
@@ -225,7 +236,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
     override fun handle(action: VerificationAction) = withState { state ->
         val otherUserId = state.otherUserMxItem?.id ?: return@withState
         val roomId = state.roomId
-                ?: session.getExistingDirectRoomWithUser(otherUserId)?.roomId
+                ?: session.getExistingDirectRoomWithUser(otherUserId)
 
         when (action) {
             is VerificationAction.RequestVerificationByDM      -> {
@@ -237,39 +248,34 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                                 pendingRequest = Loading()
                         )
                     }
-                    val roomParams = CreateRoomParams()
-                            .apply {
-                                invitedUserIds.add(otherUserId)
-                                setDirectMessage()
-                                enableEncryptionIfInvitedUsersSupportIt = true
-                            }
-
-                    session.createRoom(roomParams, object : MatrixCallback<String> {
-                        override fun onSuccess(data: String) {
-                            setState {
-                                copy(
-                                        roomId = data,
-                                        pendingRequest = Success(
-                                                session
-                                                        .cryptoService()
-                                                        .verificationService()
-                                                        .requestKeyVerificationInDMs(
-                                                                supportedVerificationMethodsProvider.provide(),
-                                                                otherUserId,
-                                                                data,
-                                                                pendingLocalId
-                                                        )
+                    viewModelScope.launch {
+                        val result = runCatching { session.createDirectRoom(otherUserId) }
+                        result.fold(
+                                { data ->
+                                    setState {
+                                        copy(
+                                                roomId = data,
+                                                pendingRequest = Success(
+                                                        session
+                                                                .cryptoService()
+                                                                .verificationService()
+                                                                .requestKeyVerificationInDMs(
+                                                                        supportedVerificationMethodsProvider.provide(),
+                                                                        otherUserId,
+                                                                        data,
+                                                                        pendingLocalId
+                                                                )
+                                                )
                                         )
-                                )
-                            }
-                        }
-
-                        override fun onFailure(failure: Throwable) {
-                            setState {
-                                copy(pendingRequest = Fail(failure))
-                            }
-                        }
-                    })
+                                    }
+                                },
+                                { failure ->
+                                    setState {
+                                        copy(pendingRequest = Fail(failure))
+                                    }
+                                }
+                        )
+                    }
                 } else {
                     setState {
                         copy(
@@ -300,8 +306,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                             transactionId = action.pendingRequestTransactionId,
                             roomId = roomId,
                             otherUserId = request.otherUserId,
-                            otherDeviceId = otherDevice ?: "",
-                            callback = null
+                            otherDeviceId = otherDevice ?: ""
                     )
                 }
                 Unit
@@ -346,6 +351,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                 _viewEvents.post(VerificationBottomSheetViewEvents.Dismiss)
             }
             is VerificationAction.VerifyFromPassphrase         -> {
+                setState { copy(verifyingFrom4S = true) }
                 _viewEvents.post(VerificationBottomSheetViewEvents.AccessSecretStore)
             }
             is VerificationAction.GotResultFromSsss            -> {
@@ -354,51 +360,68 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
             VerificationAction.SecuredStorageHasBeenReset      -> {
                 if (session.cryptoService().crossSigningService().allPrivateKeysKnown()) {
                     setState {
-                        copy(quadSHasBeenReset = true)
+                        copy(quadSHasBeenReset = true, verifyingFrom4S = false)
                     }
                 }
                 Unit
+            }
+            VerificationAction.CancelledFromSsss               -> {
+                setState {
+                    copy(verifyingFrom4S = false)
+                }
             }
         }.exhaustive
     }
 
     private fun handleSecretBackFromSSSS(action: VerificationAction.GotResultFromSsss) {
-        try {
-            action.cypherData.fromBase64().inputStream().use { ins ->
-                val res = session.loadSecureSecret<Map<String, String>>(ins, action.alias)
-                val trustResult = session.cryptoService().crossSigningService().checkTrustFromPrivateKeys(
-                        res?.get(MASTER_KEY_SSSS_NAME),
-                        res?.get(USER_SIGNING_KEY_SSSS_NAME),
-                        res?.get(SELF_SIGNING_KEY_SSSS_NAME)
-                )
-                if (trustResult.isVerified()) {
-                    // Sign this device and upload the signature
-                    session.sessionParams.deviceId?.let { deviceId ->
-                        session.cryptoService()
-                                .crossSigningService().trustDevice(deviceId, object : MatrixCallback<Unit> {
-                                    override fun onFailure(failure: Throwable) {
-                                        Timber.w(failure, "Failed to sign my device after recovery")
-                                    }
-                                })
-                    }
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                action.cypherData.fromBase64().inputStream().use { ins ->
+                    val res = session.loadSecureSecret<Map<String, String>>(ins, action.alias)
+                    val trustResult = session.cryptoService().crossSigningService().checkTrustFromPrivateKeys(
+                            res?.get(MASTER_KEY_SSSS_NAME),
+                            res?.get(USER_SIGNING_KEY_SSSS_NAME),
+                            res?.get(SELF_SIGNING_KEY_SSSS_NAME)
+                    )
+                    if (trustResult.isVerified()) {
+                        // Sign this device and upload the signature
+                        session.sessionParams.deviceId?.let { deviceId ->
+                            session.cryptoService()
+                                    .crossSigningService().trustDevice(deviceId, object : MatrixCallback<Unit> {
+                                        override fun onFailure(failure: Throwable) {
+                                            Timber.w(failure, "Failed to sign my device after recovery")
+                                        }
+                                    })
+                        }
 
-                    setState {
-                        copy(verifiedFromPrivateKeys = true)
-                    }
+                        setState {
+                            copy(
+                                    verifyingFrom4S = false,
+                                    verifiedFromPrivateKeys = true
+                            )
+                        }
 
-                    // try to get keybackup key
-                } else {
-                    // POP UP something
-                    _viewEvents.post(VerificationBottomSheetViewEvents.ModalError(stringProvider.getString(R.string.error_failed_to_import_keys)))
+                        // try the keybackup
+                        tentativeRestoreBackup(res)
+                    } else {
+                        setState {
+                            copy(
+                                    verifyingFrom4S = false
+                            )
+                        }
+                        // POP UP something
+                        _viewEvents.post(VerificationBottomSheetViewEvents.ModalError(stringProvider.getString(R.string.error_failed_to_import_keys)))
+                    }
                 }
-
-                // try the keybackup
-                tentativeRestoreBackup(res)
-                Unit
+            } catch (failure: Throwable) {
+                setState {
+                    copy(
+                            verifyingFrom4S = false
+                    )
+                }
+                _viewEvents.post(
+                        VerificationBottomSheetViewEvents.ModalError(failure.localizedMessage ?: stringProvider.getString(R.string.unexpected_error)))
             }
-        } catch (failure: Throwable) {
-            _viewEvents.post(
-                    VerificationBottomSheetViewEvents.ModalError(failure.localizedMessage ?: stringProvider.getString(R.string.unexpected_error)))
         }
     }
 

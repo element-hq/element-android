@@ -19,14 +19,11 @@ import android.content.Context
 import android.graphics.Typeface
 import android.util.AttributeSet
 import android.view.View
-import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.core.content.withStyledAttributes
-import butterknife.BindView
-import butterknife.ButterKnife
 import im.vector.app.R
 import im.vector.app.core.extensions.setTextOrHide
+import im.vector.app.databinding.ViewPollResultLineBinding
 
 class PollResultLineView @JvmOverloads constructor(
         context: Context,
@@ -34,45 +31,38 @@ class PollResultLineView @JvmOverloads constructor(
         defStyleAttr: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr) {
 
-    @BindView(R.id.pollResultItemLabel)
-    lateinit var labelTextView: TextView
-
-    @BindView(R.id.pollResultItemPercent)
-    lateinit var percentTextView: TextView
-
-    @BindView(R.id.pollResultItemSelectedIcon)
-    lateinit var selectedIcon: ImageView
+    private val views: ViewPollResultLineBinding
 
     var label: String? = null
         set(value) {
             field = value
-            labelTextView.setTextOrHide(value)
+            views.pollResultItemLabel.setTextOrHide(value)
         }
 
     var percent: String? = null
         set(value) {
             field = value
-            percentTextView.setTextOrHide(value)
+            views.pollResultItemPercent.setTextOrHide(value)
         }
 
     var optionSelected: Boolean = false
         set(value) {
             field = value
-            selectedIcon.visibility = if (value) View.VISIBLE else View.INVISIBLE
+            views.pollResultItemSelectedIcon.visibility = if (value) View.VISIBLE else View.INVISIBLE
         }
 
     var isWinner: Boolean = false
         set(value) {
             field = value
             // Text in main color
-            labelTextView.setTypeface(labelTextView.typeface, if (value) Typeface.BOLD else Typeface.NORMAL)
-            percentTextView.setTypeface(percentTextView.typeface, if (value) Typeface.BOLD else Typeface.NORMAL)
+            views.pollResultItemLabel.setTypeface(views.pollResultItemLabel.typeface, if (value) Typeface.BOLD else Typeface.NORMAL)
+            views.pollResultItemPercent.setTypeface(views.pollResultItemPercent.typeface, if (value) Typeface.BOLD else Typeface.NORMAL)
         }
 
     init {
-        inflate(context, R.layout.item_timeline_event_poll_result_item, this)
+        inflate(context, R.layout.view_poll_result_line, this)
+        views = ViewPollResultLineBinding.bind(this)
         orientation = HORIZONTAL
-        ButterKnife.bind(this)
 
         context.withStyledAttributes(attrs, R.styleable.PollResultLineView) {
             label = getString(R.styleable.PollResultLineView_optionName) ?: ""

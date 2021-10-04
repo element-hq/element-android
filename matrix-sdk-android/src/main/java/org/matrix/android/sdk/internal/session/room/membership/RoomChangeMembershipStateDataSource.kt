@@ -1,5 +1,4 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,6 +21,7 @@ import androidx.lifecycle.MutableLiveData
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.internal.session.SessionScope
+import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 
 /**
@@ -31,7 +31,7 @@ import javax.inject.Inject
 internal class RoomChangeMembershipStateDataSource @Inject constructor() {
 
     private val mutableLiveStates = MutableLiveData<Map<String, ChangeMembershipState>>(emptyMap())
-    private val states = HashMap<String, ChangeMembershipState>()
+    private val states = ConcurrentHashMap<String, ChangeMembershipState>()
 
     /**
      * This will update local states to be synced with the server.

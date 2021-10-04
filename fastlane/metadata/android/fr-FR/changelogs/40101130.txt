@@ -1,0 +1,2 @@
+Principaux changements pour cette version : principalement des corrections de bogues et de stabilité.
+Intégralité des changements : https://github.com/vector-im/element-android/releases/tag/v1.1.13

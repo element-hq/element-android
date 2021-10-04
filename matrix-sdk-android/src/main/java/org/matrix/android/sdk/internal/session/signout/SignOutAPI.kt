@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,7 +19,6 @@ package org.matrix.android.sdk.internal.session.signout
 import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.internal.auth.data.PasswordLoginParams
 import org.matrix.android.sdk.internal.network.NetworkConstants
-import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.Headers
 import retrofit2.http.POST
@@ -36,11 +34,11 @@ internal interface SignOutAPI {
      */
     @Headers("CONNECT_TIMEOUT:60000", "READ_TIMEOUT:60000", "WRITE_TIMEOUT:60000")
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "login")
-    fun loginAgain(@Body loginParams: PasswordLoginParams): Call<Credentials>
+    suspend fun loginAgain(@Body loginParams: PasswordLoginParams): Credentials
 
     /**
      * Invalidate the access token, so that it can no longer be used for authorization.
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "logout")
-    fun signOut(): Call<Unit>
+    suspend fun signOut()
 }

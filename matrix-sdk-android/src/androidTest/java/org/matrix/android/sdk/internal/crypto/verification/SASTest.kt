@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -555,7 +555,7 @@ class SASTest : InstrumentedTest {
 
         mTestHelper.waitWithLatch {
             mTestHelper.retryPeriodicallyWithLatch(it) {
-                val prAlicePOV = aliceVerificationService.getExistingVerificationRequest(bobSession.myUserId)?.firstOrNull()
+                val prAlicePOV = aliceVerificationService.getExistingVerificationRequests(bobSession.myUserId).firstOrNull()
                 requestID = prAlicePOV?.transactionId
                 Log.v("TEST", "== alicePOV is $prAlicePOV")
                 prAlicePOV?.transactionId != null && prAlicePOV.localId == req.localId
@@ -566,7 +566,7 @@ class SASTest : InstrumentedTest {
 
         mTestHelper.waitWithLatch {
             mTestHelper.retryPeriodicallyWithLatch(it) {
-                val prBobPOV = bobVerificationService.getExistingVerificationRequest(aliceSession.myUserId)?.firstOrNull()
+                val prBobPOV = bobVerificationService.getExistingVerificationRequests(aliceSession.myUserId).firstOrNull()
                 Log.v("TEST", "== prBobPOV is $prBobPOV")
                 prBobPOV?.transactionId == requestID
             }
@@ -581,7 +581,7 @@ class SASTest : InstrumentedTest {
         // wait for alice to get the ready
         mTestHelper.waitWithLatch {
             mTestHelper.retryPeriodicallyWithLatch(it) {
-                val prAlicePOV = aliceVerificationService.getExistingVerificationRequest(bobSession.myUserId)?.firstOrNull()
+                val prAlicePOV = aliceVerificationService.getExistingVerificationRequests(bobSession.myUserId).firstOrNull()
                 Log.v("TEST", "== prAlicePOV is $prAlicePOV")
                 prAlicePOV?.transactionId == requestID && prAlicePOV?.isReady != null
             }
@@ -593,16 +593,14 @@ class SASTest : InstrumentedTest {
                 requestID!!,
                 cryptoTestData.roomId,
                 bobSession.myUserId,
-                bobSession.sessionParams.deviceId!!,
-                null)
+                bobSession.sessionParams.deviceId!!)
 
         bobVerificationService.beginKeyVerificationInDMs(
                 VerificationMethod.SAS,
                 requestID!!,
                 cryptoTestData.roomId,
                 aliceSession.myUserId,
-                aliceSession.sessionParams.deviceId!!,
-                null)
+                aliceSession.sessionParams.deviceId!!)
 
         // we should reach SHOW SAS on both
         var alicePovTx: SasVerificationTransaction?

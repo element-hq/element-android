@@ -1,5 +1,4 @@
 /*
- * copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * licensed under the apache license, version 2.0 (the "license");

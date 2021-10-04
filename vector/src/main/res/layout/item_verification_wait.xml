@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/itemVerificationNoticeText"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -11,11 +12,12 @@
 
     <TextView
         android:id="@+id/use_latest_riot"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="start"
         android:text="@string/use_latest_app"
-        android:textColor="?riotx_text_primary"
+        android:textColor="?vctr_content_primary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -26,46 +28,52 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginTop="16dp"
+        android:importantForAccessibility="no"
         android:scaleType="fitCenter"
         android:src="@drawable/ic_monitor"
-        android:tint="?vctr_notice_secondary"
         app:layout_constraintEnd_toStartOf="@id/smartphoneIcon"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/use_latest_riot" />
+        app:layout_constraintTop_toBottomOf="@+id/use_latest_riot"
+        app:tint="?vctr_notice_secondary"
+        tools:ignore="MissingPrefix" />
 
     <ImageView
         android:id="@+id/smartphoneIcon"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginTop="16dp"
+        android:importantForAccessibility="no"
         android:scaleType="fitCenter"
         android:src="@drawable/ic_smartphone"
-        android:tint="?vctr_notice_secondary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/monitorIcon"
-        app:layout_constraintTop_toBottomOf="@+id/use_latest_riot" />
+        app:layout_constraintTop_toBottomOf="@+id/use_latest_riot"
+        app:tint="?vctr_notice_secondary"
+        tools:ignore="MissingPrefix" />
 
 
     <TextView
         android:id="@+id/app_desktop_web"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:gravity="center"
         android:text="@string/app_desktop_web"
-        android:textColor="?riotx_text_primary"
+        android:textColor="?vctr_content_primary"
         app:layout_constraintEnd_toEndOf="@id/monitorIcon"
         app:layout_constraintStart_toStartOf="@id/monitorIcon"
         app:layout_constraintTop_toBottomOf="@id/monitorIcon" />
 
     <TextView
         android:id="@+id/app_ios_android"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:gravity="center"
         android:text="@string/app_ios_android"
-        android:textColor="?riotx_text_primary"
+        android:textColor="?vctr_content_primary"
         app:layout_constraintEnd_toEndOf="@id/smartphoneIcon"
         app:layout_constraintStart_toStartOf="@id/smartphoneIcon"
         app:layout_constraintTop_toBottomOf="@id/smartphoneIcon" />
@@ -79,13 +87,13 @@
 
 
     <TextView
+        style="@style/Widget.Vector.TextView.Caption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:gravity="center"
         android:text="@string/or_other_mx_capabale_client"
-        android:textColor="?riotx_text_secondary"
-        android:textSize="12sp"
+        android:textColor="?vctr_content_secondary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/labelsBarrier" />

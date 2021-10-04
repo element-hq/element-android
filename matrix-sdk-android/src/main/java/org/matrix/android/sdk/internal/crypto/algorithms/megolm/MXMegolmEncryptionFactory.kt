@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,7 +16,7 @@
 
 package org.matrix.android.sdk.internal.crypto.algorithms.megolm
 
-import org.matrix.android.sdk.api.auth.data.Credentials
+import kotlinx.coroutines.CoroutineScope
 import org.matrix.android.sdk.internal.crypto.DeviceListManager
 import org.matrix.android.sdk.internal.crypto.MXOlmDevice
 import org.matrix.android.sdk.internal.crypto.actions.EnsureOlmSessionsForDevicesAction
@@ -26,7 +25,9 @@ import org.matrix.android.sdk.internal.crypto.keysbackup.DefaultKeysBackupServic
 import org.matrix.android.sdk.internal.crypto.repository.WarnOnUnknownDeviceRepository
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.crypto.tasks.SendToDeviceTask
-import org.matrix.android.sdk.internal.task.TaskExecutor
+import org.matrix.android.sdk.internal.di.DeviceId
+import org.matrix.android.sdk.internal.di.UserId
+import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
 import javax.inject.Inject
 
 internal class MXMegolmEncryptionFactory @Inject constructor(
@@ -35,25 +36,29 @@ internal class MXMegolmEncryptionFactory @Inject constructor(
         private val cryptoStore: IMXCryptoStore,
         private val deviceListManager: DeviceListManager,
         private val ensureOlmSessionsForDevicesAction: EnsureOlmSessionsForDevicesAction,
-        private val credentials: Credentials,
+        @UserId private val userId: String,
+        @DeviceId private val deviceId: String?,
         private val sendToDeviceTask: SendToDeviceTask,
         private val messageEncrypter: MessageEncrypter,
         private val warnOnUnknownDevicesRepository: WarnOnUnknownDeviceRepository,
-        private val taskExecutor: TaskExecutor) {
+        private val coroutineDispatchers: MatrixCoroutineDispatchers,
+        private val cryptoCoroutineScope: CoroutineScope) {
 
     fun create(roomId: String): MXMegolmEncryption {
         return MXMegolmEncryption(
-                roomId,
-                olmDevice,
-                defaultKeysBackupService,
-                cryptoStore,
-                deviceListManager,
-                ensureOlmSessionsForDevicesAction,
-                credentials,
-                sendToDeviceTask,
-                messageEncrypter,
-                warnOnUnknownDevicesRepository,
-                taskExecutor
+                roomId = roomId,
+                olmDevice = olmDevice,
+                defaultKeysBackupService = defaultKeysBackupService,
+                cryptoStore = cryptoStore,
+                deviceListManager = deviceListManager,
+                ensureOlmSessionsForDevicesAction = ensureOlmSessionsForDevicesAction,
+                userId = userId,
+                deviceId = deviceId!!,
+                sendToDeviceTask = sendToDeviceTask,
+                messageEncrypter = messageEncrypter,
+                warnOnUnknownDevicesRepository = warnOnUnknownDevicesRepository,
+                coroutineDispatchers = coroutineDispatchers,
+                cryptoCoroutineScope = cryptoCoroutineScope
         )
     }
 }

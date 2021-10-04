@@ -1,0 +1,2 @@
+Tato nová verze obsahuje hlavně opravy chyb a vylepšení. Odeslání zprávy je nyní mhohem rychlejší.
+Plné znění změn: https://github.com/vector-im/element-android/releases/tag/v1.0.10

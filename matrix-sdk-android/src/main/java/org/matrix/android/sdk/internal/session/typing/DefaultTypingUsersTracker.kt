@@ -1,5 +1,4 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -38,6 +37,6 @@ internal class DefaultTypingUsersTracker @Inject constructor() : TypingUsersTrac
     }
 
     override fun getTypingUsers(roomId: String): List<SenderInfo> {
-        return typingUsers[roomId] ?: emptyList()
+        return typingUsers[roomId].orEmpty()
     }
 }

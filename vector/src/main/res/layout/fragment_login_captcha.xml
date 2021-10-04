@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?riotx_background">
+    android:background="?android:colorBackground">
 
     <!-- No scroll view in the screen, but use the style -->
     <LinearLayout
@@ -22,11 +22,12 @@
 
         <TextView
             android:id="@+id/loginCaptchaNotice"
-            style="@style/TextAppearance.Vector.Login.Text.Small"
+            style="@style/Widget.Vector.TextView.Caption"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:text="@string/auth_recaptcha_message" />
+            android:text="@string/auth_recaptcha_message"
+            android:textColor="?vctr_content_secondary" />
 
         <!-- contentDescription does not work on WebView? -->
         <WebView

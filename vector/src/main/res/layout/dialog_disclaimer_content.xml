@@ -19,35 +19,40 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:importantForAccessibility="no"
             android:src="@drawable/ic_riot_icon" />
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="32dp"
+            android:importantForAccessibility="no"
             android:src="@drawable/ic_arrow_right"
-            android:tint="?riotx_text_secondary" />
+            app:tint="?vctr_content_secondary"
+            tools:ignore="MissingPrefix" />
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:importantForAccessibility="no"
             android:src="@drawable/element_logo_green" />
 
     </LinearLayout>
 
     <TextView
         android:id="@+id/disclaimerTextView"
+        style="@style/Widget.Vector.TextView.Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/element_disclaimer_title"
-        android:textColor="?riotx_text_primary"
-        android:textSize="20sp"
+        android:text="@string/disclaimer_title"
+        android:textColor="?vctr_content_primary"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/disclaimerIconsLayout" />
 
     <TextView
+        style="@style/Widget.Vector.TextView.Subtitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -55,9 +60,8 @@
         android:layout_marginEnd="24dp"
         android:gravity="center"
         android:paddingBottom="32dp"
-        android:text="@string/element_disclaimer_content"
-        android:textColor="?riotx_text_secondary"
-        android:textSize="16sp"
+        android:text="@string/disclaimer_content"
+        android:textColor="?vctr_content_secondary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/disclaimerTextView" />

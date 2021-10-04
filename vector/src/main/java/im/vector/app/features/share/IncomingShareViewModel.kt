@@ -20,19 +20,20 @@ import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import com.jakewharton.rxrelay2.BehaviorRelay
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
-import org.matrix.android.sdk.api.query.QueryStringValue
-import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.content.ContentAttachmentData
-import org.matrix.android.sdk.api.session.room.model.Membership
-import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
+import dagger.assisted.AssistedFactory
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.toggle
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.attachments.isPreviewable
 import im.vector.app.features.attachments.toGroupedContentAttachmentData
 import im.vector.app.features.home.room.list.BreadcrumbsRoomComparator
+import org.matrix.android.sdk.api.query.QueryStringValue
+import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.content.ContentAttachmentData
+import org.matrix.android.sdk.api.session.room.model.Membership
+import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.rx.rx
 import java.util.concurrent.TimeUnit
 
@@ -42,7 +43,7 @@ class IncomingShareViewModel @AssistedInject constructor(
         private val breadcrumbsRoomComparator: BreadcrumbsRoomComparator)
     : VectorViewModel<IncomingShareViewState, IncomingShareAction, IncomingShareViewEvents>(initialState) {
 
-    @AssistedInject.Factory
+    @AssistedFactory
     interface Factory {
         fun create(initialState: IncomingShareViewState): IncomingShareViewModel
     }
@@ -96,6 +97,7 @@ class IncomingShareViewModel @AssistedInject constructor(
         when (action) {
             is IncomingShareAction.SelectRoom           -> handleSelectRoom(action)
             is IncomingShareAction.ShareToSelectedRooms -> handleShareToSelectedRooms()
+            is IncomingShareAction.ShareToRoom          -> handleShareToRoom(action)
             is IncomingShareAction.ShareMedia           -> handleShareMediaToSelectedRooms(action)
             is IncomingShareAction.FilterWith           -> handleFilter(action)
             is IncomingShareAction.UpdateSharedData     -> handleUpdateSharedData(action)
@@ -132,6 +134,11 @@ class IncomingShareViewModel @AssistedInject constructor(
                 }
             }.exhaustive
         }
+    }
+
+    private fun handleShareToRoom(action: IncomingShareAction.ShareToRoom) = withState { state ->
+        val sharedData = state.sharedData ?: return@withState
+        _viewEvents.post(IncomingShareViewEvents.ShareToRoom(action.roomSummary, sharedData, showAlert = false))
     }
 
     private fun handleShareMediaToSelectedRooms(action: IncomingShareAction.ShareMedia) = withState { state ->

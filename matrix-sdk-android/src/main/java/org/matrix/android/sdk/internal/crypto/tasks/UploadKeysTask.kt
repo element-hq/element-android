@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,9 +21,9 @@ import org.matrix.android.sdk.internal.crypto.api.CryptoApi
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceKeys
 import org.matrix.android.sdk.internal.crypto.model.rest.KeysUploadBody
 import org.matrix.android.sdk.internal.crypto.model.rest.KeysUploadResponse
+import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.task.Task
-import org.greenrobot.eventbus.EventBus
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -39,7 +38,7 @@ internal interface UploadKeysTask : Task<UploadKeysTask.Params, KeysUploadRespon
 
 internal class DefaultUploadKeysTask @Inject constructor(
         private val cryptoApi: CryptoApi,
-        private val eventBus: EventBus
+        private val globalErrorReceiver: GlobalErrorReceiver
 ) : UploadKeysTask {
 
     override suspend fun execute(params: UploadKeysTask.Params): KeysUploadResponse {
@@ -50,8 +49,8 @@ internal class DefaultUploadKeysTask @Inject constructor(
 
         Timber.i("## Uploading device keys -> $body")
 
-        return executeRequest(eventBus) {
-            apiCall = cryptoApi.uploadKeys(body)
+        return executeRequest(globalErrorReceiver) {
+            cryptoApi.uploadKeys(body)
         }
     }
 }

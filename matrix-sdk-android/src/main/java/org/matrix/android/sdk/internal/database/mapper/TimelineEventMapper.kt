@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,7 +17,6 @@
 package org.matrix.android.sdk.internal.database.mapper
 
 import org.matrix.android.sdk.api.session.events.model.Event
-import org.matrix.android.sdk.api.session.room.model.ReadReceipt
 import org.matrix.android.sdk.api.session.room.sender.SenderInfo
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
@@ -26,9 +24,9 @@ import javax.inject.Inject
 
 internal class TimelineEventMapper @Inject constructor(private val readReceiptsSummaryMapper: ReadReceiptsSummaryMapper) {
 
-    fun map(timelineEventEntity: TimelineEventEntity, buildReadReceipts: Boolean = true, correctedReadReceipts: List<ReadReceipt>? = null): TimelineEvent {
+    fun map(timelineEventEntity: TimelineEventEntity, buildReadReceipts: Boolean = true): TimelineEvent {
         val readReceipts = if (buildReadReceipts) {
-            correctedReadReceipts ?: timelineEventEntity.readReceipts
+            timelineEventEntity.readReceipts
                     ?.let {
                         readReceiptsSummaryMapper.map(it)
                     }

@@ -1,5 +1,4 @@
 /*
- * Copyright 2018 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,15 +18,15 @@ package org.matrix.android.sdk.internal.crypto.store.db
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
+import androidx.paging.LivePagedListBuilder
+import androidx.paging.PagedList
 import com.zhuinden.monarchy.Monarchy
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import io.realm.Sort
 import io.realm.kotlin.where
-import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MXCrossSigningInfo
 import org.matrix.android.sdk.api.session.events.model.Event
-import org.matrix.android.sdk.api.session.events.model.LocalEcho
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.api.util.toOptional
@@ -47,10 +46,10 @@ import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.internal.crypto.model.OlmInboundGroupSessionWrapper2
 import org.matrix.android.sdk.internal.crypto.model.OlmSessionWrapper
+import org.matrix.android.sdk.internal.crypto.model.OutboundGroupSessionWrapper
 import org.matrix.android.sdk.internal.crypto.model.event.RoomKeyWithHeldContent
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.rest.RoomKeyRequestBody
-import org.matrix.android.sdk.internal.crypto.model.toEntity
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.crypto.store.PrivateKeysInfo
 import org.matrix.android.sdk.internal.crypto.store.SavedKeyBackupKeyInfo
@@ -64,6 +63,7 @@ import org.matrix.android.sdk.internal.crypto.store.db.model.CryptoRoomEntityFie
 import org.matrix.android.sdk.internal.crypto.store.db.model.DeviceInfoEntity
 import org.matrix.android.sdk.internal.crypto.store.db.model.DeviceInfoEntityFields
 import org.matrix.android.sdk.internal.crypto.store.db.model.GossipingEventEntity
+import org.matrix.android.sdk.internal.crypto.store.db.model.GossipingEventEntityFields
 import org.matrix.android.sdk.internal.crypto.store.db.model.IncomingGossipingRequestEntity
 import org.matrix.android.sdk.internal.crypto.store.db.model.IncomingGossipingRequestEntityFields
 import org.matrix.android.sdk.internal.crypto.store.db.model.KeysBackupDataEntity
@@ -72,6 +72,7 @@ import org.matrix.android.sdk.internal.crypto.store.db.model.OlmInboundGroupSess
 import org.matrix.android.sdk.internal.crypto.store.db.model.OlmInboundGroupSessionEntityFields
 import org.matrix.android.sdk.internal.crypto.store.db.model.OlmSessionEntity
 import org.matrix.android.sdk.internal.crypto.store.db.model.OlmSessionEntityFields
+import org.matrix.android.sdk.internal.crypto.store.db.model.OutboundGroupSessionInfoEntity
 import org.matrix.android.sdk.internal.crypto.store.db.model.OutgoingGossipingRequestEntity
 import org.matrix.android.sdk.internal.crypto.store.db.model.OutgoingGossipingRequestEntityFields
 import org.matrix.android.sdk.internal.crypto.store.db.model.SharedSessionEntity
@@ -80,17 +81,24 @@ import org.matrix.android.sdk.internal.crypto.store.db.model.UserEntity
 import org.matrix.android.sdk.internal.crypto.store.db.model.UserEntityFields
 import org.matrix.android.sdk.internal.crypto.store.db.model.WithHeldSessionEntity
 import org.matrix.android.sdk.internal.crypto.store.db.model.createPrimaryKey
+import org.matrix.android.sdk.internal.crypto.store.db.model.deleteOnCascade
 import org.matrix.android.sdk.internal.crypto.store.db.query.create
 import org.matrix.android.sdk.internal.crypto.store.db.query.delete
 import org.matrix.android.sdk.internal.crypto.store.db.query.get
 import org.matrix.android.sdk.internal.crypto.store.db.query.getById
 import org.matrix.android.sdk.internal.crypto.store.db.query.getOrCreate
+import org.matrix.android.sdk.internal.crypto.util.RequestIdHelper
 import org.matrix.android.sdk.internal.database.mapper.ContentMapper
+import org.matrix.android.sdk.internal.database.tools.RealmDebugTools
 import org.matrix.android.sdk.internal.di.CryptoDatabase
+import org.matrix.android.sdk.internal.di.DeviceId
 import org.matrix.android.sdk.internal.di.MoshiProvider
+import org.matrix.android.sdk.internal.di.UserId
+import org.matrix.android.sdk.internal.extensions.clearWith
 import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.olm.OlmAccount
 import org.matrix.olm.OlmException
+import org.matrix.olm.OlmOutboundGroupSession
 import timber.log.Timber
 import javax.inject.Inject
 import kotlin.collections.set
@@ -99,7 +107,9 @@ import kotlin.collections.set
 internal class RealmCryptoStore @Inject constructor(
         @CryptoDatabase private val realmConfiguration: RealmConfiguration,
         private val crossSigningKeysMapper: CrossSigningKeysMapper,
-        private val credentials: Credentials) : IMXCryptoStore {
+        @UserId private val userId: String,
+        @DeviceId private val deviceId: String?
+) : IMXCryptoStore {
 
     /* ==========================================================================================
      * Memory cache, to correctly release JNI objects
@@ -142,8 +152,8 @@ internal class RealmCryptoStore @Inject constructor(
                 // Check credentials
                 // The device id may not have been provided in credentials.
                 // Check it only if provided, else trust the stored one.
-                if (currentMetadata.userId != credentials.userId
-                        || (credentials.deviceId != null && credentials.deviceId != currentMetadata.deviceId)) {
+                if (currentMetadata.userId != userId
+                        || (deviceId != null && deviceId != currentMetadata.deviceId)) {
                     Timber.w("## open() : Credentials do not match, close this store and delete data")
                     deleteAll = true
                     currentMetadata = null
@@ -156,8 +166,8 @@ internal class RealmCryptoStore @Inject constructor(
                 }
 
                 // Metadata not found, or database cleaned, create it
-                realm.createObject(CryptoMetadataEntity::class.java, credentials.userId).apply {
-                    deviceId = credentials.deviceId
+                realm.createObject(CryptoMetadataEntity::class.java, userId).apply {
+                    deviceId = this@RealmCryptoStore.deviceId
                 }
             }
         }
@@ -269,24 +279,37 @@ internal class RealmCryptoStore @Inject constructor(
     override fun storeUserDevices(userId: String, devices: Map<String, CryptoDeviceInfo>?) {
         doRealmTransaction(realmConfiguration) { realm ->
             if (devices == null) {
+                Timber.d("Remove user $userId")
                 // Remove the user
                 UserEntity.delete(realm, userId)
             } else {
-                UserEntity.getOrCreate(realm, userId)
-                        .let { u ->
-                            // Add the devices
-                            val currentKnownDevices = u.devices.toList()
-                            val new = devices.map { entry -> entry.value.toEntity() }
-                            new.forEach { entity ->
-                                // Maintain first time seen
-                                val existing = currentKnownDevices.firstOrNull { it.deviceId == entity.deviceId && it.identityKey == entity.identityKey }
-                                entity.firstTimeSeenLocalTs = existing?.firstTimeSeenLocalTs ?: System.currentTimeMillis()
-                                realm.insertOrUpdate(entity)
-                            }
-                            // Ensure all other devices are deleted
-                            u.devices.deleteAllFromRealm()
-                            u.devices.addAll(new)
+                val userEntity = UserEntity.getOrCreate(realm, userId)
+                // First delete the removed devices
+                val deviceIds = devices.keys
+                userEntity.devices.toTypedArray().iterator().let {
+                    while (it.hasNext()) {
+                        val deviceInfoEntity = it.next()
+                        if (deviceInfoEntity.deviceId !in deviceIds) {
+                            Timber.d("Remove device ${deviceInfoEntity.deviceId} of user $userId")
+                            deviceInfoEntity.deleteOnCascade()
                         }
+                    }
+                }
+                // Then update existing devices or add new one
+                devices.values.forEach { cryptoDeviceInfo ->
+                    val existingDeviceInfoEntity = userEntity.devices.firstOrNull { it.deviceId == cryptoDeviceInfo.deviceId }
+                    if (existingDeviceInfoEntity == null) {
+                        // Add the device
+                        Timber.d("Add device ${cryptoDeviceInfo.deviceId} of user $userId")
+                        val newEntity = CryptoMapper.mapToEntity(cryptoDeviceInfo)
+                        newEntity.firstTimeSeenLocalTs = System.currentTimeMillis()
+                        userEntity.devices.add(newEntity)
+                    } else {
+                        // Update the device
+                        Timber.d("Update device ${cryptoDeviceInfo.deviceId} of user $userId")
+                        CryptoMapper.updateDeviceInfoEntity(existingDeviceInfoEntity, cryptoDeviceInfo)
+                    }
+                }
             }
         }
     }
@@ -300,25 +323,45 @@ internal class RealmCryptoStore @Inject constructor(
                     .let { userEntity ->
                         if (masterKey == null || selfSigningKey == null) {
                             // The user has disabled cross signing?
-                            userEntity.crossSigningInfoEntity?.deleteFromRealm()
+                            userEntity.crossSigningInfoEntity?.deleteOnCascade()
                             userEntity.crossSigningInfoEntity = null
                         } else {
+                            var shouldResetMyDevicesLocalTrust = false
                             CrossSigningInfoEntity.getOrCreate(realm, userId).let { signingInfo ->
                                 // What should we do if we detect a change of the keys?
                                 val existingMaster = signingInfo.getMasterKey()
                                 if (existingMaster != null && existingMaster.publicKeyBase64 == masterKey.unpaddedBase64PublicKey) {
                                     crossSigningKeysMapper.update(existingMaster, masterKey)
                                 } else {
+                                    Timber.d("## CrossSigning  MSK change for $userId")
                                     val keyEntity = crossSigningKeysMapper.map(masterKey)
                                     signingInfo.setMasterKey(keyEntity)
+                                    if (userId == this.userId) {
+                                        shouldResetMyDevicesLocalTrust = true
+                                        // my msk has changed! clear my private key
+                                        // Could we have some race here? e.g I am the one that did change the keys
+                                        // could i get this update to early and clear the private keys?
+                                        // -> initializeCrossSigning is guarding for that by storing all at once
+                                        realm.where<CryptoMetadataEntity>().findFirst()?.apply {
+                                            xSignMasterPrivateKey = null
+                                        }
+                                    }
                                 }
 
                                 val existingSelfSigned = signingInfo.getSelfSignedKey()
                                 if (existingSelfSigned != null && existingSelfSigned.publicKeyBase64 == selfSigningKey.unpaddedBase64PublicKey) {
                                     crossSigningKeysMapper.update(existingSelfSigned, selfSigningKey)
                                 } else {
+                                    Timber.d("## CrossSigning  SSK change for $userId")
                                     val keyEntity = crossSigningKeysMapper.map(selfSigningKey)
                                     signingInfo.setSelfSignedKey(keyEntity)
+                                    if (userId == this.userId) {
+                                        shouldResetMyDevicesLocalTrust = true
+                                        // my ssk has changed! clear my private key
+                                        realm.where<CryptoMetadataEntity>().findFirst()?.apply {
+                                            xSignSelfSignedPrivateKey = null
+                                        }
+                                    }
                                 }
 
                                 // Only for me
@@ -327,9 +370,28 @@ internal class RealmCryptoStore @Inject constructor(
                                     if (existingUSK != null && existingUSK.publicKeyBase64 == userSigningKey.unpaddedBase64PublicKey) {
                                         crossSigningKeysMapper.update(existingUSK, userSigningKey)
                                     } else {
+                                        Timber.d("## CrossSigning  USK change for $userId")
                                         val keyEntity = crossSigningKeysMapper.map(userSigningKey)
                                         signingInfo.setUserSignedKey(keyEntity)
+                                        if (userId == this.userId) {
+                                            shouldResetMyDevicesLocalTrust = true
+                                            // my usk has changed! clear my private key
+                                            realm.where<CryptoMetadataEntity>().findFirst()?.apply {
+                                                xSignUserPrivateKey = null
+                                            }
+                                        }
                                     }
+                                }
+
+                                // When my cross signing keys are reset, we consider clearing all existing device trust
+                                if (shouldResetMyDevicesLocalTrust) {
+                                    realm.where<UserEntity>()
+                                            .equalTo(UserEntityFields.USER_ID, this.userId)
+                                            .findFirst()
+                                            ?.devices?.forEach {
+                                                it?.trustLevelEntity?.crossSignedVerified = false
+                                                it?.trustLevelEntity?.locallyVerified = it.deviceId == deviceId
+                                            }
                                 }
                                 userEntity.crossSigningInfoEntity = signingInfo
                             }
@@ -642,7 +704,7 @@ internal class RealmCryptoStore @Inject constructor(
         }
     }
 
-    override fun getDeviceSessionIds(deviceKey: String): MutableSet<String> {
+    override fun getDeviceSessionIds(deviceKey: String): List<String> {
         return doWithRealm(realmConfiguration) {
             it.where<OlmSessionEntity>()
                     .equalTo(OlmSessionEntityFields.DEVICE_KEY, deviceKey)
@@ -651,7 +713,6 @@ internal class RealmCryptoStore @Inject constructor(
                         sessionEntity.sessionId
                     }
         }
-                .toMutableSet()
     }
 
     override fun storeInboundGroupSessions(sessions: List<OlmInboundGroupSessionWrapper2>) {
@@ -711,11 +772,47 @@ internal class RealmCryptoStore @Inject constructor(
         return inboundGroupSessionToRelease[key]
     }
 
+    override fun getCurrentOutboundGroupSessionForRoom(roomId: String): OutboundGroupSessionWrapper? {
+        return doWithRealm(realmConfiguration) { realm ->
+            realm.where<CryptoRoomEntity>()
+                    .equalTo(CryptoRoomEntityFields.ROOM_ID, roomId)
+                    .findFirst()?.outboundSessionInfo?.let { entity ->
+                        entity.getOutboundGroupSession()?.let {
+                            OutboundGroupSessionWrapper(
+                                    it,
+                                    entity.creationTime ?: 0
+                            )
+                        }
+                    }
+        }
+    }
+
+    override fun storeCurrentOutboundGroupSessionForRoom(roomId: String, outboundGroupSession: OlmOutboundGroupSession?) {
+        // we can do this async, as it's just for restoring on next launch
+        // the olmdevice is caching the active instance
+        // this is called for each sent message (so not high frequency), thus we can use basic realm async without
+        // risk of reaching max async operation limit?
+        doRealmTransactionAsync(realmConfiguration) { realm ->
+            CryptoRoomEntity.getById(realm, roomId)?.let { entity ->
+                // we should delete existing outbound session info if any
+                entity.outboundSessionInfo?.deleteFromRealm()
+
+                if (outboundGroupSession != null) {
+                    val info = realm.createObject(OutboundGroupSessionInfoEntity::class.java).apply {
+                        creationTime = System.currentTimeMillis()
+                        putOutboundGroupSession(outboundGroupSession)
+                    }
+                    entity.outboundSessionInfo = info
+                }
+            }
+        }
+    }
+
     /**
      * Note: the result will be only use to export all the keys and not to use the OlmInboundGroupSessionWrapper2,
      * so there is no need to use or update `inboundGroupSessionToRelease` for native memory management
      */
-    override fun getInboundGroupSessions(): MutableList<OlmInboundGroupSessionWrapper2> {
+    override fun getInboundGroupSessions(): List<OlmInboundGroupSessionWrapper2> {
         return doWithRealm(realmConfiguration) {
             it.where<OlmInboundGroupSessionEntity>()
                     .findAll()
@@ -723,7 +820,6 @@ internal class RealmCryptoStore @Inject constructor(
                         inboundGroupSessionEntity.getInboundGroupSession()
                     }
         }
-                .toMutableList()
     }
 
     override fun removeInboundGroupSession(sessionId: String, senderKey: String) {
@@ -853,7 +949,7 @@ internal class RealmCryptoStore @Inject constructor(
         }
     }
 
-    override fun getDeviceKeysUploaded(): Boolean {
+    override fun areDeviceKeysUploaded(): Boolean {
         return doWithRealm(realmConfiguration) {
             it.where<CryptoMetadataEntity>().findFirst()?.deviceKeysSentToServer
         } ?: false
@@ -878,7 +974,7 @@ internal class RealmCryptoStore @Inject constructor(
         }
     }
 
-    override fun getRoomsListBlacklistUnverifiedDevices(): MutableList<String> {
+    override fun getRoomsListBlacklistUnverifiedDevices(): List<String> {
         return doWithRealm(realmConfiguration) {
             it.where<CryptoRoomEntity>()
                     .equalTo(CryptoRoomEntityFields.BLACKLIST_UNVERIFIED_DEVICES, true)
@@ -887,10 +983,9 @@ internal class RealmCryptoStore @Inject constructor(
                         cryptoRoom.roomId
                     }
         }
-                .toMutableList()
     }
 
-    override fun getDeviceTrackingStatuses(): MutableMap<String, Int> {
+    override fun getDeviceTrackingStatuses(): Map<String, Int> {
         return doWithRealm(realmConfiguration) {
             it.where<UserEntity>()
                     .findAll()
@@ -901,7 +996,6 @@ internal class RealmCryptoStore @Inject constructor(
                         entry.value.deviceTrackingStatus
                     }
         }
-                .toMutableMap()
     }
 
     override fun saveDeviceTrackingStatuses(deviceTrackingStatuses: Map<String, Int>) {
@@ -957,7 +1051,50 @@ internal class RealmCryptoStore @Inject constructor(
         }
     }
 
-    override fun getGossipingEventsTrail(): List<Event> {
+    override fun getIncomingRoomKeyRequestsPaged(): LiveData<PagedList<IncomingRoomKeyRequest>> {
+        val realmDataSourceFactory = monarchy.createDataSourceFactory { realm ->
+            realm.where<IncomingGossipingRequestEntity>()
+                    .equalTo(IncomingGossipingRequestEntityFields.TYPE_STR, GossipRequestType.KEY.name)
+                    .sort(IncomingGossipingRequestEntityFields.LOCAL_CREATION_TIMESTAMP, Sort.DESCENDING)
+        }
+        val dataSourceFactory = realmDataSourceFactory.map {
+            it.toIncomingGossipingRequest() as? IncomingRoomKeyRequest
+                    ?: IncomingRoomKeyRequest(
+                            requestBody = null,
+                            deviceId = "",
+                            userId = "",
+                            requestId = "",
+                            state = GossipingRequestState.NONE,
+                            localCreationTimestamp = 0
+                    )
+        }
+        return monarchy.findAllPagedWithChanges(realmDataSourceFactory,
+                LivePagedListBuilder(dataSourceFactory,
+                        PagedList.Config.Builder()
+                                .setPageSize(20)
+                                .setEnablePlaceholders(false)
+                                .setPrefetchDistance(1)
+                                .build())
+        )
+    }
+
+    override fun getGossipingEventsTrail(): LiveData<PagedList<Event>> {
+        val realmDataSourceFactory = monarchy.createDataSourceFactory { realm ->
+            realm.where<GossipingEventEntity>().sort(GossipingEventEntityFields.AGE_LOCAL_TS, Sort.DESCENDING)
+        }
+        val dataSourceFactory = realmDataSourceFactory.map { it.toModel() }
+        val trail = monarchy.findAllPagedWithChanges(realmDataSourceFactory,
+                LivePagedListBuilder(dataSourceFactory,
+                        PagedList.Config.Builder()
+                                .setPageSize(20)
+                                .setEnablePlaceholders(false)
+                                .setPrefetchDistance(1)
+                                .build())
+        )
+        return trail
+    }
+
+    override fun getGossipingEvents(): List<Event> {
         return monarchy.fetchAllCopiedSync { realm ->
             realm.where<GossipingEventEntity>()
         }.map {
@@ -984,7 +1121,7 @@ internal class RealmCryptoStore @Inject constructor(
 
             if (existing == null) {
                 request = realm.createObject(OutgoingGossipingRequestEntity::class.java).apply {
-                    this.requestId = LocalEcho.createLocalEchoId()
+                    this.requestId = RequestIdHelper.createUniqueRequestId()
                     this.setRecipients(recipients)
                     this.requestState = OutgoingGossipingRequestState.UNSENT
                     this.type = GossipRequestType.KEY
@@ -1014,7 +1151,7 @@ internal class RealmCryptoStore @Inject constructor(
                     this.type = GossipRequestType.SECRET
                     setRecipients(recipients)
                     this.requestState = OutgoingGossipingRequestState.UNSENT
-                    this.requestId = LocalEcho.createLocalEchoId()
+                    this.requestId = RequestIdHelper.createUniqueRequestId()
                     this.requestedInfoStr = secretName
                 }.toOutgoingGossipingRequest() as? OutgoingSecretRequest
             } else {
@@ -1025,24 +1162,43 @@ internal class RealmCryptoStore @Inject constructor(
         return request
     }
 
-    override fun saveGossipingEvent(event: Event) {
+    override fun saveGossipingEvents(events: List<Event>) {
         val now = System.currentTimeMillis()
-        val ageLocalTs = event.unsignedData?.age?.let { now - it } ?: now
-        val entity = GossipingEventEntity(
-                type = event.type,
-                sender = event.senderId,
-                ageLocalTs = ageLocalTs,
-                content = ContentMapper.map(event.content)
-        ).apply {
-            sendState = SendState.SYNCED
-            decryptionResultJson = MoshiProvider.providesMoshi().adapter<OlmDecryptionResult>(OlmDecryptionResult::class.java).toJson(event.mxDecryptionResult)
-            decryptionErrorCode = event.mCryptoError?.name
-        }
-        doRealmTransaction(realmConfiguration) { realm ->
-            realm.insertOrUpdate(entity)
+        monarchy.writeAsync { realm ->
+            events.forEach { event ->
+                val ageLocalTs = event.unsignedData?.age?.let { now - it } ?: now
+                val entity = GossipingEventEntity(
+                        type = event.type,
+                        sender = event.senderId,
+                        ageLocalTs = ageLocalTs,
+                        content = ContentMapper.map(event.content)
+                ).apply {
+                    sendState = SendState.SYNCED
+                    decryptionResultJson = MoshiProvider.providesMoshi().adapter(OlmDecryptionResult::class.java).toJson(event.mxDecryptionResult)
+                    decryptionErrorCode = event.mCryptoError?.name
+                }
+                realm.insertOrUpdate(entity)
+            }
         }
     }
 
+    override fun saveGossipingEvent(event: Event) {
+        monarchy.writeAsync { realm ->
+            val now = System.currentTimeMillis()
+            val ageLocalTs = event.unsignedData?.age?.let { now - it } ?: now
+            val entity = GossipingEventEntity(
+                    type = event.type,
+                    sender = event.senderId,
+                    ageLocalTs = ageLocalTs,
+                    content = ContentMapper.map(event.content)
+            ).apply {
+                sendState = SendState.SYNCED
+                decryptionResultJson = MoshiProvider.providesMoshi().adapter(OlmDecryptionResult::class.java).toJson(event.mxDecryptionResult)
+                decryptionErrorCode = event.mCryptoError?.name
+            }
+            realm.insertOrUpdate(entity)
+        }
+    }
 //    override fun getOutgoingRoomKeyRequestByState(states: Set<ShareRequestState>): OutgoingRoomKeyRequest? {
 //        val statesIndex = states.map { it.ordinal }.toTypedArray()
 //        return doRealmQueryAndCopy(realmConfiguration) { realm ->
@@ -1134,12 +1290,15 @@ internal class RealmCryptoStore @Inject constructor(
 //        }
 //    }
 
-    override fun updateGossipingRequestState(request: IncomingShareRequestCommon, state: GossipingRequestState) {
+    override fun updateGossipingRequestState(requestUserId: String?,
+                                             requestDeviceId: String?,
+                                             requestId: String?,
+                                             state: GossipingRequestState) {
         doRealmTransaction(realmConfiguration) { realm ->
             realm.where<IncomingGossipingRequestEntity>()
-                    .equalTo(IncomingGossipingRequestEntityFields.OTHER_USER_ID, request.userId)
-                    .equalTo(IncomingGossipingRequestEntityFields.OTHER_DEVICE_ID, request.deviceId)
-                    .equalTo(IncomingGossipingRequestEntityFields.REQUEST_ID, request.requestId)
+                    .equalTo(IncomingGossipingRequestEntityFields.OTHER_USER_ID, requestUserId)
+                    .equalTo(IncomingGossipingRequestEntityFields.OTHER_DEVICE_ID, requestDeviceId)
+                    .equalTo(IncomingGossipingRequestEntityFields.REQUEST_ID, requestId)
                     .findAll().forEach {
                         it.requestState = state
                     }
@@ -1195,7 +1354,7 @@ internal class RealmCryptoStore @Inject constructor(
                     .findAll()
                     .mapNotNull { entity ->
                         when (entity.type) {
-                            GossipRequestType.KEY -> {
+                            GossipRequestType.KEY    -> {
                                 IncomingRoomKeyRequest(
                                         userId = entity.otherUserId,
                                         deviceId = entity.otherDeviceId,
@@ -1235,6 +1394,28 @@ internal class RealmCryptoStore @Inject constructor(
                 } else if (request is IncomingRoomKeyRequest) {
                     it.type = GossipRequestType.KEY
                     it.requestedInfoStr = request.requestBody?.toJson()
+                }
+            }
+        }
+    }
+
+    override fun storeIncomingGossipingRequests(requests: List<IncomingShareRequestCommon>) {
+        doRealmTransactionAsync(realmConfiguration) { realm ->
+            requests.forEach { request ->
+                // After a clear cache, we might have a
+                realm.createObject(IncomingGossipingRequestEntity::class.java).let {
+                    it.otherDeviceId = request.deviceId
+                    it.otherUserId = request.userId
+                    it.requestId = request.requestId ?: ""
+                    it.requestState = GossipingRequestState.PENDING
+                    it.localCreationTimestamp = request.localCreationTimestamp ?: System.currentTimeMillis()
+                    if (request is IncomingSecretShareRequest) {
+                        it.type = GossipRequestType.SECRET
+                        it.requestedInfoStr = request.secretName
+                    } else if (request is IncomingRoomKeyRequest) {
+                        it.type = GossipRequestType.KEY
+                        it.requestedInfoStr = request.requestBody?.toJson()
+                    }
                 }
             }
         }
@@ -1314,7 +1495,7 @@ internal class RealmCryptoStore @Inject constructor(
                     .findAll()
             xInfoEntities?.forEach { info ->
                 // Need to ignore mine
-                if (info.userId != credentials.userId) {
+                if (info.userId != userId) {
                     info.crossSigningKeys.forEach {
                         it.trustLevelEntity = null
                     }
@@ -1329,7 +1510,7 @@ internal class RealmCryptoStore @Inject constructor(
                     .findAll()
             xInfoEntities?.forEach { xInfoEntity ->
                 // Need to ignore mine
-                if (xInfoEntity.userId == credentials.userId) return@forEach
+                if (xInfoEntity.userId == userId) return@forEach
                 val mapped = mapCrossSigningInfoEntity(xInfoEntity)
                 val currentTrust = mapped.isTrusted()
                 val newTrust = check(mapped.userId)
@@ -1371,6 +1552,27 @@ internal class RealmCryptoStore @Inject constructor(
             entity.toOutgoingGossipingRequest() as? OutgoingSecretRequest
         })
                 .filterNotNull()
+    }
+
+    override fun getOutgoingRoomKeyRequestsPaged(): LiveData<PagedList<OutgoingRoomKeyRequest>> {
+        val realmDataSourceFactory = monarchy.createDataSourceFactory { realm ->
+            realm
+                    .where(OutgoingGossipingRequestEntity::class.java)
+                    .equalTo(OutgoingGossipingRequestEntityFields.TYPE_STR, GossipRequestType.KEY.name)
+        }
+        val dataSourceFactory = realmDataSourceFactory.map {
+            it.toOutgoingGossipingRequest() as? OutgoingRoomKeyRequest
+                    ?: OutgoingRoomKeyRequest(requestBody = null, requestId = "?", recipients = emptyMap(), state = OutgoingGossipingRequestState.CANCELLED)
+        }
+        val trail = monarchy.findAllPagedWithChanges(realmDataSourceFactory,
+                LivePagedListBuilder(dataSourceFactory,
+                        PagedList.Config.Builder()
+                                .setPageSize(20)
+                                .setEnablePlaceholders(false)
+                                .setPrefetchDistance(1)
+                                .build())
+        )
+        return trail
     }
 
     override fun getCrossSigningInfo(userId: String): MXCrossSigningInfo? {
@@ -1441,7 +1643,7 @@ internal class RealmCryptoStore @Inject constructor(
         } else {
             // Just override existing, caller should check and untrust id needed
             val existing = CrossSigningInfoEntity.getOrCreate(realm, userId)
-            existing.crossSigningKeys.deleteAllFromRealm()
+            existing.crossSigningKeys.clearWith { it.deleteOnCascade() }
             existing.crossSigningKeys.addAll(
                     info.crossSigningKeys.map {
                         crossSigningKeysMapper.map(it)
@@ -1479,7 +1681,12 @@ internal class RealmCryptoStore @Inject constructor(
         }
     }
 
-    override fun markedSessionAsShared(roomId: String?, sessionId: String, userId: String, deviceId: String, chainIndex: Int) {
+    override fun markedSessionAsShared(roomId: String?,
+                                       sessionId: String,
+                                       userId: String,
+                                       deviceId: String,
+                                       deviceIdentityKey: String,
+                                       chainIndex: Int) {
         doRealmTransaction(realmConfiguration) { realm ->
             SharedSessionEntity.create(
                     realm = realm,
@@ -1487,14 +1694,22 @@ internal class RealmCryptoStore @Inject constructor(
                     sessionId = sessionId,
                     userId = userId,
                     deviceId = deviceId,
+                    deviceIdentityKey = deviceIdentityKey,
                     chainIndex = chainIndex
             )
         }
     }
 
-    override fun wasSessionSharedWithUser(roomId: String?, sessionId: String, userId: String, deviceId: String): IMXCryptoStore.SharedSessionResult {
+    override fun getSharedSessionInfo(roomId: String?, sessionId: String, deviceInfo: CryptoDeviceInfo): IMXCryptoStore.SharedSessionResult {
         return doWithRealm(realmConfiguration) { realm ->
-            SharedSessionEntity.get(realm, roomId, sessionId, userId, deviceId)?.let {
+            SharedSessionEntity.get(
+                    realm = realm,
+                    roomId = roomId,
+                    sessionId = sessionId,
+                    userId = deviceInfo.userId,
+                    deviceId = deviceInfo.deviceId,
+                    deviceIdentityKey = deviceInfo.identityKey()
+            )?.let {
                 IMXCryptoStore.SharedSessionResult(true, it.chainIndex)
             } ?: IMXCryptoStore.SharedSessionResult(false, null)
         }
@@ -1513,5 +1728,46 @@ internal class RealmCryptoStore @Inject constructor(
 
             result
         }
+    }
+
+    /**
+     * Some entries in the DB can get a bit out of control with time
+     * So we need to tidy up a bit
+     */
+    override fun tidyUpDataBase() {
+        val prevWeekTs = System.currentTimeMillis() - 7 * 24 * 60 * 60 * 1_000
+        doRealmTransaction(realmConfiguration) { realm ->
+
+            // Only keep one week history
+            realm.where<IncomingGossipingRequestEntity>()
+                    .lessThan(IncomingGossipingRequestEntityFields.LOCAL_CREATION_TIMESTAMP, prevWeekTs)
+                    .findAll()
+                    .also { Timber.i("## Crypto Clean up ${it.size} IncomingGossipingRequestEntity") }
+                    .deleteAllFromRealm()
+
+            // Clean the cancelled ones?
+            realm.where<OutgoingGossipingRequestEntity>()
+                    .equalTo(OutgoingGossipingRequestEntityFields.REQUEST_STATE_STR, OutgoingGossipingRequestState.CANCELLED.name)
+                    .equalTo(OutgoingGossipingRequestEntityFields.TYPE_STR, GossipRequestType.KEY.name)
+                    .findAll()
+                    .also { Timber.i("## Crypto Clean up ${it.size} OutgoingGossipingRequestEntity") }
+                    .deleteAllFromRealm()
+
+            // Only keep one week history
+            realm.where<GossipingEventEntity>()
+                    .lessThan(GossipingEventEntityFields.AGE_LOCAL_TS, prevWeekTs)
+                    .findAll()
+                    .also { Timber.i("## Crypto Clean up ${it.size} GossipingEventEntityFields") }
+                    .deleteAllFromRealm()
+
+            // Can we do something for WithHeldSessionEntity?
+        }
+    }
+
+    /**
+     * Prints out database info
+     */
+    override fun logDbUsageInfo() {
+        RealmDebugTools(realmConfiguration).logInfo("Crypto")
     }
 }

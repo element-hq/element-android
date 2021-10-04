@@ -1,5 +1,4 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -45,7 +44,7 @@ import timber.log.Timber;
  */
 public class HomeServerConnectionConfig {
 
-    // the home server URI
+    // the homeserver URI
     private Uri mHomeServerUri;
     // the jitsi server URI. Can be null
     @Nullable
@@ -83,7 +82,7 @@ public class HomeServerConnectionConfig {
     }
 
     /**
-     * Update the home server URI.
+     * Update the homeserver URI.
      *
      * @param uri the new HS uri
      */
@@ -92,7 +91,7 @@ public class HomeServerConnectionConfig {
     }
 
     /**
-     * @return the home server uri
+     * @return the homeserver uri
      */
     public Uri getHomeserverUri() {
         return mHomeServerUri;
@@ -146,7 +145,7 @@ public class HomeServerConnectionConfig {
     public void setCredentials(Credentials credentials) {
         mCredentials = credentials;
 
-        // Override home server url and/or identity server url if provided
+        // Override homeserver url and/or identity server url if provided
         if (credentials.wellKnown != null) {
             if (credentials.wellKnown.homeServer != null) {
                 String homeServerUrl = credentials.wellKnown.homeServer.baseURL;
@@ -182,7 +181,7 @@ public class HomeServerConnectionConfig {
                 if (!TextUtils.isEmpty(jitsiServerUrl)) {
                     // add trailing "/"
                     if (!jitsiServerUrl.endsWith("/")) {
-                        jitsiServerUrl =jitsiServerUrl + "/";
+                        jitsiServerUrl = jitsiServerUrl + "/";
                     }
 
                     Timber.d("Overriding jitsi server url to " + jitsiServerUrl);
@@ -201,7 +200,7 @@ public class HomeServerConnectionConfig {
     }
 
     /**
-     * TLS versions accepted for TLS connections with the home server.
+     * TLS versions accepted for TLS connections with the homeserver.
      */
     @Nullable
     public List<TlsVersion> getAcceptedTlsVersions() {
@@ -209,7 +208,7 @@ public class HomeServerConnectionConfig {
     }
 
     /**
-     * TLS cipher suites accepted for TLS connections with the home server.
+     * TLS cipher suites accepted for TLS connections with the homeserver.
      */
     @Nullable
     public List<CipherSuite> getAcceptedTlsCipherSuites() {
@@ -427,7 +426,7 @@ public class HomeServerConnectionConfig {
          */
         public Builder withHomeServerUri(final Uri homeServerUri) {
             if (homeServerUri == null || (!"http".equals(homeServerUri.getScheme()) && !"https".equals(homeServerUri.getScheme()))) {
-                throw new RuntimeException("Invalid home server URI: " + homeServerUri);
+                throw new RuntimeException("Invalid homeserver URI: " + homeServerUri);
             }
 
             // remove trailing /
@@ -436,7 +435,7 @@ public class HomeServerConnectionConfig {
                     String url = homeServerUri.toString();
                     mHomeServerConnectionConfig.mHomeServerUri = Uri.parse(url.substring(0, url.length() - 1));
                 } catch (Exception e) {
-                    throw new RuntimeException("Invalid home server URI: " + homeServerUri);
+                    throw new RuntimeException("Invalid homeserver URI: " + homeServerUri);
                 }
             } else {
                 mHomeServerConnectionConfig.mHomeServerUri = homeServerUri;
@@ -550,7 +549,7 @@ public class HomeServerConnectionConfig {
         }
 
         /**
-         * Add an accepted TLS version for TLS connections with the home server.
+         * Add an accepted TLS version for TLS connections with the homeserver.
          *
          * @param tlsVersion the tls version to add to the set of TLS versions accepted.
          * @return this builder
@@ -578,7 +577,7 @@ public class HomeServerConnectionConfig {
         }
 
         /**
-         * Add a TLS cipher suite to the list of accepted TLS connections with the home server.
+         * Add a TLS cipher suite to the list of accepted TLS connections with the homeserver.
          *
          * @param tlsCipherSuite the tls cipher suite to add.
          * @return this builder
@@ -667,7 +666,7 @@ public class HomeServerConnectionConfig {
         public HomeServerConnectionConfig build() {
             // Check mandatory parameters
             if (mHomeServerConnectionConfig.mHomeServerUri == null) {
-                throw new RuntimeException("Home server URI not set");
+                throw new RuntimeException("Homeserver URI not set");
             }
 
             return mHomeServerConnectionConfig;

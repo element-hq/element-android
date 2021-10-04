@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,6 +20,8 @@ package org.matrix.android.sdk.api.session.events.model
  * Constants defining known event types from Matrix specifications.
  */
 object EventType {
+    // Used when the type is missing, which should not happen
+    const val MISSING_TYPE = "org.matrix.android.sdk.missing_type"
 
     const val PRESENCE = "m.presence"
     const val MESSAGE = "m.room.message"
@@ -30,9 +31,7 @@ object EventType {
     const val TYPING = "m.typing"
     const val REDACTION = "m.room.redaction"
     const val RECEIPT = "m.receipt"
-    const val TAG = "m.tag"
     const val ROOM_KEY = "m.room_key"
-    const val FULLY_READ = "m.fully_read"
     const val PLUMBING = "m.room.plumbing"
     const val BOT_OPTIONS = "m.room.bot.options"
     const val PREVIEW_URLS = "org.matrix.room.preview_urls"
@@ -50,6 +49,16 @@ object EventType {
     const val STATE_ROOM_JOIN_RULES = "m.room.join_rules"
     const val STATE_ROOM_GUEST_ACCESS = "m.room.guest_access"
     const val STATE_ROOM_POWER_LEVELS = "m.room.power_levels"
+
+    const val STATE_SPACE_CHILD = "m.space.child"
+
+    const val STATE_SPACE_PARENT = "m.space.parent"
+
+    /**
+     * Note that this Event has been deprecated, see
+     * - https://matrix.org/docs/spec/client_server/r0.6.1#historical-events
+     * - https://github.com/matrix-org/matrix-doc/pull/2432
+     */
     const val STATE_ROOM_ALIASES = "m.room.aliases"
     const val STATE_ROOM_TOMBSTONE = "m.room.tombstone"
     const val STATE_ROOM_CANONICAL_ALIAS = "m.room.canonical_alias"
@@ -57,12 +66,21 @@ object EventType {
     const val STATE_ROOM_RELATED_GROUPS = "m.room.related_groups"
     const val STATE_ROOM_PINNED_EVENT = "m.room.pinned_events"
     const val STATE_ROOM_ENCRYPTION = "m.room.encryption"
+    const val STATE_ROOM_SERVER_ACL = "m.room.server_acl"
 
     // Call Events
     const val CALL_INVITE = "m.call.invite"
     const val CALL_CANDIDATES = "m.call.candidates"
     const val CALL_ANSWER = "m.call.answer"
+    const val CALL_SELECT_ANSWER = "m.call.select_answer"
+    const val CALL_NEGOTIATE = "m.call.negotiate"
+    const val CALL_REJECT = "m.call.reject"
     const val CALL_HANGUP = "m.call.hangup"
+    const val CALL_ASSERTED_IDENTITY = "m.call.asserted_identity"
+    const val CALL_ASSERTED_IDENTITY_PREFIX = "org.matrix.call.asserted_identity"
+
+    // This type is not processed by the client, just sent to the server
+    const val CALL_REPLACES = "m.call.replaces"
 
     // Key share events
     const val ROOM_KEY_REQUEST = "m.room_key_request"
@@ -92,5 +110,9 @@ object EventType {
                 || type == CALL_CANDIDATES
                 || type == CALL_ANSWER
                 || type == CALL_HANGUP
+                || type == CALL_SELECT_ANSWER
+                || type == CALL_NEGOTIATE
+                || type == CALL_REJECT
+                || type == CALL_REPLACES
     }
 }

@@ -3,7 +3,7 @@
     <!-- Modify some severity -->
 
     <!-- Resource -->
-    <issue id="MissingTranslation" severity="warning" />
+    <issue id="MissingTranslation" severity="ignore" />
     <issue id="TypographyEllipsis" severity="error" />
     <issue id="ImpliedQuantity" severity="warning" />
     <issue id="UnusedQuantity" severity="error" />
@@ -12,21 +12,27 @@
     <issue id="IconDuplicatesConfig" severity="error" />
     <issue id="IconDuplicates" severity="error" />
     <issue id="IconExpectedSize" severity="error" />
+    <issue id="LocaleFolder" severity="error" />
 
     <!-- UX -->
     <issue id="ButtonOrder" severity="error" />
     <issue id="TextFields" severity="error" />
 
+    <!-- Accessibility -->
+    <issue id="LabelFor" severity="error" />
+    <issue id="ContentDescription" severity="error" />
+    <issue id="SpUsage" severity="error" />
+
     <!-- Layout -->
     <issue id="UnknownIdInLayout" severity="error" />
     <issue id="StringFormatCount" severity="error" />
     <issue id="HardcodedText" severity="error" />
-    <issue id="SpUsage" severity="error" />
     <issue id="ObsoleteLayoutParam" severity="error" />
     <issue id="InefficientWeight" severity="error" />
     <issue id="DisableBaselineAlignment" severity="error" />
     <issue id="ScrollViewSize" severity="error" />
     <issue id="NegativeMargin" severity="error" />
+    <issue id="UseCompatTextViewDrawableXml" severity="error" />
 
     <!-- RTL -->
     <issue id="RtlEnabled" severity="error" />
@@ -40,6 +46,8 @@
     <issue id="ObsoleteSdkInt" severity="error" />
     <issue id="Recycle" severity="error" />
     <issue id="KotlinPropertyAccess" severity="error" />
+    <issue id="DefaultLocale" severity="error" />
+    <issue id="CheckResult" severity="error" />
 
     <issue id="InvalidPackage">
         <!-- Ignore error from HtmlCompressor lib -->
@@ -51,11 +59,28 @@
     <!-- Manifest -->
     <issue id="PermissionImpliesUnsupportedChromeOsHardware" severity="error" />
 
+    <!-- Performance -->
+    <issue id="UselessParent" severity="error" />
+
+    <!-- Dependencies -->
+    <issue id="KtxExtensionAvailable" severity="error" />
+
     <!-- Timber -->
     <!--    This rule is failing on CI because it's marked as unknwown rule id :/-->
     <!--    <issue id="BinaryOperationInTimber" severity="error" />-->
 
     <!-- Wording -->
-    <!-- TODO When strings are imported from Weblate, move this to error -->
-    <issue id="Typos" severity="warning" />
+    <issue id="Typos" severity="error" />
+
+    <!-- Ignore lint issue in generated resource file from templates.
+     https://github.com/LikeTheSalad/android-string-reference generates string from the default language
+     if the translation is missing, and it can lead to typos. Lint should only check the string from the
+     original file, so with id starting by `template_`. -->
+    <issue id="all">
+        <ignore path="**/generated/resolved/**/resolved.xml" />
+    </issue>
+
+    <!-- Bug in lint agp 4.1 incorrectly thinks kotlin forEach is using java 8 API's. -->
+    <!-- FIXME this workaround should be removed in a near future -->
+    <issue id="NewApi" severity="warning" />
 </lint>

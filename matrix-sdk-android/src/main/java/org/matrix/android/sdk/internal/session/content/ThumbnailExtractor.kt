@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,10 +20,14 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.media.MediaMetadataRetriever
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
+import org.matrix.android.sdk.api.util.MimeTypes
 import timber.log.Timber
 import java.io.ByteArrayOutputStream
+import javax.inject.Inject
 
-internal object ThumbnailExtractor {
+internal class ThumbnailExtractor @Inject constructor(
+        private val context: Context
+) {
 
     class ThumbnailData(
             val width: Int,
@@ -34,35 +37,37 @@ internal object ThumbnailExtractor {
             val mimeType: String
     )
 
-    fun extractThumbnail(context: Context, attachment: ContentAttachmentData): ThumbnailData? {
+    fun extractThumbnail(attachment: ContentAttachmentData): ThumbnailData? {
         return if (attachment.type == ContentAttachmentData.Type.VIDEO) {
-            extractVideoThumbnail(context, attachment)
+            extractVideoThumbnail(attachment)
         } else {
             null
         }
     }
 
-    private fun extractVideoThumbnail(context: Context, attachment: ContentAttachmentData): ThumbnailData? {
+    private fun extractVideoThumbnail(attachment: ContentAttachmentData): ThumbnailData? {
         var thumbnailData: ThumbnailData? = null
         val mediaMetadataRetriever = MediaMetadataRetriever()
         try {
             mediaMetadataRetriever.setDataSource(context, attachment.queryUri)
-            val thumbnail = mediaMetadataRetriever.frameAtTime
-
-            val outputStream = ByteArrayOutputStream()
-            thumbnail.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
-            val thumbnailWidth = thumbnail.width
-            val thumbnailHeight = thumbnail.height
-            val thumbnailSize = outputStream.size()
-            thumbnailData = ThumbnailData(
-                    width = thumbnailWidth,
-                    height = thumbnailHeight,
-                    size = thumbnailSize.toLong(),
-                    bytes = outputStream.toByteArray(),
-                    mimeType = "image/jpeg"
-            )
-            thumbnail.recycle()
-            outputStream.reset()
+            mediaMetadataRetriever.frameAtTime?.let { thumbnail ->
+                val outputStream = ByteArrayOutputStream()
+                thumbnail.compress(Bitmap.CompressFormat.JPEG, 80, outputStream)
+                val thumbnailWidth = thumbnail.width
+                val thumbnailHeight = thumbnail.height
+                val thumbnailSize = outputStream.size()
+                thumbnailData = ThumbnailData(
+                        width = thumbnailWidth,
+                        height = thumbnailHeight,
+                        size = thumbnailSize.toLong(),
+                        bytes = outputStream.toByteArray(),
+                        mimeType = MimeTypes.Jpeg
+                )
+                thumbnail.recycle()
+                outputStream.reset()
+            } ?: run {
+                Timber.e("Cannot extract video thumbnail at %s", attachment.queryUri.toString())
+            }
         } catch (e: Exception) {
             Timber.e(e, "Cannot extract video thumbnail")
         } finally {

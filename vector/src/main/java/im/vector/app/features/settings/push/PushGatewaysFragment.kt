@@ -17,25 +17,33 @@
 package im.vector.app.features.settings.push
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
-import im.vector.app.core.platform.VectorBaseActivity
+import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorBaseFragment
-import kotlinx.android.synthetic.main.fragment_generic_recycler.*
+import im.vector.app.databinding.FragmentGenericRecyclerBinding
+import org.matrix.android.sdk.api.session.pushers.Pusher
+
 import javax.inject.Inject
 
 // Referenced in vector_settings_notifications.xml
 class PushGatewaysFragment @Inject constructor(
         val pushGatewaysViewModelFactory: PushGatewaysViewModel.Factory,
         private val epoxyController: PushGateWayController
-) : VectorBaseFragment() {
+) : VectorBaseFragment<FragmentGenericRecyclerBinding>() {
 
-    override fun getLayoutResId() = R.layout.fragment_generic_recycler
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentGenericRecyclerBinding {
+        return FragmentGenericRecyclerBinding.inflate(inflater, container, false)
+    }
 
     private val viewModel: PushGatewaysViewModel by fragmentViewModel(PushGatewaysViewModel::class)
 
@@ -54,16 +62,30 @@ class PushGatewaysFragment @Inject constructor(
 
     override fun onResume() {
         super.onResume()
-        (activity as? VectorBaseActivity)?.supportActionBar?.setTitle(R.string.settings_notifications_targets)
+        (activity as? AppCompatActivity)?.supportActionBar?.setTitle(R.string.settings_notifications_targets)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        recyclerView.configureWith(epoxyController, showDivider = true)
+        epoxyController.interactionListener = object : PushGatewayItemInteractions {
+            override fun onRemovePushTapped(pusher: Pusher) = viewModel.handle(PushGatewayAction.RemovePusher(pusher))
+        }
+        views.genericRecyclerView.configureWith(epoxyController, dividerDrawable = R.drawable.divider_horizontal)
+        viewModel.observeViewEvents {
+            when (it) {
+                is PushGatewayViewEvents.RemovePusherFailed -> {
+                    MaterialAlertDialogBuilder(requireContext())
+                            .setTitle(R.string.dialog_title_error)
+                            .setMessage(errorFormatter.toHumanReadable(it.cause))
+                            .setPositiveButton(android.R.string.ok, null)
+                            .show()
+                }
+            }.exhaustive
+        }
     }
 
     override fun onDestroyView() {
-        recyclerView.cleanup()
+        views.genericRecyclerView.cleanup()
         super.onDestroyView()
     }
 

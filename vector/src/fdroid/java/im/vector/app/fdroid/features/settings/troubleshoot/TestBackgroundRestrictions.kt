@@ -15,7 +15,9 @@
  */
 package im.vector.app.fdroid.features.settings.troubleshoot
 
+import android.content.Intent
 import android.net.ConnectivityManager
+import androidx.activity.result.ActivityResultLauncher
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.getSystemService
 import androidx.core.net.ConnectivityManagerCompat
@@ -28,7 +30,7 @@ class TestBackgroundRestrictions @Inject constructor(private val context: AppCom
                                                      private val stringProvider: StringProvider)
     : TroubleshootTest(R.string.settings_troubleshoot_test_bg_restricted_title) {
 
-    override fun perform() {
+    override fun perform(activityResultLauncher: ActivityResultLauncher<Intent>) {
         context.getSystemService<ConnectivityManager>()!!.apply {
             // Checks if the device is on a metered network
             if (isActiveNetworkMetered) {

@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,15 +16,16 @@
 
 package org.matrix.android.sdk.internal.crypto.keysbackup.model.rest
 
+import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class BackupKeysResult(
-
+internal data class BackupKeysResult(
         // The hash value which is an opaque string representing stored keys in the backup
-        var hash: String? = null,
+        @Json(name = "etag")
+        val hash: String,
 
         // The number of keys stored in the backup.
-        var count: Int? = null
-
+        @Json(name = "count")
+        val count: Int
 )

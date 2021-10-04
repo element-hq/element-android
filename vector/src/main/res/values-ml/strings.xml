@@ -1,0 +1,990 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="keys_backup_settings_delete_backup_button">ബാക്കപ്പ് ഇല്ലാതാക്കൂ</string>
+    <string name="keys_backup_settings_deleting_backup">ബാക്കപ്പ് ഇല്ലാതാക്കുന്നൂ…</string>
+    <string name="keys_backup_settings_delete_confirm_title">ബാക്കപ്പ് ഇല്ലാതാക്കൂ</string>
+    <string name="room_list_quick_actions_settings">ക്രമീകരണങ്ങൾ</string>
+    <string name="room_list_quick_actions_notifications_mentions">സൂചനകൾ മാത്രം</string>
+    <string name="room_list_quick_actions_notifications_all">എല്ലാ സന്ദേശങ്ങളും</string>
+    <string name="notice_member_no_changes_by_you">നിങ്ങൾ മാറ്റങ്ങളൊന്നും വരുത്തിയില്ല</string>
+    <string name="timeline_unread_messages">വായിക്കാത്ത സന്ദേശങ്ങൾ</string>
+    <string name="media_file_added_to_gallery">മീഡിയ ഫയൽ ഗാലറിയിലേക്ക് ചേർത്തു</string>
+    <string name="unencrypted">എൻ‌ക്രിപ്റ്റ് ചെയ്യാത്തത്</string>
+    <string name="default_message_emote_snow">മഞ്ഞ് അയയ്ക്കുന്നു ❄️</string>
+    <string name="crosssigning_verify_session">പ്രവേശനം ഉറപ്പാക്കൂ</string>
+    <string name="error_empty_field_choose_password">ഒരു രഹസ്യവാക്ക് തിരഞ്ഞെടുക്കുക.</string>
+    <string name="error_empty_field_choose_user_name">ഒരു ഉപയോക്തൃനാമം തിരഞ്ഞെടുക്കുക.</string>
+    <string name="add_people">ആളുകളെ ചേർക്കൂ</string>
+    <string name="invite_users_to_room_title">ഉപയോക്താക്കളെ ക്ഷണിക്കുക</string>
+    <string name="invite_friends">സുഹൃത്തുക്കളെ ക്ഷണിക്കുക</string>
+    <string name="user_code_share">എന്റെ കോഡ് പങ്കിടുക</string>
+    <string name="user_code_my_code">എന്റെ കോഡ്</string>
+    <string name="template_invite_friends_rich_title">🔐️ ${app_name}-ൽ എന്നോടൊപ്പം ചേരുക</string>
+    <string name="identity_server_set_alternative_submit">സമർപ്പിക്കൂ</string>
+    <string name="a11y_open_chat">ചാറ്റ് തുറക്കുക</string>
+    <string name="a11y_stop_camera">ക്യാമറ നിർത്തുക</string>
+    <string name="room_settings_topic_hint">വിഷയം</string>
+    <string name="room_settings_name_hint">മുറിയുടെ പേര്</string>
+    <string name="room_settings_set_avatar">അവതാർ സജ്ജമാക്കുക</string>
+    <string name="loading_contact_book">നിങ്ങളുടെ കോൺടാക്റ്റുകൾ ലഭ്യമാക്കുന്നൂ…</string>
+    <string name="auth_pin_forgot">പിൻ മറന്നോ\?</string>
+    <string name="auth_pin_title">നിങ്ങളുടെ പിൻ നൽകുക</string>
+    <string name="settings_security_pin_code_notifications_title">ഉള്ളടക്കം അറിയിപ്പുകളിൽ കാണിക്കൂ</string>
+    <string name="settings_security_pin_code_change_pin_title">പിൻ മാറ്റുക</string>
+    <string name="call_tile_ended">ഈ കോൾ അവസാനിച്ചു</string>
+    <string name="call_tile_other_started_call">%1$s ഒരു കോൾ ആരംഭിച്ചൂ</string>
+    <string name="call_tile_you_started_call">നിങ്ങൾ ഒരു കോൾ ആരംഭിച്ചൂ</string>
+    <string name="warning_unsaved_change_discard">മാറ്റങ്ങൾ ഉപേക്ഷിക്കുക</string>
+    <string name="call_tile_call_back">തിരിച്ചു വിളിക്കുക</string>
+    <string name="call_transfer_users_tab_title">ഉപയോക്താക്കൾ</string>
+    <string name="no_result_placeholder">ഫലങ്ങളൊന്നുമില്ല</string>
+    <string name="no_conversation_placeholder">സംഭാഷണങ്ങളൊന്നുമില്ല</string>
+    <string name="direct_chats_header">സംഭാഷണങ്ങൾ</string>
+    <string name="invitations_header">കഷണങ്ങൾ</string>
+    <string name="bottom_action_rooms">മുറികൾ</string>
+    <string name="bottom_action_people">ആളുകൾ</string>
+    <string name="bottom_action_favourites">പ്രിയപ്പെട്ടവ</string>
+    <string name="bottom_action_notification">അറിയിപ്പുകൾ</string>
+    <string name="dialog_title_success">വിജയകരം</string>
+    <string name="dialog_title_warning">മുന്നറിയിപ്പ്</string>
+    <string name="action_add">ചേർക്കുക</string>
+    <string name="action_copy">പകർത്തുക</string>
+    <string name="action_close">അടയ്ക്കുക</string>
+    <string name="action_open">തുറക്കുക</string>
+    <string name="action_mark_room_read">വായിച്ചതായി കാണിക്കൂ</string>
+    <string name="action_historical">ചരിത്രപരമായ</string>
+    <string name="action_mark_all_as_read">എല്ലാം വായിച്ചതായി കാണിക്കൂ</string>
+    <string name="action_video_call">വീഡിയോ കോൾ</string>
+    <string name="action_voice_call">വോയ്സ് കോൾ</string>
+    <string name="actions">പ്രവർത്തനങ്ങൾ</string>
+    <string name="action_exit">പുറത്തുകടക്കുക</string>
+    <string name="ignore">അവഗണിക്കൂ</string>
+    <string name="done">ചെയ്‌തു</string>
+    <string name="skip">ഒഴിവാക്കൂ</string>
+    <string name="offline">ഓഫ്‌ലൈൻ</string>
+    <string name="invite">ക്ഷണിക്കുക</string>
+    <string name="or">അല്ലെങ്കിൽ</string>
+    <string name="device_information">സെഷൻ വിശദാംശങ്ങൾ</string>
+    <string name="audio_meeting">ഓഡിയോ മീറ്റിംഗ് ആരംഭിക്കുക</string>
+    <string name="video_meeting">വീഡിയോ മീറ്റിംഗ് ആരംഭിക്കുക</string>
+    <string name="conference_call_in_progress">ഒരു കോൺഫറൻസ് ഇതിനകം പുരോഗമിക്കുന്നു!</string>
+    <string name="no_permissions_to_start_conf_call_in_direct_room">ഒരു കോൺഫറൻസ് കോൾ ആരംഭിക്കാൻ നിങ്ങൾക്ക് അനുവാദമില്ല</string>
+    <string name="cannot_start_call">കോൾ ആരംഭിക്കാൻ കഴിയില്ല, ദയവായി പിന്നീട് ശ്രമിക്കുക</string>
+    <string name="ongoing_conference_call_video">വീഡിയോ</string>
+    <string name="start_chatting">ചാറ്റിംഗ് ആരംഭിക്കുക</string>
+    <string name="delete">ഇല്ലാതാക്കൂ</string>
+    <string name="clear">മായ്ക്കുക</string>
+    <string name="download">ഡൌൺലോഡ് ചെയ്യൂ</string>
+    <string name="share">പങ്കിടുക</string>
+    <string name="resend">വീണ്ടും അയയ്ക്കൂ</string>
+    <string name="send">അയയ്ക്കൂ</string>
+    <string name="save">സംരക്ഷിക്കൂ</string>
+    <string name="cancel">റദ്ദാക്കൂ</string>
+    <string name="ok">ശരി</string>
+    <string name="loading">ലഭ്യമാക്കുന്നു…</string>
+    <string name="are_you_sure">നിങ്ങൾക്കു ഉറപ്പാണോ\?</string>
+    <string name="sign_out_bottom_sheet_dont_want_secure_messages">എന്റെ എൻക്രിപ്റ്റ് ചെയ്ത സന്ദേശങ്ങളൊന്നും എനിക്ക് വേണ്ട</string>
+    <string name="title_activity_verify_device">സെഷൻ ഉറപ്പാക്കൂ</string>
+    <string name="title_activity_choose_sticker">ഒരു സ്റ്റിക്കർ അയയ്‌ക്കുക</string>
+    <string name="title_activity_group_details">കമ്മ്യൂണിറ്റി വിശദാംശങ്ങൾ</string>
+    <string name="title_activity_historical">ചരിത്രപരമായ</string>
+    <string name="title_activity_settings">ക്രമീകരണങ്ങൾ</string>
+    <string name="title_activity_room">മുറി</string>
+    <string name="title_activity_home">സന്ദേശങ്ങൾ</string>
+    <string name="notification_silent_notifications">നിശബ്‌ദ അറിയിപ്പുകൾ</string>
+    <string name="notification_sync_in_progress">സമന്വയിപ്പിക്കുന്നു…</string>
+    <string name="auth_opt_phone_number_placeholder">ഫോൺ നമ്പർ (നിർബന്ധമല്ല)</string>
+    <string name="auth_phone_number_placeholder">ഫോൺ നമ്പർ</string>
+    <string name="auth_skip">ഒഴിവാക്കൂ</string>
+    <string name="auth_submit">സമർപ്പിക്കൂ</string>
+    <string name="auth_register">അക്കൗണ്ട് സൃഷ്ടിക്കൂ</string>
+    <string name="option_take_video">വീഡിയോ എടുക്കുക</string>
+    <string name="option_take_photo">ഫോട്ടോ എടുക്കുക</string>
+    <string name="sound_device_speaker">സ്പീക്കർ</string>
+    <string name="sound_device_phone">ഫോൺ</string>
+    <string name="call_failed_dont_ask_again">എന്നോട് ഇനിയും ചോദിക്കരുത്</string>
+    <string name="start_new_chat">പുതിയ ചാറ്റ് ആരംഭിക്കുക</string>
+    <string name="login">പ്രവേശിക്കൂ</string>
+    <string name="create_account">അക്കൗണ്ട് സൃഷ്ടിക്കൂ</string>
+    <string name="username">ഉപയോക്തൃനാമം</string>
+    <string name="join_room">മുറിയിൽ ചേരുക</string>
+    <string name="send_bug_report_include_screenshot">സ്ക്രീൻഷോട്ട് അയയ്ക്കൂ</string>
+    <string name="groups_invite_header">ക്ഷണിക്കുക</string>
+    <string name="copied_to_clipboard">ക്ലിപ്പ്ബോർഡിലേക്ക് പകർത്തി</string>
+    <string name="call_notification_reject">നിരസിക്കുക</string>
+    <string name="call_notification_answer">സ്വീകരിക്കുക</string>
+    <string name="no_permissions_to_start_webrtc_call_in_direct_room">ഒരു കോൾ ആരംഭിക്കാൻ നിങ്ങളെ അനുവദിച്ചിട്ടില്ല</string>
+    <string name="dismiss">ഒഴിവാക്കൂ</string>
+    <string name="rename">പേരുമാറ്റുക</string>
+    <string name="speak">സംസാരിക്കൂ</string>
+    <string name="redact">നീക്കംചെയ്യൂ</string>
+    <string name="backup">ബാക്കപ്പ്</string>
+    <string name="title_activity_member_details">അംഗ വിശദാംശങ്ങൾ</string>
+    <string name="login_a11y_choose_matrix_org">matrix.org തിരഞ്ഞെടുക്കൂ</string>
+    <string name="login_signup_submit">അടുത്തത്</string>
+    <string name="login_signup_username_hint">ഉപയോക്തൃനാമം</string>
+    <string name="login_msisdn_confirm_submit">അടുത്തത്</string>
+    <string name="login_msisdn_confirm_send_again">വീണ്ടും അയയ്ക്കൂ</string>
+    <string name="login_msisdn_confirm_hint">കോഡ് നൽകൂ</string>
+    <string name="login_msisdn_confirm_title">ഫോൺ നമ്പർ ഉറപ്പാക്കൂ</string>
+    <string name="login_set_msisdn_submit">അടുത്തത്</string>
+    <string name="login_set_msisdn_optional_hint">ഫോൺ നമ്പർ (നിർബന്ധമല്ല)</string>
+    <string name="login_set_msisdn_mandatory_hint">ഫോൺ നമ്പർ</string>
+    <string name="login_set_msisdn_title">ഫോൺ നമ്പർ സജ്ജമാക്കൂ</string>
+    <string name="login_set_email_submit">അടുത്തത്</string>
+    <string name="login_reset_password_success_title">വിജയകരം!</string>
+    <string name="login_reset_password_warning_title">മുന്നറിയിപ്പ്!</string>
+    <string name="login_server_url_form_other_hint">വിലാസം</string>
+    <string name="login_social_continue_with">%s-ൽ തുടരുക</string>
+    <string name="login_social_continue">അല്ലെങ്കിൽ</string>
+    <string name="login_server_other_title">മറ്റുള്ളവ</string>
+    <string name="login_server_modular_learn_more">കൂടുതൽ അറിയുക</string>
+    <string name="login_server_title">ഒരു സെർവർ തിരഞ്ഞെടുക്കുക</string>
+    <string name="login_continue">തുടരുക</string>
+    <string name="login_clear_homeserver_history">ചരിത്രം മായ്ക്കൂ</string>
+    <string name="login_reset_password_submit">അടുത്തത്</string>
+    <string name="login_reset_password_cancel_confirmation_title">മുന്നറിയിപ്പ്</string>
+    <plurals name="room_new_messages_notification">
+        <item quantity="one">%d പുതിയ സന്ദേശങ്ങൾ</item>
+        <item quantity="other">%d പുതിയ സന്ദേശം</item>
+    </plurals>
+    <string name="room_prompt_cancel">എല്ലാം റദ്ദാക്കൂ</string>
+    <string name="room_prompt_resend">എല്ലാം വീണ്ടും അയയ്ക്കൂ</string>
+    <string name="room_message_placeholder_not_encrypted">ഒരു സന്ദേശം അയക്കൂ (എൻ‌ക്രിപ്റ്റ് ചെയ്യാത്ത)…</string>
+    <string name="room_one_user_is_typing">%s ടൈപ്പുചെയ്യുന്നു…</string>
+    <string name="room_menu_search">തിരയുക</string>
+    <string name="room_participants_invite_join_names">"%1$s, "</string>
+    <string name="room_participants_action_set_admin">അഡ്മിൻ ആക്കൂ</string>
+    <string name="room_participants_action_cancel_invite">ക്ഷണം റദ്ദാക്കൂ</string>
+    <string name="room_participants_action_invite">ക്ഷണിക്കുക</string>
+    <string name="room_participants_now">ഇപ്പോൾ %1$s</string>
+    <string name="room_participants_offline">ഓഫ്‌ലൈൻ</string>
+    <string name="room_participants_online">ഓൺ‌ലൈൻ</string>
+    <string name="room_participants_create">സൃഷ്ടിക്കൂ</string>
+    <string name="room_title_one_member">1 അംഗം</string>
+    <plurals name="room_title_members">
+        <item quantity="one">%d അംഗം</item>
+        <item quantity="other">%d അംഗങ്ങൾ</item>
+    </plurals>
+    <plurals name="room_header_active_members_count">
+        <item quantity="one">%d സജീവ അംഗം</item>
+        <item quantity="other">%d സജീവ അംഗങ്ങൾ</item>
+    </plurals>
+    <string name="room_creation_add_member">അംഗത്തെ ചേർക്കുക</string>
+    <string name="room_creation_title">പുതിയ ചാറ്റ്</string>
+    <string name="room_preview_try_join_an_unknown_room_default">ഒരു മുറി</string>
+    <string name="room_sync_in_progress">സമന്വയിപ്പിക്കുന്നു…</string>
+    <string name="reject">നിരസിക്കുക</string>
+    <string name="join">ചേരുക</string>
+    <string name="remove">നീക്കംചെയ്യൂ</string>
+    <string name="_continue">തുടരുക</string>
+    <string name="no">ഇല്ല</string>
+    <string name="yes">അതെ</string>
+    <string name="media_slider_saved">സംരക്ഷിച്ചു</string>
+    <string name="permissions_rationale_popup_title">വിവരം</string>
+    <string name="settings_call_category">കോളുകൾ</string>
+    <string name="room_info_room_topic">മുറിയുടെ വിഷയം</string>
+    <string name="room_info_room_name">മുറിയുടെ പേര്</string>
+    <string name="today">ഇന്ന്</string>
+    <string name="yesterday">ഇന്നലെ</string>
+    <string name="e2e_re_request_encryption_key_dialog_title">അഭ്യർത്ഥന അയച്ചൂ</string>
+    <string name="auth_identity_server">തിരിച്ചറിയൽ സെർവർ:</string>
+    <string name="auth_home_server">ഹോം സെർവർ:</string>
+    <string name="auth_email_placeholder">ഈ - മെയില് വിലാസം</string>
+    <string name="auth_login">പ്രവേശിക്കൂ</string>
+    <string name="option_take_photo_video">ഫോട്ടോ അല്ലെങ്കിൽ വീഡിയോ എടുക്കൂ</string>
+    <string name="option_send_sticker">സ്റ്റിക്കർ അയയ്ക്കൂ</string>
+    <string name="option_send_files">ഫയലുകൾ അയയ്ക്കൂ</string>
+    <string name="call_select_sound_device">ശബ്‌ദ ഉപകരണം തിരഞ്ഞെടുക്കുക</string>
+    <string name="start_video_call">വീഡിയോ കോൾ ആരംഭിക്കുക</string>
+    <string name="start_voice_call">വോയ്സ് കോൾ ആരംഭിക്കുക</string>
+    <string name="send_bug_report_progress">പുരോഗതി (%s%%)</string>
+    <string name="send_bug_report_placeholder">നിങ്ങളുടെ പ്രശ്നം ഇവിടെ വിവരിക്കുക</string>
+    <string name="no_group_placeholder">ഗ്രൂപ്പുകളില്ല</string>
+    <string name="no_room_placeholder">മുറികളില്ല</string>
+    <string name="rooms_header">മുറികൾ</string>
+    <string name="dialog_title_confirmation">ഉറപ്പാക്കൽ</string>
+    <string name="accept">സ്വീകരിക്കുക</string>
+    <string name="later">പിന്നീട്</string>
+    <string name="ongoing_conference_call_voice">വോയ്സ്</string>
+    <string name="people_search_filter_text">Matrix ഉപയോക്താക്കൾ മാത്രം</string>
+    <string name="room_participants_action_cancel_invite_title">ക്ഷണം റദ്ദാക്കൂ</string>
+    <string name="room_participants_action_mention">സൂചിപ്പിക്കൂ</string>
+    <string name="room_participants_header_direct_chats">നേരിട്ടുള്ള സന്ദേശങ്ങൾ</string>
+    <string name="room_participants_header_call">വിളിക്കൂ</string>
+    <string name="room_participants_header_admin_tools">അഡ്മിൻ ഉപകരണ്ങ്ങൾ</string>
+    <string name="list_members">അംഗങ്ങളെ കാണിക്കൂ</string>
+    <string name="media_picker_both_capture_title">ഒരു ചിത്രം അല്ലെങ്കിൽ വീഡിയോ എടുക്കൂ</string>
+    <string name="call_ended">കോൾ അവസാനിച്ചൂ</string>
+    <string name="call_ring">വിളിക്കുന്നൂ…</string>
+    <string name="call">വിളിക്കൂ</string>
+    <string name="attachment_cancel_download">ഡൗൺലോഡ് റദ്ദാക്കണോ\?</string>
+    <string name="auth_reset_password_missing_password">ഒരു പുതിയ രഹസ്യവാക്ക് നൽകണം.</string>
+    <string name="auth_reset_password_next_step_button">ഞാൻ എന്റെ ഈമെയിൽ വിലാസം ഉറപ്പാക്കി</string>
+    <string name="auth_forgot_password">രഹസ്യവാക്ക് മറന്നോ\?</string>
+    <string name="auth_password_dont_match">രഹസ്യവാക്കുകൾ പൊരുത്തപെടുന്നില്ല</string>
+    <string name="auth_repeat_new_password_placeholder">നിങ്ങളുടെ പുതിയ രഹസ്യവാക്ക് ഉറപ്പാക്കൂ</string>
+    <string name="auth_repeat_password_placeholder">രഹസ്യവാക്ക് ആവർത്തിക്കൂ</string>
+    <string name="auth_opt_email_placeholder">ഈ - മെയിൽ വിലാസം (നിർബന്ധമല്ല)</string>
+    <string name="call_switch_camera">ക്യാമറ മാറ്റുക</string>
+    <string name="auth_user_name_placeholder">ഉപയോക്തൃനാമം</string>
+    <string name="auth_new_password_placeholder">പുതിയ രഹസ്യവാക്ക്</string>
+    <string name="auth_password_placeholder">രഹസ്യവാക്ക്</string>
+    <string name="auth_user_id_placeholder">ഇമെയിൽ അല്ലെങ്കിൽ ഉപയോക്തൃനാമം</string>
+    <string name="go_on_with">തുടരുക…</string>
+    <string name="template_call_failed_no_connection">${app_name} കോൾ പരാജയപ്പെട്ടു</string>
+    <string name="option_send_voice">ശബ്ദം അയയ്ക്കൂ</string>
+    <string name="hs_url">ഹോം സെർവർ URL</string>
+    <string name="no_public_room_placeholder">പൊതു മുറിക‍ൾ ഒന്നും ലഭ്യമല്ല</string>
+    <string name="action_return">മടങ്ങുക</string>
+    <string name="no_permissions_to_start_webrtc_call">ഈ മുറിയിൽ ഒരു കോൾ ആരംഭിക്കാൻ നിങ്ങൾക്ക് അനുവാദമില്ല</string>
+    <string name="active_call">സജീവ കോൾ</string>
+    <string name="call_format_turn_hd_on">HD ഓൺ ആക്കൂ</string>
+    <string name="call_format_turn_hd_off">HD ഓഫ് ആക്കൂ</string>
+    <string name="call_failed_no_ice_use_alt">%s ഉപയോഗിച്ച് നോക്കൂ</string>
+    <string name="send_bug_report">ബഗ്ഗ് റിപ്പോർട്ട് ചെയ്യൂ</string>
+    <plurals name="public_room_nb_users">
+        <item quantity="one">%d ഉപയോക്താവ്</item>
+        <item quantity="other">%d ഉപയോക്താക്കൾ</item>
+    </plurals>
+    <string name="home_filter_placeholder_home">മുറി നാമങ്ങൾ ഫിൽറ്റർ ചെയ്യൂ</string>
+    <string name="send_anyway">എന്തായാലും അയയ്ക്കൂ</string>
+    <string name="title_activity_keys_backup_setup">കീ ബാക്കപ്പ്</string>
+    <string name="black_theme">കറുത്ത തീം</string>
+    <string name="dark_theme">ഡാ൪ക്ക് തീം</string>
+    <string name="light_theme">ലൈറ്റ് തീം</string>
+    <string name="notification_sync_init">സേവനം സമാരംഭിക്കുന്നു</string>
+    <string name="system_theme">സിസ്റ്റം സ്ഥിരസ്ഥിതി</string>
+    <string name="room_settings_topic">വിഷയം</string>
+    <string name="settings_phone_number_code">കോഡ്</string>
+    <string name="settings_phone_number_country_label">രാജ്യം</string>
+    <string name="settings_interface_language">ഭാഷ</string>
+    <string name="devices_delete_submit_button_label">സമർപ്പിക്കൂ</string>
+    <string name="settings_devices_list">സെഷനുകൾ</string>
+    <string name="settings_advanced">വിപുലമായ</string>
+    <string name="settings_other">മറ്റുള്ളവ</string>
+    <string name="settings_notifications">അറിയിപ്പുകൾ</string>
+    <string name="settings_notification_privacy_normal">സാധാരണ</string>
+    <string name="room_sliding_menu_settings">ക്രമീകരണങ്ങൾ</string>
+    <string name="room_sliding_menu_messages">സന്ദേശങ്ങൾ</string>
+    <string name="room_settings_forget">മറക്കൂ</string>
+    <string name="room_recents_conversations">മുറികൾ</string>
+    <string name="tab_title_search_files">ഫയലുകൾ</string>
+    <string name="tab_title_search_people">ആളുകൾ</string>
+    <string name="tab_title_search_messages">സന്ദേശങ്ങൾ</string>
+    <string name="tab_title_search_rooms">മുറികൾ</string>
+    <string name="room_details_people_present_group_name">ചേർന്നു</string>
+    <string name="room_details_people_invited_group_name">ക്ഷണിച്ചു</string>
+    <string name="room_details_settings">ക്രമീകരണങ്ങൾ</string>
+    <string name="room_details_files">ഫയലുകൾ</string>
+    <string name="room_details_people">ആളുകൾ</string>
+    <string name="room_permissions_title">അനുമതികൾ</string>
+    <string name="reason_hint">കാരണം</string>
+    <string name="room_participants_action_kick">പുറത്താക്കൂ</string>
+    <string name="room_participants_action_ban">നിരോധിക്കൂ</string>
+    <string name="reset">പുനഃസജ്ജമാക്കൂ</string>
+    <string name="none">ഒന്നുമില്ല</string>
+    <string name="call_only_active">സജീവ കോൾ (%1$s)</string>
+    <string name="call_tile_other_declined">%1$s ഈ കോൾ നിരസിച്ചു</string>
+    <string name="new_recovery_method_popup_was_me">അത് ഞാൻ ആയിരുന്നു</string>
+    <string name="finish">പൂർത്തിയാക്കൂ</string>
+    <string name="bootstrap_finish_title">നിങ്ങൾ ചെയ്തു!</string>
+    <string name="confirm_recovery_passphrase">%s ഉറപ്പാക്കൂ</string>
+    <string name="new_session">പുതിയ പ്രവേശനം. ഇത് നിങ്ങളാണോ\?</string>
+    <string name="search">തിരയുക</string>
+    <string name="no_more_results">കൂടുതൽ ഫലങ്ങളൊന്നുമില്ല</string>
+    <string name="system_alerts_header">സിസ്റ്റം അലേർട്ടുകൾ</string>
+    <string name="bottom_action_home">ഹോം</string>
+    <string name="call_anyway">എന്തായാലും വിളിക്കൂ</string>
+    <string name="action_global_search">ആഗോള തിരയൽ</string>
+    <string name="decline">നിരസിക്കുക</string>
+    <string name="play_video">പ്ലേ</string>
+    <string name="permalink">പെർമാലിങ്ക്</string>
+    <string name="dialog_title_third_party_licences">മൂന്നാം കക്ഷി ലൈസൻസുകൾ</string>
+    <string name="verification_profile_warning">മുന്നറിയിപ്പ്</string>
+    <string name="verification_profile_verify">ഉറപ്പാക്കൂ</string>
+    <string name="crosssigning_verify_this_session">ഈ പ്രവേശനം ഉറപ്പാക്കൂ</string>
+    <string name="settings_active_sessions_show_all">എല്ലാ സെഷനുകളും കാണിക്കൂ</string>
+    <string name="settings_active_sessions_list">സജീവ സെഷനുകൾ</string>
+    <string name="room_settings_enable_encryption_dialog_submit">എൻ‌ക്രിപ്ഷൻ പ്രാപ്തമാക്കൂ</string>
+    <string name="settings_category_timeline">സമയരേഖ</string>
+    <string name="room_list_sharing_header_other_rooms">മറ്റ് മുറികൾ</string>
+    <string name="room_list_sharing_header_recent_rooms">സമീപകാല മുറികൾ</string>
+    <string name="room_member_open_or_create_dm">നേരിട്ടുള്ള സന്ദേശം</string>
+    <string name="room_member_power_level_admin_in">%1$s-ലെ അഡ്മിൻ</string>
+    <string name="room_member_power_level_users">ഉപയോക്താക്കൾ</string>
+    <string name="room_member_power_level_admins">അഡ്‌മിനുകൾ</string>
+    <string name="room_profile_section_more_uploads">അപ്‌ലോഡുകൾ</string>
+    <plurals name="room_profile_section_more_member_list">
+        <item quantity="one">ഒരു വ്യക്തി</item>
+        <item quantity="other">%1$d ആളുകൾ</item>
+    </plurals>
+    <string name="room_profile_section_more_notifications">അറിയിപ്പുകൾ</string>
+    <string name="direct_room_profile_section_more_settings">ക്രമീകരണങ്ങൾ</string>
+    <string name="room_profile_section_more_settings">മുറി ക്രമീകരണങ്ങൾ</string>
+    <string name="room_profile_section_admin">അഡ്മിൻ പ്രവർത്തനങ്ങൾ</string>
+    <string name="room_profile_section_more">കൂടുതൽ</string>
+    <string name="room_profile_section_security_learn_more">കൂടുതൽ അറിയുക</string>
+    <string name="verification_scan_their_code">അവരുടെ കോഡ് സ്കാൻ ചെയ്യൂ</string>
+    <string name="you">നിങ്ങൾ</string>
+    <string name="send_a_sticker">സ്റ്റിക്കർ</string>
+    <string name="sent_a_file">ഫയൽ</string>
+    <string name="sent_an_audio_file">ഓഡിയോ</string>
+    <string name="verification_conclusion_not_secure">സുരക്ഷിതമല്ല</string>
+    <string name="verification_sas_match">അവ പൊരുത്തപ്പെടുന്നു</string>
+    <string name="create_room_in_progress">മുറി സൃഷ്ടിക്കുന്നൂ…</string>
+    <string name="create_room_alias_hint">മുറിയുടെ വിലാസം</string>
+    <string name="hide_advanced">വിപുലമായത് കാണിക്കൂ</string>
+    <string name="show_advanced">വിപുലമായത് കാണിക്കൂ</string>
+    <string name="create_room_encryption_title">എൻ‌ക്രിപ്ഷൻ പ്രാപ്തമാക്കൂ</string>
+    <string name="settings">ക്രമീകരണങ്ങൾ</string>
+    <string name="settings_advanced_settings">വിപുല ക്രമീകരണങ്ങൾ</string>
+    <string name="settings_show_devices_list">എന്റെ എല്ലാ സെഷനുകളും കാണുക</string>
+    <string name="soft_logout_clear_data_title">സ്വകാര്യ ഡാറ്റ മായ്ക്കൂ</string>
+    <string name="seen_by">കണ്ടവർ</string>
+    <string name="soft_logout_clear_data_dialog_title">ഡാറ്റ മായ്ക്കൂ</string>
+    <string name="soft_logout_clear_data_submit">എല്ലാ ഡാറ്റയും മായ്ക്കൂ</string>
+    <string name="bug_report_error_too_short">വിവരണം വളരെ ചെറുതാണ്</string>
+    <string name="devices_other_devices">മറ്റ് സെഷനുകൾ</string>
+    <string name="devices_current_device">നിലവിലെ സെഷൻ</string>
+    <string name="create_room_alias_empty">ദയവായി ഒരു മുറിയുടെ വിലാസം നൽകുക</string>
+    <string name="sent_an_image">ചിത്രം.</string>
+    <string name="sent_a_video">വീഡിയോ.</string>
+    <string name="verification_request_you_accepted">നിങ്ങൾ സ്വീകരിച്ചു</string>
+    <string name="verification_request_other_accepted">%s സ്വീകരിച്ചു</string>
+    <string name="verification_request_you_cancelled">നിങ്ങൾ റദ്ദാക്കി</string>
+    <string name="verification_request_other_cancelled">%s റദ്ദാക്കി</string>
+    <string name="verification_request_waiting">കാത്തിരിക്കുന്നൂ…</string>
+    <string name="auth_return_to_login">പ്രവേശന സ്ക്രീനിലേക്ക് മടങ്ങുക</string>
+    <string name="start_video_call_prompt_msg">നിങ്ങൾക്ക് ഒരു വിഡിയോ കോൾ ആരംഭിക്കണമെന്ന് ഉറപ്പാണോ\?</string>
+    <string name="identity_url">തിരിച്ചറിയൽ സെർവറിന്റെ URL</string>
+    <string name="send_bug_report_description_in_english">കഴിയുമെങ്കിൽ, വിവരണം ഇംഗ്ലീഷിൽ എഴുതുക.</string>
+    <string name="home_filter_placeholder_people">ആളുകളെ അരിക്കുക</string>
+    <string name="keys_backup_activate">കീ ബാക്കപ്പ് ഉപയൊഗിക്കുക</string>
+    <string name="keys_backup_is_not_finished_please_wait">കീ ബാക്കപ്പ് പൂർത്തിയായിട്ടില്ല, കാത്തിരിക്കൂ…</string>
+    <string name="settings_phone_numbers">ഫോൺ നമ്പറുകൾ</string>
+    <string name="settings_emails">ഈമെയിൽ വിലാസം</string>
+    <string name="settings_app_info_link_title">അപ്ലിക്കേഷൻ വിവരം</string>
+    <string name="settings_add_phone_number">ഫോൺ നമ്പർ ചേർക്കുക</string>
+    <string name="settings_phone_number">ഫോൺ</string>
+    <string name="settings_add_email_address">ഈ - മെയിൽ വിലാസം ചേർക്കുക</string>
+    <string name="settings_email_address">ഈ - മെയിൽ</string>
+    <string name="settings_display_name">പ്രദർശന നാമം</string>
+    <string name="settings_profile_picture">പ്രൊഫൈൽ ചിത്രം</string>
+    <string name="room_sliding_menu_privacy_policy">സ്വകാര്യതാ നയം</string>
+    <string name="room_sliding_menu_third_party_notices">മൂന്നാം കക്ഷി അറിയിപ്പുകൾ</string>
+    <string name="room_sliding_menu_term_and_conditions">നിബന്ധനകളും വ്യവസ്ഥകളും</string>
+    <string name="room_sliding_menu_version_x">പതിപ്പ് %s</string>
+    <string name="room_sliding_menu_version">പതിപ്പ്</string>
+    <string name="room_settings_mention_only">സൂചനകൾ മാത്രം</string>
+    <string name="room_settings_all_messages">എല്ലാ സന്ദേശങ്ങളും</string>
+    <plurals name="directory_search_rooms">
+        <item quantity="one">%d മുറി</item>
+        <item quantity="other">%d മുറികൾ</item>
+    </plurals>
+    <string name="room_recents_join_room_title">ഒരു മുറിയിൽ ചേരുക</string>
+    <string name="room_recents_join_room">മുറിയിൽ ചേരുക</string>
+    <string name="room_recents_create_room">മുറി സൃഷ്ടിക്കൂ</string>
+    <string name="room_recents_start_chat">ചാറ്റ് ആരംഭിക്കുക</string>
+    <string name="search_no_results">ഫലങ്ങളൊന്നുമില്ല</string>
+    <string name="room_details_title">മുറി വിശദാംശങ്ങൾ</string>
+    <string name="room_permissions_change_topic">വിഷയം മാറ്റുക</string>
+    <string name="room_permissions_change_room_name">മുറിയുടെ പേര് മാറ്റുക</string>
+    <string name="room_permissions_notify_everyone">എല്ലാവരേയും അറിയിക്കുക</string>
+    <string name="room_permissions_ban_users">ഉപയോക്താക്കളെ നിരോധിക്കുക</string>
+    <string name="room_permissions_kick_users">ഉപയോക്താക്കളെ പുറത്താക്കുക</string>
+    <string name="room_permissions_change_settings">ക്രമീകരണങ്ങൾ മാറ്റുക</string>
+    <string name="room_permissions_invite_users">ഉപയോക്താക്കളെ ക്ഷണിക്കുക</string>
+    <string name="room_permissions_send_messages">സന്ദേശങ്ങൾ അയയ്ക്കൂ</string>
+    <string name="room_settings_permissions_title">മുറിയുടെ അനുമതികൾ</string>
+    <string name="ssl_trust">വിശ്വസിക്കുക</string>
+    <string name="room_message_file_not_found">ഫയൽ കണ്ടെത്തിയില്ല</string>
+    <string name="room_message_placeholder_reply_to_not_encrypted">ഒരു മറുപടി അയയ്‌ക്കുക(എൻ‌ക്രിപ്റ്റ് ചെയ്യാത്ത)…</string>
+    <string name="room_participants_ban_reason">നിരോനിരോധിക്കാനുള്ള കാരണം</string>
+    <string name="room_participants_ban_title">ഉപയോക്താവിനെ നിരോധിക്കുക</string>
+    <string name="room_participants_kick_reason">പുറത്താക്കാനുള്ള കാരണം</string>
+    <string name="room_participants_kick_title">ഉപയോക്താവിനെ പുറത്താക്കുക</string>
+    <string name="room_participants_action_ignore">അവഗണിക്കൂ</string>
+    <string name="room_participants_action_ignore_title">ഉപയോക്താവിനെ അവഗണിക്കുക</string>
+    <string name="room_participants_power_level_demote">തരംതാഴ്ത്തുക</string>
+    <string name="room_participants_power_level_demote_warning_title">സ്വയം തരംതാഴ്ത്തണോ\?</string>
+    <string name="room_participants_action_devices_list">സെഷൻ പട്ടിക കാണിക്കുക</string>
+    <string name="ssl_logout_account">പുറത്തിറങ്ങുക</string>
+    <string name="logout">പുറത്തിറങ്ങുക</string>
+    <string name="title_activity_keys_backup_restore">കീ ബാക്കപ്പ് ഉപയൊഗിക്കൂ</string>
+    <string name="summary_user_sent_sticker">%1$s ഒരു സ്റ്റിക്കർ അയച്ചു.</string>
+    <string name="summary_you_sent_image">നിങ്ങൾ ഒരു ചിത്രം അയച്ചു.</string>
+    <string name="summary_user_sent_image">%1$s ഒരു ചിത്രം അയച്ചു.</string>
+    <string name="summary_message">%1$s: %2$s</string>
+    <string name="notice_room_kick_by_you">നിങ്ങൾ %1$s-നെ(യെ) പുറത്താക്കി</string>
+    <string name="notice_room_kick">%1$s %2$s-നെ(യെ) പുറത്താക്കി</string>
+    <string name="notice_direct_room_join_by_you">നിങ്ങൾ ചേർന്നു</string>
+    <string name="notice_direct_room_join">%1$s ചേർന്നു</string>
+    <string name="notice_room_join_by_you">നിങ്ങൾ മുറിയിൽ ചേർന്നു</string>
+    <string name="notice_room_join">%1$s മുറിയിൽ ചേർന്നു</string>
+    <string name="notice_room_invite_you">%1$s നിങ്ങളെ ക്ഷണിച്ചു</string>
+    <string name="notice_room_invite_by_you">നിങ്ങൾ %1$s-നെ(യെ) ക്ഷണിച്ചു</string>
+    <string name="notice_room_invite">%1$s %2$s-നെ(യെ) ക്ഷണിച്ചു</string>
+    <string name="notice_room_created_by_you">നിങ്ങൾ മുറി സൃഷ്ടിച്ചു</string>
+    <string name="notice_room_created">%1$s മുറി സൃഷ്ടിച്ചു</string>
+    <string name="notice_room_invite_no_invitee_by_you">നിങ്ങളുടെ ക്ഷണം</string>
+    <string name="notice_room_invite_no_invitee">%s-ന്റെ ക്ഷണം</string>
+    <string name="summary_you_sent_sticker">നിങ്ങൾ ഒരു സ്റ്റിക്കർ അയച്ചു.</string>
+    <string name="notice_event_redacted_by_with_reason">%1$s സന്ദേശം നീക്കം ചെയ്തു [കാരണം: %2$s]</string>
+    <string name="notice_event_redacted_with_reason">സന്ദേശം നീക്കം ചെയ്തു [കാരണം: %1$s]</string>
+    <string name="notice_event_redacted_by">സന്ദേശം %1$s നീക്കംചെയ്തു</string>
+    <string name="notice_event_redacted">സന്ദേശം നീക്കംചെയ്‌തു</string>
+    <string name="notice_room_avatar_removed_by_you">നിങ്ങൾ മുറിയുടെ അവതാർ നീക്കംചെയ്‌തു</string>
+    <string name="notice_room_avatar_removed">%1$s മുറിയുടെ അവതാർ നീക്കം ചെയ്‌തു</string>
+    <string name="notice_room_topic_removed_by_you">നിങ്ങൾ മുറിയുടെ വിഷയം നീക്കംചെയ്‌തു</string>
+    <string name="notice_room_topic_removed">%1$s മുറിയുടെ വിഷയം നീക്കം ചെയ്‌തു</string>
+    <string name="notice_room_name_removed_by_you">നിങ്ങൾ മുറിയുടെ പേര് നീക്കംചെയ്‌തു</string>
+    <string name="notice_room_name_removed">%1$s മുറിയുടെ പേര് നീക്കംചെയ്‌തു</string>
+    <string name="notice_avatar_changed_too">(അവതാറും മാറ്റി)</string>
+    <string name="notice_voip_finished">VoIP കോൺഫറൻസ് പൂർത്തിയായി</string>
+    <string name="notice_voip_started">VoIP കോൺഫറൻസ് ആരംഭിച്ചു</string>
+    <string name="notice_requested_voip_conference_by_you">നിങ്ങൾ ഒരു VoIP കൊൺഫറൻസ് അഭ്യർത്ഥിച്ചു</string>
+    <string name="notice_requested_voip_conference">%1$s ഒരു VoIP കോൺഫറൻസ് അഭ്യർത്ഥിച്ചു</string>
+    <string name="notice_room_server_acl_allow_is_empty">🎉 എല്ലാ സെർവറുകളും പങ്കെടുക്കുന്നതിൽ നിന്ന് വിലക്കി! ഈ മുറി ഇനി ഉപയോഗിക്കാനാവില്ല.</string>
+    <string name="notice_room_server_acl_updated_no_change">മാറ്റമൊന്നുമില്ല.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• ഐപി ലിറ്ററലുകളുമായി പൊരുത്തപ്പെടുന്ന സെർവർ ഇപ്പോൾ നിരോധിച്ചു.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_allowed">• ഐപി ലിറ്ററലുകളുമായി പൊരുത്തപ്പെടുന്ന സെർവർ ഇപ്പോൾ അനുവദനീയമാണ്.</string>
+    <string name="notice_room_server_acl_updated_was_allowed">• അനുവദനീയ പട്ടികയിൽ നിന്നും %sമായി പൊരുത്തപ്പെടുന്ന സെർവർ നീക്കം ചെയ്തു.</string>
+    <string name="notice_room_server_acl_updated_allowed">• %sമായി പൊരുത്തപ്പെടുന്ന സെർവർ ഇപ്പോൾ അനുവദനീയമാണ്.</string>
+    <string name="notice_room_server_acl_updated_was_banned">• %sമായി പൊരുത്തപ്പെടുന്ന സെർവർ നിരോധന പട്ടികയിൽ നിന്ന് നീക്കംചെയ്‌തു.</string>
+    <string name="notice_room_server_acl_updated_banned">• %s മായി പൊരുത്തപ്പെടുന്ന സെർവർ ഇപ്പോൾ നിരോധിച്ചിരിക്കുന്നു.</string>
+    <string name="notice_room_server_acl_updated_title_by_you">ഈ റൂമിനായി നിങ്ങൾ സെർവർ ACL-കൾ മാറ്റി.</string>
+    <string name="notice_room_server_acl_updated_title">%s ഈ മുറിക്കായി സെർവർ ACL-കൾ മാറ്റി.</string>
+    <string name="notice_room_server_acl_set_ip_literals_allowed">• ഐപി ലിറ്ററലുകളുമായി പൊരുത്തപ്പെടുന്ന സെർവർ അനുവദനീയമാണ്.</string>
+    <string name="notice_room_server_acl_set_ip_literals_not_allowed">• ഐപി ലിറ്ററലുകളുമായി പൊരുത്തപ്പെടുന്ന സെർവർ നിരോധിച്ചിരിക്കുന്നു.</string>
+    <string name="notice_room_server_acl_set_banned">• %s മായി പൊരുത്തപ്പെടുന്ന സെർവർ നിരോധിച്ചിരിക്കുന്നു.</string>
+    <string name="notice_room_server_acl_set_allowed">• %s മായി പൊരുത്തപ്പെടുന്ന സെർവർ അനുവദനീയമാണ്.</string>
+    <string name="notice_room_server_acl_set_title_by_you">ഈ മുറിക്കായി നിങ്ങൾ സെർവർ ACL-കൾ സജ്ജമാക്കി.</string>
+    <string name="notice_room_server_acl_set_title">%s ഈ മുറിക്കായി സെർവർ ACL-കൾ സജ്ജമാക്കി.</string>
+    <string name="notice_direct_room_update_by_you">നിങ്ങൾ ഇവിടെ നവീകരിച്ചു.</string>
+    <string name="notice_direct_room_update">%s ഇവിടെ നവീകരിച്ചു.</string>
+    <string name="notice_room_update_by_you">നിങ്ങൾ ഈ മുറി നവീകരിച്ചു.</string>
+    <string name="notice_room_update">%s ഈ മുറി നവീകരിച്ചു.</string>
+    <string name="notice_end_to_end_by_you">നിങ്ങൾ എൻഡ്-ടു-എൻഡ് എൻ‌ക്രിപ്ഷൻ ഓണാക്കി (%1$s)</string>
+    <string name="notice_end_to_end">%1$s എൻഡ്-ടു-എൻഡ് എൻ‌ക്രിപ്ഷൻ ഓണാക്കി (%2$s)</string>
+    <string name="notice_room_visibility_unknown">അജ്ഞാതം (%s).</string>
+    <string name="notice_room_visibility_world_readable">ആർക്കും.</string>
+    <string name="notice_room_visibility_shared">എല്ലാ മുറി അംഗങ്ങളും.</string>
+    <string name="notice_room_visibility_joined">എല്ലാ മുറി അംഗങ്ങളും, അവർ ചേർന്ന സമയം മുതൽ.</string>
+    <string name="notice_room_visibility_invited">എല്ലാ മുറി അംഗങ്ങളും, അവരെ ക്ഷണിച്ച സമയം മുതൽ.</string>
+    <string name="notice_made_future_direct_room_visibility_by_you">ഭാവിയിലെ സന്ദേശങ്ങൾ %1$s ന് നിങ്ങൾ ദൃശ്യമാക്കി</string>
+    <string name="notice_made_future_direct_room_visibility">%1$s ഭാവി സന്ദേശങ്ങൾ %2$s ന് ദൃശ്യമാക്കി</string>
+    <string name="notice_made_future_room_visibility_by_you">നിങ്ങൾ ഭാവിയിലെ മുറിയുടെ ചരിത്രം %1$s ന് ദൃശ്യമാക്കി</string>
+    <string name="notice_made_future_room_visibility">%1$s ഭാവിയിലെ മുറിയുടെ ചരിത്രം %2$s ന് ദൃശ്യമാക്കി</string>
+    <string name="notice_ended_call_by_you">നിങ്ങൾ കോൾ അവസാനിപ്പിച്ചു.</string>
+    <string name="notice_ended_call">%s കോൾ അവസാനിപ്പിച്ചു.</string>
+    <string name="notice_answered_call_by_you">നിങ്ങൾ കോളിന് മറുപടി നൽകി.</string>
+    <string name="notice_answered_call">%s കോളിന് മറുപടി നൽകി.</string>
+    <string name="notice_call_candidates_by_you">കോൾ സജ്ജീകരിക്കുന്നതിന് നിങ്ങൾ ഡാറ്റ അയച്ചു.</string>
+    <string name="notice_call_candidates">കോൾ സജ്ജീകരിക്കുന്നതിന് %s ഡാറ്റ അയച്ചു.</string>
+    <string name="notice_placed_voice_call_by_you">നിങ്ങൾ ഒരു വോയ്സ് കോൾ നടത്തി.</string>
+    <string name="notice_placed_voice_call">%s ഒരു വോയ്സ് കോൾ നടത്തി.</string>
+    <string name="notice_placed_video_call_by_you">നിങ്ങൾ ഒരു വീഡിയോ കോൾ നടത്തി.</string>
+    <string name="notice_placed_video_call">%s ഒരു വീഡിയോ കോൾ നടത്തി.</string>
+    <string name="notice_room_name_changed_by_you">നിങ്ങൾ മുറിയുടെ പേര് ഇതിലേക്ക് മാറ്റി: %1$s</string>
+    <string name="notice_room_name_changed">%1$s മുറിയുടെ പേര് ഇതിലേക്ക് മാറ്റി: %2$s</string>
+    <string name="notice_room_avatar_changed_by_you">നിങ്ങൾ മുറിയുടെ അവതാർ മാറ്റി</string>
+    <string name="notice_room_avatar_changed">%1$s മുറിയുടെ അവതാർ മാറ്റി</string>
+    <string name="notice_room_topic_changed_by_you">നിങ്ങൾ വിഷയം ഇതിലേക്ക് മാറ്റി: %1$s</string>
+    <string name="notice_room_topic_changed">%1$s വിഷയം ഇതിലേക്ക് മാറ്റി: %2$s</string>
+    <string name="notice_display_name_removed_by_you">നിങ്ങൾ നിങ്ങളുടെ പ്രദർശന നാമം നീക്കം ചെയ്തു (ഇത് %1$s ആയിരുന്നു)</string>
+    <string name="notice_display_name_removed">%1$s അവരുടെ പ്രദർശന നാമം നീക്കം ചെയ്തു (ഇത് %2$s ആയിരുന്നു)</string>
+    <string name="notice_display_name_changed_from_by_you">നിങ്ങൾ നിങ്ങളുടെ പ്രദർശന നാമം %1$sൽ നിന്നും %2$s ലേക്ക് മാറ്റി</string>
+    <string name="notice_display_name_changed_from">%1$s അവരുടെ പ്രദർശന നാമം %2$s ൽ നിന്നും %3$s ആക്കി മാറ്റി</string>
+    <string name="notice_display_name_set_by_you">നിങ്ങൾ നിങ്ങളുടെ പ്രദർശന നാമം %1$s ആയി സജ്ജമാക്കി</string>
+    <string name="notice_display_name_set">%1$s അവരുടെ പ്രദർശന നാമം %2$s ആയി സജ്ജമാക്കി</string>
+    <string name="notice_avatar_url_changed_by_you">നിങ്ങൾ നിങ്ങളുടെ അവതാർ മാറ്റി</string>
+    <string name="notice_avatar_url_changed">%1$s അവരുടെ അവതാർ മാറ്റി</string>
+    <string name="notice_room_withdraw_by_you">നിങ്ങൾ %1$s ന്റെ ക്ഷണം പിൻവലിച്ചു</string>
+    <string name="notice_room_withdraw">%1$s %2$s ന്റെ ക്ഷണം പിൻവലിച്ചു</string>
+    <string name="notice_room_ban_by_you">നിങ്ങൾ %1$s നെ നിരോധിച്ചു</string>
+    <string name="notice_room_ban">%1$s %2$s നെ നിരോധിച്ചു</string>
+    <string name="notice_room_unban_by_you">നിങ്ങൾ %1$s ന്റെ നിരോധനം മാറ്റി</string>
+    <string name="notice_room_unban">%1$s %2$s ന്റെ നിരോധനം മാറ്റി</string>
+    <string name="notice_room_reject_by_you">നിങ്ങൾ ക്ഷണം നിരസിച്ചു</string>
+    <string name="notice_room_reject">%1$s ക്ഷണം നിരസിച്ചു</string>
+    <string name="notice_direct_room_leave_by_you">നിങ്ങൾ മുറി വിട്ടു</string>
+    <string name="notice_direct_room_leave">%1$s മുറി വിട്ടു</string>
+    <string name="notice_room_leave_by_you">നിങ്ങൾ മുറി വിട്ടു</string>
+    <string name="notice_room_leave">%1$s മുറി വിട്ടു</string>
+    <string name="notice_direct_room_created_by_you">നിങ്ങൾ ചർച്ച സൃഷ്ടിച്ചു</string>
+    <string name="notice_direct_room_created">%1$s ചർച്ച സൃഷ്ടിച്ചു</string>
+    <string name="notice_room_canonical_alias_set">%1$s ഈ മുറിയുടെ പ്രധാന വിലാസമായി %2$s സജ്ജമാക്കി.</string>
+    <string name="notice_room_aliases_added_and_removed_by_you">നിങ്ങൾ %1$s ചേർത്ത് ഈ മുറിയുടെ വിലാസങ്ങളായിരുന്ന %2$s നീക്കം ചെയ്‌തു.</string>
+    <string name="notice_room_aliases_added_and_removed">%1$s %2$s ചേർത്ത് ഈ മുറിയുടെ വിലാസങ്ങളായിരുന്ന %3$s നീക്കം ചെയ്‌തു.</string>
+    <plurals name="notice_room_aliases_removed_by_you">
+        <item quantity="one">നിങ്ങൾ ഈ മുറിയുടെ വിലാസമായിരുന്ന %1$s നീക്കംചെയ്‌തു.</item>
+        <item quantity="other">നിങ്ങൾ ഈ മുറിയുടെ വിലാസങ്ങളായിരുന്ന %1$s നീക്കംചെയ്‌തു.</item>
+    </plurals>
+    <plurals name="notice_room_aliases_removed">
+        <item quantity="one">%1$s ഈ മുറിയുടെ വിലാസമായിരുന്ന %2$s നീക്കംചെയ്‌തു.</item>
+        <item quantity="other">%1$s ഈ മുറിയുടെ വിലാസങ്ങളായിരുന്ന %2$s നീക്കംചെയ്‌തു.</item>
+    </plurals>
+    <plurals name="notice_room_aliases_added_by_you">
+        <item quantity="one">ഈ മുറിയുടെ വിലാസമായി നിങ്ങൾ %1$s ചേർത്തു.</item>
+        <item quantity="other">ഈ മുറിയുടെ വിലാസങ്ങളായി നിങ്ങൾ %1$s ചേർത്തു.</item>
+    </plurals>
+    <plurals name="notice_room_aliases_added">
+        <item quantity="one">ഈ മുറിയുടെ വിലാസമായി %1$s %2$s ചേർത്തു.</item>
+        <item quantity="other">ഈ മുറിയുടെ വിലാസങ്ങളായി %1$s %2$s ചേർത്തു.</item>
+    </plurals>
+    <string name="notice_room_withdraw_with_reason_by_you">%1$sന്റെ ക്ഷണം നിങ്ങൾ പിൻവലിച്ചു. കാരണം: %2$s</string>
+    <string name="notice_room_withdraw_with_reason">%1$s %2$sന്റെ ക്ഷണം പിൻവലിച്ചു. കാരണം: %3$s</string>
+    <string name="notice_room_third_party_registered_invite_with_reason_by_you">%1$sനുള്ള ക്ഷണം നിങ്ങൾ സ്വീകരിച്ചു. കാരണം: %2$s</string>
+    <string name="notice_room_third_party_registered_invite_with_reason">%1$s %2$sനുള്ള ക്ഷണം സ്വീകരിച്ചു. കാരണം: %3$s</string>
+    <string name="notice_room_third_party_revoked_invite_with_reason_by_you">%1$sന് മുറിയിൽ ചേരുന്നതിനുള്ള ക്ഷണം നിങ്ങൾ റദ്ദാക്കി. കാരണം: %2$s</string>
+    <string name="notice_room_third_party_revoked_invite_with_reason">%2$sന് മുറിയിൽ ചേരുന്നതിനുള്ള ക്ഷണം %1$s റദ്ദാക്കി. കാരണം: %3$s</string>
+    <string name="notice_room_third_party_invite_with_reason_by_you">മുറിയിൽ ചേരാൻ നിങ്ങൾ %1$sന് ഒരു ക്ഷണം അയച്ചു. കാരണം: %2$s</string>
+    <string name="notice_room_third_party_invite_with_reason">%1$s മുറിയിൽ ചേരാൻ %2$sന്ക്ഷണം അയച്ചു. കാരണം:%3$s</string>
+    <string name="notice_room_ban_with_reason_by_you">നിങ്ങൾ %1$sനെ വിലക്കി. കാരണം: %2$s</string>
+    <string name="notice_room_ban_with_reason">%1$s %2$s ന്റെ വിലക്ക് നീക്കി. കാരണം: %3$s</string>
+    <string name="notice_room_unban_with_reason_by_you">നിങ്ങൾ %1$sന്റെ വിലക്ക് നീക്കി. കാരണം: %2$s</string>
+    <string name="notice_room_unban_with_reason">%1$s %2$sന്റെ വിലക്ക് നീക്കി. കാരണം: %3$s</string>
+    <string name="notice_room_kick_with_reason_by_you">നിങ്ങൾ %1$sനെ പുറത്താക്കി. കാരണം:%2$s</string>
+    <string name="notice_room_kick_with_reason">%1$s %2$sനെ പുറത്താക്കി. കാരണം: %3$s</string>
+    <string name="notice_room_reject_with_reason_by_you">നിങ്ങൾ ക്ഷണം നിരസിച്ചു. കാരണം: %1$s</string>
+    <string name="notice_room_reject_with_reason">%1$s ക്ഷണം നിരസിച്ചു. കാരണം: %2$s</string>
+    <string name="notice_direct_room_leave_with_reason_by_you">നിങ്ങൾ ഉപേക്ഷിച്ചു. കാരണം: %1$s</string>
+    <string name="notice_direct_room_leave_with_reason">%1$s ഉപേക്ഷിച്ചു. കാരണം: %2$s</string>
+    <string name="notice_room_leave_with_reason_by_you">നിങ്ങൾ മുറി വിട്ടു. കാരണം: %1$s</string>
+    <string name="notice_room_leave_with_reason">%1$s മുറി വിട്ടു. കാരണം: %2$s</string>
+    <string name="notice_direct_room_join_with_reason_by_you">നിങ്ങൾ ചേർന്നു. കാരണം: %1$s</string>
+    <string name="notice_direct_room_join_with_reason">%1$s ചേർന്നു. കാരണം: %2$s</string>
+    <string name="notice_room_join_with_reason_by_you">നിങ്ങൾ മുറിയിൽ ചേർന്നു. കാരണം: %1$s</string>
+    <string name="notice_room_join_with_reason">%1$s മുറിയിൽ ചേർന്നു. കാരണം: %2$s</string>
+    <string name="notice_room_invite_you_with_reason">%1$s നിങ്ങളെ ക്ഷണിച്ചു. കാരണം: %2$s</string>
+    <string name="notice_room_invite_with_reason_by_you">നിങ്ങൾ %1$sനെ ക്ഷണിച്ചു. കാരണം: %2$s</string>
+    <string name="notice_room_invite_with_reason">%1$s %2$sനെ ക്ഷണിച്ചു. കാരണം: %3$s</string>
+    <string name="notice_room_invite_no_invitee_with_reason_by_you">നിങ്ങളുടെ ക്ഷണം. കാരണം: %1$s</string>
+    <string name="notice_room_invite_no_invitee_with_reason">%1$s ന്റെ ക്ഷണം. കാരണം: %2$s</string>
+    <string name="clear_timeline_send_queue">അയയ്‌ക്കാനുള്ള ശ്രേണി മായ്‌ക്കുക</string>
+    <string name="event_status_sending_message">സന്ദേശം അയയ്ക്കുന്നു…</string>
+    <string name="initial_sync_start_importing_account_data">പ്രാരംഭ സമന്വയം:
+\nഅക്കൗണ്ട് ഡാറ്റ ഇറക്കുമതി ചെയ്യുന്നു</string>
+    <string name="initial_sync_start_importing_account_groups">പ്രാരംഭ സമന്വയം:
+\nജനസമൂഹങ്ങൾ ഇറക്കുമതി ചെയ്യുന്നു</string>
+    <string name="initial_sync_start_importing_account_left_rooms">പ്രാരംഭ സമന്വയം:
+\nഉപേക്ഷിച്ച മുറികൾ ഇറക്കുമതി ചെയ്യുന്നു</string>
+    <string name="initial_sync_start_importing_account_invited_rooms">പ്രാരംഭ സമന്വയം:
+\nക്ഷണിക്കപ്പെട്ട മുറികൾ ഇറക്കുമതി ചെയ്യുന്നു</string>
+    <string name="initial_sync_start_importing_account_joined_rooms">പ്രാരംഭ സമന്വയം:
+\nചേർന്ന മുറികൾ ഇറക്കുമതി ചെയ്യുന്നു</string>
+    <string name="initial_sync_start_importing_account_rooms">പ്രാരംഭ സമന്വയം:
+\nമുറികൾ ഇറക്കുമതി ചെയ്യുന്നു</string>
+    <string name="initial_sync_start_importing_account_crypto">പ്രാരംഭ സമന്വയം:
+\nക്രിപ്‌റ്റോ ഇറക്കുമതി ചെയ്യുന്നു</string>
+    <string name="initial_sync_start_importing_account">പ്രാരംഭ സമന്വയം:
+\nഅക്കൗണ്ട് ഇറക്കുമതി ചെയ്യുന്നു…</string>
+    <string name="initial_sync_start_downloading">പ്രാരംഭ സമന്വയം:
+\nഡാറ്റ ഡൗൺലോഡുചെയ്യുന്നു…</string>
+    <string name="initial_sync_start_server_computing">പ്രാരംഭ സമന്വയം:
+\nസെർവർ പ്രതികരണത്തിനായി കാത്തിരിക്കുന്നു…</string>
+    <string name="room_displayname_empty_room_was">ശൂന്യമായ മുറി ( %s ആയിരുന്നു)</string>
+    <string name="room_displayname_empty_room">ശൂന്യമായ മുറി</string>
+    <plurals name="room_displayname_three_and_more_members">
+        <item quantity="one">%1$s ഉം വേറെ 1 ആളും</item>
+        <item quantity="other">%1$s ഉം വേറെ %2$d പേരും</item>
+    </plurals>
+    <plurals name="room_displayname_four_and_more_members">
+        <item quantity="one">%1$s, %2$s, %3$s കൂടാതെ %4$d പേർ</item>
+        <item quantity="other">%1$s, %2$s, %3$s കൂടാതെ %4$d പേരും</item>
+    </plurals>
+    <string name="room_displayname_4_members">%1$s, %2$s, %3$s പിന്നെ %4$sഉം</string>
+    <string name="room_displayname_3_members">%1$s, %2$s പിന്നെ %3$sഉം</string>
+    <string name="room_displayname_two_members">%1$s ഉം %2$s ഉം</string>
+    <string name="room_displayname_room_invite">മുറി ക്ഷണം</string>
+    <string name="room_displayname_invite_from">%sൽ നിന്നുമുള്ള ക്ഷണം</string>
+    <string name="medium_phone_number">ഫോൺ നമ്പർ</string>
+    <string name="medium_email">ഈ - മെയിൽ വിലാസം</string>
+    <string name="room_error_join_failed_empty_room">ഒരു ശൂന്യമായ മുറിയിൽ വീണ്ടും ചേരാൻ നിലവിൽ സാധ്യമല്ല.</string>
+    <string name="matrix_error">മേട്രിക്സ് പിശക്</string>
+    <string name="network_error">നെറ്റ്‌വർക്ക് പിശക്</string>
+    <string name="message_failed_to_upload">ചിത്രം അപ്‌ലോഡുചെയ്യുന്നതിൽ പരാജയപ്പെട്ടു</string>
+    <string name="unable_to_send_message">സന്ദേശം അയയ്‌ക്കാനായില്ല</string>
+    <string name="could_not_redact">പുനഃക്രമീകരിക്കാൻ കഴിഞ്ഞില്ല</string>
+    <string name="notice_crypto_error_unkwown_inbound_session_id">അയച്ചയാളുടെ ഉപകരണം ഈ സന്ദേശത്തിനുള്ള കീകൾ ഞങ്ങൾക്ക് അയച്ചിട്ടില്ല.</string>
+    <string name="notice_crypto_unable_to_decrypt">** ഡീക്രിപ്റ്റ് ചെയ്യാൻ കഴിഞ്ഞില്ല: %s **</string>
+    <string name="notice_power_level_changed">%1$s %2$s ന്റെ അധികാര നില മാറ്റി.</string>
+    <string name="notice_power_level_changed_by_you">നിങ്ങൾ %1$s ന്റെ അധികാര നില മാറ്റി.</string>
+    <string name="power_level_custom_no_value">ഇച്ഛാനുസൃതം</string>
+    <string name="power_level_custom">ഇച്ഛാനുസൃതം (%1$d)</string>
+    <string name="power_level_default">തനത്</string>
+    <string name="power_level_moderator">മോഡറേറ്റർ</string>
+    <string name="power_level_admin">അഡ്മിൻ</string>
+    <string name="notice_widget_jitsi_modified_by_you">നിങ്ങൾ വീഡിയോ കോൺഫറൻസ് പരിഷ്ക്കരിച്ചു</string>
+    <string name="notice_widget_jitsi_modified">%1$s വീഡിയോ കോൺഫറൻസ് പരിഷ്ക്കരിച്ചു</string>
+    <string name="notice_widget_jitsi_removed_by_you">നിങ്ങൾ വീഡിയോ കോൺഫറൻസ് അവസാനിപ്പിച്ചു</string>
+    <string name="notice_widget_jitsi_removed">%1$s വീഡിയോ കോൺഫറൻസ് അവസാനിച്ചു</string>
+    <string name="notice_widget_jitsi_added_by_you">നിങ്ങൾ വീഡിയോ കോൺഫറൻസ് ആരംഭിച്ചു</string>
+    <string name="notice_widget_jitsi_added">%1$s വീഡിയോ കോൺഫറൻസ് ആരംഭിച്ചു</string>
+    <string name="notice_widget_modified_by_you">നിങ്ങൾ %1$s വിജറ്റ് പരിഷ്ക്കരിച്ചു</string>
+    <string name="notice_widget_modified">%1$s %2$s വിജറ്റ് പരിഷ്ക്കരിച്ചു</string>
+    <string name="notice_widget_removed_by_you">നിങ്ങൾ %1$s വിജറ്റ് നീക്കം ചെയ്തു</string>
+    <string name="notice_widget_removed">%1$s %2$s വിജറ്റ് നീക്കം ചെയ്തു</string>
+    <string name="notice_widget_added_by_you">നിങ്ങൾ %1$s വിജറ്റ് ചേർത്തു</string>
+    <string name="notice_widget_added">%1$s %2$s വിജറ്റ് ചേർത്തു</string>
+    <string name="notice_room_third_party_registered_invite_by_you">%1$s നുള്ള ക്ഷണം നിങ്ങൾ സ്വീകരിച്ചു</string>
+    <string name="notice_room_third_party_registered_invite">%1$s %2$sനുള്ള ക്ഷണം സ്വീകരിച്ചു</string>
+    <string name="notice_direct_room_third_party_revoked_invite_by_you">%1$sനുള്ള ക്ഷണം നിങ്ങൾ റദ്ദാക്കി</string>
+    <string name="notice_direct_room_third_party_revoked_invite">%1$s %2$sനുള്ള ക്ഷണം റദ്ദാക്കി</string>
+    <string name="notice_room_third_party_revoked_invite_by_you">%1$sന് മുറിയിൽ ചേരുന്നതിനുള്ള ക്ഷണം നിങ്ങൾ റദ്ദാക്കി</string>
+    <string name="notice_room_third_party_revoked_invite">%2$sന് മുറിയിൽ ചേരുന്നതിനുള്ള ക്ഷണം %1$s റദ്ദാക്കി</string>
+    <string name="notice_direct_room_third_party_invite_by_you">നിങ്ങൾ %1$s നെ ക്ഷണിച്ചു</string>
+    <string name="notice_direct_room_third_party_invite">%1$s %2$sനെ ക്ഷണിച്ചു</string>
+    <string name="notice_room_third_party_invite_by_you">മുറിയിൽ ചേരാൻ നിങ്ങൾ %1$s ന് ഒരു ക്ഷണം അയച്ചു</string>
+    <string name="notice_room_third_party_invite">%1$s മുറിയിൽ ചേരാൻ %2$s ന് ക്ഷണം അയച്ചു</string>
+    <string name="notice_profile_change_redacted_by_you">നിങ്ങളുടെ പ്രൊഫൈൽ %1$s നവീകരിച്ചു</string>
+    <string name="notice_profile_change_redacted">%1$s അവരുടെ പ്രൊഫൈൽ %2$s നവീകരിച്ചു</string>
+    <string name="room_participants_idle">നിഷ്‌ക്രിയം</string>
+    <plurals name="format_time_d">
+        <item quantity="one">%dദി</item>
+        <item quantity="other">%dദി</item>
+    </plurals>
+    <plurals name="format_time_h">
+        <item quantity="one">%dമ</item>
+        <item quantity="other">%dമ</item>
+    </plurals>
+    <plurals name="format_time_m">
+        <item quantity="one">%dമി</item>
+        <item quantity="other">%dമി</item>
+    </plurals>
+    <plurals name="format_time_s">
+        <item quantity="one">%dസെ</item>
+        <item quantity="other">%dസെ</item>
+    </plurals>
+    <string name="preview">പ്രിവ്യൂ</string>
+    <string name="call_hold_action">ഹോൾഡ്</string>
+    <string name="call_resume_action">പുനരാരംഭിക്കുക</string>
+    <string name="compression_opt_list_small">ചെറുത്</string>
+    <string name="compression_opt_list_medium">ഇടത്തരം</string>
+    <string name="compression_opt_list_large">വലുത്</string>
+    <string name="compression_opt_list_original">യഥാർത്ഥം</string>
+    <string name="call_camera_front">മുന്നിലുള്ള</string>
+    <string name="call_camera_back">പിന്നിലുള്ള</string>
+    <string name="sound_device_headset">ഹെഡ്‌സെറ്റ്</string>
+    <string name="read_receipt">വായിക്കുക</string>
+    <string name="groups_header">കമ്മ്യൂണിറ്റികൾ</string>
+    <string name="bottom_action_groups">കമ്മ്യൂണിറ്റികൾ</string>
+    <string name="dialog_title_error">പിശക്</string>
+    <string name="disable">അപ്രാപ്തമാക്കുക</string>
+    <string name="review">അവലോകനം</string>
+    <string name="abort">ഉപേക്ഷിക്കുക</string>
+    <string name="pause_video">താൽക്കാലികമായി നിർത്തുക</string>
+    <string name="disconnect">വിച്ഛേദിക്കുക</string>
+    <string name="revoke">അസാധുവാക്കുക</string>
+    <string name="forward">ഫോർവേഡ്</string>
+    <string name="quote">ഉദ്ധരണി</string>
+    <string name="stay">തുടരുക</string>
+    <string name="leave">വിടുക</string>
+    <plurals name="notice_room_canonical_alias_alternative_added_by_you">
+        <item quantity="one">ഈ മുറിക്കായി %1$s എന്ന ഇതര വിലാസം നിങ്ങൾ ചേർത്തു.</item>
+        <item quantity="other">ഈ മുറിക്കായി %1$s എന്ന ഇതര വിലാസങ്ങൾ നിങ്ങൾ ചേർത്തു.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_added">
+        <item quantity="one">%1$s ഈ മുറിക്കായി %2$s എന്ന ഇതര വിലാസം ചേർത്തു.</item>
+        <item quantity="other">%1$s ഈ മുറിക്കായി %2$s എന്നീ ഇതര വിലാസങ്ങൾ ചേർത്തു.</item>
+    </plurals>
+    <string name="notice_room_canonical_alias_unset_by_you">ഈ മുറിയുടെ പ്രധാന വിലാസം നിങ്ങൾ നീക്കംചെയ്തു.</string>
+    <string name="notice_room_canonical_alias_unset">%1$s ഈ മുറിയുടെ പ്രധാന വിലാസം നീക്കംചെയ്‌തു.</string>
+    <string name="notice_room_canonical_alias_set_by_you">ഈ മുറിയുടെ പ്രധാന വിലാസം %1$s ആയി നിങ്ങൾ സജ്ജമാക്കി.</string>
+    <string name="event_status_sent_message">സന്ദേശം അയച്ചു</string>
+    <string name="direct_room_user_list_contacts_title">കോൺടാക്റ്റുകൾ</string>
+    <string name="direct_room_user_list_recent_title">പുതുതായത്</string>
+    <string name="edited_suffix">(എഡിറ്റുചെയ്തത്)</string>
+    <string name="send_file_step_idle">കാത്തിരിക്കുന്നു…</string>
+    <string name="push_gateway_item_format">Format:</string>
+    <string name="push_gateway_item_url">Url:</string>
+    <string name="push_gateway_item_device_name">session_name:</string>
+    <string name="push_gateway_item_app_display_name">app_display_name:</string>
+    <string name="push_gateway_item_push_key">push_key:</string>
+    <string name="push_gateway_item_app_id">app_id:</string>
+    <string name="settings_expert">വിദഗ്ദ്ധൻ</string>
+    <string name="settings_preferences">മുൻ‌ഗണനകൾ</string>
+    <string name="settings_general_title">പൊതുവായ</string>
+    <string name="create_room_public_title">പരസ്യമായത്</string>
+    <string name="create_room_topic_hint">വിഷയം</string>
+    <string name="create_room_name_hint">പേര്</string>
+    <string name="create_room_action_create">സൃഷ്ടിക്കുക</string>
+    <string name="fab_menu_create_room">മുറികൾ</string>
+    <string name="action_change">മാറ്റുക</string>
+    <string name="reactions">പ്രതികരണങ്ങൾ</string>
+    <string name="reactions_like">ലൈക്ക്</string>
+    <string name="reactions_agree">സമ്മതിക്കുക</string>
+    <string name="title_activity_emoji_reaction_picker">പ്രതികരണങ്ങൾ</string>
+    <string name="room_list_rooms_empty_title">മുറികൾ</string>
+    <string name="room_list_people_empty_title">സംഭാഷണങ്ങൾ</string>
+    <string name="global_retry">വീണ്ടും ശ്രമിക്കുക</string>
+    <string name="reply">മറുപടി</string>
+    <string name="edit">തിരുത്തുക</string>
+    <string name="sas_verified">പരിശോധിച്ചുറപ്പിച്ചു!</string>
+    <string name="keys_backup_info_title_signature">ഒപ്പ്</string>
+    <string name="keys_backup_info_title_algorithm">അൽഗോരിതം</string>
+    <string name="keys_backup_info_title_version">പതിപ്പ്</string>
+    <string name="keys_backup_setup_override_stop">നിർത്തുക</string>
+    <string name="keys_backup_setup_override_replace">മാറ്റിസ്ഥാപിക്കുക</string>
+    <string name="keys_backup_setup_step3_share_recovery_file">പങ്കിടുക</string>
+    <string name="keys_backup_setup_step3_button_title">ചെയ്‌തു</string>
+    <string name="keys_backup_setup_step1_advanced">(വിപുലമായത്)</string>
+    <string name="x_plus">%d+</string>
+    <string name="plus_x">+%d</string>
+    <string name="generic_label">%1$s:</string>
+    <string name="show_info_area_always">എല്ലായ്പ്പോഴും</string>
+    <string name="merged_events_collapse">സങ്കോചിപ്പിക്കുക</string>
+    <string name="merged_events_expand">വിപുലീകരിക്കുക</string>
+    <string name="avatar">അവതാർ</string>
+    <string name="rejoin">വീണ്ടും ചേരുക</string>
+    <string name="invited">ക്ഷണിച്ചു</string>
+    <string name="joined">ചേർന്നു</string>
+    <string name="rooms">മുറികൾ</string>
+    <string name="group_details_rooms">മുറികൾ</string>
+    <string name="group_details_people">ആളുകൾ</string>
+    <string name="group_details_home">പൂമുഖം</string>
+    <string name="community_id_hint">ഉദാഹരണം</string>
+    <string name="community_name_hint">ഉദാഹരണം</string>
+    <string name="create">സൃഷ്ടിക്കൂ</string>
+    <string name="notification_noisy">ശബ്ദമേറിയത്</string>
+    <string name="notification_silent">നിശബ്ദത</string>
+    <string name="notification_off">ഓഫ്</string>
+    <string name="conference_call_warning_title">മുന്നറിയിപ്പ്!</string>
+    <string name="ignore_request_short_label">അവഗണിക്കൂ</string>
+    <string name="share_without_verifying_short_label">പങ്കിടുക</string>
+    <string name="start_verification_short_label">ഉറപ്പാക്കൂ</string>
+    <string name="room_widget_resource_grant_permission">അനുവദിക്കുക</string>
+    <string name="room_widget_activity_title">വിജറ്റ്</string>
+    <string name="active_widget_view_action">കാണുക</string>
+    <string name="huge">വൻ വലുപ്പമേറിയത്</string>
+    <string name="largest">ഏറ്റവും വലുത്</string>
+    <string name="larger">വളരെ വലുത്</string>
+    <string name="large">വലുത്</string>
+    <string name="normal">സാധാരണ</string>
+    <string name="small">ചെറുത്</string>
+    <string name="tiny">തീരെച്ചെറുത്</string>
+    <string name="notification_sender_me">ഞാൻ</string>
+    <string name="notification_unknown_room_name">മുറി</string>
+    <string name="encryption_information_block">കരിമ്പട്ടിക</string>
+    <string name="encryption_information_verify">ഉറപ്പാക്കൂ</string>
+    <string name="encryption_information_none">ഒന്നുമില്ല</string>
+    <string name="encryption_information_blocked">കരിമ്പട്ടികയിൽ പെടുത്തി</string>
+    <string name="encryption_information_verified">പരിശോധിച്ചുറപ്പിച്ചു</string>
+    <string name="encryption_information_verification">സ്ഥിരീകരണം</string>
+    <string name="encryption_information_algorithm">അൽഗോരിതം</string>
+    <string name="settings_theme">തീം</string>
+    <string name="directory_title">മേല്‍വിലാസപ്പട്ടിക</string>
+    <string name="room_settings_labs_pref_title">ലാബുകൾ</string>
+    <string name="room_settings_addresses_pref_title">വിലാസങ്ങൾ</string>
+    <string name="room_settings_category_advanced_title">വിപുലമായവ</string>
+    <string name="room_settings_read_history_entry_anyone">ആർക്കും</string>
+    <string name="room_alias_published_alias_add_manually_submit">പ്രസിദ്ധീകരിക്കുക</string>
+    <string name="room_settings_room_notifications_title">അറിയിപ്പുകൾ</string>
+    <string name="room_settings_tag_pref_entry_none">ഒന്നുമില്ല</string>
+    <string name="room_settings_tag_pref_entry_favourite">പ്രിയപ്പെട്ടവ</string>
+    <string name="media_saving_period_forever">എന്നേക്കും</string>
+    <string name="media_source_choose">തിരഞ്ഞെടുക്കുക</string>
+    <string name="compression_opt_list_choose">തിരഞ്ഞെടുക്കുക</string>
+    <string name="settings_media">മാധ്യമം</string>
+    <string name="settings_password">രഹസ്യവാക്ക്</string>
+    <string name="devices_delete_pswd">രഹസ്യവാചകം:</string>
+    <string name="devices_delete_dialog_title">പ്രാമാണീകരണം</string>
+    <string name="devices_details_id_title">ID</string>
+    <string name="settings_analytics">അനലിറ്റിക്സ്</string>
+    <string name="settings_discovery_category">കണ്ടെത്തൽ</string>
+    <string name="settings_secure_backup_manage">നിയന്ത്രിക്കുക</string>
+    <string name="settings_cryptography">ക്രിപ്റ്റോഗ്രഫി</string>
+    <string name="settings_integrations">സംയോജകങ്ങൾ</string>
+    <string name="settings_copyright">പകർപ്പാവകാശം</string>
+    <string name="settings_version">പതിപ്പ്</string>
+    <string name="settings_troubleshoot_test_device_settings_quickfix">പ്രാപ്തമാക്കുക</string>
+    <string name="settings_troubleshoot_test_account_settings_quickfix">പ്രാപ്തമാക്കുക</string>
+    <string name="room_sliding_menu_copyright">പകർപ്പാവകാശം</string>
+    <string name="room_settings_mute">നിശബ്ദമാക്കുക</string>
+    <string name="room_recents_invites">കഷണങ്ങൾ</string>
+    <string name="room_recents_join">ചേരുക</string>
+    <string name="search_hint">തിരയുക</string>
+    <string name="ssl_remain_offline">അവഗണിക്കുക</string>
+    <string name="room_participants_action_unban">നിരോധനം മാറ്റുക</string>
+    <string name="room_participants_header_devices">സെഷനുകൾ</string>
+    <string name="encryption_information_session_id">സെഷൻ ഐഡി</string>
+    <string name="encryption_information_user_id">ഉപയോക്തൃ ഐഡി</string>
+    <string name="encryption_information_device_info">ഇവന്റ് വിവരങ്ങൾ</string>
+    <string name="room_settings_labs_end_to_end">എൻഡ്-ടു-എൻഡ് എൻ‌ക്രിപ്ഷൻ</string>
+    <string name="room_settings_banned_users_title">നിരോധിച്ച ഉപയോക്താക്കൾ</string>
+    <string name="room_alias_local_address_title">പ്രാദേശിക വിലാസങ്ങൾ</string>
+    <string name="room_alias_main_address_hint">പ്രധാന വിലാസം</string>
+    <string name="room_alias_published_alias_title">പ്രസിദ്ധീകരിച്ച വിലാസങ്ങൾ</string>
+    <string name="room_alias_title">മുറി വിലാസങ്ങൾ</string>
+    <string name="room_settings_alias_title">മുറി വിലാസങ്ങൾ</string>
+    <string name="room_settings_tag_pref_entry_low_priority">കുറഞ്ഞ മുൻ‌ഗണന</string>
+    <string name="room_settings_tag_pref_dialog_title">ടാഗുചെയ്തത്:</string>
+    <string name="room_settings_room_tag">മുറിയുടെ ടാഗ്</string>
+    <string name="room_settings_room_name">മുറിയുടെ പേര്</string>
+    <string name="room_settings_room_photo">മുറിയുടെ ചിത്രം</string>
+    <string name="media_saving_period_1_month">1 മാസം</string>
+    <string name="media_saving_period_1_week">1 ആഴ്ച</string>
+    <string name="media_saving_period_3_days">3 ദിവസം</string>
+    <string name="settings_default_compression">തനത് കംപ്രഷൻ</string>
+    <string name="settings_phone_number_verification">ഫോൺ സ്ഥിരീകരിച്ചുറപ്പിക്കൽ</string>
+    <string name="settings_phone_number_label">ഫോൺ നമ്പർ</string>
+    <string name="settings_change_password_submit">രഹസ്യവാക്ക് പുതുക്കുക</string>
+    <string name="settings_new_password">പുതിയ രഹസ്യവാക്ക്</string>
+    <string name="settings_old_password">നിലവിലെ രഹസ്യവാക്ക്</string>
+    <string name="settings_change_password">രഹസ്യവാക്ക് മാറ്റുക</string>
+    <string name="account_email_validation_title">സ്ഥിരീകരണം തീർച്ചപ്പെടുത്തിയിട്ടില്ല</string>
+    <string name="settings_select_language">ഭാഷ തിരഞ്ഞെടുക്കുക</string>
+    <string name="settings_user_interface">ഉപയോക്തൃ ഇന്റർഫേസ്</string>
+    <string name="settings_integration_manager">സംയോജക മാനേജർ</string>
+    <string name="settings_integration_allow">സംയോജനങ്ങൾ അനുവദിക്കുക</string>
+    <string name="settings_identity_server">തിരിച്ചറിയൽ സെർവർ</string>
+    <string name="settings_home_server">ഹോം സെർവർ</string>
+    <string name="devices_details_last_seen_title">അവസാനം കണ്ടത്</string>
+    <string name="devices_details_name_title">പൊതു നാമം</string>
+    <string name="devices_details_dialog_title">സെഷൻ വിവരം</string>
+    <string name="startup_notification_fdroid_battery_optim_button_grant">അനുമതി നൽകുക</string>
+    <string name="startup_notification_fdroid_battery_optim_title">പശ്ചാത്തല കണക്ഷൻ</string>
+    <string name="startup_notification_privacy_button_grant">അനുമതി നൽകുക</string>
+    <string name="startup_notification_privacy_title">അറിയിപ്പ് സ്വകാര്യത</string>
+    <string name="settings_deactivate_account_section">അക്കൗണ്ട് മരവിപ്പിക്കുക</string>
+    <string name="settings_secure_backup_section_title">സുരക്ഷിത ബാക്കപ്പ്</string>
+    <string name="settings_send_markdown">മാർക്ക്ഡൗൺ ഫോർമാറ്റിംഗ്</string>
+    <string name="settings_home_display">ഹോം ഡിസ്‌പ്ലേ</string>
+    <string name="settings_contacts_phonebook_country">ഫോൺബുക്ക് രാജ്യം</string>
+    <string name="settings_contacts_app_permission">കോൺ‌ടാക്റ്റുകളുടെ അനുമതി</string>
+    <string name="settings_contact">പ്രാദേശിക കോൺടാക്റ്റുകൾ</string>
+    <string name="settings_ignored_users">അവഗണിച്ച ഉപയോക്താക്കൾ</string>
+    <string name="settings_user_settings">ഉപയോക്തൃ ക്രമീകരണങ്ങൾ</string>
+    <string name="settings_clear_cache">കാഷെ മായ്‌ക്കുക</string>
+    <string name="settings_keep_media">മീഡിയ സൂക്ഷിക്കുക</string>
+    <string name="settings_privacy_policy">സ്വകാര്യതാ നയം</string>
+    <string name="settings_olm_version">olm പതിപ്പ്</string>
+    <plurals name="seconds">
+        <item quantity="one">%d സെക്കൻഡ്</item>
+        <item quantity="other">%d സെക്കൻഡുകൾ</item>
+    </plurals>
+    <string name="settings_background_sync">പശ്ചാത്തല സമന്വയം</string>
+    <string name="settings_call_invitations">കോൾ ക്ഷണങ്ങൾ</string>
+    <string name="settings_notification_ringtone">അറിയിപ്പ് ശബ്‌ദം</string>
+    <string name="settings_notification_privacy_reduced">സ്വകാര്യത കുറച്ചു</string>
+    <string name="settings_troubleshoot_test_battery_quickfix">ഒപ്റ്റിമൈസേഷൻ അവഗണിക്കുക</string>
+    <string name="settings_troubleshoot_test_battery_title">ബാറ്ററി ഒപ്റ്റിമൈസേഷൻ</string>
+    <string name="settings_troubleshoot_test_bg_restricted_quickfix">നിയന്ത്രണങ്ങൾ പ്രവർത്തനരഹിതമാക്കുക</string>
+    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">സേവനം ആരംഭിക്കുക</string>
+    <string name="settings_troubleshoot_test_notification_title">അറിയിപ്പ് പ്രദർശനം</string>
+    <string name="settings_troubleshoot_test_token_registration_title">ടോക്കൺ രജിസ്ട്രേഷൻ</string>
+    <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">അക്കൗണ്ട് ചേർക്കുക</string>
+    <string name="settings_troubleshoot_test_fcm_title">ഫയർബേസ് ടോക്കൺ</string>
+    <string name="settings_troubleshoot_test_bing_settings_quickfix">ക്രമീകരണങ്ങൾ പരിശോധിക്കുക</string>
+    <string name="settings_troubleshoot_test_bing_settings_title">ഇച്ഛാനുസൃത ക്രമീകരണങ്ങൾ.</string>
+    <string name="settings_troubleshoot_test_device_settings_title">സെഷൻ ക്രമീകരണങ്ങൾ.</string>
+    <string name="settings_troubleshoot_test_account_settings_title">അക്കൗണ്ട് ക്രമീകരണങ്ങൾ.</string>
+    <string name="open_settings">ക്രമീകരണങ്ങൾ തുറക്കുക</string>
+    <string name="settings_troubleshoot_test_system_settings_title">സിസ്റ്റം ക്രമീകരണങ്ങൾ.</string>
+    <string name="settings_troubleshoot_diagnostic_run_button_title">ടെസ്റ്റുകൾ പ്രവർത്തിപ്പിക്കുക</string>
+    <string name="settings_notification_troubleshoot">പ്രശ്നപരിഹാര അറിയിപ്പുകൾ</string>
+    <string name="settings_notification_privacy">അറിയിപ്പ് സ്വകാര്യത</string>
+    <string name="settings_remove_three_pid_confirmation_content">%s നീക്കംചെയ്യണോ\?</string>
+    <string name="room_settings_leave_conversation">സംഭാഷണം വിടുക</string>
+    <string name="room_settings_direct_chat">നേരിട്ടുള്ള ചാറ്റ്</string>
+    <string name="directory_searching_title">ഡയറക്‌ടറിയിൽ തിരയുന്നു…</string>
+    <string name="directory_search_results_title">ഡയറക്ടറി ബ്രൗസ് ചെയ്യുക</string>
+    <string name="room_recents_low_priority">കുറഞ്ഞ മുൻ‌ഗണന</string>
+    <string name="room_event_action_cancel_download">ഡൗൺലോഡ് റദ്ദാക്കുക</string>
+    <string name="room_event_action_cancel_upload">അപ്‌ലോഡ് റദ്ദാക്കുക</string>
+    <plurals name="room_details_selected">
+        <item quantity="one">%d തിരഞ്ഞെടുത്തു</item>
+        <item quantity="other">%d തിരഞ്ഞെടുത്തു</item>
+    </plurals>
+    <string name="room_permissions_change_permissions">അനുമതികൾ മാറ്റുക</string>
+    <string name="room_permissions_modify_widgets">വിഡ്ജറ്റുകൾ പരിഷ്‌ക്കരിക്കുക</string>
+    <string name="room_permissions_default_role">തനത് പങ്ക്</string>
+    <string name="ssl_fingerprint_hash">ഫിംഗർപ്രിന്റ് (%s):</string>
+    <string name="room_participants_invite_join_names_combined">%1$s %2$s</string>
+    <string name="room_participants_action_set_moderator">മോഡറേറ്ററാക്കുക</string>
+    <string name="room_participants_leave_prompt_title">മുറി വിടുക</string>
+    <string name="open_chat_header">ഹെഡർ തുറക്കുക</string>
+    <string name="incoming_call">ഇൻകമിംഗ് കോൾ</string>
+    <string name="call_connecting">കോൾ കണക്റ്റുചെയ്യുന്നു…</string>
+    <string name="call_connected">കോൾ കണക്റ്റുചെയ്‌തു</string>
+    <string name="attachment_remaining_time_minutes">%1$d മി %2$d സെ</string>
+    <string name="attachment_remaining_time_seconds">%d സെ</string>
+    <string name="compression_options">എന്നപോലെ അയയ്‌ക്കുക</string>
+    <string name="groups_list">ഗ്രൂപ്പുകളുടെ പട്ടിക</string>
+    <string name="login_error_bad_json">തെറ്റായ JSON</string>
+    <string name="login_error_forbidden">തെറ്റായ ഉപയോക്തൃനാമം/രഹസ്യവാക്ക്</string>
+    <string name="login_error_ssl_other">SSL പിശക്.</string>
+    <string name="auth_invalid_token">അസാധുവായ ടോക്കൺ</string>
+    <string name="auth_missing_password">രഹസ്യവാക്ക് കണ്ടെത്തിയില്ല</string>
+    <string name="sound_device_wireless_headset">വയർലെസ് ഹെഡ്‌സെറ്റ്</string>
+    <string name="send_files_in">ഇതിലേക്ക് അയയ്‌ക്കുക</string>
+    <string name="send_bug_report_include_logs">ലോഗുകൾ അയയ്‌ക്കുക</string>
+    <string name="rooms_directory_header">മുറി ഡയറക്ടറി</string>
+    <string name="user_directory_header">ഉപയോക്തൃ ഡയറക്‌ടറി</string>
+    <string name="low_priority_header">കുറഞ്ഞ മുൻ‌ഗണന</string>
+    <string name="home_filter_placeholder_favorites">പ്രിയങ്കരങ്ങൾ ഫിൽട്ടർ ചെയ്യുക</string>
+    <string name="action_quick_reply">പെട്ടെന്നുള്ള മറുപടി</string>
+    <string name="action_sign_out">പുറത്തു കടക്കുക</string>
+    <string name="call_notification_hangup">മാറ്റിവയ്ക്കുക</string>
+    <string name="report_content">ഉള്ളടക്കം റിപ്പോർട്ടുചെയ്യുക</string>
+    <string name="view_source">ഉറവിടം കാണുക</string>
+    <string name="title_activity_bug_report">ബഗ് റിപ്പോർട്ട്</string>
+    <string name="event_status_a11y_failed">പരാജയപ്പെട്ടു</string>
+    <string name="event_status_a11y_sent">അയച്ചു</string>
+    <string name="event_status_a11y_sending">അയയ്ക്കുന്നു</string>
+    <string name="dev_tools_form_hint_type">തരം</string>
+    <string name="a11y_checked">പരിശോധിച്ചു</string>
+    <string name="a11y_selected">തിരഞ്ഞെടുത്തു</string>
+    <string name="a11y_video">വീഡിയോ</string>
+    <string name="a11y_image">ചിത്രം</string>
+    <string name="a11y_screenshot">സ്ക്രീൻഷോട്ട്</string>
+    <string name="action_switch">മാറുക</string>
+    <string name="call_transfer_title">കൈമാറുക</string>
+    <string name="call_transfer_connect_action">ബന്ധിപ്പിക്കുക</string>
+    <string name="power_level_title">പങ്ക്</string>
+    <string name="invite_users_to_room_action_invite">ക്ഷണം</string>
+    <string name="room_message_placeholder">സന്ദേശം…</string>
+    <string name="settings_troubleshoot_title">പ്രശ്‌നപരിഹാരം</string>
+    <string name="topic_prefix">"വിഷയം: "</string>
+    <string name="refresh">പുതുക്കുക</string>
+    <string name="message_action_item_redact">നീക്കംചെയ്യൂ…</string>
+    <string name="enter_secret_storage_passphrase_warning">മുന്നറിയിപ്പ്:</string>
+    <string name="qr_code_scanned_by_other_no">ഇല്ല</string>
+    <string name="qr_code_scanned_by_other_yes">അതെ</string>
+    <string name="trusted">വിശ്വസനീയമാണ്</string>
+    <string name="room_member_profile_sessions_section_title">സെഷനുകൾ</string>
+    <string name="verification_profile_verified">പരിശോധിച്ചുറപ്പിച്ചു</string>
+    <string name="room_member_power_level_invites">ക്ഷണങ്ങൾ</string>
+    <string name="room_member_power_level_custom">ഇച്ഛാനുസൃതം</string>
+    <string name="room_member_power_level_moderators">മോഡറേറ്റർമാർ</string>
+    <string name="direct_room_profile_section_more_leave">വിടുക</string>
+    <string name="room_profile_section_security">സുരക്ഷ</string>
+    <string name="sent_a_poll">പോൾ</string>
+    <string name="settings_rageshake">രാഗേഷേക്ക്</string>
+    <string name="soft_logout_signin_password_hint">രഹസ്യവാക്ക്</string>
+    <string name="login_signup_cancel_confirmation_title">മുന്നറിയിപ്പ്</string>
+    <string name="login_signup_password_hint">രഹസ്യവാക്ക്</string>
+    <string name="login_set_email_mandatory_hint">ഈ - മെയിൽ</string>
+    <string name="login_reset_password_warning_submit">തുടരുക</string>
+    <string name="login_reset_password_email_hint">ഈമെയിൽ</string>
+    <string name="spoiler">സ്‌പോയിലർ</string>
+    <string name="room_list_quick_actions_notifications_mute">നിശബ്ദമാക്കുക</string>
+    <string name="report_content_custom_submit">റിപ്പോർട്ട്</string>
+    <string name="uploads_files_title">ഫയലുകൾ</string>
+    <string name="uploads_media_title">മീഡിയ</string>
+    <string name="attachment_type_sticker">സ്റ്റിക്കർ</string>
+    <string name="attachment_type_gallery">ഗാലറി</string>
+    <string name="attachment_type_audio">ഓ‍ഡിയോ</string>
+    <string name="attachment_type_camera">ക്യാമറ</string>
+    <string name="attachment_type_contact">കോൺടാക്റ്റ്</string>
+    <string name="attachment_type_file">ഫയൽ</string>
+    <string name="settings_text_message_sent_hint">കോഡ്</string>
+    <string name="settings_discovery_mail_pending">ശേഷിക്കുന്നു</string>
+    <string name="direct_room_user_list_suggestions_title">നിർദ്ദേശങ്ങൾ</string>
+    <string name="encryption_information_unblock">കരിമ്പട്ടികയിൽ നിന്നും നീക്കുക</string>
+    <string name="encryption_import_import">ഇമ്പോർട്ട്</string>
+    <string name="encryption_export_export">എക്സ്പോർട്ട്</string>
+    <string name="spaces_invited_header">ക്ഷണങ്ങൾ</string>
+    <string name="settings_flair">ഫ്ലെയർ</string>
+</resources>

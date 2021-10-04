@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -41,7 +40,7 @@ data class ImageInfo(
         /**
          * Size of the image in bytes.
          */
-        @Json(name = "size") val size: Int = 0,
+        @Json(name = "size") val size: Long = 0,
 
         /**
          * Metadata about the image referred to in thumbnail_url.
@@ -58,3 +57,10 @@ data class ImageInfo(
          */
         @Json(name = "thumbnail_file") val thumbnailFile: EncryptedFileInfo? = null
 )
+
+/**
+ * Get the url of the encrypted thumbnail or of the thumbnail
+ */
+fun ImageInfo.getThumbnailUrl(): String? {
+        return thumbnailFile?.url ?: thumbnailUrl
+}

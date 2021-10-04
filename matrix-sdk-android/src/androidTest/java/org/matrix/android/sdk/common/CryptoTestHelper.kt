@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 New Vector Ltd
+ * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,18 @@ package org.matrix.android.sdk.common
 import android.os.SystemClock
 import android.util.Log
 import androidx.lifecycle.Observer
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
+import org.matrix.android.sdk.api.auth.UIABaseAuth
+import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
+import org.matrix.android.sdk.api.auth.UserPasswordAuth
+import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.verification.IncomingSasVerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.OutgoingSasVerificationTransaction
@@ -32,24 +44,14 @@ import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
-import org.matrix.android.sdk.api.session.room.timeline.Timeline
-import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
-import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
 import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM_BACKUP
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.MegolmBackupAuthData
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.MegolmBackupCreationInfo
-import org.matrix.android.sdk.internal.crypto.model.rest.UserPasswordAuth
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotNull
-import org.junit.Assert.assertNull
-import org.junit.Assert.assertTrue
 import java.util.UUID
 import java.util.concurrent.CountDownLatch
+import kotlin.coroutines.Continuation
+import kotlin.coroutines.resume
 
 class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
 
@@ -64,24 +66,25 @@ class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
     fun doE2ETestWithAliceInARoom(encryptedRoom: Boolean = true): CryptoTestData {
         val aliceSession = mTestHelper.createAccount(TestConstants.USER_ALICE, defaultSessionParams)
 
-        val roomId = mTestHelper.doSync<String> {
-            aliceSession.createRoom(CreateRoomParams().apply { name = "MyRoom" }, it)
+        val roomId = mTestHelper.runBlockingTest {
+            aliceSession.createRoom(CreateRoomParams().apply { name = "MyRoom" })
         }
 
         if (encryptedRoom) {
             val room = aliceSession.getRoom(roomId)!!
 
-            mTestHelper.doSync<Unit> {
-                room.enableEncryption(callback = it)
+            mTestHelper.runBlockingTest {
+                room.enableEncryption()
             }
         }
 
-        return CryptoTestData(aliceSession, roomId)
+        return CryptoTestData(roomId, listOf(aliceSession))
     }
 
     /**
      * @return alice and bob sessions
      */
+    @Suppress("EXPERIMENTAL_API_USAGE")
     fun doE2ETestWithAliceAndBobInARoom(encryptedRoom: Boolean = true): CryptoTestData {
         val cryptoTestData = doE2ETestWithAliceInARoom(encryptedRoom)
         val aliceSession = cryptoTestData.firstSession
@@ -110,8 +113,8 @@ class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
             bobRoomSummariesLive.observeForever(newRoomObserver)
         }
 
-        mTestHelper.doSync<Unit> {
-            aliceRoom.invite(bobSession.myUserId, callback = it)
+        mTestHelper.runBlockingTest {
+            aliceRoom.invite(bobSession.myUserId)
         }
 
         mTestHelper.await(lock1)
@@ -133,7 +136,7 @@ class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
             bobRoomSummariesLive.observeForever(roomJoinedObserver)
         }
 
-        mTestHelper.doSync<Unit> { bobSession.joinRoom(aliceRoomId, callback = it) }
+        mTestHelper.runBlockingTest { bobSession.joinRoom(aliceRoomId) }
 
         mTestHelper.await(lock)
 
@@ -142,7 +145,7 @@ class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
 //        assertNotNull(roomFromBobPOV.powerLevels)
 //        assertTrue(roomFromBobPOV.powerLevels.maySendMessage(bobSession.myUserId))
 
-        return CryptoTestData(aliceSession, aliceRoomId, bobSession)
+        return CryptoTestData(aliceRoomId, listOf(aliceSession, bobSession))
     }
 
     /**
@@ -160,7 +163,7 @@ class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
         // wait the initial sync
         SystemClock.sleep(1000)
 
-        return CryptoTestData(aliceSession, aliceRoomId, cryptoTestData.secondSession, samSession)
+        return CryptoTestData(aliceRoomId, listOf(aliceSession, cryptoTestData.secondSession!!, samSession))
     }
 
     /**
@@ -170,12 +173,12 @@ class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
     fun createSamAccountAndInviteToTheRoom(room: Room): Session {
         val samSession = mTestHelper.createAccount(TestConstants.USER_SAM, defaultSessionParams)
 
-        mTestHelper.doSync<Unit> {
-            room.invite(samSession.myUserId, null, it)
+        mTestHelper.runBlockingTest {
+            room.invite(samSession.myUserId, null)
         }
 
-        mTestHelper.doSync<Unit> {
-            samSession.joinRoom(room.roomId, null, emptyList(), it)
+        mTestHelper.runBlockingTest {
+            samSession.joinRoom(room.roomId, null, emptyList())
         }
 
         return samSession
@@ -197,47 +200,16 @@ class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
         val roomFromBobPOV = bobSession.getRoom(aliceRoomId)!!
         val roomFromAlicePOV = aliceSession.getRoom(aliceRoomId)!!
 
-        val lock = CountDownLatch(1)
-
-        val bobEventsListener = object : Timeline.Listener {
-            override fun onTimelineFailure(throwable: Throwable) {
-                // noop
-            }
-
-            override fun onNewTimelineEvents(eventIds: List<String>) {
-                // noop
-            }
-
-            override fun onTimelineUpdated(snapshot: List<TimelineEvent>) {
-                val messages = snapshot.filter { it.root.getClearType() == EventType.MESSAGE }
-                        .groupBy { it.root.senderId!! }
-
-                // Alice has sent 2 messages and Bob has sent 3 messages
-                if (messages[aliceSession.myUserId]?.size == 2 && messages[bobSession.myUserId]?.size == 3) {
-                    lock.countDown()
-                }
-            }
-        }
-
-        val bobTimeline = roomFromBobPOV.createTimeline(null, TimelineSettings(20))
-        bobTimeline.start()
-        bobTimeline.addListener(bobEventsListener)
-
         // Alice sends a message
-        roomFromAlicePOV.sendTextMessage(messagesFromAlice[0])
+        mTestHelper.sendTextMessage(roomFromAlicePOV, messagesFromAlice[0], 1)
+//        roomFromAlicePOV.sendTextMessage(messagesFromAlice[0])
 
         // Bob send 3 messages
-        roomFromBobPOV.sendTextMessage(messagesFromBob[0])
-        roomFromBobPOV.sendTextMessage(messagesFromBob[1])
-        roomFromBobPOV.sendTextMessage(messagesFromBob[2])
-
+        mTestHelper.sendTextMessage(roomFromBobPOV, messagesFromBob[0], 1)
+        mTestHelper.sendTextMessage(roomFromBobPOV, messagesFromBob[1], 1)
+        mTestHelper.sendTextMessage(roomFromBobPOV, messagesFromBob[2], 1)
         // Alice sends a message
-        roomFromAlicePOV.sendTextMessage(messagesFromAlice[1])
-
-        mTestHelper.await(lock)
-
-        bobTimeline.removeListener(bobEventsListener)
-        bobTimeline.dispose()
+        mTestHelper.sendTextMessage(roomFromAlicePOV, messagesFromAlice[1], 1)
 
         return cryptoTestData
     }
@@ -279,20 +251,15 @@ class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
     fun createFakeMegolmBackupCreationInfo(): MegolmBackupCreationInfo {
         return MegolmBackupCreationInfo(
                 algorithm = MXCRYPTO_ALGORITHM_MEGOLM_BACKUP,
-                authData = createFakeMegolmBackupAuthData()
+                authData = createFakeMegolmBackupAuthData(),
+                recoveryKey = "fake"
         )
     }
 
+    @Suppress("EXPERIMENTAL_API_USAGE")
     fun createDM(alice: Session, bob: Session): String {
-        val roomId = mTestHelper.doSync<String> {
-            alice.createRoom(
-                    CreateRoomParams().apply {
-                        invitedUserIds.add(bob.myUserId)
-                        setDirectMessage()
-                        enableEncryptionIfInvitedUsersSupportIt = true
-                    },
-                    it
-            )
+        val roomId = mTestHelper.runBlockingTest {
+            alice.createDirectRoom(bob.myUserId)
         }
 
         mTestHelper.waitWithLatch { latch ->
@@ -335,7 +302,7 @@ class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
                 bobRoomSummariesLive.observeForever(newRoomObserver)
             }
 
-            mTestHelper.doSync<Unit> { bob.joinRoom(roomId, callback = it) }
+            mTestHelper.runBlockingTest { bob.joinRoom(roomId) }
         }
 
         return roomId
@@ -344,10 +311,18 @@ class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
     fun initializeCrossSigning(session: Session) {
         mTestHelper.doSync<Unit> {
             session.cryptoService().crossSigningService()
-                    .initializeCrossSigning(UserPasswordAuth(
-                            user = session.myUserId,
-                            password = TestConstants.PASSWORD
-                    ), it)
+                    .initializeCrossSigning(
+                            object : UserInteractiveAuthInterceptor {
+                                override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
+                                    promise.resume(
+                                            UserPasswordAuth(
+                                                    user = session.myUserId,
+                                                    password = TestConstants.PASSWORD,
+                                                    session = flowResponse.session
+                                            )
+                                    )
+                                }
+                            }, it)
         }
     }
 
@@ -364,8 +339,7 @@ class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
                 requestID,
                 roomId,
                 bob.myUserId,
-                bob.sessionParams.credentials.deviceId!!,
-                null)
+                bob.sessionParams.credentials.deviceId!!)
 
         // we should reach SHOW SAS on both
         var alicePovTx: OutgoingSasVerificationTransaction? = null
@@ -420,5 +394,31 @@ class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
                 alice.cryptoService().crossSigningService().isUserTrusted(bob.myUserId)
             }
         }
+    }
+
+    fun doE2ETestWithManyMembers(numberOfMembers: Int): CryptoTestData {
+        val aliceSession = mTestHelper.createAccount(TestConstants.USER_ALICE, defaultSessionParams)
+        aliceSession.cryptoService().setWarnOnUnknownDevices(false)
+
+        val roomId = mTestHelper.runBlockingTest {
+            aliceSession.createRoom(CreateRoomParams().apply { name = "MyRoom" })
+        }
+        val room = aliceSession.getRoom(roomId)!!
+
+        mTestHelper.runBlockingTest {
+            room.enableEncryption()
+        }
+
+        val sessions = mutableListOf(aliceSession)
+        for (index in 1 until numberOfMembers) {
+            val session = mTestHelper.createAccount("User_$index", defaultSessionParams)
+            mTestHelper.runBlockingTest(timeout = 600_000) { room.invite(session.myUserId, null) }
+            println("TEST -> " + session.myUserId + " invited")
+            mTestHelper.runBlockingTest { session.joinRoom(room.roomId, null, emptyList()) }
+            println("TEST -> " + session.myUserId + " joined")
+            sessions.add(session)
+        }
+
+        return CryptoTestData(roomId, sessions)
     }
 }

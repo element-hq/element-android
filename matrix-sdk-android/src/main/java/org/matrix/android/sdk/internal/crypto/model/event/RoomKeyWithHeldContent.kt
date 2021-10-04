@@ -1,5 +1,4 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -67,19 +66,23 @@ enum class WithHeldCode(val value: String) {
      * the user/device was blacklisted
      */
     BLACKLISTED("m.blacklisted"),
+
     /**
      * the user/devices is unverified
      */
     UNVERIFIED("m.unverified"),
+
     /**
      * the user/device is not allowed have the key. For example, this would usually be sent in response
      * to a key request if the user was not in the room when the message was sent
      */
     UNAUTHORISED("m.unauthorised"),
+
     /**
      * Sent in reply to a key request if the device that the key is requested from does not have the requested key
      */
     UNAVAILABLE("m.unavailable"),
+
     /**
      * An olm session could not be established.
      * This may happen, for example, if the sender was unable to obtain a one-time key from the recipient.

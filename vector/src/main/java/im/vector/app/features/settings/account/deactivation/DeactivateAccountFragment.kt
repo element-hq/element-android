@@ -16,34 +16,59 @@
 
 package im.vector.app.features.settings.account.deactivation
 
+import android.app.Activity
 import android.content.Context
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import com.airbnb.mvrx.fragmentViewModel
-import com.airbnb.mvrx.withState
-import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.app.R
 import im.vector.app.core.extensions.exhaustive
-import im.vector.app.core.extensions.showPassword
-import im.vector.app.core.platform.VectorBaseActivity
+import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.databinding.FragmentDeactivateAccountBinding
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
+import im.vector.app.features.auth.ReAuthActivity
 import im.vector.app.features.settings.VectorSettingsActivity
-import kotlinx.android.synthetic.main.fragment_deactivate_account.*
+import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
+
 import javax.inject.Inject
 
 class DeactivateAccountFragment @Inject constructor(
         val viewModelFactory: DeactivateAccountViewModel.Factory
-) : VectorBaseFragment() {
+) : VectorBaseFragment<FragmentDeactivateAccountBinding>() {
 
     private val viewModel: DeactivateAccountViewModel by fragmentViewModel()
 
-    override fun getLayoutResId() = R.layout.fragment_deactivate_account
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentDeactivateAccountBinding {
+        return FragmentDeactivateAccountBinding.inflate(inflater, container, false)
+    }
+
+    private val reAuthActivityResultLauncher = registerStartForActivityResult { activityResult ->
+        if (activityResult.resultCode == Activity.RESULT_OK) {
+            when (activityResult.data?.extras?.getString(ReAuthActivity.RESULT_FLOW_TYPE)) {
+                LoginFlowTypes.SSO -> {
+                    viewModel.handle(DeactivateAccountAction.SsoAuthDone)
+                }
+                LoginFlowTypes.PASSWORD -> {
+                    val password = activityResult.data?.extras?.getString(ReAuthActivity.RESULT_VALUE) ?: ""
+                    viewModel.handle(DeactivateAccountAction.PasswordAuthDone(password))
+                }
+                else                    -> {
+                    viewModel.handle(DeactivateAccountAction.ReAuthCancelled)
+                }
+            }
+        } else {
+            viewModel.handle(DeactivateAccountAction.ReAuthCancelled)
+        }
+    }
 
     override fun onResume() {
         super.onResume()
-        (activity as? VectorBaseActivity)?.supportActionBar?.setTitle(R.string.deactivate_account_title)
+        (activity as? AppCompatActivity)?.supportActionBar?.setTitle(R.string.deactivate_account_title)
     }
 
     private var settingsActivity: VectorSettingsActivity? = null
@@ -61,59 +86,46 @@ class DeactivateAccountFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setupUi()
         setupViewListeners()
         observeViewEvents()
     }
 
-    private fun setupUi() {
-        deactivateAccountPassword.textChanges()
-                .subscribe {
-                    deactivateAccountPasswordTil.error = null
-                    deactivateAccountSubmit.isEnabled = it.isNotEmpty()
-                }
-                .disposeOnDestroyView()
-    }
-
     private fun setupViewListeners() {
-        deactivateAccountPasswordReveal.setOnClickListener {
-            viewModel.handle(DeactivateAccountAction.TogglePassword)
-        }
-
-        deactivateAccountSubmit.debouncedClicks {
+        views.deactivateAccountSubmit.debouncedClicks {
             viewModel.handle(DeactivateAccountAction.DeactivateAccount(
-                    deactivateAccountPassword.text.toString(),
-                    deactivateAccountEraseCheckbox.isChecked))
+                    views.deactivateAccountEraseCheckbox.isChecked)
+            )
         }
     }
 
     private fun observeViewEvents() {
         viewModel.observeViewEvents {
             when (it) {
-                is DeactivateAccountViewEvents.Loading      -> {
+                is DeactivateAccountViewEvents.Loading       -> {
                     settingsActivity?.ignoreInvalidTokenError = true
                     showLoadingDialog(it.message)
                 }
-                DeactivateAccountViewEvents.EmptyPassword   -> {
+                DeactivateAccountViewEvents.InvalidAuth      -> {
+                    dismissLoadingDialog()
                     settingsActivity?.ignoreInvalidTokenError = false
-                    deactivateAccountPasswordTil.error = getString(R.string.error_empty_field_your_password)
                 }
-                DeactivateAccountViewEvents.InvalidPassword -> {
+                is DeactivateAccountViewEvents.OtherFailure  -> {
                     settingsActivity?.ignoreInvalidTokenError = false
-                    deactivateAccountPasswordTil.error = getString(R.string.settings_fail_to_update_password_invalid_current_password)
-                }
-                is DeactivateAccountViewEvents.OtherFailure -> {
-                    settingsActivity?.ignoreInvalidTokenError = false
+                    dismissLoadingDialog()
                     displayErrorDialog(it.throwable)
                 }
-                DeactivateAccountViewEvents.Done            ->
+                DeactivateAccountViewEvents.Done             -> {
                     MainActivity.restartApp(requireActivity(), MainActivityArgs(clearCredentials = true, isAccountDeactivated = true))
+                }
+                is DeactivateAccountViewEvents.RequestReAuth -> {
+                    ReAuthActivity.newIntent(requireContext(),
+                            it.registrationFlowResponse,
+                            it.lastErrorCode,
+                            getString(R.string.deactivate_account_title)).let { intent ->
+                        reAuthActivityResultLauncher.launch(intent)
+                    }
+                }
             }.exhaustive
         }
-    }
-
-    override fun invalidate() = withState(viewModel) { state ->
-        deactivateAccountPassword.showPassword(state.passwordShown)
-        deactivateAccountPasswordReveal.setImageResource(if (state.passwordShown) R.drawable.ic_eye_closed else R.drawable.ic_eye)
     }
 }

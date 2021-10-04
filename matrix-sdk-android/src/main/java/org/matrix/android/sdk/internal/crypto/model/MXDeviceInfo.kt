@@ -1,7 +1,4 @@
 /*
- * Copyright 2016 OpenMarket Ltd
- * Copyright 2017 Vector Creations Ltd
- * Copyright 2018 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -59,7 +56,7 @@ data class MXDeviceInfo(
         val signatures: Map<String, Map<String, String>>? = null,
 
         /*
-         * Additional data from the home server.
+         * Additional data from the homeserver.
          */
         @Json(name = "unsigned")
         val unsigned: JsonDict? = null,
@@ -106,7 +103,7 @@ data class MXDeviceInfo(
      */
     fun fingerprint(): String? {
         return keys
-                ?.takeIf { !deviceId.isBlank() }
+                ?.takeIf { deviceId.isNotBlank() }
                 ?.get("ed25519:$deviceId")
     }
 
@@ -115,7 +112,7 @@ data class MXDeviceInfo(
      */
     fun identityKey(): String? {
         return keys
-                ?.takeIf { !deviceId.isBlank() }
+                ?.takeIf { deviceId.isNotBlank() }
                 ?.get("curve25519:$deviceId")
     }
 

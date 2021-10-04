@@ -1,5 +1,4 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,12 +20,12 @@ import com.zhuinden.monarchy.Monarchy
 import org.matrix.android.sdk.internal.database.model.ChunkEntity
 import org.matrix.android.sdk.internal.database.query.findIncludingEvent
 import org.matrix.android.sdk.internal.di.SessionDatabase
+import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.filter.FilterRepository
 import org.matrix.android.sdk.internal.session.room.RoomAPI
 import org.matrix.android.sdk.internal.task.Task
 import org.matrix.android.sdk.internal.util.awaitTransaction
-import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
 internal interface FetchTokenAndPaginateTask : Task<FetchTokenAndPaginateTask.Params, TokenChunkEventPersistor.Result> {
@@ -44,13 +43,13 @@ internal class DefaultFetchTokenAndPaginateTask @Inject constructor(
         @SessionDatabase private val monarchy: Monarchy,
         private val filterRepository: FilterRepository,
         private val paginationTask: PaginationTask,
-        private val eventBus: EventBus
+        private val globalErrorReceiver: GlobalErrorReceiver
 ) : FetchTokenAndPaginateTask {
 
     override suspend fun execute(params: FetchTokenAndPaginateTask.Params): TokenChunkEventPersistor.Result {
         val filter = filterRepository.getRoomFilter()
-        val response = executeRequest<EventContextResponse>(eventBus) {
-            apiCall = roomAPI.getContextOfEvent(params.roomId, params.lastKnownEventId, 0, filter)
+        val response = executeRequest(globalErrorReceiver) {
+            roomAPI.getContextOfEvent(params.roomId, params.lastKnownEventId, 0, filter)
         }
         val fromToken = if (params.direction == PaginationDirection.FORWARDS) {
             response.end

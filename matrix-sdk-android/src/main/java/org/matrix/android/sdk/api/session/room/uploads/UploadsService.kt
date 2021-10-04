@@ -1,5 +1,4 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,9 +16,6 @@
 
 package org.matrix.android.sdk.api.session.room.uploads
 
-import org.matrix.android.sdk.api.MatrixCallback
-import org.matrix.android.sdk.api.util.Cancelable
-
 /**
  * This interface defines methods to get event with uploads (= attachments) sent to a room. It's implemented at the room level.
  */
@@ -30,7 +26,5 @@ interface UploadsService {
      * @param numberOfEvents the expected number of events to retrieve. The result can contain less events.
      * @param since token to get next page, or null to get the first page
      */
-    fun getUploads(numberOfEvents: Int,
-                   since: String?,
-                   callback: MatrixCallback<GetUploadsResult>): Cancelable
+    suspend fun getUploads(numberOfEvents: Int, since: String?): GetUploadsResult
 }

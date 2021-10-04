@@ -19,30 +19,28 @@ package im.vector.app.features.roomdirectory.createroom
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.widget.Toolbar
-import com.airbnb.mvrx.viewModel
+import com.google.android.material.appbar.MaterialToolbar
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
+import im.vector.app.databinding.ActivitySimpleBinding
 import im.vector.app.features.roomdirectory.RoomDirectorySharedAction
 import im.vector.app.features.roomdirectory.RoomDirectorySharedActionViewModel
-import javax.inject.Inject
 
 /**
  * Simple container for [CreateRoomFragment]
  */
-class CreateRoomActivity : VectorBaseActivity(), ToolbarConfigurable {
-
-    @Inject lateinit var createRoomViewModelFactory: CreateRoomViewModel.Factory
-    private val createRoomViewModel: CreateRoomViewModel by viewModel()
+class CreateRoomActivity : VectorBaseActivity<ActivitySimpleBinding>(), ToolbarConfigurable {
 
     private lateinit var sharedActionViewModel: RoomDirectorySharedActionViewModel
 
-    override fun getLayoutRes() = R.layout.activity_simple
+    override fun getBinding() = ActivitySimpleBinding.inflate(layoutInflater)
 
-    override fun configure(toolbar: Toolbar) {
+    override fun getCoordinatorLayout() = views.coordinatorLayout
+
+    override fun configure(toolbar: MaterialToolbar) {
         configureToolbar(toolbar)
     }
 
@@ -52,8 +50,14 @@ class CreateRoomActivity : VectorBaseActivity(), ToolbarConfigurable {
 
     override fun initUiAndData() {
         if (isFirstCreation()) {
-            addFragment(R.id.simpleFragmentContainer, CreateRoomFragment::class.java)
-            createRoomViewModel.handle(CreateRoomAction.SetName(intent?.getStringExtra(INITIAL_NAME) ?: ""))
+            addFragment(
+                    R.id.simpleFragmentContainer,
+                    CreateRoomFragment::class.java,
+                    CreateRoomArgs(
+                            intent?.getStringExtra(INITIAL_NAME) ?: "",
+                            isSpace = intent?.getBooleanExtra(IS_SPACE, false) ?: false
+                    )
+            )
         }
     }
 
@@ -73,10 +77,12 @@ class CreateRoomActivity : VectorBaseActivity(), ToolbarConfigurable {
 
     companion object {
         private const val INITIAL_NAME = "INITIAL_NAME"
+        private const val IS_SPACE = "IS_SPACE"
 
-        fun getIntent(context: Context, initialName: String = ""): Intent {
+        fun getIntent(context: Context, initialName: String = "", isSpace: Boolean = false): Intent {
             return Intent(context, CreateRoomActivity::class.java).apply {
                 putExtra(INITIAL_NAME, initialName)
+                putExtra(IS_SPACE, isSpace)
             }
         }
     }

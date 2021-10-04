@@ -1,5 +1,4 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -38,6 +37,7 @@ internal class RoomCreateEventProcessor @Inject constructor() : EventInsertLiveP
         val predecessorRoomSummary = RoomSummaryEntity.where(realm, predecessorRoomId).findFirst()
                 ?: RoomSummaryEntity(predecessorRoomId)
         predecessorRoomSummary.versioningState = VersioningState.UPGRADED_ROOM_JOINED
+        predecessorRoomSummary.isHiddenFromUser = true
         realm.insertOrUpdate(predecessorRoomSummary)
     }
 

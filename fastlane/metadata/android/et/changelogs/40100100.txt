@@ -1,0 +1,2 @@
+Selles uues versioonis leidub põhiliselt veaparandusi ja pisikohendusi. Sõnumite saatmine on nüüd märkatavalt kiirem.
+Kogu ingliskeelne muudatuste logi: https://github.com/vector-im/element-android/releases/tag/v1.0.10

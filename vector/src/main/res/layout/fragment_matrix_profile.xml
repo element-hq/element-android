@@ -2,23 +2,21 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/vector_coordinator_layout"
+    android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?riotx_header_panel_background">
+    android:background="?colorSurface">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/matrixProfileAppBarLayout"
-        style="@style/VectorAppBarLayoutStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:id="@+id/matrixProfileCollapsingToolbarLayout"
-            android:theme="@style/Vector.Toolbar.Profile"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:contentScrim="?riotx_background"
+            app:contentScrim="?android:colorBackground"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
             app:scrimAnimationDuration="250"
             app:scrimVisibleHeightTrigger="80dp"
@@ -29,12 +27,12 @@
                 android:id="@+id/matrixProfileHeaderView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="?riotx_background"
+                android:background="?android:colorBackground"
                 android:orientation="vertical"
                 app:layout_collapseMode="parallax"
                 app:layout_collapseParallaxMultiplier="0.9" />
 
-            <androidx.appcompat.widget.Toolbar
+            <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/matrixProfileToolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
@@ -53,13 +51,14 @@
                         android:layout_marginTop="8dp"
                         android:layout_marginBottom="8dp"
                         android:alpha="0"
+                        android:contentDescription="@string/avatar"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         tools:alpha="1"
-                        tools:src="@tools:sample/avatars" />
+                        tools:src="@sample/room_round_avatars" />
 
-                    <ImageView
+                    <im.vector.app.core.ui.views.ShieldImageView
                         android:id="@+id/matrixProfileDecorationToolbarAvatarImageView"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
@@ -68,11 +67,11 @@
                         app:layout_constraintCircleAngle="135"
                         app:layout_constraintCircleRadius="20dp"
                         tools:alpha="1"
-                        tools:ignore="MissingConstraints"
-                        tools:src="@drawable/ic_shield_trusted" />
+                        tools:ignore="MissingConstraints" />
 
                     <TextView
                         android:id="@+id/matrixProfileToolbarTitleView"
+                        style="@style/Widget.Vector.TextView.HeadlineMedium"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
@@ -80,21 +79,19 @@
                         android:alpha="0"
                         android:ellipsize="end"
                         android:maxLines="1"
-                        android:textColor="?vctr_toolbar_primary_text_color"
-                        android:textSize="18sp"
+                        android:textColor="?vctr_content_primary"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/matrixProfileToolbarAvatarImageView"
                         app:layout_constraintTop_toTopOf="parent"
                         tools:alpha="1"
-                        tools:text="@sample/matrix.json/data/roomName" />
+                        tools:text="@sample/rooms.json/data/name" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-            </androidx.appcompat.widget.Toolbar>
+            </com.google.android.material.appbar.MaterialToolbar>
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
-
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -104,5 +101,9 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:listitem="@layout/item_profile_action" />
+
+    <include
+        android:id="@+id/waiting_view"
+        layout="@layout/merge_overlay_waiting_view" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

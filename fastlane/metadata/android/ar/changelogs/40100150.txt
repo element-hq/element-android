@@ -1,0 +1,2 @@
+التغييرات الرئيسة في هذا الإصدار: دعم تسجيل الدخول الاجتماعي.
+سجل التعديل الكامل: https://github.com/vector-im/element-android/releases/tag/v1.0.15

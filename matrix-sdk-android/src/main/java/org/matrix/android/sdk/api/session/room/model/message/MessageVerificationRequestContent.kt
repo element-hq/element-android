@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,7 +24,7 @@ import org.matrix.android.sdk.internal.crypto.verification.VerificationInfoReque
 
 @JsonClass(generateAdapter = true)
 data class MessageVerificationRequestContent(
-        @Json(name = "msgtype") override val msgType: String = MessageType.MSGTYPE_VERIFICATION_REQUEST,
+        @Json(name = MessageContent.MSG_TYPE_JSON_KEY)override val msgType: String = MessageType.MSGTYPE_VERIFICATION_REQUEST,
         @Json(name = "body") override val body: String,
         @Json(name = "from_device") override val fromDevice: String?,
         @Json(name = "methods") override val methods: List<String>,

@@ -29,6 +29,7 @@ import com.airbnb.epoxy.EpoxyModelWithHolder
 import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.features.notifications.toNotificationAction
+import im.vector.app.features.themes.ThemeUtils
 import org.matrix.android.sdk.api.pushrules.getActions
 import org.matrix.android.sdk.api.pushrules.rest.PushRule
 
@@ -47,7 +48,7 @@ abstract class PushRuleItem : EpoxyModelWithHolder<PushRuleItem.Holder>() {
             holder.view.setBackgroundColor(Color.TRANSPARENT)
             holder.ruleId.text = pushRule.ruleId
         } else {
-            holder.view.setBackgroundColor(ContextCompat.getColor(context, R.color.vector_silver_color))
+            holder.view.setBackgroundColor(ThemeUtils.getColor(context, R.attr.vctr_header_background))
             holder.ruleId.text = "[Disabled] ${pushRule.ruleId}"
         }
         val actions = pushRule.getActions()
@@ -59,10 +60,13 @@ abstract class PushRuleItem : EpoxyModelWithHolder<PushRuleItem.Holder>() {
 
             if (notifAction.shouldNotify && !notifAction.soundName.isNullOrBlank()) {
                 holder.actionIcon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_action_notify_noisy))
+                holder.actionIcon.contentDescription = context.getString(R.string.a11y_rule_notify_noisy)
             } else if (notifAction.shouldNotify) {
                 holder.actionIcon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_action_notify_silent))
+                holder.actionIcon.contentDescription = context.getString(R.string.a11y_rule_notify_silent)
             } else {
                 holder.actionIcon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_action_dont_notify))
+                holder.actionIcon.contentDescription = context.getString(R.string.a11y_rule_notify_off)
             }
 
             val description = StringBuffer()

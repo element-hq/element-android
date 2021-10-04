@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,11 +16,11 @@
 
 package org.matrix.android.sdk.internal.session.room.membership.threepid
 
-import org.greenrobot.eventbus.EventBus
 import org.matrix.android.sdk.api.session.identity.IdentityServiceError
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.identity.toMedium
 import org.matrix.android.sdk.internal.di.AuthenticatedIdentity
+import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.network.token.AccessTokenProvider
 import org.matrix.android.sdk.internal.session.identity.EnsureIdentityTokenTask
@@ -40,7 +39,7 @@ internal interface InviteThreePidTask : Task<InviteThreePidTask.Params, Unit> {
 
 internal class DefaultInviteThreePidTask @Inject constructor(
         private val roomAPI: RoomAPI,
-        private val eventBus: EventBus,
+        private val globalErrorReceiver: GlobalErrorReceiver,
         private val identityStore: IdentityStore,
         private val ensureIdentityTokenTask: EnsureIdentityTokenTask,
         @AuthenticatedIdentity
@@ -53,14 +52,14 @@ internal class DefaultInviteThreePidTask @Inject constructor(
         val identityServerUrlWithoutProtocol = identityStore.getIdentityServerUrlWithoutProtocol() ?: throw IdentityServiceError.NoIdentityServerConfigured
         val identityServerAccessToken = accessTokenProvider.getToken() ?: throw IdentityServiceError.NoIdentityServerConfigured
 
-        return executeRequest(eventBus) {
+        return executeRequest(globalErrorReceiver) {
             val body = ThreePidInviteBody(
                     idServer = identityServerUrlWithoutProtocol,
                     idAccessToken = identityServerAccessToken,
                     medium = params.threePid.toMedium(),
                     address = params.threePid.value
             )
-            apiCall = roomAPI.invite3pid(params.roomId, body)
+            roomAPI.invite3pid(params.roomId, body)
         }
     }
 }

@@ -34,7 +34,6 @@ fun EpoxyController.buildProfileSection(title: String) {
 fun EpoxyController.buildProfileAction(
         id: String,
         title: String,
-        dividerColor: Int,
         subtitle: String? = null,
         editable: Boolean = true,
         @DrawableRes icon: Int = 0,
@@ -59,15 +58,12 @@ fun EpoxyController.buildProfileAction(
         accessoryRes(accessory)
         accessoryMatrixItem(accessoryMatrixItem)
         avatarRenderer(avatarRenderer)
-        listener { _ ->
-            action?.invoke()
-        }
+        listener(action)
     }
 
     if (divider) {
         dividerItem {
             id("divider_$title")
-            color(dividerColor)
         }
     }
 }

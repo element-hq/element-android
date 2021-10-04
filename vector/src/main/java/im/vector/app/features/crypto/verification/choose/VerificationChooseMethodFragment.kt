@@ -16,37 +16,43 @@
 package im.vector.app.features.crypto.verification.choose
 
 import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
+import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
-import im.vector.app.core.utils.PERMISSION_REQUEST_CODE_LAUNCH_CAMERA
-import im.vector.app.core.utils.allGranted
 import im.vector.app.core.utils.checkPermissions
+import im.vector.app.core.utils.onPermissionDeniedDialog
+import im.vector.app.core.utils.registerForPermissionsResult
+import im.vector.app.databinding.BottomSheetVerificationChildFragmentBinding
 import im.vector.app.features.crypto.verification.VerificationAction
 import im.vector.app.features.crypto.verification.VerificationBottomSheetViewModel
 import im.vector.app.features.qrcode.QrCodeScannerActivity
-import kotlinx.android.synthetic.main.bottom_sheet_verification_child_fragment.*
+
 import timber.log.Timber
 import javax.inject.Inject
 
 class VerificationChooseMethodFragment @Inject constructor(
         val verificationChooseMethodViewModelFactory: VerificationChooseMethodViewModel.Factory,
         val controller: VerificationChooseMethodController
-) : VectorBaseFragment(), VerificationChooseMethodController.Listener {
+) : VectorBaseFragment<BottomSheetVerificationChildFragmentBinding>(),
+        VerificationChooseMethodController.Listener {
 
     private val viewModel by fragmentViewModel(VerificationChooseMethodViewModel::class)
 
     private val sharedViewModel by parentFragmentViewModel(VerificationBottomSheetViewModel::class)
 
-    override fun getLayoutResId() = R.layout.bottom_sheet_verification_child_fragment
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): BottomSheetVerificationChildFragmentBinding {
+        return BottomSheetVerificationChildFragmentBinding.inflate(inflater, container, false)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -55,13 +61,13 @@ class VerificationChooseMethodFragment @Inject constructor(
     }
 
     override fun onDestroyView() {
-        bottomSheetVerificationRecyclerView.cleanup()
+        views.bottomSheetVerificationRecyclerView.cleanup()
         controller.listener = null
         super.onDestroyView()
     }
 
     private fun setupRecyclerView() {
-        bottomSheetVerificationRecyclerView.configureWith(controller, hasFixedSize = false, disableItemAnimation = true)
+        views.bottomSheetVerificationRecyclerView.configureWith(controller, hasFixedSize = false, disableItemAnimation = true)
         controller.listener = this
     }
 
@@ -75,16 +81,16 @@ class VerificationChooseMethodFragment @Inject constructor(
                 state.pendingRequest.invoke()?.transactionId ?: ""))
     }
 
-    override fun openCamera() {
-        if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, this, PERMISSION_REQUEST_CODE_LAUNCH_CAMERA)) {
+    private val openCameraActivityResultLauncher = registerForPermissionsResult { allGranted, deniedPermanently ->
+        if (allGranted) {
             doOpenQRCodeScanner()
+        } else if (deniedPermanently) {
+            activity?.onPermissionDeniedDialog(R.string.denied_permission_camera)
         }
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
-        if (requestCode == PERMISSION_REQUEST_CODE_LAUNCH_CAMERA && allGranted(grantResults)) {
+    override fun openCamera() {
+        if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, requireActivity(), openCameraActivityResultLauncher)) {
             doOpenQRCodeScanner()
         }
     }
@@ -94,24 +100,18 @@ class VerificationChooseMethodFragment @Inject constructor(
     }
 
     private fun doOpenQRCodeScanner() {
-        QrCodeScannerActivity.startForResult(this)
+        QrCodeScannerActivity.startForResult(requireActivity(), scanActivityResultLauncher)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
+    private val scanActivityResultLauncher = registerStartForActivityResult { activityResult ->
+        if (activityResult.resultCode == Activity.RESULT_OK) {
+            val scannedQrCode = QrCodeScannerActivity.getResultText(activityResult.data)
+            val wasQrCode = QrCodeScannerActivity.getResultIsQrCode(activityResult.data)
 
-        if (resultCode == Activity.RESULT_OK) {
-            when (requestCode) {
-                QrCodeScannerActivity.QR_CODE_SCANNER_REQUEST_CODE -> {
-                    val scannedQrCode = QrCodeScannerActivity.getResultText(data)
-                    val wasQrCode = QrCodeScannerActivity.getResultIsQrCode(data)
-
-                    if (wasQrCode && !scannedQrCode.isNullOrBlank()) {
-                        onRemoteQrCodeScanned(scannedQrCode)
-                    } else {
-                        Timber.w("It was not a QR code, or empty result")
-                    }
-                }
+            if (wasQrCode && !scannedQrCode.isNullOrBlank()) {
+                onRemoteQrCodeScanned(scannedQrCode)
+            } else {
+                Timber.w("It was not a QR code, or empty result")
             }
         }
     }

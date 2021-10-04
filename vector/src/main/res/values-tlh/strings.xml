@@ -1,11 +1,8 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-    <string name="resources_language">tlh</string>
-    <string name="resources_country_code">QO</string>
-
     <string name="light_theme">tu\'qom wov</string>
     <string name="dark_theme">tu\'qom Hurgh</string>
-    <string name="black_them">tu\'qom qIj</string>
+    <string name="black_theme">tu\'qom qIj</string>
 
     <string name="notification_sync_in_progress">vIrapmoHltaH</string>
     <string name="notification_listening_for_events">wanI\' vInejtaH</string>

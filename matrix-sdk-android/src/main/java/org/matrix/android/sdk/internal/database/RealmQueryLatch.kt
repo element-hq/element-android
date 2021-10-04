@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,8 +28,8 @@ import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
 
 internal suspend fun <T> awaitNotEmptyResult(realmConfiguration: RealmConfiguration,
-                                    timeoutMillis: Long,
-                                    builder: (Realm) -> RealmQuery<T>) {
+                                             timeoutMillis: Long,
+                                             builder: (Realm) -> RealmQuery<T>) {
     withTimeout(timeoutMillis) {
         // Confine Realm interaction to a single thread with Looper.
         withContext(Dispatchers.Main) {

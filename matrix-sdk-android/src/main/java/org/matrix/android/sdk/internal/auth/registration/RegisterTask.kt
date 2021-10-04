@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -37,7 +36,7 @@ internal class DefaultRegisterTask(
     override suspend fun execute(params: RegisterTask.Params): Credentials {
         try {
             return executeRequest(null) {
-                apiCall = authAPI.register(params.registrationParams)
+                authAPI.register(params.registrationParams)
             }
         } catch (throwable: Throwable) {
             throw throwable.toRegistrationFlowResponse()

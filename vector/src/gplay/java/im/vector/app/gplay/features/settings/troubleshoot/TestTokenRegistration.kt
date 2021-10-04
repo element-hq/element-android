@@ -15,6 +15,8 @@
  */
 package im.vector.app.gplay.features.settings.troubleshoot
 
+import android.content.Intent
+import androidx.activity.result.ActivityResultLauncher
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.work.WorkInfo
@@ -37,7 +39,7 @@ class TestTokenRegistration @Inject constructor(private val context: AppCompatAc
                                                 private val activeSessionHolder: ActiveSessionHolder)
     : TroubleshootTest(R.string.settings_troubleshoot_test_token_registration_title) {
 
-    override fun perform() {
+    override fun perform(activityResultLauncher: ActivityResultLauncher<Intent>) {
         // Check if we have a registered pusher for this token
         val fcmToken = FcmHelper.getFcmToken(context) ?: run {
             status = TestStatus.FAILED
@@ -59,9 +61,9 @@ class TestTokenRegistration @Inject constructor(private val context: AppCompatAc
                     WorkManager.getInstance(context).getWorkInfoByIdLiveData(workId).observe(context, Observer { workInfo ->
                         if (workInfo != null) {
                             if (workInfo.state == WorkInfo.State.SUCCEEDED) {
-                                manager?.retry()
+                                manager?.retry(activityResultLauncher)
                             } else if (workInfo.state == WorkInfo.State.FAILED) {
-                                manager?.retry()
+                                manager?.retry(activityResultLauncher)
                             }
                         }
                     })

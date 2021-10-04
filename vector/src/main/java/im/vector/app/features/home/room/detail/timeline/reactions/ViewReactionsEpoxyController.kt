@@ -38,6 +38,7 @@ class ViewReactionsEpoxyController @Inject constructor(
     var listener: Listener? = null
 
     override fun buildModels(state: DisplayReactionsViewState) {
+        val host = this
         when (state.mapReactionKeyToMemberList) {
             is Incomplete -> {
                 genericLoaderItem {
@@ -47,17 +48,17 @@ class ViewReactionsEpoxyController @Inject constructor(
             is Fail       -> {
                 genericFooterItem {
                     id("failure")
-                    text(stringProvider.getString(R.string.unknown_error))
+                    text(host.stringProvider.getString(R.string.unknown_error))
                 }
             }
             is Success    -> {
-                state.mapReactionKeyToMemberList()?.forEach {
+                state.mapReactionKeyToMemberList()?.forEach { reactionInfo ->
                     reactionInfoSimpleItem {
-                        id(it.eventId)
-                        timeStamp(it.timestamp)
-                        reactionKey(emojiCompatWrapper.safeEmojiSpanify(it.reactionKey))
-                        authorDisplayName(it.authorName ?: it.authorId)
-                        userClicked { listener?.didSelectUser(it.authorId) }
+                        id(reactionInfo.eventId)
+                        timeStamp(reactionInfo.timestamp)
+                        reactionKey(host.emojiCompatWrapper.safeEmojiSpanify(reactionInfo.reactionKey))
+                        authorDisplayName(reactionInfo.authorName ?: reactionInfo.authorId)
+                        userClicked { host.listener?.didSelectUser(reactionInfo.authorId) }
                     }
                 }
             }

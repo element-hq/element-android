@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,8 +15,8 @@
  */
 package org.matrix.android.sdk.internal.database.model
 
-import org.matrix.android.sdk.api.session.pushers.PusherState
 import io.realm.RealmObject
+import org.matrix.android.sdk.api.session.pushers.PusherState
 
 // TODO
 //        at java.lang.Thread.run(Thread.java:764)
@@ -54,4 +53,9 @@ internal open class PusherEntity(
         }
 
     companion object
+}
+
+internal fun PusherEntity.deleteOnCascade() {
+    data?.deleteFromRealm()
+    deleteFromRealm()
 }

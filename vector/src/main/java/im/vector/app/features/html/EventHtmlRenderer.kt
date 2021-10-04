@@ -17,21 +17,23 @@
 package im.vector.app.features.html
 
 import android.content.Context
-import im.vector.app.core.di.ActiveSessionHolder
-import im.vector.app.core.glide.GlideApp
+import android.text.Spannable
+import androidx.core.text.toSpannable
 import im.vector.app.core.resources.ColorProvider
-import im.vector.app.features.home.AvatarRenderer
 import io.noties.markwon.Markwon
 import io.noties.markwon.html.HtmlPlugin
-import io.noties.markwon.html.TagHandlerNoOp
 import org.commonmark.node.Node
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class EventHtmlRenderer @Inject constructor(context: Context,
-                                            htmlConfigure: MatrixHtmlPluginConfigure) {
+class EventHtmlRenderer @Inject constructor(htmlConfigure: MatrixHtmlPluginConfigure,
+                                            context: Context) {
+
+    interface PostProcessor {
+        fun afterRender(renderedText: Spannable)
+    }
 
     private val markwon = Markwon.builder(context)
             .usePlugin(HtmlPlugin.create(htmlConfigure))
@@ -41,35 +43,47 @@ class EventHtmlRenderer @Inject constructor(context: Context,
         return markwon.parse(text)
     }
 
-    fun render(text: String): CharSequence {
+    /**
+     * @param text the text you want to render
+     * @param postProcessors an optional array of post processor to add any span if needed
+     */
+    fun render(text: String, vararg postProcessors: PostProcessor): CharSequence {
         return try {
-            markwon.toMarkdown(text)
+            val parsed = markwon.parse(text)
+            renderAndProcess(parsed, postProcessors)
         } catch (failure: Throwable) {
             Timber.v("Fail to render $text to html")
             text
         }
     }
 
-    fun render(node: Node): CharSequence? {
+    /**
+     * @param node the node you want to render
+     * @param postProcessors an optional array of post processor to add any span if needed
+     */
+    fun render(node: Node, vararg postProcessors: PostProcessor): CharSequence? {
         return try {
-            markwon.render(node)
+            renderAndProcess(node, postProcessors)
         } catch (failure: Throwable) {
             Timber.v("Fail to render $node to html")
             return null
         }
     }
+
+    private fun renderAndProcess(node: Node, postProcessors: Array<out PostProcessor>): CharSequence {
+        val renderedText = markwon.render(node).toSpannable()
+        postProcessors.forEach {
+            it.afterRender(renderedText)
+        }
+        return renderedText
+    }
 }
 
-class MatrixHtmlPluginConfigure @Inject constructor(private val context: Context,
-                                                    private val colorProvider: ColorProvider,
-                                                    private val avatarRenderer: AvatarRenderer,
-                                                    private val session: ActiveSessionHolder) : HtmlPlugin.HtmlConfigure {
+class MatrixHtmlPluginConfigure @Inject constructor(private val colorProvider: ColorProvider) : HtmlPlugin.HtmlConfigure {
 
     override fun configureHtml(plugin: HtmlPlugin) {
         plugin
-                .addHandler(TagHandlerNoOp.create("a"))
                 .addHandler(FontTagHandler())
-                .addHandler(MxLinkTagHandler(GlideApp.with(context), context, avatarRenderer, session))
                 .addHandler(MxReplyTagHandler())
                 .addHandler(SpanHandler(colorProvider))
     }

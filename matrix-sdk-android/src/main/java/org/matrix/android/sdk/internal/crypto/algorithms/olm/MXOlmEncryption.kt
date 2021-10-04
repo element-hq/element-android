@@ -1,7 +1,4 @@
 /*
- * Copyright 2015 OpenMarket Ltd
- * Copyright 2017 Vector Creations Ltd
- * Copyright 2018 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -78,14 +75,5 @@ internal class MXOlmEncryption(
     private suspend fun ensureSession(users: List<String>) {
         deviceListManager.downloadKeys(users, false)
         ensureOlmSessionsForUsersAction.handle(users)
-    }
-
-    override fun discardSessionKey() {
-        // No need for olm
-    }
-
-    override suspend fun reshareKey(sessionId: String, userId: String, deviceId: String, senderKey: String): Boolean {
-        // No need for olm
-        return false
     }
 }

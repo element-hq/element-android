@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -35,6 +34,11 @@ object RuleIds {
 
     // Default Content Rules
     const val RULE_ID_CONTAIN_USER_NAME = ".m.rule.contains_user_name"
+
+    // The keywords rule id is not a "real" id in that it does not exist server-side.
+    // It is used client-side as a placeholder for rendering the keyword push rule setting
+    // alongside the others. A similar approach and naming is used on Web and iOS.
+    const val RULE_ID_KEYWORDS = "_keywords"
 
     // Default Underride Rules
     const val RULE_ID_CALL = ".m.rule.call"

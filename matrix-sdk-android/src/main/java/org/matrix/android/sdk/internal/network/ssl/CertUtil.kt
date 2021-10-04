@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -254,7 +253,7 @@ internal object CertUtil {
         val list = ArrayList<ConnectionSpec>()
         list.add(builder.build())
         // TODO: we should display a warning if user enter an http url
-        if (hsConfig.allowHttpExtension || hsConfig.homeServerUri.toString().startsWith("http://")) {
+        if (hsConfig.allowHttpExtension || hsConfig.homeServerUriBase.toString().startsWith("http://")) {
             list.add(ConnectionSpec.CLEARTEXT)
         }
         return list

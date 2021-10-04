@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
+ * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -66,8 +66,8 @@ class TimelineForwardPaginationTest : InstrumentedTest {
                 numberOfMessagesToSend)
 
         // Alice clear the cache
-        commonTestHelper.doSync<Unit> {
-            aliceSession.clearCache(it)
+        commonTestHelper.runBlockingTest {
+            aliceSession.clearCache()
         }
 
         // And restarts the sync
@@ -139,7 +139,7 @@ class TimelineForwardPaginationTest : InstrumentedTest {
                 // Alice can see the first event of the room (so Back pagination has worked)
                 snapshot.lastOrNull()?.root?.getClearType() == EventType.STATE_ROOM_CREATE
                         // 6 for room creation item (backward pagination), 1 for the context, and 50 for the forward pagination
-                        && snapshot.size == 6 + 1 + 50
+                        && snapshot.size == 57 // 6 + 1 + 50
             }
 
             aliceTimeline.addListener(aliceEventsListener)

@@ -1,5 +1,4 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,7 +16,7 @@
 
 package org.matrix.android.sdk.api.session.room.members
 
-sealed class ChangeMembershipState() {
+sealed class ChangeMembershipState {
     object Unknown : ChangeMembershipState()
     object Joining : ChangeMembershipState()
     data class FailedJoining(val throwable: Throwable) : ChangeMembershipState()

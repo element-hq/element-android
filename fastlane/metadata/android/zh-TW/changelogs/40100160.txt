@@ -1,0 +1,2 @@
+此版本的主要變動：社群網路登入支援。
+完整變更紀錄：https://github.com/vector-im/element-android/releases/tag/v1.0.15 以及 https://github.com/vector-im/element-android/releases/tag/v1.0.16

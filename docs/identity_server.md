@@ -4,7 +4,7 @@ Issue: #607
 PR: #1354
 
 ## Introduction
-Identity Servers support contact discovery on Matrix by letting people look up Third Party Identifiers to see if the owner has publicly linked them with their Matrix ID.
+Identity servers support contact discovery on Matrix by letting people look up Third Party Identifiers to see if the owner has publicly linked them with their Matrix ID.
 
 ## Implementation
 
@@ -87,6 +87,6 @@ This screen displays the identity server configuration and the binding of the us
 This screen is a form to set a new identity server URL
 
 ## Ref:
-- https://matrix.org/blog/2019/09/27/privacy-improvements-in-synapse-1-4-and-riot-1-4 is a good summary of the role of an Identity server and the proper way to configure and use it in respect to the privacy and the consent of the user.
+- https://matrix.org/blog/2019/09/27/privacy-improvements-in-synapse-1-4-and-riot-1-4 is a good summary of the role of an identity server and the proper way to configure and use it in respect to the privacy and the consent of the user.
 - API documentation: https://matrix.org/docs/spec/identity_service/latest
 - vector.im TOS: https://vector.im/identity-server-privacy-notice

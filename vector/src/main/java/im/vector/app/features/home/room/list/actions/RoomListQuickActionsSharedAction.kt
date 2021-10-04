@@ -23,7 +23,7 @@ import im.vector.app.core.platform.VectorSharedAction
 
 sealed class RoomListQuickActionsSharedAction(
         @StringRes val titleRes: Int,
-        @DrawableRes val iconResId: Int,
+        @DrawableRes val iconResId: Int?,
         val destructive: Boolean = false)
     : VectorSharedAction {
 
@@ -52,13 +52,17 @@ sealed class RoomListQuickActionsSharedAction(
             R.drawable.ic_room_actions_settings
     )
 
+    data class LowPriority(val roomId: String) : RoomListQuickActionsSharedAction(
+            R.string.room_list_quick_actions_low_priority_add,
+            R.drawable.ic_low_priority_24)
+
     data class Favorite(val roomId: String) : RoomListQuickActionsSharedAction(
             R.string.room_list_quick_actions_favorite_add,
             R.drawable.ic_star_24dp)
 
-    data class Leave(val roomId: String) : RoomListQuickActionsSharedAction(
+    data class Leave(val roomId: String, val showIcon: Boolean = true) : RoomListQuickActionsSharedAction(
             R.string.room_list_quick_actions_leave,
-            R.drawable.ic_room_actions_leave,
+            if (showIcon) R.drawable.ic_room_actions_leave else null,
             true
     )
 }

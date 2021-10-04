@@ -24,8 +24,15 @@ import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
+import dagger.assisted.AssistedFactory
+import im.vector.app.core.platform.EmptyAction
+import im.vector.app.core.platform.EmptyViewEvents
+import im.vector.app.core.platform.VectorViewModel
+import io.reactivex.Observable
+import io.reactivex.functions.Function4
+import io.reactivex.subjects.PublishSubject
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.accountdata.UserAccountDataEvent
@@ -37,12 +44,6 @@ import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupState
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupStateListener
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.crypto.store.PrivateKeysInfo
-import im.vector.app.core.platform.EmptyAction
-import im.vector.app.core.platform.EmptyViewEvents
-import im.vector.app.core.platform.VectorViewModel
-import io.reactivex.Observable
-import io.reactivex.functions.Function4
-import io.reactivex.subjects.PublishSubject
 import org.matrix.android.sdk.rx.rx
 import java.util.concurrent.TimeUnit
 
@@ -69,7 +70,7 @@ class ServerBackupStatusViewModel @AssistedInject constructor(@Assisted initialS
                                                               private val session: Session)
     : VectorViewModel<ServerBackupStatusViewState, EmptyAction, EmptyViewEvents>(initialState), KeysBackupStateListener {
 
-    @AssistedInject.Factory
+    @AssistedFactory
     interface Factory {
         fun create(initialState: ServerBackupStatusViewState): ServerBackupStatusViewModel
     }
@@ -98,7 +99,7 @@ class ServerBackupStatusViewModel @AssistedInject constructor(@Assisted initialS
         keysBackupState.value = session.cryptoService().keysBackupService().state
 
         Observable.combineLatest<List<UserAccountDataEvent>, Optional<MXCrossSigningInfo>, KeysBackupState, Optional<PrivateKeysInfo>, BannerState>(
-                session.rx().liveAccountData(setOf(MASTER_KEY_SSSS_NAME, USER_SIGNING_KEY_SSSS_NAME, SELF_SIGNING_KEY_SSSS_NAME)),
+                session.rx().liveUserAccountData(setOf(MASTER_KEY_SSSS_NAME, USER_SIGNING_KEY_SSSS_NAME, SELF_SIGNING_KEY_SSSS_NAME)),
                 session.rx().liveCrossSigningInfo(session.myUserId),
                 keyBackupPublishSubject,
                 session.rx().liveCrossSigningPrivateKeys(),
@@ -114,8 +115,10 @@ class ServerBackupStatusViewModel @AssistedInject constructor(@Assisted initialS
 
                     // So recovery is not setup
                     // Check if cross signing is enabled and local secrets known
-                    if (crossSigningInfo.getOrNull()?.isTrusted() == true
-                            && pInfo.getOrNull()?.allKnown().orFalse()
+                    if (
+                            crossSigningInfo.getOrNull() == null
+                            || (crossSigningInfo.getOrNull()?.isTrusted() == true
+                            && pInfo.getOrNull()?.allKnown().orFalse())
                     ) {
                         // So 4S is not setup and we have local secrets,
                         return@Function4 BannerState.Setup(numberOfKeys = getNumberOfKeysToBackup())
@@ -157,8 +160,8 @@ class ServerBackupStatusViewModel @AssistedInject constructor(@Assisted initialS
     }
 
     override fun onCleared() {
-        super.onCleared()
         session.cryptoService().keysBackupService().removeListener(this)
+        super.onCleared()
     }
 
     override fun onStateChange(newState: KeysBackupState) {

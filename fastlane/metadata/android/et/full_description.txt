@@ -1,0 +1,39 @@
+Element on nii suhtlus- ja koostöörakendus, mis sobib ideaalselt rühmavestlusteks kaugtöö ajal. Läbiv krüptimine on kasutusel sõnumivahetuseks, videokõnedeks, häälkõnedeks ja failide jagamiseks.
+
+<b>Element pakub muu hulgas selliseid võimalusi</b>
+- moodsad võrgupõhised suhtlusvahendid
+- läbivalt krüptitud sõnumid võimaldavad turvalist suhtlust, sealhulgas kaugtöötajatega
+- Matrix'i protokollil põhinev hajutatud suhtlusvõrk
+- projektide jaoks vajalike failide jagamine turvaliselt ja krüptitult
+- VoIP'i põhised videokõned ja ekraani jagamine
+- lihtne lõimimine harjumispäraste võrgupõhiste koostöövahenditega, projektihalduse rakendustega, VoIP-teenustega ja muude ühistöörakendustega
+
+Element erineb teistest sõnumi- ja koostöörakendustest. Tema aluseks on Matrix - avatud võrk turvalise ja hajutatud suhtluse jaoks.
+
+<b>Privaatsus ja krüptitud sõnumivahetus</b>
+Element tagab, et sa ei ole seotud reklaamidega, andmekogumisega ja suletud süsteemidega. Kasutades läbivat krüptimist ja risttunnustamisel põhinevat verifitseerimist on sinu sõnumid, andmed, kahepoolsed videokõned ja häälkõned turvatud.
+
+Lubades suhelda turvaliselt ükspuha kellega Matrix'i võrgus või muude ärikeskondades kasutatavate koostöörakendustega nagu Slack, jätab Element sulle kontrolli oma privaatsuse üle.
+
+<b>Võid kasutada Element'i jaoks oma serverid</b>
+Kui vajad suuremat kontrolli oma suhtluse ja andmete üle, siis võid kasutada oma serverit või tellida teenuse ükspuha missuguselt Matrix'i-teenuse pakkujalt. Matrix on standard avatud lähtekoodil põhineva detsentraliseeritud suhtluse jaoks.
+
+<b>Andmed on Sinu omad</b>
+Sina otsustad seda, kus hoiad oma sõnumeid ja andmeid. Ning seejuures puudub andmekaevandamise risk ja ligipääs kolmandatele osapooltele.
+
+Element annab kontrolli sinule valikuga mitme võimaluse vahel:
+1. tasuta konto Matrix'i arendajate hostitud avalikus serveris matrix.org või vali tuhandete avalike serverite hulgast, mida haldavad vabatahtlikud
+2. hosti oma kontot ise, paigaldades serveri oma IT-taristule
+3. telli tasuline kasutajakonto Element Matrix Services teenuseplatvormilt
+
+<b>Avatud suhtlus ja koostöö</b>
+Saad vestelda kõigi teistega Matrix'i võrgus, olenemata sellest, kas nad kasutavad Elementi või mõnda muud Matrixi rakendust ja isegi kui nad kasutavad mõnda teistsugust suhtlussüsteemi.
+
+<b>Üliturvaline</b>
+Tõeline läbiv krüptimine (ainult vestluses osalejad saavad sõnumeid lugeda) ja risttunnustamine vestluses osalejate tuvastamiseks.
+
+<b>Kõik suhtlusvõimalused</b>
+Sõnumid, hääl- ja videokõned, failide jagamine, ekraani jagamine ja terve hulk lõiminguid, roboteid ja vidinaid. Loo tubasid, kogukondi, hoia ühendust ja saa asjad aetud.
+
+<b>Jätka sealt, kus pooleli jäid</b>
+Saad suhelda kõigis oma seadmetes ja ka veebis aadressil https://app.element.io ning sealjuures täielikult sünkroonitud sõnumite ajalooga.

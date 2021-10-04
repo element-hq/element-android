@@ -1,5 +1,4 @@
 /*
- * Copyright 2017 OpenMarket Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -37,6 +36,7 @@ import kotlin.math.min
 object MXMegolmExportEncryption {
     private const val HEADER_LINE = "-----BEGIN MEGOLM SESSION DATA-----"
     private const val TRAILER_LINE = "-----END MEGOLM SESSION DATA-----"
+
     // we split into lines before base64ing, because encodeBase64 doesn't deal
     // terribly well with large arrays.
     private const val LINE_LENGTH = 72 * 4 / 3

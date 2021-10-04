@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,7 +20,7 @@ object ContentUtils {
         val lines = repliedBody.lines()
         var wellFormed = repliedBody.startsWith(">")
         var endOfPreviousFound = false
-        val usefullines = ArrayList<String>()
+        val usefulLines = ArrayList<String>()
         lines.forEach {
             if (it == "") {
                 endOfPreviousFound = true
@@ -30,10 +29,10 @@ object ContentUtils {
             if (!endOfPreviousFound) {
                 wellFormed = wellFormed && it.startsWith(">")
             } else {
-                usefullines.add(it)
+                usefulLines.add(it)
             }
         }
-        return usefullines.joinToString("\n").takeIf { wellFormed } ?: repliedBody
+        return usefulLines.joinToString("\n").takeIf { wellFormed } ?: repliedBody
     }
 
     fun extractUsefulTextFromHtmlReply(repliedBody: String): String {

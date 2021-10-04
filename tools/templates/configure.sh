@@ -19,6 +19,7 @@
 echo "Configure Element Template..."
 if [ -z ${ANDROID_STUDIO+x} ]; then ANDROID_STUDIO="/Applications/Android Studio.app/Contents"; fi
 {
+mkdir -p "${ANDROID_STUDIO%/}/plugins/android/lib/templates/other"
 ln -s $(pwd)/ElementFeature "${ANDROID_STUDIO%/}/plugins/android/lib/templates/other"
 } && {
   echo "Please restart Android Studio."

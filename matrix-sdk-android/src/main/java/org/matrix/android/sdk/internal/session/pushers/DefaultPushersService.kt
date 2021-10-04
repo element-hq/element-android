@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,16 +18,15 @@ package org.matrix.android.sdk.internal.session.pushers
 import androidx.lifecycle.LiveData
 import androidx.work.BackoffPolicy
 import com.zhuinden.monarchy.Monarchy
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.pushers.Pusher
 import org.matrix.android.sdk.api.session.pushers.PushersService
-import org.matrix.android.sdk.api.util.Cancelable
 import org.matrix.android.sdk.internal.database.mapper.asDomain
 import org.matrix.android.sdk.internal.database.model.PusherEntity
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.di.SessionId
 import org.matrix.android.sdk.internal.di.WorkManagerProvider
+import org.matrix.android.sdk.internal.session.pushers.gateway.PushGatewayNotifyTask
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.task.configureWith
 import org.matrix.android.sdk.internal.worker.WorkerParamsFactory
@@ -42,9 +40,17 @@ internal class DefaultPushersService @Inject constructor(
         @SessionDatabase private val monarchy: Monarchy,
         @SessionId private val sessionId: String,
         private val getPusherTask: GetPushersTask,
+        private val pushGatewayNotifyTask: PushGatewayNotifyTask,
         private val removePusherTask: RemovePusherTask,
         private val taskExecutor: TaskExecutor
 ) : PushersService {
+
+    override suspend fun testPush(url: String,
+                                  appId: String,
+                                  pushkey: String,
+                                  eventId: String) {
+        pushGatewayNotifyTask.execute(PushGatewayNotifyTask.Params(url, appId, pushkey, eventId))
+    }
 
     override fun refreshPushers() {
         getPusherTask
@@ -60,43 +66,75 @@ internal class DefaultPushersService @Inject constructor(
                                deviceDisplayName: String,
                                url: String,
                                append: Boolean,
-                               withEventIdOnly: Boolean)
-            : UUID {
-        // Do some parameter checks. It's ok to throw Exception, to inform developer of the problem
-        if (pushkey.length > 512) throw InvalidParameterException("pushkey should not exceed 512 chars")
-        if (appId.length > 64) throw InvalidParameterException("appId should not exceed 64 chars")
-        if ("/_matrix/push/v1/notify" !in url) throw InvalidParameterException("url should contain '/_matrix/push/v1/notify'")
+                               withEventIdOnly: Boolean
+    ) = addPusher(
+            JsonPusher(
+                    pushKey = pushkey,
+                    kind = Pusher.KIND_HTTP,
+                    appId = appId,
+                    profileTag = profileTag,
+                    lang = lang,
+                    appDisplayName = appDisplayName,
+                    deviceDisplayName = deviceDisplayName,
+                    data = JsonPusherData(url, EVENT_ID_ONLY.takeIf { withEventIdOnly }),
+                    append = append
+            )
+    )
 
-        val pusher = JsonPusher(
-                pushKey = pushkey,
-                kind = "http",
-                appId = appId,
-                appDisplayName = appDisplayName,
-                deviceDisplayName = deviceDisplayName,
-                profileTag = profileTag,
-                lang = lang,
-                data = JsonPusherData(url, EVENT_ID_ONLY.takeIf { withEventIdOnly }),
-                append = append)
+    override fun addEmailPusher(email: String,
+                                lang: String,
+                                emailBranding: String,
+                                appDisplayName: String,
+                                deviceDisplayName: String,
+                                append: Boolean
+    ) = addPusher(
+            JsonPusher(
+                    pushKey = email,
+                    kind = Pusher.KIND_EMAIL,
+                    appId = Pusher.APP_ID_EMAIL,
+                    profileTag = "",
+                    lang = lang,
+                    appDisplayName = appDisplayName,
+                    deviceDisplayName = deviceDisplayName,
+                    data = JsonPusherData(brand = emailBranding),
+                    append = append
+            )
+    )
 
-        val params = AddHttpPusherWorker.Params(sessionId, pusher)
-
-        val request = workManagerProvider.matrixOneTimeWorkRequestBuilder<AddHttpPusherWorker>()
+    private fun addPusher(pusher: JsonPusher): UUID {
+        pusher.validateParameters()
+        val params = AddPusherWorker.Params(sessionId, pusher)
+        val request = workManagerProvider.matrixOneTimeWorkRequestBuilder<AddPusherWorker>()
                 .setConstraints(WorkManagerProvider.workConstraints)
                 .setInputData(WorkerParamsFactory.toData(params))
-                .setBackoffCriteria(BackoffPolicy.LINEAR, 10_000L, TimeUnit.MILLISECONDS)
+                .setBackoffCriteria(BackoffPolicy.LINEAR, WorkManagerProvider.BACKOFF_DELAY_MILLIS, TimeUnit.MILLISECONDS)
                 .build()
         workManagerProvider.workManager.enqueue(request)
         return request.id
     }
 
-    override fun removeHttpPusher(pushkey: String, appId: String, callback: MatrixCallback<Unit>): Cancelable {
-        val params = RemovePusherTask.Params(pushkey, appId)
-        return removePusherTask
-                .configureWith(params) {
-                    this.callback = callback
-                }
-                // .enableRetry() ??
-                .executeBy(taskExecutor)
+    private fun JsonPusher.validateParameters() {
+        // Do some parameter checks. It's ok to throw Exception, to inform developer of the problem
+        if (pushKey.length > 512) throw InvalidParameterException("pushkey should not exceed 512 chars")
+        if (appId.length > 64) throw InvalidParameterException("appId should not exceed 64 chars")
+        data?.url?.let { url -> if ("/_matrix/push/v1/notify" !in url) throw InvalidParameterException("url should contain '/_matrix/push/v1/notify'") }
+    }
+
+    override suspend fun removePusher(pusher: Pusher) {
+        removePusher(pusher.pushKey, pusher.appId)
+    }
+
+    override suspend fun removeHttpPusher(pushkey: String, appId: String) {
+        removePusher(pushkey, appId)
+    }
+
+    override suspend fun removeEmailPusher(email: String) {
+        removePusher(pushKey = email, Pusher.APP_ID_EMAIL)
+    }
+
+    private suspend fun removePusher(pushKey: String, pushAppId: String) {
+        val params = RemovePusherTask.Params(pushKey, pushAppId)
+        removePusherTask.execute(params)
     }
 
     override fun getPushersLive(): LiveData<List<Pusher>> {

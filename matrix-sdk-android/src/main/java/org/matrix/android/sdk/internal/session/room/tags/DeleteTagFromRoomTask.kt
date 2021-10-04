@@ -1,5 +1,4 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,10 +17,10 @@
 package org.matrix.android.sdk.internal.session.room.tags
 
 import org.matrix.android.sdk.internal.di.UserId
+import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.room.RoomAPI
 import org.matrix.android.sdk.internal.task.Task
-import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
 internal interface DeleteTagFromRoomTask : Task<DeleteTagFromRoomTask.Params, Unit> {
@@ -35,12 +34,12 @@ internal interface DeleteTagFromRoomTask : Task<DeleteTagFromRoomTask.Params, Un
 internal class DefaultDeleteTagFromRoomTask @Inject constructor(
         private val roomAPI: RoomAPI,
         @UserId private val userId: String,
-        private val eventBus: EventBus
+        private val globalErrorReceiver: GlobalErrorReceiver
 ) : DeleteTagFromRoomTask {
 
     override suspend fun execute(params: DeleteTagFromRoomTask.Params) {
-        executeRequest<Unit>(eventBus) {
-            apiCall = roomAPI.deleteTag(
+        executeRequest(globalErrorReceiver) {
+            roomAPI.deleteTag(
                     userId = userId,
                     roomId = params.roomId,
                     tag = params.tag

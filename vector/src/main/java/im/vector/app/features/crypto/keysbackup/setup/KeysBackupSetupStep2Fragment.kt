@@ -16,74 +16,50 @@
 package im.vector.app.features.crypto.keysbackup.setup
 
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import android.widget.EditText
-import android.widget.ImageView
-import androidx.lifecycle.Observer
+import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.viewModelScope
 import androidx.transition.TransitionManager
-import butterknife.BindView
-import butterknife.OnClick
-import butterknife.OnTextChanged
-import com.google.android.material.textfield.TextInputLayout
 import com.nulabinc.zxcvbn.Zxcvbn
 import im.vector.app.R
-import im.vector.app.core.extensions.showPassword
+import im.vector.app.core.extensions.hidePassword
 import im.vector.app.core.platform.VectorBaseFragment
-import im.vector.app.core.ui.views.PasswordStrengthBar
+import im.vector.app.databinding.FragmentKeysBackupSetupStep2Binding
 import im.vector.app.features.settings.VectorLocale
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class KeysBackupSetupStep2Fragment @Inject constructor() : VectorBaseFragment() {
+class KeysBackupSetupStep2Fragment @Inject constructor() : VectorBaseFragment<FragmentKeysBackupSetupStep2Binding>() {
 
-    override fun getLayoutResId() = R.layout.fragment_keys_backup_setup_step2
-
-    @BindView(R.id.keys_backup_root)
-    lateinit var rootGroup: ViewGroup
-
-    @BindView(R.id.keys_backup_passphrase_enter_edittext)
-    lateinit var mPassphraseTextEdit: EditText
-
-    @BindView(R.id.keys_backup_passphrase_enter_til)
-    lateinit var mPassphraseInputLayout: TextInputLayout
-
-    @BindView(R.id.keys_backup_view_show_password)
-    lateinit var mPassphraseReveal: ImageView
-
-    @BindView(R.id.keys_backup_passphrase_confirm_edittext)
-    lateinit var mPassphraseConfirmTextEdit: EditText
-
-    @BindView(R.id.keys_backup_passphrase_confirm_til)
-    lateinit var mPassphraseConfirmInputLayout: TextInputLayout
-
-    @BindView(R.id.keys_backup_passphrase_security_progress)
-    lateinit var mPassphraseProgressLevel: PasswordStrengthBar
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentKeysBackupSetupStep2Binding {
+        return FragmentKeysBackupSetupStep2Binding.inflate(inflater, container, false)
+    }
 
     private val zxcvbn = Zxcvbn()
 
-    @OnTextChanged(R.id.keys_backup_passphrase_enter_edittext)
-    fun onPassphraseChanged() {
-        viewModel.passphrase.value = mPassphraseTextEdit.text.toString()
+    private fun onPassphraseChanged() {
+        viewModel.passphrase.value = views.keysBackupSetupStep2PassphraseEnterEdittext.text.toString()
         viewModel.confirmPassphraseError.value = null
     }
 
-    @OnTextChanged(R.id.keys_backup_passphrase_confirm_edittext)
-    fun onConfirmPassphraseChanged() {
-        viewModel.confirmPassphrase.value = mPassphraseConfirmTextEdit.text.toString()
+    private fun onConfirmPassphraseChanged() {
+        viewModel.confirmPassphrase.value = views.keysBackupSetupStep2PassphraseConfirmEditText.text.toString()
     }
 
     private lateinit var viewModel: KeysBackupSetupSharedViewModel
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         viewModel = activityViewModelProvider.get(KeysBackupSetupSharedViewModel::class.java)
 
         viewModel.shouldPromptOnBack = true
         bindViewToViewModel()
+        setupViews()
     }
 
     /* ==========================================================================================
@@ -91,31 +67,31 @@ class KeysBackupSetupStep2Fragment @Inject constructor() : VectorBaseFragment() 
      * ========================================================================================== */
 
     private fun bindViewToViewModel() {
-        viewModel.passwordStrength.observe(viewLifecycleOwner, Observer { strength ->
+        viewModel.passwordStrength.observe(viewLifecycleOwner) { strength ->
             if (strength == null) {
-                mPassphraseProgressLevel.strength = 0
-                mPassphraseInputLayout.error = null
+                views.keysBackupSetupStep2PassphraseStrengthLevel.strength = 0
+                views.keysBackupSetupStep2PassphraseEnterTil.error = null
             } else {
                 val score = strength.score
-                mPassphraseProgressLevel.strength = score
+                views.keysBackupSetupStep2PassphraseStrengthLevel.strength = score
 
                 if (score in 1..3) {
                     val warning = strength.feedback?.getWarning(VectorLocale.applicationLocale)
                     if (warning != null) {
-                        mPassphraseInputLayout.error = warning
+                        views.keysBackupSetupStep2PassphraseEnterTil.error = warning
                     }
 
                     val suggestions = strength.feedback?.getSuggestions(VectorLocale.applicationLocale)
                     if (suggestions != null) {
-                        mPassphraseInputLayout.error = suggestions.firstOrNull()
+                        views.keysBackupSetupStep2PassphraseEnterTil.error = suggestions.firstOrNull()
                     }
                 } else {
-                    mPassphraseInputLayout.error = null
+                    views.keysBackupSetupStep2PassphraseEnterTil.error = null
                 }
             }
-        })
+        }
 
-        viewModel.passphrase.observe(viewLifecycleOwner, Observer<String> { newValue ->
+        viewModel.passphrase.observe(viewLifecycleOwner) { newValue ->
             if (newValue.isEmpty()) {
                 viewModel.passwordStrength.value = null
             } else {
@@ -126,30 +102,23 @@ class KeysBackupSetupStep2Fragment @Inject constructor() : VectorBaseFragment() 
                     }
                 }
             }
-        })
+        }
 
-        mPassphraseTextEdit.setText(viewModel.passphrase.value)
+        views.keysBackupSetupStep2PassphraseEnterEdittext.setText(viewModel.passphrase.value)
 
-        viewModel.passphraseError.observe(viewLifecycleOwner, Observer {
-            TransitionManager.beginDelayedTransition(rootGroup)
-            mPassphraseInputLayout.error = it
-        })
+        viewModel.passphraseError.observe(viewLifecycleOwner) {
+            TransitionManager.beginDelayedTransition(views.keysBackupRoot)
+            views.keysBackupSetupStep2PassphraseEnterTil.error = it
+        }
 
-        mPassphraseConfirmTextEdit.setText(viewModel.confirmPassphrase.value)
+        views.keysBackupSetupStep2PassphraseConfirmEditText.setText(viewModel.confirmPassphrase.value)
 
-        viewModel.showPasswordMode.observe(viewLifecycleOwner, Observer {
-            val shouldBeVisible = it ?: false
-            mPassphraseTextEdit.showPassword(shouldBeVisible)
-            mPassphraseConfirmTextEdit.showPassword(shouldBeVisible)
-            mPassphraseReveal.setImageResource(if (shouldBeVisible) R.drawable.ic_eye_closed else R.drawable.ic_eye)
-        })
+        viewModel.confirmPassphraseError.observe(viewLifecycleOwner) {
+            TransitionManager.beginDelayedTransition(views.keysBackupRoot)
+            views.keysBackupSetupStep2PassphraseConfirmTil.error = it
+        }
 
-        viewModel.confirmPassphraseError.observe(viewLifecycleOwner, Observer {
-            TransitionManager.beginDelayedTransition(rootGroup)
-            mPassphraseConfirmInputLayout.error = it
-        })
-
-        mPassphraseConfirmTextEdit.setOnEditorActionListener { _, actionId, _ ->
+        views.keysBackupSetupStep2PassphraseConfirmEditText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 doNext()
                 return@setOnEditorActionListener true
@@ -158,13 +127,15 @@ class KeysBackupSetupStep2Fragment @Inject constructor() : VectorBaseFragment() 
         }
     }
 
-    @OnClick(R.id.keys_backup_view_show_password)
-    fun toggleVisibilityMode() {
-        viewModel.showPasswordMode.value = !(viewModel.showPasswordMode.value ?: false)
+    private fun setupViews() {
+        views.keysBackupSetupStep2Button.setOnClickListener { doNext() }
+        views.keysBackupSetupStep2SkipButton.setOnClickListener { skipPassphrase() }
+
+        views.keysBackupSetupStep2PassphraseEnterEdittext.doOnTextChanged { _, _, _, _ -> onPassphraseChanged() }
+        views.keysBackupSetupStep2PassphraseConfirmEditText.doOnTextChanged { _, _, _, _ -> onConfirmPassphraseChanged() }
     }
 
-    @OnClick(R.id.keys_backup_setup_step2_button)
-    fun doNext() {
+    private fun doNext() {
         when {
             viewModel.passphrase.value.isNullOrEmpty()                      -> {
                 viewModel.passphraseError.value = context?.getString(R.string.passphrase_empty_error_message)
@@ -178,18 +149,23 @@ class KeysBackupSetupStep2Fragment @Inject constructor() : VectorBaseFragment() 
             else                                                            -> {
                 viewModel.megolmBackupCreationInfo = null
 
+                // Ensure passphrase is hidden during the process
+                views.keysBackupSetupStep2PassphraseEnterEdittext.hidePassword()
+                views.keysBackupSetupStep2PassphraseConfirmEditText.hidePassword()
                 viewModel.prepareRecoveryKey(requireActivity(), viewModel.passphrase.value)
             }
         }
     }
 
-    @OnClick(R.id.keys_backup_setup_step2_skip_button)
-    fun skipPassphrase() {
+    private fun skipPassphrase() {
         when {
             viewModel.passphrase.value.isNullOrEmpty() -> {
                 // Generate a recovery key for the user
                 viewModel.megolmBackupCreationInfo = null
 
+                // Ensure passphrase is hidden during the process
+                views.keysBackupSetupStep2PassphraseEnterEdittext.hidePassword()
+                views.keysBackupSetupStep2PassphraseConfirmEditText.hidePassword()
                 viewModel.prepareRecoveryKey(requireActivity(), null)
             }
             else                                       -> {

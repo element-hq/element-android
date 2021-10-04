@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -38,3 +37,10 @@ data class LocationInfo(
          */
         @Json(name = "thumbnail_file") val thumbnailFile: EncryptedFileInfo? = null
 )
+
+/**
+ * Get the url of the encrypted thumbnail or of the thumbnail
+ */
+fun LocationInfo.getThumbnailUrl(): String? {
+        return thumbnailFile?.url ?: thumbnailUrl
+}

@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,8 +18,8 @@ package org.matrix.android.sdk.internal.session.room.send
 import android.content.Context
 import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
-import org.greenrobot.eventbus.EventBus
 import org.matrix.android.sdk.api.failure.Failure
+import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.SessionComponent
 import org.matrix.android.sdk.internal.session.room.RoomAPI
@@ -47,7 +46,7 @@ internal class RedactEventWorker(context: Context, params: WorkerParameters)
     ) : SessionWorkerParams
 
     @Inject lateinit var roomAPI: RoomAPI
-    @Inject lateinit var eventBus: EventBus
+    @Inject lateinit var globalErrorReceiver: GlobalErrorReceiver
 
     override fun injectWith(injector: SessionComponent) {
         injector.inject(this)
@@ -56,8 +55,8 @@ internal class RedactEventWorker(context: Context, params: WorkerParameters)
     override suspend fun doSafeWork(params: Params): Result {
         val eventId = params.eventId
         return runCatching {
-            executeRequest<SendResponse>(eventBus) {
-                apiCall = roomAPI.redactEvent(
+            executeRequest(globalErrorReceiver) {
+                roomAPI.redactEvent(
                         params.txID,
                         params.roomId,
                         eventId,

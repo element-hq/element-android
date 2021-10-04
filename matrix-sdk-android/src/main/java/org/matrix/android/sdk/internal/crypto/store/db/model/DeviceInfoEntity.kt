@@ -1,5 +1,4 @@
 /*
- * Copyright 2018 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -47,4 +46,9 @@ internal open class DeviceInfoEntity(
     val users: RealmResults<UserEntity>? = null
 
     companion object
+}
+
+internal fun DeviceInfoEntity.deleteOnCascade() {
+    trustLevelEntity?.deleteFromRealm()
+    deleteFromRealm()
 }

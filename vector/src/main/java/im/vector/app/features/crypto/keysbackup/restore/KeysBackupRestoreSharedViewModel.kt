@@ -23,6 +23,8 @@ import im.vector.app.R
 import im.vector.app.core.platform.WaitingViewData
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.LiveEvent
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.listeners.StepProgressListener
 import org.matrix.android.sdk.api.session.Session
@@ -34,8 +36,6 @@ import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersionR
 import org.matrix.android.sdk.internal.crypto.keysbackup.util.computeRecoveryKey
 import org.matrix.android.sdk.internal.crypto.model.ImportRoomKeysResult
 import org.matrix.android.sdk.internal.util.awaitCallback
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -252,7 +252,7 @@ class KeysBackupRestoreSharedViewModel @Inject constructor(
     }
 
     private fun isBackupKeyInQuadS(): Boolean {
-        val sssBackupSecret = session.getAccountDataEvent(KEYBACKUP_SECRET_SSSS_NAME)
+        val sssBackupSecret = session.accountDataService().getUserAccountDataEvent(KEYBACKUP_SECRET_SSSS_NAME)
                 ?: return false
 
         // Some sanity ?

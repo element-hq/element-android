@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
+ * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.room.model.Membership
-import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
+import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageTextContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import kotlin.random.Random
@@ -41,11 +41,11 @@ object RoomDataHelper {
         }
     }
 
-    fun createFakeEvent(type: String,
-                        content: Content? = null,
-                        prevContent: Content? = null,
-                        sender: String = FAKE_TEST_SENDER,
-                        stateKey: String = FAKE_TEST_SENDER
+    private fun createFakeEvent(type: String,
+                                content: Content? = null,
+                                prevContent: Content? = null,
+                                sender: String = FAKE_TEST_SENDER,
+                                stateKey: String = FAKE_TEST_SENDER
     ): Event {
         return Event(
                 type = type,
@@ -62,8 +62,8 @@ object RoomDataHelper {
         return createFakeEvent(EventType.MESSAGE, message)
     }
 
-    fun createFakeRoomMemberEvent(): Event {
-        val roomMember = RoomMemberSummary(Membership.JOIN, "Fake name #${Random.nextLong()}").toContent()
+    private fun createFakeRoomMemberEvent(): Event {
+        val roomMember = RoomMemberContent(Membership.JOIN, "Fake name #${Random.nextLong()}").toContent()
         return createFakeEvent(EventType.STATE_ROOM_MEMBER, roomMember)
     }
 }

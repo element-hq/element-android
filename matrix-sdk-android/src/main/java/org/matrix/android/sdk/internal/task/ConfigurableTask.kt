@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -38,7 +37,8 @@ internal data class ConfigurableTask<PARAMS, RESULT>(
         val id: UUID,
         val callbackThread: TaskThread,
         val executionThread: TaskThread,
-        val callback: MatrixCallback<RESULT>
+        val callback: MatrixCallback<RESULT>,
+        val maxRetryCount: Int = 0
 
 ) : Task<PARAMS, RESULT> by task {
 
@@ -58,7 +58,8 @@ internal data class ConfigurableTask<PARAMS, RESULT>(
                 id = id,
                 callbackThread = callbackThread,
                 executionThread = executionThread,
-                callback = callback
+                callback = callback,
+                maxRetryCount = retryCount
         )
     }
 

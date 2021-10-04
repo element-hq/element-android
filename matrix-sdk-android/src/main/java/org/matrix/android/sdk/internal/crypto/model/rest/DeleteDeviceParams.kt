@@ -1,5 +1,4 @@
 /*
- * Copyright 2016 OpenMarket Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,5 +24,5 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 internal data class DeleteDeviceParams(
         @Json(name = "auth")
-        val userPasswordAuth: UserPasswordAuth? = null
+        val auth: Map<String, *>? = null
 )

@@ -1,5 +1,4 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,3 +22,8 @@ fun CharSequence.ensurePrefix(prefix: CharSequence): CharSequence {
         else               -> "$prefix$this"
     }
 }
+
+/**
+ * Append a new line and then the provided string
+ */
+fun StringBuilder.appendNl(str: String) = append("\n").append(str)

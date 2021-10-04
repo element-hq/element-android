@@ -1,5 +1,4 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,25 +17,27 @@
 package org.matrix.android.sdk.internal.session.profile
 
 import com.zhuinden.monarchy.Monarchy
-import org.greenrobot.eventbus.EventBus
+import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.toRegistrationFlowResponse
 import org.matrix.android.sdk.api.session.identity.ThreePid
-import org.matrix.android.sdk.internal.crypto.model.rest.UserPasswordAuth
+import org.matrix.android.sdk.internal.auth.registration.handleUIA
+import org.matrix.android.sdk.api.auth.UIABaseAuth
 import org.matrix.android.sdk.internal.database.model.PendingThreePidEntity
 import org.matrix.android.sdk.internal.database.model.PendingThreePidEntityFields
 import org.matrix.android.sdk.internal.di.SessionDatabase
-import org.matrix.android.sdk.internal.di.UserId
+import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.task.Task
 import org.matrix.android.sdk.internal.util.awaitTransaction
+import timber.log.Timber
 import javax.inject.Inject
 
 internal abstract class FinalizeAddingThreePidTask : Task<FinalizeAddingThreePidTask.Params, Unit> {
     data class Params(
             val threePid: ThreePid,
-            val session: String?,
-            val accountPassword: String?,
+            val userInteractiveAuthInterceptor: UserInteractiveAuthInterceptor?,
+            val userAuthParam: UIABaseAuth? = null,
             val userWantsToCancel: Boolean
     )
 }
@@ -45,11 +46,12 @@ internal class DefaultFinalizeAddingThreePidTask @Inject constructor(
         private val profileAPI: ProfileAPI,
         @SessionDatabase private val monarchy: Monarchy,
         private val pendingThreePidMapper: PendingThreePidMapper,
-        @UserId private val userId: String,
-        private val eventBus: EventBus) : FinalizeAddingThreePidTask() {
+        private val globalErrorReceiver: GlobalErrorReceiver) : FinalizeAddingThreePidTask() {
 
     override suspend fun execute(params: Params) {
-        if (params.userWantsToCancel.not()) {
+        val canCleanup = if (params.userWantsToCancel) {
+            true
+        } else {
             // Get the required pending data
             val pendingThreePids = monarchy.fetchAllMappedSync(
                     { it.where(PendingThreePidEntity::class.java) },
@@ -59,28 +61,38 @@ internal class DefaultFinalizeAddingThreePidTask @Inject constructor(
                     ?: throw IllegalArgumentException("unknown threepid")
 
             try {
-                executeRequest<Unit>(eventBus) {
+                executeRequest(globalErrorReceiver) {
                     val body = FinalizeAddThreePidBody(
                             clientSecret = pendingThreePids.clientSecret,
                             sid = pendingThreePids.sid,
-                            auth = if (params.session != null && params.accountPassword != null) {
-                                UserPasswordAuth(
-                                        session = params.session,
-                                        user = userId,
-                                        password = params.accountPassword
-                                )
-                            } else null
+                            auth = params.userAuthParam?.asMap()
                     )
-                    apiCall = profileAPI.finalizeAddThreePid(body)
+                    profileAPI.finalizeAddThreePid(body)
                 }
+                true
             } catch (throwable: Throwable) {
-                throw throwable.toRegistrationFlowResponse()
-                        ?.let { Failure.RegistrationFlowError(it) }
-                        ?: throwable
+                if (params.userInteractiveAuthInterceptor == null
+                        || !handleUIA(
+                                failure = throwable,
+                                interceptor = params.userInteractiveAuthInterceptor,
+                                retryBlock = { authUpdate ->
+                                    execute(params.copy(userAuthParam = authUpdate))
+                                }
+                        )
+                ) {
+                    Timber.d("## UIA: propagate failure")
+                    throw throwable.toRegistrationFlowResponse()
+                            ?.let { Failure.RegistrationFlowError(it) }
+                            ?: throwable
+                } else {
+                    false
+                }
             }
         }
 
-        cleanupDatabase(params)
+        if (canCleanup) {
+            cleanupDatabase(params)
+        }
     }
 
     private suspend fun cleanupDatabase(params: Params) {

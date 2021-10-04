@@ -7,11 +7,12 @@
 
     <TextView
         android:id="@+id/receiptMore"
+        style="@style/Widget.Vector.TextView.Caption"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_marginEnd="8dp"
         android:gravity="center"
-        android:textSize="12sp"
+        android:textColor="?vctr_content_primary"
         tools:text="999+" />
 
     <ImageView
@@ -19,39 +20,44 @@
         android:layout_width="16dp"
         android:layout_height="16dp"
         android:adjustViewBounds="true"
+        android:importantForAccessibility="no"
         android:scaleType="centerCrop"
-        tools:src="@tools:sample/avatars" />
+        tools:src="@sample/user_round_avatars" />
 
     <ImageView
         android:id="@+id/receiptAvatar4"
         android:layout_width="16dp"
         android:layout_height="16dp"
         android:adjustViewBounds="true"
+        android:importantForAccessibility="no"
         android:scaleType="centerCrop"
-        tools:src="@tools:sample/avatars" />
+        tools:src="@sample/user_round_avatars" />
 
     <ImageView
         android:id="@+id/receiptAvatar3"
         android:layout_width="16dp"
         android:layout_height="16dp"
         android:adjustViewBounds="true"
+        android:importantForAccessibility="no"
         android:scaleType="centerCrop"
-        tools:src="@tools:sample/avatars" />
+        tools:src="@sample/user_round_avatars" />
 
     <ImageView
         android:id="@+id/receiptAvatar2"
         android:layout_width="16dp"
         android:layout_height="16dp"
         android:adjustViewBounds="true"
+        android:importantForAccessibility="no"
         android:scaleType="centerCrop"
-        tools:src="@tools:sample/avatars" />
+        tools:src="@sample/user_round_avatars" />
 
     <ImageView
         android:id="@+id/receiptAvatar1"
         android:layout_width="16dp"
         android:layout_height="16dp"
         android:adjustViewBounds="true"
+        android:importantForAccessibility="no"
         android:scaleType="centerCrop"
-        tools:src="@tools:sample/avatars" />
+        tools:src="@sample/user_round_avatars" />
 
 </merge>

@@ -18,8 +18,9 @@ package im.vector.app.features.autocomplete.member
 
 import android.content.Context
 import androidx.recyclerview.widget.RecyclerView
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import im.vector.app.features.autocomplete.AutocompleteClickListener
 import im.vector.app.features.autocomplete.RecyclerViewPresenter
 import org.matrix.android.sdk.api.query.QueryStringValue
@@ -30,11 +31,11 @@ import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 
 class AutocompleteMemberPresenter @AssistedInject constructor(context: Context,
                                                               @Assisted val roomId: String,
-                                                              private val session: Session,
+                                                              session: Session,
                                                               private val controller: AutocompleteMemberController
 ) : RecyclerViewPresenter<RoomMemberSummary>(context), AutocompleteClickListener<RoomMemberSummary> {
 
-    private val room = session.getRoom(roomId)!!
+    private val room by lazy { session.getRoom(roomId)!! }
 
     init {
         controller.listener = this
@@ -44,7 +45,7 @@ class AutocompleteMemberPresenter @AssistedInject constructor(context: Context,
         controller.listener = null
     }
 
-    @AssistedInject.Factory
+    @AssistedFactory
     interface Factory {
         fun create(roomId: String): AutocompleteMemberPresenter
     }
@@ -70,6 +71,23 @@ class AutocompleteMemberPresenter @AssistedInject constructor(context: Context,
         val members = room.getRoomMembers(queryParams)
                 .asSequence()
                 .sortedBy { it.displayName }
+                .disambiguate()
         controller.setData(members.toList())
+    }
+}
+
+private fun Sequence<RoomMemberSummary>.disambiguate(): Sequence<RoomMemberSummary> {
+    val displayNames = hashMapOf<String, Int>().also { map ->
+        for (item in this) {
+            item.displayName?.lowercase()?.also { displayName ->
+                map[displayName] = map.getOrPut(displayName, { 0 }) + 1
+            }
+        }
+    }
+
+    return map { roomMemberSummary ->
+        if (displayNames[roomMemberSummary.displayName?.lowercase()] ?: 0 > 1) {
+            roomMemberSummary.copy(displayName = roomMemberSummary.displayName + " " + roomMemberSummary.userId)
+        } else roomMemberSummary
     }
 }

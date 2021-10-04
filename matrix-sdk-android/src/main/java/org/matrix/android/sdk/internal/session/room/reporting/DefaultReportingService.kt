@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,31 +16,22 @@
 
 package org.matrix.android.sdk.internal.session.room.reporting
 
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
-import org.matrix.android.sdk.api.MatrixCallback
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
+import dagger.assisted.AssistedFactory
 import org.matrix.android.sdk.api.session.room.reporting.ReportingService
-import org.matrix.android.sdk.api.util.Cancelable
-import org.matrix.android.sdk.internal.task.TaskExecutor
-import org.matrix.android.sdk.internal.task.configureWith
 
 internal class DefaultReportingService @AssistedInject constructor(@Assisted private val roomId: String,
-                                                                   private val taskExecutor: TaskExecutor,
                                                                    private val reportContentTask: ReportContentTask
 ) : ReportingService {
 
-    @AssistedInject.Factory
+    @AssistedFactory
     interface Factory {
-        fun create(roomId: String): ReportingService
+        fun create(roomId: String): DefaultReportingService
     }
 
-    override fun reportContent(eventId: String, score: Int, reason: String, callback: MatrixCallback<Unit>): Cancelable {
+    override suspend fun reportContent(eventId: String, score: Int, reason: String) {
         val params = ReportContentTask.Params(roomId, eventId, score, reason)
-
-        return reportContentTask
-                .configureWith(params) {
-                    this.callback = callback
-                }
-                .executeBy(taskExecutor)
+        reportContentTask.execute(params)
     }
 }

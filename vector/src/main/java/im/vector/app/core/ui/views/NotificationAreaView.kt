@@ -21,18 +21,20 @@ import android.graphics.Color
 import android.text.method.LinkMovementMethod
 import android.util.AttributeSet
 import android.view.View
-import android.widget.RelativeLayout
+import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import androidx.core.text.italic
 import im.vector.app.R
 import im.vector.app.core.error.ResourceLimitErrorFormatter
+import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.utils.DimensionConverter
+import im.vector.app.databinding.ViewNotificationAreaBinding
 import im.vector.app.features.themes.ThemeUtils
-import org.matrix.android.sdk.api.failure.MatrixError
-import org.matrix.android.sdk.api.session.events.model.Event
-import kotlinx.android.synthetic.main.view_notification_area.view.*
+
 import me.gujun.android.span.span
 import me.saket.bettermovementmethod.BetterLinkMovementMethod
+import org.matrix.android.sdk.api.failure.MatrixError
+import org.matrix.android.sdk.api.session.events.model.Event
 import timber.log.Timber
 
 /**
@@ -43,10 +45,12 @@ class NotificationAreaView @JvmOverloads constructor(
         context: Context,
         attrs: AttributeSet? = null,
         defStyleAttr: Int = 0
-) : RelativeLayout(context, attrs, defStyleAttr) {
+) : LinearLayout(context, attrs, defStyleAttr) {
 
     var delegate: Delegate? = null
     private var state: State = State.Initial
+
+    private lateinit var views : ViewNotificationAreaBinding
 
     init {
         setupView()
@@ -66,39 +70,41 @@ class NotificationAreaView @JvmOverloads constructor(
         cleanUp()
         state = newState
         when (newState) {
+            State.Initial                       -> Unit
             is State.Default                    -> renderDefault()
             is State.Hidden                     -> renderHidden()
             is State.NoPermissionToPost         -> renderNoPermissionToPost()
-            is State.Tombstone                  -> renderTombstone(newState)
+            is State.Tombstone                  -> renderTombstone()
             is State.ResourceLimitExceededError -> renderResourceLimitExceededError(newState)
-        }
+        }.exhaustive
     }
 
     // PRIVATE METHODS ****************************************************************************************************************************************
 
     private fun setupView() {
         inflate(context, R.layout.view_notification_area, this)
+        views = ViewNotificationAreaBinding.bind(this)
         minimumHeight = DimensionConverter(resources).dpToPx(48)
     }
 
     private fun cleanUp() {
-        roomNotificationMessage.setOnClickListener(null)
-        roomNotificationIcon.setOnClickListener(null)
+        views.roomNotificationMessage.setOnClickListener(null)
+        views.roomNotificationIcon.setOnClickListener(null)
         setBackgroundColor(Color.TRANSPARENT)
-        roomNotificationMessage.text = null
-        roomNotificationIcon.setImageResource(0)
+        views.roomNotificationMessage.text = null
+        views.roomNotificationIcon.setImageResource(0)
     }
 
     private fun renderNoPermissionToPost() {
         visibility = View.VISIBLE
-        roomNotificationIcon.setImageDrawable(null)
+        views.roomNotificationIcon.setImageDrawable(null)
         val message = span {
             italic {
                 +resources.getString(R.string.room_do_not_have_permission_to_post)
             }
         }
-        roomNotificationMessage.text = message
-        roomNotificationMessage.setTextColor(ThemeUtils.getColor(context, R.attr.riotx_text_secondary))
+        views.roomNotificationMessage.text = message
+        views.roomNotificationMessage.setTextColor(ThemeUtils.getColor(context, R.attr.vctr_content_secondary))
     }
 
     private fun renderResourceLimitExceededError(state: State.ResourceLimitExceededError) {
@@ -114,26 +120,26 @@ class NotificationAreaView @JvmOverloads constructor(
             formatterMode = ResourceLimitErrorFormatter.Mode.Hard
         }
         val message = resourceLimitErrorFormatter.format(state.matrixError, formatterMode, clickable = true)
-        roomNotificationMessage.setTextColor(Color.WHITE)
-        roomNotificationMessage.text = message
-        roomNotificationMessage.movementMethod = LinkMovementMethod.getInstance()
-        roomNotificationMessage.setLinkTextColor(Color.WHITE)
+        views.roomNotificationMessage.setTextColor(Color.WHITE)
+        views.roomNotificationMessage.text = message
+        views.roomNotificationMessage.movementMethod = LinkMovementMethod.getInstance()
+        views.roomNotificationMessage.setLinkTextColor(Color.WHITE)
         setBackgroundColor(ContextCompat.getColor(context, backgroundColor))
     }
 
-    private fun renderTombstone(state: State.Tombstone) {
+    private fun renderTombstone() {
         visibility = View.VISIBLE
-        roomNotificationIcon.setImageResource(R.drawable.error)
+        views.roomNotificationIcon.setImageResource(R.drawable.ic_warning_badge)
         val message = span {
             +resources.getString(R.string.room_tombstone_versioned_description)
             +"\n"
             span(resources.getString(R.string.room_tombstone_continuation_link)) {
                 textDecorationLine = "underline"
-                onClick = { delegate?.onTombstoneEventClicked(state.tombstoneEvent) }
+                onClick = { delegate?.onTombstoneEventClicked() }
             }
         }
-        roomNotificationMessage.movementMethod = BetterLinkMovementMethod.getInstance()
-        roomNotificationMessage.text = message
+        views.roomNotificationMessage.movementMethod = BetterLinkMovementMethod.getInstance()
+        views.roomNotificationMessage.text = message
     }
 
     private fun renderDefault() {
@@ -173,6 +179,6 @@ class NotificationAreaView @JvmOverloads constructor(
      * An interface to delegate some actions to another object
      */
     interface Delegate {
-        fun onTombstoneEventClicked(tombstoneEvent: Event)
+        fun onTombstoneEventClicked()
     }
 }

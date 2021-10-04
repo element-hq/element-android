@@ -24,18 +24,24 @@ import androidx.core.view.isVisible
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.error.ErrorFormatter
-import im.vector.app.core.utils.isLocalFile
-import org.matrix.android.sdk.api.MatrixCallback
-import org.matrix.android.sdk.api.session.file.FileService
+import im.vector.app.core.files.LocalFilesHelper
+import im.vector.app.features.session.coroutineScope
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.internal.crypto.attachments.ElementToDecrypt
-import kotlinx.android.parcel.Parcelize
 import timber.log.Timber
-import java.io.File
 import java.net.URLEncoder
 import javax.inject.Inject
 
-class VideoContentRenderer @Inject constructor(private val activeSessionHolder: ActiveSessionHolder,
+class VideoContentRenderer @Inject constructor(private val localFilesHelper: LocalFilesHelper,
+                                               private val activeSessionHolder: ActiveSessionHolder,
                                                private val errorFormatter: ErrorFormatter) {
+
+    private val sessionScope: CoroutineScope
+        get() = activeSessionHolder.getActiveSession().coroutineScope
 
     @Parcelize
     data class Data(
@@ -64,7 +70,7 @@ class VideoContentRenderer @Inject constructor(private val activeSessionHolder: 
                 loadingView.isVisible = false
                 errorView.isVisible = true
                 errorView.setText(R.string.unknown_error)
-            } else if (data.url.isLocalFile() && data.allowNonMxcUrls) {
+            } else if (localFilesHelper.isLocalFile(data.url) && data.allowNonMxcUrls) {
                 thumbnailView.isVisible = false
                 loadingView.isVisible = false
                 videoView.isVisible = true
@@ -74,34 +80,37 @@ class VideoContentRenderer @Inject constructor(private val activeSessionHolder: 
                 thumbnailView.isVisible = true
                 loadingView.isVisible = true
 
-                activeSessionHolder.getActiveSession().fileService()
-                        .downloadFile(
-                                downloadMode = FileService.DownloadMode.FOR_INTERNAL_USE,
-                                id = data.eventId,
-                                fileName = data.filename,
-                                mimeType = data.mimeType,
-                                url = data.url,
-                                elementToDecrypt = data.elementToDecrypt,
-                                callback = object : MatrixCallback<File> {
-                                    override fun onSuccess(data: File) {
-                                        thumbnailView.isVisible = false
-                                        loadingView.isVisible = false
-                                        videoView.isVisible = true
+                sessionScope.launch {
+                    val result = runCatching {
+                        activeSessionHolder.getActiveSession().fileService()
+                                .downloadFile(
+                                        fileName = data.filename,
+                                        mimeType = data.mimeType,
+                                        url = data.url,
+                                        elementToDecrypt = data.elementToDecrypt)
+                    }
+                    withContext(Dispatchers.Main) {
+                        result.fold(
+                                { data ->
+                                    thumbnailView.isVisible = false
+                                    loadingView.isVisible = false
+                                    videoView.isVisible = true
 
-                                        videoView.setVideoPath(data.path)
-                                        videoView.start()
-                                    }
-
-                                    override fun onFailure(failure: Throwable) {
-                                        loadingView.isVisible = false
-                                        errorView.isVisible = true
-                                        errorView.text = errorFormatter.toHumanReadable(failure)
-                                    }
-                                })
+                                    videoView.setVideoPath(data.path)
+                                    videoView.start()
+                                },
+                                {
+                                    loadingView.isVisible = false
+                                    errorView.isVisible = true
+                                    errorView.text = errorFormatter.toHumanReadable(it)
+                                }
+                        )
+                    }
+                }
             }
         } else {
             val resolvedUrl = contentUrlResolver.resolveFullSize(data.url)
-                    ?: data.url?.takeIf { data.url.isLocalFile() && data.allowNonMxcUrls }
+                    ?: data.url?.takeIf { localFilesHelper.isLocalFile(data.url) && data.allowNonMxcUrls }
 
             if (resolvedUrl == null) {
                 thumbnailView.isVisible = false
@@ -114,30 +123,33 @@ class VideoContentRenderer @Inject constructor(private val activeSessionHolder: 
                 thumbnailView.isVisible = true
                 loadingView.isVisible = true
 
-                activeSessionHolder.getActiveSession().fileService()
-                        .downloadFile(
-                                downloadMode = FileService.DownloadMode.FOR_INTERNAL_USE,
-                                id = data.eventId,
-                                fileName = data.filename,
-                                mimeType = data.mimeType,
-                                url = data.url,
-                                elementToDecrypt = null,
-                                callback = object : MatrixCallback<File> {
-                                    override fun onSuccess(data: File) {
-                                        thumbnailView.isVisible = false
-                                        loadingView.isVisible = false
-                                        videoView.isVisible = true
+                sessionScope.launch {
+                    val result = runCatching {
+                        activeSessionHolder.getActiveSession().fileService()
+                                .downloadFile(
+                                        fileName = data.filename,
+                                        mimeType = data.mimeType,
+                                        url = data.url,
+                                        elementToDecrypt = null)
+                    }
+                    withContext(Dispatchers.Main) {
+                        result.fold(
+                                { data ->
+                                    thumbnailView.isVisible = false
+                                    loadingView.isVisible = false
+                                    videoView.isVisible = true
 
-                                        videoView.setVideoPath(data.path)
-                                        videoView.start()
-                                    }
-
-                                    override fun onFailure(failure: Throwable) {
-                                        loadingView.isVisible = false
-                                        errorView.isVisible = true
-                                        errorView.text = errorFormatter.toHumanReadable(failure)
-                                    }
-                                })
+                                    videoView.setVideoPath(data.path)
+                                    videoView.start()
+                                },
+                                {
+                                    loadingView.isVisible = false
+                                    errorView.isVisible = true
+                                    errorView.text = errorFormatter.toHumanReadable(it)
+                                }
+                        )
+                    }
+                }
             }
         }
     }

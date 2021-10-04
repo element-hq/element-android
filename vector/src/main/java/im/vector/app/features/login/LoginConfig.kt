@@ -18,13 +18,13 @@ package im.vector.app.features.login
 
 import android.net.Uri
 import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 /**
  * Parameters extracted from a configuration url
  * Ex: https://mobile.element.io?hs_url=https%3A%2F%2Fexample.modular.im&is_url=https%3A%2F%2Fcustom.identity.org
  *
- * Note: On RiotX, identityServerUrl will never be used, so is declared private. Keep it for compatibility reason.
+ * Note: On Element, identityServerUrl will never be used, so is declared private. Keep it for compatibility reason.
  */
 @Parcelize
 data class LoginConfig(

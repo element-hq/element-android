@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,6 +24,7 @@ import io.realm.Realm
 import io.realm.RealmList
 import io.realm.RealmQuery
 import io.realm.kotlin.where
+import org.matrix.android.sdk.api.session.events.model.EventType
 
 internal fun EventEntity.copyToRealmOrIgnore(realm: Realm, insertType: EventInsertType): EventEntity {
     val eventEntity = realm.where<EventEntity>()
@@ -32,7 +32,8 @@ internal fun EventEntity.copyToRealmOrIgnore(realm: Realm, insertType: EventInse
             .equalTo(EventEntityFields.ROOM_ID, roomId)
             .findFirst()
     return if (eventEntity == null) {
-        val insertEntity = EventInsertEntity(eventId = eventId, eventType = type).apply {
+        val canBeProcessed = type != EventType.ENCRYPTED || decryptionResultJson != null
+        val insertEntity = EventInsertEntity(eventId = eventId, eventType = type, canBeProcessed = canBeProcessed).apply {
             this.insertType = insertType
         }
         realm.insert(insertEntity)

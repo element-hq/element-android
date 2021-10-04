@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -96,12 +95,6 @@ interface Timeline {
      */
     fun getTimelineEventWithId(eventId: String?): TimelineEvent?
 
-    /**
-     * Returns the first displayable events starting from eventId.
-     * It does depend on the provided [TimelineSettings].
-     */
-    fun getFirstDisplayableEventId(eventId: String): String?
-
     interface Listener {
         /**
          * Call when the timeline has been updated through pagination or sync.
@@ -129,6 +122,7 @@ interface Timeline {
          * It represents future events.
          */
         FORWARDS,
+
         /**
          * It represents past events.
          */

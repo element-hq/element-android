@@ -34,10 +34,9 @@ sealed class BootstrapActions : VectorViewModelAction {
 
     data class DoInitialize(val passphrase: String) : BootstrapActions()
     object DoInitializeGeneratedKey : BootstrapActions()
-    object TogglePasswordVisibility : BootstrapActions()
     data class UpdateCandidatePassphrase(val pass: String) : BootstrapActions()
     data class UpdateConfirmCandidatePassphrase(val pass: String) : BootstrapActions()
-    data class ReAuth(val pass: String) : BootstrapActions()
+//    data class ReAuth(val pass: String) : BootstrapActions()
     object RecoveryKeySaved : BootstrapActions()
     object Completed : BootstrapActions()
     object SaveReqQueryStarted : BootstrapActions()
@@ -47,4 +46,8 @@ sealed class BootstrapActions : VectorViewModelAction {
     object HandleForgotBackupPassphrase : BootstrapActions()
     data class DoMigrateWithPassphrase(val passphrase: String) : BootstrapActions()
     data class DoMigrateWithRecoveryKey(val recoveryKey: String) : BootstrapActions()
+
+    object SsoAuthDone: BootstrapActions()
+    data class PasswordAuthDone(val password: String): BootstrapActions()
+    object ReAuthCancelled: BootstrapActions()
 }

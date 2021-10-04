@@ -17,39 +17,44 @@
 package im.vector.app.features.settings.devtools
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
-import im.vector.app.core.resources.ColorProvider
-import kotlinx.android.synthetic.main.fragment_generic_recycler.*
+import im.vector.app.databinding.FragmentGenericRecyclerBinding
+
 import javax.inject.Inject
 
 class IncomingKeyRequestListFragment @Inject constructor(
         val viewModelFactory: KeyRequestListViewModel.Factory,
-        private val epoxyController: KeyRequestEpoxyController,
-        private val colorProvider: ColorProvider
-) : VectorBaseFragment() {
+        private val epoxyController: IncomingKeyRequestPagedController
+) : VectorBaseFragment<FragmentGenericRecyclerBinding>() {
 
-    override fun getLayoutResId() = R.layout.fragment_generic_recycler
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentGenericRecyclerBinding {
+        return FragmentGenericRecyclerBinding.inflate(inflater, container, false)
+    }
 
     private val viewModel: KeyRequestListViewModel by fragmentViewModel(KeyRequestListViewModel::class)
 
     override fun invalidate() = withState(viewModel) { state ->
-        epoxyController.outgoing = false
-        epoxyController.setData(state)
+        state.incomingRequests.invoke()?.let {
+            epoxyController.submitList(it)
+        }
+        Unit
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        recyclerView.configureWith(epoxyController, showDivider = true)
+        views.genericRecyclerView.configureWith(epoxyController, dividerDrawable = R.drawable.divider_horizontal)
     }
 
     override fun onDestroyView() {
+        views.genericRecyclerView.cleanup()
         super.onDestroyView()
-        recyclerView.cleanup()
     }
 }

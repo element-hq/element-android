@@ -8,6 +8,7 @@
 
     <TextView
         android:id="@+id/activeWidgetsLabel"
+        style="@style/Widget.Vector.TextView.Subtitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
@@ -17,12 +18,12 @@
         android:paddingTop="8dp"
         android:paddingEnd="12dp"
         android:paddingBottom="8dp"
-        android:textAppearance="@style/TextAppearance.Vector.Title"
-        android:textColor="?riotx_room_active_widgets_banner_text"
+        android:textColor="?vctr_room_active_widgets_banner_text"
         tools:text="2 active widgets" />
 
     <TextView
         android:id="@+id/activeWidgetsViewAction"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
@@ -32,6 +33,6 @@
         android:minWidth="48dp"
         android:text="@string/active_widget_view_action"
         android:textAllCaps="true"
-        android:textColor="?attr/colorAccent" />
+        android:textColor="?colorSecondary" />
 
 </merge>

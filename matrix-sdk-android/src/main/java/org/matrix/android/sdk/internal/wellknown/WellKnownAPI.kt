@@ -1,5 +1,4 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,11 +16,10 @@
 package org.matrix.android.sdk.internal.wellknown
 
 import org.matrix.android.sdk.api.auth.data.WellKnown
-import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
 
 internal interface WellKnownAPI {
     @GET("https://{domain}/.well-known/matrix/client")
-    fun getWellKnown(@Path("domain") domain: String): Call<WellKnown>
+    suspend fun getWellKnown(@Path("domain") domain: String): WellKnown
 }

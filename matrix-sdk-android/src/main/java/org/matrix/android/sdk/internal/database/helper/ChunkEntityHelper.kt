@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -38,12 +37,6 @@ import io.realm.Realm
 import io.realm.Sort
 import io.realm.kotlin.createObject
 import timber.log.Timber
-
-internal fun ChunkEntity.deleteOnCascade() {
-    assertIsManaged()
-    this.timelineEvents.deleteAllFromRealm()
-    this.deleteFromRealm()
-}
 
 internal fun ChunkEntity.merge(roomId: String, chunkToMerge: ChunkEntity, direction: PaginationDirection) {
     assertIsManaged()
@@ -104,7 +97,8 @@ internal fun ChunkEntity.addTimelineEvent(roomId: String,
         this.root = eventEntity
         this.eventId = eventId
         this.roomId = roomId
-        this.annotations = EventAnnotationsSummaryEntity.where(realm, eventId).findFirst()
+        this.annotations = EventAnnotationsSummaryEntity.where(realm, roomId, eventId).findFirst()
+                ?.also { it.cleanUp(eventEntity.sender) }
         this.readReceipts = readReceiptsSummaryEntity
         this.displayIndex = displayIndex
         val roomMemberContent = roomMemberContentsByUser[senderId]

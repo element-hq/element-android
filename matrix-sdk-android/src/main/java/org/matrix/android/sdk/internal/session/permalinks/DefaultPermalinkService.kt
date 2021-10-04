@@ -1,5 +1,4 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -34,8 +33,8 @@ internal class DefaultPermalinkService @Inject constructor(
         return permalinkFactory.createPermalink(id)
     }
 
-    override fun createRoomPermalink(roomId: String): String? {
-        return permalinkFactory.createRoomPermalink(roomId)
+    override fun createRoomPermalink(roomId: String, viaServers: List<String>?): String? {
+        return permalinkFactory.createRoomPermalink(roomId, viaServers)
     }
 
     override fun createPermalink(roomId: String, eventId: String): String {

@@ -1,5 +1,4 @@
 /*
- * Copyright 2020 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,10 +16,10 @@
 
 package org.matrix.android.sdk.internal.session.search
 
-import org.greenrobot.eventbus.EventBus
 import org.matrix.android.sdk.api.session.search.EventAndSender
 import org.matrix.android.sdk.api.session.search.SearchResult
 import org.matrix.android.sdk.api.util.MatrixItem
+import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.search.request.SearchRequestBody
 import org.matrix.android.sdk.internal.session.search.request.SearchRequestCategories
@@ -48,29 +47,29 @@ internal interface SearchTask : Task<SearchTask.Params, SearchResult> {
 
 internal class DefaultSearchTask @Inject constructor(
         private val searchAPI: SearchAPI,
-        private val eventBus: EventBus
+        private val globalErrorReceiver: GlobalErrorReceiver
 ) : SearchTask {
 
     override suspend fun execute(params: SearchTask.Params): SearchResult {
-        return executeRequest<SearchResponse>(eventBus) {
-            val searchRequestBody = SearchRequestBody(
-                    searchCategories = SearchRequestCategories(
-                            roomEvents = SearchRequestRoomEvents(
-                                    searchTerm = params.searchTerm,
-                                    orderBy = if (params.orderByRecent) SearchRequestOrder.RECENT else SearchRequestOrder.RANK,
-                                    filter = SearchRequestFilter(
-                                            limit = params.limit,
-                                            rooms = listOf(params.roomId)
-                                    ),
-                                    eventContext = SearchRequestEventContext(
-                                            beforeLimit = params.beforeLimit,
-                                            afterLimit = params.afterLimit,
-                                            includeProfile = params.includeProfile
-                                    )
-                            )
-                    )
-            )
-            apiCall = searchAPI.search(params.nextBatch, searchRequestBody)
+        val searchRequestBody = SearchRequestBody(
+                searchCategories = SearchRequestCategories(
+                        roomEvents = SearchRequestRoomEvents(
+                                searchTerm = params.searchTerm,
+                                orderBy = if (params.orderByRecent) SearchRequestOrder.RECENT else SearchRequestOrder.RANK,
+                                filter = SearchRequestFilter(
+                                        limit = params.limit,
+                                        rooms = listOf(params.roomId)
+                                ),
+                                eventContext = SearchRequestEventContext(
+                                        beforeLimit = params.beforeLimit,
+                                        afterLimit = params.afterLimit,
+                                        includeProfile = params.includeProfile
+                                )
+                        )
+                )
+        )
+        return executeRequest(globalErrorReceiver) {
+            searchAPI.search(params.nextBatch, searchRequestBody)
         }.toDomain()
     }
 

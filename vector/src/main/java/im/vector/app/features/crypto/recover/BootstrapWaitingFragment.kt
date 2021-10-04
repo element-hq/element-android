@@ -16,26 +16,31 @@
 
 package im.vector.app.features.crypto.recover
 
+import android.view.LayoutInflater
+import android.view.ViewGroup
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
-import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseFragment
-import kotlinx.android.synthetic.main.fragment_bootstrap_waiting.*
+import im.vector.app.databinding.FragmentBootstrapWaitingBinding
+
 import javax.inject.Inject
 
-class BootstrapWaitingFragment @Inject constructor() : VectorBaseFragment() {
+class BootstrapWaitingFragment @Inject constructor()
+    : VectorBaseFragment<FragmentBootstrapWaitingBinding>() {
 
-    override fun getLayoutResId() = R.layout.fragment_bootstrap_waiting
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentBootstrapWaitingBinding {
+        return FragmentBootstrapWaitingBinding.inflate(inflater, container, false)
+    }
 
     val sharedViewModel: BootstrapSharedViewModel by parentFragmentViewModel()
 
     override fun invalidate() = withState(sharedViewModel) { state ->
         when (state.step) {
             is BootstrapStep.Initializing -> {
-                bootstrapLoadingStatusText.isVisible = true
-                bootstrapDescriptionText.isVisible = true
-                bootstrapLoadingStatusText.text = state.initializationWaitingViewData?.message
+                views.bootstrapLoadingStatusText.isVisible = true
+                views.bootstrapDescriptionText.isVisible = true
+                views.bootstrapLoadingStatusText.text = state.initializationWaitingViewData?.message
             }
 //            is BootstrapStep.CheckingMigration -> {
 //                bootstrapLoadingStatusText.isVisible = false
@@ -43,8 +48,8 @@ class BootstrapWaitingFragment @Inject constructor() : VectorBaseFragment() {
 //            }
             else                          -> {
                 // just show the spinner
-                bootstrapLoadingStatusText.isVisible = false
-                bootstrapDescriptionText.isVisible = false
+                views.bootstrapLoadingStatusText.isVisible = false
+                views.bootstrapDescriptionText.isVisible = false
             }
         }
     }

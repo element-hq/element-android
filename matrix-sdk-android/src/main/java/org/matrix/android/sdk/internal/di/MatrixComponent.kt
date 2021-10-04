@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,6 +25,7 @@ import okhttp3.OkHttpClient
 import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.api.auth.AuthenticationService
+import org.matrix.android.sdk.api.auth.HomeServerHistoryService
 import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.internal.SessionManager
 import org.matrix.android.sdk.internal.auth.AuthModule
@@ -36,6 +36,7 @@ import org.matrix.android.sdk.internal.session.TestInterceptor
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.util.BackgroundDetectionObserver
 import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
+import org.matrix.android.sdk.internal.util.system.SystemModule
 import org.matrix.olm.OlmManager
 import java.io.File
 
@@ -44,6 +45,7 @@ import java.io.File
     NetworkModule::class,
     AuthModule::class,
     RawModule::class,
+    SystemModule::class,
     NoOpTestModule::class
 ])
 @MatrixScope
@@ -63,6 +65,8 @@ internal interface MatrixComponent {
 
     fun rawService(): RawService
 
+    fun homeServerHistoryService(): HomeServerHistoryService
+
     fun context(): Context
 
     fun matrixConfiguration(): MatrixConfiguration
@@ -71,9 +75,6 @@ internal interface MatrixComponent {
 
     @CacheDirectory
     fun cacheDir(): File
-
-    @ExternalFilesDirectory
-    fun externalFilesDir(): File?
 
     fun olmManager(): OlmManager
 

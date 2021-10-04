@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -52,7 +51,7 @@ internal class SessionManager @Inject constructor(private val matrixComponent: M
         }
     }
 
-    private fun getOrCreateSessionComponent(sessionParams: SessionParams): SessionComponent {
+    fun getOrCreateSessionComponent(sessionParams: SessionParams): SessionComponent {
         return sessionComponents.getOrPut(sessionParams.credentials.sessionId()) {
             DaggerSessionComponent
                     .factory()

@@ -20,7 +20,7 @@ package im.vector.app.features.roommemberprofile
 import android.content.Context
 import android.content.Intent
 import android.widget.Toast
-import androidx.appcompat.widget.Toolbar
+import com.google.android.material.appbar.MaterialToolbar
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.viewModel
 import im.vector.app.R
@@ -28,13 +28,14 @@ import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
+import im.vector.app.databinding.ActivitySimpleBinding
 import im.vector.app.features.room.RequireActiveMembershipViewEvents
 import im.vector.app.features.room.RequireActiveMembershipViewModel
 import im.vector.app.features.room.RequireActiveMembershipViewState
 import javax.inject.Inject
 
 class RoomMemberProfileActivity :
-        VectorBaseActivity(),
+        VectorBaseActivity<ActivitySimpleBinding>(),
         ToolbarConfigurable,
         RequireActiveMembershipViewModel.Factory {
 
@@ -56,11 +57,12 @@ class RoomMemberProfileActivity :
     }
 
     override fun injectWith(injector: ScreenComponent) {
-        super.injectWith(injector)
         injector.inject(this)
     }
 
-    override fun getLayoutRes() = R.layout.activity_simple
+    override fun getBinding(): ActivitySimpleBinding {
+        return ActivitySimpleBinding.inflate(layoutInflater)
+    }
 
     override fun initUiAndData() {
         if (isFirstCreation()) {
@@ -75,7 +77,7 @@ class RoomMemberProfileActivity :
         }
     }
 
-    override fun configure(toolbar: Toolbar) {
+    override fun configure(toolbar: MaterialToolbar) {
         configureToolbar(toolbar)
     }
 

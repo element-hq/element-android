@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -34,7 +33,7 @@ internal class DefaultValidateCodeTask(
 
     override suspend fun execute(params: ValidateCodeTask.Params): SuccessResult {
         return executeRequest(null) {
-            apiCall = authAPI.validate3Pid(params.url, params.body)
+            authAPI.validate3Pid(params.url, params.body)
         }
     }
 }

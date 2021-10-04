@@ -16,14 +16,14 @@
 
 package im.vector.app.features.settings
 
-import android.content.Intent
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.Preference
 import androidx.preference.SwitchPreference
 import im.vector.app.R
+import im.vector.app.core.extensions.registerStartForActivityResult
+import im.vector.app.core.preference.VectorPreference
 import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.notifications.NotificationDrawerManager
-import im.vector.app.features.pin.PinActivity
 import im.vector.app.features.pin.PinCodeStore
 import im.vector.app.features.pin.PinMode
 import kotlinx.coroutines.launch
@@ -40,6 +40,10 @@ class VectorSettingsPinFragment @Inject constructor(
 
     private val usePinCodePref by lazy {
         findPreference<SwitchPreference>(VectorPreferences.SETTINGS_SECURITY_USE_PIN_CODE_FLAG)!!
+    }
+
+    private val changePinCodePref by lazy {
+        findPreference<VectorPreference>(VectorPreferences.SETTINGS_SECURITY_CHANGE_PIN_CODE_FLAG)!!
     }
 
     private val useCompleteNotificationPref by lazy {
@@ -67,17 +71,29 @@ class VectorSettingsPinFragment @Inject constructor(
                         refreshPinCodeStatus()
                     }
                 } else {
-                    navigator.openPinCode(this@VectorSettingsPinFragment, PinMode.CREATE)
+                    navigator.openPinCode(
+                            requireContext(),
+                            pinActivityResultLauncher,
+                            PinMode.CREATE
+                    )
+                }
+                true
+            }
+
+            changePinCodePref.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                if (hasPinCode) {
+                    navigator.openPinCode(
+                            requireContext(),
+                            pinActivityResultLauncher,
+                            PinMode.MODIFY
+                    )
                 }
                 true
             }
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == PinActivity.PIN_REQUEST_CODE) {
-            refreshPinCodeStatus()
-        }
+    private val pinActivityResultLauncher = registerStartForActivityResult {
+        refreshPinCodeStatus()
     }
 }

@@ -4,17 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?riotx_background"
+    android:background="?android:colorBackground"
     android:paddingStart="@dimen/layout_horizontal_margin"
     android:paddingEnd="@dimen/layout_horizontal_margin">
 
     <TextView
         android:id="@+id/settings_item_edit_text_description"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:textColor="?android:textColorSecondary"
-        android:textSize="15sp"
+        android:textColor="?vctr_content_secondary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -22,7 +22,6 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/settings_item_edit_text_til"
-        style="@style/VectorTextInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:errorEnabled="true"
@@ -37,7 +36,6 @@
             android:imeOptions="actionDone|flagNoPersonalizedLearning"
             android:inputType="numberDecimal"
             android:maxLines="1"
-            android:textColor="?android:textColorPrimary"
             tools:text="1234" />
 
     </com.google.android.material.textfield.TextInputLayout>

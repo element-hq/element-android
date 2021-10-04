@@ -1,5 +1,4 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,9 +26,10 @@ import javax.inject.Inject
 internal class RoomTypingUsersHandler @Inject constructor(@UserId private val userId: String,
                                                           private val typingUsersTracker: DefaultTypingUsersTracker) {
 
+    // TODO This could be handled outside of the Realm transaction. Use the new aggregator?
     fun handle(realm: Realm, roomId: String, ephemeralResult: RoomSyncHandler.EphemeralResult?) {
         val roomMemberHelper = RoomMemberHelper(realm, roomId)
-        val typingIds = ephemeralResult?.typingUserIds?.filter { it != userId } ?: emptyList()
+        val typingIds = ephemeralResult?.typingUserIds?.filter { it != userId }.orEmpty()
         val senderInfo = typingIds.map { userId ->
             val roomMemberSummaryEntity = roomMemberHelper.getLastRoomMember(userId)
             SenderInfo(

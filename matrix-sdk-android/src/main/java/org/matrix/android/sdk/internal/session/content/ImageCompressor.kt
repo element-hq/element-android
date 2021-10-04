@@ -1,5 +1,4 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,21 +16,21 @@
 
 package org.matrix.android.sdk.internal.session.content
 
-import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
 import androidx.exifinterface.media.ExifInterface
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import org.matrix.android.sdk.internal.util.TemporaryFileCreator
 import timber.log.Timber
 import java.io.File
-import java.util.UUID
 import javax.inject.Inject
 
-internal class ImageCompressor @Inject constructor() {
+internal class ImageCompressor @Inject constructor(
+        private val temporaryFileCreator: TemporaryFileCreator
+) {
     suspend fun compress(
-            context: Context,
             imageFile: File,
             desiredWidth: Int,
             desiredHeight: Int,
@@ -47,7 +46,7 @@ internal class ImageCompressor @Inject constructor() {
                 }
             } ?: return@withContext imageFile
 
-            val destinationFile = createDestinationFile(context)
+            val destinationFile = temporaryFileCreator.create()
 
             runCatching {
                 destinationFile.outputStream().use {
@@ -55,7 +54,7 @@ internal class ImageCompressor @Inject constructor() {
                 }
             }
 
-            return@withContext destinationFile
+            destinationFile
         }
     }
 
@@ -117,9 +116,5 @@ internal class ImageCompressor @Inject constructor() {
             Timber.e(e, "Cannot decode Bitmap")
             null
         }
-    }
-
-    private fun createDestinationFile(context: Context): File {
-        return File.createTempFile(UUID.randomUUID().toString(), null, context.cacheDir)
     }
 }

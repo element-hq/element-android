@@ -1,5 +1,4 @@
 /*
- * Copyright 2020 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,10 +18,10 @@ package org.matrix.android.sdk.api.session.crypto.crosssigning
 
 import androidx.lifecycle.LiveData
 import org.matrix.android.sdk.api.MatrixCallback
+import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.crypto.crosssigning.DeviceTrustResult
 import org.matrix.android.sdk.internal.crypto.crosssigning.UserTrustResult
-import org.matrix.android.sdk.internal.crypto.model.rest.UserPasswordAuth
 import org.matrix.android.sdk.internal.crypto.store.PrivateKeysInfo
 
 interface CrossSigningService {
@@ -41,7 +40,7 @@ interface CrossSigningService {
      * Initialize cross signing for this user.
      * Users needs to enter credentials
      */
-    fun initializeCrossSigning(authParams: UserPasswordAuth?,
+    fun initializeCrossSigning(uiaInterceptor: UserInteractiveAuthInterceptor?,
                                callback: MatrixCallback<Unit>)
 
     fun isCrossSigningInitialized(): Boolean = getMyCrossSigningKeys() != null

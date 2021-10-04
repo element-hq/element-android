@@ -1,0 +1,2 @@
+Main changes in this version: URL Preview, new Emoji keyboard, new room settings capabilities, and snow for Christmas!
+Full changelog: https://github.com/vector-im/element-android/releases/tag/v1.0.13

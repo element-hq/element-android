@@ -24,9 +24,8 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.widget.SearchView
-import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isVisible
-import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.viewModel
 import com.google.android.material.tabs.TabLayout
 import com.jakewharton.rxbinding3.widget.queryTextChanges
@@ -35,9 +34,11 @@ import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.observeEvent
 import im.vector.app.core.platform.VectorBaseActivity
+import im.vector.app.databinding.ActivityEmojiReactionPickerBinding
 import im.vector.app.features.reactions.data.EmojiDataSource
 import io.reactivex.android.schedulers.AndroidSchedulers
-import kotlinx.android.synthetic.main.activity_emoji_reaction_picker.*
+import kotlinx.coroutines.launch
+
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -47,16 +48,16 @@ import javax.inject.Inject
  * TODO: Loading indicator while getting emoji data source?
  * TODO: Finish Refactor to vector base activity
  */
-class EmojiReactionPickerActivity : VectorBaseActivity(),
+class EmojiReactionPickerActivity : VectorBaseActivity<ActivityEmojiReactionPickerBinding>(),
         EmojiCompatFontProvider.FontProviderListener {
-
-    private lateinit var tabLayout: TabLayout
 
     lateinit var viewModel: EmojiChooserViewModel
 
     override fun getMenuRes() = R.menu.menu_emoji_reaction_picker
 
-    override fun getLayoutRes() = R.layout.activity_emoji_reaction_picker
+    override fun getBinding() = ActivityEmojiReactionPickerBinding.inflate(layoutInflater)
+
+    override fun getCoordinatorLayout() = views.coordinatorLayout
 
     override fun getTitleRes() = R.string.title_activity_emoji_reaction_picker
 
@@ -83,38 +84,38 @@ class EmojiReactionPickerActivity : VectorBaseActivity(),
     }
 
     override fun initUiAndData() {
-        configureToolbar(emojiPickerToolbar)
+        configureToolbar(views.emojiPickerToolbar)
         emojiCompatFontProvider.let {
             EmojiDrawView.configureTextPaint(this, it.typeface)
             it.addListener(this)
         }
 
-        tabLayout = findViewById(R.id.tabs)
-
         viewModel = viewModelProvider.get(EmojiChooserViewModel::class.java)
 
         viewModel.eventId = intent.getStringExtra(EXTRA_EVENT_ID)
-
-        emojiDataSource.rawData.categories.forEach { category ->
-            val s = category.emojis[0]
-            tabLayout.newTab()
-                    .also { tab ->
-                        tab.text = emojiDataSource.rawData.emojis[s]!!.emoji
-                        tab.contentDescription = category.name
-                    }
-                    .also { tab ->
-                        tabLayout.addTab(tab)
-                    }
-        }
-        tabLayout.addOnTabSelectedListener(tabLayoutSelectionListener)
-
-        viewModel.currentSection.observe(this, Observer { section ->
-            section?.let {
-                tabLayout.removeOnTabSelectedListener(tabLayoutSelectionListener)
-                tabLayout.getTabAt(it)?.select()
-                tabLayout.addOnTabSelectedListener(tabLayoutSelectionListener)
+        lifecycleScope.launch {
+            val rawData = emojiDataSource.rawData.await()
+            rawData.categories.forEach { category ->
+                val s = category.emojis[0]
+                views.tabs.newTab()
+                        .also { tab ->
+                            tab.text = rawData.emojis[s]!!.emoji
+                            tab.contentDescription = category.name
+                        }
+                        .also { tab ->
+                            views.tabs.addTab(tab)
+                        }
             }
-        })
+        }
+        views.tabs.addOnTabSelectedListener(tabLayoutSelectionListener)
+
+        viewModel.currentSection.observe(this) { section ->
+            section?.let {
+                views.tabs.removeOnTabSelectedListener(tabLayoutSelectionListener)
+                views.tabs.getTabAt(it)?.select()
+                views.tabs.addOnTabSelectedListener(tabLayoutSelectionListener)
+            }
+        }
 
         viewModel.navigateEvent.observeEvent(this) {
             if (it == EmojiChooserViewModel.NAVIGATE_FINISH) {
@@ -127,9 +128,9 @@ class EmojiReactionPickerActivity : VectorBaseActivity(),
             }
         }
 
-        emojiPickerWholeListFragmentContainer.isVisible = true
-        emojiPickerFilteredListFragmentContainer.isVisible = false
-        tabLayout.isVisible = true
+        views.emojiPickerWholeListFragmentContainer.isVisible = true
+        views.emojiPickerFilteredListFragmentContainer.isVisible = false
+        views.tabs.isVisible = true
     }
 
     override fun compatibilityFontUpdate(typeface: Typeface?) {
@@ -152,13 +153,13 @@ class EmojiReactionPickerActivity : VectorBaseActivity(),
                     searchView.isIconified = false
                     searchView.requestFocusFromTouch()
                     // we want to force the tool bar as visible even if hidden with scroll flags
-                    findViewById<Toolbar>(R.id.toolbar)?.minimumHeight = getActionBarSize()
+                    views.emojiPickerToolbar.minimumHeight = getActionBarSize()
                     return true
                 }
 
                 override fun onMenuItemActionCollapse(p0: MenuItem?): Boolean {
                     // when back, clear all search
-                    findViewById<Toolbar>(R.id.toolbar)?.minimumHeight = 0
+                    views.emojiPickerToolbar.minimumHeight = 0
                     searchView.setQuery("", true)
                     return true
                 }
@@ -190,13 +191,13 @@ class EmojiReactionPickerActivity : VectorBaseActivity(),
 
     private fun onQueryText(query: String) {
         if (query.isEmpty()) {
-            tabLayout.isVisible = true
-            emojiPickerWholeListFragmentContainer.isVisible = true
-            emojiPickerFilteredListFragmentContainer.isVisible = false
+            views.tabs.isVisible = true
+            views.emojiPickerWholeListFragmentContainer.isVisible = true
+            views.emojiPickerFilteredListFragmentContainer.isVisible = false
         } else {
-            tabLayout.isVisible = false
-            emojiPickerWholeListFragmentContainer.isVisible = false
-            emojiPickerFilteredListFragmentContainer.isVisible = true
+            views.tabs.isVisible = false
+            views.emojiPickerWholeListFragmentContainer.isVisible = false
+            views.emojiPickerFilteredListFragmentContainer.isVisible = true
             searchResultViewModel.handle(EmojiSearchAction.UpdateQuery(query))
         }
     }
@@ -212,10 +213,8 @@ class EmojiReactionPickerActivity : VectorBaseActivity(),
             return intent
         }
 
-        fun getOutput(data: Intent): Pair<String, String>? {
-            val eventId = data.getStringExtra(EXTRA_EVENT_ID) ?: return null
-            val reaction = data.getStringExtra(EXTRA_REACTION_RESULT) ?: return null
-            return eventId to reaction
-        }
+        fun getOutputEventId(data: Intent?): String? = data?.getStringExtra(EXTRA_EVENT_ID)
+
+        fun getOutputReaction(data: Intent?): String? = data?.getStringExtra(EXTRA_REACTION_RESULT)
     }
 }

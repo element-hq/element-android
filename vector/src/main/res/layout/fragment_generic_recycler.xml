@@ -4,15 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?riotx_background">
+    android:background="?android:colorBackground">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
+        android:id="@+id/genericRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:itemSpacing="1dp"
         tools:listitem="@layout/item_pushgateway" />
 
-    <include layout="@layout/merge_overlay_waiting_view" />
+    <include
+        android:id="@+id/waiting_view"
+        layout="@layout/merge_overlay_waiting_view" />
 
 </FrameLayout>

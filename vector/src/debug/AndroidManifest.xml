@@ -4,13 +4,8 @@
 
     <application>
         <activity android:name=".features.debug.TestLinkifyActivity" />
+        <activity android:name=".features.debug.DebugPermissionActivity" />
         <activity android:name=".features.debug.sas.DebugSasEmojiActivity" />
-        <activity
-            android:name=".features.debug.DebugMaterialThemeLightActivity"
-            android:theme="@style/VectorMaterialThemeDebugLight" />
-        <activity
-            android:name=".features.debug.DebugMaterialThemeDarkActivity"
-            android:theme="@style/VectorMaterialThemeDebugDark" />
     </application>
 
 </manifest>

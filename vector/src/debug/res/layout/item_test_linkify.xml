@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -12,7 +12,6 @@
         android:orientation="vertical">
 
         <TextView
-            style="@style/ListHeader"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="AutoLink" />
@@ -26,7 +25,6 @@
             tools:text="www.example.org" />
 
         <TextView
-            style="@style/ListHeader"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Custom Link" />
@@ -40,4 +38,4 @@
 
     </LinearLayout>
 
-</androidx.cardview.widget.CardView>
+</com.google.android.material.card.MaterialCardView>

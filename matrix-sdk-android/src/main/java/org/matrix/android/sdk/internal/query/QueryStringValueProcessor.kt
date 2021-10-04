@@ -1,5 +1,4 @@
 /*
- * Copyright 2020 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,10 +16,10 @@
 
 package org.matrix.android.sdk.internal.query
 
-import org.matrix.android.sdk.api.query.QueryStringValue
 import io.realm.Case
 import io.realm.RealmObject
 import io.realm.RealmQuery
+import org.matrix.android.sdk.api.query.QueryStringValue
 import timber.log.Timber
 
 fun <T : RealmObject> RealmQuery<T>.process(field: String, queryStringValue: QueryStringValue): RealmQuery<T> {

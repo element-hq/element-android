@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
+ * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.session.room.summary
 
 import io.realm.Realm
 import org.matrix.android.sdk.api.session.room.summary.RoomSummaryConstants
+import org.matrix.android.sdk.api.session.room.timeline.EventTypeFilter
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEventFilters
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
 import org.matrix.android.sdk.internal.database.query.latestEvent
@@ -26,7 +27,7 @@ internal object RoomSummaryEventsHelper {
 
     private val previewFilters = TimelineEventFilters(
             filterTypes = true,
-            allowedTypes = RoomSummaryConstants.PREVIEWABLE_TYPES,
+            allowedTypes = RoomSummaryConstants.PREVIEWABLE_TYPES.map { EventTypeFilter(eventType = it, stateKey = null) },
             filterUseless = true,
             filterRedacted = false,
             filterEdits = true

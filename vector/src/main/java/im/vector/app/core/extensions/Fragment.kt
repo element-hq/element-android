@@ -17,16 +17,23 @@
 package im.vector.app.core.extensions
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Parcelable
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import im.vector.app.R
-import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.selectTxtFileToWrite
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-fun VectorBaseFragment.addFragment(
+fun Fragment.registerStartForActivityResult(onResult: (ActivityResult) -> Unit): ActivityResultLauncher<Intent> {
+    return registerForActivityResult(ActivityResultContracts.StartActivityForResult(), onResult)
+}
+
+fun Fragment.addFragment(
         frameId: Int,
         fragment: Fragment,
         allowStateLoss: Boolean = false
@@ -34,7 +41,7 @@ fun VectorBaseFragment.addFragment(
     parentFragmentManager.commitTransaction(allowStateLoss) { add(frameId, fragment) }
 }
 
-fun <T : Fragment> VectorBaseFragment.addFragment(
+fun <T : Fragment> Fragment.addFragment(
         frameId: Int,
         fragmentClass: Class<T>,
         params: Parcelable? = null,
@@ -46,7 +53,7 @@ fun <T : Fragment> VectorBaseFragment.addFragment(
     }
 }
 
-fun VectorBaseFragment.replaceFragment(
+fun Fragment.replaceFragment(
         frameId: Int,
         fragment: Fragment,
         allowStateLoss: Boolean = false
@@ -54,7 +61,7 @@ fun VectorBaseFragment.replaceFragment(
     parentFragmentManager.commitTransaction(allowStateLoss) { replace(frameId, fragment) }
 }
 
-fun <T : Fragment> VectorBaseFragment.replaceFragment(
+fun <T : Fragment> Fragment.replaceFragment(
         frameId: Int,
         fragmentClass: Class<T>,
         params: Parcelable? = null,
@@ -66,7 +73,7 @@ fun <T : Fragment> VectorBaseFragment.replaceFragment(
     }
 }
 
-fun VectorBaseFragment.addFragmentToBackstack(
+fun Fragment.addFragmentToBackstack(
         frameId: Int,
         fragment: Fragment,
         tag: String? = null,
@@ -75,7 +82,7 @@ fun VectorBaseFragment.addFragmentToBackstack(
     parentFragmentManager.commitTransaction(allowStateLoss) { replace(frameId, fragment, tag).addToBackStack(tag) }
 }
 
-fun <T : Fragment> VectorBaseFragment.addFragmentToBackstack(
+fun <T : Fragment> Fragment.addFragmentToBackstack(
         frameId: Int,
         fragmentClass: Class<T>,
         params: Parcelable? = null,
@@ -87,7 +94,7 @@ fun <T : Fragment> VectorBaseFragment.addFragmentToBackstack(
     }
 }
 
-fun VectorBaseFragment.addChildFragment(
+fun Fragment.addChildFragment(
         frameId: Int,
         fragment: Fragment,
         tag: String? = null,
@@ -96,7 +103,7 @@ fun VectorBaseFragment.addChildFragment(
     childFragmentManager.commitTransaction(allowStateLoss) { add(frameId, fragment, tag) }
 }
 
-fun <T : Fragment> VectorBaseFragment.addChildFragment(
+fun <T : Fragment> Fragment.addChildFragment(
         frameId: Int,
         fragmentClass: Class<T>,
         params: Parcelable? = null,
@@ -108,7 +115,7 @@ fun <T : Fragment> VectorBaseFragment.addChildFragment(
     }
 }
 
-fun VectorBaseFragment.replaceChildFragment(
+fun Fragment.replaceChildFragment(
         frameId: Int,
         fragment: Fragment,
         tag: String? = null,
@@ -117,7 +124,7 @@ fun VectorBaseFragment.replaceChildFragment(
     childFragmentManager.commitTransaction(allowStateLoss) { replace(frameId, fragment, tag) }
 }
 
-fun <T : Fragment> VectorBaseFragment.replaceChildFragment(
+fun <T : Fragment> Fragment.replaceChildFragment(
         frameId: Int,
         fragmentClass: Class<T>,
         params: Parcelable? = null,
@@ -129,7 +136,7 @@ fun <T : Fragment> VectorBaseFragment.replaceChildFragment(
     }
 }
 
-fun VectorBaseFragment.addChildFragmentToBackstack(
+fun Fragment.addChildFragmentToBackstack(
         frameId: Int,
         fragment: Fragment,
         tag: String? = null,
@@ -138,7 +145,7 @@ fun VectorBaseFragment.addChildFragmentToBackstack(
     childFragmentManager.commitTransaction(allowStateLoss) { replace(frameId, fragment).addToBackStack(tag) }
 }
 
-fun <T : Fragment> VectorBaseFragment.addChildFragmentToBackstack(
+fun <T : Fragment> Fragment.addChildFragmentToBackstack(
         frameId: Int,
         fragmentClass: Class<T>,
         params: Parcelable? = null,
@@ -160,26 +167,24 @@ fun Fragment.getAllChildFragments(): List<Fragment> {
 // Define a missing constant
 const val POP_BACK_STACK_EXCLUSIVE = 0
 
-fun Fragment.queryExportKeys(userId: String, requestCode: Int) {
+fun Fragment.queryExportKeys(userId: String, activityResultLauncher: ActivityResultLauncher<Intent>) {
     val timestamp = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
 
     selectTxtFileToWrite(
             activity = requireActivity(),
-            fragment = this,
+            activityResultLauncher = activityResultLauncher,
             defaultFileName = "element-megolm-export-$userId-$timestamp.txt",
-            chooserHint = getString(R.string.keys_backup_setup_step1_manual_export),
-            requestCode = requestCode
+            chooserHint = getString(R.string.keys_backup_setup_step1_manual_export)
     )
 }
 
-fun Activity.queryExportKeys(userId: String, requestCode: Int) {
+fun Activity.queryExportKeys(userId: String, activityResultLauncher: ActivityResultLauncher<Intent>) {
     val timestamp = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
 
     selectTxtFileToWrite(
             activity = this,
-            fragment = null,
+            activityResultLauncher = activityResultLauncher,
             defaultFileName = "element-megolm-export-$userId-$timestamp.txt",
-            chooserHint = getString(R.string.keys_backup_setup_step1_manual_export),
-            requestCode = requestCode
+            chooserHint = getString(R.string.keys_backup_setup_step1_manual_export)
     )
 }

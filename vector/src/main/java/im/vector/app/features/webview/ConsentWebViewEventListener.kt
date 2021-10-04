@@ -16,10 +16,10 @@
 
 package im.vector.app.features.webview
 
-import org.matrix.android.sdk.api.MatrixCallback
-import org.matrix.android.sdk.api.session.Session
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.weak
+import org.matrix.android.sdk.api.MatrixCallback
+import org.matrix.android.sdk.api.session.Session
 import timber.log.Timber
 
 private const val SUCCESS_URL_SUFFIX = "/_matrix/consent"
@@ -29,12 +29,12 @@ private const val RIOT_BOT_ID = "@riot-bot:matrix.org"
  * This class is the Consent implementation of WebViewEventListener.
  * It is used to manage the consent agreement flow.
  */
-class ConsentWebViewEventListener(activity: VectorBaseActivity,
+class ConsentWebViewEventListener(activity: VectorBaseActivity<*>,
                                   private val session: Session,
                                   private val delegate: WebViewEventListener)
     : WebViewEventListener by delegate {
 
-    private val safeActivity: VectorBaseActivity? by weak(activity)
+    private val safeActivity: VectorBaseActivity<*>? by weak(activity)
 
     override fun onPageFinished(url: String) {
         delegate.onPageFinished(url)
@@ -48,7 +48,7 @@ class ConsentWebViewEventListener(activity: VectorBaseActivity,
      */
     private fun createRiotBotRoomIfNeeded() {
         safeActivity?.let {
-            /* We do not create a Room with RiotBot in RiotX for the moment
+            /* We do not create a Room with RiotBot in Element for the moment
             val joinedRooms = session.dataHandler.store.rooms.filter {
                 it.isJoined
             }
@@ -58,7 +58,7 @@ class ConsentWebViewEventListener(activity: VectorBaseActivity,
                 session.profileApiClient
                         .displayname(RIOT_BOT_ID, object : MatrixCallback<String>(createRiotBotRoomCallback) {
                             override fun onSuccess(info: String?) {
-                                // Ok, the Home Server knows riot-Bot, so create a Room with him
+                                // Ok, the homeserver knows riot-Bot, so create a Room with him
                                 session.createDirectMessageRoom(RIOT_BOT_ID, createRiotBotRoomCallback)
                             }
                         })

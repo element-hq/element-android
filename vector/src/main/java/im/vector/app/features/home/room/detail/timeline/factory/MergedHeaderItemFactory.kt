@@ -22,19 +22,22 @@ import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.helper.AvatarSizeProvider
 import im.vector.app.features.home.room.detail.timeline.helper.MergedTimelineEventVisibilityStateChangedListener
-import im.vector.app.features.home.room.detail.timeline.helper.RoomSummaryHolder
+import im.vector.app.features.home.room.detail.timeline.helper.TimelineEventVisibilityHelper
 import im.vector.app.features.home.room.detail.timeline.helper.canBeMerged
 import im.vector.app.features.home.room.detail.timeline.helper.isRoomConfiguration
-import im.vector.app.features.home.room.detail.timeline.helper.prevSameTypeEvents
 import im.vector.app.features.home.room.detail.timeline.item.BasedMergedItem
 import im.vector.app.features.home.room.detail.timeline.item.MergedMembershipEventsItem
 import im.vector.app.features.home.room.detail.timeline.item.MergedMembershipEventsItem_
 import im.vector.app.features.home.room.detail.timeline.item.MergedRoomCreationItem
 import im.vector.app.features.home.room.detail.timeline.item.MergedRoomCreationItem_
+import im.vector.app.features.home.room.detail.timeline.tools.createLinkMovementMethod
 import org.matrix.android.sdk.api.extensions.orFalse
+import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
 import org.matrix.android.sdk.api.session.room.model.create.RoomCreateContent
+import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import org.matrix.android.sdk.internal.crypto.model.event.EncryptionEventContent
@@ -43,7 +46,7 @@ import javax.inject.Inject
 class MergedHeaderItemFactory @Inject constructor(private val activeSessionHolder: ActiveSessionHolder,
                                                   private val avatarRenderer: AvatarRenderer,
                                                   private val avatarSizeProvider: AvatarSizeProvider,
-                                                  private val roomSummaryHolder: RoomSummaryHolder) {
+                                                  private val timelineEventVisibilityHelper: TimelineEventVisibilityHelper) {
 
     private val collapsedEventIds = linkedSetOf<Long>()
     private val mergeItemCollapseStates = HashMap<Long, Boolean>()
@@ -55,6 +58,7 @@ class MergedHeaderItemFactory @Inject constructor(private val activeSessionHolde
     fun create(event: TimelineEvent,
                nextEvent: TimelineEvent?,
                items: List<TimelineEvent>,
+               partialState: TimelineEventController.PartialState,
                addDaySeparator: Boolean,
                currentPosition: Int,
                eventIdToHighlight: String?,
@@ -65,28 +69,26 @@ class MergedHeaderItemFactory @Inject constructor(private val activeSessionHolde
                 && event.isRoomConfiguration(nextEvent.root.getClearContent()?.toModel<RoomCreateContent>()?.creator)) {
             // It's the first item before room.create
             // Collapse all room configuration events
-            buildRoomCreationMergedSummary(currentPosition, items, event, eventIdToHighlight, requestModelBuild, callback)
+            buildRoomCreationMergedSummary(currentPosition, items, partialState, event, eventIdToHighlight, requestModelBuild, callback)
         } else if (!event.canBeMerged() || (nextEvent?.root?.getClearType() == event.root.getClearType() && !addDaySeparator)) {
             null
         } else {
-            buildMembershipEventsMergedSummary(currentPosition, items, event, eventIdToHighlight, requestModelBuild, callback)
+            buildMembershipEventsMergedSummary(currentPosition, items, partialState, event, eventIdToHighlight, requestModelBuild, callback)
         }
     }
 
-    private fun isDirectRoom() = roomSummaryHolder.roomSummary?.isDirect.orFalse()
-
     private fun buildMembershipEventsMergedSummary(currentPosition: Int,
                                                    items: List<TimelineEvent>,
+                                                   partialState: TimelineEventController.PartialState,
                                                    event: TimelineEvent,
                                                    eventIdToHighlight: String?,
                                                    requestModelBuild: () -> Unit,
                                                    callback: TimelineEventController.Callback?): MergedMembershipEventsItem_? {
-        val prevSameTypeEvents = items.prevSameTypeEvents(currentPosition, 2)
-        return if (prevSameTypeEvents.isEmpty()) {
+        val mergedEvents = timelineEventVisibilityHelper.prevSameTypeEvents(items, currentPosition, 2, eventIdToHighlight)
+        return if (mergedEvents.isEmpty()) {
             null
         } else {
             var highlighted = false
-            val mergedEvents = (prevSameTypeEvents + listOf(event)).asReversed()
             val mergedData = ArrayList<BasedMergedItem.Data>(mergedEvents.size)
             mergedEvents.forEach { mergedEvent ->
                 if (!highlighted && mergedEvent.root.eventId == eventIdToHighlight) {
@@ -98,7 +100,7 @@ class MergedHeaderItemFactory @Inject constructor(private val activeSessionHolde
                         memberName = mergedEvent.senderInfo.disambiguatedDisplayName,
                         localId = mergedEvent.localId,
                         eventId = mergedEvent.root.eventId ?: "",
-                        isDirectRoom = isDirectRoom()
+                        isDirectRoom = partialState.isDirectRoom()
                 )
                 mergedData.add(data)
             }
@@ -122,8 +124,7 @@ class MergedHeaderItemFactory @Inject constructor(private val activeSessionHolde
                     onCollapsedStateChanged = {
                         mergeItemCollapseStates[event.localId] = it
                         requestModelBuild()
-                    },
-                    readReceiptsCallback = callback
+                    }
             )
             MergedMembershipEventsItem_()
                     .id(mergeId)
@@ -138,6 +139,7 @@ class MergedHeaderItemFactory @Inject constructor(private val activeSessionHolde
 
     private fun buildRoomCreationMergedSummary(currentPosition: Int,
                                                items: List<TimelineEvent>,
+                                               partialState: TimelineEventController.PartialState,
                                                event: TimelineEvent,
                                                eventIdToHighlight: String?,
                                                requestModelBuild: () -> Unit,
@@ -148,7 +150,7 @@ class MergedHeaderItemFactory @Inject constructor(private val activeSessionHolde
         var hasEncryption = false
         var encryptionAlgorithm: String? = null
         while (prevEvent != null && prevEvent.isRoomConfiguration(null)) {
-            if (prevEvent.root.getClearType() == EventType.STATE_ROOM_ENCRYPTION) {
+            if (prevEvent.root.isStateEvent() && prevEvent.root.getClearType() == EventType.STATE_ROOM_ENCRYPTION) {
                 hasEncryption = true
                 encryptionAlgorithm = prevEvent.root.getClearContent()?.toModel<EncryptionEventContent>()?.algorithm
             }
@@ -170,7 +172,7 @@ class MergedHeaderItemFactory @Inject constructor(private val activeSessionHolde
                                 memberName = mergedEvent.senderInfo.disambiguatedDisplayName,
                                 localId = mergedEvent.localId,
                                 eventId = mergedEvent.root.eventId ?: "",
-                                isDirectRoom = isDirectRoom()
+                                isDirectRoom = partialState.isDirectRoom()
                         )
                         mergedData.add(data)
                     }
@@ -187,6 +189,10 @@ class MergedHeaderItemFactory @Inject constructor(private val activeSessionHolde
                 collapsedEventIds.removeAll(mergedEventIds)
             }
             val mergeId = mergedEventIds.joinToString(separator = "_") { it.toString() }
+            val powerLevelsHelper = activeSessionHolder.getSafeActiveSession()?.getRoom(event.roomId)
+                    ?.let { it.getStateEvent(EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.NoCondition)?.content?.toModel<PowerLevelsContent>() }
+                    ?.let { PowerLevelsHelper(it) }
+            val currentUserId = activeSessionHolder.getSafeActiveSession()?.myUserId ?: ""
             val attributes = MergedRoomCreationItem.Attributes(
                     isCollapsed = isCollapsed,
                     mergeData = mergedData,
@@ -197,18 +203,28 @@ class MergedHeaderItemFactory @Inject constructor(private val activeSessionHolde
                     },
                     hasEncryptionEvent = hasEncryption,
                     isEncryptionAlgorithmSecure = encryptionAlgorithm == MXCRYPTO_ALGORITHM_MEGOLM,
-                    readReceiptsCallback = callback,
-                    currentUserId = activeSessionHolder.getSafeActiveSession()?.myUserId ?: ""
+                    callback = callback,
+                    currentUserId = currentUserId,
+                    roomSummary = partialState.roomSummary,
+                    canInvite = powerLevelsHelper?.isUserAbleToInvite(currentUserId) ?: false,
+                    canChangeAvatar = powerLevelsHelper?.isUserAllowedToSend(currentUserId, true, EventType.STATE_ROOM_AVATAR) ?: false,
+                    canChangeTopic = powerLevelsHelper?.isUserAllowedToSend(currentUserId, true, EventType.STATE_ROOM_TOPIC) ?: false,
+                    canChangeName = powerLevelsHelper?.isUserAllowedToSend(currentUserId, true, EventType.STATE_ROOM_NAME) ?: false
             )
             MergedRoomCreationItem_()
                     .id(mergeId)
                     .leftGuideline(avatarSizeProvider.leftGuideline)
                     .highlighted(isCollapsed && highlighted)
                     .attributes(attributes)
+                    .movementMethod(createLinkMovementMethod(callback))
                     .also {
                         it.setOnVisibilityStateChanged(MergedTimelineEventVisibilityStateChangedListener(callback, mergedEvents))
                     }
         } else null
+    }
+
+    private fun TimelineEventController.PartialState.isDirectRoom(): Boolean {
+        return roomSummary?.isDirect.orFalse()
     }
 
     fun isCollapsed(localId: Long): Boolean {

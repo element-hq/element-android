@@ -26,10 +26,10 @@ To install the template (to be done only once):
 
 To create a new screen:
 - First create a new package in your code.
-- Then right click on the package, and select `New/New Vector/RiotX Feature`.
+- Then right click on the package, and select `New/New Vector/Element Feature`.
 - Follow the Wizard, especially replace `Main` by something more relevant to your feature.
 - Click on `Finish`.
-- Remaining steps are described as TODO in the generated files, or will be pointed out by the compilator, or at runtime :)
+- Remaining steps are described as TODO in the generated files, or will be pointed out by the compiler, or at runtime :)
 
 Note that if the templates are modified, the only things to do is to restart Android Studio for the change to take effect.
 
@@ -40,7 +40,7 @@ For now, the Matrix SDK and the Element application are in the same project. So 
 ## I want to help translating Element
 
 If you want to fix an issue with an English string, please submit a PR.
-If you want to fix an issue in other languages, or add a missing translation, or even add a new language, please use [Weblate](https://translate.riot.im/projects/element-android/).
+If you want to fix an issue in other languages, or add a missing translation, or even add a new language, please use [Weblate](https://translate.element.io/projects/element-android/).
 
 ## I want to submit a PR to fix an issue
 
@@ -51,9 +51,21 @@ If an issue does not exist yet, it may be relevant to open a new issue and let u
 
 This project is full Kotlin. Please do not write Java classes.
 
-### CHANGES.md
+### Changelog
 
-Please add a line to the top of the file `CHANGES.md` describing your change.
+Please create at least one file under ./changelog.d containing details about your change. Towncrier will be used when preparing the release.
+
+Towncrier says to use the PR number for the filename, but the issue number is also fine.
+
+Supported filename extensions are:
+
+- ``.feature``: Signifying a new feature in Element Android or in the Matrix SDK.
+- ``.bugfix``: Signifying a bug fix.
+- ``.doc``: Signifying a documentation improvement.
+- ``.removal``: Signifying a deprecation or removal of public API. Can be used to notifying about API change in the Matrix SDK
+- ``.misc``: Any other changes.
+
+See https://github.com/twisted/towncrier#news-fragments if you need more details.
 
 ### Code quality
 
@@ -104,12 +116,39 @@ You should consider adding Unit tests with your PR, and also integration tests (
 
 ### Internationalisation
 
-When adding new string resources, please only add new entries in file `value/strings.xml`. Translations will be added later by the community of translators with a specific tool named [Weblate](https://translate.riot.im/projects/riot-android/).
+Translations are handled using an external tool: [Weblate](https://translate.element.io/projects/element-android/)
+
+As a general rule, please never edit or add or remove translations to the project in a Pull Request. It can lead to merge conflict if the translations are also modified in Weblate side.
+
+#### Adding new string
+
+When adding new string resources, please only add new entries in file `value/strings.xml`. Translations will be added later by the community of translators using Weblate.
+
+New strings can be added anywhere in the file `value/strings.xml`, not necessarily at the end of the file. Generally, it's even better to add the new strings in some dedicated section per feature, and not at the end of the file, to avoid merge conflict between 2 PR adding strings at the end of the same file.
+
 Do not hesitate to use plurals when appropriate.
+
+#### Editing existing strings
+
+Two cases:
+- If the meaning stays the same, it's OK to edit the original string (i.e. the English version).
+- If the meaning is not the same, please create a new string and do not remove the existing string. See below for instructions to remove existing string.
+
+#### Removing existing strings
+
+If a string is not used anymore, it should be removed from the resource, but please do not remove the strings or its translations in the PR. It can lead to merge conflict with Weblate, and to lint error if new translations from deleted strings are added with Weblate.
+
+Instead, please comment the original string with:
+```xml
+<!-- TO BE REMOVED -->
+```
+The string will be removed during the next sync with Weblate.
 
 ### Accessibility
 
 Please consider accessibility as an important point. As a minimum requirement, in layout XML files please use attributes such as `android:contentDescription` and `android:importantForAccessibility`, and test with a screen reader if it's working well. You can add new string resources, dedicated to accessibility, in this case, please prefix theirs id with `a11y_`.
+
+For instance, when updating the image `src` of an ImageView, please also consider updating its `contentDescription`. A good example is a play pause button.
 
 ### Layout
 

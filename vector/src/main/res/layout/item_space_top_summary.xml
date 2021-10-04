@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp">
+
+    <ImageView
+        android:id="@+id/spaceSummaryMemberCountIcon"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:importantForAccessibility="no"
+        android:src="@drawable/ic_room_profile_member_list"
+        app:layout_constraintBottom_toBottomOf="@+id/spaceSummaryMemberCountText"
+        app:layout_constraintStart_toEndOf="@+id/spaceSummaryMemberCountText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="?vctr_content_secondary"
+        tools:ignore="MissingPrefix" />
+
+    <TextView
+        android:id="@+id/spaceSummaryMemberCountText"
+        style="@style/Widget.Vector.TextView.Body"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="?vctr_content_secondary"
+        app:layout_constraintBottom_toBottomOf="@+id/spaceSummaryMemberCountIcon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/spaceSummaryMemberCountIcon"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="123 members" />
+
+    <TextView
+        android:id="@+id/spaceSummaryTopic"
+        style="@style/Widget.Vector.TextView.Subtitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:autoLink="all"
+        android:textColor="?vctr_content_primary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/spaceSummaryMemberCountIcon"
+        tools:text="@sample/spaces.json/data/topic" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

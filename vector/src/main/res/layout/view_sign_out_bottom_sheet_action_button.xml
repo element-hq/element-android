@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:parentTag="android.widget.FrameLayout">
+
+    <LinearLayout
+        android:id="@+id/signedOutActionClickable"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:foreground="?attr/selectableItemBackground"
+        android:minHeight="50dp"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/layout_horizontal_margin"
+        android:paddingTop="8dp"
+        android:paddingEnd="@dimen/layout_horizontal_margin"
+        android:paddingBottom="8dp">
+
+        <ImageView
+            android:id="@+id/actionIconImageView"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="16dp"
+            android:importantForAccessibility="no"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_secure_backup"
+            app:tint="?vctr_content_primary"
+            tools:ignore="MissingPrefix" />
+
+        <TextView
+            android:id="@+id/actionTitleText"
+            style="@style/Widget.Vector.TextView.HeadlineMedium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="@string/secure_backup_setup"
+            android:textColor="?vctr_content_primary" />
+
+    </LinearLayout>
+
+</merge>

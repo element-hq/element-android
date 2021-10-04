@@ -20,10 +20,10 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
-import androidx.appcompat.app.AlertDialog
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
-import org.matrix.android.sdk.api.MatrixCallback
-import org.matrix.android.sdk.api.failure.GlobalError
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.ScreenComponent
@@ -31,22 +31,25 @@ import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.startSyncing
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.deleteAllFiles
+import im.vector.app.databinding.ActivityMainBinding
 import im.vector.app.features.home.HomeActivity
 import im.vector.app.features.home.ShortcutsHandler
-import im.vector.app.features.login.LoginActivity
 import im.vector.app.features.notifications.NotificationDrawerManager
 import im.vector.app.features.pin.PinCodeStore
 import im.vector.app.features.pin.PinLocker
 import im.vector.app.features.pin.UnlockedActivity
+import im.vector.app.features.popup.PopupAlertManager
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.signout.hard.SignedOutActivity
 import im.vector.app.features.signout.soft.SoftLogoutActivity
+import im.vector.app.features.signout.soft.SoftLogoutActivity2
+import im.vector.app.features.themes.ActivityOtherThemes
 import im.vector.app.features.ui.UiStateRepository
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.matrix.android.sdk.api.failure.GlobalError
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -60,11 +63,11 @@ data class MainActivityArgs(
 ) : Parcelable
 
 /**
- * This is the entry point of RiotX
- * This Activity, when started with argument, is also doing some cleanup when user disconnects,
+ * This is the entry point of Element Android
+ * This Activity, when started with argument, is also doing some cleanup when user signs out,
  * clears cache, is logged out, or is soft logged out
  */
-class MainActivity : VectorBaseActivity(), UnlockedActivity {
+class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity {
 
     companion object {
         private const val EXTRA_ARGS = "EXTRA_ARGS"
@@ -79,6 +82,10 @@ class MainActivity : VectorBaseActivity(), UnlockedActivity {
         }
     }
 
+    override fun getBinding() = ActivityMainBinding.inflate(layoutInflater)
+
+    override fun getOtherThemes() = ActivityOtherThemes.Launcher
+
     private lateinit var args: MainActivityArgs
 
     @Inject lateinit var notificationDrawerManager: NotificationDrawerManager
@@ -89,6 +96,7 @@ class MainActivity : VectorBaseActivity(), UnlockedActivity {
     @Inject lateinit var shortcutsHandler: ShortcutsHandler
     @Inject lateinit var pinCodeStore: PinCodeStore
     @Inject lateinit var pinLocker: PinLocker
+    @Inject lateinit var popupAlertManager: PopupAlertManager
 
     override fun injectWith(injector: ScreenComponent) {
         injector.inject(this)
@@ -115,6 +123,9 @@ class MainActivity : VectorBaseActivity(), UnlockedActivity {
 
         // Also clear the dynamic shortcuts
         shortcutsHandler.clearShortcuts()
+
+        // Also clear the alerts
+        popupAlertManager.cancelAll()
     }
 
     private fun parseArgs(): MainActivityArgs {
@@ -138,38 +149,36 @@ class MainActivity : VectorBaseActivity(), UnlockedActivity {
         }
         when {
             args.isAccountDeactivated -> {
-                // Just do the local cleanup
-                Timber.w("Account deactivated, start app")
-                sessionHolder.clearActiveSession()
-                doLocalCleanup(clearPreferences = true)
-                startNextActivityAndFinish()
+                lifecycleScope.launch {
+                    // Just do the local cleanup
+                    Timber.w("Account deactivated, start app")
+                    sessionHolder.clearActiveSession()
+                    doLocalCleanup(clearPreferences = true)
+                    startNextActivityAndFinish()
+                }
             }
-            args.clearCredentials     -> session.signOut(
-                    !args.isUserLoggedOut,
-                    object : MatrixCallback<Unit> {
-                        override fun onSuccess(data: Unit) {
-                            Timber.w("SIGN_OUT: success, start app")
-                            sessionHolder.clearActiveSession()
-                            doLocalCleanup(clearPreferences = true)
-                            startNextActivityAndFinish()
-                        }
-
-                        override fun onFailure(failure: Throwable) {
-                            displayError(failure)
-                        }
-                    })
-            args.clearCache           -> session.clearCache(
-                    object : MatrixCallback<Unit> {
-                        override fun onSuccess(data: Unit) {
-                            doLocalCleanup(clearPreferences = false)
-                            session.startSyncing(applicationContext)
-                            startNextActivityAndFinish()
-                        }
-
-                        override fun onFailure(failure: Throwable) {
-                            displayError(failure)
-                        }
-                    })
+            args.clearCredentials     -> {
+                lifecycleScope.launch {
+                    try {
+                        session.signOut(!args.isUserLoggedOut)
+                    } catch (failure: Throwable) {
+                        displayError(failure)
+                        return@launch
+                    }
+                    Timber.w("SIGN_OUT: success, start app")
+                    sessionHolder.clearActiveSession()
+                    doLocalCleanup(clearPreferences = true)
+                    startNextActivityAndFinish()
+                }
+            }
+            args.clearCache           -> {
+                lifecycleScope.launch {
+                    session.clearCache()
+                    doLocalCleanup(clearPreferences = false)
+                    session.startSyncing(applicationContext)
+                    startNextActivityAndFinish()
+                }
+            }
         }
     }
 
@@ -178,46 +187,49 @@ class MainActivity : VectorBaseActivity(), UnlockedActivity {
         Timber.w("Ignoring invalid token global error")
     }
 
-    private fun doLocalCleanup(clearPreferences: Boolean) {
-        GlobalScope.launch(Dispatchers.Main) {
-            // On UI Thread
-            Glide.get(this@MainActivity).clearMemory()
+    private suspend fun doLocalCleanup(clearPreferences: Boolean) {
+        // On UI Thread
+        Glide.get(this@MainActivity).clearMemory()
 
-            if (clearPreferences) {
-                vectorPreferences.clearPreferences()
-                uiStateRepository.reset()
-                pinLocker.unlock()
-                pinCodeStore.deleteEncodedPin()
-            }
-            withContext(Dispatchers.IO) {
-                // On BG thread
-                Glide.get(this@MainActivity).clearDiskCache()
+        if (clearPreferences) {
+            vectorPreferences.clearPreferences()
+            uiStateRepository.reset()
+            pinLocker.unlock()
+            pinCodeStore.deleteEncodedPin()
+        }
+        withContext(Dispatchers.IO) {
+            // On BG thread
+            Glide.get(this@MainActivity).clearDiskCache()
 
-                // Also clear cache (Logs, etc...)
-                deleteAllFiles(this@MainActivity.cacheDir)
-            }
+            // Also clear cache (Logs, etc...)
+            deleteAllFiles(this@MainActivity.cacheDir)
         }
     }
 
     private fun displayError(failure: Throwable) {
-        AlertDialog.Builder(this)
-                .setTitle(R.string.dialog_title_error)
-                .setMessage(errorFormatter.toHumanReadable(failure))
-                .setPositiveButton(R.string.global_retry) { _, _ -> doCleanUp() }
-                .setNegativeButton(R.string.cancel) { _, _ -> startNextActivityAndFinish() }
-                .setCancelable(false)
-                .show()
+        if (lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) {
+            MaterialAlertDialogBuilder(this)
+                    .setTitle(R.string.dialog_title_error)
+                    .setMessage(errorFormatter.toHumanReadable(failure))
+                    .setPositiveButton(R.string.global_retry) { _, _ -> doCleanUp() }
+                    .setNegativeButton(R.string.cancel) { _, _ -> startNextActivityAndFinish(ignoreClearCredentials = true) }
+                    .setCancelable(false)
+                    .show()
+        }
     }
 
-    private fun startNextActivityAndFinish() {
+    private fun startNextActivityAndFinish(ignoreClearCredentials: Boolean = false) {
         val intent = when {
             args.clearCredentials
-                    && (!args.isUserLoggedOut || args.isAccountDeactivated) ->
+                    && !ignoreClearCredentials
+                    && (!args.isUserLoggedOut || args.isAccountDeactivated) -> {
                 // User has explicitly asked to log out or deactivated his account
-                LoginActivity.newIntent(this, null)
+                navigator.openLogin(this, null)
+                null
+            }
             args.isSoftLogout                                               ->
                 // The homeserver has invalidated the token, with a soft logout
-                SoftLogoutActivity.newIntent(this)
+                getSoftLogoutActivityIntent()
             args.isUserLoggedOut                                            ->
                 // the homeserver has invalidated the token (password changed, device deleted, other security reasons)
                 SignedOutActivity.newIntent(this)
@@ -228,13 +240,23 @@ class MainActivity : VectorBaseActivity(), UnlockedActivity {
                     HomeActivity.newIntent(this)
                 } else {
                     // The token is still invalid
-                    SoftLogoutActivity.newIntent(this)
+                    getSoftLogoutActivityIntent()
                 }
-            else                                                            ->
+            else                                                            -> {
                 // First start, or no active session
-                LoginActivity.newIntent(this, null)
+                navigator.openLogin(this, null)
+                null
+            }
         }
-        startActivity(intent)
+        intent?.let { startActivity(it) }
         finish()
+    }
+
+    private fun getSoftLogoutActivityIntent(): Intent {
+        return if (resources.getBoolean(R.bool.useLoginV2)) {
+            SoftLogoutActivity2.newIntent(this)
+        } else {
+            SoftLogoutActivity.newIntent(this)
+        }
     }
 }

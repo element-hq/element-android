@@ -17,12 +17,16 @@
 package im.vector.app.features.attachments
 
 import im.vector.lib.multipicker.entity.MultiPickerAudioType
+import im.vector.lib.multipicker.entity.MultiPickerBaseMediaType
 import im.vector.lib.multipicker.entity.MultiPickerBaseType
 import im.vector.lib.multipicker.entity.MultiPickerContactType
 import im.vector.lib.multipicker.entity.MultiPickerFileType
 import im.vector.lib.multipicker.entity.MultiPickerImageType
 import im.vector.lib.multipicker.entity.MultiPickerVideoType
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
+import org.matrix.android.sdk.api.util.MimeTypes.isMimeTypeAudio
+import org.matrix.android.sdk.api.util.MimeTypes.isMimeTypeImage
+import org.matrix.android.sdk.api.util.MimeTypes.isMimeTypeVideo
 import timber.log.Timber
 
 fun MultiPickerContactType.toContactAttachment(): ContactAttachment {
@@ -53,16 +57,35 @@ fun MultiPickerAudioType.toContentAttachmentData(): ContentAttachmentData {
             size = size,
             name = displayName,
             duration = duration,
-            queryUri = contentUri
+            queryUri = contentUri,
+            waveform = waveform
     )
 }
 
 private fun MultiPickerBaseType.mapType(): ContentAttachmentData.Type {
     return when {
-        mimeType?.startsWith("image/") == true -> ContentAttachmentData.Type.IMAGE
-        mimeType?.startsWith("video/") == true -> ContentAttachmentData.Type.VIDEO
-        mimeType?.startsWith("audio/") == true -> ContentAttachmentData.Type.AUDIO
-        else                                   -> ContentAttachmentData.Type.FILE
+        mimeType?.isMimeTypeImage() == true -> ContentAttachmentData.Type.IMAGE
+        mimeType?.isMimeTypeVideo() == true -> ContentAttachmentData.Type.VIDEO
+        mimeType?.isMimeTypeAudio() == true -> ContentAttachmentData.Type.AUDIO
+        else                                -> ContentAttachmentData.Type.FILE
+    }
+}
+
+fun MultiPickerBaseType.toContentAttachmentData(): ContentAttachmentData {
+    return when (this) {
+        is MultiPickerImageType -> toContentAttachmentData()
+        is MultiPickerVideoType -> toContentAttachmentData()
+        is MultiPickerAudioType -> toContentAttachmentData()
+        is MultiPickerFileType  -> toContentAttachmentData()
+        else                    -> throw IllegalStateException("Unknown file type")
+    }
+}
+
+fun MultiPickerBaseMediaType.toContentAttachmentData(): ContentAttachmentData {
+    return when (this) {
+        is MultiPickerImageType -> toContentAttachmentData()
+        is MultiPickerVideoType -> toContentAttachmentData()
+        else                    -> throw IllegalStateException("Unknown media type")
     }
 }
 

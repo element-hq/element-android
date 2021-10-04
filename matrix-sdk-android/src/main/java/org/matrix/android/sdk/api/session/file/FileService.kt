@@ -1,12 +1,11 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,9 +17,11 @@
 package org.matrix.android.sdk.api.session.file
 
 import android.net.Uri
-import org.matrix.android.sdk.api.MatrixCallback
-import org.matrix.android.sdk.api.util.Cancelable
+import org.matrix.android.sdk.api.session.room.model.message.MessageWithAttachmentContent
+import org.matrix.android.sdk.api.session.room.model.message.getFileName
+import org.matrix.android.sdk.api.session.room.model.message.getFileUrl
 import org.matrix.android.sdk.internal.crypto.attachments.ElementToDecrypt
+import org.matrix.android.sdk.internal.crypto.attachments.toElementToDecrypt
 import java.io.File
 
 /**
@@ -28,60 +29,90 @@ import java.io.File
  */
 interface FileService {
 
-    enum class DownloadMode {
+    sealed class FileState {
         /**
-         * Download file in external storage
+         * The original file is in cache, but the decrypted files can be deleted for security reason.
+         * To decrypt the file again, call [downloadFile], the encrypted file will not be downloaded again
+         * @param decryptedFileInCache true if the decrypted file is available. Always true for clear files.
          */
-        TO_EXPORT,
-
-        /**
-         * Download file in cache
-         */
-        FOR_INTERNAL_USE,
-
-        /**
-         * Download file in file provider path
-         */
-        FOR_EXTERNAL_SHARE
-    }
-
-    enum class FileState {
-        IN_CACHE,
-        DOWNLOADING,
-        UNKNOWN
+        data class InCache(val decryptedFileInCache: Boolean) : FileState()
+        object Downloading : FileState()
+        object Unknown : FileState()
     }
 
     /**
-     * Download a file.
+     * Download a file if necessary and ensure that if the file is encrypted, the file is decrypted.
      * Result will be a decrypted file, stored in the cache folder. url parameter will be used to create unique filename to avoid name collision.
      */
-    fun downloadFile(
-            downloadMode: DownloadMode,
-            id: String,
-            fileName: String,
-            mimeType: String?,
-            url: String?,
-            elementToDecrypt: ElementToDecrypt?,
-            callback: MatrixCallback<File>): Cancelable
+    suspend fun downloadFile(fileName: String,
+                     mimeType: String?,
+                     url: String?,
+                     elementToDecrypt: ElementToDecrypt?): File
 
-    fun isFileInCache(mxcUrl: String, mimeType: String?): Boolean
+    suspend fun downloadFile(messageContent: MessageWithAttachmentContent): File =
+            downloadFile(
+                    fileName = messageContent.getFileName(),
+                    mimeType = messageContent.mimeType,
+                    url = messageContent.getFileUrl(),
+                    elementToDecrypt = messageContent.encryptedFileInfo?.toElementToDecrypt()
+            )
+
+    fun isFileInCache(mxcUrl: String?,
+                      fileName: String,
+                      mimeType: String?,
+                      elementToDecrypt: ElementToDecrypt?
+    ): Boolean
+
+    fun isFileInCache(messageContent: MessageWithAttachmentContent) =
+            isFileInCache(
+                    mxcUrl = messageContent.getFileUrl(),
+                    fileName = messageContent.getFileName(),
+                    mimeType = messageContent.mimeType,
+                    elementToDecrypt = messageContent.encryptedFileInfo?.toElementToDecrypt())
 
     /**
      * Use this URI and pass it to intent using flag Intent.FLAG_GRANT_READ_URI_PERMISSION
      * (if not other app won't be able to access it)
      */
-    fun getTemporarySharableURI(mxcUrl: String, mimeType: String?): Uri?
+    fun getTemporarySharableURI(mxcUrl: String?,
+                                fileName: String,
+                                mimeType: String?,
+                                elementToDecrypt: ElementToDecrypt?): Uri?
+
+    fun getTemporarySharableURI(messageContent: MessageWithAttachmentContent): Uri? =
+            getTemporarySharableURI(
+                    mxcUrl = messageContent.getFileUrl(),
+                    fileName = messageContent.getFileName(),
+                    mimeType = messageContent.mimeType,
+                    elementToDecrypt = messageContent.encryptedFileInfo?.toElementToDecrypt()
+            )
 
     /**
      * Get information on the given file.
      * Mimetype should be the same one as passed to downloadFile (limitation for now)
      */
-    fun fileState(mxcUrl: String, mimeType: String?): FileState
+    fun fileState(mxcUrl: String?,
+                  fileName: String,
+                  mimeType: String?,
+                  elementToDecrypt: ElementToDecrypt?): FileState
+
+    fun fileState(messageContent: MessageWithAttachmentContent): FileState =
+            fileState(
+                    mxcUrl = messageContent.getFileUrl(),
+                    fileName = messageContent.getFileName(),
+                    mimeType = messageContent.mimeType,
+                    elementToDecrypt = messageContent.encryptedFileInfo?.toElementToDecrypt()
+            )
 
     /**
-     * Clears all the files downloaded by the service
+     * Clears all the files downloaded by the service, including decrypted files
      */
     fun clearCache()
+
+    /**
+     * Clears all the decrypted files by the service
+     */
+    fun clearDecryptedCache()
 
     /**
      * Get size of cached files

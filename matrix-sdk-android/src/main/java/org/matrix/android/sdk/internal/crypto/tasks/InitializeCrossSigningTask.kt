@@ -1,5 +1,4 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,6 +17,8 @@
 package org.matrix.android.sdk.internal.crypto.tasks
 
 import dagger.Lazy
+import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
+import org.matrix.android.sdk.internal.auth.registration.handleUIA
 import org.matrix.android.sdk.internal.crypto.MXOlmDevice
 import org.matrix.android.sdk.internal.crypto.MyDeviceInfoHolder
 import org.matrix.android.sdk.internal.crypto.crosssigning.canonicalSignable
@@ -25,7 +26,6 @@ import org.matrix.android.sdk.internal.crypto.crosssigning.toBase64NoPadding
 import org.matrix.android.sdk.internal.crypto.model.CryptoCrossSigningKey
 import org.matrix.android.sdk.internal.crypto.model.KeyUsage
 import org.matrix.android.sdk.internal.crypto.model.rest.UploadSignatureQueryBuilder
-import org.matrix.android.sdk.internal.crypto.model.rest.UserPasswordAuth
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.task.Task
 import org.matrix.android.sdk.internal.util.JsonCanonicalizer
@@ -35,7 +35,7 @@ import javax.inject.Inject
 
 internal interface InitializeCrossSigningTask : Task<InitializeCrossSigningTask.Params, InitializeCrossSigningTask.Result> {
     data class Params(
-            val authParams: UserPasswordAuth?
+            val interactiveAuthInterceptor: UserInteractiveAuthInterceptor?
     )
 
     data class Result(
@@ -97,7 +97,7 @@ internal class DefaultInitializeCrossSigningTask @Inject constructor(
 
             Timber.v("## CrossSigning - sskPublicKey:$sskPublicKey")
 
-            // Sign userSigningKey with master
+            // Sign selfSigningKey with master
             val signedSSK = CryptoCrossSigningKey.Builder(userId, KeyUsage.SELF_SIGNING)
                     .key(sskPublicKey)
                     .build()
@@ -118,10 +118,26 @@ internal class DefaultInitializeCrossSigningTask @Inject constructor(
                             .key(sskPublicKey)
                             .signature(userId, masterPublicKey, signedSSK)
                             .build(),
-                    userPasswordAuth = params.authParams
+                    userAuthParam = null
+//                    userAuthParam = params.authParams
             )
 
-            uploadSigningKeysTask.execute(uploadSigningKeysParams)
+            try {
+                uploadSigningKeysTask.execute(uploadSigningKeysParams)
+            } catch (failure: Throwable) {
+                if (params.interactiveAuthInterceptor == null
+                        || !handleUIA(
+                                failure = failure,
+                                interceptor = params.interactiveAuthInterceptor,
+                                retryBlock = { authUpdate ->
+                                    uploadSigningKeysTask.execute(uploadSigningKeysParams.copy(userAuthParam = authUpdate))
+                                }
+                        )
+                ) {
+                    Timber.d("## UIA: propagate failure")
+                    throw failure
+                }
+            }
 
             //  Sign the current device with SSK
             val uploadSignatureQueryBuilder = UploadSignatureQueryBuilder()

@@ -20,14 +20,8 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
-
-### EVENT BUS ###
-
+# BMA: Not sure I can delete this one without side effect
 -keepattributes *Annotation*
--keepclassmembers class * {
-    @org.greenrobot.eventbus.Subscribe <methods>;
-}
--keep enum org.greenrobot.eventbus.ThreadMode { *; }
 
 ### MOSHI ###
 

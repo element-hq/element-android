@@ -1,5 +1,4 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,35 +20,31 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
 import com.zhuinden.monarchy.Monarchy
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.MatrixConfiguration
+import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerConfig
 import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerService
 import org.matrix.android.sdk.api.session.widgets.model.WidgetContent
 import org.matrix.android.sdk.api.session.widgets.model.WidgetType
-import org.matrix.android.sdk.api.util.Cancelable
-import org.matrix.android.sdk.api.util.NoOpCancellable
 import org.matrix.android.sdk.internal.database.model.WellknownIntegrationManagerConfigEntity
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.extensions.observeNotNull
-import org.matrix.android.sdk.internal.session.SessionLifecycleObserver
+import org.matrix.android.sdk.api.session.SessionLifecycleObserver
 import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.api.session.accountdata.UserAccountDataTypes
 import org.matrix.android.sdk.api.session.accountdata.UserAccountDataEvent
-import org.matrix.android.sdk.internal.session.user.accountdata.AccountDataDataSource
+import org.matrix.android.sdk.internal.session.user.accountdata.UserAccountDataDataSource
 import org.matrix.android.sdk.internal.session.user.accountdata.UpdateUserAccountDataTask
 import org.matrix.android.sdk.internal.session.widgets.helper.WidgetFactory
 import org.matrix.android.sdk.internal.session.widgets.helper.extractWidgetSequence
-import org.matrix.android.sdk.internal.task.TaskExecutor
-import org.matrix.android.sdk.internal.task.configureWith
 import timber.log.Timber
 import javax.inject.Inject
 
 /**
  * The integration manager allows to
- *  - Get the Integration Manager that a user has explicitly set for its account (via account data)
- *  - Get the recommended/preferred Integration Manager list as defined by the HomeServer (via wellknown)
+ *  - Get the integration manager that a user has explicitly set for its account (via account data)
+ *  - Get the recommended/preferred integration manager list as defined by the homeserver (via wellknown)
  *  - Check if the user has disabled the integration manager feature
  *  - Allow / Disallow Integration manager (propagated to other riot clients)
  *
@@ -60,10 +55,9 @@ import javax.inject.Inject
  */
 @SessionScope
 internal class IntegrationManager @Inject constructor(matrixConfiguration: MatrixConfiguration,
-                                                      private val taskExecutor: TaskExecutor,
                                                       @SessionDatabase private val monarchy: Monarchy,
                                                       private val updateUserAccountDataTask: UpdateUserAccountDataTask,
-                                                      private val accountDataDataSource: AccountDataDataSource,
+                                                      private val accountDataDataSource: UserAccountDataDataSource,
                                                       private val widgetFactory: WidgetFactory)
     : SessionLifecycleObserver {
 
@@ -84,7 +78,7 @@ internal class IntegrationManager @Inject constructor(matrixConfiguration: Matri
         currentConfigs.add(defaultConfig)
     }
 
-    override fun onStart() {
+    override fun onSessionStarted(session: Session) {
         lifecycleRegistry.currentState = Lifecycle.State.STARTED
         observeWellknownConfig()
         accountDataDataSource
@@ -112,7 +106,7 @@ internal class IntegrationManager @Inject constructor(matrixConfiguration: Matri
                 }
     }
 
-    override fun onStop() {
+    override fun onSessionStopped(session: Session) {
         lifecycleRegistry.currentState = Lifecycle.State.DESTROYED
     }
 
@@ -138,22 +132,17 @@ internal class IntegrationManager @Inject constructor(matrixConfiguration: Matri
         return integrationProvisioningContent?.enabled ?: false
     }
 
-    fun setIntegrationEnabled(enable: Boolean, callback: MatrixCallback<Unit>): Cancelable {
+    suspend fun setIntegrationEnabled(enable: Boolean) {
         val isIntegrationEnabled = isIntegrationEnabled()
         if (enable == isIntegrationEnabled) {
-            callback.onSuccess(Unit)
-            return NoOpCancellable
+            return
         }
         val integrationProvisioningContent = IntegrationProvisioningContent(enabled = enable)
         val params = UpdateUserAccountDataTask.IntegrationProvisioning(integrationProvisioningContent = integrationProvisioningContent)
-        return updateUserAccountDataTask
-                .configureWith(params) {
-                    this.callback = callback
-                }
-                .executeBy(taskExecutor)
+        return updateUserAccountDataTask.execute(params)
     }
 
-    fun setWidgetAllowed(stateEventId: String, allowed: Boolean, callback: MatrixCallback<Unit>): Cancelable {
+    suspend fun setWidgetAllowed(stateEventId: String, allowed: Boolean) {
         val currentAllowedWidgets = accountDataDataSource.getAccountDataEvent(UserAccountDataTypes.TYPE_ALLOWED_WIDGETS)
         val currentContent = currentAllowedWidgets?.content?.toModel<AllowedWidgetsContent>()
         val newContent = if (currentContent == null) {
@@ -166,11 +155,7 @@ internal class IntegrationManager @Inject constructor(matrixConfiguration: Matri
             currentContent.copy(widgets = allowedWidgets)
         }
         val params = UpdateUserAccountDataTask.AllowedWidgets(allowedWidgetsContent = newContent)
-        return updateUserAccountDataTask
-                .configureWith(params) {
-                    this.callback = callback
-                }
-                .executeBy(taskExecutor)
+        return updateUserAccountDataTask.execute(params)
     }
 
     fun isWidgetAllowed(stateEventId: String): Boolean {
@@ -179,7 +164,7 @@ internal class IntegrationManager @Inject constructor(matrixConfiguration: Matri
         return currentContent?.widgets?.get(stateEventId) ?: false
     }
 
-    fun setNativeWidgetDomainAllowed(widgetType: String, domain: String, allowed: Boolean, callback: MatrixCallback<Unit>): Cancelable {
+    suspend fun setNativeWidgetDomainAllowed(widgetType: String, domain: String, allowed: Boolean) {
         val currentAllowedWidgets = accountDataDataSource.getAccountDataEvent(UserAccountDataTypes.TYPE_ALLOWED_WIDGETS)
         val currentContent = currentAllowedWidgets?.content?.toModel<AllowedWidgetsContent>()
         val newContent = if (currentContent == null) {
@@ -196,11 +181,7 @@ internal class IntegrationManager @Inject constructor(matrixConfiguration: Matri
             currentContent.copy(native = nativeAllowedWidgets)
         }
         val params = UpdateUserAccountDataTask.AllowedWidgets(allowedWidgetsContent = newContent)
-        return updateUserAccountDataTask
-                .configureWith(params) {
-                    this.callback = callback
-                }
-                .executeBy(taskExecutor)
+        return updateUserAccountDataTask.execute(params)
     }
 
     fun isNativeWidgetDomainAllowed(widgetType: String, domain: String?): Boolean {

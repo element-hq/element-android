@@ -15,6 +15,8 @@
  */
 package im.vector.app.gplay.features.settings.troubleshoot
 
+import android.content.Intent
+import androidx.activity.result.ActivityResultLauncher
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
@@ -31,7 +33,7 @@ class TestPlayServices @Inject constructor(private val context: AppCompatActivit
                                            private val stringProvider: StringProvider)
     : TroubleshootTest(R.string.settings_troubleshoot_test_play_services_title) {
 
-    override fun perform() {
+    override fun perform(activityResultLauncher: ActivityResultLauncher<Intent>) {
         val apiAvailability = GoogleApiAvailability.getInstance()
         val resultCode = apiAvailability.isGooglePlayServicesAvailable(context)
         if (resultCode == ConnectionResult.SUCCESS) {

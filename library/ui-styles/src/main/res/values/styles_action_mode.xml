@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Action mode style -->
+    <style name="Widget.Vector.ActionMode" parent="Widget.AppCompat.ActionMode">
+        <item name="background">?android:colorBackground</item>
+        <item name="titleTextStyle">@style/Widget.Vector.TextView.Title</item>
+        <item name="subtitleTextStyle">@style/Widget.Vector.TextView.Subtitle</item>
+        <item name="actionMenuTextColor">?colorOnPrimary</item>
+    </style>
+
+</resources>

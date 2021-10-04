@@ -1,5 +1,4 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -81,7 +80,11 @@ internal class StateEventDataSource @Inject constructor(@SessionDatabase private
     ): RealmQuery<CurrentStateEventEntity> {
         return realm.where<CurrentStateEventEntity>()
                 .equalTo(CurrentStateEventEntityFields.ROOM_ID, roomId)
-                .`in`(CurrentStateEventEntityFields.TYPE, eventTypes.toTypedArray())
+                .apply {
+                    if (eventTypes.isNotEmpty()) {
+                        `in`(CurrentStateEventEntityFields.TYPE, eventTypes.toTypedArray())
+                    }
+                }
                 .process(CurrentStateEventEntityFields.STATE_KEY, stateKey)
     }
 }

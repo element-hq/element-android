@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?riotx_background"
+    android:background="?android:colorBackground"
     android:foreground="?attr/selectableItemBackground"
     android:paddingStart="8dp"
     android:paddingTop="6dp"
@@ -12,38 +12,38 @@
 
     <TextView
         android:id="@+id/commandName"
+        style="@style/Widget.Vector.TextView.Caption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:maxLines="1"
-        android:textColor="?riotx_text_primary"
-        android:textSize="12sp"
+        android:textColor="?vctr_content_primary"
         android:textStyle="bold"
         tools:text="/invite" />
 
     <TextView
         android:id="@+id/commandParameter"
+        style="@style/Widget.Vector.TextView.Caption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_marginStart="5dp"
         android:layout_toEndOf="@+id/commandName"
         android:maxLines="1"
-        android:textColor="?riotx_text_secondary"
-        android:textSize="12sp"
+        android:textColor="?vctr_content_secondary"
         android:textStyle="italic"
         tools:text="&lt;user-id&gt;" />
 
     <TextView
         android:id="@+id/commandDescription"
+        style="@style/Widget.Vector.TextView.Caption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/commandName"
         android:layout_alignParentStart="true"
         android:layout_gravity="center_vertical"
         android:maxLines="2"
-        android:textColor="?riotx_text_secondary"
-        android:textSize="12sp"
+        android:textColor="?vctr_content_secondary"
         tools:text="@string/command_description_invite_user" />
 
 </RelativeLayout>

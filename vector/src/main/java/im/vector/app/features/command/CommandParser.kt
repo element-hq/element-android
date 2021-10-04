@@ -18,6 +18,7 @@ package im.vector.app.features.command
 
 import im.vector.app.core.extensions.isEmail
 import im.vector.app.core.extensions.isMsisdn
+import im.vector.app.features.home.room.detail.ChatEffect
 import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import timber.log.Timber
@@ -379,7 +380,53 @@ object CommandParser {
                         ParsedCommand.ErrorSyntax(Command.WHOIS)
                     }
                 }
-                else                                         -> {
+                Command.CONFETTI.command               -> {
+                    val message = textMessage.substring(Command.CONFETTI.command.length).trim()
+                    ParsedCommand.SendChatEffect(ChatEffect.CONFETTI, message)
+                }
+                Command.SNOWFALL.command               -> {
+                    val message = textMessage.substring(Command.SNOWFALL.command.length).trim()
+                    ParsedCommand.SendChatEffect(ChatEffect.SNOWFALL, message)
+                }
+                Command.CREATE_SPACE.command           -> {
+                    val rawCommand = textMessage.substring(Command.CREATE_SPACE.command.length).trim()
+                    val split = rawCommand.split(" ").map { it.trim() }
+                    if (split.isEmpty()) {
+                        ParsedCommand.ErrorSyntax(Command.CREATE_SPACE)
+                    } else {
+                        ParsedCommand.CreateSpace(
+                                split[0],
+                                split.subList(1, split.size)
+                        )
+                    }
+                }
+                Command.ADD_TO_SPACE.command           -> {
+                    val rawCommand = textMessage.substring(Command.ADD_TO_SPACE.command.length).trim()
+                    ParsedCommand.AddToSpace(
+                            rawCommand
+                    )
+                }
+                Command.JOIN_SPACE.command             -> {
+                    val spaceIdOrAlias = textMessage.substring(Command.JOIN_SPACE.command.length).trim()
+                    ParsedCommand.JoinSpace(
+                            spaceIdOrAlias
+                    )
+                }
+                Command.LEAVE_ROOM.command             -> {
+                    val spaceIdOrAlias = textMessage.substring(Command.LEAVE_ROOM.command.length).trim()
+                    ParsedCommand.LeaveRoom(
+                            spaceIdOrAlias
+                    )
+                }
+                Command.UPGRADE_ROOM.command           -> {
+                    val newVersion = textMessage.substring(Command.UPGRADE_ROOM.command.length).trim()
+                    if (newVersion.isEmpty()) {
+                        ParsedCommand.ErrorSyntax(Command.UPGRADE_ROOM)
+                    } else {
+                        ParsedCommand.UpgradeRoom(newVersion)
+                    }
+                }
+                else                                   -> {
                     // Unknown command
                     ParsedCommand.ErrorUnknownSlashCommand(slashCommand)
                 }

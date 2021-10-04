@@ -1,6 +1,4 @@
 /*
- * Copyright 2015 OpenMarket Ltd
- * Copyright 2018 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -156,7 +154,7 @@ internal class MXOlmDecryption(
      * @return payload, if decrypted successfully.
      */
     private fun decryptMessage(message: JsonDict, theirDeviceIdentityKey: String): String? {
-        val sessionIds = olmDevice.getSessionIds(theirDeviceIdentityKey) ?: emptySet()
+        val sessionIds = olmDevice.getSessionIds(theirDeviceIdentityKey).orEmpty()
 
         val messageBody = message["body"] as? String ?: return null
         val messageType = when (val typeAsVoid = message["type"]) {

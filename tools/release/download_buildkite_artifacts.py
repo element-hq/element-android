@@ -41,10 +41,17 @@ parser.add_argument('-b',
                     type=int,
                     required=True,
                     help='the buildkite build number.')
+parser.add_argument('-f',
+                    '--filename',
+                    help='the filename, to download only one artifact.')
 parser.add_argument('-e',
                     '--expecting',
                     type=int,
                     help='the expected number of artifacts. If omitted, no check will be done.')
+parser.add_argument('-i',
+                    '--ignoreErrors',
+                    help='Ignore errors that can be ignored. Build state and number of artifacts.',
+                    action="store_true")
 parser.add_argument('-d',
                     '--directory',
                     default="",
@@ -74,7 +81,9 @@ base_url = "https://api.buildkite.com/v2/organizations/%s/pipelines/%s/builds/%s
 
 buildkite_build_state_url = base_url
 
-print("Getting build state of project %s/%s build %s" % (ORG_SLUG, PIPELINE_SLUG, build_str))
+buildkite_url = "https://buildkite.com/%s/%s/builds/%s" % (ORG_SLUG, PIPELINE_SLUG, build_str)
+
+print("Getting build state of project %s/%s build %s (%s)" % (ORG_SLUG, PIPELINE_SLUG, build_str, buildkite_url))
 
 if args.verbose:
     print("Url: %s" % buildkite_build_state_url)
@@ -91,9 +100,14 @@ print("   git commit         : \"%s\"" % data0.get('commit'))
 print("   git commit message : \"%s\"" % data0.get('message'))
 print("   build state        : %s" % data0.get('state'))
 
+error = False
+
 if data0.get('state') != 'passed':
     print("❌ Error, the build is in state '%s', and not 'passed'" % data0.get('state'))
-    exit(1)
+    if args.ignoreErrors:
+        error = True
+    else:
+        exit(1)
 
 ### Fetch artifacts list
 
@@ -110,8 +124,11 @@ data = json.loads(r.content.decode())
 print("   %d artifact(s) found." % len(data))
 
 if args.expecting is not None and args.expecting != len(data):
-    print("Error, expecting %d artifacts and found %d." % (args.expecting, len(data)))
-    exit(1)
+    print("❌ Error, expecting %d artifacts and found %d." % (args.expecting, len(data)))
+    if args.ignoreErrors:
+        error = True
+    else:
+        exit(1)
 
 if args.verbose:
     print("Json data:")
@@ -126,9 +143,7 @@ else:
     targetDir = args.directory
 
 if not args.simulate:
-    os.mkdir(targetDir)
-
-error = False
+    os.makedirs(targetDir, exist_ok=True)
 
 for elt in data:
     if args.verbose:
@@ -138,6 +153,8 @@ for elt in data:
             print("   %s: %s" % (key, str(value)))
     url = elt.get("download_url")
     filename = elt.get("filename")
+    if args.filename is not None and args.filename != filename:
+        continue
     target = targetDir + "/" + filename
     print("Downloading %s to '%s'..." % (filename, targetDir))
     if not args.simulate:
@@ -157,7 +174,7 @@ for elt in data:
             print("❌ Checksum mismatch: expecting %s and get %s" % (elt.get("sha1sum"), hash))
 
 if error:
-    print("❌ Error(s) occurred, check the log")
+    print("❌ Error(s) occurred, please check the log")
     exit(1)
 else:
     print("Done!")

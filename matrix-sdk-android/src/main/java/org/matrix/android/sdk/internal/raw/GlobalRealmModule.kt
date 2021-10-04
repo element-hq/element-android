@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,6 +17,7 @@
 package org.matrix.android.sdk.internal.raw
 
 import io.realm.annotations.RealmModule
+import org.matrix.android.sdk.internal.database.model.KnownServerUrlEntity
 import org.matrix.android.sdk.internal.database.model.RawCacheEntity
 
 /**
@@ -25,6 +25,7 @@ import org.matrix.android.sdk.internal.database.model.RawCacheEntity
  */
 @RealmModule(library = true,
         classes = [
-            RawCacheEntity::class
+            RawCacheEntity::class,
+            KnownServerUrlEntity::class
         ])
 internal class GlobalRealmModule

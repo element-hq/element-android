@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,10 +24,6 @@ data class TimelineSettings(
          * The initial number of events to retrieve from cache. You might get less events if you don't have loaded enough yet.
          */
         val initialSize: Int,
-        /**
-         * Filters for timeline event
-         */
-        val filters: TimelineEventFilters = TimelineEventFilters(),
         /**
          * If true, will build read receipts for each event.
          */

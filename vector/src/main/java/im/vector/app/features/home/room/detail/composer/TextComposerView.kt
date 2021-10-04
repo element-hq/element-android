@@ -21,28 +21,28 @@ import android.net.Uri
 import android.text.Editable
 import android.util.AttributeSet
 import android.view.ViewGroup
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.text.toSpannable
+import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.transition.AutoTransition
+import androidx.transition.ChangeBounds
+import androidx.transition.Fade
 import androidx.transition.Transition
 import androidx.transition.TransitionManager
-import butterknife.BindView
-import butterknife.ButterKnife
+import androidx.transition.TransitionSet
 import im.vector.app.R
-import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
-import kotlinx.android.synthetic.main.merge_composer_layout.view.*
+import im.vector.app.databinding.ComposerLayoutBinding
+import org.matrix.android.sdk.api.extensions.orFalse
 
 /**
  * Encapsulate the timeline composer UX.
- *
  */
-class TextComposerView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null,
-                                                 defStyleAttr: Int = 0) : ConstraintLayout(context, attrs, defStyleAttr) {
+class TextComposerView @JvmOverloads constructor(
+        context: Context,
+        attrs: AttributeSet? = null,
+        defStyleAttr: Int = 0) : ConstraintLayout(context, attrs, defStyleAttr) {
 
     interface Callback : ComposerEditText.Callback {
         fun onCloseRelatedMessage()
@@ -50,97 +50,102 @@ class TextComposerView @JvmOverloads constructor(context: Context, attrs: Attrib
         fun onAddAttachment()
     }
 
-    var callback: Callback? = null
+    val views: ComposerLayoutBinding
 
-    @BindView(R.id.composer_related_message_sender)
-    lateinit var composerRelatedMessageTitle: TextView
-    @BindView(R.id.composer_related_message_preview)
-    lateinit var composerRelatedMessageContent: TextView
-    @BindView(R.id.composer_related_message_avatar_view)
-    lateinit var composerRelatedMessageAvatar: ImageView
-    @BindView(R.id.composer_related_message_action_image)
-    lateinit var composerRelatedMessageActionIcon: ImageView
-    @BindView(R.id.composer_related_message_close)
-    lateinit var composerRelatedMessageCloseButton: ImageButton
-    @BindView(R.id.composerEditText)
-    lateinit var composerEditText: ComposerEditText
-    @BindView(R.id.composer_avatar_view)
-    lateinit var composerAvatarImageView: ImageView
-    @BindView(R.id.composer_shield)
-    lateinit var composerShieldImageView: ImageView
+    var callback: Callback? = null
 
     private var currentConstraintSetId: Int = -1
 
     private val animationDuration = 100L
 
     val text: Editable?
-        get() = composerEditText.text
+        get() = views.composerEditText.text
+
+    var alwaysShowSendButton = false
+        set(value) {
+            field = value
+            val shouldShowSendButton = currentConstraintSetId == R.layout.composer_layout_constraint_set_expanded || text?.isNotBlank().orFalse() || value
+            views.sendButton.isInvisible = !shouldShowSendButton
+        }
 
     init {
-        inflate(context, R.layout.merge_composer_layout, this)
-        ButterKnife.bind(this)
+        inflate(context, R.layout.composer_layout, this)
+        views = ComposerLayoutBinding.bind(this)
+
         collapse(false)
-        composerEditText.callback = object : ComposerEditText.Callback {
+
+        views.composerEditText.callback = object : ComposerEditText.Callback {
             override fun onRichContentSelected(contentUri: Uri): Boolean {
                 return callback?.onRichContentSelected(contentUri) ?: false
             }
+
+            override fun onTextBlankStateChanged(isBlank: Boolean) {
+                val shouldShowSendButton = currentConstraintSetId == R.layout.composer_layout_constraint_set_expanded || !isBlank || alwaysShowSendButton
+                TransitionManager.endTransitions(this@TextComposerView)
+                if (views.sendButton.isVisible != shouldShowSendButton) {
+                    TransitionManager.beginDelayedTransition(
+                            this@TextComposerView,
+                            AutoTransition().also { it.duration = 150 }
+                    )
+                    views.sendButton.isInvisible = !shouldShowSendButton
+                }
+                callback?.onTextBlankStateChanged(isBlank)
+            }
         }
-        composerRelatedMessageCloseButton.setOnClickListener {
+        views.composerRelatedMessageCloseButton.setOnClickListener {
             collapse()
             callback?.onCloseRelatedMessage()
         }
 
-        sendButton.setOnClickListener {
+        views.sendButton.setOnClickListener {
             val textMessage = text?.toSpannable() ?: ""
             callback?.onSendMessage(textMessage)
         }
 
-        attachmentButton.setOnClickListener {
+        views.attachmentButton.setOnClickListener {
             callback?.onAddAttachment()
         }
     }
 
     fun collapse(animate: Boolean = true, transitionComplete: (() -> Unit)? = null) {
-        if (currentConstraintSetId == R.layout.constraint_set_composer_layout_compact) {
+        if (currentConstraintSetId == R.layout.composer_layout_constraint_set_compact) {
             // ignore we good
             return
         }
-        currentConstraintSetId = R.layout.constraint_set_composer_layout_compact
-        if (animate) {
-            val transition = AutoTransition()
-            transition.duration = animationDuration
-            transition.addListener(object : Transition.TransitionListener {
-                override fun onTransitionEnd(transition: Transition) {
-                    transitionComplete?.invoke()
-                }
+        currentConstraintSetId = R.layout.composer_layout_constraint_set_compact
+        applyNewConstraintSet(animate, transitionComplete)
 
-                override fun onTransitionResume(transition: Transition) {}
-
-                override fun onTransitionPause(transition: Transition) {}
-
-                override fun onTransitionCancel(transition: Transition) {}
-
-                override fun onTransitionStart(transition: Transition) {}
-            }
-            )
-            TransitionManager.beginDelayedTransition((parent as? ViewGroup ?: this), transition)
-        }
-        ConstraintSet().also {
-            it.clone(context, currentConstraintSetId)
-            it.applyTo(this)
-        }
+        val shouldShowSendButton = !views.composerEditText.text.isNullOrEmpty() || alwaysShowSendButton
+        views.sendButton.isInvisible = !shouldShowSendButton
     }
 
     fun expand(animate: Boolean = true, transitionComplete: (() -> Unit)? = null) {
-        if (currentConstraintSetId == R.layout.constraint_set_composer_layout_expanded) {
+        if (currentConstraintSetId == R.layout.composer_layout_constraint_set_expanded) {
             // ignore we good
             return
         }
-        currentConstraintSetId = R.layout.constraint_set_composer_layout_expanded
+        currentConstraintSetId = R.layout.composer_layout_constraint_set_expanded
+        applyNewConstraintSet(animate, transitionComplete)
+        views.sendButton.isInvisible = false
+    }
+
+    private fun applyNewConstraintSet(animate: Boolean, transitionComplete: (() -> Unit)?) {
         if (animate) {
-            val transition = AutoTransition()
-            transition.duration = animationDuration
-            transition.addListener(object : Transition.TransitionListener {
+            configureAndBeginTransition(transitionComplete)
+        }
+        ConstraintSet().also {
+            it.clone(context, currentConstraintSetId)
+            it.applyTo(this)
+        }
+    }
+
+    private fun configureAndBeginTransition(transitionComplete: (() -> Unit)? = null) {
+        val transition = TransitionSet().apply {
+            ordering = TransitionSet.ORDERING_SEQUENTIAL
+            addTransition(ChangeBounds())
+            addTransition(Fade(Fade.IN))
+            duration = animationDuration
+            addListener(object : Transition.TransitionListener {
                 override fun onTransitionEnd(transition: Transition) {
                     transitionComplete?.invoke()
                 }
@@ -152,29 +157,16 @@ class TextComposerView @JvmOverloads constructor(context: Context, attrs: Attrib
                 override fun onTransitionCancel(transition: Transition) {}
 
                 override fun onTransitionStart(transition: Transition) {}
-            }
-            )
-            TransitionManager.beginDelayedTransition((parent as? ViewGroup ?: this), transition)
+            })
         }
-        ConstraintSet().also {
-            it.clone(context, currentConstraintSetId)
-            it.applyTo(this)
-        }
+        TransitionManager.beginDelayedTransition((parent as? ViewGroup ?: this), transition)
     }
 
-    fun setRoomEncrypted(isEncrypted: Boolean, roomEncryptionTrustLevel: RoomEncryptionTrustLevel?) {
+    fun setRoomEncrypted(isEncrypted: Boolean) {
         if (isEncrypted) {
-            composerEditText.setHint(R.string.room_message_placeholder)
-            composerShieldImageView.isVisible = true
-            val shieldRes = when (roomEncryptionTrustLevel) {
-                RoomEncryptionTrustLevel.Trusted -> R.drawable.ic_shield_trusted
-                RoomEncryptionTrustLevel.Warning -> R.drawable.ic_shield_warning
-                else                             -> R.drawable.ic_shield_black
-            }
-            composerShieldImageView.setImageResource(shieldRes)
+            views.composerEditText.setHint(R.string.room_message_placeholder)
         } else {
-            composerEditText.setHint(R.string.room_message_placeholder)
-            composerShieldImageView.isVisible = false
+            views.composerEditText.setHint(R.string.room_message_placeholder)
         }
     }
 }

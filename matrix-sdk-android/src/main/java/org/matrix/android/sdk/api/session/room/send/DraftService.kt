@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,24 +17,27 @@
 package org.matrix.android.sdk.api.session.room.send
 
 import androidx.lifecycle.LiveData
-import org.matrix.android.sdk.api.MatrixCallback
-import org.matrix.android.sdk.api.util.Cancelable
+import org.matrix.android.sdk.api.util.Optional
 
 interface DraftService {
 
     /**
      * Save or update a draft to the room
      */
-    fun saveDraft(draft: UserDraft, callback: MatrixCallback<Unit>): Cancelable
+    suspend fun saveDraft(draft: UserDraft)
 
     /**
      * Delete the last draft, basically just after sending the message
      */
-    fun deleteDraft(callback: MatrixCallback<Unit>): Cancelable
+    suspend fun deleteDraft()
 
     /**
-     * Return the current drafts if any, as a live data
-     * The draft list can contain one draft for {regular, reply, quote} and an arbitrary number of {edit} drafts
+     * Return the current draft or null
      */
-    fun getDraftsLive(): LiveData<List<UserDraft>>
+    fun getDraft(): UserDraft?
+
+    /**
+     * Return the current draft if any, as a live data
+     */
+    fun getDraftLive(): LiveData<Optional<UserDraft>>
 }

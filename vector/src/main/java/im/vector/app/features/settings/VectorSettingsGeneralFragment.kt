@@ -18,55 +18,43 @@
 
 package im.vector.app.features.settings
 
-import android.app.Activity
-import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.core.net.toUri
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import androidx.preference.EditTextPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
 import androidx.preference.SwitchPreference
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.cache.DiskCache
-import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textfield.TextInputLayout
-import com.yalantis.ucrop.UCrop
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
+import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
 import im.vector.app.core.extensions.hideKeyboard
-import im.vector.app.core.extensions.showPassword
+import im.vector.app.core.extensions.hidePassword
 import im.vector.app.core.intent.getFilenameFromUri
 import im.vector.app.core.platform.SimpleTextWatcher
 import im.vector.app.core.preference.UserAvatarPreference
 import im.vector.app.core.preference.VectorPreference
 import im.vector.app.core.preference.VectorSwitchPreference
-import im.vector.app.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
-import im.vector.app.core.utils.PERMISSION_REQUEST_CODE_LAUNCH_CAMERA
+import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.utils.TextUtils
-import im.vector.app.core.utils.allGranted
-import im.vector.app.core.utils.checkPermissions
 import im.vector.app.core.utils.getSizeOfFiles
 import im.vector.app.core.utils.toast
+import im.vector.app.databinding.DialogChangePasswordBinding
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
-import im.vector.app.features.media.createUCropWithDefaultSettings
 import im.vector.app.features.workers.signout.SignOutUiWorker
-import im.vector.lib.multipicker.MultiPicker
-import im.vector.lib.multipicker.entity.MultiPickerImageType
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.matrix.android.sdk.api.MatrixCallback
-import org.matrix.android.sdk.api.NoOpMatrixCallback
 import org.matrix.android.sdk.api.failure.isInvalidPassword
 import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerConfig
 import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerService
@@ -74,13 +62,18 @@ import org.matrix.android.sdk.rx.rx
 import org.matrix.android.sdk.rx.unwrap
 import java.io.File
 import java.util.UUID
+import javax.inject.Inject
 
-class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
+class VectorSettingsGeneralFragment @Inject constructor(
+        colorProvider: ColorProvider
+) :
+        VectorSettingsBaseFragment(),
+        GalleryOrCameraDialogHelper.Listener {
 
     override var titleRes = R.string.settings_general_title
     override val preferenceXmlRes = R.xml.vector_settings_general
 
-    private var avatarCameraUri: Uri? = null
+    private val galleryOrCameraDialogHelper = GalleryOrCameraDialogHelper(this, colorProvider)
 
     private val mUserSettingsCategory by lazy {
         findPreference<PreferenceCategory>(VectorPreferences.SETTINGS_USER_SETTINGS_PREFERENCE_KEY)!!
@@ -154,7 +147,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
         // Avatar
         mUserAvatarPreference.let {
             it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                onUpdateAvatarClick()
+                galleryOrCameraDialogHelper.show()
                 false
             }
         }
@@ -186,7 +179,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_LOGGED_IN_PREFERENCE_KEY)!!
                 .summary = session.myUserId
 
-        // home server
+        // homeserver
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_HOME_SERVER_PREFERENCE_KEY)!!
                 .summary = session.sessionParams.homeServerUrl
 
@@ -217,7 +210,9 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
             it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
                 // Disable it while updating the state, will be re-enabled by the account data listener.
                 it.isEnabled = false
-                session.integrationManagerService().setIntegrationEnabled(newValue as Boolean, NoOpMatrixCallback())
+                lifecycleScope.launch {
+                    session.integrationManagerService().setIntegrationEnabled(newValue as Boolean)
+                }
                 true
             }
         }
@@ -229,7 +224,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
             it.summary = TextUtils.formatFileSize(requireContext(), size.toLong())
 
             it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                GlobalScope.launch(Dispatchers.Main) {
+                lifecycleScope.launch(Dispatchers.Main) {
                     // On UI Thread
                     displayLoadingView()
 
@@ -259,8 +254,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
         findPreference<VectorPreference>("SETTINGS_SIGN_OUT_KEY")!!
                 .onPreferenceClickListener = Preference.OnPreferenceClickListener {
             activity?.let {
-                SignOutUiWorker(requireActivity())
-                        .perform(requireContext())
+                SignOutUiWorker(requireActivity()).perform()
             }
 
             false
@@ -278,93 +272,6 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
     override fun onPause() {
         super.onPause()
         session.integrationManagerService().removeListener(integrationServiceListener)
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        if (allGranted(grantResults)) {
-            if (requestCode == PERMISSION_REQUEST_CODE_LAUNCH_CAMERA) {
-                onAvatarTypeSelected(true)
-            }
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (resultCode == Activity.RESULT_OK) {
-            when (requestCode) {
-                REQUEST_NEW_PHONE_NUMBER            -> refreshPhoneNumbersList()
-                REQUEST_PHONEBOOK_COUNTRY           -> onPhonebookCountryUpdate(data)
-                MultiPicker.REQUEST_CODE_TAKE_PHOTO -> {
-                    avatarCameraUri?.let { uri ->
-                        MultiPicker.get(MultiPicker.CAMERA)
-                                .getTakenPhoto(requireContext(), requestCode, resultCode, uri)
-                                ?.let {
-                                    onAvatarSelected(it)
-                                }
-                    }
-                }
-                MultiPicker.REQUEST_CODE_PICK_IMAGE -> {
-                    MultiPicker
-                            .get(MultiPicker.IMAGE)
-                            .getSelectedFiles(requireContext(), requestCode, resultCode, data)
-                            .firstOrNull()?.let {
-                                onAvatarSelected(it)
-                            }
-                }
-                UCrop.REQUEST_CROP                  -> data?.let { onAvatarCropped(UCrop.getOutput(it)) }
-                /* TODO
-                    VectorUtils.TAKE_IMAGE -> {
-                        val thumbnailUri = VectorUtils.getThumbnailUriFromIntent(activity, data, session.mediaCache)
-
-                        if (null != thumbnailUri) {
-                            displayLoadingView()
-
-                            val resource = ResourceUtils.openResource(activity, thumbnailUri, null)
-
-                            if (null != resource) {
-                                session.mediaCache.uploadContent(resource.mContentStream, null, resource.mMimeType, null, object : MXMediaUploadListener() {
-
-                                    override fun onUploadError(uploadId: String?, serverResponseCode: Int, serverErrorMessage: String?) {
-                                        activity?.runOnUiThread { onCommonDone(serverResponseCode.toString() + " : " + serverErrorMessage) }
-                                    }
-
-                                    override fun onUploadComplete(uploadId: String?, contentUri: String?) {
-                                        activity?.runOnUiThread {
-                                            session.myUser.updateAvatarUrl(contentUri, object : MatrixCallback<Unit> {
-                                                override fun onSuccess(info: Void?) {
-                                                    onCommonDone(null)
-                                                    refreshDisplay()
-                                                }
-
-                                                override fun onNetworkError(e: Exception) {
-                                                    onCommonDone(e.localizedMessage)
-                                                }
-
-                                                override fun onMatrixError(e: MatrixError) {
-                                                    if (MatrixError.M_CONSENT_NOT_GIVEN == e.errcode) {
-                                                        activity?.runOnUiThread {
-                                                            hideLoadingView()
-                                                            (activity as VectorAppCompatActivity).consentNotGivenHelper.displayDialog(e)
-                                                        }
-                                                    } else {
-                                                        onCommonDone(e.localizedMessage)
-                                                    }
-                                                }
-
-                                                override fun onUnexpectedError(e: Exception) {
-                                                    onCommonDone(e.localizedMessage)
-                                                }
-                                            })
-                                        }
-                                    }
-                                })
-                            }
-                        }
-                    }
-                    */
-            }
-        }
     }
 
     private fun refreshIntegrationManagerSettings() {
@@ -386,40 +293,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
         }
     }
 
-    /**
-     * Update the avatar.
-     */
-    private fun onUpdateAvatarClick() {
-        AlertDialog
-                .Builder(requireContext())
-                .setItems(arrayOf(
-                        getString(R.string.attachment_type_camera),
-                        getString(R.string.attachment_type_gallery)
-                )) { dialog, which ->
-                    dialog.cancel()
-                    onAvatarTypeSelected(isCamera = (which == 0))
-                }.show()
-    }
-
-    private fun onAvatarTypeSelected(isCamera: Boolean) {
-        if (isCamera) {
-            if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, this, PERMISSION_REQUEST_CODE_LAUNCH_CAMERA)) {
-                avatarCameraUri = MultiPicker.get(MultiPicker.CAMERA).startWithExpectingFile(this)
-            }
-        } else {
-            MultiPicker.get(MultiPicker.IMAGE).single().startWith(this)
-        }
-    }
-
-    private fun onAvatarSelected(image: MultiPickerImageType) {
-        val destinationFile = File(requireContext().cacheDir, "${image.displayName}_edited_image_${System.currentTimeMillis()}")
-        val uri = image.contentUri
-        createUCropWithDefaultSettings(requireContext(), uri, destinationFile.toUri(), image.displayName)
-                .apply { withAspectRatio(1f, 1f) }
-                .start(requireContext(), this)
-    }
-
-    private fun onAvatarCropped(uri: Uri?) {
+    override fun onImageReady(uri: Uri?) {
         if (uri != null) {
             uploadAvatar(uri)
         } else {
@@ -430,17 +304,13 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
     private fun uploadAvatar(uri: Uri) {
         displayLoadingView()
 
-        session.updateAvatar(session.myUserId, uri, getFilenameFromUri(context, uri) ?: UUID.randomUUID().toString(), object : MatrixCallback<Unit> {
-            override fun onSuccess(data: Unit) {
-                if (!isAdded) return
-                onCommonDone(null)
+        lifecycleScope.launch {
+            val result = runCatching {
+                session.updateAvatar(session.myUserId, uri, getFilenameFromUri(context, uri) ?: UUID.randomUUID().toString())
             }
-
-            override fun onFailure(failure: Throwable) {
-                if (!isAdded) return
-                onCommonDone(failure.localizedMessage)
-            }
-        })
+            if (!isAdded) return@launch
+            onCommonDone(result.fold({ null }, { it.localizedMessage }))
+        }
     }
 
     // ==============================================================================================================
@@ -465,28 +335,9 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
         */
     }
 
-    private fun onPhonebookCountryUpdate(data: Intent?) {
-        /* TODO
-        if (data != null && data.hasExtra(CountryPickerActivity.EXTRA_OUT_COUNTRY_NAME)
-                && data.hasExtra(CountryPickerActivity.EXTRA_OUT_COUNTRY_CODE)) {
-            val countryCode = data.getStringExtra(CountryPickerActivity.EXTRA_OUT_COUNTRY_CODE)
-            if (!TextUtils.equals(countryCode, PhoneNumberUtils.getCountryCode(activity))) {
-                PhoneNumberUtils.setCountryCode(activity, countryCode)
-                mContactPhonebookCountryPreference.summary = data.getStringExtra(CountryPickerActivity.EXTRA_OUT_COUNTRY_NAME)
-            }
-        }
-        */
-    }
-
     // ==============================================================================================================
     // Phone number management
     // ==============================================================================================================
-
-    /**
-     * Refresh phone number list
-     */
-    private fun refreshPhoneNumbersList() {
-    }
 
     /**
      * Update the password.
@@ -494,28 +345,9 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
     private fun onPasswordUpdateClick() {
         activity?.let { activity ->
             val view: ViewGroup = activity.layoutInflater.inflate(R.layout.dialog_change_password, null) as ViewGroup
+            val views = DialogChangePasswordBinding.bind(view)
 
-            val showPassword: ImageView = view.findViewById(R.id.change_password_show_passwords)
-            val oldPasswordTil: TextInputLayout = view.findViewById(R.id.change_password_old_pwd_til)
-            val oldPasswordText: TextInputEditText = view.findViewById(R.id.change_password_old_pwd_text)
-            val newPasswordText: TextInputEditText = view.findViewById(R.id.change_password_new_pwd_text)
-            val confirmNewPasswordTil: TextInputLayout = view.findViewById(R.id.change_password_confirm_new_pwd_til)
-            val confirmNewPasswordText: TextInputEditText = view.findViewById(R.id.change_password_confirm_new_pwd_text)
-            val changePasswordLoader: View = view.findViewById(R.id.change_password_loader)
-
-            var passwordShown = false
-
-            showPassword.setOnClickListener {
-                passwordShown = !passwordShown
-
-                oldPasswordText.showPassword(passwordShown)
-                newPasswordText.showPassword(passwordShown)
-                confirmNewPasswordText.showPassword(passwordShown)
-
-                showPassword.setImageResource(if (passwordShown) R.drawable.ic_eye_closed else R.drawable.ic_eye)
-            }
-
-            val dialog = AlertDialog.Builder(activity)
+            val dialog = MaterialAlertDialogBuilder(activity)
                     .setView(view)
                     .setCancelable(false)
                     .setPositiveButton(R.string.settings_change_password, null)
@@ -531,92 +363,71 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
                 updateButton.isEnabled = false
 
                 fun updateUi() {
-                    val oldPwd = oldPasswordText.text.toString()
-                    val newPwd = newPasswordText.text.toString()
-                    val newConfirmPwd = confirmNewPasswordText.text.toString()
+                    val oldPwd = views.changePasswordOldPwdText.text.toString()
+                    val newPwd = views.changePasswordNewPwdText.text.toString()
 
-                    updateButton.isEnabled = oldPwd.isNotEmpty() && newPwd.isNotEmpty() && newPwd == newConfirmPwd
-
-                    if (newPwd.isNotEmpty() && newConfirmPwd.isNotEmpty() && newPwd != newConfirmPwd) {
-                        confirmNewPasswordTil.error = getString(R.string.passwords_do_not_match)
-                    }
+                    updateButton.isEnabled = oldPwd.isNotEmpty() && newPwd.isNotEmpty()
                 }
 
-                oldPasswordText.addTextChangedListener(object : SimpleTextWatcher() {
+                views.changePasswordOldPwdText.addTextChangedListener(object : SimpleTextWatcher() {
                     override fun afterTextChanged(s: Editable) {
-                        oldPasswordTil.error = null
+                        views.changePasswordOldPwdTil.error = null
                         updateUi()
                     }
                 })
 
-                newPasswordText.addTextChangedListener(object : SimpleTextWatcher() {
+                views.changePasswordNewPwdText.addTextChangedListener(object : SimpleTextWatcher() {
                     override fun afterTextChanged(s: Editable) {
-                        confirmNewPasswordTil.error = null
-                        updateUi()
-                    }
-                })
-
-                confirmNewPasswordText.addTextChangedListener(object : SimpleTextWatcher() {
-                    override fun afterTextChanged(s: Editable) {
-                        confirmNewPasswordTil.error = null
                         updateUi()
                     }
                 })
 
                 fun showPasswordLoadingView(toShow: Boolean) {
                     if (toShow) {
-                        showPassword.isEnabled = false
-                        oldPasswordText.isEnabled = false
-                        newPasswordText.isEnabled = false
-                        confirmNewPasswordText.isEnabled = false
-                        changePasswordLoader.isVisible = true
+                        views.changePasswordOldPwdText.isEnabled = false
+                        views.changePasswordNewPwdText.isEnabled = false
+                        views.changePasswordLoader.isVisible = true
                         updateButton.isEnabled = false
                         cancelButton.isEnabled = false
                     } else {
-                        showPassword.isEnabled = true
-                        oldPasswordText.isEnabled = true
-                        newPasswordText.isEnabled = true
-                        confirmNewPasswordText.isEnabled = true
-                        changePasswordLoader.isVisible = false
+                        views.changePasswordOldPwdText.isEnabled = true
+                        views.changePasswordNewPwdText.isEnabled = true
+                        views.changePasswordLoader.isVisible = false
                         updateButton.isEnabled = true
                         cancelButton.isEnabled = true
                     }
                 }
 
                 updateButton.setOnClickListener {
-                    if (passwordShown) {
-                        // Hide passwords during processing
-                        showPassword.performClick()
-                    }
+                    // Hide passwords during processing
+                    views.changePasswordOldPwdText.hidePassword()
+                    views.changePasswordNewPwdText.hidePassword()
 
                     view.hideKeyboard()
 
-                    val oldPwd = oldPasswordText.text.toString()
-                    val newPwd = newPasswordText.text.toString()
+                    val oldPwd = views.changePasswordOldPwdText.text.toString()
+                    val newPwd = views.changePasswordNewPwdText.text.toString()
 
                     showPasswordLoadingView(true)
-                    session.changePassword(oldPwd, newPwd, object : MatrixCallback<Unit> {
-                        override fun onSuccess(data: Unit) {
-                            if (!isAdded) {
-                                return
-                            }
-                            showPasswordLoadingView(false)
+                    lifecycleScope.launch {
+                        val result = runCatching {
+                            session.changePassword(oldPwd, newPwd)
+                        }
+                        if (!isAdded) {
+                            return@launch
+                        }
+                        showPasswordLoadingView(false)
+                        result.fold({
                             dialog.dismiss()
                             activity.toast(R.string.settings_password_updated)
-                        }
-
-                        override fun onFailure(failure: Throwable) {
-                            if (!isAdded) {
-                                return
-                            }
-                            showPasswordLoadingView(false)
+                        }, { failure ->
                             if (failure.isInvalidPassword()) {
-                                oldPasswordTil.error = getString(R.string.settings_fail_to_update_password_invalid_current_password)
+                                views.changePasswordOldPwdTil.error = getString(R.string.settings_fail_to_update_password_invalid_current_password)
                             } else {
-                                oldPasswordTil.error = getString(R.string.settings_fail_to_update_password)
+                                views.changePasswordOldPwdTil.error = getString(R.string.settings_fail_to_update_password)
                             }
-                        }
-                    })
+                        })
+                    }
                 }
             }
             dialog.show()
@@ -631,25 +442,21 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
         if (currentDisplayName != value) {
             displayLoadingView()
 
-            session.setDisplayName(session.myUserId, value, object : MatrixCallback<Unit> {
-                override fun onSuccess(data: Unit) {
-                    if (!isAdded) return
-                    // refresh the settings value
-                    mDisplayNamePreference.summary = value
-                    mDisplayNamePreference.text = value
-                    onCommonDone(null)
-                }
-
-                override fun onFailure(failure: Throwable) {
-                    if (!isAdded) return
-                    onCommonDone(failure.localizedMessage)
-                }
-            })
+            lifecycleScope.launch {
+                val result = runCatching { session.setDisplayName(session.myUserId, value) }
+                if (!isAdded) return@launch
+                result.fold(
+                        {
+                            // refresh the settings value
+                            mDisplayNamePreference.summary = value
+                            mDisplayNamePreference.text = value
+                            onCommonDone(null)
+                        },
+                        {
+                            onCommonDone(it.localizedMessage)
+                        }
+                )
+            }
         }
-    }
-
-    companion object {
-        private const val REQUEST_NEW_PHONE_NUMBER = 456
-        private const val REQUEST_PHONEBOOK_COUNTRY = 789
     }
 }

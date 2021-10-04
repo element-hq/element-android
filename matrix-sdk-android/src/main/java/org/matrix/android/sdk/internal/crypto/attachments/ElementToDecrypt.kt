@@ -1,5 +1,4 @@
 /*
- * Copyright 2016 OpenMarket Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,7 +18,7 @@ package org.matrix.android.sdk.internal.crypto.attachments
 
 import android.os.Parcelable
 import org.matrix.android.sdk.internal.crypto.model.rest.EncryptedFileInfo
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 fun EncryptedFileInfo.toElementToDecrypt(): ElementToDecrypt? {
     // Check the validity of some fields

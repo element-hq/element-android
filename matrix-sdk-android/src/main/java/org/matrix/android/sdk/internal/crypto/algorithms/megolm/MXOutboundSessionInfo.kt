@@ -1,6 +1,4 @@
 /*
- * Copyright 2015 OpenMarket Ltd
- * Copyright 2017 Vector Creations Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,9 +23,9 @@ import timber.log.Timber
 internal class MXOutboundSessionInfo(
         // The id of the session
         val sessionId: String,
-        val sharedWithHelper: SharedWithHelper) {
-    // When the session was created
-    private val creationTime = System.currentTimeMillis()
+        val sharedWithHelper: SharedWithHelper,
+        // When the session was created
+        private val creationTime: Long = System.currentTimeMillis()) {
 
     // Number of times this session has been used
     var useCount: Int = 0

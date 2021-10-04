@@ -21,12 +21,15 @@ import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import com.jakewharton.rxrelay2.BehaviorRelay
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
+import dagger.assisted.AssistedFactory
 import im.vector.app.R
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
+import io.reactivex.Observable
+import io.reactivex.schedulers.Schedulers
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -36,8 +39,6 @@ import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.rx.rx
 import org.matrix.android.sdk.rx.unwrap
-import io.reactivex.Observable
-import io.reactivex.schedulers.Schedulers
 
 /**
  * This ViewModel observe a room summary and notify when the room is left
@@ -48,7 +49,7 @@ class RequireActiveMembershipViewModel @AssistedInject constructor(
         private val session: Session)
     : VectorViewModel<RequireActiveMembershipViewState, RequireActiveMembershipAction, RequireActiveMembershipViewEvents>(initialState) {
 
-    @AssistedInject.Factory
+    @AssistedFactory
     interface Factory {
         fun create(initialState: RequireActiveMembershipViewState): RequireActiveMembershipViewModel
     }

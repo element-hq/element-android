@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -32,6 +31,8 @@ interface ContentUploadStateTracker {
     sealed class State {
         object Idle : State()
         object EncryptingThumbnail : State()
+        object CompressingImage : State()
+        data class CompressingVideo(val percent: Float) : State()
         data class UploadingThumbnail(val current: Long, val total: Long) : State()
         data class Encrypting(val current: Long, val total: Long) : State()
         data class Uploading(val current: Long, val total: Long) : State()

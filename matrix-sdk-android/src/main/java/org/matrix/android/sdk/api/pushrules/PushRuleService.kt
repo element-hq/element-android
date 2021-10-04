@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,11 +15,10 @@
  */
 package org.matrix.android.sdk.api.pushrules
 
-import org.matrix.android.sdk.api.MatrixCallback
+import androidx.lifecycle.LiveData
 import org.matrix.android.sdk.api.pushrules.rest.PushRule
 import org.matrix.android.sdk.api.pushrules.rest.RuleSet
 import org.matrix.android.sdk.api.session.events.model.Event
-import org.matrix.android.sdk.api.util.Cancelable
 
 interface PushRuleService {
     /**
@@ -30,17 +28,25 @@ interface PushRuleService {
 
     fun getPushRules(scope: String = RuleScope.GLOBAL): RuleSet
 
-    fun updatePushRuleEnableStatus(kind: RuleKind, pushRule: PushRule, enabled: Boolean, callback: MatrixCallback<Unit>): Cancelable
+    suspend fun updatePushRuleEnableStatus(kind: RuleKind, pushRule: PushRule, enabled: Boolean)
 
-    fun addPushRule(kind: RuleKind, pushRule: PushRule, callback: MatrixCallback<Unit>): Cancelable
+    suspend fun addPushRule(kind: RuleKind, pushRule: PushRule)
 
-    fun updatePushRuleActions(kind: RuleKind, oldPushRule: PushRule, newPushRule: PushRule, callback: MatrixCallback<Unit>): Cancelable
+    /**
+     * Enables/Disables a push rule and updates the actions if necessary
+     * @param enable Enables/Disables the rule
+     * @param actions Actions to update if not null
+     */
 
-    fun removePushRule(kind: RuleKind, pushRule: PushRule, callback: MatrixCallback<Unit>): Cancelable
+    suspend fun updatePushRuleActions(kind: RuleKind, ruleId: String, enable: Boolean, actions: List<Action>?)
+
+    suspend fun removePushRule(kind: RuleKind, ruleId: String)
 
     fun addPushRuleListener(listener: PushRuleListener)
 
     fun removePushRuleListener(listener: PushRuleListener)
+
+    fun getActions(event: Event): List<Action>
 
 //    fun fulfilledBingRule(event: Event, rules: List<PushRule>): PushRule?
 
@@ -51,4 +57,6 @@ interface PushRuleService {
         fun onEventRedacted(redactedEventId: String)
         fun batchFinish()
     }
+
+    fun getKeywords(): LiveData<Set<String>>
 }

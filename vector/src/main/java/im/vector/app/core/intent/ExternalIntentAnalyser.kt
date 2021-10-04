@@ -109,7 +109,7 @@ fun analyseIntent(intent: Intent): List<ExternalIntentData> {
         for (i in 0 until clipData.itemCount) {
             val item = clipData.getItemAt(i)
             val mimeType = mimeTypes?.getOrElse(i) { mimeTypes[0] }
-                        // uris list is not a valid mimetype
+                    // uris list is not a valid mimetype
                     .takeUnless { it == ClipDescription.MIMETYPE_TEXT_URILIST }
 
             externalIntentDataList.add(ExternalIntentData.IntentDataClipData(item, mimeType))

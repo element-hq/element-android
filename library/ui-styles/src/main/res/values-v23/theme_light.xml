@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.Vector.Light.v23" parent="Base.Theme.Vector.Light">
+        <item name="android:statusBarColor">@color/android_status_bar_background_light</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+
+    <style name="Theme.Vector.Light" parent="Theme.Vector.Light.v23"/>
+
+</resources>

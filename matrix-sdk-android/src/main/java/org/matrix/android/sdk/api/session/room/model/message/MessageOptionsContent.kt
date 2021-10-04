@@ -1,5 +1,4 @@
 /*
- * Copyright 2020 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -31,7 +30,7 @@ const val OPTION_TYPE_BUTTONS = "org.matrix.buttons"
  */
 @JsonClass(generateAdapter = true)
 data class MessageOptionsContent(
-        @Json(name = "msgtype") override val msgType: String = MessageType.MSGTYPE_OPTIONS,
+        @Json(name = MessageContent.MSG_TYPE_JSON_KEY) override val msgType: String = MessageType.MSGTYPE_OPTIONS,
         @Json(name = "type") val optionType: String? = null,
         @Json(name = "body") override val body: String,
         @Json(name = "label") val label: String?,

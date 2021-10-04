@@ -21,26 +21,32 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
-import org.matrix.android.sdk.api.failure.GlobalError
-import org.matrix.android.sdk.api.session.Session
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.VectorBaseActivity
+import im.vector.app.databinding.ActivityVectorSettingsBinding
+import im.vector.app.features.discovery.DiscoverySettingsFragment
 import im.vector.app.features.settings.devices.VectorSettingsDevicesFragment
-import kotlinx.android.synthetic.main.activity_vector_settings.*
+import im.vector.app.features.settings.notifications.VectorSettingsNotificationPreferenceFragment
+import im.vector.app.features.settings.threepids.ThreePidsSettingsFragment
+
+import org.matrix.android.sdk.api.failure.GlobalError
+import org.matrix.android.sdk.api.session.Session
 import timber.log.Timber
 import javax.inject.Inject
 
 /**
  * Displays the client settings.
  */
-class VectorSettingsActivity : VectorBaseActivity(),
+class VectorSettingsActivity : VectorBaseActivity<ActivityVectorSettingsBinding>(),
         PreferenceFragmentCompat.OnPreferenceStartFragmentCallback,
         FragmentManager.OnBackStackChangedListener,
         VectorSettingsFragmentInteractionListener {
 
-    override fun getLayoutRes() = R.layout.activity_vector_settings
+    override fun getBinding() = ActivityVectorSettingsBinding.inflate(layoutInflater)
+
+    override fun getCoordinatorLayout() = views.coordinatorLayout
 
     override fun getTitleRes() = R.string.title_activity_settings
 
@@ -55,7 +61,7 @@ class VectorSettingsActivity : VectorBaseActivity(),
     }
 
     override fun initUiAndData() {
-        configureToolbar(settingsToolbar)
+        configureToolbar(views.settingsToolbar)
 
         if (isFirstCreation()) {
             // display the fragment
@@ -71,9 +77,12 @@ class VectorSettingsActivity : VectorBaseActivity(),
                             VectorSettingsDevicesFragment::class.java,
                             null,
                             FRAGMENT_TAG)
-                EXTRA_DIRECT_ACCESS_NOTIFICATIONS                -> {
+                EXTRA_DIRECT_ACCESS_NOTIFICATIONS                    -> {
                     requestHighlightPreferenceKeyOnResume(VectorPreferences.SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY)
                     replaceFragment(R.id.vector_settings_page, VectorSettingsNotificationPreferenceFragment::class.java, null, FRAGMENT_TAG)
+                }
+                EXTRA_DIRECT_ACCESS_DISCOVERY_SETTINGS                    -> {
+                    replaceFragment(R.id.vector_settings_page, DiscoverySettingsFragment::class.java, null, FRAGMENT_TAG)
                 }
 
                 else                                                 ->
@@ -107,7 +116,8 @@ class VectorSettingsActivity : VectorBaseActivity(),
         }
 
         if (oFragment != null) {
-            oFragment.setTargetFragment(caller, 0)
+            // Deprecated, I comment it, I think it is useless
+            // oFragment.setTargetFragment(caller, 0)
             // Replace the existing Fragment with the new Fragment
             supportFragmentManager.beginTransaction()
                     .setCustomAnimations(R.anim.right_in, R.anim.fade_out, R.anim.fade_in, R.anim.right_out)
@@ -127,6 +137,10 @@ class VectorSettingsActivity : VectorBaseActivity(),
         return keyToHighlight
     }
 
+    override fun navigateToEmailAndPhoneNumbers() {
+        navigateTo(ThreePidsSettingsFragment::class.java)
+    }
+
     override fun handleInvalidToken(globalError: GlobalError.InvalidToken) {
         if (ignoreInvalidTokenError) {
             Timber.w("Ignoring invalid token global error")
@@ -135,7 +149,7 @@ class VectorSettingsActivity : VectorBaseActivity(),
         }
     }
 
-    fun <T: Fragment> navigateTo(fragmentClass: Class<T>) {
+    fun <T : Fragment> navigateTo(fragmentClass: Class<T>) {
         supportFragmentManager.beginTransaction()
                 .setCustomAnimations(R.anim.right_in, R.anim.fade_out, R.anim.fade_in, R.anim.right_out)
                 .replace(R.id.vector_settings_page, fragmentClass, null)
@@ -155,6 +169,7 @@ class VectorSettingsActivity : VectorBaseActivity(),
         const val EXTRA_DIRECT_ACCESS_SECURITY_PRIVACY_MANAGE_SESSIONS = 3
         const val EXTRA_DIRECT_ACCESS_GENERAL = 4
         const val EXTRA_DIRECT_ACCESS_NOTIFICATIONS = 5
+        const val EXTRA_DIRECT_ACCESS_DISCOVERY_SETTINGS = 6
 
         private const val FRAGMENT_TAG = "VectorSettingsPreferencesFragment"
     }

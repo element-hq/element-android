@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
+ * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,11 +20,15 @@ import org.matrix.android.sdk.api.session.events.model.EventType
 
 object RoomSummaryConstants {
 
+    /**
+     *
+     */
     val PREVIEWABLE_TYPES = listOf(
             // TODO filter message type (KEY_VERIFICATION_READY, etc.)
             EventType.MESSAGE,
             EventType.CALL_INVITE,
             EventType.CALL_HANGUP,
+            EventType.CALL_REJECT,
             EventType.CALL_ANSWER,
             EventType.ENCRYPTED,
             EventType.STICKER,

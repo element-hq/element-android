@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,18 +24,30 @@ import org.commonmark.renderer.html.HtmlRenderer
 import org.matrix.android.sdk.api.session.file.FileService
 import org.matrix.android.sdk.api.session.room.RoomDirectoryService
 import org.matrix.android.sdk.api.session.room.RoomService
+import org.matrix.android.sdk.api.session.space.SpaceService
 import org.matrix.android.sdk.internal.session.DefaultFileService
 import org.matrix.android.sdk.internal.session.SessionScope
+import org.matrix.android.sdk.internal.session.directory.DirectoryAPI
+import org.matrix.android.sdk.internal.session.identity.DefaultSign3pidInvitationTask
+import org.matrix.android.sdk.internal.session.identity.Sign3pidInvitationTask
+import org.matrix.android.sdk.internal.session.room.accountdata.DefaultUpdateRoomAccountDataTask
+import org.matrix.android.sdk.internal.session.room.accountdata.UpdateRoomAccountDataTask
 import org.matrix.android.sdk.internal.session.room.alias.AddRoomAliasTask
 import org.matrix.android.sdk.internal.session.room.alias.DefaultAddRoomAliasTask
+import org.matrix.android.sdk.internal.session.room.alias.DefaultDeleteRoomAliasTask
 import org.matrix.android.sdk.internal.session.room.alias.DefaultGetRoomIdByAliasTask
+import org.matrix.android.sdk.internal.session.room.alias.DefaultGetRoomLocalAliasesTask
+import org.matrix.android.sdk.internal.session.room.alias.DeleteRoomAliasTask
 import org.matrix.android.sdk.internal.session.room.alias.GetRoomIdByAliasTask
+import org.matrix.android.sdk.internal.session.room.alias.GetRoomLocalAliasesTask
 import org.matrix.android.sdk.internal.session.room.create.CreateRoomTask
 import org.matrix.android.sdk.internal.session.room.create.DefaultCreateRoomTask
 import org.matrix.android.sdk.internal.session.room.directory.DefaultGetPublicRoomTask
-import org.matrix.android.sdk.internal.session.room.directory.DefaultGetThirdPartyProtocolsTask
+import org.matrix.android.sdk.internal.session.room.directory.DefaultGetRoomDirectoryVisibilityTask
+import org.matrix.android.sdk.internal.session.room.directory.DefaultSetRoomDirectoryVisibilityTask
 import org.matrix.android.sdk.internal.session.room.directory.GetPublicRoomTask
-import org.matrix.android.sdk.internal.session.room.directory.GetThirdPartyProtocolsTask
+import org.matrix.android.sdk.internal.session.room.directory.GetRoomDirectoryVisibilityTask
+import org.matrix.android.sdk.internal.session.room.directory.SetRoomDirectoryVisibilityTask
 import org.matrix.android.sdk.internal.session.room.membership.DefaultLoadRoomMembersTask
 import org.matrix.android.sdk.internal.session.room.membership.LoadRoomMembersTask
 import org.matrix.android.sdk.internal.session.room.membership.admin.DefaultMembershipAdminTask
@@ -49,6 +60,10 @@ import org.matrix.android.sdk.internal.session.room.membership.leaving.DefaultLe
 import org.matrix.android.sdk.internal.session.room.membership.leaving.LeaveRoomTask
 import org.matrix.android.sdk.internal.session.room.membership.threepid.DefaultInviteThreePidTask
 import org.matrix.android.sdk.internal.session.room.membership.threepid.InviteThreePidTask
+import org.matrix.android.sdk.internal.session.room.peeking.DefaultPeekRoomTask
+import org.matrix.android.sdk.internal.session.room.peeking.DefaultResolveRoomStateTask
+import org.matrix.android.sdk.internal.session.room.peeking.PeekRoomTask
+import org.matrix.android.sdk.internal.session.room.peeking.ResolveRoomStateTask
 import org.matrix.android.sdk.internal.session.room.read.DefaultMarkAllRoomsReadTask
 import org.matrix.android.sdk.internal.session.room.read.DefaultSetReadMarkersTask
 import org.matrix.android.sdk.internal.session.room.read.MarkAllRoomsReadTask
@@ -69,14 +84,19 @@ import org.matrix.android.sdk.internal.session.room.tags.DefaultDeleteTagFromRoo
 import org.matrix.android.sdk.internal.session.room.tags.DeleteTagFromRoomTask
 import org.matrix.android.sdk.internal.session.room.timeline.DefaultFetchTokenAndPaginateTask
 import org.matrix.android.sdk.internal.session.room.timeline.DefaultGetContextOfEventTask
+import org.matrix.android.sdk.internal.session.room.timeline.DefaultGetEventTask
 import org.matrix.android.sdk.internal.session.room.timeline.DefaultPaginationTask
 import org.matrix.android.sdk.internal.session.room.timeline.FetchTokenAndPaginateTask
 import org.matrix.android.sdk.internal.session.room.timeline.GetContextOfEventTask
+import org.matrix.android.sdk.internal.session.room.timeline.GetEventTask
 import org.matrix.android.sdk.internal.session.room.timeline.PaginationTask
 import org.matrix.android.sdk.internal.session.room.typing.DefaultSendTypingTask
 import org.matrix.android.sdk.internal.session.room.typing.SendTypingTask
 import org.matrix.android.sdk.internal.session.room.uploads.DefaultGetUploadsTask
 import org.matrix.android.sdk.internal.session.room.uploads.GetUploadsTask
+import org.matrix.android.sdk.internal.session.room.version.DefaultRoomVersionUpgradeTask
+import org.matrix.android.sdk.internal.session.room.version.RoomVersionUpgradeTask
+import org.matrix.android.sdk.internal.session.space.DefaultSpaceService
 import retrofit2.Retrofit
 
 @Module
@@ -93,6 +113,13 @@ internal abstract class RoomModule {
 
         @Provides
         @JvmStatic
+        @SessionScope
+        fun providesDirectoryAPI(retrofit: Retrofit): DirectoryAPI {
+            return retrofit.create(DirectoryAPI::class.java)
+        }
+
+        @Provides
+        @JvmStatic
         fun providesParser(): Parser {
             return Parser.builder().build()
         }
@@ -102,6 +129,7 @@ internal abstract class RoomModule {
         fun providesHtmlRenderer(): HtmlRenderer {
             return HtmlRenderer
                     .builder()
+                    .softbreak("<br />")
                     .build()
         }
     }
@@ -116,6 +144,9 @@ internal abstract class RoomModule {
     abstract fun bindRoomService(service: DefaultRoomService): RoomService
 
     @Binds
+    abstract fun bindSpaceService(service: DefaultSpaceService): SpaceService
+
+    @Binds
     abstract fun bindRoomDirectoryService(service: DefaultRoomDirectoryService): RoomDirectoryService
 
     @Binds
@@ -128,7 +159,10 @@ internal abstract class RoomModule {
     abstract fun bindGetPublicRoomTask(task: DefaultGetPublicRoomTask): GetPublicRoomTask
 
     @Binds
-    abstract fun bindGetThirdPartyProtocolsTask(task: DefaultGetThirdPartyProtocolsTask): GetThirdPartyProtocolsTask
+    abstract fun bindGetRoomDirectoryVisibilityTask(task: DefaultGetRoomDirectoryVisibilityTask): GetRoomDirectoryVisibilityTask
+
+    @Binds
+    abstract fun bindSetRoomDirectoryVisibilityTask(task: DefaultSetRoomDirectoryVisibilityTask): SetRoomDirectoryVisibilityTask
 
     @Binds
     abstract fun bindInviteTask(task: DefaultInviteTask): InviteTask
@@ -182,7 +216,13 @@ internal abstract class RoomModule {
     abstract fun bindGetRoomIdByAliasTask(task: DefaultGetRoomIdByAliasTask): GetRoomIdByAliasTask
 
     @Binds
+    abstract fun bindGetRoomLocalAliasesTask(task: DefaultGetRoomLocalAliasesTask): GetRoomLocalAliasesTask
+
+    @Binds
     abstract fun bindAddRoomAliasTask(task: DefaultAddRoomAliasTask): AddRoomAliasTask
+
+    @Binds
+    abstract fun bindDeleteRoomAliasTask(task: DefaultDeleteRoomAliasTask): DeleteRoomAliasTask
 
     @Binds
     abstract fun bindSendTypingTask(task: DefaultSendTypingTask): SendTypingTask
@@ -195,4 +235,25 @@ internal abstract class RoomModule {
 
     @Binds
     abstract fun bindDeleteTagFromRoomTask(task: DefaultDeleteTagFromRoomTask): DeleteTagFromRoomTask
+
+    @Binds
+    abstract fun bindResolveRoomStateTask(task: DefaultResolveRoomStateTask): ResolveRoomStateTask
+
+    @Binds
+    abstract fun bindPeekRoomTask(task: DefaultPeekRoomTask): PeekRoomTask
+
+    @Binds
+    abstract fun bindUpdateRoomAccountDataTask(task: DefaultUpdateRoomAccountDataTask): UpdateRoomAccountDataTask
+
+    @Binds
+    abstract fun bindGetEventTask(task: DefaultGetEventTask): GetEventTask
+
+    @Binds
+    abstract fun bindRoomVersionUpgradeTask(task: DefaultRoomVersionUpgradeTask): RoomVersionUpgradeTask
+
+    @Binds
+    abstract fun bindSign3pidInvitationTask(task: DefaultSign3pidInvitationTask): Sign3pidInvitationTask
+
+    @Binds
+    abstract fun bindGetRoomSummaryTask(task: DefaultGetRoomSummaryTask): GetRoomSummaryTask
 }

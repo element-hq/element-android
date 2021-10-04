@@ -15,16 +15,19 @@
  */
 package im.vector.app.features.reactions
 
+import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.reactions.data.EmojiDataSource
 import im.vector.app.features.reactions.data.EmojiItem
+import kotlinx.coroutines.launch
 
 data class EmojiSearchResultViewState(
         val query: String = "",
@@ -36,7 +39,7 @@ class EmojiSearchResultViewModel @AssistedInject constructor(
         private val dataSource: EmojiDataSource)
     : VectorViewModel<EmojiSearchResultViewState, EmojiSearchAction, EmptyViewEvents>(initialState) {
 
-    @AssistedInject.Factory
+    @AssistedFactory
     interface Factory {
         fun create(initialState: EmojiSearchResultViewState): EmojiSearchResultViewModel
     }
@@ -57,11 +60,14 @@ class EmojiSearchResultViewModel @AssistedInject constructor(
     }
 
     private fun updateQuery(action: EmojiSearchAction.UpdateQuery) {
-        setState {
-            copy(
-                    query = action.queryString,
-                    results = dataSource.filterWith(action.queryString)
-            )
+        viewModelScope.launch {
+            val results = dataSource.filterWith(action.queryString)
+            setState {
+                copy(
+                        query = action.queryString,
+                        results = results
+                )
+            }
         }
     }
 }

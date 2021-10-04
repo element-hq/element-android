@@ -17,52 +17,73 @@
 package im.vector.app.features.contactsbook
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
 import com.jakewharton.rxbinding3.widget.checkedChanges
 import com.jakewharton.rxbinding3.widget.textChanges
-import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.platform.VectorBaseFragment
-import im.vector.app.features.userdirectory.PendingInvitee
-import im.vector.app.features.userdirectory.UserDirectoryAction
-import im.vector.app.features.userdirectory.UserDirectorySharedAction
-import im.vector.app.features.userdirectory.UserDirectorySharedActionViewModel
-import im.vector.app.features.userdirectory.UserDirectoryViewModel
+import im.vector.app.core.utils.showIdentityServerConsentDialog
+import im.vector.app.databinding.FragmentContactsBookBinding
+import im.vector.app.features.userdirectory.PendingSelection
+import im.vector.app.features.userdirectory.UserListAction
+import im.vector.app.features.userdirectory.UserListSharedAction
+import im.vector.app.features.userdirectory.UserListSharedActionViewModel
+import im.vector.app.features.userdirectory.UserListViewModel
+
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.user.model.User
-import kotlinx.android.synthetic.main.fragment_contacts_book.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class ContactsBookFragment @Inject constructor(
-        val contactsBookViewModelFactory: ContactsBookViewModel.Factory,
+        private val contactsBookViewModelFactory: ContactsBookViewModel.Factory,
         private val contactsBookController: ContactsBookController
-) : VectorBaseFragment(), ContactsBookController.Callback {
+) : VectorBaseFragment<FragmentContactsBookBinding>(), ContactsBookController.Callback, ContactsBookViewModel.Factory {
 
-    override fun getLayoutResId() = R.layout.fragment_contacts_book
-    private val viewModel: UserDirectoryViewModel by activityViewModel()
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentContactsBookBinding {
+        return FragmentContactsBookBinding.inflate(inflater, container, false)
+    }
+
+    private val viewModel: UserListViewModel by activityViewModel()
 
     // Use activityViewModel to avoid loading several times the data
     private val contactsBookViewModel: ContactsBookViewModel by activityViewModel()
 
-    private lateinit var sharedActionViewModel: UserDirectorySharedActionViewModel
+    private lateinit var sharedActionViewModel: UserListSharedActionViewModel
+
+    override fun create(initialState: ContactsBookViewState): ContactsBookViewModel {
+        return contactsBookViewModelFactory.create(initialState)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        sharedActionViewModel = activityViewModelProvider.get(UserDirectorySharedActionViewModel::class.java)
+        sharedActionViewModel = activityViewModelProvider.get(UserListSharedActionViewModel::class.java)
         setupRecyclerView()
         setupFilterView()
+        setupConsentView()
         setupOnlyBoundContactsView()
         setupCloseView()
     }
 
+    private fun setupConsentView() {
+        views.phoneBookSearchForMatrixContacts.setOnClickListener {
+            withState(contactsBookViewModel) { state ->
+                requireContext().showIdentityServerConsentDialog(state.identityServerUrl) {
+                    contactsBookViewModel.handle(ContactsBookAction.UserConsentGranted)
+                }
+            }
+        }
+    }
+
     private fun setupOnlyBoundContactsView() {
-        phoneBookOnlyBoundContacts.checkedChanges()
+        views.phoneBookOnlyBoundContacts.checkedChanges()
                 .subscribe {
                     contactsBookViewModel.handle(ContactsBookAction.OnlyBoundContacts(it))
                 }
@@ -70,7 +91,7 @@ class ContactsBookFragment @Inject constructor(
     }
 
     private fun setupFilterView() {
-        phoneBookFilter
+        views.phoneBookFilter
                 .textChanges()
                 .skipInitialValue()
                 .debounce(300, TimeUnit.MILLISECONDS)
@@ -81,36 +102,37 @@ class ContactsBookFragment @Inject constructor(
     }
 
     override fun onDestroyView() {
-        phoneBookRecyclerView.cleanup()
+        views.phoneBookRecyclerView.cleanup()
         contactsBookController.callback = null
         super.onDestroyView()
     }
 
     private fun setupRecyclerView() {
         contactsBookController.callback = this
-        phoneBookRecyclerView.configureWith(contactsBookController)
+        views.phoneBookRecyclerView.configureWith(contactsBookController)
     }
 
     private fun setupCloseView() {
-        phoneBookClose.debouncedClicks {
-            sharedActionViewModel.post(UserDirectorySharedAction.GoBack)
+        views.phoneBookClose.debouncedClicks {
+            sharedActionViewModel.post(UserListSharedAction.GoBack)
         }
     }
 
     override fun invalidate() = withState(contactsBookViewModel) { state ->
-        phoneBookOnlyBoundContacts.isVisible = state.isBoundRetrieved
+        views.phoneBookSearchForMatrixContacts.isVisible = state.filteredMappedContacts.isNotEmpty() && state.identityServerUrl != null && !state.userConsent
+        views.phoneBookOnlyBoundContacts.isVisible = state.isBoundRetrieved
         contactsBookController.setData(state)
     }
 
     override fun onMatrixIdClick(matrixId: String) {
         view?.hideKeyboard()
-        viewModel.handle(UserDirectoryAction.SelectPendingInvitee(PendingInvitee.UserPendingInvitee(User(matrixId))))
-        sharedActionViewModel.post(UserDirectorySharedAction.GoBack)
+        viewModel.handle(UserListAction.AddPendingSelection(PendingSelection.UserPendingSelection(User(matrixId))))
+        sharedActionViewModel.post(UserListSharedAction.GoBack)
     }
 
     override fun onThreePidClick(threePid: ThreePid) {
         view?.hideKeyboard()
-        viewModel.handle(UserDirectoryAction.SelectPendingInvitee(PendingInvitee.ThreePidPendingInvitee(threePid)))
-        sharedActionViewModel.post(UserDirectorySharedAction.GoBack)
+        viewModel.handle(UserListAction.AddPendingSelection(PendingSelection.ThreePidPendingSelection(threePid)))
+        sharedActionViewModel.post(UserListSharedAction.GoBack)
     }
 }

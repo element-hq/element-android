@@ -16,6 +16,7 @@
 
 package im.vector.app.core.glide
 
+import android.content.Context
 import com.bumptech.glide.Priority
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.Options
@@ -24,23 +25,22 @@ import com.bumptech.glide.load.model.ModelLoader
 import com.bumptech.glide.load.model.ModelLoaderFactory
 import com.bumptech.glide.load.model.MultiModelLoaderFactory
 import com.bumptech.glide.signature.ObjectKey
-import im.vector.app.core.di.ActiveSessionHolder
+import im.vector.app.core.extensions.vectorComponent
+import im.vector.app.core.files.LocalFilesHelper
 import im.vector.app.features.media.ImageContentRenderer
+import im.vector.app.features.session.coroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
-import org.matrix.android.sdk.api.MatrixCallback
-import org.matrix.android.sdk.api.session.file.FileService
 import timber.log.Timber
-import java.io.File
 import java.io.IOException
 import java.io.InputStream
-import java.lang.Exception
-import java.lang.IllegalArgumentException
 
-class VectorGlideModelLoaderFactory(private val activeSessionHolder: ActiveSessionHolder)
-    : ModelLoaderFactory<ImageContentRenderer.Data, InputStream> {
+class VectorGlideModelLoaderFactory(private val context: Context) : ModelLoaderFactory<ImageContentRenderer.Data, InputStream> {
 
     override fun build(multiFactory: MultiModelLoaderFactory): ModelLoader<ImageContentRenderer.Data, InputStream> {
-        return VectorGlideModelLoader(activeSessionHolder)
+        return VectorGlideModelLoader(context)
     }
 
     override fun teardown() {
@@ -48,7 +48,7 @@ class VectorGlideModelLoaderFactory(private val activeSessionHolder: ActiveSessi
     }
 }
 
-class VectorGlideModelLoader(private val activeSessionHolder: ActiveSessionHolder)
+class VectorGlideModelLoader(private val context: Context)
     : ModelLoader<ImageContentRenderer.Data, InputStream> {
     override fun handles(model: ImageContentRenderer.Data): Boolean {
         // Always handle
@@ -56,15 +56,18 @@ class VectorGlideModelLoader(private val activeSessionHolder: ActiveSessionHolde
     }
 
     override fun buildLoadData(model: ImageContentRenderer.Data, width: Int, height: Int, options: Options): ModelLoader.LoadData<InputStream>? {
-        return ModelLoader.LoadData(ObjectKey(model), VectorGlideDataFetcher(activeSessionHolder, model, width, height))
+        return ModelLoader.LoadData(ObjectKey(model), VectorGlideDataFetcher(context, model, width, height))
     }
 }
 
-class VectorGlideDataFetcher(private val activeSessionHolder: ActiveSessionHolder,
+class VectorGlideDataFetcher(context: Context,
                              private val data: ImageContentRenderer.Data,
                              private val width: Int,
                              private val height: Int)
     : DataFetcher<InputStream> {
+
+    private val localFilesHelper = LocalFilesHelper(context)
+    private val activeSessionHolder = context.vectorComponent().activeSessionHolder()
 
     private val client = activeSessionHolder.getSafeActiveSession()?.getOkHttpClient() ?: OkHttpClient()
 
@@ -100,9 +103,10 @@ class VectorGlideDataFetcher(private val activeSessionHolder: ActiveSessionHolde
 
     override fun loadData(priority: Priority, callback: DataFetcher.DataCallback<in InputStream>) {
         Timber.v("Load data: $data")
-        if (data.isLocalFile && data.url != null) {
-            val initialFile = File(data.url)
-            callback.onDataReady(initialFile.inputStream())
+        if (localFilesHelper.isLocalFile(data.url)) {
+            localFilesHelper.openInputStream(data.url)?.use {
+                callback.onDataReady(it)
+            }
             return
         }
 //        val contentUrlResolver = activeSessionHolder.getActiveSession().contentUrlResolver()
@@ -111,23 +115,21 @@ class VectorGlideDataFetcher(private val activeSessionHolder: ActiveSessionHolde
             callback.onLoadFailed(IllegalArgumentException("No File service"))
         }
         // Use the file vector service, will avoid flickering and redownload after upload
-        fileService.downloadFile(
-                downloadMode = FileService.DownloadMode.FOR_INTERNAL_USE,
-                mimeType = data.mimeType,
-                id = data.eventId,
-                url = data.url,
-                fileName = data.filename,
-                elementToDecrypt = data.elementToDecrypt,
-                callback = object: MatrixCallback<File> {
-                    override fun onSuccess(data: File) {
-                        callback.onDataReady(data.inputStream())
-                    }
-
-                    override fun onFailure(failure: Throwable) {
-                        callback.onLoadFailed(failure as? Exception ?: IOException(failure.localizedMessage))
-                    }
-                }
-        )
+        activeSessionHolder.getSafeActiveSession()?.coroutineScope?.launch {
+            val result = runCatching {
+                fileService.downloadFile(
+                        fileName = data.filename,
+                        mimeType = data.mimeType,
+                        url = data.url,
+                        elementToDecrypt = data.elementToDecrypt)
+            }
+            withContext(Dispatchers.Main) {
+                result.fold(
+                        { callback.onDataReady(it.inputStream()) },
+                        { callback.onLoadFailed(it as? Exception ?: IOException(it.localizedMessage)) }
+                )
+            }
+        }
 //        val url = contentUrlResolver.resolveFullSize(data.url)
 //                ?: return
 //

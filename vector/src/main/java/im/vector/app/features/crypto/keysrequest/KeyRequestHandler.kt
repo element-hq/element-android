@@ -1,7 +1,4 @@
 /*
- * Copyright 2016 OpenMarket Ltd
- * Copyright 2017 Vector Creations Ltd
- * Copyright 2018 New Vector Ltd
  * Copyright 2019 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -76,7 +73,7 @@ class KeyRequestHandler @Inject constructor(
     }
 
     override fun onSecretShareRequest(request: IncomingSecretShareRequest): Boolean {
-        // By default riotX will not prompt if the SDK has decided that the request should not be fulfilled
+        // By default Element will not prompt if the SDK has decided that the request should not be fulfilled
         Timber.v("## onSecretShareRequest() : Ignoring $request")
         request.ignore?.run()
         return true
@@ -126,7 +123,7 @@ class KeyRequestHandler @Inject constructor(
                     // can we get more info on this device?
                     session?.cryptoService()?.getMyDevicesInfo()?.firstOrNull { it.deviceId == deviceId }?.let {
                         postAlert(context, userId, deviceId, true, deviceInfo, it)
-                    } ?: kotlin.run {
+                    } ?: run {
                         postAlert(context, userId, deviceId, true, deviceInfo)
                     }
                 } else {
@@ -186,11 +183,11 @@ class KeyRequestHandler @Inject constructor(
             denyAllRequests(mappingKey)
         }
 
-        alert.addButton(context.getString(R.string.share_without_verifying_short_label), Runnable {
+        alert.addButton(context.getString(R.string.share_without_verifying_short_label), {
             shareAllSessions(mappingKey)
         })
 
-        alert.addButton(context.getString(R.string.ignore_request_short_label), Runnable {
+        alert.addButton(context.getString(R.string.ignore_request_short_label), {
             denyAllRequests(mappingKey)
         })
 

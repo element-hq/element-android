@@ -1,5 +1,4 @@
 /*
- * Copyright 2020 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,11 +18,10 @@
 package org.matrix.android.sdk.internal.raw
 
 import okhttp3.ResponseBody
-import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Url
 
 internal interface RawAPI {
     @GET
-    fun getUrl(@Url url: String): Call<ResponseBody>
+    suspend fun getUrl(@Url url: String): ResponseBody
 }

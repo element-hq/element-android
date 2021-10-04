@@ -1,5 +1,4 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,8 +16,7 @@
 
 package org.matrix.android.sdk.api.session.account
 
-import org.matrix.android.sdk.api.MatrixCallback
-import org.matrix.android.sdk.api.util.Cancelable
+import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 
 /**
  * This interface defines methods to manage the account. It's implemented at the session level.
@@ -29,7 +27,8 @@ interface AccountService {
      * @param password Current password.
      * @param newPassword New password
      */
-    fun changePassword(password: String, newPassword: String, callback: MatrixCallback<Unit>): Cancelable
+    suspend fun changePassword(password: String,
+                               newPassword: String)
 
     /**
      * Deactivate the account.
@@ -43,9 +42,10 @@ interface AccountService {
      * be shared with any new or unregistered users, but registered users who already have access to these messages will still
      * have access to their copy.
      *
-     * @param password the account password
      * @param eraseAllData set to true to forget all messages that have been sent. Warning: this will cause future users to see
      * an incomplete view of conversations
+     * @param userInteractiveAuthInterceptor see [UserInteractiveAuthInterceptor]
      */
-    fun deactivateAccount(password: String, eraseAllData: Boolean, callback: MatrixCallback<Unit>): Cancelable
+    suspend fun deactivateAccount(eraseAllData: Boolean,
+                                  userInteractiveAuthInterceptor: UserInteractiveAuthInterceptor)
 }

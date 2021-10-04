@@ -1,0 +1,40 @@
+Element egy biztonságos üzenetküldő és csapatmunka támogató alkalmazás ami ideális távoli munkavégzés közben csoportos csevegéshez. Az alkalmazás végpontok közötti titkosítást használ videó konferenciához, fájl megosztáshoz és videó hivásokhoz.
+
+<b>Element tulajdonságai:</b>
+- Fejlett online kommunikációs eszköz
+- Teljesen titkosított üzenetküldés biztonságos céges kommunikációt kínál még a távdolgozóknak is
+- Elosztott csevegés a Matrix nyílt forráskódú keretrendszer felhasználásával
+- Bizontságos fájl megosztás titkosítottan projektek kezeléséhez
+- Videó hívás VoIP-pal és képernyőmegosztással
+- Könnyen integrálható a kedvenc online kollaborációs eszközöddel, projekt menedzsment eszközzel, VoIP szolgáltatással vagy más csoport üzenetküldő alkalmazással
+
+Element teljesen más mint a többi üzenetküldő alkalmazás. Matrixot használ, egy nyílt hálózatot a decentralizált biztonságos kommunikációhoz. Lehetőséget ad saját szerver üzemeltetésére ami maximális tulajdont és kontrollt biztosít az adatok fölött.
+
+<b>Magánélet védelme és titkosított üzenetküldés</b>
+Element megóv a kéretlen hirdetésektől, adatbányászattól és a különböző szigetszerű megoldásoktól. Minden adatot biztonságba helyez, egy az egybe videó és hang kommunikáció végpontok között titkosítva ahol az eszközök hitelesítve vannak.
+
+Element a kezedbe adja az adatvédelmi irányítást miközben bárkivel kommunikálhatsz a Matrix hálózatban vagy más üzleti kollaborációs eszközzel ami integrálva van, mint amilyen a Slack.
+
+<b>Element futtatható saját szerveren</b>
+
+Azért, hogy az érzékeny adatok és beszélgetések minnél inkább az irányításod alatt lehessen az Elementet saját magadnak üzemeltetheted vagy választhatsz bármely Matrixon alapuló - szabványos nyílt forráskódú és decentralizált kommunikáció - szoláltató közül. Element adatvédelmet, biztonságot és rugalmas integrációkat biztosít.
+
+<b>A te adatod a tiéd</b>
+Te döntöd el, hogy hol tárolod az adataidat és üzeneteidet. Adatbányászat vagy harmadik fél hozzáférésének kockázata nélkül.
+
+Element többféle képpen adja vissza az irányítást:
+1. Szerezz egy ingyenes hozzáférést a matrix.org nyilvános szerverre amit a Matrix fejlesztők üzemeltetnek vagy válassz a több ezer önkéntesek által üzemeltetett nyilvános szerverből 
+2. Üzemeltess szerver magadnak a saját infrastruktúrádon
+3. Iratkozz fel egy egyedi szerverre az Element Matrix Services platformon
+
+<b>Nyílt üzenetküldés és kollaboráció</b>
+Bárkivel beszélgethetsz a Matrix hálózaton, akár az Elementet használja akár egy másik Matrix alkalmazást használ vagy akár egy eltérő üzenetküldőt. 
+
+<b>Fantasztikusan biztonságos</b>
+Igazi végpontok között titkosítás (csak a beszélgetésben résztvevők tudják visszafejteni) és hitelesítés eszközök közötti aláírásokkal.
+
+<b>Teljes kommunikáció és integráció</b>
+Üzenetküldés, hang és videóhívás, fájl megosztás, képernyő megosztás és egy csomó integráció, botok és kisalkalmazások. Építs szobákat, közösségeket, maradj kapcsolatban és végezz el dolgokat.
+
+<b>Vedd fel a fonalat</b>
+Maradj kapcsolatban bárhol minden eszközödön a szinkronizált üzenetekkel és a weben a https://app.element.io oldallal

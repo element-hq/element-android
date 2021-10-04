@@ -24,26 +24,35 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.Person
 import androidx.core.content.getSystemService
-import butterknife.OnClick
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.ScreenComponent
+import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
-import im.vector.app.core.utils.PERMISSION_REQUEST_CODE_LAUNCH_CAMERA
-import im.vector.app.core.utils.allGranted
 import im.vector.app.core.utils.checkPermissions
+import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.core.utils.toast
+import im.vector.app.databinding.ActivityDebugMenuBinding
 import im.vector.app.features.debug.sas.DebugSasEmojiActivity
 import im.vector.app.features.qrcode.QrCodeScannerActivity
+import im.vector.lib.ui.styles.debug.DebugMaterialThemeDarkDefaultActivity
+import im.vector.lib.ui.styles.debug.DebugMaterialThemeDarkTestActivity
+import im.vector.lib.ui.styles.debug.DebugMaterialThemeDarkVectorActivity
+import im.vector.lib.ui.styles.debug.DebugMaterialThemeLightDefaultActivity
+import im.vector.lib.ui.styles.debug.DebugMaterialThemeLightTestActivity
+import im.vector.lib.ui.styles.debug.DebugMaterialThemeLightVectorActivity
+import im.vector.lib.ui.styles.debug.DebugVectorButtonStylesDarkActivity
+import im.vector.lib.ui.styles.debug.DebugVectorButtonStylesLightActivity
+import im.vector.lib.ui.styles.debug.DebugVectorTextViewDarkActivity
+import im.vector.lib.ui.styles.debug.DebugVectorTextViewLightActivity
 import org.matrix.android.sdk.internal.crypto.verification.qrcode.toQrCodeData
-import kotlinx.android.synthetic.debug.activity_debug_menu.*
 import timber.log.Timber
 import javax.inject.Inject
 
-class DebugMenuActivity : VectorBaseActivity() {
+class DebugMenuActivity : VectorBaseActivity<ActivityDebugMenuBinding>() {
 
-    override fun getLayoutRes() = R.layout.activity_debug_menu
+    override fun getBinding() = ActivityDebugMenuBinding.inflate(layoutInflater)
 
     @Inject
     lateinit var activeSessionHolder: ActiveSessionHolder
@@ -65,24 +74,63 @@ class DebugMenuActivity : VectorBaseActivity() {
         val string = buffer.toString(Charsets.ISO_8859_1)
 
         renderQrCode(string)
+        setupViews()
+    }
+
+    private fun setupViews() {
+        views.debugTestTextViewLink.setOnClickListener { testTextViewLink() }
+        views.debugOpenButtonStylesLight.setOnClickListener {
+            startActivity(Intent(this, DebugVectorButtonStylesLightActivity::class.java))
+        }
+        views.debugOpenButtonStylesDark.setOnClickListener {
+            startActivity(Intent(this, DebugVectorButtonStylesDarkActivity::class.java))
+        }
+        views.debugTestTextViewLight.setOnClickListener {
+            startActivity(Intent(this, DebugVectorTextViewLightActivity::class.java))
+        }
+        views.debugTestTextViewDark.setOnClickListener {
+            startActivity(Intent(this, DebugVectorTextViewDarkActivity::class.java))
+        }
+        views.debugShowSasEmoji.setOnClickListener { showSasEmoji() }
+        views.debugTestNotification.setOnClickListener { testNotification() }
+        views.debugTestMaterialThemeLightDefault.setOnClickListener {
+            startActivity(Intent(this, DebugMaterialThemeLightDefaultActivity::class.java))
+        }
+        views.debugTestMaterialThemeLightTest.setOnClickListener {
+            startActivity(Intent(this, DebugMaterialThemeLightTestActivity::class.java))
+        }
+        views.debugTestMaterialThemeLightVector.setOnClickListener {
+            startActivity(Intent(this, DebugMaterialThemeLightVectorActivity::class.java))
+        }
+        views.debugTestMaterialThemeDarkDefault.setOnClickListener {
+            startActivity(Intent(this, DebugMaterialThemeDarkDefaultActivity::class.java))
+        }
+        views.debugTestMaterialThemeDarkTest.setOnClickListener {
+            startActivity(Intent(this, DebugMaterialThemeDarkTestActivity::class.java))
+        }
+        views.debugTestMaterialThemeDarkVector.setOnClickListener {
+            startActivity(Intent(this, DebugMaterialThemeDarkVectorActivity::class.java))
+        }
+        views.debugTestCrash.setOnClickListener { testCrash() }
+        views.debugScanQrCode.setOnClickListener { scanQRCode() }
+        views.debugPermission.setOnClickListener {
+            startActivity(Intent(this, DebugPermissionActivity::class.java))
+        }
     }
 
     private fun renderQrCode(text: String) {
-        debug_qr_code.setData(text)
+        views.debugQrCode.setData(text)
     }
 
-    @OnClick(R.id.debug_test_text_view_link)
-    fun testTextViewLink() {
+    private fun testTextViewLink() {
         startActivity(Intent(this, TestLinkifyActivity::class.java))
     }
 
-    @OnClick(R.id.debug_show_sas_emoji)
-    fun showSasEmoji() {
+    private fun showSasEmoji() {
         startActivity(Intent(this, DebugSasEmojiActivity::class.java))
     }
 
-    @OnClick(R.id.debug_test_notification)
-    fun testNotification() {
+    private fun testNotification() {
         val notificationManager = getSystemService<NotificationManager>()!!
 
         // Create channel first
@@ -165,64 +213,46 @@ class DebugMenuActivity : VectorBaseActivity() {
         )
     }
 
-    @OnClick(R.id.debug_test_material_theme_light)
-    fun testMaterialThemeLight() {
-        startActivity(Intent(this, DebugMaterialThemeLightActivity::class.java))
-    }
-
-    @OnClick(R.id.debug_test_material_theme_dark)
-    fun testMaterialThemeDark() {
-        startActivity(Intent(this, DebugMaterialThemeDarkActivity::class.java))
-    }
-
-    @OnClick(R.id.debug_test_crash)
-    fun testCrash() {
+    private fun testCrash() {
         throw RuntimeException("Application crashed from user demand")
     }
 
-    @OnClick(R.id.debug_scan_qr_code)
-    fun scanQRCode() {
-        if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, this, PERMISSION_REQUEST_CODE_LAUNCH_CAMERA)) {
+    private fun scanQRCode() {
+        if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, this, permissionCameraLauncher)) {
             doScanQRCode()
         }
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
-        if (requestCode == PERMISSION_REQUEST_CODE_LAUNCH_CAMERA && allGranted(grantResults)) {
+    private val permissionCameraLauncher = registerForPermissionsResult { allGranted, _ ->
+        if (allGranted) {
             doScanQRCode()
         }
     }
 
     private fun doScanQRCode() {
-        QrCodeScannerActivity.startForResult(this)
+        QrCodeScannerActivity.startForResult(this, qrStartForActivityResult)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK) {
-            when (requestCode) {
-                QrCodeScannerActivity.QR_CODE_SCANNER_REQUEST_CODE -> {
-                    toast("QrCode: " + QrCodeScannerActivity.getResultText(data) + " is QRCode: " + QrCodeScannerActivity.getResultIsQrCode(data))
+    private val qrStartForActivityResult = registerStartForActivityResult { activityResult ->
+        if (activityResult.resultCode == Activity.RESULT_OK) {
+            toast("QrCode: " + QrCodeScannerActivity.getResultText(activityResult.data)
+                    + " is QRCode: " + QrCodeScannerActivity.getResultIsQrCode(activityResult.data))
 
-                    // Also update the current QR Code (reverse operation)
-                    // renderQrCode(QrCodeScannerActivity.getResultText(data) ?: "")
-                    val result = QrCodeScannerActivity.getResultText(data)!!
+            // Also update the current QR Code (reverse operation)
+            // renderQrCode(QrCodeScannerActivity.getResultText(data) ?: "")
+            val result = QrCodeScannerActivity.getResultText(activityResult.data)!!
 
-                    val qrCodeData = result.toQrCodeData()
-                    Timber.e("qrCodeData: $qrCodeData")
+            val qrCodeData = result.toQrCodeData()
+            Timber.e("qrCodeData: $qrCodeData")
 
-                    if (result.length != buffer.size) {
-                        Timber.e("Error, length are not the same")
-                    } else {
-                        // Convert to ByteArray
-                        val byteArrayResult = result.toByteArray(Charsets.ISO_8859_1)
-                        for (i in byteArrayResult.indices) {
-                            if (buffer[i] != byteArrayResult[i]) {
-                                Timber.e("Error for byte $i, expecting ${buffer[i]} and get ${byteArrayResult[i]}")
-                            }
-                        }
+            if (result.length != buffer.size) {
+                Timber.e("Error, length are not the same")
+            } else {
+                // Convert to ByteArray
+                val byteArrayResult = result.toByteArray(Charsets.ISO_8859_1)
+                for (i in byteArrayResult.indices) {
+                    if (buffer[i] != byteArrayResult[i]) {
+                        Timber.e("Error for byte $i, expecting ${buffer[i]} and get ${byteArrayResult[i]}")
                     }
                 }
             }

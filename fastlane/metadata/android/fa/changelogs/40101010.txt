@@ -1,0 +1,2 @@
+تغییرات اصلی در این نگارش: بهبود عملکرد و رفع مشکل‌ها!
+گزارش تغییر کامل: https://github.com/vector-im/element-android/releases/tag/v1.1.1

@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,10 +20,11 @@ interface FilterService {
 
     enum class FilterPreset {
         NoFilter,
+
         /**
-         * Filter for Riot, will include only known event type
+         * Filter for Element, will include only known event type
          */
-        RiotFilter
+        ElementFilter
     }
 
     /**

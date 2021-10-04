@@ -1,0 +1,2 @@
+Canvis principals d'aquesta versió: inici de sessió amb xarxes socials.
+Registre de canvis complet: https://github.com/vector-im/element-android/releases/tag/v1.0.15

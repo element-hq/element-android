@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,7 +20,9 @@ import android.content.Context
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
+import io.realm.RealmConfiguration
 import org.matrix.android.sdk.api.auth.AuthenticationService
+import org.matrix.android.sdk.api.auth.HomeServerHistoryService
 import org.matrix.android.sdk.api.legacy.LegacySessionImporter
 import org.matrix.android.sdk.internal.auth.db.AuthRealmMigration
 import org.matrix.android.sdk.internal.auth.db.AuthRealmModule
@@ -33,7 +34,6 @@ import org.matrix.android.sdk.internal.database.RealmKeysUtils
 import org.matrix.android.sdk.internal.di.AuthDatabase
 import org.matrix.android.sdk.internal.legacy.DefaultLegacySessionImporter
 import org.matrix.android.sdk.internal.wellknown.WellknownModule
-import io.realm.RealmConfiguration
 import java.io.File
 
 @Module(includes = [WellknownModule::class])
@@ -81,4 +81,10 @@ internal abstract class AuthModule {
 
     @Binds
     abstract fun bindDirectLoginTask(task: DefaultDirectLoginTask): DirectLoginTask
+
+    @Binds
+    abstract fun bindIsValidClientServerApiTask(task: DefaultIsValidClientServerApiTask): IsValidClientServerApiTask
+
+    @Binds
+    abstract fun bindHomeServerHistoryService(service: DefaultHomeServerHistoryService): HomeServerHistoryService
 }

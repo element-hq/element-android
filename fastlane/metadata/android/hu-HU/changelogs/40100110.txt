@@ -1,0 +1,2 @@
+Ez az új verzió főleg a felhasználói felülettel és a felhasználói élménnyel kapcsolatos javításokat tartalmaz. Mostantól már sokkal gyorsabban hívhatsz meg új ismerősöket a QR kód beolvasás által.
+A változtatások teljes listája itt található: https://github.com/vector-im/element-android/releases/tag/v1.0.11

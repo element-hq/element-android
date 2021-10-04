@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -49,9 +48,15 @@ internal fun RoomSummaryEntity.Companion.getOrCreate(realm: Realm, roomId: Strin
     return where(realm, roomId).findFirst() ?: realm.createObject(roomId)
 }
 
-internal fun RoomSummaryEntity.Companion.getDirectRooms(realm: Realm): RealmResults<RoomSummaryEntity> {
+internal fun RoomSummaryEntity.Companion.getDirectRooms(realm: Realm,
+                                                        excludeRoomIds: Set<String>? = null): RealmResults<RoomSummaryEntity> {
     return RoomSummaryEntity.where(realm)
             .equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
+            .apply {
+                if (!excludeRoomIds.isNullOrEmpty()) {
+                    not().`in`(RoomSummaryEntityFields.ROOM_ID, excludeRoomIds.toTypedArray())
+                }
+            }
             .findAll()
 }
 

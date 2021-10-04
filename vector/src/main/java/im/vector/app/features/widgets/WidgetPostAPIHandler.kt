@@ -17,10 +17,17 @@
 package im.vector.app.features.widgets
 
 import android.text.TextUtils
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
+import dagger.assisted.AssistedFactory
+import im.vector.app.R
+import im.vector.app.core.resources.StringProvider
+import im.vector.app.features.session.coroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.accountdata.UserAccountDataTypes
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -31,9 +38,6 @@ import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.session.widgets.WidgetPostAPIMediator
 import org.matrix.android.sdk.api.util.JsonDict
-import org.matrix.android.sdk.api.session.accountdata.UserAccountDataTypes
-import im.vector.app.R
-import im.vector.app.core.resources.StringProvider
 import timber.log.Timber
 import java.util.ArrayList
 import java.util.HashMap
@@ -42,7 +46,7 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
                                                        private val stringProvider: StringProvider,
                                                        private val session: Session) : WidgetPostAPIMediator.Handler {
 
-    @AssistedInject.Factory
+    @AssistedFactory
     interface Factory {
         fun create(roomId: String): WidgetPostAPIHandler
     }
@@ -279,18 +283,20 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
                             "type" to "m.widget"
                     )
             )
-            session.updateAccountData(
-                    type = UserAccountDataTypes.TYPE_WIDGETS,
-                    content = addUserWidgetBody,
-                    callback = createWidgetAPICallback(widgetPostAPIMediator, eventData)
-            )
+            launchWidgetAPIAction(widgetPostAPIMediator, eventData) {
+                session.accountDataService().updateUserAccountData(
+                        type = UserAccountDataTypes.TYPE_WIDGETS,
+                        content = addUserWidgetBody
+                )
+            }
         } else {
-            session.widgetService().createRoomWidget(
-                    roomId = roomId,
-                    widgetId = widgetId,
-                    content = widgetEventContent,
-                    callback = createWidgetAPICallback(widgetPostAPIMediator, eventData)
-            )
+            launchWidgetAPIAction(widgetPostAPIMediator, eventData) {
+                session.widgetService().createRoomWidget(
+                        roomId = roomId,
+                        widgetId = widgetId,
+                        content = widgetEventContent
+                )
+            }
         }
     }
 
@@ -310,12 +316,13 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
 
         val params = HashMap<String, Any>()
         params["status"] = status
-        room.sendStateEvent(
-                eventType = EventType.PLUMBING,
-                stateKey = null,
-                body = params,
-                callback = createWidgetAPICallback(widgetPostAPIMediator, eventData)
-        )
+        launchWidgetAPIAction(widgetPostAPIMediator, eventData) {
+            room.sendStateEvent(
+                    eventType = EventType.PLUMBING,
+                    stateKey = null,
+                    body = params
+            )
+        }
     }
 
     /**
@@ -333,12 +340,14 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
         Timber.d(description)
         val content = eventData["content"] as JsonDict
         val stateKey = "_$userId"
-        room.sendStateEvent(
-                eventType = EventType.BOT_OPTIONS,
-                stateKey = stateKey,
-                body = content,
-                callback = createWidgetAPICallback(widgetPostAPIMediator, eventData)
-        )
+
+        launchWidgetAPIAction(widgetPostAPIMediator, eventData) {
+            room.sendStateEvent(
+                    eventType = EventType.BOT_OPTIONS,
+                    stateKey = stateKey,
+                    body = content
+            )
+        }
     }
 
     /**
@@ -379,7 +388,9 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
         if (member != null && member.membership == Membership.JOIN) {
             widgetPostAPIMediator.sendSuccess(eventData)
         } else {
-            room.invite(userId = userId, callback = createWidgetAPICallback(widgetPostAPIMediator, eventData))
+            launchWidgetAPIAction(widgetPostAPIMediator, eventData) {
+                room.invite(userId = userId)
+            }
         }
     }
 
@@ -453,7 +464,19 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
         return false
     }
 
-    private fun createWidgetAPICallback(widgetPostAPIMediator: WidgetPostAPIMediator, eventData: JsonDict): WidgetAPICallback {
-        return WidgetAPICallback(widgetPostAPIMediator, eventData, stringProvider)
+    private fun launchWidgetAPIAction(widgetPostAPIMediator: WidgetPostAPIMediator, eventData: JsonDict, block: suspend () -> Unit): Job {
+        // We should probably use a scope tight to the lifecycle here...
+        return session.coroutineScope.launch {
+            kotlin.runCatching {
+                block()
+            }.fold(
+                    onSuccess = {
+                        widgetPostAPIMediator.sendSuccess(eventData)
+                    },
+                    onFailure = {
+                        widgetPostAPIMediator.sendError(stringProvider.getString(R.string.widget_integration_failed_to_send_request), eventData)
+                    }
+            )
+        }
     }
 }

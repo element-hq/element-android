@@ -1,5 +1,4 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,6 +20,7 @@ import android.annotation.SuppressLint
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import org.matrix.android.sdk.api.util.JsonDict
+import org.matrix.android.sdk.internal.util.safeCapitalize
 
 /**
  * Ref: https://github.com/matrix-org/matrix-doc/issues/1236
@@ -40,6 +40,6 @@ data class WidgetContent(
 
     @SuppressLint("DefaultLocale")
     fun getHumanName(): String {
-        return (name ?: type ?: "").capitalize()
+        return (name ?: type ?: "").safeCapitalize()
     }
 }

@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,10 +16,10 @@
 
 package org.matrix.android.sdk.internal.session.room.reporting
 
+import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.room.RoomAPI
 import org.matrix.android.sdk.internal.task.Task
-import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
 internal interface ReportContentTask : Task<ReportContentTask.Params, Unit> {
@@ -34,12 +33,12 @@ internal interface ReportContentTask : Task<ReportContentTask.Params, Unit> {
 
 internal class DefaultReportContentTask @Inject constructor(
         private val roomAPI: RoomAPI,
-        private val eventBus: EventBus
+        private val globalErrorReceiver: GlobalErrorReceiver
 ) : ReportContentTask {
 
     override suspend fun execute(params: ReportContentTask.Params) {
-        return executeRequest(eventBus) {
-            apiCall = roomAPI.reportContent(params.roomId, params.eventId, ReportContentBody(params.score, params.reason))
+        return executeRequest(globalErrorReceiver) {
+            roomAPI.reportContent(params.roomId, params.eventId, ReportContentBody(params.score, params.reason))
         }
     }
 }

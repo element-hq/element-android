@@ -23,11 +23,14 @@ import android.widget.TextView
 import androidx.annotation.IdRes
 import androidx.core.view.isVisible
 import im.vector.app.R
-import im.vector.app.core.utils.DebouncedClickListener
+import im.vector.app.core.epoxy.ClickListener
+import im.vector.app.core.epoxy.onClick
+import im.vector.app.core.ui.views.ShieldImageView
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.MessageColorProvider
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.reactions.widget.ReactionButton
+import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.session.room.send.SendState
 
 /**
@@ -38,10 +41,6 @@ import org.matrix.android.sdk.api.session.room.send.SendState
 abstract class AbsBaseMessageItem<H : AbsBaseMessageItem.Holder> : BaseEventItem<H>() {
 
     abstract val baseAttributes: Attributes
-
-    private val _readReceiptsClickListener = DebouncedClickListener(View.OnClickListener {
-        baseAttributes.readReceiptsCallback?.onReadReceiptsClicked(baseAttributes.informationData.readReceipts)
-    })
 
     private var reactionClickListener: ReactionButton.ReactedListener = object : ReactionButton.ReactedListener {
         override fun onReacted(reactionButton: ReactionButton) {
@@ -67,12 +66,6 @@ abstract class AbsBaseMessageItem<H : AbsBaseMessageItem.Holder> : BaseEventItem
 
     override fun bind(holder: H) {
         super.bind(holder)
-        holder.readReceiptsView.render(
-                baseAttributes.informationData.readReceipts,
-                baseAttributes.avatarRenderer,
-                _readReceiptsClickListener
-        )
-
         val reactions = baseAttributes.informationData.orderedReactionList
         if (!shouldShowReactionAtBottom() || reactions.isNullOrEmpty()) {
             holder.reactionsContainer.isVisible = false
@@ -94,23 +87,21 @@ abstract class AbsBaseMessageItem<H : AbsBaseMessageItem.Holder> : BaseEventItem
 
         when (baseAttributes.informationData.e2eDecoration) {
             E2EDecoration.NONE                 -> {
-                holder.e2EDecorationView.isVisible = false
+                holder.e2EDecorationView.render(null)
             }
             E2EDecoration.WARN_IN_CLEAR,
             E2EDecoration.WARN_SENT_BY_UNVERIFIED,
             E2EDecoration.WARN_SENT_BY_UNKNOWN -> {
-                holder.e2EDecorationView.setImageResource(R.drawable.ic_shield_warning)
-                holder.e2EDecorationView.isVisible = true
+                holder.e2EDecorationView.render(RoomEncryptionTrustLevel.Warning)
             }
         }
 
-        holder.view.setOnClickListener(baseAttributes.itemClickListener)
+        holder.view.onClick(baseAttributes.itemClickListener)
         holder.view.setOnLongClickListener(baseAttributes.itemLongClickListener)
     }
 
     override fun unbind(holder: H) {
         holder.reactionsContainer.setOnLongClickListener(null)
-        holder.readReceiptsView.unbind(baseAttributes.avatarRenderer)
         super.unbind(holder)
     }
 
@@ -123,7 +114,7 @@ abstract class AbsBaseMessageItem<H : AbsBaseMessageItem.Holder> : BaseEventItem
 
     abstract class Holder(@IdRes stubId: Int) : BaseEventItem.BaseHolder(stubId) {
         val reactionsContainer by bind<ViewGroup>(R.id.reactionsContainer)
-        val e2EDecorationView by bind<ImageView>(R.id.messageE2EDecoration)
+        val e2EDecorationView by bind<ShieldImageView>(R.id.messageE2EDecoration)
     }
 
     /**
@@ -135,9 +126,11 @@ abstract class AbsBaseMessageItem<H : AbsBaseMessageItem.Holder> : BaseEventItem
         val avatarRenderer: AvatarRenderer
         val messageColorProvider: MessageColorProvider
         val itemLongClickListener: View.OnLongClickListener?
-        val itemClickListener: View.OnClickListener?
-        //        val memberClickListener: View.OnClickListener?
+        val itemClickListener: ClickListener?
+
+        //        val memberClickListener: ClickListener?
         val reactionPillCallback: TimelineEventController.ReactionPillCallback?
+
         //        val avatarCallback: TimelineEventController.AvatarCallback?
         val readReceiptsCallback: TimelineEventController.ReadReceiptsCallback?
 //        val emojiTypeFace: Typeface?
@@ -148,7 +141,7 @@ abstract class AbsBaseMessageItem<H : AbsBaseMessageItem.Holder> : BaseEventItem
 //            override val avatarRenderer: AvatarRenderer,
 //            override val colorProvider: ColorProvider,
 //            override val itemLongClickListener: View.OnLongClickListener? = null,
-//            override val itemClickListener: View.OnClickListener? = null,
+//            override val itemClickListener: ClickListener? = null,
 //            override val reactionPillCallback: TimelineEventController.ReactionPillCallback? = null,
 //            override val readReceiptsCallback: TimelineEventController.ReadReceiptsCallback? = null
 //    ) : Attributes

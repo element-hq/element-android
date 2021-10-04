@@ -21,7 +21,9 @@ import android.net.Uri
 import android.os.Parcelable
 import android.view.View
 import android.widget.ImageView
+import androidx.core.view.updateLayoutParams
 import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestListener
@@ -31,16 +33,16 @@ import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView.ORIENTATION
 import com.github.piasy.biv.view.BigImageView
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
+import im.vector.app.core.files.LocalFilesHelper
 import im.vector.app.core.glide.GlideApp
 import im.vector.app.core.glide.GlideRequest
 import im.vector.app.core.glide.GlideRequests
 import im.vector.app.core.ui.model.Size
 import im.vector.app.core.utils.DimensionConverter
-import im.vector.app.core.utils.isLocalFile
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.content.ContentUrlResolver
 import org.matrix.android.sdk.internal.crypto.attachments.ElementToDecrypt
-import org.matrix.android.sdk.api.extensions.tryOrNull
 import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
@@ -52,11 +54,13 @@ interface AttachmentData : Parcelable {
     val mimeType: String?
     val url: String?
     val elementToDecrypt: ElementToDecrypt?
+
     // If true will load non mxc url, be careful to set it only for attachments sent by you
     val allowNonMxcUrls: Boolean
 }
 
-class ImageContentRenderer @Inject constructor(private val activeSessionHolder: ActiveSessionHolder,
+class ImageContentRenderer @Inject constructor(private val localFilesHelper: LocalFilesHelper,
+                                               private val activeSessionHolder: ActiveSessionHolder,
                                                private val dimensionConverter: DimensionConverter) {
 
     @Parcelize
@@ -70,7 +74,6 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
             val maxHeight: Int,
             val width: Int?,
             val maxWidth: Int,
-            val isLocalFile: Boolean = url.isLocalFile(),
             // If true will load non mxc url, be careful to set it only for images sent by you
             override val allowNonMxcUrls: Boolean = false
     ) : AttachmentData
@@ -79,6 +82,19 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
         FULL_SIZE,
         THUMBNAIL,
         STICKER
+    }
+
+    /**
+     * For url preview
+     */
+    fun render(mxcUrl: String, imageView: ImageView): Boolean {
+        val contentUrlResolver = activeSessionHolder.getActiveSession().contentUrlResolver()
+        val imageUrl = contentUrlResolver.resolveFullSize(mxcUrl) ?: return false
+
+        GlideApp.with(imageView)
+                .load(imageUrl)
+                .into(imageView)
+        return true
     }
 
     /**
@@ -95,15 +111,17 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
 
     fun render(data: Data, mode: Mode, imageView: ImageView) {
         val size = processSize(data, mode)
-        imageView.layoutParams.width = size.width
-        imageView.layoutParams.height = size.height
+        imageView.updateLayoutParams {
+            width = size.width
+            height = size.height
+        }
         // a11y
         imageView.contentDescription = data.filename
 
         createGlideRequest(data, mode, imageView, size)
                 .dontAnimate()
                 .transform(RoundedCorners(dimensionConverter.dpToPx(8)))
-                .thumbnail(0.3f)
+                // .thumbnail(0.3f)
                 .into(imageView)
     }
 
@@ -116,12 +134,16 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
         }
     }
 
+    /**
+     * Used by Attachment Viewer
+     */
     fun render(data: Data, contextView: View, target: CustomViewTarget<*, Drawable>) {
         val req = if (data.elementToDecrypt != null) {
             // Encrypted image
             GlideApp
                     .with(contextView)
                     .load(data)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
         } else {
             // Clear image
             val resolvedUrl = resolveUrl(data)
@@ -176,6 +198,7 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
             GlideApp
                     .with(imageView)
                     .load(data)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
         } else {
             // Clear image
             val resolvedUrl = resolveUrl(data)
@@ -207,14 +230,16 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
                 .into(imageView)
     }
 
-    fun createGlideRequest(data: Data, mode: Mode, imageView: ImageView, size: Size): GlideRequest<Drawable> {
+    private fun createGlideRequest(data: Data, mode: Mode, imageView: ImageView, size: Size): GlideRequest<Drawable> {
         return createGlideRequest(data, mode, GlideApp.with(imageView), size)
     }
 
     fun createGlideRequest(data: Data, mode: Mode, glideRequests: GlideRequests, size: Size = processSize(data, mode)): GlideRequest<Drawable> {
         return if (data.elementToDecrypt != null) {
             // Encrypted image
-            glideRequests.load(data)
+            glideRequests
+                    .load(data)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
         } else {
             // Clear image
             val contentUrlResolver = activeSessionHolder.getActiveSession().contentUrlResolver()
@@ -226,12 +251,12 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
             // Fallback to base url
                     ?: data.url.takeIf { it?.startsWith("content://") == true }
 
-           glideRequests
+            glideRequests
                     .load(resolvedUrl)
                     .apply {
                         if (mode == Mode.THUMBNAIL) {
                             error(
-                                   glideRequests.load(resolveUrl(data))
+                                    glideRequests.load(resolveUrl(data))
                             )
                         }
                     }
@@ -266,7 +291,7 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
 
     private fun resolveUrl(data: Data) =
             (activeSessionHolder.getActiveSession().contentUrlResolver().resolveFullSize(data.url)
-                    ?: data.url?.takeIf { data.isLocalFile && data.allowNonMxcUrls })
+                    ?: data.url?.takeIf { localFilesHelper.isLocalFile(data.url) && data.allowNonMxcUrls })
 
     private fun processSize(data: Data, mode: Mode): Size {
         val maxImageWidth = data.maxWidth

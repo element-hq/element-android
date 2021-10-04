@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -37,7 +36,7 @@ internal class UserAgentHolder @Inject constructor(private val context: Context,
 
     /**
      * Create an user agent with the application version.
-     * Ex: RiotX/1.0.0 (Linux; U; Android 6.0.1; SM-A510F Build/MMB29; Flavour GPlay; MatrixAndroidSDK_X 1.0)
+     * Ex: Element/1.0.0 (Linux; U; Android 6.0.1; SM-A510F Build/MMB29; Flavour GPlay; MatrixAndroidSdk2 1.0)
      *
      * @param flavorDescription the flavor description
      */
@@ -75,13 +74,13 @@ internal class UserAgentHolder @Inject constructor(private val context: Context,
         // if there is no user agent or cannot parse it
         if (null == systemUserAgent || systemUserAgent.lastIndexOf(")") == -1 || !systemUserAgent.contains("(")) {
             userAgent = (appName + "/" + appVersion + " ( Flavour " + flavorDescription
-                    + "; MatrixAndroidSDK_X " + BuildConfig.VERSION_NAME + ")")
+                    + "; MatrixAndroidSdk2 " + BuildConfig.SDK_VERSION + ")")
         } else {
             // update
             userAgent = appName + "/" + appVersion + " " +
                     systemUserAgent.substring(systemUserAgent.indexOf("("), systemUserAgent.lastIndexOf(")") - 1) +
                     "; Flavour " + flavorDescription +
-                    "; MatrixAndroidSDK_X " + BuildConfig.VERSION_NAME + ")"
+                    "; MatrixAndroidSdk2 " + BuildConfig.SDK_VERSION + ")"
         }
     }
 }

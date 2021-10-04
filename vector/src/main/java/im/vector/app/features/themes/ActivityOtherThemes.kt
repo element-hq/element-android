@@ -24,24 +24,25 @@ import im.vector.app.R
  * Note that style for light theme is default and is declared in the Android Manifest
  */
 sealed class ActivityOtherThemes(@StyleRes val dark: Int,
-                                 @StyleRes val black: Int,
-                                 @StyleRes val status: Int) {
+                                 @StyleRes val black: Int) {
 
     object Default : ActivityOtherThemes(
-            R.style.AppTheme_Dark,
-            R.style.AppTheme_Black,
-            R.style.AppTheme_Status
+            R.style.Theme_Vector_Dark,
+            R.style.Theme_Vector_Black
+    )
+
+    object Launcher : ActivityOtherThemes(
+            R.style.Theme_Vector_Launcher,
+            R.style.Theme_Vector_Launcher
     )
 
     object AttachmentsPreview : ActivityOtherThemes(
-            R.style.AppTheme_AttachmentsPreview,
-            R.style.AppTheme_AttachmentsPreview,
-            R.style.AppTheme_AttachmentsPreview
+            R.style.Theme_Vector_Black_AttachmentsPreview,
+            R.style.Theme_Vector_Black_AttachmentsPreview
     )
 
     object VectorAttachmentsPreview : ActivityOtherThemes(
-            R.style.AppTheme_Transparent,
-            R.style.AppTheme_Transparent,
-            R.style.AppTheme_Transparent
+            R.style.Theme_Vector_Black_Transparent,
+            R.style.Theme_Vector_Black_Transparent
     )
 }

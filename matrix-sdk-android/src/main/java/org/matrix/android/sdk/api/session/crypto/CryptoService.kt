@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,7 +18,9 @@ package org.matrix.android.sdk.api.session.crypto
 
 import android.content.Context
 import androidx.lifecycle.LiveData
+import androidx.paging.PagedList
 import org.matrix.android.sdk.api.MatrixCallback
+import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.listeners.ProgressListener
 import org.matrix.android.sdk.api.session.crypto.crosssigning.CrossSigningService
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupService
@@ -52,9 +53,7 @@ interface CryptoService {
 
     fun setDeviceName(deviceId: String, deviceName: String, callback: MatrixCallback<Unit>)
 
-    fun deleteDevice(deviceId: String, callback: MatrixCallback<Unit>)
-
-    fun deleteDeviceWithUserPassword(deviceId: String, authSession: String?, password: String, callback: MatrixCallback<Unit>)
+    fun deleteDevice(deviceId: String, userInteractiveAuthInterceptor: UserInteractiveAuthInterceptor, callback: MatrixCallback<Unit>)
 
     fun getCryptoVersion(context: Context, longFormat: Boolean): String
 
@@ -82,9 +81,11 @@ interface CryptoService {
 
     fun getDeviceTrackingStatus(userId: String): Int
 
-    fun importRoomKeys(roomKeysAsArray: ByteArray, password: String, progressListener: ProgressListener?, callback: MatrixCallback<ImportRoomKeysResult>)
+    suspend fun importRoomKeys(roomKeysAsArray: ByteArray,
+                               password: String,
+                               progressListener: ProgressListener?): ImportRoomKeysResult
 
-    fun exportRoomKeys(password: String, callback: MatrixCallback<ByteArray>)
+    suspend fun exportRoomKeys(password: String): ByteArray
 
     fun setRoomBlacklistUnverifiedDevices(roomId: String)
 
@@ -102,9 +103,9 @@ interface CryptoService {
 
     fun fetchDevicesList(callback: MatrixCallback<DevicesListResponse>)
 
-    fun getMyDevicesInfo() : List<DeviceInfo>
+    fun getMyDevicesInfo(): List<DeviceInfo>
 
-    fun getLiveMyDevicesInfo() : LiveData<List<DeviceInfo>>
+    fun getLiveMyDevicesInfo(): LiveData<List<DeviceInfo>>
 
     fun getDeviceInfo(deviceId: String, callback: MatrixCallback<DeviceInfo>)
 
@@ -143,12 +144,23 @@ interface CryptoService {
     fun removeSessionListener(listener: NewSessionListener)
 
     fun getOutgoingRoomKeyRequests(): List<OutgoingRoomKeyRequest>
+    fun getOutgoingRoomKeyRequestsPaged(): LiveData<PagedList<OutgoingRoomKeyRequest>>
 
     fun getIncomingRoomKeyRequests(): List<IncomingRoomKeyRequest>
+    fun getIncomingRoomKeyRequestsPaged(): LiveData<PagedList<IncomingRoomKeyRequest>>
 
-    fun getGossipingEventsTrail(): List<Event>
+    fun getGossipingEventsTrail(): LiveData<PagedList<Event>>
+    fun getGossipingEvents(): List<Event>
 
     // For testing shared session
-    fun getSharedWithInfo(roomId: String?, sessionId: String) : MXUsersDevicesMap<Int>
-    fun getWithHeldMegolmSession(roomId: String, sessionId: String) : RoomKeyWithHeldContent?
+    fun getSharedWithInfo(roomId: String?, sessionId: String): MXUsersDevicesMap<Int>
+    fun getWithHeldMegolmSession(roomId: String, sessionId: String): RoomKeyWithHeldContent?
+
+    fun logDbUsageInfo()
+
+    /**
+     * Perform any background tasks that can be done before a message is ready to
+     * send, in order to speed up sending of the message.
+     */
+    fun prepareToEncrypt(roomId: String, callback: MatrixCallback<Unit>)
 }

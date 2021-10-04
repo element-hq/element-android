@@ -19,19 +19,18 @@ package im.vector.app.features.attachments.preview
 
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.widget.Toolbar
+import com.google.android.material.appbar.MaterialToolbar
 import im.vector.app.R
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
+import im.vector.app.databinding.ActivitySimpleBinding
 import im.vector.app.features.themes.ActivityOtherThemes
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 
-class AttachmentsPreviewActivity : VectorBaseActivity(), ToolbarConfigurable {
+class AttachmentsPreviewActivity : VectorBaseActivity<ActivitySimpleBinding>(), ToolbarConfigurable {
 
     companion object {
-        const val REQUEST_CODE = 55
-
         private const val EXTRA_FRAGMENT_ARGS = "EXTRA_FRAGMENT_ARGS"
         private const val ATTACHMENTS_PREVIEW_RESULT = "ATTACHMENTS_PREVIEW_RESULT"
         private const val KEEP_ORIGINAL_IMAGES_SIZE = "KEEP_ORIGINAL_IMAGES_SIZE"
@@ -53,7 +52,9 @@ class AttachmentsPreviewActivity : VectorBaseActivity(), ToolbarConfigurable {
 
     override fun getOtherThemes() = ActivityOtherThemes.AttachmentsPreview
 
-    override fun getLayoutRes() = R.layout.activity_simple
+    override fun getBinding() = ActivitySimpleBinding.inflate(layoutInflater)
+
+    override fun getCoordinatorLayout() = views.coordinatorLayout
 
     override fun initUiAndData() {
         if (isFirstCreation()) {
@@ -71,7 +72,7 @@ class AttachmentsPreviewActivity : VectorBaseActivity(), ToolbarConfigurable {
         finish()
     }
 
-    override fun configure(toolbar: Toolbar) {
+    override fun configure(toolbar: MaterialToolbar) {
         configureToolbar(toolbar)
     }
 }

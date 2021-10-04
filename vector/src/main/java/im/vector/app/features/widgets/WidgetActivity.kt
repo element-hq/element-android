@@ -19,25 +19,29 @@ package im.vector.app.features.widgets
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.widget.Toolbar
+import com.google.android.material.appbar.MaterialToolbar
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.viewModel
-import org.matrix.android.sdk.api.session.events.model.Content
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
+import im.vector.app.databinding.ActivityWidgetBinding
 import im.vector.app.features.widgets.permissions.RoomWidgetPermissionBottomSheet
 import im.vector.app.features.widgets.permissions.RoomWidgetPermissionViewEvents
 import im.vector.app.features.widgets.permissions.RoomWidgetPermissionViewModel
 import im.vector.app.features.widgets.permissions.RoomWidgetPermissionViewState
-import kotlinx.android.synthetic.main.activity_widget.*
+
+import org.matrix.android.sdk.api.session.events.model.Content
 import java.io.Serializable
 import javax.inject.Inject
 
-class WidgetActivity : VectorBaseActivity(), ToolbarConfigurable, WidgetViewModel.Factory, RoomWidgetPermissionViewModel.Factory {
+class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>(),
+        ToolbarConfigurable,
+        WidgetViewModel.Factory,
+        RoomWidgetPermissionViewModel.Factory {
 
     companion object {
 
@@ -69,7 +73,7 @@ class WidgetActivity : VectorBaseActivity(), ToolbarConfigurable, WidgetViewMode
     private val viewModel: WidgetViewModel by viewModel()
     private val permissionViewModel: RoomWidgetPermissionViewModel by viewModel()
 
-    override fun getLayoutRes() = R.layout.activity_widget
+    override fun getBinding() = ActivityWidgetBinding.inflate(layoutInflater)
 
     override fun getMenuRes() = R.menu.menu_widget
 
@@ -85,8 +89,8 @@ class WidgetActivity : VectorBaseActivity(), ToolbarConfigurable, WidgetViewMode
             finish()
             return
         }
-        configure(toolbar)
-        toolbar.isVisible = widgetArgs.kind.nameRes != 0
+        configure(views.toolbar)
+        views.toolbar.isVisible = widgetArgs.kind.nameRes != 0
         viewModel.observeViewEvents {
             when (it) {
                 is WidgetViewEvents.Close -> handleClose(it)
@@ -146,7 +150,7 @@ class WidgetActivity : VectorBaseActivity(), ToolbarConfigurable, WidgetViewMode
         finish()
     }
 
-    override fun configure(toolbar: Toolbar) {
+    override fun configure(toolbar: MaterialToolbar) {
         configureToolbar(toolbar)
     }
 }

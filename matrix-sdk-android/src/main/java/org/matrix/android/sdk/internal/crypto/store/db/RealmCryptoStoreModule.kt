@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -34,6 +33,7 @@ import org.matrix.android.sdk.internal.crypto.store.db.model.TrustLevelEntity
 import org.matrix.android.sdk.internal.crypto.store.db.model.UserEntity
 import org.matrix.android.sdk.internal.crypto.store.db.model.WithHeldSessionEntity
 import io.realm.annotations.RealmModule
+import org.matrix.android.sdk.internal.crypto.store.db.model.OutboundGroupSessionInfoEntity
 
 /**
  * Realm module for Crypto store classes
@@ -55,6 +55,7 @@ import io.realm.annotations.RealmModule
             OutgoingGossipingRequestEntity::class,
             MyDeviceLastSeenInfoEntity::class,
             WithHeldSessionEntity::class,
-            SharedSessionEntity::class
+            SharedSessionEntity::class,
+            OutboundGroupSessionInfoEntity::class
         ])
 internal class RealmCryptoStoreModule

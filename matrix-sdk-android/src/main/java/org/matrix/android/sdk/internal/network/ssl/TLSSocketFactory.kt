@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -113,9 +112,5 @@ constructor(trustPinned: Array<TrustManager>, acceptedTlsVersions: List<TlsVersi
             }
         }
         return socket
-    }
-
-    companion object {
-        private val LOG_TAG = TLSSocketFactory::class.java.simpleName
     }
 }

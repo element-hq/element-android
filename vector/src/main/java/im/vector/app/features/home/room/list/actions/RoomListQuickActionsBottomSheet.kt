@@ -18,17 +18,27 @@ package im.vector.app.features.home.room.list.actions
 
 import android.os.Bundle
 import android.os.Parcelable
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
+import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
+import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
+import im.vector.app.databinding.BottomSheetGenericListBinding
 import im.vector.app.features.navigation.Navigator
-import kotlinx.android.parcel.Parcelize
+import im.vector.app.features.roomprofile.notifications.RoomNotificationSettingsAction
+import im.vector.app.features.roomprofile.notifications.RoomNotificationSettingsViewEvents
+import im.vector.app.features.roomprofile.notifications.RoomNotificationSettingsViewModel
+import kotlinx.parcelize.Parcelize
+import org.matrix.android.sdk.api.session.room.notification.RoomNotificationState
 import javax.inject.Inject
 
 @Parcelize
@@ -46,18 +56,19 @@ data class RoomListActionsArgs(
 /**
  * Bottom sheet fragment that shows room information with list of contextual actions
  */
-class RoomListQuickActionsBottomSheet : VectorBaseBottomSheetDialogFragment(), RoomListQuickActionsEpoxyController.Listener {
+class RoomListQuickActionsBottomSheet :
+        VectorBaseBottomSheetDialogFragment<BottomSheetGenericListBinding>(),
+        RoomListQuickActionsEpoxyController.Listener {
 
     private lateinit var sharedActionViewModel: RoomListQuickActionsSharedActionViewModel
     @Inject lateinit var sharedViewPool: RecyclerView.RecycledViewPool
-    @Inject lateinit var roomListActionsViewModelFactory: RoomListQuickActionsViewModel.Factory
+    @Inject lateinit var roomNotificationSettingsViewModelFactory: RoomNotificationSettingsViewModel.Factory
     @Inject lateinit var roomListActionsEpoxyController: RoomListQuickActionsEpoxyController
     @Inject lateinit var navigator: Navigator
+    @Inject lateinit var errorFormatter: ErrorFormatter
 
-    private val viewModel: RoomListQuickActionsViewModel by fragmentViewModel(RoomListQuickActionsViewModel::class)
-
-    @BindView(R.id.bottomSheetRecyclerView)
-    lateinit var recyclerView: RecyclerView
+    private val roomListActionsArgs: RoomListActionsArgs by args()
+    private val viewModel: RoomNotificationSettingsViewModel by fragmentViewModel(RoomNotificationSettingsViewModel::class)
 
     override val showExpanded = true
 
@@ -65,22 +76,40 @@ class RoomListQuickActionsBottomSheet : VectorBaseBottomSheetDialogFragment(), R
         injector.inject(this)
     }
 
-    override fun getLayoutResId() = R.layout.bottom_sheet_generic_list
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): BottomSheetGenericListBinding {
+        return BottomSheetGenericListBinding.inflate(inflater, container, false)
+    }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         sharedActionViewModel = activityViewModelProvider.get(RoomListQuickActionsSharedActionViewModel::class.java)
-        recyclerView.configureWith(roomListActionsEpoxyController, viewPool = sharedViewPool, hasFixedSize = false, disableItemAnimation = true)
+        views.bottomSheetRecyclerView.configureWith(
+                epoxyController = roomListActionsEpoxyController,
+                viewPool = sharedViewPool,
+                hasFixedSize = false,
+                disableItemAnimation = true
+        )
         roomListActionsEpoxyController.listener = this
+
+        viewModel.observeViewEvents {
+            when (it) {
+                is RoomNotificationSettingsViewEvents.Failure -> displayErrorDialog(it.throwable)
+            }
+        }
     }
 
     override fun onDestroyView() {
-        recyclerView.cleanup()
+        views.bottomSheetRecyclerView.cleanup()
+        roomListActionsEpoxyController.listener = null
         super.onDestroyView()
     }
 
     override fun invalidate() = withState(viewModel) {
-        roomListActionsEpoxyController.setData(it)
+        val roomListViewState = RoomListQuickActionViewState(
+                roomListActionsArgs,
+                it
+        )
+        roomListActionsEpoxyController.setData(roomListViewState)
         super.invalidate()
     }
 
@@ -88,9 +117,14 @@ class RoomListQuickActionsBottomSheet : VectorBaseBottomSheetDialogFragment(), R
         sharedActionViewModel.post(quickAction)
         // Do not dismiss for all the actions
         when (quickAction) {
-            is RoomListQuickActionsSharedAction.Favorite -> Unit
-            else                                         -> dismiss()
+            is RoomListQuickActionsSharedAction.LowPriority -> Unit
+            is RoomListQuickActionsSharedAction.Favorite    -> Unit
+            else                                            -> dismiss()
         }
+    }
+
+    override fun didSelectRoomNotificationState(roomNotificationState: RoomNotificationState) {
+        viewModel.handle(RoomNotificationSettingsAction.SelectNotificationState(roomNotificationState))
     }
 
     companion object {
@@ -99,5 +133,13 @@ class RoomListQuickActionsBottomSheet : VectorBaseBottomSheetDialogFragment(), R
                 setArguments(RoomListActionsArgs(roomId, mode))
             }
         }
+    }
+
+    private fun displayErrorDialog(throwable: Throwable) {
+        MaterialAlertDialogBuilder(requireActivity())
+                .setTitle(R.string.dialog_title_error)
+                .setMessage(errorFormatter.toHumanReadable(throwable))
+                .setPositiveButton(R.string.ok, null)
+                .show()
     }
 }

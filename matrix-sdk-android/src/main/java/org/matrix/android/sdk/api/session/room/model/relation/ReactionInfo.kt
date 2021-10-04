@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,7 +23,7 @@ import com.squareup.moshi.JsonClass
 data class ReactionInfo(
         @Json(name = "rel_type") override val type: String?,
         @Json(name = "event_id") override val eventId: String,
-        val key: String,
+        @Json(name = "key") val key: String,
         // always null for reaction
         @Json(name = "m.in_reply_to") override val inReplyTo: ReplyToContent? = null,
         @Json(name = "option") override val option: Int? = null

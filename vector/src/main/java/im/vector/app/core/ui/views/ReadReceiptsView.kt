@@ -23,10 +23,10 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.core.view.isVisible
 import im.vector.app.R
+import im.vector.app.databinding.ViewReadReceiptsBinding
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.item.ReadReceiptData
 import im.vector.app.features.home.room.detail.timeline.item.toMatrixItem
-import kotlinx.android.synthetic.main.view_read_receipts.view.*
 
 private const val MAX_RECEIPT_DISPLAYED = 5
 private const val MAX_RECEIPT_DESCRIBED = 3
@@ -37,20 +37,29 @@ class ReadReceiptsView @JvmOverloads constructor(
         defStyleAttr: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr) {
 
-    private val receiptAvatars: List<ImageView> by lazy {
-        listOf(receiptAvatar1, receiptAvatar2, receiptAvatar3, receiptAvatar4, receiptAvatar5)
-    }
+    private val views : ViewReadReceiptsBinding
 
     init {
         setupView()
+        views = ViewReadReceiptsBinding.bind(this)
+    }
+
+    private val receiptAvatars: List<ImageView> by lazy {
+        listOf(
+                views.receiptAvatar1,
+                views.receiptAvatar2,
+                views.receiptAvatar3,
+                views.receiptAvatar4,
+                views.receiptAvatar5
+        )
     }
 
     private fun setupView() {
         inflate(context, R.layout.view_read_receipts, this)
+        contentDescription = context.getString(R.string.a11y_view_read_receipts)
     }
 
-    fun render(readReceipts: List<ReadReceiptData>, avatarRenderer: AvatarRenderer, clickListener: OnClickListener) {
-        setOnClickListener(clickListener)
+    fun render(readReceipts: List<ReadReceiptData>, avatarRenderer: AvatarRenderer) {
         if (readReceipts.isNotEmpty()) {
             isVisible = true
             for (index in 0 until MAX_RECEIPT_DISPLAYED) {
@@ -69,12 +78,12 @@ class ReadReceiptsView @JvmOverloads constructor(
                     .take(MAX_RECEIPT_DESCRIBED)
 
             if (readReceipts.size > MAX_RECEIPT_DISPLAYED) {
-                receiptMore.visibility = View.VISIBLE
-                receiptMore.text = context.getString(
+                views.receiptMore.visibility = View.VISIBLE
+                views.receiptMore.text = context.getString(
                         R.string.x_plus, readReceipts.size - MAX_RECEIPT_DISPLAYED
                 )
             } else {
-                receiptMore.visibility = View.GONE
+                views.receiptMore.visibility = View.GONE
             }
             contentDescription = when (readReceipts.size) {
                 1    ->

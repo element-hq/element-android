@@ -1,5 +1,4 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,7 +25,6 @@ data class Widget(
         val widgetId: String,
         val senderInfo: SenderInfo?,
         val isAddedByMe: Boolean,
-        val computedUrl: String?,
         val type: WidgetType
 ) {
 

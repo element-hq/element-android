@@ -20,8 +20,8 @@ import android.content.Context
 import androidx.annotation.StringRes
 import androidx.core.text.HtmlCompat
 import im.vector.app.R
-import org.matrix.android.sdk.api.failure.MatrixError
 import me.gujun.android.span.span
+import org.matrix.android.sdk.api.failure.MatrixError
 
 class ResourceLimitErrorFormatter(private val context: Context) {
 

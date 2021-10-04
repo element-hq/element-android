@@ -4,43 +4,43 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?riotx_background"
+    android:background="?android:colorBackground"
     android:foreground="?attr/selectableItemBackground"
     android:minHeight="60dp"
     android:padding="8dp">
 
     <TextView
         android:id="@+id/contactDetailName"
+        style="@style/Widget.Vector.TextView.Subtitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_marginStart="60dp"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textColor="?riotx_text_primary"
-        android:textSize="15sp"
+        android:textColor="?vctr_content_primary"
         app:layout_constraintBottom_toTopOf="@id/contactDetailMatrixId"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed"
-        tools:text="@tools:sample/full_names" />
+        tools:text="@sample/users.json/data/displayName" />
 
     <TextView
         android:id="@+id/contactDetailMatrixId"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textColor="?riotx_text_secondary"
-        android:textSize="15sp"
+        android:textColor="?vctr_content_secondary"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/contactDetailName"
         app:layout_constraintTop_toBottomOf="@+id/contactDetailName"
-        tools:text="@sample/matrix.json/data/mxid"
+        tools:text="@sample/users.json/data/id"
         tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

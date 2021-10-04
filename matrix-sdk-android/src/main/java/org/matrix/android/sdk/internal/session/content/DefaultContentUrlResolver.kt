@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,7 +26,7 @@ private const val MATRIX_CONTENT_URI_SCHEME = "mxc://"
 
 internal class DefaultContentUrlResolver @Inject constructor(homeServerConnectionConfig: HomeServerConnectionConfig) : ContentUrlResolver {
 
-    private val baseUrl = homeServerConnectionConfig.homeServerUri.toString().ensureTrailingSlash()
+    private val baseUrl = homeServerConnectionConfig.homeServerUriBase.toString().ensureTrailingSlash()
 
     override val uploadUrl = baseUrl + NetworkConstants.URI_API_MEDIA_PREFIX_PATH_R0 + "upload"
 

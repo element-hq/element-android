@@ -28,16 +28,25 @@ import im.vector.app.core.epoxy.onClick
 abstract class SettingsContinueCancelItem : EpoxyModelWithHolder<SettingsContinueCancelItem.Holder>() {
 
     @EpoxyAttribute
+    var continueText: String? = null
+
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var continueOnClick: ClickListener? = null
 
     @EpoxyAttribute
+    var canContinue: Boolean = true
+
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var cancelOnClick: ClickListener? = null
 
     override fun bind(holder: Holder) {
         super.bind(holder)
 
         holder.cancelButton.onClick(cancelOnClick)
+
+        continueText?.let { holder.continueButton.text = it }
         holder.continueButton.onClick(continueOnClick)
+        holder.continueButton.isEnabled = canContinue
     }
 
     class Holder : VectorEpoxyHolder() {

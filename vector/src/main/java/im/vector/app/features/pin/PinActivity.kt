@@ -18,18 +18,17 @@ package im.vector.app.features.pin
 
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.widget.Toolbar
+import com.google.android.material.appbar.MaterialToolbar
 import com.airbnb.mvrx.MvRx
 import im.vector.app.R
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
+import im.vector.app.databinding.ActivitySimpleBinding
 
-class PinActivity : VectorBaseActivity(), ToolbarConfigurable, UnlockedActivity {
+class PinActivity : VectorBaseActivity<ActivitySimpleBinding>(), ToolbarConfigurable, UnlockedActivity {
 
     companion object {
-        const val PIN_REQUEST_CODE = 17890
-
         fun newIntent(context: Context, args: PinArgs): Intent {
             return Intent(context, PinActivity::class.java).apply {
                 putExtra(MvRx.KEY_ARG, args)
@@ -37,7 +36,9 @@ class PinActivity : VectorBaseActivity(), ToolbarConfigurable, UnlockedActivity 
         }
     }
 
-    override fun getLayoutRes() = R.layout.activity_simple
+    override fun getBinding() = ActivitySimpleBinding.inflate(layoutInflater)
+
+    override fun getCoordinatorLayout() = views.coordinatorLayout
 
     override fun initUiAndData() {
         if (isFirstCreation()) {
@@ -46,7 +47,7 @@ class PinActivity : VectorBaseActivity(), ToolbarConfigurable, UnlockedActivity 
         }
     }
 
-    override fun configure(toolbar: Toolbar) {
+    override fun configure(toolbar: MaterialToolbar) {
         configureToolbar(toolbar)
     }
 }

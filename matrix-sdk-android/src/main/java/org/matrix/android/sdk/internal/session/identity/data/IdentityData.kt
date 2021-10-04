@@ -1,5 +1,4 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,5 +20,6 @@ internal data class IdentityData(
         val identityServerUrl: String?,
         val token: String?,
         val hashLookupPepper: String?,
-        val hashLookupAlgorithm: List<String>
+        val hashLookupAlgorithm: List<String>,
+        val userConsent: Boolean
 )

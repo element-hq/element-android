@@ -23,7 +23,9 @@ import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.airbnb.epoxy.EpoxyModelWithHolder
 import im.vector.app.R
+import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
+import im.vector.app.core.epoxy.onClick
 import im.vector.app.features.home.AvatarRenderer
 import org.matrix.android.sdk.api.util.MatrixItem
 
@@ -33,7 +35,7 @@ abstract class DisplayReadReceiptItem : EpoxyModelWithHolder<DisplayReadReceiptI
     @EpoxyAttribute lateinit var matrixItem: MatrixItem
     @EpoxyAttribute var timestamp: CharSequence? = null
     @EpoxyAttribute lateinit var avatarRenderer: AvatarRenderer
-    @EpoxyAttribute var userClicked: (() -> Unit)? = null
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var userClicked: ClickListener? = null
 
     override fun bind(holder: Holder) {
         super.bind(holder)
@@ -45,7 +47,7 @@ abstract class DisplayReadReceiptItem : EpoxyModelWithHolder<DisplayReadReceiptI
         } ?: run {
             holder.timestampView.isVisible = false
         }
-        holder.view.setOnClickListener { userClicked?.invoke() }
+        holder.view.onClick(userClicked)
     }
 
     class Holder : VectorEpoxyHolder() {

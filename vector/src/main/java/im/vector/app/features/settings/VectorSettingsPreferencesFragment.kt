@@ -19,14 +19,18 @@ package im.vector.app.features.settings
 import android.app.Activity
 import android.content.Context
 import android.widget.CheckedTextView
-import android.widget.LinearLayout
-import androidx.appcompat.app.AlertDialog
+import androidx.core.view.children
 import androidx.preference.Preference
-import androidx.preference.SwitchPreference
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
+import im.vector.app.core.dialogs.PhotoOrVideoDialog
 import im.vector.app.core.extensions.restart
 import im.vector.app.core.preference.VectorListPreference
 import im.vector.app.core.preference.VectorPreference
+import im.vector.app.core.preference.VectorSwitchPreference
+import im.vector.app.databinding.DialogSelectTextSizeBinding
+import im.vector.app.features.MainActivity
+import im.vector.app.features.MainActivityArgs
 import im.vector.app.features.configuration.VectorConfiguration
 import im.vector.app.features.themes.ThemeUtils
 import javax.inject.Inject
@@ -44,6 +48,9 @@ class VectorSettingsPreferencesFragment @Inject constructor(
     }
     private val textSizePreference by lazy {
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_INTERFACE_TEXT_SIZE_KEY)!!
+    }
+    private val takePhotoOrVideoPreference by lazy {
+        findPreference<VectorPreference>("SETTINGS_INTERFACE_TAKE_PHOTO_VIDEO")!!
     }
 
     override fun bindPref() {
@@ -63,10 +70,18 @@ class VectorSettingsPreferencesFragment @Inject constructor(
             }
         }
 
+        findPreference<VectorSwitchPreference>(VectorPreferences.SETTINGS_PREF_SPACE_SHOW_ALL_ROOM_IN_HOME)!!.let { pref ->
+            pref.isChecked = vectorPreferences.prefSpacesShowAllRoomInHome()
+            pref.setOnPreferenceChangeListener { _, _ ->
+                MainActivity.restartApp(requireActivity(), MainActivityArgs(clearCache = false))
+                true
+            }
+        }
+
         // Url preview
+        /*
+        TODO Note: we keep the setting client side for now
         findPreference<SwitchPreference>(VectorPreferences.SETTINGS_SHOW_URL_PREVIEW_KEY)!!.let {
-            /*
-            TODO
             it.isChecked = session.isURLPreviewEnabled
 
             it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
@@ -100,8 +115,8 @@ class VectorSettingsPreferencesFragment @Inject constructor(
 
                 false
             }
-            */
         }
+        */
 
         // update keep medias period
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_MEDIA_SAVING_PERIOD_KEY)!!.let {
@@ -109,7 +124,7 @@ class VectorSettingsPreferencesFragment @Inject constructor(
 
             it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 context?.let { context: Context ->
-                    AlertDialog.Builder(context)
+                    MaterialAlertDialogBuilder(context)
                             .setSingleChoiceItems(R.array.media_saving_choice,
                                     vectorPreferences.getSelectedMediasSavingPeriod()) { d, n ->
                                 vectorPreferences.setSelectedMediasSavingPeriod(n)
@@ -123,6 +138,28 @@ class VectorSettingsPreferencesFragment @Inject constructor(
                 false
             }
         }
+
+        // Take photo or video
+        updateTakePhotoOrVideoPreferenceSummary()
+        takePhotoOrVideoPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            PhotoOrVideoDialog(requireActivity(), vectorPreferences).showForSettings(object: PhotoOrVideoDialog.PhotoOrVideoDialogSettingsListener {
+                override fun onUpdated() {
+                    updateTakePhotoOrVideoPreferenceSummary()
+                }
+            })
+            true
+        }
+    }
+
+    private fun updateTakePhotoOrVideoPreferenceSummary() {
+        takePhotoOrVideoPreference.summary = getString(
+                when (vectorPreferences.getTakePhotoVideoMode()) {
+                    VectorPreferences.TAKE_PHOTO_VIDEO_MODE_PHOTO -> R.string.option_take_photo
+                    VectorPreferences.TAKE_PHOTO_VIDEO_MODE_VIDEO -> R.string.option_take_video
+                    /* VectorPreferences.TAKE_PHOTO_VIDEO_MODE_ALWAYS_ASK */
+                    else                                          -> R.string.option_always_ask
+                }
+        )
     }
 
     // ==============================================================================================================
@@ -143,35 +180,29 @@ class VectorSettingsPreferencesFragment @Inject constructor(
     }
 
     private fun displayTextSizeSelection(activity: Activity) {
-        val inflater = activity.layoutInflater
-        val layout = inflater.inflate(R.layout.dialog_select_text_size, null)
+        val layout = layoutInflater.inflate(R.layout.dialog_select_text_size, null)
+        val views = DialogSelectTextSizeBinding.bind(layout)
 
-        val dialog = AlertDialog.Builder(activity)
+        val dialog = MaterialAlertDialogBuilder(activity)
                 .setTitle(R.string.font_size)
                 .setView(layout)
                 .setPositiveButton(R.string.ok, null)
                 .setNegativeButton(R.string.cancel, null)
                 .show()
 
-        val linearLayout = layout.findViewById<LinearLayout>(R.id.text_selection_group_view)
-
-        val childCount = linearLayout.childCount
-
         val index = FontScale.getFontScaleValue(activity).index
 
-        for (i in 0 until childCount) {
-            val v = linearLayout.getChildAt(i)
+        views.textSelectionGroupView.children
+                .filterIsInstance(CheckedTextView::class.java)
+                .forEachIndexed { i, v ->
+                    v.isChecked = i == index
 
-            if (v is CheckedTextView) {
-                v.isChecked = i == index
-
-                v.setOnClickListener {
-                    dialog.dismiss()
-                    FontScale.updateFontScale(activity, i)
-                    vectorConfiguration.applyToApplicationContext()
-                    activity.restart()
+                    v.setOnClickListener {
+                        dialog.dismiss()
+                        FontScale.updateFontScale(activity, i)
+                        vectorConfiguration.applyToApplicationContext()
+                        activity.restart()
+                    }
                 }
-            }
-        }
     }
 }

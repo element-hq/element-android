@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -44,11 +43,13 @@ import io.realm.annotations.RealmModule
             EventAnnotationsSummaryEntity::class,
             ReactionAggregatedSummaryEntity::class,
             EditAggregatedSummaryEntity::class,
+            EditionOfEvent::class,
             PollResponseAggregatedSummaryEntity::class,
             ReferencesAggregatedSummaryEntity::class,
             PushRulesEntity::class,
             PushRuleEntity::class,
             PushConditionEntity::class,
+            PreviewUrlCacheEntity::class,
             PusherEntity::class,
             PusherDataEntity::class,
             ReadReceiptsSummaryEntity::class,
@@ -60,6 +61,9 @@ import io.realm.annotations.RealmModule
             CurrentStateEventEntity::class,
             UserAccountDataEntity::class,
             ScalarTokenEntity::class,
-            WellknownIntegrationManagerConfigEntity::class
+            WellknownIntegrationManagerConfigEntity::class,
+            RoomAccountDataEntity::class,
+            SpaceChildSummaryEntity::class,
+            SpaceParentSummaryEntity::class
         ])
 internal class SessionRealmModule

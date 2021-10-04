@@ -1,5 +1,4 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -52,14 +51,11 @@ internal class CleanupSession @Inject constructor(
         @UserMd5 private val userMd5: String
 ) {
     suspend fun handle() {
-        Timber.d("Cleanup: release session...")
-        sessionManager.releaseSession(sessionId)
+        Timber.d("Cleanup: delete session params...")
+        sessionParamsStore.delete(sessionId)
 
         Timber.d("Cleanup: cancel pending works...")
         workManagerProvider.cancelAllWorks()
-
-        Timber.d("Cleanup: delete session params...")
-        sessionParamsStore.delete(sessionId)
 
         Timber.d("Cleanup: clear session data...")
         clearSessionDataTask.execute(Unit)
@@ -74,6 +70,9 @@ internal class CleanupSession @Inject constructor(
         Timber.d("Cleanup: clear the database keys")
         realmKeysUtils.clear(SessionModule.getKeyAlias(userMd5))
         realmKeysUtils.clear(CryptoModule.getKeyAlias(userMd5))
+
+        Timber.d("Cleanup: release session...")
+        sessionManager.releaseSession(sessionId)
 
         // Sanity check
         if (BuildConfig.DEBUG) {

@@ -18,7 +18,7 @@ package im.vector.app.features.home.room.detail.timeline.action
 
 import android.os.Parcelable
 import im.vector.app.features.home.room.detail.timeline.item.MessageInformationData
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class TimelineEventFragmentArgs(

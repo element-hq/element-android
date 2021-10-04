@@ -19,8 +19,10 @@ import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.app.R
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.core.ui.list.genericButtonItem
 import im.vector.app.core.ui.list.genericItem
-import im.vector.app.core.ui.list.genericItemWithValue
+import im.vector.app.core.ui.list.genericPositiveButtonItem
+import im.vector.app.core.ui.list.genericWithValueItem
 import im.vector.app.core.utils.DimensionConverter
 import me.gujun.android.span.span
 import javax.inject.Inject
@@ -31,38 +33,70 @@ class CrossSigningSettingsController @Inject constructor(
         private val dimensionConverter: DimensionConverter
 ) : TypedEpoxyController<CrossSigningSettingsViewState>() {
 
-    interface InteractionListener
+    interface InteractionListener {
+        fun didTapInitializeCrossSigning()
+    }
 
     var interactionListener: InteractionListener? = null
 
     override fun buildModels(data: CrossSigningSettingsViewState?) {
         if (data == null) return
+        val host = this
         when {
             data.xSigningKeyCanSign        -> {
                 genericItem {
                     id("can")
                     titleIconResourceId(R.drawable.ic_shield_trusted)
-                    title(stringProvider.getString(R.string.encryption_information_dg_xsigning_complete))
+                    title(host.stringProvider.getString(R.string.encryption_information_dg_xsigning_complete))
+                }
+                genericButtonItem {
+                    id("Reset")
+                    text(host.stringProvider.getString(R.string.reset_cross_signing))
+                    buttonClickAction {
+                        host.interactionListener?.didTapInitializeCrossSigning()
+                    }
                 }
             }
             data.xSigningKeysAreTrusted    -> {
                 genericItem {
                     id("trusted")
                     titleIconResourceId(R.drawable.ic_shield_custom)
-                    title(stringProvider.getString(R.string.encryption_information_dg_xsigning_trusted))
+                    title(host.stringProvider.getString(R.string.encryption_information_dg_xsigning_trusted))
+                }
+                genericButtonItem {
+                    id("Reset")
+                    text(host.stringProvider.getString(R.string.reset_cross_signing))
+                    buttonClickAction {
+                        host.interactionListener?.didTapInitializeCrossSigning()
+                    }
                 }
             }
             data.xSigningIsEnableInAccount -> {
                 genericItem {
                     id("enable")
                     titleIconResourceId(R.drawable.ic_shield_black)
-                    title(stringProvider.getString(R.string.encryption_information_dg_xsigning_not_trusted))
+                    title(host.stringProvider.getString(R.string.encryption_information_dg_xsigning_not_trusted))
+                }
+                genericButtonItem {
+                    id("Reset")
+                    text(host.stringProvider.getString(R.string.reset_cross_signing))
+                    buttonClickAction {
+                        host.interactionListener?.didTapInitializeCrossSigning()
+                    }
                 }
             }
             else                           -> {
                 genericItem {
                     id("not")
-                    title(stringProvider.getString(R.string.encryption_information_dg_xsigning_disabled))
+                    title(host.stringProvider.getString(R.string.encryption_information_dg_xsigning_disabled))
+                }
+
+                genericPositiveButtonItem {
+                    id("Initialize")
+                    text(host.stringProvider.getString(R.string.initialize_cross_signing))
+                    buttonClickAction {
+                        host.interactionListener?.didTapInitializeCrossSigning()
+                    }
                 }
             }
         }
@@ -70,7 +104,7 @@ class CrossSigningSettingsController @Inject constructor(
         val crossSigningKeys = data.crossSigningInfo
 
         crossSigningKeys?.masterKey()?.let {
-            genericItemWithValue {
+            genericWithValueItem {
                 id("msk")
                 titleIconResourceId(R.drawable.key_small)
                 title(
@@ -78,15 +112,15 @@ class CrossSigningSettingsController @Inject constructor(
                             +"Master Key:\n"
                             span {
                                 text = it.unpaddedBase64PublicKey ?: ""
-                                textColor = colorProvider.getColorFromAttribute(R.attr.riotx_text_secondary)
-                                textSize = dimensionConverter.spToPx(12)
+                                textColor = host.colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
+                                textSize = host.dimensionConverter.spToPx(12)
                             }
                         }
                 )
             }
         }
         crossSigningKeys?.userKey()?.let {
-            genericItemWithValue {
+            genericWithValueItem {
                 id("usk")
                 titleIconResourceId(R.drawable.key_small)
                 title(
@@ -94,15 +128,15 @@ class CrossSigningSettingsController @Inject constructor(
                             +"User Key:\n"
                             span {
                                 text = it.unpaddedBase64PublicKey ?: ""
-                                textColor = colorProvider.getColorFromAttribute(R.attr.riotx_text_secondary)
-                                textSize = dimensionConverter.spToPx(12)
+                                textColor = host.colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
+                                textSize = host.dimensionConverter.spToPx(12)
                             }
                         }
                 )
             }
         }
         crossSigningKeys?.selfSigningKey()?.let {
-            genericItemWithValue {
+            genericWithValueItem {
                 id("ssk")
                 titleIconResourceId(R.drawable.key_small)
                 title(
@@ -110,8 +144,8 @@ class CrossSigningSettingsController @Inject constructor(
                             +"Self Signed Key:\n"
                             span {
                                 text = it.unpaddedBase64PublicKey ?: ""
-                                textColor = colorProvider.getColorFromAttribute(R.attr.riotx_text_secondary)
-                                textSize = dimensionConverter.spToPx(12)
+                                textColor = host.colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
+                                textSize = host.dimensionConverter.spToPx(12)
                             }
                         }
                 )

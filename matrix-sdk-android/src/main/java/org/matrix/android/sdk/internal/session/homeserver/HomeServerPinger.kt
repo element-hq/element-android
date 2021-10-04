@@ -1,5 +1,4 @@
 /*
- * Copyright 2020 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -35,8 +34,8 @@ internal class HomeServerPinger @Inject constructor(private val taskExecutor: Ta
 
     suspend fun canReachHomeServer(): Boolean {
         return try {
-            executeRequest<Unit>(null) {
-                apiCall = capabilitiesAPI.ping()
+            executeRequest(null) {
+                capabilitiesAPI.ping()
             }
             true
         } catch (throwable: Throwable) {

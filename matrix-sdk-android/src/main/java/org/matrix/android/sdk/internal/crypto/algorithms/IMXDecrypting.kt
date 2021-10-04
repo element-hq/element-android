@@ -1,6 +1,4 @@
 /*
- * Copyright 2015 OpenMarket Ltd
- * Copyright 2018 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -70,7 +68,7 @@ internal interface IMXDecrypting {
      */
     fun shareKeysWithDevice(request: IncomingRoomKeyRequest) {}
 
-    fun shareSecretWithDevice(request: IncomingSecretShareRequest, secretValue : String) {}
+    fun shareSecretWithDevice(request: IncomingSecretShareRequest, secretValue: String) {}
 
     fun requestKeysForEvent(event: Event, withHeld: Boolean)
 }

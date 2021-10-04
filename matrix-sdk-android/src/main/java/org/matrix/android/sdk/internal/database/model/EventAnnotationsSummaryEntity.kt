@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,6 +18,7 @@ package org.matrix.android.sdk.internal.database.model
 import io.realm.RealmList
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
+import timber.log.Timber
 
 internal open class EventAnnotationsSummaryEntity(
         @PrimaryKey
@@ -30,5 +30,28 @@ internal open class EventAnnotationsSummaryEntity(
         var pollResponseSummary: PollResponseAggregatedSummaryEntity? = null
 ) : RealmObject() {
 
+    /**
+     * Cleanup undesired editions, done by users different from the originalEventSender
+     */
+    fun cleanUp(originalEventSenderId: String?) {
+        originalEventSenderId ?: return
+
+        editSummary?.editions?.filter {
+            it.senderId != originalEventSenderId
+        }
+                ?.forEach {
+                    Timber.w("Deleting an edition from ${it.senderId} of event sent by $originalEventSenderId")
+                    it.deleteFromRealm()
+                }
+    }
+
     companion object
+}
+
+internal fun EventAnnotationsSummaryEntity.deleteOnCascade() {
+    reactionsSummary.deleteAllFromRealm()
+    editSummary?.deleteFromRealm()
+    referencesSummaryEntity?.deleteFromRealm()
+    pollResponseSummary?.deleteFromRealm()
+    deleteFromRealm()
 }

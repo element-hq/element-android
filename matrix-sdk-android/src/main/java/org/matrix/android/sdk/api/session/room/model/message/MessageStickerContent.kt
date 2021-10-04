@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,6 +27,7 @@ data class MessageStickerContent(
         /**
          * Set in local, not from server
          */
+        @Transient
         override val msgType: String = MessageType.MSGTYPE_STICKER_LOCAL,
 
         /**
@@ -54,6 +54,6 @@ data class MessageStickerContent(
          */
         @Json(name = "file") override val encryptedFileInfo: EncryptedFileInfo? = null
 ) : MessageImageInfoContent {
-        override val mimeType: String?
-                get() = encryptedFileInfo?.mimetype ?: info?.mimeType
+    override val mimeType: String?
+        get() = info?.mimeType
 }

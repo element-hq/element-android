@@ -22,14 +22,13 @@ import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
-import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.terms.GetTermsResponse
-import org.matrix.android.sdk.internal.util.awaitCallback
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
+import dagger.assisted.AssistedFactory
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.session.Session
 import timber.log.Timber
 
 class ReviewTermsViewModel @AssistedInject constructor(
@@ -37,7 +36,7 @@ class ReviewTermsViewModel @AssistedInject constructor(
         private val session: Session
 ) : VectorViewModel<ReviewTermsViewState, ReviewTermsAction, ReviewTermsViewEvents>(initialState) {
 
-    @AssistedInject.Factory
+    @AssistedFactory
     interface Factory {
         fun create(initialState: ReviewTermsViewState): ReviewTermsViewModel
     }
@@ -94,15 +93,12 @@ class ReviewTermsViewModel @AssistedInject constructor(
 
         viewModelScope.launch {
             try {
-                awaitCallback<Unit> {
-                    session.agreeToTerms(
-                            termsArgs.type,
-                            termsArgs.baseURL,
-                            agreedUrls,
-                            termsArgs.token,
-                            it
-                    )
-                }
+                session.agreeToTerms(
+                        termsArgs.type,
+                        termsArgs.baseURL,
+                        agreedUrls,
+                        termsArgs.token
+                )
                 _viewEvents.post(ReviewTermsViewEvents.Success)
             } catch (failure: Throwable) {
                 Timber.e(failure, "Failed to agree to terms")
@@ -122,9 +118,7 @@ class ReviewTermsViewModel @AssistedInject constructor(
 
         viewModelScope.launch {
             try {
-                val data = awaitCallback<GetTermsResponse> {
-                    session.getTerms(termsArgs.type, termsArgs.baseURL, it)
-                }
+                val data = session.getTerms(termsArgs.type, termsArgs.baseURL)
                 val terms = data.serverResponse.getLocalizedTerms(action.preferredLanguageCode).map {
                     Term(it.localizedUrl ?: "",
                             it.localizedName ?: "",

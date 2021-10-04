@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,13 +17,15 @@
 package org.matrix.android.sdk.internal.session.room
 
 import androidx.lifecycle.LiveData
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.room.Room
+import org.matrix.android.sdk.api.session.room.accountdata.RoomAccountDataService
+import org.matrix.android.sdk.api.session.room.alias.AliasService
 import org.matrix.android.sdk.api.session.room.call.RoomCallService
 import org.matrix.android.sdk.api.session.room.members.MembershipService
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
+import org.matrix.android.sdk.api.session.room.model.RoomType
 import org.matrix.android.sdk.api.session.room.model.relation.RelationService
 import org.matrix.android.sdk.api.session.room.notification.RoomPushRuleService
 import org.matrix.android.sdk.api.session.room.read.ReadService
@@ -36,37 +37,42 @@ import org.matrix.android.sdk.api.session.room.tags.TagsService
 import org.matrix.android.sdk.api.session.room.timeline.TimelineService
 import org.matrix.android.sdk.api.session.room.typing.TypingService
 import org.matrix.android.sdk.api.session.room.uploads.UploadsService
+import org.matrix.android.sdk.api.session.room.version.RoomVersionService
 import org.matrix.android.sdk.api.session.search.SearchResult
-import org.matrix.android.sdk.api.util.Cancelable
+import org.matrix.android.sdk.api.session.space.Space
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
+import org.matrix.android.sdk.internal.session.permalinks.ViaParameterFinder
 import org.matrix.android.sdk.internal.session.room.state.SendStateTask
 import org.matrix.android.sdk.internal.session.room.summary.RoomSummaryDataSource
 import org.matrix.android.sdk.internal.session.search.SearchTask
-import org.matrix.android.sdk.internal.task.TaskExecutor
-import org.matrix.android.sdk.internal.task.configureWith
+import org.matrix.android.sdk.internal.session.space.DefaultSpace
+import org.matrix.android.sdk.internal.util.awaitCallback
 import java.security.InvalidParameterException
-import javax.inject.Inject
 
-internal class DefaultRoom @Inject constructor(override val roomId: String,
-                                               private val roomSummaryDataSource: RoomSummaryDataSource,
-                                               private val timelineService: TimelineService,
-                                               private val sendService: SendService,
-                                               private val draftService: DraftService,
-                                               private val stateService: StateService,
-                                               private val uploadsService: UploadsService,
-                                               private val reportingService: ReportingService,
-                                               private val roomCallService: RoomCallService,
-                                               private val readService: ReadService,
-                                               private val typingService: TypingService,
-                                               private val tagsService: TagsService,
-                                               private val cryptoService: CryptoService,
-                                               private val relationService: RelationService,
-                                               private val roomMembersService: MembershipService,
-                                               private val roomPushRuleService: RoomPushRuleService,
-                                               private val taskExecutor: TaskExecutor,
-                                               private val sendStateTask: SendStateTask,
-                                               private val searchTask: SearchTask) :
+internal class DefaultRoom(override val roomId: String,
+                           private val roomSummaryDataSource: RoomSummaryDataSource,
+                           private val timelineService: TimelineService,
+                           private val sendService: SendService,
+                           private val draftService: DraftService,
+                           private val stateService: StateService,
+                           private val uploadsService: UploadsService,
+                           private val reportingService: ReportingService,
+                           private val roomCallService: RoomCallService,
+                           private val readService: ReadService,
+                           private val typingService: TypingService,
+                           private val aliasService: AliasService,
+                           private val tagsService: TagsService,
+                           private val cryptoService: CryptoService,
+                           private val relationService: RelationService,
+                           private val roomMembersService: MembershipService,
+                           private val roomPushRuleService: RoomPushRuleService,
+                           private val roomAccountDataService: RoomAccountDataService,
+                           private val roomVersionService: RoomVersionService,
+                           private val sendStateTask: SendStateTask,
+                           private val viaParameterFinder: ViaParameterFinder,
+                           private val searchTask: SearchTask
+) :
         Room,
         TimelineService by timelineService,
         SendService by sendService,
@@ -77,10 +83,13 @@ internal class DefaultRoom @Inject constructor(override val roomId: String,
         RoomCallService by roomCallService,
         ReadService by readService,
         TypingService by typingService,
+        AliasService by aliasService,
         TagsService by tagsService,
         RelationService by relationService,
         MembershipService by roomMembersService,
-        RoomPushRuleService by roomPushRuleService {
+        RoomPushRuleService by roomPushRuleService,
+        RoomAccountDataService by roomAccountDataService,
+        RoomVersionService by roomVersionService {
 
     override fun getRoomSummaryLive(): LiveData<Optional<RoomSummary>> {
         return roomSummaryDataSource.getRoomSummaryLive(roomId)
@@ -102,13 +111,19 @@ internal class DefaultRoom @Inject constructor(override val roomId: String,
         return cryptoService.shouldEncryptForInvitedMembers(roomId)
     }
 
-    override fun enableEncryption(algorithm: String, callback: MatrixCallback<Unit>) {
+    override suspend fun prepareToEncrypt() {
+        awaitCallback<Unit> {
+            cryptoService.prepareToEncrypt(roomId, it)
+        }
+    }
+
+    override suspend fun enableEncryption(algorithm: String) {
         when {
             isEncrypted()                          -> {
-                callback.onFailure(IllegalStateException("Encryption is already enabled for this room"))
+                throw IllegalStateException("Encryption is already enabled for this room")
             }
             algorithm != MXCRYPTO_ALGORITHM_MEGOLM -> {
-                callback.onFailure(InvalidParameterException("Only MXCRYPTO_ALGORITHM_MEGOLM algorithm is supported"))
+                throw InvalidParameterException("Only MXCRYPTO_ALGORITHM_MEGOLM algorithm is supported")
             }
             else                                   -> {
                 val params = SendStateTask.Params(
@@ -119,25 +134,20 @@ internal class DefaultRoom @Inject constructor(override val roomId: String,
                                 "algorithm" to algorithm
                         ))
 
-                sendStateTask
-                        .configureWith(params) {
-                            this.callback = callback
-                        }
-                        .executeBy(taskExecutor)
+                sendStateTask.execute(params)
             }
         }
     }
 
-    override fun search(searchTerm: String,
-                        nextBatch: String?,
-                        orderByRecent: Boolean,
-                        limit: Int,
-                        beforeLimit: Int,
-                        afterLimit: Int,
-                        includeProfile: Boolean,
-                        callback: MatrixCallback<SearchResult>): Cancelable {
-        return searchTask
-                .configureWith(SearchTask.Params(
+    override suspend fun search(searchTerm: String,
+                                nextBatch: String?,
+                                orderByRecent: Boolean,
+                                limit: Int,
+                                beforeLimit: Int,
+                                afterLimit: Int,
+                                includeProfile: Boolean): SearchResult {
+        return searchTask.execute(
+                SearchTask.Params(
                         searchTerm = searchTerm,
                         roomId = roomId,
                         nextBatch = nextBatch,
@@ -146,8 +156,12 @@ internal class DefaultRoom @Inject constructor(override val roomId: String,
                         beforeLimit = beforeLimit,
                         afterLimit = afterLimit,
                         includeProfile = includeProfile
-                )) {
-                    this.callback = callback
-                }.executeBy(taskExecutor)
+                )
+        )
+    }
+
+    override fun asSpace(): Space? {
+        if (roomSummary()?.roomType != RoomType.SPACE) return null
+        return DefaultSpace(this, roomSummaryDataSource, viaParameterFinder)
     }
 }

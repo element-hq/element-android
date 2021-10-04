@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,7 +26,7 @@ import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
  * This class holds some data of a room.
  * It can be retrieved by [org.matrix.android.sdk.api.session.room.Room] and [org.matrix.android.sdk.api.session.room.RoomService]
  */
-data class RoomSummary constructor(
+data class RoomSummary(
         val roomId: String,
         // Computed display name
         val displayName: String = "",
@@ -36,7 +35,9 @@ data class RoomSummary constructor(
         val avatarUrl: String = "",
         val canonicalAlias: String? = null,
         val aliases: List<String> = emptyList(),
+        val joinRules: RoomJoinRules? = null,
         val isDirect: Boolean = false,
+        val directUserId: String? = null,
         val joinedMembersCount: Int? = 0,
         val invitedMembersCount: Int? = 0,
         val latestPreviewableEvent: TimelineEvent? = null,
@@ -55,7 +56,11 @@ data class RoomSummary constructor(
         val inviterId: String? = null,
         val breadcrumbsIndex: Int = NOT_IN_BREADCRUMBS,
         val roomEncryptionTrustLevel: RoomEncryptionTrustLevel? = null,
-        val hasFailedSending: Boolean = false
+        val hasFailedSending: Boolean = false,
+        val roomType: String? = null,
+        val spaceParents: List<SpaceParentInfo>? = null,
+        val spaceChildren: List<SpaceChildInfo>? = null,
+        val flattenParentIds: List<String> = emptyList()
 ) {
 
     val isVersioned: Boolean
@@ -64,8 +69,16 @@ data class RoomSummary constructor(
     val hasNewMessages: Boolean
         get() = notificationCount != 0
 
+    val isLowPriority: Boolean
+        get() = hasTag(RoomTag.ROOM_TAG_LOW_PRIORITY)
+
     val isFavorite: Boolean
-        get() = tags.any { it.name == RoomTag.ROOM_TAG_FAVOURITE }
+        get() = hasTag(RoomTag.ROOM_TAG_FAVOURITE)
+
+    val isPublic: Boolean
+        get() = joinRules == RoomJoinRules.PUBLIC
+
+    fun hasTag(tag: String) = tags.any { it.name == tag }
 
     val canStartCall: Boolean
         get() = joinedMembersCount == 2

@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,6 +24,7 @@ import org.matrix.android.sdk.api.failure.isTokenError
 import org.matrix.android.sdk.internal.di.WorkManagerProvider
 import org.matrix.android.sdk.internal.network.NetworkConnectivityChecker
 import org.matrix.android.sdk.internal.session.SessionComponent
+import org.matrix.android.sdk.internal.session.sync.SyncPresence
 import org.matrix.android.sdk.internal.session.sync.SyncTask
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.worker.SessionSafeCoroutineWorker
@@ -95,7 +95,7 @@ internal class SyncWorker(context: Context,
     }
 
     private suspend fun doSync(timeout: Long) {
-        val taskParams = SyncTask.Params(timeout * 1000)
+        val taskParams = SyncTask.Params(timeout * 1000, SyncPresence.Offline)
         syncTask.execute(taskParams)
     }
 
@@ -106,7 +106,7 @@ internal class SyncWorker(context: Context,
             val data = WorkerParamsFactory.toData(Params(sessionId, serverTimeout, 0L, false))
             val workRequest = workManagerProvider.matrixOneTimeWorkRequestBuilder<SyncWorker>()
                     .setConstraints(WorkManagerProvider.workConstraints)
-                    .setBackoffCriteria(BackoffPolicy.LINEAR, 1_000, TimeUnit.MILLISECONDS)
+                    .setBackoffCriteria(BackoffPolicy.LINEAR, WorkManagerProvider.BACKOFF_DELAY_MILLIS, TimeUnit.MILLISECONDS)
                     .setInputData(data)
                     .build()
             workManagerProvider.workManager
@@ -118,7 +118,7 @@ internal class SyncWorker(context: Context,
             val workRequest = workManagerProvider.matrixOneTimeWorkRequestBuilder<SyncWorker>()
                     .setConstraints(WorkManagerProvider.workConstraints)
                     .setInputData(data)
-                    .setBackoffCriteria(BackoffPolicy.LINEAR, 1_000, TimeUnit.MILLISECONDS)
+                    .setBackoffCriteria(BackoffPolicy.LINEAR, WorkManagerProvider.BACKOFF_DELAY_MILLIS, TimeUnit.MILLISECONDS)
                     .setInitialDelay(delayInSeconds, TimeUnit.SECONDS)
                     .build()
 

@@ -16,71 +16,24 @@
 
 package im.vector.lib.multipicker
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.media.MediaMetadataRetriever
-import android.provider.MediaStore
 import im.vector.lib.multipicker.entity.MultiPickerAudioType
+import im.vector.lib.multipicker.utils.toMultiPickerAudioType
 
 /**
  * Audio file picker implementation
  */
-class AudioPicker(override val requestCode: Int) : Picker<MultiPickerAudioType>(requestCode) {
+class AudioPicker : Picker<MultiPickerAudioType>() {
 
     /**
      * Call this function from onActivityResult(int, int, Intent).
-     * Returns selected audio files or empty list if request code is wrong
-     * or result code is not Activity.RESULT_OK
-     * or user did not select any files.
+     * Returns selected audio files or empty list if user did not select any files.
      */
-    override fun getSelectedFiles(context: Context, requestCode: Int, resultCode: Int, data: Intent?): List<MultiPickerAudioType> {
-        if (requestCode != this.requestCode && resultCode != Activity.RESULT_OK) {
-            return emptyList()
+    override fun getSelectedFiles(context: Context, data: Intent?): List<MultiPickerAudioType> {
+        return getSelectedUriList(data).mapNotNull { selectedUri ->
+            selectedUri.toMultiPickerAudioType(context)
         }
-
-        val audioList = mutableListOf<MultiPickerAudioType>()
-
-        getSelectedUriList(data).forEach { selectedUri ->
-            val projection = arrayOf(
-                    MediaStore.Audio.Media.DISPLAY_NAME,
-                    MediaStore.Audio.Media.SIZE
-            )
-
-            context.contentResolver.query(
-                    selectedUri,
-                    projection,
-                    null,
-                    null,
-                    null
-            )?.use { cursor ->
-                val nameColumn = cursor.getColumnIndex(MediaStore.Audio.Media.DISPLAY_NAME)
-                val sizeColumn = cursor.getColumnIndex(MediaStore.Audio.Media.SIZE)
-
-                if (cursor.moveToNext()) {
-                    val name = cursor.getString(nameColumn)
-                    val size = cursor.getLong(sizeColumn)
-                    var duration = 0L
-
-                    context.contentResolver.openFileDescriptor(selectedUri, "r")?.use { pfd ->
-                        val mediaMetadataRetriever = MediaMetadataRetriever()
-                        mediaMetadataRetriever.setDataSource(pfd.fileDescriptor)
-                        duration = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION).toLong()
-                    }
-
-                    audioList.add(
-                            MultiPickerAudioType(
-                                    name,
-                                    size,
-                                    context.contentResolver.getType(selectedUri),
-                                    selectedUri,
-                                    duration
-                            )
-                    )
-                }
-            }
-        }
-        return audioList
     }
 
     override fun createIntent(): Intent {

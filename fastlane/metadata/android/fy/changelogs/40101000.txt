@@ -1,0 +1,2 @@
+Haadferoaring yn disse ferzje: VoIP (lûds en video skilje yn DM) ferbetteringen en breksoplossings!
+Folsleine feroaringslist: https://github.com/vector-im/element-android/releases/tag/v1.1.0

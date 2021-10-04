@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,7 +16,6 @@
 package org.matrix.android.sdk.api.session.room.model.relation
 
 import androidx.lifecycle.LiveData
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.model.EventAnnotationsSummary
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
@@ -68,11 +66,11 @@ interface RelationService {
 
     /**
      * Edit a text message body. Limited to "m.text" contentType
-     * @param targetEventId The event to edit
+     * @param targetEvent The event to edit
      * @param newBodyText The edited body
      * @param compatibilityBodyText The text that will appear on clients that don't support yet edition
      */
-    fun editTextMessage(targetEventId: String,
+    fun editTextMessage(targetEvent: TimelineEvent,
                         msgType: String,
                         newBodyText: CharSequence,
                         newBodyAutoMarkdown: Boolean,
@@ -93,8 +91,11 @@ interface RelationService {
 
     /**
      * Get the edit history of the given event
+     * The return list will contain the original event and all the editions of this event, done by the
+     * same sender, sorted in the reverse order (so the original event is the latest element, and the
+     * latest edition is the first element of the list)
      */
-    fun fetchEditHistory(eventId: String, callback: MatrixCallback<List<Event>>)
+    suspend fun fetchEditHistory(eventId: String): List<Event>
 
     /**
      * Reply to an event in the timeline (must be in same room)

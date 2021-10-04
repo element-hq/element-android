@@ -1,0 +1,2 @@
+Main changes in this version: Voice Message is enabled by default.
+Full changelog: https://github.com/vector-im/element-android/releases/tag/v1.2.0

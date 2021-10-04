@@ -1,5 +1,4 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,7 +18,6 @@ package org.matrix.android.sdk.internal.session.group
 
 import org.matrix.android.sdk.api.session.group.Group
 import org.matrix.android.sdk.internal.session.SessionScope
-import org.matrix.android.sdk.internal.task.TaskExecutor
 import javax.inject.Inject
 
 internal interface GroupFactory {
@@ -27,14 +25,12 @@ internal interface GroupFactory {
 }
 
 @SessionScope
-internal class DefaultGroupFactory @Inject constructor(private val getGroupDataTask: GetGroupDataTask,
-                                                       private val taskExecutor: TaskExecutor) :
+internal class DefaultGroupFactory @Inject constructor(private val getGroupDataTask: GetGroupDataTask) :
         GroupFactory {
 
     override fun create(groupId: String): Group {
         return DefaultGroup(
                 groupId = groupId,
-                taskExecutor = taskExecutor,
                 getGroupDataTask = getGroupDataTask
         )
     }

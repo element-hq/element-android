@@ -78,7 +78,7 @@ abstract class SettingsTextButtonSingleLineItem : EpoxyModelWithHolder<SettingsT
     @EpoxyAttribute
     var checked: Boolean? = null
 
-    @EpoxyAttribute
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var buttonClickListener: ClickListener? = null
 
     @EpoxyAttribute
@@ -117,10 +117,10 @@ abstract class SettingsTextButtonSingleLineItem : EpoxyModelWithHolder<SettingsT
                     holder.switchButton.isVisible = false
                     when (buttonStyle) {
                         ButtonStyle.POSITIVE    -> {
-                            holder.mainButton.setTextColor(colorProvider.getColorFromAttribute(R.attr.colorAccent))
+                            holder.mainButton.setTextColor(colorProvider.getColorFromAttribute(R.attr.colorPrimary))
                         }
                         ButtonStyle.DESTRUCTIVE -> {
-                            holder.mainButton.setTextColor(colorProvider.getColor(R.color.vector_error_color))
+                            holder.mainButton.setTextColor(colorProvider.getColorFromAttribute(R.attr.colorError))
                         }
                     }.exhaustive
                     holder.mainButton.onClick(buttonClickListener)
@@ -148,7 +148,7 @@ abstract class SettingsTextButtonSingleLineItem : EpoxyModelWithHolder<SettingsT
                 }
             }
             IconMode.ERROR -> {
-                val errorColor = colorProvider.getColor(R.color.vector_error_color)
+                val errorColor = colorProvider.getColorFromAttribute(R.attr.colorError)
                 ContextCompat.getDrawable(holder.view.context, R.drawable.ic_notification_privacy_warning)?.apply {
                     ThemeUtils.tintDrawableWithColor(this, errorColor)
                     holder.textView.setCompoundDrawablesWithIntrinsicBounds(this, null, null, null)

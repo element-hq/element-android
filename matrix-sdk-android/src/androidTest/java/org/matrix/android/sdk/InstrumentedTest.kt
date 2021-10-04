@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
+ * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@ import android.content.Context
 import androidx.test.core.app.ApplicationProvider
 import org.matrix.android.sdk.test.shared.createTimberTestRule
 import org.junit.Rule
-import java.io.File
 
 interface InstrumentedTest {
 
@@ -29,9 +28,5 @@ interface InstrumentedTest {
 
     fun context(): Context {
         return ApplicationProvider.getApplicationContext()
-    }
-
-    fun cacheDir(): File {
-        return context().cacheDir
     }
 }

@@ -1,0 +1,2 @@
+This new version mainly contains bug fixes and improvements. Sending a message is now much faster.
+Full changelog: https://github.com/vector-im/element-android/releases/tag/v1.0.10

@@ -1,5 +1,4 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,7 +45,7 @@ internal class CrossSigningKeysMapper @Inject constructor(moshi: Moshi) {
         return CryptoCrossSigningKey(
                 userId = userId ?: "",
                 keys = mapOf("ed25519:$pubKey" to pubKey),
-                usages = keyInfo.usages.map { it },
+                usages = keyInfo.usages.toList(),
                 signatures = deserializeSignatures(keyInfo.signatures),
                 trustLevel = keyInfo.trustLevelEntity?.let {
                     DeviceTrustLevel(

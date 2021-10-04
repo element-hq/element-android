@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/callDialPad"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?colorSurface"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="8dp">
+
+        <TextView
+            android:id="@+id/callDialPadTitle"
+            style="@style/Widget.Vector.TextView.HeadlineMedium"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="@string/call_dial_pad_title"
+            android:textColor="?vctr_content_primary" />
+
+        <ImageView
+            android:id="@+id/callDialPadClose"
+            android:layout_width="@dimen/layout_touch_size"
+            android:layout_height="@dimen/layout_touch_size"
+            android:contentDescription="@string/action_close"
+            android:foreground="?selectableItemBackground"
+            android:scaleType="center"
+            android:src="@drawable/ic_cross"
+            app:tint="?vctr_content_primary"
+            tools:ignore="MissingPrefix" />
+
+    </LinearLayout>
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/callDialPadFragmentContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</LinearLayout>

@@ -16,35 +16,39 @@
 package im.vector.app.features.discovery.change
 
 import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.text.toSpannable
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.app.R
 import im.vector.app.core.extensions.exhaustive
+import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.toReducedUrl
-import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.utils.colorizeMatchingText
+import im.vector.app.databinding.FragmentSetIdentityServerBinding
 import im.vector.app.features.discovery.DiscoverySharedViewModel
-import im.vector.app.features.terms.ReviewTermsActivity
+
 import org.matrix.android.sdk.api.session.terms.TermsService
-import kotlinx.android.synthetic.main.fragment_set_identity_server.*
 import javax.inject.Inject
 
 class SetIdentityServerFragment @Inject constructor(
         val viewModelFactory: SetIdentityServerViewModel.Factory,
         val colorProvider: ColorProvider
-) : VectorBaseFragment() {
+) : VectorBaseFragment<FragmentSetIdentityServerBinding>() {
 
-    override fun getLayoutResId() = R.layout.fragment_set_identity_server
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentSetIdentityServerBinding {
+        return FragmentSetIdentityServerBinding.inflate(inflater, container, false)
+    }
 
     private val viewModel by fragmentViewModel(SetIdentityServerViewModel::class)
 
@@ -53,23 +57,23 @@ class SetIdentityServerFragment @Inject constructor(
     override fun invalidate() = withState(viewModel) { state ->
         if (state.defaultIdentityServerUrl.isNullOrEmpty()) {
             // No default
-            identityServerSetDefaultNotice.isVisible = false
-            identityServerSetDefaultSubmit.isVisible = false
-            identityServerSetDefaultAlternative.setText(R.string.identity_server_set_alternative_notice_no_default)
+            views.identityServerSetDefaultNotice.isVisible = false
+            views.identityServerSetDefaultSubmit.isVisible = false
+            views.identityServerSetDefaultAlternative.setText(R.string.identity_server_set_alternative_notice_no_default)
         } else {
-            identityServerSetDefaultNotice.text = getString(
+            views.identityServerSetDefaultNotice.text = getString(
                     R.string.identity_server_set_default_notice,
                     state.homeServerUrl.toReducedUrl(),
                     state.defaultIdentityServerUrl.toReducedUrl()
             )
                     .toSpannable()
                     .colorizeMatchingText(state.defaultIdentityServerUrl.toReducedUrl(),
-                            colorProvider.getColorFromAttribute(R.attr.riotx_text_primary_body_contrast))
+                            colorProvider.getColorFromAttribute(R.attr.vctr_content_tertiary))
 
-            identityServerSetDefaultNotice.isVisible = true
-            identityServerSetDefaultSubmit.isVisible = true
-            identityServerSetDefaultSubmit.text = getString(R.string.identity_server_set_default_submit, state.defaultIdentityServerUrl.toReducedUrl())
-            identityServerSetDefaultAlternative.setText(R.string.identity_server_set_alternative_notice)
+            views.identityServerSetDefaultNotice.isVisible = true
+            views.identityServerSetDefaultSubmit.isVisible = true
+            views.identityServerSetDefaultSubmit.text = getString(R.string.identity_server_set_default_submit, state.defaultIdentityServerUrl.toReducedUrl())
+            views.identityServerSetDefaultAlternative.setText(R.string.identity_server_set_alternative_notice)
         }
     }
 
@@ -78,28 +82,28 @@ class SetIdentityServerFragment @Inject constructor(
 
         sharedViewModel = activityViewModelProvider.get(DiscoverySharedViewModel::class.java)
 
-        identityServerSetDefaultAlternativeTextInput.setOnEditorActionListener { _, actionId, _ ->
+        views.identityServerSetDefaultAlternativeTextInput.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                viewModel.handle(SetIdentityServerAction.UseCustomIdentityServer(identityServerSetDefaultAlternativeTextInput.text.toString()))
+                viewModel.handle(SetIdentityServerAction.UseCustomIdentityServer(views.identityServerSetDefaultAlternativeTextInput.text.toString()))
                 return@setOnEditorActionListener true
             }
             return@setOnEditorActionListener false
         }
 
-        identityServerSetDefaultAlternativeTextInput
+        views.identityServerSetDefaultAlternativeTextInput
                 .textChanges()
                 .subscribe {
-                    identityServerSetDefaultAlternativeTil.error = null
-                    identityServerSetDefaultAlternativeSubmit.isEnabled = it.isNotEmpty()
+                    views.identityServerSetDefaultAlternativeTil.error = null
+                    views.identityServerSetDefaultAlternativeSubmit.isEnabled = it.isNotEmpty()
                 }
                 .disposeOnDestroyView()
 
-        identityServerSetDefaultSubmit.debouncedClicks {
+        views.identityServerSetDefaultSubmit.debouncedClicks {
             viewModel.handle(SetIdentityServerAction.UseDefaultIdentityServer)
         }
 
-        identityServerSetDefaultAlternativeSubmit.debouncedClicks {
-            viewModel.handle(SetIdentityServerAction.UseCustomIdentityServer(identityServerSetDefaultAlternativeTextInput.text.toString()))
+        views.identityServerSetDefaultAlternativeSubmit.debouncedClicks {
+            viewModel.handle(SetIdentityServerAction.UseCustomIdentityServer(views.identityServerSetDefaultAlternativeTextInput.text.toString()))
         }
 
         viewModel.observeViewEvents {
@@ -108,7 +112,7 @@ class SetIdentityServerFragment @Inject constructor(
                 is SetIdentityServerViewEvents.Failure       -> handleFailure(it)
                 is SetIdentityServerViewEvents.OtherFailure  -> showFailure(it.failure)
                 is SetIdentityServerViewEvents.NoTerms       -> {
-                    AlertDialog.Builder(requireActivity())
+                    MaterialAlertDialogBuilder(requireActivity())
                             .setTitle(R.string.settings_discovery_no_terms_title)
                             .setMessage(R.string.settings_discovery_no_terms)
                             .setPositiveButton(R.string._continue) { _, _ ->
@@ -121,7 +125,8 @@ class SetIdentityServerFragment @Inject constructor(
                 is SetIdentityServerViewEvents.TermsAccepted -> processIdentityServerChange()
                 is SetIdentityServerViewEvents.ShowTerms     -> {
                     navigator.openTerms(
-                            this,
+                            requireContext(),
+                            termsActivityResultLauncher,
                             TermsService.ServiceType.IdentityService,
                             it.identityServerUrl,
                             null)
@@ -134,31 +139,28 @@ class SetIdentityServerFragment @Inject constructor(
         val message = getString(failure.errorMessageId)
         if (failure.forDefault) {
             // Display the error in a dialog
-            AlertDialog.Builder(requireActivity())
+            MaterialAlertDialogBuilder(requireActivity())
                     .setTitle(R.string.dialog_title_error)
                     .setMessage(message)
                     .setPositiveButton(R.string.ok, null)
                     .show()
         } else {
             // Display the error inlined
-            identityServerSetDefaultAlternativeTil.error = message
+            views.identityServerSetDefaultAlternativeTil.error = message
         }
     }
 
     override fun onResume() {
         super.onResume()
-        (activity as? VectorBaseActivity)?.supportActionBar?.setTitle(R.string.identity_server)
+        (activity as? AppCompatActivity)?.supportActionBar?.setTitle(R.string.identity_server)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == ReviewTermsActivity.TERMS_REQUEST_CODE) {
-            if (Activity.RESULT_OK == resultCode) {
-                processIdentityServerChange()
-            } else {
-                // add some error?
-            }
+    private val termsActivityResultLauncher = registerStartForActivityResult {
+        if (it.resultCode == Activity.RESULT_OK) {
+            processIdentityServerChange()
+        } else {
+            // add some error?
         }
-        super.onActivityResult(requestCode, resultCode, data)
     }
 
     private fun processIdentityServerChange() {

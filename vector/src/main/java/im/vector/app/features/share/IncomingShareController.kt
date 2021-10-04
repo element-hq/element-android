@@ -18,12 +18,12 @@ package im.vector.app.features.share
 
 import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.Incomplete
-import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import im.vector.app.R
 import im.vector.app.core.epoxy.loadingItem
 import im.vector.app.core.epoxy.noResultItem
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.home.room.list.RoomSummaryItemFactory
+import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import javax.inject.Inject
 
 class IncomingShareController @Inject constructor(private val roomSummaryItemFactory: RoomSummaryItemFactory,
@@ -37,6 +37,7 @@ class IncomingShareController @Inject constructor(private val roomSummaryItemFac
     var callback: Callback? = null
 
     override fun buildModels(data: IncomingShareViewState) {
+        val host = this
         if (data.sharedData == null || data.filteredRoomSummaries is Incomplete) {
             loadingItem {
                 id("loading")
@@ -47,7 +48,7 @@ class IncomingShareController @Inject constructor(private val roomSummaryItemFac
         if (roomSummaries.isNullOrEmpty()) {
             noResultItem {
                 id("no_result")
-                text(stringProvider.getString(R.string.no_result_placeholder))
+                text(host.stringProvider.getString(R.string.no_result_placeholder))
             }
         } else {
             roomSummaries.forEach { roomSummary ->

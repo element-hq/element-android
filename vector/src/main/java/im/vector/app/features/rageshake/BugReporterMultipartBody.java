@@ -1,5 +1,4 @@
 /*
- * Copyright 2017 Vector Creations Ltd
  * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -225,7 +224,7 @@ public class BugReporterMultipartBody extends RequestBody {
         }
 
         public static Part createFormData(String name, String value) {
-            return createFormData(name, null, RequestBody.create(null, value));
+            return createFormData(name, null, RequestBody.create(value, null));
         }
 
         public static Part createFormData(String name, String filename, RequestBody body) {

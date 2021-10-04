@@ -1,5 +1,4 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,7 +25,6 @@ import org.matrix.android.sdk.internal.session.identity.data.IdentityPendingBind
 import org.matrix.android.sdk.internal.session.identity.data.IdentityStore
 import org.matrix.android.sdk.internal.session.identity.model.IdentityRequestTokenForEmailBody
 import org.matrix.android.sdk.internal.session.identity.model.IdentityRequestTokenForMsisdnBody
-import org.matrix.android.sdk.internal.session.identity.model.IdentityRequestTokenResponse
 import org.matrix.android.sdk.internal.task.Task
 import java.util.UUID
 import javax.inject.Inject
@@ -57,8 +55,8 @@ internal class DefaultIdentityRequestTokenForBindingTask @Inject constructor(
         val clientSecret = identityPendingBinding?.clientSecret ?: UUID.randomUUID().toString()
         val sendAttempt = identityPendingBinding?.sendAttempt?.inc() ?: 1
 
-        val tokenResponse = executeRequest<IdentityRequestTokenResponse>(null) {
-            apiCall = when (params.threePid) {
+        val tokenResponse = executeRequest(null) {
+            when (params.threePid) {
                 is ThreePid.Email  -> identityAPI.requestTokenToBindEmail(IdentityRequestTokenForEmailBody(
                         clientSecret = clientSecret,
                         sendAttempt = sendAttempt,

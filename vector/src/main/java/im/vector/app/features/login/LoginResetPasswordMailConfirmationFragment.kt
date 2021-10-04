@@ -16,28 +16,39 @@
 
 package im.vector.app.features.login
 
-import androidx.appcompat.app.AlertDialog
-import butterknife.OnClick
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Success
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
+import im.vector.app.databinding.FragmentLoginResetPasswordMailConfirmationBinding
+
 import org.matrix.android.sdk.api.failure.is401
-import kotlinx.android.synthetic.main.fragment_login_reset_password_mail_confirmation.*
 import javax.inject.Inject
 
 /**
  * In this screen, the user is asked to check his email and to click on a button once it's done
  */
-class LoginResetPasswordMailConfirmationFragment @Inject constructor() : AbstractLoginFragment() {
+class LoginResetPasswordMailConfirmationFragment @Inject constructor() : AbstractLoginFragment<FragmentLoginResetPasswordMailConfirmationBinding>() {
 
-    override fun getLayoutResId() = R.layout.fragment_login_reset_password_mail_confirmation
-
-    private fun setupUi(state: LoginViewState) {
-        resetPasswordMailConfirmationNotice.text = getString(R.string.login_reset_password_mail_confirmation_notice, state.resetPasswordEmail)
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLoginResetPasswordMailConfirmationBinding {
+        return FragmentLoginResetPasswordMailConfirmationBinding.inflate(inflater, container, false)
     }
 
-    @OnClick(R.id.resetPasswordMailConfirmationSubmit)
-    fun submit() {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        views.resetPasswordMailConfirmationSubmit.setOnClickListener { submit() }
+    }
+
+    private fun setupUi(state: LoginViewState) {
+        views.resetPasswordMailConfirmationNotice.text = getString(R.string.login_reset_password_mail_confirmation_notice, state.resetPasswordEmail)
+    }
+
+    private fun submit() {
         loginViewModel.handle(LoginAction.ResetPasswordMailConfirmed)
     }
 
@@ -57,15 +68,13 @@ class LoginResetPasswordMailConfirmationFragment @Inject constructor() : Abstrac
                     errorFormatter.toHumanReadable(state.asyncResetMailConfirmed.error)
                 }
 
-                AlertDialog.Builder(requireActivity())
+                MaterialAlertDialogBuilder(requireActivity())
                         .setTitle(R.string.dialog_title_error)
                         .setMessage(message)
                         .setPositiveButton(R.string.ok, null)
                         .show()
             }
-            is Success -> {
-                Unit
-            }
+            is Success -> Unit
         }
     }
 }

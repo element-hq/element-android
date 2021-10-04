@@ -25,5 +25,6 @@ data class DiscoverySettingsState(
         val emailList: Async<List<PidInfo>> = Uninitialized,
         val phoneNumbersList: Async<List<PidInfo>> = Uninitialized,
         // Can be true if terms are updated
-        val termsNotSigned: Boolean = false
+        val termsNotSigned: Boolean = false,
+        val userConsent: Boolean = false
 ) : MvRxState

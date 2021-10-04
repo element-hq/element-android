@@ -1,0 +1,2 @@
+Hlavní změny v této verzi: Úpravy práv místností, automatický tmavý/světlý vzhled a řada oprav chyb.
+Úplný záznam změn: https://github.com/vector-im/element-android/releases/tag/v1.0.14

@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,6 +21,7 @@ import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
 
 internal open class HomeServerCapabilitiesEntity(
         var canChangePassword: Boolean = true,
+        var roomVersionsJson: String? = null,
         var maxUploadFileSize: Long = HomeServerCapabilities.MAX_UPLOAD_FILE_SIZE_UNKNOWN,
         var lastVersionIdentityServerSupported: Boolean = false,
         var defaultIdentityServerUrl: String? = null,

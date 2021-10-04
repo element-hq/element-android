@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Widget.Vector.SnackBar" parent="@style/Widget.MaterialComponents.Snackbar">
+<!--        <item name="android:background">@color/notification_accent_color</item>-->
+    </style>
+
+    <style name="Widget.Vector.SnackBar.Button" parent="@style/Widget.Vector.Button.Text.OnPrimary">
+<!--        <item name="android:textColor">@color/white</item>-->
+    </style>
+
+    <style name="Widget.Vector.SnackBar.TextView" parent="@style/Widget.MaterialComponents.Snackbar.TextView">
+<!--        <item name="android:textColor">@color/white</item>-->
+    </style>
+
+</resources>
