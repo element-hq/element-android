@@ -134,7 +134,7 @@ class CreateSpaceViewModel @AssistedInject constructor(
                         )
                     } else {
                         val tentativeAlias =
-                                MatrixPatterns.candidateAliasFromRoomName(action.name)
+                                MatrixPatterns.candidateAliasFromRoomName(action.name, homeServerName)
                         copy(
                                 nameInlineError = null,
                                 name = action.name,

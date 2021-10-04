@@ -28,7 +28,7 @@ data class CreateSpaceState(
         val step: Step = Step.ChooseType,
         val spaceType: SpaceType? = null,
         val spaceTopology: SpaceTopology? = null,
-        val homeServerName: String? = null,
+        val homeServerName: String = "",
         val aliasLocalPart: String? = null,
         val aliasManuallyModified: Boolean = false,
         val aliasVerificationTask: Async<Boolean> = Uninitialized,
