@@ -98,7 +98,8 @@ class CreateDirectRoomActivity : SimpleFragmentActivity(), UserListViewModel.Fac
                     UserListFragment::class.java,
                     UserListFragmentArgs(
                             title = getString(R.string.fab_menu_create_chat),
-                            menuResId = R.menu.vector_create_direct_room
+                            menuResId = R.menu.vector_create_direct_room,
+                            singleSelection = true,
                     )
             )
         }
