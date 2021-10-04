@@ -27,6 +27,8 @@ import android.view.MenuItem
 import androidx.core.view.GravityCompat
 import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.viewModel
 import com.google.android.material.appbar.MaterialToolbar
@@ -96,7 +98,8 @@ class HomeActivity :
         UnreadMessagesSharedViewModel.Factory,
         PromoteRestrictedViewModel.Factory,
         NavigationInterceptor,
-        SpaceInviteBottomSheet.InteractionListener {
+        SpaceInviteBottomSheet.InteractionListener,
+        MatrixToBottomSheet.InteractionListener {
 
     private lateinit var sharedActionViewModel: HomeSharedActionViewModel
 
@@ -145,6 +148,22 @@ class HomeActivity :
         }
     }
 
+    private val fragmentLifecycleCallbacks = object : FragmentManager.FragmentLifecycleCallbacks() {
+        override fun onFragmentResumed(fm: FragmentManager, f: Fragment) {
+            if (f is MatrixToBottomSheet) {
+                f.interactionListener = this@HomeActivity
+            }
+            super.onFragmentResumed(fm, f)
+        }
+
+        override fun onFragmentPaused(fm: FragmentManager, f: Fragment) {
+            if (f is MatrixToBottomSheet) {
+                f.interactionListener = null
+            }
+            super.onFragmentPaused(fm, f)
+        }
+    }
+
     private val drawerListener = object : DrawerLayout.SimpleDrawerListener() {
         override fun onDrawerStateChanged(newState: Int) {
             hideKeyboard()
@@ -173,6 +192,7 @@ class HomeActivity :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        supportFragmentManager.registerFragmentLifecycleCallbacks(fragmentLifecycleCallbacks, false)
         FcmHelper.ensureFcmTokenIsRetrieved(this, pushManager, vectorPreferences.areNotificationEnabledForDevice())
         sharedActionViewModel = viewModelProvider.get(HomeSharedActionViewModel::class.java)
         views.drawerLayout.addDrawerListener(drawerListener)
@@ -449,6 +469,7 @@ class HomeActivity :
 
     override fun onDestroy() {
         views.drawerLayout.removeDrawerListener(drawerListener)
+        supportFragmentManager.unregisterFragmentLifecycleCallbacks(fragmentLifecycleCallbacks)
         super.onDestroy()
     }
 
@@ -530,30 +551,15 @@ class HomeActivity :
     }
 
     override fun navToMemberProfile(userId: String, deepLink: Uri): Boolean {
-        val listener = object : MatrixToBottomSheet.InteractionListener {
-            override fun navigateToRoom(roomId: String) {
-                navigator.openRoom(this@HomeActivity, roomId)
-            }
-        }
         // TODO check if there is already one??
-        MatrixToBottomSheet.withLink(deepLink.toString(), listener)
+        MatrixToBottomSheet.withLink(deepLink.toString())
                 .show(supportFragmentManager, "HA#MatrixToBottomSheet")
         return true
     }
 
     override fun navToRoom(roomId: String?, eventId: String?, deepLink: Uri?): Boolean {
         if (roomId == null) return false
-        val listener = object : MatrixToBottomSheet.InteractionListener {
-            override fun navigateToRoom(roomId: String) {
-                navigator.openRoom(this@HomeActivity, roomId)
-            }
-
-            override fun switchToSpace(spaceId: String) {
-                navigator.switchToSpace(this@HomeActivity, spaceId, Navigator.PostSwitchSpaceAction.None)
-            }
-        }
-
-        MatrixToBottomSheet.withLink(deepLink.toString(), listener)
+        MatrixToBottomSheet.withLink(deepLink.toString())
                 .show(supportFragmentManager, "HA#MatrixToBottomSheet")
         return true
     }
@@ -586,4 +592,12 @@ class HomeActivity :
     }
 
     override fun create(initialState: ActiveSpaceViewState) = promoteRestrictedViewModelFactory.create(initialState)
+
+    override fun mxToBottomSheetNavigateToRoom(roomId: String) {
+        navigator.openRoom(this, roomId)
+    }
+
+    override fun mxToBottomSheetSwitchToSpace(spaceId: String) {
+        navigator.switchToSpace(this, spaceId, Navigator.PostSwitchSpaceAction.None)
+    }
 }

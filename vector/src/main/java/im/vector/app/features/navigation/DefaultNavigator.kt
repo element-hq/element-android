@@ -257,17 +257,11 @@ class DefaultNavigator @Inject constructor(
 
     override fun openMatrixToBottomSheet(context: Context, link: String) {
         if (context is AppCompatActivity) {
-            val listener = object : MatrixToBottomSheet.InteractionListener {
-                override fun navigateToRoom(roomId: String) {
-                    openRoom(context, roomId)
-                }
-
-                override fun switchToSpace(spaceId: String) {
-                    this@DefaultNavigator.switchToSpace(context, spaceId, Navigator.PostSwitchSpaceAction.None)
-                }
+            if (context !is MatrixToBottomSheet.InteractionListener) {
+                fatalError("Caller context should implement MatrixToBottomSheet.InteractionListener", vectorPreferences.failFast())
             }
             // TODO check if there is already one??
-            MatrixToBottomSheet.withLink(link, listener)
+            MatrixToBottomSheet.withLink(link)
                     .show(context.supportFragmentManager, "HA#MatrixToBottomSheet")
         }
     }
