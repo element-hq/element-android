@@ -162,12 +162,14 @@ object MatrixPatterns {
         return order != null && order.length < 50 && order matches ORDER_STRING_REGEX
     }
 
-    fun candidateAliasFromRoomName(name: String): String {
-        return Regex("\\s").replace(name.lowercase(), "_").let {
-            "[^a-z0-9._%#@=+-]".toRegex().replace(it, "")
-        }.let { alias ->
-            if (alias.length > 255) alias.substring(0, 255) else alias
-        }
+    fun candidateAliasFromRoomName(roomName: String, domain: String): String {
+        return roomName.lowercase()
+                // Replace spaces by '_'
+                .let { Regex("\\s").replace(it, "_") }
+                // Remove all invalid chars
+                .let { "[^a-z0-9._%#@=+-]".toRegex().replace(it, "") }
+                // limit length
+                .substring(0, MatrixConstants.maxAliasLocalPartLength(domain))
     }
 
     /**
