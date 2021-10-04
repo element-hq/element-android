@@ -17,6 +17,8 @@
 package org.matrix.android.sdk.api
 
 import org.matrix.android.sdk.BuildConfig
+import org.matrix.android.sdk.internal.util.removeInvalidRoomNameChars
+import org.matrix.android.sdk.internal.util.replaceSpaceChars
 import timber.log.Timber
 
 /**
@@ -130,8 +132,8 @@ object MatrixPatterns {
     fun isEventId(str: String?): Boolean {
         return str != null &&
                 (str matches PATTERN_CONTAIN_MATRIX_EVENT_IDENTIFIER ||
-                str matches PATTERN_CONTAIN_MATRIX_EVENT_IDENTIFIER_V3 ||
-                str matches PATTERN_CONTAIN_MATRIX_EVENT_IDENTIFIER_V4)
+                        str matches PATTERN_CONTAIN_MATRIX_EVENT_IDENTIFIER_V3 ||
+                        str matches PATTERN_CONTAIN_MATRIX_EVENT_IDENTIFIER_V4)
     }
 
     /**
@@ -164,12 +166,9 @@ object MatrixPatterns {
 
     fun candidateAliasFromRoomName(roomName: String, domain: String): String {
         return roomName.lowercase()
-                // Replace spaces by '_'
-                .let { Regex("\\s").replace(it, "_") }
-                // Remove all invalid chars
-                .let { "[^a-z0-9._%#@=+-]".toRegex().replace(it, "") }
-                // limit length
-                .substring(0, MatrixConstants.maxAliasLocalPartLength(domain))
+                .replaceSpaceChars(replacement = "_")
+                .removeInvalidRoomNameChars()
+                .take(MatrixConstants.maxAliasLocalPartLength(domain))
     }
 
     /**
