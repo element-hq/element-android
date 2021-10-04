@@ -104,7 +104,6 @@ class RoomDetailViewModel @AssistedInject constructor(
         private val vectorPreferences: VectorPreferences,
         private val vectorDataStore: VectorDataStore,
         private val stringProvider: StringProvider,
-        private val rainbowGenerator: RainbowGenerator,
         private val session: Session,
         private val supportedVerificationMethodsProvider: SupportedVerificationMethodsProvider,
         private val stickerPickerActionHandler: StickerPickerActionHandler,
