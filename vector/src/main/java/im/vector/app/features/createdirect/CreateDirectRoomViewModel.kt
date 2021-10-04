@@ -24,8 +24,8 @@ import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.mvrx.runCatchingToAsync
 import im.vector.app.core.platform.VectorViewModel
@@ -71,10 +71,13 @@ class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
      * If users already have a DM room then navigate to it instead of creating a new room.
      */
     private fun onSubmitInvitees(action: CreateDirectRoomAction.CreateRoomAndInviteSelectedUsers) {
-        if (action.existingDmRoomId != null) {
+        val existingRoomId = action.selections.singleOrNull()?.getMxId()?.let { userId ->
+            session.getExistingDirectRoomWithUser(userId)
+        }
+        if (existingRoomId != null) {
             // Do not create a new DM, just tell that the creation is successful by passing the existing roomId
             setState {
-                copy(createAndInviteState = Success(action.existingDmRoomId))
+                copy(createAndInviteState = Success(existingRoomId))
             }
         } else {
             // Create the DM
