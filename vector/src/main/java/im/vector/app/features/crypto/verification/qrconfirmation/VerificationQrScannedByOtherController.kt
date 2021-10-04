@@ -25,6 +25,7 @@ import im.vector.app.features.crypto.verification.VerificationBottomSheetViewSta
 import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationActionItem
 import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationBigImageItem
 import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationNoticeItem
+import im.vector.app.features.displayname.getBestName
 import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
 import javax.inject.Inject
 

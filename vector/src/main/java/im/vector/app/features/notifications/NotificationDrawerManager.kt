@@ -27,11 +27,13 @@ import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.FirstThrottler
+import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.invite.AutoAcceptInvites
 import im.vector.app.features.settings.VectorPreferences
 import me.gujun.android.span.span
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.content.ContentUrlResolver
+import org.matrix.android.sdk.api.util.toMatrixItem
 import timber.log.Timber
 import java.io.File
 import java.io.FileOutputStream
@@ -228,7 +230,7 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
 
         val user = session.getUser(session.myUserId)
         // myUserDisplayName cannot be empty else NotificationCompat.MessagingStyle() will crash
-        val myUserDisplayName = user?.getBestName() ?: session.myUserId
+        val myUserDisplayName = user?.toMatrixItem()?.getBestName() ?: session.myUserId
         val myUserAvatarUrl = session.contentUrlResolver().resolveThumbnail(user?.avatarUrl, avatarSize, avatarSize, ContentUrlResolver.ThumbnailMethod.SCALE)
         synchronized(eventList) {
             Timber.v("%%%%%%%% REFRESH NOTIFICATION DRAWER ")

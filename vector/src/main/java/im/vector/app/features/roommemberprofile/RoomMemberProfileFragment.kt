@@ -47,6 +47,7 @@ import im.vector.app.databinding.DialogShareQrCodeBinding
 import im.vector.app.databinding.FragmentMatrixProfileBinding
 import im.vector.app.databinding.ViewStubRoomMemberProfileHeaderBinding
 import im.vector.app.features.crypto.verification.VerificationBottomSheet
+import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.RoomDetailPendingAction
 import im.vector.app.features.home.room.detail.RoomDetailPendingActionStore

@@ -23,6 +23,7 @@ import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.core.util.Pair
 import im.vector.app.features.crypto.recover.SetupMode
+import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.login.LoginConfig
 import im.vector.app.features.media.AttachmentData
 import im.vector.app.features.pin.PinMode
