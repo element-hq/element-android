@@ -16,7 +16,9 @@
 
 package im.vector.app.ui
 
+import android.view.MenuItem
 import android.view.View
+import androidx.core.view.forEach
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.pressBack
@@ -32,6 +34,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import com.adevinta.android.barista.assertion.BaristaListAssertions.assertListItemCount
 import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
+import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertNotDisplayed
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickBack
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.longClickOn
@@ -43,6 +46,7 @@ import com.adevinta.android.barista.interaction.BaristaListInteractions.clickLis
 import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild
 import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.clickMenu
 import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import im.vector.app.BuildConfig
 import im.vector.app.EspressoHelper
 import im.vector.app.R
@@ -59,6 +63,8 @@ import im.vector.app.features.roomdirectory.RoomDirectoryActivity
 import im.vector.app.initialSyncIdlingResource
 import im.vector.app.waitForView
 import im.vector.app.withIdlingResource
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -140,10 +146,56 @@ class UiAllScreensSanityTest {
         uiTestBase.login(userId)
         ignoreVerification()
 
+        testLayoutMode()
+
         uiTestBase.signout()
         clickDialogPositiveButton()
 
         // TODO Deactivate account instead of logout?
+    }
+
+    private fun testLayoutMode() {
+        withIdlingResource(activityIdlingResource(HomeActivity::class.java)) {
+            assertDisplayed(R.id.roomListContainer)
+            closeSoftKeyboard()
+        }
+
+        val activity = EspressoHelper.getCurrentActivity()!!
+        val uiSession = (activity as HomeActivity).activeSessionHolder.getActiveSession()
+
+        withIdlingResource(initialSyncIdlingResource(uiSession)) {
+            assertDisplayed(R.id.roomListContainer)
+        }
+
+        assertDisplayed(R.id.bottomNavigationView)
+
+        val expectedMenuItems = listOf(R.id.bottom_action_home, R.id.bottom_action_people, R.id.bottom_action_rooms)
+        val bottomNavigation = activity.findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+        val menu = mutableListOf<MenuItem>().apply {
+            bottomNavigation.menu.forEach {
+                if (it.isVisible) add(it)
+            }
+        }
+        assertNotNull("Menu should not be null", menu)
+        assertEquals("Should have matching number of items", expectedMenuItems.size, menu.size)
+        for (i in expectedMenuItems.indices) {
+            val currItem: MenuItem = menu[i]
+            assertEquals("ID for Item #$i", expectedMenuItems[i], currItem.itemId)
+        }
+
+        openDrawer()
+        clickOn(R.id.homeDrawerHeaderSettingsView)
+
+        clickOn(R.string.settings_preferences)
+
+        clickOn(R.string.settings_home_layout_simple)
+
+        pressBack()
+        pressBack()
+
+        assertNotDisplayed(R.id.bottomNavigationView)
+
+        sleep(2000)
     }
 
     private fun ignoreVerification() {
