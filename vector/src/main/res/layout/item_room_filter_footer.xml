@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?android:colorBackground"
@@ -11,8 +12,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="56dp"
-        android:text="@string/room_filtering_footer_title"
         android:layout_marginBottom="@dimen/layout_vertical_margin"
+        android:text="@string/room_filtering_footer_title"
         android:textColor="?vctr_content_secondary" />
 
     <Button
@@ -31,6 +32,7 @@
         android:layout_gravity="center"
         android:text="@string/room_filtering_footer_create_new_direct_message" />
 
+    <!-- Note: can also be used to open the SpaceExploreActivity-->
     <Button
         android:id="@+id/roomFilterFooterOpenRoomDirectory"
         style="@style/Widget.Vector.Button.Text"
@@ -38,6 +40,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginBottom="@dimen/layout_vertical_margin"
-        android:text="@string/room_filtering_footer_open_room_directory" />
+        tools:text="@string/room_filtering_footer_open_room_directory" />
 
 </LinearLayout>
