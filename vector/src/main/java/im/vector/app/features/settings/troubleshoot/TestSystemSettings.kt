@@ -40,7 +40,6 @@ class TestSystemSettings @Inject constructor(private val context: Context,
             description = stringProvider.getString(R.string.settings_troubleshoot_test_system_settings_failed)
             quickFix = object : TroubleshootQuickFix(R.string.open_settings) {
                 override fun doFix() {
-                    if (manager?.diagStatus == TestStatus.RUNNING) return // wait before all is finished
                     startNotificationSettingsIntent(context, activityResultLauncher)
                 }
             }
