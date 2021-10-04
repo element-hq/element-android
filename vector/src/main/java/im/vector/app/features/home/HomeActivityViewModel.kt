@@ -16,6 +16,7 @@
 
 package im.vector.app.features.home
 
+import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.MavericksViewModelFactory
@@ -31,6 +32,8 @@ import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.VectorPreferences
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.auth.UIABaseAuth
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
@@ -44,6 +47,7 @@ import org.matrix.android.sdk.api.session.initsync.SyncStatusService
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.api.util.toMatrixItem
+import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.internal.util.awaitCallback
@@ -100,9 +104,9 @@ class HomeActivityViewModel @AssistedInject constructor(
                 .crossSigningService().allPrivateKeysKnown()
 
         safeActiveSession
-                .rx()
+                .flow()
                 .liveCrossSigningInfo(safeActiveSession.myUserId)
-                .subscribe {
+                .onEach {
                     val isVerified = it.getOrNull()?.isTrusted() ?: false
                     if (!isVerified && onceTrusted) {
                         // cross signing keys have been reset
@@ -116,15 +120,15 @@ class HomeActivityViewModel @AssistedInject constructor(
                     }
                     onceTrusted = isVerified
                 }
-                .disposeOnClear()
+                .launchIn(viewModelScope)
     }
 
     private fun observeInitialSync() {
         val session = activeSessionHolder.getSafeActiveSession() ?: return
 
         session.getSyncStatusLive()
-                .asObservable()
-                .subscribe { status ->
+                .asFlow()
+                .onEach { status ->
                     when (status) {
                         is SyncStatusService.Status.Progressing -> {
                             // Schedule a check of the bootstrap when the init sync will be finished
@@ -145,7 +149,7 @@ class HomeActivityViewModel @AssistedInject constructor(
                         )
                     }
                 }
-                .disposeOnClear()
+                .launchIn(viewModelScope)
     }
 
     /**

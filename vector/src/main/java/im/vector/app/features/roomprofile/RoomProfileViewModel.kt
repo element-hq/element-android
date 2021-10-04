@@ -40,10 +40,10 @@ import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.create.RoomCreateContent
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.session.room.state.isPublic
-import org.matrix.android.sdk.rx.RxRoom
-import org.matrix.android.sdk.rx.mapOptional
-import org.matrix.android.sdk.rx.rx
-import org.matrix.android.sdk.rx.unwrap
+import org.matrix.android.sdk.flow.FlowRoom
+import org.matrix.android.sdk.flow.flow
+import org.matrix.android.sdk.flow.mapOptional
+import org.matrix.android.sdk.flow.unwrap
 
 class RoomProfileViewModel @AssistedInject constructor(
         @Assisted private val initialState: RoomProfileViewState,
@@ -69,15 +69,15 @@ class RoomProfileViewModel @AssistedInject constructor(
     private val room = session.getRoom(initialState.roomId)!!
 
     init {
-        val rxRoom = room.rx()
-        observeRoomSummary(rxRoom)
-        observeRoomCreateContent(rxRoom)
-        observeBannedRoomMembers(rxRoom)
+        val flowRoom = room.flow()
+        observeRoomSummary(flowRoom)
+        observeRoomCreateContent(flowRoom)
+        observeBannedRoomMembers(flowRoom)
         observePermissions()
     }
 
-    private fun observeRoomCreateContent(rxRoom: RxRoom) {
-        rxRoom.liveStateEvent(EventType.STATE_ROOM_CREATE, QueryStringValue.NoCondition)
+    private fun observeRoomCreateContent(flowRoom: FlowRoom) {
+        flowRoom.liveStateEvent(EventType.STATE_ROOM_CREATE, QueryStringValue.NoCondition)
                 .mapOptional { it.content.toModel<RoomCreateContent>() }
                 .unwrap()
                 .execute { async ->
@@ -92,16 +92,16 @@ class RoomProfileViewModel @AssistedInject constructor(
                 }
     }
 
-    private fun observeRoomSummary(rxRoom: RxRoom) {
-        rxRoom.liveRoomSummary()
+    private fun observeRoomSummary(flowRoom: FlowRoom) {
+        flowRoom.liveRoomSummary()
                 .unwrap()
                 .execute {
                     copy(roomSummary = it)
                 }
     }
 
-    private fun observeBannedRoomMembers(rxRoom: RxRoom) {
-        rxRoom.liveRoomMembers(roomMemberQueryParams { memberships = listOf(Membership.BAN) })
+    private fun observeBannedRoomMembers(flowRoom: FlowRoom) {
+        flowRoom.liveRoomMembers(roomMemberQueryParams { memberships = listOf(Membership.BAN) })
                 .execute {
                     copy(bannedMembership = it)
                 }

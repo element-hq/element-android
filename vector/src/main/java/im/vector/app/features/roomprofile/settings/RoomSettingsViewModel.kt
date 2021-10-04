@@ -28,11 +28,10 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import im.vector.app.features.settings.VectorPreferences
-import io.reactivex.Completable
-import io.reactivex.Observable
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
@@ -47,7 +46,6 @@ import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.flow.mapOptional
 import org.matrix.android.sdk.flow.unwrap
-import org.matrix.android.sdk.rx.rx
 
 class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: RoomSettingsViewState,
                                                         private val vectorPreferences: VectorPreferences,
@@ -259,61 +257,57 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
     }
 
     private fun saveSettings() = withState { state ->
-        postLoading(true)
-
-        val operationList = mutableListOf<Completable>()
+        val operationList = mutableListOf<suspend () -> Unit>()
 
         val summary = state.roomSummary.invoke()
 
         when (val avatarAction = state.avatarAction) {
             RoomSettingsViewState.AvatarAction.None            -> Unit
             RoomSettingsViewState.AvatarAction.DeleteAvatar    -> {
-                operationList.add(room.rx().deleteAvatar())
+                operationList.add { room.deleteAvatar() }
             }
             is RoomSettingsViewState.AvatarAction.UpdateAvatar -> {
-                operationList.add(room.rx().updateAvatar(avatarAction.newAvatarUri, avatarAction.newAvatarFileName))
+                operationList.add { room.updateAvatar(avatarAction.newAvatarUri, avatarAction.newAvatarFileName) }
             }
         }
         if (summary?.name != state.newName) {
-            operationList.add(room.rx().updateName(state.newName ?: ""))
+            operationList.add { room.updateName(state.newName ?: "") }
         }
         if (summary?.topic != state.newTopic) {
-            operationList.add(room.rx().updateTopic(state.newTopic ?: ""))
+            operationList.add { room.updateTopic(state.newTopic ?: "") }
         }
 
         if (state.newHistoryVisibility != null) {
-            operationList.add(room.rx().updateHistoryReadability(state.newHistoryVisibility))
+            operationList.add { room.updateHistoryReadability(state.newHistoryVisibility) }
         }
 
         if (state.newRoomJoinRules.hasChanged()) {
-            operationList.add(room.rx().updateJoinRule(state.newRoomJoinRules.newJoinRules, state.newRoomJoinRules.newGuestAccess))
+            operationList.add { room.updateJoinRule(state.newRoomJoinRules.newJoinRules, state.newRoomJoinRules.newGuestAccess) }
         }
-
-        Observable
-                .fromIterable(operationList)
-                .concatMapCompletable { it }
-                .subscribe(
-                        {
-                            postLoading(false)
-                            setState {
-                                deletePendingAvatar(this)
-                                copy(
-                                        avatarAction = RoomSettingsViewState.AvatarAction.None,
-                                        newHistoryVisibility = null,
-                                        newRoomJoinRules = RoomSettingsViewState.NewJoinRule()
-                                )
-                            }
-                            _viewEvents.post(RoomSettingsViewEvents.Success)
-                        },
-                        {
-                            postLoading(false)
-                            _viewEvents.post(RoomSettingsViewEvents.Failure(it))
-                        }
-                )
-                .disposeOnClear()
+        viewModelScope.launch {
+            updateLoadingState(isLoading = true)
+            try {
+                for (operation in operationList) {
+                    operation.invoke()
+                }
+                setState {
+                    deletePendingAvatar(this)
+                    copy(
+                            avatarAction = RoomSettingsViewState.AvatarAction.None,
+                            newHistoryVisibility = null,
+                            newRoomJoinRules = RoomSettingsViewState.NewJoinRule()
+                    )
+                }
+                _viewEvents.post(RoomSettingsViewEvents.Success)
+            } catch (failure: Throwable) {
+                _viewEvents.post(RoomSettingsViewEvents.Failure(failure))
+            }finally {
+                updateLoadingState(isLoading = false)
+            }
+        }
     }
 
-    private fun postLoading(isLoading: Boolean) {
+    private fun updateLoadingState(isLoading: Boolean) {
         setState {
             copy(isLoading = isLoading)
         }

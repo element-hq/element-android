@@ -1590,57 +1590,54 @@ class RoomDetailFragment @Inject constructor(
         }
     }
 
-// TimelineEventController.Callback ************************************************************
+    // TimelineEventController.Callback ************************************************************
 
     override fun onUrlClicked(url: String, title: String): Boolean {
-        permalinkHandler
-                .launch(requireActivity(), url, object : NavigationInterceptor {
-                    override fun navToRoom(roomId: String?, eventId: String?, deepLink: Uri?): Boolean {
-                        // Same room?
-                        if (roomId == roomDetailArgs.roomId) {
-                            // Navigation to same room
-                            if (eventId == null) {
-                                showSnackWithMessage(getString(R.string.navigate_to_room_when_already_in_the_room))
-                            } else {
-                                // Highlight and scroll to this event
-                                roomDetailViewModel.handle(RoomDetailAction.NavigateToEvent(eventId, true))
+        viewLifecycleOwner.lifecycleScope.launch {
+            val isManaged = permalinkHandler
+                    .launch(requireActivity(), url, object : NavigationInterceptor {
+                        override fun navToRoom(roomId: String?, eventId: String?, deepLink: Uri?): Boolean {
+                            // Same room?
+                            if (roomId == roomDetailArgs.roomId) {
+                                // Navigation to same room
+                                if (eventId == null) {
+                                    showSnackWithMessage(getString(R.string.navigate_to_room_when_already_in_the_room))
+                                } else {
+                                    // Highlight and scroll to this event
+                                    roomDetailViewModel.handle(RoomDetailAction.NavigateToEvent(eventId, true))
+                                }
+                                return true
                             }
+                            // Not handled
+                            return false
+                        }
+
+                        override fun navToMemberProfile(userId: String, deepLink: Uri): Boolean {
+                            openRoomMemberProfile(userId)
                             return true
                         }
-                        // Not handled
-                        return false
-                    }
-
-                    override fun navToMemberProfile(userId: String, deepLink: Uri): Boolean {
-                        openRoomMemberProfile(userId)
-                        return true
-                    }
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { managed ->
-                    if (!managed) {
-                        if (title.isValidUrl() && url.isValidUrl() && URL(title).host != URL(url).host) {
-                            MaterialAlertDialogBuilder(requireActivity(), R.style.ThemeOverlay_Vector_MaterialAlertDialog_NegativeDestructive)
-                                    .setTitle(R.string.external_link_confirmation_title)
-                                    .setMessage(
-                                            getString(R.string.external_link_confirmation_message, title, url)
-                                                    .toSpannable()
-                                                    .colorizeMatchingText(url, colorProvider.getColorFromAttribute(R.attr.vctr_content_tertiary))
-                                                    .colorizeMatchingText(title, colorProvider.getColorFromAttribute(R.attr.vctr_content_tertiary))
-                                    )
-                                    .setPositiveButton(R.string._continue) { _, _ ->
-                                        openUrlInExternalBrowser(requireContext(), url)
-                                    }
-                                    .setNegativeButton(R.string.cancel, null)
-                                    .show()
-                        } else {
-                            // Open in external browser, in a new Tab
-                            openUrlInExternalBrowser(requireContext(), url)
-                        }
-                    }
+                    })
+            if (!isManaged) {
+                if (title.isValidUrl() && url.isValidUrl() && URL(title).host != URL(url).host) {
+                    MaterialAlertDialogBuilder(requireActivity(), R.style.ThemeOverlay_Vector_MaterialAlertDialog_NegativeDestructive)
+                            .setTitle(R.string.external_link_confirmation_title)
+                            .setMessage(
+                                    getString(R.string.external_link_confirmation_message, title, url)
+                                            .toSpannable()
+                                            .colorizeMatchingText(url, colorProvider.getColorFromAttribute(R.attr.vctr_content_tertiary))
+                                            .colorizeMatchingText(title, colorProvider.getColorFromAttribute(R.attr.vctr_content_tertiary))
+                            )
+                            .setPositiveButton(R.string._continue) { _, _ ->
+                                openUrlInExternalBrowser(requireContext(), url)
+                            }
+                            .setNegativeButton(R.string.cancel, null)
+                            .show()
+                } else {
+                    // Open in external browser, in a new Tab
+                    openUrlInExternalBrowser(requireContext(), url)
                 }
-                .disposeOnDestroyView()
+            }
+        }
         // In fact it is always managed
         return true
     }
@@ -1799,15 +1796,15 @@ class RoomDetailFragment @Inject constructor(
     }
 
     override fun onRoomCreateLinkClicked(url: String) {
-        permalinkHandler
-                .launch(requireContext(), url, object : NavigationInterceptor {
-                    override fun navToRoom(roomId: String?, eventId: String?, deepLink: Uri?): Boolean {
-                        requireActivity().finish()
-                        return false
-                    }
-                })
-                .subscribe()
-                .disposeOnDestroyView()
+        viewLifecycleOwner.lifecycleScope.launchWhenResumed {
+            permalinkHandler
+                    .launch(requireContext(), url, object : NavigationInterceptor {
+                        override fun navToRoom(roomId: String?, eventId: String?, deepLink: Uri?): Boolean {
+                            requireActivity().finish()
+                            return false
+                        }
+                    })
+        }
     }
 
     override fun onReadReceiptsClicked(readReceipts: List<ReadReceiptData>) {

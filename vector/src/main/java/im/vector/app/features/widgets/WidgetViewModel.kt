@@ -30,6 +30,7 @@ import dagger.assisted.AssistedInject
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.widgets.permissions.WidgetPermissionsHelper
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.query.QueryStringValue
@@ -44,7 +45,6 @@ import org.matrix.android.sdk.api.session.widgets.WidgetManagementFailure
 import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.flow.mapOptional
 import org.matrix.android.sdk.flow.unwrap
-import org.matrix.android.sdk.rx.rx
 import timber.log.Timber
 import javax.net.ssl.HttpsURLConnection
 
@@ -135,7 +135,7 @@ class WidgetViewModel @AssistedInject constructor(@Assisted val initialState: Wi
             return
         }
         val widgetId = initialState.widgetId ?: return
-        session.rx()
+        session.flow()
                 .liveRoomWidgets(initialState.roomId, QueryStringValue.Equals(widgetId))
                 .filter { it.isNotEmpty() }
                 .map { it.first() }

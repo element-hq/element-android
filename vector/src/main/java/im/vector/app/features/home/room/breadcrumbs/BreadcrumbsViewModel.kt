@@ -30,6 +30,7 @@ import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
+import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.rx.rx
 
 class BreadcrumbsViewModel @AssistedInject constructor(@Assisted initialState: BreadcrumbsViewState,
@@ -61,12 +62,11 @@ class BreadcrumbsViewModel @AssistedInject constructor(@Assisted initialState: B
     // PRIVATE METHODS *****************************************************************************
 
     private fun observeBreadcrumbs() {
-        session.rx()
+        session.flow()
                 .liveBreadcrumbs(roomSummaryQueryParams {
                     displayName = QueryStringValue.NoCondition
                     memberships = listOf(Membership.JOIN)
                 })
-                .observeOn(Schedulers.computation())
                 .execute { asyncBreadcrumbs ->
                     copy(asyncBreadcrumbs = asyncBreadcrumbs)
                 }

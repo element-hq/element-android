@@ -16,7 +16,7 @@
 
 package im.vector.app.features.spaces
 
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.asFlow
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksViewModelFactory
@@ -33,8 +33,9 @@ import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.group
 import im.vector.app.space
-import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.query.ActiveSpaceFilter
@@ -44,19 +45,16 @@ import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.group.groupSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.RoomSortOrder
-import org.matrix.android.sdk.api.session.room.accountdata.RoomAccountDataEvent
 import org.matrix.android.sdk.api.session.room.accountdata.RoomAccountDataTypes
 import org.matrix.android.sdk.api.session.room.model.Membership
-import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.summary.RoomAggregateNotificationCount
 import org.matrix.android.sdk.api.session.space.SpaceOrderUtils
 import org.matrix.android.sdk.api.session.space.model.SpaceOrderContent
 import org.matrix.android.sdk.api.session.space.model.TopLevelSpaceComparator
-import org.matrix.android.sdk.api.session.user.model.User
 import org.matrix.android.sdk.api.util.toMatrixItem
+import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.rx.asObservable
-import org.matrix.android.sdk.rx.rx
 import java.util.concurrent.TimeUnit
 
 class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: SpaceListViewState,
@@ -286,21 +284,23 @@ class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: Sp
                     null)
         }
 
-        val rxSession = session.rx()
+        val flowSession = session.flow()
 
-        Observable.combineLatest<User?, List<RoomSummary>, List<RoomAccountDataEvent>, List<RoomSummary>>(
-                rxSession
+        combine(
+                flowSession
                         .liveUser(session.myUserId)
                         .map {
                             it.getOrNull()
                         },
-                rxSession
+                flowSession
                         .liveSpaceSummaries(spaceSummaryQueryParams),
-                session.accountDataService().getLiveRoomAccountDataEvents(setOf(RoomAccountDataTypes.EVENT_TYPE_SPACE_ORDER)).asObservable(),
-                { _, communityGroups, _ ->
-                    communityGroups
-                }
-        )
+                session
+                        .accountDataService()
+                        .getLiveRoomAccountDataEvents(setOf(RoomAccountDataTypes.EVENT_TYPE_SPACE_ORDER))
+                        .asFlow()
+        ) { _, communityGroups, _ ->
+            communityGroups
+        }
                 .execute { async ->
                     val rootSpaces = session.spaceService().getRootSpaceSummaries()
                     val orders = rootSpaces.map {

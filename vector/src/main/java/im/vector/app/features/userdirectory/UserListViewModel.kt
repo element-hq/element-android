@@ -160,16 +160,15 @@ class UserListViewModel @AssistedInject constructor(@Assisted initialState: User
     }
 
     private fun observeUsers() = withState { state ->
-
         identityServerUsersSearch
                 .filter { it.isEmail() }
                 .throttleLast(300, TimeUnit.MILLISECONDS)
                 .switchMapSingle { search ->
-                    val rx = session.rx()
+                    val flowSession = session.rx()
                     val stream =
-                            rx.lookupThreePid(ThreePid.Email(search)).flatMap {
+                            flowSession.lookupThreePid(ThreePid.Email(search)).flatMap {
                                 it.getOrNull()?.let { foundThreePid ->
-                                    rx.getProfileInfo(foundThreePid.matrixId)
+                                    flowSession.getProfileInfo(foundThreePid.matrixId)
                                             .map { json ->
                                                 ThreePidUser(
                                                         email = search,

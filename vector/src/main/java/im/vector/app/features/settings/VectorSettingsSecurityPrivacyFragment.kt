@@ -60,6 +60,10 @@ import im.vector.app.features.raw.wellknown.isE2EByDefault
 import im.vector.app.features.themes.ThemeUtils
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import me.gujun.android.span.span
 import org.matrix.android.sdk.api.MatrixCallback
@@ -144,14 +148,12 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
         // My device name may have been updated
         refreshMyDevice()
         refreshXSigningStatus()
-        session.rx().liveSecretSynchronisationInfo()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
+        session.liveSecretSynchronisationInfo()
+                .flowOn(Dispatchers.Main)
+                .onEach {
                     refresh4SSection(it)
                     refreshXSigningStatus()
-                }.also {
-                    disposables.add(it)
-                }
+                }.launchIn(viewLifecycleOwner.lifecycleScope)
 
         lifecycleScope.launchWhenResumed {
             findPreference<VectorPreference>(VectorPreferences.SETTINGS_CRYPTOGRAPHY_HS_ADMIN_DISABLED_E2E_DEFAULT)?.isVisible =

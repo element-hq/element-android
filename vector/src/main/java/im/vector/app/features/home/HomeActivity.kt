@@ -27,6 +27,7 @@ import android.view.MenuItem
 import androidx.core.view.GravityCompat
 import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
 import com.google.android.material.appbar.MaterialToolbar
@@ -72,6 +73,7 @@ import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
 import im.vector.app.features.workers.signout.ServerBackupStatusViewState
 import im.vector.app.push.fcm.FcmHelper
 import io.reactivex.android.schedulers.AndroidSchedulers
+import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.session.initsync.SyncStatusService
 import org.matrix.android.sdk.api.session.permalinks.PermalinkService
@@ -288,26 +290,23 @@ class HomeActivity :
                 }
                 else                                                  -> deepLink
             }
-            permalinkHandler.launch(
-                    context = this,
-                    deepLink = resolvedLink,
-                    navigationInterceptor = this,
-                    buildTask = true
-            )
-                    // .delay(500, TimeUnit.MILLISECONDS)
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe { isHandled ->
-                        if (!isHandled) {
-                            val isMatrixToLink = deepLink.startsWith(PermalinkService.MATRIX_TO_URL_BASE)
-                                    || deepLink.startsWith(MATRIX_TO_CUSTOM_SCHEME_URL_BASE)
-                            MaterialAlertDialogBuilder(this)
-                                    .setTitle(R.string.dialog_title_error)
-                                    .setMessage(if (isMatrixToLink) R.string.permalink_malformed else R.string.universal_link_malformed)
-                                    .setPositiveButton(R.string.ok, null)
-                                    .show()
-                        }
-                    }
-                    .disposeOnDestroy()
+            lifecycleScope.launch {
+                val isHandled = permalinkHandler.launch(
+                        context = this@HomeActivity,
+                        deepLink = resolvedLink,
+                        navigationInterceptor = this@HomeActivity,
+                        buildTask = true
+                )
+                if (!isHandled) {
+                    val isMatrixToLink = deepLink.startsWith(PermalinkService.MATRIX_TO_URL_BASE)
+                            || deepLink.startsWith(MATRIX_TO_CUSTOM_SCHEME_URL_BASE)
+                    MaterialAlertDialogBuilder(this@HomeActivity)
+                            .setTitle(R.string.dialog_title_error)
+                            .setMessage(if (isMatrixToLink) R.string.permalink_malformed else R.string.universal_link_malformed)
+                            .setPositiveButton(R.string.ok, null)
+                            .show()
+                }
+            }
         }
     }
 
