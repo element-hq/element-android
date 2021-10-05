@@ -458,7 +458,7 @@ dependencies {
     kapt libs.dagger.daggerCompiler
 
     // UnifiedPush
-    implementation 'com.github.UnifiedPush:android-connector:1.2.0'
+    implementation 'com.github.UnifiedPush:android-connector:1.2.2'
     // UnifiedPush gplay flavor only
     gplayImplementation('com.github.SchildiChat:android-embedded_fcm_distributor:e223728') {
         exclude group: 'com.google.firebase', module: 'firebase-core'
