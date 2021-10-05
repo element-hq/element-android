@@ -16,6 +16,7 @@
 
 package im.vector.app.features.roomprofile.alias
 
+import androidx.lifecycle.asFlow
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
@@ -28,6 +29,8 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.core.utils.mapOptional
+import im.vector.app.core.utils.unwrap
 import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -39,11 +42,6 @@ import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.RoomCanonicalAliasContent
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
-import org.matrix.android.sdk.flow.flow
-import org.matrix.android.sdk.flow.mapOptional
-import org.matrix.android.sdk.flow.unwrap
-import org.matrix.android.sdk.rx.rx
-import org.matrix.android.sdk.rx.unwrap
 
 class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: RoomAliasViewState,
                                                      private val session: Session)
@@ -131,7 +129,8 @@ class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: Roo
     }
 
     private fun observeRoomSummary() {
-        room.flow().liveRoomSummary()
+        room.getRoomSummaryLive()
+                .asFlow()
                 .unwrap()
                 .execute { async ->
                     copy(
@@ -173,8 +172,8 @@ class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: Roo
      * We do not want to use the fallback avatar url, which can be the other user avatar, or the current user avatar.
      */
     private fun observeRoomCanonicalAlias() {
-        room.flow()
-                .liveStateEvent(EventType.STATE_ROOM_CANONICAL_ALIAS, QueryStringValue.NoCondition)
+        room.getStateEventLive(EventType.STATE_ROOM_CANONICAL_ALIAS, QueryStringValue.NoCondition)
+                .asFlow()
                 .mapOptional { it.content.toModel<RoomCanonicalAliasContent>() }
                 .unwrap()
                 .setOnEach {

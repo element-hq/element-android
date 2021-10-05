@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.flow
+package im.vector.app.core.utils
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filter

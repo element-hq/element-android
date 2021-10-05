@@ -17,6 +17,7 @@
 package im.vector.app.features.workers.signout
 
 import android.net.Uri
+import androidx.lifecycle.asFlow
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.FragmentViewModelContext
@@ -43,7 +44,6 @@ import org.matrix.android.sdk.api.session.crypto.crosssigning.SELF_SIGNING_KEY_S
 import org.matrix.android.sdk.api.session.crypto.crosssigning.USER_SIGNING_KEY_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupState
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupStateListener
-import org.matrix.android.sdk.flow.flow
 import timber.log.Timber
 
 data class SignoutCheckViewState(
@@ -98,7 +98,9 @@ class SignoutCheckViewModel @AssistedInject constructor(
             )
         }
 
-        session.flow().liveUserAccountData(setOf(MASTER_KEY_SSSS_NAME, USER_SIGNING_KEY_SSSS_NAME, SELF_SIGNING_KEY_SSSS_NAME))
+        session.accountDataService()
+                .getLiveUserAccountDataEvents(setOf(MASTER_KEY_SSSS_NAME, USER_SIGNING_KEY_SSSS_NAME, SELF_SIGNING_KEY_SSSS_NAME))
+                .asFlow()
                 .map {
                     session.sharedSecretStorageService.isRecoverySetup()
                 }

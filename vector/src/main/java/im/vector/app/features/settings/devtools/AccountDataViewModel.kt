@@ -16,6 +16,7 @@
 
 package im.vector.app.features.settings.devtools
 
+import androidx.lifecycle.asFlow
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MavericksState
@@ -31,7 +32,6 @@ import im.vector.app.core.platform.VectorViewModel
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.accountdata.UserAccountDataEvent
-import org.matrix.android.sdk.flow.flow
 
 data class AccountDataViewState(
         val accountData: Async<List<UserAccountDataEvent>> = Uninitialized
@@ -42,7 +42,9 @@ class AccountDataViewModel @AssistedInject constructor(@Assisted initialState: A
     : VectorViewModel<AccountDataViewState, AccountDataAction, EmptyViewEvents>(initialState) {
 
     init {
-        session.flow().liveUserAccountData(emptySet())
+        session.accountDataService()
+                .getLiveUserAccountDataEvents(emptySet())
+                .asFlow()
                 .execute {
                     copy(accountData = it)
                 }

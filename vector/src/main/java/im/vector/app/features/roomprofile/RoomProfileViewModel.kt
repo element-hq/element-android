@@ -17,6 +17,7 @@
 
 package im.vector.app.features.roomprofile
 
+import androidx.lifecycle.asFlow
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
@@ -27,6 +28,8 @@ import im.vector.app.R
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.core.utils.mapOptional
+import im.vector.app.core.utils.unwrap
 import im.vector.app.features.home.ShortcutCreator
 import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import kotlinx.coroutines.Dispatchers
@@ -40,10 +43,6 @@ import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.create.RoomCreateContent
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.session.room.state.isPublic
-import org.matrix.android.sdk.flow.FlowRoom
-import org.matrix.android.sdk.flow.flow
-import org.matrix.android.sdk.flow.mapOptional
-import org.matrix.android.sdk.flow.unwrap
 
 class RoomProfileViewModel @AssistedInject constructor(
         @Assisted private val initialState: RoomProfileViewState,
@@ -69,15 +68,14 @@ class RoomProfileViewModel @AssistedInject constructor(
     private val room = session.getRoom(initialState.roomId)!!
 
     init {
-        val flowRoom = room.flow()
-        observeRoomSummary(flowRoom)
-        observeRoomCreateContent(flowRoom)
-        observeBannedRoomMembers(flowRoom)
+        observeRoomSummary()
+        observeRoomCreateContent()
+        observeBannedRoomMembers()
         observePermissions()
     }
 
-    private fun observeRoomCreateContent(flowRoom: FlowRoom) {
-        flowRoom.liveStateEvent(EventType.STATE_ROOM_CREATE, QueryStringValue.NoCondition)
+    private fun observeRoomCreateContent() {
+        room.getStateEventLive(EventType.STATE_ROOM_CREATE, QueryStringValue.NoCondition).asFlow()
                 .mapOptional { it.content.toModel<RoomCreateContent>() }
                 .unwrap()
                 .execute { async ->
@@ -92,16 +90,16 @@ class RoomProfileViewModel @AssistedInject constructor(
                 }
     }
 
-    private fun observeRoomSummary(flowRoom: FlowRoom) {
-        flowRoom.liveRoomSummary()
+    private fun observeRoomSummary() {
+        room.getRoomSummaryLive().asFlow()
                 .unwrap()
                 .execute {
                     copy(roomSummary = it)
                 }
     }
 
-    private fun observeBannedRoomMembers(flowRoom: FlowRoom) {
-        flowRoom.liveRoomMembers(roomMemberQueryParams { memberships = listOf(Membership.BAN) })
+    private fun observeBannedRoomMembers() {
+        room.getRoomMembersLive(roomMemberQueryParams { memberships = listOf(Membership.BAN) }).asFlow()
                 .execute {
                     copy(bannedMembership = it)
                 }

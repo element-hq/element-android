@@ -17,6 +17,7 @@
 package im.vector.app.features.home.room.list
 
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.asFlow
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
@@ -42,7 +43,6 @@ import org.matrix.android.sdk.api.session.room.UpdatableLivePageResult
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
 import org.matrix.android.sdk.api.session.room.state.isPublic
-import org.matrix.android.sdk.flow.flow
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -95,7 +95,8 @@ class RoomListViewModel @Inject constructor(
                     )
                 }
 
-        session.flow().liveUser(session.myUserId)
+        session.getUserLive(session.myUserId)
+                .asFlow()
                 .map { it.getOrNull()?.getBestName() }
                 .distinctUntilChanged()
                 .execute {
@@ -106,8 +107,8 @@ class RoomListViewModel @Inject constructor(
     }
 
     private fun observeMembershipChanges() {
-        session.flow()
-                .liveRoomChangeMembershipState()
+        session.getChangeMembershipsLive()
+                .asFlow()
                 .setOnEach {
                     copy(roomMembershipChanges = it)
                 }

@@ -48,7 +48,6 @@ import org.matrix.android.sdk.api.session.room.RoomSortOrder
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.api.util.toMatrixItem
-import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.rx.asObservable
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
@@ -96,11 +95,13 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
         updateShowDialPadTab()
         observeDataStore()
         callManager.addProtocolsCheckerListener(this)
-        session.flow().liveUser(session.myUserId).execute {
-            copy(
-                    myMatrixItem = it.invoke()?.getOrNull()?.toMatrixItem()
-            )
-        }
+        session.getUserLive(session.myUserId)
+                .asFlow()
+                .execute {
+                    copy(
+                            myMatrixItem = it.invoke()?.getOrNull()?.toMatrixItem()
+                    )
+                }
     }
 
     private fun observeDataStore() {
@@ -183,8 +184,8 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
     }
 
     private fun observeSyncState() {
-        session.flow()
-                .liveSyncState()
+        session.getSyncStateLive()
+                .asFlow()
                 .setOnEach { syncState ->
                     copy(syncState = syncState)
                 }

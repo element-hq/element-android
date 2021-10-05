@@ -16,7 +16,7 @@
 
 package im.vector.app.features.roomprofile.notifications
 
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.asFlow
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
@@ -25,13 +25,10 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.core.utils.unwrap
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsBottomSheet
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.flow.flow
-import org.matrix.android.sdk.flow.unwrap
-import org.matrix.android.sdk.rx.rx
-import org.matrix.android.sdk.rx.unwrap
 
 class RoomNotificationSettingsViewModel @AssistedInject constructor(
         @Assisted initialState: RoomNotificationSettingsViewState,
@@ -66,7 +63,8 @@ class RoomNotificationSettingsViewModel @AssistedInject constructor(
     }
 
     private fun observeSummary() {
-        room.flow().liveRoomSummary()
+        room.getRoomSummaryLive()
+                .asFlow()
                 .unwrap()
                 .execute { async ->
                     copy(roomSummary = async)
@@ -74,8 +72,8 @@ class RoomNotificationSettingsViewModel @AssistedInject constructor(
     }
 
     private fun observeNotificationState() {
-        room.rx()
-                .liveNotificationState()
+        room.getLiveRoomNotificationState()
+                .asFlow()
                 .execute {
                     copy(notificationState = it)
                 }

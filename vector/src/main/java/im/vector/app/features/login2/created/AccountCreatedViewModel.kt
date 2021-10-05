@@ -16,7 +16,7 @@
 
 package im.vector.app.features.login2.created
 
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.asFlow
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
@@ -24,13 +24,13 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.core.utils.unwrap
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.api.util.toMatrixItem
-import org.matrix.android.sdk.rx.rx
-import org.matrix.android.sdk.rx.unwrap
 import timber.log.Timber
 
 class AccountCreatedViewModel @AssistedInject constructor(
@@ -62,8 +62,8 @@ class AccountCreatedViewModel @AssistedInject constructor(
     }
 
     private fun observeUser() {
-        session.rx()
-                .liveUser(session.myUserId)
+        session.getUserLive(session.myUserId)
+                .asFlow()
                 .unwrap()
                 .map {
                     if (MatrixPatterns.isUserId(it.userId)) {

@@ -16,6 +16,7 @@
 
 package im.vector.app.features.share
 
+import androidx.lifecycle.asFlow
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
@@ -37,7 +38,6 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
-import org.matrix.android.sdk.flow.flow
 
 class IncomingShareViewModel @AssistedInject constructor(
         @Assisted initialState: IncomingShareViewState,
@@ -69,8 +69,8 @@ class IncomingShareViewModel @AssistedInject constructor(
         val queryParams = roomSummaryQueryParams {
             memberships = listOf(Membership.JOIN)
         }
-        session
-                .flow().liveRoomSummaries(queryParams)
+        session.getRoomSummariesLive(queryParams)
+                .asFlow()
                 .execute {
                     copy(roomSummaries = it)
                 }
@@ -86,7 +86,7 @@ class IncomingShareViewModel @AssistedInject constructor(
                         displayName = displayNameQuery
                         memberships = listOf(Membership.JOIN)
                     }
-                    session.flow().liveRoomSummaries(filterQueryParams)
+                    session.getRoomSummariesLive(filterQueryParams).asFlow()
                 }
                 .sample(300)
                 .map { it.sortedWith(breadcrumbsRoomComparator) }

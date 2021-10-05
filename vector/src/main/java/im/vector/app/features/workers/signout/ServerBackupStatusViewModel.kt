@@ -17,6 +17,7 @@
 package im.vector.app.features.workers.signout
 
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.asFlow
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.FragmentViewModelContext
@@ -41,7 +42,6 @@ import org.matrix.android.sdk.api.session.crypto.crosssigning.SELF_SIGNING_KEY_S
 import org.matrix.android.sdk.api.session.crypto.crosssigning.USER_SIGNING_KEY_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupState
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupStateListener
-import org.matrix.android.sdk.flow.flow
 
 data class ServerBackupStatusViewState(
         val bannerState: Async<BannerState> = Uninitialized
@@ -92,9 +92,19 @@ class ServerBackupStatusViewModel @AssistedInject constructor(@Assisted initialS
     init {
         session.cryptoService().keysBackupService().addListener(this)
         keysBackupState.value = session.cryptoService().keysBackupService().state
-        val liveUserAccountData = session.flow().liveUserAccountData(setOf(MASTER_KEY_SSSS_NAME, USER_SIGNING_KEY_SSSS_NAME, SELF_SIGNING_KEY_SSSS_NAME))
-        val liveCrossSigningInfo = session.flow().liveCrossSigningInfo(session.myUserId)
-        val liveCrossSigningPrivateKeys = session.flow().liveCrossSigningPrivateKeys()
+        val liveUserAccountData = session.accountDataService()
+                .getLiveUserAccountDataEvents(setOf(MASTER_KEY_SSSS_NAME, USER_SIGNING_KEY_SSSS_NAME, SELF_SIGNING_KEY_SSSS_NAME))
+                .asFlow()
+        val liveCrossSigningInfo = session.cryptoService()
+                .crossSigningService()
+                .getLiveCrossSigningKeys(session.myUserId)
+                .asFlow()
+        val liveCrossSigningPrivateKeys = session.cryptoService()
+                .crossSigningService()
+                .getLiveCrossSigningPrivateKeys()
+                .asFlow()
+
+
         combine(liveUserAccountData, liveCrossSigningInfo, keyBackupFlow, liveCrossSigningPrivateKeys) { _, crossSigningInfo, keyBackupState, pInfo ->
             // first check if 4S is already setup
             if (session.sharedSecretStorageService.isRecoverySetup()) {

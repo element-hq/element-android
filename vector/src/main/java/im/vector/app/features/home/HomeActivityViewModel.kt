@@ -47,12 +47,9 @@ import org.matrix.android.sdk.api.session.initsync.SyncStatusService
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.api.util.toMatrixItem
-import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.internal.util.awaitCallback
-import org.matrix.android.sdk.rx.asObservable
-import org.matrix.android.sdk.rx.rx
 import timber.log.Timber
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
@@ -104,8 +101,10 @@ class HomeActivityViewModel @AssistedInject constructor(
                 .crossSigningService().allPrivateKeysKnown()
 
         safeActiveSession
-                .flow()
-                .liveCrossSigningInfo(safeActiveSession.myUserId)
+                .cryptoService()
+                .crossSigningService()
+                .getLiveCrossSigningKeys(safeActiveSession.myUserId)
+                .asFlow()
                 .onEach {
                     val isVerified = it.getOrNull()?.isTrusted() ?: false
                     if (!isVerified && onceTrusted) {

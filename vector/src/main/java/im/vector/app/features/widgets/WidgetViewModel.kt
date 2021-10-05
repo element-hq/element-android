@@ -17,6 +17,7 @@
 package im.vector.app.features.widgets
 
 import android.net.Uri
+import androidx.lifecycle.asFlow
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
@@ -29,6 +30,8 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.core.utils.mapOptional
+import im.vector.app.core.utils.unwrap
 import im.vector.app.features.widgets.permissions.WidgetPermissionsHelper
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
@@ -42,9 +45,6 @@ import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerS
 import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.session.widgets.WidgetManagementFailure
-import org.matrix.android.sdk.flow.flow
-import org.matrix.android.sdk.flow.mapOptional
-import org.matrix.android.sdk.flow.unwrap
 import timber.log.Timber
 import javax.net.ssl.HttpsURLConnection
 
@@ -119,7 +119,8 @@ class WidgetViewModel @AssistedInject constructor(@Assisted val initialState: Wi
         if (room == null) {
             return
         }
-        room.flow().liveStateEvent(EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.NoCondition)
+        room.getStateEventLive(EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.NoCondition)
+                .asFlow()
                 .mapOptional { it.content.toModel<PowerLevelsContent>() }
                 .unwrap()
                 .map {
@@ -135,8 +136,9 @@ class WidgetViewModel @AssistedInject constructor(@Assisted val initialState: Wi
             return
         }
         val widgetId = initialState.widgetId ?: return
-        session.flow()
-                .liveRoomWidgets(initialState.roomId, QueryStringValue.Equals(widgetId))
+        session.widgetService()
+                .getRoomWidgetsLive(initialState.roomId, QueryStringValue.Equals(widgetId))
+                .asFlow()
                 .filter { it.isNotEmpty() }
                 .map { it.first() }
                 .execute {

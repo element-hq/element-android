@@ -15,6 +15,7 @@
  */
 package im.vector.app.features.widgets.permissions
 
+import androidx.lifecycle.asFlow
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MavericksViewModelFactory
@@ -32,7 +33,6 @@ import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.widgets.model.WidgetType
-import org.matrix.android.sdk.flow.flow
 import timber.log.Timber
 import java.net.URL
 
@@ -49,8 +49,9 @@ class RoomWidgetPermissionViewModel @AssistedInject constructor(@Assisted val in
 
     private fun observeWidget() {
         val widgetId = initialState.widgetId ?: return
-        session.flow()
-                .liveRoomWidgets(initialState.roomId, QueryStringValue.Equals(widgetId))
+        session.widgetService()
+                .getRoomWidgetsLive(initialState.roomId, QueryStringValue.Equals(widgetId))
+                .asFlow()
                 .filter { it.isNotEmpty() }
                 .map {
                     val widget = it.first()

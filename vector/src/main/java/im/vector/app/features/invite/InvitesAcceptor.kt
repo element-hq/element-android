@@ -16,6 +16,7 @@
 
 package im.vector.app.features.invite
 
+import androidx.lifecycle.asFlow
 import im.vector.app.ActiveSessionDataSource
 import im.vector.app.features.session.coroutineScope
 import io.reactivex.disposables.Disposable
@@ -35,7 +36,6 @@ import org.matrix.android.sdk.api.session.room.Room
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
-import org.matrix.android.sdk.flow.flow
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -82,10 +82,9 @@ class InvitesAcceptor @Inject constructor(
         val roomQueryParams = roomSummaryQueryParams {
             this.memberships = listOf(Membership.INVITE)
         }
-        val flowSession = session.flow()
         combine(
-                flowSession.liveRoomSummaries(roomQueryParams),
-                flowSession.liveRoomChangeMembershipState().debounce(1000)
+                session.getRoomSummariesLive(roomQueryParams).asFlow(),
+                session.getChangeMembershipsLive().asFlow().debounce(1000)
         ) { invitedRooms, _ -> invitedRooms.map { it.roomId } }
                 .filter { it.isNotEmpty() }
                 .onEach { invitedRoomIds ->

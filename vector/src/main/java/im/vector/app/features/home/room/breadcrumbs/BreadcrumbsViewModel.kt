@@ -16,6 +16,7 @@
 
 package im.vector.app.features.home.room.breadcrumbs
 
+import androidx.lifecycle.asFlow
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
@@ -25,13 +26,10 @@ import dagger.assisted.AssistedFactory
 import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
-import io.reactivex.schedulers.Schedulers
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
-import org.matrix.android.sdk.flow.flow
-import org.matrix.android.sdk.rx.rx
 
 class BreadcrumbsViewModel @AssistedInject constructor(@Assisted initialState: BreadcrumbsViewState,
                                                        private val session: Session)
@@ -62,11 +60,11 @@ class BreadcrumbsViewModel @AssistedInject constructor(@Assisted initialState: B
     // PRIVATE METHODS *****************************************************************************
 
     private fun observeBreadcrumbs() {
-        session.flow()
-                .liveBreadcrumbs(roomSummaryQueryParams {
+        session.getBreadcrumbsLive(roomSummaryQueryParams {
                     displayName = QueryStringValue.NoCondition
                     memberships = listOf(Membership.JOIN)
                 })
+                .asFlow()
                 .execute { asyncBreadcrumbs ->
                     copy(asyncBreadcrumbs = asyncBreadcrumbs)
                 }

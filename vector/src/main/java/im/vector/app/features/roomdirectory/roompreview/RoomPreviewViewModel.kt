@@ -16,6 +16,7 @@
 
 package im.vector.app.features.roomdirectory.roompreview
 
+import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
@@ -42,8 +43,6 @@ import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.peeking.PeekResult
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
-import org.matrix.android.sdk.flow.flow
-import org.matrix.android.sdk.rx.rx
 import timber.log.Timber
 
 class RoomPreviewViewModel @AssistedInject constructor(@Assisted private val initialState: RoomPreviewViewState,
@@ -168,8 +167,8 @@ class RoomPreviewViewModel @AssistedInject constructor(@Assisted private val ini
             excludeType = null
         }
         session
-                .flow()
-                .liveRoomSummaries(queryParams)
+                .getRoomSummariesLive(queryParams)
+                .asFlow()
                 .onEach { list ->
                     val isRoomJoined = list.any {
                         it.membership == Membership.JOIN
@@ -187,8 +186,8 @@ class RoomPreviewViewModel @AssistedInject constructor(@Assisted private val ini
     }
 
     private fun observeMembershipChanges() {
-        session.flow()
-                .liveRoomChangeMembershipState()
+        session.getChangeMembershipsLive()
+                .asFlow()
                 .onEach {
                     val changeMembership = it[initialState.roomId] ?: ChangeMembershipState.Unknown
                     val joinState = when (changeMembership) {

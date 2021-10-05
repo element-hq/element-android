@@ -16,6 +16,7 @@
 
 package im.vector.app.features.crypto.quads
 
+import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
@@ -43,9 +44,7 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.securestorage.IntegrityResult
 import org.matrix.android.sdk.api.session.securestorage.KeyInfoResult
 import org.matrix.android.sdk.api.session.securestorage.RawBytesKeySpec
-import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.internal.crypto.crosssigning.toBase64NoPadding
-import org.matrix.android.sdk.rx.rx
 import timber.log.Timber
 import java.io.ByteArrayOutputStream
 
@@ -116,8 +115,9 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
             }
         }
 
-        session.flow()
-                .liveUserCryptoDevices(session.myUserId)
+        session.cryptoService()
+                .getLiveCryptoDeviceInfo(session.myUserId)
+                .asFlow()
                 .distinctUntilChanged()
                 .execute {
                     copy(

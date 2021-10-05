@@ -323,7 +323,6 @@ dependencies {
 
     implementation project(":matrix-sdk-android")
     implementation project(":matrix-sdk-android-rx")
-    implementation project(":matrix-sdk-android-flow")
     implementation project(":diff-match-patch")
     implementation project(":multipicker")
     implementation project(":attachment-viewer")

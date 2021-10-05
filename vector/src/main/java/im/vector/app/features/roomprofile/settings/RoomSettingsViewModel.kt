@@ -17,6 +17,7 @@
 package im.vector.app.features.roomprofile.settings
 
 import androidx.core.net.toFile
+import androidx.lifecycle.asFlow
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MavericksViewModelFactory
@@ -26,6 +27,8 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.core.utils.mapOptional
+import im.vector.app.core.utils.unwrap
 import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import im.vector.app.features.settings.VectorPreferences
 import kotlinx.coroutines.flow.launchIn
@@ -43,9 +46,6 @@ import org.matrix.android.sdk.api.session.room.model.RoomGuestAccessContent
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibilityContent
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRulesContent
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
-import org.matrix.android.sdk.flow.flow
-import org.matrix.android.sdk.flow.mapOptional
-import org.matrix.android.sdk.flow.unwrap
 
 class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: RoomSettingsViewState,
                                                         private val vectorPreferences: VectorPreferences,
@@ -125,7 +125,8 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
     }
 
     private fun observeRoomSummary() {
-        room.flow().liveRoomSummary()
+        room.getRoomSummaryLive()
+                .asFlow()
                 .unwrap()
                 .execute { async ->
                     val roomSummary = async.invoke()
@@ -161,8 +162,8 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
     }
 
     private fun observeRoomHistoryVisibility() {
-        room.flow()
-                .liveStateEvent(EventType.STATE_ROOM_HISTORY_VISIBILITY, QueryStringValue.NoCondition)
+        room.getStateEventLive(EventType.STATE_ROOM_HISTORY_VISIBILITY, QueryStringValue.NoCondition)
+                .asFlow()
                 .mapOptional { it.content.toModel<RoomHistoryVisibilityContent>() }
                 .unwrap()
                 .mapNotNull { it.historyVisibility }
@@ -172,8 +173,8 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
     }
 
     private fun observeJoinRule() {
-        room.flow()
-                .liveStateEvent(EventType.STATE_ROOM_JOIN_RULES, QueryStringValue.NoCondition)
+        room.getStateEventLive(EventType.STATE_ROOM_JOIN_RULES, QueryStringValue.NoCondition)
+                .asFlow()
                 .mapOptional { it.content.toModel<RoomJoinRulesContent>() }
                 .unwrap()
                 .mapNotNull { it.joinRules }
@@ -183,8 +184,8 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
     }
 
     private fun observeGuestAccess() {
-        room.flow()
-                .liveStateEvent(EventType.STATE_ROOM_GUEST_ACCESS, QueryStringValue.NoCondition)
+        room.getStateEventLive(EventType.STATE_ROOM_GUEST_ACCESS, QueryStringValue.NoCondition)
+                .asFlow()
                 .mapOptional { it.content.toModel<RoomGuestAccessContent>() }
                 .unwrap()
                 .mapNotNull { it.guestAccess }
@@ -197,8 +198,8 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
      * We do not want to use the fallback avatar url, which can be the other user avatar, or the current user avatar.
      */
     private fun observeRoomAvatar() {
-        room.flow()
-                .liveStateEvent(EventType.STATE_ROOM_AVATAR, QueryStringValue.NoCondition)
+        room.getStateEventLive(EventType.STATE_ROOM_AVATAR, QueryStringValue.NoCondition)
+                .asFlow()
                 .mapOptional { it.content.toModel<RoomAvatarContent>() }
                 .unwrap()
                 .setOnEach {

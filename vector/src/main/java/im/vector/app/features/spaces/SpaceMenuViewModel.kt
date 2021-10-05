@@ -16,6 +16,7 @@
 
 package im.vector.app.features.spaces
 
+import androidx.lifecycle.asFlow
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
@@ -42,8 +43,6 @@ import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.session.room.powerlevels.Role
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
-import org.matrix.android.sdk.flow.flow
-import org.matrix.android.sdk.rx.rx
 import timber.log.Timber
 
 class SpaceMenuViewModel @AssistedInject constructor(
@@ -78,17 +77,19 @@ class SpaceMenuViewModel @AssistedInject constructor(
 
         session.getRoom(initialState.spaceId)?.let { room ->
 
-            room.flow().liveRoomSummary().onEach {
-                it.getOrNull()?.let {
-                    if (it.membership == Membership.LEAVE) {
-                        setState { copy(leavingState = Success(Unit)) }
-                        if (appStateHandler.safeActiveSpaceId() == initialState.spaceId) {
-                            // switch to home?
-                            appStateHandler.setCurrentSpace(null, session)
+            room.getRoomSummaryLive()
+                    .asFlow()
+                    .onEach {
+                        it.getOrNull()?.let {
+                            if (it.membership == Membership.LEAVE) {
+                                setState { copy(leavingState = Success(Unit)) }
+                                if (appStateHandler.safeActiveSpaceId() == initialState.spaceId) {
+                                    // switch to home?
+                                    appStateHandler.setCurrentSpace(null, session)
+                                }
+                            }
                         }
-                    }
-                }
-            }.launchIn(viewModelScope)
+                    }.launchIn(viewModelScope)
 
             PowerLevelsFlowFactory(room)
                     .createFlow()

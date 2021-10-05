@@ -15,6 +15,7 @@
  */
 package im.vector.app.features.home.room.detail.timeline.action
 
+import androidx.lifecycle.asFlow
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
@@ -28,6 +29,7 @@ import im.vector.app.core.extensions.canReact
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.core.utils.unwrap
 import im.vector.app.features.home.room.detail.timeline.format.NoticeEventFormatter
 import im.vector.app.features.html.EventHtmlRenderer
 import im.vector.app.features.html.PillsPostProcessor
@@ -58,8 +60,6 @@ import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
 import org.matrix.android.sdk.api.session.room.timeline.hasBeenEdited
-import org.matrix.android.sdk.flow.flow
-import org.matrix.android.sdk.flow.unwrap
 
 /**
  * Information related to an event and used to display preview in contextual bottom sheet.
@@ -137,8 +137,8 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
 
     private fun observeEvent() {
         if (room == null) return
-        room.flow()
-                .liveTimelineEvent(initialState.eventId)
+        room.getTimeLineEventLive(initialState.eventId)
+                .asFlow()
                 .unwrap()
                 .execute {
                     copy(timelineEvent = it)
@@ -149,8 +149,8 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
         if (room == null) return
         eventIdFlow
                 .flatMapLatest { eventId ->
-                    room.flow()
-                            .liveAnnotationSummary(eventId)
+                    room.getEventAnnotationsSummaryLive(eventId)
+                            .asFlow()
                             .map { annotations ->
                                 EmojiDataSource.quickEmojis.map { emoji ->
                                     ToggleState(emoji, annotations.getOrNull()?.reactionsSummary?.firstOrNull { it.key == emoji }?.addedByMe ?: false)
