@@ -9,7 +9,7 @@ Android support can be found in this [![Element Android Matrix room #element-and
 ## Android Studio settings
 
 Please set the "hard wrap" setting of Android Studio to 160 chars, this is the setting we use internally to format the source code (Menu `Settings/Editor/Code Style` then `Hard wrap at`).
-Please ensure that your using the project formatting rules (which are in the project at .idea/codeStyles/), and format the file before committing them.
+Please ensure that you're using the project formatting rules (which are in the project at .idea/codeStyles/), and format the file before committing them.
 
 ### Template
 
