@@ -122,14 +122,15 @@ class RoomSettingsController @Inject constructor(
             id("topicDivider")
         }
 
-        buildProfileAction(
-                id = "historyReadability",
-                title = stringProvider.getString(R.string.room_settings_room_read_history_rules_pref_title),
-                subtitle = roomHistoryVisibilityFormatter.getSetting(data.newHistoryVisibility ?: data.currentHistoryVisibility),
-                divider = true,
-                editable = data.actionPermissions.canChangeHistoryVisibility,
-                action = { if (data.actionPermissions.canChangeHistoryVisibility) callback?.onHistoryVisibilityClicked() }
-        )
+        // Hidden in Tchap
+//        buildProfileAction(
+//                id = "historyReadability",
+//                title = stringProvider.getString(R.string.room_settings_room_read_history_rules_pref_title),
+//                subtitle = roomHistoryVisibilityFormatter.getSetting(data.newHistoryVisibility ?: data.currentHistoryVisibility),
+//                divider = true,
+//                editable = data.actionPermissions.canChangeHistoryVisibility,
+//                action = { if (data.actionPermissions.canChangeHistoryVisibility) callback?.onHistoryVisibilityClicked() }
+//        )
 
         buildProfileAction(
                 id = "joinRule",
