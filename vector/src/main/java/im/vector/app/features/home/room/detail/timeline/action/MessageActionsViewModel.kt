@@ -341,12 +341,12 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                 add(EventSharedAction.AddReaction(eventId))
             }
 
-            if (canQuote(timelineEvent, messageContent, actionPermissions)) {
-                add(EventSharedAction.Quote(eventId))
-            }
-
             if (canViewReactions(timelineEvent)) {
                 add(EventSharedAction.ViewReactions(informationData))
+            }
+
+            if (canQuote(timelineEvent, messageContent, actionPermissions)) {
+                add(EventSharedAction.Quote(eventId))
             }
 
             if (timelineEvent.hasBeenEdited()) {
