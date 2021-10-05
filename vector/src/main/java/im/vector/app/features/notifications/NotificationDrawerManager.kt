@@ -32,8 +32,8 @@ import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.FirstThrottler
 import im.vector.app.features.displayname.getBestName
-import im.vector.app.features.invite.AutoAcceptInvites
 import im.vector.app.features.home.room.detail.RoomDetailActivity
+import im.vector.app.features.invite.AutoAcceptInvites
 import im.vector.app.features.settings.VectorPreferences
 import me.gujun.android.span.span
 import org.matrix.android.sdk.api.session.Session

@@ -75,7 +75,7 @@ class ShortcutsHandler @Inject constructor(
             return
         }
 
-        // according to https://developer.android.com/reference/androidx/core/content/pm/ShortcutManagerCompat#removeLongLivedShortcuts(android.content.Context,%20java.util.List%3Cjava.lang.String%3E)
+        // according to Android documentation
         // removeLongLivedShortcuts for API 29 and lower should behave like removeDynamicShortcuts(Context, List)
         // getDynamicShortcuts: returns all dynamic shortcuts from the app.
         val shortcuts = ShortcutManagerCompat.getDynamicShortcuts(context).map { it.id }
