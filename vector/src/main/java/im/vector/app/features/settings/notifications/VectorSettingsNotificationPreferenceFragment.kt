@@ -135,7 +135,7 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
             updateEnabledForDevice(false)
             UPHelper.registerUnifiedPush(requireContext(), forceShowSelection = true) {
                 updateEnabledForDevice(true)
-                Handler(Looper.getMainLooper()).postDelayed({ refreshBackgroundSyncPrefs() } , 500)
+                Handler(Looper.getMainLooper()).postDelayed({ refreshBackgroundSyncPrefs() }, 500)
             }
             true
         }

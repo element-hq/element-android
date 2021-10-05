@@ -115,7 +115,11 @@ object UPHelper {
             }
             1 -> {
                 if (forceShowSelection) {
-                    Toast.makeText(context.applicationContext, context.getString(R.string.toast_unifiedpush_one_push_distributor, distributors.first()), Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                            context.applicationContext,
+                            context.getString(R.string.toast_unifiedpush_one_push_distributor, distributors.first()),
+                            Toast.LENGTH_LONG
+                    ).show()
                 }
                 up.saveDistributor(context, distributors.first())
                 up.registerApp(context)
