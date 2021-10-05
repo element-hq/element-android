@@ -40,11 +40,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.commonmark.parser.Parser
 import org.commonmark.renderer.html.HtmlRenderer
+import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
+import org.matrix.android.sdk.api.session.room.model.RoomAvatarContent
+import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.model.message.OptionItem
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
@@ -175,6 +178,10 @@ class TextComposerViewModel @AssistedInject constructor(
                             _viewEvents.post(TextComposerViewEvents.MessageSent)
                             popDraft()
                         }
+                        is ParsedCommand.ChangeRoomName           -> {
+                            handleChangeRoomNameSlashCommand(slashCommandResult)
+                            popDraft()
+                        }
                         is ParsedCommand.Invite                   -> {
                             handleInviteSlashCommand(slashCommandResult)
                             popDraft()
@@ -197,12 +204,20 @@ class TextComposerViewModel @AssistedInject constructor(
                                     if (slashCommandResult.enable) R.string.markdown_has_been_enabled else R.string.markdown_has_been_disabled))
                             popDraft()
                         }
+                        is ParsedCommand.BanUser                  -> {
+                            handleBanSlashCommand(slashCommandResult)
+                            popDraft()
+                        }
                         is ParsedCommand.UnbanUser                -> {
                             handleUnbanSlashCommand(slashCommandResult)
                             popDraft()
                         }
-                        is ParsedCommand.BanUser                  -> {
-                            handleBanSlashCommand(slashCommandResult)
+                        is ParsedCommand.IgnoreUser               -> {
+                            handleIgnoreSlashCommand(slashCommandResult)
+                            popDraft()
+                        }
+                        is ParsedCommand.UnignoreUser             -> {
+                            handleUnignoreSlashCommand(slashCommandResult)
                             popDraft()
                         }
                         is ParsedCommand.KickUser                 -> {
@@ -245,14 +260,12 @@ class TextComposerViewModel @AssistedInject constructor(
                             popDraft()
                         }
                         is ParsedCommand.SendShrug                -> {
-                            val sequence = buildString {
-                                append("¯\\_(ツ)_/¯")
-                                if (slashCommandResult.message.isNotEmpty()) {
-                                    append(" ")
-                                    append(slashCommandResult.message)
-                                }
-                            }
-                            room.sendTextMessage(sequence)
+                            sendPrefixedMessage("¯\\_(ツ)_/¯", slashCommandResult.message)
+                            _viewEvents.post(TextComposerViewEvents.SlashCommandHandled())
+                            popDraft()
+                        }
+                        is ParsedCommand.SendLenny                -> {
+                            sendPrefixedMessage("( ͡° ͜ʖ ͡°)", slashCommandResult.message)
                             _viewEvents.post(TextComposerViewEvents.SlashCommandHandled())
                             popDraft()
                         }
@@ -272,6 +285,23 @@ class TextComposerViewModel @AssistedInject constructor(
                         }
                         is ParsedCommand.ChangeDisplayName        -> {
                             handleChangeDisplayNameSlashCommand(slashCommandResult)
+                            popDraft()
+                        }
+                        is ParsedCommand.ChangeDisplayNameForRoom -> {
+                            handleChangeDisplayNameForRoomSlashCommand(slashCommandResult)
+                            popDraft()
+                        }
+                        is ParsedCommand.ChangeRoomAvatar         -> {
+                            handleChangeRoomAvatarSlashCommand(slashCommandResult)
+                            popDraft()
+                        }
+                        is ParsedCommand.ChangeAvatarForRoom      -> {
+                            handleChangeAvatarForRoomSlashCommand(slashCommandResult)
+                            popDraft()
+                        }
+                        is ParsedCommand.ShowUser                 -> {
+                            _viewEvents.post(TextComposerViewEvents.SlashCommandHandled())
+                            handleWhoisSlashCommand(slashCommandResult)
                             popDraft()
                         }
                         is ParsedCommand.DiscardSession           -> {
@@ -568,6 +598,73 @@ class TextComposerViewModel @AssistedInject constructor(
         launchSlashCommandFlowSuspendable {
             room.unban(unban.userId, unban.reason)
         }
+    }
+
+    private fun handleChangeRoomNameSlashCommand(changeRoomName: ParsedCommand.ChangeRoomName) {
+        launchSlashCommandFlowSuspendable {
+            room.updateName(changeRoomName.name)
+        }
+    }
+
+    private fun getMyRoomMemberContent(): RoomMemberContent? {
+        return room.getStateEvent(EventType.STATE_ROOM_MEMBER, QueryStringValue.Equals(session.myUserId))
+                ?.content
+                ?.toModel<RoomMemberContent>()
+    }
+
+    private fun handleChangeDisplayNameForRoomSlashCommand(changeDisplayName: ParsedCommand.ChangeDisplayNameForRoom) {
+        launchSlashCommandFlowSuspendable {
+            getMyRoomMemberContent()
+                    ?.copy(displayName = changeDisplayName.displayName)
+                    ?.toContent()
+                    ?.let {
+                        room.sendStateEvent(EventType.STATE_ROOM_MEMBER, session.myUserId, it)
+                    }
+        }
+    }
+
+    private fun handleChangeRoomAvatarSlashCommand(changeAvatar: ParsedCommand.ChangeRoomAvatar) {
+        launchSlashCommandFlowSuspendable {
+            room.sendStateEvent(EventType.STATE_ROOM_AVATAR, null, RoomAvatarContent(changeAvatar.url).toContent())
+        }
+    }
+
+    private fun handleChangeAvatarForRoomSlashCommand(changeAvatar: ParsedCommand.ChangeAvatarForRoom) {
+        launchSlashCommandFlowSuspendable {
+            getMyRoomMemberContent()
+                    ?.copy(avatarUrl = changeAvatar.url)
+                    ?.toContent()
+                    ?.let {
+                        room.sendStateEvent(EventType.STATE_ROOM_MEMBER, session.myUserId, it)
+                    }
+        }
+    }
+
+    private fun handleIgnoreSlashCommand(ignore: ParsedCommand.IgnoreUser) {
+        launchSlashCommandFlowSuspendable {
+            session.ignoreUserIds(listOf(ignore.userId))
+        }
+    }
+
+    private fun handleUnignoreSlashCommand(unignore: ParsedCommand.UnignoreUser) {
+        launchSlashCommandFlowSuspendable {
+            session.unIgnoreUserIds(listOf(unignore.userId))
+        }
+    }
+
+    private fun handleWhoisSlashCommand(whois: ParsedCommand.ShowUser) {
+        _viewEvents.post(TextComposerViewEvents.OpenRoomMemberProfile(whois.userId))
+    }
+
+    private fun sendPrefixedMessage(prefix: String, message: CharSequence) {
+        val sequence = buildString {
+            append(prefix)
+            if (message.isNotEmpty()) {
+                append(" ")
+                append(message)
+            }
+        }
+        room.sendTextMessage(sequence)
     }
 
     /**

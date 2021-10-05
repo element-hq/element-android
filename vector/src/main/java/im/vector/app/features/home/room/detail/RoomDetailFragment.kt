@@ -413,11 +413,12 @@ class RoomDetailFragment @Inject constructor(
 
         textComposerViewModel.observeViewEvents {
             when (it) {
-                is TextComposerViewEvents.JoinRoomCommandSuccess        -> handleJoinedToAnotherRoom(it)
-                is TextComposerViewEvents.SendMessageResult             -> renderSendMessageResult(it)
-                is TextComposerViewEvents.ShowMessage                   -> showSnackWithMessage(it.message)
+                is TextComposerViewEvents.JoinRoomCommandSuccess      -> handleJoinedToAnotherRoom(it)
+                is TextComposerViewEvents.SendMessageResult           -> renderSendMessageResult(it)
+                is TextComposerViewEvents.ShowMessage                 -> showSnackWithMessage(it.message)
                 is TextComposerViewEvents.ShowRoomUpgradeDialog       -> handleShowRoomUpgradeDialog(it)
                 is TextComposerViewEvents.AnimateSendButtonVisibility -> handleSendButtonVisibilityChanged(it)
+                is TextComposerViewEvents.OpenRoomMemberProfile       -> openRoomMemberProfile(it.userId)
             }.exhaustive
         }
 

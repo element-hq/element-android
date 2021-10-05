@@ -36,6 +36,8 @@ sealed class TextComposerViewEvents : VectorViewEvents {
     object SlashCommandResultOk : SendMessageResult()
     class SlashCommandResultError(val throwable: Throwable) : SendMessageResult()
 
+    data class OpenRoomMemberProfile(val userId: String) : TextComposerViewEvents()
+
     // TODO Remove
     object SlashCommandNotImplemented : SendMessageResult()
 
