@@ -432,7 +432,7 @@
     <string name="auth_username_in_use">Uživatelské jméno již použito</string>
     <string name="auth_home_server">Domovský server:</string>
     <string name="auth_identity_server">Server identity:</string>
-    <string name="auth_reset_password_next_step_button">Ověřil/a jsem svoji e-mailovou adresu</string>
+    <string name="auth_reset_password_next_step_button">Ověřil(a) jsem svoji e-mailovou adresu</string>
     <string name="auth_reset_password_message">K resetování hesla zadejte e-mailovou adresu spojenou s vaším účtem:</string>
     <string name="auth_reset_password_missing_email">Musíte zadat e-mailovou adresu spojenou s vaším účtem.</string>
     <string name="auth_reset_password_missing_password">Musíte zadat nové heslo.</string>
@@ -1753,7 +1753,7 @@
     <string name="login_reset_password_on">Resetovat heslo na %1$s</string>
     <string name="login_reset_password_notice">Ověřovací email bude odeslán do Vašeho mailboxu za účelem potvrzení nastavení nového heslo.</string>
     <string name="login_reset_password_submit">Dále</string>
-    <string name="login_reset_password_email_hint">Email</string>
+    <string name="login_reset_password_email_hint">E-mail</string>
     <string name="login_reset_password_password_hint">Nové heslo</string>
     <string name="login_reset_password_warning_title">Varování!</string>
     <string name="login_reset_password_warning_content">Změna hesla přenastaví všechny šifrovací klíče pro všechny Vaše relace, a tak učiní zašifrovanou historii chatů nečitelnou. Nastavte zálohu klíčů nebo exportujte své klíče místností z jiné relace, než se rozhodnete pokračovat.</string>
