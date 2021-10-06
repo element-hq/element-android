@@ -451,12 +451,14 @@ internal class RoomSummaryUpdater @Inject constructor(
                                 //.equalTo(RoomSummaryEntityFields.IS_DIRECT, false)
                                 .contains(RoomSummaryEntityFields.FLATTEN_PARENT_IDS, space.roomId)
                                 .findAll().forEach {
-                                    highlightCount += it.highlightCount
-                                    notificationCount += it.notificationCount
-                                    unreadCount += it.safeUnreadCount()
-                                    aggregateNotificationCount += min(it.notificationCount, 1)
-                                    aggregateUnreadCount += min(it.safeUnreadCount(), 1)
-                                    markedUnreadCount += if (it.markedUnread) 1 else 0
+                                    if (!it.isHiddenFromUser) {
+                                        highlightCount += it.highlightCount
+                                        notificationCount += it.notificationCount
+                                        unreadCount += it.safeUnreadCount()
+                                        aggregateNotificationCount += min(it.notificationCount, 1)
+                                        aggregateUnreadCount += min(it.safeUnreadCount(), 1)
+                                        markedUnreadCount += if (it.markedUnread) 1 else 0
+                                    }
                                 }
 
                         space.highlightCount = highlightCount
