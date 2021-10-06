@@ -31,6 +31,6 @@ data class DiscoverySettingsState(
 ) : MvRxState
 
 data class IdentityServerWithTerms(
-        val serverUrl: String?,
-        val terms: List<LocalizedFlowDataLoginTerms>
+        val serverUrl: String,
+        val policyUrls: List<String>
 )

@@ -67,32 +67,27 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
     private val identityServerManagerListener = object : IdentityServiceListener {
         override fun onIdentityServerChange() = withState { state ->
             viewModelScope.launch {
-                val identityServer = fetchIdentityServerWithTerms()
-                val currentIS = state.identityServer()
-                setState {
-                    copy(
-                            identityServer = Success(identityServer),
-                            userConsent = identityService.getUserConsent()
-                    )
-                }
-                if (currentIS != identityServer) retrieveBinding()
+                runCatching { fetchIdentityServerWithTerms() }.fold(
+                        onSuccess = {
+                            val currentIS = state.identityServer()
+                            setState {
+                                copy(
+                                        identityServer = Success(it),
+                                        userConsent = identityService.getUserConsent()
+                                )
+                            }
+                            if (currentIS != it) retrieveBinding()
+                        },
+                        onFailure = { _viewEvents.post(DiscoverySettingsViewEvents.Failure(it)) }
+                )
             }
         }
-    }
-
-    private suspend fun fetchIdentityServerWithTerms(): IdentityServerWithTerms {
-        val identityServerUrl = identityService.getCurrentIdentityServerUrl()
-        val policies = if (identityServerUrl == null) emptyList() else {
-            val terms = termsService.getTerms(TermsService.ServiceType.IdentityService, identityServerUrl.ensureProtocol())
-            terms.serverResponse.getLocalizedTerms(stringProvider.getString(R.string.resources_language))
-        }
-        return IdentityServerWithTerms(identityServerUrl, policies)
     }
 
     init {
         setState {
             copy(
-                    identityServer = Success(IdentityServerWithTerms(identityService.getCurrentIdentityServerUrl(), emptyList())),
+                    identityServer = Success(identityService.getCurrentIdentityServerUrl()?.let { IdentityServerWithTerms(it, emptyList()) }),
                     userConsent = identityService.getUserConsent()
             )
         }
@@ -116,7 +111,7 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
 
     override fun handle(action: DiscoverySettingsAction) {
         when (action) {
-            DiscoverySettingsAction.Refresh                  -> refreshPendingEmailBindings()
+            DiscoverySettingsAction.Refresh                  -> fetchContent()
             DiscoverySettingsAction.RetrieveBinding          -> retrieveBinding()
             DiscoverySettingsAction.DisconnectIdentityServer -> disconnectIdentityServer()
             is DiscoverySettingsAction.ChangeIdentityServer  -> changeIdentityServer(action)
@@ -395,12 +390,29 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
         }
     }
 
-    private fun refreshPendingEmailBindings() = withState { state ->
+    private fun fetchContent() = withState { state ->
         state.emailList()?.forEach { info ->
             when (info.isShared()) {
                 SharedState.BINDING_IN_PROGRESS -> finalizeBind3pid(DiscoverySettingsAction.FinalizeBind3pid(info.threePid), false)
                 else                            -> Unit
             }
+        }
+        viewModelScope.launch {
+            runCatching { fetchIdentityServerWithTerms() }.fold(
+                    onSuccess = { setState { copy(identityServer = Success(it)) } },
+                    onFailure = { _viewEvents.post(DiscoverySettingsViewEvents.Failure(it)) }
+            )
+        }
+    }
+
+    private suspend fun fetchIdentityServerWithTerms(): IdentityServerWithTerms? {
+        val identityServerUrl = identityService.getCurrentIdentityServerUrl()
+        return identityServerUrl?.let {
+            val terms = termsService.getTerms(TermsService.ServiceType.IdentityService, identityServerUrl.ensureProtocol())
+                    .serverResponse
+                    .getLocalizedTerms(stringProvider.getString(R.string.resources_language))
+            val policyUrls = terms.mapNotNull { it.localizedUrl }
+            IdentityServerWithTerms(identityServerUrl, policyUrls)
         }
     }
 }

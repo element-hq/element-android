@@ -26,11 +26,14 @@ import im.vector.app.R
 import im.vector.app.core.epoxy.attributes.ButtonStyle
 import im.vector.app.core.epoxy.attributes.ButtonType
 import im.vector.app.core.epoxy.attributes.IconMode
+import im.vector.app.core.epoxy.expandableTextItem
 import im.vector.app.core.epoxy.loadingItem
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.getFormattedValue
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.core.utils.EvenBetterLinkMovementMethod
+import org.matrix.android.sdk.api.extensions.appendNl
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.identity.SharedState
 import org.matrix.android.sdk.api.session.identity.ThreePid
@@ -105,8 +108,9 @@ class DiscoverySettingsController @Inject constructor(
         }
     }
 
-    private fun buildIdentityServerSection(data: DiscoverySettingsState) {
-        val identityServer = data.identityServer()?.serverUrl ?: stringProvider.getString(R.string.none)
+    private fun buildIdentityServerSection(data: DiscoverySettingsState, ) {
+        val identityServer = data.identityServer()
+        val identityServerUrl = identityServer?.serverUrl ?: stringProvider.getString(R.string.none)
         val host = this
 
         settingsSectionTitleItem {
@@ -116,28 +120,43 @@ class DiscoverySettingsController @Inject constructor(
 
         settingsItem {
             id("idServer")
-            title(identityServer)
+            title(identityServerUrl)
         }
 
-        if (data.identityServer() != null && data.termsNotSigned) {
+        val policyUrls = identityServer?.policyUrls?.joinToString(separator = "\n") { it }
+        if (policyUrls != null) {
+            val title = stringProvider.getString(R.string.settings_discovery_identity_server_policies_title)
+            expandableTextItem {
+                id("policy-urls")
+                maxLines(1)
+                enableScrollBar(false)
+                content(buildString {
+                    append(title)
+                    appendNl(policyUrls)
+                })
+                movementMethod(EvenBetterLinkMovementMethod())
+            }
+        }
+
+        if (identityServer != null && data.termsNotSigned) {
             settingsInfoItem {
                 id("idServerFooter")
-                helperText(host.stringProvider.getString(R.string.settings_agree_to_terms, identityServer))
+                helperText(host.stringProvider.getString(R.string.settings_agree_to_terms, identityServerUrl))
                 showCompoundDrawable(true)
                 itemClickListener { host.listener?.openIdentityServerTerms() }
             }
             settingsButtonItem {
                 id("seeTerms")
                 colorProvider(host.colorProvider)
-                buttonTitle(host.stringProvider.getString(R.string.open_terms_of, identityServer))
+                buttonTitle(host.stringProvider.getString(R.string.open_terms_of, identityServerUrl))
                 buttonClickListener { host.listener?.openIdentityServerTerms() }
             }
         } else {
             settingsInfoItem {
                 id("idServerFooter")
                 showCompoundDrawable(false)
-                if (data.identityServer() != null) {
-                    helperText(host.stringProvider.getString(R.string.settings_discovery_identity_server_info, identityServer))
+                if (identityServer != null) {
+                    helperText(host.stringProvider.getString(R.string.settings_discovery_identity_server_info, identityServerUrl))
                 } else {
                     helperTextResId(R.string.settings_discovery_identity_server_info_none)
                 }
@@ -147,7 +166,7 @@ class DiscoverySettingsController @Inject constructor(
         settingsButtonItem {
             id("change")
             colorProvider(host.colorProvider)
-            if (data.identityServer() == null) {
+            if (identityServer == null) {
                 buttonTitleId(R.string.add_identity_server)
             } else {
                 buttonTitleId(R.string.change_identity_server)
@@ -155,7 +174,7 @@ class DiscoverySettingsController @Inject constructor(
             buttonClickListener { host.listener?.onTapChangeIdentityServer() }
         }
 
-        if (data.identityServer() != null) {
+        if (identityServer != null) {
             settingsInfoItem {
                 id("removeInfo")
                 helperTextResId(R.string.settings_discovery_disconnect_identity_server_info)
