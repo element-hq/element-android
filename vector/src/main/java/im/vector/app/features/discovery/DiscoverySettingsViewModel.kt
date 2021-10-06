@@ -115,6 +115,7 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
             DiscoverySettingsAction.RetrieveBinding                -> retrieveBinding()
             DiscoverySettingsAction.DisconnectIdentityServer       -> disconnectIdentityServer()
             DiscoverySettingsAction.PolicyUrlsExpandedStateToggled -> toggleExpandedPolicyUrlsState()
+            DiscoverySettingsAction.ExpandPolicyUrls               -> updatePolicyUrlsExpandedState(isExpanded = true)
             is DiscoverySettingsAction.ChangeIdentityServer        -> changeIdentityServer(action)
             is DiscoverySettingsAction.UpdateUserConsent           -> handleUpdateUserConsent(action)
             is DiscoverySettingsAction.RevokeThreePid              -> revokeThreePid(action)
@@ -149,11 +150,11 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
     }
 
     private fun toggleExpandedPolicyUrlsState() {
-        withState {
-            setState {
-                copy(isIdentityPolicyUrlsExpanded = !it.isIdentityPolicyUrlsExpanded)
-            }
-        }
+        withState { state -> updatePolicyUrlsExpandedState(isExpanded = !state.isIdentityPolicyUrlsExpanded) }
+    }
+
+    private fun updatePolicyUrlsExpandedState(isExpanded: Boolean) {
+        setState { copy(isIdentityPolicyUrlsExpanded = isExpanded) }
     }
 
     private fun changeIdentityServer(action: DiscoverySettingsAction.ChangeIdentityServer) {

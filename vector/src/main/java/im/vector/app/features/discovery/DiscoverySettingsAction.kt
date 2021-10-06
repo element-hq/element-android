@@ -32,4 +32,5 @@ sealed class DiscoverySettingsAction : VectorViewModelAction {
     data class SubmitMsisdnToken(val threePid: ThreePid.Msisdn, val code: String) : DiscoverySettingsAction()
     data class CancelBinding(val threePid: ThreePid) : DiscoverySettingsAction()
     object PolicyUrlsExpandedStateToggled : DiscoverySettingsAction()
+    object ExpandPolicyUrls : DiscoverySettingsAction()
 }

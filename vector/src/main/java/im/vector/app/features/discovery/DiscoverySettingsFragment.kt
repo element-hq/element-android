@@ -179,9 +179,11 @@ class DiscoverySettingsFragment @Inject constructor(
     override fun onTapUpdateUserConsent(newValue: Boolean) {
         if (newValue) {
             withState(viewModel) { state ->
-                requireContext().showIdentityServerConsentDialog(state.identityServer.invoke()?.serverUrl) {
-                    viewModel.handle(DiscoverySettingsAction.UpdateUserConsent(true))
-                }
+                requireContext().showIdentityServerConsentDialog(
+                        state.identityServer.invoke()?.serverUrl,
+                        policyLinkCallback = { viewModel.handle(DiscoverySettingsAction.ExpandPolicyUrls) },
+                        consentCallBack = { viewModel.handle(DiscoverySettingsAction.UpdateUserConsent(true)) }
+                )
             }
         } else {
             viewModel.handle(DiscoverySettingsAction.UpdateUserConsent(false))
