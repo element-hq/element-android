@@ -116,7 +116,7 @@ class NotificationFactoryTest {
 
         val result = emptyRoom.toNotifications(MY_USER_ID, MY_AVATAR_URL)
 
-        result shouldBeEqualTo listOf(RoomNotification.EmptyRoom(
+        result shouldBeEqualTo listOf(RoomNotification.Removed(
                 roomId = A_ROOM_ID
         ))
     }
@@ -127,7 +127,7 @@ class NotificationFactoryTest {
 
         val result = redactedRoom.toNotifications(MY_USER_ID, MY_AVATAR_URL)
 
-        result shouldBeEqualTo listOf(RoomNotification.EmptyRoom(
+        result shouldBeEqualTo listOf(RoomNotification.Removed(
                 roomId = A_ROOM_ID
         ))
     }
