@@ -19,6 +19,7 @@ package org.matrix.android.sdk.internal.crypto.algorithms.megolm
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.crypto.MXCryptoConfig
+import org.matrix.android.sdk.api.extensions.orTrue
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -70,7 +71,7 @@ internal class MXMegolmDecryption(private val userId: String,
     override fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult {
         // If cross signing is enabled, we don't send request until the keys are trusted
         // There could be a race effect here when xsigning is enabled, we should ensure that keys was downloaded once
-        val requestOnFail = cryptoStore.getMyCrossSigningInfo() == null || cryptoStore.getMyCrossSigningInfo()?.isTrusted() == true
+        val requestOnFail = cryptoStore.getMyCrossSigningInfo()?.isTrusted().orTrue()
         return decryptEvent(event, timeline, requestOnFail)
     }
 
