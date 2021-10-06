@@ -35,6 +35,21 @@
         tools:src="@drawable/ic_presence_offline"
         tools:visibility="visible" />
 
+    <ImageView
+        android:id="@+id/roomProfilePublicImageView"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:background="@drawable/background_circle"
+        android:contentDescription="@string/a11y_public_room"
+        android:padding="2dp"
+        android:src="@drawable/ic_public_room"
+        android:visibility="gone"
+        app:layout_constraintCircle="@+id/roomProfileAvatarView"
+        app:layout_constraintCircleAngle="135"
+        app:layout_constraintCircleRadius="64dp"
+        tools:ignore="MissingConstraints"
+        tools:visibility="visible" />
+
     <im.vector.app.core.ui.views.ShieldImageView
         android:id="@+id/roomProfileDecorationImageView"
         android:layout_width="30dp"

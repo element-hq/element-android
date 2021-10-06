@@ -53,7 +53,6 @@
                     app:layout_constraintStart_toEndOf="@+id/roomToolbarAvatarImageView"
                     app:layout_constraintTop_toTopOf="@+id/roomToolbarTitleView" />
 
-
                 <im.vector.app.core.ui.views.PresenceStateImageView
                     android:id="@+id/roomToolbarPresenceImageView"
                     android:layout_width="12dp"
@@ -66,6 +65,21 @@
                     app:layout_constraintCircleRadius="20dp"
                     tools:ignore="MissingConstraints"
                     tools:src="@drawable/ic_presence_offline"
+                    tools:visibility="visible" />
+
+                <ImageView
+                    android:id="@+id/roomToolbarPublicImageView"
+                    android:layout_width="13dp"
+                    android:layout_height="13dp"
+                    android:background="@drawable/background_circle"
+                    android:contentDescription="@string/a11y_public_room"
+                    android:padding="1dp"
+                    android:src="@drawable/ic_public_room"
+                    android:visibility="gone"
+                    app:layout_constraintCircle="@+id/roomToolbarAvatarImageView"
+                    app:layout_constraintCircleAngle="135"
+                    app:layout_constraintCircleRadius="20dp"
+                    tools:ignore="MissingConstraints"
                     tools:visibility="visible" />
 
                 <TextView

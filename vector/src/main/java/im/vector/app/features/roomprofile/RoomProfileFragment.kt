@@ -220,6 +220,7 @@ class RoomProfileFragment @Inject constructor(
                 headerViews.roomProfileDecorationImageView.render(it.roomEncryptionTrustLevel)
                 views.matrixProfileDecorationToolbarAvatarImageView.render(it.roomEncryptionTrustLevel)
                 headerViews.roomProfilePresenceImageView.render(it.isDirect, it.directUserPresence)
+                headerViews.roomProfilePublicImageView.isVisible = it.isPublic && !it.isDirect
             }
         }
         roomProfileController.setData(state)

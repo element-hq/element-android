@@ -1433,6 +1433,7 @@ class RoomDetailFragment @Inject constructor(
             renderSubTitle(typingMessage, roomSummary.topic)
             views.roomToolbarDecorationImageView.render(roomSummary.roomEncryptionTrustLevel)
             views.roomToolbarPresenceImageView.render(roomSummary.isDirect, roomSummary.directUserPresence)
+            views.roomToolbarPublicImageView.isVisible = roomSummary.isPublic && !roomSummary.isDirect
         }
     }
 
