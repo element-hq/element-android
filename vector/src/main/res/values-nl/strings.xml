@@ -1585,4 +1585,5 @@
     <string name="notice_direct_room_update_by_you">U heeft hier geüpgraded.</string>
     <string name="notice_direct_room_update">%s heeft hier geüpgraded.</string>
     <string name="notice_made_future_room_visibility_by_you">U heeft toekomstige kamergeschiedenis zichtbaar gemaakt voor %1$s</string>
+    <string name="voice_message_n_seconds_warning_toast">%1$ds verliet de ruimte</string>
 </resources>
