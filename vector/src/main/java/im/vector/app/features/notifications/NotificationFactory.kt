@@ -28,7 +28,7 @@ class NotificationFactory @Inject constructor(
     fun Map<String, List<NotifiableMessageEvent>>.toNotifications(myUserDisplayName: String, myUserAvatarUrl: String?): List<RoomNotification> {
         return this.map { (roomId, events) ->
             when {
-                events.hasNoEventsToDisplay() -> RoomNotification.EmptyRoom(roomId)
+                events.hasNoEventsToDisplay() -> RoomNotification.Removed(roomId)
                 else                          -> roomGroupMessageCreator.createRoomMessage(events, roomId, myUserDisplayName, myUserAvatarUrl)
             }
         }
@@ -82,7 +82,7 @@ private fun List<RoomNotification>.mapToMeta() = filterIsInstance<RoomNotificati
 private fun List<OneShotNotification>.mapToMeta() = filterIsInstance<OneShotNotification.Append>().map { it.meta }
 
 sealed interface RoomNotification {
-    data class EmptyRoom(val roomId: String) : RoomNotification
+    data class Removed(val roomId: String) : RoomNotification
     data class Message(val notification: Notification, val meta: Meta) : RoomNotification {
         data class Meta(
                 val summaryLine: CharSequence,
