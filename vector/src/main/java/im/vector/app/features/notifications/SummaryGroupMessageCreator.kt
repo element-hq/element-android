@@ -22,25 +22,25 @@ import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
 import javax.inject.Inject
 
+/**
+ * ======== Build summary notification =========
+ * On Android 7.0 (API level 24) and higher, the system automatically builds a summary for
+ * your group using snippets of text from each notification. The user can expand this
+ * notification to see each separate notification.
+ * To support older versions, which cannot show a nested group of notifications,
+ * you must create an extra notification that acts as the summary.
+ * This appears as the only notification and the system hides all the others.
+ * So this summary should include a snippet from all the other notifications,
+ * which the user can tap to open your app.
+ * The behavior of the group summary may vary on some device types such as wearables.
+ * To ensure the best experience on all devices and versions, always include a group summary when you create a group
+ * https://developer.android.com/training/notify-user/group
+ */
 class SummaryGroupMessageCreator @Inject constructor(
         private val stringProvider: StringProvider,
         private val notificationUtils: NotificationUtils
 ) {
 
-    /**
-     * ======== Build summary notification =========
-     * On Android 7.0 (API level 24) and higher, the system automatically builds a summary for
-     * your group using snippets of text from each notification. The user can expand this
-     * notification to see each separate notification.
-     * To support older versions, which cannot show a nested group of notifications,
-     * you must create an extra notification that acts as the summary.
-     * This appears as the only notification and the system hides all the others.
-     * So this summary should include a snippet from all the other notifications,
-     * which the user can tap to open your app.
-     * The behavior of the group summary may vary on some device types such as wearables.
-     * To ensure the best experience on all devices and versions, always include a group summary when you create a group
-     * https://developer.android.com/training/notify-user/group
-     */
     fun createSummaryNotification(roomNotifications: List<RoomNotification.Message.Meta>,
                                   invitationNotifications: List<OneShotNotification.Append.Meta>,
                                   simpleNotifications: List<OneShotNotification.Append.Meta>,
