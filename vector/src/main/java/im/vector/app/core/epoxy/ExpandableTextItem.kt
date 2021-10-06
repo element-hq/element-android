@@ -40,11 +40,15 @@ abstract class ExpandableTextItem : VectorEpoxyModel<ExpandableTextItem.Holder>(
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var movementMethod: MovementMethod? = null
 
+    @EpoxyAttribute
+    var enableScrollBar = true
+
     private var isExpanded = false
     private var expandedLines = 0
 
     override fun bind(holder: Holder) {
         super.bind(holder)
+        holder.content.isVerticalScrollBarEnabled = enableScrollBar
         holder.content.text = content
         holder.content.copyOnLongClick()
         holder.content.movementMethod = movementMethod
