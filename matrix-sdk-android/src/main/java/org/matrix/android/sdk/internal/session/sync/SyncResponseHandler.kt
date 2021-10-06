@@ -63,7 +63,7 @@ internal class SyncResponseHandler @Inject constructor(
         private val processEventForPushTask: ProcessEventForPushTask,
         private val pushRuleService: PushRuleService,
         private val presenceSyncHandler: PresenceSyncHandler
-        ) {
+) {
 
     suspend fun handleResponse(syncResponse: SyncResponse,
                                fromToken: String?,
@@ -128,8 +128,8 @@ internal class SyncResponseHandler @Inject constructor(
             }
 
             measureTimeMillis {
-                    Timber.v("Handle Presence")
-                    presenceSyncHandler.handle(realm,syncResponse.presence)
+                Timber.v("Handle Presence")
+                presenceSyncHandler.handle(realm, syncResponse.presence)
             }.also {
                 Timber.v("Finish handling Presence in $it ms")
             }
@@ -160,7 +160,8 @@ internal class SyncResponseHandler @Inject constructor(
     private fun dispatchInvitedRoom(roomsSyncResponse: RoomsSyncResponse) {
         roomsSyncResponse.invite.keys.forEach { roomId ->
             sessionListeners.dispatch { session, listener ->
-                listener.onNewInvitedRoom(session, roomId) }
+                listener.onNewInvitedRoom(session, roomId)
+            }
         }
     }
 
