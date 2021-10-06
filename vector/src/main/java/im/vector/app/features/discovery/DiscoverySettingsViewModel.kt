@@ -27,20 +27,25 @@ import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.R
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.core.resources.StringProvider
+import im.vector.app.core.utils.ensureProtocol
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.identity.IdentityServiceError
 import org.matrix.android.sdk.api.session.identity.IdentityServiceListener
 import org.matrix.android.sdk.api.session.identity.SharedState
 import org.matrix.android.sdk.api.session.identity.ThreePid
+import org.matrix.android.sdk.api.session.terms.TermsService
 import org.matrix.android.sdk.rx.rx
 
 class DiscoverySettingsViewModel @AssistedInject constructor(
         @Assisted initialState: DiscoverySettingsState,
-        private val session: Session) :
-    VectorViewModel<DiscoverySettingsState, DiscoverySettingsAction, DiscoverySettingsViewEvents>(initialState) {
+        private val session: Session,
+        private val stringProvider: StringProvider
+) : VectorViewModel<DiscoverySettingsState, DiscoverySettingsAction, DiscoverySettingsViewEvents>(initialState) {
 
     @AssistedFactory
     interface Factory {
@@ -57,25 +62,37 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
     }
 
     private val identityService = session.identityService()
+    private val termsService: TermsService = session
 
     private val identityServerManagerListener = object : IdentityServiceListener {
         override fun onIdentityServerChange() = withState { state ->
-            val identityServerUrl = identityService.getCurrentIdentityServerUrl()
-            val currentIS = state.identityServer()
-            setState {
-                copy(
-                        identityServer = Success(identityServerUrl),
-                        userConsent = identityService.getUserConsent()
-                )
+            viewModelScope.launch {
+                val identityServer = fetchIdentityServerWithTerms()
+                val currentIS = state.identityServer()
+                setState {
+                    copy(
+                            identityServer = Success(identityServer),
+                            userConsent = identityService.getUserConsent()
+                    )
+                }
+                if (currentIS != identityServer) retrieveBinding()
             }
-            if (currentIS != identityServerUrl) retrieveBinding()
         }
+    }
+
+    private suspend fun fetchIdentityServerWithTerms(): IdentityServerWithTerms {
+        val identityServerUrl = identityService.getCurrentIdentityServerUrl()
+        val policies = if (identityServerUrl == null) emptyList() else {
+            val terms = termsService.getTerms(TermsService.ServiceType.IdentityService, identityServerUrl.ensureProtocol())
+            terms.serverResponse.getLocalizedTerms(stringProvider.getString(R.string.resources_language))
+        }
+        return IdentityServerWithTerms(identityServerUrl, policies)
     }
 
     init {
         setState {
             copy(
-                    identityServer = Success(identityService.getCurrentIdentityServerUrl()),
+                    identityServer = Success(IdentityServerWithTerms(identityService.getCurrentIdentityServerUrl(), emptyList())),
                     userConsent = identityService.getUserConsent()
             )
         }
@@ -143,7 +160,7 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
                 val data = session.identityService().setNewIdentityServer(action.url)
                 setState {
                     copy(
-                            identityServer = Success(data),
+                            identityServer = Success(IdentityServerWithTerms(data, emptyList())),
                             userConsent = false
                     )
                 }
@@ -287,7 +304,7 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
     }
 
     private fun retrieveBinding(threePids: List<ThreePid>) = withState { state ->
-        if (state.identityServer().isNullOrBlank()) return@withState
+        if (state.identityServer()?.serverUrl.isNullOrBlank()) return@withState
 
         val emails = threePids.filterIsInstance<ThreePid.Email>()
         val msisdns = threePids.filterIsInstance<ThreePid.Msisdn>()
@@ -335,7 +352,7 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
     }
 
     private fun submitMsisdnToken(action: DiscoverySettingsAction.SubmitMsisdnToken) = withState { state ->
-        if (state.identityServer().isNullOrBlank()) return@withState
+        if (state.identityServer()?.serverUrl.isNullOrBlank()) return@withState
 
         changeThreePidSubmitState(action.threePid, Loading())
 

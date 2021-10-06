@@ -62,7 +62,7 @@ class DiscoverySettingsController @Inject constructor(
             }
             is Success -> {
                 buildIdentityServerSection(data)
-                val hasIdentityServer = data.identityServer().isNullOrBlank().not()
+                val hasIdentityServer = data.identityServer()?.serverUrl.isNullOrBlank().not()
                 if (hasIdentityServer && !data.termsNotSigned) {
                     buildConsentSection(data)
                     buildEmailsSection(data.emailList)
@@ -106,7 +106,7 @@ class DiscoverySettingsController @Inject constructor(
     }
 
     private fun buildIdentityServerSection(data: DiscoverySettingsState) {
-        val identityServer = data.identityServer() ?: stringProvider.getString(R.string.none)
+        val identityServer = data.identityServer()?.serverUrl ?: stringProvider.getString(R.string.none)
         val host = this
 
         settingsSectionTitleItem {

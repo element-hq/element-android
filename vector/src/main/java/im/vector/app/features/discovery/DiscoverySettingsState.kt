@@ -19,12 +19,18 @@ package im.vector.app.features.discovery
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
+import org.matrix.android.sdk.internal.auth.registration.LocalizedFlowDataLoginTerms
 
 data class DiscoverySettingsState(
-        val identityServer: Async<String?> = Uninitialized,
+        val identityServer: Async<IdentityServerWithTerms?> = Uninitialized,
         val emailList: Async<List<PidInfo>> = Uninitialized,
         val phoneNumbersList: Async<List<PidInfo>> = Uninitialized,
         // Can be true if terms are updated
         val termsNotSigned: Boolean = false,
         val userConsent: Boolean = false
 ) : MvRxState
+
+data class IdentityServerWithTerms(
+        val serverUrl: String?,
+        val terms: List<LocalizedFlowDataLoginTerms>
+)

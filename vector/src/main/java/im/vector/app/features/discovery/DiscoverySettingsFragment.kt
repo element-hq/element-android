@@ -111,7 +111,7 @@ class DiscoverySettingsFragment @Inject constructor(
                     requireContext(),
                     termsActivityResultLauncher,
                     TermsService.ServiceType.IdentityService,
-                    state.identityServer()?.ensureProtocol() ?: "",
+                    state.identityServer()?.serverUrl?.ensureProtocol() ?: "",
                     null)
         }
     }
@@ -179,7 +179,7 @@ class DiscoverySettingsFragment @Inject constructor(
     override fun onTapUpdateUserConsent(newValue: Boolean) {
         if (newValue) {
             withState(viewModel) { state ->
-                requireContext().showIdentityServerConsentDialog(state.identityServer.invoke()) {
+                requireContext().showIdentityServerConsentDialog(state.identityServer.invoke()?.serverUrl) {
                     viewModel.handle(DiscoverySettingsAction.UpdateUserConsent(true))
                 }
             }
