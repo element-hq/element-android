@@ -1064,6 +1064,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
                 .putBoolean(SETTINGS_VOICE_MESSAGE, false)
                 .putBoolean(SETTINGS_USE_RAGE_SHAKE_KEY, true)
                 .putBoolean(SETTINGS_UNIFIED_PUSH_FORCE_CUSTOM_GATEWAY, true)
+                .putBoolean(SETTINGS_AGGREGATE_UNREAD_COUNTS, false)
                 .apply()
     }
 
