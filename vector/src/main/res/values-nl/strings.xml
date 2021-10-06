@@ -1585,8 +1585,8 @@
     <string name="notice_direct_room_update_by_you">U heeft hier geüpgraded.</string>
     <string name="notice_direct_room_update">%s heeft hier geüpgraded.</string>
     <string name="notice_made_future_room_visibility_by_you">Je hebt toekomstige gespreksgeschiedenis zichtbaar gemaakt voor %1$s</string>
-    <string name="voice_message_n_seconds_warning_toast">%1$ds verliet de ruimte</string>
-    <string name="direct_room_created_summary_item"></string>
+    <string name="voice_message_n_seconds_warning_toast">%1$ds over</string>
+    <string name="direct_room_created_summary_item">%s is toegetreden.</string>
     <string name="sent_verification_conclusion">Conclusie Bevestiging</string>
     <string name="sent_a_bot_buttons">Botknoppen</string>
     <string name="create_room_settings_section">Gespreksinstellingen</string>
@@ -1929,4 +1929,83 @@
         <item quantity="other">%1$s heeft %2$s als alternatieve gespreksadressen toegevoegd.</item>
     </plurals>
     <string name="login_splash_submit">Aan de slag</string>
+    <string name="space_settings_permissions_title">Spacerechten</string>
+    <string name="room_settings_permissions_title">Gespreksrechten</string>
+    <string name="space_participants_unban_prompt_msg">Door deze gebruiker niet meer de verbannen kan hij/zij opnieuw toetreden tot de space.</string>
+    <string name="room_participants_unban_prompt_msg">Door deze gebruiker niet meer de verbannen kan hij/zij opnieuw toetreden tot het gesprek.</string>
+    <string name="space_participants_ban_prompt_msg">Door deze gebruiker te verbannen zal hij/zij verwijderd worden uit deze space en voorkomen dat hij/zij opnieuw toetreedt.</string>
+    <string name="room_participants_ban_reason">Reden voor verbanning</string>
+    <string name="space_participants_kick_prompt_msg">door deze gebruiker de verwijderen zal hij/zij niet meer in deze space zitten.
+\n
+\nOm te voorkomen dat hij/zij opnieuw toetreedt, kun je hem/haar ook verbannen.</string>
+    <string name="room_participants_kick_prompt_msg">door deze gebruiker te verwijderen zal hij/zij niet meer in dit gesprek zitten.
+\n
+\nOm te voorkomen dat hij/zij opnieuw toetreedt, kun je hem/haar ook verbannen.</string>
+    <string name="room_participants_kick_reason">Reden voor verwijdering</string>
+    <string name="room_participants_action_cancel_invite_prompt_msg">Weet je zeker dat je uitnodiging voor deze gebruiker wilt annuleren\?</string>
+    <string name="room_participants_action_unignore_prompt_msg">Het niet meer negeren van deze gebruiker zal al zijn/haar berichten opnieuw doen weergeven.</string>
+    <string name="room_participants_action_ignore_prompt_msg">Door deze gebruiker te negeren worden zijn/haar berichten verwijderd uit gesprekken die jullie delen.
+\n
+\nJe kunt deze actie op elk moment ongedaan maken in de algemene instellingen.</string>
+    <string name="room_participants_power_level_demote_warning_prompt">Je kunt deze wijziging niet ongedaan maken omdat je jezelf degradeert, als je de laatste gebruiker met rechten bent in het gesprek zal het onmogelijk zijn om opnieuw rechten te krijgen.</string>
+    <string name="room_participants_leave_private_warning">Dit gesprek is niet publiek. Je kunt niet opnieuw toetreden zonder uitnodiging.</string>
+    <string name="continue_anyway">Toch Doorgaan</string>
+    <string name="permissions_denied_add_contact">Toegang verlenen tot je contactpersonen.</string>
+    <string name="permissions_denied_qr_code">Om de QR-code te scannen moet je toegang verlenen tot de camera.</string>
+    <string name="call_remove_jitsi_widget_progress">Oproep beëindigen</string>
+    <string name="call_ended_invite_timeout_title">Geen antwoord</string>
+    <string name="call_ended_user_busy_description">De gebruiker die je hebt gebeld is bezig.</string>
+    <string name="call_ended_user_busy_title">Gebruiker bezig</string>
+    <string name="call_held_by_you">Je hebt de oproep in de wacht gezet</string>
+    <string name="call_held_by_user">%s heeft de oproep in de wacht gezet</string>
+    <string name="return_to_call">Teruggaan naar oproep</string>
+    <string name="active_call_with_duration">Actieve Oproep (%s)</string>
+    <string name="audio_call_with_participant">Bellen met</string>
+    <string name="video_call_with_participant">Videobellen met</string>
+    <plurals name="missed_video_call">
+        <item quantity="one">Gemiste video-oproep</item>
+        <item quantity="other">%d gemiste video-oproepen</item>
+    </plurals>
+    <plurals name="missed_audio_call">
+        <item quantity="one">Gemiste stemoproep</item>
+        <item quantity="other">gemiste stemoproepen</item>
+    </plurals>
+    <string name="call_ringing">Gaat over…</string>
+    <string name="settings_call_show_confirmation_dialog_summary">Bevestiging vragen voor het starten van een oproep</string>
+    <string name="settings_call_show_confirmation_dialog_title">Onbedoelde oproep voorkomen</string>
+    <string name="error_unauthorized">Niet geautoriseerd, geldige authenticatiegegevens ontbreken.</string>
+    <string name="login_error_ssl_peer_unverified">SSL-fout: de identiteit van de ander is niet bevestigd.</string>
+    <string name="auth_msisdn_already_defined">Dit telefoonnummer is al gedefinieerd.</string>
+    <string name="use_as_default_and_do_not_ask_again">Gebruik als standaard en niet opnieuw vragen</string>
+    <string name="option_always_ask">Altijd vragen</string>
+    <string name="call_format_turn_hd_on">HD inschakelen</string>
+    <string name="call_format_turn_hd_off">HD uitschakelen</string>
+    <string name="call_select_sound_device">Geluidsapparaat Selecteren</string>
+    <string name="call_failed_no_connection_description">Live verbinding opzetten mislukt.Vraag de administrator van je homeserver om een TURN-server te configureren zodat oproepen betrouwbaar werken.</string>
+    <string name="template_call_failed_no_connection">${app_name} Oproep Mislukt</string>
+    <string name="hs_client_url">Homeserver API URL</string>
+    <string name="send_bug_report_include_key_share_history">Sleutel deelverzoekgeschiedenis verzenden</string>
+    <string name="settings_room_directory_show_all_rooms_summary">Alle gesprekken in de lijst tonen, waaronder gesprekken met expliciete inhoud.</string>
+    <string name="settings_room_directory_show_all_rooms">Gesprekken tonen met expliciete inhoud</string>
+    <string name="settings_category_room_directory">Gesprekslijst</string>
+    <string name="no_more_results">Er zijn niet meer resultaten</string>
+    <string name="suggested_header">Aanbevolen Gesprekken</string>
+    <string name="dialog_edit_hint">Nieuwe waarde</string>
+    <string name="failed_to_remove_widget">Widget verwijderen mislukt</string>
+    <string name="failed_to_add_widget">Widget toevoegen mislukt</string>
+    <string name="cannot_call_yourself_with_invite">Je kunt jezelf niet bellen, wacht totdat deelnemers de uitnodiging accepteren</string>
+    <string name="cannot_call_yourself">Je kunt jezelf niet bellen</string>
+    <string name="audio_video_meeting_description">Vergaderingen gebruiken beveiligings- en toestemmingsbeleid van Jitsi. Alle huidige personen in het gesprek zullen een uitnodiging zien terwijl je vergadering bezig is.</string>
+    <string name="audio_meeting">Geluidsvergadering starten</string>
+    <string name="video_meeting">Videoconferentie starten</string>
+    <string name="conference_call_in_progress">Er is al een vergadering aan de gang!</string>
+    <string name="no_permissions_to_start_webrtc_call_in_direct_room">Je mist het recht om een oproep te starten</string>
+    <string name="no_permissions_to_start_webrtc_call">Je mist het recht om een oproep in dit gesprek te starten</string>
+    <string name="no_permissions_to_start_conf_call_in_direct_room">Je mist het recht om een vergadering te starten</string>
+    <string name="no_permissions_to_start_conf_call">Je mist het recht om een vergadering in dit gesprek te starten</string>
+    <string name="missing_permissions_title">Ontbrekende rechten</string>
+    <string name="denied_permission_voice_message">Geef toestemming om de microfoon te gebruiken om stemberichten te versturen.</string>
+    <string name="secure_backup_reset_all">Alles herstellen</string>
+    <string name="direct_room_created_summary_item_by_you">Je bent toegetreden.</string>
+    <string name="labs_use_voice_message">Stemberichten inschakelen</string>
 </resources>
