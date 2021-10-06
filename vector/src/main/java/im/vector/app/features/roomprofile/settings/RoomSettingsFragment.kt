@@ -232,6 +232,10 @@ class RoomSettingsFragment @Inject constructor(
         galleryOrCameraDialogHelper.show()
     }
 
+    override fun onAccessByLinkClicked() {
+        context?.toast("Not implemented yet.")
+    }
+
     private var ignoreChanges = false
 
     override fun onBackPressed(toolbarButton: Boolean): Boolean {

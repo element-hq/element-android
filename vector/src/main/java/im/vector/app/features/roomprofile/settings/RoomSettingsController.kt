@@ -59,6 +59,7 @@ class RoomSettingsController @Inject constructor(
         fun onJoinRuleClicked()
         fun onToggleGuestAccess()
         fun onRemoveFromRoomsDirectory()
+        fun onAccessByLinkClicked()
     }
 
     var callback: Callback? = null
@@ -132,13 +133,23 @@ class RoomSettingsController @Inject constructor(
 //                action = { if (data.actionPermissions.canChangeHistoryVisibility) callback?.onHistoryVisibilityClicked() }
 //        )
 
+//        buildProfileAction(
+//                id = "joinRule",
+//                title = stringProvider.getString(R.string.room_settings_room_access_title),
+//                subtitle = data.getJoinRuleWording(stringProvider),
+//                divider = true,
+//                editable = data.actionPermissions.canChangeJoinRule,
+//                action = { if (data.actionPermissions.canChangeJoinRule) callback?.onJoinRuleClicked() }
+//        )
+
         buildProfileAction(
-                id = "joinRule",
-                title = stringProvider.getString(R.string.room_settings_room_access_title),
-                subtitle = data.getJoinRuleWording(stringProvider),
+                id = "roomAccessByLink",
+                title = stringProvider.getString(R.string.tchap_room_settings_room_access_by_link_title),
+                subtitle = data.getAccessByLinkWording(stringProvider),
                 divider = true,
-                editable = data.actionPermissions.canChangeJoinRule,
-                action = { if (data.actionPermissions.canChangeJoinRule) callback?.onJoinRuleClicked() }
+                editable = data.actionPermissions.canChangeAccessByLink,
+
+                action = { callback?.onAccessByLinkClicked() }
         )
 
         RoomUtils.getRoomType(roomSummary).let {
