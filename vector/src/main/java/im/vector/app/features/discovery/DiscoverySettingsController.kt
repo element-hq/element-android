@@ -15,6 +15,7 @@
  */
 package im.vector.app.features.discovery
 
+import android.text.method.LinkMovementMethod
 import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
@@ -134,7 +135,11 @@ class DiscoverySettingsController @Inject constructor(
                     append(title)
                     appendNl(policyUrls)
                 })
-                movementMethod(EvenBetterLinkMovementMethod())
+                movementMethod(LinkMovementMethod())
+                expanded(data.isIdentityPolicyUrlsExpanded)
+                onExpandClicked {
+                    host.listener?.onPolicyUrlsExpandedStateToggled()
+                }
             }
         }
 
@@ -419,5 +424,6 @@ class DiscoverySettingsController @Inject constructor(
         fun onTapDisconnectIdentityServer()
         fun onTapUpdateUserConsent(newValue: Boolean)
         fun onTapRetryToRetrieveBindings()
+        fun onPolicyUrlsExpandedStateToggled()
     }
 }

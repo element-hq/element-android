@@ -111,16 +111,17 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
 
     override fun handle(action: DiscoverySettingsAction) {
         when (action) {
-            DiscoverySettingsAction.Refresh                  -> fetchContent()
-            DiscoverySettingsAction.RetrieveBinding          -> retrieveBinding()
-            DiscoverySettingsAction.DisconnectIdentityServer -> disconnectIdentityServer()
-            is DiscoverySettingsAction.ChangeIdentityServer  -> changeIdentityServer(action)
-            is DiscoverySettingsAction.UpdateUserConsent     -> handleUpdateUserConsent(action)
-            is DiscoverySettingsAction.RevokeThreePid        -> revokeThreePid(action)
-            is DiscoverySettingsAction.ShareThreePid         -> shareThreePid(action)
-            is DiscoverySettingsAction.FinalizeBind3pid      -> finalizeBind3pid(action, true)
-            is DiscoverySettingsAction.SubmitMsisdnToken     -> submitMsisdnToken(action)
-            is DiscoverySettingsAction.CancelBinding         -> cancelBinding(action)
+            DiscoverySettingsAction.Refresh                        -> fetchContent()
+            DiscoverySettingsAction.RetrieveBinding                -> retrieveBinding()
+            DiscoverySettingsAction.DisconnectIdentityServer       -> disconnectIdentityServer()
+            DiscoverySettingsAction.PolicyUrlsExpandedStateToggled -> toggleExpandedPolicyUrlsState()
+            is DiscoverySettingsAction.ChangeIdentityServer        -> changeIdentityServer(action)
+            is DiscoverySettingsAction.UpdateUserConsent           -> handleUpdateUserConsent(action)
+            is DiscoverySettingsAction.RevokeThreePid              -> revokeThreePid(action)
+            is DiscoverySettingsAction.ShareThreePid               -> shareThreePid(action)
+            is DiscoverySettingsAction.FinalizeBind3pid            -> finalizeBind3pid(action, true)
+            is DiscoverySettingsAction.SubmitMsisdnToken           -> submitMsisdnToken(action)
+            is DiscoverySettingsAction.CancelBinding               -> cancelBinding(action)
         }.exhaustive
     }
 
@@ -143,6 +144,14 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
                 }
             } catch (failure: Throwable) {
                 setState { copy(identityServer = Fail(failure)) }
+            }
+        }
+    }
+
+    private fun toggleExpandedPolicyUrlsState() {
+        withState {
+            setState {
+                copy(isIdentityPolicyUrlsExpanded = !it.isIdentityPolicyUrlsExpanded)
             }
         }
     }

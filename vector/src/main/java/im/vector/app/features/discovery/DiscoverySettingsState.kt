@@ -27,7 +27,8 @@ data class DiscoverySettingsState(
         val phoneNumbersList: Async<List<PidInfo>> = Uninitialized,
         // Can be true if terms are updated
         val termsNotSigned: Boolean = false,
-        val userConsent: Boolean = false
+        val userConsent: Boolean = false,
+        val isIdentityPolicyUrlsExpanded: Boolean = false
 ) : MvRxState
 
 data class IdentityServerWithTerms(

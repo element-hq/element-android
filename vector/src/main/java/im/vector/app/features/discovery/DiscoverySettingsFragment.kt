@@ -192,6 +192,10 @@ class DiscoverySettingsFragment @Inject constructor(
         viewModel.handle(DiscoverySettingsAction.RetrieveBinding)
     }
 
+    override fun onPolicyUrlsExpandedStateToggled() {
+        viewModel.handle(DiscoverySettingsAction.PolicyUrlsExpandedStateToggled)
+    }
+
     private fun navigateToChangeIdentityServerFragment() {
         (vectorBaseActivity as? VectorSettingsActivity)?.navigateTo(SetIdentityServerFragment::class.java)
     }

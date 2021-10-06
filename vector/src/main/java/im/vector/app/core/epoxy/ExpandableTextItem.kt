@@ -43,7 +43,13 @@ abstract class ExpandableTextItem : VectorEpoxyModel<ExpandableTextItem.Holder>(
     @EpoxyAttribute
     var enableScrollBar = true
 
-    private var isExpanded = false
+    @EpoxyAttribute
+    var expanded: Boolean? = null
+
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
+    var onExpandClicked: () -> Unit? = {}
+
+    private var internalIsExpanded = false
     private var expandedLines = 0
 
     override fun bind(holder: Holder) {
@@ -53,18 +59,31 @@ abstract class ExpandableTextItem : VectorEpoxyModel<ExpandableTextItem.Holder>(
         holder.content.copyOnLongClick()
         holder.content.movementMethod = movementMethod
 
+        if (expanded == null) {
+            holder.view.setOnClickListener {
+                if (internalIsExpanded) {
+                    collapse(holder)
+                } else {
+                    expand(holder)
+                }
+            }
+        } else {
+            holder.view.setOnClickListener { onExpandClicked() }
+        }
+
         holder.content.doOnPreDraw {
             if (holder.content.lineCount > maxLines) {
                 expandedLines = holder.content.lineCount
                 holder.content.maxLines = maxLines
 
-                holder.view.setOnClickListener {
-                    if (isExpanded) {
-                        collapse(holder)
-                    } else {
+                expanded?.let { expanded ->
+                    if (expanded) {
                         expand(holder)
+                    } else {
+                        collapse(holder)
                     }
                 }
+
                 holder.arrow.isVisible = true
             } else {
                 holder.arrow.isVisible = false
@@ -81,7 +100,7 @@ abstract class ExpandableTextItem : VectorEpoxyModel<ExpandableTextItem.Holder>(
         holder.content.ellipsize = null
         holder.arrow.setImageResource(R.drawable.ic_expand_less)
         holder.arrow.contentDescription = holder.view.context.getString(R.string.merged_events_collapse)
-        isExpanded = true
+        internalIsExpanded = true
     }
 
     private fun collapse(holder: Holder) {
@@ -93,7 +112,7 @@ abstract class ExpandableTextItem : VectorEpoxyModel<ExpandableTextItem.Holder>(
         holder.content.ellipsize = TextUtils.TruncateAt.END
         holder.arrow.setImageResource(R.drawable.ic_expand_more)
         holder.arrow.contentDescription = holder.view.context.getString(R.string.merged_events_expand)
-        isExpanded = false
+        internalIsExpanded = false
     }
 
     class Holder : VectorEpoxyHolder() {
