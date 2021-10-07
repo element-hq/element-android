@@ -39,8 +39,6 @@ data class NotifiableMessageEvent(
         override val isRedacted: Boolean = false
 ) : NotifiableEvent {
 
-    override var hasBeenDisplayed: Boolean = false
-
     val type: String = EventType.MESSAGE
     val description: String = body ?: ""
     val title: String = senderName ?: ""
