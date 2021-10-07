@@ -31,7 +31,6 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.observeEvent
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseFragment
-import im.vector.app.core.utils.displayInWebView
 import im.vector.app.core.utils.ensureProtocol
 import im.vector.app.core.utils.openUrlInChromeCustomTab
 import im.vector.app.core.utils.showIdentityServerConsentDialog

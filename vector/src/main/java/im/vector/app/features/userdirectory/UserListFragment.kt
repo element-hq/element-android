@@ -227,9 +227,11 @@ class UserListFragment @Inject constructor(
 
     override fun giveIdentityServerConsent() {
         withState(viewModel) { state ->
-            requireContext().showIdentityServerConsentDialog(state.configuredIdentityServer) {
-                viewModel.handle(UserListAction.UpdateUserConsent(true))
-            }
+            requireContext().showIdentityServerConsentDialog(
+                    state.configuredIdentityServer,
+                    policyLinkCallback = { navigator.openSettings(requireContext(), VectorSettingsActivity.EXTRA_DIRECT_ACCESS_DISCOVERY_SETTINGS) },
+                    consentCallBack = { viewModel.handle(UserListAction.UpdateUserConsent(true)) }
+            )
         }
     }
 

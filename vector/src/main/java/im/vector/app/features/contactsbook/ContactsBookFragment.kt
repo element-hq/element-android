@@ -31,6 +31,7 @@ import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.showIdentityServerConsentDialog
 import im.vector.app.databinding.FragmentContactsBookBinding
+import im.vector.app.features.settings.VectorSettingsActivity
 import im.vector.app.features.userdirectory.PendingSelection
 import im.vector.app.features.userdirectory.UserListAction
 import im.vector.app.features.userdirectory.UserListSharedAction
@@ -74,9 +75,11 @@ class ContactsBookFragment @Inject constructor(
     private fun setupConsentView() {
         views.phoneBookSearchForMatrixContacts.setOnClickListener {
             withState(contactsBookViewModel) { state ->
-                requireContext().showIdentityServerConsentDialog(state.identityServerUrl) {
-                    contactsBookViewModel.handle(ContactsBookAction.UserConsentGranted)
-                }
+                requireContext().showIdentityServerConsentDialog(
+                        state.identityServerUrl,
+                        policyLinkCallback = { navigator.openSettings(requireContext(), VectorSettingsActivity.EXTRA_DIRECT_ACCESS_DISCOVERY_SETTINGS) },
+                        consentCallBack = { contactsBookViewModel.handle(ContactsBookAction.UserConsentGranted) }
+                )
             }
         }
     }
