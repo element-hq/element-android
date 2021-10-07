@@ -40,12 +40,11 @@ class PushRuleTriggerListener @Inject constructor(
 
         val notificationAction = actions.toNotificationAction()
         if (notificationAction.shouldNotify) {
-            val notifiableEvent = resolver.resolveEvent(event, safeSession)
+            val notifiableEvent = resolver.resolveEvent(event, safeSession, isNoisy = !notificationAction.soundName.isNullOrBlank())
             if (notifiableEvent == null) {
                 Timber.v("## Failed to resolve event")
                 // TODO
             } else {
-                notifiableEvent.noisy = !notificationAction.soundName.isNullOrBlank()
                 Timber.v("New event to notify")
                 notificationDrawerManager.onNotifiableEventReceived(notifiableEvent)
             }

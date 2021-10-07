@@ -23,7 +23,6 @@ import java.io.Serializable
 sealed interface NotifiableEvent : Serializable {
     val eventId: String
     val editedEventId: String?
-    var noisy: Boolean
     var hasBeenDisplayed: Boolean
     // Used to know if event should be replaced with the one coming from eventstream
     var isPushGatewayEvent: Boolean
