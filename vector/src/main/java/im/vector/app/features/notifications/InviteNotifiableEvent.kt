@@ -15,8 +15,6 @@
  */
 package im.vector.app.features.notifications
 
-import androidx.core.app.NotificationCompat
-
 data class InviteNotifiableEvent(
         val matrixID: String?,
         override val eventId: String,
@@ -31,6 +29,5 @@ data class InviteNotifiableEvent(
         override var isPushGatewayEvent: Boolean = false) : NotifiableEvent {
 
     override var isRedacted: Boolean = false
-    override var lockScreenVisibility = NotificationCompat.VISIBILITY_PUBLIC
     override var hasBeenDisplayed = false
 }
