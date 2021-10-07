@@ -126,8 +126,8 @@ class DiscoverySettingsController @Inject constructor(
             formAdvancedToggleItem {
                 id("policy-urls")
                 val titleRes = if (data.isIdentityPolicyUrlsExpanded) {
-                    R.string.settings_discovery_hide_identity_server_policies_title
-                } else R.string.settings_discovery_show_identity_server_policies_title
+                    R.string.settings_discovery_hide_identity_server_policy_title
+                } else R.string.settings_discovery_show_identity_server_policy_title
                 title(host.stringProvider.getString(titleRes))
                 expanded(data.isIdentityPolicyUrlsExpanded)
                 listener { host.listener?.onPolicyUrlsExpandedStateToggled(!data.isIdentityPolicyUrlsExpanded) }
