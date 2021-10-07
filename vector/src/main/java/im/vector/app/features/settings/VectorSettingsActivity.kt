@@ -35,7 +35,6 @@ import im.vector.app.features.navigation.SettingsActivityPayload
 import im.vector.app.features.settings.devices.VectorSettingsDevicesFragment
 import im.vector.app.features.settings.notifications.VectorSettingsNotificationPreferenceFragment
 import im.vector.app.features.settings.threepids.ThreePidsSettingsFragment
-import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.failure.GlobalError
 import org.matrix.android.sdk.api.session.Session
 import timber.log.Timber
@@ -89,7 +88,7 @@ class VectorSettingsActivity : VectorBaseActivity<ActivityVectorSettingsBinding>
                     requestHighlightPreferenceKeyOnResume(VectorPreferences.SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY)
                     replaceFragment(R.id.vector_settings_page, VectorSettingsNotificationPreferenceFragment::class.java, null, FRAGMENT_TAG)
                 }
-                is SettingsActivityPayload.DiscoverySettings             -> {
+                is SettingsActivityPayload.DiscoverySettings          -> {
                     Log.e("!!!", "SettingsActivityPayload.DiscoverySettings : $payload")
                     replaceFragment(R.id.vector_settings_page, DiscoverySettingsFragment::class.java, payload, FRAGMENT_TAG)
                 }
@@ -202,4 +201,3 @@ private fun <T : Parcelable> Activity.readPayload(default: T): T {
 private fun <T : Parcelable> Intent.applyPayload(payload: T): Intent {
     return putExtra(KEY_ACTIVITY_PAYLOAD, payload)
 }
-
