@@ -136,6 +136,24 @@ internal class MXOlmDevice @Inject constructor(
         return store.getOlmAccount().maxOneTimeKeys()
     }
 
+    fun getFallbackKey(): MutableMap<String, MutableMap<String, String>>? {
+        try {
+            return store.getOlmAccount().fallbackKey()
+        } catch (e: Exception) {
+            Timber.e("## getFallbackKey() : failed")
+        }
+        return null
+    }
+
+    fun generateFallbackKey() {
+        try {
+            store.getOlmAccount().generateFallbackKey()
+            store.saveOlmAccount()
+        } catch (e: Exception) {
+            Timber.e("## generateFallbackKey() : failed")
+        }
+    }
+
     /**
      * Release the instance
      */

@@ -67,6 +67,7 @@ import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.ImportRoomKeysResult
 import org.matrix.android.sdk.internal.crypto.model.MXDeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.MXEncryptEventContentResult
+import org.matrix.android.sdk.internal.crypto.model.MXKey.Companion.KEY_SIGNED_CURVE_25519_TYPE
 import org.matrix.android.sdk.internal.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.internal.crypto.model.event.EncryptedEventContent
 import org.matrix.android.sdk.internal.crypto.model.event.RoomKeyContent
@@ -329,7 +330,7 @@ internal class DefaultCryptoService @Inject constructor(
                 uploadDeviceKeys()
             }
 
-            oneTimeKeysUploader.maybeUploadOneTimeKeys()
+            oneTimeKeysUploader.maybeUploadOneTimeKeys(shouldGenerateFallbackKey = false)
             // this can throw if no backup
             tryOrNull {
                 keysBackupService.checkAndStartKeysBackup()
@@ -431,7 +432,17 @@ internal class DefaultCryptoService @Inject constructor(
                 if (isStarted()) {
                     // Make sure we process to-device messages before generating new one-time-keys #2782
                     deviceListManager.refreshOutdatedDeviceLists()
-                    oneTimeKeysUploader.maybeUploadOneTimeKeys()
+                    // The presence of device_unused_fallback_key_types indicates that the server supports fallback keys.
+                    // If there's no unused signed_curve25519 fallback key we need a new one.
+                    val shouldGenerateFallbackKey = if (syncResponse.deviceUnusedFallbackKeyTypes != null) {
+                        // Generate a fallback key only if the server does not already have an unused fallback key.
+                        !syncResponse.deviceUnusedFallbackKeyTypes.contains(KEY_SIGNED_CURVE_25519_TYPE)
+                    } else {
+                        // Server does not support fallbackKey
+                        false
+                    }
+
+                    oneTimeKeysUploader.maybeUploadOneTimeKeys(shouldGenerateFallbackKey)
                     incomingGossipingRequestManager.processReceivedGossipingRequests()
                 }
             }
@@ -928,7 +939,7 @@ internal class DefaultCryptoService @Inject constructor(
                 signatures = objectSigner.signObject(canonicalJson)
         )
 
-        val uploadDeviceKeysParams = UploadKeysTask.Params(rest, null)
+        val uploadDeviceKeysParams = UploadKeysTask.Params(rest, null, null)
         uploadKeysTask.execute(uploadDeviceKeysParams)
 
         cryptoStore.setDeviceKeysUploaded(true)
