@@ -142,7 +142,7 @@ class NotifiableEventResolver @Inject constructor(
             val roomName = stringProvider.getString(R.string.notification_unknown_room_name)
             val senderDisplayName = event.senderInfo.disambiguatedDisplayName
 
-            val notifiableEvent = NotifiableMessageEvent(
+            return NotifiableMessageEvent(
                     eventId = event.root.eventId!!,
                     editedEventId = event.getEditedEventId(),
                     timestamp = event.root.originServerTs ?: 0,
@@ -151,10 +151,9 @@ class NotifiableEventResolver @Inject constructor(
                     senderId = event.root.senderId,
                     body = body.toString(),
                     roomId = event.root.roomId!!,
-                    roomName = roomName)
-
-            notifiableEvent.matrixID = session.myUserId
-            return notifiableEvent
+                    roomName = roomName,
+                    matrixID = session.myUserId
+            )
         } else {
             if (event.root.isEncrypted() && event.root.mxDecryptionResult == null) {
                 // TODO use a global event decryptor? attache to session and that listen to new sessionId?
@@ -175,7 +174,7 @@ class NotifiableEventResolver @Inject constructor(
             val roomName = room.roomSummary()?.displayName ?: ""
             val senderDisplayName = event.senderInfo.disambiguatedDisplayName
 
-            val notifiableEvent = NotifiableMessageEvent(
+            return NotifiableMessageEvent(
                     eventId = event.root.eventId!!,
                     editedEventId = event.getEditedEventId(),
                     timestamp = event.root.originServerTs ?: 0,
@@ -185,25 +184,20 @@ class NotifiableEventResolver @Inject constructor(
                     body = body,
                     roomId = event.root.roomId!!,
                     roomName = roomName,
-                    roomIsDirect = room.roomSummary()?.isDirect ?: false)
-
-            notifiableEvent.matrixID = session.myUserId
-            notifiableEvent.soundName = null
-
-            // Get the avatars URL
-            notifiableEvent.roomAvatarPath = session.contentUrlResolver()
-                    .resolveThumbnail(room.roomSummary()?.avatarUrl,
-                            250,
-                            250,
-                            ContentUrlResolver.ThumbnailMethod.SCALE)
-
-            notifiableEvent.senderAvatarPath = session.contentUrlResolver()
-                    .resolveThumbnail(event.senderInfo.avatarUrl,
-                            250,
-                            250,
-                            ContentUrlResolver.ThumbnailMethod.SCALE)
-
-            return notifiableEvent
+                    roomIsDirect = room.roomSummary()?.isDirect ?: false,
+                    roomAvatarPath = session.contentUrlResolver()
+                            .resolveThumbnail(room.roomSummary()?.avatarUrl,
+                                    250,
+                                    250,
+                                    ContentUrlResolver.ThumbnailMethod.SCALE),
+                    senderAvatarPath = session.contentUrlResolver()
+                            .resolveThumbnail(event.senderInfo.avatarUrl,
+                                    250,
+                                    250,
+                                    ContentUrlResolver.ThumbnailMethod.SCALE),
+                    matrixID = session.myUserId,
+                    soundName = null
+            )
         }
     }
 
