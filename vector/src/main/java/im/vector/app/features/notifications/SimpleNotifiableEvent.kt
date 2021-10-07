@@ -18,7 +18,7 @@ package im.vector.app.features.notifications
 import androidx.core.app.NotificationCompat
 
 data class SimpleNotifiableEvent(
-        var matrixID: String?,
+        val matrixID: String?,
         override val eventId: String,
         override val editedEventId: String?,
         override var noisy: Boolean,
@@ -26,7 +26,7 @@ data class SimpleNotifiableEvent(
         val description: String,
         val type: String?,
         val timestamp: Long,
-        var soundName: String?,
+        val soundName: String?,
         override var isPushGatewayEvent: Boolean = false) : NotifiableEvent {
 
     override var hasBeenDisplayed: Boolean = false
