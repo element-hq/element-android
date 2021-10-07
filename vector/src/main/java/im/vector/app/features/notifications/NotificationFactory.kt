@@ -36,7 +36,7 @@ class NotificationFactory @Inject constructor(
 
     private fun List<NotifiableMessageEvent>.hasNoEventsToDisplay() = isEmpty() || all { it.canNotBeDisplayed() }
 
-    private fun NotifiableMessageEvent.canNotBeDisplayed() = hasBeenDisplayed || isRedacted
+    private fun NotifiableMessageEvent.canNotBeDisplayed() = isRedacted
 
     fun Map<String, InviteNotifiableEvent?>.toNotifications(myUserId: String): List<OneShotNotification> {
         return this.map { (roomId, event) ->

@@ -156,7 +156,8 @@ fun aSimpleNotifiableEvent(eventId: String) = SimpleNotifiableEvent(
         type = null,
         timestamp = 0,
         soundName = null,
-        isPushGatewayEvent = false
+        canBeReplaced = false,
+        isRedacted = false
 )
 
 fun anInviteNotifiableEvent(roomId: String) = InviteNotifiableEvent(
@@ -170,7 +171,8 @@ fun anInviteNotifiableEvent(roomId: String) = InviteNotifiableEvent(
         type = null,
         timestamp = 0,
         soundName = null,
-        isPushGatewayEvent = false
+        canBeReplaced = false,
+        isRedacted = false
 )
 
 fun aNotifiableMessageEvent(eventId: String, roomId: String) = NotifiableMessageEvent(
@@ -183,5 +185,7 @@ fun aNotifiableMessageEvent(eventId: String, roomId: String) = NotifiableMessage
         body = "message-body",
         roomId = roomId,
         roomName = "room-name",
-        roomIsDirect = false
+        roomIsDirect = false,
+        canBeReplaced = false,
+        isRedacted = false
 )

@@ -94,7 +94,6 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
                     // Use setOnlyAlertOnce to ensure update notification does not interfere with sound
                     // from first notify invocation as outlined in:
                     // https://developer.android.com/training/notify-user/build-notification#Updating
-                    notifiableEvent.hasBeenDisplayed = false
                     eventList.remove(existing)
                     eventList.add(notifiableEvent)
                 } else {
@@ -131,9 +130,9 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
         synchronized(eventList) {
             eventList.replace(eventId) {
                 when (it) {
-                    is InviteNotifiableEvent  -> it.copy(isRedacted = true).apply { hasBeenDisplayed = false }
-                    is NotifiableMessageEvent -> it.copy(isRedacted = true).apply { hasBeenDisplayed = false }
-                    is SimpleNotifiableEvent  -> it.copy(isRedacted = true).apply { hasBeenDisplayed = false }
+                    is InviteNotifiableEvent  -> it.copy(isRedacted = true)
+                    is NotifiableMessageEvent -> it.copy(isRedacted = true)
+                    is SimpleNotifiableEvent  -> it.copy(isRedacted = true)
                 }
             }
         }
