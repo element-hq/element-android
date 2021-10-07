@@ -19,7 +19,7 @@ data class SimpleNotifiableEvent(
         val matrixID: String?,
         override val eventId: String,
         override val editedEventId: String?,
-        override var noisy: Boolean,
+        val noisy: Boolean,
         val title: String,
         val description: String,
         val type: String?,

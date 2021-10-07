@@ -53,19 +53,19 @@ class NotifiableEventResolver @Inject constructor(
 
     // private val eventDisplay = RiotEventDisplay(context)
 
-    fun resolveEvent(event: Event/*, roomState: RoomState?, bingRule: PushRule?*/, session: Session): NotifiableEvent? {
+    fun resolveEvent(event: Event/*, roomState: RoomState?, bingRule: PushRule?*/, session: Session, isNoisy: Boolean): NotifiableEvent? {
         val roomID = event.roomId ?: return null
         val eventId = event.eventId ?: return null
         if (event.getClearType() == EventType.STATE_ROOM_MEMBER) {
-            return resolveStateRoomEvent(event, session)
+            return resolveStateRoomEvent(event, session, isNoisy)
         }
         val timelineEvent = session.getRoom(roomID)?.getTimeLineEvent(eventId) ?: return null
         when (event.getClearType()) {
             EventType.MESSAGE   -> {
-                return resolveMessageEvent(timelineEvent, session)
+                return resolveMessageEvent(timelineEvent, session, isNoisy)
             }
             EventType.ENCRYPTED -> {
-                return resolveMessageEvent(timelineEvent, session)
+                return resolveMessageEvent(timelineEvent, session, isNoisy)
             }
             else                -> {
                 // If the event can be displayed, display it as is
@@ -111,24 +111,14 @@ class NotifiableEventResolver @Inject constructor(
                             avatarUrl = user.avatarUrl
                     )
             )
-
-            val notifiableEvent = resolveMessageEvent(timelineEvent, session)
-
-            if (notifiableEvent == null) {
-                Timber.d("## Failed to resolve event")
-                // TODO
-                null
-            } else {
-                notifiableEvent.noisy = !notificationAction.soundName.isNullOrBlank()
-                notifiableEvent
-            }
+            resolveMessageEvent(timelineEvent, session, isNoisy = !notificationAction.soundName.isNullOrBlank())
         } else {
             Timber.d("Matched push rule is set to not notify")
             null
         }
     }
 
-    private fun resolveMessageEvent(event: TimelineEvent, session: Session): NotifiableEvent? {
+    private fun resolveMessageEvent(event: TimelineEvent, session: Session, isNoisy: Boolean): NotifiableEvent {
         // The event only contains an eventId, and roomId (type is m.room.*) , we need to get the displayable content (names, avatar, text, etc...)
         val room = session.getRoom(event.root.roomId!! /*roomID cannot be null*/)
 
@@ -143,7 +133,7 @@ class NotifiableEventResolver @Inject constructor(
                     eventId = event.root.eventId!!,
                     editedEventId = event.getEditedEventId(),
                     timestamp = event.root.originServerTs ?: 0,
-                    noisy = false, // will be updated
+                    noisy = isNoisy,
                     senderName = senderDisplayName,
                     senderId = event.root.senderId,
                     body = body.toString(),
@@ -175,7 +165,7 @@ class NotifiableEventResolver @Inject constructor(
                     eventId = event.root.eventId!!,
                     editedEventId = event.getEditedEventId(),
                     timestamp = event.root.originServerTs ?: 0,
-                    noisy = false, // will be updated
+                    noisy = isNoisy,
                     senderName = senderDisplayName,
                     senderId = event.root.senderId,
                     body = body,
@@ -198,7 +188,7 @@ class NotifiableEventResolver @Inject constructor(
         }
     }
 
-    private fun resolveStateRoomEvent(event: Event, session: Session): NotifiableEvent? {
+    private fun resolveStateRoomEvent(event: Event, session: Session, isNoisy: Boolean): NotifiableEvent? {
         val content = event.content?.toModel<RoomMemberContent>() ?: return null
         val roomId = event.roomId ?: return null
         val dName = event.senderId?.let { session.getRoomMember(it, roomId)?.displayName }
@@ -211,7 +201,7 @@ class NotifiableEventResolver @Inject constructor(
                     editedEventId = null,
                     roomId = roomId,
                     timestamp = event.originServerTs ?: 0,
-                    noisy = false, // will be set later
+                    noisy = isNoisy,
                     title = stringProvider.getString(R.string.notification_new_invitation),
                     description = body.toString(),
                     soundName = null, // will be set later

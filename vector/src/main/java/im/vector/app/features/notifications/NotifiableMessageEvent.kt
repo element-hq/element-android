@@ -20,7 +20,7 @@ import org.matrix.android.sdk.api.session.events.model.EventType
 data class NotifiableMessageEvent(
         override val eventId: String,
         override val editedEventId: String?,
-        override var noisy: Boolean,
+        val noisy: Boolean,
         val timestamp: Long,
         val senderName: String?,
         val senderId: String?,
