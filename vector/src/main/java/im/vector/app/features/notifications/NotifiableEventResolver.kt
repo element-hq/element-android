@@ -57,15 +57,15 @@ class NotifiableEventResolver @Inject constructor(
         val roomID = event.roomId ?: return null
         val eventId = event.eventId ?: return null
         if (event.getClearType() == EventType.STATE_ROOM_MEMBER) {
-            return resolveStateRoomEvent(event, session, isNoisy)
+            return resolveStateRoomEvent(event, session, canBeReplaced = false, isNoisy = isNoisy)
         }
         val timelineEvent = session.getRoom(roomID)?.getTimeLineEvent(eventId) ?: return null
         when (event.getClearType()) {
             EventType.MESSAGE   -> {
-                return resolveMessageEvent(timelineEvent, session, isNoisy)
+                return resolveMessageEvent(timelineEvent, session, canBeReplaced = false, isNoisy = isNoisy)
             }
             EventType.ENCRYPTED -> {
-                return resolveMessageEvent(timelineEvent, session, isNoisy)
+                return resolveMessageEvent(timelineEvent, session, canBeReplaced = false, isNoisy = isNoisy)
             }
             else                -> {
                 // If the event can be displayed, display it as is
@@ -82,12 +82,14 @@ class NotifiableEventResolver @Inject constructor(
                         description = bodyPreview,
                         title = stringProvider.getString(R.string.notification_unknown_new_event),
                         soundName = null,
-                        type = event.type)
+                        type = event.type,
+                        canBeReplaced = false
+                )
             }
         }
     }
 
-    fun resolveInMemoryEvent(session: Session, event: Event): NotifiableEvent? {
+    fun resolveInMemoryEvent(session: Session, event: Event, canBeReplaced: Boolean): NotifiableEvent? {
         if (event.getClearType() != EventType.MESSAGE) return null
 
         // Ignore message edition
@@ -111,14 +113,14 @@ class NotifiableEventResolver @Inject constructor(
                             avatarUrl = user.avatarUrl
                     )
             )
-            resolveMessageEvent(timelineEvent, session, isNoisy = !notificationAction.soundName.isNullOrBlank())
+            resolveMessageEvent(timelineEvent, session, canBeReplaced = canBeReplaced, isNoisy = !notificationAction.soundName.isNullOrBlank())
         } else {
             Timber.d("Matched push rule is set to not notify")
             null
         }
     }
 
-    private fun resolveMessageEvent(event: TimelineEvent, session: Session, isNoisy: Boolean): NotifiableEvent {
+    private fun resolveMessageEvent(event: TimelineEvent, session: Session, canBeReplaced: Boolean, isNoisy: Boolean): NotifiableEvent {
         // The event only contains an eventId, and roomId (type is m.room.*) , we need to get the displayable content (names, avatar, text, etc...)
         val room = session.getRoom(event.root.roomId!! /*roomID cannot be null*/)
 
@@ -132,6 +134,7 @@ class NotifiableEventResolver @Inject constructor(
             return NotifiableMessageEvent(
                     eventId = event.root.eventId!!,
                     editedEventId = event.getEditedEventId(),
+                    canBeReplaced = canBeReplaced,
                     timestamp = event.root.originServerTs ?: 0,
                     noisy = isNoisy,
                     senderName = senderDisplayName,
@@ -164,6 +167,7 @@ class NotifiableEventResolver @Inject constructor(
             return NotifiableMessageEvent(
                     eventId = event.root.eventId!!,
                     editedEventId = event.getEditedEventId(),
+                    canBeReplaced = canBeReplaced,
                     timestamp = event.root.originServerTs ?: 0,
                     noisy = isNoisy,
                     senderName = senderDisplayName,
@@ -188,7 +192,7 @@ class NotifiableEventResolver @Inject constructor(
         }
     }
 
-    private fun resolveStateRoomEvent(event: Event, session: Session, isNoisy: Boolean): NotifiableEvent? {
+    private fun resolveStateRoomEvent(event: Event, session: Session, canBeReplaced: Boolean, isNoisy: Boolean): NotifiableEvent? {
         val content = event.content?.toModel<RoomMemberContent>() ?: return null
         val roomId = event.roomId ?: return null
         val dName = event.senderId?.let { session.getRoomMember(it, roomId)?.displayName }
@@ -199,6 +203,7 @@ class NotifiableEventResolver @Inject constructor(
                     session.myUserId,
                     eventId = event.eventId!!,
                     editedEventId = null,
+                    canBeReplaced = canBeReplaced,
                     roomId = roomId,
                     timestamp = event.originServerTs ?: 0,
                     noisy = isNoisy,

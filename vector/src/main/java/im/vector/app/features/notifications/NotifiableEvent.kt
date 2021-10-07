@@ -25,6 +25,6 @@ sealed interface NotifiableEvent : Serializable {
     val editedEventId: String?
     var hasBeenDisplayed: Boolean
     // Used to know if event should be replaced with the one coming from eventstream
-    var isPushGatewayEvent: Boolean
+    val canBeReplaced: Boolean
     val isRedacted: Boolean
 }
