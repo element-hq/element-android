@@ -100,6 +100,7 @@ import org.matrix.olm.OlmAccount
 import org.matrix.olm.OlmException
 import org.matrix.olm.OlmOutboundGroupSession
 import timber.log.Timber
+import java.lang.Exception
 import javax.inject.Inject
 import kotlin.collections.set
 
@@ -210,8 +211,6 @@ internal class RealmCryptoStore @Inject constructor(
         inboundGroupSessionToRelease.clear()
 
         olmAccount?.releaseAccount()
-
-        realmLocker?.close()
         realmLocker = null
     }
 
