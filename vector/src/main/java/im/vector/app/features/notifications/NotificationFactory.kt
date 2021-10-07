@@ -82,12 +82,13 @@ class NotificationFactory @Inject constructor(
         val simpleMeta = simpleNotifications.mapToMeta()
         return when {
             roomMeta.isEmpty() && invitationMeta.isEmpty() && simpleMeta.isEmpty() -> SummaryNotification.Removed
-            else                                                                   -> SummaryNotification.Update(summaryGroupMessageCreator.createSummaryNotification(
-                    roomNotifications = roomMeta,
-                    invitationNotifications = invitationMeta,
-                    simpleNotifications = simpleMeta,
-                    useCompleteNotificationFormat = useCompleteNotificationFormat
-            ))
+            else                                                                   -> SummaryNotification.Update(
+                    summaryGroupMessageCreator.createSummaryNotification(
+                            roomNotifications = roomMeta,
+                            invitationNotifications = invitationMeta,
+                            simpleNotifications = simpleMeta,
+                            useCompleteNotificationFormat = useCompleteNotificationFormat
+                    ))
         }
     }
 }
