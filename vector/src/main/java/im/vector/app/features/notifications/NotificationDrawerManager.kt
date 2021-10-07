@@ -107,12 +107,12 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
         if (BuildConfig.LOW_PRIVACY_LOG_ENABLE) {
             Timber.d("onNotifiableEventReceived(): $notifiableEvent")
         } else {
-            Timber.d("onNotifiableEventReceived(): is push: ${notifiableEvent.isPushGatewayEvent}")
+            Timber.d("onNotifiableEventReceived(): is push: ${notifiableEvent.canBeReplaced}")
         }
         synchronized(eventList) {
             val existing = eventList.firstOrNull { it.eventId == notifiableEvent.eventId }
             if (existing != null) {
-                if (existing.isPushGatewayEvent) {
+                if (existing.canBeReplaced) {
                     // Use the event coming from the event stream as it may contains more info than
                     // the fcm one (like type/content/clear text) (e.g when an encrypted message from
                     // FCM should be update with clear text after a sync)

@@ -20,6 +20,7 @@ import org.matrix.android.sdk.api.session.events.model.EventType
 data class NotifiableMessageEvent(
         override val eventId: String,
         override val editedEventId: String?,
+        override val canBeReplaced: Boolean,
         val noisy: Boolean,
         val timestamp: Long,
         val senderName: String?,
@@ -38,7 +39,6 @@ data class NotifiableMessageEvent(
         override val isRedacted: Boolean = false
 ) : NotifiableEvent {
 
-    override var isPushGatewayEvent: Boolean = false
     override var hasBeenDisplayed: Boolean = false
 
     val type: String = EventType.MESSAGE

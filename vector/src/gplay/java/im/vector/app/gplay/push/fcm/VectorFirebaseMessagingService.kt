@@ -28,17 +28,14 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import im.vector.app.BuildConfig
-import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.extensions.vectorComponent
 import im.vector.app.core.network.WifiDetector
 import im.vector.app.core.pushers.PushersManager
 import im.vector.app.features.badge.BadgeProxy
 import im.vector.app.features.notifications.NotifiableEventResolver
-import im.vector.app.features.notifications.NotifiableMessageEvent
 import im.vector.app.features.notifications.NotificationDrawerManager
 import im.vector.app.features.notifications.NotificationUtils
-import im.vector.app.features.notifications.SimpleNotifiableEvent
 import im.vector.app.features.settings.VectorDataStore
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.push.fcm.FcmHelper
@@ -48,9 +45,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.logger.LoggerTag
-import org.matrix.android.sdk.api.pushrules.Action
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.events.model.Event
 import timber.log.Timber
 
 private val loggerTag = LoggerTag("Push", LoggerTag.SYNC)
@@ -212,12 +207,11 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
             Timber.tag(loggerTag.value).d("Fast lane: start request")
             val event = tryOrNull { session.getEvent(roomId, eventId) } ?: return@launch
 
-            val resolvedEvent = notifiableEventResolver.resolveInMemoryEvent(session, event)
+            val resolvedEvent = notifiableEventResolver.resolveInMemoryEvent(session, event, canBeReplaced = true)
 
             resolvedEvent
                     ?.also { Timber.tag(loggerTag.value).d("Fast lane: notify drawer") }
                     ?.let {
-                        it.isPushGatewayEvent = true
                         notificationDrawerManager.onNotifiableEventReceived(it)
                         notificationDrawerManager.refreshNotificationDrawer()
                     }
