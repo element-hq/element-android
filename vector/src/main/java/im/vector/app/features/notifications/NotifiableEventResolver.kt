@@ -15,7 +15,6 @@
  */
 package im.vector.app.features.notifications
 
-import androidx.core.app.NotificationCompat
 import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
@@ -66,9 +65,7 @@ class NotifiableEventResolver @Inject constructor(
                 return resolveMessageEvent(timelineEvent, session)
             }
             EventType.ENCRYPTED -> {
-                val messageEvent = resolveMessageEvent(timelineEvent, session)
-                messageEvent?.lockScreenVisibility = NotificationCompat.VISIBILITY_PRIVATE
-                return messageEvent
+                return resolveMessageEvent(timelineEvent, session)
             }
             else                -> {
                 // If the event can be displayed, display it as is
