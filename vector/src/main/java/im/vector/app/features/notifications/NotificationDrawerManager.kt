@@ -395,7 +395,7 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
                                     textStyle = "bold"
                                     +String.format("%s: ", event.senderName)
                                 }
-                                +(event.description ?: "")
+                                +(event.description)
                             }
                             summaryInboxStyle.addLine(line)
                         } else {
@@ -404,7 +404,7 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
                                     textStyle = "bold"
                                     +String.format("%s: %s ", roomName, event.senderName)
                                 }
-                                +(event.description ?: "")
+                                +(event.description)
                             }
                             summaryInboxStyle.addLine(line)
                         }
