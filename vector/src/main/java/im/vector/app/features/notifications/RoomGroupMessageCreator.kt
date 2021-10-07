@@ -16,11 +16,17 @@
 
 package im.vector.app.features.notifications
 
+import android.content.Context
 import android.graphics.Bitmap
+import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.Person
+import androidx.core.content.pm.ShortcutInfoCompat
+import androidx.core.content.pm.ShortcutManagerCompat
+import androidx.core.graphics.drawable.IconCompat
 import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.features.home.room.detail.RoomDetailActivity
 import me.gujun.android.span.Span
 import me.gujun.android.span.span
 import timber.log.Timber
@@ -30,7 +36,8 @@ class RoomGroupMessageCreator @Inject constructor(
         private val iconLoader: IconLoader,
         private val bitmapLoader: BitmapLoader,
         private val stringProvider: StringProvider,
-        private val notificationUtils: NotificationUtils
+        private val notificationUtils: NotificationUtils,
+        private val appContext: Context
 ) {
 
     fun createRoomMessage(events: List<NotifiableMessageEvent>, roomId: String, userDisplayName: String, userAvatarUrl: String?): RoomNotification.Message {
@@ -54,6 +61,19 @@ class RoomGroupMessageCreator @Inject constructor(
             stringProvider.getString(R.string.notification_ticker_text_dm, events.last().senderName, events.last().description)
         }
 
+        val largeBitmap = getRoomBitmap(events)
+        val shortcutInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            val openRoomIntent = RoomDetailActivity.shortcutIntent(appContext, roomId)
+            ShortcutInfoCompat.Builder(appContext, roomId)
+                    .setLongLived(true)
+                    .setIntent(openRoomIntent)
+                    .setShortLabel(roomName)
+                    .setIcon(largeBitmap?.let { IconCompat.createWithAdaptiveBitmap(it) } ?: iconLoader.getUserIcon(events.last().senderAvatarPath))
+                    .build()
+        } else {
+            null
+        }
+
         val lastMessageTimestamp = events.last().timestamp
         val smartReplyErrors = events.filter { it.isSmartReplyError() }
         val messageCount = (events.size - smartReplyErrors.size)
@@ -72,22 +92,27 @@ class RoomGroupMessageCreator @Inject constructor(
                             it.shouldBing = meta.shouldBing
                             it.customSound = events.last().soundName
                         },
-                        largeIcon = getRoomBitmap(events),
+                        largeIcon = largeBitmap,
                         lastMessageTimestamp,
                         userDisplayName,
                         tickerText
                 ),
+                shortcutInfo,
                 meta
         )
     }
 
     private fun NotificationCompat.MessagingStyle.addMessagesFromEvents(events: List<NotifiableMessageEvent>) {
         events.forEach { event ->
-            val senderPerson = Person.Builder()
-                    .setName(event.senderName)
-                    .setIcon(iconLoader.getUserIcon(event.senderAvatarPath))
-                    .setKey(event.senderId)
-                    .build()
+            val senderPerson = if (event.outGoingMessage) {
+                null
+            } else {
+                Person.Builder()
+                        .setName(event.senderName)
+                        .setIcon(iconLoader.getUserIcon(event.senderAvatarPath))
+                        .setKey(event.senderId)
+                        .build()
+            }
             when {
                 event.isSmartReplyError() -> addMessage(stringProvider.getString(R.string.notification_inline_reply_failed), event.timestamp, senderPerson)
                 else                      -> addMessage(event.body, event.timestamp, senderPerson)
