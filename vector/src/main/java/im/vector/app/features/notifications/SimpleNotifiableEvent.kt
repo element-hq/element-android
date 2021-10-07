@@ -30,5 +30,4 @@ data class SimpleNotifiableEvent(
 ) : NotifiableEvent {
 
     override var hasBeenDisplayed: Boolean = false
-
 }
