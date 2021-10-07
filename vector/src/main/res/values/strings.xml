@@ -2349,7 +2349,8 @@
     <string name="add_identity_server">Configure identity server</string>
     <string name="open_discovery_settings">Open Discovery Settings</string>
     <string name="change_identity_server">Change identity server</string>
-    <string name="settings_discovery_identity_server_policies_title">Identity server policy</string>
+    <string name="settings_discovery_show_identity_server_policies_title">Show identity server policy</string>
+    <string name="settings_discovery_hide_identity_server_policies_title">Hide identity server policy</string>
     <string name="settings_discovery_identity_server_info">You are currently using %1$s to discover and be discoverable by existing contacts you know.</string>
     <string name="settings_discovery_identity_server_info_none">You are not currently using an identity server. To discover and be discoverable by existing contacts you know, configure one below.</string>
     <string name="settings_discovery_emails_title">Discoverable email addresses</string>

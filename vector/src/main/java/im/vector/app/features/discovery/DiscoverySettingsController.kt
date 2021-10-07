@@ -32,7 +32,6 @@ import im.vector.app.core.extensions.getFormattedValue
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.form.formAdvancedToggleItem
-import im.vector.app.features.terms.termItem
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.identity.SharedState
 import org.matrix.android.sdk.api.session.identity.ThreePid
@@ -107,7 +106,7 @@ class DiscoverySettingsController @Inject constructor(
         }
     }
 
-    private fun buildIdentityServerSection(data: DiscoverySettingsState, ) {
+    private fun buildIdentityServerSection(data: DiscoverySettingsState) {
         val identityServer = data.identityServer()
         val identityServerUrl = identityServer?.serverUrl ?: stringProvider.getString(R.string.none)
         val host = this
@@ -126,7 +125,10 @@ class DiscoverySettingsController @Inject constructor(
         if (terms != null) {
             formAdvancedToggleItem {
                 id("policy-urls")
-                title(host.stringProvider.getString(R.string.settings_discovery_identity_server_policies_title))
+                val titleRes = if (data.isIdentityPolicyUrlsExpanded) {
+                    R.string.settings_discovery_hide_identity_server_policies_title
+                } else R.string.settings_discovery_show_identity_server_policies_title
+                title(host.stringProvider.getString(titleRes))
                 expanded(data.isIdentityPolicyUrlsExpanded)
                 listener { host.listener?.onPolicyUrlsExpandedStateToggled() }
             }
@@ -136,7 +138,7 @@ class DiscoverySettingsController @Inject constructor(
                         id(term.url)
                         name(term.name)
                         url(term.url)
-                        clickListener  {
+                        clickListener {
                             // TODO
                         }
                     }
