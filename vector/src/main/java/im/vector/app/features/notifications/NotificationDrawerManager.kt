@@ -144,9 +144,12 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
 
     fun onEventRedacted(eventId: String) {
         synchronized(eventList) {
-            eventList.find { it.eventId == eventId }?.apply {
-                isRedacted = true
-                hasBeenDisplayed = false
+            eventList.replace(eventId) {
+                when (it) {
+                    is InviteNotifiableEvent  -> it.copy(isRedacted = true).apply { hasBeenDisplayed = false }
+                    is NotifiableMessageEvent -> it.copy(isRedacted = true).apply { hasBeenDisplayed = false }
+                    is SimpleNotifiableEvent  -> it.copy(isRedacted = true).apply { hasBeenDisplayed = false }
+                }
             }
         }
     }
@@ -629,4 +632,12 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
 
         private const val KEY_ALIAS_SECRET_STORAGE = "notificationMgr"
     }
+}
+
+private fun MutableList<NotifiableEvent>.replace(eventId: String, block: (NotifiableEvent) -> NotifiableEvent) {
+    val indexToReplace = indexOfFirst { it.eventId == eventId }
+    if (indexToReplace == -1) {
+        return
+    }
+    set(indexToReplace, block(get(indexToReplace)))
 }
