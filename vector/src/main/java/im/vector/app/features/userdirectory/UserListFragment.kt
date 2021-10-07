@@ -43,6 +43,7 @@ import im.vector.app.core.utils.showIdentityServerConsentDialog
 import im.vector.app.core.utils.startSharePlainTextIntent
 import im.vector.app.databinding.FragmentUserListBinding
 import im.vector.app.features.homeserver.HomeServerCapabilitiesViewModel
+import im.vector.app.features.navigation.SettingsActivityPayload
 import im.vector.app.features.settings.VectorSettingsActivity
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.user.model.User
@@ -227,9 +228,13 @@ class UserListFragment @Inject constructor(
 
     override fun giveIdentityServerConsent() {
         withState(viewModel) { state ->
-            requireContext().showIdentityServerConsentDialog(state.configuredIdentityServer) {
-                viewModel.handle(UserListAction.UpdateUserConsent(true))
-            }
+            requireContext().showIdentityServerConsentDialog(
+                    state.configuredIdentityServer,
+                    policyLinkCallback = {
+                        navigator.openSettings(requireContext(), SettingsActivityPayload.DiscoverySettings(expandIdentityPolicies = true))
+                    },
+                    consentCallBack = { viewModel.handle(UserListAction.UpdateUserConsent(true)) }
+            )
         }
     }
 

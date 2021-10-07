@@ -353,6 +353,11 @@ class DefaultNavigator @Inject constructor(
         context.startActivity(intent)
     }
 
+    override fun openSettings(context: Context, payload: SettingsActivityPayload) {
+        val intent = VectorSettingsActivity.getIntent(context, payload)
+        context.startActivity(intent)
+    }
+
     override fun openDebug(context: Context) {
         context.startActivity(Intent(context, DebugMenuActivity::class.java))
     }
