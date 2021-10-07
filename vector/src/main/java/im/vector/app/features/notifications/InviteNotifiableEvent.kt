@@ -20,7 +20,7 @@ data class InviteNotifiableEvent(
         override val eventId: String,
         override val editedEventId: String?,
         val roomId: String,
-        override var noisy: Boolean,
+        val noisy: Boolean,
         val title: String,
         val description: String,
         val type: String?,
