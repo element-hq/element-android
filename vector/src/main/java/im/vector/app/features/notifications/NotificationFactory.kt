@@ -44,7 +44,12 @@ class NotificationFactory @Inject constructor(
                 null -> OneShotNotification.Removed(key = roomId)
                 else -> OneShotNotification.Append(
                         notificationUtils.buildRoomInvitationNotification(event, myUserId),
-                        OneShotNotification.Append.Meta(key = roomId, summaryLine = event.description, isNoisy = event.noisy)
+                        OneShotNotification.Append.Meta(
+                                key = roomId,
+                                summaryLine = event.description,
+                                isNoisy = event.noisy,
+                                timestamp = event.timestamp
+                        )
                 )
             }
         }
@@ -57,7 +62,12 @@ class NotificationFactory @Inject constructor(
                 null -> OneShotNotification.Removed(key = eventId)
                 else -> OneShotNotification.Append(
                         notificationUtils.buildSimpleEventNotification(event, myUserId),
-                        OneShotNotification.Append.Meta(key = eventId, summaryLine = event.description, isNoisy = event.noisy)
+                        OneShotNotification.Append.Meta(
+                                key = eventId,
+                                summaryLine = event.description,
+                                isNoisy = event.noisy,
+                                timestamp = event.timestamp
+                        )
                 )
             }
         }
@@ -66,13 +76,19 @@ class NotificationFactory @Inject constructor(
     fun createSummaryNotification(roomNotifications: List<RoomNotification>,
                                   invitationNotifications: List<OneShotNotification>,
                                   simpleNotifications: List<OneShotNotification>,
-                                  useCompleteNotificationFormat: Boolean): Notification {
-        return summaryGroupMessageCreator.createSummaryNotification(
-                roomNotifications = roomNotifications.mapToMeta(),
-                invitationNotifications = invitationNotifications.mapToMeta(),
-                simpleNotifications = simpleNotifications.mapToMeta(),
-                useCompleteNotificationFormat = useCompleteNotificationFormat
-        )
+                                  useCompleteNotificationFormat: Boolean): SummaryNotification {
+        val roomMeta = roomNotifications.mapToMeta()
+        val invitationMeta = invitationNotifications.mapToMeta()
+        val simpleMeta = simpleNotifications.mapToMeta()
+        return when {
+            roomMeta.isEmpty() && invitationMeta.isEmpty() && simpleMeta.isEmpty() -> SummaryNotification.Removed
+            else                                                                   -> SummaryNotification.Update(summaryGroupMessageCreator.createSummaryNotification(
+                    roomNotifications = roomMeta,
+                    invitationNotifications = invitationMeta,
+                    simpleNotifications = simpleMeta,
+                    useCompleteNotificationFormat = useCompleteNotificationFormat
+            ))
+        }
     }
 }
 
@@ -100,7 +116,13 @@ sealed interface OneShotNotification {
         data class Meta(
                 val key: String,
                 val summaryLine: CharSequence,
-                val isNoisy: Boolean
+                val isNoisy: Boolean,
+                val timestamp: Long,
         )
     }
+}
+
+sealed interface SummaryNotification {
+    object Removed : SummaryNotification
+    data class Update(val notification: Notification) : SummaryNotification
 }

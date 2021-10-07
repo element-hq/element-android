@@ -34,7 +34,7 @@ class NotificationRenderer @Inject constructor(private val notifiableEventProces
                myUserAvatarUrl: String?,
                useCompleteNotificationFormat: Boolean,
                eventList: MutableList<NotifiableEvent>) {
-        Timber.v("refreshNotificationDrawerBg()")
+        Timber.v("Render notification events - count: ${eventList.size}")
         val notificationEvents = notifiableEventProcessor.modifyAndProcess(eventList, currentRoomId)
         if (lastKnownEventList == notificationEvents.hashCode()) {
             Timber.d("Skipping notification update due to event list not changing")
@@ -50,46 +50,52 @@ class NotificationRenderer @Inject constructor(private val notifiableEventProces
             val roomNotifications = roomEvents.toNotifications(myUserDisplayName, myUserAvatarUrl)
             val invitationNotifications = invitationEvents.toNotifications(myUserId)
             val simpleNotifications = simpleEvents.toNotifications(myUserId)
+            val summaryNotification = createSummaryNotification(
+                    roomNotifications = roomNotifications,
+                    invitationNotifications = invitationNotifications,
+                    simpleNotifications = simpleNotifications,
+                    useCompleteNotificationFormat = useCompleteNotificationFormat
+            )
 
-            if (roomNotifications.isEmpty() && invitationNotifications.isEmpty() && simpleNotifications.isEmpty()) {
-                notificationDisplayer.cancelNotificationMessage(null, NotificationDrawerManager.SUMMARY_NOTIFICATION_ID)
-            } else {
-                val summaryNotification = createSummaryNotification(
-                        roomNotifications = roomNotifications,
-                        invitationNotifications = invitationNotifications,
-                        simpleNotifications = simpleNotifications,
-                        useCompleteNotificationFormat = useCompleteNotificationFormat
-                )
-                roomNotifications.forEach { wrapper ->
-                    when (wrapper) {
-                        is RoomNotification.Removed -> notificationDisplayer.cancelNotificationMessage(wrapper.roomId, NotificationDrawerManager.ROOM_MESSAGES_NOTIFICATION_ID)
-                        is RoomNotification.Message -> if (useCompleteNotificationFormat) {
-                            Timber.d("Updating room messages notification ${wrapper.meta.roomId}")
-                            notificationDisplayer.showNotificationMessage(wrapper.meta.roomId, NotificationDrawerManager.ROOM_MESSAGES_NOTIFICATION_ID, wrapper.notification)
-                        }
+            roomNotifications.forEach { wrapper ->
+                when (wrapper) {
+                    is RoomNotification.Removed -> notificationDisplayer.cancelNotificationMessage(wrapper.roomId, NotificationDrawerManager.ROOM_MESSAGES_NOTIFICATION_ID)
+                    is RoomNotification.Message -> if (useCompleteNotificationFormat) {
+                        Timber.d("Updating room messages notification ${wrapper.meta.roomId}")
+                        notificationDisplayer.showNotificationMessage(wrapper.meta.roomId, NotificationDrawerManager.ROOM_MESSAGES_NOTIFICATION_ID, wrapper.notification)
                     }
                 }
+            }
 
-                invitationNotifications.forEach { wrapper ->
-                    when (wrapper) {
-                        is OneShotNotification.Removed -> notificationDisplayer.cancelNotificationMessage(wrapper.key, NotificationDrawerManager.ROOM_INVITATION_NOTIFICATION_ID)
-                        is OneShotNotification.Append  -> if (useCompleteNotificationFormat) {
-                            Timber.d("Updating invitation notification ${wrapper.meta.key}")
-                            notificationDisplayer.showNotificationMessage(wrapper.meta.key, NotificationDrawerManager.ROOM_INVITATION_NOTIFICATION_ID, wrapper.notification)
-                        }
+            invitationNotifications.forEach { wrapper ->
+                when (wrapper) {
+                    is OneShotNotification.Removed -> notificationDisplayer.cancelNotificationMessage(wrapper.key, NotificationDrawerManager.ROOM_INVITATION_NOTIFICATION_ID)
+                    is OneShotNotification.Append  -> if (useCompleteNotificationFormat) {
+                        Timber.d("Updating invitation notification ${wrapper.meta.key}")
+                        notificationDisplayer.showNotificationMessage(wrapper.meta.key, NotificationDrawerManager.ROOM_INVITATION_NOTIFICATION_ID, wrapper.notification)
                     }
                 }
+            }
 
-                simpleNotifications.forEach { wrapper ->
-                    when (wrapper) {
-                        is OneShotNotification.Removed -> notificationDisplayer.cancelNotificationMessage(wrapper.key, NotificationDrawerManager.ROOM_EVENT_NOTIFICATION_ID)
-                        is OneShotNotification.Append  -> if (useCompleteNotificationFormat) {
-                            Timber.d("Updating simple notification ${wrapper.meta.key}")
-                            notificationDisplayer.showNotificationMessage(wrapper.meta.key, NotificationDrawerManager.ROOM_EVENT_NOTIFICATION_ID, wrapper.notification)
-                        }
+            simpleNotifications.forEach { wrapper ->
+                when (wrapper) {
+                    is OneShotNotification.Removed -> notificationDisplayer.cancelNotificationMessage(wrapper.key, NotificationDrawerManager.ROOM_EVENT_NOTIFICATION_ID)
+                    is OneShotNotification.Append  -> if (useCompleteNotificationFormat) {
+                        Timber.d("Updating simple notification ${wrapper.meta.key}")
+                        notificationDisplayer.showNotificationMessage(wrapper.meta.key, NotificationDrawerManager.ROOM_EVENT_NOTIFICATION_ID, wrapper.notification)
                     }
                 }
-                notificationDisplayer.showNotificationMessage(null, NotificationDrawerManager.SUMMARY_NOTIFICATION_ID, summaryNotification)
+            }
+
+            when (summaryNotification) {
+                SummaryNotification.Removed   -> {
+                    Timber.d("Removing summary notification")
+                    notificationDisplayer.cancelNotificationMessage(null, NotificationDrawerManager.SUMMARY_NOTIFICATION_ID)
+                }
+                is SummaryNotification.Update -> {
+                    Timber.d("Updating summary notification")
+                    notificationDisplayer.showNotificationMessage(null, NotificationDrawerManager.SUMMARY_NOTIFICATION_ID, summaryNotification.notification)
+                }
             }
         }
     }
