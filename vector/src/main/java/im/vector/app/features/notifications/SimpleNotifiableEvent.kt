@@ -25,8 +25,10 @@ data class SimpleNotifiableEvent(
         val type: String?,
         val timestamp: Long,
         val soundName: String?,
-        override var isPushGatewayEvent: Boolean = false) : NotifiableEvent {
+        override var isPushGatewayEvent: Boolean = false,
+        override val isRedacted: Boolean = false
+) : NotifiableEvent {
 
     override var hasBeenDisplayed: Boolean = false
-    override var isRedacted: Boolean = false
+
 }
