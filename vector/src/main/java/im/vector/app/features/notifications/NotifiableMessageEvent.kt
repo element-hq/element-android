@@ -22,7 +22,7 @@ data class NotifiableMessageEvent(
         override val eventId: String,
         override val editedEventId: String?,
         override var noisy: Boolean,
-        override val timestamp: Long,
+        val timestamp: Long,
         var senderName: String?,
         var senderId: String?,
         var body: String?,
@@ -31,8 +31,8 @@ data class NotifiableMessageEvent(
         var roomIsDirect: Boolean = false
 ) : NotifiableEvent {
 
-    override var matrixID: String? = null
-    override var soundName: String? = null
+    var matrixID: String? = null
+    var soundName: String? = null
     override var lockScreenVisibility = NotificationCompat.VISIBILITY_PUBLIC
     override var hasBeenDisplayed: Boolean = false
     override var isRedacted: Boolean = false
@@ -42,14 +42,12 @@ data class NotifiableMessageEvent(
 
     override var isPushGatewayEvent: Boolean = false
 
-    override val type: String
-        get() = EventType.MESSAGE
+    val type: String = EventType.MESSAGE
 
-    override val description: String?
+    val description: String
         get() = body ?: ""
 
-    override val title: String
-        get() = senderName ?: ""
+    val title: String = senderName ?: ""
 
     // This is used for >N notification, as the result of a smart reply
     var outGoingMessage = false
