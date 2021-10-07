@@ -19,7 +19,6 @@ package im.vector.app.features.navigation
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.os.Parcelable
 import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.core.util.Pair
@@ -32,7 +31,6 @@ import im.vector.app.features.roomdirectory.RoomDirectoryData
 import im.vector.app.features.roomdirectory.roompreview.RoomPreviewData
 import im.vector.app.features.settings.VectorSettingsActivity
 import im.vector.app.features.share.SharedData
-import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.session.permalinks.PermalinkData
 import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoom
 import org.matrix.android.sdk.api.session.terms.TermsService
@@ -142,15 +140,4 @@ interface Navigator {
     fun openDevTools(context: Context, roomId: String)
 
     fun openCallTransfer(context: Context, callId: String)
-}
-
-sealed interface SettingsActivityPayload : Parcelable {
-
-    @Parcelize object Root : SettingsActivityPayload
-    @Parcelize object AdvancedSettings : SettingsActivityPayload
-    @Parcelize object SecurityPrivacy : SettingsActivityPayload
-    @Parcelize object SecurityPrivacyManageSessions : SettingsActivityPayload
-    @Parcelize object General : SettingsActivityPayload
-    @Parcelize object Notifications : SettingsActivityPayload
-    @Parcelize object DiscoverySettings : SettingsActivityPayload
 }

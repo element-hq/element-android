@@ -18,7 +18,9 @@ package im.vector.app.features.settings
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.os.Bundle
 import android.os.Parcelable
+import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.preference.Preference
@@ -71,7 +73,7 @@ class VectorSettingsActivity : VectorBaseActivity<ActivityVectorSettingsBinding>
         if (isFirstCreation()) {
             // display the fragment
 
-            when (readPayload<SettingsActivityPayload>(SettingsActivityPayload.Root)) {
+            when (val payload = readPayload<SettingsActivityPayload>(SettingsActivityPayload.Root)) {
                 SettingsActivityPayload.General                       ->
                     replaceFragment(R.id.vector_settings_page, VectorSettingsGeneralFragment::class.java, null, FRAGMENT_TAG)
                 SettingsActivityPayload.AdvancedSettings              ->
@@ -87,8 +89,9 @@ class VectorSettingsActivity : VectorBaseActivity<ActivityVectorSettingsBinding>
                     requestHighlightPreferenceKeyOnResume(VectorPreferences.SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY)
                     replaceFragment(R.id.vector_settings_page, VectorSettingsNotificationPreferenceFragment::class.java, null, FRAGMENT_TAG)
                 }
-                SettingsActivityPayload.DiscoverySettings             -> {
-                    replaceFragment(R.id.vector_settings_page, DiscoverySettingsFragment::class.java, null, FRAGMENT_TAG)
+                is SettingsActivityPayload.DiscoverySettings             -> {
+                    Log.e("!!!", "SettingsActivityPayload.DiscoverySettings : $payload")
+                    replaceFragment(R.id.vector_settings_page, DiscoverySettingsFragment::class.java, payload, FRAGMENT_TAG)
                 }
                 else                                                  ->
                     replaceFragment(R.id.vector_settings_page, VectorSettingsRootFragment::class.java, null, FRAGMENT_TAG)
@@ -154,10 +157,10 @@ class VectorSettingsActivity : VectorBaseActivity<ActivityVectorSettingsBinding>
         }
     }
 
-    fun <T : Fragment> navigateTo(fragmentClass: Class<T>) {
+    fun <T : Fragment> navigateTo(fragmentClass: Class<T>, arguments: Bundle? = null) {
         supportFragmentManager.beginTransaction()
                 .setCustomAnimations(R.anim.right_in, R.anim.fade_out, R.anim.fade_in, R.anim.right_out)
-                .replace(R.id.vector_settings_page, fragmentClass, null)
+                .replace(R.id.vector_settings_page, fragmentClass, arguments)
                 .addToBackStack(null)
                 .commit()
     }
@@ -170,7 +173,7 @@ class VectorSettingsActivity : VectorBaseActivity<ActivityVectorSettingsBinding>
             EXTRA_DIRECT_ACCESS_SECURITY_PRIVACY_MANAGE_SESSIONS -> SettingsActivityPayload.SecurityPrivacyManageSessions
             EXTRA_DIRECT_ACCESS_GENERAL                          -> SettingsActivityPayload.General
             EXTRA_DIRECT_ACCESS_NOTIFICATIONS                    -> SettingsActivityPayload.Notifications
-            EXTRA_DIRECT_ACCESS_DISCOVERY_SETTINGS               -> SettingsActivityPayload.DiscoverySettings
+            EXTRA_DIRECT_ACCESS_DISCOVERY_SETTINGS               -> SettingsActivityPayload.DiscoverySettings()
             else                                                 -> {
                 Timber.w("Unknown directAccess: $directAccess defaulting to Root")
                 SettingsActivityPayload.Root

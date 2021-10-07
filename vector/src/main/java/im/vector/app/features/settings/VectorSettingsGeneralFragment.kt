@@ -38,6 +38,7 @@ import im.vector.app.R
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.hidePassword
+import im.vector.app.core.extensions.toMvRxBundle
 import im.vector.app.core.intent.getFilenameFromUri
 import im.vector.app.core.platform.SimpleTextWatcher
 import im.vector.app.core.preference.UserAvatarPreference
@@ -50,6 +51,8 @@ import im.vector.app.core.utils.toast
 import im.vector.app.databinding.DialogChangePasswordBinding
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
+import im.vector.app.features.discovery.DiscoverySettingsFragment
+import im.vector.app.features.navigation.SettingsActivityPayload
 import im.vector.app.features.workers.signout.SignOutUiWorker
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.coroutines.Dispatchers
@@ -171,6 +174,15 @@ class VectorSettingsGeneralFragment @Inject constructor(
             }
         } else {
             mPasswordPreference.isVisible = false
+        }
+
+        val discoveryPreference = findPreference<VectorPreference>(VectorPreferences.SETTINGS_DISCOVERY_PREFERENCE_KEY)!!
+        discoveryPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            (requireActivity() as VectorSettingsActivity).navigateTo(
+                    DiscoverySettingsFragment::class.java,
+                    SettingsActivityPayload.DiscoverySettings().toMvRxBundle()
+            )
+            true
         }
 
         // Advanced settings

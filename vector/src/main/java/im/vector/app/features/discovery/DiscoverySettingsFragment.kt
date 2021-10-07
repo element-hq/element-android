@@ -21,6 +21,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -36,6 +37,7 @@ import im.vector.app.core.utils.openUrlInChromeCustomTab
 import im.vector.app.core.utils.showIdentityServerConsentDialog
 import im.vector.app.databinding.FragmentGenericRecyclerBinding
 import im.vector.app.features.discovery.change.SetIdentityServerFragment
+import im.vector.app.features.navigation.SettingsActivityPayload
 import im.vector.app.features.settings.VectorSettingsActivity
 import org.matrix.android.sdk.api.session.identity.SharedState
 import org.matrix.android.sdk.api.session.identity.ThreePid
@@ -53,6 +55,7 @@ class DiscoverySettingsFragment @Inject constructor(
     }
 
     private val viewModel by fragmentViewModel(DiscoverySettingsViewModel::class)
+    private val discoveryArgs: SettingsActivityPayload.DiscoverySettings by args()
 
     lateinit var sharedViewModel: DiscoverySharedViewModel
 
@@ -77,6 +80,9 @@ class DiscoverySettingsFragment @Inject constructor(
                     displayErrorDialog(it.throwable)
                 }
             }.exhaustive
+        }
+        if (discoveryArgs.expandIdentityPolicies) {
+            viewModel.handle(DiscoverySettingsAction.ExpandPolicyUrls)
         }
     }
 
