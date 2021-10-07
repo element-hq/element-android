@@ -20,7 +20,6 @@ import android.app.Notification
 import im.vector.app.test.fakes.FakeNotifiableEventProcessor
 import im.vector.app.test.fakes.FakeNotificationDisplayer
 import im.vector.app.test.fakes.FakeNotificationFactory
-import im.vector.app.test.fakes.FakeVectorPreferences
 import io.mockk.mockk
 import org.junit.Test
 

@@ -17,6 +17,10 @@ package im.vector.app.features.notifications
 
 import android.content.Context
 import androidx.annotation.WorkerThread
+import im.vector.app.features.notifications.NotificationDrawerManager.Companion.ROOM_EVENT_NOTIFICATION_ID
+import im.vector.app.features.notifications.NotificationDrawerManager.Companion.ROOM_INVITATION_NOTIFICATION_ID
+import im.vector.app.features.notifications.NotificationDrawerManager.Companion.ROOM_MESSAGES_NOTIFICATION_ID
+import im.vector.app.features.notifications.NotificationDrawerManager.Companion.SUMMARY_NOTIFICATION_ID
 import androidx.core.content.pm.ShortcutManagerCompat
 import timber.log.Timber
 import javax.inject.Inject
@@ -47,7 +51,11 @@ class NotificationRenderer @Inject constructor(private val notifiableEventProces
         }
     }
 
-    private fun processEvents(notificationEvents: ProcessedNotificationEvents, myUserId: String, myUserDisplayName: String, myUserAvatarUrl: String?, useCompleteNotificationFormat: Boolean) {
+    private fun processEvents(notificationEvents: ProcessedNotificationEvents,
+                              myUserId: String,
+                              myUserDisplayName: String,
+                              myUserAvatarUrl: String?,
+                              useCompleteNotificationFormat: Boolean) {
         val (roomEvents, simpleEvents, invitationEvents) = notificationEvents
         with(notificationFactory) {
             val roomNotifications = roomEvents.toNotifications(myUserDisplayName, myUserAvatarUrl)
@@ -62,33 +70,33 @@ class NotificationRenderer @Inject constructor(private val notifiableEventProces
 
             roomNotifications.forEach { wrapper ->
                 when (wrapper) {
-                    is RoomNotification.Removed -> notificationDisplayer.cancelNotificationMessage(wrapper.roomId, NotificationDrawerManager.ROOM_MESSAGES_NOTIFICATION_ID)
+                    is RoomNotification.Removed -> notificationDisplayer.cancelNotificationMessage(wrapper.roomId, ROOM_MESSAGES_NOTIFICATION_ID)
                     is RoomNotification.Message -> if (useCompleteNotificationFormat) {
                         Timber.d("Updating room messages notification ${wrapper.meta.roomId}")
                         wrapper.shortcutInfo?.let {
                             ShortcutManagerCompat.pushDynamicShortcut(appContext, it)
                         }
-                        notificationDisplayer.showNotificationMessage(wrapper.meta.roomId, NotificationDrawerManager.ROOM_MESSAGES_NOTIFICATION_ID, wrapper.notification)
+                        notificationDisplayer.showNotificationMessage(wrapper.meta.roomId, ROOM_MESSAGES_NOTIFICATION_ID, wrapper.notification)
                     }
                 }
             }
 
             invitationNotifications.forEach { wrapper ->
                 when (wrapper) {
-                    is OneShotNotification.Removed -> notificationDisplayer.cancelNotificationMessage(wrapper.key, NotificationDrawerManager.ROOM_INVITATION_NOTIFICATION_ID)
+                    is OneShotNotification.Removed -> notificationDisplayer.cancelNotificationMessage(wrapper.key, ROOM_INVITATION_NOTIFICATION_ID)
                     is OneShotNotification.Append  -> if (useCompleteNotificationFormat) {
                         Timber.d("Updating invitation notification ${wrapper.meta.key}")
-                        notificationDisplayer.showNotificationMessage(wrapper.meta.key, NotificationDrawerManager.ROOM_INVITATION_NOTIFICATION_ID, wrapper.notification)
+                        notificationDisplayer.showNotificationMessage(wrapper.meta.key, ROOM_INVITATION_NOTIFICATION_ID, wrapper.notification)
                     }
                 }
             }
 
             simpleNotifications.forEach { wrapper ->
                 when (wrapper) {
-                    is OneShotNotification.Removed -> notificationDisplayer.cancelNotificationMessage(wrapper.key, NotificationDrawerManager.ROOM_EVENT_NOTIFICATION_ID)
+                    is OneShotNotification.Removed -> notificationDisplayer.cancelNotificationMessage(wrapper.key, ROOM_EVENT_NOTIFICATION_ID)
                     is OneShotNotification.Append  -> if (useCompleteNotificationFormat) {
                         Timber.d("Updating simple notification ${wrapper.meta.key}")
-                        notificationDisplayer.showNotificationMessage(wrapper.meta.key, NotificationDrawerManager.ROOM_EVENT_NOTIFICATION_ID, wrapper.notification)
+                        notificationDisplayer.showNotificationMessage(wrapper.meta.key, ROOM_EVENT_NOTIFICATION_ID, wrapper.notification)
                     }
                 }
             }
@@ -96,11 +104,11 @@ class NotificationRenderer @Inject constructor(private val notifiableEventProces
             when (summaryNotification) {
                 SummaryNotification.Removed   -> {
                     Timber.d("Removing summary notification")
-                    notificationDisplayer.cancelNotificationMessage(null, NotificationDrawerManager.SUMMARY_NOTIFICATION_ID)
+                    notificationDisplayer.cancelNotificationMessage(null, SUMMARY_NOTIFICATION_ID)
                 }
                 is SummaryNotification.Update -> {
                     Timber.d("Updating summary notification")
-                    notificationDisplayer.showNotificationMessage(null, NotificationDrawerManager.SUMMARY_NOTIFICATION_ID, summaryNotification.notification)
+                    notificationDisplayer.showNotificationMessage(null, SUMMARY_NOTIFICATION_ID, summaryNotification.notification)
                 }
             }
         }
