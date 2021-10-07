@@ -37,6 +37,7 @@ import org.matrix.android.sdk.api.session.sync.SyncState
 import org.matrix.android.sdk.api.session.user.model.User
 import org.matrix.android.sdk.api.session.widgets.model.Widget
 import org.matrix.android.sdk.api.util.Optional
+import org.matrix.android.sdk.api.util.toOptional
 import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
 import org.matrix.android.sdk.internal.crypto.store.PrivateKeysInfo
@@ -45,22 +46,37 @@ class RxFlow(private val session: Session) {
 
     fun liveRoomSummaries(queryParams: RoomSummaryQueryParams): Flow<List<RoomSummary>> {
         return session.getRoomSummariesLive(queryParams).asFlow()
+                .startWith {
+                    session.getRoomSummaries(queryParams)
+                }
     }
 
     fun liveGroupSummaries(queryParams: GroupSummaryQueryParams): Flow<List<GroupSummary>> {
         return session.getGroupSummariesLive(queryParams).asFlow()
+                .startWith {
+                    session.getGroupSummaries(queryParams)
+                }
     }
 
     fun liveSpaceSummaries(queryParams: SpaceSummaryQueryParams): Flow<List<RoomSummary>> {
         return session.spaceService().getSpaceSummariesLive(queryParams).asFlow()
+                .startWith {
+                    session.spaceService().getSpaceSummaries(queryParams)
+                }
     }
 
     fun liveBreadcrumbs(queryParams: RoomSummaryQueryParams): Flow<List<RoomSummary>> {
         return session.getBreadcrumbsLive(queryParams).asFlow()
+                .startWith {
+                    session.getBreadcrumbs(queryParams)
+                }
     }
 
     fun liveMyDevicesInfo(): Flow<List<DeviceInfo>> {
         return session.cryptoService().getLiveMyDevicesInfo().asFlow()
+                .startWith {
+                    session.cryptoService().getMyDevicesInfo()
+                }
     }
 
     fun liveSyncState(): Flow<SyncState> {
@@ -73,10 +89,16 @@ class RxFlow(private val session: Session) {
 
     fun liveUser(userId: String): Flow<Optional<User>> {
         return session.getUserLive(userId).asFlow()
+                .startWith {
+                    session.getUser(userId).toOptional()
+                }
     }
 
     fun liveRoomMember(userId: String, roomId: String): Flow<Optional<RoomMemberSummary>> {
         return session.getRoomMemberLive(userId, roomId).asFlow()
+                .startWith {
+                    session.getRoomMember(userId, roomId).toOptional()
+                }
     }
 
     fun liveUsers(): Flow<List<User>> {
@@ -93,30 +115,47 @@ class RxFlow(private val session: Session) {
 
     fun liveThreePIds(refreshData: Boolean): Flow<List<ThreePid>> {
         return session.getThreePidsLive(refreshData).asFlow()
+                .startWith { session.getThreePids() }
     }
 
     fun livePendingThreePIds(): Flow<List<ThreePid>> {
         return session.getPendingThreePidsLive().asFlow()
+                .startWith { session.getPendingThreePids() }
     }
 
     fun liveUserCryptoDevices(userId: String): Flow<List<CryptoDeviceInfo>> {
         return session.cryptoService().getLiveCryptoDeviceInfo(userId).asFlow()
+                .startWith {
+                    session.cryptoService().getCryptoDeviceInfo(userId)
+                }
     }
 
     fun liveCrossSigningInfo(userId: String): Flow<Optional<MXCrossSigningInfo>> {
         return session.cryptoService().crossSigningService().getLiveCrossSigningKeys(userId).asFlow()
+                .startWith {
+                    session.cryptoService().crossSigningService().getUserCrossSigningKeys(userId).toOptional()
+                }
     }
 
     fun liveCrossSigningPrivateKeys(): Flow<Optional<PrivateKeysInfo>> {
         return session.cryptoService().crossSigningService().getLiveCrossSigningPrivateKeys().asFlow()
+                .startWith {
+                    session.cryptoService().crossSigningService().getCrossSigningPrivateKeys().toOptional()
+                }
     }
 
     fun liveUserAccountData(types: Set<String>): Flow<List<UserAccountDataEvent>> {
         return session.accountDataService().getLiveUserAccountDataEvents(types).asFlow()
+                .startWith {
+                    session.accountDataService().getUserAccountDataEvents(types)
+                }
     }
 
     fun liveRoomAccountData(types: Set<String>): Flow<List<RoomAccountDataEvent>> {
         return session.accountDataService().getLiveRoomAccountDataEvents(types).asFlow()
+                .startWith {
+                    session.accountDataService().getRoomAccountDataEvents(types)
+                }
     }
 
     fun liveRoomWidgets(
@@ -126,6 +165,9 @@ class RxFlow(private val session: Session) {
             excludedTypes: Set<String>? = null
     ): Flow<List<Widget>> {
         return session.widgetService().getRoomWidgetsLive(roomId, widgetId, widgetTypes, excludedTypes).asFlow()
+                .startWith {
+                    session.widgetService().getRoomWidgets(roomId, widgetId, widgetTypes, excludedTypes)
+                }
     }
 
     fun liveRoomChangeMembershipState(): Flow<Map<String, ChangeMembershipState>> {

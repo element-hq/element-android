@@ -30,31 +30,50 @@ import org.matrix.android.sdk.api.session.room.notification.RoomNotificationStat
 import org.matrix.android.sdk.api.session.room.send.UserDraft
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.util.Optional
+import org.matrix.android.sdk.api.util.toOptional
 
 class FlowRoom(private val room: Room) {
 
     fun liveRoomSummary(): Flow<Optional<RoomSummary>> {
         return room.getRoomSummaryLive().asFlow()
+                .startWith { 
+                    room.roomSummary().toOptional() 
+                }
     }
 
     fun liveRoomMembers(queryParams: RoomMemberQueryParams): Flow<List<RoomMemberSummary>> {
         return room.getRoomMembersLive(queryParams).asFlow()
+                .startWith {
+                    room.getRoomMembers(queryParams)
+                }
     }
 
     fun liveAnnotationSummary(eventId: String): Flow<Optional<EventAnnotationsSummary>> {
         return room.getEventAnnotationsSummaryLive(eventId).asFlow()
+                .startWith {
+                    room.getEventAnnotationsSummary(eventId).toOptional()
+                }
     }
 
     fun liveTimelineEvent(eventId: String): Flow<Optional<TimelineEvent>> {
         return room.getTimeLineEventLive(eventId).asFlow()
+                .startWith {
+                    room.getTimeLineEvent(eventId).toOptional()
+                }
     }
 
     fun liveStateEvent(eventType: String, stateKey: QueryStringValue): Flow<Optional<Event>> {
         return room.getStateEventLive(eventType, stateKey).asFlow()
+                .startWith {
+                    room.getStateEvent(eventType, stateKey).toOptional()
+                }
     }
 
     fun liveStateEvents(eventTypes: Set<String>): Flow<List<Event>> {
         return room.getStateEventsLive(eventTypes).asFlow()
+                .startWith {
+                    room.getStateEvents(eventTypes)
+                }
     }
 
     fun liveReadMarker(): Flow<Optional<String>> {
@@ -71,6 +90,9 @@ class FlowRoom(private val room: Room) {
 
     fun liveDraft(): Flow<Optional<UserDraft>> {
         return room.getDraftLive().asFlow()
+                .startWith {
+                    room.getDraft().toOptional()
+                }
     }
 
     fun liveNotificationState(): Flow<RoomNotificationState> {
