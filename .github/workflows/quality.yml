@@ -14,12 +14,12 @@ jobs:
       - name: Run code quality check suite
         run: ./tools/check/check_code_quality.sh
 
-  klint:
+  ktlint:
     name: Kotlin Linter
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Run klint
+      - name: Run ktlint
         run: |
           ./gradlew ktlintCheck --continue
       - name: Upload reports
