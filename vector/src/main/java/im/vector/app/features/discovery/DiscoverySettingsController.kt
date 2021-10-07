@@ -130,7 +130,7 @@ class DiscoverySettingsController @Inject constructor(
                 } else R.string.settings_discovery_show_identity_server_policies_title
                 title(host.stringProvider.getString(titleRes))
                 expanded(data.isIdentityPolicyUrlsExpanded)
-                listener { host.listener?.onPolicyUrlsExpandedStateToggled() }
+                listener { host.listener?.onPolicyUrlsExpandedStateToggled(!data.isIdentityPolicyUrlsExpanded) }
             }
             if (data.isIdentityPolicyUrlsExpanded) {
                 policies.forEach { policy ->
@@ -425,7 +425,7 @@ class DiscoverySettingsController @Inject constructor(
         fun onTapDisconnectIdentityServer()
         fun onTapUpdateUserConsent(newValue: Boolean)
         fun onTapRetryToRetrieveBindings()
-        fun onPolicyUrlsExpandedStateToggled()
+        fun onPolicyUrlsExpandedStateToggled(newExpandedState: Boolean)
         fun onPolicyTapped(policy: IdentityServerPolicy)
     }
 }

@@ -82,7 +82,7 @@ class DiscoverySettingsFragment @Inject constructor(
             }.exhaustive
         }
         if (discoveryArgs.expandIdentityPolicies) {
-            viewModel.handle(DiscoverySettingsAction.ExpandPolicyUrls)
+            viewModel.handle(DiscoverySettingsAction.SetPoliciesExpandState(expanded = true))
         }
     }
 
@@ -188,7 +188,7 @@ class DiscoverySettingsFragment @Inject constructor(
             withState(viewModel) { state ->
                 requireContext().showIdentityServerConsentDialog(
                         state.identityServer.invoke()?.serverUrl,
-                        policyLinkCallback = { viewModel.handle(DiscoverySettingsAction.ExpandPolicyUrls) },
+                        policyLinkCallback = { viewModel.handle(DiscoverySettingsAction.SetPoliciesExpandState(expanded = true)) },
                         consentCallBack = { viewModel.handle(DiscoverySettingsAction.UpdateUserConsent(true)) }
                 )
             }
@@ -201,8 +201,8 @@ class DiscoverySettingsFragment @Inject constructor(
         viewModel.handle(DiscoverySettingsAction.RetrieveBinding)
     }
 
-    override fun onPolicyUrlsExpandedStateToggled() {
-        viewModel.handle(DiscoverySettingsAction.PolicyUrlsExpandedStateToggled)
+    override fun onPolicyUrlsExpandedStateToggled(newExpandedState: Boolean) {
+        viewModel.handle(DiscoverySettingsAction.SetPoliciesExpandState(expanded = newExpandedState))
     }
 
     override fun onPolicyTapped(policy: IdentityServerPolicy) {
