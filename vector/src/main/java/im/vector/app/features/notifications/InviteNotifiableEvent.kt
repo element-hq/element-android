@@ -29,7 +29,4 @@ data class InviteNotifiableEvent(
         val timestamp: Long,
         val soundName: String?,
         override val isRedacted: Boolean = false
-) : NotifiableEvent {
-
-    override var hasBeenDisplayed = false
-}
+) : NotifiableEvent

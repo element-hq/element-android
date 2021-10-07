@@ -123,7 +123,7 @@ class NotificationFactoryTest {
 
     @Test
     fun `given a room with only redacted events when mapping to notification then is Empty`() = testWith(notificationFactory) {
-        val redactedRoom = mapOf(A_ROOM_ID to listOf(A_MESSAGE_EVENT.copy().apply { isRedacted = true }))
+        val redactedRoom = mapOf(A_ROOM_ID to listOf(A_MESSAGE_EVENT.copy(isRedacted = true)))
 
         val result = redactedRoom.toNotifications(MY_USER_ID, MY_AVATAR_URL)
 
