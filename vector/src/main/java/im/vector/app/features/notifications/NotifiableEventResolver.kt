@@ -205,8 +205,8 @@ class NotifiableEventResolver @Inject constructor(
                     title = stringProvider.getString(R.string.notification_new_invitation),
                     description = body.toString(),
                     soundName = null, // will be set later
-                    type = event.getClearType(),
-                    isPushGatewayEvent = false)
+                    type = event.getClearType()
+            )
         } else {
             Timber.e("## unsupported notifiable event for eventId [${event.eventId}]")
             if (BuildConfig.LOW_PRIVACY_LOG_ENABLE) {
