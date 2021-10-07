@@ -33,5 +33,7 @@ data class DiscoverySettingsState(
 
 data class IdentityServerWithTerms(
         val serverUrl: String,
-        val policyUrls: List<String>
+        val terms: List<IdentityServerTerms>
 )
+
+data class IdentityServerTerms(val name: String, val url: String)

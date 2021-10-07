@@ -421,7 +421,15 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
             val terms = termsService.getTerms(TermsService.ServiceType.IdentityService, identityServerUrl.ensureProtocol())
                     .serverResponse
                     .getLocalizedTerms(stringProvider.getString(R.string.resources_language))
-            val policyUrls = terms.mapNotNull { it.localizedUrl }
+            val policyUrls = terms.mapNotNull {
+                val name = it.localizedName ?: it.policyName
+                val url = it.localizedUrl
+                if (name == null || url == null) {
+                    null
+                } else {
+                    IdentityServerTerms(name = name, url = url)
+                }
+            }
             IdentityServerWithTerms(identityServerUrl, policyUrls)
         }
     }

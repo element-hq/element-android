@@ -15,7 +15,6 @@
  */
 package im.vector.app.features.discovery
 
-import android.text.method.LinkMovementMethod
 import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
@@ -27,14 +26,13 @@ import im.vector.app.R
 import im.vector.app.core.epoxy.attributes.ButtonStyle
 import im.vector.app.core.epoxy.attributes.ButtonType
 import im.vector.app.core.epoxy.attributes.IconMode
-import im.vector.app.core.epoxy.expandableTextItem
 import im.vector.app.core.epoxy.loadingItem
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.getFormattedValue
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.core.utils.EvenBetterLinkMovementMethod
-import org.matrix.android.sdk.api.extensions.appendNl
+import im.vector.app.features.form.formAdvancedToggleItem
+import im.vector.app.features.terms.termItem
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.identity.SharedState
 import org.matrix.android.sdk.api.session.identity.ThreePid
@@ -124,21 +122,24 @@ class DiscoverySettingsController @Inject constructor(
             title(identityServerUrl)
         }
 
-        val policyUrls = identityServer?.policyUrls?.joinToString(separator = "\n") { it }
-        if (policyUrls != null) {
-            val title = stringProvider.getString(R.string.settings_discovery_identity_server_policies_title)
-            expandableTextItem {
+        val terms = identityServer?.terms
+        if (terms != null) {
+            formAdvancedToggleItem {
                 id("policy-urls")
-                maxLines(1)
-                enableScrollBar(false)
-                content(buildString {
-                    append(title)
-                    appendNl(policyUrls)
-                })
-                movementMethod(LinkMovementMethod())
+                title(host.stringProvider.getString(R.string.settings_discovery_identity_server_policies_title))
                 expanded(data.isIdentityPolicyUrlsExpanded)
-                onExpandClicked {
-                    host.listener?.onPolicyUrlsExpandedStateToggled()
+                listener { host.listener?.onPolicyUrlsExpandedStateToggled() }
+            }
+            if (data.isIdentityPolicyUrlsExpanded) {
+                terms.forEach { term ->
+                    discoveryPolicyItem {
+                        id(term.url)
+                        name(term.name)
+                        url(term.url)
+                        clickListener  {
+                            // TODO
+                        }
+                    }
                 }
             }
         }
