@@ -133,12 +133,19 @@ class DiscoverySettingsController @Inject constructor(
                 listener { host.listener?.onPolicyUrlsExpandedStateToggled(!data.isIdentityPolicyUrlsExpanded) }
             }
             if (data.isIdentityPolicyUrlsExpanded) {
-                policies.forEach { policy ->
-                    discoveryPolicyItem {
-                        id(policy.url)
-                        name(policy.name)
-                        url(policy.url)
-                        clickListener { host.listener?.onPolicyTapped(policy) }
+                if (policies.isEmpty()) {
+                    settingsInfoItem {
+                        id("emptyPolicy")
+                        helperText(host.stringProvider.getString(R.string.settings_discovery_no_policy_provided))
+                    }
+                } else {
+                    policies.forEach { policy ->
+                        discoveryPolicyItem {
+                            id(policy.url)
+                            name(policy.name)
+                            url(policy.url)
+                            clickListener { host.listener?.onPolicyTapped(policy) }
+                        }
                     }
                 }
             }
