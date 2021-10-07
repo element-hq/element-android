@@ -16,11 +16,11 @@
 
 package im.vector.app.test.fakes
 
-import android.app.Notification
 import im.vector.app.features.notifications.NotificationFactory
 import im.vector.app.features.notifications.OneShotNotification
 import im.vector.app.features.notifications.ProcessedNotificationEvents
 import im.vector.app.features.notifications.RoomNotification
+import im.vector.app.features.notifications.SummaryNotification
 import io.mockk.every
 import io.mockk.mockk
 
@@ -36,7 +36,7 @@ class FakeNotificationFactory {
                               roomNotifications: List<RoomNotification>,
                               invitationNotifications: List<OneShotNotification>,
                               simpleNotifications: List<OneShotNotification>,
-                              summaryNotification: Notification) {
+                              summaryNotification: SummaryNotification) {
         with(instance) {
             every { processedEvents.roomEvents.toNotifications(myUserDisplayName, myUserAvatarUrl) } returns roomNotifications
             every { processedEvents.invitationEvents.toNotifications(myUserId) } returns invitationNotifications

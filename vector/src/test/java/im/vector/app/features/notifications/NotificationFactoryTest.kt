@@ -55,7 +55,8 @@ class NotificationFactoryTest {
                 meta = OneShotNotification.Append.Meta(
                         key = A_ROOM_ID,
                         summaryLine = AN_INVITATION_EVENT.description,
-                        isNoisy = AN_INVITATION_EVENT.noisy
+                        isNoisy = AN_INVITATION_EVENT.noisy,
+                        timestamp = AN_INVITATION_EVENT.timestamp
                 ))
         )
     }
@@ -83,7 +84,8 @@ class NotificationFactoryTest {
                 meta = OneShotNotification.Append.Meta(
                         key = AN_EVENT_ID,
                         summaryLine = A_SIMPLE_EVENT.description,
-                        isNoisy = A_SIMPLE_EVENT.noisy
+                        isNoisy = A_SIMPLE_EVENT.noisy,
+                        timestamp = AN_INVITATION_EVENT.timestamp
                 ))
         )
     }

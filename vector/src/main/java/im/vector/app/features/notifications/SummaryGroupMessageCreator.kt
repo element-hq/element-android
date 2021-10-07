@@ -57,7 +57,9 @@ class SummaryGroupMessageCreator @Inject constructor(
 
         val messageCount = roomNotifications.fold(initial = 0) { acc, current -> acc + current.messageCount }
 
-        val lastMessageTimestamp1 = roomNotifications.last().latestTimestamp
+        val lastMessageTimestamp = roomNotifications.lastOrNull()?.latestTimestamp
+                ?: invitationNotifications.lastOrNull()?.timestamp
+                ?: simpleNotifications.last().timestamp
 
         // FIXME roomIdToEventMap.size is not correct, this is the number of rooms
         val nbEvents = roomNotifications.size + simpleNotifications.size
@@ -71,12 +73,12 @@ class SummaryGroupMessageCreator @Inject constructor(
                     summaryInboxStyle,
                     sumTitle,
                     noisy = summaryIsNoisy,
-                    lastMessageTimestamp = lastMessageTimestamp1
+                    lastMessageTimestamp = lastMessageTimestamp
             )
         } else {
             processSimpleGroupSummary(summaryIsNoisy, messageCount,
                     simpleNotifications.size, invitationNotifications.size,
-                    roomNotifications.size, lastMessageTimestamp1)
+                    roomNotifications.size, lastMessageTimestamp)
         }
     }
 
