@@ -18,19 +18,19 @@ package im.vector.app.features.notifications
 import androidx.core.app.NotificationCompat
 
 data class InviteNotifiableEvent(
-        override var matrixID: String?,
+        var matrixID: String?,
         override val eventId: String,
         override val editedEventId: String?,
         var roomId: String,
         override var noisy: Boolean,
-        override val title: String,
-        override val description: String,
-        override val type: String?,
-        override val timestamp: Long,
-        override var soundName: String?,
+        val title: String,
+        val description: String,
+        val type: String?,
+        val timestamp: Long,
+        var soundName: String?,
         override var isPushGatewayEvent: Boolean = false) : NotifiableEvent {
 
-    override var hasBeenDisplayed: Boolean = false
     override var isRedacted: Boolean = false
     override var lockScreenVisibility = NotificationCompat.VISIBILITY_PUBLIC
+    override var hasBeenDisplayed = false
 }
