@@ -16,7 +16,6 @@
 
 package im.vector.app.features.settings.ignored
 
-import androidx.lifecycle.asFlow
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
@@ -34,6 +33,7 @@ import im.vector.app.core.platform.VectorViewModelAction
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.user.model.User
+import org.matrix.android.sdk.flow.flow
 
 data class IgnoredUsersViewState(
         val ignoredUsers: List<User> = emptyList(),
@@ -67,8 +67,8 @@ class IgnoredUsersViewModel @AssistedInject constructor(@Assisted initialState: 
     }
 
     private fun observeIgnoredUsers() {
-        session.getIgnoredUsersLive()
-                .asFlow()
+        session.flow()
+                .liveIgnoredUsers()
                 .execute { async ->
                     copy(
                             ignoredUsers = async.invoke().orEmpty()

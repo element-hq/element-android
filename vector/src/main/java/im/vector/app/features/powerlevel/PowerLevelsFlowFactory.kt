@@ -16,9 +16,6 @@
 
 package im.vector.app.features.powerlevel
 
-import androidx.lifecycle.asFlow
-import im.vector.app.core.utils.mapOptional
-import im.vector.app.core.utils.unwrap
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
@@ -27,13 +24,15 @@ import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.Room
 import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
+import org.matrix.android.sdk.flow.flow
+import org.matrix.android.sdk.flow.mapOptional
+import org.matrix.android.sdk.flow.unwrap
 
 class PowerLevelsFlowFactory(private val room: Room) {
 
     fun createFlow(): Flow<PowerLevelsContent> {
-        return room
-                .getStateEventLive(EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.NoCondition)
-                .asFlow()
+        return room.flow()
+                .liveStateEvent(EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.NoCondition)
                 .flowOn(Dispatchers.Default)
                 .mapOptional { it.content.toModel<PowerLevelsContent>() }
                 .unwrap()

@@ -17,7 +17,6 @@
 
 package im.vector.app.features.roommemberprofile
 
-import androidx.lifecycle.asFlow
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
@@ -32,7 +31,6 @@ import im.vector.app.R
 import im.vector.app.core.mvrx.runCatchingToAsync
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.core.utils.unwrap
 import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.combine
@@ -55,6 +53,8 @@ import org.matrix.android.sdk.api.session.room.powerlevels.Role
 import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.api.util.toOptional
+import org.matrix.android.sdk.flow.flow
+import org.matrix.android.sdk.flow.unwrap
 
 class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private val initialState: RoomMemberProfileViewState,
                                                              private val stringProvider: StringProvider,
@@ -107,7 +107,7 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
             }
         }
 
-        session.cryptoService().getLiveCryptoDeviceInfo(initialState.userId).asFlow()
+        session.flow().liveUserCryptoDevices(initialState.userId)
                 .map {
                     Pair(
                             it.fold(true, { prev, dev -> prev && dev.isVerified }),
@@ -121,14 +121,14 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
                     )
                 }
 
-        session.cryptoService().crossSigningService().getLiveCrossSigningKeys(initialState.userId).asFlow()
+        session.flow().liveCrossSigningInfo(initialState.userId)
                 .execute {
                     copy(userMXCrossSigningInfo = it.invoke()?.getOrNull())
                 }
     }
 
     private fun observeIgnoredState() {
-        session.getIgnoredUsersLive().asFlow()
+        session.flow().liveIgnoredUsers()
                 .map { ignored ->
                     ignored.find {
                         it.userId == initialState.userId
@@ -245,7 +245,7 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
         val queryParams = roomMemberQueryParams {
             this.userId = QueryStringValue.Equals(initialState.userId, QueryStringValue.Case.SENSITIVE)
         }
-        room.getRoomMembersLive(queryParams).asFlow()
+        room.flow().liveRoomMembers(queryParams)
                 .map { it.firstOrNull().toOptional() }
                 .unwrap()
                 .execute {
@@ -285,7 +285,7 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
     }
 
     private fun observeRoomSummaryAndPowerLevels(room: Room) {
-        val roomSummaryLive = room.getRoomSummaryLive().asFlow().unwrap()
+        val roomSummaryLive = room.flow().liveRoomSummary().unwrap()
         val powerLevelsContentLive = PowerLevelsFlowFactory(room).createFlow()
 
         powerLevelsContentLive

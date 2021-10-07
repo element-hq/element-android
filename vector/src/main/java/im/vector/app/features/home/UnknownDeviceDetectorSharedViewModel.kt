@@ -16,7 +16,6 @@
 
 package im.vector.app.features.home
 
-import androidx.lifecycle.asFlow
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.FragmentViewModelContext
@@ -42,6 +41,7 @@ import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.api.util.toMatrixItem
+import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
 import timber.log.Timber
 
@@ -99,9 +99,9 @@ class UnknownDeviceDetectorSharedViewModel @AssistedInject constructor(@Assisted
         )
 
         combine(
-                session.cryptoService().getLiveCryptoDeviceInfo(session.myUserId).asFlow(),
-                session.cryptoService().getLiveMyDevicesInfo().asFlow(),
-                session.cryptoService().crossSigningService().getLiveCrossSigningPrivateKeys().asFlow()
+                session.flow().liveUserCryptoDevices(session.myUserId),
+                session.flow().liveMyDevicesInfo(),
+                session.flow().liveCrossSigningPrivateKeys()
         )
         { cryptoList, infoList, pInfo ->
             //                    Timber.v("## Detector trigger ${cryptoList.map { "${it.deviceId} ${it.trustLevel}" }}")
@@ -132,7 +132,7 @@ class UnknownDeviceDetectorSharedViewModel @AssistedInject constructor(@Assisted
                     )
                 }
 
-        session.cryptoService().getLiveCryptoDeviceInfo(session.myUserId).asFlow()
+        session.flow().liveUserCryptoDevices(session.myUserId)
                 .distinctUntilChanged()
                 .sample(5_000)
                 .onEach {

@@ -15,7 +15,6 @@
  */
 package im.vector.app.features.settings.crosssigning
 
-import androidx.lifecycle.asFlow
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
@@ -38,6 +37,7 @@ import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.api.auth.registration.nextUncompletedStage
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.internal.crypto.crosssigning.fromBase64
 import org.matrix.android.sdk.internal.crypto.crosssigning.isVerified
 import org.matrix.android.sdk.internal.crypto.model.rest.DefaultBaseAuth
@@ -56,8 +56,8 @@ class CrossSigningSettingsViewModel @AssistedInject constructor(
 
     init {
         combine(
-                session.cryptoService().getLiveMyDevicesInfo().asFlow(),
-                session.cryptoService().crossSigningService().getLiveCrossSigningKeys(session.myUserId).asFlow()
+                session.flow().liveMyDevicesInfo(),
+                session.flow().liveCrossSigningInfo(session.myUserId)
         )
         { myDevicesInfo, mxCrossSigningInfo ->
             myDevicesInfo to mxCrossSigningInfo

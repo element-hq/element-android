@@ -16,7 +16,6 @@
 
 package im.vector.app.features.roomprofile.banned
 
-import androidx.lifecycle.asFlow
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
@@ -27,7 +26,6 @@ import im.vector.app.R
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.core.utils.unwrap
 import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -40,6 +38,10 @@ import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
+import org.matrix.android.sdk.flow.flow
+import org.matrix.android.sdk.flow.unwrap
+import org.matrix.android.sdk.rx.rx
+import org.matrix.android.sdk.rx.unwrap
 
 class RoomBannedMemberListViewModel @AssistedInject constructor(@Assisted initialState: RoomBannedMemberListViewState,
                                                                 private val stringProvider: StringProvider,
@@ -55,15 +57,13 @@ class RoomBannedMemberListViewModel @AssistedInject constructor(@Assisted initia
 
     init {
 
-        room.getRoomSummaryLive()
-                .asFlow()
+        room.flow().liveRoomSummary()
                 .unwrap()
                 .execute { async ->
                     copy(roomSummary = async)
                 }
 
-        room.getRoomMembersLive(roomMemberQueryParams { memberships = listOf(Membership.BAN) })
-                .asFlow()
+        room.flow().liveRoomMembers(roomMemberQueryParams { memberships = listOf(Membership.BAN) })
                 .execute {
                     copy(
                             bannedMemberSummaries = it

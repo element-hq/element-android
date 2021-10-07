@@ -16,7 +16,6 @@
 
 package im.vector.app.features.settings.threepids
 
-import androidx.lifecycle.asFlow
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
@@ -39,6 +38,7 @@ import org.matrix.android.sdk.api.auth.UserPasswordAuth
 import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.identity.ThreePid
+import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.internal.crypto.crosssigning.fromBase64
 import org.matrix.android.sdk.internal.crypto.model.rest.DefaultBaseAuth
 import timber.log.Timber
@@ -101,8 +101,8 @@ class ThreePidsSettingsViewModel @AssistedInject constructor(
     }
 
     private fun observeThreePids() {
-        session.getThreePidsLive(true)
-                .asFlow()
+        session.flow()
+                .liveThreePIds(true)
                 .execute {
                     copy(
                             threePids = it
@@ -111,8 +111,8 @@ class ThreePidsSettingsViewModel @AssistedInject constructor(
     }
 
     private fun observePendingThreePids() {
-        session.getPendingThreePidsLive()
-                .asFlow()
+        session.flow()
+                .livePendingThreePIds()
                 .execute {
                     copy(
                             pendingThreePids = it,

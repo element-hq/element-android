@@ -27,8 +27,6 @@ import dagger.assisted.AssistedInject
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
-import im.vector.app.core.utils.mapOptional
-import im.vector.app.core.utils.unwrap
 import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.coroutines.Dispatchers
@@ -53,6 +51,9 @@ import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.session.room.powerlevels.Role
+import org.matrix.android.sdk.flow.flow
+import org.matrix.android.sdk.flow.mapOptional
+import org.matrix.android.sdk.flow.unwrap
 import timber.log.Timber
 
 class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState: RoomMemberListViewState,
@@ -93,9 +94,9 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
         }
 
         combine(
-                room.getRoomMembersLive(roomMemberQueryParams).asFlow(),
-                room.getStateEventLive(EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.NoCondition)
-                        .asFlow()
+                room.flow().liveRoomMembers(roomMemberQueryParams),
+                room.flow()
+                        .liveStateEvent(EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.NoCondition)
                         .mapOptional { it.content.toModel<PowerLevelsContent>() }
                         .unwrap()
         )
@@ -108,8 +109,7 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
                 }
 
         if (room.isEncrypted()) {
-            room.getRoomMembersLive(roomMemberQueryParams)
-                    .asFlow()
+            room.flow().liveRoomMembers(roomMemberQueryParams)
                     .flowOn(Dispatchers.Main)
                     .flatMapLatest { membersSummary ->
                         session.cryptoService().getLiveCryptoDeviceInfo(membersSummary.map { it.userId })
@@ -153,8 +153,7 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
     }
 
     private fun observeRoomSummary() {
-        room.getRoomSummaryLive()
-                .asFlow()
+        room.flow().liveRoomSummary()
                 .unwrap()
                 .execute { async ->
                     copy(roomSummary = async)
@@ -162,8 +161,7 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
     }
 
     private fun observeThirdPartyInvites() {
-        room.getStateEventsLive(setOf(EventType.STATE_ROOM_THIRD_PARTY_INVITE))
-                .asFlow()
+        room.flow().liveStateEvents(setOf(EventType.STATE_ROOM_THIRD_PARTY_INVITE))
                 .execute { async ->
                     copy(threePidInvites = async)
                 }

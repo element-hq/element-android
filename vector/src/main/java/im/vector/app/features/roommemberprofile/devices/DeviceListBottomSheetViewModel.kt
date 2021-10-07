@@ -16,7 +16,6 @@
  */
 package im.vector.app.features.roommemberprofile.devices
 
-import androidx.lifecycle.asFlow
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
@@ -34,7 +33,9 @@ import org.matrix.android.sdk.api.session.crypto.crosssigning.MXCrossSigningInfo
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
 import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.api.util.toMatrixItem
+import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
+import org.matrix.android.sdk.rx.rx
 
 data class DeviceListViewState(
         val userItem: MatrixItem? = null,
@@ -55,17 +56,14 @@ class DeviceListBottomSheetViewModel @AssistedInject constructor(@Assisted priva
     }
 
     init {
-        session.cryptoService().getLiveCryptoDeviceInfo(args.userId)
-                .asFlow()
+        session.flow().liveUserCryptoDevices(args.userId)
                 .execute {
                     copy(cryptoDevices = it).also {
                         refreshSelectedId()
                     }
                 }
 
-        session.cryptoService().crossSigningService()
-                .getLiveCrossSigningKeys(args.userId)
-                .asFlow()
+        session.flow().liveCrossSigningInfo(args.userId)
                 .execute {
                     copy(memberCrossSigningKey = it.invoke()?.getOrNull())
                 }

@@ -16,7 +16,6 @@
 
 package im.vector.app.features.roomdirectory
 
-import androidx.lifecycle.asFlow
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
@@ -39,6 +38,7 @@ import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoomsFilter
 import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoomsParams
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
+import org.matrix.android.sdk.flow.flow
 import timber.log.Timber
 
 class RoomDirectoryViewModel @AssistedInject constructor(
@@ -80,8 +80,8 @@ class RoomDirectoryViewModel @AssistedInject constructor(
             memberships = listOf(Membership.JOIN)
         }
         session
-                .getRoomSummariesLive(queryParams)
-                .asFlow()
+                .flow()
+                .liveRoomSummaries(queryParams)
                 .map { roomSummaries ->
                     roomSummaries
                             .map { it.roomId }
@@ -93,8 +93,8 @@ class RoomDirectoryViewModel @AssistedInject constructor(
     }
 
     private fun observeMembershipChanges() {
-        session.getChangeMembershipsLive()
-                .asFlow()
+        session.flow()
+                .liveRoomChangeMembershipState()
                 .setOnEach {
                     copy(changeMembershipStates = it)
                 }

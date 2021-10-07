@@ -16,7 +16,6 @@
 
 package im.vector.app.features.settings
 
-import androidx.lifecycle.asFlow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -26,6 +25,7 @@ import org.matrix.android.sdk.api.session.crypto.crosssigning.KEYBACKUP_SECRET_S
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MASTER_KEY_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.crosssigning.SELF_SIGNING_KEY_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.crosssigning.USER_SIGNING_KEY_SSSS_NAME
+import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.rx.SecretsSynchronisationInfo
 
 data class SecretsSynchronisationInfo(
@@ -39,12 +39,11 @@ data class SecretsSynchronisationInfo(
 )
 
 fun Session.liveSecretSynchronisationInfo(): Flow<SecretsSynchronisationInfo> {
+    val sessionFlow = flow()
     return combine(
-            accountDataService()
-                    .getLiveUserAccountDataEvents(setOf(MASTER_KEY_SSSS_NAME, USER_SIGNING_KEY_SSSS_NAME, SELF_SIGNING_KEY_SSSS_NAME, KEYBACKUP_SECRET_SSSS_NAME))
-                    .asFlow(),
-            cryptoService().crossSigningService().getLiveCrossSigningKeys(myUserId).asFlow(),
-            cryptoService().crossSigningService().getLiveCrossSigningPrivateKeys().asFlow()
+            sessionFlow.liveUserAccountData(setOf(MASTER_KEY_SSSS_NAME, USER_SIGNING_KEY_SSSS_NAME, SELF_SIGNING_KEY_SSSS_NAME, KEYBACKUP_SECRET_SSSS_NAME)),
+            sessionFlow.liveCrossSigningInfo(myUserId),
+            sessionFlow.liveCrossSigningPrivateKeys()
     ) { _, crossSigningInfo, pInfo ->
         // first check if 4S is already setup
         val is4SSetup = sharedSecretStorageService.isRecoverySetup()

@@ -15,7 +15,6 @@
  */
 package im.vector.app.features.discovery
 
-import androidx.lifecycle.asFlow
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
@@ -37,6 +36,7 @@ import org.matrix.android.sdk.api.session.identity.IdentityServiceError
 import org.matrix.android.sdk.api.session.identity.IdentityServiceListener
 import org.matrix.android.sdk.api.session.identity.SharedState
 import org.matrix.android.sdk.api.session.identity.ThreePid
+import org.matrix.android.sdk.flow.flow
 
 class DiscoverySettingsViewModel @AssistedInject constructor(
         @Assisted initialState: DiscoverySettingsState,
@@ -85,9 +85,8 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
     }
 
     private fun observeThreePids() {
-        session
-                .getThreePidsLive(true)
-                .asFlow()
+        session.flow()
+                .liveThreePIds(true)
                 .onEach {
                     retrieveBinding(it)
                 }

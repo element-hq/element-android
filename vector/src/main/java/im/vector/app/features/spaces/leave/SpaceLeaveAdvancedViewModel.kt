@@ -16,7 +16,6 @@
 
 package im.vector.app.features.spaces.leave
 
-import androidx.lifecycle.asFlow
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
@@ -31,7 +30,6 @@ import dagger.assisted.AssistedInject
 import im.vector.app.AppStateHandler
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
-import im.vector.app.core.utils.unwrap
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -41,6 +39,8 @@ import org.matrix.android.sdk.api.query.RoomCategoryFilter
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
+import org.matrix.android.sdk.flow.flow
+import org.matrix.android.sdk.flow.unwrap
 import timber.log.Timber
 
 class SpaceLeaveAdvancedViewModel @AssistedInject constructor(
@@ -97,8 +97,7 @@ class SpaceLeaveAdvancedViewModel @AssistedInject constructor(
         val spaceSummary = session.getRoomSummary(initialState.spaceId)
         setState { copy(spaceSummary = spaceSummary) }
         session.getRoom(initialState.spaceId)?.let { room ->
-            room.getRoomSummaryLive()
-                    .asFlow()
+            room.flow().liveRoomSummary()
                     .unwrap()
                     .onEach {
                         if (it.membership == Membership.LEAVE) {

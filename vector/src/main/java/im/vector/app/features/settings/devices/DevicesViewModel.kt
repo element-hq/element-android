@@ -16,7 +16,6 @@
 
 package im.vector.app.features.settings.devices
 
-import androidx.lifecycle.asFlow
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
@@ -57,6 +56,7 @@ import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
+import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.internal.crypto.crosssigning.DeviceTrustLevel
 import org.matrix.android.sdk.internal.crypto.crosssigning.fromBase64
 import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
@@ -123,14 +123,8 @@ class DevicesViewModel @AssistedInject constructor(
         }
 
         combine(
-                session.cryptoService().getLiveCryptoDeviceInfo(session.myUserId).asFlow()
-                        .onEach {
-                            Timber.v("getLiveCryptoDeviceInfo")
-                        },
-                session.cryptoService().getLiveMyDevicesInfo().asFlow()
-                        .onEach {
-                            Timber.v("getLiveMyDevicesInfo")
-                        }
+                session.flow().liveUserCryptoDevices(session.myUserId),
+                session.flow().liveMyDevicesInfo()
         )
         { cryptoList, infoList ->
             infoList
@@ -147,8 +141,7 @@ class DevicesViewModel @AssistedInject constructor(
                     )
                 }
 
-        session.cryptoService().crossSigningService().getLiveCrossSigningKeys(session.myUserId)
-                .asFlow()
+        session.flow().liveCrossSigningInfo(session.myUserId)
                 .execute {
                     copy(
                             hasAccountCrossSigning = it.invoke()?.getOrNull() != null,
@@ -164,8 +157,7 @@ class DevicesViewModel @AssistedInject constructor(
 //                    )
 //                }
 
-        session.cryptoService().getLiveCryptoDeviceInfo(session.myUserId)
-                .asFlow()
+        session.flow().liveUserCryptoDevices(session.myUserId)
                 .map { it.size }
                 .distinctUntilChanged()
                 .sample(5_000)

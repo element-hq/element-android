@@ -16,7 +16,6 @@
 
 package im.vector.app.features.spaces.explore
 
-import androidx.lifecycle.asFlow
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
@@ -44,6 +43,7 @@ import org.matrix.android.sdk.api.session.room.model.RoomType
 import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
+import org.matrix.android.sdk.flow.flow
 import timber.log.Timber
 
 class SpaceDirectoryViewModel @AssistedInject constructor(
@@ -147,8 +147,9 @@ class SpaceDirectoryViewModel @AssistedInject constructor(
             memberships = listOf(Membership.JOIN)
             excludeType = null
         }
-        session.getRoomSummariesLive(queryParams)
-                .asFlow()
+        session
+                .flow()
+                .liveRoomSummaries(queryParams)
                 .map {
                     it.map { it.roomId }.toSet()
                 }
@@ -158,8 +159,8 @@ class SpaceDirectoryViewModel @AssistedInject constructor(
     }
 
     private fun observeMembershipChanges() {
-        session.getChangeMembershipsLive()
-                .asFlow()
+        session.flow()
+                .liveRoomChangeMembershipState()
                 .setOnEach {
                     copy(changeMembershipStates = it)
                 }

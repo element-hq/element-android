@@ -26,7 +26,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
-import androidx.lifecycle.asFlow
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.EditTextPreference
 import androidx.preference.Preference
@@ -48,7 +47,6 @@ import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.utils.TextUtils
 import im.vector.app.core.utils.getSizeOfFiles
 import im.vector.app.core.utils.toast
-import im.vector.app.core.utils.unwrap
 import im.vector.app.databinding.DialogChangePasswordBinding
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
@@ -64,6 +62,8 @@ import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.failure.isInvalidPassword
 import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerConfig
 import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerService
+import org.matrix.android.sdk.flow.flow
+import org.matrix.android.sdk.flow.unwrap
 import java.io.File
 import java.util.UUID
 import javax.inject.Inject
@@ -122,8 +122,8 @@ class VectorSettingsGeneralFragment @Inject constructor(
     }
 
     private fun observeUserAvatar() {
-        session.getUserLive(session.myUserId)
-                .asFlow()
+        session.flow()
+                .liveUser(session.myUserId)
                 .unwrap()
                 .distinctUntilChangedBy { user -> user.avatarUrl }
                 .onEach {
@@ -133,8 +133,8 @@ class VectorSettingsGeneralFragment @Inject constructor(
     }
 
     private fun observeUserDisplayName() {
-        session.getUserLive(session.myUserId)
-                .asFlow()
+        session.flow()
+                .liveUser(session.myUserId)
                 .unwrap()
                 .map { it.displayName ?: "" }
                 .distinctUntilChanged()

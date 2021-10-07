@@ -16,7 +16,6 @@
 
 package im.vector.app.features.room
 
-import androidx.lifecycle.asFlow
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MavericksViewModelFactory
@@ -28,7 +27,6 @@ import im.vector.app.R
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.core.utils.unwrap
 import io.reactivex.Observable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -49,6 +47,8 @@ import org.matrix.android.sdk.api.session.room.Room
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.util.Optional
+import org.matrix.android.sdk.flow.flow
+import org.matrix.android.sdk.flow.unwrap
 
 /**
  * This ViewModel observe a room summary and notify when the room is left
@@ -90,8 +90,8 @@ class RequireActiveMembershipViewModel @AssistedInject constructor(
                         val emptyResult = Optional.empty<RequireActiveMembershipViewEvents.RoomLeft>()
                         emit(emptyResult)
                     }
-                    room.getRoomSummaryLive()
-                            .asFlow()
+                    room.flow()
+                            .liveRoomSummary()
                             .unwrap()
                             .flowOn(Dispatchers.Default)
                             .map { mapToLeftViewEvent(room, it) }

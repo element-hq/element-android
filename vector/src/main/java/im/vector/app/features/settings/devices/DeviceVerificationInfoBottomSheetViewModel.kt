@@ -15,7 +15,6 @@
  */
 package im.vector.app.features.settings.devices
 
-import androidx.lifecycle.asFlow
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksViewModelFactory
@@ -28,7 +27,9 @@ import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import kotlinx.coroutines.flow.map
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
+import org.matrix.android.sdk.rx.rx
 
 class DeviceVerificationInfoBottomSheetViewModel @AssistedInject constructor(@Assisted initialState: DeviceVerificationInfoBottomSheetViewState,
                                                                              @Assisted val deviceId: String,
@@ -49,8 +50,7 @@ class DeviceVerificationInfoBottomSheetViewModel @AssistedInject constructor(@As
                     isRecoverySetup = session.sharedSecretStorageService.isRecoverySetup()
             )
         }
-        session.cryptoService().crossSigningService().getLiveCrossSigningKeys(session.myUserId)
-                .asFlow()
+        session.flow().liveCrossSigningInfo(session.myUserId)
                 .execute {
                     copy(
                             hasAccountCrossSigning = it.invoke()?.getOrNull() != null,
@@ -58,8 +58,7 @@ class DeviceVerificationInfoBottomSheetViewModel @AssistedInject constructor(@As
                     )
                 }
 
-        session.cryptoService().getLiveCryptoDeviceInfo(session.myUserId)
-                .asFlow()
+        session.flow().liveUserCryptoDevices(session.myUserId)
                 .map { list ->
                     list.firstOrNull { it.deviceId == deviceId }
                 }
@@ -70,7 +69,7 @@ class DeviceVerificationInfoBottomSheetViewModel @AssistedInject constructor(@As
                     )
                 }
 
-        session.cryptoService().getLiveCryptoDeviceInfo(session.myUserId).asFlow()
+        session.flow().liveUserCryptoDevices(session.myUserId)
                 .map { it.size }
                 .execute {
                     copy(
@@ -82,8 +81,7 @@ class DeviceVerificationInfoBottomSheetViewModel @AssistedInject constructor(@As
             copy(deviceInfo = Loading())
         }
 
-        session.cryptoService().getLiveMyDevicesInfo()
-                .asFlow()
+        session.flow().liveMyDevicesInfo()
                 .map { devices ->
                     devices.firstOrNull { it.deviceId == deviceId } ?: DeviceInfo(deviceId = deviceId)
                 }

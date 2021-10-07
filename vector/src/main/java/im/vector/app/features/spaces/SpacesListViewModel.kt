@@ -53,6 +53,7 @@ import org.matrix.android.sdk.api.session.space.SpaceOrderUtils
 import org.matrix.android.sdk.api.session.space.model.SpaceOrderContent
 import org.matrix.android.sdk.api.session.space.model.TopLevelSpaceComparator
 import org.matrix.android.sdk.api.util.toMatrixItem
+import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.rx.asObservable
 import java.util.concurrent.TimeUnit
 
@@ -81,13 +82,14 @@ class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: Sp
 
     init {
 
-        session.getUserLive(session.myUserId)
-                .asFlow()
-                .setOnEach {
-                    copy(
-                            myMxItem = it.getOrNull()?.toMatrixItem()?.let { Success(it) } ?: Loading()
-                    )
-                }
+        session.getUserLive(session.myUserId).asObservable()
+                .subscribe {
+                    setState {
+                        copy(
+                                myMxItem = it?.getOrNull()?.toMatrixItem()?.let { Success(it) } ?: Loading()
+                        )
+                    }
+                }.disposeOnClear()
 
         observeSpaceSummaries()
 //        observeSelectionState()
@@ -282,13 +284,16 @@ class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: Sp
                     null)
         }
 
+        val flowSession = session.flow()
+
         combine(
-                session.getUserLive(session.myUserId)
-                        .asFlow()
+                flowSession
+                        .liveUser(session.myUserId)
                         .map {
                             it.getOrNull()
                         },
-                session.spaceService().getSpaceSummariesLive(spaceSummaryQueryParams).asFlow(),
+                flowSession
+                        .liveSpaceSummaries(spaceSummaryQueryParams),
                 session
                         .accountDataService()
                         .getLiveRoomAccountDataEvents(setOf(RoomAccountDataTypes.EVENT_TYPE_SPACE_ORDER))
@@ -314,8 +319,7 @@ class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: Sp
         // clear local echos on update
         session.accountDataService()
                 .getLiveRoomAccountDataEvents(setOf(RoomAccountDataTypes.EVENT_TYPE_SPACE_ORDER))
-                .asFlow()
-                .execute {
+                .asObservable().execute {
                     copy(
                             spaceOrderLocalEchos = emptyMap()
                     )

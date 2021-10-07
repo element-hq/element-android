@@ -37,7 +37,6 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.mvrx.runCatchingToAsync
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.core.utils.unwrap
 import im.vector.app.features.attachments.toContentAttachmentData
 import im.vector.app.features.call.conference.ConferenceEvent
 import im.vector.app.features.call.conference.JitsiActiveConferenceHolder
@@ -109,6 +108,8 @@ import org.matrix.android.sdk.api.session.room.timeline.getTextEditableContent
 import org.matrix.android.sdk.api.session.space.CreateSpaceParams
 import org.matrix.android.sdk.api.session.widgets.model.WidgetType
 import org.matrix.android.sdk.api.util.toOptional
+import org.matrix.android.sdk.flow.flow
+import org.matrix.android.sdk.flow.unwrap
 import org.matrix.android.sdk.internal.crypto.model.event.WithHeldCode
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
@@ -253,12 +254,11 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private fun observeActiveRoomWidgets() {
-        session.widgetService()
-                .getRoomWidgetsLive(
+        session.flow()
+                .liveRoomWidgets(
                         roomId = initialState.roomId,
                         widgetId = QueryStringValue.NoCondition
                 )
-                .asFlow()
                 .map { widgets ->
                     widgets.filter { it.isActive }
                 }
@@ -287,9 +287,8 @@ class RoomDetailViewModel @AssistedInject constructor(
         val queryParams = roomMemberQueryParams {
             this.userId = QueryStringValue.Equals(session.myUserId, QueryStringValue.Case.SENSITIVE)
         }
-        room
-                .getRoomMembersLive(queryParams)
-                .asFlow()
+        room.flow()
+                .liveRoomMembers(queryParams)
                 .map {
                     it.firstOrNull().toOptional()
                 }
@@ -1506,8 +1505,8 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private fun observeSyncState() {
-        session.getSyncStateLive()
-                .asFlow()
+        session.flow()
+                .liveSyncState()
                 .setOnEach { syncState ->
                     copy(syncState = syncState)
                 }
@@ -1521,8 +1520,7 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private fun observeRoomSummary() {
-        room.getRoomSummaryLive()
-                .asFlow()
+        room.flow().liveRoomSummary()
                 .unwrap()
                 .execute { async ->
                     copy(
@@ -1534,7 +1532,7 @@ class RoomDetailViewModel @AssistedInject constructor(
     private fun getUnreadState() {
         combine(
                 timelineEvents,
-                room.getRoomSummaryLive().asFlow().unwrap()
+                room.flow().liveRoomSummary().unwrap()
         ) { timelineEvents, roomSummary ->
             computeUnreadState(timelineEvents, roomSummary)
         }
@@ -1581,8 +1579,8 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private fun observeMembershipChanges() {
-        session.getChangeMembershipsLive()
-                .asFlow()
+        session.flow()
+                .liveRoomChangeMembershipState()
                 .map {
                     it[initialState.roomId] ?: ChangeMembershipState.Unknown
                 }
