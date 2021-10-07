@@ -45,15 +45,11 @@ class NotificationRendererTest {
 
     private val notifiableEventProcessor = FakeNotifiableEventProcessor()
     private val notificationDisplayer = FakeNotificationDisplayer()
-    private val preferences = FakeVectorPreferences().also {
-        it.givenUseCompleteNotificationFormat(USE_COMPLETE_NOTIFICATION_FORMAT)
-    }
     private val notificationFactory = FakeNotificationFactory()
 
     private val notificationRenderer = NotificationRenderer(
             notifiableEventProcessor = notifiableEventProcessor.instance,
             notificationDisplayer = notificationDisplayer.instance,
-            vectorPreferences = preferences.instance,
             notificationFactory = notificationFactory.instance
     )
 
@@ -154,6 +150,7 @@ class NotificationRendererTest {
                 myUserId = MY_USER_ID,
                 myUserDisplayName = MY_USER_DISPLAY_NAME,
                 myUserAvatarUrl = MY_USER_AVATAR_URL,
+                useCompleteNotificationFormat = USE_COMPLETE_NOTIFICATION_FORMAT,
                 eventList = AN_EVENT_LIST
         )
     }

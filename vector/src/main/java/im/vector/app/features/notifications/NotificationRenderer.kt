@@ -16,7 +16,6 @@
 package im.vector.app.features.notifications
 
 import androidx.annotation.WorkerThread
-import im.vector.app.features.settings.VectorPreferences
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -24,32 +23,28 @@ import javax.inject.Singleton
 @Singleton
 class NotificationRenderer @Inject constructor(private val notifiableEventProcessor: NotifiableEventProcessor,
                                                private val notificationDisplayer: NotificationDisplayer,
-                                               private val vectorPreferences: VectorPreferences,
                                                private val notificationFactory: NotificationFactory) {
 
     private var lastKnownEventList = -1
-    private var useCompleteNotificationFormat = vectorPreferences.useCompleteNotificationFormat()
 
     @WorkerThread
-    fun render(currentRoomId: String?, myUserId: String, myUserDisplayName: String, myUserAvatarUrl: String?, eventList: MutableList<NotifiableEvent>) {
+    fun render(currentRoomId: String?,
+               myUserId: String,
+               myUserDisplayName: String,
+               myUserAvatarUrl: String?,
+               useCompleteNotificationFormat: Boolean,
+               eventList: MutableList<NotifiableEvent>) {
         Timber.v("refreshNotificationDrawerBg()")
-        val newSettings = vectorPreferences.useCompleteNotificationFormat()
-        if (newSettings != useCompleteNotificationFormat) {
-            // Settings has changed, remove all current notifications
-            notificationDisplayer.cancelAllNotifications()
-            useCompleteNotificationFormat = newSettings
-        }
-
         val notificationEvents = notifiableEventProcessor.modifyAndProcess(eventList, currentRoomId)
         if (lastKnownEventList == notificationEvents.hashCode()) {
             Timber.d("Skipping notification update due to event list not changing")
         } else {
-            processEvents(notificationEvents, myUserId, myUserDisplayName, myUserAvatarUrl)
+            processEvents(notificationEvents, myUserId, myUserDisplayName, myUserAvatarUrl, useCompleteNotificationFormat)
             lastKnownEventList = notificationEvents.hashCode()
         }
     }
 
-    private fun processEvents(notificationEvents: ProcessedNotificationEvents, myUserId: String, myUserDisplayName: String, myUserAvatarUrl: String?) {
+    private fun processEvents(notificationEvents: ProcessedNotificationEvents, myUserId: String, myUserDisplayName: String, myUserAvatarUrl: String?, useCompleteNotificationFormat: Boolean) {
         val (roomEvents, simpleEvents, invitationEvents) = notificationEvents
         with(notificationFactory) {
             val roomNotifications = roomEvents.toNotifications(myUserDisplayName, myUserAvatarUrl)
