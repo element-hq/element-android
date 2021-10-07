@@ -427,7 +427,7 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
                 if (name == null || url == null) {
                     null
                 } else {
-                    IdentityServerTerms(name = name, url = url)
+                    IdentityServerPolicy(name = name, url = url)
                 }
             }
             IdentityServerWithTerms(identityServerUrl, policyUrls)

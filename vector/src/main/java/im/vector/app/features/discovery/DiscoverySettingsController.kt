@@ -121,8 +121,8 @@ class DiscoverySettingsController @Inject constructor(
             title(identityServerUrl)
         }
 
-        val terms = identityServer?.terms
-        if (terms != null) {
+        val policies = identityServer?.policies
+        if (policies != null) {
             formAdvancedToggleItem {
                 id("policy-urls")
                 val titleRes = if (data.isIdentityPolicyUrlsExpanded) {
@@ -133,14 +133,12 @@ class DiscoverySettingsController @Inject constructor(
                 listener { host.listener?.onPolicyUrlsExpandedStateToggled() }
             }
             if (data.isIdentityPolicyUrlsExpanded) {
-                terms.forEach { term ->
+                policies.forEach { policy ->
                     discoveryPolicyItem {
-                        id(term.url)
-                        name(term.name)
-                        url(term.url)
-                        clickListener {
-                            // TODO
-                        }
+                        id(policy.url)
+                        name(policy.name)
+                        url(policy.url)
+                        clickListener { host.listener?.onPolicyTapped(policy) }
                     }
                 }
             }
@@ -428,5 +426,6 @@ class DiscoverySettingsController @Inject constructor(
         fun onTapUpdateUserConsent(newValue: Boolean)
         fun onTapRetryToRetrieveBindings()
         fun onPolicyUrlsExpandedStateToggled()
+        fun onPolicyTapped(policy: IdentityServerPolicy)
     }
 }
