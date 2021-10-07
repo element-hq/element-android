@@ -19,6 +19,7 @@ data class InviteNotifiableEvent(
         val matrixID: String?,
         override val eventId: String,
         override val editedEventId: String?,
+        override val canBeReplaced: Boolean,
         val roomId: String,
         val noisy: Boolean,
         val title: String,
@@ -29,6 +30,5 @@ data class InviteNotifiableEvent(
         override val isRedacted: Boolean = false
 ) : NotifiableEvent {
 
-    override var isPushGatewayEvent: Boolean = false
     override var hasBeenDisplayed = false
 }
