@@ -141,7 +141,8 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
                 roomId = room.roomId,
                 roomName = room.roomSummary()?.displayName ?: room.roomId,
                 roomIsDirect = room.roomSummary()?.isDirect == true,
-                outGoingMessage = true
+                outGoingMessage = true,
+                canBeReplaced = false
         )
 
         notificationDrawerManager.onNotifiableEventReceived(notifiableMessageEvent)
