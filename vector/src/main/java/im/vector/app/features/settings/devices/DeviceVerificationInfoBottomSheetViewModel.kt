@@ -29,7 +29,6 @@ import kotlinx.coroutines.flow.map
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
-import org.matrix.android.sdk.rx.rx
 
 class DeviceVerificationInfoBottomSheetViewModel @AssistedInject constructor(@Assisted initialState: DeviceVerificationInfoBottomSheetViewState,
                                                                              @Assisted val deviceId: String,

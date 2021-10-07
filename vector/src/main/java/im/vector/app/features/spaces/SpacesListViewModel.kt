@@ -34,8 +34,14 @@ import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.group
 import im.vector.app.space
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.observeOn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.sample
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.query.ActiveSpaceFilter
@@ -82,14 +88,13 @@ class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: Sp
 
     init {
 
-        session.getUserLive(session.myUserId).asObservable()
-                .subscribe {
-                    setState {
-                        copy(
-                                myMxItem = it?.getOrNull()?.toMatrixItem()?.let { Success(it) } ?: Loading()
-                        )
-                    }
-                }.disposeOnClear()
+        session.getUserLive(session.myUserId)
+                .asFlow()
+                .setOnEach {
+                    copy(
+                            myMxItem = it?.getOrNull()?.toMatrixItem()?.let { Success(it) } ?: Loading()
+                    )
+                }
 
         observeSpaceSummaries()
 //        observeSelectionState()
@@ -105,14 +110,10 @@ class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: Sp
                 .disposeOnClear()
 
         session.getGroupSummariesLive(groupSummaryQueryParams {})
-                .asObservable()
-                .subscribe {
-                    setState {
-                        copy(
-                                legacyGroups = it
-                        )
-                    }
-                }.disposeOnClear()
+                .asFlow()
+                .setOnEach {
+                    copy(legacyGroups = it)
+                }
 
         // XXX there should be a way to refactor this and share it
         session.getPagedRoomSummariesLive(
@@ -122,10 +123,10 @@ class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: Sp
                         !vectorPreferences.prefSpacesShowAllRoomInHome()
                     } ?: ActiveSpaceFilter.None
                 }, sortOrder = RoomSortOrder.NONE
-        ).asObservable()
-                .throttleFirst(300, TimeUnit.MILLISECONDS)
-                .observeOn(Schedulers.computation())
-                .subscribe {
+        ).asFlow()
+                .sample(300)
+                .flowOn(Dispatchers.Default)
+                .onEach {
                     val inviteCount = if (autoAcceptInvites.hideInvites) {
                         0
                     } else {
@@ -150,7 +151,7 @@ class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: Sp
                                 homeAggregateCount = counts
                         )
                     }
-                }.disposeOnClear()
+                }.launchIn(viewModelScope)
     }
 
     override fun handle(action: SpaceListAction) {
@@ -319,7 +320,8 @@ class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: Sp
         // clear local echos on update
         session.accountDataService()
                 .getLiveRoomAccountDataEvents(setOf(RoomAccountDataTypes.EVENT_TYPE_SPACE_ORDER))
-                .asObservable().execute {
+                .asFlow()
+                .execute {
                     copy(
                             spaceOrderLocalEchos = emptyMap()
                     )

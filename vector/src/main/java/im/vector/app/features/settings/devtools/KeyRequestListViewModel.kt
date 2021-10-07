@@ -16,6 +16,7 @@
 
 package im.vector.app.features.settings.devtools
 
+import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagedList
 import com.airbnb.mvrx.Async
@@ -51,13 +52,13 @@ class KeyRequestListViewModel @AssistedInject constructor(@Assisted initialState
 
     fun refresh() {
         viewModelScope.launch {
-            session.cryptoService().getOutgoingRoomKeyRequestsPaged().asObservable()
+            session.cryptoService().getOutgoingRoomKeyRequestsPaged().asFlow()
                     .execute {
                         copy(outgoingRoomKeyRequests = it)
                     }
 
             session.cryptoService().getIncomingRoomKeyRequestsPaged()
-                    .asObservable()
+                    .asFlow()
                     .execute {
                         copy(incomingRequests = it)
                     }

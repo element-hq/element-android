@@ -16,6 +16,7 @@
 
 package im.vector.app.features.settings.devtools
 
+import androidx.lifecycle.asFlow
 import androidx.paging.PagedList
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.FragmentViewModelContext
@@ -50,7 +51,8 @@ class GossipingEventsPaperTrailViewModel @AssistedInject constructor(@Assisted i
         setState {
             copy(events = Loading())
         }
-        session.cryptoService().getGossipingEventsTrail().asObservable()
+        session.cryptoService().getGossipingEventsTrail()
+                .asFlow()
                 .execute {
                     copy(events = it)
                 }

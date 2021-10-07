@@ -43,7 +43,6 @@ import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.session.room.powerlevels.Role
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.flow.flow
-import org.matrix.android.sdk.rx.rx
 import timber.log.Timber
 
 class SpaceMenuViewModel @AssistedInject constructor(

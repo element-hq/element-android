@@ -16,6 +16,7 @@
 
 package im.vector.app.features.call.conference
 
+import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.MavericksViewModelFactory
@@ -28,7 +29,11 @@ import dagger.assisted.AssistedInject
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import io.reactivex.disposables.Disposable
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
@@ -47,7 +52,7 @@ class JitsiCallViewModel @AssistedInject constructor(
         fun create(initialState: JitsiCallViewState): JitsiCallViewModel
     }
 
-    private var currentWidgetObserver: Disposable? = null
+    private var currentWidgetObserver: Job? = null
     private val widgetService = session.widgetService()
 
     private var confIsJoined = false
@@ -59,11 +64,11 @@ class JitsiCallViewModel @AssistedInject constructor(
 
     private fun observeWidget(roomId: String, widgetId: String) {
         confIsJoined = false
-        currentWidgetObserver?.dispose()
+        currentWidgetObserver?.cancel()
         currentWidgetObserver = widgetService.getRoomWidgetsLive(roomId, QueryStringValue.Equals(widgetId), WidgetType.Jitsi.values())
-                .asObservable()
+                .asFlow()
                 .distinctUntilChanged()
-                .subscribe {
+                .onEach {
                     val jitsiWidget = it.firstOrNull()
                     if (jitsiWidget != null) {
                         setState {
@@ -81,7 +86,7 @@ class JitsiCallViewModel @AssistedInject constructor(
                         }
                     }
                 }
-                .disposeOnClear()
+                .launchIn(viewModelScope)
     }
 
     private fun joinConference(jitsiWidget: Widget) = withState { state ->

@@ -30,8 +30,6 @@ import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.flow.unwrap
-import org.matrix.android.sdk.rx.rx
-import org.matrix.android.sdk.rx.unwrap
 
 class RoomNotificationSettingsViewModel @AssistedInject constructor(
         @Assisted initialState: RoomNotificationSettingsViewState,
@@ -74,7 +72,7 @@ class RoomNotificationSettingsViewModel @AssistedInject constructor(
     }
 
     private fun observeNotificationState() {
-        room.rx()
+        room.flow()
                 .liveNotificationState()
                 .execute {
                     copy(notificationState = it)
