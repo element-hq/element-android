@@ -16,26 +16,15 @@
 package im.vector.app.features.notifications
 
 import android.content.Context
-import android.graphics.Bitmap
-import android.os.Build
 import android.os.Handler
 import android.os.HandlerThread
 import androidx.annotation.WorkerThread
-import androidx.core.app.NotificationCompat
-import androidx.core.app.Person
-import androidx.core.content.pm.ShortcutInfoCompat
-import androidx.core.content.pm.ShortcutManagerCompat
-import androidx.core.graphics.drawable.IconCompat
 import im.vector.app.ActiveSessionDataSource
 import im.vector.app.BuildConfig
 import im.vector.app.R
-import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.FirstThrottler
 import im.vector.app.features.displayname.getBestName
-import im.vector.app.features.home.room.detail.RoomDetailActivity
-import im.vector.app.features.invite.AutoAcceptInvites
 import im.vector.app.features.settings.VectorPreferences
-import me.gujun.android.span.span
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.content.ContentUrlResolver
 import org.matrix.android.sdk.api.util.toMatrixItem
@@ -54,12 +43,8 @@ import javax.inject.Singleton
 class NotificationDrawerManager @Inject constructor(private val context: Context,
                                                     private val notificationUtils: NotificationUtils,
                                                     private val vectorPreferences: VectorPreferences,
-                                                    private val stringProvider: StringProvider,
                                                     private val activeSessionDataSource: ActiveSessionDataSource,
-                                                    private val iconLoader: IconLoader,
-                                                    private val bitmapLoader: BitmapLoader,
-                                                    private val outdatedDetector: OutdatedEventDetector?,
-                                                    private val autoAcceptInvites: AutoAcceptInvites) {
+                                                    private val notificationRenderer: NotificationRenderer) {
 
     private val handlerThread: HandlerThread = HandlerThread("NotificationDrawerManager", Thread.MIN_PRIORITY)
     private var backgroundHandler: Handler
@@ -69,13 +54,8 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
         backgroundHandler = Handler(handlerThread.looper)
     }
 
-    // The first time the notification drawer is refreshed, we force re-render of all notifications
-    private var firstTime = true
-
     private val eventList = loadEventInfo()
-
     private val avatarSize = context.resources.getDimensionPixelSize(R.dimen.profile_avatar_size)
-
     private var currentRoomId: String? = null
 
     // TODO Multi-session: this will have to be improved
@@ -258,357 +238,15 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
         val myUserAvatarUrl = session.contentUrlResolver().resolveThumbnail(user?.avatarUrl, avatarSize, avatarSize, ContentUrlResolver.ThumbnailMethod.SCALE)
 
         synchronized(eventList) {
-            val useSplitNotifications = false
-            if (useSplitNotifications) {
-                // TODO
-            } else {
-                Timber.v("%%%%%%%% REFRESH NOTIFICATION DRAWER ")
-                // TMP code
-                var hasNewEvent = false
-                var summaryIsNoisy = false
-                val summaryInboxStyle = NotificationCompat.InboxStyle()
-
-                // group events by room to create a single MessagingStyle notif
-                val roomIdToEventMap: MutableMap<String, MutableList<NotifiableMessageEvent>> = LinkedHashMap()
-                val simpleEvents: MutableList<SimpleNotifiableEvent> = ArrayList()
-                val invitationEvents: MutableList<InviteNotifiableEvent> = ArrayList()
-
-                val eventIterator = eventList.listIterator()
-                while (eventIterator.hasNext()) {
-                    when (val event = eventIterator.next()) {
-                        is NotifiableMessageEvent -> {
-                            val roomId = event.roomId
-                            val roomEvents = roomIdToEventMap.getOrPut(roomId) { ArrayList() }
-
-                        if (shouldIgnoreMessageEventInRoom(roomId) || outdatedDetector?.isMessageOutdated(event) == true) {
-                            // forget this event
-                            eventIterator.remove()
-                        } else {
-                            roomEvents.add(event)
-                        }
-                    }
-                    is InviteNotifiableEvent  -> {
-                        if (autoAcceptInvites.hideInvites) {
-                            // Forget this event
-                            eventIterator.remove()
-                        } else {
-                            invitationEvents.add(event)
-                        }
-                    }
-                    is SimpleNotifiableEvent  -> simpleEvents.add(event)
-                    else                      -> Timber.w("Type not handled")
-                }
+            val newSettings = vectorPreferences.useCompleteNotificationFormat()
+            if (newSettings != useCompleteNotificationFormat) {
+                // Settings has changed, remove all current notifications
+                notificationUtils.cancelAllNotifications()
+                useCompleteNotificationFormat = newSettings
             }
 
-                Timber.v("%%%%%%%% REFRESH NOTIFICATION DRAWER ${roomIdToEventMap.size} room groups")
-
-                var globalLastMessageTimestamp = 0L
-
-                val newSettings = vectorPreferences.useCompleteNotificationFormat()
-                if (newSettings != useCompleteNotificationFormat) {
-                    // Settings has changed, remove all current notifications
-                    notificationUtils.cancelAllNotifications()
-                    useCompleteNotificationFormat = newSettings
-                }
-
-                var simpleNotificationRoomCounter = 0
-                var simpleNotificationMessageCounter = 0
-
-                // events have been grouped by roomId
-                for ((roomId, events) in roomIdToEventMap) {
-                    // Build the notification for the room
-                    if (events.isEmpty() || events.all { it.isRedacted }) {
-                        // Just clear this notification
-                        Timber.v("%%%%%%%% REFRESH NOTIFICATION DRAWER $roomId has no more events")
-                        notificationUtils.cancelNotificationMessage(roomId, ROOM_MESSAGES_NOTIFICATION_ID)
-                        continue
-                    }
-
-                    simpleNotificationRoomCounter++
-                    val roomName = events[0].roomName ?: events[0].senderName ?: ""
-
-                    val roomEventGroupInfo = RoomEventGroupInfo(
-                            roomId = roomId,
-                            isDirect = events[0].roomIsDirect,
-                            roomDisplayName = roomName)
-
-                    val style = NotificationCompat.MessagingStyle(Person.Builder()
-                            .setName(myUserDisplayName)
-                            .setIcon(iconLoader.getUserIcon(myUserAvatarUrl))
-                            .setKey(events[0].matrixID)
-                            .build())
-
-                    style.isGroupConversation = !roomEventGroupInfo.isDirect
-
-                    if (!roomEventGroupInfo.isDirect) {
-                        style.conversationTitle = roomEventGroupInfo.roomDisplayName
-                    }
-
-                    val largeBitmap = getRoomBitmap(events)
-
-                    for (event in events) {
-                        // if all events in this room have already been displayed there is no need to update it
-                        if (!event.hasBeenDisplayed && !event.isRedacted) {
-                            roomEventGroupInfo.shouldBing = roomEventGroupInfo.shouldBing || event.noisy
-                            roomEventGroupInfo.customSound = event.soundName
-                        }
-                        roomEventGroupInfo.hasNewEvent = roomEventGroupInfo.hasNewEvent || !event.hasBeenDisplayed
-
-                    val senderPerson = if (event.outGoingMessage) {
-                        null
-                    } else {
-                        Person.Builder()
-                                .setName(event.senderName)
-                                .setIcon(iconLoader.getUserIcon(event.senderAvatarPath))
-                                .setKey(event.senderId)
-                                .build()
-                    }
-
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                        val openRoomIntent = RoomDetailActivity.shortcutIntent(context, roomId)
-
-                        val shortcut = ShortcutInfoCompat.Builder(context, roomId)
-                                .setLongLived(true)
-                                .setIntent(openRoomIntent)
-                                .setShortLabel(roomName)
-                                .setIcon(largeBitmap?.let { IconCompat.createWithAdaptiveBitmap(it) } ?: iconLoader.getUserIcon(event.senderAvatarPath))
-                                .build()
-
-                        ShortcutManagerCompat.pushDynamicShortcut(context, shortcut)
-                    }
-
-                        if (event.outGoingMessage && event.outGoingMessageFailed) {
-                            style.addMessage(stringProvider.getString(R.string.notification_inline_reply_failed), event.timestamp, senderPerson)
-                            roomEventGroupInfo.hasSmartReplyError = true
-                        } else {
-                            if (!event.isRedacted) {
-                                simpleNotificationMessageCounter++
-                                style.addMessage(event.body, event.timestamp, senderPerson)
-                            }
-                        }
-                        event.hasBeenDisplayed = true // we can consider it as displayed
-
-                        // It is possible that this event was previously shown as an 'anonymous' simple notif.
-                        // And now it will be merged in a single MessageStyle notif, so we can clean to be sure
-                        notificationUtils.cancelNotificationMessage(event.eventId, ROOM_EVENT_NOTIFICATION_ID)
-                    }
-
-                    try {
-                        if (events.size == 1) {
-                            val event = events[0]
-                            if (roomEventGroupInfo.isDirect) {
-                                val line = span {
-                                    span {
-                                        textStyle = "bold"
-                                        +String.format("%s: ", event.senderName)
-                                    }
-                                    +(event.description)
-                                }
-                                summaryInboxStyle.addLine(line)
-                            } else {
-                                val line = span {
-                                    span {
-                                        textStyle = "bold"
-                                        +String.format("%s: %s ", roomName, event.senderName)
-                                    }
-                                    +(event.description)
-                                }
-                                summaryInboxStyle.addLine(line)
-                            }
-                        } else {
-                            val summaryLine = stringProvider.getQuantityString(
-                                    R.plurals.notification_compat_summary_line_for_room, events.size, roomName, events.size)
-                            summaryInboxStyle.addLine(summaryLine)
-                        }
-                    } catch (e: Throwable) {
-                        // String not found or bad format
-                        Timber.v("%%%%%%%% REFRESH NOTIFICATION DRAWER failed to resolve string")
-                        summaryInboxStyle.addLine(roomName)
-                    }
-
-                    if (firstTime || roomEventGroupInfo.hasNewEvent) {
-                        // Should update displayed notification
-                        Timber.v("%%%%%%%% REFRESH NOTIFICATION DRAWER $roomId need refresh")
-                        val lastMessageTimestamp = events.last().timestamp
-
-                        if (globalLastMessageTimestamp < lastMessageTimestamp) {
-                            globalLastMessageTimestamp = lastMessageTimestamp
-                        }
-
-                        val tickerText = if (roomEventGroupInfo.isDirect) {
-                            stringProvider.getString(R.string.notification_ticker_text_dm, events.last().senderName, events.last().description)
-                        } else {
-                            stringProvider.getString(R.string.notification_ticker_text_group, roomName, events.last().senderName, events.last().description)
-                        }
-
-                        if (useCompleteNotificationFormat) {
-                            val notification = notificationUtils.buildMessagesListNotification(
-                                    style,
-                                    roomEventGroupInfo,
-                                    largeBitmap,
-                                    lastMessageTimestamp,
-                                    myUserDisplayName,
-                                    tickerText)
-
-                            // is there an id for this room?
-                            notificationUtils.showNotificationMessage(roomId, ROOM_MESSAGES_NOTIFICATION_ID, notification)
-                        }
-
-                        hasNewEvent = true
-                        summaryIsNoisy = summaryIsNoisy || roomEventGroupInfo.shouldBing
-                    } else {
-                        Timber.v("%%%%%%%% REFRESH NOTIFICATION DRAWER $roomId is up to date")
-                    }
-                }
-
-                // Handle invitation events
-                for (event in invitationEvents) {
-                    // We build a invitation notification
-                    if (firstTime || !event.hasBeenDisplayed) {
-                        if (useCompleteNotificationFormat) {
-                            val notification = notificationUtils.buildRoomInvitationNotification(event, session.myUserId)
-                            notificationUtils.showNotificationMessage(event.roomId, ROOM_INVITATION_NOTIFICATION_ID, notification)
-                        }
-                        event.hasBeenDisplayed = true // we can consider it as displayed
-                        hasNewEvent = true
-                        summaryIsNoisy = summaryIsNoisy || event.noisy
-                        summaryInboxStyle.addLine(event.description)
-                    }
-                }
-
-                // Handle simple events
-                for (event in simpleEvents) {
-                    // We build a simple notification
-                    if (firstTime || !event.hasBeenDisplayed) {
-                        if (useCompleteNotificationFormat) {
-                            val notification = notificationUtils.buildSimpleEventNotification(event, session.myUserId)
-                            notificationUtils.showNotificationMessage(event.eventId, ROOM_EVENT_NOTIFICATION_ID, notification)
-                        }
-                        event.hasBeenDisplayed = true // we can consider it as displayed
-                        hasNewEvent = true
-                        summaryIsNoisy = summaryIsNoisy || event.noisy
-                        summaryInboxStyle.addLine(event.description)
-                    }
-                }
-
-                // ======== Build summary notification =========
-                // On Android 7.0 (API level 24) and higher, the system automatically builds a summary for
-                // your group using snippets of text from each notification. The user can expand this
-                // notification to see each separate notification.
-                // To support older versions, which cannot show a nested group of notifications,
-                // you must create an extra notification that acts as the summary.
-                // This appears as the only notification and the system hides all the others.
-                // So this summary should include a snippet from all the other notifications,
-                // which the user can tap to open your app.
-                // The behavior of the group summary may vary on some device types such as wearables.
-                // To ensure the best experience on all devices and versions, always include a group summary when you create a group
-                // https://developer.android.com/training/notify-user/group
-
-                if (eventList.isEmpty() || eventList.all { it.isRedacted }) {
-                    notificationUtils.cancelNotificationMessage(null, SUMMARY_NOTIFICATION_ID)
-                } else if (hasNewEvent) {
-                    // FIXME roomIdToEventMap.size is not correct, this is the number of rooms
-                    val nbEvents = roomIdToEventMap.size + simpleEvents.size
-                    val sumTitle = stringProvider.getQuantityString(R.plurals.notification_compat_summary_title, nbEvents, nbEvents)
-                    summaryInboxStyle.setBigContentTitle(sumTitle)
-                            // TODO get latest event?
-                            .setSummaryText(stringProvider.getQuantityString(R.plurals.notification_unread_notified_messages, nbEvents, nbEvents))
-
-                    if (useCompleteNotificationFormat) {
-                        val notification = notificationUtils.buildSummaryListNotification(
-                                summaryInboxStyle,
-                                sumTitle,
-                                noisy = hasNewEvent && summaryIsNoisy,
-                                lastMessageTimestamp = globalLastMessageTimestamp)
-
-                        notificationUtils.showNotificationMessage(null, SUMMARY_NOTIFICATION_ID, notification)
-                    } else {
-                        // Add the simple events as message (?)
-                        simpleNotificationMessageCounter += simpleEvents.size
-                        val numberOfInvitations = invitationEvents.size
-
-                        val privacyTitle = if (numberOfInvitations > 0) {
-                            val invitationsStr = stringProvider.getQuantityString(R.plurals.notification_invitations, numberOfInvitations, numberOfInvitations)
-                            if (simpleNotificationMessageCounter > 0) {
-                                // Invitation and message
-                                val messageStr = stringProvider.getQuantityString(R.plurals.room_new_messages_notification,
-                                        simpleNotificationMessageCounter, simpleNotificationMessageCounter)
-                                if (simpleNotificationRoomCounter > 1) {
-                                    // In several rooms
-                                    val roomStr = stringProvider.getQuantityString(R.plurals.notification_unread_notified_messages_in_room_rooms,
-                                            simpleNotificationRoomCounter, simpleNotificationRoomCounter)
-                                    stringProvider.getString(
-                                            R.string.notification_unread_notified_messages_in_room_and_invitation,
-                                            messageStr,
-                                            roomStr,
-                                            invitationsStr
-                                    )
-                                } else {
-                                    // In one room
-                                    stringProvider.getString(
-                                            R.string.notification_unread_notified_messages_and_invitation,
-                                            messageStr,
-                                            invitationsStr
-                                    )
-                                }
-                            } else {
-                                // Only invitation
-                                invitationsStr
-                            }
-                        } else {
-                            // No invitation, only messages
-                            val messageStr = stringProvider.getQuantityString(R.plurals.room_new_messages_notification,
-                                    simpleNotificationMessageCounter, simpleNotificationMessageCounter)
-                            if (simpleNotificationRoomCounter > 1) {
-                                // In several rooms
-                                val roomStr = stringProvider.getQuantityString(R.plurals.notification_unread_notified_messages_in_room_rooms,
-                                        simpleNotificationRoomCounter, simpleNotificationRoomCounter)
-                                stringProvider.getString(R.string.notification_unread_notified_messages_in_room, messageStr, roomStr)
-                            } else {
-                                // In one room
-                                messageStr
-                            }
-                        }
-                        val notification = notificationUtils.buildSummaryListNotification(
-                                style = null,
-                                compatSummary = privacyTitle,
-                                noisy = hasNewEvent && summaryIsNoisy,
-                                lastMessageTimestamp = globalLastMessageTimestamp)
-
-                        notificationUtils.showNotificationMessage(null, SUMMARY_NOTIFICATION_ID, notification)
-                    }
-
-                    if (hasNewEvent && summaryIsNoisy) {
-                        try {
-                            // turn the screen on for 3 seconds
-                            /*
-                        TODO
-                        if (Matrix.getInstance(VectorApp.getInstance())!!.pushManager.isScreenTurnedOn) {
-                            val pm = VectorApp.getInstance().getSystemService<PowerManager>()!!
-                            val wl = pm.newWakeLock(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON or PowerManager.ACQUIRE_CAUSES_WAKEUP,
-                                    NotificationDrawerManager::class.java.name)
-                            wl.acquire(3000)
-                            wl.release()
-                        }
-                         */
-                        } catch (e: Throwable) {
-                            Timber.e(e, "## Failed to turn screen on")
-                        }
-                    }
-                }
-                // notice that we can get bit out of sync with actual display but not a big issue
-                firstTime = false
-            }
+            notificationRenderer.render(currentRoomId, session.myUserId, myUserDisplayName, myUserAvatarUrl, useCompleteNotificationFormat, eventList)
         }
-    }
-
-    private fun getRoomBitmap(events: List<NotifiableMessageEvent>): Bitmap? {
-        if (events.isEmpty()) return null
-
-        // Use the last event (most recent?)
-        val roomAvatarPath = events.last().roomAvatarPath ?: events.last().senderAvatarPath
-
-        return bitmapLoader.getRoomBitmap(roomAvatarPath)
     }
 
     fun shouldIgnoreMessageEventInRoom(roomId: String?): Boolean {

@@ -17,6 +17,8 @@
 package im.vector.app.features.notifications
 
 import android.app.Notification
+import androidx.core.content.pm.ShortcutInfoCompat
+import androidx.core.content.pm.ShortcutManagerCompat
 import javax.inject.Inject
 
 class NotificationFactory @Inject constructor(
@@ -83,7 +85,7 @@ private fun List<OneShotNotification>.mapToMeta() = filterIsInstance<OneShotNoti
 
 sealed interface RoomNotification {
     data class Removed(val roomId: String) : RoomNotification
-    data class Message(val notification: Notification, val meta: Meta) : RoomNotification {
+    data class Message(val notification: Notification, val shortcutInfo: ShortcutInfoCompat?, val meta: Meta) : RoomNotification {
         data class Meta(
                 val summaryLine: CharSequence,
                 val messageCount: Int,
