@@ -51,9 +51,9 @@ class SummaryGroupMessageCreator @Inject constructor(
             simpleNotifications.forEach { style.addLine(it.summaryLine) }
         }
 
-        val summaryIsNoisy = roomNotifications.any { it.shouldBing }
-                || invitationNotifications.any { it.isNoisy }
-                || simpleNotifications.any { it.isNoisy }
+        val summaryIsNoisy = roomNotifications.any { it.shouldBing } ||
+                invitationNotifications.any { it.isNoisy } ||
+                simpleNotifications.any { it.isNoisy }
 
         val messageCount = roomNotifications.fold(initial = 0) { acc, current -> acc + current.messageCount }
 
