@@ -18,16 +18,16 @@ package im.vector.app.features.notifications
 import androidx.core.app.NotificationCompat
 
 data class InviteNotifiableEvent(
-        var matrixID: String?,
+        val matrixID: String?,
         override val eventId: String,
         override val editedEventId: String?,
-        var roomId: String,
+        val roomId: String,
         override var noisy: Boolean,
         val title: String,
         val description: String,
         val type: String?,
         val timestamp: Long,
-        var soundName: String?,
+        val soundName: String?,
         override var isPushGatewayEvent: Boolean = false) : NotifiableEvent {
 
     override var isRedacted: Boolean = false
