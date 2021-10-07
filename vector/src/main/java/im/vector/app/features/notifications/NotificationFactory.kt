@@ -26,7 +26,7 @@ class NotificationFactory @Inject constructor(
 ) {
 
     fun Map<String, List<NotifiableMessageEvent>>.toNotifications(myUserDisplayName: String, myUserAvatarUrl: String?): List<RoomNotification> {
-        return this.map { (roomId, events) ->
+        return map { (roomId, events) ->
             when {
                 events.hasNoEventsToDisplay() -> RoomNotification.Removed(roomId)
                 else                          -> roomGroupMessageCreator.createRoomMessage(events, roomId, myUserDisplayName, myUserAvatarUrl)
@@ -39,7 +39,7 @@ class NotificationFactory @Inject constructor(
     private fun NotifiableMessageEvent.canNotBeDisplayed() = isRedacted
 
     fun Map<String, InviteNotifiableEvent?>.toNotifications(myUserId: String): List<OneShotNotification> {
-        return this.map { (roomId, event) ->
+        return map { (roomId, event) ->
             when (event) {
                 null -> OneShotNotification.Removed(key = roomId)
                 else -> OneShotNotification.Append(
@@ -57,7 +57,7 @@ class NotificationFactory @Inject constructor(
 
     @JvmName("toNotificationsSimpleNotifiableEvent")
     fun Map<String, SimpleNotifiableEvent?>.toNotifications(myUserId: String): List<OneShotNotification> {
-        return this.map { (eventId, event) ->
+        return map { (eventId, event) ->
             when (event) {
                 null -> OneShotNotification.Removed(key = eventId)
                 else -> OneShotNotification.Append(

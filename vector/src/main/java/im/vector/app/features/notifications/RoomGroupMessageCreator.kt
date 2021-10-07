@@ -145,4 +145,4 @@ class RoomGroupMessageCreator @Inject constructor(
     }
 }
 
-private fun NotifiableMessageEvent.isSmartReplyError() = this.outGoingMessage && this.outGoingMessageFailed
+private fun NotifiableMessageEvent.isSmartReplyError() = outGoingMessage && outGoingMessageFailed
