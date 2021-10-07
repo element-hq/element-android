@@ -20,14 +20,12 @@ import java.io.Serializable
 /**
  * Parent interface for all events which can be displayed as a Notification
  */
-interface NotifiableEvent : Serializable {
+sealed interface NotifiableEvent : Serializable {
     val eventId: String
     val editedEventId: String?
     var noisy: Boolean
-
     var hasBeenDisplayed: Boolean
-    var isRedacted: Boolean
-
     // Used to know if event should be replaced with the one coming from eventstream
     var isPushGatewayEvent: Boolean
+    val isRedacted: Boolean
 }

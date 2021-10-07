@@ -26,8 +26,9 @@ data class InviteNotifiableEvent(
         val type: String?,
         val timestamp: Long,
         val soundName: String?,
-        override var isPushGatewayEvent: Boolean = false) : NotifiableEvent {
+        override var isPushGatewayEvent: Boolean = false,
+        override val isRedacted: Boolean = false
+) : NotifiableEvent {
 
-    override var isRedacted: Boolean = false
     override var hasBeenDisplayed = false
 }

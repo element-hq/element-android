@@ -36,12 +36,11 @@ data class NotifiableMessageEvent(
 
         // This is used for >N notification, as the result of a smart reply
         val outGoingMessage: Boolean = false,
-        val outGoingMessageFailed: Boolean = false
-
+        val outGoingMessageFailed: Boolean = false,
+        override var hasBeenDisplayed: Boolean = false,
+        override val isRedacted: Boolean = false
 ) : NotifiableEvent {
 
-    override var hasBeenDisplayed: Boolean = false
-    override var isRedacted: Boolean = false
     override var isPushGatewayEvent: Boolean = false
 
     val type: String = EventType.MESSAGE
