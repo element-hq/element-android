@@ -34,12 +34,13 @@ private const val USE_COMPLETE_NOTIFICATION_FORMAT = true
 
 private val AN_EVENT_LIST = mutableListOf<NotifiableEvent>()
 private val A_PROCESSED_EVENTS = ProcessedNotificationEvents(emptyMap(), emptyMap(), emptyMap())
-private val A_SUMMARY_NOTIFICATION = mockk<Notification>()
+private val A_SUMMARY_NOTIFICATION = SummaryNotification.Update(mockk())
+private val A_REMOVE_SUMMARY_NOTIFICATION = SummaryNotification.Removed
 private val A_NOTIFICATION = mockk<Notification>()
 private val MESSAGE_META = RoomNotification.Message.Meta(
         summaryLine = "ignored", messageCount = 1, latestTimestamp = -1, roomId = A_ROOM_ID, shouldBing = false
 )
-private val ONE_SHOT_META = OneShotNotification.Append.Meta(key = "ignored", summaryLine = "ignored", isNoisy = false)
+private val ONE_SHOT_META = OneShotNotification.Append.Meta(key = "ignored", summaryLine = "ignored", isNoisy = false, timestamp = -1)
 
 class NotificationRendererTest {
 
@@ -71,7 +72,7 @@ class NotificationRendererTest {
 
         notificationDisplayer.verifyInOrder {
             cancelNotificationMessage(tag = A_ROOM_ID, NotificationDrawerManager.ROOM_MESSAGES_NOTIFICATION_ID)
-            showNotificationMessage(tag = null, NotificationDrawerManager.SUMMARY_NOTIFICATION_ID, A_SUMMARY_NOTIFICATION)
+            showNotificationMessage(tag = null, NotificationDrawerManager.SUMMARY_NOTIFICATION_ID, A_SUMMARY_NOTIFICATION.notification)
         }
     }
 
@@ -86,7 +87,7 @@ class NotificationRendererTest {
 
         notificationDisplayer.verifyInOrder {
             showNotificationMessage(tag = A_ROOM_ID, NotificationDrawerManager.ROOM_MESSAGES_NOTIFICATION_ID, A_NOTIFICATION)
-            showNotificationMessage(tag = null, NotificationDrawerManager.SUMMARY_NOTIFICATION_ID, A_SUMMARY_NOTIFICATION)
+            showNotificationMessage(tag = null, NotificationDrawerManager.SUMMARY_NOTIFICATION_ID, A_SUMMARY_NOTIFICATION.notification)
         }
     }
 
@@ -98,7 +99,7 @@ class NotificationRendererTest {
 
         notificationDisplayer.verifyInOrder {
             cancelNotificationMessage(tag = AN_EVENT_ID, NotificationDrawerManager.ROOM_EVENT_NOTIFICATION_ID)
-            showNotificationMessage(tag = null, NotificationDrawerManager.SUMMARY_NOTIFICATION_ID, A_SUMMARY_NOTIFICATION)
+            showNotificationMessage(tag = null, NotificationDrawerManager.SUMMARY_NOTIFICATION_ID, A_SUMMARY_NOTIFICATION.notification)
         }
     }
 
@@ -113,7 +114,7 @@ class NotificationRendererTest {
 
         notificationDisplayer.verifyInOrder {
             showNotificationMessage(tag = AN_EVENT_ID, NotificationDrawerManager.ROOM_EVENT_NOTIFICATION_ID, A_NOTIFICATION)
-            showNotificationMessage(tag = null, NotificationDrawerManager.SUMMARY_NOTIFICATION_ID, A_SUMMARY_NOTIFICATION)
+            showNotificationMessage(tag = null, NotificationDrawerManager.SUMMARY_NOTIFICATION_ID, A_SUMMARY_NOTIFICATION.notification)
         }
     }
 
@@ -125,7 +126,7 @@ class NotificationRendererTest {
 
         notificationDisplayer.verifyInOrder {
             cancelNotificationMessage(tag = A_ROOM_ID, NotificationDrawerManager.ROOM_INVITATION_NOTIFICATION_ID)
-            showNotificationMessage(tag = null, NotificationDrawerManager.SUMMARY_NOTIFICATION_ID, A_SUMMARY_NOTIFICATION)
+            showNotificationMessage(tag = null, NotificationDrawerManager.SUMMARY_NOTIFICATION_ID, A_SUMMARY_NOTIFICATION.notification)
         }
     }
 
@@ -140,7 +141,7 @@ class NotificationRendererTest {
 
         notificationDisplayer.verifyInOrder {
             showNotificationMessage(tag = A_ROOM_ID, NotificationDrawerManager.ROOM_EVENT_NOTIFICATION_ID, A_NOTIFICATION)
-            showNotificationMessage(tag = null, NotificationDrawerManager.SUMMARY_NOTIFICATION_ID, A_SUMMARY_NOTIFICATION)
+            showNotificationMessage(tag = null, NotificationDrawerManager.SUMMARY_NOTIFICATION_ID, A_SUMMARY_NOTIFICATION.notification)
         }
     }
 
@@ -156,14 +157,14 @@ class NotificationRendererTest {
     }
 
     private fun givenNoNotifications() {
-        givenNotifications(emptyList(), emptyList(), emptyList(), USE_COMPLETE_NOTIFICATION_FORMAT, A_SUMMARY_NOTIFICATION)
+        givenNotifications(emptyList(), emptyList(), emptyList(), USE_COMPLETE_NOTIFICATION_FORMAT, A_REMOVE_SUMMARY_NOTIFICATION)
     }
 
     private fun givenNotifications(roomNotifications: List<RoomNotification> = emptyList(),
                                    invitationNotifications: List<OneShotNotification> = emptyList(),
                                    simpleNotifications: List<OneShotNotification> = emptyList(),
                                    useCompleteNotificationFormat: Boolean = USE_COMPLETE_NOTIFICATION_FORMAT,
-                                   summaryNotification: Notification = A_SUMMARY_NOTIFICATION) {
+                                   summaryNotification: SummaryNotification = A_SUMMARY_NOTIFICATION) {
         notifiableEventProcessor.givenProcessedEventsFor(AN_EVENT_LIST, A_CURRENT_ROOM_ID, A_PROCESSED_EVENTS)
         notificationFactory.givenNotificationsFor(
                 processedEvents = A_PROCESSED_EVENTS,
