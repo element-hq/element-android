@@ -25,9 +25,6 @@ interface NotifiableEvent : Serializable {
     val editedEventId: String?
     var noisy: Boolean
 
-    // NotificationCompat.VISIBILITY_PUBLIC , VISIBILITY_PRIVATE , VISIBILITY_SECRET
-    var lockScreenVisibility: Int
-
     var hasBeenDisplayed: Boolean
     var isRedacted: Boolean
 

@@ -15,7 +15,6 @@
  */
 package im.vector.app.features.notifications
 
-import androidx.core.app.NotificationCompat
 import org.matrix.android.sdk.api.session.events.model.EventType
 
 data class NotifiableMessageEvent(
@@ -41,7 +40,6 @@ data class NotifiableMessageEvent(
 
 ) : NotifiableEvent {
 
-    override var lockScreenVisibility = NotificationCompat.VISIBILITY_PUBLIC
     override var hasBeenDisplayed: Boolean = false
     override var isRedacted: Boolean = false
     override var isPushGatewayEvent: Boolean = false
