@@ -212,12 +212,16 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
     }
 
     fun clearMemberShipNotificationForRoom(roomId: String) {
-        synchronized(eventList) {
-            eventList.removeAll { e ->
-                e is InviteNotifiableEvent && e.roomId == roomId
-            }
+        val shouldUpdate = removeAll { it is InviteNotifiableEvent && it.roomId == roomId }
+        if (shouldUpdate) {
+            refreshNotificationDrawerBg()
         }
-        notificationUtils.cancelNotificationMessage(roomId, ROOM_INVITATION_NOTIFICATION_ID)
+    }
+
+    private fun removeAll(predicate: (NotifiableEvent) -> Boolean): Boolean {
+        return synchronized(eventList) {
+            eventList.removeAll(predicate)
+        }
     }
 
     private var firstThrottler = FirstThrottler(200)
