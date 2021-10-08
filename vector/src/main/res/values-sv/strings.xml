@@ -2947,4 +2947,10 @@
     <string name="call_ringing">Samtal ringer…</string>
     <string name="spaces">Utrymmen</string>
     <string name="learn_more">Lär dig mer</string>
+    <string name="space_settings_permissions_title">Utrymmesbehörigheter</string>
+    <string name="space_participants_unban_prompt_msg">Om användaren avbannas kommer denna att få gå med i utrymmet igen.</string>
+    <string name="space_participants_ban_prompt_msg">Att banna användaren kommer att kicka denne från det här utrymmet och hindra hen från att gå med igen.</string>
+    <string name="space_participants_kick_prompt_msg">att kicka användaren kommer att ta bort den från det här utrymmet.
+\n
+\nFör att hindra hen från att gå med igen så bör de banna hen istället.</string>
 </resources>
