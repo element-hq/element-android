@@ -36,6 +36,7 @@ import im.vector.app.features.ui.UiStateRepository
 import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.auth.HomeServerHistoryService
+import org.matrix.android.sdk.api.crypto.DehydrationService
 import org.matrix.android.sdk.api.legacy.LegacySessionImporter
 import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
@@ -93,6 +94,12 @@ abstract class VectorModule {
         @JvmStatic
         fun providesHomeServerHistoryService(matrix: Matrix): HomeServerHistoryService {
             return matrix.homeServerHistoryService()
+        }
+
+        @Provides
+        @JvmStatic
+        fun providesDehydrationService(matrix: Matrix): DehydrationService {
+            return matrix.dehydrationService()
         }
     }
 

@@ -23,7 +23,7 @@ import com.squareup.moshi.JsonClass
  * Representation of the response of the get dehydrated device request
  */
 @JsonClass(generateAdapter = true)
-data class GetDehydratedDeviceResponse (
+data class GetDehydratedDeviceResponse(
         /**
          * ID of the dehydrated device
          */

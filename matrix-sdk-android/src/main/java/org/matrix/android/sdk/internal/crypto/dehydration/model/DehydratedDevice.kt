@@ -23,7 +23,7 @@ import com.squareup.moshi.JsonClass
  * Representation of the JSON dehydrated device structure
  */
 @JsonClass(generateAdapter = true)
-data class DehydratedDevice (
+data class DehydratedDevice(
         /**
          * Initial device display name of the dehydrated device.
          */

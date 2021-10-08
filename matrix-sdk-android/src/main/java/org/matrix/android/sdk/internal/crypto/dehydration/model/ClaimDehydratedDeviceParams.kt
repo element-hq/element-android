@@ -20,7 +20,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class ClaimDehydratedDeviceParams (
+data class ClaimDehydratedDeviceParams(
     /**
      * Dehydrated device id to claim.
      * This is required to be sure that dehydrated device did not claim by other clients.

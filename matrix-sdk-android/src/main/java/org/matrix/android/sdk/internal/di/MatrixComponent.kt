@@ -30,6 +30,7 @@ import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.internal.SessionManager
 import org.matrix.android.sdk.internal.auth.AuthModule
 import org.matrix.android.sdk.internal.auth.SessionParamsStore
+import org.matrix.android.sdk.internal.crypto.dehydration.DehydrationModule
 import org.matrix.android.sdk.internal.raw.RawModule
 import org.matrix.android.sdk.internal.session.MockHttpInterceptor
 import org.matrix.android.sdk.internal.session.TestInterceptor
@@ -46,7 +47,8 @@ import java.io.File
     AuthModule::class,
     RawModule::class,
     SystemModule::class,
-    NoOpTestModule::class
+    NoOpTestModule::class,
+    DehydrationModule::class
 ])
 @MatrixScope
 internal interface MatrixComponent {

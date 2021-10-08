@@ -16,6 +16,8 @@
 
 package org.matrix.android.sdk.api.auth.login
 
+import org.matrix.android.sdk.api.network.ApiInterceptorListener
+import org.matrix.android.sdk.api.network.ApiPath
 import org.matrix.android.sdk.api.session.Session
 
 /**
@@ -23,7 +25,7 @@ import org.matrix.android.sdk.api.session.Session
  *
  * More documentation can be found in the file https://github.com/vector-im/element-android/blob/main/docs/signin.md
  */
-interface LoginWizard {
+interface LoginWizard : ApiInterceptorListener {
     /**
      * Get some information about a matrixId: displayName and avatar url
      */
@@ -64,4 +66,6 @@ interface LoginWizard {
      * When this method succeed, tha account password will be effectively modified.
      */
     suspend fun resetPasswordMailConfirmed()
+
+    override fun onApiResponse(path: ApiPath, response: String)
 }

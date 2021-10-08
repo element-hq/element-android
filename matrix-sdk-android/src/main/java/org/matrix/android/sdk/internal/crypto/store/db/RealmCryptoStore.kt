@@ -233,6 +233,13 @@ internal class RealmCryptoStore @Inject constructor(
         }
     }
 
+    override fun saveRehydratedOlmAccount(account: OlmAccount) {
+        doRealmTransaction(realmConfiguration) {
+            it.where<CryptoMetadataEntity>().findFirst()?.putOlmAccount(account)
+        }
+        olmAccount = account
+    }
+
     override fun getOlmAccount(): OlmAccount {
         return olmAccount!!
     }
@@ -1756,5 +1763,9 @@ internal class RealmCryptoStore @Inject constructor(
      */
     override fun logDbUsageInfo() {
         RealmDebugTools(realmConfiguration).logInfo("Crypto")
+    }
+
+    override fun hasOlmAccount(): Boolean {
+        return olmAccount != null
     }
 }

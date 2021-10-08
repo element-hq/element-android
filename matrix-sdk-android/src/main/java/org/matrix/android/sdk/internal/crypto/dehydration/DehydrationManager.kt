@@ -16,27 +16,35 @@
 
 package org.matrix.android.sdk.internal.crypto.dehydration
 
+import android.util.Base64
+import dagger.Lazy
+import okhttp3.OkHttpClient
+import org.matrix.android.sdk.api.auth.data.Credentials
+import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
+import org.matrix.android.sdk.api.crypto.DehydrationService
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.MatrixError
-import org.matrix.android.sdk.api.session.SessionLifecycleObserver
-import org.matrix.android.sdk.internal.crypto.DefaultCryptoService
+import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.internal.crypto.MXCryptoAlgorithms
+import org.matrix.android.sdk.internal.crypto.api.CryptoApi
 import org.matrix.android.sdk.internal.crypto.crosssigning.canonicalSignable
+import org.matrix.android.sdk.internal.crypto.dehydration.model.ClaimDehydratedDeviceParams
 import org.matrix.android.sdk.internal.crypto.dehydration.model.DehydratedDevice
 import org.matrix.android.sdk.internal.crypto.dehydration.model.DehydratedDeviceData
 import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceKeys
+import org.matrix.android.sdk.internal.crypto.model.rest.KeysUploadBody
 import org.matrix.android.sdk.internal.crypto.model.rest.KeysUploadResponse
-import org.matrix.android.sdk.internal.crypto.tasks.UploadKeysTask
-import org.matrix.android.sdk.internal.di.UserId
+import org.matrix.android.sdk.internal.di.Unauthenticated
+import org.matrix.android.sdk.internal.network.RetrofitFactory
+import org.matrix.android.sdk.internal.network.httpclient.addAccessTokenInterceptor
+import org.matrix.android.sdk.internal.network.httpclient.addSocketFactory
+import org.matrix.android.sdk.internal.network.token.AccessTokenProvider
 import org.matrix.android.sdk.internal.util.JsonCanonicalizer
 import org.matrix.olm.OlmAccount
 import org.matrix.olm.OlmException
 import timber.log.Timber
 import javax.inject.Inject
-import dagger.Lazy
-import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.internal.util.awaitCallback
 
 const val DehydrationAlgorithm = "org.matrix.msc2697.v1.olm.libolm_pickle"
 
@@ -56,7 +64,7 @@ sealed class DehydrationResult {
 }
 
 sealed class RehydrationResult {
-    data class Success(val deviceId: String) : RehydrationResult()
+    data class Success(val deviceId: String, val olmAccount: OlmAccount) : RehydrationResult()
     object Canceled : RehydrationResult()
 
     abstract class Failure(val error: String?) : RehydrationResult()
@@ -69,37 +77,88 @@ sealed class RehydrationResult {
 }
 
 internal class DehydrationManager @Inject constructor(
-        private val cryptoService: Lazy<DefaultCryptoService>,
-        @UserId private val userId: String,
-        private val setDehydratedDeviceTask: Lazy<SetDehydratedDeviceTask>,
-        private val uploadKeysTask: Lazy<UploadKeysTask>,
-        private val getDehydratedDeviceTask: Lazy<GetDehydratedDeviceTask>,
-        private val claimDehydratedDeviceTask: Lazy<ClaimDehydratedDeviceTask>
-): SessionLifecycleObserver {
+        private val retrofitFactory: RetrofitFactory,
+        @Unauthenticated
+        private val okHttpClient: Lazy<OkHttpClient>) : DehydrationService {
 
-    private var isSessionOpen = false
-
-    override fun onSessionStarted(session: Session) {
-        super.onSessionStarted(session)
-
-        isSessionOpen = true
+    private fun buildDehydrationApi(accessToken: String, homeServerConnectionConfig: HomeServerConnectionConfig): DehydrationApi {
+        val retrofit = retrofitFactory.create(buildClient(accessToken, homeServerConnectionConfig), homeServerConnectionConfig.homeServerUriBase.toString())
+        return retrofit.create(DehydrationApi::class.java)
     }
 
-    override fun onSessionStopped(session: Session) {
-        super.onSessionStopped(session)
-
-        isSessionOpen = false
+    private fun buildCryptoApi(accessToken: String, homeServerConnectionConfig: HomeServerConnectionConfig): CryptoApi {
+        val retrofit = retrofitFactory.create(buildClient(accessToken, homeServerConnectionConfig), homeServerConnectionConfig.homeServerUriBase.toString())
+        return retrofit.create(CryptoApi::class.java)
     }
 
-    suspend fun dehydrateDevice(deviceDisplayName: String, dehydrationKey: ByteArray): DehydrationResult {
-        //TODO manage key here
+    private fun buildClient(accessToken: String, homeServerConnectionConfig: HomeServerConnectionConfig): OkHttpClient {
+        return okHttpClient.get()
+                .newBuilder()
+                .addAccessTokenInterceptor(object : AccessTokenProvider {
+                    override fun getToken(): String {
+                        return accessToken
+                    }
+                })
+                .addSocketFactory(homeServerConnectionConfig)
+                .build()
+    }
 
-        /*
-        if (!isSessionOpen) {
-            Timber.e("[DehydrationManager] dehydrateDevice: Cannot dehydrate device if session is not open.")
-            return DehydrationResult.Canceled
+    override suspend fun rehydrateDevice(
+            credentials: Credentials,
+            homeServerConnectionConfig: HomeServerConnectionConfig,
+            dehydrationKey: String): RehydrationResult {
+        val dehydrationApi = buildDehydrationApi(credentials.accessToken, homeServerConnectionConfig)
+
+        try {
+            val dehydratedDevice = dehydrationApi.getDehydratedDevice()
+            if (dehydratedDevice.deviceId.isNullOrBlank()) {
+                Timber.d("[DehydrationManager] rehydrateDevice: No dehydrated device found.")
+                return RehydrationResult.Canceled
+            }
+
+            if (dehydratedDevice.deviceData.algorithm != DehydrationAlgorithm) {
+                Timber.e("[DehydrationManager] rehydrateDevice: Unsupported algorithm for dehydrated device ${dehydratedDevice.deviceData.algorithm}.")
+                return RehydrationResult.UnsupportedPickleAlgorithm(dehydratedDevice.deviceData.algorithm)
+            }
+
+            val account = OlmAccount()
+            val key = Base64.decode(dehydrationKey, Base64.DEFAULT)
+            account.unpickle(dehydratedDevice.deviceData.account.toByteArray(), key)
+            Timber.d("[DehydrationManager] rehydrateDevice: account unpickled ${account.identityKeys()}")
+
+            try {
+                val claimResponse = dehydrationApi.claimDehydratedDevice(ClaimDehydratedDeviceParams(dehydratedDevice.deviceId))
+                if (!claimResponse.success) {
+                    Timber.d("[DehydrationManager] rehydrateDevice: device already claimed.")
+                    return RehydrationResult.Canceled
+                }
+
+                return RehydrationResult.Success(dehydratedDevice.deviceId, account)
+            } catch (failure: Failure) {
+                Timber.e("[DehydrationManager] rehydrateDevice: claimDehydratedDeviceWithId failed with error: ${failure.localizedMessage}")
+                return RehydrationResult.FailedToClaimDehydratedDevice(failure)
+            }
+        } catch (failure: Failure) {
+            return if (failure is Failure.ServerError && failure.error.code == MatrixError.M_NOT_FOUND) {
+                Timber.d("[DehydrationManager] rehydrateDevice: No dehydrated device found.")
+                RehydrationResult.Canceled
+            } else {
+                Timber.e("[DehydrationManager] rehydrateDevice: dehydratedDeviceId failed with error: ${failure.localizedMessage}")
+                RehydrationResult.FailedToGetDehydratedDevice(failure)
+            }
+        } catch (e: Throwable) {
+            return RehydrationResult.FailedToGetDehydratedDevice(Failure.Unknown(e))
         }
-         */
+    }
+
+    override suspend fun dehydrateDevice(
+            credentials: Credentials,
+            homeServerConnectionConfig: HomeServerConnectionConfig,
+            deviceDisplayName: String,
+            dehydrationKey: ByteArray,
+            cryptoService: CryptoService): DehydrationResult {
+        val dehydrationApi = buildDehydrationApi(credentials.accessToken, homeServerConnectionConfig)
+        val cryptoApi = buildCryptoApi(credentials.accessToken, homeServerConnectionConfig)
 
         val account = OlmAccount()
         val e2eKeys = account.identityKeys()
@@ -125,9 +184,10 @@ internal class DehydrationManager @Inject constructor(
                 )
         )
 
+        val userId = credentials.userId
+
         try {
-            val deviceDehydrationParams = SetDehydratedDeviceTask.Params(dehydratedDevice)
-            val deviceDehydrationResponse = setDehydratedDeviceTask.get().execute(deviceDehydrationParams)
+            val deviceDehydrationResponse = dehydrationApi.setDehydratedDevice(dehydratedDevice)
 
             deviceDehydrationResponse.deviceId.let { deviceId ->
                 val deviceInfo = CryptoDeviceInfo(
@@ -135,7 +195,7 @@ internal class DehydrationManager @Inject constructor(
                         deviceId = deviceId,
                         keys = mapOf(
                                 "ed25519:$deviceId" to e2eKeys["ed25519"].toString(),
-                                "curve25519:$deviceId" to e2eKeys["curve25519"].toString(),
+                                "curve25519:$deviceId" to e2eKeys["curve25519"].toString()
                         ),
                         algorithms = MXCryptoAlgorithms.supportedAlgorithms()
                 )
@@ -153,17 +213,8 @@ internal class DehydrationManager @Inject constructor(
                                     )
                             )
                     )
-
-                    try {
-                        awaitCallback<Unit> { callback ->
-                            cryptoService.get().crossSigningService().trustDevice(deviceInfo.deviceId, callback)
-                        }
-                    } catch (failure: Throwable) {
-                        Timber.w("[DehydrationManager] dehydrateDevice: failed to trust dehydrated device: ${failure.localizedMessage}");
-                    }
-
                     return try {
-                        uploadOneTimeKeys(deviceId, deviceKeys, account)
+                        uploadOneTimeKeys(cryptoApi, deviceId, deviceKeys, account)
                         account.markOneTimeKeysAsPublished()
                         DehydrationResult.Success(deviceInfo.deviceId)
                     } catch (failure: Failure) {
@@ -178,61 +229,11 @@ internal class DehydrationManager @Inject constructor(
         }
     }
 
-    suspend fun rehydrateDevice(dehydrationKey: ByteArray): RehydrationResult {
-        if (isSessionOpen) {
-            Timber.e("[DehydrationManager] rehydrateDevice: Cannot rehydrate device after session is open.")
-            return RehydrationResult.Canceled
-        }
-
-        //TODO manage key here
-
-        try {
-            val dehydratedDevice = getDehydratedDeviceTask.get().execute(Unit)
-            if (dehydratedDevice.deviceId.isNullOrBlank()) {
-                Timber.d("[DehydrationManager] rehydrateDevice: No dehydrated device found.")
-                return RehydrationResult.Canceled
-            }
-
-            if (dehydratedDevice.deviceData.algorithm != DehydrationAlgorithm) {
-                Timber.e("[DehydrationManager] rehydrateDevice: Unsupported algorithm for dehydrated device ${dehydratedDevice.deviceData.algorithm}.")
-                return RehydrationResult.UnsupportedPickleAlgorithm(dehydratedDevice.deviceData.algorithm)
-            }
-
-            val account = OlmAccount()
-            account.unpickle(dehydratedDevice.deviceData.account.toByteArray(), dehydrationKey)
-
-            Timber.d("[DehydrationManager] rehydrateDevice: account unpickled ${account.identityKeys()}")
-
-            val claimResponse = claimDehydratedDeviceTask.get().execute(
-                    ClaimDehydratedDeviceTask.Params(dehydratedDevice.deviceId)
-            )
-            try {
-                if (!claimResponse.success) {
-                    Timber.d("[DehydrationManager] rehydrateDevice: device already claimed.")
-                    return RehydrationResult.Canceled
-                }
-
-                Timber.d("[DehydrationManager] rehydrateDevice: exporting dehydrated device with ID ${dehydratedDevice.deviceId}")
-                //TODO rehydrate exported OLM device
-            } catch (failure: Failure) {
-                Timber.e("[DehydrationManager] rehydrateDevice: claimDehydratedDeviceWithId failed with error: ${failure.localizedMessage}")
-                return RehydrationResult.FailedToClaimDehydratedDevice(failure)
-            }
-        } catch (failure: Failure) {
-            return if (failure is Failure.ServerError && failure.error.code == MatrixError.M_NOT_FOUND) {
-                Timber.d("[DehydrationManager] rehydrateDevice: No dehydrated device found.")
-                RehydrationResult.Canceled
-            } else {
-                Timber.e("[DehydrationManager] rehydrateDevice: dehydratedDeviceId failed with error: ${failure.localizedMessage}")
-                RehydrationResult.FailedToGetDehydratedDevice(failure)
-            }
-        }
-
-        return RehydrationResult.Canceled
-    }
-
     @Throws
-    private suspend fun uploadOneTimeKeys(deviceId: String, deviceKeys: DeviceKeys, account: OlmAccount): KeysUploadResponse {
+    private suspend fun uploadOneTimeKeys(cryptoApi: CryptoApi,
+                                          deviceId: String,
+                                          deviceKeys: DeviceKeys,
+                                          account: OlmAccount): KeysUploadResponse {
         val oneTimeJson = mutableMapOf<String, Any>()
 
         val curve25519Map = account.oneTimeKeys()
@@ -251,7 +252,10 @@ internal class DehydrationManager @Inject constructor(
 
         // For now, we set the device id explicitly, as we may not be using the
         // same one as used in login.
-        val uploadParams = UploadKeysTask.Params(deviceKeys, oneTimeJson, deviceId)
-        return uploadKeysTask.get().execute(uploadParams)
+        val body = KeysUploadBody(
+                deviceKeys = deviceKeys,
+                oneTimeKeys = oneTimeJson
+        )
+        return cryptoApi.uploadKeys(deviceId, body)
     }
 }

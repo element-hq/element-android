@@ -16,7 +16,6 @@
 
 package org.matrix.android.sdk.internal.session
 
-import android.util.Base64
 import androidx.annotation.MainThread
 import dagger.Lazy
 import io.realm.RealmConfiguration
@@ -65,9 +64,6 @@ import org.matrix.android.sdk.api.util.appendParamToUrl
 import org.matrix.android.sdk.internal.auth.SSO_UIA_FALLBACK_PATH
 import org.matrix.android.sdk.internal.auth.SessionParamsStore
 import org.matrix.android.sdk.internal.crypto.DefaultCryptoService
-import org.matrix.android.sdk.internal.crypto.dehydration.DehydrationManager
-import org.matrix.android.sdk.internal.crypto.dehydration.DehydrationResult
-import org.matrix.android.sdk.internal.crypto.dehydration.RehydrationResult
 import org.matrix.android.sdk.internal.crypto.model.MXExportedOlmDevice
 import org.matrix.android.sdk.internal.database.tools.RealmDebugTools
 import org.matrix.android.sdk.internal.di.SessionDatabase
@@ -80,8 +76,8 @@ import org.matrix.android.sdk.internal.session.sync.SyncTokenStore
 import org.matrix.android.sdk.internal.session.sync.job.SyncThread
 import org.matrix.android.sdk.internal.session.sync.job.SyncWorker
 import org.matrix.android.sdk.internal.util.createUIHandler
+import org.matrix.olm.OlmAccount
 import timber.log.Timber
-import java.nio.charset.Charset
 import javax.inject.Inject
 import javax.inject.Provider
 
@@ -134,8 +130,7 @@ internal class DefaultSession @Inject constructor(
         private val spaceService: Lazy<SpaceService>,
         private val openIdService: Lazy<OpenIdService>,
         @UnauthenticatedWithCertificate
-        private val unauthenticatedWithCertificateOkHttpClient: Lazy<OkHttpClient>,
-        private val dehydrationManager: Lazy<DehydrationManager>
+        private val unauthenticatedWithCertificateOkHttpClient: Lazy<OkHttpClient>
 ) : Session,
         GlobalErrorHandler.Listener,
         RoomService by roomService.get(),
@@ -171,8 +166,10 @@ internal class DefaultSession @Inject constructor(
     @MainThread
     override fun open() {
         assert(!isOpen)
+
         isOpen = true
         globalErrorHandler.listener = this
+        cryptoService.get().initializeDevice()
         cryptoService.get().ensureDevice()
         uiHandler.post {
             lifecycleObservers.forEach {
@@ -340,13 +337,7 @@ internal class DefaultSession @Inject constructor(
         exportedOlmDeviceToImport = exportedOlmDevice
     }
 
-    override suspend fun dehydrateDevice(dehydrationKey: String): DehydrationResult {
-        val decodedDehydrationKey = Base64.decode(dehydrationKey, Base64.DEFAULT)
-        return dehydrationManager.get().dehydrateDevice("Backup device", decodedDehydrationKey)
-    }
-
-    override suspend fun rehydrateDevice(dehydrationKey: String): RehydrationResult {
-        val decodedDehydrationKey = Base64.decode(dehydrationKey, Base64.DEFAULT)
-        return dehydrationManager.get().rehydrateDevice(decodedDehydrationKey)
+    override fun importOlmAccount(olmAccount: OlmAccount) {
+        cryptoService.get().initializeDevice(olmAccount)
     }
 }

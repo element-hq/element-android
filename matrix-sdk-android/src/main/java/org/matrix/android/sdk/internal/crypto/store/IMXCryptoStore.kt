@@ -166,10 +166,15 @@ internal interface IMXCryptoStore {
 
     /**
      * Store the end to end account for the logged-in user.
+     */
+    fun saveOlmAccount()
+
+    /**
+     * Store the exported account which is created from dehydrated device.
      *
      * @param account the account to save
      */
-    fun saveOlmAccount()
+    fun saveRehydratedOlmAccount(account: OlmAccount)
 
     /**
      * Retrieve a device for a user.
@@ -478,4 +483,6 @@ internal interface IMXCryptoStore {
     fun areDeviceKeysUploaded(): Boolean
     fun tidyUpDataBase()
     fun logDbUsageInfo()
+
+    fun hasOlmAccount(): Boolean
 }

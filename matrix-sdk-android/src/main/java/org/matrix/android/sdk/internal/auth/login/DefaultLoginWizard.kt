@@ -17,9 +17,12 @@
 package org.matrix.android.sdk.internal.auth.login
 
 import android.util.Patterns
+import org.json.JSONObject
 import org.matrix.android.sdk.api.auth.login.LoginProfileInfo
 import org.matrix.android.sdk.api.auth.login.LoginWizard
 import org.matrix.android.sdk.api.auth.registration.RegisterThreePid
+import org.matrix.android.sdk.api.extensions.tryOrNull
+import org.matrix.android.sdk.api.network.ApiPath
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.internal.auth.AuthAPI
 import org.matrix.android.sdk.internal.auth.PendingSessionStore
@@ -30,13 +33,17 @@ import org.matrix.android.sdk.internal.auth.data.TokenLoginParams
 import org.matrix.android.sdk.internal.auth.db.PendingSessionData
 import org.matrix.android.sdk.internal.auth.registration.AddThreePidRegistrationParams
 import org.matrix.android.sdk.internal.auth.registration.RegisterAddThreePidTask
+import org.matrix.android.sdk.internal.crypto.dehydration.DehydrationManager
+import org.matrix.android.sdk.internal.crypto.dehydration.RehydrationResult
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.content.DefaultContentUrlResolver
+import timber.log.Timber
 
 internal class DefaultLoginWizard(
         private val authAPI: AuthAPI,
         private val sessionCreator: SessionCreator,
-        private val pendingSessionStore: PendingSessionStore
+        private val pendingSessionStore: PendingSessionStore,
+        private val dehydrationManager: DehydrationManager
 ) : LoginWizard {
 
     private var pendingSessionData: PendingSessionData = pendingSessionStore.getPendingSessionData() ?: error("Pending session data should exist here")
@@ -45,6 +52,8 @@ internal class DefaultLoginWizard(
             authAPI,
             DefaultContentUrlResolver(pendingSessionData.homeServerConnectionConfig)
     )
+
+    private var secureBackupKey: String? = null
 
     override suspend fun getProfileInfo(matrixId: String): LoginProfileInfo {
         return getProfileTask.execute(GetProfileTask.Params(matrixId))
@@ -74,6 +83,19 @@ internal class DefaultLoginWizard(
         )
         val credentials = executeRequest(null) {
             authAPI.login(loginParams)
+        }
+
+        secureBackupKey?.let {
+            val rehydrationResult = dehydrationManager.rehydrateDevice(credentials, pendingSessionData.homeServerConnectionConfig, it)
+            Timber.d(rehydrationResult.toString())
+
+            if (rehydrationResult is RehydrationResult.Success) {
+                return sessionCreator.createSession(
+                        credentials.copy(deviceId = rehydrationResult.deviceId),
+                        pendingSessionData.homeServerConnectionConfig,
+                        rehydrationResult.olmAccount
+                )
+            }
         }
 
         return sessionCreator.createSession(credentials, pendingSessionData.homeServerConnectionConfig)
@@ -113,5 +135,9 @@ internal class DefaultLoginWizard(
 
         // Set to null?
         // resetPasswordData = null
+    }
+
+    override fun onApiResponse(path: ApiPath, response: String) {
+        secureBackupKey = tryOrNull { JSONObject(response).getString("secure_backup_key") }
     }
 }

@@ -21,13 +21,10 @@ import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.work.Configuration
 import androidx.work.WorkManager
 import com.zhuinden.monarchy.Monarchy
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import org.matrix.android.sdk.BuildConfig
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.auth.HomeServerHistoryService
+import org.matrix.android.sdk.api.crypto.DehydrationService
 import org.matrix.android.sdk.api.legacy.LegacySessionImporter
 import org.matrix.android.sdk.api.network.ApiInterceptorListener
 import org.matrix.android.sdk.api.network.ApiPath
@@ -57,6 +54,7 @@ class Matrix private constructor(context: Context, matrixConfiguration: MatrixCo
     @Inject internal lateinit var sessionManager: SessionManager
     @Inject internal lateinit var homeServerHistoryService: HomeServerHistoryService
     @Inject internal lateinit var apiInterceptor: ApiInterceptor
+    @Inject internal lateinit var dehydrationService: DehydrationService
 
     init {
         Monarchy.init(context)
@@ -88,6 +86,8 @@ class Matrix private constructor(context: Context, matrixConfiguration: MatrixCo
     fun unregisterApiInterceptorListener(path: ApiPath, listener: ApiInterceptorListener) {
         apiInterceptor.removeListener(path, listener)
     }
+
+    fun dehydrationService() = dehydrationService
 
     companion object {
 

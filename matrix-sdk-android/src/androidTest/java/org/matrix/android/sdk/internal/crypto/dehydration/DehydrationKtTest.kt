@@ -17,10 +17,6 @@
 package org.matrix.android.sdk.internal.crypto.dehydration
 
 import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import org.amshove.kluent.internal.assertEquals
 import org.junit.FixMethodOrder
 import org.junit.Test
 import org.junit.runner.RunWith

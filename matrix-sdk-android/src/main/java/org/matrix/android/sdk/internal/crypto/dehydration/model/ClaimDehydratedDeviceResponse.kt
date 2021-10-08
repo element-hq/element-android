@@ -23,7 +23,7 @@ import com.squareup.moshi.JsonClass
  * Representation of the response of the claim dehydrated device request
  */
 @JsonClass(generateAdapter = true)
-data class ClaimDehydratedDeviceResponse (
+data class ClaimDehydratedDeviceResponse(
         /**
          * True if the dehydrated device has been properly claimed. False otherwise.
          */

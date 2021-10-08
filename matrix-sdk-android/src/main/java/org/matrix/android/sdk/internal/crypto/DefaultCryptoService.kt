@@ -94,6 +94,7 @@ import org.matrix.android.sdk.internal.task.configureWith
 import org.matrix.android.sdk.internal.task.launchToCallback
 import org.matrix.android.sdk.internal.util.JsonCanonicalizer
 import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
+import org.matrix.olm.OlmAccount
 import org.matrix.olm.OlmManager
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
@@ -289,6 +290,10 @@ internal class DefaultCryptoService @Inject constructor(
      */
     fun isStarting(): Boolean {
         return isStarting.get()
+    }
+
+    fun initializeDevice(olmAccount: OlmAccount? = null) {
+        olmDevice.initialize(olmAccount)
     }
 
     /**

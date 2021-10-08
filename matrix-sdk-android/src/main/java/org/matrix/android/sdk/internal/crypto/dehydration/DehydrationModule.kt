@@ -18,33 +18,11 @@ package org.matrix.android.sdk.internal.crypto.dehydration
 
 import dagger.Binds
 import dagger.Module
-import dagger.Provides
-import org.commonmark.parser.Parser
-import org.commonmark.renderer.html.HtmlRenderer
-import org.matrix.android.sdk.internal.session.SessionScope
-import org.matrix.android.sdk.internal.session.directory.DirectoryAPI
-import org.matrix.android.sdk.internal.session.room.RoomAPI
-import retrofit2.Retrofit
+import org.matrix.android.sdk.api.crypto.DehydrationService
 
 @Module
 internal abstract class DehydrationModule {
 
-    @Module
-    companion object {
-        @Provides
-        @JvmStatic
-        @SessionScope
-        fun providesDehydrationAPI(retrofit: Retrofit): DehydrationApi {
-            return retrofit.create(DehydrationApi::class.java)
-        }
-    }
-
     @Binds
-    abstract fun bindSetDehydratedDeviceTask(factory: DefaultSetDehydratedDeviceTaskFactory): SetDehydratedDeviceTask
-
-    @Binds
-    abstract fun bindGetDehydratedDeviceTask(factory: DefaultGetDehydratedDeviceTaskFactory): GetDehydratedDeviceTask
-
-    @Binds
-    abstract fun bindClaimDehydratedDeviceTask(factory: DefaultClaimDehydratedDeviceTaskFactory): ClaimDehydratedDeviceTask
+    abstract fun bindDehydrationService(service: DehydrationManager): DehydrationService
 }

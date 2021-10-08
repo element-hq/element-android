@@ -23,7 +23,7 @@ import com.squareup.moshi.JsonClass
  * Class representing the `device_data` part of the dehydrated device JSON object
  */
 @JsonClass(generateAdapter = true)
-data class DehydratedDeviceData (
+data class DehydratedDeviceData(
         /**
          * Type of the algorithm used for pickling the account data. Should be "m.dehydration.v1.olm"
          */

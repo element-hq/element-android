@@ -23,11 +23,12 @@ import org.matrix.android.sdk.api.auth.data.SessionParams
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.internal.SessionManager
+import org.matrix.olm.OlmAccount
 import timber.log.Timber
 import javax.inject.Inject
 
 internal interface SessionCreator {
-    suspend fun createSession(credentials: Credentials, homeServerConnectionConfig: HomeServerConnectionConfig): Session
+    suspend fun createSession(credentials: Credentials, homeServerConnectionConfig: HomeServerConnectionConfig, olmAccount: OlmAccount? = null): Session
 }
 
 internal class DefaultSessionCreator @Inject constructor(
@@ -41,7 +42,7 @@ internal class DefaultSessionCreator @Inject constructor(
      * Credentials can affect the homeServerConnectionConfig, override homeserver url and/or
      * identity server url if provided in the credentials
      */
-    override suspend fun createSession(credentials: Credentials, homeServerConnectionConfig: HomeServerConnectionConfig): Session {
+    override suspend fun createSession(credentials: Credentials, homeServerConnectionConfig: HomeServerConnectionConfig, olmAccount: OlmAccount?): Session {
         // We can cleanup the pending session params
         pendingSessionStore.delete()
 
@@ -81,5 +82,8 @@ internal class DefaultSessionCreator @Inject constructor(
 
         sessionParamsStore.save(sessionParams)
         return sessionManager.getOrCreateSession(sessionParams)
+                .apply {
+                    olmAccount?.let { importOlmAccount(it) }
+                }
     }
 }

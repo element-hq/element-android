@@ -57,10 +57,8 @@ import org.matrix.android.sdk.api.session.thirdparty.ThirdPartyService
 import org.matrix.android.sdk.api.session.typing.TypingUsersTracker
 import org.matrix.android.sdk.api.session.user.UserService
 import org.matrix.android.sdk.api.session.widgets.WidgetService
-import org.matrix.android.sdk.internal.crypto.dehydration.DehydrationManager
-import org.matrix.android.sdk.internal.crypto.dehydration.DehydrationResult
-import org.matrix.android.sdk.internal.crypto.dehydration.RehydrationResult
 import org.matrix.android.sdk.internal.crypto.model.MXExportedOlmDevice
+import org.matrix.olm.OlmAccount
 
 /**
  * This interface defines interactions with a session.
@@ -294,7 +292,5 @@ interface Session :
 
     fun importOlmDevice(deviceId: String, exportedOlmDevice: MXExportedOlmDevice)
 
-    suspend fun dehydrateDevice(dehydrationKey: String): DehydrationResult
-
-    suspend fun rehydrateDevice(dehydrationKey: String): RehydrationResult
+    fun importOlmAccount(olmAccount: OlmAccount)
 }

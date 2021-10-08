@@ -63,6 +63,7 @@ import im.vector.app.features.ui.UiStateRepository
 import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.auth.HomeServerHistoryService
+import org.matrix.android.sdk.api.crypto.DehydrationService
 import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
 import javax.inject.Singleton
@@ -166,6 +167,8 @@ interface VectorComponent {
     fun webRtcCallManager(): WebRtcCallManager
 
     fun jitsiActiveConferenceHolder(): JitsiActiveConferenceHolder
+
+    fun dehydrationService(): DehydrationService
 
     @Component.Factory
     interface Factory {

@@ -42,6 +42,7 @@ import org.matrix.android.sdk.internal.auth.registration.DefaultRegistrationWiza
 import org.matrix.android.sdk.internal.auth.version.Versions
 import org.matrix.android.sdk.internal.auth.version.isLoginAndRegistrationSupportedBySdk
 import org.matrix.android.sdk.internal.auth.version.isSupportedBySdk
+import org.matrix.android.sdk.internal.crypto.dehydration.DehydrationManager
 import org.matrix.android.sdk.internal.di.Unauthenticated
 import org.matrix.android.sdk.internal.network.RetrofitFactory
 import org.matrix.android.sdk.internal.network.executeRequest
@@ -60,7 +61,8 @@ internal class DefaultAuthenticationService @Inject constructor(
         private val sessionCreator: SessionCreator,
         private val pendingSessionStore: PendingSessionStore,
         private val getWellknownTask: GetWellknownTask,
-        private val directLoginTask: DirectLoginTask
+        private val directLoginTask: DirectLoginTask,
+        private val dehydrationManager: DehydrationManager
 ) : AuthenticationService {
 
     private var pendingSessionData: PendingSessionData? = pendingSessionStore.getPendingSessionData()
@@ -333,7 +335,8 @@ internal class DefaultAuthenticationService @Inject constructor(
                         DefaultLoginWizard(
                                 buildAuthAPI(it),
                                 sessionCreator,
-                                pendingSessionStore
+                                pendingSessionStore,
+                                dehydrationManager
                         ).also {
                             currentLoginWizard = it
                         }

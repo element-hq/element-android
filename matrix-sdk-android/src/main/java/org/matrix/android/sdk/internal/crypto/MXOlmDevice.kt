@@ -88,10 +88,16 @@ internal class MXOlmDevice @Inject constructor(
     // The second level keys are strings of form "<senderKey>|<session_id>|<message_index>"
     private val inboundGroupSessionMessageIndexes: MutableMap<String, MutableSet<String>> = HashMap()
 
-    init {
+    fun initialize(rehydratedAccount: OlmAccount?) {
+        if (store.hasOlmAccount()) return
+
         // Retrieve the account from the store
         try {
-            store.getOrCreateOlmAccount()
+            rehydratedAccount?.let {
+                store.saveRehydratedOlmAccount(it)
+            } ?: run {
+                store.getOrCreateOlmAccount()
+            }
         } catch (e: Exception) {
             Timber.e(e, "MXOlmDevice : cannot initialize olmAccount")
         }
