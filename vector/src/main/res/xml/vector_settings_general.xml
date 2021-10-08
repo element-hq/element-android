@@ -87,7 +87,6 @@
         <im.vector.app.core.preference.VectorPreference
             android:key="SETTINGS_IDENTITY_SERVER_PREFERENCE_KEY"
             android:title="@string/settings_identity_server"
-            app:fragment="im.vector.app.features.discovery.DiscoverySettingsFragment"
             tools:summary="https://identity.server.url" />
 
         <im.vector.app.core.preference.VectorPreference
