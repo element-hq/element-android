@@ -27,10 +27,10 @@ import android.view.MenuItem
 import androidx.core.view.GravityCompat
 import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.lifecycle.lifecycleScope
-import com.airbnb.mvrx.Mavericks
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.lifecycleScope
+import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -74,7 +74,6 @@ import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
 import im.vector.app.features.workers.signout.ServerBackupStatusViewState
 import im.vector.app.push.fcm.FcmHelper
-import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.session.initsync.SyncStatusService
@@ -319,8 +318,8 @@ class HomeActivity :
                         buildTask = true
                 )
                 if (!isHandled) {
-                    val isMatrixToLink = deepLink.startsWith(PermalinkService.MATRIX_TO_URL_BASE)
-                            || deepLink.startsWith(MATRIX_TO_CUSTOM_SCHEME_URL_BASE)
+                    val isMatrixToLink = deepLink.startsWith(PermalinkService.MATRIX_TO_URL_BASE) ||
+                            deepLink.startsWith(MATRIX_TO_CUSTOM_SCHEME_URL_BASE)
                     MaterialAlertDialogBuilder(this@HomeActivity)
                             .setTitle(R.string.dialog_title_error)
                             .setMessage(if (isMatrixToLink) R.string.permalink_malformed else R.string.universal_link_malformed)

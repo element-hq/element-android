@@ -58,8 +58,7 @@ class CrossSigningSettingsViewModel @AssistedInject constructor(
         combine(
                 session.flow().liveMyDevicesInfo(),
                 session.flow().liveCrossSigningInfo(session.myUserId)
-        )
-        { myDevicesInfo, mxCrossSigningInfo ->
+        ) { myDevicesInfo, mxCrossSigningInfo ->
             myDevicesInfo to mxCrossSigningInfo
         }
         .execute { data ->

@@ -125,8 +125,7 @@ class DevicesViewModel @AssistedInject constructor(
         combine(
                 session.flow().liveUserCryptoDevices(session.myUserId),
                 session.flow().liveMyDevicesInfo()
-        )
-        { cryptoList, infoList ->
+        ) { cryptoList, infoList ->
             infoList
                     .sortedByDescending { it.lastSeenTs }
                     .map { deviceInfo ->

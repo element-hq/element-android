@@ -33,7 +33,6 @@ import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.Event
-import org.matrix.android.sdk.rx.asObservable
 
 data class GossipingEventsPaperTrailState(
         val events: Async<PagedList<Event>> = Uninitialized

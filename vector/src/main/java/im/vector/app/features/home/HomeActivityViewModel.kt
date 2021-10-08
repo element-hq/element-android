@@ -51,7 +51,6 @@ import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.internal.util.awaitCallback
-import org.matrix.android.sdk.rx.asObservable
 import timber.log.Timber
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume

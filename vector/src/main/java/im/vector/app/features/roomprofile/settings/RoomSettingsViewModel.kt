@@ -301,7 +301,7 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
                 _viewEvents.post(RoomSettingsViewEvents.Success)
             } catch (failure: Throwable) {
                 _viewEvents.post(RoomSettingsViewEvents.Failure(failure))
-            }finally {
+            } finally {
                 updateLoadingState(isLoading = false)
             }
         }

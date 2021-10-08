@@ -27,19 +27,14 @@ import im.vector.app.R
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
-import io.reactivex.Observable
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.subscribe
-import kotlinx.coroutines.flow.switchMap
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -86,7 +81,7 @@ class RequireActiveMembershipViewModel @AssistedInject constructor(
         roomIdFlow
                 .unwrap()
                 .flatMapLatest { roomId ->
-                    val room = session.getRoom(roomId) ?: return@flatMapLatest flow{
+                    val room = session.getRoom(roomId) ?: return@flatMapLatest flow {
                         val emptyResult = Optional.empty<RequireActiveMembershipViewEvents.RoomLeft>()
                         emit(emptyResult)
                     }

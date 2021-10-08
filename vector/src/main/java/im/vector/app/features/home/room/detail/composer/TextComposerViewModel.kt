@@ -17,7 +17,7 @@
 package im.vector.app.features.home.room.detail.composer
 
 import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -707,7 +707,7 @@ class TextComposerViewModel @AssistedInject constructor(
         fun create(initialState: TextComposerViewState): TextComposerViewModel
     }
 
-    companion object : MvRxViewModelFactory<TextComposerViewModel, TextComposerViewState> {
+    companion object : MavericksViewModelFactory<TextComposerViewModel, TextComposerViewState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: TextComposerViewState): TextComposerViewModel {

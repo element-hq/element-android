@@ -36,8 +36,8 @@ class FlowRoom(private val room: Room) {
 
     fun liveRoomSummary(): Flow<Optional<RoomSummary>> {
         return room.getRoomSummaryLive().asFlow()
-                .startWith { 
-                    room.roomSummary().toOptional() 
+                .startWith {
+                    room.roomSummary().toOptional()
                 }
     }
 

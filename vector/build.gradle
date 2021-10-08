@@ -378,6 +378,7 @@ dependencies {
     kapt libs.airbnb.epoxyProcessor
     implementation libs.airbnb.epoxyPaging
     implementation libs.airbnb.mavericks
+    //TODO: remove when entirely migrated to Flow
     implementation libs.airbnb.mavericksRx
 
     // Work

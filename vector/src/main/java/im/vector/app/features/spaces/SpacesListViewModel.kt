@@ -33,13 +33,11 @@ import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.group
 import im.vector.app.space
-import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.observeOn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.sample
 import kotlinx.coroutines.launch
@@ -60,8 +58,6 @@ import org.matrix.android.sdk.api.session.space.model.SpaceOrderContent
 import org.matrix.android.sdk.api.session.space.model.TopLevelSpaceComparator
 import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.flow.flow
-import org.matrix.android.sdk.rx.asObservable
-import java.util.concurrent.TimeUnit
 
 class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: SpaceListViewState,
                                                       private val appStateHandler: AppStateHandler,
@@ -92,7 +88,7 @@ class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: Sp
                 .asFlow()
                 .setOnEach {
                     copy(
-                            myMxItem = it?.getOrNull()?.toMatrixItem()?.let { Success(it) } ?: Loading()
+                            myMxItem = it.getOrNull()?.toMatrixItem()?.let { Success(it) } ?: Loading()
                     )
                 }
 

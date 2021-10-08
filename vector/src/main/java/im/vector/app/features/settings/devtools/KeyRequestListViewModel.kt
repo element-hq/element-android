@@ -35,7 +35,6 @@ import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.internal.crypto.IncomingRoomKeyRequest
 import org.matrix.android.sdk.internal.crypto.OutgoingRoomKeyRequest
-import org.matrix.android.sdk.rx.asObservable
 
 data class KeyRequestListViewState(
         val incomingRequests: Async<PagedList<IncomingRoomKeyRequest>> = Uninitialized,

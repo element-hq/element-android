@@ -28,7 +28,6 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
-import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
@@ -37,7 +36,6 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.switchMap
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.extensions.orFalse
@@ -99,11 +97,9 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
                         .liveStateEvent(EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.NoCondition)
                         .mapOptional { it.content.toModel<PowerLevelsContent>() }
                         .unwrap()
-        )
-        { roomMembers, powerLevelsContent ->
+        ) { roomMembers, powerLevelsContent ->
             buildRoomMemberSummaries(powerLevelsContent, roomMembers)
         }
-
                 .execute { async ->
                     copy(roomMemberSummaries = async)
                 }

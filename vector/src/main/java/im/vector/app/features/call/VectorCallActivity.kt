@@ -631,10 +631,11 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
         const val INCOMING_ACCEPT = "INCOMING_ACCEPT"
 
         fun newIntent(context: Context, call: WebRtcCall, mode: String?): Intent {
+            val callArgs = CallArgs(call.nativeRoomId, call.callId, call.mxCall.opponentUserId, !call.mxCall.isOutgoing, call.mxCall.isVideoCall)
             return Intent(context, VectorCallActivity::class.java).apply {
                 // what could be the best flags?
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                putExtra(Mavericks.KEY_ARG, CallArgs(call.nativeRoomId, call.callId, call.mxCall.opponentUserId, !call.mxCall.isOutgoing, call.mxCall.isVideoCall))
+                putExtra(Mavericks.KEY_ARG, callArgs)
                 putExtra(EXTRA_MODE, mode)
             }
         }
@@ -646,10 +647,11 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                       isIncomingCall: Boolean,
                       isVideoCall: Boolean,
                       mode: String?): Intent {
+            val callArgs = CallArgs(signalingRoomId, callId, otherUserId, isIncomingCall, isVideoCall)
             return Intent(context, VectorCallActivity::class.java).apply {
                 // what could be the best flags?
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                putExtra(Mavericks.KEY_ARG, CallArgs(signalingRoomId, callId, otherUserId, isIncomingCall, isVideoCall))
+                putExtra(Mavericks.KEY_ARG, callArgs)
                 putExtra(EXTRA_MODE, mode)
             }
         }
