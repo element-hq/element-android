@@ -116,6 +116,7 @@ import im.vector.app.features.roomprofile.permissions.RoomPermissionsFragment
 import im.vector.app.features.roomprofile.settings.RoomSettingsFragment
 import im.vector.app.features.roomprofile.settings.joinrule.RoomJoinRuleChooseRestrictedFragment
 import im.vector.app.features.roomprofile.settings.joinrule.RoomJoinRuleFragment
+import im.vector.app.features.roomprofile.settings.linkaccess.TchapRoomLinkAccessFragment
 import im.vector.app.features.roomprofile.uploads.RoomUploadsFragment
 import im.vector.app.features.roomprofile.uploads.files.RoomUploadsFilesFragment
 import im.vector.app.features.roomprofile.uploads.media.RoomUploadsMediaFragment
@@ -864,4 +865,9 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(SpaceLeaveAdvancedFragment::class)
     fun bindSpaceLeaveAdvancedFragment(fragment: SpaceLeaveAdvancedFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(TchapRoomLinkAccessFragment::class)
+    fun bindTchapRoomLinkAccessFragment(fragment: TchapRoomLinkAccessFragment): Fragment
 }

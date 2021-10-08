@@ -30,6 +30,7 @@ import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
+import im.vector.app.core.extensions.addFragmentToBackstack
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.exhaustive
@@ -46,6 +47,7 @@ import im.vector.app.features.roomprofile.settings.historyvisibility.RoomHistory
 import im.vector.app.features.roomprofile.settings.historyvisibility.RoomHistoryVisibilitySharedActionViewModel
 import im.vector.app.features.roomprofile.settings.joinrule.RoomJoinRuleActivity
 import im.vector.app.features.roomprofile.settings.joinrule.RoomJoinRuleSharedActionViewModel
+import im.vector.app.features.roomprofile.settings.linkaccess.TchapRoomLinkAccessFragment
 import org.matrix.android.sdk.api.session.room.model.GuestAccess
 import org.matrix.android.sdk.api.util.toMatrixItem
 import java.util.UUID
@@ -183,6 +185,10 @@ class RoomSettingsFragment @Inject constructor(
         startActivity(RoomJoinRuleActivity.newIntent(requireContext(), roomProfileArgs.roomId))
     }
 
+    override fun onAccessByLinkClicked() {
+        addFragmentToBackstack(R.id.simpleFragmentContainer, TchapRoomLinkAccessFragment::class.java, roomProfileArgs)
+    }
+
     override fun onToggleGuestAccess() = withState(viewModel) { state ->
         val currentGuestAccess = state.newRoomJoinRules.newGuestAccess ?: state.currentGuestAccess
         val toggled = if (currentGuestAccess == GuestAccess.Forbidden) GuestAccess.CanJoin else GuestAccess.Forbidden
@@ -230,10 +236,6 @@ class RoomSettingsFragment @Inject constructor(
 
     override fun onAvatarChange() {
         galleryOrCameraDialogHelper.show()
-    }
-
-    override fun onAccessByLinkClicked() {
-        context?.toast("Not implemented yet.")
     }
 
     private var ignoreChanges = false
