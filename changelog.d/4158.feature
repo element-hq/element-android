@@ -1,1 +1,0 @@
-Handle 8 new slash commands: `/ignore`, `/unignore`, `/roomname`, `/myroomnick`, `/roomavatar`, `/myroomavatar`, `/lenny`, `/whois`.
