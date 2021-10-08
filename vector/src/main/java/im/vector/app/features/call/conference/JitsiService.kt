@@ -22,6 +22,7 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.ensureProtocol
 import im.vector.app.core.utils.toBase32String
 import im.vector.app.features.call.conference.jwt.JitsiJWTFactory
+import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.raw.wellknown.getElementWellknown
 import im.vector.app.features.settings.VectorLocale
 import im.vector.app.features.themes.ThemeProvider

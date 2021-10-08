@@ -21,8 +21,8 @@ import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 
-class ReadMarkerVisibilityStateChangedListener(private val callback: TimelineEventController.Callback?)
-    : VectorEpoxyModel.OnVisibilityStateChangedListener {
+class ReadMarkerVisibilityStateChangedListener(private val callback: TimelineEventController.Callback?) :
+    VectorEpoxyModel.OnVisibilityStateChangedListener {
 
     override fun onVisibilityStateChanged(visibilityState: Int) {
         if (visibilityState == VisibilityState.VISIBLE) {
@@ -32,8 +32,8 @@ class ReadMarkerVisibilityStateChangedListener(private val callback: TimelineEve
 }
 
 class TimelineEventVisibilityStateChangedListener(private val callback: TimelineEventController.Callback?,
-                                                  private val event: TimelineEvent)
-    : VectorEpoxyModel.OnVisibilityStateChangedListener {
+                                                  private val event: TimelineEvent) :
+    VectorEpoxyModel.OnVisibilityStateChangedListener {
 
     override fun onVisibilityStateChanged(visibilityState: Int) {
         if (visibilityState == VisibilityState.VISIBLE) {
@@ -45,8 +45,8 @@ class TimelineEventVisibilityStateChangedListener(private val callback: Timeline
 }
 
 class MergedTimelineEventVisibilityStateChangedListener(private val callback: TimelineEventController.Callback?,
-                                                        private val events: List<TimelineEvent>)
-    : VectorEpoxyModel.OnVisibilityStateChangedListener {
+                                                        private val events: List<TimelineEvent>) :
+    VectorEpoxyModel.OnVisibilityStateChangedListener {
 
     override fun onVisibilityStateChanged(visibilityState: Int) {
         if (visibilityState == VisibilityState.VISIBLE) {

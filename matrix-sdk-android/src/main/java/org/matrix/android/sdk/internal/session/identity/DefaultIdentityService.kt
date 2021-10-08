@@ -320,12 +320,12 @@ internal class DefaultIdentityService @Inject constructor(
 }
 
 private fun Throwable.isInvalidToken(): Boolean {
-    return this is Failure.ServerError
-            && httpCode == HttpsURLConnection.HTTP_UNAUTHORIZED /* 401 */
+    return this is Failure.ServerError &&
+            httpCode == HttpsURLConnection.HTTP_UNAUTHORIZED /* 401 */
 }
 
 private fun Throwable.isTermsNotSigned(): Boolean {
-    return this is Failure.ServerError
-            && httpCode == HttpsURLConnection.HTTP_FORBIDDEN /* 403 */
-            && error.code == MatrixError.M_TERMS_NOT_SIGNED
+    return this is Failure.ServerError &&
+            httpCode == HttpsURLConnection.HTTP_FORBIDDEN && /* 403 */
+            error.code == MatrixError.M_TERMS_NOT_SIGNED
 }

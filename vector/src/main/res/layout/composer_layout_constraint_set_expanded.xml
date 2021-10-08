@@ -184,7 +184,7 @@
         android:contentDescription="@string/send"
         android:scaleType="center"
         android:src="@drawable/ic_send"
-        android:visibility="gone"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/composer_preview_barrier"

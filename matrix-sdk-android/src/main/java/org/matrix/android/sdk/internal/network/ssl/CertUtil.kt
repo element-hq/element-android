@@ -16,9 +16,9 @@
 
 package org.matrix.android.sdk.internal.network.ssl
 
-import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import okhttp3.ConnectionSpec
 import okhttp3.internal.tls.OkHostnameVerifier
+import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import timber.log.Timber
 import java.security.KeyStore
 import java.security.MessageDigest

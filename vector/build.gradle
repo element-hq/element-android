@@ -14,7 +14,7 @@ kapt {
 // Note: 2 digits max for each value
 ext.versionMajor = 1
 ext.versionMinor = 3
-ext.versionPatch = 1
+ext.versionPatch = 2
 
 static def getGitTimestamp() {
     def cmd = 'git show -s --format=%ct'
@@ -361,7 +361,7 @@ dependencies {
     implementation 'com.facebook.stetho:stetho:1.6.0'
 
     // Phone number https://github.com/google/libphonenumber
-    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.33'
+    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.34'
 
     // rx
     implementation libs.rx.rxKotlin
@@ -412,7 +412,7 @@ dependencies {
     implementation 'com.nulab-inc:zxcvbn:1.5.2'
 
     // To convert voice message on old platforms
-    implementation 'com.arthenica:ffmpeg-kit-audio:4.4.LTS'
+    implementation 'com.arthenica:ffmpeg-kit-audio:4.5.LTS'
 
     // Alerter
     implementation 'com.tapadoo.android:alerter:7.0.1'

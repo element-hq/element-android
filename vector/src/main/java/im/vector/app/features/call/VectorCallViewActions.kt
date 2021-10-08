@@ -25,9 +25,9 @@ sealed class VectorCallViewActions : VectorViewModelAction {
     object DeclineCall : VectorCallViewActions()
     object ToggleMute : VectorCallViewActions()
     object ToggleVideo : VectorCallViewActions()
-    object ToggleHoldResume: VectorCallViewActions()
+    object ToggleHoldResume : VectorCallViewActions()
     data class ChangeAudioDevice(val device: CallAudioManager.Device) : VectorCallViewActions()
-    object OpenDialPad: VectorCallViewActions()
+    object OpenDialPad : VectorCallViewActions()
     data class SendDtmfDigit(val digit: String) : VectorCallViewActions()
     data class SwitchCall(val callArgs: CallArgs) : VectorCallViewActions()
 
@@ -36,5 +36,5 @@ sealed class VectorCallViewActions : VectorViewModelAction {
     object ToggleCamera : VectorCallViewActions()
     object ToggleHDSD : VectorCallViewActions()
     object InitiateCallTransfer : VectorCallViewActions()
-    object TransferCall: VectorCallViewActions()
+    object TransferCall : VectorCallViewActions()
 }

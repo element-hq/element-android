@@ -46,8 +46,8 @@ class DisplayableEventFormatter @Inject constructor(
             return noticeEventFormatter.formatRedactedEvent(timelineEvent.root)
         }
 
-        if (timelineEvent.root.isEncrypted()
-                && timelineEvent.root.mxDecryptionResult == null) {
+        if (timelineEvent.root.isEncrypted() &&
+                timelineEvent.root.mxDecryptionResult == null) {
             return stringProvider.getString(R.string.encrypted_message)
         }
 

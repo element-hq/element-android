@@ -21,14 +21,14 @@ import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
+import org.matrix.android.sdk.api.session.sync.model.SyncResponse
+import org.matrix.android.sdk.api.session.sync.model.ToDeviceSyncResponse
 import org.matrix.android.sdk.internal.crypto.DefaultCryptoService
 import org.matrix.android.sdk.internal.crypto.MXEventDecryptionResult
 import org.matrix.android.sdk.internal.crypto.algorithms.olm.OlmDecryptionResult
 import org.matrix.android.sdk.internal.crypto.model.event.OlmEventContent
 import org.matrix.android.sdk.internal.crypto.verification.DefaultVerificationService
 import org.matrix.android.sdk.internal.session.initsync.ProgressReporter
-import org.matrix.android.sdk.internal.session.sync.model.SyncResponse
-import org.matrix.android.sdk.internal.session.sync.model.ToDeviceSyncResponse
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -42,8 +42,8 @@ internal class CryptoSyncHandler @Inject constructor(private val cryptoService: 
             // Decrypt event if necessary
             Timber.i("## CRYPTO | To device event from ${event.senderId} of type:${event.type}")
             decryptToDeviceEvent(event, null)
-            if (event.getClearType() == EventType.MESSAGE
-                    && event.getClearContent()?.toModel<MessageContent>()?.msgType == "m.bad.encrypted") {
+            if (event.getClearType() == EventType.MESSAGE &&
+                    event.getClearContent()?.toModel<MessageContent>()?.msgType == "m.bad.encrypted") {
                 Timber.e("## CRYPTO | handleToDeviceEvent() : Warning: Unable to decrypt to-device event : ${event.content}")
             } else {
                 verificationService.onToDeviceEvent(event)

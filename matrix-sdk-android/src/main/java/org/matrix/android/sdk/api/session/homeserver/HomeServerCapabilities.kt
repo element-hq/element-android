@@ -89,7 +89,7 @@ data class HomeServerCapabilities(
      * You can also use #isFeatureSupported prior to this call to check if the
      * feature is supported and report some feedback to user.
      */
-    fun versionOverrideForFeature(feature: String) : String? {
+    fun versionOverrideForFeature(feature: String): String? {
         val cap = roomVersions?.capabilities?.get(feature)
         return cap?.preferred ?: cap?.support?.lastOrNull()
     }

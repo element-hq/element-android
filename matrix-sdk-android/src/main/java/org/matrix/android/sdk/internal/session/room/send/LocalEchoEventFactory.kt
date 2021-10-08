@@ -165,8 +165,8 @@ internal class LocalEchoEventFactory @Inject constructor(
                                  newBodyAutoMarkdown: Boolean,
                                  msgType: String,
                                  compatibilityText: String): Event {
-        val permalink = permalinkFactory.createPermalink(roomId, originalEvent.root.eventId ?: "")
-        val userLink = originalEvent.root.senderId?.let { permalinkFactory.createPermalink(it) } ?: ""
+        val permalink = permalinkFactory.createPermalink(roomId, originalEvent.root.eventId ?: "", false)
+        val userLink = originalEvent.root.senderId?.let { permalinkFactory.createPermalink(it, false) } ?: ""
 
         val body = bodyForReply(originalEvent.getLastMessageContent(), originalEvent.isReply())
         val replyFormatted = REPLY_PATTERN.format(
@@ -350,9 +350,9 @@ internal class LocalEchoEventFactory @Inject constructor(
                              autoMarkdown: Boolean): Event? {
         // Fallbacks and event representation
         // TODO Add error/warning logs when any of this is null
-        val permalink = permalinkFactory.createPermalink(eventReplied.root) ?: return null
+        val permalink = permalinkFactory.createPermalink(eventReplied.root, false) ?: return null
         val userId = eventReplied.root.senderId ?: return null
-        val userLink = permalinkFactory.createPermalink(userId) ?: return null
+        val userLink = permalinkFactory.createPermalink(userId, false) ?: return null
 
         val body = bodyForReply(eventReplied.getLastMessageContent(), eventReplied.isReply())
         val replyFormatted = REPLY_PATTERN.format(

@@ -2550,7 +2550,6 @@
     <string name="direct_room_user_list_recent_title">Recenti</string>
     <string name="qr_code">Codice QR</string>
     <string name="add_by_qr_code">Aggiungi da codice QR</string>
-    <string name="user_directory_search_hint">Cerca per nome o ID</string>
     <string name="permissions_denied_qr_code">Per scansionare un codice QR devi permettere l\'accesso alla fotocamera.</string>
     <string name="permissions_denied_add_contact">Autorizza ad accedere ai tuoi contatti.</string>
     <string name="start_chatting">Inizia a chattare</string>
@@ -2732,8 +2731,6 @@
     <string name="spaces_beta_welcome_to_spaces_desc">Gli Spazi sono un nuovo modo per raggruppare stanze e contatti.</string>
     <string name="spaces_beta_welcome_to_spaces">Benvenuto negli Spazi!</string>
     <string name="space_add_existing_rooms">Aggiungi stanze e Spazi esistenti</string>
-    <!-- TO BE REMOVED -->
-    <string name="space_leave_prompt_msg">Vuoi veramente uscire dallo Spazio\?</string>
     <string name="leave_space">Esci dallo Spazio</string>
     <string name="space_add_child_title">Aggiungi stanze</string>
     <string name="space_explore_activity_title">Guarda le stanze</string>

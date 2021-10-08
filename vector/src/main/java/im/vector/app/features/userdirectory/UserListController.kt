@@ -29,6 +29,7 @@ import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.genericPillItem
+import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.AvatarRenderer
 import me.gujun.android.span.span
 import org.matrix.android.sdk.api.session.Session

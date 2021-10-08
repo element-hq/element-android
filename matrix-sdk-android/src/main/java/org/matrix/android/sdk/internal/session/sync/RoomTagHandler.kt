@@ -16,10 +16,10 @@
 
 package org.matrix.android.sdk.internal.session.sync
 
+import io.realm.Realm
 import org.matrix.android.sdk.api.session.room.model.tag.RoomTagContent
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
 import org.matrix.android.sdk.internal.database.model.RoomTagEntity
-import io.realm.Realm
 import org.matrix.android.sdk.internal.database.query.getOrCreate
 import javax.inject.Inject
 

@@ -2452,7 +2452,6 @@
     <string name="direct_room_user_list_recent_title">Récent</string>
     <string name="qr_code">code QR</string>
     <string name="add_by_qr_code">Ajouter avec un code QR</string>
-    <string name="user_directory_search_hint">Chercher par nom ou identifiant</string>
     <string name="permissions_denied_add_contact">Autoriser l’accès à vos contacts.</string>
     <string name="permissions_denied_qr_code">Pour scanner un code QR, vous devez autoriser l’accès à votre appareil photo.</string>
     <string name="start_chatting">Commencer une conversation</string>
@@ -2708,8 +2707,6 @@
     <string name="spaces_beta_welcome_to_spaces_desc">Les espaces sont une nouvelle manière de regrouper les salons et les gens.</string>
     <string name="spaces_beta_welcome_to_spaces">Bienvenue dans les espaces !</string>
     <string name="space_add_existing_rooms">Ajouter des salons et espaces existants</string>
-    <!-- TO BE REMOVED -->
-    <string name="space_leave_prompt_msg">Voulez-vous vraiment quitter l’espace \?</string>
     <string name="leave_space">Quitter l’espace</string>
     <string name="space_add_child_title">Ajouter des salons</string>
     <string name="space_explore_activity_title">Parcourir les salons</string>

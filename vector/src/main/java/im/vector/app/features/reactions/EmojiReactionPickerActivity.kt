@@ -38,7 +38,6 @@ import im.vector.app.databinding.ActivityEmojiReactionPickerBinding
 import im.vector.app.features.reactions.data.EmojiDataSource
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.coroutines.launch
-
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -165,6 +164,12 @@ class EmojiReactionPickerActivity : VectorBaseActivity<ActivityEmojiReactionPick
                 }
             })
 
+            searchView.setOnCloseListener {
+                currentFocus?.clearFocus()
+                searchItem.collapseActionView()
+                true
+            }
+
             searchView.queryTextChanges()
                     .throttleWithTimeout(600, TimeUnit.MILLISECONDS)
                     .doOnError { err -> Timber.e(err) }
@@ -174,6 +179,7 @@ class EmojiReactionPickerActivity : VectorBaseActivity<ActivityEmojiReactionPick
                     }
                     .disposeOnDestroy()
         }
+        searchItem.expandActionView()
         return true
     }
 

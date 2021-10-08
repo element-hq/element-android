@@ -107,8 +107,8 @@ internal class EventDecryptor @Inject constructor(
                 } catch (mxCryptoError: MXCryptoError) {
                     Timber.v("## CRYPTO | internalDecryptEvent : Failed to decrypt ${event.eventId} reason: $mxCryptoError")
                     if (algorithm == MXCRYPTO_ALGORITHM_OLM) {
-                        if (mxCryptoError is MXCryptoError.Base
-                                && mxCryptoError.errorType == MXCryptoError.ErrorType.BAD_ENCRYPTED_MESSAGE) {
+                        if (mxCryptoError is MXCryptoError.Base &&
+                                mxCryptoError.errorType == MXCryptoError.ErrorType.BAD_ENCRYPTED_MESSAGE) {
                             // need to find sending device
                             cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
                                 val olmContent = event.content.toModel<OlmEventContent>()

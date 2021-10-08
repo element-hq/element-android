@@ -63,8 +63,8 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
                                                       private val callManager: WebRtcCallManager,
                                                       private val directRoomHelper: DirectRoomHelper,
                                                       private val appStateHandler: AppStateHandler,
-                                                      private val autoAcceptInvites: AutoAcceptInvites)
-    : VectorViewModel<HomeDetailViewState, HomeDetailAction, HomeDetailViewEvents>(initialState),
+                                                      private val autoAcceptInvites: AutoAcceptInvites) :
+    VectorViewModel<HomeDetailViewState, HomeDetailAction, HomeDetailViewEvents>(initialState),
         CallProtocolsChecker.Listener {
 
     @AssistedFactory

@@ -18,8 +18,8 @@ package org.matrix.android.sdk.internal.session.notification
 
 import org.matrix.android.sdk.api.pushrules.rest.PushRule
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.sync.model.RoomsSyncResponse
 import org.matrix.android.sdk.internal.di.UserId
-import org.matrix.android.sdk.internal.session.sync.model.RoomsSyncResponse
 import org.matrix.android.sdk.internal.task.Task
 import timber.log.Timber
 import javax.inject.Inject

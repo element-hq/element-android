@@ -20,9 +20,9 @@ package im.vector.app.features.roommemberprofile
 import android.content.Context
 import android.content.Intent
 import android.widget.Toast
-import com.google.android.material.appbar.MaterialToolbar
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.viewModel
+import com.google.android.material.appbar.MaterialToolbar
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.addFragment

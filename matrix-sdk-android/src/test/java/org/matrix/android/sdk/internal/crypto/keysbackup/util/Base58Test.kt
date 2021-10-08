@@ -16,15 +16,15 @@
 
 package org.matrix.android.sdk.internal.crypto.keysbackup.util
 
-import org.matrix.android.sdk.MatrixTest
 import org.junit.Assert.assertArrayEquals
 import org.junit.Assert.assertEquals
 import org.junit.FixMethodOrder
 import org.junit.Test
 import org.junit.runners.MethodSorters
+import org.matrix.android.sdk.MatrixTest
 
 @FixMethodOrder(MethodSorters.JVM)
-class Base58Test: MatrixTest {
+class Base58Test : MatrixTest {
 
     @Test
     fun encode() {

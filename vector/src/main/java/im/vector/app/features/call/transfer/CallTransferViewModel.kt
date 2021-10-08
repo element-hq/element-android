@@ -37,8 +37,8 @@ import org.matrix.android.sdk.api.session.call.MxCall
 class CallTransferViewModel @AssistedInject constructor(@Assisted initialState: CallTransferViewState,
                                                         private val dialPadLookup: DialPadLookup,
                                                         private val directRoomHelper: DirectRoomHelper,
-                                                        private val callManager: WebRtcCallManager)
-    : VectorViewModel<CallTransferViewState, CallTransferAction, CallTransferViewEvents>(initialState) {
+                                                        private val callManager: WebRtcCallManager) :
+    VectorViewModel<CallTransferViewState, CallTransferAction, CallTransferViewEvents>(initialState) {
 
     @AssistedFactory
     interface Factory {

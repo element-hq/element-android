@@ -17,10 +17,12 @@
 package org.matrix.android.sdk.internal.session.room.membership
 
 import androidx.lifecycle.LiveData
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
-import dagger.assisted.AssistedFactory
 import com.zhuinden.monarchy.Monarchy
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import io.realm.Realm
+import io.realm.RealmQuery
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.room.members.MembershipService
 import org.matrix.android.sdk.api.session.room.members.RoomMemberQueryParams
@@ -38,8 +40,6 @@ import org.matrix.android.sdk.internal.session.room.membership.joining.JoinRoomT
 import org.matrix.android.sdk.internal.session.room.membership.leaving.LeaveRoomTask
 import org.matrix.android.sdk.internal.session.room.membership.threepid.InviteThreePidTask
 import org.matrix.android.sdk.internal.util.fetchCopied
-import io.realm.Realm
-import io.realm.RealmQuery
 
 internal class DefaultMembershipService @AssistedInject constructor(
         @Assisted private val roomId: String,

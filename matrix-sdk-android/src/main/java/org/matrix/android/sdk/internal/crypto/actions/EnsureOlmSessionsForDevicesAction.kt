@@ -90,8 +90,8 @@ internal class EnsureOlmSessionsForDevicesAction @Inject constructor(
                             oneTimeKey = key
                         }
                         if (oneTimeKey == null) {
-                            Timber.w("## CRYPTO | ensureOlmSessionsForDevices() : No one-time keys " + oneTimeKeyAlgorithm
-                                    + " for device " + userId + " : " + deviceId)
+                            Timber.w("## CRYPTO | ensureOlmSessionsForDevices() : No one-time keys " + oneTimeKeyAlgorithm +
+                                    " for device " + userId + " : " + deviceId)
                             continue
                         }
                         // Update the result for this device in results
@@ -126,15 +126,15 @@ internal class EnsureOlmSessionsForDevicesAction @Inject constructor(
                 sessionId = olmDevice.createOutboundSession(deviceInfo.identityKey()!!, oneTimeKey.value)
 
                 if (!sessionId.isNullOrEmpty()) {
-                    Timber.v("## CRYPTO | verifyKeyAndStartSession() : Started new sessionid " + sessionId
-                            + " for device " + deviceInfo + "(theirOneTimeKey: " + oneTimeKey.value + ")")
+                    Timber.v("## CRYPTO | verifyKeyAndStartSession() : Started new sessionid " + sessionId +
+                            " for device " + deviceInfo + "(theirOneTimeKey: " + oneTimeKey.value + ")")
                 } else {
                     // Possibly a bad key
                     Timber.e("## CRYPTO | verifyKeyAndStartSession() : Error starting session with device $userId:$deviceId")
                 }
             } else {
-                Timber.e("## CRYPTO | verifyKeyAndStartSession() : Unable to verify signature on one-time key for device " + userId
-                        + ":" + deviceId + " Error " + errorMessage)
+                Timber.e("## CRYPTO | verifyKeyAndStartSession() : Unable to verify signature on one-time key for device " + userId +
+                        ":" + deviceId + " Error " + errorMessage)
             }
         }
 

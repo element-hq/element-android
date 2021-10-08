@@ -52,8 +52,7 @@ private var permissionDialogDisplayed = false
  * So when the user does not grant the permission and check the box do not ask again, this boolean will be false.
  * Only useful if the first boolean is false
  */
-fun ComponentActivity.registerForPermissionsResult(lambda: (allGranted: Boolean, deniedPermanently: Boolean) -> Unit)
-        : ActivityResultLauncher<Array<String>> {
+fun ComponentActivity.registerForPermissionsResult(lambda: (allGranted: Boolean, deniedPermanently: Boolean) -> Unit): ActivityResultLauncher<Array<String>> {
     return registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { result ->
         onPermissionResult(result, lambda)
     }

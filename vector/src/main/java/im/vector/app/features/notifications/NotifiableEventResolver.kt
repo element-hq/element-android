@@ -19,6 +19,7 @@ import androidx.core.app.NotificationCompat
 import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.room.detail.timeline.format.DisplayableEventFormatter
 import im.vector.app.features.home.room.detail.timeline.format.NoticeEventFormatter
 import org.matrix.android.sdk.api.extensions.orFalse
@@ -34,6 +35,7 @@ import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
 import org.matrix.android.sdk.api.session.room.sender.SenderInfo
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.getEditedEventId
+import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.internal.crypto.algorithms.olm.OlmDecryptionResult
 import timber.log.Timber
 import java.util.UUID
@@ -107,7 +109,7 @@ class NotifiableEventResolver @Inject constructor(
                     displayIndex = 0,
                     senderInfo = SenderInfo(
                             userId = user.userId,
-                            displayName = user.getBestName(),
+                            displayName = user.toMatrixItem().getBestName(),
                             isUniqueDisplayName = true,
                             avatarUrl = user.avatarUrl
                     )

@@ -28,8 +28,8 @@ import javax.inject.Inject
  * Checks if notifications are enable in the system settings for this app.
  */
 class TestSystemSettings @Inject constructor(private val context: Context,
-                                             private val stringProvider: StringProvider)
-    : TroubleshootTest(R.string.settings_troubleshoot_test_system_settings_title) {
+                                             private val stringProvider: StringProvider) :
+    TroubleshootTest(R.string.settings_troubleshoot_test_system_settings_title) {
 
     override fun perform(activityResultLauncher: ActivityResultLauncher<Intent>) {
         if (NotificationManagerCompat.from(context).areNotificationsEnabled()) {
@@ -40,7 +40,6 @@ class TestSystemSettings @Inject constructor(private val context: Context,
             description = stringProvider.getString(R.string.settings_troubleshoot_test_system_settings_failed)
             quickFix = object : TroubleshootQuickFix(R.string.open_settings) {
                 override fun doFix() {
-                    if (manager?.diagStatus == TestStatus.RUNNING) return // wait before all is finished
                     startNotificationSettingsIntent(context, activityResultLauncher)
                 }
             }

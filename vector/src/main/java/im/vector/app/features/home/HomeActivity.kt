@@ -27,6 +27,8 @@ import android.view.MenuItem
 import androidx.core.view.GravityCompat
 import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.viewModel
 import com.google.android.material.appbar.MaterialToolbar
@@ -51,6 +53,9 @@ import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.notifications.NotificationDrawerManager
 import im.vector.app.features.permalink.NavigationInterceptor
 import im.vector.app.features.permalink.PermalinkHandler
+import im.vector.app.features.permalink.PermalinkHandler.Companion.MATRIX_TO_CUSTOM_SCHEME_URL_BASE
+import im.vector.app.features.permalink.PermalinkHandler.Companion.ROOM_LINK_PREFIX
+import im.vector.app.features.permalink.PermalinkHandler.Companion.USER_LINK_PREFIX
 import im.vector.app.features.popup.DefaultVectorAlert
 import im.vector.app.features.popup.PopupAlertManager
 import im.vector.app.features.popup.VerificationVectorAlert
@@ -93,7 +98,8 @@ class HomeActivity :
         UnreadMessagesSharedViewModel.Factory,
         PromoteRestrictedViewModel.Factory,
         NavigationInterceptor,
-        SpaceInviteBottomSheet.InteractionListener {
+        SpaceInviteBottomSheet.InteractionListener,
+        MatrixToBottomSheet.InteractionListener {
 
     private lateinit var sharedActionViewModel: HomeSharedActionViewModel
 
@@ -142,6 +148,22 @@ class HomeActivity :
         }
     }
 
+    private val fragmentLifecycleCallbacks = object : FragmentManager.FragmentLifecycleCallbacks() {
+        override fun onFragmentResumed(fm: FragmentManager, f: Fragment) {
+            if (f is MatrixToBottomSheet) {
+                f.interactionListener = this@HomeActivity
+            }
+            super.onFragmentResumed(fm, f)
+        }
+
+        override fun onFragmentPaused(fm: FragmentManager, f: Fragment) {
+            if (f is MatrixToBottomSheet) {
+                f.interactionListener = null
+            }
+            super.onFragmentPaused(fm, f)
+        }
+    }
+
     private val drawerListener = object : DrawerLayout.SimpleDrawerListener() {
         override fun onDrawerStateChanged(newState: Int) {
             hideKeyboard()
@@ -170,6 +192,7 @@ class HomeActivity :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        supportFragmentManager.registerFragmentLifecycleCallbacks(fragmentLifecycleCallbacks, false)
         FcmHelper.ensureFcmTokenIsRetrieved(this, pushManager, vectorPreferences.areNotificationEnabledForDevice())
         sharedActionViewModel = viewModelProvider.get(HomeSharedActionViewModel::class.java)
         views.drawerLayout.addDrawerListener(drawerListener)
@@ -251,8 +274,8 @@ class HomeActivity :
 
         if (!vectorPreferences.didPromoteNewRestrictedFeature()) {
             promoteRestrictedViewModel.subscribe(this) {
-                if (it.activeSpaceSummary != null && !it.activeSpaceSummary.isPublic
-                        && it.activeSpaceSummary.otherMemberIds.isNotEmpty()) {
+                if (it.activeSpaceSummary != null && !it.activeSpaceSummary.isPublic &&
+                        it.activeSpaceSummary.otherMemberIds.isNotEmpty()) {
                     // It's a private space with some members show this once
                     if (it.canUserManageSpace && !popupAlertManager.hasAlertsToShow()) {
                         if (!vectorPreferences.didPromoteNewRestrictedFeature()) {
@@ -272,20 +295,19 @@ class HomeActivity :
     private fun handleIntent(intent: Intent?) {
         intent?.dataString?.let { deepLink ->
             val resolvedLink = when {
-                deepLink.startsWith(PermalinkService.MATRIX_TO_URL_BASE) -> deepLink
-                deepLink.startsWith(MATRIX_TO_CUSTOM_SCHEME_URL_BASE)    -> {
-                    // This is a bit ugly, but for now just convert to matrix.to link for compatibility
-                    when {
+                // Element custom scheme is not handled by the sdk, convert it to matrix.to link for compatibility
+                deepLink.startsWith(MATRIX_TO_CUSTOM_SCHEME_URL_BASE) -> {
+                    val let = when {
                         deepLink.startsWith(USER_LINK_PREFIX) -> deepLink.substring(USER_LINK_PREFIX.length)
                         deepLink.startsWith(ROOM_LINK_PREFIX) -> deepLink.substring(ROOM_LINK_PREFIX.length)
                         else                                  -> null
-                    }?.let {
-                        activeSessionHolder.getSafeActiveSession()?.permalinkService()?.createPermalink(it)
+                    }?.let { permalinkId ->
+                        activeSessionHolder.getSafeActiveSession()?.permalinkService()?.createPermalink(permalinkId)
                     }
+                    let
                 }
-                else                                                     -> return@let
+                else                                                  -> deepLink
             }
-
             permalinkHandler.launch(
                     context = this,
                     deepLink = resolvedLink,
@@ -296,9 +318,11 @@ class HomeActivity :
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe { isHandled ->
                         if (!isHandled) {
+                            val isMatrixToLink = deepLink.startsWith(PermalinkService.MATRIX_TO_URL_BASE) ||
+                                    deepLink.startsWith(MATRIX_TO_CUSTOM_SCHEME_URL_BASE)
                             MaterialAlertDialogBuilder(this)
                                     .setTitle(R.string.dialog_title_error)
-                                    .setMessage(R.string.permalink_malformed)
+                                    .setMessage(if (isMatrixToLink) R.string.permalink_malformed else R.string.universal_link_malformed)
                                     .setPositiveButton(R.string.ok, null)
                                     .show()
                         }
@@ -309,10 +333,7 @@ class HomeActivity :
 
     private fun renderState(state: HomeActivityViewState) {
         when (val status = state.syncStatusServiceStatus) {
-            is SyncStatusService.Status.Idle                  -> {
-                views.waitingView.root.isVisible = false
-            }
-            is SyncStatusService.Status.Progressing           -> {
+            is SyncStatusService.Status.Progressing -> {
                 val initSyncStepStr = initSyncStepFormatter.format(status.initSyncStep)
                 Timber.v("$initSyncStepStr ${status.percentProgress}")
                 views.waitingView.root.setOnClickListener {
@@ -330,7 +351,10 @@ class HomeActivity :
                 }
                 views.waitingView.root.isVisible = true
             }
-            else                                              -> Unit
+            else                                    -> {
+                // Idle or Incremental sync status
+                views.waitingView.root.isVisible = false
+            }
         }.exhaustive
     }
 
@@ -445,6 +469,7 @@ class HomeActivity :
 
     override fun onDestroy() {
         views.drawerLayout.removeDrawerListener(drawerListener)
+        supportFragmentManager.unregisterFragmentLifecycleCallbacks(fragmentLifecycleCallbacks)
         super.onDestroy()
     }
 
@@ -526,30 +551,15 @@ class HomeActivity :
     }
 
     override fun navToMemberProfile(userId: String, deepLink: Uri): Boolean {
-        val listener = object : MatrixToBottomSheet.InteractionListener {
-            override fun navigateToRoom(roomId: String) {
-                navigator.openRoom(this@HomeActivity, roomId)
-            }
-        }
         // TODO check if there is already one??
-        MatrixToBottomSheet.withLink(deepLink.toString(), listener)
+        MatrixToBottomSheet.withLink(deepLink.toString())
                 .show(supportFragmentManager, "HA#MatrixToBottomSheet")
         return true
     }
 
     override fun navToRoom(roomId: String?, eventId: String?, deepLink: Uri?): Boolean {
         if (roomId == null) return false
-        val listener = object : MatrixToBottomSheet.InteractionListener {
-            override fun navigateToRoom(roomId: String) {
-                navigator.openRoom(this@HomeActivity, roomId)
-            }
-
-            override fun switchToSpace(spaceId: String) {
-                navigator.switchToSpace(this@HomeActivity, spaceId, Navigator.PostSwitchSpaceAction.None)
-            }
-        }
-
-        MatrixToBottomSheet.withLink(deepLink.toString(), listener)
+        MatrixToBottomSheet.withLink(deepLink.toString())
                 .show(supportFragmentManager, "HA#MatrixToBottomSheet")
         return true
     }
@@ -579,11 +589,15 @@ class HomeActivity :
                         putExtra(MvRx.KEY_ARG, args)
                     }
         }
-
-        private const val MATRIX_TO_CUSTOM_SCHEME_URL_BASE = "element://"
-        private const val ROOM_LINK_PREFIX = "${MATRIX_TO_CUSTOM_SCHEME_URL_BASE}room/"
-        private const val USER_LINK_PREFIX = "${MATRIX_TO_CUSTOM_SCHEME_URL_BASE}user/"
     }
 
     override fun create(initialState: ActiveSpaceViewState) = promoteRestrictedViewModelFactory.create(initialState)
+
+    override fun mxToBottomSheetNavigateToRoom(roomId: String) {
+        navigator.openRoom(this, roomId)
+    }
+
+    override fun mxToBottomSheetSwitchToSpace(spaceId: String) {
+        navigator.switchToSpace(this, spaceId, Navigator.PostSwitchSpaceAction.None)
+    }
 }

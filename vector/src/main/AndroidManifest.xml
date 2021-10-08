@@ -83,13 +83,19 @@
             android:name="android.max_aspect"
             android:value="9.9" />
 
+        <meta-data
+            android:name="com.google.android.gms.car.application"
+            android:resource="@xml/automotive_app_desc" />
+
         <activity
             android:name=".features.MainActivity"
             android:theme="@style/Theme.Vector.Launcher" />
 
         <!-- Activity alias for the launcher Activity (must be declared after the Activity it targets) -->
+        <!-- exported="true" is required to launch application -->
         <activity-alias
             android:name=".features.Alias"
+            android:exported="true"
             android:targetActivity=".features.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -103,10 +109,13 @@
         </activity-alias>
 
         <activity android:name=".features.home.HomeActivity" />
+
+        <!-- exported="true" is required to handle android.intent.action.VIEW for URL redirection-->
         <activity
             android:name=".features.login.LoginActivity"
-            android:launchMode="singleTask"
             android:enabled="@bool/useLoginV1"
+            android:exported="true"
+            android:launchMode="singleTask"
             android:windowSoftInputMode="adjustResize">
             <!-- Add intent filter to handle redirection URL after SSO login in external browser -->
             <intent-filter>
@@ -120,10 +129,13 @@
                     android:scheme="element" />
             </intent-filter>
         </activity>
+
+        <!-- exported="true" is required to handle android.intent.action.VIEW for URL redirection-->
         <activity
             android:name=".features.login2.LoginActivity2"
-            android:launchMode="singleTask"
             android:enabled="@bool/useLoginV2"
+            android:exported="true"
+            android:launchMode="singleTask"
             android:windowSoftInputMode="adjustResize">
             <!-- Add intent filter to handle redirection URL after SSO login in external browser -->
             <intent-filter>
@@ -143,7 +155,6 @@
             android:name=".features.media.VectorAttachmentViewerActivity"
             android:theme="@style/Theme.Vector.Black.Transparent"
             tools:ignore="Instantiatable" />
-
         <activity android:name=".features.media.BigImageViewerActivity" />
         <activity
             android:name=".features.rageshake.BugReportActivity"
@@ -161,7 +172,6 @@
         <activity
             android:name=".features.crypto.keysbackup.settings.KeysBackupManageActivity"
             android:label="@string/encryption_message_recovery" />
-
         <activity
             android:name=".features.reactions.EmojiReactionPickerActivity"
             android:label="@string/title_activity_emoji_reaction_picker" />
@@ -180,7 +190,13 @@
         <activity android:name=".features.createdirect.CreateDirectRoomActivity" />
         <activity android:name=".features.invite.InviteUsersToRoomActivity" />
         <activity android:name=".features.webview.VectorWebViewActivity" />
-        <activity android:name=".features.link.LinkHandlerActivity">
+
+        <!-- Activity to intercept links coming from a web instance -->
+        <!-- exported="true" is required to handle android.intent.action.VIEW for URL redirection-->
+        <activity
+            android:name=".features.link.LinkHandlerActivity"
+            android:enabled="true"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -196,8 +212,37 @@
             </intent-filter>
         </activity>
 
+        <!-- Activity alias for matrix.to or element permalinks -->
+        <!-- exported="true" is required to handle android.intent.action.VIEW for URL redirection-->
+        <activity-alias
+            android:name=".features.permalink.PermalinkHandlerActivity"
+            android:enabled="true"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:targetActivity=".features.link.LinkHandlerActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data android:host="matrix.to" />
+                <data
+                    android:host="user"
+                    android:scheme="element" />
+                <data
+                    android:host="room"
+                    android:scheme="element" />
+
+            </intent-filter>
+        </activity-alias>
+
+        <!-- exported="true" is required for the share functionality-->
         <activity
             android:name=".features.share.IncomingShareActivity"
+            android:exported="true"
             android:parentActivityName=".features.home.HomeActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -222,35 +267,12 @@
                 android:name="android.service.chooser.chooser_target_service"
                 android:value="androidx.sharetarget.ChooserTargetServiceCompat" />
         </activity>
-
         <activity android:name=".features.roomprofile.RoomProfileActivity" />
         <activity android:name=".features.roomprofile.settings.joinrule.RoomJoinRuleActivity" />
-
         <activity android:name=".features.signout.hard.SignedOutActivity" />
         <activity
             android:name=".features.signout.soft.SoftLogoutActivity"
             android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name=".features.permalink.PermalinkHandlerActivity"
-            android:launchMode="singleTask">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data android:scheme="http" />
-                <data android:scheme="https" />
-                <data android:host="matrix.to" />
-                <data
-                    android:host="user"
-                    android:scheme="element" />
-                <data
-                    android:host="room"
-                    android:scheme="element" />
-
-            </intent-filter>
-        </activity>
 
         <activity
             android:name=".features.roommemberprofile.RoomMemberProfileActivity"
@@ -261,22 +283,20 @@
         </activity>
 
         <activity android:name=".features.qrcode.QrCodeScannerActivity" />
-
         <activity android:name=".features.crypto.quads.SharedSecureStorageActivity" />
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".features.attachments.preview.AttachmentsPreviewActivity"
             android:theme="@style/Theme.Vector.Black.AttachmentsPreview" />
         <activity
-            android:supportsPictureInPicture="true"
-            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:name=".features.call.VectorCallActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
+            android:excludeFromRecents="true"
             android:launchMode="singleTask"
-            android:taskAffinity=".features.call.VectorCallActivity"
-            android:excludeFromRecents="true" />
+            android:supportsPictureInPicture="true"
+            android:taskAffinity=".features.call.VectorCallActivity" />
         <!-- PIP Support https://developer.android.com/guide/topics/ui/picture-in-picture -->
         <activity
             android:name=".features.call.conference.VectorJitsiActivity"
@@ -294,7 +314,6 @@
         <!-- Single instance is very important for the custom scheme callback-->
         <activity
             android:name=".features.auth.ReAuthActivity"
-            android:exported="false"
             android:launchMode="singleInstance">
 
             <!-- XXX: UIA SSO has only web fallback, i.e no url redirect, so for now we comment this out
@@ -320,6 +339,7 @@
         <activity android:name=".features.spaces.manage.SpaceManageActivity" />
         <activity android:name=".features.spaces.people.SpacePeopleActivity" />
         <activity android:name=".features.spaces.leave.SpaceLeaveAdvancedActivity" />
+
         <!-- Services -->
 
         <service
@@ -339,6 +359,7 @@
 
         <service
             android:name=".features.call.telecom.VectorConnectionService"
+            android:exported="false"
             android:permission="android.permission.BIND_TELECOM_CONNECTION_SERVICE">
             <intent-filter>
                 <action android:name="android.telecom.ConnectionService" />
@@ -365,7 +386,9 @@
         A media button receiver receives and helps translate hardware media playback buttons,
         such as those found on wired and wireless headsets, into the appropriate callbacks in your app.
            -->
-        <receiver android:name="androidx.media.session.MediaButtonReceiver">
+        <receiver
+            android:name="androidx.media.session.MediaButtonReceiver"
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.MEDIA_BUTTON" />
             </intent-filter>
@@ -375,9 +398,15 @@
 
         <!-- Remove WorkManagerInitializer Provider because we are using on-demand initialization of WorkManager-->
         <provider
-            android:name="androidx.work.impl.WorkManagerInitializer"
-            android:authorities="${applicationId}.workmanager-init"
-            tools:node="remove" />
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
+            android:exported="false"
+            tools:node="merge">
+            <meta-data
+                android:name="androidx.work.WorkManagerInitializer"
+                android:value="androidx.startup"
+                tools:node="remove" />
+        </provider>
 
         <provider
             android:name="androidx.core.content.FileProvider"

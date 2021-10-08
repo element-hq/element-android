@@ -16,4 +16,31 @@
 
 package im.vector.app.test
 
+import com.airbnb.mvrx.MvRxState
+import im.vector.app.core.platform.VectorViewEvents
+import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.core.platform.VectorViewModelAction
+import io.reactivex.observers.TestObserver
+import org.amshove.kluent.shouldBeEqualTo
+
 fun String.trimIndentOneLine() = trimIndent().replace("\n", "")
+
+fun <S : MvRxState, VA : VectorViewModelAction, VE : VectorViewEvents> VectorViewModel<S, VA, VE>.test(): ViewModelTest<S, VE> {
+    val state = { com.airbnb.mvrx.withState(this) { it } }
+    val viewEvents = viewEvents.observe().test()
+    return ViewModelTest(state, viewEvents)
+}
+
+class ViewModelTest<S, VE>(
+        val state: () -> S,
+        val viewEvents: TestObserver<VE>
+) {
+
+    fun assertEvents(vararg expected: VE) {
+        viewEvents.assertValues(*expected)
+    }
+
+    fun assertState(expected: S) {
+        state() shouldBeEqualTo expected
+    }
+}

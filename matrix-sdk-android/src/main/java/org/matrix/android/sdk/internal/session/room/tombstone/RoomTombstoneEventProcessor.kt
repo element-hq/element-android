@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.internal.session.room.tombstone
 
+import io.realm.Realm
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
@@ -25,7 +26,6 @@ import org.matrix.android.sdk.internal.database.model.EventInsertType
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.session.EventInsertLiveProcessor
-import io.realm.Realm
 import javax.inject.Inject
 
 internal class RoomTombstoneEventProcessor @Inject constructor() : EventInsertLiveProcessor {

@@ -144,10 +144,10 @@ internal class DefaultOutgoingSASDefaultVerificationTransaction(
             return
         }
         // Check that the agreement is correct
-        if (!KNOWN_AGREEMENT_PROTOCOLS.contains(accept.keyAgreementProtocol)
-                || !KNOWN_HASHES.contains(accept.hash)
-                || !KNOWN_MACS.contains(accept.messageAuthenticationCode)
-                || accept.shortAuthenticationStrings.intersect(KNOWN_SHORT_CODES).isEmpty()) {
+        if (!KNOWN_AGREEMENT_PROTOCOLS.contains(accept.keyAgreementProtocol) ||
+                !KNOWN_HASHES.contains(accept.hash) ||
+                !KNOWN_MACS.contains(accept.messageAuthenticationCode) ||
+                accept.shortAuthenticationStrings.intersect(KNOWN_SHORT_CODES).isEmpty()) {
             Timber.e("## SAS O: received invalid accept")
             cancel(CancelCode.UnknownMethod)
             return
@@ -233,12 +233,12 @@ internal class DefaultOutgoingSASDefaultVerificationTransaction(
     override fun onKeyVerificationMac(vMac: ValidVerificationInfoMac) {
         Timber.v("## SAS O: onKeyVerificationMac id:$transactionId")
         // There is starting to be a huge amount of state / race here :/
-        if (state != VerificationTxState.OnKeyReceived
-                && state != VerificationTxState.ShortCodeReady
-                && state != VerificationTxState.ShortCodeAccepted
-                && state != VerificationTxState.KeySent
-                && state != VerificationTxState.SendingMac
-                && state != VerificationTxState.MacSent) {
+        if (state != VerificationTxState.OnKeyReceived &&
+                state != VerificationTxState.ShortCodeReady &&
+                state != VerificationTxState.ShortCodeAccepted &&
+                state != VerificationTxState.KeySent &&
+                state != VerificationTxState.SendingMac &&
+                state != VerificationTxState.MacSent) {
             Timber.e("## SAS O: received mac from invalid state $state")
             cancel(CancelCode.UnexpectedMessage)
             return

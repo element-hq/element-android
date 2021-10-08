@@ -1616,7 +1616,6 @@
     <string name="add_identity_server">Kimlik sunucusunu yapılandırın</string>
     <string name="disconnect_identity_server">Kimlik sunucusunun bağlantısını kesin</string>
     <string name="identity_server">Kimlik sunucusu</string>
-    <string name="user_directory_search_hint">İsimle veya ID ile ara</string>
     <string name="settings_labs_show_hidden_events_in_timeline">Gizli etkinlikleri zaman tünelinde göster</string>
     <string name="room_preview_no_preview_join">Bu oda ön izlenemiyor. Katılmak ister misiniz\?</string>
     <string name="room_manage_integrations">Entegrasyonları Yönet</string>

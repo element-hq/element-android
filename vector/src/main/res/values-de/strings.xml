@@ -2523,7 +2523,6 @@
     <string name="direct_room_user_list_recent_title">Kürzlich</string>
     <string name="qr_code">QR-Code</string>
     <string name="add_by_qr_code">Hinzufügen via QR-Code</string>
-    <string name="user_directory_search_hint">Nach Name oder ID suchen</string>
     <string name="permissions_denied_add_contact">Gib die Erlaubnis, um auf die Kamera zu zugreifen.</string>
     <string name="permissions_denied_qr_code">Um den QR-Code zu scannen, muss der Zugriff auf die Kamera erlaubt werden.</string>
     <string name="room_alias_published_alias_title">Öffentliche Adressen</string>
@@ -2770,8 +2769,6 @@
     <string name="command_description_leave_room">Verlasse den Raum mit der angegebenen ID (oder den aktuellen Raum, wenn keine ID angegeben wird)</string>
     <string name="search_hint_room_name">Name suchen</string>
     <string name="you_are_invited">Du wurdest eingeladen</string>
-    <!-- TO BE REMOVED -->
-    <string name="space_leave_prompt_msg">Bist du dir sicher, dass du den Space verlassen willst\?</string>
     <string name="leave_space">Space verlassen</string>
     <string name="space_add_child_title">Räume hinzufügen</string>
     <string name="space_explore_activity_title">Räume erkunden</string>

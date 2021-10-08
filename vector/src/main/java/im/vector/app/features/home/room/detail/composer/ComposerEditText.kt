@@ -32,16 +32,15 @@ import im.vector.app.core.platform.SimpleTextWatcher
 import im.vector.app.features.html.PillImageSpan
 import timber.log.Timber
 
-class ComposerEditText @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = android.R.attr.editTextStyle)
-    : EmojiEditText(context, attrs, defStyleAttr) {
+class ComposerEditText @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = android.R.attr.editTextStyle) :
+    EmojiEditText(context, attrs, defStyleAttr) {
 
     interface Callback {
         fun onRichContentSelected(contentUri: Uri): Boolean
-        fun onTextBlankStateChanged(isBlank: Boolean)
+        fun onTextChanged(text: CharSequence)
     }
 
     var callback: Callback? = null
-    private var isBlankText = true
 
     override fun onCreateInputConnection(editorInfo: EditorInfo): InputConnection? {
         val ic = super.onCreateInputConnection(editorInfo) ?: return null
@@ -95,11 +94,7 @@ class ComposerEditText @JvmOverloads constructor(context: Context, attrs: Attrib
                             }
                             spanToRemove = null
                         }
-                        // Report blank status of EditText to be able to arrange other elements of the composer
-                        if (s.isBlank() != isBlankText) {
-                            isBlankText = !isBlankText
-                            callback?.onTextBlankStateChanged(isBlankText)
-                        }
+                        callback?.onTextChanged(s.toString())
                     }
                 }
         )

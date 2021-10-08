@@ -93,13 +93,15 @@ internal class DefaultRoomService @Inject constructor(
         return roomSummaryDataSource.getRoomSummariesLive(queryParams)
     }
 
-    override fun getPagedRoomSummariesLive(queryParams: RoomSummaryQueryParams, pagedListConfig: PagedList.Config, sortOrder: RoomSortOrder)
-            : LiveData<PagedList<RoomSummary>> {
+    override fun getPagedRoomSummariesLive(queryParams: RoomSummaryQueryParams,
+                                           pagedListConfig: PagedList.Config,
+                                           sortOrder: RoomSortOrder): LiveData<PagedList<RoomSummary>> {
         return roomSummaryDataSource.getSortedPagedRoomSummariesLive(queryParams, pagedListConfig, sortOrder)
     }
 
-    override fun getFilteredPagedRoomSummariesLive(queryParams: RoomSummaryQueryParams, pagedListConfig: PagedList.Config, sortOrder: RoomSortOrder)
-            : UpdatableLivePageResult {
+    override fun getFilteredPagedRoomSummariesLive(queryParams: RoomSummaryQueryParams,
+                                                   pagedListConfig: PagedList.Config,
+                                                   sortOrder: RoomSortOrder): UpdatableLivePageResult {
         return roomSummaryDataSource.getUpdatablePagedRoomSummariesLive(queryParams, pagedListConfig, sortOrder)
     }
 
