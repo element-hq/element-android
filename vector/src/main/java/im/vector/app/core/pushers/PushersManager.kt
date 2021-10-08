@@ -47,15 +47,15 @@ class PushersManager @Inject constructor(
 
     fun enqueueRegisterPusherWithFcmKey(pushKey: String): UUID {
         val currentSession = activeSessionHolder.getActiveSession()
-        return currentSession.enqueueAddHttpPusher(httpPusher(pushKey))
+        return currentSession.enqueueAddHttpPusher(createHttpPusher(pushKey))
     }
 
     suspend fun registerPusherWithFcmKey(pushKey: String) {
         val currentSession = activeSessionHolder.getActiveSession()
-        currentSession.addHttpPusher(httpPusher(pushKey))
+        currentSession.addHttpPusher(createHttpPusher(pushKey))
     }
 
-    private fun httpPusher(pushKey: String) = PushersService.HttpPusher(
+    private fun createHttpPusher(pushKey: String) = PushersService.HttpPusher(
             pushKey,
             stringProvider.getString(R.string.pusher_app_id),
             profileTag = DEFAULT_PUSHER_FILE_TAG + "_" + abs(activeSessionHolder.getActiveSession().myUserId.hashCode()),
