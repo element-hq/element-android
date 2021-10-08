@@ -1964,7 +1964,6 @@
     <string name="a11y_qr_code_for_verification">QR-код</string>
     <string name="a13n_qr_code_description">Зображення QR-коду</string>
     <string name="qr_code">QR-код</string>
-    <string name="user_directory_search_hint">Пошук за іменем або ID</string>
     <string name="add_by_qr_code">Додати за QR-кодом</string>
     <string name="settings_discovery_mail_pending">Очікування</string>
     <string name="identity_server_set_alternative_notice_no_default">Зазначте адресу сервера ідентифікації</string>
@@ -2200,7 +2199,6 @@
     <string name="voice_message_slide_to_cancel">Проведіть пальцем, щоб скасувати</string>
     <string name="a11y_start_voice_message">Розпочати голосове повідомлення</string>
     <string name="call_jitsi_started">Розпочато груповий виклик</string>
-    <string name="space_leave_prompt_msg">Ви впевнені, що хочете вийти з простору\?</string>
     <string name="leave_space">Вийти з простору</string>
     <string name="space_settings_manage_rooms">Керувати кімнатами</string>
     <string name="user_invites_you">%s запрошує вас</string>

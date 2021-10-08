@@ -2497,7 +2497,6 @@
     <string name="direct_room_user_list_recent_title">Hiljutised</string>
     <string name="qr_code">QR-kood</string>
     <string name="add_by_qr_code">Lisa QR-koodi abil</string>
-    <string name="user_directory_search_hint">Otsi nime või Matrix\'i tunnuse alusel</string>
     <string name="permissions_denied_add_contact">Anna õigused oma kontakte lugeda.</string>
     <string name="permissions_denied_qr_code">QR-koodi lugemiseks pead selleks kaamerale õigused andma.</string>
     <string name="start_chatting">Alusta vestlust</string>
@@ -2679,8 +2678,6 @@
     <string name="spaces_beta_welcome_to_spaces_desc">Kogukonnakeskused on uus võimalus siduda jututubasid ja inimesi.</string>
     <string name="spaces_beta_welcome_to_spaces">Tere tulemast kasutama kogukonnakeskuseid!</string>
     <string name="space_add_existing_rooms">Lisa olemasolevaid jututubasid ja kogukonnakeskuseid</string>
-    <!-- TO BE REMOVED -->
-    <string name="space_leave_prompt_msg">Kas oled kindel, et soovid lahkuda kogukonnakeskusest\?</string>
     <string name="leave_space">Lahku kogukonnakeskusest</string>
     <string name="space_add_child_title">Lisa jututuba</string>
     <string name="space_explore_activity_title">Uuri jututubasid</string>

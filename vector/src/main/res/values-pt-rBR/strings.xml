@@ -2567,7 +2567,6 @@
     <string name="direct_room_user_list_known_title">Usuárias(os) Conhecidas(os)</string>
     <string name="qr_code">QR code</string>
     <string name="add_by_qr_code">Adicionar por QR code</string>
-    <string name="user_directory_search_hint">Pesquisar por nome ou ID</string>
     <string name="permissions_denied_add_contact">Aceitar permissão para acessar seus contatos.</string>
     <string name="permissions_denied_qr_code">Para scannear um QR code, você precisa permitir acesso a câmera.</string>
     <string name="start_chatting">Começar a Conversar</string>
@@ -2815,8 +2814,6 @@
     <string name="space_leave_prompt_msg_as_admin">Você é a/o única(o) admin deste espaço. Sair dele vai significar que ninguém tem controle sobre ele.</string>
     <string name="space_leave_prompt_msg_private">Você não vai ser capaz de se rejuntar a menos que você seja re-convidada(o).</string>
     <string name="space_leave_prompt_msg_only_you">Você é a única pessoa aqui. Se você sair, ninguém vai ser capaz de se juntar no futuro, incluindo você.</string>
-    <!-- TO BE REMOVED -->
-    <string name="space_leave_prompt_msg">Você tem certeza que você quer sair do espaço\?</string>
     <string name="leave_space">Sair de Espaço</string>
     <string name="space_add_child_title">Adicionar salas</string>
     <string name="space_explore_activity_title">Explorar salas</string>

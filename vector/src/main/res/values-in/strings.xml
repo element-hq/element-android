@@ -1770,7 +1770,6 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="link_copied_to_clipboard">Tautan disalin ke klipboard</string>
     <string name="labs_swipe_to_reply_in_timeline">Aktifkan geser untuk balas di linimasa</string>
     <string name="search_hint_room_name">Cari Nama</string>
-    <string name="user_directory_search_hint">Cari dengan nama atau ID</string>
     <string name="room_directory_search_hint">Nama atau ID (#contoh:matrix.org)</string>
     <string name="room_filtering_footer_open_room_directory">Tampilkan direktori ruangan</string>
     <string name="room_filtering_footer_create_new_direct_message">Kirim pesan langsung baru</string>
@@ -2396,7 +2395,6 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="space_leave_prompt_msg_as_admin">Anda adalah admin satu-satunya di space ini. Meninggalkannya berarti siapa saja tidak akan mempunyai kontrol atas space-nya.</string>
     <string name="space_leave_prompt_msg_private">Anda tidak akan bisa bergabung lagi kecuali jika Anda diundang lagi.</string>
     <string name="space_leave_prompt_msg_only_you">Anda hanya salah satu orang di sini. Jika Anda tinggalkan, siapa saja tidak dapat bergabung di masa depan, termasuk Anda.</string>
-    <string name="space_leave_prompt_msg">Apakah Anda yakin untuk meninggalkan space ini\?</string>
     <string name="space_leave_prompt_msg_with_name">Apakah Anda yakin untuk meninggalkan %s\?</string>
     <string name="leave_space">Tinggalkan Space</string>
     <string name="space_add_child_title">Tambahkan ruangan</string>
