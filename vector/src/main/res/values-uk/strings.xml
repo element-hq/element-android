@@ -1832,7 +1832,7 @@
     <string name="secure_backup_reset_all">Скинути все</string>
     <string name="keys_backup_passphrase_error_decrypt">Не вдалося розшифрувати резервну копію цією парольною фразою: переконайтесь, що вказано правильну парольну фразу відновлення.</string>
     <string name="keys_backup_restore_with_passphrase_helper_with_link">Не знаєте вашої відновлювальної парольної фрази\? Ви можете %s.</string>
-    <string name="backup_recovery_passphrase">Відновлювальна парольна фраза</string>
+    <string name="backup_recovery_passphrase">Парольна фраза відновлення</string>
     <string name="bad_passphrase_key_reset_all_action">Забули або втратили усі можливості для відновлення\? Скинути все</string>
     <string name="use_file">Використати файл</string>
     <string name="verification_cannot_access_other_session">Скористатись парольною фразою відновлення або ключем</string>
@@ -2800,4 +2800,66 @@
     <string name="login_signup_cancel_confirmation_content">Ваш обліковий запис ще не створено.
 \n
 \nЗупинити процес реєстрації\?</string>
+    <string name="enter_secret_storage_passphrase_warning">Попередження:</string>
+    <string name="delete_event_dialog_title">Підтвердити вилучення</string>
+    <string name="settings_key_requests">Запити ключів</string>
+    <string name="template_login_default_session_public_name">${app_name} Android</string>
+    <string name="a11y_start_camera">Увімкнути камеру</string>
+    <string name="a11y_stop_camera">Вимкнути камеру</string>
+    <string name="add_people">Додати людей</string>
+    <string name="add_members_to_room">Додати учасників</string>
+    <string name="external_link_confirmation_title">Перевірте це посилання</string>
+    <string name="review_logins">Перевірте, де ви ввійшли</string>
+    <string name="cross_signing_verify_by_emoji">Інтерактивна перевірка за допомогою емоджі</string>
+    <string name="error_empty_field_choose_password">Виберіть пароль.</string>
+    <string name="error_empty_field_choose_user_name">Виберіть ім\'я користувача.</string>
+    <string name="failed_to_initialize_cross_signing">Не вдалося налаштувати перехресне підписування</string>
+    <string name="cross_signing_verify_by_text">Звірити власноруч за допомогою тексту</string>
+    <string name="failed_to_access_secure_storage">Не вдалося отримати доступ до безпечного сховища</string>
+    <string name="template_app_ios_android">${app_name} iOS
+\n${app_name} Android</string>
+    <string name="template_app_desktop_web">${app_name} для переглядача
+\n${app_name} для ПК</string>
+    <string name="error_saving_media_file">Не вдалося зберегти медіафайл</string>
+    <string name="error_adding_media_file_to_gallery">Не вдалося додати медіафайл до галереї</string>
+    <string name="media_file_added_to_gallery">Медіафайл додано до галереї</string>
+    <string name="new_session_review_with_info">%1$s (%2$s)</string>
+    <string name="bootstrap_invalid_recovery_key">Це не дійсний ключ відновлення</string>
+    <string name="recovery_passphrase">Парольна фраза відновлення</string>
+    <string name="enter_backup_passphrase">Введіть %s</string>
+    <string name="bootstrap_enter_recovery">Введіть %s, щоб продовжити</string>
+    <string name="security_prompt_text">Перевірте себе та інших, щоб ваші бесіди були безпечними</string>
+    <string name="setup_cross_signing">Увімкнути перехресне підписування</string>
+    <string name="auth_invalid_login_deactivated_account">Цей обліковий запис деактивовано.</string>
+    <string name="error_failed_to_import_keys">Не вдалося імпортувати ключі</string>
+    <string name="room_created_summary_item_by_you">Ви створили та налаштували кімнату.</string>
+    <string name="room_created_summary_item">%s створює та налаштовує кімнату.</string>
+    <string name="encryption_unknown_algorithm_tile_description">Шифрування, застосоване цією кімнатою не підтримується</string>
+    <string name="encryption_not_enabled">Шифрування не увімкнено</string>
+    <string name="auth_flow_not_supported">Ви не можете зробити це з мобільного</string>
+    <string name="bootstrap_crosssigning_save_cloud">Скопіювати у своє особисте хмарне сховище</string>
+    <string name="bootstrap_crosssigning_save_usb">Зберегти на USB-накопичувач або резервний диск</string>
+    <string name="bootstrap_crosssigning_print_it">Надрукуйте його та зберігайте у безпечному місці</string>
+    <string name="bootstrap_cross_signing_success">Ваші %2$s та %1$s налаштовано.
+\n
+\nТримайте їх у безпеці! Вони знадобляться вам, щоб розблокувати зашифровані повідомлення та захистити дані, якщо ви втратите всі активні сеанси.</string>
+    <string name="bootstrap_crosssigning_progress_key_backup">Налаштування резервного копіювання ключів</string>
+    <string name="bootstrap_crosssigning_progress_save_ssk">Синхронізація самопідписаного ключа</string>
+    <string name="bootstrap_crosssigning_progress_save_usk">Синхронізація користувацького ключа</string>
+    <string name="bootstrap_crosssigning_progress_save_msk">Синхронізація головного ключа</string>
+    <string name="bootstrap_crosssigning_progress_default_key">Визначення типового ключа SSSS</string>
+    <string name="bootstrap_crosssigning_progress_pbkdf2">Генерування ключів безпеки з парольної фрази</string>
+    <string name="bootstrap_crosssigning_progress_initializing">Публікування створених ключів ідентифікації</string>
+    <string name="bootstrap_save_key_description">Використовуйте %1$s запаскою на випадок втрати %2$s.</string>
+    <string name="keep_it_safe">Зберігайте його у надійному місці</string>
+    <string name="bootstrap_finish_title">Усе готово!</string>
+    <string name="your_recovery_key">Ваш ключ відновлення</string>
+    <string name="bootstrap_loading_title">Налаштування відновлення.</string>
+    <string name="bootstrap_loading_text">Це може тривати кілька секунд, будь ласка, зачекайте.</string>
+    <string name="set_a_security_phrase_hint">Таємна фраза</string>
+    <string name="set_a_security_phrase_notice">Введіть таємну фразу, яку знаєте лише ви, яка використовується для захисту таємниць на вашому сервері.</string>
+    <string name="bootstrap_info_text_2">Введіть таємну фразу, яку знаєте лише ви, яка використовується для захисту таємниць на вашому сервері.</string>
+    <string name="bootstrap_dont_reuse_pwd">Не застосовуйте пароль облікового запису повторно.</string>
+    <string name="bootstrap_info_confirm_text">Введіть %s ще раз, щоб підтвердити.</string>
+    <string name="bootstrap_info_text">Захистіть та розблокуйте зашифровані повідомлення та перевіряйте довіреність за допомогою %s.</string>
 </resources>
