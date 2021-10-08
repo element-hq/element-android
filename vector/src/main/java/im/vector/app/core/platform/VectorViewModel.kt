@@ -27,8 +27,8 @@ import im.vector.app.core.utils.PublishDataSource
 import io.reactivex.Observable
 import io.reactivex.Single
 
-abstract class VectorViewModel<S : MavericksState, VA : VectorViewModelAction, VE : VectorViewEvents>(initialState: S)
-    : BaseMvRxViewModel<S>(initialState) {
+abstract class VectorViewModel<S : MavericksState, VA : VectorViewModelAction, VE : VectorViewEvents>(initialState: S) :
+        BaseMvRxViewModel<S>(initialState) {
 
     interface Factory<S : MavericksState> {
         fun create(state: S): BaseMvRxViewModel<S>

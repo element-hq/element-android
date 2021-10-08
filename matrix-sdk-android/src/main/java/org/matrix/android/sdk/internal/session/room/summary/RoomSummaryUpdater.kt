@@ -34,6 +34,8 @@ import org.matrix.android.sdk.api.session.room.model.VersioningState
 import org.matrix.android.sdk.api.session.room.model.create.RoomCreateContent
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.session.room.send.SendState
+import org.matrix.android.sdk.api.session.sync.model.RoomSyncSummary
+import org.matrix.android.sdk.api.session.sync.model.RoomSyncUnreadNotifications
 import org.matrix.android.sdk.internal.crypto.EventDecryptor
 import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import org.matrix.android.sdk.internal.crypto.crosssigning.DefaultCrossSigningService
@@ -63,8 +65,6 @@ import org.matrix.android.sdk.internal.session.room.accountdata.RoomAccountDataD
 import org.matrix.android.sdk.internal.session.room.membership.RoomDisplayNameResolver
 import org.matrix.android.sdk.internal.session.room.membership.RoomMemberHelper
 import org.matrix.android.sdk.internal.session.room.relationship.RoomChildRelationInfo
-import org.matrix.android.sdk.internal.session.sync.model.RoomSyncSummary
-import org.matrix.android.sdk.internal.session.sync.model.RoomSyncUnreadNotifications
 import timber.log.Timber
 import javax.inject.Inject
 import kotlin.system.measureTimeMillis
@@ -105,8 +105,8 @@ internal class RoomSummaryUpdater @Inject constructor(
         }
 
         // Hard to filter from the app now we use PagedList...
-        roomSummaryEntity.isHiddenFromUser = roomSummaryEntity.versioningState == VersioningState.UPGRADED_ROOM_JOINED
-                || roomAccountDataDataSource.getAccountDataEvent(roomId, RoomAccountDataTypes.EVENT_TYPE_VIRTUAL_ROOM) != null
+        roomSummaryEntity.isHiddenFromUser = roomSummaryEntity.versioningState == VersioningState.UPGRADED_ROOM_JOINED ||
+                roomAccountDataDataSource.getAccountDataEvent(roomId, RoomAccountDataTypes.EVENT_TYPE_VIRTUAL_ROOM) != null
 
         val lastNameEvent = CurrentStateEventEntity.getOrNull(realm, roomId, type = EventType.STATE_ROOM_NAME, stateKey = "")?.root
         val lastTopicEvent = CurrentStateEventEntity.getOrNull(realm, roomId, type = EventType.STATE_ROOM_TOPIC, stateKey = "")?.root
@@ -132,9 +132,9 @@ internal class RoomSummaryUpdater @Inject constructor(
             roomSummaryEntity.lastActivityTime = lastActivityFromEvent
         }
 
-        roomSummaryEntity.hasUnreadMessages = roomSummaryEntity.notificationCount > 0
+        roomSummaryEntity.hasUnreadMessages = roomSummaryEntity.notificationCount > 0 ||
                 // avoid this call if we are sure there are unread events
-                || !isEventRead(realm.configuration, userId, roomId, latestPreviewableEvent?.eventId)
+                !isEventRead(realm.configuration, userId, roomId, latestPreviewableEvent?.eventId)
 
         roomSummaryEntity.displayName = roomDisplayNameResolver.resolve(realm, roomId)
         roomSummaryEntity.avatarUrl = roomAvatarResolver.resolve(realm, roomId)

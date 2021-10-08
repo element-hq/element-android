@@ -23,6 +23,7 @@ import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.core.util.Pair
 import im.vector.app.features.crypto.recover.SetupMode
+import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.login.LoginConfig
 import im.vector.app.features.media.AttachmentData
 import im.vector.app.features.pin.PinMode
@@ -81,6 +82,8 @@ interface Navigator {
     fun openRoomsFiltering(context: Context)
 
     fun openSettings(context: Context, directAccess: Int = VectorSettingsActivity.EXTRA_DIRECT_ACCESS_ROOT)
+
+    fun openSettings(context: Context, payload: SettingsActivityPayload)
 
     fun openDebug(context: Context)
 

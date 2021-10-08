@@ -29,8 +29,7 @@ internal fun SharedSessionEntity.Companion.get(realm: Realm,
                                                sessionId: String,
                                                userId: String,
                                                deviceId: String,
-                                               deviceIdentityKey: String?)
-        : SharedSessionEntity? {
+                                               deviceIdentityKey: String?): SharedSessionEntity? {
     return realm.where<SharedSessionEntity>()
             .equalTo(SharedSessionEntityFields.ROOM_ID, roomId)
             .equalTo(SharedSessionEntityFields.SESSION_ID, sessionId)
@@ -41,8 +40,7 @@ internal fun SharedSessionEntity.Companion.get(realm: Realm,
             .findFirst()
 }
 
-internal fun SharedSessionEntity.Companion.get(realm: Realm, roomId: String?, sessionId: String)
-        : RealmResults<SharedSessionEntity> {
+internal fun SharedSessionEntity.Companion.get(realm: Realm, roomId: String?, sessionId: String): RealmResults<SharedSessionEntity> {
     return realm.where<SharedSessionEntity>()
             .equalTo(SharedSessionEntityFields.ROOM_ID, roomId)
             .equalTo(SharedSessionEntityFields.SESSION_ID, sessionId)
@@ -55,8 +53,7 @@ internal fun SharedSessionEntity.Companion.create(realm: Realm, roomId: String?,
                                                   userId: String,
                                                   deviceId: String,
                                                   deviceIdentityKey: String,
-                                                  chainIndex: Int)
-        : SharedSessionEntity {
+                                                  chainIndex: Int): SharedSessionEntity {
     return realm.createObject<SharedSessionEntity>().apply {
         this.roomId = roomId
         this.algorithm = MXCRYPTO_ALGORITHM_MEGOLM

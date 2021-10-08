@@ -29,7 +29,7 @@ sealed class LoginMode : Parcelable
     @Parcelize object Unsupported : LoginMode()
 }
 
-fun LoginMode.ssoIdentityProviders() : List<SsoIdentityProvider>? {
+fun LoginMode.ssoIdentityProviders(): List<SsoIdentityProvider>? {
     return when (this) {
         is LoginMode.Sso            -> ssoIdentityProviders
         is LoginMode.SsoAndPassword -> ssoIdentityProviders
@@ -37,7 +37,7 @@ fun LoginMode.ssoIdentityProviders() : List<SsoIdentityProvider>? {
     }
 }
 
-fun LoginMode.hasSso() : Boolean {
+fun LoginMode.hasSso(): Boolean {
     return when (this) {
         is LoginMode.Sso            -> true
         is LoginMode.SsoAndPassword -> true

@@ -50,8 +50,8 @@ class PreShareKeysTest : InstrumentedTest {
         aliceSession.cryptoService().discardOutboundSession(e2eRoomID)
 
         val preShareCount = bobSession.cryptoService().getGossipingEvents().count {
-            it.senderId == aliceSession.myUserId
-                    && it.getClearType() == EventType.ROOM_KEY
+            it.senderId == aliceSession.myUserId &&
+                    it.getClearType() == EventType.ROOM_KEY
         }
 
         assertEquals("Bob should not have receive any key from alice at this point", 0, preShareCount)
@@ -65,16 +65,16 @@ class PreShareKeysTest : InstrumentedTest {
         mTestHelper.waitWithLatch { latch ->
             mTestHelper.retryPeriodicallyWithLatch(latch) {
                 val newGossipCount = bobSession.cryptoService().getGossipingEvents().count {
-                    it.senderId == aliceSession.myUserId
-                            && it.getClearType() == EventType.ROOM_KEY
+                    it.senderId == aliceSession.myUserId &&
+                            it.getClearType() == EventType.ROOM_KEY
                 }
                 newGossipCount > preShareCount
             }
         }
 
         val latest = bobSession.cryptoService().getGossipingEvents().lastOrNull {
-            it.senderId == aliceSession.myUserId
-                    && it.getClearType() == EventType.ROOM_KEY
+            it.senderId == aliceSession.myUserId &&
+                    it.getClearType() == EventType.ROOM_KEY
         }
 
         val content = latest?.getClearContent().toModel<RoomKeyContent>()

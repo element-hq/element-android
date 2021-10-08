@@ -23,8 +23,8 @@ import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.platform.EmptyAction
@@ -41,8 +41,8 @@ import org.matrix.android.sdk.rx.unwrap
 data class DisplayReactionsViewState(
         val eventId: String,
         val roomId: String,
-        val mapReactionKeyToMemberList: Async<List<ReactionInfo>> = Uninitialized)
-    : MavericksState {
+        val mapReactionKeyToMemberList: Async<List<ReactionInfo>> = Uninitialized) :
+    MavericksState {
 
     constructor(args: TimelineEventFragmentArgs) : this(roomId = args.roomId, eventId = args.eventId)
 }

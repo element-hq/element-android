@@ -63,8 +63,8 @@ sealed class BannerState {
 }
 
 class ServerBackupStatusViewModel @AssistedInject constructor(@Assisted initialState: ServerBackupStatusViewState,
-                                                              private val session: Session)
-    : VectorViewModel<ServerBackupStatusViewState, EmptyAction, EmptyViewEvents>(initialState), KeysBackupStateListener {
+                                                              private val session: Session) :
+        VectorViewModel<ServerBackupStatusViewState, EmptyAction, EmptyViewEvents>(initialState), KeysBackupStateListener {
 
     @AssistedFactory
     interface Factory {
@@ -108,15 +108,14 @@ class ServerBackupStatusViewModel @AssistedInject constructor(@Assisted initialS
             // So recovery is not setup
             // Check if cross signing is enabled and local secrets known
             if (
-                    crossSigningInfo.getOrNull() == null
-                    || (crossSigningInfo.getOrNull()?.isTrusted() == true
-                            && pInfo.getOrNull()?.allKnown().orFalse())
+                    crossSigningInfo.getOrNull() == null ||
+                    (crossSigningInfo.getOrNull()?.isTrusted() == true &&
+                    pInfo.getOrNull()?.allKnown().orFalse())
             ) {
                 // So 4S is not setup and we have local secrets,
                 return@combine BannerState.Setup(numberOfKeys = getNumberOfKeysToBackup())
             }
             BannerState.Hidden
-
         }
                 .sample(1000) // we don't want to flicker or catch transient states
                 .distinctUntilChanged()

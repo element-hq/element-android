@@ -28,7 +28,8 @@ data class CreateRoomViewState(
         val roomName: String = "",
         val roomTopic: String = "",
         val roomJoinRules: RoomJoinRules = RoomJoinRules.INVITE,
-        val isEncrypted: Boolean = false,
+        val isEncrypted: Boolean? = null,
+        val defaultEncrypted: Map<RoomJoinRules, Boolean> = emptyMap(),
         val showAdvanced: Boolean = false,
         val disableFederation: Boolean = false,
         val homeServerName: String = "",
@@ -50,8 +51,8 @@ data class CreateRoomViewState(
     /**
      * Return true if there is not important input from user
      */
-    fun isEmpty() = avatarUri == null
-            && roomName.isEmpty()
-            && roomTopic.isEmpty()
-            && aliasLocalPart.isNullOrEmpty()
+    fun isEmpty() = avatarUri == null &&
+            roomName.isEmpty() &&
+            roomTopic.isEmpty() &&
+            aliasLocalPart.isNullOrEmpty()
 }

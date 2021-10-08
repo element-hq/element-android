@@ -28,8 +28,8 @@ import javax.inject.Provider
 
 internal class DefaultWidgetService @Inject constructor(private val widgetManager: WidgetManager,
                                                         private val widgetURLFormatter: WidgetURLFormatter,
-                                                        private val widgetPostAPIMediator: Provider<WidgetPostAPIMediator>)
-    : WidgetService {
+                                                        private val widgetPostAPIMediator: Provider<WidgetPostAPIMediator>) :
+    WidgetService {
 
     override fun getWidgetURLFormatter(): WidgetURLFormatter {
         return widgetURLFormatter

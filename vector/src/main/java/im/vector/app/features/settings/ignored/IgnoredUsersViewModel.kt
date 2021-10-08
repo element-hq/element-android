@@ -45,8 +45,8 @@ sealed class IgnoredUsersAction : VectorViewModelAction {
 }
 
 class IgnoredUsersViewModel @AssistedInject constructor(@Assisted initialState: IgnoredUsersViewState,
-                                                        private val session: Session)
-    : VectorViewModel<IgnoredUsersViewState, IgnoredUsersAction, IgnoredUsersViewEvents>(initialState) {
+                                                        private val session: Session) :
+    VectorViewModel<IgnoredUsersViewState, IgnoredUsersAction, IgnoredUsersViewEvents>(initialState) {
 
     @AssistedFactory
     interface Factory {

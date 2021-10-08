@@ -31,6 +31,7 @@ import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.getFormattedValue
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.features.form.formAdvancedToggleItem
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.identity.SharedState
 import org.matrix.android.sdk.api.session.identity.ThreePid
@@ -62,7 +63,7 @@ class DiscoverySettingsController @Inject constructor(
             }
             is Success -> {
                 buildIdentityServerSection(data)
-                val hasIdentityServer = data.identityServer().isNullOrBlank().not()
+                val hasIdentityServer = data.identityServer()?.serverUrl.isNullOrBlank().not()
                 if (hasIdentityServer && !data.termsNotSigned) {
                     buildConsentSection(data)
                     buildEmailsSection(data.emailList)
@@ -106,7 +107,8 @@ class DiscoverySettingsController @Inject constructor(
     }
 
     private fun buildIdentityServerSection(data: DiscoverySettingsState) {
-        val identityServer = data.identityServer() ?: stringProvider.getString(R.string.none)
+        val identityServer = data.identityServer()
+        val identityServerUrl = identityServer?.serverUrl ?: stringProvider.getString(R.string.none)
         val host = this
 
         settingsSectionTitleItem {
@@ -116,28 +118,58 @@ class DiscoverySettingsController @Inject constructor(
 
         settingsItem {
             id("idServer")
-            title(identityServer)
+            title(identityServerUrl)
         }
 
-        if (data.identityServer() != null && data.termsNotSigned) {
+        val policies = identityServer?.policies
+        if (policies != null) {
+            formAdvancedToggleItem {
+                id("policy-urls")
+                val titleRes = if (data.isIdentityPolicyUrlsExpanded) {
+                    R.string.settings_discovery_hide_identity_server_policy_title
+                } else R.string.settings_discovery_show_identity_server_policy_title
+                title(host.stringProvider.getString(titleRes))
+                expanded(data.isIdentityPolicyUrlsExpanded)
+                listener { host.listener?.onPolicyUrlsExpandedStateToggled(!data.isIdentityPolicyUrlsExpanded) }
+            }
+            if (data.isIdentityPolicyUrlsExpanded) {
+                if (policies.isEmpty()) {
+                    settingsInfoItem {
+                        id("emptyPolicy")
+                        helperText(host.stringProvider.getString(R.string.settings_discovery_no_policy_provided))
+                    }
+                } else {
+                    policies.forEach { policy ->
+                        discoveryPolicyItem {
+                            id(policy.url)
+                            name(policy.name)
+                            url(policy.url)
+                            clickListener { host.listener?.onPolicyTapped(policy) }
+                        }
+                    }
+                }
+            }
+        }
+
+        if (identityServer != null && data.termsNotSigned) {
             settingsInfoItem {
                 id("idServerFooter")
-                helperText(host.stringProvider.getString(R.string.settings_agree_to_terms, identityServer))
+                helperText(host.stringProvider.getString(R.string.settings_agree_to_terms, identityServerUrl))
                 showCompoundDrawable(true)
                 itemClickListener { host.listener?.openIdentityServerTerms() }
             }
             settingsButtonItem {
                 id("seeTerms")
                 colorProvider(host.colorProvider)
-                buttonTitle(host.stringProvider.getString(R.string.open_terms_of, identityServer))
+                buttonTitle(host.stringProvider.getString(R.string.open_terms_of, identityServerUrl))
                 buttonClickListener { host.listener?.openIdentityServerTerms() }
             }
         } else {
             settingsInfoItem {
                 id("idServerFooter")
                 showCompoundDrawable(false)
-                if (data.identityServer() != null) {
-                    helperText(host.stringProvider.getString(R.string.settings_discovery_identity_server_info, identityServer))
+                if (identityServer != null) {
+                    helperText(host.stringProvider.getString(R.string.settings_discovery_identity_server_info, identityServerUrl))
                 } else {
                     helperTextResId(R.string.settings_discovery_identity_server_info_none)
                 }
@@ -147,7 +179,7 @@ class DiscoverySettingsController @Inject constructor(
         settingsButtonItem {
             id("change")
             colorProvider(host.colorProvider)
-            if (data.identityServer() == null) {
+            if (identityServer == null) {
                 buttonTitleId(R.string.add_identity_server)
             } else {
                 buttonTitleId(R.string.change_identity_server)
@@ -155,7 +187,7 @@ class DiscoverySettingsController @Inject constructor(
             buttonClickListener { host.listener?.onTapChangeIdentityServer() }
         }
 
-        if (data.identityServer() != null) {
+        if (identityServer != null) {
             settingsInfoItem {
                 id("removeInfo")
                 helperTextResId(R.string.settings_discovery_disconnect_identity_server_info)
@@ -282,8 +314,8 @@ class DiscoverySettingsController @Inject constructor(
                 val error = pidInfo.finalRequest.error
                 // Deal with error 500
                 // Ref: https://github.com/matrix-org/sydent/issues/292
-                if (error is Failure.ServerError
-                        && error.httpCode == HttpsURLConnection.HTTP_INTERNAL_ERROR /* 500 */) {
+                if (error is Failure.ServerError &&
+                        error.httpCode == HttpsURLConnection.HTTP_INTERNAL_ERROR /* 500 */) {
                     stringProvider.getString(R.string.settings_text_message_sent_wrong_code)
                 } else {
                     errorFormatter.toHumanReadable(error)
@@ -400,5 +432,7 @@ class DiscoverySettingsController @Inject constructor(
         fun onTapDisconnectIdentityServer()
         fun onTapUpdateUserConsent(newValue: Boolean)
         fun onTapRetryToRetrieveBindings()
+        fun onPolicyUrlsExpandedStateToggled(newExpandedState: Boolean)
+        fun onPolicyTapped(policy: IdentityServerPolicy)
     }
 }

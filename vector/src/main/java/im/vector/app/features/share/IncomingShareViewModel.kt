@@ -42,8 +42,8 @@ import org.matrix.android.sdk.flow.flow
 class IncomingShareViewModel @AssistedInject constructor(
         @Assisted initialState: IncomingShareViewState,
         private val session: Session,
-        private val breadcrumbsRoomComparator: BreadcrumbsRoomComparator)
-    : VectorViewModel<IncomingShareViewState, IncomingShareAction, IncomingShareViewEvents>(initialState) {
+        private val breadcrumbsRoomComparator: BreadcrumbsRoomComparator) :
+    VectorViewModel<IncomingShareViewState, IncomingShareAction, IncomingShareViewEvents>(initialState) {
 
     @AssistedFactory
     interface Factory {

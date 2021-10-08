@@ -692,8 +692,8 @@ class LoginViewModel @AssistedInject constructor(
 
     private fun onFlowResponse(flowResult: FlowResult) {
         // If dummy stage is mandatory, and password is already sent, do the dummy stage now
-        if (isRegistrationStarted
-                && flowResult.missingStages.any { it is Stage.Dummy && it.mandatory }) {
+        if (isRegistrationStarted &&
+                flowResult.missingStages.any { it is Stage.Dummy && it.mandatory }) {
             handleRegisterDummy()
         } else {
             // Notify the user
@@ -781,11 +781,11 @@ class LoginViewModel @AssistedInject constructor(
 
             val loginMode = when {
                 // SSO login is taken first
-                data.supportedLoginTypes.contains(LoginFlowTypes.SSO)
-                        && data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD) -> LoginMode.SsoAndPassword(data.ssoIdentityProviders)
-                data.supportedLoginTypes.contains(LoginFlowTypes.SSO)                 -> LoginMode.Sso(data.ssoIdentityProviders)
-                data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD)            -> LoginMode.Password
-                else                                                                  -> LoginMode.Unsupported
+                data.supportedLoginTypes.contains(LoginFlowTypes.SSO) &&
+                        data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD) -> LoginMode.SsoAndPassword(data.ssoIdentityProviders)
+                data.supportedLoginTypes.contains(LoginFlowTypes.SSO)              -> LoginMode.Sso(data.ssoIdentityProviders)
+                data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD)         -> LoginMode.Password
+                else                                                               -> LoginMode.Unsupported
             }
 
             // FIXME We should post a view event here normally?
@@ -798,8 +798,8 @@ class LoginViewModel @AssistedInject constructor(
                         loginModeSupportedTypes = data.supportedLoginTypes.toList()
                 )
             }
-            if ((loginMode == LoginMode.Password && !data.isLoginAndRegistrationSupported)
-                    || data.isOutdatedHomeserver) {
+            if ((loginMode == LoginMode.Password && !data.isLoginAndRegistrationSupported) ||
+                    data.isOutdatedHomeserver) {
                 // Notify the UI
                 _viewEvents.post(LoginViewEvents.OutdatedHomeserver)
             }

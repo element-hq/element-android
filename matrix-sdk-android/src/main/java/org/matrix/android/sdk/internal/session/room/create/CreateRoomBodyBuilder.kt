@@ -77,9 +77,9 @@ internal class CreateRoomBodyBuilder @Inject constructor(
                         buildHistoryVisibilityEvent(params),
                         buildAvatarEvent(params),
                         buildGuestAccess(params)
-                )
-                        + params.featurePreset?.setupInitialStates().orEmpty()
-                        + buildCustomInitialStates(params)
+                ) +
+                        params.featurePreset?.setupInitialStates().orEmpty() +
+                        buildCustomInitialStates(params)
                 )
                 .takeIf { it.isNotEmpty() }
 
@@ -154,8 +154,8 @@ internal class CreateRoomBodyBuilder @Inject constructor(
      * Add the crypto algorithm to the room creation parameters.
      */
     private suspend fun buildEncryptionWithAlgorithmEvent(params: CreateRoomParams): Event? {
-        if (params.algorithm == null
-                && canEnableEncryption(params)) {
+        if (params.algorithm == null &&
+                canEnableEncryption(params)) {
             // Enable the encryption
             params.enableEncryption()
         }
@@ -173,13 +173,13 @@ internal class CreateRoomBodyBuilder @Inject constructor(
     }
 
     private suspend fun canEnableEncryption(params: CreateRoomParams): Boolean {
-        return params.enableEncryptionIfInvitedUsersSupportIt
+        return params.enableEncryptionIfInvitedUsersSupportIt &&
                 // Parity with web, enable if users have encryption ready devices
                 // for now remove checks on cross signing and 3pid invites
                 // && crossSigningService.isCrossSigningVerified()
-                && params.invite3pids.isEmpty()
-                && params.invitedUserIds.isNotEmpty()
-                && params.invitedUserIds.let { userIds ->
+                params.invite3pids.isEmpty() &&
+                params.invitedUserIds.isNotEmpty() &&
+                params.invitedUserIds.let { userIds ->
             val keys = deviceListManager.downloadKeys(userIds, forceDownload = false)
 
             userIds.all { userId ->

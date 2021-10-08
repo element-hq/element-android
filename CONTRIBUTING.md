@@ -9,7 +9,7 @@ Android support can be found in this [![Element Android Matrix room #element-and
 ## Android Studio settings
 
 Please set the "hard wrap" setting of Android Studio to 160 chars, this is the setting we use internally to format the source code (Menu `Settings/Editor/Code Style` then `Hard wrap at`).
-Please ensure that your using the project formatting rules (which are in the project at .idea/codeStyles/), and format the file before committing them.
+Please ensure that you're using the project formatting rules (which are in the project at .idea/codeStyles/), and format the file before committing them.
 
 ### Template
 
@@ -80,14 +80,13 @@ Make sure the following commands execute without any error:
 #### ktlint
 
 <pre>
-curl -sSLO https://github.com/pinterest/ktlint/releases/download/0.34.2/ktlint && chmod a+x ktlint
-./ktlint --android --experimental -v
+./gradlew ktlintCheck --continue
 </pre>
 
 Note that you can run
 
 <pre>
-./ktlint --android --experimental -v -F
+./gradlew ktlintFormat
 </pre>
 
 For ktlint to fix some detected errors for you (you still have to check and commit the fix of course)

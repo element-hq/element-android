@@ -38,8 +38,8 @@ import timber.log.Timber
 import javax.inject.Inject
 
 internal class SendGossipWorker(context: Context,
-                                params: WorkerParameters)
-    : SessionSafeCoroutineWorker<SendGossipWorker.Params>(context, params, Params::class.java) {
+                                params: WorkerParameters) :
+    SessionSafeCoroutineWorker<SendGossipWorker.Params>(context, params, Params::class.java) {
 
     @JsonClass(generateAdapter = true)
     internal data class Params(

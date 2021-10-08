@@ -16,10 +16,10 @@
 
 package org.matrix.android.sdk.api.auth.data
 
-import org.matrix.android.sdk.internal.auth.version.Versions
-import org.matrix.android.sdk.internal.auth.version.isSupportedBySdk
 import org.amshove.kluent.shouldBe
 import org.junit.Test
+import org.matrix.android.sdk.internal.auth.version.Versions
+import org.matrix.android.sdk.internal.auth.version.isSupportedBySdk
 
 class VersionsKtTest {
 

@@ -587,16 +587,16 @@ class LoginViewModel2 @AssistedInject constructor(
                 return@launch
             }
             when (data) {
-                is WellknownResult.Prompt          ->
+                is WellknownResult.Prompt     ->
                     onWellknownSuccess(action, data, homeServerConnectionConfig)
-                is WellknownResult.FailPrompt      ->
+                is WellknownResult.FailPrompt ->
                     // Relax on IS discovery if homeserver is valid
                     if (data.homeServerUrl != null && data.wellKnown != null) {
                         onWellknownSuccess(action, WellknownResult.Prompt(data.homeServerUrl!!, null, data.wellKnown!!), homeServerConnectionConfig)
                     } else {
                         onWellKnownError()
                     }
-                else                               -> {
+                else                          -> {
                     onWellKnownError()
                 }
             }.exhaustive
@@ -630,11 +630,11 @@ class LoginViewModel2 @AssistedInject constructor(
         } ?: return
 
         val loginMode = when {
-            data.supportedLoginTypes.contains(LoginFlowTypes.SSO)
-                    && data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD) -> LoginMode.SsoAndPassword(data.ssoIdentityProviders)
-            data.supportedLoginTypes.contains(LoginFlowTypes.SSO)                 -> LoginMode.Sso(data.ssoIdentityProviders)
-            data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD)            -> LoginMode.Password
-            else                                                                  -> LoginMode.Unsupported
+            data.supportedLoginTypes.contains(LoginFlowTypes.SSO) &&
+                    data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD) -> LoginMode.SsoAndPassword(data.ssoIdentityProviders)
+            data.supportedLoginTypes.contains(LoginFlowTypes.SSO)              -> LoginMode.Sso(data.ssoIdentityProviders)
+            data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD)         -> LoginMode.Password
+            else                                                               -> LoginMode.Unsupported
         }
 
         val viewEvent = when (loginMode) {
@@ -662,8 +662,8 @@ class LoginViewModel2 @AssistedInject constructor(
             )
         }
 
-        if ((loginMode == LoginMode.Password && !data.isLoginAndRegistrationSupported)
-                || data.isOutdatedHomeserver) {
+        if ((loginMode == LoginMode.Password && !data.isLoginAndRegistrationSupported) ||
+                data.isOutdatedHomeserver) {
             // Notify the UI
             _viewEvents.post(LoginViewEvents2.OutdatedHomeserver)
         }
@@ -688,8 +688,8 @@ class LoginViewModel2 @AssistedInject constructor(
 
     private fun onFlowResponse(flowResult: FlowResult) {
         // If dummy stage is mandatory, and password is already sent, do the dummy stage now
-        if (isRegistrationStarted
-                && flowResult.missingStages.any { it is Stage.Dummy && it.mandatory }) {
+        if (isRegistrationStarted &&
+                flowResult.missingStages.any { it is Stage.Dummy && it.mandatory }) {
             handleRegisterDummy()
         } else {
             // Notify the user
@@ -757,11 +757,11 @@ class LoginViewModel2 @AssistedInject constructor(
             rememberHomeServer(homeServerConnectionConfig.homeServerUri.toString())
 
             val loginMode = when {
-                data.supportedLoginTypes.contains(LoginFlowTypes.SSO)
-                        && data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD) -> LoginMode.SsoAndPassword(data.ssoIdentityProviders)
-                data.supportedLoginTypes.contains(LoginFlowTypes.SSO)                 -> LoginMode.Sso(data.ssoIdentityProviders)
-                data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD)            -> LoginMode.Password
-                else                                                                  -> LoginMode.Unsupported
+                data.supportedLoginTypes.contains(LoginFlowTypes.SSO) &&
+                        data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD) -> LoginMode.SsoAndPassword(data.ssoIdentityProviders)
+                data.supportedLoginTypes.contains(LoginFlowTypes.SSO)              -> LoginMode.Sso(data.ssoIdentityProviders)
+                data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD)         -> LoginMode.Password
+                else                                                               -> LoginMode.Unsupported
             }
 
             val viewEvent = when (loginMode) {
@@ -802,8 +802,8 @@ class LoginViewModel2 @AssistedInject constructor(
             }
             viewEvent?.let { _viewEvents.post(it) }
 
-            if ((loginMode == LoginMode.Password && !data.isLoginAndRegistrationSupported)
-                    || data.isOutdatedHomeserver) {
+            if ((loginMode == LoginMode.Password && !data.isLoginAndRegistrationSupported) ||
+                    data.isOutdatedHomeserver) {
                 // Notify the UI
                 _viewEvents.post(LoginViewEvents2.OutdatedHomeserver)
             }

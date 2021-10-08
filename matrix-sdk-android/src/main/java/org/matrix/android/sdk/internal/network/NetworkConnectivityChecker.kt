@@ -17,10 +17,10 @@
 package org.matrix.android.sdk.internal.network
 
 import androidx.annotation.WorkerThread
+import kotlinx.coroutines.runBlocking
 import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.internal.session.homeserver.HomeServerPinger
 import org.matrix.android.sdk.internal.util.BackgroundDetectionObserver
-import kotlinx.coroutines.runBlocking
 import java.util.Collections
 import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
@@ -43,8 +43,8 @@ interface NetworkConnectivityChecker {
 @SessionScope
 internal class DefaultNetworkConnectivityChecker @Inject constructor(private val homeServerPinger: HomeServerPinger,
                                                                      private val backgroundDetectionObserver: BackgroundDetectionObserver,
-                                                                     private val networkCallbackStrategy: NetworkCallbackStrategy)
-    : NetworkConnectivityChecker {
+                                                                     private val networkCallbackStrategy: NetworkCallbackStrategy) :
+    NetworkConnectivityChecker {
 
     private val hasInternetAccess = AtomicBoolean(true)
     private val listeners = Collections.synchronizedSet(LinkedHashSet<NetworkConnectivityChecker.Listener>())

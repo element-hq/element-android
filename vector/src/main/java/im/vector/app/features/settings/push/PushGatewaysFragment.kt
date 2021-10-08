@@ -32,7 +32,6 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentGenericRecyclerBinding
 import org.matrix.android.sdk.api.session.pushers.Pusher
-
 import javax.inject.Inject
 
 // Referenced in vector_settings_notifications.xml

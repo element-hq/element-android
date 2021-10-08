@@ -65,13 +65,13 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
                 ?: false
 
         val showInformation =
-                addDaySeparator
-                        || event.senderInfo.avatarUrl != nextDisplayableEvent?.senderInfo?.avatarUrl
-                        || event.senderInfo.disambiguatedDisplayName != nextDisplayableEvent?.senderInfo?.disambiguatedDisplayName
-                        || nextDisplayableEvent.root.getClearType() !in listOf(EventType.MESSAGE, EventType.STICKER, EventType.ENCRYPTED)
-                        || isNextMessageReceivedMoreThanOneHourAgo
-                        || isTileTypeMessage(nextDisplayableEvent)
-                        || nextDisplayableEvent.isEdition()
+                addDaySeparator ||
+                        event.senderInfo.avatarUrl != nextDisplayableEvent?.senderInfo?.avatarUrl ||
+                        event.senderInfo.disambiguatedDisplayName != nextDisplayableEvent?.senderInfo?.disambiguatedDisplayName ||
+                        nextDisplayableEvent.root.getClearType() !in listOf(EventType.MESSAGE, EventType.STICKER, EventType.ENCRYPTED) ||
+                        isNextMessageReceivedMoreThanOneHourAgo ||
+                        isTileTypeMessage(nextDisplayableEvent) ||
+                        nextDisplayableEvent.isEdition()
 
         val time = dateFormatter.format(event.root.originServerTs, DateFormatKind.MESSAGE_SIMPLE)
         val roomSummary = params.partialState.roomSummary
@@ -143,10 +143,10 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
 
     private fun getE2EDecoration(roomSummary: RoomSummary?, event: TimelineEvent): E2EDecoration {
         return if (
-                event.root.sendState == SendState.SYNCED
-                && roomSummary?.isEncrypted.orFalse()
+                event.root.sendState == SendState.SYNCED &&
+                roomSummary?.isEncrypted.orFalse() &&
                 // is user verified
-                && session.cryptoService().crossSigningService().getUserCrossSigningKeys(event.root.senderId ?: "")?.isTrusted() == true) {
+                session.cryptoService().crossSigningService().getUserCrossSigningKeys(event.root.senderId ?: "")?.isTrusted() == true) {
             val ts = roomSummary?.encryptionEventTs ?: 0
             val eventTs = event.root.originServerTs ?: 0
             if (event.isEncrypted()) {

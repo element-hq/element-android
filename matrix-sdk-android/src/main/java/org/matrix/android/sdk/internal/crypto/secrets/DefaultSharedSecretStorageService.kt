@@ -16,6 +16,8 @@
 
 package org.matrix.android.sdk.internal.crypto.secrets
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.listeners.ProgressListener
 import org.matrix.android.sdk.api.session.accountdata.SessionAccountDataService
@@ -43,8 +45,6 @@ import org.matrix.android.sdk.internal.crypto.tools.HkdfSha256
 import org.matrix.android.sdk.internal.crypto.tools.withOlmDecryption
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.withContext
 import org.matrix.olm.OlmPkMessage
 import java.security.SecureRandom
 import javax.crypto.Cipher
@@ -359,8 +359,8 @@ internal class DefaultSharedSecretStorageService @Inject constructor(
         val keyInfo = (keyInfoResult as? KeyInfoResult.Success)?.keyInfo
                 ?: return IntegrityResult.Error(SharedSecretStorageError.UnknownKey(keyId ?: ""))
 
-        if (keyInfo.content.algorithm != SSSS_ALGORITHM_AES_HMAC_SHA2
-                && keyInfo.content.algorithm != SSSS_ALGORITHM_CURVE25519_AES_SHA2) {
+        if (keyInfo.content.algorithm != SSSS_ALGORITHM_AES_HMAC_SHA2 &&
+                keyInfo.content.algorithm != SSSS_ALGORITHM_CURVE25519_AES_SHA2) {
             // Unsupported algorithm
             return IntegrityResult.Error(
                     SharedSecretStorageError.UnsupportedAlgorithm(keyInfo.content.algorithm ?: "")

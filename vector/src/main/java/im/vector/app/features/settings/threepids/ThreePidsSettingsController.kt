@@ -295,9 +295,9 @@ class ThreePidsSettingsController @Inject constructor(
         val failure = (data.msisdnValidationRequests[threePid.value] as? Fail)?.error ?: return null
         // Wrong code?
         // See https://github.com/matrix-org/synapse/issues/8218
-        return if (failure is Failure.ServerError
-                && failure.httpCode == 400
-                && failure.error.code == MatrixError.M_UNKNOWN) {
+        return if (failure is Failure.ServerError &&
+                failure.httpCode == 400 &&
+                failure.error.code == MatrixError.M_UNKNOWN) {
             stringProvider.getString(R.string.settings_text_message_sent_wrong_code)
         } else {
             errorFormatter.toHumanReadable(failure)

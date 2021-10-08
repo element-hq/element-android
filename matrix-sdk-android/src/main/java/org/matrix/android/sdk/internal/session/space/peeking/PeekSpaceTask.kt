@@ -76,9 +76,9 @@ internal class DefaultPeekSpaceTask @Inject constructor(
         if (depth >= maxDepth) return emptyList()
         val childRoomsIds = stateEvents
                 .filter {
-                    it.type == EventType.STATE_SPACE_CHILD && !it.stateKey.isNullOrEmpty()
+                    it.type == EventType.STATE_SPACE_CHILD && !it.stateKey.isNullOrEmpty() &&
                             // Children where via is not present are ignored.
-                            && it.content?.toModel<SpaceChildContent>()?.via != null
+                            it.content?.toModel<SpaceChildContent>()?.via != null
                 }
                 .map { it.stateKey to it.content?.toModel<SpaceChildContent>() }
 

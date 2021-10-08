@@ -46,8 +46,8 @@ import org.matrix.android.sdk.flow.flow
 import timber.log.Timber
 
 class RoomPreviewViewModel @AssistedInject constructor(@Assisted private val initialState: RoomPreviewViewState,
-                                                       private val session: Session)
-    : VectorViewModel<RoomPreviewViewState, RoomPreviewAction, EmptyViewEvents>(initialState) {
+                                                       private val session: Session) :
+    VectorViewModel<RoomPreviewViewState, RoomPreviewAction, EmptyViewEvents>(initialState) {
 
     @AssistedFactory
     interface Factory {

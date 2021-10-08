@@ -39,7 +39,6 @@ import im.vector.app.features.permalink.NavigationInterceptor
 import im.vector.app.features.permalink.PermalinkHandler
 import io.reactivex.rxkotlin.subscribeBy
 import kotlinx.coroutines.launch
-
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoom
 import timber.log.Timber

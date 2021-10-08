@@ -18,6 +18,8 @@ package org.matrix.android.sdk.internal.session.group
 
 import androidx.lifecycle.LiveData
 import com.zhuinden.monarchy.Monarchy
+import io.realm.Realm
+import io.realm.RealmQuery
 import org.matrix.android.sdk.api.session.group.Group
 import org.matrix.android.sdk.api.session.group.GroupService
 import org.matrix.android.sdk.api.session.group.GroupSummaryQueryParams
@@ -30,8 +32,6 @@ import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.query.process
 import org.matrix.android.sdk.internal.util.fetchCopyMap
-import io.realm.Realm
-import io.realm.RealmQuery
 import javax.inject.Inject
 
 internal class DefaultGroupService @Inject constructor(@SessionDatabase private val monarchy: Monarchy,

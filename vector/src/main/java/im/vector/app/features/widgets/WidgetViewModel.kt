@@ -51,8 +51,8 @@ import javax.net.ssl.HttpsURLConnection
 class WidgetViewModel @AssistedInject constructor(@Assisted val initialState: WidgetViewState,
                                                   widgetPostAPIHandlerFactory: WidgetPostAPIHandler.Factory,
                                                   private val stringProvider: StringProvider,
-                                                  private val session: Session)
-    : VectorViewModel<WidgetViewState, WidgetAction, WidgetViewEvents>(initialState),
+                                                  private val session: Session) :
+    VectorViewModel<WidgetViewState, WidgetAction, WidgetViewEvents>(initialState),
         WidgetPostAPIHandler.NavigationCallback,
         IntegrationManagerService.Listener {
 

@@ -31,7 +31,6 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.startImportTextFromFileIntent
 import im.vector.app.databinding.FragmentSsssAccessFromKeyBinding
 import io.reactivex.android.schedulers.AndroidSchedulers
-
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject

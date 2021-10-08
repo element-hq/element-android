@@ -33,6 +33,7 @@ import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
 import org.matrix.android.sdk.internal.database.query.getOrNull
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.UserId
+import org.matrix.android.sdk.internal.session.displayname.DisplayNameResolver
 import javax.inject.Inject
 
 /**
@@ -40,6 +41,7 @@ import javax.inject.Inject
  */
 internal class RoomDisplayNameResolver @Inject constructor(
         matrixConfiguration: MatrixConfiguration,
+        private val displayNameResolver: DisplayNameResolver,
         @UserId private val userId: String
 ) {
 
@@ -83,7 +85,8 @@ internal class RoomDisplayNameResolver @Inject constructor(
                         activeMembers.where()
                                 .equalTo(RoomMemberSummaryEntityFields.USER_ID, it)
                                 .findFirst()
-                                ?.getBestName()
+                                ?.toMatrixItem()
+                                ?.let { matrixItem -> displayNameResolver.getBestName(matrixItem) }
                     }
                     ?: roomDisplayNameFallbackProvider.getNameForRoomInvite()
         } else if (roomEntity?.membership == Membership.JOIN) {
@@ -109,7 +112,7 @@ internal class RoomDisplayNameResolver @Inject constructor(
                     // Get left members if any
                     val leftMembersNames = roomMembers.queryLeftRoomMembersEvent()
                             .findAll()
-                            .map { it.getBestName() }
+                            .map { displayNameResolver.getBestName(it.toMatrixItem()) }
                     roomDisplayNameFallbackProvider.getNameForEmptyRoom(roomSummary?.isDirect.orFalse(), leftMembersNames)
                 }
                 1    -> {
@@ -157,7 +160,7 @@ internal class RoomDisplayNameResolver @Inject constructor(
                                       roomMemberHelper: RoomMemberHelper): String {
         val isUnique = roomMemberHelper.isUniqueDisplayName(roomMemberSummary.displayName)
         return if (isUnique) {
-            roomMemberSummary.getBestName()
+            displayNameResolver.getBestName(roomMemberSummary.toMatrixItem())
         } else {
             "${roomMemberSummary.displayName} (${roomMemberSummary.userId})"
         }

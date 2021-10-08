@@ -16,17 +16,17 @@
 
 package org.matrix.android.sdk.internal.crypto
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.internal.crypto.model.rest.RoomKeyRequestBody
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
+import org.matrix.android.sdk.internal.crypto.tasks.createUniqueTxnId
+import org.matrix.android.sdk.internal.crypto.util.RequestIdHelper
 import org.matrix.android.sdk.internal.di.SessionId
 import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.internal.worker.WorkerParamsFactory
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import org.matrix.android.sdk.internal.crypto.tasks.createUniqueTxnId
-import org.matrix.android.sdk.internal.crypto.util.RequestIdHelper
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -112,9 +112,8 @@ internal class OutgoingGossipingRequestManager @Inject constructor(
      * @param andResend   true to resend the key request
      */
     private fun cancelRoomKeyRequest(requestBody: RoomKeyRequestBody, andResend: Boolean) {
-        val req = cryptoStore.getOutgoingRoomKeyRequest(requestBody)
-                ?: // no request was made for this key
-                return Unit.also {
+        val req = cryptoStore.getOutgoingRoomKeyRequest(requestBody) // no request was made for this key
+                ?: return Unit.also {
                     Timber.v("## CRYPTO - GOSSIP cancelRoomKeyRequest() Unknown request $requestBody")
                 }
 

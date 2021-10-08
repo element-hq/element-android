@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.internal.crypto.keysbackup
 
+import org.junit.Assert
 import org.matrix.android.sdk.api.listeners.ProgressListener
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupService
@@ -28,7 +29,6 @@ import org.matrix.android.sdk.common.assertListEquals
 import org.matrix.android.sdk.internal.crypto.MegolmSessionData
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.MegolmBackupCreationInfo
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersion
-import org.junit.Assert
 import java.util.concurrent.CountDownLatch
 
 class KeysBackupTestHelper(

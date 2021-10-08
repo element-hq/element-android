@@ -26,8 +26,8 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import im.vector.app.R
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
@@ -86,8 +86,8 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
         @Assisted val args: VerificationBottomSheet.VerificationArgs,
         private val session: Session,
         private val supportedVerificationMethodsProvider: SupportedVerificationMethodsProvider,
-        private val stringProvider: StringProvider)
-    : VectorViewModel<VerificationBottomSheetViewState, VerificationAction, VerificationBottomSheetViewEvents>(initialState),
+        private val stringProvider: StringProvider) :
+    VectorViewModel<VerificationBottomSheetViewState, VerificationAction, VerificationBottomSheetViewEvents>(initialState),
         VerificationService.Listener {
 
     init {
@@ -172,9 +172,9 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
             }
         } else {
             // if the verification is already done you can't cancel anymore
-            if (state.pendingRequest.invoke()?.cancelConclusion != null
-                    || state.sasTransactionState is VerificationTxState.TerminalTxState
-                    || state.verifyingFrom4S) {
+            if (state.pendingRequest.invoke()?.cancelConclusion != null ||
+                    state.sasTransactionState is VerificationTxState.TerminalTxState ||
+                    state.verifyingFrom4S) {
                 // you cannot cancel anymore
             } else {
                 setState {
@@ -537,9 +537,9 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
             }
         }
 
-        if (pr.localId == state.pendingLocalId
-                || pr.localId == state.pendingRequest.invoke()?.localId
-                || state.pendingRequest.invoke()?.transactionId == pr.transactionId) {
+        if (pr.localId == state.pendingLocalId ||
+                pr.localId == state.pendingRequest.invoke()?.localId ||
+                state.pendingRequest.invoke()?.transactionId == pr.transactionId) {
             setState {
                 copy(
                         transactionId = args.verificationId ?: pr.transactionId,

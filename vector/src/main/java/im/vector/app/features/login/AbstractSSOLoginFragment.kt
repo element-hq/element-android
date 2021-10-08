@@ -25,7 +25,7 @@ import androidx.viewbinding.ViewBinding
 import com.airbnb.mvrx.withState
 import im.vector.app.core.utils.openUrlInChromeCustomTab
 
-abstract class AbstractSSOLoginFragment<VB: ViewBinding> : AbstractLoginFragment<VB>() {
+abstract class AbstractSSOLoginFragment<VB : ViewBinding> : AbstractLoginFragment<VB>() {
 
     // For sso
     private var customTabsServiceConnection: CustomTabsServiceConnection? = null
