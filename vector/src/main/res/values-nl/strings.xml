@@ -1960,8 +1960,8 @@
     <string name="call_held_by_user">%s heeft de oproep in de wacht gezet</string>
     <string name="return_to_call">Teruggaan naar oproep</string>
     <string name="active_call_with_duration">Actieve Oproep (%s)</string>
-    <string name="audio_call_with_participant">Bellen met</string>
-    <string name="video_call_with_participant">Videobellen met</string>
+    <string name="audio_call_with_participant">Bellen met %s</string>
+    <string name="video_call_with_participant">Videobellen met %s</string>
     <plurals name="missed_video_call">
         <item quantity="one">Gemiste video-oproep</item>
         <item quantity="other">%d gemiste video-oproepen</item>
