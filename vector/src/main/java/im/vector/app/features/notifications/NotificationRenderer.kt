@@ -68,9 +68,20 @@ class NotificationRenderer @Inject constructor(private val notifiableEventProces
                     useCompleteNotificationFormat = useCompleteNotificationFormat
             )
 
+            // Remove summary first to avoid briefly displaying it after dismissing the last notification
+            when (summaryNotification) {
+                SummaryNotification.Removed -> {
+                    Timber.d("Removing summary notification")
+                    notificationDisplayer.cancelNotificationMessage(null, SUMMARY_NOTIFICATION_ID)
+                }
+            }
+
             roomNotifications.forEach { wrapper ->
                 when (wrapper) {
-                    is RoomNotification.Removed -> notificationDisplayer.cancelNotificationMessage(wrapper.roomId, ROOM_MESSAGES_NOTIFICATION_ID)
+                    is RoomNotification.Removed -> {
+                        Timber.d("Removing room messages notification ${wrapper.roomId}")
+                        notificationDisplayer.cancelNotificationMessage(wrapper.roomId, ROOM_MESSAGES_NOTIFICATION_ID)
+                    }
                     is RoomNotification.Message -> if (useCompleteNotificationFormat) {
                         Timber.d("Updating room messages notification ${wrapper.meta.roomId}")
                         wrapper.shortcutInfo?.let {
@@ -83,7 +94,10 @@ class NotificationRenderer @Inject constructor(private val notifiableEventProces
 
             invitationNotifications.forEach { wrapper ->
                 when (wrapper) {
-                    is OneShotNotification.Removed -> notificationDisplayer.cancelNotificationMessage(wrapper.key, ROOM_INVITATION_NOTIFICATION_ID)
+                    is OneShotNotification.Removed -> {
+                        Timber.d("Removing invitation notification ${wrapper.key}")
+                        notificationDisplayer.cancelNotificationMessage(wrapper.key, ROOM_INVITATION_NOTIFICATION_ID)
+                    }
                     is OneShotNotification.Append  -> if (useCompleteNotificationFormat) {
                         Timber.d("Updating invitation notification ${wrapper.meta.key}")
                         notificationDisplayer.showNotificationMessage(wrapper.meta.key, ROOM_INVITATION_NOTIFICATION_ID, wrapper.notification)
@@ -93,7 +107,10 @@ class NotificationRenderer @Inject constructor(private val notifiableEventProces
 
             simpleNotifications.forEach { wrapper ->
                 when (wrapper) {
-                    is OneShotNotification.Removed -> notificationDisplayer.cancelNotificationMessage(wrapper.key, ROOM_EVENT_NOTIFICATION_ID)
+                    is OneShotNotification.Removed -> {
+                        Timber.d("Removing simple notification ${wrapper.key}")
+                        notificationDisplayer.cancelNotificationMessage(wrapper.key, ROOM_EVENT_NOTIFICATION_ID)
+                    }
                     is OneShotNotification.Append  -> if (useCompleteNotificationFormat) {
                         Timber.d("Updating simple notification ${wrapper.meta.key}")
                         notificationDisplayer.showNotificationMessage(wrapper.meta.key, ROOM_EVENT_NOTIFICATION_ID, wrapper.notification)
@@ -101,11 +118,8 @@ class NotificationRenderer @Inject constructor(private val notifiableEventProces
                 }
             }
 
+            // Update summary last to avoid briefly displaying it before other notifications
             when (summaryNotification) {
-                SummaryNotification.Removed   -> {
-                    Timber.d("Removing summary notification")
-                    notificationDisplayer.cancelNotificationMessage(null, SUMMARY_NOTIFICATION_ID)
-                }
                 is SummaryNotification.Update -> {
                     Timber.d("Updating summary notification")
                     notificationDisplayer.showNotificationMessage(null, SUMMARY_NOTIFICATION_ID, summaryNotification.notification)
