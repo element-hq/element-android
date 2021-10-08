@@ -2586,7 +2586,6 @@
     <string name="create_room_name_section">Название комнаты</string>
     <string name="settings_discovery_consent_notice_on">Вы дали свое согласие на отправку электронных писем и телефонных номеров на этот сервер идентификации для обнаружения других пользователей из ваших контактов.</string>
     <string name="add_by_qr_code">Добавить по QR-коду</string>
-    <string name="user_directory_search_hint">Поиск по имени или идентификатору</string>
     <string name="permissions_denied_add_contact">Разрешить доступ к вашим контактам.</string>
     <string name="permissions_denied_qr_code">Чтобы отсканировать QR-код, вам нужно разрешить доступ к камере.</string>
     <string name="matrix_to_card_title">Ссылка Matrix</string>
@@ -2868,8 +2867,6 @@
     <string name="space_leave_prompt_msg_as_admin">Вы являетесь администратором этого пространства, перед уходом убедитесь, что передали права администратора другому пользователю.</string>
     <string name="space_leave_prompt_msg_private">Это пространство не является публичным. Вы не сможете присоединиться к нему без приглашения.</string>
     <string name="space_leave_prompt_msg_only_you">Вы здесь единственный человек. Если вы уйдёте, никто не сможет присоединиться в будущем, включая вас.</string>
-    <!-- TO BE REMOVED -->
-    <string name="space_leave_prompt_msg">Вы уверены, что хотите покинуть пространство\?</string>
     <string name="leave_space">Покинуть пространство</string>
     <string name="space_add_child_title">Добавить комнаты</string>
     <string name="space_explore_activity_title">Список комнат</string>

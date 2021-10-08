@@ -132,9 +132,6 @@ class UserListFragment @Inject constructor(
     }
 
     private fun setupSearchView() {
-        withState(viewModel) {
-            views.userListSearch.hint = getString(R.string.user_directory_search_hint_2)
-        }
         views.userListSearch
                 .textChanges()
                 .startWith(views.userListSearch.text)

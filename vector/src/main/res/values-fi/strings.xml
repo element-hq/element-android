@@ -2078,7 +2078,6 @@
     <string name="start_chatting">Aloita keskustelu</string>
     <string name="room_list_quick_actions_favorite_remove">Poista suosikeista</string>
     <string name="room_list_quick_actions_favorite_add">Lisää suosikiksi</string>
-    <string name="user_directory_search_hint">Hae nimellä tai käyttäjänimellä</string>
     <string name="room_no_active_widgets">Ei aktiivisia sovelmia</string>
     <string name="notification_ticker_text_group">%1$s: %2$s %3$s</string>
     <string name="notification_ticker_text_dm">%1$s: %2$s</string>
