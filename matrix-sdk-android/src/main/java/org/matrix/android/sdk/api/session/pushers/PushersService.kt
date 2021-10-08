@@ -115,7 +115,6 @@ interface PushersService {
              * this is the routing or destination address information for the notification,
              * for example, the APNS token for APNS or the Registration ID for GCM. If your
              * notification client has no such concept, use any unique identifier. Max length, 512 chars.
-             * If the kind is "email", this is the email address to send notifications to.
              */
             val pushkey: String,
 
