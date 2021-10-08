@@ -64,6 +64,18 @@ class NotificationRendererTest {
     }
 
     @Test
+    fun `given last room message group notification is removed when rendering then remove the summary and then remove message notification`() {
+        givenNotifications(roomNotifications = listOf(RoomNotification.Removed(A_ROOM_ID)), summaryNotification = A_REMOVE_SUMMARY_NOTIFICATION)
+
+        renderEventsAsNotifications()
+
+        notificationDisplayer.verifyInOrder {
+            cancelNotificationMessage(tag = null, NotificationDrawerManager.SUMMARY_NOTIFICATION_ID)
+            cancelNotificationMessage(tag = A_ROOM_ID, NotificationDrawerManager.ROOM_MESSAGES_NOTIFICATION_ID)
+        }
+    }
+
+    @Test
     fun `given a room message group notification is removed when rendering then remove the message notification and update summary`() {
         givenNotifications(roomNotifications = listOf(RoomNotification.Removed(A_ROOM_ID)))
 
@@ -91,6 +103,18 @@ class NotificationRendererTest {
     }
 
     @Test
+    fun `given last simple notification is removed when rendering then remove the summary and then remove simple notification`() {
+        givenNotifications(simpleNotifications = listOf(OneShotNotification.Removed(AN_EVENT_ID)), summaryNotification = A_REMOVE_SUMMARY_NOTIFICATION)
+
+        renderEventsAsNotifications()
+
+        notificationDisplayer.verifyInOrder {
+            cancelNotificationMessage(tag = null, NotificationDrawerManager.SUMMARY_NOTIFICATION_ID)
+            cancelNotificationMessage(tag = AN_EVENT_ID, NotificationDrawerManager.ROOM_EVENT_NOTIFICATION_ID)
+        }
+    }
+
+    @Test
     fun `given a simple notification is removed when rendering then remove the simple notification and update summary`() {
         givenNotifications(simpleNotifications = listOf(OneShotNotification.Removed(AN_EVENT_ID)))
 
@@ -114,6 +138,18 @@ class NotificationRendererTest {
         notificationDisplayer.verifyInOrder {
             showNotificationMessage(tag = AN_EVENT_ID, NotificationDrawerManager.ROOM_EVENT_NOTIFICATION_ID, A_NOTIFICATION)
             showNotificationMessage(tag = null, NotificationDrawerManager.SUMMARY_NOTIFICATION_ID, A_SUMMARY_NOTIFICATION.notification)
+        }
+    }
+
+    @Test
+    fun `given last invitation notification is removed when rendering then remove the summary and then remove invitation notification`() {
+        givenNotifications(invitationNotifications = listOf(OneShotNotification.Removed(A_ROOM_ID)), summaryNotification = A_REMOVE_SUMMARY_NOTIFICATION)
+
+        renderEventsAsNotifications()
+
+        notificationDisplayer.verifyInOrder {
+            cancelNotificationMessage(tag = null, NotificationDrawerManager.SUMMARY_NOTIFICATION_ID)
+            cancelNotificationMessage(tag = A_ROOM_ID, NotificationDrawerManager.ROOM_INVITATION_NOTIFICATION_ID)
         }
     }
 
