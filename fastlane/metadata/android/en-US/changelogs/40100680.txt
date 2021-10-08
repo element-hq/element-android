@@ -1,0 +1,6 @@
+- Update codebase to Element v1.3.1
+- Support MSC2654 for server-reported unread counts
+- Jump to the bottom of a chat when sending a message
+- Use the voice message player also for audio messages
+- Fix and improve FCM troubleshooting
+- Improve visibility of the "jump to bottom" unread counter badge
