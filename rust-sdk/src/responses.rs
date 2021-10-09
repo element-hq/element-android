@@ -8,6 +8,7 @@ use serde_json::json;
 
 use ruma::{
     api::client::r0::{
+        backup::add_backup_keys::Response as KeysBackupResponse,
         keys::{
             claim_keys::{Request as KeysClaimRequest, Response as KeysClaimResponse},
             get_keys::Response as KeysQueryResponse,
@@ -152,6 +153,10 @@ pub enum Request {
         request_id: String,
         body: String,
     },
+    KeysBackup {
+        request_id: String,
+        rooms: HashMap<String, HashMap<String, String>>,
+    }
 }
 
 impl From<OutgoingRequest> for Request {
@@ -186,6 +191,7 @@ impl From<OutgoingRequest> for Request {
             },
             RoomMessage(r) => Request::from(r),
             KeysClaim(c) => (*r.request_id(), c.clone()).into(),
+            KeysBackup(_) => todo!(),
         }
     }
 }
@@ -256,6 +262,7 @@ pub enum RequestType {
     KeysUpload,
     ToDevice,
     SignatureUpload,
+    KeysBackup,
 }
 
 pub struct DeviceLists {
@@ -291,6 +298,7 @@ pub(crate) enum OwnedResponse {
     KeysQuery(KeysQueryResponse),
     ToDevice(ToDeviceResponse),
     SignatureUpload(SignatureUploadResponse),
+    KeysBackup(KeysBackupResponse),
 }
 
 impl From<KeysClaimResponse> for OwnedResponse {
@@ -323,6 +331,12 @@ impl From<SignatureUploadResponse> for OwnedResponse {
     }
 }
 
+impl From<KeysBackupResponse> for OwnedResponse {
+    fn from(r: KeysBackupResponse) -> Self {
+        Self::KeysBackup(r)
+    }
+}
+
 impl<'a> From<&'a OwnedResponse> for IncomingResponse<'a> {
     fn from(r: &'a OwnedResponse) -> Self {
         match r {
@@ -331,6 +345,7 @@ impl<'a> From<&'a OwnedResponse> for IncomingResponse<'a> {
             OwnedResponse::KeysUpload(r) => IncomingResponse::KeysUpload(r),
             OwnedResponse::ToDevice(r) => IncomingResponse::ToDevice(r),
             OwnedResponse::SignatureUpload(r) => IncomingResponse::SignatureUpload(r),
+            OwnedResponse::KeysBackup(r) => IncomingResponse::KeysBackup(r),
         }
     }
 }

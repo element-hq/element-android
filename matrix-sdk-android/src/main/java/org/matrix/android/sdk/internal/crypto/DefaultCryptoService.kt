@@ -37,10 +37,12 @@ import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.crypto.MXCryptoConfig
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.failure.Failure
+import org.matrix.android.sdk.api.failure.MatrixError
 import org.matrix.android.sdk.api.listeners.ProgressListener
 import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.crypto.crosssigning.CrossSigningService
+import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupService
 import org.matrix.android.sdk.api.session.crypto.keyshare.GossipingRequestListener
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
 import org.matrix.android.sdk.api.session.events.model.Content
@@ -54,7 +56,14 @@ import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
 import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.internal.auth.registration.handleUIA
 import org.matrix.android.sdk.internal.crypto.crosssigning.DeviceTrustLevel
-import org.matrix.android.sdk.internal.crypto.keysbackup.DefaultKeysBackupService
+import org.matrix.android.sdk.internal.crypto.keysbackup.RustKeyBackupService
+import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.CreateKeysBackupVersionBody
+import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersion
+import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersionResult
+import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.CreateKeysBackupVersionTask
+import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.DeleteBackupTask
+import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.GetKeysBackupLastVersionTask
+import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.GetKeysBackupVersionTask
 import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.ImportRoomKeysResult
 import org.matrix.android.sdk.internal.crypto.model.MXEncryptEventContentResult
@@ -119,6 +128,10 @@ internal class RequestSender @Inject constructor(
         private val signaturesUploadTask: UploadSignaturesTask,
         private val sendVerificationMessageTask: Lazy<DefaultSendVerificationMessageTask>,
         private val uploadSigningKeysTask: UploadSigningKeysTask,
+        private val getKeysBackupLastVersionTask: GetKeysBackupLastVersionTask,
+        private val getKeysBackupVersionTask: GetKeysBackupVersionTask,
+        private val deleteBackupTask: DeleteBackupTask,
+        private val createKeysBackupVersionTask: CreateKeysBackupVersionTask,
 ) {
     companion object {
         const val REQUEST_RETRY_COUNT = 3
@@ -192,7 +205,7 @@ internal class RequestSender @Inject constructor(
             request: UploadSigningKeysRequest,
             interactiveAuthInterceptor: UserInteractiveAuthInterceptor?
     ) {
-        val adapter = MoshiProvider.providesMoshi().adapter<RestKeyInfo>(RestKeyInfo::class.java)
+        val adapter = MoshiProvider.providesMoshi().adapter(RestKeyInfo::class.java)
         val masterKey = adapter.fromJson(request.masterKey)!!.toCryptoModel()
         val selfSigningKey = adapter.fromJson(request.selfSigningKey)!!.toCryptoModel()
         val userSigningKey = adapter.fromJson(request.userSigningKey)!!.toCryptoModel()
@@ -248,6 +261,32 @@ internal class RequestSender @Inject constructor(
         val sendToDeviceParams = SendToDeviceTask.Params(eventType, userMap, transactionId)
         sendToDeviceTask.executeRetry(sendToDeviceParams, REQUEST_RETRY_COUNT)
     }
+
+    suspend fun getKeyBackupVersion(version: String? = null): KeysVersionResult? {
+        return try {
+            if (version != null) {
+                getKeysBackupVersionTask.execute(version)
+            } else {
+                getKeysBackupLastVersionTask.execute(Unit)
+            }
+        } catch (failure: Throwable) {
+            if (failure is Failure.ServerError
+                    && failure.error.code == MatrixError.M_NOT_FOUND) {
+                null
+            } else {
+                throw failure
+            }
+        }
+    }
+
+    suspend fun createKeyBackup(body: CreateKeysBackupVersionBody): KeysVersion {
+        return createKeysBackupVersionTask.execute(body)
+    }
+
+    suspend fun deleteKeyBackup(version: String) {
+        val params = DeleteBackupTask.Params(version)
+        deleteBackupTask.execute(params)
+    }
 }
 
 /**
@@ -272,8 +311,6 @@ internal class DefaultCryptoService @Inject constructor(
         private val cryptoStore: IMXCryptoStore,
         // Set of parameters used to configure/customize the end-to-end crypto.
         private val mxCryptoConfig: MXCryptoConfig,
-        // The key backup service.
-        private val keysBackupService: DefaultKeysBackupService,
         // Actions
         private val warnOnUnknownDevicesRepository: WarnOnUnknownDeviceRepository,
         // Tasks
@@ -283,6 +320,7 @@ internal class DefaultCryptoService @Inject constructor(
         private val setDeviceNameTask: SetDeviceNameTask,
         private val loadRoomMembersTask: LoadRoomMembersTask,
         private val cryptoSessionInfoProvider: CryptoSessionInfoProvider,
+        private val createKeysBackupVersionTask: CreateKeysBackupVersionTask,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val taskExecutor: TaskExecutor,
         private val cryptoCoroutineScope: CoroutineScope,
@@ -299,6 +337,9 @@ internal class DefaultCryptoService @Inject constructor(
 
     // The cross signing service.
     private var crossSigningService: RustCrossSigningService? = null
+
+    // The key backup service.
+    private var keysBackupService: RustKeyBackupService? = null
 
     private val deviceObserver: DeviceUpdateObserver = DeviceUpdateObserver()
 
@@ -448,9 +489,12 @@ internal class DefaultCryptoService @Inject constructor(
             cryptoStore.open()
 
             // this can throw if no backup
+            /*
+            TODO
             tryOrNull {
                 keysBackupService.checkAndStartKeysBackup()
             }
+            */
         }
     }
 
@@ -466,11 +510,16 @@ internal class DefaultCryptoService @Inject constructor(
             olmMachine = machine
             verificationService = RustVerificationService(machine)
             crossSigningService = RustCrossSigningService(machine)
+            keysBackupService = RustKeyBackupService(machine, sender, coroutineDispatchers, cryptoCoroutineScope)
             Timber.v(
                     "## CRYPTO | Successfully started up an Olm machine for " +
                             "${userId}, ${deviceId}, identity keys: ${this.olmMachine?.identityKeys()}")
         } catch (throwable: Throwable) {
             Timber.v("Failed create an Olm machine: $throwable")
+        }
+
+        tryOrNull {
+            keysBackupService!!.checkAndStartKeysBackup()
         }
 
         // Open the store
@@ -494,7 +543,12 @@ internal class DefaultCryptoService @Inject constructor(
     /**
      * @return the Keys backup Service
      */
-    override fun keysBackupService() = keysBackupService
+    override fun keysBackupService(): KeysBackupService {
+        if (keysBackupService == null) {
+            internalStart()
+        }
+        return keysBackupService!!
+    }
 
     /**
      * @return the VerificationService
@@ -693,7 +747,7 @@ internal class DefaultCryptoService @Inject constructor(
                                      eventType: String,
                                      roomId: String,
                                      callback: MatrixCallback<MXEncryptEventContentResult>) {
-        // moved to crypto scope to have uptodate values
+        // moved to crypto scope to have up to date values
         cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
             val algorithm = getEncryptionAlgorithm(roomId)
 
@@ -969,6 +1023,11 @@ internal class DefaultCryptoService @Inject constructor(
                         is Request.SignatureUpload -> {
                             async {
                                 signatureUpload(it)
+                            }
+                        }
+                        is Request.KeysBackup -> {
+                            async {
+                                TODO()
                             }
                         }
                     }

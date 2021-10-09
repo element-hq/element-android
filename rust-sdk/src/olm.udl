@@ -110,7 +110,7 @@ dictionary UploadSigningKeysRequest {
 };
 
 dictionary BootstrapCrossSigningResult {
-   UploadSigningKeysRequest upload_signing_keys_request; 
+   UploadSigningKeysRequest upload_signing_keys_request;
    SignatureUploadRequest signature_request;
 };
 
@@ -208,6 +208,7 @@ interface Request {
     KeysUpload(string request_id, string body);
     KeysQuery(string request_id, sequence<string> users);
     KeysClaim(string request_id, record<DOMString, record<DOMString, string>> one_time_keys);
+    KeysBackup(string request_id, record<DOMString, record<DOMString, string>> rooms);
     RoomMessage(string request_id, string room_id, string event_type, string content);
     SignatureUpload(string request_id, string body);
 };
@@ -222,6 +223,7 @@ enum RequestType {
     "KeysUpload",
     "ToDevice",
     "SignatureUpload",
+    "KeysBackup",
 };
 
 interface OlmMachine {
@@ -343,4 +345,49 @@ interface OlmMachine {
     void import_cross_signing_keys(CrossSigningKeyExport export);
     [Throws=CryptoStoreError]
     boolean is_identity_verified([ByRef] string user_id);
+
+    record<DOMString, record<DOMString, string>> sign([ByRef] string message);
+    [Throws=CryptoStoreError]
+    void enable_backup(BackupKey key, string version);
+    [Throws=CryptoStoreError]
+    void disable_backup();
+    [Throws=CryptoStoreError]
+    Request? backup_room_keys();
+    [Throws=CryptoStoreError]
+    void save_recovery_key(string? key, string? version);
+    [Throws=CryptoStoreError]
+    RoomKeyCounts room_key_counts();
+    [Throws=CryptoStoreError]
+    BackupKeys? get_backup_keys();
+};
+
+dictionary PassphraseInfo {
+    string private_key_salt;
+    i32 private_key_iterations;
+};
+
+dictionary BackupKey {
+    string public_key;
+    record<DOMString, record<DOMString, string>> signatures;
+    PassphraseInfo? passphrase_info;
+};
+
+dictionary BackupKeys {
+    string recovery_key;
+    string backup_version;
+};
+
+dictionary RoomKeyCounts {
+    i64 total;
+    i64 backed_up;
+};
+
+interface BackupRecoveryKey {
+    constructor();
+    [Name=from_base64]
+    constructor(string key);
+    [Name=from_passphrase]
+    constructor(string key);
+    string to_base58();
+    BackupKey public_key();
 };

@@ -34,6 +34,7 @@ import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupService
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupState
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupStateListener
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.KeysBackupVersionTrust
+import timber.log.Timber
 
 class KeysBackupSettingsViewModel @AssistedInject constructor(@Assisted initialState: KeysBackupSettingViewState,
                                                               session: Session
@@ -81,6 +82,7 @@ class KeysBackupSettingsViewModel @AssistedInject constructor(@Assisted initialS
 
     private fun getKeysBackupTrust() = withState { state ->
         val versionResult = keysBackupService.keysBackupVersion
+        Timber.d("BACKUP: HEEEEEEE $versionResult ${state.keysBackupVersionTrust}")
 
         if (state.keysBackupVersionTrust is Uninitialized && versionResult != null) {
             setState {
@@ -89,10 +91,12 @@ class KeysBackupSettingsViewModel @AssistedInject constructor(@Assisted initialS
                         deleteBackupRequest = Uninitialized
                 )
             }
+            Timber.d("BACKUP: HEEEEEEE TWO")
 
             keysBackupService
                     .getKeysBackupTrust(versionResult, object : MatrixCallback<KeysBackupVersionTrust> {
                         override fun onSuccess(data: KeysBackupVersionTrust) {
+                            Timber.d("BACKUP: HEEEE suceeeded $data")
                             setState {
                                 copy(
                                         keysBackupVersionTrust = Success(data)
@@ -101,6 +105,7 @@ class KeysBackupSettingsViewModel @AssistedInject constructor(@Assisted initialS
                         }
 
                         override fun onFailure(failure: Throwable) {
+                            Timber.d("BACKUP: HEEEE FAILED $failure")
                             setState {
                                 copy(
                                         keysBackupVersionTrust = Fail(failure)

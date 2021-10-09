@@ -18,19 +18,25 @@ thiserror = "1.0.25"
 tracing = "0.1.26"
 tracing-subscriber = "0.2.18"
 uniffi = "0.12.0"
+pbkdf2 = "0.8.0"
+sha2 = "0.9.5"
+rand = "0.8.4"
+hmac = "0.11.0"
 
 [dependencies.js_int]
 version = "0.2.1"
 features = ["lax_deserialize"]
 
 [dependencies.matrix-sdk-common]
-git = "https://github.com/matrix-org/matrix-rust-sdk/"
-rev = "9bae87b0ac213f9d37c033e76ea3a336e164cf02"
+path = "/home/poljar/werk/priv/nio-rust/crates/matrix-sdk-common/"
+# git = "https://github.com/matrix-org/matrix-rust-sdk/"
+# rev = "9bae87b0ac213f9d37c033e76ea3a336e164cf02"
 
 [dependencies.matrix-sdk-crypto]
-git = "https://github.com/matrix-org/matrix-rust-sdk/"
-rev = "9bae87b0ac213f9d37c033e76ea3a336e164cf02"
-features = ["sled_cryptostore"]
+# git = "https://github.com/matrix-org/matrix-rust-sdk/"
+# rev = "9bae87b0ac213f9d37c033e76ea3a336e164cf02"
+path = "/home/poljar/werk/priv/nio-rust/crates/matrix-sdk-crypto/"
+features = ["sled_cryptostore", "qrcode", "backups_v1"]
 
 [dependencies.tokio]
 version = "1.7.1"
@@ -38,8 +44,9 @@ default_features = false
 features = ["rt-multi-thread"]
 
 [dependencies.ruma]
-version = "0.3.0"
-features = ["client-api"]
+git = "https://github.com/ruma/ruma"
+rev = "0101e110f"
+features = ["client-api-c"]
 
 [build-dependencies]
 uniffi_build = "0.12.0"

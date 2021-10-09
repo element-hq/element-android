@@ -9,6 +9,7 @@ use js_int::UInt;
 use ruma::{
     api::{
         client::r0::{
+            backup::add_backup_keys::Response as KeysBackupResponse,
             keys::{
                 claim_keys::Response as KeysClaimResponse, get_keys::Response as KeysQueryResponse,
                 upload_keys::Response as KeysUploadResponse,
@@ -31,17 +32,21 @@ use tokio::runtime::Runtime;
 
 use matrix_sdk_common::{deserialized_responses::AlgorithmInfo, uuid::Uuid};
 use matrix_sdk_crypto::{
-    decrypt_key_export, encrypt_key_export, matrix_qrcode::QrVerificationData, EncryptionSettings,
-    LocalTrust, OlmMachine as InnerMachine, UserIdentities, Verification as RustVerification,
+    backups::{MegolmV1BackupKey, RecoveryKey},
+    decrypt_key_export, encrypt_key_export,
+    matrix_qrcode::QrVerificationData,
+    EncryptionSettings, LocalTrust, OlmMachine as InnerMachine, UserIdentities,
+    Verification as RustVerification,
 };
 
 use crate::{
     error::{CryptoStoreError, DecryptionError, SecretImportError, SignatureError},
     responses::{response_from_string, OutgoingVerificationRequest, OwnedResponse},
-    BootstrapCrossSigningResult, ConfirmVerificationResult, CrossSigningKeyExport,
-    CrossSigningStatus, DecryptedEvent, Device, DeviceLists, KeyImportError, KeysImportResult,
-    ProgressListener, QrCode, Request, RequestType, RequestVerificationResult, ScanResult,
-    SignatureUploadRequest, StartSasResult, UserIdentity, Verification, VerificationRequest,
+    BackupKey, BackupKeys, BootstrapCrossSigningResult, ConfirmVerificationResult,
+    CrossSigningKeyExport, CrossSigningStatus, DecryptedEvent, Device, DeviceLists, KeyImportError,
+    KeysImportResult, ProgressListener, QrCode, Request, RequestType, RequestVerificationResult,
+    RoomKeyCounts, ScanResult, SignatureUploadRequest, StartSasResult, UserIdentity, Verification,
+    VerificationRequest,
 };
 
 /// A high level state machine that handles E2EE for Matrix.
@@ -95,7 +100,7 @@ impl OlmMachine {
 
     /// Get the display name of our own device.
     pub fn display_name(&self) -> Result<Option<String>, CryptoStoreError> {
-        Ok(self.runtime.block_on(self.inner.dislpay_name())?)
+        Ok(self.runtime.block_on(self.inner.display_name())?)
     }
 
     /// Get a cross signing user identity for the given user ID.
@@ -304,6 +309,9 @@ impl OlmMachine {
             }
             RequestType::SignatureUpload => {
                 SignatureUploadResponse::try_from_http_response(response).map(Into::into)
+            }
+            RequestType::KeysBackup => {
+                KeysBackupResponse::try_from_http_response(response).map(Into::into)
             }
         }
         .expect("Can't convert json string to response");
@@ -701,10 +709,7 @@ impl OlmMachine {
         methods: Vec<String>,
     ) -> Option<OutgoingVerificationRequest> {
         let user_id = UserId::try_from(user_id).ok()?;
-        let methods = methods
-            .into_iter()
-            .map(VerificationMethod::from)
-            .collect();
+        let methods = methods.into_iter().map(VerificationMethod::from).collect();
 
         if let Some(verification) = self.inner.get_verification_request(&user_id, flow_id) {
             verification.accept_with_methods(methods).map(|r| r.into())
@@ -731,10 +736,7 @@ impl OlmMachine {
 
         let identity = self.runtime.block_on(self.inner.get_identity(&user_id))?;
 
-        let methods = methods
-            .into_iter()
-            .map(VerificationMethod::from)
-            .collect();
+        let methods = methods.into_iter().map(VerificationMethod::from).collect();
 
         Ok(if let Some(identity) = identity.and_then(|i| i.other()) {
             let content = self
@@ -779,10 +781,7 @@ impl OlmMachine {
 
         let identity = self.runtime.block_on(self.inner.get_identity(&user_id))?;
 
-        let methods = methods
-            .into_iter()
-            .map(VerificationMethod::from)
-            .collect();
+        let methods = methods.into_iter().map(VerificationMethod::from).collect();
 
         Ok(if let Some(identity) = identity.and_then(|i| i.other()) {
             let request = self.runtime.block_on(identity.request_verification(
@@ -816,10 +815,7 @@ impl OlmMachine {
     ) -> Result<Option<RequestVerificationResult>, CryptoStoreError> {
         let user_id = UserId::try_from(user_id)?;
 
-        let methods = methods
-            .into_iter()
-            .map(VerificationMethod::from)
-            .collect();
+        let methods = methods.into_iter().map(VerificationMethod::from).collect();
 
         Ok(
             if let Some(device) = self
@@ -854,10 +850,7 @@ impl OlmMachine {
             .runtime
             .block_on(self.inner.get_identity(self.inner.user_id()))?;
 
-        let methods = methods
-            .into_iter()
-            .map(VerificationMethod::from)
-            .collect();
+        let methods = methods.into_iter().map(VerificationMethod::from).collect();
 
         Ok(if let Some(identity) = identity.and_then(|i| i.own()) {
             let (verification, request) = self
@@ -1023,10 +1016,7 @@ impl OlmMachine {
         let user_id = UserId::try_from(user_id).ok()?;
         self.inner
             .get_verification(&user_id, flow_id)
-            .and_then(|v| {
-                v.qr_v1()
-                    .and_then(|qr| qr.to_bytes().map(encode).ok())
-            })
+            .and_then(|v| v.qr_v1().and_then(|qr| qr.to_bytes().map(encode).ok()))
     }
 
     /// Pass data from a scanned QR code to an active verification request and
@@ -1253,5 +1243,75 @@ impl OlmMachine {
             .block_on(self.inner.import_cross_signing_keys(export.into()))?;
 
         Ok(())
+    }
+
+    /// TODO
+    pub fn enable_backup(&self, key: BackupKey, version: String) -> Result<(), CryptoStoreError> {
+        let backup_key = MegolmV1BackupKey::from_base64(&key.public_key).unwrap();
+        backup_key.set_version(version);
+
+        self.runtime
+            .block_on(self.inner.backup_machine().enable_backup(backup_key))?;
+
+        Ok(())
+    }
+
+    /// TODO
+    pub fn disable_backup(&self) -> Result<(), CryptoStoreError> {
+        Ok(self
+            .runtime
+            .block_on(self.inner.backup_machine().disable_backup())?)
+    }
+
+    /// TODO
+    pub fn backup_room_keys(&self) -> Result<Option<Request>, CryptoStoreError> {
+        let request = self
+            .runtime
+            .block_on(self.inner.backup_machine().backup())?;
+
+        Ok(request.map(|r| r.into()))
+    }
+
+    /// TODO
+    pub fn room_key_counts(&self) -> Result<RoomKeyCounts, CryptoStoreError> {
+        Ok(self
+            .runtime
+            .block_on(self.inner.backup_machine().room_key_counts())?
+            .into())
+    }
+
+    /// TODO
+    pub fn save_recovery_key(
+        &self,
+        key: Option<String>,
+        version: Option<String>,
+    ) -> Result<(), CryptoStoreError> {
+        let key = key.map(RecoveryKey::from_base64).transpose().ok().flatten();
+        Ok(self
+            .runtime
+            .block_on(self.inner.backup_machine().save_recovery_key(key, version))?)
+    }
+
+    /// TODO
+    pub fn get_backup_keys(&self) -> Result<Option<BackupKeys>, CryptoStoreError> {
+        Ok(self
+            .runtime
+            .block_on(self.inner.backup_machine().get_backup_keys())?
+            .try_into()
+            .ok())
+    }
+
+    /// TODO
+    pub fn sign(&self, message: &str) -> HashMap<String, HashMap<String, String>> {
+        self.runtime
+            .block_on(self.inner.sign(message))
+            .into_iter()
+            .map(|(k, v)| {
+                (
+                    k.to_string(),
+                    v.into_iter().map(|(k, v)| (k.to_string(), v)).collect(),
+                )
+            })
+            .collect()
     }
 }

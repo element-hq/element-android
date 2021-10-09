@@ -48,6 +48,8 @@ import org.matrix.android.sdk.internal.session.sync.model.DeviceListResponse
 import org.matrix.android.sdk.internal.session.sync.model.DeviceOneTimeKeysCountSyncResponse
 import org.matrix.android.sdk.internal.session.sync.model.ToDeviceSyncResponse
 import timber.log.Timber
+import uniffi.olm.BackupKey
+import uniffi.olm.BackupKeys
 import uniffi.olm.CrossSigningKeyExport
 import uniffi.olm.CrossSigningStatus
 import uniffi.olm.CryptoStoreErrorException
@@ -59,6 +61,7 @@ import uniffi.olm.OlmMachine as InnerMachine
 import uniffi.olm.ProgressListener as RustProgressListener
 import uniffi.olm.Request
 import uniffi.olm.RequestType
+import uniffi.olm.RoomKeyCounts
 import uniffi.olm.UserIdentity as RustUserIdentity
 import uniffi.olm.setLogger
 
@@ -759,5 +762,34 @@ internal class OlmMachine(
         this.updateLivePrivateKeys()
         // TODO map the errors from importCrossSigningKeys to the UserTrustResult
         return UserTrustResult.Success
+    }
+
+    suspend fun sign(message: String): Map<String, Map<String, String>> {
+        return withContext(Dispatchers.Default) {
+            inner.sign(message)
+        }
+    }
+
+    @Throws(CryptoStoreErrorException::class)
+    suspend fun enableBackup(key: String, version: String) {
+        return withContext(Dispatchers.Default) {
+            val backupKey = BackupKey(key, mapOf(), null)
+            inner.enableBackup(backupKey, version)
+        }
+    }
+
+    fun roomKeyCounts(): RoomKeyCounts {
+        // TODO convert this to a suspendable method
+        return inner.roomKeyCounts()
+    }
+
+    fun getBackupKeys(): BackupKeys? {
+        // TODO this needs to be suspendable
+        return inner.getBackupKeys()
+    }
+
+    fun saveRecoveryKey(key: String?, version: String?) {
+        // TODO convert this to a suspendable method
+        inner.saveRecoveryKey(key, version)
     }
 }

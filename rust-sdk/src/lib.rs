@@ -10,6 +10,7 @@
 
 //! TODO
 
+mod backup_recovery_key;
 mod device;
 mod error;
 mod logger;
@@ -18,18 +19,21 @@ mod responses;
 mod users;
 mod verification;
 
+pub use backup_recovery_key::{BackupKey, BackupRecoveryKey, PassphraseInfo};
 pub use device::Device;
-pub use error::{CryptoStoreError, DecryptionError, KeyImportError, SignatureError, SecretImportError};
+pub use error::{
+    CryptoStoreError, DecryptionError, KeyImportError, SecretImportError, SignatureError,
+};
 pub use logger::{set_logger, Logger};
 pub use machine::{KeyRequestPair, OlmMachine};
 pub use responses::{
-    DeviceLists, KeysImportResult, OutgoingVerificationRequest, Request, RequestType, SignatureUploadRequest,
-    BootstrapCrossSigningResult, UploadSigningKeysRequest,
+    BootstrapCrossSigningResult, DeviceLists, KeysImportResult, OutgoingVerificationRequest,
+    Request, RequestType, SignatureUploadRequest, UploadSigningKeysRequest,
 };
 pub use users::UserIdentity;
 pub use verification::{
-    CancelInfo, QrCode, RequestVerificationResult, Sas, ScanResult, StartSasResult, Verification,
-    VerificationRequest, ConfirmVerificationResult,
+    CancelInfo, ConfirmVerificationResult, QrCode, RequestVerificationResult, Sas, ScanResult,
+    StartSasResult, Verification, VerificationRequest,
 };
 
 /// Callback that will be passed over the FFI to report progress
@@ -81,6 +85,42 @@ pub struct CrossSigningKeyExport {
     pub self_signing_key: Option<String>,
     /// The seed of the user signing key encoded as unpadded base64.
     pub user_signing_key: Option<String>,
+}
+
+/// TODO
+pub struct RoomKeyCounts {
+    /// TODO
+    pub total: i64,
+    /// TODO
+    pub backed_up: i64,
+}
+
+/// TODO
+pub struct BackupKeys {
+    /// TODO
+    pub recovery_key: String,
+    /// TODO
+    pub backup_version: String,
+}
+
+impl std::convert::TryFrom<matrix_sdk_crypto::store::BackupKeys> for BackupKeys {
+    type Error = ();
+
+    fn try_from(keys: matrix_sdk_crypto::store::BackupKeys) -> Result<Self, Self::Error> {
+        Ok(Self {
+            recovery_key: keys.recovery_key.ok_or(())?.to_base64(),
+            backup_version: keys.backup_version.ok_or(())?,
+        })
+    }
+}
+
+impl From<matrix_sdk_crypto::store::RoomKeyCounts> for RoomKeyCounts {
+    fn from(count: matrix_sdk_crypto::store::RoomKeyCounts) -> Self {
+        Self {
+            total: count.total as i64,
+            backed_up: count.backed_up as i64,
+        }
+    }
 }
 
 impl From<matrix_sdk_crypto::CrossSigningKeyExport> for CrossSigningKeyExport {
