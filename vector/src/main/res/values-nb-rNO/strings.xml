@@ -1205,7 +1205,6 @@
     <string name="no_message_edits_found">Ingen endringer funnet</string>
     <string name="room_filtering_footer_title">Finner du ikke det du leter etter\?</string>
     <string name="room_filtering_footer_create_new_direct_message">Send en ny direkte melding</string>
-    <string name="user_directory_search_hint">Søk etter navn eller ID</string>
     <string name="labs_swipe_to_reply_in_timeline">Aktiver sveip for å svare på tidslinjen</string>
     <string name="link_copied_to_clipboard">Link kopiert til utklippstavlen</string>
     <string name="add_by_matrix_id">Legg til med matrix-ID</string>

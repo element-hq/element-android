@@ -432,7 +432,7 @@
     <string name="auth_username_in_use">Uživatelské jméno již použito</string>
     <string name="auth_home_server">Domovský server:</string>
     <string name="auth_identity_server">Server identity:</string>
-    <string name="auth_reset_password_next_step_button">Ověřil/a jsem svoji e-mailovou adresu</string>
+    <string name="auth_reset_password_next_step_button">Ověřil(a) jsem svoji e-mailovou adresu</string>
     <string name="auth_reset_password_message">K resetování hesla zadejte e-mailovou adresu spojenou s vaším účtem:</string>
     <string name="auth_reset_password_missing_email">Musíte zadat e-mailovou adresu spojenou s vaším účtem.</string>
     <string name="auth_reset_password_missing_password">Musíte zadat nové heslo.</string>
@@ -1753,7 +1753,7 @@
     <string name="login_reset_password_on">Resetovat heslo na %1$s</string>
     <string name="login_reset_password_notice">Ověřovací email bude odeslán do Vašeho mailboxu za účelem potvrzení nastavení nového heslo.</string>
     <string name="login_reset_password_submit">Dále</string>
-    <string name="login_reset_password_email_hint">Email</string>
+    <string name="login_reset_password_email_hint">E-mail</string>
     <string name="login_reset_password_password_hint">Nové heslo</string>
     <string name="login_reset_password_warning_title">Varování!</string>
     <string name="login_reset_password_warning_content">Změna hesla přenastaví všechny šifrovací klíče pro všechny Vaše relace, a tak učiní zašifrovanou historii chatů nečitelnou. Nastavte zálohu klíčů nebo exportujte své klíče místností z jiné relace, než se rozhodnete pokračovat.</string>
@@ -2543,7 +2543,6 @@
     <string name="direct_room_user_list_recent_title">Poslední</string>
     <string name="qr_code">QR kód</string>
     <string name="add_by_qr_code">Přidat pomocí QR kódu</string>
-    <string name="user_directory_search_hint">Hledat podle jména nebo ID</string>
     <string name="permissions_denied_add_contact">Udělte právo přístupu ke kontaktům.</string>
     <string name="permissions_denied_qr_code">Pro sken QR kódu je nutné povolit přístup k fotoaparátu.</string>
     <string name="send_bug_report_include_key_share_history">Poslat historii požadavků na sdílení klíčů</string>
@@ -2737,8 +2736,6 @@
     <string name="you_are_invited">Jste zváni</string>
     <string name="spaces_beta_welcome_to_spaces">Vítejte ve Spaces!</string>
     <string name="space_add_existing_rooms">Přidat existující místnosti a prostor</string>
-    <!-- TO BE REMOVED -->
-    <string name="space_leave_prompt_msg">Jste si jisti, že chcete opustit tento prostor\?</string>
     <string name="leave_space">Opustit prostor</string>
     <string name="space_add_child_title">Přidat místnosti</string>
     <string name="space_explore_activity_title">Prozkoumat místnosti</string>

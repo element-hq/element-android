@@ -176,14 +176,18 @@ class VectorSettingsGeneralFragment @Inject constructor(
             mPasswordPreference.isVisible = false
         }
 
-        val discoveryPreference = findPreference<VectorPreference>(VectorPreferences.SETTINGS_DISCOVERY_PREFERENCE_KEY)!!
-        discoveryPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+        val openDiscoveryScreenPreferenceClickListener = Preference.OnPreferenceClickListener {
             (requireActivity() as VectorSettingsActivity).navigateTo(
                     DiscoverySettingsFragment::class.java,
                     SettingsActivityPayload.DiscoverySettings().toMvRxBundle()
             )
             true
         }
+
+        val discoveryPreference = findPreference<VectorPreference>(VectorPreferences.SETTINGS_DISCOVERY_PREFERENCE_KEY)!!
+        discoveryPreference.onPreferenceClickListener = openDiscoveryScreenPreferenceClickListener
+
+        mIdentityServerPreference.onPreferenceClickListener = openDiscoveryScreenPreferenceClickListener
 
         // Advanced settings
 

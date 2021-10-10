@@ -2308,8 +2308,6 @@
     <string name="room_filtering_footer_open_room_directory">View the room directory</string>
 
     <string name="room_directory_search_hint">Name or ID (#example:matrix.org)</string>
-    <!-- TO BE REMOVED -->
-    <string name="user_directory_search_hint">Search by name or ID</string>
     <string name="user_directory_search_hint_2">Search by name, ID or mail</string>
 
     <string name="search_hint_room_name">Search Name</string>
@@ -3518,8 +3516,6 @@
     <string name="space_add_child_title">Add rooms</string>
     <string name="leave_space">Leave Space</string>
     <string name="space_leave_prompt_msg_with_name">Are you sure you want to leave %s?</string>
-    <!-- TO BE REMOVED -->
-    <string name="space_leave_prompt_msg">Are you sure you want to leave the space?</string>
     <string name="space_leave_prompt_msg_only_you">You are the only person here. If you leave, no one will be able to join in the future, including you.</string>
     <string name="space_leave_prompt_msg_private">You won\'t be able to rejoin unless you are re-invited.</string>
     <string name="space_leave_prompt_msg_as_admin">You\'re the only admin of this space. Leaving it will mean no one has control over it.</string>

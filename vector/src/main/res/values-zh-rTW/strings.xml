@@ -2449,7 +2449,6 @@
     <string name="direct_room_user_list_recent_title">最近</string>
     <string name="qr_code">QR code</string>
     <string name="add_by_qr_code">透過 QR code 新增</string>
-    <string name="user_directory_search_hint">使用名稱或 ID 搜尋</string>
     <string name="permissions_denied_add_contact">允許存取您聯絡人的權限。</string>
     <string name="permissions_denied_qr_code">要掃描 QR code，您必須允許存取攝影機。</string>
     <string name="start_chatting">開始聊天</string>
@@ -2628,8 +2627,6 @@
     <string name="spaces_beta_welcome_to_spaces_desc">空間是將聊天室與人們分組的新方式。</string>
     <string name="spaces_beta_welcome_to_spaces">歡迎使用空間！</string>
     <string name="space_add_existing_rooms">新增既有的聊天室與空間</string>
-    <!-- TO BE REMOVED -->
-    <string name="space_leave_prompt_msg">您確定您想要離開空間嗎？</string>
     <string name="leave_space">離開空間</string>
     <string name="space_add_child_title">新增聊天室</string>
     <string name="space_explore_activity_title">探索聊天室</string>
