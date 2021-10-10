@@ -20,7 +20,7 @@
     <string name="share">Bagikan</string>
     <string name="delete">Hapus</string>
     <string name="rename">Ubah Nama</string>
-    <string name="report_content">Laporkan konten</string>
+    <string name="report_content">Laporkan Konten</string>
     <string name="device_information">Informasi Perangkat</string>
     <string name="or">atau</string>
     <string name="invite">Undang</string>
@@ -2332,13 +2332,13 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="voice_message_tap_to_stop_toast">Ketuk pada rekaman Anda untuk dihentikan atau didengarkan</string>
     <string name="voice_message_n_seconds_warning_toast">%1$dd lagi</string>
     <string name="voice_message_release_to_send_toast">Tahan untuk merekam, lepaskan untuk mengirimnya</string>
-    <string name="a11y_delete_recorded_voice_message">Hapus pesan suara yang telah direkam</string>
+    <string name="a11y_delete_recorded_voice_message">Hapus rekaman</string>
     <string name="a11y_recording_voice_message">Merekam pesan suara</string>
     <string name="a11y_pause_voice_message">Jeda Pesan Suara</string>
     <string name="a11y_play_voice_message">Mainkan Pesan Suara</string>
     <string name="a11y_lock_voice_message">Kunci Pesan Suara</string>
     <string name="voice_message_slide_to_cancel">Geser untuk membatalkan</string>
-    <string name="a11y_start_voice_message">Mulai Pesan Suara</string>
+    <string name="a11y_start_voice_message">Rekam Pesan Suara</string>
     <string name="call_jitsi_started">Panggilan grup dimulai</string>
     <string name="error_failed_to_join_room">Maaf, sebuah kesalahan terjadi saat bergabung: %s</string>
     <string name="room_upgrade_to_recommended_version">Tingkatkan ke versi ruangan yang disarankan</string>
@@ -2937,4 +2937,17 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="space_participants_kick_prompt_msg">mengeluarkan pengguna akan mengeluarkannya dari space ini.
 \n
 \nUntuk mencegah pengguna untuk bergabung lagi, Anda seharusnya cekal pengguna itu saja.</string>
+    <string name="a11y_stop_voice_message">Berhenti Merekam</string>
+    <string name="command_description_lenny">Menambahkan ( ͡° ͜ʖ ͡°) ke pesan teks biasa</string>
+    <string name="identity_server_consent_dialog_neutral_policy">Kebijakan</string>
+    <string name="settings_discovery_no_policy_provided">Tidak ada kebijakan yang disediakan oleh server identitasnya</string>
+    <string name="settings_discovery_hide_identity_server_policy_title">Sembunyikan kebijakan server identitas</string>
+    <string name="settings_discovery_show_identity_server_policy_title">Tampilkan kebijakan server identitas</string>
+    <string name="command_description_ignore_user">Mengabaikan sebuah pengguna, akan menyembunyikan pesan mereka</string>
+    <string name="command_description_unignore_user">Mengabaikan sebuah pengguna, dan menampilkan pesan mereka</string>
+    <string name="command_description_room_name">Mentetapkan nama ruangan</string>
+    <string name="command_description_nick_for_room">Mengubah nama tampilan Anda di ruangan saat ini saja</string>
+    <string name="command_description_room_avatar">Mengubah avatar ruangan saat ini</string>
+    <string name="command_description_avatar_for_room">Mengubah avatar Anda di ruangan saat ini saja</string>
+    <string name="command_description_whois">Menampilkan</string>
 </resources>
