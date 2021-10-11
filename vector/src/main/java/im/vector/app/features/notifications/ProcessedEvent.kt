@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package im.vector.app.test.fakes
+package im.vector.app.features.notifications
 
-import im.vector.app.features.notifications.NotifiableEventProcessor
-import io.mockk.mockk
+typealias ProcessedEvent = Pair<ProcessedType, NotifiableEvent>
 
-class FakeNotifiableEventProcessor {
-
-    val instance = mockk<NotifiableEventProcessor>()
-
+enum class ProcessedType {
+    KEEP,
+    REMOVE
 }
+
+fun List<ProcessedEvent>.onlyKeptEvents() = filter { it.first == ProcessedType.KEEP }.map { it.second }
