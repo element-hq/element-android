@@ -5,6 +5,12 @@ on:
   push:
     branches: [main, develop]
 
+# Enrich gradle.properties for CI/CD
+env:
+  CI_GRADLE_ARG_PROPERTIES: >
+    -Porg.gradle.jvmargs=-Xmx2g
+    -Porg.gradle.parallel=false
+
 jobs:
   unit-tests:
     name: Run Unit Tests
@@ -20,4 +26,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
       - name: Run unit tests
-        run: ./gradlew clean test --stacktrace -PallWarningsAsErrors=false
+        run: ./gradlew clean test $CI_GRADLE_ARG_PROPERTIES -PallWarningsAsErrors=false --stacktrace
+      - name: Publish Unit Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v1
+        if: always() &&
+          github.event.sender.login != 'dependabot[bot]' &&
+          ( github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository )
+        with:
+          files: ./**/build/test-results/**/*.xml

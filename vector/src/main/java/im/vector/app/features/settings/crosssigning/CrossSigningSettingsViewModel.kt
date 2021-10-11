@@ -102,8 +102,8 @@ class CrossSigningSettingsViewModel @AssistedInject constructor(
                                                                   errCode: String?,
                                                                   promise: Continuation<UIABaseAuth>) {
                                             Timber.d("## UIA : initializeCrossSigning UIA")
-                                            if (flowResponse.nextUncompletedStage() == LoginFlowTypes.PASSWORD
-                                                    && reAuthHelper.data != null && errCode == null) {
+                                            if (flowResponse.nextUncompletedStage() == LoginFlowTypes.PASSWORD &&
+                                                    reAuthHelper.data != null && errCode == null) {
                                                 UserPasswordAuth(
                                                         session = null,
                                                         user = session.myUserId,

@@ -94,5 +94,7 @@ interface SpaceService {
      */
     suspend fun setSpaceParent(childRoomId: String, parentSpaceId: String, canonical: Boolean, viaServers: List<String>)
 
+    suspend fun removeSpaceParent(childRoomId: String, parentSpaceId: String)
+
     fun getRootSpaceSummaries(): List<RoomSummary>
 }

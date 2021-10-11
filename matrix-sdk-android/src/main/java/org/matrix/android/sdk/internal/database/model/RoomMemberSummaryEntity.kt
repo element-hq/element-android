@@ -16,10 +16,11 @@
 
 package org.matrix.android.sdk.internal.database.model
 
-import org.matrix.android.sdk.api.session.room.model.Membership
 import io.realm.RealmObject
 import io.realm.annotations.Index
 import io.realm.annotations.PrimaryKey
+import org.matrix.android.sdk.api.session.room.model.Membership
+import org.matrix.android.sdk.api.util.MatrixItem
 
 internal open class RoomMemberSummaryEntity(@PrimaryKey var primaryKey: String = "",
                                             @Index var userId: String = "",
@@ -39,7 +40,7 @@ internal open class RoomMemberSummaryEntity(@PrimaryKey var primaryKey: String =
             membershipStr = value.name
         }
 
-    fun getBestName() = displayName?.takeIf { it.isNotBlank() } ?: userId
+    fun toMatrixItem() = MatrixItem.UserItem(userId, displayName, avatarUrl)
 
     companion object
 }

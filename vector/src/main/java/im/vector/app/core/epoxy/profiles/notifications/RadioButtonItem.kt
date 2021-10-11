@@ -27,6 +27,7 @@ import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.epoxy.onClick
+import im.vector.app.core.extensions.setAttributeTintedImageResource
 
 @EpoxyModelClass(layout = R.layout.item_radio)
 abstract class RadioButtonItem : VectorEpoxyModel<RadioButtonItem.Holder>() {
@@ -54,7 +55,7 @@ abstract class RadioButtonItem : VectorEpoxyModel<RadioButtonItem.Holder>() {
         }
 
         if (selected) {
-            holder.radioImage.setImageDrawable(ContextCompat.getDrawable(holder.view.context, R.drawable.ic_radio_on))
+            holder.radioImage.setAttributeTintedImageResource(R.drawable.ic_radio_on, R.attr.colorPrimary)
             holder.radioImage.contentDescription = holder.view.context.getString(R.string.a11y_checked)
         } else {
             holder.radioImage.setImageDrawable(ContextCompat.getDrawable(holder.view.context, R.drawable.ic_radio_off))

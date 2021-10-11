@@ -20,8 +20,8 @@ import com.airbnb.epoxy.TypedEpoxyController
 /**
  * Epoxy controller for generic bottom sheet actions
  */
-abstract class BottomSheetGenericController<State : BottomSheetGenericState, Action : BottomSheetGenericRadioAction>
-    : TypedEpoxyController<State>() {
+abstract class BottomSheetGenericController<State : BottomSheetGenericState, Action : BottomSheetGenericRadioAction> :
+    TypedEpoxyController<State>() {
 
     var listener: Listener<Action>? = null
 

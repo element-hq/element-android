@@ -39,16 +39,21 @@ import im.vector.app.features.notifications.NotifiableMessageEvent
 import im.vector.app.features.notifications.NotificationDrawerManager
 import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.features.notifications.SimpleNotifiableEvent
+import im.vector.app.features.settings.VectorDataStore
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.push.fcm.FcmHelper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.matrix.android.sdk.api.extensions.tryOrNull
+import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.pushrules.Action
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.Event
 import timber.log.Timber
+
+private val loggerTag = LoggerTag("Push", LoggerTag.SYNC)
 
 /**
  * Class extending FirebaseMessagingService.
@@ -60,6 +65,7 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
     private lateinit var pusherManager: PushersManager
     private lateinit var activeSessionHolder: ActiveSessionHolder
     private lateinit var vectorPreferences: VectorPreferences
+    private lateinit var vectorDataStore: VectorDataStore
     private lateinit var wifiDetector: WifiDetector
 
     private val coroutineScope = CoroutineScope(SupervisorJob())
@@ -77,6 +83,7 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
             pusherManager = pusherManager()
             activeSessionHolder = activeSessionHolder()
             vectorPreferences = vectorPreferences()
+            vectorDataStore = vectorDataStore()
             wifiDetector = wifiDetector()
         }
     }
@@ -88,9 +95,13 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
      */
     override fun onMessageReceived(message: RemoteMessage) {
         if (BuildConfig.LOW_PRIVACY_LOG_ENABLE) {
-            Timber.d("## onMessageReceived() %s", message.data.toString())
+            Timber.tag(loggerTag.value).d("## onMessageReceived() %s", message.data.toString())
         }
-        Timber.d("## onMessageReceived() from FCM with priority %s", message.priority)
+        Timber.tag(loggerTag.value).d("## onMessageReceived() from FCM with priority %s", message.priority)
+
+        runBlocking {
+            vectorDataStore.incrementPushCounter()
+        }
 
         // Diagnostic Push
         if (message.data["event_id"] == PushersManager.TEST_EVENT_ID) {
@@ -100,14 +111,14 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
         }
 
         if (!vectorPreferences.areNotificationEnabledForDevice()) {
-            Timber.i("Notification are disabled for this device")
+            Timber.tag(loggerTag.value).i("Notification are disabled for this device")
             return
         }
 
         mUIHandler.post {
             if (ProcessLifecycleOwner.get().lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
                 // we are in foreground, let the sync do the things?
-                Timber.d("PUSH received in a foreground state, ignore")
+                Timber.tag(loggerTag.value).d("PUSH received in a foreground state, ignore")
             } else {
                 onMessageReceivedInternal(message.data)
             }
@@ -121,7 +132,7 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
      * you retrieve the token.
      */
     override fun onNewToken(refreshedToken: String) {
-        Timber.i("onNewToken: FCM Token has been updated")
+        Timber.tag(loggerTag.value).i("onNewToken: FCM Token has been updated")
         FcmHelper.storeFcmToken(this, refreshedToken)
         if (vectorPreferences.areNotificationEnabledForDevice() && activeSessionHolder.hasActiveSession()) {
             pusherManager.registerPusherWithFcmKey(refreshedToken)
@@ -138,7 +149,7 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
      *  It is recommended that the app do a full sync with the app server after receiving this call.
      */
     override fun onDeletedMessages() {
-        Timber.v("## onDeletedMessages()")
+        Timber.tag(loggerTag.value).v("## onDeletedMessages()")
     }
 
     /**
@@ -150,9 +161,9 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
     private fun onMessageReceivedInternal(data: Map<String, String>) {
         try {
             if (BuildConfig.LOW_PRIVACY_LOG_ENABLE) {
-                Timber.d("## onMessageReceivedInternal() : $data")
+                Timber.tag(loggerTag.value).d("## onMessageReceivedInternal() : $data")
             } else {
-                Timber.d("## onMessageReceivedInternal() : $data")
+                Timber.tag(loggerTag.value).d("## onMessageReceivedInternal()")
             }
 
             // update the badge counter
@@ -162,24 +173,24 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
             val session = activeSessionHolder.getSafeActiveSession()
 
             if (session == null) {
-                Timber.w("## Can't sync from push, no current session")
+                Timber.tag(loggerTag.value).w("## Can't sync from push, no current session")
             } else {
                 val eventId = data["event_id"]
                 val roomId = data["room_id"]
 
                 if (isEventAlreadyKnown(eventId, roomId)) {
-                    Timber.d("Ignoring push, event already known")
+                    Timber.tag(loggerTag.value).d("Ignoring push, event already known")
                 } else {
                     // Try to get the Event content faster
-                    Timber.d("Requesting event in fast lane")
+                    Timber.tag(loggerTag.value).d("Requesting event in fast lane")
                     getEventFastLane(session, roomId, eventId)
 
-                    Timber.d("Requesting background sync")
+                    Timber.tag(loggerTag.value).d("Requesting background sync")
                     session.requireBackgroundSync()
                 }
             }
         } catch (e: Exception) {
-            Timber.e(e, "## onMessageReceivedInternal() failed")
+            Timber.tag(loggerTag.value).e(e, "## onMessageReceivedInternal() failed")
         }
     }
 
@@ -193,18 +204,18 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
         }
 
         if (wifiDetector.isConnectedToWifi().not()) {
-            Timber.d("No WiFi network, do not get Event")
+            Timber.tag(loggerTag.value).d("No WiFi network, do not get Event")
             return
         }
 
         coroutineScope.launch {
-            Timber.d("Fast lane: start request")
+            Timber.tag(loggerTag.value).d("Fast lane: start request")
             val event = tryOrNull { session.getEvent(roomId, eventId) } ?: return@launch
 
             val resolvedEvent = notifiableEventResolver.resolveInMemoryEvent(session, event)
 
             resolvedEvent
-                    ?.also { Timber.d("Fast lane: notify drawer") }
+                    ?.also { Timber.tag(loggerTag.value).d("Fast lane: notify drawer") }
                     ?.let {
                         it.isPushGatewayEvent = true
                         notificationDrawerManager.onNotifiableEventReceived(it)
@@ -222,7 +233,7 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
                 val room = session.getRoom(roomId) ?: return false
                 return room.getTimeLineEvent(eventId) != null
             } catch (e: Exception) {
-                Timber.e(e, "## isEventAlreadyKnown() : failed to check if the event was already defined")
+                Timber.tag(loggerTag.value).e(e, "## isEventAlreadyKnown() : failed to check if the event was already defined")
             }
         }
         return false
@@ -230,7 +241,7 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
 
     private fun handleNotificationWithoutSyncingMode(data: Map<String, String>, session: Session?) {
         if (session == null) {
-            Timber.e("## handleNotificationWithoutSyncingMode cannot find session")
+            Timber.tag(loggerTag.value).e("## handleNotificationWithoutSyncingMode cannot find session")
             return
         }
 
@@ -263,9 +274,9 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
             val notifiableEvent = notifiableEventResolver.resolveEvent(event, session)
 
             if (notifiableEvent == null) {
-                Timber.e("Unsupported notifiable event $eventId")
+                Timber.tag(loggerTag.value).e("Unsupported notifiable event $eventId")
                 if (BuildConfig.LOW_PRIVACY_LOG_ENABLE) {
-                    Timber.e("--> $event")
+                    Timber.tag(loggerTag.value).e("--> $event")
                 }
             } else {
                 if (notifiableEvent is NotifiableMessageEvent) {

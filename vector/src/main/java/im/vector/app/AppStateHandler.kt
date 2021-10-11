@@ -59,12 +59,25 @@ class AppStateHandler @Inject constructor(
 
     val selectedRoomGroupingObservable = selectedSpaceDataSource.observe()
 
-    fun getCurrentRoomGroupingMethod(): RoomGroupingMethod? = selectedSpaceDataSource.currentValue?.orNull()
+    fun getCurrentRoomGroupingMethod(): RoomGroupingMethod? {
+        // XXX we should somehow make it live :/ just a work around
+        // For example just after creating a space and switching to it the
+        // name in the app Bar could show Empty Room, and it will not update unless you
+        // switch space
+        return selectedSpaceDataSource.currentValue?.orNull()?.let {
+            if (it is RoomGroupingMethod.BySpace) {
+                // try to refresh sum?
+                it.spaceSummary?.roomId?.let { activeSessionHolder.getSafeActiveSession()?.getRoomSummary(it) }?.let {
+                    RoomGroupingMethod.BySpace(it)
+                } ?: it
+            } else it
+        }
+    }
 
     fun setCurrentSpace(spaceId: String?, session: Session? = null) {
         val uSession = session ?: activeSessionHolder.getSafeActiveSession() ?: return
-        if (selectedSpaceDataSource.currentValue?.orNull() is RoomGroupingMethod.BySpace
-                && spaceId == selectedSpaceDataSource.currentValue?.orNull()?.space()?.roomId) return
+        if (selectedSpaceDataSource.currentValue?.orNull() is RoomGroupingMethod.BySpace &&
+                spaceId == selectedSpaceDataSource.currentValue?.orNull()?.space()?.roomId) return
         val spaceSum = spaceId?.let { uSession.getRoomSummary(spaceId) }
         selectedSpaceDataSource.post(Option.just(RoomGroupingMethod.BySpace(spaceSum)))
         if (spaceId != null) {
@@ -78,8 +91,8 @@ class AppStateHandler @Inject constructor(
 
     fun setCurrentGroup(groupId: String?, session: Session? = null) {
         val uSession = session ?: activeSessionHolder.getSafeActiveSession() ?: return
-        if (selectedSpaceDataSource.currentValue?.orNull() is RoomGroupingMethod.ByLegacyGroup
-                && groupId == selectedSpaceDataSource.currentValue?.orNull()?.group()?.groupId) return
+        if (selectedSpaceDataSource.currentValue?.orNull() is RoomGroupingMethod.ByLegacyGroup &&
+                groupId == selectedSpaceDataSource.currentValue?.orNull()?.group()?.groupId) return
         val activeGroup = groupId?.let { uSession.getGroupSummary(groupId) }
         selectedSpaceDataSource.post(Option.just(RoomGroupingMethod.ByLegacyGroup(activeGroup)))
         if (groupId != null) {

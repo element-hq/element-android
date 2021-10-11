@@ -141,8 +141,6 @@ android\.app\.AlertDialog
 androidx\.appcompat\.app\.AlertDialog===4
 
 ### Put the operator at the beginning of next line
-&&$
-\|\|$
  ==$
 
 ### Use JsonUtils.getBasicGson()
@@ -162,7 +160,7 @@ Formatter\.formatShortFileSize===1
 # android\.text\.TextUtils
 
 ### This is not a rule, but a warning: the number of "enum class" has changed. For Json classes, it is mandatory that they have `@JsonClass(generateAdapter = false)`. If the enum is not used as a Json class, change the value in file forbidden_strings_in_code.txt
-enum class===105
+enum class===106
 
 ### Do not import temporary legacy classes
 import org.matrix.android.sdk.internal.legacy.riot===3

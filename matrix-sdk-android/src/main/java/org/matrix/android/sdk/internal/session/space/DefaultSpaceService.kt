@@ -33,6 +33,7 @@ import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomPreset
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
+import org.matrix.android.sdk.api.session.room.powerlevels.Role
 import org.matrix.android.sdk.api.session.space.CreateSpaceParams
 import org.matrix.android.sdk.api.session.space.JoinSpaceResult
 import org.matrix.android.sdk.api.session.space.Space
@@ -77,7 +78,7 @@ internal class DefaultSpaceService @Inject constructor(
             if (isPublic) {
                 this.roomAliasName = roomAliasLocalPart
                 this.powerLevelContentOverride = (powerLevelContentOverride ?: PowerLevelsContent()).copy(
-                        invite = 0
+                        invite = if (isPublic) Role.Default.value else Role.Moderator.value
                 )
                 this.preset = CreateRoomPreset.PRESET_PUBLIC_CHAT
                 this.historyVisibility = RoomHistoryVisibility.WORLD_READABLE
@@ -220,5 +221,24 @@ internal class DefaultSpaceService @Inject constructor(
                         canonical = canonical
                 ).toContent()
         )
+    }
+
+    override suspend fun removeSpaceParent(childRoomId: String, parentSpaceId: String) {
+        val room = roomGetter.getRoom(childRoomId)
+                ?: throw IllegalArgumentException("Unknown Room $childRoomId")
+
+        val existingEvent = room.getStateEvent(EventType.STATE_SPACE_PARENT, QueryStringValue.Equals(parentSpaceId))
+        if (existingEvent != null) {
+            // Should i check if it was sent by me?
+            // we don't check power level, it will throw if you cannot do that
+            room.sendStateEvent(
+                    eventType = EventType.STATE_SPACE_PARENT,
+                    stateKey = parentSpaceId,
+                    body = SpaceParentContent(
+                            via = null,
+                            canonical = null
+                    ).toContent()
+            )
+        }
     }
 }

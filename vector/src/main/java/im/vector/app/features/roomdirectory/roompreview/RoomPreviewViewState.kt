@@ -62,7 +62,7 @@ data class RoomPreviewViewState(
             roomType = args.roomType
     )
 
-    fun matrixItem() : MatrixItem {
+    fun matrixItem(): MatrixItem {
         return if (roomType == RoomType.SPACE) MatrixItem.SpaceItem(roomId, roomName ?: roomAlias, avatarUrl)
             else MatrixItem.RoomItem(roomId, roomName ?: roomAlias, avatarUrl)
     }

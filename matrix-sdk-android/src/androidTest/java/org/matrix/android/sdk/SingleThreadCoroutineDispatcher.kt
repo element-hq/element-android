@@ -16,9 +16,9 @@
 
 package org.matrix.android.sdk
 
-import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.asCoroutineDispatcher
+import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
 import java.util.concurrent.Executors
 
 internal val testCoroutineDispatchers = MatrixCoroutineDispatchers(Main, Main, Main, Main,

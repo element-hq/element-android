@@ -76,7 +76,6 @@ import im.vector.app.features.login2.LoginFragmentSigninPassword2
 import im.vector.app.features.login2.LoginFragmentSigninUsername2
 import im.vector.app.features.login2.LoginFragmentSignupPassword2
 import im.vector.app.features.login2.LoginFragmentSignupUsername2
-import im.vector.app.features.login2.created.AccountCreatedFragment
 import im.vector.app.features.login2.LoginFragmentToAny2
 import im.vector.app.features.login2.LoginGenericTextInputFormFragment2
 import im.vector.app.features.login2.LoginResetPasswordFragment2
@@ -88,6 +87,7 @@ import im.vector.app.features.login2.LoginSplashSignUpSignInSelectionFragment2
 import im.vector.app.features.login2.LoginSsoOnlyFragment2
 import im.vector.app.features.login2.LoginWaitForEmailFragment2
 import im.vector.app.features.login2.LoginWebFragment2
+import im.vector.app.features.login2.created.AccountCreatedFragment
 import im.vector.app.features.login2.terms.LoginTermsFragment2
 import im.vector.app.features.matrixto.MatrixToRoomSpaceFragment
 import im.vector.app.features.matrixto.MatrixToUserFragment
@@ -114,12 +114,9 @@ import im.vector.app.features.roomprofile.settings.joinrule.RoomJoinRuleFragment
 import im.vector.app.features.roomprofile.uploads.RoomUploadsFragment
 import im.vector.app.features.roomprofile.uploads.files.RoomUploadsFilesFragment
 import im.vector.app.features.roomprofile.uploads.media.RoomUploadsMediaFragment
-import im.vector.app.features.settings.notifications.VectorSettingsAdvancedNotificationPreferenceFragment
 import im.vector.app.features.settings.VectorSettingsGeneralFragment
 import im.vector.app.features.settings.VectorSettingsHelpAboutFragment
 import im.vector.app.features.settings.VectorSettingsLabsFragment
-import im.vector.app.features.settings.notifications.VectorSettingsNotificationPreferenceFragment
-import im.vector.app.features.settings.notifications.VectorSettingsNotificationsTroubleshootFragment
 import im.vector.app.features.settings.VectorSettingsPinFragment
 import im.vector.app.features.settings.VectorSettingsPreferencesFragment
 import im.vector.app.features.settings.VectorSettingsSecurityPrivacyFragment
@@ -134,6 +131,9 @@ import im.vector.app.features.settings.devtools.OutgoingKeyRequestListFragment
 import im.vector.app.features.settings.homeserver.HomeserverSettingsFragment
 import im.vector.app.features.settings.ignored.VectorSettingsIgnoredUsersFragment
 import im.vector.app.features.settings.locale.LocalePickerFragment
+import im.vector.app.features.settings.notifications.VectorSettingsAdvancedNotificationPreferenceFragment
+import im.vector.app.features.settings.notifications.VectorSettingsNotificationPreferenceFragment
+import im.vector.app.features.settings.notifications.VectorSettingsNotificationsTroubleshootFragment
 import im.vector.app.features.settings.push.PushGatewaysFragment
 import im.vector.app.features.settings.push.PushRulesFragment
 import im.vector.app.features.settings.threepids.ThreePidsSettingsFragment
@@ -142,9 +142,11 @@ import im.vector.app.features.signout.soft.SoftLogoutFragment
 import im.vector.app.features.spaces.SpaceListFragment
 import im.vector.app.features.spaces.create.ChoosePrivateSpaceTypeFragment
 import im.vector.app.features.spaces.create.ChooseSpaceTypeFragment
+import im.vector.app.features.spaces.create.CreateSpaceAdd3pidInvitesFragment
 import im.vector.app.features.spaces.create.CreateSpaceDefaultRoomsFragment
 import im.vector.app.features.spaces.create.CreateSpaceDetailsFragment
 import im.vector.app.features.spaces.explore.SpaceDirectoryFragment
+import im.vector.app.features.spaces.leave.SpaceLeaveAdvancedFragment
 import im.vector.app.features.spaces.manage.SpaceAddRoomFragment
 import im.vector.app.features.spaces.manage.SpaceManageRoomsFragment
 import im.vector.app.features.spaces.manage.SpaceSettingsFragment
@@ -795,6 +797,11 @@ interface FragmentModule {
 
     @Binds
     @IntoMap
+    @FragmentKey(CreateSpaceAdd3pidInvitesFragment::class)
+    fun bindCreateSpaceAdd3pidInvitesFragment(fragment: CreateSpaceAdd3pidInvitesFragment): Fragment
+
+    @Binds
+    @IntoMap
     @FragmentKey(SpaceAddRoomFragment::class)
     fun bindSpaceAddRoomFragment(fragment: SpaceAddRoomFragment): Fragment
 
@@ -822,4 +829,9 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(RoomJoinRuleChooseRestrictedFragment::class)
     fun bindRoomJoinRuleChooseRestrictedFragment(fragment: RoomJoinRuleChooseRestrictedFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(SpaceLeaveAdvancedFragment::class)
+    fun bindSpaceLeaveAdvancedFragment(fragment: SpaceLeaveAdvancedFragment): Fragment
 }

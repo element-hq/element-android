@@ -89,7 +89,6 @@ internal class DefaultSpace(
                 body = SpaceChildContent(
                         order = null,
                         via = null,
-//                        autoJoin = null,
                         suggested = null
                 ).toContent()
         )

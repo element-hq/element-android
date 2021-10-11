@@ -129,7 +129,7 @@ fun activityIdlingResource(activityClass: Class<*>): IdlingResource {
         private var callback: IdlingResource.ResourceCallback? = null
 
         var hasResumed = false
-        private var currentActivity : Activity? = null
+        private var currentActivity: Activity? = null
 
         val uniqTS = System.currentTimeMillis()
         override fun getName() = "activityIdlingResource_${activityClass.name}_$uniqTS"

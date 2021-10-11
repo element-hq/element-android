@@ -40,7 +40,7 @@ import org.matrix.android.sdk.api.session.file.ContentDownloadStateTracker
 import org.matrix.android.sdk.api.session.file.FileService
 import org.matrix.android.sdk.api.session.group.GroupService
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilitiesService
-import org.matrix.android.sdk.api.session.initsync.InitialSyncProgressService
+import org.matrix.android.sdk.api.session.initsync.SyncStatusService
 import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerService
 import org.matrix.android.sdk.api.session.media.MediaService
 import org.matrix.android.sdk.api.session.openid.OpenIdService
@@ -117,7 +117,7 @@ internal class DefaultSession @Inject constructor(
         private val contentUploadProgressTracker: ContentUploadStateTracker,
         private val typingUsersTracker: TypingUsersTracker,
         private val contentDownloadStateTracker: ContentDownloadStateTracker,
-        private val initialSyncProgressService: Lazy<InitialSyncProgressService>,
+        private val syncStatusService: Lazy<SyncStatusService>,
         private val homeServerCapabilitiesService: Lazy<HomeServerCapabilitiesService>,
         private val accountDataService: Lazy<SessionAccountDataService>,
         private val _sharedSecretStorageService: Lazy<SharedSecretStorageService>,
@@ -143,7 +143,7 @@ internal class DefaultSession @Inject constructor(
         PushersService by pushersService.get(),
         EventService by eventService.get(),
         TermsService by termsService.get(),
-        InitialSyncProgressService by initialSyncProgressService.get(),
+        SyncStatusService by syncStatusService.get(),
         SecureStorageService by secureStorageService.get(),
         HomeServerCapabilitiesService by homeServerCapabilitiesService.get(),
         ProfileService by profileService.get(),
@@ -228,6 +228,8 @@ internal class DefaultSession @Inject constructor(
     }
 
     override fun getSyncStateLive() = getSyncThread().liveState()
+
+    override fun syncFlow() = getSyncThread().syncFlow()
 
     override fun getSyncState() = getSyncThread().currentState()
 

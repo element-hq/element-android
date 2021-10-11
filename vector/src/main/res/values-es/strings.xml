@@ -2551,7 +2551,6 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="settings_show_emoji_keyboard">Mostrar teclado emoji</string>
     <string name="direct_room_user_list_recent_title">Reciente</string>
     <string name="add_by_qr_code">Añadir mediante código QR</string>
-    <string name="user_directory_search_hint">Buscar por nick o ID</string>
     <string name="qr_code">Código QR</string>
     <string name="direct_room_user_list_suggestions_title">Sugerencias</string>
     <string name="direct_room_user_list_contacts_title">Contactos</string>
@@ -2619,7 +2618,6 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="labs_use_restricted_join_rule">Espacio Experimental - Sala Restringida.</string>
     <string name="you_are_invited">Estas invitado</string>
     <string name="space_add_rooms">Añadir salas</string>
-    <string name="space_leave_prompt_msg">Estas seguro de que quieres salir de este espacio\?</string>
     <string name="leave_space">Salir de este espacio</string>
     <string name="space_add_child_title">Añadir salas</string>
     <string name="space_explore_activity_title">Explorar salas</string>

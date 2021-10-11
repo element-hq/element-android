@@ -20,8 +20,8 @@ import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import im.vector.app.R
 import im.vector.app.core.di.HasScreenInjector
 import im.vector.app.core.extensions.exhaustive
@@ -38,8 +38,8 @@ import java.net.UnknownHostException
 class SetIdentityServerViewModel @AssistedInject constructor(
         @Assisted initialState: SetIdentityServerState,
         private val mxSession: Session,
-        stringProvider: StringProvider)
-    : VectorViewModel<SetIdentityServerState, SetIdentityServerAction, SetIdentityServerViewEvents>(initialState) {
+        stringProvider: StringProvider) :
+    VectorViewModel<SetIdentityServerState, SetIdentityServerAction, SetIdentityServerViewEvents>(initialState) {
 
     @AssistedFactory
     interface Factory {

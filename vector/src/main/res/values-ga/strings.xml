@@ -47,11 +47,11 @@
         <item quantity="other">%dn</item>
     </plurals>
     <plurals name="format_time_s">
-        <item quantity="one"/>
-        <item quantity="two"/>
-        <item quantity="few"/>
+        <item quantity="one">%ds</item>
+        <item quantity="two"></item>
+        <item quantity="few"></item>
         <item quantity="many">%ds</item>
-        <item quantity="other"/>
+        <item quantity="other"></item>
     </plurals>
     <string name="room_sync_in_progress">Ag sioncronú…</string>
     <string name="reject">Diúltaigh</string>
@@ -225,4 +225,10 @@
     <string name="summary_user_sent_sticker">Sheol %1$s greamán.</string>
     <string name="summary_you_sent_image">Sheol tú íomhá.</string>
     <string name="summary_user_sent_image">Sheol %1$s íomhá.</string>
+    <string name="tab_title_search_people">DAOINE</string>
+    <string name="tab_title_search_messages">TEACHTAIREACHTAÍ</string>
+    <string name="tab_title_search_rooms">SEOMRAÍ</string>
+    <string name="search_hint">Cuardaigh</string>
+    <string name="room_details_people_present_group_name">BAILL</string>
+    <string name="auth_home_server">Freastalaí baile:</string>
 </resources>

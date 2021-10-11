@@ -636,8 +636,8 @@ class WebRtcCall(
         // We consider a call to be on hold only if *all* the tracks are on hold
         // (is this the right thing to do?)
         for (transceiver in peerConnection?.transceivers ?: emptyList()) {
-            val trackOnHold = transceiver.currentDirection == RtpTransceiver.RtpTransceiverDirection.INACTIVE
-                    || transceiver.currentDirection == RtpTransceiver.RtpTransceiverDirection.RECV_ONLY
+            val trackOnHold = transceiver.currentDirection == RtpTransceiver.RtpTransceiverDirection.INACTIVE ||
+                    transceiver.currentDirection == RtpTransceiver.RtpTransceiverDirection.RECV_ONLY
             if (!trackOnHold) callOnHold = false
         }
         return callOnHold
@@ -810,17 +810,19 @@ class WebRtcCall(
         }
     }
 
-    fun endCall(reason: EndCallReason = EndCallReason.USER_HANGUP) {
+    fun endCall(reason: EndCallReason = EndCallReason.USER_HANGUP, sendSignaling: Boolean = true) {
         sessionScope?.launch(dispatcher) {
             if (mxCall.state is CallState.Ended) {
                 return@launch
             }
             val reject = mxCall.state is CallState.LocalRinging
             terminate(reason, reject)
-            if (reject) {
-                mxCall.reject()
-            } else {
-                mxCall.hangUp(reason)
+            if (sendSignaling) {
+                if (reject) {
+                    mxCall.reject()
+                } else {
+                    mxCall.hangUp(reason)
+                }
             }
         }
     }
@@ -889,8 +891,8 @@ class WebRtcCall(
             val polite = !mxCall.isOutgoing
             // Here we follow the perfect negotiation logic from
             // https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API/Perfect_negotiation
-            val offerCollision = description.type == SdpType.OFFER
-                    && (makingOffer || peerConnection.signalingState() != PeerConnection.SignalingState.STABLE)
+            val offerCollision = description.type == SdpType.OFFER &&
+                    (makingOffer || peerConnection.signalingState() != PeerConnection.SignalingState.STABLE)
 
             ignoreOffer = !polite && offerCollision
             if (ignoreOffer) {

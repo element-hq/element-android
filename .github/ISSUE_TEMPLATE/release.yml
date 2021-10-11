@@ -1,7 +1,7 @@
 name: Release checklist
 description: Checklist for each release. This template is only for the core team.
 title: "[Release] Element Android v"
-labels: [\U0001F680 Release]
+labels: [🚀 Release]
 assignees:
   - bmarty
 
@@ -71,14 +71,14 @@ body:
         https://github.com/matrix-org/matrix-android-sdk2
 
         - [ ] Create a release with GitFlow
+        - [ ] Update the value of VERSION_NAME in the file gradle.properties
         - [ ] Update the files `./build.gradle` and `./gradle/gradle-wrapper.properties` manually, to use the latest version for the dependency. You can get inspired by the same files on Element Android project.
         - [ ] Run the script `./tools/import_from_element.sh`
-        - [ ] Update the version in `./matrix-sdk-android/build.gradle`
-        - [ ] Check the diff on this file and restore what may have been erased (in particular the line `apply plugin: "com.vanniktech.maven.publish"`)
+        - [ ] Check the diff in the file `./matrix-sdk-android/build.gradle` and restore what may have been erased (in particular the line `apply plugin: "com.vanniktech.maven.publish"` and the line about the version)
         - [ ] Let the script finish to build the library
         - [ ] Update the file `CHANGES.md`
-        - [ ] Update the value of VERSION_NAME in the file gradle.properties
         - [ ] Finish the release using GitFlow
+        - [ ] Push the branch `main`, the new tag and the branch `develop` to origin
 
         ##### Release on MavenCentral
 

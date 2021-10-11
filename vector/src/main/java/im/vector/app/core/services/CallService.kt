@@ -33,6 +33,7 @@ import im.vector.app.features.call.telecom.CallConnection
 import im.vector.app.features.call.webrtc.WebRtcCall
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.call.webrtc.getOpponentAsMatrixItem
+import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.features.popup.IncomingCallAlert
@@ -50,7 +51,7 @@ private val loggerTag = LoggerTag("CallService", LoggerTag.VOIP)
 class CallService : VectorService() {
 
     private val connections = mutableMapOf<String, CallConnection>()
-    private val knownCalls = mutableSetOf<CallInformation>()
+    private val knownCalls = mutableMapOf<String, CallInformation>()
     private val connectedCallIds = mutableSetOf<String>()
 
     private lateinit var notificationManager: NotificationManagerCompat
@@ -190,7 +191,7 @@ class CallService : VectorService() {
         } else {
             notificationManager.notify(callId.hashCode(), notification)
         }
-        knownCalls.add(callInformation)
+        knownCalls[callId] = callInformation
     }
 
     private fun handleCallTerminated(intent: Intent) {
@@ -198,20 +199,22 @@ class CallService : VectorService() {
         val endCallReason = intent.getSerializableExtra(EXTRA_END_CALL_REASON) as EndCallReason
         val rejected = intent.getBooleanExtra(EXTRA_END_CALL_REJECTED, false)
         alertManager.cancelAlert(callId)
-        val terminatedCall = knownCalls.firstOrNull { it.callId == callId }
+        val terminatedCall = knownCalls.remove(callId)
         if (terminatedCall == null) {
-            Timber.tag(loggerTag.value).v("Call terminated for unknown call $callId$")
+            Timber.tag(loggerTag.value).v("Call terminated for unknown call $callId")
             handleUnexpectedState(callId)
             return
         }
-        knownCalls.remove(terminatedCall)
+        val notification = notificationUtils.buildCallEndedNotification(false)
+        val notificationId = callId.hashCode()
+        startForeground(notificationId, notification)
         if (knownCalls.isEmpty()) {
+            Timber.tag(loggerTag.value).v("No more call, stop the service")
+            stopForeground(true)
             mediaSession?.isActive = false
             myStopSelf()
         }
         val wasConnected = connectedCallIds.remove(callId)
-        val notification = notificationUtils.buildCallEndedNotification(terminatedCall.isVideoCall)
-        notificationManager.notify(callId.hashCode(), notification)
         if (!wasConnected && !terminatedCall.isOutgoing && !rejected && endCallReason != EndCallReason.ANSWERED_ELSEWHERE) {
             val missedCallNotification = notificationUtils.buildCallMissedNotification(terminatedCall)
             notificationManager.notify(MISSED_CALL_TAG, terminatedCall.nativeRoomId.hashCode(), missedCallNotification)
@@ -243,7 +246,7 @@ class CallService : VectorService() {
         } else {
             notificationManager.notify(callId.hashCode(), notification)
         }
-        knownCalls.add(callInformation)
+        knownCalls[callId] = callInformation
     }
 
     /**
@@ -267,18 +270,19 @@ class CallService : VectorService() {
         } else {
             notificationManager.notify(callId.hashCode(), notification)
         }
-        knownCalls.add(callInformation)
+        knownCalls[callId] = callInformation
     }
 
     private fun handleUnexpectedState(callId: String?) {
         Timber.tag(loggerTag.value).v("Fallback to clear everything")
         callRingPlayerIncoming?.stop()
         callRingPlayerOutgoing?.stop()
-        if (callId != null) {
-            notificationManager.cancel(callId.hashCode())
-        }
         val notification = notificationUtils.buildCallEndedNotification(false)
-        startForeground(DEFAULT_NOTIFICATION_ID, notification)
+        if (callId != null) {
+            startForeground(callId.hashCode(), notification)
+        } else {
+            startForeground(DEFAULT_NOTIFICATION_ID, notification)
+        }
         if (knownCalls.isEmpty()) {
             mediaSession?.isActive = false
             myStopSelf()
@@ -371,7 +375,7 @@ class CallService : VectorService() {
                         putExtra(EXTRA_END_CALL_REASON, endCallReason)
                         putExtra(EXTRA_END_CALL_REJECTED, rejected)
                     }
-            ContextCompat.startForegroundService(context, intent)
+            context.startService(intent)
         }
     }
 

@@ -40,7 +40,7 @@ import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.api.auth.registration.nextUncompletedStage
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.pushrules.RuleIds
-import org.matrix.android.sdk.api.session.initsync.InitialSyncProgressService
+import org.matrix.android.sdk.api.session.initsync.SyncStatusService
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.api.util.toMatrixItem
@@ -122,25 +122,26 @@ class HomeActivityViewModel @AssistedInject constructor(
     private fun observeInitialSync() {
         val session = activeSessionHolder.getSafeActiveSession() ?: return
 
-        session.getInitialSyncProgressStatus()
+        session.getSyncStatusLive()
                 .asObservable()
                 .subscribe { status ->
                     when (status) {
-                        is InitialSyncProgressService.Status.Progressing -> {
+                        is SyncStatusService.Status.Progressing -> {
                             // Schedule a check of the bootstrap when the init sync will be finished
                             checkBootstrap = true
                         }
-                        is InitialSyncProgressService.Status.Idle        -> {
+                        is SyncStatusService.Status.Idle        -> {
                             if (checkBootstrap) {
                                 checkBootstrap = false
                                 maybeBootstrapCrossSigningAfterInitialSync()
                             }
                         }
+                        else                                    -> Unit
                     }
 
                     setState {
                         copy(
-                                initialSyncProgressServiceStatus = status
+                                syncStatusServiceStatus = status
                         )
                     }
                 }
@@ -217,9 +218,9 @@ class HomeActivityViewModel @AssistedInject constructor(
                                 object : UserInteractiveAuthInterceptor {
                                     override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
                                         // We missed server grace period or it's not setup, see if we remember locally password
-                                        if (flowResponse.nextUncompletedStage() == LoginFlowTypes.PASSWORD
-                                                && errCode == null
-                                                && reAuthHelper.data != null) {
+                                        if (flowResponse.nextUncompletedStage() == LoginFlowTypes.PASSWORD &&
+                                                errCode == null &&
+                                                reAuthHelper.data != null) {
                                             promise.resume(
                                                     UserPasswordAuth(
                                                             session = flowResponse.session,

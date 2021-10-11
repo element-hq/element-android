@@ -34,8 +34,8 @@ internal class MXOlmDecryption(
         // The olm device interface
         private val olmDevice: MXOlmDevice,
         // the matrix userId
-        private val userId: String)
-    : IMXDecrypting {
+        private val userId: String) :
+    IMXDecrypting {
 
     @Throws(MXCryptoError::class)
     override fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult {

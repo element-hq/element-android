@@ -38,19 +38,19 @@ import im.vector.app.features.auth.ReAuthActivity
 import im.vector.app.features.login.ReAuthHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.auth.UIABaseAuth
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
+import org.matrix.android.sdk.api.auth.UserPasswordAuth
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
+import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
+import org.matrix.android.sdk.api.auth.registration.nextUncompletedStage
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.securestorage.RawBytesKeySpec
-import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
-import org.matrix.android.sdk.api.auth.registration.nextUncompletedStage
 import org.matrix.android.sdk.internal.crypto.crosssigning.fromBase64
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersionResult
 import org.matrix.android.sdk.internal.crypto.keysbackup.util.extractCurveKeyFromRecoveryKey
 import org.matrix.android.sdk.internal.crypto.model.rest.DefaultBaseAuth
-import org.matrix.android.sdk.api.auth.UIABaseAuth
-import org.matrix.android.sdk.api.auth.UserPasswordAuth
 import org.matrix.android.sdk.internal.util.awaitCallback
 import java.io.OutputStream
 import kotlin.coroutines.Continuation
@@ -437,9 +437,9 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                         }
                     }
                     is BootstrapResult.Failure                 -> {
-                        if (bootstrapResult is BootstrapResult.GenericError
-                                && bootstrapResult.failure is Failure.OtherServerError
-                                && bootstrapResult.failure.httpCode == 401) {
+                        if (bootstrapResult is BootstrapResult.GenericError &&
+                                bootstrapResult.failure is Failure.OtherServerError &&
+                                bootstrapResult.failure.httpCode == 401) {
                             // Ignore this error
                         } else {
                             _viewEvents.post(BootstrapViewEvents.ModalError(bootstrapResult.error ?: stringProvider.getString(R.string.matrix_error)))

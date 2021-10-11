@@ -41,7 +41,6 @@ import im.vector.app.databinding.FragmentIncomingShareBinding
 import im.vector.app.features.attachments.AttachmentsHelper
 import im.vector.app.features.attachments.preview.AttachmentsPreviewActivity
 import im.vector.app.features.attachments.preview.AttachmentsPreviewArgs
-
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import javax.inject.Inject

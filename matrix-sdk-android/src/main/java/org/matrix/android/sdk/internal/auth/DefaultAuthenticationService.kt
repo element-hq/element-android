@@ -174,8 +174,8 @@ internal class DefaultAuthenticationService @Inject constructor(
         return try {
             getWellknownLoginFlowInternal(homeServerConnectionConfig)
         } catch (failure: Throwable) {
-            if (failure is Failure.OtherServerError
-                    && failure.httpCode == HttpsURLConnection.HTTP_NOT_FOUND /* 404 */) {
+            if (failure is Failure.OtherServerError &&
+                    failure.httpCode == HttpsURLConnection.HTTP_NOT_FOUND /* 404 */) {
                 // 404, no well-known data, try direct access to the API
                 // First check the homeserver version
                 return runCatching {
@@ -192,8 +192,8 @@ internal class DefaultAuthenticationService @Inject constructor(
                                     it
                                 },
                                 {
-                                    if (it is Failure.OtherServerError
-                                            && it.httpCode == HttpsURLConnection.HTTP_NOT_FOUND /* 404 */) {
+                                    if (it is Failure.OtherServerError &&
+                                            it.httpCode == HttpsURLConnection.HTTP_NOT_FOUND /* 404 */) {
                                         // It's maybe a Web client url?
                                         getWebClientDomainLoginFlowInternal(homeServerConnectionConfig)
                                     } else {
@@ -227,8 +227,8 @@ internal class DefaultAuthenticationService @Inject constructor(
                             it
                         },
                         {
-                            if (it is Failure.OtherServerError
-                                    && it.httpCode == HttpsURLConnection.HTTP_NOT_FOUND /* 404 */) {
+                            if (it is Failure.OtherServerError &&
+                                    it.httpCode == HttpsURLConnection.HTTP_NOT_FOUND /* 404 */) {
                                 // Try with config.json
                                 getWebClientLoginFlowInternal(homeServerConnectionConfig)
                             } else {

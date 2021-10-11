@@ -63,8 +63,8 @@ private data class NewAttachmentAttributes(
  * Possible previous worker: None
  * Possible next worker    : Always [MultipleEventSendingDispatcherWorker]
  */
-internal class UploadContentWorker(val context: Context, params: WorkerParameters)
-    : SessionSafeCoroutineWorker<UploadContentWorker.Params>(context, params, Params::class.java) {
+internal class UploadContentWorker(val context: Context, params: WorkerParameters) :
+    SessionSafeCoroutineWorker<UploadContentWorker.Params>(context, params, Params::class.java) {
 
     @JsonClass(generateAdapter = true)
     internal data class Params(
@@ -157,10 +157,10 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                         params.attachment.size
                 )
 
-                if (attachment.type == ContentAttachmentData.Type.IMAGE
+                if (attachment.type == ContentAttachmentData.Type.IMAGE &&
                         // Do not compress gif
-                        && attachment.mimeType != MimeTypes.Gif
-                        && params.compressBeforeSending) {
+                        attachment.mimeType != MimeTypes.Gif &&
+                        params.compressBeforeSending) {
                     notifyTracker(params) { contentUploadStateTracker.setCompressingImage(it) }
 
                     fileToUpload = imageCompressor.compress(workingFile, MAX_IMAGE_SIZE, MAX_IMAGE_SIZE)
@@ -177,10 +177,10 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                                 }
                             }
                             .also { filesToDelete.add(it) }
-                } else if (attachment.type == ContentAttachmentData.Type.VIDEO
+                } else if (attachment.type == ContentAttachmentData.Type.VIDEO &&
                         // Do not compress gif
-                        && attachment.mimeType != MimeTypes.Gif
-                        && params.compressBeforeSending) {
+                        attachment.mimeType != MimeTypes.Gif &&
+                        params.compressBeforeSending) {
                     fileToUpload = videoCompressor.compress(workingFile, object : ProgressListener {
                         override fun onProgress(progress: Int, total: Int) {
                             notifyTracker(params) { contentUploadStateTracker.setCompressingVideo(it, progress.toFloat()) }

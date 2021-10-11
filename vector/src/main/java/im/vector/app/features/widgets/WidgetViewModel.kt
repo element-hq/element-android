@@ -26,8 +26,8 @@ import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.widgets.permissions.WidgetPermissionsHelper
@@ -50,8 +50,8 @@ import javax.net.ssl.HttpsURLConnection
 class WidgetViewModel @AssistedInject constructor(@Assisted val initialState: WidgetViewState,
                                                   widgetPostAPIHandlerFactory: WidgetPostAPIHandler.Factory,
                                                   private val stringProvider: StringProvider,
-                                                  private val session: Session)
-    : VectorViewModel<WidgetViewState, WidgetAction, WidgetViewEvents>(initialState),
+                                                  private val session: Session) :
+    VectorViewModel<WidgetViewState, WidgetAction, WidgetViewEvents>(initialState),
         WidgetPostAPIHandler.NavigationCallback,
         IntegrationManagerService.Listener {
 

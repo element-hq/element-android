@@ -24,8 +24,8 @@ import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.pushrules.RuleKind
 import org.matrix.android.sdk.api.pushrules.rest.PushRuleAndKind
 
-abstract class VectorSettingsPushRuleNotificationPreferenceFragment
-    : VectorSettingsBaseFragment() {
+abstract class VectorSettingsPushRuleNotificationPreferenceFragment :
+    VectorSettingsBaseFragment() {
 
     abstract val prefKeyToPushRuleId: Map<String, String>
 

@@ -51,20 +51,20 @@ data class LoginViewState(
         // Network result
         @PersistState
         val loginMode: LoginMode = LoginMode.Unknown,
-        @PersistState
         // Supported types for the login. We cannot use a sealed class for LoginType because it is not serializable
-        val loginModeSupportedTypes: List<String> = emptyList(),
+        @PersistState
+val loginModeSupportedTypes: List<String> = emptyList(),
         val knownCustomHomeServersUrls: List<String> = emptyList()
 ) : MvRxState {
 
     fun isLoading(): Boolean {
-        return asyncLoginAction is Loading
-                || asyncHomeServerLoginFlowRequest is Loading
-                || asyncResetPassword is Loading
-                || asyncResetMailConfirmed is Loading
-                || asyncRegistration is Loading
+        return asyncLoginAction is Loading ||
+                asyncHomeServerLoginFlowRequest is Loading ||
+                asyncResetPassword is Loading ||
+                asyncResetMailConfirmed is Loading ||
+                asyncRegistration is Loading ||
                 // Keep loading when it is success because of the delay to switch to the next Activity
-                || asyncLoginAction is Success
+                asyncLoginAction is Success
     }
 
     fun isUserLogged(): Boolean {

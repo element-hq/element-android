@@ -36,15 +36,18 @@ import im.vector.app.features.settings.VectorPreferences
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixPatterns.getDomain
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
 import org.matrix.android.sdk.api.session.room.alias.RoomAliasError
 import org.matrix.android.sdk.api.session.room.failure.CreateRoomFailure
+import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
 import org.matrix.android.sdk.api.session.room.model.RoomDirectoryVisibility
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRulesAllowEntry
+import org.matrix.android.sdk.api.session.room.model.RoomType
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomPreset
 import org.matrix.android.sdk.api.session.room.model.create.RestrictedRoomPreset
@@ -53,7 +56,7 @@ import timber.log.Timber
 class CreateRoomViewModel @AssistedInject constructor(@Assisted private val initialState: CreateRoomViewState,
                                                       private val session: Session,
                                                       private val rawService: RawService,
-                                                      private val vectorPreferences: VectorPreferences
+                                                      vectorPreferences: VectorPreferences
 ) : VectorViewModel<CreateRoomViewState, CreateRoomAction, CreateRoomViewEvents>(initialState) {
 
     @AssistedFactory
@@ -107,8 +110,13 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted private val init
 
             setState {
                 copy(
-                        isEncrypted = RoomJoinRules.INVITE == roomJoinRules && adminE2EByDefault,
-                        hsAdminHasDisabledE2E = !adminE2EByDefault
+                        hsAdminHasDisabledE2E = !adminE2EByDefault,
+                        defaultEncrypted = mapOf(
+                                RoomJoinRules.INVITE to adminE2EByDefault,
+                                RoomJoinRules.PUBLIC to false,
+                                RoomJoinRules.RESTRICTED to adminE2EByDefault
+                        )
+
                 )
             }
         }
@@ -241,6 +249,18 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted private val init
                     name = state.roomName.takeIf { it.isNotBlank() }
                     topic = state.roomTopic.takeIf { it.isNotBlank() }
                     avatarUri = state.avatarUri
+
+                    if (state.isSubSpace) {
+                        // Space-rooms are distinguished from regular messaging rooms by the m.room.type of m.space
+                        roomType = RoomType.SPACE
+
+                        // Space-rooms should be created with a power level for events_default of 100,
+                        // to prevent the rooms accidentally/maliciously clogging up with messages from random members of the space.
+                        powerLevelContentOverride = PowerLevelsContent(
+                                eventsDefault = 100
+                        )
+                    }
+
                     when (state.roomJoinRules) {
                         RoomJoinRules.PUBLIC     -> {
                             // Directory visibility
@@ -272,7 +292,12 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted private val init
                     disableFederation = state.disableFederation
 
                     // Encryption
-                    if (state.isEncrypted) {
+                    val shouldEncrypt = when (state.roomJoinRules) {
+                        // we ignore the isEncrypted for public room as the switch is hidden in this case
+                        RoomJoinRules.PUBLIC -> false
+                        else                 -> state.isEncrypted ?: state.defaultEncrypted[state.roomJoinRules].orFalse()
+                    }
+                    if (shouldEncrypt) {
                         enableEncryption()
                     }
                 }

@@ -39,13 +39,13 @@ import im.vector.app.features.home.room.detail.timeline.factory.MergedHeaderItem
 import im.vector.app.features.home.room.detail.timeline.factory.ReadReceiptsItemFactory
 import im.vector.app.features.home.room.detail.timeline.factory.TimelineItemFactory
 import im.vector.app.features.home.room.detail.timeline.factory.TimelineItemFactoryParams
-import im.vector.app.features.home.room.detail.timeline.helper.TimelineEventsGroups
 import im.vector.app.features.home.room.detail.timeline.helper.ContentDownloadStateTrackerBinder
 import im.vector.app.features.home.room.detail.timeline.helper.ContentUploadStateTrackerBinder
 import im.vector.app.features.home.room.detail.timeline.helper.TimelineControllerInterceptorHelper
 import im.vector.app.features.home.room.detail.timeline.helper.TimelineEventDiffUtilCallback
 import im.vector.app.features.home.room.detail.timeline.helper.TimelineEventVisibilityHelper
 import im.vector.app.features.home.room.detail.timeline.helper.TimelineEventVisibilityStateChangedListener
+import im.vector.app.features.home.room.detail.timeline.helper.TimelineEventsGroups
 import im.vector.app.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
 import im.vector.app.features.home.room.detail.timeline.item.BasedMergedItem
 import im.vector.app.features.home.room.detail.timeline.item.DaySeparatorItem
@@ -249,8 +249,8 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         if (partialState.highlightedEventId != newPartialState.highlightedEventId) {
             // Clear cache to force a refresh
             for (i in 0 until modelCache.size) {
-                if (modelCache[i]?.eventId == viewState.highlightedEventId
-                        || modelCache[i]?.eventId == partialState.highlightedEventId) {
+                if (modelCache[i]?.eventId == viewState.highlightedEventId ||
+                        modelCache[i]?.eventId == partialState.highlightedEventId) {
                     modelCache[i] = null
                 }
             }
@@ -276,6 +276,10 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
     }
 
     override fun buildModels() {
+        // Don't build anything if membership is not joined
+        if (partialState.roomSummary?.membership != Membership.JOIN) {
+            return
+        }
         val timestamp = System.currentTimeMillis()
 
         val showingForwardLoader = LoadingItem_()
@@ -494,8 +498,8 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         if (vectorPreferences.labShowCompleteHistoryInEncryptedRoom()) {
             return
         }
-        if (event.root.type == EventType.STATE_ROOM_MEMBER
-                && event.root.stateKey == session.myUserId) {
+        if (event.root.type == EventType.STATE_ROOM_MEMBER &&
+                event.root.stateKey == session.myUserId) {
             val content = event.root.content.toModel<RoomMemberContent>()
             if (content?.membership == Membership.INVITE) {
                 hasReachedInvite = true

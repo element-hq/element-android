@@ -1194,7 +1194,6 @@ ${app_name}からあなた個人の電話帳への検索要求を許可する場
     <string name="user_code_share">コードを共有</string>
     <string name="template_invite_friends_text">${app_name} で会話しましょう: %s</string>
     <string name="invite_friends">フレンドを招待</string>
-    <string name="user_directory_search_hint">名前または ID で検索</string>
     <string name="direct_room_user_list_known_title">既知のユーザー</string>
     <string name="invalid_qr_code_uri">無効なQRコード (無効な URI)！</string>
     <string name="passwords_do_not_match">パスワードが一致しません</string>

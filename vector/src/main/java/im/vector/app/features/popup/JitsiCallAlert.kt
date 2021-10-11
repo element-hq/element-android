@@ -21,6 +21,7 @@ import android.view.View
 import im.vector.app.R
 import im.vector.app.core.glide.GlideApp
 import im.vector.app.databinding.AlerterJitsiCallLayoutBinding
+import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.AvatarRenderer
 import org.matrix.android.sdk.api.util.MatrixItem
 

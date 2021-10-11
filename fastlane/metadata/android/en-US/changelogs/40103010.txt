@@ -1,0 +1,2 @@
+Main changes in this version: Organize your rooms using Spaces! v1.3.1 is fixing a crash which can occurs in v1.3.0.
+Full changelog: https://github.com/vector-im/element-android/releases/tag/v1.3.1

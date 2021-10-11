@@ -22,7 +22,6 @@ import android.view.View
 import android.widget.RelativeLayout
 import im.vector.app.R
 import im.vector.app.databinding.ViewRoomWidgetsBannerBinding
-
 import org.matrix.android.sdk.api.session.widgets.model.Widget
 
 class RoomWidgetsBannerView @JvmOverloads constructor(

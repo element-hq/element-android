@@ -23,8 +23,8 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import org.matrix.android.sdk.api.MatrixCallback
@@ -163,7 +163,7 @@ class KeysBackupSettingsViewModel @AssistedInject constructor(@Assisted initialS
     fun canExit(): Boolean {
         val currentBackupState = keysBackupService.state
 
-        return currentBackupState == KeysBackupState.Unknown
-                || currentBackupState == KeysBackupState.CheckingBackUpOnHomeserver
+        return currentBackupState == KeysBackupState.Unknown ||
+                currentBackupState == KeysBackupState.CheckingBackUpOnHomeserver
     }
 }

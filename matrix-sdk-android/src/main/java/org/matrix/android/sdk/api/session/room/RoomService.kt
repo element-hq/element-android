@@ -220,7 +220,7 @@ interface RoomService {
                 .setPrefetchDistance(10)
                 .build()
 
-    fun getFlattenRoomSummaryChildrenOf(spaceId: String?, memberships: List<Membership> = Membership.activeMemberships()) : List<RoomSummary>
+    fun getFlattenRoomSummaryChildrenOf(spaceId: String?, memberships: List<Membership> = Membership.activeMemberships()): List<RoomSummary>
 
     /**
      * Returns all the children of this space, as LiveData

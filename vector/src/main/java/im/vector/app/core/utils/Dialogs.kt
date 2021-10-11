@@ -20,6 +20,7 @@ import android.content.Context
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import im.vector.app.R
 
 /**
  * Open a web view above the current activity.
@@ -36,5 +37,19 @@ fun Context.displayInWebView(url: String) {
     MaterialAlertDialogBuilder(this)
             .setView(wv)
             .setPositiveButton(android.R.string.ok, null)
+            .show()
+}
+
+fun Context.showIdentityServerConsentDialog(configuredIdentityServer: String?, policyLinkCallback: () -> Unit, consentCallBack: (() -> Unit)) {
+    MaterialAlertDialogBuilder(this)
+            .setTitle(R.string.identity_server_consent_dialog_title)
+            .setMessage(getString(R.string.identity_server_consent_dialog_content, configuredIdentityServer ?: ""))
+            .setPositiveButton(R.string.yes) { _, _ ->
+                consentCallBack.invoke()
+            }
+            .setNeutralButton(R.string.identity_server_consent_dialog_neutral_policy) { _, _ ->
+                policyLinkCallback.invoke()
+            }
+            .setNegativeButton(R.string.no, null)
             .show()
 }

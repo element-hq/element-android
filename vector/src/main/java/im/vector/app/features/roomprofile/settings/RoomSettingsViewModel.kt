@@ -47,8 +47,8 @@ import org.matrix.android.sdk.rx.unwrap
 
 class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: RoomSettingsViewState,
                                                         private val vectorPreferences: VectorPreferences,
-                                                        private val session: Session)
-    : VectorViewModel<RoomSettingsViewState, RoomSettingsAction, RoomSettingsViewEvents>(initialState) {
+                                                        private val session: Session) :
+    VectorViewModel<RoomSettingsViewState, RoomSettingsAction, RoomSettingsViewEvents>(initialState) {
 
     @AssistedFactory
     interface Factory {
@@ -112,11 +112,11 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
             val summary = asyncSummary()
             setState {
                 copy(
-                        showSaveAction = avatarAction !is RoomSettingsViewState.AvatarAction.None
-                                || summary?.name != newName
-                                || summary?.topic != newTopic
-                                || (newHistoryVisibility != null && newHistoryVisibility != currentHistoryVisibility)
-                                || newJoinRule.hasChanged()
+                        showSaveAction = avatarAction !is RoomSettingsViewState.AvatarAction.None ||
+                                summary?.name != newName ||
+                                summary?.topic != newTopic ||
+                                (newHistoryVisibility != null && newHistoryVisibility != currentHistoryVisibility) ||
+                                newJoinRule.hasChanged()
                 )
             }
         }
@@ -146,8 +146,8 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
                             canChangeHistoryVisibility = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true,
                                     EventType.STATE_ROOM_HISTORY_VISIBILITY),
                             canChangeJoinRule = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true,
-                                    EventType.STATE_ROOM_JOIN_RULES)
-                                    && powerLevelsHelper.isUserAllowedToSend(session.myUserId, true,
+                                    EventType.STATE_ROOM_JOIN_RULES) &&
+                                    powerLevelsHelper.isUserAllowedToSend(session.myUserId, true,
                                     EventType.STATE_ROOM_GUEST_ACCESS),
                             canAddChildren = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true,
                                     EventType.STATE_SPACE_CHILD)

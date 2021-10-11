@@ -152,8 +152,8 @@ internal class RealmCryptoStore @Inject constructor(
                 // Check credentials
                 // The device id may not have been provided in credentials.
                 // Check it only if provided, else trust the stored one.
-                if (currentMetadata.userId != userId
-                        || (deviceId != null && deviceId != currentMetadata.deviceId)) {
+                if (currentMetadata.userId != userId ||
+                        (deviceId != null && deviceId != currentMetadata.deviceId)) {
                     Timber.w("## open() : Credentials do not match, close this store and delete data")
                     deleteAll = true
                     currentMetadata = null
@@ -178,9 +178,9 @@ internal class RealmCryptoStore @Inject constructor(
 
     override fun hasData(): Boolean {
         return doWithRealm(realmConfiguration) {
-            !it.isEmpty
+            !it.isEmpty &&
                     // Check if there is a MetaData object
-                    && it.where<CryptoMetadataEntity>().count() > 0
+                    it.where<CryptoMetadataEntity>().count() > 0
         }
     }
 
@@ -1032,10 +1032,10 @@ internal class RealmCryptoStore @Inject constructor(
         }.mapNotNull {
             it.toOutgoingGossipingRequest() as? OutgoingRoomKeyRequest
         }.firstOrNull {
-            it.requestBody?.algorithm == requestBody.algorithm
-                    && it.requestBody?.roomId == requestBody.roomId
-                    && it.requestBody?.senderKey == requestBody.senderKey
-                    && it.requestBody?.sessionId == requestBody.sessionId
+            it.requestBody?.algorithm == requestBody.algorithm &&
+                    it.requestBody?.roomId == requestBody.roomId &&
+                    it.requestBody?.senderKey == requestBody.senderKey &&
+                    it.requestBody?.sessionId == requestBody.sessionId
         }
     }
 
@@ -1120,10 +1120,10 @@ internal class RealmCryptoStore @Inject constructor(
                     .mapNotNull {
                         it.toOutgoingGossipingRequest() as? OutgoingRoomKeyRequest
                     }.firstOrNull {
-                        it.requestBody?.algorithm == requestBody.algorithm
-                                && it.requestBody?.sessionId == requestBody.sessionId
-                                && it.requestBody?.senderKey == requestBody.senderKey
-                                && it.requestBody?.roomId == requestBody.roomId
+                        it.requestBody?.algorithm == requestBody.algorithm &&
+                                it.requestBody?.sessionId == requestBody.sessionId &&
+                                it.requestBody?.senderKey == requestBody.senderKey &&
+                                it.requestBody?.roomId == requestBody.roomId
                     }
 
             if (existing == null) {
@@ -1688,7 +1688,12 @@ internal class RealmCryptoStore @Inject constructor(
         }
     }
 
-    override fun markedSessionAsShared(roomId: String?, sessionId: String, userId: String, deviceId: String, chainIndex: Int) {
+    override fun markedSessionAsShared(roomId: String?,
+                                       sessionId: String,
+                                       userId: String,
+                                       deviceId: String,
+                                       deviceIdentityKey: String,
+                                       chainIndex: Int) {
         doRealmTransaction(realmConfiguration) { realm ->
             SharedSessionEntity.create(
                     realm = realm,
@@ -1696,14 +1701,22 @@ internal class RealmCryptoStore @Inject constructor(
                     sessionId = sessionId,
                     userId = userId,
                     deviceId = deviceId,
+                    deviceIdentityKey = deviceIdentityKey,
                     chainIndex = chainIndex
             )
         }
     }
 
-    override fun getSharedSessionInfo(roomId: String?, sessionId: String, userId: String, deviceId: String): IMXCryptoStore.SharedSessionResult {
+    override fun getSharedSessionInfo(roomId: String?, sessionId: String, deviceInfo: CryptoDeviceInfo): IMXCryptoStore.SharedSessionResult {
         return doWithRealm(realmConfiguration) { realm ->
-            SharedSessionEntity.get(realm, roomId, sessionId, userId, deviceId)?.let {
+            SharedSessionEntity.get(
+                    realm = realm,
+                    roomId = roomId,
+                    sessionId = sessionId,
+                    userId = deviceInfo.userId,
+                    deviceId = deviceInfo.deviceId,
+                    deviceIdentityKey = deviceInfo.identityKey()
+            )?.let {
                 IMXCryptoStore.SharedSessionResult(true, it.chainIndex)
             } ?: IMXCryptoStore.SharedSessionResult(false, null)
         }

@@ -29,6 +29,7 @@ import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.badge.BadgeDrawable
+import im.vector.app.AppStateHandler
 import im.vector.app.R
 import im.vector.app.RoomGroupingMethod
 import im.vector.app.core.extensions.commitTransaction
@@ -69,7 +70,8 @@ class HomeDetailFragment @Inject constructor(
         private val colorProvider: ColorProvider,
         private val alertManager: PopupAlertManager,
         private val callManager: WebRtcCallManager,
-        private val vectorPreferences: VectorPreferences
+        private val vectorPreferences: VectorPreferences,
+        private val appStateHandler: AppStateHandler
 ) : VectorBaseFragment<FragmentHomeDetailBinding>(),
         KeysBackupBanner.Delegate,
         CurrentCallsView.Callback,
@@ -153,7 +155,7 @@ class HomeDetailFragment @Inject constructor(
 
         viewModel.observeViewEvents { viewEvent ->
             when (viewEvent) {
-                HomeDetailViewEvents.CallStarted   -> dismissLoadingDialog()
+                HomeDetailViewEvents.CallStarted   -> handleCallStarted()
                 is HomeDetailViewEvents.FailToCall -> showFailure(viewEvent.failure)
                 HomeDetailViewEvents.Loading       -> showLoadingDialog()
             }
@@ -188,10 +190,16 @@ class HomeDetailFragment @Inject constructor(
 
         sharedCallActionViewModel
                 .liveKnownCalls
-                .observe(viewLifecycleOwner, {
+                .observe(viewLifecycleOwner) {
                     currentCallsViewPresenter.updateCall(callManager.getCurrentCall(), callManager.getCalls())
                     invalidateOptionsMenu()
-                })
+                }
+    }
+
+    private fun handleCallStarted() {
+        dismissLoadingDialog()
+        val fragmentTag = HomeTab.DialPad.toFragmentTag()
+        (childFragmentManager.findFragmentByTag(fragmentTag) as? DialPadFragment)?.clear()
     }
 
     override fun onDestroyView() {
@@ -204,6 +212,18 @@ class HomeDetailFragment @Inject constructor(
         // update notification tab if needed
         updateTabVisibilitySafely(R.id.bottom_action_notification, vectorPreferences.labAddNotificationTab())
         callManager.checkForProtocolsSupportIfNeeded()
+
+        // Current space/group is not live so at least refresh toolbar on resume
+        appStateHandler.getCurrentRoomGroupingMethod()?.let { roomGroupingMethod ->
+            when (roomGroupingMethod) {
+                is RoomGroupingMethod.ByLegacyGroup -> {
+                    onGroupChange(roomGroupingMethod.groupSummary)
+                }
+                is RoomGroupingMethod.BySpace       -> {
+                    onSpaceChange(roomGroupingMethod.spaceSummary)
+                }
+            }
+        }
     }
 
     private fun promptForNewUnknownDevices(uid: String, state: UnknownDevicesState, newest: DeviceInfo) {
@@ -356,8 +376,10 @@ class HomeDetailFragment @Inject constructor(
         invalidateOptionsMenu()
     }
 
+    private fun HomeTab.toFragmentTag() = "FRAGMENT_TAG_$this"
+
     private fun updateSelectedFragment(tab: HomeTab) {
-        val fragmentTag = "FRAGMENT_TAG_$tab"
+        val fragmentTag = tab.toFragmentTag()
         val fragmentToShow = childFragmentManager.findFragmentByTag(fragmentTag)
         childFragmentManager.commitTransaction {
             childFragmentManager.fragments
@@ -426,7 +448,11 @@ class HomeDetailFragment @Inject constructor(
         views.bottomNavigationView.getOrCreateBadge(R.id.bottom_action_people).render(it.notificationCountPeople, it.notificationHighlightPeople)
         views.bottomNavigationView.getOrCreateBadge(R.id.bottom_action_rooms).render(it.notificationCountRooms, it.notificationHighlightRooms)
         views.bottomNavigationView.getOrCreateBadge(R.id.bottom_action_notification).render(it.notificationCountCatchup, it.notificationHighlightCatchup)
-        views.syncStateView.render(it.syncState)
+        views.syncStateView.render(
+                it.syncState,
+                it.incrementalSyncStatus,
+                it.pushCounter,
+                vectorPreferences.developerShowDebugInfo())
 
         hasUnreadRooms = it.hasUnreadMessages
     }

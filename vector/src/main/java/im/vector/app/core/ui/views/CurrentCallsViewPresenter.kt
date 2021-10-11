@@ -36,7 +36,7 @@ class CurrentCallsViewPresenter {
         this.currentCall = currentCall
         this.currentCall?.addListener(tickListener)
         this.calls = calls
-        val hasActiveCall = currentCall != null
+        val hasActiveCall = calls.isNotEmpty()
         currentCallsView?.isVisible = hasActiveCall
         currentCallsView?.render(calls, currentCall?.formattedDuration() ?: "")
     }

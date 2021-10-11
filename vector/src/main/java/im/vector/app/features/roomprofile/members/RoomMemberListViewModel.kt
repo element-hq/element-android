@@ -51,8 +51,8 @@ import timber.log.Timber
 
 class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState: RoomMemberListViewState,
                                                           private val roomMemberSummaryComparator: RoomMemberSummaryComparator,
-                                                          private val session: Session)
-    : VectorViewModel<RoomMemberListViewState, RoomMemberListAction, EmptyViewEvents>(initialState) {
+                                                          private val session: Session) :
+    VectorViewModel<RoomMemberListViewState, RoomMemberListAction, EmptyViewEvents>(initialState) {
 
     @AssistedFactory
     interface Factory {
