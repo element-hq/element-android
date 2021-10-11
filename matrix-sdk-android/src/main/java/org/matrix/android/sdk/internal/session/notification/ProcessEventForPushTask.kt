@@ -17,11 +17,8 @@
 package org.matrix.android.sdk.internal.session.notification
 
 import org.matrix.android.sdk.api.pushrules.rest.PushRule
-import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
-import org.matrix.android.sdk.api.session.events.model.toModel
-import org.matrix.android.sdk.api.session.room.model.Membership
-import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
+import org.matrix.android.sdk.api.session.events.model.isInvitation
 import org.matrix.android.sdk.api.session.sync.model.RoomsSyncResponse
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.task.Task
@@ -101,6 +98,3 @@ internal class DefaultProcessEventForPushTask @Inject constructor(
         defaultPushRuleService.dispatchFinish()
     }
 }
-
-private fun Event.isInvitation(): Boolean = type == EventType.STATE_ROOM_MEMBER &&
-        content?.toModel<RoomMemberContent>()?.membership == Membership.INVITE
