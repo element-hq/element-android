@@ -27,16 +27,21 @@ class NotificationFactory @Inject constructor(
         private val summaryGroupMessageCreator: SummaryGroupMessageCreator
 ) {
 
-    fun Map<String, List<NotifiableMessageEvent>>.toNotifications(myUserDisplayName: String, myUserAvatarUrl: String?): List<RoomNotification> {
+    fun Map<String, List<Pair<ProcessedType, NotifiableMessageEvent>>>.toNotifications(myUserDisplayName: String, myUserAvatarUrl: String?): List<RoomNotification> {
         return map { (roomId, events) ->
             when {
                 events.hasNoEventsToDisplay() -> RoomNotification.Removed(roomId)
-                else                          -> roomGroupMessageCreator.createRoomMessage(events, roomId, myUserDisplayName, myUserAvatarUrl)
+                else                          -> {
+                    val messageEvents = events.filter { it.first == ProcessedType.KEEP }.map { it.second }
+                    roomGroupMessageCreator.createRoomMessage(messageEvents, roomId, myUserDisplayName, myUserAvatarUrl)
+                }
             }
         }
     }
 
-    private fun List<NotifiableMessageEvent>.hasNoEventsToDisplay() = isEmpty() || all { it.canNotBeDisplayed() }
+    private fun List<Pair<ProcessedType, NotifiableMessageEvent>>.hasNoEventsToDisplay() = isEmpty() || all {
+        it.first == ProcessedType.REMOVE || it.second.canNotBeDisplayed()
+    }
 
     private fun NotifiableMessageEvent.canNotBeDisplayed() = isRedacted
 

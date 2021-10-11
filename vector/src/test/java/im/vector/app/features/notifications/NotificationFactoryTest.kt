@@ -105,7 +105,7 @@ class NotificationFactoryTest {
     fun `given room with message when mapping to notification then delegates to room group message creator`() = testWith(notificationFactory) {
         val events = listOf(A_MESSAGE_EVENT)
         val expectedNotification = roomGroupMessageCreator.givenCreatesRoomMessageFor(events, A_ROOM_ID, MY_USER_ID, MY_AVATAR_URL)
-        val roomWithMessage = mapOf(A_ROOM_ID to events)
+        val roomWithMessage = mapOf(A_ROOM_ID to listOf(ProcessedType.KEEP to A_MESSAGE_EVENT))
 
         val result = roomWithMessage.toNotifications(MY_USER_ID, MY_AVATAR_URL)
 
@@ -114,7 +114,8 @@ class NotificationFactoryTest {
 
     @Test
     fun `given a room with no events to display when mapping to notification then is Empty`() = testWith(notificationFactory) {
-        val emptyRoom: Map<String, List<NotifiableMessageEvent>> = mapOf(A_ROOM_ID to emptyList())
+        val events = listOf(ProcessedType.REMOVE to A_MESSAGE_EVENT)
+        val emptyRoom = mapOf(A_ROOM_ID to events)
 
         val result = emptyRoom.toNotifications(MY_USER_ID, MY_AVATAR_URL)
 
@@ -125,7 +126,7 @@ class NotificationFactoryTest {
 
     @Test
     fun `given a room with only redacted events when mapping to notification then is Empty`() = testWith(notificationFactory) {
-        val redactedRoom = mapOf(A_ROOM_ID to listOf(A_MESSAGE_EVENT.copy(isRedacted = true)))
+        val redactedRoom = mapOf(A_ROOM_ID to listOf(ProcessedType.KEEP to A_MESSAGE_EVENT.copy(isRedacted = true)))
 
         val result = redactedRoom.toNotifications(MY_USER_ID, MY_AVATAR_URL)
 
