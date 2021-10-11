@@ -52,10 +52,11 @@ internal class DefaultProcessEventForPushTask @Inject constructor(
         }
         val newJoinEvents = params.syncResponse.join
                 .mapNotNull { (key, value) ->
-                    value.timeline?.events?.map { it.copy(roomId = key) }
+                    value.timeline?.events?.mapNotNull {
+                        it.takeIf { !it.isInvitation() }?.copy(roomId = key)
+                    }
                 }
                 .flatten()
-                .filterNot { it.isInvitationJoined() }
 
         val inviteEvents = params.syncResponse.invite
                 .mapNotNull { (key, value) ->
@@ -101,5 +102,5 @@ internal class DefaultProcessEventForPushTask @Inject constructor(
     }
 }
 
-private fun Event.isInvitationJoined(): Boolean = type == EventType.STATE_ROOM_MEMBER &&
+private fun Event.isInvitation(): Boolean = type == EventType.STATE_ROOM_MEMBER &&
         content?.toModel<RoomMemberContent>()?.membership == Membership.INVITE
