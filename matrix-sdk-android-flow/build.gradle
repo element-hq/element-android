@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    compileSdk 31
+    compileSdk versions.compileSdk
 
     defaultConfig {
-        minSdk 21
-        targetSdk 31
+        minSdk versions.minSdk
+        targetSdk versions.targetSdk
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -22,11 +22,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility versions.sourceCompat
+        targetCompatibility versions.targetCompat
     }
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = "11"
     }
 }
 
@@ -45,5 +45,4 @@ dependencies {
 
     // Logging
     implementation libs.jakewharton.timber
-
 }
