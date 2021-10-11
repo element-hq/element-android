@@ -44,6 +44,7 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
                                                     private val notificationUtils: NotificationUtils,
                                                     private val vectorPreferences: VectorPreferences,
                                                     private val activeSessionDataSource: ActiveSessionDataSource,
+                                                    private val notifiableEventProcessor: NotifiableEventProcessor,
                                                     private val notificationRenderer: NotificationRenderer) {
 
     private val handlerThread: HandlerThread = HandlerThread("NotificationDrawerManager", Thread.MIN_PRIORITY)
@@ -55,6 +56,7 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
     }
 
     private val eventList = loadEventInfo()
+    private var renderedEventsList = emptyMap<String, NotifiableEvent?>()
     private val avatarSize = context.resources.getDimensionPixelSize(R.dimen.profile_avatar_size)
     private var currentRoomId: String? = null
 
@@ -223,22 +225,32 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
     @WorkerThread
     private fun refreshNotificationDrawerBg() {
         Timber.v("refreshNotificationDrawerBg()")
-        val session = currentSession ?: return
 
-        val user = session.getUser(session.myUserId)
-        // myUserDisplayName cannot be empty else NotificationCompat.MessagingStyle() will crash
-        val myUserDisplayName = user?.toMatrixItem()?.getBestName() ?: session.myUserId
-        val myUserAvatarUrl = session.contentUrlResolver().resolveThumbnail(user?.avatarUrl, avatarSize, avatarSize, ContentUrlResolver.ThumbnailMethod.SCALE)
+        val newSettings = vectorPreferences.useCompleteNotificationFormat()
+        if (newSettings != useCompleteNotificationFormat) {
+            // Settings has changed, remove all current notifications
+            notificationUtils.cancelAllNotifications()
+            useCompleteNotificationFormat = newSettings
+        }
 
-        synchronized(eventList) {
-            val newSettings = vectorPreferences.useCompleteNotificationFormat()
-            if (newSettings != useCompleteNotificationFormat) {
-                // Settings has changed, remove all current notifications
-                notificationUtils.cancelAllNotifications()
-                useCompleteNotificationFormat = newSettings
+        val eventsToRender = synchronized(eventList) {
+            notifiableEventProcessor.process(eventList, currentRoomId).also {
+                eventList.clear()
+                eventList.addAll(it.values.filterNotNull())
             }
+        }
 
-            notificationRenderer.render(currentRoomId, session.myUserId, myUserDisplayName, myUserAvatarUrl, useCompleteNotificationFormat, eventList)
+        if (renderedEventsList == eventsToRender) {
+            Timber.d("Skipping notification update due to event list not changing")
+        } else {
+            renderedEventsList = eventsToRender
+            val session = currentSession ?: return
+            val user = session.getUser(session.myUserId)
+            // myUserDisplayName cannot be empty else NotificationCompat.MessagingStyle() will crash
+            val myUserDisplayName = user?.toMatrixItem()?.getBestName() ?: session.myUserId
+            val myUserAvatarUrl = session.contentUrlResolver().resolveThumbnail(user?.avatarUrl, avatarSize, avatarSize, ContentUrlResolver.ThumbnailMethod.SCALE)
+
+            notificationRenderer.render(session.myUserId, myUserDisplayName, myUserAvatarUrl, useCompleteNotificationFormat, eventsToRender)
         }
     }
 
