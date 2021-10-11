@@ -2197,7 +2197,7 @@
     <string name="invite_by_mxid">Запросити за користувацьким іменем</string>
     <string name="invite_by_email">Запросити електронним листом</string>
     <string name="voice_message_slide_to_cancel">Проведіть пальцем, щоб скасувати</string>
-    <string name="a11y_start_voice_message">Розпочати голосове повідомлення</string>
+    <string name="a11y_start_voice_message">Записати голосове повідомлення</string>
     <string name="call_jitsi_started">Розпочато груповий виклик</string>
     <string name="leave_space">Вийти з простору</string>
     <string name="space_settings_manage_rooms">Керувати кімнатами</string>

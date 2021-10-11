@@ -1,0 +1,2 @@
+Principales cambios en esta versión: ¡Organiza tus habitaciones usando Spaces!
+Registro de cambios completo: https://github.com/vector-im/element-android/releases/tag/v1.3.0

@@ -90,9 +90,10 @@
             android:name="android.max_aspect"
             android:value="9.9" />
 
-        <meta-data
+        <!-- Disable Android Auto supports see https://github.com/vector-im/element-android/issues/4205 -->
+        <!--meta-data
             android:name="com.google.android.gms.car.application"
-            android:resource="@xml/automotive_app_desc" />
+            android:resource="@xml/automotive_app_desc" /-->
 
         <activity
             android:name=".features.MainActivity"

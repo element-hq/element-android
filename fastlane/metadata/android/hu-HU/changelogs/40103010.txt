@@ -1,0 +1,2 @@
+Fő változás ebben a verzióban: Rendezd a szobáidat terekbe! v1.3.1 a v1.3.0 összeomlásait javítja.
+Teljes változásnapló: https://github.com/vector-im/element-android/releases/tag/v1.3.1
