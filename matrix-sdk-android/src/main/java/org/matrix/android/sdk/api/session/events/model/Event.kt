@@ -22,6 +22,8 @@ import org.json.JSONObject
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.failure.MatrixError
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
+import org.matrix.android.sdk.api.session.room.model.Membership
+import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.model.relation.RelationDefaultContent
@@ -305,3 +307,6 @@ fun Event.isReply(): Boolean {
 fun Event.isEdition(): Boolean {
     return getRelationContent()?.takeIf { it.type == RelationType.REPLACE }?.eventId != null
 }
+
+fun Event.isInvitation(): Boolean = type == EventType.STATE_ROOM_MEMBER &&
+        content?.toModel<RoomMemberContent>()?.membership == Membership.INVITE
