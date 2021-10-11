@@ -38,14 +38,14 @@ class NotificationFactory @Inject constructor(
 
     private fun NotifiableMessageEvent.canNotBeDisplayed() = isRedacted
 
-    fun Map<String, InviteNotifiableEvent?>.toNotifications(myUserId: String): List<OneShotNotification> {
-        return map { (roomId, event) ->
-            when (event) {
-                null -> OneShotNotification.Removed(key = roomId)
-                else -> OneShotNotification.Append(
+    fun List<Pair<Processed, InviteNotifiableEvent>>.toNotifications(myUserId: String): List<OneShotNotification> {
+        return map { (processed, event) ->
+            when (processed) {
+                Processed.REMOVE -> OneShotNotification.Removed(key = event.roomId)
+                Processed.KEEP   -> OneShotNotification.Append(
                         notificationUtils.buildRoomInvitationNotification(event, myUserId),
                         OneShotNotification.Append.Meta(
-                                key = roomId,
+                                key = event.roomId,
                                 summaryLine = event.description,
                                 isNoisy = event.noisy,
                                 timestamp = event.timestamp
@@ -56,14 +56,14 @@ class NotificationFactory @Inject constructor(
     }
 
     @JvmName("toNotificationsSimpleNotifiableEvent")
-    fun Map<String, SimpleNotifiableEvent?>.toNotifications(myUserId: String): List<OneShotNotification> {
-        return map { (eventId, event) ->
-            when (event) {
-                null -> OneShotNotification.Removed(key = eventId)
-                else -> OneShotNotification.Append(
+    fun List<Pair<Processed, SimpleNotifiableEvent>>.toNotifications(myUserId: String): List<OneShotNotification> {
+        return map { (processed, event) ->
+            when (processed) {
+                Processed.REMOVE -> OneShotNotification.Removed(key = event.eventId)
+                Processed.KEEP   -> OneShotNotification.Append(
                         notificationUtils.buildSimpleEventNotification(event, myUserId),
                         OneShotNotification.Append.Meta(
-                                key = eventId,
+                                key = event.eventId,
                                 summaryLine = event.description,
                                 isNoisy = event.noisy,
                                 timestamp = event.timestamp

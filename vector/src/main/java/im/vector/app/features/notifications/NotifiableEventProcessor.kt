@@ -17,6 +17,8 @@
 package im.vector.app.features.notifications
 
 import im.vector.app.features.invite.AutoAcceptInvites
+import im.vector.app.features.notifications.Processed.KEEP
+import im.vector.app.features.notifications.Processed.REMOVE
 import javax.inject.Inject
 
 class NotifiableEventProcessor @Inject constructor(
@@ -24,20 +26,26 @@ class NotifiableEventProcessor @Inject constructor(
         private val autoAcceptInvites: AutoAcceptInvites
 ) {
 
-    fun process(eventList: List<NotifiableEvent>, currentRoomId: String?): Map<String, NotifiableEvent?> {
-        return eventList.associateBy { it.eventId }
-                .mapValues { (_, value) ->
-                    when (value) {
-                        is InviteNotifiableEvent  -> if (autoAcceptInvites.hideInvites) null else value
-                        is NotifiableMessageEvent -> if (shouldIgnoreMessageEventInRoom(currentRoomId, value.roomId) || outdatedDetector.isMessageOutdated(value)) {
-                            null
-                        } else value
-                        is SimpleNotifiableEvent  -> value
-                    }
-                }
+    fun process(eventList: List<NotifiableEvent>, currentRoomId: String?): List<Pair<Processed, NotifiableEvent>> {
+        return eventList.map {
+            when (it) {
+                is InviteNotifiableEvent  -> if (autoAcceptInvites.hideInvites) REMOVE else KEEP
+                is NotifiableMessageEvent -> if (shouldIgnoreMessageEventInRoom(currentRoomId, it.roomId) || outdatedDetector.isMessageOutdated(it)) {
+                    REMOVE
+                } else KEEP
+                is SimpleNotifiableEvent  -> KEEP
+            } to it
+        }
     }
 
     private fun shouldIgnoreMessageEventInRoom(currentRoomId: String?, roomId: String?): Boolean {
         return currentRoomId != null && roomId == currentRoomId
     }
 }
+
+enum class Processed {
+    KEEP,
+    REMOVE
+}
+
+fun List<Pair<Processed, NotifiableEvent>>.onlyKeptEvents() = filter { it.first == KEEP }.map { it.second }
