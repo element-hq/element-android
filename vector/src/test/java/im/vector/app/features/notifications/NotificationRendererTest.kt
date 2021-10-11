@@ -29,8 +29,8 @@ private const val AN_EVENT_ID = "event-id"
 private const val A_ROOM_ID = "room-id"
 private const val USE_COMPLETE_NOTIFICATION_FORMAT = true
 
-private val AN_EVENT_LIST = mapOf<String, NotifiableEvent?>()
-private val A_PROCESSED_EVENTS = GroupedNotificationEvents(emptyMap(), emptyMap(), emptyMap())
+private val AN_EVENT_LIST = listOf<Pair<ProcessedType, NotifiableEvent>>()
+private val A_PROCESSED_EVENTS = GroupedNotificationEvents(emptyMap(), emptyList(), emptyList())
 private val A_SUMMARY_NOTIFICATION = SummaryNotification.Update(mockk())
 private val A_REMOVE_SUMMARY_NOTIFICATION = SummaryNotification.Removed
 private val A_NOTIFICATION = mockk<Notification>()

@@ -31,120 +31,103 @@ class NotifiableEventProcessorTest {
     private val eventProcessor = NotifiableEventProcessor(outdatedDetector.instance, autoAcceptInvites)
 
     @Test
-    fun `given simple events when processing then return without mutating`() {
-        val (events, originalEvents) = createEventsList(
+    fun `given simple events when processing then keep simple events`() {
+        val events = listOf(
                 aSimpleNotifiableEvent(eventId = "event-1"),
                 aSimpleNotifiableEvent(eventId = "event-2")
         )
 
-        val result = eventProcessor.process(events, currentRoomId = NOT_VIEWING_A_ROOM, renderedEventsList = renderedEventsList)
+        val result = eventProcessor.process(events, currentRoomId = NOT_VIEWING_A_ROOM, renderedEventsList = emptyList())
 
-        result shouldBeEqualTo aProcessedNotificationEvents(
-                simpleEvents = mapOf(
-                        "event-1" to events[0] as SimpleNotifiableEvent,
-                        "event-2" to events[1] as SimpleNotifiableEvent
-                )
+        result shouldBeEqualTo listOf(
+                ProcessedType.KEEP to events[0],
+                ProcessedType.KEEP to events[1]
         )
-        events shouldBeEqualTo originalEvents
     }
 
     @Test
     fun `given invites are auto accepted when processing then remove invitations`() {
         autoAcceptInvites._isEnabled = true
-        val events = mutableListOf<NotifiableEvent>(
+        val events = listOf<NotifiableEvent>(
                 anInviteNotifiableEvent(roomId = "room-1"),
                 anInviteNotifiableEvent(roomId = "room-2")
         )
 
-        val result = eventProcessor.process(events, currentRoomId = NOT_VIEWING_A_ROOM, renderedEventsList = renderedEventsList)
+        val result = eventProcessor.process(events, currentRoomId = NOT_VIEWING_A_ROOM, renderedEventsList = emptyList())
 
-        result shouldBeEqualTo aProcessedNotificationEvents(
-                invitationEvents = mapOf(
-                        "room-1" to null,
-                        "room-2" to null
-                )
+        result shouldBeEqualTo listOf(
+                ProcessedType.REMOVE to events[0],
+                ProcessedType.REMOVE to events[1]
         )
-        events shouldBeEqualTo emptyList()
     }
 
     @Test
-    fun `given invites are not auto accepted when processing then return without mutating`() {
+    fun `given invites are not auto accepted when processing then keep invitation events`() {
         autoAcceptInvites._isEnabled = false
-        val (events, originalEvents) = createEventsList(
+        val events = listOf(
                 anInviteNotifiableEvent(roomId = "room-1"),
                 anInviteNotifiableEvent(roomId = "room-2")
         )
 
-        val result = eventProcessor.process(events, currentRoomId = NOT_VIEWING_A_ROOM, renderedEventsList = renderedEventsList)
+        val result = eventProcessor.process(events, currentRoomId = NOT_VIEWING_A_ROOM, renderedEventsList = emptyList())
 
-        result shouldBeEqualTo aProcessedNotificationEvents(
-                invitationEvents = mapOf(
-                        "room-1" to originalEvents[0] as InviteNotifiableEvent,
-                        "room-2" to originalEvents[1] as InviteNotifiableEvent
-                )
+        result shouldBeEqualTo listOf(
+                ProcessedType.KEEP to events[0],
+                ProcessedType.KEEP to events[1]
         )
-        events shouldBeEqualTo originalEvents
     }
 
     @Test
-    fun `given out of date message event when processing then removes message`() {
-        val (events) = createEventsList(aNotifiableMessageEvent(eventId = "event-1", roomId = "room-1"))
+    fun `given out of date message event when processing then removes message event`() {
+        val events = listOf(aNotifiableMessageEvent(eventId = "event-1", roomId = "room-1"))
         outdatedDetector.givenEventIsOutOfDate(events[0])
 
-        val result = eventProcessor.process(events, currentRoomId = NOT_VIEWING_A_ROOM, renderedEventsList = renderedEventsList)
+        val result = eventProcessor.process(events, currentRoomId = NOT_VIEWING_A_ROOM, renderedEventsList = emptyList())
 
-        result shouldBeEqualTo aProcessedNotificationEvents(
-                roomEvents = mapOf(
-                        "room-1" to emptyList()
-                )
+        result shouldBeEqualTo listOf(
+                ProcessedType.REMOVE to events[0],
         )
-        events shouldBeEqualTo emptyList()
     }
 
     @Test
-    fun `given in date message event when processing then without mutating`() {
-        val (events, originalEvents) = createEventsList(aNotifiableMessageEvent(eventId = "event-1", roomId = "room-1"))
+    fun `given in date message event when processing then keep message event`() {
+        val events = listOf(aNotifiableMessageEvent(eventId = "event-1", roomId = "room-1"))
         outdatedDetector.givenEventIsInDate(events[0])
 
-        val result = eventProcessor.process(events, currentRoomId = NOT_VIEWING_A_ROOM, renderedEventsList = renderedEventsList)
+        val result = eventProcessor.process(events, currentRoomId = NOT_VIEWING_A_ROOM, renderedEventsList = emptyList())
 
-        result shouldBeEqualTo aProcessedNotificationEvents(
-                roomEvents = mapOf(
-                        "room-1" to listOf(events[0] as NotifiableMessageEvent)
-                )
+        result shouldBeEqualTo listOf(
+                ProcessedType.KEEP to events[0],
         )
-        events shouldBeEqualTo originalEvents
     }
 
     @Test
     fun `given viewing the same room as message event when processing then removes message`() {
-        val (events) = createEventsList(aNotifiableMessageEvent(eventId = "event-1", roomId = "room-1"))
+        val events = listOf(aNotifiableMessageEvent(eventId = "event-1", roomId = "room-1"))
 
-        val result = eventProcessor.process(events, currentRoomId = "room-1", renderedEventsList = renderedEventsList)
+        val result = eventProcessor.process(events, currentRoomId = "room-1", renderedEventsList = emptyList())
 
-        result shouldBeEqualTo aProcessedNotificationEvents(
-                roomEvents = mapOf(
-                        "room-1" to emptyList()
-                )
+        result shouldBeEqualTo listOf(
+                ProcessedType.REMOVE to events[0],
         )
-        events shouldBeEqualTo emptyList()
+    }
+
+    @Test
+    fun `given events are different to rendered events when processing then removes difference`() {
+        val events = listOf(aSimpleNotifiableEvent(eventId = "event-1"))
+        val renderedEvents = listOf(
+                ProcessedType.KEEP to events[0],
+                ProcessedType.KEEP to anInviteNotifiableEvent(roomId = "event-2")
+        )
+
+        val result = eventProcessor.process(events, currentRoomId = NOT_VIEWING_A_ROOM, renderedEventsList = renderedEvents)
+
+        result shouldBeEqualTo listOf(
+                ProcessedType.REMOVE to renderedEvents[1].second,
+                ProcessedType.KEEP to renderedEvents[0].second
+        )
     }
 }
-
-fun createEventsList(vararg event: NotifiableEvent): Pair<MutableList<NotifiableEvent>, List<NotifiableEvent>> {
-    val mutableEvents = mutableListOf(*event)
-    val immutableEvents = mutableEvents.toList()
-    return mutableEvents to immutableEvents
-}
-
-fun aProcessedNotificationEvents(simpleEvents: Map<String, SimpleNotifiableEvent?> = emptyMap(),
-                                 invitationEvents: Map<String, InviteNotifiableEvent?> = emptyMap(),
-                                 roomEvents: Map<String, List<NotifiableMessageEvent>> = emptyMap()
-) = GroupedNotificationEvents(
-        roomEvents = roomEvents,
-        simpleEvents = simpleEvents,
-        invitationEvents = invitationEvents,
-)
 
 fun aSimpleNotifiableEvent(eventId: String) = SimpleNotifiableEvent(
         matrixID = null,

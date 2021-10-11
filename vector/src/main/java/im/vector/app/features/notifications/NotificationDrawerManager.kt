@@ -56,7 +56,7 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
     }
 
     private val eventList = loadEventInfo()
-    private var renderedEventsList = emptyList<Pair<Processed, NotifiableEvent>>()
+    private var renderedEventsList = emptyList<Pair<ProcessedType, NotifiableEvent>>()
     private val avatarSize = context.resources.getDimensionPixelSize(R.dimen.profile_avatar_size)
     private var currentRoomId: String? = null
 
@@ -234,13 +234,11 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
         }
 
         val eventsToRender = synchronized(eventList) {
-            notifiableEventProcessor.process(eventList, currentRoomId).also {
+            notifiableEventProcessor.process(eventList, currentRoomId, renderedEventsList).also {
                 eventList.clear()
                 eventList.addAll(it.onlyKeptEvents())
             }
         }
-
-
 
         if (renderedEventsList == eventsToRender) {
             Timber.d("Skipping notification update due to event list not changing")

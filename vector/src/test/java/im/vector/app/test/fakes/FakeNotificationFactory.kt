@@ -16,9 +16,9 @@
 
 package im.vector.app.test.fakes
 
+import im.vector.app.features.notifications.GroupedNotificationEvents
 import im.vector.app.features.notifications.NotificationFactory
 import im.vector.app.features.notifications.OneShotNotification
-import im.vector.app.features.notifications.GroupedNotificationEvents
 import im.vector.app.features.notifications.RoomNotification
 import im.vector.app.features.notifications.SummaryNotification
 import io.mockk.every
@@ -50,7 +50,6 @@ class FakeNotificationFactory {
                         useCompleteNotificationFormat
                 )
             } returns summaryNotification
-
         }
     }
 }
