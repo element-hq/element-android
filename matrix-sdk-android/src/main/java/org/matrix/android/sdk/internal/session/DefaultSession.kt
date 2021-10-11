@@ -223,6 +223,8 @@ internal class DefaultSession @Inject constructor(
 
     override fun getSyncStateLive() = getSyncThread().liveState()
 
+    override fun syncFlow() = getSyncThread().syncFlow()
+
     override fun getSyncState() = getSyncThread().currentState()
 
     override fun hasAlreadySynced(): Boolean {

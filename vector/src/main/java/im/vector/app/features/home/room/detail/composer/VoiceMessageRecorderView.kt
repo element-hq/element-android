@@ -43,7 +43,7 @@ import kotlin.math.floor
 /**
  * Encapsulates the voice message recording view and animations.
  */
-class VoiceMessageRecorderView: ConstraintLayout, VoiceMessagePlaybackTracker.Listener {
+class VoiceMessageRecorderView : ConstraintLayout, VoiceMessagePlaybackTracker.Listener {
 
     interface Callback {
         // Return true if the recording is started
@@ -262,8 +262,8 @@ class VoiceMessageRecorderView: ConstraintLayout, VoiceMessagePlaybackTracker.Li
         val previousRecordingState = recordingState
         if (recordingState == RecordingState.STARTED) {
             // Determine if cancelling or locking for the first move action.
-            if (((currentX < firstX && rtlXMultiplier == 1) || (currentX > firstX && rtlXMultiplier == -1))
-                    && distanceX > distanceY && distanceX > lastDistanceX) {
+            if (((currentX < firstX && rtlXMultiplier == 1) || (currentX > firstX && rtlXMultiplier == -1)) &&
+                    distanceX > distanceY && distanceX > lastDistanceX) {
                 recordingState = RecordingState.CANCELLING
             } else if (currentY < firstY && distanceY > distanceX && distanceY > lastDistanceY) {
                 recordingState = RecordingState.LOCKING
@@ -515,12 +515,14 @@ class VoiceMessageRecorderView: ConstraintLayout, VoiceMessagePlaybackTracker.Li
         views.voicePlaybackControlButton.isVisible = false
         views.voiceMessageSendButton.isVisible = true
         views.voiceMessageMicButton.isInvisible = true
+        views.voicePlaybackWaveform.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_YES
         renderToast(context.getString(R.string.voice_message_tap_to_stop_toast))
     }
 
     private fun showPlaybackViews() {
         views.voiceMessagePlaybackTimerIndicator.isVisible = false
         views.voicePlaybackControlButton.isVisible = true
+        views.voicePlaybackWaveform.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
         callback?.onVoiceRecordingPlaybackModeOn()
     }
 

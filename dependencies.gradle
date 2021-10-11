@@ -9,9 +9,9 @@ ext.versions = [
 
 def gradle = "7.0.2"
 // Ref: https://kotlinlang.org/releases.html
-def kotlin = "1.5.30"
-def kotlinCoroutines = "1.5.1"
-def dagger = "2.38.1"
+def kotlin = "1.5.31"
+def kotlinCoroutines = "1.5.2"
+def dagger = "2.39.1"
 def retrofit = "2.9.0"
 def arrow = "0.8.2"
 def markwon = "4.6.2"
@@ -50,7 +50,7 @@ ext.libs = [
                 'exifinterface'           : "androidx.exifinterface:exifinterface:1.3.3",
                 'fragmentKtx'             : "androidx.fragment:fragment-ktx:1.3.6",
                 'constraintLayout'        : "androidx.constraintlayout:constraintlayout:2.1.1",
-                'work'                    : "androidx.work:work-runtime-ktx:2.5.0",
+                'work'                    : "androidx.work:work-runtime-ktx:2.6.0",
                 'autoFill'                : "androidx.autofill:autofill:1.1.0",
                 'preferenceKtx'           : "androidx.preference:preference-ktx:1.1.1",
                 'junit'                   : "androidx.test.ext:junit:1.1.3",

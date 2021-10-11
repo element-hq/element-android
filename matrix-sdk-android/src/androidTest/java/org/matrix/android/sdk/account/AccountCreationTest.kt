@@ -16,16 +16,16 @@
 
 package org.matrix.android.sdk.account
 
-import org.matrix.android.sdk.InstrumentedTest
-import org.matrix.android.sdk.common.CommonTestHelper
-import org.matrix.android.sdk.common.CryptoTestHelper
-import org.matrix.android.sdk.common.SessionTestParams
-import org.matrix.android.sdk.common.TestConstants
 import org.junit.FixMethodOrder
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 import org.junit.runners.MethodSorters
+import org.matrix.android.sdk.InstrumentedTest
+import org.matrix.android.sdk.common.CommonTestHelper
+import org.matrix.android.sdk.common.CryptoTestHelper
+import org.matrix.android.sdk.common.SessionTestParams
+import org.matrix.android.sdk.common.TestConstants
 
 @RunWith(JUnit4::class)
 @FixMethodOrder(MethodSorters.JVM)

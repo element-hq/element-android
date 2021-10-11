@@ -31,12 +31,12 @@ import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.showIdentityServerConsentDialog
 import im.vector.app.databinding.FragmentContactsBookBinding
+import im.vector.app.features.navigation.SettingsActivityPayload
 import im.vector.app.features.userdirectory.PendingSelection
 import im.vector.app.features.userdirectory.UserListAction
 import im.vector.app.features.userdirectory.UserListSharedAction
 import im.vector.app.features.userdirectory.UserListSharedActionViewModel
 import im.vector.app.features.userdirectory.UserListViewModel
-
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.user.model.User
 import java.util.concurrent.TimeUnit
@@ -75,9 +75,13 @@ class ContactsBookFragment @Inject constructor(
     private fun setupConsentView() {
         views.phoneBookSearchForMatrixContacts.setOnClickListener {
             withState(contactsBookViewModel) { state ->
-                requireContext().showIdentityServerConsentDialog(state.identityServerUrl) {
-                    contactsBookViewModel.handle(ContactsBookAction.UserConsentGranted)
-                }
+                requireContext().showIdentityServerConsentDialog(
+                        state.identityServerUrl,
+                        policyLinkCallback = {
+                            navigator.openSettings(requireContext(), SettingsActivityPayload.DiscoverySettings(expandIdentityPolicies = true))
+                        },
+                        consentCallBack = { contactsBookViewModel.handle(ContactsBookAction.UserConsentGranted) }
+                )
             }
         }
     }

@@ -27,7 +27,6 @@ import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.databinding.FragmentBootstrapReauthBinding
-
 import javax.inject.Inject
 
 class BootstrapReAuthFragment @Inject constructor(

@@ -16,7 +16,7 @@
 /fastlane/private
 /fastlane/report.xml
 
-ktlint
+/library/build
 
 .tmp_unpatched_strings
 .tmp_new_patched_strings

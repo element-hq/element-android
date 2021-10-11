@@ -2437,7 +2437,6 @@
     <string name="direct_room_user_list_recent_title">اخیر</string>
     <string name="qr_code">رمز QR</string>
     <string name="add_by_qr_code">افزودن با رمز QR</string>
-    <string name="user_directory_search_hint">جست‌وجو با نام یا شناسه</string>
     <string name="permissions_denied_add_contact">دادن اجازهٔ دسترسی به آشنایانتان.</string>
     <string name="permissions_denied_qr_code">برای پویش یک رمز QR نیاز است دسترسی به دوربین را مجاز کنید.</string>
     <string name="start_chatting">آغاز به گپ</string>
@@ -2679,8 +2678,6 @@
     <string name="spaces_beta_welcome_to_spaces_desc">فضاها شیوه‌ای جدید برای گروه‌بندی اتاق‌ها و افراد است.</string>
     <string name="spaces_beta_welcome_to_spaces">به فضاها خوش آمدید!</string>
     <string name="space_add_existing_rooms">افزودن فضا و اتاق‌های موجود</string>
-    <!-- TO BE REMOVED -->
-    <string name="space_leave_prompt_msg">مطمئنید که می‌خواهید فضا را ترک کنید؟</string>
     <string name="leave_space">ترک فضا</string>
     <string name="space_add_child_title">افزودن اتاق</string>
     <string name="space_explore_activity_title">کاوش در اتاق‌ها</string>

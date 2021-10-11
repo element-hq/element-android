@@ -31,7 +31,7 @@ interface RoomVersionService {
     /**
      * Get the recommended room version for the current homeserver
      */
-    fun getRecommendedVersion() : String
+    fun getRecommendedVersion(): String
 
     /**
      * Ask if the user has enough power level to upgrade the room

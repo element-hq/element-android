@@ -37,7 +37,6 @@ import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.utils.colorizeMatchingText
 import im.vector.app.databinding.FragmentSetIdentityServerBinding
 import im.vector.app.features.discovery.DiscoverySharedViewModel
-
 import org.matrix.android.sdk.api.session.terms.TermsService
 import javax.inject.Inject
 

@@ -40,12 +40,15 @@ fun Context.displayInWebView(url: String) {
             .show()
 }
 
-fun Context.showIdentityServerConsentDialog(configuredIdentityServer: String?, consentCallBack: (() -> Unit)) {
+fun Context.showIdentityServerConsentDialog(configuredIdentityServer: String?, policyLinkCallback: () -> Unit, consentCallBack: (() -> Unit)) {
     MaterialAlertDialogBuilder(this)
             .setTitle(R.string.identity_server_consent_dialog_title)
             .setMessage(getString(R.string.identity_server_consent_dialog_content, configuredIdentityServer ?: ""))
             .setPositiveButton(R.string.yes) { _, _ ->
                 consentCallBack.invoke()
+            }
+            .setNeutralButton(R.string.identity_server_consent_dialog_neutral_policy) { _, _ ->
+                policyLinkCallback.invoke()
             }
             .setNegativeButton(R.string.no, null)
             .show()

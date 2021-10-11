@@ -1074,7 +1074,6 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="attachment_type_camera">Kamera</string>
     <string name="settings_text_message_sent_hint">Kods</string>
     <string name="direct_room_user_list_known_title">Zināmie lietotāji</string>
-    <string name="user_directory_search_hint">Meklēt pēc nosaukuma vai ID</string>
     <string name="send_file_step_idle">Gaida…</string>
     <string name="bottom_action_people_x">Tiešās ziņas</string>
     <string name="send_suggestion_failed">Ieteikumu neizdevās nosūtīt (%s)</string>

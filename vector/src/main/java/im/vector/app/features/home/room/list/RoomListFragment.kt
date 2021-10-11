@@ -459,8 +459,8 @@ class RoomListFragment @Inject constructor(
     }
 
     private fun checkEmptyState() {
-        val shouldShowEmpty = adapterInfosList.all { it.sectionHeaderAdapter.roomsSectionData.isHidden }
-                && !adapterInfosList.any { it.sectionHeaderAdapter.roomsSectionData.isLoading }
+        val shouldShowEmpty = adapterInfosList.all { it.sectionHeaderAdapter.roomsSectionData.isHidden } &&
+                !adapterInfosList.any { it.sectionHeaderAdapter.roomsSectionData.isLoading }
         if (shouldShowEmpty) {
             val emptyState = when (roomListParams.displayMode) {
                 RoomListDisplayMode.ALL ->

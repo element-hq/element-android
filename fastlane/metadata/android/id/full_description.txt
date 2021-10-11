@@ -11,7 +11,7 @@ Element adalah perpesanan yang aman dan aplikasi kolaborasi tim produktivitas ya
 Element benar-benar berbeda dari aplikasi perpesanan dan kolaborasi lainnya. Element beroperasi pada Matrix, jaringan terbuka untuk pengiriman pesan yang aman dan komunikasi terdesentralisasi. Matrix memungkinkan hosting sendiri untuk memberi pengguna kepemilikan maksimum dan kontrol data dan pesan mereka.
 
 <b>Pesan privasi dan terenkripsi</b>
-Element melindungi Anda dari iklan yang tidak diinginkan, data penambangan dan taman berdinding. Element juga mengamankan semua data Anda, komunikasi video dan suara satu-ke-satu melalui enkripsi ujung-ke-ujung dan verifikasi perangkat yang ditanda tangani silang.
+Element melindungi Anda dari iklan yang tidak diinginkan, penambangan data dan taman berdinding. Element juga mengamankan semua data Anda, komunikasi video dan suara satu-ke-satu melalui enkripsi ujung-ke-ujung dan verifikasi perangkat yang ditandatangani secara silang.
 
 Element memberi Anda kendali atas privasi Anda sambil memungkinkan Anda untuk berkomunikasi dengan aman dengan siapa pun di jaringan Matrix, atau alat kolaborasi bisnis lainnya dengan mengintegrasikan dengan aplikasi seperti Slack.
 

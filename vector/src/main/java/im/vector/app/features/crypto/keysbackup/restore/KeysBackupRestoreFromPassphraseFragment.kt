@@ -27,7 +27,6 @@ import androidx.core.widget.doOnTextChanged
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentKeysBackupRestoreFromPassphraseBinding
-
 import javax.inject.Inject
 
 class KeysBackupRestoreFromPassphraseFragment @Inject constructor() : VectorBaseFragment<FragmentKeysBackupRestoreFromPassphraseBinding>() {

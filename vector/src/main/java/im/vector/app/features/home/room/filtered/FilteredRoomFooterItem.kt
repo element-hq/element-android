@@ -18,6 +18,7 @@ package im.vector.app.features.home.room.filtered
 
 import android.view.View
 import android.widget.Button
+import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
@@ -35,6 +36,9 @@ abstract class FilteredRoomFooterItem : VectorEpoxyModel<FilteredRoomFooterItem.
     @EpoxyAttribute
     var currentFilter: String = ""
 
+    @EpoxyAttribute
+    var inSpace: Boolean = false
+
     override fun bind(holder: Holder) {
         super.bind(holder)
         val vectorPreferences = VectorPreferences(holder.createRoomButton.context)
@@ -42,6 +46,13 @@ abstract class FilteredRoomFooterItem : VectorEpoxyModel<FilteredRoomFooterItem.
         holder.createDirectChat.onClick { listener?.createDirectChat() }
         holder.openRoomDirectory.onClick { listener?.openRoomDirectory(currentFilter) }
         holder.openRoomDirectory.visibility = if (vectorPreferences.simplifiedMode()) View.GONE else View.VISIBLE
+
+        holder.openRoomDirectory.setText(
+                if (inSpace) R.string.space_explore_activity_title else R.string.room_filtering_footer_open_room_directory
+        )
+
+        // The explore space screen will have a shortcut to create
+        holder.createRoomButton.isVisible = !inSpace
     }
 
     class Holder : VectorEpoxyHolder() {

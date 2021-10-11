@@ -38,7 +38,6 @@ import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.selectTxtFileToWrite
 import im.vector.app.databinding.FragmentDevtoolKeyrequestsBinding
-
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import javax.inject.Inject
 

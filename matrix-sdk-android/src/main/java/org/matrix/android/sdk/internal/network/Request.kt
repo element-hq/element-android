@@ -74,10 +74,10 @@ internal suspend inline fun <DATA> executeRequest(globalErrorReceiver: GlobalErr
 
             currentRetryCount++
 
-            if (exception is Failure.ServerError
-                    && exception.httpCode == 429
-                    && exception.error.code == MatrixError.M_LIMIT_EXCEEDED
-                    && currentRetryCount < maxRetriesCount) {
+            if (exception is Failure.ServerError &&
+                    exception.httpCode == 429 &&
+                    exception.error.code == MatrixError.M_LIMIT_EXCEEDED &&
+                    currentRetryCount < maxRetriesCount) {
                 // 429, we can retry
                 delay(exception.getRetryDelay(1_000))
             } else if (canRetry && currentRetryCount < maxRetriesCount && exception.shouldBeRetried()) {

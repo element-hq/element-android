@@ -218,9 +218,9 @@ class HomeActivityViewModel @AssistedInject constructor(
                                 object : UserInteractiveAuthInterceptor {
                                     override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
                                         // We missed server grace period or it's not setup, see if we remember locally password
-                                        if (flowResponse.nextUncompletedStage() == LoginFlowTypes.PASSWORD
-                                                && errCode == null
-                                                && reAuthHelper.data != null) {
+                                        if (flowResponse.nextUncompletedStage() == LoginFlowTypes.PASSWORD &&
+                                                errCode == null &&
+                                                reAuthHelper.data != null) {
                                             promise.resume(
                                                     UserPasswordAuth(
                                                             session = flowResponse.session,

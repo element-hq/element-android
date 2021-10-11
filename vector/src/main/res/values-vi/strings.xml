@@ -1124,7 +1124,6 @@
     <string name="link_copied_to_clipboard">Đường link được copy</string>
     <string name="labs_swipe_to_reply_in_timeline">Bật chức năng quẹt để Trả lời</string>
     <string name="search_hint_room_name">Tìm Tên</string>
-    <string name="user_directory_search_hint">Tìm theo tên hoặc ID</string>
     <string name="room_directory_search_hint">Tên hoặc ID</string>
     <string name="room_filtering_footer_open_room_directory">Xem danh mục phòng chat</string>
     <string name="room_filtering_footer_create_new_direct_message">Gửi tin nhắn tới phòng 1-1</string>

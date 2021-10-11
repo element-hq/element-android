@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.internal.auth.login
 
 import dagger.Lazy
+import okhttp3.OkHttpClient
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.Session
@@ -29,7 +30,6 @@ import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.network.httpclient.addSocketFactory
 import org.matrix.android.sdk.internal.network.ssl.UnrecognizedCertificateException
 import org.matrix.android.sdk.internal.task.Task
-import okhttp3.OkHttpClient
 import javax.inject.Inject
 
 internal interface DirectLoginTask : Task<DirectLoginTask.Params, Session> {

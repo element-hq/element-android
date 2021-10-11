@@ -62,7 +62,6 @@ import im.vector.app.features.matrixto.MatrixToBottomSheet
 import im.vector.app.features.media.BigImageViewerActivity
 import im.vector.app.features.media.VectorAttachmentViewerActivity
 import im.vector.app.features.navigation.Navigator
-import im.vector.app.features.permalink.PermalinkHandlerActivity
 import im.vector.app.features.pin.PinLocker
 import im.vector.app.features.qrcode.QrCodeScannerActivity
 import im.vector.app.features.rageshake.BugReportActivity
@@ -155,7 +154,6 @@ interface ScreenComponent {
     fun inject(activity: CreateDirectRoomActivity)
     fun inject(activity: IncomingShareActivity)
     fun inject(activity: SoftLogoutActivity)
-    fun inject(activity: PermalinkHandlerActivity)
     fun inject(activity: QrCodeScannerActivity)
     fun inject(activity: DebugMenuActivity)
     fun inject(activity: SharedSecureStorageActivity)

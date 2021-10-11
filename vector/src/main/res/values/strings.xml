@@ -378,7 +378,7 @@
     <string name="none">None</string>
     <string name="revoke">Revoke</string>
     <string name="disconnect">Disconnect</string>
-    <string name="report_content">Report content</string>
+    <string name="report_content">Report Content</string>
     <string name="active_call">Active call</string>
     <string name="play_video">Play</string>
     <string name="pause_video">Pause</string>
@@ -1831,16 +1831,23 @@
     <string name="command_description_emote">Displays action</string>
     <string name="command_description_ban_user">Bans user with given id</string>
     <string name="command_description_unban_user">Unbans user with given id</string>
+    <string name="command_description_ignore_user">Ignores a user, hiding their messages from you</string>
+    <string name="command_description_unignore_user">Stops ignoring a user, showing their messages going forward</string>
     <string name="command_description_op_user">Define the power level of a user</string>
     <string name="command_description_deop_user">Deops user with given id</string>
+    <string name="command_description_room_name">Sets the room name</string>
     <string name="command_description_invite_user">Invites user with given id to current room</string>
     <string name="command_description_join_room">Joins room with given alias</string>
     <string name="command_description_part_room">Leave room</string>
     <string name="command_description_topic">Set the room topic</string>
     <string name="command_description_kick_user">Kicks user with given id</string>
     <string name="command_description_nick">Changes your display nickname</string>
+    <string name="command_description_nick_for_room">Changes your display nickname in the current room only</string>
+    <string name="command_description_room_avatar">Changes the avatar of the current room</string>
+    <string name="command_description_avatar_for_room">Changes your avatar in this current room only</string>
     <string name="command_description_markdown">On/Off markdown</string>
     <string name="command_description_clear_scalar_token">To fix Matrix Apps management</string>
+    <string name="command_description_whois">Displays information about a user</string>
 
     <string name="markdown_has_been_enabled">Markdown has been enabled.</string>
     <string name="markdown_has_been_disabled">Markdown has been disabled.</string>
@@ -2301,8 +2308,6 @@
     <string name="room_filtering_footer_open_room_directory">View the room directory</string>
 
     <string name="room_directory_search_hint">Name or ID (#example:matrix.org)</string>
-    <!-- TO BE REMOVED -->
-    <string name="user_directory_search_hint">Search by name or ID</string>
     <string name="user_directory_search_hint_2">Search by name, ID or mail</string>
 
     <string name="search_hint_room_name">Search Name</string>
@@ -2342,6 +2347,9 @@
     <string name="add_identity_server">Configure identity server</string>
     <string name="open_discovery_settings">Open Discovery Settings</string>
     <string name="change_identity_server">Change identity server</string>
+    <string name="settings_discovery_show_identity_server_policy_title">Show identity server policy</string>
+    <string name="settings_discovery_hide_identity_server_policy_title">Hide identity server policy</string>
+    <string name="settings_discovery_no_policy_provided">No policy provided by the identity server</string>
     <string name="settings_discovery_identity_server_info">You are currently using %1$s to discover and be discoverable by existing contacts you know.</string>
     <string name="settings_discovery_identity_server_info_none">You are not currently using an identity server. To discover and be discoverable by existing contacts you know, configure one below.</string>
     <string name="settings_discovery_emails_title">Discoverable email addresses</string>
@@ -2360,6 +2368,7 @@
 
     <string name="identity_server_consent_dialog_title">Send emails and phone numbers</string>
     <string name="identity_server_consent_dialog_content">In order to discover existing contacts you know, do you accept to send your contact data (phone numbers and/or emails) to the configured identity server (%1$s)?\n\nFor more privacy, the sent data will be hashed before being sent.</string>
+    <string name="identity_server_consent_dialog_neutral_policy">Policy</string>
 
     <string name="settings_discovery_enter_identity_server">Enter an identity server URL</string>
     <string name="settings_discovery_bad_identity_server">Could not connect to identity server</string>
@@ -2671,6 +2680,7 @@
     <string name="settings_developer_mode_show_info_on_screen_summary">Show some useful info to help debugging the application</string>
 
     <string name="command_description_shrug">Prepends ¯\\_(ツ)_/¯ to a plain-text message</string>
+    <string name="command_description_lenny">Prepends ( ͡° ͜ʖ ͡°) to a plain-text message</string>
 
     <string name="create_room_encryption_title">"Enable encryption"</string>
     <string name="create_room_encryption_description">"Once enabled, encryption cannot be disabled."</string>
@@ -3182,7 +3192,7 @@
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
     <string name="template_identity_server_error_bulk_sha256_not_supported">For your privacy, ${app_name} only supports sending hashed user emails and phone number.</string>
     <string name="identity_server_error_binding_error">The association has failed.</string>
-    <string name="identity_server_error_no_current_binding_error">The is no current association with this identifier.</string>
+    <string name="identity_server_error_no_current_binding_error">There is no current association with this identifier.</string>
     <string name="identity_server_user_consent_not_provided">The user consent has not been provided.</string>
 
     <string name="identity_server_set_default_notice">Your homeserver (%1$s) proposes to use %2$s for your identity server</string>
@@ -3506,8 +3516,6 @@
     <string name="space_add_child_title">Add rooms</string>
     <string name="leave_space">Leave Space</string>
     <string name="space_leave_prompt_msg_with_name">Are you sure you want to leave %s?</string>
-    <!-- TO BE REMOVED -->
-    <string name="space_leave_prompt_msg">Are you sure you want to leave the space?</string>
     <string name="space_leave_prompt_msg_only_you">You are the only person here. If you leave, no one will be able to join in the future, including you.</string>
     <string name="space_leave_prompt_msg_private">You won\'t be able to rejoin unless you are re-invited.</string>
     <string name="space_leave_prompt_msg_as_admin">You\'re the only admin of this space. Leaving it will mean no one has control over it.</string>
@@ -3577,13 +3585,14 @@
     <string name="error_failed_to_join_room">Sorry, an error occurred while trying to join: %s</string>
     <string name="call_jitsi_started">Group call started</string>
 
-    <string name="a11y_start_voice_message">Start Voice Message</string>
+    <string name="a11y_start_voice_message">Record Voice Message</string>
     <string name="voice_message_slide_to_cancel">Slide to cancel</string>
     <string name="a11y_lock_voice_message">Voice Message Lock</string>
     <string name="a11y_play_voice_message">Play Voice Message</string>
     <string name="a11y_pause_voice_message">Pause Voice Message</string>
+    <string name="a11y_stop_voice_message">Stop Recording</string>
     <string name="a11y_recording_voice_message">Recording voice message</string>
-    <string name="a11y_delete_recorded_voice_message">Delete recorded voice message</string>
+    <string name="a11y_delete_recorded_voice_message">Delete recording</string>
     <string name="voice_message_release_to_send_toast">Hold to record, release to send</string>
     <string name="voice_message_n_seconds_warning_toast">%1$ds left</string>
     <string name="voice_message_tap_to_stop_toast">Tap on your recording to stop or listen</string>

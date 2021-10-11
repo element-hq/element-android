@@ -33,7 +33,6 @@ import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.utils.ensureProtocol
 import im.vector.app.core.utils.openUrlInChromeCustomTab
 import im.vector.app.databinding.FragmentLoginServerUrlFormBinding
-
 import org.matrix.android.sdk.api.failure.Failure
 import java.net.UnknownHostException
 import javax.inject.Inject
@@ -144,8 +143,8 @@ class LoginServerUrlFormFragment @Inject constructor() : AbstractLoginFragment<F
     }
 
     override fun onError(throwable: Throwable) {
-        views.loginServerUrlFormHomeServerUrlTil.error = if (throwable is Failure.NetworkConnection
-                && throwable.ioException is UnknownHostException) {
+        views.loginServerUrlFormHomeServerUrlTil.error = if (throwable is Failure.NetworkConnection &&
+                throwable.ioException is UnknownHostException) {
             // Invalid homeserver?
             getString(R.string.login_error_homeserver_not_found)
         } else {

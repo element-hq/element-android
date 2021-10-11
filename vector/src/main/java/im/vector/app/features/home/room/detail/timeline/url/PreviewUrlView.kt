@@ -26,7 +26,6 @@ import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.databinding.ViewUrlPreviewBinding
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.media.ImageContentRenderer
-
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.media.PreviewUrlData
 

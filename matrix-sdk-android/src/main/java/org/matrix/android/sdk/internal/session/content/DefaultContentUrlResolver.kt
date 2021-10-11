@@ -16,13 +16,13 @@
 
 package org.matrix.android.sdk.internal.session.content
 
+import org.matrix.android.sdk.api.MatrixUrls
+import org.matrix.android.sdk.api.MatrixUrls.isMxcUrl
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.session.content.ContentUrlResolver
 import org.matrix.android.sdk.internal.network.NetworkConstants
 import org.matrix.android.sdk.internal.util.ensureTrailingSlash
 import javax.inject.Inject
-
-private const val MATRIX_CONTENT_URI_SCHEME = "mxc://"
 
 internal class DefaultContentUrlResolver @Inject constructor(homeServerConnectionConfig: HomeServerConnectionConfig) : ContentUrlResolver {
 
@@ -33,7 +33,7 @@ internal class DefaultContentUrlResolver @Inject constructor(homeServerConnectio
     override fun resolveFullSize(contentUrl: String?): String? {
         return contentUrl
                 // do not allow non-mxc content URLs
-                ?.takeIf { it.isValidMatrixContentUrl() }
+                ?.takeIf { it.isMxcUrl() }
                 ?.let {
                     resolve(
                             contentUrl = it,
@@ -45,7 +45,7 @@ internal class DefaultContentUrlResolver @Inject constructor(homeServerConnectio
     override fun resolveThumbnail(contentUrl: String?, width: Int, height: Int, method: ContentUrlResolver.ThumbnailMethod): String? {
         return contentUrl
                 // do not allow non-mxc content URLs
-                ?.takeIf { it.isValidMatrixContentUrl() }
+                ?.takeIf { it.isMxcUrl() }
                 ?.let {
                     resolve(
                             contentUrl = it,
@@ -58,7 +58,7 @@ internal class DefaultContentUrlResolver @Inject constructor(homeServerConnectio
     private fun resolve(contentUrl: String,
                         prefix: String,
                         params: String = ""): String? {
-        var serverAndMediaId = contentUrl.removePrefix(MATRIX_CONTENT_URI_SCHEME)
+        var serverAndMediaId = contentUrl.removePrefix(MatrixUrls.MATRIX_CONTENT_URI_SCHEME)
         val fragmentOffset = serverAndMediaId.indexOf("#")
         var fragment = ""
         if (fragmentOffset >= 0) {
@@ -67,9 +67,5 @@ internal class DefaultContentUrlResolver @Inject constructor(homeServerConnectio
         }
 
         return baseUrl + prefix + serverAndMediaId + params + fragment
-    }
-
-    private fun String.isValidMatrixContentUrl(): Boolean {
-        return startsWith(MATRIX_CONTENT_URI_SCHEME)
     }
 }

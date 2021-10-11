@@ -30,6 +30,7 @@ import im.vector.app.RoomGroupingMethod
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.room.ScSdkPreferences
 import im.vector.app.features.invite.AutoAcceptInvites
 import im.vector.app.features.settings.VectorPreferences
@@ -42,6 +43,7 @@ import org.matrix.android.sdk.api.session.room.UpdatableLivePageResult
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
 import org.matrix.android.sdk.api.session.room.state.isPublic
+import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.rx.rx
 import timber.log.Timber
 import javax.inject.Inject
@@ -74,11 +76,13 @@ class RoomListViewModel @Inject constructor(
          * If current space is null, will return orphan rooms only
          */
         ORPHANS_IF_SPACE_NULL,
+
         /**
          * Special case when we don't want to discriminate rooms when current space is null.
          * In this case return all.
          */
         ALL_IF_SPACE_NULL,
+
         /** Do not filter based on space*/
         NONE
     }
@@ -95,7 +99,7 @@ class RoomListViewModel @Inject constructor(
                 }
 
         session.rx().liveUser(session.myUserId)
-                .map { it.getOrNull()?.getBestName() }
+                .map { it.getOrNull()?.toMatrixItem()?.getBestName() }
                 .distinctUntilChanged()
                 .execute {
                     copy(

@@ -240,8 +240,8 @@ internal class TokenChunkEventPersistor @Inject constructor(@SessionDatabase pri
             it.deleteOnCascade(deleteStateEvents = false, canDeleteRoot = false)
         }
         val roomSummaryEntity = RoomSummaryEntity.getOrCreate(realm, roomId)
-        val shouldUpdateSummary = roomSummaryEntity.latestPreviewableOriginalContentEvent == null
-                || (chunksToDelete.isNotEmpty() && currentChunk.isLastForward && direction == PaginationDirection.FORWARDS)
+        val shouldUpdateSummary = roomSummaryEntity.latestPreviewableOriginalContentEvent == null ||
+                (chunksToDelete.isNotEmpty() && currentChunk.isLastForward && direction == PaginationDirection.FORWARDS)
         if (shouldUpdateSummary) {
             roomSummaryEntity.latestPreviewableOriginalContentEvent = RoomSummaryEventsHelper.getLatestPreviewableEventScOriginalContent(realm, roomId)
         }

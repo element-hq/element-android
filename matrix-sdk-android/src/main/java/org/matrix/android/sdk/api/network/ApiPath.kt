@@ -154,7 +154,6 @@ enum class ApiPath(val path: String, val method: String) {
     SEND_STATE_EVENT(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/state/{state_event_type}", "PUT"),
     SEND_STATE_EVENT_WITH_STATE_KEY(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/state/{state_event_type}/{state_key}", "PUT"),
     GET_ROOM_STATE(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/state", "GET"),
-    SEND_RELATION(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/send_relation/{parent_id}/{relation_type}/{event_type}", "POST"),
     GET_RELATIONS(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "rooms/{roomId}/relations/{eventId}/{relationType}/{eventType}", "GET"),
     JOIN_ROOM(NetworkConstants.URI_API_PREFIX_PATH_R0 + "join/{roomIdOrAlias}", "POST"),
     LEAVE_ROOM(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/leave", "POST"),

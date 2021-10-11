@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.internal.session.room.read
 
 import com.zhuinden.monarchy.Monarchy
+import io.realm.Realm
 import org.matrix.android.sdk.api.session.events.model.LocalEcho
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
@@ -26,14 +27,13 @@ import org.matrix.android.sdk.internal.database.query.latestEvent
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.di.UserId
+import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.room.RoomAPI
 import org.matrix.android.sdk.internal.session.sync.ReadReceiptHandler
 import org.matrix.android.sdk.internal.session.sync.RoomFullyReadHandler
 import org.matrix.android.sdk.internal.task.Task
 import org.matrix.android.sdk.internal.util.awaitTransaction
-import io.realm.Realm
-import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import timber.log.Timber
 import javax.inject.Inject
 import kotlin.collections.set
@@ -82,8 +82,8 @@ internal class DefaultSetReadMarkersTask @Inject constructor(
                 markers[READ_MARKER] = fullyReadEventId
             }
         }
-        if (readReceiptEventId != null
-                && !isEventRead(monarchy.realmConfiguration, userId, params.roomId, readReceiptEventId)) {
+        if (readReceiptEventId != null &&
+                !isEventRead(monarchy.realmConfiguration, userId, params.roomId, readReceiptEventId)) {
             if (LocalEcho.isLocalEchoId(readReceiptEventId)) {
                 Timber.w("Can't set read receipt for local event $readReceiptEventId")
             } else {

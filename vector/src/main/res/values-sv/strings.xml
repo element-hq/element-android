@@ -2504,7 +2504,6 @@
     <string name="direct_room_user_list_recent_title">Senaste</string>
     <string name="qr_code">QR-kod</string>
     <string name="add_by_qr_code">Lägg till med QR-kod</string>
-    <string name="user_directory_search_hint">Sök med namn eller ID</string>
     <string name="room_preview_no_preview_join">Det här rummet kan inte förhandsgranskas. Vill du gå med i det\?</string>
     <string name="room_preview_not_found">Det här rummet är inte åtkomligt just nu.
 \nFörsök igen senare, eller be en rumsadministratör för att kolla om du har åtkomst.</string>
@@ -2737,8 +2736,6 @@
     <string name="spaces_beta_welcome_to_spaces_desc">Utrymmen är ett nytt sätt att gruppera rum och personer.</string>
     <string name="spaces_beta_welcome_to_spaces">Välkommen till utrymmen!</string>
     <string name="space_add_existing_rooms">Lägg till existerande rum och utrymme</string>
-    <!-- TO BE REMOVED -->
-    <string name="space_leave_prompt_msg">Är du säker på att du vill lämna utrymmet\?</string>
     <string name="leave_space">Lämna utrymme</string>
     <string name="space_add_child_title">Lägg till rum</string>
     <string name="space_explore_activity_title">Utforska rum</string>
@@ -2947,4 +2944,10 @@
     <string name="call_ringing">Samtal ringer…</string>
     <string name="spaces">Utrymmen</string>
     <string name="learn_more">Lär dig mer</string>
+    <string name="space_settings_permissions_title">Utrymmesbehörigheter</string>
+    <string name="space_participants_unban_prompt_msg">Om användaren avbannas kommer denna att få gå med i utrymmet igen.</string>
+    <string name="space_participants_ban_prompt_msg">Att banna användaren kommer att kicka denne från det här utrymmet och hindra hen från att gå med igen.</string>
+    <string name="space_participants_kick_prompt_msg">att kicka användaren kommer att ta bort den från det här utrymmet.
+\n
+\nFör att hindra hen från att gå med igen så bör de banna hen istället.</string>
 </resources>

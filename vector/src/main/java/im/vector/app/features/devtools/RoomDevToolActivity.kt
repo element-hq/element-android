@@ -194,8 +194,8 @@ class RoomDevToolActivity : SimpleFragmentActivity(), RoomDevToolViewModel.Facto
                     state.displayMode is RoomDevToolViewState.Mode.StateEventDetail
                 }
                 R.id.menuItemSend -> {
-                    state.displayMode is RoomDevToolViewState.Mode.EditEventContent
-                            || state.displayMode is RoomDevToolViewState.Mode.SendEventForm
+                    state.displayMode is RoomDevToolViewState.Mode.EditEventContent ||
+                            state.displayMode is RoomDevToolViewState.Mode.SendEventForm
                 }
                 else              -> true
             }

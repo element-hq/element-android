@@ -43,8 +43,8 @@ import org.matrix.android.sdk.rx.rx
 import org.matrix.android.sdk.rx.unwrap
 
 class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: RoomAliasViewState,
-                                                     private val session: Session)
-    : VectorViewModel<RoomAliasViewState, RoomAliasAction, RoomAliasViewEvents>(initialState) {
+                                                     private val session: Session) :
+    VectorViewModel<RoomAliasViewState, RoomAliasAction, RoomAliasViewEvents>(initialState) {
 
     @AssistedFactory
     interface Factory {

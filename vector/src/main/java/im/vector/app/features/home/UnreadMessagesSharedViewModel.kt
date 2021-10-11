@@ -59,8 +59,8 @@ class UnreadMessagesSharedViewModel @AssistedInject constructor(@Assisted initia
                                                                 private val scSdkPreferences: ScSdkPreferences,
                                                                 private val vectorPreferences: VectorPreferences,
                                                                 appStateHandler: AppStateHandler,
-                                                                private val autoAcceptInvites: AutoAcceptInvites)
-    : VectorViewModel<UnreadMessagesState, EmptyAction, EmptyViewEvents>(initialState) {
+                                                                private val autoAcceptInvites: AutoAcceptInvites) :
+    VectorViewModel<UnreadMessagesState, EmptyAction, EmptyViewEvents>(initialState) {
 
     @AssistedFactory
     interface Factory {
@@ -212,18 +212,18 @@ class UnreadMessagesSharedViewModel @AssistedInject constructor(@Assisted initia
                             CountInfo(
                                     homeCount = counts,
                                     otherCount = RoomAggregateNotificationCount(
-                                            notificationCount = rootCounts.fold(0, { acc, rs -> acc + rs.notificationCount })
-                                                    + (counts.notificationCount.takeIf { selectedSpace != null } ?: 0)
-                                                    + spaceInviteCount,
-                                            highlightCount = rootCounts.fold(0, { acc, rs -> acc + rs.highlightCount })
-                                                    + (counts.highlightCount.takeIf { selectedSpace != null } ?: 0)
-                                                    + spaceInviteCount,
+                                            notificationCount = rootCounts.fold(0, { acc, rs -> acc + rs.notificationCount }) +
+                                                    (counts.notificationCount.takeIf { selectedSpace != null } ?: 0) +
+                                                    spaceInviteCount,
+                                            highlightCount = rootCounts.fold(0, { acc, rs -> acc + rs.highlightCount }) +
+                                                    (counts.highlightCount.takeIf { selectedSpace != null } ?: 0) +
+                                                    spaceInviteCount,
 
-                                            unreadCount = rootCounts.fold(0, { acc, rs -> acc + (if (rs.scIsUnread(scSdkPreferences)) 1 else 0) })
-                                                    + (counts.unreadCount.takeIf { selectedSpace != null } ?: 0)
-                                                    + spaceInviteCount,
-                                            markedUnreadCount = rootCounts.fold(0, { acc, rs -> acc + (if (rs.markedUnread) 1 else 0) })
-                                                    + (counts.markedUnreadCount.takeIf { selectedSpace != null } ?: 0)
+                                            unreadCount = rootCounts.fold(0, { acc, rs -> acc + (if (rs.scIsUnread(scSdkPreferences)) 1 else 0) }) +
+                                                    (counts.unreadCount.takeIf { selectedSpace != null } ?: 0) +
+                                                    spaceInviteCount,
+                                            markedUnreadCount = rootCounts.fold(0, { acc, rs -> acc + (if (rs.markedUnread) 1 else 0) }) +
+                                                    (counts.markedUnreadCount.takeIf { selectedSpace != null } ?: 0)
                                     )
                             )
                              */
