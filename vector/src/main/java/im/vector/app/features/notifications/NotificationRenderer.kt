@@ -33,7 +33,7 @@ class NotificationRenderer @Inject constructor(private val notificationDisplayer
                myUserDisplayName: String,
                myUserAvatarUrl: String?,
                useCompleteNotificationFormat: Boolean,
-               eventsToProcess: List<Pair<ProcessedType, NotifiableEvent>>) {
+               eventsToProcess: List<ProcessedEvent>) {
         val (roomEvents, simpleEvents, invitationEvents) = eventsToProcess.groupByType()
         with(notificationFactory) {
             val roomNotifications = roomEvents.toNotifications(myUserDisplayName, myUserAvatarUrl)
@@ -104,8 +104,8 @@ class NotificationRenderer @Inject constructor(private val notificationDisplayer
     }
 }
 
-private fun List<Pair<ProcessedType, NotifiableEvent>>.groupByType(): GroupedNotificationEvents {
-    val roomIdToEventMap: MutableMap<String, MutableList<NotifiableMessageEvent>> = LinkedHashMap()
+private fun List<ProcessedEvent>.groupByType(): GroupedNotificationEvents {
+    val roomIdToEventMap: MutableMap<String, MutableList<Pair<ProcessedType, NotifiableMessageEvent>>> = LinkedHashMap()
     val simpleEvents: MutableList<Pair<ProcessedType, SimpleNotifiableEvent>> = ArrayList()
     val invitationEvents: MutableList<Pair<ProcessedType, InviteNotifiableEvent>> = ArrayList()
     forEach {
@@ -113,7 +113,7 @@ private fun List<Pair<ProcessedType, NotifiableEvent>>.groupByType(): GroupedNot
             is InviteNotifiableEvent  -> invitationEvents.add(it.asPair())
             is NotifiableMessageEvent -> {
                 val roomEvents = roomIdToEventMap.getOrPut(event.roomId) { ArrayList() }
-                roomEvents.add(event)
+                roomEvents.add(it.asPair())
             }
             is SimpleNotifiableEvent  -> simpleEvents.add(it.asPair())
         }
@@ -125,7 +125,7 @@ private fun List<Pair<ProcessedType, NotifiableEvent>>.groupByType(): GroupedNot
 private fun <T : NotifiableEvent> Pair<ProcessedType, *>.asPair(): Pair<ProcessedType, T> = this as Pair<ProcessedType, T>
 
 data class GroupedNotificationEvents(
-        val roomEvents: Map<String, List<NotifiableMessageEvent>>,
+        val roomEvents: Map<String, List<Pair<ProcessedType, NotifiableMessageEvent>>>,
         val simpleEvents: List<Pair<ProcessedType, SimpleNotifiableEvent>>,
         val invitationEvents: List<Pair<ProcessedType, InviteNotifiableEvent>>
 )
