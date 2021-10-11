@@ -1,3 +1,11 @@
+Changes in Element v1.3.3 (2021-10-11)
+======================================
+
+Bugfixes 🐛
+----------
+ - Disable Android Auto supports ([#4205](https://github.com/vector-im/element-android/issues/4205))
+
+
 Changes in Element v1.3.2 (2021-10-08)
 ======================================
 
