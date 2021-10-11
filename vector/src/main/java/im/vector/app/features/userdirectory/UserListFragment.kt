@@ -81,7 +81,7 @@ class UserListFragment @Inject constructor(
         setupRecyclerView()
         setupSearchView()
 
-        homeServerCapabilitiesViewModel.subscribe {
+        homeServerCapabilitiesViewModel.onEach {
             views.userListE2EbyDefaultDisabled.isVisible = !it.isE2EByDefault
         }
 

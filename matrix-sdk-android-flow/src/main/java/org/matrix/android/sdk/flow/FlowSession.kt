@@ -42,7 +42,7 @@ import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
 import org.matrix.android.sdk.internal.crypto.store.PrivateKeysInfo
 
-class RxFlow(private val session: Session) {
+class FlowSession(private val session: Session) {
 
     fun liveRoomSummaries(queryParams: RoomSummaryQueryParams): Flow<List<RoomSummary>> {
         return session.getRoomSummariesLive(queryParams).asFlow()
@@ -175,6 +175,6 @@ class RxFlow(private val session: Session) {
     }
 }
 
-fun Session.flow(): RxFlow {
-    return RxFlow(this)
+fun Session.flow(): FlowSession {
+    return FlowSession(this)
 }

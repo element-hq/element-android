@@ -161,7 +161,7 @@ class HomeDetailFragment @Inject constructor(
             }
         }
 
-        unknownDeviceDetectorSharedViewModel.subscribe { state ->
+        unknownDeviceDetectorSharedViewModel.onEach { state ->
             state.unknownSessions.invoke()?.let { unknownDevices ->
 //                Timber.v("## Detector Triggerred in fragment - ${unknownDevices.firstOrNull()}")
                 if (unknownDevices.firstOrNull()?.currentSessionTrust == true) {
@@ -179,7 +179,7 @@ class HomeDetailFragment @Inject constructor(
             }
         }
 
-        unreadMessagesSharedViewModel.subscribe { state ->
+        unreadMessagesSharedViewModel.onEach { state ->
             views.drawerUnreadCounterBadgeView.render(
                     UnreadCounterBadgeView.State(
                             count = state.otherSpacesUnread.totalCount,

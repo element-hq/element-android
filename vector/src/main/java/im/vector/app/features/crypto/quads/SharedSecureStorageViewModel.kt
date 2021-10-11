@@ -16,7 +16,6 @@
 
 package im.vector.app.features.crypto.quads
 
-import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading

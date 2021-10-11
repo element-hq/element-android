@@ -22,11 +22,10 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.withContext
 
 internal fun <T> Flow<T>.startWith(supplier: suspend () -> T): Flow<T> {
-    return this
-            .onStart {
-                val value = withContext(Dispatchers.IO) {
-                    supplier()
-                }
-                emit(value)
-            }
+    return onStart {
+        val value = withContext(Dispatchers.IO) {
+            supplier()
+        }
+        emit(value)
+    }
 }
