@@ -1095,8 +1095,6 @@ class RoomDetailFragment @Inject constructor(
 
         textComposerViewModel.handle(TextComposerAction.SaveDraft(views.composerLayout.text.toString()))
 
-        // We should improve the UX to support going into playback mode when paused and delete the media when the view is destroyed.
-        roomDetailViewModel.handle(RoomDetailAction.EndAllVoiceActions)
         views.voiceMessageRecorderView.initVoiceRecordingViews()
     }
 
