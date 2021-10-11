@@ -112,11 +112,13 @@ class TextComposerViewModel @AssistedInject constructor(
     }
 
     private fun updateIsSendButtonVisibility(triggerAnimation: Boolean) = setState {
-        val isSendButtonVisible = isComposerVisible && (sendMode !is SendMode.REGULAR || currentComposerText.isNotBlank())
-        if (this.isSendButtonVisible != isSendButtonVisible && triggerAnimation) {
-            _viewEvents.post(TextComposerViewEvents.AnimateSendButtonVisibility(isSendButtonVisible))
+        val upstreamShowsSendButton = (isComposerVisible && (sendMode !is SendMode.REGULAR || currentComposerText.isNotBlank()))
+        val isSendButtonVisible = upstreamShowsSendButton || !vectorPreferences.useVoiceMessage()
+        val isSendButtonActive = currentComposerText.isNotBlank()
+        if ((this.isSendButtonVisible != isSendButtonVisible || this.isSendButtonActive != isSendButtonActive) && triggerAnimation) {
+            _viewEvents.post(TextComposerViewEvents.AnimateSendButtonVisibility(isSendButtonVisible, isSendButtonActive))
         }
-        copy(isSendButtonVisible = isSendButtonVisible)
+        copy(isSendButtonVisible = isSendButtonVisible, isSendButtonActive = isSendButtonActive)
     }
 
     private fun handleEnterRegularMode(action: TextComposerAction.EnterRegularMode) = setState {

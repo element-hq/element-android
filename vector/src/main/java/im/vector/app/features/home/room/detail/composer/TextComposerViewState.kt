@@ -45,6 +45,7 @@ data class TextComposerViewState(
         val roomId: String,
         val canSendMessage: Boolean = true,
         val isVoiceRecording: Boolean = false,
+        val isSendButtonActive: Boolean = false,
         val isSendButtonVisible: Boolean = false,
         val sendMode: SendMode = SendMode.REGULAR("", false)
 ) : MvRxState {

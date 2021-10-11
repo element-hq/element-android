@@ -19,6 +19,7 @@ package im.vector.app.features.home.room.detail
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.Typeface
@@ -474,11 +475,17 @@ class RoomDetailFragment @Inject constructor(
     }
 
     private fun handleSendButtonVisibilityChanged(event: TextComposerViewEvents.AnimateSendButtonVisibility) {
+        val sendButtonColor = ThemeUtils.getColor(views.composerLayout.context, if (event.isActive) R.attr.colorAccent else R.attr.vctr_content_tertiary)
+        views.composerLayout.views.sendButton.imageTintList = ColorStateList.valueOf(sendButtonColor)
         if (event.isVisible) {
             views.voiceMessageRecorderView.isVisible = false
-            views.composerLayout.views.sendButton.alpha = 0f
-            views.composerLayout.views.sendButton.isVisible = true
-            views.composerLayout.views.sendButton.animate().alpha(1f).setDuration(150).start()
+            if (views.composerLayout.views.sendButton.isVisible) {
+                views.composerLayout.views.sendButton.alpha = 1f
+            } else {
+                views.composerLayout.views.sendButton.alpha = 0f
+                views.composerLayout.views.sendButton.isVisible = true
+                views.composerLayout.views.sendButton.animate().alpha(1f).setDuration(150).start()
+            }
         } else {
             views.composerLayout.views.sendButton.isInvisible = true
             views.voiceMessageRecorderView.alpha = 0f
@@ -1426,7 +1433,7 @@ class RoomDetailFragment @Inject constructor(
             lazyLoadedViews.inviteView(false)?.isVisible = false
             if (mainState.tombstoneEvent == null) {
                 views.composerLayout.isInvisible = !textComposerState.isComposerVisible
-                views.voiceMessageRecorderView.isVisible = !textComposerState.isSendButtonVisible && vectorPreferences.useVoiceMessage()
+                views.voiceMessageRecorderView.isVisible = !textComposerState.isSendButtonVisible
                 views.composerLayout.views.sendButton.isInvisible = !textComposerState.isSendButtonVisible
                 views.composerLayout.setRoomEncrypted(summary.isEncrypted)
                 // views.composerLayout.alwaysShowSendButton = !vectorPreferences.useVoiceMessage()
