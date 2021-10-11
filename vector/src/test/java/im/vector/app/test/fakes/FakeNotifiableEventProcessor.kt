@@ -16,17 +16,11 @@
 
 package im.vector.app.test.fakes
 
-import im.vector.app.features.notifications.NotifiableEvent
 import im.vector.app.features.notifications.NotifiableEventProcessor
-import im.vector.app.features.notifications.ProcessedNotificationEvents
-import io.mockk.every
 import io.mockk.mockk
 
 class FakeNotifiableEventProcessor {
 
     val instance = mockk<NotifiableEventProcessor>()
 
-    fun givenProcessedEventsFor(events: MutableList<NotifiableEvent>, currentRoomId: String?, processedEvents: ProcessedNotificationEvents) {
-        every { instance.modifyAndProcess(events, currentRoomId) } returns processedEvents
-    }
 }

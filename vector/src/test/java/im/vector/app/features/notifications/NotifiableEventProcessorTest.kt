@@ -37,7 +37,7 @@ class NotifiableEventProcessorTest {
                 aSimpleNotifiableEvent(eventId = "event-2")
         )
 
-        val result = eventProcessor.modifyAndProcess(events, currentRoomId = NOT_VIEWING_A_ROOM)
+        val result = eventProcessor.process(events, currentRoomId = NOT_VIEWING_A_ROOM)
 
         result shouldBeEqualTo aProcessedNotificationEvents(
                 simpleEvents = mapOf(
@@ -56,7 +56,7 @@ class NotifiableEventProcessorTest {
                 anInviteNotifiableEvent(roomId = "room-2")
         )
 
-        val result = eventProcessor.modifyAndProcess(events, currentRoomId = NOT_VIEWING_A_ROOM)
+        val result = eventProcessor.process(events, currentRoomId = NOT_VIEWING_A_ROOM)
 
         result shouldBeEqualTo aProcessedNotificationEvents(
                 invitationEvents = mapOf(
@@ -75,7 +75,7 @@ class NotifiableEventProcessorTest {
                 anInviteNotifiableEvent(roomId = "room-2")
         )
 
-        val result = eventProcessor.modifyAndProcess(events, currentRoomId = NOT_VIEWING_A_ROOM)
+        val result = eventProcessor.process(events, currentRoomId = NOT_VIEWING_A_ROOM)
 
         result shouldBeEqualTo aProcessedNotificationEvents(
                 invitationEvents = mapOf(
@@ -91,7 +91,7 @@ class NotifiableEventProcessorTest {
         val (events) = createEventsList(aNotifiableMessageEvent(eventId = "event-1", roomId = "room-1"))
         outdatedDetector.givenEventIsOutOfDate(events[0])
 
-        val result = eventProcessor.modifyAndProcess(events, currentRoomId = NOT_VIEWING_A_ROOM)
+        val result = eventProcessor.process(events, currentRoomId = NOT_VIEWING_A_ROOM)
 
         result shouldBeEqualTo aProcessedNotificationEvents(
                 roomEvents = mapOf(
@@ -106,7 +106,7 @@ class NotifiableEventProcessorTest {
         val (events, originalEvents) = createEventsList(aNotifiableMessageEvent(eventId = "event-1", roomId = "room-1"))
         outdatedDetector.givenEventIsInDate(events[0])
 
-        val result = eventProcessor.modifyAndProcess(events, currentRoomId = NOT_VIEWING_A_ROOM)
+        val result = eventProcessor.process(events, currentRoomId = NOT_VIEWING_A_ROOM)
 
         result shouldBeEqualTo aProcessedNotificationEvents(
                 roomEvents = mapOf(
@@ -120,7 +120,7 @@ class NotifiableEventProcessorTest {
     fun `given viewing the same room as message event when processing then removes message`() {
         val (events) = createEventsList(aNotifiableMessageEvent(eventId = "event-1", roomId = "room-1"))
 
-        val result = eventProcessor.modifyAndProcess(events, currentRoomId = "room-1")
+        val result = eventProcessor.process(events, currentRoomId = "room-1")
 
         result shouldBeEqualTo aProcessedNotificationEvents(
                 roomEvents = mapOf(
@@ -140,7 +140,7 @@ fun createEventsList(vararg event: NotifiableEvent): Pair<MutableList<Notifiable
 fun aProcessedNotificationEvents(simpleEvents: Map<String, SimpleNotifiableEvent?> = emptyMap(),
                                  invitationEvents: Map<String, InviteNotifiableEvent?> = emptyMap(),
                                  roomEvents: Map<String, List<NotifiableMessageEvent>> = emptyMap()
-) = ProcessedNotificationEvents(
+) = GroupedNotificationEvents(
         roomEvents = roomEvents,
         simpleEvents = simpleEvents,
         invitationEvents = invitationEvents,
