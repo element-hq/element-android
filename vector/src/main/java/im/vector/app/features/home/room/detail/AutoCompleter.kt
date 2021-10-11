@@ -220,10 +220,9 @@ class AutoCompleter @AssistedInject constructor(
         // Replace the word by its completion
         val displayName = matrixItem.getBestName()
 
-
         // Adding trailing space " " or ": " if the user started mention someone
         val displayNameSuffix =
-                if (firstChar == "@" && editText.length() == 1) {
+                if (firstChar == "@" && startIndex == 0) {
                     ": "
                 } else {
                     " "
