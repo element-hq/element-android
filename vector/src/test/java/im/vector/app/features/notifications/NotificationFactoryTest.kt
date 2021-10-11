@@ -46,7 +46,7 @@ class NotificationFactoryTest {
     @Test
     fun `given a room invitation when mapping to notification then is Append`() = testWith(notificationFactory) {
         val expectedNotification = notificationUtils.givenBuildRoomInvitationNotificationFor(AN_INVITATION_EVENT, MY_USER_ID)
-        val roomInvitation = mapOf(A_ROOM_ID to AN_INVITATION_EVENT)
+        val roomInvitation = listOf(ProcessedType.KEEP to AN_INVITATION_EVENT)
 
         val result = roomInvitation.toNotifications(MY_USER_ID)
 
@@ -63,7 +63,7 @@ class NotificationFactoryTest {
 
     @Test
     fun `given a missing event in room invitation when mapping to notification then is Removed`() = testWith(notificationFactory) {
-        val missingEventRoomInvitation: Map<String, InviteNotifiableEvent?> = mapOf(A_ROOM_ID to null)
+        val missingEventRoomInvitation = listOf(ProcessedType.REMOVE to AN_INVITATION_EVENT)
 
         val result = missingEventRoomInvitation.toNotifications(MY_USER_ID)
 
@@ -75,7 +75,7 @@ class NotificationFactoryTest {
     @Test
     fun `given a simple event when mapping to notification then is Append`() = testWith(notificationFactory) {
         val expectedNotification = notificationUtils.givenBuildSimpleInvitationNotificationFor(A_SIMPLE_EVENT, MY_USER_ID)
-        val roomInvitation = mapOf(AN_EVENT_ID to A_SIMPLE_EVENT)
+        val roomInvitation = listOf(ProcessedType.KEEP to A_SIMPLE_EVENT)
 
         val result = roomInvitation.toNotifications(MY_USER_ID)
 
@@ -92,7 +92,7 @@ class NotificationFactoryTest {
 
     @Test
     fun `given a missing simple event when mapping to notification then is Removed`() = testWith(notificationFactory) {
-        val missingEventRoomInvitation: Map<String, SimpleNotifiableEvent?> = mapOf(AN_EVENT_ID to null)
+        val missingEventRoomInvitation = listOf(ProcessedType.REMOVE to A_SIMPLE_EVENT)
 
         val result = missingEventRoomInvitation.toNotifications(MY_USER_ID)
 

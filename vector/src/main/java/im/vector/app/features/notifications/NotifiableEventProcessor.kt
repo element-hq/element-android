@@ -17,8 +17,8 @@
 package im.vector.app.features.notifications
 
 import im.vector.app.features.invite.AutoAcceptInvites
-import im.vector.app.features.notifications.Processed.KEEP
-import im.vector.app.features.notifications.Processed.REMOVE
+import im.vector.app.features.notifications.ProcessedType.KEEP
+import im.vector.app.features.notifications.ProcessedType.REMOVE
 import javax.inject.Inject
 
 class NotifiableEventProcessor @Inject constructor(
@@ -26,8 +26,8 @@ class NotifiableEventProcessor @Inject constructor(
         private val autoAcceptInvites: AutoAcceptInvites
 ) {
 
-    fun process(eventList: List<NotifiableEvent>, currentRoomId: String?): List<Pair<Processed, NotifiableEvent>> {
-        return eventList.map {
+    fun process(eventList: List<NotifiableEvent>, currentRoomId: String?, renderedEventsList: List<Pair<ProcessedType, NotifiableEvent>>): List<ProcessedEvent> {
+        val processedEventList = eventList.map {
             when (it) {
                 is InviteNotifiableEvent  -> if (autoAcceptInvites.hideInvites) REMOVE else KEEP
                 is NotifiableMessageEvent -> if (shouldIgnoreMessageEventInRoom(currentRoomId, it.roomId) || outdatedDetector.isMessageOutdated(it)) {
@@ -36,16 +36,15 @@ class NotifiableEventProcessor @Inject constructor(
                 is SimpleNotifiableEvent  -> KEEP
             } to it
         }
+
+        val removedEventsDiff = renderedEventsList.filter { renderedEvent ->
+            eventList.none { it.eventId == renderedEvent.second.eventId }
+        }.map { REMOVE to it.second }
+
+        return removedEventsDiff + processedEventList
     }
 
     private fun shouldIgnoreMessageEventInRoom(currentRoomId: String?, roomId: String?): Boolean {
         return currentRoomId != null && roomId == currentRoomId
     }
 }
-
-enum class Processed {
-    KEEP,
-    REMOVE
-}
-
-fun List<Pair<Processed, NotifiableEvent>>.onlyKeptEvents() = filter { it.first == KEEP }.map { it.second }
