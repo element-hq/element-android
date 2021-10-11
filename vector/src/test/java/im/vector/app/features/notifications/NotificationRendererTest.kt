@@ -17,13 +17,11 @@
 package im.vector.app.features.notifications
 
 import android.app.Notification
-import im.vector.app.test.fakes.FakeNotifiableEventProcessor
 import im.vector.app.test.fakes.FakeNotificationDisplayer
 import im.vector.app.test.fakes.FakeNotificationFactory
 import io.mockk.mockk
 import org.junit.Test
 
-private const val A_CURRENT_ROOM_ID = "current-room-id"
 private const val MY_USER_ID = "my-user-id"
 private const val MY_USER_DISPLAY_NAME = "display-name"
 private const val MY_USER_AVATAR_URL = "avatar-url"
@@ -31,8 +29,8 @@ private const val AN_EVENT_ID = "event-id"
 private const val A_ROOM_ID = "room-id"
 private const val USE_COMPLETE_NOTIFICATION_FORMAT = true
 
-private val AN_EVENT_LIST = mutableListOf<NotifiableEvent>()
-private val A_PROCESSED_EVENTS = ProcessedNotificationEvents(emptyMap(), emptyMap(), emptyMap())
+private val AN_EVENT_LIST = mapOf<String, NotifiableEvent?>()
+private val A_PROCESSED_EVENTS = GroupedNotificationEvents(emptyMap(), emptyMap(), emptyMap())
 private val A_SUMMARY_NOTIFICATION = SummaryNotification.Update(mockk())
 private val A_REMOVE_SUMMARY_NOTIFICATION = SummaryNotification.Removed
 private val A_NOTIFICATION = mockk<Notification>()
@@ -43,12 +41,10 @@ private val ONE_SHOT_META = OneShotNotification.Append.Meta(key = "ignored", sum
 
 class NotificationRendererTest {
 
-    private val notifiableEventProcessor = FakeNotifiableEventProcessor()
     private val notificationDisplayer = FakeNotificationDisplayer()
     private val notificationFactory = FakeNotificationFactory()
 
     private val notificationRenderer = NotificationRenderer(
-            notifiableEventProcessor = notifiableEventProcessor.instance,
             notificationDisplayer = notificationDisplayer.instance,
             notificationFactory = notificationFactory.instance
     )
@@ -182,12 +178,11 @@ class NotificationRendererTest {
 
     private fun renderEventsAsNotifications() {
         notificationRenderer.render(
-                currentRoomId = A_CURRENT_ROOM_ID,
                 myUserId = MY_USER_ID,
                 myUserDisplayName = MY_USER_DISPLAY_NAME,
                 myUserAvatarUrl = MY_USER_AVATAR_URL,
                 useCompleteNotificationFormat = USE_COMPLETE_NOTIFICATION_FORMAT,
-                eventList = AN_EVENT_LIST
+                eventsToProcess = AN_EVENT_LIST
         )
     }
 
@@ -200,9 +195,8 @@ class NotificationRendererTest {
                                    simpleNotifications: List<OneShotNotification> = emptyList(),
                                    useCompleteNotificationFormat: Boolean = USE_COMPLETE_NOTIFICATION_FORMAT,
                                    summaryNotification: SummaryNotification = A_SUMMARY_NOTIFICATION) {
-        notifiableEventProcessor.givenProcessedEventsFor(AN_EVENT_LIST, A_CURRENT_ROOM_ID, A_PROCESSED_EVENTS)
         notificationFactory.givenNotificationsFor(
-                processedEvents = A_PROCESSED_EVENTS,
+                groupedEvents = A_PROCESSED_EVENTS,
                 myUserId = MY_USER_ID,
                 myUserDisplayName = MY_USER_DISPLAY_NAME,
                 myUserAvatarUrl = MY_USER_AVATAR_URL,

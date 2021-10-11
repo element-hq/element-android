@@ -25,35 +25,16 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class NotificationRenderer @Inject constructor(private val notifiableEventProcessor: NotifiableEventProcessor,
-                                               private val notificationDisplayer: NotificationDisplayer,
+class NotificationRenderer @Inject constructor(private val notificationDisplayer: NotificationDisplayer,
                                                private val notificationFactory: NotificationFactory) {
 
-    private var lastKnownEventList = -1
-
     @WorkerThread
-    fun render(currentRoomId: String?,
-               myUserId: String,
+    fun render(myUserId: String,
                myUserDisplayName: String,
                myUserAvatarUrl: String?,
                useCompleteNotificationFormat: Boolean,
-               eventList: MutableList<NotifiableEvent>) {
-        Timber.v("Render notification events - count: ${eventList.size}")
-        val notificationEvents = notifiableEventProcessor.modifyAndProcess(eventList, currentRoomId)
-        if (lastKnownEventList == notificationEvents.hashCode()) {
-            Timber.d("Skipping notification update due to event list not changing")
-        } else {
-            processEvents(notificationEvents, myUserId, myUserDisplayName, myUserAvatarUrl, useCompleteNotificationFormat)
-            lastKnownEventList = notificationEvents.hashCode()
-        }
-    }
-
-    private fun processEvents(notificationEvents: ProcessedNotificationEvents,
-                              myUserId: String,
-                              myUserDisplayName: String,
-                              myUserAvatarUrl: String?,
-                              useCompleteNotificationFormat: Boolean) {
-        val (roomEvents, simpleEvents, invitationEvents) = notificationEvents
+               eventsToProcess: Map<String, NotifiableEvent?>) {
+        val (roomEvents, simpleEvents, invitationEvents) = eventsToProcess.groupByType()
         with(notificationFactory) {
             val roomNotifications = roomEvents.toNotifications(myUserDisplayName, myUserAvatarUrl)
             val invitationNotifications = invitationEvents.toNotifications(myUserId)
@@ -122,3 +103,26 @@ class NotificationRenderer @Inject constructor(private val notifiableEventProces
         }
     }
 }
+
+private fun Map<String, NotifiableEvent?>.groupByType(): GroupedNotificationEvents {
+    val roomIdToEventMap: MutableMap<String, MutableList<NotifiableMessageEvent>> = LinkedHashMap()
+    val simpleEvents: MutableMap<String, SimpleNotifiableEvent?> = LinkedHashMap()
+    val invitationEvents: MutableMap<String, InviteNotifiableEvent?> = LinkedHashMap()
+    forEach { (_, value) ->
+        when (value) {
+            is InviteNotifiableEvent  -> invitationEvents[value.roomId]
+            is NotifiableMessageEvent -> {
+                val roomEvents = roomIdToEventMap.getOrPut(value.roomId) { ArrayList() }
+                roomEvents.add(value)
+            }
+            is SimpleNotifiableEvent  -> simpleEvents[value.eventId] = value
+        }
+    }
+    return GroupedNotificationEvents(roomIdToEventMap, simpleEvents, invitationEvents)
+}
+
+data class GroupedNotificationEvents(
+        val roomEvents: Map<String, List<NotifiableMessageEvent>>,
+        val simpleEvents: Map<String, SimpleNotifiableEvent?>,
+        val invitationEvents: Map<String, InviteNotifiableEvent?>
+)
