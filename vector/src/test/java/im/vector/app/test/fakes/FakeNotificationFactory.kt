@@ -18,7 +18,7 @@ package im.vector.app.test.fakes
 
 import im.vector.app.features.notifications.NotificationFactory
 import im.vector.app.features.notifications.OneShotNotification
-import im.vector.app.features.notifications.ProcessedNotificationEvents
+import im.vector.app.features.notifications.GroupedNotificationEvents
 import im.vector.app.features.notifications.RoomNotification
 import im.vector.app.features.notifications.SummaryNotification
 import io.mockk.every
@@ -28,7 +28,7 @@ class FakeNotificationFactory {
 
     val instance = mockk<NotificationFactory>()
 
-    fun givenNotificationsFor(processedEvents: ProcessedNotificationEvents,
+    fun givenNotificationsFor(groupedEvents: GroupedNotificationEvents,
                               myUserId: String,
                               myUserDisplayName: String,
                               myUserAvatarUrl: String?,
@@ -38,9 +38,9 @@ class FakeNotificationFactory {
                               simpleNotifications: List<OneShotNotification>,
                               summaryNotification: SummaryNotification) {
         with(instance) {
-            every { processedEvents.roomEvents.toNotifications(myUserDisplayName, myUserAvatarUrl) } returns roomNotifications
-            every { processedEvents.invitationEvents.toNotifications(myUserId) } returns invitationNotifications
-            every { processedEvents.simpleEvents.toNotifications(myUserId) } returns simpleNotifications
+            every { groupedEvents.roomEvents.toNotifications(myUserDisplayName, myUserAvatarUrl) } returns roomNotifications
+            every { groupedEvents.invitationEvents.toNotifications(myUserId) } returns invitationNotifications
+            every { groupedEvents.simpleEvents.toNotifications(myUserId) } returns simpleNotifications
 
             every {
                 createSummaryNotification(
