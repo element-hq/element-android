@@ -298,6 +298,12 @@ android {
 
     kotlinOptions {
         jvmTarget = "11"
+        freeCompilerArgs += [
+                "-Xopt-in=kotlin.RequiresOptIn",
+                // Fixes false positive "This is an internal Mavericks API. It is not intended for external use."
+                // of MvRx `by viewModel()` calls. Maybe due to the inlining of code... This is a temporary fix...
+                "-Xopt-in=com.airbnb.mvrx.InternalMavericksApi",
+        ]
     }
 
     sourceSets {
