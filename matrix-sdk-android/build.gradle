@@ -130,6 +130,7 @@ dependencies {
 
     // Database
     implementation 'com.github.Zhuinden:realm-monarchy:0.7.1'
+
     kapt 'dk.ilios:realmfieldnameshelper:2.0.0'
 
     // Work
@@ -165,6 +166,8 @@ dependencies {
     implementation libs.jetbrains.coroutinesAndroid
     // Plant Timber tree for test
     testImplementation 'net.lachlanmckee:timber-junit-rule:1.0.1'
+    // Transitively required for mocking realm as monarchy doesn't expose Rx
+    testImplementation libs.rx.rxKotlin
 
     kaptAndroidTest libs.dagger.daggerCompiler
     androidTestImplementation libs.androidx.testCore
