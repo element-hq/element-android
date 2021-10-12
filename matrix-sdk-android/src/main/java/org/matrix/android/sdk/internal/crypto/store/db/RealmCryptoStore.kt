@@ -25,6 +25,7 @@ import io.realm.Realm
 import io.realm.RealmConfiguration
 import io.realm.Sort
 import io.realm.kotlin.where
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MXCrossSigningInfo
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.send.SendState
@@ -101,6 +102,7 @@ import org.matrix.olm.OlmException
 import org.matrix.olm.OlmOutboundGroupSession
 import timber.log.Timber
 import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import kotlin.collections.set
 
@@ -206,6 +208,10 @@ internal class RealmCryptoStore @Inject constructor(
         // Ensure no async request will be run later
         val tasks = monarchyWriteAsyncExecutor.shutdownNow()
         Timber.w("Closing RealmCryptoStore, ${tasks.size} async task(s) cancelled")
+        tryOrNull("Interrupted") {
+            // Wait 1 minute max
+            monarchyWriteAsyncExecutor.awaitTermination(1, TimeUnit.MINUTES)
+        }
 
         olmSessionsToRelease.forEach {
             it.value.olmSession.releaseSession()
