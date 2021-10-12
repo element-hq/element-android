@@ -34,6 +34,7 @@ import fr.gouv.tchap.features.login.registration.TchapRegisterWaitForEmailFragme
 import fr.gouv.tchap.features.login.registration.TchapRegisterWaitForEmailFragmentArgument
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
+import im.vector.app.core.extensions.POP_BACK_STACK_EXCLUSIVE
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.extensions.addFragmentToBackstack
 import im.vector.app.core.extensions.exhaustive
@@ -41,9 +42,14 @@ import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityLoginBinding
 import im.vector.app.features.home.HomeActivity
+import im.vector.app.features.login.LoginAction
 import im.vector.app.features.login.LoginConfig
 import im.vector.app.features.login.LoginFragment
 import im.vector.app.features.login.LoginResetPasswordFragment
+import im.vector.app.features.login.LoginResetPasswordMailConfirmationFragment
+import im.vector.app.features.login.LoginResetPasswordSuccessFragment
+import im.vector.app.features.login.LoginViewEvents
+import im.vector.app.features.login.LoginViewModel
 import im.vector.app.features.login.LoginViewState
 import im.vector.app.features.login.SignMode
 import im.vector.app.features.login.isSupported
@@ -57,9 +63,9 @@ import javax.inject.Inject
  */
 open class TchapLoginActivity : VectorBaseActivity<ActivityLoginBinding>(), ToolbarConfigurable, UnlockedActivity {
 
-    private val tchapLoginViewModel: TchapLoginViewModel by viewModel()
+    private val loginViewModel: LoginViewModel by viewModel()
 
-    @Inject lateinit var tchapLoginViewModelFactory: TchapLoginViewModel.Factory
+    @Inject lateinit var loginViewModelFactory: LoginViewModel.Factory
 
     @CallSuper
     override fun injectWith(injector: ScreenComponent) {
@@ -95,18 +101,18 @@ open class TchapLoginActivity : VectorBaseActivity<ActivityLoginBinding>(), Tool
             addFirstFragment()
         }
 
-        tchapLoginViewModel
+        loginViewModel
                 .subscribe(this) {
                     updateWithState(it)
                 }
 
-        tchapLoginViewModel.observeViewEvents { handleLoginViewEvents(it) }
+        loginViewModel.observeViewEvents { handleLoginViewEvents(it) }
 
         // Get config extra
         val loginConfig = intent.getParcelableExtra<LoginConfig?>(EXTRA_CONFIG)
         if (isFirstCreation()) {
             // TODO Check this
-            tchapLoginViewModel.handle(TchapLoginAction.InitWith(loginConfig))
+            loginViewModel.handle(LoginAction.InitWith(loginConfig))
         }
     }
 
@@ -114,9 +120,9 @@ open class TchapLoginActivity : VectorBaseActivity<ActivityLoginBinding>(), Tool
         addFragment(R.id.loginFragmentContainer, TchapWelcomeFragment::class.java)
     }
 
-    private fun handleLoginViewEvents(loginViewEvents: TchapLoginViewEvents) {
+    private fun handleLoginViewEvents(loginViewEvents: LoginViewEvents) {
         when (loginViewEvents) {
-            is TchapLoginViewEvents.RegistrationFlowResult                     -> {
+            is LoginViewEvents.RegistrationFlowResult                     -> {
                 // Check that all flows are supported by the application
                 if (loginViewEvents.flowResult.missingStages.any { !it.isSupported() }) {
                     // Display a popup to propose use web fallback
@@ -137,7 +143,7 @@ open class TchapLoginActivity : VectorBaseActivity<ActivityLoginBinding>(), Tool
                     }
                 }
             }
-            is TchapLoginViewEvents.OutdatedHomeserver                         -> {
+            is LoginViewEvents.OutdatedHomeserver                         -> {
                 MaterialAlertDialogBuilder(this)
                         .setTitle(R.string.login_error_outdated_homeserver_title)
                         .setMessage(R.string.login_error_outdated_homeserver_warning_content)
@@ -145,24 +151,41 @@ open class TchapLoginActivity : VectorBaseActivity<ActivityLoginBinding>(), Tool
                         .show()
                 Unit
             }
-            is TchapLoginViewEvents.OnSignModeSelected                         -> onSignModeSelected(loginViewEvents)
-            is TchapLoginViewEvents.OnLoginFlowRetrieved                       -> Unit // Handled by the Tchap login fragment
-            is TchapLoginViewEvents.OnForgetPasswordClicked                    ->
+            is LoginViewEvents.OnSignModeSelected                         -> onSignModeSelected(loginViewEvents)
+            is LoginViewEvents.OnLoginFlowRetrieved                       -> Unit // Handled by the Tchap login fragment
+            is LoginViewEvents.OnForgetPasswordClicked                    ->
                 addFragmentToBackstack(R.id.loginFragmentContainer,
                         LoginResetPasswordFragment::class.java,
                         option = commonOption)
-            is TchapLoginViewEvents.OnSendEmailSuccess                         ->
+            is LoginViewEvents.OnResetPasswordSendThreePidDone            -> {
+                supportFragmentManager.popBackStack(FRAGMENT_LOGIN_TAG, POP_BACK_STACK_EXCLUSIVE)
+                addFragmentToBackstack(R.id.loginFragmentContainer,
+                        LoginResetPasswordMailConfirmationFragment::class.java,
+                        option = commonOption)
+            }
+            is LoginViewEvents.OnResetPasswordMailConfirmationSuccess     -> {
+                supportFragmentManager.popBackStack(FRAGMENT_LOGIN_TAG, POP_BACK_STACK_EXCLUSIVE)
+                addFragmentToBackstack(R.id.loginFragmentContainer,
+                        LoginResetPasswordSuccessFragment::class.java,
+                        option = commonOption)
+            }
+            is LoginViewEvents.OnResetPasswordMailConfirmationSuccessDone -> {
+                // Go back to the login fragment
+                supportFragmentManager.popBackStack(FRAGMENT_LOGIN_TAG, POP_BACK_STACK_EXCLUSIVE)
+            }
+            is LoginViewEvents.OnSendEmailSuccess                         ->
                 addFragmentToBackstack(R.id.loginFragmentContainer,
                         TchapRegisterWaitForEmailFragment::class.java,
                         TchapRegisterWaitForEmailFragmentArgument(loginViewEvents.email),
                         tag = FRAGMENT_REGISTRATION_STAGE_TAG,
                         option = commonOption)
-            is TchapLoginViewEvents.OnGoToSignInClicked                        -> {
+            is LoginViewEvents.OnGoToSignInClicked                        -> {
                 supportFragmentManager.popBackStack(FRAGMENT_REGISTER_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-                tchapLoginViewModel.handle(TchapLoginAction.UpdateSignMode(SignMode.SignIn))
+                loginViewModel.handle(LoginAction.UpdateSignMode(SignMode.SignIn))
             }
-            is TchapLoginViewEvents.Failure,
-            is TchapLoginViewEvents.Loading                                    -> Unit // This is handled by the Fragments
+            is LoginViewEvents.Failure,
+            is LoginViewEvents.Loading                                    -> Unit // This is handled by the Fragments
+            else                                                          -> Unit
         }.exhaustive
     }
 
@@ -181,7 +204,7 @@ open class TchapLoginActivity : VectorBaseActivity<ActivityLoginBinding>(), Tool
         views.loginLoading.isVisible = loginViewState.isLoading()
     }
 
-    private fun onSignModeSelected(loginViewEvents: TchapLoginViewEvents.OnSignModeSelected) {
+    private fun onSignModeSelected(loginViewEvents: LoginViewEvents.OnSignModeSelected) {
         // state.signMode could not be ready yet. So use value from the ViewEvent
         when (loginViewEvents.signMode) {
             SignMode.Unknown            -> error("Sign mode has to be set before calling this method")

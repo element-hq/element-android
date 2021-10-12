@@ -618,7 +618,7 @@
     <string name="auth_reset_password_message">Pour réinitialiser votre mot de passe, saisissez l’adresse e\u2011mail associée à votre compte :</string>
     <string name="auth_reset_password_missing_email">L’adresse e\u2011mail liée à votre compte doit être saisie.</string>
     <string name="auth_reset_password_missing_password">Un nouveau mot de passe doit être saisi.</string>
-    <string name="template_auth_reset_password_email_validation_message">Si un compte ${app_name} existe, un e\u2011mail a été envoyé à l’adresse : %s. Une fois que vous aurez suivi le lien qu’il contient, cliquez ci-dessous.</string>
+    <string name="auth_reset_password_email_validation_message">Un e\u2011mail a été envoyé à %s. Une fois que vous aurez suivi le lien qu’il contient, cliquez ci-dessous.</string>
     <string name="auth_reset_password_error_unauthorized">Impossible de vérifier l’adresse e\u2011mail : assurez-vous d’avoir cliqué sur le lien dans l’e\u2011mail</string>
     <string name="auth_reset_password_success_message">Votre mot de passe a été réinitialisé.
 \n
@@ -1693,8 +1693,8 @@
 \n
 \nVoulez-vous vous inscrire en utilisant un client web \?</string>
     <string name="login_login_with_email_error">Cet e\u2011mail n’est associé à aucun compte.</string>
-    <string name="login_reset_password_on">Réinitialiser le mot de passe sur %1$s</string>
-    <string name="login_reset_password_notice">Un e\u2011mail de vérification sera envoyé à votre adresse pour confirmer la configuration de votre nouveau mot de passe.</string>
+    <string name="login_reset_password_on">Réinitialiser le mot de passe</string>
+    <string name="login_reset_password_notice">Pour réinitialiser votre mot de passe, saisissez l’adresse e\u2011mail associée à votre compte :</string>
     <string name="login_reset_password_submit">Suivant</string>
     <string name="login_reset_password_email_hint">E\u2011mail</string>
     <string name="login_reset_password_password_hint">Nouveau mot de passe</string>
@@ -1703,8 +1703,8 @@
     <string name="login_reset_password_warning_submit">Poursuivre</string>
     <string name="login_reset_password_error_not_found">Cet e\u2011mail n’est lié à aucun compte</string>
     <string name="login_reset_password_mail_confirmation_title">Vérifiez votre boîte de réception</string>
-    <string name="login_reset_password_mail_confirmation_notice">Un e\u2011mail de vérification a été envoyé à %1$s.</string>
-    <string name="login_reset_password_mail_confirmation_notice_2">Touchez le lien pour confirmer votre nouveau mot de passe. Après avoir suivi le lien qu’il contient, cliquez ci-dessous.</string>
+    <string name="template_login_reset_password_mail_confirmation_notice">Si un compte ${app_name} existe, un e\u2011mail a été envoyé à l’adresse : %s.</string>
+    <string name="login_reset_password_mail_confirmation_notice_2">Une fois que vous aurez suivi le lien qu’il contient, cliquez ci-dessous.</string>
     <string name="login_reset_password_mail_confirmation_submit">J’ai vérifié mon adresse e\u2011mail</string>
     <string name="login_reset_password_success_title">Succès !</string>
     <string name="login_reset_password_success_notice">Votre mot de passe a été réinitialisé.</string>

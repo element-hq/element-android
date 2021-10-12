@@ -149,6 +149,7 @@
     <string name="tchap_email_validation_succeeded">Votre e\u2011mail a été validé, vous pouvez poursuivre l’opération qui attendait cette validation.</string>
     <string name="tchap_email_validation_failed">La validation de l’e\u2011mail a échouée. Le lien a expiré, ou il n’est pas valide.</string>
     <string name="tchap_change_password_help">Votre nouveau mot de passe doit contenir au moins 8 caractères, avec au moins un caractère de chaque type : majuscule, minuscule, chiffre, caractère spécial.</string>
+    <string name="tchap_login_reset_password_warning_content">Le changement de mot de passe réinitialisera toutes les clés de chiffrement sur toutes vos sessions, rendant l’historique des discussions chiffrées illisible. Exportez vos clés de salon depuis une autre session avant de réinitialiser votre mot de passe.</string>
 
     <!-- Logout Tchap -->
     <string name="tchap_action_sign_out_confirmation">Pour des raisons de sécurité, la déconnexion supprimera toutes les clés de chiffrement de bout en bout, rendant l’historique des conversations chiffrées inaccessible lorsque vous vous reconnecterez. Cliquez sur exporter pour les sauvegarder avant de vous déconnecter.</string>

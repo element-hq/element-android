@@ -150,6 +150,7 @@
     <string name="tchap_email_validation_succeeded">The email has been validated. You may pursue the related operation.</string>
     <string name="tchap_email_validation_failed">The email validation failed. The link has expired, or it is not valid.</string>
     <string name="tchap_change_password_help">Your new password must include a lower-case letter, an upper-case letter, a number and a symbol and be at a minimum 8 characters in length.</string>
+    <string name="tchap_login_reset_password_warning_content">Changing your password will reset any end-to-end encryption keys on all of your sessions, making encrypted chat history unreadable. Export your room keys from another session before resetting your password.</string>
 
     <!-- Logout Tchap -->
     <string name="tchap_action_sign_out_confirmation">For security, logging out will delete any end-to-end encryption keys making previous encrypted chat history unreadable if you log back in.\nSelect export to backup them before signing out.</string>

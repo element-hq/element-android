@@ -21,6 +21,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import im.vector.app.databinding.FragmentTchapWelcomeBinding
+import im.vector.app.features.login.AbstractLoginFragment
+import im.vector.app.features.login.LoginAction
 import im.vector.app.features.login.SignMode
 
 import javax.inject.Inject
@@ -28,7 +30,7 @@ import javax.inject.Inject
 /**
  * In this screen, the user is asked to sign up or to sign in to the homeserver
  */
-class TchapWelcomeFragment @Inject constructor() : TchapAbstractLoginFragment<FragmentTchapWelcomeBinding>() {
+class TchapWelcomeFragment @Inject constructor() : AbstractLoginFragment<FragmentTchapWelcomeBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentTchapWelcomeBinding {
         return FragmentTchapWelcomeBinding.inflate(inflater, container, false)
@@ -46,14 +48,14 @@ class TchapWelcomeFragment @Inject constructor() : TchapAbstractLoginFragment<Fr
     }
 
     private fun signUp() {
-        loginViewModel.handle(TchapLoginAction.UpdateSignMode(SignMode.SignUp))
+        loginViewModel.handle(LoginAction.UpdateSignMode(SignMode.SignUp))
     }
 
     private fun signIn() {
-        loginViewModel.handle(TchapLoginAction.UpdateSignMode(SignMode.SignIn))
+        loginViewModel.handle(LoginAction.UpdateSignMode(SignMode.SignIn))
     }
 
     override fun resetViewModel() {
-        loginViewModel.handle(TchapLoginAction.ResetSignMode)
+        loginViewModel.handle(LoginAction.ResetSignMode)
     }
 }

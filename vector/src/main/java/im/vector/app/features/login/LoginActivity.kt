@@ -205,6 +205,7 @@ open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), ToolbarCo
             is LoginViewEvents.Loading                                    ->
                 // This is handled by the Fragments
                 Unit
+            else                                                          -> Unit
         }.exhaustive
     }
 

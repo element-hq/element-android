@@ -27,7 +27,7 @@
 
             <include layout="@layout/fragment_tchap_forgotten_password" />
 
-            <include layout="@layout/fragment_tchap_message_button" />
+<!--            <include layout="@layout/fragment_tchap_message_button" />-->
 
         </LinearLayout>
 

@@ -25,9 +25,6 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import fr.gouv.tchap.android.sdk.internal.services.threepidplatformdiscover.model.Platform
 import fr.gouv.tchap.core.utils.TchapUtils
-import fr.gouv.tchap.features.login.TchapAbstractLoginFragment
-import fr.gouv.tchap.features.login.TchapLoginAction
-import fr.gouv.tchap.features.login.TchapLoginViewEvents
 import fr.gouv.tchap.features.platform.PlatformAction
 import fr.gouv.tchap.features.platform.PlatformViewEvents
 import fr.gouv.tchap.features.platform.PlatformViewModel
@@ -36,6 +33,9 @@ import im.vector.app.R
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.isEmail
 import im.vector.app.databinding.FragmentTchapRegisterBinding
+import im.vector.app.features.login.AbstractLoginFragment
+import im.vector.app.features.login.LoginAction
+import im.vector.app.features.login.LoginViewEvents
 import org.matrix.android.sdk.api.auth.registration.RegisterThreePid
 import org.matrix.android.sdk.api.auth.registration.Stage
 import org.matrix.android.sdk.api.failure.Failure
@@ -52,7 +52,7 @@ import javax.inject.Inject
  * - the user is asked for login and password
  */
 class TchapRegisterFragment @Inject constructor(private val platformViewModelFactory: PlatformViewModel.Factory
-) : TchapAbstractLoginFragment<FragmentTchapRegisterBinding>(), PlatformViewModel.Factory {
+) : AbstractLoginFragment<FragmentTchapRegisterBinding>(), PlatformViewModel.Factory {
 
     private val viewModel: PlatformViewModel by fragmentViewModel()
     private lateinit var login: String
@@ -79,15 +79,15 @@ class TchapRegisterFragment @Inject constructor(private val platformViewModelFac
 
         loginViewModel.observeViewEvents { loginViewEvents ->
             when (loginViewEvents) {
-                TchapLoginViewEvents.OnLoginFlowRetrieved       ->
-                    loginViewModel.handle(TchapLoginAction.LoginOrRegister(login, password, getString(R.string.login_default_session_public_name)))
-                is TchapLoginViewEvents.RegistrationFlowResult  -> {
+                LoginViewEvents.OnLoginFlowRetrieved           ->
+                    loginViewModel.handle(LoginAction.LoginOrRegister(login, password, getString(R.string.login_default_session_public_name)))
+                is LoginViewEvents.RegistrationFlowResult -> {
                     // Result from registration request when the account password is set.
                     // Email stage is mandatory at this time and another stage should not happen.
                     val emailStage = loginViewEvents.flowResult.missingStages.firstOrNull { it.mandatory && it is Stage.Email }
 
                     if (emailStage != null) {
-                        loginViewModel.handle(TchapLoginAction.AddThreePid(RegisterThreePid.Email(login)))
+                        loginViewModel.handle(LoginAction.AddThreePid(RegisterThreePid.Email(login)))
                     } else {
                         MaterialAlertDialogBuilder(requireActivity())
                                 .setTitle(R.string.dialog_title_error)
@@ -155,17 +155,17 @@ class TchapRegisterFragment @Inject constructor(private val platformViewModelFac
                     .setCancelable(false)
                     .setMessage(R.string.tchap_register_warning_for_external)
                     .setPositiveButton(R.string.tchap_register_warning_for_external_proceed) { _, _ ->
-                        loginViewModel.handle(TchapLoginAction.UpdateHomeServer(getString(R.string.server_url_prefix) + platform.hs))
+                        loginViewModel.handle(LoginAction.UpdateHomeServer(getString(R.string.server_url_prefix) + platform.hs))
                     }
                     .setNegativeButton(R.string.cancel, null)
                     .show()
         } else {
-            loginViewModel.handle(TchapLoginAction.UpdateHomeServer(getString(R.string.server_url_prefix) + platform.hs))
+            loginViewModel.handle(LoginAction.UpdateHomeServer(getString(R.string.server_url_prefix) + platform.hs))
         }
     }
 
     override fun resetViewModel() {
-        loginViewModel.handle(TchapLoginAction.ResetLogin)
+        loginViewModel.handle(LoginAction.ResetLogin)
     }
 
     override fun onError(throwable: Throwable) {
@@ -178,7 +178,7 @@ class TchapRegisterFragment @Inject constructor(private val platformViewModelFac
             views.tchapRegisterPassword.error = errorFormatter.toHumanReadable(throwable)
         } else if (throwable.is401()) {
             // This is normal use case, we go to the mail waiting screen
-            loginViewModel.handle(TchapLoginAction.PostViewEvent(TchapLoginViewEvents.OnSendEmailSuccess(loginViewModel.currentThreePid ?: "")))
+            loginViewModel.handle(LoginAction.PostViewEvent(LoginViewEvents.OnSendEmailSuccess(loginViewModel.currentThreePid ?: "")))
         } else {
             views.tchapRegisterEmail.error = errorFormatter.toHumanReadable(throwable)
         }
