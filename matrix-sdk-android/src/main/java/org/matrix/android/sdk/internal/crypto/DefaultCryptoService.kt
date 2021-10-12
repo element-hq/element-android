@@ -874,7 +874,7 @@ internal class DefaultCryptoService @Inject constructor(
             }
         }
 
-        val keyShareLock = roomKeyShareLocks.getOrDefault(roomId, Mutex())
+        val keyShareLock = roomKeyShareLocks.getOrPut(roomId, { Mutex() })
 
         keyShareLock.withLock {
             coroutineScope {
