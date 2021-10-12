@@ -54,6 +54,7 @@ import org.matrix.android.sdk.api.pushrules.RuleKind
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.pushers.Pusher
+import org.matrix.android.sdk.internal.extensions.combineLatest
 import javax.inject.Inject
 
 // Referenced in vector_settings_preferences_root.xml
@@ -339,11 +340,11 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
 
     override fun onPreferenceTreeClick(preference: Preference?): Boolean {
         return when (preference?.key) {
-            VectorPreferences.SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY   -> {
+            VectorPreferences.SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY -> {
                 updateEnabledForAccount(preference)
                 true
             }
-            else                                                         -> {
+            else                                                       -> {
                 return super.onPreferenceTreeClick(preference)
             }
         }
@@ -406,12 +407,9 @@ private fun Session.getEmailsWithPushInformation(): List<Pair<ThreePid.Email, Bo
 }
 
 private fun Session.getEmailsWithPushInformationLive(): LiveData<List<Pair<ThreePid.Email, Boolean>>> {
-    return getThreePidsLive(refreshData = true)
-            .distinctUntilChanged()
-            .map { threePids ->
-                val emailPushers = getPushers().filter { it.kind == Pusher.KIND_EMAIL }
-                threePids
-                        .filterIsInstance<ThreePid.Email>()
-                        .map { it to emailPushers.any { pusher -> pusher.pushKey == it.email } }
-            }
+    val emailThreePids = getThreePidsLive(refreshData = true).map { it.filterIsInstance<ThreePid.Email>() }
+    val emailPushers = getPushersLive().map { it.filter { pusher -> pusher.kind == Pusher.KIND_EMAIL } }
+    return combineLatest(emailThreePids, emailPushers) { emailThreePidsResult, emailPushersResult ->
+        emailThreePidsResult.map { it to emailPushersResult.any { pusher -> pusher.pushKey == it.email } }
+    }.distinctUntilChanged()
 }
