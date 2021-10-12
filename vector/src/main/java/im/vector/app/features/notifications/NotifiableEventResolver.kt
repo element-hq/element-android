@@ -197,7 +197,8 @@ class NotifiableEventResolver @Inject constructor(
         val roomId = event.roomId ?: return null
         val dName = event.senderId?.let { session.getRoomMember(it, roomId)?.displayName }
         if (Membership.INVITE == content.membership) {
-            val body = noticeEventFormatter.format(event, dName, isDm = session.getRoomSummary(roomId)?.isDirect.orFalse())
+            val roomSummary = session.getRoomSummary(roomId)
+            val body = noticeEventFormatter.format(event, dName, isDm = roomSummary?.isDirect.orFalse())
                     ?: stringProvider.getString(R.string.notification_new_invitation)
             return InviteNotifiableEvent(
                     session.myUserId,
@@ -205,6 +206,7 @@ class NotifiableEventResolver @Inject constructor(
                     editedEventId = null,
                     canBeReplaced = canBeReplaced,
                     roomId = roomId,
+                    roomName = roomSummary?.displayName,
                     timestamp = event.originServerTs ?: 0,
                     noisy = isNoisy,
                     title = stringProvider.getString(R.string.notification_new_invitation),
