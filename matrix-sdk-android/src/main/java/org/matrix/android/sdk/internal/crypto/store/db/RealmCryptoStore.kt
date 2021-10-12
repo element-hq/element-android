@@ -1163,8 +1163,8 @@ internal class RealmCryptoStore @Inject constructor(
     }
 
     override fun saveGossipingEvents(events: List<Event>) {
-        val now = System.currentTimeMillis()
         monarchy.writeAsync { realm ->
+            val now = System.currentTimeMillis()
             events.forEach { event ->
                 val ageLocalTs = event.unsignedData?.age?.let { now - it } ?: now
                 val entity = GossipingEventEntity(
@@ -1182,23 +1182,6 @@ internal class RealmCryptoStore @Inject constructor(
         }
     }
 
-    override fun saveGossipingEvent(event: Event) {
-        monarchy.writeAsync { realm ->
-            val now = System.currentTimeMillis()
-            val ageLocalTs = event.unsignedData?.age?.let { now - it } ?: now
-            val entity = GossipingEventEntity(
-                    type = event.type,
-                    sender = event.senderId,
-                    ageLocalTs = ageLocalTs,
-                    content = ContentMapper.map(event.content)
-            ).apply {
-                sendState = SendState.SYNCED
-                decryptionResultJson = MoshiProvider.providesMoshi().adapter(OlmDecryptionResult::class.java).toJson(event.mxDecryptionResult)
-                decryptionErrorCode = event.mCryptoError?.name
-            }
-            realm.insertOrUpdate(entity)
-        }
-    }
 //    override fun getOutgoingRoomKeyRequestByState(states: Set<ShareRequestState>): OutgoingRoomKeyRequest? {
 //        val statesIndex = states.map { it.ordinal }.toTypedArray()
 //        return doRealmQueryAndCopy(realmConfiguration) { realm ->
