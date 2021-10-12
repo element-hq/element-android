@@ -40,17 +40,14 @@ class TchapRoomLinkAccessBottomSheetController @Inject constructor() : TypedEpox
         }
 
         var idx = 0
-
-        // Copy
         state.matrixToLink?.let {
+            // Copy
             TchapRoomLinkAccessBottomSheetSharedAction.CopyLink(it).toBottomSheetItem(++idx)
+            // Forward
+            TchapRoomLinkAccessBottomSheetSharedAction.ForwardLink(it).toBottomSheetItem(++idx)
+            // Share
+            TchapRoomLinkAccessBottomSheetSharedAction.ShareLink(it).toBottomSheetItem(++idx)
         }
-
-        // Forward
-        TchapRoomLinkAccessBottomSheetSharedAction.ForwardLink(state.alias).toBottomSheetItem(++idx)
-
-        // Share
-        TchapRoomLinkAccessBottomSheetSharedAction.ShareLink(state.alias).toBottomSheetItem(++idx)
     }
 
     private fun TchapRoomLinkAccessBottomSheetSharedAction.toBottomSheetItem(index: Int) {

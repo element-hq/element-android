@@ -26,17 +26,17 @@ sealed class TchapRoomLinkAccessBottomSheetSharedAction(
         @DrawableRes val iconResId: Int = 0)
     : VectorSharedAction {
 
-    data class CopyLink(val matrixTo: String) : TchapRoomLinkAccessBottomSheetSharedAction(
+    data class CopyLink(val permalink: String) : TchapRoomLinkAccessBottomSheetSharedAction(
             R.string.action_copy,
             R.drawable.ic_copy
     )
 
-    data class ForwardLink(val alias: String) : TchapRoomLinkAccessBottomSheetSharedAction(
+    data class ForwardLink(val permalink: String) : TchapRoomLinkAccessBottomSheetSharedAction(
             R.string.tchap_room_settings_room_access_by_link_forward,
             R.drawable.quantum_ic_send_white_24
     )
 
-    data class ShareLink(val alias: String) : TchapRoomLinkAccessBottomSheetSharedAction(
+    data class ShareLink(val permalink: String) : TchapRoomLinkAccessBottomSheetSharedAction(
             R.string.tchap_room_settings_room_access_by_link_share,
             R.drawable.ic_share_link
     )
