@@ -80,6 +80,7 @@ import im.vector.app.features.roomprofile.alias.detail.RoomAliasBottomSheet
 import im.vector.app.features.roomprofile.settings.historyvisibility.RoomHistoryVisibilityBottomSheet
 import im.vector.app.features.roomprofile.settings.joinrule.RoomJoinRuleActivity
 import im.vector.app.features.roomprofile.settings.joinrule.RoomJoinRuleBottomSheet
+import im.vector.app.features.roomprofile.settings.linkaccess.detail.TchapRoomLinkAccessBottomSheet
 import im.vector.app.features.settings.VectorSettingsActivity
 import im.vector.app.features.settings.devices.DeviceVerificationInfoBottomSheet
 import im.vector.app.features.share.IncomingShareActivity
@@ -207,6 +208,7 @@ interface ScreenComponent {
     fun inject(bottomSheet: JoinReplacementRoomBottomSheet)
     fun inject(bottomSheet: MigrateRoomBottomSheet)
     fun inject(bottomSheet: LeaveSpaceBottomSheet)
+    fun inject(bottomSheet: TchapRoomLinkAccessBottomSheet)
 
     /* ==========================================================================================
      * Others

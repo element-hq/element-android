@@ -57,9 +57,6 @@ class TchapRoomLinkAccessViewModel @AssistedInject constructor(
     override fun handle(action: TchapRoomLinkAccessAction) {
         when (action) {
             is TchapRoomLinkAccessAction.SetIsEnabled -> handleSetIsEnabled(action)
-            TchapRoomLinkAccessAction.CopyLink        -> handleCopyLink()
-            TchapRoomLinkAccessAction.ForwardLink     -> handleForwardLink()
-            TchapRoomLinkAccessAction.ShareLink       -> handleShareLink()
         }.exhaustive
     }
 
@@ -75,17 +72,5 @@ class TchapRoomLinkAccessViewModel @AssistedInject constructor(
 
     private fun handleSetIsEnabled(action: TchapRoomLinkAccessAction.SetIsEnabled) {
         setState { copy(isLinkAccessEnabled = action.isEnabled) }
-    }
-
-    private fun handleCopyLink() {
-        // TODO
-    }
-
-    private fun handleForwardLink() {
-        // TODO
-    }
-
-    private fun handleShareLink() {
-        // TODO
     }
 }

@@ -33,7 +33,7 @@ class TchapRoomLinkAccessController @Inject constructor(
 
     interface InteractionListener {
         fun setLinkAccessEnabled(isEnabled: Boolean)
-        fun openAliasDetail(canonicalAlias: String)
+        fun openAliasDetail(alias: String)
     }
 
     var interactionListener: InteractionListener? = null

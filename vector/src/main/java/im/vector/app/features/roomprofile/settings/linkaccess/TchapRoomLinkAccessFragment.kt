@@ -27,6 +27,7 @@ import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentRoomSettingGenericBinding
 import im.vector.app.features.home.AvatarRenderer
+import im.vector.app.features.roomprofile.settings.linkaccess.detail.TchapRoomLinkAccessBottomSheet
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
@@ -72,7 +73,9 @@ class TchapRoomLinkAccessFragment @Inject constructor(
         viewModel.handle(TchapRoomLinkAccessAction.SetIsEnabled(isEnabled))
     }
 
-    override fun openAliasDetail(canonicalAlias: String) {
-        // TODO
+    override fun openAliasDetail(alias: String) {
+        TchapRoomLinkAccessBottomSheet
+                .newInstance(alias = alias)
+                .show(childFragmentManager, "TCHAP_ROOM_LINK_ACCESS_ACTIONS")
     }
 }
