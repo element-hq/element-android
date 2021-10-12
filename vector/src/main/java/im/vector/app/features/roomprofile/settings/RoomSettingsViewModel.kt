@@ -19,17 +19,19 @@ package im.vector.app.features.roomprofile.settings
 import androidx.core.net.toFile
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
-import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
+import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import im.vector.app.features.settings.VectorPreferences
-import io.reactivex.Completable
-import io.reactivex.Observable
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.mapNotNull
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
@@ -41,9 +43,9 @@ import org.matrix.android.sdk.api.session.room.model.RoomGuestAccessContent
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibilityContent
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRulesContent
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
-import org.matrix.android.sdk.rx.mapOptional
-import org.matrix.android.sdk.rx.rx
-import org.matrix.android.sdk.rx.unwrap
+import org.matrix.android.sdk.flow.flow
+import org.matrix.android.sdk.flow.mapOptional
+import org.matrix.android.sdk.flow.unwrap
 
 class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: RoomSettingsViewState,
                                                         private val vectorPreferences: VectorPreferences,
@@ -55,7 +57,7 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
         fun create(initialState: RoomSettingsViewState): RoomSettingsViewModel
     }
 
-    companion object : MvRxViewModelFactory<RoomSettingsViewModel, RoomSettingsViewState> {
+    companion object : MavericksViewModelFactory<RoomSettingsViewModel, RoomSettingsViewState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: RoomSettingsViewState): RoomSettingsViewModel? {
@@ -97,7 +99,7 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
     }
 
     private fun observeState() {
-        selectSubscribe(
+        onEach(
                 RoomSettingsViewState::avatarAction,
                 RoomSettingsViewState::newName,
                 RoomSettingsViewState::newTopic,
@@ -123,7 +125,7 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
     }
 
     private fun observeRoomSummary() {
-        room.rx().liveRoomSummary()
+        room.flow().liveRoomSummary()
                 .unwrap()
                 .execute { async ->
                     val roomSummary = async.invoke()
@@ -134,10 +136,10 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
                     )
                 }
 
-        val powerLevelsContentLive = PowerLevelsObservableFactory(room).createObservable()
+        val powerLevelsContentLive = PowerLevelsFlowFactory(room).createFlow()
 
         powerLevelsContentLive
-                .subscribe {
+                .onEach {
                     val powerLevelsHelper = PowerLevelsHelper(it)
                     val permissions = RoomSettingsViewState.ActionPermissions(
                             canChangeAvatar = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_AVATAR),
@@ -152,62 +154,56 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
                             canAddChildren = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true,
                                     EventType.STATE_SPACE_CHILD)
                     )
-                    setState { copy(actionPermissions = permissions) }
-                }
-                .disposeOnClear()
+                    setState {
+                        copy(actionPermissions = permissions)
+                    }
+                }.launchIn(viewModelScope)
     }
 
     private fun observeRoomHistoryVisibility() {
-        room.rx()
+        room.flow()
                 .liveStateEvent(EventType.STATE_ROOM_HISTORY_VISIBILITY, QueryStringValue.NoCondition)
                 .mapOptional { it.content.toModel<RoomHistoryVisibilityContent>() }
                 .unwrap()
-                .subscribe {
-                    it.historyVisibility?.let {
-                        setState { copy(currentHistoryVisibility = it) }
-                    }
+                .mapNotNull { it.historyVisibility }
+                .setOnEach {
+                    copy(currentHistoryVisibility = it)
                 }
-                .disposeOnClear()
     }
 
     private fun observeJoinRule() {
-        room.rx()
+        room.flow()
                 .liveStateEvent(EventType.STATE_ROOM_JOIN_RULES, QueryStringValue.NoCondition)
                 .mapOptional { it.content.toModel<RoomJoinRulesContent>() }
                 .unwrap()
-                .subscribe {
-                    it.joinRules?.let {
-                        setState { copy(currentRoomJoinRules = it) }
-                    }
+                .mapNotNull { it.joinRules }
+                .setOnEach {
+                    copy(currentRoomJoinRules = it)
                 }
-                .disposeOnClear()
     }
 
     private fun observeGuestAccess() {
-        room.rx()
+        room.flow()
                 .liveStateEvent(EventType.STATE_ROOM_GUEST_ACCESS, QueryStringValue.NoCondition)
                 .mapOptional { it.content.toModel<RoomGuestAccessContent>() }
                 .unwrap()
-                .subscribe {
-                    it.guestAccess?.let {
-                        setState { copy(currentGuestAccess = it) }
-                    }
+                .mapNotNull { it.guestAccess }
+                .setOnEach {
+                    copy(currentGuestAccess = it)
                 }
-                .disposeOnClear()
     }
 
     /**
      * We do not want to use the fallback avatar url, which can be the other user avatar, or the current user avatar.
      */
     private fun observeRoomAvatar() {
-        room.rx()
+        room.flow()
                 .liveStateEvent(EventType.STATE_ROOM_AVATAR, QueryStringValue.NoCondition)
                 .mapOptional { it.content.toModel<RoomAvatarContent>() }
                 .unwrap()
-                .subscribe {
-                    setState { copy(currentRoomAvatarUrl = it.avatarUrl) }
+                .setOnEach {
+                    copy(currentRoomAvatarUrl = it.avatarUrl)
                 }
-                .disposeOnClear()
     }
 
     override fun handle(action: RoomSettingsAction) {
@@ -261,61 +257,57 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
     }
 
     private fun saveSettings() = withState { state ->
-        postLoading(true)
-
-        val operationList = mutableListOf<Completable>()
+        val operationList = mutableListOf<suspend () -> Unit>()
 
         val summary = state.roomSummary.invoke()
 
         when (val avatarAction = state.avatarAction) {
             RoomSettingsViewState.AvatarAction.None            -> Unit
             RoomSettingsViewState.AvatarAction.DeleteAvatar    -> {
-                operationList.add(room.rx().deleteAvatar())
+                operationList.add { room.deleteAvatar() }
             }
             is RoomSettingsViewState.AvatarAction.UpdateAvatar -> {
-                operationList.add(room.rx().updateAvatar(avatarAction.newAvatarUri, avatarAction.newAvatarFileName))
+                operationList.add { room.updateAvatar(avatarAction.newAvatarUri, avatarAction.newAvatarFileName) }
             }
         }
         if (summary?.name != state.newName) {
-            operationList.add(room.rx().updateName(state.newName ?: ""))
+            operationList.add { room.updateName(state.newName ?: "") }
         }
         if (summary?.topic != state.newTopic) {
-            operationList.add(room.rx().updateTopic(state.newTopic ?: ""))
+            operationList.add { room.updateTopic(state.newTopic ?: "") }
         }
 
         if (state.newHistoryVisibility != null) {
-            operationList.add(room.rx().updateHistoryReadability(state.newHistoryVisibility))
+            operationList.add { room.updateHistoryReadability(state.newHistoryVisibility) }
         }
 
         if (state.newRoomJoinRules.hasChanged()) {
-            operationList.add(room.rx().updateJoinRule(state.newRoomJoinRules.newJoinRules, state.newRoomJoinRules.newGuestAccess))
+            operationList.add { room.updateJoinRule(state.newRoomJoinRules.newJoinRules, state.newRoomJoinRules.newGuestAccess) }
         }
-
-        Observable
-                .fromIterable(operationList)
-                .concatMapCompletable { it }
-                .subscribe(
-                        {
-                            postLoading(false)
-                            setState {
-                                deletePendingAvatar(this)
-                                copy(
-                                        avatarAction = RoomSettingsViewState.AvatarAction.None,
-                                        newHistoryVisibility = null,
-                                        newRoomJoinRules = RoomSettingsViewState.NewJoinRule()
-                                )
-                            }
-                            _viewEvents.post(RoomSettingsViewEvents.Success)
-                        },
-                        {
-                            postLoading(false)
-                            _viewEvents.post(RoomSettingsViewEvents.Failure(it))
-                        }
-                )
-                .disposeOnClear()
+        viewModelScope.launch {
+            updateLoadingState(isLoading = true)
+            try {
+                for (operation in operationList) {
+                    operation.invoke()
+                }
+                setState {
+                    deletePendingAvatar(this)
+                    copy(
+                            avatarAction = RoomSettingsViewState.AvatarAction.None,
+                            newHistoryVisibility = null,
+                            newRoomJoinRules = RoomSettingsViewState.NewJoinRule()
+                    )
+                }
+                _viewEvents.post(RoomSettingsViewEvents.Success)
+            } catch (failure: Throwable) {
+                _viewEvents.post(RoomSettingsViewEvents.Failure(failure))
+            } finally {
+                updateLoadingState(isLoading = false)
+            }
+        }
     }
 
-    private fun postLoading(isLoading: Boolean) {
+    private fun updateLoadingState(isLoading: Boolean) {
         setState {
             copy(isLoading = isLoading)
         }

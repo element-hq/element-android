@@ -16,12 +16,11 @@
 
 package im.vector.app.features.spaces.leave
 
-import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
@@ -31,6 +30,8 @@ import dagger.assisted.AssistedInject
 import im.vector.app.AppStateHandler
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import okhttp3.internal.toImmutableList
 import org.matrix.android.sdk.api.query.ActiveSpaceFilter
@@ -38,7 +39,8 @@ import org.matrix.android.sdk.api.query.RoomCategoryFilter
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
-import org.matrix.android.sdk.rx.rx
+import org.matrix.android.sdk.flow.flow
+import org.matrix.android.sdk.flow.unwrap
 import timber.log.Timber
 
 class SpaceLeaveAdvancedViewModel @AssistedInject constructor(
@@ -95,17 +97,17 @@ class SpaceLeaveAdvancedViewModel @AssistedInject constructor(
         val spaceSummary = session.getRoomSummary(initialState.spaceId)
         setState { copy(spaceSummary = spaceSummary) }
         session.getRoom(initialState.spaceId)?.let { room ->
-            room.rx().liveRoomSummary().subscribe {
-                it.getOrNull()?.let {
-                    if (it.membership == Membership.LEAVE) {
-                        setState { copy(leaveState = Success(Unit)) }
-                        if (appStateHandler.safeActiveSpaceId() == initialState.spaceId) {
-                            // switch to home?
-                            appStateHandler.setCurrentSpace(null, session)
+            room.flow().liveRoomSummary()
+                    .unwrap()
+                    .onEach {
+                        if (it.membership == Membership.LEAVE) {
+                            setState { copy(leaveState = Success(Unit)) }
+                            if (appStateHandler.safeActiveSpaceId() == initialState.spaceId) {
+                                // switch to home?
+                                appStateHandler.setCurrentSpace(null, session)
+                            }
                         }
-                    }
-                }
-            }
+                    }.launchIn(viewModelScope)
         }
 
         viewModelScope.launch {
@@ -129,7 +131,7 @@ class SpaceLeaveAdvancedViewModel @AssistedInject constructor(
         fun create(initialState: SpaceLeaveAdvanceViewState): SpaceLeaveAdvancedViewModel
     }
 
-    companion object : MvRxViewModelFactory<SpaceLeaveAdvancedViewModel, SpaceLeaveAdvanceViewState> {
+    companion object : MavericksViewModelFactory<SpaceLeaveAdvancedViewModel, SpaceLeaveAdvanceViewState> {
         override fun create(viewModelContext: ViewModelContext, state: SpaceLeaveAdvanceViewState): SpaceLeaveAdvancedViewModel? {
             val factory = when (viewModelContext) {
                 is FragmentViewModelContext -> viewModelContext.fragment as? Factory

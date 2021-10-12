@@ -17,7 +17,7 @@
 package im.vector.app.features.roomprofile.settings.joinrule.advanced
 
 import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.Uninitialized
 import im.vector.app.features.roomprofile.RoomProfileArgs
 import im.vector.app.features.roomprofile.settings.joinrule.JoinRulesOptionSupport
@@ -45,6 +45,6 @@ data class RoomJoinRuleChooseRestrictedState(
         val restrictedSupportedByThisVersion: Boolean = false,
         val restrictedVersionNeeded: String? = null,
         val didSwitchToReplacementRoom: Boolean = false
-) : MvRxState {
+) : MavericksState {
     constructor(args: RoomProfileArgs) : this(roomId = args.roomId)
 }

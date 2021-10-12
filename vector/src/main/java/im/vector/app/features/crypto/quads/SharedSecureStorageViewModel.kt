@@ -16,13 +16,12 @@
 
 package im.vector.app.features.crypto.quads
 
-import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRx
-import com.airbnb.mvrx.MvRxState
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.Mavericks
+import com.airbnb.mvrx.MavericksState
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
@@ -35,6 +34,7 @@ import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.platform.WaitingViewData
 import im.vector.app.core.resources.StringProvider
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.listeners.ProgressListener
@@ -42,8 +42,8 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.securestorage.IntegrityResult
 import org.matrix.android.sdk.api.session.securestorage.KeyInfoResult
 import org.matrix.android.sdk.api.session.securestorage.RawBytesKeySpec
+import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.internal.crypto.crosssigning.toBase64NoPadding
-import org.matrix.android.sdk.rx.rx
 import timber.log.Timber
 import java.io.ByteArrayOutputStream
 
@@ -55,7 +55,7 @@ data class SharedSecureStorageViewState(
         val activeDeviceCount: Int = 0,
         val showResetAllAction: Boolean = false,
         val userId: String = ""
-) : MvRxState {
+) : MavericksState {
     enum class Step {
         EnterPassphrase,
         EnterKey,
@@ -114,7 +114,7 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
             }
         }
 
-        session.rx()
+        session.flow()
                 .liveUserCryptoDevices(session.myUserId)
                 .distinctUntilChanged()
                 .execute {
@@ -320,12 +320,12 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
         _viewEvents.post(SharedSecureStorageViewEvent.Dismiss)
     }
 
-    companion object : MvRxViewModelFactory<SharedSecureStorageViewModel, SharedSecureStorageViewState> {
+    companion object : MavericksViewModelFactory<SharedSecureStorageViewModel, SharedSecureStorageViewState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: SharedSecureStorageViewState): SharedSecureStorageViewModel? {
             val activity: SharedSecureStorageActivity = viewModelContext.activity()
-            val args: SharedSecureStorageActivity.Args = activity.intent.getParcelableExtra(MvRx.KEY_ARG) ?: error("Missing args")
+            val args: SharedSecureStorageActivity.Args = activity.intent.getParcelableExtra(Mavericks.KEY_ARG) ?: error("Missing args")
             return activity.viewModelFactory.create(state, args)
         }
     }

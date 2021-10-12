@@ -19,7 +19,7 @@ package im.vector.app.features.usercode
 import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -45,7 +45,7 @@ class UserCodeSharedViewModel @AssistedInject constructor(
         private val directRoomHelper: DirectRoomHelper,
         private val rawService: RawService) : VectorViewModel<UserCodeState, UserCodeActions, UserCodeShareViewEvents>(initialState) {
 
-    companion object : MvRxViewModelFactory<UserCodeSharedViewModel, UserCodeState> {
+    companion object : MavericksViewModelFactory<UserCodeSharedViewModel, UserCodeState> {
         override fun create(viewModelContext: ViewModelContext, state: UserCodeState): UserCodeSharedViewModel? {
             val factory = when (viewModelContext) {
                 is FragmentViewModelContext -> viewModelContext.fragment as? Factory

@@ -19,7 +19,7 @@ package im.vector.app.features.spaces
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import com.airbnb.mvrx.MvRx
+import com.airbnb.mvrx.Mavericks
 import im.vector.app.R
 import im.vector.app.core.extensions.commitTransaction
 import im.vector.app.core.platform.VectorBaseActivity
@@ -50,12 +50,12 @@ class SpacePreviewActivity : VectorBaseActivity<ActivitySimpleBinding>() {
 
         if (isFirstCreation()) {
             val simpleName = SpacePreviewFragment::class.java.simpleName
-            val args = intent?.getParcelableExtra<SpacePreviewArgs>(MvRx.KEY_ARG)
+            val args = intent?.getParcelableExtra<SpacePreviewArgs>(Mavericks.KEY_ARG)
             if (supportFragmentManager.findFragmentByTag(simpleName) == null) {
                 supportFragmentManager.commitTransaction {
                     replace(R.id.simpleFragmentContainer,
                             SpacePreviewFragment::class.java,
-                            Bundle().apply { this.putParcelable(MvRx.KEY_ARG, args) },
+                            Bundle().apply { this.putParcelable(Mavericks.KEY_ARG, args) },
                             simpleName
                     )
                 }
@@ -66,7 +66,7 @@ class SpacePreviewActivity : VectorBaseActivity<ActivitySimpleBinding>() {
     companion object {
         fun newIntent(context: Context, spaceIdOrAlias: String): Intent {
             return Intent(context, SpacePreviewActivity::class.java).apply {
-                putExtra(MvRx.KEY_ARG, SpacePreviewArgs(spaceIdOrAlias))
+                putExtra(Mavericks.KEY_ARG, SpacePreviewArgs(spaceIdOrAlias))
             }
         }
     }

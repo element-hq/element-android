@@ -20,7 +20,7 @@ import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
@@ -49,7 +49,7 @@ class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
         fun create(initialState: CreateDirectRoomViewState): CreateDirectRoomViewModel
     }
 
-    companion object : MvRxViewModelFactory<CreateDirectRoomViewModel, CreateDirectRoomViewState> {
+    companion object : MavericksViewModelFactory<CreateDirectRoomViewModel, CreateDirectRoomViewState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: CreateDirectRoomViewState): CreateDirectRoomViewModel? {

@@ -16,12 +16,11 @@
 
 package im.vector.app.features.roomprofile.uploads
 
-import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
@@ -32,8 +31,8 @@ import im.vector.app.core.platform.VectorViewModel
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
-import org.matrix.android.sdk.rx.rx
-import org.matrix.android.sdk.rx.unwrap
+import org.matrix.android.sdk.flow.flow
+import org.matrix.android.sdk.flow.unwrap
 
 class RoomUploadsViewModel @AssistedInject constructor(
         @Assisted initialState: RoomUploadsViewState,
@@ -45,7 +44,7 @@ class RoomUploadsViewModel @AssistedInject constructor(
         fun create(initialState: RoomUploadsViewState): RoomUploadsViewModel
     }
 
-    companion object : MvRxViewModelFactory<RoomUploadsViewModel, RoomUploadsViewState> {
+    companion object : MavericksViewModelFactory<RoomUploadsViewModel, RoomUploadsViewState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: RoomUploadsViewState): RoomUploadsViewModel? {
@@ -66,7 +65,7 @@ class RoomUploadsViewModel @AssistedInject constructor(
     }
 
     private fun observeRoomSummary() {
-        room.rx().liveRoomSummary()
+        room.flow().liveRoomSummary()
                 .unwrap()
                 .execute { async ->
                     copy(roomSummary = async)

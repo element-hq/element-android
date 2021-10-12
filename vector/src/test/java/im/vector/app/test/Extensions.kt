@@ -16,7 +16,7 @@
 
 package im.vector.app.test
 
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MavericksState
 import im.vector.app.core.platform.VectorViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.platform.VectorViewModelAction
@@ -25,7 +25,7 @@ import org.amshove.kluent.shouldBeEqualTo
 
 fun String.trimIndentOneLine() = trimIndent().replace("\n", "")
 
-fun <S : MvRxState, VA : VectorViewModelAction, VE : VectorViewEvents> VectorViewModel<S, VA, VE>.test(): ViewModelTest<S, VE> {
+fun <S : MavericksState, VA : VectorViewModelAction, VE : VectorViewEvents> VectorViewModel<S, VA, VE>.test(): ViewModelTest<S, VE> {
     val state = { com.airbnb.mvrx.withState(this) { it } }
     val viewEvents = viewEvents.observe().test()
     return ViewModelTest(state, viewEvents)

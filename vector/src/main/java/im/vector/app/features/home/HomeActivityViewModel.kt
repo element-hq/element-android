@@ -16,9 +16,10 @@
 
 package im.vector.app.features.home
 
+import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewModelScope
-import com.airbnb.mvrx.MvRx
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.Mavericks
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -31,6 +32,8 @@ import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.VectorPreferences
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.auth.UIABaseAuth
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
@@ -44,11 +47,10 @@ import org.matrix.android.sdk.api.session.initsync.SyncStatusService
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.api.util.toMatrixItem
+import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.internal.util.awaitCallback
-import org.matrix.android.sdk.rx.asObservable
-import org.matrix.android.sdk.rx.rx
 import timber.log.Timber
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
@@ -67,12 +69,12 @@ class HomeActivityViewModel @AssistedInject constructor(
         fun create(initialState: HomeActivityViewState, args: HomeActivityArgs): HomeActivityViewModel
     }
 
-    companion object : MvRxViewModelFactory<HomeActivityViewModel, HomeActivityViewState> {
+    companion object : MavericksViewModelFactory<HomeActivityViewModel, HomeActivityViewState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: HomeActivityViewState): HomeActivityViewModel? {
             val activity: HomeActivity = viewModelContext.activity()
-            val args: HomeActivityArgs? = activity.intent.getParcelableExtra(MvRx.KEY_ARG)
+            val args: HomeActivityArgs? = activity.intent.getParcelableExtra(Mavericks.KEY_ARG)
             return activity.viewModelFactory.create(state, args ?: HomeActivityArgs(clearNotification = false, accountCreation = false))
         }
     }
@@ -100,9 +102,9 @@ class HomeActivityViewModel @AssistedInject constructor(
                 .crossSigningService().allPrivateKeysKnown()
 
         safeActiveSession
-                .rx()
+                .flow()
                 .liveCrossSigningInfo(safeActiveSession.myUserId)
-                .subscribe {
+                .onEach {
                     val isVerified = it.getOrNull()?.isTrusted() ?: false
                     if (!isVerified && onceTrusted) {
                         // cross signing keys have been reset
@@ -116,15 +118,15 @@ class HomeActivityViewModel @AssistedInject constructor(
                     }
                     onceTrusted = isVerified
                 }
-                .disposeOnClear()
+                .launchIn(viewModelScope)
     }
 
     private fun observeInitialSync() {
         val session = activeSessionHolder.getSafeActiveSession() ?: return
 
         session.getSyncStatusLive()
-                .asObservable()
-                .subscribe { status ->
+                .asFlow()
+                .onEach { status ->
                     when (status) {
                         is SyncStatusService.Status.Progressing -> {
                             // Schedule a check of the bootstrap when the init sync will be finished
@@ -145,7 +147,7 @@ class HomeActivityViewModel @AssistedInject constructor(
                         )
                     }
                 }
-                .disposeOnClear()
+                .launchIn(viewModelScope)
     }
 
     /**

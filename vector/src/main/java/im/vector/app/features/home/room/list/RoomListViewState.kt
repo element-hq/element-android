@@ -17,7 +17,7 @@
 package im.vector.app.features.home.room.list
 
 import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.Uninitialized
 import im.vector.app.RoomGroupingMethod
 import im.vector.app.features.home.RoomListDisplayMode
@@ -31,7 +31,7 @@ data class RoomListViewState(
         val asyncSuggestedRooms: Async<List<SpaceChildInfo>> = Uninitialized,
         val currentUserName: String? = null,
         val currentRoomGrouping: Async<RoomGroupingMethod> = Uninitialized
-) : MvRxState {
+) : MavericksState {
 
     constructor(args: RoomListParams) : this(displayMode = args.displayMode)
 }

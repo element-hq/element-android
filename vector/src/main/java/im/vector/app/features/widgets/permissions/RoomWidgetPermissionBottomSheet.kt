@@ -23,7 +23,7 @@ import android.text.style.BulletSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.airbnb.mvrx.MvRx
+import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
 import im.vector.app.R
@@ -115,7 +115,7 @@ class RoomWidgetPermissionBottomSheet :
     companion object {
 
         fun newInstance(widgetArgs: WidgetArgs) = RoomWidgetPermissionBottomSheet().withArgs {
-            putParcelable(MvRx.KEY_ARG, widgetArgs)
+            putParcelable(Mavericks.KEY_ARG, widgetArgs)
         }
     }
 }

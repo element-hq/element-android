@@ -17,8 +17,8 @@ package im.vector.app.features.settings.account.deactivation
 
 import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxState
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksState
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -42,7 +42,7 @@ import kotlin.coroutines.resumeWithException
 
 data class DeactivateAccountViewState(
         val dummy: Boolean = false
-) : MvRxState
+) : MavericksState
 
 class DeactivateAccountViewModel @AssistedInject constructor(@Assisted private val initialState: DeactivateAccountViewState,
                                                              private val session: Session) :
@@ -114,7 +114,7 @@ class DeactivateAccountViewModel @AssistedInject constructor(@Assisted private v
         }
     }
 
-    companion object : MvRxViewModelFactory<DeactivateAccountViewModel, DeactivateAccountViewState> {
+    companion object : MavericksViewModelFactory<DeactivateAccountViewModel, DeactivateAccountViewState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: DeactivateAccountViewState): DeactivateAccountViewModel? {

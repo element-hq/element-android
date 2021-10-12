@@ -17,13 +17,12 @@
 package im.vector.app.features.workers.signout
 
 import android.net.Uri
-import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxState
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksState
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
@@ -35,6 +34,8 @@ import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.platform.VectorViewModelAction
 import im.vector.app.features.crypto.keys.KeysExporter
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MASTER_KEY_SSSS_NAME
@@ -42,7 +43,7 @@ import org.matrix.android.sdk.api.session.crypto.crosssigning.SELF_SIGNING_KEY_S
 import org.matrix.android.sdk.api.session.crypto.crosssigning.USER_SIGNING_KEY_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupState
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupStateListener
-import org.matrix.android.sdk.rx.rx
+import org.matrix.android.sdk.flow.flow
 import timber.log.Timber
 
 data class SignoutCheckViewState(
@@ -51,7 +52,7 @@ data class SignoutCheckViewState(
         val crossSigningSetupAllKeysKnown: Boolean = false,
         val keysBackupState: KeysBackupState = KeysBackupState.Unknown,
         val hasBeenExportedToFile: Async<Boolean> = Uninitialized
-) : MvRxState
+) : MavericksState
 
 class SignoutCheckViewModel @AssistedInject constructor(
         @Assisted initialState: SignoutCheckViewState,
@@ -69,7 +70,7 @@ class SignoutCheckViewModel @AssistedInject constructor(
         fun create(initialState: SignoutCheckViewState): SignoutCheckViewModel
     }
 
-    companion object : MvRxViewModelFactory<SignoutCheckViewModel, SignoutCheckViewState> {
+    companion object : MavericksViewModelFactory<SignoutCheckViewModel, SignoutCheckViewState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: SignoutCheckViewState): SignoutCheckViewModel? {
@@ -97,7 +98,7 @@ class SignoutCheckViewModel @AssistedInject constructor(
             )
         }
 
-        session.rx().liveUserAccountData(setOf(MASTER_KEY_SSSS_NAME, USER_SIGNING_KEY_SSSS_NAME, SELF_SIGNING_KEY_SSSS_NAME))
+        session.flow().liveUserAccountData(setOf(MASTER_KEY_SSSS_NAME, USER_SIGNING_KEY_SSSS_NAME, SELF_SIGNING_KEY_SSSS_NAME))
                 .map {
                     session.sharedSecretStorageService.isRecoverySetup()
                 }

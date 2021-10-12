@@ -18,9 +18,8 @@ package im.vector.app.features.room
 
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
-import com.jakewharton.rxrelay2.BehaviorRelay
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -28,8 +27,14 @@ import im.vector.app.R
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
-import io.reactivex.Observable
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -37,8 +42,8 @@ import org.matrix.android.sdk.api.session.room.Room
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.util.Optional
-import org.matrix.android.sdk.rx.rx
-import org.matrix.android.sdk.rx.unwrap
+import org.matrix.android.sdk.flow.flow
+import org.matrix.android.sdk.flow.unwrap
 
 /**
  * This ViewModel observe a room summary and notify when the room is left
@@ -54,7 +59,7 @@ class RequireActiveMembershipViewModel @AssistedInject constructor(
         fun create(initialState: RequireActiveMembershipViewState): RequireActiveMembershipViewModel
     }
 
-    companion object : MvRxViewModelFactory<RequireActiveMembershipViewModel, RequireActiveMembershipViewState> {
+    companion object : MavericksViewModelFactory<RequireActiveMembershipViewModel, RequireActiveMembershipViewState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: RequireActiveMembershipViewState): RequireActiveMembershipViewModel? {
@@ -66,28 +71,31 @@ class RequireActiveMembershipViewModel @AssistedInject constructor(
         }
     }
 
-    private val roomIdObservable = BehaviorRelay.createDefault(Optional.from(initialState.roomId))
+    private val roomIdFlow = MutableStateFlow(Optional.from(initialState.roomId))
 
     init {
         observeRoomSummary()
     }
 
     private fun observeRoomSummary() {
-        roomIdObservable
+        roomIdFlow
                 .unwrap()
-                .switchMap { roomId ->
-                    val room = session.getRoom(roomId) ?: return@switchMap Observable.just(Optional.empty<RequireActiveMembershipViewEvents.RoomLeft>())
-                    room.rx()
+                .flatMapLatest { roomId ->
+                    val room = session.getRoom(roomId) ?: return@flatMapLatest flow {
+                        val emptyResult = Optional.empty<RequireActiveMembershipViewEvents.RoomLeft>()
+                        emit(emptyResult)
+                    }
+                    room.flow()
                             .liveRoomSummary()
                             .unwrap()
-                            .observeOn(Schedulers.computation())
+                            .flowOn(Dispatchers.Default)
                             .map { mapToLeftViewEvent(room, it) }
                 }
                 .unwrap()
-                .subscribe { event ->
+                .onEach { event ->
                     _viewEvents.post(event)
                 }
-                .disposeOnClear()
+                .launchIn(viewModelScope)
     }
 
     private fun mapToLeftViewEvent(room: Room, roomSummary: RoomSummary): Optional<RequireActiveMembershipViewEvents.RoomLeft> {
@@ -128,7 +136,7 @@ class RequireActiveMembershipViewModel @AssistedInject constructor(
                 setState {
                     copy(roomId = action.roomId)
                 }
-                roomIdObservable.accept(Optional.from(action.roomId))
+                roomIdFlow.tryEmit(Optional.from(action.roomId))
             }
         }.exhaustive
     }

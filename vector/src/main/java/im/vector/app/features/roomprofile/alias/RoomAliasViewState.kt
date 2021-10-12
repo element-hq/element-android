@@ -17,7 +17,7 @@
 package im.vector.app.features.roomprofile.alias
 
 import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.Uninitialized
 import im.vector.app.features.roomprofile.RoomProfileArgs
 import org.matrix.android.sdk.api.session.room.model.RoomDirectoryVisibility
@@ -35,7 +35,7 @@ data class RoomAliasViewState(
         val publishManuallyState: AddAliasState = AddAliasState.Hidden,
         val localAliases: Async<List<String>> = Uninitialized,
         val newLocalAliasState: AddAliasState = AddAliasState.Closed
-) : MvRxState {
+) : MavericksState {
 
     constructor(args: RoomProfileArgs) : this(roomId = args.roomId)
 

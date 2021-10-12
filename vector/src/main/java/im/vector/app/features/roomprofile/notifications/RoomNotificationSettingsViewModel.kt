@@ -18,7 +18,7 @@ package im.vector.app.features.roomprofile.notifications
 
 import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
@@ -28,8 +28,8 @@ import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsBottomSheet
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.rx.rx
-import org.matrix.android.sdk.rx.unwrap
+import org.matrix.android.sdk.flow.flow
+import org.matrix.android.sdk.flow.unwrap
 
 class RoomNotificationSettingsViewModel @AssistedInject constructor(
         @Assisted initialState: RoomNotificationSettingsViewState,
@@ -41,7 +41,7 @@ class RoomNotificationSettingsViewModel @AssistedInject constructor(
         fun create(initialState: RoomNotificationSettingsViewState): RoomNotificationSettingsViewModel
     }
 
-    companion object : MvRxViewModelFactory<RoomNotificationSettingsViewModel, RoomNotificationSettingsViewState> {
+    companion object : MavericksViewModelFactory<RoomNotificationSettingsViewModel, RoomNotificationSettingsViewState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: RoomNotificationSettingsViewState): RoomNotificationSettingsViewModel {
@@ -64,7 +64,7 @@ class RoomNotificationSettingsViewModel @AssistedInject constructor(
     }
 
     private fun observeSummary() {
-        room.rx().liveRoomSummary()
+        room.flow().liveRoomSummary()
                 .unwrap()
                 .execute { async ->
                     copy(roomSummary = async)
@@ -72,7 +72,7 @@ class RoomNotificationSettingsViewModel @AssistedInject constructor(
     }
 
     private fun observeNotificationState() {
-        room.rx()
+        room.flow()
                 .liveNotificationState()
                 .execute {
                     copy(notificationState = it)

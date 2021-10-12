@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.session
 
 import dagger.BindsInstance
 import dagger.Component
+import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.auth.data.SessionParams
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.internal.crypto.CancelGossipRequestWorker
@@ -62,7 +63,6 @@ import org.matrix.android.sdk.internal.session.user.UserModule
 import org.matrix.android.sdk.internal.session.user.accountdata.AccountDataModule
 import org.matrix.android.sdk.internal.session.widgets.WidgetModule
 import org.matrix.android.sdk.internal.task.TaskExecutor
-import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.internal.util.system.SystemModule
 
 @Component(dependencies = [MatrixComponent::class],
