@@ -343,7 +343,7 @@ class RoomDetailViewModel @AssistedInject constructor(
             is RoomDetailAction.PlayOrPauseVoicePlayback         -> handlePlayOrPauseVoicePlayback(action)
             RoomDetailAction.PauseRecordingVoiceMessage          -> handlePauseRecordingVoiceMessage()
             RoomDetailAction.PlayOrPauseRecordingPlayback        -> handlePlayOrPauseRecordingPlayback()
-            RoomDetailAction.EndAllVoiceActions                  -> handleEndAllVoiceActions()
+            is RoomDetailAction.EndAllVoiceActions               -> handleEndAllVoiceActions(action.deleteRecord)
             is RoomDetailAction.RoomUpgradeSuccess               -> {
                 setState {
                     copy(joinUpgradedRoomAsync = Success(action.replacementRoomId))
@@ -649,8 +649,8 @@ class RoomDetailViewModel @AssistedInject constructor(
         voiceMessageHelper.startOrPauseRecordingPlayback()
     }
 
-    private fun handleEndAllVoiceActions() {
-        voiceMessageHelper.stopAllVoiceActions()
+    private fun handleEndAllVoiceActions(deleteRecord: Boolean) {
+        voiceMessageHelper.stopAllVoiceActions(deleteRecord)
     }
 
     private fun handlePauseRecordingVoiceMessage() {

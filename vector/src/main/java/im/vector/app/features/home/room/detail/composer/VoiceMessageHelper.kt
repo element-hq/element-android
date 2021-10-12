@@ -217,10 +217,12 @@ class VoiceMessageHelper @Inject constructor(
         playbackTicker = null
     }
 
-    fun stopAllVoiceActions() {
+    fun stopAllVoiceActions(deleteRecord: Boolean = true) {
         stopRecording()
         stopPlayback()
-        deleteRecording()
+        if (deleteRecord) {
+            deleteRecording()
+        }
         playbackTracker.clear()
     }
 }
