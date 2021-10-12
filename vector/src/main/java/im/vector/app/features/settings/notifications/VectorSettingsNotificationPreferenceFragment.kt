@@ -406,7 +406,7 @@ private fun Session.getEmailsWithPushInformation(): List<Pair<ThreePid.Email, Bo
 }
 
 private fun Session.getEmailsWithPushInformationLive(): LiveData<List<Pair<ThreePid.Email, Boolean>>> {
-    return getThreePidsLive(refreshData = false)
+    return getThreePidsLive(refreshData = true)
             .distinctUntilChanged()
             .map { threePids ->
                 val emailPushers = getPushers().filter { it.kind == Pusher.KIND_EMAIL }
