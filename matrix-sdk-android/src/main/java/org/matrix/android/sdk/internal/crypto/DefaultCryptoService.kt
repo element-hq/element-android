@@ -120,10 +120,13 @@ internal class RequestSender @Inject constructor(
         private val sendVerificationMessageTask: Lazy<DefaultSendVerificationMessageTask>,
         private val uploadSigningKeysTask: UploadSigningKeysTask,
 ) {
+    companion object {
+        const val REQUEST_RETRY_COUNT = 3
+    }
 
     suspend fun claimKeys(request: Request.KeysClaim): String {
         val claimParams = ClaimOneTimeKeysForUsersDeviceTask.Params(request.oneTimeKeys)
-        val response = oneTimeKeysForUsersDeviceTask.execute(claimParams)
+        val response = oneTimeKeysForUsersDeviceTask.executeRetry(claimParams, REQUEST_RETRY_COUNT)
         val adapter = MoshiProvider
                 .providesMoshi()
                 .adapter(KeysClaimResponse::class.java)
@@ -132,7 +135,7 @@ internal class RequestSender @Inject constructor(
 
     suspend fun queryKeys(request: Request.KeysQuery): String {
         val params = DownloadKeysForUsersTask.Params(request.users, null)
-        val response = downloadKeysForUsersTask.execute(params)
+        val response = downloadKeysForUsersTask.executeRetry(params, REQUEST_RETRY_COUNT)
         val adapter = MoshiProvider.providesMoshi().adapter(KeysQueryResponse::class.java)
         return adapter.toJson(response)!!
     }
@@ -141,7 +144,7 @@ internal class RequestSender @Inject constructor(
         val body = MoshiProvider.providesMoshi().adapter<JsonDict>(Map::class.java).fromJson(request.body)!!
         val params = UploadKeysTask.Params(body)
 
-        val response = uploadKeysTask.execute(params)
+        val response = uploadKeysTask.executeRetry(params, REQUEST_RETRY_COUNT)
         val adapter = MoshiProvider.providesMoshi().adapter(KeysUploadResponse::class.java)
 
         return adapter.toJson(response)!!
@@ -167,7 +170,7 @@ internal class RequestSender @Inject constructor(
         val jsonContent = adapter.fromJson(content)
         val event = Event(eventType, transactionId, jsonContent, roomId = roomId)
         val params = SendVerificationMessageTask.Params(event)
-        return this.sendVerificationMessageTask.get().execute(params)
+        return this.sendVerificationMessageTask.get().executeRetry(params, REQUEST_RETRY_COUNT)
     }
 
     suspend fun sendSignatureUpload(request: Request.SignatureUpload) {
@@ -182,7 +185,7 @@ internal class RequestSender @Inject constructor(
         val adapter = MoshiProvider.providesMoshi().adapter<Map<String, Map<String, Any>>>(Map::class.java)
         val signatures = adapter.fromJson(body)!!
         val params = UploadSignaturesTask.Params(signatures)
-        this.signaturesUploadTask.execute(params)
+        this.signaturesUploadTask.executeRetry(params, REQUEST_RETRY_COUNT)
     }
 
     suspend fun uploadCrossSigningKeys(
@@ -209,7 +212,10 @@ internal class RequestSender @Inject constructor(
                             failure = failure,
                             interceptor = interactiveAuthInterceptor,
                             retryBlock = { authUpdate ->
-                                uploadSigningKeysTask.execute(uploadSigningKeysParams.copy(userAuthParam = authUpdate))
+                                uploadSigningKeysTask.executeRetry(
+                                        uploadSigningKeysParams.copy(userAuthParam = authUpdate),
+                                        REQUEST_RETRY_COUNT
+                                )
                             }
                     )
             ) {
@@ -240,7 +246,7 @@ internal class RequestSender @Inject constructor(
         userMap.join(jsonBody)
 
         val sendToDeviceParams = SendToDeviceTask.Params(eventType, userMap, transactionId)
-        sendToDeviceTask.execute(sendToDeviceParams)
+        sendToDeviceTask.executeRetry(sendToDeviceParams, REQUEST_RETRY_COUNT)
     }
 }
 
