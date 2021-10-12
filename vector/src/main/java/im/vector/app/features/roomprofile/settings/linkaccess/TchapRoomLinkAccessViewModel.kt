@@ -25,7 +25,12 @@ import dagger.assisted.AssistedInject
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
+import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.room.model.RoomCanonicalAliasContent
+import org.matrix.android.sdk.rx.mapOptional
 import org.matrix.android.sdk.rx.rx
 import org.matrix.android.sdk.rx.unwrap
 
@@ -52,6 +57,20 @@ class TchapRoomLinkAccessViewModel @AssistedInject constructor(
 
     init {
         observeRoomSummary()
+        observeRoomCanonicalAlias()
+    }
+
+    private fun observeRoomCanonicalAlias() {
+        room.rx()
+                .liveStateEvent(EventType.STATE_ROOM_CANONICAL_ALIAS, QueryStringValue.NoCondition)
+                .mapOptional { it.content.toModel<RoomCanonicalAliasContent>() }
+                .unwrap()
+                .subscribe {
+                    setState {
+                        copy(canonicalAlias = it.canonicalAlias)
+                    }
+                }
+                .disposeOnClear()
     }
 
     override fun handle(action: TchapRoomLinkAccessAction) {
