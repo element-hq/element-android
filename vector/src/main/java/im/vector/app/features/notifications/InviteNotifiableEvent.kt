@@ -21,6 +21,7 @@ data class InviteNotifiableEvent(
         override val editedEventId: String?,
         override val canBeReplaced: Boolean,
         val roomId: String,
+        val roomName: String?,
         val noisy: Boolean,
         val title: String,
         val description: String,
