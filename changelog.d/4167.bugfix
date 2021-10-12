@@ -1,0 +1,1 @@
+Fixing push notifications starting the looping background sync when the push notification causes the application to be created.
