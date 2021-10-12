@@ -36,42 +36,42 @@ class FlowRoom(private val room: Room) {
 
     fun liveRoomSummary(): Flow<Optional<RoomSummary>> {
         return room.getRoomSummaryLive().asFlow()
-                .startWith {
+                .startWith(room.coroutineDispatchers.io) {
                     room.roomSummary().toOptional()
                 }
     }
 
     fun liveRoomMembers(queryParams: RoomMemberQueryParams): Flow<List<RoomMemberSummary>> {
         return room.getRoomMembersLive(queryParams).asFlow()
-                .startWith {
+                .startWith(room.coroutineDispatchers.io) {
                     room.getRoomMembers(queryParams)
                 }
     }
 
     fun liveAnnotationSummary(eventId: String): Flow<Optional<EventAnnotationsSummary>> {
         return room.getEventAnnotationsSummaryLive(eventId).asFlow()
-                .startWith {
+                .startWith(room.coroutineDispatchers.io) {
                     room.getEventAnnotationsSummary(eventId).toOptional()
                 }
     }
 
     fun liveTimelineEvent(eventId: String): Flow<Optional<TimelineEvent>> {
         return room.getTimeLineEventLive(eventId).asFlow()
-                .startWith {
+                .startWith(room.coroutineDispatchers.io) {
                     room.getTimeLineEvent(eventId).toOptional()
                 }
     }
 
     fun liveStateEvent(eventType: String, stateKey: QueryStringValue): Flow<Optional<Event>> {
         return room.getStateEventLive(eventType, stateKey).asFlow()
-                .startWith {
+                .startWith(room.coroutineDispatchers.io) {
                     room.getStateEvent(eventType, stateKey).toOptional()
                 }
     }
 
     fun liveStateEvents(eventTypes: Set<String>): Flow<List<Event>> {
         return room.getStateEventsLive(eventTypes).asFlow()
-                .startWith {
+                .startWith(room.coroutineDispatchers.io) {
                     room.getStateEvents(eventTypes)
                 }
     }
@@ -90,7 +90,7 @@ class FlowRoom(private val room: Room) {
 
     fun liveDraft(): Flow<Optional<UserDraft>> {
         return room.getDraftLive().asFlow()
-                .startWith {
+                .startWith(room.coroutineDispatchers.io) {
                     room.getDraft().toOptional()
                 }
     }

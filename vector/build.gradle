@@ -391,6 +391,7 @@ dependencies {
     //TODO: remove when entirely migrated to Flow
     implementation libs.airbnb.mavericksRx
 
+
     // Work
     implementation libs.androidx.work
 
@@ -513,6 +514,7 @@ dependencies {
     testImplementation libs.mockk.mockk
     // Plant Timber tree for test
     testImplementation libs.tests.timberJunitRule
+    testImplementation libs.airbnb.mavericksTesting
 
     // Activate when you want to check for leaks, from time to time.
     //debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.3'

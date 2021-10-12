@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.crypto.secrets
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.withContext
+import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.listeners.ProgressListener
 import org.matrix.android.sdk.api.session.accountdata.SessionAccountDataService
@@ -44,7 +45,6 @@ import org.matrix.android.sdk.internal.crypto.keysbackup.util.computeRecoveryKey
 import org.matrix.android.sdk.internal.crypto.tools.HkdfSha256
 import org.matrix.android.sdk.internal.crypto.tools.withOlmDecryption
 import org.matrix.android.sdk.internal.di.UserId
-import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
 import org.matrix.olm.OlmPkMessage
 import java.security.SecureRandom
 import javax.crypto.Cipher

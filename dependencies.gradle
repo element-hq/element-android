@@ -100,7 +100,8 @@ ext.libs = [
                 'epoxyProcessor'         : "com.airbnb.android:epoxy-processor:$epoxy",
                 'epoxyPaging'            : "com.airbnb.android:epoxy-paging:$epoxy",
                 'mavericks'              : "com.airbnb.android:mavericks:$mavericks",
-                'mavericksRx'            : "com.airbnb.android:mavericks-rxjava2:$mavericks"
+                'mavericksRx'            : "com.airbnb.android:mavericks-rxjava2:$mavericks",
+                'mavericksTesting'       : "com.airbnb.android:mavericks-testing:$mavericks"
         ],
         mockk      : [
                 'mockk'                   : "io.mockk:mockk:$mockk",

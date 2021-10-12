@@ -1,11 +1,11 @@
 /*
- * Copyright 2020 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2021 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,12 +14,15 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk
+package im.vector.app.test
 
-import kotlinx.coroutines.Dispatchers.Main
-import kotlinx.coroutines.asCoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
-import java.util.concurrent.Executors
 
-internal val testCoroutineDispatchers = MatrixCoroutineDispatchers(Main, Main, Main, Main,
-        Executors.newSingleThreadExecutor().asCoroutineDispatcher())
+internal val testCoroutineDispatchers = MatrixCoroutineDispatchers(
+        io = Dispatchers.Main,
+        computation = Dispatchers.Main,
+        main = Dispatchers.Main,
+        crypto = Dispatchers.Main,
+        dmVerif = Dispatchers.Main
+)
