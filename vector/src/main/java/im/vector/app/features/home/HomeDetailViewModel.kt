@@ -16,9 +16,9 @@
 
 package im.vector.app.features.home
 
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.asFlow
 import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -38,6 +38,7 @@ import im.vector.app.features.ui.UiStateRepository
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.query.ActiveSpaceFilter
 import org.matrix.android.sdk.api.query.RoomCategoryFilter
@@ -47,8 +48,8 @@ import org.matrix.android.sdk.api.session.room.RoomSortOrder
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.api.util.toMatrixItem
+import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.rx.asObservable
-import org.matrix.android.sdk.rx.rx
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
@@ -72,7 +73,7 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
         fun create(initialState: HomeDetailViewState): HomeDetailViewModel
     }
 
-    companion object : MvRxViewModelFactory<HomeDetailViewModel, HomeDetailViewState> {
+    companion object : MavericksViewModelFactory<HomeDetailViewModel, HomeDetailViewState> {
 
         override fun initialState(viewModelContext: ViewModelContext): HomeDetailViewState? {
             val uiStateRepository = (viewModelContext.activity as HasScreenInjector).injector().uiStateRepository()
@@ -95,7 +96,7 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
         updateShowDialPadTab()
         observeDataStore()
         callManager.addProtocolsCheckerListener(this)
-        session.rx().liveUser(session.myUserId).execute {
+        session.flow().liveUser(session.myUserId).execute {
             copy(
                     myMatrixItem = it.invoke()?.getOrNull()?.toMatrixItem()
             )
@@ -182,25 +183,18 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
     }
 
     private fun observeSyncState() {
-        session.rx()
+        session.flow()
                 .liveSyncState()
-                .subscribe { syncState ->
-                    setState {
-                        copy(syncState = syncState)
-                    }
+                .setOnEach { syncState ->
+                    copy(syncState = syncState)
                 }
-                .disposeOnClear()
 
         session.getSyncStatusLive()
-                .asObservable()
-                .subscribe {
-                    if (it is SyncStatusService.Status.IncrementalSyncStatus) {
-                        setState {
-                            copy(incrementalSyncStatus = it)
-                        }
-                    }
+                .asFlow()
+                .filterIsInstance<SyncStatusService.Status.IncrementalSyncStatus>()
+                .setOnEach {
+                    copy(incrementalSyncStatus = it)
                 }
-                .disposeOnClear()
     }
 
     private fun observeRoomGroupingMethod() {

@@ -211,7 +211,7 @@
     <string name="view_decrypted_source">Visszafejtett forrás megtekintése</string>
     <string name="delete">Törlés</string>
     <string name="rename">Átnevezés</string>
-    <string name="report_content">Tartalom bejelentése</string>
+    <string name="report_content">Tartalom Bejelentése</string>
     <string name="active_call">Aktív hívás</string>
     <string name="ongoing_conference_call">Folyamatban lévő konferenciahívás.
 \nCsatlakozás: %1$s vagy %2$s</string>
@@ -2306,7 +2306,6 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="this_is_the_beginning_of_room_no_name">Itt kezdődik ez a beszélgetés.</string>
     <string name="this_is_the_beginning_of_room">Ez a %s szoba kezdete.</string>
     <string name="direct_room_user_list_known_title">Ismert felhasználók</string>
-    <string name="user_directory_search_hint">Keresés névvel, vagy Matrix ID-vel</string>
     <string name="sent_a_reaction">Reakció: %s</string>
     <string name="action_add">Hozzáadás</string>
     <string name="call_notification_hangup">Befejezés</string>
@@ -2490,8 +2489,6 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="space_leave_prompt_msg_as_admin">Ön az egyetlen adminisztrátora a térnek. Ha kilép, senki nem tudja irányítani.</string>
     <string name="space_leave_prompt_msg_private">Amíg nem hívnak meg újra nem tudsz újracsatlakozni.</string>
     <string name="space_leave_prompt_msg_only_you">Csak te van itt. Ha kilépsz, akkor a jövőben senki nem tud majd ide belépni, beleértve téged is.</string>
-    <!-- TO BE REMOVED -->
-    <string name="space_leave_prompt_msg">Biztos el akarod hagyni a teret\?</string>
     <string name="leave_space">Tér elhagyása</string>
     <string name="space_add_child_title">Szobák hozzáadása</string>
     <string name="space_explore_activity_title">Szobák felderítése</string>
@@ -2890,13 +2887,13 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="voice_message_tap_to_stop_toast">Megállításhoz és visszajátszáshoz koppints a felvételre</string>
     <string name="voice_message_n_seconds_warning_toast">vissza van: %1$d</string>
     <string name="voice_message_release_to_send_toast">Felvételhez tartsd nyomva, a küldéshez engedd el</string>
-    <string name="a11y_delete_recorded_voice_message">Felvett hang üzenet törlése</string>
+    <string name="a11y_delete_recorded_voice_message">Felvétel törlése</string>
     <string name="a11y_recording_voice_message">Hang üzenet felvétel</string>
     <string name="a11y_pause_voice_message">Hang üzenet szüneteltetése</string>
     <string name="a11y_play_voice_message">Hang üzenet lejátszása</string>
     <string name="a11y_lock_voice_message">Hang üzenet kitartó rögzítése</string>
     <string name="voice_message_slide_to_cancel">Elhúzás a megszakításhoz</string>
-    <string name="a11y_start_voice_message">Hang üzenet indítása</string>
+    <string name="a11y_start_voice_message">Hang üzenet felvétele</string>
     <string name="allow_anyone_in_room_to_access">%s tér tagság megtalálhatja és hozzáférhet. Más tereket is beállíthatsz.</string>
     <string name="link_this_email_with_your_account">%s a Beállításokba a közvetlen meghívások fogadásához az Elemenetben.</string>
     <string name="this_invite_to_this_space_was_sent">Ehhez a térhez a meghívó ide lett elküldve: %s, ami nincs összefüggésben a fiókoddal</string>
@@ -2997,4 +2994,17 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="space_participants_kick_prompt_msg">a felhasználó kirúgása eltávolítja a térből.
 \n
 \nHa meg akarja akadályozni, hogy újra csatlakozzon, akkor inkább tiltsa ki.</string>
+    <string name="a11y_stop_voice_message">Felvétel megállítása</string>
+    <string name="command_description_lenny">( ͡° ͜ʖ ͡°) -t tesz a szöveg elejére</string>
+    <string name="identity_server_consent_dialog_neutral_policy">Felhasználási feltétel</string>
+    <string name="settings_discovery_no_policy_provided">Azonosítási szerver nem adott meg felhasználási feltételt</string>
+    <string name="settings_discovery_hide_identity_server_policy_title">Azonosítási szerver felhasználási feltételek elrejtése</string>
+    <string name="settings_discovery_show_identity_server_policy_title">Azonosítási szerver felhasználási feltételek megjelenítése</string>
+    <string name="command_description_whois">A felhasználóról információ megjelenítése</string>
+    <string name="command_description_avatar_for_room">Csak ebben a szobában változtatja meg a profilképedet</string>
+    <string name="command_description_room_avatar">Megváltoztatja a profilképed a jelenlegi szobában</string>
+    <string name="command_description_nick_for_room">Csak ebben a szobában változtatja meg a becenevedet</string>
+    <string name="command_description_room_name">Szobanév beállítása</string>
+    <string name="command_description_unignore_user">A felhasználó újbóli figyelembe vétele, és az üzenetei megjelenítése a jövőben</string>
+    <string name="command_description_ignore_user">Figyelmen kívül hagy egy felhasználót, elrejtve előled az üzeneteit</string>
 </resources>

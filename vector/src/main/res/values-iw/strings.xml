@@ -1602,7 +1602,6 @@
     <string name="link_copied_to_clipboard">הקישור הועתק ללוח</string>
     <string name="labs_show_unread_notifications_as_tab">הוסף כרטיסייה ייעודית להתראות שלא נקראו על המסך הראשי.</string>
     <string name="labs_swipe_to_reply_in_timeline">אפשר החלקה כדי להשיב בציר הזמן</string>
-    <string name="user_directory_search_hint">חפש לפי שם או תעודת זהות</string>
     <string name="room_directory_search_hint">שם או מזהה (# לדוגמא: matrix.ahava528.com)</string>
     <string name="room_filtering_footer_open_room_directory">צפו בספריית החדרים</string>
     <string name="room_filtering_footer_create_new_direct_message">שלח הודעה ישירה חדשה</string>

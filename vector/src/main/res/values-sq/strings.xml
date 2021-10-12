@@ -2483,7 +2483,6 @@
     <string name="direct_room_user_list_known_title">Përdorues të Ditur</string>
     <string name="qr_code">Kod QR</string>
     <string name="add_by_qr_code">Shtoni përmes kodi QR</string>
-    <string name="user_directory_search_hint">Kërkoni sipas emri ose ID-je</string>
     <string name="permissions_denied_qr_code">Që të skanoni një kod QR, lypset të lejoni përdorim kamere.</string>
     <string name="start_chatting">Filloni të Llafoseni</string>
     <string name="permissions_denied_add_contact">Jepni leje për hyrje te kontaktet tuaja.</string>
@@ -2668,8 +2667,6 @@
     <string name="you_are_invited">Jeni ftuar</string>
     <string name="spaces_beta_welcome_to_spaces">Mirë se vini te Hapësira!</string>
     <string name="space_add_existing_rooms">Shtoni dhoma ekzistuese dhe hapësira</string>
-    <!-- TO BE REMOVED -->
-    <string name="space_leave_prompt_msg">Jeni i sigurt se doni të dilni nga hapësira\?</string>
     <string name="leave_space">Braktiseni Hapësirën</string>
     <string name="space_add_child_title">Shtoni dhoma</string>
     <string name="space_explore_activity_title">Eksploroni dhoma</string>
@@ -2981,4 +2978,17 @@
     <string name="space_participants_kick_prompt_msg">Përzënia e përdoruesit do ta heqë prej kësaj hapësire.
 \n
 \nQë të pengohet pjesëmarrja sërish e tij, duhet ta dëboni.</string>
+    <string name="a11y_stop_voice_message">Ndale Regjistrimin</string>
+    <string name="command_description_lenny">I shton ( ͡° ͜ʖ ͡°) një mesazhi tekst të thjeshtë përpara</string>
+    <string name="identity_server_consent_dialog_neutral_policy">Rregulla</string>
+    <string name="settings_discovery_no_policy_provided">S’ka rregulla të dhëna nga shërbyesi i identiteteve</string>
+    <string name="settings_discovery_hide_identity_server_policy_title">Fshih rregulla shërbyesi identitetesh</string>
+    <string name="settings_discovery_show_identity_server_policy_title">Shfaq rregulla shërbyesi identitetesh</string>
+    <string name="command_description_whois">Shfaq hollësi mbi një përdorues</string>
+    <string name="command_description_avatar_for_room">Ndryshon avatarin tuaj vetëm në këtë dhomë</string>
+    <string name="command_description_room_avatar">Ndryshon avatarin e dhomës së tanishme</string>
+    <string name="command_description_nick_for_room">Ndryshon nofkën e shfaqur për ju vetëm në dhomën e tanishme</string>
+    <string name="command_description_room_name">Cakton emrin e dhomës</string>
+    <string name="command_description_unignore_user">E ndal shpërfilljen e një përdoruesi, duke i shfaqur mesazhet e tyre pas kësaj</string>
+    <string name="command_description_ignore_user">Shpërfill një përdorues, duke fshehur mesazhet e tij prej jush</string>
 </resources>

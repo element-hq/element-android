@@ -1,1 +1,0 @@
-Android Auto notification support

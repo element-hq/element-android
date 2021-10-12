@@ -171,7 +171,7 @@ class SpaceCreationActivity : SimpleFragmentActivity(), CreateSpaceViewModel.Fac
 
         fun newIntent(context: Context): Intent {
             return Intent(context, SpaceCreationActivity::class.java).apply {
-                // putExtra(MvRx.KEY_ARG, SpaceDirectoryArgs(spaceId))
+                // putExtra(Mavericks.KEY_ARG, SpaceDirectoryArgs(spaceId))
             }
         }
 

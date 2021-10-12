@@ -244,20 +244,22 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         interceptorHelper.intercept(models, partialState.unreadState, timeline, callback)
     }
 
-    fun update(viewState: RoomDetailViewState) = synchronized(modelCache) {
-        val newPartialState = PartialState(viewState)
-        if (partialState.highlightedEventId != newPartialState.highlightedEventId) {
-            // Clear cache to force a refresh
-            for (i in 0 until modelCache.size) {
-                if (modelCache[i]?.eventId == viewState.highlightedEventId ||
-                        modelCache[i]?.eventId == partialState.highlightedEventId) {
-                    modelCache[i] = null
+    fun update(viewState: RoomDetailViewState) = backgroundHandler.post {
+        synchronized(modelCache) {
+            val newPartialState = PartialState(viewState)
+            if (partialState.highlightedEventId != newPartialState.highlightedEventId) {
+                // Clear cache to force a refresh
+                for (i in 0 until modelCache.size) {
+                    if (modelCache[i]?.eventId == viewState.highlightedEventId ||
+                            modelCache[i]?.eventId == partialState.highlightedEventId) {
+                        modelCache[i] = null
+                    }
                 }
             }
-        }
-        if (newPartialState != partialState) {
-            partialState = newPartialState
-            requestModelBuild()
+            if (newPartialState != partialState) {
+                partialState = newPartialState
+                requestModelBuild()
+            }
         }
     }
 

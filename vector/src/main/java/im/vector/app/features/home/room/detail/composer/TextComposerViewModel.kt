@@ -16,9 +16,8 @@
 
 package im.vector.app.features.home.room.detail.composer
 
-import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -33,7 +32,7 @@ import im.vector.app.features.home.room.detail.ChatEffect
 import im.vector.app.features.home.room.detail.RoomDetailFragment
 import im.vector.app.features.home.room.detail.composer.rainbow.RainbowGenerator
 import im.vector.app.features.home.room.detail.toMessageType
-import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
+import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.VectorPreferences
 import kotlinx.coroutines.Dispatchers
@@ -130,14 +129,11 @@ class TextComposerViewModel @AssistedInject constructor(
     }
 
     private fun observePowerLevel() {
-        PowerLevelsObservableFactory(room).createObservable()
-                .subscribe {
+        PowerLevelsFlowFactory(room).createFlow()
+                .setOnEach {
                     val canSendMessage = PowerLevelsHelper(it).isUserAllowedToSend(session.myUserId, false, EventType.MESSAGE)
-                    setState {
-                        copy(canSendMessage = canSendMessage)
-                    }
+                    copy(canSendMessage = canSendMessage)
                 }
-                .disposeOnClear()
     }
 
     private fun handleEnterQuoteMode(action: TextComposerAction.EnterQuoteMode) {
@@ -711,7 +707,7 @@ class TextComposerViewModel @AssistedInject constructor(
         fun create(initialState: TextComposerViewState): TextComposerViewModel
     }
 
-    companion object : MvRxViewModelFactory<TextComposerViewModel, TextComposerViewState> {
+    companion object : MavericksViewModelFactory<TextComposerViewModel, TextComposerViewState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: TextComposerViewState): TextComposerViewModel {

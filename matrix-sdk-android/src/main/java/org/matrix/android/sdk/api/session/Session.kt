@@ -20,6 +20,7 @@ import androidx.annotation.MainThread
 import androidx.lifecycle.LiveData
 import kotlinx.coroutines.flow.SharedFlow
 import okhttp3.OkHttpClient
+import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.auth.data.SessionParams
 import org.matrix.android.sdk.api.failure.GlobalError
 import org.matrix.android.sdk.api.federation.FederationService
@@ -83,6 +84,8 @@ interface Session :
         HomeServerCapabilitiesService,
         SecureStorageService,
         AccountService {
+
+    val coroutineDispatchers: MatrixCoroutineDispatchers
 
     /**
      * The params associated to the session

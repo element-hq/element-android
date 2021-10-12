@@ -543,7 +543,7 @@
     <string name="later">稍后再说</string>
     <string name="permalink">永久链接</string>
     <string name="rename">重命名</string>
-    <string name="report_content">举报消息</string>
+    <string name="report_content">举报内容</string>
     <string name="active_call">当前通话</string>
     <string name="ongoing_conference_call">正在进行电话会议。
 \n请以 %1$s 或 %2$s 的形式加入</string>
@@ -2172,7 +2172,7 @@
     <string name="identity_server_error_terms_not_signed">请先在设置中接受身份服务器的条款。</string>
     <string name="template_identity_server_error_bulk_sha256_not_supported">为了你的隐私，${app_name} 仅支持发送用户电子邮件和电话号码的哈希值。</string>
     <string name="identity_server_error_binding_error">关联失败。</string>
-    <string name="identity_server_error_no_current_binding_error">目前与此标识符没有关联。</string>
+    <string name="identity_server_error_no_current_binding_error">当前与此标识符没有关联。</string>
     <string name="identity_server_set_default_notice">你的主服务器（%1$s）建议使用 %2$s 作为你的身份服务器</string>
     <string name="identity_server_set_default_submit">使用 %1$s</string>
     <string name="identity_server_set_alternative_notice">或者，你可以输入任何其他身份服务器 URL</string>
@@ -2419,7 +2419,6 @@
     <string name="direct_room_user_list_recent_title">最近</string>
     <string name="qr_code">二维码</string>
     <string name="add_by_qr_code">通过二维码添加</string>
-    <string name="user_directory_search_hint">通过名称或 ID 搜索</string>
     <string name="create_room_settings_section">聊天室设置</string>
     <string name="create_room_topic_hint">主题</string>
     <string name="create_room_topic_section">聊天室话题（可选）</string>
@@ -2602,8 +2601,6 @@
     <string name="space_leave_prompt_msg_as_admin">你是此空间唯一的管理员。离开就意味着没人能控制它。</string>
     <string name="space_leave_prompt_msg_private">除非你被重新邀请，否则你将无法重新加入。</string>
     <string name="space_leave_prompt_msg_only_you">你是这唯一的人。如果你离开，包括你在内的所有人都将无法加入此空间。</string>
-    <!-- TO BE REMOVED -->
-    <string name="space_leave_prompt_msg">你确定你想要离开此空间吗？</string>
     <string name="leave_space">离开空间</string>
     <string name="space_add_child_title">添加聊天室</string>
     <string name="space_explore_activity_title">探索聊天室</string>
@@ -2814,13 +2811,13 @@
     <string name="voice_message_tap_to_stop_toast">点按您的录音以停止或收听</string>
     <string name="voice_message_n_seconds_warning_toast">剩余 %1$d秒</string>
     <string name="voice_message_release_to_send_toast">按住录音，松开发送</string>
-    <string name="a11y_delete_recorded_voice_message">删除录制的语音消息</string>
+    <string name="a11y_delete_recorded_voice_message">删除录音</string>
     <string name="a11y_recording_voice_message">录制语音消息</string>
     <string name="a11y_pause_voice_message">暂停语音消息</string>
     <string name="a11y_play_voice_message">播放语音消息</string>
     <string name="a11y_lock_voice_message">语音消息锁</string>
     <string name="voice_message_slide_to_cancel">滑动取消</string>
-    <string name="a11y_start_voice_message">开始语音消息</string>
+    <string name="a11y_start_voice_message">录制语音消息</string>
     <string name="allow_anyone_in_room_to_access">允许 %s 中的任何人查找和访问。 您也可以选择其他空间。</string>
     <string name="upgrade_required">需要升级</string>
     <string name="sent_a_voice_message">语音</string>
@@ -2946,4 +2943,17 @@
     <string name="space_participants_kick_prompt_msg">把用户踢出也会从这个空间删除他们。
 \n
 \n为了防止他们再次加入，你应该封禁他们。</string>
+    <string name="a11y_stop_voice_message">停止录制</string>
+    <string name="command_description_lenny">预置 ( ͡° ͜ʖ ͡°) 到纯文本消息</string>
+    <string name="identity_server_consent_dialog_neutral_policy">政策</string>
+    <string name="settings_discovery_no_policy_provided">身份服务器未提供政策</string>
+    <string name="settings_discovery_hide_identity_server_policy_title">隐藏身份服务器政策</string>
+    <string name="settings_discovery_show_identity_server_policy_title">显示身份服务器策略</string>
+    <string name="command_description_whois">显示用户信息</string>
+    <string name="command_description_avatar_for_room">仅更改您在当前聊天室的头像</string>
+    <string name="command_description_room_avatar">更改当前聊天室的头像</string>
+    <string name="command_description_nick_for_room">仅在当前聊天室更改您的显示昵称</string>
+    <string name="command_description_room_name">设置聊天室名称</string>
+    <string name="command_description_unignore_user">停止忽略用户，继续显示他们的消息</string>
+    <string name="command_description_ignore_user">忽略用户，隐藏他们的消息</string>
 </resources>

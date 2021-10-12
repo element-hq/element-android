@@ -19,10 +19,10 @@ package org.matrix.android.sdk.internal.crypto
 import android.util.LruCache
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.internal.crypto.model.OlmInboundGroupSessionWrapper2
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
-import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
 import timber.log.Timber
 import java.util.Timer
 import java.util.TimerTask

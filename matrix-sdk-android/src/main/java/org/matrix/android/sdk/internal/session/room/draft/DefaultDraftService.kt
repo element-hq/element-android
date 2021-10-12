@@ -21,10 +21,10 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.withContext
+import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.session.room.send.DraftService
 import org.matrix.android.sdk.api.session.room.send.UserDraft
 import org.matrix.android.sdk.api.util.Optional
-import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
 
 internal class DefaultDraftService @AssistedInject constructor(@Assisted private val roomId: String,
                                                                private val draftRepository: DraftRepository,

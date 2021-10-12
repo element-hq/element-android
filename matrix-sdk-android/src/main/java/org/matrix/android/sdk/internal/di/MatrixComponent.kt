@@ -24,6 +24,7 @@ import dagger.Component
 import okhttp3.OkHttpClient
 import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.MatrixConfiguration
+import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.auth.HomeServerHistoryService
 import org.matrix.android.sdk.api.raw.RawService
@@ -35,7 +36,6 @@ import org.matrix.android.sdk.internal.session.MockHttpInterceptor
 import org.matrix.android.sdk.internal.session.TestInterceptor
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.util.BackgroundDetectionObserver
-import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.internal.util.system.SystemModule
 import org.matrix.olm.OlmManager
 import java.io.File

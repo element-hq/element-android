@@ -17,7 +17,7 @@
 package im.vector.app.features.login2.created
 
 import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.Uninitialized
 import org.matrix.android.sdk.api.util.MatrixItem
 
@@ -26,4 +26,4 @@ data class AccountCreatedViewState(
         val isLoading: Boolean = false,
         val currentUser: Async<MatrixItem.UserItem> = Uninitialized,
         val hasBeenModified: Boolean = false
-) : MvRxState
+) : MavericksState

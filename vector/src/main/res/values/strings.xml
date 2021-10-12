@@ -2308,8 +2308,6 @@
     <string name="room_filtering_footer_open_room_directory">View the room directory</string>
 
     <string name="room_directory_search_hint">Name or ID (#example:matrix.org)</string>
-    <!-- TO BE REMOVED -->
-    <string name="user_directory_search_hint">Search by name or ID</string>
     <string name="user_directory_search_hint_2">Search by name, ID or mail</string>
 
     <string name="search_hint_room_name">Search Name</string>
@@ -2349,6 +2347,9 @@
     <string name="add_identity_server">Configure identity server</string>
     <string name="open_discovery_settings">Open Discovery Settings</string>
     <string name="change_identity_server">Change identity server</string>
+    <string name="settings_discovery_show_identity_server_policy_title">Show identity server policy</string>
+    <string name="settings_discovery_hide_identity_server_policy_title">Hide identity server policy</string>
+    <string name="settings_discovery_no_policy_provided">No policy provided by the identity server</string>
     <string name="settings_discovery_identity_server_info">You are currently using %1$s to discover and be discoverable by existing contacts you know.</string>
     <string name="settings_discovery_identity_server_info_none">You are not currently using an identity server. To discover and be discoverable by existing contacts you know, configure one below.</string>
     <string name="settings_discovery_emails_title">Discoverable email addresses</string>
@@ -2367,6 +2368,7 @@
 
     <string name="identity_server_consent_dialog_title">Send emails and phone numbers</string>
     <string name="identity_server_consent_dialog_content">In order to discover existing contacts you know, do you accept to send your contact data (phone numbers and/or emails) to the configured identity server (%1$s)?\n\nFor more privacy, the sent data will be hashed before being sent.</string>
+    <string name="identity_server_consent_dialog_neutral_policy">Policy</string>
 
     <string name="settings_discovery_enter_identity_server">Enter an identity server URL</string>
     <string name="settings_discovery_bad_identity_server">Could not connect to identity server</string>
@@ -3517,8 +3519,6 @@
     <string name="space_add_child_title">Add rooms</string>
     <string name="leave_space">Leave Space</string>
     <string name="space_leave_prompt_msg_with_name">Are you sure you want to leave %s?</string>
-    <!-- TO BE REMOVED -->
-    <string name="space_leave_prompt_msg">Are you sure you want to leave the space?</string>
     <string name="space_leave_prompt_msg_only_you">You are the only person here. If you leave, no one will be able to join in the future, including you.</string>
     <string name="space_leave_prompt_msg_private">You won\'t be able to rejoin unless you are re-invited.</string>
     <string name="space_leave_prompt_msg_as_admin">You\'re the only admin of this space. Leaving it will mean no one has control over it.</string>

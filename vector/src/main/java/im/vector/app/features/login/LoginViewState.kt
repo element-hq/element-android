@@ -18,7 +18,7 @@ package im.vector.app.features.login
 
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.PersistState
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
@@ -55,7 +55,7 @@ data class LoginViewState(
         @PersistState
 val loginModeSupportedTypes: List<String> = emptyList(),
         val knownCustomHomeServersUrls: List<String> = emptyList()
-) : MvRxState {
+) : MavericksState {
 
     fun isLoading(): Boolean {
         return asyncLoginAction is Loading ||

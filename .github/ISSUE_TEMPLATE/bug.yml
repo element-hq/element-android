@@ -64,9 +64,9 @@ body:
   - type: dropdown
     id: rageshake
     attributes:
-      label: Have you submitted a rageshake?
+      label: Will you send logs?
       description:  |
-        Did you know that you can shake your phone to submit logs for this issue? Trigger the defect, then shake your phone and you will see a popup asking if you would like to open the bug report screen. Click YES, and describe the issue, mentioning that you have also filed a bug. Submit the report to send anonymous logs to the developers.
+        Did you know that you can shake your phone to submit logs for this issue? Trigger the defect, then shake your phone and you will see a popup asking if you would like to open the bug report screen. Click YES, and describe the issue, mentioning that you have also filed a bug (it's helpful if you can include a link to the bug). Send the report to submit anonymous logs to the developers.
       options:
         - 'Yes'
         - 'No'

@@ -296,7 +296,7 @@
     <string name="view_decrypted_source">Visualizar Fonte Decriptada</string>
     <string name="delete">Deletar</string>
     <string name="rename">Renomear</string>
-    <string name="report_content">Reportar conteúdo</string>
+    <string name="report_content">Reportar Conteúdo</string>
     <string name="active_call">Chamada ativa</string>
     <string name="ongoing_conference_call">Chamada de conferência em curso.
 \nJunte-se como %1$s ou %2$s</string>
@@ -2567,7 +2567,6 @@
     <string name="direct_room_user_list_known_title">Usuárias(os) Conhecidas(os)</string>
     <string name="qr_code">QR code</string>
     <string name="add_by_qr_code">Adicionar por QR code</string>
-    <string name="user_directory_search_hint">Pesquisar por nome ou ID</string>
     <string name="permissions_denied_add_contact">Aceitar permissão para acessar seus contatos.</string>
     <string name="permissions_denied_qr_code">Para scannear um QR code, você precisa permitir acesso a câmera.</string>
     <string name="start_chatting">Começar a Conversar</string>
@@ -2815,8 +2814,6 @@
     <string name="space_leave_prompt_msg_as_admin">Você é a/o única(o) admin deste espaço. Sair dele vai significar que ninguém tem controle sobre ele.</string>
     <string name="space_leave_prompt_msg_private">Você não vai ser capaz de se rejuntar a menos que você seja re-convidada(o).</string>
     <string name="space_leave_prompt_msg_only_you">Você é a única pessoa aqui. Se você sair, ninguém vai ser capaz de se juntar no futuro, incluindo você.</string>
-    <!-- TO BE REMOVED -->
-    <string name="space_leave_prompt_msg">Você tem certeza que você quer sair do espaço\?</string>
     <string name="leave_space">Sair de Espaço</string>
     <string name="space_add_child_title">Adicionar salas</string>
     <string name="space_explore_activity_title">Explorar salas</string>
@@ -2929,13 +2926,13 @@
     <string name="voice_message_tap_to_stop_toast">Toque em sua gravação para parar ou escutar</string>
     <string name="voice_message_n_seconds_warning_toast">%1$ds restando</string>
     <string name="voice_message_release_to_send_toast">Segure para gravar, solte para enviar</string>
-    <string name="a11y_delete_recorded_voice_message">Deletar mensagem de voz gravada</string>
+    <string name="a11y_delete_recorded_voice_message">Deletar gravação</string>
     <string name="a11y_recording_voice_message">Gravando mensagem de voz</string>
     <string name="a11y_pause_voice_message">Pausar Mensagem de Voz</string>
     <string name="a11y_play_voice_message">Tocar Mensagem de Voz</string>
     <string name="a11y_lock_voice_message">Cadeado de Mensagem de Voz</string>
     <string name="voice_message_slide_to_cancel">Deslize para cancelar</string>
-    <string name="a11y_start_voice_message">Começar Mensagem de Voz</string>
+    <string name="a11y_start_voice_message">Gravar Mensagem de Voz</string>
     <string name="allow_anyone_in_room_to_access">Permitir qualquer pessoa em %s a encontrar e acessar. Você pode selecionar outros espaços também.</string>
     <string name="upgrade_required">Upgrade Requerido</string>
     <string name="sent_a_voice_message">Voz</string>
@@ -3062,4 +3059,17 @@
     <string name="space_participants_kick_prompt_msg">expulsar usuária(o) vai removê-la(o) deste espaço.
 \n
 \nPara preveni-la(o) de se juntar de novo, você devia bani-la(o) em vez disso.</string>
+    <string name="a11y_stop_voice_message">Parar de Gravar</string>
+    <string name="command_description_lenny">Prepende ( ͡° ͜ʖ ͡°) a uma mensagem de texto puro</string>
+    <string name="identity_server_consent_dialog_neutral_policy">Política</string>
+    <string name="settings_discovery_no_policy_provided">Nenhuma política provida pelo servidor de identidade</string>
+    <string name="settings_discovery_hide_identity_server_policy_title">Esconder política de servidor de identidade</string>
+    <string name="settings_discovery_show_identity_server_policy_title">Mostrar política de servidor de identidade</string>
+    <string name="command_description_whois">Exibe informação sobre um/uma usuário(a)</string>
+    <string name="command_description_avatar_for_room">Muda seu avatar nesta sala atual somente</string>
+    <string name="command_description_room_avatar">Muda o avatar da sala atual</string>
+    <string name="command_description_nick_for_room">Muda seu apelido de exibição na sala atual somente</string>
+    <string name="command_description_room_name">Define o nome da sala</string>
+    <string name="command_description_unignore_user">Para de ignorar um/uma usuário(a), mostrando as mensagens dele/dela de agora em diante</string>
+    <string name="command_description_ignore_user">Ignora um/uma usuário(a), escondendo as mensagens dele/dela de você</string>
 </resources>

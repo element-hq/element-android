@@ -1,0 +1,2 @@
+Perubahan utama dalam versi ini: Organisir ruangan Anda dengan menggunakan sebuah Space! v1.3.1 memperbaiki crash yang dapat terjadi di v1.3.0.
+Changelog lengkap: https://github.com/vector-im/element-android/releases/tag/v1.3.1

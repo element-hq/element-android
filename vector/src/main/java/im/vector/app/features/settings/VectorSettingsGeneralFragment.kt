@@ -38,6 +38,7 @@ import im.vector.app.R
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.hidePassword
+import im.vector.app.core.extensions.toMvRxBundle
 import im.vector.app.core.intent.getFilenameFromUri
 import im.vector.app.core.platform.SimpleTextWatcher
 import im.vector.app.core.preference.UserAvatarPreference
@@ -50,16 +51,22 @@ import im.vector.app.core.utils.toast
 import im.vector.app.databinding.DialogChangePasswordBinding
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
+import im.vector.app.features.discovery.DiscoverySettingsFragment
+import im.vector.app.features.navigation.SettingsActivityPayload
 import im.vector.app.features.workers.signout.SignOutUiWorker
-import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.distinctUntilChangedBy
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.failure.isInvalidPassword
 import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerConfig
 import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerService
-import org.matrix.android.sdk.rx.rx
-import org.matrix.android.sdk.rx.unwrap
+import org.matrix.android.sdk.flow.flow
+import org.matrix.android.sdk.flow.unwrap
 import java.io.File
 import java.util.UUID
 import javax.inject.Inject
@@ -118,29 +125,29 @@ class VectorSettingsGeneralFragment @Inject constructor(
     }
 
     private fun observeUserAvatar() {
-        session.rx()
+        session.flow()
                 .liveUser(session.myUserId)
                 .unwrap()
-                .distinctUntilChanged { user -> user.avatarUrl }
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { mUserAvatarPreference.refreshAvatar(it) }
-                .disposeOnDestroyView()
+                .distinctUntilChangedBy { user -> user.avatarUrl }
+                .onEach {
+                    mUserAvatarPreference.refreshAvatar(it)
+                }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     private fun observeUserDisplayName() {
-        session.rx()
+        session.flow()
                 .liveUser(session.myUserId)
                 .unwrap()
                 .map { it.displayName ?: "" }
                 .distinctUntilChanged()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { displayName ->
+                .onEach { displayName ->
                     mDisplayNamePreference.let {
                         it.summary = displayName
                         it.text = displayName
                     }
                 }
-                .disposeOnDestroyView()
+                .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     override fun bindPref() {
@@ -172,6 +179,19 @@ class VectorSettingsGeneralFragment @Inject constructor(
         } else {
             mPasswordPreference.isVisible = false
         }
+
+        val openDiscoveryScreenPreferenceClickListener = Preference.OnPreferenceClickListener {
+            (requireActivity() as VectorSettingsActivity).navigateTo(
+                    DiscoverySettingsFragment::class.java,
+                    SettingsActivityPayload.DiscoverySettings().toMvRxBundle()
+            )
+            true
+        }
+
+        val discoveryPreference = findPreference<VectorPreference>(VectorPreferences.SETTINGS_DISCOVERY_PREFERENCE_KEY)!!
+        discoveryPreference.onPreferenceClickListener = openDiscoveryScreenPreferenceClickListener
+
+        mIdentityServerPreference.onPreferenceClickListener = openDiscoveryScreenPreferenceClickListener
 
         // Advanced settings
 

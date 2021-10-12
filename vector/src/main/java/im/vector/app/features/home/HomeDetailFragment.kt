@@ -134,7 +134,7 @@ class HomeDetailFragment @Inject constructor(
             views.bottomNavigationView.selectedItemId = it.currentTab.toMenuId()
         }
 
-        viewModel.selectSubscribe(this, HomeDetailViewState::roomGroupingMethod) { roomGroupingMethod ->
+        viewModel.onEach(HomeDetailViewState::roomGroupingMethod) { roomGroupingMethod ->
             when (roomGroupingMethod) {
                 is RoomGroupingMethod.ByLegacyGroup -> {
                     onGroupChange(roomGroupingMethod.groupSummary)
@@ -145,23 +145,23 @@ class HomeDetailFragment @Inject constructor(
             }
         }
 
-        viewModel.selectSubscribe(this, HomeDetailViewState::currentTab) { currentTab ->
+        viewModel.onEach(HomeDetailViewState::currentTab) { currentTab ->
             updateUIForTab(currentTab)
         }
 
-        viewModel.selectSubscribe(this, HomeDetailViewState::showDialPadTab) { showDialPadTab ->
+        viewModel.onEach(HomeDetailViewState::showDialPadTab) { showDialPadTab ->
             updateTabVisibilitySafely(R.id.bottom_action_dial_pad, showDialPadTab)
         }
 
         viewModel.observeViewEvents { viewEvent ->
             when (viewEvent) {
-                HomeDetailViewEvents.CallStarted   -> dismissLoadingDialog()
+                HomeDetailViewEvents.CallStarted   -> handleCallStarted()
                 is HomeDetailViewEvents.FailToCall -> showFailure(viewEvent.failure)
                 HomeDetailViewEvents.Loading       -> showLoadingDialog()
             }
         }
 
-        unknownDeviceDetectorSharedViewModel.subscribe { state ->
+        unknownDeviceDetectorSharedViewModel.onEach { state ->
             state.unknownSessions.invoke()?.let { unknownDevices ->
 //                Timber.v("## Detector Triggerred in fragment - ${unknownDevices.firstOrNull()}")
                 if (unknownDevices.firstOrNull()?.currentSessionTrust == true) {
@@ -179,7 +179,7 @@ class HomeDetailFragment @Inject constructor(
             }
         }
 
-        unreadMessagesSharedViewModel.subscribe { state ->
+        unreadMessagesSharedViewModel.onEach { state ->
             views.drawerUnreadCounterBadgeView.render(
                     UnreadCounterBadgeView.State(
                             count = state.otherSpacesUnread.totalCount,
@@ -190,10 +190,16 @@ class HomeDetailFragment @Inject constructor(
 
         sharedCallActionViewModel
                 .liveKnownCalls
-                .observe(viewLifecycleOwner, {
+                .observe(viewLifecycleOwner) {
                     currentCallsViewPresenter.updateCall(callManager.getCurrentCall(), callManager.getCalls())
                     invalidateOptionsMenu()
-                })
+                }
+    }
+
+    private fun handleCallStarted() {
+        dismissLoadingDialog()
+        val fragmentTag = HomeTab.DialPad.toFragmentTag()
+        (childFragmentManager.findFragmentByTag(fragmentTag) as? DialPadFragment)?.clear()
     }
 
     override fun onDestroyView() {
@@ -370,8 +376,10 @@ class HomeDetailFragment @Inject constructor(
         invalidateOptionsMenu()
     }
 
+    private fun HomeTab.toFragmentTag() = "FRAGMENT_TAG_$this"
+
     private fun updateSelectedFragment(tab: HomeTab) {
-        val fragmentTag = "FRAGMENT_TAG_$tab"
+        val fragmentTag = tab.toFragmentTag()
         val fragmentToShow = childFragmentManager.findFragmentByTag(fragmentTag)
         childFragmentManager.commitTransaction {
             childFragmentManager.fragments

@@ -2437,7 +2437,6 @@
     <string name="direct_room_user_list_recent_title">اخیر</string>
     <string name="qr_code">رمز QR</string>
     <string name="add_by_qr_code">افزودن با رمز QR</string>
-    <string name="user_directory_search_hint">جست‌وجو با نام یا شناسه</string>
     <string name="permissions_denied_add_contact">دادن اجازهٔ دسترسی به آشنایانتان.</string>
     <string name="permissions_denied_qr_code">برای پویش یک رمز QR نیاز است دسترسی به دوربین را مجاز کنید.</string>
     <string name="start_chatting">آغاز به گپ</string>
@@ -2447,7 +2446,7 @@
 \n
 \nبرای محرمانگی بیش‌تر، داده‌ها پیش از ارسال، درهم ریخته می‌شوند.</string>
     <string name="bottom_sheet_setup_secure_backup_security_key_subtitle">یک کلید امنیتی ایجاد کنید تا در مکانی امن مانند سامانه مدیریت رمز عبور یا گاوصندوق آن را ذخیره کنید.</string>
-    <string name="identity_server_error_no_current_binding_error">در حال حاضر هیچ ارتباطی با این شناسه وجود ندارد.</string>
+    <string name="identity_server_error_no_current_binding_error">ارتباطی با این شناسه وجود ندارد.</string>
     <string name="confirm_your_identity_quad_s">هویت خود را تأیید کنید تا به پیام‌های رمز شده دسترسی پیدا کنید.</string>
     <string name="confirm_your_identity">هویت خود را با تأیید این ورود به سیستم از یکی دیگر از نشست‌های خود، تأیید کنید تا به پیام‌های رمز شده دسترسی پیدا کنید.</string>
     <plurals name="secure_backup_reset_devices_you_can_verify">
@@ -2679,8 +2678,6 @@
     <string name="spaces_beta_welcome_to_spaces_desc">فضاها شیوه‌ای جدید برای گروه‌بندی اتاق‌ها و افراد است.</string>
     <string name="spaces_beta_welcome_to_spaces">به فضاها خوش آمدید!</string>
     <string name="space_add_existing_rooms">افزودن فضا و اتاق‌های موجود</string>
-    <!-- TO BE REMOVED -->
-    <string name="space_leave_prompt_msg">مطمئنید که می‌خواهید فضا را ترک کنید؟</string>
     <string name="leave_space">ترک فضا</string>
     <string name="space_add_child_title">افزودن اتاق</string>
     <string name="space_explore_activity_title">کاوش در اتاق‌ها</string>
@@ -2847,13 +2844,13 @@
     <string name="voice_message_tap_to_stop_toast">برای توقّف یا شمیدن، روی ضبطتان بزنید</string>
     <string name="voice_message_n_seconds_warning_toast">%1$dث مانده</string>
     <string name="voice_message_release_to_send_toast">برای ضبط نگه دارید. برای فرستادن رها کنید</string>
-    <string name="a11y_delete_recorded_voice_message">حذف پیام صوتی ضبط‌شده</string>
+    <string name="a11y_delete_recorded_voice_message">حذف ضبط</string>
     <string name="a11y_recording_voice_message">ضبط کردن پیام صوتی</string>
     <string name="a11y_pause_voice_message">مکث پیام صوتی</string>
     <string name="a11y_play_voice_message">پخش پیام صوتی</string>
     <string name="a11y_lock_voice_message">قفل پیام صوتی</string>
     <string name="voice_message_slide_to_cancel">برای لغو، بکشید</string>
-    <string name="a11y_start_voice_message">آغاز پیام صوتی</string>
+    <string name="a11y_start_voice_message">ضبط پیام صوتی</string>
     <string name="upgrade_required">نیازمند ارتقا</string>
     <string name="sent_a_voice_message">صدا</string>
     <string name="other_spaces_or_rooms_you_might_not_know">دیگر فضاها یا اتاق‌هایی که ممکن است نشناسید</string>
@@ -2992,4 +2989,17 @@
     <string name="space_participants_kick_prompt_msg">اخراج کاربر، از این فضا برش می‌دارد.
 \n
 \nبرای پیش‌گیری از پیوستن دوباره، باید تحریمش کنید.</string>
+    <string name="a11y_stop_voice_message">پایان ضبط</string>
+    <string name="command_description_lenny">( ͡° ͜ʖ ͡°) را به ابتدای پیام‌های متنی خام می‌افزاید</string>
+    <string name="identity_server_consent_dialog_neutral_policy">سیاست</string>
+    <string name="settings_discovery_no_policy_provided">سیاستی از سوری کارساز هویت فراهم نشده</string>
+    <string name="settings_discovery_hide_identity_server_policy_title">نهفتن سیاست کارساز هویت</string>
+    <string name="settings_discovery_show_identity_server_policy_title">نمایش سیاست کارساز هویت</string>
+    <string name="command_description_whois">اطّلاعات را دربارهٔ کاربر نشان می‌دهد</string>
+    <string name="command_description_avatar_for_room">چهرکتان را فقط در این اتاق تغییر می‌دهد</string>
+    <string name="command_description_room_avatar">چهرک اتاق کنونی را تفییر می‌دهد</string>
+    <string name="command_description_nick_for_room">نام نمایشیتان را فقط در اتاق کنونی تغییر می‌دهد</string>
+    <string name="command_description_room_name">نام اتاق را تنظیم می‌کند</string>
+    <string name="command_description_unignore_user">به کاربری چشم گشوده و پیام‌های بعدیش را نشان می‌دهد</string>
+    <string name="command_description_ignore_user">از کاربری چشم‌پوشی کرده و پیام‌هایش را از شما پنهان می‌کند</string>
 </resources>

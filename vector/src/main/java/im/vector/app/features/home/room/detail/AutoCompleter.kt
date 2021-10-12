@@ -220,8 +220,15 @@ class AutoCompleter @AssistedInject constructor(
         // Replace the word by its completion
         val displayName = matrixItem.getBestName()
 
-        // with a trailing space
-        editable.replace(startIndex, endIndex, "$displayName ")
+        // Adding trailing space " " or ": " if the user started mention someone
+        val displayNameSuffix =
+                if (firstChar == "@" && startIndex == 0) {
+                    ": "
+                } else {
+                    " "
+                }
+
+        editable.replace(startIndex, endIndex, "$displayName$displayNameSuffix")
 
         // Add the span
         val span = PillImageSpan(

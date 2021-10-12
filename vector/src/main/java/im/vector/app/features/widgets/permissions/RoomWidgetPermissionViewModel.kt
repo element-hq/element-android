@@ -15,23 +15,24 @@
  */
 package im.vector.app.features.widgets.permissions
 
-import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.R
 import im.vector.app.core.platform.VectorViewModel
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.widgets.model.WidgetType
-import org.matrix.android.sdk.rx.rx
+import org.matrix.android.sdk.flow.flow
 import timber.log.Timber
 import java.net.URL
 
@@ -48,7 +49,7 @@ class RoomWidgetPermissionViewModel @AssistedInject constructor(@Assisted val in
 
     private fun observeWidget() {
         val widgetId = initialState.widgetId ?: return
-        session.rx()
+        session.flow()
                 .liveRoomWidgets(initialState.roomId, QueryStringValue.Equals(widgetId))
                 .filter { it.isNotEmpty() }
                 .map {
@@ -144,7 +145,7 @@ class RoomWidgetPermissionViewModel @AssistedInject constructor(@Assisted val in
         fun create(initialState: RoomWidgetPermissionViewState): RoomWidgetPermissionViewModel
     }
 
-    companion object : MvRxViewModelFactory<RoomWidgetPermissionViewModel, RoomWidgetPermissionViewState> {
+    companion object : MavericksViewModelFactory<RoomWidgetPermissionViewModel, RoomWidgetPermissionViewState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: RoomWidgetPermissionViewState): RoomWidgetPermissionViewModel? {

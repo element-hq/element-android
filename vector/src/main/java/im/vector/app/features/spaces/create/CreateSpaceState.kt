@@ -18,7 +18,7 @@ package im.vector.app.features.spaces.create
 
 import android.net.Uri
 import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.Uninitialized
 
 data class CreateSpaceState(
@@ -38,7 +38,7 @@ data class CreateSpaceState(
         val emailValidationResult: Map<Int /** position in form */, Boolean>? = null,
         val creationResult: Async<String> = Uninitialized,
         val canInviteByMail: Boolean = false
-) : MvRxState {
+) : MavericksState {
 
     enum class Step {
         ChooseType,

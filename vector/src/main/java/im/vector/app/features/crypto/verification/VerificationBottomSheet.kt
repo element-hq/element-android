@@ -24,7 +24,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.airbnb.mvrx.MvRx
+import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -185,7 +185,7 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetV
 
         if (state.quadSHasBeenReset) {
             showFragment(VerificationConclusionFragment::class, Bundle().apply {
-                putParcelable(MvRx.KEY_ARG, VerificationConclusionFragment.Args(
+                putParcelable(Mavericks.KEY_ARG, VerificationConclusionFragment.Args(
                         isSuccessFull = true,
                         isMe = true,
                         cancelReason = null
@@ -212,7 +212,7 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetV
         }
         if (state.selfVerificationMode && state.verifiedFromPrivateKeys) {
             showFragment(VerificationConclusionFragment::class, Bundle().apply {
-                putParcelable(MvRx.KEY_ARG, VerificationConclusionFragment.Args(true, null, state.isMe))
+                putParcelable(Mavericks.KEY_ARG, VerificationConclusionFragment.Args(true, null, state.isMe))
             })
             return@withState
         }
@@ -236,7 +236,7 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetV
                 is VerificationTxState.MacSent,
                 is VerificationTxState.Verifying -> {
                     showFragment(VerificationEmojiCodeFragment::class, Bundle().apply {
-                        putParcelable(MvRx.KEY_ARG, VerificationArgs(
+                        putParcelable(Mavericks.KEY_ARG, VerificationArgs(
                                 state.otherUserMxItem?.id ?: "",
                                 // If it was outgoing it.transaction id would be null, but the pending request
                                 // would be updated (from localId to txId)
@@ -245,12 +245,12 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetV
                 }
                 is VerificationTxState.Verified  -> {
                     showFragment(VerificationConclusionFragment::class, Bundle().apply {
-                        putParcelable(MvRx.KEY_ARG, VerificationConclusionFragment.Args(true, null, state.isMe))
+                        putParcelable(Mavericks.KEY_ARG, VerificationConclusionFragment.Args(true, null, state.isMe))
                     })
                 }
                 is VerificationTxState.Cancelled -> {
                     showFragment(VerificationConclusionFragment::class, Bundle().apply {
-                        putParcelable(MvRx.KEY_ARG, VerificationConclusionFragment.Args(false, state.sasTransactionState.cancelCode.value, state.isMe))
+                        putParcelable(Mavericks.KEY_ARG, VerificationConclusionFragment.Args(false, state.sasTransactionState.cancelCode.value, state.isMe))
                     })
                 }
             }
@@ -266,7 +266,7 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetV
             is VerificationTxState.Started,
             is VerificationTxState.WaitingOtherReciprocateConfirm -> {
                 showFragment(VerificationQRWaitingFragment::class, Bundle().apply {
-                    putParcelable(MvRx.KEY_ARG, VerificationQRWaitingFragment.Args(
+                    putParcelable(Mavericks.KEY_ARG, VerificationQRWaitingFragment.Args(
                             isMe = state.isMe,
                             otherUserName = state.otherUserMxItem?.getBestName() ?: ""
                     ))
@@ -275,13 +275,13 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetV
             }
             is VerificationTxState.Verified                       -> {
                 showFragment(VerificationConclusionFragment::class, Bundle().apply {
-                    putParcelable(MvRx.KEY_ARG, VerificationConclusionFragment.Args(true, null, state.isMe))
+                    putParcelable(Mavericks.KEY_ARG, VerificationConclusionFragment.Args(true, null, state.isMe))
                 })
                 return@withState
             }
             is VerificationTxState.Cancelled                      -> {
                 showFragment(VerificationConclusionFragment::class, Bundle().apply {
-                    putParcelable(MvRx.KEY_ARG, VerificationConclusionFragment.Args(false, state.qrTransactionState.cancelCode.value, state.isMe))
+                    putParcelable(Mavericks.KEY_ARG, VerificationConclusionFragment.Args(false, state.qrTransactionState.cancelCode.value, state.isMe))
                 })
                 return@withState
             }
@@ -295,7 +295,7 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetV
             // The request has been declined, we should dismiss
             views.otherUserNameText.text = getString(R.string.verification_cancelled)
             showFragment(VerificationConclusionFragment::class, Bundle().apply {
-                putParcelable(MvRx.KEY_ARG, VerificationConclusionFragment.Args(
+                putParcelable(Mavericks.KEY_ARG, VerificationConclusionFragment.Args(
                         false,
                         state.pendingRequest.invoke()?.cancelConclusion?.value ?: CancelCode.User.value,
                         state.isMe))
@@ -310,13 +310,13 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetV
                 Timber.v("## SAS show bottom sheet for outgoing and ready request")
                 // Show choose method fragment with waiting
                 showFragment(VerificationChooseMethodFragment::class, Bundle().apply {
-                    putParcelable(MvRx.KEY_ARG, VerificationArgs(state.otherUserMxItem?.id
+                    putParcelable(Mavericks.KEY_ARG, VerificationArgs(state.otherUserMxItem?.id
                             ?: "", state.pendingRequest.invoke()?.transactionId))
                 })
             } else {
                 // Stay on the start fragment
                 showFragment(VerificationRequestFragment::class, Bundle().apply {
-                    putParcelable(MvRx.KEY_ARG, VerificationArgs(
+                    putParcelable(Mavericks.KEY_ARG, VerificationArgs(
                             state.otherUserMxItem?.id ?: "",
                             state.pendingRequest.invoke()?.transactionId,
                             state.roomId))
@@ -326,7 +326,7 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetV
             Timber.v("## SAS show bottom sheet for Incoming request")
             // For incoming we can switch to choose method because ready is being sent or already sent
             showFragment(VerificationChooseMethodFragment::class, Bundle().apply {
-                putParcelable(MvRx.KEY_ARG, VerificationArgs(state.otherUserMxItem?.id
+                putParcelable(Mavericks.KEY_ARG, VerificationArgs(state.otherUserMxItem?.id
                         ?: "", state.pendingRequest.invoke()?.transactionId))
             })
         }
@@ -349,7 +349,7 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetV
         fun withArgs(roomId: String?, otherUserId: String, transactionId: String? = null): VerificationBottomSheet {
             return VerificationBottomSheet().apply {
                 arguments = Bundle().apply {
-                    putParcelable(MvRx.KEY_ARG, VerificationArgs(
+                    putParcelable(Mavericks.KEY_ARG, VerificationArgs(
                             otherUserId = otherUserId,
                             roomId = roomId,
                             verificationId = transactionId,
@@ -362,7 +362,7 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetV
         fun forSelfVerification(session: Session): VerificationBottomSheet {
             return VerificationBottomSheet().apply {
                 arguments = Bundle().apply {
-                    putParcelable(MvRx.KEY_ARG, VerificationArgs(
+                    putParcelable(Mavericks.KEY_ARG, VerificationArgs(
                             otherUserId = session.myUserId,
                             selfVerificationMode = true
                     ))
@@ -373,7 +373,7 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetV
         fun forSelfVerification(session: Session, outgoingRequest: String): VerificationBottomSheet {
             return VerificationBottomSheet().apply {
                 arguments = Bundle().apply {
-                    putParcelable(MvRx.KEY_ARG, VerificationArgs(
+                    putParcelable(Mavericks.KEY_ARG, VerificationArgs(
                             otherUserId = session.myUserId,
                             selfVerificationMode = true,
                             verificationId = outgoingRequest

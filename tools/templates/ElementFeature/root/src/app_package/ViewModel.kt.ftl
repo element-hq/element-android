@@ -2,7 +2,7 @@ package ${escapeKotlinIdentifiers(packageName)}
 
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
@@ -27,7 +27,7 @@ class ${viewModelClass} @AssistedInject constructor(@Assisted initialState: ${vi
         fun create(initialState: ${viewStateClass}): ${viewModelClass}
     }
 
-    companion object : MvRxViewModelFactory<${viewModelClass}, ${viewStateClass}> {
+    companion object : MavericksViewModelFactory<${viewModelClass}, ${viewStateClass}> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: ${viewStateClass}): ${viewModelClass}? {

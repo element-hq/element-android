@@ -17,7 +17,7 @@
 package im.vector.app.features.spaces
 
 import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.Uninitialized
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 
@@ -30,7 +30,7 @@ data class SpaceMenuState(
         val isLastAdmin: Boolean = false,
         val leaveMode: LeaveMode = LeaveMode.LEAVE_NONE,
         val leavingState: Async<Unit> = Uninitialized
-) : MvRxState {
+) : MavericksState {
     constructor(args: SpaceBottomSheetSettingsArgs) : this(spaceId = args.spaceId)
 
     enum class LeaveMode {

@@ -25,7 +25,7 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentOnAttachListener
-import com.airbnb.mvrx.MvRx
+import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
@@ -159,7 +159,7 @@ class SharedSecureStorageActivity :
                       resultKeyStoreAlias: String = DEFAULT_RESULT_KEYSTORE_ALIAS): Intent {
             require(requestedSecrets.isNotEmpty())
             return Intent(context, SharedSecureStorageActivity::class.java).also {
-                it.putExtra(MvRx.KEY_ARG, Args(
+                it.putExtra(Mavericks.KEY_ARG, Args(
                         keyId,
                         requestedSecrets,
                         resultKeyStoreAlias

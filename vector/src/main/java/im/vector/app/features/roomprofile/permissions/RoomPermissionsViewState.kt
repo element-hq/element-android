@@ -17,7 +17,7 @@
 package im.vector.app.features.roomprofile.permissions
 
 import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.Uninitialized
 import im.vector.app.features.roomprofile.RoomProfileArgs
 import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
@@ -30,7 +30,7 @@ data class RoomPermissionsViewState(
         val showAdvancedPermissions: Boolean = false,
         val currentPowerLevelsContent: Async<PowerLevelsContent> = Uninitialized,
         val isLoading: Boolean = false
-) : MvRxState {
+) : MavericksState {
 
     constructor(args: RoomProfileArgs) : this(roomId = args.roomId)
 

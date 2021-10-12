@@ -2497,7 +2497,6 @@
     <string name="direct_room_user_list_recent_title">Hiljutised</string>
     <string name="qr_code">QR-kood</string>
     <string name="add_by_qr_code">Lisa QR-koodi abil</string>
-    <string name="user_directory_search_hint">Otsi nime või Matrix\'i tunnuse alusel</string>
     <string name="permissions_denied_add_contact">Anna õigused oma kontakte lugeda.</string>
     <string name="permissions_denied_qr_code">QR-koodi lugemiseks pead selleks kaamerale õigused andma.</string>
     <string name="start_chatting">Alusta vestlust</string>
@@ -2679,8 +2678,6 @@
     <string name="spaces_beta_welcome_to_spaces_desc">Kogukonnakeskused on uus võimalus siduda jututubasid ja inimesi.</string>
     <string name="spaces_beta_welcome_to_spaces">Tere tulemast kasutama kogukonnakeskuseid!</string>
     <string name="space_add_existing_rooms">Lisa olemasolevaid jututubasid ja kogukonnakeskuseid</string>
-    <!-- TO BE REMOVED -->
-    <string name="space_leave_prompt_msg">Kas oled kindel, et soovid lahkuda kogukonnakeskusest\?</string>
     <string name="leave_space">Lahku kogukonnakeskusest</string>
     <string name="space_add_child_title">Lisa jututuba</string>
     <string name="space_explore_activity_title">Uuri jututubasid</string>
@@ -2860,13 +2857,13 @@
     <string name="allow_space_member_to_find_and_access">Luba kogukonna liikmetel leida ja vaadata.</string>
     <string name="room_settings_room_access_private_invite_only_title">Privaatne (vaid kutse alusel)</string>
     <string name="denied_permission_voice_message">Häälsõnumite saatmiseks palun anna rakendusele õigus mikrofoni kasutada.</string>
-    <string name="a11y_start_voice_message">Alusta häälsõnumi salvestust</string>
+    <string name="a11y_start_voice_message">Salvesta häälsõnum</string>
     <string name="voice_message_slide_to_cancel">Tühistamiseks viipa</string>
     <string name="a11y_lock_voice_message">Häälsõnumi lukustus</string>
     <string name="a11y_pause_voice_message">Peata häälsõnumi esitus</string>
     <string name="a11y_play_voice_message">Esita häälsõnumit</string>
     <string name="a11y_recording_voice_message">Salvestan häälsõnumit</string>
-    <string name="a11y_delete_recorded_voice_message">Kustuta salvestatud häälsõnum</string>
+    <string name="a11y_delete_recorded_voice_message">Kustuta salvestus</string>
     <string name="voice_message_release_to_send_toast">Salvestamiseks vajuta nuppu, saatmiseks lase nupp lahti</string>
     <string name="voice_message_n_seconds_warning_toast">Jäänud on %1$d s</string>
     <string name="voice_message_tap_to_stop_toast">Salvestuse peatamiseks ja taasesituseks vajuta salvestuse vaadet</string>
@@ -2992,4 +2989,17 @@
     <string name="space_participants_kick_prompt_msg">kogukonnast välja müksamine eemaldab ta praeguseks sellest kogukonnast.
 \n
 \nKui soovid, et ta ei saaks uuesti liituda, siis peaksid seadma suhtluskeelu.</string>
+    <string name="a11y_stop_voice_message">Lõpeta salvestamine</string>
+    <string name="command_description_lenny">Lisa ( ͡° ͜ʖ ͡°) smaili vormindamata sõnumi algusesse</string>
+    <string name="identity_server_consent_dialog_neutral_policy">Reeglid</string>
+    <string name="settings_discovery_no_policy_provided">Isikutuvastusserveril pole reegleid kirjeldatud</string>
+    <string name="settings_discovery_hide_identity_server_policy_title">Peida isikutuvastusserveri reeglid</string>
+    <string name="settings_discovery_show_identity_server_policy_title">Näita isikutuvastusserveri reegleid</string>
+    <string name="command_description_whois">Näitab teavet kasutaja kohta</string>
+    <string name="command_description_avatar_for_room">Muudab sinu tunnuspilti vaid selles jututoas</string>
+    <string name="command_description_room_avatar">Muudab selle jututoa tunnuspilti</string>
+    <string name="command_description_nick_for_room">Muudab sinu hüüdnime vaid selles jututoas</string>
+    <string name="command_description_room_name">Määrab jututoa nime</string>
+    <string name="command_description_unignore_user">Lõpeta kasutaja eiramine ja näita edaspidi tema sõnumeid</string>
+    <string name="command_description_ignore_user">Eirab kasutajat peites kõik tema sõnumid sinu eest</string>
 </resources>

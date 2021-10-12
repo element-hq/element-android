@@ -17,7 +17,7 @@
 package im.vector.app.features.login2
 
 import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.PersistState
 import com.airbnb.mvrx.Uninitialized
 import im.vector.app.core.extensions.toReducedUrl
@@ -55,7 +55,7 @@ data class LoginViewState2(
 
         // From database
         val knownCustomHomeServersUrls: List<String> = emptyList()
-) : MvRxState {
+) : MavericksState {
 
     // Pending user identifier
     fun userIdentifier(): String {

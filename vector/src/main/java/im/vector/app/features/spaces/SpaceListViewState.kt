@@ -17,7 +17,7 @@
 package im.vector.app.features.spaces
 
 import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.Uninitialized
 import im.vector.app.RoomGroupingMethod
 import org.matrix.android.sdk.api.session.group.model.GroupSummary
@@ -35,4 +35,4 @@ data class SpaceListViewState(
         val legacyGroups: List<GroupSummary>? = null,
         val expandedStates: Map<String, Boolean> = emptyMap(),
         val homeAggregateCount: RoomAggregateNotificationCount = RoomAggregateNotificationCount(0, 0)
-) : MvRxState
+) : MavericksState

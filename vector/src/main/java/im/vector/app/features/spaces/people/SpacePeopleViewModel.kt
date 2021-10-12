@@ -21,7 +21,7 @@ import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
@@ -48,7 +48,7 @@ class SpacePeopleViewModel @AssistedInject constructor(
         fun create(initialState: SpacePeopleViewState): SpacePeopleViewModel
     }
 
-    companion object : MvRxViewModelFactory<SpacePeopleViewModel, SpacePeopleViewState> {
+    companion object : MavericksViewModelFactory<SpacePeopleViewModel, SpacePeopleViewState> {
         override fun create(viewModelContext: ViewModelContext, state: SpacePeopleViewState): SpacePeopleViewModel? {
             val factory = when (viewModelContext) {
                 is FragmentViewModelContext -> viewModelContext.fragment as? Factory
