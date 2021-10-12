@@ -1,0 +1,1 @@
+Handle Presence support, for Direct Message room
