@@ -100,6 +100,7 @@ import org.matrix.olm.OlmAccount
 import org.matrix.olm.OlmException
 import org.matrix.olm.OlmOutboundGroupSession
 import timber.log.Timber
+import java.util.concurrent.Executors
 import javax.inject.Inject
 import kotlin.collections.set
 
@@ -137,8 +138,11 @@ internal class RealmCryptoStore @Inject constructor(
         newSessionListeners.remove(listener)
     }
 
+    private val monarchyWriteAsyncExecutor = Executors.newSingleThreadExecutor()
+
     private val monarchy = Monarchy.Builder()
             .setRealmConfiguration(realmConfiguration)
+            .setWriteAsyncExecutor(monarchyWriteAsyncExecutor)
             .build()
 
     init {
@@ -199,6 +203,10 @@ internal class RealmCryptoStore @Inject constructor(
     }
 
     override fun close() {
+        // Ensure no async request will be run later
+        val tasks = monarchyWriteAsyncExecutor.shutdownNow()
+        Timber.w("Closing RealmCryptoStore, ${tasks.size} async task(s) cancelled")
+
         olmSessionsToRelease.forEach {
             it.value.olmSession.releaseSession()
         }
