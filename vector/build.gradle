@@ -372,7 +372,7 @@ dependencies {
     implementation 'com.facebook.stetho:stetho:1.6.0'
 
     // Phone number https://github.com/google/libphonenumber
-    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.34'
+    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.35'
 
     // rx
     implementation libs.rx.rxKotlin
