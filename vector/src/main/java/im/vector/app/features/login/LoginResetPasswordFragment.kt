@@ -31,6 +31,7 @@ import fr.gouv.tchap.features.platform.PlatformAction
 import fr.gouv.tchap.features.platform.PlatformViewEvents
 import fr.gouv.tchap.features.platform.PlatformViewModel
 import fr.gouv.tchap.features.platform.PlatformViewState
+import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.hideKeyboard
@@ -109,10 +110,15 @@ class LoginResetPasswordFragment @Inject constructor(
 
         if (showWarning) {
             showWarning = false
+            val message = if (BuildConfig.IS_KEY_BACKUP_SUPPORTED) {
+                R.string.login_reset_password_warning_content
+            } else {
+                R.string.tchap_login_reset_password_warning_content
+            }
             // Display a warning as Riot-Web does first
             MaterialAlertDialogBuilder(requireActivity())
                     .setTitle(R.string.login_reset_password_warning_title)
-                    .setMessage(R.string.login_reset_password_warning_content)
+                    .setMessage(message)
                     .setPositiveButton(R.string.login_reset_password_warning_submit) { _, _ ->
                         doSubmit()
                     }
