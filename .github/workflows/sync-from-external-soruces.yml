@@ -55,7 +55,6 @@ jobs:
             ${{ runner.os }}-
       - name: Install Prerequisite dependencies
         run: |
-          pip install BeautifulSoup4
           pip install requests
       - name: Run SAS String script
         run: ./tools/import_sas_strings.py
