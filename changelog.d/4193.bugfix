@@ -1,0 +1,1 @@
+Fix random crash when user logs out just after the log in.
