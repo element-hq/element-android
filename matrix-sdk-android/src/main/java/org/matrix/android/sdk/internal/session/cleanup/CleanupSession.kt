@@ -61,6 +61,9 @@ internal class CleanupSession @Inject constructor(
         Timber.d("Cleanup: cancel pending works...")
         workManagerProvider.cancelAllWorks()
 
+        Timber.d("Cleanup: release session...")
+        sessionManager.releaseSession(sessionId)
+
         Timber.d("Cleanup: clear session data...")
         clearSessionDataTask.execute(Unit)
 
@@ -70,9 +73,6 @@ internal class CleanupSession @Inject constructor(
         Timber.d("Cleanup: clear the database keys")
         realmKeysUtils.clear(SessionModule.getKeyAlias(userMd5))
         realmKeysUtils.clear(CryptoModule.getKeyAlias(userMd5))
-
-        Timber.d("Cleanup: release session...")
-        sessionManager.releaseSession(sessionId)
 
         // Wait for all the Realm instance to be released properly. Closing Realm instance is async.
         // After that we can safely delete the Realm files
