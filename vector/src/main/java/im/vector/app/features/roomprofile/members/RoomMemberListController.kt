@@ -21,7 +21,7 @@ import im.vector.app.R
 import im.vector.app.core.epoxy.dividerItem
 import im.vector.app.core.epoxy.profiles.buildProfileSection
 import im.vector.app.core.epoxy.profiles.profileMatrixItem
-import im.vector.app.core.epoxy.profiles.profileMatrixItemWithPresence
+import im.vector.app.core.epoxy.profiles.profileMatrixItemWithPowerLevelWithPresence
 import im.vector.app.core.extensions.join
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
@@ -29,11 +29,11 @@ import im.vector.app.features.home.AvatarRenderer
 import me.gujun.android.span.span
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.presence.model.UserPresence
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.session.room.model.RoomThirdPartyInviteContent
 import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.api.util.toMatrixItem
-import org.matrix.android.sdk.internal.session.presence.model.UserPresence
 import javax.inject.Inject
 
 class RoomMemberListController @Inject constructor(
@@ -130,7 +130,7 @@ class RoomMemberListController @Inject constructor(
     ) {
         val powerLabel = stringProvider.getString(powerLevelCategory.titleRes)
 
-        profileMatrixItemWithPresence {
+        profileMatrixItemWithPowerLevelWithPresence {
             id(roomMember.userId)
             matrixItem(roomMember.toMatrixItem())
             avatarRenderer(host.avatarRenderer)

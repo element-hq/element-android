@@ -16,7 +16,7 @@
 
 package org.matrix.android.sdk.api.session.room.model
 
-import org.matrix.android.sdk.internal.session.presence.model.UserPresence
+import org.matrix.android.sdk.api.session.presence.model.UserPresence
 
 /**
  * Class representing a simplified version of EventType.STATE_ROOM_MEMBER state event content

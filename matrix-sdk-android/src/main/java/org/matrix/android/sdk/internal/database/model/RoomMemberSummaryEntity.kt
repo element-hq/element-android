@@ -46,7 +46,6 @@ internal open class RoomMemberSummaryEntity(@PrimaryKey var primaryKey: String =
             if (value != field) field = value
         }
 
-    fun getBestName() = displayName?.takeIf { it.isNotBlank() } ?: userId
     fun toMatrixItem() = MatrixItem.UserItem(userId, displayName, avatarUrl)
 
     companion object

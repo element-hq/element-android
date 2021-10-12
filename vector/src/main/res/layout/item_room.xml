@@ -84,7 +84,7 @@
         app:layout_constraintCircleAngle="135"
         app:layout_constraintCircleRadius="28dp"
         tools:ignore="MissingConstraints"
-        tools:visibility="gone" />
+        tools:visibility="visible" />
 
     <im.vector.app.core.ui.views.PresenceStateImageView
         android:id="@+id/roomAvatarPresenceImageView"
@@ -98,6 +98,7 @@
         app:layout_constraintCircleAngle="135"
         app:layout_constraintCircleRadius="28dp"
         tools:ignore="MissingConstraints"
+        tools:layout_constraintCircleRadius="8dp"
         tools:src="@drawable/ic_presence_offline"
         tools:visibility="visible" />
 

@@ -355,6 +355,7 @@ internal object RealmSessionStoreMigration : RealmMigration {
                 ?.addField(UserPresenceEntityFields.IS_CURRENTLY_ACTIVE, Boolean::class.java)
                 ?.setNullable(UserPresenceEntityFields.IS_CURRENTLY_ACTIVE, true)
                 ?.addField(UserPresenceEntityFields.AVATAR_URL, String::class.java)
+                ?.addField(UserPresenceEntityFields.DISPLAY_NAME, String::class.java)
 
         val userPresenceEntity = realm.schema.get("UserPresenceEntity") ?: return
         realm.schema.get("RoomSummaryEntity")

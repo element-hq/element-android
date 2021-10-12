@@ -17,28 +17,18 @@
 
 package im.vector.app.core.epoxy.profiles
 
-import android.widget.TextView
-import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
-import im.vector.app.core.extensions.setTextOrHide
-import org.matrix.android.sdk.internal.session.presence.model.UserPresence
+import org.matrix.android.sdk.api.session.presence.model.UserPresence
 
 @EpoxyModelClass(layout = R.layout.item_profile_matrix_item)
-abstract class ProfileMatrixItemWithPresence : BaseProfileMatrixItem<ProfileMatrixItemWithPresence.Holder>() {
+abstract class ProfileMatrixItemWithPowerLevelWithPresence : ProfileMatrixItemWithPowerLevel() {
 
-    @EpoxyAttribute var powerLevelLabel: CharSequence? = null
     @EpoxyAttribute var userPresence: UserPresence? = null
 
     override fun bind(holder: Holder) {
         super.bind(holder)
-        holder.powerLabel.setTextOrHide(powerLevelLabel)
         holder.presenceImageView.render(userPresence = userPresence)
-        holder.editableView.isVisible = false
-    }
-
-    class Holder : ProfileMatrixItem.Holder() {
-        val powerLabel by bind<TextView>(R.id.matrixItemPowerLevelLabel)
     }
 }

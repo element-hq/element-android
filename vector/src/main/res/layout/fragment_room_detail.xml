@@ -64,6 +64,7 @@
                     app:layout_constraintCircleAngle="135"
                     app:layout_constraintCircleRadius="20dp"
                     tools:ignore="MissingConstraints"
+                    tools:layout_constraintCircleRadius="8dp"
                     tools:src="@drawable/ic_presence_offline"
                     tools:visibility="visible" />
 
@@ -97,8 +98,8 @@
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toEndOf="@+id/roomToolbarDecorationImageView"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_goneMarginStart="7dp"
                     app:layout_constraintVertical_chainStyle="packed"
+                    app:layout_goneMarginStart="7dp"
                     tools:text="@sample/rooms.json/data/name" />
 
                 <TextView
