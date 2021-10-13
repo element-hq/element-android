@@ -130,6 +130,9 @@ ext.libs = [
                 'emojiMaterial'          : "com.vanniktech:emoji-material:$vanniktechEmoji",
                 'emojiGoogle'            : "com.vanniktech:emoji-google:$vanniktechEmoji"
         ],
+        apache:[
+                'commonsImaging'         : "org.apache.sanselan:sanselan:0.97-incubator"
+        ],
         tests       : [
                 'kluent'                 : "org.amshove.kluent:kluent-android:1.68",
                 'timberJunitRule'        : "net.lachlanmckee:timber-junit-rule:1.0.1",
