@@ -47,7 +47,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_margin="4dp"
-                android:drawableEnd="@drawable/ic_simple_layout"
+                android:drawableEnd="@drawable/setting_layout_simple"
                 android:text="@string/settings_home_layout_simple"
                 tools:checked="true" />
 
@@ -58,64 +58,11 @@
                 android:layout_gravity="center_vertical"
                 android:layout_margin="4dp"
                 android:checked="false"
-                android:drawableEnd="@drawable/ic_pro_layout"
+                android:drawableEnd="@drawable/setting_layout_pro"
                 android:text="@string/settings_home_layout_pro" />
 
         </RadioGroup>
 
-        <!--        <LinearLayout-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:orientation="horizontal"-->
-        <!--            android:padding="2dp">-->
-
-        <!--            <RadioButton-->
-        <!--                android:id="@+id/simpleLayoutRadioButton"-->
-        <!--                android:layout_width="0dp"-->
-        <!--                android:layout_height="wrap_content"-->
-        <!--                android:layout_gravity="center_vertical"-->
-        <!--                android:layout_weight="1"-->
-        <!--                android:drawableEnd="@drawable/ic_simple_layout"-->
-        <!--                android:text="@string/settings_home_layout_simple"-->
-        <!--                tools:checked="true" />-->
-
-        <!--            &lt;!&ndash;            <ImageView&ndash;&gt;-->
-        <!--            &lt;!&ndash;                android:id="@+id/simpleLayoutPreview"&ndash;&gt;-->
-        <!--            &lt;!&ndash;                android:layout_width="60dp"&ndash;&gt;-->
-        <!--            &lt;!&ndash;                android:layout_height="wrap_content"&ndash;&gt;-->
-        <!--            &lt;!&ndash;                android:layout_marginEnd="20dp"&ndash;&gt;-->
-        <!--            &lt;!&ndash;                android:importantForAccessibility="no"&ndash;&gt;-->
-        <!--            &lt;!&ndash;                android:src="@drawable/ic_simple_layout"&ndash;&gt;-->
-        <!--            &lt;!&ndash;                app:layout_constraintEnd_toEndOf="parent"&ndash;&gt;-->
-        <!--            &lt;!&ndash;                app:layout_constraintTop_toTopOf="parent" />&ndash;&gt;-->
-
-        <!--        </LinearLayout>-->
-
-
-        <!--        <LinearLayout-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:orientation="horizontal"-->
-        <!--            android:padding="2dp">-->
-
-        <!--            <RadioButton-->
-        <!--                android:id="@+id/proLayoutRadioButton"-->
-        <!--                android:layout_width="0dp"-->
-        <!--                android:layout_height="wrap_content"-->
-        <!--                android:layout_gravity="center_vertical"-->
-        <!--                android:layout_weight="1"-->
-        <!--                android:drawableEnd="@drawable/ic_pro_layout"-->
-        <!--                android:text="@string/settings_home_layout_pro"-->
-        <!--                tools:checked="false" />-->
-
-        <!--            &lt;!&ndash;            <ImageView&ndash;&gt;-->
-        <!--            &lt;!&ndash;                android:id="@+id/proLayoutPreview"&ndash;&gt;-->
-        <!--            &lt;!&ndash;                android:layout_width="60dp"&ndash;&gt;-->
-        <!--            &lt;!&ndash;                android:layout_height="wrap_content"&ndash;&gt;-->
-        <!--            &lt;!&ndash;                android:layout_marginEnd="20dp"&ndash;&gt;-->
-        <!--            &lt;!&ndash;                android:importantForAccessibility="no"&ndash;&gt;-->
-        <!--            &lt;!&ndash;                android:src="@drawable/ic_pro_layout" />&ndash;&gt;-->
-        <!--        </LinearLayout>-->
     </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
