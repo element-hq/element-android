@@ -324,4 +324,12 @@
     <string name="power_level_default">Implicit</string>
     <string name="power_level_moderator">Moderator</string>
     <string name="power_level_admin">Administrator</string>
+    <string name="notice_widget_jitsi_added_by_you">Ați început o conferință video</string>
+    <string name="notice_widget_jitsi_added">Conferință video începută de %1$s</string>
+    <string name="notice_widget_modified_by_you">Ați modificat widget-ul %1$s</string>
+    <string name="notice_widget_modified">%1$s a modifcat widget-ul %2$s</string>
+    <string name="notice_widget_removed_by_you">Ați înlăturat widget-ul %1$s</string>
+    <string name="notice_widget_removed">%1$s a înlăturat widget-ul %2$s</string>
+    <string name="notice_widget_added_by_you">Ați adăugat widget-ul %1$s</string>
+    <string name="notice_widget_added">%1$s a adăugat widget-ul %2$s</string>
 </resources>
