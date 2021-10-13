@@ -108,9 +108,9 @@ class HomeDetailFragment @Inject constructor(
 
     override fun onPrepareOptionsMenu(menu: Menu) {
         withState(viewModel) { state ->
-            menu.iterator().forEach { it.isVisible = state.currentTab is HomeTab.RoomList }
+            val isRoomList = state.currentTab is HomeTab.RoomList
+            menu.findItem(R.id.menu_home_mark_all_as_read).isVisible = isRoomList && hasUnreadRooms
         }
-        menu.findItem(R.id.menu_home_mark_all_as_read).isVisible = hasUnreadRooms
         super.onPrepareOptionsMenu(menu)
     }
 
