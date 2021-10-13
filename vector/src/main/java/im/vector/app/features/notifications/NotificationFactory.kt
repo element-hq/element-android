@@ -21,13 +21,15 @@ import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
 import javax.inject.Inject
 
+private typealias ProcessedMessageEvent = Pair<ProcessedType, NotifiableMessageEvent>
+
 class NotificationFactory @Inject constructor(
         private val notificationUtils: NotificationUtils,
         private val roomGroupMessageCreator: RoomGroupMessageCreator,
         private val summaryGroupMessageCreator: SummaryGroupMessageCreator
 ) {
 
-    fun Map<String, List<Pair<ProcessedType, NotifiableMessageEvent>>>.toNotifications(myUserDisplayName: String, myUserAvatarUrl: String?): List<RoomNotification> {
+    fun Map<String, List<ProcessedMessageEvent>>.toNotifications(myUserDisplayName: String, myUserAvatarUrl: String?): List<RoomNotification> {
         return map { (roomId, events) ->
             when {
                 events.hasNoEventsToDisplay() -> RoomNotification.Removed(roomId)

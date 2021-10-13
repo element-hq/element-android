@@ -26,7 +26,7 @@ class NotifiableEventProcessor @Inject constructor(
         private val autoAcceptInvites: AutoAcceptInvites
 ) {
 
-    fun process(eventList: List<NotifiableEvent>, currentRoomId: String?, renderedEventsList: List<Pair<ProcessedType, NotifiableEvent>>): List<ProcessedEvent> {
+    fun process(eventList: List<NotifiableEvent>, currentRoomId: String?, renderedEventsList: List<ProcessedEvent>): List<ProcessedEvent> {
         val processedEventList = eventList.map {
             when (it) {
                 is InviteNotifiableEvent  -> if (autoAcceptInvites.hideInvites) REMOVE else KEEP

@@ -262,8 +262,12 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
             val user = session.getUser(session.myUserId)
             // myUserDisplayName cannot be empty else NotificationCompat.MessagingStyle() will crash
             val myUserDisplayName = user?.toMatrixItem()?.getBestName() ?: session.myUserId
-            val myUserAvatarUrl = session.contentUrlResolver().resolveThumbnail(user?.avatarUrl, avatarSize, avatarSize, ContentUrlResolver.ThumbnailMethod.SCALE)
-
+            val myUserAvatarUrl = session.contentUrlResolver().resolveThumbnail(
+                    contentUrl = user?.avatarUrl,
+                    width = avatarSize,
+                    height = avatarSize,
+                    method = ContentUrlResolver.ThumbnailMethod.SCALE
+            )
             notificationRenderer.render(session.myUserId, myUserDisplayName, myUserAvatarUrl, useCompleteNotificationFormat, eventsToRender)
         }
     }
