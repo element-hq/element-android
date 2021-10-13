@@ -319,4 +319,9 @@
     <string name="notice_end_to_end_by_you">Ai pornit criptarea end-to-end (%1$s)</string>
     <string name="notice_room_unban_by_you">Ai deblocat %1$s</string>
     <string name="notice_room_unban">%1$s deblocat %2$s</string>
+    <string name="power_level_custom_no_value">Personalizat</string>
+    <string name="power_level_custom">Personalizat (%1$d)</string>
+    <string name="power_level_default">Implicit</string>
+    <string name="power_level_moderator">Moderator</string>
+    <string name="power_level_admin">Administrator</string>
 </resources>
