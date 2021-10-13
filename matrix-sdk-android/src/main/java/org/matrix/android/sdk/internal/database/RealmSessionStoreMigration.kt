@@ -24,8 +24,10 @@ import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRulesContent
 import org.matrix.android.sdk.api.session.room.model.VersioningState
 import org.matrix.android.sdk.api.session.room.model.create.RoomCreateContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
 import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntityFields
+import org.matrix.android.sdk.internal.database.model.DraftEntityFields
 import org.matrix.android.sdk.internal.database.model.EditAggregatedSummaryEntityFields
 import org.matrix.android.sdk.internal.database.model.EditionOfEventFields
 import org.matrix.android.sdk.internal.database.model.EventEntityFields
@@ -381,6 +383,11 @@ internal class RealmSessionStoreMigration @Inject constructor(
 
     private fun migrateTo19(realm: DynamicRealm) {
         Timber.d("Step 18 -> 19")
+        realm.schema.get("DraftEntity")
+                ?.addField(DraftEntityFields.MESSAGE_TYPE, String::class.java)
+                ?.transform {
+                    it.setString(DraftEntityFields.MESSAGE_TYPE, MessageType.MSGTYPE_TEXT)
+                }
         realm.schema.get("RoomSummaryEntity")
                 ?.addField(RoomSummaryEntityFields.NORMALIZED_DISPLAY_NAME, String::class.java)
                 ?.transform {

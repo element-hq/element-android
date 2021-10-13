@@ -456,20 +456,20 @@ class MessageComposerViewModel @AssistedInject constructor(
             copy(
                     // Create a sendMode from a draft and retrieve the TimelineEvent
                     sendMode = when (currentDraft) {
-                        is UserDraft.REGULAR -> SendMode.REGULAR(currentDraft.text, false)
+                        is UserDraft.REGULAR -> SendMode.REGULAR(currentDraft.content, false)
                         is UserDraft.QUOTE   -> {
                             room.getTimeLineEvent(currentDraft.linkedEventId)?.let { timelineEvent ->
-                                SendMode.QUOTE(timelineEvent, currentDraft.text)
+                                SendMode.QUOTE(timelineEvent, currentDraft.content)
                             }
                         }
                         is UserDraft.REPLY   -> {
                             room.getTimeLineEvent(currentDraft.linkedEventId)?.let { timelineEvent ->
-                                SendMode.REPLY(timelineEvent, currentDraft.text)
+                                SendMode.REPLY(timelineEvent, currentDraft.content)
                             }
                         }
                         is UserDraft.EDIT    -> {
                             room.getTimeLineEvent(currentDraft.linkedEventId)?.let { timelineEvent ->
-                                SendMode.EDIT(timelineEvent, currentDraft.text)
+                                SendMode.EDIT(timelineEvent, currentDraft.content)
                             }
                         }
                         else                 -> null
@@ -681,19 +681,19 @@ class MessageComposerViewModel @AssistedInject constructor(
             when {
                 it.sendMode is SendMode.REGULAR && !it.sendMode.fromSharing -> {
                     setState { copy(sendMode = it.sendMode.copy(action.draft)) }
-                    room.saveDraft(UserDraft.REGULAR(action.draft))
+                    room.saveDraft(UserDraft.REGULAR(action.draft, action.messageType))
                 }
                 it.sendMode is SendMode.REPLY                               -> {
                     setState { copy(sendMode = it.sendMode.copy(text = action.draft)) }
-                    room.saveDraft(UserDraft.REPLY(it.sendMode.timelineEvent.root.eventId!!, action.draft))
+                    room.saveDraft(UserDraft.REPLY(it.sendMode.timelineEvent.root.eventId!!, action.draft, action.messageType))
                 }
                 it.sendMode is SendMode.QUOTE                               -> {
                     setState { copy(sendMode = it.sendMode.copy(text = action.draft)) }
-                    room.saveDraft(UserDraft.QUOTE(it.sendMode.timelineEvent.root.eventId!!, action.draft))
+                    room.saveDraft(UserDraft.QUOTE(it.sendMode.timelineEvent.root.eventId!!, action.draft, action.messageType))
                 }
                 it.sendMode is SendMode.EDIT                                -> {
                     setState { copy(sendMode = it.sendMode.copy(text = action.draft)) }
-                    room.saveDraft(UserDraft.EDIT(it.sendMode.timelineEvent.root.eventId!!, action.draft))
+                    room.saveDraft(UserDraft.EDIT(it.sendMode.timelineEvent.root.eventId!!, action.draft, action.messageType))
                 }
             }
         }
