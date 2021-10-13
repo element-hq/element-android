@@ -147,6 +147,7 @@ fun anInviteNotifiableEvent(roomId: String) = InviteNotifiableEvent(
         matrixID = null,
         eventId = "event-id",
         roomId = roomId,
+        roomName = "a room name",
         editedEventId = null,
         noisy = false,
         title = "title",
