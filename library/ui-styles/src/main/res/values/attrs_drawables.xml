@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- room message colors -->
+    <attr name="vctr_empty_state_dm" format="reference" />
+    <attr name="vctr_empty_state_rooms" format="reference" />
+
+</resources>

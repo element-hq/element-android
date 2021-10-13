@@ -49,6 +49,7 @@ import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedA
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedActionViewModel
 import im.vector.app.features.home.room.list.widget.NotifsFabMenuView
 import im.vector.app.features.notifications.NotificationDrawerManager
+import im.vector.app.features.themes.ThemeUtils
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.extensions.orTrue
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
@@ -430,27 +431,44 @@ class RoomListFragment @Inject constructor(
                 !adapterInfosList.any { it.sectionHeaderAdapter.roomsSectionData.isLoading }
         if (shouldShowEmpty) {
             val emptyState = when (roomListParams.displayMode) {
-                RoomListDisplayMode.HOME   -> {
-                    StateView.State.Empty(
-                            title = getString(R.string.room_list_catchup_empty_title),
-                            image = ContextCompat.getDrawable(requireContext(), R.drawable.ic_noun_party_popper),
-                            message = getString(R.string.room_list_catchup_empty_body))
-                }
-                RoomListDisplayMode.PEOPLE ->
+//                RoomListDisplayMode.HOME   -> {
+//                    StateView.State.Empty(
+//                            title = getString(R.string.room_list_catchup_empty_title),
+//                            image = ContextCompat.getDrawable(requireContext(), R.drawable.ic_noun_party_popper),
+//                            message = getString(R.string.room_list_catchup_empty_body))
+//                }
+                RoomListDisplayMode.PEOPLE     ->
                     StateView.State.Empty(
                             title = getString(R.string.room_list_people_empty_title),
-                            image = ContextCompat.getDrawable(requireContext(), R.drawable.empty_state_dm),
+                            image = ThemeUtils.getAttribute(requireContext(), R.attr.vctr_empty_state_dm)?.let {
+                                ContextCompat.getDrawable(requireContext(),
+                                        it.resourceId)
+                            },
                             isBigImage = true,
                             message = getString(R.string.room_list_people_empty_body)
                     )
-                RoomListDisplayMode.ROOMS  ->
+                RoomListDisplayMode.ROOMS      ->
                     StateView.State.Empty(
                             title = getString(R.string.room_list_rooms_empty_title),
-                            image = ContextCompat.getDrawable(requireContext(), R.drawable.empty_state_room),
+                            image = ThemeUtils.getAttribute(requireContext(), R.attr.vctr_empty_state_rooms)?.let {
+                                ContextCompat.getDrawable(requireContext(),
+                                        it.resourceId)
+                            },
                             isBigImage = true,
                             message = getString(R.string.room_list_rooms_empty_body)
                     )
-                else                       ->
+                RoomListDisplayMode.HOME,
+                RoomListDisplayMode.ALL_IN_ONE ->
+                    StateView.State.Empty(
+                            title = getString(R.string.room_list_people_empty_title),
+                            image = ThemeUtils.getAttribute(requireContext(), R.attr.vctr_empty_state_rooms)?.let {
+                                ContextCompat.getDrawable(requireContext(),
+                                        it.resourceId)
+                            },
+                            isBigImage = true,
+                            message = getString(R.string.room_list_all_in_one_empty_body)
+                    )
+                else                           ->
                     // Always display the content in this mode, because if the footer
                     StateView.State.Content
             }

@@ -32,6 +32,10 @@
         <item name="vctr_chat_effect_snow_background">@color/vctr_chat_effect_snow_background_light</item>
         <item name="vctr_toolbar_background">@color/element_background_light</item>
 
+        <!-- drawables -->
+        <item name="vctr_empty_state_dm">@drawable/empty_state_dm</item>
+        <item name="vctr_empty_state_rooms">@drawable/empty_state_room</item>
+
         <!-- room message colors -->
         <item name="vctr_notice_secondary">#61708B</item>
         <item name="vctr_unsent_message_text_color">?colorError</item>

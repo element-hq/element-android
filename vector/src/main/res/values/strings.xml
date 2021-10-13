@@ -2192,6 +2192,7 @@
     <string name="room_list_people_empty_body">Your direct message conversations will be displayed here. Tap the + bottom right to start some.</string>
     <string name="room_list_rooms_empty_title">Rooms</string>
     <string name="room_list_rooms_empty_body">Your rooms will be displayed here. Tap the + bottom right to find existing ones or start some of your own.</string>
+    <string name="room_list_all_in_one_empty_body">Your conversations will be displayed here. Tap the + bottom right to start some.</string>
 
     <string name="title_activity_emoji_reaction_picker">Reactions</string>
     <string name="reactions_agree">Agree</string>
