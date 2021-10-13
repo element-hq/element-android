@@ -150,7 +150,7 @@ class HomeDetailFragment @Inject constructor(
             updateUIForTab(currentTab)
         }
 
-        viewModel.selectSubscribe(this, HomeDetailViewState::showDialPadTab, HomeDetailViewState::layoutMode) { showDialPadTab, layoutMode ->
+        viewModel.onEach(HomeDetailViewState::showDialPadTab, HomeDetailViewState::layoutMode) { showDialPadTab, layoutMode ->
             updateTabNavigationSafely(layoutMode, showDialPadTab)
         }
 
