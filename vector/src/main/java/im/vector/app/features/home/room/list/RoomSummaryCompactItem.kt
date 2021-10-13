@@ -116,6 +116,7 @@ abstract class RoomSummaryCompactItem : VectorEpoxyModel<RoomSummaryCompactItem.
         //        val lastEventView by bind<TextView>(R.id.roomLastEventView)
 //        val typingView by bind<TextView>(R.id.roomTypingView)
         val draftView by bind<ImageView>(R.id.roomDraftBadge)
+
 //        val lastEventTimeView by bind<TextView>(R.id.roomLastEventTimeView)
         val avatarCheckedImageView by bind<ImageView>(R.id.roomAvatarCheckedImageView)
         val avatarImageView by bind<ImageView>(R.id.roomAvatarImageView)
