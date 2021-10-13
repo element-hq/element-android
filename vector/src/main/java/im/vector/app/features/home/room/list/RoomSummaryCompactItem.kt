@@ -46,7 +46,6 @@ abstract class RoomSummaryCompactItem : VectorEpoxyModel<RoomSummaryCompactItem.
     @EpoxyAttribute lateinit var avatarRenderer: AvatarRenderer
     @EpoxyAttribute lateinit var matrixItem: MatrixItem
 
-
     // Used only for diff calculation
 //    @EpoxyAttribute lateinit var lastEvent: String
 
