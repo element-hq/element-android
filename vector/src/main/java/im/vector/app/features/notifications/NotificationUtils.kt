@@ -802,6 +802,7 @@ class NotificationUtils @Inject constructor(private val context: Context,
 
         return NotificationCompat.Builder(context, if (noisy) NOISY_NOTIFICATION_CHANNEL_ID else SILENT_NOTIFICATION_CHANNEL_ID)
                 // used in compat < N, after summary is built based on child notifications
+                .setOnlyAlertOnce(true)
                 .setWhen(lastMessageTimestamp)
                 .setStyle(style)
                 .setContentTitle(stringProvider.getString(R.string.app_name))
