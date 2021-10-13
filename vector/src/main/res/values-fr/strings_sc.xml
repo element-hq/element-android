@@ -49,7 +49,7 @@
     <string name="url_previews_in_encrypted_rooms_summary">Ceci fera fuiter les URL de tes messages vers votre serveur domestique !</string>
     <string name="login_mobile_device_sc">SchildiChat Android</string>
     <string name="all_list_rooms_empty_title">SchildiChat</string>
-    <string name="all_list_rooms_empty_body">Lea conversations seront affichées ici</string>
+    <string name="all_list_rooms_empty_body">Les conversations seront affichées ici</string>
     <string name="login_connect_using_matrix_id_text_sc">par ex. @utilisateur:domaine.com</string>
     <string name="login_server_other_title_sc">Serveur personnalisé</string>
     <string name="settings_show_voice_message_recorder_ui">Messages vocaux</string>
@@ -89,4 +89,8 @@
     <string name="sc_accent_turquoise">Turquoise</string>
     <string name="settings_unread_counter">Compteur des non lus</string>
     <string name="settings_apply_sc_default_settings">Ne pas cliquer sur ce paramètre</string>
+    <string name="settings_unimportant_counter_badge_v2">Compter les messages silencieux</string>
+    <string name="settings_aggregate_unread_counts_summary">Compter ou non les discussions non-lues plutôt que les messages individuels dans les espaces et les catégories de salon</string>
+    <string name="settings_unimportant_counter_badge_summary_v2">Afficher le nombre de messages silencieux dans la vue d\'ensemble de la discussion</string>
+    <string name="settings_aggregate_unread_counts">Compter les discussions au lieu des messages</string>
 </resources>
