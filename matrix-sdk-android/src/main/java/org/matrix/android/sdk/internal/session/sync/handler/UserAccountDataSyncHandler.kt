@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.session.sync
+package org.matrix.android.sdk.internal.session.sync.handler
 
 import com.zhuinden.monarchy.Monarchy
 import io.realm.Realm

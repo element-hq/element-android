@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.session.sync
+package org.matrix.android.sdk.internal.session.sync.handler
 
 import io.realm.Realm
 import org.matrix.android.sdk.api.session.initsync.InitSyncStep

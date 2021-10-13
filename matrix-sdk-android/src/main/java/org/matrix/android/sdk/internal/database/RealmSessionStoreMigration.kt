@@ -35,19 +35,21 @@ import org.matrix.android.sdk.internal.database.model.PendingThreePidEntityField
 import org.matrix.android.sdk.internal.database.model.PreviewUrlCacheEntityFields
 import org.matrix.android.sdk.internal.database.model.RoomAccountDataEntityFields
 import org.matrix.android.sdk.internal.database.model.RoomEntityFields
+import org.matrix.android.sdk.internal.database.model.RoomMemberSummaryEntityFields
 import org.matrix.android.sdk.internal.database.model.RoomMembersLoadStatusType
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntityFields
 import org.matrix.android.sdk.internal.database.model.RoomTagEntityFields
 import org.matrix.android.sdk.internal.database.model.SpaceChildSummaryEntityFields
 import org.matrix.android.sdk.internal.database.model.SpaceParentSummaryEntityFields
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntityFields
+import org.matrix.android.sdk.internal.database.model.presence.UserPresenceEntityFields
 import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.query.process
 import timber.log.Timber
 
 internal object RealmSessionStoreMigration : RealmMigration {
 
-    const val SESSION_STORE_SCHEMA_VERSION = 17L
+    const val SESSION_STORE_SCHEMA_VERSION = 18L
 
     override fun migrate(realm: DynamicRealm, oldVersion: Long, newVersion: Long) {
         Timber.v("Migrating Realm Session from $oldVersion to $newVersion")
@@ -69,6 +71,7 @@ internal object RealmSessionStoreMigration : RealmMigration {
         if (oldVersion <= 14) migrateTo15(realm)
         if (oldVersion <= 15) migrateTo16(realm)
         if (oldVersion <= 16) migrateTo17(realm)
+        if (oldVersion <= 17) migrateTo18(realm)
     }
 
     private fun migrateTo1(realm: DynamicRealm) {
@@ -337,5 +340,28 @@ internal object RealmSessionStoreMigration : RealmMigration {
         Timber.d("Step 16 -> 17")
         realm.schema.get("EventInsertEntity")
                 ?.addField(EventInsertEntityFields.CAN_BE_PROCESSED, Boolean::class.java)
+    }
+
+    private fun migrateTo18(realm: DynamicRealm) {
+        Timber.d("Step 17 -> 18")
+        realm.schema.create("UserPresenceEntity")
+                ?.addField(UserPresenceEntityFields.USER_ID, String::class.java)
+                ?.addPrimaryKey(UserPresenceEntityFields.USER_ID)
+                ?.setRequired(UserPresenceEntityFields.USER_ID, true)
+                ?.addField(UserPresenceEntityFields.PRESENCE_STR, String::class.java)
+                ?.addField(UserPresenceEntityFields.LAST_ACTIVE_AGO, Long::class.java)
+                ?.setNullable(UserPresenceEntityFields.LAST_ACTIVE_AGO, true)
+                ?.addField(UserPresenceEntityFields.STATUS_MESSAGE, String::class.java)
+                ?.addField(UserPresenceEntityFields.IS_CURRENTLY_ACTIVE, Boolean::class.java)
+                ?.setNullable(UserPresenceEntityFields.IS_CURRENTLY_ACTIVE, true)
+                ?.addField(UserPresenceEntityFields.AVATAR_URL, String::class.java)
+                ?.addField(UserPresenceEntityFields.DISPLAY_NAME, String::class.java)
+
+        val userPresenceEntity = realm.schema.get("UserPresenceEntity") ?: return
+        realm.schema.get("RoomSummaryEntity")
+                ?.addRealmObjectField(RoomSummaryEntityFields.DIRECT_USER_PRESENCE.`$`, userPresenceEntity)
+
+        realm.schema.get("RoomMemberSummaryEntity")
+                ?.addRealmObjectField(RoomMemberSummaryEntityFields.USER_PRESENCE_ENTITY.`$`, userPresenceEntity)
     }
 }

@@ -44,6 +44,7 @@ import org.matrix.android.sdk.internal.session.identity.IdentityModule
 import org.matrix.android.sdk.internal.session.integrationmanager.IntegrationManagerModule
 import org.matrix.android.sdk.internal.session.media.MediaModule
 import org.matrix.android.sdk.internal.session.openid.OpenIdModule
+import org.matrix.android.sdk.internal.session.presence.di.PresenceModule
 import org.matrix.android.sdk.internal.session.profile.ProfileModule
 import org.matrix.android.sdk.internal.session.pushers.AddPusherWorker
 import org.matrix.android.sdk.internal.session.pushers.PushersModule
@@ -96,6 +97,7 @@ import org.matrix.android.sdk.internal.util.system.SystemModule
             SearchModule::class,
             ThirdPartyModule::class,
             SpaceModule::class,
+            PresenceModule::class,
             RequestModule::class
         ]
 )
