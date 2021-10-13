@@ -55,7 +55,21 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
         backgroundHandler = Handler(handlerThread.looper)
     }
 
+    /**
+     * The notifiable events to render
+     * this is our source of truth for notifications, any changes to this list will be rendered as notifications
+     * when events are removed the previously rendered notifications will be cancelled
+     * when adding or updating, the notifications will be notified
+     *
+     * Events are unique by their properties, we should be careful not to insert multiple events with the same event-id
+     */
     private val eventList = loadEventInfo()
+
+    /**
+     * The last known rendered notifiable events
+     * we keep track of them in order to know which events have been removed from the eventList
+     * allowing us to cancel any notifications previous displayed by now removed events
+     */
     private var renderedEventsList = emptyList<Pair<ProcessedType, NotifiableEvent>>()
     private val avatarSize = context.resources.getDimensionPixelSize(R.dimen.profile_avatar_size)
     private var currentRoomId: String? = null
