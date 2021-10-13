@@ -86,9 +86,9 @@ class NotificationFactory @Inject constructor(
                                   invitationNotifications: List<OneShotNotification>,
                                   simpleNotifications: List<OneShotNotification>,
                                   useCompleteNotificationFormat: Boolean): SummaryNotification {
-        val roomMeta = roomNotifications.mapToMeta()
-        val invitationMeta = invitationNotifications.mapToMeta()
-        val simpleMeta = simpleNotifications.mapToMeta()
+        val roomMeta = roomNotifications.filterIsInstance<RoomNotification.Message>().map { it.meta }
+        val invitationMeta = invitationNotifications.filterIsInstance<OneShotNotification.Append>().map { it.meta }
+        val simpleMeta = simpleNotifications.filterIsInstance<OneShotNotification.Append>().map { it.meta }
         return when {
             roomMeta.isEmpty() && invitationMeta.isEmpty() && simpleMeta.isEmpty() -> SummaryNotification.Removed
             else                                                                   -> SummaryNotification.Update(
@@ -101,11 +101,6 @@ class NotificationFactory @Inject constructor(
         }
     }
 }
-
-private fun List<RoomNotification>.mapToMeta() = filterIsInstance<RoomNotification.Message>().map { it.meta }
-
-@JvmName("mapToMetaOneShotNotification")
-private fun List<OneShotNotification>.mapToMeta() = filterIsInstance<OneShotNotification.Append>().map { it.meta }
 
 sealed interface RoomNotification {
     data class Removed(val roomId: String) : RoomNotification
