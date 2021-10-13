@@ -2983,4 +2983,6 @@
     <string name="space_permissions_notice_read_only">Du har inte behörighet att uppdatera rollerna som krävs för att ändra diverse delar av det här utrmmet</string>
     <string name="space_permissions_notice">Välj de roller som krävs för att ändra diverse delar av det här utrymmet</string>
     <string name="space_settings_permissions_subtitle">Se och uppdatera rollerna som krävs för att ändra diverse delar av utrymmet.</string>
+    <string name="create_spaces_invite_public_header">Vilka är dina lagkamrater\?</string>
+    <string name="command_description_add_to_space">Lägg till till det angivna utrymmet</string>
 </resources>
