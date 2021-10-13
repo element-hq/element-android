@@ -24,8 +24,10 @@ import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRulesContent
 import org.matrix.android.sdk.api.session.room.model.VersioningState
 import org.matrix.android.sdk.api.session.room.model.create.RoomCreateContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
 import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntityFields
+import org.matrix.android.sdk.internal.database.model.DraftEntityFields
 import org.matrix.android.sdk.internal.database.model.EditAggregatedSummaryEntityFields
 import org.matrix.android.sdk.internal.database.model.EditionOfEventFields
 import org.matrix.android.sdk.internal.database.model.EventEntityFields
@@ -49,7 +51,7 @@ import timber.log.Timber
 
 internal object RealmSessionStoreMigration : RealmMigration {
 
-    const val SESSION_STORE_SCHEMA_VERSION = 18L
+    const val SESSION_STORE_SCHEMA_VERSION = 19L
 
     override fun migrate(realm: DynamicRealm, oldVersion: Long, newVersion: Long) {
         Timber.v("Migrating Realm Session from $oldVersion to $newVersion")
@@ -72,6 +74,7 @@ internal object RealmSessionStoreMigration : RealmMigration {
         if (oldVersion <= 15) migrateTo16(realm)
         if (oldVersion <= 16) migrateTo17(realm)
         if (oldVersion <= 17) migrateTo18(realm)
+        if (oldVersion <= 18) migrateTo19(realm)
     }
 
     private fun migrateTo1(realm: DynamicRealm) {
@@ -363,5 +366,13 @@ internal object RealmSessionStoreMigration : RealmMigration {
 
         realm.schema.get("RoomMemberSummaryEntity")
                 ?.addRealmObjectField(RoomMemberSummaryEntityFields.USER_PRESENCE_ENTITY.`$`, userPresenceEntity)
+    }
+
+    private fun migrateTo19(realm: DynamicRealm) {
+        realm.schema.get("DraftEntity")
+                ?.addField(DraftEntityFields.MESSAGE_TYPE, String::class.java)
+                ?.transform {
+                    it.setString(DraftEntityFields.MESSAGE_TYPE, MessageType.MSGTYPE_TEXT)
+                }
     }
 }

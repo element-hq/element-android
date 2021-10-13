@@ -201,6 +201,7 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageFormat
 import org.matrix.android.sdk.api.session.room.model.message.MessageImageInfoContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageStickerContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageTextContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.model.message.MessageVerificationRequestContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageVideoContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageWithAttachmentContent
@@ -1090,7 +1091,7 @@ class RoomDetailFragment @Inject constructor(
 
         notificationDrawerManager.setCurrentRoom(null)
 
-        textComposerViewModel.handle(TextComposerAction.SaveDraft(views.composerLayout.text.toString()))
+        textComposerViewModel.handle(TextComposerAction.SaveDraft(views.composerLayout.text.toString(), MessageType.MSGTYPE_TEXT))
 
         // We should improve the UX to support going into playback mode when paused and delete the media when the view is destroyed.
         roomDetailViewModel.handle(RoomDetailAction.EndAllVoiceActions(deleteRecord = false))

@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.internal.database.mapper
 
+import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.send.UserDraft
 import org.matrix.android.sdk.internal.database.model.DraftEntity
 
@@ -26,20 +27,20 @@ internal object DraftMapper {
 
     fun map(entity: DraftEntity): UserDraft {
         return when (entity.draftMode) {
-            DraftEntity.MODE_REGULAR -> UserDraft.REGULAR(entity.content)
-            DraftEntity.MODE_EDIT    -> UserDraft.EDIT(entity.linkedEventId, entity.content)
-            DraftEntity.MODE_QUOTE   -> UserDraft.QUOTE(entity.linkedEventId, entity.content)
-            DraftEntity.MODE_REPLY   -> UserDraft.REPLY(entity.linkedEventId, entity.content)
+            DraftEntity.MODE_REGULAR -> UserDraft.REGULAR(entity.content, entity.messageType)
+            DraftEntity.MODE_EDIT    -> UserDraft.EDIT(entity.linkedEventId, entity.content, entity.messageType)
+            DraftEntity.MODE_QUOTE   -> UserDraft.QUOTE(entity.linkedEventId, entity.content, entity.messageType)
+            DraftEntity.MODE_REPLY   -> UserDraft.REPLY(entity.linkedEventId, entity.content, entity.messageType)
             else                     -> null
-        } ?: UserDraft.REGULAR("")
+        } ?: UserDraft.REGULAR("", MessageType.MSGTYPE_TEXT)
     }
 
     fun map(domain: UserDraft): DraftEntity {
         return when (domain) {
-            is UserDraft.REGULAR -> DraftEntity(content = domain.text, draftMode = DraftEntity.MODE_REGULAR, linkedEventId = "")
-            is UserDraft.EDIT    -> DraftEntity(content = domain.text, draftMode = DraftEntity.MODE_EDIT, linkedEventId = domain.linkedEventId)
-            is UserDraft.QUOTE   -> DraftEntity(content = domain.text, draftMode = DraftEntity.MODE_QUOTE, linkedEventId = domain.linkedEventId)
-            is UserDraft.REPLY   -> DraftEntity(content = domain.text, draftMode = DraftEntity.MODE_REPLY, linkedEventId = domain.linkedEventId)
+            is UserDraft.REGULAR -> DraftEntity(content = domain.content, draftMode = DraftEntity.MODE_REGULAR, linkedEventId = "")
+            is UserDraft.EDIT    -> DraftEntity(content = domain.content, draftMode = DraftEntity.MODE_EDIT, linkedEventId = domain.linkedEventId)
+            is UserDraft.QUOTE   -> DraftEntity(content = domain.content, draftMode = DraftEntity.MODE_QUOTE, linkedEventId = domain.linkedEventId)
+            is UserDraft.REPLY   -> DraftEntity(content = domain.content, draftMode = DraftEntity.MODE_REPLY, linkedEventId = domain.linkedEventId)
         }
     }
 }

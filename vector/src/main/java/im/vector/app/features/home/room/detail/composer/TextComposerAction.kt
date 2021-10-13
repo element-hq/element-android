@@ -19,7 +19,7 @@ package im.vector.app.features.home.room.detail.composer
 import im.vector.app.core.platform.VectorViewModelAction
 
 sealed class TextComposerAction : VectorViewModelAction {
-    data class SaveDraft(val draft: String) : TextComposerAction()
+    data class SaveDraft(val draft: String, val messageType: String) : TextComposerAction()
     data class SendMessage(val text: CharSequence, val autoMarkdown: Boolean) : TextComposerAction()
     data class EnterEditMode(val eventId: String, val text: String) : TextComposerAction()
     data class EnterQuoteMode(val eventId: String, val text: String) : TextComposerAction()
