@@ -20,6 +20,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.app.core.extensions.cleanup
@@ -55,6 +56,7 @@ class TchapRoomLinkAccessFragment @Inject constructor(
     }
 
     private fun renderRoomSummary(state: TchapRoomLinkAccessState) {
+        views.waitingView.root.isVisible = state.isLoading
         state.roomSummary()?.let {
             views.roomSettingsToolbarTitleView.text = it.displayName
             avatarRenderer.render(it.toMatrixItem(), views.roomSettingsToolbarAvatarImageView)
@@ -74,6 +76,12 @@ class TchapRoomLinkAccessFragment @Inject constructor(
                 .observe()
                 .subscribe { handleLinkAccessAction(it) }
                 .disposeOnDestroyView()
+
+        viewModel.observeViewEvents {
+            when (it) {
+                is TchapRoomLinkAccessViewEvents.Failure -> showFailure(it.throwable)
+            }
+        }
     }
 
     override fun onDestroyView() {
@@ -100,14 +108,17 @@ class TchapRoomLinkAccessFragment @Inject constructor(
                 .show(childFragmentManager, "TCHAP_ROOM_LINK_ACCESS_ACTIONS")
     }
 
+    @Suppress("UNUSED_PARAMETER")
     private fun handleCopy(permalink: String) {
         copyToClipboard(requireContext(), permalink)
     }
 
+    @Suppress("UNUSED_PARAMETER")
     private fun handleForward(permalink: String) {
         forwardText(requireContext(), permalink)
     }
 
+    @Suppress("UNUSED_PARAMETER")
     private fun handleShare(permalink: String) {
         shareText(requireContext(), permalink)
     }

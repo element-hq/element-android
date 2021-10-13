@@ -20,14 +20,19 @@ import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Uninitialized
 import im.vector.app.core.ui.bottomsheet.BottomSheetGenericState
 import im.vector.app.features.roomprofile.RoomProfileArgs
+import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 
 data class TchapRoomLinkAccessState(
         val roomId: String,
+        val currentRoomJoinRules: RoomJoinRules = RoomJoinRules.INVITE,
         val roomSummary: Async<RoomSummary> = Uninitialized,
-        val isLinkAccessEnabled: Boolean = false,
         val canonicalAlias: String? = null,
+        val isLoading: Boolean = false
 ) : BottomSheetGenericState() {
+
+    val isLinkAccessEnabled: Boolean
+        get() = currentRoomJoinRules != RoomJoinRules.INVITE
 
     constructor(args: RoomProfileArgs) : this(
             roomId = args.roomId

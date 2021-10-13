@@ -23,13 +23,15 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.core.extensions.exhaustive
-import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.room.model.GuestAccess
 import org.matrix.android.sdk.api.session.room.model.RoomCanonicalAliasContent
+import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
+import org.matrix.android.sdk.api.session.room.model.RoomJoinRulesContent
 import org.matrix.android.sdk.rx.mapOptional
 import org.matrix.android.sdk.rx.rx
 import org.matrix.android.sdk.rx.unwrap
@@ -37,7 +39,7 @@ import org.matrix.android.sdk.rx.unwrap
 class TchapRoomLinkAccessViewModel @AssistedInject constructor(
         @Assisted initialState: TchapRoomLinkAccessState,
         session: Session
-) : VectorViewModel<TchapRoomLinkAccessState, TchapRoomLinkAccessAction, EmptyViewEvents>(initialState) {
+) : VectorViewModel<TchapRoomLinkAccessState, TchapRoomLinkAccessAction, TchapRoomLinkAccessViewEvents>(initialState) {
 
     @AssistedFactory
     interface Factory {
@@ -57,6 +59,7 @@ class TchapRoomLinkAccessViewModel @AssistedInject constructor(
 
     init {
         observeRoomSummary()
+        observeJoinRule()
         observeRoomCanonicalAlias()
     }
 
@@ -89,7 +92,35 @@ class TchapRoomLinkAccessViewModel @AssistedInject constructor(
                 }
     }
 
+    private fun observeJoinRule() {
+        room.rx()
+                .liveStateEvent(EventType.STATE_ROOM_JOIN_RULES, QueryStringValue.NoCondition)
+                .mapOptional { it.content.toModel<RoomJoinRulesContent>() }
+                .unwrap()
+                .subscribe {
+                    it.joinRules?.let {
+                        setState { copy(currentRoomJoinRules = it) }
+                    }
+                }
+                .disposeOnClear()
+    }
+
     private fun handleSetIsEnabled(action: TchapRoomLinkAccessAction.SetIsEnabled) {
-        setState { copy(isLinkAccessEnabled = action.isEnabled) }
+        setState { copy(isLoading = true) }
+        if (action.isEnabled) {
+            room.rx().updateJoinRule(RoomJoinRules.PUBLIC, GuestAccess.Forbidden)
+        } else {
+            room.rx().updateJoinRule(RoomJoinRules.INVITE, null)
+        }
+                .subscribe(
+                        {
+                            setState { copy(isLoading = false) }
+                        },
+                        {
+                            setState { copy(isLoading = false) }
+                            _viewEvents.post(TchapRoomLinkAccessViewEvents.Failure(it))
+                        }
+                )
+                .disposeOnClear()
     }
 }
