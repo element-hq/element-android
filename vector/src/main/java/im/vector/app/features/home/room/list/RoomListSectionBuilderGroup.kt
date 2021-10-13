@@ -99,7 +99,9 @@ class RoomListSectionBuilderGroup(
         return sections
     }
 
-    private fun buildHomeSection(sections: MutableList<RoomsSection>, activeGroupAwareQueries: MutableList<UpdatableLivePageResult>, actualGroupId: String?) {
+    private fun buildHomeSection(sections: MutableList<RoomsSection>,
+                                 activeGroupAwareQueries: MutableList<UpdatableLivePageResult>,
+                                 actualGroupId: String?) {
         if (autoAcceptInvites.showInvites()) {
             addSection(
                     sections = sections,
@@ -164,7 +166,9 @@ class RoomListSectionBuilderGroup(
         }
     }
 
-    private fun buildAllInOneSection(sections: MutableList<RoomsSection>, activeGroupAwareQueries: MutableList<UpdatableLivePageResult>, actualGroupId: String?) {
+    private fun buildAllInOneSection(sections: MutableList<RoomsSection>,
+                                     activeGroupAwareQueries: MutableList<UpdatableLivePageResult>,
+                                     actualGroupId: String?) {
         if (autoAcceptInvites.showInvites()) {
             addSection(
                     sections,
@@ -362,7 +366,8 @@ class RoomListSectionBuilderGroup(
         )
     }
 
-    private fun withQueryParams(builder: (RoomSummaryQueryParams.Builder) -> Unit, block: (RoomSummaryQueryParams) -> Unit) {
+    private fun withQueryParams(builder: (RoomSummaryQueryParams.Builder) -> Unit,
+                                block: (RoomSummaryQueryParams) -> Unit) {
         RoomSummaryQueryParams.Builder()
                 .apply { builder.invoke(this) }
                 .build()
