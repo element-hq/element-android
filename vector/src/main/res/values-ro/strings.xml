@@ -125,7 +125,7 @@
     <string name="create_spaces_organise_rooms">Un spațiu privat pentru organizarea camerelor</string>
     <string name="create_spaces_join_info_help">Pentru a vă alătura unui spațiu existent, aveți nevoie de o invitație.</string>
     <string name="create_spaces_you_can_change_later">Puteți schimba acest lucru mai târziu</string>
-    <string name="room_settings_room_access_restricted_title">Spații</string>
+    <string name="room_settings_room_access_restricted_title">Spații numai pentru membri</string>
     <string name="spaces_invited_header">Invitații</string>
     <string name="send_a_sticker">Autocolant</string>
     <string name="attachment_type_sticker">Autocolant</string>
@@ -296,7 +296,7 @@
     <string name="notice_room_server_acl_set_allowed">• Serverele care se potrivesc %s sunt permise.</string>
     <string name="notice_room_server_acl_set_banned">• Serverele care se potrivesc %s sunt interzise.</string>
     <string name="notice_room_server_acl_set_title_by_you">Tu ai setat lista de acces in aceasta cameră.</string>
-    <string name="notice_end_to_end">%1$s porniți criptarea de la un capat la altul (%2$s)</string>
+    <string name="notice_end_to_end">%1$s porniți criptarea end-to-end (%2$s)</string>
     <string name="notice_made_future_room_visibility_by_you">Ați făcut istoria camerei viitoare vizibilă pentru %1$s</string>
     <string name="notice_made_future_room_visibility">%1$s a făcut istoria camerei viitoare vizibilă pentru %2$s</string>
     <string name="notice_crypto_unable_to_decrypt">** Imposibil de decriptat: %s **</string>
@@ -340,4 +340,57 @@
     <string name="save">Salvează</string>
     <string name="cancel">Anulează</string>
     <string name="title_activity_verify_device">Verificați sesiunea</string>
+    <string name="notice_room_invite_no_invitee_with_reason_by_you">Invitația ta. Motivul: %1$s</string>
+    <string name="notice_room_invite_no_invitee_with_reason">Invitația trimisă de %1$s. Motivul: %2$s</string>
+    <string name="clear_timeline_send_queue">Șterge coada de trimitere</string>
+    <string name="event_status_sending_message">Mesajul se trimite…</string>
+    <string name="event_status_sent_message">Mesaj trimis</string>
+    <string name="initial_sync_start_importing_account_data">Sincronizare inițială:
+\nSe importă datele contului</string>
+    <string name="initial_sync_start_importing_account_groups">Sincronizare inițială:
+\nSe importă comunitățile</string>
+    <string name="initial_sync_start_importing_account_left_rooms">Sincronizare inițială:
+\nSe importă camerele pe care le-ați părăsit</string>
+    <string name="initial_sync_start_importing_account_invited_rooms">Sincronizare inițială:
+\nSe importă camerele la care a-ți primit invitații</string>
+    <string name="initial_sync_start_importing_account_joined_rooms">Sincronizare inițială:
+\nSe importă camerele la care v-ați alăturat</string>
+    <string name="initial_sync_start_importing_account_rooms">Sincronizare inițială:
+\nSe importa camerele</string>
+    <string name="initial_sync_start_importing_account_crypto">Sincronizare inițială:
+\nSe importă crypto</string>
+    <string name="initial_sync_start_importing_account">Sincronizare inițială:
+\nSe importă contul…</string>
+    <string name="initial_sync_start_downloading">Sincronizare inițială:
+\nSe descarcă datele…</string>
+    <string name="initial_sync_start_server_computing">Sincronizare inițială:
+\nSe așteaptă pentru răspunsul serverului…</string>
+    <string name="room_displayname_empty_room_was">Cameră liberă (a fost %s)</string>
+    <string name="room_displayname_empty_room">Cameră liberă</string>
+    <plurals name="room_displayname_three_and_more_members">
+        <item quantity="one">%1$s și un altul</item>
+        <item quantity="few">%1$s și %2$d alți</item>
+        <item quantity="other">%1$s și %2$d de alți</item>
+    </plurals>
+    <plurals name="room_displayname_four_and_more_members">
+        <item quantity="one">%1$s, %2$s, %3$s și %4$d altul</item>
+        <item quantity="few">%1$s, %2$s, %3$s și %4$d altele</item>
+        <item quantity="other">%1$s, %2$s, %3$s și %4$d altele</item>
+    </plurals>
+    <string name="room_displayname_4_members">%1$s,%2$s,%3$s și %4$s</string>
+    <string name="room_displayname_3_members">%1$s,%2$s și %3$s</string>
+    <string name="room_displayname_two_members">%1$s și %2$s</string>
+    <string name="room_displayname_room_invite">Invitația camerei</string>
+    <string name="room_displayname_invite_from">Invitație de la %s</string>
+    <string name="room_error_join_failed_empty_room">În acest moment este imposibil să reintri într-o camră goală.</string>
+    <string name="matrix_error">Eroare de aplicație</string>
+    <string name="network_error">Eroare de rețea</string>
+    <string name="message_failed_to_upload">A apărut o eroare în timpul incărcării imaginii</string>
+    <string name="unable_to_send_message">Nu s-a putut trimite mesajul</string>
+    <string name="could_not_redact">Nu se poate redacta</string>
+    <string name="notice_crypto_error_unkwown_inbound_session_id">Dispozitivul expeditorului nu a trimis cheile de decriptare pentru acest mesaj.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_not_allowed">Acum sunt blocate serverele ce au adrese IP ce se potrivesc.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_allowed">Acum sunt permise serverele ce au adrese IP ce se potrivesc.</string>
+    <string name="notice_room_server_acl_set_ip_literals_not_allowed">Sunt blocate serverele ce au adrese IP ce se potrivesc.</string>
+    <string name="notice_room_server_acl_set_ip_literals_allowed">Sunt permise serverele ce au adrese IP ce se potrivesc.</string>
 </resources>
