@@ -17,7 +17,8 @@
 package im.vector.app.features.notifications
 
 /**
- * A FIFO circular buffer of strings
+ * A FIFO circular buffer of T
+ * This class is not thread safe
  */
 class CircularCache<T>(cacheSize: Int) {
 
