@@ -17,11 +17,11 @@ package im.vector.app.features.notifications
 
 import android.content.Context
 import androidx.annotation.WorkerThread
+import androidx.core.content.pm.ShortcutManagerCompat
 import im.vector.app.features.notifications.NotificationDrawerManager.Companion.ROOM_EVENT_NOTIFICATION_ID
 import im.vector.app.features.notifications.NotificationDrawerManager.Companion.ROOM_INVITATION_NOTIFICATION_ID
 import im.vector.app.features.notifications.NotificationDrawerManager.Companion.ROOM_MESSAGES_NOTIFICATION_ID
 import im.vector.app.features.notifications.NotificationDrawerManager.Companion.SUMMARY_NOTIFICATION_ID
-import androidx.core.content.pm.ShortcutManagerCompat
 import timber.log.Timber
 import javax.inject.Inject
 
