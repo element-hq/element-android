@@ -17,6 +17,7 @@
 package im.vector.app.features.notifications
 
 import android.app.Notification
+import im.vector.app.test.fakes.FakeContext
 import im.vector.app.test.fakes.FakeNotificationDisplayer
 import im.vector.app.test.fakes.FakeNotificationFactory
 import io.mockk.mockk
@@ -41,12 +42,14 @@ private val ONE_SHOT_META = OneShotNotification.Append.Meta(key = "ignored", sum
 
 class NotificationRendererTest {
 
+    private val context = FakeContext()
     private val notificationDisplayer = FakeNotificationDisplayer()
     private val notificationFactory = FakeNotificationFactory()
 
     private val notificationRenderer = NotificationRenderer(
             notificationDisplayer = notificationDisplayer.instance,
-            notificationFactory = notificationFactory.instance
+            notificationFactory = notificationFactory.instance,
+            appContext = context.instance
     )
 
     @Test
@@ -87,6 +90,7 @@ class NotificationRendererTest {
     fun `given a room message group notification is added when rendering then show the message notification and update summary`() {
         givenNotifications(roomNotifications = listOf(RoomNotification.Message(
                 A_NOTIFICATION,
+                shortcutInfo = null,
                 MESSAGE_META
         )))
 
