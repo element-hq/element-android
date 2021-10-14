@@ -70,7 +70,6 @@ internal class ImageExifTagRemover @Inject constructor(
                     it.removeField(GPSTagConstants.GPS_TAG_GPS_DEST_LATITUDE_REF)
                     ExifRewriter().updateExifMetadataLossless(jpegImageFile, outputStream, it)
                 } ?: throw FileNotScrubbedException("Unable to remove exif tags from jpeg")
-
             }
             scrubbedFile
         }.fold(

@@ -16,4 +16,4 @@
 
 package org.matrix.android.sdk.internal.session.exceptions
 
-class FileNotScrubbedException (message:String): Exception(message)
+class FileNotScrubbedException(message: String) : Exception(message)
