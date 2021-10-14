@@ -147,11 +147,11 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
                         // Ignore an edit of a not displayed event in the notification drawer
                     }
                 } else {
+                    // Not an edit
                     if (seenEventIds.contains(notifiableEvent.eventId)) {
-                        // we've already seen the event, lets' skip
-                        Timber.d("onNotifiableEventReceived(): skipping event, already seen}")
+                        // we've already seen the event, lets skip
+                        Timber.d("onNotifiableEventReceived(): skipping event, already seen")
                     } else {
-                        // Not an edit
                         seenEventIds.put(notifiableEvent.eventId)
                         eventList.add(notifiableEvent)
                     }
