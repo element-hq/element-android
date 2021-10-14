@@ -330,11 +330,15 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
                     }
                     roomEventGroupInfo.hasNewEvent = roomEventGroupInfo.hasNewEvent || !event.hasBeenDisplayed
 
-                    val senderPerson = Person.Builder()
-                            .setName(event.senderName)
-                            .setIcon(iconLoader.getUserIcon(event.senderAvatarPath))
-                            .setKey(event.senderId)
-                            .build()
+                    val senderPerson = if (event.outGoingMessage) {
+                        null
+                    } else {
+                        Person.Builder()
+                                .setName(event.senderName)
+                                .setIcon(iconLoader.getUserIcon(event.senderAvatarPath))
+                                .setKey(event.senderId)
+                                .build()
+                    }
 
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                         val openRoomIntent = RoomDetailActivity.shortcutIntent(context, roomId)
