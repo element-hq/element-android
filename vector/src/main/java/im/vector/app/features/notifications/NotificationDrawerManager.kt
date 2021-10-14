@@ -41,7 +41,7 @@ import javax.inject.Singleton
  */
 @Singleton
 class NotificationDrawerManager @Inject constructor(private val context: Context,
-                                                    private val notificationUtils: NotificationUtils,
+                                                    private val notificationDisplayer: NotificationDisplayer,
                                                     private val vectorPreferences: VectorPreferences,
                                                     private val activeSessionDataSource: ActiveSessionDataSource,
                                                     private val notifiableEventProcessor: NotifiableEventProcessor,
@@ -243,7 +243,7 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
         val newSettings = vectorPreferences.useCompleteNotificationFormat()
         if (newSettings != useCompleteNotificationFormat) {
             // Settings has changed, remove all current notifications
-            notificationUtils.cancelAllNotifications()
+            notificationDisplayer.cancelAllNotifications()
             useCompleteNotificationFormat = newSettings
         }
 
@@ -316,10 +316,6 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
         if (file.exists()) {
             file.delete()
         }
-    }
-
-    fun displayDiagnosticNotification() {
-        notificationUtils.displayDiagnosticNotification()
     }
 
     companion object {
