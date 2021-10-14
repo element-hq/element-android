@@ -68,8 +68,8 @@
     <string name="notice_answered_call_by_you">Ați răspuns la apel.</string>
     <string name="notice_answered_call">%s a răspuns la apel.</string>
     <string name="summary_message">%1$s: %2$s</string>
-    <string name="summary_user_sent_sticker">%1$s a trimis un autocolant.</string>
-    <string name="summary_you_sent_sticker">Ați trimis un autocolant.</string>
+    <string name="summary_user_sent_sticker">%1$s a trimis un sticker.</string>
+    <string name="summary_you_sent_sticker">Ați trimis un sticker.</string>
     <string name="invite_friends">Invită prieteni</string>
     <string name="notice_room_server_acl_updated_no_change">Fără schimbări.</string>
     <string name="notice_room_third_party_registered_invite_by_you">Ați acceptat invitația pentru %1$s</string>
@@ -83,7 +83,7 @@
     <string name="notice_event_redacted_by_with_reason">Mesaj șters de %1$s [motiv: %2$s]</string>
     <string name="notice_event_redacted_with_reason">Mesaj șters [motiv: %1$s]</string>
     <string name="notice_event_redacted_by">Mesaj șters de %1$s</string>
-    <string name="notice_event_redacted">Mesaj șters</string>
+    <string name="notice_event_redacted">Mesaj înlăturat</string>
     <string name="notice_room_avatar_removed_by_you">Ați înlăturat avatarul camerei</string>
     <string name="notice_room_avatar_removed">%1$s a înlăturat avatarul camerei</string>
     <string name="notice_room_topic_removed_by_you">Ați înlăturat subiectul acestei camere</string>
