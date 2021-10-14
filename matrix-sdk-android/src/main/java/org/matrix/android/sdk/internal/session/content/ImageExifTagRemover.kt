@@ -74,5 +74,4 @@ internal class ImageExifTagRemover @Inject constructor(
         }
         destinationFile
     }
-
 }
