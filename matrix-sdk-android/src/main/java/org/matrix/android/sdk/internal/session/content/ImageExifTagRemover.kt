@@ -16,14 +16,16 @@
 
 package org.matrix.android.sdk.internal.session.content
 
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.apache.sanselan.Sanselan
 import org.apache.sanselan.formats.jpeg.JpegImageMetadata
 import org.apache.sanselan.formats.jpeg.exifRewrite.ExifRewriter
 import org.apache.sanselan.formats.tiff.constants.ExifTagConstants
 import org.apache.sanselan.formats.tiff.constants.GPSTagConstants
+import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
+import org.matrix.android.sdk.internal.session.exceptions.FileNotScrubbedException
 import org.matrix.android.sdk.internal.util.TemporaryFileCreator
+import timber.log.Timber
 import java.io.BufferedOutputStream
 import java.io.File
 import java.io.FileOutputStream
@@ -34,19 +36,20 @@ import javax.inject.Inject
  */
 
 internal class ImageExifTagRemover @Inject constructor(
-        private val temporaryFileCreator: TemporaryFileCreator
+        private val temporaryFileCreator: TemporaryFileCreator,
+        private val coroutineDispatchers: MatrixCoroutineDispatchers
 ) {
 
     /**
      * Remove sensitive exif tags from a jpeg image file.
      * Scrubbing exif tags like GPS location and user comments
      * @param jpegImageFile The image file to be scrubbed
+     * @return the new scrubbed image file, or the original file if the operation failed
      */
-    suspend fun removeSensitiveJpegExifTags(jpegImageFile: File): File = withContext(Dispatchers.IO) {
-        val destinationFile = temporaryFileCreator.create()
-
+    suspend fun removeSensitiveJpegExifTags(jpegImageFile: File): File = withContext(coroutineDispatchers.io) {
+        val scrubbedFile = temporaryFileCreator.create()
         runCatching {
-            FileOutputStream(destinationFile).use { fos ->
+            FileOutputStream(scrubbedFile).use { fos ->
                 val outputStream = BufferedOutputStream(fos)
                 val outputSet = (Sanselan.getMetadata(jpegImageFile) as? JpegImageMetadata)?.exif?.outputSet
 
@@ -66,12 +69,19 @@ internal class ImageExifTagRemover @Inject constructor(
                     it.removeField(GPSTagConstants.GPS_TAG_GPS_DEST_LATITUDE)
                     it.removeField(GPSTagConstants.GPS_TAG_GPS_DEST_LATITUDE_REF)
                     ExifRewriter().updateExifMetadataLossless(jpegImageFile, outputStream, it)
-                } ?: let {
-                    destinationFile.delete()
-                    return@withContext jpegImageFile
-                }
+                } ?: throw FileNotScrubbedException("Unable to remove exif tags from jpeg")
+
             }
-        }
-        destinationFile
+            scrubbedFile
+        }.fold(
+                onSuccess = {
+                    it
+                },
+                onFailure = {
+                    Timber.e(it)
+                    scrubbedFile.delete()
+                    jpegImageFile
+                }
+        )
     }
 }
