@@ -89,7 +89,7 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
      * Acts as a notification debouncer to stop already dismissed push notifications from
      * displaying again when the /sync response is delayed.
      */
-    private val seenEventIds = CircularStringCache(cacheSize = 25)
+    private val seenEventIds = CircularCache<String>(cacheSize = 25)
 
     /**
     Should be called as soon as a new event is ready to be displayed.

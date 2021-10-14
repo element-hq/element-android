@@ -19,14 +19,14 @@ package im.vector.app.features.notifications
 /**
  * A FIFO circular buffer of strings
  */
-class CircularStringCache(cacheSize: Int) {
+class CircularCache<T>(cacheSize: Int) {
 
-    private val cache = Array(cacheSize) { "" }
+    private val cache = ArrayList<T>(initialCapacity = cacheSize)
     private var writeIndex = 0
 
-    fun contains(key: String): Boolean = cache.contains(key)
+    fun contains(key: T): Boolean = cache.contains(key)
 
-    fun put(key: String) {
+    fun put(key: T) {
         if (writeIndex == cache.size - 1) {
             writeIndex = 0
         }
