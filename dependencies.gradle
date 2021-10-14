@@ -34,7 +34,9 @@ def androidxTest = "1.4.0"
 ext.libs = [
         gradle      : [
                 'gradlePlugin'            : "com.android.tools.build:gradle:$gradle",
-                'kotlinPlugin'            : "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin"
+                'kotlinPlugin'            : "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin",
+                'hiltPlugin'              : "com.google.dagger:hilt-android-gradle-plugin:$dagger"
+
         ],
         jetbrains   : [
                 'kotlinStdlibJdk7'        : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin",
@@ -74,7 +76,9 @@ ext.libs = [
         ],
         dagger      : [
                 'dagger'                  : "com.google.dagger:dagger:$dagger",
-                'daggerCompiler'          : "com.google.dagger:dagger-compiler:$dagger"
+                'daggerCompiler'          : "com.google.dagger:dagger-compiler:$dagger",
+                'hilt'                    : "com.google.dagger:hilt-android:$dagger",
+                'hiltCompiler'            : "com.google.dagger:hilt-compiler:$dagger"
         ],
         squareup    : [
                 'moshi'                  : "com.squareup.moshi:moshi-adapters:$moshi",

@@ -18,7 +18,9 @@ package im.vector.app.features.home.room.list
 
 import dagger.Binds
 import dagger.Module
+import dagger.hilt.migration.DisableInstallInCheck
 
+@DisableInstallInCheck
 @Module
 abstract class RoomListModule {
 

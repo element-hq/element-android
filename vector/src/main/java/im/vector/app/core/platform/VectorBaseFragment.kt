@@ -35,10 +35,12 @@ import com.bumptech.glide.util.Util.assertMainThread
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.jakewharton.rxbinding3.view.clicks
+import dagger.hilt.EntryPoints
 import im.vector.app.R
 import im.vector.app.core.di.DaggerScreenComponent
 import im.vector.app.core.di.HasScreenInjector
 import im.vector.app.core.di.ScreenComponent
+import im.vector.app.core.di.ScreenComponentDependencies
 import im.vector.app.core.dialogs.UnrecognizedCertificateDialog
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.toMvRxBundle
@@ -95,7 +97,10 @@ abstract class VectorBaseFragment<VB : ViewBinding> : Fragment(), MavericksView,
      * ========================================================================================== */
 
     override fun onAttach(context: Context) {
-        screenComponent = DaggerScreenComponent.factory().create(vectorBaseActivity.getVectorComponent(), vectorBaseActivity)
+        val screenComponentDeps = EntryPoints.get(
+                vectorBaseActivity.applicationContext,
+                ScreenComponentDependencies::class.java)
+        screenComponent = DaggerScreenComponent.factory().create(screenComponentDeps, vectorBaseActivity)
         navigator = screenComponent.navigator()
         errorFormatter = screenComponent.errorFormatter()
         unrecognizedCertificateDialog = screenComponent.unrecognizedCertificateDialog()

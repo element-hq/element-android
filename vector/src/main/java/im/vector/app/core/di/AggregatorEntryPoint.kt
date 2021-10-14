@@ -1,11 +1,11 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright (c) 2021 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,13 +18,13 @@ package im.vector.app.core.di
 
 import android.content.Context
 import android.content.res.Resources
-import dagger.BindsInstance
-import dagger.Component
+import dagger.hilt.EntryPoint
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import im.vector.app.ActiveSessionDataSource
 import im.vector.app.AppStateHandler
 import im.vector.app.EmojiCompatFontProvider
 import im.vector.app.EmojiCompatWrapper
-import im.vector.app.VectorApplication
 import im.vector.app.core.dialogs.UnrecognizedCertificateDialog
 import im.vector.app.core.dispatchers.CoroutineDispatchers
 import im.vector.app.core.error.ErrorFormatter
@@ -47,7 +47,6 @@ import im.vector.app.features.invite.AutoAcceptInvites
 import im.vector.app.features.login.ReAuthHelper
 import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.notifications.NotifiableEventResolver
-import im.vector.app.features.notifications.NotificationBroadcastReceiver
 import im.vector.app.features.notifications.NotificationDrawerManager
 import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.features.notifications.PushRuleTriggerListener
@@ -68,15 +67,10 @@ import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.auth.HomeServerHistoryService
 import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
-import javax.inject.Singleton
 
-@Component(modules = [VectorModule::class])
-@Singleton
-interface VectorComponent {
-
-    fun inject(notificationBroadcastReceiver: NotificationBroadcastReceiver)
-
-    fun inject(vectorApplication: VectorApplication)
+@InstallIn(SingletonComponent::class)
+@EntryPoint
+interface AggregatorEntryPoint {
 
     fun matrix(): Matrix
 
@@ -175,9 +169,4 @@ interface VectorComponent {
     fun coroutineDispatchers(): CoroutineDispatchers
 
     fun jitsiActiveConferenceHolder(): JitsiActiveConferenceHolder
-
-    @Component.Factory
-    interface Factory {
-        fun create(@BindsInstance context: Context): VectorComponent
-    }
 }

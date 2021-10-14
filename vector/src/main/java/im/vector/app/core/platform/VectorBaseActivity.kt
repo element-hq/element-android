@@ -45,14 +45,16 @@ import com.bumptech.glide.util.Util
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.snackbar.Snackbar
 import com.jakewharton.rxbinding3.view.clicks
+import dagger.hilt.EntryPoints
 import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
+import im.vector.app.core.di.AggregatorEntryPoint
 import im.vector.app.core.di.DaggerScreenComponent
 import im.vector.app.core.di.HasScreenInjector
 import im.vector.app.core.di.HasVectorInjector
 import im.vector.app.core.di.ScreenComponent
-import im.vector.app.core.di.VectorComponent
+import im.vector.app.core.di.ScreenComponentDependencies
 import im.vector.app.core.dialogs.DialogLocker
 import im.vector.app.core.dialogs.UnrecognizedCertificateDialog
 import im.vector.app.core.extensions.exhaustive
@@ -188,7 +190,10 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), HasSc
     override fun onCreate(savedInstanceState: Bundle?) {
         Timber.i("onCreate Activity ${javaClass.simpleName}")
         val vectorComponent = getVectorComponent()
-        screenComponent = DaggerScreenComponent.factory().create(vectorComponent, this)
+        val screenComponentDeps = EntryPoints.get(
+                applicationContext,
+                ScreenComponentDependencies::class.java)
+        screenComponent = DaggerScreenComponent.factory().create(screenComponentDeps, this)
         val timeForInjection = measureTimeMillis {
             injectWith(screenComponent)
         }
@@ -419,7 +424,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), HasSc
      * PRIVATE METHODS
      * ========================================================================================== */
 
-    internal fun getVectorComponent(): VectorComponent {
+    internal fun getVectorComponent(): AggregatorEntryPoint {
         return (application as HasVectorInjector).injector()
     }
 

@@ -20,9 +20,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.migration.DisableInstallInCheck
 import im.vector.app.core.glide.GlideApp
 
 @Module
+@DisableInstallInCheck
 object ScreenModule {
 
     @Provides

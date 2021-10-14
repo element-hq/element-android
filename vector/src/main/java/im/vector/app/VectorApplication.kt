@@ -39,10 +39,11 @@ import com.facebook.stetho.Stetho
 import com.gabrielittner.threetenbp.LazyThreeTen
 import com.vanniktech.emoji.EmojiManager
 import com.vanniktech.emoji.google.GoogleEmojiProvider
+import dagger.hilt.EntryPoints
+import dagger.hilt.android.HiltAndroidApp
 import im.vector.app.core.di.ActiveSessionHolder
-import im.vector.app.core.di.DaggerVectorComponent
+import im.vector.app.core.di.AggregatorEntryPoint
 import im.vector.app.core.di.HasVectorInjector
-import im.vector.app.core.di.VectorComponent
 import im.vector.app.core.extensions.configureAndStart
 import im.vector.app.core.extensions.startSyncing
 import im.vector.app.core.rx.RxConfig
@@ -75,6 +76,7 @@ import java.util.concurrent.Executors
 import javax.inject.Inject
 import androidx.work.Configuration as WorkConfiguration
 
+@HiltAndroidApp
 class VectorApplication :
         Application(),
         HasVectorInjector,
@@ -100,8 +102,6 @@ class VectorApplication :
     @Inject lateinit var callManager: WebRtcCallManager
     @Inject lateinit var invitesAcceptor: InvitesAcceptor
 
-    lateinit var vectorComponent: VectorComponent
-
     // font thread handler
     private var fontThreadHandler: Handler? = null
 
@@ -114,12 +114,15 @@ class VectorApplication :
         }
     }
 
+    fun component(): AggregatorEntryPoint {
+        // Use EntryPoints to get an instance of the AggregatorEntryPoint.
+        return EntryPoints.get(this, AggregatorEntryPoint::class.java)
+    }
+
     override fun onCreate() {
         enableStrictModeIfNeeded()
         super.onCreate()
         appContext = this
-        vectorComponent = DaggerVectorComponent.factory().create(this)
-        vectorComponent.inject(this)
         invitesAcceptor.initialize()
         vectorUncaughtExceptionHandler.activate(this)
         rxConfig.setupRxPlugin()
@@ -132,7 +135,7 @@ class VectorApplication :
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
         }
-        Timber.plant(vectorComponent.vectorFileLogger())
+        Timber.plant(component().vectorFileLogger())
 
         if (BuildConfig.DEBUG) {
             Stetho.initializeWithDefaults(this)
@@ -236,8 +239,8 @@ class VectorApplication :
                 .build()
     }
 
-    override fun injector(): VectorComponent {
-        return vectorComponent
+    override fun injector(): AggregatorEntryPoint {
+        return component()
     }
 
     private fun logInfo() {

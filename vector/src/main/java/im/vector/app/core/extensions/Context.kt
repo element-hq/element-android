@@ -17,10 +17,10 @@
 package im.vector.app.core.extensions
 
 import android.content.Context
+import im.vector.app.core.di.AggregatorEntryPoint
 import im.vector.app.core.di.HasVectorInjector
-import im.vector.app.core.di.VectorComponent
 
-fun Context.vectorComponent(): VectorComponent {
+fun Context.vectorComponent(): AggregatorEntryPoint {
     val appContext = applicationContext
     if (appContext is HasVectorInjector) {
         return appContext.injector()

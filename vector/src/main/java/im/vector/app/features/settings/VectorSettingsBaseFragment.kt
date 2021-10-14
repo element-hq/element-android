@@ -22,10 +22,12 @@ import android.view.View
 import androidx.annotation.CallSuper
 import androidx.preference.PreferenceFragmentCompat
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.EntryPoints
 import im.vector.app.R
 import im.vector.app.core.di.DaggerScreenComponent
 import im.vector.app.core.di.HasScreenInjector
 import im.vector.app.core.di.ScreenComponent
+import im.vector.app.core.di.ScreenComponentDependencies
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.toast
@@ -56,7 +58,10 @@ abstract class VectorSettingsBaseFragment : PreferenceFragmentCompat(), HasScree
     }
 
     override fun onAttach(context: Context) {
-        screenComponent = DaggerScreenComponent.factory().create(vectorActivity.getVectorComponent(), vectorActivity)
+        val screenComponentDeps = EntryPoints.get(
+                vectorActivity.applicationContext,
+                ScreenComponentDependencies::class.java)
+        screenComponent = DaggerScreenComponent.factory().create(screenComponentDeps, vectorActivity)
         super.onAttach(context)
         session = screenComponent.activeSessionHolder().getActiveSession()
         errorFormatter = screenComponent.errorFormatter()

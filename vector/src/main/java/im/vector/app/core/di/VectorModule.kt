@@ -16,6 +16,7 @@
 
 package im.vector.app.core.di
 
+import android.app.Application
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
@@ -23,6 +24,8 @@ import android.content.res.Resources
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import im.vector.app.core.dispatchers.CoroutineDispatchers
 import im.vector.app.core.error.DefaultErrorFormatter
 import im.vector.app.core.error.ErrorFormatter
@@ -45,74 +48,9 @@ import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
 import javax.inject.Singleton
 
+@InstallIn(SingletonComponent::class)
 @Module
-abstract class VectorModule {
-
-    @Module
-    companion object {
-
-        @Provides
-        @JvmStatic
-        fun providesResources(context: Context): Resources {
-            return context.resources
-        }
-
-        @Provides
-        @JvmStatic
-        fun providesSharedPreferences(context: Context): SharedPreferences {
-            return context.getSharedPreferences("im.vector.riot", MODE_PRIVATE)
-        }
-
-        @Provides
-        @JvmStatic
-        fun providesMatrix(context: Context): Matrix {
-            return Matrix.getInstance(context)
-        }
-
-        @Provides
-        @JvmStatic
-        fun providesCurrentSession(activeSessionHolder: ActiveSessionHolder): Session {
-            // TODO: handle session injection better
-            return activeSessionHolder.getActiveSession()
-        }
-
-        @Provides
-        @JvmStatic
-        fun providesLegacySessionImporter(matrix: Matrix): LegacySessionImporter {
-            return matrix.legacySessionImporter()
-        }
-
-        @Provides
-        @JvmStatic
-        fun providesAuthenticationService(matrix: Matrix): AuthenticationService {
-            return matrix.authenticationService()
-        }
-
-        @Provides
-        @JvmStatic
-        fun providesRawService(matrix: Matrix): RawService {
-            return matrix.rawService()
-        }
-
-        @Provides
-        @JvmStatic
-        fun providesHomeServerHistoryService(matrix: Matrix): HomeServerHistoryService {
-            return matrix.homeServerHistoryService()
-        }
-
-        @Provides
-        @JvmStatic
-        @Singleton
-        fun providesApplicationCoroutineScope(): CoroutineScope {
-            return CoroutineScope(SupervisorJob() + Dispatchers.Main)
-        }
-
-        @Provides
-        @JvmStatic
-        fun providesCoroutineDispatchers(): CoroutineDispatchers {
-            return CoroutineDispatchers(io = Dispatchers.IO)
-        }
-    }
+abstract class VectorBindModule {
 
     @Binds
     abstract fun bindNavigator(navigator: DefaultNavigator): Navigator
@@ -128,4 +66,77 @@ abstract class VectorModule {
 
     @Binds
     abstract fun bindAutoAcceptInvites(autoAcceptInvites: CompileTimeAutoAcceptInvites): AutoAcceptInvites
+}
+
+@InstallIn(SingletonComponent::class)
+@Module
+object VectorStaticModule {
+
+    @Provides
+    @JvmStatic
+    fun providesContext(application: Application): Context {
+        return application.applicationContext
+    }
+
+    @Provides
+    @JvmStatic
+    fun providesResources(context: Context): Resources {
+        return context.resources
+    }
+
+    @Provides
+    @JvmStatic
+    fun providesSharedPreferences(context: Context): SharedPreferences {
+        return context.getSharedPreferences("im.vector.riot", MODE_PRIVATE)
+    }
+
+    @Provides
+    @JvmStatic
+    fun providesMatrix(context: Context): Matrix {
+        return Matrix.getInstance(context)
+    }
+
+    @Provides
+    @JvmStatic
+    fun providesCurrentSession(activeSessionHolder: ActiveSessionHolder): Session {
+        // TODO: handle session injection better
+        return activeSessionHolder.getActiveSession()
+    }
+
+    @Provides
+    @JvmStatic
+    fun providesLegacySessionImporter(matrix: Matrix): LegacySessionImporter {
+        return matrix.legacySessionImporter()
+    }
+
+    @Provides
+    @JvmStatic
+    fun providesAuthenticationService(matrix: Matrix): AuthenticationService {
+        return matrix.authenticationService()
+    }
+
+    @Provides
+    @JvmStatic
+    fun providesRawService(matrix: Matrix): RawService {
+        return matrix.rawService()
+    }
+
+    @Provides
+    @JvmStatic
+    fun providesHomeServerHistoryService(matrix: Matrix): HomeServerHistoryService {
+        return matrix.homeServerHistoryService()
+    }
+
+    @Provides
+    @JvmStatic
+    @Singleton
+    fun providesApplicationCoroutineScope(): CoroutineScope {
+        return CoroutineScope(SupervisorJob() + Dispatchers.Main)
+    }
+
+    @Provides
+    @JvmStatic
+    fun providesCoroutineDispatchers(): CoroutineDispatchers {
+        return CoroutineDispatchers(io = Dispatchers.IO)
+    }
 }
