@@ -18,7 +18,6 @@ package im.vector.app.features.notifications
 
 import android.app.Notification
 import androidx.core.content.pm.ShortcutInfoCompat
-import androidx.core.content.pm.ShortcutManagerCompat
 import javax.inject.Inject
 
 private typealias ProcessedMessageEvent = Pair<ProcessedType, NotifiableMessageEvent>
