@@ -67,10 +67,12 @@ internal class ImageExifTagRemover @Inject constructor(
                     it.removeField(GPSTagConstants.GPS_TAG_GPS_DEST_LATITUDE_REF)
                     ExifRewriter().updateExifMetadataLossless(jpegImageFile, outputStream, it)
                 } ?: let {
+                    destinationFile.delete()
                     return@withContext jpegImageFile
                 }
             }
         }
         destinationFile
     }
+
 }
