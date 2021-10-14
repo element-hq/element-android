@@ -28,7 +28,9 @@ data class TchapRoomLinkAccessState(
         val currentRoomJoinRules: RoomJoinRules = RoomJoinRules.INVITE,
         val roomSummary: Async<RoomSummary> = Uninitialized,
         val canonicalAlias: String? = null,
-        val isLoading: Boolean = false
+        val alternativeAliases: List<String> = emptyList(),
+        val isLoading: Boolean = false,
+        val canChangeLinkAccess: Boolean = false
 ) : BottomSheetGenericState() {
 
     val isLinkAccessEnabled: Boolean

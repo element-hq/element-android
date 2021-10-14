@@ -52,6 +52,7 @@ class TchapRoomLinkAccessController @Inject constructor(
             title(host.stringProvider.getString(R.string.tchap_room_settings_enable_room_access_by_link))
             switchChecked(data.isLinkAccessEnabled)
             listener { host.interactionListener?.setLinkAccessEnabled(it) }
+            enabled(data.canChangeLinkAccess)
         }
 
         settingsInfoItem {
