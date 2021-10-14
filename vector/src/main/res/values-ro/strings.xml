@@ -118,7 +118,7 @@
     </plurals>
     <string name="room_creation_add_member">Adaugă un membru</string>
     <string name="list_members">Lista membrilor</string>
-    <string name="space_manage_rooms_and_spaces">Gestionați camerele și spațiile</string>
+    <string name="space_manage_rooms_and_spaces">Administrează camerele și spațiile</string>
     <string name="spaces_beta_welcome_to_spaces">Bine ați venit la spații!</string>
     <string name="create_spaces_loading_message">Se creează spațiul…</string>
     <string name="create_spaces_default_public_random_room_name">Aleatoriu</string>
@@ -332,4 +332,12 @@
     <string name="notice_widget_removed">%1$s a înlăturat widget-ul %2$s</string>
     <string name="notice_widget_added_by_you">Ați adăugat widget-ul %1$s</string>
     <string name="notice_widget_added">%1$s a adăugat widget-ul %2$s</string>
+    <string name="space_settings_manage_rooms">Administrează camerele</string>
+    <string name="room_participants_action_unignore_title">Revocați ignorarea utilizatorului</string>
+    <string name="ongoing_conference_call_video">Video</string>
+    <string name="delete">Șterge</string>
+    <string name="leave">Părăsește</string>
+    <string name="save">Salvează</string>
+    <string name="cancel">Anulează</string>
+    <string name="title_activity_verify_device">Verificați sesiunea</string>
 </resources>
