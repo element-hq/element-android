@@ -20,15 +20,19 @@ package im.vector.app.features.notifications
  * A FIFO circular buffer of T
  * This class is not thread safe
  */
-class CircularCache<T>(cacheSize: Int) {
+class CircularCache<T : Any>(cacheSize: Int, factory: (Int) -> Array<T?>) {
 
-    private val cache = ArrayList<T>(initialCapacity = cacheSize)
+    companion object {
+        inline fun <reified T : Any> create(cacheSize: Int) = CircularCache(cacheSize) { Array<T?>(cacheSize) { null } }
+    }
+
+    private val cache = factory(cacheSize)
     private var writeIndex = 0
 
     fun contains(key: T): Boolean = cache.contains(key)
 
     fun put(key: T) {
-        if (writeIndex == cache.size - 1) {
+        if (writeIndex == cache.size) {
             writeIndex = 0
         }
         cache[writeIndex] = key
