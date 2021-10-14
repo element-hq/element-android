@@ -385,6 +385,7 @@ internal class RealmSessionStoreMigration @Inject constructor(
         Timber.d("Step 18 -> 19")
         realm.schema.get("DraftEntity")
                 ?.addField(DraftEntityFields.MESSAGE_TYPE, String::class.java)
+                ?.setRequired(DraftEntityFields.MESSAGE_TYPE, true)
                 ?.transform {
                     it.setString(DraftEntityFields.MESSAGE_TYPE, MessageType.MSGTYPE_TEXT)
                 }
