@@ -371,6 +371,7 @@ internal object RealmSessionStoreMigration : RealmMigration {
     private fun migrateTo19(realm: DynamicRealm) {
         realm.schema.get("DraftEntity")
                 ?.addField(DraftEntityFields.MESSAGE_TYPE, String::class.java)
+                ?.setRequired(DraftEntityFields.MESSAGE_TYPE, true)
                 ?.transform {
                     it.setString(DraftEntityFields.MESSAGE_TYPE, MessageType.MSGTYPE_TEXT)
                 }
