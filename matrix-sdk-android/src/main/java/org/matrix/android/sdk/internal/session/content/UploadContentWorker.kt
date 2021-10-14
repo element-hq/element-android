@@ -37,6 +37,7 @@ import org.matrix.android.sdk.internal.crypto.attachments.MXEncryptedAttachments
 import org.matrix.android.sdk.internal.crypto.model.rest.EncryptedFileInfo
 import org.matrix.android.sdk.internal.database.mapper.ContentMapper
 import org.matrix.android.sdk.internal.database.mapper.asDomain
+import org.matrix.android.sdk.internal.extensions.addIfNotContained
 import org.matrix.android.sdk.internal.network.ProgressRequestBody
 import org.matrix.android.sdk.internal.session.DefaultFileService
 import org.matrix.android.sdk.internal.session.SessionComponent
@@ -177,7 +178,7 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                                     )
                                 }
                             }
-                            .also { filesToDelete.add(it) }
+                            .also { filesToDelete.addIfNotContained(it) }
                 } else if (attachment.type == ContentAttachmentData.Type.VIDEO &&
                         // Do not compress gif
                         attachment.mimeType != MimeTypes.Gif &&
@@ -211,7 +212,7 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                                                 newHeight = compressedHeight ?: newAttachmentAttributes.newHeight
                                         )
                                         compressedFile
-                                                .also { filesToDelete.add(it) }
+                                                .also { filesToDelete.addIfNotContained(it) }
                                     }
                                     VideoCompressionResult.CompressionNotNeeded,
                                     VideoCompressionResult.CompressionCancelled,
@@ -222,7 +223,7 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                             }
                 } else if (attachment.type == ContentAttachmentData.Type.IMAGE && !params.compressBeforeSending) {
                     fileToUpload = imageExitTagRemover.removeSensitiveJpegExifTags(workingFile)
-                            .also { filesToDelete.add(it) }
+                            .also { filesToDelete.addIfNotContained(it) }
                     if (params.attachment.size <= 0) {
                         newAttachmentAttributes = newAttachmentAttributes.copy(newFileSize = fileToUpload.length())
                     }
