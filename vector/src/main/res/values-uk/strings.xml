@@ -185,7 +185,7 @@
     <string name="title_activity_settings">Налаштування</string>
     <string name="title_activity_member_details">Інформація про учасника</string>
     <string name="title_activity_historical">Історія</string>
-    <string name="title_activity_bug_report">Сповістити про помилку</string>
+    <string name="title_activity_bug_report">Звіт про ваду</string>
     <!-- button names -->
     <string name="ok">Гаразд</string>
     <string name="cancel">Скасувати</string>
@@ -268,10 +268,10 @@
     <string name="send_bug_report_include_logs">Надіслати журнали</string>
     <string name="send_bug_report_include_crash_logs">Надіслати журнали помилок</string>
     <string name="send_bug_report_include_screenshot">Надіслати знімок екрана</string>
-    <string name="send_bug_report">Повідомити про помилку</string>
-    <string name="send_bug_report_description">Буль ласка, опишіть помилку. Що ви робили? Якої поведінки чекали? Що сталося натомість?</string>
+    <string name="send_bug_report">Повідомити про ваду</string>
+    <string name="send_bug_report_description">Опишіть ваду. Що ви робили\? Виконання якої дії очікували\? Що сталося натомість\?</string>
     <string name="send_bug_report_placeholder">Опишіть свою проблему</string>
-    <string name="send_bug_report_logs_description">Для діагностики проблеми, журнали з цього клієнту будуть приєднані до звіту про помилку. Цей звіт, включаючи журнали та скріншот, не буде доступний публічно. Якщо ви не хочете надсилати журнали, зніміть позначку:</string>
+    <string name="send_bug_report_logs_description">Для визначення проблеми, журнали з цього клієнта буде долучено до звіту про ваду. Цей звіт, включно з журналами та знімком екрана, не буде доступний публічно. Якщо ви не хочете надсилати журнали, приберіть позначку:</string>
     <string name="send_bug_report_alert_message">Здається, ви трясете телефон від фрустрації. Бажаєте надіслати звіт про помилку?</string>
     <string name="send_bug_report_app_crashed">При останньому запуску застосунок закрився з помилкою. Бажаєте надіслати звіт про помилку?</string>
     <string name="send_bug_report_sent">Звіт про помилку вдало надіслано</string>
@@ -814,7 +814,7 @@
     <string name="groups_invite_header">Запросити</string>
     <string name="groups_header">Спільноти</string>
     <string name="no_group_placeholder">Нема груп</string>
-    <string name="send_bug_report_rage_shake">Струснути пристрій, щоб повідомити про помилку</string>
+    <string name="send_bug_report_rage_shake">Струснути пристрій, щоб повідомити про ваду</string>
     <string name="start_new_chat_prompt_msg">Ви впевнені, що бажаєте розпочати новий чат з %s\?</string>
     <string name="start_voice_call_prompt_msg">Ви впевнені, що бажаєте розпочати голосовий виклик\?</string>
     <string name="start_video_call_prompt_msg">Ви впевнені, що бажаєте розпочати відео виклик\?</string>
@@ -1287,7 +1287,7 @@
     <string name="login_server_other_text">Власні та розширені налаштування</string>
     <string name="keys_backup_setup_step1_advanced">(Розширені)</string>
     <string name="preference_root_help_about">Довідка та опис</string>
-    <string name="settings_preferences">Налаштування</string>
+    <string name="settings_preferences">Пристосування</string>
     <string name="settings_system_preferences_summary">Виберіть колір світлодіода, вібрацію, звук…</string>
     <string name="settings_silent_notifications_preferences">Налаштування тихих сповіщень</string>
     <string name="settings_call_notifications_preferences">Налаштування сповіщень викликів</string>
@@ -1855,9 +1855,9 @@
 \nКлючі не є довіреними</string>
     <string name="encryption_information_dg_xsigning_trusted">Перехресне підписування увімкнено
 \nКлючі є довіреними.
-\nЗакриті ключі невідомі</string>
+\nПриватні ключі невідомі</string>
     <string name="encryption_information_dg_xsigning_complete">Перехресне підписування увімкнено
-\nЗакриті ключі на пристрої.</string>
+\nПриватні ключі на пристрої.</string>
     <string name="encryption_information_cross_signing_state">Перехресне підписування</string>
     <string name="direct_room_created_summary_item">%s приєднується.</string>
     <string name="encryption_enabled">Шифрування увімкнено</string>
