@@ -177,7 +177,7 @@ class HomeDetailFragment @Inject constructor(
 
         viewModel.observeViewEvents { viewEvent ->
             when (viewEvent) {
-                HomeDetailViewEvents.CallStarted                          -> dismissLoadingDialog()
+                HomeDetailViewEvents.CallStarted                          -> handleCallStarted()
                 is HomeDetailViewEvents.FailToCall                        -> showFailure(viewEvent.failure)
                 HomeDetailViewEvents.Loading                              -> showLoadingDialog()
                 is HomeDetailViewEvents.InviteIgnoredForDiscoveredUser    -> handleExistingUser(viewEvent.user)
@@ -233,10 +233,10 @@ class HomeDetailFragment @Inject constructor(
 
         sharedCallActionViewModel
                 .liveKnownCalls
-                .observe(viewLifecycleOwner, {
+                .observe(viewLifecycleOwner) {
                     currentCallsViewPresenter.updateCall(callManager.getCurrentCall(), callManager.getCalls())
                     invalidateOptionsMenu()
-                })
+                }
 
         roomListViewModel.observeViewEvents {
             if (it is RoomListViewEvents.CancelSearch) {
@@ -265,6 +265,12 @@ class HomeDetailFragment @Inject constructor(
                 }
             }.exhaustive
         }
+    }
+
+    private fun handleCallStarted() {
+        dismissLoadingDialog()
+        val fragmentTag = HomeTab.DialPad.toFragmentTag()
+        (childFragmentManager.findFragmentByTag(fragmentTag) as? DialPadFragment)?.clear()
     }
 
     override fun onDestroyView() {
@@ -493,8 +499,10 @@ class HomeDetailFragment @Inject constructor(
         invalidateOptionsMenu()
     }
 
+    private fun HomeTab.toFragmentTag() = "FRAGMENT_TAG_$this"
+
     private fun updateSelectedFragment(tab: HomeTab) {
-        val fragmentTag = "FRAGMENT_TAG_$tab"
+        val fragmentTag = tab.toFragmentTag()
         val fragmentToShow = childFragmentManager.findFragmentByTag(fragmentTag)
         childFragmentManager.commitTransaction {
             childFragmentManager.fragments

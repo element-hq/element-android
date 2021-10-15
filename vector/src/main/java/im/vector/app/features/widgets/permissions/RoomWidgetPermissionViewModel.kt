@@ -21,8 +21,8 @@ import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import im.vector.app.R
 import im.vector.app.core.platform.VectorViewModel
 import kotlinx.coroutines.launch
@@ -36,8 +36,8 @@ import timber.log.Timber
 import java.net.URL
 
 class RoomWidgetPermissionViewModel @AssistedInject constructor(@Assisted val initialState: RoomWidgetPermissionViewState,
-                                                                private val session: Session)
-    : VectorViewModel<RoomWidgetPermissionViewState, RoomWidgetPermissionActions, RoomWidgetPermissionViewEvents>(initialState) {
+                                                                private val session: Session) :
+    VectorViewModel<RoomWidgetPermissionViewState, RoomWidgetPermissionActions, RoomWidgetPermissionViewEvents>(initialState) {
 
     private val widgetService = session.widgetService()
     private val integrationManagerService = session.integrationManagerService()

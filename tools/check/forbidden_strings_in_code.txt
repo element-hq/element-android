@@ -141,8 +141,6 @@ android\.app\.AlertDialog
 androidx\.appcompat\.app\.AlertDialog===4
 
 ### Put the operator at the beginning of next line
-&&$
-\|\|$
  ==$
 
 ### Use JsonUtils.getBasicGson()

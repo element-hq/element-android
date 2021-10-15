@@ -30,11 +30,13 @@ data class PublicRoomsViewState(
         val publicRooms: Map<PublicRoom, RoomDirectoryData> = emptyMap(),
         // Current pagination request
         val asyncPublicRoomsRequest: Async<Unit> = Uninitialized,
+        // True if more result are available server side
+        val hasMore: Boolean = false,
         // Set of joined roomId,
         val joinedRoomsIds: Set<String> = emptySet(),
         // keys are room alias or roomId
         val changeMembershipStates: Map<String, ChangeMembershipState> = emptyMap(),
-
+        val roomDirectoryData: RoomDirectoryData = RoomDirectoryData(),
         val asyncThirdPartyRequest: Async<Map<String, ThirdPartyProtocol>> = Uninitialized,
         // computed
         val directories: List<RoomDirectoryServer> = emptyList()

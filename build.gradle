@@ -27,7 +27,14 @@ buildscript {
     }
 }
 
+// ktlint Plugin
+plugins {
+    id "org.jlleitschuh.gradle.ktlint" version "10.2.0"
+}
+
 allprojects {
+    apply plugin: "org.jlleitschuh.gradle.ktlint"
+
     repositories {
         // For olm library. This has to be declared first, to ensure that Olm library is not downloaded from another repo
         maven {
@@ -74,6 +81,26 @@ allprojects {
         // Warnings are potential errors, so stop ignoring them
         // You can override by passing `-PallWarningsAsErrors=false` in the command line
         kotlinOptions.allWarningsAsErrors = project.getProperties().getOrDefault("allWarningsAsErrors", "true").toBoolean()
+    }
+
+    // Fix "Java heap space" issue
+    tasks.withType(org.jlleitschuh.gradle.ktlint.tasks.BaseKtLintCheckTask).configureEach {
+        it.workerMaxHeapSize.set("2G")
+    }
+
+    // See https://github.com/JLLeitschuh/ktlint-gradle#configuration
+    ktlint {
+        android = true
+        ignoreFailures = false
+        enableExperimentalRules = true
+        // display the corresponding rule
+        verbose = true
+        disabledRules = [
+                "spacing-between-declarations-with-comments",
+                "no-multi-spaces",
+                "experimental:spacing-between-declarations-with-annotations",
+                "experimental:annotation"
+        ]
     }
 }
 

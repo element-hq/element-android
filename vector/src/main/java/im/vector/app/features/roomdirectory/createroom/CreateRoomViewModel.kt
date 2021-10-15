@@ -59,7 +59,7 @@ import timber.log.Timber
 class CreateRoomViewModel @AssistedInject constructor(@Assisted private val initialState: CreateRoomViewState,
                                                       private val session: Session,
                                                       private val rawService: RawService,
-                                                      private val vectorPreferences: VectorPreferences
+                                                      vectorPreferences: VectorPreferences
 ) : VectorViewModel<CreateRoomViewState, CreateRoomAction, CreateRoomViewEvents>(initialState) {
 
     @AssistedFactory
@@ -124,8 +124,13 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted private val init
 
             setState {
                 copy(
-                        isEncrypted = RoomJoinRules.INVITE == roomJoinRules && adminE2EByDefault,
-                        hsAdminHasDisabledE2E = !adminE2EByDefault
+                        hsAdminHasDisabledE2E = !adminE2EByDefault,
+                        defaultEncrypted = mapOf(
+                                RoomJoinRules.INVITE to adminE2EByDefault,
+                                RoomJoinRules.PUBLIC to false,
+                                RoomJoinRules.RESTRICTED to adminE2EByDefault
+                        )
+
                 )
             }
         }

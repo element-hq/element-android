@@ -341,12 +341,12 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                 add(EventSharedAction.AddReaction(eventId))
             }
 
-            if (canQuote(timelineEvent, messageContent, actionPermissions)) {
-                add(EventSharedAction.Quote(eventId))
-            }
-
             if (canViewReactions(timelineEvent)) {
                 add(EventSharedAction.ViewReactions(informationData))
+            }
+
+            if (canQuote(timelineEvent, messageContent, actionPermissions)) {
+                add(EventSharedAction.Quote(eventId))
             }
 
             if (timelineEvent.hasBeenEdited()) {
@@ -365,14 +365,14 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
         if (vectorPreferences.developerMode()) {
             if (timelineEvent.isEncrypted() && timelineEvent.root.mCryptoError != null) {
                 val keysBackupService = session.cryptoService().keysBackupService()
-                if (keysBackupService.state == KeysBackupState.NotTrusted
-                        || (keysBackupService.state == KeysBackupState.ReadyToBackUp
-                                && keysBackupService.canRestoreKeys())
+                if (keysBackupService.state == KeysBackupState.NotTrusted ||
+                        (keysBackupService.state == KeysBackupState.ReadyToBackUp &&
+                                keysBackupService.canRestoreKeys())
                 ) {
                     add(EventSharedAction.UseKeyBackup)
                 }
-                if (session.cryptoService().getCryptoDeviceInfo(session.myUserId).size > 1
-                        || timelineEvent.senderInfo.userId != session.myUserId) {
+                if (session.cryptoService().getCryptoDeviceInfo(session.myUserId).size > 1 ||
+                        timelineEvent.senderInfo.userId != session.myUserId) {
                     add(EventSharedAction.ReRequestKey(timelineEvent.eventId))
                 }
             }
@@ -435,9 +435,9 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
     }
 
     private fun canRetry(event: TimelineEvent, actionPermissions: ActionPermissions): Boolean {
-        return event.root.sendState.hasFailed()
-                && actionPermissions.canSendMessage
-                && (event.root.isAttachmentMessage() || event.root.isTextMessage())
+        return event.root.sendState.hasFailed() &&
+                actionPermissions.canSendMessage &&
+                (event.root.isAttachmentMessage() || event.root.isTextMessage())
     }
 
     private fun canViewReactions(event: TimelineEvent): Boolean {
@@ -453,8 +453,8 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
         // TODO if user is admin or moderator
         val messageContent = event.root.getClearContent().toModel<MessageContent>()
         return event.root.senderId == myUserId && (
-                messageContent?.msgType == MessageType.MSGTYPE_TEXT
-                        || messageContent?.msgType == MessageType.MSGTYPE_EMOTE
+                messageContent?.msgType == MessageType.MSGTYPE_TEXT ||
+                        messageContent?.msgType == MessageType.MSGTYPE_EMOTE
                 )
     }
 

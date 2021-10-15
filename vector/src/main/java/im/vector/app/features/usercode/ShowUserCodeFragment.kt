@@ -30,7 +30,6 @@ import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.core.utils.startSharePlainTextIntent
 import im.vector.app.databinding.FragmentUserCodeShowBinding
 import im.vector.app.features.home.AvatarRenderer
-
 import javax.inject.Inject
 
 class ShowUserCodeFragment @Inject constructor(

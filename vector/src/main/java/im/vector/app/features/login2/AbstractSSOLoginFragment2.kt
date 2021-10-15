@@ -27,7 +27,7 @@ import im.vector.app.core.utils.openUrlInChromeCustomTab
 import im.vector.app.features.login.hasSso
 import im.vector.app.features.login.ssoIdentityProviders
 
-abstract class AbstractSSOLoginFragment2<VB: ViewBinding> : AbstractLoginFragment2<VB>() {
+abstract class AbstractSSOLoginFragment2<VB : ViewBinding> : AbstractLoginFragment2<VB>() {
 
     // For sso
     private var customTabsServiceConnection: CustomTabsServiceConnection? = null

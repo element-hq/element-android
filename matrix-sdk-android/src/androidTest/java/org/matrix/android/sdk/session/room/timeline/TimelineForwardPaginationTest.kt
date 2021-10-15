@@ -16,6 +16,13 @@
 
 package org.matrix.android.sdk.session.room.timeline
 
+import org.amshove.kluent.shouldBeFalse
+import org.amshove.kluent.shouldBeTrue
+import org.junit.FixMethodOrder
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.junit.runners.JUnit4
+import org.junit.runners.MethodSorters
 import org.matrix.android.sdk.InstrumentedTest
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -26,13 +33,6 @@ import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
 import org.matrix.android.sdk.common.CommonTestHelper
 import org.matrix.android.sdk.common.CryptoTestHelper
 import org.matrix.android.sdk.common.checkSendOrder
-import org.amshove.kluent.shouldBeFalse
-import org.amshove.kluent.shouldBeTrue
-import org.junit.FixMethodOrder
-import org.junit.Test
-import org.junit.runner.RunWith
-import org.junit.runners.JUnit4
-import org.junit.runners.MethodSorters
 import timber.log.Timber
 import java.util.concurrent.CountDownLatch
 
@@ -86,8 +86,8 @@ class TimelineForwardPaginationTest : InstrumentedTest {
                 }
 
                 // Ok, we have the 10 last messages of the initial sync
-                snapshot.size == 10
-                        && snapshot.all { it.root.content.toModel<MessageContent>()?.body?.startsWith(message).orFalse() }
+                snapshot.size == 10 &&
+                        snapshot.all { it.root.content.toModel<MessageContent>()?.body?.startsWith(message).orFalse() }
             }
 
             // Open the timeline at last sent message
@@ -110,8 +110,8 @@ class TimelineForwardPaginationTest : InstrumentedTest {
                 }
 
                 // The event is not in db, so it is fetch alone
-                snapshot.size == 1
-                        && snapshot.all { it.root.content.toModel<MessageContent>()?.body?.startsWith("Message from Alice").orFalse() }
+                snapshot.size == 1 &&
+                        snapshot.all { it.root.content.toModel<MessageContent>()?.body?.startsWith("Message from Alice").orFalse() }
             }
 
             aliceTimeline.addListener(aliceEventsListener)
@@ -137,9 +137,9 @@ class TimelineForwardPaginationTest : InstrumentedTest {
                 }
 
                 // Alice can see the first event of the room (so Back pagination has worked)
-                snapshot.lastOrNull()?.root?.getClearType() == EventType.STATE_ROOM_CREATE
+                snapshot.lastOrNull()?.root?.getClearType() == EventType.STATE_ROOM_CREATE &&
                         // 6 for room creation item (backward pagination), 1 for the context, and 50 for the forward pagination
-                        && snapshot.size == 57 // 6 + 1 + 50
+                        snapshot.size == 57 // 6 + 1 + 50
             }
 
             aliceTimeline.addListener(aliceEventsListener)
@@ -166,8 +166,8 @@ class TimelineForwardPaginationTest : InstrumentedTest {
                     Timber.w(" event ${it.root.content}")
                 }
                 // 6 for room creation item (backward pagination),and numberOfMessagesToSend (all the message of the room)
-                snapshot.size == 6 + numberOfMessagesToSend
-                        && snapshot.checkSendOrder(message, numberOfMessagesToSend, 0)
+                snapshot.size == 6 + numberOfMessagesToSend &&
+                        snapshot.checkSendOrder(message, numberOfMessagesToSend, 0)
             }
 
             aliceTimeline.addListener(aliceEventsListener)

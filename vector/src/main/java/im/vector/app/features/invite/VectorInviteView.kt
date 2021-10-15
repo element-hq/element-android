@@ -30,8 +30,8 @@ import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
-class VectorInviteView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0)
-    : ConstraintLayout(context, attrs, defStyle) {
+class VectorInviteView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0) :
+    ConstraintLayout(context, attrs, defStyle) {
 
     interface Callback {
         fun onAcceptInvite()

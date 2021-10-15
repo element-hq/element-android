@@ -29,6 +29,7 @@ import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.hidePassword
 import im.vector.app.core.extensions.isEmail
+import im.vector.app.core.extensions.toReducedUrl
 import im.vector.app.core.utils.autoResetTextInputLayoutErrors
 import im.vector.app.databinding.FragmentLoginResetPassword2Binding
 import io.reactivex.Observable

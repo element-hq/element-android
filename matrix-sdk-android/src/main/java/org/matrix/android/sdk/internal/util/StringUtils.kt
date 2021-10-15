@@ -78,7 +78,7 @@ internal val spaceChars = "[\u00A0\u2000-\u200B\u2800\u3000]".toRegex()
 /**
  * Strip all the UTF-8 chars which are actually spaces
  */
-internal fun String.replaceSpaceChars() = replace(spaceChars, "")
+internal fun String.replaceSpaceChars(replacement: String = "") = replace(spaceChars, replacement)
 
 // String.capitalize is now deprecated
 internal fun String.safeCapitalize(): String {
@@ -90,3 +90,5 @@ internal fun String.safeCapitalize(): String {
         }
     }
 }
+
+internal fun String.removeInvalidRoomNameChars() = "[^a-z0-9._%#@=+-]".toRegex().replace(this, "")

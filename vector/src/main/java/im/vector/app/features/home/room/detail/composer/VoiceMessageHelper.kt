@@ -60,6 +60,7 @@ class VoiceMessageHelper @Inject constructor(
         try {
             voiceRecorder.startRecord()
         } catch (failure: Throwable) {
+            Timber.e(failure, "Unable to start recording")
             throw VoiceFailure.UnableToRecord(failure)
         }
         startRecordingAmplitudes()
@@ -146,6 +147,7 @@ class VoiceMessageHelper @Inject constructor(
                 }
             }
         } catch (failure: Throwable) {
+            Timber.e(failure, "Unable to start playback")
             throw VoiceFailure.UnableToPlay(failure)
         }
         startPlaybackTicker(id)

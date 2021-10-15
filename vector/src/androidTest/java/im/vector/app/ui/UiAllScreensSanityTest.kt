@@ -226,7 +226,7 @@ class UiAllScreensSanityTest {
         // Filter
         // TODO clickMenu(R.id.search)
         // Wait for emoji to load, it's async now
-        sleep(1_000)
+        sleep(2_000)
         clickListItem(R.id.emojiRecyclerView, 4)
 
         // Test Edit mode

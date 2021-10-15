@@ -28,7 +28,6 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentBreadcrumbsBinding
 import im.vector.app.features.home.room.detail.RoomDetailSharedAction
 import im.vector.app.features.home.room.detail.RoomDetailSharedActionViewModel
-
 import javax.inject.Inject
 
 class BreadcrumbsFragment @Inject constructor(

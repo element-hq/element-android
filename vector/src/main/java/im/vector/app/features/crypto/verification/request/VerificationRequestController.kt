@@ -32,6 +32,7 @@ import im.vector.app.features.crypto.verification.epoxy.bottomSheetSelfWaitItem
 import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationActionItem
 import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationNoticeItem
 import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationWaitingItem
+import im.vector.app.features.displayname.getBestName
 import javax.inject.Inject
 
 class VerificationRequestController @Inject constructor(

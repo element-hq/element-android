@@ -17,10 +17,10 @@
 package org.matrix.android.sdk.internal.util
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import org.matrix.android.sdk.InstrumentedTest
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.matrix.android.sdk.InstrumentedTest
 
 @RunWith(AndroidJUnit4::class)
 internal class JsonCanonicalizerTest : InstrumentedTest {

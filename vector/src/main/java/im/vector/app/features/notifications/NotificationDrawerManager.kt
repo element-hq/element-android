@@ -27,11 +27,13 @@ import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.FirstThrottler
+import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.invite.AutoAcceptInvites
 import im.vector.app.features.settings.VectorPreferences
 import me.gujun.android.span.span
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.content.ContentUrlResolver
+import org.matrix.android.sdk.api.util.toMatrixItem
 import timber.log.Timber
 import java.io.File
 import java.io.FileOutputStream
@@ -119,9 +121,9 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
                     // This is an edition
                     val eventBeforeEdition = eventList.firstOrNull {
                         // Edition of an event
-                        it.eventId == notifiableEvent.editedEventId
+                        it.eventId == notifiableEvent.editedEventId ||
                                 // or edition of an edition
-                                || it.editedEventId == notifiableEvent.editedEventId
+                                it.editedEventId == notifiableEvent.editedEventId
                     }
 
                     if (eventBeforeEdition != null) {
@@ -228,7 +230,7 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
 
         val user = session.getUser(session.myUserId)
         // myUserDisplayName cannot be empty else NotificationCompat.MessagingStyle() will crash
-        val myUserDisplayName = user?.getBestName() ?: session.myUserId
+        val myUserDisplayName = user?.toMatrixItem()?.getBestName() ?: session.myUserId
         val myUserAvatarUrl = session.contentUrlResolver().resolveThumbnail(user?.avatarUrl, avatarSize, avatarSize, ContentUrlResolver.ThumbnailMethod.SCALE)
         synchronized(eventList) {
             Timber.v("%%%%%%%% REFRESH NOTIFICATION DRAWER ")
@@ -458,7 +460,7 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
 
             if (eventList.isEmpty() || eventList.all { it.isRedacted }) {
                 notificationUtils.cancelNotificationMessage(null, SUMMARY_NOTIFICATION_ID)
-            } else {
+            } else if (hasNewEvent) {
                 // FIXME roomIdToEventMap.size is not correct, this is the number of rooms
                 val nbEvents = roomIdToEventMap.size + simpleEvents.size
                 val sumTitle = stringProvider.getQuantityString(R.plurals.notification_compat_summary_title, nbEvents, nbEvents)

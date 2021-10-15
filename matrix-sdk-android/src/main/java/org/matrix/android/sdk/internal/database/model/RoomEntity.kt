@@ -16,10 +16,10 @@
 
 package org.matrix.android.sdk.internal.database.model
 
-import org.matrix.android.sdk.api.session.room.model.Membership
 import io.realm.RealmList
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
+import org.matrix.android.sdk.api.session.room.model.Membership
 
 internal open class RoomEntity(@PrimaryKey var roomId: String = "",
                                var chunks: RealmList<ChunkEntity> = RealmList(),

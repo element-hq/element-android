@@ -65,7 +65,8 @@ class PublicRoomsController @Inject constructor(private val stringProvider: Stri
 
             unknownRoomItem?.addTo(this)
 
-            if (viewState.asyncPublicRoomsRequest is Incomplete) {
+            if ((viewState.hasMore && viewState.asyncPublicRoomsRequest is Success) ||
+                    viewState.asyncPublicRoomsRequest is Incomplete) {
                 loadingItem {
                     id("loading")
                 }

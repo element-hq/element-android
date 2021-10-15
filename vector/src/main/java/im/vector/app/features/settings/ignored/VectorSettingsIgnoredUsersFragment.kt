@@ -33,7 +33,6 @@ import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentGenericRecyclerBinding
-
 import javax.inject.Inject
 
 class VectorSettingsIgnoredUsersFragment @Inject constructor(

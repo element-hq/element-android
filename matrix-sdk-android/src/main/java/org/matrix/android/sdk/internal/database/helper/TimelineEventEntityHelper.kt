@@ -16,9 +16,9 @@
 
 package org.matrix.android.sdk.internal.database.helper
 
+import io.realm.Realm
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntityFields
-import io.realm.Realm
 
 internal fun TimelineEventEntity.Companion.nextId(realm: Realm): Long {
     val currentIdNum = realm.where(TimelineEventEntity::class.java).max(TimelineEventEntityFields.LOCAL_ID)

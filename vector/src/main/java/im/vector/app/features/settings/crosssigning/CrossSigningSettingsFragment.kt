@@ -35,7 +35,6 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentGenericRecyclerBinding
 import im.vector.app.features.auth.ReAuthActivity
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
-
 import javax.inject.Inject
 
 /**

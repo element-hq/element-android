@@ -51,8 +51,8 @@ class ConferenceEventEmitter(private val context: Context)  {
 }
 
 class ConferenceEventObserver(private val context: Context,
-                              private val onBroadcastEvent: (ConferenceEvent) -> Unit)
-    : LifecycleObserver {
+                              private val onBroadcastEvent: (ConferenceEvent) -> Unit) :
+    LifecycleObserver {
 
     // See https://jitsi.github.io/handbook/docs/dev-guide/dev-guide-android-sdk#listening-for-broadcasted-events
     private val broadcastReceiver = object : BroadcastReceiver() {

@@ -28,8 +28,8 @@ data class PushRulesViewState(
         val rules: List<PushRule> = emptyList()
 ) : MvRxState
 
-class PushRulesViewModel(initialState: PushRulesViewState)
-    : VectorViewModel<PushRulesViewState, EmptyAction, EmptyViewEvents>(initialState) {
+class PushRulesViewModel(initialState: PushRulesViewState) :
+    VectorViewModel<PushRulesViewState, EmptyAction, EmptyViewEvents>(initialState) {
 
     companion object : MvRxViewModelFactory<PushRulesViewModel, PushRulesViewState> {
 

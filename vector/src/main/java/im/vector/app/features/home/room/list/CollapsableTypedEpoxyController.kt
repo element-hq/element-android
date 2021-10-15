@@ -18,8 +18,8 @@ package im.vector.app.features.home.room.list
 
 import com.airbnb.epoxy.EpoxyController
 
-abstract class CollapsableTypedEpoxyController<T>
-    : EpoxyController(), CollapsableControllerExtension {
+abstract class CollapsableTypedEpoxyController<T> :
+    EpoxyController(), CollapsableControllerExtension {
 
     private var currentData: T? = null
     private var allowModelBuildRequests = false
@@ -43,8 +43,8 @@ abstract class CollapsableTypedEpoxyController<T>
 
     override fun requestModelBuild() {
         check(allowModelBuildRequests) {
-            ("You cannot call `requestModelBuild` directly. Call `setData` instead to trigger a "
-                    + "model refresh with new data.")
+            ("You cannot call `requestModelBuild` directly. Call `setData` instead to trigger a " +
+                    "model refresh with new data.")
         }
         super.requestModelBuild()
     }
@@ -57,8 +57,8 @@ abstract class CollapsableTypedEpoxyController<T>
 
     override fun requestDelayedModelBuild(delayMs: Int) {
         check(allowModelBuildRequests) {
-            ("You cannot call `requestModelBuild` directly. Call `setData` instead to trigger a "
-                    + "model refresh with new data.")
+            ("You cannot call `requestModelBuild` directly. Call `setData` instead to trigger a " +
+                    "model refresh with new data.")
         }
         super.requestDelayedModelBuild(delayMs)
     }
@@ -69,8 +69,8 @@ abstract class CollapsableTypedEpoxyController<T>
 
     override fun buildModels() {
         check(isBuildingModels()) {
-            ("You cannot call `buildModels` directly. Call `setData` instead to trigger a model "
-                    + "refresh with new data.")
+            ("You cannot call `buildModels` directly. Call `setData` instead to trigger a model " +
+                    "refresh with new data.")
         }
         if (collapsed) {
             buildModels(null)

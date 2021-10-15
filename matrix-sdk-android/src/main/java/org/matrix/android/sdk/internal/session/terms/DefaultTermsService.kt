@@ -30,8 +30,8 @@ import org.matrix.android.sdk.internal.session.identity.IdentityAuthAPI
 import org.matrix.android.sdk.internal.session.identity.IdentityRegisterTask
 import org.matrix.android.sdk.internal.session.openid.GetOpenIdTokenTask
 import org.matrix.android.sdk.internal.session.sync.model.accountdata.AcceptedTermsContent
-import org.matrix.android.sdk.internal.session.user.accountdata.UserAccountDataDataSource
 import org.matrix.android.sdk.internal.session.user.accountdata.UpdateUserAccountDataTask
+import org.matrix.android.sdk.internal.session.user.accountdata.UserAccountDataDataSource
 import org.matrix.android.sdk.internal.util.ensureTrailingSlash
 import javax.inject.Inject
 

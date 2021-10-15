@@ -21,7 +21,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import im.vector.app.databinding.FragmentLoginResetPasswordSuccess2Binding
-
 import javax.inject.Inject
 
 /**

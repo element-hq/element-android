@@ -104,8 +104,8 @@ class VectorConfiguration @Inject constructor(private val context: Context) {
      * @return the local status value
      */
     fun getHash(): String {
-        return (VectorLocale.applicationLocale.toString()
-                + "_" + FontScale.getFontScaleValue(context).preferenceValue
-                + "_" + ThemeUtils.getApplicationTheme(context))
+        return (VectorLocale.applicationLocale.toString() +
+                "_" + FontScale.getFontScaleValue(context).preferenceValue +
+                "_" + ThemeUtils.getApplicationTheme(context))
     }
 }

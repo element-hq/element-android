@@ -27,8 +27,8 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import im.vector.app.R
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
@@ -67,8 +67,8 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
         @Assisted initialState: SharedSecureStorageViewState,
         @Assisted val args: SharedSecureStorageActivity.Args,
         private val stringProvider: StringProvider,
-        private val session: Session)
-    : VectorViewModel<SharedSecureStorageViewState, SharedSecureStorageAction, SharedSecureStorageViewEvent>(initialState) {
+        private val session: Session) :
+    VectorViewModel<SharedSecureStorageViewState, SharedSecureStorageAction, SharedSecureStorageViewEvent>(initialState) {
 
     @AssistedFactory
     interface Factory {
@@ -76,7 +76,6 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
     }
 
     init {
-
         setState {
             copy(userId = session.myUserId)
         }
@@ -167,10 +166,14 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
         if (state.checkingSSSSAction is Loading) return@withState // ignore
         when (state.step) {
             SharedSecureStorageViewState.Step.EnterKey -> {
-                setState {
-                    copy(
-                            step = SharedSecureStorageViewState.Step.EnterPassphrase
-                    )
+                if (state.hasPassphrase) {
+                    setState {
+                        copy(
+                                step = SharedSecureStorageViewState.Step.EnterPassphrase
+                        )
+                    }
+                } else {
+                    _viewEvents.post(SharedSecureStorageViewEvent.Dismiss)
                 }
             }
             SharedSecureStorageViewState.Step.ResetAll -> {

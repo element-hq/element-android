@@ -43,8 +43,8 @@ import im.vector.app.core.utils.showIdentityServerConsentDialog
 import im.vector.app.core.utils.startSharePlainTextIntent
 import im.vector.app.databinding.FragmentUserListBinding
 import im.vector.app.features.homeserver.HomeServerCapabilitiesViewModel
+import im.vector.app.features.navigation.SettingsActivityPayload
 import im.vector.app.features.settings.VectorSettingsActivity
-
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.user.model.User
 import javax.inject.Inject
@@ -132,9 +132,6 @@ class UserListFragment @Inject constructor(
     }
 
     private fun setupSearchView() {
-        withState(viewModel) {
-            views.userListSearch.hint = getString(R.string.user_directory_search_hint_2)
-        }
         views.userListSearch
                 .textChanges()
                 .startWith(views.userListSearch.text)
@@ -228,9 +225,13 @@ class UserListFragment @Inject constructor(
 
     override fun giveIdentityServerConsent() {
         withState(viewModel) { state ->
-            requireContext().showIdentityServerConsentDialog(state.configuredIdentityServer) {
-                viewModel.handle(UserListAction.UpdateUserConsent(true))
-            }
+            requireContext().showIdentityServerConsentDialog(
+                    state.configuredIdentityServer,
+                    policyLinkCallback = {
+                        navigator.openSettings(requireContext(), SettingsActivityPayload.DiscoverySettings(expandIdentityPolicies = true))
+                    },
+                    consentCallBack = { viewModel.handle(UserListAction.UpdateUserConsent(true)) }
+            )
         }
     }
 

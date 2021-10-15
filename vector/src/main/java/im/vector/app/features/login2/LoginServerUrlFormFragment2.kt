@@ -122,14 +122,14 @@ class LoginServerUrlFormFragment2 @Inject constructor() : AbstractLoginFragment2
     }
 
     override fun onError(throwable: Throwable) {
-        views.loginServerUrlFormHomeServerUrlTil.error = if (throwable is Failure.NetworkConnection
-                && throwable.ioException is UnknownHostException) {
+        views.loginServerUrlFormHomeServerUrlTil.error = if (throwable is Failure.NetworkConnection &&
+                throwable.ioException is UnknownHostException) {
             // Invalid homeserver?
             getString(R.string.login_error_homeserver_not_found)
         } else {
-            if (throwable is Failure.ServerError
-                    && throwable.error.code == MatrixError.M_FORBIDDEN
-                    && throwable.httpCode == HttpsURLConnection.HTTP_FORBIDDEN /* 403 */) {
+            if (throwable is Failure.ServerError &&
+                    throwable.error.code == MatrixError.M_FORBIDDEN &&
+                    throwable.httpCode == HttpsURLConnection.HTTP_FORBIDDEN /* 403 */) {
                 getString(R.string.login_registration_disabled)
             } else {
                 errorFormatter.toHumanReadable(throwable)

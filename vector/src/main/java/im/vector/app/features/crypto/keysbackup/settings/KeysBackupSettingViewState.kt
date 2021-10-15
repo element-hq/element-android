@@ -26,5 +26,5 @@ import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersionR
 data class KeysBackupSettingViewState(val keysBackupVersionTrust: Async<KeysBackupVersionTrust> = Uninitialized,
                                       val keysBackupState: KeysBackupState? = null,
                                       val keysBackupVersion: KeysVersionResult? = null,
-                                      val deleteBackupRequest: Async<Unit> = Uninitialized)
-    : MvRxState
+                                      val deleteBackupRequest: Async<Unit> = Uninitialized) :
+    MvRxState

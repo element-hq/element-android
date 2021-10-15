@@ -57,7 +57,7 @@ fun CharSequence.isMsisdn(): Boolean {
  * - "fi.le.txt".insertBeforeLast("_foo") will return "fi.le_foo.txt"
  * - null.insertBeforeLast("_foo") will return "_foo"
  */
-fun String?.insertBeforeLast(insert: String, delimiter: String = ".") : String {
+fun String?.insertBeforeLast(insert: String, delimiter: String = "."): String {
     if (this == null) return insert
     val idx = lastIndexOf(delimiter)
     return if (idx == -1) {

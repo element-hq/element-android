@@ -37,13 +37,12 @@ import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.databinding.FragmentQrCodeScannerWithButtonBinding
 import im.vector.lib.multipicker.MultiPicker
 import im.vector.lib.multipicker.utils.ImageUtils
-
 import me.dm7.barcodescanner.zxing.ZXingScannerView
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import javax.inject.Inject
 
-class ScanUserCodeFragment @Inject constructor()
-    : VectorBaseFragment<FragmentQrCodeScannerWithButtonBinding>(),
+class ScanUserCodeFragment @Inject constructor() :
+    VectorBaseFragment<FragmentQrCodeScannerWithButtonBinding>(),
         ZXingScannerView.ResultHandler {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentQrCodeScannerWithButtonBinding {

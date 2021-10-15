@@ -84,8 +84,8 @@ class SpaceSummaryController @Inject constructor(
                     avatarRenderer(host.avatarRenderer)
                     id("all_communities")
                     matrixItem(mxItem.copy(displayName = host.stringProvider.getString(R.string.group_all_communities)))
-                    selected(nonNullViewState.selectedGroupingMethod is RoomGroupingMethod.ByLegacyGroup
-                            && nonNullViewState.selectedGroupingMethod.group() == null)
+                    selected(nonNullViewState.selectedGroupingMethod is RoomGroupingMethod.ByLegacyGroup &&
+                            nonNullViewState.selectedGroupingMethod.group() == null)
                     listener { host.callback?.onGroupSelected(null) }
                 }
             }
@@ -95,8 +95,8 @@ class SpaceSummaryController @Inject constructor(
                     avatarRenderer(host.avatarRenderer)
                     id(groupSummary.groupId)
                     matrixItem(groupSummary.toMatrixItem())
-                    selected(nonNullViewState.selectedGroupingMethod is RoomGroupingMethod.ByLegacyGroup
-                            && nonNullViewState.selectedGroupingMethod.group()?.groupId == groupSummary.groupId)
+                    selected(nonNullViewState.selectedGroupingMethod is RoomGroupingMethod.ByLegacyGroup &&
+                            nonNullViewState.selectedGroupingMethod.group()?.groupId == groupSummary.groupId)
                     listener { host.callback?.onGroupSelected(groupSummary) }
                 }
             }

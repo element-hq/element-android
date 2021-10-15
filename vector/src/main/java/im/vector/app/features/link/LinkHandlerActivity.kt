@@ -27,13 +27,12 @@ import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.toast
 import im.vector.app.databinding.ActivityProgressBinding
+import im.vector.app.features.home.HomeActivity
 import im.vector.app.features.login.LoginConfig
 import im.vector.app.features.permalink.PermalinkHandler
-import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.permalinks.PermalinkService
 import timber.log.Timber
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 /**
@@ -45,30 +44,38 @@ class LinkHandlerActivity : VectorBaseActivity<ActivityProgressBinding>() {
     @Inject lateinit var errorFormatter: ErrorFormatter
     @Inject lateinit var permalinkHandler: PermalinkHandler
 
+    override fun getBinding() = ActivityProgressBinding.inflate(layoutInflater)
+
     override fun injectWith(injector: ScreenComponent) {
         injector.inject(this)
     }
 
-    override fun getBinding() = ActivityProgressBinding.inflate(layoutInflater)
-
     override fun initUiAndData() {
+        handleIntent()
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        handleIntent()
+    }
+
+    private fun handleIntent() {
         val uri = intent.data
-
-        if (uri == null) {
-            // Should not happen
-            Timber.w("Uri is null")
-            finish()
-            return
-        }
-
-        if (uri.getQueryParameter(LoginConfig.CONFIG_HS_PARAMETER) != null) {
-            handleConfigUrl(uri)
-        } else if (SUPPORTED_HOSTS.contains(uri.host)) {
-            handleSupportedHostUrl(uri)
-        } else {
-            // Other links are not yet handled, but should not come here (manifest configuration error?)
-            toast(R.string.universal_link_malformed)
-            finish()
+        when {
+            uri == null                                                                    -> {
+                // Should not happen
+                Timber.w("Uri is null")
+                finish()
+            }
+            uri.getQueryParameter(LoginConfig.CONFIG_HS_PARAMETER) != null                 -> handleConfigUrl(uri)
+            uri.toString().startsWith(PermalinkService.MATRIX_TO_URL_BASE)                 -> handleSupportedHostUrl()
+            uri.toString().startsWith(PermalinkHandler.MATRIX_TO_CUSTOM_SCHEME_URL_BASE)   -> handleSupportedHostUrl()
+            resources.getStringArray(R.array.permalink_supported_hosts).contains(uri.host) -> handleSupportedHostUrl()
+            else                                                                           -> {
+                // Other links are not yet handled, but should not come here (manifest configuration error?)
+                toast(R.string.universal_link_malformed)
+                finish()
+            }
         }
     }
 
@@ -81,53 +88,28 @@ class LinkHandlerActivity : VectorBaseActivity<ActivityProgressBinding>() {
         }
     }
 
-    private fun handleSupportedHostUrl(uri: Uri) {
+    private fun handleSupportedHostUrl() {
+        // If we are not logged in, open login screen.
+        // In the future, we might want to relaunch the process after login.
         if (!sessionHolder.hasActiveSession()) {
-            startLoginActivity(uri)
-            finish()
-        } else {
-            convertUriToPermalink(uri)?.let { permalink ->
-                startPermalinkHandler(permalink)
-            } ?: run {
-                // Host is correct but we do not recognize path
-                Timber.w("Unable to handle this uri: $uri")
-                finish()
-            }
+            startLoginActivity()
+            return
         }
+
+        // We forward intent to HomeActivity (singleTask) to avoid the dueling app problem
+        // https://stackoverflow.com/questions/25884954/deep-linking-and-multiple-app-instances
+        intent.setClass(this, HomeActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+        startActivity(intent)
     }
 
     /**
-     * Convert a URL of element web instance to a matrix.to url
-     * Examples:
-     * - https://riot.im/develop/#/room/#element-android:matrix.org ->  https://matrix.to/#/#element-android:matrix.org
-     * - https://app.element.io/#/room/#element-android:matrix.org  ->  https://matrix.to/#/#element-android:matrix.org
+     * Start the login screen with identity server and homeserver pre-filled, if any
      */
-    private fun convertUriToPermalink(uri: Uri): String? {
-        val uriString = uri.toString()
-        val path = SUPPORTED_PATHS.find { it in uriString } ?: return null
-        return PermalinkService.MATRIX_TO_URL_BASE + uriString.substringAfter(path)
-    }
-
-    private fun startPermalinkHandler(permalink: String) {
-        permalinkHandler.launch(this, permalink, buildTask = true)
-                .delay(500, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { isHandled ->
-                    if (!isHandled) {
-                        toast(R.string.universal_link_malformed)
-                    }
-                    finish()
-                }
-                .disposeOnDestroy()
-    }
-
-    /**
-     * Start the login screen with identity server and homeserver pre-filled
-     */
-    private fun startLoginActivity(uri: Uri) {
+    private fun startLoginActivity(uri: Uri? = null) {
         navigator.openLogin(
                 context = this,
-                loginConfig = LoginConfig.parse(uri),
+                loginConfig = uri?.let { LoginConfig.parse(uri) },
                 flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
         )
         finish()
@@ -172,22 +154,5 @@ class LinkHandlerActivity : VectorBaseActivity<ActivityProgressBinding>() {
                 .setCancelable(false)
                 .setPositiveButton(R.string.ok) { _, _ -> finish() }
                 .show()
-    }
-
-    companion object {
-        private val SUPPORTED_HOSTS = listOf(
-                // Regular Element Web instance
-                "app.element.io",
-                // Other known instances of Element Web
-                "develop.element.io",
-                "staging.element.io",
-                // Previous Web instance, kept for compatibility reason
-                "riot.im"
-        )
-        private val SUPPORTED_PATHS = listOf(
-                "/#/room/",
-                "/#/user/",
-                "/#/group/"
-        )
     }
 }

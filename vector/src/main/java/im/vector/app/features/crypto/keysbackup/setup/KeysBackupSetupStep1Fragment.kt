@@ -23,7 +23,6 @@ import android.view.ViewGroup
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.LiveEvent
 import im.vector.app.databinding.FragmentKeysBackupSetupStep1Binding
-
 import javax.inject.Inject
 
 class KeysBackupSetupStep1Fragment @Inject constructor() : VectorBaseFragment<FragmentKeysBackupSetupStep1Binding>() {

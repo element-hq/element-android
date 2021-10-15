@@ -18,6 +18,8 @@ package org.matrix.android.sdk.internal.crypto.store.db.model
 
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Types
+import io.realm.RealmObject
+import io.realm.annotations.Index
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.internal.crypto.GossipRequestType
 import org.matrix.android.sdk.internal.crypto.OutgoingGossipingRequest
@@ -26,8 +28,6 @@ import org.matrix.android.sdk.internal.crypto.OutgoingRoomKeyRequest
 import org.matrix.android.sdk.internal.crypto.OutgoingSecretRequest
 import org.matrix.android.sdk.internal.crypto.model.rest.RoomKeyRequestBody
 import org.matrix.android.sdk.internal.di.MoshiProvider
-import io.realm.RealmObject
-import io.realm.annotations.Index
 
 internal open class OutgoingGossipingRequestEntity(
         @Index var requestId: String? = null,

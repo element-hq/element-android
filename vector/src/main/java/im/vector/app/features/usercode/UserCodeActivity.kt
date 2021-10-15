@@ -24,6 +24,7 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.viewModel
 import com.airbnb.mvrx.withState
@@ -60,8 +61,25 @@ class UserCodeActivity : VectorBaseActivity<ActivitySimpleBinding>(),
         injector.inject(this)
     }
 
+    private val fragmentLifecycleCallbacks = object : FragmentManager.FragmentLifecycleCallbacks() {
+        override fun onFragmentResumed(fm: FragmentManager, f: Fragment) {
+            if (f is MatrixToBottomSheet) {
+                f.interactionListener = this@UserCodeActivity
+            }
+            super.onFragmentResumed(fm, f)
+        }
+
+        override fun onFragmentPaused(fm: FragmentManager, f: Fragment) {
+            if (f is MatrixToBottomSheet) {
+                f.interactionListener = null
+            }
+            super.onFragmentPaused(fm, f)
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        supportFragmentManager.registerFragmentLifecycleCallbacks(fragmentLifecycleCallbacks, false)
 
         if (isFirstCreation()) {
             // should be there early for shared element transition
@@ -74,7 +92,7 @@ class UserCodeActivity : VectorBaseActivity<ActivitySimpleBinding>(),
                 UserCodeState.Mode.SCAN      -> showFragment(ScanUserCodeFragment::class, Bundle.EMPTY)
                 is UserCodeState.Mode.RESULT -> {
                     showFragment(ShowUserCodeFragment::class, Bundle.EMPTY)
-                    MatrixToBottomSheet.withLink(mode.rawLink, this).show(supportFragmentManager, "MatrixToBottomSheet")
+                    MatrixToBottomSheet.withLink(mode.rawLink).show(supportFragmentManager, "MatrixToBottomSheet")
                 }
             }
         }
@@ -97,6 +115,11 @@ class UserCodeActivity : VectorBaseActivity<ActivitySimpleBinding>(),
         }
     }
 
+    override fun onDestroy() {
+        supportFragmentManager.unregisterFragmentLifecycleCallbacks(fragmentLifecycleCallbacks)
+        super.onDestroy()
+    }
+
     private fun showFragment(fragmentClass: KClass<out Fragment>, bundle: Bundle) {
         if (supportFragmentManager.findFragmentByTag(fragmentClass.simpleName) == null) {
             supportFragmentManager.commitTransaction {
@@ -110,9 +133,11 @@ class UserCodeActivity : VectorBaseActivity<ActivitySimpleBinding>(),
         }
     }
 
-    override fun navigateToRoom(roomId: String) {
+    override fun mxToBottomSheetNavigateToRoom(roomId: String) {
         navigator.openRoom(this, roomId)
     }
+
+    override fun mxToBottomSheetSwitchToSpace(spaceId: String) {}
 
     override fun onBackPressed() = withState(sharedViewModel) {
         when (it.mode) {
