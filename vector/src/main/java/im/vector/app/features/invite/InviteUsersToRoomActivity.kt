@@ -53,23 +53,17 @@ import javax.inject.Inject
 @Parcelize
 data class InviteUsersToRoomArgs(val roomId: String) : Parcelable
 
-class InviteUsersToRoomActivity : SimpleFragmentActivity(), UserListViewModel.Factory, ContactsBookViewModel.Factory, InviteUsersToRoomViewModel.Factory {
+class InviteUsersToRoomActivity : SimpleFragmentActivity(), InviteUsersToRoomViewModel.Factory {
 
     private val viewModel: InviteUsersToRoomViewModel by viewModel()
     private lateinit var sharedActionViewModel: UserListSharedActionViewModel
-    @Inject lateinit var userListViewModelFactory: UserListViewModel.Factory
     @Inject lateinit var inviteUsersToRoomViewModelFactory: InviteUsersToRoomViewModel.Factory
-    @Inject lateinit var contactsBookViewModelFactory: ContactsBookViewModel.Factory
     @Inject lateinit var errorFormatter: ErrorFormatter
 
     override fun injectWith(injector: ScreenComponent) {
         super.injectWith(injector)
         injector.inject(this)
     }
-
-    override fun create(initialState: UserListViewState) = userListViewModelFactory.create(initialState)
-
-    override fun create(initialState: ContactsBookViewState) = contactsBookViewModelFactory.create(initialState)
 
     override fun create(initialState: InviteUsersToRoomViewState) = inviteUsersToRoomViewModelFactory.create(initialState)
 

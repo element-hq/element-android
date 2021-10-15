@@ -95,9 +95,7 @@ class HomeActivity :
         VectorBaseActivity<ActivityHomeBinding>(),
         ToolbarConfigurable,
         UnknownDeviceDetectorSharedViewModel.Factory,
-        ServerBackupStatusViewModel.Factory,
         UnreadMessagesSharedViewModel.Factory,
-        PromoteRestrictedViewModel.Factory,
         NavigationInterceptor,
         SpaceInviteBottomSheet.InteractionListener,
         MatrixToBottomSheet.InteractionListener {
@@ -108,8 +106,6 @@ class HomeActivity :
     @Inject lateinit var viewModelFactory: HomeActivityViewModel.Factory
 
     private val serverBackupStatusViewModel: ServerBackupStatusViewModel by viewModel()
-    @Inject lateinit var serverBackupviewModelFactory: ServerBackupStatusViewModel.Factory
-    @Inject lateinit var promoteRestrictedViewModelFactory: PromoteRestrictedViewModel.Factory
     private val promoteRestrictedViewModel: PromoteRestrictedViewModel by viewModel()
 
     @Inject lateinit var activeSessionHolder: ActiveSessionHolder
@@ -181,10 +177,6 @@ class HomeActivity :
 
     override fun create(initialState: UnknownDevicesState): UnknownDeviceDetectorSharedViewModel {
         return unknownDeviceViewModelFactory.create(initialState)
-    }
-
-    override fun create(initialState: ServerBackupStatusViewState): ServerBackupStatusViewModel {
-        return serverBackupviewModelFactory.create(initialState)
     }
 
     override fun create(initialState: UnreadMessagesState): UnreadMessagesSharedViewModel {
@@ -589,8 +581,6 @@ class HomeActivity :
                     }
         }
     }
-
-    override fun create(initialState: ActiveSpaceViewState) = promoteRestrictedViewModelFactory.create(initialState)
 
     override fun mxToBottomSheetNavigateToRoom(roomId: String) {
         navigator.openRoom(this, roomId)

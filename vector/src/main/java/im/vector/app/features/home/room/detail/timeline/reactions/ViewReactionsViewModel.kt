@@ -27,6 +27,8 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
@@ -70,18 +72,11 @@ class ViewReactionsViewModel @AssistedInject constructor(@Assisted
             ?: throw IllegalStateException("Shouldn't use this ViewModel without a room")
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: DisplayReactionsViewState): ViewReactionsViewModel
+    interface Factory: MavericksAssistedViewModelFactory<ViewReactionsViewModel,DisplayReactionsViewState> {
+        override fun create(state: DisplayReactionsViewState): ViewReactionsViewModel
     }
 
-    companion object : MavericksViewModelFactory<ViewReactionsViewModel, DisplayReactionsViewState> {
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: DisplayReactionsViewState): ViewReactionsViewModel? {
-            val fragment: ViewReactionsBottomSheet = (viewModelContext as FragmentViewModelContext).fragment()
-            return fragment.viewReactionsViewModelFactory.create(state)
-        }
-    }
+    companion object : MavericksViewModelFactory<ViewReactionsViewModel, DisplayReactionsViewState> by hiltMavericksViewModelFactory()
 
     init {
         observeEventAnnotationSummaries()

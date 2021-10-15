@@ -46,8 +46,7 @@ import javax.inject.Inject
 
 // TODO this needs to be refactored to current standard and remove legacy
 class SignOutBottomSheetDialogFragment :
-        VectorBaseBottomSheetDialogFragment<BottomSheetLogoutAndBackupBinding>(),
-        SignoutCheckViewModel.Factory {
+        VectorBaseBottomSheetDialogFragment<BottomSheetLogoutAndBackupBinding>(){
 
     var onSignOut: Runnable? = null
 
@@ -57,13 +56,6 @@ class SignOutBottomSheetDialogFragment :
 
     init {
         isCancelable = true
-    }
-
-    @Inject
-    lateinit var viewModelFactory: SignoutCheckViewModel.Factory
-
-    override fun create(initialState: SignoutCheckViewState): SignoutCheckViewModel {
-        return viewModelFactory.create(initialState)
     }
 
     private val viewModel: SignoutCheckViewModel by fragmentViewModel(SignoutCheckViewModel::class)

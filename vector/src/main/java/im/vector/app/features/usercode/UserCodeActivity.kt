@@ -41,10 +41,7 @@ import javax.inject.Inject
 import kotlin.reflect.KClass
 
 class UserCodeActivity : VectorBaseActivity<ActivitySimpleBinding>(),
-        UserCodeSharedViewModel.Factory,
         MatrixToBottomSheet.InteractionListener {
-
-    @Inject lateinit var viewModelFactory: UserCodeSharedViewModel.Factory
 
     val sharedViewModel: UserCodeSharedViewModel by viewModel()
 
@@ -146,9 +143,6 @@ class UserCodeActivity : VectorBaseActivity<ActivitySimpleBinding>(),
             UserCodeState.Mode.SCAN -> sharedViewModel.handle(UserCodeActions.SwitchMode(UserCodeState.Mode.SHOW))
         }.exhaustive
     }
-
-    override fun create(initialState: UserCodeState) =
-            viewModelFactory.create(initialState)
 
     companion object {
         fun newIntent(context: Context, userId: String): Intent {

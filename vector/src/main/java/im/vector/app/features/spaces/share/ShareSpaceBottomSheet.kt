@@ -35,7 +35,7 @@ import im.vector.app.features.invite.InviteUsersToRoomActivity
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
-class ShareSpaceBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetSpaceInviteBinding>(), ShareSpaceViewModel.Factory {
+class ShareSpaceBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetSpaceInviteBinding>(){
 
     @Parcelize
     data class Args(
@@ -46,10 +46,6 @@ class ShareSpaceBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetSpa
     override val showExpanded = true
 
     private val viewModel: ShareSpaceViewModel by fragmentViewModel(ShareSpaceViewModel::class)
-
-    @Inject lateinit var viewModelFactory: ShareSpaceViewModel.Factory
-
-    override fun create(initialState: ShareSpaceViewState): ShareSpaceViewModel = viewModelFactory.create(initialState)
 
     override fun injectWith(injector: ScreenComponent) {
         injector.inject(this)

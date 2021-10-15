@@ -28,6 +28,8 @@ import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.platform.VectorViewModel
 import kotlinx.coroutines.Dispatchers
@@ -58,19 +60,11 @@ class SpacePreviewViewModel @AssistedInject constructor(
     }
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: SpacePreviewState): SpacePreviewViewModel
+    interface Factory: MavericksAssistedViewModelFactory<SpacePreviewViewModel,SpacePreviewState> {
+        override fun create(state: SpacePreviewState): SpacePreviewViewModel
     }
 
-    companion object : MavericksViewModelFactory<SpacePreviewViewModel, SpacePreviewState> {
-        override fun create(viewModelContext: ViewModelContext, state: SpacePreviewState): SpacePreviewViewModel? {
-            val factory = when (viewModelContext) {
-                is FragmentViewModelContext -> viewModelContext.fragment as? Factory
-                is ActivityViewModelContext -> viewModelContext.activity as? Factory
-            }
-            return factory?.create(state) ?: error("You should let your activity/fragment implements Factory interface")
-        }
-    }
+    companion object : MavericksViewModelFactory<SpacePreviewViewModel, SpacePreviewState> by hiltMavericksViewModelFactory()
 
     override fun handle(action: SpacePreviewViewAction) {
         when (action) {

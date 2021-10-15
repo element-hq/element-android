@@ -48,7 +48,6 @@ class RoomDetailActivity :
         VectorBaseActivity<ActivityRoomDetailBinding>(),
         ToolbarConfigurable,
         RequireActiveMembershipViewModel.Factory,
-        RoomWidgetPermissionViewModel.Factory,
         MatrixToBottomSheet.InteractionListener {
 
     override fun getBinding(): ActivityRoomDetailBinding {
@@ -83,12 +82,6 @@ class RoomDetailActivity :
     override fun create(initialState: RequireActiveMembershipViewState): RequireActiveMembershipViewModel {
         // Due to shortcut, we cannot use MvRx args. Pass the first roomId here
         return requireActiveMembershipViewModelFactory.create(initialState.copy(roomId = currentRoomId ?: ""))
-    }
-
-    @Inject
-    lateinit var permissionsViewModelFactory: RoomWidgetPermissionViewModel.Factory
-    override fun create(initialState: RoomWidgetPermissionViewState): RoomWidgetPermissionViewModel {
-        return permissionsViewModelFactory.create(initialState)
     }
 
     override fun injectWith(injector: ScreenComponent) {

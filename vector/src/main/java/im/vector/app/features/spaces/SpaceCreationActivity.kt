@@ -41,9 +41,7 @@ import im.vector.app.features.spaces.create.SpaceTopology
 import im.vector.app.features.spaces.create.SpaceType
 import javax.inject.Inject
 
-class SpaceCreationActivity : SimpleFragmentActivity(), CreateSpaceViewModel.Factory {
-
-    @Inject lateinit var viewModelFactory: CreateSpaceViewModel.Factory
+class SpaceCreationActivity : SimpleFragmentActivity(){
 
     override fun injectWith(injector: ScreenComponent) {
         super.injectWith(injector)
@@ -188,5 +186,4 @@ class SpaceCreationActivity : SimpleFragmentActivity(), CreateSpaceViewModel.Fac
         }
     }
 
-    override fun create(initialState: CreateSpaceState): CreateSpaceViewModel = viewModelFactory.create(initialState)
 }

@@ -23,11 +23,38 @@ import dagger.multibindings.IntoMap
 import im.vector.app.features.auth.ReAuthViewModel
 import im.vector.app.features.call.VectorCallViewModel
 import im.vector.app.features.call.conference.JitsiCallViewModel
+import im.vector.app.features.call.transfer.CallTransferViewModel
+import im.vector.app.features.contactsbook.ContactsBookViewModel
+import im.vector.app.features.createdirect.CreateDirectRoomViewModel
+import im.vector.app.features.crypto.keysbackup.settings.KeysBackupSettingsViewModel
+import im.vector.app.features.crypto.quads.SharedSecureStorageViewModel
+import im.vector.app.features.devtools.RoomDevToolViewModel
+import im.vector.app.features.home.PromoteRestrictedViewModel
+import im.vector.app.features.home.room.detail.timeline.reactions.ViewReactionsViewModel
+import im.vector.app.features.home.room.detail.upgrade.MigrateRoomViewModel
 import im.vector.app.features.home.room.list.RoomListViewModel
 import im.vector.app.features.roomdirectory.RoomDirectoryViewModel
+import im.vector.app.features.roomdirectory.picker.RoomDirectoryPickerViewModel
+import im.vector.app.features.roomprofile.notifications.RoomNotificationSettingsViewModel
+import im.vector.app.features.settings.ignored.IgnoredUsersViewModel
 import im.vector.app.features.spaces.SpaceListViewModel
+import im.vector.app.features.spaces.create.CreateSpaceViewModel
+import im.vector.app.features.spaces.explore.SpaceDirectoryViewModel
+import im.vector.app.features.spaces.invite.SpaceInviteBottomSheetViewModel
+import im.vector.app.features.spaces.leave.SpaceLeaveAdvancedViewModel
+import im.vector.app.features.spaces.manage.SpaceAddRoomsViewModel
 import im.vector.app.features.spaces.manage.SpaceManageRoomsViewModel
 import im.vector.app.features.spaces.manage.SpaceManageSharedViewModel
+import im.vector.app.features.spaces.people.SpacePeopleViewModel
+import im.vector.app.features.spaces.preview.SpacePreviewViewModel
+import im.vector.app.features.spaces.share.ShareSpaceViewModel
+import im.vector.app.features.terms.ReviewTermsViewModel
+import im.vector.app.features.usercode.UserCodeSharedViewModel
+import im.vector.app.features.userdirectory.UserListViewModel
+import im.vector.app.features.widgets.WidgetViewModel
+import im.vector.app.features.widgets.permissions.RoomWidgetPermissionViewModel
+import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
+import im.vector.app.features.workers.signout.SignoutCheckViewModel
 
 @InstallIn(MavericksViewModelComponent::class)
 @Module
@@ -73,6 +100,139 @@ interface MavericksViewModelModule {
     @MavericksViewModelKey(RoomDirectoryViewModel::class)
     fun roomDirectoryViewModelFactory(factory: RoomDirectoryViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
 
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(ViewReactionsViewModel::class)
+    fun viewReactionsViewModelFactory(factory: ViewReactionsViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
 
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(RoomWidgetPermissionViewModel::class)
+    fun roomWidgetPermissionViewModelFactory(factory: RoomWidgetPermissionViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(WidgetViewModel::class)
+    fun widgetViewModelFactory(factory: WidgetViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(ServerBackupStatusViewModel::class)
+    fun serverBackupStatusViewModelFactory(factory: ServerBackupStatusViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(SignoutCheckViewModel::class)
+    fun signoutCheckViewModelFactory(factory: SignoutCheckViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(RoomDirectoryPickerViewModel::class)
+    fun roomDirectoryPickerViewModelFactory(factory: RoomDirectoryPickerViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(RoomDevToolViewModel::class)
+    fun roomDevToolViewModelFactory(factory: RoomDevToolViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(MigrateRoomViewModel::class)
+    fun migrateRoomViewModelFactory(factory: MigrateRoomViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(IgnoredUsersViewModel::class)
+    fun ignoredUsersViewModelFactory(factory: IgnoredUsersViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(CallTransferViewModel::class)
+    fun callTransferViewModelFactory(factory: CallTransferViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(ContactsBookViewModel::class)
+    fun contactsBookViewModelFactory(factory: ContactsBookViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(CreateDirectRoomViewModel::class)
+    fun createDirectRoomViewModelFactory(factory: CreateDirectRoomViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(RoomNotificationSettingsViewModel::class)
+    fun roomNotificationSettingsViewModelFactory(factory: RoomNotificationSettingsViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(KeysBackupSettingsViewModel::class)
+    fun keysBackupSettingsViewModelFactory(factory: KeysBackupSettingsViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(SharedSecureStorageViewModel::class)
+    fun sharedSecureStorageViewModelFactory(factory: SharedSecureStorageViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(PromoteRestrictedViewModel::class)
+    fun promoteRestrictedViewModelFactory(factory: PromoteRestrictedViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(UserListViewModel::class)
+    fun userListViewModelFactory(factory: UserListViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(UserCodeSharedViewModel::class)
+    fun userCodeSharedViewModelFactory(factory: UserCodeSharedViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(ReviewTermsViewModel::class)
+    fun reviewTermsViewModelFactory(factory: ReviewTermsViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(ShareSpaceViewModel::class)
+    fun shareSpaceViewModelFactory(factory: ShareSpaceViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(SpacePreviewViewModel::class)
+    fun spacePreviewViewModelFactory(factory: SpacePreviewViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(SpacePeopleViewModel::class)
+    fun spacePeopleViewModelFactory(factory: SpacePeopleViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(SpaceAddRoomsViewModel::class)
+    fun spaceAddRoomsViewModelFactory(factory: SpaceAddRoomsViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(SpaceLeaveAdvancedViewModel::class)
+    fun spaceLeaveAdvancedViewModelFactory(factory: SpaceLeaveAdvancedViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(SpaceInviteBottomSheetViewModel::class)
+    fun spaceInviteBottomSheetViewModelFactory(factory: SpaceInviteBottomSheetViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(SpaceDirectoryViewModel::class)
+    fun spaceDirectoryViewModelFactory(factory: SpaceDirectoryViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(CreateSpaceViewModel::class)
+    fun createSpaceViewModelFactory(factory: CreateSpaceViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
 
 }

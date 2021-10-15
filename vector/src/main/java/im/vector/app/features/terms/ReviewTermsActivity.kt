@@ -32,7 +32,6 @@ import javax.inject.Inject
 class ReviewTermsActivity : SimpleFragmentActivity() {
 
     @Inject lateinit var errorFormatter: ErrorFormatter
-    @Inject lateinit var viewModelFactory: ReviewTermsViewModel.Factory
 
     private val reviewTermsViewModel: ReviewTermsViewModel by viewModel()
 

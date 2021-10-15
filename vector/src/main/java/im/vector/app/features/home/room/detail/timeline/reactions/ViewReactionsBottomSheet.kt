@@ -44,7 +44,6 @@ class ViewReactionsBottomSheet :
 
     private val viewModel: ViewReactionsViewModel by fragmentViewModel(ViewReactionsViewModel::class)
 
-    @Inject lateinit var viewReactionsViewModelFactory: ViewReactionsViewModel.Factory
     private lateinit var sharedActionViewModel: MessageSharedActionViewModel
 
     @Inject lateinit var epoxyController: ViewReactionsEpoxyController

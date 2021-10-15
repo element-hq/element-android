@@ -38,9 +38,7 @@ import java.io.Serializable
 import javax.inject.Inject
 
 class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>(),
-        ToolbarConfigurable,
-        WidgetViewModel.Factory,
-        RoomWidgetPermissionViewModel.Factory {
+        ToolbarConfigurable {
 
     companion object {
 
@@ -65,9 +63,6 @@ class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>(),
             }
         }
     }
-
-    @Inject lateinit var viewModelFactory: WidgetViewModel.Factory
-    @Inject lateinit var permissionsViewModelFactory: RoomWidgetPermissionViewModel.Factory
 
     private val viewModel: WidgetViewModel by viewModel()
     private val permissionViewModel: RoomWidgetPermissionViewModel by viewModel()
@@ -131,14 +126,6 @@ class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>(),
         viewModel.onEach(WidgetViewState::canManageWidgets) {
             invalidateOptionsMenu()
         }
-    }
-
-    override fun create(initialState: WidgetViewState): WidgetViewModel {
-        return viewModelFactory.create(initialState)
-    }
-
-    override fun create(initialState: RoomWidgetPermissionViewState): RoomWidgetPermissionViewModel {
-        return permissionsViewModelFactory.create(initialState)
     }
 
     private fun handleClose(event: WidgetViewEvents.Close) {

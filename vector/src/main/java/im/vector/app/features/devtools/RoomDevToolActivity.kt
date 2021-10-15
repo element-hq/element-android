@@ -45,10 +45,8 @@ import kotlinx.parcelize.Parcelize
 import org.billcarsonfr.jsonviewer.JSonViewerFragment
 import javax.inject.Inject
 
-class RoomDevToolActivity : SimpleFragmentActivity(), RoomDevToolViewModel.Factory,
-        FragmentManager.OnBackStackChangedListener {
+class RoomDevToolActivity : SimpleFragmentActivity(), FragmentManager.OnBackStackChangedListener {
 
-    @Inject lateinit var viewModelFactory: RoomDevToolViewModel.Factory
     @Inject lateinit var colorProvider: ColorProvider
 
     //    private lateinit var viewModel: RoomDevToolViewModel
@@ -68,10 +66,6 @@ class RoomDevToolActivity : SimpleFragmentActivity(), RoomDevToolViewModel.Facto
     override fun injectWith(injector: ScreenComponent) {
         super.injectWith(injector)
         injector.inject(this)
-    }
-
-    override fun create(initialState: RoomDevToolViewState): RoomDevToolViewModel {
-        return viewModelFactory.create(initialState)
     }
 
     override fun initUiAndData() {

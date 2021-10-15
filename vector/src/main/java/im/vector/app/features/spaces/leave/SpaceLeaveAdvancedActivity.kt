@@ -41,17 +41,13 @@ import im.vector.app.features.spaces.SpaceBottomSheetSettingsArgs
 import javax.inject.Inject
 
 class SpaceLeaveAdvancedActivity : VectorBaseActivity<ActivitySimpleLoadingBinding>(),
-        SpaceLeaveAdvancedViewModel.Factory,
         ToolbarConfigurable {
 
     override fun getBinding(): ActivitySimpleLoadingBinding = ActivitySimpleLoadingBinding.inflate(layoutInflater)
 
     val leaveViewModel: SpaceLeaveAdvancedViewModel by viewModel()
 
-    @Inject lateinit var viewModelFactory: SpaceLeaveAdvancedViewModel.Factory
     @Inject lateinit var errorFormatter: ErrorFormatter
-
-    override fun create(initialState: SpaceLeaveAdvanceViewState) = viewModelFactory.create(initialState)
 
     override fun injectWith(injector: ScreenComponent) {
         super.injectWith(injector)

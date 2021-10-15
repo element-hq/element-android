@@ -40,7 +40,6 @@ class KeysBackupManageActivity : SimpleFragmentActivity() {
     override fun getTitleRes() = R.string.encryption_message_recovery
 
     private val viewModel: KeysBackupSettingsViewModel by viewModel()
-    @Inject lateinit var keysBackupSettingsViewModelFactory: KeysBackupSettingsViewModel.Factory
 
     override fun injectWith(injector: ScreenComponent) {
         super.injectWith(injector)

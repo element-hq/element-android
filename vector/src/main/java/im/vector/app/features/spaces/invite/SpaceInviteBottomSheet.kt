@@ -43,7 +43,7 @@ import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
-class SpaceInviteBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetInvitedToSpaceBinding>(), SpaceInviteBottomSheetViewModel.Factory {
+class SpaceInviteBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetInvitedToSpaceBinding>() {
 
     interface InteractionListener {
         fun spaceInviteBottomSheetOnAccept(spaceId: String)
@@ -64,10 +64,6 @@ class SpaceInviteBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetIn
     lateinit var spaceCardRenderer: SpaceCardRenderer
 
     private val viewModel: SpaceInviteBottomSheetViewModel by fragmentViewModel(SpaceInviteBottomSheetViewModel::class)
-
-    @Inject lateinit var viewModelFactory: SpaceInviteBottomSheetViewModel.Factory
-
-    override fun create(initialState: SpaceInviteBottomSheetState) = viewModelFactory.create(initialState)
 
     override fun injectWith(injector: ScreenComponent) {
         injector.inject(this)

@@ -52,7 +52,6 @@ class SharedSecureStorageActivity :
     ) : Parcelable
 
     private val viewModel: SharedSecureStorageViewModel by viewModel()
-    @Inject lateinit var viewModelFactory: SharedSecureStorageViewModel.Factory
     @Inject lateinit var errorFormatter: ErrorFormatter
 
     override fun injectWith(injector: ScreenComponent) {

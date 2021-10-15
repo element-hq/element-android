@@ -27,6 +27,8 @@ import dagger.assisted.AssistedInject
 import im.vector.app.AppStateHandler
 import im.vector.app.RoomGroupingMethod
 import im.vector.app.core.di.ActiveSessionHolder
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
@@ -72,21 +74,11 @@ class PromoteRestrictedViewModel @AssistedInject constructor(
     }
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: ActiveSpaceViewState): PromoteRestrictedViewModel
+    interface Factory: MavericksAssistedViewModelFactory<PromoteRestrictedViewModel,ActiveSpaceViewState> {
+        override fun create(state: ActiveSpaceViewState): PromoteRestrictedViewModel
     }
 
-    companion object : MavericksViewModelFactory<PromoteRestrictedViewModel, ActiveSpaceViewState> {
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: ActiveSpaceViewState): PromoteRestrictedViewModel? {
-            val factory = when (viewModelContext) {
-                is FragmentViewModelContext -> viewModelContext.fragment as? Factory
-                is ActivityViewModelContext -> viewModelContext.activity as? Factory
-            }
-            return factory?.create(state) ?: error("You should let your activity/fragment implements Factory interface")
-        }
-    }
+    companion object : MavericksViewModelFactory<PromoteRestrictedViewModel, ActiveSpaceViewState> by hiltMavericksViewModelFactory()
 
     override fun handle(action: EmptyAction) {}
 }

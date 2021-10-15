@@ -55,25 +55,16 @@ import org.matrix.android.sdk.api.session.room.failure.CreateRoomFailure
 import java.net.HttpURLConnection
 import javax.inject.Inject
 
-class CreateDirectRoomActivity : SimpleFragmentActivity(), UserListViewModel.Factory, CreateDirectRoomViewModel.Factory, ContactsBookViewModel.Factory {
+class CreateDirectRoomActivity : SimpleFragmentActivity(){
 
     private val viewModel: CreateDirectRoomViewModel by viewModel()
     private lateinit var sharedActionViewModel: UserListSharedActionViewModel
-    @Inject lateinit var userListViewModelFactory: UserListViewModel.Factory
-    @Inject lateinit var createDirectRoomViewModelFactory: CreateDirectRoomViewModel.Factory
-    @Inject lateinit var contactsBookViewModelFactory: ContactsBookViewModel.Factory
     @Inject lateinit var errorFormatter: ErrorFormatter
 
     override fun injectWith(injector: ScreenComponent) {
         super.injectWith(injector)
         injector.inject(this)
     }
-
-    override fun create(initialState: UserListViewState) = userListViewModelFactory.create(initialState)
-
-    override fun create(initialState: CreateDirectRoomViewState) = createDirectRoomViewModelFactory.create(initialState)
-
-    override fun create(initialState: ContactsBookViewState) = contactsBookViewModelFactory.create(initialState)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

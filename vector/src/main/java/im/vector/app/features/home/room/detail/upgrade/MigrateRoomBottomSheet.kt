@@ -37,8 +37,7 @@ import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
 class MigrateRoomBottomSheet :
-        VectorBaseBottomSheetDialogFragment<BottomSheetRoomUpgradeBinding>(),
-        MigrateRoomViewModel.Factory {
+        VectorBaseBottomSheetDialogFragment<BottomSheetRoomUpgradeBinding>(){
 
     enum class MigrationReason {
         MANUAL,
@@ -52,9 +51,6 @@ class MigrateRoomBottomSheet :
             val reason: MigrationReason = MigrationReason.MANUAL,
             val customDescription: CharSequence? = null
     ) : Parcelable
-
-    @Inject
-    lateinit var viewModelFactory: MigrateRoomViewModel.Factory
 
     override val showExpanded = true
 
@@ -150,10 +146,6 @@ class MigrateRoomBottomSheet :
         views.autoUpdateParent.setOnCheckedChangeListener { _, isChecked ->
             viewModel.handle(MigrateRoomAction.SetUpdateKnownParentSpace(isChecked))
         }
-    }
-
-    override fun create(initialState: MigrateRoomViewState): MigrateRoomViewModel {
-        return viewModelFactory.create(initialState)
     }
 
     companion object {

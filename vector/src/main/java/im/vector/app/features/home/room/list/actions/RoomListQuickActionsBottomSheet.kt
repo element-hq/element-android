@@ -62,7 +62,6 @@ class RoomListQuickActionsBottomSheet :
 
     private lateinit var sharedActionViewModel: RoomListQuickActionsSharedActionViewModel
     @Inject lateinit var sharedViewPool: RecyclerView.RecycledViewPool
-    @Inject lateinit var roomNotificationSettingsViewModelFactory: RoomNotificationSettingsViewModel.Factory
     @Inject lateinit var roomListActionsEpoxyController: RoomListQuickActionsEpoxyController
     @Inject lateinit var navigator: Navigator
     @Inject lateinit var errorFormatter: ErrorFormatter

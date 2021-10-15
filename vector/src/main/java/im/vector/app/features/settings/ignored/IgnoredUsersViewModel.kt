@@ -28,6 +28,8 @@ import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.platform.VectorViewModelAction
 import kotlinx.coroutines.launch
@@ -49,18 +51,11 @@ class IgnoredUsersViewModel @AssistedInject constructor(@Assisted initialState: 
     VectorViewModel<IgnoredUsersViewState, IgnoredUsersAction, IgnoredUsersViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: IgnoredUsersViewState): IgnoredUsersViewModel
+    interface Factory: MavericksAssistedViewModelFactory<IgnoredUsersViewModel,IgnoredUsersViewState> {
+        override fun create(state: IgnoredUsersViewState): IgnoredUsersViewModel
     }
 
-    companion object : MavericksViewModelFactory<IgnoredUsersViewModel, IgnoredUsersViewState> {
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: IgnoredUsersViewState): IgnoredUsersViewModel? {
-            val ignoredUsersFragment: VectorSettingsIgnoredUsersFragment = (viewModelContext as FragmentViewModelContext).fragment()
-            return ignoredUsersFragment.ignoredUsersViewModelFactory.create(state)
-        }
-    }
+    companion object : MavericksViewModelFactory<IgnoredUsersViewModel, IgnoredUsersViewState> by hiltMavericksViewModelFactory()
 
     init {
         observeIgnoredUsers()

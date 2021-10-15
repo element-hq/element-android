@@ -37,9 +37,7 @@ import im.vector.app.features.spaces.explore.SpaceDirectoryViewEvents
 import im.vector.app.features.spaces.explore.SpaceDirectoryViewModel
 import javax.inject.Inject
 
-class SpaceExploreActivity : VectorBaseActivity<ActivitySimpleBinding>(), SpaceDirectoryViewModel.Factory, MatrixToBottomSheet.InteractionListener {
-
-    @Inject lateinit var spaceDirectoryViewModelFactory: SpaceDirectoryViewModel.Factory
+class SpaceExploreActivity : VectorBaseActivity<ActivitySimpleBinding>(), MatrixToBottomSheet.InteractionListener {
 
     override fun injectWith(injector: ScreenComponent) {
         injector.inject(this)
@@ -112,9 +110,6 @@ class SpaceExploreActivity : VectorBaseActivity<ActivitySimpleBinding>(), SpaceD
             }
         }
     }
-
-    override fun create(initialState: SpaceDirectoryState): SpaceDirectoryViewModel =
-            spaceDirectoryViewModelFactory.create(initialState)
 
     override fun mxToBottomSheetNavigateToRoom(roomId: String) {
         navigator.openRoom(this, roomId)
