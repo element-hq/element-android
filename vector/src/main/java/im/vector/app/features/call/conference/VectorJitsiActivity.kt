@@ -61,8 +61,6 @@ class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMee
 
     override fun getBinding() = ActivityJitsiBinding.inflate(layoutInflater)
 
-    @Inject lateinit var viewModelFactory: JitsiCallViewModel.Factory
-
     private var jitsiMeetView: JitsiMeetView? = null
 
     private val jitsiViewModel: JitsiCallViewModel by viewModel()

@@ -26,6 +26,8 @@ import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import kotlinx.coroutines.Job
@@ -46,8 +48,8 @@ class JitsiCallViewModel @AssistedInject constructor(
 ) : VectorViewModel<JitsiCallViewState, JitsiCallViewActions, JitsiCallViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: JitsiCallViewState): JitsiCallViewModel
+    interface Factory: MavericksAssistedViewModelFactory<JitsiCallViewModel,JitsiCallViewState> {
+        override fun create(state: JitsiCallViewState): JitsiCallViewModel
     }
 
     private var currentWidgetObserver: Job? = null
@@ -143,24 +145,9 @@ class JitsiCallViewModel @AssistedInject constructor(
         }
     }
 
-    companion object : MavericksViewModelFactory<JitsiCallViewModel, JitsiCallViewState> {
-
+    companion object : MavericksViewModelFactory<JitsiCallViewModel, JitsiCallViewState> by hiltMavericksViewModelFactory() {
         const val ENABLE_VIDEO_OPTION = "ENABLE_VIDEO_OPTION"
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: JitsiCallViewState): JitsiCallViewModel? {
-            val callActivity: VectorJitsiActivity = viewModelContext.activity()
-            return callActivity.viewModelFactory.create(state)
-        }
-
-        override fun initialState(viewModelContext: ViewModelContext): JitsiCallViewState? {
-            val args: VectorJitsiActivity.Args = viewModelContext.args()
-
-            return JitsiCallViewState(
-                    roomId = args.roomId,
-                    widgetId = args.widgetId,
-                    enableVideo = args.enableVideo
-            )
-        }
     }
+
+
 }

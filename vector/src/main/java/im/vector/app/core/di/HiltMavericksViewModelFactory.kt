@@ -59,6 +59,11 @@ class HiltMavericksViewModelFactory<VM : MavericksViewModel<S>, S : MavericksSta
         val castedViewModelFactory = viewModelFactory as? MavericksAssistedViewModelFactory<VM, S>
         return castedViewModelFactory?.create(state) as VM
     }
+
+    override fun initialState(viewModelContext: ViewModelContext): S? {
+        return super.initialState(viewModelContext)
+    }
+
 }
 
 /**

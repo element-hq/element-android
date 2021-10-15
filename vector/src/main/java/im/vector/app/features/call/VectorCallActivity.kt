@@ -41,6 +41,7 @@ import com.airbnb.mvrx.viewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.setTextOrHide
@@ -89,6 +90,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
 
     override fun getBinding() = ActivityCallBinding.inflate(layoutInflater)
 
+    @Inject lateinit var callManager: WebRtcCallManager
     @Inject lateinit var avatarRenderer: AvatarRenderer
 
     override fun injectWith(injector: ScreenComponent) {
@@ -97,8 +99,6 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
 
     private val callViewModel: VectorCallViewModel by viewModel()
 
-    @Inject lateinit var callManager: WebRtcCallManager
-    @Inject lateinit var viewModelFactory: VectorCallViewModel.Factory
 
     private val dialPadCallback = object : DialPadFragment.Callback {
         override fun onDigitAppended(digit: String) {

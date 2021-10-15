@@ -51,10 +51,8 @@ data class SpaceManageArgs(
 ) : Parcelable
 
 class SpaceManageActivity : VectorBaseActivity<ActivitySimpleLoadingBinding>(),
-        ToolbarConfigurable,
-        SpaceManageSharedViewModel.Factory {
+        ToolbarConfigurable {
 
-    @Inject lateinit var sharedViewModelFactory: SpaceManageSharedViewModel.Factory
     private lateinit var sharedDirectoryActionViewModel: RoomDirectorySharedActionViewModel
 
     override fun injectWith(injector: ScreenComponent) {
@@ -193,8 +191,6 @@ class SpaceManageActivity : VectorBaseActivity<ActivitySimpleLoadingBinding>(),
             }
         }
     }
-
-    override fun create(initialState: SpaceManageViewState) = sharedViewModelFactory.create(initialState)
 
     override fun configure(toolbar: MaterialToolbar) {
         configureToolbar(toolbar)

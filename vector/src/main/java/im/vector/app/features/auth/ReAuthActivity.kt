@@ -42,7 +42,7 @@ import org.matrix.android.sdk.api.auth.registration.nextUncompletedStage
 import timber.log.Timber
 import javax.inject.Inject
 
-class ReAuthActivity : SimpleFragmentActivity(), ReAuthViewModel.Factory {
+class ReAuthActivity : SimpleFragmentActivity(){
 
     @Parcelize
     data class Args(
@@ -59,9 +59,6 @@ class ReAuthActivity : SimpleFragmentActivity(), ReAuthViewModel.Factory {
     private var customTabsSession: CustomTabsSession? = null
 
     @Inject lateinit var authenticationService: AuthenticationService
-    @Inject lateinit var reAuthViewModelFactory: ReAuthViewModel.Factory
-
-    override fun create(initialState: ReAuthState) = reAuthViewModelFactory.create(initialState)
 
     override fun injectWith(injector: ScreenComponent) {
         super.injectWith(injector)
