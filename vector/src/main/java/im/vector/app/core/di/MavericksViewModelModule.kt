@@ -16,17 +16,18 @@
 
 package im.vector.app.core.di
 
-import androidx.lifecycle.ViewModel
-import com.airbnb.mvrx.MavericksViewModel
-import dagger.MapKey
-import kotlin.reflect.KClass
+import dagger.Binds
+import dagger.Module
+import dagger.hilt.InstallIn
+import dagger.multibindings.IntoMap
+import im.vector.app.features.home.room.list.RoomListViewModel
 
-@Target(AnnotationTarget.FUNCTION, AnnotationTarget.PROPERTY_GETTER, AnnotationTarget.PROPERTY_SETTER)
-@Retention(AnnotationRetention.RUNTIME)
-@MapKey
-annotation class ViewModelKey(val value: KClass<out ViewModel>)
+@InstallIn(MavericksViewModelComponent::class)
+@Module
+interface MavericksViewModelModule {
 
-@Retention(AnnotationRetention.RUNTIME)
-@Target(AnnotationTarget.FUNCTION)
-@MapKey
-annotation class MavericksViewModelKey(val value: KClass<out MavericksViewModel<*>>)
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(RoomListViewModel::class)
+    fun roomListViewModelFactory(factory: RoomListViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+}

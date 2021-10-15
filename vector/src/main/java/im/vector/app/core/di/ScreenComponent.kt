@@ -73,7 +73,6 @@ import im.vector.app.features.home.room.detail.timeline.reactions.ViewReactionsB
 import im.vector.app.features.home.room.detail.upgrade.MigrateRoomBottomSheet
 import im.vector.app.features.home.room.detail.widget.RoomWidgetsBottomSheet
 import im.vector.app.features.home.room.filtered.FilteredRoomsActivity
-import im.vector.app.features.home.room.list.RoomListModule
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsBottomSheet
 import im.vector.app.features.html.EventHtmlRenderer
 import im.vector.app.features.html.VectorHtmlCompressor
@@ -253,7 +252,6 @@ interface ScreenComponentDependencies {
             ViewModelModule::class,
             FragmentModule::class,
             HomeModule::class,
-            RoomListModule::class,
             ScreenModule::class
         ]
 )

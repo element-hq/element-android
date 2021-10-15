@@ -24,8 +24,13 @@ import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.ViewModelContext
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import im.vector.app.AppStateHandler
 import im.vector.app.RoomGroupingMethod
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
@@ -48,8 +53,8 @@ import org.matrix.android.sdk.flow.flow
 import timber.log.Timber
 import javax.inject.Inject
 
-class RoomListViewModel @Inject constructor(
-        initialState: RoomListViewState,
+class RoomListViewModel @AssistedInject constructor(
+        @Assisted initialState: RoomListViewState,
         private val session: Session,
         private val stringProvider: StringProvider,
         private val appStateHandler: AppStateHandler,
@@ -57,8 +62,9 @@ class RoomListViewModel @Inject constructor(
         private val autoAcceptInvites: AutoAcceptInvites
 ) : VectorViewModel<RoomListViewState, RoomListAction, RoomListViewEvents>(initialState) {
 
-    interface Factory {
-        fun create(initialState: RoomListViewState): RoomListViewModel
+    @AssistedFactory
+    interface Factory: MavericksAssistedViewModelFactory<RoomListViewModel, RoomListViewState> {
+        override fun create(state: RoomListViewState): RoomListViewModel
     }
 
     private var updatableQuery: UpdatableLivePageResult? = null
@@ -115,14 +121,7 @@ class RoomListViewModel @Inject constructor(
                 }
     }
 
-    companion object : MavericksViewModelFactory<RoomListViewModel, RoomListViewState> {
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: RoomListViewState): RoomListViewModel {
-            val fragment: RoomListFragment = (viewModelContext as FragmentViewModelContext).fragment()
-            return fragment.roomListViewModelFactory.create(state)
-        }
-    }
+    companion object : MavericksViewModelFactory<RoomListViewModel, RoomListViewState> by hiltMavericksViewModelFactory()
 
     private val roomListSectionBuilder = if (appStateHandler.getCurrentRoomGroupingMethod() is RoomGroupingMethod.BySpace) {
         RoomListSectionBuilderSpace(
