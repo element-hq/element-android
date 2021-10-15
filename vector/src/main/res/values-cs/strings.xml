@@ -2919,13 +2919,13 @@
     <string name="labs_use_voice_message">Povolit hlasovou zprávu</string>
     <string name="voice_message_n_seconds_warning_toast">%1$ds zbývá</string>
     <string name="voice_message_release_to_send_toast">Podržením nahrajte, uvolněním odešlete</string>
-    <string name="a11y_delete_recorded_voice_message">Odstranit nahranou hlasovou zprávu</string>
+    <string name="a11y_delete_recorded_voice_message">Odstranit záznam</string>
     <string name="a11y_recording_voice_message">Nahrát hlasovou zprávu</string>
     <string name="a11y_pause_voice_message">Pozastavit hlasovou zprávu</string>
     <string name="a11y_play_voice_message">Přehrát hlasovou zprávu</string>
     <string name="a11y_lock_voice_message">Zámek hlasové zprávy</string>
     <string name="voice_message_slide_to_cancel">Posunutím zrušíte</string>
-    <string name="a11y_start_voice_message">Zahájení hlasové zprávy</string>
+    <string name="a11y_start_voice_message">Nahrát hlasovou zprávu</string>
     <string name="sent_a_voice_message">Hlasová zpráva</string>
     <string name="spaces_which_can_access">Spaces, které mají přístup</string>
     <string name="allow_space_member_to_find_and_access">Umožněte členům prostoru ho najít a zpřístupnit.</string>
@@ -3045,4 +3045,17 @@
     <string name="space_participants_kick_prompt_msg">vykopnutí uživatele je z tohoto prostoru odstraní.
 \n
 \nAbyste jim zabránili v dalším vstupu, měli byste je raději vykázat.</string>
+    <string name="command_description_lenny">Předsune ( ͡° ͜ʖ ͡°) do textové zprávy</string>
+    <string name="a11y_stop_voice_message">Zastavit nahrávání</string>
+    <string name="identity_server_consent_dialog_neutral_policy">Zásady</string>
+    <string name="settings_discovery_no_policy_provided">Server identit neposkytuje žádné zásady</string>
+    <string name="settings_discovery_hide_identity_server_policy_title">Skrýt zásady serveru identit</string>
+    <string name="settings_discovery_show_identity_server_policy_title">Zobrazit zásady serveru identit</string>
+    <string name="command_description_whois">Zobrazí informace o uživateli</string>
+    <string name="command_description_avatar_for_room">Změní vašeho avatara pouze v této místnosti</string>
+    <string name="command_description_room_avatar">Změní avatar aktuální místnosti</string>
+    <string name="command_description_nick_for_room">Změní vaši zobrazovanou přezdívku pouze v aktuální místnosti</string>
+    <string name="command_description_room_name">Nastaví název místnosti</string>
+    <string name="command_description_unignore_user">Přestane ignorovat uživatele a zobrazí jeho zprávy</string>
+    <string name="command_description_ignore_user">Ignoruje uživatele a skrývá jeho zprávy</string>
 </resources>

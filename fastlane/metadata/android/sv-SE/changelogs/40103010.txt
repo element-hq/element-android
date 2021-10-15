@@ -1,0 +1,2 @@
+Huvudsakliga ändringar i den här versionen: Organisera dina rum med utrymmen! v1.3.1 fixar en krasch som kan hända i v1.3.0.
+Full ändringslogg: https://github.com/vector-im/element-android/releases/tag/v1.3.1

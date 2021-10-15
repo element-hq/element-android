@@ -312,7 +312,7 @@
     <string name="view_decrypted_source">Просмотр расшифрованного исходного кода</string>
     <string name="delete">Удалить</string>
     <string name="rename">Переименовать</string>
-    <string name="report_content">Пожаловаться на содержимое</string>
+    <string name="report_content">Содержание отчёта</string>
     <string name="active_call">Активный вызов</string>
     <string name="ongoing_conference_call">Ongoing conference call.
 \nПрисоединиться как %1$s или %2$s</string>
@@ -1136,16 +1136,16 @@
         <item quantity="other">%d мин.</item>
     </plurals>
     <plurals name="format_time_h">
-        <item quantity="one">%dh</item>
-        <item quantity="few">%dh</item>
-        <item quantity="many">%dh</item>
-        <item quantity="other">%dh</item>
+        <item quantity="one">%dч</item>
+        <item quantity="few">%dч</item>
+        <item quantity="many">%dч</item>
+        <item quantity="other">%dч</item>
     </plurals>
     <plurals name="format_time_d">
-        <item quantity="one">%dd</item>
-        <item quantity="few">%dd</item>
-        <item quantity="many">%dd</item>
-        <item quantity="other">%dd</item>
+        <item quantity="one">%dдень</item>
+        <item quantity="few">%dдня</item>
+        <item quantity="many">%dдней</item>
+        <item quantity="other">%dдней</item>
     </plurals>
     <string name="room_participants_now">Сейчас %1$s</string>
     <string name="room_participants_ago">%1$s %2$s назад</string>
@@ -2735,8 +2735,8 @@
     <string name="call_transfer_users_tab_title">Пользователи</string>
     <string name="call_transfer_failure">Произошла ошибка при переводе вызова</string>
     <string name="call_transfer_title">Перевод</string>
-    <string name="call_transfer_connect_action">Соединиться</string>
-    <string name="call_transfer_consult_first">Сначала спросить</string>
+    <string name="call_transfer_connect_action">Подключиться</string>
+    <string name="call_transfer_consult_first">Сначала посоветуйтесь</string>
     <plurals name="call_one_active_and_other_paused">
         <item quantity="one">1 активный вызов (%1$s) · 1 приостановленный вызов</item>
         <item quantity="few">1 активный вызов (%1$s) · %2$d приостановленных вызова</item>
@@ -2762,7 +2762,7 @@
     <string name="dev_tools_event_content_hint">Содержание события</string>
     <string name="dev_tools_success_state_event">Событие статуса отправлено!</string>
     <string name="dev_tools_success_event">Событие отправлено!</string>
-    <string name="dev_tools_error_malformed_event">Неисправное событие</string>
+    <string name="dev_tools_error_malformed_event">Некорректное событие</string>
     <string name="dev_tools_error_no_message_type">Отсутствует тип сообщения</string>
     <string name="dev_tools_error_no_content">Нет содержания</string>
     <string name="dev_tools_form_hint_event_content">Содержание события</string>
@@ -2775,7 +2775,7 @@
     <string name="dev_tools_send_state_event">Отправить событие статуса</string>
     <string name="dev_tools_send_custom_event">Отправить пользовательское событие</string>
     <string name="dev_tools_menu_name">Инструменты для разработчиков</string>
-    <string name="a11y_view_read_receipts">См. подтверждение получения</string>
+    <string name="a11y_view_read_receipts">Смотреть подтверждение получения</string>
     <string name="a11y_rule_notify_off">Не уведомлять</string>
     <string name="a11y_rule_notify_silent">Уведомить без звука</string>
     <string name="a11y_rule_notify_noisy">Уведомить со звуком</string>
@@ -2784,7 +2784,7 @@
     <string name="a11y_close_emoji_picker">Закрыть выбор эмодзи</string>
     <string name="a11y_open_emoji_picker">Открыть выбор эмодзи</string>
     <string name="a11y_trust_level_trusted">Доверенный уровень доверия</string>
-    <string name="a11y_trust_level_warning">Предупреждающий уровень доверия</string>
+    <string name="a11y_trust_level_warning">Предостерегающий уровень доверия</string>
     <string name="a11y_trust_level_default">Уровень доверия по умолчанию</string>
     <string name="a11y_selected">Выбрано</string>
     <string name="a11y_video">Видео</string>
@@ -2835,7 +2835,7 @@
     <string name="upgrade_public_room">Модернизировать публичную комнату</string>
     <string name="upgrade">Обновление</string>
     <string name="it_may_take_some_time">Пожалуйста, будьте терпеливы, это может занять некоторое время.</string>
-    <string name="joining_replacement_room">Присоединиться к замещающей комнате</string>
+    <string name="joining_replacement_room">Присоединиться к изменённой комнате</string>
     <string name="teammate_spaces_might_not_join">В настоящее время люди не могут присоединиться к созданным вами приватным комнатам.
 \n
 \nМы улучшим это в рамках бета-версии, но мы просто хотели сообщить вам об этом.</string>
@@ -2864,8 +2864,8 @@
     <string name="spaces_beta_welcome_to_spaces">Добро пожаловать в Пространства!</string>
     <string name="space_add_rooms">Добавить комнаты</string>
     <string name="space_add_existing_rooms">Добавить существующие комнаты и пространство</string>
-    <string name="space_leave_prompt_msg_as_admin">Вы являетесь администратором этого пространства, перед уходом убедитесь, что передали права администратора другому пользователю.</string>
-    <string name="space_leave_prompt_msg_private">Это пространство не является публичным. Вы не сможете присоединиться к нему без приглашения.</string>
+    <string name="space_leave_prompt_msg_as_admin">Вы единственный администратор этого пространства. Если вы его покинете, то никто не сможет управлять им.</string>
+    <string name="space_leave_prompt_msg_private">Вы сможете присоединиться только после повторного приглашения.</string>
     <string name="space_leave_prompt_msg_only_you">Вы здесь единственный человек. Если вы уйдёте, никто не сможет присоединиться в будущем, включая вас.</string>
     <string name="leave_space">Покинуть пространство</string>
     <string name="space_add_child_title">Добавить комнаты</string>
@@ -2936,7 +2936,7 @@
     <string name="a11y_unchecked">Непроверенные</string>
     <string name="call_transfer_unknown_person">Неизвестное лицо</string>
     <string name="call_transfer_transfer_to_title">Перевести на %1$s</string>
-    <string name="call_transfer_consulting_with">Запросить с %1$s</string>
+    <string name="call_transfer_consulting_with">Консультация с %1$s</string>
     <plurals name="send_videos_with_original_size">
         <item quantity="one">Отправить видео в исходном размере</item>
         <item quantity="few">Отправить видео в исходном размере</item>
@@ -3012,13 +3012,13 @@
     <string name="voice_message_tap_to_stop_toast">Нажмите на запись, чтобы остановить или прослушать ее</string>
     <string name="voice_message_n_seconds_warning_toast">%1$d осталось</string>
     <string name="voice_message_release_to_send_toast">Удерживайте для записи, отпустите для отправки</string>
-    <string name="a11y_delete_recorded_voice_message">Удалить записанное голосовое сообщение</string>
+    <string name="a11y_delete_recorded_voice_message">Удалить запись</string>
     <string name="a11y_recording_voice_message">Запись голосового сообщения</string>
     <string name="a11y_pause_voice_message">Приостановить голосовое сообщение</string>
     <string name="a11y_play_voice_message">Прослушать голосовое сообщение</string>
     <string name="a11y_lock_voice_message">Заблокировать голосовое сообщение</string>
     <string name="voice_message_slide_to_cancel">Проведите для отмены</string>
-    <string name="a11y_start_voice_message">Начать голосовое сообщение</string>
+    <string name="a11y_start_voice_message">Запись голосового сообщения</string>
     <string name="allow_anyone_in_room_to_access">Разрешить любому человеку в %s найти и получить доступ. Можно выбрать и другие пространства.</string>
     <string name="upgrade_required">Требуется обновление</string>
     <string name="sent_a_voice_message">Голосовое сообщение</string>
@@ -3054,7 +3054,7 @@
     <string name="help_space_members">Помогите участникам пространства в поиске приватных комнат</string>
     <string name="this_makes_it_easy_for_rooms_to_stay_private_to_a_space">Это позволяет комнатам оставаться приватными для пространства, в то же время позволяя людям в пространстве находить их и присоединяться к ним. Все новые комнаты в пространстве будут иметь эту опцию.</string>
     <string name="help_people_in_spaces_find_and_join">Помогите людям в пространствах самим находить и присоединяться к приватным комнатам, без необходимости вручную приглашать всех.</string>
-    <string name="new_let_people_in_spaces_find_and_join">Новое: Позвольте людям в пространствах находить и присоединяться к приватным комнатам</string>
+    <string name="new_let_people_in_spaces_find_and_join">Новое: Позволяет людям в пространствах находить и присоединяться к приватным комнатам</string>
     <string name="call_jitsi_started">Начался групповой вызов</string>
     <string name="all_rooms_youre_in_will_be_shown_in_home">Все комнаты, в которых вы находитесь, будут отображаться в Начале.</string>
     <string name="preference_show_all_rooms_in_home">Показать все комнаты в Начале</string>
@@ -3091,7 +3091,7 @@
     <string name="settings_notification_keyword_contains_dot">Ключевые слова не могут начинаться с \'.\'</string>
     <string name="settings_notification_new_keyword">Добавить новое ключевое слово</string>
     <string name="settings_notification_your_keywords">Ваши ключевые слова</string>
-    <string name="room_settings_none">Ничего</string>
+    <string name="room_settings_none">Отсутствует</string>
     <string name="room_settings_mention_and_keyword_only">Только упоминания и ключевые слова</string>
     <string name="call_remove_jitsi_widget_progress">Завершение вызова…</string>
     <string name="call_ended_invite_timeout_title">Нет ответа</string>
@@ -3147,4 +3147,17 @@
     <string name="space_participants_kick_prompt_msg">Выгнанный пользователь будет удалён из этого пространства. 
 \n 
 \nЧтобы предотвратить его повторное присоединение, вы должны заблокировать его.</string>
+    <string name="a11y_stop_voice_message">Остановить запись</string>
+    <string name="command_description_lenny">Добавляет ( ͡° ͜ʖ ͡°) к текстовому сообщению</string>
+    <string name="identity_server_consent_dialog_neutral_policy">Правила</string>
+    <string name="settings_discovery_no_policy_provided">Отсутствие политики, предоставляемой сервером идентификации</string>
+    <string name="settings_discovery_hide_identity_server_policy_title">Скрыть правила сервера идентификации</string>
+    <string name="settings_discovery_show_identity_server_policy_title">Показать правила сервера идентификации</string>
+    <string name="command_description_whois">Отображает информацию о пользователе</string>
+    <string name="command_description_avatar_for_room">Изменяет ваш аватар только в этой текущей комнате</string>
+    <string name="command_description_room_avatar">Меняет аватар текущей комнаты</string>
+    <string name="command_description_nick_for_room">Изменяет ваш отображаемый псевдоним только в текущей комнате</string>
+    <string name="command_description_room_name">Устанавливает имя комнаты</string>
+    <string name="command_description_unignore_user">Прекращение игнорирования пользователя, показывает его сообщения в дальнейшем</string>
+    <string name="command_description_ignore_user">Игнорирует пользователя, скрывая его сообщения от вас</string>
 </resources>
