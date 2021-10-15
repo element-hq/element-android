@@ -33,6 +33,7 @@ import im.vector.app.core.contacts.MappedContact
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.toggle
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.features.displayname.getBestName
 import io.reactivex.Single
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -45,6 +46,7 @@ import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.api.session.user.model.User
+import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.rx.asObservable
 import org.matrix.android.sdk.rx.rx
 import timber.log.Timber
@@ -203,7 +205,7 @@ class TchapContactListViewModel @AssistedInject constructor(@Assisted initialSta
         })
 
         val filteredUsers = if (state.searchTerm.isNotEmpty()) {
-            tchapContactList.filter { it.getBestName().contains(state.searchTerm, true) }
+            tchapContactList.filter { it.toMatrixItem().getBestName().contains(state.searchTerm, true) }
         } else {
             tchapContactList
         }

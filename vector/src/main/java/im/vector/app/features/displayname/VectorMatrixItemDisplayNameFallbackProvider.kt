@@ -16,6 +16,7 @@
 
 package im.vector.app.features.displayname
 
+import fr.gouv.tchap.core.utils.TchapUtils
 import org.matrix.android.sdk.api.MatrixItemDisplayNameFallbackProvider
 import org.matrix.android.sdk.api.util.MatrixItem
 
@@ -23,6 +24,6 @@ import org.matrix.android.sdk.api.util.MatrixItem
 object VectorMatrixItemDisplayNameFallbackProvider : MatrixItemDisplayNameFallbackProvider {
     override fun getDefaultName(matrixItem: MatrixItem): String {
         // Can customize something from the id if necessary here
-        return matrixItem.id
+        return TchapUtils.computeDisplayNameFromUserId(matrixItem.id).orEmpty()
     }
 }

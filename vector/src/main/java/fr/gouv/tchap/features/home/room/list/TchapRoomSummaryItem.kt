@@ -35,6 +35,7 @@ import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.extensions.setTextOrHide
+import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.list.RoomSummaryFormatter
 import im.vector.app.features.themes.ThemeUtils

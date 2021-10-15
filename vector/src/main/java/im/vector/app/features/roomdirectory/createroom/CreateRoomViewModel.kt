@@ -35,6 +35,7 @@ import fr.gouv.tchap.core.utils.TchapRoomType
 import fr.gouv.tchap.core.utils.TchapUtils
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.raw.wellknown.getElementWellknown
 import im.vector.app.features.raw.wellknown.isE2EByDefault
 import im.vector.app.features.settings.VectorPreferences
@@ -54,6 +55,7 @@ import org.matrix.android.sdk.api.session.room.model.RoomType
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomPreset
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomStateEvent
+import org.matrix.android.sdk.api.util.toMatrixItem
 import timber.log.Timber
 
 class CreateRoomViewModel @AssistedInject constructor(@Assisted private val initialState: CreateRoomViewState,
@@ -103,11 +105,7 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted private val init
     }
 
     private fun initUserDomain() {
-        // TODO: it should be better to update User.getBestName function to compute the displayname
-        val displayName = session.run { getUser(myUserId) }
-                ?.displayName
-                ?.takeUnless { it.isEmpty() }
-                ?: TchapUtils.computeDisplayNameFromUserId(session.myUserId).orEmpty()
+        val displayName = session.run { getUser(myUserId) }?.toMatrixItem()?.getBestName().orEmpty()
 
         setState { copy(userDomain = TchapUtils.getDomainFromDisplayName(displayName)) }
     }

@@ -21,13 +21,13 @@ import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
-import fr.gouv.tchap.core.utils.TchapUtils
 import im.vector.app.R
 import im.vector.app.core.epoxy.errorWithRetryItem
 import im.vector.app.core.epoxy.loadingItem
 import im.vector.app.core.epoxy.noResultItem
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.userdirectory.actionItem
 import im.vector.app.features.userdirectory.userDirectoryUserItem
@@ -100,13 +100,8 @@ class TchapContactListController @Inject constructor(private val session: Sessio
         }
 
         currentState.filteredLocalUsers.toMutableList().sortedWith() { contact1, contact2 ->
-            // TODO: it should be better to update User.getBestName function to compute the displayname
-            val lhs = contact1.displayName
-                    ?.takeUnless { it.isEmpty() }
-                    ?: TchapUtils.computeDisplayNameFromUserId(contact1.userId).orEmpty()
-            val rhs = contact2.displayName
-                    ?.takeUnless { it.isEmpty() }
-                    ?: TchapUtils.computeDisplayNameFromUserId(contact2.userId).orEmpty()
+            val lhs = contact1.toMatrixItem().getBestName()
+            val rhs = contact2.toMatrixItem().getBestName()
 
             String.CASE_INSENSITIVE_ORDER.compare(lhs, rhs)
         }.forEach { item ->
