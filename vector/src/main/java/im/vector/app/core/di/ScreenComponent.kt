@@ -23,6 +23,7 @@ import dagger.BindsInstance
 import dagger.Component
 import fr.gouv.tchap.features.expired.ExpiredAccountActivity
 import fr.gouv.tchap.features.login.TchapLoginActivity
+import fr.gouv.tchap.features.roomprofile.settings.linkaccess.detail.TchapRoomLinkAccessBottomSheet
 import im.vector.app.core.dialogs.UnrecognizedCertificateDialog
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.preference.UserAvatarPreference
@@ -80,7 +81,6 @@ import im.vector.app.features.roomprofile.alias.detail.RoomAliasBottomSheet
 import im.vector.app.features.roomprofile.settings.historyvisibility.RoomHistoryVisibilityBottomSheet
 import im.vector.app.features.roomprofile.settings.joinrule.RoomJoinRuleActivity
 import im.vector.app.features.roomprofile.settings.joinrule.RoomJoinRuleBottomSheet
-import im.vector.app.features.roomprofile.settings.linkaccess.detail.TchapRoomLinkAccessBottomSheet
 import im.vector.app.features.settings.VectorSettingsActivity
 import im.vector.app.features.settings.devices.DeviceVerificationInfoBottomSheet
 import im.vector.app.features.share.IncomingShareActivity

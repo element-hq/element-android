@@ -28,6 +28,7 @@ import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import fr.gouv.tchap.features.roomprofile.settings.linkaccess.TchapRoomLinkAccessFragment
 import im.vector.app.R
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
 import im.vector.app.core.extensions.addFragmentToBackstack
@@ -47,7 +48,6 @@ import im.vector.app.features.roomprofile.settings.historyvisibility.RoomHistory
 import im.vector.app.features.roomprofile.settings.historyvisibility.RoomHistoryVisibilitySharedActionViewModel
 import im.vector.app.features.roomprofile.settings.joinrule.RoomJoinRuleActivity
 import im.vector.app.features.roomprofile.settings.joinrule.RoomJoinRuleSharedActionViewModel
-import im.vector.app.features.roomprofile.settings.linkaccess.TchapRoomLinkAccessFragment
 import org.matrix.android.sdk.api.session.room.model.GuestAccess
 import org.matrix.android.sdk.api.util.toMatrixItem
 import java.util.UUID

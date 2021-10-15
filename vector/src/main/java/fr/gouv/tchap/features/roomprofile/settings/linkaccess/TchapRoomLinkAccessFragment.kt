@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.roomprofile.settings.linkaccess
+package fr.gouv.tchap.features.roomprofile.settings.linkaccess
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -23,6 +23,9 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import fr.gouv.tchap.features.roomprofile.settings.linkaccess.detail.TchapRoomLinkAccessBottomSheet
+import fr.gouv.tchap.features.roomprofile.settings.linkaccess.detail.TchapRoomLinkAccessBottomSheetSharedAction
+import fr.gouv.tchap.features.roomprofile.settings.linkaccess.detail.TchapRoomLinkAccessBottomSheetSharedActionViewModel
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
@@ -31,9 +34,6 @@ import im.vector.app.core.utils.forwardText
 import im.vector.app.core.utils.shareText
 import im.vector.app.databinding.FragmentRoomSettingGenericBinding
 import im.vector.app.features.home.AvatarRenderer
-import im.vector.app.features.roomprofile.settings.linkaccess.detail.TchapRoomLinkAccessBottomSheet
-import im.vector.app.features.roomprofile.settings.linkaccess.detail.TchapRoomLinkAccessBottomSheetSharedAction
-import im.vector.app.features.roomprofile.settings.linkaccess.detail.TchapRoomLinkAccessBottomSheetSharedActionViewModel
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 

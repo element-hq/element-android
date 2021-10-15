@@ -27,6 +27,7 @@ import fr.gouv.tchap.features.login.TchapLoginFragment
 import fr.gouv.tchap.features.login.TchapWelcomeFragment
 import fr.gouv.tchap.features.login.registration.TchapRegisterFragment
 import fr.gouv.tchap.features.login.registration.TchapRegisterWaitForEmailFragment
+import fr.gouv.tchap.features.roomprofile.settings.linkaccess.TchapRoomLinkAccessFragment
 import im.vector.app.features.attachments.preview.AttachmentsPreviewFragment
 import im.vector.app.features.contactsbook.ContactsBookFragment
 import im.vector.app.features.crypto.keysbackup.settings.KeysBackupSettingsFragment
@@ -116,7 +117,6 @@ import im.vector.app.features.roomprofile.permissions.RoomPermissionsFragment
 import im.vector.app.features.roomprofile.settings.RoomSettingsFragment
 import im.vector.app.features.roomprofile.settings.joinrule.RoomJoinRuleChooseRestrictedFragment
 import im.vector.app.features.roomprofile.settings.joinrule.RoomJoinRuleFragment
-import im.vector.app.features.roomprofile.settings.linkaccess.TchapRoomLinkAccessFragment
 import im.vector.app.features.roomprofile.uploads.RoomUploadsFragment
 import im.vector.app.features.roomprofile.uploads.files.RoomUploadsFilesFragment
 import im.vector.app.features.roomprofile.uploads.media.RoomUploadsMediaFragment

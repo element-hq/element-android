@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.roomprofile.settings.linkaccess
+package fr.gouv.tchap.features.roomprofile.settings.linkaccess
 
-import im.vector.app.core.platform.VectorViewEvents
+import im.vector.app.core.platform.VectorViewModelAction
 
-sealed class TchapRoomLinkAccessViewEvents : VectorViewEvents {
-    data class Failure(val throwable: Throwable) : TchapRoomLinkAccessViewEvents()
+sealed class TchapRoomLinkAccessAction: VectorViewModelAction {
+    data class SetIsEnabled(val isEnabled: Boolean): TchapRoomLinkAccessAction()
 }

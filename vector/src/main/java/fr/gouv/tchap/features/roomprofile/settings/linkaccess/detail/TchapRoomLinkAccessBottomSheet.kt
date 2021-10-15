@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.roomprofile.settings.linkaccess.detail
+package fr.gouv.tchap.features.roomprofile.settings.linkaccess.detail
 
 import android.os.Bundle
 import android.os.Parcelable

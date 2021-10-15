@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package im.vector.app.features.roomprofile.settings.linkaccess
+package fr.gouv.tchap.features.roomprofile.settings.linkaccess
 
 import android.widget.TextView
 import androidx.annotation.StringRes

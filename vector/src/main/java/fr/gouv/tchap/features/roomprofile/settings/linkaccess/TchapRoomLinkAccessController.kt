@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.roomprofile.settings.linkaccess
+package fr.gouv.tchap.features.roomprofile.settings.linkaccess
 
 import com.airbnb.epoxy.TypedEpoxyController
 import fr.gouv.tchap.core.utils.RoomUtils
