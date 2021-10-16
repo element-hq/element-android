@@ -312,7 +312,7 @@
     <string name="view_decrypted_source">Просмотр расшифрованного исходного кода</string>
     <string name="delete">Удалить</string>
     <string name="rename">Переименовать</string>
-    <string name="report_content">Содержание отчёта</string>
+    <string name="report_content">Пожаловаться на содержимое</string>
     <string name="active_call">Активный вызов</string>
     <string name="ongoing_conference_call">Ongoing conference call.
 \nПрисоединиться как %1$s или %2$s</string>
@@ -3150,7 +3150,7 @@
     <string name="a11y_stop_voice_message">Остановить запись</string>
     <string name="command_description_lenny">Добавляет ( ͡° ͜ʖ ͡°) к текстовому сообщению</string>
     <string name="identity_server_consent_dialog_neutral_policy">Правила</string>
-    <string name="settings_discovery_no_policy_provided">Отсутствие политики, предоставляемой сервером идентификации</string>
+    <string name="settings_discovery_no_policy_provided">Нет правил, предоставляемых сервером идентификации</string>
     <string name="settings_discovery_hide_identity_server_policy_title">Скрыть правила сервера идентификации</string>
     <string name="settings_discovery_show_identity_server_policy_title">Показать правила сервера идентификации</string>
     <string name="command_description_whois">Отображает информацию о пользователе</string>
@@ -3160,4 +3160,7 @@
     <string name="command_description_room_name">Устанавливает имя комнаты</string>
     <string name="command_description_unignore_user">Прекращение игнорирования пользователя, показывает его сообщения в дальнейшем</string>
     <string name="command_description_ignore_user">Игнорирует пользователя, скрывая его сообщения от вас</string>
+    <string name="a11y_presence_unavailable">Недоступен</string>
+    <string name="a11y_presence_offline">Не в сети</string>
+    <string name="a11y_presence_online">В сети</string>
 </resources>
