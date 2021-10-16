@@ -88,4 +88,32 @@
     <string name="settings_open_chats_at_first_unread_summary">Открывайте чаты на первом непрочитанном сообщении, а не внизу.</string>
     <string name="settings_show_voice_message_recorder_ui">Голосовые сообщения</string>
     <string name="settings_show_voice_message_recorder_ui_summary">Показать кнопку для записи голосовых сообщений</string>
+    <string name="settings_unifiedpush">UnifiedPush</string>
+    <string name="settings_unifiedpush_force_custom_gateway">Принудительный пользовательский push-шлюз</string>
+    <string name="settings_unifiedpush_reregister">Перерегистрация push дистрибьютора</string>
+    <string name="settings_force_allow_background_sync">Разрешить фоновую синхронизацию в дополнение к push</string>
+    <string name="send_bug_report_sc_extra">Чтобы повысить заметность вашей проблемы и дать нам возможность связаться с вами, вы можете сослаться на этот отчет (указав свой идентификатор Matrix и приблизительное время, когда он был отправлен) в Issues на сайте https://github.com/SchildiChat/SchildiChat-android/issues (сначала проверьте, существует ли уже такой отчет для вашей проблемы, и создайте новый, если его нет).</string>
+    <string name="unifiedpush_getdistributors_dialog_title">Выберите дистрибьютора</string>
+    <string name="settings_troubleshoot_test_fcm_failed_sc">Не удалось получить токен FCM</string>
+    <string name="settings_troubleshoot_test_endpoint_success">Конечная точка успешно получена:
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_pusher_registration_title">Регистрация pusher-а</string>
+    <string name="settings_aggregate_unread_counts">Считать чаты вместо сообщений</string>
+    <string name="settings_aggregate_unread_counts_summary">Учитывать ли непрочитанные чаты вместо отдельных сообщений в пространствах и категориях комнат</string>
+    <string name="settings_unread_counter">Счетчик непрочитанных сообщений</string>
+    <string name="settings_unimportant_counter_badge_v2">Считать заглушенные сообщения</string>
+    <string name="settings_unimportant_counter_badge_summary_v2">Показывать счётчик заглушенных сообщений в обзоре чата</string>
+    <string name="settings_unifiedpush_force_custom_gateway_summary">Включите эту опцию, только если вашей конечной точке push не требуется внешний шлюз.</string>
+    <string name="settings_troubleshoot_test_pusher_registration_failed">Не удалось зарегистрировать pusher на домашнем сервере:
+\n%1$s</string>
+    <string name="settings_force_allow_background_sync_summary">Имеет смысл только при отладке настройки push!</string>
+    <string name="toast_unifiedpush_no_push_distributor">Push дистрибьютор не найден!</string>
+    <string name="toast_unifiedpush_one_push_distributor">Зарегистрированный push дистрибьютор %1$s</string>
+    <string name="settings_troubleshoot_test_endpoint_title">Конечная точка/FCM</string>
+    <string name="settings_troubleshoot_test_endpoint_failed">Не удалось получить конечную точку.</string>
+    <string name="unifiedpush_getdistributors_dialog_fcm_fallback">FCM обратная связь</string>
+    <string name="settings_troubleshoot_test_pusher_registration_success">Pusher успешно зарегистрирован на домашнем сервере.</string>
+    <string name="settings_apply_sc_default_settings">Не нажимайте на эту настройку</string>
+    <string name="settings_apply_sc_default_settings_dialog_title">Нарушение настроек</string>
+    <string name="settings_apply_sc_default_settings_dialog_summary">Если вы продолжите, это нарушит настройки вашего приложения!</string>
 </resources>
