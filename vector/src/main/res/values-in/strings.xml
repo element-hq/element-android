@@ -2950,4 +2950,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="command_description_room_avatar">Mengubah avatar ruangan saat ini</string>
     <string name="command_description_avatar_for_room">Mengubah avatar Anda di ruangan saat ini saja</string>
     <string name="command_description_whois">Menampilkan</string>
+    <string name="a11y_presence_unavailable">Tidak Tersedia</string>
+    <string name="a11y_presence_offline">Offline</string>
+    <string name="a11y_presence_online">Online</string>
 </resources>
