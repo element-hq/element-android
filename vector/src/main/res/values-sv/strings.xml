@@ -2998,4 +2998,11 @@
     <string name="discovery_section">Discovery (%s)</string>
     <string name="finish_setup">Slutför konfigurationen</string>
     <string name="create_spaces_invite_public_header_desc">Se till att rätt personer har tillgång till %s företag. Du kan bjuda in mer senare.</string>
+    <string name="discovery_invite">Bjud in med e-post, hitta kontakter och mer…</string>
+    <string name="finish_setting_up_discovery">Slutför inställning av upptäckbarhet.</string>
+    <string name="create_space_identity_server_info_none">Du använder för närvarande ingen identitetsserver. För att bjuda in teammedlemmar och kunna upptäckas av dem, konfigurera en nedan.</string>
+    <string name="invite_by_mxid_or_mail">Bjud in med användarnamn eller e-postadress</string>
+    <string name="a11y_presence_unavailable">Otillgänglig</string>
+    <string name="a11y_presence_offline">Offline</string>
+    <string name="a11y_presence_online">Online</string>
 </resources>
