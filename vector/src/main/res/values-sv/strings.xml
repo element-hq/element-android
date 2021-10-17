@@ -747,7 +747,7 @@
     <string name="change_room_directory_network">Byt nätverk</string>
     <string name="group_all_communities">Alla gemenskaper</string>
     <string name="settings_general_title">Allmänt</string>
-    <string name="settings_preferences">Alternativ</string>
+    <string name="settings_preferences">Inställningar</string>
     <string name="room_directory_search_hint">Namn eller ID (#example:matrix.org)</string>
     <string name="verify_cancel_other">Du kommer inte att verifiera %1$s (%2$s) om du avbryter nu. Börja igen i hens användarprofil.</string>
     <string name="encryption_enabled_tile_description">Meddelanden i det här rummet är totalsträckskrypterade. Lär dig mer och verifiera användare i deras profiler.</string>
@@ -2778,8 +2778,8 @@
     <string name="spaces_feeling_experimental_subspace">Känner du dig äventyrlig\?
 \nDu kan lägga till existerande utrymmen till ett utrymme.</string>
     <string name="space_add_rooms">Lägg till rum</string>
-    <string name="space_leave_prompt_msg_as_admin">Du är administratör för det här utrymmet, se till att du har överfört administratörsrättigheter till en annan medlem innan du lämnar.</string>
-    <string name="space_leave_prompt_msg_private">Det här utrymmet är inte offentligt. Du kommer inte att kunna gå med igen utan en inbjudan.</string>
+    <string name="space_leave_prompt_msg_as_admin">Du är den enda administratören av detta utrymme. Att lämna det betyder att ingen har kontroll över det.</string>
+    <string name="space_leave_prompt_msg_private">Du kommer inte att kunna gå med igen om du inte är inbjuden igen.</string>
     <string name="space_leave_prompt_msg_only_you">Du är den enda personen här. Om du lämnar så kommer ingen kunna gå med i framtiden, inklusive du.</string>
     <string name="invite_to_space">Bjud in till %s</string>
     <string name="a11y_beta">Den här funktionen är i beta</string>
@@ -2821,13 +2821,13 @@
     <string name="voice_message_tap_to_stop_toast">Tryck på din inspelning för att stoppa eller lyssna</string>
     <string name="voice_message_n_seconds_warning_toast">%1$d lämnade</string>
     <string name="voice_message_release_to_send_toast">Håll in för att spela in, släpp för att skicka</string>
-    <string name="a11y_delete_recorded_voice_message">Radera inspelat röstmeddelande</string>
+    <string name="a11y_delete_recorded_voice_message">Ta bort inspelningen</string>
     <string name="a11y_recording_voice_message">Spelar in röstmeddelande</string>
     <string name="a11y_pause_voice_message">Pausa röstmeddelande</string>
     <string name="a11y_play_voice_message">Spela röstmeddelande</string>
     <string name="a11y_lock_voice_message">Röstmeddelandelås</string>
     <string name="voice_message_slide_to_cancel">Svep för att avbryta</string>
-    <string name="a11y_start_voice_message">Starta röstmeddelande</string>
+    <string name="a11y_start_voice_message">Börja röstmeddelande</string>
     <string name="error_failed_to_join_room">Tyvärr så inträffade ett fel vid försök att gå med i: %s</string>
     <string name="room_upgrade_to_recommended_version">Uppgradera till rekommenderad rumsversion</string>
     <string name="room_using_unstable_room_version">Det är rummet kör rumsversion %s, vilken den hör hemservern har markerat som instabil.</string>
@@ -2985,4 +2985,17 @@
     <string name="space_settings_permissions_subtitle">Se och uppdatera rollerna som krävs för att ändra diverse delar av utrymmet.</string>
     <string name="create_spaces_invite_public_header">Vilka är dina lagkamrater\?</string>
     <string name="command_description_add_to_space">Lägg till till det angivna utrymmet</string>
+    <string name="a11y_stop_voice_message">Sluta spela in</string>
+    <string name="space_add_space_to_any_space_you_manage">Lägg till ett mellanslag till alla utrymmen du hanterar.</string>
+    <string name="space_add_existing_spaces">Lägg till befintliga utrymmen</string>
+    <string name="space_add_existing_rooms_only">Lägg till befintliga rum</string>
+    <string name="pick_tings_to_leave">Välj saker att lämna</string>
+    <string name="leave_specific_ones">Lämna specifika rum och utrymmen…</string>
+    <string name="dont_leave_any">Lämna inga rum och utrymmen</string>
+    <string name="you_will_leave_all_in">Du kommer att lämna alla rum och utrymmen i %s.</string>
+    <string name="leave_all_rooms_and_spaces">Lämna alla rum och utrymmen</string>
+    <string name="space_leave_prompt_msg_with_name">Är du säker på att du vill lämna %s\?</string>
+    <string name="discovery_section">Discovery (%s)</string>
+    <string name="finish_setup">Slutför konfigurationen</string>
+    <string name="create_spaces_invite_public_header_desc">Se till att rätt personer har tillgång till %s företag. Du kan bjuda in mer senare.</string>
 </resources>
