@@ -3058,4 +3058,7 @@
     <string name="command_description_room_name">Nastaví název místnosti</string>
     <string name="command_description_unignore_user">Přestane ignorovat uživatele a zobrazí jeho zprávy</string>
     <string name="command_description_ignore_user">Ignoruje uživatele a skrývá jeho zprávy</string>
+    <string name="a11y_presence_unavailable">Nedostupný</string>
+    <string name="a11y_presence_offline">Offline</string>
+    <string name="a11y_presence_online">Online</string>
 </resources>
