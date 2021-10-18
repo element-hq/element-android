@@ -458,6 +458,7 @@ class RoomDetailFragment @Inject constructor(
                 RoomDetailViewEvents.StopChatEffects                     -> handleStopChatEffects()
                 is RoomDetailViewEvents.DisplayAndAcceptCall             -> acceptIncomingCall(it)
                 RoomDetailViewEvents.RoomReplacementStarted              -> handleRoomReplacement()
+                is RoomDetailViewEvents.SaveDraft                        -> handleSaveDraft(it.defaultContent, it.messageType)
             }.exhaustive
         }
 
@@ -579,6 +580,20 @@ class RoomDetailFragment @Inject constructor(
         navigator.openRoom(requireContext(), openRoom.roomId, null)
         if (openRoom.closeCurrentRoom) {
             requireActivity().finish()
+        }
+    }
+
+    private fun handleSaveDraft(defaultContent: String?, messageType: String) {
+        if (messageType == MessageType.MSGTYPE_AUDIO) {
+            defaultContent?.let {
+                textComposerViewModel.handle(
+                        TextComposerAction.SaveDraft(it, MessageType.MSGTYPE_AUDIO)
+                )
+            }
+        } else {
+            textComposerViewModel.handle(
+                    TextComposerAction.SaveDraft(views.composerLayout.text.toString(), MessageType.MSGTYPE_TEXT)
+            )
         }
     }
 
@@ -1091,10 +1106,12 @@ class RoomDetailFragment @Inject constructor(
 
         notificationDrawerManager.setCurrentRoom(null)
 
-        textComposerViewModel.handle(TextComposerAction.SaveDraft(views.composerLayout.text.toString(), MessageType.MSGTYPE_TEXT))
+        roomDetailViewModel.handle(
+                RoomDetailAction.OnRoomDetailEntersBackground(
+                        isVoiceMessageActive = views.voiceMessageRecorderView.isActive()
+                )
+        )
 
-        // We should improve the UX to support going into playback mode when paused and delete the media when the view is destroyed.
-        roomDetailViewModel.handle(RoomDetailAction.EndAllVoiceActions(deleteRecord = false))
         views.voiceMessageRecorderView.initVoiceRecordingViews()
     }
 

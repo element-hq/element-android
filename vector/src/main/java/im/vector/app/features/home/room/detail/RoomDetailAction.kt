@@ -116,4 +116,6 @@ sealed class RoomDetailAction : VectorViewModelAction {
     data class PlayOrPauseVoicePlayback(val eventId: String, val messageAudioContent: MessageAudioContent) : RoomDetailAction()
     object PlayOrPauseRecordingPlayback : RoomDetailAction()
     data class EndAllVoiceActions(val deleteRecord: Boolean = true) : RoomDetailAction()
+
+    data class OnRoomDetailEntersBackground(val isVoiceMessageActive: Boolean) : RoomDetailAction()
 }
