@@ -223,9 +223,7 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                 } else if (attachment.type == ContentAttachmentData.Type.IMAGE && !params.compressBeforeSending) {
                     fileToUpload = imageExitTagRemover.removeSensitiveJpegExifTags(workingFile)
                             .also { filesToDelete.add(it) }
-                    if (params.attachment.size <= 0) {
-                        newAttachmentAttributes = newAttachmentAttributes.copy(newFileSize = fileToUpload.length())
-                    }
+                    newAttachmentAttributes = newAttachmentAttributes.copy(newFileSize = fileToUpload.length())
                 } else {
                     fileToUpload = workingFile
                     // Fix: OpenableColumns.SIZE may return -1 or 0
