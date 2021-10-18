@@ -3055,4 +3055,7 @@
     <string name="command_description_room_name">Imposta il nome della stanza</string>
     <string name="command_description_unignore_user">Smetti di ignorare un utente, mostrando i suoi messaggi successivi</string>
     <string name="command_description_ignore_user">Ignora un utente, non mostrandoti i suoi messaggi</string>
+    <string name="a11y_presence_unavailable">Non disponibile</string>
+    <string name="a11y_presence_offline">Offline</string>
+    <string name="a11y_presence_online">Online</string>
 </resources>
