@@ -48,7 +48,7 @@ class ContactsBookViewModel @AssistedInject constructor(@Assisted
 
     @AssistedFactory
     interface Factory: MavericksAssistedViewModelFactory<ContactsBookViewModel,ContactsBookViewState> {
-        override fun create(state: ContactsBookViewState): ContactsBookViewModel
+        override fun create(initialState: ContactsBookViewState): ContactsBookViewModel
     }
 
     companion object : MavericksViewModelFactory<ContactsBookViewModel, ContactsBookViewState> by hiltMavericksViewModelFactory()

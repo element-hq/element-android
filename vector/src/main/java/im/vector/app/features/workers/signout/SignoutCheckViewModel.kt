@@ -69,7 +69,7 @@ class SignoutCheckViewModel @AssistedInject constructor(
 
     @AssistedFactory
     interface Factory: MavericksAssistedViewModelFactory<SignoutCheckViewModel,SignoutCheckViewState> {
-        override fun create(state: SignoutCheckViewState): SignoutCheckViewModel
+        override fun create(initialState: SignoutCheckViewState): SignoutCheckViewModel
     }
 
     companion object : MavericksViewModelFactory<SignoutCheckViewModel, SignoutCheckViewState> by hiltMavericksViewModelFactory()

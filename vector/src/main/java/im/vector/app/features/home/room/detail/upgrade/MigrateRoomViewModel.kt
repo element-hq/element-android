@@ -51,7 +51,7 @@ class MigrateRoomViewModel @AssistedInject constructor(
 
     @AssistedFactory
     interface Factory: MavericksAssistedViewModelFactory<MigrateRoomViewModel,MigrateRoomViewState> {
-        override fun create(state: MigrateRoomViewState): MigrateRoomViewModel
+        override fun create(initialState: MigrateRoomViewState): MigrateRoomViewModel
     }
 
     companion object : MavericksViewModelFactory<MigrateRoomViewModel, MigrateRoomViewState> by hiltMavericksViewModelFactory()

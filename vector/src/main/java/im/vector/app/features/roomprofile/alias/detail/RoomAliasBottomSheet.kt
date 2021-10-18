@@ -50,7 +50,6 @@ class RoomAliasBottomSheet :
 
     private lateinit var sharedActionViewModel: RoomAliasBottomSheetSharedActionViewModel
     @Inject lateinit var sharedViewPool: RecyclerView.RecycledViewPool
-    @Inject lateinit var roomAliasBottomSheetViewModelFactory: RoomAliasBottomSheetViewModel.Factory
     @Inject lateinit var controller: RoomAliasBottomSheetController
 
     private val viewModel: RoomAliasBottomSheetViewModel by fragmentViewModel(RoomAliasBottomSheetViewModel::class)

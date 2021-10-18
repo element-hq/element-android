@@ -43,7 +43,7 @@ class SpacePeopleViewModel @AssistedInject constructor(
 
     @AssistedFactory
     interface Factory: MavericksAssistedViewModelFactory<SpacePeopleViewModel,SpacePeopleViewState> {
-        override fun create(state: SpacePeopleViewState): SpacePeopleViewModel
+        override fun create(initialState: SpacePeopleViewState): SpacePeopleViewModel
     }
 
     companion object : MavericksViewModelFactory<SpacePeopleViewModel, SpacePeopleViewState> by hiltMavericksViewModelFactory()

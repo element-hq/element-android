@@ -73,7 +73,7 @@ class ViewReactionsViewModel @AssistedInject constructor(@Assisted
 
     @AssistedFactory
     interface Factory: MavericksAssistedViewModelFactory<ViewReactionsViewModel,DisplayReactionsViewState> {
-        override fun create(state: DisplayReactionsViewState): ViewReactionsViewModel
+        override fun create(initialState: DisplayReactionsViewState): ViewReactionsViewModel
     }
 
     companion object : MavericksViewModelFactory<ViewReactionsViewModel, DisplayReactionsViewState> by hiltMavericksViewModelFactory()

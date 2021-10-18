@@ -18,17 +18,17 @@ package im.vector.app.features.settings.devices
 
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.R
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.auth.ReAuthActivity
@@ -97,18 +97,11 @@ class DevicesViewModel @AssistedInject constructor(
     var pendingAuth: UIABaseAuth? = null
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: DevicesViewState): DevicesViewModel
+    interface Factory: MavericksAssistedViewModelFactory<DevicesViewModel,DevicesViewState> {
+        override fun create(initialState: DevicesViewState): DevicesViewModel
     }
 
-    companion object : MavericksViewModelFactory<DevicesViewModel, DevicesViewState> {
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: DevicesViewState): DevicesViewModel? {
-            val fragment: VectorSettingsDevicesFragment = (viewModelContext as FragmentViewModelContext).fragment()
-            return fragment.devicesViewModelFactory.create(state)
-        }
-    }
+    companion object : MavericksViewModelFactory<DevicesViewModel, DevicesViewState> by hiltMavericksViewModelFactory()
 
     private val refreshPublisher: PublishSubject<Unit> = PublishSubject.create()
 

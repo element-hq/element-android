@@ -33,11 +33,37 @@ import im.vector.app.features.home.PromoteRestrictedViewModel
 import im.vector.app.features.home.room.detail.timeline.reactions.ViewReactionsViewModel
 import im.vector.app.features.home.room.detail.upgrade.MigrateRoomViewModel
 import im.vector.app.features.home.room.list.RoomListViewModel
+import im.vector.app.features.room.RequireActiveMembershipViewModel
 import im.vector.app.features.roomdirectory.RoomDirectoryViewModel
+import im.vector.app.features.roomdirectory.createroom.CreateRoomViewModel
 import im.vector.app.features.roomdirectory.picker.RoomDirectoryPickerViewModel
+import im.vector.app.features.roomdirectory.roompreview.RoomPreviewViewModel
+import im.vector.app.features.roommemberprofile.RoomMemberProfileViewModel
+import im.vector.app.features.roomprofile.RoomProfileViewModel
+import im.vector.app.features.roomprofile.alias.RoomAliasViewModel
+import im.vector.app.features.roomprofile.alias.detail.RoomAliasBottomSheetViewModel
+import im.vector.app.features.roomprofile.banned.RoomBannedMemberListViewModel
+import im.vector.app.features.roomprofile.members.RoomMemberListViewModel
 import im.vector.app.features.roomprofile.notifications.RoomNotificationSettingsViewModel
+import im.vector.app.features.roomprofile.permissions.RoomPermissionsViewModel
+import im.vector.app.features.roomprofile.settings.RoomSettingsViewModel
+import im.vector.app.features.roomprofile.settings.joinrule.advanced.RoomJoinRuleChooseRestrictedViewModel
+import im.vector.app.features.roomprofile.uploads.RoomUploadsViewModel
+import im.vector.app.features.settings.account.deactivation.DeactivateAccountViewModel
+import im.vector.app.features.settings.crosssigning.CrossSigningSettingsViewModel
+import im.vector.app.features.settings.devices.DevicesViewModel
+import im.vector.app.features.settings.devtools.AccountDataViewModel
+import im.vector.app.features.settings.devtools.GossipingEventsPaperTrailViewModel
+import im.vector.app.features.settings.devtools.KeyRequestListViewModel
+import im.vector.app.features.settings.homeserver.HomeserverSettingsViewModel
 import im.vector.app.features.settings.ignored.IgnoredUsersViewModel
+import im.vector.app.features.settings.locale.LocalePickerViewModel
+import im.vector.app.features.settings.push.PushGatewaysViewModel
+import im.vector.app.features.settings.threepids.ThreePidsSettingsViewModel
+import im.vector.app.features.share.IncomingShareViewModel
+import im.vector.app.features.signout.soft.SoftLogoutViewModel
 import im.vector.app.features.spaces.SpaceListViewModel
+import im.vector.app.features.spaces.SpaceMenuViewModel
 import im.vector.app.features.spaces.create.CreateSpaceViewModel
 import im.vector.app.features.spaces.explore.SpaceDirectoryViewModel
 import im.vector.app.features.spaces.invite.SpaceInviteBottomSheetViewModel
@@ -234,5 +260,137 @@ interface MavericksViewModelModule {
     @IntoMap
     @MavericksViewModelKey(CreateSpaceViewModel::class)
     fun createSpaceViewModelFactory(factory: CreateSpaceViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(SpaceMenuViewModel::class)
+    fun spaceMenuViewModelFactory(factory: SpaceMenuViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(SoftLogoutViewModel::class)
+    fun softLogoutViewModelFactory(factory: SoftLogoutViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(IncomingShareViewModel::class)
+    fun incomingShareViewModelFactory(factory: IncomingShareViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(ThreePidsSettingsViewModel::class)
+    fun threePidsSettingsViewModelFactory(factory: ThreePidsSettingsViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(PushGatewaysViewModel::class)
+    fun pushGatewaysViewModelFactory(factory: PushGatewaysViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(HomeserverSettingsViewModel::class)
+    fun homeserverSettingsViewModelFactory(factory: HomeserverSettingsViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(LocalePickerViewModel::class)
+    fun localePickerViewModelFactory(factory: LocalePickerViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(GossipingEventsPaperTrailViewModel::class)
+    fun gossipingEventsPaperTrailViewModelFactory(factory: GossipingEventsPaperTrailViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(AccountDataViewModel::class)
+    fun accountDataViewModelFactory(factory: AccountDataViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(DevicesViewModel::class)
+    fun devicesViewModelFactory(factory: DevicesViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(KeyRequestListViewModel::class)
+    fun keyRequestListViewModelFactory(factory: KeyRequestListViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(CrossSigningSettingsViewModel::class)
+    fun crossSigningSettingsViewModelFactory(factory: CrossSigningSettingsViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(DeactivateAccountViewModel::class)
+    fun deactivateAccountViewModelFactory(factory: DeactivateAccountViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(RoomUploadsViewModel::class)
+    fun roomUploadsViewModelFactory(factory: RoomUploadsViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(RoomJoinRuleChooseRestrictedViewModel::class)
+    fun roomJoinRuleChooseRestrictedViewModelFactory(factory: RoomJoinRuleChooseRestrictedViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(RoomSettingsViewModel::class)
+    fun roomSettingsViewModelFactory(factory: RoomSettingsViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(RoomPermissionsViewModel::class)
+    fun roomPermissionsViewModelFactory(factory: RoomPermissionsViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(RoomMemberListViewModel::class)
+    fun roomMemberListViewModelFactory(factory: RoomMemberListViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(RoomBannedMemberListViewModel::class)
+    fun roomBannedMemberListViewModelFactory(factory: RoomBannedMemberListViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(RoomAliasViewModel::class)
+    fun roomAliasViewModelFactory(factory: RoomAliasViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(RoomAliasBottomSheetViewModel::class)
+    fun roomAliasBottomSheetViewModelFactory(factory: RoomAliasBottomSheetViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(RoomProfileViewModel::class)
+    fun roomProfileViewModelFactory(factory: RoomProfileViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(RoomMemberProfileViewModel::class)
+    fun roomMemberProfileViewModelFactory(factory: RoomMemberProfileViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(RoomPreviewViewModel::class)
+    fun roomPreviewViewModelFactory(factory: RoomPreviewViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(CreateRoomViewModel::class)
+    fun createRoomViewModelFactory(factory: CreateRoomViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(RequireActiveMembershipViewModel::class)
+    fun requireActiveMembershipViewModelFactory(factory: RequireActiveMembershipViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+
 
 }

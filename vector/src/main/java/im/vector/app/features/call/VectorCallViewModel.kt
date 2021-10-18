@@ -344,7 +344,7 @@ class VectorCallViewModel @AssistedInject constructor(
 
     @AssistedFactory
     interface Factory: MavericksAssistedViewModelFactory<VectorCallViewModel,VectorCallViewState> {
-        override fun create(state: VectorCallViewState): VectorCallViewModel
+        override fun create(initialState: VectorCallViewState): VectorCallViewModel
     }
 
     companion object : MavericksViewModelFactory<VectorCallViewModel, VectorCallViewState> by hiltMavericksViewModelFactory()

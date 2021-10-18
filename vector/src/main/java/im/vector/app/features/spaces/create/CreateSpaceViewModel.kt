@@ -76,7 +76,7 @@ class CreateSpaceViewModel @AssistedInject constructor(
 
     @AssistedFactory
     interface Factory: MavericksAssistedViewModelFactory<CreateSpaceViewModel,CreateSpaceState> {
-        override fun create(state: CreateSpaceState): CreateSpaceViewModel
+        override fun create(initialState: CreateSpaceState): CreateSpaceViewModel
     }
 
     private fun startListenToIdentityManager() {

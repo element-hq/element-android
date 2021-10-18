@@ -46,12 +46,11 @@ data class SpaceBottomSheetSettingsArgs(
         val spaceId: String
 ) : Parcelable
 
-class SpaceSettingsMenuBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetSpaceSettingsBinding>(), SpaceMenuViewModel.Factory {
+class SpaceSettingsMenuBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetSpaceSettingsBinding>(){
 
     @Inject lateinit var navigator: Navigator
     @Inject lateinit var avatarRenderer: AvatarRenderer
     @Inject lateinit var bugReporter: BugReporter
-    @Inject lateinit var viewModelFactory: SpaceMenuViewModel.Factory
 
     private val spaceArgs: SpaceBottomSheetSettingsArgs by args()
 
@@ -138,9 +137,5 @@ class SpaceSettingsMenuBottomSheet : VectorBaseBottomSheetDialogFragment<BottomS
                 setArguments(SpaceBottomSheetSettingsArgs(spaceId))
             }
         }
-    }
-
-    override fun create(initialState: SpaceMenuState): SpaceMenuViewModel {
-        return viewModelFactory.create(initialState)
     }
 }

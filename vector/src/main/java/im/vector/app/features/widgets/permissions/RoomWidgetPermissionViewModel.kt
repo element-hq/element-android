@@ -143,7 +143,7 @@ class RoomWidgetPermissionViewModel @AssistedInject constructor(@Assisted val in
 
     @AssistedFactory
     interface Factory: MavericksAssistedViewModelFactory<RoomWidgetPermissionViewModel,RoomWidgetPermissionViewState> {
-        override fun create(state: RoomWidgetPermissionViewState): RoomWidgetPermissionViewModel
+        override fun create(initialState: RoomWidgetPermissionViewState): RoomWidgetPermissionViewModel
     }
 
     companion object : MavericksViewModelFactory<RoomWidgetPermissionViewModel, RoomWidgetPermissionViewState> by hiltMavericksViewModelFactory()

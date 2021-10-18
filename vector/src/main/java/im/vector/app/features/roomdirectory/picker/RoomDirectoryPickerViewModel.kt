@@ -48,7 +48,7 @@ class RoomDirectoryPickerViewModel @AssistedInject constructor(
 
     @AssistedFactory
     interface Factory: MavericksAssistedViewModelFactory<RoomDirectoryPickerViewModel,RoomDirectoryPickerViewState> {
-        override fun create(state: RoomDirectoryPickerViewState): RoomDirectoryPickerViewModel
+        override fun create(initialState: RoomDirectoryPickerViewState): RoomDirectoryPickerViewModel
     }
 
     companion object : MavericksViewModelFactory<RoomDirectoryPickerViewModel, RoomDirectoryPickerViewState> by hiltMavericksViewModelFactory()

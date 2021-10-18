@@ -52,7 +52,7 @@ class IgnoredUsersViewModel @AssistedInject constructor(@Assisted initialState: 
 
     @AssistedFactory
     interface Factory: MavericksAssistedViewModelFactory<IgnoredUsersViewModel,IgnoredUsersViewState> {
-        override fun create(state: IgnoredUsersViewState): IgnoredUsersViewModel
+        override fun create(initialState: IgnoredUsersViewState): IgnoredUsersViewModel
     }
 
     companion object : MavericksViewModelFactory<IgnoredUsersViewModel, IgnoredUsersViewState> by hiltMavericksViewModelFactory()

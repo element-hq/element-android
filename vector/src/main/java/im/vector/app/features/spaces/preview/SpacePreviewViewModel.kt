@@ -61,7 +61,7 @@ class SpacePreviewViewModel @AssistedInject constructor(
 
     @AssistedFactory
     interface Factory: MavericksAssistedViewModelFactory<SpacePreviewViewModel,SpacePreviewState> {
-        override fun create(state: SpacePreviewState): SpacePreviewViewModel
+        override fun create(initialState: SpacePreviewState): SpacePreviewViewModel
     }
 
     companion object : MavericksViewModelFactory<SpacePreviewViewModel, SpacePreviewState> by hiltMavericksViewModelFactory()

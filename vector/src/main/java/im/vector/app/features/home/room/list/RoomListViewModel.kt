@@ -64,7 +64,7 @@ class RoomListViewModel @AssistedInject constructor(
 
     @AssistedFactory
     interface Factory: MavericksAssistedViewModelFactory<RoomListViewModel, RoomListViewState> {
-        override fun create(state: RoomListViewState): RoomListViewModel
+        override fun create(initialState: RoomListViewState): RoomListViewModel
     }
 
     private var updatableQuery: UpdatableLivePageResult? = null

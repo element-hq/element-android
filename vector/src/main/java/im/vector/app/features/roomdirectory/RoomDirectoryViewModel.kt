@@ -52,7 +52,7 @@ class RoomDirectoryViewModel @AssistedInject constructor(
 
     @AssistedFactory
     interface Factory: MavericksAssistedViewModelFactory<RoomDirectoryViewModel,PublicRoomsViewState> {
-        override fun create(state: PublicRoomsViewState): RoomDirectoryViewModel
+        override fun create(initialState: PublicRoomsViewState): RoomDirectoryViewModel
     }
 
     companion object : MavericksViewModelFactory<RoomDirectoryViewModel, PublicRoomsViewState> by hiltMavericksViewModelFactory() {

@@ -36,5 +36,5 @@ import com.airbnb.mvrx.MavericksViewModel
  * If you already have a ViewModelsModule then all you have to do is add the multibinding entry for your new [MavericksViewModel].
  */
 interface MavericksAssistedViewModelFactory<VM : MavericksViewModel<S>, S : MavericksState> {
-    fun create(state: S): VM
+    fun create(initialState: S): VM
 }

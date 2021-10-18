@@ -64,7 +64,7 @@ class UserListViewModel @AssistedInject constructor(@Assisted initialState: User
 
     @AssistedFactory
     interface Factory: MavericksAssistedViewModelFactory<UserListViewModel,UserListViewState> {
-        override fun create(state: UserListViewState): UserListViewModel
+        override fun create(initialState: UserListViewState): UserListViewModel
     }
 
     companion object : MavericksViewModelFactory<UserListViewModel, UserListViewState> by hiltMavericksViewModelFactory()

@@ -38,7 +38,7 @@ class ReAuthViewModel @AssistedInject constructor(
 
     @AssistedFactory
     interface Factory: MavericksAssistedViewModelFactory<ReAuthViewModel,ReAuthState> {
-        override fun create(state: ReAuthState): ReAuthViewModel
+        override fun create(initialState: ReAuthState): ReAuthViewModel
     }
 
     companion object : MavericksViewModelFactory<ReAuthViewModel, ReAuthState> by hiltMavericksViewModelFactory()

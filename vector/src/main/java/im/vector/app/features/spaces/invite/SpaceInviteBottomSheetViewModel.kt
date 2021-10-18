@@ -96,7 +96,7 @@ class SpaceInviteBottomSheetViewModel @AssistedInject constructor(
 
     @AssistedFactory
     interface Factory: MavericksAssistedViewModelFactory<SpaceInviteBottomSheetViewModel,SpaceInviteBottomSheetState> {
-        override fun create(state: SpaceInviteBottomSheetState): SpaceInviteBottomSheetViewModel
+        override fun create(initialState: SpaceInviteBottomSheetState): SpaceInviteBottomSheetViewModel
     }
 
     companion object : MavericksViewModelFactory<SpaceInviteBottomSheetViewModel, SpaceInviteBottomSheetState> by hiltMavericksViewModelFactory()

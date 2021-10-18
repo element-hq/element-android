@@ -60,7 +60,7 @@ class WidgetViewModel @AssistedInject constructor(@Assisted val initialState: Wi
 
     @AssistedFactory
     interface Factory: MavericksAssistedViewModelFactory<WidgetViewModel,WidgetViewState> {
-        override fun create(state: WidgetViewState): WidgetViewModel
+        override fun create(initialState: WidgetViewState): WidgetViewModel
     }
 
     companion object : MavericksViewModelFactory<WidgetViewModel, WidgetViewState> by hiltMavericksViewModelFactory()

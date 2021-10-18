@@ -42,7 +42,7 @@ class KeysBackupSettingsViewModel @AssistedInject constructor(@Assisted initialS
 
     @AssistedFactory
     interface Factory: MavericksAssistedViewModelFactory<KeysBackupSettingsViewModel,KeysBackupSettingViewState> {
-        override fun create(state: KeysBackupSettingViewState): KeysBackupSettingsViewModel
+        override fun create(initialState: KeysBackupSettingViewState): KeysBackupSettingsViewModel
     }
 
     companion object : MavericksViewModelFactory<KeysBackupSettingsViewModel, KeysBackupSettingViewState> by hiltMavericksViewModelFactory()

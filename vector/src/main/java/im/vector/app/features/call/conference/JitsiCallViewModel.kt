@@ -49,7 +49,7 @@ class JitsiCallViewModel @AssistedInject constructor(
 
     @AssistedFactory
     interface Factory: MavericksAssistedViewModelFactory<JitsiCallViewModel,JitsiCallViewState> {
-        override fun create(state: JitsiCallViewState): JitsiCallViewModel
+        override fun create(initialState: JitsiCallViewState): JitsiCallViewModel
     }
 
     private var currentWidgetObserver: Job? = null

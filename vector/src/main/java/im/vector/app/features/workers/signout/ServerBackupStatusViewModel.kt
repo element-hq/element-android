@@ -70,7 +70,7 @@ class ServerBackupStatusViewModel @AssistedInject constructor(@Assisted initialS
 
     @AssistedFactory
     interface Factory: MavericksAssistedViewModelFactory<ServerBackupStatusViewModel,ServerBackupStatusViewState> {
-        override fun create(state: ServerBackupStatusViewState): ServerBackupStatusViewModel
+        override fun create(initialState: ServerBackupStatusViewState): ServerBackupStatusViewModel
     }
 
     companion object : MavericksViewModelFactory<ServerBackupStatusViewModel, ServerBackupStatusViewState> by hiltMavericksViewModelFactory()

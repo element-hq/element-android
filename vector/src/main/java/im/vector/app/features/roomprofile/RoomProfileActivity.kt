@@ -46,8 +46,7 @@ import javax.inject.Inject
 
 class RoomProfileActivity :
         VectorBaseActivity<ActivitySimpleBinding>(),
-        ToolbarConfigurable,
-        RequireActiveMembershipViewModel.Factory {
+        ToolbarConfigurable {
 
     companion object {
 
@@ -72,14 +71,7 @@ class RoomProfileActivity :
     private val requireActiveMembershipViewModel: RequireActiveMembershipViewModel by viewModel()
 
     @Inject
-    lateinit var requireActiveMembershipViewModelFactory: RequireActiveMembershipViewModel.Factory
-
-    @Inject
     lateinit var roomDetailPendingActionStore: RoomDetailPendingActionStore
-
-    override fun create(initialState: RequireActiveMembershipViewState): RequireActiveMembershipViewModel {
-        return requireActiveMembershipViewModelFactory.create(initialState)
-    }
 
     override fun injectWith(injector: ScreenComponent) {
         injector.inject(this)

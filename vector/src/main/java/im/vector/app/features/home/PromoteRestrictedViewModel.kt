@@ -75,7 +75,7 @@ class PromoteRestrictedViewModel @AssistedInject constructor(
 
     @AssistedFactory
     interface Factory: MavericksAssistedViewModelFactory<PromoteRestrictedViewModel,ActiveSpaceViewState> {
-        override fun create(state: ActiveSpaceViewState): PromoteRestrictedViewModel
+        override fun create(initialState: ActiveSpaceViewState): PromoteRestrictedViewModel
     }
 
     companion object : MavericksViewModelFactory<PromoteRestrictedViewModel, ActiveSpaceViewState> by hiltMavericksViewModelFactory()

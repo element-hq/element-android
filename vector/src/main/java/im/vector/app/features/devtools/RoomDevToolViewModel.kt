@@ -50,7 +50,7 @@ class RoomDevToolViewModel @AssistedInject constructor(
 
     @AssistedFactory
     interface Factory : MavericksAssistedViewModelFactory<RoomDevToolViewModel, RoomDevToolViewState> {
-        override fun create(state: RoomDevToolViewState): RoomDevToolViewModel
+        override fun create(initialState: RoomDevToolViewState): RoomDevToolViewModel
     }
 
     companion object : MavericksViewModelFactory<RoomDevToolViewModel, RoomDevToolViewState> by hiltMavericksViewModelFactory()

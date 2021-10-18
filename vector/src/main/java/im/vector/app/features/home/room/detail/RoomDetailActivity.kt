@@ -24,6 +24,7 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
 import com.google.android.material.appbar.MaterialToolbar
 import im.vector.app.R
@@ -39,15 +40,10 @@ import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.room.RequireActiveMembershipAction
 import im.vector.app.features.room.RequireActiveMembershipViewEvents
 import im.vector.app.features.room.RequireActiveMembershipViewModel
-import im.vector.app.features.room.RequireActiveMembershipViewState
-import im.vector.app.features.widgets.permissions.RoomWidgetPermissionViewModel
-import im.vector.app.features.widgets.permissions.RoomWidgetPermissionViewState
-import javax.inject.Inject
 
 class RoomDetailActivity :
         VectorBaseActivity<ActivityRoomDetailBinding>(),
         ToolbarConfigurable,
-        RequireActiveMembershipViewModel.Factory,
         MatrixToBottomSheet.InteractionListener {
 
     override fun getBinding(): ActivityRoomDetailBinding {
@@ -76,14 +72,6 @@ class RoomDetailActivity :
     private lateinit var sharedActionViewModel: RoomDetailSharedActionViewModel
     private val requireActiveMembershipViewModel: RequireActiveMembershipViewModel by viewModel()
 
-    @Inject
-    lateinit var requireActiveMembershipViewModelFactory: RequireActiveMembershipViewModel.Factory
-
-    override fun create(initialState: RequireActiveMembershipViewState): RequireActiveMembershipViewModel {
-        // Due to shortcut, we cannot use MvRx args. Pass the first roomId here
-        return requireActiveMembershipViewModelFactory.create(initialState.copy(roomId = currentRoomId ?: ""))
-    }
-
     override fun injectWith(injector: ScreenComponent) {
         injector.inject(this)
     }
@@ -101,6 +89,7 @@ class RoomDetailActivity :
             intent?.extras?.getParcelable(EXTRA_ROOM_DETAIL_ARGS)
         }
         if (roomDetailArgs == null) return
+        intent.putExtra(Mavericks.KEY_ARG, roomDetailArgs)
         currentRoomId = roomDetailArgs.roomId
 
         if (isFirstCreation()) {

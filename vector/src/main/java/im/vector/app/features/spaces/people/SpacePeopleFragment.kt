@@ -44,12 +44,10 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class SpacePeopleFragment @Inject constructor(
-        private val roomMemberModelFactory: RoomMemberListViewModel.Factory,
         private val drawableProvider: DrawableProvider,
         private val colorProvider: ColorProvider,
         private val epoxyController: SpacePeopleListController
 ) : VectorBaseFragment<FragmentRecyclerviewWithSearchBinding>(),
-        RoomMemberListViewModel.Factory,
         OnBackPressed, SpacePeopleListController.InteractionListener {
 
     private val viewModel by fragmentViewModel(SpacePeopleViewModel::class)
@@ -62,10 +60,6 @@ class SpacePeopleFragment @Inject constructor(
     override fun onBackPressed(toolbarButton: Boolean): Boolean {
         sharedActionViewModel.post(SpacePeopleSharedAction.Dismiss)
         return true
-    }
-
-    override fun create(initialState: RoomMemberListViewState): RoomMemberListViewModel {
-        return roomMemberModelFactory.create(initialState)
     }
 
     override fun invalidate() = withState(membersViewModel) { memberListState ->

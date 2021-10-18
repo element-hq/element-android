@@ -41,7 +41,7 @@ class CallTransferViewModel @AssistedInject constructor(@Assisted initialState: 
 
     @AssistedFactory
     interface Factory: MavericksAssistedViewModelFactory<CallTransferViewModel,CallTransferViewState> {
-        override fun create(state: CallTransferViewState): CallTransferViewModel
+        override fun create(initialState: CallTransferViewState): CallTransferViewModel
     }
 
     companion object : MavericksViewModelFactory<CallTransferViewModel, CallTransferViewState> by hiltMavericksViewModelFactory()

@@ -52,7 +52,7 @@ class SpaceDirectoryViewModel @AssistedInject constructor(
 
     @AssistedFactory
     interface Factory: MavericksAssistedViewModelFactory<SpaceDirectoryViewModel,SpaceDirectoryState> {
-        override fun create(state: SpaceDirectoryState): SpaceDirectoryViewModel
+        override fun create(initialState: SpaceDirectoryState): SpaceDirectoryViewModel
     }
 
     companion object : MavericksViewModelFactory<SpaceDirectoryViewModel, SpaceDirectoryState> by hiltMavericksViewModelFactory()

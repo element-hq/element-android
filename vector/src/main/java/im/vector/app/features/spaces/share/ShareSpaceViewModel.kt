@@ -38,7 +38,7 @@ class ShareSpaceViewModel @AssistedInject constructor(
 
     @AssistedFactory
     interface Factory: MavericksAssistedViewModelFactory<ShareSpaceViewModel,ShareSpaceViewState> {
-        override fun create(state: ShareSpaceViewState): ShareSpaceViewModel
+        override fun create(initialState: ShareSpaceViewState): ShareSpaceViewModel
     }
 
     companion object : MavericksViewModelFactory<ShareSpaceViewModel, ShareSpaceViewState> by hiltMavericksViewModelFactory()

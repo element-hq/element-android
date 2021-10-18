@@ -36,7 +36,7 @@ class RoomNotificationSettingsViewModel @AssistedInject constructor(
 
     @AssistedFactory
     interface Factory: MavericksAssistedViewModelFactory<RoomNotificationSettingsViewModel,RoomNotificationSettingsViewState> {
-       override fun create(state: RoomNotificationSettingsViewState): RoomNotificationSettingsViewModel
+       override fun create(initialState: RoomNotificationSettingsViewState): RoomNotificationSettingsViewModel
     }
 
     companion object : MavericksViewModelFactory<RoomNotificationSettingsViewModel, RoomNotificationSettingsViewState> by hiltMavericksViewModelFactory()

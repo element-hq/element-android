@@ -43,7 +43,6 @@ class SoftLogoutActivity : LoginActivity() {
 
     private val softLogoutViewModel: SoftLogoutViewModel by viewModel()
 
-    @Inject lateinit var softLogoutViewModelFactory: SoftLogoutViewModel.Factory
     @Inject lateinit var session: Session
     @Inject lateinit var errorFormatter: ErrorFormatter
 

@@ -33,7 +33,7 @@ class SpaceManageSharedViewModel @AssistedInject constructor(
 
     @AssistedFactory
     interface Factory: MavericksAssistedViewModelFactory<SpaceManageSharedViewModel,SpaceManageViewState>{
-        override fun create(state: SpaceManageViewState): SpaceManageSharedViewModel
+        override fun create(initialState: SpaceManageViewState): SpaceManageSharedViewModel
     }
 
     companion object : MavericksViewModelFactory<SpaceManageSharedViewModel, SpaceManageViewState> by hiltMavericksViewModelFactory()

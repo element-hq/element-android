@@ -44,22 +44,16 @@ import im.vector.app.features.roomprofile.settings.joinrule.advanced.RoomJoinRul
 import im.vector.app.features.roomprofile.settings.joinrule.advanced.RoomJoinRuleChooseRestrictedViewModel
 import javax.inject.Inject
 
-class RoomJoinRuleActivity : VectorBaseActivity<ActivitySimpleBinding>(),
-        RoomJoinRuleChooseRestrictedViewModel.Factory {
+class RoomJoinRuleActivity : VectorBaseActivity<ActivitySimpleBinding>() {
 
     override fun getBinding() = ActivitySimpleBinding.inflate(layoutInflater)
 
     private lateinit var roomProfileArgs: RoomProfileArgs
 
     @Inject
-    lateinit var allowListViewModelFactory: RoomJoinRuleChooseRestrictedViewModel.Factory
-
-    @Inject
     lateinit var errorFormatter: ErrorFormatter
 
     val viewModel: RoomJoinRuleChooseRestrictedViewModel by viewModel()
-
-    override fun create(initialState: RoomJoinRuleChooseRestrictedState) = allowListViewModelFactory.create(initialState)
 
     override fun injectWith(injector: ScreenComponent) {
         injector.inject(this)

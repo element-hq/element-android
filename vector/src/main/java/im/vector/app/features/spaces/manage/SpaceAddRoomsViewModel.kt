@@ -58,7 +58,7 @@ class SpaceAddRoomsViewModel @AssistedInject constructor(
 
     @AssistedFactory
     interface Factory: MavericksAssistedViewModelFactory<SpaceAddRoomsViewModel,SpaceAddRoomsState> {
-        override fun create(state: SpaceAddRoomsState): SpaceAddRoomsViewModel
+        override fun create(initialState: SpaceAddRoomsState): SpaceAddRoomsViewModel
     }
 
     companion object : MavericksViewModelFactory<SpaceAddRoomsViewModel, SpaceAddRoomsState> by hiltMavericksViewModelFactory()

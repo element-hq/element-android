@@ -37,7 +37,7 @@ class ReviewTermsViewModel @AssistedInject constructor(
 
     @AssistedFactory
     interface Factory: MavericksAssistedViewModelFactory<ReviewTermsViewModel,ReviewTermsViewState> {
-        override fun create(state: ReviewTermsViewState): ReviewTermsViewModel
+        override fun create(initialState: ReviewTermsViewState): ReviewTermsViewModel
     }
 
     companion object : MavericksViewModelFactory<ReviewTermsViewModel, ReviewTermsViewState> by hiltMavericksViewModelFactory()

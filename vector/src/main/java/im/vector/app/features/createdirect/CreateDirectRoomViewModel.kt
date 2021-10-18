@@ -44,7 +44,7 @@ class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
 
     @AssistedFactory
     interface Factory: MavericksAssistedViewModelFactory<CreateDirectRoomViewModel,CreateDirectRoomViewState> {
-        override fun create(state: CreateDirectRoomViewState): CreateDirectRoomViewModel
+        override fun create(initialState: CreateDirectRoomViewState): CreateDirectRoomViewModel
     }
 
     companion object : MavericksViewModelFactory<CreateDirectRoomViewModel, CreateDirectRoomViewState> by hiltMavericksViewModelFactory()

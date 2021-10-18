@@ -83,7 +83,7 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
 
     @AssistedFactory
     interface Factory: MavericksAssistedViewModelFactory<SharedSecureStorageViewModel,SharedSecureStorageViewState> {
-        override fun create(state: SharedSecureStorageViewState): SharedSecureStorageViewModel
+        override fun create(initialState: SharedSecureStorageViewState): SharedSecureStorageViewModel
     }
 
     init {
