@@ -28,8 +28,8 @@ class RoomListViewModelFactory @Inject constructor(private val session: Provider
                                                    private val appStateHandler: AppStateHandler,
                                                    private val stringProvider: StringProvider,
                                                    private val vectorPreferences: VectorPreferences,
-                                                   private val autoAcceptInvites: AutoAcceptInvites)
-    : RoomListViewModel.Factory {
+                                                   private val autoAcceptInvites: AutoAcceptInvites) :
+    RoomListViewModel.Factory {
 
     override fun create(initialState: RoomListViewState): RoomListViewModel {
         return RoomListViewModel(

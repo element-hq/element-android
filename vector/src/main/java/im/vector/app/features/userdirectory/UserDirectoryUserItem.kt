@@ -29,6 +29,7 @@ import im.vector.app.R
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
+import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.themes.ThemeUtils
 import org.matrix.android.sdk.api.util.MatrixItem
@@ -44,10 +45,7 @@ abstract class UserDirectoryUserItem : VectorEpoxyModel<UserDirectoryUserItem.Ho
     override fun bind(holder: Holder) {
         super.bind(holder)
         holder.view.setOnClickListener(clickListener)
-        // TODO: it should be better to update User.getBestName function to compute the displayname
-        val displayName = matrixItem.displayName
-                ?.takeUnless { it.isEmpty() }
-                ?: TchapUtils.computeDisplayNameFromUserId(matrixItem.id).orEmpty()
+        val displayName = matrixItem.getBestName()
         if (TchapUtils.isExternalTchapUser(matrixItem.id)) {
             holder.nameView.text = displayName
             holder.domainView.text = holder.view.context.resources.getString(R.string.tchap_contact_external)

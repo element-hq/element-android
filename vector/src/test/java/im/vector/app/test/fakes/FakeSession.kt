@@ -18,10 +18,11 @@ package im.vector.app.test.fakes
 
 import io.mockk.mockk
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.crypto.CryptoService
 
 class FakeSession(
-        private val cryptoService: CryptoService = FakeCryptoService()
+        val fakeCryptoService: FakeCryptoService = FakeCryptoService(),
+        val fakeSharedSecretStorageService: FakeSharedSecretStorageService = FakeSharedSecretStorageService()
 ) : Session by mockk(relaxed = true) {
-    override fun cryptoService() = cryptoService
+    override fun cryptoService() = fakeCryptoService
+    override val sharedSecretStorageService = fakeSharedSecretStorageService
 }

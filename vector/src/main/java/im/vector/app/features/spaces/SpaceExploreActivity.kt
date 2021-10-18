@@ -29,6 +29,7 @@ import im.vector.app.core.extensions.commitTransaction
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivitySimpleBinding
 import im.vector.app.features.matrixto.MatrixToBottomSheet
+import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.spaces.explore.SpaceDirectoryArgs
 import im.vector.app.features.spaces.explore.SpaceDirectoryFragment
 import im.vector.app.features.spaces.explore.SpaceDirectoryState
@@ -51,18 +52,18 @@ class SpaceExploreActivity : VectorBaseActivity<ActivitySimpleBinding>(), SpaceD
     val sharedViewModel: SpaceDirectoryViewModel by viewModel()
 
     private val fragmentLifecycleCallbacks = object : FragmentManager.FragmentLifecycleCallbacks() {
-        override fun onFragmentAttached(fm: FragmentManager, f: Fragment, context: Context) {
+        override fun onFragmentResumed(fm: FragmentManager, f: Fragment) {
             if (f is MatrixToBottomSheet) {
                 f.interactionListener = this@SpaceExploreActivity
             }
-            super.onFragmentAttached(fm, f, context)
+            super.onFragmentResumed(fm, f)
         }
 
-        override fun onFragmentDetached(fm: FragmentManager, f: Fragment) {
+        override fun onFragmentPaused(fm: FragmentManager, f: Fragment) {
             if (f is MatrixToBottomSheet) {
                 f.interactionListener = null
             }
-            super.onFragmentDetached(fm, f)
+            super.onFragmentPaused(fm, f)
         }
     }
 
@@ -86,14 +87,14 @@ class SpaceExploreActivity : VectorBaseActivity<ActivitySimpleBinding>(), SpaceD
 
         sharedViewModel.observeViewEvents {
             when (it) {
-                SpaceDirectoryViewEvents.Dismiss -> {
+                SpaceDirectoryViewEvents.Dismiss                      -> {
                     finish()
                 }
-                is SpaceDirectoryViewEvents.NavigateToRoom -> {
+                is SpaceDirectoryViewEvents.NavigateToRoom            -> {
                     navigator.openRoom(this, it.roomId)
                 }
                 is SpaceDirectoryViewEvents.NavigateToMxToBottomSheet -> {
-                    MatrixToBottomSheet.withLink(it.link, this).show(supportFragmentManager, "ShowChild")
+                    MatrixToBottomSheet.withLink(it.link).show(supportFragmentManager, "ShowChild")
                 }
             }
         }
@@ -115,7 +116,11 @@ class SpaceExploreActivity : VectorBaseActivity<ActivitySimpleBinding>(), SpaceD
     override fun create(initialState: SpaceDirectoryState): SpaceDirectoryViewModel =
             spaceDirectoryViewModelFactory.create(initialState)
 
-    override fun navigateToRoom(roomId: String) {
+    override fun mxToBottomSheetNavigateToRoom(roomId: String) {
         navigator.openRoom(this, roomId)
+    }
+
+    override fun mxToBottomSheetSwitchToSpace(spaceId: String) {
+        navigator.switchToSpace(this, spaceId, Navigator.PostSwitchSpaceAction.None)
     }
 }

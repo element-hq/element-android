@@ -1,0 +1,2 @@
+Ndryshime kryesore në këtë version: Sistemoni dhomat tuaja duke përdorur Hapësira! v1.3.1 ndreq një vithisje që mund të ndodhë në v1.3.0.
+Regjistër i plotë ndryshimesh: https://github.com/vector-im/element-android/releases/tag/v1.3.1

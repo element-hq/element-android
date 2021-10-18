@@ -33,6 +33,7 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.home.HomeActivity
+import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.invite.AutoAcceptInvites
 import im.vector.app.features.settings.VectorPreferences
 import kotlinx.coroutines.Dispatchers
@@ -44,6 +45,7 @@ import org.matrix.android.sdk.api.session.room.UpdatableLivePageResult
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
 import org.matrix.android.sdk.api.session.room.state.isPublic
+import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.rx.rx
 import timber.log.Timber
 import javax.inject.Inject
@@ -98,7 +100,7 @@ class RoomListViewModel @Inject constructor(
                 }
 
         session.rx().liveUser(session.myUserId)
-                .map { it.getOrNull()?.getBestName() }
+                .map { it.getOrNull()?.toMatrixItem()?.getBestName() }
                 .distinctUntilChanged()
                 .execute {
                     copy(

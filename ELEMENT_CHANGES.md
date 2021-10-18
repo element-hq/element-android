@@ -1,3 +1,57 @@
+Changes in Element v1.3.3 (2021-10-11)
+======================================
+
+Bugfixes 🐛
+----------
+ - Disable Android Auto supports ([#4205](https://github.com/vector-im/element-android/issues/4205))
+
+
+Changes in Element v1.3.2 (2021-10-08)
+======================================
+
+Features ✨
+----------
+ - Android Auto notification support ([#240](https://github.com/vector-im/element-android/issues/240))
+ - Add a fallback for user displayName when this one is null or empty ([#3732](https://github.com/vector-im/element-android/issues/3732))
+ - Add client base url config to customize permalinks ([#4027](https://github.com/vector-im/element-android/issues/4027))
+ - Check if DM exists before creating a new one ([#4157](https://github.com/vector-im/element-android/issues/4157))
+ - Handle 8 new slash commands: `/ignore`, `/unignore`, `/roomname`, `/myroomnick`, `/roomavatar`, `/myroomavatar`, `/lenny`, `/whois`. ([#4158](https://github.com/vector-im/element-android/issues/4158))
+ - Display identity server policies in the Discovery screen ([#4184](https://github.com/vector-im/element-android/issues/4184))
+
+Bugfixes 🐛
+----------
+ - Ensure initial sync progress dialog is hidden when the initial sync is over ([#983](https://github.com/vector-im/element-android/issues/983))
+ - Avoid resending notifications that are already shown ([#1673](https://github.com/vector-im/element-android/issues/1673))
+ - Room filter no results bad CTA in space mode when a space selected ([#3048](https://github.com/vector-im/element-android/issues/3048))
+ - Fixes notifications not dismissing when reading messages on other devices ([#3347](https://github.com/vector-im/element-android/issues/3347))
+ - Fixes the passphrase screen being incorrectly shown when pressing back on the key verification screen.
+  When the user doesn't have a passphrase set we don't show the passphrase screen. ([#3898](https://github.com/vector-im/element-android/issues/3898))
+ - App doesn't take you to a Space after choosing to Join it ([#3933](https://github.com/vector-im/element-android/issues/3933))
+ - Validate public space addresses and room aliases length ([#3934](https://github.com/vector-im/element-android/issues/3934))
+ - Save button for adding rooms to a space is hidden when scrolling through list of rooms ([#3935](https://github.com/vector-im/element-android/issues/3935))
+ - Align new room encryption default to Web ([#4045](https://github.com/vector-im/element-android/issues/4045))
+ - Fix Reply/Edit mode animation is broken when sending ([#4077](https://github.com/vector-im/element-android/issues/4077))
+ - Added changes that will make SearchView in search bar focused by default on opening reaction picker.
+
+  When tapping close icon of SearchView, the SearchView did not collapse therefore added the on close listener
+  which will collapse the SearchView on close. ([#4092](https://github.com/vector-im/element-android/issues/4092))
+ - Troubleshoot notification: Fix button not clickable ([#4109](https://github.com/vector-im/element-android/issues/4109))
+ - Harmonize wording in the message bottom sheet and move up the View Reactions item ([#4155](https://github.com/vector-im/element-android/issues/4155))
+ - Remove unused SendRelationWorker and related API call (3588) ([#4156](https://github.com/vector-im/element-android/issues/4156))
+ - SIP user to native user mapping is wrong ([#4176](https://github.com/vector-im/element-android/issues/4176))
+
+SDK API changes ⚠️
+------------------
+ - Create extension `String.isMxcUrl()` ([#4158](https://github.com/vector-im/element-android/issues/4158))
+
+Other changes
+-------------
+ - Use ktlint plugin. See [the documentation](https://github.com/vector-im/element-android/blob/develop/CONTRIBUTING.md#ktlint) for more detail. ([#3957](https://github.com/vector-im/element-android/issues/3957))
+ - Minimize the use of exported="true" in android Manifest (link: https://github.com/matrix-org/matrix-dinsic/issues/618) ([#4018](https://github.com/vector-im/element-android/issues/4018))
+ - Fix redundancy in heading in the bug report issue form ([#4076](https://github.com/vector-im/element-android/issues/4076))
+ - Fix release label in the release issue template ([#4113](https://github.com/vector-im/element-android/issues/4113))
+
+
 Changes in Element v1.3.1 (2021-09-29)
 ======================================
 

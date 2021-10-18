@@ -17,6 +17,7 @@
 package im.vector.app.features.form
 
 import android.text.Editable
+import android.text.InputFilter
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
@@ -77,6 +78,9 @@ abstract class FormEditTextItem : VectorEpoxyModel<FormEditTextItem.Holder>() {
     @EpoxyAttribute
     var suffixText: String? = null
 
+    @EpoxyAttribute
+    var maxLength: Int? = null
+
     private val onTextChangeListener = object : SimpleTextWatcher() {
         override fun afterTextChanged(s: Editable) {
             onTextChange?.invoke(s.toString())
@@ -109,6 +113,15 @@ abstract class FormEditTextItem : VectorEpoxyModel<FormEditTextItem.Holder>() {
         holder.textInputEditText.addTextChangedListenerOnce(onTextChangeListener)
         holder.textInputEditText.setOnEditorActionListener(editorActionListener)
         holder.textInputEditText.onFocusChangeListener = onFocusChangedListener
+
+        if (maxLength != null) {
+            holder.textInputEditText.filters = arrayOf(InputFilter.LengthFilter(maxLength!!))
+            holder.textInputLayout.isCounterEnabled = true
+            holder.textInputLayout.counterMaxLength = maxLength!!
+        } else {
+            holder.textInputEditText.filters = arrayOf()
+            holder.textInputLayout.isCounterEnabled = false
+        }
     }
 
     override fun shouldSaveViewState(): Boolean {

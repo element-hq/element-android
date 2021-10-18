@@ -48,7 +48,6 @@ import org.matrix.android.sdk.internal.session.profile.ProfileModule
 import org.matrix.android.sdk.internal.session.pushers.AddPusherWorker
 import org.matrix.android.sdk.internal.session.pushers.PushersModule
 import org.matrix.android.sdk.internal.session.room.RoomModule
-import org.matrix.android.sdk.internal.session.room.relation.SendRelationWorker
 import org.matrix.android.sdk.internal.session.room.send.MultipleEventSendingDispatcherWorker
 import org.matrix.android.sdk.internal.session.room.send.RedactEventWorker
 import org.matrix.android.sdk.internal.session.room.send.SendEventWorker
@@ -118,8 +117,6 @@ internal interface SessionComponent {
     fun taskExecutor(): TaskExecutor
 
     fun inject(worker: SendEventWorker)
-
-    fun inject(worker: SendRelationWorker)
 
     fun inject(worker: MultipleEventSendingDispatcherWorker)
 

@@ -24,7 +24,6 @@ import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityBigImageViewerBinding
-
 import javax.inject.Inject
 
 /**

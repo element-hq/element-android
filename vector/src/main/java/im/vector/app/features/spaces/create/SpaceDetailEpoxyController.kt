@@ -27,6 +27,7 @@ import im.vector.app.features.form.formEditableSquareAvatarItem
 import im.vector.app.features.form.formMultiLineEditTextItem
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.roomdirectory.createroom.RoomAliasErrorFormatter
+import org.matrix.android.sdk.api.MatrixConstants
 import org.matrix.android.sdk.api.session.room.alias.RoomAliasError
 import org.matrix.android.sdk.api.util.MatrixItem
 import javax.inject.Inject
@@ -94,6 +95,7 @@ class SpaceDetailEpoxyController @Inject constructor(
                 hint(host.stringProvider.getString(R.string.create_space_alias_hint))
                 suffixText(":" + data.homeServerName)
                 prefixText("#")
+                maxLength(MatrixConstants.maxAliasLocalPartLength(data.homeServerName))
                 onFocusChange { hasFocus ->
                     host.aliasTextIsFocused = hasFocus
                 }

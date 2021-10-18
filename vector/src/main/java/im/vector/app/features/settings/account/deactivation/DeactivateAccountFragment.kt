@@ -34,7 +34,6 @@ import im.vector.app.features.MainActivityArgs
 import im.vector.app.features.auth.ReAuthActivity
 import im.vector.app.features.settings.VectorSettingsActivity
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
-
 import javax.inject.Inject
 
 class DeactivateAccountFragment @Inject constructor(

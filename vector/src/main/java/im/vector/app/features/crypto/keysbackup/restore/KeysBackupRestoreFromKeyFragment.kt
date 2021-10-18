@@ -27,12 +27,11 @@ import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.startImportTextFromFileIntent
 import im.vector.app.databinding.FragmentKeysBackupRestoreFromKeyBinding
-
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import javax.inject.Inject
 
-class KeysBackupRestoreFromKeyFragment @Inject constructor()
-    : VectorBaseFragment<FragmentKeysBackupRestoreFromKeyBinding>() {
+class KeysBackupRestoreFromKeyFragment @Inject constructor() :
+    VectorBaseFragment<FragmentKeysBackupRestoreFromKeyBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentKeysBackupRestoreFromKeyBinding {
         return FragmentKeysBackupRestoreFromKeyBinding.inflate(inflater, container, false)

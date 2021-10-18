@@ -34,8 +34,8 @@ private class LiveDataObservable<T>(
         liveData.observeForever(relay)
     }
 
-    private inner class RemoveObserverInMainThread(private val observer: io.reactivex.Observer<in T>)
-        : MainThreadDisposable(), Observer<T> {
+    private inner class RemoveObserverInMainThread(private val observer: io.reactivex.Observer<in T>) :
+        MainThreadDisposable(), Observer<T> {
 
         override fun onChanged(t: T?) {
             if (!isDisposed) {

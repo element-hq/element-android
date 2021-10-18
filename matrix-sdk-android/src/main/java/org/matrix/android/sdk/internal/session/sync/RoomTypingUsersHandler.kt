@@ -16,11 +16,11 @@
 
 package org.matrix.android.sdk.internal.session.sync
 
+import io.realm.Realm
 import org.matrix.android.sdk.api.session.room.sender.SenderInfo
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.room.membership.RoomMemberHelper
 import org.matrix.android.sdk.internal.session.typing.DefaultTypingUsersTracker
-import io.realm.Realm
 import javax.inject.Inject
 
 internal class RoomTypingUsersHandler @Inject constructor(@UserId private val userId: String,

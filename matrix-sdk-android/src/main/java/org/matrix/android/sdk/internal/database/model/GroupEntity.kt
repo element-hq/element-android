@@ -16,16 +16,16 @@
 
 package org.matrix.android.sdk.internal.database.model
 
-import org.matrix.android.sdk.api.session.room.model.Membership
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
+import org.matrix.android.sdk.api.session.room.model.Membership
 
 /**
  * This class is used to store group info (groupId and membership) from the sync response.
  * Then GetGroupDataTask is called regularly to fetch group information from the homeserver.
  */
-internal open class GroupEntity(@PrimaryKey var groupId: String = "")
-    : RealmObject() {
+internal open class GroupEntity(@PrimaryKey var groupId: String = "") :
+    RealmObject() {
 
     private var membershipStr: String = Membership.NONE.name
     var membership: Membership

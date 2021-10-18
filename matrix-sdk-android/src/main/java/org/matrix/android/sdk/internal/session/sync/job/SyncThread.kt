@@ -21,25 +21,28 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.squareup.moshi.JsonEncodingException
 import kotlinx.coroutines.CancellationException
-import org.matrix.android.sdk.api.failure.Failure
-import org.matrix.android.sdk.api.failure.isTokenError
-import org.matrix.android.sdk.api.session.sync.SyncState
-import org.matrix.android.sdk.internal.network.NetworkConnectivityChecker
-import org.matrix.android.sdk.internal.session.sync.SyncTask
-import org.matrix.android.sdk.internal.util.BackgroundDetectionObserver
-import org.matrix.android.sdk.internal.util.Debouncer
-import org.matrix.android.sdk.internal.util.createUIHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import org.matrix.android.sdk.api.failure.Failure
+import org.matrix.android.sdk.api.failure.isTokenError
 import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.session.call.MxCall
+import org.matrix.android.sdk.api.session.sync.SyncState
+import org.matrix.android.sdk.api.session.sync.model.SyncResponse
+import org.matrix.android.sdk.internal.network.NetworkConnectivityChecker
 import org.matrix.android.sdk.internal.session.call.ActiveCallHandler
 import org.matrix.android.sdk.internal.session.sync.SyncPresence
+import org.matrix.android.sdk.internal.session.sync.SyncTask
+import org.matrix.android.sdk.internal.util.BackgroundDetectionObserver
+import org.matrix.android.sdk.internal.util.Debouncer
+import org.matrix.android.sdk.internal.util.createUIHandler
 import timber.log.Timber
 import java.net.SocketTimeoutException
 import java.util.Timer
@@ -74,6 +77,8 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
             pause()
         }
     }
+
+    private val _syncFlow = MutableSharedFlow<SyncResponse>()
 
     init {
         updateStateTo(SyncState.Idle)
@@ -117,6 +122,8 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
     fun liveState(): LiveData<SyncState> {
         return liveState
     }
+
+    fun syncFlow(): SharedFlow<SyncResponse> = _syncFlow
 
     override fun onConnectivityChanged() {
         retryNoNetworkTask?.cancel()
@@ -195,7 +202,8 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
 
     private suspend fun doSync(params: SyncTask.Params) {
         try {
-            syncTask.execute(params)
+            val syncResponse = syncTask.execute(params)
+            _syncFlow.emit(syncResponse)
         } catch (failure: Throwable) {
             if (failure is Failure.NetworkConnection) {
                 canReachServer = false

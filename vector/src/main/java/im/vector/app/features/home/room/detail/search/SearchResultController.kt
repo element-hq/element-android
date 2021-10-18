@@ -102,9 +102,9 @@ class SearchResultController @Inject constructor(
         data.searchResult.forEach { eventAndSender ->
             val event = eventAndSender.event
 
-            @Suppress("UNCHECKED_CAST")
             // Take new content first
-            val text = ((event.content?.get("m.new_content") as? Content) ?: event.content)?.get("body") as? String ?: return@forEach
+            @Suppress("UNCHECKED_CAST")
+val text = ((event.content?.get("m.new_content") as? Content) ?: event.content)?.get("body") as? String ?: return@forEach
             val spannable = setHighLightedText(text, data.highlights) ?: return@forEach
 
             val eventDate = Calendar.getInstance().apply {

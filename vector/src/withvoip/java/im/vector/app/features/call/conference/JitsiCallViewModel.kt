@@ -104,8 +104,8 @@ class JitsiCallViewModel @AssistedInject constructor(
 
     private fun handleSwitchTo(action: JitsiCallViewActions.SwitchTo) = withState { state ->
         // Check if it is the same conf
-        if (action.args.roomId != state.roomId
-                || action.args.widgetId != state.widgetId) {
+        if (action.args.roomId != state.roomId ||
+                action.args.widgetId != state.widgetId) {
             if (action.withConfirmation) {
                 // Ask confirmation to switch, but wait a bit for the Activity to quit the PiP mode
                 viewModelScope.launch {

@@ -26,6 +26,7 @@ import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.DebouncedClickListener
+import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.format.DisplayableEventFormatter
 import im.vector.app.features.home.room.list.RoomInvitationItem_
@@ -79,13 +80,16 @@ class TchapRoomSummaryItemFactory @Inject constructor(private val displayableEve
                                      changeMembershipState: ChangeMembershipState,
                                      listener: RoomListListener?): VectorEpoxyModel<*> {
         val secondLine = roomSummary.inviterId?.let { userId ->
-            // TODO: it should be better to update User.getBestName function to compute the displayname
-            val displayName = session.getUser(userId)?.displayName
+            val displayName = session.getUser(userId)?.toMatrixItem()?.getBestName()
                     ?.let { displayName ->
-                        displayName.takeUnless { roomSummary.isDirect } ?: TchapUtils.getNameFromDisplayName(displayName)
+                        if (roomSummary.isDirect) {
+                            // We remove the user domain in second line because it is already present in first line
+                            TchapUtils.getNameFromDisplayName(displayName)
+                        } else {
+                            displayName
+                        }
                     }
                     ?: TchapUtils.computeDisplayNameFromUserId(userId)
-                    ?: userId
             stringProvider.getString(R.string.tchap_room_invited_you, displayName)
         }
 

@@ -24,8 +24,8 @@ import im.vector.app.R
 import im.vector.app.databinding.ItemNotificationTroubleshootBinding
 import im.vector.app.features.themes.ThemeUtils
 
-class NotificationTroubleshootRecyclerViewAdapter(val tests: ArrayList<TroubleshootTest>)
-    : RecyclerView.Adapter<NotificationTroubleshootRecyclerViewAdapter.ViewHolder>() {
+class NotificationTroubleshootRecyclerViewAdapter(val tests: ArrayList<TroubleshootTest>) :
+    RecyclerView.Adapter<NotificationTroubleshootRecyclerViewAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)

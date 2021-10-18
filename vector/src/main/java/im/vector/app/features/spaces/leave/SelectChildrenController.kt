@@ -95,8 +95,8 @@ class SelectChildrenController @Inject constructor(
             }
             // if filter is "Jo Do", it should match "John Doe"
             return filter.split(" ").all {
-                roomSummary.name.contains(it, ignoreCase = true).orFalse()
-                        || roomSummary.topic.contains(it, ignoreCase = true).orFalse()
+                roomSummary.name.contains(it, ignoreCase = true).orFalse() ||
+                        roomSummary.topic.contains(it, ignoreCase = true).orFalse()
             }
         }
     }

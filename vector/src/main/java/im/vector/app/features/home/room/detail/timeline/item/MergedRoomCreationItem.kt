@@ -166,9 +166,9 @@ abstract class MergedRoomCreationItem : BasedMergedItem<MergedRoomCreationItem.H
         holder.roomTopicText.movementMethod = movementMethod
 
         val roomItem = roomSummary?.toMatrixItem()
-        val shouldSetAvatar = attributes.canChangeAvatar
-                && (roomSummary?.isDirect == false || (isDirect && membersCount >= 2))
-                && roomItem?.avatarUrl.isNullOrBlank()
+        val shouldSetAvatar = attributes.canChangeAvatar &&
+                (roomSummary?.isDirect == false || (isDirect && membersCount >= 2)) &&
+                roomItem?.avatarUrl.isNullOrBlank()
 
         holder.roomAvatarImageView.isVisible = roomItem != null
         if (roomItem != null) {

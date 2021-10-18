@@ -35,8 +35,8 @@ enum class ConclusionState {
     CANCELLED
 }
 
-class VerificationConclusionViewModel(initialState: VerificationConclusionViewState)
-    : VectorViewModel<VerificationConclusionViewState, EmptyAction, EmptyViewEvents>(initialState) {
+class VerificationConclusionViewModel(initialState: VerificationConclusionViewState) :
+    VectorViewModel<VerificationConclusionViewState, EmptyAction, EmptyViewEvents>(initialState) {
 
     companion object : MvRxViewModelFactory<VerificationConclusionViewModel, VerificationConclusionViewState> {
 

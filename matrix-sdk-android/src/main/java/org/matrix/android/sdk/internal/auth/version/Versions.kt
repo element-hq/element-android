@@ -63,9 +63,9 @@ internal fun Versions.isSupportedBySdk(): Boolean {
  * Return true if the SDK supports this homeserver version for login and registration
  */
 internal fun Versions.isLoginAndRegistrationSupportedBySdk(): Boolean {
-    return !doesServerRequireIdentityServerParam()
-            && doesServerAcceptIdentityAccessToken()
-            && doesServerSeparatesAddAndBind()
+    return !doesServerRequireIdentityServerParam() &&
+            doesServerAcceptIdentityAccessToken() &&
+            doesServerSeparatesAddAndBind()
 }
 
 /**
@@ -74,8 +74,8 @@ internal fun Versions.isLoginAndRegistrationSupportedBySdk(): Boolean {
  * @return true if the server support the lazy loading of room members
  */
 private fun Versions.supportLazyLoadMembers(): Boolean {
-    return getMaxVersion() >= HomeServerVersion.r0_5_0
-            || unstableFeatures?.get(FEATURE_LAZY_LOAD_MEMBERS) == true
+    return getMaxVersion() >= HomeServerVersion.r0_5_0 ||
+            unstableFeatures?.get(FEATURE_LAZY_LOAD_MEMBERS) == true
 }
 
 /**
@@ -92,13 +92,13 @@ private fun Versions.doesServerRequireIdentityServerParam(): Boolean {
  * Some homeservers may trigger errors if they are not prepared for the new parameter.
  */
 private fun Versions.doesServerAcceptIdentityAccessToken(): Boolean {
-    return getMaxVersion() >= HomeServerVersion.r0_6_0
-            || unstableFeatures?.get(FEATURE_ID_ACCESS_TOKEN) ?: false
+    return getMaxVersion() >= HomeServerVersion.r0_6_0 ||
+            unstableFeatures?.get(FEATURE_ID_ACCESS_TOKEN) ?: false
 }
 
 private fun Versions.doesServerSeparatesAddAndBind(): Boolean {
-    return getMaxVersion() >= HomeServerVersion.r0_6_0
-            || unstableFeatures?.get(FEATURE_SEPARATE_ADD_AND_BIND) ?: false
+    return getMaxVersion() >= HomeServerVersion.r0_6_0 ||
+            unstableFeatures?.get(FEATURE_SEPARATE_ADD_AND_BIND) ?: false
 }
 
 private fun Versions.getMaxVersion(): HomeServerVersion {

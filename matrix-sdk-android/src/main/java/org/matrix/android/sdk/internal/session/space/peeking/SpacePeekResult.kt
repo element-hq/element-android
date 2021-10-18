@@ -28,6 +28,7 @@ data class SpacePeekSummary(
 interface ISpaceChild {
     val id: String
     val roomPeekResult: PeekResult
+
 //    val default: Boolean?
     val order: String?
 }
@@ -52,5 +53,5 @@ sealed class SpacePeekResult {
     data class FailedToResolve(val spaceId: String, val roomPeekResult: PeekResult) : SpacePeekError()
     data class NotSpaceType(val spaceId: String) : SpacePeekError()
 
-    data class Success(val summary: SpacePeekSummary): SpacePeekResult()
+    data class Success(val summary: SpacePeekSummary) : SpacePeekResult()
 }

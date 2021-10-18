@@ -18,8 +18,8 @@ package im.vector.app.features.pin
 
 import android.content.Context
 import android.content.Intent
-import com.google.android.material.appbar.MaterialToolbar
 import com.airbnb.mvrx.MvRx
+import com.google.android.material.appbar.MaterialToolbar
 import im.vector.app.R
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.ToolbarConfigurable

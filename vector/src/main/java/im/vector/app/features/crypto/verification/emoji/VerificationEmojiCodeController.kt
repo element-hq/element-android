@@ -30,6 +30,7 @@ import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationD
 import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationEmojisItem
 import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationNoticeItem
 import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationWaitingItem
+import im.vector.app.features.displayname.getBestName
 import javax.inject.Inject
 
 class VerificationEmojiCodeController @Inject constructor(

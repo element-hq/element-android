@@ -475,8 +475,8 @@ internal class DeviceListManager @Inject constructor(private val cryptoStore: IM
         }
 
         if (!isVerified) {
-            Timber.e("## CRYPTO | validateDeviceKeys() : Unable to verify signature on device " + userId + ":"
-                    + deviceKeys.deviceId + " with error " + errorMessage)
+            Timber.e("## CRYPTO | validateDeviceKeys() : Unable to verify signature on device " + userId + ":" +
+                    deviceKeys.deviceId + " with error " + errorMessage)
             return false
         }
 
@@ -486,9 +486,9 @@ internal class DeviceListManager @Inject constructor(private val cryptoStore: IM
                 // best off sticking with the original keys.
                 //
                 // Should we warn the user about it somehow?
-                Timber.e("## CRYPTO | validateDeviceKeys() : WARNING:Ed25519 key for device " + userId + ":"
-                        + deviceKeys.deviceId + " has changed : "
-                        + previouslyStoredDeviceKeys.fingerprint() + " -> " + signKey)
+                Timber.e("## CRYPTO | validateDeviceKeys() : WARNING:Ed25519 key for device " + userId + ":" +
+                        deviceKeys.deviceId + " has changed : " +
+                        previouslyStoredDeviceKeys.fingerprint() + " -> " + signKey)
 
                 Timber.e("## CRYPTO | validateDeviceKeys() : $previouslyStoredDeviceKeys -> $deviceKeys")
                 Timber.e("## CRYPTO | validateDeviceKeys() : ${previouslyStoredDeviceKeys.keys} -> ${deviceKeys.keys}")

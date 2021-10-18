@@ -33,8 +33,8 @@ import org.matrix.android.sdk.api.pushrules.RuleKind
 import org.matrix.android.sdk.api.pushrules.rest.PushRule
 import org.matrix.android.sdk.api.pushrules.toJson
 
-class VectorSettingsKeywordAndMentionsNotificationPreferenceFragment
-    : VectorSettingsPushRuleNotificationPreferenceFragment() {
+class VectorSettingsKeywordAndMentionsNotificationPreferenceFragment :
+    VectorSettingsPushRuleNotificationPreferenceFragment() {
 
     override var titleRes: Int = R.string.settings_notification_mentions_and_keywords
 
@@ -88,7 +88,7 @@ class VectorSettingsKeywordAndMentionsNotificationPreferenceFragment
             false
         }
 
-        editKeywordPreference.listener  = object: KeywordPreference.Listener {
+        editKeywordPreference.listener  = object : KeywordPreference.Listener {
             override fun onFocusDidChange(hasFocus: Boolean) {
                 keywordsHasFocus = true
             }

@@ -28,6 +28,7 @@ import im.vector.app.features.form.formEditTextItem
 import im.vector.app.features.form.formEditableSquareAvatarItem
 import im.vector.app.features.form.formMultiLineEditTextItem
 import im.vector.app.features.form.formSubmitButtonItem
+import org.matrix.android.sdk.api.MatrixConstants
 import org.matrix.android.sdk.api.session.room.failure.CreateRoomFailure
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 import javax.inject.Inject
@@ -81,6 +82,7 @@ class CreateSubSpaceController @Inject constructor(
                 hint(host.stringProvider.getString(R.string.create_space_alias_hint))
                 suffixText(":" + data.homeServerName)
                 prefixText("#")
+                maxLength(MatrixConstants.maxAliasLocalPartLength(data.homeServerName))
                 errorMessage(
                         host.roomAliasErrorFormatter.format(
                                 (((data.asyncCreateRoomRequest as? Fail)?.error) as? CreateRoomFailure.AliasError)?.aliasError)
