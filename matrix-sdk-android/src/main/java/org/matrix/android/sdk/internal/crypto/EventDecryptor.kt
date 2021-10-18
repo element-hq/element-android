@@ -38,6 +38,8 @@ import org.matrix.android.sdk.internal.session.SessionScope
 import timber.log.Timber
 import javax.inject.Inject
 
+private const val SEND_TO_DEVICE_RETRY_COUNT = 3
+
 @SessionScope
 internal class EventDecryptor @Inject constructor(
         private val cryptoCoroutineScope: CoroutineScope,
@@ -173,7 +175,7 @@ internal class EventDecryptor @Inject constructor(
         withContext(coroutineDispatchers.io) {
             val sendToDeviceParams = SendToDeviceTask.Params(EventType.ENCRYPTED, sendToDeviceMap)
             try {
-                sendToDeviceTask.execute(sendToDeviceParams)
+                sendToDeviceTask.executeRetry(sendToDeviceParams, remainingRetry = SEND_TO_DEVICE_RETRY_COUNT)
             } catch (failure: Throwable) {
                 Timber.e(failure, "## CRYPTO | markOlmSessionForUnwedging() : failed to send dummy to $senderId:${deviceInfo.deviceId}")
             }
