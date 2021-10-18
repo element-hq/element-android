@@ -125,6 +125,7 @@ impl From<ToDeviceRequest> for OutgoingVerificationRequest {
     }
 }
 
+#[derive(Debug)]
 pub enum Request {
     ToDevice {
         request_id: String,
@@ -155,8 +156,9 @@ pub enum Request {
     },
     KeysBackup {
         request_id: String,
-        rooms: HashMap<String, HashMap<String, String>>,
-    }
+        version: String,
+        rooms: String,
+    },
 }
 
 impl From<OutgoingRequest> for Request {
@@ -191,7 +193,12 @@ impl From<OutgoingRequest> for Request {
             },
             RoomMessage(r) => Request::from(r),
             KeysClaim(c) => (*r.request_id(), c.clone()).into(),
-            KeysBackup(_) => todo!(),
+            KeysBackup(b) => Request::KeysBackup {
+                request_id: r.request_id().to_string(),
+                version: b.version.to_owned(),
+                rooms: serde_json::to_string(&b.rooms)
+                    .expect("Can't serialize keys backup request"),
+            },
         }
     }
 }

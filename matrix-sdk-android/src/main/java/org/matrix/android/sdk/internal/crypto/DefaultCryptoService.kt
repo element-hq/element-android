@@ -57,13 +57,17 @@ import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.internal.auth.registration.handleUIA
 import org.matrix.android.sdk.internal.crypto.crosssigning.DeviceTrustLevel
 import org.matrix.android.sdk.internal.crypto.keysbackup.RustKeyBackupService
+import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.BackupKeysResult
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.CreateKeysBackupVersionBody
+import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysBackupData
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersion
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersionResult
+import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.RoomKeysBackupData
 import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.CreateKeysBackupVersionTask
 import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.DeleteBackupTask
 import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.GetKeysBackupLastVersionTask
 import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.GetKeysBackupVersionTask
+import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.StoreSessionsDataTask
 import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.ImportRoomKeysResult
 import org.matrix.android.sdk.internal.crypto.model.MXEncryptEventContentResult
@@ -132,7 +136,8 @@ internal class RequestSender @Inject constructor(
         private val getKeysBackupVersionTask: GetKeysBackupVersionTask,
         private val deleteBackupTask: DeleteBackupTask,
         private val createKeysBackupVersionTask: CreateKeysBackupVersionTask,
-) {
+        private val backupRoomKeysTask: StoreSessionsDataTask,
+        ) {
     companion object {
         const val REQUEST_RETRY_COUNT = 3
     }
@@ -286,6 +291,49 @@ internal class RequestSender @Inject constructor(
     suspend fun deleteKeyBackup(version: String) {
         val params = DeleteBackupTask.Params(version)
         deleteBackupTask.execute(params)
+    }
+
+    suspend fun backupRoomKeys(request: Request.KeysBackup): String {
+        val adapter = MoshiProvider
+                .providesMoshi()
+                .newBuilder()
+                .build()
+                .adapter<MutableMap<String, RoomKeysBackupData>>(MutableMap::class.java)
+        val keys = adapter.fromJson(request.rooms)!!
+        Timber.d("BACKUP: CONVERTED KEYS TO HASHMAP $keys")
+        /*
+        val keyAdapter = MoshiProvider.providesMoshi().adapter(KeyBackupData::class.java)
+        val keysBackupData = KeysBackupData()
+        for (room in keys) {
+            val sessions = room.value.getOrDefault("sessions", mapOf())
+
+            for (session in sessions) {
+                Timber.d("BACKUP: HEEELOO CONVERTING KEY ${session.value}")
+                val key = keyAdapter.fromJson(session.value)!!
+                Timber.d("BACKUP: HEEELOO CONVERTED KEY $key")
+
+                keysBackupData
+                        .roomIdToRoomKeysBackupData
+                        .getOrPut(room.key, { RoomKeysBackupData() })
+                        .sessionIdToKeyBackupData[session.key] = key
+            }
+        }
+
+
+         */
+        /*
+        for ((roomId, backupData) in keys) {
+            val roomData = backup.roomIdToRoomKeysBackupData.getOrPut(roomId, { RoomKeysBackupData() })
+            for ((sessionId, key) in backupData.sessionIdToKeyBackupData) {
+                Timber.d("BACKUP INSERTING KEY $key")
+                roomData.sessionIdToKeyBackupData[sessionId] = key
+            }
+        }
+         */
+        val params = StoreSessionsDataTask.Params(request.version, KeysBackupData())
+        val response = backupRoomKeysTask.execute(params)
+        val responseAdapter = MoshiProvider.providesMoshi().adapter(BackupKeysResult::class.java)
+        return responseAdapter.toJson(response)!!
     }
 }
 
@@ -1025,7 +1073,7 @@ internal class DefaultCryptoService @Inject constructor(
                                 signatureUpload(it)
                             }
                         }
-                        is Request.KeysBackup -> {
+                        is Request.KeysBackup      -> {
                             async {
                                 TODO()
                             }

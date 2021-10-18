@@ -778,6 +778,10 @@ internal class OlmMachine(
         }
     }
 
+    fun backupEnabled(): Boolean {
+        return inner.backupEnabled()
+    }
+
     fun roomKeyCounts(): RoomKeyCounts {
         // TODO convert this to a suspendable method
         return inner.roomKeyCounts()
@@ -791,5 +795,15 @@ internal class OlmMachine(
     fun saveRecoveryKey(key: String?, version: String?) {
         // TODO convert this to a suspendable method
         inner.saveRecoveryKey(key, version)
+    }
+
+    @Throws(CryptoStoreErrorException::class)
+    suspend fun backupRoomKeys(): Request? {
+        return withContext(Dispatchers.Default) {
+            Timber.d("BACKUP CREATING REQUEST")
+            val request = inner.backupRoomKeys()
+            Timber.d("BACKUP CREATED REQUEST: $request")
+            request
+        }
     }
 }

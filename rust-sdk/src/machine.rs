@@ -1257,6 +1257,11 @@ impl OlmMachine {
     }
 
     /// TODO
+    pub fn backup_enabled(&self) -> bool {
+        self.runtime.block_on(self.inner.backup_machine().enabled())
+    }
+
+    /// TODO
     pub fn disable_backup(&self) -> Result<(), CryptoStoreError> {
         Ok(self
             .runtime
@@ -1269,7 +1274,9 @@ impl OlmMachine {
             .runtime
             .block_on(self.inner.backup_machine().backup())?;
 
-        Ok(request.map(|r| r.into()))
+        let request = request.map(|r| r.into());
+
+        Ok(request)
     }
 
     /// TODO

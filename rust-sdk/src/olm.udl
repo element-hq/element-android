@@ -208,7 +208,7 @@ interface Request {
     KeysUpload(string request_id, string body);
     KeysQuery(string request_id, sequence<string> users);
     KeysClaim(string request_id, record<DOMString, record<DOMString, string>> one_time_keys);
-    KeysBackup(string request_id, record<DOMString, record<DOMString, string>> rooms);
+    KeysBackup(string request_id, string version, string rooms);
     RoomMessage(string request_id, string room_id, string event_type, string content);
     SignatureUpload(string request_id, string body);
 };
@@ -359,6 +359,7 @@ interface OlmMachine {
     RoomKeyCounts room_key_counts();
     [Throws=CryptoStoreError]
     BackupKeys? get_backup_keys();
+    boolean backup_enabled();
 };
 
 dictionary PassphraseInfo {

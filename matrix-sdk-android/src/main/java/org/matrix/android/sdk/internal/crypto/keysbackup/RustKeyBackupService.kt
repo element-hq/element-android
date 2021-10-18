@@ -18,10 +18,15 @@ package org.matrix.android.sdk.internal.crypto.keysbackup
 
 import android.os.Handler
 import android.os.Looper
+import androidx.annotation.UiThread
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.MatrixCallback
+import org.matrix.android.sdk.api.failure.Failure
+import org.matrix.android.sdk.api.failure.MatrixError
 import org.matrix.android.sdk.api.listeners.ProgressListener
 import org.matrix.android.sdk.api.listeners.StepProgressListener
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupService
@@ -43,9 +48,13 @@ import org.matrix.android.sdk.internal.extensions.foldToCallback
 import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.internal.util.JsonCanonicalizer
 import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
+import org.matrix.olm.OlmException
 import timber.log.Timber
 import uniffi.olm.BackupRecoveryKey
+import uniffi.olm.Request
+import uniffi.olm.RequestType
 import javax.inject.Inject
+import kotlin.random.Random
 
 /**
  * A DefaultKeysBackupService class instance manage incremental backup of e2e keys (megolm keys)
@@ -58,6 +67,10 @@ internal class RustKeyBackupService @Inject constructor(
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val cryptoCoroutineScope: CoroutineScope,
 ) : KeysBackupService {
+    companion object {
+        // Maximum delay in ms in {@link maybeBackupKeys}
+        private const val KEY_BACKUP_WAITING_TIME_TO_SEND_KEY_BACKUP_MILLIS = 10_000L
+    }
 
     private val uiHandler = Handler(Looper.getMainLooper())
 
@@ -150,7 +163,16 @@ internal class RustKeyBackupService @Inject constructor(
                     // TODO reset our backup state here, i.e. the `backed_up` flag on inbound group sessions
                 }
 
-                olmMachine.enableBackup(keysBackupCreationInfo.authData.publicKey, data.version)
+                val keyBackupVersion = KeysVersionResult(
+                        algorithm = createKeysBackupVersionBody.algorithm,
+                        authData = createKeysBackupVersionBody.authData,
+                        version = data.version,
+                        // We can assume that the server does not have keys yet
+                        count = 0,
+                        hash = ""
+                )
+
+                enableKeysBackup(keyBackupVersion)
 
                 callback.onSuccess(data)
             } catch (failure: Throwable) {
@@ -226,8 +248,12 @@ internal class RustKeyBackupService @Inject constructor(
     }
 
     override fun canRestoreKeys(): Boolean {
-        // TODO
-        return false
+        val keyCountOnServer = keysBackupVersion?.count ?: return false
+        val keyCountLocally = getTotalNumbersOfKeys()
+
+        // TODO is this sensible? We may have the same number of keys, or even more keys locally
+        //  but the set of keys doesn't necessarily overlap
+        return keyCountLocally < keyCountOnServer
     }
 
     override fun getTotalNumbersOfKeys(): Int {
@@ -462,5 +488,158 @@ internal class RustKeyBackupService @Inject constructor(
                 .takeIf { it.version.isNotEmpty() && it.algorithm == MXCRYPTO_ALGORITHM_MEGOLM_BACKUP }
                 ?.getAuthDataAsMegolmBackupAuthData()
                 ?.takeIf { it.publicKey.isNotEmpty() }
+    }
+
+    /**
+     * Enable backing up of keys.
+     * This method will update the state and will start sending keys in nominal case
+     *
+     * @param keysVersionResult backup information object as returned by [getCurrentVersion].
+     */
+    private suspend fun enableKeysBackup(keysVersionResult: KeysVersionResult) {
+        val retrievedMegolmBackupAuthData = keysVersionResult.getAuthDataAsMegolmBackupAuthData()
+
+        if (retrievedMegolmBackupAuthData != null) {
+            try {
+                olmMachine.enableBackup(retrievedMegolmBackupAuthData.publicKey, keysVersionResult.version)
+                keysBackupVersion = keysVersionResult
+            } catch (e: OlmException) {
+                Timber.e(e, "OlmException")
+                keysBackupStateManager.state = KeysBackupState.Disabled
+                return
+            }
+
+            keysBackupStateManager.state = KeysBackupState.ReadyToBackUp
+            maybeBackupKeys()
+        } else {
+            Timber.e("Invalid authentication data")
+            keysBackupStateManager.state = KeysBackupState.Disabled
+        }
+    }
+
+    /**
+     * Do a backup if there are new keys, with a delay
+     */
+    private fun maybeBackupKeys() {
+        when {
+            isStucked                              -> {
+                // If not already done, or in error case, check for a valid backup version on the homeserver.
+                // If there is one, maybeBackupKeys will be called again.
+                checkAndStartKeysBackup()
+            }
+            state == KeysBackupState.ReadyToBackUp -> {
+                keysBackupStateManager.state = KeysBackupState.WillBackUp
+
+                // Wait between 0 and 10 seconds, to avoid backup requests from
+                // different clients hitting the server all at the same time when a
+                // new key is sent
+                val delayInMs = Random.nextLong(KEY_BACKUP_WAITING_TIME_TO_SEND_KEY_BACKUP_MILLIS)
+
+                cryptoCoroutineScope.launch {
+                    delay(delayInMs)
+                    // TODO is this correct? we used to call uiHandler.post() instead of this
+                    withContext(Dispatchers.Main) {
+                        backupKeys()
+                    }
+                }
+            }
+            else                                   -> {
+                Timber.v("maybeBackupKeys: Skip it because state: $state")
+            }
+        }
+    }
+
+    /**
+     * Send a chunk of keys to backup
+     */
+    @UiThread
+    private suspend fun backupKeys() {
+        Timber.v("backupKeys")
+
+        // Sanity check, as this method can be called after a delay, the state may have change during the delay
+        if (!isEnabled || !olmMachine.backupEnabled() || keysBackupVersion == null) {
+            Timber.v("backupKeys: Invalid configuration $isEnabled ${olmMachine.backupEnabled()} $keysBackupVersion")
+            backupAllGroupSessionsCallback?.onFailure(IllegalStateException("Invalid configuration"))
+            resetBackupAllGroupSessionsListeners()
+
+            return
+        }
+
+        if (state === KeysBackupState.BackingUp) {
+            // Do nothing if we are already backing up
+            Timber.v("backupKeys: Invalid state: $state")
+            return
+        }
+
+        Timber.d("BACKUP: CREATING REQUEST")
+
+        val request = olmMachine.backupRoomKeys()
+
+        Timber.d("BACKUP: GOT REQUEST $request")
+
+        if (request == null) {
+            // Backup is up to date
+            // Note: Changing state will trigger the call to backupAllGroupSessionsCallback.onSuccess()
+            keysBackupStateManager.state = KeysBackupState.ReadyToBackUp
+
+            backupAllGroupSessionsCallback?.onSuccess(Unit)
+            resetBackupAllGroupSessionsListeners()
+        } else {
+            try {
+                if (request is Request.KeysBackup) {
+                    keysBackupStateManager.state = KeysBackupState.BackingUp
+
+                    Timber.d("BACKUP SENDING REQUEST")
+                    val response = sender.backupRoomKeys(request)
+                    Timber.d("BACKUP GOT RESPONSE $response")
+                    olmMachine.markRequestAsSent(request.requestId, RequestType.KEYS_BACKUP, response)
+                    Timber.d("BACKUP MARKED REQUEST AS SENT")
+
+                    // TODO again is this correct?
+                    withContext(Dispatchers.Main) {
+                        backupKeys()
+                    }
+                } else {
+                    // Can't happen, do we want to panic?
+                }
+            } catch (failure: Throwable) {
+                if (failure is Failure.ServerError) {
+                    withContext(Dispatchers.Main) {
+                        Timber.e(failure, "backupKeys: backupKeys failed.")
+
+                        when (failure.error.code) {
+                            MatrixError.M_NOT_FOUND,
+                            MatrixError.M_WRONG_ROOM_KEYS_VERSION -> {
+                                // Backup has been deleted on the server, or we are not using
+                                // the last backup version
+                                keysBackupStateManager.state = KeysBackupState.WrongBackUpVersion
+                                backupAllGroupSessionsCallback?.onFailure(failure)
+                                resetBackupAllGroupSessionsListeners()
+                                resetKeysBackupData()
+                                keysBackupVersion = null
+
+                                // Do not stay in KeysBackupState.WrongBackUpVersion but check what
+                                // is available on the homeserver
+                                checkAndStartKeysBackup()
+                            }
+                            else                                  ->
+                                // Come back to the ready state so that we will retry on the next received key
+                                keysBackupStateManager.state = KeysBackupState.ReadyToBackUp
+                        }
+                    }
+                } else {
+                    withContext(Dispatchers.Main) {
+                        backupAllGroupSessionsCallback?.onFailure(failure)
+                        resetBackupAllGroupSessionsListeners()
+
+                        Timber.e("backupKeys: backupKeys failed: $failure")
+
+                        // Retry a bit later
+                        keysBackupStateManager.state = KeysBackupState.ReadyToBackUp
+                        maybeBackupKeys()
+                    }
+                }
+            }
+        }
     }
 }
