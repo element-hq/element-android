@@ -23,9 +23,7 @@ import org.apache.sanselan.formats.jpeg.exifRewrite.ExifRewriter
 import org.apache.sanselan.formats.tiff.constants.ExifTagConstants
 import org.apache.sanselan.formats.tiff.constants.GPSTagConstants
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
-import org.matrix.android.sdk.internal.session.exceptions.FileNotScrubbedException
 import org.matrix.android.sdk.internal.util.TemporaryFileCreator
-import timber.log.Timber
 import java.io.BufferedOutputStream
 import java.io.File
 import java.io.FileOutputStream
@@ -69,7 +67,10 @@ internal class ImageExifTagRemover @Inject constructor(
                     it.removeField(GPSTagConstants.GPS_TAG_GPS_DEST_LATITUDE)
                     it.removeField(GPSTagConstants.GPS_TAG_GPS_DEST_LATITUDE_REF)
                     ExifRewriter().updateExifMetadataLossless(jpegImageFile, outputStream, it)
-                } ?: throw FileNotScrubbedException("Unable to remove exif tags from jpeg")
+                } ?: run {
+                    scrubbedFile.delete()
+                    return@withContext jpegImageFile
+                }
             }
             scrubbedFile
         }.fold(
@@ -77,7 +78,6 @@ internal class ImageExifTagRemover @Inject constructor(
                     it
                 },
                 onFailure = {
-                    Timber.e(it)
                     scrubbedFile.delete()
                     jpegImageFile
                 }
