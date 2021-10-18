@@ -154,6 +154,9 @@ dependencies {
     // Video compression
     implementation 'com.otaliastudios:transcoder:0.10.4'
 
+    // Exif data handling
+    implementation libs.apache.commonsImaging
+
     // Phone number https://github.com/google/libphonenumber
     implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.35'
 
