@@ -32,8 +32,8 @@ import im.vector.app.core.di.HasScreenInjector
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.features.home.HomeActivity
 import im.vector.app.features.displayname.getBestName
+import im.vector.app.features.home.HomeActivity
 import im.vector.app.features.invite.AutoAcceptInvites
 import im.vector.app.features.settings.VectorPreferences
 import kotlinx.coroutines.Dispatchers

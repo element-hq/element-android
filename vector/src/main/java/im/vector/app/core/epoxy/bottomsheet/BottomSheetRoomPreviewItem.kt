@@ -49,6 +49,7 @@ abstract class BottomSheetRoomPreviewItem : VectorEpoxyModel<BottomSheetRoomPrev
     @EpoxyAttribute var izLowPriority: Boolean = false
     @EpoxyAttribute var izFavorite: Boolean = false
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var settingsClickListener: ClickListener? = null
+
 //    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var lowPriorityClickListener: ClickListener? = null
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var favoriteClickListener: ClickListener? = null
 
@@ -125,6 +126,7 @@ abstract class BottomSheetRoomPreviewItem : VectorEpoxyModel<BottomSheetRoomPrev
     class Holder : VectorEpoxyHolder() {
         val avatar by bind<ImageView>(R.id.bottomSheetRoomPreviewAvatar)
         val roomName by bind<TextView>(R.id.bottomSheetRoomPreviewName)
+
 //        val roomLowPriority by bind<ImageView>(R.id.bottomSheetRoomPreviewLowPriority)
         val roomFavorite by bind<ImageView>(R.id.bottomSheetRoomPreviewFavorite)
         val roomSettings by bind<View>(R.id.bottomSheetRoomPreviewSettings)

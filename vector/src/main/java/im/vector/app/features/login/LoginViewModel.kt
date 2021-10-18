@@ -461,11 +461,11 @@ class LoginViewModel @AssistedInject constructor(
             currentJob = viewModelScope.launch {
                 val passwordPolicy = tryOrNull { authenticationService.getPasswordPolicy(homeServerConnectionConfig) }
                 val isValid = if (passwordPolicy != null) {
-                    passwordPolicy.minLength?.let { it <= action.newPassword.length } ?: true
-                            && passwordPolicy.requireDigit?.let { it && action.newPassword.any { char -> char.isDigit() } } ?: true
-                            && passwordPolicy.requireLowercase?.let { it && action.newPassword.any { char -> char.isLetter() && char.isLowerCase() } } ?: true
-                            && passwordPolicy.requireUppercase?.let { it && action.newPassword.any { char -> char.isLetter() && char.isUpperCase() } } ?: true
-                            && passwordPolicy.requireSymbol?.let { it && action.newPassword.any { char -> !char.isLetter() && !char.isDigit()} } ?: true
+                    passwordPolicy.minLength?.let { it <= action.newPassword.length } ?: true &&
+                            passwordPolicy.requireDigit?.let { it && action.newPassword.any { char -> char.isDigit() } } ?: true &&
+                            passwordPolicy.requireLowercase?.let { it && action.newPassword.any { char -> char.isLetter() && char.isLowerCase() } } ?: true &&
+                            passwordPolicy.requireUppercase?.let { it && action.newPassword.any { char -> char.isLetter() && char.isUpperCase() } } ?: true &&
+                            passwordPolicy.requireSymbol?.let { it && action.newPassword.any { char -> !char.isLetter() && !char.isDigit() } } ?: true
                 } else {
                     true
                 }

@@ -154,9 +154,9 @@ class TchapLoginFragment @Inject constructor(
             is Loading -> Unit
             is Fail    -> {
                 val error = state.asyncLoginAction.error
-                if (error is Failure.ServerError
-                        && error.error.code == MatrixError.M_FORBIDDEN
-                        && error.error.message.isEmpty()) {
+                if (error is Failure.ServerError &&
+                        error.error.code == MatrixError.M_FORBIDDEN &&
+                        error.error.message.isEmpty()) {
                     // Login with email, but email unknown
                     views.tchapLoginEmail.error = getString(R.string.login_error_forbidden)
                 } else {

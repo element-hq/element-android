@@ -172,8 +172,8 @@ class TchapRegisterFragment @Inject constructor(private val platformViewModelFac
         val passwordErrors = setOf(MatrixError.M_WEAK_PASSWORD, MatrixError.M_PASSWORD_TOO_SHORT, MatrixError.M_PASSWORD_NO_UPPERCASE,
                 MatrixError.M_PASSWORD_NO_DIGIT, MatrixError.M_PASSWORD_NO_SYMBOL, MatrixError.M_PASSWORD_NO_LOWERCASE, MatrixError.M_PASSWORD_IN_DICTIONARY)
 
-        if (throwable is Failure.ServerError
-                && throwable.error.code in passwordErrors) {
+        if (throwable is Failure.ServerError &&
+                throwable.error.code in passwordErrors) {
             // Show password error in the password field
             views.tchapRegisterPassword.error = errorFormatter.toHumanReadable(throwable)
         } else if (throwable.is401()) {

@@ -24,7 +24,6 @@ import im.vector.app.databinding.FragmentTchapWelcomeBinding
 import im.vector.app.features.login.AbstractLoginFragment
 import im.vector.app.features.login.LoginAction
 import im.vector.app.features.login.SignMode
-
 import javax.inject.Inject
 
 /**
