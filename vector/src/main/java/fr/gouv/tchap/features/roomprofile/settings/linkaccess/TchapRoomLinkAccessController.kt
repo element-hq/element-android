@@ -22,13 +22,19 @@ import fr.gouv.tchap.core.utils.TchapRoomType
 import im.vector.app.R
 import im.vector.app.core.epoxy.profiles.buildProfileSection
 import im.vector.app.core.epoxy.profiles.profileActionItem
+import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.core.ui.list.genericHeaderItem
+import im.vector.app.core.ui.list.verticalMarginItem
+import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.features.discovery.settingsInfoItem
 import im.vector.app.features.form.formSwitchItem
 import javax.inject.Inject
 
 class TchapRoomLinkAccessController @Inject constructor(
-        private val stringProvider: StringProvider
+        private val stringProvider: StringProvider,
+        private val colorProvider: ColorProvider,
+        private val dimensionConverter: DimensionConverter
 ) : TypedEpoxyController<TchapRoomLinkAccessState>() {
 
     interface InteractionListener {
@@ -38,40 +44,58 @@ class TchapRoomLinkAccessController @Inject constructor(
 
     var interactionListener: InteractionListener? = null
 
-    override fun buildModels(data: TchapRoomLinkAccessState?) {
-        data ?: return
-        val roomSummary = data.roomSummary() ?: return
+    override fun buildModels(state: TchapRoomLinkAccessState?) {
+        state ?: return
+        val roomSummary = state.roomSummary() ?: return
         val host = this
+        val roomType = RoomUtils.getRoomType(roomSummary)
 
         buildProfileSection(
                 stringProvider.getString(R.string.tchap_room_settings_room_access_by_link_title)
         )
 
-        formSwitchItem {
-            id("LinkAccessActivation")
-            title(host.stringProvider.getString(R.string.tchap_room_settings_enable_room_access_by_link))
-            switchChecked(data.isLinkAccessEnabled)
-            listener { host.interactionListener?.setLinkAccessEnabled(it) }
-            enabled(data.canChangeLinkAccess)
+        if (roomType == TchapRoomType.FORUM) {
+            verticalMarginItem {
+                id("marginTop")
+                heightInPx(host.dimensionConverter.dpToPx(16))
+            }
+
+            genericHeaderItem {
+                id("forumTitle")
+                text(host.stringProvider.getString(R.string.tchap_room_settings_room_access_by_link_enabled))
+                textColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
+            }
+
+            verticalMarginItem {
+                id("marginBottom")
+                heightInPx(host.dimensionConverter.dpToPx(8))
+            }
+        } else {
+            formSwitchItem {
+                id("LinkAccessActivation")
+                title(host.stringProvider.getString(R.string.tchap_room_settings_enable_room_access_by_link))
+                switchChecked(state.isLinkAccessEnabled)
+                listener { host.interactionListener?.setLinkAccessEnabled(it) }
+                enabled(state.canChangeLinkAccess)
+            }
         }
 
         settingsInfoItem {
             id("LinkAccessInfo")
-            val roomType = RoomUtils.getRoomType(roomSummary)
             helperTextResId(
                     when {
-                        !data.isLinkAccessEnabled          -> R.string.tchap_room_settings_enable_room_access_by_link_info_off
+                        !state.isLinkAccessEnabled         -> R.string.tchap_room_settings_enable_room_access_by_link_info_off
                         roomType == TchapRoomType.EXTERNAL -> R.string.tchap_room_settings_enable_room_access_by_link_info_on_with_limitation
                         else                               -> R.string.tchap_room_settings_enable_room_access_by_link_info_on
                     }
             )
         }
 
-        if (data.isLinkAccessEnabled && !data.canonicalAlias.isNullOrEmpty()) {
+        if (state.isLinkAccessEnabled && !state.canonicalAlias.isNullOrEmpty()) {
             profileActionItem {
-                id("canonical")
-                title(data.canonicalAlias)
-                listener { host.interactionListener?.openAliasDetail(data.canonicalAlias) }
+                id("canonicalAlias")
+                title(state.canonicalAlias)
+                listener { host.interactionListener?.openAliasDetail(state.canonicalAlias) }
             }
         }
     }
