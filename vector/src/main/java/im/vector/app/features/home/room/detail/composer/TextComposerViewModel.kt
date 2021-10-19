@@ -225,8 +225,8 @@ class TextComposerViewModel @AssistedInject constructor(
                             popDraft()
                         }
                         is ParsedCommand.PartRoom                 -> {
-                            // TODO
-                            _viewEvents.post(TextComposerViewEvents.SlashCommandNotImplemented)
+                            handlePartSlashCommand(slashCommandResult)
+                            popDraft()
                         }
                         is ParsedCommand.SendEmote                -> {
                             room.sendTextMessage(slashCommandResult.message, msgType = MessageType.MSGTYPE_EMOTE, autoMarkdown = action.autoMarkdown)
@@ -575,6 +575,20 @@ class TextComposerViewModel @AssistedInject constructor(
     private fun handleChangeDisplayNameSlashCommand(changeDisplayName: ParsedCommand.ChangeDisplayName) {
         launchSlashCommandFlowSuspendable {
             session.setDisplayName(session.myUserId, changeDisplayName.displayName)
+        }
+    }
+
+    private fun handlePartSlashCommand(command: ParsedCommand.PartRoom) {
+        launchSlashCommandFlowSuspendable {
+            if (command.roomAlias == null) {
+                // Leave the current room
+                room
+            } else {
+                session.getRoomSummary(roomIdOrAlias = command.roomAlias)
+                        ?.roomId
+                        ?.let { session.getRoom(it) }
+            }
+                    ?.leave(reason = null)
         }
     }
 

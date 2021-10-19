@@ -35,7 +35,7 @@ enum class Command(val command: String, val parameters: String, @StringRes val d
     ROOM_NAME("/roomname", "<name>", R.string.command_description_room_name, false),
     INVITE("/invite", "<user-id> [reason]", R.string.command_description_invite_user, false),
     JOIN_ROOM("/join", "<room-address> [reason]", R.string.command_description_join_room, false),
-    PART("/part", "<room-address> [reason]", R.string.command_description_part_room, false),
+    PART("/part", "[<room-address>]", R.string.command_description_part_room, false),
     TOPIC("/topic", "<topic>", R.string.command_description_topic, false),
     KICK_USER("/kick", "<user-id> [reason]", R.string.command_description_kick_user, false),
     CHANGE_DISPLAY_NAME("/nick", "<display-name>", R.string.command_description_nick, false),
