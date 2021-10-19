@@ -126,11 +126,11 @@ ext.libs = [
                 'jjwtImpl'               : "io.jsonwebtoken:jjwt-impl:$jjwt",
                 'jjwtOrgjson'            : "io.jsonwebtoken:jjwt-orgjson:$jjwt"
         ],
-        vanniktech: [
+        vanniktech  : [
                 'emojiMaterial'          : "com.vanniktech:emoji-material:$vanniktechEmoji",
                 'emojiGoogle'            : "com.vanniktech:emoji-google:$vanniktechEmoji"
         ],
-        apache:[
+        apache      : [
                 'commonsImaging'         : "org.apache.sanselan:sanselan:0.97-incubator"
         ],
         tests       : [
