@@ -261,7 +261,7 @@
     <string name="missing_permissions_warning">En raison de permissions manquantes, certaines fonctionnalités peuvent être absentes…</string>
     <string name="missing_permissions_to_start_conf_call">Vous avez besoin de la permission d’invitation pour lancer une téléconférence dans ce salon</string>
     <string name="missing_permissions_title_to_start_conf_call">Impossible de lancer l’appel</string>
-    <string name="device_information">Informations sur l’appareil</string>
+    <string name="device_information">Informations sur la session</string>
     <string name="room_no_conference_call_in_encrypted_rooms">Les téléconférences ne sont pas prises en charge dans les salons chiffrés</string>
     <string name="or">ou</string>
     <string name="invite">Inviter</string>
@@ -400,7 +400,7 @@
     <string name="room_participants_header_admin_tools">OUTILS DE L’ADMINISTRATEUR</string>
     <string name="room_participants_header_call">APPEL</string>
     <string name="room_participants_header_direct_chats">DISCUSSIONS</string>
-    <string name="room_participants_header_devices">APPAREILS</string>
+    <string name="room_participants_header_devices">SESSIONS</string>
     <string name="room_participants_action_invite">Inviter</string>
     <string name="room_participants_action_leave">Quitter ce salon</string>
     <string name="room_participants_action_remove">Exclure de ce salon</string>
@@ -410,7 +410,7 @@
     <string name="room_participants_action_set_moderator">Nommer modérateur</string>
     <string name="room_participants_action_set_admin">Nommer administrateur</string>
     <string name="room_participants_action_mention">Mentionner</string>
-    <string name="room_participants_action_devices_list">Afficher la liste des appareils</string>
+    <string name="room_participants_action_devices_list">Afficher la liste des sessions</string>
     <string name="people_search_local_contacts">Contacts locaux (%d)</string>
     <string name="people_search_filter_text">Utilisateurs Matrix uniquement</string>
     <string name="people_search_invite_by_id_dialog_title">Inviter par e\u2011mail</string>
@@ -476,7 +476,7 @@
     <string name="settings_app_info_link_summary">Affiche les informations de l’application dans les paramètres système.</string>
     <string name="settings_app_info_link_title">Informations sur l’application</string>
     <string name="settings_enable_all_notif">Activer les notifications pour ce compte</string>
-    <string name="settings_enable_this_device">Activer les notifications pour cet appareil</string>
+    <string name="settings_enable_this_device">Activer les notifications pour cette session</string>
     <string name="settings_messages_in_one_to_one">Messages dans les discussions</string>
     <string name="settings_messages_in_group_chat">Messages dans les salons</string>
     <string name="settings_call_invitations">Demandes d’appel</string>
@@ -504,8 +504,8 @@
     <string name="settings_home_display">Page d’accueil</string>
     <string name="settings_pin_missed_notifications">Épingler les conversations avec des notifications manquées</string>
     <string name="settings_pin_unread_messages">Épingler les conversations avec des messages non lus</string>
-    <string name="settings_devices_list">Appareils</string>
-    <string name="devices_details_dialog_title">Informations de l’appareil</string>
+    <string name="settings_devices_list">Sessions</string>
+    <string name="devices_details_dialog_title">Informations de la session</string>
     <string name="devices_details_id_title">Identifiant</string>
     <string name="devices_details_name_title">Nom public</string>
     <string name="devices_details_device_name">Mettre à jour le nom public</string>
@@ -547,7 +547,7 @@
     <string name="room_settings_labs_pref_title">Expérimental</string>
     <string name="room_settings_labs_end_to_end">Chiffrement de bout en bout</string>
     <string name="room_settings_labs_end_to_end_is_active">Le chiffrement de bout en bout est actif</string>
-    <string name="room_settings_never_send_to_unverified_devices_title">Chiffrer uniquement pour les appareils vérifiés</string>
+    <string name="room_settings_never_send_to_unverified_devices_title">Chiffrer uniquement pour les sessions vérifiées</string>
     <string name="room_settings_addresses_add_new_address">Nouvelle adresse (par exemple #foo:matrix.org)</string>
     <string name="room_settings_addresses_invalid_format_dialog_title">Format d’alias invalide</string>
     <string name="room_settings_addresses_disable_main_address_prompt_title">Avertissements concernant l’adresse principale</string>
@@ -564,11 +564,11 @@
     <string name="encryption_information_algorithm">Algorithme</string>
     <string name="encryption_information_session_id">Identifiant de session</string>
     <string name="encryption_information_decryption_error">Erreur de déchiffrement</string>
-    <string name="encryption_information_sender_device_information">Informations sur l’appareil de l’expéditeur</string>
+    <string name="encryption_information_sender_device_information">Informations sur la session de l’expéditeur</string>
     <string name="encryption_information_device_name">Nom public</string>
     <string name="encryption_information_name">Nom public</string>
-    <string name="encryption_information_device_id">Identifiant de l’appareil</string>
-    <string name="encryption_information_device_key">Clé de l’appareil</string>
+    <string name="encryption_information_device_id">Identifiant de session</string>
+    <string name="encryption_information_device_key">Clé de la session</string>
     <string name="encryption_information_verification">Vérification</string>
     <string name="encryption_information_ed25519_fingerprint">Empreinte Ed25519</string>
     <string name="encryption_export_e2e_room_keys">Exporter les clés des conversations</string>
@@ -579,17 +579,17 @@
     <string name="encryption_import_e2e_room_keys">Importer les clés des conversations</string>
     <string name="encryption_import_room_keys">Importer les clés des conversations</string>
     <string name="encryption_import_import">Importer</string>
-    <string name="encryption_never_send_to_unverified_devices_title">Chiffrer uniquement vers les appareils vérifiés</string>
+    <string name="encryption_never_send_to_unverified_devices_title">Chiffrer uniquement vers les sessions vérifiées</string>
     <string name="encryption_information_not_verified">Non vérifié</string>
     <string name="encryption_information_verified">Vérifié</string>
     <string name="encryption_information_blocked">Sur liste noire</string>
-    <string name="encryption_information_unknown_device">appareil inconnu</string>
+    <string name="encryption_information_unknown_device">session inconnue</string>
     <string name="encryption_information_none">aucun</string>
     <string name="encryption_information_verify">Vérifier</string>
     <string name="encryption_information_unverify">Annuler la vérification</string>
     <string name="encryption_information_block">Ajouter à la liste noire</string>
     <string name="encryption_information_unblock">Supprimer de la liste noire</string>
-    <string name="encryption_information_verify_device">Vérifier l’appareil</string>
+    <string name="encryption_information_verify_device">Vérifier la session</string>
     <string name="select_room_directory">Sélectionner un répertoire de salons</string>
     <string name="directory_server_placeholder">Nom du serveur d’accueil</string>
     <string name="directory_server_all_rooms_on_server">Tous les salons sur le serveur %s</string>
@@ -622,7 +622,7 @@
     <string name="auth_reset_password_error_unauthorized">Impossible de vérifier l’adresse e\u2011mail : assurez-vous d’avoir cliqué sur le lien dans l’e\u2011mail</string>
     <string name="auth_reset_password_success_message">Votre mot de passe a été réinitialisé.
 \n
-\nVous avez été déconnecté de tous les appareils et ne recevrez plus de notifications. Pour réactiver les notifications, reconnectez-vous sur chaque appareil.</string>
+\nVous avez été déconnecté de toutes les sessions et ne recevrez plus de notifications. Pour réactiver les notifications, reconnectez-vous sur chaque appareil.</string>
     <string name="login_error_must_start_http">L’URL doit commencer par http[s]://</string>
     <string name="login_error_network_error">Impossible de se connecter : erreur réseau</string>
     <string name="login_error_unable_login">Impossible de se connecter</string>
@@ -680,7 +680,7 @@
     <string name="room_many_users_are_typing">%1$s, %2$s et d’autres écrivent…</string>
     <string name="room_offline_notification">La connexion au serveur a été perdue.</string>
     <string name="room_unsent_messages_notification">Messages non envoyés. %1$s ou %2$s maintenant \?</string>
-    <string name="room_unknown_devices_messages_notification">Messages non envoyés car des appareils inconnus sont présents. %1$s ou %2$s maintenant \?</string>
+    <string name="room_unknown_devices_messages_notification">Messages non envoyés car des sessions inconnues sont présentes. %1$s ou %2$s maintenant \?</string>
     <string name="room_do_not_have_permission_to_post">Vous n’avez pas la permission de poster dans ce salon.</string>
     <string name="ssl_fingerprint_hash">Empreinte (%s) :</string>
     <string name="ssl_could_not_verify">Impossible de vérifier l’identité du serveur distant.</string>
@@ -724,7 +724,7 @@
     <string name="room_settings_room_access_entry_anyone_with_link_including_guest">Tous ceux qui connaissent le lien du salon, y compris les invités</string>
     <string name="room_settings_labs_warning_message">Ce sont des fonctionnalités expérimentales qui peuvent se comporter de façon inattendue. À utiliser avec précaution.</string>
     <string name="room_settings_labs_end_to_end_warnings">Vous devez vous déconnecter pour pouvoir activer le chiffrement.</string>
-    <string name="room_settings_never_send_to_unverified_devices_summary">Ne jamais envoyer de message chiffré aux appareils non vérifiés sur ce salon, depuis cet appareil.</string>
+    <string name="room_settings_never_send_to_unverified_devices_summary">Ne jamais envoyer de message chiffré aux sessions non vérifiées sur ce salon, depuis cette session.</string>
     <string name="room_settings_addresses_no_local_addresses">Ce salon n’a pas d’adresse locale</string>
     <string name="room_settings_addresses_invalid_format_dialog_body">« %s » n’est pas un format valide pour un alias</string>
     <string name="room_settings_addresses_disable_main_address_prompt_msg">Vous n’aurez aucune adresse principale spécifiée pour ce salon.</string>
@@ -738,16 +738,16 @@
 \n
 \nAttention : ce fichier peut être supprimé si l’application est désinstallée.</string>
     <string name="encryption_import_room_keys_summary">Importer les clés à partir d’un fichier local</string>
-    <string name="encryption_never_send_to_unverified_devices_summary">Ne jamais envoyer de messages chiffrés aux appareils non vérifiés depuis cet appareil.</string>
-    <string name="encryption_information_verify_device_warning">Pour valider que vous pouvez faire confiance à cet appareil, merci de vérifier que la clé que vous voyez dans les Paramètres Utilisateur de cet appareil correspond à la clé ci-dessous :</string>
+    <string name="encryption_never_send_to_unverified_devices_summary">Ne jamais envoyer de messages chiffrés aux sessions non vérifiées depuis cette session.</string>
+    <string name="encryption_information_verify_device_warning">Pour valider que vous pouvez faire confiance à cette session, merci de vérifier que la clé que vous voyez dans les Paramètres Utilisateur de cette session correspond à la clé ci-dessous :</string>
     <string name="encryption_information_verify_device_warning2">Si les clés correspondent, cliquer sur le bouton Vérifier ci-dessous.</string>
     <string name="encryption_information_verify_key_match">Je confirme que les clés correspondent</string>
-    <string name="unknown_devices_alert_title">La conversation contient des appareils inconnus</string>
-    <string name="unknown_devices_alert_message">Cette conversation contient des appareils inconnus, qui n’ont pas été vérifiés.
-\nCela signifie qu’il n’y a aucune garantie que les appareils appartiennent aux utilisateurs qu’ils prétendent.
-\nNous vous recommandons d’effectuer le processus de vérification pour chaque appareil avant de continuer, mais vous pouvez renvoyer le message sans vérifier si vous préférez.
+    <string name="unknown_devices_alert_title">La conversation contient des sessions inconnues</string>
+    <string name="unknown_devices_alert_message">Cette conversation contient des sessions inconnues, qui n’ont pas été vérifiées.
+\nCela signifie qu’il n’y a aucune garantie que les sessions appartiennent aux utilisateurs qu’elles prétendent.
+\nNous vous recommandons d’effectuer le processus de vérification pour chaque session avant de continuer, mais vous pouvez renvoyer le message sans vérifier si vous préférez.
 \n
-\nAppareils inconnus :</string>
+\nSessions inconnues :</string>
     <string name="directory_server_fail_to_retrieve_server">Le serveur est peut-être indisponible ou surchargé</string>
     <string name="directory_server_type_homeserver">Saisir un serveur d’accueil pour lister ses forums</string>
     <string name="settings_user_interface">Préférences</string>
@@ -801,8 +801,8 @@
     <string name="call">Appel</string>
     <string name="settings_containing_my_display_name">Messages contenant mon nom affiché</string>
     <string name="settings_containing_my_user_name">Messages contenant mon nom d’utilisateur</string>
-    <string name="you_added_a_new_device">Vous avez ajouté un nouvel appareil « %s », qui demande les clés de chiffrement.</string>
-    <string name="your_unverified_device_requesting">Votre appareil « %s » demande les clés de chiffrement.</string>
+    <string name="you_added_a_new_device">Vous avez ajouté une nouvelle session « %s », qui demande les clés de chiffrement.</string>
+    <string name="your_unverified_device_requesting">Votre session non vérifiée « %s » demande les clés de chiffrement.</string>
     <string name="start_verification">Commencer la vérification</string>
     <string name="share_without_verifying">Accepter la demande</string>
     <string name="ignore_request">Ignorer la demande</string>
@@ -965,7 +965,7 @@
     <string name="e2e_re_request_encryption_key">Demande envoyée. <u>Renvoyer</u></string>
     <string name="e2e_re_request_encryption_key_sent">Demande en cours…</string>
     <string name="e2e_re_request_encryption_key_dialog_title">Demande envoyée</string>
-    <string name="template_e2e_re_request_encryption_key_dialog_content">Veuillez lancer ${app_name} sur un autre appareil qui peut déchiffrer le message pour qu’il puisse envoyer les clés à cet appareil.</string>
+    <string name="template_e2e_re_request_encryption_key_dialog_content">Veuillez lancer ${app_name} sur un autre appareil qui peut déchiffrer le message pour qu’il puisse envoyer les clés à cette session.</string>
     <string name="lock_screen_hint">Saisir du texte ici…</string>
     <string name="option_send_voice">Envoyer un message vocal</string>
     <string name="go_on_with">continuer avec…</string>
@@ -1103,9 +1103,9 @@
     <string name="settings_troubleshoot_test_account_settings_failed">Les notifications sont désactivées pour votre compte.
 \nVeuillez vérifier les paramètres du compte.</string>
     <string name="settings_troubleshoot_test_account_settings_quickfix">Activer</string>
-    <string name="settings_troubleshoot_test_device_settings_title">Paramètres de l’appareil.</string>
-    <string name="settings_troubleshoot_test_device_settings_success">Les notifications sont activées pour cet appareil.</string>
-    <string name="template_settings_troubleshoot_test_device_settings_failed">Les notifications ne sont pas activées pour cet appareil.
+    <string name="settings_troubleshoot_test_device_settings_title">Paramètres de la session.</string>
+    <string name="settings_troubleshoot_test_device_settings_success">Les notifications sont activées pour cette session.</string>
+    <string name="template_settings_troubleshoot_test_device_settings_failed">Les notifications ne sont pas activées pour cette session.
 \nVeuillez vérifier les paramètres de ${app_name}.</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">Activer</string>
     <string name="settings_troubleshoot_test_play_services_title">Vérification des services Google Play</string>
@@ -1224,22 +1224,22 @@
         <item quantity="other">Sauvegarde restaurée avec %d clés.</item>
     </plurals>
     <plurals name="keys_backup_restore_success_description_part2">
-        <item quantity="one">%d nouvelle clé a été ajoutée à cet appareil.</item>
-        <item quantity="other">%d nouvelles clés ont été ajoutées à cet appareil.</item>
+        <item quantity="one">%d nouvelle clé a été ajoutée à cette session.</item>
+        <item quantity="other">%d nouvelles clés ont été ajoutées à cette session.</item>
     </plurals>
     <string name="keys_backup_get_version_error">Échec de récupération de la dernière version des clés de récupération (%s).</string>
     <string name="keys_backup_no_keysbackup_sdk_error">La cryptographie de la session n’est pas activée</string>
     <string name="keys_backup_settings_restore_backup_button">Restaurer depuis la sauvegarde</string>
     <string name="keys_backup_settings_delete_backup_button">Supprimer la sauvegarde</string>
-    <string name="keys_backup_settings_status_ok">La sauvegarde de clés a été correctement configurée pour cet appareil.</string>
-    <string name="keys_backup_settings_status_ko">La sauvegarde de clés n’est pas activée sur cet appareil.</string>
-    <string name="keys_backup_settings_status_not_setup">Vos clés ne sont pas sauvegardées depuis cet appareil.</string>
-    <string name="keys_backup_settings_signature_from_unknown_device">La sauvegarde a une signature d’un appareil inconnu ayant pour identifiant %s.</string>
-    <string name="keys_backup_settings_valid_signature_from_this_device">La sauvegarde a une signature valide de cet appareil.</string>
-    <string name="keys_backup_settings_valid_signature_from_verified_device">La sauvegarde a une signature valide de l’appareil vérifié %s.</string>
-    <string name="keys_backup_settings_valid_signature_from_unverified_device">La sauvegarde a une signature valide de l’appareil non vérifié %s</string>
-    <string name="keys_backup_settings_invalid_signature_from_verified_device">La sauvegarde a une signature non valide de l’appareil vérifié %s</string>
-    <string name="keys_backup_settings_invalid_signature_from_unverified_device">La sauvegarde a une signature non valide de l’appareil non vérifié %s</string>
+    <string name="keys_backup_settings_status_ok">La sauvegarde de clés a été correctement configurée pour cette session.</string>
+    <string name="keys_backup_settings_status_ko">La sauvegarde de clés n’est pas activée sur cette session.</string>
+    <string name="keys_backup_settings_status_not_setup">Vos clés ne sont pas sauvegardées depuis cette session.</string>
+    <string name="keys_backup_settings_signature_from_unknown_device">La sauvegarde a une signature d’une session inconnue ayant pour identifiant %s.</string>
+    <string name="keys_backup_settings_valid_signature_from_this_device">La sauvegarde a une signature valide de cette session.</string>
+    <string name="keys_backup_settings_valid_signature_from_verified_device">La sauvegarde a une signature valide de la session vérifiée %s.</string>
+    <string name="keys_backup_settings_valid_signature_from_unverified_device">La sauvegarde a une signature valide de la session non vérifiée %s</string>
+    <string name="keys_backup_settings_invalid_signature_from_verified_device">La sauvegarde a une signature non valide de la session vérifiée %s</string>
+    <string name="keys_backup_settings_invalid_signature_from_unverified_device">La sauvegarde a une signature non valide de la session non vérifiée %s</string>
     <string name="keys_backup_get_trust_error">Échec de la récupération des informations de confiance de la sauvegarde (%s).</string>
     <string name="keys_backup_settings_deleting_backup">Suppression de la sauvegarde…</string>
     <string name="keys_backup_settings_delete_backup_error">Échec lors de la suppression de la sauvegarde (%s)</string>
@@ -1247,7 +1247,7 @@
     <string name="keys_backup_settings_delete_confirm_message">Supprimer les clés de chiffrement sauvegardées sur le serveur \? Vous ne pourrez plus utiliser votre clé de récupération pour lire l’historique des messages chiffrés.</string>
     <string name="sign_out_bottom_sheet_warning_no_backup">Vous perdrez vos messages chiffrés si vous vous déconnectez maintenant</string>
     <string name="sign_out_bottom_sheet_warning_backing_up">Sauvegarde de clés en cours. Si vous vous déconnectez maintenant, vous perdrez accès à vos messages chiffrés.</string>
-    <string name="sign_out_bottom_sheet_warning_backup_not_active">La sauvegarde de clés sécurisées devrait être activée sur tous vos appareils pour éviter de perdre l’accès à vos messages chiffrés.</string>
+    <string name="sign_out_bottom_sheet_warning_backup_not_active">La sauvegarde de clés sécurisées devrait être activée pour toutes vos sessions afin d’éviter de perdre l’accès à vos messages chiffrés.</string>
     <string name="sign_out_bottom_sheet_dont_want_secure_messages">Je ne veux pas de mes messages chiffrés</string>
     <string name="sign_out_bottom_sheet_backing_up_keys">Sauvegarde de clés…</string>
     <string name="keys_backup_activate">Utiliser la sauvegarde de clés</string>
@@ -1292,7 +1292,7 @@
     <string name="keys_backup_info_title_version">Version</string>
     <string name="keys_backup_info_title_algorithm">Algorithme</string>
     <string name="keys_backup_info_title_signature">Signature</string>
-    <string name="keys_backup_settings_untrusted_backup">Pour utiliser la sauvegarde de clés sur cet appareil, faites une restauration avec votre phrase secrète ou votre clé de récupération.</string>
+    <string name="keys_backup_settings_untrusted_backup">Pour utiliser la sauvegarde de clés sur cette session, faites une restauration avec votre phrase secrète ou votre clé de récupération.</string>
     <string name="new_recovery_method_popup_title">Nouvelle sauvegarde de clés</string>
     <string name="new_recovery_method_popup_description">Une nouvelle sauvegarde de clés de messages sécurisés a été détectée.
 \n
@@ -1339,16 +1339,16 @@
     <string name="notification_sender_me">Moi</string>
     <string name="notification_inline_reply_failed">** Échec de l’envoi − veuillez ouvrir le salon</string>
     <string name="error_jitsi_not_supported_on_old_device">Désolé, les appels en visioconférence avec Jitsi ne sont pas pris en charge sur les anciens appareils (avec une version d\'Android antérieure à 6.0)</string>
-    <string name="title_activity_verify_device">Vérifier l’appareil</string>
+    <string name="title_activity_verify_device">Vérifier la session</string>
     <string name="encryption_information_unknown_ip">adresse IP inconnue</string>
-    <string name="you_added_a_new_device_with_info">Un nouvel appareil demande les clés de chiffrement.
-\nNom de l’appareil : %1$s
+    <string name="you_added_a_new_device_with_info">Une nouvelle session demande les clés de chiffrement.
+\nNom de la session : %1$s
 \nVu : %2$s
-\nSi vous ne vous êtes pas connecté sur un autre appareil, ignorez cette demande.</string>
-    <string name="your_unverified_device_requesting_with_info">Un appareil non vérifié demande les clés de chiffrement.
-\nNom de l’appareil : %1$s
-\nVu : %2$s
-\nSi vous ne vous êtes pas connecté sur un autre appareil, ignorez cette demande.</string>
+\nSi vous ne vous êtes pas connecté à une autre session, ignorez cette demande.</string>
+    <string name="your_unverified_device_requesting_with_info">Une session non vérifiée demande les clés de chiffrement.
+\nNom de la session : %1$s
+\nVu : %2$s
+\nSi vous ne vous êtes pas connecté à une autre session, ignorez cette demande.</string>
     <string name="start_verification_short_label">Vérifier</string>
     <string name="share_without_verifying_short_label">Partager</string>
     <string name="key_share_request">Demande de partage de clé</string>
@@ -1357,35 +1357,35 @@
     <string name="sas_security_advise">Pour une sécurité maximale, nous vous recommandons de faire cela en personne ou d’utiliser d’autres moyens de communication sécurisés.</string>
     <string name="sas_verify_start_button_title">Commencer la vérification</string>
     <string name="sas_incoming_request_title">Demande de vérification entrante</string>
-    <string name="sas_incoming_request_description">L’un de vos appareils souhaite vérifier votre appareil actuel. En effectuant cette vérification, un lien de confiance s’établira entre vos deux appareils afin de faciliter le partage de clés de chiffrement.</string>
-    <string name="sas_incoming_request_description_2">La vérification de cet appareil le marquera comme fiable, et marquera aussi votre appareil comme fiable auprès de votre partenaire.</string>
-    <string name="sas_emoji_description">Vérifiez l’appareil en confirmant que les émojis suivants apparaissent également sur son écran</string>
-    <string name="sas_decimal_description">Vérifiez l’appareil en confirmant que les chiffres suivants apparaissent également sur son écran</string>
+    <string name="sas_incoming_request_description">L’une de vos sessions souhaite vérifier votre session actuelle. En effectuant cette vérification, un lien de confiance s’établira entre vos deux sessions afin de faciliter le partage de clés de chiffrement.</string>
+    <string name="sas_incoming_request_description_2">La vérification de cette session la marquera comme fiable, et marquera aussi votre session comme fiable auprès de votre partenaire.</string>
+    <string name="sas_emoji_description">Vérifiez cette session en confirmant que les émojis suivants apparaissent sur l’écran de votre partenaire</string>
+    <string name="sas_decimal_description">Vérifiez cette session en confirmant que les chiffres suivants apparaissent sur l’écran de votre partenaire</string>
     <string name="sas_incoming_verification_request_dialog">Vous avez reçu une demande de vérification entrante.</string>
     <string name="sas_view_request_action">Voir la demande</string>
-    <string name="sas_waiting_for_partner">Veuillez confirmer également les emojis sur l’autre appareil…</string>
+    <string name="sas_waiting_for_partner">Veuillez confirmer également les emojis sur l’autre session…</string>
     <string name="sas_verified">Vérifié !</string>
-    <string name="sas_verified_successful">Vous avez bien vérifié cet appareil.</string>
+    <string name="sas_verified_successful">Vous avez bien vérifié cette session.</string>
     <string name="sas_verified_successful_description">Le partage des clés va s’effectuer progressivement. Les messages se déchiffreront au fur à mesure. Cela peut prendre quelques minutes.</string>
     <string name="sas_got_it">Compris</string>
     <string name="sas_verifying_keys">Il est possible que la demande ne s’affiche pas sur cet appareil, car certaines versions de l’application ne prennent pas en charge la vérification interactive. Nous vous invitions alors à utiliser la vérification traditionnelle.</string>
     <string name="sas_legacy_verification_button_title">Utiliser la vérification traditionnelle.</string>
     <string name="sas_verification_request_notification_channel_title">Vérification de clé</string>
     <string name="sas_cancelled_dialog_title">Demande annulée</string>
-    <string name="sas_cancelled_by_other">La vérification a été annulée sur l’autre appareil.
+    <string name="sas_cancelled_by_other">La vérification a été annulée sur l’autre session.
 \n%s</string>
     <string name="sas_cancelled_by_me">La vérification est annulée.
 \nMotif : %s</string>
-    <string name="sas_verification_request_notification_channel">Vérification d’appareil interactive</string>
+    <string name="sas_verification_request_notification_channel">Vérification de session interactive</string>
     <string name="sas_incoming_request_notif_title">Demande de vérification</string>
-    <string name="sas_incoming_request_notif_content">%s veut vérifier votre appareil</string>
+    <string name="sas_incoming_request_notif_content">%s veut vérifier votre session</string>
     <string name="sas_error_m_user">L’utilisateur a annulé la vérification</string>
     <string name="sas_error_m_timeout">Le processus de vérification a expiré</string>
-    <string name="sas_error_m_unknown_transaction">L’appareil n’est pas au courant de cette transaction</string>
-    <string name="sas_error_m_unknown_method">L’appareil ne peut pas s’accorder sur une méthode de concordance, de hachage, de MAC ou de SAS de clé</string>
+    <string name="sas_error_m_unknown_transaction">La session n’est pas au courant de cette transaction</string>
+    <string name="sas_error_m_unknown_method">La session ne peut pas s’accorder sur une méthode de concordance, de hachage, de MAC ou de SAS de clé</string>
     <string name="sas_error_m_mismatched_commitment">L’engagement de hachage ne correspond pas</string>
     <string name="sas_error_m_mismatched_sas">Le SAS ne correspond pas</string>
-    <string name="sas_error_m_unexpected_message">L’appareil a reçu un message inattendu</string>
+    <string name="sas_error_m_unexpected_message">La session a reçu un message inattendu</string>
     <string name="sas_error_m_invalid_message">Un message non valide a été reçu</string>
     <string name="sas_error_m_key_mismatch">Non-concordance de clé</string>
     <string name="sas_error_m_user_error">Non-concordance d’utilisateur</string>
@@ -1405,7 +1405,7 @@
     <string name="room_list_people_empty_title">Discussions</string>
     <string name="change_room_directory_network">Changer de réseau</string>
     <string name="please_wait">Veuillez patienter…</string>
-    <string name="keys_backup_setup_override_backup_prompt_description">On dirait que vous avez déjà configuré une sauvegarde de clé depuis un autre appareil. Voulez-vous la remplacer par celle que vous êtes en train de créer \?</string>
+    <string name="keys_backup_setup_override_backup_prompt_description">On dirait que vous avez déjà configuré une sauvegarde de clé depuis une autre session. Voulez-vous la remplacer par celle que vous êtes en train de créer \?</string>
     <string name="room_list_empty">Rejoignez un salon pour commencer à utiliser l’application.</string>
     <string name="room_list_catchup_welcome_title">Bienvenue chez vous !</string>
     <string name="room_list_catchup_welcome_body">Rattrapez votre retard sur vos messages non lus ici</string>
@@ -1454,7 +1454,7 @@
     <string name="push_gateway_item_app_id">app_id :</string>
     <string name="push_gateway_item_push_key">push_key :</string>
     <string name="push_gateway_item_app_display_name">app_display_name :</string>
-    <string name="push_gateway_item_device_name">device_name :</string>
+    <string name="push_gateway_item_device_name">session_name :</string>
     <string name="push_gateway_item_url">URL :</string>
     <string name="push_gateway_item_format">Format :</string>
     <string name="preference_voice_and_video">Voix et vidéo</string>
@@ -1536,7 +1536,7 @@
     <string name="settings_discovery_category">Découverte</string>
     <string name="settings_discovery_manage">Gérer vos paramètres de découverte.</string>
     <string name="encryption_information_device_name_with_warning">Nom public de l’appareil (visible par les personnes avec qui vous communiquez)</string>
-    <string name="device_name_warning">Le nom public d’un appareil est visible par les personnes avec qui vous communiquez</string>
+    <string name="device_name_warning">Le nom public d’une session est visible par les personnes avec qui vous communiquez</string>
     <string name="identity_server_not_defined">Vous n’utilisez aucun serveur d’identité</string>
     <string name="identity_server_not_defined_for_password_reset">Aucun serveur d’identité n’est configuré, il est nécessaire pour réinitialiser votre mot de passe.</string>
     <string name="error_user_already_logged_in">Il semblerait que vous essayez de vous connecter à un autre serveur d’accueil. Voulez-vous vous déconnecter \?</string>
@@ -1708,7 +1708,7 @@
     <string name="login_reset_password_mail_confirmation_submit">J’ai vérifié mon adresse e\u2011mail</string>
     <string name="login_reset_password_success_title">Succès !</string>
     <string name="login_reset_password_success_notice">Votre mot de passe a été réinitialisé.</string>
-    <string name="login_reset_password_success_notice_2">Vous avez été déconnecté de toutes les appareils et ne recevrez plus de notification. Pour réactiver les notifications, reconnectez-vous sur chaque appareil.</string>
+    <string name="login_reset_password_success_notice_2">Vous avez été déconnecté de toutes les sessions et ne recevrez plus de notification. Pour réactiver les notifications, reconnectez-vous sur chaque appareil.</string>
     <string name="login_reset_password_success_submit">Retourner à l’authentification</string>
     <string name="login_reset_password_cancel_confirmation_title">Attention</string>
     <string name="login_reset_password_cancel_confirmation_content">Votre mot de passe n’a pas encore été changé.
@@ -1904,8 +1904,8 @@
 \nLes clés ne sont pas fiables</string>
     <string name="encryption_information_dg_xsigning_disabled">La signature croisée n’est pas activée</string>
     <string name="settings_active_sessions_list">Sessions actives</string>
-    <string name="settings_active_sessions_show_all">Afficher toutes les appareils</string>
-    <string name="settings_active_sessions_manage">Gérer les appareils</string>
+    <string name="settings_active_sessions_show_all">Afficher toutes les sessions</string>
+    <string name="settings_active_sessions_manage">Gérer les sessions</string>
     <string name="settings_active_sessions_signout_device">Se déconnecter de cette session</string>
     <string name="settings_failed_to_get_crypto_device_info">Aucune information cryptographique n’est disponible</string>
     <string name="settings_active_sessions_verified_device_desc">Cette session est fiable pour la messagerie sécurisée car vous l’avez vérifiée :</string>
@@ -2098,7 +2098,7 @@
     <string name="unencrypted">Non chiffré</string>
     <string name="encrypted_unverified">Chiffré par un appareil non vérifié</string>
     <string name="review_logins">Vérifiez où vous vous êtes connecté</string>
-    <string name="verify_other_sessions">Vérifiez toutes les appareils pour vous assurer que votre compte et vos messages sont en sécurité</string>
+    <string name="verify_other_sessions">Vérifiez toutes les sessions pour vous assurer que votre compte et vos messages sont en sécurité</string>
     <string name="verify_this_session">Vérifiez la nouvelle connexion accédant à votre compte : %1$s</string>
     <string name="notification_ticker_text_dm">%1$s : %2$s</string>
     <string name="notification_ticker_text_group">%1$s : %2$s %3$s</string>

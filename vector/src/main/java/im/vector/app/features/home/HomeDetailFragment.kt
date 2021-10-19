@@ -45,6 +45,7 @@ import fr.gouv.tchap.features.platform.PlatformViewState
 import fr.gouv.tchap.features.userdirectory.TchapContactListSharedAction
 import fr.gouv.tchap.features.userdirectory.TchapContactListSharedActionViewModel
 import im.vector.app.AppStateHandler
+import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.RoomGroupingMethod
 import im.vector.app.core.extensions.commitTransaction
@@ -204,7 +205,7 @@ class HomeDetailFragment @Inject constructor(
                     val newest = unknownDevices.firstOrNull { it.isNew }?.deviceInfo
                     if (newest != null) {
                         promptForNewUnknownDevices(uid, state, newest)
-                    } else if (olderUnverified.isNotEmpty()) {
+                    } else if (BuildConfig.ENABLE_CROSS_SIGNING && olderUnverified.isNotEmpty()) {
                         // In this case we prompt to go to settings to review logins
                         promptToReviewChanges(uid, state, olderUnverified.map { it.deviceInfo })
                     }

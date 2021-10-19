@@ -180,16 +180,16 @@ class DefaultNavigator @Inject constructor(
     override fun requestSessionVerification(context: Context, otherSessionId: String) {
         val session = sessionHolder.getSafeActiveSession() ?: return
 
-        val txId = if (session.cryptoService().crossSigningService().getMyCrossSigningKeys() == null) {
-            session.cryptoService()
-                    .verificationService()
-                    .beginKeyVerification(VerificationMethod.SAS, session.myUserId, otherSessionId, null)
-        } else {
+        val txId = if (session.cryptoService().crossSigningService().isCrossSigningInitialized()) {
             session.cryptoService().verificationService().requestKeyVerification(
                     supportedVerificationMethodsProvider.provide(),
                     session.myUserId,
                     listOf(otherSessionId)
             ).transactionId
+        } else {
+            session.cryptoService()
+                    .verificationService()
+                    .beginKeyVerification(VerificationMethod.SAS, session.myUserId, otherSessionId, null)
         }
 
         if (context is AppCompatActivity) {

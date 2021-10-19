@@ -120,7 +120,8 @@ class UnknownDeviceDetectorSharedViewModel @AssistedInject constructor(@Assisted
                                 DeviceDetectionInfo(
                                         deviceInfo,
                                         deviceKnownSince > currentSessionTs + 60_000, // short window to avoid false positive,
-                                        xInfo.getOrNull() == null || pInfo.getOrNull()?.selfSigned != null // adding this to pass distinct when cross sign change
+                                        // adding this to pass distinct when cross sign change
+                                        xInfo.getOrNull() == null || pInfo.getOrNull()?.selfSigned != null
                                 )
                             }
                 }
