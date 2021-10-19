@@ -178,7 +178,7 @@ object TchapUtils {
      * @return the suggested alias.
      */
     fun createRoomAlias(session: Session, prefix: String): String {
-        return "#" + createRoomAliasName(prefix) + ":" + getHomeServerNameFromMXIdentifier(session.myUserId)
+        return "#${createRoomAliasName(prefix)}:${getHomeServerNameFromMXIdentifier(session.myUserId)}"
     }
 
     /**
