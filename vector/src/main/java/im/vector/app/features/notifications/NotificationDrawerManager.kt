@@ -70,7 +70,7 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
      * we keep track of them in order to know which events have been removed from the eventList
      * allowing us to cancel any notifications previous displayed by now removed events
      */
-    private var renderedEventsList = emptyList<Pair<ProcessedType, NotifiableEvent>>()
+    private var renderedEventsList = emptyList<ProcessedEvent<NotifiableEvent>>()
     private val avatarSize = context.resources.getDimensionPixelSize(R.dimen.profile_avatar_size)
     private var currentRoomId: String? = null
 

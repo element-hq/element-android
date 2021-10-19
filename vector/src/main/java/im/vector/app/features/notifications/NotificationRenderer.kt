@@ -34,7 +34,7 @@ class NotificationRenderer @Inject constructor(private val notificationDisplayer
                myUserDisplayName: String,
                myUserAvatarUrl: String?,
                useCompleteNotificationFormat: Boolean,
-               eventsToProcess: List<ProcessedEvent>) {
+               eventsToProcess: List<ProcessedEvent<NotifiableEvent>>) {
         val (roomEvents, simpleEvents, invitationEvents) = eventsToProcess.groupByType()
         with(notificationFactory) {
             val roomNotifications = roomEvents.toNotifications(myUserDisplayName, myUserAvatarUrl)
@@ -108,28 +108,28 @@ class NotificationRenderer @Inject constructor(private val notificationDisplayer
     }
 }
 
-private fun List<ProcessedEvent>.groupByType(): GroupedNotificationEvents {
-    val roomIdToEventMap: MutableMap<String, MutableList<Pair<ProcessedType, NotifiableMessageEvent>>> = LinkedHashMap()
-    val simpleEvents: MutableList<Pair<ProcessedType, SimpleNotifiableEvent>> = ArrayList()
-    val invitationEvents: MutableList<Pair<ProcessedType, InviteNotifiableEvent>> = ArrayList()
+private fun List<ProcessedEvent<NotifiableEvent>>.groupByType(): GroupedNotificationEvents {
+    val roomIdToEventMap: MutableMap<String, MutableList<ProcessedEvent<NotifiableMessageEvent>>> = LinkedHashMap()
+    val simpleEvents: MutableList<ProcessedEvent<SimpleNotifiableEvent>> = ArrayList()
+    val invitationEvents: MutableList<ProcessedEvent<InviteNotifiableEvent>> = ArrayList()
     forEach {
-        when (val event = it.second) {
-            is InviteNotifiableEvent  -> invitationEvents.add(it.asPair())
+        when (val event = it.event) {
+            is InviteNotifiableEvent  -> invitationEvents.add(it.castedToEventType())
             is NotifiableMessageEvent -> {
                 val roomEvents = roomIdToEventMap.getOrPut(event.roomId) { ArrayList() }
-                roomEvents.add(it.asPair())
+                roomEvents.add(it.castedToEventType())
             }
-            is SimpleNotifiableEvent  -> simpleEvents.add(it.asPair())
+            is SimpleNotifiableEvent  -> simpleEvents.add(it.castedToEventType())
         }
     }
     return GroupedNotificationEvents(roomIdToEventMap, simpleEvents, invitationEvents)
 }
 
 @Suppress("UNCHECKED_CAST")
-private fun <T : NotifiableEvent> Pair<ProcessedType, *>.asPair(): Pair<ProcessedType, T> = this as Pair<ProcessedType, T>
+private fun <T : NotifiableEvent> ProcessedEvent<NotifiableEvent>.castedToEventType(): ProcessedEvent<T> = this as ProcessedEvent<T>
 
 data class GroupedNotificationEvents(
-        val roomEvents: Map<String, List<Pair<ProcessedType, NotifiableMessageEvent>>>,
-        val simpleEvents: List<Pair<ProcessedType, SimpleNotifiableEvent>>,
-        val invitationEvents: List<Pair<ProcessedType, InviteNotifiableEvent>>
+        val roomEvents: Map<String, List<ProcessedEvent<NotifiableMessageEvent>>>,
+        val simpleEvents: List<ProcessedEvent<SimpleNotifiableEvent>>,
+        val invitationEvents: List<ProcessedEvent<InviteNotifiableEvent>>
 )
