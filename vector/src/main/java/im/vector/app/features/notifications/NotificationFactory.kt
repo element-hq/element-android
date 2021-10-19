@@ -20,7 +20,7 @@ import android.app.Notification
 import androidx.core.content.pm.ShortcutInfoCompat
 import javax.inject.Inject
 
-private typealias ProcessedMessageEvent = Pair<ProcessedType, NotifiableMessageEvent>
+private typealias ProcessedMessageEvents = List<ProcessedEvent<NotifiableMessageEvent>>
 
 class NotificationFactory @Inject constructor(
         private val notificationUtils: NotificationUtils,
@@ -28,29 +28,30 @@ class NotificationFactory @Inject constructor(
         private val summaryGroupMessageCreator: SummaryGroupMessageCreator
 ) {
 
-    fun Map<String, List<ProcessedMessageEvent>>.toNotifications(myUserDisplayName: String, myUserAvatarUrl: String?): List<RoomNotification> {
+    fun Map<String, ProcessedMessageEvents>.toNotifications(myUserDisplayName: String, myUserAvatarUrl: String?): List<RoomNotification> {
         return map { (roomId, events) ->
             when {
                 events.hasNoEventsToDisplay() -> RoomNotification.Removed(roomId)
                 else                          -> {
-                    val messageEvents = events.filter { it.first == ProcessedType.KEEP }.map { it.second }
+                    val messageEvents = events.onlyKeptEvents()
                     roomGroupMessageCreator.createRoomMessage(messageEvents, roomId, myUserDisplayName, myUserAvatarUrl)
                 }
             }
         }
     }
 
-    private fun List<Pair<ProcessedType, NotifiableMessageEvent>>.hasNoEventsToDisplay() = isEmpty() || all {
-        it.first == ProcessedType.REMOVE || it.second.canNotBeDisplayed()
+    private fun ProcessedMessageEvents.hasNoEventsToDisplay() = isEmpty() || all {
+        it.type == ProcessedEvent.Type.REMOVE || it.event.canNotBeDisplayed()
     }
 
     private fun NotifiableMessageEvent.canNotBeDisplayed() = isRedacted
 
-    fun List<Pair<ProcessedType, InviteNotifiableEvent>>.toNotifications(myUserId: String): List<OneShotNotification> {
+    @JvmName("toNotificationsInviteNotifiableEvent")
+    fun List<ProcessedEvent<InviteNotifiableEvent>>.toNotifications(myUserId: String): List<OneShotNotification> {
         return map { (processed, event) ->
             when (processed) {
-                ProcessedType.REMOVE -> OneShotNotification.Removed(key = event.roomId)
-                ProcessedType.KEEP   -> OneShotNotification.Append(
+                ProcessedEvent.Type.REMOVE -> OneShotNotification.Removed(key = event.roomId)
+                ProcessedEvent.Type.KEEP   -> OneShotNotification.Append(
                         notificationUtils.buildRoomInvitationNotification(event, myUserId),
                         OneShotNotification.Append.Meta(
                                 key = event.roomId,
@@ -64,11 +65,11 @@ class NotificationFactory @Inject constructor(
     }
 
     @JvmName("toNotificationsSimpleNotifiableEvent")
-    fun List<Pair<ProcessedType, SimpleNotifiableEvent>>.toNotifications(myUserId: String): List<OneShotNotification> {
+    fun List<ProcessedEvent<SimpleNotifiableEvent>>.toNotifications(myUserId: String): List<OneShotNotification> {
         return map { (processed, event) ->
             when (processed) {
-                ProcessedType.REMOVE -> OneShotNotification.Removed(key = event.eventId)
-                ProcessedType.KEEP   -> OneShotNotification.Append(
+                ProcessedEvent.Type.REMOVE -> OneShotNotification.Removed(key = event.eventId)
+                ProcessedEvent.Type.KEEP   -> OneShotNotification.Append(
                         notificationUtils.buildSimpleEventNotification(event, myUserId),
                         OneShotNotification.Append.Meta(
                                 key = event.eventId,
