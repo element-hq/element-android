@@ -37,8 +37,6 @@ ext.libs = [
                 'kotlinPlugin'            : "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin"
         ],
         jetbrains   : [
-                'kotlinStdlibJdk7'        : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin",
-                'kotlinStdlib'            : "org.jetbrains.kotlin:kotlin-stdlib:$kotlin",
                 'coroutinesCore'          : "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinCoroutines",
                 'coroutinesAndroid'       : "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinCoroutines",
                 'coroutinesRx2'           : "org.jetbrains.kotlinx:kotlinx-coroutines-rx2:$kotlinCoroutines"

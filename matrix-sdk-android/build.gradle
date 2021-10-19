@@ -100,8 +100,6 @@ static def gitRevisionDate() {
 }
 
 dependencies {
-
-    implementation libs.jetbrains.kotlinStdlibJdk7
     implementation libs.jetbrains.coroutinesCore
     implementation libs.jetbrains.coroutinesAndroid
 
