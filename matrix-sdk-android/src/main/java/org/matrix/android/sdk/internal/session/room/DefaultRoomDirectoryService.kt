@@ -16,33 +16,28 @@
 
 package org.matrix.android.sdk.internal.session.room
 
-import org.matrix.android.sdk.api.MatrixCallback
+import org.matrix.android.sdk.api.session.room.AliasAvailabilityResult
 import org.matrix.android.sdk.api.session.room.RoomDirectoryService
+import org.matrix.android.sdk.api.session.room.alias.RoomAliasError
 import org.matrix.android.sdk.api.session.room.model.RoomDirectoryVisibility
 import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoomsParams
 import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoomsResponse
-import org.matrix.android.sdk.api.util.Cancelable
+import org.matrix.android.sdk.internal.session.room.alias.RoomAliasAvailabilityChecker
 import org.matrix.android.sdk.internal.session.room.directory.GetPublicRoomTask
 import org.matrix.android.sdk.internal.session.room.directory.GetRoomDirectoryVisibilityTask
 import org.matrix.android.sdk.internal.session.room.directory.SetRoomDirectoryVisibilityTask
-import org.matrix.android.sdk.internal.task.TaskExecutor
-import org.matrix.android.sdk.internal.task.configureWith
 import javax.inject.Inject
 
 internal class DefaultRoomDirectoryService @Inject constructor(
         private val getPublicRoomTask: GetPublicRoomTask,
         private val getRoomDirectoryVisibilityTask: GetRoomDirectoryVisibilityTask,
         private val setRoomDirectoryVisibilityTask: SetRoomDirectoryVisibilityTask,
-        private val taskExecutor: TaskExecutor) : RoomDirectoryService {
+        private val roomAliasAvailabilityChecker: RoomAliasAvailabilityChecker
+) : RoomDirectoryService {
 
-    override fun getPublicRooms(server: String?,
-                                publicRoomsParams: PublicRoomsParams,
-                                callback: MatrixCallback<PublicRoomsResponse>): Cancelable {
-        return getPublicRoomTask
-                .configureWith(GetPublicRoomTask.Params(server, publicRoomsParams)) {
-                    this.callback = callback
-                }
-                .executeBy(taskExecutor)
+    override suspend fun getPublicRooms(server: String?,
+                                        publicRoomsParams: PublicRoomsParams): PublicRoomsResponse {
+        return getPublicRoomTask.execute(GetPublicRoomTask.Params(server, publicRoomsParams))
     }
 
     override suspend fun getRoomDirectoryVisibility(roomId: String): RoomDirectoryVisibility {
@@ -51,5 +46,14 @@ internal class DefaultRoomDirectoryService @Inject constructor(
 
     override suspend fun setRoomDirectoryVisibility(roomId: String, roomDirectoryVisibility: RoomDirectoryVisibility) {
         setRoomDirectoryVisibilityTask.execute(SetRoomDirectoryVisibilityTask.Params(roomId, roomDirectoryVisibility))
+    }
+
+    override suspend fun checkAliasAvailability(aliasLocalPart: String?): AliasAvailabilityResult {
+        return try {
+            roomAliasAvailabilityChecker.check(aliasLocalPart)
+            AliasAvailabilityResult.Available
+        } catch (failure: RoomAliasError) {
+            AliasAvailabilityResult.NotAvailable(failure)
+        }
     }
 }

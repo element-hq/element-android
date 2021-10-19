@@ -34,12 +34,12 @@ internal class DefaultDeleteThreePidTask @Inject constructor(
         private val globalErrorReceiver: GlobalErrorReceiver) : DeleteThreePidTask() {
 
     override suspend fun execute(params: Params) {
-        executeRequest<DeleteThreePidResponse>(globalErrorReceiver) {
-            val body = DeleteThreePidBody(
-                    medium = params.threePid.toMedium(),
-                    address = params.threePid.value
-            )
-            apiCall = profileAPI.deleteThreePid(body)
+        val body = DeleteThreePidBody(
+                medium = params.threePid.toMedium(),
+                address = params.threePid.value
+        )
+        executeRequest(globalErrorReceiver) {
+            profileAPI.deleteThreePid(body)
         }
 
         // We do not really care about the result for the moment

@@ -18,9 +18,8 @@ package im.vector.lib.multipicker
 
 import android.content.Context
 import android.content.Intent
-import android.media.MediaMetadataRetriever
-import android.provider.MediaStore
 import im.vector.lib.multipicker.entity.MultiPickerVideoType
+import im.vector.lib.multipicker.utils.toMultiPickerVideoType
 
 /**
  * Video Picker implementation
@@ -32,57 +31,9 @@ class VideoPicker : Picker<MultiPickerVideoType>() {
      * Returns selected video files or empty list if user did not select any files.
      */
     override fun getSelectedFiles(context: Context, data: Intent?): List<MultiPickerVideoType> {
-        val videoList = mutableListOf<MultiPickerVideoType>()
-
-        getSelectedUriList(data).forEach { selectedUri ->
-            val projection = arrayOf(
-                    MediaStore.Video.Media.DISPLAY_NAME,
-                    MediaStore.Video.Media.SIZE
-            )
-
-            context.contentResolver.query(
-                    selectedUri,
-                    projection,
-                    null,
-                    null,
-                    null
-            )?.use { cursor ->
-                val nameColumn = cursor.getColumnIndex(MediaStore.Video.Media.DISPLAY_NAME)
-                val sizeColumn = cursor.getColumnIndex(MediaStore.Video.Media.SIZE)
-
-                if (cursor.moveToNext()) {
-                    val name = cursor.getString(nameColumn)
-                    val size = cursor.getLong(sizeColumn)
-                    var duration = 0L
-                    var width = 0
-                    var height = 0
-                    var orientation = 0
-
-                    context.contentResolver.openFileDescriptor(selectedUri, "r")?.use { pfd ->
-                        val mediaMetadataRetriever = MediaMetadataRetriever()
-                        mediaMetadataRetriever.setDataSource(pfd.fileDescriptor)
-                        duration = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)?.toLong() ?: 0L
-                        width = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH)?.toInt() ?: 0
-                        height = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT)?.toInt() ?: 0
-                        orientation = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_ROTATION)?.toInt() ?: 0
-                    }
-
-                    videoList.add(
-                            MultiPickerVideoType(
-                                    name,
-                                    size,
-                                    context.contentResolver.getType(selectedUri),
-                                    selectedUri,
-                                    width,
-                                    height,
-                                    orientation,
-                                    duration
-                            )
-                    )
-                }
-            }
+        return getSelectedUriList(data).mapNotNull { selectedUri ->
+            selectedUri.toMultiPickerVideoType(context)
         }
-        return videoList
     }
 
     override fun createIntent(): Intent {

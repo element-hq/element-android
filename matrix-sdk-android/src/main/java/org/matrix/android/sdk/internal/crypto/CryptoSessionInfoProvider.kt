@@ -38,7 +38,7 @@ internal class CryptoSessionInfoProvider @Inject constructor(
         val encryptionEvent = monarchy.fetchCopied { realm ->
             EventEntity.whereType(realm, roomId = roomId, type = EventType.STATE_ROOM_ENCRYPTION)
                     .contains(EventEntityFields.CONTENT, "\"algorithm\":\"$MXCRYPTO_ALGORITHM_MEGOLM\"")
-                    .isNotNull(EventEntityFields.STATE_KEY) // should be an empty key
+                    .isEmpty(EventEntityFields.STATE_KEY)
                     .findFirst()
         }
         return encryptionEvent != null

@@ -17,7 +17,6 @@
 package org.matrix.android.sdk.internal.session.terms
 
 import org.matrix.android.sdk.internal.network.HttpHeaders
-import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
@@ -29,13 +28,13 @@ internal interface TermsAPI {
      * This request does not require authentication
      */
     @GET
-    fun getTerms(@Url url: String): Call<TermsResponse>
+    suspend fun getTerms(@Url url: String): TermsResponse
 
     /**
      * This request requires authentication
      */
     @POST
-    fun agreeToTerms(@Url url: String,
-                     @Body params: AcceptTermsBody,
-                     @Header(HttpHeaders.Authorization) token: String): Call<Unit>
+    suspend fun agreeToTerms(@Url url: String,
+                             @Body params: AcceptTermsBody,
+                             @Header(HttpHeaders.Authorization) token: String)
 }

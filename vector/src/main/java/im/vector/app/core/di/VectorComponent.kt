@@ -21,26 +21,29 @@ import android.content.res.Resources
 import dagger.BindsInstance
 import dagger.Component
 import im.vector.app.ActiveSessionDataSource
+import im.vector.app.AppStateHandler
 import im.vector.app.EmojiCompatFontProvider
 import im.vector.app.EmojiCompatWrapper
 import im.vector.app.VectorApplication
 import im.vector.app.core.dialogs.UnrecognizedCertificateDialog
+import im.vector.app.core.dispatchers.CoroutineDispatchers
 import im.vector.app.core.error.ErrorFormatter
+import im.vector.app.core.network.WifiDetector
 import im.vector.app.core.pushers.PushersManager
 import im.vector.app.core.utils.AssetReader
 import im.vector.app.core.utils.DimensionConverter
+import im.vector.app.features.call.conference.JitsiActiveConferenceHolder
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.configuration.VectorConfiguration
 import im.vector.app.features.crypto.keysrequest.KeyRequestHandler
 import im.vector.app.features.crypto.verification.IncomingVerificationRequestHandler
-import im.vector.app.features.grouplist.SelectedGroupDataSource
 import im.vector.app.features.home.AvatarRenderer
-import im.vector.app.features.home.HomeRoomListDataSource
+import im.vector.app.features.home.CurrentSpaceSuggestedRoomListDataSource
 import im.vector.app.features.home.room.detail.RoomDetailPendingActionStore
 import im.vector.app.features.home.room.detail.timeline.helper.MatrixItemColorProvider
-import im.vector.app.features.home.room.detail.timeline.helper.RoomSummariesHolder
 import im.vector.app.features.html.EventHtmlRenderer
 import im.vector.app.features.html.VectorHtmlCompressor
+import im.vector.app.features.invite.AutoAcceptInvites
 import im.vector.app.features.login.ReAuthHelper
 import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.notifications.NotifiableEventResolver
@@ -56,8 +59,10 @@ import im.vector.app.features.rageshake.VectorFileLogger
 import im.vector.app.features.rageshake.VectorUncaughtExceptionHandler
 import im.vector.app.features.reactions.data.EmojiDataSource
 import im.vector.app.features.session.SessionListener
+import im.vector.app.features.settings.VectorDataStore
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.ui.UiStateRepository
+import kotlinx.coroutines.CoroutineScope
 import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.auth.HomeServerHistoryService
@@ -113,9 +118,9 @@ interface VectorComponent {
 
     fun errorFormatter(): ErrorFormatter
 
-    fun homeRoomListObservableStore(): HomeRoomListDataSource
+    fun appStateHandler(): AppStateHandler
 
-    fun selectedGroupStore(): SelectedGroupDataSource
+    fun currentSpaceSuggestedRoomListDataSource(): CurrentSpaceSuggestedRoomListDataSource
 
     fun roomDetailPendingActionStore(): RoomDetailPendingActionStore
 
@@ -143,6 +148,10 @@ interface VectorComponent {
 
     fun vectorPreferences(): VectorPreferences
 
+    fun vectorDataStore(): VectorDataStore
+
+    fun wifiDetector(): WifiDetector
+
     fun vectorFileLogger(): VectorFileLogger
 
     fun uiStateRepository(): UiStateRepository
@@ -157,9 +166,15 @@ interface VectorComponent {
 
     fun pinLocker(): PinLocker
 
+    fun autoAcceptInvites(): AutoAcceptInvites
+
     fun webRtcCallManager(): WebRtcCallManager
 
-    fun roomSummaryHolder(): RoomSummariesHolder
+    fun appCoroutineScope(): CoroutineScope
+
+    fun coroutineDispatchers(): CoroutineDispatchers
+
+    fun jitsiActiveConferenceHolder(): JitsiActiveConferenceHolder
 
     @Component.Factory
     interface Factory {

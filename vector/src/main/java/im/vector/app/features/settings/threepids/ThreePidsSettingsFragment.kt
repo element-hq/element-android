@@ -17,17 +17,15 @@
 package im.vector.app.features.settings.threepids
 
 import android.app.Activity
-import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
-import im.vector.app.core.dialogs.withColoredButton
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.exhaustive
@@ -71,12 +69,6 @@ class ThreePidsSettingsFragment @Inject constructor(
             }.exhaustive
         }
     }
-
-    //    private fun askUserPassword() {
-//        PromptPasswordDialog().show(requireActivity()) { password ->
-//            viewModel.handle(ThreePidsSettingsAction.AccountPassword(password))
-//        }
-//    }
 
     private fun askAuthentication(event: ThreePidsSettingsViewEvents.RequestReAuth) {
         ReAuthActivity.newIntent(requireContext(),
@@ -192,14 +184,13 @@ class ThreePidsSettingsFragment @Inject constructor(
     }
 
     override fun deleteThreePid(threePid: ThreePid) {
-        AlertDialog.Builder(requireActivity())
+        MaterialAlertDialogBuilder(requireActivity(), R.style.ThemeOverlay_Vector_MaterialAlertDialog_Destructive)
                 .setMessage(getString(R.string.settings_remove_three_pid_confirmation_content, threePid.getFormattedValue()))
                 .setPositiveButton(R.string.remove) { _, _ ->
                     viewModel.handle(ThreePidsSettingsAction.DeleteThreePid(threePid))
                 }
                 .setNegativeButton(R.string.cancel, null)
                 .show()
-                .withColoredButton(DialogInterface.BUTTON_POSITIVE)
     }
 
     override fun onBackPressed(toolbarButton: Boolean): Boolean {

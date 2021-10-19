@@ -19,8 +19,10 @@ package im.vector.app.core.error
 import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.call.dialpad.DialPadLookup
+import im.vector.app.features.voice.VoiceFailure
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.MatrixError
+import org.matrix.android.sdk.api.failure.MatrixIdFailure
 import org.matrix.android.sdk.api.failure.isInvalidPassword
 import org.matrix.android.sdk.api.session.identity.IdentityServiceError
 import java.net.HttpURLConnection
@@ -39,9 +41,9 @@ class DefaultErrorFormatter @Inject constructor(
 
     override fun toHumanReadable(throwable: Throwable?): String {
         return when (throwable) {
-            null                         -> null
-            is IdentityServiceError      -> identityServerError(throwable)
-            is Failure.NetworkConnection -> {
+            null                                   -> null
+            is IdentityServiceError                -> identityServerError(throwable)
+            is Failure.NetworkConnection           -> {
                 when (throwable.ioException) {
                     is SocketTimeoutException     ->
                         stringProvider.getString(R.string.error_network_timeout)
@@ -54,70 +56,85 @@ class DefaultErrorFormatter @Inject constructor(
                         stringProvider.getString(R.string.error_no_network)
                 }
             }
-            is Failure.ServerError       -> {
+            is Failure.ServerError                 -> {
                 when {
-                    throwable.error.code == MatrixError.M_CONSENT_NOT_GIVEN          -> {
+                    throwable.error.code == MatrixError.M_CONSENT_NOT_GIVEN       -> {
                         // Special case for terms and conditions
                         stringProvider.getString(R.string.error_terms_not_accepted)
                     }
-                    throwable.isInvalidPassword()                                    -> {
+                    throwable.isInvalidPassword()                                 -> {
                         stringProvider.getString(R.string.auth_invalid_login_param)
                     }
-                    throwable.error.code == MatrixError.M_USER_IN_USE                -> {
+                    throwable.error.code == MatrixError.M_USER_IN_USE             -> {
                         stringProvider.getString(R.string.login_signup_error_user_in_use)
                     }
-                    throwable.error.code == MatrixError.M_BAD_JSON                   -> {
+                    throwable.error.code == MatrixError.M_BAD_JSON                -> {
                         stringProvider.getString(R.string.login_error_bad_json)
                     }
-                    throwable.error.code == MatrixError.M_NOT_JSON                   -> {
+                    throwable.error.code == MatrixError.M_NOT_JSON                -> {
                         stringProvider.getString(R.string.login_error_not_json)
                     }
-                    throwable.error.code == MatrixError.M_THREEPID_DENIED            -> {
+                    throwable.error.code == MatrixError.M_THREEPID_DENIED         -> {
                         stringProvider.getString(R.string.login_error_threepid_denied)
                     }
-                    throwable.error.code == MatrixError.M_LIMIT_EXCEEDED             -> {
+                    throwable.error.code == MatrixError.M_LIMIT_EXCEEDED          -> {
                         limitExceededError(throwable.error)
                     }
-                    throwable.error.code == MatrixError.M_THREEPID_NOT_FOUND         -> {
+                    throwable.error.code == MatrixError.M_TOO_LARGE               -> {
+                        stringProvider.getString(R.string.error_file_too_big_simple)
+                    }
+                    throwable.error.code == MatrixError.M_THREEPID_NOT_FOUND      -> {
                         stringProvider.getString(R.string.login_reset_password_error_not_found)
                     }
-                    throwable.error.code == MatrixError.M_USER_DEACTIVATED           -> {
+                    throwable.error.code == MatrixError.M_USER_DEACTIVATED        -> {
                         stringProvider.getString(R.string.auth_invalid_login_deactivated_account)
                     }
-                    throwable.error.code == MatrixError.M_THREEPID_IN_USE
-                            && throwable.error.message == "Email is already in use"  -> {
+                    throwable.error.code == MatrixError.M_THREEPID_IN_USE &&
+                            throwable.error.message == "Email is already in use"  -> {
                         stringProvider.getString(R.string.account_email_already_used_error)
                     }
-                    throwable.error.code == MatrixError.M_THREEPID_IN_USE
-                            && throwable.error.message == "MSISDN is already in use" -> {
+                    throwable.error.code == MatrixError.M_THREEPID_IN_USE &&
+                            throwable.error.message == "MSISDN is already in use" -> {
                         stringProvider.getString(R.string.account_phone_number_already_used_error)
                     }
-                    throwable.error.code == MatrixError.M_THREEPID_AUTH_FAILED       -> {
+                    throwable.error.code == MatrixError.M_THREEPID_AUTH_FAILED    -> {
                         stringProvider.getString(R.string.error_threepid_auth_failed)
                     }
-                    else                                                             -> {
+                    else                                                          -> {
                         throwable.error.message.takeIf { it.isNotEmpty() }
                                 ?: throwable.error.code.takeIf { it.isNotEmpty() }
                     }
                 }
             }
-            is Failure.OtherServerError  -> {
+            is Failure.OtherServerError            -> {
                 when (throwable.httpCode) {
-                    HttpURLConnection.HTTP_NOT_FOUND ->
+                    HttpURLConnection.HTTP_NOT_FOUND    ->
                         // homeserver not found
                         stringProvider.getString(R.string.login_error_no_homeserver_found)
                     HttpURLConnection.HTTP_UNAUTHORIZED ->
                         // uia errors?
                         stringProvider.getString(R.string.error_unauthorized)
-                    else                             ->
+                    else                                ->
                         throwable.localizedMessage
                 }
             }
-            is DialPadLookup.Failure                                                        ->
+            is DialPadLookup.Failure.NumberIsYours ->
+                stringProvider.getString(R.string.cannot_call_yourself)
+            is DialPadLookup.Failure.NoResult      ->
                 stringProvider.getString(R.string.call_dial_pad_lookup_error)
-            else                                                                            -> throwable.localizedMessage
+            is MatrixIdFailure.InvalidMatrixId     ->
+                stringProvider.getString(R.string.login_signin_matrix_id_error_invalid_matrix_id)
+            is VoiceFailure                        -> voiceMessageError(throwable)
+            else                                   -> throwable.localizedMessage
         }
                 ?: stringProvider.getString(R.string.unknown_error)
+    }
+
+    private fun voiceMessageError(throwable: VoiceFailure): String {
+        return when (throwable) {
+            is VoiceFailure.UnableToPlay   -> stringProvider.getString(R.string.error_voice_message_unable_to_play)
+            is VoiceFailure.UnableToRecord -> stringProvider.getString(R.string.error_voice_message_unable_to_record)
+        }
     }
 
     private fun limitExceededError(error: MatrixError): String {

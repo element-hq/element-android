@@ -18,13 +18,13 @@ package im.vector.app.features.home.room.detail.timeline.reactions
 
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxState
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksState
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.platform.EmptyAction
@@ -41,8 +41,8 @@ import org.matrix.android.sdk.rx.unwrap
 data class DisplayReactionsViewState(
         val eventId: String,
         val roomId: String,
-        val mapReactionKeyToMemberList: Async<List<ReactionInfo>> = Uninitialized)
-    : MvRxState {
+        val mapReactionKeyToMemberList: Async<List<ReactionInfo>> = Uninitialized) :
+    MavericksState {
 
     constructor(args: TimelineEventFragmentArgs) : this(roomId = args.roomId, eventId = args.eventId)
 }
@@ -74,7 +74,7 @@ class ViewReactionsViewModel @AssistedInject constructor(@Assisted
         fun create(initialState: DisplayReactionsViewState): ViewReactionsViewModel
     }
 
-    companion object : MvRxViewModelFactory<ViewReactionsViewModel, DisplayReactionsViewState> {
+    companion object : MavericksViewModelFactory<ViewReactionsViewModel, DisplayReactionsViewState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: DisplayReactionsViewState): ViewReactionsViewModel? {

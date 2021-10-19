@@ -1,11 +1,108 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+    <string name="summary_message">%1$s: %2$s</string>
+    <string name="summary_user_sent_image">%1$s èt e fotootje gesteurd.</string>
+    <string name="summary_user_sent_sticker">%1$s èt e sticker gesteurd.</string>
+
+    <string name="notice_room_invite_no_invitee">Uutnodigienge van %s</string>
+    <string name="notice_room_invite">%1$s èt %2$s uutgenodigd</string>
+    <string name="notice_room_invite_you">%1$s èt joun uitgenodigd</string>
+    <string name="notice_room_join">%1$s neemt nu deel an ’t gesprek</string>
+    <string name="notice_room_leave">%1$s èt ’t gesprek verloatn</string>
+    <string name="notice_room_reject">%1$s èt d’uitnodigienge geweigerd</string>
+    <string name="notice_room_kick">%1$s èt %2$s uut ’t gesprek verwyderd</string>
+    <string name="notice_room_unban">%1$s èt %2$s ountbann</string>
+    <string name="notice_room_ban">%1$s èt %2$s verbann</string>
+    <string name="notice_room_withdraw">%1$s èt d’uutnodigienge van %2$s ingetrokkn</string>
+    <string name="notice_avatar_url_changed">%1$s èt zyn/heur avatar angepast</string>
+    <string name="notice_display_name_set">%1$s èt zyn/heur noame angepast noa %2$s</string>
+    <string name="notice_display_name_changed_from">%1$s èt zyn/heur noame angepast van %2$s noa %3$s</string>
+    <string name="notice_display_name_removed">%1$s èt zyn/heur noame verwyderd (%2$s)</string>
+    <string name="notice_room_topic_changed">%1$s èt ’t ounderwerp veranderd noa: %2$s</string>
+    <string name="notice_room_name_changed">%1$s èt de gespreksnoame veranderd noa: %2$s</string>
+    <string name="notice_placed_video_call">%s èt e video-iproep gemakt.</string>
+    <string name="notice_placed_voice_call">%s èt e sproakiproep gemakt.</string>
+    <string name="notice_answered_call">%s èt den iproep beantwoord.</string>
+    <string name="notice_ended_call">%s èt ipgehangn.</string>
+    <string name="notice_made_future_room_visibility">%1$s èt de toekomstige gespreksgeschiedenisse zichtboar gemakt vo %2$s</string>
+    <string name="notice_room_visibility_invited">alle deelnemers an ’t gesprek, vanaf ’t punt dan ze zyn uutgenodigd.</string>
+    <string name="notice_room_visibility_joined">alle deelnemers an ’t gesprek, vanaf ’t punt dan ze zyn toegetreedn.</string>
+    <string name="notice_room_visibility_shared">alle deelnemers an ’t gesprek.</string>
+    <string name="notice_room_visibility_world_readable">iedereen.</string>
+    <string name="notice_room_visibility_unknown">ounbekend (%s).</string>
+    <string name="notice_end_to_end">%1$s èt eind-tout-eind-versleutelienge angezet (%2$s)</string>
+
+    <string name="notice_requested_voip_conference">%1$s èt e VoIP-vergoaderienge angevroagd</string>
+    <string name="notice_voip_started">VoIP-vergoaderienge begunn</string>
+    <string name="notice_voip_finished">VoIP-vergoaderienge gestopt</string>
+
+    <string name="notice_avatar_changed_too">(avatar es ook veranderd)</string>
+    <string name="notice_room_name_removed">%1$s èt de gespreksnoame verwyderd</string>
+    <string name="notice_room_topic_removed">%1$s èt ’t gespreksounderwerp verwyderd</string>
+    <string name="notice_event_redacted">Bericht verwyderd</string>
+    <string name="notice_event_redacted_by">Bericht verwyderd deur %1$s</string>
+    <string name="notice_event_redacted_with_reason">Bericht verwyderd [reden: %1$s]</string>
+    <string name="notice_event_redacted_by_with_reason">Bericht verwyderd deur %1$s [reden: %2$s]</string>
+    <string name="notice_profile_change_redacted">%1$s èt zyn/heur profiel %2$s bygewerkt</string>
+    <string name="notice_room_third_party_invite">%1$s èt een uutnodigienge noa %2$s gesteurd vo ’t gesprek toe te treedn</string>
+    <string name="notice_room_third_party_registered_invite">%1$s èt d’uutnodigienge vo %2$s anveird</string>
+
+    <string name="notice_crypto_unable_to_decrypt">** Kun nie ountsleuteln: %s **</string>
+    <string name="notice_crypto_error_unkwown_inbound_session_id">’t Toestel van den afzender èt geen sleutels vo da bericht hier gesteurd.</string>
+
+    <string name="could_not_redact">Kosteg nie verwyderd wordn</string>
+    <string name="unable_to_send_message">Kosteg ’t bericht nie verzendn</string>
+
+    <string name="message_failed_to_upload">Iploadn van ’t fotootje es mislukt</string>
+
+    <string name="network_error">Netwerkfout</string>
+    <string name="matrix_error">Matrix-fout</string>
+
+    <string name="room_error_join_failed_empty_room">’t Es vo de moment nie meuglik van e leeg gesprek were toe te treedn.</string>
+
+    <string name="medium_email">E-mailadresse</string>
+    <string name="medium_phone_number">Telefongnumero</string>
+
+    <string name="room_displayname_invite_from">Uutnodigienge van %s</string>
+    <string name="room_displayname_room_invite">Gespreksuutnodigienge</string>
+
+    <string name="room_displayname_two_members">%1$s en %2$s</string>
+
+    <plurals name="room_displayname_three_and_more_members">
+        <item quantity="one">%1$s en 1 andere</item>
+        <item quantity="other">%1$s en %2$d anderen</item>
+    </plurals>
+
+    <string name="room_displayname_empty_room">Leeg gesprek</string>
+
+    <string name="initial_sync_start_importing_account">Initiële synchronisoasje:
+\nAccount wor geïmporteerd…</string>
+    <string name="initial_sync_start_importing_account_crypto">Initiële synchronisoasje:
+\nCrypto wor geïmporteerd</string>
+    <string name="initial_sync_start_importing_account_rooms">Initiële synchronisoasje:
+\nGesprekkn wordn geïmporteerd</string>
+    <string name="initial_sync_start_importing_account_joined_rooms">Initiële synchronisoasje:
+\nDeelgenoomn gesprekken wordn geïmporteerd</string>
+    <string name="initial_sync_start_importing_account_invited_rooms">Initiële synchronisoasje:
+\nUutgenodigde gesprekkn wordn geïmporteerd</string>
+    <string name="initial_sync_start_importing_account_left_rooms">Initiële synchronisoasje:
+\nVerloatn gesprekkn wordn geïmporteerd</string>
+    <string name="initial_sync_start_importing_account_groups">Initiële synchronisoasje:
+\nGemeenschappn wordn geïmporteerd</string>
+    <string name="initial_sync_start_importing_account_data">Initiële synchronisoasje:
+\nAccountgegeevns wordn geïmporteerd</string>
+
+    <string name="notice_room_update">%s èt da gesprek hier ipgewoardeerd.</string>
+
+    <string name="event_status_sending_message">Bericht wor verstuurd…</string>
+    <string name="clear_timeline_send_queue">Uutgoande wachtreeke leegn</string>
+
+    <string name="notice_room_third_party_revoked_invite">%1$s èt d’uutnodigienge vo %2$s vo ’t gesprek toe te treedn ingetrokkn</string>
     <string name="encrypted_message">Versleuteld bericht</string>
 
     <string name="light_theme">Licht thema</string>
     <string name="dark_theme">Dounker thema</string>
-    <string name="black_them">Zwart thema</string>
-    <string name="status_theme">Status.im-thema</string>
+    <string name="black_theme">Zwart thema</string>
 
     <string name="notification_sync_init">Dienst wor geïnitialiseerd</string>
     <string name="notification_sync_in_progress">Bezig me synchroniseern…</string>

@@ -7,12 +7,11 @@
 
     <TextView
         android:id="@+id/optionLabelText"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:textColor="?riotx_text_primary"
-        android:textSize="14sp"
-        android:textStyle="normal"
+        android:textColor="?vctr_content_primary"
         tools:text="What would you like to do?" />
 
     <LinearLayout
@@ -22,9 +21,9 @@
         android:orientation="vertical">
 
         <!-- Filled at runtime with buttons -->
-        <!--com.google.android.material.button.MaterialButton
+        <!--Button
             android:id="@+id/pollButton1"
-            style="@style/Style.Vector.Poll.Button"
+            style="@style/Widget.Vector.Button.Outlined.Poll"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             tools:text="Create Github issue" /-->

@@ -15,15 +15,20 @@
  */
 package org.matrix.android.sdk.internal.session.notification
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Transformations
 import com.zhuinden.monarchy.Monarchy
+import org.matrix.android.sdk.api.pushrules.Action
 import org.matrix.android.sdk.api.pushrules.PushRuleService
 import org.matrix.android.sdk.api.pushrules.RuleKind
+import org.matrix.android.sdk.api.pushrules.RuleScope
 import org.matrix.android.sdk.api.pushrules.RuleSetKey
 import org.matrix.android.sdk.api.pushrules.getActions
 import org.matrix.android.sdk.api.pushrules.rest.PushRule
 import org.matrix.android.sdk.api.pushrules.rest.RuleSet
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.internal.database.mapper.PushRulesMapper
+import org.matrix.android.sdk.internal.database.model.PushRuleEntity
 import org.matrix.android.sdk.internal.database.model.PushRulesEntity
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase
@@ -45,6 +50,7 @@ internal class DefaultPushRuleService @Inject constructor(
         private val addPushRuleTask: AddPushRuleTask,
         private val updatePushRuleActionsTask: UpdatePushRuleActionsTask,
         private val removePushRuleTask: RemovePushRuleTask,
+        private val pushRuleFinder: PushRuleFinder,
         private val taskExecutor: TaskExecutor,
         @SessionDatabase private val monarchy: Monarchy
 ) : PushRuleService {
@@ -110,12 +116,12 @@ internal class DefaultPushRuleService @Inject constructor(
         addPushRuleTask.execute(AddPushRuleTask.Params(kind, pushRule))
     }
 
-    override suspend fun updatePushRuleActions(kind: RuleKind, oldPushRule: PushRule, newPushRule: PushRule) {
-        updatePushRuleActionsTask.execute(UpdatePushRuleActionsTask.Params(kind, oldPushRule, newPushRule))
+    override suspend fun updatePushRuleActions(kind: RuleKind, ruleId: String, enable: Boolean, actions: List<Action>?) {
+        updatePushRuleActionsTask.execute(UpdatePushRuleActionsTask.Params(kind, ruleId, enable, actions))
     }
 
-    override suspend fun removePushRule(kind: RuleKind, pushRule: PushRule) {
-        removePushRuleTask.execute(RemovePushRuleTask.Params(kind, pushRule))
+    override suspend fun removePushRule(kind: RuleKind, ruleId: String) {
+        removePushRuleTask.execute(RemovePushRuleTask.Params(kind, ruleId))
     }
 
     override fun removePushRuleListener(listener: PushRuleService.PushRuleListener) {
@@ -128,6 +134,12 @@ internal class DefaultPushRuleService @Inject constructor(
         synchronized(listeners) {
             listeners.add(listener)
         }
+    }
+
+    override fun getActions(event: Event): List<Action> {
+        val rules = getPushRules(RuleScope.GLOBAL).getAllRules()
+
+        return pushRuleFinder.fulfilledBingRule(event, rules)?.getActions().orEmpty()
     }
 
 //    fun processEvents(events: List<Event>) {
@@ -200,6 +212,21 @@ internal class DefaultPushRuleService @Inject constructor(
                     Timber.e(e, "Error while dispatching finish")
                 }
             }
+        }
+    }
+
+    override fun getKeywords(): LiveData<Set<String>> {
+        // Keywords are all content rules that don't start with '.'
+        val liveData = monarchy.findAllMappedWithChanges(
+                { realm ->
+                    PushRulesEntity.where(realm, RuleScope.GLOBAL, RuleSetKey.CONTENT)
+                },
+                { result ->
+                    result.pushRules.map(PushRuleEntity::ruleId).filter { !it.startsWith(".") }
+                }
+        )
+        return Transformations.map(liveData) { results ->
+            results.firstOrNull().orEmpty().toSet()
         }
     }
 }

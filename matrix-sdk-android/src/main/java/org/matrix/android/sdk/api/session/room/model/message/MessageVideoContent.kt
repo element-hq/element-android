@@ -27,7 +27,7 @@ data class MessageVideoContent(
         /**
          * Required. Must be 'm.video'.
          */
-        @Json(name = "msgtype") override val msgType: String,
+        @Json(name = MessageContent.MSG_TYPE_JSON_KEY)override val msgType: String,
 
         /**
          * Required. A description of the video e.g. 'Gangnam style', or some kind of content description for accessibility e.g. 'video attachment'.
@@ -53,5 +53,5 @@ data class MessageVideoContent(
         @Json(name = "file") override val encryptedFileInfo: EncryptedFileInfo? = null
 ) : MessageWithAttachmentContent {
     override val mimeType: String?
-        get() = encryptedFileInfo?.mimetype ?: videoInfo?.mimeType
+        get() = videoInfo?.mimeType
 }

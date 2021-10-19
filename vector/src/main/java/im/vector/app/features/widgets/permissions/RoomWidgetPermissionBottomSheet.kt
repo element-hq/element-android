@@ -23,7 +23,7 @@ import android.text.style.BulletSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.airbnb.mvrx.MvRx
+import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
 import im.vector.app.R
@@ -33,7 +33,6 @@ import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.databinding.BottomSheetRoomWidgetPermissionBinding
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.widgets.WidgetArgs
-
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
@@ -64,8 +63,8 @@ class RoomWidgetPermissionBottomSheet :
     }
 
     private fun setupViews() {
-        views.widgetPermissionDecline.setOnClickListener { doDecline() }
-        views.widgetPermissionContinue.setOnClickListener { doAccept() }
+        views.widgetPermissionDecline.debouncedClicks { doDecline() }
+        views.widgetPermissionContinue.debouncedClicks { doAccept() }
     }
 
     override fun invalidate() = withState(viewModel) { state ->
@@ -116,7 +115,7 @@ class RoomWidgetPermissionBottomSheet :
     companion object {
 
         fun newInstance(widgetArgs: WidgetArgs) = RoomWidgetPermissionBottomSheet().withArgs {
-            putParcelable(MvRx.KEY_ARG, widgetArgs)
+            putParcelable(Mavericks.KEY_ARG, widgetArgs)
         }
     }
 }

@@ -19,7 +19,9 @@ package org.matrix.android.sdk.internal.crypto.verification
 import android.os.Handler
 import android.os.Looper
 import dagger.Lazy
-import org.matrix.android.sdk.api.MatrixCallback
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.session.crypto.crosssigning.CrossSigningService
 import org.matrix.android.sdk.api.session.crypto.crosssigning.KEYBACKUP_SECRET_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MASTER_KEY_SSSS_NAME
@@ -82,9 +84,6 @@ import org.matrix.android.sdk.internal.di.DeviceId
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.internal.task.TaskExecutor
-import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.UUID
 import javax.inject.Inject
@@ -538,8 +537,8 @@ internal class DefaultVerificationService @Inject constructor(
                     // as we are the one requesting in first place (or we accepted the request)
                     // I need to check if the pending request was related to this device also
                     val autoAccept = getExistingVerificationRequests(otherUserId).any {
-                        it.transactionId == startReq.transactionId
-                                && (it.requestInfo?.fromDevice == this.deviceId || it.readyInfo?.fromDevice == this.deviceId)
+                        it.transactionId == startReq.transactionId &&
+                                (it.requestInfo?.fromDevice == this.deviceId || it.readyInfo?.fromDevice == this.deviceId)
                     }
                     val tx = DefaultIncomingSASDefaultVerificationTransaction(
 //                            this,
@@ -1127,8 +1126,10 @@ internal class DefaultVerificationService @Inject constructor(
         }
     }
 
-    override fun requestKeyVerificationInDMs(methods: List<VerificationMethod>, otherUserId: String, roomId: String, localId: String?)
-            : PendingVerificationRequest {
+    override fun requestKeyVerificationInDMs(methods: List<VerificationMethod>,
+                                             otherUserId: String,
+                                             roomId: String,
+                                             localId: String?): PendingVerificationRequest {
         Timber.i("## SAS Requesting verification to user: $otherUserId in room $roomId")
 
         val requestsForUser = pendingRequests.getOrPut(otherUserId) { mutableListOf() }
@@ -1279,8 +1280,8 @@ internal class DefaultVerificationService @Inject constructor(
     private fun updatePendingRequest(updated: PendingVerificationRequest) {
         val requestsForUser = pendingRequests.getOrPut(updated.otherUserId) { mutableListOf() }
         val index = requestsForUser.indexOfFirst {
-            it.transactionId == updated.transactionId
-                    || it.transactionId == null && it.localId == updated.localId
+            it.transactionId == updated.transactionId ||
+                    it.transactionId == null && it.localId == updated.localId
         }
         if (index != -1) {
             requestsForUser.removeAt(index)
@@ -1293,8 +1294,7 @@ internal class DefaultVerificationService @Inject constructor(
                                            transactionId: String,
                                            roomId: String,
                                            otherUserId: String,
-                                           otherDeviceId: String,
-                                           callback: MatrixCallback<String>?): String? {
+                                           otherDeviceId: String): String {
         if (method == VerificationMethod.SAS) {
             val tx = DefaultOutgoingSASDefaultVerificationTransaction(
                     setDeviceVerificationAction,

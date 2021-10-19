@@ -39,6 +39,8 @@ class VectorConfiguration @Inject constructor(private val context: Context) {
             Timber.v("## onConfigurationChanged(): restore the expected value ${VectorLocale.applicationLocale}")
             Locale.setDefault(VectorLocale.applicationLocale)
         }
+        // Night mode may have changed
+        ThemeUtils.init(context)
     }
 
     fun applyToApplicationContext() {
@@ -102,8 +104,8 @@ class VectorConfiguration @Inject constructor(private val context: Context) {
      * @return the local status value
      */
     fun getHash(): String {
-        return (VectorLocale.applicationLocale.toString()
-                + "_" + FontScale.getFontScaleValue(context).preferenceValue
-                + "_" + ThemeUtils.getApplicationTheme(context))
+        return (VectorLocale.applicationLocale.toString() +
+                "_" + FontScale.getFontScaleValue(context).preferenceValue +
+                "_" + ThemeUtils.getApplicationTheme(context))
     }
 }

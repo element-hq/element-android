@@ -20,7 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import im.vector.app.core.platform.DefaultListUpdateCallback
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.item.ItemWithEvents
-import timber.log.Timber
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import java.util.concurrent.CopyOnWriteArrayList
 
 class ScrollOnNewMessageCallback(private val layoutManager: LinearLayoutManager,
@@ -38,24 +38,27 @@ class ScrollOnNewMessageCallback(private val layoutManager: LinearLayoutManager,
     }
 
     override fun onInserted(position: Int, count: Int) {
+        if (position != 0) {
+            return
+        }
         if (forceScroll) {
             forceScroll = false
-            layoutManager.scrollToPosition(position)
+            layoutManager.scrollToPosition(0)
             return
         }
-        Timber.v("On inserted $count count at position: $position")
-        if (layoutManager.findFirstVisibleItemPosition() != position) {
+        if (layoutManager.findFirstVisibleItemPosition() > 1) {
             return
         }
-        val firstNewItem = timelineEventController.adapter.getModelAtPosition(position) as? ItemWithEvents ?: return
+        val firstNewItem = tryOrNull {
+            timelineEventController.adapter.getModelAtPosition(position)
+        } as? ItemWithEvents ?: return
         val firstNewItemIds = firstNewItem.getEventIds().firstOrNull() ?: return
         val indexOfFirstNewItem = newTimelineEventIds.indexOf(firstNewItemIds)
         if (indexOfFirstNewItem != -1) {
-            Timber.v("Should scroll to position: $position")
-            repeat(newTimelineEventIds.size - indexOfFirstNewItem) {
-                newTimelineEventIds.removeAt(indexOfFirstNewItem)
+            while (newTimelineEventIds.lastOrNull() != firstNewItemIds) {
+                newTimelineEventIds.removeLastOrNull()
             }
-            layoutManager.scrollToPosition(position)
+            layoutManager.scrollToPosition(0)
         }
     }
 }

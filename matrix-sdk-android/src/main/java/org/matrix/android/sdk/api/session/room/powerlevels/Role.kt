@@ -17,14 +17,11 @@
 
 package org.matrix.android.sdk.api.session.room.powerlevels
 
-import androidx.annotation.StringRes
-import org.matrix.android.sdk.R
-
-sealed class Role(open val value: Int, @StringRes val res: Int) : Comparable<Role> {
-    object Admin : Role(100, R.string.power_level_admin)
-    object Moderator : Role(50, R.string.power_level_moderator)
-    object Default : Role(0, R.string.power_level_default)
-    data class Custom(override val value: Int) : Role(value, R.string.power_level_custom)
+sealed class Role(open val value: Int) : Comparable<Role> {
+    object Admin : Role(100)
+    object Moderator : Role(50)
+    object Default : Role(0)
+    data class Custom(override val value: Int) : Role(value)
 
     override fun compareTo(other: Role): Int {
         return value.compareTo(other.value)

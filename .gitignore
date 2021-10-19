@@ -8,9 +8,12 @@
 .idea/*.xml
 .DS_Store
 /build
+/benchmark-out
 /captures
 .externalNativeBuild
 
 /tmp
+/fastlane/private
+/fastlane/report.xml
 
-ktlint
+/library/build

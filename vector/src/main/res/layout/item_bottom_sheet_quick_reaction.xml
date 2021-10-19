@@ -9,83 +9,74 @@
 
     <TextView
         android:id="@+id/quickReaction0"
+        style="@style/Widget.Vector.TextView.Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="4dp"
-        android:textColor="?riotx_text_secondary"
-        android:textSize="24sp"
-        tools:ignore="MissingConstraints"
+        android:textColor="@color/emoji_black"
         tools:text="👍" />
 
     <TextView
         android:id="@+id/quickReaction1"
+        style="@style/Widget.Vector.TextView.Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="4dp"
-        android:textColor="?riotx_text_secondary"
-        android:textSize="24sp"
-        tools:ignore="MissingConstraints"
         tools:text="👎" />
 
     <TextView
         android:id="@+id/quickReaction2"
+        style="@style/Widget.Vector.TextView.Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="4dp"
-        android:textColor="?riotx_text_secondary"
-        android:textSize="24sp"
-        tools:ignore="MissingConstraints"
+        android:textColor="@color/emoji_black"
         tools:text="😀" />
 
 
     <TextView
         android:id="@+id/quickReaction3"
+        style="@style/Widget.Vector.TextView.Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="4dp"
-        android:textColor="?riotx_text_secondary"
-        android:textSize="24sp"
-        tools:ignore="MissingConstraints"
+        android:textColor="@color/emoji_black"
         tools:text="🎉" />
 
     <TextView
         android:id="@+id/quickReaction4"
+        style="@style/Widget.Vector.TextView.Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="4dp"
-        android:textColor="?riotx_text_secondary"
-        android:textSize="24sp"
-        tools:ignore="MissingConstraints"
+        android:textColor="@color/emoji_black"
         tools:text="😕" />
 
     <TextView
         android:id="@+id/quickReaction5"
+        style="@style/Widget.Vector.TextView.Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="4dp"
-        android:textColor="?riotx_text_secondary"
-        android:textSize="24sp"
-        tools:ignore="MissingConstraints"
+        android:textColor="@color/emoji_black"
         tools:text="♥" />
 
     <TextView
         android:id="@+id/quickReaction6"
+        style="@style/Widget.Vector.TextView.Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="4dp"
-        android:textColor="?riotx_text_secondary"
-        android:textSize="24sp"
-        tools:ignore="MissingConstraints"
+        android:textColor="@color/emoji_black"
         tools:text="🍆" />
 
     <TextView
         android:id="@+id/quickReaction7"
+        style="@style/Widget.Vector.TextView.Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="4dp"
-        android:textColor="?riotx_text_secondary"
-        android:textSize="26sp"
-        tools:ignore="MissingConstraints"
+        android:textColor="@color/emoji_black"
         tools:text="👀" />
 
     <androidx.constraintlayout.helper.widget.Flow

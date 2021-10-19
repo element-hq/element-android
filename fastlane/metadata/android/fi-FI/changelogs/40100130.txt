@@ -1,0 +1,2 @@
+Tärkeimmät muutokset tässä versiossa: URL-esikatselu, uusi emoji-näppäimistö, uudet huoneasetukset ja lunta jouluksi!
+Täysi muutosloki: https://github.com/vector-im/element-android/releases/tag/v1.0.13

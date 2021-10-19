@@ -39,7 +39,7 @@ internal class GossipingWorkManager @Inject constructor(
                 .setConstraints(WorkManagerProvider.workConstraints)
                 .startChain(startChain)
                 .setInputData(data)
-                .setBackoffCriteria(BackoffPolicy.LINEAR, 10_000L, TimeUnit.MILLISECONDS)
+                .setBackoffCriteria(BackoffPolicy.LINEAR, WorkManagerProvider.BACKOFF_DELAY_MILLIS, TimeUnit.MILLISECONDS)
                 .build()
     }
 

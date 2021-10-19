@@ -16,66 +16,154 @@
 
 package im.vector.app.features.home.room.list
 
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.MutableLiveData
+import com.airbnb.mvrx.Async
+import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.Loading
+import com.airbnb.mvrx.MavericksViewModelFactory
+import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.ViewModelContext
+import im.vector.app.AppStateHandler
+import im.vector.app.RoomGroupingMethod
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
-import im.vector.app.core.utils.DataSource
-import io.reactivex.schedulers.Schedulers
+import im.vector.app.core.resources.StringProvider
+import im.vector.app.features.displayname.getBestName
+import im.vector.app.features.invite.AutoAcceptInvites
+import im.vector.app.features.settings.VectorPreferences
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import org.matrix.android.sdk.api.MatrixCallback
-import org.matrix.android.sdk.api.NoOpMatrixCallback
 import org.matrix.android.sdk.api.extensions.orFalse
+import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.room.model.Membership
-import org.matrix.android.sdk.api.session.room.model.RoomSummary
+import org.matrix.android.sdk.api.session.room.UpdatableLivePageResult
+import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
 import org.matrix.android.sdk.api.session.room.state.isPublic
-import org.matrix.android.sdk.rx.rx
+import org.matrix.android.sdk.api.util.toMatrixItem
+import org.matrix.android.sdk.flow.flow
 import timber.log.Timber
-import java.lang.Exception
 import javax.inject.Inject
 
-class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
-                                            private val session: Session,
-                                            private val roomSummariesSource: DataSource<List<RoomSummary>>)
-    : VectorViewModel<RoomListViewState, RoomListAction, RoomListViewEvents>(initialState) {
+class RoomListViewModel @Inject constructor(
+        initialState: RoomListViewState,
+        private val session: Session,
+        private val stringProvider: StringProvider,
+        private val appStateHandler: AppStateHandler,
+        private val vectorPreferences: VectorPreferences,
+        private val autoAcceptInvites: AutoAcceptInvites
+) : VectorViewModel<RoomListViewState, RoomListAction, RoomListViewEvents>(initialState) {
 
     interface Factory {
         fun create(initialState: RoomListViewState): RoomListViewModel
     }
 
-    companion object : MvRxViewModelFactory<RoomListViewModel, RoomListViewState> {
+    private var updatableQuery: UpdatableLivePageResult? = null
+
+    private val suggestedRoomJoiningState: MutableLiveData<Map<String, Async<Unit>>> = MutableLiveData(emptyMap())
+
+    interface ActiveSpaceQueryUpdater {
+        fun updateForSpaceId(roomId: String?)
+    }
+
+    enum class SpaceFilterStrategy {
+        /**
+         * Filter the rooms if they are part of the current space (children and grand children).
+         * If current space is null, will return orphan rooms only
+         */
+        ORPHANS_IF_SPACE_NULL,
+
+        /**
+         * Special case when we don't want to discriminate rooms when current space is null.
+         * In this case return all.
+         */
+        ALL_IF_SPACE_NULL,
+
+        /** Do not filter based on space*/
+        NONE
+    }
+
+    init {
+        observeMembershipChanges()
+
+        appStateHandler.selectedRoomGroupingObservable
+                .distinctUntilChanged()
+                .execute {
+                    copy(
+                            currentRoomGrouping = it.invoke()?.orNull()?.let { Success(it) } ?: Loading()
+                    )
+                }
+
+        session.flow().liveUser(session.myUserId)
+                .map { it.getOrNull()?.toMatrixItem()?.getBestName() }
+                .distinctUntilChanged()
+                .execute {
+                    copy(
+                            currentUserName = it.invoke() ?: session.myUserId
+                    )
+                }
+    }
+
+    private fun observeMembershipChanges() {
+        session.flow()
+                .liveRoomChangeMembershipState()
+                .setOnEach {
+                    copy(roomMembershipChanges = it)
+                }
+    }
+
+    companion object : MavericksViewModelFactory<RoomListViewModel, RoomListViewState> {
 
         @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: RoomListViewState): RoomListViewModel? {
+        override fun create(viewModelContext: ViewModelContext, state: RoomListViewState): RoomListViewModel {
             val fragment: RoomListFragment = (viewModelContext as FragmentViewModelContext).fragment()
             return fragment.roomListViewModelFactory.create(state)
         }
     }
 
-    private val displayMode = initialState.displayMode
-    private val roomListDisplayModeFilter = RoomListDisplayModeFilter(displayMode)
+    private val roomListSectionBuilder = if (appStateHandler.getCurrentRoomGroupingMethod() is RoomGroupingMethod.BySpace) {
+        RoomListSectionBuilderSpace(
+                session,
+                stringProvider,
+                appStateHandler,
+                viewModelScope,
+                autoAcceptInvites,
+                {
+                    updatableQuery = it
+                },
+                suggestedRoomJoiningState,
+                !vectorPreferences.prefSpacesShowAllRoomInHome()
+        )
+    } else {
+        RoomListSectionBuilderGroup(
+                session,
+                stringProvider,
+                appStateHandler,
+                autoAcceptInvites
+        ) {
+            updatableQuery = it
+        }
+    }
 
-    init {
-        observeRoomSummaries()
-        observeMembershipChanges()
+    val sections: List<RoomsSection> by lazy {
+        roomListSectionBuilder.buildSections(initialState.displayMode)
     }
 
     override fun handle(action: RoomListAction) {
         when (action) {
             is RoomListAction.SelectRoom                  -> handleSelectRoom(action)
-            is RoomListAction.ToggleCategory              -> handleToggleCategory(action)
             is RoomListAction.AcceptInvitation            -> handleAcceptInvitation(action)
             is RoomListAction.RejectInvitation            -> handleRejectInvitation(action)
             is RoomListAction.FilterWith                  -> handleFilter(action)
-            is RoomListAction.MarkAllRoomsRead            -> handleMarkAllRoomsRead()
             is RoomListAction.LeaveRoom                   -> handleLeaveRoom(action)
             is RoomListAction.ChangeRoomNotificationState -> handleChangeNotificationMode(action)
             is RoomListAction.ToggleTag                   -> handleToggleTag(action)
+            is RoomListAction.ToggleSection               -> handleToggleSection(action.section)
+            is RoomListAction.JoinSuggestedRoom           -> handleJoinSuggestedRoom(action)
+            is RoomListAction.ShowRoomDetails             -> handleShowRoomDetails(action)
         }.exhaustive
     }
 
@@ -89,8 +177,14 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
         _viewEvents.post(RoomListViewEvents.SelectRoom(action.roomSummary))
     }
 
-    private fun handleToggleCategory(action: RoomListAction.ToggleCategory) = setState {
-        this.toggle(action.category)
+    private fun handleToggleSection(roomSection: RoomsSection) {
+        roomSection.isExpanded.postValue(!roomSection.isExpanded.value.orFalse())
+        /* TODO Cleanup if it is working
+        sections.find { it.sectionName == roomSection.sectionName }
+                ?.let { section ->
+                    section.isExpanded.postValue(!section.isExpanded.value.orFalse())
+                }
+         */
     }
 
     private fun handleFilter(action: RoomListAction.FilterWith) {
@@ -99,23 +193,11 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
                     roomFilter = action.filter
             )
         }
-    }
-
-    private fun observeRoomSummaries() {
-        roomSummariesSource
-                .observe()
-                .observeOn(Schedulers.computation())
-                .execute { asyncRooms ->
-                    copy(asyncRooms = asyncRooms)
-                }
-
-        roomSummariesSource
-                .observe()
-                .observeOn(Schedulers.computation())
-                .map { buildRoomSummaries(it) }
-                .execute { async ->
-                    copy(asyncFilteredRooms = async)
-                }
+        updatableQuery?.updateQuery {
+            it.copy(
+                    displayName = QueryStringValue.Contains(action.filter, QueryStringValue.Case.INSENSITIVE)
+            )
+        }
     }
 
     private fun handleAcceptInvitation(action: RoomListAction.AcceptInvitation) = withState { state ->
@@ -127,17 +209,30 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
             return@withState
         }
 
-        session.getRoom(roomId)?.join(callback = object : MatrixCallback<Unit> {
-            override fun onSuccess(data: Unit) {
+        // quick echo
+        setState {
+            copy(
+                    roomMembershipChanges = roomMembershipChanges.mapValues {
+                        if (it.key == roomId) {
+                            ChangeMembershipState.Joining
+                        } else {
+                            it.value
+                        }
+                    }
+            )
+        }
+
+        val room = session.getRoom(roomId) ?: return@withState
+        viewModelScope.launch {
+            try {
+                room.join()
                 // We do not update the joiningRoomsIds here, because, the room is not joined yet regarding the sync data.
                 // Instead, we wait for the room to be joined
-            }
-
-            override fun onFailure(failure: Throwable) {
+            } catch (failure: Throwable) {
                 // Notify the user
                 _viewEvents.post(RoomListViewEvents.Failure(failure))
             }
-        })
+        }
     }
 
     private fun handleRejectInvitation(action: RoomListAction.RejectInvitation) = withState { state ->
@@ -149,28 +244,19 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
             return@withState
         }
 
-        session.getRoom(roomId)?.leave(null, object : MatrixCallback<Unit> {
-            override fun onSuccess(data: Unit) {
+        val room = session.getRoom(roomId) ?: return@withState
+        viewModelScope.launch {
+            try {
+                room.leave(null)
                 // We do not update the rejectingRoomsIds here, because, the room is not rejected yet regarding the sync data.
                 // Instead, we wait for the room to be rejected
                 // Known bug: if the user is invited again (after rejecting the first invitation), the loading will be displayed instead of the buttons.
                 // If we update the state, the button will be displayed again, so it's not ideal...
-            }
-
-            override fun onFailure(failure: Throwable) {
+            } catch (failure: Throwable) {
                 // Notify the user
                 _viewEvents.post(RoomListViewEvents.Failure(failure))
             }
-        })
-    }
-
-    private fun handleMarkAllRoomsRead() = withState { state ->
-        state.asyncFilteredRooms.invoke()
-                ?.flatMap { it.value }
-                ?.filter { it.membership == Membership.JOIN }
-                ?.map { it.roomId }
-                ?.toList()
-                ?.let { session.markAllAsRead(it, NoOpMatrixCallback()) }
+        }
     }
 
     private fun handleChangeNotificationMode(action: RoomListAction.ChangeRoomNotificationState) {
@@ -183,6 +269,32 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
                     _viewEvents.post(RoomListViewEvents.Failure(failure))
                 }
             }
+        }
+    }
+
+    private fun handleJoinSuggestedRoom(action: RoomListAction.JoinSuggestedRoom) {
+        suggestedRoomJoiningState.postValue(suggestedRoomJoiningState.value.orEmpty().toMutableMap().apply {
+            this[action.roomId] = Loading()
+        }.toMap())
+
+        viewModelScope.launch {
+            try {
+                session.joinRoom(action.roomId, null, action.viaServers ?: emptyList())
+
+                suggestedRoomJoiningState.postValue(suggestedRoomJoiningState.value.orEmpty().toMutableMap().apply {
+                    this[action.roomId] = Success(Unit)
+                }.toMap())
+            } catch (failure: Throwable) {
+                suggestedRoomJoiningState.postValue(suggestedRoomJoiningState.value.orEmpty().toMutableMap().apply {
+                    this[action.roomId] = Fail(failure)
+                }.toMap())
+            }
+        }
+    }
+
+    private fun handleShowRoomDetails(action: RoomListAction.ShowRoomDetails) {
+        session.permalinkService().createRoomPermalink(action.roomId, action.viaServers)?.let {
+            _viewEvents.post(RoomListViewEvents.NavigateToMxToBottomSheet(it))
         }
     }
 
@@ -220,56 +332,16 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
 
     private fun handleLeaveRoom(action: RoomListAction.LeaveRoom) {
         _viewEvents.post(RoomListViewEvents.Loading(null))
-        session.getRoom(action.roomId)?.leave(null, object : MatrixCallback<Unit> {
-            override fun onSuccess(data: Unit) {
-                _viewEvents.post(RoomListViewEvents.Done)
-            }
-
-            override fun onFailure(failure: Throwable) {
-                _viewEvents.post(RoomListViewEvents.Failure(failure))
-            }
-        })
-    }
-
-    private fun observeMembershipChanges() {
-        session.rx()
-                .liveRoomChangeMembershipState()
-                .subscribe {
-                    Timber.v("ChangeMembership states: $it")
-                    setState { copy(roomMembershipChanges = it) }
-                }
-                .disposeOnClear()
-    }
-
-    private fun buildRoomSummaries(rooms: List<RoomSummary>): RoomSummaries {
-        // Set up init size on directChats and groupRooms as they are the biggest ones
-        val invites = ArrayList<RoomSummary>()
-        val favourites = ArrayList<RoomSummary>()
-        val directChats = ArrayList<RoomSummary>(rooms.size)
-        val groupRooms = ArrayList<RoomSummary>(rooms.size)
-        val lowPriorities = ArrayList<RoomSummary>()
-        val serverNotices = ArrayList<RoomSummary>()
-
-        rooms
-                .filter { roomListDisplayModeFilter.test(it) }
-                .forEach { room ->
-                    val tags = room.tags.map { it.name }
-                    when {
-                        room.membership == Membership.INVITE          -> invites.add(room)
-                        tags.contains(RoomTag.ROOM_TAG_SERVER_NOTICE) -> serverNotices.add(room)
-                        tags.contains(RoomTag.ROOM_TAG_FAVOURITE)     -> favourites.add(room)
-                        tags.contains(RoomTag.ROOM_TAG_LOW_PRIORITY)  -> lowPriorities.add(room)
-                        room.isDirect                                 -> directChats.add(room)
-                        else                                          -> groupRooms.add(room)
-                    }
-                }
-        return RoomSummaries().apply {
-            put(RoomCategory.INVITE, invites)
-            put(RoomCategory.FAVOURITE, favourites)
-            put(RoomCategory.DIRECT, directChats)
-            put(RoomCategory.GROUP, groupRooms)
-            put(RoomCategory.LOW_PRIORITY, lowPriorities)
-            put(RoomCategory.SERVER_NOTICE, serverNotices)
+        val room = session.getRoom(action.roomId) ?: return
+        viewModelScope.launch {
+            val value = runCatching { room.leave(null) }
+                    .fold({ RoomListViewEvents.Done }, { RoomListViewEvents.Failure(it) })
+            _viewEvents.post(value)
         }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        roomListSectionBuilder.dispose()
     }
 }

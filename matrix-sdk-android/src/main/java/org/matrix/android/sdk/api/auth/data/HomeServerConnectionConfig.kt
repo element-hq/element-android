@@ -18,11 +18,11 @@ package org.matrix.android.sdk.api.auth.data
 
 import android.net.Uri
 import com.squareup.moshi.JsonClass
+import okhttp3.CipherSuite
+import okhttp3.TlsVersion
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig.Builder
 import org.matrix.android.sdk.internal.network.ssl.Fingerprint
 import org.matrix.android.sdk.internal.util.ensureTrailingSlash
-import okhttp3.CipherSuite
-import okhttp3.TlsVersion
 
 /**
  * This data class holds how to connect to a specific Homeserver.
@@ -31,7 +31,12 @@ import okhttp3.TlsVersion
  */
 @JsonClass(generateAdapter = true)
 data class HomeServerConnectionConfig(
+        // This is the homeserver URL entered by the user
         val homeServerUri: Uri,
+        // This is the homeserver base URL for the client-server API. Default to homeServerUri,
+        // but can be updated with data from .Well-Known before login, and/or with the data
+        // included in the login response
+        val homeServerUriBase: Uri = homeServerUri,
         val identityServerUri: Uri? = null,
         val antiVirusServerUri: Uri? = null,
         val allowedFingerprints: List<Fingerprint> = emptyList(),
@@ -47,7 +52,6 @@ data class HomeServerConnectionConfig(
      * This builder should be use to create a [HomeServerConnectionConfig] instance.
      */
     class Builder {
-
         private lateinit var homeServerUri: Uri
         private var identityServerUri: Uri? = null
         private var antiVirusServerUri: Uri? = null
@@ -69,14 +73,14 @@ data class HomeServerConnectionConfig(
          */
         fun withHomeServerUri(hsUri: Uri): Builder {
             if (hsUri.scheme != "http" && hsUri.scheme != "https") {
-                throw RuntimeException("Invalid home server URI: $hsUri")
+                throw RuntimeException("Invalid homeserver URI: $hsUri")
             }
             // ensure trailing /
             val hsString = hsUri.toString().ensureTrailingSlash()
             homeServerUri = try {
                 Uri.parse(hsString)
             } catch (e: Exception) {
-                throw RuntimeException("Invalid home server URI: $hsUri")
+                throw RuntimeException("Invalid homeserver URI: $hsUri")
             }
             return this
         }
@@ -134,7 +138,7 @@ data class HomeServerConnectionConfig(
         }
 
         /**
-         * Add an accepted TLS version for TLS connections with the home server.
+         * Add an accepted TLS version for TLS connections with the homeserver.
          *
          * @param tlsVersion the tls version to add to the set of TLS versions accepted.
          * @return this builder
@@ -156,7 +160,7 @@ data class HomeServerConnectionConfig(
         }
 
         /**
-         * Add a TLS cipher suite to the list of accepted TLS connections with the home server.
+         * Add a TLS cipher suite to the list of accepted TLS connections with the homeserver.
          *
          * @param tlsCipherSuite the tls cipher suite to add.
          * @return this builder
@@ -234,16 +238,16 @@ data class HomeServerConnectionConfig(
          */
         fun build(): HomeServerConnectionConfig {
             return HomeServerConnectionConfig(
-                    homeServerUri,
-                    identityServerUri,
-                    antiVirusServerUri,
-                    allowedFingerprints,
-                    shouldPin,
-                    tlsVersions,
-                    tlsCipherSuites,
-                    shouldAcceptTlsExtensions,
-                    allowHttpExtension,
-                    forceUsageTlsVersions
+                    homeServerUri = homeServerUri,
+                    identityServerUri = identityServerUri,
+                    antiVirusServerUri = antiVirusServerUri,
+                    allowedFingerprints = allowedFingerprints,
+                    shouldPin = shouldPin,
+                    tlsVersions = tlsVersions,
+                    tlsCipherSuites = tlsCipherSuites,
+                    shouldAcceptTlsExtensions = shouldAcceptTlsExtensions,
+                    allowHttpExtension = allowHttpExtension,
+                    forceUsageTlsVersions = forceUsageTlsVersions
             )
         }
     }

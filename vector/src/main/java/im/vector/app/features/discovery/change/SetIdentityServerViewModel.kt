@@ -17,11 +17,11 @@ package im.vector.app.features.discovery.change
 
 import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import im.vector.app.R
 import im.vector.app.core.di.HasScreenInjector
 import im.vector.app.core.extensions.exhaustive
@@ -33,21 +33,20 @@ import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.identity.IdentityServiceError
 import org.matrix.android.sdk.api.session.terms.TermsService
-import org.matrix.android.sdk.internal.util.awaitCallback
 import java.net.UnknownHostException
 
 class SetIdentityServerViewModel @AssistedInject constructor(
         @Assisted initialState: SetIdentityServerState,
         private val mxSession: Session,
-        stringProvider: StringProvider)
-    : VectorViewModel<SetIdentityServerState, SetIdentityServerAction, SetIdentityServerViewEvents>(initialState) {
+        stringProvider: StringProvider) :
+    VectorViewModel<SetIdentityServerState, SetIdentityServerAction, SetIdentityServerViewEvents>(initialState) {
 
     @AssistedFactory
     interface Factory {
         fun create(initialState: SetIdentityServerState): SetIdentityServerViewModel
     }
 
-    companion object : MvRxViewModelFactory<SetIdentityServerViewModel, SetIdentityServerState> {
+    companion object : MavericksViewModelFactory<SetIdentityServerViewModel, SetIdentityServerState> {
 
         override fun initialState(viewModelContext: ViewModelContext): SetIdentityServerState? {
             val session = (viewModelContext.activity as HasScreenInjector).injector().activeSessionHolder().getActiveSession()
@@ -97,9 +96,7 @@ class SetIdentityServerViewModel @AssistedInject constructor(
         viewModelScope.launch {
             try {
                 // First ping the identity server v2 API
-                awaitCallback<Unit> {
-                    mxSession.identityService().isValidIdentityServer(baseUrl, it)
-                }
+                mxSession.identityService().isValidIdentityServer(baseUrl)
                 // Ok, next step
                 checkTerms(baseUrl)
             } catch (failure: Throwable) {

@@ -38,8 +38,8 @@ import javax.inject.Inject
  * Possible previous worker: Always [UploadContentWorker]
  * Possible next worker    : None, but it will post new work to send events, encrypted or not
  */
-internal class MultipleEventSendingDispatcherWorker(context: Context, params: WorkerParameters)
-    : SessionSafeCoroutineWorker<MultipleEventSendingDispatcherWorker.Params>(context, params, Params::class.java) {
+internal class MultipleEventSendingDispatcherWorker(context: Context, params: WorkerParameters) :
+    SessionSafeCoroutineWorker<MultipleEventSendingDispatcherWorker.Params>(context, params, Params::class.java) {
 
     @JsonClass(generateAdapter = true)
     internal data class Params(
@@ -55,7 +55,12 @@ internal class MultipleEventSendingDispatcherWorker(context: Context, params: Wo
 
     override fun doOnError(params: Params): Result {
         params.localEchoIds.forEach { localEchoIds ->
-            localEchoRepository.updateSendState(localEchoIds.eventId, localEchoIds.roomId, SendState.UNDELIVERED)
+            localEchoRepository.updateSendState(
+                    eventId = localEchoIds.eventId,
+                    roomId = localEchoIds.roomId,
+                    sendState = SendState.UNDELIVERED,
+                    sendStateDetails = params.lastFailureMessage
+            )
         }
 
         return super.doOnError(params)

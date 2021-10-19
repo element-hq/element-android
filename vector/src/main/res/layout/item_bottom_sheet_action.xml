@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="?colorSurface"
     android:clickable="true"
     android:focusable="true"
     android:foreground="?attr/selectableItemBackground"
@@ -36,7 +37,7 @@
         app:layout_constraintEnd_toStartOf="@+id/actionTitleContainer"
         app:layout_constraintStart_toEndOf="@+id/actionStartSpace"
         app:layout_constraintTop_toTopOf="parent"
-        app:tint="?riotx_text_secondary"
+        app:tint="?vctr_content_secondary"
         tools:ignore="MissingPrefix"
         tools:src="@drawable/ic_room_actions_notifications_all" />
 
@@ -52,16 +53,16 @@
 
         <TextView
             android:id="@+id/actionTitle"
+            style="@style/Widget.Vector.TextView.Subtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:drawablePadding="16dp"
             android:ellipsize="end"
             android:maxLines="2"
-            android:textColor="?riotx_text_secondary"
-            android:textSize="17sp"
-            tools:drawableEnd="@drawable/ic_material_expand_more_black"
-            tools:drawableTint="?riotx_text_secondary"
+            android:textColor="?vctr_content_secondary"
+            tools:drawableEnd="@drawable/ic_expand_more"
+            tools:drawableTint="?vctr_content_secondary"
             tools:text="kdqsksqdk" />
 
     </FrameLayout>
@@ -76,7 +77,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tint="@color/riotx_accent"
+        app:tint="?colorPrimary"
         tools:ignore="MissingPrefix"
         tools:visibility="visible" />
 

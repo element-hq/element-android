@@ -24,7 +24,7 @@
         android:icon="@drawable/ic_video"
         android:title="@string/action_video_call"
         android:visible="false"
-        app:iconTint="@color/riotx_accent"
+        app:iconTint="?colorPrimary"
         app:showAsAction="always"
         tools:visible="true" />
 
@@ -33,40 +33,21 @@
         android:icon="@drawable/ic_phone"
         android:title="@string/call"
         android:visible="false"
-        app:iconTint="@color/riotx_accent"
+        app:iconTint="?colorPrimary"
         app:showAsAction="always"
         tools:visible="true" />
 
-    <item
-        android:id="@+id/hangup_call"
-        android:icon="@drawable/ic_call_end"
-        android:title="@string/call_notification_hangup"
-        android:visible="false"
-        app:iconTint="@color/riotx_destructive_accent"
+    <item android:id="@+id/join_conference"
+        android:title="@string/join"
+        app:actionLayout="@layout/layout_join_conference_action"
         app:showAsAction="always"
-        tools:visible="true" />
+        />
 
     <item
         android:id="@+id/open_matrix_apps"
         android:title="@string/room_add_matrix_apps"
         app:actionLayout="@layout/custom_action_item_layout_badge"
         app:showAsAction="ifRoom" />
-
-    <item
-        android:id="@+id/resend_all"
-        android:icon="@drawable/ic_refresh_cw"
-        android:title="@string/room_prompt_resend"
-        android:visible="false"
-        app:showAsAction="never"
-        tools:visible="true" />
-
-    <item
-        android:id="@+id/clear_all"
-        android:icon="@drawable/ic_trash"
-        android:title="@string/room_prompt_cancel"
-        android:visible="false"
-        app:showAsAction="never"
-        tools:visible="true" />
 
     <item
         android:id="@+id/dev_tools"

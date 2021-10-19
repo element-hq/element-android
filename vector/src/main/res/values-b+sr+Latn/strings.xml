@@ -3,8 +3,7 @@
 
     <string name="light_theme">Svetla Tema</string>
     <string name="dark_theme">Tamna Tema</string>
-    <string name="black_them">Crna Tema</string>
-    <string name="status_theme">Status.im Tema</string>
+    <string name="black_theme">Crna Tema</string>
 
     <string name="notification_sync_init">Inicijalizacija servisa</string>
     <string name="notification_sync_in_progress">Sinhronizacija u toku…</string>
@@ -179,7 +178,7 @@
     <string name="room_info_room_topic">Tema sobe</string>
 
     <string name="settings_call_category">Pozivi</string>
-    <string name="settings_call_ringtone_use_app_ringtone">Koristi podrazumevani Element zvuk zvona za dolazeće pozive</string>
+    <string name="template_settings_call_ringtone_use_app_ringtone">Koristi podrazumevani ${app_name} zvuk zvona za dolazeće pozive</string>
     <string name="settings_call_ringtone_title">Zvuk zvona dolazećeg poziva</string>
     <string name="settings_call_ringtone_dialog_title">Izaberite zvuk zvona za pozive:</string>
 
@@ -209,7 +208,7 @@
 
     <string name="settings_troubleshoot_test_service_boot_success">Servis će se početi sa radom prilikom ponovnog pokretanja uređaja.</string>
     <string name="settings_troubleshoot_test_battery_title">Optimizacija potrošnje baterije</string>
-    <string name="settings_troubleshoot_test_battery_success">Optimizacija potrošnje baterije ne utiče na Element.</string>
+    <string name="template_settings_troubleshoot_test_battery_success">Optimizacija potrošnje baterije ne utiče na ${app_name}.</string>
     <string name="settings_troubleshoot_test_battery_quickfix">Ignoriši optimizacije</string>
 
     <string name="settings_notification_privacy_normal">Normalno</string>
@@ -264,7 +263,7 @@
     <string name="settings_discovery_category">Pronalaženje</string>
     <string name="settings_discovery_manage">Upravljajte vašim podešavanjima za pronalaženje.</string>
     <string name="startup_notification_privacy_title">Privatnost obaveštenja</string>
-    <string name="startup_notification_privacy_message">Element može da radi u pozadini kako bi upravljao vašim obaveštenjima sigurno i privatno. Ovo može da utiče na potrošnju baterije.</string>
+    <string name="template_startup_notification_privacy_message">${app_name} može da radi u pozadini kako bi upravljao vašim obaveštenjima sigurno i privatno. Ovo može da utiče na potrošnju baterije.</string>
     <string name="startup_notification_privacy_button_grant">Dozvoli</string>
     <string name="startup_notification_privacy_button_other">Izaberi drugu opciju</string>
 

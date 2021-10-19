@@ -16,18 +16,22 @@
 
 package im.vector.app.features.home.room.list
 
+import com.airbnb.mvrx.Async
+import com.airbnb.mvrx.Fail
+import com.airbnb.mvrx.Loading
 import im.vector.app.R
 import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.epoxy.VectorEpoxyModel
+import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.core.utils.DebouncedClickListener
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.format.DisplayableEventFormatter
 import im.vector.app.features.home.room.typing.TypingHelper
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
+import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
@@ -35,12 +39,13 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
                                                  private val dateFormatter: VectorDateFormatter,
                                                  private val stringProvider: StringProvider,
                                                  private val typingHelper: TypingHelper,
-                                                 private val avatarRenderer: AvatarRenderer) {
+                                                 private val avatarRenderer: AvatarRenderer,
+                                                 private val errorFormatter: ErrorFormatter) {
 
     fun create(roomSummary: RoomSummary,
                roomChangeMembershipStates: Map<String, ChangeMembershipState>,
                selectedRoomIds: Set<String>,
-               listener: RoomSummaryController.Listener?): VectorEpoxyModel<*> {
+               listener: RoomListListener?): VectorEpoxyModel<*> {
         return when (roomSummary.membership) {
             Membership.INVITE -> {
                 val changeMembershipState = roomChangeMembershipStates[roomSummary.roomId] ?: ChangeMembershipState.Unknown
@@ -50,9 +55,33 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
         }
     }
 
+    fun createSuggestion(spaceChildInfo: SpaceChildInfo,
+                         suggestedRoomJoiningStates: Map<String, Async<Unit>>,
+                         listener: RoomListListener?): VectorEpoxyModel<*> {
+        val error = (suggestedRoomJoiningStates[spaceChildInfo.childRoomId] as? Fail)?.error
+        return SpaceChildInfoItem_()
+                .id("sug_${spaceChildInfo.childRoomId}")
+                .matrixItem(spaceChildInfo.toMatrixItem())
+                .avatarRenderer(avatarRenderer)
+                .topic(spaceChildInfo.topic)
+                .errorLabel(
+                        error?.let {
+                            stringProvider.getString(R.string.error_failed_to_join_room, errorFormatter.toHumanReadable(it))
+                        }
+                )
+                .buttonLabel(
+                        if (error != null) stringProvider.getString(R.string.global_retry)
+                        else stringProvider.getString(R.string.join)
+                )
+                .loading(suggestedRoomJoiningStates[spaceChildInfo.childRoomId] is Loading)
+                .memberCount(spaceChildInfo.activeMemberCount ?: 0)
+                .buttonClickListener { listener?.onJoinSuggestedRoom(spaceChildInfo) }
+                .itemClickListener { listener?.onSuggestedRoomClicked(spaceChildInfo) }
+    }
+
     private fun createInvitationItem(roomSummary: RoomSummary,
                                      changeMembershipState: ChangeMembershipState,
-                                     listener: RoomSummaryController.Listener?): VectorEpoxyModel<*> {
+                                     listener: RoomListListener?): VectorEpoxyModel<*> {
         val secondLine = if (roomSummary.isDirect) {
             roomSummary.inviterId
         } else {
@@ -85,14 +114,18 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
         var latestEventTime: CharSequence = ""
         val latestEvent = roomSummary.latestPreviewableEvent
         if (latestEvent != null) {
-            latestFormattedEvent = displayableEventFormatter.format(latestEvent, roomSummary.isDirect.not())
+            latestFormattedEvent = displayableEventFormatter.format(latestEvent, roomSummary.isDirect, roomSummary.isDirect.not())
             latestEventTime = dateFormatter.format(latestEvent.root.originServerTs, DateFormatKind.ROOM_LIST)
         }
         val typingMessage = typingHelper.getTypingMessage(roomSummary.typingUsers)
         return RoomSummaryItem_()
                 .id(roomSummary.roomId)
                 .avatarRenderer(avatarRenderer)
-                .encryptionTrustLevel(roomSummary.roomEncryptionTrustLevel)
+                // We do not display shield in the room list anymore
+                // .encryptionTrustLevel(roomSummary.roomEncryptionTrustLevel)
+                .izPublic(roomSummary.isPublic)
+                .showPresence(roomSummary.isDirect)
+                .userPresence(roomSummary.directUserPresence)
                 .matrixItem(roomSummary.toMatrixItem())
                 .lastEventTime(latestEventTime)
                 .typingMessage(typingMessage)
@@ -107,10 +140,6 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
                 .itemLongClickListener { _ ->
                     onLongClick?.invoke(roomSummary) ?: false
                 }
-                .itemClickListener(
-                        DebouncedClickListener({
-                            onClick?.invoke(roomSummary)
-                        })
-                )
+                .itemClickListener { onClick?.invoke(roomSummary) }
     }
 }

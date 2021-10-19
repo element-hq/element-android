@@ -29,6 +29,7 @@ import android.os.PowerManager
 import android.provider.Settings
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
+import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
 import androidx.core.content.getSystemService
 import androidx.fragment.app.Fragment
@@ -47,8 +48,8 @@ import im.vector.app.features.notifications.NotificationUtils
  */
 fun isIgnoringBatteryOptimizations(context: Context): Boolean {
     // no issue before Android M, battery optimisations did not exist
-    return Build.VERSION.SDK_INT < Build.VERSION_CODES.M
-            || context.getSystemService<PowerManager>()?.isIgnoringBatteryOptimizations(context.packageName) == true
+    return Build.VERSION.SDK_INT < Build.VERSION_CODES.M ||
+            context.getSystemService<PowerManager>()?.isIgnoringBatteryOptimizations(context.packageName) == true
 }
 
 fun isAirplaneModeOn(context: Context): Boolean {
@@ -126,6 +127,17 @@ fun startAddGoogleAccountIntent(context: Context, activityResultLauncher: Activi
     try {
         val intent = Intent(Settings.ACTION_ADD_ACCOUNT)
         intent.putExtra(Settings.EXTRA_ACCOUNT_TYPES, arrayOf("com.google"))
+        activityResultLauncher.launch(intent)
+    } catch (activityNotFoundException: ActivityNotFoundException) {
+        context.toast(R.string.error_no_external_application_found)
+    }
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun startInstallFromSourceIntent(context: Context, activityResultLauncher: ActivityResultLauncher<Intent>) {
+    try {
+        val intent = Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES)
+                .setData(Uri.parse(String.format("package:%s", context.packageName)))
         activityResultLauncher.launch(intent)
     } catch (activityNotFoundException: ActivityNotFoundException) {
         context.toast(R.string.error_no_external_application_found)

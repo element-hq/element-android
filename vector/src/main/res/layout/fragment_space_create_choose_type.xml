@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp">
+
+        <TextView
+            android:id="@+id/headerText"
+            style="@style/Widget.Vector.TextView.Subtitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/create_spaces_type_header"
+            android:textColor="?vctr_content_secondary"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            style="@style/Widget.Vector.TextView.Title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:gravity="center"
+            android:text="@string/create_spaces_choose_type_label"
+            android:textColor="?vctr_content_primary"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/joinInfoHelpText"
+            app:layout_constraintTop_toBottomOf="@id/headerText"
+            app:layout_constraintVertical_bias="1" />
+
+        <TextView
+            android:id="@+id/joinInfoHelpText"
+            style="@style/Widget.Vector.TextView.Body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:gravity="center"
+            android:text="@string/create_spaces_join_info_help"
+            android:textColor="?vctr_content_secondary"
+            app:layout_constraintBottom_toTopOf="@id/publicButton" />
+
+        <im.vector.app.features.spaces.create.WizardButtonView
+            android:id="@+id/publicButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:icon="@drawable/ic_public_room"
+            app:iconTint="?vctr_content_secondary"
+            app:layout_constraintBottom_toTopOf="@id/privateButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:subTitle="@string/space_type_public_desc"
+            app:title="@string/space_type_public" />
+
+        <im.vector.app.features.spaces.create.WizardButtonView
+            android:id="@+id/privateButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:icon="@drawable/ic_room_private"
+            app:iconTint="?vctr_content_secondary"
+            app:layout_constraintBottom_toTopOf="@id/changeLaterText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:subTitle="@string/space_type_private_desc"
+            app:title="@string/space_type_private" />
+
+        <TextView
+            android:id="@+id/changeLaterText"
+            style="@style/Widget.Vector.TextView.Body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:gravity="center"
+            android:text="@string/create_spaces_you_can_change_later"
+            android:textColor="?vctr_content_secondary"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

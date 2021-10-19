@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?riotx_background"
+    android:background="?android:colorBackground"
     android:clickable="true"
     android:focusable="true"
     android:foreground="?attr/selectableItemBackground"
@@ -19,12 +19,12 @@
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:layout_centerVertical="true"
-        android:contentDescription="@string/avatar"
+        android:importantForAccessibility="no"
         android:scaleType="centerInside"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@tools:sample/avatars" />
+        tools:src="@sample/user_round_avatars" />
 
     <im.vector.app.core.ui.views.ShieldImageView
         android:id="@+id/matrixItemAvatarDecoration"
@@ -37,43 +37,39 @@
 
     <TextView
         android:id="@+id/matrixItemTitle"
-        android:layout_width="wrap_content"
+        style="@style/Widget.Vector.TextView.Subtitle"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:drawablePadding="16dp"
+        android:layout_marginEnd="8dp"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textColor="?riotx_text_primary"
-        android:textSize="16sp"
+        android:textColor="?vctr_content_primary"
         app:layout_constrainedWidth="true"
         app:layout_constraintBottom_toTopOf="@+id/matrixItemSubtitle"
         app:layout_constraintEnd_toStartOf="@+id/matrixItemProgress"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@id/matrixItemAvatar"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_goneMarginStart="0dp"
-        tools:text="@sample/matrix.json/data/displayName" />
+        app:layout_goneMarginEnd="80dp"
+        tools:text="@sample/users.json/data/displayName" />
 
     <TextView
         android:id="@+id/matrixItemSubtitle"
-        android:layout_width="wrap_content"
+        style="@style/Widget.Vector.TextView.Body"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:drawablePadding="16dp"
+        android:layout_marginEnd="8dp"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textColor="?riotx_text_secondary"
-        android:textSize="12sp"
+        android:textColor="?vctr_content_secondary"
         app:layout_constrainedWidth="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/matrixItemProgress"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@id/matrixItemAvatar"
         app:layout_constraintTop_toBottomOf="@id/matrixItemTitle"
-        app:layout_goneMarginStart="0dp"
-        tools:text="@sample/matrix.json/data/mxid" />
+        app:layout_goneMarginEnd="8dp"
+        tools:text="@sample/users.json/data/id" />
 
     <ProgressBar
         android:id="@+id/matrixItemProgress"
@@ -93,12 +89,10 @@
         android:layout_height="wrap_content"
         android:importantForAccessibility="no"
         android:src="@drawable/ic_arrow_right"
-        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tint="?riotx_text_secondary"
-        tools:ignore="MissingPrefix"
-        tools:visibility="visible" />
+        app:tint="?vctr_content_secondary"
+        tools:ignore="MissingPrefix" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

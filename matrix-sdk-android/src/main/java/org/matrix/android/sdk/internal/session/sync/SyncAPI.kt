@@ -17,9 +17,9 @@
 package org.matrix.android.sdk.internal.session.sync
 
 import okhttp3.ResponseBody
+import org.matrix.android.sdk.api.session.sync.model.SyncResponse
 import org.matrix.android.sdk.internal.network.NetworkConstants
 import org.matrix.android.sdk.internal.network.TimeOutInterceptor
-import org.matrix.android.sdk.internal.session.sync.model.SyncResponse
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Header
@@ -31,11 +31,11 @@ internal interface SyncAPI {
      * Set all the timeouts to 1 minute by default
      */
     @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "sync")
-    fun sync(@QueryMap params: Map<String, String>,
-             @Header(TimeOutInterceptor.CONNECT_TIMEOUT) connectTimeOut: Long = TimeOutInterceptor.DEFAULT_LONG_TIMEOUT,
-             @Header(TimeOutInterceptor.READ_TIMEOUT) readTimeOut: Long = TimeOutInterceptor.DEFAULT_LONG_TIMEOUT,
-             @Header(TimeOutInterceptor.WRITE_TIMEOUT) writeTimeOut: Long = TimeOutInterceptor.DEFAULT_LONG_TIMEOUT
-    ): Call<SyncResponse>
+    suspend fun sync(@QueryMap params: Map<String, String>,
+                     @Header(TimeOutInterceptor.CONNECT_TIMEOUT) connectTimeOut: Long = TimeOutInterceptor.DEFAULT_LONG_TIMEOUT,
+                     @Header(TimeOutInterceptor.READ_TIMEOUT) readTimeOut: Long = TimeOutInterceptor.DEFAULT_LONG_TIMEOUT,
+                     @Header(TimeOutInterceptor.WRITE_TIMEOUT) writeTimeOut: Long = TimeOutInterceptor.DEFAULT_LONG_TIMEOUT
+    ): SyncResponse
 
     /**
      * Set all the timeouts to 1 minute by default

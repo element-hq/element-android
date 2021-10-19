@@ -28,7 +28,7 @@ data class MessageFileContent(
         /**
          * Required. Must be 'm.file'.
          */
-        @Json(name = "msgtype") override val msgType: String,
+        @Json(name = MessageContent.MSG_TYPE_JSON_KEY) override val msgType: String,
 
         /**
          * Required. A human-readable description of the file. This is recommended to be the filename of the original upload.
@@ -60,8 +60,7 @@ data class MessageFileContent(
 ) : MessageWithAttachmentContent {
 
     override val mimeType: String?
-        get() = encryptedFileInfo?.mimetype
-                ?: info?.mimeType
+        get() = info?.mimeType
                 ?: MimeTypeMap.getFileExtensionFromUrl(filename ?: body)?.let { extension ->
                     MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension)
                 }

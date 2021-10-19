@@ -45,14 +45,14 @@ internal class DefaultSignOutTask @Inject constructor(
         if (params.signOutFromHomeserver) {
             Timber.d("SignOut: send request...")
             try {
-                executeRequest<Unit>(globalErrorReceiver) {
-                    apiCall = signOutAPI.signOut()
+                executeRequest(globalErrorReceiver) {
+                    signOutAPI.signOut()
                 }
             } catch (throwable: Throwable) {
                 // Maybe due to https://github.com/matrix-org/synapse/issues/5756
-                if (throwable is Failure.ServerError
-                        && throwable.httpCode == HttpURLConnection.HTTP_UNAUTHORIZED /* 401 */
-                        && throwable.error.code == MatrixError.M_UNKNOWN_TOKEN) {
+                if (throwable is Failure.ServerError &&
+                        throwable.httpCode == HttpURLConnection.HTTP_UNAUTHORIZED && /* 401 */
+                        throwable.error.code == MatrixError.M_UNKNOWN_TOKEN) {
                     // Also throwable.error.isSoftLogout should be true
                     // Ignore
                     Timber.w("Ignore error due to https://github.com/matrix-org/synapse/issues/5755")

@@ -20,12 +20,12 @@ import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import im.vector.app.core.contacts.ContactsDataSource
 import im.vector.app.core.contacts.MappedContact
 import im.vector.app.core.extensions.exhaustive
@@ -33,9 +33,7 @@ import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.identity.FoundThreePid
 import org.matrix.android.sdk.api.session.identity.IdentityServiceError
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import timber.log.Timber
@@ -43,15 +41,15 @@ import timber.log.Timber
 class ContactsBookViewModel @AssistedInject constructor(@Assisted
                                                         initialState: ContactsBookViewState,
                                                         private val contactsDataSource: ContactsDataSource,
-                                                        private val session: Session)
-    : VectorViewModel<ContactsBookViewState, ContactsBookAction, EmptyViewEvents>(initialState) {
+                                                        private val session: Session) :
+    VectorViewModel<ContactsBookViewState, ContactsBookAction, EmptyViewEvents>(initialState) {
 
     @AssistedFactory
     interface Factory {
         fun create(initialState: ContactsBookViewState): ContactsBookViewModel
     }
 
-    companion object : MvRxViewModelFactory<ContactsBookViewModel, ContactsBookViewState> {
+    companion object : MavericksViewModelFactory<ContactsBookViewModel, ContactsBookViewState> {
 
         override fun create(viewModelContext: ViewModelContext, state: ContactsBookViewState): ContactsBookViewModel? {
             val factory = when (viewModelContext) {
@@ -68,7 +66,7 @@ class ContactsBookViewModel @AssistedInject constructor(@Assisted
     init {
         loadContacts()
 
-        selectSubscribe(ContactsBookViewState::searchTerm, ContactsBookViewState::onlyBoundContacts) { _, _ ->
+        onEach(ContactsBookViewState::searchTerm, ContactsBookViewState::onlyBoundContacts) { _, _ ->
             updateFilteredMappedContacts()
         }
     }
@@ -101,56 +99,56 @@ class ContactsBookViewModel @AssistedInject constructor(@Assisted
         }
     }
 
-    private fun performLookup(data: List<MappedContact>) {
+    private fun performLookup(contacts: List<MappedContact>) {
         if (!session.identityService().getUserConsent()) {
             return
         }
         viewModelScope.launch {
-            val threePids = data.flatMap { contact ->
+            val threePids = contacts.flatMap { contact ->
                 contact.emails.map { ThreePid.Email(it.email) } +
                         contact.msisdns.map { ThreePid.Msisdn(it.phoneNumber) }
             }
-            session.identityService().lookUp(threePids, object : MatrixCallback<List<FoundThreePid>> {
-                override fun onFailure(failure: Throwable) {
-                    Timber.w(failure, "Unable to perform the lookup")
 
-                    // Should not happen, but just to be sure
-                    if (failure is IdentityServiceError.UserConsentNotProvided) {
-                        setState {
-                            copy(userConsent = false)
-                        }
-                    }
-                }
+            val data = try {
+                session.identityService().lookUp(threePids)
+            } catch (failure: Throwable) {
+                Timber.w(failure, "Unable to perform the lookup")
 
-                override fun onSuccess(data: List<FoundThreePid>) {
-                    mappedContacts = allContacts.map { contactModel ->
-                        contactModel.copy(
-                                emails = contactModel.emails.map { email ->
-                                    email.copy(
-                                            matrixId = data
-                                                    .firstOrNull { foundThreePid -> foundThreePid.threePid.value == email.email }
-                                                    ?.matrixId
-                                    )
-                                },
-                                msisdns = contactModel.msisdns.map { msisdn ->
-                                    msisdn.copy(
-                                            matrixId = data
-                                                    .firstOrNull { foundThreePid -> foundThreePid.threePid.value == msisdn.phoneNumber }
-                                                    ?.matrixId
-                                    )
-                                }
-                        )
-                    }
-
+                // Should not happen, but just to be sure
+                if (failure is IdentityServiceError.UserConsentNotProvided) {
                     setState {
-                        copy(
-                                isBoundRetrieved = true
-                        )
+                        copy(userConsent = false)
                     }
-
-                    updateFilteredMappedContacts()
                 }
-            })
+                return@launch
+            }
+
+            mappedContacts = allContacts.map { contactModel ->
+                contactModel.copy(
+                        emails = contactModel.emails.map { email ->
+                            email.copy(
+                                    matrixId = data
+                                            .firstOrNull { foundThreePid -> foundThreePid.threePid.value == email.email }
+                                            ?.matrixId
+                            )
+                        },
+                        msisdns = contactModel.msisdns.map { msisdn ->
+                            msisdn.copy(
+                                    matrixId = data
+                                            .firstOrNull { foundThreePid -> foundThreePid.threePid.value == msisdn.phoneNumber }
+                                            ?.matrixId
+                            )
+                        }
+                )
+            }
+
+            setState {
+                copy(
+                        isBoundRetrieved = true
+                )
+            }
+
+            updateFilteredMappedContacts()
         }
     }
 
@@ -158,8 +156,8 @@ class ContactsBookViewModel @AssistedInject constructor(@Assisted
         val filteredMappedContacts = mappedContacts
                 .filter { it.displayName.contains(state.searchTerm, true) }
                 .filter { contactModel ->
-                    !state.onlyBoundContacts
-                            || contactModel.emails.any { it.matrixId != null } || contactModel.msisdns.any { it.matrixId != null }
+                    !state.onlyBoundContacts ||
+                            contactModel.emails.any { it.matrixId != null } || contactModel.msisdns.any { it.matrixId != null }
                 }
 
         setState {

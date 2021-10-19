@@ -17,20 +17,21 @@
 package im.vector.app.features.widgets
 
 import android.net.Uri
-import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.widgets.permissions.WidgetPermissionsHelper
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
@@ -41,18 +42,17 @@ import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerS
 import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.session.widgets.WidgetManagementFailure
-import org.matrix.android.sdk.internal.util.awaitCallback
-import org.matrix.android.sdk.rx.mapOptional
-import org.matrix.android.sdk.rx.rx
-import org.matrix.android.sdk.rx.unwrap
+import org.matrix.android.sdk.flow.flow
+import org.matrix.android.sdk.flow.mapOptional
+import org.matrix.android.sdk.flow.unwrap
 import timber.log.Timber
 import javax.net.ssl.HttpsURLConnection
 
 class WidgetViewModel @AssistedInject constructor(@Assisted val initialState: WidgetViewState,
                                                   widgetPostAPIHandlerFactory: WidgetPostAPIHandler.Factory,
                                                   private val stringProvider: StringProvider,
-                                                  private val session: Session)
-    : VectorViewModel<WidgetViewState, WidgetAction, WidgetViewEvents>(initialState),
+                                                  private val session: Session) :
+    VectorViewModel<WidgetViewState, WidgetAction, WidgetViewEvents>(initialState),
         WidgetPostAPIHandler.NavigationCallback,
         IntegrationManagerService.Listener {
 
@@ -61,7 +61,7 @@ class WidgetViewModel @AssistedInject constructor(@Assisted val initialState: Wi
         fun create(initialState: WidgetViewState): WidgetViewModel
     }
 
-    companion object : MvRxViewModelFactory<WidgetViewModel, WidgetViewState> {
+    companion object : MavericksViewModelFactory<WidgetViewModel, WidgetViewState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: WidgetViewState): WidgetViewModel? {
@@ -102,7 +102,7 @@ class WidgetViewModel @AssistedInject constructor(@Assisted val initialState: Wi
     }
 
     private fun subscribeToWidget() {
-        asyncSubscribe(WidgetViewState::asyncWidget) {
+        onAsync(WidgetViewState::asyncWidget) {
             setState { copy(widgetName = it.name) }
         }
     }
@@ -119,14 +119,15 @@ class WidgetViewModel @AssistedInject constructor(@Assisted val initialState: Wi
         if (room == null) {
             return
         }
-        room.rx().liveStateEvent(EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.NoCondition)
+        room.flow().liveStateEvent(EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.NoCondition)
                 .mapOptional { it.content.toModel<PowerLevelsContent>() }
                 .unwrap()
                 .map {
                     PowerLevelsHelper(it).isUserAllowedToSend(session.myUserId, true, null)
-                }.subscribe {
-                    setState { copy(canManageWidgets = it) }
-                }.disposeOnClear()
+                }
+                .setOnEach {
+                    copy(canManageWidgets = it)
+                }
     }
 
     private fun observeWidgetIfNeeded() {
@@ -134,7 +135,7 @@ class WidgetViewModel @AssistedInject constructor(@Assisted val initialState: Wi
             return
         }
         val widgetId = initialState.widgetId ?: return
-        session.rx()
+        session.flow()
                 .liveRoomWidgets(initialState.roomId, QueryStringValue.Equals(widgetId))
                 .filter { it.isNotEmpty() }
                 .map { it.first() }
@@ -173,10 +174,8 @@ class WidgetViewModel @AssistedInject constructor(@Assisted val initialState: Wi
         viewModelScope.launch {
             val widgetId = initialState.widgetId ?: return@launch
             try {
-                awaitCallback<Unit> {
-                    widgetService.destroyRoomWidget(initialState.roomId, widgetId, it)
-                    _viewEvents.post(WidgetViewEvents.Close())
-                }
+                widgetService.destroyRoomWidget(initialState.roomId, widgetId)
+                _viewEvents.post(WidgetViewEvents.Close())
             } catch (failure: Throwable) {
                 _viewEvents.post(WidgetViewEvents.Failure(failure))
             }

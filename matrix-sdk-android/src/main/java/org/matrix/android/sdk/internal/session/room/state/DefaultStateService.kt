@@ -19,28 +19,30 @@ package org.matrix.android.sdk.internal.session.room.state
 import android.net.Uri
 import androidx.lifecycle.LiveData
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.room.model.GuestAccess
 import org.matrix.android.sdk.api.session.room.model.RoomCanonicalAliasContent
-import org.matrix.android.sdk.api.session.room.model.RoomGuestAccessContent
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
+import org.matrix.android.sdk.api.session.room.model.RoomJoinRulesAllowEntry
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRulesContent
 import org.matrix.android.sdk.api.session.room.state.StateService
 import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.api.util.MimeTypes
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.session.content.FileUploader
+import org.matrix.android.sdk.internal.session.permalinks.ViaParameterFinder
 
 internal class DefaultStateService @AssistedInject constructor(@Assisted private val roomId: String,
                                                                private val stateEventDataSource: StateEventDataSource,
                                                                private val sendStateTask: SendStateTask,
-                                                               private val fileUploader: FileUploader
+                                                               private val fileUploader: FileUploader,
+                                                               private val viaParameterFinder: ViaParameterFinder
 ) : StateService {
 
     @AssistedFactory
@@ -75,7 +77,7 @@ internal class DefaultStateService @AssistedInject constructor(@Assisted private
                 eventType = eventType,
                 body = body.toSafeJson(eventType)
         )
-        sendStateTask.execute(params)
+        sendStateTask.executeRetry(params, 3)
     }
 
     private fun JsonDict.toSafeJson(eventType: String): JsonDict {
@@ -127,18 +129,26 @@ internal class DefaultStateService @AssistedInject constructor(@Assisted private
         )
     }
 
-    override suspend fun updateJoinRule(joinRules: RoomJoinRules?, guestAccess: GuestAccess?) {
+    override suspend fun updateJoinRule(joinRules: RoomJoinRules?, guestAccess: GuestAccess?, allowList: List<RoomJoinRulesAllowEntry>?) {
         if (joinRules != null) {
+            val body = if (joinRules == RoomJoinRules.RESTRICTED) {
+                RoomJoinRulesContent(
+                        _joinRules = RoomJoinRules.RESTRICTED.value,
+                        allowList = allowList
+                ).toContent()
+            } else {
+                mapOf("join_rule" to joinRules)
+            }
             sendStateEvent(
                     eventType = EventType.STATE_ROOM_JOIN_RULES,
-                    body = RoomJoinRulesContent(joinRules).toContent(),
+                    body = body,
                     stateKey = null
             )
         }
         if (guestAccess != null) {
             sendStateEvent(
                     eventType = EventType.STATE_ROOM_GUEST_ACCESS,
-                    body = RoomGuestAccessContent(guestAccess).toContent(),
+                    body = mapOf("guest_access" to guestAccess),
                     stateKey = null
             )
         }
@@ -159,5 +169,21 @@ internal class DefaultStateService @AssistedInject constructor(@Assisted private
                 body = emptyMap(),
                 stateKey = null
         )
+    }
+
+    override suspend fun setJoinRulePublic() {
+        updateJoinRule(RoomJoinRules.PUBLIC, null)
+    }
+
+    override suspend fun setJoinRuleInviteOnly() {
+        updateJoinRule(RoomJoinRules.INVITE, null)
+    }
+
+    override suspend fun setJoinRuleRestricted(allowList: List<String>) {
+        // we need to compute correct via parameters and check if PL are correct
+        val allowEntries = allowList.map { spaceId ->
+            RoomJoinRulesAllowEntry.restrictedToRoom(spaceId)
+        }
+        updateJoinRule(RoomJoinRules.RESTRICTED, null, allowEntries)
     }
 }

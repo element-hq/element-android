@@ -19,12 +19,12 @@ package im.vector.app.features.roommemberprofile.devices
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxState
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksState
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import im.vector.app.core.di.HasScreenInjector
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
@@ -33,8 +33,8 @@ import org.matrix.android.sdk.api.session.crypto.crosssigning.MXCrossSigningInfo
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
 import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.api.util.toMatrixItem
+import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
-import org.matrix.android.sdk.rx.rx
 
 data class DeviceListViewState(
         val userItem: MatrixItem? = null,
@@ -42,12 +42,12 @@ data class DeviceListViewState(
         val memberCrossSigningKey: MXCrossSigningInfo? = null,
         val cryptoDevices: Async<List<CryptoDeviceInfo>> = Loading(),
         val selectedDevice: CryptoDeviceInfo? = null
-) : MvRxState
+) : MavericksState
 
 class DeviceListBottomSheetViewModel @AssistedInject constructor(@Assisted private val initialState: DeviceListViewState,
                                                                  @Assisted private val args: DeviceListBottomSheet.Args,
-                                                                 private val session: Session)
-    : VectorViewModel<DeviceListViewState, DeviceListAction, DeviceListBottomSheetViewEvents>(initialState) {
+                                                                 private val session: Session) :
+    VectorViewModel<DeviceListViewState, DeviceListAction, DeviceListBottomSheetViewEvents>(initialState) {
 
     @AssistedFactory
     interface Factory {
@@ -55,14 +55,14 @@ class DeviceListBottomSheetViewModel @AssistedInject constructor(@Assisted priva
     }
 
     init {
-        session.rx().liveUserCryptoDevices(args.userId)
+        session.flow().liveUserCryptoDevices(args.userId)
                 .execute {
                     copy(cryptoDevices = it).also {
                         refreshSelectedId()
                     }
                 }
 
-        session.rx().liveCrossSigningInfo(args.userId)
+        session.flow().liveCrossSigningInfo(args.userId)
                 .execute {
                     copy(memberCrossSigningKey = it.invoke()?.getOrNull())
                 }
@@ -108,7 +108,7 @@ class DeviceListBottomSheetViewModel @AssistedInject constructor(@Assisted priva
         }
     }
 
-    companion object : MvRxViewModelFactory<DeviceListBottomSheetViewModel, DeviceListViewState> {
+    companion object : MavericksViewModelFactory<DeviceListBottomSheetViewModel, DeviceListViewState> {
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: DeviceListViewState): DeviceListBottomSheetViewModel? {
             val fragment: DeviceListBottomSheet = (viewModelContext as FragmentViewModelContext).fragment()

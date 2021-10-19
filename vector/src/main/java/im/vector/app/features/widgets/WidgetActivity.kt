@@ -19,10 +19,10 @@ package im.vector.app.features.widgets
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isVisible
-import com.airbnb.mvrx.MvRx
+import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
+import com.google.android.material.appbar.MaterialToolbar
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.addFragment
@@ -33,7 +33,6 @@ import im.vector.app.features.widgets.permissions.RoomWidgetPermissionBottomShee
 import im.vector.app.features.widgets.permissions.RoomWidgetPermissionViewEvents
 import im.vector.app.features.widgets.permissions.RoomWidgetPermissionViewModel
 import im.vector.app.features.widgets.permissions.RoomWidgetPermissionViewState
-
 import org.matrix.android.sdk.api.session.events.model.Content
 import java.io.Serializable
 import javax.inject.Inject
@@ -51,7 +50,7 @@ class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>(),
 
         fun newIntent(context: Context, args: WidgetArgs): Intent {
             return Intent(context, WidgetActivity::class.java).apply {
-                putExtra(MvRx.KEY_ARG, args)
+                putExtra(Mavericks.KEY_ARG, args)
             }
         }
 
@@ -84,7 +83,7 @@ class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>(),
     }
 
     override fun initUiAndData() {
-        val widgetArgs: WidgetArgs? = intent?.extras?.getParcelable(MvRx.KEY_ARG)
+        val widgetArgs: WidgetArgs? = intent?.extras?.getParcelable(Mavericks.KEY_ARG)
         if (widgetArgs == null) {
             finish()
             return
@@ -103,14 +102,14 @@ class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>(),
             }
         }
 
-        viewModel.selectSubscribe(this, WidgetViewState::status) { ws ->
+        viewModel.onEach(WidgetViewState::status) { ws ->
             when (ws) {
                 WidgetStatus.UNKNOWN            -> {
                 }
                 WidgetStatus.WIDGET_NOT_ALLOWED -> {
                     val dFrag = supportFragmentManager.findFragmentByTag(WIDGET_PERMISSION_FRAGMENT_TAG) as? RoomWidgetPermissionBottomSheet
                     if (dFrag != null && dFrag.dialog?.isShowing == true && !dFrag.isRemoving) {
-                        return@selectSubscribe
+                        return@onEach
                     } else {
                         RoomWidgetPermissionBottomSheet
                                 .newInstance(widgetArgs)
@@ -125,11 +124,11 @@ class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>(),
             }
         }
 
-        viewModel.selectSubscribe(this, WidgetViewState::widgetName) { name ->
+        viewModel.onEach(WidgetViewState::widgetName) { name ->
             supportActionBar?.title = name
         }
 
-        viewModel.selectSubscribe(this, WidgetViewState::canManageWidgets) {
+        viewModel.onEach(WidgetViewState::canManageWidgets) {
             invalidateOptionsMenu()
         }
     }
@@ -150,7 +149,7 @@ class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>(),
         finish()
     }
 
-    override fun configure(toolbar: Toolbar) {
+    override fun configure(toolbar: MaterialToolbar) {
         configureToolbar(toolbar)
     }
 }

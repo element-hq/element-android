@@ -34,6 +34,7 @@ import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.multidex.MultiDex
 import com.airbnb.epoxy.EpoxyAsyncUtil
 import com.airbnb.epoxy.EpoxyController
+import com.airbnb.mvrx.Mavericks
 import com.facebook.stetho.Stetho
 import com.gabrielittner.threetenbp.LazyThreeTen
 import com.vanniktech.emoji.EmojiManager
@@ -43,21 +44,25 @@ import im.vector.app.core.di.DaggerVectorComponent
 import im.vector.app.core.di.HasVectorInjector
 import im.vector.app.core.di.VectorComponent
 import im.vector.app.core.extensions.configureAndStart
+import im.vector.app.core.extensions.startSyncing
 import im.vector.app.core.rx.RxConfig
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.configuration.VectorConfiguration
 import im.vector.app.features.disclaimer.doNotShowDisclaimerDialog
+import im.vector.app.features.invite.InvitesAcceptor
 import im.vector.app.features.lifecycle.VectorActivityLifecycleCallbacks
 import im.vector.app.features.notifications.NotificationDrawerManager
 import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.features.pin.PinLocker
 import im.vector.app.features.popup.PopupAlertManager
 import im.vector.app.features.rageshake.VectorUncaughtExceptionHandler
+import im.vector.app.features.room.VectorRoomDisplayNameFallbackProvider
 import im.vector.app.features.settings.VectorLocale
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.version.VersionProvider
 import im.vector.app.push.fcm.FcmHelper
+import org.jitsi.meet.sdk.log.JitsiMeetDefaultLogHandler
 import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.api.auth.AuthenticationService
@@ -93,6 +98,7 @@ class VectorApplication :
     @Inject lateinit var popupAlertManager: PopupAlertManager
     @Inject lateinit var pinLocker: PinLocker
     @Inject lateinit var callManager: WebRtcCallManager
+    @Inject lateinit var invitesAcceptor: InvitesAcceptor
 
     lateinit var vectorComponent: VectorComponent
 
@@ -101,8 +107,8 @@ class VectorApplication :
 
     private val powerKeyReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent) {
-            if (intent.action == Intent.ACTION_SCREEN_OFF
-                    && vectorPreferences.useFlagPinCode()) {
+            if (intent.action == Intent.ACTION_SCREEN_OFF &&
+                    vectorPreferences.useFlagPinCode()) {
                 pinLocker.screenIsOff()
             }
         }
@@ -114,8 +120,14 @@ class VectorApplication :
         appContext = this
         vectorComponent = DaggerVectorComponent.factory().create(this)
         vectorComponent.inject(this)
+        invitesAcceptor.initialize()
         vectorUncaughtExceptionHandler.activate(this)
         rxConfig.setupRxPlugin()
+
+        // Remove Log handler statically added by Jitsi
+        Timber.forest()
+                .filterIsInstance(JitsiMeetDefaultLogHandler::class.java)
+                .forEach { Timber.uproot(it) }
 
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
@@ -127,7 +139,7 @@ class VectorApplication :
         }
         logInfo()
         LazyThreeTen.init(this)
-
+        Mavericks.initialize(debugMode = false)
         EpoxyController.defaultDiffingHandler = EpoxyAsyncUtil.getAsyncBackgroundHandler()
         EpoxyController.defaultModelBuildingHandler = EpoxyAsyncUtil.getAsyncBackgroundHandler()
         registerActivityLifecycleCallbacks(VectorActivityLifecycleCallbacks(popupAlertManager))
@@ -156,8 +168,11 @@ class VectorApplication :
         if (authenticationService.hasAuthenticatedSessions() && !activeSessionHolder.hasActiveSession()) {
             val lastAuthenticatedSession = authenticationService.getLastAuthenticatedSession()!!
             activeSessionHolder.setActiveSession(lastAuthenticatedSession)
-            lastAuthenticatedSession.configureAndStart(applicationContext)
+            lastAuthenticatedSession.configureAndStart(applicationContext, startSyncing = false)
         }
+
+        ProcessLifecycleOwner.get().lifecycle.addObserver(startSyncOnFirstStart)
+
         ProcessLifecycleOwner.get().lifecycle.addObserver(object : LifecycleObserver {
             @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
             fun entersForeground() {
@@ -190,6 +205,15 @@ class VectorApplication :
         EmojiManager.install(GoogleEmojiProvider())
     }
 
+    private val startSyncOnFirstStart = object : LifecycleObserver {
+        @OnLifecycleEvent(Lifecycle.Event.ON_START)
+        fun onStart() {
+            Timber.i("App process started")
+            authenticationService.getLastAuthenticatedSession()?.startSyncing(appContext)
+            ProcessLifecycleOwner.get().lifecycle.removeObserver(this)
+        }
+    }
+
     private fun enableStrictModeIfNeeded() {
         if (BuildConfig.ENABLE_STRICT_MODE_LOGS) {
             StrictMode.setThreadPolicy(StrictMode.ThreadPolicy.Builder()
@@ -199,7 +223,12 @@ class VectorApplication :
         }
     }
 
-    override fun providesMatrixConfiguration() = MatrixConfiguration(BuildConfig.FLAVOR_DESCRIPTION)
+    override fun providesMatrixConfiguration(): MatrixConfiguration {
+        return MatrixConfiguration(
+                applicationFlavor = BuildConfig.FLAVOR_DESCRIPTION,
+                roomDisplayNameFallbackProvider = VectorRoomDisplayNameFallbackProvider(this)
+        )
+    }
 
     override fun getWorkManagerConfiguration(): WorkConfiguration {
         return WorkConfiguration.Builder()

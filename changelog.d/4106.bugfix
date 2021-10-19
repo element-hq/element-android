@@ -1,0 +1,2 @@
+Fixes push notification emails list not refreshing the first time seeing the notifications page.
+Also improves the error handling in the email notification toggling by using synchronous flows instead of the WorkManager

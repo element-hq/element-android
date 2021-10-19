@@ -20,8 +20,8 @@ package im.vector.app.features.attachments.preview
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 
-class AttachmentsPreviewViewModel(initialState: AttachmentsPreviewViewState)
-    : VectorViewModel<AttachmentsPreviewViewState, AttachmentsPreviewAction, AttachmentsPreviewViewEvents>(initialState) {
+class AttachmentsPreviewViewModel(initialState: AttachmentsPreviewViewState) :
+    VectorViewModel<AttachmentsPreviewViewState, AttachmentsPreviewAction, AttachmentsPreviewViewEvents>(initialState) {
 
     override fun handle(action: AttachmentsPreviewAction) {
         when (action) {

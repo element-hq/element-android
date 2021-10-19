@@ -20,16 +20,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.activityViewModel
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.databinding.BottomSheetCallControlsBinding
-import im.vector.app.features.call.audio.CallAudioManager
-
-import me.gujun.android.span.span
 
 class CallControlsBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetCallControlsBinding>() {
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): BottomSheetCallControlsBinding {
@@ -43,10 +39,6 @@ class CallControlsBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetC
 
         callViewModel.subscribe(this) {
             renderState(it)
-        }
-
-        views.callControlsSoundDevice.views.bottomSheetActionClickableZone.debouncedClicks {
-            callViewModel.handle(VectorCallViewActions.SwitchSoundDevice)
         }
 
         views.callControlsSwitchCamera.views.bottomSheetActionClickableZone.debouncedClicks {
@@ -72,74 +64,11 @@ class CallControlsBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetC
             callViewModel.handle(VectorCallViewActions.InitiateCallTransfer)
             dismiss()
         }
-
-        callViewModel.observeViewEvents {
-            when (it) {
-                is VectorCallViewEvents.ShowSoundDeviceChooser -> {
-                    showSoundDeviceChooser(it.available, it.current)
-                }
-                else                                           -> {
-                }
-            }
-        }
-    }
-
-    private fun showSoundDeviceChooser(available: Set<CallAudioManager.Device>, current: CallAudioManager.Device) {
-        val soundDevices = available.map {
-            when (it) {
-                CallAudioManager.Device.WIRELESS_HEADSET -> span {
-                    text = getString(R.string.sound_device_wireless_headset)
-                    textStyle = if (current == it) "bold" else "normal"
-                }
-                CallAudioManager.Device.PHONE            -> span {
-                    text = getString(R.string.sound_device_phone)
-                    textStyle = if (current == it) "bold" else "normal"
-                }
-                CallAudioManager.Device.SPEAKER          -> span {
-                    text = getString(R.string.sound_device_speaker)
-                    textStyle = if (current == it) "bold" else "normal"
-                }
-                CallAudioManager.Device.HEADSET          -> span {
-                    text = getString(R.string.sound_device_headset)
-                    textStyle = if (current == it) "bold" else "normal"
-                }
-            }
-        }
-        AlertDialog.Builder(requireContext())
-                .setItems(soundDevices.toTypedArray()) { d, n ->
-                    d.cancel()
-                    when (soundDevices[n].toString()) {
-                        // TODO Make an adapter and handle multiple Bluetooth headsets. Also do not use translations.
-                        getString(R.string.sound_device_phone) -> {
-                            callViewModel.handle(VectorCallViewActions.ChangeAudioDevice(CallAudioManager.Device.PHONE))
-                        }
-                        getString(R.string.sound_device_speaker) -> {
-                            callViewModel.handle(VectorCallViewActions.ChangeAudioDevice(CallAudioManager.Device.SPEAKER))
-                        }
-                        getString(R.string.sound_device_headset) -> {
-                            callViewModel.handle(VectorCallViewActions.ChangeAudioDevice(CallAudioManager.Device.HEADSET))
-                        }
-                        getString(R.string.sound_device_wireless_headset) -> {
-                            callViewModel.handle(VectorCallViewActions.ChangeAudioDevice(CallAudioManager.Device.WIRELESS_HEADSET))
-                        }
-                    }
-                }
-                .setNegativeButton(R.string.cancel, null)
-                .show()
     }
 
     private fun renderState(state: VectorCallViewState) {
-        views.callControlsSoundDevice.title = getString(R.string.call_select_sound_device)
-        views.callControlsSoundDevice.subTitle = when (state.device) {
-            CallAudioManager.Device.PHONE            -> getString(R.string.sound_device_phone)
-            CallAudioManager.Device.SPEAKER          -> getString(R.string.sound_device_speaker)
-            CallAudioManager.Device.HEADSET          -> getString(R.string.sound_device_headset)
-            CallAudioManager.Device.WIRELESS_HEADSET -> getString(R.string.sound_device_wireless_headset)
-        }
-
         views.callControlsSwitchCamera.isVisible = state.isVideoCall && state.canSwitchCamera
         views.callControlsSwitchCamera.subTitle = getString(if (state.isFrontCamera) R.string.call_camera_front else R.string.call_camera_back)
-
         if (state.isVideoCall) {
             views.callControlsToggleSDHD.isVisible = true
             if (state.isHD) {

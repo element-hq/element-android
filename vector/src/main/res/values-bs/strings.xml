@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="room_displayname_invite_from">Pozovite iz %s</string>
+    <string name="room_displayname_room_invite">Poziv u Sobu</string>
+    <string name="room_displayname_two_members">%1$s i %2$s</string>
+    <string name="room_displayname_empty_room">Prazna soba</string>
     <string name="light_theme">Svijetla Tema</string>
     <string name="dark_theme">Tamna Tema</string>
-    <string name="black_them">Crna Tema</string>
+    <string name="black_theme">Crna Tema</string>
     <string name="notification_sync_in_progress">Sinkronizacija</string>
     <string name="notification_listening_for_events">Budući Događaji</string>
     <string name="notification_noisy_notifications">Glasne notifikacije</string>
@@ -72,7 +76,7 @@
     <string name="user_directory_header">Imenik korisnika</string>
     <string name="matrix_only_filter">Samo matriks kontakti</string>
     <string name="no_conversation_placeholder">Nema razgovora</string>
-    <string name="no_contact_access_placeholder">Niste omogućili Elementu pristup vašim lokalnim kontaktima</string>
+    <string name="template_no_contact_access_placeholder">Niste omogućili ${app_name}u pristup vašim lokalnim kontaktima</string>
     <string name="no_result_placeholder">Nema rezultata</string>
     <string name="rooms_header">Sobe</string>
     <string name="rooms_directory_header">Imenik soba</string>
@@ -196,24 +200,24 @@ Odjavljeni ste sa svih uređaja i više nećete primati obavijesti. Da biste pon
     <string name="media_picker_both_capture_title">Snimi fotografiju ili video</string>
     <string name="media_picker_cannot_record_video">Nije moguće snimiti video</string>
     <string name="permissions_rationale_popup_title">Informacije</string>
-    <string name="permissions_rationale_msg_storage">Hepek treba dopuštenje za pristup vašoj biblioteci fotografija i videozapisa za slanje i spremanje privitaka.
+    <string name="template_permissions_rationale_msg_storage">Hepek treba dopuštenje za pristup vašoj biblioteci fotografija i videozapisa za slanje i spremanje privitaka.
 
 Omogućite pristup sljedećem skočnom prozoru da biste mogli slati datoteke sa telefona.</string>
-    <string name="permissions_rationale_msg_camera">Hepek treba dopuštenje za pristup vašoj kameri za snimanje fotografija i videopoziva.</string>
+    <string name="template_permissions_rationale_msg_camera">Hepek treba dopuštenje za pristup vašoj kameri za snimanje fotografija i videopoziva.</string>
     <string name="permissions_rationale_msg_camera_explanation">
 
 Omogućite pristup sljedećem pop-upu kako biste mogli uputiti poziv.</string>
-    <string name="permissions_rationale_msg_record_audio">Hepek traži dopuštenje za pristup mikrofonu za obavljanje audio poziva.</string>
+    <string name="template_permissions_rationale_msg_record_audio">Hepek traži dopuštenje za pristup mikrofonu za obavljanje audio poziva.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">
 
 Omogućite pristup sljedećem pop-upu kako biste mogli uputiti poziv.</string>
-    <string name="permissions_rationale_msg_camera_and_audio">Hepek treba dopuštenje za pristup vašoj kemeri i mikrofonu za obavljanje video poziva.
+    <string name="template_permissions_rationale_msg_camera_and_audio">Hepek treba dopuštenje za pristup vašoj kemeri i mikrofonu za obavljanje video poziva.
 
 Omogućite pristup sljedećim skočnim prozorima da biste mogli uspostaviti poziv.</string>
-    <string name="permissions_rationale_msg_contacts">Hepek treba dopuštenje za pristup kontaktima kako bi pronašao druge Matrix korisnike na temelju njihove email adrese i telefonskih brojeva.
+    <string name="template_permissions_rationale_msg_contacts">Hepek treba dopuštenje za pristup kontaktima kako bi pronašao druge Matrix korisnike na temelju njihove email adrese i telefonskih brojeva.
 
 Dopustite pristup sljedećem skočnom prozoru da biste otkrili kontakte koji koriste Hepek.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Hepek treba dopuštenje za pristup kontaktima kako bi pronašao druge Matrix korisnike na temelju njihove email adrese i telefonskih brojeva.
+    <string name="template_permissions_msg_contacts_warning_other_androids">Hepek treba dopuštenje za pristup kontaktima kako bi pronašao druge Matrix korisnike na temelju njihove email adrese i telefonskih brojeva.
 
 Želite li dopustiti da Hepek pristupi vašim kontaktima?</string>
     <string name="permissions_action_not_performed_missing_permissions">Nažalost, akcija nije izvršena zbog nedostatka dozvola</string>

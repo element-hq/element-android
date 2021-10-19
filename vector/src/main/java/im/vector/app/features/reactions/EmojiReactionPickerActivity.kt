@@ -24,8 +24,8 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.widget.SearchView
-import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.viewModel
 import com.google.android.material.tabs.TabLayout
 import com.jakewharton.rxbinding3.widget.queryTextChanges
@@ -37,7 +37,7 @@ import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityEmojiReactionPickerBinding
 import im.vector.app.features.reactions.data.EmojiDataSource
 import io.reactivex.android.schedulers.AndroidSchedulers
-
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -92,17 +92,19 @@ class EmojiReactionPickerActivity : VectorBaseActivity<ActivityEmojiReactionPick
         viewModel = viewModelProvider.get(EmojiChooserViewModel::class.java)
 
         viewModel.eventId = intent.getStringExtra(EXTRA_EVENT_ID)
-
-        emojiDataSource.rawData.categories.forEach { category ->
-            val s = category.emojis[0]
-            views.tabs.newTab()
-                    .also { tab ->
-                        tab.text = emojiDataSource.rawData.emojis[s]!!.emoji
-                        tab.contentDescription = category.name
-                    }
-                    .also { tab ->
-                        views.tabs.addTab(tab)
-                    }
+        lifecycleScope.launch {
+            val rawData = emojiDataSource.rawData.await()
+            rawData.categories.forEach { category ->
+                val s = category.emojis[0]
+                views.tabs.newTab()
+                        .also { tab ->
+                            tab.text = rawData.emojis[s]!!.emoji
+                            tab.contentDescription = category.name
+                        }
+                        .also { tab ->
+                            views.tabs.addTab(tab)
+                        }
+            }
         }
         views.tabs.addOnTabSelectedListener(tabLayoutSelectionListener)
 
@@ -150,17 +152,23 @@ class EmojiReactionPickerActivity : VectorBaseActivity<ActivityEmojiReactionPick
                     searchView.isIconified = false
                     searchView.requestFocusFromTouch()
                     // we want to force the tool bar as visible even if hidden with scroll flags
-                    findViewById<Toolbar>(R.id.toolbar)?.minimumHeight = getActionBarSize()
+                    views.emojiPickerToolbar.minimumHeight = getActionBarSize()
                     return true
                 }
 
                 override fun onMenuItemActionCollapse(p0: MenuItem?): Boolean {
                     // when back, clear all search
-                    findViewById<Toolbar>(R.id.toolbar)?.minimumHeight = 0
+                    views.emojiPickerToolbar.minimumHeight = 0
                     searchView.setQuery("", true)
                     return true
                 }
             })
+
+            searchView.setOnCloseListener {
+                currentFocus?.clearFocus()
+                searchItem.collapseActionView()
+                true
+            }
 
             searchView.queryTextChanges()
                     .throttleWithTimeout(600, TimeUnit.MILLISECONDS)
@@ -171,6 +179,7 @@ class EmojiReactionPickerActivity : VectorBaseActivity<ActivityEmojiReactionPick
                     }
                     .disposeOnDestroy()
         }
+        searchItem.expandActionView()
         return true
     }
 

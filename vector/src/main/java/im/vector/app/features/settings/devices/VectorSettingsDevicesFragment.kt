@@ -21,13 +21,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.dialogs.ManuallyVerifyDialog
 import im.vector.app.core.extensions.cleanup
@@ -40,7 +40,6 @@ import im.vector.app.databinding.FragmentGenericRecyclerBinding
 import im.vector.app.features.auth.ReAuthActivity
 import im.vector.app.features.crypto.verification.VerificationBottomSheet
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
-
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
 import javax.inject.Inject
 
@@ -69,7 +68,7 @@ class VectorSettingsDevicesFragment @Inject constructor(
         views.waitingView.waitingStatusText.setText(R.string.please_wait)
         views.waitingView.waitingStatusText.isVisible = true
         devicesController.callback = this
-        views.genericRecyclerView.configureWith(devicesController, showDivider = true)
+        views.genericRecyclerView.configureWith(devicesController, dividerDrawable = R.drawable.divider_horizontal)
         viewModel.observeViewEvents {
             when (it) {
                 is DevicesViewEvents.Loading            -> showLoading(it.message)
@@ -130,7 +129,7 @@ class VectorSettingsDevicesFragment @Inject constructor(
         val views = DialogBaseEditTextBinding.bind(layout)
         views.editText.setText(deviceInfo.displayName)
 
-        AlertDialog.Builder(requireActivity())
+        MaterialAlertDialogBuilder(requireActivity())
                 .setTitle(R.string.devices_details_device_name)
                 .setView(layout)
                 .setPositiveButton(R.string.ok) { _, _ ->

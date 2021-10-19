@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="200dp">
+
+    <ImageView
+        android:id="@+id/matrixToCardAvatar"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="@dimen/layout_vertical_margin_big"
+        android:contentDescription="@string/avatar"
+        android:elevation="4dp"
+        android:transitionName="profile"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@sample/user_round_avatars" />
+
+    <TextView
+        android:id="@+id/matrixToCardNameText"
+        style="@style/Widget.Vector.TextView.Subtitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="@dimen/layout_vertical_margin_big"
+        android:layout_marginEnd="16dp"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:textAlignment="center"
+        android:textColor="?vctr_content_primary"
+        app:layout_constraintTop_toBottomOf="@+id/matrixToCardAvatar"
+        tools:text="@sample/users.json/data/displayName" />
+
+    <TextView
+        android:id="@+id/matrixToCardUserIdText"
+        style="@style/Widget.Vector.TextView.Body"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="16dp"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:textAlignment="center"
+        android:textColor="?vctr_content_secondary"
+        app:layout_constraintTop_toBottomOf="@id/matrixToCardNameText"
+        tools:text="@sample/users.json/data/id" />
+
+    <Button
+        android:id="@+id/matrixToCardSendMessageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="@dimen/layout_vertical_margin_big"
+        android:minWidth="130dp"
+        android:text="@string/start_chatting"
+        app:icon="@drawable/ic_fab_add_chat"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/matrixToCardUserIdText" />
+
+    <ProgressBar
+        android:id="@+id/matrixToCardButtonLoading"
+        style="?android:attr/progressBarStyleSmall"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/matrixToCardSendMessageButton"
+        app:layout_constraintEnd_toEndOf="@id/matrixToCardSendMessageButton"
+        app:layout_constraintStart_toStartOf="@id/matrixToCardSendMessageButton"
+        app:layout_constraintTop_toTopOf="@id/matrixToCardSendMessageButton"
+        tools:visibility="visible" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/matrixToCardUserContentVisibility"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="matrixToCardAvatar,matrixToCardNameText,matrixToCardUserIdText"
+        tools:visibility="visible" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

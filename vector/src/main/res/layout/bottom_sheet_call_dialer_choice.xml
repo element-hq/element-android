@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/callControlsWrapper"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?riotx_bottom_sheet_background"
+    android:background="?colorSurface"
     android:orientation="vertical">
 
     <im.vector.app.core.ui.views.BottomSheetActionButton
@@ -13,8 +12,8 @@
         android:layout_height="wrap_content"
         app:actionTitle="@string/call_dial_pad_title"
         app:leftIcon="@drawable/ic_call_dial_pad"
-        app:tint="?attr/riotx_text_primary"
-        app:titleTextColor="?attr/riotx_text_primary" />
+        app:tint="?vctr_content_primary"
+        app:titleTextColor="?vctr_content_primary" />
 
     <im.vector.app.core.ui.views.BottomSheetActionButton
         android:id="@+id/dialerChoiceVoiceCall"
@@ -22,8 +21,8 @@
         android:layout_height="wrap_content"
         app:actionTitle="@string/action_voice_call"
         app:leftIcon="@drawable/ic_call_answer"
-        app:tint="?attr/riotx_text_primary"
-        app:titleTextColor="?attr/riotx_text_primary" />
+        app:tint="?vctr_content_primary"
+        app:titleTextColor="?vctr_content_primary" />
 
 
 </LinearLayout>

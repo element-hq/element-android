@@ -35,14 +35,14 @@
             android:importantForAccessibility="no"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/creationEncryptionTile"
-            tools:srcCompat="@tools:sample/avatars" />
+            tools:srcCompat="@sample/room_round_avatars" />
 
-        <com.google.android.material.button.MaterialButton
+        <Button
             android:id="@+id/creationTileSetAvatarButton"
             style="@style/Widget.MaterialComponents.Button.Icon"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:backgroundTint="?riotx_bottom_nav_background_color"
+            android:backgroundTint="?colorSurface"
             android:contentDescription="@string/room_settings_set_avatar"
             android:elevation="2dp"
             android:insetLeft="0dp"
@@ -55,7 +55,7 @@
             app:iconGravity="textStart"
             app:iconPadding="0dp"
             app:iconSize="20dp"
-            app:iconTint="?riot_primary_text_color"
+            app:iconTint="?vctr_content_primary"
             app:layout_constraintCircle="@+id/creationTileRoomAvatarImageView"
             app:layout_constraintCircleAngle="135"
             app:layout_constraintCircleRadius="34dp"
@@ -63,27 +63,26 @@
 
         <TextView
             android:id="@+id/roomNameTileText"
+            style="@style/Widget.Vector.TextView.Title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="16dp"
-            android:textColor="?riotx_text_primary"
-            android:textSize="20sp"
+            android:textColor="?vctr_content_primary"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/creationTileRoomAvatarImageView"
-            tools:text="@sample/matrix.json/data/roomName" />
+            tools:text="@sample/rooms.json/data/name" />
 
         <TextView
             android:id="@+id/roomNameDescriptionText"
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
-            android:textColor="?riotx_text_secondary"
-            android:textSize="15sp"
-            android:textStyle="normal"
+            android:textColor="?vctr_content_secondary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/roomNameTileText"
@@ -91,13 +90,12 @@
 
         <TextView
             android:id="@+id/roomNameTopicText"
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
-            android:textColor="?riotx_text_secondary"
-            android:textColorLink="@color/riotx_accent"
-            android:textSize="15sp"
-            android:textStyle="normal"
+            android:textColor="?vctr_content_secondary"
+            android:textColorLink="?colorPrimary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/roomNameDescriptionText"
@@ -122,18 +120,19 @@
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:background="@drawable/circle"
-                android:backgroundTint="@color/riotx_accent"
+                android:backgroundTint="?colorPrimary"
                 android:importantForAccessibility="no"
                 android:scaleType="center"
                 android:src="@drawable/ic_add_people" />
 
             <TextView
+                style="@style/Widget.Vector.TextView.Body"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:importantForAccessibility="no"
                 android:text="@string/add_people"
-                android:textColor="@color/riotx_accent" />
+                android:textColor="?colorPrimary" />
 
         </LinearLayout>
 
@@ -153,10 +152,11 @@
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:contentDescription="@string/avatar"
-            tools:srcCompat="@tools:sample/avatars" />
+            tools:srcCompat="@sample/user_round_avatars" />
 
         <TextView
             android:id="@+id/itemNoticeTextView"
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -166,14 +166,14 @@
             android:layout_marginBottom="8dp"
             android:layout_toStartOf="@id/itemMergedExpandTextView"
             android:layout_toEndOf="@id/itemNoticeAvatarView"
-            android:textColor="?riotx_text_secondary"
-            android:textSize="14sp"
+            android:textColor="?vctr_content_secondary"
             android:textStyle="italic"
             tools:text="@string/room_created_summary_item" />
 
 
         <TextView
             android:id="@+id/itemMergedExpandTextView"
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
@@ -183,8 +183,7 @@
             android:paddingEnd="8dp"
             android:paddingBottom="4dp"
             android:text="@string/merged_events_expand"
-            android:textColor="?attr/colorAccent"
-            android:textSize="14sp"
+            android:textColor="?colorSecondary"
             android:textStyle="italic" />
 
     </RelativeLayout>
@@ -195,6 +194,6 @@
         android:layout_height="1dp"
         android:layout_below="@+id/mergedSumContainer"
         android:layout_marginTop="4dp"
-        android:background="?attr/riotx_header_panel_background" />
+        android:background="?vctr_list_separator" />
 
 </RelativeLayout>

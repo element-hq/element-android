@@ -2,8 +2,7 @@
 <resources>
     <string name="light_theme">Svijetla tema</string>
     <string name="dark_theme">Tamna tema</string>
-    <string name="black_them">Crna tema</string>
-    <string name="status_theme">Tema Status.im-a</string>
+    <string name="black_theme">Crna tema</string>
     <string name="notification_sync_init">Inicijalizacija servisa</string>
     <string name="notification_sync_in_progress">Sinkronizacija u tijeku…</string>
     <string name="notification_listening_for_events">Osluškivanje događaja</string>
@@ -116,7 +115,7 @@
     <string name="user_directory_header">Popis korisnika</string>
     <string name="matrix_only_filter">Samo kontakti u Matrixu</string>
     <string name="no_conversation_placeholder">Nema razgovora</string>
-    <string name="no_contact_access_placeholder">Niste Elementu omogućili pristup Vašim lokalnim kontaktima</string>
+    <string name="template_no_contact_access_placeholder">Niste ${app_name}u omogućili pristup Vašim lokalnim kontaktima</string>
     <string name="no_result_placeholder">Nema rezultata</string>
     <string name="people_no_identity_server">Nije podešen poslužitelj identiteta.</string>
     <string name="rooms_header">Sobe</string>
@@ -248,7 +247,7 @@
     <string name="e2e_re_request_encryption_key">Ponovno zatražite ključeve za šifriranje od Vaših drugih sesija.</string>
     <string name="e2e_re_request_encryption_key_sent">Zahtjev za ključ je poslan.</string>
     <string name="e2e_re_request_encryption_key_dialog_title">Zahtjev poslan</string>
-    <string name="e2e_re_request_encryption_key_dialog_content">Pokrenite Element na nekom drugom uređaju koji može dešifrirati poruku kako bi poslao ključeve ovoj sesiji.</string>
+    <string name="template_e2e_re_request_encryption_key_dialog_content">Pokrenite ${app_name} na nekom drugom uređaju koji može dešifrirati poruku kako bi poslao ključeve ovoj sesiji.</string>
     <string name="read_receipts_list">Popis potvrda o pročitanim porukama</string>
     <string name="groups_list">Popis grupa</string>
     <plurals name="membership_changes">
@@ -270,7 +269,7 @@
     <string name="room_info_room_name">Naziv sobe</string>
     <string name="room_info_room_topic">Tema sobe</string>
     <string name="settings_call_category">Pozivi</string>
-    <string name="settings_call_ringtone_use_app_ringtone">Koristi zadan zvuk tona Elementa za dolazne pozive</string>
+    <string name="template_settings_call_ringtone_use_app_ringtone">Koristi zadan zvuk tona ${app_name}a za dolazne pozive</string>
     <string name="settings_call_ringtone_use_default_stun">Dozvoli rezervnog poslužitelja za pozivnog pomoćnika</string>
     <string name="settings_call_ringtone_use_default_stun_sum">Koristit će se %s kao pomoćnik u slučaju da ga Vaš poslužitelj nema (Vaša IP adresa će biti podijeljena tijekom poziva)</string>
     <string name="settings_call_ringtone_title">Zvuk tona dolaznog poziva</string>
@@ -292,22 +291,22 @@
     <string name="media_picker_both_capture_title">Napravi fotografiju ili video zapis</string>
     <string name="media_picker_cannot_record_video">Nije moguće snimiti video zapis</string>
     <string name="permissions_rationale_popup_title">Informacije</string>
-    <string name="permissions_rationale_msg_storage">Element treba dozvolu pristupa Vašoj kolekciji fotografija i video zapisa za slanje i spremanje privitaka.
+    <string name="template_permissions_rationale_msg_storage">${app_name} treba dozvolu pristupa Vašoj kolekciji fotografija i video zapisa za slanje i spremanje privitaka.
 \n
 \nOmogućite pristup putem sljedećeg skočnog prozora kako biste mogli slati datoteke s Vašeg uređaja.</string>
-    <string name="permissions_rationale_msg_camera">Element treba dozvolu pristupa Vašoj kameri za snimanje fotografija i za video pozive.</string>
+    <string name="template_permissions_rationale_msg_camera">${app_name} treba dozvolu pristupa Vašoj kameri za snimanje fotografija i za video pozive.</string>
     <string name="permissions_rationale_msg_camera_explanation">"
 \n
 \nOmogućite pristup putem sljedećeg skočnog prozora kako biste mogli uspostaviti poziv."</string>
-    <string name="permissions_rationale_msg_record_audio">Element treba dozvolu pristupa Vašem mikrofonu za obavljanje zvučnih poziva.</string>
+    <string name="template_permissions_rationale_msg_record_audio">${app_name} treba dozvolu pristupa Vašem mikrofonu za obavljanje zvučnih poziva.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">"
 \n
 \nOmogućite pristup putem sljedećeg skočnog prozora kako biste mogli uspostaviti poziv."</string>
-    <string name="permissions_rationale_msg_camera_and_audio">Element treba dozvolu pristupa Vašoj kameri i mikrofonu za obavljanje video poziva.
+    <string name="template_permissions_rationale_msg_camera_and_audio">${app_name} treba dozvolu pristupa Vašoj kameri i mikrofonu za obavljanje video poziva.
 \n
 \nOmogućite pristup putem sljedećih skočnih prozora kako biste mogli uspostaviti poziv.</string>
-    <string name="permissions_rationale_msg_contacts">Element može provjeriti Vaš imenik kako bi našao druge korisnike Matrixa temeljem njihove e-pošte i telefonskih brojeva. Ako se slažete podijeliti imenik u ove svrhe, dozvolite pristup putem sljedećeg skočnog prozora.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Element može provjeriti Vaš imenik kako bi našao druge korisnike Matrixa temeljem njihove e-pošte i telefonskih brojeva.
+    <string name="template_permissions_rationale_msg_contacts">${app_name} može provjeriti Vaš imenik kako bi našao druge korisnike Matrixa temeljem njihove e-pošte i telefonskih brojeva. Ako se slažete podijeliti imenik u ove svrhe, dozvolite pristup putem sljedećeg skočnog prozora.</string>
+    <string name="template_permissions_msg_contacts_warning_other_androids">${app_name} može provjeriti Vaš imenik kako bi našao druge korisnike Matrixa temeljem njihove e-pošte i telefonskih brojeva.
 \n
 \nŽelite li podijeliti imenik u ove svrhe\?</string>
     <string name="permissions_action_not_performed_missing_permissions">Nažalost, radnja nije izvršena zbog nedostatka dozvola</string>
@@ -514,7 +513,7 @@
     <string name="ssl_only_accept">Prihvatite certifikat samo ako je poslužiteljski administrator objavio otisak prsta koji odgovara gore navedenom otisku.</string>
     <string name="room_settings_de_prioritize">Smanji prioritet</string>
     <string name="settings_add_3pid_confirm_password_title">Potvrdite Vašu lozinku</string>
-    <string name="settings_add_3pid_flow_not_supported">Ovo nije moguće napraviti iz mobilne inačice Elementa</string>
+    <string name="template_settings_add_3pid_flow_not_supported">Ovo nije moguće napraviti iz mobilne inačice ${app_name}a</string>
     <string name="settings_add_3pid_authentication_needed">Potrebna je ovjera</string>
     <string name="settings_notification_advanced">Napredne postavke obavijesti</string>
     <string name="settings_notification_by_event">Važnost obavijesti po događajima</string>
@@ -538,8 +537,8 @@
     <string name="settings_troubleshoot_test_account_settings_quickfix">Uključi</string>
     <string name="settings_troubleshoot_test_device_settings_title">Postavke sesije.</string>
     <string name="settings_troubleshoot_test_device_settings_success">Obavijesti su uključene za ovu sesiju.</string>
-    <string name="settings_troubleshoot_test_device_settings_failed">Obavijesti su isključene za ovu sesiju.
-\nProvjerite postavke Elementa.</string>
+    <string name="template_settings_troubleshoot_test_device_settings_failed">Obavijesti su isključene za ovu sesiju.
+\nProvjerite postavke ${app_name}a.</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">Uključi</string>
     <string name="settings_troubleshoot_test_bing_settings_title">Prilagođene postavke.</string>
     <string name="settings_troubleshoot_test_bing_settings_success_with_warn">Uočite da su neke poruke postavljene na tiho (doći će do obavijesti bez zvuka).</string>
@@ -548,7 +547,7 @@
     <string name="settings_troubleshoot_test_bing_settings_quickfix">Provjeri postavke</string>
     <string name="settings_troubleshoot_test_play_services_title">Provjera Usluga za Play</string>
     <string name="settings_troubleshoot_test_play_services_success">APK Usluga za Google Play je dostupan i ažuriran.</string>
-    <string name="settings_troubleshoot_test_play_services_failed">Element koristi Usluge za Google Play kako bi isporučio poruke, no čini se da nisu ispravno podešene.
+    <string name="template_settings_troubleshoot_test_play_services_failed">${app_name} koristi Usluge za Google Play kako bi isporučio poruke, no čini se da nisu ispravno podešene.
 \n%1$s</string>
     <string name="settings_troubleshoot_test_play_services_quickfix">Popravi Usluge za Play</string>
     <string name="settings_troubleshoot_test_fcm_title">Firebaseova oznaka</string>
@@ -556,12 +555,12 @@
 \n%1$s</string>
     <string name="settings_troubleshoot_test_fcm_failed">Neuspješno dohvaćanje oznake FCM-a:
 \n%1$s</string>
-    <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
-\nElement nema kontrolu nad ovom greškom te prema Googleu ova greška ukazuje da uređaj ima previše prijavljenih aplikacija na FCM-u. Greška se pojavljuje samo u slučajevima u kojima postoji krajnje mnogo aplikacija te to ne bi trebao biti slučaj kod prosječnog korisnika.</string>
-    <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
-\nElement nema kontrolu nad ovom greškom. Nekoliko je mogućih razloga za grešku. Možda će raditi ako kasnije ponovno pokušate. Također u postavkama sustava možete provjeriti da Usluge za Google Play nisu ograničene u korištenju podatkovnog prometa i da je sat Vašeg uređaja točan. Greška je moguća i na prilagođenim ROM-ovima.</string>
-    <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
-\nElement nema kontrolu nad ovom greškom. Na uređaju ne postoji račun pri Googleu. Možete otvoriti upravitelja računima i dodati račun pri Googleu.</string>
+    <string name="template_settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
+\n${app_name} nema kontrolu nad ovom greškom te prema Googleu ova greška ukazuje da uređaj ima previše prijavljenih aplikacija na FCM-u. Greška se pojavljuje samo u slučajevima u kojima postoji krajnje mnogo aplikacija te to ne bi trebao biti slučaj kod prosječnog korisnika.</string>
+    <string name="template_settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
+\n${app_name} nema kontrolu nad ovom greškom. Nekoliko je mogućih razloga za grešku. Možda će raditi ako kasnije ponovno pokušate. Također u postavkama sustava možete provjeriti da Usluge za Google Play nisu ograničene u korištenju podatkovnog prometa i da je sat Vašeg uređaja točan. Greška je moguća i na prilagođenim ROM-ovima.</string>
+    <string name="template_settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
+\n${app_name} nema kontrolu nad ovom greškom. Na uređaju ne postoji račun pri Googleu. Možete otvoriti upravitelja računima i dodati račun pri Googleu.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Dodaj račun</string>
     <string name="settings_troubleshoot_test_token_registration_title">Registracija oznake</string>
     <string name="settings_troubleshoot_test_token_registration_success">Oznaka FCM-a je uspješno registrirana pri Vašem poslužitelju.</string>
@@ -577,17 +576,17 @@
     <string name="settings_troubleshoot_test_service_restart_failed">Neuspjelo ponovno pokretanje servisa</string>
     <string name="settings_troubleshoot_test_service_boot_title">Pokreni pri podizanju sustava</string>
     <string name="settings_troubleshoot_test_service_boot_success">Servis će se pokrenuti prilikom ponovnog pokretanja uređaja.</string>
-    <string name="settings_troubleshoot_test_service_boot_failed">Servis se neće pokrenuti sa ponovnim pokretanjem uređaja pa nećete primati obavijesti sve dok ne otvorite Element.</string>
+    <string name="template_settings_troubleshoot_test_service_boot_failed">Servis se neće pokrenuti sa ponovnim pokretanjem uređaja pa nećete primati obavijesti sve dok ne otvorite ${app_name}.</string>
     <string name="settings_troubleshoot_test_service_boot_quickfix">Omogući pokretanje pri podizanju sustava</string>
     <string name="settings_troubleshoot_test_bg_restricted_title">Provjeri pozadinska ograničenja</string>
-    <string name="settings_troubleshoot_test_bg_restricted_success">Pozadinska su ograničenja onemogućena za Element. Ovaj test trebate izvršiti putem podatkovne veze (bez WIFI-ja).
+    <string name="template_settings_troubleshoot_test_bg_restricted_success">Pozadinska su ograničenja onemogućena za ${app_name}. Ovaj test trebate izvršiti putem podatkovne veze (bez WIFI-ja).
 \n%1$s</string>
-    <string name="settings_troubleshoot_test_bg_restricted_failed">Pozadinska su ograničenja omogućena za Element.
+    <string name="template_settings_troubleshoot_test_bg_restricted_failed">Pozadinska su ograničenja omogućena za ${app_name}.
 \nRadnje koje aplikacija pokušava napraviti su bitno ograničene dok je u pozadini i ovo možete utjecati na obavijesti.
 \n%1$s</string>
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">Onemogući ograničenja</string>
     <string name="settings_troubleshoot_test_battery_title">Optimiranje baterije</string>
-    <string name="settings_troubleshoot_test_battery_success">Optimiranje baterije ne utječe na Element.</string>
+    <string name="template_settings_troubleshoot_test_battery_success">Optimiranje baterije ne utječe na ${app_name}.</string>
     <string name="settings_troubleshoot_test_battery_failed">Ako korisnik uz ugašen zaslon ostavi uređaj nepriključenog i u mirovanju tijekom nekog vremena, uređaj će ući u način drijemanja. Ovo aplikacijama onemogućuje pristup mreži i odgađa njihove zadatke, sinkronizaciju i uobičajene alarme.</string>
     <string name="settings_troubleshoot_test_battery_quickfix">Zanemari optimiranje</string>
     <string name="settings_notification_privacy_normal">Obično</string>
@@ -617,11 +616,11 @@
     <string name="settings_background_sync">Pozadinska sinkronizacija</string>
     <string name="settings_background_fdroid_sync_mode">Način pozadinske sinkronizacije (eksperimentalno)</string>
     <string name="settings_background_fdroid_sync_mode_battery">Optimirano za bateriju</string>
-    <string name="settings_background_fdroid_sync_mode_battery_description">Element će sinkronizirati u pozadini na način koji čuva ograničena sredstva uređaja (baterija).
+    <string name="template_settings_background_fdroid_sync_mode_battery_description">${app_name} će sinkronizirati u pozadini na način koji čuva ograničena sredstva uređaja (baterija).
 \nOvisno o stanju sredstava uređaja, operacijski sustav može odgoditi sinkronizaciju.</string>
     <string name="settings_background_fdroid_sync_mode_real_time">Optimirano za stvarno vrijeme</string>
-    <string name="settings_background_fdroid_sync_mode_real_time_description">Element će u pozadini i periodično u točno određeno vrijeme koje je podesivo vršiti sinkronizaciju.
-\nOvo će imati utjecaja na korištenje radijskog sustava i potrošnju baterije. Uočit ćete stalno prikazanu obavijest da Element osluškuje događaje.</string>
+    <string name="template_settings_background_fdroid_sync_mode_real_time_description">${app_name} će u pozadini i periodično u točno određeno vrijeme koje je podesivo vršiti sinkronizaciju.
+\nOvo će imati utjecaja na korištenje radijskog sustava i potrošnju baterije. Uočit ćete stalno prikazanu obavijest da ${app_name} osluškuje događaje.</string>
     <string name="settings_background_fdroid_sync_mode_disabled">Bez pozadinske sinkronizacije</string>
     <string name="settings_background_fdroid_sync_mode_disabled_description">Nećete primati obavijesti o dolaznim porukama kada je aplikacija u pozadini.</string>
     <string name="settings_background_sync_update_error">Neuspjela promjena postavki.</string>
@@ -680,17 +679,17 @@
     <string name="settings_discovery_category">Pronalaženje</string>
     <string name="settings_discovery_manage">Upravljajte Vašim postavkama za pronalaženje.</string>
     <string name="startup_notification_privacy_title">Privatnost obavještavanja</string>
-    <string name="startup_notification_privacy_message">Element se može izvršavati u pozadini kako bi sigurno i privatno upravljao Vašim obavijestima. Ovo može utjecati na potrošnju baterije.</string>
+    <string name="template_startup_notification_privacy_message">${app_name} se može izvršavati u pozadini kako bi sigurno i privatno upravljao Vašim obavijestima. Ovo može utjecati na potrošnju baterije.</string>
     <string name="startup_notification_privacy_button_grant">Dozvoli</string>
     <string name="startup_notification_privacy_button_other">Izaberi drugu opciju</string>
     <string name="startup_notification_fdroid_battery_optim_title">Pozadinska veza</string>
-    <string name="startup_notification_fdroid_battery_optim_message">Element treba održati pozadinsku vezu s malim utjecajem kako bi imao pouzdane obavijesti.
-\nNa sljedećem zaslonu potvrdite Elementov zahtjev za stalnim izvršavanjem u pozadini.</string>
+    <string name="template_startup_notification_fdroid_battery_optim_message">${app_name} treba održati pozadinsku vezu s malim utjecajem kako bi imao pouzdane obavijesti.
+\nNa sljedećem zaslonu potvrdite ${app_name}ov zahtjev za stalnim izvršavanjem u pozadini.</string>
     <string name="startup_notification_fdroid_battery_optim_button_grant">Dozvoli</string>
     <string name="settings_analytics">Analitika</string>
     <string name="settings_opt_in_of_analytics">Pošalji analitičke podatke</string>
-    <string name="settings_opt_in_of_analytics_summary">Element skuplja anonimnu analitiku kako bi se unaprijedila aplikacija.</string>
-    <string name="settings_opt_in_of_analytics_prompt">Omogućite analitiku ako želite pomoći unaprijediti Element.</string>
+    <string name="template_settings_opt_in_of_analytics_summary">${app_name} skuplja anonimnu analitiku kako bi se unaprijedila aplikacija.</string>
+    <string name="template_settings_opt_in_of_analytics_prompt">Omogućite analitiku ako želite pomoći unaprijediti ${app_name}.</string>
     <string name="settings_opt_in_of_analytics_ok">Da, želim pomoći!</string>
     <string name="settings_data_save_mode">Način uštede podataka</string>
     <string name="settings_data_save_mode_summary">Način uštede podataka primjenjuje određeno izdvajanje u kojem se ne navode novosti o prisutnosti i obavijesti o tipkanju.</string>
@@ -903,7 +902,7 @@
     <string name="passphrase_passphrase_does_not_match">Fraza-lozinka se ne podudara</string>
     <string name="passphrase_empty_error_message">Unesite fraza-lozinku</string>
     <string name="passphrase_passphrase_too_weak">Fraza-lozinka je preslaba</string>
-    <string name="keys_backup_passphrase_not_empty_error_message">Izbrišite fraza-lozinku ako želite da Element generira ključ za obnovu.</string>
+    <string name="template_keys_backup_passphrase_not_empty_error_message">Izbrišite fraza-lozinku ako želite da ${app_name} generira ključ za obnovu.</string>
     <string name="sas_incoming_request_notif_title">Zahtjev za potvrdom</string>
     <string name="sas_incoming_request_notif_content">%s želi potvrditi Vašu sesiju</string>
     <string name="sas_error_m_user">Korisnik je prekinuo potvrdu</string>
@@ -951,7 +950,7 @@
     <string name="please_wait">Pričekajte…</string>
     <string name="group_all_communities">Sve zajednice</string>
     <string name="room_preview_no_preview">Nije moguće pregledati sobu</string>
-    <string name="room_preview_world_readable_room_not_supported_yet">Pregled sobe u koju svatko ima uvid još nije podržan u Element-u</string>
+    <string name="template_room_preview_world_readable_room_not_supported_yet">Pregled sobe u koju svatko ima uvid još nije podržan u ${app_name}-u</string>
     <string name="fab_menu_create_room">Sobe</string>
     <string name="fab_menu_create_chat">Izravne poruke</string>
     <string name="create_room_title">Nova soba</string>
@@ -1234,7 +1233,6 @@
     <string name="login_server_url_form_other_hint">Adresa</string>
     <string name="login_server_url_form_modular_text">Plaćeno gošćenje za organizacije</string>
     <string name="login_server_url_form_modular_notice">Unesite adresu Modular Elementa ili poslužitelja koji želite koristiti</string>
-    <string name="login_server_url_form_other_notice">Unesite adresu poslužitelja ili Elementa na koji se želite spojiti</string>
     <string name="login_sso_error_message">Došlo je do greške pri učitavanju stranice: %1$s (%2$d)</string>
     <string name="login_mode_not_supported">Aplikacija se ne može prijaviti na ovog poslužitelja. Poslužitelj podržava sljedeće vrste prijava: %1$s.
 \n
@@ -1298,9 +1296,9 @@
     <string name="room_member_power_level_moderator_in">Moderator u %1$s</string>
     <string name="room_member_power_level_custom_in">Prilagođeno (%1$d) u %2$s</string>
     <string name="room_member_jump_to_read_receipt">Skoči na potvrdu o pročitanoj poruci</string>
-    <string name="rendering_event_error_type_of_event_not_handled">Element ne podržava događaje tipa \'%1$s\'</string>
-    <string name="rendering_event_error_type_of_message_not_handled">Element ne podržava poruke tipa \'%1$s\'</string>
-    <string name="rendering_event_error_exception">Element je naišao na problem pri prikazu sadržaja događaja s identitetom \'%1$s\'</string>
+    <string name="template_rendering_event_error_type_of_event_not_handled">${app_name} ne podržava događaje tipa \'%1$s\'</string>
+    <string name="template_rendering_event_error_type_of_message_not_handled">${app_name} ne podržava poruke tipa \'%1$s\'</string>
+    <string name="template_rendering_event_error_exception">${app_name} je naišao na problem pri prikazu sadržaja događaja s identitetom \'%1$s\'</string>
     <string name="unignore">Ukloni zanemarivanje</string>
     <string name="room_list_sharing_header_recent_rooms">Nedavne sobe</string>
     <string name="room_list_sharing_header_other_rooms">Druge sobe</string>

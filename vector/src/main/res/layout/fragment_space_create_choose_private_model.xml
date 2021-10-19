@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp">
+
+        <TextView
+            android:id="@+id/headerText"
+            style="@style/Widget.Vector.TextView.HeadlineMedium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/create_spaces_who_are_you_working_with"
+            android:textColor="?vctr_content_primary"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/accessInfoHelpText"
+            style="@style/Widget.Vector.TextView.Body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:textColor="?vctr_content_secondary"
+            app:layout_constraintTop_toBottomOf="@id/headerText"
+            tools:text="@string/create_spaces_make_sure_access" />
+
+        <im.vector.app.features.spaces.create.WizardButtonView
+            android:id="@+id/justMeButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:icon="@drawable/ic_user_round"
+            app:iconTint="?vctr_content_secondary"
+            app:layout_constraintBottom_toTopOf="@id/teammatesButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:subTitle="@string/create_spaces_organise_rooms"
+            app:title="@string/create_spaces_just_me" />
+
+        <im.vector.app.features.spaces.create.WizardButtonView
+            android:id="@+id/teammatesButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:icon="@drawable/ic_member_small"
+            app:iconTint="?vctr_content_secondary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:subTitle="@string/create_spaces_private_teammates"
+            app:title="@string/create_spaces_me_and_teammates" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

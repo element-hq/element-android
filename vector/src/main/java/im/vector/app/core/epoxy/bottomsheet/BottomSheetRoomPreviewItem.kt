@@ -20,7 +20,7 @@ import android.content.res.ColorStateList
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.content.ContextCompat
+import androidx.appcompat.widget.TooltipCompat
 import androidx.core.widget.ImageViewCompat
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
@@ -30,6 +30,7 @@ import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.extensions.setTextOrHide
+import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.themes.ThemeUtils
@@ -44,11 +45,12 @@ abstract class BottomSheetRoomPreviewItem : VectorEpoxyModel<BottomSheetRoomPrev
     @EpoxyAttribute lateinit var avatarRenderer: AvatarRenderer
     @EpoxyAttribute lateinit var matrixItem: MatrixItem
     @EpoxyAttribute lateinit var stringProvider: StringProvider
+    @EpoxyAttribute lateinit var colorProvider: ColorProvider
     @EpoxyAttribute var izLowPriority: Boolean = false
     @EpoxyAttribute var izFavorite: Boolean = false
-    @EpoxyAttribute var settingsClickListener: ClickListener? = null
-    @EpoxyAttribute var lowPriorityClickListener: ClickListener? = null
-    @EpoxyAttribute var favoriteClickListener: ClickListener? = null
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var settingsClickListener: ClickListener? = null
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var lowPriorityClickListener: ClickListener? = null
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var favoriteClickListener: ClickListener? = null
 
     override fun bind(holder: Holder) {
         super.bind(holder)
@@ -58,7 +60,7 @@ abstract class BottomSheetRoomPreviewItem : VectorEpoxyModel<BottomSheetRoomPrev
         setLowPriorityState(holder, izLowPriority)
         setFavoriteState(holder, izFavorite)
 
-        holder.roomLowPriority.setOnClickListener {
+        holder.roomLowPriority.onClick {
             // Immediate echo
             setLowPriorityState(holder, !izLowPriority)
             if (!izLowPriority) {
@@ -66,9 +68,9 @@ abstract class BottomSheetRoomPreviewItem : VectorEpoxyModel<BottomSheetRoomPrev
                 setFavoriteState(holder, false)
             }
             // And do the action
-            lowPriorityClickListener?.invoke()
+            lowPriorityClickListener?.invoke(it)
         }
-        holder.roomFavorite.setOnClickListener {
+        holder.roomFavorite.onClick {
             // Immediate echo
             setFavoriteState(holder, !izFavorite)
             if (!izFavorite) {
@@ -76,35 +78,48 @@ abstract class BottomSheetRoomPreviewItem : VectorEpoxyModel<BottomSheetRoomPrev
                 setLowPriorityState(holder, false)
             }
             // And do the action
-            favoriteClickListener?.invoke()
+            favoriteClickListener?.invoke(it)
         }
-        holder.roomSettings.onClick(settingsClickListener)
+        holder.roomSettings.apply {
+            onClick(settingsClickListener)
+            TooltipCompat.setTooltipText(this, stringProvider.getString(R.string.room_list_quick_actions_room_settings))
+        }
     }
 
     private fun setLowPriorityState(holder: Holder, isLowPriority: Boolean) {
+        val description: String
         val tintColor: Int
         if (isLowPriority) {
-            holder.roomLowPriority.contentDescription = stringProvider.getString(R.string.room_list_quick_actions_low_priority_remove)
-            tintColor = ContextCompat.getColor(holder.view.context, R.color.riotx_accent)
+            description = stringProvider.getString(R.string.room_list_quick_actions_low_priority_remove)
+            tintColor = colorProvider.getColorFromAttribute(R.attr.colorPrimary)
         } else {
-            holder.roomLowPriority.contentDescription = stringProvider.getString(R.string.room_list_quick_actions_low_priority_add)
-            tintColor = ThemeUtils.getColor(holder.view.context, R.attr.riotx_text_secondary)
+            description = stringProvider.getString(R.string.room_list_quick_actions_low_priority_add)
+            tintColor = ThemeUtils.getColor(holder.view.context, R.attr.vctr_content_secondary)
         }
-        ImageViewCompat.setImageTintList(holder.roomLowPriority, ColorStateList.valueOf(tintColor))
+        holder.roomLowPriority.apply {
+            contentDescription = description
+            ImageViewCompat.setImageTintList(this, ColorStateList.valueOf(tintColor))
+            TooltipCompat.setTooltipText(this, description)
+        }
     }
 
     private fun setFavoriteState(holder: Holder, isFavorite: Boolean) {
+        val description: String
         val tintColor: Int
         if (isFavorite) {
-            holder.roomFavorite.contentDescription = stringProvider.getString(R.string.room_list_quick_actions_favorite_remove)
+            description = stringProvider.getString(R.string.room_list_quick_actions_favorite_remove)
             holder.roomFavorite.setImageResource(R.drawable.ic_star_green_24dp)
-            tintColor = ContextCompat.getColor(holder.view.context, R.color.riotx_accent)
+            tintColor = colorProvider.getColorFromAttribute(R.attr.colorPrimary)
         } else {
-            holder.roomFavorite.contentDescription = stringProvider.getString(R.string.room_list_quick_actions_favorite_add)
+            description = stringProvider.getString(R.string.room_list_quick_actions_favorite_add)
             holder.roomFavorite.setImageResource(R.drawable.ic_star_24dp)
-            tintColor = ThemeUtils.getColor(holder.view.context, R.attr.riotx_text_secondary)
+            tintColor = ThemeUtils.getColor(holder.view.context, R.attr.vctr_content_secondary)
         }
-        ImageViewCompat.setImageTintList(holder.roomFavorite, ColorStateList.valueOf(tintColor))
+        holder.roomFavorite.apply {
+            contentDescription = description
+            ImageViewCompat.setImageTintList(this, ColorStateList.valueOf(tintColor))
+            TooltipCompat.setTooltipText(this, description)
+        }
     }
 
     class Holder : VectorEpoxyHolder() {

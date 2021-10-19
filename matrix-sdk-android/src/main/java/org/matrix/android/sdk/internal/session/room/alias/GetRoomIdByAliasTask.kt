@@ -52,8 +52,8 @@ internal class DefaultGetRoomIdByAliasTask @Inject constructor(
             Optional.from(null)
         } else {
             val description  = tryOrNull("## Failed to get roomId from alias") {
-                executeRequest<RoomAliasDescription>(globalErrorReceiver) {
-                    apiCall = directoryAPI.getRoomIdByAlias(params.roomAlias)
+                executeRequest(globalErrorReceiver) {
+                    directoryAPI.getRoomIdByAlias(params.roomAlias)
                 }
             }
             Optional.from(description)

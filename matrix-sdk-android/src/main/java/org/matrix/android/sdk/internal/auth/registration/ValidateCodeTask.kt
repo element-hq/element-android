@@ -33,7 +33,7 @@ internal class DefaultValidateCodeTask(
 
     override suspend fun execute(params: ValidateCodeTask.Params): SuccessResult {
         return executeRequest(null) {
-            apiCall = authAPI.validate3Pid(params.url, params.body)
+            authAPI.validate3Pid(params.url, params.body)
         }
     }
 }

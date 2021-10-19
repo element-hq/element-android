@@ -1,8 +1,214 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+    <string name="summary_message">%1$s: %2$s</string>
+    <string name="summary_user_sent_image">%1$s poslal/a obrázok.</string>
+    <string name="notice_room_invite_no_invitee">Pozvanie od %s</string>
+    <string name="notice_room_invite">%1$s pozval/a %2$s</string>
+    <string name="notice_room_invite_you">%1$s vás pozval/a</string>
+    <string name="notice_room_join">%1$s vstúpil/a do miestnosti</string>
+    <string name="notice_room_leave">%1$s opustil/a miestnosť</string>
+    <string name="notice_room_reject">%1$s odmietol/a pozvanie</string>
+    <string name="notice_room_kick">%1$s vykázal/a %2$s</string>
+    <string name="notice_room_unban">%1$s povolil/a vstupovať %2$s</string>
+    <string name="notice_room_ban">%1$s zakázal/a vstupovať %2$s</string>
+    <string name="notice_room_withdraw">%1$s vzal/a späť pozvanie %2$s</string>
+    <string name="notice_avatar_url_changed">%1$s si zmenil/a obrázok v profile</string>
+    <string name="notice_display_name_set">%1$s si nastavil/a zobrazované meno %2$s</string>
+    <string name="notice_display_name_changed_from">%1$s si zmenil/a zobrazované meno %2$s na %3$s</string>
+    <string name="notice_display_name_removed">%1$s odstránil/a svoje zobrazované meno (%2$s)</string>
+    <string name="notice_room_topic_changed">%1$s zmenil/a tému na: %2$s</string>
+    <string name="notice_room_name_changed">%1$s zmenil/a názov miestnosti na: %2$s</string>
+    <string name="notice_placed_video_call">%s uskutočnil/a video hovor.</string>
+    <string name="notice_placed_voice_call">%s zatelefonoval/a.</string>
+    <string name="notice_answered_call">%s prijal/a hovor.</string>
+    <string name="notice_ended_call">%s ukončil/a hovor.</string>
+    <string name="notice_made_future_room_visibility">%1$s sprístupnil/a budúcu históriu miestnosti %2$s</string>
+    <string name="notice_room_visibility_invited">pre všetkých členov, od kedy boli pozvaní.</string>
+    <string name="notice_room_visibility_joined">pre všetkých členov, od kedy vstúpili.</string>
+    <string name="notice_room_visibility_shared">pre všetkých členov.</string>
+    <string name="notice_room_visibility_world_readable">pre každého.</string>
+    <string name="notice_room_visibility_unknown">neznámym (%s).</string>
+    <string name="notice_end_to_end">%1$s povolil/a E2E šifrovanie (%2$s)</string>
+    <string name="notice_requested_voip_conference">%1$s požiadal/a o VoIP konferenciu</string>
+    <string name="notice_voip_started">Začala sa VoIP konferencia</string>
+    <string name="notice_voip_finished">Skončila sa VoIP konferencia</string>
+    <string name="notice_avatar_changed_too">(aj obrázok v profile)</string>
+    <string name="notice_room_name_removed">%1$s odstránil/a názov miestnosti</string>
+    <string name="notice_room_topic_removed">%1$s odstránil/a tému miestnosti</string>
+    <string name="notice_profile_change_redacted">%1$s aktualizoval/a svoj profil %2$s</string>
+    <string name="notice_room_third_party_invite">%1$s pozval/a %2$s vstúpiť do miestnosti</string>
+    <string name="notice_room_third_party_registered_invite">%1$s prijal/a pozvanie pre %2$s</string>
+    <string name="notice_crypto_unable_to_decrypt">** Nie je možné dešifrovať: %s **</string>
+    <string name="notice_crypto_error_unkwown_inbound_session_id">Zo zariadenia odosieľateľa nebolo možné získať kľúče potrebné na dešifrovanie tejto správy.</string>
+    <string name="could_not_redact">Nie je možné vymazať</string>
+    <string name="unable_to_send_message">Nie je možné odoslať správu</string>
+    <string name="message_failed_to_upload">Nepodarilo sa nahrať obrázok</string>
+    <string name="network_error">Chyba siete</string>
+    <string name="matrix_error">Chyba Matrix</string>
+    <string name="room_error_join_failed_empty_room">V súčasnosti nie je možné znovu vstúpiť do prázdnej miestnosti.</string>
+    <string name="medium_email">Emailová adresa</string>
+    <string name="medium_phone_number">Telefónne číslo</string>
+    <string name="summary_user_sent_sticker">%1$s poslal/a nálepku.</string>
+    <string name="room_displayname_invite_from">Pozvanie od %s</string>
+    <string name="room_displayname_room_invite">Pozvanie do miestnosti</string>
+    <string name="room_displayname_two_members">%1$s a %2$s</string>
+    <string name="room_displayname_empty_room">Prázdna miestnosť</string>
+    <plurals name="room_displayname_three_and_more_members">
+        <item quantity="one">%1$s a 1 ďalší</item>
+        <item quantity="few">%1$s a %2$d ďalší</item>
+        <item quantity="other">%1$s a %2$d ďalších</item>
+    </plurals>
+    <string name="notice_room_update">%s aktualizoval/a túto miestnosť.</string>
+    <string name="notice_event_redacted">Odstránená správa</string>
+    <string name="notice_event_redacted_by">Odstránená správa používateľom %1$s</string>
+    <string name="notice_event_redacted_with_reason">Odstránená správa [dôvod: %1$s]</string>
+    <string name="notice_event_redacted_by_with_reason">Odstránená správa používateľom %1$s [dôvod: %2$s]</string>
+    <string name="initial_sync_start_importing_account">Úvodná synchronizácia:
+\nPrebieha import účtu…</string>
+    <string name="initial_sync_start_importing_account_crypto">Úvodná synchronizácia:
+\nPrebieha import šifrovacích kľúčov</string>
+    <string name="initial_sync_start_importing_account_rooms">Úvodná synchronizácia:
+\nPrebieha import miestností</string>
+    <string name="initial_sync_start_importing_account_joined_rooms">Úvodná synchronizácia:
+\nPrebieha import miestností, do ktorých ste vstúpili</string>
+    <string name="initial_sync_start_importing_account_invited_rooms">Úvodná synchronizácia:
+\nPrebieha import pozvaní</string>
+    <string name="initial_sync_start_importing_account_left_rooms">Úvodná synchronizácia:
+\nPrebieha import opustených miestností</string>
+    <string name="initial_sync_start_importing_account_groups">Úvodná synchronizácia:
+\nPrebieha import komunít</string>
+    <string name="initial_sync_start_importing_account_data">Úvodná synchronizácia:
+\nPrebieha import údajov účtu</string>
+    <string name="event_status_sending_message">Odosielanie správy…</string>
+    <string name="clear_timeline_send_queue">Vymazať správy na odoslanie</string>
+    <string name="notice_room_third_party_revoked_invite">%1$s zamietol/a pozvanie používateľa %2$s vstúpiť do miestnosti</string>
+    <string name="notice_room_invite_no_invitee_with_reason">Pozvanie od %1$s. Dôvod: %2$s</string>
+    <string name="notice_room_invite_with_reason">%1$s pozval/a %2$s. Dôvod: %3$s</string>
+    <string name="notice_room_invite_you_with_reason">%1$s vás pozval/a. Dôvod: %2$s</string>
+    <string name="notice_room_join_with_reason">%1$s vstúpil/a do miestnosti. Dôvod: %2$s</string>
+    <string name="notice_room_leave_with_reason">%1$s opustil/a miestnosť. Dôvod: %2$s</string>
+    <string name="notice_room_reject_with_reason">%1$s odmietol/a pozvanie. Dôvod: %2$s</string>
+    <string name="notice_room_kick_with_reason">%1$s vykázal/a %2$s. Dôvod: %3$s</string>
+    <string name="notice_room_unban_with_reason">%1$s povolil/a vstupovať %2$s. Dôvod: %3$s</string>
+    <string name="notice_room_ban_with_reason">%1$s zakázal/a vstupovať %2$s. Dôvod: %3$s</string>
+    <string name="notice_room_third_party_invite_with_reason">%1$s pozval/a %2$s vstúpiť do miestnosti. Dôvod: %3$s</string>
+    <string name="notice_room_third_party_revoked_invite_with_reason">%1$s zamietol/a pozvanie používateľa %2$s vstúpiť do miestnosti. Dôvod: %3$s</string>
+    <string name="notice_room_third_party_registered_invite_with_reason">%1$s prijal/a pozvanie pre %2$s. Dôvod: %3$s</string>
+    <string name="notice_room_withdraw_with_reason">%1$s vzal/a späť pozvanie %2$s. Dôvod: %3$s</string>
+    <plurals name="notice_room_aliases_added">
+        <item quantity="one">%1$s pridal/a adresu %2$s pre túto miestnosť.</item>
+        <item quantity="few">%1$s pridal/a adresy %2$s pre túto miestnosť.</item>
+        <item quantity="other">%1$s pridal/a adresy %2$s pre túto miestnosť.</item>
+    </plurals>
+    <plurals name="notice_room_aliases_removed">
+        <item quantity="one">%1$s odstránil/a adresu %2$s pre túto miestnosť.</item>
+        <item quantity="few">%1$s odstránil/a adresy %3$s pre túto miestnosť.</item>
+        <item quantity="other">%1$s odstránil/a adresy %3$s pre túto miestnosť.</item>
+    </plurals>
+    <string name="notice_room_aliases_added_and_removed">%1$s pridal/a adresy %2$s a odstránil/a adresy %3$s pre túto miestnosť.</string>
+    <string name="notice_room_canonical_alias_set">%1$s nastavil/a hlavnú adresu tejto miestnosti %2$s.</string>
+    <string name="notice_room_canonical_alias_unset">%1$s odstránil/a hlavnú adresu tejto miestnosti.</string>
+    <string name="notice_room_guest_access_can_join">%1$s povolil/a hosťom///návštevníkom prístup do tejto miestnosti.</string>
+    <string name="summary_you_sent_image">Poslali ste obrázok.</string>
+    <string name="summary_you_sent_sticker">Poslali ste nálepku.</string>
+    <string name="notice_room_invite_no_invitee_by_you">Pozvanie od vás</string>
+    <string name="notice_room_created">%1$s vytvoril/a miestnosť</string>
+    <string name="notice_room_created_by_you">Vytvorili ste miestnosť</string>
+    <string name="notice_room_invite_by_you">Pozvali ste %1$s</string>
+    <string name="notice_room_join_by_you">Vstúpili ste do miestnosti</string>
+    <string name="notice_room_leave_by_you">Opustili ste miestnosť</string>
+    <string name="notice_room_reject_by_you">Odmietli ste pozvanie</string>
+    <string name="notice_room_kick_by_you">Vykázali ste %1$s</string>
+    <string name="notice_room_unban_by_you">Povolili ste vstupovať %1$s</string>
+    <string name="notice_room_ban_by_you">Zakázali ste vstupovať %1$s</string>
+    <string name="notice_room_withdraw_by_you">Vzali ste späť pozvanie %1$s</string>
+    <string name="notice_avatar_url_changed_by_you">Zmenili ste si obrázok v profile</string>
+    <string name="notice_display_name_set_by_you">Nastavili ste si zobrazované meno %1$s</string>
+    <string name="notice_display_name_changed_from_by_you">Zmenili ste si zobrazované meno %1$s na %2$s</string>
+    <string name="notice_display_name_removed_by_you">Odstránili ste svoje zobrazované meno %1$s</string>
+    <string name="notice_room_topic_changed_by_you">Zmenili ste tému na: %1$s</string>
+    <string name="notice_room_avatar_changed">%1$s zmenil/a obrázok miestnosti</string>
+    <string name="notice_room_avatar_changed_by_you">Zmenili ste obrázok miestnosti</string>
+    <string name="notice_room_name_changed_by_you">Zmenili ste názov miestnosti na: %1$s</string>
+    <string name="notice_placed_video_call_by_you">Uskutočnili ste video hovor.</string>
+    <string name="notice_placed_voice_call_by_you">Zatelefonovali ste.</string>
+    <string name="notice_call_candidates">%s poslal údaje pre nastavenie hovoru.</string>
+    <string name="notice_call_candidates_by_you">Poslali ste údaje na nastavenie hovoru.</string>
+    <string name="notice_answered_call_by_you">Prijali ste hovor.</string>
+    <string name="notice_ended_call_by_you">Ukončili ste hovor.</string>
+    <string name="notice_made_future_room_visibility_by_you">Sprístupnili ste budúcu históriu miestnosti %1$s</string>
+    <string name="notice_end_to_end_by_you">Povolili ste E2E šifrovanie (%1$s)</string>
+    <string name="notice_room_update_by_you">Aktualizovali ste túto miestnosť.</string>
+    <string name="notice_requested_voip_conference_by_you">Požiadali ste o VoIP konferenciu</string>
+    <string name="notice_room_name_removed_by_you">Odstránili ste názov miestnosti</string>
+    <string name="notice_room_topic_removed_by_you">Odstránili ste tému miestnosti</string>
+    <string name="notice_room_avatar_removed">%1$s odstránil obrázok miestnosti</string>
+    <string name="notice_room_avatar_removed_by_you">Odstránili ste obrázok miestnosti</string>
+    <string name="notice_profile_change_redacted_by_you">Aktualizovali ste svoj profil %1$s</string>
+    <string name="notice_room_third_party_invite_by_you">Pozvali ste %1$s vstúpiť do miestnosti</string>
+    <string name="notice_room_third_party_revoked_invite_by_you">Zamietli ste pozvanie používateľa %1$s vstúpiť do miestnosti</string>
+    <string name="notice_room_third_party_registered_invite_by_you">Prijali ste pozvanie pre %1$s</string>
+    <string name="notice_widget_added">%1$s pridal/a widget %2$s</string>
+    <string name="notice_widget_added_by_you">Pridali ste widget %1$s</string>
+    <string name="notice_widget_removed">%1$s odstránil/a widget %2$s</string>
+    <string name="notice_widget_removed_by_you">Odstránili ste widget %1$s</string>
+    <string name="notice_widget_modified">%1$s upravil/a widget %2$s</string>
+    <string name="notice_widget_modified_by_you">Upravili ste widget %1$s</string>
+    <string name="power_level_admin">Správca</string>
+    <string name="power_level_moderator">Moderátor</string>
+    <string name="power_level_default">Predvolený</string>
+    <string name="power_level_custom">Vlastná úroveň (%1$d)</string>
+    <string name="power_level_custom_no_value">Vlastná úroveň</string>
+    <string name="notice_power_level_changed_by_you">Zmenili ste úroveň moci používateľa %1$s.</string>
+    <string name="notice_power_level_changed">%1$s zmenil úroveň moci používateľa %2$s.</string>
+    <string name="notice_power_level_diff">%1$s z %2$s na %3$s</string>
+    <string name="notice_room_invite_no_invitee_with_reason_by_you">Pozvanie od vás. Dôvod: %1$s</string>
+    <string name="notice_room_invite_with_reason_by_you">Pozvali ste %1$s. Dôvod: %2$s</string>
+    <string name="notice_room_join_with_reason_by_you">Vstúpili ste do miestnosti. Dôvod: %1$s</string>
+    <string name="notice_room_leave_with_reason_by_you">Opustili ste miestnosť. Dôvod: %1$s</string>
+    <string name="notice_room_reject_with_reason_by_you">Odmietli ste pozvanie. Dôvod: %1$s</string>
+    <string name="notice_room_kick_with_reason_by_you">Vykázali ste %1$s. Dôvod: %2$s</string>
+    <string name="notice_room_unban_with_reason_by_you">Povolili ste vstupovať %1$s. Dôvod: %2$s</string>
+    <string name="notice_room_ban_with_reason_by_you">Zakázali ste vstupovať %1$s. Dôvod: %2$s</string>
+    <string name="notice_room_third_party_invite_with_reason_by_you">Pozvali ste %1$s vstúpiť do miestnosti. Dôvod: %2$s</string>
+    <string name="notice_room_third_party_revoked_invite_with_reason_by_you">Zamietli ste pozvanie používateľa %1$s vstúpiť do miestnosti. Dôvod: %2$s</string>
+    <string name="notice_room_third_party_registered_invite_with_reason_by_you">Prijali ste pozvanie pre %1$s. Dôvod: %2$s</string>
+    <string name="notice_room_withdraw_with_reason_by_you">Vzali ste späť pozvanie %1$s. Dôvod: %2$s</string>
+    <plurals name="notice_room_aliases_added_by_you">
+        <item quantity="one">Pridali ste adresu %1$s pre túto miestnosť.</item>
+        <item quantity="few">Pridali ste adresy %1$s pre túto miestnosť.</item>
+        <item quantity="other">Pridali ste adresy %1$s pre túto miestnosť.</item>
+    </plurals>
+    <plurals name="notice_room_aliases_removed_by_you">
+        <item quantity="one">Odstránili ste adresu %1$s pre túto miestnosť.</item>
+        <item quantity="few">Odstránili ste adresy %1$s pre túto miestnosť.</item>
+        <item quantity="other">Odstránili ste adresy %1$s pre túto miestnosť.</item>
+    </plurals>
+    <string name="notice_room_aliases_added_and_removed_by_you">Pridali ste %1$s a odstránili adresy %2$s pre túto miestnosť.</string>
+    <string name="notice_room_canonical_alias_set_by_you">Nastavili ste hlavnú adresu tejto miestnosti %1$s.</string>
+    <string name="notice_room_canonical_alias_unset_by_you">Odstránili ste hlavnú adresu tejto miestnosti.</string>
+    <string name="notice_room_guest_access_can_join_by_you">Povolili ste hosťom///návštevníkom prístup do tejto miestnosti.</string>
+    <string name="notice_room_guest_access_forbidden">%1$s zakázal/a hosťom///návštevníkom prístup do tejto miestnosti.</string>
+    <string name="notice_room_guest_access_forbidden_by_you">Zakázali ste hosťom///návštevníkom prístup do tejto miestnosti.</string>
+    <string name="notice_end_to_end_ok">%1$s povolil/a E2E šifrovanie.</string>
+    <string name="notice_end_to_end_ok_by_you">Povolili ste E2E šifrovanie.</string>
+    <string name="notice_end_to_end_unknown_algorithm">%1$s povolil/a E2E šifrovanie (Nerozpoznaný algorytmus %2$s).</string>
+    <string name="notice_end_to_end_unknown_algorithm_by_you">Povolili ste E2E šifrovanie (Nerozpoznaný algorytmus %1$s).</string>
+    <string name="notice_room_server_acl_set_title_by_you">nastavili ste na servery pravidlá ACL tejto miestnosti.</string>
+    <string name="notice_room_server_acl_set_title">%s nastavil(a) na servery pravidlá ACL tejto miestnosti.</string>
+    <string name="notice_direct_room_update_by_you">Aktualizovali ste sem.</string>
+    <string name="notice_direct_room_update">%s aktualizoval(a) sem.</string>
+    <string name="notice_made_future_direct_room_visibility">%1$s sprístupnil(a) budúce správy %2$s</string>
+    <string name="notice_made_future_direct_room_visibility_by_you">Sprístupnili ste budúce správy %1$s</string>
+    <string name="notice_direct_room_leave_by_you">Opustili ste miestnosť</string>
+    <string name="notice_direct_room_leave">%1$s opustil(a) miestnosť</string>
+    <string name="notice_direct_room_join_by_you">Vstúpili ste</string>
+    <string name="notice_direct_room_join">%1$s vstúpil(a)</string>
+    <string name="notice_direct_room_created_by_you">Vytvorili ste konverzáciu</string>
+    <string name="notice_direct_room_created">%1$s vytvoril(a) konverzáciu</string>
     <string name="light_theme">Svetlý vzhľad</string>
     <string name="dark_theme">Tmavý vzhľad</string>
-    <string name="black_them">Čierny vzhľad</string>
+    <string name="black_theme">Čierny vzhľad</string>
 
     <string name="notification_sync_in_progress">Prebieha synchronizácia…</string>
     <string name="notification_listening_for_events">Spracovanie udalostí</string>
@@ -83,7 +289,7 @@
     <string name="user_directory_header">Adresár používateľov</string>
     <string name="matrix_only_filter">Len Matrix kontakty</string>
     <string name="no_conversation_placeholder">Žiadne konverzácie</string>
-    <string name="no_contact_access_placeholder">Aplikácii Element ste nepovolili prístup k lokálnym kontaktom</string>
+    <string name="template_no_contact_access_placeholder">Aplikácii ${app_name} ste nepovolili prístup k lokálnym kontaktom</string>
     <string name="no_result_placeholder">Žiadne výsledky</string>
 
     <string name="rooms_header">Miestnosti</string>
@@ -231,24 +437,24 @@ Emailovú adresu si môžete k účtu pridať neskôr cez nastavenia.</string>
     <string name="media_picker_cannot_record_video">Nie je možné nahrať video</string>
 
     <string name="permissions_rationale_popup_title">Informácia</string>
-    <string name="permissions_rationale_msg_storage">Aby ste mohli posielať a prijímať súbory, Element potrebuje prístup k fotkám, videám a súborom vo vašom zariadení.
+    <string name="template_permissions_rationale_msg_storage">Aby ste mohli posielať a prijímať súbory, ${app_name} potrebuje prístup k fotkám, videám a súborom vo vašom zariadení.
 
 Prosím, povoľte prístup na nasledujúcej obrazovke.</string>
-    <string name="permissions_rationale_msg_camera">Aby ste mohli fotiť obrázky a videá a tiež uskutočňovať video hovory, Element potrebuje prístup k fotoaparátu.</string>
+    <string name="template_permissions_rationale_msg_camera">Aby ste mohli fotiť obrázky a videá a tiež uskutočňovať video hovory, ${app_name} potrebuje prístup k fotoaparátu.</string>
     <string name="permissions_rationale_msg_camera_explanation">"
 \n
 \nProsím, povoľte prístup na nasledujúcej obrazovke, aby ste mohli uskutočniť hovor."</string>
-    <string name="permissions_rationale_msg_record_audio">Aby ste mohli uskutočňovať audio hovory, Element potrebuje prístup k mikrofónu vašeho zariadenia.</string>
+    <string name="template_permissions_rationale_msg_record_audio">Aby ste mohli uskutočňovať audio hovory, ${app_name} potrebuje prístup k mikrofónu vašeho zariadenia.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">"
 \n
 \nProsím, povoľte prístup na nasledujúcej obrazovke, aby ste mohli uskutočniť hovor."</string>
-    <string name="permissions_rationale_msg_camera_and_audio">Aby ste mohli uskutočňovať video hovory, Element potrebuje prístup k fotoaparátu a mikrofónu vašeho zariadenia.
+    <string name="template_permissions_rationale_msg_camera_and_audio">Aby ste mohli uskutočňovať video hovory, ${app_name} potrebuje prístup k fotoaparátu a mikrofónu vašeho zariadenia.
 
 Prosím, povoľte prístup na nasledujúcich obrazovkách.</string>
-    <string name="permissions_rationale_msg_contacts">Aby ste mohli na Matrixe nájsť vašich známych podľa telefónneho čísla alebo emailovej adresy, Element potrebuje prístup k vašim kontaktom. Ak si prajete zdieľať váš zoznam kontaktov za týmto účelom, prosím, povoľte prístup na nasledujúcej obrazovke.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Aby ste mohli na Matrixe nájsť vašich známych podľa telefónneho čísla alebo emailovej adresy, Element potrebuje prístup k vašim kontaktom.
+    <string name="template_permissions_rationale_msg_contacts">Aby ste mohli na Matrixe nájsť vašich známych podľa telefónneho čísla alebo emailovej adresy, ${app_name} potrebuje prístup k vašim kontaktom. Ak si prajete zdieľať váš zoznam kontaktov za týmto účelom, prosím, povoľte prístup na nasledujúcej obrazovke.</string>
+    <string name="template_permissions_msg_contacts_warning_other_androids">Aby ste mohli na Matrixe nájsť vašich známych podľa telefónneho čísla alebo emailovej adresy, ${app_name} potrebuje prístup k vašim kontaktom.
 
-Chcete aplikácii Element povoliť prístup k vašim kontaktom?</string>
+Chcete aplikácii ${app_name} povoliť prístup k vašim kontaktom?</string>
 
     <string name="permissions_action_not_performed_missing_permissions">Prepáčte, akcia nebola vykonaná kvôli chýbajúcim oprávneniam</string>
 
@@ -844,7 +1050,7 @@ Pozor: tento súbor môže byť automaticky zmazaný po odinštalovaní aplikác
     <string name="settings_notification_privacy_message_content_not_shown">• Súčasťou oznámení <b>nebude zobrazený obsah správ</b></string>
 
     <string name="startup_notification_privacy_title">Súkromie oznámení</string>
-    <string name="startup_notification_privacy_message">Element môže fungovať na pozadí aby spracovával vaše upozornenia bezpečne a v súkromí. Môže to ovplyvniť využitie batérie.</string>
+    <string name="template_startup_notification_privacy_message">${app_name} môže fungovať na pozadí aby spracovával vaše upozornenia bezpečne a v súkromí. Môže to ovplyvniť využitie batérie.</string>
     <string name="startup_notification_privacy_button_grant">Udeliť oprávnenie</string>
     <string name="startup_notification_privacy_button_other">Vyberte inú voľbu</string>
 
@@ -859,8 +1065,8 @@ Pozor: tento súbor môže byť automaticky zmazaný po odinštalovaní aplikác
     <string name="settings_deactivate_my_account">Deaktivovať môj účet</string>
 
     <string name="settings_opt_in_of_analytics">Odosielať analytické údaje</string>
-    <string name="settings_opt_in_of_analytics_summary">Element zbiera anonymné analytické údaje, čo nám umožňuje aplikáciu ďalej zlepšovať.</string>
-    <string name="settings_opt_in_of_analytics_prompt">Prosím povoľte odosielanie analytických údajov a pomôžte nám tak vylepšovať Element.</string>
+    <string name="template_settings_opt_in_of_analytics_summary">${app_name} zbiera anonymné analytické údaje, čo nám umožňuje aplikáciu ďalej zlepšovať.</string>
+    <string name="template_settings_opt_in_of_analytics_prompt">Prosím povoľte odosielanie analytických údajov a pomôžte nám tak vylepšovať ${app_name}.</string>
     <string name="settings_opt_in_of_analytics_ok">Áno, chcem pomôcť!</string>
 
     <string name="widget_integration_missing_parameter">Chýba zadanie povinného argumentu.</string>
@@ -890,7 +1096,7 @@ Viditeľnosť správ odoslaných cez matrix funguje podobne ako viditeľnosť sp
 
     <string name="e2e_re_request_encryption_key">Znovu požiadať o šifrovacie kľúče z vašich ostatných relácií.<u>Znovu požiadať o šifrovacie kľúče</u> z vašich ostatných zariadení.</string>
 
-    <string name="e2e_re_request_encryption_key_dialog_content">Prosím spustite Element na inom zariadení, ktoré je schopné dešifrovať túto správu, čím sa automaticky spustí prenos chýbajúcich kľúčov na túto reláciu.</string>
+    <string name="template_e2e_re_request_encryption_key_dialog_content">Prosím spustite ${app_name} na inom zariadení, ktoré je schopné dešifrovať túto správu, čím sa automaticky spustí prenos chýbajúcich kľúčov na túto reláciu.</string>
 
     <string name="option_send_voice">Odoslať hlasovú správu</string>
 
@@ -997,8 +1203,6 @@ Viditeľnosť správ odoslaných cez matrix funguje podobne ako viditeľnosť sp
 
     <string name="unknown_error">Prepáčte, vyskytla sa chyba</string>
 
-    <string name="status_theme">Vzhľad Status.im</string>
-
     <string name="room_sliding_menu_version_x">Verzia %s</string>
     <string name="encryption_export_notice">Prosím vytvorte si heslo, ktorým zašifrujete exportované kľúče. Toto isté heslo budete musieť zadať aj pri importe kľúčov z uloženého súboru.</string>
     <string name="passphrase_create_passphrase">Vytvoriť heslo</string>
@@ -1022,7 +1226,7 @@ Viditeľnosť správ odoslaných cez matrix funguje podobne ako viditeľnosť sp
     <string name="auth_accept_policies">Prosím prečítajte si a odsúhlaste zmluvné podmienky tohoto domovského servera:</string>
 
     <string name="settings_call_category">Hovory</string>
-    <string name="settings_call_ringtone_use_app_ringtone">Použiť predvolené zvonenie Element pre prichádzajúce hovory</string>
+    <string name="template_settings_call_ringtone_use_app_ringtone">Použiť predvolené zvonenie ${app_name} pre prichádzajúce hovory</string>
     <string name="settings_call_ringtone_title">Zvonenie pre prichádzajúci hovor</string>
     <string name="settings_call_ringtone_dialog_title">Vyberte zvonenie pre prichádzajúce hovory:</string>
 
@@ -1053,13 +1257,13 @@ Prosím, skontrolujte nastavenia účtu.</string>
 
     <string name="settings_troubleshoot_test_device_settings_title">Nastavenia relácií.</string>
     <string name="settings_troubleshoot_test_device_settings_success">Oznámenia sú povolené pre túto reláciu.</string>
-    <string name="settings_troubleshoot_test_device_settings_failed">Oznámenia nie sú povolené pre túto reláciu.
-\nProsím, skontrolujte nastavenia Elementu.</string>
+    <string name="template_settings_troubleshoot_test_device_settings_failed">Oznámenia nie sú povolené pre túto reláciu.
+\nProsím, skontrolujte nastavenia ${app_name}u.</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">Povoliť</string>
 
     <string name="settings_troubleshoot_test_play_services_title">Kontrola aplikácii Služby Google Play</string>
     <string name="settings_troubleshoot_test_play_services_success">Aplikácia Služby Google Playje k dispozícii a aktualizovaná.</string>
-    <string name="settings_troubleshoot_test_play_services_failed">Element používa aplikáciu Služby Google Play na doručovanie oznámení. No zdá sa, že táto nie je správne nakonfigurovaná:
+    <string name="template_settings_troubleshoot_test_play_services_failed">${app_name} používa aplikáciu Služby Google Play na doručovanie oznámení. No zdá sa, že táto nie je správne nakonfigurovaná:
 \n%1$s</string>
     <string name="settings_troubleshoot_test_play_services_quickfix">Opraviť Služby Play</string>
 
@@ -1086,19 +1290,19 @@ Prosím skúste reštartovať aplikáciu.</string>
 
     <string name="settings_troubleshoot_test_service_boot_title">Spustenie po zapnutí</string>
     <string name="settings_troubleshoot_test_service_boot_success">Služba sa automaticky spustí po reštarte zariadenia.</string>
-    <string name="settings_troubleshoot_test_service_boot_failed">Služba sa automaticky nespustí po reštarte zariadenia a nedostanete po reštarte žiadne oznámenia, kým nespustíte Element aspoň raz.</string>
+    <string name="template_settings_troubleshoot_test_service_boot_failed">Služba sa automaticky nespustí po reštarte zariadenia a nedostanete po reštarte žiadne oznámenia, kým nespustíte ${app_name} aspoň raz.</string>
     <string name="settings_troubleshoot_test_service_boot_quickfix">Povoliť spustenie služby po reštarte</string>
 
     <string name="settings_troubleshoot_test_bg_restricted_title">Kontrola obmedzenia spustenia na pozadí</string>
-    <string name="settings_troubleshoot_test_bg_restricted_success">Obmedzenie spustenia na pozadí nie je aktívne pre Element. Tento test je potrebné spustiť cez mobilné dáta (nie cez wifi).
+    <string name="template_settings_troubleshoot_test_bg_restricted_success">Obmedzenie spustenia na pozadí nie je aktívne pre ${app_name}. Tento test je potrebné spustiť cez mobilné dáta (nie cez wifi).
 %1$s</string>
-    <string name="settings_troubleshoot_test_bg_restricted_failed">Obmedzenie spustenia na pozadí je aktívne pre Element.
-Činnosť aplikácii bude agresívne obmedzovaná operačným systémom, keď je Element na pozadí. Môže to mať negatívny vplyv na doručovanie oznámení.
+    <string name="template_settings_troubleshoot_test_bg_restricted_failed">Obmedzenie spustenia na pozadí je aktívne pre ${app_name}.
+Činnosť aplikácii bude agresívne obmedzovaná operačným systémom, keď je ${app_name} na pozadí. Môže to mať negatívny vplyv na doručovanie oznámení.
 %1$s</string>
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">Deaktivovať obmedzenia</string>
 
     <string name="settings_troubleshoot_test_battery_title">Optimalizácia batérie</string>
-    <string name="settings_troubleshoot_test_battery_success">Chod Element nie je ovplyvnený nastavením optimalizácie batérie.</string>
+    <string name="template_settings_troubleshoot_test_battery_success">Chod ${app_name} nie je ovplyvnený nastavením optimalizácie batérie.</string>
     <string name="settings_troubleshoot_test_battery_failed">Ak používateľ na nejaký čas ponechá zariadenie s vypnutou obrazovkou odložené odpojené od napájania, na zariadení sa použije režim Doze. Toto aplikáciám zabráni pristupovať k sieti, pozastaví ich naplánované úlohy, synchronizáciu aj bežné signály.</string>
     <string name="settings_troubleshoot_test_battery_quickfix">Ignorovať optimalizáciu</string>
 
@@ -1114,8 +1318,8 @@ Prosím skúste reštartovať aplikáciu.</string>
     <string name="settings_show_avatar_display_name_changes_messages">Zobrazovať udalosti účtu</string>
     <string name="settings_show_avatar_display_name_changes_messages_summary">Zahŕňa zmeny zobrazovaného mena a obrázka v profile.</string>
     <string name="startup_notification_fdroid_battery_optim_title">Pripojenie na pozadí</string>
-    <string name="startup_notification_fdroid_battery_optim_message">Element potrebuje na pozadí udržovať aktívne nenáročné spojenie, aby spoľahlivo fungovali oznámenia.
-Na ďalšej obrazovke vás systém požiada o povolenie vždy bežať na pozadí pre Element. Prosím povoľte ho.</string>
+    <string name="template_startup_notification_fdroid_battery_optim_message">${app_name} potrebuje na pozadí udržovať aktívne nenáročné spojenie, aby spoľahlivo fungovali oznámenia.
+Na ďalšej obrazovke vás systém požiada o povolenie vždy bežať na pozadí pre ${app_name}. Prosím povoľte ho.</string>
     <string name="startup_notification_fdroid_battery_optim_button_grant">Udeliť oprávnenie</string>
 
     <string name="account_email_error">Pri pokuse overiť vašu emailovú adresu sa vyskytla chyba.</string>
@@ -1168,12 +1372,12 @@ Na ďalšej obrazovke vás systém požiada o povolenie vždy bežať na pozadí
     <string name="settings_troubleshoot_test_bing_settings_failed_to_load_rules">Nepodarilo sa načítať pravidlá oznámení. Prosím, skúste znovu.</string>
     <string name="settings_troubleshoot_test_bing_settings_quickfix">Skontrolovať nastavenia</string>
 
-    <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
-\nNa zariadení máte množstvo aplikácií zaregistrovaných na doručovanie okamžitých oznámení cez služby Google play. Konfigurácia Element nemá vplyv na výskyt tejto chyby. Podľa Google sa môže vyskytovať len pri veľmi vysokom počte nainštalovaných aplikácií. Bežní používatelia by týmto nemali byť postihnutí.</string>
-    <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
-\nKonfigurácia Element nemá vplyv na zobrazenie tejto chyby. Táto chyba sa môže zobraziť z niekoľkých dôvodov. Uistite sa že máte správne nastavený systémový čas a že ste v nastaveniach systému aplikácii služby Google play neobmedzili používanie prístupu na internet. Chyba sa tiež môže zobrazovať na vlastných zostaveniach (ROM), alebo sa chyba môže samovoľne prestať zobrazovať neskôr.</string>
-    <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
-\nV zariadení nemáte nastavený účet Google. Prosím, pridajte si účet cez správcu účtov. Konfigurácia Element nemá vplyv na zobrazenie tejto chyby.</string>
+    <string name="template_settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
+\nNa zariadení máte množstvo aplikácií zaregistrovaných na doručovanie okamžitých oznámení cez služby Google play. Konfigurácia ${app_name} nemá vplyv na výskyt tejto chyby. Podľa Google sa môže vyskytovať len pri veľmi vysokom počte nainštalovaných aplikácií. Bežní používatelia by týmto nemali byť postihnutí.</string>
+    <string name="template_settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
+\nKonfigurácia ${app_name} nemá vplyv na zobrazenie tejto chyby. Táto chyba sa môže zobraziť z niekoľkých dôvodov. Uistite sa že máte správne nastavený systémový čas a že ste v nastaveniach systému aplikácii služby Google play neobmedzili používanie prístupu na internet. Chyba sa tiež môže zobrazovať na vlastných zostaveniach (ROM), alebo sa chyba môže samovoľne prestať zobrazovať neskôr.</string>
+    <string name="template_settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
+\nV zariadení nemáte nastavený účet Google. Prosím, pridajte si účet cez správcu účtov. Konfigurácia ${app_name} nemá vplyv na zobrazenie tejto chyby.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Pridať účet</string>
 
     <string name="settings_notification_privacy_no_background_sync">Aplikácia sa <b>nepotrebuje</b> pripájať k domovskému serveru, keď beží na pozadí, čo môže predĺžiť výdrž batérie</string>
@@ -1265,7 +1469,7 @@ Na ďalšej obrazovke vás systém požiada o povolenie vždy bežať na pozadí
     <string name="dialog_title_success">Úspešné</string>
 
     <string name="bottom_action_notification">Oznámenia</string>
-    <string name="call_failed_no_connection">Element hovor zlyhal</string>
+    <string name="template_call_failed_no_connection">${app_name} hovor zlyhal</string>
     <string name="call_failed_no_connection_description">Nepodarilo sa uskutočniť spojenie v reálnom čase.
 \nProsím, požiadajte správcu domovského servera, aby správne nastavil server turn na zaistenie čo najspoľahlivejšej prevádzky hovorov.</string>
 
@@ -1314,17 +1518,17 @@ Na ďalšej obrazovke vás systém požiada o povolenie vždy bežať na pozadí
     <string name="room_participants_unban_prompt_msg">Povolením používateľovi vstupovať zaistíte, aby sa používateľ mohol vrátiť do miestnosti.</string>
 
     <string name="settings_add_3pid_confirm_password_title">Potvrdiť vaše heslo</string>
-    <string name="settings_add_3pid_flow_not_supported">Toto nie je možné urobiť cez mobilnú aplikáciu Element</string>
+    <string name="template_settings_add_3pid_flow_not_supported">Toto nie je možné urobiť cez mobilnú aplikáciu ${app_name}</string>
     <string name="settings_add_3pid_authentication_needed">Je požadované overenie</string>
 
 
     <string name="settings_background_fdroid_sync_mode">Režim synchronizácie na pozadí (Experimentálne)</string>
     <string name="settings_background_fdroid_sync_mode_battery">Optimalizovaný na využívanie batérie</string>
-    <string name="settings_background_fdroid_sync_mode_battery_description">Element sa bude synchronizovať na pozadí s cieľom ušetriť limitované zdroje (batériu).
+    <string name="template_settings_background_fdroid_sync_mode_battery_description">${app_name} sa bude synchronizovať na pozadí s cieľom ušetriť limitované zdroje (batériu).
 \nV závislosti od kapacity prostriedkov zariadenia môže byť synchronizácia odložená operačným systémom na neskôr.</string>
     <string name="settings_background_fdroid_sync_mode_real_time">Optimalizovaný na používanie v reálnom čase</string>
-    <string name="settings_background_fdroid_sync_mode_real_time_description">Element sa bude pravideľne synchronizovať na pozadí v presne stanovenom čase (nastaviteľné).
-\nToto ovplyvní využívanie batérie a prenos údajov, v oznamovacej oblasti sa bude neustále zobrazovať upozornenie, že Element spracúva udalosti.</string>
+    <string name="template_settings_background_fdroid_sync_mode_real_time_description">${app_name} sa bude pravideľne synchronizovať na pozadí v presne stanovenom čase (nastaviteľné).
+\nToto ovplyvní využívanie batérie a prenos údajov, v oznamovacej oblasti sa bude neustále zobrazovať upozornenie, že ${app_name} spracúva udalosti.</string>
     <string name="settings_background_fdroid_sync_mode_disabled">Žiadna synchronizácia na pozadí</string>
     <string name="settings_background_fdroid_sync_mode_disabled_description">Nebudete dostávať oznámenia o prichádzajúcich správach, keď aplikácia pracuje na pozadí.</string>
     <string name="settings_background_sync_update_error">Nepodarilo sa aktualizovať nastavenia.</string>
@@ -1426,7 +1630,7 @@ Na ďalšej obrazovke vás systém požiada o povolenie vždy bežať na pozadí
     <string name="passphrase_empty_error_message">Prosím, zadajte dlhé heslo</string>
     <string name="passphrase_passphrase_too_weak">Dlhé heslo je príliš slabé</string>
 
-    <string name="keys_backup_passphrase_not_empty_error_message">Prosím, zmažte dlhé heslo, ak si želáte vygenerovať kľúč obnovenia.</string>
+    <string name="template_keys_backup_passphrase_not_empty_error_message">Prosím, zmažte dlhé heslo, ak si želáte vygenerovať kľúč obnovenia.</string>
     <string name="keys_backup_no_session_error">Nie je dostupná žiadna relácia matrix</string>
 
     <string name="keys_backup_setup_step1_title">Nikdy nepríďte o šifrované správy</string>
@@ -1574,7 +1778,7 @@ Na ďalšej obrazovke vás systém požiada o povolenie vždy bežať na pozadí
 
     <string name="autodiscover_invalid_response">Neplatná odpoveď pri zisťovaní domovského servera</string>
     <string name="autodiscover_well_known_autofill_dialog_title">Automaticky doplniť možnosti servera</string>
-    <string name="autodiscover_well_known_autofill_dialog_message">Element zistil vlastné nastavenie servera pre vaše ID používateľa a doménu \"%1$s\":
+    <string name="template_autodiscover_well_known_autofill_dialog_message">${app_name} zistil vlastné nastavenie servera pre vaše ID používateľa a doménu \"%1$s\":
 \n%2$s</string>
     <string name="autodiscover_well_known_autofill_confirm">Použiť nastavenia</string>
 
@@ -1671,7 +1875,7 @@ Na ďalšej obrazovke vás systém požiada o povolenie vždy bežať na pozadí
     <string name="group_all_communities">Všetky komunity</string>
 
     <string name="room_preview_no_preview">Nie je možné zobraziť náhľad tejto miestnosti</string>
-    <string name="room_preview_world_readable_room_not_supported_yet">Nazeranie do verejných miestností nie je zatiaľ podporované</string>
+    <string name="template_room_preview_world_readable_room_not_supported_yet">Nazeranie do verejných miestností nie je zatiaľ podporované</string>
 
     <string name="fab_menu_create_room">Miestnosti</string>
     <string name="fab_menu_create_chat">Priame konverzácie</string>

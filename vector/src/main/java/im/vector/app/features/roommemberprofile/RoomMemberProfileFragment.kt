@@ -23,7 +23,6 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Incomplete
@@ -31,6 +30,7 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.animations.AppBarStateChangeListener
 import im.vector.app.core.animations.MatrixItemAppBarStateChangeListener
@@ -47,6 +47,7 @@ import im.vector.app.databinding.DialogShareQrCodeBinding
 import im.vector.app.databinding.FragmentMatrixProfileBinding
 import im.vector.app.databinding.ViewStubRoomMemberProfileHeaderBinding
 import im.vector.app.features.crypto.verification.VerificationBottomSheet
+import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.RoomDetailPendingAction
 import im.vector.app.features.home.room.detail.RoomDetailPendingActionStore
@@ -160,7 +161,7 @@ class RoomMemberProfileFragment @Inject constructor(
                     .withArgs(roomId = null, otherUserId = startVerification.userId)
                     .show(parentFragmentManager, "VERIF")
         } else {
-            AlertDialog.Builder(requireContext())
+            MaterialAlertDialogBuilder(requireContext())
                     .setTitle(R.string.dialog_title_warning)
                     .setMessage(R.string.verify_cannot_cross_sign)
                     .setPositiveButton(R.string.verification_profile_verify) { _, _ ->
@@ -304,17 +305,17 @@ class RoomMemberProfileFragment @Inject constructor(
         val view = layoutInflater.inflate(R.layout.dialog_share_qr_code, null)
         val views = DialogShareQrCodeBinding.bind(view)
         views.itemShareQrCodeImage.setData(permalink)
-        AlertDialog.Builder(requireContext())
-            .setView(view)
-            .setNeutralButton(R.string.ok, null)
-            .setPositiveButton(R.string.share_by_text) { _, _ ->
-                startSharePlainTextIntent(
-                        fragment = this,
-                        activityResultLauncher = null,
-                        chooserTitle = null,
-                        text = permalink
-                )
-            }.show()
+        MaterialAlertDialogBuilder(requireContext())
+                .setView(view)
+                .setNeutralButton(R.string.ok, null)
+                .setPositiveButton(R.string.share_by_text) { _, _ ->
+                    startSharePlainTextIntent(
+                            fragment = this,
+                            activityResultLauncher = null,
+                            chooserTitle = null,
+                            text = permalink
+                    )
+                }.show()
     }
 
     private fun onAvatarClicked(view: View, userMatrixItem: MatrixItem) {
@@ -327,12 +328,13 @@ class RoomMemberProfileFragment @Inject constructor(
         }
     }
 
-    override fun onKickClicked() {
+    override fun onKickClicked(isSpace: Boolean) {
         ConfirmationDialogBuilder
                 .show(
                         activity = requireActivity(),
                         askForReason = true,
-                        confirmationRes = R.string.room_participants_kick_prompt_msg,
+                        confirmationRes = if (isSpace) R.string.space_participants_kick_prompt_msg
+                        else R.string.room_participants_kick_prompt_msg,
                         positiveRes = R.string.room_participants_action_kick,
                         reasonHintRes = R.string.room_participants_kick_reason,
                         titleRes = R.string.room_participants_kick_title
@@ -341,16 +343,18 @@ class RoomMemberProfileFragment @Inject constructor(
                 }
     }
 
-    override fun onBanClicked(isUserBanned: Boolean) {
+    override fun onBanClicked(isSpace: Boolean, isUserBanned: Boolean) {
         val titleRes: Int
         val positiveButtonRes: Int
         val confirmationRes: Int
         if (isUserBanned) {
-            confirmationRes = R.string.room_participants_unban_prompt_msg
+            confirmationRes = if (isSpace) R.string.space_participants_unban_prompt_msg
+            else R.string.room_participants_unban_prompt_msg
             titleRes = R.string.room_participants_unban_title
             positiveButtonRes = R.string.room_participants_action_unban
         } else {
-            confirmationRes = R.string.room_participants_ban_prompt_msg
+            confirmationRes = if (isSpace) R.string.space_participants_ban_prompt_msg
+            else R.string.room_participants_ban_prompt_msg
             titleRes = R.string.room_participants_ban_title
             positiveButtonRes = R.string.room_participants_action_ban
         }

@@ -28,8 +28,8 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentDevtoolsEditorBinding
 import javax.inject.Inject
 
-class RoomDevToolEditFragment @Inject constructor()
-    : VectorBaseFragment<FragmentDevtoolsEditorBinding>() {
+class RoomDevToolEditFragment @Inject constructor() :
+    VectorBaseFragment<FragmentDevtoolsEditorBinding>() {
 
     private val sharedViewModel: RoomDevToolViewModel by activityViewModel()
 

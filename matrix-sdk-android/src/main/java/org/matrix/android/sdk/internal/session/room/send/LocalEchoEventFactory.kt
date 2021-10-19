@@ -20,7 +20,6 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.media.MediaMetadataRetriever
 import androidx.exifinterface.media.ExifInterface
-import org.matrix.android.sdk.R
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.Event
@@ -30,6 +29,7 @@ import org.matrix.android.sdk.api.session.events.model.RelationType
 import org.matrix.android.sdk.api.session.events.model.UnsignedData
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.room.model.message.AudioInfo
+import org.matrix.android.sdk.api.session.room.model.message.AudioWaveformInfo
 import org.matrix.android.sdk.api.session.room.model.message.FileInfo
 import org.matrix.android.sdk.api.session.room.model.message.ImageInfo
 import org.matrix.android.sdk.api.session.room.model.message.MessageAudioContent
@@ -42,7 +42,6 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageOptionsConte
 import org.matrix.android.sdk.api.session.room.model.message.MessagePollResponseContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageTextContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
-import org.matrix.android.sdk.api.session.room.model.message.MessageVerificationRequestContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageVideoContent
 import org.matrix.android.sdk.api.session.room.model.message.OPTION_TYPE_POLL
 import org.matrix.android.sdk.api.session.room.model.message.OptionItem
@@ -59,7 +58,6 @@ import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.content.ThumbnailExtractor
 import org.matrix.android.sdk.internal.session.permalinks.PermalinkFactory
 import org.matrix.android.sdk.internal.session.room.send.pills.TextPillsUtils
-import org.matrix.android.sdk.internal.util.StringProvider
 import javax.inject.Inject
 
 /**
@@ -74,9 +72,10 @@ import javax.inject.Inject
 internal class LocalEchoEventFactory @Inject constructor(
         private val context: Context,
         @UserId private val userId: String,
-        private val stringProvider: StringProvider,
         private val markdownParser: MarkdownParser,
         private val textPillsUtils: TextPillsUtils,
+        private val thumbnailExtractor: ThumbnailExtractor,
+        private val waveformSanitizer: WaveFormSanitizer,
         private val localEchoRepository: LocalEchoRepository,
         private val permalinkFactory: PermalinkFactory
 ) {
@@ -166,8 +165,8 @@ internal class LocalEchoEventFactory @Inject constructor(
                                  newBodyAutoMarkdown: Boolean,
                                  msgType: String,
                                  compatibilityText: String): Event {
-        val permalink = permalinkFactory.createPermalink(roomId, originalEvent.root.eventId ?: "")
-        val userLink = originalEvent.root.senderId?.let { permalinkFactory.createPermalink(it) } ?: ""
+        val permalink = permalinkFactory.createPermalink(roomId, originalEvent.root.eventId ?: "", false)
+        val userLink = originalEvent.root.senderId?.let { permalinkFactory.createPermalink(it, false) } ?: ""
 
         val body = bodyForReply(originalEvent.getLastMessageContent(), originalEvent.isReply())
         val replyFormatted = REPLY_PATTERN.format(
@@ -248,7 +247,7 @@ internal class LocalEchoEventFactory @Inject constructor(
                         mimeType = attachment.getSafeMimeType(),
                         width = width?.toInt() ?: 0,
                         height = height?.toInt() ?: 0,
-                        size = attachment.size.toInt()
+                        size = attachment.size
                 ),
                 url = attachment.queryUri.toString()
         )
@@ -265,7 +264,7 @@ internal class LocalEchoEventFactory @Inject constructor(
         val width = firstFrame?.width ?: 0
         mediaDataRetriever.release()
 
-        val thumbnailInfo = ThumbnailExtractor.extractThumbnail(context, attachment)?.let {
+        val thumbnailInfo = thumbnailExtractor.extractThumbnail(attachment)?.let {
             ThumbnailInfo(
                     width = it.width,
                     height = it.height,
@@ -292,14 +291,21 @@ internal class LocalEchoEventFactory @Inject constructor(
     }
 
     private fun createAudioEvent(roomId: String, attachment: ContentAttachmentData): Event {
+        val isVoiceMessage = attachment.waveform != null
         val content = MessageAudioContent(
                 msgType = MessageType.MSGTYPE_AUDIO,
                 body = attachment.name ?: "audio",
                 audioInfo = AudioInfo(
+                        duration = attachment.duration?.toInt(),
                         mimeType = attachment.getSafeMimeType()?.takeIf { it.isNotBlank() },
                         size = attachment.size
                 ),
-                url = attachment.queryUri.toString()
+                url = attachment.queryUri.toString(),
+                audioWaveformInfo = if (!isVoiceMessage) null else AudioWaveformInfo(
+                        duration = attachment.duration?.toInt(),
+                        waveform = waveformSanitizer.sanitize(attachment.waveform)
+                ),
+                voiceMessageIndicator = if (!isVoiceMessage) null else emptyMap()
         )
         return createMessageEvent(roomId, content)
     }
@@ -334,25 +340,6 @@ internal class LocalEchoEventFactory @Inject constructor(
         )
     }
 
-    fun createVerificationRequest(roomId: String, fromDevice: String, toUserId: String, methods: List<String>): Event {
-        val localId = LocalEcho.createLocalEchoId()
-        return Event(
-                roomId = roomId,
-                originServerTs = dummyOriginServerTs(),
-                senderId = userId,
-                eventId = localId,
-                type = EventType.MESSAGE,
-                content = MessageVerificationRequestContent(
-                        body = stringProvider.getString(R.string.key_verification_request_fallback_message, userId),
-                        fromDevice = fromDevice,
-                        toUserId = toUserId,
-                        timestamp = System.currentTimeMillis(),
-                        methods = methods
-                ).toContent(),
-                unsignedData = UnsignedData(age = null, transactionId = localId)
-        )
-    }
-
     private fun dummyOriginServerTs(): Long {
         return System.currentTimeMillis()
     }
@@ -363,9 +350,9 @@ internal class LocalEchoEventFactory @Inject constructor(
                              autoMarkdown: Boolean): Event? {
         // Fallbacks and event representation
         // TODO Add error/warning logs when any of this is null
-        val permalink = permalinkFactory.createPermalink(eventReplied.root) ?: return null
+        val permalink = permalinkFactory.createPermalink(eventReplied.root, false) ?: return null
         val userId = eventReplied.root.senderId ?: return null
-        val userLink = permalinkFactory.createPermalink(userId) ?: return null
+        val userLink = permalinkFactory.createPermalink(userId, false) ?: return null
 
         val body = bodyForReply(eventReplied.getLastMessageContent(), eventReplied.isReply())
         val replyFormatted = REPLY_PATTERN.format(

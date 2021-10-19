@@ -97,7 +97,7 @@ internal class DefaultInitializeCrossSigningTask @Inject constructor(
 
             Timber.v("## CrossSigning - sskPublicKey:$sskPublicKey")
 
-            // Sign userSigningKey with master
+            // Sign selfSigningKey with master
             val signedSSK = CryptoCrossSigningKey.Builder(userId, KeyUsage.SELF_SIGNING)
                     .key(sskPublicKey)
                     .build()
@@ -125,8 +125,8 @@ internal class DefaultInitializeCrossSigningTask @Inject constructor(
             try {
                 uploadSigningKeysTask.execute(uploadSigningKeysParams)
             } catch (failure: Throwable) {
-                if (params.interactiveAuthInterceptor == null
-                        || !handleUIA(
+                if (params.interactiveAuthInterceptor == null ||
+                        !handleUIA(
                                 failure = failure,
                                 interceptor = params.interactiveAuthInterceptor,
                                 retryBlock = { authUpdate ->

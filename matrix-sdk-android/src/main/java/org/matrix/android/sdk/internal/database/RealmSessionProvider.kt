@@ -20,8 +20,9 @@ import android.os.Looper
 import androidx.annotation.MainThread
 import com.zhuinden.monarchy.Monarchy
 import io.realm.Realm
+import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.SessionLifecycleObserver
 import org.matrix.android.sdk.internal.di.SessionDatabase
-import org.matrix.android.sdk.internal.session.SessionLifecycleObserver
 import org.matrix.android.sdk.internal.session.SessionScope
 import javax.inject.Inject
 import kotlin.concurrent.getOrSet
@@ -31,8 +32,8 @@ import kotlin.concurrent.getOrSet
  * instance. This does check each time if you are on the main thread or not and returns the appropriate realm instance.
  */
 @SessionScope
-internal class RealmSessionProvider @Inject constructor(@SessionDatabase private val monarchy: Monarchy)
-    : SessionLifecycleObserver {
+internal class RealmSessionProvider @Inject constructor(@SessionDatabase private val monarchy: Monarchy) :
+    SessionLifecycleObserver {
 
     private val realmThreadLocal = ThreadLocal<Realm>()
 
@@ -44,14 +45,14 @@ internal class RealmSessionProvider @Inject constructor(@SessionDatabase private
     }
 
     @MainThread
-    override fun onStart() {
+    override fun onSessionStarted(session: Session) {
         realmThreadLocal.getOrSet {
             Realm.getInstance(monarchy.realmConfiguration)
         }
     }
 
     @MainThread
-    override fun onStop() {
+    override fun onSessionStopped(session: Session) {
         realmThreadLocal.get()?.close()
         realmThreadLocal.remove()
     }

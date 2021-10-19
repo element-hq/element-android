@@ -16,7 +16,6 @@
 
 package org.matrix.android.sdk.api.session.securestorage
 
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.listeners.ProgressListener
 import org.matrix.android.sdk.api.session.crypto.crosssigning.KEYBACKUP_SECRET_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MASTER_KEY_SSSS_NAME
@@ -43,13 +42,12 @@ interface SharedSecretStorageService {
      * @param keyName a human readable name
      * @param keySigner Used to add a signature to the key (client should check key signature before storing secret)
      *
-     * @param callback Get key creation info
+     * @return key creation info
      */
-    fun generateKey(keyId: String,
-                    key: SsssKeySpec?,
-                    keyName: String,
-                    keySigner: KeySigner?,
-                    callback: MatrixCallback<SsssKeyCreationInfo>)
+    suspend fun generateKey(keyId: String,
+                            key: SsssKeySpec?,
+                            keyName: String,
+                            keySigner: KeySigner?): SsssKeyCreationInfo
 
     /**
      * Generates a SSSS key using the given passphrase.
@@ -61,14 +59,13 @@ interface SharedSecretStorageService {
      * @param keySigner Used to add a signature to the key (client should check key signature before retrieving secret)
      * @param progressListener The derivation of the passphrase may take long depending on the device, use this to report progress
      *
-     * @param callback Get key creation info
+     * @return key creation info
      */
-    fun generateKeyWithPassphrase(keyId: String,
-                                  keyName: String,
-                                  passphrase: String,
-                                  keySigner: KeySigner,
-                                  progressListener: ProgressListener?,
-                                  callback: MatrixCallback<SsssKeyCreationInfo>)
+    suspend fun generateKeyWithPassphrase(keyId: String,
+                                          keyName: String,
+                                          passphrase: String,
+                                          keySigner: KeySigner,
+                                          progressListener: ProgressListener?): SsssKeyCreationInfo
 
     fun getKey(keyId: String): KeyInfoResult
 
@@ -80,7 +77,7 @@ interface SharedSecretStorageService {
      */
     fun getDefaultKey(): KeyInfoResult
 
-    fun setDefaultKey(keyId: String, callback: MatrixCallback<Unit>)
+    suspend fun setDefaultKey(keyId: String)
 
     /**
      * Check whether we have a key with a given ID.
@@ -98,7 +95,7 @@ interface SharedSecretStorageService {
      * @param secret The secret contents.
      * @param keys The list of (ID,privateKey) of the keys to use to encrypt the secret.
      */
-    fun storeSecret(name: String, secretBase64: String, keys: List<KeyRef>, callback: MatrixCallback<Unit>)
+    suspend fun storeSecret(name: String, secretBase64: String, keys: List<KeyRef>)
 
     /**
      * Use this call to determine which SSSSKeySpec to use for requesting secret
@@ -113,7 +110,7 @@ interface SharedSecretStorageService {
      * @param secretKey the secret key to use (@see #RawBytesKeySpec)
      *
      */
-    fun getSecret(name: String, keyId: String?, secretKey: SsssKeySpec, callback: MatrixCallback<String>)
+    suspend fun getSecret(name: String, keyId: String?, secretKey: SsssKeySpec): String
 
     /**
      * Return true if SSSS is configured

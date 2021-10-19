@@ -5,7 +5,7 @@
     android:id="@+id/itemRoomLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?riotx_background"
+    android:background="?android:colorBackground"
     android:clickable="true"
     android:focusable="true"
     android:foreground="?attr/selectableItemBackground">
@@ -14,7 +14,7 @@
         android:id="@+id/roomUnreadIndicator"
         android:layout_width="4dp"
         android:layout_height="0dp"
-        android:background="?attr/colorAccent"
+        android:background="?colorSecondary"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -34,8 +34,8 @@
             android:id="@+id/roomAvatarImageView"
             android:layout_width="56dp"
             android:layout_height="56dp"
-            android:contentDescription="@string/avatar"
-            tools:src="@tools:sample/avatars" />
+            android:importantForAccessibility="no"
+            tools:src="@sample/room_round_avatars" />
 
         <ImageView
             android:id="@+id/roomAvatarCheckedImageView"
@@ -60,6 +60,7 @@
         app:layout_constraintCircleRadius="30dp"
         tools:ignore="MissingConstraints" />
 
+    <!-- Note: this is always gone now -->
     <im.vector.app.core.ui.views.ShieldImageView
         android:id="@+id/roomAvatarDecorationImageView"
         android:layout_width="24dp"
@@ -67,7 +68,39 @@
         app:layout_constraintCircle="@id/roomAvatarContainer"
         app:layout_constraintCircleAngle="135"
         app:layout_constraintCircleRadius="28dp"
-        tools:ignore="MissingConstraints" />
+        tools:ignore="MissingConstraints"
+        tools:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/roomAvatarPublicDecorationImageView"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:background="@drawable/background_circle"
+        android:contentDescription="@string/a11y_public_room"
+        android:padding="2dp"
+        android:src="@drawable/ic_public_room"
+        android:visibility="gone"
+        app:layout_constraintCircle="@id/roomAvatarContainer"
+        app:layout_constraintCircleAngle="135"
+        app:layout_constraintCircleRadius="28dp"
+        tools:ignore="MissingConstraints"
+        tools:visibility="visible" />
+
+    <im.vector.app.core.ui.views.PresenceStateImageView
+        android:id="@+id/roomAvatarPresenceImageView"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:background="@drawable/background_circle"
+        android:importantForAccessibility="no"
+        android:padding="2dp"
+        android:visibility="gone"
+        app:layout_constraintCircle="@id/roomAvatarContainer"
+        app:layout_constraintCircleAngle="135"
+        app:layout_constraintCircleRadius="28dp"
+        tools:ignore="MissingConstraints"
+        tools:layout_constraintCircleRadius="8dp"
+        tools:src="@drawable/ic_presence_offline"
+        tools:visibility="visible" />
 
     <!-- Margin bottom does not work, so I use space -->
     <Space
@@ -80,6 +113,7 @@
 
     <TextView
         android:id="@+id/roomNameView"
+        style="@style/Widget.Vector.TextView.Subtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/layout_horizontal_margin"
@@ -88,8 +122,7 @@
         android:duplicateParentState="true"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textColor="?riotx_text_primary"
-        android:textSize="15sp"
+        android:textColor="?vctr_content_primary"
         android:textStyle="bold"
         app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toStartOf="@+id/roomDraftBadge"
@@ -97,7 +130,7 @@
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toEndOf="@id/roomAvatarContainer"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="@sample/matrix.json/data/displayName" />
+        tools:text="@sample/users.json/data/displayName" />
 
     <ImageView
         android:id="@+id/roomDraftBadge"
@@ -112,12 +145,13 @@
         app:layout_constraintEnd_toStartOf="@+id/roomUnreadCounterBadgeView"
         app:layout_constraintStart_toEndOf="@+id/roomNameView"
         app:layout_constraintTop_toTopOf="@+id/roomNameView"
-        app:tint="?riotx_text_primary"
+        app:tint="?vctr_content_primary"
         tools:ignore="MissingPrefix"
         tools:visibility="visible" />
 
     <im.vector.app.features.home.room.list.UnreadCounterBadgeView
         android:id="@+id/roomUnreadCounterBadgeView"
+        style="@style/Widget.Vector.TextView.Micro"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -126,8 +160,7 @@
         android:minHeight="16dp"
         android:paddingStart="4dp"
         android:paddingEnd="4dp"
-        android:textColor="@android:color/white"
-        android:textSize="10sp"
+        android:textColor="?colorOnError"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/roomNameView"
         app:layout_constraintEnd_toStartOf="@+id/roomLastEventTimeView"
@@ -139,11 +172,11 @@
 
     <TextView
         android:id="@+id/roomLastEventTimeView"
+        style="@style/Widget.Vector.TextView.Caption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:textColor="?riotx_text_secondary"
-        android:textSize="15sp"
+        android:textColor="?vctr_content_secondary"
         app:layout_constraintBottom_toBottomOf="@+id/roomNameView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/roomNameView"
@@ -151,29 +184,29 @@
 
     <TextView
         android:id="@+id/roomLastEventView"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="3dp"
         android:layout_marginEnd="8dp"
         android:ellipsize="end"
         android:maxLines="2"
-        android:textColor="?riotx_text_secondary"
-        android:textSize="15sp"
+        android:textColor="?vctr_content_secondary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/roomNameView"
         app:layout_constraintTop_toBottomOf="@+id/roomNameView"
-        tools:text="@sample/matrix.json/data/message" />
+        tools:text="@sample/messages.json/data/message" />
 
     <TextView
         android:id="@+id/roomTypingView"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="3dp"
         android:layout_marginEnd="8dp"
         android:ellipsize="end"
         android:maxLines="2"
-        android:textColor="@color/riotx_accent"
-        android:textSize="15sp"
+        android:textColor="?colorPrimary"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/roomNameView"
@@ -196,11 +229,12 @@
         app:barrierDirection="bottom"
         app:constraint_referenced_ids="roomAvatarBottomSpace,roomLastEventBottomSpace" />
 
+    <!-- We use vctr_list_separator_system here for a better rendering -->
     <View
         android:id="@+id/roomDividerView"
         android:layout_width="0dp"
         android:layout_height="1dp"
-        android:background="?riotx_header_panel_border_mobile"
+        android:background="?vctr_list_separator_system"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

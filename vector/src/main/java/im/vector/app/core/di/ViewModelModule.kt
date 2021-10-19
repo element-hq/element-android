@@ -38,6 +38,8 @@ import im.vector.app.features.roomprofile.RoomProfileSharedActionViewModel
 import im.vector.app.features.roomprofile.alias.detail.RoomAliasBottomSheetSharedActionViewModel
 import im.vector.app.features.roomprofile.settings.historyvisibility.RoomHistoryVisibilitySharedActionViewModel
 import im.vector.app.features.roomprofile.settings.joinrule.RoomJoinRuleSharedActionViewModel
+import im.vector.app.features.spaces.SpacePreviewSharedActionViewModel
+import im.vector.app.features.spaces.people.SpacePeopleSharedActionViewModel
 import im.vector.app.features.userdirectory.UserListSharedActionViewModel
 
 @Module
@@ -142,4 +144,14 @@ interface ViewModelModule {
     @IntoMap
     @ViewModelKey(DiscoverySharedViewModel::class)
     fun bindDiscoverySharedViewModel(viewModel: DiscoverySharedViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(SpacePreviewSharedActionViewModel::class)
+    fun bindSpacePreviewSharedActionViewModel(viewModel: SpacePreviewSharedActionViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(SpacePeopleSharedActionViewModel::class)
+    fun bindSpacePeopleSharedActionViewModel(viewModel: SpacePeopleSharedActionViewModel): ViewModel
 }

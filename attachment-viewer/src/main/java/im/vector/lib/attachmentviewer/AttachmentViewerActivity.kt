@@ -33,12 +33,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.GestureDetectorCompat
 import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import androidx.core.view.updatePadding
 import androidx.transition.TransitionManager
 import androidx.viewpager2.widget.ViewPager2
 import im.vector.lib.attachmentviewer.databinding.ActivityAttachmentViewerBinding
-
 import java.lang.ref.WeakReference
 import kotlin.math.abs
 
@@ -124,9 +124,11 @@ abstract class AttachmentViewerActivity : AppCompatActivity(), AttachmentEventLi
         scaleDetector = createScaleGestureDetector()
 
         ViewCompat.setOnApplyWindowInsetsListener(views.rootContainer) { _, insets ->
-            overlayView?.updatePadding(top = insets.systemWindowInsetTop, bottom = insets.systemWindowInsetBottom)
-            topInset = insets.systemWindowInsetTop
-            bottomInset = insets.systemWindowInsetBottom
+            val systemBarsInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+
+            overlayView?.updatePadding(top = systemBarsInsets.top, bottom = systemBarsInsets.bottom)
+            topInset = systemBarsInsets.top
+            bottomInset = systemBarsInsets.bottom
             insets
         }
     }
@@ -288,8 +290,8 @@ abstract class AttachmentViewerActivity : AppCompatActivity(), AttachmentEventLi
     private fun calculateTranslationAlpha(translationY: Float, translationLimit: Int): Float =
             1.0f - 1.0f / translationLimit.toFloat() / 4f * abs(translationY)
 
-    private fun createSwipeToDismissHandler()
-            : SwipeToDismissHandler = SwipeToDismissHandler(
+    private fun createSwipeToDismissHandler(): SwipeToDismissHandler =
+            SwipeToDismissHandler(
             swipeView = views.dismissContainer,
             shouldAnimateDismiss = { shouldAnimateDismiss() },
             onDismiss = { animateClose() },

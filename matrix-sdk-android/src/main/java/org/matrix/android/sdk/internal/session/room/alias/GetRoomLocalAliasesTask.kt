@@ -35,8 +35,8 @@ internal class DefaultGetRoomLocalAliasesTask @Inject constructor(
 
     override suspend fun execute(params: GetRoomLocalAliasesTask.Params): List<String> {
         // We do not check for "org.matrix.msc2432", so the API may be missing
-        val response = executeRequest<GetAliasesResponse>(globalErrorReceiver) {
-            apiCall = roomAPI.getAliases(roomId = params.roomId)
+        val response = executeRequest(globalErrorReceiver) {
+            roomAPI.getAliases(roomId = params.roomId)
         }
 
         return response.aliases

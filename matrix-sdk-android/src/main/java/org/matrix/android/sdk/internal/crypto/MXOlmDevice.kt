@@ -312,7 +312,7 @@ internal class MXOlmDevice @Inject constructor(
      * @param theirDeviceIdentityKey the Curve25519 identity key for the remote device.
      * @return a list of known session ids for the device.
      */
-    fun getSessionIds(theirDeviceIdentityKey: String): Set<String>? {
+    fun getSessionIds(theirDeviceIdentityKey: String): List<String>? {
         return store.getDeviceSessionIds(theirDeviceIdentityKey)
     }
 
@@ -577,7 +577,8 @@ internal class MXOlmDevice @Inject constructor(
         session.keysClaimed = keysClaimed
         session.forwardingCurve25519KeyChain = forwardingCurve25519KeyChain
 
-        store.storeInboundGroupSessions(listOf(session))
+        inboundGroupSessionStore.storeInBoundGroupSession(session, sessionId, senderKey)
+//        store.storeInboundGroupSessions(listOf(session))
 
         return true
     }
@@ -703,7 +704,7 @@ internal class MXOlmDevice @Inject constructor(
                 timelineSet.add(messageIndexKey)
             }
 
-            inboundGroupSessionStore.storeInBoundGroupSession(session)
+            inboundGroupSessionStore.storeInBoundGroupSession(session, sessionId, senderKey)
             val payload = try {
                 val adapter = MoshiProvider.providesMoshi().adapter<JsonDict>(JSON_DICT_PARAMETERIZED_TYPE)
                 val payloadString = convertFromUTF8(decryptResult.mDecryptedMessage)

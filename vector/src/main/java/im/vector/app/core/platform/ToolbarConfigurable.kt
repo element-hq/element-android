@@ -16,9 +16,9 @@
 
 package im.vector.app.core.platform
 
-import androidx.appcompat.widget.Toolbar
+import com.google.android.material.appbar.MaterialToolbar
 
 interface ToolbarConfigurable {
 
-    fun configure(toolbar: Toolbar)
+    fun configure(toolbar: MaterialToolbar)
 }

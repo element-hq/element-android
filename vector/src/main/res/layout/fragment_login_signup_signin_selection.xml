@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?riotx_background">
+    android:background="?android:colorBackground">
 
     <androidx.core.widget.NestedScrollView style="@style/LoginFormScrollView">
 
@@ -26,17 +26,18 @@
                 android:visibility="gone"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/loginLogo"
-                app:tint="?riotx_text_primary"
+                app:tint="?vctr_content_primary"
                 tools:ignore="MissingPrefix,UnknownId"
                 tools:src="@drawable/ic_logo_matrix_org"
                 tools:visibility="visible" />
 
             <TextView
                 android:id="@+id/loginSignupSigninTitle"
+                style="@style/Widget.Vector.TextView.Title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="27dp"
-                android:textAppearance="@style/TextAppearance.Vector.Login.Title"
+                android:textColor="?vctr_content_primary"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/loginSignupSigninServerIcon"
                 app:layout_goneMarginTop="0dp"
@@ -44,20 +45,21 @@
 
             <TextView
                 android:id="@+id/loginSignupSigninText"
+                style="@style/Widget.Vector.TextView.Body"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="27dp"
                 android:gravity="start"
-                android:textAppearance="@style/TextAppearance.Vector.Login.Text"
+                android:textColor="?vctr_content_secondary"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/loginSignupSigninTitle"
                 tools:text="@string/login_server_matrix_org_text" />
 
             <!-- Sign up or sign in SSO -->
-            <com.google.android.material.button.MaterialButton
+            <Button
                 android:id="@+id/loginSignupSigninSubmit"
-                style="@style/Style.Vector.Login.Button"
+                style="@style/Widget.Vector.Button.Login"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="38dp"
@@ -67,9 +69,9 @@
                 tools:text="@string/login_signup" />
 
             <!-- Sign in or gone -->
-            <com.google.android.material.button.MaterialButton
+            <Button
                 android:id="@+id/loginSignupSigninSignIn"
-                style="@style/Style.Vector.Login.Button.Outlined"
+                style="@style/Widget.Vector.Button.Outlined.Login"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
@@ -97,13 +99,13 @@
 
                 <TextView
                     android:id="@+id/loginSignupSigninSocialLoginHeader"
+                    style="@style/Widget.Vector.TextView.Body"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="27dp"
                     android:gravity="center"
                     android:text="@string/login_social_continue"
-                    android:textAppearance="@style/TextAppearance.Vector.Login.Text"
-                    android:textSize="14sp" />
+                    android:textColor="?vctr_content_secondary" />
 
                 <im.vector.app.features.login.SocialLoginButtonsView
                     android:id="@+id/loginSignupSigninSocialLoginButtons"

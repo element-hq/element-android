@@ -1,0 +1,2 @@
+Modifiche principali in questa versione: migliorato il VoIP (chiamate audio e video in MD) e correzione di errori!
+Cronologia completa: https://github.com/vector-im/element-android/releases/tag/v1.1.0

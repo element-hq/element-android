@@ -61,6 +61,7 @@ class CallDialPadBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetCa
                 arguments = Bundle().apply {
                     putBoolean(DialPadFragment.EXTRA_ENABLE_DELETE, showActions)
                     putBoolean(DialPadFragment.EXTRA_ENABLE_OK, showActions)
+                    putBoolean(DialPadFragment.EXTRA_CURSOR_VISIBLE, false)
                     putString(DialPadFragment.EXTRA_REGION_CODE, VectorLocale.applicationLocale.country)
                 }
                 callback = DialPadFragmentCallbackWrapper(this@CallDialPadBottomSheet.callback)
@@ -70,7 +71,7 @@ class CallDialPadBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetCa
         } else {
             setCallbackToFragment(callback)
         }
-        views.callDialPadClose.setOnClickListener {
+        views.callDialPadClose.debouncedClicks {
             dismiss()
         }
     }
@@ -86,7 +87,7 @@ class CallDialPadBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetCa
         dialPadFragment?.callback = DialPadFragmentCallbackWrapper(callback)
     }
 
-    private inner class DialPadFragmentCallbackWrapper(val callback: DialPadFragment.Callback?): DialPadFragment.Callback {
+    private inner class DialPadFragmentCallbackWrapper(val callback: DialPadFragment.Callback?) : DialPadFragment.Callback {
 
         override fun onDigitAppended(digit: String) {
             callback?.onDigitAppended(digit)

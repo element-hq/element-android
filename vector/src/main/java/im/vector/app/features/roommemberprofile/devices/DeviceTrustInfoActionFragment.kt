@@ -27,7 +27,6 @@ import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.databinding.BottomSheetGenericListBinding
-
 import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import javax.inject.Inject
 
@@ -48,8 +47,8 @@ class DeviceTrustInfoActionFragment @Inject constructor(
         views.bottomSheetRecyclerView.setPadding(0, dimensionConverter.dpToPx(16), 0, dimensionConverter.dpToPx(16))
         views.bottomSheetRecyclerView.configureWith(
                 epoxyController,
-                showDivider = false,
-                hasFixedSize = false)
+                hasFixedSize = false
+        )
         epoxyController.interactionListener = this
     }
 

@@ -26,7 +26,6 @@ import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.platform.CheckableView
-import im.vector.app.core.ui.views.ReadReceiptsView
 import im.vector.app.core.utils.DimensionConverter
 
 /**
@@ -44,19 +43,29 @@ abstract class BaseEventItem<H : BaseEventItem.BaseHolder> : VectorEpoxyModel<H>
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     lateinit var dimensionConverter: DimensionConverter
 
+    protected var ignoreSendStatusVisibility = false
+
     @CallSuper
     override fun bind(holder: H) {
         super.bind(holder)
         holder.leftGuideline.updateLayoutParams<RelativeLayout.LayoutParams> {
             this.marginStart = leftGuideline
         }
+        // Ignore visibility of the send status icon?
+        holder.contentContainer.updateLayoutParams<RelativeLayout.LayoutParams> {
+            if (ignoreSendStatusVisibility) {
+                addRule(RelativeLayout.ALIGN_PARENT_END)
+            } else {
+                removeRule(RelativeLayout.ALIGN_PARENT_END)
+            }
+        }
         holder.checkableBackground.isChecked = highlighted
     }
 
     abstract class BaseHolder(@IdRes val stubId: Int) : VectorEpoxyHolder() {
         val leftGuideline by bind<View>(R.id.messageStartGuideline)
+        val contentContainer by bind<View>(R.id.viewStubContainer)
         val checkableBackground by bind<CheckableView>(R.id.messageSelectedBackground)
-        val readReceiptsView by bind<ReadReceiptsView>(R.id.readReceiptsView)
 
         override fun bindView(itemView: View) {
             super.bindView(itemView)

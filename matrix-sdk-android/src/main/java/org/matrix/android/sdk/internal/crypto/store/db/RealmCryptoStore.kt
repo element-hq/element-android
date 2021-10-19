@@ -25,9 +25,9 @@ import io.realm.Realm
 import io.realm.RealmConfiguration
 import io.realm.Sort
 import io.realm.kotlin.where
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MXCrossSigningInfo
 import org.matrix.android.sdk.api.session.events.model.Event
-import org.matrix.android.sdk.api.session.events.model.LocalEcho
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.api.util.toOptional
@@ -51,7 +51,6 @@ import org.matrix.android.sdk.internal.crypto.model.OutboundGroupSessionWrapper
 import org.matrix.android.sdk.internal.crypto.model.event.RoomKeyWithHeldContent
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.rest.RoomKeyRequestBody
-import org.matrix.android.sdk.internal.crypto.model.toEntity
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.crypto.store.PrivateKeysInfo
 import org.matrix.android.sdk.internal.crypto.store.SavedKeyBackupKeyInfo
@@ -89,6 +88,7 @@ import org.matrix.android.sdk.internal.crypto.store.db.query.delete
 import org.matrix.android.sdk.internal.crypto.store.db.query.get
 import org.matrix.android.sdk.internal.crypto.store.db.query.getById
 import org.matrix.android.sdk.internal.crypto.store.db.query.getOrCreate
+import org.matrix.android.sdk.internal.crypto.util.RequestIdHelper
 import org.matrix.android.sdk.internal.database.mapper.ContentMapper
 import org.matrix.android.sdk.internal.database.tools.RealmDebugTools
 import org.matrix.android.sdk.internal.di.CryptoDatabase
@@ -101,6 +101,8 @@ import org.matrix.olm.OlmAccount
 import org.matrix.olm.OlmException
 import org.matrix.olm.OlmOutboundGroupSession
 import timber.log.Timber
+import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import kotlin.collections.set
 
@@ -138,8 +140,11 @@ internal class RealmCryptoStore @Inject constructor(
         newSessionListeners.remove(listener)
     }
 
+    private val monarchyWriteAsyncExecutor = Executors.newSingleThreadExecutor()
+
     private val monarchy = Monarchy.Builder()
             .setRealmConfiguration(realmConfiguration)
+            .setWriteAsyncExecutor(monarchyWriteAsyncExecutor)
             .build()
 
     init {
@@ -153,8 +158,8 @@ internal class RealmCryptoStore @Inject constructor(
                 // Check credentials
                 // The device id may not have been provided in credentials.
                 // Check it only if provided, else trust the stored one.
-                if (currentMetadata.userId != userId
-                        || (deviceId != null && deviceId != currentMetadata.deviceId)) {
+                if (currentMetadata.userId != userId ||
+                        (deviceId != null && deviceId != currentMetadata.deviceId)) {
                     Timber.w("## open() : Credentials do not match, close this store and delete data")
                     deleteAll = true
                     currentMetadata = null
@@ -179,9 +184,9 @@ internal class RealmCryptoStore @Inject constructor(
 
     override fun hasData(): Boolean {
         return doWithRealm(realmConfiguration) {
-            !it.isEmpty
+            !it.isEmpty &&
                     // Check if there is a MetaData object
-                    && it.where<CryptoMetadataEntity>().count() > 0
+                    it.where<CryptoMetadataEntity>().count() > 0
         }
     }
 
@@ -200,6 +205,14 @@ internal class RealmCryptoStore @Inject constructor(
     }
 
     override fun close() {
+        // Ensure no async request will be run later
+        val tasks = monarchyWriteAsyncExecutor.shutdownNow()
+        Timber.w("Closing RealmCryptoStore, ${tasks.size} async task(s) cancelled")
+        tryOrNull("Interrupted") {
+            // Wait 1 minute max
+            monarchyWriteAsyncExecutor.awaitTermination(1, TimeUnit.MINUTES)
+        }
+
         olmSessionsToRelease.forEach {
             it.value.olmSession.releaseSession()
         }
@@ -280,24 +293,37 @@ internal class RealmCryptoStore @Inject constructor(
     override fun storeUserDevices(userId: String, devices: Map<String, CryptoDeviceInfo>?) {
         doRealmTransaction(realmConfiguration) { realm ->
             if (devices == null) {
+                Timber.d("Remove user $userId")
                 // Remove the user
                 UserEntity.delete(realm, userId)
             } else {
-                UserEntity.getOrCreate(realm, userId)
-                        .let { u ->
-                            // Add the devices
-                            val currentKnownDevices = u.devices.toList()
-                            val new = devices.map { entry -> entry.value.toEntity() }
-                            new.forEach { entity ->
-                                // Maintain first time seen
-                                val existing = currentKnownDevices.firstOrNull { it.deviceId == entity.deviceId && it.identityKey == entity.identityKey }
-                                entity.firstTimeSeenLocalTs = existing?.firstTimeSeenLocalTs ?: System.currentTimeMillis()
-                                realm.insertOrUpdate(entity)
-                            }
-                            // Ensure all other devices are deleted
-                            u.devices.clearWith { it.deleteOnCascade() }
-                            u.devices.addAll(new)
+                val userEntity = UserEntity.getOrCreate(realm, userId)
+                // First delete the removed devices
+                val deviceIds = devices.keys
+                userEntity.devices.toTypedArray().iterator().let {
+                    while (it.hasNext()) {
+                        val deviceInfoEntity = it.next()
+                        if (deviceInfoEntity.deviceId !in deviceIds) {
+                            Timber.d("Remove device ${deviceInfoEntity.deviceId} of user $userId")
+                            deviceInfoEntity.deleteOnCascade()
                         }
+                    }
+                }
+                // Then update existing devices or add new one
+                devices.values.forEach { cryptoDeviceInfo ->
+                    val existingDeviceInfoEntity = userEntity.devices.firstOrNull { it.deviceId == cryptoDeviceInfo.deviceId }
+                    if (existingDeviceInfoEntity == null) {
+                        // Add the device
+                        Timber.d("Add device ${cryptoDeviceInfo.deviceId} of user $userId")
+                        val newEntity = CryptoMapper.mapToEntity(cryptoDeviceInfo)
+                        newEntity.firstTimeSeenLocalTs = System.currentTimeMillis()
+                        userEntity.devices.add(newEntity)
+                    } else {
+                        // Update the device
+                        Timber.d("Update device ${cryptoDeviceInfo.deviceId} of user $userId")
+                        CryptoMapper.updateDeviceInfoEntity(existingDeviceInfoEntity, cryptoDeviceInfo)
+                    }
+                }
             }
         }
     }
@@ -692,7 +718,7 @@ internal class RealmCryptoStore @Inject constructor(
         }
     }
 
-    override fun getDeviceSessionIds(deviceKey: String): MutableSet<String> {
+    override fun getDeviceSessionIds(deviceKey: String): List<String> {
         return doWithRealm(realmConfiguration) {
             it.where<OlmSessionEntity>()
                     .equalTo(OlmSessionEntityFields.DEVICE_KEY, deviceKey)
@@ -701,7 +727,6 @@ internal class RealmCryptoStore @Inject constructor(
                         sessionEntity.sessionId
                     }
         }
-                .toMutableSet()
     }
 
     override fun storeInboundGroupSessions(sessions: List<OlmInboundGroupSessionWrapper2>) {
@@ -801,7 +826,7 @@ internal class RealmCryptoStore @Inject constructor(
      * Note: the result will be only use to export all the keys and not to use the OlmInboundGroupSessionWrapper2,
      * so there is no need to use or update `inboundGroupSessionToRelease` for native memory management
      */
-    override fun getInboundGroupSessions(): MutableList<OlmInboundGroupSessionWrapper2> {
+    override fun getInboundGroupSessions(): List<OlmInboundGroupSessionWrapper2> {
         return doWithRealm(realmConfiguration) {
             it.where<OlmInboundGroupSessionEntity>()
                     .findAll()
@@ -809,7 +834,6 @@ internal class RealmCryptoStore @Inject constructor(
                         inboundGroupSessionEntity.getInboundGroupSession()
                     }
         }
-                .toMutableList()
     }
 
     override fun removeInboundGroupSession(sessionId: String, senderKey: String) {
@@ -939,7 +963,7 @@ internal class RealmCryptoStore @Inject constructor(
         }
     }
 
-    override fun getDeviceKeysUploaded(): Boolean {
+    override fun areDeviceKeysUploaded(): Boolean {
         return doWithRealm(realmConfiguration) {
             it.where<CryptoMetadataEntity>().findFirst()?.deviceKeysSentToServer
         } ?: false
@@ -964,7 +988,7 @@ internal class RealmCryptoStore @Inject constructor(
         }
     }
 
-    override fun getRoomsListBlacklistUnverifiedDevices(): MutableList<String> {
+    override fun getRoomsListBlacklistUnverifiedDevices(): List<String> {
         return doWithRealm(realmConfiguration) {
             it.where<CryptoRoomEntity>()
                     .equalTo(CryptoRoomEntityFields.BLACKLIST_UNVERIFIED_DEVICES, true)
@@ -973,10 +997,9 @@ internal class RealmCryptoStore @Inject constructor(
                         cryptoRoom.roomId
                     }
         }
-                .toMutableList()
     }
 
-    override fun getDeviceTrackingStatuses(): MutableMap<String, Int> {
+    override fun getDeviceTrackingStatuses(): Map<String, Int> {
         return doWithRealm(realmConfiguration) {
             it.where<UserEntity>()
                     .findAll()
@@ -987,7 +1010,6 @@ internal class RealmCryptoStore @Inject constructor(
                         entry.value.deviceTrackingStatus
                     }
         }
-                .toMutableMap()
     }
 
     override fun saveDeviceTrackingStatuses(deviceTrackingStatuses: Map<String, Int>) {
@@ -1017,10 +1039,10 @@ internal class RealmCryptoStore @Inject constructor(
         }.mapNotNull {
             it.toOutgoingGossipingRequest() as? OutgoingRoomKeyRequest
         }.firstOrNull {
-            it.requestBody?.algorithm == requestBody.algorithm
-                    && it.requestBody?.roomId == requestBody.roomId
-                    && it.requestBody?.senderKey == requestBody.senderKey
-                    && it.requestBody?.sessionId == requestBody.sessionId
+            it.requestBody?.algorithm == requestBody.algorithm &&
+                    it.requestBody?.roomId == requestBody.roomId &&
+                    it.requestBody?.senderKey == requestBody.senderKey &&
+                    it.requestBody?.sessionId == requestBody.sessionId
         }
     }
 
@@ -1105,15 +1127,15 @@ internal class RealmCryptoStore @Inject constructor(
                     .mapNotNull {
                         it.toOutgoingGossipingRequest() as? OutgoingRoomKeyRequest
                     }.firstOrNull {
-                        it.requestBody?.algorithm == requestBody.algorithm
-                                && it.requestBody?.sessionId == requestBody.sessionId
-                                && it.requestBody?.senderKey == requestBody.senderKey
-                                && it.requestBody?.roomId == requestBody.roomId
+                        it.requestBody?.algorithm == requestBody.algorithm &&
+                                it.requestBody?.sessionId == requestBody.sessionId &&
+                                it.requestBody?.senderKey == requestBody.senderKey &&
+                                it.requestBody?.roomId == requestBody.roomId
                     }
 
             if (existing == null) {
                 request = realm.createObject(OutgoingGossipingRequestEntity::class.java).apply {
-                    this.requestId = LocalEcho.createLocalEchoId()
+                    this.requestId = RequestIdHelper.createUniqueRequestId()
                     this.setRecipients(recipients)
                     this.requestState = OutgoingGossipingRequestState.UNSENT
                     this.type = GossipRequestType.KEY
@@ -1143,7 +1165,7 @@ internal class RealmCryptoStore @Inject constructor(
                     this.type = GossipRequestType.SECRET
                     setRecipients(recipients)
                     this.requestState = OutgoingGossipingRequestState.UNSENT
-                    this.requestId = LocalEcho.createLocalEchoId()
+                    this.requestId = RequestIdHelper.createUniqueRequestId()
                     this.requestedInfoStr = secretName
                 }.toOutgoingGossipingRequest() as? OutgoingSecretRequest
             } else {
@@ -1155,8 +1177,8 @@ internal class RealmCryptoStore @Inject constructor(
     }
 
     override fun saveGossipingEvents(events: List<Event>) {
-        val now = System.currentTimeMillis()
         monarchy.writeAsync { realm ->
+            val now = System.currentTimeMillis()
             events.forEach { event ->
                 val ageLocalTs = event.unsignedData?.age?.let { now - it } ?: now
                 val entity = GossipingEventEntity(
@@ -1174,23 +1196,6 @@ internal class RealmCryptoStore @Inject constructor(
         }
     }
 
-    override fun saveGossipingEvent(event: Event) {
-        monarchy.writeAsync { realm ->
-            val now = System.currentTimeMillis()
-            val ageLocalTs = event.unsignedData?.age?.let { now - it } ?: now
-            val entity = GossipingEventEntity(
-                    type = event.type,
-                    sender = event.senderId,
-                    ageLocalTs = ageLocalTs,
-                    content = ContentMapper.map(event.content)
-            ).apply {
-                sendState = SendState.SYNCED
-                decryptionResultJson = MoshiProvider.providesMoshi().adapter(OlmDecryptionResult::class.java).toJson(event.mxDecryptionResult)
-                decryptionErrorCode = event.mCryptoError?.name
-            }
-            realm.insertOrUpdate(entity)
-        }
-    }
 //    override fun getOutgoingRoomKeyRequestByState(states: Set<ShareRequestState>): OutgoingRoomKeyRequest? {
 //        val statesIndex = states.map { it.ordinal }.toTypedArray()
 //        return doRealmQueryAndCopy(realmConfiguration) { realm ->
@@ -1673,7 +1678,12 @@ internal class RealmCryptoStore @Inject constructor(
         }
     }
 
-    override fun markedSessionAsShared(roomId: String?, sessionId: String, userId: String, deviceId: String, chainIndex: Int) {
+    override fun markedSessionAsShared(roomId: String?,
+                                       sessionId: String,
+                                       userId: String,
+                                       deviceId: String,
+                                       deviceIdentityKey: String,
+                                       chainIndex: Int) {
         doRealmTransaction(realmConfiguration) { realm ->
             SharedSessionEntity.create(
                     realm = realm,
@@ -1681,14 +1691,22 @@ internal class RealmCryptoStore @Inject constructor(
                     sessionId = sessionId,
                     userId = userId,
                     deviceId = deviceId,
+                    deviceIdentityKey = deviceIdentityKey,
                     chainIndex = chainIndex
             )
         }
     }
 
-    override fun getSharedSessionInfo(roomId: String?, sessionId: String, userId: String, deviceId: String): IMXCryptoStore.SharedSessionResult {
+    override fun getSharedSessionInfo(roomId: String?, sessionId: String, deviceInfo: CryptoDeviceInfo): IMXCryptoStore.SharedSessionResult {
         return doWithRealm(realmConfiguration) { realm ->
-            SharedSessionEntity.get(realm, roomId, sessionId, userId, deviceId)?.let {
+            SharedSessionEntity.get(
+                    realm = realm,
+                    roomId = roomId,
+                    sessionId = sessionId,
+                    userId = deviceInfo.userId,
+                    deviceId = deviceInfo.deviceId,
+                    deviceIdentityKey = deviceInfo.identityKey()
+            )?.let {
                 IMXCryptoStore.SharedSessionResult(true, it.chainIndex)
             } ?: IMXCryptoStore.SharedSessionResult(false, null)
         }

@@ -22,17 +22,17 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.view.Menu
 import android.view.MenuItem
-import androidx.appcompat.app.AlertDialog
 import androidx.core.view.forEach
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRx
+import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.viewModel
 import com.airbnb.mvrx.withState
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.exhaustive
@@ -84,7 +84,7 @@ class RoomDevToolActivity : SimpleFragmentActivity(), RoomDevToolViewModel.Facto
             when (it) {
                 DevToolsViewEvents.Dismiss             -> finish()
                 is DevToolsViewEvents.ShowAlertMessage -> {
-                    AlertDialog.Builder(this)
+                    MaterialAlertDialogBuilder(this)
                             .setMessage(it.message)
                             .setPositiveButton(R.string.ok, null)
                             .show()
@@ -147,10 +147,6 @@ class RoomDevToolActivity : SimpleFragmentActivity(), RoomDevToolViewModel.Facto
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == android.R.id.home) {
-            onBackPressed()
-            return true
-        }
         if (item.itemId == R.id.menuItemEdit) {
             viewModel.handle(RoomDevToolAction.MenuEdit)
             return true
@@ -198,8 +194,8 @@ class RoomDevToolActivity : SimpleFragmentActivity(), RoomDevToolViewModel.Facto
                     state.displayMode is RoomDevToolViewState.Mode.StateEventDetail
                 }
                 R.id.menuItemSend -> {
-                    state.displayMode is RoomDevToolViewState.Mode.EditEventContent
-                            || state.displayMode is RoomDevToolViewState.Mode.SendEventForm
+                    state.displayMode is RoomDevToolViewState.Mode.EditEventContent ||
+                            state.displayMode is RoomDevToolViewState.Mode.SendEventForm
                 }
                 else              -> true
             }
@@ -212,7 +208,7 @@ class RoomDevToolActivity : SimpleFragmentActivity(), RoomDevToolViewModel.Facto
 
         fun intent(context: Context, roomId: String): Intent {
             return Intent(context, RoomDevToolActivity::class.java).apply {
-                putExtra(MvRx.KEY_ARG, Args(roomId))
+                putExtra(Mavericks.KEY_ARG, Args(roomId))
             }
         }
     }

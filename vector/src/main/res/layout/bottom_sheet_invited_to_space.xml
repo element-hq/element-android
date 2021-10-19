@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/bottomSheetScrollView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    android:background="?colorSurface"
+    android:fadeScrollbars="false"
+    android:scrollbars="vertical">
+
+    <!-- Inviter info-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp">
+
+            <ImageView
+                android:id="@+id/inviterAvatarImage"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:importantForAccessibility="no"
+                android:transitionName="profile"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@sample/user_round_avatars" />
+
+
+            <TextView
+                android:id="@+id/inviterText"
+                style="@style/Widget.Vector.TextView.Subtitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:textColor="?vctr_content_primary"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/inviterAvatarImage"
+                app:layout_constraintTop_toTopOf="@id/inviterAvatarImage"
+                tools:text="@string/user_invites_you" />
+
+            <TextView
+                android:id="@+id/inviterMxid"
+                style="@style/Widget.Vector.TextView.Body"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="?vctr_content_secondary"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/inviterAvatarImage"
+                app:layout_constraintTop_toBottomOf="@id/inviterText"
+                tools:text="@sample/users.json/data/id" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?vctr_list_separator" />
+
+        <include
+            android:id="@+id/spaceCard"
+            layout="@layout/fragment_matrix_to_room_space_card" />
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

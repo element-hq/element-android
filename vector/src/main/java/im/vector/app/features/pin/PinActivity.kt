@@ -18,8 +18,8 @@ package im.vector.app.features.pin
 
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.widget.Toolbar
-import com.airbnb.mvrx.MvRx
+import com.airbnb.mvrx.Mavericks
+import com.google.android.material.appbar.MaterialToolbar
 import im.vector.app.R
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.ToolbarConfigurable
@@ -31,7 +31,7 @@ class PinActivity : VectorBaseActivity<ActivitySimpleBinding>(), ToolbarConfigur
     companion object {
         fun newIntent(context: Context, args: PinArgs): Intent {
             return Intent(context, PinActivity::class.java).apply {
-                putExtra(MvRx.KEY_ARG, args)
+                putExtra(Mavericks.KEY_ARG, args)
             }
         }
     }
@@ -42,12 +42,12 @@ class PinActivity : VectorBaseActivity<ActivitySimpleBinding>(), ToolbarConfigur
 
     override fun initUiAndData() {
         if (isFirstCreation()) {
-            val fragmentArgs: PinArgs = intent?.extras?.getParcelable(MvRx.KEY_ARG) ?: return
+            val fragmentArgs: PinArgs = intent?.extras?.getParcelable(Mavericks.KEY_ARG) ?: return
             addFragment(R.id.simpleFragmentContainer, PinFragment::class.java, fragmentArgs)
         }
     }
 
-    override fun configure(toolbar: Toolbar) {
+    override fun configure(toolbar: MaterialToolbar) {
         configureToolbar(toolbar)
     }
 }

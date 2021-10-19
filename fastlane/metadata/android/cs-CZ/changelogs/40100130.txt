@@ -1,0 +1,2 @@
+Hlavní změny v této verzi: Náhled URL, nová klávesice s Emoji, nové možnosti nastavení místností a sníh na vánoce!
+Plné znění změn: https://github.com/vector-im/element-android/releases/tag/v1.0.13

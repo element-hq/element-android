@@ -19,14 +19,10 @@ package im.vector.app.features.settings
 import im.vector.app.R
 import javax.inject.Inject
 
-class VectorSettingsLabsFragment @Inject constructor(
-        private val vectorPreferences: VectorPreferences
-) : VectorSettingsBaseFragment() {
+class VectorSettingsLabsFragment @Inject constructor() : VectorSettingsBaseFragment() {
 
     override var titleRes = R.string.room_settings_labs_pref_title
     override val preferenceXmlRes = R.xml.vector_settings_labs
 
-    override fun bindPref() {
-        // Nothing to do
-    }
+    override fun bindPref() {}
 }

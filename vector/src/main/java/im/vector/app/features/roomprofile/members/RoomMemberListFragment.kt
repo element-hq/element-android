@@ -20,13 +20,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
@@ -34,7 +34,6 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentRoomMemberListBinding
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.roomprofile.RoomProfileArgs
-
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
@@ -47,10 +46,15 @@ class RoomMemberListFragment @Inject constructor(
         private val roomMemberListController: RoomMemberListController,
         private val avatarRenderer: AvatarRenderer
 ) : VectorBaseFragment<FragmentRoomMemberListBinding>(),
-        RoomMemberListController.Callback {
+        RoomMemberListController.Callback,
+        RoomMemberListViewModel.Factory {
 
     private val viewModel: RoomMemberListViewModel by fragmentViewModel()
     private val roomProfileArgs: RoomProfileArgs by args()
+
+    override fun create(initialState: RoomMemberListViewState): RoomMemberListViewModel {
+        return viewModelFactory.create(initialState)
+    }
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentRoomMemberListBinding {
         return FragmentRoomMemberListBinding.inflate(inflater, container, false)
@@ -125,7 +129,7 @@ class RoomMemberListFragment @Inject constructor(
         val content = event.content.toModel<RoomThirdPartyInviteContent>() ?: return
         val stateKey = event.stateKey ?: return
         if (withState(viewModel) { it.actionsPermissions.canRevokeThreePidInvite }) {
-            AlertDialog.Builder(requireActivity())
+            MaterialAlertDialogBuilder(requireActivity())
                     .setTitle(R.string.three_pid_revoke_invite_dialog_title)
                     .setMessage(getString(R.string.three_pid_revoke_invite_dialog_content, content.displayName))
                     .setNegativeButton(R.string.cancel, null)
@@ -140,6 +144,7 @@ class RoomMemberListFragment @Inject constructor(
         state.roomSummary()?.let {
             views.roomSettingGeneric.roomSettingsToolbarTitleView.text = it.displayName
             avatarRenderer.render(it.toMatrixItem(), views.roomSettingGeneric.roomSettingsToolbarAvatarImageView)
+            views.roomSettingGeneric.roomSettingsDecorationToolbarAvatarImageView.render(it.roomEncryptionTrustLevel)
         }
     }
 }

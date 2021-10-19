@@ -22,9 +22,10 @@ import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequest
 import androidx.work.Operation
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.MatrixUrls.isMxcUrl
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.isAttachmentMessage
@@ -109,14 +110,6 @@ internal class DefaultSendService @AssistedInject constructor(
                 .let { sendEvent(it) }
     }
 
-    override fun sendMedias(attachments: List<ContentAttachmentData>,
-                            compressBeforeSending: Boolean,
-                            roomIds: Set<String>): Cancelable {
-        return attachments.mapTo(CancelableBag()) {
-            sendMedia(it, compressBeforeSending, roomIds)
-        }
-    }
-
     override fun redactEvent(event: Event, reason: String?): Cancelable {
         // TODO manage media/attachements?
         val redactionEcho = localEchoEventFactory.createRedactEvent(roomId, event.eventId!!, reason)
@@ -138,7 +131,7 @@ internal class DefaultSendService @AssistedInject constructor(
             val messageContent = clearContent?.toModel<MessageContent>() as? MessageWithAttachmentContent ?: return NoOpCancellable
 
             val url = messageContent.getFileUrl() ?: return NoOpCancellable
-            if (url.startsWith("mxc://")) {
+            if (url.isMxcUrl()) {
                 // We need to resend only the message as the attachment is ok
                 localEchoRepository.updateSendState(localEcho.eventId, roomId, SendState.UNSENT)
                 return sendEvent(localEcho.root)
@@ -149,8 +142,8 @@ internal class DefaultSendService @AssistedInject constructor(
                 is MessageImageContent -> {
                     // The image has not yet been sent
                     val attachmentData = ContentAttachmentData(
-                            size = messageContent.info!!.size.toLong(),
-                            mimeType = messageContent.info.mimeType!!,
+                            size = messageContent.info!!.size,
+                            mimeType = messageContent.mimeType,
                             width = messageContent.info.width.toLong(),
                             height = messageContent.info.height.toLong(),
                             name = messageContent.body,
@@ -177,7 +170,7 @@ internal class DefaultSendService @AssistedInject constructor(
                 is MessageFileContent  -> {
                     val attachmentData = ContentAttachmentData(
                             size = messageContent.info!!.size,
-                            mimeType = messageContent.info.mimeType!!,
+                            mimeType = messageContent.mimeType,
                             name = messageContent.getFileName(),
                             queryUri = Uri.parse(messageContent.url),
                             type = ContentAttachmentData.Type.FILE
@@ -189,10 +182,11 @@ internal class DefaultSendService @AssistedInject constructor(
                     val attachmentData = ContentAttachmentData(
                             size = messageContent.audioInfo?.size ?: 0,
                             duration = messageContent.audioInfo?.duration?.toLong() ?: 0L,
-                            mimeType = messageContent.audioInfo?.mimeType,
+                            mimeType = messageContent.mimeType,
                             name = messageContent.body,
                             queryUri = Uri.parse(messageContent.url),
-                            type = ContentAttachmentData.Type.AUDIO
+                            type = ContentAttachmentData.Type.AUDIO,
+                            waveform = messageContent.audioWaveformInfo?.waveform?.filterNotNull()
                     )
                     localEchoRepository.updateSendState(localEcho.eventId, roomId, SendState.UNSENT)
                     internalSendMedia(listOf(localEcho.root), attachmentData, true)
@@ -229,6 +223,22 @@ internal class DefaultSendService @AssistedInject constructor(
                 }
             }
             localEchoRepository.updateSendState(roomId, eventsToResend.map { it.eventId }, SendState.UNSENT)
+        }
+    }
+
+    override fun cancelAllFailedMessages() {
+        taskExecutor.executorScope.launch {
+            localEchoRepository.getAllFailedEventsToResend(roomId).forEach { event ->
+                cancelSend(event.eventId)
+            }
+        }
+    }
+
+    override fun sendMedias(attachments: List<ContentAttachmentData>,
+                            compressBeforeSending: Boolean,
+                            roomIds: Set<String>): Cancelable {
+        return attachments.mapTo(CancelableBag()) {
+            sendMedia(it, compressBeforeSending, roomIds)
         }
     }
 
@@ -310,7 +320,7 @@ internal class DefaultSendService @AssistedInject constructor(
                 .setConstraints(WorkManagerProvider.workConstraints)
                 .startChain(true)
                 .setInputData(uploadWorkData)
-                .setBackoffCriteria(BackoffPolicy.LINEAR, WorkManagerProvider.BACKOFF_DELAY, TimeUnit.MILLISECONDS)
+                .setBackoffCriteria(BackoffPolicy.LINEAR, WorkManagerProvider.BACKOFF_DELAY_MILLIS, TimeUnit.MILLISECONDS)
                 .build()
     }
 
@@ -324,7 +334,7 @@ internal class DefaultSendService @AssistedInject constructor(
                 // .setConstraints(WorkManagerProvider.workConstraints)
                 .startChain(false)
                 .setInputData(workData)
-                .setBackoffCriteria(BackoffPolicy.LINEAR, WorkManagerProvider.BACKOFF_DELAY, TimeUnit.MILLISECONDS)
+                .setBackoffCriteria(BackoffPolicy.LINEAR, WorkManagerProvider.BACKOFF_DELAY_MILLIS, TimeUnit.MILLISECONDS)
                 .build()
     }
 }

@@ -16,25 +16,25 @@
 
 package im.vector.app.features.crypto.quads
 
-import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRx
-import com.airbnb.mvrx.MvRxState
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.Mavericks
+import com.airbnb.mvrx.MavericksState
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import im.vector.app.R
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.platform.WaitingViewData
 import im.vector.app.core.resources.StringProvider
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.listeners.ProgressListener
@@ -42,22 +42,20 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.securestorage.IntegrityResult
 import org.matrix.android.sdk.api.session.securestorage.KeyInfoResult
 import org.matrix.android.sdk.api.session.securestorage.RawBytesKeySpec
+import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.internal.crypto.crosssigning.toBase64NoPadding
-import org.matrix.android.sdk.internal.util.awaitCallback
-import org.matrix.android.sdk.rx.rx
 import timber.log.Timber
 import java.io.ByteArrayOutputStream
 
 data class SharedSecureStorageViewState(
         val ready: Boolean = false,
         val hasPassphrase: Boolean = true,
-        val passphraseVisible: Boolean = false,
         val checkingSSSSAction: Async<Unit> = Uninitialized,
         val step: Step = Step.EnterPassphrase,
         val activeDeviceCount: Int = 0,
         val showResetAllAction: Boolean = false,
         val userId: String = ""
-) : MvRxState {
+) : MavericksState {
     enum class Step {
         EnterPassphrase,
         EnterKey,
@@ -69,8 +67,8 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
         @Assisted initialState: SharedSecureStorageViewState,
         @Assisted val args: SharedSecureStorageActivity.Args,
         private val stringProvider: StringProvider,
-        private val session: Session)
-    : VectorViewModel<SharedSecureStorageViewState, SharedSecureStorageAction, SharedSecureStorageViewEvent>(initialState) {
+        private val session: Session) :
+    VectorViewModel<SharedSecureStorageViewState, SharedSecureStorageAction, SharedSecureStorageViewEvent>(initialState) {
 
     @AssistedFactory
     interface Factory {
@@ -78,7 +76,6 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
     }
 
     init {
-
         setState {
             copy(userId = session.myUserId)
         }
@@ -117,7 +114,7 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
             }
         }
 
-        session.rx()
+        session.flow()
                 .liveUserCryptoDevices(session.myUserId)
                 .distinctUntilChanged()
                 .execute {
@@ -129,7 +126,6 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
 
     override fun handle(action: SharedSecureStorageAction) = withState {
         when (action) {
-            is SharedSecureStorageAction.TogglePasswordVisibility -> handleTogglePasswordVisibility()
             is SharedSecureStorageAction.Cancel                   -> handleCancel()
             is SharedSecureStorageAction.SubmitPassphrase         -> handleSubmitPassphrase(action)
             SharedSecureStorageAction.UseKey                      -> handleUseKey()
@@ -170,10 +166,14 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
         if (state.checkingSSSSAction is Loading) return@withState // ignore
         when (state.step) {
             SharedSecureStorageViewState.Step.EnterKey -> {
-                setState {
-                    copy(
-                            step = SharedSecureStorageViewState.Step.EnterPassphrase
-                    )
+                if (state.hasPassphrase) {
+                    setState {
+                        copy(
+                                step = SharedSecureStorageViewState.Step.EnterPassphrase
+                        )
+                    }
+                } else {
+                    _viewEvents.post(SharedSecureStorageViewEvent.Dismiss)
                 }
             }
             SharedSecureStorageViewState.Step.ResetAll -> {
@@ -219,14 +219,11 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
 
                 withContext(Dispatchers.IO) {
                     args.requestedSecrets.forEach {
-                        if (session.getAccountDataEvent(it) != null) {
-                            val res = awaitCallback<String> { callback ->
-                                session.sharedSecretStorageService.getSecret(
-                                        name = it,
-                                        keyId = keyInfo.id,
-                                        secretKey = keySpec,
-                                        callback = callback)
-                            }
+                        if (session.accountDataService().getUserAccountDataEvent(it) != null) {
+                            val res = session.sharedSecretStorageService.getSecret(
+                                    name = it,
+                                    keyId = keyInfo.id,
+                                    secretKey = keySpec)
                             decryptedSecretMap[it] = res
                         } else {
                             Timber.w("## Cannot find secret $it in SSSS, skip")
@@ -291,14 +288,11 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
 
                 withContext(Dispatchers.IO) {
                     args.requestedSecrets.forEach {
-                        if (session.getAccountDataEvent(it) != null) {
-                            val res = awaitCallback<String> { callback ->
-                                session.sharedSecretStorageService.getSecret(
-                                        name = it,
-                                        keyId = keyInfo.id,
-                                        secretKey = keySpec,
-                                        callback = callback)
-                            }
+                        if (session.accountDataService().getUserAccountDataEvent(it) != null) {
+                            val res = session.sharedSecretStorageService.getSecret(
+                                    name = it,
+                                    keyId = keyInfo.id,
+                                    secretKey = keySpec)
                             decryptedSecretMap[it] = res
                         } else {
                             Timber.w("## Cannot find secret $it in SSSS, skip")
@@ -326,20 +320,12 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
         _viewEvents.post(SharedSecureStorageViewEvent.Dismiss)
     }
 
-    private fun handleTogglePasswordVisibility() {
-        setState {
-            copy(
-                    passphraseVisible = !passphraseVisible
-            )
-        }
-    }
-
-    companion object : MvRxViewModelFactory<SharedSecureStorageViewModel, SharedSecureStorageViewState> {
+    companion object : MavericksViewModelFactory<SharedSecureStorageViewModel, SharedSecureStorageViewState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: SharedSecureStorageViewState): SharedSecureStorageViewModel? {
             val activity: SharedSecureStorageActivity = viewModelContext.activity()
-            val args: SharedSecureStorageActivity.Args = activity.intent.getParcelableExtra(MvRx.KEY_ARG) ?: error("Missing args")
+            val args: SharedSecureStorageActivity.Args = activity.intent.getParcelableExtra(Mavericks.KEY_ARG) ?: error("Missing args")
             return activity.viewModelFactory.create(state, args)
         }
     }

@@ -32,17 +32,18 @@ import im.vector.app.core.platform.SimpleTextWatcher
 import im.vector.app.features.html.PillImageSpan
 import timber.log.Timber
 
-class ComposerEditText @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = android.R.attr.editTextStyle)
-    : EmojiEditText(context, attrs, defStyleAttr) {
+class ComposerEditText @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = android.R.attr.editTextStyle) :
+    EmojiEditText(context, attrs, defStyleAttr) {
 
     interface Callback {
         fun onRichContentSelected(contentUri: Uri): Boolean
+        fun onTextChanged(text: CharSequence)
     }
 
     var callback: Callback? = null
 
-    override fun onCreateInputConnection(editorInfo: EditorInfo): InputConnection {
-        val ic: InputConnection = super.onCreateInputConnection(editorInfo)
+    override fun onCreateInputConnection(editorInfo: EditorInfo): InputConnection? {
+        val ic = super.onCreateInputConnection(editorInfo) ?: return null
         EditorInfoCompat.setContentMimeTypes(editorInfo, arrayOf("*/*"))
 
         val callback =
@@ -93,6 +94,7 @@ class ComposerEditText @JvmOverloads constructor(context: Context, attrs: Attrib
                             }
                             spanToRemove = null
                         }
+                        callback?.onTextChanged(s.toString())
                     }
                 }
         )

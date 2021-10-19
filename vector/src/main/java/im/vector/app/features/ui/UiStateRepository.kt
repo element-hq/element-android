@@ -31,4 +31,17 @@ interface UiStateRepository {
     fun getDisplayMode(): RoomListDisplayMode
 
     fun storeDisplayMode(displayMode: RoomListDisplayMode)
+
+    // TODO Handle SharedPreference per session in a better way, also to cleanup when login out
+    fun storeSelectedSpace(spaceId: String?, sessionId: String)
+    fun storeSelectedGroup(groupId: String?, sessionId: String)
+
+    fun storeGroupingMethod(isSpace: Boolean, sessionId: String)
+
+    fun getSelectedSpace(sessionId: String): String?
+    fun getSelectedGroup(sessionId: String): String?
+    fun isGroupingMethodSpace(sessionId: String): Boolean
+
+    fun setCustomRoomDirectoryHomeservers(sessionId: String, servers: Set<String>)
+    fun getCustomRoomDirectoryHomeservers(sessionId: String): Set<String>
 }

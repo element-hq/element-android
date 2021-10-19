@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.crypto
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.api.crypto.MXCryptoConfig
 import org.matrix.android.sdk.api.session.crypto.crosssigning.KEYBACKUP_SECRET_SSSS_NAME
@@ -28,15 +29,16 @@ import org.matrix.android.sdk.api.session.crypto.keyshare.GossipingRequestListen
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.internal.crypto.algorithms.IMXGroupEncryption
 import org.matrix.android.sdk.internal.crypto.crosssigning.toBase64NoPadding
 import org.matrix.android.sdk.internal.crypto.keysbackup.util.extractCurveKeyFromRecoveryKey
 import org.matrix.android.sdk.internal.crypto.model.rest.GossipingDefaultContent
 import org.matrix.android.sdk.internal.crypto.model.rest.GossipingToDeviceObject
 import org.matrix.android.sdk.internal.crypto.model.rest.RoomKeyRequestBody
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
+import org.matrix.android.sdk.internal.crypto.tasks.createUniqueTxnId
 import org.matrix.android.sdk.internal.di.SessionId
 import org.matrix.android.sdk.internal.session.SessionScope
-import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.internal.worker.WorkerParamsFactory
 import timber.log.Timber
 import java.util.concurrent.Executors
@@ -290,12 +292,16 @@ internal class IncomingGossipingRequestManager @Inject constructor(
                 .also { cryptoStore.updateGossipingRequestState(request, GossipingRequestState.REJECTED) }
 
         cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
-            val isSuccess = roomEncryptor.reshareKey(sessionId, userId, deviceId, senderKey)
+            if (roomEncryptor is IMXGroupEncryption) {
+                val isSuccess = roomEncryptor.reshareKey(sessionId, userId, deviceId, senderKey)
 
-            if (isSuccess) {
-                cryptoStore.updateGossipingRequestState(request, GossipingRequestState.ACCEPTED)
+                if (isSuccess) {
+                    cryptoStore.updateGossipingRequestState(request, GossipingRequestState.ACCEPTED)
+                } else {
+                    cryptoStore.updateGossipingRequestState(request, GossipingRequestState.UNABLE_TO_PROCESS)
+                }
             } else {
-                cryptoStore.updateGossipingRequestState(request, GossipingRequestState.UNABLE_TO_PROCESS)
+                Timber.e("## CRYPTO | handleKeyRequestFromOtherUser() from:$userId: Unable to handle IMXGroupEncryption.reshareKey for $alg")
             }
         }
         cryptoStore.updateGossipingRequestState(request, GossipingRequestState.RE_REQUESTED)
@@ -351,7 +357,8 @@ internal class IncomingGossipingRequestManager @Inject constructor(
                         secretValue = secretValue,
                         requestUserId = request.userId,
                         requestDeviceId = request.deviceId,
-                        requestId = request.requestId
+                        requestId = request.requestId,
+                        txnId = createUniqueTxnId()
                 )
 
                 cryptoStore.updateGossipingRequestState(request, GossipingRequestState.ACCEPTING)
@@ -371,13 +378,13 @@ internal class IncomingGossipingRequestManager @Inject constructor(
         }
 
         request.share = { secretValue ->
-
             val params = SendGossipWorker.Params(
                     sessionId = userId,
                     secretValue = secretValue,
                     requestUserId = request.userId,
                     requestDeviceId = request.deviceId,
-                    requestId = request.requestId
+                    requestId = request.requestId,
+                    txnId = createUniqueTxnId()
             )
 
             cryptoStore.updateGossipingRequestState(request, GossipingRequestState.ACCEPTING)

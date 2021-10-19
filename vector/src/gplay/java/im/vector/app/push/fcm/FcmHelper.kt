@@ -75,7 +75,7 @@ object FcmHelper {
                         .addOnSuccessListener { token ->
                             storeFcmToken(activity, token)
                             if (registerPusher) {
-                                pushersManager.registerPusherWithFcmKey(token)
+                                pushersManager.enqueueRegisterPusherWithFcmKey(token)
                             }
                         }
                         .addOnFailureListener { e ->

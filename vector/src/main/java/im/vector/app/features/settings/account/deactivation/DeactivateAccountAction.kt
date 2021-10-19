@@ -19,10 +19,9 @@ package im.vector.app.features.settings.account.deactivation
 import im.vector.app.core.platform.VectorViewModelAction
 
 sealed class DeactivateAccountAction : VectorViewModelAction {
-    object TogglePassword : DeactivateAccountAction()
     data class DeactivateAccount(val eraseAllData: Boolean) : DeactivateAccountAction()
 
-    object SsoAuthDone: DeactivateAccountAction()
-    data class PasswordAuthDone(val password: String): DeactivateAccountAction()
-    object ReAuthCancelled: DeactivateAccountAction()
+    object SsoAuthDone : DeactivateAccountAction()
+    data class PasswordAuthDone(val password: String) : DeactivateAccountAction()
+    object ReAuthCancelled : DeactivateAccountAction()
 }

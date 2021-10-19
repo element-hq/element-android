@@ -19,6 +19,8 @@ package org.matrix.android.sdk.internal.session.identity
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
+import io.realm.RealmConfiguration
+import okhttp3.OkHttpClient
 import org.matrix.android.sdk.internal.database.RealmKeysUtils
 import org.matrix.android.sdk.internal.di.AuthenticatedIdentity
 import org.matrix.android.sdk.internal.di.IdentityDatabase
@@ -32,8 +34,6 @@ import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.internal.session.identity.data.IdentityStore
 import org.matrix.android.sdk.internal.session.identity.db.IdentityRealmModule
 import org.matrix.android.sdk.internal.session.identity.db.RealmIdentityStore
-import io.realm.RealmConfiguration
-import okhttp3.OkHttpClient
 import org.matrix.android.sdk.internal.session.identity.db.RealmIdentityStoreMigration
 import java.io.File
 
@@ -60,7 +60,6 @@ internal abstract class IdentityModule {
         @SessionScope
         fun providesIdentityRealmConfiguration(realmKeysUtils: RealmKeysUtils,
                                                @SessionFilesDirectory directory: File,
-                                               migration: RealmIdentityStoreMigration,
                                                @UserMd5 userMd5: String): RealmConfiguration {
             return RealmConfiguration.Builder()
                     .directory(directory)
@@ -69,7 +68,7 @@ internal abstract class IdentityModule {
                         realmKeysUtils.configureEncryption(this, SessionModule.getKeyAlias(userMd5))
                     }
                     .schemaVersion(RealmIdentityStoreMigration.IDENTITY_STORE_SCHEMA_VERSION)
-                    .migration(migration)
+                    .migration(RealmIdentityStoreMigration)
                     .allowWritesOnUiThread(true)
                     .modules(IdentityRealmModule())
                     .build()

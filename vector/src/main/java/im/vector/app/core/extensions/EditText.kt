@@ -18,6 +18,7 @@ package im.vector.app.core.extensions
 
 import android.text.Editable
 import android.text.InputType
+import android.text.Spanned
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -58,14 +59,37 @@ fun EditText.setupAsSearch(@DrawableRes searchIconRes: Int = R.drawable.ic_searc
     })
 }
 
-/**
- * Update the edit text value, only if necessary and move the cursor to the end of the text
- */
-fun EditText.setTextSafe(value: String?) {
-    if (value != null && text.toString() != value) {
-        setText(value)
-        // To fix jumping cursor to the start https://github.com/airbnb/epoxy/issues/426
-        // Note: there is still a known bug if deleting char in the middle of the text, by long pressing on the backspace button.
-        setSelection(value.length)
+fun EditText.setTextIfDifferent(newText: CharSequence?): Boolean {
+    if (!isTextDifferent(newText, text)) {
+        // Previous text is the same. No op
+        return false
     }
+    setText(newText)
+    // Since the text changed we move the cursor to the end of the new text.
+    // This allows us to fill in text programmatically with a different value,
+    // but if the user is typing and the view is rebound we won't lose their cursor position.
+    setSelection(newText?.length ?: 0)
+    return true
+}
+
+private fun isTextDifferent(str1: CharSequence?, str2: CharSequence?): Boolean {
+    if (str1 === str2) {
+        return false
+    }
+    if (str1 == null || str2 == null) {
+        return true
+    }
+    val length = str1.length
+    if (length != str2.length) {
+        return true
+    }
+    if (str1 is Spanned) {
+        return str1 != str2
+    }
+    for (i in 0 until length) {
+        if (str1[i] != str2[i]) {
+            return true
+        }
+    }
+    return false
 }

@@ -19,15 +19,16 @@ package im.vector.app.features.roomdirectory.roompreview
 import android.content.Context
 import android.content.Intent
 import android.os.Parcelable
-import androidx.appcompat.widget.Toolbar
+import com.google.android.material.appbar.MaterialToolbar
 import im.vector.app.R
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivitySimpleBinding
+import im.vector.app.features.roomdirectory.RoomDirectoryData
 import kotlinx.parcelize.Parcelize
+import org.matrix.android.sdk.api.session.permalinks.PermalinkData
 import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoom
-import org.matrix.android.sdk.api.session.room.model.thirdparty.RoomDirectoryData
 import org.matrix.android.sdk.api.util.MatrixItem
 import timber.log.Timber
 
@@ -37,12 +38,14 @@ data class RoomPreviewData(
         val eventId: String? = null,
         val roomName: String? = null,
         val roomAlias: String? = null,
+        val roomType: String? = null,
         val topic: String? = null,
         val worldReadable: Boolean = false,
         val avatarUrl: String? = null,
         val homeServers: List<String> = emptyList(),
         val peekFromServer: Boolean = false,
-        val buildTask: Boolean = false
+        val buildTask: Boolean = false,
+        val fromEmailInvite: PermalinkData.RoomEmailInviteLink? = null
 ) : Parcelable {
     val matrixItem: MatrixItem
         get() = MatrixItem.RoomItem(roomId, roomName ?: roomAlias, avatarUrl)
@@ -77,7 +80,7 @@ class RoomPreviewActivity : VectorBaseActivity<ActivitySimpleBinding>(), Toolbar
 
     override fun getCoordinatorLayout() = views.coordinatorLayout
 
-    override fun configure(toolbar: Toolbar) {
+    override fun configure(toolbar: MaterialToolbar) {
         configureToolbar(toolbar)
     }
 

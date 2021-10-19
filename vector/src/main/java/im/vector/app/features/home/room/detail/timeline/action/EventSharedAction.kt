@@ -63,7 +63,7 @@ sealed class EventSharedAction(@StringRes val titleRes: Int,
     data class Redact(val eventId: String, val askForReason: Boolean) :
             EventSharedAction(R.string.message_action_item_redact, R.drawable.ic_delete, true)
 
-    data class Cancel(val eventId: String) :
+    data class Cancel(val eventId: String, val force: Boolean) :
             EventSharedAction(R.string.cancel, R.drawable.ic_close_round)
 
     data class ViewSource(val content: String) :

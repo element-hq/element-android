@@ -28,10 +28,12 @@ import com.bumptech.glide.signature.ObjectKey
 import im.vector.app.core.extensions.vectorComponent
 import im.vector.app.core.files.LocalFilesHelper
 import im.vector.app.features.media.ImageContentRenderer
+import im.vector.app.features.session.coroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
-import org.matrix.android.sdk.api.MatrixCallback
 import timber.log.Timber
-import java.io.File
 import java.io.IOException
 import java.io.InputStream
 
@@ -46,8 +48,8 @@ class VectorGlideModelLoaderFactory(private val context: Context) : ModelLoaderF
     }
 }
 
-class VectorGlideModelLoader(private val context: Context)
-    : ModelLoader<ImageContentRenderer.Data, InputStream> {
+class VectorGlideModelLoader(private val context: Context) :
+    ModelLoader<ImageContentRenderer.Data, InputStream> {
     override fun handles(model: ImageContentRenderer.Data): Boolean {
         // Always handle
         return true
@@ -61,8 +63,8 @@ class VectorGlideModelLoader(private val context: Context)
 class VectorGlideDataFetcher(context: Context,
                              private val data: ImageContentRenderer.Data,
                              private val width: Int,
-                             private val height: Int)
-    : DataFetcher<InputStream> {
+                             private val height: Int) :
+    DataFetcher<InputStream> {
 
     private val localFilesHelper = LocalFilesHelper(context)
     private val activeSessionHolder = context.vectorComponent().activeSessionHolder()
@@ -113,21 +115,21 @@ class VectorGlideDataFetcher(context: Context,
             callback.onLoadFailed(IllegalArgumentException("No File service"))
         }
         // Use the file vector service, will avoid flickering and redownload after upload
-        fileService.downloadFile(
-                fileName = data.filename,
-                mimeType = data.mimeType,
-                url = data.url,
-                elementToDecrypt = data.elementToDecrypt,
-                callback = object : MatrixCallback<File> {
-                    override fun onSuccess(data: File) {
-                        callback.onDataReady(data.inputStream())
-                    }
-
-                    override fun onFailure(failure: Throwable) {
-                        callback.onLoadFailed(failure as? Exception ?: IOException(failure.localizedMessage))
-                    }
-                }
-        )
+        activeSessionHolder.getSafeActiveSession()?.coroutineScope?.launch {
+            val result = runCatching {
+                fileService.downloadFile(
+                        fileName = data.filename,
+                        mimeType = data.mimeType,
+                        url = data.url,
+                        elementToDecrypt = data.elementToDecrypt)
+            }
+            withContext(Dispatchers.Main) {
+                result.fold(
+                        { callback.onDataReady(it.inputStream()) },
+                        { callback.onLoadFailed(it as? Exception ?: IOException(it.localizedMessage)) }
+                )
+            }
+        }
 //        val url = contentUrlResolver.resolveFullSize(data.url)
 //                ?: return
 //

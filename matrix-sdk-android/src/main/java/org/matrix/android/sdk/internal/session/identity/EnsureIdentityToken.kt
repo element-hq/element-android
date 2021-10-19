@@ -17,13 +17,13 @@
 package org.matrix.android.sdk.internal.session.identity
 
 import dagger.Lazy
+import okhttp3.OkHttpClient
 import org.matrix.android.sdk.api.session.identity.IdentityServiceError
 import org.matrix.android.sdk.internal.di.UnauthenticatedWithCertificate
 import org.matrix.android.sdk.internal.network.RetrofitFactory
 import org.matrix.android.sdk.internal.session.identity.data.IdentityStore
 import org.matrix.android.sdk.internal.session.openid.GetOpenIdTokenTask
 import org.matrix.android.sdk.internal.task.Task
-import okhttp3.OkHttpClient
 import javax.inject.Inject
 
 internal interface EnsureIdentityTokenTask : Task<Unit, Unit>

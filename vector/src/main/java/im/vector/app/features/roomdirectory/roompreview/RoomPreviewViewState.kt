@@ -17,9 +17,11 @@
 package im.vector.app.features.roomdirectory.roompreview
 
 import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.Uninitialized
 import im.vector.app.features.roomdirectory.JoinState
+import org.matrix.android.sdk.api.session.permalinks.PermalinkData
+import org.matrix.android.sdk.api.session.room.model.RoomType
 import org.matrix.android.sdk.api.util.MatrixItem
 
 data class RoomPreviewViewState(
@@ -27,6 +29,7 @@ data class RoomPreviewViewState(
         // The room id
         val roomId: String = "",
         val roomAlias: String? = null,
+        val roomType: String? = null,
 
         val roomName: String? = null,
         val roomTopic: String? = null,
@@ -34,14 +37,18 @@ data class RoomPreviewViewState(
 
         val shouldPeekFromServer: Boolean = false,
         /**
-         * Can be empty when the server is the current user's home server.
+         * Can be empty when the server is the current user's homeserver.
          */
         val homeServers: List<String> = emptyList(),
         // Current state of the room in preview
         val roomJoinState: JoinState = JoinState.NOT_JOINED,
         // Last error of join room request
-        val lastError: Throwable? = null
-) : MvRxState {
+        val lastError: Throwable? = null,
+
+        val fromEmailInvite: PermalinkData.RoomEmailInviteLink? = null,
+        // used only if it's an email invite
+        val isEmailBoundToAccount: Boolean = false
+) : MavericksState {
 
     constructor(args: RoomPreviewData) : this(
             roomId = args.roomId,
@@ -50,10 +57,13 @@ data class RoomPreviewViewState(
             roomName = args.roomName,
             roomTopic = args.topic,
             avatarUrl = args.avatarUrl,
-            shouldPeekFromServer = args.peekFromServer
+            shouldPeekFromServer = args.peekFromServer,
+            fromEmailInvite = args.fromEmailInvite,
+            roomType = args.roomType
     )
 
-    fun matrixItem() : MatrixItem {
-        return MatrixItem.RoomItem(roomId, roomName ?: roomAlias, avatarUrl)
+    fun matrixItem(): MatrixItem {
+        return if (roomType == RoomType.SPACE) MatrixItem.SpaceItem(roomId, roomName ?: roomAlias, avatarUrl)
+            else MatrixItem.RoomItem(roomId, roomName ?: roomAlias, avatarUrl)
     }
 }

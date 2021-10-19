@@ -16,6 +16,7 @@
 package org.matrix.android.sdk.internal.session.room.relation
 
 import com.zhuinden.monarchy.Monarchy
+import io.realm.Realm
 import org.matrix.android.sdk.internal.database.model.EventAnnotationsSummaryEntity
 import org.matrix.android.sdk.internal.database.model.EventEntity
 import org.matrix.android.sdk.internal.database.model.ReactionAggregatedSummaryEntityFields
@@ -23,7 +24,6 @@ import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.task.Task
-import io.realm.Realm
 import javax.inject.Inject
 
 internal interface FindReactionEventForUndoTask : Task<FindReactionEventForUndoTask.Params, FindReactionEventForUndoTask.Result> {
@@ -45,16 +45,16 @@ internal class DefaultFindReactionEventForUndoTask @Inject constructor(
 
     override suspend fun execute(params: FindReactionEventForUndoTask.Params): FindReactionEventForUndoTask.Result {
         val eventId = Realm.getInstance(monarchy.realmConfiguration).use { realm ->
-            getReactionToRedact(realm, params.reaction, params.eventId)?.eventId
+            getReactionToRedact(realm, params)?.eventId
         }
         return FindReactionEventForUndoTask.Result(eventId)
     }
 
-    private fun getReactionToRedact(realm: Realm, reaction: String, eventId: String): EventEntity? {
-        val summary = EventAnnotationsSummaryEntity.where(realm, eventId).findFirst() ?: return null
+    private fun getReactionToRedact(realm: Realm, params: FindReactionEventForUndoTask.Params): EventEntity? {
+        val summary = EventAnnotationsSummaryEntity.where(realm, params.roomId, params.eventId).findFirst() ?: return null
 
         val rase = summary.reactionsSummary.where()
-                .equalTo(ReactionAggregatedSummaryEntityFields.KEY, reaction)
+                .equalTo(ReactionAggregatedSummaryEntityFields.KEY, params.reaction)
                 .findFirst() ?: return null
 
         // want to find the event originated by me!

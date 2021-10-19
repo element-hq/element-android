@@ -17,19 +17,28 @@ package im.vector.app.features.notifications
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.os.Build
 import android.os.Handler
 import android.os.HandlerThread
 import androidx.annotation.WorkerThread
 import androidx.core.app.NotificationCompat
 import androidx.core.app.Person
+import androidx.core.content.pm.ShortcutInfoCompat
+import androidx.core.content.pm.ShortcutManagerCompat
+import androidx.core.graphics.drawable.IconCompat
 import im.vector.app.ActiveSessionDataSource
 import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.core.utils.FirstThrottler
+import im.vector.app.features.displayname.getBestName
+import im.vector.app.features.home.room.detail.RoomDetailActivity
+import im.vector.app.features.invite.AutoAcceptInvites
 import im.vector.app.features.settings.VectorPreferences
 import me.gujun.android.span.span
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.content.ContentUrlResolver
+import org.matrix.android.sdk.api.util.toMatrixItem
 import timber.log.Timber
 import java.io.File
 import java.io.FileOutputStream
@@ -49,7 +58,8 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
                                                     private val activeSessionDataSource: ActiveSessionDataSource,
                                                     private val iconLoader: IconLoader,
                                                     private val bitmapLoader: BitmapLoader,
-                                                    private val outdatedDetector: OutdatedEventDetector?) {
+                                                    private val outdatedDetector: OutdatedEventDetector?,
+                                                    private val autoAcceptInvites: AutoAcceptInvites) {
 
     private val handlerThread: HandlerThread = HandlerThread("NotificationDrawerManager", Thread.MIN_PRIORITY)
     private var backgroundHandler: Handler
@@ -75,6 +85,13 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
     private var useCompleteNotificationFormat = vectorPreferences.useCompleteNotificationFormat()
 
     /**
+     * An in memory FIFO cache of the seen events.
+     * Acts as a notification debouncer to stop already dismissed push notifications from
+     * displaying again when the /sync response is delayed.
+     */
+    private val seenEventIds = CircularCache.create<String>(cacheSize = 25)
+
+    /**
     Should be called as soon as a new event is ready to be displayed.
     The notification corresponding to this event will not be displayed until
     #refreshNotificationDrawer() is called.
@@ -88,20 +105,23 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
         // If we support multi session, event list should be per userId
         // Currently only manage single session
         if (BuildConfig.LOW_PRIVACY_LOG_ENABLE) {
-            Timber.v("%%%%%%%% onNotifiableEventReceived $notifiableEvent")
+            Timber.d("onNotifiableEventReceived(): $notifiableEvent")
+        } else {
+            Timber.d("onNotifiableEventReceived(): is push: ${notifiableEvent.isPushGatewayEvent}")
         }
         synchronized(eventList) {
             val existing = eventList.firstOrNull { it.eventId == notifiableEvent.eventId }
             if (existing != null) {
                 if (existing.isPushGatewayEvent) {
                     // Use the event coming from the event stream as it may contains more info than
-                    // the fcm one (like type/content/clear text)
+                    // the fcm one (like type/content/clear text) (e.g when an encrypted message from
+                    // FCM should be update with clear text after a sync)
                     // In this case the message has already been notified, and might have done some noise
                     // So we want the notification to be updated even if it has already been displayed
-                    // But it should make no noise (e.g when an encrypted message from FCM should be
-                    // update with clear text after a sync)
+                    // Use setOnlyAlertOnce to ensure update notification does not interfere with sound
+                    // from first notify invocation as outlined in:
+                    // https://developer.android.com/training/notify-user/build-notification#Updating
                     notifiableEvent.hasBeenDisplayed = false
-                    notifiableEvent.noisy = false
                     eventList.remove(existing)
                     eventList.add(notifiableEvent)
                 } else {
@@ -113,9 +133,9 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
                     // This is an edition
                     val eventBeforeEdition = eventList.firstOrNull {
                         // Edition of an event
-                        it.eventId == notifiableEvent.editedEventId
+                        it.eventId == notifiableEvent.editedEventId ||
                                 // or edition of an edition
-                                || it.editedEventId == notifiableEvent.editedEventId
+                                it.editedEventId == notifiableEvent.editedEventId
                     }
 
                     if (eventBeforeEdition != null) {
@@ -128,7 +148,13 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
                     }
                 } else {
                     // Not an edit
-                    eventList.add(notifiableEvent)
+                    if (seenEventIds.contains(notifiableEvent.eventId)) {
+                        // we've already seen the event, lets skip
+                        Timber.d("onNotifiableEventReceived(): skipping event, already seen")
+                    } else {
+                        seenEventIds.put(notifiableEvent.eventId)
+                        eventList.add(notifiableEvent)
+                    }
                 }
             }
         }
@@ -194,10 +220,14 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
         notificationUtils.cancelNotificationMessage(roomId, ROOM_INVITATION_NOTIFICATION_ID)
     }
 
+    private var firstThrottler = FirstThrottler(200)
+
     fun refreshNotificationDrawer() {
         // Implement last throttler
-        Timber.v("refreshNotificationDrawer()")
+        val canHandle = firstThrottler.canHandle()
+        Timber.v("refreshNotificationDrawer(), delay: ${canHandle.waitMillis()} ms")
         backgroundHandler.removeCallbacksAndMessages(null)
+
         backgroundHandler.postDelayed(
                 {
                     try {
@@ -206,7 +236,8 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
                         // It can happen if for instance session has been destroyed. It's a bit ugly to try catch like this, but it's safer
                         Timber.w(throwable, "refreshNotificationDrawerBg failure")
                     }
-                }, 200)
+                },
+                canHandle.waitMillis())
     }
 
     @WorkerThread
@@ -217,7 +248,7 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
 
         val user = session.getUser(session.myUserId)
         // myUserDisplayName cannot be empty else NotificationCompat.MessagingStyle() will crash
-        val myUserDisplayName = user?.getBestName() ?: session.myUserId
+        val myUserDisplayName = user?.toMatrixItem()?.getBestName() ?: session.myUserId
         val myUserAvatarUrl = session.contentUrlResolver().resolveThumbnail(user?.avatarUrl, avatarSize, avatarSize, ContentUrlResolver.ThumbnailMethod.SCALE)
         synchronized(eventList) {
             Timber.v("%%%%%%%% REFRESH NOTIFICATION DRAWER ")
@@ -245,7 +276,14 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
                             roomEvents.add(event)
                         }
                     }
-                    is InviteNotifiableEvent  -> invitationEvents.add(event)
+                    is InviteNotifiableEvent  -> {
+                        if (autoAcceptInvites.hideInvites) {
+                            // Forget this event
+                            eventIterator.remove()
+                        } else {
+                            invitationEvents.add(event)
+                        }
+                    }
                     is SimpleNotifiableEvent  -> simpleEvents.add(event)
                     else                      -> Timber.w("Type not handled")
                 }
@@ -305,11 +343,28 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
                     }
                     roomEventGroupInfo.hasNewEvent = roomEventGroupInfo.hasNewEvent || !event.hasBeenDisplayed
 
-                    val senderPerson = Person.Builder()
-                            .setName(event.senderName)
-                            .setIcon(iconLoader.getUserIcon(event.senderAvatarPath))
-                            .setKey(event.senderId)
-                            .build()
+                    val senderPerson = if (event.outGoingMessage) {
+                        null
+                    } else {
+                        Person.Builder()
+                                .setName(event.senderName)
+                                .setIcon(iconLoader.getUserIcon(event.senderAvatarPath))
+                                .setKey(event.senderId)
+                                .build()
+                    }
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                        val openRoomIntent = RoomDetailActivity.shortcutIntent(context, roomId)
+
+                        val shortcut = ShortcutInfoCompat.Builder(context, roomId)
+                                .setLongLived(true)
+                                .setIntent(openRoomIntent)
+                                .setShortLabel(roomName)
+                                .setIcon(largeBitmap?.let { IconCompat.createWithAdaptiveBitmap(it) } ?: iconLoader.getUserIcon(event.senderAvatarPath))
+                                .build()
+
+                        ShortcutManagerCompat.pushDynamicShortcut(context, shortcut)
+                    }
 
                     if (event.outGoingMessage && event.outGoingMessageFailed) {
                         style.addMessage(stringProvider.getString(R.string.notification_inline_reply_failed), event.timestamp, senderPerson)
@@ -440,7 +495,7 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
 
             if (eventList.isEmpty() || eventList.all { it.isRedacted }) {
                 notificationUtils.cancelNotificationMessage(null, SUMMARY_NOTIFICATION_ID)
-            } else {
+            } else if (hasNewEvent) {
                 // FIXME roomIdToEventMap.size is not correct, this is the number of rooms
                 val nbEvents = roomIdToEventMap.size + simpleEvents.size
                 val sumTitle = stringProvider.getQuantityString(R.plurals.notification_compat_summary_title, nbEvents, nbEvents)
@@ -544,7 +599,7 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
         return bitmapLoader.getRoomBitmap(roomAvatarPath)
     }
 
-    private fun shouldIgnoreMessageEventInRoom(roomId: String?): Boolean {
+    fun shouldIgnoreMessageEventInRoom(roomId: String?): Boolean {
         return currentRoomId != null && roomId == currentRoomId
     }
 

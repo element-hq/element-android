@@ -30,13 +30,11 @@ import androidx.transition.Transition
 import androidx.transition.TransitionManager
 import androidx.transition.TransitionSet
 import im.vector.app.R
+import im.vector.app.core.extensions.setTextIfDifferent
 import im.vector.app.databinding.ComposerLayoutBinding
-
-import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
 
 /**
  * Encapsulate the timeline composer UX.
- *
  */
 class TextComposerView @JvmOverloads constructor(
         context: Context,
@@ -69,6 +67,10 @@ class TextComposerView @JvmOverloads constructor(
         views.composerEditText.callback = object : ComposerEditText.Callback {
             override fun onRichContentSelected(contentUri: Uri): Boolean {
                 return callback?.onRichContentSelected(contentUri) ?: false
+            }
+
+            override fun onTextChanged(text: CharSequence) {
+                callback?.onTextChanged(text)
             }
         }
         views.composerRelatedMessageCloseButton.setOnClickListener {
@@ -104,16 +106,21 @@ class TextComposerView @JvmOverloads constructor(
         applyNewConstraintSet(animate, transitionComplete)
     }
 
+    fun setTextIfDifferent(text: CharSequence?): Boolean {
+        return views.composerEditText.setTextIfDifferent(text)
+    }
+
     private fun applyNewConstraintSet(animate: Boolean, transitionComplete: (() -> Unit)?) {
+        // val wasSendButtonInvisible = views.sendButton.isInvisible
         if (animate) {
             configureAndBeginTransition(transitionComplete)
         }
         ConstraintSet().also {
             it.clone(context, currentConstraintSetId)
-            // in case shield is hidden, we will have glitch without this
-            it.getConstraint(R.id.composerShieldImageView).propertySet.visibility = views.composerShieldImageView.visibility
             it.applyTo(this)
         }
+        // Might be updated by view state just after, but avoid blinks
+        // views.sendButton.isInvisible = wasSendButtonInvisible
     }
 
     private fun configureAndBeginTransition(transitionComplete: (() -> Unit)? = null) {
@@ -139,13 +146,11 @@ class TextComposerView @JvmOverloads constructor(
         TransitionManager.beginDelayedTransition((parent as? ViewGroup ?: this), transition)
     }
 
-    fun setRoomEncrypted(isEncrypted: Boolean, roomEncryptionTrustLevel: RoomEncryptionTrustLevel?) {
+    fun setRoomEncrypted(isEncrypted: Boolean) {
         if (isEncrypted) {
             views.composerEditText.setHint(R.string.room_message_placeholder)
-            views.composerShieldImageView.render(roomEncryptionTrustLevel)
         } else {
             views.composerEditText.setHint(R.string.room_message_placeholder)
-            views.composerShieldImageView.render(null)
         }
     }
 }

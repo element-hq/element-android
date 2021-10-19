@@ -1,0 +1,1 @@
+Fixing notification sounds being triggered for every message, now they only trigger for the first, consistent with the vibrations

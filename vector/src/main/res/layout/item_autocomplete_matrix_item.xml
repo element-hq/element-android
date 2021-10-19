@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?riotx_background"
+    android:background="?android:colorBackground"
     android:foreground="?attr/selectableItemBackground"
     android:orientation="horizontal"
     android:padding="8dp">
@@ -14,7 +14,7 @@
         android:layout_height="28dp"
         android:layout_gravity="center_vertical"
         android:importantForAccessibility="no"
-        tools:src="@tools:sample/avatars" />
+        tools:src="@sample/user_round_avatars" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -25,24 +25,24 @@
 
         <TextView
             android:id="@+id/matrixItemAutocompleteName"
+            style="@style/Widget.Vector.TextView.Caption"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:maxLines="1"
-            android:textColor="?riotx_text_primary"
-            android:textSize="12sp"
+            android:textColor="?vctr_content_primary"
             android:textStyle="bold"
             tools:text="name" />
 
         <TextView
             android:id="@+id/matrixItemAutocompleteSubname"
+            style="@style/Widget.Vector.TextView.Caption"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginTop="2dp"
             android:maxLines="1"
-            android:textColor="?riotx_text_secondary"
-            android:textSize="12sp"
+            android:textColor="?vctr_content_secondary"
             android:visibility="gone"
             tools:text="name"
             tools:visibility="visible" />

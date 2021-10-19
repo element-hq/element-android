@@ -31,7 +31,7 @@ internal class DefaultGetThirdPartyProtocolsTask @Inject constructor(
 
     override suspend fun execute(params: Unit): Map<String, ThirdPartyProtocol> {
         return executeRequest(globalErrorReceiver) {
-            apiCall = thirdPartyAPI.thirdPartyProtocols()
+            thirdPartyAPI.thirdPartyProtocols()
         }
     }
 }

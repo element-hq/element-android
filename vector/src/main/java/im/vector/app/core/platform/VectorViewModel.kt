@@ -20,17 +20,17 @@ import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.BaseMvRxViewModel
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.Success
 import im.vector.app.core.utils.DataSource
 import im.vector.app.core.utils.PublishDataSource
 import io.reactivex.Observable
 import io.reactivex.Single
 
-abstract class VectorViewModel<S : MvRxState, VA : VectorViewModelAction, VE : VectorViewEvents>(initialState: S)
-    : BaseMvRxViewModel<S>(initialState, false) {
+abstract class VectorViewModel<S : MavericksState, VA : VectorViewModelAction, VE : VectorViewEvents>(initialState: S) :
+        BaseMvRxViewModel<S>(initialState) {
 
-    interface Factory<S : MvRxState> {
+    interface Factory<S : MavericksState> {
         fun create(state: S): BaseMvRxViewModel<S>
     }
 

@@ -19,27 +19,6 @@
         tools:src="@tools:sample/backgrounds/scenic" />
 
     <ImageView
-        android:id="@+id/messageFailToSendIndicator"
-        android:layout_width="14dp"
-        android:layout_height="14dp"
-        android:layout_marginStart="2dp"
-        android:contentDescription="@string/a11y_error_message_not_sent"
-        android:src="@drawable/ic_warning_badge"
-        android:visibility="gone"
-        app:layout_constraintStart_toEndOf="@id/messageThumbnailView"
-        app:layout_constraintTop_toTopOf="@id/messageThumbnailView"
-        tools:visibility="visible" />
-
-    <ProgressBar
-        android:id="@+id/eventSendingIndicator"
-        style="?android:attr/progressBarStyleSmall"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
-        android:visibility="gone"
-        app:layout_constraintStart_toEndOf="@id/messageThumbnailView"
-        app:layout_constraintTop_toBottomOf="@id/messageFailToSendIndicator" />
-
-    <ImageView
         android:id="@+id/messageMediaPlayView"
         android:layout_width="40dp"
         android:layout_height="40dp"

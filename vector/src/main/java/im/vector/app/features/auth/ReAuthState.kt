@@ -16,17 +16,16 @@
 
 package im.vector.app.features.auth
 
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MavericksState
 
 data class ReAuthState(
         val title: String? = null,
         val session: String? = null,
         val flowType: String? = null,
         val ssoFallbackPageWasShown: Boolean = false,
-        val passwordVisible: Boolean = false,
         val lastErrorCode: String? = null,
         val resultKeyStoreAlias: String = ""
-) : MvRxState {
+) : MavericksState {
     constructor(args: ReAuthActivity.Args) : this(
             args.title,
             args.session,

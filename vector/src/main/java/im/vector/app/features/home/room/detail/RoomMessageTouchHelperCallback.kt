@@ -62,7 +62,7 @@ class RoomMessageTouchHelperCallback(private val context: Context,
     init {
         DrawableCompat.setTint(
                 imageDrawable,
-                ThemeUtils.getColor(context, R.attr.riotx_text_primary)
+                ThemeUtils.getColor(context, R.attr.vctr_content_primary)
         )
     }
 
@@ -70,10 +70,10 @@ class RoomMessageTouchHelperCallback(private val context: Context,
     private val minShowDistance = convertToPx(20)
     private val triggerDelta = convertToPx(20)
 
-    override fun onSwiped(viewHolder: EpoxyViewHolder?, direction: Int) {
+    override fun onSwiped(viewHolder: EpoxyViewHolder, direction: Int) {
     }
 
-    override fun onMove(recyclerView: RecyclerView?, viewHolder: EpoxyViewHolder?, target: EpoxyViewHolder?): Boolean {
+    override fun onMove(recyclerView: RecyclerView, viewHolder: EpoxyViewHolder, target: EpoxyViewHolder): Boolean {
         return false
     }
 

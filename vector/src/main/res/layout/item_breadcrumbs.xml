@@ -5,7 +5,7 @@
     android:id="@+id/breadcrumbsRoot"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="?riotx_background"
+    android:background="?android:colorBackground"
     android:clickable="true"
     android:focusable="true"
     android:foreground="?attr/selectableItemBackground">
@@ -14,7 +14,7 @@
         android:id="@+id/breadcrumbsUnreadIndicator"
         android:layout_width="4dp"
         android:layout_height="0dp"
-        android:background="?attr/colorAccent"
+        android:background="?colorSecondary"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -34,17 +34,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="ContentDescription"
-        tools:src="@tools:sample/avatars" />
+        tools:src="@sample/room_round_avatars" />
 
     <im.vector.app.features.home.room.list.UnreadCounterBadgeView
         android:id="@+id/breadcrumbsUnreadCounterBadgeView"
+        style="@style/Widget.Vector.TextView.Micro"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:minWidth="18dp"
         android:minHeight="18dp"
-        android:textColor="@android:color/white"
-        android:textSize="11sp"
+        android:textColor="?colorOnError"
         android:visibility="gone"
         app:layout_constraintCircle="@+id/breadcrumbsImageView"
         app:layout_constraintCircleAngle="45"
@@ -56,13 +56,14 @@
 
     <TextView
         android:id="@+id/breadcrumbsTypingView"
+        style="@style/Widget.Vector.TextView.Micro"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:background="@drawable/bg_breadcrumbs_typing"
+        android:background="@drawable/circle"
+        android:backgroundTint="?colorPrimary"
         android:gravity="center"
         android:text="@string/ellipsis"
-        android:textColor="@android:color/white"
-        android:textSize="11sp"
+        android:textColor="?colorOnPrimary"
         android:textStyle="bold"
         android:visibility="gone"
         app:layout_constraintCircle="@+id/breadcrumbsImageView"

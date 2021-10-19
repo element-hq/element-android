@@ -39,7 +39,7 @@ internal class DefaultSendStateTask @Inject constructor(
 
     override suspend fun execute(params: SendStateTask.Params) {
         return executeRequest(globalErrorReceiver) {
-            apiCall = if (params.stateKey == null) {
+            if (params.stateKey == null) {
                 roomAPI.sendStateEvent(
                         roomId = params.roomId,
                         stateEventType = params.eventType,

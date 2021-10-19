@@ -23,7 +23,7 @@ import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
@@ -40,10 +40,10 @@ import im.vector.app.core.utils.ensureTrailingSlash
 import im.vector.app.features.signout.soft.SoftLogoutActivity
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.MatrixPatterns.getDomain
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.auth.HomeServerHistoryService
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
-import org.matrix.android.sdk.api.auth.data.LoginFlowResult
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import org.matrix.android.sdk.api.auth.login.LoginWizard
 import org.matrix.android.sdk.api.auth.registration.FlowResult
@@ -52,6 +52,7 @@ import org.matrix.android.sdk.api.auth.registration.RegistrationWizard
 import org.matrix.android.sdk.api.auth.registration.Stage
 import org.matrix.android.sdk.api.auth.wellknown.WellknownResult
 import org.matrix.android.sdk.api.failure.Failure
+import org.matrix.android.sdk.api.failure.MatrixIdFailure
 import org.matrix.android.sdk.api.session.Session
 import timber.log.Timber
 import java.util.concurrent.CancellationException
@@ -85,7 +86,7 @@ class LoginViewModel @AssistedInject constructor(
         }
     }
 
-    companion object : MvRxViewModelFactory<LoginViewModel, LoginViewState> {
+    companion object : MavericksViewModelFactory<LoginViewModel, LoginViewState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: LoginViewState): LoginViewModel? {
@@ -214,6 +215,7 @@ class LoginViewModel @AssistedInject constructor(
             copy(
                     signMode = SignMode.SignIn,
                     loginMode = LoginMode.Sso(action.ssoIdentityProviders),
+                    homeServerUrlFromUser = action.homeServerUrl,
                     homeServerUrl = action.homeServerUrl,
                     deviceId = action.deviceId
             )
@@ -365,6 +367,7 @@ class LoginViewModel @AssistedInject constructor(
                     setState {
                         copy(
                                 asyncHomeServerLoginFlowRequest = Uninitialized,
+                                homeServerUrlFromUser = null,
                                 homeServerUrl = null,
                                 loginMode = LoginMode.Unknown,
                                 serverType = ServerType.Unknown,
@@ -561,24 +564,16 @@ class LoginViewModel @AssistedInject constructor(
                 return@launch
             }
             when (data) {
-                is WellknownResult.Prompt          ->
+                is WellknownResult.Prompt     ->
                     onWellknownSuccess(action, data, homeServerConnectionConfig)
-                is WellknownResult.FailPrompt      ->
-                    // Relax on IS discovery if home server is valid
+                is WellknownResult.FailPrompt ->
+                    // Relax on IS discovery if homeserver is valid
                     if (data.homeServerUrl != null && data.wellKnown != null) {
                         onWellknownSuccess(action, WellknownResult.Prompt(data.homeServerUrl!!, null, data.wellKnown!!), homeServerConnectionConfig)
                     } else {
                         onWellKnownError()
                     }
-                is WellknownResult.InvalidMatrixId -> {
-                    setState {
-                        copy(
-                                asyncLoginAction = Uninitialized
-                        )
-                    }
-                    _viewEvents.post(LoginViewEvents.Failure(Exception(stringProvider.getString(R.string.login_signin_matrix_id_error_invalid_matrix_id))))
-                }
-                else                               -> {
+                else                          -> {
                     onWellKnownError()
                 }
             }.exhaustive
@@ -599,11 +594,12 @@ class LoginViewModel @AssistedInject constructor(
                                            homeServerConnectionConfig: HomeServerConnectionConfig?) {
         val alteredHomeServerConnectionConfig = homeServerConnectionConfig
                 ?.copy(
-                        homeServerUri = Uri.parse(wellKnownPrompt.homeServerUrl),
+                        homeServerUriBase = Uri.parse(wellKnownPrompt.homeServerUrl),
                         identityServerUri = wellKnownPrompt.identityServerUrl?.let { Uri.parse(it) }
                 )
                 ?: HomeServerConnectionConfig(
-                        homeServerUri = Uri.parse(wellKnownPrompt.homeServerUrl),
+                        homeServerUri = Uri.parse("https://${action.username.getDomain()}"),
+                        homeServerUriBase = Uri.parse(wellKnownPrompt.homeServerUrl),
                         identityServerUri = wellKnownPrompt.identityServerUrl?.let { Uri.parse(it) }
                 )
 
@@ -621,19 +617,23 @@ class LoginViewModel @AssistedInject constructor(
     }
 
     private fun onDirectLoginError(failure: Throwable) {
-        if (failure is Failure.UnrecognizedCertificateFailure) {
-            // Display this error in a dialog
-            _viewEvents.post(LoginViewEvents.Failure(failure))
-            setState {
-                copy(
-                        asyncLoginAction = Uninitialized
-                )
+        when (failure) {
+            is MatrixIdFailure.InvalidMatrixId,
+            is Failure.UnrecognizedCertificateFailure -> {
+                // Display this error in a dialog
+                _viewEvents.post(LoginViewEvents.Failure(failure))
+                setState {
+                    copy(
+                            asyncLoginAction = Uninitialized
+                    )
+                }
             }
-        } else {
-            setState {
-                copy(
-                        asyncLoginAction = Fail(failure)
-                )
+            else                                      -> {
+                setState {
+                    copy(
+                            asyncLoginAction = Fail(failure)
+                    )
+                }
             }
         }
     }
@@ -692,8 +692,8 @@ class LoginViewModel @AssistedInject constructor(
 
     private fun onFlowResponse(flowResult: FlowResult) {
         // If dummy stage is mandatory, and password is already sent, do the dummy stage now
-        if (isRegistrationStarted
-                && flowResult.missingStages.any { it is Stage.Dummy && it.mandatory }) {
+        if (isRegistrationStarted &&
+                flowResult.missingStages.any { it is Stage.Dummy && it.mandatory }) {
             handleRegisterDummy()
         } else {
             // Notify the user
@@ -773,34 +773,35 @@ class LoginViewModel @AssistedInject constructor(
                 null
             }
 
-            if (data is LoginFlowResult.Success) {
-                // Valid Homeserver, add it to the history.
-                // Note: we add what the user has input, data.homeServerUrl can be different
-                rememberHomeServer(homeServerConnectionConfig.homeServerUri.toString())
+            data ?: return@launch
 
-                val loginMode = when {
-                    // SSO login is taken first
-                    data.supportedLoginTypes.contains(LoginFlowTypes.SSO)
-                            && data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD) -> LoginMode.SsoAndPassword(data.ssoIdentityProviders)
-                    data.supportedLoginTypes.contains(LoginFlowTypes.SSO)                 -> LoginMode.Sso(data.ssoIdentityProviders)
-                    data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD)            -> LoginMode.Password
-                    else                                                                  -> LoginMode.Unsupported
-                }
+            // Valid Homeserver, add it to the history.
+            // Note: we add what the user has input, data.homeServerUrlBase can be different
+            rememberHomeServer(homeServerConnectionConfig.homeServerUri.toString())
 
-                // FIXME We should post a view event here normally?
-                setState {
-                    copy(
-                            asyncHomeServerLoginFlowRequest = Uninitialized,
-                            homeServerUrl = data.homeServerUrl,
-                            loginMode = loginMode,
-                            loginModeSupportedTypes = data.supportedLoginTypes.toList()
-                    )
-                }
-                if ((loginMode == LoginMode.Password && !data.isLoginAndRegistrationSupported)
-                        || data.isOutdatedHomeserver) {
-                    // Notify the UI
-                    _viewEvents.post(LoginViewEvents.OutdatedHomeserver)
-                }
+            val loginMode = when {
+                // SSO login is taken first
+                data.supportedLoginTypes.contains(LoginFlowTypes.SSO) &&
+                        data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD) -> LoginMode.SsoAndPassword(data.ssoIdentityProviders)
+                data.supportedLoginTypes.contains(LoginFlowTypes.SSO)              -> LoginMode.Sso(data.ssoIdentityProviders)
+                data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD)         -> LoginMode.Password
+                else                                                               -> LoginMode.Unsupported
+            }
+
+            // FIXME We should post a view event here normally?
+            setState {
+                copy(
+                        asyncHomeServerLoginFlowRequest = Uninitialized,
+                        homeServerUrlFromUser = homeServerConnectionConfig.homeServerUri.toString(),
+                        homeServerUrl = data.homeServerUrl,
+                        loginMode = loginMode,
+                        loginModeSupportedTypes = data.supportedLoginTypes.toList()
+                )
+            }
+            if ((loginMode == LoginMode.Password && !data.isLoginAndRegistrationSupported) ||
+                    data.isOutdatedHomeserver) {
+                // Notify the UI
+                _viewEvents.post(LoginViewEvents.OutdatedHomeserver)
             }
         }
     }

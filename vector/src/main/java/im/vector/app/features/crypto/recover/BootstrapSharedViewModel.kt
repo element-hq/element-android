@@ -20,7 +20,7 @@ import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
@@ -38,19 +38,19 @@ import im.vector.app.features.auth.ReAuthActivity
 import im.vector.app.features.login.ReAuthHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.auth.UIABaseAuth
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
+import org.matrix.android.sdk.api.auth.UserPasswordAuth
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
+import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
+import org.matrix.android.sdk.api.auth.registration.nextUncompletedStage
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.securestorage.RawBytesKeySpec
-import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
-import org.matrix.android.sdk.api.auth.registration.nextUncompletedStage
 import org.matrix.android.sdk.internal.crypto.crosssigning.fromBase64
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersionResult
 import org.matrix.android.sdk.internal.crypto.keysbackup.util.extractCurveKeyFromRecoveryKey
 import org.matrix.android.sdk.internal.crypto.model.rest.DefaultBaseAuth
-import org.matrix.android.sdk.api.auth.UIABaseAuth
-import org.matrix.android.sdk.api.auth.UserPasswordAuth
 import org.matrix.android.sdk.internal.util.awaitCallback
 import java.io.OutputStream
 import kotlin.coroutines.Continuation
@@ -139,7 +139,7 @@ class BootstrapSharedViewModel @AssistedInject constructor(
     private fun handleStartMigratingKeyBackup() {
         if (isBackupCreatedFromPassphrase) {
             setState {
-                copy(step = BootstrapStep.GetBackupSecretPassForMigration(isPasswordVisible = false, useKey = false))
+                copy(step = BootstrapStep.GetBackupSecretPassForMigration(useKey = false))
             }
         } else {
             setState {
@@ -151,29 +151,6 @@ class BootstrapSharedViewModel @AssistedInject constructor(
     override fun handle(action: BootstrapActions) = withState { state ->
         when (action) {
             is BootstrapActions.GoBack                           -> queryBack()
-            BootstrapActions.TogglePasswordVisibility            -> {
-                when (state.step) {
-                    is BootstrapStep.SetupPassphrase                 -> {
-                        setState {
-                            copy(step = state.step.copy(isPasswordVisible = !state.step.isPasswordVisible))
-                        }
-                    }
-                    is BootstrapStep.ConfirmPassphrase               -> {
-                        setState {
-                            copy(step = state.step.copy(isPasswordVisible = !state.step.isPasswordVisible))
-                        }
-                    }
-                    is BootstrapStep.AccountReAuth                   -> {
-                        // nop
-                    }
-                    is BootstrapStep.GetBackupSecretPassForMigration -> {
-                        setState {
-                            copy(step = state.step.copy(isPasswordVisible = !state.step.isPasswordVisible))
-                        }
-                    }
-                    else                                             -> Unit
-                }
-            }
             BootstrapActions.StartKeyBackupMigration             -> {
                 handleStartMigratingKeyBackup()
             }
@@ -193,9 +170,7 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                 setState {
                     copy(
                             passphrase = action.passphrase,
-                            step = BootstrapStep.ConfirmPassphrase(
-                                    isPasswordVisible = (state.step as? BootstrapStep.SetupPassphrase)?.isPasswordVisible ?: false
-                            )
+                            step = BootstrapStep.ConfirmPassphrase
                     )
                 }
             }
@@ -255,7 +230,7 @@ class BootstrapSharedViewModel @AssistedInject constructor(
             BootstrapActions.HandleForgotBackupPassphrase        -> {
                 if (state.step is BootstrapStep.GetBackupSecretPassForMigration) {
                     setState {
-                        copy(step = BootstrapStep.GetBackupSecretPassForMigration(state.step.isPasswordVisible, true))
+                        copy(step = BootstrapStep.GetBackupSecretPassForMigration(true))
                     }
                 } else return@withState
             }
@@ -293,7 +268,7 @@ class BootstrapSharedViewModel @AssistedInject constructor(
         if (action.userWantsToEnterPassphrase) {
             setState {
                 copy(
-                        step = BootstrapStep.SetupPassphrase(isPasswordVisible = false)
+                        step = BootstrapStep.SetupPassphrase
                 )
             }
         } else {
@@ -462,9 +437,9 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                         }
                     }
                     is BootstrapResult.Failure                 -> {
-                        if (bootstrapResult is BootstrapResult.GenericError
-                                && bootstrapResult.failure is Failure.OtherServerError
-                                && bootstrapResult.failure.httpCode == 401) {
+                        if (bootstrapResult is BootstrapResult.GenericError &&
+                                bootstrapResult.failure is Failure.OtherServerError &&
+                                bootstrapResult.failure.httpCode == 401) {
                             // Ignore this error
                         } else {
                             _viewEvents.post(BootstrapViewEvents.ModalError(bootstrapResult.error ?: stringProvider.getString(R.string.matrix_error)))
@@ -493,7 +468,6 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                     setState {
                         copy(
                                 step = BootstrapStep.GetBackupSecretPassForMigration(
-                                        isPasswordVisible = state.step.isPasswordVisible,
                                         useKey = false
                                 )
                         )
@@ -524,9 +498,7 @@ class BootstrapSharedViewModel @AssistedInject constructor(
             is BootstrapStep.ConfirmPassphrase               -> {
                 setState {
                     copy(
-                            step = BootstrapStep.SetupPassphrase(
-                                    isPasswordVisible = state.step.isPasswordVisible
-                            )
+                            step = BootstrapStep.SetupPassphrase
                     )
                 }
             }
@@ -580,7 +552,7 @@ class BootstrapSharedViewModel @AssistedInject constructor(
     // Companion, view model assisted creation
     // ======================================
 
-    companion object : MvRxViewModelFactory<BootstrapSharedViewModel, BootstrapViewState> {
+    companion object : MavericksViewModelFactory<BootstrapSharedViewModel, BootstrapViewState> {
 
         override fun create(viewModelContext: ViewModelContext, state: BootstrapViewState): BootstrapSharedViewModel? {
             val fragment: BootstrapBottomSheet = (viewModelContext as FragmentViewModelContext).fragment()

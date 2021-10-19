@@ -9,7 +9,7 @@
     android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_call_screen"
+    android:background="@color/bg_call_screen_blur"
     tools:ignore="MergeRootFrame">
 
     <ImageView
@@ -22,56 +22,102 @@
 
     <org.webrtc.SurfaceViewRenderer
         android:id="@+id/fullscreenRenderer"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/pipContainer"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/callControlsView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/callToolbar">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/pipRendererWrapper"
+            android:layout_width="@dimen/call_pip_width"
+            android:layout_height="@dimen/call_pip_height"
+            android:layout_marginEnd="16dp"
+            app:layout_goneMarginEnd="0dp"
+            app:cardCornerRadius="@dimen/call_pip_radius"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <org.webrtc.SurfaceViewRenderer
+                android:id="@+id/pipRenderer"
+                android:layout_width="@dimen/call_pip_width"
+                android:layout_height="@dimen/call_pip_height"
+                android:visibility="gone"
+                tools:visibility="visible" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/otherKnownCallLayout"
+            android:layout_width="@dimen/call_pip_width"
+            android:layout_height="@dimen/call_pip_height"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:background="@color/element_background_light"
+            android:foreground="?attr/selectableItemBackground"
+            android:visibility="gone"
+            app:cardBackgroundColor="@color/bg_call_screen"
+            app:cardCornerRadius="@dimen/call_pip_radius"
+            app:cardElevation="4dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/pipRendererWrapper"
+            tools:visibility="visible">
+
+            <ImageView
+                android:id="@+id/otherKnownCallAvatarView"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_gravity="center"
+                android:importantForAccessibility="no"
+                android:scaleType="centerCrop"
+                tools:src="@tools:sample/avatars" />
+
+            <ImageView
+                android:id="@+id/otherSmallIsHeldIcon"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:importantForAccessibility="no"
+                android:src="@drawable/ic_call_small_pause" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/callToolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <org.webrtc.SurfaceViewRenderer
-        android:id="@+id/pipRenderer"
-        android:layout_width="wrap_content"
-        android:layout_height="144dp"
-        android:layout_gravity="bottom|end"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
+        android:background="@android:color/transparent"
+        android:fitsSystemWindows="true"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <FrameLayout
-        android:id="@+id/otherKnownCallLayout"
-        android:layout_width="80dp"
-        android:layout_height="144dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="16dp"
-        android:background="@color/riotx_background_light"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="visible">
-
-        <ImageView
-            android:id="@+id/otherKnownCallAvatarView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:foreground="?attr/selectableItemBackground"
-            android:importantForAccessibility="no"
-            android:scaleType="centerCrop"
-            tools:src="@tools:sample/avatars" />
-
-        <ImageView
-            android:id="@+id/otherSmallIsHeldIcon"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_gravity="center"
-            android:importantForAccessibility="no"
-            android:src="@drawable/ic_call_small_pause" />
-
-    </FrameLayout>
+        app:navigationIcon="@drawable/ic_back_24dp"
+        app:navigationIconTint="@color/element_background_light"
+        app:subtitle="3:10"
+        app:subtitleTextAppearance="@style/TextAppearance.Vector.Caption"
+        app:subtitleTextColor="@color/element_background_light"
+        app:title="Video call"
+        app:titleMarginTop="16dp"
+        app:titleTextAppearance="@style/TextAppearance.Vector.Body.Medium"
+        app:titleTextColor="@color/element_background_light" />
 
     <ImageView
         android:id="@+id/otherMemberAvatar"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
         android:contentDescription="@string/avatar"
         android:importantForAccessibility="no"
         android:scaleType="centerCrop"
@@ -79,7 +125,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@tools:sample/avatars" />
+        tools:src="@sample/user_round_avatars" />
 
     <ImageView
         android:id="@+id/smallIsHeldIcon"
@@ -94,93 +140,44 @@
 
     <TextView
         android:id="@+id/participantNameText"
+        style="@style/Widget.Vector.TextView.Title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/layout_horizontal_margin"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="@dimen/layout_horizontal_margin"
         android:gravity="center"
-        android:textColor="@color/white"
-        android:textSize="20sp"
+        android:textColor="@android:color/white"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/otherMemberAvatar"
-        tools:text="@sample/matrix.json/data/displayName" />
-
-    <TextView
-        android:id="@+id/callStatusText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/layout_horizontal_margin"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="@dimen/layout_horizontal_margin"
-        android:layout_marginBottom="8dp"
-        android:gravity="center"
-        android:textColor="@color/white"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/participantNameText"
-        tools:text="@string/call_connecting" />
+        tools:text="@sample/users.json/data/displayName" />
 
     <Button
         android:id="@+id/callActionText"
-        style="@style/VectorButtonStyleText"
+        style="@style/Widget.Vector.Button.Text"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
         android:layout_margin="8dp"
         android:gravity="center"
-        android:textColor="?attr/colorAccent"
-        android:textSize="14sp"
+        android:textColor="?colorSecondary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/callStatusText"
+        app:layout_constraintTop_toBottomOf="@id/participantNameText"
         tools:text="@string/call_resume_action" />
-
-    <ProgressBar
-        android:id="@+id/callConnectingProgress"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_margin="8dp"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/callStatusText"
-        tools:visibility="visible" />
 
     <androidx.constraintlayout.widget.Group
         android:id="@+id/callInfoGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="visible"
-        app:constraint_referenced_ids="participantNameText, otherMemberAvatar,callStatusText" />
-
-    <androidx.constraintlayout.widget.Group
-        android:id="@+id/callVideoGroup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="visible"
-        app:constraint_referenced_ids="pipRenderer, fullscreenRenderer"
-        tools:visibility="invisible" />
+        app:constraint_referenced_ids="participantNameText, otherMemberAvatar" />
 
     <im.vector.app.features.call.CallControlsView
         android:id="@+id/callControlsView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent" />
-
-    <FrameLayout
-        android:id="@+id/hud_fragment_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <FrameLayout
-            android:id="@+id/call_fragment_container"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

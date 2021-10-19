@@ -5,7 +5,7 @@
     android:id="@+id/roomCategoryRootView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?riotx_background"
+    android:background="?android:colorBackground"
     android:clickable="true"
     android:focusable="true"
     android:foreground="?attr/selectableItemBackground"
@@ -18,21 +18,22 @@
 
     <TextView
         android:id="@+id/roomCategoryTitleView"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        tools:drawableEnd="@drawable/ic_expand_more_white"
         android:ellipsize="end"
         android:gravity="center_vertical"
         android:maxLines="1"
-        android:textColor="?riotx_text_secondary"
-        android:textSize="14sp"
+        android:textColor="?vctr_content_secondary"
         android:textStyle="bold"
-        tools:text="@string/room_participants_header_direct_chats"
-        app:drawableTint="?riotx_text_secondary" />
+        app:drawableTint="?vctr_content_secondary"
+        tools:drawableEnd="@drawable/ic_expand_more"
+        tools:text="@string/room_participants_header_direct_chats" />
 
     <im.vector.app.features.home.room.list.UnreadCounterBadgeView
         android:id="@+id/roomCategoryUnreadCounterBadgeView"
+        style="@style/Widget.Vector.TextView.Micro"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -40,8 +41,7 @@
         android:minHeight="16dp"
         android:paddingStart="4dp"
         android:paddingEnd="4dp"
-        android:textColor="@android:color/white"
-        android:textSize="10sp"
+        android:textColor="?colorOnError"
         tools:background="@drawable/bg_unread_highlight"
         tools:text="24" />
 

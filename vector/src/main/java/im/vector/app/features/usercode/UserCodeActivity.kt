@@ -24,7 +24,8 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import com.airbnb.mvrx.MvRx
+import androidx.fragment.app.FragmentManager
+import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
 import com.airbnb.mvrx.withState
 import im.vector.app.R
@@ -60,37 +61,63 @@ class UserCodeActivity : VectorBaseActivity<ActivitySimpleBinding>(),
         injector.inject(this)
     }
 
+    private val fragmentLifecycleCallbacks = object : FragmentManager.FragmentLifecycleCallbacks() {
+        override fun onFragmentResumed(fm: FragmentManager, f: Fragment) {
+            if (f is MatrixToBottomSheet) {
+                f.interactionListener = this@UserCodeActivity
+            }
+            super.onFragmentResumed(fm, f)
+        }
+
+        override fun onFragmentPaused(fm: FragmentManager, f: Fragment) {
+            if (f is MatrixToBottomSheet) {
+                f.interactionListener = null
+            }
+            super.onFragmentPaused(fm, f)
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        supportFragmentManager.registerFragmentLifecycleCallbacks(fragmentLifecycleCallbacks, false)
 
         if (isFirstCreation()) {
             // should be there early for shared element transition
             showFragment(ShowUserCodeFragment::class, Bundle.EMPTY)
         }
 
-        sharedViewModel.selectSubscribe(this, UserCodeState::mode) { mode ->
+        sharedViewModel.onEach(UserCodeState::mode) { mode ->
             when (mode) {
                 UserCodeState.Mode.SHOW      -> showFragment(ShowUserCodeFragment::class, Bundle.EMPTY)
                 UserCodeState.Mode.SCAN      -> showFragment(ScanUserCodeFragment::class, Bundle.EMPTY)
                 is UserCodeState.Mode.RESULT -> {
                     showFragment(ShowUserCodeFragment::class, Bundle.EMPTY)
-                    MatrixToBottomSheet.withLink(mode.rawLink, this).show(supportFragmentManager, "MatrixToBottomSheet")
+                    MatrixToBottomSheet.withLink(mode.rawLink).show(supportFragmentManager, "MatrixToBottomSheet")
                 }
             }
         }
 
         sharedViewModel.observeViewEvents {
             when (it) {
-                UserCodeShareViewEvents.Dismiss                    -> ActivityCompat.finishAfterTransition(this)
-                UserCodeShareViewEvents.ShowWaitingScreen          -> views.simpleActivityWaitingView.isVisible = true
-                UserCodeShareViewEvents.HideWaitingScreen          -> views.simpleActivityWaitingView.isVisible = false
-                is UserCodeShareViewEvents.ToastMessage            -> Toast.makeText(this, it.message, Toast.LENGTH_LONG).show()
-                is UserCodeShareViewEvents.NavigateToRoom          -> navigator.openRoom(this, it.roomId)
-                UserCodeShareViewEvents.CameraPermissionNotGranted -> onPermissionDeniedSnackbar(R.string.permissions_denied_qr_code)
-                else                                               -> {
+                UserCodeShareViewEvents.Dismiss                       -> ActivityCompat.finishAfterTransition(this)
+                UserCodeShareViewEvents.ShowWaitingScreen             -> views.simpleActivityWaitingView.isVisible = true
+                UserCodeShareViewEvents.HideWaitingScreen             -> views.simpleActivityWaitingView.isVisible = false
+                is UserCodeShareViewEvents.ToastMessage               -> Toast.makeText(this, it.message, Toast.LENGTH_LONG).show()
+                is UserCodeShareViewEvents.NavigateToRoom             -> navigator.openRoom(this, it.roomId)
+                is UserCodeShareViewEvents.CameraPermissionNotGranted -> {
+                    if (it.deniedPermanently) {
+                        onPermissionDeniedSnackbar(R.string.permissions_denied_qr_code)
+                    }
+                }
+                else                                                  -> {
                 }
             }
         }
+    }
+
+    override fun onDestroy() {
+        supportFragmentManager.unregisterFragmentLifecycleCallbacks(fragmentLifecycleCallbacks)
+        super.onDestroy()
     }
 
     private fun showFragment(fragmentClass: KClass<out Fragment>, bundle: Bundle) {
@@ -106,9 +133,11 @@ class UserCodeActivity : VectorBaseActivity<ActivitySimpleBinding>(),
         }
     }
 
-    override fun navigateToRoom(roomId: String) {
+    override fun mxToBottomSheetNavigateToRoom(roomId: String) {
         navigator.openRoom(this, roomId)
     }
+
+    override fun mxToBottomSheetSwitchToSpace(spaceId: String) {}
 
     override fun onBackPressed() = withState(sharedViewModel) {
         when (it.mode) {
@@ -124,7 +153,7 @@ class UserCodeActivity : VectorBaseActivity<ActivitySimpleBinding>(),
     companion object {
         fun newIntent(context: Context, userId: String): Intent {
             return Intent(context, UserCodeActivity::class.java).apply {
-                putExtra(MvRx.KEY_ARG, Args(userId))
+                putExtra(Mavericks.KEY_ARG, Args(userId))
             }
         }
     }

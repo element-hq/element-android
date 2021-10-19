@@ -21,6 +21,10 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
 import com.zhuinden.monarchy.Monarchy
 import org.matrix.android.sdk.api.MatrixConfiguration
+import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.SessionLifecycleObserver
+import org.matrix.android.sdk.api.session.accountdata.UserAccountDataEvent
+import org.matrix.android.sdk.api.session.accountdata.UserAccountDataTypes
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerConfig
 import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerService
@@ -29,12 +33,9 @@ import org.matrix.android.sdk.api.session.widgets.model.WidgetType
 import org.matrix.android.sdk.internal.database.model.WellknownIntegrationManagerConfigEntity
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.extensions.observeNotNull
-import org.matrix.android.sdk.internal.session.SessionLifecycleObserver
 import org.matrix.android.sdk.internal.session.SessionScope
-import org.matrix.android.sdk.api.session.accountdata.UserAccountDataTypes
-import org.matrix.android.sdk.api.session.accountdata.UserAccountDataEvent
-import org.matrix.android.sdk.internal.session.user.accountdata.AccountDataDataSource
 import org.matrix.android.sdk.internal.session.user.accountdata.UpdateUserAccountDataTask
+import org.matrix.android.sdk.internal.session.user.accountdata.UserAccountDataDataSource
 import org.matrix.android.sdk.internal.session.widgets.helper.WidgetFactory
 import org.matrix.android.sdk.internal.session.widgets.helper.extractWidgetSequence
 import timber.log.Timber
@@ -42,8 +43,8 @@ import javax.inject.Inject
 
 /**
  * The integration manager allows to
- *  - Get the Integration Manager that a user has explicitly set for its account (via account data)
- *  - Get the recommended/preferred Integration Manager list as defined by the HomeServer (via wellknown)
+ *  - Get the integration manager that a user has explicitly set for its account (via account data)
+ *  - Get the recommended/preferred integration manager list as defined by the homeserver (via wellknown)
  *  - Check if the user has disabled the integration manager feature
  *  - Allow / Disallow Integration manager (propagated to other riot clients)
  *
@@ -56,9 +57,9 @@ import javax.inject.Inject
 internal class IntegrationManager @Inject constructor(matrixConfiguration: MatrixConfiguration,
                                                       @SessionDatabase private val monarchy: Monarchy,
                                                       private val updateUserAccountDataTask: UpdateUserAccountDataTask,
-                                                      private val accountDataDataSource: AccountDataDataSource,
-                                                      private val widgetFactory: WidgetFactory)
-    : SessionLifecycleObserver {
+                                                      private val accountDataDataSource: UserAccountDataDataSource,
+                                                      private val widgetFactory: WidgetFactory) :
+    SessionLifecycleObserver {
 
     private val currentConfigs = ArrayList<IntegrationManagerConfig>()
     private val lifecycleOwner: LifecycleOwner = LifecycleOwner { lifecycleRegistry }
@@ -77,7 +78,7 @@ internal class IntegrationManager @Inject constructor(matrixConfiguration: Matri
         currentConfigs.add(defaultConfig)
     }
 
-    override fun onStart() {
+    override fun onSessionStarted(session: Session) {
         lifecycleRegistry.currentState = Lifecycle.State.STARTED
         observeWellknownConfig()
         accountDataDataSource
@@ -105,7 +106,7 @@ internal class IntegrationManager @Inject constructor(matrixConfiguration: Matri
                 }
     }
 
-    override fun onStop() {
+    override fun onSessionStopped(session: Session) {
         lifecycleRegistry.currentState = Lifecycle.State.DESTROYED
     }
 

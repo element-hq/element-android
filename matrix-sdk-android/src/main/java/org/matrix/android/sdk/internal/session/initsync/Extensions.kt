@@ -16,25 +16,25 @@
 
 package org.matrix.android.sdk.internal.session.initsync
 
-import androidx.annotation.StringRes
+import org.matrix.android.sdk.api.session.initsync.InitSyncStep
 
 internal inline fun <T> reportSubtask(reporter: ProgressReporter?,
-                                      @StringRes nameRes: Int,
+                                      initSyncStep: InitSyncStep,
                                       totalProgress: Int,
                                       parentWeight: Float,
                                       block: () -> T): T {
-    reporter?.startTask(nameRes, totalProgress, parentWeight)
+    reporter?.startTask(initSyncStep, totalProgress, parentWeight)
     return block().also {
         reporter?.endTask()
     }
 }
 
 internal inline fun <K, V, R> Map<out K, V>.mapWithProgress(reporter: ProgressReporter?,
-                                                            @StringRes nameRes: Int,
+                                                            initSyncStep: InitSyncStep,
                                                             parentWeight: Float,
                                                             transform: (Map.Entry<K, V>) -> R): List<R> {
     var current = 0F
-    reporter?.startTask(nameRes, count() + 1, parentWeight)
+    reporter?.startTask(initSyncStep, count() + 1, parentWeight)
     return map {
         reporter?.reportProgress(current)
         current++

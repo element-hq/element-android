@@ -27,6 +27,7 @@ import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
 import im.vector.app.core.utils.checkPermissions
+import im.vector.app.core.utils.onPermissionDeniedDialog
 import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.databinding.FragmentQrCodeScannerBinding
 import im.vector.app.features.userdirectory.PendingSelection
@@ -44,9 +45,11 @@ class CreateDirectRoomByQrCodeFragment @Inject constructor() : VectorBaseFragmen
         return FragmentQrCodeScannerBinding.inflate(inflater, container, false)
     }
 
-    private val openCameraActivityResultLauncher = registerForPermissionsResult { allGranted ->
+    private val openCameraActivityResultLauncher = registerForPermissionsResult { allGranted, deniedPermanently ->
         if (allGranted) {
             startCamera()
+        } else if (deniedPermanently) {
+            activity?.onPermissionDeniedDialog(R.string.denied_permission_camera)
         }
     }
 
@@ -96,7 +99,6 @@ class CreateDirectRoomByQrCodeFragment @Inject constructor() : VectorBaseFragmen
             Toast.makeText(requireContext(), R.string.invalid_qr_code_uri, Toast.LENGTH_SHORT).show()
             requireActivity().finish()
         } else {
-            val existingDm = viewModel.session.getExistingDirectRoomWithUser(mxid)
             // The following assumes MXIDs are case insensitive
             if (mxid.equals(other = viewModel.session.myUserId, ignoreCase = true)) {
                 Toast.makeText(requireContext(), R.string.cannot_dm_self, Toast.LENGTH_SHORT).show()
@@ -106,7 +108,7 @@ class CreateDirectRoomByQrCodeFragment @Inject constructor() : VectorBaseFragmen
                 val qrInvitee = if (viewModel.session.getUser(mxid) != null) viewModel.session.getUser(mxid)!! else User(mxid, null, null)
 
                 viewModel.handle(
-                        CreateDirectRoomAction.CreateRoomAndInviteSelectedUsers(setOf(PendingSelection.UserPendingSelection(qrInvitee)), existingDm)
+                        CreateDirectRoomAction.CreateRoomAndInviteSelectedUsers(setOf(PendingSelection.UserPendingSelection(qrInvitee)))
                 )
             }
         }

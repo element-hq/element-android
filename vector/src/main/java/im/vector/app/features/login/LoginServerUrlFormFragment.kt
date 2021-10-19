@@ -33,7 +33,6 @@ import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.utils.ensureProtocol
 import im.vector.app.core.utils.openUrlInChromeCustomTab
 import im.vector.app.databinding.FragmentLoginServerUrlFormBinding
-
 import org.matrix.android.sdk.api.failure.Failure
 import java.net.UnknownHostException
 import javax.inject.Inject
@@ -86,7 +85,7 @@ class LoginServerUrlFormFragment @Inject constructor() : AbstractLoginFragment<F
                 views.loginServerUrlFormText.text = getString(R.string.login_server_url_form_modular_text)
                 views.loginServerUrlFormLearnMore.isVisible = true
                 views.loginServerUrlFormHomeServerUrlTil.hint = getText(R.string.login_server_url_form_modular_hint)
-                views.loginServerUrlFormNotice.text = getString(R.string.login_server_url_form_common_notice)
+                views.loginServerUrlFormNotice.text = getString(R.string.login_server_url_form_modular_notice)
             }
             else           -> {
                 views.loginServerUrlFormIcon.isVisible = false
@@ -144,8 +143,8 @@ class LoginServerUrlFormFragment @Inject constructor() : AbstractLoginFragment<F
     }
 
     override fun onError(throwable: Throwable) {
-        views.loginServerUrlFormHomeServerUrlTil.error = if (throwable is Failure.NetworkConnection
-                && throwable.ioException is UnknownHostException) {
+        views.loginServerUrlFormHomeServerUrlTil.error = if (throwable is Failure.NetworkConnection &&
+                throwable.ioException is UnknownHostException) {
             // Invalid homeserver?
             getString(R.string.login_error_homeserver_not_found)
         } else {
@@ -159,7 +158,7 @@ class LoginServerUrlFormFragment @Inject constructor() : AbstractLoginFragment<F
         views.loginServerUrlFormClearHistory.isInvisible = state.knownCustomHomeServersUrls.isEmpty()
 
         if (state.loginMode != LoginMode.Unknown) {
-            // The home server url is valid
+            // The homeserver url is valid
             loginViewModel.handle(LoginAction.PostViewEvent(LoginViewEvents.OnLoginFlowRetrieved))
         }
     }

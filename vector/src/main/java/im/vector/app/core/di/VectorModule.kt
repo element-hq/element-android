@@ -23,20 +23,27 @@ import android.content.res.Resources
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
+import im.vector.app.core.dispatchers.CoroutineDispatchers
 import im.vector.app.core.error.DefaultErrorFormatter
 import im.vector.app.core.error.ErrorFormatter
+import im.vector.app.features.invite.AutoAcceptInvites
+import im.vector.app.features.invite.CompileTimeAutoAcceptInvites
 import im.vector.app.features.navigation.DefaultNavigator
 import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.pin.PinCodeStore
 import im.vector.app.features.pin.SharedPrefPinCodeStore
 import im.vector.app.features.ui.SharedPreferencesUiStateRepository
 import im.vector.app.features.ui.UiStateRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.auth.HomeServerHistoryService
 import org.matrix.android.sdk.api.legacy.LegacySessionImporter
 import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
+import javax.inject.Singleton
 
 @Module
 abstract class VectorModule {
@@ -92,6 +99,19 @@ abstract class VectorModule {
         fun providesHomeServerHistoryService(matrix: Matrix): HomeServerHistoryService {
             return matrix.homeServerHistoryService()
         }
+
+        @Provides
+        @JvmStatic
+        @Singleton
+        fun providesApplicationCoroutineScope(): CoroutineScope {
+            return CoroutineScope(SupervisorJob() + Dispatchers.Main)
+        }
+
+        @Provides
+        @JvmStatic
+        fun providesCoroutineDispatchers(): CoroutineDispatchers {
+            return CoroutineDispatchers(io = Dispatchers.IO)
+        }
     }
 
     @Binds
@@ -105,4 +125,7 @@ abstract class VectorModule {
 
     @Binds
     abstract fun bindPinCodeStore(store: SharedPrefPinCodeStore): PinCodeStore
+
+    @Binds
+    abstract fun bindAutoAcceptInvites(autoAcceptInvites: CompileTimeAutoAcceptInvites): AutoAcceptInvites
 }

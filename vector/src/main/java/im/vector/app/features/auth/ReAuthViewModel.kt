@@ -18,7 +18,7 @@ package im.vector.app.features.auth
 
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -39,7 +39,7 @@ class ReAuthViewModel @AssistedInject constructor(
         fun create(initialState: ReAuthState): ReAuthViewModel
     }
 
-    companion object : MvRxViewModelFactory<ReAuthViewModel, ReAuthState> {
+    companion object : MavericksViewModelFactory<ReAuthViewModel, ReAuthState> {
 
         override fun create(viewModelContext: ViewModelContext, state: ReAuthState): ReAuthViewModel? {
             val factory = when (viewModelContext) {
@@ -64,13 +64,6 @@ class ReAuthViewModel @AssistedInject constructor(
             }
             ReAuthActions.FallBackPageClosed -> {
                 // Should we do something here?
-            }
-            ReAuthActions.TogglePassVisibility -> {
-                setState {
-                    copy(
-                            passwordVisible = !state.passwordVisible
-                    )
-                }
             }
             is ReAuthActions.ReAuthWithPass -> {
                 val safeForIntentCypher = ByteArrayOutputStream().also {

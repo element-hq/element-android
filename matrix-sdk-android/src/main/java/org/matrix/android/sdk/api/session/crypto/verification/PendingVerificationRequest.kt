@@ -48,8 +48,8 @@ data class PendingVerificationRequest(
      * SAS is supported if I support it and the other party support it
      */
     fun isSasSupported(): Boolean {
-        return requestInfo?.methods?.contains(VERIFICATION_METHOD_SAS).orFalse()
-                && readyInfo?.methods?.contains(VERIFICATION_METHOD_SAS).orFalse()
+        return requestInfo?.methods?.contains(VERIFICATION_METHOD_SAS).orFalse() &&
+                readyInfo?.methods?.contains(VERIFICATION_METHOD_SAS).orFalse()
     }
 
     /**
@@ -57,11 +57,11 @@ data class PendingVerificationRequest(
      */
     fun otherCanShowQrCode(): Boolean {
         return if (isIncoming) {
-            requestInfo?.methods?.contains(VERIFICATION_METHOD_QR_CODE_SHOW).orFalse()
-                    && readyInfo?.methods?.contains(VERIFICATION_METHOD_QR_CODE_SCAN).orFalse()
+            requestInfo?.methods?.contains(VERIFICATION_METHOD_QR_CODE_SHOW).orFalse() &&
+                    readyInfo?.methods?.contains(VERIFICATION_METHOD_QR_CODE_SCAN).orFalse()
         } else {
-            requestInfo?.methods?.contains(VERIFICATION_METHOD_QR_CODE_SCAN).orFalse()
-                    && readyInfo?.methods?.contains(VERIFICATION_METHOD_QR_CODE_SHOW).orFalse()
+            requestInfo?.methods?.contains(VERIFICATION_METHOD_QR_CODE_SCAN).orFalse() &&
+                    readyInfo?.methods?.contains(VERIFICATION_METHOD_QR_CODE_SHOW).orFalse()
         }
     }
 
@@ -70,11 +70,11 @@ data class PendingVerificationRequest(
      */
     fun otherCanScanQrCode(): Boolean {
         return if (isIncoming) {
-            requestInfo?.methods?.contains(VERIFICATION_METHOD_QR_CODE_SCAN).orFalse()
-                    && readyInfo?.methods?.contains(VERIFICATION_METHOD_QR_CODE_SHOW).orFalse()
+            requestInfo?.methods?.contains(VERIFICATION_METHOD_QR_CODE_SCAN).orFalse() &&
+                    readyInfo?.methods?.contains(VERIFICATION_METHOD_QR_CODE_SHOW).orFalse()
         } else {
-            requestInfo?.methods?.contains(VERIFICATION_METHOD_QR_CODE_SHOW).orFalse()
-                    && readyInfo?.methods?.contains(VERIFICATION_METHOD_QR_CODE_SCAN).orFalse()
+            requestInfo?.methods?.contains(VERIFICATION_METHOD_QR_CODE_SHOW).orFalse() &&
+                    readyInfo?.methods?.contains(VERIFICATION_METHOD_QR_CODE_SCAN).orFalse()
         }
     }
 }

@@ -20,7 +20,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
-import com.airbnb.mvrx.MvRx
+import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
 import com.google.android.material.tabs.TabLayoutMediator
 import im.vector.app.R
@@ -59,7 +59,6 @@ class CallTransferActivity : VectorBaseActivity<ActivityCallTransferBinding>(),
     override fun getCoordinatorLayout() = views.vectorCoordinatorLayout
 
     override fun injectWith(injector: ScreenComponent) {
-        super.injectWith(injector)
         injector.inject(this)
     }
 
@@ -80,24 +79,20 @@ class CallTransferActivity : VectorBaseActivity<ActivityCallTransferBinding>(),
         waitingView = views.waitingView.waitingView
 
         callTransferViewModel.observeViewEvents {
-            when (it)  {
+            when (it) {
                 is CallTransferViewEvents.Dismiss        -> finish()
                 CallTransferViewEvents.Loading           -> showWaitingView()
                 is CallTransferViewEvents.FailToTransfer -> showSnackbar(getString(R.string.call_transfer_failure))
             }
         }
 
-        sectionsPagerAdapter = CallTransferPagerAdapter(this).register()
+        sectionsPagerAdapter = CallTransferPagerAdapter(this)
         views.callTransferViewPager.adapter = sectionsPagerAdapter
-        sectionsPagerAdapter.onDialPadOkClicked = { phoneNumber ->
-            val action = CallTransferAction.ConnectWithPhoneNumber(views.callTransferConsultCheckBox.isChecked, phoneNumber)
-            callTransferViewModel.handle(action)
-        }
 
         TabLayoutMediator(views.callTransferTabLayout, views.callTransferViewPager) { tab, position ->
             when (position) {
-                0 -> tab.text = getString(R.string.call_transfer_users_tab_title)
-                1 -> tab.text = getString(R.string.call_dial_pad_title)
+                CallTransferPagerAdapter.USER_LIST_INDEX -> tab.text = getString(R.string.call_transfer_users_tab_title)
+                CallTransferPagerAdapter.DIAL_PAD_INDEX  -> tab.text = getString(R.string.call_dial_pad_title)
             }
         }.attach()
         configureToolbar(views.callTransferToolbar)
@@ -107,10 +102,17 @@ class CallTransferActivity : VectorBaseActivity<ActivityCallTransferBinding>(),
 
     private fun setupConnectAction() {
         views.callTransferConnectAction.debouncedClicks {
-            val selectedUser = sectionsPagerAdapter.userListFragment?.getCurrentState()?.getSelectedMatrixId()?.firstOrNull()
-            if (selectedUser != null) {
-                val action = CallTransferAction.ConnectWithUserId(views.callTransferConsultCheckBox.isChecked, selectedUser)
-                callTransferViewModel.handle(action)
+            when (views.callTransferTabLayout.selectedTabPosition) {
+                CallTransferPagerAdapter.USER_LIST_INDEX -> {
+                    val selectedUser = sectionsPagerAdapter.userListFragment?.getCurrentState()?.getSelectedMatrixId()?.firstOrNull() ?: return@debouncedClicks
+                    val action = CallTransferAction.ConnectWithUserId(views.callTransferConsultCheckBox.isChecked, selectedUser)
+                    callTransferViewModel.handle(action)
+                }
+                CallTransferPagerAdapter.DIAL_PAD_INDEX  -> {
+                    val phoneNumber = sectionsPagerAdapter.dialPadFragment?.getRawInput() ?: return@debouncedClicks
+                    val action = CallTransferAction.ConnectWithPhoneNumber(views.callTransferConsultCheckBox.isChecked, phoneNumber)
+                    callTransferViewModel.handle(action)
+                }
             }
         }
     }
@@ -119,7 +121,7 @@ class CallTransferActivity : VectorBaseActivity<ActivityCallTransferBinding>(),
 
         fun newIntent(context: Context, callId: String): Intent {
             return Intent(context, CallTransferActivity::class.java).also {
-                it.putExtra(MvRx.KEY_ARG, CallTransferArgs(callId))
+                it.putExtra(Mavericks.KEY_ARG, CallTransferArgs(callId))
             }
         }
     }

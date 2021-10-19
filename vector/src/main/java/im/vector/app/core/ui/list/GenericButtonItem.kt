@@ -15,15 +15,16 @@
  */
 package im.vector.app.core.ui.list
 
-import android.view.View
 import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.google.android.material.button.MaterialButton
 import im.vector.app.R
+import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
+import im.vector.app.core.epoxy.onClick
 import im.vector.app.features.themes.ThemeUtils
 
 /**
@@ -35,8 +36,8 @@ abstract class GenericButtonItem : VectorEpoxyModel<GenericButtonItem.Holder>() 
     @EpoxyAttribute
     var text: String? = null
 
-    @EpoxyAttribute
-    var buttonClickAction: View.OnClickListener? = null
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
+    var buttonClickAction: ClickListener? = null
 
     @EpoxyAttribute
     @ColorInt
@@ -49,7 +50,7 @@ abstract class GenericButtonItem : VectorEpoxyModel<GenericButtonItem.Holder>() 
     override fun bind(holder: Holder) {
         super.bind(holder)
         holder.button.text = text
-        val textColor = textColor ?: ThemeUtils.getColor(holder.view.context, R.attr.riotx_text_primary)
+        val textColor = textColor ?: ThemeUtils.getColor(holder.view.context, R.attr.vctr_content_primary)
         holder.button.setTextColor(textColor)
         if (iconRes != null) {
             holder.button.setIconResource(iconRes!!)
@@ -57,7 +58,7 @@ abstract class GenericButtonItem : VectorEpoxyModel<GenericButtonItem.Holder>() 
             holder.button.icon = null
         }
 
-        buttonClickAction?.let { holder.button.setOnClickListener(it) }
+        holder.button.onClick(buttonClickAction)
     }
 
     class Holder : VectorEpoxyHolder() {

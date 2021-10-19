@@ -10,7 +10,6 @@
     android:paddingEnd="?dialogPreferredPadding">
 
     <com.google.android.material.textfield.TextInputLayout
-        style="@style/VectorTextInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/report_content_custom_hint"

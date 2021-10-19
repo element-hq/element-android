@@ -18,9 +18,8 @@ package org.matrix.android.sdk
 
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
-import org.matrix.android.sdk.test.shared.createTimberTestRule
 import org.junit.Rule
-import java.io.File
+import org.matrix.android.sdk.test.shared.createTimberTestRule
 
 interface InstrumentedTest {
 
@@ -29,9 +28,5 @@ interface InstrumentedTest {
 
     fun context(): Context {
         return ApplicationProvider.getApplicationContext()
-    }
-
-    fun cacheDir(): File {
-        return context().cacheDir
     }
 }

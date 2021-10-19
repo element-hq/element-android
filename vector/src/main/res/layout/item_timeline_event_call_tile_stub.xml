@@ -11,50 +11,38 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_gravity="center_horizontal"
-        android:contentDescription="@string/avatar"
-        tools:src="@tools:sample/avatars" />
+        android:importantForAccessibility="no"
+        tools:src="@sample/user_round_avatars" />
 
     <TextView
         android:id="@+id/itemCallCreatorNameTextView"
+        style="@style/Widget.Vector.TextView.Subtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="8dp"
         android:drawablePadding="6dp"
         android:gravity="center"
-        android:textColor="?riotx_text_primary"
-        android:textSize="15sp"
+        android:textColor="?vctr_content_primary"
         android:textStyle="bold"
-        tools:text="@sample/matrix.json/data/displayName" />
-
-
-    <TextView
-        android:id="@+id/itemCallKindTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="12dp"
-        android:drawablePadding="4dp"
-        android:gravity="center"
-        android:textColor="?riotx_text_primary"
-        android:textSize="12sp"
-        tools:text="@string/action_video_call" />
+        tools:text="@sample/users.json/data/displayName" />
 
     <TextView
         android:id="@+id/itemCallStatusTextView"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_marginTop="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="12dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="12dp"
-        android:textColor="?attr/vctr_notice_secondary"
-        android:textSize="13sp"
-        tools:text="@string/video_call_in_progress" />
+        android:layout_marginBottom="16dp"
+        android:gravity="center"
+        android:textColor="?vctr_content_secondary"
+        android:maxLines="3"
+        android:drawablePadding="8dp"
+        tools:drawableLeft="@drawable/ic_missed_video_call"
+        tools:text="@string/call_tile_video_incoming" />
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -64,7 +52,7 @@
 
         <Button
             android:id="@+id/itemCallAcceptView"
-            style="@style/VectorButtonStylePositive"
+            style="@style/Widget.Vector.Button.Positive"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
@@ -72,20 +60,21 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toEndOf="@+id/itemCallRejectView"
-            app:layout_constraintTop_toTopOf="@id/itemCallRejectView" />
+            app:layout_constraintTop_toTopOf="@id/itemCallRejectView"
+            tools:text="@string/join" />
 
         <Button
             android:id="@+id/itemCallRejectView"
-            style="@style/VectorButtonStyleDestructive"
+            style="@style/Widget.Vector.Button.Destructive"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:layout_marginEnd="4dp"
             android:minWidth="120dp"
             app:layout_constraintEnd_toStartOf="@+id/itemCallAcceptView"
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="@string/ignore" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

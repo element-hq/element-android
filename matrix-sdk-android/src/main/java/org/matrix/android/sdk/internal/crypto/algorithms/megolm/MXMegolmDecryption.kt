@@ -16,6 +16,9 @@
 
 package org.matrix.android.sdk.internal.crypto.algorithms.megolm
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -39,9 +42,6 @@ import org.matrix.android.sdk.internal.crypto.model.rest.ForwardedRoomKeyContent
 import org.matrix.android.sdk.internal.crypto.model.rest.RoomKeyRequestBody
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.crypto.tasks.SendToDeviceTask
-import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 import timber.log.Timber
 
 internal class MXMegolmDecryption(private val userId: String,
@@ -74,7 +74,7 @@ internal class MXMegolmDecryption(private val userId: String,
 
     @Throws(MXCryptoError::class)
     private fun decryptEvent(event: Event, timeline: String, requestKeysOnFail: Boolean): MXEventDecryptionResult {
-        Timber.v("## CRYPTO | decryptEvent ${event.eventId} , requestKeysOnFail:$requestKeysOnFail")
+        Timber.v("## CRYPTO | decryptEvent ${event.eventId}, requestKeysOnFail:$requestKeysOnFail")
         if (event.roomId.isNullOrBlank()) {
             throw MXCryptoError.Base(MXCryptoError.ErrorType.MISSING_FIELDS, MXCryptoError.MISSING_FIELDS_REASON)
         }
@@ -82,9 +82,9 @@ internal class MXMegolmDecryption(private val userId: String,
         val encryptedEventContent = event.content.toModel<EncryptedEventContent>()
                 ?: throw MXCryptoError.Base(MXCryptoError.ErrorType.MISSING_FIELDS, MXCryptoError.MISSING_FIELDS_REASON)
 
-        if (encryptedEventContent.senderKey.isNullOrBlank()
-                || encryptedEventContent.sessionId.isNullOrBlank()
-                || encryptedEventContent.ciphertext.isNullOrBlank()) {
+        if (encryptedEventContent.senderKey.isNullOrBlank() ||
+                encryptedEventContent.sessionId.isNullOrBlank() ||
+                encryptedEventContent.ciphertext.isNullOrBlank()) {
             throw MXCryptoError.Base(MXCryptoError.ErrorType.MISSING_FIELDS, MXCryptoError.MISSING_FIELDS_REASON)
         }
 
@@ -155,7 +155,7 @@ internal class MXMegolmDecryption(private val userId: String,
                                                 withHeldInfo.code?.value ?: "",
                                                 withHeldInfo.reason)
                                     } else {
-                                        // This is un-used in riotX SDK, not sure if needed
+                                        // This is un-used in Matrix Android SDK2, not sure if needed
                                         // addEventToPendingList(event, timeline)
                                         if (requestKeysOnFail) {
                                             requestKeysForEvent(event, false)
@@ -360,7 +360,7 @@ internal class MXMegolmDecryption(private val userId: String,
                                             },
                                             {
                                                 // TODO
-                                                Timber.e(it, "## CRYPTO | shareKeysWithDevice: failed to get session for request $body")
+                                                Timber.e(it, "## CRYPTO | shareKeysWithDevice: failed to get session for request $body")
                                             }
 
                                     )

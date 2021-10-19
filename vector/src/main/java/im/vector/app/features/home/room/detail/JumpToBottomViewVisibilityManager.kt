@@ -66,7 +66,7 @@ class JumpToBottomViewVisibilityManager(
     }
 
     private fun maybeShowJumpToBottomViewVisibility() {
-        if (layoutManager.findFirstVisibleItemPosition() != 0) {
+        if (layoutManager.findFirstVisibleItemPosition() > 1) {
             jumpToBottomView.show()
         } else {
             jumpToBottomView.hide()

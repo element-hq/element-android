@@ -23,24 +23,13 @@ import com.squareup.moshi.JsonClass
  * Represents the membership of a user on a room
  */
 @JsonClass(generateAdapter = false)
-enum class Membership(val value: String) {
-
-    NONE("none"),
-
-    @Json(name = "invite")
-    INVITE("invite"),
-
-    @Json(name = "join")
-    JOIN("join"),
-
-    @Json(name = "knock")
-    KNOCK("knock"),
-
-    @Json(name = "leave")
-    LEAVE("leave"),
-
-    @Json(name = "ban")
-    BAN("ban");
+enum class Membership {
+    NONE,
+    @Json(name = "invite") INVITE,
+    @Json(name = "join") JOIN,
+    @Json(name = "knock") KNOCK,
+    @Json(name = "leave") LEAVE,
+    @Json(name = "ban") BAN;
 
     fun isLeft(): Boolean {
         return this == KNOCK || this == LEAVE || this == BAN

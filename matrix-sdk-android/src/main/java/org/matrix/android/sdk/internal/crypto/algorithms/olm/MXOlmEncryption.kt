@@ -32,8 +32,8 @@ internal class MXOlmEncryption(
         private val cryptoStore: IMXCryptoStore,
         private val messageEncrypter: MessageEncrypter,
         private val deviceListManager: DeviceListManager,
-        private val ensureOlmSessionsForUsersAction: EnsureOlmSessionsForUsersAction)
-    : IMXEncrypting {
+        private val ensureOlmSessionsForUsersAction: EnsureOlmSessionsForUsersAction) :
+    IMXEncrypting {
 
     override suspend fun encryptEventContent(eventContent: Content, eventType: String, userIds: List<String>): Content {
         // pick the list of recipients based on the membership list.
@@ -75,14 +75,5 @@ internal class MXOlmEncryption(
     private suspend fun ensureSession(users: List<String>) {
         deviceListManager.downloadKeys(users, false)
         ensureOlmSessionsForUsersAction.handle(users)
-    }
-
-    override fun discardSessionKey() {
-        // No need for olm
-    }
-
-    override suspend fun reshareKey(sessionId: String, userId: String, deviceId: String, senderKey: String): Boolean {
-        // No need for olm
-        return false
     }
 }

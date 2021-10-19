@@ -21,8 +21,10 @@ import androidx.annotation.ColorInt
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
+import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.features.themes.ThemeUtils
 
@@ -36,13 +38,13 @@ import im.vector.app.features.themes.ThemeUtils
 abstract class GenericFooterItem : VectorEpoxyModel<GenericFooterItem.Holder>() {
 
     @EpoxyAttribute
-    var text: String? = null
+    var text: CharSequence? = null
 
     @EpoxyAttribute
-    var style: GenericItem.STYLE = GenericItem.STYLE.NORMAL_TEXT
+    var style: ItemStyle = ItemStyle.NORMAL_TEXT
 
-    @EpoxyAttribute
-    var itemClickAction: GenericItem.Action? = null
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
+    var itemClickAction: ClickListener? = null
 
     @EpoxyAttribute
     var centered: Boolean = true
@@ -53,22 +55,19 @@ abstract class GenericFooterItem : VectorEpoxyModel<GenericFooterItem.Holder>() 
 
     override fun bind(holder: Holder) {
         super.bind(holder)
+
         holder.text.setTextOrHide(text)
-        when (style) {
-            GenericItem.STYLE.BIG_TEXT    -> holder.text.textSize = 18f
-            GenericItem.STYLE.NORMAL_TEXT -> holder.text.textSize = 14f
-        }
+        holder.text.typeface = style.toTypeFace()
+        holder.text.textSize = style.toTextSize()
         holder.text.gravity = if (centered) Gravity.CENTER_HORIZONTAL else Gravity.START
 
         if (textColor != null) {
             holder.text.setTextColor(textColor!!)
         } else {
-            holder.text.setTextColor(ThemeUtils.getColor(holder.view.context, R.attr.riotx_text_secondary))
+            holder.text.setTextColor(ThemeUtils.getColor(holder.view.context, R.attr.vctr_content_secondary))
         }
 
-        holder.view.setOnClickListener {
-            itemClickAction?.perform?.run()
-        }
+        holder.view.onClick(itemClickAction)
     }
 
     class Holder : VectorEpoxyHolder() {

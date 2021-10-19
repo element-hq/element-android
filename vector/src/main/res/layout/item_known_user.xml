@@ -6,7 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?riotx_background"
+    android:background="?android:colorBackground"
     android:foreground="?attr/selectableItemBackground"
     android:gravity="center_vertical"
     android:orientation="horizontal"
@@ -24,8 +24,8 @@
             android:id="@+id/knownUserAvatar"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:contentDescription="@string/avatar"
-            tools:src="@tools:sample/avatars" />
+            android:importantForAccessibility="no"
+            tools:src="@sample/user_round_avatars" />
 
         <ImageView
             android:id="@+id/knownUserAvatarChecked"
@@ -40,35 +40,35 @@
 
     <TextView
         android:id="@+id/knownUserName"
+        style="@style/Widget.Vector.TextView.Subtitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_marginStart="12dp"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textColor="?riotx_text_primary"
-        android:textSize="15sp"
+        android:textColor="?vctr_content_primary"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/knownUserID"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/knownUserAvatarContainer"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="@tools:sample/full_names" />
+        tools:text="@sample/users.json/data/displayName" />
 
     <TextView
         android:id="@+id/knownUserID"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textColor="?riotx_text_secondary"
-        android:textSize="15sp"
+        android:textColor="?vctr_content_secondary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="@+id/knownUserName"
         app:layout_constraintTop_toBottomOf="@+id/knownUserName"
-        tools:text="Blabla" />
+        tools:text="@sample/users.json/data/id" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

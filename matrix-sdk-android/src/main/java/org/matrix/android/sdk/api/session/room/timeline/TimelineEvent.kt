@@ -21,6 +21,7 @@ import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.RelationType
 import org.matrix.android.sdk.api.session.events.model.getRelationContent
+import org.matrix.android.sdk.api.session.events.model.isEdition
 import org.matrix.android.sdk.api.session.events.model.isReply
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.EventAnnotationsSummary
@@ -38,6 +39,9 @@ import org.matrix.android.sdk.api.util.ContentUtils.extractUsefulTextFromReply
  */
 data class TimelineEvent(
         val root: Event,
+        /**
+         * Uniquely identify an event, computed locally by the sdk
+         */
         val localId: Long,
         val eventId: String,
         val displayIndex: Int,
@@ -123,8 +127,7 @@ fun TimelineEvent.getLastMessageContent(): MessageContent? {
     return if (root.getClearType() == EventType.STICKER) {
         root.getClearContent().toModel<MessageStickerContent>()
     } else {
-        annotations?.editSummary?.aggregatedContent?.toModel()
-                ?: root.getClearContent().toModel()
+        (annotations?.editSummary?.latestContent ?: root.getClearContent()).toModel()
     }
 }
 
@@ -147,6 +150,10 @@ fun TimelineEvent.getLastMessageBody(): String? {
  */
 fun TimelineEvent.isReply(): Boolean {
     return root.isReply()
+}
+
+fun TimelineEvent.isEdition(): Boolean {
+    return root.isEdition()
 }
 
 fun TimelineEvent.getTextEditableContent(): String? {

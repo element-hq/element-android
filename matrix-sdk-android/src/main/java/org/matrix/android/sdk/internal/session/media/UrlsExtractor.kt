@@ -33,9 +33,9 @@ internal class UrlsExtractor @Inject constructor() {
         return event.takeIf { it.root.getClearType() == EventType.MESSAGE }
                 ?.getLastMessageContent()
                 ?.takeIf {
-                    it.msgType == MessageType.MSGTYPE_TEXT
-                            || it.msgType == MessageType.MSGTYPE_NOTICE
-                            || it.msgType == MessageType.MSGTYPE_EMOTE
+                    it.msgType == MessageType.MSGTYPE_TEXT ||
+                            it.msgType == MessageType.MSGTYPE_NOTICE ||
+                            it.msgType == MessageType.MSGTYPE_EMOTE
                 }
                 ?.let { messageContent ->
                     if (event.isReply()) {

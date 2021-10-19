@@ -16,11 +16,10 @@
 
 package im.vector.app.features.signout.soft
 
-import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
@@ -33,7 +32,6 @@ import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.login.LoginMode
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.auth.AuthenticationService
-import org.matrix.android.sdk.api.auth.data.LoginFlowResult
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import org.matrix.android.sdk.api.session.Session
 import timber.log.Timber
@@ -53,7 +51,7 @@ class SoftLogoutViewModel @AssistedInject constructor(
         fun create(initialState: SoftLogoutViewState): SoftLogoutViewModel
     }
 
-    companion object : MvRxViewModelFactory<SoftLogoutViewModel, SoftLogoutViewState> {
+    companion object : MavericksViewModelFactory<SoftLogoutViewModel, SoftLogoutViewState> {
 
         override fun initialState(viewModelContext: ViewModelContext): SoftLogoutViewState? {
             val activity: SoftLogoutActivity = (viewModelContext as ActivityViewModelContext).activity()
@@ -100,21 +98,21 @@ class SoftLogoutViewModel @AssistedInject constructor(
                 null
             }
 
-            if (data is LoginFlowResult.Success) {
-                val loginMode = when {
-                    // SSO login is taken first
-                    data.supportedLoginTypes.contains(LoginFlowTypes.SSO)
-                            && data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD) -> LoginMode.SsoAndPassword(data.ssoIdentityProviders)
-                    data.supportedLoginTypes.contains(LoginFlowTypes.SSO)                 -> LoginMode.Sso(data.ssoIdentityProviders)
-                    data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD)            -> LoginMode.Password
-                    else                                                                  -> LoginMode.Unsupported
-                }
+            data ?: return@launch
 
-                setState {
-                    copy(
-                            asyncHomeServerLoginFlowRequest = Success(loginMode)
-                    )
-                }
+            val loginMode = when {
+                // SSO login is taken first
+                data.supportedLoginTypes.contains(LoginFlowTypes.SSO) &&
+                        data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD) -> LoginMode.SsoAndPassword(data.ssoIdentityProviders)
+                data.supportedLoginTypes.contains(LoginFlowTypes.SSO)              -> LoginMode.Sso(data.ssoIdentityProviders)
+                data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD)         -> LoginMode.Password
+                else                                                               -> LoginMode.Unsupported
+            }
+
+            setState {
+                copy(
+                        asyncHomeServerLoginFlowRequest = Success(loginMode)
+                )
             }
         }
     }
@@ -123,7 +121,6 @@ class SoftLogoutViewModel @AssistedInject constructor(
         when (action) {
             is SoftLogoutAction.RetryLoginFlow  -> getSupportedLoginFlow()
             is SoftLogoutAction.PasswordChanged -> handlePasswordChange(action)
-            is SoftLogoutAction.TogglePassword  -> handleTogglePassword()
             is SoftLogoutAction.SignInAgain     -> handleSignInAgain(action)
             is SoftLogoutAction.WebLoginSuccess -> handleWebLoginSuccess(action)
             is SoftLogoutAction.ClearData       -> handleClearData()
@@ -139,18 +136,8 @@ class SoftLogoutViewModel @AssistedInject constructor(
         setState {
             copy(
                     asyncLoginAction = Uninitialized,
-                    submitEnabled = action.password.isNotBlank()
+                    enteredPassword = action.password
             )
-        }
-    }
-
-    private fun handleTogglePassword() {
-        withState {
-            setState {
-                copy(
-                        passwordShown = !this.passwordShown
-                )
-            }
         }
     }
 
@@ -189,9 +176,7 @@ class SoftLogoutViewModel @AssistedInject constructor(
     private fun handleSignInAgain(action: SoftLogoutAction.SignInAgain) {
         setState {
             copy(
-                    asyncLoginAction = Loading(),
-                    // Ensure password is hidden
-                    passwordShown = false
+                    asyncLoginAction = Loading()
             )
         }
         viewModelScope.launch {

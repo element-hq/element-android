@@ -16,11 +16,17 @@
 
 package org.matrix.android.sdk.internal.session
 
-import org.matrix.android.sdk.api.failure.GlobalError
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.internal.SessionManager
+import org.matrix.android.sdk.internal.di.SessionId
+import timber.log.Timber
 import javax.inject.Inject
 
-internal class SessionListeners @Inject constructor() {
+@SessionScope
+internal class SessionListeners @Inject constructor(
+        @SessionId private val sessionId: String,
+        private val sessionManager: SessionManager) {
 
     private val listeners = mutableSetOf<Session.Listener>()
 
@@ -36,11 +42,18 @@ internal class SessionListeners @Inject constructor() {
         }
     }
 
-    fun dispatchGlobalError(globalError: GlobalError) {
+    fun dispatch(block: (Session, Session.Listener) -> Unit) {
         synchronized(listeners) {
+            val session = getSession() ?: return Unit.also {
+                Timber.w("You don't have any attached session")
+            }
             listeners.forEach {
-                it.onGlobalError(globalError)
+                tryOrNull { block(session, it) }
             }
         }
+    }
+
+    private fun getSession(): Session? {
+        return sessionManager.getSessionComponent(sessionId)?.session()
     }
 }

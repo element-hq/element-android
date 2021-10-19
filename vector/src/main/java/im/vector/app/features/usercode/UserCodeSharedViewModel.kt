@@ -19,11 +19,11 @@ package im.vector.app.features.usercode
 import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import im.vector.app.R
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
@@ -37,7 +37,6 @@ import org.matrix.android.sdk.api.session.permalinks.PermalinkData
 import org.matrix.android.sdk.api.session.permalinks.PermalinkParser
 import org.matrix.android.sdk.api.session.user.model.User
 import org.matrix.android.sdk.api.util.toMatrixItem
-import org.matrix.android.sdk.internal.util.awaitCallback
 
 class UserCodeSharedViewModel @AssistedInject constructor(
         @Assisted val initialState: UserCodeState,
@@ -46,7 +45,7 @@ class UserCodeSharedViewModel @AssistedInject constructor(
         private val directRoomHelper: DirectRoomHelper,
         private val rawService: RawService) : VectorViewModel<UserCodeState, UserCodeActions, UserCodeShareViewEvents>(initialState) {
 
-    companion object : MvRxViewModelFactory<UserCodeSharedViewModel, UserCodeState> {
+    companion object : MavericksViewModelFactory<UserCodeSharedViewModel, UserCodeState> {
         override fun create(viewModelContext: ViewModelContext, state: UserCodeState): UserCodeSharedViewModel? {
             val factory = when (viewModelContext) {
                 is FragmentViewModelContext -> viewModelContext.fragment as? Factory
@@ -77,7 +76,7 @@ class UserCodeSharedViewModel @AssistedInject constructor(
             is UserCodeActions.SwitchMode -> setState { copy(mode = action.mode) }
             is UserCodeActions.DecodedQRCode -> handleQrCodeDecoded(action)
             is UserCodeActions.StartChattingWithUser -> handleStartChatting(action)
-            UserCodeActions.CameraPermissionNotGranted -> _viewEvents.post(UserCodeShareViewEvents.CameraPermissionNotGranted)
+            is UserCodeActions.CameraPermissionNotGranted -> _viewEvents.post(UserCodeShareViewEvents.CameraPermissionNotGranted(action.deniedPermanently))
             UserCodeActions.ShareByText -> handleShareByText()
         }
     }
@@ -126,11 +125,7 @@ class UserCodeSharedViewModel @AssistedInject constructor(
                     _viewEvents.post(UserCodeShareViewEvents.ToastMessage(stringProvider.getString(R.string.not_implemented)))
                 }
                 is PermalinkData.UserLink -> {
-                    val user = tryOrNull {
-                        awaitCallback<User> {
-                            session.resolveUser(linkedId.userId, it)
-                        }
-                    }
+                    val user = tryOrNull { session.resolveUser(linkedId.userId) }
                     // Create raw Uxid in case the user is not searchable
                             ?: User(linkedId.userId, null, null)
 

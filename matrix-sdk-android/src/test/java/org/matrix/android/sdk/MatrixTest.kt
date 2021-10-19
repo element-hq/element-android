@@ -16,8 +16,8 @@
 
 package org.matrix.android.sdk
 
-import org.matrix.android.sdk.test.shared.createTimberTestRule
 import org.junit.Rule
+import org.matrix.android.sdk.test.shared.createTimberTestRule
 
 interface MatrixTest {
 

@@ -18,6 +18,9 @@ package org.matrix.android.sdk.internal.crypto.store.db
 
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
+import io.realm.DynamicRealm
+import io.realm.RealmMigration
+import io.realm.RealmObjectSchema
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.internal.crypto.model.MXDeviceInfo
@@ -35,29 +38,24 @@ import org.matrix.android.sdk.internal.crypto.store.db.model.KeysBackupDataEntit
 import org.matrix.android.sdk.internal.crypto.store.db.model.MyDeviceLastSeenInfoEntityFields
 import org.matrix.android.sdk.internal.crypto.store.db.model.OlmInboundGroupSessionEntityFields
 import org.matrix.android.sdk.internal.crypto.store.db.model.OlmSessionEntityFields
+import org.matrix.android.sdk.internal.crypto.store.db.model.OutboundGroupSessionInfoEntityFields
 import org.matrix.android.sdk.internal.crypto.store.db.model.OutgoingGossipingRequestEntityFields
 import org.matrix.android.sdk.internal.crypto.store.db.model.SharedSessionEntityFields
 import org.matrix.android.sdk.internal.crypto.store.db.model.TrustLevelEntityFields
 import org.matrix.android.sdk.internal.crypto.store.db.model.UserEntityFields
 import org.matrix.android.sdk.internal.crypto.store.db.model.WithHeldSessionEntityFields
+import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.di.SerializeNulls
-import io.realm.DynamicRealm
-import io.realm.RealmMigration
-import io.realm.RealmObjectSchema
-import org.matrix.android.sdk.internal.crypto.store.db.model.OutboundGroupSessionInfoEntityFields
 import org.matrix.androidsdk.crypto.data.MXOlmInboundGroupSession2
 import timber.log.Timber
-import javax.inject.Inject
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo as LegacyMXDeviceInfo
 
-internal class RealmCryptoStoreMigration @Inject constructor(private val crossSigningKeysMapper: CrossSigningKeysMapper) : RealmMigration {
+internal object RealmCryptoStoreMigration : RealmMigration {
 
-    companion object {
-        // 0, 1, 2: legacy Riot-Android
-        // 3: migrate to RiotX schema
-        // 4, 5, 6, 7, 8, 9: migrations from RiotX (which was previously 1, 2, 3, 4, 5, 6)
-        const val CRYPTO_STORE_SCHEMA_VERSION = 12L
-    }
+    // 0, 1, 2: legacy Riot-Android
+    // 3: migrate to RiotX schema
+    // 4, 5, 6, 7, 8, 9: migrations from RiotX (which was previously 1, 2, 3, 4, 5, 6)
+    const val CRYPTO_STORE_SCHEMA_VERSION = 14L
 
     private fun RealmObjectSchema.addFieldIfNotExists(fieldName: String, fieldType: Class<*>): RealmObjectSchema {
         if (!hasField(fieldName)) {
@@ -95,6 +93,8 @@ internal class RealmCryptoStoreMigration @Inject constructor(private val crossSi
         if (oldVersion <= 9) migrateTo10(realm)
         if (oldVersion <= 10) migrateTo11(realm)
         if (oldVersion <= 11) migrateTo12(realm)
+        if (oldVersion <= 12) migrateTo13(realm)
+        if (oldVersion <= 13) migrateTo14(realm)
     }
 
     private fun migrateTo1Legacy(realm: DynamicRealm) {
@@ -384,6 +384,8 @@ internal class RealmCryptoStoreMigration @Inject constructor(private val crossSi
     private fun migrateTo7(realm: DynamicRealm) {
         Timber.d("Step 6 -> 7")
         Timber.d("Updating KeyInfoEntity table")
+        val crossSigningKeysMapper = CrossSigningKeysMapper(MoshiProvider.providesMoshi())
+
         val keyInfoEntities = realm.where("KeyInfoEntity").findAll()
         try {
             keyInfoEntities.forEach {
@@ -496,5 +498,78 @@ internal class RealmCryptoStoreMigration @Inject constructor(private val crossSi
 
         realm.schema.get("CryptoRoomEntity")
                 ?.addRealmObjectField(CryptoRoomEntityFields.OUTBOUND_SESSION_INFO.`$`, outboundEntitySchema)
+    }
+
+    // Version 13L delete unreferenced TrustLevelEntity
+    private fun migrateTo13(realm: DynamicRealm) {
+        Timber.d("Step 12 -> 13")
+
+        // Use a trick to do that... Ref: https://stackoverflow.com/questions/55221366
+        val trustLevelEntitySchema = realm.schema.get("TrustLevelEntity")
+
+        /*
+        Creating a new temp field called isLinked which is set to true for those which are
+        references by other objects. Rest of them are set to false. Then removing all
+        those which are false and hence duplicate and unnecessary. Then removing the temp field
+        isLinked
+         */
+        var mainCounter = 0
+        var deviceInfoCounter = 0
+        var keyInfoCounter = 0
+        val deleteCounter: Int
+
+        trustLevelEntitySchema
+                ?.addField("isLinked", Boolean::class.java)
+                ?.transform { obj ->
+                    // Setting to false for all by default
+                    obj.set("isLinked", false)
+                    mainCounter++
+                }
+
+        realm.schema.get("DeviceInfoEntity")?.transform { obj ->
+            // Setting to true for those which are referenced in DeviceInfoEntity
+            deviceInfoCounter++
+            obj.getObject("trustLevelEntity")?.set("isLinked", true)
+        }
+
+        realm.schema.get("KeyInfoEntity")?.transform { obj ->
+            // Setting to true for those which are referenced in KeyInfoEntity
+            keyInfoCounter++
+            obj.getObject("trustLevelEntity")?.set("isLinked", true)
+        }
+
+        // Removing all those which are set as false
+        realm.where("TrustLevelEntity")
+                .equalTo("isLinked", false)
+                .findAll()
+                .also { deleteCounter = it.size }
+                .deleteAllFromRealm()
+
+        trustLevelEntitySchema?.removeField("isLinked")
+
+        Timber.w("TrustLevelEntity cleanup: $mainCounter entities")
+        Timber.w("TrustLevelEntity cleanup: $deviceInfoCounter entities referenced in DeviceInfoEntities")
+        Timber.w("TrustLevelEntity cleanup: $keyInfoCounter entities referenced in KeyInfoEntity")
+        Timber.w("TrustLevelEntity cleanup: $deleteCounter entities deleted!")
+        if (mainCounter != deviceInfoCounter + keyInfoCounter + deleteCounter) {
+            Timber.e("TrustLevelEntity cleanup: Something is not correct...")
+        }
+    }
+
+    // Version 14L Update the way we remember key sharing
+    private fun migrateTo14(realm: DynamicRealm) {
+        Timber.d("Step 13 -> 14")
+        realm.schema.get("SharedSessionEntity")
+                ?.addField(SharedSessionEntityFields.DEVICE_IDENTITY_KEY, String::class.java)
+                ?.addIndex(SharedSessionEntityFields.DEVICE_IDENTITY_KEY)
+                ?.transform {
+                    val sharedUserId = it.getString(SharedSessionEntityFields.USER_ID)
+                    val sharedDeviceId = it.getString(SharedSessionEntityFields.DEVICE_ID)
+                    val knownDevice = realm.where("DeviceInfoEntity")
+                            .equalTo(DeviceInfoEntityFields.USER_ID, sharedUserId)
+                            .equalTo(DeviceInfoEntityFields.DEVICE_ID, sharedDeviceId)
+                            .findFirst()
+                    it.setString(SharedSessionEntityFields.DEVICE_IDENTITY_KEY, knownDevice?.getString(DeviceInfoEntityFields.IDENTITY_KEY))
+                }
     }
 }

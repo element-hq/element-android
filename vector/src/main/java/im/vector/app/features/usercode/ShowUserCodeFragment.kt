@@ -30,7 +30,6 @@ import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.core.utils.startSharePlainTextIntent
 import im.vector.app.databinding.FragmentUserCodeShowBinding
 import im.vector.app.features.home.AvatarRenderer
-
 import javax.inject.Inject
 
 class ShowUserCodeFragment @Inject constructor(
@@ -43,11 +42,11 @@ class ShowUserCodeFragment @Inject constructor(
 
     val sharedViewModel: UserCodeSharedViewModel by activityViewModel()
 
-    private val openCameraActivityResultLauncher = registerForPermissionsResult { allGranted ->
+    private val openCameraActivityResultLauncher = registerForPermissionsResult { allGranted, deniedPermanently ->
         if (allGranted) {
             doOpenQRCodeScanner()
         } else {
-            sharedViewModel.handle(UserCodeActions.CameraPermissionNotGranted)
+            sharedViewModel.handle(UserCodeActions.CameraPermissionNotGranted(deniedPermanently))
         }
     }
 

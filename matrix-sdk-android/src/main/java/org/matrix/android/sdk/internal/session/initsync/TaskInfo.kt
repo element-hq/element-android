@@ -16,10 +16,10 @@
 
 package org.matrix.android.sdk.internal.session.initsync
 
-import androidx.annotation.StringRes
+import org.matrix.android.sdk.api.session.initsync.InitSyncStep
 import timber.log.Timber
 
-internal class TaskInfo(@StringRes val nameRes: Int,
+internal class TaskInfo(val initSyncStep: InitSyncStep,
                         val totalProgress: Int,
                         val parent: TaskInfo?,
                         val parentWeight: Float) {

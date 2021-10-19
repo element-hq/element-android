@@ -65,8 +65,8 @@ internal class DefaultGetPreviewUrlTask @Inject constructor(
     }
 
     private suspend fun doRequest(url: String, timestamp: Long?): PreviewUrlData {
-        return executeRequest<JsonDict>(globalErrorReceiver) {
-            apiCall = mediaAPI.getPreviewUrlData(url, timestamp)
+        return executeRequest(globalErrorReceiver) {
+            mediaAPI.getPreviewUrlData(url, timestamp)
         }
                 .toPreviewUrlData(url)
     }

@@ -16,15 +16,15 @@
 
 package org.matrix.android.sdk.internal.session.user.accountdata
 
+import org.matrix.android.sdk.api.session.accountdata.UserAccountDataTypes
 import org.matrix.android.sdk.internal.di.UserId
+import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.integrationmanager.AllowedWidgetsContent
 import org.matrix.android.sdk.internal.session.integrationmanager.IntegrationProvisioningContent
 import org.matrix.android.sdk.internal.session.sync.model.accountdata.AcceptedTermsContent
 import org.matrix.android.sdk.internal.session.sync.model.accountdata.BreadcrumbsContent
 import org.matrix.android.sdk.internal.session.sync.model.accountdata.IdentityServerContent
-import org.matrix.android.sdk.api.session.accountdata.UserAccountDataTypes
-import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.task.Task
 import javax.inject.Inject
 
@@ -105,7 +105,7 @@ internal class DefaultUpdateUserAccountDataTask @Inject constructor(
 
     override suspend fun execute(params: UpdateUserAccountDataTask.Params) {
         return executeRequest(globalErrorReceiver) {
-            apiCall = accountDataApi.setAccountData(userId, params.type, params.getData())
+            accountDataApi.setAccountData(userId, params.type, params.getData())
         }
     }
 }

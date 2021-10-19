@@ -18,8 +18,6 @@ package org.matrix.android.sdk.internal.crypto.model
 import org.matrix.android.sdk.internal.crypto.crosssigning.DeviceTrustLevel
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceKeys
 import org.matrix.android.sdk.internal.crypto.model.rest.UnsignedDeviceInfo
-import org.matrix.android.sdk.internal.crypto.store.db.model.CryptoMapper
-import org.matrix.android.sdk.internal.crypto.store.db.model.DeviceInfoEntity
 
 data class CryptoDeviceInfo(
         val deviceId: String,
@@ -44,7 +42,7 @@ data class CryptoDeviceInfo(
      */
     fun fingerprint(): String? {
         return keys
-                ?.takeIf { !deviceId.isBlank() }
+                ?.takeIf { deviceId.isNotBlank() }
                 ?.get("ed25519:$deviceId")
     }
 
@@ -53,7 +51,7 @@ data class CryptoDeviceInfo(
      */
     fun identityKey(): String? {
         return keys
-                ?.takeIf { !deviceId.isBlank() }
+                ?.takeIf { deviceId.isNotBlank() }
                 ?.get("curve25519:$deviceId")
     }
 
@@ -76,8 +74,4 @@ data class CryptoDeviceInfo(
 
 internal fun CryptoDeviceInfo.toRest(): DeviceKeys {
     return CryptoInfoMapper.map(this)
-}
-
-internal fun CryptoDeviceInfo.toEntity(): DeviceInfoEntity {
-    return CryptoMapper.mapToEntity(this)
 }

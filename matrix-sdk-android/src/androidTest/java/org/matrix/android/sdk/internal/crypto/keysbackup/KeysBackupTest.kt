@@ -17,6 +17,16 @@
 package org.matrix.android.sdk.internal.crypto.keysbackup
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
+import org.junit.Assert.fail
+import org.junit.FixMethodOrder
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.junit.runners.MethodSorters
 import org.matrix.android.sdk.InstrumentedTest
 import org.matrix.android.sdk.api.listeners.ProgressListener
 import org.matrix.android.sdk.api.listeners.StepProgressListener
@@ -33,16 +43,6 @@ import org.matrix.android.sdk.internal.crypto.keysbackup.model.MegolmBackupCreat
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersion
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersionResult
 import org.matrix.android.sdk.internal.crypto.model.ImportRoomKeysResult
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertNotNull
-import org.junit.Assert.assertNull
-import org.junit.Assert.assertTrue
-import org.junit.Assert.fail
-import org.junit.FixMethodOrder
-import org.junit.Test
-import org.junit.runner.RunWith
-import org.junit.runners.MethodSorters
 import java.util.ArrayList
 import java.util.Collections
 import java.util.concurrent.CountDownLatch
@@ -816,7 +816,7 @@ class KeysBackupTest : InstrumentedTest {
         // - Do an e2e backup to the homeserver
         mKeysBackupTestHelper.prepareAndCreateKeysBackupData(keysBackup)
 
-        // Get key backup version from the home server
+        // Get key backup version from the homeserver
         val keysVersionResult = mTestHelper.doSync<KeysVersionResult?> {
             keysBackup.getCurrentVersion(it)
         }

@@ -38,9 +38,9 @@ internal class EnsureOlmSessionsForUsersAction @Inject constructor(private val o
 
             devices.filter {
                 // Don't bother setting up session to ourself
-                it.identityKey() != olmDevice.deviceCurve25519Key
+                it.identityKey() != olmDevice.deviceCurve25519Key &&
                         // Don't bother setting up sessions with blocked users
-                        && !(it.trustLevel?.isVerified() ?: false)
+                        !(it.trustLevel?.isVerified() ?: false)
             }
         }
         return ensureOlmSessionsForDevicesAction.handle(devicesByUser)

@@ -17,18 +17,20 @@
             android:padding="16dp">
 
             <TextView
+                style="@style/Widget.Vector.TextView.Body"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/settings_background_fdroid_sync_mode_battery"
-                android:textColor="?riotx_text_primary"
+                android:textColor="?vctr_content_primary"
                 android:textStyle="bold" />
 
             <TextView
+                style="@style/Widget.Vector.TextView.Body"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:text="@string/settings_background_fdroid_sync_mode_battery_description"
-                android:textColor="?riotx_text_secondary" />
+                android:textColor="?vctr_content_secondary" />
 
         </LinearLayout>
 
@@ -41,18 +43,20 @@
             android:padding="16dp">
 
             <TextView
+                style="@style/Widget.Vector.TextView.Body"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/settings_background_fdroid_sync_mode_real_time"
-                android:textColor="?riotx_text_primary"
+                android:textColor="?vctr_content_primary"
                 android:textStyle="bold" />
 
             <TextView
+                style="@style/Widget.Vector.TextView.Body"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:text="@string/settings_background_fdroid_sync_mode_real_time_description"
-                android:textColor="?riotx_text_secondary" />
+                android:textColor="?vctr_content_secondary" />
 
         </LinearLayout>
 
@@ -65,18 +69,20 @@
             android:padding="16dp">
 
             <TextView
+                style="@style/Widget.Vector.TextView.Body"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/settings_background_fdroid_sync_mode_disabled"
-                android:textColor="?riotx_text_primary"
+                android:textColor="?vctr_content_primary"
                 android:textStyle="bold" />
 
             <TextView
+                style="@style/Widget.Vector.TextView.Body"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:text="@string/settings_background_fdroid_sync_mode_disabled_description"
-                android:textColor="?riotx_text_secondary" />
+                android:textColor="?vctr_content_secondary" />
 
         </LinearLayout>
 

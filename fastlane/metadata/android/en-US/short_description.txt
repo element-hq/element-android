@@ -1,1 +1,1 @@
-Secure decentralised chat & VoIP. Keep your data safe from third parties.
+Group messenger - encrypted messaging, group chat and video calls

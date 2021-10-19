@@ -17,8 +17,8 @@ package im.vector.app.features.settings.account.deactivation
 
 import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxState
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksState
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -27,26 +27,26 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.auth.ReAuthActivity
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.auth.UIABaseAuth
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
+import org.matrix.android.sdk.api.auth.UserPasswordAuth
+import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.api.failure.isInvalidUIAAuth
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.internal.crypto.crosssigning.fromBase64
 import org.matrix.android.sdk.internal.crypto.model.rest.DefaultBaseAuth
-import org.matrix.android.sdk.api.auth.UIABaseAuth
-import org.matrix.android.sdk.api.auth.UserPasswordAuth
 import timber.log.Timber
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
 data class DeactivateAccountViewState(
-        val passwordShown: Boolean = false
-) : MvRxState
+        val dummy: Boolean = false
+) : MavericksState
 
 class DeactivateAccountViewModel @AssistedInject constructor(@Assisted private val initialState: DeactivateAccountViewState,
-                                                             private val session: Session)
-    : VectorViewModel<DeactivateAccountViewState, DeactivateAccountAction, DeactivateAccountViewEvents>(initialState) {
+                                                             private val session: Session) :
+    VectorViewModel<DeactivateAccountViewState, DeactivateAccountAction, DeactivateAccountViewEvents>(initialState) {
 
     @AssistedFactory
     interface Factory {
@@ -58,7 +58,6 @@ class DeactivateAccountViewModel @AssistedInject constructor(@Assisted private v
 
     override fun handle(action: DeactivateAccountAction) {
         when (action) {
-            DeactivateAccountAction.TogglePassword -> handleTogglePassword()
             is DeactivateAccountAction.DeactivateAccount -> handleDeactivateAccount(action)
             DeactivateAccountAction.SsoAuthDone -> {
                 Timber.d("## UIA - FallBack success")
@@ -85,12 +84,6 @@ class DeactivateAccountViewModel @AssistedInject constructor(@Assisted private v
                 pendingAuth = null
             }
         }.exhaustive
-    }
-
-    private fun handleTogglePassword() = withState {
-        setState {
-            copy(passwordShown = !passwordShown)
-        }
     }
 
     private fun handleDeactivateAccount(action: DeactivateAccountAction.DeactivateAccount) {
@@ -121,7 +114,7 @@ class DeactivateAccountViewModel @AssistedInject constructor(@Assisted private v
         }
     }
 
-    companion object : MvRxViewModelFactory<DeactivateAccountViewModel, DeactivateAccountViewState> {
+    companion object : MavericksViewModelFactory<DeactivateAccountViewModel, DeactivateAccountViewState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: DeactivateAccountViewState): DeactivateAccountViewModel? {

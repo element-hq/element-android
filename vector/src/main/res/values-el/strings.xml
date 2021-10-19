@@ -1,5 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="medium_email">Ηλεκτρονική διεύθυνση</string>
+    <string name="summary_message">%1$s: %2$s</string>
+    <string name="summary_user_sent_image">Ο/Η %1$s έστειλε μια εικόνα.</string>
+    <string name="summary_user_sent_sticker">Ο/Η %1$s έστειλε ένα αυτοκόλλητο.</string>
+
+    <string name="notice_room_invite_you">Ο/Η %1$s σας προσκάλεσε</string>
+    <string name="notice_room_leave">Ο/Η %1$s αποχώρησε</string>
+    <string name="notice_room_reject">Ο/Η %1$s απέρριψε την πρόσκληση</string>
+    <string name="notice_room_kick">Ο/Η %1$s έδιωξε τον/την %2$s</string>
+    <string name="notice_room_invite">Ο/Η %1$s προσκάλεσε τον/την %2$s</string>
+    <string name="notice_room_invite_no_invitee">Η πρόσκληση του/της %s</string>
+    <string name="medium_phone_number">Αριθμός τηλεφώνου</string>
+
+    <string name="notice_room_ban">Ο/Η %1$s απέκλεισε τον/την %2$s</string>
+    <string name="notice_room_withdraw">Ο/Η %1$s απέσυρε την πρόσκληση του/της %2$s</string>
+    <string name="notice_avatar_url_changed">Ο/Η %1$s άλλαξε εικονίδιο χρήστη</string>
+    <string name="notice_display_name_set">Ο/Η %1$s άλλαξε το εμφανιζόμενό του/της όνομα σε %2$s</string>
+    <string name="notice_display_name_changed_from">Ο/Η %1$s άλλαξε το εμφανιζόμενό του/της όνομα από %2$s σε %3$s</string>
+    <string name="notice_display_name_removed">Ο/Η %1$s αφαίρεσε το εμφανιζόμενό του/της όνομα (%2$s)</string>
+    <string name="notice_room_topic_changed">Ο/Η %1$s άλλαξε το θέμα σε: %2$s</string>
+    <string name="notice_room_name_changed">Ο/Η %1$s άλλαξε το όνομα του δωματίου σε: %2$s</string>
+    <string name="notice_answered_call">Ο/Η %s απάντησε στην κλήση.</string>
+    <string name="notice_ended_call">Ο/Η %s τερμάτισε την κλήση.</string>
+
+    <string name="notice_placed_video_call">Ο/Η %s πραγματοποίησε μια κλήση βίντεο.</string>
+    <string name="notice_placed_voice_call">Ο/Η %s πραγματοποίησε μια κλήση ήχου.</string>
+    <string name="notice_made_future_room_visibility">Ο/Η %1$s κατέστησε το μελλοντικό ιστορικό του δωματίου ορατό στον/στην %2$s</string>
+    <string name="notice_room_visibility_invited">όλα τα μέλη του δωματίου, από την στιγμή που προσκλήθηκαν.</string>
+    <string name="notice_room_visibility_shared">όλα τα μέλη του δωματίου.</string>
+    <string name="notice_room_visibility_world_readable">οποιοσδήποτε.</string>
+    <string name="notice_room_visibility_unknown">άγνωστος/η (%s).</string>
+    <string name="notice_avatar_changed_too">(έγινε αλλαγή και του εικονιδίου χρήστη)</string>
+    <string name="notice_room_name_removed">Ο/Η %1$s αφαίρεσε το όνομα του δωματίου</string>
+    <string name="notice_room_topic_removed">Ο/Η %1$s αφαίρεσε το θέμα του δωματίου</string>
+    <string name="notice_profile_change_redacted">Ο/Η %1$s ανανέωσε το προφίλ του/της %2$s</string>
+    <string name="notice_room_third_party_registered_invite">Ο/Η %1$s δέχτηκε την πρόσκληση για το %2$s</string>
+
+    <string name="notice_crypto_unable_to_decrypt">** Αδυναμία αποκρυπτογράφησης: %s **</string>
+    <string name="notice_crypto_error_unkwown_inbound_session_id">Η συσκευή του/της αποστολέα δεν μας έχει στείλει τα κλειδιά για αυτό το μήνυμα.</string>
+
+    <string name="unable_to_send_message">Αποτυχία αποστολής μηνύματος</string>
+
+    <string name="message_failed_to_upload">Αποτυχία αναφόρτωσης εικόνας</string>
+
+    <string name="network_error">Σφάλμα δικτύου</string>
+    <string name="matrix_error">Σφάλμα του Matrix</string>
+
+    <string name="notice_requested_voip_conference">Ο/Η %1$s ζήτησε μια VoIP διάσκεψη</string>
+    <string name="notice_voip_started">Η VoIP διάσκεψη ξεκίνησε</string>
+    <string name="notice_voip_finished">Η VoIP διάσκεψη έληξε</string>
+
+    <string name="notice_room_join">Ο/Η %1$s εισήλθε στο δωμάτιο</string>
+
+    <string name="room_displayname_invite_from">Πρόσκληση από %s</string>
+    <string name="room_displayname_room_invite">Πρόσκληση στο δωμάτιο</string>
+
+    <string name="room_displayname_two_members">%1$s και %2$s</string>
+
+    <plurals name="room_displayname_three_and_more_members">
+        <item quantity="one">%1$s και 1 ακόμα</item>
+        <item quantity="other">%1$s και %2$d ακόμα</item>
+    </plurals>
+
+    <string name="room_displayname_empty_room">Άδειο δωμάτιο</string>
+
+    <string name="notice_room_visibility_joined">όλα τα μέλη του δωματίου από την στιγμή που εισήλθαν.</string>
+    <string name="notice_end_to_end">Ο/Η %1$s ενεργοποίησε την κρυπτογράφηση απ\'άκρη σ\'άκρη (%2$s)</string>
+
+    <string name="notice_room_third_party_invite">Ο/Η %1$s έστειλε μία πρόσκληση στον/στην %2$s για να εισέλθει στο δωμάτιο</string>
+    <string name="room_error_join_failed_empty_room">Δεν είναι δυνατή ακόμα η επανείσοδος σε ένα άδειο δωμάτιο.</string>
     <string name="cancel">Ακύρωση</string>
     <string name="action_close">Κλείσιμο</string>
     <string name="room_settings_direct_chat">Απευθείας συνομιλία</string>
@@ -43,8 +113,7 @@
     <string name="encrypted_message">Κρυπτογραφημένο μήνυμα</string>
     <string name="light_theme">Ανοιχτόχρωμο θέμα</string>
     <string name="dark_theme">Σκουρόχρωμο θέμα</string>
-    <string name="black_them">Μαύρο θέμα</string>
-    <string name="status_theme">Θέμα Status.im</string>
+    <string name="black_theme">Μαύρο θέμα</string>
     <string name="title_activity_choose_sticker">Αποστολή αυτοκόλλητου</string>
     <string name="dialog_title_third_party_licences">Άδειες τρίτων</string>
     <string name="later">Αργότερα</string>
@@ -138,7 +207,7 @@
     <string name="room_info_room_name">Όνομα δωματίου</string>
     <string name="room_info_room_topic">Θέμα δωματίου</string>
     <string name="settings_call_category">Κλήσεις</string>
-    <string name="settings_call_ringtone_use_app_ringtone">Χρήση του προεπιλεγμένου ήχου κλήσης του Element για τις εισερχόμενες κλήσεις</string>
+    <string name="template_settings_call_ringtone_use_app_ringtone">Χρήση του προεπιλεγμένου ήχου κλήσης του ${app_name} για τις εισερχόμενες κλήσεις</string>
     <string name="settings_call_ringtone_title">Ήχος εισερχομένων κλήσεων</string>
     <string name="settings_call_ringtone_dialog_title">Επιλέξτε ήχο κλήσης:</string>
     <string name="call">Κλήση</string>
@@ -164,8 +233,8 @@
     <string name="settings_troubleshoot_test_account_settings_quickfix">Ενεργοποίηση</string>
     <string name="settings_troubleshoot_test_device_settings_title">Ρυθμίσεις συσκευής.</string>
     <string name="settings_troubleshoot_test_device_settings_success">Οι ειδοποιήσεις είναι ενεργοποιημένες για αυτή την συσκευή.</string>
-    <string name="settings_troubleshoot_test_device_settings_failed">Οι ειδοποιήσεις δεν επιτρέπονται για αυτή την συσκευή. 
-\nΠαρακαλώ ελέγξτε τις ρυθμίσεις του Element.</string>
+    <string name="template_settings_troubleshoot_test_device_settings_failed">Οι ειδοποιήσεις δεν επιτρέπονται για αυτή την συσκευή.
+\nΠαρακαλώ ελέγξτε τις ρυθμίσεις του ${app_name}.</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">Ενεργοποίηση</string>
     <string name="settings_devices_list">Συσκευές</string>
     <string name="settings_inline_url_preview">Προεπισκόπιση συνδέσμων</string>
@@ -445,7 +514,7 @@
     <string name="call_select_sound_device">Αλλαγή Συσκευής Ήχου</string>
     <string name="call_failed_no_connection_description">Αποτυχία σύνδεσης σε πραγματικό χρόνο.
 \nΖητήστε από τον διαχειριστή του οικιακού σας διακομιστή να διαμορφώσει έναν διακομιστή TURN ώστε οι κλήσεις να λειτουργούν αξιόπιστα.</string>
-    <string name="call_failed_no_connection">Η Κλήση Element Aπέτυχε</string>
+    <string name="template_call_failed_no_connection">Η Κλήση ${app_name} Aπέτυχε</string>
     <string name="call_failed_dont_ask_again">Να μην ερωτηθώ ξανά</string>
     <string name="call_failed_no_ice_use_alt">Προσπαθήστε να χρησιμοποιήσετε το %s</string>
     <string name="call_failed_no_ice_description">Παρακαλώ ζητήστε απο τον διαχειριστή του ιδιέταιρου διακομιστή (%1$s) να ρυθμίσει ένα διακομιστή TURN ώστε οι κλήσεις να δουλέυουν αξιόπιστα.
@@ -476,7 +545,7 @@
     <string name="call_notification_hangup">Τέλος κλήσης</string>
     <string name="ongoing_conference_call">Τρέχουσα κλήση συνδιάσκεψης.
 \nΣυνδεθείτε με %1$s ή %2$s</string>
-    <string name="no_contact_access_placeholder">Δεν επιτρέψατε στο Element την πρόσβαση στις επαφές σας</string>
+    <string name="template_no_contact_access_placeholder">Δεν επιτρέψατε στο ${app_name} την πρόσβαση στις επαφές σας</string>
     <string name="bottom_action_notification">Ειδοποιήσεις</string>
     <string name="copied_to_clipboard">Αντιγράφηκε στο πρόχειρο</string>
     <string name="action_add">Πρόσθεση</string>

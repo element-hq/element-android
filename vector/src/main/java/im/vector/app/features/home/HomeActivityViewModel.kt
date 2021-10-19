@@ -16,9 +16,10 @@
 
 package im.vector.app.features.home
 
+import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewModelScope
-import com.airbnb.mvrx.MvRx
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.Mavericks
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -27,10 +28,12 @@ import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.login.ReAuthHelper
+import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.VectorPreferences
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.auth.UIABaseAuth
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
@@ -40,15 +43,14 @@ import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.api.auth.registration.nextUncompletedStage
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.pushrules.RuleIds
-import org.matrix.android.sdk.api.session.initsync.InitialSyncProgressService
+import org.matrix.android.sdk.api.session.initsync.SyncStatusService
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.api.util.toMatrixItem
+import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.internal.util.awaitCallback
-import org.matrix.android.sdk.rx.asObservable
-import org.matrix.android.sdk.rx.rx
 import timber.log.Timber
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
@@ -67,12 +69,12 @@ class HomeActivityViewModel @AssistedInject constructor(
         fun create(initialState: HomeActivityViewState, args: HomeActivityArgs): HomeActivityViewModel
     }
 
-    companion object : MvRxViewModelFactory<HomeActivityViewModel, HomeActivityViewState> {
+    companion object : MavericksViewModelFactory<HomeActivityViewModel, HomeActivityViewState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: HomeActivityViewState): HomeActivityViewModel? {
             val activity: HomeActivity = viewModelContext.activity()
-            val args: HomeActivityArgs? = activity.intent.getParcelableExtra(MvRx.KEY_ARG)
+            val args: HomeActivityArgs? = activity.intent.getParcelableExtra(Mavericks.KEY_ARG)
             return activity.viewModelFactory.create(state, args ?: HomeActivityArgs(clearNotification = false, accountCreation = false))
         }
     }
@@ -100,9 +102,9 @@ class HomeActivityViewModel @AssistedInject constructor(
                 .crossSigningService().allPrivateKeysKnown()
 
         safeActiveSession
-                .rx()
+                .flow()
                 .liveCrossSigningInfo(safeActiveSession.myUserId)
-                .subscribe {
+                .onEach {
                     val isVerified = it.getOrNull()?.isTrusted() ?: false
                     if (!isVerified && onceTrusted) {
                         // cross signing keys have been reset
@@ -116,35 +118,36 @@ class HomeActivityViewModel @AssistedInject constructor(
                     }
                     onceTrusted = isVerified
                 }
-                .disposeOnClear()
+                .launchIn(viewModelScope)
     }
 
     private fun observeInitialSync() {
         val session = activeSessionHolder.getSafeActiveSession() ?: return
 
-        session.getInitialSyncProgressStatus()
-                .asObservable()
-                .subscribe { status ->
+        session.getSyncStatusLive()
+                .asFlow()
+                .onEach { status ->
                     when (status) {
-                        is InitialSyncProgressService.Status.Progressing -> {
+                        is SyncStatusService.Status.Progressing -> {
                             // Schedule a check of the bootstrap when the init sync will be finished
                             checkBootstrap = true
                         }
-                        is InitialSyncProgressService.Status.Idle        -> {
+                        is SyncStatusService.Status.Idle        -> {
                             if (checkBootstrap) {
                                 checkBootstrap = false
                                 maybeBootstrapCrossSigningAfterInitialSync()
                             }
                         }
+                        else                                    -> Unit
                     }
 
                     setState {
                         copy(
-                                initialSyncProgressServiceStatus = status
+                                syncStatusServiceStatus = status
                         )
                     }
                 }
-                .disposeOnClear()
+                .launchIn(viewModelScope)
     }
 
     /**
@@ -184,7 +187,7 @@ class HomeActivityViewModel @AssistedInject constructor(
 
     private fun maybeBootstrapCrossSigningAfterInitialSync() {
         // We do not use the viewModel context because we do not want to tie this action to activity view model
-        GlobalScope.launch(Dispatchers.IO) {
+        activeSessionHolder.getSafeActiveSession()?.coroutineScope?.launch(Dispatchers.IO) {
             val session = activeSessionHolder.getSafeActiveSession() ?: return@launch
 
             tryOrNull("## MaybeBootstrapCrossSigning: Failed to download keys") {
@@ -203,9 +206,8 @@ class HomeActivityViewModel @AssistedInject constructor(
                     _viewEvents.post(
                             HomeActivityViewEvents.OnNewSession(
                                     session.getUser(session.myUserId)?.toMatrixItem(),
-                                    // If it's an old unverified, we should send requests
-                                    // instead of waiting for an incoming one
-                                    reAuthHelper.data != null
+                                    // Always send request instead of waiting for an incoming as per recent EW changes
+                                    false
                             )
                     )
                 }
@@ -218,9 +220,9 @@ class HomeActivityViewModel @AssistedInject constructor(
                                 object : UserInteractiveAuthInterceptor {
                                     override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
                                         // We missed server grace period or it's not setup, see if we remember locally password
-                                        if (flowResponse.nextUncompletedStage() == LoginFlowTypes.PASSWORD
-                                                && errCode == null
-                                                && reAuthHelper.data != null) {
+                                        if (flowResponse.nextUncompletedStage() == LoginFlowTypes.PASSWORD &&
+                                                errCode == null &&
+                                                reAuthHelper.data != null) {
                                             promise.resume(
                                                     UserPasswordAuth(
                                                             session = flowResponse.session,

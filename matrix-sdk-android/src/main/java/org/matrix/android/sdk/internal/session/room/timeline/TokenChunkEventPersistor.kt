@@ -149,7 +149,7 @@ internal class TokenChunkEventPersistor @Inject constructor(@SessionDatabase pri
                     }
                             ?: ChunkEntity.create(realm, prevToken, nextToken)
 
-                    if (receivedChunk.events.isEmpty() && !receivedChunk.hasMore()) {
+                    if (receivedChunk.events.isNullOrEmpty() && !receivedChunk.hasMore()) {
                         handleReachEnd(realm, roomId, direction, currentChunk)
                     } else {
                         handlePagination(realm, roomId, direction, receivedChunk, currentChunk)
@@ -238,8 +238,8 @@ internal class TokenChunkEventPersistor @Inject constructor(@SessionDatabase pri
             it.deleteOnCascade(deleteStateEvents = false, canDeleteRoot = false)
         }
         val roomSummaryEntity = RoomSummaryEntity.getOrCreate(realm, roomId)
-        val shouldUpdateSummary = roomSummaryEntity.latestPreviewableEvent == null
-                || (chunksToDelete.isNotEmpty() && currentChunk.isLastForward && direction == PaginationDirection.FORWARDS)
+        val shouldUpdateSummary = roomSummaryEntity.latestPreviewableEvent == null ||
+                (chunksToDelete.isNotEmpty() && currentChunk.isLastForward && direction == PaginationDirection.FORWARDS)
         if (shouldUpdateSummary) {
             roomSummaryEntity.latestPreviewableEvent = RoomSummaryEventsHelper.getLatestPreviewableEvent(realm, roomId)
         }

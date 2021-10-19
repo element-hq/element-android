@@ -20,40 +20,40 @@ import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxState
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksState
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.platform.VectorViewModelAction
-import org.matrix.android.sdk.api.MatrixCallback
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.user.model.User
-import org.matrix.android.sdk.rx.rx
+import org.matrix.android.sdk.flow.flow
 
 data class IgnoredUsersViewState(
         val ignoredUsers: List<User> = emptyList(),
         val unIgnoreRequest: Async<Unit> = Uninitialized
-) : MvRxState
+) : MavericksState
 
 sealed class IgnoredUsersAction : VectorViewModelAction {
     data class UnIgnore(val userId: String) : IgnoredUsersAction()
 }
 
 class IgnoredUsersViewModel @AssistedInject constructor(@Assisted initialState: IgnoredUsersViewState,
-                                                        private val session: Session)
-    : VectorViewModel<IgnoredUsersViewState, IgnoredUsersAction, IgnoredUsersViewEvents>(initialState) {
+                                                        private val session: Session) :
+    VectorViewModel<IgnoredUsersViewState, IgnoredUsersAction, IgnoredUsersViewEvents>(initialState) {
 
     @AssistedFactory
     interface Factory {
         fun create(initialState: IgnoredUsersViewState): IgnoredUsersViewModel
     }
 
-    companion object : MvRxViewModelFactory<IgnoredUsersViewModel, IgnoredUsersViewState> {
+    companion object : MavericksViewModelFactory<IgnoredUsersViewModel, IgnoredUsersViewState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: IgnoredUsersViewState): IgnoredUsersViewModel? {
@@ -67,7 +67,7 @@ class IgnoredUsersViewModel @AssistedInject constructor(@Assisted initialState: 
     }
 
     private fun observeIgnoredUsers() {
-        session.rx()
+        session.flow()
                 .liveIgnoredUsers()
                 .execute { async ->
                     copy(
@@ -89,24 +89,14 @@ class IgnoredUsersViewModel @AssistedInject constructor(@Assisted initialState: 
             )
         }
 
-        session.unIgnoreUserIds(listOf(action.userId), object : MatrixCallback<Unit> {
-            override fun onFailure(failure: Throwable) {
-                setState {
-                    copy(
-                            unIgnoreRequest = Fail(failure)
-                    )
-                }
-
-                _viewEvents.post(IgnoredUsersViewEvents.Failure(failure))
+        viewModelScope.launch {
+            val result = runCatching { session.unIgnoreUserIds(listOf(action.userId)) }
+            setState {
+                copy(
+                        unIgnoreRequest = result.fold(::Success, ::Fail)
+                )
             }
-
-            override fun onSuccess(data: Unit) {
-                setState {
-                    copy(
-                            unIgnoreRequest = Success(data)
-                    )
-                }
-            }
-        })
+            result.onFailure { _viewEvents.post(IgnoredUsersViewEvents.Failure(it)) }
+        }
     }
 }

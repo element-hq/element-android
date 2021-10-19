@@ -55,5 +55,5 @@ data class MessageStickerContent(
         @Json(name = "file") override val encryptedFileInfo: EncryptedFileInfo? = null
 ) : MessageImageInfoContent {
     override val mimeType: String?
-        get() = encryptedFileInfo?.mimetype ?: info?.mimeType
+        get() = info?.mimeType
 }

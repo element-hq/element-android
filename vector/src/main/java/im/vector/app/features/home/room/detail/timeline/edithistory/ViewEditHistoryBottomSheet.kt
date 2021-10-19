@@ -19,7 +19,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.airbnb.mvrx.MvRx
+import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.app.R
@@ -30,8 +30,6 @@ import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.databinding.BottomSheetGenericListWithTitleBinding
 import im.vector.app.features.home.room.detail.timeline.action.TimelineEventFragmentArgs
 import im.vector.app.features.home.room.detail.timeline.item.MessageInformationData
-import im.vector.app.features.html.EventHtmlRenderer
-
 import javax.inject.Inject
 
 /**
@@ -43,11 +41,7 @@ class ViewEditHistoryBottomSheet :
     private val viewModel: ViewEditHistoryViewModel by fragmentViewModel(ViewEditHistoryViewModel::class)
 
     @Inject lateinit var viewEditHistoryViewModelFactory: ViewEditHistoryViewModel.Factory
-    @Inject lateinit var eventHtmlRenderer: EventHtmlRenderer
-
-    private val epoxyController by lazy {
-        ViewEditHistoryEpoxyController(requireContext(), viewModel.dateFormatter, eventHtmlRenderer)
-    }
+    @Inject lateinit var epoxyController: ViewEditHistoryEpoxyController
 
     override fun injectWith(injector: ScreenComponent) {
         injector.inject(this)
@@ -61,7 +55,7 @@ class ViewEditHistoryBottomSheet :
         super.onViewCreated(view, savedInstanceState)
         views.bottomSheetRecyclerView.configureWith(
                 epoxyController,
-                showDivider = true,
+                dividerDrawable = R.drawable.divider_horizontal_on_secondary,
                 hasFixedSize = false)
         views.bottomSheetTitle.text = context?.getString(R.string.message_edits)
     }
@@ -84,7 +78,7 @@ class ViewEditHistoryBottomSheet :
                     roomId,
                     informationData
             )
-            args.putParcelable(MvRx.KEY_ARG, parcelableArgs)
+            args.putParcelable(Mavericks.KEY_ARG, parcelableArgs)
             return ViewEditHistoryBottomSheet().apply { arguments = args }
         }
     }

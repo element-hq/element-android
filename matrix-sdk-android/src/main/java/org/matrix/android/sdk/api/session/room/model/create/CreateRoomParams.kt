@@ -18,13 +18,13 @@ package org.matrix.android.sdk.api.session.room.model.create
 
 import android.net.Uri
 import org.matrix.android.sdk.api.session.identity.ThreePid
+import org.matrix.android.sdk.api.session.room.model.GuestAccess
 import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
 import org.matrix.android.sdk.api.session.room.model.RoomDirectoryVisibility
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
 import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 
-// TODO Give a way to include other initial states
-class CreateRoomParams {
+open class CreateRoomParams {
     /**
      * A public visibility indicates that the room will be shown in the published room list.
      * A private visibility will hide the room from the published room list.
@@ -69,6 +69,11 @@ class CreateRoomParams {
     val invite3pids = mutableListOf<ThreePid>()
 
     /**
+     * Initial Guest Access
+     */
+    var guestAccess: GuestAccess? = null
+
+    /**
      * If set to true, when the room will be created, if cross-signing is enabled and we can get keys for every invited users,
      * the encryption will be enabled on the created room
      */
@@ -97,6 +102,13 @@ class CreateRoomParams {
     val creationContent = mutableMapOf<String, Any>()
 
     /**
+     * A list of state events to set in the new room. This allows the user to override the default state events
+     * set in the new room. The expected format of the state events are an object with type, state_key and content keys set.
+     * Takes precedence over events set by preset, but gets overridden by name and topic keys.
+     */
+    val initialStates = mutableListOf<CreateRoomStateEvent>()
+
+    /**
      * Set to true to disable federation of this room.
      * Default: false
      */
@@ -108,6 +120,17 @@ class CreateRoomParams {
             } else {
                 // This is the default value, we remove the field
                 creationContent.remove(CREATION_CONTENT_KEY_M_FEDERATE)
+            }
+        }
+
+    var roomType: String? = null // RoomType.MESSAGING
+        set(value) {
+            field = value
+            if (value != null) {
+                creationContent[CREATION_CONTENT_KEY_ROOM_TYPE] = value
+            } else {
+                // This is the default value, we remove the field
+                creationContent.remove(CREATION_CONTENT_KEY_ROOM_TYPE)
             }
         }
 
@@ -136,7 +159,12 @@ class CreateRoomParams {
         algorithm = MXCRYPTO_ALGORITHM_MEGOLM
     }
 
+    var roomVersion: String? = null
+
+    var featurePreset: RoomFeaturePreset? = null
+
     companion object {
         private const val CREATION_CONTENT_KEY_M_FEDERATE = "m.federate"
+        private const val CREATION_CONTENT_KEY_ROOM_TYPE = "type"
     }
 }

@@ -20,24 +20,23 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
 import com.jakewharton.rxbinding3.widget.checkedChanges
 import com.jakewharton.rxbinding3.widget.textChanges
-import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.core.utils.showIdentityServerConsentDialog
 import im.vector.app.databinding.FragmentContactsBookBinding
+import im.vector.app.features.navigation.SettingsActivityPayload
 import im.vector.app.features.userdirectory.PendingSelection
 import im.vector.app.features.userdirectory.UserListAction
 import im.vector.app.features.userdirectory.UserListSharedAction
 import im.vector.app.features.userdirectory.UserListSharedActionViewModel
 import im.vector.app.features.userdirectory.UserListViewModel
-
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.user.model.User
 import java.util.concurrent.TimeUnit
@@ -76,14 +75,13 @@ class ContactsBookFragment @Inject constructor(
     private fun setupConsentView() {
         views.phoneBookSearchForMatrixContacts.setOnClickListener {
             withState(contactsBookViewModel) { state ->
-                AlertDialog.Builder(requireActivity())
-                        .setTitle(R.string.identity_server_consent_dialog_title)
-                        .setMessage(getString(R.string.identity_server_consent_dialog_content, state.identityServerUrl ?: ""))
-                        .setPositiveButton(R.string.yes) { _, _ ->
-                            contactsBookViewModel.handle(ContactsBookAction.UserConsentGranted)
-                        }
-                        .setNegativeButton(R.string.no, null)
-                        .show()
+                requireContext().showIdentityServerConsentDialog(
+                        state.identityServerUrl,
+                        policyLinkCallback = {
+                            navigator.openSettings(requireContext(), SettingsActivityPayload.DiscoverySettings(expandIdentityPolicies = true))
+                        },
+                        consentCallBack = { contactsBookViewModel.handle(ContactsBookAction.UserConsentGranted) }
+                )
             }
         }
     }

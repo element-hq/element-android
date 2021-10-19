@@ -35,7 +35,6 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentGenericStateViewRecyclerBinding
 import im.vector.app.features.roomprofile.uploads.RoomUploadsAction
 import im.vector.app.features.roomprofile.uploads.RoomUploadsViewModel
-
 import org.matrix.android.sdk.api.session.room.uploads.UploadEvent
 import javax.inject.Inject
 
@@ -58,7 +57,7 @@ class RoomUploadsFilesFragment @Inject constructor(
         views.genericStateViewListStateView.eventCallback = this
 
         views.genericStateViewListRecycler.trackItemsVisibilityChange()
-        views.genericStateViewListRecycler.configureWith(controller, showDivider = true)
+        views.genericStateViewListRecycler.configureWith(controller, dividerDrawable = R.drawable.divider_horizontal)
         controller.listener = this
     }
 

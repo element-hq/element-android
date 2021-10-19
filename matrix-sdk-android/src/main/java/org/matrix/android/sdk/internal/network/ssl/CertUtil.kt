@@ -16,9 +16,9 @@
 
 package org.matrix.android.sdk.internal.network.ssl
 
-import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import okhttp3.ConnectionSpec
 import okhttp3.internal.tls.OkHostnameVerifier
+import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import timber.log.Timber
 import java.security.KeyStore
 import java.security.MessageDigest
@@ -253,7 +253,7 @@ internal object CertUtil {
         val list = ArrayList<ConnectionSpec>()
         list.add(builder.build())
         // TODO: we should display a warning if user enter an http url
-        if (hsConfig.allowHttpExtension || hsConfig.homeServerUri.toString().startsWith("http://")) {
+        if (hsConfig.allowHttpExtension || hsConfig.homeServerUriBase.toString().startsWith("http://")) {
             list.add(ConnectionSpec.CLEARTEXT)
         }
         return list

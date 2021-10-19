@@ -18,13 +18,13 @@ package im.vector.app.features.terms
 import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import kotlinx.coroutines.launch
@@ -41,7 +41,7 @@ class ReviewTermsViewModel @AssistedInject constructor(
         fun create(initialState: ReviewTermsViewState): ReviewTermsViewModel
     }
 
-    companion object : MvRxViewModelFactory<ReviewTermsViewModel, ReviewTermsViewState> {
+    companion object : MavericksViewModelFactory<ReviewTermsViewModel, ReviewTermsViewState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: ReviewTermsViewState): ReviewTermsViewModel? {

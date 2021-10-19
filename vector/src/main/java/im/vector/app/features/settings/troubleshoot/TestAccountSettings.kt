@@ -20,8 +20,11 @@ import androidx.activity.result.ActivityResultLauncher
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.resources.StringProvider
-import kotlinx.coroutines.GlobalScope
+import im.vector.app.features.session.coroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.pushrules.RuleIds
 import org.matrix.android.sdk.api.pushrules.RuleKind
 import javax.inject.Inject
@@ -30,8 +33,8 @@ import javax.inject.Inject
  * Check that the main pushRule (RULE_ID_DISABLE_ALL) is correctly setup
  */
 class TestAccountSettings @Inject constructor(private val stringProvider: StringProvider,
-                                              private val activeSessionHolder: ActiveSessionHolder)
-    : TroubleshootTest(R.string.settings_troubleshoot_test_account_settings_title) {
+                                              private val activeSessionHolder: ActiveSessionHolder) :
+    TroubleshootTest(R.string.settings_troubleshoot_test_account_settings_title) {
 
     override fun perform(activityResultLauncher: ActivityResultLauncher<Intent>) {
         val session = activeSessionHolder.getSafeActiveSession() ?: return
@@ -49,11 +52,13 @@ class TestAccountSettings @Inject constructor(private val stringProvider: String
                     override fun doFix() {
                         if (manager?.diagStatus == TestStatus.RUNNING) return // wait before all is finished
 
-                        GlobalScope.launch {
-                            runCatching {
+                        session.coroutineScope.launch {
+                            tryOrNull {
                                 session.updatePushRuleEnableStatus(RuleKind.OVERRIDE, defaultRule, !defaultRule.enabled)
                             }
-                            manager?.retry(activityResultLauncher)
+                            withContext(Dispatchers.Main) {
+                                manager?.retry(activityResultLauncher)
+                            }
                         }
                     }
                 }

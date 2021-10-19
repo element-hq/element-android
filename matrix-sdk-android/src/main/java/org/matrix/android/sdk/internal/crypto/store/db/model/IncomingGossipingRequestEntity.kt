@@ -16,6 +16,8 @@
 
 package org.matrix.android.sdk.internal.crypto.store.db.model
 
+import io.realm.RealmObject
+import io.realm.annotations.Index
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.internal.crypto.GossipRequestType
 import org.matrix.android.sdk.internal.crypto.GossipingRequestState
@@ -23,8 +25,6 @@ import org.matrix.android.sdk.internal.crypto.IncomingRoomKeyRequest
 import org.matrix.android.sdk.internal.crypto.IncomingSecretShareRequest
 import org.matrix.android.sdk.internal.crypto.IncomingShareRequestCommon
 import org.matrix.android.sdk.internal.crypto.model.rest.RoomKeyRequestBody
-import io.realm.RealmObject
-import io.realm.annotations.Index
 
 internal open class IncomingGossipingRequestEntity(@Index var requestId: String? = "",
                                                    @Index var typeStr: String? = null,

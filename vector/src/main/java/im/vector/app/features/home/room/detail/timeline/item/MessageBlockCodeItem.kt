@@ -20,6 +20,7 @@ import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.extensions.setTextOrHide
 import me.saket.bettermovementmethod.BetterLinkMovementMethod
 
@@ -36,7 +37,7 @@ abstract class MessageBlockCodeItem : AbsMessageItem<MessageBlockCodeItem.Holder
         super.bind(holder)
         holder.messageView.text = message
         renderSendState(holder.messageView, holder.messageView)
-        holder.messageView.setOnClickListener(attributes.itemClickListener)
+        holder.messageView.onClick(attributes.itemClickListener)
         holder.messageView.setOnLongClickListener(attributes.itemLongClickListener)
         holder.editedView.movementMethod = BetterLinkMovementMethod.getInstance()
         holder.editedView.setTextOrHide(editedSpan)

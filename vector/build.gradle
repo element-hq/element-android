@@ -5,6 +5,7 @@ apply plugin: 'com.google.android.gms.oss-licenses-plugin'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-parcelize'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'placeholder-resolver'
 
 kapt {
     correctErrorTypes = true
@@ -12,8 +13,8 @@ kapt {
 
 // Note: 2 digits max for each value
 ext.versionMajor = 1
-ext.versionMinor = 1
-ext.versionPatch = 1
+ext.versionMinor = 3
+ext.versionPatch = 4
 
 static def getGitTimestamp() {
     def cmd = 'git show -s --format=%ct'
@@ -63,9 +64,9 @@ static def gitBranchName() {
     }
 }
 
-// For Google Play build, build on any other branch than master will have a "-dev" suffix
+// For Google Play build, build on any other branch than main will have a "-dev" suffix
 static def getGplayVersionSuffix() {
-    if (gitBranchName() == "master") {
+    if (gitBranchName() == "main") {
         return ""
     } else {
         return "-dev"
@@ -101,24 +102,27 @@ ext.abiVersionCodes = ["armeabi-v7a": 1, "arm64-v8a": 2, "x86": 3, "x86_64": 4].
 def buildNumber = System.env.BUILDKITE_BUILD_NUMBER as Integer ?: 0
 
 android {
-    compileSdkVersion 30
+
+
 
     // Due to a bug introduced in Android gradle plugin 3.6.0, we have to specify the ndk version to use
     // Ref: https://issuetracker.google.com/issues/144111441
     ndkVersion "21.3.6528147"
 
+    compileSdk versions.compileSdk
+
     defaultConfig {
         applicationId "im.vector.app"
         // Set to API 21: see #405
-        minSdkVersion 21
-        targetSdkVersion 30
+        minSdk versions.minSdk
+        targetSdk versions.targetSdk
         multiDexEnabled true
 
         renderscriptTargetApi 24
         renderscriptSupportModeEnabled true
 
         // `develop` branch will have version code from timestamp, to ensure each build from CI has a incremented versionCode.
-        // Other branches (master, features, etc.) will have version code based on application version.
+        // Other branches (main, features, etc.) will have version code based on application version.
         versionCode project.getVersionCode()
 
         // Required for sonar analysis
@@ -135,6 +139,25 @@ android {
 
         buildConfigField "String", "BUILD_NUMBER", "\"${buildNumber}\""
         resValue "string", "build_number", "\"${buildNumber}\""
+
+        // The two booleans must not have the same value. We need two values for the manifest
+        // LoginFlowV2 is disabled to be merged on develop (changelog: Improve login/register flow (#1410, #2585, #3172))
+        resValue "bool", "useLoginV1", "true"
+        resValue "bool", "useLoginV2", "false"
+
+        // NotificationSettingsV2 is disabled. To be released in conjunction with iOS/Web
+        def useNotificationSettingsV2 = true
+        buildConfigField "Boolean", "USE_NOTIFICATION_SETTINGS_V2", "${useNotificationSettingsV2}"
+        resValue "bool", "useNotificationSettingsV1", "${!useNotificationSettingsV2}"
+        resValue "bool", "useNotificationSettingsV2", "${useNotificationSettingsV2}"
+
+        buildConfigField "im.vector.app.features.crypto.keysrequest.OutboundSessionKeySharingStrategy", "outboundSessionKeySharingStrategy", "im.vector.app.features.crypto.keysrequest.OutboundSessionKeySharingStrategy.WhenTyping"
+
+        buildConfigField "Long", "VOICE_MESSAGE_DURATION_LIMIT_MS", "120_000L"
+
+        //  If set, MSC3086 asserted identity messages sent on VoIP calls will cause the call to appear in the room corresponding to the asserted identity.
+        //  This *must* only be set in trusted environments.
+        buildConfigField "Boolean", "handleCallAssertedIdentityEvents", "false"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -234,6 +257,11 @@ android {
 
     productFlavors {
         gplay {
+            apply plugin: 'com.google.gms.google-services'
+            afterEvaluate {
+                tasks.matching { it.name.contains("GoogleServices") && !it.name.contains("Gplay") }*.enabled = false
+            }
+
             dimension "store"
             isDefault = true
             versionName "${versionMajor}.${versionMinor}.${versionPatch}${getGplayVersionSuffix()}"
@@ -259,16 +287,27 @@ android {
     lintOptions {
         lintConfig file("lint.xml")
 
+        checkDependencies true
         abortOnError true
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility versions.sourceCompat
+        targetCompatibility versions.targetCompat
     }
 
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "11"
+        freeCompilerArgs += [
+                "-Xopt-in=kotlin.RequiresOptIn",
+                // Fixes false positive "This is an internal Mavericks API. It is not intended for external use."
+                // of MvRx `by viewModel()` calls. Maybe due to the inlining of code... This is a temporary fix...
+                "-Xopt-in=com.airbnb.mvrx.InternalMavericksApi",
+                // Opt in for kotlinx.coroutines.FlowPreview too
+                "-Xopt-in=kotlinx.coroutines.FlowPreview",
+                // Opt in for kotlinx.coroutines.ExperimentalCoroutinesApi too
+                "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
+        ]
     }
 
     sourceSets {
@@ -285,142 +324,144 @@ android {
     }
 }
 
+configurations {
+    // videocache includes a sl4j logger which causes mockk to attempt to call the static android Log
+    testImplementation.exclude group: 'org.slf4j', module: 'slf4j-android'
+}
+
 dependencies {
-
-    def epoxy_version = '4.4.0'
-    def fragment_version = '1.3.0'
-    def arrow_version = "0.8.2"
-    def markwon_version = '4.1.2'
-    def big_image_viewer_version = '1.7.0'
-    def glide_version = '4.12.0'
-    def moshi_version = '1.11.0'
-    def daggerVersion = '2.32'
-    def autofill_version = "1.1.0"
-    def work_version = '2.5.0'
-    def arch_version = '2.1.0'
-    def lifecycle_version = '2.2.0'
-    def rxbinding_version = '3.1.0'
-
-    // Tests
-    def kluent_version = '1.65'
-    def androidxTest_version = '1.3.0'
-    def espresso_version = '3.3.0'
 
     implementation project(":matrix-sdk-android")
     implementation project(":matrix-sdk-android-rx")
+    implementation project(":matrix-sdk-android-flow")
     implementation project(":diff-match-patch")
     implementation project(":multipicker")
     implementation project(":attachment-viewer")
-    implementation 'com.android.support:multidex:1.0.3'
+    implementation project(":library:ui-styles")
+    implementation 'androidx.multidex:multidex:2.0.1'
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlin_coroutines_version"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlin_coroutines_version"
+    implementation libs.jetbrains.kotlinStdlibJdk7
+    implementation libs.jetbrains.coroutinesCore
+    implementation libs.jetbrains.coroutinesAndroid
 
-    implementation "androidx.recyclerview:recyclerview:1.2.0-beta01"
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation "androidx.fragment:fragment-ktx:$fragment_version"
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    implementation libs.androidx.recyclerview
+    implementation libs.androidx.appCompat
+    implementation libs.androidx.fragmentKtx
+    implementation libs.androidx.constraintLayout
     implementation "androidx.sharetarget:sharetarget:1.1.0"
-    implementation 'androidx.core:core-ktx:1.3.2'
-    implementation "androidx.media:media:1.2.1"
+    implementation libs.androidx.core
+    implementation "androidx.media:media:1.4.3"
+    implementation "androidx.transition:transition:1.4.1"
 
     implementation "org.threeten:threetenbp:1.4.0:no-tzdb"
     implementation "com.gabrielittner.threetenbp:lazythreetenbp:0.9.0"
 
-    implementation "com.squareup.moshi:moshi-adapters:$moshi_version"
-    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
-    kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshi_version"
+    implementation libs.squareup.moshi
+    kapt libs.squareup.moshiKotlin
+    implementation libs.androidx.lifecycleExtensions
+    implementation libs.androidx.lifecycleLivedata
+
+    implementation libs.androidx.datastore
+    implementation libs.androidx.datastorepreferences
+
 
     // Log
-    implementation 'com.jakewharton.timber:timber:4.7.1'
+    implementation libs.jakewharton.timber
 
     // Debug
-    implementation 'com.facebook.stetho:stetho:1.5.1'
+    implementation 'com.facebook.stetho:stetho:1.6.0'
 
     // Phone number https://github.com/google/libphonenumber
-    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.18'
+    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.35'
 
     // rx
-    implementation 'io.reactivex.rxjava2:rxkotlin:2.4.0'
-    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+    implementation libs.rx.rxKotlin
+    implementation libs.rx.rxAndroid
     implementation 'com.jakewharton.rxrelay2:rxrelay:2.1.1'
     // RXBinding
-    implementation "com.jakewharton.rxbinding3:rxbinding:$rxbinding_version"
-    implementation "com.jakewharton.rxbinding3:rxbinding-appcompat:$rxbinding_version"
-    implementation "com.jakewharton.rxbinding3:rxbinding-material:$rxbinding_version"
+    implementation libs.jakewharton.rxbinding
+    implementation libs.jakewharton.rxbindingAppcompat
+    implementation libs.jakewharton.rxbindingMaterial
 
-    implementation("com.airbnb.android:epoxy:$epoxy_version")
-    implementation "com.airbnb.android:epoxy-glide-preloading:$epoxy_version"
-    kapt "com.airbnb.android:epoxy-processor:$epoxy_version"
-    implementation "com.airbnb.android:epoxy-paging:$epoxy_version"
-    implementation 'com.airbnb.android:mvrx:1.5.1'
+    implementation libs.airbnb.epoxy
+    implementation libs.airbnb.epoxyGlide
+    kapt libs.airbnb.epoxyProcessor
+    implementation libs.airbnb.epoxyPaging
+    implementation libs.airbnb.mavericks
+    //TODO: remove when entirely migrated to Flow
+    implementation libs.airbnb.mavericksRx
+
 
     // Work
-    implementation "androidx.work:work-runtime-ktx:$work_version"
+    implementation libs.androidx.work
 
     // Paging
-    implementation "androidx.paging:paging-runtime-ktx:2.1.2"
+    implementation libs.androidx.pagingRuntimeKtx
 
     // Functional Programming
-    implementation "io.arrow-kt:arrow-core:$arrow_version"
+    implementation libs.arrow.core
 
     // Pref
-    implementation 'androidx.preference:preference-ktx:1.1.1'
+    implementation libs.androidx.preferenceKtx
 
     // UI
     implementation 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
-    implementation 'com.google.android.material:material:1.3.0'
+    implementation libs.google.material
     implementation 'me.gujun.android:span:1.7'
-    implementation "io.noties.markwon:core:$markwon_version"
-    implementation "io.noties.markwon:html:$markwon_version"
+    implementation libs.markwon.core
+    implementation libs.markwon.html
     implementation 'com.googlecode.htmlcompressor:htmlcompressor:1.5.2'
     implementation 'me.saket:better-link-movement-method:2.2.0'
     implementation 'com.google.android:flexbox:2.0.1'
-    implementation "androidx.autofill:autofill:$autofill_version"
+    implementation libs.androidx.autoFill
     implementation 'jp.wasabeef:glide-transformations:4.3.0'
     implementation 'com.github.vector-im:PFLockScreen-Android:1.0.0-beta12'
+    implementation 'com.github.hyuwah:DraggableView:1.0.0'
+    implementation 'com.github.Armen101:AudioRecordView:1.0.5'
 
     // Custom Tab
     implementation 'androidx.browser:browser:1.3.0'
 
     // Passphrase strength helper
-    implementation 'com.nulab-inc:zxcvbn:1.4.0'
+    implementation 'com.nulab-inc:zxcvbn:1.5.2'
 
-    //Alerter
+    // To convert voice message on old platforms
+    implementation 'com.arthenica:ffmpeg-kit-audio:4.5.LTS'
+
+    // Alerter
     implementation 'com.tapadoo.android:alerter:7.0.1'
 
     implementation 'com.otaliastudios:autocomplete:1.1.0'
 
     // Shake detection
-    implementation 'com.squareup:seismic:1.0.2'
+    implementation 'com.squareup:seismic:1.0.3'
 
     // Image Loading
-    implementation "com.github.piasy:BigImageViewer:$big_image_viewer_version"
-    implementation "com.github.piasy:GlideImageLoader:$big_image_viewer_version"
-    implementation "com.github.piasy:ProgressPieIndicator:$big_image_viewer_version"
-    implementation "com.github.piasy:GlideImageViewFactory:$big_image_viewer_version"
+    implementation libs.github.bigImageViewer
+    implementation libs.github.glideImageLoader
+    implementation libs.github.progressPieIndicator
+    implementation libs.github.glideImageViewFactory
 
     // implementation 'com.github.MikeOrtiz:TouchImageView:3.0.2'
-    implementation 'com.github.chrisbanes:PhotoView:2.1.4'
+    implementation 'com.github.chrisbanes:PhotoView:2.3.0'
 
-    implementation "com.github.bumptech.glide:glide:$glide_version"
-    kapt "com.github.bumptech.glide:compiler:$glide_version"
+    implementation libs.github.glide
+    kapt libs.github.glideCompiler
     implementation 'com.danikula:videocache:2.7.1'
-    implementation 'com.github.yalantis:ucrop:2.2.6'
+    implementation 'com.github.yalantis:ucrop:2.2.7'
 
     // Badge for compatibility
     implementation 'me.leolin:ShortcutBadger:1.1.22@aar'
 
     // Chat effects
-    implementation 'nl.dionsegijn:konfetti:1.2.6'
-    implementation 'com.github.jetradarmobile:android-snowfall:1.2.0'
+    implementation 'nl.dionsegijn:konfetti:1.3.2'
+    implementation 'com.github.jetradarmobile:android-snowfall:1.2.1'
     // DI
-    implementation "com.google.dagger:dagger:$daggerVersion"
-    kapt "com.google.dagger:dagger-compiler:$daggerVersion"
+    implementation libs.dagger.dagger
+    kapt libs.dagger.daggerCompiler
 
     // gplay flavor only
-    gplayImplementation('com.google.firebase:firebase-messaging:21.0.1') {
+    gplayImplementation('com.google.firebase:firebase-messaging:22.0.0') {
         exclude group: 'com.google.firebase', module: 'firebase-core'
         exclude group: 'com.google.firebase', module: 'firebase-analytics'
         exclude group: 'com.google.firebase', module: 'firebase-measurement-connector'
@@ -431,7 +472,9 @@ dependencies {
 
     implementation "androidx.emoji:emoji-appcompat:1.1.0"
 
-    implementation 'com.github.BillCarsonFr:JsonViewer:0.5'
+    implementation ('com.github.BillCarsonFr:JsonViewer:0.6'){
+        exclude group: 'com.airbnb.android'
+    }
 
     // WebRTC
     // org.webrtc:google-webrtc is for development purposes only
@@ -439,7 +482,11 @@ dependencies {
     implementation('com.facebook.react:react-native-webrtc:1.87.3-jitsi-6624067@aar')
 
     // Jitsi
-    implementation('org.jitsi.react:jitsi-meet-sdk:3.1.0')
+    implementation('org.jitsi.react:jitsi-meet-sdk:3.1.0') {
+        exclude group: 'com.google.firebase'
+        exclude group: 'com.google.android.gms'
+        exclude group: 'com.android.installreferrer'
+    }
 
     // QR-code
     // Stick to 3.3.3 because of https://github.com/zxing/zxing/issues/1170
@@ -447,37 +494,45 @@ dependencies {
     implementation 'me.dm7.barcodescanner:zxing:1.9.13'
 
     // Emoji Keyboard
-    implementation 'com.vanniktech:emoji-material:0.7.0'
-    implementation 'com.vanniktech:emoji-google:0.7.0'
+    implementation libs.vanniktech.emojiMaterial
+    implementation libs.vanniktech.emojiGoogle
 
     implementation 'im.dlg:android-dialer:1.2.5'
 
+    // JWT
+    api libs.jsonwebtoken.jjwtApi
+    runtimeOnly libs.jsonwebtoken.jjwtImpl
+    runtimeOnly(libs.jsonwebtoken.jjwtOrgjson) {
+        exclude group: 'org.json', module: 'json' //provided by Android natively
+    }
+    implementation 'commons-codec:commons-codec:1.15'
+
+
     // TESTS
-    testImplementation 'junit:junit:4.13.2'
-    testImplementation "org.amshove.kluent:kluent-android:$kluent_version"
+    testImplementation libs.tests.junit
+    testImplementation libs.tests.kluent
+    testImplementation libs.mockk.mockk
     // Plant Timber tree for test
-    testImplementation 'net.lachlanmckee:timber-junit-rule:1.0.1'
+    testImplementation libs.tests.timberJunitRule
+    testImplementation libs.airbnb.mavericksTesting
 
     // Activate when you want to check for leaks, from time to time.
     //debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.3'
 
-    androidTestImplementation "androidx.test:core:$androidxTest_version"
-    androidTestImplementation "androidx.test:runner:$androidxTest_version"
-    androidTestImplementation "androidx.test:rules:$androidxTest_version"
-    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-    androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_version"
-    androidTestImplementation "androidx.test.espresso:espresso-contrib:$espresso_version"
-    androidTestImplementation "androidx.test.espresso:espresso-intents:$espresso_version"
-    androidTestImplementation "org.amshove.kluent:kluent-android:$kluent_version"
-    androidTestImplementation "androidx.arch.core:core-testing:$arch_version"
+    androidTestImplementation libs.androidx.testCore
+    androidTestImplementation libs.androidx.testRunner
+    androidTestImplementation libs.androidx.testRules
+    androidTestImplementation libs.androidx.junit
+    androidTestImplementation libs.androidx.espressoCore
+    androidTestImplementation libs.androidx.espressoContrib
+    androidTestImplementation libs.androidx.espressoIntents
+    androidTestImplementation libs.tests.kluent
+    androidTestImplementation libs.androidx.coreTesting
     // Plant Timber tree for test
-    androidTestImplementation 'net.lachlanmckee:timber-junit-rule:1.0.1'
+    androidTestImplementation libs.tests.timberJunitRule
     // "The one who serves a great Espresso"
-    androidTestImplementation('com.schibsted.spain:barista:3.7.0') {
+    androidTestImplementation('com.adevinta.android:barista:4.2.0') {
         exclude group: 'org.jetbrains.kotlin'
     }
-}
-
-if (getGradle().getStartParameter().getTaskRequests().toString().contains("Gplay")) {
-    apply plugin: 'com.google.gms.google-services'
+    androidTestUtil libs.androidx.orchestrator
 }

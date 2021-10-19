@@ -26,7 +26,7 @@ import androidx.browser.customtabs.CustomTabsCallback
 import androidx.browser.customtabs.CustomTabsClient
 import androidx.browser.customtabs.CustomTabsServiceConnection
 import androidx.browser.customtabs.CustomTabsSession
-import com.airbnb.mvrx.MvRx
+import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
 import com.airbnb.mvrx.withState
 import im.vector.app.R
@@ -78,7 +78,7 @@ class ReAuthActivity : SimpleFragmentActivity(), ReAuthViewModel.Factory {
         val title = intent.extras?.getString(EXTRA_REASON_TITLE) ?: getString(R.string.re_authentication_activity_title)
         supportActionBar?.setTitle(title) ?: run { setTitle(title) }
 
-//        val authArgs = intent.getParcelableExtra<Args>(MvRx.KEY_ARG)
+//        val authArgs = intent.getParcelableExtra<Args>(Mavericks.KEY_ARG)
 
         // For the sso flow we can for now only rely on the fallback flow, that handles all
         // the UI, due to the sandbox nature of CCT (chrome custom tab) we cannot get much information
@@ -221,7 +221,7 @@ class ReAuthActivity : SimpleFragmentActivity(), ReAuthViewModel.Factory {
                 }
             }
             return Intent(context, ReAuthActivity::class.java).apply {
-                putExtra(MvRx.KEY_ARG, Args(authType, reasonTitle, fromError.session, lastErrorCode, resultKeyStoreAlias))
+                putExtra(Mavericks.KEY_ARG, Args(authType, reasonTitle, fromError.session, lastErrorCode, resultKeyStoreAlias))
             }
         }
     }

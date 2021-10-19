@@ -16,8 +16,8 @@
 package org.matrix.android.sdk.internal.crypto.verification
 
 import org.matrix.android.sdk.api.MatrixCallback
-import org.matrix.android.sdk.api.session.crypto.verification.ValidVerificationInfoRequest
 import org.matrix.android.sdk.api.session.crypto.verification.CancelCode
+import org.matrix.android.sdk.api.session.crypto.verification.ValidVerificationInfoRequest
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
@@ -33,11 +33,9 @@ import org.matrix.android.sdk.internal.crypto.model.rest.KeyVerificationStart
 import org.matrix.android.sdk.internal.crypto.model.rest.VERIFICATION_METHOD_RECIPROCATE
 import org.matrix.android.sdk.internal.crypto.model.rest.VERIFICATION_METHOD_SAS
 import org.matrix.android.sdk.internal.crypto.tasks.SendToDeviceTask
-import org.matrix.android.sdk.internal.di.DeviceId
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.task.configureWith
 import timber.log.Timber
-import javax.inject.Inject
 
 internal class VerificationTransportToDevice(
         private var tx: DefaultVerificationTransaction?,
@@ -70,7 +68,7 @@ internal class VerificationTransportToDevice(
             contentMap.setObject(otherUserId, it, keyReq)
         }
         sendToDeviceTask
-                .configureWith(SendToDeviceTask.Params(MessageType.MSGTYPE_VERIFICATION_REQUEST, contentMap, localId)) {
+                .configureWith(SendToDeviceTask.Params(MessageType.MSGTYPE_VERIFICATION_REQUEST, contentMap)) {
                     this.callback = object : MatrixCallback<Unit> {
                         override fun onSuccess(data: Unit) {
                             Timber.v("## verification [$tx.transactionId] send toDevice request success")
@@ -126,7 +124,7 @@ internal class VerificationTransportToDevice(
         contentMap.setObject(tx.otherUserId, tx.otherDeviceId, toSendToDeviceObject)
 
         sendToDeviceTask
-                .configureWith(SendToDeviceTask.Params(type, contentMap, tx.transactionId)) {
+                .configureWith(SendToDeviceTask.Params(type, contentMap)) {
                     this.callback = object : MatrixCallback<Unit> {
                         override fun onSuccess(data: Unit) {
                             Timber.v("## SAS verification [$tx.transactionId] toDevice type '$type' success.")
@@ -157,7 +155,7 @@ internal class VerificationTransportToDevice(
         val contentMap = MXUsersDevicesMap<Any>()
         contentMap.setObject(otherUserId, otherUserDeviceId, cancelMessage)
         sendToDeviceTask
-                .configureWith(SendToDeviceTask.Params(EventType.KEY_VERIFICATION_DONE, contentMap, transactionId)) {
+                .configureWith(SendToDeviceTask.Params(EventType.KEY_VERIFICATION_DONE, contentMap)) {
                     this.callback = object : MatrixCallback<Unit> {
                         override fun onSuccess(data: Unit) {
                             onDone?.invoke()
@@ -178,7 +176,7 @@ internal class VerificationTransportToDevice(
         val contentMap = MXUsersDevicesMap<Any>()
         contentMap.setObject(otherUserId, otherUserDeviceId, cancelMessage)
         sendToDeviceTask
-                .configureWith(SendToDeviceTask.Params(EventType.KEY_VERIFICATION_CANCEL, contentMap, transactionId)) {
+                .configureWith(SendToDeviceTask.Params(EventType.KEY_VERIFICATION_CANCEL, contentMap)) {
                     this.callback = object : MatrixCallback<Unit> {
                         override fun onSuccess(data: Unit) {
                             Timber.v("## SAS verification [$transactionId] canceled for reason ${code.value}")
@@ -246,15 +244,5 @@ internal class VerificationTransportToDevice(
                 fromDevice = fromDevice,
                 methods = methods
         )
-    }
-}
-
-internal class VerificationTransportToDeviceFactory @Inject constructor(
-        private val sendToDeviceTask: SendToDeviceTask,
-        @DeviceId val myDeviceId: String?,
-        private val taskExecutor: TaskExecutor) {
-
-    fun createTransport(tx: DefaultVerificationTransaction?): VerificationTransportToDevice {
-        return VerificationTransportToDevice(tx, sendToDeviceTask, myDeviceId, taskExecutor)
     }
 }

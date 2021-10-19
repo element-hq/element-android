@@ -16,16 +16,16 @@
 
 package org.matrix.android.sdk.internal.task
 
-import org.matrix.android.sdk.api.util.Cancelable
-import org.matrix.android.sdk.internal.di.MatrixScope
-import org.matrix.android.sdk.internal.extensions.foldToCallback
-import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
-import org.matrix.android.sdk.internal.util.toCancelable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
+import org.matrix.android.sdk.api.util.Cancelable
+import org.matrix.android.sdk.internal.di.MatrixScope
+import org.matrix.android.sdk.internal.extensions.foldToCallback
+import org.matrix.android.sdk.internal.util.toCancelable
 import timber.log.Timber
 import javax.inject.Inject
 import kotlin.coroutines.EmptyCoroutineContext
@@ -40,9 +40,9 @@ internal class TaskExecutor @Inject constructor(private val coroutineDispatchers
                 .launch(task.callbackThread.toDispatcher()) {
                     val resultOrFailure = runCatching {
                         withContext(task.executionThread.toDispatcher()) {
-                            Timber.v("Enqueue task $task")
-                            Timber.v("Execute task $task on ${Thread.currentThread().name}")
-                            task.execute(task.params)
+                            Timber.v("## TASK: Enqueue task $task")
+                            Timber.v("## TASK: Execute task $task on ${Thread.currentThread().name}")
+                            task.executeRetry(task.params, task.maxRetryCount)
                         }
                     }
                     resultOrFailure

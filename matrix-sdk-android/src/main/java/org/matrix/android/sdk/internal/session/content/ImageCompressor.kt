@@ -16,25 +16,27 @@
 
 package org.matrix.android.sdk.internal.session.content
 
-import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
 import androidx.exifinterface.media.ExifInterface
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
+import org.matrix.android.sdk.internal.util.TemporaryFileCreator
 import timber.log.Timber
 import java.io.File
-import java.util.UUID
 import javax.inject.Inject
 
-internal class ImageCompressor @Inject constructor(private val context: Context) {
+internal class ImageCompressor @Inject constructor(
+        private val temporaryFileCreator: TemporaryFileCreator,
+        private val coroutineDispatchers: MatrixCoroutineDispatchers
+) {
     suspend fun compress(
             imageFile: File,
             desiredWidth: Int,
             desiredHeight: Int,
             desiredQuality: Int = 80): File {
-        return withContext(Dispatchers.IO) {
+        return withContext(coroutineDispatchers.io) {
             val compressedBitmap = BitmapFactory.Options().run {
                 inJustDecodeBounds = true
                 decodeBitmap(imageFile, this)
@@ -45,15 +47,17 @@ internal class ImageCompressor @Inject constructor(private val context: Context)
                 }
             } ?: return@withContext imageFile
 
-            val destinationFile = createDestinationFile()
+            val destinationFile = temporaryFileCreator.create()
 
             runCatching {
                 destinationFile.outputStream().use {
                     compressedBitmap.compress(Bitmap.CompressFormat.JPEG, desiredQuality, it)
                 }
+            }.onFailure {
+                return@withContext imageFile
             }
 
-            return@withContext destinationFile
+            destinationFile
         }
     }
 
@@ -64,16 +68,16 @@ internal class ImageCompressor @Inject constructor(private val context: Context)
                     val orientation = exifInfo.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)
                     val matrix = Matrix()
                     when (orientation) {
-                        ExifInterface.ORIENTATION_ROTATE_270      -> matrix.postRotate(270f)
-                        ExifInterface.ORIENTATION_ROTATE_180      -> matrix.postRotate(180f)
-                        ExifInterface.ORIENTATION_ROTATE_90       -> matrix.postRotate(90f)
+                        ExifInterface.ORIENTATION_ROTATE_270 -> matrix.postRotate(270f)
+                        ExifInterface.ORIENTATION_ROTATE_180 -> matrix.postRotate(180f)
+                        ExifInterface.ORIENTATION_ROTATE_90 -> matrix.postRotate(90f)
                         ExifInterface.ORIENTATION_FLIP_HORIZONTAL -> matrix.preScale(-1f, 1f)
-                        ExifInterface.ORIENTATION_FLIP_VERTICAL   -> matrix.preScale(1f, -1f)
-                        ExifInterface.ORIENTATION_TRANSPOSE       -> {
+                        ExifInterface.ORIENTATION_FLIP_VERTICAL -> matrix.preScale(1f, -1f)
+                        ExifInterface.ORIENTATION_TRANSPOSE -> {
                             matrix.preRotate(-90f)
                             matrix.preScale(-1f, 1f)
                         }
-                        ExifInterface.ORIENTATION_TRANSVERSE      -> {
+                        ExifInterface.ORIENTATION_TRANSVERSE -> {
                             matrix.preRotate(90f)
                             matrix.preScale(-1f, 1f)
                         }
@@ -115,9 +119,5 @@ internal class ImageCompressor @Inject constructor(private val context: Context)
             Timber.e(e, "Cannot decode Bitmap")
             null
         }
-    }
-
-    private fun createDestinationFile(): File {
-        return File.createTempFile(UUID.randomUUID().toString(), null, context.cacheDir)
     }
 }

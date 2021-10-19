@@ -19,7 +19,8 @@ package im.vector.app.features.media
 import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.resources.StringProvider
 import im.vector.lib.attachmentviewer.AttachmentInfo
-import org.matrix.android.sdk.api.MatrixCallback
+import kotlinx.coroutines.CoroutineScope
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.file.FileService
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
@@ -27,6 +28,7 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageImageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageVideoContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageWithAttachmentContent
 import org.matrix.android.sdk.api.session.room.model.message.getFileUrl
+import org.matrix.android.sdk.api.session.room.model.message.getThumbnailUrl
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.util.MimeTypes
 import org.matrix.android.sdk.internal.crypto.attachments.toElementToDecrypt
@@ -37,8 +39,16 @@ class RoomEventsAttachmentProvider(
         imageContentRenderer: ImageContentRenderer,
         dateFormatter: VectorDateFormatter,
         fileService: FileService,
+        coroutineScope: CoroutineScope,
         stringProvider: StringProvider
-) : BaseAttachmentProvider<TimelineEvent>(attachments, imageContentRenderer, fileService, dateFormatter, stringProvider) {
+) : BaseAttachmentProvider<TimelineEvent>(
+        attachments = attachments,
+        imageContentRenderer = imageContentRenderer,
+        fileService = fileService,
+        coroutineScope = coroutineScope,
+        dateFormatter = dateFormatter,
+        stringProvider = stringProvider
+) {
 
     override fun getAttachmentInfoAt(position: Int): AttachmentInfo {
         return getItem(position).let {
@@ -75,8 +85,7 @@ class RoomEventsAttachmentProvider(
                         eventId = it.eventId,
                         filename = content.body,
                         mimeType = content.mimeType,
-                        url = content.videoInfo?.thumbnailFile?.url
-                                ?: content.videoInfo?.thumbnailUrl,
+                        url = content.videoInfo?.getThumbnailUrl(),
                         elementToDecrypt = content.videoInfo?.thumbnailFile?.toElementToDecrypt(),
                         height = content.videoInfo?.height,
                         maxHeight = -1,
@@ -99,8 +108,7 @@ class RoomEventsAttachmentProvider(
                         data = data,
                         thumbnail = AttachmentInfo.Image(
                                 uid = it.eventId,
-                                url = content.videoInfo?.thumbnailFile?.url
-                                        ?: content.videoInfo?.thumbnailUrl ?: "",
+                                url = content.videoInfo?.getThumbnailUrl() ?: "",
                                 data = thumbnailData
 
                         )
@@ -119,27 +127,19 @@ class RoomEventsAttachmentProvider(
         return getItem(position)
     }
 
-    override fun getFileForSharing(position: Int, callback: (File?) -> Unit) {
-        getItem(position).let { timelineEvent ->
-
-            val messageContent = timelineEvent.root.getClearContent().toModel<MessageContent>()
-                    as? MessageWithAttachmentContent
-                    ?: return@let
-            fileService.downloadFile(
-                    fileName = messageContent.body,
-                    mimeType = messageContent.mimeType,
-                    url = messageContent.getFileUrl(),
-                    elementToDecrypt = messageContent.encryptedFileInfo?.toElementToDecrypt(),
-                    callback = object : MatrixCallback<File> {
-                        override fun onSuccess(data: File) {
-                            callback(data)
-                        }
-
-                        override fun onFailure(failure: Throwable) {
-                            callback(null)
-                        }
+    override suspend fun getFileForSharing(position: Int): File? {
+        return getItem(position)
+                .let { timelineEvent ->
+                    timelineEvent.root.getClearContent().toModel<MessageContent>() as? MessageWithAttachmentContent
+                }
+                ?.let { messageContent ->
+                    tryOrNull {
+                        fileService.downloadFile(
+                                fileName = messageContent.body,
+                                mimeType = messageContent.mimeType,
+                                url = messageContent.getFileUrl(),
+                                elementToDecrypt = messageContent.encryptedFileInfo?.toElementToDecrypt())
                     }
-            )
-        }
+                }
     }
 }

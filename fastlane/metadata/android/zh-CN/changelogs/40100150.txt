@@ -1,0 +1,2 @@
+此版本的主要变化：支持通过社交网络登录。
+完整更新日志：https://github.com/vector-im/element-android/releases/tag/v1.0.15

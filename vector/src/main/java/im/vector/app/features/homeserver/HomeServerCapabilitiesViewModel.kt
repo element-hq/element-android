@@ -18,11 +18,11 @@ package im.vector.app.features.homeserver
 
 import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import im.vector.app.core.di.HasScreenInjector
 import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.EmptyViewEvents
@@ -48,7 +48,7 @@ class HomeServerCapabilitiesViewModel @AssistedInject constructor(
         fun create(initialState: HomeServerCapabilitiesViewState): HomeServerCapabilitiesViewModel
     }
 
-    companion object : MvRxViewModelFactory<HomeServerCapabilitiesViewModel, HomeServerCapabilitiesViewState> {
+    companion object : MavericksViewModelFactory<HomeServerCapabilitiesViewModel, HomeServerCapabilitiesViewState> {
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: HomeServerCapabilitiesViewState): HomeServerCapabilitiesViewModel? {
             val fragment: UserListFragment = (viewModelContext as FragmentViewModelContext).fragment()
@@ -70,7 +70,7 @@ class HomeServerCapabilitiesViewModel @AssistedInject constructor(
     private fun initAdminE2eByDefault() {
         viewModelScope.launch(Dispatchers.IO) {
             val adminE2EByDefault = tryOrNull {
-                rawService.getElementWellknown(session.myUserId)
+                rawService.getElementWellknown(session.sessionParams)
                         ?.isE2EByDefault()
                         ?: true
             } ?: true

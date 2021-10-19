@@ -17,7 +17,6 @@
 package org.matrix.android.sdk.api.session.room.read
 
 import androidx.lifecycle.LiveData
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.room.model.ReadReceipt
 import org.matrix.android.sdk.api.util.Optional
 
@@ -35,17 +34,17 @@ interface ReadService {
     /**
      * Force the read marker to be set on the latest event.
      */
-    fun markAsRead(params: MarkAsReadParams = MarkAsReadParams.BOTH, callback: MatrixCallback<Unit>)
+    suspend fun markAsRead(params: MarkAsReadParams = MarkAsReadParams.BOTH)
 
     /**
      * Set the read receipt on the event with provided eventId.
      */
-    fun setReadReceipt(eventId: String, callback: MatrixCallback<Unit>)
+    suspend fun setReadReceipt(eventId: String)
 
     /**
      * Set the read marker on the event with provided eventId.
      */
-    fun setReadMarker(fullyReadEventId: String, callback: MatrixCallback<Unit>)
+    suspend fun setReadMarker(fullyReadEventId: String)
 
     /**
      * Check if an event is already read, ie. your read receipt is set on a more recent event.

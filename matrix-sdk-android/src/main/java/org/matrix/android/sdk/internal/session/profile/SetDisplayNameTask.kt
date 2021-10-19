@@ -33,11 +33,11 @@ internal class DefaultSetDisplayNameTask @Inject constructor(
         private val globalErrorReceiver: GlobalErrorReceiver) : SetDisplayNameTask() {
 
     override suspend fun execute(params: Params) {
+        val body = SetDisplayNameBody(
+                displayName = params.newDisplayName
+        )
         return executeRequest(globalErrorReceiver) {
-            val body = SetDisplayNameBody(
-                    displayName = params.newDisplayName
-            )
-            apiCall = profileAPI.setDisplayName(params.userId, body)
+            profileAPI.setDisplayName(params.userId, body)
         }
     }
 }

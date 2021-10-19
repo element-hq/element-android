@@ -1,0 +1,39 @@
+Element er både en sikker budbringer og en produktivitets team -samarbeidsprogram som er ideell for gruppechatter mens du jobber på fjernkontroll. Denne chat-appen bruker ende-til-ende-kryptering for å tilby kraftige videokonferanser, fildeling og taleanrop.
+
+<b> Elementets funksjoner inkluderer: </b>
+- Avanserte elektroniske kommunikasjonsverktøy
+- Fullt krypterte meldinger for å tillate tryggere bedriftskommunikasjon, selv for eksterne arbeidere
+- Desentralisert chat basert på Matrix open source -rammeverket
+- Fildeling sikkert med krypterte data mens du administrerer prosjekter
+- Videochatter med Voice over IP og skjermdeling
+- Enkel integrering med dine favoritt online samarbeidsverktøy, prosjektstyringsverktøy, VoIP -tjenester og andre teammeldingsapper
+
+Element er helt annerledes enn andre meldings- og samarbeidsapper. Den opererer på Matrix, et åpent nettverk for sikre meldinger og desentralisert kommunikasjon. Det gjør det mulig for egen hosting å gi brukerne maksimal eierskap og kontroll over sine data og meldinger.
+
+<b> Personvern og krypterte meldinger </b>
+Element beskytter deg mot uønskede annonser, datautvinning og inngjerdede hager. Den sikrer også alle dataene dine, en-til-en video- og talekommunikasjon gjennom ende-til-ende-kryptering og kryssignert enhetsverifisering.
+
+Element gir deg kontroll over personvernet ditt, samtidig som du kan kommunisere trygt med alle på Matrix -nettverket eller andre forretningssamarbeidsverktøy ved å integrere med apper som Slack.
+
+<b> Elementet kan hostes selv </b>
+For å tillate mer kontroll over dine sensitive data og samtaler, kan Element være egenvert, eller du kan velge hvilken som helst Matrix-basert vert-standarden for åpen kildekode, desentralisert kommunikasjon. Element gir deg personvern, overholdelse av sikkerhet og fleksibilitet for integrering.
+
+<b> Ei dataene dine </b>
+Du bestemmer hvor du vil beholde dataene og meldingene dine. Uten risiko for datautvinning eller tilgang fra tredjeparter.
+
+Element gir deg kontroll på forskjellige måter:
+1. Få en gratis konto på den matrix.org offentlige serveren som Matrix -utviklerne er vert for, eller velg blant tusenvis av offentlige servere som er arrangert av frivillige
+2. Vær vert for kontoen din ved å kjøre en server på din egen IT-infrastruktur
+3. Registrer deg for en konto på en tilpasset server ved ganske enkelt å abonnere på Element Matrix Services hosting -plattform
+
+<b> Åpen melding og samarbeid </b>
+Du kan chatte med alle på Matrix -nettverket, enten de bruker Element, en annen Matrix -app eller til og med om de bruker en annen meldingsapp.
+
+<b> Super sikker </b>
+Ekte ende-til-ende-kryptering (bare de i samtalen kan dekryptere meldinger) og kryssignert enhetsbekreftelse.
+
+<b> Fullstendig kommunikasjon og integrering </b>
+Meldinger, tale- og videosamtaler, fildeling, skjermdeling og en hel haug med integrasjoner, bots og widgets. Bygg rom, lokalsamfunn, hold kontakten og få ting gjort.
+
+<b> Hent der du slapp </b>
+Hold kontakten uansett hvor du er med fullt synkronisert meldingshistorikk på alle enhetene dine og på nettet på https://app.element.io

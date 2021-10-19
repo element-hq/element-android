@@ -16,10 +16,10 @@
 
 package org.matrix.android.sdk.internal.session.initsync
 
-import androidx.annotation.StringRes
+import org.matrix.android.sdk.api.session.initsync.InitSyncStep
 
 internal interface ProgressReporter {
-    fun startTask(@StringRes nameRes: Int,
+    fun startTask(initSyncStep: InitSyncStep,
                   totalProgress: Int,
                   parentWeight: Float)
 
