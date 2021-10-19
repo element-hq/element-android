@@ -1451,8 +1451,8 @@ class RoomDetailFragment @Inject constructor(
 
     private fun renderSendMessageResult(sendMessageResult: TextComposerViewEvents.SendMessageResult) {
         when (sendMessageResult) {
-            is TextComposerViewEvents.SlashCommandHandled        -> {
-                sendMessageResult.messageRes?.let { showSnackWithMessage(getString(it)) }
+            is TextComposerViewEvents.SlashCommandLoading        -> {
+                showLoading(null)
             }
             is TextComposerViewEvents.SlashCommandError          -> {
                 displayCommandError(getString(R.string.command_problem_with_parameters, sendMessageResult.command.command))
@@ -1461,9 +1461,12 @@ class RoomDetailFragment @Inject constructor(
                 displayCommandError(getString(R.string.unrecognized_command, sendMessageResult.command))
             }
             is TextComposerViewEvents.SlashCommandResultOk       -> {
+                dismissLoadingDialog()
                 views.composerLayout.setTextIfDifferent("")
+                sendMessageResult.messageRes?.let { showSnackWithMessage(getString(it)) }
             }
             is TextComposerViewEvents.SlashCommandResultError    -> {
+                dismissLoadingDialog()
                 displayCommandError(errorFormatter.toHumanReadable(sendMessageResult.throwable))
             }
             is TextComposerViewEvents.SlashCommandNotImplemented -> {
