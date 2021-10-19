@@ -28,11 +28,32 @@ import im.vector.app.features.contactsbook.ContactsBookViewModel
 import im.vector.app.features.createdirect.CreateDirectRoomViewModel
 import im.vector.app.features.crypto.keysbackup.settings.KeysBackupSettingsViewModel
 import im.vector.app.features.crypto.quads.SharedSecureStorageViewModel
+import im.vector.app.features.crypto.verification.choose.VerificationChooseMethodViewModel
+import im.vector.app.features.crypto.verification.emoji.VerificationEmojiCodeViewModel
 import im.vector.app.features.devtools.RoomDevToolViewModel
+import im.vector.app.features.discovery.DiscoverySettingsViewModel
+import im.vector.app.features.discovery.change.SetIdentityServerViewModel
+import im.vector.app.features.home.HomeDetailViewModel
 import im.vector.app.features.home.PromoteRestrictedViewModel
+import im.vector.app.features.home.UnknownDeviceDetectorSharedViewModel
+import im.vector.app.features.home.UnreadMessagesSharedViewModel
+import im.vector.app.features.home.room.breadcrumbs.BreadcrumbsViewModel
+import im.vector.app.features.home.room.detail.RoomDetailViewModel
+import im.vector.app.features.home.room.detail.composer.TextComposerViewModel
+import im.vector.app.features.home.room.detail.search.SearchViewModel
+import im.vector.app.features.home.room.detail.timeline.action.MessageActionsViewModel
+import im.vector.app.features.home.room.detail.timeline.edithistory.ViewEditHistoryViewModel
 import im.vector.app.features.home.room.detail.timeline.reactions.ViewReactionsViewModel
 import im.vector.app.features.home.room.detail.upgrade.MigrateRoomViewModel
 import im.vector.app.features.home.room.list.RoomListViewModel
+import im.vector.app.features.homeserver.HomeServerCapabilitiesViewModel
+import im.vector.app.features.invite.InviteUsersToRoomViewModel
+import im.vector.app.features.login.LoginViewModel
+import im.vector.app.features.login2.LoginViewModel2
+import im.vector.app.features.login2.created.AccountCreatedViewModel
+import im.vector.app.features.matrixto.MatrixToBottomSheetViewModel
+import im.vector.app.features.rageshake.BugReportViewModel
+import im.vector.app.features.reactions.EmojiSearchResultViewModel
 import im.vector.app.features.room.RequireActiveMembershipViewModel
 import im.vector.app.features.roomdirectory.RoomDirectoryViewModel
 import im.vector.app.features.roomdirectory.createroom.CreateRoomViewModel
@@ -391,6 +412,104 @@ interface MavericksViewModelModule {
     @MavericksViewModelKey(RequireActiveMembershipViewModel::class)
     fun requireActiveMembershipViewModelFactory(factory: RequireActiveMembershipViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
 
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(EmojiSearchResultViewModel::class)
+    fun emojiSearchResultViewModelFactory(factory: EmojiSearchResultViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
 
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(BugReportViewModel::class)
+    fun bugReportViewModelFactory(factory: BugReportViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(MatrixToBottomSheetViewModel::class)
+    fun matrixToBottomSheetViewModelFactory(factory: MatrixToBottomSheetViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(AccountCreatedViewModel::class)
+    fun accountCreatedViewModelFactory(factory: AccountCreatedViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(LoginViewModel2::class)
+    fun loginViewModel2Factory(factory: LoginViewModel2.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(LoginViewModel::class)
+    fun loginViewModelFactory(factory: LoginViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(HomeServerCapabilitiesViewModel::class)
+    fun homeServerCapabilitiesViewModelFactory(factory: HomeServerCapabilitiesViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(InviteUsersToRoomViewModel::class)
+    fun inviteUsersToRoomViewModelFactory(factory: InviteUsersToRoomViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(ViewEditHistoryViewModel::class)
+    fun viewEditHistoryViewModelFactory(factory: ViewEditHistoryViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(MessageActionsViewModel::class)
+    fun messageActionsViewModelFactory(factory: MessageActionsViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(VerificationChooseMethodViewModel::class)
+    fun verificationChooseMethodViewModelFactory(factory: VerificationChooseMethodViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(VerificationEmojiCodeViewModel::class)
+    fun verificationEmojiCodeViewModelFactory(factory: VerificationEmojiCodeViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(SearchViewModel::class)
+    fun searchViewModelFactory(factory: SearchViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(UnreadMessagesSharedViewModel::class)
+    fun unreadMessagesSharedViewModelFactory(factory: UnreadMessagesSharedViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(UnknownDeviceDetectorSharedViewModel::class)
+    fun unknownDeviceDetectorSharedViewModelFactory(factory: UnknownDeviceDetectorSharedViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(DiscoverySettingsViewModel::class)
+    fun discoverySettingsViewModelFactory(factory: DiscoverySettingsViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(TextComposerViewModel::class)
+    fun textComposerViewModelFactory(factory: TextComposerViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(SetIdentityServerViewModel::class)
+    fun setIdentityServerViewModelFactory(factory: SetIdentityServerViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(BreadcrumbsViewModel::class)
+    fun breadcrumbsViewModelFactory(factory: BreadcrumbsViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(HomeDetailViewModel::class)
+    fun homeDetailViewModelFactory(factory: HomeDetailViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
 
 }

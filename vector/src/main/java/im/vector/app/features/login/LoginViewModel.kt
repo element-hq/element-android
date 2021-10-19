@@ -32,6 +32,8 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.configureAndStart
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
@@ -72,9 +74,11 @@ class LoginViewModel @AssistedInject constructor(
 ) : VectorViewModel<LoginViewState, LoginAction, LoginViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: LoginViewState): LoginViewModel
+    interface Factory:MavericksAssistedViewModelFactory<LoginViewModel,LoginViewState> {
+        override fun create(initialState: LoginViewState): LoginViewModel
     }
+
+    companion object : MavericksViewModelFactory<LoginViewModel, LoginViewState> by hiltMavericksViewModelFactory()
 
     init {
         getKnownCustomHomeServersUrls()
@@ -83,18 +87,6 @@ class LoginViewModel @AssistedInject constructor(
     private fun getKnownCustomHomeServersUrls() {
         setState {
             copy(knownCustomHomeServersUrls = homeServerHistoryService.getKnownServersUrls())
-        }
-    }
-
-    companion object : MavericksViewModelFactory<LoginViewModel, LoginViewState> {
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: LoginViewState): LoginViewModel? {
-            return when (val activity: FragmentActivity = (viewModelContext as ActivityViewModelContext).activity()) {
-                is LoginActivity      -> activity.loginViewModelFactory.create(state)
-                is SoftLogoutActivity -> activity.loginViewModelFactory.create(state)
-                else                  -> error("Invalid Activity")
-            }
         }
     }
 

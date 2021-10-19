@@ -23,6 +23,8 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.R
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
@@ -703,16 +705,9 @@ class TextComposerViewModel @AssistedInject constructor(
     }
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: TextComposerViewState): TextComposerViewModel
+    interface Factory: MavericksAssistedViewModelFactory<TextComposerViewModel,TextComposerViewState> {
+        override fun create(initialState: TextComposerViewState): TextComposerViewModel
     }
 
-    companion object : MavericksViewModelFactory<TextComposerViewModel, TextComposerViewState> {
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: TextComposerViewState): TextComposerViewModel {
-            val fragment: RoomDetailFragment = (viewModelContext as FragmentViewModelContext).fragment()
-            return fragment.textComposerViewModelFactory.create(state)
-        }
-    }
+    companion object : MavericksViewModelFactory<TextComposerViewModel, TextComposerViewState> by hiltMavericksViewModelFactory()
 }

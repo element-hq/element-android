@@ -28,6 +28,8 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.core.di.HasScreenInjector
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
@@ -151,16 +153,11 @@ class VerificationEmojiCodeViewModel @AssistedInject constructor(
     }
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: VerificationEmojiCodeViewState): VerificationEmojiCodeViewModel
+    interface Factory: MavericksAssistedViewModelFactory<VerificationEmojiCodeViewModel,VerificationEmojiCodeViewState> {
+        override fun create(initialState: VerificationEmojiCodeViewState): VerificationEmojiCodeViewModel
     }
 
-    companion object : MavericksViewModelFactory<VerificationEmojiCodeViewModel, VerificationEmojiCodeViewState> {
-
-        override fun create(viewModelContext: ViewModelContext, state: VerificationEmojiCodeViewState): VerificationEmojiCodeViewModel? {
-            val factory = (viewModelContext as FragmentViewModelContext).fragment<VerificationEmojiCodeFragment>().viewModelFactory
-            return factory.create(state)
-        }
+    companion object : MavericksViewModelFactory<VerificationEmojiCodeViewModel, VerificationEmojiCodeViewState> by hiltMavericksViewModelFactory() {
 
         override fun initialState(viewModelContext: ViewModelContext): VerificationEmojiCodeViewState? {
             val args = viewModelContext.args<VerificationBottomSheet.VerificationArgs>()

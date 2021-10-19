@@ -15,7 +15,6 @@
  */
 package im.vector.app.features.crypto.verification.choose
 
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
@@ -23,6 +22,8 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.core.di.HasScreenInjector
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
@@ -49,6 +50,10 @@ class VerificationChooseMethodViewModel @AssistedInject constructor(
         @Assisted initialState: VerificationChooseMethodViewState,
         private val session: Session
 ) : VectorViewModel<VerificationChooseMethodViewState, EmptyAction, EmptyViewEvents>(initialState), VerificationService.Listener {
+
+    init {
+        session.cryptoService().verificationService().addListener(this)
+    }
 
     override fun transactionCreated(tx: VerificationTransaction) {
         transactionUpdated(tx)
@@ -81,26 +86,13 @@ class VerificationChooseMethodViewModel @AssistedInject constructor(
     }
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: VerificationChooseMethodViewState): VerificationChooseMethodViewModel
+    interface Factory : MavericksAssistedViewModelFactory<VerificationChooseMethodViewModel, VerificationChooseMethodViewState> {
+        override fun create(initialState: VerificationChooseMethodViewState): VerificationChooseMethodViewModel
     }
 
-    init {
-        session.cryptoService().verificationService().addListener(this)
-    }
+    companion object : MavericksViewModelFactory<VerificationChooseMethodViewModel, VerificationChooseMethodViewState> by hiltMavericksViewModelFactory() {
 
-    override fun onCleared() {
-        session.cryptoService().verificationService().removeListener(this)
-        super.onCleared()
-    }
-
-    companion object : MavericksViewModelFactory<VerificationChooseMethodViewModel, VerificationChooseMethodViewState> {
-        override fun create(viewModelContext: ViewModelContext, state: VerificationChooseMethodViewState): VerificationChooseMethodViewModel? {
-            val fragment: VerificationChooseMethodFragment = (viewModelContext as FragmentViewModelContext).fragment()
-            return fragment.verificationChooseMethodViewModelFactory.create(state)
-        }
-
-        override fun initialState(viewModelContext: ViewModelContext): VerificationChooseMethodViewState? {
+        override fun initialState(viewModelContext: ViewModelContext): VerificationChooseMethodViewState {
             val args: VerificationBottomSheet.VerificationArgs = viewModelContext.args()
             val session = (viewModelContext.activity as HasScreenInjector).injector().activeSessionHolder().getActiveSession()
             val verificationService = session.cryptoService().verificationService()
@@ -119,6 +111,11 @@ class VerificationChooseMethodViewModel @AssistedInject constructor(
                     sasModeAvailable = pvr?.isSasSupported().orFalse()
             )
         }
+    }
+
+    override fun onCleared() {
+        session.cryptoService().verificationService().removeListener(this)
+        super.onCleared()
     }
 
     override fun handle(action: EmptyAction) {}

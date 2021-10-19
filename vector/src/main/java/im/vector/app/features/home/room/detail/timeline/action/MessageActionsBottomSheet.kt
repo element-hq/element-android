@@ -36,7 +36,6 @@ class MessageActionsBottomSheet :
         VectorBaseBottomSheetDialogFragment<BottomSheetGenericListBinding>(),
         MessageActionsEpoxyController.MessageActionsEpoxyControllerListener {
 
-    @Inject lateinit var messageActionViewModelFactory: MessageActionsViewModel.Factory
     @Inject lateinit var messageActionsEpoxyController: MessageActionsEpoxyController
 
     private val viewModel: MessageActionsViewModel by fragmentViewModel(MessageActionsViewModel::class)

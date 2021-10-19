@@ -57,8 +57,6 @@ open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), ToolbarCo
 
     private val loginViewModel: LoginViewModel by viewModel()
 
-    @Inject lateinit var loginViewModelFactory: LoginViewModel.Factory
-
     @CallSuper
     override fun injectWith(injector: ScreenComponent) {
         injector.inject(this)

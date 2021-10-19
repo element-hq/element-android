@@ -40,7 +40,6 @@ class ViewEditHistoryBottomSheet :
 
     private val viewModel: ViewEditHistoryViewModel by fragmentViewModel(ViewEditHistoryViewModel::class)
 
-    @Inject lateinit var viewEditHistoryViewModelFactory: ViewEditHistoryViewModel.Factory
     @Inject lateinit var epoxyController: ViewEditHistoryEpoxyController
 
     override fun injectWith(injector: ScreenComponent) {

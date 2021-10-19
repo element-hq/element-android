@@ -94,8 +94,6 @@ data class HomeActivityArgs(
 class HomeActivity :
         VectorBaseActivity<ActivityHomeBinding>(),
         ToolbarConfigurable,
-        UnknownDeviceDetectorSharedViewModel.Factory,
-        UnreadMessagesSharedViewModel.Factory,
         NavigationInterceptor,
         SpaceInviteBottomSheet.InteractionListener,
         MatrixToBottomSheet.InteractionListener {
@@ -115,8 +113,6 @@ class HomeActivity :
     @Inject lateinit var vectorPreferences: VectorPreferences
     @Inject lateinit var popupAlertManager: PopupAlertManager
     @Inject lateinit var shortcutsHandler: ShortcutsHandler
-    @Inject lateinit var unknownDeviceViewModelFactory: UnknownDeviceDetectorSharedViewModel.Factory
-    @Inject lateinit var unreadMessagesSharedViewModelFactory: UnreadMessagesSharedViewModel.Factory
     @Inject lateinit var permalinkHandler: PermalinkHandler
     @Inject lateinit var avatarRenderer: AvatarRenderer
     @Inject lateinit var initSyncStepFormatter: InitSyncStepFormatter
@@ -173,14 +169,6 @@ class HomeActivity :
 
     override fun injectWith(injector: ScreenComponent) {
         injector.inject(this)
-    }
-
-    override fun create(initialState: UnknownDevicesState): UnknownDeviceDetectorSharedViewModel {
-        return unknownDeviceViewModelFactory.create(initialState)
-    }
-
-    override fun create(initialState: UnreadMessagesState): UnreadMessagesSharedViewModel {
-        return unreadMessagesSharedViewModelFactory.create(initialState)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -44,8 +44,6 @@ class BugReportActivity : VectorBaseActivity<ActivityBugReportBinding>() {
 
     override fun getBinding() = ActivityBugReportBinding.inflate(layoutInflater)
 
-    @Inject lateinit var bugReportViewModelFactory: BugReportViewModel.Factory
-
     private val viewModel: BugReportViewModel by viewModel()
 
     private var reportType: ReportType = ReportType.BUG_REPORT

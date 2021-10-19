@@ -49,9 +49,6 @@ class MatrixToBottomSheet :
 
     @Inject lateinit var avatarRenderer: AvatarRenderer
 
-    @Inject
-    lateinit var matrixToBottomSheetViewModelFactory: MatrixToBottomSheetViewModel.Factory
-
     override fun injectWith(injector: ScreenComponent) {
         injector.inject(this)
     }
