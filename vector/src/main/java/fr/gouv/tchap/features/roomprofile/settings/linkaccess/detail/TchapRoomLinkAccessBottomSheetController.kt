@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 package fr.gouv.tchap.features.roomprofile.settings.linkaccess.detail
 
 import com.airbnb.epoxy.TypedEpoxyController

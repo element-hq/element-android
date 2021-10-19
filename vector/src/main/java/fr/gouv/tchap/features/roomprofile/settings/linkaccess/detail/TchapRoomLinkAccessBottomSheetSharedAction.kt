@@ -23,8 +23,8 @@ import im.vector.app.core.platform.VectorSharedAction
 
 sealed class TchapRoomLinkAccessBottomSheetSharedAction(
         @StringRes val titleRes: Int,
-        @DrawableRes val iconResId: Int = 0)
-    : VectorSharedAction {
+        @DrawableRes val iconResId: Int = 0
+) : VectorSharedAction {
 
     data class CopyLink(val permalink: String) : TchapRoomLinkAccessBottomSheetSharedAction(
             R.string.action_copy,

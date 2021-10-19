@@ -18,6 +18,6 @@ package fr.gouv.tchap.features.roomprofile.settings.linkaccess
 
 import im.vector.app.core.platform.VectorViewModelAction
 
-sealed class TchapRoomLinkAccessAction: VectorViewModelAction {
-    data class SetIsEnabled(val isEnabled: Boolean): TchapRoomLinkAccessAction()
+sealed class TchapRoomLinkAccessAction : VectorViewModelAction {
+    data class SetIsEnabled(val isEnabled: Boolean) : TchapRoomLinkAccessAction()
 }
