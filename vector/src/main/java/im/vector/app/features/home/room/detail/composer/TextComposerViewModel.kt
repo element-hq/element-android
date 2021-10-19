@@ -709,7 +709,7 @@ class TextComposerViewModel @AssistedInject constructor(
             val event = try {
                 block()
                 TextComposerViewEvents.SlashCommandResultOk
-            } catch (failure: Exception) {
+            } catch (failure: Throwable) {
                 TextComposerViewEvents.SlashCommandResultError(failure)
             }
             _viewEvents.post(event)
