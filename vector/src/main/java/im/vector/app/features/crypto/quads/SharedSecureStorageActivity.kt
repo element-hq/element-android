@@ -28,6 +28,7 @@ import androidx.fragment.app.FragmentOnAttachListener
 import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.error.ErrorFormatter
@@ -39,6 +40,7 @@ import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 import kotlin.reflect.KClass
 
+@AndroidEntryPoint
 class SharedSecureStorageActivity :
         SimpleFragmentActivity(),
         VectorBaseBottomSheetDialogFragment.ResultListener,
@@ -53,11 +55,6 @@ class SharedSecureStorageActivity :
 
     private val viewModel: SharedSecureStorageViewModel by viewModel()
     @Inject lateinit var errorFormatter: ErrorFormatter
-
-    override fun injectWith(injector: ScreenComponent) {
-        super.injectWith(injector)
-        injector.inject(this)
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

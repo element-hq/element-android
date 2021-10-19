@@ -33,6 +33,7 @@ import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.viewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.exhaustive
@@ -45,6 +46,7 @@ import kotlinx.parcelize.Parcelize
 import org.billcarsonfr.jsonviewer.JSonViewerFragment
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class RoomDevToolActivity : SimpleFragmentActivity(), FragmentManager.OnBackStackChangedListener {
 
     @Inject lateinit var colorProvider: ColorProvider
@@ -62,11 +64,6 @@ class RoomDevToolActivity : SimpleFragmentActivity(), FragmentManager.OnBackStac
     data class Args(
             val roomId: String
     ) : Parcelable
-
-    override fun injectWith(injector: ScreenComponent) {
-        super.injectWith(injector)
-        injector.inject(this)
-    }
 
     override fun initUiAndData() {
         super.initUiAndData()

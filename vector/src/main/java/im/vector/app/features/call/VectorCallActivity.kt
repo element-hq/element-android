@@ -86,16 +86,13 @@ data class CallArgs(
 
 private val loggerTag = LoggerTag("VectorCallActivity", LoggerTag.VOIP)
 
+@AndroidEntryPoint
 class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallControlsView.InteractionListener {
 
     override fun getBinding() = ActivityCallBinding.inflate(layoutInflater)
 
     @Inject lateinit var callManager: WebRtcCallManager
     @Inject lateinit var avatarRenderer: AvatarRenderer
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
 
     private val callViewModel: VectorCallViewModel by viewModel()
 

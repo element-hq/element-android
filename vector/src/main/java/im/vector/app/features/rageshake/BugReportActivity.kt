@@ -25,6 +25,7 @@ import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import com.airbnb.mvrx.viewModel
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.platform.VectorBaseActivity
@@ -36,11 +37,8 @@ import javax.inject.Inject
 /**
  * Form to send a bug report
  */
+@AndroidEntryPoint
 class BugReportActivity : VectorBaseActivity<ActivityBugReportBinding>() {
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
 
     override fun getBinding() = ActivityBugReportBinding.inflate(layoutInflater)
 

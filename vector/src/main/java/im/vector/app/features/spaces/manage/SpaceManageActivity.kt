@@ -26,6 +26,7 @@ import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.appbar.MaterialToolbar
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.addFragmentToBackstack
@@ -50,14 +51,11 @@ data class SpaceManageArgs(
         val manageType: ManageType
 ) : Parcelable
 
+@AndroidEntryPoint
 class SpaceManageActivity : VectorBaseActivity<ActivitySimpleLoadingBinding>(),
         ToolbarConfigurable {
 
     private lateinit var sharedDirectoryActionViewModel: RoomDirectorySharedActionViewModel
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
 
     override fun getBinding(): ActivitySimpleLoadingBinding = ActivitySimpleLoadingBinding.inflate(layoutInflater)
 

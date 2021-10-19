@@ -23,6 +23,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.commitTransaction
@@ -37,11 +38,8 @@ import im.vector.app.features.spaces.explore.SpaceDirectoryViewEvents
 import im.vector.app.features.spaces.explore.SpaceDirectoryViewModel
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class SpaceExploreActivity : VectorBaseActivity<ActivitySimpleBinding>(), MatrixToBottomSheet.InteractionListener {
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
 
     override fun getBinding(): ActivitySimpleBinding = ActivitySimpleBinding.inflate(layoutInflater)
 

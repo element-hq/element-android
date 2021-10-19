@@ -29,6 +29,7 @@ import androidx.browser.customtabs.CustomTabsSession
 import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.addFragment
@@ -42,6 +43,7 @@ import org.matrix.android.sdk.api.auth.registration.nextUncompletedStage
 import timber.log.Timber
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class ReAuthActivity : SimpleFragmentActivity(){
 
     @Parcelize
@@ -59,11 +61,6 @@ class ReAuthActivity : SimpleFragmentActivity(){
     private var customTabsSession: CustomTabsSession? = null
 
     @Inject lateinit var authenticationService: AuthenticationService
-
-    override fun injectWith(injector: ScreenComponent) {
-        super.injectWith(injector)
-        injector.inject(this)
-    }
 
     private val sharedViewModel: ReAuthViewModel by viewModel()
 

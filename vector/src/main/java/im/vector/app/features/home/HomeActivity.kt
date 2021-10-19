@@ -34,6 +34,7 @@ import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.AppStateHandler
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
@@ -91,6 +92,7 @@ data class HomeActivityArgs(
         val inviteNotificationRoomId: String? = null
 ) : Parcelable
 
+@AndroidEntryPoint
 class HomeActivity :
         VectorBaseActivity<ActivityHomeBinding>(),
         ToolbarConfigurable,
@@ -166,10 +168,6 @@ class HomeActivity :
     override fun getCoordinatorLayout() = views.coordinatorLayout
 
     override fun getBinding() = ActivityHomeBinding.inflate(layoutInflater)
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

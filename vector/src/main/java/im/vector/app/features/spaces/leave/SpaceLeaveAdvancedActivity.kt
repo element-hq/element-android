@@ -28,6 +28,7 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.viewModel
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.error.ErrorFormatter
@@ -40,6 +41,7 @@ import im.vector.app.databinding.ActivitySimpleLoadingBinding
 import im.vector.app.features.spaces.SpaceBottomSheetSettingsArgs
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class SpaceLeaveAdvancedActivity : VectorBaseActivity<ActivitySimpleLoadingBinding>(),
         ToolbarConfigurable {
 
@@ -48,11 +50,6 @@ class SpaceLeaveAdvancedActivity : VectorBaseActivity<ActivitySimpleLoadingBindi
     val leaveViewModel: SpaceLeaveAdvancedViewModel by viewModel()
 
     @Inject lateinit var errorFormatter: ErrorFormatter
-
-    override fun injectWith(injector: ScreenComponent) {
-        super.injectWith(injector)
-        injector.inject(this)
-    }
 
     override fun showWaitingView(text: String?) {
         hideKeyboard()

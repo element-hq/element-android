@@ -21,6 +21,7 @@ import android.content.Intent
 import android.os.Bundle
 import com.airbnb.mvrx.viewModel
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.addFragment
@@ -33,6 +34,7 @@ import im.vector.app.features.roomdirectory.createroom.CreateRoomFragment
 import im.vector.app.features.roomdirectory.picker.RoomDirectoryPickerFragment
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class RoomDirectoryActivity : VectorBaseActivity<ActivitySimpleBinding>() {
 
     @Inject lateinit var roomDirectoryViewModelFactory: RoomDirectoryViewModel.Factory
@@ -42,10 +44,6 @@ class RoomDirectoryActivity : VectorBaseActivity<ActivitySimpleBinding>() {
     override fun getBinding() = ActivitySimpleBinding.inflate(layoutInflater)
 
     override fun getCoordinatorLayout() = views.coordinatorLayout
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -21,6 +21,7 @@ import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.viewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.replaceFragment
@@ -28,6 +29,7 @@ import im.vector.app.core.platform.SimpleFragmentActivity
 import im.vector.app.core.platform.WaitingViewData
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class KeysBackupManageActivity : SimpleFragmentActivity() {
 
     companion object {
@@ -40,11 +42,6 @@ class KeysBackupManageActivity : SimpleFragmentActivity() {
     override fun getTitleRes() = R.string.encryption_message_recovery
 
     private val viewModel: KeysBackupSettingsViewModel by viewModel()
-
-    override fun injectWith(injector: ScreenComponent) {
-        super.injectWith(injector)
-        injector.inject(this)
-    }
 
     override fun initUiAndData() {
         super.initUiAndData()

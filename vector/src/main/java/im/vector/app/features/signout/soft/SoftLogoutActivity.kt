@@ -23,6 +23,7 @@ import androidx.fragment.app.FragmentManager
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.viewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.error.ErrorFormatter
@@ -39,17 +40,13 @@ import javax.inject.Inject
  * In this screen, the user is viewing a message informing that he has been logged out
  * Extends LoginActivity to get the login with SSO and forget password functionality for (nearly) free
  */
+@AndroidEntryPoint
 class SoftLogoutActivity : LoginActivity() {
 
     private val softLogoutViewModel: SoftLogoutViewModel by viewModel()
 
     @Inject lateinit var session: Session
     @Inject lateinit var errorFormatter: ErrorFormatter
-
-    override fun injectWith(injector: ScreenComponent) {
-        super.injectWith(injector)
-        injector.inject(this)
-    }
 
     override fun initUiAndData() {
         super.initUiAndData()

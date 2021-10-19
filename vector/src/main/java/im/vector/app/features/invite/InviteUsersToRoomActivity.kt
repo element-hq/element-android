@@ -24,6 +24,7 @@ import android.view.View
 import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.error.ErrorFormatter
@@ -53,16 +54,12 @@ import javax.inject.Inject
 @Parcelize
 data class InviteUsersToRoomArgs(val roomId: String) : Parcelable
 
+@AndroidEntryPoint
 class InviteUsersToRoomActivity : SimpleFragmentActivity() {
 
     private val viewModel: InviteUsersToRoomViewModel by viewModel()
     private lateinit var sharedActionViewModel: UserListSharedActionViewModel
     @Inject lateinit var errorFormatter: ErrorFormatter
-
-    override fun injectWith(injector: ScreenComponent) {
-        super.injectWith(injector)
-        injector.inject(this)
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

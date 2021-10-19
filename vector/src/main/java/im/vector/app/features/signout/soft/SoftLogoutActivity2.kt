@@ -23,6 +23,7 @@ import androidx.fragment.app.FragmentManager
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.viewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.error.ErrorFormatter
@@ -41,18 +42,13 @@ import javax.inject.Inject
  *
  * This is just a copy of SoftLogoutActivity2, which extends LoginActivity2
  */
+@AndroidEntryPoint
 class SoftLogoutActivity2 : LoginActivity2() {
 
     private val softLogoutViewModel: SoftLogoutViewModel by viewModel()
 
-    @Inject lateinit var softLogoutViewModelFactory: SoftLogoutViewModel.Factory
     @Inject lateinit var session: Session
     @Inject lateinit var errorFormatter: ErrorFormatter
-
-    override fun injectWith(injector: ScreenComponent) {
-        super.injectWith(injector)
-        injector.inject(this)
-    }
 
     override fun initUiAndData() {
         super.initUiAndData()

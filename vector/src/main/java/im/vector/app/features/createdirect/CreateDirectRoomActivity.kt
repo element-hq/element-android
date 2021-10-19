@@ -28,6 +28,7 @@ import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.viewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.error.ErrorFormatter
@@ -55,16 +56,12 @@ import org.matrix.android.sdk.api.session.room.failure.CreateRoomFailure
 import java.net.HttpURLConnection
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class CreateDirectRoomActivity : SimpleFragmentActivity(){
 
     private val viewModel: CreateDirectRoomViewModel by viewModel()
     private lateinit var sharedActionViewModel: UserListSharedActionViewModel
     @Inject lateinit var errorFormatter: ErrorFormatter
-
-    override fun injectWith(injector: ScreenComponent) {
-        super.injectWith(injector)
-        injector.inject(this)
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -24,6 +24,7 @@ import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.viewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.toMvRxBundle
@@ -41,12 +42,8 @@ import im.vector.app.features.spaces.create.SpaceTopology
 import im.vector.app.features.spaces.create.SpaceType
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class SpaceCreationActivity : SimpleFragmentActivity(){
-
-    override fun injectWith(injector: ScreenComponent) {
-        super.injectWith(injector)
-        injector.inject(this)
-    }
 
     val viewModel: CreateSpaceViewModel by viewModel()
 

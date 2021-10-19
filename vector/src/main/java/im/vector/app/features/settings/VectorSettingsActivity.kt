@@ -25,6 +25,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.replaceFragment
@@ -45,6 +46,7 @@ private const val KEY_ACTIVITY_PAYLOAD = "settings-activity-payload"
 /**
  * Displays the client settings.
  */
+@AndroidEntryPoint
 class VectorSettingsActivity : VectorBaseActivity<ActivityVectorSettingsBinding>(),
         PreferenceFragmentCompat.OnPreferenceStartFragmentCallback,
         FragmentManager.OnBackStackChangedListener,
@@ -61,10 +63,6 @@ class VectorSettingsActivity : VectorBaseActivity<ActivityVectorSettingsBinding>
     var ignoreInvalidTokenError = false
 
     @Inject lateinit var session: Session
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
 
     override fun initUiAndData() {
         configureToolbar(views.settingsToolbar)

@@ -30,6 +30,7 @@ import androidx.fragment.app.FragmentTransaction
 import com.airbnb.mvrx.viewModel
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.POP_BACK_STACK_EXCLUSIVE
@@ -60,14 +61,10 @@ import javax.inject.Inject
 /**
  * The LoginActivity manages the fragment navigation and also display the loading View
  */
+@AndroidEntryPoint
 open class LoginActivity2 : VectorBaseActivity<ActivityLoginBinding>(), ToolbarConfigurable, UnlockedActivity {
 
     private val loginViewModel: LoginViewModel2 by viewModel()
-
-    @CallSuper
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
 
     private val enterAnim = R.anim.enter_fade_in
     private val exitAnim = R.anim.exit_fade_out

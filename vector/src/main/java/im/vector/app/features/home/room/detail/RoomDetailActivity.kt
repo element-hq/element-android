@@ -27,6 +27,7 @@ import androidx.fragment.app.FragmentManager
 import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
 import com.google.android.material.appbar.MaterialToolbar
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.hideKeyboard
@@ -41,6 +42,7 @@ import im.vector.app.features.room.RequireActiveMembershipAction
 import im.vector.app.features.room.RequireActiveMembershipViewEvents
 import im.vector.app.features.room.RequireActiveMembershipViewModel
 
+@AndroidEntryPoint
 class RoomDetailActivity :
         VectorBaseActivity<ActivityRoomDetailBinding>(),
         ToolbarConfigurable,
@@ -71,10 +73,6 @@ class RoomDetailActivity :
 
     private lateinit var sharedActionViewModel: RoomDetailSharedActionViewModel
     private val requireActiveMembershipViewModel: RequireActiveMembershipViewModel by viewModel()
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
 
     // Simple filter
     var currentRoomId: String? = null

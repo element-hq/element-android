@@ -23,6 +23,7 @@ import android.widget.Toast
 import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
 import com.google.android.material.appbar.MaterialToolbar
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.addFragment
@@ -44,6 +45,7 @@ import im.vector.app.features.roomprofile.settings.RoomSettingsFragment
 import im.vector.app.features.roomprofile.uploads.RoomUploadsFragment
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class RoomProfileActivity :
         VectorBaseActivity<ActivitySimpleBinding>(),
         ToolbarConfigurable {
@@ -72,10 +74,6 @@ class RoomProfileActivity :
 
     @Inject
     lateinit var roomDetailPendingActionStore: RoomDetailPendingActionStore
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
 
     override fun getBinding(): ActivitySimpleBinding {
         return ActivitySimpleBinding.inflate(layoutInflater)
