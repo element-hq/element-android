@@ -16,6 +16,7 @@
 
 package im.vector.app.features.notifications
 
+import im.vector.app.features.notifications.ProcessedEvent.Type
 import im.vector.app.test.fakes.FakeAutoAcceptInvites
 import im.vector.app.test.fakes.FakeOutdatedEventDetector
 import org.amshove.kluent.shouldBeEqualTo
@@ -39,9 +40,9 @@ class NotifiableEventProcessorTest {
 
         val result = eventProcessor.process(events, currentRoomId = NOT_VIEWING_A_ROOM, renderedEventsList = emptyList())
 
-        result shouldBeEqualTo listOf(
-                ProcessedType.KEEP to events[0],
-                ProcessedType.KEEP to events[1]
+        result shouldBeEqualTo listOfProcessedEvents(
+                Type.KEEP to events[0],
+                Type.KEEP to events[1]
         )
     }
 
@@ -55,9 +56,9 @@ class NotifiableEventProcessorTest {
 
         val result = eventProcessor.process(events, currentRoomId = NOT_VIEWING_A_ROOM, renderedEventsList = emptyList())
 
-        result shouldBeEqualTo listOf(
-                ProcessedType.REMOVE to events[0],
-                ProcessedType.REMOVE to events[1]
+        result shouldBeEqualTo listOfProcessedEvents(
+                Type.REMOVE to events[0],
+                Type.REMOVE to events[1]
         )
     }
 
@@ -71,9 +72,9 @@ class NotifiableEventProcessorTest {
 
         val result = eventProcessor.process(events, currentRoomId = NOT_VIEWING_A_ROOM, renderedEventsList = emptyList())
 
-        result shouldBeEqualTo listOf(
-                ProcessedType.KEEP to events[0],
-                ProcessedType.KEEP to events[1]
+        result shouldBeEqualTo listOfProcessedEvents(
+                Type.KEEP to events[0],
+                Type.KEEP to events[1]
         )
     }
 
@@ -84,8 +85,8 @@ class NotifiableEventProcessorTest {
 
         val result = eventProcessor.process(events, currentRoomId = NOT_VIEWING_A_ROOM, renderedEventsList = emptyList())
 
-        result shouldBeEqualTo listOf(
-                ProcessedType.REMOVE to events[0],
+        result shouldBeEqualTo listOfProcessedEvents(
+                Type.REMOVE to events[0],
         )
     }
 
@@ -96,8 +97,8 @@ class NotifiableEventProcessorTest {
 
         val result = eventProcessor.process(events, currentRoomId = NOT_VIEWING_A_ROOM, renderedEventsList = emptyList())
 
-        result shouldBeEqualTo listOf(
-                ProcessedType.KEEP to events[0],
+        result shouldBeEqualTo listOfProcessedEvents(
+                Type.KEEP to events[0],
         )
     }
 
@@ -107,25 +108,29 @@ class NotifiableEventProcessorTest {
 
         val result = eventProcessor.process(events, currentRoomId = "room-1", renderedEventsList = emptyList())
 
-        result shouldBeEqualTo listOf(
-                ProcessedType.REMOVE to events[0],
+        result shouldBeEqualTo listOfProcessedEvents(
+                Type.REMOVE to events[0],
         )
     }
 
     @Test
     fun `given events are different to rendered events when processing then removes difference`() {
         val events = listOf(aSimpleNotifiableEvent(eventId = "event-1"))
-        val renderedEvents = listOf(
-                ProcessedType.KEEP to events[0],
-                ProcessedType.KEEP to anInviteNotifiableEvent(roomId = "event-2")
+        val renderedEvents = listOf<ProcessedEvent<NotifiableEvent>>(
+                ProcessedEvent(Type.KEEP, events[0]),
+                ProcessedEvent(Type.KEEP, anInviteNotifiableEvent(roomId = "event-2"))
         )
 
         val result = eventProcessor.process(events, currentRoomId = NOT_VIEWING_A_ROOM, renderedEventsList = renderedEvents)
 
-        result shouldBeEqualTo listOf(
-                ProcessedType.REMOVE to renderedEvents[1].second,
-                ProcessedType.KEEP to renderedEvents[0].second
+        result shouldBeEqualTo listOfProcessedEvents(
+                Type.REMOVE to renderedEvents[1].event,
+                Type.KEEP to renderedEvents[0].event
         )
+    }
+
+    private fun listOfProcessedEvents(vararg event: Pair<Type, NotifiableEvent>) = event.map {
+        ProcessedEvent(it.first, it.second)
     }
 }
 

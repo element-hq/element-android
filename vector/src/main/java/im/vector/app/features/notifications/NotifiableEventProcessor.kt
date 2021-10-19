@@ -17,29 +17,32 @@
 package im.vector.app.features.notifications
 
 import im.vector.app.features.invite.AutoAcceptInvites
-import im.vector.app.features.notifications.ProcessedType.KEEP
-import im.vector.app.features.notifications.ProcessedType.REMOVE
+import im.vector.app.features.notifications.ProcessedEvent.Type.KEEP
+import im.vector.app.features.notifications.ProcessedEvent.Type.REMOVE
 import javax.inject.Inject
+
+private typealias ProcessedEvents = List<ProcessedEvent<NotifiableEvent>>
 
 class NotifiableEventProcessor @Inject constructor(
         private val outdatedDetector: OutdatedEventDetector,
         private val autoAcceptInvites: AutoAcceptInvites
 ) {
 
-    fun process(eventList: List<NotifiableEvent>, currentRoomId: String?, renderedEventsList: List<ProcessedEvent>): List<ProcessedEvent> {
+    fun process(eventList: List<NotifiableEvent>, currentRoomId: String?, renderedEventsList: ProcessedEvents): ProcessedEvents {
         val processedEventList = eventList.map {
-            when (it) {
+            val type = when (it) {
                 is InviteNotifiableEvent  -> if (autoAcceptInvites.hideInvites) REMOVE else KEEP
                 is NotifiableMessageEvent -> if (shouldIgnoreMessageEventInRoom(currentRoomId, it.roomId) || outdatedDetector.isMessageOutdated(it)) {
                     REMOVE
                 } else KEEP
                 is SimpleNotifiableEvent  -> KEEP
-            } to it
+            }
+            ProcessedEvent(type, it)
         }
 
         val removedEventsDiff = renderedEventsList.filter { renderedEvent ->
-            eventList.none { it.eventId == renderedEvent.second.eventId }
-        }.map { REMOVE to it.second }
+            eventList.none { it.eventId == renderedEvent.event.eventId }
+        }.map { ProcessedEvent(REMOVE, it.event) }
 
         return removedEventsDiff + processedEventList
     }

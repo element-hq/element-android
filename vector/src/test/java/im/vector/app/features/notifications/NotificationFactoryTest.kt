@@ -16,6 +16,7 @@
 
 package im.vector.app.features.notifications
 
+import im.vector.app.features.notifications.ProcessedEvent.Type
 import im.vector.app.test.fakes.FakeNotificationUtils
 import im.vector.app.test.fakes.FakeRoomGroupMessageCreator
 import im.vector.app.test.fakes.FakeSummaryGroupMessageCreator
@@ -46,7 +47,7 @@ class NotificationFactoryTest {
     @Test
     fun `given a room invitation when mapping to notification then is Append`() = testWith(notificationFactory) {
         val expectedNotification = notificationUtils.givenBuildRoomInvitationNotificationFor(AN_INVITATION_EVENT, MY_USER_ID)
-        val roomInvitation = listOf(ProcessedType.KEEP to AN_INVITATION_EVENT)
+        val roomInvitation = listOf(ProcessedEvent(Type.KEEP, AN_INVITATION_EVENT))
 
         val result = roomInvitation.toNotifications(MY_USER_ID)
 
@@ -63,7 +64,7 @@ class NotificationFactoryTest {
 
     @Test
     fun `given a missing event in room invitation when mapping to notification then is Removed`() = testWith(notificationFactory) {
-        val missingEventRoomInvitation = listOf(ProcessedType.REMOVE to AN_INVITATION_EVENT)
+        val missingEventRoomInvitation = listOf(ProcessedEvent(Type.REMOVE, AN_INVITATION_EVENT))
 
         val result = missingEventRoomInvitation.toNotifications(MY_USER_ID)
 
@@ -75,7 +76,7 @@ class NotificationFactoryTest {
     @Test
     fun `given a simple event when mapping to notification then is Append`() = testWith(notificationFactory) {
         val expectedNotification = notificationUtils.givenBuildSimpleInvitationNotificationFor(A_SIMPLE_EVENT, MY_USER_ID)
-        val roomInvitation = listOf(ProcessedType.KEEP to A_SIMPLE_EVENT)
+        val roomInvitation = listOf(ProcessedEvent(Type.KEEP, A_SIMPLE_EVENT))
 
         val result = roomInvitation.toNotifications(MY_USER_ID)
 
@@ -92,7 +93,7 @@ class NotificationFactoryTest {
 
     @Test
     fun `given a missing simple event when mapping to notification then is Removed`() = testWith(notificationFactory) {
-        val missingEventRoomInvitation = listOf(ProcessedType.REMOVE to A_SIMPLE_EVENT)
+        val missingEventRoomInvitation = listOf(ProcessedEvent(Type.REMOVE, A_SIMPLE_EVENT))
 
         val result = missingEventRoomInvitation.toNotifications(MY_USER_ID)
 
@@ -105,7 +106,7 @@ class NotificationFactoryTest {
     fun `given room with message when mapping to notification then delegates to room group message creator`() = testWith(notificationFactory) {
         val events = listOf(A_MESSAGE_EVENT)
         val expectedNotification = roomGroupMessageCreator.givenCreatesRoomMessageFor(events, A_ROOM_ID, MY_USER_ID, MY_AVATAR_URL)
-        val roomWithMessage = mapOf(A_ROOM_ID to listOf(ProcessedType.KEEP to A_MESSAGE_EVENT))
+        val roomWithMessage = mapOf(A_ROOM_ID to listOf(ProcessedEvent(Type.KEEP, A_MESSAGE_EVENT)))
 
         val result = roomWithMessage.toNotifications(MY_USER_ID, MY_AVATAR_URL)
 
@@ -114,7 +115,7 @@ class NotificationFactoryTest {
 
     @Test
     fun `given a room with no events to display when mapping to notification then is Empty`() = testWith(notificationFactory) {
-        val events = listOf(ProcessedType.REMOVE to A_MESSAGE_EVENT)
+        val events = listOf(ProcessedEvent(Type.REMOVE, A_MESSAGE_EVENT))
         val emptyRoom = mapOf(A_ROOM_ID to events)
 
         val result = emptyRoom.toNotifications(MY_USER_ID, MY_AVATAR_URL)
@@ -126,7 +127,7 @@ class NotificationFactoryTest {
 
     @Test
     fun `given a room with only redacted events when mapping to notification then is Empty`() = testWith(notificationFactory) {
-        val redactedRoom = mapOf(A_ROOM_ID to listOf(ProcessedType.KEEP to A_MESSAGE_EVENT.copy(isRedacted = true)))
+        val redactedRoom = mapOf(A_ROOM_ID to listOf(ProcessedEvent(Type.KEEP, A_MESSAGE_EVENT.copy(isRedacted = true))))
 
         val result = redactedRoom.toNotifications(MY_USER_ID, MY_AVATAR_URL)
 

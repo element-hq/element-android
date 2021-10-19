@@ -16,11 +16,15 @@
 
 package im.vector.app.features.notifications
 
-typealias ProcessedEvent = Pair<ProcessedType, NotifiableEvent>
+data class ProcessedEvent<T>(
+        val type: Type,
+        val event: T
+) {
 
-enum class ProcessedType {
-    KEEP,
-    REMOVE
+    enum class Type {
+        KEEP,
+        REMOVE
+    }
 }
 
-fun List<ProcessedEvent>.onlyKeptEvents() = filter { it.first == ProcessedType.KEEP }.map { it.second }
+fun <T> List<ProcessedEvent<T>>.onlyKeptEvents() = filter { it.type == ProcessedEvent.Type.KEEP }.map { it.event }
