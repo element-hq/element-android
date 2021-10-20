@@ -163,7 +163,7 @@ class RoomGroupMessageCreator @Inject constructor(
         if (events.isEmpty()) return null
 
         // Use the last event (most recent?)
-        val roomAvatarPath = events.last().roomAvatarPath ?: events.last().senderAvatarPath
+        val roomAvatarPath = events.last().roomAvatarPath
 
         return bitmapLoader.getRoomBitmap(roomAvatarPath)
     }
