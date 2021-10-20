@@ -108,6 +108,7 @@ abstract class FormEditTextItem : VectorEpoxyModel<FormEditTextItem.Holder>() {
 
         holder.textInputEditText.isEnabled = enabled
         inputType?.let { holder.textInputEditText.inputType = it }
+        imeOptions?.let { holder.textInputEditText.imeOptions = it }
 
         if (singleLine) {
             holder.textInputEditText.maxLines = 1
