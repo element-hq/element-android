@@ -18,6 +18,7 @@ package im.vector.app.features.form
 
 import android.text.Editable
 import android.text.InputFilter
+import android.text.InputType
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
@@ -107,8 +108,13 @@ abstract class FormEditTextItem : VectorEpoxyModel<FormEditTextItem.Holder>() {
 
         holder.textInputEditText.isEnabled = enabled
         inputType?.let { holder.textInputEditText.inputType = it }
-        holder.textInputEditText.isSingleLine = singleLine
-        holder.textInputEditText.imeOptions = imeOptions ?: EditorInfo.IME_ACTION_NONE
+
+        if (singleLine) {
+            holder.textInputEditText.maxLines = 1
+            holder.textInputEditText.minLines = 1
+            imeOptions ?: run { holder.textInputEditText.imeOptions = EditorInfo.IME_ACTION_NEXT }
+            inputType ?: run { holder.textInputEditText.setRawInputType(InputType.TYPE_CLASS_TEXT) }
+        }
 
         holder.textInputEditText.addTextChangedListenerOnce(onTextChangeListener)
         holder.textInputEditText.setOnEditorActionListener(editorActionListener)
