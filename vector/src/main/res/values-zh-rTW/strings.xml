@@ -2946,4 +2946,7 @@
     <string name="command_description_room_name">設定聊天室名稱</string>
     <string name="command_description_unignore_user">停止忽略使用者，繼續顯示他們的訊息</string>
     <string name="command_description_ignore_user">忽略使用者，為您隱藏他們的訊息</string>
+    <string name="a11y_presence_unavailable">不可用</string>
+    <string name="a11y_presence_offline">離線</string>
+    <string name="a11y_presence_online">線上</string>
 </resources>

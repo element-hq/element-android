@@ -2991,4 +2991,6 @@
     <string name="command_description_room_name">Cakton emrin e dhomës</string>
     <string name="command_description_unignore_user">E ndal shpërfilljen e një përdoruesi, duke i shfaqur mesazhet e tyre pas kësaj</string>
     <string name="command_description_ignore_user">Shpërfill një përdorues, duke fshehur mesazhet e tij prej jush</string>
+    <string name="a11y_presence_offline">Jo në linjë</string>
+    <string name="a11y_presence_online">Në linjë</string>
 </resources>
