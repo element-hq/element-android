@@ -641,9 +641,11 @@ class RoomDetailFragment @Inject constructor(
                     }
                 }
                 .setOnEmojiPopupDismissListener {
-                    views.composerLayout.views.composerEmojiButton.apply {
-                        contentDescription = getString(R.string.a11y_open_emoji_picker)
-                        setImageResource(R.drawable.ic_insert_emoji)
+                    if (isAdded) {
+                        views.composerLayout.views.composerEmojiButton.apply {
+                            contentDescription = getString(R.string.a11y_open_emoji_picker)
+                            setImageResource(R.drawable.ic_insert_emoji)
+                        }
                     }
                 }
                 .build(views.composerLayout.views.composerEditText)
