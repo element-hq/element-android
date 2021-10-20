@@ -37,12 +37,13 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.jakewharton.rxbinding3.view.clicks
 import dagger.hilt.EntryPoints
 import im.vector.app.R
+import im.vector.app.core.di.SingletonEntryPoint
 import im.vector.app.core.di.DaggerScreenComponent
 import im.vector.app.core.di.HasScreenInjector
 import im.vector.app.core.di.ScreenComponent
-import im.vector.app.core.di.ScreenComponentDependencies
 import im.vector.app.core.dialogs.UnrecognizedCertificateDialog
 import im.vector.app.core.error.ErrorFormatter
+import im.vector.app.core.extensions.singletonEntryPoint
 import im.vector.app.core.extensions.toMvRxBundle
 import im.vector.app.features.navigation.Navigator
 import im.vector.lib.ui.styles.dialogs.MaterialProgressDialog
@@ -97,9 +98,7 @@ abstract class VectorBaseFragment<VB : ViewBinding> : Fragment(), MavericksView,
      * ========================================================================================== */
 
     override fun onAttach(context: Context) {
-        val screenComponentDeps = EntryPoints.get(
-                vectorBaseActivity.applicationContext,
-                ScreenComponentDependencies::class.java)
+        val screenComponentDeps = context.singletonEntryPoint()
         screenComponent = DaggerScreenComponent.factory().create(screenComponentDeps, vectorBaseActivity)
         navigator = screenComponent.navigator()
         errorFormatter = screenComponent.errorFormatter()

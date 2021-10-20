@@ -34,9 +34,9 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.jakewharton.rxbinding3.view.clicks
 import dagger.hilt.EntryPoints
+import im.vector.app.core.di.SingletonEntryPoint
 import im.vector.app.core.di.DaggerScreenComponent
 import im.vector.app.core.di.ScreenComponent
-import im.vector.app.core.di.ScreenComponentDependencies
 import im.vector.app.core.utils.DimensionConverter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -126,7 +126,7 @@ abstract class VectorBaseBottomSheetDialogFragment<VB : ViewBinding> : BottomShe
     override fun onAttach(context: Context) {
         val screenComponentDeps = EntryPoints.get(
                 vectorBaseActivity.applicationContext,
-                ScreenComponentDependencies::class.java)
+                SingletonEntryPoint::class.java)
         screenComponent = DaggerScreenComponent.factory().create(screenComponentDeps, vectorBaseActivity)
         viewModelFactory = screenComponent.viewModelFactory()
         super.onAttach(context)

@@ -27,10 +27,10 @@ import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
-import im.vector.app.core.extensions.vectorComponent
 import im.vector.app.core.network.WifiDetector
 import im.vector.app.core.pushers.PushersManager
 import im.vector.app.features.badge.BadgeProxy
@@ -52,40 +52,29 @@ import org.matrix.android.sdk.api.pushrules.Action
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.Event
 import timber.log.Timber
+import javax.inject.Inject
 
 private val loggerTag = LoggerTag("Push", LoggerTag.SYNC)
 
 /**
  * Class extending FirebaseMessagingService.
  */
+@AndroidEntryPoint
 class VectorFirebaseMessagingService : FirebaseMessagingService() {
 
-    private lateinit var notificationDrawerManager: NotificationDrawerManager
-    private lateinit var notifiableEventResolver: NotifiableEventResolver
-    private lateinit var pusherManager: PushersManager
-    private lateinit var activeSessionHolder: ActiveSessionHolder
-    private lateinit var vectorPreferences: VectorPreferences
-    private lateinit var vectorDataStore: VectorDataStore
-    private lateinit var wifiDetector: WifiDetector
+    @Inject lateinit var notificationDrawerManager: NotificationDrawerManager
+    @Inject lateinit var notifiableEventResolver: NotifiableEventResolver
+    @Inject lateinit var pusherManager: PushersManager
+    @Inject lateinit var activeSessionHolder: ActiveSessionHolder
+    @Inject lateinit var vectorPreferences: VectorPreferences
+    @Inject lateinit var vectorDataStore: VectorDataStore
+    @Inject lateinit var wifiDetector: WifiDetector
 
     private val coroutineScope = CoroutineScope(SupervisorJob())
 
     // UI handler
     private val mUIHandler by lazy {
         Handler(Looper.getMainLooper())
-    }
-
-    override fun onCreate() {
-        super.onCreate()
-        with(vectorComponent()) {
-            notificationDrawerManager = notificationDrawerManager()
-            notifiableEventResolver = notifiableEventResolver()
-            pusherManager = pusherManager()
-            activeSessionHolder = activeSessionHolder()
-            vectorPreferences = vectorPreferences()
-            vectorDataStore = vectorDataStore()
-            wifiDetector = wifiDetector()
-        }
     }
 
     /**

@@ -70,7 +70,7 @@ import org.matrix.android.sdk.api.session.Session
 
 @InstallIn(SingletonComponent::class)
 @EntryPoint
-interface AggregatorEntryPoint {
+interface SingletonEntryPoint {
 
     fun matrix(): Matrix
 

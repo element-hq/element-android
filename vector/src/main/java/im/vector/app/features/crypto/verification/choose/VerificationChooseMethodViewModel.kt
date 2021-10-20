@@ -21,7 +21,8 @@ import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import im.vector.app.core.di.HasScreenInjector
+import dagger.hilt.EntryPoints
+import im.vector.app.core.di.SingletonEntryPoint
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.EmptyAction
@@ -94,7 +95,7 @@ class VerificationChooseMethodViewModel @AssistedInject constructor(
 
         override fun initialState(viewModelContext: ViewModelContext): VerificationChooseMethodViewState {
             val args: VerificationBottomSheet.VerificationArgs = viewModelContext.args()
-            val session = (viewModelContext.activity as HasScreenInjector).injector().activeSessionHolder().getActiveSession()
+            val session = EntryPoints.get(viewModelContext.app(), SingletonEntryPoint::class.java).activeSessionHolder().getActiveSession()
             val verificationService = session.cryptoService().verificationService()
             val pvr = verificationService.getExistingVerificationRequest(args.otherUserId, args.verificationId)
 

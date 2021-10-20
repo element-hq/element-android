@@ -17,7 +17,6 @@ package im.vector.app.features.crypto.verification.emoji
 
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.MavericksViewModelFactory
@@ -27,7 +26,8 @@ import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import im.vector.app.core.di.HasScreenInjector
+import dagger.hilt.EntryPoints
+import im.vector.app.core.di.SingletonEntryPoint
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.EmptyAction
@@ -161,7 +161,7 @@ class VerificationEmojiCodeViewModel @AssistedInject constructor(
 
         override fun initialState(viewModelContext: ViewModelContext): VerificationEmojiCodeViewState? {
             val args = viewModelContext.args<VerificationBottomSheet.VerificationArgs>()
-            val session = (viewModelContext.activity as HasScreenInjector).injector().activeSessionHolder().getActiveSession()
+            val session = EntryPoints.get(viewModelContext.app(), SingletonEntryPoint::class.java).activeSessionHolder().getActiveSession()
             val matrixItem = session.getUser(args.otherUserId)?.toMatrixItem()
 
             return VerificationEmojiCodeViewState(

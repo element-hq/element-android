@@ -21,7 +21,8 @@ import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import im.vector.app.core.di.HasScreenInjector
+import dagger.hilt.EntryPoints
+import im.vector.app.core.di.SingletonEntryPoint
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.EmptyAction
@@ -50,7 +51,7 @@ class HomeServerCapabilitiesViewModel @AssistedInject constructor(
     companion object : MavericksViewModelFactory<HomeServerCapabilitiesViewModel, HomeServerCapabilitiesViewState> by hiltMavericksViewModelFactory() {
 
         override fun initialState(viewModelContext: ViewModelContext): HomeServerCapabilitiesViewState {
-            val session = (viewModelContext.activity as HasScreenInjector).injector().activeSessionHolder().getSafeActiveSession()
+            val session = EntryPoints.get(viewModelContext.app(), SingletonEntryPoint::class.java).activeSessionHolder().getSafeActiveSession()
             return HomeServerCapabilitiesViewState(
                     capabilities = session?.getHomeServerCapabilities() ?: HomeServerCapabilities()
             )

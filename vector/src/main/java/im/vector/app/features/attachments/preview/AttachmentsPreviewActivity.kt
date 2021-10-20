@@ -29,6 +29,7 @@ import im.vector.app.databinding.ActivitySimpleBinding
 import im.vector.app.features.themes.ActivityOtherThemes
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 
+@AndroidEntryPoint
 class AttachmentsPreviewActivity : VectorBaseActivity<ActivitySimpleBinding>(), ToolbarConfigurable {
 
     companion object {

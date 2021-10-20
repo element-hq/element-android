@@ -25,7 +25,8 @@ import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import im.vector.app.core.di.HasScreenInjector
+import dagger.hilt.EntryPoints
+import im.vector.app.core.di.SingletonEntryPoint
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import org.matrix.android.sdk.api.session.Session
@@ -118,7 +119,7 @@ class DeviceListBottomSheetViewModel @AssistedInject constructor(@Assisted priva
 
         override fun initialState(viewModelContext: ViewModelContext): DeviceListViewState? {
             val userId = viewModelContext.args<DeviceListBottomSheet.Args>().userId
-            val session = (viewModelContext.activity as HasScreenInjector).injector().activeSessionHolder().getActiveSession()
+            val session = EntryPoints.get(viewModelContext.app(), SingletonEntryPoint::class.java).activeSessionHolder().getActiveSession()
             return session.getUser(userId)?.toMatrixItem()?.let {
                 DeviceListViewState(
                         userItem = it,

@@ -20,8 +20,9 @@ import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import dagger.hilt.EntryPoints
 import im.vector.app.R
-import im.vector.app.core.di.HasScreenInjector
+import im.vector.app.core.di.SingletonEntryPoint
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.exhaustive
@@ -49,7 +50,7 @@ class SetIdentityServerViewModel @AssistedInject constructor(
     companion object : MavericksViewModelFactory<SetIdentityServerViewModel, SetIdentityServerState> by hiltMavericksViewModelFactory() {
 
         override fun initialState(viewModelContext: ViewModelContext): SetIdentityServerState {
-            val session = (viewModelContext.activity as HasScreenInjector).injector().activeSessionHolder().getActiveSession()
+            val session = EntryPoints.get(viewModelContext.app(), SingletonEntryPoint::class.java).activeSessionHolder().getActiveSession()
             return SetIdentityServerState(
                     homeServerUrl = session.sessionParams.homeServerUrl,
                     defaultIdentityServerUrl = session.identityService().getDefaultIdentityServer()

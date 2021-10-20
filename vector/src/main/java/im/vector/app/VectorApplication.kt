@@ -39,13 +39,11 @@ import com.facebook.stetho.Stetho
 import com.gabrielittner.threetenbp.LazyThreeTen
 import com.vanniktech.emoji.EmojiManager
 import com.vanniktech.emoji.google.GoogleEmojiProvider
-import dagger.hilt.EntryPoints
 import dagger.hilt.android.HiltAndroidApp
 import im.vector.app.core.di.ActiveSessionHolder
-import im.vector.app.core.di.AggregatorEntryPoint
-import im.vector.app.core.di.HasVectorInjector
 import im.vector.app.core.extensions.configureAndStart
 import im.vector.app.core.extensions.startSyncing
+import im.vector.app.core.extensions.singletonEntryPoint
 import im.vector.app.core.rx.RxConfig
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.configuration.VectorConfiguration
@@ -79,7 +77,6 @@ import androidx.work.Configuration as WorkConfiguration
 @HiltAndroidApp
 class VectorApplication :
         Application(),
-        HasVectorInjector,
         MatrixConfiguration.Provider,
         WorkConfiguration.Provider {
 
@@ -114,11 +111,6 @@ class VectorApplication :
         }
     }
 
-    fun component(): AggregatorEntryPoint {
-        // Use EntryPoints to get an instance of the AggregatorEntryPoint.
-        return EntryPoints.get(this, AggregatorEntryPoint::class.java)
-    }
-
     override fun onCreate() {
         enableStrictModeIfNeeded()
         super.onCreate()
@@ -135,7 +127,7 @@ class VectorApplication :
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
         }
-        Timber.plant(component().vectorFileLogger())
+        Timber.plant(singletonEntryPoint().vectorFileLogger())
 
         if (BuildConfig.DEBUG) {
             Stetho.initializeWithDefaults(this)
@@ -237,10 +229,6 @@ class VectorApplication :
         return WorkConfiguration.Builder()
                 .setExecutor(Executors.newCachedThreadPool())
                 .build()
-    }
-
-    override fun injector(): AggregatorEntryPoint {
-        return component()
     }
 
     private fun logInfo() {

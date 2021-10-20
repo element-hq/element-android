@@ -23,6 +23,7 @@ import android.view.View
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import androidx.core.content.withStyledAttributes
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.EmojiCompatWrapper
 import im.vector.app.R
 import im.vector.app.core.di.HasScreenInjector
@@ -35,16 +36,11 @@ import javax.inject.Inject
  * An animated reaction button.
  * Displays a String reaction (emoji), with a count, and that can be selected or not (toggle)
  */
+@AndroidEntryPoint
 class ReactionButton @JvmOverloads constructor(context: Context,
                                                attrs: AttributeSet? = null,
                                                defStyleAttr: Int = 0) :
     LinearLayout(context, attrs, defStyleAttr), View.OnClickListener, View.OnLongClickListener {
-
-    init {
-        if (context is HasScreenInjector) {
-            context.injector().inject(this)
-        }
-    }
 
     @Inject lateinit var emojiCompatWrapper: EmojiCompatWrapper
 
