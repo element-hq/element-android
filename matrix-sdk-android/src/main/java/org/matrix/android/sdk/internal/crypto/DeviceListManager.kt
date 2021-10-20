@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.crypto
 
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.internal.crypto.crosssigning.DeviceTrustLevel
@@ -29,7 +30,6 @@ import org.matrix.android.sdk.internal.crypto.tasks.DownloadKeysForUsersTask
 import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.internal.session.sync.SyncTokenStore
 import org.matrix.android.sdk.internal.task.TaskExecutor
-import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.internal.util.logLimit
 import timber.log.Timber
 import javax.inject.Inject

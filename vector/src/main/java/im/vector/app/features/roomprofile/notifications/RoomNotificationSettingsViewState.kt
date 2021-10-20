@@ -17,7 +17,7 @@
 package im.vector.app.features.roomprofile.notifications
 
 import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import im.vector.app.features.home.room.list.actions.RoomListActionsArgs
@@ -30,7 +30,7 @@ data class RoomNotificationSettingsViewState(
         val roomSummary: Async<RoomSummary> = Uninitialized,
         val isLoading: Boolean = false,
         val notificationState: Async<RoomNotificationState> = Uninitialized
-)  : MvRxState {
+)  : MavericksState {
     constructor(args: RoomProfileArgs) : this(roomId = args.roomId)
     constructor(args: RoomListActionsArgs) : this(roomId = args.roomId)
 }

@@ -15,6 +15,7 @@
                 "face-with-tears-of-joy",
                 "slightly-smiling-face",
                 "upsidedown-face",
+                "melting-face",
                 "winking-face",
                 "smiling-face-with-smiling-eyes",
                 "smiling-face-with-halo",
@@ -33,15 +34,19 @@
                 "zany-face",
                 "squinting-face-with-tongue",
                 "moneymouth-face",
-                "hugging-face",
+                "smiling-face-with-open-hands",
                 "face-with-hand-over-mouth",
+                "face-with-open-eyes-and-hand-over-mouth",
+                "face-with-peeking-eye",
                 "shushing-face",
                 "thinking-face",
+                "saluting-face",
                 "zippermouth-face",
                 "face-with-raised-eyebrow",
                 "neutral-face",
                 "expressionless-face",
                 "face-without-mouth",
+                "dotted-line-face",
                 "face-in-clouds",
                 "smirking-face",
                 "unamused-face",
@@ -63,7 +68,7 @@
                 "hot-face",
                 "cold-face",
                 "woozy-face",
-                "knockedout-face",
+                "face-with-crossedout-eyes",
                 "face-with-spiral-eyes",
                 "exploding-head",
                 "cowboy-hat-face",
@@ -73,6 +78,7 @@
                 "nerd-face",
                 "face-with-monocle",
                 "confused-face",
+                "face-with-diagonal-mouth",
                 "worried-face",
                 "slightly-frowning-face",
                 "frowning-face",
@@ -81,6 +87,7 @@
                 "astonished-face",
                 "flushed-face",
                 "pleading-face",
+                "face-holding-back-tears",
                 "frowning-face-with-open-mouth",
                 "anguished-face",
                 "fearful-face",
@@ -172,11 +179,16 @@
                 "hand-with-fingers-splayed",
                 "raised-hand",
                 "vulcan-salute",
+                "rightwards-hand",
+                "leftwards-hand",
+                "palm-down-hand",
+                "palm-up-hand",
                 "ok-hand",
                 "pinched-fingers",
                 "pinching-hand",
                 "victory-hand",
                 "crossed-fingers",
+                "hand-with-index-finger-and-thumb-crossed",
                 "loveyou-gesture",
                 "sign-of-the-horns",
                 "call-me-hand",
@@ -186,6 +198,7 @@
                 "middle-finger",
                 "backhand-index-pointing-down",
                 "index-pointing-up",
+                "index-pointing-at-the-viewer",
                 "thumbs-up",
                 "thumbs-down",
                 "raised-fist",
@@ -194,6 +207,7 @@
                 "rightfacing-fist",
                 "clapping-hands",
                 "raising-hands",
+                "heart-hands",
                 "open-hands",
                 "palms-up-together",
                 "handshake",
@@ -218,6 +232,7 @@
                 "eye",
                 "tongue",
                 "mouth",
+                "biting-lip",
                 "baby",
                 "child",
                 "boy",
@@ -337,6 +352,7 @@
                 "construction-worker",
                 "man-construction-worker",
                 "woman-construction-worker",
+                "person-with-crown",
                 "prince",
                 "princess",
                 "person-wearing-turban",
@@ -351,6 +367,8 @@
                 "man-with-veil",
                 "woman-with-veil",
                 "pregnant-woman",
+                "pregnant-man",
+                "pregnant-person",
                 "breastfeeding",
                 "woman-feeding-baby",
                 "man-feeding-baby",
@@ -386,6 +404,7 @@
                 "zombie",
                 "man-zombie",
                 "woman-zombie",
+                "troll",
                 "person-getting-massage",
                 "man-getting-massage",
                 "woman-getting-massage",
@@ -623,6 +642,7 @@
                 "shark",
                 "octopus",
                 "spiral-shell",
+                "coral",
                 "snail",
                 "butterfly",
                 "bug",
@@ -642,6 +662,7 @@
                 "bouquet",
                 "cherry-blossom",
                 "white-flower",
+                "lotus",
                 "rosette",
                 "rose",
                 "wilted-flower",
@@ -661,7 +682,9 @@
                 "four-leaf-clover",
                 "maple-leaf",
                 "fallen-leaf",
-                "leaf-fluttering-in-wind"
+                "leaf-fluttering-in-wind",
+                "empty-nest",
+                "nest-with-eggs"
             ]
         },
         {
@@ -701,6 +724,7 @@
                 "onion",
                 "mushroom",
                 "peanuts",
+                "beans",
                 "chestnut",
                 "bread",
                 "croissant",
@@ -786,6 +810,7 @@
                 "clinking-beer-mugs",
                 "clinking-glasses",
                 "tumbler-glass",
+                "pouring-liquid",
                 "cup-with-straw",
                 "bubble-tea",
                 "beverage-box",
@@ -796,6 +821,7 @@
                 "fork-and-knife",
                 "spoon",
                 "kitchen-knife",
+                "jar",
                 "amphora"
             ]
         },
@@ -864,6 +890,7 @@
                 "bridge-at-night",
                 "hot-springs",
                 "carousel-horse",
+                "playground-slide",
                 "ferris-wheel",
                 "roller-coaster",
                 "barber-pole",
@@ -912,12 +939,14 @@
                 "railway-track",
                 "oil-drum",
                 "fuel-pump",
+                "wheel",
                 "police-car-light",
                 "horizontal-traffic-light",
                 "vertical-traffic-light",
                 "stop-sign",
                 "construction",
                 "anchor",
+                "ring-buoy",
                 "sailboat",
                 "canoe",
                 "speedboat",
@@ -1085,6 +1114,7 @@
                 "crystal-ball",
                 "magic-wand",
                 "nazar-amulet",
+                "hamsa",
                 "video-game",
                 "joystick",
                 "slot-machine",
@@ -1092,6 +1122,7 @@
                 "puzzle-piece",
                 "teddy-bear",
                 "piata",
+                "mirror-ball",
                 "nesting-dolls",
                 "spade-suit",
                 "heart-suit",
@@ -1193,6 +1224,7 @@
                 "pager",
                 "fax-machine",
                 "battery",
+                "low-battery",
                 "electric-plug",
                 "laptop",
                 "desktop-computer",
@@ -1333,7 +1365,9 @@
                 "drop-of-blood",
                 "pill",
                 "adhesive-bandage",
+                "crutch",
                 "stethoscope",
+                "xray",
                 "door",
                 "elevator",
                 "mirror",
@@ -1354,6 +1388,7 @@
                 "roll-of-paper",
                 "bucket",
                 "soap",
+                "bubbles",
                 "toothbrush",
                 "sponge",
                 "fire-extinguisher",
@@ -1363,7 +1398,8 @@
                 "headstone",
                 "funeral-urn",
                 "moai",
-                "placard"
+                "placard",
+                "identification-card"
             ]
         },
         {
@@ -1473,6 +1509,7 @@
                 "plus",
                 "minus",
                 "divide",
+                "heavy-equals-sign",
                 "infinity",
                 "double-exclamation-mark",
                 "exclamation-question-mark",
@@ -2012,6 +2049,16 @@
                 "smile"
             ]
         },
+        "melting-face": {
+            "a": "⊛ Melting Face",
+            "b": "1FAE0",
+            "j": [
+                "disappear",
+                "dissolve",
+                "liquid",
+                "melt"
+            ]
+        },
         "winking-face": {
             "a": "Winking Face",
             "b": "1F609",
@@ -2271,13 +2318,16 @@
                 "dollar"
             ]
         },
-        "hugging-face": {
-            "a": "Hugging Face",
+        "smiling-face-with-open-hands": {
+            "a": "Smiling Face with Open Hands",
             "b": "1F917",
             "j": [
                 "face",
                 "hug",
                 "hugging",
+                "open hands",
+                "smiling face",
+                "hugging_face",
                 "smile"
             ]
         },
@@ -2290,6 +2340,27 @@
                 "sudden realization",
                 "surprise",
                 "face"
+            ]
+        },
+        "face-with-open-eyes-and-hand-over-mouth": {
+            "a": "⊛ Face with Open Eyes and Hand over Mouth",
+            "b": "1FAE2",
+            "j": [
+                "amazement",
+                "awe",
+                "disbelief",
+                "embarrass",
+                "scared",
+                "surprise"
+            ]
+        },
+        "face-with-peeking-eye": {
+            "a": "⊛ Face with Peeking Eye",
+            "b": "1FAE3",
+            "j": [
+                "captivated",
+                "peep",
+                "stare"
             ]
         },
         "shushing-face": {
@@ -2311,6 +2382,17 @@
                 "hmmm",
                 "think",
                 "consider"
+            ]
+        },
+        "saluting-face": {
+            "a": "⊛ Saluting Face",
+            "b": "1FAE1",
+            "j": [
+                "ok",
+                "salute",
+                "sunny",
+                "troops",
+                "yes"
             ]
         },
         "zippermouth-face": {
@@ -2377,8 +2459,19 @@
                 "hellokitty"
             ]
         },
+        "dotted-line-face": {
+            "a": "⊛ Dotted Line Face",
+            "b": "1FAE5",
+            "j": [
+                "depressed",
+                "disappear",
+                "hide",
+                "introvert",
+                "invisible"
+            ]
+        },
         "face-in-clouds": {
-            "a": "⊛ Face in Clouds",
+            "a": "Face in Clouds",
             "b": "1F636-200D-1F32B-FE0F",
             "j": [
                 "absentminded",
@@ -2439,7 +2532,7 @@
             ]
         },
         "face-exhaling": {
-            "a": "⊛ Face Exhaling",
+            "a": "Face Exhaling",
             "b": "1F62E-200D-1F4A8",
             "j": [
                 "exhale",
@@ -2631,14 +2724,15 @@
                 "wavy"
             ]
         },
-        "knockedout-face": {
-            "a": "Knocked-out Face",
+        "face-with-crossedout-eyes": {
+            "a": "Face with Crossed-out Eyes",
             "b": "1F635",
             "j": [
+                "crossed-out eyes",
                 "dead",
                 "face",
+                "face with crossed-out eyes",
                 "knocked out",
-                "knocked-out face",
                 "dizzy_face",
                 "spent",
                 "unconscious",
@@ -2647,7 +2741,7 @@
             ]
         },
         "face-with-spiral-eyes": {
-            "a": "⊛ Face with Spiral Eyes",
+            "a": "Face with Spiral Eyes",
             "b": "1F635-200D-1F4AB",
             "j": [
                 "dizzy",
@@ -2754,6 +2848,16 @@
                 ":/"
             ]
         },
+        "face-with-diagonal-mouth": {
+            "a": "⊛ Face with Diagonal Mouth",
+            "b": "1FAE4",
+            "j": [
+                "disappointed",
+                "meh",
+                "skeptical",
+                "unsure"
+            ]
+        },
         "worried-face": {
             "a": "Worried Face",
             "b": "1F61F",
@@ -2847,6 +2951,17 @@
                 "mercy",
                 "puppy eyes",
                 "face"
+            ]
+        },
+        "face-holding-back-tears": {
+            "a": "⊛ Face Holding Back Tears",
+            "b": "1F979",
+            "j": [
+                "angry",
+                "cry",
+                "proud",
+                "resist",
+                "sad"
             ]
         },
         "frowning-face-with-open-mouth": {
@@ -3584,7 +3699,7 @@
             ]
         },
         "heart-on-fire": {
-            "a": "⊛ Heart on Fire",
+            "a": "Heart on Fire",
             "b": "2764-FE0F-200D-1F525",
             "j": [
                 "burn",
@@ -3596,7 +3711,7 @@
             ]
         },
         "mending-heart": {
-            "a": "⊛ Mending Heart",
+            "a": "Mending Heart",
             "b": "2764-FE0F-200D-1FA79",
             "j": [
                 "healthier",
@@ -3933,6 +4048,43 @@
                 "star trek"
             ]
         },
+        "rightwards-hand": {
+            "a": "⊛ Rightwards Hand",
+            "b": "1FAF1",
+            "j": [
+                "hand",
+                "right",
+                "rightward"
+            ]
+        },
+        "leftwards-hand": {
+            "a": "⊛ Leftwards Hand",
+            "b": "1FAF2",
+            "j": [
+                "hand",
+                "left",
+                "leftward"
+            ]
+        },
+        "palm-down-hand": {
+            "a": "⊛ Palm Down Hand",
+            "b": "1FAF3",
+            "j": [
+                "dismiss",
+                "drop",
+                "shoo"
+            ]
+        },
+        "palm-up-hand": {
+            "a": "⊛ Palm Up Hand",
+            "b": "1FAF4",
+            "j": [
+                "beckon",
+                "catch",
+                "come",
+                "offer"
+            ]
+        },
         "ok-hand": {
             "a": "Ok Hand",
             "b": "1F44C",
@@ -3993,6 +4145,17 @@
                 "luck",
                 "good",
                 "lucky"
+            ]
+        },
+        "hand-with-index-finger-and-thumb-crossed": {
+            "a": "⊛ Hand with Index Finger and Thumb Crossed",
+            "b": "1FAF0",
+            "j": [
+                "expensive",
+                "heart",
+                "love",
+                "money",
+                "snap"
             ]
         },
         "loveyou-gesture": {
@@ -4110,6 +4273,14 @@
                 "direction"
             ]
         },
+        "index-pointing-at-the-viewer": {
+            "a": "⊛ Index Pointing at the Viewer",
+            "b": "1FAF5",
+            "j": [
+                "point",
+                "you"
+            ]
+        },
         "thumbs-up": {
             "a": "Thumbs Up",
             "b": "1F44D",
@@ -4215,6 +4386,13 @@
                 "raised",
                 "yea",
                 "hands"
+            ]
+        },
+        "heart-hands": {
+            "a": "⊛ Heart Hands",
+            "b": "1FAF6",
+            "j": [
+                "love"
             ]
         },
         "open-hands": {
@@ -4463,6 +4641,18 @@
                 "kiss"
             ]
         },
+        "biting-lip": {
+            "a": "⊛ Biting Lip",
+            "b": "1FAE6",
+            "j": [
+                "anxious",
+                "fear",
+                "flirting",
+                "nervous",
+                "uncomfortable",
+                "worried"
+            ]
+        },
         "baby": {
             "a": "Baby",
             "b": "1F476",
@@ -4552,7 +4742,7 @@
             ]
         },
         "man-beard": {
-            "a": "⊛ Man: Beard",
+            "a": "Man: Beard",
             "b": "1F9D4-200D-2642-FE0F",
             "j": [
                 "beard",
@@ -4561,7 +4751,7 @@
             ]
         },
         "woman-beard": {
-            "a": "⊛ Woman: Beard",
+            "a": "Woman: Beard",
             "b": "1F9D4-200D-2640-FE0F",
             "j": [
                 "beard",
@@ -5847,6 +6037,16 @@
                 "labor"
             ]
         },
+        "person-with-crown": {
+            "a": "⊛ Person with Crown",
+            "b": "1FAC5",
+            "j": [
+                "monarch",
+                "noble",
+                "regal",
+                "royalty"
+            ]
+        },
         "prince": {
             "a": "Prince",
             "b": "1F934",
@@ -6008,6 +6208,26 @@
                 "pregnant",
                 "woman",
                 "baby"
+            ]
+        },
+        "pregnant-man": {
+            "a": "⊛ Pregnant Man",
+            "b": "1FAC3",
+            "j": [
+                "belly",
+                "bloated",
+                "full",
+                "pregnant"
+            ]
+        },
+        "pregnant-person": {
+            "a": "⊛ Pregnant Person",
+            "b": "1FAC4",
+            "j": [
+                "belly",
+                "bloated",
+                "full",
+                "pregnant"
             ]
         },
         "breastfeeding": {
@@ -6393,6 +6613,15 @@
                 "walking dead",
                 "woman",
                 "female"
+            ]
+        },
+        "troll": {
+            "a": "⊛ Troll",
+            "b": "1F9CC",
+            "j": [
+                "fairy tale",
+                "fantasy",
+                "monster"
             ]
         },
         "person-getting-massage": {
@@ -8625,7 +8854,8 @@
             "a": "Koala",
             "b": "1F428",
             "j": [
-                "bear",
+                "face",
+                "marsupial",
                 "animal",
                 "nature"
             ]
@@ -9125,6 +9355,14 @@
                 "beach"
             ]
         },
+        "coral": {
+            "a": "⊛ Coral",
+            "b": "1FAB8",
+            "j": [
+                "ocean",
+                "reef"
+            ]
+        },
         "snail": {
             "a": "Snail",
             "b": "1F40C",
@@ -9324,6 +9562,18 @@
                 "flower",
                 "japanese",
                 "spring"
+            ]
+        },
+        "lotus": {
+            "a": "⊛ Lotus",
+            "b": "1FAB7",
+            "j": [
+                "Buddhism",
+                "flower",
+                "Hinduism",
+                "India",
+                "purity",
+                "Vietnam"
             ]
         },
         "rosette": {
@@ -9562,6 +9812,20 @@
                 "grass",
                 "lawn",
                 "spring"
+            ]
+        },
+        "empty-nest": {
+            "a": "⊛ Empty Nest",
+            "b": "1FAB9",
+            "j": [
+                "nesting"
+            ]
+        },
+        "nest-with-eggs": {
+            "a": "⊛ Nest with Eggs",
+            "b": "1FABA",
+            "j": [
+                "nesting"
             ]
         },
         "grapes": {
@@ -9892,6 +10156,15 @@
                 "nut",
                 "peanut",
                 "vegetable"
+            ]
+        },
+        "beans": {
+            "a": "⊛ Beans",
+            "b": "1FAD8",
+            "j": [
+                "food",
+                "kidney",
+                "legume"
             ]
         },
         "chestnut": {
@@ -10893,6 +11166,16 @@
                 "scotch"
             ]
         },
+        "pouring-liquid": {
+            "a": "⊛ Pouring Liquid",
+            "b": "1FAD7",
+            "j": [
+                "drink",
+                "empty",
+                "glass",
+                "spill"
+            ]
+        },
         "cup-with-straw": {
             "a": "Cup with Straw",
             "b": "1F964",
@@ -11008,6 +11291,17 @@
                 "blade",
                 "cutlery",
                 "kitchen"
+            ]
+        },
+        "jar": {
+            "a": "⊛ Jar",
+            "b": "1FAD9",
+            "j": [
+                "condiment",
+                "container",
+                "empty",
+                "sauce",
+                "store"
             ]
         },
         "amphora": {
@@ -11690,6 +11984,14 @@
                 "carnival"
             ]
         },
+        "playground-slide": {
+            "a": "⊛ Playground Slide",
+            "b": "1F6DD",
+            "j": [
+                "amusement park",
+                "play"
+            ]
+        },
         "ferris-wheel": {
             "a": "Ferris Wheel",
             "b": "1F3A1",
@@ -12164,7 +12466,6 @@
             "b": "1F68F",
             "j": [
                 "bus",
-                "busstop",
                 "stop",
                 "transportation",
                 "wait"
@@ -12210,6 +12511,15 @@
                 "station",
                 "gas station",
                 "petroleum"
+            ]
+        },
+        "wheel": {
+            "a": "⊛ Wheel",
+            "b": "1F6DE",
+            "j": [
+                "circle",
+                "tire",
+                "turn"
             ]
         },
         "police-car-light": {
@@ -12281,6 +12591,17 @@
                 "ferry",
                 "sea",
                 "boat"
+            ]
+        },
+        "ring-buoy": {
+            "a": "⊛ Ring Buoy",
+            "b": "1F6DF",
+            "j": [
+                "float",
+                "life preserver",
+                "life saver",
+                "rescue",
+                "safety"
             ]
         },
         "sailboat": {
@@ -14322,6 +14643,18 @@
                 "talisman"
             ]
         },
+        "hamsa": {
+            "a": "⊛ Hamsa",
+            "b": "1FAAC",
+            "j": [
+                "amulet",
+                "Fatima",
+                "hand",
+                "Mary",
+                "Miriam",
+                "protection"
+            ]
+        },
         "video-game": {
             "a": "Video Game",
             "b": "1F3AE",
@@ -14400,6 +14733,16 @@
                 "pinata",
                 "mexico",
                 "candy"
+            ]
+        },
+        "mirror-ball": {
+            "a": "⊛ Mirror Ball",
+            "b": "1FAA9",
+            "j": [
+                "dance",
+                "disco",
+                "glitter",
+                "party"
             ]
         },
         "nesting-dolls": {
@@ -15500,6 +15843,14 @@
                 "power",
                 "energy",
                 "sustain"
+            ]
+        },
+        "low-battery": {
+            "a": "⊛ Low Battery",
+            "b": "1FAAB",
+            "j": [
+                "electronic",
+                "low energy"
             ]
         },
         "electric-plug": {
@@ -17135,6 +17486,17 @@
                 "heal"
             ]
         },
+        "crutch": {
+            "a": "⊛ Crutch",
+            "b": "1FA7C",
+            "j": [
+                "cane",
+                "disability",
+                "hurt",
+                "mobility aid",
+                "stick"
+            ]
+        },
         "stethoscope": {
             "a": "Stethoscope",
             "b": "1FA7A",
@@ -17143,6 +17505,16 @@
                 "heart",
                 "medicine",
                 "health"
+            ]
+        },
+        "xray": {
+            "a": "⊛ X-Ray",
+            "b": "1FA7B",
+            "j": [
+                "bones",
+                "doctor",
+                "medical",
+                "skeleton"
             ]
         },
         "door": {
@@ -17340,6 +17712,16 @@
                 "soapdish"
             ]
         },
+        "bubbles": {
+            "a": "⊛ Bubbles",
+            "b": "1FAE7",
+            "j": [
+                "burp",
+                "clean",
+                "soap",
+                "underwater"
+            ]
+        },
         "toothbrush": {
             "a": "Toothbrush",
             "b": "1FAA5",
@@ -17451,6 +17833,16 @@
                 "protest",
                 "sign",
                 "announcement"
+            ]
+        },
+        "identification-card": {
+            "a": "⊛ Identification Card",
+            "b": "1FAAA",
+            "j": [
+                "credentials",
+                "ID",
+                "license",
+                "security"
             ]
         },
         "atm-sign": {
@@ -18713,6 +19105,14 @@
                 "sign",
                 "division_sign",
                 "calculation"
+            ]
+        },
+        "heavy-equals-sign": {
+            "a": "⊛ Heavy Equals Sign",
+            "b": "1F7F0",
+            "j": [
+                "equality",
+                "math"
             ]
         },
         "infinity": {
@@ -20247,7 +20647,8 @@
                 "ad",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "andorra"
             ]
         },
         "flag-united-arab-emirates": {
@@ -20260,7 +20661,8 @@
                 "emirates",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "united_arab_emirates"
             ]
         },
         "flag-afghanistan": {
@@ -20271,7 +20673,8 @@
                 "af",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "afghanistan"
             ]
         },
         "flag-antigua--barbuda": {
@@ -20284,7 +20687,8 @@
                 "barbuda",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "antigua_barbuda"
             ]
         },
         "flag-anguilla": {
@@ -20295,7 +20699,8 @@
                 "ai",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "anguilla"
             ]
         },
         "flag-albania": {
@@ -20306,7 +20711,8 @@
                 "al",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "albania"
             ]
         },
         "flag-armenia": {
@@ -20317,7 +20723,8 @@
                 "am",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "armenia"
             ]
         },
         "flag-angola": {
@@ -20328,7 +20735,8 @@
                 "ao",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "angola"
             ]
         },
         "flag-antarctica": {
@@ -20339,7 +20747,8 @@
                 "aq",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "antarctica"
             ]
         },
         "flag-argentina": {
@@ -20350,7 +20759,8 @@
                 "ar",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "argentina"
             ]
         },
         "flag-american-samoa": {
@@ -20362,7 +20772,8 @@
                 "ws",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "american_samoa"
             ]
         },
         "flag-austria": {
@@ -20373,7 +20784,8 @@
                 "at",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "austria"
             ]
         },
         "flag-australia": {
@@ -20384,7 +20796,8 @@
                 "au",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "australia"
             ]
         },
         "flag-aruba": {
@@ -20395,7 +20808,8 @@
                 "aw",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "aruba"
             ]
         },
         "flag-land-islands": {
@@ -20408,7 +20822,8 @@
                 "islands",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "aland_islands"
             ]
         },
         "flag-azerbaijan": {
@@ -20419,7 +20834,8 @@
                 "az",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "azerbaijan"
             ]
         },
         "flag-bosnia--herzegovina": {
@@ -20432,7 +20848,8 @@
                 "herzegovina",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "bosnia_herzegovina"
             ]
         },
         "flag-barbados": {
@@ -20443,7 +20860,8 @@
                 "bb",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "barbados"
             ]
         },
         "flag-bangladesh": {
@@ -20454,7 +20872,8 @@
                 "bd",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "bangladesh"
             ]
         },
         "flag-belgium": {
@@ -20465,7 +20884,8 @@
                 "be",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "belgium"
             ]
         },
         "flag-burkina-faso": {
@@ -20477,7 +20897,8 @@
                 "faso",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "burkina_faso"
             ]
         },
         "flag-bulgaria": {
@@ -20488,7 +20909,8 @@
                 "bg",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "bulgaria"
             ]
         },
         "flag-bahrain": {
@@ -20499,7 +20921,8 @@
                 "bh",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "bahrain"
             ]
         },
         "flag-burundi": {
@@ -20510,7 +20933,8 @@
                 "bi",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "burundi"
             ]
         },
         "flag-benin": {
@@ -20521,7 +20945,8 @@
                 "bj",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "benin"
             ]
         },
         "flag-st-barthlemy": {
@@ -20534,7 +20959,8 @@
                 "barthélemy",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "st_barthelemy"
             ]
         },
         "flag-bermuda": {
@@ -20545,7 +20971,8 @@
                 "bm",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "bermuda"
             ]
         },
         "flag-brunei": {
@@ -20557,7 +20984,8 @@
                 "darussalam",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "brunei"
             ]
         },
         "flag-bolivia": {
@@ -20568,7 +20996,8 @@
                 "bo",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "bolivia"
             ]
         },
         "flag-caribbean-netherlands": {
@@ -20579,7 +21008,8 @@
                 "bonaire",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "caribbean_netherlands"
             ]
         },
         "flag-brazil": {
@@ -20590,7 +21020,8 @@
                 "br",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "brazil"
             ]
         },
         "flag-bahamas": {
@@ -20601,7 +21032,8 @@
                 "bs",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "bahamas"
             ]
         },
         "flag-bhutan": {
@@ -20612,7 +21044,8 @@
                 "bt",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "bhutan"
             ]
         },
         "flag-bouvet-island": {
@@ -20631,7 +21064,8 @@
                 "bw",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "botswana"
             ]
         },
         "flag-belarus": {
@@ -20642,7 +21076,8 @@
                 "by",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "belarus"
             ]
         },
         "flag-belize": {
@@ -20653,7 +21088,8 @@
                 "bz",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "belize"
             ]
         },
         "flag-canada": {
@@ -20664,7 +21100,8 @@
                 "ca",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "canada"
             ]
         },
         "flag-cocos-keeling-islands": {
@@ -20678,7 +21115,8 @@
                 "islands",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "cocos_islands"
             ]
         },
         "flag-congo--kinshasa": {
@@ -20692,7 +21130,8 @@
                 "republic",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "congo_kinshasa"
             ]
         },
         "flag-central-african-republic": {
@@ -20705,7 +21144,8 @@
                 "republic",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "central_african_republic"
             ]
         },
         "flag-congo--brazzaville": {
@@ -20717,7 +21157,8 @@
                 "congo",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "congo_brazzaville"
             ]
         },
         "flag-switzerland": {
@@ -20728,7 +21169,8 @@
                 "ch",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "switzerland"
             ]
         },
         "flag-cte-divoire": {
@@ -20741,7 +21183,8 @@
                 "coast",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "cote_d_ivoire"
             ]
         },
         "flag-cook-islands": {
@@ -20753,7 +21196,8 @@
                 "islands",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "cook_islands"
             ]
         },
         "flag-chile": {
@@ -20763,7 +21207,8 @@
                 "flag",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "chile"
             ]
         },
         "flag-cameroon": {
@@ -20774,7 +21219,8 @@
                 "cm",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "cameroon"
             ]
         },
         "flag-china": {
@@ -20798,7 +21244,8 @@
                 "co",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "colombia"
             ]
         },
         "flag-clipperton-island": {
@@ -20817,7 +21264,8 @@
                 "rica",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "costa_rica"
             ]
         },
         "flag-cuba": {
@@ -20828,7 +21276,8 @@
                 "cu",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "cuba"
             ]
         },
         "flag-cape-verde": {
@@ -20840,7 +21289,8 @@
                 "verde",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "cape_verde"
             ]
         },
         "flag-curaao": {
@@ -20852,7 +21302,8 @@
                 "curaçao",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "curacao"
             ]
         },
         "flag-christmas-island": {
@@ -20864,7 +21315,8 @@
                 "island",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "christmas_island"
             ]
         },
         "flag-cyprus": {
@@ -20875,7 +21327,8 @@
                 "cy",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "cyprus"
             ]
         },
         "flag-czechia": {
@@ -20886,7 +21339,8 @@
                 "cz",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "czechia"
             ]
         },
         "flag-germany": {
@@ -20897,7 +21351,8 @@
                 "german",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "germany"
             ]
         },
         "flag-diego-garcia": {
@@ -20915,7 +21370,8 @@
                 "dj",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "djibouti"
             ]
         },
         "flag-denmark": {
@@ -20926,7 +21382,8 @@
                 "dk",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "denmark"
             ]
         },
         "flag-dominica": {
@@ -20937,7 +21394,8 @@
                 "dm",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "dominica"
             ]
         },
         "flag-dominican-republic": {
@@ -20949,7 +21407,8 @@
                 "republic",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "dominican_republic"
             ]
         },
         "flag-algeria": {
@@ -20960,7 +21419,8 @@
                 "dz",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "algeria"
             ]
         },
         "flag-ceuta--melilla": {
@@ -20979,7 +21439,8 @@
                 "ec",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "ecuador"
             ]
         },
         "flag-estonia": {
@@ -20990,7 +21451,8 @@
                 "ee",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "estonia"
             ]
         },
         "flag-egypt": {
@@ -21001,7 +21463,8 @@
                 "eg",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "egypt"
             ]
         },
         "flag-western-sahara": {
@@ -21013,7 +21476,8 @@
                 "sahara",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "western_sahara"
             ]
         },
         "flag-eritrea": {
@@ -21024,7 +21488,8 @@
                 "er",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "eritrea"
             ]
         },
         "flag-spain": {
@@ -21046,7 +21511,8 @@
                 "et",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "ethiopia"
             ]
         },
         "flag-european-union": {
@@ -21067,7 +21533,8 @@
                 "fi",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "finland"
             ]
         },
         "flag-fiji": {
@@ -21078,7 +21545,8 @@
                 "fj",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "fiji"
             ]
         },
         "flag-falkland-islands": {
@@ -21091,7 +21559,8 @@
                 "malvinas",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "falkland_islands"
             ]
         },
         "flag-micronesia": {
@@ -21116,7 +21585,8 @@
                 "islands",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "faroe_islands"
             ]
         },
         "flag-france": {
@@ -21139,7 +21609,8 @@
                 "ga",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "gabon"
             ]
         },
         "flag-united-kingdom": {
@@ -21160,7 +21631,8 @@
                 "UK",
                 "english",
                 "england",
-                "union jack"
+                "union jack",
+                "united_kingdom"
             ]
         },
         "flag-grenada": {
@@ -21171,7 +21643,8 @@
                 "gd",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "grenada"
             ]
         },
         "flag-georgia": {
@@ -21182,7 +21655,8 @@
                 "ge",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "georgia"
             ]
         },
         "flag-french-guiana": {
@@ -21194,7 +21668,8 @@
                 "guiana",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "french_guiana"
             ]
         },
         "flag-guernsey": {
@@ -21205,7 +21680,8 @@
                 "gg",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "guernsey"
             ]
         },
         "flag-ghana": {
@@ -21216,7 +21692,8 @@
                 "gh",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "ghana"
             ]
         },
         "flag-gibraltar": {
@@ -21227,7 +21704,8 @@
                 "gi",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "gibraltar"
             ]
         },
         "flag-greenland": {
@@ -21238,7 +21716,8 @@
                 "gl",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "greenland"
             ]
         },
         "flag-gambia": {
@@ -21249,7 +21728,8 @@
                 "gm",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "gambia"
             ]
         },
         "flag-guinea": {
@@ -21260,7 +21740,8 @@
                 "gn",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "guinea"
             ]
         },
         "flag-guadeloupe": {
@@ -21271,7 +21752,8 @@
                 "gp",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "guadeloupe"
             ]
         },
         "flag-equatorial-guinea": {
@@ -21283,7 +21765,8 @@
                 "gn",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "equatorial_guinea"
             ]
         },
         "flag-greece": {
@@ -21294,7 +21777,8 @@
                 "gr",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "greece"
             ]
         },
         "flag-south-georgia--south-sandwich-islands": {
@@ -21309,7 +21793,8 @@
                 "islands",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "south_georgia_south_sandwich_islands"
             ]
         },
         "flag-guatemala": {
@@ -21320,7 +21805,8 @@
                 "gt",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "guatemala"
             ]
         },
         "flag-guam": {
@@ -21331,7 +21817,8 @@
                 "gu",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "guam"
             ]
         },
         "flag-guineabissau": {
@@ -21344,7 +21831,8 @@
                 "bissau",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "guinea_bissau"
             ]
         },
         "flag-guyana": {
@@ -21355,7 +21843,8 @@
                 "gy",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "guyana"
             ]
         },
         "flag-hong-kong-sar-china": {
@@ -21367,7 +21856,8 @@
                 "kong",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "hong_kong_sar_china"
             ]
         },
         "flag-heard--mcdonald-islands": {
@@ -21386,7 +21876,8 @@
                 "hn",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "honduras"
             ]
         },
         "flag-croatia": {
@@ -21397,7 +21888,8 @@
                 "hr",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "croatia"
             ]
         },
         "flag-haiti": {
@@ -21408,7 +21900,8 @@
                 "ht",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "haiti"
             ]
         },
         "flag-hungary": {
@@ -21419,7 +21912,8 @@
                 "hu",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "hungary"
             ]
         },
         "flag-canary-islands": {
@@ -21431,7 +21925,8 @@
                 "islands",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "canary_islands"
             ]
         },
         "flag-indonesia": {
@@ -21441,7 +21936,8 @@
                 "flag",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "indonesia"
             ]
         },
         "flag-ireland": {
@@ -21452,7 +21948,8 @@
                 "ie",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "ireland"
             ]
         },
         "flag-israel": {
@@ -21463,7 +21960,8 @@
                 "il",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "israel"
             ]
         },
         "flag-isle-of-man": {
@@ -21475,7 +21973,8 @@
                 "man",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "isle_of_man"
             ]
         },
         "flag-india": {
@@ -21486,7 +21985,8 @@
                 "in",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "india"
             ]
         },
         "flag-british-indian-ocean-territory": {
@@ -21500,7 +22000,8 @@
                 "territory",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "british_indian_ocean_territory"
             ]
         },
         "flag-iraq": {
@@ -21511,7 +22012,8 @@
                 "iq",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "iraq"
             ]
         },
         "flag-iran": {
@@ -21535,7 +22037,8 @@
                 "is",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "iceland"
             ]
         },
         "flag-italy": {
@@ -21557,7 +22060,8 @@
                 "je",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "jersey"
             ]
         },
         "flag-jamaica": {
@@ -21568,7 +22072,8 @@
                 "jm",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "jamaica"
             ]
         },
         "flag-jordan": {
@@ -21579,7 +22084,8 @@
                 "jo",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "jordan"
             ]
         },
         "flag-japan": {
@@ -21590,7 +22096,8 @@
                 "japanese",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "japan"
             ]
         },
         "flag-kenya": {
@@ -21601,7 +22108,8 @@
                 "ke",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "kenya"
             ]
         },
         "flag-kyrgyzstan": {
@@ -21612,7 +22120,8 @@
                 "kg",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "kyrgyzstan"
             ]
         },
         "flag-cambodia": {
@@ -21623,7 +22132,8 @@
                 "kh",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "cambodia"
             ]
         },
         "flag-kiribati": {
@@ -21634,7 +22144,8 @@
                 "ki",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "kiribati"
             ]
         },
         "flag-comoros": {
@@ -21645,7 +22156,8 @@
                 "km",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "comoros"
             ]
         },
         "flag-st-kitts--nevis": {
@@ -21659,7 +22171,8 @@
                 "nevis",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "st_kitts_nevis"
             ]
         },
         "flag-north-korea": {
@@ -21671,7 +22184,8 @@
                 "korea",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "north_korea"
             ]
         },
         "flag-south-korea": {
@@ -21683,7 +22197,8 @@
                 "korea",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "south_korea"
             ]
         },
         "flag-kuwait": {
@@ -21694,7 +22209,8 @@
                 "kw",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "kuwait"
             ]
         },
         "flag-cayman-islands": {
@@ -21706,7 +22222,8 @@
                 "islands",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "cayman_islands"
             ]
         },
         "flag-kazakhstan": {
@@ -21717,7 +22234,8 @@
                 "kz",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "kazakhstan"
             ]
         },
         "flag-laos": {
@@ -21730,7 +22248,8 @@
                 "republic",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "laos"
             ]
         },
         "flag-lebanon": {
@@ -21741,7 +22260,8 @@
                 "lb",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "lebanon"
             ]
         },
         "flag-st-lucia": {
@@ -21753,7 +22273,8 @@
                 "lucia",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "st_lucia"
             ]
         },
         "flag-liechtenstein": {
@@ -21764,7 +22285,8 @@
                 "li",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "liechtenstein"
             ]
         },
         "flag-sri-lanka": {
@@ -21776,7 +22298,8 @@
                 "lanka",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "sri_lanka"
             ]
         },
         "flag-liberia": {
@@ -21787,7 +22310,8 @@
                 "lr",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "liberia"
             ]
         },
         "flag-lesotho": {
@@ -21798,7 +22322,8 @@
                 "ls",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "lesotho"
             ]
         },
         "flag-lithuania": {
@@ -21809,7 +22334,8 @@
                 "lt",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "lithuania"
             ]
         },
         "flag-luxembourg": {
@@ -21820,7 +22346,8 @@
                 "lu",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "luxembourg"
             ]
         },
         "flag-latvia": {
@@ -21831,7 +22358,8 @@
                 "lv",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "latvia"
             ]
         },
         "flag-libya": {
@@ -21842,7 +22370,8 @@
                 "ly",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "libya"
             ]
         },
         "flag-morocco": {
@@ -21853,7 +22382,8 @@
                 "ma",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "morocco"
             ]
         },
         "flag-monaco": {
@@ -21864,7 +22394,8 @@
                 "mc",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "monaco"
             ]
         },
         "flag-moldova": {
@@ -21887,7 +22418,8 @@
                 "me",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "montenegro"
             ]
         },
         "flag-st-martin": {
@@ -21905,7 +22437,8 @@
                 "mg",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "madagascar"
             ]
         },
         "flag-marshall-islands": {
@@ -21917,7 +22450,8 @@
                 "islands",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "marshall_islands"
             ]
         },
         "flag-north-macedonia": {
@@ -21928,7 +22462,8 @@
                 "macedonia",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "north_macedonia"
             ]
         },
         "flag-mali": {
@@ -21939,7 +22474,8 @@
                 "ml",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "mali"
             ]
         },
         "flag-myanmar-burma": {
@@ -21951,7 +22487,8 @@
                 "mm",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "myanmar"
             ]
         },
         "flag-mongolia": {
@@ -21962,7 +22499,8 @@
                 "mn",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "mongolia"
             ]
         },
         "flag-macao-sar-china": {
@@ -21973,7 +22511,8 @@
                 "macao",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "macao_sar_china"
             ]
         },
         "flag-northern-mariana-islands": {
@@ -21986,7 +22525,8 @@
                 "islands",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "northern_mariana_islands"
             ]
         },
         "flag-martinique": {
@@ -21997,7 +22537,8 @@
                 "mq",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "martinique"
             ]
         },
         "flag-mauritania": {
@@ -22008,7 +22549,8 @@
                 "mr",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "mauritania"
             ]
         },
         "flag-montserrat": {
@@ -22019,7 +22561,8 @@
                 "ms",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "montserrat"
             ]
         },
         "flag-malta": {
@@ -22030,7 +22573,8 @@
                 "mt",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "malta"
             ]
         },
         "flag-mauritius": {
@@ -22041,7 +22585,8 @@
                 "mu",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "mauritius"
             ]
         },
         "flag-maldives": {
@@ -22052,7 +22597,8 @@
                 "mv",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "maldives"
             ]
         },
         "flag-malawi": {
@@ -22063,7 +22609,8 @@
                 "mw",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "malawi"
             ]
         },
         "flag-mexico": {
@@ -22074,7 +22621,8 @@
                 "mx",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "mexico"
             ]
         },
         "flag-malaysia": {
@@ -22085,7 +22633,8 @@
                 "my",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "malaysia"
             ]
         },
         "flag-mozambique": {
@@ -22096,7 +22645,8 @@
                 "mz",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "mozambique"
             ]
         },
         "flag-namibia": {
@@ -22107,7 +22657,8 @@
                 "na",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "namibia"
             ]
         },
         "flag-new-caledonia": {
@@ -22119,7 +22670,8 @@
                 "caledonia",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "new_caledonia"
             ]
         },
         "flag-niger": {
@@ -22130,7 +22682,8 @@
                 "ne",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "niger"
             ]
         },
         "flag-norfolk-island": {
@@ -22142,7 +22695,8 @@
                 "island",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "norfolk_island"
             ]
         },
         "flag-nigeria": {
@@ -22152,7 +22706,8 @@
                 "flag",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "nigeria"
             ]
         },
         "flag-nicaragua": {
@@ -22163,7 +22718,8 @@
                 "ni",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "nicaragua"
             ]
         },
         "flag-netherlands": {
@@ -22174,7 +22730,8 @@
                 "nl",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "netherlands"
             ]
         },
         "flag-norway": {
@@ -22185,7 +22742,8 @@
                 "no",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "norway"
             ]
         },
         "flag-nepal": {
@@ -22196,7 +22754,8 @@
                 "np",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "nepal"
             ]
         },
         "flag-nauru": {
@@ -22207,7 +22766,8 @@
                 "nr",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "nauru"
             ]
         },
         "flag-niue": {
@@ -22218,7 +22778,8 @@
                 "nu",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "niue"
             ]
         },
         "flag-new-zealand": {
@@ -22230,7 +22791,8 @@
                 "zealand",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "new_zealand"
             ]
         },
         "flag-oman": {
@@ -22241,7 +22803,8 @@
                 "om_symbol",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "oman"
             ]
         },
         "flag-panama": {
@@ -22252,7 +22815,8 @@
                 "pa",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "panama"
             ]
         },
         "flag-peru": {
@@ -22263,7 +22827,8 @@
                 "pe",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "peru"
             ]
         },
         "flag-french-polynesia": {
@@ -22275,7 +22840,8 @@
                 "polynesia",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "french_polynesia"
             ]
         },
         "flag-papua-new-guinea": {
@@ -22288,7 +22854,8 @@
                 "guinea",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "papua_new_guinea"
             ]
         },
         "flag-philippines": {
@@ -22299,7 +22866,8 @@
                 "ph",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "philippines"
             ]
         },
         "flag-pakistan": {
@@ -22310,7 +22878,8 @@
                 "pk",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "pakistan"
             ]
         },
         "flag-poland": {
@@ -22321,7 +22890,8 @@
                 "pl",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "poland"
             ]
         },
         "flag-st-pierre--miquelon": {
@@ -22335,7 +22905,8 @@
                 "miquelon",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "st_pierre_miquelon"
             ]
         },
         "flag-pitcairn-islands": {
@@ -22346,7 +22917,8 @@
                 "pitcairn",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "pitcairn_islands"
             ]
         },
         "flag-puerto-rico": {
@@ -22358,7 +22930,8 @@
                 "rico",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "puerto_rico"
             ]
         },
         "flag-palestinian-territories": {
@@ -22371,7 +22944,8 @@
                 "territories",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "palestinian_territories"
             ]
         },
         "flag-portugal": {
@@ -22382,7 +22956,8 @@
                 "pt",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "portugal"
             ]
         },
         "flag-palau": {
@@ -22393,7 +22968,8 @@
                 "pw",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "palau"
             ]
         },
         "flag-paraguay": {
@@ -22404,7 +22980,8 @@
                 "py",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "paraguay"
             ]
         },
         "flag-qatar": {
@@ -22415,7 +22992,8 @@
                 "qa",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "qatar"
             ]
         },
         "flag-runion": {
@@ -22427,7 +23005,8 @@
                 "réunion",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "reunion"
             ]
         },
         "flag-romania": {
@@ -22438,7 +23017,8 @@
                 "ro",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "romania"
             ]
         },
         "flag-serbia": {
@@ -22449,7 +23029,8 @@
                 "rs",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "serbia"
             ]
         },
         "flag-russia": {
@@ -22461,7 +23042,8 @@
                 "federation",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "russia"
             ]
         },
         "flag-rwanda": {
@@ -22472,7 +23054,8 @@
                 "rw",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "rwanda"
             ]
         },
         "flag-saudi-arabia": {
@@ -22482,7 +23065,8 @@
                 "flag",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "saudi_arabia"
             ]
         },
         "flag-solomon-islands": {
@@ -22494,7 +23078,8 @@
                 "islands",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "solomon_islands"
             ]
         },
         "flag-seychelles": {
@@ -22505,7 +23090,8 @@
                 "sc",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "seychelles"
             ]
         },
         "flag-sudan": {
@@ -22516,7 +23102,8 @@
                 "sd",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "sudan"
             ]
         },
         "flag-sweden": {
@@ -22527,7 +23114,8 @@
                 "se",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "sweden"
             ]
         },
         "flag-singapore": {
@@ -22538,7 +23126,8 @@
                 "sg",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "singapore"
             ]
         },
         "flag-st-helena": {
@@ -22553,7 +23142,8 @@
                 "cunha",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "st_helena"
             ]
         },
         "flag-slovenia": {
@@ -22564,7 +23154,8 @@
                 "si",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "slovenia"
             ]
         },
         "flag-svalbard--jan-mayen": {
@@ -22583,7 +23174,8 @@
                 "sk",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "slovakia"
             ]
         },
         "flag-sierra-leone": {
@@ -22595,7 +23187,8 @@
                 "leone",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "sierra_leone"
             ]
         },
         "flag-san-marino": {
@@ -22607,7 +23200,8 @@
                 "marino",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "san_marino"
             ]
         },
         "flag-senegal": {
@@ -22618,7 +23212,8 @@
                 "sn",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "senegal"
             ]
         },
         "flag-somalia": {
@@ -22629,7 +23224,8 @@
                 "so",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "somalia"
             ]
         },
         "flag-suriname": {
@@ -22640,7 +23236,8 @@
                 "sr",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "suriname"
             ]
         },
         "flag-south-sudan": {
@@ -22652,7 +23249,8 @@
                 "sd",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "south_sudan"
             ]
         },
         "flag-so-tom--prncipe": {
@@ -22666,7 +23264,8 @@
                 "principe",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "sao_tome_principe"
             ]
         },
         "flag-el-salvador": {
@@ -22678,7 +23277,8 @@
                 "salvador",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "el_salvador"
             ]
         },
         "flag-sint-maarten": {
@@ -22691,7 +23291,8 @@
                 "dutch",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "sint_maarten"
             ]
         },
         "flag-syria": {
@@ -22704,7 +23305,8 @@
                 "republic",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "syria"
             ]
         },
         "flag-eswatini": {
@@ -22715,7 +23317,8 @@
                 "sz",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "eswatini"
             ]
         },
         "flag-tristan-da-cunha": {
@@ -22736,7 +23339,8 @@
                 "islands",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "turks_caicos_islands"
             ]
         },
         "flag-chad": {
@@ -22747,7 +23351,8 @@
                 "td",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "chad"
             ]
         },
         "flag-french-southern-territories": {
@@ -22760,7 +23365,8 @@
                 "territories",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "french_southern_territories"
             ]
         },
         "flag-togo": {
@@ -22771,7 +23377,8 @@
                 "tg",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "togo"
             ]
         },
         "flag-thailand": {
@@ -22782,7 +23389,8 @@
                 "th",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "thailand"
             ]
         },
         "flag-tajikistan": {
@@ -22793,7 +23401,8 @@
                 "tj",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "tajikistan"
             ]
         },
         "flag-tokelau": {
@@ -22804,7 +23413,8 @@
                 "tk",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "tokelau"
             ]
         },
         "flag-timorleste": {
@@ -22817,7 +23427,8 @@
                 "leste",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "timor_leste"
             ]
         },
         "flag-turkmenistan": {
@@ -22827,7 +23438,8 @@
                 "flag",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "turkmenistan"
             ]
         },
         "flag-tunisia": {
@@ -22838,7 +23450,8 @@
                 "tn",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "tunisia"
             ]
         },
         "flag-tonga": {
@@ -22849,7 +23462,8 @@
                 "to",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "tonga"
             ]
         },
         "flag-turkey": {
@@ -22873,7 +23487,8 @@
                 "tobago",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "trinidad_tobago"
             ]
         },
         "flag-tuvalu": {
@@ -22883,7 +23498,8 @@
                 "flag",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "tuvalu"
             ]
         },
         "flag-taiwan": {
@@ -22894,7 +23510,8 @@
                 "tw",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "taiwan"
             ]
         },
         "flag-tanzania": {
@@ -22918,7 +23535,8 @@
                 "ua",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "ukraine"
             ]
         },
         "flag-uganda": {
@@ -22929,7 +23547,8 @@
                 "ug",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "uganda"
             ]
         },
         "flag-us-outlying-islands": {
@@ -22959,7 +23578,8 @@
                 "america",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "united_states"
             ]
         },
         "flag-uruguay": {
@@ -22970,7 +23590,8 @@
                 "uy",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "uruguay"
             ]
         },
         "flag-uzbekistan": {
@@ -22981,7 +23602,8 @@
                 "uz",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "uzbekistan"
             ]
         },
         "flag-vatican-city": {
@@ -22993,7 +23615,8 @@
                 "city",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "vatican_city"
             ]
         },
         "flag-st-vincent--grenadines": {
@@ -23007,7 +23630,8 @@
                 "grenadines",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "st_vincent_grenadines"
             ]
         },
         "flag-venezuela": {
@@ -23020,7 +23644,8 @@
                 "republic",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "venezuela"
             ]
         },
         "flag-british-virgin-islands": {
@@ -23034,7 +23659,8 @@
                 "bvi",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "british_virgin_islands"
             ]
         },
         "flag-us-virgin-islands": {
@@ -23048,7 +23674,8 @@
                 "us",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "u_s_virgin_islands"
             ]
         },
         "flag-vietnam": {
@@ -23060,7 +23687,8 @@
                 "nam",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "vietnam"
             ]
         },
         "flag-vanuatu": {
@@ -23071,7 +23699,8 @@
                 "vu",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "vanuatu"
             ]
         },
         "flag-wallis--futuna": {
@@ -23084,7 +23713,8 @@
                 "futuna",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "wallis_futuna"
             ]
         },
         "flag-samoa": {
@@ -23095,7 +23725,8 @@
                 "ws",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "samoa"
             ]
         },
         "flag-kosovo": {
@@ -23106,7 +23737,8 @@
                 "xk",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "kosovo"
             ]
         },
         "flag-yemen": {
@@ -23117,7 +23749,8 @@
                 "ye",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "yemen"
             ]
         },
         "flag-mayotte": {
@@ -23128,7 +23761,8 @@
                 "yt",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "mayotte"
             ]
         },
         "flag-south-africa": {
@@ -23140,7 +23774,8 @@
                 "africa",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "south_africa"
             ]
         },
         "flag-zambia": {
@@ -23151,7 +23786,8 @@
                 "zm",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "zambia"
             ]
         },
         "flag-zimbabwe": {
@@ -23162,7 +23798,8 @@
                 "zw",
                 "nation",
                 "country",
-                "banner"
+                "banner",
+                "zimbabwe"
             ]
         },
         "flag-england": {

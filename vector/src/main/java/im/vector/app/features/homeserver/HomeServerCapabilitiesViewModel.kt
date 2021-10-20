@@ -18,7 +18,7 @@ package im.vector.app.features.homeserver
 
 import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -48,7 +48,7 @@ class HomeServerCapabilitiesViewModel @AssistedInject constructor(
         fun create(initialState: HomeServerCapabilitiesViewState): HomeServerCapabilitiesViewModel
     }
 
-    companion object : MvRxViewModelFactory<HomeServerCapabilitiesViewModel, HomeServerCapabilitiesViewState> {
+    companion object : MavericksViewModelFactory<HomeServerCapabilitiesViewModel, HomeServerCapabilitiesViewState> {
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: HomeServerCapabilitiesViewState): HomeServerCapabilitiesViewModel? {
             val fragment: UserListFragment = (viewModelContext as FragmentViewModelContext).fragment()

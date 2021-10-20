@@ -64,7 +64,7 @@ class RoomWidgetsBottomSheet :
         views.bottomSheetTitle.textSize = 20f
         views.bottomSheetTitle.setTextColor(colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
         epoxyController.listener = this
-        roomDetailViewModel.asyncSubscribe(this, RoomDetailViewState::activeRoomWidgets) {
+        roomDetailViewModel.onAsync(RoomDetailViewState::activeRoomWidgets) {
             epoxyController.setData(it)
         }
     }

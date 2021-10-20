@@ -7,7 +7,7 @@ ext.versions = [
         'targetCompat'      : JavaVersion.VERSION_11,
 ]
 
-def gradle = "7.0.2"
+def gradle = "7.0.3"
 // Ref: https://kotlinlang.org/releases.html
 def kotlin = "1.5.31"
 def kotlinCoroutines = "1.5.2"
@@ -19,6 +19,7 @@ def moshi = "1.12.0"
 def lifecycle = "2.2.0"
 def rxBinding = "3.1.0"
 def epoxy = "4.6.2"
+def mavericks = "2.4.0"
 def glide = "4.12.0"
 def bigImageViewer = "1.8.1"
 def jjwt = "0.11.2"
@@ -36,8 +37,6 @@ ext.libs = [
                 'kotlinPlugin'            : "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin"
         ],
         jetbrains   : [
-                'kotlinStdlibJdk7'        : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin",
-                'kotlinStdlib'            : "org.jetbrains.kotlin:kotlin-stdlib:$kotlin",
                 'coroutinesCore'          : "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinCoroutines",
                 'coroutinesAndroid'       : "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinCoroutines",
                 'coroutinesRx2'           : "org.jetbrains.kotlinx:kotlinx-coroutines-rx2:$kotlinCoroutines"
@@ -98,7 +97,9 @@ ext.libs = [
                 'epoxyGlide'             : "com.airbnb.android:epoxy-glide-preloading:$epoxy",
                 'epoxyProcessor'         : "com.airbnb.android:epoxy-processor:$epoxy",
                 'epoxyPaging'            : "com.airbnb.android:epoxy-paging:$epoxy",
-                'mvrx'                   : "com.airbnb.android:mvrx:1.5.1"
+                'mavericks'              : "com.airbnb.android:mavericks:$mavericks",
+                'mavericksRx'            : "com.airbnb.android:mavericks-rxjava2:$mavericks",
+                'mavericksTesting'       : "com.airbnb.android:mavericks-testing:$mavericks"
         ],
         mockk      : [
                 'mockk'                   : "io.mockk:mockk:$mockk",
@@ -123,9 +124,12 @@ ext.libs = [
                 'jjwtImpl'               : "io.jsonwebtoken:jjwt-impl:$jjwt",
                 'jjwtOrgjson'            : "io.jsonwebtoken:jjwt-orgjson:$jjwt"
         ],
-        vanniktech: [
+        vanniktech  : [
                 'emojiMaterial'          : "com.vanniktech:emoji-material:$vanniktechEmoji",
                 'emojiGoogle'            : "com.vanniktech:emoji-google:$vanniktechEmoji"
+        ],
+        apache      : [
+                'commonsImaging'         : "org.apache.sanselan:sanselan:0.97-incubator"
         ],
         tests       : [
                 'kluent'                 : "org.amshove.kluent:kluent-android:1.68",

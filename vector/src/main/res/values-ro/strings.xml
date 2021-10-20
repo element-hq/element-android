@@ -68,8 +68,8 @@
     <string name="notice_answered_call_by_you">Ați răspuns la apel.</string>
     <string name="notice_answered_call">%s a răspuns la apel.</string>
     <string name="summary_message">%1$s: %2$s</string>
-    <string name="summary_user_sent_sticker">%1$s a trimis un autocolant.</string>
-    <string name="summary_you_sent_sticker">Ați trimis un autocolant.</string>
+    <string name="summary_user_sent_sticker">%1$s a trimis un sticker.</string>
+    <string name="summary_you_sent_sticker">Ați trimis un sticker.</string>
     <string name="invite_friends">Invită prieteni</string>
     <string name="notice_room_server_acl_updated_no_change">Fără schimbări.</string>
     <string name="notice_room_third_party_registered_invite_by_you">Ați acceptat invitația pentru %1$s</string>
@@ -83,7 +83,7 @@
     <string name="notice_event_redacted_by_with_reason">Mesaj șters de %1$s [motiv: %2$s]</string>
     <string name="notice_event_redacted_with_reason">Mesaj șters [motiv: %1$s]</string>
     <string name="notice_event_redacted_by">Mesaj șters de %1$s</string>
-    <string name="notice_event_redacted">Mesaj șters</string>
+    <string name="notice_event_redacted">Mesaj înlăturat</string>
     <string name="notice_room_avatar_removed_by_you">Ați înlăturat avatarul camerei</string>
     <string name="notice_room_avatar_removed">%1$s a înlăturat avatarul camerei</string>
     <string name="notice_room_topic_removed_by_you">Ați înlăturat subiectul acestei camere</string>
@@ -118,14 +118,14 @@
     </plurals>
     <string name="room_creation_add_member">Adaugă un membru</string>
     <string name="list_members">Lista membrilor</string>
-    <string name="space_manage_rooms_and_spaces">Gestionați camerele și spațiile</string>
+    <string name="space_manage_rooms_and_spaces">Administrează camerele și spațiile</string>
     <string name="spaces_beta_welcome_to_spaces">Bine ați venit la spații!</string>
     <string name="create_spaces_loading_message">Se creează spațiul…</string>
     <string name="create_spaces_default_public_random_room_name">Aleatoriu</string>
     <string name="create_spaces_organise_rooms">Un spațiu privat pentru organizarea camerelor</string>
     <string name="create_spaces_join_info_help">Pentru a vă alătura unui spațiu existent, aveți nevoie de o invitație.</string>
     <string name="create_spaces_you_can_change_later">Puteți schimba acest lucru mai târziu</string>
-    <string name="room_settings_room_access_restricted_title">Spații</string>
+    <string name="room_settings_room_access_restricted_title">Spații numai pentru membri</string>
     <string name="spaces_invited_header">Invitații</string>
     <string name="send_a_sticker">Autocolant</string>
     <string name="attachment_type_sticker">Autocolant</string>
@@ -296,7 +296,101 @@
     <string name="notice_room_server_acl_set_allowed">• Serverele care se potrivesc %s sunt permise.</string>
     <string name="notice_room_server_acl_set_banned">• Serverele care se potrivesc %s sunt interzise.</string>
     <string name="notice_room_server_acl_set_title_by_you">Tu ai setat lista de acces in aceasta cameră.</string>
-    <string name="notice_end_to_end">%1$s porniți criptarea de la un capat la altul (%2$s)</string>
+    <string name="notice_end_to_end">%1$s porniți criptarea end-to-end (%2$s)</string>
     <string name="notice_made_future_room_visibility_by_you">Ați făcut istoria camerei viitoare vizibilă pentru %1$s</string>
     <string name="notice_made_future_room_visibility">%1$s a făcut istoria camerei viitoare vizibilă pentru %2$s</string>
+    <string name="notice_crypto_unable_to_decrypt">** Imposibil de decriptat: %s **</string>
+    <string name="notice_power_level_diff">%1$s de la %2$s către %3$s</string>
+    <string name="notice_power_level_changed">%1$s a schimbat nivelul de putere pentru %2$s.</string>
+    <string name="notice_power_level_changed_by_you">Ați modificat nivelul de putere pentru %1$s.</string>
+    <string name="notice_widget_jitsi_modified_by_you">Ați modificat conferința video</string>
+    <string name="notice_widget_jitsi_modified">Conferința video a fost modificată de %1$s</string>
+    <string name="notice_widget_jitsi_removed_by_you">Ați închis conferința video</string>
+    <string name="notice_widget_jitsi_removed">Conferința video a fost terminată de %1$s</string>
+    <string name="notice_room_third_party_revoked_invite_by_you">Ai revocat invitația de alăturare a camerei pentru %1$s</string>
+    <string name="notice_room_third_party_revoked_invite">%1$s a revocat invitația către %2$s pentru a se alătura camerei</string>
+    <string name="notice_room_third_party_invite_by_you">Ai trimis o invitație către %1$s pentru a se alătura camerei</string>
+    <string name="notice_room_third_party_invite">%1$s a trimis o invitație către %2$s pentru a se alătura camerei</string>
+    <string name="notice_room_server_acl_allow_is_empty">🎉 Toate serverele sunt blocate din a participa! Această cameră nu mai poate fi folosită.</string>
+    <string name="notice_room_server_acl_updated_was_allowed">Serverele ce se potrivesc cu %s au fost eliminate din lista de permisiuni.</string>
+    <string name="notice_room_server_acl_updated_allowed">Serverele ce se potrivesc cu %s sunt acum permise.</string>
+    <string name="notice_room_server_acl_updated_banned">Serverele ce se potrivesc cu %s sunt acum blocate.</string>
+    <string name="notice_room_server_acl_set_title">%s Setați listele ACL pentru acestă cameră.</string>
+    <string name="notice_end_to_end_by_you">Ai pornit criptarea end-to-end (%1$s)</string>
+    <string name="notice_room_unban_by_you">Ai deblocat %1$s</string>
+    <string name="notice_room_unban">%1$s deblocat %2$s</string>
+    <string name="power_level_custom_no_value">Personalizat</string>
+    <string name="power_level_custom">Personalizat (%1$d)</string>
+    <string name="power_level_default">Implicit</string>
+    <string name="power_level_moderator">Moderator</string>
+    <string name="power_level_admin">Administrator</string>
+    <string name="notice_widget_jitsi_added_by_you">Ați început o conferință video</string>
+    <string name="notice_widget_jitsi_added">Conferință video începută de %1$s</string>
+    <string name="notice_widget_modified_by_you">Ați modificat widget-ul %1$s</string>
+    <string name="notice_widget_modified">%1$s a modifcat widget-ul %2$s</string>
+    <string name="notice_widget_removed_by_you">Ați înlăturat widget-ul %1$s</string>
+    <string name="notice_widget_removed">%1$s a înlăturat widget-ul %2$s</string>
+    <string name="notice_widget_added_by_you">Ați adăugat widget-ul %1$s</string>
+    <string name="notice_widget_added">%1$s a adăugat widget-ul %2$s</string>
+    <string name="space_settings_manage_rooms">Administrează camerele</string>
+    <string name="room_participants_action_unignore_title">Revocați ignorarea utilizatorului</string>
+    <string name="ongoing_conference_call_video">Video</string>
+    <string name="delete">Șterge</string>
+    <string name="leave">Părăsește</string>
+    <string name="save">Salvează</string>
+    <string name="cancel">Anulează</string>
+    <string name="title_activity_verify_device">Verificați sesiunea</string>
+    <string name="notice_room_invite_no_invitee_with_reason_by_you">Invitația ta. Motivul: %1$s</string>
+    <string name="notice_room_invite_no_invitee_with_reason">Invitația trimisă de %1$s. Motivul: %2$s</string>
+    <string name="clear_timeline_send_queue">Șterge coada de trimitere</string>
+    <string name="event_status_sending_message">Mesajul se trimite…</string>
+    <string name="event_status_sent_message">Mesaj trimis</string>
+    <string name="initial_sync_start_importing_account_data">Sincronizare inițială:
+\nSe importă datele contului</string>
+    <string name="initial_sync_start_importing_account_groups">Sincronizare inițială:
+\nSe importă comunitățile</string>
+    <string name="initial_sync_start_importing_account_left_rooms">Sincronizare inițială:
+\nSe importă camerele pe care le-ați părăsit</string>
+    <string name="initial_sync_start_importing_account_invited_rooms">Sincronizare inițială:
+\nSe importă camerele la care a-ți primit invitații</string>
+    <string name="initial_sync_start_importing_account_joined_rooms">Sincronizare inițială:
+\nSe importă camerele la care v-ați alăturat</string>
+    <string name="initial_sync_start_importing_account_rooms">Sincronizare inițială:
+\nSe importa camerele</string>
+    <string name="initial_sync_start_importing_account_crypto">Sincronizare inițială:
+\nSe importă crypto</string>
+    <string name="initial_sync_start_importing_account">Sincronizare inițială:
+\nSe importă contul…</string>
+    <string name="initial_sync_start_downloading">Sincronizare inițială:
+\nSe descarcă datele…</string>
+    <string name="initial_sync_start_server_computing">Sincronizare inițială:
+\nSe așteaptă pentru răspunsul serverului…</string>
+    <string name="room_displayname_empty_room_was">Cameră liberă (a fost %s)</string>
+    <string name="room_displayname_empty_room">Cameră liberă</string>
+    <plurals name="room_displayname_three_and_more_members">
+        <item quantity="one">%1$s și un altul</item>
+        <item quantity="few">%1$s și %2$d alți</item>
+        <item quantity="other">%1$s și %2$d de alți</item>
+    </plurals>
+    <plurals name="room_displayname_four_and_more_members">
+        <item quantity="one">%1$s, %2$s, %3$s și %4$d altul</item>
+        <item quantity="few">%1$s, %2$s, %3$s și %4$d altele</item>
+        <item quantity="other">%1$s, %2$s, %3$s și %4$d altele</item>
+    </plurals>
+    <string name="room_displayname_4_members">%1$s,%2$s,%3$s și %4$s</string>
+    <string name="room_displayname_3_members">%1$s,%2$s și %3$s</string>
+    <string name="room_displayname_two_members">%1$s și %2$s</string>
+    <string name="room_displayname_room_invite">Invitația camerei</string>
+    <string name="room_displayname_invite_from">Invitație de la %s</string>
+    <string name="room_error_join_failed_empty_room">În acest moment este imposibil să reintri într-o camră goală.</string>
+    <string name="matrix_error">Eroare de aplicație</string>
+    <string name="network_error">Eroare de rețea</string>
+    <string name="message_failed_to_upload">A apărut o eroare în timpul incărcării imaginii</string>
+    <string name="unable_to_send_message">Nu s-a putut trimite mesajul</string>
+    <string name="could_not_redact">Nu se poate redacta</string>
+    <string name="notice_crypto_error_unkwown_inbound_session_id">Dispozitivul expeditorului nu a trimis cheile de decriptare pentru acest mesaj.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_not_allowed">Acum sunt blocate serverele ce au adrese IP ce se potrivesc.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_allowed">Acum sunt permise serverele ce au adrese IP ce se potrivesc.</string>
+    <string name="notice_room_server_acl_set_ip_literals_not_allowed">Sunt blocate serverele ce au adrese IP ce se potrivesc.</string>
+    <string name="notice_room_server_acl_set_ip_literals_allowed">Sunt permise serverele ce au adrese IP ce se potrivesc.</string>
 </resources>

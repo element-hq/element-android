@@ -17,12 +17,11 @@
 package im.vector.app.features.home.room.list
 
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.ViewModelContext
 import im.vector.app.AppStateHandler
@@ -34,6 +33,8 @@ import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.invite.AutoAcceptInvites
 import im.vector.app.features.settings.VectorPreferences
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.query.QueryStringValue
@@ -43,7 +44,7 @@ import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
 import org.matrix.android.sdk.api.session.room.state.isPublic
 import org.matrix.android.sdk.api.util.toMatrixItem
-import org.matrix.android.sdk.rx.rx
+import org.matrix.android.sdk.flow.flow
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -96,7 +97,7 @@ class RoomListViewModel @Inject constructor(
                     )
                 }
 
-        session.rx().liveUser(session.myUserId)
+        session.flow().liveUser(session.myUserId)
                 .map { it.getOrNull()?.toMatrixItem()?.getBestName() }
                 .distinctUntilChanged()
                 .execute {
@@ -107,18 +108,17 @@ class RoomListViewModel @Inject constructor(
     }
 
     private fun observeMembershipChanges() {
-        session.rx()
+        session.flow()
                 .liveRoomChangeMembershipState()
-                .subscribe {
-                    setState { copy(roomMembershipChanges = it) }
+                .setOnEach {
+                    copy(roomMembershipChanges = it)
                 }
-                .disposeOnClear()
     }
 
-    companion object : MvRxViewModelFactory<RoomListViewModel, RoomListViewState> {
+    companion object : MavericksViewModelFactory<RoomListViewModel, RoomListViewState> {
 
         @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: RoomListViewState): RoomListViewModel? {
+        override fun create(viewModelContext: ViewModelContext, state: RoomListViewState): RoomListViewModel {
             val fragment: RoomListFragment = (viewModelContext as FragmentViewModelContext).fragment()
             return fragment.roomListViewModelFactory.create(state)
         }
@@ -324,7 +324,7 @@ class RoomListViewModel @Inject constructor(
 
     private fun String.otherTag(): String? {
         return when (this) {
-            RoomTag.ROOM_TAG_FAVOURITE -> RoomTag.ROOM_TAG_LOW_PRIORITY
+            RoomTag.ROOM_TAG_FAVOURITE    -> RoomTag.ROOM_TAG_LOW_PRIORITY
             RoomTag.ROOM_TAG_LOW_PRIORITY -> RoomTag.ROOM_TAG_FAVOURITE
             else                          -> null
         }

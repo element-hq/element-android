@@ -21,7 +21,7 @@ import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.airbnb.mvrx.MvRx
+import com.airbnb.mvrx.Mavericks
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
@@ -46,7 +46,7 @@ class VerificationQRWaitingFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
-        (arguments?.getParcelable(MvRx.KEY_ARG) as? Args)?.let {
+        (arguments?.getParcelable(Mavericks.KEY_ARG) as? Args)?.let {
             controller.update(it)
         }
     }

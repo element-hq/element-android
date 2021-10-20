@@ -21,7 +21,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
-import com.airbnb.mvrx.MvRx
+import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
@@ -165,7 +165,7 @@ class InviteUsersToRoomActivity : SimpleFragmentActivity(), UserListViewModel.Fa
 
         fun getIntent(context: Context, roomId: String): Intent {
             return Intent(context, InviteUsersToRoomActivity::class.java).also {
-                it.putExtra(MvRx.KEY_ARG, InviteUsersToRoomArgs(roomId))
+                it.putExtra(Mavericks.KEY_ARG, InviteUsersToRoomArgs(roomId))
             }
         }
     }

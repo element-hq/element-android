@@ -24,7 +24,7 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.airbnb.mvrx.Incomplete
-import com.airbnb.mvrx.MvRx
+import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -127,7 +127,7 @@ class MatrixToBottomSheet :
         fun withLink(matrixToLink: String): MatrixToBottomSheet {
             return MatrixToBottomSheet().apply {
                 arguments = Bundle().apply {
-                    putParcelable(MvRx.KEY_ARG, MatrixToArgs(
+                    putParcelable(Mavericks.KEY_ARG, MatrixToArgs(
                             matrixToLink = matrixToLink
                     ))
                 }

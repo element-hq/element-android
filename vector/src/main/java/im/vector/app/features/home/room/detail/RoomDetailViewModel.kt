@@ -18,17 +18,16 @@ package im.vector.app.features.home.room.detail
 
 import android.net.Uri
 import androidx.annotation.IdRes
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.asFlow
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import com.jakewharton.rxrelay2.BehaviorRelay
-import com.jakewharton.rxrelay2.PublishRelay
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -52,16 +51,21 @@ import im.vector.app.features.home.room.detail.sticker.StickerPickerActionHandle
 import im.vector.app.features.home.room.detail.timeline.factory.TimelineFactory
 import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlRetriever
 import im.vector.app.features.home.room.typing.TypingHelper
-import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
+import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.VectorDataStore
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.voice.VoicePlayerHelper
-import io.reactivex.Observable
 import io.reactivex.rxkotlin.subscribeBy
-import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filterIsInstance
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.MatrixPatterns
@@ -90,10 +94,9 @@ import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.widgets.model.WidgetType
 import org.matrix.android.sdk.api.util.toOptional
+import org.matrix.android.sdk.flow.flow
+import org.matrix.android.sdk.flow.unwrap
 import org.matrix.android.sdk.internal.crypto.model.event.WithHeldCode
-import org.matrix.android.sdk.rx.asObservable
-import org.matrix.android.sdk.rx.rx
-import org.matrix.android.sdk.rx.unwrap
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
@@ -122,7 +125,7 @@ class RoomDetailViewModel @AssistedInject constructor(
     private val eventId = initialState.eventId
     private val invisibleEventsObservable = BehaviorRelay.create<RoomDetailAction.TimelineEventTurnsInvisible>()
     private val visibleEventsObservable = BehaviorRelay.create<RoomDetailAction.TimelineEventTurnsVisible>()
-    private var timelineEvents = PublishRelay.create<List<TimelineEvent>>()
+    private var timelineEvents = MutableSharedFlow<List<TimelineEvent>>(0)
     val timeline = timelineFactory.createTimeline(viewModelScope, room, eventId)
 
     // Same lifecycle than the ViewModel (survive to screen rotation)
@@ -144,7 +147,7 @@ class RoomDetailViewModel @AssistedInject constructor(
         fun create(initialState: RoomDetailViewState): RoomDetailViewModel
     }
 
-    companion object : MvRxViewModelFactory<RoomDetailViewModel, RoomDetailViewState> {
+    companion object : MavericksViewModelFactory<RoomDetailViewModel, RoomDetailViewState> {
 
         const val PAGINATION_COUNT = 50
 
@@ -217,8 +220,8 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private fun observePowerLevel() {
-        PowerLevelsObservableFactory(room).createObservable()
-                .subscribe {
+        PowerLevelsFlowFactory(room).createFlow()
+                .onEach {
                     val canInvite = PowerLevelsHelper(it).isUserAbleToInvite(session.myUserId)
                     val isAllowedToManageWidgets = session.widgetService().hasPermissionsToHandleWidgets(room.roomId)
                     val isAllowedToStartWebRTCCall = PowerLevelsHelper(it).isUserAllowedToSend(session.myUserId, false, EventType.CALL_INVITE)
@@ -229,12 +232,11 @@ class RoomDetailViewModel @AssistedInject constructor(
                                 isAllowedToStartWebRTCCall = isAllowedToStartWebRTCCall
                         )
                     }
-                }
-                .disposeOnClear()
+                }.launchIn(viewModelScope)
     }
 
     private fun observeActiveRoomWidgets() {
-        session.rx()
+        session.flow()
                 .liveRoomWidgets(
                         roomId = initialState.roomId,
                         widgetId = QueryStringValue.NoCondition
@@ -246,7 +248,7 @@ class RoomDetailViewModel @AssistedInject constructor(
                     copy(activeRoomWidgets = widgets)
                 }
 
-        asyncSubscribe(RoomDetailViewState::activeRoomWidgets) { widgets ->
+        onAsync(RoomDetailViewState::activeRoomWidgets) { widgets ->
             setState {
                 val jitsiWidget = widgets.firstOrNull { it.type == WidgetType.Jitsi }
                 val jitsiConfId = jitsiWidget?.let {
@@ -267,7 +269,7 @@ class RoomDetailViewModel @AssistedInject constructor(
         val queryParams = roomMemberQueryParams {
             this.userId = QueryStringValue.Equals(session.myUserId, QueryStringValue.Case.SENSITIVE)
         }
-        room.rx()
+        room.flow()
                 .liveRoomMembers(queryParams)
                 .map {
                     it.firstOrNull().toOptional()
@@ -343,7 +345,7 @@ class RoomDetailViewModel @AssistedInject constructor(
             is RoomDetailAction.PlayOrPauseVoicePlayback         -> handlePlayOrPauseVoicePlayback(action)
             RoomDetailAction.PauseRecordingVoiceMessage          -> handlePauseRecordingVoiceMessage()
             RoomDetailAction.PlayOrPauseRecordingPlayback        -> handlePlayOrPauseRecordingPlayback()
-            RoomDetailAction.EndAllVoiceActions                  -> handleEndAllVoiceActions()
+            is RoomDetailAction.EndAllVoiceActions               -> handleEndAllVoiceActions(action.deleteRecord)
             is RoomDetailAction.RoomUpgradeSuccess               -> {
                 setState {
                     copy(joinUpgradedRoomAsync = Success(action.replacementRoomId))
@@ -649,8 +651,8 @@ class RoomDetailViewModel @AssistedInject constructor(
         voiceMessageHelper.startOrPauseRecordingPlayback()
     }
 
-    private fun handleEndAllVoiceActions() {
-        voiceMessageHelper.stopAllVoiceActions()
+    private fun handleEndAllVoiceActions(deleteRecord: Boolean) {
+        voiceMessageHelper.stopAllVoiceActions(deleteRecord)
     }
 
     private fun handlePauseRecordingVoiceMessage() {
@@ -982,29 +984,22 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private fun observeSyncState() {
-        session.rx()
+        session.flow()
                 .liveSyncState()
-                .subscribe { syncState ->
-                    setState {
-                        copy(syncState = syncState)
-                    }
+                .setOnEach { syncState ->
+                    copy(syncState = syncState)
                 }
-                .disposeOnClear()
 
         session.getSyncStatusLive()
-                .asObservable()
-                .subscribe { it ->
-                    if (it is SyncStatusService.Status.IncrementalSyncStatus) {
-                        setState {
-                            copy(incrementalSyncStatus = it)
-                        }
-                    }
+                .asFlow()
+                .filterIsInstance<SyncStatusService.Status.IncrementalSyncStatus>()
+                .setOnEach {
+                    copy(incrementalSyncStatus = it)
                 }
-                .disposeOnClear()
     }
 
     private fun observeRoomSummary() {
-        room.rx().liveRoomSummary()
+        room.flow().liveRoomSummary()
                 .unwrap()
                 .execute { async ->
                     copy(
@@ -1014,14 +1009,12 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private fun getUnreadState() {
-        Observable
-                .combineLatest<List<TimelineEvent>, RoomSummary, UnreadState>(
-                        timelineEvents.observeOn(Schedulers.computation()),
-                        room.rx().liveRoomSummary().unwrap(),
-                        { timelineEvents, roomSummary ->
-                            computeUnreadState(timelineEvents, roomSummary)
-                        }
-                )
+        combine(
+                timelineEvents,
+                room.flow().liveRoomSummary().unwrap()
+        ) { timelineEvents, roomSummary ->
+            computeUnreadState(timelineEvents, roomSummary)
+        }
                 // We don't want live update of unread so we skip when we already had a HasUnread or HasNoUnread
                 .distinctUntilChanged { previous, current ->
                     when {
@@ -1030,10 +1023,9 @@ class RoomDetailViewModel @AssistedInject constructor(
                         else                                                                           -> false
                     }
                 }
-                .subscribe {
-                    setState { copy(unreadState = it) }
+                .setOnEach {
+                    copy(unreadState = it)
                 }
-                .disposeOnClear()
     }
 
     private fun computeUnreadState(events: List<TimelineEvent>, roomSummary: RoomSummary): UnreadState {
@@ -1057,7 +1049,7 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private fun observeUnreadState() {
-        selectSubscribe(RoomDetailViewState::unreadState) {
+        onEach(RoomDetailViewState::unreadState) {
             Timber.v("Unread state: $it")
             if (it is UnreadState.HasNoUnread) {
                 startTrackingUnreadMessages()
@@ -1066,20 +1058,19 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private fun observeMembershipChanges() {
-        session.rx()
+        session.flow()
                 .liveRoomChangeMembershipState()
                 .map {
                     it[initialState.roomId] ?: ChangeMembershipState.Unknown
                 }
                 .distinctUntilChanged()
-                .subscribe {
-                    setState { copy(changeMembershipState = it) }
+                .setOnEach {
+                    copy(changeMembershipState = it)
                 }
-                .disposeOnClear()
     }
 
     private fun observeSummaryState() {
-        asyncSubscribe(RoomDetailViewState::asyncRoomSummary) { summary ->
+        onAsync(RoomDetailViewState::asyncRoomSummary) { summary ->
             setState {
                 val typingMessage = typingHelper.getTypingMessage(summary.typingUsers)
                 copy(
@@ -1101,7 +1092,7 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     override fun onTimelineUpdated(snapshot: List<TimelineEvent>) {
-        timelineEvents.accept(snapshot)
+        timelineEvents.tryEmit(snapshot)
 
         // PreviewUrl
         if (vectorPreferences.showUrlPreviews()) {

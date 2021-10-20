@@ -17,7 +17,7 @@
 package im.vector.app.features.settings.devices
 
 import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.Uninitialized
 import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
@@ -30,7 +30,7 @@ data class DeviceVerificationInfoBottomSheetViewState(
         val isMine: Boolean = false,
         val hasOtherSessions: Boolean = false,
         val isRecoverySetup: Boolean = false
-) : MvRxState {
+) : MavericksState {
 
     val canVerifySession: Boolean
         get() = hasOtherSessions || isRecoverySetup

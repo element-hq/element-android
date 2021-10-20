@@ -22,6 +22,7 @@ import androidx.lifecycle.LifecycleRegistry
 import dagger.Lazy
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
+import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.auth.data.SessionParams
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
@@ -51,7 +52,6 @@ import org.matrix.android.sdk.internal.session.profile.UnbindThreePidsTask
 import org.matrix.android.sdk.internal.session.sync.model.accountdata.IdentityServerContent
 import org.matrix.android.sdk.internal.session.user.accountdata.UpdateUserAccountDataTask
 import org.matrix.android.sdk.internal.session.user.accountdata.UserAccountDataDataSource
-import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.internal.util.ensureProtocol
 import timber.log.Timber
 import javax.inject.Inject

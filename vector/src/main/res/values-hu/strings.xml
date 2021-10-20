@@ -3007,4 +3007,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="command_description_room_name">Szobanév beállítása</string>
     <string name="command_description_unignore_user">A felhasználó újbóli figyelembe vétele, és az üzenetei megjelenítése a jövőben</string>
     <string name="command_description_ignore_user">Figyelmen kívül hagy egy felhasználót, elrejtve előled az üzeneteit</string>
+    <string name="a11y_presence_unavailable">Elérhetetlen</string>
+    <string name="a11y_presence_offline">Kapcsolat nélkül</string>
+    <string name="a11y_presence_online">Kapcsolódva</string>
 </resources>

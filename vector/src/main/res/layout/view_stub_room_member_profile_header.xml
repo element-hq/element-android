@@ -30,14 +30,33 @@
             app:layout_constraintVertical_chainStyle="spread_inside"
             tools:src="@sample/user_round_avatars" />
 
-        <im.vector.app.core.ui.views.ShieldImageView
-            android:id="@+id/memberProfileDecorationImageView"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+
+        <im.vector.app.core.ui.views.PresenceStateImageView
+            android:id="@+id/memberProfilePresenceImageView"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:background="@drawable/background_circle"
+            android:importantForAccessibility="no"
+            android:padding="3dp"
+            android:visibility="gone"
             app:layout_constraintCircle="@+id/memberProfileAvatarView"
             app:layout_constraintCircleAngle="135"
             app:layout_constraintCircleRadius="64dp"
-            tools:ignore="MissingConstraints" />
+            tools:ignore="MissingConstraints"
+            tools:src="@drawable/ic_presence_offline"
+            tools:visibility="visible" />
+
+        <im.vector.app.core.ui.views.ShieldImageView
+            android:id="@+id/memberProfileDecorationImageView"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/memberProfileNameView"
+            app:layout_constraintEnd_toStartOf="@+id/memberProfileNameView"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/memberProfileNameView" />
 
         <TextView
             android:id="@+id/memberProfileNameView"
@@ -48,7 +67,7 @@
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/memberProfileIdView"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/memberProfileDecorationImageView"
             app:layout_constraintTop_toBottomOf="@+id/memberProfileAvatarView"
             tools:text="@sample/users.json/data/displayName" />
 

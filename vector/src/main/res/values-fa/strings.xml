@@ -3002,4 +3002,7 @@
     <string name="command_description_room_name">نام اتاق را تنظیم می‌کند</string>
     <string name="command_description_unignore_user">به کاربری چشم گشوده و پیام‌های بعدیش را نشان می‌دهد</string>
     <string name="command_description_ignore_user">از کاربری چشم‌پوشی کرده و پیام‌هایش را از شما پنهان می‌کند</string>
+    <string name="a11y_presence_unavailable">ناموجود</string>
+    <string name="a11y_presence_offline">برون‌خط</string>
+    <string name="a11y_presence_online">برخط</string>
 </resources>

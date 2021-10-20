@@ -108,9 +108,9 @@ class HomeDetailFragment @Inject constructor(
 
     override fun onPrepareOptionsMenu(menu: Menu) {
         withState(viewModel) { state ->
-            menu.iterator().forEach { it.isVisible = state.currentTab is HomeTab.RoomList }
+            val isRoomList = state.currentTab is HomeTab.RoomList
+            menu.findItem(R.id.menu_home_mark_all_as_read).isVisible = isRoomList && hasUnreadRooms
         }
-        menu.findItem(R.id.menu_home_mark_all_as_read).isVisible = hasUnreadRooms
         super.onPrepareOptionsMenu(menu)
     }
 
@@ -134,7 +134,7 @@ class HomeDetailFragment @Inject constructor(
             views.bottomNavigationView.selectedItemId = it.currentTab.toMenuId()
         }
 
-        viewModel.selectSubscribe(this, HomeDetailViewState::roomGroupingMethod) { roomGroupingMethod ->
+        viewModel.onEach(HomeDetailViewState::roomGroupingMethod) { roomGroupingMethod ->
             when (roomGroupingMethod) {
                 is RoomGroupingMethod.ByLegacyGroup -> {
                     onGroupChange(roomGroupingMethod.groupSummary)
@@ -145,11 +145,11 @@ class HomeDetailFragment @Inject constructor(
             }
         }
 
-        viewModel.selectSubscribe(this, HomeDetailViewState::currentTab) { currentTab ->
+        viewModel.onEach(HomeDetailViewState::currentTab) { currentTab ->
             updateUIForTab(currentTab)
         }
 
-        viewModel.selectSubscribe(this, HomeDetailViewState::showDialPadTab) { showDialPadTab ->
+        viewModel.onEach(HomeDetailViewState::showDialPadTab) { showDialPadTab ->
             updateTabVisibilitySafely(R.id.bottom_action_dial_pad, showDialPadTab)
         }
 
@@ -161,7 +161,7 @@ class HomeDetailFragment @Inject constructor(
             }
         }
 
-        unknownDeviceDetectorSharedViewModel.subscribe { state ->
+        unknownDeviceDetectorSharedViewModel.onEach { state ->
             state.unknownSessions.invoke()?.let { unknownDevices ->
 //                Timber.v("## Detector Triggerred in fragment - ${unknownDevices.firstOrNull()}")
                 if (unknownDevices.firstOrNull()?.currentSessionTrust == true) {
@@ -179,7 +179,7 @@ class HomeDetailFragment @Inject constructor(
             }
         }
 
-        unreadMessagesSharedViewModel.subscribe { state ->
+        unreadMessagesSharedViewModel.onEach { state ->
             views.drawerUnreadCounterBadgeView.render(
                     UnreadCounterBadgeView.State(
                             count = state.otherSpacesUnread.totalCount,

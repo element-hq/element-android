@@ -16,11 +16,10 @@
 
 package im.vector.app.features.settings.devtools
 
-import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxState
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksState
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
@@ -32,18 +31,18 @@ import im.vector.app.core.platform.VectorViewModel
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.accountdata.UserAccountDataEvent
-import org.matrix.android.sdk.rx.rx
+import org.matrix.android.sdk.flow.flow
 
 data class AccountDataViewState(
         val accountData: Async<List<UserAccountDataEvent>> = Uninitialized
-) : MvRxState
+) : MavericksState
 
 class AccountDataViewModel @AssistedInject constructor(@Assisted initialState: AccountDataViewState,
                                                        private val session: Session) :
     VectorViewModel<AccountDataViewState, AccountDataAction, EmptyViewEvents>(initialState) {
 
     init {
-        session.rx().liveUserAccountData(emptySet())
+        session.flow().liveUserAccountData(emptySet())
                 .execute {
                     copy(accountData = it)
                 }
@@ -66,7 +65,7 @@ class AccountDataViewModel @AssistedInject constructor(@Assisted initialState: A
         fun create(initialState: AccountDataViewState): AccountDataViewModel
     }
 
-    companion object : MvRxViewModelFactory<AccountDataViewModel, AccountDataViewState> {
+    companion object : MavericksViewModelFactory<AccountDataViewModel, AccountDataViewState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: AccountDataViewState): AccountDataViewModel? {

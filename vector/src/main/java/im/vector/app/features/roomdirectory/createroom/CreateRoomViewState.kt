@@ -18,7 +18,7 @@ package im.vector.app.features.roomdirectory.createroom
 
 import android.net.Uri
 import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.Uninitialized
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
@@ -40,7 +40,7 @@ data class CreateRoomViewState(
         val supportsRestricted: Boolean = false,
         val aliasLocalPart: String? = null,
         val isSubSpace: Boolean = false
-) : MvRxState {
+) : MavericksState {
 
     constructor(args: CreateRoomArgs) : this(
             roomName = args.initialName,

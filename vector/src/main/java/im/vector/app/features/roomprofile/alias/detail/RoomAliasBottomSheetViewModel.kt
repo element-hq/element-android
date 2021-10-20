@@ -16,7 +16,7 @@
 package im.vector.app.features.roomprofile.alias.detail
 
 import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -36,7 +36,7 @@ class RoomAliasBottomSheetViewModel @AssistedInject constructor(
         fun create(initialState: RoomAliasBottomSheetState): RoomAliasBottomSheetViewModel
     }
 
-    companion object : MvRxViewModelFactory<RoomAliasBottomSheetViewModel, RoomAliasBottomSheetState> {
+    companion object : MavericksViewModelFactory<RoomAliasBottomSheetViewModel, RoomAliasBottomSheetState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: RoomAliasBottomSheetState): RoomAliasBottomSheetViewModel? {

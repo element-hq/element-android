@@ -40,6 +40,7 @@ import androidx.fragment.app.FragmentFactory
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewbinding.ViewBinding
+import com.airbnb.mvrx.MavericksView
 import com.bumptech.glide.util.Util
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.snackbar.Snackbar
@@ -88,7 +89,7 @@ import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import kotlin.system.measureTimeMillis
 
-abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), HasScreenInjector {
+abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), HasScreenInjector, MavericksView {
     /* ==========================================================================================
      * View
      * ========================================================================================== */
@@ -575,6 +576,8 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), HasSc
     open fun doBeforeSetContentView() = Unit
 
     open fun initUiAndData() = Unit
+
+    override fun invalidate() = Unit
 
     @StringRes
     open fun getTitleRes() = -1

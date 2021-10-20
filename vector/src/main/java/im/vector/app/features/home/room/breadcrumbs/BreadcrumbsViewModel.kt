@@ -17,7 +17,7 @@
 package im.vector.app.features.home.room.breadcrumbs
 
 import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -25,12 +25,11 @@ import dagger.assisted.AssistedInject
 import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
-import io.reactivex.schedulers.Schedulers
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
-import org.matrix.android.sdk.rx.rx
+import org.matrix.android.sdk.flow.flow
 
 class BreadcrumbsViewModel @AssistedInject constructor(@Assisted initialState: BreadcrumbsViewState,
                                                        private val session: Session) :
@@ -41,7 +40,7 @@ class BreadcrumbsViewModel @AssistedInject constructor(@Assisted initialState: B
         fun create(initialState: BreadcrumbsViewState): BreadcrumbsViewModel
     }
 
-    companion object : MvRxViewModelFactory<BreadcrumbsViewModel, BreadcrumbsViewState> {
+    companion object : MavericksViewModelFactory<BreadcrumbsViewModel, BreadcrumbsViewState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: BreadcrumbsViewState): BreadcrumbsViewModel? {
@@ -61,12 +60,11 @@ class BreadcrumbsViewModel @AssistedInject constructor(@Assisted initialState: B
     // PRIVATE METHODS *****************************************************************************
 
     private fun observeBreadcrumbs() {
-        session.rx()
+        session.flow()
                 .liveBreadcrumbs(roomSummaryQueryParams {
                     displayName = QueryStringValue.NoCondition
                     memberships = listOf(Membership.JOIN)
                 })
-                .observeOn(Schedulers.computation())
                 .execute { asyncBreadcrumbs ->
                     copy(asyncBreadcrumbs = asyncBreadcrumbs)
                 }

@@ -14,7 +14,7 @@ kapt {
 // Note: 2 digits max for each value
 ext.versionMajor = 1
 ext.versionMinor = 3
-ext.versionPatch = 3
+ext.versionPatch = 4
 
 static def getGitTimestamp() {
     def cmd = 'git show -s --format=%ct'
@@ -298,6 +298,16 @@ android {
 
     kotlinOptions {
         jvmTarget = "11"
+        freeCompilerArgs += [
+                "-Xopt-in=kotlin.RequiresOptIn",
+                // Fixes false positive "This is an internal Mavericks API. It is not intended for external use."
+                // of MvRx `by viewModel()` calls. Maybe due to the inlining of code... This is a temporary fix...
+                "-Xopt-in=com.airbnb.mvrx.InternalMavericksApi",
+                // Opt in for kotlinx.coroutines.FlowPreview too
+                "-Xopt-in=kotlinx.coroutines.FlowPreview",
+                // Opt in for kotlinx.coroutines.ExperimentalCoroutinesApi too
+                "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
+        ]
     }
 
     sourceSets {
@@ -323,13 +333,13 @@ dependencies {
 
     implementation project(":matrix-sdk-android")
     implementation project(":matrix-sdk-android-rx")
+    implementation project(":matrix-sdk-android-flow")
     implementation project(":diff-match-patch")
     implementation project(":multipicker")
     implementation project(":attachment-viewer")
     implementation project(":library:ui-styles")
     implementation 'androidx.multidex:multidex:2.0.1'
 
-    implementation libs.jetbrains.kotlinStdlibJdk7
     implementation libs.jetbrains.coroutinesCore
     implementation libs.jetbrains.coroutinesAndroid
 
@@ -339,7 +349,7 @@ dependencies {
     implementation libs.androidx.constraintLayout
     implementation "androidx.sharetarget:sharetarget:1.1.0"
     implementation libs.androidx.core
-    implementation "androidx.media:media:1.4.2"
+    implementation "androidx.media:media:1.4.3"
     implementation "androidx.transition:transition:1.4.1"
 
     implementation "org.threeten:threetenbp:1.4.0:no-tzdb"
@@ -361,7 +371,7 @@ dependencies {
     implementation 'com.facebook.stetho:stetho:1.6.0'
 
     // Phone number https://github.com/google/libphonenumber
-    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.34'
+    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.35'
 
     // rx
     implementation libs.rx.rxKotlin
@@ -376,7 +386,10 @@ dependencies {
     implementation libs.airbnb.epoxyGlide
     kapt libs.airbnb.epoxyProcessor
     implementation libs.airbnb.epoxyPaging
-    implementation libs.airbnb.mvrx
+    implementation libs.airbnb.mavericks
+    //TODO: remove when entirely migrated to Flow
+    implementation libs.airbnb.mavericksRx
+
 
     // Work
     implementation libs.androidx.work
@@ -458,7 +471,9 @@ dependencies {
 
     implementation "androidx.emoji:emoji-appcompat:1.1.0"
 
-    implementation 'com.github.BillCarsonFr:JsonViewer:0.6'
+    implementation ('com.github.BillCarsonFr:JsonViewer:0.6'){
+        exclude group: 'com.airbnb.android'
+    }
 
     // WebRTC
     // org.webrtc:google-webrtc is for development purposes only
@@ -498,6 +513,7 @@ dependencies {
     testImplementation libs.mockk.mockk
     // Plant Timber tree for test
     testImplementation libs.tests.timberJunitRule
+    testImplementation libs.airbnb.mavericksTesting
 
     // Activate when you want to check for leaks, from time to time.
     //debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.3'

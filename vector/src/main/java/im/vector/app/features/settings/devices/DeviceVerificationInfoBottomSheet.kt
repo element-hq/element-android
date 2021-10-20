@@ -21,7 +21,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import com.airbnb.mvrx.MvRx
+import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
@@ -83,7 +83,7 @@ class DeviceVerificationInfoBottomSheet :
         fun newInstance(userId: String, deviceId: String): DeviceVerificationInfoBottomSheet {
             val args = Bundle()
             val parcelableArgs = DeviceVerificationInfoArgs(userId, deviceId)
-            args.putParcelable(MvRx.KEY_ARG, parcelableArgs)
+            args.putParcelable(Mavericks.KEY_ARG, parcelableArgs)
             return DeviceVerificationInfoBottomSheet().apply { arguments = args }
         }
     }
