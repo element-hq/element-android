@@ -67,8 +67,7 @@ class SummaryGroupMessageCreator @Inject constructor(
         summaryInboxStyle.setBigContentTitle(sumTitle)
                 // TODO get latest event?
                 .setSummaryText(stringProvider.getQuantityString(R.plurals.notification_unread_notified_messages, nbEvents, nbEvents))
-        return if (useCompleteNotificationFormat
-        ) {
+        return if (useCompleteNotificationFormat) {
             notificationUtils.buildSummaryListNotification(
                     summaryInboxStyle,
                     sumTitle,
@@ -76,9 +75,14 @@ class SummaryGroupMessageCreator @Inject constructor(
                     lastMessageTimestamp = lastMessageTimestamp
             )
         } else {
-            processSimpleGroupSummary(summaryIsNoisy, messageCount,
-                    simpleNotifications.size, invitationNotifications.size,
-                    roomNotifications.size, lastMessageTimestamp)
+            processSimpleGroupSummary(
+                    summaryIsNoisy,
+                    messageCount,
+                    simpleNotifications.size,
+                    invitationNotifications.size,
+                    roomNotifications.size,
+                    lastMessageTimestamp
+            )
         }
     }
 
