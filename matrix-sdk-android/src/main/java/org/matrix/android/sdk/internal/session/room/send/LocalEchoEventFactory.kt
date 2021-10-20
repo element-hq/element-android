@@ -51,6 +51,8 @@ import org.matrix.android.sdk.api.session.room.model.relation.ReactionContent
 import org.matrix.android.sdk.api.session.room.model.relation.ReactionInfo
 import org.matrix.android.sdk.api.session.room.model.relation.RelationDefaultContent
 import org.matrix.android.sdk.api.session.room.model.relation.ReplyToContent
+import org.matrix.android.sdk.api.session.room.model.relation.threads.ThreadTextContent
+import org.matrix.android.sdk.api.session.room.model.relation.threads.ThreadRelatesTo
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
 import org.matrix.android.sdk.api.session.room.timeline.isReply
@@ -58,6 +60,7 @@ import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.content.ThumbnailExtractor
 import org.matrix.android.sdk.internal.session.permalinks.PermalinkFactory
 import org.matrix.android.sdk.internal.session.room.send.pills.TextPillsUtils
+import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -339,6 +342,15 @@ internal class LocalEchoEventFactory @Inject constructor(
                 unsignedData = UnsignedData(age = null, transactionId = localId)
         )
     }
+
+    /**
+     * Creates a thread event related to the already existing event
+     */
+    fun createThreadTextEvent(eventToReplyInThread: TimelineEvent, textContent: TextContent): Event =
+            createEvent(
+                    eventToReplyInThread.roomId,
+                    EventType.MESSAGE,
+                    textContent.toThreadTextContent(eventToReplyInThread).toContent())
 
     private fun dummyOriginServerTs(): Long {
         return System.currentTimeMillis()

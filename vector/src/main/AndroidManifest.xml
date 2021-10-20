@@ -179,6 +179,9 @@
         <activity android:name=".features.roomdirectory.RoomDirectoryActivity" />
         <activity android:name=".features.roomdirectory.roompreview.RoomPreviewActivity" />
         <activity android:name=".features.home.room.filtered.FilteredRoomsActivity" />
+        <activity android:name=".features.home.room.threads.RoomThreadsActivity" />
+        <activity android:name=".features.home.room.threads.detail.RoomThreadDetailActivity" />
+
         <activity
             android:name=".features.home.room.detail.RoomDetailActivity"
             android:parentActivityName=".features.home.HomeActivity">

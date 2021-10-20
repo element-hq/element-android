@@ -1021,6 +1021,9 @@
     <string name="room_details_people_invited_group_name">INVITED</string>
     <string name="room_details_people_present_group_name">JOINED</string>
 
+    <!-- Room Threads -->
+    <string name="room_threads_filter">Filter Threads in room</string>
+
     <!-- Room events -->
     <string name="room_event_action_report_prompt_reason">Reason for reporting this content</string>
     <string name="room_event_action_report_prompt_ignore_user">Do you want to hide all messages from this user?\n\nNote that this action will restart the app and it may take some time.</string>
@@ -2171,6 +2174,7 @@
 
     <string name="edit">Edit</string>
     <string name="reply">Reply</string>
+    <string name="reply_in_thread">Reply In Thread</string>
 
     <string name="global_retry">Retry</string>
     <string name="room_list_empty">"Join a room to start using the app."</string>

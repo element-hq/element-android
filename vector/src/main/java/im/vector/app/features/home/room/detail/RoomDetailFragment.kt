@@ -161,6 +161,8 @@ import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlRetriever
 import im.vector.app.features.home.room.detail.upgrade.MigrateRoomBottomSheet
 import im.vector.app.features.home.room.detail.views.RoomDetailLazyLoadedViews
 import im.vector.app.features.home.room.detail.widget.RoomWidgetsBottomSheet
+import im.vector.app.features.home.room.threads.detail.RoomThreadDetailArgs
+import im.vector.app.features.home.room.threads.detail.RoomThreadDetailActivity
 import im.vector.app.features.html.EventHtmlRenderer
 import im.vector.app.features.html.PillImageSpan
 import im.vector.app.features.html.PillsPostProcessor
@@ -1953,6 +1955,16 @@ class RoomDetailFragment @Inject constructor(
             is EventSharedAction.Reply                      -> {
                 if (!views.voiceMessageRecorderView.isActive()) {
                     textComposerViewModel.handle(TextComposerAction.EnterReplyMode(action.eventId, views.composerLayout.text.toString()))
+                } else {
+                    requireActivity().toast(R.string.error_voice_message_cannot_reply_or_edit)
+                }
+            }
+            is EventSharedAction.ReplyInThread              -> {
+                if (!views.voiceMessageRecorderView.isActive()) {
+                    context?.let {
+                        val roomThreadDetailArgs = RoomThreadDetailArgs(roomDetailArgs.roomId,action.eventId)
+                        startActivity(RoomThreadDetailActivity.newIntent(it, roomThreadDetailArgs))
+                    }
                 } else {
                     requireActivity().toast(R.string.error_voice_message_cannot_reply_or_edit)
                 }

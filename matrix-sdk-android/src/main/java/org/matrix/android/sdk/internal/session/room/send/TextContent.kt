@@ -16,9 +16,13 @@
 
 package org.matrix.android.sdk.internal.session.room.send
 
+import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageFormat
 import org.matrix.android.sdk.api.session.room.model.message.MessageTextContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
+import org.matrix.android.sdk.api.session.room.model.relation.threads.ThreadTextContent
+import org.matrix.android.sdk.api.session.room.model.relation.threads.ThreadRelatesTo
+import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.util.ContentUtils.extractUsefulTextFromHtmlReply
 import org.matrix.android.sdk.api.util.ContentUtils.extractUsefulTextFromReply
 
@@ -38,6 +42,14 @@ fun TextContent.toMessageTextContent(msgType: String = MessageType.MSGTYPE_TEXT)
             format = MessageFormat.FORMAT_MATRIX_HTML.takeIf { formattedText != null },
             body = text,
             formattedBody = formattedText
+    )
+}
+
+fun TextContent.toThreadTextContent(eventToReplyInThread: TimelineEvent, msgType: String = MessageType.MSGTYPE_TEXT): ThreadTextContent {
+    return ThreadTextContent(
+            msgType = msgType,
+            body = text,
+            relatesTo = ThreadRelatesTo(eventId = eventToReplyInThread.eventId)
     )
 }
 

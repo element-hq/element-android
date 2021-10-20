@@ -326,6 +326,11 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                 add(EventSharedAction.Reply(eventId))
             }
 
+            // *** Testing Threads ****
+            if (canReplyInThread(timelineEvent, messageContent, actionPermissions)) {
+                add(EventSharedAction.ReplyInThread(eventId))
+            }
+
             if (canEdit(timelineEvent, session.myUserId, actionPermissions)) {
                 add(EventSharedAction.Edit(eventId))
             }
@@ -397,6 +402,22 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
     }
 
     private fun canReply(event: TimelineEvent, messageContent: MessageContent?, actionPermissions: ActionPermissions): Boolean {
+        // Only event of type EventType.MESSAGE are supported for the moment
+        if (event.root.getClearType() != EventType.MESSAGE) return false
+        if (!actionPermissions.canSendMessage) return false
+        return when (messageContent?.msgType) {
+            MessageType.MSGTYPE_TEXT,
+            MessageType.MSGTYPE_NOTICE,
+            MessageType.MSGTYPE_EMOTE,
+            MessageType.MSGTYPE_IMAGE,
+            MessageType.MSGTYPE_VIDEO,
+            MessageType.MSGTYPE_AUDIO,
+            MessageType.MSGTYPE_FILE -> true
+            else                     -> false
+        }
+    }
+
+    private fun canReplyInThread(event: TimelineEvent, messageContent: MessageContent?, actionPermissions: ActionPermissions): Boolean {
         // Only event of type EventType.MESSAGE are supported for the moment
         if (event.root.getClearType() != EventType.MESSAGE) return false
         if (!actionPermissions.canSendMessage) return false

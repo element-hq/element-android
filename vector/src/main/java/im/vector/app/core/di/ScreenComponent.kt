@@ -52,6 +52,8 @@ import im.vector.app.features.home.room.detail.widget.RoomWidgetsBottomSheet
 import im.vector.app.features.home.room.filtered.FilteredRoomsActivity
 import im.vector.app.features.home.room.list.RoomListModule
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsBottomSheet
+import im.vector.app.features.home.room.threads.RoomThreadsActivity
+import im.vector.app.features.home.room.threads.detail.RoomThreadDetailActivity
 import im.vector.app.features.invite.AutoAcceptInvites
 import im.vector.app.features.invite.InviteUsersToRoomActivity
 import im.vector.app.features.invite.VectorInviteView
@@ -174,6 +176,8 @@ interface ScreenComponent {
     fun inject(activity: SpaceManageActivity)
     fun inject(activity: RoomJoinRuleActivity)
     fun inject(activity: SpaceLeaveAdvancedActivity)
+    fun inject(activity: RoomThreadsActivity)
+    fun inject(activity: RoomThreadDetailActivity)
 
     /* ==========================================================================================
      * BottomSheets

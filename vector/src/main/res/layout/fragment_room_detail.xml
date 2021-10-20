@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:minHeight="48dp"
             android:visibility="gone"
-            tools:visibility="visible" />
+            tools:visibility="gone" />
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/roomToolbar"

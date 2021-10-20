@@ -44,6 +44,9 @@ import org.matrix.android.sdk.api.util.Optional
  *  m.reference - lets you define an event which references an existing event.
  *              When aggregated, currently doesn't do anything special, but in future could bundle chains of references (i.e. threads).
  *              These are primarily intended for handling replies (and in future threads).
+ *
+ *  m.thread - lets you define an event which is a thread reply to an existing event.
+ *             When aggregated, returns the most thread event
  */
 interface RelationService {
 
@@ -123,4 +126,16 @@ interface RelationService {
      * @return the LiveData of EventAnnotationsSummary
      */
     fun getEventAnnotationsSummaryLive(eventId: String): LiveData<Optional<EventAnnotationsSummary>>
+
+    /**
+     * Creates a thread reply for an existing timeline event
+     * The replyInThreadText can be a Spannable and contains special spans (MatrixItemSpan) that will be translated
+     * by the sdk into pills.
+     * @param eventToReplyInThread the event referenced by the thread reply
+     * @param replyInThreadText the reply text
+     * @param autoMarkdown If true, the SDK will generate a formatted HTML message from the body text if markdown syntax is present
+     */
+    fun replyInThread(eventToReplyInThread: TimelineEvent,
+                       replyInThreadText: CharSequence,
+                       autoMarkdown: Boolean = false): Cancelable?
 }

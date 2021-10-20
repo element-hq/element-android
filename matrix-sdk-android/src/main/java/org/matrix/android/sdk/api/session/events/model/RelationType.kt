@@ -28,6 +28,9 @@ object RelationType {
     /** Lets you define an event which references an existing event.*/
     const val REFERENCE = "m.reference"
 
+    /** Lets you define an event which is a reply to an existing event.*/
+    const val THREAD = "m.thread"
+
     /** Lets you define an event which adds a response to an existing event.*/
     const val RESPONSE = "org.matrix.response"
 }
