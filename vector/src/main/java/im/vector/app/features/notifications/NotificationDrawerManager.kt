@@ -63,14 +63,14 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
      *
      * Events are unique by their properties, we should be careful not to insert multiple events with the same event-id
      */
-    private val eventList = loadEventInfo()
+    private val queuedEvents = loadEventInfo()
 
     /**
      * The last known rendered notifiable events
      * we keep track of them in order to know which events have been removed from the eventList
      * allowing us to cancel any notifications previous displayed by now removed events
      */
-    private var renderedEventsList = emptyList<ProcessedEvent<NotifiableEvent>>()
+    private var renderedEvents = emptyList<ProcessedEvent<NotifiableEvent>>()
     private val avatarSize = context.resources.getDimensionPixelSize(R.dimen.profile_avatar_size)
     private var currentRoomId: String? = null
 
@@ -105,8 +105,8 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
         } else {
             Timber.d("onNotifiableEventReceived(): is push: ${notifiableEvent.canBeReplaced}")
         }
-        synchronized(eventList) {
-            val existing = eventList.firstOrNull { it.eventId == notifiableEvent.eventId }
+        synchronized(queuedEvents) {
+            val existing = queuedEvents.firstOrNull { it.eventId == notifiableEvent.eventId }
             if (existing != null) {
                 if (existing.canBeReplaced) {
                     // Use the event coming from the event stream as it may contains more info than
@@ -117,8 +117,8 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
                     // Use setOnlyAlertOnce to ensure update notification does not interfere with sound
                     // from first notify invocation as outlined in:
                     // https://developer.android.com/training/notify-user/build-notification#Updating
-                    eventList.remove(existing)
-                    eventList.add(notifiableEvent)
+                    queuedEvents.remove(existing)
+                    queuedEvents.add(notifiableEvent)
                 } else {
                     // keep the existing one, do not replace
                 }
@@ -126,7 +126,7 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
                 // Check if this is an edit
                 if (notifiableEvent.editedEventId != null) {
                     // This is an edition
-                    val eventBeforeEdition = eventList.firstOrNull {
+                    val eventBeforeEdition = queuedEvents.firstOrNull {
                         // Edition of an event
                         it.eventId == notifiableEvent.editedEventId ||
                                 // or edition of an edition
@@ -135,9 +135,9 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
 
                     if (eventBeforeEdition != null) {
                         // Replace the existing notification with the new content
-                        eventList.remove(eventBeforeEdition)
+                        queuedEvents.remove(eventBeforeEdition)
 
-                        eventList.add(notifiableEvent)
+                        queuedEvents.add(notifiableEvent)
                     } else {
                         // Ignore an edit of a not displayed event in the notification drawer
                     }
@@ -148,7 +148,7 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
                         Timber.d("onNotifiableEventReceived(): skipping event, already seen")
                     } else {
                         seenEventIds.put(notifiableEvent.eventId)
-                        eventList.add(notifiableEvent)
+                        queuedEvents.add(notifiableEvent)
                     }
                 }
             }
@@ -156,8 +156,8 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
     }
 
     fun onEventRedacted(eventId: String) {
-        synchronized(eventList) {
-            eventList.replace(eventId) {
+        synchronized(queuedEvents) {
+            queuedEvents.replace(eventId) {
                 when (it) {
                     is InviteNotifiableEvent  -> it.copy(isRedacted = true)
                     is NotifiableMessageEvent -> it.copy(isRedacted = true)
@@ -171,8 +171,8 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
      * Clear all known events and refresh the notification drawer
      */
     fun clearAllEvents() {
-        synchronized(eventList) {
-            eventList.clear()
+        synchronized(queuedEvents) {
+            queuedEvents.clear()
         }
         refreshNotificationDrawer()
     }
@@ -194,7 +194,7 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
      */
     fun setCurrentRoom(roomId: String?) {
         var hasChanged: Boolean
-        synchronized(eventList) {
+        synchronized(queuedEvents) {
             hasChanged = roomId != currentRoomId
             currentRoomId = roomId
         }
@@ -211,8 +211,8 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
     }
 
     private fun removeAll(predicate: (NotifiableEvent) -> Boolean): Boolean {
-        return synchronized(eventList) {
-            eventList.removeAll(predicate)
+        return synchronized(queuedEvents) {
+            queuedEvents.removeAll(predicate)
         }
     }
 
@@ -247,17 +247,17 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
             useCompleteNotificationFormat = newSettings
         }
 
-        val eventsToRender = synchronized(eventList) {
-            notifiableEventProcessor.process(eventList, currentRoomId, renderedEventsList).also {
-                eventList.clear()
-                eventList.addAll(it.onlyKeptEvents())
+        val eventsToRender = synchronized(queuedEvents) {
+            notifiableEventProcessor.process(queuedEvents, currentRoomId, renderedEvents).also {
+                queuedEvents.clear()
+                queuedEvents.addAll(it.onlyKeptEvents())
             }
         }
 
-        if (renderedEventsList == eventsToRender) {
+        if (renderedEvents == eventsToRender) {
             Timber.d("Skipping notification update due to event list not changing")
         } else {
-            renderedEventsList = eventsToRender
+            renderedEvents = eventsToRender
             val session = currentSession ?: return
             val user = session.getUser(session.myUserId)
             // myUserDisplayName cannot be empty else NotificationCompat.MessagingStyle() will crash
@@ -277,8 +277,8 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
     }
 
     fun persistInfo() {
-        synchronized(eventList) {
-            if (eventList.isEmpty()) {
+        synchronized(queuedEvents) {
+            if (queuedEvents.isEmpty()) {
                 deleteCachedRoomNotifications()
                 return
             }
@@ -286,7 +286,7 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
                 val file = File(context.applicationContext.cacheDir, ROOMS_NOTIFICATIONS_FILE_NAME)
                 if (!file.exists()) file.createNewFile()
                 FileOutputStream(file).use {
-                    currentSession?.securelyStoreObject(eventList, KEY_ALIAS_SECRET_STORAGE, it)
+                    currentSession?.securelyStoreObject(queuedEvents, KEY_ALIAS_SECRET_STORAGE, it)
                 }
             } catch (e: Throwable) {
                 Timber.e(e, "## Failed to save cached notification info")
