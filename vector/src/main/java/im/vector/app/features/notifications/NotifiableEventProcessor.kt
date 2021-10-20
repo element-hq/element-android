@@ -28,8 +28,8 @@ class NotifiableEventProcessor @Inject constructor(
         private val autoAcceptInvites: AutoAcceptInvites
 ) {
 
-    fun process(eventList: List<NotifiableEvent>, currentRoomId: String?, renderedEventsList: ProcessedEvents): ProcessedEvents {
-        val processedEventList = eventList.map {
+    fun process(queuedEvents: List<NotifiableEvent>, currentRoomId: String?, renderedEvents: ProcessedEvents): ProcessedEvents {
+        val processedEvents = queuedEvents.map {
             val type = when (it) {
                 is InviteNotifiableEvent  -> if (autoAcceptInvites.hideInvites) REMOVE else KEEP
                 is NotifiableMessageEvent -> if (shouldIgnoreMessageEventInRoom(currentRoomId, it.roomId) || outdatedDetector.isMessageOutdated(it)) {
@@ -40,11 +40,11 @@ class NotifiableEventProcessor @Inject constructor(
             ProcessedEvent(type, it)
         }
 
-        val removedEventsDiff = renderedEventsList.filter { renderedEvent ->
-            eventList.none { it.eventId == renderedEvent.event.eventId }
+        val removedEventsDiff = renderedEvents.filter { renderedEvent ->
+            queuedEvents.none { it.eventId == renderedEvent.event.eventId }
         }.map { ProcessedEvent(REMOVE, it.event) }
 
-        return removedEventsDiff + processedEventList
+        return removedEventsDiff + processedEvents
     }
 
     private fun shouldIgnoreMessageEventInRoom(currentRoomId: String?, roomId: String?): Boolean {
