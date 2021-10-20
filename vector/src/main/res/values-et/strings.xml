@@ -3002,4 +3002,7 @@
     <string name="command_description_room_name">Määrab jututoa nime</string>
     <string name="command_description_unignore_user">Lõpeta kasutaja eiramine ja näita edaspidi tema sõnumeid</string>
     <string name="command_description_ignore_user">Eirab kasutajat peites kõik tema sõnumid sinu eest</string>
+    <string name="a11y_presence_unavailable">Pole leitav</string>
+    <string name="a11y_presence_offline">Võrgust väljas</string>
+    <string name="a11y_presence_online">Võrgus</string>
 </resources>
