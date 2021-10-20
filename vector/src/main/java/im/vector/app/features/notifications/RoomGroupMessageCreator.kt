@@ -160,12 +160,10 @@ class RoomGroupMessageCreator @Inject constructor(
     }
 
     private fun getRoomBitmap(events: List<NotifiableMessageEvent>): Bitmap? {
-        if (events.isEmpty()) return null
-
         // Use the last event (most recent?)
-        val roomAvatarPath = events.last().roomAvatarPath
-
-        return bitmapLoader.getRoomBitmap(roomAvatarPath)
+        return events.lastOrNull()
+                ?.roomAvatarPath
+                ?.let { bitmapLoader.getRoomBitmap(it) }
     }
 }
 
