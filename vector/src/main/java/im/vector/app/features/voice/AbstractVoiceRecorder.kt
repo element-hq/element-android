@@ -19,10 +19,11 @@ package im.vector.app.features.voice
 import android.content.Context
 import android.media.MediaRecorder
 import android.os.Build
-import org.matrix.android.sdk.api.extensions.tryOrNull
+import im.vector.app.core.intent.getFilenameFromUri
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import java.io.File
 import java.io.FileOutputStream
+import java.util.UUID
 
 abstract class AbstractVoiceRecorder(
         private val context: Context,
@@ -60,21 +61,15 @@ abstract class AbstractVoiceRecorder(
     }
 
     override fun initializeRecord(attachmentData: ContentAttachmentData) {
-        outputFile = File.createTempFile("Voice message", ".$filenameExt", outputDirectory)
-                .also {
-                    tryOrNull {
-                        context.contentResolver.openInputStream(attachmentData.queryUri)?.use { inputStream ->
-                            it.outputStream().use { outputStream ->
-                                inputStream.copyTo(outputStream)
-                            }
-                        }
-                    }
-                }
+        getFilenameFromUri(context, attachmentData.queryUri)?.let {
+            outputFile = File(outputDirectory, it)
+        }
     }
 
     override fun startRecord() {
         init()
-        outputFile = File(outputDirectory, "Voice message.$filenameExt")
+        val fileName = """${UUID.randomUUID()}.$filenameExt"""
+        outputFile = File(outputDirectory, fileName)
 
         val mr = mediaRecorder ?: return
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
