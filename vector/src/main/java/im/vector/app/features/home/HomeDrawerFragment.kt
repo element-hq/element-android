@@ -25,6 +25,8 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
 import im.vector.app.BuildConfig
 import im.vector.app.R
+import im.vector.app.core.extensions.cleanup
+import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.observeK
 import im.vector.app.core.extensions.replaceChildFragment
 import im.vector.app.core.platform.VectorBaseFragment
@@ -42,8 +44,10 @@ import javax.inject.Inject
 class HomeDrawerFragment @Inject constructor(
         private val session: Session,
         private val vectorPreferences: VectorPreferences,
-        private val avatarRenderer: AvatarRenderer
-) : VectorBaseFragment<FragmentHomeDrawerBinding>() {
+        private val avatarRenderer: AvatarRenderer,
+        private val homeDrawerActionsController: HomeDrawerActionsController
+) : VectorBaseFragment<FragmentHomeDrawerBinding>(),
+        HomeDrawerActionsController.Listener {
 
     private lateinit var sharedActionViewModel: HomeSharedActionViewModel
 
@@ -55,6 +59,9 @@ class HomeDrawerFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
 
         sharedActionViewModel = activityViewModelProvider.get(HomeSharedActionViewModel::class.java)
+
+        homeDrawerActionsController.listener = this
+        views.tchapHomeDrawerActionsRecyclerView.configureWith(homeDrawerActionsController)
 
         if (BuildConfig.SHOW_SPACES && savedInstanceState == null) {
             replaceChildFragment(R.id.homeDrawerGroupListContainer, SpaceListFragment::class.java)
@@ -115,5 +122,15 @@ class HomeDrawerFragment @Inject constructor(
             sharedActionViewModel.post(HomeActivitySharedAction.CloseDrawer)
             navigator.openDebug(requireActivity())
         }
+    }
+
+    override fun onDestroyView() {
+        homeDrawerActionsController.listener = null
+        views.tchapHomeDrawerActionsRecyclerView.cleanup()
+        super.onDestroyView()
+    }
+
+    override fun inviteByEmail() {
+        // Todo: handle invite by email action
     }
 }

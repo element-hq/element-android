@@ -123,15 +123,26 @@
         android:background="?vctr_list_separator"
         app:layout_constraintTop_toBottomOf="@+id/homeDrawerHeader" />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/tchapHomeDrawerActionsRecyclerView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toTopOf="@id/homeDrawerGroupListContainer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_default="wrap"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/homeDrawerHeaderSeparator"
+        tools:listitem="@layout/item_home_drawer_action"/>
+
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/homeDrawerGroupListContainer"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/homeDrawerBottomSeparator"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/homeDrawerHeaderSeparator" />
+        app:layout_constraintTop_toBottomOf="@+id/tchapHomeDrawerActionsRecyclerView" />
 
     <View
         android:id="@+id/homeDrawerBottomSeparator"

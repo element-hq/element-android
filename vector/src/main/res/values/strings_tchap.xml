@@ -158,5 +158,8 @@
     <!-- Call -->
     <string name="template_tchap_call_not_supported">${app_name} does not support calls yet</string>
 
+    <!-- Home drawer -->
+    <string name="template_tchap_invite_to">Invite to join ${app_name}</string>
+
     <string name="tchap_dialog_user_consent_homeserver_name">Tchap</string>
 </resources>
