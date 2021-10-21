@@ -1383,7 +1383,9 @@ class RoomDetailFragment @Inject constructor(
             textComposerViewModel.handle(TextComposerAction.SendMessage(text, vectorPreferences.isMarkdownEnabled()))
             emojiPopup.dismiss()
 
-            doJumpToBottom()
+            if (vectorPreferences.jumpToBottomOnSend()) {
+                doJumpToBottom()
+            }
         }
     }
 

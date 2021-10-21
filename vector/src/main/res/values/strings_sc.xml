@@ -145,4 +145,7 @@
     <string name="toast_unifiedpush_no_push_distributor">No push distributor found!</string>
     <string name="toast_unifiedpush_one_push_distributor">Registered push distributor %1$s</string>
 
+    <string name="settings_jump_to_bottom_on_send">Jump to bottom on send</string>
+    <string name="settings_jump_to_bottom_on_send_summary">Automatically scroll down when sending a message</string>
+
 </resources>

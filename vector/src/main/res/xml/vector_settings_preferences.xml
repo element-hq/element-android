@@ -148,6 +148,12 @@
 
         <im.vector.app.core.preference.VectorSwitchPreference
             android:defaultValue="true"
+            android:key="SETTINGS_JUMP_TO_BOTTOM_ON_SEND"
+            android:title="@string/settings_jump_to_bottom_on_send"
+            android:summary="@string/settings_jump_to_bottom_on_send_summary" />
+
+        <im.vector.app.core.preference.VectorSwitchPreference
+            android:defaultValue="true"
             android:key="SETTINGS_SHOW_EMOJI_KEYBOARD"
             android:summary="@string/settings_show_emoji_keyboard_summary"
             android:title="@string/settings_show_emoji_keyboard" />

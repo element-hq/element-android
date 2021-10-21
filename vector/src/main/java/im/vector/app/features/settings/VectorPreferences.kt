@@ -211,6 +211,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         const val SETTINGS_VOICE_MESSAGE = "SETTINGS_VOICE_MESSAGE"
         const val SETTINGS_UNIFIED_PUSH_FORCE_CUSTOM_GATEWAY = "SETTINGS_UNIFIED_PUSH_FORCE_CUSTOM_GATEWAY"
         const val SETTINGS_FORCE_ALLOW_BACKGROUND_SYNC = "SETTINGS_FORCE_ALLOW_BACKGROUND_SYNC"
+        private const val SETTINGS_JUMP_TO_BOTTOM_ON_SEND = "SETTINGS_JUMP_TO_BOTTOM_ON_SEND"
 
         private const val DID_ASK_TO_ENABLE_SESSION_PUSH = "DID_ASK_TO_ENABLE_SESSION_PUSH"
         private const val DID_PROMOTE_NEW_RESTRICTED_JOIN_RULE = "DID_PROMOTE_NEW_RESTRICTED_JOIN_RULE"
@@ -1034,6 +1035,10 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     fun useVoiceMessage(): Boolean {
         // Voice messages crash on SDK 21
         return Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP && defaultPrefs.getBoolean(SETTINGS_VOICE_MESSAGE, true)
+    }
+
+    fun jumpToBottomOnSend(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_JUMP_TO_BOTTOM_ON_SEND, true)
     }
 
     fun forceUseCustomUpGateway(): Boolean {
