@@ -117,4 +117,6 @@
     <string name="settings_unimportant_counter_badge_summary_v2">Zobrazovat počet ztlumených zpráv v přehledu chatu</string>
     <string name="settings_aggregate_unread_counts">Počítat chaty namísto zpráv</string>
     <string name="settings_aggregate_unread_counts_summary">Zda počítat nepřečtené chaty místo jednotlivých zpráv v kategoriích prostorů a místností</string>
+    <string name="settings_jump_to_bottom_on_send">Přejít na konec po odesílání</string>
+    <string name="settings_jump_to_bottom_on_send_summary">Automaticky posunout dolů při odesílání zprávy</string>
 </resources>
