@@ -103,7 +103,6 @@ class HomeActivity :
     private lateinit var sharedActionViewModel: HomeSharedActionViewModel
 
     private val homeActivityViewModel: HomeActivityViewModel by viewModel()
-    @Inject lateinit var viewModelFactory: HomeActivityViewModel.Factory
 
     private val serverBackupStatusViewModel: ServerBackupStatusViewModel by viewModel()
     private val promoteRestrictedViewModel: PromoteRestrictedViewModel by viewModel()

@@ -57,9 +57,6 @@ class BootstrapBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetBoot
 
     override val showExpanded = true
 
-    @Inject
-    lateinit var bootstrapViewModelFactory: BootstrapSharedViewModel.Factory
-
     private val viewModel by fragmentViewModel(BootstrapSharedViewModel::class)
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): BottomSheetBootstrapBinding {

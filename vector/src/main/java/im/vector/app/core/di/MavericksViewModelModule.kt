@@ -28,11 +28,14 @@ import im.vector.app.features.contactsbook.ContactsBookViewModel
 import im.vector.app.features.createdirect.CreateDirectRoomViewModel
 import im.vector.app.features.crypto.keysbackup.settings.KeysBackupSettingsViewModel
 import im.vector.app.features.crypto.quads.SharedSecureStorageViewModel
+import im.vector.app.features.crypto.recover.BootstrapSharedViewModel
+import im.vector.app.features.crypto.verification.VerificationBottomSheetViewModel
 import im.vector.app.features.crypto.verification.choose.VerificationChooseMethodViewModel
 import im.vector.app.features.crypto.verification.emoji.VerificationEmojiCodeViewModel
 import im.vector.app.features.devtools.RoomDevToolViewModel
 import im.vector.app.features.discovery.DiscoverySettingsViewModel
 import im.vector.app.features.discovery.change.SetIdentityServerViewModel
+import im.vector.app.features.home.HomeActivityViewModel
 import im.vector.app.features.home.HomeDetailViewModel
 import im.vector.app.features.home.PromoteRestrictedViewModel
 import im.vector.app.features.home.UnknownDeviceDetectorSharedViewModel
@@ -60,6 +63,7 @@ import im.vector.app.features.roomdirectory.createroom.CreateRoomViewModel
 import im.vector.app.features.roomdirectory.picker.RoomDirectoryPickerViewModel
 import im.vector.app.features.roomdirectory.roompreview.RoomPreviewViewModel
 import im.vector.app.features.roommemberprofile.RoomMemberProfileViewModel
+import im.vector.app.features.roommemberprofile.devices.DeviceListBottomSheetViewModel
 import im.vector.app.features.roomprofile.RoomProfileViewModel
 import im.vector.app.features.roomprofile.alias.RoomAliasViewModel
 import im.vector.app.features.roomprofile.alias.detail.RoomAliasBottomSheetViewModel
@@ -72,6 +76,7 @@ import im.vector.app.features.roomprofile.settings.joinrule.advanced.RoomJoinRul
 import im.vector.app.features.roomprofile.uploads.RoomUploadsViewModel
 import im.vector.app.features.settings.account.deactivation.DeactivateAccountViewModel
 import im.vector.app.features.settings.crosssigning.CrossSigningSettingsViewModel
+import im.vector.app.features.settings.devices.DeviceVerificationInfoBottomSheetViewModel
 import im.vector.app.features.settings.devices.DevicesViewModel
 import im.vector.app.features.settings.devtools.AccountDataViewModel
 import im.vector.app.features.settings.devtools.GossipingEventsPaperTrailViewModel
@@ -511,5 +516,31 @@ interface MavericksViewModelModule {
     @IntoMap
     @MavericksViewModelKey(HomeDetailViewModel::class)
     fun homeDetailViewModelFactory(factory: HomeDetailViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(DeviceVerificationInfoBottomSheetViewModel::class)
+    fun deviceVerificationInfoBottomSheetViewModelFactory(factory: DeviceVerificationInfoBottomSheetViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(DeviceListBottomSheetViewModel::class)
+    fun deviceListBottomSheetViewModelFactory(factory: DeviceListBottomSheetViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(HomeActivityViewModel::class)
+    fun homeActivityViewModelFactory(factory: HomeActivityViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(BootstrapSharedViewModel::class)
+    fun bootstrapSharedViewModelFactory(factory: BootstrapSharedViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(VerificationBottomSheetViewModel::class)
+    fun verificationBottomSheetViewModelFactory(factory: VerificationBottomSheetViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
 
 }

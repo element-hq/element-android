@@ -78,9 +78,6 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetV
     override val showExpanded = true
 
     @Inject
-    lateinit var verificationViewModelFactory: VerificationBottomSheetViewModel.Factory
-
-    @Inject
     lateinit var avatarRenderer: AvatarRenderer
 
     private val viewModel by fragmentViewModel(VerificationBottomSheetViewModel::class)

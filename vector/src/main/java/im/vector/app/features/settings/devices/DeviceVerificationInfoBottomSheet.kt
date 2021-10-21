@@ -49,7 +49,6 @@ class DeviceVerificationInfoBottomSheet :
 
     private val sharedViewModel: DevicesViewModel by parentFragmentViewModel(DevicesViewModel::class)
 
-    @Inject lateinit var deviceVerificationInfoViewModelFactory: DeviceVerificationInfoBottomSheetViewModel.Factory
     @Inject lateinit var controller: DeviceVerificationInfoBottomSheetController
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): BottomSheetGenericListWithTitleBinding {
