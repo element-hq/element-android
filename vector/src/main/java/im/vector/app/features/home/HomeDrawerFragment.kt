@@ -141,4 +141,8 @@ class HomeDrawerFragment @Inject constructor(
     override fun openTermAndConditions() {
         sharedActionViewModel.post(HomeActivitySharedAction.OpenTermAndConditions)
     }
+
+    override fun reportBug() {
+        sharedActionViewModel.post(HomeActivitySharedAction.OpenBugReport)
+    }
 }

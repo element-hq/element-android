@@ -25,6 +25,7 @@ class HomeDrawerActionsController @Inject constructor() : EpoxyController() {
     interface Listener {
         fun inviteByEmail()
         fun openTermAndConditions()
+        fun reportBug()
     }
 
     var listener: Listener? = null
@@ -46,6 +47,12 @@ class HomeDrawerActionsController @Inject constructor() : EpoxyController() {
             titleRes(R.string.settings_app_term_conditions)
             iconRes(R.drawable.ic_tchap_term_conditions)
             itemClickAction { host.listener?.openTermAndConditions() }
+        }
+        homeDrawerActionItem {
+            id("bugReport")
+            titleRes(R.string.send_bug_report)
+            iconRes(R.drawable.ic_tchap_bug_report)
+            itemClickAction { host.listener?.reportBug() }
         }
     }
 }
