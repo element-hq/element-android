@@ -19,6 +19,7 @@ package im.vector.app.features.notifications
 import im.vector.app.features.invite.AutoAcceptInvites
 import im.vector.app.features.notifications.ProcessedEvent.Type.KEEP
 import im.vector.app.features.notifications.ProcessedEvent.Type.REMOVE
+import org.matrix.android.sdk.api.session.events.model.EventType
 import javax.inject.Inject
 
 private typealias ProcessedEvents = List<ProcessedEvent<NotifiableEvent>>
@@ -35,7 +36,10 @@ class NotifiableEventProcessor @Inject constructor(
                 is NotifiableMessageEvent -> if (shouldIgnoreMessageEventInRoom(currentRoomId, it.roomId) || outdatedDetector.isMessageOutdated(it)) {
                     REMOVE
                 } else KEEP
-                is SimpleNotifiableEvent  -> KEEP
+                is SimpleNotifiableEvent  -> when (it.type) {
+                    EventType.REDACTION -> REMOVE
+                    else                -> KEEP
+                }
             }
             ProcessedEvent(type, it)
         }

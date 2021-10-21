@@ -21,6 +21,7 @@ import im.vector.app.test.fakes.FakeAutoAcceptInvites
 import im.vector.app.test.fakes.FakeOutdatedEventDetector
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Test
+import org.matrix.android.sdk.api.session.events.model.EventType
 
 private val NOT_VIEWING_A_ROOM: String? = null
 
@@ -43,6 +44,17 @@ class NotifiableEventProcessorTest {
         result shouldBeEqualTo listOfProcessedEvents(
                 Type.KEEP to events[0],
                 Type.KEEP to events[1]
+        )
+    }
+
+    @Test
+    fun `given redacted simple event when processing then remove redaction event`() {
+        val events = listOf(aSimpleNotifiableEvent(eventId = "event-1", type = EventType.REDACTION))
+
+        val result = eventProcessor.process(events, currentRoomId = NOT_VIEWING_A_ROOM, renderedEvents = emptyList())
+
+        result shouldBeEqualTo listOfProcessedEvents(
+                Type.REMOVE to events[0]
         )
     }
 
@@ -134,14 +146,14 @@ class NotifiableEventProcessorTest {
     }
 }
 
-fun aSimpleNotifiableEvent(eventId: String) = SimpleNotifiableEvent(
+fun aSimpleNotifiableEvent(eventId: String, type: String? = null) = SimpleNotifiableEvent(
         matrixID = null,
         eventId = eventId,
         editedEventId = null,
         noisy = false,
         title = "title",
         description = "description",
-        type = null,
+        type = type,
         timestamp = 0,
         soundName = null,
         canBeReplaced = false,
