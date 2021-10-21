@@ -135,6 +135,20 @@ class NotificationFactoryTest {
                 roomId = A_ROOM_ID
         ))
     }
+
+    @Test
+    fun `given a room with redacted and non redacted message events when mapping to notification then redacted events are removed`() = testWith(notificationFactory) {
+        val roomWithRedactedMessage = mapOf(A_ROOM_ID to listOf(
+                ProcessedEvent(Type.KEEP, A_MESSAGE_EVENT.copy(isRedacted = true)),
+                ProcessedEvent(Type.KEEP, A_MESSAGE_EVENT.copy(eventId = "not-redacted"))
+        ))
+        val withRedactedRemoved = listOf(A_MESSAGE_EVENT.copy(eventId = "not-redacted"))
+        val expectedNotification = roomGroupMessageCreator.givenCreatesRoomMessageFor(withRedactedRemoved, A_ROOM_ID, MY_USER_ID, MY_AVATAR_URL)
+
+        val result = roomWithRedactedMessage.toNotifications(MY_USER_ID, MY_AVATAR_URL)
+
+        result shouldBeEqualTo listOf(expectedNotification)
+    }
 }
 
 fun <T> testWith(receiver: T, block: T.() -> Unit) {
