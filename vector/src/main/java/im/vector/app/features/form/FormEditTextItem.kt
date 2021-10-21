@@ -130,26 +130,25 @@ abstract class FormEditTextItem : VectorEpoxyModel<FormEditTextItem.Holder>() {
      * especially when we want to use a single line, we set the InputType to InputType.TYPE_CLASS_TEXT
      * while the default for the EditText is InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_MULTI_LINE
      */
-    private fun configureInputType(holder: Holder) =
-            inputType?.let {
-                holder.textInputEditText.setRawInputType(it)
-            } ?: when (singleLine) {
-                true  -> holder.textInputEditText.setRawInputType(InputType.TYPE_CLASS_TEXT)
-                false -> holder.textInputEditText.setRawInputType(InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_MULTI_LINE)
+    private fun configureInputType(holder: Holder) = holder.textInputEditText.setRawInputType(
+            inputType ?: when (singleLine) {
+                true  -> InputType.TYPE_CLASS_TEXT
+                false -> InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_MULTI_LINE
             }
+    )
 
     /**
-     * Configure the imeOptions of the EditText, when imeOptions are not defined by user
+     * Configure the imeOptions of the EditText, when imeOptions are not defined by the developer
      * EditorInfo.IME_ACTION_NEXT will be used for singleLine EditTexts to disable "new line"
      * while EditorInfo.IME_ACTION_NONE will be used for all the other cases
      */
-    private fun configureImeOptions(holder: Holder) =
-            imeOptions?.let {
-                holder.textInputEditText.imeOptions = it
-            } ?: when (singleLine) {
-                true  -> holder.textInputEditText.imeOptions = EditorInfo.IME_ACTION_NEXT
-                false -> holder.textInputEditText.imeOptions = EditorInfo.IME_ACTION_NONE
-            }
+    private fun configureImeOptions(holder: Holder) {
+        holder.textInputEditText.imeOptions =
+                imeOptions ?: when (singleLine) {
+                    true  -> EditorInfo.IME_ACTION_NEXT
+                    false -> EditorInfo.IME_ACTION_NONE
+                }
+    }
 
     override fun shouldSaveViewState(): Boolean {
         return false
