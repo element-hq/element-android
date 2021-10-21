@@ -1,0 +1,2 @@
+此版本中的主要變動：新增對 Android Auto 的支援。以及許多錯誤修復！
+完整的變更紀錄：https://github.com/vector-im/element-android/releases/tag/v1.3.2

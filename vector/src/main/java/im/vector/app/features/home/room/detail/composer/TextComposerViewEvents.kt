@@ -32,8 +32,8 @@ sealed class TextComposerViewEvents : VectorViewEvents {
     data class JoinRoomCommandSuccess(val roomId: String) : SendMessageResult()
     class SlashCommandError(val command: Command) : SendMessageResult()
     class SlashCommandUnknown(val command: String) : SendMessageResult()
-    data class SlashCommandHandled(@StringRes val messageRes: Int? = null) : SendMessageResult()
-    object SlashCommandResultOk : SendMessageResult()
+    object SlashCommandLoading : SendMessageResult()
+    data class SlashCommandResultOk(@StringRes val messageRes: Int? = null) : SendMessageResult()
     class SlashCommandResultError(val throwable: Throwable) : SendMessageResult()
 
     data class OpenRoomMemberProfile(val userId: String) : TextComposerViewEvents()

@@ -17,11 +17,10 @@
 
 package im.vector.app.features.roommemberprofile
 
-import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
@@ -33,10 +32,12 @@ import im.vector.app.core.mvrx.runCatchingToAsync
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.displayname.getBestName
-import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
-import io.reactivex.Observable
-import io.reactivex.functions.BiFunction
+import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.query.QueryStringValue
@@ -47,16 +48,14 @@ import org.matrix.android.sdk.api.session.profile.ProfileService
 import org.matrix.android.sdk.api.session.room.Room
 import org.matrix.android.sdk.api.session.room.members.roomMemberQueryParams
 import org.matrix.android.sdk.api.session.room.model.Membership
-import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
-import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.RoomType
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.session.room.powerlevels.Role
 import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.api.util.toOptional
-import org.matrix.android.sdk.rx.rx
-import org.matrix.android.sdk.rx.unwrap
+import org.matrix.android.sdk.flow.flow
+import org.matrix.android.sdk.flow.unwrap
 
 class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private val initialState: RoomMemberProfileViewState,
                                                              private val stringProvider: StringProvider,
@@ -68,7 +67,7 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
         fun create(initialState: RoomMemberProfileViewState): RoomMemberProfileViewModel
     }
 
-    companion object : MvRxViewModelFactory<RoomMemberProfileViewModel, RoomMemberProfileViewState> {
+    companion object : MavericksViewModelFactory<RoomMemberProfileViewModel, RoomMemberProfileViewState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: RoomMemberProfileViewState): RoomMemberProfileViewModel? {
@@ -109,7 +108,7 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
             }
         }
 
-        session.rx().liveUserCryptoDevices(initialState.userId)
+        session.flow().liveUserCryptoDevices(initialState.userId)
                 .map {
                     Pair(
                             it.fold(true, { prev, dev -> prev && dev.isVerified }),
@@ -123,14 +122,14 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
                     )
                 }
 
-        session.rx().liveCrossSigningInfo(initialState.userId)
+        session.flow().liveCrossSigningInfo(initialState.userId)
                 .execute {
                     copy(userMXCrossSigningInfo = it.invoke()?.getOrNull())
                 }
     }
 
     private fun observeIgnoredState() {
-        session.rx().liveIgnoredUsers()
+        session.flow().liveIgnoredUsers()
                 .map { ignored ->
                     ignored.find {
                         it.userId == initialState.userId
@@ -247,7 +246,7 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
         val queryParams = roomMemberQueryParams {
             this.userId = QueryStringValue.Equals(initialState.userId, QueryStringValue.Case.SENSITIVE)
         }
-        room.rx().liveRoomMembers(queryParams)
+        room.flow().liveRoomMembers(queryParams)
                 .map { it.firstOrNull().toOptional() }
                 .unwrap()
                 .execute {
@@ -287,11 +286,11 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
     }
 
     private fun observeRoomSummaryAndPowerLevels(room: Room) {
-        val roomSummaryLive = room.rx().liveRoomSummary().unwrap()
-        val powerLevelsContentLive = PowerLevelsObservableFactory(room).createObservable()
+        val roomSummaryLive = room.flow().liveRoomSummary().unwrap()
+        val powerLevelsContentLive = PowerLevelsFlowFactory(room).createFlow()
 
         powerLevelsContentLive
-                .subscribe {
+                .onEach {
                     val powerLevelsHelper = PowerLevelsHelper(it)
                     val permissions = ActionPermissions(
                             canKick = powerLevelsHelper.isUserAbleToKick(session.myUserId),
@@ -299,30 +298,26 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
                             canInvite = powerLevelsHelper.isUserAbleToInvite(session.myUserId),
                             canEditPowerLevel = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_POWER_LEVELS)
                     )
-                    setState { copy(powerLevelsContent = it, actionPermissions = permissions) }
-                }
-                .disposeOnClear()
+                    setState {
+                        copy(powerLevelsContent = it, actionPermissions = permissions)
+                    }
+                }.launchIn(viewModelScope)
 
         roomSummaryLive.execute {
             copy(isRoomEncrypted = it.invoke()?.isEncrypted == true)
         }
-        Observable
-                .combineLatest(
-                        roomSummaryLive,
-                        powerLevelsContentLive,
-                        BiFunction<RoomSummary, PowerLevelsContent, String> { roomSummary, powerLevelsContent ->
-                            val roomName = roomSummary.toMatrixItem().getBestName()
-                            val powerLevelsHelper = PowerLevelsHelper(powerLevelsContent)
-                            when (val userPowerLevel = powerLevelsHelper.getUserRole(initialState.userId)) {
-                                Role.Admin     -> stringProvider.getString(R.string.room_member_power_level_admin_in, roomName)
-                                Role.Moderator -> stringProvider.getString(R.string.room_member_power_level_moderator_in, roomName)
-                                Role.Default   -> stringProvider.getString(R.string.room_member_power_level_default_in, roomName)
-                                is Role.Custom -> stringProvider.getString(R.string.room_member_power_level_custom_in, userPowerLevel.value, roomName)
-                            }
-                        }
-                ).execute {
-                    copy(userPowerLevelString = it)
-                }
+        roomSummaryLive.combine(powerLevelsContentLive) { roomSummary, powerLevelsContent ->
+            val roomName = roomSummary.toMatrixItem().getBestName()
+            val powerLevelsHelper = PowerLevelsHelper(powerLevelsContent)
+            when (val userPowerLevel = powerLevelsHelper.getUserRole(initialState.userId)) {
+                Role.Admin     -> stringProvider.getString(R.string.room_member_power_level_admin_in, roomName)
+                Role.Moderator -> stringProvider.getString(R.string.room_member_power_level_moderator_in, roomName)
+                Role.Default   -> stringProvider.getString(R.string.room_member_power_level_default_in, roomName)
+                is Role.Custom -> stringProvider.getString(R.string.room_member_power_level_custom_in, userPowerLevel.value, roomName)
+            }
+        }.execute {
+            copy(userPowerLevelString = it)
+        }
     }
 
     private fun handleIgnoreAction() = withState { state ->

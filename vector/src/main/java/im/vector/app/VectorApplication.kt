@@ -34,6 +34,7 @@ import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.multidex.MultiDex
 import com.airbnb.epoxy.EpoxyAsyncUtil
 import com.airbnb.epoxy.EpoxyController
+import com.airbnb.mvrx.Mavericks
 import com.facebook.stetho.Stetho
 import com.gabrielittner.threetenbp.LazyThreeTen
 import com.vanniktech.emoji.EmojiManager
@@ -43,6 +44,7 @@ import im.vector.app.core.di.DaggerVectorComponent
 import im.vector.app.core.di.HasVectorInjector
 import im.vector.app.core.di.VectorComponent
 import im.vector.app.core.extensions.configureAndStart
+import im.vector.app.core.extensions.startSyncing
 import im.vector.app.core.rx.RxConfig
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.configuration.VectorConfiguration
@@ -137,7 +139,7 @@ class VectorApplication :
         }
         logInfo()
         LazyThreeTen.init(this)
-
+        Mavericks.initialize(debugMode = false)
         EpoxyController.defaultDiffingHandler = EpoxyAsyncUtil.getAsyncBackgroundHandler()
         EpoxyController.defaultModelBuildingHandler = EpoxyAsyncUtil.getAsyncBackgroundHandler()
         registerActivityLifecycleCallbacks(VectorActivityLifecycleCallbacks(popupAlertManager))
@@ -162,11 +164,15 @@ class VectorApplication :
             // Do not display the name change popup
             doNotShowDisclaimerDialog(this)
         }
+
         if (authenticationService.hasAuthenticatedSessions() && !activeSessionHolder.hasActiveSession()) {
             val lastAuthenticatedSession = authenticationService.getLastAuthenticatedSession()!!
             activeSessionHolder.setActiveSession(lastAuthenticatedSession)
-            lastAuthenticatedSession.configureAndStart(applicationContext)
+            lastAuthenticatedSession.configureAndStart(applicationContext, startSyncing = false)
         }
+
+        ProcessLifecycleOwner.get().lifecycle.addObserver(startSyncOnFirstStart)
+
         ProcessLifecycleOwner.get().lifecycle.addObserver(object : LifecycleObserver {
             @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
             fun entersForeground() {
@@ -197,6 +203,15 @@ class VectorApplication :
         })
 
         EmojiManager.install(GoogleEmojiProvider())
+    }
+
+    private val startSyncOnFirstStart = object : LifecycleObserver {
+        @OnLifecycleEvent(Lifecycle.Event.ON_START)
+        fun onStart() {
+            Timber.i("App process started")
+            authenticationService.getLastAuthenticatedSession()?.startSyncing(appContext)
+            ProcessLifecycleOwner.get().lifecycle.removeObserver(this)
+        }
     }
 
     private fun enableStrictModeIfNeeded() {

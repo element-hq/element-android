@@ -23,91 +23,80 @@ import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.utils.toast
 import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.roomdirectory.roompreview.RoomPreviewData
-import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.extensions.orFalse
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.permalinks.PermalinkData
 import org.matrix.android.sdk.api.session.permalinks.PermalinkParser
 import org.matrix.android.sdk.api.session.permalinks.PermalinkService
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomType
-import org.matrix.android.sdk.api.util.Optional
-import org.matrix.android.sdk.api.util.toOptional
-import org.matrix.android.sdk.rx.rx
 import javax.inject.Inject
 
 class PermalinkHandler @Inject constructor(private val activeSessionHolder: ActiveSessionHolder,
                                            private val navigator: Navigator) {
 
-    fun launch(
+    suspend fun launch(
             context: Context,
             deepLink: String?,
             navigationInterceptor: NavigationInterceptor? = null,
             buildTask: Boolean = false
-    ): Single<Boolean> {
+    ): Boolean {
         val uri = deepLink?.let { Uri.parse(it) }
         return launch(context, uri, navigationInterceptor, buildTask)
     }
 
-    fun launch(
+    suspend fun launch(
             context: Context,
             deepLink: Uri?,
             navigationInterceptor: NavigationInterceptor? = null,
             buildTask: Boolean = false
-    ): Single<Boolean> {
+    ): Boolean {
         if (deepLink == null || !isPermalinkSupported(context, deepLink.toString())) {
-            return Single.just(false)
+            return false
         }
-        return Single
-                .fromCallable {
-                    PermalinkParser.parse(deepLink)
-                }
-                .subscribeOn(Schedulers.computation())
-                .observeOn(AndroidSchedulers.mainThread())
-                .flatMap { permalinkData ->
-                    handlePermalink(permalinkData, deepLink, context, navigationInterceptor, buildTask)
-                }
-                .onErrorReturnItem(false)
+        return tryOrNull {
+            withContext(Dispatchers.Default) {
+                val permalinkData = PermalinkParser.parse(deepLink)
+                handlePermalink(permalinkData, deepLink, context, navigationInterceptor, buildTask)
+            }
+        } ?: false
     }
 
-    private fun handlePermalink(
+    private suspend fun handlePermalink(
             permalinkData: PermalinkData,
             rawLink: Uri,
             context: Context,
             navigationInterceptor: NavigationInterceptor?,
             buildTask: Boolean
-    ): Single<Boolean> {
+    ): Boolean {
         return when (permalinkData) {
             is PermalinkData.RoomLink            -> {
-                permalinkData.getRoomId()
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .map {
-                            val roomId = it.getOrNull()
-                            if (navigationInterceptor?.navToRoom(roomId, permalinkData.eventId, rawLink) != true) {
-                                openRoom(
-                                        context = context,
-                                        roomId = roomId,
-                                        permalinkData = permalinkData,
-                                        rawLink = rawLink,
-                                        buildTask = buildTask
-                                )
-                            }
-                            true
-                        }
+                val roomId = permalinkData.getRoomId()
+                if (navigationInterceptor?.navToRoom(roomId, permalinkData.eventId, rawLink) != true) {
+                    openRoom(
+                            context = context,
+                            roomId = roomId,
+                            permalinkData = permalinkData,
+                            rawLink = rawLink,
+                            buildTask = buildTask
+                    )
+                }
+                true
             }
             is PermalinkData.GroupLink           -> {
                 navigator.openGroupDetail(permalinkData.groupId, context, buildTask)
-                Single.just(true)
+                true
             }
             is PermalinkData.UserLink            -> {
                 if (navigationInterceptor?.navToMemberProfile(permalinkData.userId, rawLink) != true) {
                     navigator.openRoomMemberProfile(userId = permalinkData.userId, roomId = null, context = context, buildTask = buildTask)
                 }
-                Single.just(true)
+                true
             }
             is PermalinkData.FallbackLink        -> {
-                Single.just(false)
+                false
             }
             is PermalinkData.RoomEmailInviteLink -> {
                 val data = RoomPreviewData(
@@ -118,7 +107,7 @@ class PermalinkHandler @Inject constructor(private val activeSessionHolder: Acti
                         roomType = permalinkData.roomType
                 )
                 navigator.openRoomPreview(context, data)
-                Single.just(true)
+                true
             }
         }
     }
@@ -130,15 +119,13 @@ class PermalinkHandler @Inject constructor(private val activeSessionHolder: Acti
         }
     }
 
-    private fun PermalinkData.RoomLink.getRoomId(): Single<Optional<String>> {
+    private suspend fun PermalinkData.RoomLink.getRoomId(): String? {
         val session = activeSessionHolder.getSafeActiveSession()
         return if (isRoomAlias && session != null) {
-            session.rx()
-                    .getRoomIdByAlias(roomIdOrAlias, true)
-                    .map { it.getOrNull()?.roomId.toOptional() }
-                    .subscribeOn(Schedulers.io())
+            val roomIdByAlias = session.getRoomIdByAlias(roomIdOrAlias, true)
+            roomIdByAlias.getOrNull()?.roomId
         } else {
-            Single.just(Optional.from(roomIdOrAlias))
+            roomIdOrAlias
         }
     }
 

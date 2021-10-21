@@ -17,7 +17,7 @@
 package im.vector.app.features.roomdirectory.picker
 
 import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.Uninitialized
 import im.vector.app.features.roomdirectory.RoomDirectoryServer
 import org.matrix.android.sdk.api.session.room.model.thirdparty.ThirdPartyProtocol
@@ -30,4 +30,4 @@ data class RoomDirectoryPickerViewState(
         val addServerAsync: Async<Unit> = Uninitialized,
         // computed
         val directories: List<RoomDirectoryServer> = emptyList()
-) : MvRxState
+) : MavericksState

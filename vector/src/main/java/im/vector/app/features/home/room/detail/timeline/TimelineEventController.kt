@@ -249,37 +249,39 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         interceptorHelper.intercept(models, partialState.unreadState, timeline, callback)
     }
 
-    fun update(viewState: RoomDetailViewState) = synchronized(modelCache) {
-        val newPartialState = PartialState(viewState)
-        // Full list rebuild if isDirect changed to apply new layout
-        if (partialState.roomSummary?.isDirect != newPartialState.roomSummary?.isDirect) {
-            partialState = newPartialState
-            invalidateFullTimeline()
-            // This already called requestModelBuild
-            return
-        }
-        // Full list rebuild if power levels changed and username colors depend on power levels
-        if (partialState.powerLevelsHelper != newPartialState.powerLevelsHelper) {
-            val coloringMode = vectorPreferences.userColorMode(newPartialState.roomSummary?.isDirect ?: false, newPartialState.roomSummary?.isPublic ?: false)
-            if (coloringMode == MatrixItemColorProvider.USER_COLORING_FROM_PL) {
+    fun update(viewState: RoomDetailViewState) = backgroundHandler.post {
+        synchronized(modelCache) {
+            val newPartialState = PartialState(viewState)
+            // Full list rebuild if isDirect changed to apply new layout
+            if (partialState.roomSummary?.isDirect != newPartialState.roomSummary?.isDirect) {
                 partialState = newPartialState
                 invalidateFullTimeline()
                 // This already called requestModelBuild
-                return
+                return@synchronized
             }
-        }
-        if (partialState.highlightedEventId != newPartialState.highlightedEventId) {
-            // Clear cache to force a refresh
-            for (i in 0 until modelCache.size) {
-                if (modelCache[i]?.eventId == viewState.highlightedEventId ||
-                        modelCache[i]?.eventId == partialState.highlightedEventId) {
-                    modelCache[i] = null
+            // Full list rebuild if power levels changed and username colors depend on power levels
+            if (partialState.powerLevelsHelper != newPartialState.powerLevelsHelper) {
+                val coloringMode = vectorPreferences.userColorMode(newPartialState.roomSummary?.isDirect ?: false, newPartialState.roomSummary?.isPublic ?: false)
+                if (coloringMode == MatrixItemColorProvider.USER_COLORING_FROM_PL) {
+                    partialState = newPartialState
+                    invalidateFullTimeline()
+                    // This already called requestModelBuild
+                    return@synchronized
                 }
             }
-        }
-        if (newPartialState != partialState) {
-            partialState = newPartialState
-            requestModelBuild()
+            if (partialState.highlightedEventId != newPartialState.highlightedEventId) {
+                // Clear cache to force a refresh
+                for (i in 0 until modelCache.size) {
+                    if (modelCache[i]?.eventId == viewState.highlightedEventId ||
+                            modelCache[i]?.eventId == partialState.highlightedEventId) {
+                        modelCache[i] = null
+                    }
+                }
+            }
+            if (newPartialState != partialState) {
+                partialState = newPartialState
+                requestModelBuild()
+            }
         }
     }
 

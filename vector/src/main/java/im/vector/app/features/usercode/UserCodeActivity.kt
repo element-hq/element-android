@@ -25,7 +25,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import com.airbnb.mvrx.MvRx
+import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
 import com.airbnb.mvrx.withState
 import im.vector.app.R
@@ -86,7 +86,7 @@ class UserCodeActivity : VectorBaseActivity<ActivitySimpleBinding>(),
             showFragment(ShowUserCodeFragment::class, Bundle.EMPTY)
         }
 
-        sharedViewModel.selectSubscribe(this, UserCodeState::mode) { mode ->
+        sharedViewModel.onEach(UserCodeState::mode) { mode ->
             when (mode) {
                 UserCodeState.Mode.SHOW      -> showFragment(ShowUserCodeFragment::class, Bundle.EMPTY)
                 UserCodeState.Mode.SCAN      -> showFragment(ScanUserCodeFragment::class, Bundle.EMPTY)
@@ -153,7 +153,7 @@ class UserCodeActivity : VectorBaseActivity<ActivitySimpleBinding>(),
     companion object {
         fun newIntent(context: Context, userId: String): Intent {
             return Intent(context, UserCodeActivity::class.java).apply {
-                putExtra(MvRx.KEY_ARG, Args(userId))
+                putExtra(Mavericks.KEY_ARG, Args(userId))
             }
         }
     }

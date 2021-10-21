@@ -16,9 +16,8 @@
 package im.vector.app.features.home.room.detail.timeline.action
 
 import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
-import com.jakewharton.rxrelay2.BehaviorRelay
 import dagger.Lazy
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -33,9 +32,14 @@ import im.vector.app.features.home.room.detail.timeline.format.NoticeEventFormat
 import im.vector.app.features.html.EventHtmlRenderer
 import im.vector.app.features.html.PillsPostProcessor
 import im.vector.app.features.html.VectorHtmlCompressor
-import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
+import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import im.vector.app.features.reactions.data.EmojiDataSource
 import im.vector.app.features.settings.VectorPreferences
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupState
@@ -54,9 +58,8 @@ import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
 import org.matrix.android.sdk.api.session.room.timeline.hasBeenEdited
-import org.matrix.android.sdk.rx.rx
-import org.matrix.android.sdk.rx.unwrap
-import java.util.ArrayList
+import org.matrix.android.sdk.flow.flow
+import org.matrix.android.sdk.flow.unwrap
 
 /**
  * Information related to an event and used to display preview in contextual bottom sheet.
@@ -79,14 +82,14 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
         pillsPostProcessorFactory.create(initialState.roomId)
     }
 
-    private val eventIdObservable = BehaviorRelay.createDefault(initialState.eventId)
+    private val eventIdFlow = MutableStateFlow(initialState.eventId)
 
     @AssistedFactory
     interface Factory {
         fun create(initialState: MessageActionState): MessageActionsViewModel
     }
 
-    companion object : MvRxViewModelFactory<MessageActionsViewModel, MessageActionState> {
+    companion object : MavericksViewModelFactory<MessageActionsViewModel, MessageActionState> {
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: MessageActionState): MessageActionsViewModel? {
             val fragment: MessageActionsBottomSheet = (viewModelContext as FragmentViewModelContext).fragment()
@@ -119,8 +122,8 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
         if (room == null) {
             return
         }
-        PowerLevelsObservableFactory(room).createObservable()
-                .subscribe {
+        PowerLevelsFlowFactory(room).createFlow()
+                .onEach {
                     val powerLevelsHelper = PowerLevelsHelper(it)
                     val canReact = powerLevelsHelper.isUserAllowedToSend(session.myUserId, false, EventType.REACTION)
                     val canRedact = powerLevelsHelper.isUserAbleToRedact(session.myUserId)
@@ -129,13 +132,12 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                     setState {
                         copy(actionPermissions = permissions)
                     }
-                }
-                .disposeOnClear()
+                }.launchIn(viewModelScope)
     }
 
     private fun observeEvent() {
         if (room == null) return
-        room.rx()
+        room.flow()
                 .liveTimelineEvent(initialState.eventId)
                 .unwrap()
                 .execute {
@@ -145,9 +147,9 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
 
     private fun observeReactions() {
         if (room == null) return
-        eventIdObservable
-                .switchMap { eventId ->
-                    room.rx()
+        eventIdFlow
+                .flatMapLatest { eventId ->
+                    room.flow()
                             .liveAnnotationSummary(eventId)
                             .map { annotations ->
                                 EmojiDataSource.quickEmojis.map { emoji ->
@@ -161,9 +163,9 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
     }
 
     private fun observeTimelineEventState() {
-        selectSubscribe(MessageActionState::timelineEvent, MessageActionState::actionPermissions) { timelineEvent, permissions ->
-            val nonNullTimelineEvent = timelineEvent() ?: return@selectSubscribe
-            eventIdObservable.accept(nonNullTimelineEvent.eventId)
+        onEach(MessageActionState::timelineEvent, MessageActionState::actionPermissions) { timelineEvent, permissions ->
+            val nonNullTimelineEvent = timelineEvent() ?: return@onEach
+            eventIdFlow.tryEmit(nonNullTimelineEvent.eventId)
             setState {
                 copy(
                         eventId = nonNullTimelineEvent.eventId,

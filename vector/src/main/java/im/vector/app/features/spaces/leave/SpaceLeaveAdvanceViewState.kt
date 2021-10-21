@@ -17,7 +17,7 @@
 package im.vector.app.features.spaces.leave
 
 import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.Uninitialized
 import im.vector.app.features.spaces.SpaceBottomSheetSettingsArgs
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
@@ -29,7 +29,7 @@ data class SpaceLeaveAdvanceViewState(
         val selectedRooms: List<String> = emptyList(),
         val currentFilter: String = "",
         val leaveState: Async<Unit> = Uninitialized
-) : MvRxState {
+) : MavericksState {
     constructor(args: SpaceBottomSheetSettingsArgs) : this(
             spaceId = args.spaceId
     )

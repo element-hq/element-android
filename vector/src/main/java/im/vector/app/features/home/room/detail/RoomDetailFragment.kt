@@ -62,7 +62,7 @@ import com.airbnb.epoxy.EpoxyModel
 import com.airbnb.epoxy.OnModelBuildFinishedListener
 import com.airbnb.epoxy.addGlidePreloader
 import com.airbnb.epoxy.glidePreloader
-import com.airbnb.mvrx.MvRx
+import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
@@ -187,8 +187,6 @@ import im.vector.app.features.widgets.WidgetActivity
 import im.vector.app.features.widgets.WidgetArgs
 import im.vector.app.features.widgets.WidgetKind
 import im.vector.app.features.widgets.permissions.RoomWidgetPermissionBottomSheet
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import nl.dionsegijn.konfetti.models.Shape
@@ -386,13 +384,13 @@ class RoomDetailFragment @Inject constructor(
                     invalidateOptionsMenu()
                 }
 
-        roomDetailViewModel.selectSubscribe(this, RoomDetailViewState::canShowJumpToReadMarker, RoomDetailViewState::unreadState) { _, _ ->
+        roomDetailViewModel.onEach(RoomDetailViewState::canShowJumpToReadMarker, RoomDetailViewState::unreadState) { _, _ ->
             updateJumpToReadMarkerViewVisibility()
         }
 
-        textComposerViewModel.selectSubscribe(this, TextComposerViewState::sendMode, TextComposerViewState::canSendMessage) { mode, canSend ->
+        textComposerViewModel.onEach(TextComposerViewState::sendMode, TextComposerViewState::canSendMessage) { mode, canSend ->
             if (!canSend) {
-                return@selectSubscribe
+                return@onEach
             }
             when (mode) {
                 is SendMode.REGULAR -> renderRegularMode(mode.text)
@@ -402,8 +400,7 @@ class RoomDetailFragment @Inject constructor(
             }
         }
 
-        roomDetailViewModel.selectSubscribe(
-                this,
+        roomDetailViewModel.onEach(
                 RoomDetailViewState::syncState,
                 RoomDetailViewState::incrementalSyncStatus,
                 RoomDetailViewState::pushCounter
@@ -655,9 +652,11 @@ class RoomDetailFragment @Inject constructor(
                     }
                 }
                 .setOnEmojiPopupDismissListener {
-                    views.composerLayout.views.composerEmojiButton.apply {
-                        contentDescription = getString(R.string.a11y_open_emoji_picker)
-                        setImageResource(R.drawable.ic_insert_emoji)
+                    if (isAdded) {
+                        views.composerLayout.views.composerEmojiButton.apply {
+                            contentDescription = getString(R.string.a11y_open_emoji_picker)
+                            setImageResource(R.drawable.ic_insert_emoji)
+                        }
                     }
                 }
                 .build(views.composerLayout.views.composerEditText)
@@ -1125,7 +1124,7 @@ class RoomDetailFragment @Inject constructor(
         textComposerViewModel.handle(TextComposerAction.SaveDraft(views.composerLayout.text.toString()))
 
         // We should improve the UX to support going into playback mode when paused and delete the media when the view is destroyed.
-        roomDetailViewModel.handle(RoomDetailAction.EndAllVoiceActions)
+        roomDetailViewModel.handle(RoomDetailAction.EndAllVoiceActions(deleteRecord = false))
         views.voiceMessageRecorderView.initVoiceRecordingViews()
     }
 
@@ -1472,9 +1471,10 @@ class RoomDetailFragment @Inject constructor(
             views.roomToolbarContentView.isClickable = roomSummary.membership == Membership.JOIN
             views.roomToolbarTitleView.text = roomSummary.displayName
             avatarRenderer.render(roomSummary.toMatrixItem(), views.roomToolbarAvatarImageView)
-
             renderSubTitle(typingMessage, roomSummary.topic)
             views.roomToolbarDecorationImageView.render(roomSummary.roomEncryptionTrustLevel)
+            views.roomToolbarPresenceImageView.render(roomSummary.isDirect, roomSummary.directUserPresence)
+            views.roomToolbarPublicImageView.isVisible = roomSummary.isPublic && !roomSummary.isDirect
         }
     }
 
@@ -1495,8 +1495,8 @@ class RoomDetailFragment @Inject constructor(
 
     private fun renderSendMessageResult(sendMessageResult: TextComposerViewEvents.SendMessageResult) {
         when (sendMessageResult) {
-            is TextComposerViewEvents.SlashCommandHandled        -> {
-                sendMessageResult.messageRes?.let { showSnackWithMessage(getString(it)) }
+            is TextComposerViewEvents.SlashCommandLoading        -> {
+                showLoading(null)
             }
             is TextComposerViewEvents.SlashCommandError          -> {
                 displayCommandError(getString(R.string.command_problem_with_parameters, sendMessageResult.command.command))
@@ -1505,9 +1505,12 @@ class RoomDetailFragment @Inject constructor(
                 displayCommandError(getString(R.string.unrecognized_command, sendMessageResult.command))
             }
             is TextComposerViewEvents.SlashCommandResultOk       -> {
+                dismissLoadingDialog()
                 views.composerLayout.setTextIfDifferent("")
+                sendMessageResult.messageRes?.let { showSnackWithMessage(getString(it)) }
             }
             is TextComposerViewEvents.SlashCommandResultError    -> {
+                dismissLoadingDialog()
                 displayCommandError(errorFormatter.toHumanReadable(sendMessageResult.throwable))
             }
             is TextComposerViewEvents.SlashCommandNotImplemented -> {
@@ -1633,7 +1636,7 @@ class RoomDetailFragment @Inject constructor(
                 val otherUserId = data.otherUserId ?: return
                 VerificationBottomSheet().apply {
                     arguments = Bundle().apply {
-                        putParcelable(MvRx.KEY_ARG, VerificationBottomSheet.VerificationArgs(
+                        putParcelable(Mavericks.KEY_ARG, VerificationBottomSheet.VerificationArgs(
                                 otherUserId, data.transactionId, roomId = roomDetailArgs.roomId))
                     }
                 }.show(parentFragmentManager, "REQ")
@@ -1641,57 +1644,54 @@ class RoomDetailFragment @Inject constructor(
         }
     }
 
-// TimelineEventController.Callback ************************************************************
+    // TimelineEventController.Callback ************************************************************
 
     override fun onUrlClicked(url: String, title: String): Boolean {
-        permalinkHandler
-                .launch(requireActivity(), url, object : NavigationInterceptor {
-                    override fun navToRoom(roomId: String?, eventId: String?, deepLink: Uri?): Boolean {
-                        // Same room?
-                        if (roomId == roomDetailArgs.roomId) {
-                            // Navigation to same room
-                            if (eventId == null) {
-                                showSnackWithMessage(getString(R.string.navigate_to_room_when_already_in_the_room))
-                            } else {
-                                // Highlight and scroll to this event
-                                roomDetailViewModel.handle(RoomDetailAction.NavigateToEvent(eventId, true))
+        viewLifecycleOwner.lifecycleScope.launch {
+            val isManaged = permalinkHandler
+                    .launch(requireActivity(), url, object : NavigationInterceptor {
+                        override fun navToRoom(roomId: String?, eventId: String?, deepLink: Uri?): Boolean {
+                            // Same room?
+                            if (roomId == roomDetailArgs.roomId) {
+                                // Navigation to same room
+                                if (eventId == null) {
+                                    showSnackWithMessage(getString(R.string.navigate_to_room_when_already_in_the_room))
+                                } else {
+                                    // Highlight and scroll to this event
+                                    roomDetailViewModel.handle(RoomDetailAction.NavigateToEvent(eventId, true))
+                                }
+                                return true
                             }
+                            // Not handled
+                            return false
+                        }
+
+                        override fun navToMemberProfile(userId: String, deepLink: Uri): Boolean {
+                            openRoomMemberProfile(userId)
                             return true
                         }
-                        // Not handled
-                        return false
-                    }
-
-                    override fun navToMemberProfile(userId: String, deepLink: Uri): Boolean {
-                        openRoomMemberProfile(userId)
-                        return true
-                    }
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { managed ->
-                    if (!managed) {
-                        if (title.isValidUrl() && url.isValidUrl() && URL(title).host != URL(url).host) {
-                            MaterialAlertDialogBuilder(requireActivity(), R.style.ThemeOverlay_Vector_MaterialAlertDialog_NegativeDestructive)
-                                    .setTitle(R.string.external_link_confirmation_title)
-                                    .setMessage(
-                                            getString(R.string.external_link_confirmation_message, title, url)
-                                                    .toSpannable()
-                                                    .colorizeMatchingText(url, colorProvider.getColorFromAttribute(R.attr.vctr_content_tertiary))
-                                                    .colorizeMatchingText(title, colorProvider.getColorFromAttribute(R.attr.vctr_content_tertiary))
-                                    )
-                                    .setPositiveButton(R.string._continue) { _, _ ->
-                                        openUrlInExternalBrowser(requireContext(), url)
-                                    }
-                                    .setNegativeButton(R.string.cancel, null)
-                                    .show()
-                        } else {
-                            // Open in external browser, in a new Tab
-                            openUrlInExternalBrowser(requireContext(), url)
-                        }
-                    }
+                    })
+            if (!isManaged) {
+                if (title.isValidUrl() && url.isValidUrl() && URL(title).host != URL(url).host) {
+                    MaterialAlertDialogBuilder(requireActivity(), R.style.ThemeOverlay_Vector_MaterialAlertDialog_NegativeDestructive)
+                            .setTitle(R.string.external_link_confirmation_title)
+                            .setMessage(
+                                    getString(R.string.external_link_confirmation_message, title, url)
+                                            .toSpannable()
+                                            .colorizeMatchingText(url, colorProvider.getColorFromAttribute(R.attr.vctr_content_tertiary))
+                                            .colorizeMatchingText(title, colorProvider.getColorFromAttribute(R.attr.vctr_content_tertiary))
+                            )
+                            .setPositiveButton(R.string._continue) { _, _ ->
+                                openUrlInExternalBrowser(requireContext(), url)
+                            }
+                            .setNegativeButton(R.string.cancel, null)
+                            .show()
+                } else {
+                    // Open in external browser, in a new Tab
+                    openUrlInExternalBrowser(requireContext(), url)
                 }
-                .disposeOnDestroyView()
+            }
+        }
         // In fact it is always managed
         return true
     }
@@ -1850,15 +1850,15 @@ class RoomDetailFragment @Inject constructor(
     }
 
     override fun onRoomCreateLinkClicked(url: String) {
-        permalinkHandler
-                .launch(requireContext(), url, object : NavigationInterceptor {
-                    override fun navToRoom(roomId: String?, eventId: String?, deepLink: Uri?): Boolean {
-                        requireActivity().finish()
-                        return false
-                    }
-                })
-                .subscribe()
-                .disposeOnDestroyView()
+        viewLifecycleOwner.lifecycleScope.launchWhenResumed {
+            permalinkHandler
+                    .launch(requireContext(), url, object : NavigationInterceptor {
+                        override fun navToRoom(roomId: String?, eventId: String?, deepLink: Uri?): Boolean {
+                            requireActivity().finish()
+                            return false
+                        }
+                    })
+        }
     }
 
     override fun onReadReceiptsClicked(readReceipts: List<ReadReceiptData>) {

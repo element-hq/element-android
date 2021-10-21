@@ -20,7 +20,7 @@ import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
@@ -49,7 +49,7 @@ class ContactsBookViewModel @AssistedInject constructor(@Assisted
         fun create(initialState: ContactsBookViewState): ContactsBookViewModel
     }
 
-    companion object : MvRxViewModelFactory<ContactsBookViewModel, ContactsBookViewState> {
+    companion object : MavericksViewModelFactory<ContactsBookViewModel, ContactsBookViewState> {
 
         override fun create(viewModelContext: ViewModelContext, state: ContactsBookViewState): ContactsBookViewModel? {
             val factory = when (viewModelContext) {
@@ -66,7 +66,7 @@ class ContactsBookViewModel @AssistedInject constructor(@Assisted
     init {
         loadContacts()
 
-        selectSubscribe(ContactsBookViewState::searchTerm, ContactsBookViewState::onlyBoundContacts) { _, _ ->
+        onEach(ContactsBookViewState::searchTerm, ContactsBookViewState::onlyBoundContacts) { _, _ ->
             updateFilteredMappedContacts()
         }
     }

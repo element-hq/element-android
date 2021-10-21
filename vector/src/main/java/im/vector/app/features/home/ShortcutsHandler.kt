@@ -75,7 +75,11 @@ class ShortcutsHandler @Inject constructor(
             return
         }
 
-        ShortcutManagerCompat.removeAllDynamicShortcuts(context)
+        // according to Android documentation
+        // removeLongLivedShortcuts for API 29 and lower should behave like removeDynamicShortcuts(Context, List)
+        // getDynamicShortcuts: returns all dynamic shortcuts from the app.
+        val shortcuts = ShortcutManagerCompat.getDynamicShortcuts(context).map { it.id }
+        ShortcutManagerCompat.removeLongLivedShortcuts(context, shortcuts)
 
         // We can only disabled pinned shortcuts with the API, but at least it will prevent the crash
         if (ShortcutManagerCompat.isRequestPinShortcutSupported(context)) {

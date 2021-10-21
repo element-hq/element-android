@@ -176,7 +176,7 @@ val upHandler = object: MessagingReceiverHandler {
                     || UPHelper.getPushGateway(context) != gateway) {
                 UPHelper.storePushGateway(context, gateway)
                 UPHelper.storeUpEndpoint(context, endpoint)
-                pusherManager.registerPusher(context, endpoint, gateway)
+                pusherManager.enqueueRegisterPusher(context, endpoint, gateway)
             } else {
                 Timber.tag(loggerTag.value).i("onNewEndpoint: skipped")
             }

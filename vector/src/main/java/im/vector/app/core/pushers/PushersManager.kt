@@ -22,6 +22,7 @@ import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.resources.AppNameProvider
 import im.vector.app.core.resources.LocaleProvider
 import im.vector.app.core.resources.StringProvider
+import org.matrix.android.sdk.api.session.pushers.PushersService
 import java.util.UUID
 import javax.inject.Inject
 import kotlin.math.abs
@@ -45,24 +46,54 @@ class PushersManager @Inject constructor(
         )
     }
 
-    fun registerPusher(context: Context, pushKey: String, gateway: String): UUID {
+    fun enqueueRegisterPusher(
+            context: Context,
+            pushKey: String,
+            gateway: String
+    ): UUID {
         val currentSession = activeSessionHolder.getActiveSession()
-        val profileTag = DEFAULT_PUSHER_FILE_TAG + "_" + abs(currentSession.myUserId.hashCode())
 
-        return currentSession.addHttpPusher(
-                pushKey, // this is the UnifiedPush endpoint
-                getPusherAppId(context),
-                profileTag,
-                localeProvider.current().language,
-                appNameProvider.getAppName(),
-                currentSession.sessionParams.deviceId ?: "MOBILE",
-                gateway,
-                append = false,
-                withEventIdOnly = true
+        return currentSession.enqueueAddHttpPusher(
+                createHttpPusher(
+                        pushKey,
+                        gateway,
+                        getPusherAppId(context)
+                )
         )
     }
 
-    fun registerEmailForPush(email: String) {
+    suspend fun registerPusher(
+            context: Context,
+            pushKey: String,
+            gateway: String
+    ) {
+        val currentSession = activeSessionHolder.getActiveSession()
+        currentSession.addHttpPusher(
+                createHttpPusher(
+                        pushKey,
+                        gateway,
+                        getPusherAppId(context)
+                )
+        )
+    }
+
+    private fun createHttpPusher(
+            pushKey: String,
+            gateway: String,
+            deviceId: String
+    ) = PushersService.HttpPusher(
+            pushKey,
+            deviceId,
+            profileTag = DEFAULT_PUSHER_FILE_TAG + "_" + abs(activeSessionHolder.getActiveSession().myUserId.hashCode()),
+            localeProvider.current().language,
+            appNameProvider.getAppName(),
+            activeSessionHolder.getActiveSession().sessionParams.deviceId ?: "MOBILE",
+            gateway,
+            append = false,
+            withEventIdOnly = true
+    )
+
+    suspend fun registerEmailForPush(email: String) {
         val currentSession = activeSessionHolder.getActiveSession()
         val appName = appNameProvider.getAppName()
         currentSession.addEmailPusher(

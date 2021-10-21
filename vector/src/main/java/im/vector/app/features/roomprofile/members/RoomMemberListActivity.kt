@@ -2,7 +2,7 @@ package im.vector.app.features.roomprofile.members
 
 import android.content.Context
 import android.content.Intent
-import com.airbnb.mvrx.MvRx
+import com.airbnb.mvrx.Mavericks
 import im.vector.app.R
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.features.roomprofile.RoomProfileActivity
@@ -16,7 +16,7 @@ class RoomMemberListActivity :
         fun newIntent(context: Context, roomId: String): Intent {
             val roomProfileArgs = RoomProfileArgs(roomId)
             return Intent(context, RoomMemberListActivity::class.java).apply {
-                putExtra(MvRx.KEY_ARG, roomProfileArgs)
+                putExtra(Mavericks.KEY_ARG, roomProfileArgs)
             }
         }
     }

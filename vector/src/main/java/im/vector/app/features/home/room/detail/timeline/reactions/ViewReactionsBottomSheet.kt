@@ -20,7 +20,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.airbnb.mvrx.MvRx
+import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.app.R
@@ -92,7 +92,7 @@ class ViewReactionsBottomSheet :
                     roomId,
                     informationData
             )
-            args.putParcelable(MvRx.KEY_ARG, parcelableArgs)
+            args.putParcelable(Mavericks.KEY_ARG, parcelableArgs)
             return ViewReactionsBottomSheet().apply { arguments = args }
         }
     }

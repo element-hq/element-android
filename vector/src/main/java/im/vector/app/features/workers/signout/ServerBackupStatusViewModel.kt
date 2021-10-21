@@ -20,8 +20,8 @@ import androidx.lifecycle.MutableLiveData
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxState
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksState
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
@@ -30,26 +30,22 @@ import dagger.assisted.AssistedInject
 import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
-import io.reactivex.Observable
-import io.reactivex.functions.Function4
-import io.reactivex.subjects.PublishSubject
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.sample
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.accountdata.UserAccountDataEvent
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MASTER_KEY_SSSS_NAME
-import org.matrix.android.sdk.api.session.crypto.crosssigning.MXCrossSigningInfo
 import org.matrix.android.sdk.api.session.crypto.crosssigning.SELF_SIGNING_KEY_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.crosssigning.USER_SIGNING_KEY_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupState
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupStateListener
-import org.matrix.android.sdk.api.util.Optional
-import org.matrix.android.sdk.internal.crypto.store.PrivateKeysInfo
-import org.matrix.android.sdk.rx.rx
-import java.util.concurrent.TimeUnit
+import org.matrix.android.sdk.flow.flow
 
 data class ServerBackupStatusViewState(
         val bannerState: Async<BannerState> = Uninitialized
-) : MvRxState
+) : MavericksState
 
 /**
  * The state representing the view
@@ -68,14 +64,14 @@ sealed class BannerState {
 
 class ServerBackupStatusViewModel @AssistedInject constructor(@Assisted initialState: ServerBackupStatusViewState,
                                                               private val session: Session) :
-    VectorViewModel<ServerBackupStatusViewState, EmptyAction, EmptyViewEvents>(initialState), KeysBackupStateListener {
+        VectorViewModel<ServerBackupStatusViewState, EmptyAction, EmptyViewEvents>(initialState), KeysBackupStateListener {
 
     @AssistedFactory
     interface Factory {
         fun create(initialState: ServerBackupStatusViewState): ServerBackupStatusViewModel
     }
 
-    companion object : MvRxViewModelFactory<ServerBackupStatusViewModel, ServerBackupStatusViewState> {
+    companion object : MavericksViewModelFactory<ServerBackupStatusViewModel, ServerBackupStatusViewState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: ServerBackupStatusViewState): ServerBackupStatusViewModel? {
@@ -91,43 +87,37 @@ class ServerBackupStatusViewModel @AssistedInject constructor(@Assisted initialS
     val keysExportedToFile = MutableLiveData<Boolean>()
     val keysBackupState = MutableLiveData<KeysBackupState>()
 
-    private val keyBackupPublishSubject: PublishSubject<KeysBackupState> = PublishSubject.create()
+    private val keyBackupFlow = MutableSharedFlow<KeysBackupState>(0)
 
     init {
         session.cryptoService().keysBackupService().addListener(this)
-
         keysBackupState.value = session.cryptoService().keysBackupService().state
-
-        Observable.combineLatest<List<UserAccountDataEvent>, Optional<MXCrossSigningInfo>, KeysBackupState, Optional<PrivateKeysInfo>, BannerState>(
-                session.rx().liveUserAccountData(setOf(MASTER_KEY_SSSS_NAME, USER_SIGNING_KEY_SSSS_NAME, SELF_SIGNING_KEY_SSSS_NAME)),
-                session.rx().liveCrossSigningInfo(session.myUserId),
-                keyBackupPublishSubject,
-                session.rx().liveCrossSigningPrivateKeys(),
-                Function4 { _, crossSigningInfo, keyBackupState, pInfo ->
-                    // first check if 4S is already setup
-                    if (session.sharedSecretStorageService.isRecoverySetup()) {
-                        // 4S is already setup sp we should not display anything
-                        return@Function4 when (keyBackupState) {
-                            KeysBackupState.BackingUp -> BannerState.BackingUp
-                            else                      -> BannerState.Hidden
-                        }
-                    }
-
-                    // So recovery is not setup
-                    // Check if cross signing is enabled and local secrets known
-                    if (
-                            crossSigningInfo.getOrNull() == null ||
-                            (crossSigningInfo.getOrNull()?.isTrusted() == true &&
-                            pInfo.getOrNull()?.allKnown().orFalse())
-                    ) {
-                        // So 4S is not setup and we have local secrets,
-                        return@Function4 BannerState.Setup(numberOfKeys = getNumberOfKeysToBackup())
-                    }
-
-                    BannerState.Hidden
+        val liveUserAccountData = session.flow().liveUserAccountData(setOf(MASTER_KEY_SSSS_NAME, USER_SIGNING_KEY_SSSS_NAME, SELF_SIGNING_KEY_SSSS_NAME))
+        val liveCrossSigningInfo = session.flow().liveCrossSigningInfo(session.myUserId)
+        val liveCrossSigningPrivateKeys = session.flow().liveCrossSigningPrivateKeys()
+        combine(liveUserAccountData, liveCrossSigningInfo, keyBackupFlow, liveCrossSigningPrivateKeys) { _, crossSigningInfo, keyBackupState, pInfo ->
+            // first check if 4S is already setup
+            if (session.sharedSecretStorageService.isRecoverySetup()) {
+                // 4S is already setup sp we should not display anything
+                return@combine when (keyBackupState) {
+                    KeysBackupState.BackingUp -> BannerState.BackingUp
+                    else                      -> BannerState.Hidden
                 }
-        )
-                .throttleLast(1000, TimeUnit.MILLISECONDS) // we don't want to flicker or catch transient states
+            }
+
+            // So recovery is not setup
+            // Check if cross signing is enabled and local secrets known
+            if (
+                    crossSigningInfo.getOrNull() == null ||
+                    (crossSigningInfo.getOrNull()?.isTrusted() == true &&
+                    pInfo.getOrNull()?.allKnown().orFalse())
+            ) {
+                // So 4S is not setup and we have local secrets,
+                return@combine BannerState.Setup(numberOfKeys = getNumberOfKeysToBackup())
+            }
+            BannerState.Hidden
+        }
+                .sample(1000) // we don't want to flicker or catch transient states
                 .distinctUntilChanged()
                 .execute { async ->
                     copy(
@@ -135,7 +125,7 @@ class ServerBackupStatusViewModel @AssistedInject constructor(@Assisted initialS
                     )
                 }
 
-        keyBackupPublishSubject.onNext(session.cryptoService().keysBackupService().state)
+        keyBackupFlow.tryEmit(session.cryptoService().keysBackupService().state)
     }
 
     /**
@@ -165,7 +155,7 @@ class ServerBackupStatusViewModel @AssistedInject constructor(@Assisted initialS
     }
 
     override fun onStateChange(newState: KeysBackupState) {
-        keyBackupPublishSubject.onNext(session.cryptoService().keysBackupService().state)
+        keyBackupFlow.tryEmit(session.cryptoService().keysBackupService().state)
         keysBackupState.value = newState
     }
 

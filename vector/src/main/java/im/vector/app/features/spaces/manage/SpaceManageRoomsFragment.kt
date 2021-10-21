@@ -80,7 +80,7 @@ class SpaceManageRoomsFragment @Inject constructor(
                 }
                 .disposeOnDestroyView()
 
-        viewModel.selectSubscribe(SpaceManageRoomViewState::actionState) { actionState ->
+        viewModel.onEach(SpaceManageRoomViewState::actionState) { actionState ->
             when (actionState) {
                 is Loading -> {
                     sharedViewModel.handle(SpaceManagedSharedAction.ShowLoading)

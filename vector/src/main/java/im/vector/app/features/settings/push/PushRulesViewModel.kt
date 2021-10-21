@@ -15,8 +15,8 @@
  */
 package im.vector.app.features.settings.push
 
-import com.airbnb.mvrx.MvRxState
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksState
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import im.vector.app.core.di.HasScreenInjector
 import im.vector.app.core.platform.EmptyAction
@@ -26,12 +26,12 @@ import org.matrix.android.sdk.api.pushrules.rest.PushRule
 
 data class PushRulesViewState(
         val rules: List<PushRule> = emptyList()
-) : MvRxState
+) : MavericksState
 
 class PushRulesViewModel(initialState: PushRulesViewState) :
     VectorViewModel<PushRulesViewState, EmptyAction, EmptyViewEvents>(initialState) {
 
-    companion object : MvRxViewModelFactory<PushRulesViewModel, PushRulesViewState> {
+    companion object : MavericksViewModelFactory<PushRulesViewModel, PushRulesViewState> {
 
         override fun initialState(viewModelContext: ViewModelContext): PushRulesViewState? {
             val session = (viewModelContext.activity as HasScreenInjector).injector().activeSessionHolder().getActiveSession()

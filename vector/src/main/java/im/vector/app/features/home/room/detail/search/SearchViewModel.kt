@@ -20,7 +20,7 @@ import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
@@ -50,7 +50,7 @@ class SearchViewModel @AssistedInject constructor(
         fun create(initialState: SearchViewState): SearchViewModel
     }
 
-    companion object : MvRxViewModelFactory<SearchViewModel, SearchViewState> {
+    companion object : MavericksViewModelFactory<SearchViewModel, SearchViewState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: SearchViewState): SearchViewModel? {

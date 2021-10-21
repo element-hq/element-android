@@ -85,6 +85,13 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
     private var useCompleteNotificationFormat = vectorPreferences.useCompleteNotificationFormat()
 
     /**
+     * An in memory FIFO cache of the seen events.
+     * Acts as a notification debouncer to stop already dismissed push notifications from
+     * displaying again when the /sync response is delayed.
+     */
+    private val seenEventIds = CircularCache.create<String>(cacheSize = 25)
+
+    /**
     Should be called as soon as a new event is ready to be displayed.
     The notification corresponding to this event will not be displayed until
     #refreshNotificationDrawer() is called.
@@ -141,7 +148,13 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
                     }
                 } else {
                     // Not an edit
-                    eventList.add(notifiableEvent)
+                    if (seenEventIds.contains(notifiableEvent.eventId)) {
+                        // we've already seen the event, lets skip
+                        Timber.d("onNotifiableEventReceived(): skipping event, already seen")
+                    } else {
+                        seenEventIds.put(notifiableEvent.eventId)
+                        eventList.add(notifiableEvent)
+                    }
                 }
             }
         }
@@ -266,7 +279,7 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
                     is InviteNotifiableEvent  -> {
                         if (autoAcceptInvites.hideInvites) {
                             // Forget this event
-                           eventIterator.remove()
+                            eventIterator.remove()
                         } else {
                             invitationEvents.add(event)
                         }
@@ -330,11 +343,28 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
                     }
                     roomEventGroupInfo.hasNewEvent = roomEventGroupInfo.hasNewEvent || !event.hasBeenDisplayed
 
-                    val senderPerson = Person.Builder()
-                            .setName(event.senderName)
-                            .setIcon(iconLoader.getUserIcon(event.senderAvatarPath))
-                            .setKey(event.senderId)
-                            .build()
+                    val senderPerson = if (event.outGoingMessage) {
+                        null
+                    } else {
+                        Person.Builder()
+                                .setName(event.senderName)
+                                .setIcon(iconLoader.getUserIcon(event.senderAvatarPath))
+                                .setKey(event.senderId)
+                                .build()
+                    }
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                        val openRoomIntent = RoomDetailActivity.shortcutIntent(context, roomId)
+
+                        val shortcut = ShortcutInfoCompat.Builder(context, roomId)
+                                .setLongLived(true)
+                                .setIntent(openRoomIntent)
+                                .setShortLabel(roomName)
+                                .setIcon(largeBitmap?.let { IconCompat.createWithAdaptiveBitmap(it) } ?: iconLoader.getUserIcon(event.senderAvatarPath))
+                                .build()
+
+                        ShortcutManagerCompat.pushDynamicShortcut(context, shortcut)
+                    }
 
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                         val openRoomIntent = RoomDetailActivity.shortcutIntent(context, roomId)

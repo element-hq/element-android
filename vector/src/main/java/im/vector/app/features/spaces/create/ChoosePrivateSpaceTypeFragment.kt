@@ -49,7 +49,7 @@ class ChoosePrivateSpaceTypeFragment @Inject constructor(
             sharedViewModel.handle(CreateSpaceAction.SetSpaceTopology(SpaceTopology.MeAndTeammates))
         }
 
-        sharedViewModel.subscribe { state ->
+        sharedViewModel.onEach { state ->
             views.accessInfoHelpText.text = stringProvider.getString(R.string.create_spaces_make_sure_access, state.name ?: "")
         }
     }

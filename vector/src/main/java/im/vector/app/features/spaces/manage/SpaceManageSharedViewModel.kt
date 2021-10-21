@@ -18,7 +18,7 @@ package im.vector.app.features.spaces.manage
 
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -37,7 +37,7 @@ class SpaceManageSharedViewModel @AssistedInject constructor(
         fun create(initialState: SpaceManageViewState): SpaceManageSharedViewModel
     }
 
-    companion object : MvRxViewModelFactory<SpaceManageSharedViewModel, SpaceManageViewState> {
+    companion object : MavericksViewModelFactory<SpaceManageSharedViewModel, SpaceManageViewState> {
         override fun create(viewModelContext: ViewModelContext, state: SpaceManageViewState): SpaceManageSharedViewModel? {
             val factory = when (viewModelContext) {
                 is FragmentViewModelContext -> viewModelContext.fragment as? Factory

@@ -16,13 +16,12 @@
 
 package im.vector.app.features.settings.ignored
 
-import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxState
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksState
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
@@ -34,12 +33,12 @@ import im.vector.app.core.platform.VectorViewModelAction
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.user.model.User
-import org.matrix.android.sdk.rx.rx
+import org.matrix.android.sdk.flow.flow
 
 data class IgnoredUsersViewState(
         val ignoredUsers: List<User> = emptyList(),
         val unIgnoreRequest: Async<Unit> = Uninitialized
-) : MvRxState
+) : MavericksState
 
 sealed class IgnoredUsersAction : VectorViewModelAction {
     data class UnIgnore(val userId: String) : IgnoredUsersAction()
@@ -54,7 +53,7 @@ class IgnoredUsersViewModel @AssistedInject constructor(@Assisted initialState: 
         fun create(initialState: IgnoredUsersViewState): IgnoredUsersViewModel
     }
 
-    companion object : MvRxViewModelFactory<IgnoredUsersViewModel, IgnoredUsersViewState> {
+    companion object : MavericksViewModelFactory<IgnoredUsersViewModel, IgnoredUsersViewState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: IgnoredUsersViewState): IgnoredUsersViewModel? {
@@ -68,7 +67,7 @@ class IgnoredUsersViewModel @AssistedInject constructor(@Assisted initialState: 
     }
 
     private fun observeIgnoredUsers() {
-        session.rx()
+        session.flow()
                 .liveIgnoredUsers()
                 .execute { async ->
                     copy(

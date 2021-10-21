@@ -16,11 +16,10 @@
 
 package im.vector.app.features.settings.push
 
-import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxState
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksState
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
@@ -31,11 +30,11 @@ import im.vector.app.core.platform.VectorViewModel
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.pushers.Pusher
-import org.matrix.android.sdk.rx.RxSession
+import org.matrix.android.sdk.flow.flow
 
 data class PushGatewayViewState(
         val pushGateways: Async<List<Pusher>> = Uninitialized
-) : MvRxState
+) : MavericksState
 
 class PushGatewaysViewModel @AssistedInject constructor(@Assisted initialState: PushGatewayViewState,
                                                         private val session: Session) :
@@ -46,7 +45,7 @@ class PushGatewaysViewModel @AssistedInject constructor(@Assisted initialState: 
         fun create(initialState: PushGatewayViewState): PushGatewaysViewModel
     }
 
-    companion object : MvRxViewModelFactory<PushGatewaysViewModel, PushGatewayViewState> {
+    companion object : MavericksViewModelFactory<PushGatewaysViewModel, PushGatewayViewState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: PushGatewayViewState): PushGatewaysViewModel? {
@@ -62,7 +61,7 @@ class PushGatewaysViewModel @AssistedInject constructor(@Assisted initialState: 
     }
 
     private fun observePushers() {
-        RxSession(session)
+        session.flow()
                 .livePushers()
                 .execute {
                     copy(pushGateways = it)

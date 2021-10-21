@@ -3072,4 +3072,7 @@
     <string name="command_description_room_name">Define o nome da sala</string>
     <string name="command_description_unignore_user">Para de ignorar um/uma usuário(a), mostrando as mensagens dele/dela de agora em diante</string>
     <string name="command_description_ignore_user">Ignora um/uma usuário(a), escondendo as mensagens dele/dela de você</string>
+    <string name="a11y_presence_unavailable">Indisponível</string>
+    <string name="a11y_presence_offline">Offline</string>
+    <string name="a11y_presence_online">Online</string>
 </resources>

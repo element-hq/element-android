@@ -17,9 +17,8 @@
 
 package im.vector.app.features.roomprofile
 
-import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -29,7 +28,7 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.home.ShortcutCreator
-import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
+import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.query.QueryStringValue
@@ -41,10 +40,10 @@ import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.create.RoomCreateContent
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.session.room.state.isPublic
-import org.matrix.android.sdk.rx.RxRoom
-import org.matrix.android.sdk.rx.mapOptional
-import org.matrix.android.sdk.rx.rx
-import org.matrix.android.sdk.rx.unwrap
+import org.matrix.android.sdk.flow.FlowRoom
+import org.matrix.android.sdk.flow.flow
+import org.matrix.android.sdk.flow.mapOptional
+import org.matrix.android.sdk.flow.unwrap
 
 class RoomProfileViewModel @AssistedInject constructor(
         @Assisted private val initialState: RoomProfileViewState,
@@ -58,7 +57,7 @@ class RoomProfileViewModel @AssistedInject constructor(
         fun create(initialState: RoomProfileViewState): RoomProfileViewModel
     }
 
-    companion object : MvRxViewModelFactory<RoomProfileViewModel, RoomProfileViewState> {
+    companion object : MavericksViewModelFactory<RoomProfileViewModel, RoomProfileViewState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: RoomProfileViewState): RoomProfileViewModel? {
@@ -70,15 +69,15 @@ class RoomProfileViewModel @AssistedInject constructor(
     private val room = session.getRoom(initialState.roomId)!!
 
     init {
-        val rxRoom = room.rx()
-        observeRoomSummary(rxRoom)
-        observeRoomCreateContent(rxRoom)
-        observeBannedRoomMembers(rxRoom)
+        val flowRoom = room.flow()
+        observeRoomSummary(flowRoom)
+        observeRoomCreateContent(flowRoom)
+        observeBannedRoomMembers(flowRoom)
         observePermissions()
     }
 
-    private fun observeRoomCreateContent(rxRoom: RxRoom) {
-        rxRoom.liveStateEvent(EventType.STATE_ROOM_CREATE, QueryStringValue.NoCondition)
+    private fun observeRoomCreateContent(flowRoom: FlowRoom) {
+        flowRoom.liveStateEvent(EventType.STATE_ROOM_CREATE, QueryStringValue.NoCondition)
                 .mapOptional { it.content.toModel<RoomCreateContent>() }
                 .unwrap()
                 .execute { async ->
@@ -93,32 +92,31 @@ class RoomProfileViewModel @AssistedInject constructor(
                 }
     }
 
-    private fun observeRoomSummary(rxRoom: RxRoom) {
-        rxRoom.liveRoomSummary()
+    private fun observeRoomSummary(flowRoom: FlowRoom) {
+        flowRoom.liveRoomSummary()
                 .unwrap()
                 .execute {
                     copy(roomSummary = it)
                 }
     }
 
-    private fun observeBannedRoomMembers(rxRoom: RxRoom) {
-        rxRoom.liveRoomMembers(roomMemberQueryParams { memberships = listOf(Membership.BAN) })
+    private fun observeBannedRoomMembers(flowRoom: FlowRoom) {
+        flowRoom.liveRoomMembers(roomMemberQueryParams { memberships = listOf(Membership.BAN) })
                 .execute {
                     copy(bannedMembership = it)
                 }
     }
 
     private fun observePermissions() {
-        PowerLevelsObservableFactory(room)
-                .createObservable()
-                .subscribe {
+        PowerLevelsFlowFactory(room)
+                .createFlow()
+                .setOnEach {
                     val powerLevelsHelper = PowerLevelsHelper(it)
                     val permissions = RoomProfileViewState.ActionPermissions(
                             canEnableEncryption = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_ENCRYPTION)
                     )
-                    setState { copy(actionPermissions = permissions) }
+                    copy(actionPermissions = permissions)
                 }
-                .disposeOnClear()
     }
 
     override fun handle(action: RoomProfileAction) {

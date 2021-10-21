@@ -562,7 +562,7 @@ class NotificationUtils @Inject constructor(private val context: Context,
                 // TODO Group should be current user display name
                 .setGroup(stringProvider.getString(R.string.app_name))
                 // In order to avoid notification making sound twice (due to the summary notification)
-                .setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_SUMMARY)
+                .setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_ALL)
                 .setSmallIcon(smallIcon)
                 // Set primary color (important for Wear 2.0 Notifications).
                 .setColor(accentColor)
@@ -645,7 +645,7 @@ class NotificationUtils @Inject constructor(private val context: Context,
                 .setContentTitle(stringProvider.getString(R.string.app_name))
                 .setContentText(inviteNotifiableEvent.description)
                 .setGroup(stringProvider.getString(R.string.app_name))
-                .setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_SUMMARY)
+                .setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_ALL)
                 .setSmallIcon(smallIcon)
                 .setColor(accentColor)
                 .apply {
@@ -709,7 +709,7 @@ class NotificationUtils @Inject constructor(private val context: Context,
                 .setContentTitle(stringProvider.getString(R.string.app_name))
                 .setContentText(simpleNotifiableEvent.description)
                 .setGroup(stringProvider.getString(R.string.app_name))
-                .setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_SUMMARY)
+                .setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_ALL)
                 .setSmallIcon(smallIcon)
                 .setColor(accentColor)
                 .setAutoCancel(true)
@@ -802,6 +802,7 @@ class NotificationUtils @Inject constructor(private val context: Context,
         val smallIcon = R.drawable.ic_status_bar_sc
 
         return NotificationCompat.Builder(context, if (noisy) NOISY_NOTIFICATION_CHANNEL_ID else SILENT_NOTIFICATION_CHANNEL_ID)
+                .setOnlyAlertOnce(true)
                 // used in compat < N, after summary is built based on child notifications
                 .setWhen(lastMessageTimestamp)
                 .setStyle(style)

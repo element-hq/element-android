@@ -1,0 +1,47 @@
+
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+}
+
+android {
+    compileSdk versions.compileSdk
+
+    defaultConfig {
+        minSdk versions.minSdk
+        targetSdk versions.targetSdk
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility versions.sourceCompat
+        targetCompatibility versions.targetCompat
+    }
+    kotlinOptions {
+        jvmTarget = "11"
+    }
+}
+
+dependencies {
+
+    implementation project(":matrix-sdk-android")
+    implementation libs.androidx.appCompat
+
+    implementation libs.jetbrains.coroutinesCore
+    implementation libs.jetbrains.coroutinesAndroid
+    implementation libs.androidx.lifecycleLivedata
+
+    // Paging
+    implementation libs.androidx.pagingRuntimeKtx
+
+    // Logging
+    implementation libs.jakewharton.timber
+}

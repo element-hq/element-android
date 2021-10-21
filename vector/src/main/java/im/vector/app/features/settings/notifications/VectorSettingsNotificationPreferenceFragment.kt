@@ -57,6 +57,7 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.pushers.Pusher
 import timber.log.Timber
+import org.matrix.android.sdk.internal.extensions.combineLatest
 import javax.inject.Inject
 
 // Referenced in vector_settings_preferences_root.xml
@@ -86,6 +87,12 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
 
             val areNotifEnabledAtAccountLevel = !mRuleMaster.enabled
             (pref as SwitchPreference).isChecked = areNotifEnabledAtAccountLevel
+        }
+
+        findPreference<SwitchPreference>(VectorPreferences.SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY)?.let {
+            it.setTransactionalSwitchChangeListener(lifecycleScope) { isChecked ->
+                updateEnabledForDevice(isChecked)
+            }
         }
 
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_FDROID_BACKGROUND_SYNC_MODE)?.let {
@@ -131,13 +138,19 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
             true
         }
 
-        findPreference<VectorPreference>(SETTINGS_UNIFIED_PUSH_RE_REGISTER)?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            updateEnabledForDevice(false)
-            UPHelper.registerUnifiedPush(requireContext(), forceShowSelection = true) {
-                updateEnabledForDevice(true)
-                Handler(Looper.getMainLooper()).postDelayed({ refreshBackgroundSyncPrefs() }, 500)
+        findPreference<VectorPreference>(SETTINGS_UNIFIED_PUSH_RE_REGISTER)?.let {
+            it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                lifecycleScope.launch {
+                    updateEnabledForDevice(false)
+                    UPHelper.registerUnifiedPush(requireContext(), forceShowSelection = true) {
+                        lifecycleScope.launch {
+                            updateEnabledForDevice(true)
+                        }
+                        Handler(Looper.getMainLooper()).postDelayed({ refreshBackgroundSyncPrefs() }, 500)
+                    }
+                }
+                true
             }
-            true
         }
 
         findPreference<VectorSwitchPreference>(VectorPreferences.SETTINGS_FORCE_ALLOW_BACKGROUND_SYNC)?.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
@@ -349,56 +362,34 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
 
     override fun onPreferenceTreeClick(preference: Preference?): Boolean {
         return when (preference?.key) {
-            VectorPreferences.SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY -> {
-                updateEnabledForDevice(preference as SwitchPreference)
-                true
-            }
-            VectorPreferences.SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY   -> {
+            VectorPreferences.SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY -> {
                 updateEnabledForAccount(preference)
                 true
             }
-            else                                                         -> {
+            else                                                       -> {
                 return super.onPreferenceTreeClick(preference)
             }
         }
     }
 
-    private fun updateEnabledForDevice(preference: SwitchPreference) {
-        updateEnabledForDevice(preference.isChecked)
-    }
-
-    private fun updateEnabledForDevice(enabled: Boolean) {
+    private suspend fun updateEnabledForDevice(enabled: Boolean) {
         val pref = findPreference<VectorSwitchPreference>(VectorPreferences.SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY)
         pref?.isChecked = enabled
         if (enabled) {
             UPHelper.registerUnifiedPush(requireContext())
         } else {
             UPHelper.getUpEndpoint(requireContext())?.let {
-                lifecycleScope.launch {
-                    runCatching {
-                        try {
-                            pushManager.unregisterPusher(requireContext(), it)
-                        } catch (e: Exception) {
-                            Timber.d("Probably unregistering a non existant pusher")
-                        }
-                        try {
-                            UPHelper.unregister(requireContext())
-                        } catch (e: Exception) {
-                            Timber.d("Probably unregistering to a non-saved distributor")
-                        }
-                    }
-                            .fold(
-                                    { session.refreshPushers() },
-                                    {
-                                        if (!isAdded) {
-                                            return@fold
-                                        }
-                                        // revert the check box
-                                        pref?.isChecked = true
-                                        Toast.makeText(activity, R.string.unknown_error, Toast.LENGTH_SHORT).show()
-                                    }
-                            )
+                try {
+                    pushManager.unregisterPusher(requireContext(), it)
+                } catch (e: Exception) {
+                    Timber.d("Probably unregistering a non existant pusher")
                 }
+                try {
+                    UPHelper.unregister(requireContext())
+                } catch (e: Exception) {
+                    Timber.d("Probably unregistering to a non-saved distributor")
+                }
+                session.refreshPushers()
             }
         }
     }
@@ -464,12 +455,9 @@ private fun Session.getEmailsWithPushInformation(): List<Pair<ThreePid.Email, Bo
 }
 
 private fun Session.getEmailsWithPushInformationLive(): LiveData<List<Pair<ThreePid.Email, Boolean>>> {
-    return getThreePidsLive(refreshData = false)
-            .distinctUntilChanged()
-            .map { threePids ->
-                val emailPushers = getPushers().filter { it.kind == Pusher.KIND_EMAIL }
-                threePids
-                        .filterIsInstance<ThreePid.Email>()
-                        .map { it to emailPushers.any { pusher -> pusher.pushKey == it.email } }
-            }
+    val emailThreePids = getThreePidsLive(refreshData = true).map { it.filterIsInstance<ThreePid.Email>() }
+    val emailPushers = getPushersLive().map { it.filter { pusher -> pusher.kind == Pusher.KIND_EMAIL } }
+    return combineLatest(emailThreePids, emailPushers) { emailThreePidsResult, emailPushersResult ->
+        emailThreePidsResult.map { it to emailPushersResult.any { pusher -> pusher.pushKey == it.email } }
+    }.distinctUntilChanged()
 }
