@@ -31,21 +31,6 @@ object BackgroundSyncStarter {
     fun start(context: Context, vectorPreferences: VectorPreferences, activeSessionHolder: ActiveSessionHolder) {
         if (vectorPreferences.areNotificationEnabledForDevice()) {
             val activeSession = activeSessionHolder.getSafeActiveSession() ?: return
-
-            val intent = Intent(context, GuardService::class.java)
-            if (vectorPreferences.getFdroidSyncBackgroundMode() == BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_REALTIME) {
-                intent.putExtra(SyncService.EXTRA_SESSION_ID, activeSession.sessionId)
-            } else {
-                intent.putExtra(SyncService.EXTRA_SESSION_ID, "") // this assures the GuardService runs, but will not start VectorSyncService
-            }
-            intent.putExtra(SyncService.EXTRA_DELAY_SECONDS, vectorPreferences.backgroundSyncDelay())
-            try {
-                Timber.i("## Sync: starting GuardService")
-                ContextCompat.startForegroundService(context, intent)
-            } catch (ex: Throwable) {
-                Timber.e("## Sync: ERROR starting GuardService")
-            }
-
             when (vectorPreferences.getFdroidSyncBackgroundMode()) {
                 BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_BATTERY  -> {
                     // we rely on periodic worker
