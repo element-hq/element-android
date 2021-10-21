@@ -16,34 +16,30 @@
 
 package fr.gouv.tchap.features.home.contact.list
 
-import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isVisible
-import androidx.core.widget.doOnTextChanged
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.jakewharton.rxbinding3.widget.textChanges
+import fr.gouv.tchap.core.dialogs.InviteByEmailDialog
 import fr.gouv.tchap.features.userdirectory.TchapContactListSharedAction
 import fr.gouv.tchap.features.userdirectory.TchapContactListSharedActionViewModel
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.hideKeyboard
-import im.vector.app.core.extensions.isEmail
 import im.vector.app.core.extensions.setupAsSearch
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.PERMISSIONS_FOR_MEMBERS_SEARCH
 import im.vector.app.core.utils.checkPermissions
 import im.vector.app.core.utils.registerForPermissionsResult
-import im.vector.app.databinding.DialogInviteByIdBinding
 import im.vector.app.databinding.FragmentTchapContactListBinding
-import im.vector.app.features.settings.VectorLocale
 import im.vector.app.features.userdirectory.PendingSelection
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.user.model.User
@@ -131,33 +127,15 @@ class TchapContactListFragment @Inject constructor(
         tchapContactListController.setData(it)
     }
 
-    override fun onInviteByEmailClick(): Unit = withState(viewModel) {
-        val dialogLayout = requireActivity().layoutInflater.inflate(R.layout.dialog_invite_by_id, null)
-        val views = DialogInviteByIdBinding.bind(dialogLayout)
-
-        val inviteDialog = MaterialAlertDialogBuilder(requireActivity())
-                .setTitle(R.string.people_search_invite_by_id_dialog_title)
-                .setView(dialogLayout)
-                .setPositiveButton(R.string.invite) { _, _ ->
-                    val text = views.inviteByIdEditText.text.toString().lowercase(VectorLocale.applicationLocale).trim()
-
-                    if (text.isEmail()) {
-                        view?.hideKeyboard()
-                        viewModel.handle(TchapContactListAction.AddPendingSelection(PendingSelection.ThreePidPendingSelection(ThreePid.Email(text))))
-                        sharedActionViewModel.post(TchapContactListSharedAction.OnInviteByEmail(text))
+    override fun onInviteByEmailClick() {
+        InviteByEmailDialog(requireActivity()).show(
+                object : InviteByEmailDialog.Listener {
+                    override fun inviteByEmail(email: String) {
+                        viewModel.handle(TchapContactListAction.AddPendingSelection(PendingSelection.ThreePidPendingSelection(ThreePid.Email(email))))
+                        sharedActionViewModel.post(TchapContactListSharedAction.OnInviteByEmail(email))
                     }
                 }
-                .setNegativeButton(R.string.cancel, null)
-                .show()
-
-        val inviteButton = inviteDialog.getButton(DialogInterface.BUTTON_POSITIVE)
-        inviteButton.isEnabled = false
-
-        views.inviteByIdEditText.doOnTextChanged { text, _, _, _ ->
-            if (text != null) {
-                inviteButton.isEnabled = text.trim().isEmail()
-            }
-        }
+        )
     }
 
     override fun onItemClick(user: User) {
