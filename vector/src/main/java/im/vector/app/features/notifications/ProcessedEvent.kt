@@ -27,4 +27,6 @@ data class ProcessedEvent<T>(
     }
 }
 
-fun <T> List<ProcessedEvent<T>>.onlyKeptEvents() = filter { it.type == ProcessedEvent.Type.KEEP }.map { it.event }
+fun <T> List<ProcessedEvent<T>>.onlyKeptEvents() = mapNotNull { processedEvent ->
+    processedEvent.event.takeIf { processedEvent.type == ProcessedEvent.Type.KEEP }
+}
