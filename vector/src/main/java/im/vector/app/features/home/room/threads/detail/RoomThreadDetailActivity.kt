@@ -51,7 +51,6 @@ class RoomThreadDetailActivity : VectorBaseActivity<ActivityRoomThreadDetailBind
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         initToolbar()
         initFragment()
     }

@@ -12,19 +12,18 @@
         android:layout_height="wrap_content"
         android:text="@string/room_threads_filter"
         android:textSize="25sp"
-        app:layout_constraintBottom_toTopOf="@id/composerLayout"
+        app:layout_constraintBottom_toTopOf="@id/roomThreadDetailTextComposerView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <im.vector.app.features.home.room.detail.composer.TextComposerView
-        android:id="@+id/composerLayout"
+        android:id="@+id/roomThreadDetailTextComposerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?android:colorBackground"
         android:minHeight="56dp"
-        android:transitionName="composer"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

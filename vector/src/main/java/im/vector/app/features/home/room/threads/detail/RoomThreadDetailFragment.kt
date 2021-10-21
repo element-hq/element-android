@@ -21,6 +21,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import com.airbnb.mvrx.args
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentRoomThreadDetailBinding
@@ -45,6 +46,12 @@ class RoomThreadDetailFragment @Inject constructor(
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initTextComposer()
         views.testTextVeiwddasda.text = "${roomThreadDetailArgs.eventId}  --  ${roomThreadDetailArgs.roomId}"
     }
+
+    private fun initTextComposer(){
+        views.roomThreadDetailTextComposerView.views.sendButton.isVisible = true
+    }
+
 }
