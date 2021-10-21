@@ -138,7 +138,7 @@ abstract class FormEditTextItem : VectorEpoxyModel<FormEditTextItem.Holder>() {
                 }
 
         // This is a must in order to avoid extreme lag in some devices, on fast typing
-        if(holder.textInputEditText.inputType != newInputType){
+        if (holder.textInputEditText.inputType != newInputType) {
             holder.textInputEditText.inputType = newInputType
         }
     }
