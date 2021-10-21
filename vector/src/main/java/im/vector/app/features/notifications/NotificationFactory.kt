@@ -33,7 +33,7 @@ class NotificationFactory @Inject constructor(
             when {
                 events.hasNoEventsToDisplay() -> RoomNotification.Removed(roomId)
                 else                          -> {
-                    val messageEvents = events.onlyKeptEvents()
+                    val messageEvents = events.onlyKeptEvents().filterNot { it.isRedacted }
                     roomGroupMessageCreator.createRoomMessage(messageEvents, roomId, myUserDisplayName, myUserAvatarUrl)
                 }
             }
