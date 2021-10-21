@@ -460,7 +460,7 @@ class TextComposerViewModel @AssistedInject constructor(
             copy(
                     // Create a sendMode from a draft and retrieve the TimelineEvent
                     sendMode = when (currentDraft) {
-                        is UserDraft.REGULAR -> SendMode.REGULAR(currentDraft.content, false)
+                        is UserDraft.REGULAR -> SendMode.REGULAR(currentDraft.content, false, currentDraft.messageType)
                         is UserDraft.QUOTE   -> {
                             room.getTimeLineEvent(currentDraft.linkedEventId)?.let { timelineEvent ->
                                 SendMode.QUOTE(timelineEvent, currentDraft.content)
@@ -670,7 +670,7 @@ class TextComposerViewModel @AssistedInject constructor(
         session.coroutineScope.launch {
             when {
                 it.sendMode is SendMode.REGULAR && !it.sendMode.fromSharing -> {
-                    setState { copy(sendMode = it.sendMode.copy(action.draft)) }
+                    setState { copy(sendMode = it.sendMode.copy(text = action.draft, messageType = action.messageType)) }
                     room.saveDraft(UserDraft.REGULAR(action.draft, action.messageType))
                 }
                 it.sendMode is SendMode.REPLY                               -> {

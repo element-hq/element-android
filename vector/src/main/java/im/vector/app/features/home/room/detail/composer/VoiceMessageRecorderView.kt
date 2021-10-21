@@ -109,16 +109,22 @@ class VoiceMessageRecorderView : ConstraintLayout, VoiceMessagePlaybackTracker.L
         }
     }
 
-    fun initVoiceRecordingViews() {
-        recordingState = RecordingState.NONE
+    fun initVoiceRecordingViews(isInPlaybackMode: Boolean = false) {
+        if (isInPlaybackMode) {
+            recordingState = RecordingState.PLAYBACK
 
-        hideRecordingViews(null)
-        stopRecordingTicker()
+            showPlaybackViews()
+        } else {
+            recordingState = RecordingState.NONE
 
-        views.voiceMessageMicButton.isVisible = true
-        views.voiceMessageSendButton.isVisible = false
+            hideRecordingViews(null)
+            stopRecordingTicker()
 
-        views.voicePlaybackWaveform.post { views.voicePlaybackWaveform.recreate() }
+            views.voiceMessageMicButton.isVisible = true
+            views.voiceMessageSendButton.isVisible = false
+
+            views.voicePlaybackWaveform.post { views.voicePlaybackWaveform.recreate() }
+        }
     }
 
     private fun initListeners() {
@@ -509,8 +515,10 @@ class VoiceMessageRecorderView : ConstraintLayout, VoiceMessagePlaybackTracker.L
     }
 
     private fun showPlaybackViews() {
+        views.voiceMessagePlaybackLayout.isVisible = true
         views.voiceMessagePlaybackTimerIndicator.isVisible = false
         views.voicePlaybackControlButton.isVisible = true
+        views.voiceMessageSendButton.isVisible = true
         views.voicePlaybackWaveform.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
         callback?.onVoiceRecordingPlaybackModeOn()
     }

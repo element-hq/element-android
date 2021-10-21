@@ -110,6 +110,7 @@ sealed class RoomDetailAction : VectorViewModelAction {
     data class RoomUpgradeSuccess(val replacementRoomId: String) : RoomDetailAction()
 
     // Voice Message
+    data class InitializeVoiceRecorder(val attachmentData: ContentAttachmentData) : RoomDetailAction()
     object StartRecordingVoiceMessage : RoomDetailAction()
     data class EndRecordingVoiceMessage(val isCancelled: Boolean) : RoomDetailAction()
     object PauseRecordingVoiceMessage : RoomDetailAction()

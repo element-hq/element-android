@@ -72,6 +72,7 @@ import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.LocalEcho
@@ -341,6 +342,7 @@ class RoomDetailViewModel @AssistedInject constructor(
             is RoomDetailAction.DoNotShowPreviewUrlFor           -> handleDoNotShowPreviewUrlFor(action)
             RoomDetailAction.RemoveAllFailedMessages             -> handleRemoveAllFailedMessages()
             RoomDetailAction.ResendAll                           -> handleResendAll()
+            is RoomDetailAction.InitializeVoiceRecorder          -> handleInitializeVoiceRecorder(action.attachmentData)
             RoomDetailAction.StartRecordingVoiceMessage          -> handleStartRecordingVoiceMessage()
             is RoomDetailAction.EndRecordingVoiceMessage         -> handleEndRecordingVoiceMessage(action.isCancelled)
             is RoomDetailAction.PlayOrPauseVoicePlayback         -> handlePlayOrPauseVoicePlayback(action)
@@ -611,6 +613,10 @@ class RoomDetailViewModel @AssistedInject constructor(
         }
     }
 
+    private fun handleInitializeVoiceRecorder(attachmentData: ContentAttachmentData) {
+        voiceMessageHelper.initializeRecorder(attachmentData)
+    }
+
     private fun handleStartRecordingVoiceMessage() {
         try {
             voiceMessageHelper.startRecording()
@@ -660,7 +666,8 @@ class RoomDetailViewModel @AssistedInject constructor(
     private fun handleRoomDetailEntersBackground(isVoiceMessageActive: Boolean) {
         if (isVoiceMessageActive) {
             val audioType = voiceMessageHelper.stopAllVoiceActions(deleteRecord = false)
-            _viewEvents.post(RoomDetailViewEvents.SaveDraft(audioType?.contentUri?.toString(), MessageType.MSGTYPE_AUDIO))
+            val audioJsonString = audioType?.toContentAttachmentData()?.toJsonString()
+            _viewEvents.post(RoomDetailViewEvents.SaveDraft(audioJsonString, MessageType.MSGTYPE_AUDIO))
         } else {
             _viewEvents.post(RoomDetailViewEvents.SaveDraft(null, MessageType.MSGTYPE_TEXT))
         }

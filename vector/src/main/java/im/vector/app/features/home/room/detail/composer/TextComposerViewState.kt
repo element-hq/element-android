@@ -18,6 +18,7 @@ package im.vector.app.features.home.room.detail.composer
 
 import com.airbnb.mvrx.MavericksState
 import im.vector.app.features.home.room.detail.RoomDetailArgs
+import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 
 /**
@@ -32,6 +33,7 @@ sealed class SendMode(open val text: String) {
     data class REGULAR(
             override val text: String,
             val fromSharing: Boolean,
+            val messageType: String = MessageType.MSGTYPE_TEXT,
             // This is necessary for forcing refresh on selectSubscribe
             private val ts: Long = System.currentTimeMillis()
     ) : SendMode(text)

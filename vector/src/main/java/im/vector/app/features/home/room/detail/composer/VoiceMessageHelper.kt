@@ -30,6 +30,7 @@ import im.vector.lib.multipicker.entity.MultiPickerAudioType
 import im.vector.lib.multipicker.utils.toMultiPickerAudioType
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
+import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import timber.log.Timber
 import java.io.File
 import java.io.FileInputStream
@@ -51,6 +52,15 @@ class VoiceMessageHelper @Inject constructor(
 
     private var amplitudeTicker: CountUpTimer? = null
     private var playbackTicker: CountUpTimer? = null
+
+    fun initializeRecorder(attachmentData: ContentAttachmentData) {
+        voiceRecorder.initializeRecord(attachmentData)
+        amplitudeList.clear()
+        attachmentData.waveform?.let {
+            amplitudeList.addAll(it)
+            playbackTracker.updateCurrentRecording(VoiceMessagePlaybackTracker.RECORDING_ID, amplitudeList)
+        }
+    }
 
     fun startRecording() {
         stopPlayback()

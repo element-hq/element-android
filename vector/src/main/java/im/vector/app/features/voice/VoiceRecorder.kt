@@ -16,9 +16,16 @@
 
 package im.vector.app.features.voice
 
+import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import java.io.File
 
 interface VoiceRecorder {
+    /**
+     * Initialize recording with a pre-recorded file.
+     * @param attachmentData data of the recorded file
+     */
+    fun initializeRecord(attachmentData: ContentAttachmentData)
+
     /**
      * Start the recording
      */

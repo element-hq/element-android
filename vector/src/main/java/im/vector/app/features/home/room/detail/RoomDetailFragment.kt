@@ -389,7 +389,7 @@ class RoomDetailFragment @Inject constructor(
                 return@onEach
             }
             when (mode) {
-                is SendMode.REGULAR -> renderRegularMode(mode.text)
+                is SendMode.REGULAR -> renderRegularMode(mode.text, mode.messageType)
                 is SendMode.EDIT    -> renderSpecialMode(mode.timelineEvent, R.drawable.ic_edit, R.string.edit, mode.text)
                 is SendMode.QUOTE   -> renderSpecialMode(mode.timelineEvent, R.drawable.ic_quote, R.string.quote, mode.text)
                 is SendMode.REPLY   -> renderSpecialMode(mode.timelineEvent, R.drawable.ic_reply, R.string.reply, mode.text)
@@ -1019,11 +1019,20 @@ class RoomDetailFragment @Inject constructor(
                 .show()
     }
 
-    private fun renderRegularMode(text: String) {
-        autoCompleter.exitSpecialMode()
-        views.composerLayout.collapse()
-        views.composerLayout.setTextIfDifferent(text)
-        views.composerLayout.views.sendButton.contentDescription = getString(R.string.send)
+    private fun renderRegularMode(content: String, messageType: String) {
+        if (messageType == MessageType.MSGTYPE_AUDIO) {
+            ContentAttachmentData.fromJsonString(content)?.let { audioAttachmentData ->
+                views.voiceMessageRecorderView.isVisible = true
+                roomDetailViewModel.handle(RoomDetailAction.InitializeVoiceRecorder(audioAttachmentData))
+                textComposerViewModel.handle(TextComposerAction.OnVoiceRecordingStateChanged(true))
+                views.voiceMessageRecorderView.initVoiceRecordingViews(isInPlaybackMode = true)
+            }
+        } else {
+            autoCompleter.exitSpecialMode()
+            views.composerLayout.collapse()
+            views.composerLayout.setTextIfDifferent(content)
+            views.composerLayout.views.sendButton.contentDescription = getString(R.string.send)
+        }
     }
 
     private fun renderSpecialMode(event: TimelineEvent,
@@ -1111,8 +1120,6 @@ class RoomDetailFragment @Inject constructor(
                         isVoiceMessageActive = views.voiceMessageRecorderView.isActive()
                 )
         )
-
-        views.voiceMessageRecorderView.initVoiceRecordingViews()
     }
 
     private val attachmentFileActivityResultLauncher = registerStartForActivityResult {
