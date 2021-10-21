@@ -37,6 +37,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
 import android.widget.ImageView
 import android.widget.TextView
@@ -514,6 +515,7 @@ class RoomDetailFragment @Inject constructor(
     private fun onCannotRecord() {
         // Update the UI, cancel the animation
         views.voiceMessageRecorderView.initVoiceRecordingViews()
+        activity?.window?.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
     private fun acceptIncomingCall(event: RoomDetailViewEvents.DisplayAndAcceptCall) {
@@ -698,6 +700,7 @@ class RoomDetailFragment @Inject constructor(
                     roomDetailViewModel.handle(RoomDetailAction.StartRecordingVoiceMessage)
                     textComposerViewModel.handle(TextComposerAction.OnVoiceRecordingStateChanged(true))
                     vibrate(requireContext())
+                    activity?.window?.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
                     true
                 } else {
                     // Permission dialog is displayed
@@ -708,6 +711,7 @@ class RoomDetailFragment @Inject constructor(
             override fun onVoiceRecordingEnded(isCancelled: Boolean) {
                 roomDetailViewModel.handle(RoomDetailAction.EndRecordingVoiceMessage(isCancelled))
                 textComposerViewModel.handle(TextComposerAction.OnVoiceRecordingStateChanged(false))
+                activity?.window?.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
             }
 
             override fun onVoiceRecordingPlaybackModeOn() {
@@ -1126,6 +1130,7 @@ class RoomDetailFragment @Inject constructor(
         // We should improve the UX to support going into playback mode when paused and delete the media when the view is destroyed.
         roomDetailViewModel.handle(RoomDetailAction.EndAllVoiceActions(deleteRecord = false))
         views.voiceMessageRecorderView.initVoiceRecordingViews()
+        activity?.window?.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
     private val attachmentFileActivityResultLauncher = registerStartForActivityResult {
