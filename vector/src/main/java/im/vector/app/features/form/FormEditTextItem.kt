@@ -130,12 +130,18 @@ abstract class FormEditTextItem : VectorEpoxyModel<FormEditTextItem.Holder>() {
      * especially when we want to use a single line, we set the InputType to InputType.TYPE_CLASS_TEXT
      * while the default for the EditText is InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_MULTI_LINE
      */
-    private fun configureInputType(holder: Holder) = holder.textInputEditText.setRawInputType(
-            inputType ?: when (singleLine) {
-                true  -> InputType.TYPE_CLASS_TEXT
-                false -> InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_MULTI_LINE
-            }
-    )
+    private fun configureInputType(holder: Holder) {
+        val newInputType =
+                inputType ?: when (singleLine) {
+                    true  -> InputType.TYPE_CLASS_TEXT
+                    false -> InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_MULTI_LINE
+                }
+
+        // This is a must in order to avoid extreme lag in some devices, on fast typing
+        if (holder.textInputEditText.inputType != newInputType) {
+            holder.textInputEditText.inputType = newInputType
+        }
+    }
 
     /**
      * Configure the imeOptions of the EditText, when imeOptions are not defined by the developer
