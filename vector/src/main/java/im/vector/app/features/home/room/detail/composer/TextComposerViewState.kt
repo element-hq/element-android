@@ -49,8 +49,8 @@ data class TextComposerViewState(
         val sendMode: SendMode = SendMode.REGULAR("", false)
 ) : MavericksState {
 
-    val isComposerVisible: Boolean
-        get() = canSendMessage && !isVoiceRecording
+    val isComposerVisible = canSendMessage && !isVoiceRecording
+    val isVoiceMessageRecorderVisible = canSendMessage && !isSendButtonVisible
 
     constructor(args: RoomDetailArgs) : this(roomId = args.roomId)
 }
