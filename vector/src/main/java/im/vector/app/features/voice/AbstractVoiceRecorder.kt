@@ -19,6 +19,8 @@ package im.vector.app.features.voice
 import android.content.Context
 import android.media.MediaRecorder
 import android.os.Build
+import org.matrix.android.sdk.api.extensions.tryOrNull
+import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import java.io.File
 import java.io.FileOutputStream
 
@@ -55,6 +57,19 @@ abstract class AbstractVoiceRecorder(
             @Suppress("DEPRECATION")
             MediaRecorder()
         }
+    }
+
+    override fun initializeRecord(attachmentData: ContentAttachmentData) {
+        outputFile = File.createTempFile("Voice message", ".$filenameExt", outputDirectory)
+                .also {
+                    tryOrNull {
+                        context.contentResolver.openInputStream(attachmentData.queryUri)?.use { inputStream ->
+                            it.outputStream().use { outputStream ->
+                                inputStream.copyTo(outputStream)
+                            }
+                        }
+                    }
+                }
     }
 
     override fun startRecord() {

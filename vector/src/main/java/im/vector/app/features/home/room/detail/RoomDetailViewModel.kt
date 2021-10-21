@@ -71,6 +71,7 @@ import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.LocalEcho
@@ -335,7 +336,6 @@ class RoomDetailViewModel @AssistedInject constructor(
                 }
                 _viewEvents.post(RoomDetailViewEvents.OpenRoom(action.replacementRoomId, closeCurrentRoom = true))
             }
-            is RoomDetailAction.OnRoomDetailEntersBackground     -> handleRoomDetailEntersBackground(action.isVoiceMessageActive)
         }.exhaustive
     }
 
