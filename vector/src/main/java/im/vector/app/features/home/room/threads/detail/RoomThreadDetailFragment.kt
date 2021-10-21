@@ -18,27 +18,20 @@ package im.vector.app.features.home.room.threads.detail
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.airbnb.mvrx.args
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentRoomThreadDetailBinding
-import kotlinx.parcelize.Parcelize
+import im.vector.app.features.home.room.threads.detail.arguments.RoomThreadDetailArgs
 import org.matrix.android.sdk.api.session.Session
 import javax.inject.Inject
 
-@Parcelize
-data class RoomThreadDetailArgs(
-        val roomId: String,
-        val eventId: String? = null,
-) : Parcelable
-
 class RoomThreadDetailFragment @Inject constructor(
         private val session: Session
-) :
-        VectorBaseFragment<FragmentRoomThreadDetailBinding>() {
+) : VectorBaseFragment<FragmentRoomThreadDetailBinding>() {
+
     private val roomThreadDetailArgs: RoomThreadDetailArgs by args()
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentRoomThreadDetailBinding {

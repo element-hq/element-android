@@ -24,8 +24,15 @@ import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityRoomThreadDetailBinding
+import im.vector.app.features.home.AvatarRenderer
+import im.vector.app.features.home.room.threads.detail.arguments.RoomThreadDetailArgs
+import org.matrix.android.sdk.api.util.MatrixItem
+import javax.inject.Inject
 
 class RoomThreadDetailActivity : VectorBaseActivity<ActivityRoomThreadDetailBinding>() {
+
+    @Inject
+    lateinit var avatarRenderer: AvatarRenderer
 
 //    private val roomThreadDetailFragment: RoomThreadDetailFragment?
 //        get() {
@@ -44,20 +51,34 @@ class RoomThreadDetailActivity : VectorBaseActivity<ActivityRoomThreadDetailBind
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        initToolbar()
+        initFragment()
+    }
+
+    private fun initToolbar() {
         configureToolbar(views.roomThreadDetailToolbar)
-        if (isFirstCreation()) {
-            val roomThreadDetailArgs: RoomThreadDetailArgs? = intent?.extras?.getParcelable(EXTRA_ROOM_THREAD_DETAIL_ARGS)
-            replaceFragment(R.id.roomThreadDetailFragmentContainer, RoomThreadDetailFragment::class.java, roomThreadDetailArgs, FRAGMENT_TAG)
+        getRoomThreadDetailArgs()?.let {
+            val matrixItem = MatrixItem.RoomItem(it.roomId, it.displayName, it.avatarUrl)
+            avatarRenderer.render(matrixItem, views.roomThreadDetailToolbarImageView)
         }
     }
 
+    private fun initFragment() {
+        if (isFirstCreation()) {
+            replaceFragment(R.id.roomThreadDetailFragmentContainer, RoomThreadDetailFragment::class.java, getRoomThreadDetailArgs(), FRAGMENT_TAG)
+        }
+    }
+
+    private fun getRoomThreadDetailArgs(): RoomThreadDetailArgs? = intent?.extras?.getParcelable(ROOM_THREAD_DETAIL_ARGS)
+
     companion object {
-        private const val FRAGMENT_TAG = "RoomThreadDetailFragment"
-        const val EXTRA_ROOM_THREAD_DETAIL_ARGS = "EXTRA_ROOM_THREAD_DETAIL_ARGS"
+        private val FRAGMENT_TAG = RoomThreadDetailFragment::class.simpleName
+        const val ROOM_THREAD_DETAIL_ARGS = "ROOM_THREAD_DETAIL_ARGS"
 
         fun newIntent(context: Context, roomThreadDetailArgs: RoomThreadDetailArgs): Intent {
             return Intent(context, RoomThreadDetailActivity::class.java).apply {
-                putExtra(EXTRA_ROOM_THREAD_DETAIL_ARGS, roomThreadDetailArgs)
+                putExtra(ROOM_THREAD_DETAIL_ARGS, roomThreadDetailArgs)
             }
         }
     }

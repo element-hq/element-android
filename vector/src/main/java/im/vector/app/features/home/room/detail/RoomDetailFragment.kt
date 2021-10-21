@@ -161,7 +161,7 @@ import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlRetriever
 import im.vector.app.features.home.room.detail.upgrade.MigrateRoomBottomSheet
 import im.vector.app.features.home.room.detail.views.RoomDetailLazyLoadedViews
 import im.vector.app.features.home.room.detail.widget.RoomWidgetsBottomSheet
-import im.vector.app.features.home.room.threads.detail.RoomThreadDetailArgs
+import im.vector.app.features.home.room.threads.detail.arguments.RoomThreadDetailArgs
 import im.vector.app.features.home.room.threads.detail.RoomThreadDetailActivity
 import im.vector.app.features.html.EventHtmlRenderer
 import im.vector.app.features.html.PillImageSpan
@@ -1962,7 +1962,11 @@ class RoomDetailFragment @Inject constructor(
             is EventSharedAction.ReplyInThread              -> {
                 if (!views.voiceMessageRecorderView.isActive()) {
                     context?.let {
-                        val roomThreadDetailArgs = RoomThreadDetailArgs(roomDetailArgs.roomId,action.eventId)
+                        val roomThreadDetailArgs = RoomThreadDetailArgs(
+                                roomId = roomDetailArgs.roomId,
+                                displayName = roomDetailViewModel.getRoomSummary()?.displayName,
+                                avatarUrl = roomDetailViewModel.getRoomSummary()?.avatarUrl,
+                                eventId = action.eventId)
                         startActivity(RoomThreadDetailActivity.newIntent(it, roomThreadDetailArgs))
                     }
                 } else {
