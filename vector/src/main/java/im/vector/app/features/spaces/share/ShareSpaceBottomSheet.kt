@@ -25,8 +25,9 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.core.di.ScreenComponent
+
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.core.utils.startSharePlainTextIntent
@@ -35,6 +36,7 @@ import im.vector.app.features.invite.InviteUsersToRoomActivity
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class ShareSpaceBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetSpaceInviteBinding>(){
 
     @Parcelize
@@ -46,10 +48,6 @@ class ShareSpaceBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetSpa
     override val showExpanded = true
 
     private val viewModel: ShareSpaceViewModel by fragmentViewModel(ShareSpaceViewModel::class)
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): BottomSheetSpaceInviteBinding {
         return BottomSheetSpaceInviteBinding.inflate(inflater, container, false)

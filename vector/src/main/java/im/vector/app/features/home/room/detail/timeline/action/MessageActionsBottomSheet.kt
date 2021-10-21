@@ -21,7 +21,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
-import im.vector.app.core.di.ScreenComponent
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
@@ -32,6 +32,7 @@ import javax.inject.Inject
 /**
  * Bottom sheet fragment that shows a message preview with list of contextual actions
  */
+@AndroidEntryPoint
 class MessageActionsBottomSheet :
         VectorBaseBottomSheetDialogFragment<BottomSheetGenericListBinding>(),
         MessageActionsEpoxyController.MessageActionsEpoxyControllerListener {
@@ -43,10 +44,6 @@ class MessageActionsBottomSheet :
     override val showExpanded = true
 
     private lateinit var sharedActionViewModel: MessageSharedActionViewModel
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): BottomSheetGenericListBinding {
         return BottomSheetGenericListBinding.inflate(inflater, container, false)

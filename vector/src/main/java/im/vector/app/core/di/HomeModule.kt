@@ -16,25 +16,22 @@
 
 package im.vector.app.core.di
 
-import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.RecyclerView
+import android.os.Handler
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityComponent
-import dagger.hilt.android.scopes.ActivityScoped
-import im.vector.app.core.glide.GlideApp
+import im.vector.app.features.home.room.detail.timeline.TimelineEventControllerHandler
+import im.vector.app.features.home.room.detail.timeline.helper.TimelineAsyncHelper
 
 @Module
 @InstallIn(ActivityComponent::class)
-object ScreenModule {
-
+object HomeModule {
     @Provides
     @JvmStatic
-    fun providesGlideRequests(context: AppCompatActivity) = GlideApp.with(context)
+    @TimelineEventControllerHandler
+    fun providesTimelineBackgroundHandler(): Handler {
+        return TimelineAsyncHelper.getBackgroundHandler()
+    }
 
-    @Provides
-    @JvmStatic
-    @ActivityScoped
-    fun providesSharedViewPool() = RecyclerView.RecycledViewPool()
 }

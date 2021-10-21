@@ -27,8 +27,9 @@ import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.core.di.ScreenComponent
+
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
@@ -36,6 +37,7 @@ import im.vector.app.databinding.BottomSheetRoomUpgradeBinding
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class MigrateRoomBottomSheet :
         VectorBaseBottomSheetDialogFragment<BottomSheetRoomUpgradeBinding>(){
 
@@ -54,14 +56,9 @@ class MigrateRoomBottomSheet :
 
     override val showExpanded = true
 
-    @Inject
-    lateinit var errorFormatter: ErrorFormatter
+    @Inject lateinit var errorFormatter: ErrorFormatter
 
     val viewModel: MigrateRoomViewModel by fragmentViewModel()
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
 
     override fun invalidate() = withState(viewModel) { state ->
         views.headerText.setText(if (state.isPublic) R.string.upgrade_public_room else R.string.upgrade_private_room)

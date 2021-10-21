@@ -45,12 +45,12 @@ import com.bumptech.glide.util.Util
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.snackbar.Snackbar
 import com.jakewharton.rxbinding3.view.clicks
-import dagger.hilt.EntryPoints
+import dagger.hilt.android.EntryPointAccessors
 import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
+import im.vector.app.core.di.ActivityEntryPoint
 import im.vector.app.core.di.SingletonEntryPoint
-import im.vector.app.core.di.DaggerScreenComponent
 import im.vector.app.core.di.HasVectorInjector
 import im.vector.app.core.dialogs.DialogLocker
 import im.vector.app.core.dialogs.UnrecognizedCertificateDialog
@@ -184,19 +184,19 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
     @CallSuper
     override fun onCreate(savedInstanceState: Bundle?) {
         Timber.i("onCreate Activity ${javaClass.simpleName}")
-        val screenComponentDeps = singletonEntryPoint()
-        val screenComponent = DaggerScreenComponent.factory().create(screenComponentDeps, this)
+        val singletonEntryPoint = singletonEntryPoint()
+        val activityEntryPoint = EntryPointAccessors.fromActivity(this, ActivityEntryPoint::class.java)
         ThemeUtils.setActivityTheme(this, getOtherThemes())
-        fragmentFactory = screenComponent.fragmentFactory()
+        fragmentFactory = activityEntryPoint.fragmentFactory()
         supportFragmentManager.fragmentFactory = fragmentFactory
+        viewModelFactory = activityEntryPoint.viewModelFactory()
         super.onCreate(savedInstanceState)
-        viewModelFactory = screenComponent.viewModelFactory()
         configurationViewModel = viewModelProvider.get(ConfigurationViewModel::class.java)
-        bugReporter = screenComponentDeps.bugReporter()
-        pinLocker = screenComponentDeps.pinLocker()
-        navigator = screenComponentDeps.navigator()
-        activeSessionHolder = screenComponentDeps.activeSessionHolder()
-        vectorPreferences = screenComponentDeps.vectorPreferences()
+        bugReporter = singletonEntryPoint.bugReporter()
+        pinLocker = singletonEntryPoint.pinLocker()
+        navigator = singletonEntryPoint.navigator()
+        activeSessionHolder = singletonEntryPoint.activeSessionHolder()
+        vectorPreferences = singletonEntryPoint.vectorPreferences()
         configurationViewModel.activityRestarter.observe(this) {
             if (!it.hasBeenHandled) {
                 // Recreate the Activity because configuration has changed
@@ -208,7 +208,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
                 navigator.openPinCode(this, pinStartForActivityResult, PinMode.AUTH)
             }
         }
-        sessionListener = screenComponentDeps.sessionListener()
+        sessionListener = singletonEntryPoint.sessionListener()
         sessionListener.globalErrorLiveData.observeEvent(this) {
             handleGlobalError(it)
         }

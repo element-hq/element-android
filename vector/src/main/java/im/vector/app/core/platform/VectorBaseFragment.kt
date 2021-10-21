@@ -35,12 +35,10 @@ import com.bumptech.glide.util.Util.assertMainThread
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.jakewharton.rxbinding3.view.clicks
-import dagger.hilt.EntryPoints
+import dagger.hilt.android.EntryPointAccessors
 import im.vector.app.R
-import im.vector.app.core.di.SingletonEntryPoint
-import im.vector.app.core.di.DaggerScreenComponent
-import im.vector.app.core.di.HasScreenInjector
-import im.vector.app.core.di.ScreenComponent
+import im.vector.app.core.di.ActivityEntryPoint
+
 import im.vector.app.core.dialogs.UnrecognizedCertificateDialog
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.singletonEntryPoint
@@ -53,7 +51,7 @@ import io.reactivex.disposables.Disposable
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
-abstract class VectorBaseFragment<VB : ViewBinding> : Fragment(), MavericksView, HasScreenInjector {
+abstract class VectorBaseFragment<VB : ViewBinding> : Fragment(), MavericksView {
 
     protected val vectorBaseActivity: VectorBaseActivity<*> by lazy {
         activity as VectorBaseActivity<*>
@@ -62,8 +60,6 @@ abstract class VectorBaseFragment<VB : ViewBinding> : Fragment(), MavericksView,
     /* ==========================================================================================
      * Navigator and other common objects
      * ========================================================================================== */
-
-    private lateinit var screenComponent: ScreenComponent
 
     protected lateinit var navigator: Navigator
     protected lateinit var errorFormatter: ErrorFormatter
@@ -98,13 +94,13 @@ abstract class VectorBaseFragment<VB : ViewBinding> : Fragment(), MavericksView,
      * ========================================================================================== */
 
     override fun onAttach(context: Context) {
-        val screenComponentDeps = context.singletonEntryPoint()
-        screenComponent = DaggerScreenComponent.factory().create(screenComponentDeps, vectorBaseActivity)
-        navigator = screenComponent.navigator()
-        errorFormatter = screenComponent.errorFormatter()
-        unrecognizedCertificateDialog = screenComponent.unrecognizedCertificateDialog()
-        viewModelFactory = screenComponent.viewModelFactory()
-        childFragmentManager.fragmentFactory = screenComponent.fragmentFactory()
+        val singletonEntryPoint = context.singletonEntryPoint()
+        val activityEntryPoint = EntryPointAccessors.fromActivity(vectorBaseActivity,ActivityEntryPoint::class.java)
+        navigator = singletonEntryPoint.navigator()
+        errorFormatter = singletonEntryPoint.errorFormatter()
+        unrecognizedCertificateDialog = singletonEntryPoint.unrecognizedCertificateDialog()
+        viewModelFactory = activityEntryPoint.viewModelFactory()
+        childFragmentManager.fragmentFactory = activityEntryPoint.fragmentFactory()
         super.onAttach(context)
     }
 
@@ -163,10 +159,6 @@ abstract class VectorBaseFragment<VB : ViewBinding> : Fragment(), MavericksView,
         Timber.i("onDestroy Fragment ${javaClass.simpleName}")
         uiDisposables.dispose()
         super.onDestroy()
-    }
-
-    override fun injector(): ScreenComponent {
-        return screenComponent
     }
 
     /* ==========================================================================================

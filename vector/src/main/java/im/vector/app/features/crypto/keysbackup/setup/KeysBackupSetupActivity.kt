@@ -26,7 +26,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
-import im.vector.app.core.di.ScreenComponent
+
 import im.vector.app.core.dialogs.ExportKeysDialog
 import im.vector.app.core.extensions.observeEvent
 import im.vector.app.core.extensions.queryExportKeys

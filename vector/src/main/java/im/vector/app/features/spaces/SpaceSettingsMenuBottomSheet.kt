@@ -26,7 +26,8 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
-import im.vector.app.core.di.ScreenComponent
+import dagger.hilt.android.AndroidEntryPoint
+
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.databinding.BottomSheetSpaceSettingsBinding
@@ -46,6 +47,7 @@ data class SpaceBottomSheetSettingsArgs(
         val spaceId: String
 ) : Parcelable
 
+@AndroidEntryPoint
 class SpaceSettingsMenuBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetSpaceSettingsBinding>(){
 
     @Inject lateinit var navigator: Navigator
@@ -63,10 +65,6 @@ class SpaceSettingsMenuBottomSheet : VectorBaseBottomSheetDialogFragment<BottomS
     var interactionListener: InteractionListener? = null
 
     override val showExpanded = true
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
 
     var isLastAdmin: Boolean = false
 

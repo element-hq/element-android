@@ -32,8 +32,9 @@ import com.airbnb.mvrx.args
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
 import com.jakewharton.rxbinding3.widget.checkedChanges
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.core.di.ScreenComponent
+
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.setTextOrHide
@@ -49,6 +50,7 @@ import me.gujun.android.span.span
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class LeaveSpaceBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetLeaveSpaceBinding>() {
 
     val settingsViewModel: SpaceMenuViewModel by parentFragmentViewModel()
@@ -59,10 +61,6 @@ class LeaveSpaceBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetLea
 
     @Inject lateinit var colorProvider: ColorProvider
     @Inject lateinit var errorFormatter: ErrorFormatter
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
 
     @Parcelize
     data class Args(

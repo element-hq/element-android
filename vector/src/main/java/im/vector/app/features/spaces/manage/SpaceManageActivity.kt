@@ -28,7 +28,7 @@ import com.airbnb.mvrx.withState
 import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.core.di.ScreenComponent
+
 import im.vector.app.core.extensions.addFragmentToBackstack
 import im.vector.app.core.extensions.commitTransaction
 import im.vector.app.core.extensions.hideKeyboard

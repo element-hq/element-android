@@ -43,7 +43,6 @@ import dagger.hilt.android.HiltAndroidApp
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.extensions.configureAndStart
 import im.vector.app.core.extensions.startSyncing
-import im.vector.app.core.extensions.singletonEntryPoint
 import im.vector.app.core.rx.RxConfig
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.configuration.VectorConfiguration
@@ -54,6 +53,7 @@ import im.vector.app.features.notifications.NotificationDrawerManager
 import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.features.pin.PinLocker
 import im.vector.app.features.popup.PopupAlertManager
+import im.vector.app.features.rageshake.VectorFileLogger
 import im.vector.app.features.rageshake.VectorUncaughtExceptionHandler
 import im.vector.app.features.room.VectorRoomDisplayNameFallbackProvider
 import im.vector.app.features.settings.VectorLocale
@@ -98,6 +98,7 @@ class VectorApplication :
     @Inject lateinit var pinLocker: PinLocker
     @Inject lateinit var callManager: WebRtcCallManager
     @Inject lateinit var invitesAcceptor: InvitesAcceptor
+    @Inject lateinit var vectorFileLogger: VectorFileLogger
 
     // font thread handler
     private var fontThreadHandler: Handler? = null
@@ -127,7 +128,7 @@ class VectorApplication :
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
         }
-        Timber.plant(singletonEntryPoint().vectorFileLogger())
+        Timber.plant(vectorFileLogger)
 
         if (BuildConfig.DEBUG) {
             Stetho.initializeWithDefaults(this)

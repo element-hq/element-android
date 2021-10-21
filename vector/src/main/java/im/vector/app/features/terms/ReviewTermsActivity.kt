@@ -22,7 +22,7 @@ import com.airbnb.mvrx.viewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.core.di.ScreenComponent
+
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.replaceFragment
