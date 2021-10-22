@@ -46,6 +46,7 @@ class SharedSecureStorageViewModelTest {
 
     private val stringProvider = FakeStringProvider()
     private val session = FakeSession()
+    val args = SharedSecureStorageActivity.Args(keyId = null, emptyList(), "alias")
 
     @Test
     fun `given a key info with passphrase when initialising then step is EnterPassphrase`() {
@@ -123,14 +124,15 @@ class SharedSecureStorageViewModelTest {
         test.assertEvents(SharedSecureStorageViewEvent.Dismiss)
     }
 
-    private fun createViewModel() = SharedSecureStorageViewModel(
-            SharedSecureStorageViewState(),
-            SharedSecureStorageActivity.Args(keyId = null, emptyList(), "alias"),
-            stringProvider.instance,
-            session
-    )
+    private fun createViewModel(): SharedSecureStorageViewModel {
+        return SharedSecureStorageViewModel(
+                SharedSecureStorageViewState(args),
+                stringProvider.instance,
+                session
+        )
+    }
 
-    private fun aViewState(hasPassphrase: Boolean, step: SharedSecureStorageViewState.Step) = SharedSecureStorageViewState(
+    private fun aViewState(hasPassphrase: Boolean, step: SharedSecureStorageViewState.Step) = SharedSecureStorageViewState(args).copy(
             ready = true,
             hasPassphrase = hasPassphrase,
             checkingSSSSAction = Uninitialized,
