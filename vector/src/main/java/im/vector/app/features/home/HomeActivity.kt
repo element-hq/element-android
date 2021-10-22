@@ -257,6 +257,9 @@ class HomeActivity :
                         HomeActivitySharedAction.SendSpaceFeedBack    -> {
                             bugReporter.openBugReportScreen(this, ReportType.SPACE_BETA_FEEDBACK)
                         }
+                        is HomeActivitySharedAction.InviteByEmail    -> {
+                            // TODO
+                        }
                     }.exhaustive
                 }
                 .disposeOnDestroy()

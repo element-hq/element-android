@@ -23,6 +23,7 @@ import android.view.ViewGroup
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
+import fr.gouv.tchap.core.dialogs.InviteByEmailDialog
 import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
@@ -131,6 +132,13 @@ class HomeDrawerFragment @Inject constructor(
     }
 
     override fun inviteByEmail() {
-        // Todo: handle invite by email action
+        sharedActionViewModel.post(HomeActivitySharedAction.CloseDrawer)
+        InviteByEmailDialog(requireActivity()).show(
+                object : InviteByEmailDialog.Listener {
+                    override fun inviteByEmail(email: String) {
+                        sharedActionViewModel.post(HomeActivitySharedAction.InviteByEmail(email))
+                    }
+                }
+        )
     }
 }
