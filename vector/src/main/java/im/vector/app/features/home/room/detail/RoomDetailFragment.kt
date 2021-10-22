@@ -1438,7 +1438,7 @@ class RoomDetailFragment @Inject constructor(
             lazyLoadedViews.inviteView(false)?.isVisible = false
             if (mainState.tombstoneEvent == null) {
                 views.composerLayout.isInvisible = !textComposerState.isComposerVisible
-                views.voiceMessageRecorderView.isVisible = !textComposerState.isSendButtonVisible
+                views.voiceMessageRecorderView.isVisible = textComposerState.isVoiceMessageRecorderVisible
                 views.composerLayout.views.sendButton.isInvisible = !textComposerState.isSendButtonVisible
                 views.composerLayout.setRoomEncrypted(summary.isEncrypted)
                 // views.composerLayout.alwaysShowSendButton = !vectorPreferences.useVoiceMessage()

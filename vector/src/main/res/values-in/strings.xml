@@ -525,7 +525,7 @@ Ijinkan akses lewat halaman selanjutnya untuk menemukan pengguna ${app_name} yan
     <string name="command_description_unban_user">Cabut larangan pengguna dengan id berikut</string>
     <string name="command_description_op_user">Tentukan tingkat kuasa seorang pengguna</string>
     <string name="command_description_invite_user">Undang pengguna dengan id berikut bergabung ke ruang ini</string>
-    <string name="command_description_join_room">Gabung ke ruang dengan alias berikut</string>
+    <string name="command_description_join_room">Gabung ke ruangan dengan alamat berikut</string>
     <string name="command_description_part_room">Tinggalkan ruang</string>
     <string name="command_description_topic">Tentukan topik ruang</string>
     <string name="command_description_kick_user">Keluarkan pengguna dengan id berikut</string>

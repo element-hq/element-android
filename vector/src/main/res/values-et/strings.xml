@@ -1556,7 +1556,7 @@
     <string name="command_description_op_user">Määra kasutaja õigused</string>
     <string name="command_description_deop_user">Eemalda antud tunnusega kasutajalt haldusõigused selles jututoas</string>
     <string name="command_description_invite_user">Kutsub nimetatud kasutajatunnusega kasutaja sellesse jututuppa</string>
-    <string name="command_description_join_room">Liitu antud aadressiga jututoaga</string>
+    <string name="command_description_join_room">Liitu sellise aadressiga jututoaga</string>
     <string name="command_description_part_room">Lahku jututoast</string>
     <string name="command_description_topic">Määra jututoa teema</string>
     <string name="command_description_kick_user">Müksa selle tunnusega kasutaja jututoast välja</string>

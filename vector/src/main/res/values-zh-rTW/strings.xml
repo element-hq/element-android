@@ -988,7 +988,7 @@
     <string name="command_description_op_user">定義使用者的權限等級</string>
     <string name="command_description_deop_user">取消指定 id 的使用者的管理權</string>
     <string name="command_description_invite_user">邀請指定 id 的使用者到目前的聊天室</string>
-    <string name="command_description_join_room">加入指定別名的聊天室</string>
+    <string name="command_description_join_room">加入指定地址的聊天室</string>
     <string name="command_description_part_room">離開聊天室</string>
     <string name="command_description_topic">設定聊天室主題</string>
     <string name="command_description_kick_user">踢除指定 id 的使用者</string>

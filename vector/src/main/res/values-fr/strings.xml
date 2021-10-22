@@ -984,7 +984,7 @@
     <string name="command_description_op_user">Définit le rang d’un utilisateur</string>
     <string name="command_description_deop_user">Rétrograde l’utilisateur avec l’identifiant fourni</string>
     <string name="command_description_invite_user">Invite l’utilisateur avec l’identifiant fourni dans le salon actuel</string>
-    <string name="command_description_join_room">Rejoint le salon avec l’alias fourni</string>
+    <string name="command_description_join_room">Rejoint le salon avec l’adresse fournie</string>
     <string name="command_description_part_room">Quitte le salon</string>
     <string name="command_description_topic">Définit le sujet du salon</string>
     <string name="command_description_kick_user">Expulse l’utilisateur avec l’identifiant fourni</string>
@@ -3009,4 +3009,7 @@
     <string name="space_participants_kick_prompt_msg">L’expulsion des utilisateurs va les supprimer de cet espace
 \n
 \nPour les empêcher de revenir, vous devriez les exclure.</string>
+    <string name="a11y_presence_unavailable">Indisponible</string>
+    <string name="a11y_presence_offline">Hors ligne</string>
+    <string name="a11y_presence_online">En ligne</string>
 </resources>
