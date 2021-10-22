@@ -50,8 +50,6 @@ import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.ActivityEntryPoint
-import im.vector.app.core.di.SingletonEntryPoint
-import im.vector.app.core.di.HasVectorInjector
 import im.vector.app.core.dialogs.DialogLocker
 import im.vector.app.core.dialogs.UnrecognizedCertificateDialog
 import im.vector.app.core.extensions.exhaustive
@@ -403,10 +401,6 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
     /* ==========================================================================================
      * PRIVATE METHODS
      * ========================================================================================== */
-
-    internal fun getVectorComponent(): SingletonEntryPoint {
-        return (application as HasVectorInjector).injector()
-    }
 
     /**
      * Force to render the activity in fullscreen
