@@ -25,7 +25,6 @@ import androidx.paging.PagedList
 import com.zhuinden.monarchy.Monarchy
 import io.realm.Realm
 import io.realm.RealmQuery
-import io.realm.Sort
 import io.realm.kotlin.where
 import org.matrix.android.sdk.api.query.ActiveSpaceFilter
 import org.matrix.android.sdk.api.query.RoomCategoryFilter
@@ -80,25 +79,27 @@ internal class RoomSummaryDataSource @Inject constructor(@SessionDatabase privat
         }
     }
 
-    fun getRoomSummaries(queryParams: RoomSummaryQueryParams): List<RoomSummary> {
+    fun getRoomSummaries(queryParams: RoomSummaryQueryParams,
+                         sortOrder: RoomSortOrder = RoomSortOrder.NONE): List<RoomSummary> {
         return monarchy.fetchAllMappedSync(
-                { roomSummariesQuery(it, queryParams) },
+                { roomSummariesQuery(it, queryParams).process(sortOrder) },
                 { roomSummaryMapper.map(it) }
         )
     }
 
-    fun getRoomSummariesLive(queryParams: RoomSummaryQueryParams): LiveData<List<RoomSummary>> {
+    fun getRoomSummariesLive(queryParams: RoomSummaryQueryParams,
+                             sortOrder: RoomSortOrder = RoomSortOrder.NONE): LiveData<List<RoomSummary>> {
         return monarchy.findAllMappedWithChanges(
                 {
-                    roomSummariesQuery(it, queryParams)
-                            .sort(RoomSummaryEntityFields.LAST_ACTIVITY_TIME, Sort.DESCENDING)
+                    roomSummariesQuery(it, queryParams).process(sortOrder)
                 },
                 { roomSummaryMapper.map(it) }
         )
     }
 
-    fun getSpaceSummariesLive(queryParams: SpaceSummaryQueryParams): LiveData<List<RoomSummary>> {
-        return getRoomSummariesLive(queryParams)
+    fun getSpaceSummariesLive(queryParams: SpaceSummaryQueryParams,
+                              sortOrder: RoomSortOrder = RoomSortOrder.NONE): LiveData<List<RoomSummary>> {
+        return getRoomSummariesLive(queryParams, sortOrder)
     }
 
     fun getSpaceSummary(roomIdOrAlias: String): RoomSummary? {
@@ -122,8 +123,9 @@ internal class RoomSummaryDataSource @Inject constructor(@SessionDatabase privat
         }
     }
 
-    fun getSpaceSummaries(spaceSummaryQueryParams: SpaceSummaryQueryParams): List<RoomSummary> {
-        return getRoomSummaries(spaceSummaryQueryParams)
+    fun getSpaceSummaries(spaceSummaryQueryParams: SpaceSummaryQueryParams,
+                          sortOrder: RoomSortOrder = RoomSortOrder.NONE): List<RoomSummary> {
+        return getRoomSummaries(spaceSummaryQueryParams, sortOrder)
     }
 
     fun getRootSpaceSummaries(): List<RoomSummary> {
