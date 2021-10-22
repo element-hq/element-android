@@ -38,7 +38,6 @@ import com.jakewharton.rxbinding3.view.clicks
 import dagger.hilt.android.EntryPointAccessors
 import im.vector.app.R
 import im.vector.app.core.di.ActivityEntryPoint
-
 import im.vector.app.core.dialogs.UnrecognizedCertificateDialog
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.singletonEntryPoint
@@ -95,7 +94,7 @@ abstract class VectorBaseFragment<VB : ViewBinding> : Fragment(), MavericksView 
 
     override fun onAttach(context: Context) {
         val singletonEntryPoint = context.singletonEntryPoint()
-        val activityEntryPoint = EntryPointAccessors.fromActivity(vectorBaseActivity,ActivityEntryPoint::class.java)
+        val activityEntryPoint = EntryPointAccessors.fromActivity(vectorBaseActivity, ActivityEntryPoint::class.java)
         navigator = singletonEntryPoint.navigator()
         errorFormatter = singletonEntryPoint.errorFormatter()
         unrecognizedCertificateDialog = singletonEntryPoint.unrecognizedCertificateDialog()

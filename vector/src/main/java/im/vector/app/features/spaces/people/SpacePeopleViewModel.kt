@@ -42,7 +42,7 @@ class SpacePeopleViewModel @AssistedInject constructor(
 ) : VectorViewModel<SpacePeopleViewState, SpacePeopleViewAction, SpacePeopleViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory: MavericksAssistedViewModelFactory<SpacePeopleViewModel,SpacePeopleViewState> {
+    interface Factory : MavericksAssistedViewModelFactory<SpacePeopleViewModel, SpacePeopleViewState> {
         override fun create(initialState: SpacePeopleViewState): SpacePeopleViewModel
     }
 

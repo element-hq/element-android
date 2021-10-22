@@ -17,13 +17,10 @@
 package im.vector.app.features.workers.signout
 
 import androidx.lifecycle.MutableLiveData
-import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Uninitialized
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -69,7 +66,7 @@ class ServerBackupStatusViewModel @AssistedInject constructor(@Assisted initialS
         VectorViewModel<ServerBackupStatusViewState, EmptyAction, EmptyViewEvents>(initialState), KeysBackupStateListener {
 
     @AssistedFactory
-    interface Factory: MavericksAssistedViewModelFactory<ServerBackupStatusViewModel,ServerBackupStatusViewState> {
+    interface Factory : MavericksAssistedViewModelFactory<ServerBackupStatusViewModel, ServerBackupStatusViewState> {
         override fun create(initialState: ServerBackupStatusViewState): ServerBackupStatusViewModel
     }
 

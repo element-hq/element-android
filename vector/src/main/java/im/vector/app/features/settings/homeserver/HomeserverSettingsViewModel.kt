@@ -36,7 +36,7 @@ class HomeserverSettingsViewModel @AssistedInject constructor(
 ) : VectorViewModel<HomeServerSettingsViewState, HomeserverSettingsAction, EmptyViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory: MavericksAssistedViewModelFactory<HomeserverSettingsViewModel,HomeServerSettingsViewState> {
+    interface Factory : MavericksAssistedViewModelFactory<HomeserverSettingsViewModel, HomeServerSettingsViewState> {
         override fun create(initialState: HomeServerSettingsViewState): HomeserverSettingsViewModel
     }
 

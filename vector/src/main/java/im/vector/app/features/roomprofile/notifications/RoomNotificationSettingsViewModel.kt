@@ -35,7 +35,7 @@ class RoomNotificationSettingsViewModel @AssistedInject constructor(
 ) : VectorViewModel<RoomNotificationSettingsViewState, RoomNotificationSettingsAction, RoomNotificationSettingsViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory: MavericksAssistedViewModelFactory<RoomNotificationSettingsViewModel,RoomNotificationSettingsViewState> {
+    interface Factory : MavericksAssistedViewModelFactory<RoomNotificationSettingsViewModel, RoomNotificationSettingsViewState> {
        override fun create(initialState: RoomNotificationSettingsViewState): RoomNotificationSettingsViewModel
     }
 

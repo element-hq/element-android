@@ -23,7 +23,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
-
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.toast

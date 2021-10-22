@@ -54,7 +54,7 @@ class SpaceManageRoomsViewModel @AssistedInject constructor(
     }
 
     @AssistedFactory
-    interface Factory: MavericksAssistedViewModelFactory<SpaceManageRoomsViewModel, SpaceManageRoomViewState> {
+    interface Factory : MavericksAssistedViewModelFactory<SpaceManageRoomsViewModel, SpaceManageRoomViewState> {
         override fun create(initialState: SpaceManageRoomViewState): SpaceManageRoomsViewModel
     }
 

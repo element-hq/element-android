@@ -45,7 +45,7 @@ class SearchViewModel @AssistedInject constructor(
     private var nextBatch: String? = null
 
     @AssistedFactory
-    interface Factory: MavericksAssistedViewModelFactory<SearchViewModel,SearchViewState> {
+    interface Factory : MavericksAssistedViewModelFactory<SearchViewModel, SearchViewState> {
         override fun create(initialState: SearchViewState): SearchViewModel
     }
 

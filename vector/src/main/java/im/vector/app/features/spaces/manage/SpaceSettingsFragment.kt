@@ -79,7 +79,6 @@ class SpaceSettingsFragment @Inject constructor(
 
     override fun getMenuRes() = R.menu.vector_room_settings
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupToolbar(views.roomSettingsToolbar)

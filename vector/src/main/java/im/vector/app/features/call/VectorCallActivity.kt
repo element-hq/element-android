@@ -95,7 +95,6 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
 
     private val callViewModel: VectorCallViewModel by viewModel()
 
-
     private val dialPadCallback = object : DialPadFragment.Callback {
         override fun onDigitAppended(digit: String) {
             callViewModel.handle(VectorCallViewActions.SendDtmfDigit(digit))

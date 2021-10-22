@@ -32,7 +32,6 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-
 import im.vector.app.core.platform.ButtonStateView
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.core.utils.toast

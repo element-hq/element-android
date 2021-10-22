@@ -20,10 +20,8 @@ import android.content.Context
 import android.content.Intent
 import android.webkit.WebChromeClient
 import android.webkit.WebView
-import androidx.annotation.CallSuper
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.di.ActiveSessionHolder
-
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityVectorWebViewBinding
 import org.matrix.android.sdk.api.session.Session

@@ -18,12 +18,9 @@ package im.vector.app.features.login2
 
 import android.content.Context
 import android.net.Uri
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.viewModelScope
-import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksViewModelFactory
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -74,7 +71,7 @@ class LoginViewModel2 @AssistedInject constructor(
 ) : VectorViewModel<LoginViewState2, LoginAction2, LoginViewEvents2>(initialState) {
 
     @AssistedFactory
-    interface Factory: MavericksAssistedViewModelFactory<LoginViewModel2,LoginViewState2> {
+    interface Factory : MavericksAssistedViewModelFactory<LoginViewModel2, LoginViewState2> {
         override fun create(initialState: LoginViewState2): LoginViewModel2
     }
 

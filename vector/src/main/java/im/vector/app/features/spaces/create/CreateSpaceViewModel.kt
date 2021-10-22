@@ -75,7 +75,7 @@ class CreateSpaceViewModel @AssistedInject constructor(
     }
 
     @AssistedFactory
-    interface Factory: MavericksAssistedViewModelFactory<CreateSpaceViewModel,CreateSpaceState> {
+    interface Factory : MavericksAssistedViewModelFactory<CreateSpaceViewModel, CreateSpaceState> {
         override fun create(initialState: CreateSpaceState): CreateSpaceViewModel
     }
 
@@ -92,7 +92,7 @@ class CreateSpaceViewModel @AssistedInject constructor(
         super.onCleared()
     }
 
-    companion object : MavericksViewModelFactory<CreateSpaceViewModel, CreateSpaceState> by hiltMavericksViewModelFactory(){
+    companion object : MavericksViewModelFactory<CreateSpaceViewModel, CreateSpaceState> by hiltMavericksViewModelFactory() {
 
         override fun initialState(viewModelContext: ViewModelContext): CreateSpaceState {
             return CreateSpaceState(

@@ -51,7 +51,7 @@ class SpaceMenuViewModel @AssistedInject constructor(
 ) : VectorViewModel<SpaceMenuState, SpaceLeaveViewAction, EmptyViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory: MavericksAssistedViewModelFactory<SpaceMenuViewModel,SpaceMenuState> {
+    interface Factory : MavericksAssistedViewModelFactory<SpaceMenuViewModel, SpaceMenuState> {
         override fun create(initialState: SpaceMenuState): SpaceMenuViewModel
     }
 

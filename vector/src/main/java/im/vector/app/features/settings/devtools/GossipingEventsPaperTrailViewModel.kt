@@ -60,7 +60,7 @@ class GossipingEventsPaperTrailViewModel @AssistedInject constructor(@Assisted i
     override fun handle(action: EmptyAction) {}
 
     @AssistedFactory
-    interface Factory: MavericksAssistedViewModelFactory<GossipingEventsPaperTrailViewModel,GossipingEventsPaperTrailState> {
+    interface Factory : MavericksAssistedViewModelFactory<GossipingEventsPaperTrailViewModel, GossipingEventsPaperTrailState> {
         override fun create(initialState: GossipingEventsPaperTrailState): GossipingEventsPaperTrailViewModel
     }
 

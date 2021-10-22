@@ -23,11 +23,9 @@ import com.airbnb.mvrx.viewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-
 import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.SimpleFragmentActivity
 import im.vector.app.core.platform.WaitingViewData
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class KeysBackupManageActivity : SimpleFragmentActivity() {

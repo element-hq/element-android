@@ -39,7 +39,7 @@ class RoomUploadsViewModel @AssistedInject constructor(
 ) : VectorViewModel<RoomUploadsViewState, RoomUploadsAction, RoomUploadsViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory: MavericksAssistedViewModelFactory<RoomUploadsViewModel,RoomUploadsViewState> {
+    interface Factory : MavericksAssistedViewModelFactory<RoomUploadsViewModel, RoomUploadsViewState> {
         override fun create(initialState: RoomUploadsViewState): RoomUploadsViewModel
     }
 

@@ -46,7 +46,7 @@ class IncomingShareViewModel @AssistedInject constructor(
     VectorViewModel<IncomingShareViewState, IncomingShareAction, IncomingShareViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory: MavericksAssistedViewModelFactory<IncomingShareViewModel,IncomingShareViewState> {
+    interface Factory : MavericksAssistedViewModelFactory<IncomingShareViewModel, IncomingShareViewState> {
         override fun create(initialState: IncomingShareViewState): IncomingShareViewModel
     }
 

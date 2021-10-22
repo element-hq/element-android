@@ -85,7 +85,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
     private val eventIdFlow = MutableStateFlow(initialState.eventId)
 
     @AssistedFactory
-    interface Factory: MavericksAssistedViewModelFactory<MessageActionsViewModel,MessageActionState> {
+    interface Factory : MavericksAssistedViewModelFactory<MessageActionsViewModel, MessageActionState> {
         override fun create(initialState: MessageActionState): MessageActionsViewModel
     }
 

@@ -33,7 +33,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-
 import im.vector.app.core.dialogs.ExportKeysDialog
 import im.vector.app.core.extensions.queryExportKeys
 import im.vector.app.core.extensions.registerStartForActivityResult
@@ -43,12 +42,11 @@ import im.vector.app.features.crypto.keysbackup.setup.KeysBackupSetupActivity
 import im.vector.app.features.crypto.recover.BootstrapBottomSheet
 import im.vector.app.features.crypto.recover.SetupMode
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupState
-import javax.inject.Inject
 
 // TODO this needs to be refactored to current standard and remove legacy
 @AndroidEntryPoint
 class SignOutBottomSheetDialogFragment :
-        VectorBaseBottomSheetDialogFragment<BottomSheetLogoutAndBackupBinding>(){
+        VectorBaseBottomSheetDialogFragment<BottomSheetLogoutAndBackupBinding>() {
 
     var onSignOut: Runnable? = null
 

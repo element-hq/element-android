@@ -17,7 +17,6 @@ package im.vector.app.gplay.features.settings.troubleshoot
 
 import android.content.Intent
 import androidx.activity.result.ActivityResultLauncher
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentActivity
 import com.google.firebase.messaging.FirebaseMessaging
 import im.vector.app.R

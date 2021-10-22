@@ -60,7 +60,7 @@ class UnreadMessagesSharedViewModel @AssistedInject constructor(@Assisted initia
     VectorViewModel<UnreadMessagesState, EmptyAction, EmptyViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory: MavericksAssistedViewModelFactory<UnreadMessagesSharedViewModel,UnreadMessagesState> {
+    interface Factory : MavericksAssistedViewModelFactory<UnreadMessagesSharedViewModel, UnreadMessagesState> {
         override fun create(initialState: UnreadMessagesState): UnreadMessagesSharedViewModel
     }
 

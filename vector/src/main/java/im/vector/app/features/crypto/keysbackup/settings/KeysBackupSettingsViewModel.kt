@@ -41,7 +41,7 @@ class KeysBackupSettingsViewModel @AssistedInject constructor(@Assisted initialS
         KeysBackupStateListener {
 
     @AssistedFactory
-    interface Factory: MavericksAssistedViewModelFactory<KeysBackupSettingsViewModel,KeysBackupSettingViewState> {
+    interface Factory : MavericksAssistedViewModelFactory<KeysBackupSettingsViewModel, KeysBackupSettingViewState> {
         override fun create(initialState: KeysBackupSettingViewState): KeysBackupSettingsViewModel
     }
 

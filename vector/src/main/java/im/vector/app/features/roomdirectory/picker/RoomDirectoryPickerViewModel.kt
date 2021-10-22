@@ -17,12 +17,10 @@
 package im.vector.app.features.roomdirectory.picker
 
 import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -47,7 +45,7 @@ class RoomDirectoryPickerViewModel @AssistedInject constructor(
 ) : VectorViewModel<RoomDirectoryPickerViewState, RoomDirectoryPickerAction, EmptyViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory: MavericksAssistedViewModelFactory<RoomDirectoryPickerViewModel,RoomDirectoryPickerViewState> {
+    interface Factory : MavericksAssistedViewModelFactory<RoomDirectoryPickerViewModel, RoomDirectoryPickerViewState> {
         override fun create(initialState: RoomDirectoryPickerViewState): RoomDirectoryPickerViewModel
     }
 

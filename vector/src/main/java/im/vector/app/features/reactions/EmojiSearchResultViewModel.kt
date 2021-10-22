@@ -39,7 +39,7 @@ class EmojiSearchResultViewModel @AssistedInject constructor(
     VectorViewModel<EmojiSearchResultViewState, EmojiSearchAction, EmptyViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory: MavericksAssistedViewModelFactory<EmojiSearchResultViewModel,EmojiSearchResultViewState> {
+    interface Factory : MavericksAssistedViewModelFactory<EmojiSearchResultViewModel, EmojiSearchResultViewState> {
         override fun create(initialState: EmojiSearchResultViewState): EmojiSearchResultViewModel
     }
 

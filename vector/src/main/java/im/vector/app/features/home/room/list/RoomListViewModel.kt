@@ -19,11 +19,9 @@ package im.vector.app.features.home.room.list
 import androidx.lifecycle.MutableLiveData
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -51,7 +49,6 @@ import org.matrix.android.sdk.api.session.room.state.isPublic
 import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.flow.flow
 import timber.log.Timber
-import javax.inject.Inject
 
 class RoomListViewModel @AssistedInject constructor(
         @Assisted initialState: RoomListViewState,
@@ -63,7 +60,7 @@ class RoomListViewModel @AssistedInject constructor(
 ) : VectorViewModel<RoomListViewState, RoomListAction, RoomListViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory: MavericksAssistedViewModelFactory<RoomListViewModel, RoomListViewState> {
+    interface Factory : MavericksAssistedViewModelFactory<RoomListViewModel, RoomListViewState> {
         override fun create(initialState: RoomListViewState): RoomListViewModel
     }
 

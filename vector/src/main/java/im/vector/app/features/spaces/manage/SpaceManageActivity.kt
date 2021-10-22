@@ -28,7 +28,6 @@ import com.airbnb.mvrx.withState
 import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-
 import im.vector.app.core.extensions.addFragmentToBackstack
 import im.vector.app.core.extensions.commitTransaction
 import im.vector.app.core.extensions.hideKeyboard
@@ -43,7 +42,6 @@ import im.vector.app.features.roomprofile.RoomProfileArgs
 import im.vector.app.features.roomprofile.alias.RoomAliasFragment
 import im.vector.app.features.roomprofile.permissions.RoomPermissionsFragment
 import kotlinx.parcelize.Parcelize
-import javax.inject.Inject
 
 @Parcelize
 data class SpaceManageArgs(

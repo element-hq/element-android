@@ -40,7 +40,7 @@ class CallTransferViewModel @AssistedInject constructor(@Assisted initialState: 
     VectorViewModel<CallTransferViewState, CallTransferAction, CallTransferViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory: MavericksAssistedViewModelFactory<CallTransferViewModel,CallTransferViewState> {
+    interface Factory : MavericksAssistedViewModelFactory<CallTransferViewModel, CallTransferViewState> {
         override fun create(initialState: CallTransferViewState): CallTransferViewModel
     }
 

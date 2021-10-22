@@ -17,12 +17,9 @@
 package im.vector.app.features.contactsbook
 
 import androidx.lifecycle.viewModelScope
-import com.airbnb.mvrx.ActivityViewModelContext
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -47,7 +44,7 @@ class ContactsBookViewModel @AssistedInject constructor(@Assisted
     VectorViewModel<ContactsBookViewState, ContactsBookAction, EmptyViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory: MavericksAssistedViewModelFactory<ContactsBookViewModel,ContactsBookViewState> {
+    interface Factory : MavericksAssistedViewModelFactory<ContactsBookViewModel, ContactsBookViewState> {
         override fun create(initialState: ContactsBookViewState): ContactsBookViewModel
     }
 

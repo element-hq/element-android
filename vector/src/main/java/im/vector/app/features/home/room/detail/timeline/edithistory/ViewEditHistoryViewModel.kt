@@ -46,7 +46,7 @@ class ViewEditHistoryViewModel @AssistedInject constructor(
             ?: throw IllegalStateException("Shouldn't use this ViewModel without a room")
 
     @AssistedFactory
-    interface Factory: MavericksAssistedViewModelFactory<ViewEditHistoryViewModel,ViewEditHistoryViewState> {
+    interface Factory : MavericksAssistedViewModelFactory<ViewEditHistoryViewModel, ViewEditHistoryViewState> {
         override fun create(initialState: ViewEditHistoryViewState): ViewEditHistoryViewModel
     }
 

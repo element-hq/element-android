@@ -42,7 +42,7 @@ class InviteUsersToRoomViewModel @AssistedInject constructor(@Assisted
     private val room = session.getRoom(initialState.roomId)!!
 
     @AssistedFactory
-    interface Factory: MavericksAssistedViewModelFactory<InviteUsersToRoomViewModel,InviteUsersToRoomViewState> {
+    interface Factory : MavericksAssistedViewModelFactory<InviteUsersToRoomViewModel, InviteUsersToRoomViewState> {
         override fun create(initialState: InviteUsersToRoomViewState): InviteUsersToRoomViewModel
     }
 

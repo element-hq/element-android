@@ -126,7 +126,7 @@ class SpaceLeaveAdvancedViewModel @AssistedInject constructor(
     }
 
     @AssistedFactory
-    interface Factory: MavericksAssistedViewModelFactory<SpaceLeaveAdvancedViewModel, SpaceLeaveAdvanceViewState> {
+    interface Factory : MavericksAssistedViewModelFactory<SpaceLeaveAdvancedViewModel, SpaceLeaveAdvanceViewState> {
         override fun create(initialState: SpaceLeaveAdvanceViewState): SpaceLeaveAdvancedViewModel
     }
 

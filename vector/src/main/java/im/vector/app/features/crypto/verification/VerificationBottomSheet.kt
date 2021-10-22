@@ -30,7 +30,6 @@ import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-
 import im.vector.app.core.extensions.commitTransaction
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.registerStartForActivityResult

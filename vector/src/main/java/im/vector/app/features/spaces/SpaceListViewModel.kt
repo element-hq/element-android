@@ -67,7 +67,7 @@ class SpaceListViewModel @AssistedInject constructor(@Assisted initialState: Spa
 ) : VectorViewModel<SpaceListViewState, SpaceListAction, SpaceListViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory: MavericksAssistedViewModelFactory<SpaceListViewModel, SpaceListViewState> {
+    interface Factory : MavericksAssistedViewModelFactory<SpaceListViewModel, SpaceListViewState> {
         override fun create(initialState: SpaceListViewState): SpaceListViewModel
     }
 

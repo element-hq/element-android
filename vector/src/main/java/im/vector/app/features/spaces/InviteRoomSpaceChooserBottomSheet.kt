@@ -26,7 +26,6 @@ import com.airbnb.mvrx.args
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
-
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.databinding.BottomSheetSpaceInviteChooserBinding
 import kotlinx.parcelize.Parcelize

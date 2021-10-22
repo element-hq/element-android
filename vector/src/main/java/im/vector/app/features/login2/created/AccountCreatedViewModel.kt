@@ -39,7 +39,7 @@ class AccountCreatedViewModel @AssistedInject constructor(
 ) : VectorViewModel<AccountCreatedViewState, AccountCreatedAction, AccountCreatedViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory: MavericksAssistedViewModelFactory<AccountCreatedViewModel,AccountCreatedViewState> {
+    interface Factory : MavericksAssistedViewModelFactory<AccountCreatedViewModel, AccountCreatedViewState> {
         override fun create(initialState: AccountCreatedViewState): AccountCreatedViewModel
     }
 

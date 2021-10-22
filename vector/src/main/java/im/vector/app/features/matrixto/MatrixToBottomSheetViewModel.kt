@@ -53,7 +53,7 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
     VectorViewModel<MatrixToBottomSheetState, MatrixToAction, MatrixToViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory: MavericksAssistedViewModelFactory<MatrixToBottomSheetViewModel,MatrixToBottomSheetState> {
+    interface Factory : MavericksAssistedViewModelFactory<MatrixToBottomSheetViewModel, MatrixToBottomSheetState> {
         override fun create(initialState: MatrixToBottomSheetState): MatrixToBottomSheetViewModel
     }
 

@@ -97,7 +97,7 @@ class DevicesViewModel @AssistedInject constructor(
     var pendingAuth: UIABaseAuth? = null
 
     @AssistedFactory
-    interface Factory: MavericksAssistedViewModelFactory<DevicesViewModel,DevicesViewState> {
+    interface Factory : MavericksAssistedViewModelFactory<DevicesViewModel, DevicesViewState> {
         override fun create(initialState: DevicesViewState): DevicesViewModel
     }
 

@@ -35,7 +35,6 @@ import com.facebook.react.modules.core.PermissionListener
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityJitsiBinding
@@ -49,7 +48,6 @@ import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.util.JsonDict
 import timber.log.Timber
 import java.net.URL
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMeetActivityInterface {

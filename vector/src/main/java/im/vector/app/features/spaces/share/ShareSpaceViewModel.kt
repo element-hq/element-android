@@ -37,7 +37,7 @@ class ShareSpaceViewModel @AssistedInject constructor(
         private val session: Session) : VectorViewModel<ShareSpaceViewState, ShareSpaceAction, ShareSpaceViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory: MavericksAssistedViewModelFactory<ShareSpaceViewModel,ShareSpaceViewState> {
+    interface Factory : MavericksAssistedViewModelFactory<ShareSpaceViewModel, ShareSpaceViewState> {
         override fun create(initialState: ShareSpaceViewState): ShareSpaceViewModel
     }
 

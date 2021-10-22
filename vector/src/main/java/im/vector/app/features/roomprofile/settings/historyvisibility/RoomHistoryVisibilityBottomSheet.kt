@@ -22,7 +22,6 @@ import android.view.View
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
-
 import im.vector.app.core.ui.bottomsheet.BottomSheetGeneric
 import im.vector.app.core.ui.bottomsheet.BottomSheetGenericController
 import kotlinx.parcelize.Parcelize

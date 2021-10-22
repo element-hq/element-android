@@ -37,7 +37,6 @@ import im.vector.app.core.resources.DrawableProvider
 import im.vector.app.databinding.FragmentRecyclerviewWithSearchBinding
 import im.vector.app.features.roomprofile.members.RoomMemberListAction
 import im.vector.app.features.roomprofile.members.RoomMemberListViewModel
-import im.vector.app.features.roomprofile.members.RoomMemberListViewState
 import io.reactivex.rxkotlin.subscribeBy
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import java.util.concurrent.TimeUnit

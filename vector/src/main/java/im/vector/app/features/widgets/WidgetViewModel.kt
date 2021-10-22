@@ -17,13 +17,10 @@
 package im.vector.app.features.widgets
 
 import android.net.Uri
-import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -59,7 +56,7 @@ class WidgetViewModel @AssistedInject constructor(@Assisted val initialState: Wi
         IntegrationManagerService.Listener {
 
     @AssistedFactory
-    interface Factory: MavericksAssistedViewModelFactory<WidgetViewModel,WidgetViewState> {
+    interface Factory : MavericksAssistedViewModelFactory<WidgetViewModel, WidgetViewState> {
         override fun create(initialState: WidgetViewState): WidgetViewModel
     }
 

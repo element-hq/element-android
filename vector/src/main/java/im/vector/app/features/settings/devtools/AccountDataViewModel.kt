@@ -61,7 +61,7 @@ class AccountDataViewModel @AssistedInject constructor(@Assisted initialState: A
     }
 
     @AssistedFactory
-    interface Factory: MavericksAssistedViewModelFactory<AccountDataViewModel,AccountDataViewState> {
+    interface Factory : MavericksAssistedViewModelFactory<AccountDataViewModel, AccountDataViewState> {
         override fun create(initialState: AccountDataViewState): AccountDataViewModel
     }
 

@@ -55,7 +55,7 @@ class KeyRequestViewModel @AssistedInject constructor(
     VectorViewModel<KeyRequestViewState, KeyRequestAction, KeyRequestEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory: MavericksAssistedViewModelFactory<KeyRequestViewModel,KeyRequestViewState> {
+    interface Factory : MavericksAssistedViewModelFactory<KeyRequestViewModel, KeyRequestViewState> {
         override fun create(initialState: KeyRequestViewState): KeyRequestViewModel
     }
 

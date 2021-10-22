@@ -19,12 +19,10 @@ package im.vector.app.features.crypto.quads
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -62,7 +60,7 @@ data class SharedSecureStorageViewState(
         val resultKeyStoreAlias: String
 ) : MavericksState {
 
-    constructor(args: SharedSecureStorageActivity.Args): this(
+    constructor(args: SharedSecureStorageActivity.Args) : this(
             keyId = args.keyId,
             requestedSecrets = args.requestedSecrets,
             resultKeyStoreAlias = args.resultKeyStoreAlias
@@ -82,7 +80,7 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
     VectorViewModel<SharedSecureStorageViewState, SharedSecureStorageAction, SharedSecureStorageViewEvent>(initialState) {
 
     @AssistedFactory
-    interface Factory: MavericksAssistedViewModelFactory<SharedSecureStorageViewModel,SharedSecureStorageViewState> {
+    interface Factory : MavericksAssistedViewModelFactory<SharedSecureStorageViewModel, SharedSecureStorageViewState> {
         override fun create(initialState: SharedSecureStorageViewState): SharedSecureStorageViewModel
     }
 
@@ -90,8 +88,8 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
         setState {
             copy(userId = session.myUserId)
         }
-        val isValid = session.sharedSecretStorageService.checkShouldBeAbleToAccessSecrets(initialState.requestedSecrets, initialState.keyId) is IntegrityResult.Success
-        if (!isValid) {
+        val integrityResult = session.sharedSecretStorageService.checkShouldBeAbleToAccessSecrets(initialState.requestedSecrets, initialState.keyId)
+        if (integrityResult  !is IntegrityResult.Success) {
             _viewEvents.post(
                     SharedSecureStorageViewEvent.Error(
                             stringProvider.getString(R.string.enter_secret_storage_invalid),

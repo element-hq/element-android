@@ -15,7 +15,6 @@
  */
 package im.vector.app.features.settings.troubleshoot
 
-import android.content.Context
 import android.content.Intent
 import androidx.activity.result.ActivityResultLauncher
 import androidx.core.app.NotificationManagerCompat

@@ -29,7 +29,6 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
@@ -39,7 +38,7 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class MigrateRoomBottomSheet :
-        VectorBaseBottomSheetDialogFragment<BottomSheetRoomUpgradeBinding>(){
+        VectorBaseBottomSheetDialogFragment<BottomSheetRoomUpgradeBinding>() {
 
     enum class MigrationReason {
         MANUAL,

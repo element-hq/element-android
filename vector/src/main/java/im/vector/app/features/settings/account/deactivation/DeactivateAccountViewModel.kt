@@ -48,7 +48,7 @@ class DeactivateAccountViewModel @AssistedInject constructor(@Assisted private v
     VectorViewModel<DeactivateAccountViewState, DeactivateAccountAction, DeactivateAccountViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory: MavericksAssistedViewModelFactory<DeactivateAccountViewModel, DeactivateAccountViewState> {
+    interface Factory : MavericksAssistedViewModelFactory<DeactivateAccountViewModel, DeactivateAccountViewState> {
         override fun create(initialState: DeactivateAccountViewState): DeactivateAccountViewModel
     }
 

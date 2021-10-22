@@ -34,7 +34,6 @@ import com.airbnb.mvrx.withState
 import com.jakewharton.rxbinding3.widget.checkedChanges
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.setTextOrHide

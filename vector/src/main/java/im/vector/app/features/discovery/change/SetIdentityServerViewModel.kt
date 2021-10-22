@@ -22,8 +22,8 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.EntryPoints
 import im.vector.app.R
-import im.vector.app.core.di.SingletonEntryPoint
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.SingletonEntryPoint
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
@@ -43,7 +43,7 @@ class SetIdentityServerViewModel @AssistedInject constructor(
     VectorViewModel<SetIdentityServerState, SetIdentityServerAction, SetIdentityServerViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory: MavericksAssistedViewModelFactory<SetIdentityServerViewModel,SetIdentityServerState> {
+    interface Factory : MavericksAssistedViewModelFactory<SetIdentityServerViewModel, SetIdentityServerState> {
         override fun create(initialState: SetIdentityServerState): SetIdentityServerViewModel
     }
 
@@ -56,7 +56,6 @@ class SetIdentityServerViewModel @AssistedInject constructor(
                     defaultIdentityServerUrl = session.identityService().getDefaultIdentityServer()
             )
         }
-
     }
 
     var currentWantedUrl: String? = null

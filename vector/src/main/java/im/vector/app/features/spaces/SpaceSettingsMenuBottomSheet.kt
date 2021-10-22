@@ -27,7 +27,6 @@ import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
-
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.databinding.BottomSheetSpaceSettingsBinding
@@ -48,7 +47,7 @@ data class SpaceBottomSheetSettingsArgs(
 ) : Parcelable
 
 @AndroidEntryPoint
-class SpaceSettingsMenuBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetSpaceSettingsBinding>(){
+class SpaceSettingsMenuBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetSpaceSettingsBinding>() {
 
     @Inject lateinit var navigator: Navigator
     @Inject lateinit var avatarRenderer: AvatarRenderer

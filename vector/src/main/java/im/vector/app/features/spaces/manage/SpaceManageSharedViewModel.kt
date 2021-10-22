@@ -32,7 +32,7 @@ class SpaceManageSharedViewModel @AssistedInject constructor(
 ) : VectorViewModel<SpaceManageViewState, SpaceManagedSharedAction, SpaceManagedSharedViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory: MavericksAssistedViewModelFactory<SpaceManageSharedViewModel,SpaceManageViewState>{
+    interface Factory : MavericksAssistedViewModelFactory<SpaceManageSharedViewModel, SpaceManageViewState> {
         override fun create(initialState: SpaceManageViewState): SpaceManageSharedViewModel
     }
 

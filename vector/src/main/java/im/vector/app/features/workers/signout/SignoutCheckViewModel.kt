@@ -17,15 +17,12 @@
 package im.vector.app.features.workers.signout
 
 import android.net.Uri
-import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -68,7 +65,7 @@ class SignoutCheckViewModel @AssistedInject constructor(
     }
 
     @AssistedFactory
-    interface Factory: MavericksAssistedViewModelFactory<SignoutCheckViewModel,SignoutCheckViewState> {
+    interface Factory : MavericksAssistedViewModelFactory<SignoutCheckViewModel, SignoutCheckViewState> {
         override fun create(initialState: SignoutCheckViewState): SignoutCheckViewModel
     }
 

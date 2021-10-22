@@ -16,9 +16,7 @@
 
 package im.vector.app.features.home.room.breadcrumbs
 
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MavericksViewModelFactory
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject

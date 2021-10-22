@@ -37,6 +37,5 @@ data class BootstrapViewState(
         val recoverySaveFileProcess: Async<Unit> = Uninitialized
 ) : MavericksState {
 
-    constructor(args: BootstrapBottomSheet.Args): this(setupMode = args.setUpMode)
-
+    constructor(args: BootstrapBottomSheet.Args) : this(setupMode = args.setUpMode)
 }

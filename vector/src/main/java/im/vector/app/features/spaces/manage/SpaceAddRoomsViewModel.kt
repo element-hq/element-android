@@ -19,13 +19,10 @@ package im.vector.app.features.spaces.manage
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagedList
-import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -57,7 +54,7 @@ class SpaceAddRoomsViewModel @AssistedInject constructor(
 ) : VectorViewModel<SpaceAddRoomsState, SpaceAddRoomActions, SpaceAddRoomsViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory: MavericksAssistedViewModelFactory<SpaceAddRoomsViewModel,SpaceAddRoomsState> {
+    interface Factory : MavericksAssistedViewModelFactory<SpaceAddRoomsViewModel, SpaceAddRoomsState> {
         override fun create(initialState: SpaceAddRoomsState): SpaceAddRoomsViewModel
     }
 

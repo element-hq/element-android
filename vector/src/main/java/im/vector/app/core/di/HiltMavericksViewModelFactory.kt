@@ -63,7 +63,6 @@ class HiltMavericksViewModelFactory<VM : MavericksViewModel<S>, S : MavericksSta
     override fun initialState(viewModelContext: ViewModelContext): S? {
         return super.initialState(viewModelContext)
     }
-
 }
 
 /**

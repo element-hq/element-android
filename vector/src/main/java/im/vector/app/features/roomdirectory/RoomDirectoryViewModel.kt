@@ -16,12 +16,10 @@
 
 package im.vector.app.features.roomdirectory
 
-import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.ViewModelContext
 import com.airbnb.mvrx.appendAt
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -51,7 +49,7 @@ class RoomDirectoryViewModel @AssistedInject constructor(
 ) : VectorViewModel<PublicRoomsViewState, RoomDirectoryAction, RoomDirectoryViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory: MavericksAssistedViewModelFactory<RoomDirectoryViewModel,PublicRoomsViewState> {
+    interface Factory : MavericksAssistedViewModelFactory<RoomDirectoryViewModel, PublicRoomsViewState> {
         override fun create(initialState: PublicRoomsViewState): RoomDirectoryViewModel
     }
 

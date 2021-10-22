@@ -35,7 +35,7 @@ class BugReportViewModel @AssistedInject constructor(
 ) : VectorViewModel<BugReportState, EmptyAction, EmptyViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory: MavericksAssistedViewModelFactory<BugReportViewModel,BugReportState> {
+    interface Factory : MavericksAssistedViewModelFactory<BugReportViewModel, BugReportState> {
         override fun create(initialState: BugReportState): BugReportViewModel
     }
 

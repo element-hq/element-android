@@ -18,13 +18,11 @@ package im.vector.app.features.settings.ignored
 
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -51,7 +49,7 @@ class IgnoredUsersViewModel @AssistedInject constructor(@Assisted initialState: 
     VectorViewModel<IgnoredUsersViewState, IgnoredUsersAction, IgnoredUsersViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory: MavericksAssistedViewModelFactory<IgnoredUsersViewModel,IgnoredUsersViewState> {
+    interface Factory : MavericksAssistedViewModelFactory<IgnoredUsersViewModel, IgnoredUsersViewState> {
         override fun create(initialState: IgnoredUsersViewState): IgnoredUsersViewModel
     }
 

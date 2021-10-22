@@ -42,7 +42,7 @@ class RoomPermissionsViewModel @AssistedInject constructor(@Assisted initialStat
     VectorViewModel<RoomPermissionsViewState, RoomPermissionsAction, RoomPermissionsViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory: MavericksAssistedViewModelFactory<RoomPermissionsViewModel,RoomPermissionsViewState> {
+    interface Factory : MavericksAssistedViewModelFactory<RoomPermissionsViewModel, RoomPermissionsViewState> {
         override fun create(initialState: RoomPermissionsViewState): RoomPermissionsViewModel
     }
 

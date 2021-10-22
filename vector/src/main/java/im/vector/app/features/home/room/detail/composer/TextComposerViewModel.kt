@@ -16,9 +16,7 @@
 
 package im.vector.app.features.home.room.detail.composer
 
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MavericksViewModelFactory
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -31,7 +29,6 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.command.CommandParser
 import im.vector.app.features.command.ParsedCommand
 import im.vector.app.features.home.room.detail.ChatEffect
-import im.vector.app.features.home.room.detail.RoomDetailFragment
 import im.vector.app.features.home.room.detail.composer.rainbow.RainbowGenerator
 import im.vector.app.features.home.room.detail.toMessageType
 import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
@@ -712,7 +709,7 @@ class TextComposerViewModel @AssistedInject constructor(
     }
 
     @AssistedFactory
-    interface Factory: MavericksAssistedViewModelFactory<TextComposerViewModel,TextComposerViewState> {
+    interface Factory : MavericksAssistedViewModelFactory<TextComposerViewModel, TextComposerViewState> {
         override fun create(initialState: TextComposerViewState): TextComposerViewModel
     }
 

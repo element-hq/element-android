@@ -63,7 +63,6 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), BaseAttachmen
     @Inject
     lateinit var imageContentRenderer: ImageContentRenderer
 
-
     private var initialIndex = 0
     private var isAnimatingOut = false
 

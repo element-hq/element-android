@@ -65,7 +65,7 @@ class UnknownDeviceDetectorSharedViewModel @AssistedInject constructor(@Assisted
     }
 
     @AssistedFactory
-    interface Factory: MavericksAssistedViewModelFactory<UnknownDeviceDetectorSharedViewModel,UnknownDevicesState> {
+    interface Factory : MavericksAssistedViewModelFactory<UnknownDeviceDetectorSharedViewModel, UnknownDevicesState> {
         override fun create(initialState: UnknownDevicesState): UnknownDeviceDetectorSharedViewModel
     }
 

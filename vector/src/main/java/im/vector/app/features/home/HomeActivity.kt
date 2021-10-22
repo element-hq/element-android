@@ -38,7 +38,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.AppStateHandler
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
-
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.registerStartForActivityResult
@@ -73,7 +72,6 @@ import im.vector.app.features.spaces.invite.SpaceInviteBottomSheet
 import im.vector.app.features.spaces.share.ShareSpaceBottomSheet
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
-import im.vector.app.features.workers.signout.ServerBackupStatusViewState
 import im.vector.app.push.fcm.FcmHelper
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize

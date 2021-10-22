@@ -28,10 +28,9 @@ data class JitsiCallViewState(
         val widget: Async<Widget> = Uninitialized
 ) : MavericksState {
 
-    constructor(args: VectorJitsiActivity.Args): this(
+    constructor(args: VectorJitsiActivity.Args) : this(
             roomId = args.roomId,
             widgetId = args.widgetId,
             enableVideo = args.enableVideo
     )
-
 }

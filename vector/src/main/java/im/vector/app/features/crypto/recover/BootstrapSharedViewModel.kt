@@ -17,12 +17,10 @@
 package im.vector.app.features.crypto.recover
 
 import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
-import com.airbnb.mvrx.ViewModelContext
 import com.nulabinc.zxcvbn.Zxcvbn
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -36,7 +34,6 @@ import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.platform.WaitingViewData
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.auth.ReAuthActivity
-import im.vector.app.features.login.ReAuthHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.auth.UIABaseAuth

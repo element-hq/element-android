@@ -22,8 +22,8 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.EntryPoints
-import im.vector.app.core.di.SingletonEntryPoint
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.SingletonEntryPoint
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.EmptyViewEvents

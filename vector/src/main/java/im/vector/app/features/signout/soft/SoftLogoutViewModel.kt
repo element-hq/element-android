@@ -49,11 +49,11 @@ class SoftLogoutViewModel @AssistedInject constructor(
 ) : VectorViewModel<SoftLogoutViewState, SoftLogoutAction, SoftLogoutViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory: MavericksAssistedViewModelFactory<SoftLogoutViewModel,SoftLogoutViewState> {
+    interface Factory : MavericksAssistedViewModelFactory<SoftLogoutViewModel, SoftLogoutViewState> {
         override fun create(initialState: SoftLogoutViewState): SoftLogoutViewModel
     }
 
-    companion object : MavericksViewModelFactory<SoftLogoutViewModel, SoftLogoutViewState> by hiltMavericksViewModelFactory(){
+    companion object : MavericksViewModelFactory<SoftLogoutViewModel, SoftLogoutViewState> by hiltMavericksViewModelFactory() {
 
         override fun initialState(viewModelContext: ViewModelContext): SoftLogoutViewState? {
             val activity: SoftLogoutActivity = (viewModelContext as ActivityViewModelContext).activity()
@@ -66,7 +66,6 @@ class SoftLogoutViewModel @AssistedInject constructor(
                     hasUnsavedKeys = activity.session.hasUnsavedKeys()
             )
         }
-
     }
 
     init {

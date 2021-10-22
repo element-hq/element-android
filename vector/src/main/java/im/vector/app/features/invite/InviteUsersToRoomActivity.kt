@@ -26,7 +26,6 @@ import com.airbnb.mvrx.viewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.extensions.addFragmentToBackstack
@@ -38,14 +37,10 @@ import im.vector.app.core.utils.onPermissionDeniedSnackbar
 import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.core.utils.toast
 import im.vector.app.features.contactsbook.ContactsBookFragment
-import im.vector.app.features.contactsbook.ContactsBookViewModel
-import im.vector.app.features.contactsbook.ContactsBookViewState
 import im.vector.app.features.userdirectory.UserListFragment
 import im.vector.app.features.userdirectory.UserListFragmentArgs
 import im.vector.app.features.userdirectory.UserListSharedAction
 import im.vector.app.features.userdirectory.UserListSharedActionViewModel
-import im.vector.app.features.userdirectory.UserListViewModel
-import im.vector.app.features.userdirectory.UserListViewState
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.failure.Failure
 import java.net.HttpURLConnection

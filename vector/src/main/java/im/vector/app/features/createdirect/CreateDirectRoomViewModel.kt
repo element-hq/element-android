@@ -43,7 +43,7 @@ class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
     VectorViewModel<CreateDirectRoomViewState, CreateDirectRoomAction, CreateDirectRoomViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory: MavericksAssistedViewModelFactory<CreateDirectRoomViewModel,CreateDirectRoomViewState> {
+    interface Factory : MavericksAssistedViewModelFactory<CreateDirectRoomViewModel, CreateDirectRoomViewState> {
         override fun create(initialState: CreateDirectRoomViewState): CreateDirectRoomViewModel
     }
 

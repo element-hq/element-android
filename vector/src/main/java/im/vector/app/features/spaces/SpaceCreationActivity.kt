@@ -26,7 +26,6 @@ import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-
 import im.vector.app.core.extensions.toMvRxBundle
 import im.vector.app.core.platform.SimpleFragmentActivity
 import im.vector.app.features.spaces.create.ChoosePrivateSpaceTypeFragment
@@ -40,10 +39,9 @@ import im.vector.app.features.spaces.create.CreateSpaceState
 import im.vector.app.features.spaces.create.CreateSpaceViewModel
 import im.vector.app.features.spaces.create.SpaceTopology
 import im.vector.app.features.spaces.create.SpaceType
-import javax.inject.Inject
 
 @AndroidEntryPoint
-class SpaceCreationActivity : SimpleFragmentActivity(){
+class SpaceCreationActivity : SimpleFragmentActivity() {
 
     val viewModel: CreateSpaceViewModel by viewModel()
 
@@ -182,5 +180,4 @@ class SpaceCreationActivity : SimpleFragmentActivity(){
             return data?.extras?.getBoolean(RESULT_DATA_CREATED_SPACE_IS_JUST_ME, false) == true
         }
     }
-
 }

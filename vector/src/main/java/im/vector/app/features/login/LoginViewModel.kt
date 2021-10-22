@@ -18,15 +18,12 @@ package im.vector.app.features.login
 
 import android.content.Context
 import android.net.Uri
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.viewModelScope
-import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -39,7 +36,6 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.ensureTrailingSlash
-import im.vector.app.features.signout.soft.SoftLogoutActivity
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixPatterns.getDomain
@@ -74,7 +70,7 @@ class LoginViewModel @AssistedInject constructor(
 ) : VectorViewModel<LoginViewState, LoginAction, LoginViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory:MavericksAssistedViewModelFactory<LoginViewModel,LoginViewState> {
+    interface Factory : MavericksAssistedViewModelFactory<LoginViewModel, LoginViewState> {
         override fun create(initialState: LoginViewState): LoginViewModel
     }
 

@@ -27,7 +27,6 @@ import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.parentFragmentViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.platform.ButtonStateView

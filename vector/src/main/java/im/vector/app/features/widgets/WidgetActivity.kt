@@ -25,7 +25,6 @@ import com.airbnb.mvrx.viewModel
 import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
@@ -33,10 +32,8 @@ import im.vector.app.databinding.ActivityWidgetBinding
 import im.vector.app.features.widgets.permissions.RoomWidgetPermissionBottomSheet
 import im.vector.app.features.widgets.permissions.RoomWidgetPermissionViewEvents
 import im.vector.app.features.widgets.permissions.RoomWidgetPermissionViewModel
-import im.vector.app.features.widgets.permissions.RoomWidgetPermissionViewState
 import org.matrix.android.sdk.api.session.events.model.Content
 import java.io.Serializable
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>(),

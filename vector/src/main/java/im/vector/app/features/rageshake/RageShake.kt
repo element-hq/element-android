@@ -19,7 +19,6 @@ package im.vector.app.features.rageshake
 import android.content.Context
 import android.hardware.Sensor
 import android.hardware.SensorManager
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.getSystemService
 import androidx.fragment.app.FragmentActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder

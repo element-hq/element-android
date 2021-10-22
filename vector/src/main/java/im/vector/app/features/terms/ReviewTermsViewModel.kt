@@ -36,7 +36,7 @@ class ReviewTermsViewModel @AssistedInject constructor(
 ) : VectorViewModel<ReviewTermsViewState, ReviewTermsAction, ReviewTermsViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory: MavericksAssistedViewModelFactory<ReviewTermsViewModel,ReviewTermsViewState> {
+    interface Factory : MavericksAssistedViewModelFactory<ReviewTermsViewModel, ReviewTermsViewState> {
         override fun create(initialState: ReviewTermsViewState): ReviewTermsViewModel
     }
 

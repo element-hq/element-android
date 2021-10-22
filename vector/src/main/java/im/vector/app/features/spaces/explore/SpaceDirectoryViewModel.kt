@@ -51,7 +51,7 @@ class SpaceDirectoryViewModel @AssistedInject constructor(
 ) : VectorViewModel<SpaceDirectoryState, SpaceDirectoryViewAction, SpaceDirectoryViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory: MavericksAssistedViewModelFactory<SpaceDirectoryViewModel,SpaceDirectoryState> {
+    interface Factory : MavericksAssistedViewModelFactory<SpaceDirectoryViewModel, SpaceDirectoryState> {
         override fun create(initialState: SpaceDirectoryState): SpaceDirectoryViewModel
     }
 

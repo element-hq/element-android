@@ -41,7 +41,6 @@ import im.vector.app.features.home.PromoteRestrictedViewModel
 import im.vector.app.features.home.UnknownDeviceDetectorSharedViewModel
 import im.vector.app.features.home.UnreadMessagesSharedViewModel
 import im.vector.app.features.home.room.breadcrumbs.BreadcrumbsViewModel
-import im.vector.app.features.home.room.detail.RoomDetailViewModel
 import im.vector.app.features.home.room.detail.composer.TextComposerViewModel
 import im.vector.app.features.home.room.detail.search.SearchViewModel
 import im.vector.app.features.home.room.detail.timeline.action.MessageActionsViewModel
@@ -541,6 +540,4 @@ interface MavericksViewModelModule {
     @IntoMap
     @MavericksViewModelKey(VerificationBottomSheetViewModel::class)
     fun verificationBottomSheetViewModelFactory(factory: VerificationBottomSheetViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
-
-
 }

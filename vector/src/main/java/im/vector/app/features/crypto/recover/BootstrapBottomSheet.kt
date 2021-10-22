@@ -35,7 +35,6 @@ import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-
 import im.vector.app.core.extensions.commitTransaction
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.registerStartForActivityResult
@@ -44,7 +43,6 @@ import im.vector.app.databinding.BottomSheetBootstrapBinding
 import im.vector.app.features.auth.ReAuthActivity
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
-import javax.inject.Inject
 import kotlin.reflect.KClass
 
 @AndroidEntryPoint

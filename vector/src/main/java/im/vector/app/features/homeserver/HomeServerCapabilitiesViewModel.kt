@@ -22,8 +22,8 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.EntryPoints
-import im.vector.app.core.di.SingletonEntryPoint
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.SingletonEntryPoint
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.EmptyViewEvents
@@ -44,7 +44,7 @@ class HomeServerCapabilitiesViewModel @AssistedInject constructor(
 ) : VectorViewModel<HomeServerCapabilitiesViewState, EmptyAction, EmptyViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory: MavericksAssistedViewModelFactory<HomeServerCapabilitiesViewModel,HomeServerCapabilitiesViewState> {
+    interface Factory : MavericksAssistedViewModelFactory<HomeServerCapabilitiesViewModel, HomeServerCapabilitiesViewState> {
         override fun create(initialState: HomeServerCapabilitiesViewState): HomeServerCapabilitiesViewModel
     }
 

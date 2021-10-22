@@ -35,7 +35,7 @@ class PushRulesViewModel(initialState: PushRulesViewState) :
     companion object : MavericksViewModelFactory<PushRulesViewModel, PushRulesViewState> {
 
         override fun initialState(viewModelContext: ViewModelContext): PushRulesViewState? {
-            val session = EntryPoints.get(viewModelContext.app(),SingletonEntryPoint::class.java).activeSessionHolder().getActiveSession()
+            val session = EntryPoints.get(viewModelContext.app(), SingletonEntryPoint::class.java).activeSessionHolder().getActiveSession()
             val rules = session.getPushRules().getAllRules()
             return PushRulesViewState(rules)
         }

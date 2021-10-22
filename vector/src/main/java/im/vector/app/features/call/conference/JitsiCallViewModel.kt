@@ -22,7 +22,6 @@ import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -48,7 +47,7 @@ class JitsiCallViewModel @AssistedInject constructor(
 ) : VectorViewModel<JitsiCallViewState, JitsiCallViewActions, JitsiCallViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory: MavericksAssistedViewModelFactory<JitsiCallViewModel,JitsiCallViewState> {
+    interface Factory : MavericksAssistedViewModelFactory<JitsiCallViewModel, JitsiCallViewState> {
         override fun create(initialState: JitsiCallViewState): JitsiCallViewModel
     }
 
@@ -148,6 +147,4 @@ class JitsiCallViewModel @AssistedInject constructor(
     companion object : MavericksViewModelFactory<JitsiCallViewModel, JitsiCallViewState> by hiltMavericksViewModelFactory() {
         const val ENABLE_VIDEO_OPTION = "ENABLE_VIDEO_OPTION"
     }
-
-
 }

@@ -17,7 +17,6 @@
 package im.vector.app.features.room
 
 import com.airbnb.mvrx.MavericksViewModelFactory
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -55,7 +54,7 @@ class RequireActiveMembershipViewModel @AssistedInject constructor(
     VectorViewModel<RequireActiveMembershipViewState, RequireActiveMembershipAction, RequireActiveMembershipViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory: MavericksAssistedViewModelFactory<RequireActiveMembershipViewModel,RequireActiveMembershipViewState> {
+    interface Factory : MavericksAssistedViewModelFactory<RequireActiveMembershipViewModel, RequireActiveMembershipViewState> {
         override fun create(initialState: RequireActiveMembershipViewState): RequireActiveMembershipViewModel
     }
 

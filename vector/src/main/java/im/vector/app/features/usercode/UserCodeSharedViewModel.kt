@@ -56,7 +56,7 @@ class UserCodeSharedViewModel @AssistedInject constructor(
     }
 
     @AssistedFactory
-    interface Factory: MavericksAssistedViewModelFactory<UserCodeSharedViewModel,UserCodeState> {
+    interface Factory : MavericksAssistedViewModelFactory<UserCodeSharedViewModel, UserCodeState> {
         override fun create(initialState: UserCodeState): UserCodeSharedViewModel
     }
 

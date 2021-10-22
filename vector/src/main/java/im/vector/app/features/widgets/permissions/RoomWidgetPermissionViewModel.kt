@@ -15,8 +15,6 @@
  */
 package im.vector.app.features.widgets.permissions
 
-import com.airbnb.mvrx.ActivityViewModelContext
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MavericksViewModelFactory
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -142,7 +140,7 @@ class RoomWidgetPermissionViewModel @AssistedInject constructor(@Assisted val in
     }
 
     @AssistedFactory
-    interface Factory: MavericksAssistedViewModelFactory<RoomWidgetPermissionViewModel,RoomWidgetPermissionViewState> {
+    interface Factory : MavericksAssistedViewModelFactory<RoomWidgetPermissionViewModel, RoomWidgetPermissionViewState> {
         override fun create(initialState: RoomWidgetPermissionViewState): RoomWidgetPermissionViewModel
     }
 

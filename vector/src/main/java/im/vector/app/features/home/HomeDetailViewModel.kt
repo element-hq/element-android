@@ -22,10 +22,8 @@ import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import dagger.hilt.EntryPoints
 import im.vector.app.AppStateHandler
 import im.vector.app.RoomGroupingMethod
-import im.vector.app.core.di.SingletonEntryPoint
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.singletonEntryPoint
@@ -72,11 +70,11 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
         CallProtocolsChecker.Listener {
 
     @AssistedFactory
-    interface Factory: MavericksAssistedViewModelFactory<HomeDetailViewModel,HomeDetailViewState> {
+    interface Factory : MavericksAssistedViewModelFactory<HomeDetailViewModel, HomeDetailViewState> {
         override fun create(initialState: HomeDetailViewState): HomeDetailViewModel
     }
 
-    companion object : MavericksViewModelFactory<HomeDetailViewModel, HomeDetailViewState> by hiltMavericksViewModelFactory(){
+    companion object : MavericksViewModelFactory<HomeDetailViewModel, HomeDetailViewState> by hiltMavericksViewModelFactory() {
 
         override fun initialState(viewModelContext: ViewModelContext): HomeDetailViewState {
             val uiStateRepository = viewModelContext.activity.singletonEntryPoint().uiStateRepository()

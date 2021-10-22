@@ -35,11 +35,12 @@ class DeviceVerificationInfoBottomSheetViewModel @AssistedInject constructor(@As
 ) : VectorViewModel<DeviceVerificationInfoBottomSheetViewState, EmptyAction, EmptyViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory: MavericksAssistedViewModelFactory<DeviceVerificationInfoBottomSheetViewModel,DeviceVerificationInfoBottomSheetViewState> {
+    interface Factory : MavericksAssistedViewModelFactory<DeviceVerificationInfoBottomSheetViewModel, DeviceVerificationInfoBottomSheetViewState> {
         override fun create(initialState: DeviceVerificationInfoBottomSheetViewState): DeviceVerificationInfoBottomSheetViewModel
     }
 
-    companion object : MavericksViewModelFactory<DeviceVerificationInfoBottomSheetViewModel, DeviceVerificationInfoBottomSheetViewState> by hiltMavericksViewModelFactory()
+    companion object : MavericksViewModelFactory<DeviceVerificationInfoBottomSheetViewModel, DeviceVerificationInfoBottomSheetViewState>
+    by hiltMavericksViewModelFactory()
 
     init {
 

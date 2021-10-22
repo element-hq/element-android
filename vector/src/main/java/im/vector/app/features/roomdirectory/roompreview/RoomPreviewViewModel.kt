@@ -49,7 +49,7 @@ class RoomPreviewViewModel @AssistedInject constructor(@Assisted private val ini
     VectorViewModel<RoomPreviewViewState, RoomPreviewAction, EmptyViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory: MavericksAssistedViewModelFactory<RoomPreviewViewModel,RoomPreviewViewState> {
+    interface Factory : MavericksAssistedViewModelFactory<RoomPreviewViewModel, RoomPreviewViewState> {
         override fun create(initialState: RoomPreviewViewState): RoomPreviewViewModel
     }
 

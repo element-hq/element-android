@@ -17,14 +17,11 @@
 package im.vector.app.features.spaces.invite
 
 import androidx.lifecycle.viewModelScope
-import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -95,7 +92,7 @@ class SpaceInviteBottomSheetViewModel @AssistedInject constructor(
     }
 
     @AssistedFactory
-    interface Factory: MavericksAssistedViewModelFactory<SpaceInviteBottomSheetViewModel,SpaceInviteBottomSheetState> {
+    interface Factory : MavericksAssistedViewModelFactory<SpaceInviteBottomSheetViewModel, SpaceInviteBottomSheetState> {
         override fun create(initialState: SpaceInviteBottomSheetState): SpaceInviteBottomSheetViewModel
     }
 

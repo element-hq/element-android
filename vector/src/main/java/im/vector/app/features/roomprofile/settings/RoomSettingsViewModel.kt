@@ -17,10 +17,7 @@
 package im.vector.app.features.roomprofile.settings
 
 import androidx.core.net.toFile
-import com.airbnb.mvrx.ActivityViewModelContext
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MavericksViewModelFactory
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject

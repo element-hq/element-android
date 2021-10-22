@@ -17,11 +17,8 @@
 package im.vector.app.features.userdirectory
 
 import androidx.lifecycle.asFlow
-import com.airbnb.mvrx.ActivityViewModelContext
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Uninitialized
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -63,7 +60,7 @@ class UserListViewModel @AssistedInject constructor(@Assisted initialState: User
     private val identityServerUsersSearch = MutableStateFlow("")
 
     @AssistedFactory
-    interface Factory: MavericksAssistedViewModelFactory<UserListViewModel,UserListViewState> {
+    interface Factory : MavericksAssistedViewModelFactory<UserListViewModel, UserListViewState> {
         override fun create(initialState: UserListViewState): UserListViewModel
     }
 

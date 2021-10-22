@@ -17,11 +17,9 @@
 package im.vector.app.features.home.room.detail.timeline.reactions
 
 import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Uninitialized
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -72,7 +70,7 @@ class ViewReactionsViewModel @AssistedInject constructor(@Assisted
             ?: throw IllegalStateException("Shouldn't use this ViewModel without a room")
 
     @AssistedFactory
-    interface Factory: MavericksAssistedViewModelFactory<ViewReactionsViewModel,DisplayReactionsViewState> {
+    interface Factory : MavericksAssistedViewModelFactory<ViewReactionsViewModel, DisplayReactionsViewState> {
         override fun create(initialState: DisplayReactionsViewState): ViewReactionsViewModel
     }
 

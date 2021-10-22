@@ -27,12 +27,10 @@ import com.airbnb.mvrx.viewModel
 import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityBugReportBinding
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import timber.log.Timber
-import javax.inject.Inject
 
 /**
  * Form to send a bug report

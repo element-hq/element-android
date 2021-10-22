@@ -23,7 +23,6 @@ import androidx.appcompat.widget.SearchView
 import com.airbnb.mvrx.Mavericks
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivitySearchBinding
