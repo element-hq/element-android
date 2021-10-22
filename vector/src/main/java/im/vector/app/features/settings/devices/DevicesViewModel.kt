@@ -29,7 +29,6 @@ import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
@@ -141,10 +140,6 @@ class DevicesViewModel @AssistedInject constructor(
         session.rx().liveCrossSigningInfo(session.myUserId)
                 .execute {
                     val mxCrossSigningInfo = it.invoke()?.getOrNull()
-
-                    if (!BuildConfig.ENABLE_CROSS_SIGNING && mxCrossSigningInfo != null) {
-                        Timber.i("Cross signing feature is disabled. This account should not have cross signing keys")
-                    }
 
                     copy(
                             hasAccountCrossSigning = mxCrossSigningInfo != null,

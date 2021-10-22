@@ -105,7 +105,14 @@ class HomeActivityViewModel @AssistedInject constructor(
                 .rx()
                 .liveCrossSigningInfo(safeActiveSession.myUserId)
                 .subscribe {
-                    val isVerified = it.getOrNull()?.isTrusted() ?: false
+
+                    val mxCrossSigningInfo = it.getOrNull()
+
+                    if (!BuildConfig.ENABLE_CROSS_SIGNING && mxCrossSigningInfo != null) {
+                        Timber.i("Cross signing feature is disabled. This account should not have cross signing keys")
+                    }
+
+                    val isVerified = mxCrossSigningInfo?.isTrusted() ?: false
                     if (!isVerified && onceTrusted) {
                         // cross signing keys have been reset
                         // Trigger a popup to re-verify
