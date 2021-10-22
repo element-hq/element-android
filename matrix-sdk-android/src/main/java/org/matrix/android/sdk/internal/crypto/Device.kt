@@ -24,10 +24,10 @@ import org.matrix.android.sdk.internal.crypto.crosssigning.DeviceTrustLevel
 import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.rest.UnsignedDeviceInfo
 import org.matrix.android.sdk.internal.crypto.verification.prepareMethods
-import uniffi.olm.CryptoStoreErrorException
+import uniffi.olm.CryptoStoreException
 import uniffi.olm.Device as InnerDevice
 import uniffi.olm.OlmMachine
-import uniffi.olm.SignatureErrorException
+import uniffi.olm.SignatureException
 import uniffi.olm.VerificationRequest
 
 /** Class representing a device that supports E2EE in the Matrix world
@@ -41,7 +41,7 @@ internal class Device(
         private val sender: RequestSender,
         private val listeners: ArrayList<VerificationService.Listener>,
 ) {
-    @Throws(CryptoStoreErrorException::class)
+    @Throws(CryptoStoreException::class)
     private suspend fun refreshData() {
         val device = withContext(Dispatchers.IO) {
             machine.getDevice(inner.userId, inner.deviceId)
@@ -63,7 +63,7 @@ internal class Device(
      * [org.matrix.android.sdk.internal.crypto.OwnUserIdentity.requestVerification]
      * method can be used instead.
      */
-    @Throws(CryptoStoreErrorException::class)
+    @Throws(CryptoStoreException::class)
     suspend fun requestVerification(methods: List<VerificationMethod>): VerificationRequest? {
         val stringMethods = prepareMethods(methods)
         val result = withContext(Dispatchers.IO) {
@@ -87,7 +87,7 @@ internal class Device(
      * The [requestVerification] method should be used instead.
      *
      */
-    @Throws(CryptoStoreErrorException::class)
+    @Throws(CryptoStoreException::class)
     suspend fun startVerification(): SasVerification? {
         val result = withContext(Dispatchers.IO) {
             machine.startSasWithDevice(inner.userId, inner.deviceId)
@@ -109,7 +109,7 @@ internal class Device(
      * This won't upload any signatures, it will only mark the device as trusted
      * in the local database.
      */
-    @Throws(CryptoStoreErrorException::class)
+    @Throws(CryptoStoreException::class)
     suspend fun markAsTrusted() {
         withContext(Dispatchers.IO) {
             machine.markDeviceAsTrusted(inner.userId, inner.deviceId)
@@ -125,7 +125,7 @@ internal class Device(
      * This will fail if the device doesn't belong to use or if we don't have the
      * private part of our self-signing key.
      */
-    @Throws(SignatureErrorException::class)
+    @Throws(SignatureException::class)
     suspend fun verify(): Boolean {
         val request = withContext(Dispatchers.IO) {
             machine.verifyDevice(inner.userId, inner.deviceId)
@@ -139,7 +139,7 @@ internal class Device(
     /**
      * Get the DeviceTrustLevel of this device
      */
-    @Throws(CryptoStoreErrorException::class)
+    @Throws(CryptoStoreException::class)
     suspend fun trustLevel(): DeviceTrustLevel {
         refreshData()
         return DeviceTrustLevel(crossSigningVerified = inner.crossSigningTrusted, locallyVerified = inner.locallyTrusted)

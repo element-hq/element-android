@@ -42,6 +42,7 @@ import org.matrix.android.sdk.internal.crypto.keysbackup.model.SignalableMegolmB
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.CreateKeysBackupVersionBody
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersion
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersionResult
+import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.UpdateKeysBackupVersionBody
 import org.matrix.android.sdk.internal.crypto.model.ImportRoomKeysResult
 import org.matrix.android.sdk.internal.crypto.store.SavedKeyBackupKeyInfo
 import org.matrix.android.sdk.internal.extensions.foldToCallback
@@ -266,34 +267,148 @@ internal class RustKeyBackupService @Inject constructor(
 
     override fun backupAllGroupSessions(progressListener: ProgressListener?,
                                         callback: MatrixCallback<Unit>?) {
+        // This is only used in tests?
         TODO()
+    }
+
+    private suspend fun checkBackupTrust(authData: MegolmBackupAuthData?): KeysBackupVersionTrust {
+        return if (authData == null || authData.publicKey.isEmpty() || authData.signatures.isEmpty()) {
+            Timber.v("getKeysBackupTrust: Key backup is absent or missing required data")
+            KeysBackupVersionTrust()
+        } else {
+            KeysBackupVersionTrust(olmMachine.checkAuthDataSignature(authData))
+        }
     }
 
     override fun getKeysBackupTrust(keysBackupVersion: KeysVersionResult,
                                     callback: MatrixCallback<KeysBackupVersionTrust>) {
-        Timber.d("BACKUP: HELLOO TRYING TO CHECK THE TRUST")
-        // TODO
-        callback.onSuccess(KeysBackupVersionTrust(false))
+        val authData = keysBackupVersion.getAuthDataAsMegolmBackupAuthData()
+
+        cryptoCoroutineScope.launch {
+            try {
+                callback.onSuccess(checkBackupTrust(authData))
+            } catch (exception: Throwable) {
+                callback.onFailure(exception)
+            }
+        }
     }
 
     override fun trustKeysBackupVersion(keysBackupVersion: KeysVersionResult,
                                         trust: Boolean,
                                         callback: MatrixCallback<Unit>) {
         Timber.v("trustKeyBackupVersion: $trust, version ${keysBackupVersion.version}")
-        TODO()
+
+        // Get auth data to update it
+        val authData = getMegolmBackupAuthData(keysBackupVersion)
+
+        if (authData == null) {
+            Timber.w("trustKeyBackupVersion:trust: Key backup is missing required data")
+
+            callback.onFailure(IllegalArgumentException("Missing element"))
+        } else {
+            cryptoCoroutineScope.launch(coroutineDispatchers.main) {
+                val body = withContext(coroutineDispatchers.crypto) {
+                    // Get current signatures, or create an empty set
+                    val userId = olmMachine.userId()
+                    val signatures = authData.signatures[userId].orEmpty().toMutableMap()
+
+                    if (trust) {
+                        // Add current device signature
+                        val canonicalJson = JsonCanonicalizer.getCanonicalJson(Map::class.java, authData.signalableJSONDictionary())
+                        val deviceSignature = olmMachine.sign(canonicalJson)
+
+                        deviceSignature[userId]?.forEach { entry ->
+                            signatures[entry.key] = entry.value
+                        }
+                    } else {
+                        signatures.remove("ed25519:${olmMachine.deviceId()}")
+                    }
+
+                    val newAuthData = authData.copy()
+                    val newSignatures = newAuthData.signatures.toMutableMap()
+                    newSignatures[userId] = signatures
+
+                    @Suppress("UNCHECKED_CAST")
+                    UpdateKeysBackupVersionBody(
+                        algorithm = keysBackupVersion.algorithm,
+                        authData = newAuthData.copy(signatures = newSignatures).toJsonDict(),
+                        version = keysBackupVersion.version)
+                }
+                try {
+                    sender.updateBackup(keysBackupVersion, body)
+
+                    val newKeysBackupVersion = KeysVersionResult(
+                            algorithm = keysBackupVersion.algorithm,
+                            authData = body.authData,
+                            version = keysBackupVersion.version,
+                            hash = keysBackupVersion.hash,
+                            count = keysBackupVersion.count
+                    )
+
+                    checkAndStartWithKeysBackupVersion(newKeysBackupVersion)
+                    callback.onSuccess(Unit)
+                } catch (exception: Throwable) {
+                    callback.onFailure(exception)
+                }
+            }
+        }
+    }
+
+    // Check that the recovery key matches to the public key that we downloaded from the server.
+    // If they match, we can trust the public key and enable backups since we have the private key.
+    private fun checkRecoveryKey(recoveryKey: BackupRecoveryKey, keysBackupData: KeysVersionResult) {
+        val backupKey = recoveryKey.publicKey()
+        val authData = getMegolmBackupAuthData(keysBackupData)
+
+        when {
+            authData == null                          -> {
+                Timber.w("isValidRecoveryKeyForKeysBackupVersion: Key backup is missing required data")
+                throw IllegalArgumentException("Missing element")
+
+            }
+            backupKey.publicKey != authData.publicKey -> {
+                Timber.w("isValidRecoveryKeyForKeysBackupVersion: Public keys mismatch")
+                throw IllegalArgumentException("Invalid recovery key or password")
+            }
+            else                                      -> {
+                // This case is fine, the public key on the server matches the public key the
+                // recovery key produced.
+            }
+        }
     }
 
     override fun trustKeysBackupVersionWithRecoveryKey(keysBackupVersion: KeysVersionResult,
                                                        recoveryKey: String,
                                                        callback: MatrixCallback<Unit>) {
         Timber.v("trustKeysBackupVersionWithRecoveryKey: version ${keysBackupVersion.version}")
-        TODO()
+
+        cryptoCoroutineScope.launch {
+            try {
+                // This is ~nowhere mentioned, the string here is actually a base58 encoded key.
+                // This not really supported by the spec for the backup key, the 4S key supports
+                // base58 encoding and the same method seems to be used here.
+                val key = BackupRecoveryKey.fromBase58(recoveryKey)
+                checkRecoveryKey(key, keysBackupVersion)
+                trustKeysBackupVersion(keysBackupVersion, true, callback)
+
+            } catch (exception: Throwable) {
+                callback.onFailure(exception)
+            }
+        }
     }
 
     override fun trustKeysBackupVersionWithPassphrase(keysBackupVersion: KeysVersionResult,
                                                       password: String,
                                                       callback: MatrixCallback<Unit>) {
-        TODO()
+        cryptoCoroutineScope.launch {
+            try {
+                val key = BackupRecoveryKey.fromPassphrase(password)
+                checkRecoveryKey(key, keysBackupVersion)
+                trustKeysBackupVersion(keysBackupVersion, true, callback)
+            } catch (exception: Throwable) {
+                callback.onFailure(exception)
+            }
+        }
     }
 
     override fun onSecretKeyGossip(secret: String) {
@@ -437,8 +552,9 @@ internal class RustKeyBackupService @Inject constructor(
                         }
 
                         Timber.v("   -> enabling key backups")
-                        // TODO
-                        // enableKeysBackup(keyBackupVersion)
+                        cryptoCoroutineScope.launch {
+                            enableKeysBackup(keyBackupVersion)
+                        }
                     } else {
                         Timber.v("checkAndStartWithKeysBackupVersion: No usable key backup. version: ${keyBackupVersion.version}")
                         if (versionInStore != null) {
@@ -595,7 +711,7 @@ internal class RustKeyBackupService @Inject constructor(
                     olmMachine.markRequestAsSent(request.requestId, RequestType.KEYS_BACKUP, response)
                     Timber.d("BACKUP MARKED REQUEST AS SENT")
 
-                    // TODO again is this correct?
+                    // TODO, again is this correct?
                     withContext(Dispatchers.Main) {
                         backupKeys()
                     }

@@ -20,6 +20,7 @@ import android.content.Context
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.paging.PagedList
+import com.squareup.moshi.Types
 import dagger.Lazy
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
@@ -57,17 +58,20 @@ import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.internal.auth.registration.handleUIA
 import org.matrix.android.sdk.internal.crypto.crosssigning.DeviceTrustLevel
 import org.matrix.android.sdk.internal.crypto.keysbackup.RustKeyBackupService
+import org.matrix.android.sdk.internal.crypto.keysbackup.model.MegolmBackupAuthData
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.BackupKeysResult
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.CreateKeysBackupVersionBody
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysBackupData
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersion
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersionResult
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.RoomKeysBackupData
+import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.UpdateKeysBackupVersionBody
 import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.CreateKeysBackupVersionTask
 import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.DeleteBackupTask
 import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.GetKeysBackupLastVersionTask
 import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.GetKeysBackupVersionTask
 import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.StoreSessionsDataTask
+import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.UpdateKeysBackupVersionTask
 import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.ImportRoomKeysResult
 import org.matrix.android.sdk.internal.crypto.model.MXEncryptEventContentResult
@@ -137,6 +141,7 @@ internal class RequestSender @Inject constructor(
         private val deleteBackupTask: DeleteBackupTask,
         private val createKeysBackupVersionTask: CreateKeysBackupVersionTask,
         private val backupRoomKeysTask: StoreSessionsDataTask,
+        private val updateKeysBackupVersionTask: UpdateKeysBackupVersionTask,
         ) {
     companion object {
         const val REQUEST_RETRY_COUNT = 3
@@ -297,43 +302,24 @@ internal class RequestSender @Inject constructor(
         val adapter = MoshiProvider
                 .providesMoshi()
                 .newBuilder()
+                .add(CheckNumberType.JSON_ADAPTER_FACTORY)
                 .build()
-                .adapter<MutableMap<String, RoomKeysBackupData>>(MutableMap::class.java)
+                .adapter<MutableMap<String, RoomKeysBackupData>>(
+                        Types.newParameterizedType(
+                                Map::class.java,
+                                String::class.java,
+                                RoomKeysBackupData::class.java
+                        ))
         val keys = adapter.fromJson(request.rooms)!!
-        Timber.d("BACKUP: CONVERTED KEYS TO HASHMAP $keys")
-        /*
-        val keyAdapter = MoshiProvider.providesMoshi().adapter(KeyBackupData::class.java)
-        val keysBackupData = KeysBackupData()
-        for (room in keys) {
-            val sessions = room.value.getOrDefault("sessions", mapOf())
-
-            for (session in sessions) {
-                Timber.d("BACKUP: HEEELOO CONVERTING KEY ${session.value}")
-                val key = keyAdapter.fromJson(session.value)!!
-                Timber.d("BACKUP: HEEELOO CONVERTED KEY $key")
-
-                keysBackupData
-                        .roomIdToRoomKeysBackupData
-                        .getOrPut(room.key, { RoomKeysBackupData() })
-                        .sessionIdToKeyBackupData[session.key] = key
-            }
-        }
-
-
-         */
-        /*
-        for ((roomId, backupData) in keys) {
-            val roomData = backup.roomIdToRoomKeysBackupData.getOrPut(roomId, { RoomKeysBackupData() })
-            for ((sessionId, key) in backupData.sessionIdToKeyBackupData) {
-                Timber.d("BACKUP INSERTING KEY $key")
-                roomData.sessionIdToKeyBackupData[sessionId] = key
-            }
-        }
-         */
-        val params = StoreSessionsDataTask.Params(request.version, KeysBackupData())
-        val response = backupRoomKeysTask.execute(params)
+        val params = StoreSessionsDataTask.Params(request.version, KeysBackupData(keys))
+        val response = backupRoomKeysTask.executeRetry(params, REQUEST_RETRY_COUNT)
         val responseAdapter = MoshiProvider.providesMoshi().adapter(BackupKeysResult::class.java)
         return responseAdapter.toJson(response)!!
+    }
+
+    suspend fun updateBackup(keysBackupVersion: KeysVersionResult, body: UpdateKeysBackupVersionBody) {
+        val params = UpdateKeysBackupVersionTask.Params(keysBackupVersion.version, body)
+        updateKeysBackupVersionTask.executeRetry(params, REQUEST_RETRY_COUNT)
     }
 }
 
@@ -566,6 +552,8 @@ internal class DefaultCryptoService @Inject constructor(
             Timber.v("Failed create an Olm machine: $throwable")
         }
 
+        // We try to enable key backups, if the backup version on the server is trusted,
+        // we're gonna continue backing up.
         tryOrNull {
             keysBackupService!!.checkAndStartKeysBackup()
         }
@@ -1075,7 +1063,8 @@ internal class DefaultCryptoService @Inject constructor(
                         }
                         is Request.KeysBackup      -> {
                             async {
-                                TODO()
+                                // The rust-sdk won't ever produce KeysBackup requests here,
+                                // those only get explicitly created.
                             }
                         }
                     }

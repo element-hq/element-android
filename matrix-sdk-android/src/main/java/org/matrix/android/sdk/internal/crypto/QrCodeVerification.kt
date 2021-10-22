@@ -26,7 +26,7 @@ import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxStat
 import org.matrix.android.sdk.api.session.crypto.verification.safeValueOf
 import org.matrix.android.sdk.internal.crypto.crosssigning.fromBase64
 import org.matrix.android.sdk.internal.crypto.verification.UpdateDispatcher
-import uniffi.olm.CryptoStoreErrorException
+import uniffi.olm.CryptoStoreException
 import uniffi.olm.OlmMachine
 import uniffi.olm.QrCode
 import uniffi.olm.Verification
@@ -172,7 +172,7 @@ internal class QrCodeVerification(
      * The method turns into a noop if we're not yet ready to confirm the scanning,
      * i.e. we didn't yet receive a m.key.verification.start event from the other side.
      */
-    @Throws(CryptoStoreErrorException::class)
+    @Throws(CryptoStoreException::class)
     private suspend fun confirm() {
         val result = withContext(Dispatchers.IO)
         {

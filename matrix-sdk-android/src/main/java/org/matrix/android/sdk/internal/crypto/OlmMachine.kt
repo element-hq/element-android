@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.crypto
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.squareup.moshi.Types
 import java.io.File
 import java.nio.charset.Charset
 import java.util.concurrent.ConcurrentHashMap
@@ -37,6 +38,8 @@ import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.api.util.toOptional
 import org.matrix.android.sdk.internal.crypto.crosssigning.DeviceTrustLevel
 import org.matrix.android.sdk.internal.crypto.crosssigning.UserTrustResult
+import org.matrix.android.sdk.internal.crypto.keysbackup.model.MegolmBackupAuthData
+import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.RoomKeysBackupData
 import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.ImportRoomKeysResult
 import org.matrix.android.sdk.internal.crypto.model.MXUsersDevicesMap
@@ -44,16 +47,18 @@ import org.matrix.android.sdk.internal.crypto.model.rest.RestKeyInfo
 import org.matrix.android.sdk.internal.crypto.model.rest.UnsignedDeviceInfo
 import org.matrix.android.sdk.internal.crypto.store.PrivateKeysInfo
 import org.matrix.android.sdk.internal.di.MoshiProvider
+import org.matrix.android.sdk.internal.network.parsing.CheckNumberType
 import org.matrix.android.sdk.internal.session.sync.model.DeviceListResponse
 import org.matrix.android.sdk.internal.session.sync.model.DeviceOneTimeKeysCountSyncResponse
 import org.matrix.android.sdk.internal.session.sync.model.ToDeviceSyncResponse
+import org.matrix.android.sdk.internal.util.JsonCanonicalizer
 import timber.log.Timber
 import uniffi.olm.BackupKey
 import uniffi.olm.BackupKeys
 import uniffi.olm.CrossSigningKeyExport
 import uniffi.olm.CrossSigningStatus
-import uniffi.olm.CryptoStoreErrorException
-import uniffi.olm.DecryptionErrorException
+import uniffi.olm.CryptoStoreException
+import uniffi.olm.DecryptionException
 import uniffi.olm.DeviceLists
 import uniffi.olm.KeyRequestPair
 import uniffi.olm.Logger
@@ -262,7 +267,7 @@ internal class OlmMachine(
      *
      * @param responseBody The body of the response that was received.
      */
-    @Throws(CryptoStoreErrorException::class)
+    @Throws(CryptoStoreException::class)
     suspend fun markRequestAsSent(
             requestId: String,
             requestType: RequestType,
@@ -290,7 +295,7 @@ internal class OlmMachine(
      *
      * @param keyCounts The map of uploaded one-time key types and counts.
      */
-    @Throws(CryptoStoreErrorException::class)
+    @Throws(CryptoStoreException::class)
     suspend fun receiveSyncChanges(
             toDevice: ToDeviceSyncResponse?,
             deviceChanges: DeviceListResponse?,
@@ -342,7 +347,7 @@ internal class OlmMachine(
      *
      * @return A [Request.KeysClaim] request that needs to be sent out to the server.
      */
-    @Throws(CryptoStoreErrorException::class)
+    @Throws(CryptoStoreException::class)
     suspend fun getMissingSessions(users: List<String>): Request? =
             withContext(Dispatchers.IO) { inner.getMissingSessions(users) }
 
@@ -364,7 +369,7 @@ internal class OlmMachine(
      *
      * @return The list of [Request.ToDevice] that need to be sent out.
      */
-    @Throws(CryptoStoreErrorException::class)
+    @Throws(CryptoStoreException::class)
     suspend fun shareRoomKey(roomId: String, users: List<String>): List<Request> =
             withContext(Dispatchers.IO) { inner.shareRoomKey(roomId, users) }
 
@@ -398,7 +403,7 @@ internal class OlmMachine(
      *
      * @return The encrypted version of the [Content]
      */
-    @Throws(CryptoStoreErrorException::class)
+    @Throws(CryptoStoreException::class)
     suspend fun encrypt(roomId: String, eventType: String, content: Content): Content =
             withContext(Dispatchers.IO) {
                 val adapter = MoshiProvider.providesMoshi().adapter<Content>(Map::class.java)
@@ -453,7 +458,7 @@ internal class OlmMachine(
      * request itself. The cancellation *must* be sent out before the request, otherwise devices
      * will ignore the key request.
      */
-    @Throws(DecryptionErrorException::class)
+    @Throws(DecryptionException::class)
     suspend fun requestRoomKey(event: Event): KeyRequestPair =
             withContext(Dispatchers.IO) {
                 val adapter = MoshiProvider.providesMoshi().adapter(Event::class.java)
@@ -472,7 +477,7 @@ internal class OlmMachine(
      *
      * @return the encrypted key export as a bytearray.
      */
-    @Throws(CryptoStoreErrorException::class)
+    @Throws(CryptoStoreException::class)
     suspend fun exportKeys(passphrase: String, rounds: Int): ByteArray =
             withContext(Dispatchers.IO) { inner.exportKeys(passphrase, rounds).toByteArray() }
 
@@ -485,7 +490,7 @@ internal class OlmMachine(
      *
      * @param listener A callback that can be used to introspect the progress of the key import.
      */
-    @Throws(CryptoStoreErrorException::class)
+    @Throws(CryptoStoreException::class)
     suspend fun importKeys(
             keys: ByteArray,
             passphrase: String,
@@ -501,7 +506,7 @@ internal class OlmMachine(
                 ImportRoomKeysResult(result.total, result.imported)
             }
 
-    @Throws(CryptoStoreErrorException::class)
+    @Throws(CryptoStoreException::class)
     suspend fun getIdentity(userId: String): UserIdentities? {
         val identity = withContext(Dispatchers.IO) {
             inner.getIdentity(userId)
@@ -545,7 +550,7 @@ internal class OlmMachine(
      *
      * @return The Device if it found one.
      */
-    @Throws(CryptoStoreErrorException::class)
+    @Throws(CryptoStoreException::class)
     suspend fun getCryptoDeviceInfo(userId: String, deviceId: String): CryptoDeviceInfo? {
         return if (userId == userId() && deviceId == deviceId()) {
             // Our own device isn't part of our store on the Rust side, return it
@@ -556,7 +561,7 @@ internal class OlmMachine(
         }
     }
 
-    @Throws(CryptoStoreErrorException::class)
+    @Throws(CryptoStoreException::class)
     suspend fun getDevice(userId: String, deviceId: String): Device? {
         val device = withContext(Dispatchers.IO) {
             inner.getDevice(userId, deviceId)
@@ -578,7 +583,7 @@ internal class OlmMachine(
      *
      * @return The list of Devices or an empty list if there aren't any.
      */
-    @Throws(CryptoStoreErrorException::class)
+    @Throws(CryptoStoreException::class)
     suspend fun getCryptoDeviceInfo(userId: String): List<CryptoDeviceInfo> {
         val devices = this.getUserDevices(userId).map { it.toCryptoDeviceInfo() }.toMutableList()
 
@@ -658,7 +663,7 @@ internal class OlmMachine(
     }
 
     /** Discard the currently active room key for the given room if there is one. */
-    @Throws(CryptoStoreErrorException::class)
+    @Throws(CryptoStoreException::class)
     fun discardRoomKey(roomId: String) {
         runBlocking { inner.discardRoomKey(roomId) }
     }
@@ -770,7 +775,7 @@ internal class OlmMachine(
         }
     }
 
-    @Throws(CryptoStoreErrorException::class)
+    @Throws(CryptoStoreException::class)
     suspend fun enableBackup(key: String, version: String) {
         return withContext(Dispatchers.Default) {
             val backupKey = BackupKey(key, mapOf(), null)
@@ -797,13 +802,27 @@ internal class OlmMachine(
         inner.saveRecoveryKey(key, version)
     }
 
-    @Throws(CryptoStoreErrorException::class)
+    @Throws(CryptoStoreException::class)
     suspend fun backupRoomKeys(): Request? {
         return withContext(Dispatchers.Default) {
             Timber.d("BACKUP CREATING REQUEST")
             val request = inner.backupRoomKeys()
             Timber.d("BACKUP CREATED REQUEST: $request")
             request
+        }
+    }
+
+    @Throws(CryptoStoreException::class)
+    suspend fun checkAuthDataSignature(authData: MegolmBackupAuthData): Boolean {
+        return withContext(Dispatchers.Default) {
+            val adapter = MoshiProvider
+                    .providesMoshi()
+                    .newBuilder()
+                    .add(CheckNumberType.JSON_ADAPTER_FACTORY)
+                    .build()
+                    .adapter(MegolmBackupAuthData::class.java)
+            val serializedAuthData = adapter.toJson(authData)
+            inner.verifyBackup(serializedAuthData)
         }
     }
 }

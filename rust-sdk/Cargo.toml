@@ -17,7 +17,7 @@ base64 = "0.13.0"
 thiserror = "1.0.25"
 tracing = "0.1.26"
 tracing-subscriber = "0.2.18"
-uniffi = "0.12.0"
+uniffi = "0.14.0"
 pbkdf2 = "0.8.0"
 sha2 = "0.9.5"
 rand = "0.8.4"
@@ -28,14 +28,14 @@ version = "0.2.1"
 features = ["lax_deserialize"]
 
 [dependencies.matrix-sdk-common]
-path = "/home/poljar/werk/priv/nio-rust/crates/matrix-sdk-common/"
+path = "/home/poljar/werk/matrix/nio-rust/crates/matrix-sdk-common/"
 # git = "https://github.com/matrix-org/matrix-rust-sdk/"
 # rev = "9bae87b0ac213f9d37c033e76ea3a336e164cf02"
 
 [dependencies.matrix-sdk-crypto]
 # git = "https://github.com/matrix-org/matrix-rust-sdk/"
 # rev = "9bae87b0ac213f9d37c033e76ea3a336e164cf02"
-path = "/home/poljar/werk/priv/nio-rust/crates/matrix-sdk-crypto/"
+path = "/home/poljar/werk/matrix/nio-rust/crates/matrix-sdk-crypto/"
 features = ["sled_cryptostore", "qrcode", "backups_v1"]
 
 [dependencies.tokio]

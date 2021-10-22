@@ -27,7 +27,7 @@ import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxStat
 import org.matrix.android.sdk.api.session.crypto.verification.safeValueOf
 import org.matrix.android.sdk.internal.crypto.verification.UpdateDispatcher
 import org.matrix.android.sdk.internal.crypto.verification.getEmojiForCode
-import uniffi.olm.CryptoStoreErrorException
+import uniffi.olm.CryptoStoreException
 import uniffi.olm.OlmMachine
 import uniffi.olm.Sas
 import uniffi.olm.Verification
@@ -202,7 +202,7 @@ internal class SasVerification(
         }
     }
 
-    @Throws(CryptoStoreErrorException::class)
+    @Throws(CryptoStoreException::class)
     private suspend fun confirm() {
         val result = withContext(Dispatchers.IO) {
             machine.confirmVerification(inner.otherUserId, inner.flowId)

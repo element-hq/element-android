@@ -360,6 +360,8 @@ interface OlmMachine {
     [Throws=CryptoStoreError]
     BackupKeys? get_backup_keys();
     boolean backup_enabled();
+    [Throws=CryptoStoreError]
+    boolean verify_backup([ByRef] string auth_data);
 };
 
 dictionary PassphraseInfo {
@@ -388,6 +390,8 @@ interface BackupRecoveryKey {
     [Name=from_base64]
     constructor(string key);
     [Name=from_passphrase]
+    constructor(string key);
+    [Name=from_base58]
     constructor(string key);
     string to_base58();
     BackupKey public_key();

@@ -25,8 +25,8 @@ import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.internal.crypto.crosssigning.DeviceTrustLevel
 import org.matrix.android.sdk.internal.crypto.model.CryptoCrossSigningKey
 import org.matrix.android.sdk.internal.crypto.verification.prepareMethods
-import uniffi.olm.CryptoStoreErrorException
-import uniffi.olm.SignatureErrorException
+import uniffi.olm.CryptoStoreException
+import uniffi.olm.SignatureException
 
 /**
  * A sealed class representing user identities.
@@ -46,7 +46,7 @@ sealed class UserIdentities {
      *
      * @return True if the identity is considered to be verified and trusted, false otherwise.
      */
-    @Throws(CryptoStoreErrorException::class)
+    @Throws(CryptoStoreException::class)
     abstract suspend fun verified(): Boolean
 
     /**
@@ -59,7 +59,7 @@ sealed class UserIdentities {
      * Throws a SignatureErrorException if we can't sign the identity,
      * if for example we don't have access to our user-signing key.
      */
-    @Throws(SignatureErrorException::class)
+    @Throws(SignatureException::class)
     abstract suspend fun verify()
 
     /**
@@ -93,7 +93,7 @@ internal class OwnUserIdentity(
      *
      * To perform an interactive verification user the [requestVerification] method instead.
      */
-    @Throws(SignatureErrorException::class)
+    @Throws(SignatureException::class)
     override suspend fun verify() {
         val request = withContext(Dispatchers.Default) { olmMachine.inner().verifyIdentity(userId) }
         this.requestSender.sendSignatureUpload(request)
@@ -104,7 +104,7 @@ internal class OwnUserIdentity(
      *
      * @return True if the identity is considered to be verified and trusted, false otherwise.
      */
-    @Throws(CryptoStoreErrorException::class)
+    @Throws(CryptoStoreException::class)
     override suspend fun verified(): Boolean {
         return withContext(Dispatchers.IO) { olmMachine.inner().isIdentityVerified(userId) }
     }
@@ -130,7 +130,7 @@ internal class OwnUserIdentity(
      * @param methods The list of [VerificationMethod] that we wish to advertise to the other
      * side as being supported.
      */
-    @Throws(CryptoStoreErrorException::class)
+    @Throws(CryptoStoreException::class)
     suspend fun requestVerification(methods: List<VerificationMethod>): VerificationRequest {
         val stringMethods = prepareMethods(methods)
         val result = this.olmMachine.inner().requestSelfVerification(stringMethods)
@@ -187,7 +187,7 @@ internal class UserIdentity(
      *
      * To perform an interactive verification user the [requestVerification] method instead.
      */
-    @Throws(SignatureErrorException::class)
+    @Throws(SignatureException::class)
     override suspend fun verify() {
         val request = withContext(Dispatchers.Default) { olmMachine.inner().verifyIdentity(userId) }
         this.requestSender.sendSignatureUpload(request)
@@ -225,7 +225,7 @@ internal class UserIdentity(
      * @param transactionId The transaction id that should be used for the request that sends
      * the `m.key.verification.request` to the room.
      */
-    @Throws(CryptoStoreErrorException::class)
+    @Throws(CryptoStoreException::class)
     suspend fun requestVerification(
             methods: List<VerificationMethod>,
             roomId: String,
