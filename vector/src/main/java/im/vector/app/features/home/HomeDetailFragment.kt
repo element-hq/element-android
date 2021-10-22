@@ -226,7 +226,7 @@ class HomeDetailFragment @Inject constructor(
                 .observe()
                 .subscribe { action ->
                     when (action) {
-                        is TchapContactListSharedAction.OnInviteByEmail -> onInviteByEmail(action)
+                        is TchapContactListSharedAction.OnInviteByEmail -> onInviteByEmail(action.email)
                         is TchapContactListSharedAction.OnSelectContact -> onSelectContact(action)
                     }.exhaustive
                 }
@@ -266,6 +266,16 @@ class HomeDetailFragment @Inject constructor(
                 }
             }.exhaustive
         }
+
+        sharedActionViewModel
+                .observe()
+                .subscribe { action ->
+                    when (action) {
+                        is HomeActivitySharedAction.InviteByEmail -> onInviteByEmail(action.email)
+                        else                                      -> Unit // no-op
+                    }.exhaustive
+                }
+                .disposeOnDestroyView()
     }
 
     private fun handleCallStarted() {
@@ -404,8 +414,8 @@ class HomeDetailFragment @Inject constructor(
         }
     }
 
-    private fun onInviteByEmail(action: TchapContactListSharedAction.OnInviteByEmail) {
-        viewModel.handle(HomeDetailAction.InviteByEmail(action.email))
+    private fun onInviteByEmail(email: String) {
+        viewModel.handle(HomeDetailAction.InviteByEmail(email))
     }
 
     private fun onSelectContact(action: TchapContactListSharedAction.OnSelectContact) {

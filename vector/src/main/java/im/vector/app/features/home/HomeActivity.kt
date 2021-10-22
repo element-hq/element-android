@@ -229,7 +229,7 @@ class HomeActivity :
                             if (sharedAction.clearFragment) {
                                 replaceFragment(R.id.homeDetailFragmentContainer, HomeDetailFragment::class.java, allowStateLoss = true)
                             } else {
-                                // nop
+                                // no-op
                             }
                             // we might want to delay that to avoid having the drawer animation lagging
                             // would be probably better to let the drawer do that? in the on closed callback?
@@ -257,9 +257,7 @@ class HomeActivity :
                         HomeActivitySharedAction.SendSpaceFeedBack    -> {
                             bugReporter.openBugReportScreen(this, ReportType.SPACE_BETA_FEEDBACK)
                         }
-                        is HomeActivitySharedAction.InviteByEmail    -> {
-                            // TODO
-                        }
+                        is HomeActivitySharedAction.InviteByEmail     -> Unit // no-op
                     }.exhaustive
                 }
                 .disposeOnDestroy()
