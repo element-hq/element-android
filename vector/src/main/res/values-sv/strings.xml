@@ -1785,7 +1785,7 @@
     <string name="command_description_op_user">Definiera behörighetsnivå för en användare</string>
     <string name="command_description_deop_user">Avoppar användaren med det angivna ID:t</string>
     <string name="command_description_invite_user">Bjuder in användaren med det angivna ID:t till det nuvarande rummet</string>
-    <string name="command_description_join_room">Går med i rummet med det angivna aliaset</string>
+    <string name="command_description_join_room">Går med i rummet med den angivna adressen</string>
     <string name="command_description_topic">Sätt ett rumsämne</string>
     <string name="command_description_kick_user">Sparkar ut användaren med det angivna ID:t</string>
     <string name="command_description_nick">Ändrar ditt visningsnamn</string>
