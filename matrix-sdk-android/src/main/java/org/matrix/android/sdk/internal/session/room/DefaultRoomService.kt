@@ -105,8 +105,8 @@ internal class DefaultRoomService @Inject constructor(
         return roomSummaryDataSource.getUpdatablePagedRoomSummariesLive(queryParams, pagedListConfig, sortOrder)
     }
 
-    override fun getNotificationCountForRooms(queryParams: RoomSummaryQueryParams, preferenceProvider: RoomSummary.RoomSummaryPreferenceProvider): RoomAggregateNotificationCount {
-        return roomSummaryDataSource.getNotificationCountForRooms(queryParams, preferenceProvider)
+    override fun getNotificationCountForRooms(queryParams: RoomSummaryQueryParams): RoomAggregateNotificationCount {
+        return roomSummaryDataSource.getNotificationCountForRooms(queryParams)
     }
 
     override fun getBreadcrumbs(queryParams: RoomSummaryQueryParams): List<RoomSummary> {

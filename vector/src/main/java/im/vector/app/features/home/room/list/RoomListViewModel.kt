@@ -30,7 +30,6 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.displayname.getBestName
-import im.vector.app.features.home.room.ScSdkPreferences
 import im.vector.app.features.invite.AutoAcceptInvites
 import im.vector.app.features.settings.VectorPreferences
 import kotlinx.coroutines.Dispatchers
@@ -54,7 +53,6 @@ class RoomListViewModel @Inject constructor(
         private val session: Session,
         private val stringProvider: StringProvider,
         private val appStateHandler: AppStateHandler,
-        private val scSdkPreferences: ScSdkPreferences,
         private val vectorPreferences: VectorPreferences,
         private val autoAcceptInvites: AutoAcceptInvites
 ) : VectorViewModel<RoomListViewState, RoomListAction, RoomListViewEvents>(initialState) {
@@ -129,7 +127,6 @@ class RoomListViewModel @Inject constructor(
     private val roomListSectionBuilder = if (appStateHandler.getCurrentRoomGroupingMethod() is RoomGroupingMethod.BySpace) {
         RoomListSectionBuilderSpace(
                 session,
-                scSdkPreferences,
                 stringProvider,
                 appStateHandler,
                 viewModelScope,
@@ -143,7 +140,6 @@ class RoomListViewModel @Inject constructor(
     } else {
         RoomListSectionBuilderGroup(
                 session,
-                scSdkPreferences,
                 stringProvider,
                 appStateHandler,
                 autoAcceptInvites

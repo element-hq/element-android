@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.internal.database.model
 
+import de.spiritcroc.matrixsdk.StaticScSdkHelper
 import io.realm.RealmList
 import io.realm.RealmObject
 import io.realm.annotations.Index
@@ -27,7 +28,9 @@ import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.VersioningState
 import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
+import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.internal.database.model.presence.UserPresenceEntity
+import timber.log.Timber
 
 internal open class RoomSummaryEntity(
         @PrimaryKey var roomId: String = "",
@@ -342,4 +345,36 @@ internal open class RoomSummaryEntity(
             }
         }
     companion object
+
+
+    // Keep sync with RoomSummary.scHasUnreadMessages!
+    fun scHasUnreadMessages(): Boolean {
+        val preferenceProvider = StaticScSdkHelper.scSdkPreferenceProvider
+        if (preferenceProvider == null) {
+            // Fallback to default
+            return hasUnreadOriginalContentMessages
+        }
+        return when(preferenceProvider.roomUnreadKind(isDirect)) {
+            RoomSummary.UNREAD_KIND_ORIGINAL_CONTENT -> hasUnreadOriginalContentMessages
+            RoomSummary.UNREAD_KIND_CONTENT          -> hasUnreadContentMessages
+            RoomSummary.UNREAD_KIND_FULL             -> hasUnreadMessages
+            else                                     -> hasUnreadOriginalContentMessages
+        }
+    }
+
+    // Keep sync with RoomSummary.scLatestPreviewableEvent!
+    fun scLatestPreviewableEvent(): TimelineEventEntity? {
+        val preferenceProvider = StaticScSdkHelper.scSdkPreferenceProvider
+        if (preferenceProvider == null) {
+            // Fallback to default
+            Timber.w("No preference provider set!")
+            return latestPreviewableOriginalContentEvent
+        }
+        return when(preferenceProvider.roomUnreadKind(isDirect)) {
+            RoomSummary.UNREAD_KIND_ORIGINAL_CONTENT -> latestPreviewableOriginalContentEvent
+            RoomSummary.UNREAD_KIND_CONTENT          -> latestPreviewableContentEvent
+            RoomSummary.UNREAD_KIND_FULL             -> latestPreviewableEvent
+            else                                     -> latestPreviewableOriginalContentEvent
+        }
+    }
 }

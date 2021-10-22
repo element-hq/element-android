@@ -39,6 +39,7 @@ import com.facebook.stetho.Stetho
 import com.gabrielittner.threetenbp.LazyThreeTen
 import com.vanniktech.emoji.EmojiManager
 import com.vanniktech.emoji.google.GoogleEmojiProvider
+import de.spiritcroc.matrixsdk.StaticScSdkHelper
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.DaggerVectorComponent
 import im.vector.app.core.di.HasVectorInjector
@@ -123,6 +124,9 @@ class VectorApplication :
         invitesAcceptor.initialize()
         vectorUncaughtExceptionHandler.activate(this)
         rxConfig.setupRxPlugin()
+
+        // SC SDK helper initialization
+        StaticScSdkHelper.scSdkPreferenceProvider = vectorPreferences
 
         // Remove Log handler statically added by Jitsi
         Timber.forest()

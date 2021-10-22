@@ -21,7 +21,6 @@ import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.Uninitialized
 import im.vector.app.RoomGroupingMethod
 import im.vector.app.features.home.RoomListDisplayMode
-import im.vector.app.features.home.room.ScSdkPreferences
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
 

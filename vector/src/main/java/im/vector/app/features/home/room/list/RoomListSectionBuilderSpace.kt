@@ -26,7 +26,6 @@ import im.vector.app.AppStateHandler
 import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.home.RoomListDisplayMode
-import im.vector.app.features.home.room.ScSdkPreferences
 import im.vector.app.features.invite.AutoAcceptInvites
 import im.vector.app.features.invite.showInvites
 import im.vector.app.space
@@ -49,7 +48,6 @@ import org.matrix.android.sdk.rx.asObservable
 
 class RoomListSectionBuilderSpace(
         private val session: Session,
-        private val scSdkPreferences: ScSdkPreferences,
         private val stringProvider: StringProvider,
         private val appStateHandler: AppStateHandler,
         private val viewModelScope: CoroutineScope,
@@ -504,8 +502,7 @@ class RoomListSectionBuilderSpace(
                                                                 RoomAggregateNotificationCount(it.size, it.size, 0, 0)
                                                             } else {
                                                                 session.getNotificationCountForRooms(
-                                                                        roomQueryParams.process(spaceFilterStrategy, appStateHandler.safeActiveSpaceId()),
-                                                                        scSdkPreferences
+                                                                        roomQueryParams.process(spaceFilterStrategy, appStateHandler.safeActiveSpaceId())
                                                                 )
                                                             }
                                                     )

@@ -23,6 +23,7 @@ import androidx.lifecycle.Transformations
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import com.zhuinden.monarchy.Monarchy
+import de.spiritcroc.matrixsdk.StaticScSdkHelper
 import io.realm.Realm
 import io.realm.RealmQuery
 import io.realm.Sort
@@ -43,7 +44,6 @@ import org.matrix.android.sdk.api.session.space.SpaceSummaryQueryParams
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.api.util.toOptional
 import org.matrix.android.sdk.internal.database.mapper.RoomSummaryMapper
-import org.matrix.android.sdk.internal.database.model.RoomEntityFields
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntityFields
 import org.matrix.android.sdk.internal.database.query.findByAlias
@@ -225,12 +225,13 @@ internal class RoomSummaryDataSource @Inject constructor(@SessionDatabase privat
         }
     }
 
-    fun getNotificationCountForRooms(queryParams: RoomSummaryQueryParams, preferenceProvider: RoomSummary.RoomSummaryPreferenceProvider): RoomAggregateNotificationCount {
+    fun getNotificationCountForRooms(queryParams: RoomSummaryQueryParams): RoomAggregateNotificationCount {
+        val preferenceProvider = StaticScSdkHelper.scSdkPreferenceProvider
         var notificationCount: RoomAggregateNotificationCount? = null
         monarchy.doWithRealm { realm ->
             val roomSummariesQuery = roomSummariesQuery(realm, queryParams)
             val markedUnreadCount = roomSummariesQuery(realm, queryParams).equalTo(RoomSummaryEntityFields.MARKED_UNREAD, true).count().toInt()
-            notificationCount = if (preferenceProvider.aggregateUnreadRoomCounts()) {
+            notificationCount = if (preferenceProvider?.aggregateUnreadRoomCounts() != false) {
                 // Count chats
                 val notifCount = roomSummariesQuery.greaterThan(RoomSummaryEntityFields.NOTIFICATION_COUNT, 0).count().toInt()
                 val highlightCount = roomSummariesQuery.greaterThan(RoomSummaryEntityFields.HIGHLIGHT_COUNT, 0).count().toInt()
@@ -238,7 +239,7 @@ internal class RoomSummaryDataSource @Inject constructor(@SessionDatabase privat
                         // Preferred since MSC 2654
                         roomSummariesQuery.greaterThan(RoomSummaryEntityFields.UNREAD_COUNT, 0).count().toInt(),
                         // TODO-SC-merge: properly use dm/non-dm flag? (note that this will be likely overwritten either way by above field from MSC 2654)
-                        roomSummariesQuery(realm, queryParams).equalTo(preferenceProvider.getUnreadRoomSummaryField(false), true).count().toInt()
+                        roomSummariesQuery(realm, queryParams).equalTo(getUnreadRoomSummaryField(false), true).count().toInt()
                 )
                 RoomAggregateNotificationCount(
                         notifCount,
@@ -254,7 +255,7 @@ internal class RoomSummaryDataSource @Inject constructor(@SessionDatabase privat
                         // Preferred since MSC 2654
                         roomSummariesQuery.sum(RoomSummaryEntityFields.UNREAD_COUNT).toInt(),
                         // TODO-SC-merge: properly use dm/non-dm flag? (note that this will be likely overwritten either way by above field from MSC 2654)
-                        roomSummariesQuery(realm, queryParams).equalTo(preferenceProvider.getUnreadRoomSummaryField(false), true).count().toInt()
+                        roomSummariesQuery(realm, queryParams).equalTo(getUnreadRoomSummaryField(false), true).count().toInt()
                 )
                 RoomAggregateNotificationCount(
                         notifCount,
@@ -454,6 +455,15 @@ internal class RoomSummaryDataSource @Inject constructor(@SessionDatabase privat
                     }
                 }
             }
+        }
+    }
+
+    fun getUnreadRoomSummaryField(isDirect: Boolean): String {
+        return when(StaticScSdkHelper.scSdkPreferenceProvider?.roomUnreadKind(isDirect)) {
+            RoomSummary.UNREAD_KIND_ORIGINAL_CONTENT -> RoomSummaryEntityFields.HAS_UNREAD_ORIGINAL_CONTENT_MESSAGES
+            RoomSummary.UNREAD_KIND_CONTENT          -> RoomSummaryEntityFields.HAS_UNREAD_CONTENT_MESSAGES
+            RoomSummary.UNREAD_KIND_FULL             -> RoomSummaryEntityFields.HAS_UNREAD_MESSAGES
+            else /* null */                          -> RoomSummaryEntityFields.HAS_UNREAD_ORIGINAL_CONTENT_MESSAGES
         }
     }
 }

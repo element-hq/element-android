@@ -23,7 +23,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import androidx.core.view.iterator
 import androidx.fragment.app.Fragment
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.fragmentViewModel
@@ -88,7 +87,7 @@ class HomeDetailFragment @Inject constructor(
 
     // When this changes, restart the activity for changes to apply
     private val shouldShowUnimportantCounterBadge = vectorPreferences.shouldShowUnimportantCounterBadge()
-    private val useAggregateCounts = vectorPreferences.useAggregateCounts()
+    private val useAggregateCounts = vectorPreferences.aggregateUnreadRoomCounts()
 
     private var hasUnreadRooms = false
         set(value) {
@@ -216,7 +215,7 @@ class HomeDetailFragment @Inject constructor(
         super.onResume()
 
         if (vectorPreferences.shouldShowUnimportantCounterBadge() != shouldShowUnimportantCounterBadge ||
-                vectorPreferences.useAggregateCounts() != useAggregateCounts) {
+                vectorPreferences.aggregateUnreadRoomCounts() != useAggregateCounts) {
             activity?.restart()
             return
         }

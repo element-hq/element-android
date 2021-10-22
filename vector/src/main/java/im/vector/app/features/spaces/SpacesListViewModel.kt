@@ -28,7 +28,6 @@ import dagger.assisted.AssistedInject
 import im.vector.app.AppStateHandler
 import im.vector.app.RoomGroupingMethod
 import im.vector.app.core.platform.VectorViewModel
-import im.vector.app.features.home.room.ScSdkPreferences
 import im.vector.app.features.invite.AutoAcceptInvites
 import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.VectorPreferences
@@ -63,7 +62,6 @@ import org.matrix.android.sdk.flow.flow
 class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: SpaceListViewState,
                                                       private val appStateHandler: AppStateHandler,
                                                       private val session: Session,
-                                                      private val scSdkPreferences: ScSdkPreferences,
                                                       private val vectorPreferences: VectorPreferences,
                                                       private val autoAcceptInvites: AutoAcceptInvites
 ) : VectorViewModel<SpaceListViewState, SpaceListAction, SpaceListViewEvents>(initialState) {
@@ -138,8 +136,7 @@ class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: Sp
                                 this.activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(null).takeIf {
                                     !vectorPreferences.prefSpacesShowAllRoomInHome()
                                 } ?: ActiveSpaceFilter.None
-                            },
-                            scSdkPreferences
+                            }
                     )
                     val counts = RoomAggregateNotificationCount(
                             totalCount.notificationCount + inviteCount,

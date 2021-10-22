@@ -19,13 +19,11 @@ package im.vector.app.features.home.room.breadcrumbs
 import com.airbnb.epoxy.EpoxyController
 import im.vector.app.core.epoxy.zeroItem
 import im.vector.app.features.home.AvatarRenderer
-import im.vector.app.features.home.room.ScSdkPreferences
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
 class BreadcrumbsController @Inject constructor(
-        private val avatarRenderer: AvatarRenderer,
-        private val scSdkPreferences: ScSdkPreferences
+        private val avatarRenderer: AvatarRenderer
 ) : EpoxyController() {
 
     var listener: Listener? = null
@@ -63,7 +61,7 @@ class BreadcrumbsController @Inject constructor(
                         unreadNotificationCount(roomSummary.notificationCount)
                         markedUnread(roomSummary.markedUnread)
                         showHighlighted(roomSummary.highlightCount > 0)
-                        hasUnreadMessage(roomSummary.scIsUnread(host.scSdkPreferences))
+                        hasUnreadMessage(roomSummary.scIsUnread())
                         hasDraft(roomSummary.userDrafts.isNotEmpty())
                         itemClickListener {
                             host.listener?.onBreadcrumbClicked(roomSummary.roomId)

@@ -23,6 +23,7 @@ import android.os.Build
 import android.provider.MediaStore
 import androidx.core.content.edit
 import com.squareup.seismic.ShakeDetector
+import de.spiritcroc.matrixsdk.StaticScSdkHelper
 import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.di.DefaultSharedPreferences
@@ -35,7 +36,7 @@ import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import timber.log.Timber
 import javax.inject.Inject
 
-class VectorPreferences @Inject constructor(private val context: Context) {
+class VectorPreferences @Inject constructor(private val context: Context): StaticScSdkHelper.ScSdkPreferenceProvider {
 
     companion object {
         const val SETTINGS_CHANGE_PASSWORD_PREFERENCE_KEY = "SETTINGS_CHANGE_PASSWORD_PREFERENCE_KEY"
@@ -959,7 +960,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
             default
         }
     }
-    fun roomUnreadKind(isDirect: Boolean): Int {
+    override fun roomUnreadKind(isDirect: Boolean): Int {
         return if (isDirect) {
             roomUnreadKindDm()
         } else {
@@ -979,7 +980,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     }
 
     // SC additions - for spaces/categories: whether to count unread chats, or messages
-    fun useAggregateCounts(): Boolean {
+    override fun aggregateUnreadRoomCounts(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_AGGREGATE_UNREAD_COUNTS, true)
     }
 

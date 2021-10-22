@@ -16,13 +16,14 @@
 
 package org.matrix.android.sdk.api.session.room.model
 
+import de.spiritcroc.matrixsdk.StaticScSdkHelper
 import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.session.presence.model.UserPresence
 import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
 import org.matrix.android.sdk.api.session.room.send.UserDraft
 import org.matrix.android.sdk.api.session.room.sender.SenderInfo
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
-import org.matrix.android.sdk.internal.database.model.RoomSummaryEntityFields
+import timber.log.Timber
 
 /**
  * This class holds some data of a room.
@@ -105,33 +106,37 @@ data class RoomSummary(
     val canStartCall: Boolean
         get() = joinedMembersCount == 2
 
-    fun scIsUnread(preferenceProvider: RoomSummaryPreferenceProvider?): Boolean {
-        return markedUnread || scHasUnreadMessages(preferenceProvider)
+    fun scIsUnread(): Boolean {
+        return markedUnread || scHasUnreadMessages()
     }
 
-    fun scHasUnreadMessages(preferenceProvider: RoomSummaryPreferenceProvider?): Boolean {
+    // Keep sync with RoomSummary.scHasUnreadMessages!
+    fun scHasUnreadMessages(): Boolean {
+        val preferenceProvider = StaticScSdkHelper.scSdkPreferenceProvider
         if (preferenceProvider == null) {
             // Fallback to default
-            return hasUnreadMessages
+            return hasUnreadOriginalContentMessages
         }
-        return when(preferenceProvider.getUnreadKind(isDirect)) {
+        return when(preferenceProvider.roomUnreadKind(isDirect)) {
             UNREAD_KIND_ORIGINAL_CONTENT -> hasUnreadOriginalContentMessages
-            UNREAD_KIND_CONTENT -> hasUnreadContentMessages
-            // UNREAD_KIND_FULL
-            else -> hasUnreadMessages
+            UNREAD_KIND_CONTENT          -> hasUnreadContentMessages
+            UNREAD_KIND_FULL             -> hasUnreadMessages
+            else                         -> hasUnreadOriginalContentMessages
         }
     }
 
-    fun scLatestPreviewableEvent(preferenceProvider: RoomSummaryPreferenceProvider?): TimelineEvent? {
+    // Keep sync with RoomSummaryEntity.scLatestPreviewableEvent!
+    fun scLatestPreviewableEvent(): TimelineEvent? {
+        val preferenceProvider = StaticScSdkHelper.scSdkPreferenceProvider
         if (preferenceProvider == null) {
             // Fallback to default
             return latestPreviewableOriginalContentEvent
         }
-        return when(preferenceProvider.getUnreadKind(isDirect)) {
+        return when(preferenceProvider.roomUnreadKind(isDirect)) {
             UNREAD_KIND_ORIGINAL_CONTENT -> latestPreviewableOriginalContentEvent
-            UNREAD_KIND_CONTENT -> latestPreviewableContentEvent
-            // UNREAD_KIND_DEFAULT
-            else -> latestPreviewableOriginalContentEvent
+            UNREAD_KIND_CONTENT          -> latestPreviewableContentEvent
+            UNREAD_KIND_FULL             -> latestPreviewableEvent
+            else                         -> latestPreviewableOriginalContentEvent
         }
     }
 
@@ -155,18 +160,5 @@ data class RoomSummary(
         const val UNREAD_KIND_FULL = 0
         const val UNREAD_KIND_CONTENT = 1
         const val UNREAD_KIND_ORIGINAL_CONTENT = 2
-    }
-
-    // SC addition
-    interface RoomSummaryPreferenceProvider {
-        fun getUnreadKind(isDirect: Boolean): Int
-        fun aggregateUnreadRoomCounts(): Boolean
-        fun getUnreadRoomSummaryField(isDirect: Boolean): String {
-            return when(getUnreadKind(isDirect)) {
-                UNREAD_KIND_ORIGINAL_CONTENT -> RoomSummaryEntityFields.HAS_UNREAD_ORIGINAL_CONTENT_MESSAGES
-                UNREAD_KIND_CONTENT -> RoomSummaryEntityFields.HAS_UNREAD_CONTENT_MESSAGES
-                /*UNREAD_KIND_FULL*/ else -> RoomSummaryEntityFields.HAS_UNREAD_MESSAGES
-            }
-        }
     }
 }

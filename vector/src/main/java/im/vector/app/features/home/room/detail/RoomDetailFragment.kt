@@ -135,7 +135,6 @@ import im.vector.app.features.command.Command
 import im.vector.app.features.crypto.keysbackup.restore.KeysBackupRestoreActivity
 import im.vector.app.features.crypto.verification.VerificationBottomSheet
 import im.vector.app.features.home.AvatarRenderer
-import im.vector.app.features.home.room.ScSdkPreferences
 import im.vector.app.features.home.room.detail.composer.SendMode
 import im.vector.app.features.home.room.detail.composer.TextComposerAction
 import im.vector.app.features.home.room.detail.composer.TextComposerView
@@ -1434,7 +1433,7 @@ class RoomDetailFragment @Inject constructor(
         val inviter = mainState.asyncInviter()
         if (summary?.membership == Membership.JOIN) {
             views.jumpToBottomView.count = summary.notificationCount
-            views.jumpToBottomView.drawBadge = summary.scIsUnread(ScSdkPreferences(context))
+            views.jumpToBottomView.drawBadge = summary.scIsUnread()
             timelineEventController.update(mainState)
             lazyLoadedViews.inviteView(false)?.isVisible = false
             if (mainState.tombstoneEvent == null) {

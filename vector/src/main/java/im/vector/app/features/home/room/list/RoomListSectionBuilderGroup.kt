@@ -22,7 +22,6 @@ import im.vector.app.R
 import im.vector.app.RoomGroupingMethod
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.home.RoomListDisplayMode
-import im.vector.app.features.home.room.ScSdkPreferences
 import im.vector.app.features.invite.AutoAcceptInvites
 import im.vector.app.features.invite.showInvites
 import io.reactivex.disposables.CompositeDisposable
@@ -37,7 +36,6 @@ import org.matrix.android.sdk.rx.asObservable
 
 class RoomListSectionBuilderGroup(
         private val session: Session,
-        private val scSdkPreferences: ScSdkPreferences,
         private val stringProvider: StringProvider,
         private val appStateHandler: AppStateHandler,
         private val autoAcceptInvites: AutoAcceptInvites,
@@ -320,7 +318,7 @@ class RoomListSectionBuilderGroup(
                                         .subscribe {
                                             sections.find { it.sectionName == name }
                                                     ?.notificationCount
-                                                    ?.postValue(session.getNotificationCountForRooms(roomQueryParams, scSdkPreferences))
+                                                    ?.postValue(session.getNotificationCountForRooms(roomQueryParams))
                                         }.also {
                                             disposables.add(it)
                                         }

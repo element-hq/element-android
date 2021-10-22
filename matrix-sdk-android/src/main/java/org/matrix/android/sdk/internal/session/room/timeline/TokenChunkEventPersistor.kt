@@ -174,7 +174,7 @@ internal class TokenChunkEventPersistor @Inject constructor(@SessionDatabase pri
                 currentChunk.isLastForward = true
                 currentLastForwardChunk?.deleteOnCascade(deleteStateEvents = false, canDeleteRoot = false)
                 RoomSummaryEntity.where(realm, roomId).findFirst()?.apply {
-                    latestPreviewableEvent = RoomSummaryEventsHelper.getLatestPreviewableEvent(realm, roomId)
+                    latestPreviewableEvent = RoomSummaryEventsHelper.getLatestPreviewableEventScAll(realm, roomId)
                     latestPreviewableContentEvent = RoomSummaryEventsHelper.getLatestPreviewableEvent(realm, roomId)
                     latestPreviewableOriginalContentEvent = RoomSummaryEventsHelper.getLatestPreviewableEventScOriginalContent(realm, roomId)
                 }
@@ -240,9 +240,11 @@ internal class TokenChunkEventPersistor @Inject constructor(@SessionDatabase pri
             it.deleteOnCascade(deleteStateEvents = false, canDeleteRoot = false)
         }
         val roomSummaryEntity = RoomSummaryEntity.getOrCreate(realm, roomId)
-        val shouldUpdateSummary = roomSummaryEntity.latestPreviewableOriginalContentEvent == null ||
+        val shouldUpdateSummary = roomSummaryEntity.scLatestPreviewableEvent() == null ||
                 (chunksToDelete.isNotEmpty() && currentChunk.isLastForward && direction == PaginationDirection.FORWARDS)
         if (shouldUpdateSummary) {
+            roomSummaryEntity.latestPreviewableEvent = RoomSummaryEventsHelper.getLatestPreviewableEventScAll(realm, roomId)
+            roomSummaryEntity.latestPreviewableContentEvent = RoomSummaryEventsHelper.getLatestPreviewableEvent(realm, roomId)
             roomSummaryEntity.latestPreviewableOriginalContentEvent = RoomSummaryEventsHelper.getLatestPreviewableEventScOriginalContent(realm, roomId)
         }
         if (currentChunk.isValid) {

@@ -18,7 +18,6 @@ package im.vector.app.features.home.room.list
 
 import im.vector.app.AppStateHandler
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.features.home.room.ScSdkPreferences
 import im.vector.app.features.invite.AutoAcceptInvites
 import im.vector.app.features.settings.VectorPreferences
 import org.matrix.android.sdk.api.session.Session
@@ -26,7 +25,6 @@ import javax.inject.Inject
 import javax.inject.Provider
 
 class RoomListViewModelFactory @Inject constructor(private val session: Provider<Session>,
-                                                   private val scSdkPreferences: ScSdkPreferences,
                                                    private val appStateHandler: AppStateHandler,
                                                    private val stringProvider: StringProvider,
                                                    private val vectorPreferences: VectorPreferences,
@@ -39,7 +37,6 @@ class RoomListViewModelFactory @Inject constructor(private val session: Provider
                 session = session.get(),
                 stringProvider = stringProvider,
                 appStateHandler = appStateHandler,
-                scSdkPreferences = scSdkPreferences,
                 vectorPreferences = vectorPreferences,
                 autoAcceptInvites = autoAcceptInvites
         )

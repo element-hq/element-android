@@ -26,7 +26,6 @@ import im.vector.app.core.ui.list.genericHeaderItem
 import im.vector.app.features.grouplist.groupSummaryItem
 import im.vector.app.features.grouplist.homeSpaceSummaryItem
 import im.vector.app.features.home.AvatarRenderer
-import im.vector.app.features.home.room.ScSdkPreferences
 import im.vector.app.features.home.room.list.UnreadCounterBadgeView
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.group
@@ -37,7 +36,6 @@ import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
 import org.matrix.android.sdk.api.session.room.summary.RoomAggregateNotificationCount
 import org.matrix.android.sdk.api.util.toMatrixItem
-import java.util.Locale
 import javax.inject.Inject
 
 class SpaceSummaryController @Inject constructor(
@@ -143,7 +141,7 @@ class SpaceSummaryController @Inject constructor(
             listener { host.callback?.onSpaceSelected(null) }
         }
 
-        val useAggregateCounts = vectorPreferences.useAggregateCounts()
+        val useAggregateCounts = vectorPreferences.aggregateUnreadRoomCounts()
 
         rootSpaces
                 ?.forEach { groupSummary ->
@@ -207,7 +205,7 @@ class SpaceSummaryController @Inject constructor(
         val expanded = expandedStates[childSummary.roomId] == true
         val isSelected = selected is RoomGroupingMethod.BySpace && childSummary.roomId == selected.space()?.roomId
 
-        val useAggregateCounts = vectorPreferences.useAggregateCounts()
+        val useAggregateCounts = vectorPreferences.aggregateUnreadRoomCounts()
 
         subSpaceSummaryItem {
             avatarRenderer(host.avatarRenderer)

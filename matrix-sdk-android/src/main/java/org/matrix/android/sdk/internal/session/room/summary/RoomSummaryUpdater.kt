@@ -134,7 +134,12 @@ internal class RoomSummaryUpdater @Inject constructor(
         val latestPreviewableContentEvent = RoomSummaryEventsHelper.getLatestPreviewableEvent(realm, roomId)
         val latestPreviewableOriginalContentEvent = RoomSummaryEventsHelper.getLatestPreviewableEventScOriginalContent(realm, roomId)
 
-        val lastActivityFromEvent = latestPreviewableOriginalContentEvent?.root?.originServerTs
+        roomSummaryEntity.latestPreviewableEvent = latestPreviewableEvent
+        roomSummaryEntity.latestPreviewableContentEvent = latestPreviewableContentEvent
+        roomSummaryEntity.latestPreviewableOriginalContentEvent = latestPreviewableOriginalContentEvent
+        val scLatestPreviewableEvent = roomSummaryEntity.scLatestPreviewableEvent()
+
+        val lastActivityFromEvent = scLatestPreviewableEvent?.root?.originServerTs
         if (lastActivityFromEvent != null) {
             roomSummaryEntity.lastActivityTime = lastActivityFromEvent
         }
@@ -156,9 +161,6 @@ internal class RoomSummaryUpdater @Inject constructor(
         roomSummaryEntity.name = ContentMapper.map(lastNameEvent?.content).toModel<RoomNameContent>()?.name
         roomSummaryEntity.topic = ContentMapper.map(lastTopicEvent?.content).toModel<RoomTopicContent>()?.topic
         roomSummaryEntity.joinRules = ContentMapper.map(joinRulesEvent?.content).toModel<RoomJoinRulesContent>()?.joinRules
-        roomSummaryEntity.latestPreviewableEvent = latestPreviewableEvent
-        roomSummaryEntity.latestPreviewableContentEvent = latestPreviewableContentEvent
-        roomSummaryEntity.latestPreviewableOriginalContentEvent = latestPreviewableOriginalContentEvent
         roomSummaryEntity.canonicalAlias = ContentMapper.map(lastCanonicalAliasEvent?.content).toModel<RoomCanonicalAliasContent>()
                 ?.canonicalAlias
 
@@ -203,7 +205,7 @@ internal class RoomSummaryUpdater @Inject constructor(
 
     fun updateRoomPreviews(realm: Realm) {
         RoomSummaryEntity.where(realm).findAll().forEach { entity ->
-            val previewEvent = entity.latestPreviewableOriginalContentEvent
+            val previewEvent = entity.scLatestPreviewableEvent()
             val root = previewEvent?.root
             if (root?.type == EventType.ENCRYPTED && root.decryptionResultJson == null) {
                 Timber.v("Retry decrypt ${previewEvent.eventId}")
@@ -406,7 +408,8 @@ internal class RoomSummaryUpdater @Inject constructor(
 
             // we need also to filter DMs...
             // it's more annoying as based on if the other members belong the space or not
-            /*
+            if (false /*TODO setting*/) {
+                // Wrong indention for upstream merge-ability
             RoomSummaryEntity.where(realm)
                     .equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
                     .process(RoomSummaryEntityFields.MEMBERSHIP_STR, Membership.activeMemberships())
@@ -431,7 +434,7 @@ internal class RoomSummaryUpdater @Inject constructor(
                         }
 //                        Timber.v("## SPACES: flatten of ${dmRoom.otherMemberIds.joinToString(",")} is ${dmRoom.flattenParentIds}")
                     }
-             */
+            }
 
             // Maybe a good place to count the number of notifications for spaces?
 

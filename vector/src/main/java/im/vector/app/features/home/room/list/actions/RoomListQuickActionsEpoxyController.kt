@@ -28,7 +28,6 @@ import im.vector.app.core.epoxy.profiles.notifications.radioButtonItem
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.home.AvatarRenderer
-import im.vector.app.features.home.room.ScSdkPreferences
 import im.vector.app.features.roomprofile.notifications.notificationOptions
 import im.vector.app.features.roomprofile.notifications.notificationStateMapped
 import im.vector.app.features.settings.VectorPreferences
@@ -44,7 +43,6 @@ class RoomListQuickActionsEpoxyController @Inject constructor(
         private val colorProvider: ColorProvider,
         private val stringProvider: StringProvider,
         private val vectorPreferences: VectorPreferences,
-        private val scSdkPreferences: ScSdkPreferences
 ) : TypedEpoxyController<RoomListQuickActionViewState>() {
 
     var listener: Listener? = null
@@ -77,7 +75,7 @@ class RoomListQuickActionsEpoxyController @Inject constructor(
                 bottomSheetDividerItem {
                     id("mark_unread_separator")
                 }
-                if (roomSummary.scIsUnread(scSdkPreferences)) {
+                if (roomSummary.scIsUnread()) {
                     RoomListQuickActionsSharedAction.MarkRead(roomSummary.roomId).toBottomSheetItem(-1)
                 } else {
                     RoomListQuickActionsSharedAction.MarkUnread(roomSummary.roomId).toBottomSheetItem(-1)

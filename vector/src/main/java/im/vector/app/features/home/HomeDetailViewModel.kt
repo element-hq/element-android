@@ -31,7 +31,6 @@ import im.vector.app.features.call.dialpad.DialPadLookup
 import im.vector.app.features.call.lookup.CallProtocolsChecker
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.createdirect.DirectRoomHelper
-import im.vector.app.features.home.room.ScSdkPreferences
 import im.vector.app.features.invite.AutoAcceptInvites
 import im.vector.app.features.invite.showInvites
 import im.vector.app.features.settings.VectorDataStore
@@ -61,7 +60,6 @@ import java.util.concurrent.TimeUnit
 class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: HomeDetailViewState,
                                                       private val session: Session,
                                                       private val uiStateRepository: UiStateRepository,
-                                                      private val scSdkPreferences: ScSdkPreferences,
                                                       private val vectorDataStore: VectorDataStore,
                                                       private val callManager: WebRtcCallManager,
                                                       private val directRoomHelper: DirectRoomHelper,
@@ -256,8 +254,7 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
                                         memberships = listOf(Membership.JOIN)
                                         roomCategoryFilter = RoomCategoryFilter.ONLY_DM
                                         activeSpaceFilter = activeSpaceRoomId?.let { ActiveSpaceFilter.ActiveSpace(it) } ?: ActiveSpaceFilter.None
-                                    },
-                                    scSdkPreferences
+                                    }
                             )
 
                             val otherRooms = session.getNotificationCountForRooms(
@@ -265,8 +262,7 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
                                         memberships = listOf(Membership.JOIN)
                                         roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
                                         activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(groupingMethod.spaceSummary?.roomId)
-                                    },
-                                    scSdkPreferences
+                                    }
                             )
 
                             setState {

@@ -210,7 +210,7 @@ interface RoomService {
     /**
      * TODO Doc
      */
-    fun getNotificationCountForRooms(queryParams: RoomSummaryQueryParams, preferenceProvider: RoomSummary.RoomSummaryPreferenceProvider): RoomAggregateNotificationCount
+    fun getNotificationCountForRooms(queryParams: RoomSummaryQueryParams): RoomAggregateNotificationCount
 
     private val defaultPagedListConfig
         get() = PagedList.Config.Builder()

@@ -26,7 +26,6 @@ import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.home.AvatarRenderer
-import im.vector.app.features.home.room.ScSdkPreferences
 import im.vector.app.features.home.room.detail.timeline.format.DisplayableEventFormatter
 import im.vector.app.features.home.room.typing.TypingHelper
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
@@ -41,7 +40,6 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
                                                  private val stringProvider: StringProvider,
                                                  private val typingHelper: TypingHelper,
                                                  private val avatarRenderer: AvatarRenderer,
-                                                 private val scSdkPreferences: ScSdkPreferences,
                                                  private val errorFormatter: ErrorFormatter) {
 
     fun create(roomSummary: RoomSummary,
@@ -114,7 +112,7 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
         val showSelected = selectedRoomIds.contains(roomSummary.roomId)
         var latestFormattedEvent: CharSequence = ""
         var latestEventTime: CharSequence = ""
-        val latestEvent = roomSummary.scLatestPreviewableEvent(scSdkPreferences)
+        val latestEvent = roomSummary.scLatestPreviewableEvent()
         if (latestEvent != null) {
             latestFormattedEvent = displayableEventFormatter.format(latestEvent, roomSummary.isDirect, roomSummary.isDirect.not())
             latestEventTime = dateFormatter.format(latestEvent.root.originServerTs, DateFormatKind.ROOM_LIST)
@@ -137,7 +135,7 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
                 .showSelected(showSelected)
                 .hasFailedSending(roomSummary.hasFailedSending)
                 .unreadNotificationCount(unreadCount)
-                .hasUnreadMessage(roomSummary.scIsUnread(scSdkPreferences))
+                .hasUnreadMessage(roomSummary.scIsUnread())
                 .markedUnread(roomSummary.markedUnread)
                 .unreadCount(roomSummary.unreadCount)
                 .hasDraft(roomSummary.userDrafts.isNotEmpty())
