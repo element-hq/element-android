@@ -133,12 +133,8 @@ class HomeDrawerFragment @Inject constructor(
 
     override fun inviteByEmail() {
         sharedActionViewModel.post(HomeActivitySharedAction.CloseDrawer)
-        InviteByEmailDialog(requireActivity()).show(
-                object : InviteByEmailDialog.Listener {
-                    override fun inviteByEmail(email: String) {
-                        sharedActionViewModel.post(HomeActivitySharedAction.InviteByEmail(email))
-                    }
-                }
-        )
+        InviteByEmailDialog(requireActivity()).show { email ->
+            sharedActionViewModel.post(HomeActivitySharedAction.InviteByEmail(email))
+        }
     }
 }

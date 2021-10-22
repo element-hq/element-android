@@ -128,14 +128,10 @@ class TchapContactListFragment @Inject constructor(
     }
 
     override fun onInviteByEmailClick() {
-        InviteByEmailDialog(requireActivity()).show(
-                object : InviteByEmailDialog.Listener {
-                    override fun inviteByEmail(email: String) {
-                        viewModel.handle(TchapContactListAction.AddPendingSelection(PendingSelection.ThreePidPendingSelection(ThreePid.Email(email))))
-                        sharedActionViewModel.post(TchapContactListSharedAction.OnInviteByEmail(email))
-                    }
-                }
-        )
+        InviteByEmailDialog(requireActivity()).show { email ->
+            viewModel.handle(TchapContactListAction.AddPendingSelection(PendingSelection.ThreePidPendingSelection(ThreePid.Email(email))))
+            sharedActionViewModel.post(TchapContactListSharedAction.OnInviteByEmail(email))
+        }
     }
 
     override fun onItemClick(user: User) {

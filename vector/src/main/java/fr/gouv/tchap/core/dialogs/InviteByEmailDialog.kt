@@ -30,7 +30,7 @@ class InviteByEmailDialog(
         private val activity: Activity
 ) {
 
-    interface Listener {
+    fun interface Listener {
         fun inviteByEmail(email: String)
     }
 
