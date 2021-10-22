@@ -948,7 +948,7 @@
     <string name="command_description_op_user">设置用户的权限等级</string>
     <string name="command_description_deop_user">按照 ID 取消用户管理员权限</string>
     <string name="command_description_invite_user">按照 ID 邀请用户进入当前聊天室</string>
-    <string name="command_description_join_room">按照别名加入聊天室</string>
+    <string name="command_description_join_room">用给定地址加入聊天室</string>
     <string name="command_description_part_room">离开聊天室</string>
     <string name="command_description_topic">设置聊天室主题</string>
     <string name="command_description_kick_user">按照 ID 踢出用户</string>
@@ -2956,4 +2956,7 @@
     <string name="command_description_room_name">设置聊天室名称</string>
     <string name="command_description_unignore_user">停止忽略用户，继续显示他们的消息</string>
     <string name="command_description_ignore_user">忽略用户，隐藏他们的消息</string>
+    <string name="a11y_presence_unavailable">不可用</string>
+    <string name="a11y_presence_offline">离线</string>
+    <string name="a11y_presence_online">在线</string>
 </resources>

@@ -1094,7 +1094,7 @@
     <string name="command_description_op_user">Define nível de poder de um/uma usuário(a)</string>
     <string name="command_description_deop_user">Desopa usuária(o) com id dada</string>
     <string name="command_description_invite_user">Convida usuária(o) com id dada para esta sala</string>
-    <string name="command_description_join_room">Junta-se a sala com alias dado</string>
+    <string name="command_description_join_room">Junta-se a sala com endereço dado</string>
     <string name="command_description_part_room">Sair de sala</string>
     <string name="command_description_topic">Definir o tópico da sala</string>
     <string name="command_description_kick_user">Expulsa a(o) usuária(o) com id dada</string>
@@ -3072,4 +3072,7 @@
     <string name="command_description_room_name">Define o nome da sala</string>
     <string name="command_description_unignore_user">Para de ignorar um/uma usuário(a), mostrando as mensagens dele/dela de agora em diante</string>
     <string name="command_description_ignore_user">Ignora um/uma usuário(a), escondendo as mensagens dele/dela de você</string>
+    <string name="a11y_presence_unavailable">Indisponível</string>
+    <string name="a11y_presence_offline">Offline</string>
+    <string name="a11y_presence_online">Online</string>
 </resources>

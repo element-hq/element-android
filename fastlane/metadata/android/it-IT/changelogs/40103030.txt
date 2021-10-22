@@ -1,0 +1,2 @@
+Modifiche principali in questa versione: rese visibili le informative dei server d'identità nelle impostazioni. Rimosso temporaneamente il supporto per Android Auto.
+Cronologia completa: https://github.com/vector-im/element-android/releases/tag/v1.3.3

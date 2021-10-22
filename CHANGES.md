@@ -1,3 +1,39 @@
+Changes in Element v1.3.4 (2021-10-20)
+======================================
+
+Features ✨
+----------
+ - Implement /part command, with or without parameter ([#2909](https://github.com/vector-im/element-android/issues/2909))
+ - Handle Presence support, for Direct Message room ([#4090](https://github.com/vector-im/element-android/issues/4090))
+
+Bugfixes 🐛
+----------
+ - Issue #908 Adding trailing space " " or ": " if the user started a sentence by mentioning someone, ([#908](https://github.com/vector-im/element-android/issues/908))
+ - Fixes reappearing notifications when dismissing notifications from slow homeservers or delayed /sync responses ([#3437](https://github.com/vector-im/element-android/issues/3437))
+ - Catching event decryption crash and logging when attempting to markOlmSessionForUnwedging fails ([#3608](https://github.com/vector-im/element-android/issues/3608))
+ - Fixing notification sounds being triggered for every message, now they only trigger for the first, consistent with the vibrations ([#3774](https://github.com/vector-im/element-android/issues/3774))
+ - Voice Message not sendable if recorded while flight mode was on ([#4006](https://github.com/vector-im/element-android/issues/4006))
+ - Fixes push notification emails list not refreshing the first time seeing the notifications page.
+  Also improves the error handling in the email notification toggling by using synchronous flows instead of the WorkManager ([#4106](https://github.com/vector-im/element-android/issues/4106))
+ - Make MegolmBackupAuthData.signatures optional for robustness ([#4162](https://github.com/vector-im/element-android/issues/4162))
+ - Fixing push notifications starting the looping background sync when the push notification causes the application to be created. ([#4167](https://github.com/vector-im/element-android/issues/4167))
+ - Fix random crash when user logs out just after the log in. ([#4193](https://github.com/vector-im/element-android/issues/4193))
+ - Make the font size selection dialog scrollable ([#4201](https://github.com/vector-im/element-android/issues/4201))
+ - Fix conversation notification for sent messages ([#4221](https://github.com/vector-im/element-android/issues/4221))
+ - Fixes the developer sync options being displayed in the home menu when developer mode is disabled ([#4234](https://github.com/vector-im/element-android/issues/4234))
+ - Restore support for Android Auto as sent messages are no longer read aloud ([#4247](https://github.com/vector-im/element-android/issues/4247))
+ - Fix crash on slash commands Exceptions ([#4261](https://github.com/vector-im/element-android/issues/4261))
+
+Other changes
+-------------
+ - Scrub user sensitive data like gps location from images when sending on original quality ([#465](https://github.com/vector-im/element-android/issues/465))
+ - Migrate to MvRx2 (Mavericks) ([#3890](https://github.com/vector-im/element-android/issues/3890))
+ - Implement a new github action workflow to generate two PRs for emoji and sas string sync ([#4216](https://github.com/vector-im/element-android/issues/4216))
+ - Improve wording around rageshakes in the defect issue template. ([#4226](https://github.com/vector-im/element-android/issues/4226))
+ - Add automation to move incoming issues and X-Needs-Info into the right places on the issue triage board. ([#4250](https://github.com/vector-im/element-android/issues/4250))
+ - Uppon sharing image compression fails, return the original image ([#4264](https://github.com/vector-im/element-android/issues/4264))
+
+
 Changes in Element v1.3.3 (2021-10-11)
 ======================================
 

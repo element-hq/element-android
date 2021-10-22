@@ -640,9 +640,11 @@ class RoomDetailFragment @Inject constructor(
                     }
                 }
                 .setOnEmojiPopupDismissListener {
-                    views.composerLayout.views.composerEmojiButton.apply {
-                        contentDescription = getString(R.string.a11y_open_emoji_picker)
-                        setImageResource(R.drawable.ic_insert_emoji)
+                    if (isAdded) {
+                        views.composerLayout.views.composerEmojiButton.apply {
+                            contentDescription = getString(R.string.a11y_open_emoji_picker)
+                            setImageResource(R.drawable.ic_insert_emoji)
+                        }
                     }
                 }
                 .build(views.composerLayout.views.composerEditText)
@@ -1387,7 +1389,7 @@ class RoomDetailFragment @Inject constructor(
             lazyLoadedViews.inviteView(false)?.isVisible = false
             if (mainState.tombstoneEvent == null) {
                 views.composerLayout.isInvisible = !textComposerState.isComposerVisible
-                views.voiceMessageRecorderView.isVisible = !textComposerState.isSendButtonVisible
+                views.voiceMessageRecorderView.isVisible = textComposerState.isVoiceMessageRecorderVisible
                 views.composerLayout.views.sendButton.isInvisible = !textComposerState.isSendButtonVisible
                 views.composerLayout.setRoomEncrypted(summary.isEncrypted)
                 // views.composerLayout.alwaysShowSendButton = false
@@ -1450,8 +1452,8 @@ class RoomDetailFragment @Inject constructor(
 
     private fun renderSendMessageResult(sendMessageResult: TextComposerViewEvents.SendMessageResult) {
         when (sendMessageResult) {
-            is TextComposerViewEvents.SlashCommandHandled        -> {
-                sendMessageResult.messageRes?.let { showSnackWithMessage(getString(it)) }
+            is TextComposerViewEvents.SlashCommandLoading        -> {
+                showLoading(null)
             }
             is TextComposerViewEvents.SlashCommandError          -> {
                 displayCommandError(getString(R.string.command_problem_with_parameters, sendMessageResult.command.command))
@@ -1460,9 +1462,12 @@ class RoomDetailFragment @Inject constructor(
                 displayCommandError(getString(R.string.unrecognized_command, sendMessageResult.command))
             }
             is TextComposerViewEvents.SlashCommandResultOk       -> {
+                dismissLoadingDialog()
                 views.composerLayout.setTextIfDifferent("")
+                sendMessageResult.messageRes?.let { showSnackWithMessage(getString(it)) }
             }
             is TextComposerViewEvents.SlashCommandResultError    -> {
+                dismissLoadingDialog()
                 displayCommandError(errorFormatter.toHumanReadable(sendMessageResult.throwable))
             }
             is TextComposerViewEvents.SlashCommandNotImplemented -> {

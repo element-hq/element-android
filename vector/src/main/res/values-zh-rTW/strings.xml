@@ -988,7 +988,7 @@
     <string name="command_description_op_user">定義使用者的權限等級</string>
     <string name="command_description_deop_user">取消指定 id 的使用者的管理權</string>
     <string name="command_description_invite_user">邀請指定 id 的使用者到目前的聊天室</string>
-    <string name="command_description_join_room">加入指定別名的聊天室</string>
+    <string name="command_description_join_room">加入指定地址的聊天室</string>
     <string name="command_description_part_room">離開聊天室</string>
     <string name="command_description_topic">設定聊天室主題</string>
     <string name="command_description_kick_user">踢除指定 id 的使用者</string>
@@ -2801,13 +2801,13 @@
     <string name="voice_message_tap_to_stop_toast">點擊您的錄音以停止或收聽</string>
     <string name="voice_message_n_seconds_warning_toast">剩下%1$d秒</string>
     <string name="voice_message_release_to_send_toast">按住以錄製，放開以傳送</string>
-    <string name="a11y_delete_recorded_voice_message">刪除已錄製的語音訊息</string>
+    <string name="a11y_delete_recorded_voice_message">刪除錄音</string>
     <string name="a11y_recording_voice_message">正在錄製語音訊息</string>
     <string name="a11y_pause_voice_message">暫停語音訊息</string>
     <string name="a11y_play_voice_message">播放語音訊息</string>
     <string name="a11y_lock_voice_message">語音訊息鎖定</string>
     <string name="voice_message_slide_to_cancel">滑動以取消</string>
-    <string name="a11y_start_voice_message">開始語音訊息</string>
+    <string name="a11y_start_voice_message">錄製語音訊息</string>
     <string name="allow_anyone_in_room_to_access">允許任何在 %s 中的人都可以找到並存取。您也可以選取其他空間。</string>
     <string name="upgrade_required">必須升級</string>
     <string name="sent_a_voice_message">語音</string>
@@ -2933,4 +2933,20 @@
     <string name="space_participants_kick_prompt_msg">踢除使用者將會將他們從此空間中移除。
 \n
 \n為了防止他們再加入，您應該封鎖他們。</string>
+    <string name="a11y_stop_voice_message">停止錄製</string>
+    <string name="command_description_lenny">將 ( ͡° ͜ʖ ͡°) 附加至純文字訊息</string>
+    <string name="identity_server_consent_dialog_neutral_policy">政策</string>
+    <string name="settings_discovery_no_policy_provided">身份伺服器未提供政策</string>
+    <string name="settings_discovery_hide_identity_server_policy_title">隱藏身份伺服器政策</string>
+    <string name="settings_discovery_show_identity_server_policy_title">顯示身份伺服器政策</string>
+    <string name="command_description_whois">顯示關於使用者的資訊</string>
+    <string name="command_description_avatar_for_room">僅在目前的聊天室中變更您的大頭照</string>
+    <string name="command_description_room_avatar">變更目前聊天室的大頭照</string>
+    <string name="command_description_nick_for_room">僅在目前的聊天室變更您的顯示暱稱</string>
+    <string name="command_description_room_name">設定聊天室名稱</string>
+    <string name="command_description_unignore_user">停止忽略使用者，繼續顯示他們的訊息</string>
+    <string name="command_description_ignore_user">忽略使用者，為您隱藏他們的訊息</string>
+    <string name="a11y_presence_unavailable">不可用</string>
+    <string name="a11y_presence_offline">離線</string>
+    <string name="a11y_presence_online">線上</string>
 </resources>

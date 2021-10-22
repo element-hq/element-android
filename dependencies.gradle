@@ -39,8 +39,6 @@ ext.libs = [
 
         ],
         jetbrains   : [
-                'kotlinStdlibJdk7'        : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin",
-                'kotlinStdlib'            : "org.jetbrains.kotlin:kotlin-stdlib:$kotlin",
                 'coroutinesCore'          : "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinCoroutines",
                 'coroutinesAndroid'       : "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinCoroutines",
                 'coroutinesRx2'           : "org.jetbrains.kotlinx:kotlinx-coroutines-rx2:$kotlinCoroutines"
@@ -130,9 +128,12 @@ ext.libs = [
                 'jjwtImpl'               : "io.jsonwebtoken:jjwt-impl:$jjwt",
                 'jjwtOrgjson'            : "io.jsonwebtoken:jjwt-orgjson:$jjwt"
         ],
-        vanniktech: [
+        vanniktech  : [
                 'emojiMaterial'          : "com.vanniktech:emoji-material:$vanniktechEmoji",
                 'emojiGoogle'            : "com.vanniktech:emoji-google:$vanniktechEmoji"
+        ],
+        apache      : [
+                'commonsImaging'         : "org.apache.sanselan:sanselan:0.97-incubator"
         ],
         tests       : [
                 'kluent'                 : "org.amshove.kluent:kluent-android:1.68",

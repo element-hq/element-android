@@ -942,7 +942,7 @@ Matrixban az üzenetek láthatósága hasonlít az e-mailre. Az üzenet törlés
     <string name="command_description_op_user">Felhasználó hozzáférési szintjének meghatározása</string>
     <string name="command_description_deop_user">Meghatározott azonosítójú felhasználó hozzáférési szintjének visszaállítása</string>
     <string name="command_description_invite_user">Megadott azonosítójú felhasználó meghívása a szobába</string>
-    <string name="command_description_join_room">Megadott becenévvel csatlakozik a szobához</string>
+    <string name="command_description_join_room">Megadott címmel csatlakozik a szobához</string>
     <string name="command_description_part_room">Kilépés a szobából</string>
     <string name="command_description_topic">A szoba témájának beállítása</string>
     <string name="command_description_kick_user">Megadott azonosítójú felhasználó kirúgása</string>
@@ -3007,4 +3007,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="command_description_room_name">Szobanév beállítása</string>
     <string name="command_description_unignore_user">A felhasználó újbóli figyelembe vétele, és az üzenetei megjelenítése a jövőben</string>
     <string name="command_description_ignore_user">Figyelmen kívül hagy egy felhasználót, elrejtve előled az üzeneteit</string>
+    <string name="a11y_presence_unavailable">Elérhetetlen</string>
+    <string name="a11y_presence_offline">Kapcsolat nélkül</string>
+    <string name="a11y_presence_online">Kapcsolódva</string>
 </resources>

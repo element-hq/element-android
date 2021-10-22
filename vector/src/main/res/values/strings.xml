@@ -1837,7 +1837,7 @@
     <string name="command_description_deop_user">Deops user with given id</string>
     <string name="command_description_room_name">Sets the room name</string>
     <string name="command_description_invite_user">Invites user with given id to current room</string>
-    <string name="command_description_join_room">Joins room with given alias</string>
+    <string name="command_description_join_room">Joins room with given address</string>
     <string name="command_description_part_room">Leave room</string>
     <string name="command_description_topic">Set the room topic</string>
     <string name="command_description_kick_user">Kicks user with given id</string>
