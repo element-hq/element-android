@@ -43,13 +43,12 @@ class ShortcutsHandler @Inject constructor(
         }
 
         val session = activeSessionHolder.getSafeActiveSession() ?: return Disposables.empty()
-        return session
-                .getPagedRoomSummariesLive(
-                        roomSummaryQueryParams {
-                            memberships = listOf(Membership.JOIN)
-                        },
-                        sortOrder = RoomSortOrder.PRIORITY_AND_ACTIVITY
-                )
+        return session.getRoomSummariesLive(
+                roomSummaryQueryParams {
+                    memberships = listOf(Membership.JOIN)
+                },
+                sortOrder = RoomSortOrder.PRIORITY_AND_ACTIVITY
+        )
                 .asObservable()
                 .subscribe { rooms ->
                     // Remove dead shortcuts (i.e. deleted rooms)
