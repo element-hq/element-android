@@ -34,6 +34,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.sample
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MASTER_KEY_SSSS_NAME
@@ -110,7 +111,7 @@ class ServerBackupStatusViewModel @AssistedInject constructor(@Assisted initialS
             if (
                     crossSigningInfo.getOrNull() == null ||
                     (crossSigningInfo.getOrNull()?.isTrusted() == true &&
-                    pInfo.getOrNull()?.allKnown().orFalse())
+                            pInfo.getOrNull()?.allKnown().orFalse())
             ) {
                 // So 4S is not setup and we have local secrets,
                 return@combine BannerState.Setup(numberOfKeys = getNumberOfKeysToBackup())
@@ -125,7 +126,9 @@ class ServerBackupStatusViewModel @AssistedInject constructor(@Assisted initialS
                     )
                 }
 
-        keyBackupFlow.tryEmit(session.cryptoService().keysBackupService().state)
+        viewModelScope.launch {
+            keyBackupFlow.tryEmit(session.cryptoService().keysBackupService().state)
+        }
     }
 
     /**
@@ -155,7 +158,9 @@ class ServerBackupStatusViewModel @AssistedInject constructor(@Assisted initialS
     }
 
     override fun onStateChange(newState: KeysBackupState) {
-        keyBackupFlow.tryEmit(session.cryptoService().keysBackupService().state)
+        viewModelScope.launch {
+            keyBackupFlow.tryEmit(session.cryptoService().keysBackupService().state)
+        }
         keysBackupState.value = newState
     }
 

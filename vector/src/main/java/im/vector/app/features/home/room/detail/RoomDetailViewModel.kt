@@ -541,9 +541,9 @@ class RoomDetailViewModel @AssistedInject constructor(
         val isAllowed = action.userJustAccepted || if (widget.type == WidgetType.Jitsi) {
             widget.senderInfo?.userId == session.myUserId ||
                     session.integrationManagerService().isNativeWidgetDomainAllowed(
-                    action.widget.type.preferred,
-                    domain
-            )
+                            action.widget.type.preferred,
+                            domain
+                    )
         } else false
 
         if (isAllowed) {
@@ -1110,8 +1110,10 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     override fun onTimelineUpdated(snapshot: List<TimelineEvent>) {
-        timelineEvents.tryEmit(snapshot)
-
+        viewModelScope.launch {
+            // tryEmit doesn't work with SharedFlow without cache
+            timelineEvents.emit(snapshot)
+        }
         // PreviewUrl
         if (vectorPreferences.showUrlPreviews()) {
             withState { state ->
