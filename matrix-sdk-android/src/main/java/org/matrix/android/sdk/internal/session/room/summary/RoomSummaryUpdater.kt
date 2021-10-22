@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.internal.session.room.summary
 
+import de.spiritcroc.matrixsdk.StaticScSdkHelper
 import io.realm.Realm
 import io.realm.kotlin.createObject
 import org.matrix.android.sdk.api.extensions.tryOrNull
@@ -408,7 +409,7 @@ internal class RoomSummaryUpdater @Inject constructor(
 
             // we need also to filter DMs...
             // it's more annoying as based on if the other members belong the space or not
-            if (false /*TODO setting*/) {
+            if (StaticScSdkHelper.scSdkPreferenceProvider?.includeSpaceMembersAsSpaceRooms() == true) {
                 // Wrong indention for upstream merge-ability
             RoomSummaryEntity.where(realm)
                     .equalTo(RoomSummaryEntityFields.IS_DIRECT, true)

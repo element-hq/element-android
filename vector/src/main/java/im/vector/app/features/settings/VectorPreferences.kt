@@ -213,6 +213,7 @@ class VectorPreferences @Inject constructor(private val context: Context): Stati
         const val SETTINGS_UNIFIED_PUSH_FORCE_CUSTOM_GATEWAY = "SETTINGS_UNIFIED_PUSH_FORCE_CUSTOM_GATEWAY"
         const val SETTINGS_FORCE_ALLOW_BACKGROUND_SYNC = "SETTINGS_FORCE_ALLOW_BACKGROUND_SYNC"
         private const val SETTINGS_JUMP_TO_BOTTOM_ON_SEND = "SETTINGS_JUMP_TO_BOTTOM_ON_SEND"
+        private const val SETTINGS_SPACE_MEMBERS_IN_SPACE_ROOMS = "SETTINGS_SPACE_MEMBERS_IN_SPACE_ROOMS"
 
         private const val DID_ASK_TO_ENABLE_SESSION_PUSH = "DID_ASK_TO_ENABLE_SESSION_PUSH"
         private const val DID_PROMOTE_NEW_RESTRICTED_JOIN_RULE = "DID_PROMOTE_NEW_RESTRICTED_JOIN_RULE"
@@ -982,6 +983,10 @@ class VectorPreferences @Inject constructor(private val context: Context): Stati
     // SC additions - for spaces/categories: whether to count unread chats, or messages
     override fun aggregateUnreadRoomCounts(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_AGGREGATE_UNREAD_COUNTS, true)
+    }
+
+    override fun includeSpaceMembersAsSpaceRooms(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_SPACE_MEMBERS_IN_SPACE_ROOMS, false)
     }
 
     // SC addition

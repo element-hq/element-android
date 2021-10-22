@@ -14,6 +14,7 @@ package de.spiritcroc.matrixsdk
         // RoomSummary preferences
         fun roomUnreadKind(isDirect: Boolean): Int
         fun aggregateUnreadRoomCounts(): Boolean
+        fun includeSpaceMembersAsSpaceRooms(): Boolean
     }
 
 }

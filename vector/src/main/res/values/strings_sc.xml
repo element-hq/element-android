@@ -147,5 +147,7 @@
 
     <string name="settings_jump_to_bottom_on_send">Jump to bottom on send</string>
     <string name="settings_jump_to_bottom_on_send_summary">Automatically scroll down when sending a message</string>
+    <string name="settings_include_space_members_as_rooms">Show people in spaces</string>
+    <string name="settings_include_space_members_as_rooms_summary">If disabled, you can still add Direct Messages to Personal Spaces. If enabled, you\'ll automatically see everyone who is a member of the Space.</string>
 
 </resources>
