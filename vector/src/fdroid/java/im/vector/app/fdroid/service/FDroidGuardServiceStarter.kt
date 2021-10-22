@@ -46,4 +46,3 @@ class FDroidGuardServiceStarter @Inject constructor(
         appContext.stopService(intent)
     }
 }
-
