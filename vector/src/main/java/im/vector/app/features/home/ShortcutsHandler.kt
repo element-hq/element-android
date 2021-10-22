@@ -42,15 +42,16 @@ class ShortcutsHandler @Inject constructor(
             return Disposables.empty()
         }
 
-        return activeSessionHolder.getSafeActiveSession()
-                ?.getPagedRoomSummariesLive(
+        val session = activeSessionHolder.getSafeActiveSession() ?: return Disposables.empty()
+        return session
+                .getPagedRoomSummariesLive(
                         roomSummaryQueryParams {
                             memberships = listOf(Membership.JOIN)
                         },
                         sortOrder = RoomSortOrder.PRIORITY_AND_ACTIVITY
                 )
-                ?.asObservable()
-                ?.subscribe { rooms ->
+                .asObservable()
+                .subscribe { rooms ->
                     // Remove dead shortcuts (i.e. deleted rooms)
                     val roomIds = rooms.map { it.roomId }
                     val deadShortcutIds = ShortcutManagerCompat.getShortcuts(context, ShortcutManagerCompat.FLAG_MATCH_DYNAMIC)
@@ -66,7 +67,6 @@ class ShortcutsHandler @Inject constructor(
                         ShortcutManagerCompat.pushDynamicShortcut(context, shortcut)
                     }
                 }
-                ?: Disposables.empty()
     }
 
     fun clearShortcuts() {
