@@ -105,7 +105,6 @@ class HomeActivityViewModel @AssistedInject constructor(
                 .rx()
                 .liveCrossSigningInfo(safeActiveSession.myUserId)
                 .subscribe {
-
                     val mxCrossSigningInfo = it.getOrNull()
 
                     if (!BuildConfig.ENABLE_CROSS_SIGNING && mxCrossSigningInfo != null) {
