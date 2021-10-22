@@ -373,7 +373,7 @@ class WebRtcCallManager @Inject constructor(
         if (isInBackground) {
             if (FcmHelper.isPushSupported()) {
                 // only for push version as fdroid version is already doing it?
-                currentSession?.startAutomaticBackgroundSync(30, true, 0)
+                currentSession?.startAutomaticBackgroundSync(30, 0)
             } else {
                 // Maybe increase sync freq? but how to set back to default values?
             }

@@ -19,13 +19,9 @@ package im.vector.app.fdroid
 import android.content.Context
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.fdroid.receiver.AlarmSyncBroadcastReceiver
-import im.vector.app.fdroid.service.GuardService
 import im.vector.app.features.settings.BackgroundSyncMode
 import im.vector.app.features.settings.VectorPreferences
 import timber.log.Timber
-import android.content.Intent
-import androidx.core.content.ContextCompat
-import org.matrix.android.sdk.internal.session.sync.job.SyncService
 
 object BackgroundSyncStarter {
     fun start(context: Context, vectorPreferences: VectorPreferences, activeSessionHolder: ActiveSessionHolder) {
@@ -37,7 +33,6 @@ object BackgroundSyncStarter {
                     Timber.i("## Sync: Work scheduled to periodically sync in ${vectorPreferences.backgroundSyncDelay()}s")
                     activeSession.startAutomaticBackgroundSync(
                             vectorPreferences.backgroundSyncTimeOut().toLong(),
-                            true,
                             vectorPreferences.backgroundSyncDelay().toLong()
                     )
                 }

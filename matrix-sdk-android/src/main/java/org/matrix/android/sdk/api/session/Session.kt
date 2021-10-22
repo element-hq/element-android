@@ -120,10 +120,11 @@ interface Session :
     fun requireBackgroundSync()
 
     /**
-     * Launches infinite periodic background syncs
-     * Doze mode will probably interrupt rapid sync, but it should start up again the next time we run a periodic sync
+     * Launches infinite self rescheduling background syncs
+     * This does not work in doze mode :/
+     * If battery optimization is on it can work in app standby but that's all :/
      */
-    fun startAutomaticBackgroundSync(timeOutInSeconds: Long, rapidSync: Boolean, repeatDelayInSeconds: Long)
+    fun startAutomaticBackgroundSync(timeOutInSeconds: Long, repeatDelayInSeconds: Long)
 
     fun stopAnyBackgroundSync()
 

@@ -111,7 +111,6 @@ object FcmHelper {
         val activeSession = activeSessionHolder.getSafeActiveSession() ?: return
         activeSession.startAutomaticBackgroundSync(
                 vectorPreferences.backgroundSyncTimeOut().toLong(),
-                false,
                 vectorPreferences.backgroundSyncDelay().toLong()
         )
     }
