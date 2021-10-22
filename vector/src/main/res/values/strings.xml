@@ -3565,6 +3565,11 @@
 
     <string name="labs_use_restricted_join_rule">Experimental Space - Restricted Room.</string>
     <string name="labs_use_restricted_join_rule_desc">Warning requires server support and experimental room version</string>
+
+
+    <string name="labs_auto_report_uisi">Auto Report Decryption Errors.</string>
+    <string name="labs_auto_report_uisi_desc">Your system will automatically send logs when an unable to decrypt error occurs</string>
+
     <string name="user_invites_you">%s invites you</string>
 
     <string name="looking_for_someone_not_in_space">Looking for someone not in %s?</string>

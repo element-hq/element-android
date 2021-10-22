@@ -156,6 +156,7 @@ class BugReportActivity : VectorBaseActivity<ActivityBugReportBinding>() {
                 views.bugReportEditText.text.toString(),
                 state.serverVersion,
                 views.bugReportButtonContactMe.isChecked,
+                null,
                 object : BugReporter.IMXBugReportListener {
                     override fun onUploadFailed(reason: String?) {
                         try {
@@ -198,7 +199,7 @@ class BugReportActivity : VectorBaseActivity<ActivityBugReportBinding>() {
                         views.bugReportProgressTextView.text = getString(R.string.send_bug_report_progress, myProgress.toString())
                     }
 
-                    override fun onUploadSucceed() {
+                    override fun onUploadSucceed(reportUrl: String?) {
                         try {
                             when (reportType) {
                                 ReportType.BUG_REPORT          -> {

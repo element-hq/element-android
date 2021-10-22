@@ -16,13 +16,26 @@
 
 package im.vector.app.features.settings
 
+// import im.vector.app.AutoRageShaker
 import im.vector.app.R
+import im.vector.app.core.preference.VectorSwitchPreference
 import javax.inject.Inject
 
-class VectorSettingsLabsFragment @Inject constructor() : VectorSettingsBaseFragment() {
+class VectorSettingsLabsFragment @Inject constructor(
+        private val vectorPreferences: VectorPreferences,
+//        private val autoRageShaker: AutoRageShaker
+) : VectorSettingsBaseFragment() {
 
     override var titleRes = R.string.room_settings_labs_pref_title
     override val preferenceXmlRes = R.xml.vector_settings_labs
 
-    override fun bindPref() {}
+    override fun bindPref() {
+        findPreference<VectorSwitchPreference>(VectorPreferences.SETTINGS_LABS_AUTO_REPORT_UISI)?.let { pref ->
+            pref.isChecked = vectorPreferences.labsAutoReportUISI()
+            pref.setOnPreferenceChangeListener { _, isChecked ->
+//                autoRageShaker.enable(isChecked as Boolean)
+                true
+            }
+        }
+    }
 }
