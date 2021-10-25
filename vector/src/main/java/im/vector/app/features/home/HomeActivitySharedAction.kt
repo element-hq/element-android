@@ -31,4 +31,5 @@ sealed class HomeActivitySharedAction : VectorSharedAction {
     data class ShowSpaceSettings(val spaceId: String) : HomeActivitySharedAction()
     object SendSpaceFeedBack : HomeActivitySharedAction()
     data class InviteByEmail(val email: String) : HomeActivitySharedAction()
+    object OpenTermAndConditions : HomeActivitySharedAction()
 }

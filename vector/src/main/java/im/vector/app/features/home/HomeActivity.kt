@@ -44,6 +44,7 @@ import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.pushers.PushersManager
+import im.vector.app.core.utils.openUrlInChromeCustomTab
 import im.vector.app.databinding.ActivityHomeBinding
 import im.vector.app.features.contactsbook.ContactsBookViewModel
 import im.vector.app.features.contactsbook.ContactsBookViewState
@@ -66,6 +67,7 @@ import im.vector.app.features.rageshake.ReportType
 import im.vector.app.features.rageshake.VectorUncaughtExceptionHandler
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.VectorSettingsActivity
+import im.vector.app.features.settings.VectorSettingsUrls
 import im.vector.app.features.spaces.RestrictedPromoBottomSheet
 import im.vector.app.features.spaces.SpaceCreationActivity
 import im.vector.app.features.spaces.SpacePreviewActivity
@@ -218,9 +220,9 @@ class HomeActivity :
                 .observe()
                 .subscribe { sharedAction ->
                     when (sharedAction) {
-                        is HomeActivitySharedAction.OpenDrawer        -> views.drawerLayout.openDrawer(GravityCompat.START)
-                        is HomeActivitySharedAction.CloseDrawer       -> views.drawerLayout.closeDrawer(GravityCompat.START)
-                        is HomeActivitySharedAction.OpenGroup         -> {
+                        is HomeActivitySharedAction.OpenDrawer         -> views.drawerLayout.openDrawer(GravityCompat.START)
+                        is HomeActivitySharedAction.CloseDrawer        -> views.drawerLayout.closeDrawer(GravityCompat.START)
+                        is HomeActivitySharedAction.OpenGroup          -> {
                             views.drawerLayout.closeDrawer(GravityCompat.START)
 
                             // Temporary
@@ -234,13 +236,13 @@ class HomeActivity :
                             // we might want to delay that to avoid having the drawer animation lagging
                             // would be probably better to let the drawer do that? in the on closed callback?
                         }
-                        is HomeActivitySharedAction.OpenSpacePreview  -> {
+                        is HomeActivitySharedAction.OpenSpacePreview   -> {
                             startActivity(SpacePreviewActivity.newIntent(this, sharedAction.spaceId))
                         }
-                        is HomeActivitySharedAction.AddSpace          -> {
+                        is HomeActivitySharedAction.AddSpace           -> {
                             createSpaceResultLauncher.launch(SpaceCreationActivity.newIntent(this))
                         }
-                        is HomeActivitySharedAction.ShowSpaceSettings -> {
+                        is HomeActivitySharedAction.ShowSpaceSettings  -> {
                             // open bottom sheet
                             SpaceSettingsMenuBottomSheet
                                     .newInstance(sharedAction.spaceId, object : SpaceSettingsMenuBottomSheet.InteractionListener {
@@ -250,14 +252,17 @@ class HomeActivity :
                                     })
                                     .show(supportFragmentManager, "SPACE_SETTINGS")
                         }
-                        is HomeActivitySharedAction.OpenSpaceInvite   -> {
+                        is HomeActivitySharedAction.OpenSpaceInvite    -> {
                             SpaceInviteBottomSheet.newInstance(sharedAction.spaceId)
                                     .show(supportFragmentManager, "SPACE_INVITE")
                         }
-                        HomeActivitySharedAction.SendSpaceFeedBack    -> {
+                        HomeActivitySharedAction.SendSpaceFeedBack     -> {
                             bugReporter.openBugReportScreen(this, ReportType.SPACE_BETA_FEEDBACK)
                         }
-                        is HomeActivitySharedAction.InviteByEmail     -> Unit // no-op
+                        is HomeActivitySharedAction.InviteByEmail      -> Unit // no-op
+                        HomeActivitySharedAction.OpenTermAndConditions -> {
+                            openUrlInChromeCustomTab(this, null, VectorSettingsUrls.TAC)
+                        }
                     }.exhaustive
                 }
                 .disposeOnDestroy()

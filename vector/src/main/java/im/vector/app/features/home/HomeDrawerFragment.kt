@@ -137,4 +137,8 @@ class HomeDrawerFragment @Inject constructor(
             sharedActionViewModel.post(HomeActivitySharedAction.InviteByEmail(email))
         }
     }
+
+    override fun openTermAndConditions() {
+        sharedActionViewModel.post(HomeActivitySharedAction.OpenTermAndConditions)
+    }
 }

@@ -24,6 +24,7 @@ class HomeDrawerActionsController @Inject constructor() : EpoxyController() {
 
     interface Listener {
         fun inviteByEmail()
+        fun openTermAndConditions()
     }
 
     var listener: Listener? = null
@@ -39,6 +40,12 @@ class HomeDrawerActionsController @Inject constructor() : EpoxyController() {
             titleRes(R.string.tchap_invite_to)
             iconRes(R.drawable.ic_tchap_invite)
             itemClickAction { host.listener?.inviteByEmail() }
+        }
+        homeDrawerActionItem {
+            id("openTAC")
+            titleRes(R.string.settings_app_term_conditions)
+            iconRes(R.drawable.ic_tchap_term_conditions)
+            itemClickAction { host.listener?.openTermAndConditions() }
         }
     }
 }
