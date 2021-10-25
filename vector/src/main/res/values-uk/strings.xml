@@ -991,7 +991,7 @@
     <string name="command_description_op_user">Визначити рівень повноважень користувача</string>
     <string name="command_description_deop_user">Скинути рівень доступу користувача із вказаним ID</string>
     <string name="command_description_invite_user">Запросити користувача із вказаним ID до поточної кімнати</string>
-    <string name="command_description_join_room">Приєднатися до кімнати із вказаним псевдонімом</string>
+    <string name="command_description_join_room">Приєднує до кімнати із вказаною адресою</string>
     <string name="command_description_part_room">Вийти з кімнати</string>
     <string name="command_description_topic">Встановити тему кімнати</string>
     <string name="command_description_kick_user">Копнути користувача із вказаним ID</string>
@@ -2860,4 +2860,14 @@
     <string name="bootstrap_dont_reuse_pwd">Не застосовуйте пароль облікового запису повторно.</string>
     <string name="bootstrap_info_confirm_text">Введіть %s ще раз, щоб підтвердити.</string>
     <string name="bootstrap_info_text">Захистіть та розблокуйте зашифровані повідомлення та перевіряйте довіреність за допомогою %s.</string>
+    <string name="identity_server_consent_dialog_neutral_policy">Політика</string>
+    <string name="command_description_unignore_user">Перестає нехтувати користувача, показує їхні подальші повідомлення</string>
+    <string name="command_description_ignore_user">Нехтує користувача, ховає їхні повідомлення від вас</string>
+    <string name="settings_discovery_hide_identity_server_policy_title">Сховати політику ідентифікації сервера</string>
+    <string name="settings_discovery_show_identity_server_policy_title">Показати політику ідентифікації сервера</string>
+    <string name="command_description_whois">Показує відомості про користувача</string>
+    <string name="command_description_avatar_for_room">Змінює ваш аватар лише у поточній кімнаті</string>
+    <string name="command_description_room_avatar">Змінює аватар поточної кімнати</string>
+    <string name="command_description_nick_for_room">Змінює ваше показуване ім\'я лише у поточній кімнаті</string>
+    <string name="command_description_room_name">Установлює назву кімнати</string>
 </resources>
