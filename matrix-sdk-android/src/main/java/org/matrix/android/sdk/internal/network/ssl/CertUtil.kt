@@ -177,15 +177,13 @@ internal object CertUtil {
 
             val trustPinned = arrayOf<TrustManager>(PinnedTrustManagerProvider.provide(hsConfig.allowedFingerprints, defaultTrustManager))
 
-            val sslSocketFactory: SSLSocketFactory
-
-            if (hsConfig.forceUsageTlsVersions && hsConfig.tlsVersions != null) {
+            val sslSocketFactory = if (hsConfig.forceUsageTlsVersions && !hsConfig.tlsVersions.isNullOrEmpty()) {
                 // Force usage of accepted Tls Versions for Android < 20
-                sslSocketFactory = TLSSocketFactory(trustPinned, hsConfig.tlsVersions)
+                TLSSocketFactory(trustPinned, hsConfig.tlsVersions)
             } else {
                 val sslContext = SSLContext.getInstance("TLS")
                 sslContext.init(null, trustPinned, java.security.SecureRandom())
-                sslSocketFactory = sslContext.socketFactory
+                sslContext.socketFactory
             }
 
             return PinnedSSLSocketFactory(sslSocketFactory, defaultTrustManager!!)
@@ -237,14 +235,14 @@ internal object CertUtil {
      * @return a list of accepted TLS specifications.
      */
     fun newConnectionSpecs(hsConfig: HomeServerConnectionConfig): List<ConnectionSpec> {
-        val builder = ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
+        val builder = ConnectionSpec.Builder(ConnectionSpec.RESTRICTED_TLS)
         val tlsVersions = hsConfig.tlsVersions
-        if (null != tlsVersions && tlsVersions.isNotEmpty()) {
+        if (!tlsVersions.isNullOrEmpty()) {
             builder.tlsVersions(*tlsVersions.toTypedArray())
         }
 
         val tlsCipherSuites = hsConfig.tlsCipherSuites
-        if (null != tlsCipherSuites && tlsCipherSuites.isNotEmpty()) {
+        if (!tlsCipherSuites.isNullOrEmpty()) {
             builder.cipherSuites(*tlsCipherSuites.toTypedArray())
         }
 
