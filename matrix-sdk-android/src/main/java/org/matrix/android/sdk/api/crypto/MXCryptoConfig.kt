@@ -31,5 +31,11 @@ data class MXCryptoConfig constructor(
          * If set to false, the request will be forwarded to the application layer; in this
          * case the application can decide to prompt the user.
          */
-        val discardRoomKeyRequestsFromUntrustedDevices: Boolean = true
+        val discardRoomKeyRequestsFromUntrustedDevices: Boolean = true,
+
+        /**
+         * If set to true, the SDK will send room key request to my devices only.
+         * If set to false, the SDK will send room key request to my devices and the sender device.
+         */
+        val onlyRequestRoomKeysToMyDevices: Boolean = false
 )

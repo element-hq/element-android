@@ -19,6 +19,8 @@ package org.matrix.android.sdk.internal.crypto.algorithms.megolm
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
+import org.matrix.android.sdk.api.crypto.MXCryptoConfig
+import org.matrix.android.sdk.api.extensions.orTrue
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -53,6 +55,7 @@ internal class MXMegolmDecryption(private val userId: String,
                                   private val cryptoStore: IMXCryptoStore,
                                   private val sendToDeviceTask: SendToDeviceTask,
                                   private val coroutineDispatchers: MatrixCoroutineDispatchers,
+                                  private val cryptoConfig: MXCryptoConfig,
                                   private val cryptoCoroutineScope: CoroutineScope
 ) : IMXDecrypting, IMXWithHeldExtension {
 
@@ -68,7 +71,7 @@ internal class MXMegolmDecryption(private val userId: String,
     override fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult {
         // If cross signing is enabled, we don't send request until the keys are trusted
         // There could be a race effect here when xsigning is enabled, we should ensure that keys was downloaded once
-        val requestOnFail = cryptoStore.getMyCrossSigningInfo()?.isTrusted() == true
+        val requestOnFail = cryptoStore.getMyCrossSigningInfo()?.isTrusted().orTrue()
         return decryptEvent(event, timeline, requestOnFail)
     }
 
@@ -180,7 +183,7 @@ internal class MXMegolmDecryption(private val userId: String,
         val encryptedEventContent = event.content.toModel<EncryptedEventContent>()
         val senderDevice = encryptedEventContent?.deviceId ?: return
 
-        val recipients = if (event.senderId == userId || withHeld) {
+        val recipients = if (event.senderId == userId || withHeld|| cryptoConfig.onlyRequestRoomKeysToMyDevices) {
             mapOf(
                     userId to listOf("*")
             )
