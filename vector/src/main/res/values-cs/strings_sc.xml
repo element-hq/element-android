@@ -119,4 +119,6 @@
     <string name="settings_aggregate_unread_counts_summary">Zda počítat nepřečtené chaty místo jednotlivých zpráv v kategoriích prostorů a místností</string>
     <string name="settings_jump_to_bottom_on_send">Přejít na konec po odesílání</string>
     <string name="settings_jump_to_bottom_on_send_summary">Automaticky posunout dolů při odesílání zprávy</string>
+    <string name="settings_include_space_members_as_rooms">Zorbazit lidi v prostorech</string>
+    <string name="settings_include_space_members_as_rooms_summary">Pokud je zakázáno, můžete stále přidávat přímé zprávy do osobních prostorů. Pokud je povoleno, automaticky se zobrazí všichni, kteří jsou členy daného prostoru.</string>
 </resources>
