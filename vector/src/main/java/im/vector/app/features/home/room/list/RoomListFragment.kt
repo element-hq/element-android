@@ -429,6 +429,9 @@ class RoomListFragment @Inject constructor(
             is RoomListQuickActionsSharedAction.MarkRead                  -> {
                 roomListViewModel.handle(RoomListAction.SetMarkedUnread(quickAction.roomId, false))
             }
+            is RoomListQuickActionsSharedAction.OpenAtBottom              -> {
+                navigator.openRoom(requireActivity(), quickAction.roomId, openAtFirstUnread = false)
+            }
             is RoomListQuickActionsSharedAction.Leave                     -> {
                 promptLeaveRoom(quickAction.roomId)
             }

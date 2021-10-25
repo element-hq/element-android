@@ -123,7 +123,7 @@ class RoomDetailViewModel @AssistedInject constructor(
         Timeline.Listener, ChatEffectManager.Delegate, CallProtocolsChecker.Listener {
 
     private val room = session.getRoom(initialState.roomId)!!
-    private val eventId = initialState.eventId ?: if (vectorPreferences.loadRoomAtFirstUnread()) room.roomSummary()?.readMarkerId else null
+    private val eventId = initialState.eventId ?: if (loadRoomAtFirstUnread()) room.roomSummary()?.readMarkerId else null
     private val invisibleEventsObservable = BehaviorRelay.create<RoomDetailAction.TimelineEventTurnsInvisible>()
     private val visibleEventsObservable = BehaviorRelay.create<RoomDetailAction.TimelineEventTurnsVisible>()
     private var timelineEvents = MutableSharedFlow<List<TimelineEvent>>(0)
@@ -181,7 +181,7 @@ class RoomDetailViewModel @AssistedInject constructor(
         observePowerLevel()
         room.getRoomSummaryLive()
         viewModelScope.launch(Dispatchers.IO) {
-            if (!vectorPreferences.loadRoomAtFirstUnread()) {
+            if (!loadRoomAtFirstUnread()) {
                 tryOrNull { room.markAsRead(ReadService.MarkAsReadParams.READ_RECEIPT) }
             } else {
                 tryOrNull { room.setMarkedUnread(false) }
@@ -564,7 +564,7 @@ class RoomDetailViewModel @AssistedInject constructor(
             mostRecentDisplayedEvent?.root?.eventId?.also {
                 session.coroutineScope.launch(NonCancellable) {
                     tryOrNull { room.setReadMarker(it) }
-                    if (vectorPreferences.loadRoomAtFirstUnread()) {
+                    if (loadRoomAtFirstUnread()) {
                         tryOrNull { room.setReadReceipt(it) }
                     }
                 }
@@ -1147,5 +1147,9 @@ class RoomDetailViewModel @AssistedInject constructor(
         chatEffectManager.dispose()
         callManager.removeProtocolsCheckerListener(this)
         super.onCleared()
+    }
+
+    private fun loadRoomAtFirstUnread(): Boolean {
+        return initialState.openAtFirstUnread ?: vectorPreferences.loadRoomAtFirstUnread()
     }
 }

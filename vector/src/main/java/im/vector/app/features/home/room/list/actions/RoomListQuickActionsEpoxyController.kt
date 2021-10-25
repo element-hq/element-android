@@ -76,10 +76,16 @@ class RoomListQuickActionsEpoxyController @Inject constructor(
                     id("mark_unread_separator")
                 }
                 if (roomSummary.scIsUnread()) {
-                    RoomListQuickActionsSharedAction.MarkRead(roomSummary.roomId).toBottomSheetItem(-1)
+                    RoomListQuickActionsSharedAction.MarkRead(roomSummary.roomId).toBottomSheetItem(-2)
                 } else {
-                    RoomListQuickActionsSharedAction.MarkUnread(roomSummary.roomId).toBottomSheetItem(-1)
+                    RoomListQuickActionsSharedAction.MarkUnread(roomSummary.roomId).toBottomSheetItem(-2)
                 }
+            }
+
+            if (vectorPreferences.loadRoomAtFirstUnread()) {
+                // TODO can we check if position of roomSummary.readMarkerId is below or equal to
+                // roomSummary.latestPreviewableOriginalContentEvent, and hide this otherwise?
+                RoomListQuickActionsSharedAction.OpenAtBottom(roomSummary.roomId).toBottomSheetItem(-1)
             }
 
             // Notifications

@@ -113,12 +113,12 @@ class DefaultNavigator @Inject constructor(
         context.startActivity(intent)
     }
 
-    override fun openRoom(context: Context, roomId: String, eventId: String?, buildTask: Boolean) {
+    override fun openRoom(context: Context, roomId: String, eventId: String?, buildTask: Boolean, openAtFirstUnread: Boolean?) {
         if (sessionHolder.getSafeActiveSession()?.getRoom(roomId) == null) {
             fatalError("Trying to open an unknown room $roomId", vectorPreferences.failFast())
             return
         }
-        val args = RoomDetailArgs(roomId, eventId)
+        val args = RoomDetailArgs(roomId, eventId, openAtFirstUnread = openAtFirstUnread)
         val intent = RoomDetailActivity.newIntent(context, args)
         startActivity(context, intent, buildTask)
     }

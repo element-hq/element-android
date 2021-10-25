@@ -37,6 +37,11 @@ sealed class RoomListQuickActionsSharedAction(
             R.drawable.ic_room_actions_mark_room_read
     )
 
+    data class OpenAtBottom(val roomId: String) : RoomListQuickActionsSharedAction(
+            R.string.room_list_quick_actions_open_at_bottom,
+            R.drawable.ic_room_actions_open_at_bottom
+    )
+
     data class NotificationsAllNoisy(val roomId: String) : RoomListQuickActionsSharedAction(
             R.string.room_list_quick_actions_notifications_all_noisy,
             R.drawable.ic_room_actions_notifications_all_noisy

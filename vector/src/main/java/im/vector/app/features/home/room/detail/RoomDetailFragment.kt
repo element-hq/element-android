@@ -229,7 +229,8 @@ data class RoomDetailArgs(
         val roomId: String,
         val eventId: String? = null,
         val sharedData: SharedData? = null,
-        val openShareSpaceForId: String? = null
+        val openShareSpaceForId: String? = null,
+        val openAtFirstUnread: Boolean? = null
 ) : Parcelable
 
 class RoomDetailFragment @Inject constructor(

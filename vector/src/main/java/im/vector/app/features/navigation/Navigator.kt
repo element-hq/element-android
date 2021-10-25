@@ -41,7 +41,7 @@ interface Navigator {
 
     fun openLogin(context: Context, loginConfig: LoginConfig? = null, flags: Int = 0)
 
-    fun openRoom(context: Context, roomId: String, eventId: String? = null, buildTask: Boolean = false)
+    fun openRoom(context: Context, roomId: String, eventId: String? = null, buildTask: Boolean = false, openAtFirstUnread: Boolean? = null)
 
     sealed class PostSwitchSpaceAction {
         object None : PostSwitchSpaceAction()

@@ -69,6 +69,7 @@
     <string name="show_participants_sc">Participants</string>
     <string name="room_list_quick_actions_mark_room_unread">Mark as unread</string>
     <string name="room_list_quick_actions_mark_room_read">Mark as read</string>
+    <string name="room_list_quick_actions_open_at_bottom">Open at recent messages</string>
 
     <string name="footer_read_receipt_content_description">Message status</string>
 

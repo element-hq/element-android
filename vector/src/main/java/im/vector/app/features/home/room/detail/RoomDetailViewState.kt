@@ -48,6 +48,7 @@ data class JitsiState(
 data class RoomDetailViewState(
         val roomId: String,
         val eventId: String?,
+        val openAtFirstUnread: Boolean? = null,
         val myRoomMember: Async<RoomMemberSummary> = Uninitialized,
         val asyncInviter: Async<RoomMemberSummary> = Uninitialized,
         val asyncRoomSummary: Async<RoomSummary> = Uninitialized,
@@ -74,7 +75,8 @@ data class RoomDetailViewState(
             roomId = args.roomId,
             eventId = args.eventId,
             // Also highlight the target event, if any
-            highlightedEventId = args.eventId
+            highlightedEventId = args.eventId,
+            openAtFirstUnread = args.openAtFirstUnread
     )
 
     fun isWebRTCCallOptionAvailable() = (asyncRoomSummary.invoke()?.joinedMembersCount ?: 0) <= 2
