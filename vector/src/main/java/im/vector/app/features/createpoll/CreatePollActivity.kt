@@ -21,7 +21,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import com.airbnb.mvrx.viewModel
+import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
+import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.SimpleFragmentActivity
 import javax.inject.Inject
 
@@ -40,6 +42,13 @@ class CreatePollActivity : SimpleFragmentActivity(), CreatePollViewModel.Factory
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         views.toolbar.visibility = View.GONE
+
+        if (isFirstCreation()) {
+            addFragment(
+                    R.id.container,
+                    CreatePollFragment::class.java
+            )
+        }
     }
 
     companion object {

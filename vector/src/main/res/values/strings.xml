@@ -3625,4 +3625,7 @@
     <string name="link_this_email_settings_link">Link this email with your account</string>
     <!-- %s will be replaced by the value of link_this_email_settings_link and styled as a link -->
     <string name="link_this_email_with_your_account">%s in Settings to receive invites directly in Element.</string>
+
+    <!-- Poll -->
+    <string name="create_poll_title">Create Poll</string>
 </resources>

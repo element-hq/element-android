@@ -24,6 +24,7 @@ import dagger.Module
 import dagger.multibindings.IntoMap
 import im.vector.app.features.attachments.preview.AttachmentsPreviewFragment
 import im.vector.app.features.contactsbook.ContactsBookFragment
+import im.vector.app.features.createpoll.CreatePollFragment
 import im.vector.app.features.crypto.keysbackup.settings.KeysBackupSettingsFragment
 import im.vector.app.features.crypto.quads.SharedSecuredStorageKeyFragment
 import im.vector.app.features.crypto.quads.SharedSecuredStoragePassphraseFragment
@@ -834,4 +835,9 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(SpaceLeaveAdvancedFragment::class)
     fun bindSpaceLeaveAdvancedFragment(fragment: SpaceLeaveAdvancedFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(CreatePollFragment::class)
+    fun bindCreatePollFragment(fragment: CreatePollFragment): Fragment
 }
