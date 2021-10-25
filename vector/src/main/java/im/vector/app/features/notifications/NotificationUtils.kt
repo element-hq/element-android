@@ -782,7 +782,7 @@ class NotificationUtils @Inject constructor(private val context: Context,
 
                 // the action must be unique else the parameters are ignored
                 quickReplyIntent.action = QUICK_LAUNCH_ACTION
-                quickReplyIntent.data = _root_ide_package_.im.vector.app.core.extensions.createIgnoredUri($roomId")
+                quickReplyIntent.data = createIgnoredUri($roomId")
                 return PendingIntent.getActivity(context, 0, quickReplyIntent, 0)
             }
              */
