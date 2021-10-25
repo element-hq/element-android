@@ -40,6 +40,7 @@ import im.vector.app.features.call.conference.JitsiCallViewModel
 import im.vector.app.features.call.conference.VectorJitsiActivity
 import im.vector.app.features.call.transfer.CallTransferActivity
 import im.vector.app.features.createdirect.CreateDirectRoomActivity
+import im.vector.app.features.createpoll.CreatePollActivity
 import im.vector.app.features.crypto.keysbackup.settings.KeysBackupManageActivity
 import im.vector.app.features.crypto.keysbackup.setup.KeysBackupSetupActivity
 import im.vector.app.features.crypto.recover.BootstrapBottomSheet
@@ -495,6 +496,11 @@ class DefaultNavigator @Inject constructor(
 
     override fun openCallTransfer(context: Context, callId: String) {
         val intent = CallTransferActivity.newIntent(context, callId)
+        context.startActivity(intent)
+    }
+
+    override fun openCreatePoll(context: Context) {
+        val intent = CreatePollActivity.getIntent(context)
         context.startActivity(intent)
     }
 

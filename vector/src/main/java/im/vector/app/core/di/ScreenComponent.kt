@@ -31,6 +31,7 @@ import im.vector.app.features.call.VectorCallActivity
 import im.vector.app.features.call.conference.VectorJitsiActivity
 import im.vector.app.features.call.transfer.CallTransferActivity
 import im.vector.app.features.createdirect.CreateDirectRoomActivity
+import im.vector.app.features.createpoll.CreatePollActivity
 import im.vector.app.features.crypto.keysbackup.settings.KeysBackupManageActivity
 import im.vector.app.features.crypto.keysbackup.setup.KeysBackupSetupActivity
 import im.vector.app.features.crypto.quads.SharedSecureStorageActivity
@@ -174,6 +175,7 @@ interface ScreenComponent {
     fun inject(activity: SpaceManageActivity)
     fun inject(activity: RoomJoinRuleActivity)
     fun inject(activity: SpaceLeaveAdvancedActivity)
+    fun inject(activity: CreatePollActivity)
 
     /* ==========================================================================================
      * BottomSheets
