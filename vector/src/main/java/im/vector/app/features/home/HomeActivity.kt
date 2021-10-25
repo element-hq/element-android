@@ -265,7 +265,7 @@ class HomeActivity :
                         }
                         HomeActivitySharedAction.OpenBugReport         -> {
                             views.drawerLayout.closeDrawer(GravityCompat.START)
-                            bugReporter.openBugReportScreen(this, ReportType.BUG_REPORT)
+                            bugReporter.openBugReportScreen(this, ReportType.BUG_REPORT, false)
                         }
                     }.exhaustive
                 }

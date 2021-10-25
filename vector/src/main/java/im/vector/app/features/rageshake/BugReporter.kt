@@ -457,14 +457,14 @@ class BugReporter @Inject constructor(
     /**
      * Send a bug report either with email or with Vector.
      */
-    fun openBugReportScreen(activity: FragmentActivity, reportType: ReportType = ReportType.BUG_REPORT) {
+    fun openBugReportScreen(activity: FragmentActivity, reportType: ReportType = ReportType.BUG_REPORT, withScreenshot: Boolean = true) {
         screenshot = takeScreenshot(activity)
         activeSessionHolder.getSafeActiveSession()?.let {
             it.logDbUsageInfo()
             it.cryptoService().logDbUsageInfo()
         }
 
-        activity.startActivity(BugReportActivity.intent(activity, reportType))
+        activity.startActivity(BugReportActivity.intent(activity, reportType, withScreenshot))
     }
 
 // ==============================================================================================================

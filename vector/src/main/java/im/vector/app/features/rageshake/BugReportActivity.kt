@@ -108,7 +108,10 @@ class BugReportActivity : VectorBaseActivity<ActivityBugReportBinding>() {
 
     private fun setupViews() {
         views.bugReportEditText.doOnTextChanged { _, _, _, _ -> textChanged() }
-        views.bugReportButtonIncludeScreenshot.setOnCheckedChangeListener { _, _ -> onSendScreenshotChanged() }
+        views.bugReportButtonIncludeScreenshot.apply {
+            setOnCheckedChangeListener { _, _ -> onSendScreenshotChanged() }
+            isChecked = intent.getBooleanExtra(WITH_SCREENSHOT_EXTRA, isChecked)
+        }
     }
 
     override fun getMenuRes() = R.menu.bug_report
@@ -251,10 +254,12 @@ class BugReportActivity : VectorBaseActivity<ActivityBugReportBinding>() {
 
     companion object {
         private const val REPORT_TYPE_EXTRA = "REPORT_TYPE_EXTRA"
+        private const val WITH_SCREENSHOT_EXTRA = "WITH_SCREENSHOT_EXTRA"
 
-        fun intent(context: Context, reportType: ReportType): Intent {
+        fun intent(context: Context, reportType: ReportType, withScreenshot: Boolean): Intent {
             return Intent(context, BugReportActivity::class.java).apply {
                 putExtra(REPORT_TYPE_EXTRA, reportType.name)
+                putExtra(WITH_SCREENSHOT_EXTRA, withScreenshot)
             }
         }
     }
