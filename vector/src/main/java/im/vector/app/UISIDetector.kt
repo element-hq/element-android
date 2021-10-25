@@ -75,6 +75,7 @@ class UISIDetector : LiveEventListener {
     var enabled = false
 
     override fun onLiveEvent(roomId: String, event: Event) {
+        if (!enabled) return
         if (!event.isEncrypted()) return
         executor.execute {
             handleEventReceived(E2EMessageDetected.fromEvent(event, roomId, UISIEventSource.INCREMENTAL_SYNC))
@@ -82,6 +83,7 @@ class UISIDetector : LiveEventListener {
     }
 
     override fun onPaginatedEvent(roomId: String, event: Event) {
+        if (!enabled) return
         if (!event.isEncrypted()) return
         executor.execute {
             handleEventReceived(E2EMessageDetected.fromEvent(event, roomId, UISIEventSource.PAGINATION))
@@ -89,18 +91,21 @@ class UISIDetector : LiveEventListener {
     }
 
     override fun onEventDecrypted(eventId: String, roomId: String, clearEvent: JsonDict) {
+        if (!enabled) return
         executor.execute {
             unTrack(eventId, roomId)
         }
     }
 
     override fun onLiveToDeviceEvent(event: Event) {
+        if (!enabled) return
         if (event.type == callback?.reciprocateToDeviceEventType) {
             callback?.uisiReciprocateRequest(event)
         }
     }
 
     override fun onEventDecryptionError(eventId: String, roomId: String, throwable: Throwable) {
+        if (!enabled) return
         executor.execute {
             unTrack(eventId, roomId)?.let {
                 triggerUISI(it)
@@ -116,6 +121,7 @@ class UISIDetector : LiveEventListener {
     }
 
     private fun handleEventReceived(detectorEvent: E2EMessageDetected) {
+        if (!enabled) return
         if (trackedEvents.any { it.first == detectorEvent }) {
             Timber.w("## UISIDetector: Event ${detectorEvent.eventId} is already tracked")
         } else {
@@ -135,6 +141,7 @@ class UISIDetector : LiveEventListener {
     }
 
     private fun triggerUISI(source: E2EMessageDetected) {
+        if (!enabled) return
         Timber.i("## UISIDetector: Unable To Decrypt $source")
         callback?.uisiDetected(source)
     }

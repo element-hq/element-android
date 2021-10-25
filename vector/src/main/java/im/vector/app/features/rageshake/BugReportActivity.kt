@@ -62,11 +62,11 @@ class BugReportActivity : VectorBaseActivity<ActivityBugReportBinding>() {
 
         // Default screen is for bug report, so modify it for suggestion
         when (reportType) {
-            ReportType.BUG_REPORT -> {
+            ReportType.BUG_REPORT          -> {
                 supportActionBar?.setTitle(R.string.title_activity_bug_report)
                 views.bugReportButtonContactMe.isVisible = true
             }
-            ReportType.SUGGESTION -> {
+            ReportType.SUGGESTION          -> {
                 supportActionBar?.setTitle(R.string.send_suggestion)
 
                 views.bugReportFirstText.setText(R.string.send_suggestion_content)
@@ -83,6 +83,9 @@ class BugReportActivity : VectorBaseActivity<ActivityBugReportBinding>() {
                 views.bugReportButtonContactMe.isVisible = true
 
                 hideBugReportOptions()
+            }
+            else                           -> {
+                // other types not supported here
             }
         }
     }
@@ -174,6 +177,9 @@ class BugReportActivity : VectorBaseActivity<ActivityBugReportBinding>() {
                                         Toast.makeText(this@BugReportActivity,
                                                 getString(R.string.feedback_failed, reason), Toast.LENGTH_LONG).show()
                                     }
+                                    else                           -> {
+                                        // nop
+                                    }
                                 }
                             }
                         } catch (e: Exception) {
@@ -210,6 +216,9 @@ class BugReportActivity : VectorBaseActivity<ActivityBugReportBinding>() {
                                 }
                                 ReportType.SPACE_BETA_FEEDBACK -> {
                                     Toast.makeText(this@BugReportActivity, R.string.feedback_sent, Toast.LENGTH_LONG).show()
+                                }
+                                else                           -> {
+                                    // nop
                                 }
                             }
                         } catch (e: Exception) {

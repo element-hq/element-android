@@ -17,9 +17,11 @@
 package im.vector.app
 
 import android.content.Context
+import android.content.SharedPreferences
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.features.rageshake.BugReporter
 import im.vector.app.features.rageshake.ReportType
+import im.vector.app.features.settings.VectorPreferences
 import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -39,8 +41,9 @@ class AutoRageShaker @Inject constructor(
         private val sessionDataSource: ActiveSessionDataSource,
         private val activeSessionHolder: ActiveSessionHolder,
         private val bugReporter: BugReporter,
-        private val context: Context
-) : Session.Listener {
+        private val context: Context,
+        private val vectorPreferences: VectorPreferences
+) : Session.Listener, SharedPreferences.OnSharedPreferenceChangeListener {
 
     private lateinit var activeSessionDisposable: Disposable
     private val activeSessionIds = mutableSetOf<String>()
@@ -50,10 +53,18 @@ class AutoRageShaker @Inject constructor(
 
     fun initialize() {
         observeActiveSession()
+        // It's a singleton...
+        vectorPreferences.subscribeToChanges(this)
+    }
+
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
+        enable(vectorPreferences.labsAutoReportUISI())
     }
 
     var _enabled = false
     fun enable(enabled: Boolean) {
+        if (enabled == _enabled) return
+        _enabled = enabled
         uisiDetectors.forEach { it.value.enabled = enabled }
     }
 
