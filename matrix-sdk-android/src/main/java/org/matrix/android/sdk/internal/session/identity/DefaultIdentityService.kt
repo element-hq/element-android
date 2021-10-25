@@ -80,7 +80,7 @@ internal class DefaultIdentityService @Inject constructor(
         private val identityApiProvider: IdentityApiProvider,
         private val accountDataDataSource: UserAccountDataDataSource,
         private val homeServerCapabilitiesService: HomeServerCapabilitiesService,
-        private val sign3pidInvitationTask: DefaultSign3pidInvitationTask,
+        private val sign3pidInvitationTask: Sign3pidInvitationTask,
         private val sessionParams: SessionParams
 ) : IdentityService, SessionLifecycleObserver {
 
