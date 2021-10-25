@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.internal.crypto.algorithms.megolm
 
 import kotlinx.coroutines.CoroutineScope
+import org.matrix.android.sdk.api.crypto.MXCryptoConfig
 import org.matrix.android.sdk.internal.crypto.DeviceListManager
 import org.matrix.android.sdk.internal.crypto.MXOlmDevice
 import org.matrix.android.sdk.internal.crypto.OutgoingGossipingRequestManager
@@ -38,6 +39,7 @@ internal class MXMegolmDecryptionFactory @Inject constructor(
         private val cryptoStore: IMXCryptoStore,
         private val sendToDeviceTask: SendToDeviceTask,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
+        private val cryptoConfig: MXCryptoConfig,
         private val cryptoCoroutineScope: CoroutineScope
 ) {
 
@@ -52,6 +54,7 @@ internal class MXMegolmDecryptionFactory @Inject constructor(
                 cryptoStore,
                 sendToDeviceTask,
                 coroutineDispatchers,
+                cryptoConfig,
                 cryptoCoroutineScope)
     }
 }

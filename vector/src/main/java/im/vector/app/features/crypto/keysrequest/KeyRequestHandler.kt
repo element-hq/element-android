@@ -17,6 +17,7 @@
 package im.vector.app.features.crypto.keysrequest
 
 import android.content.Context
+import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
@@ -115,19 +116,22 @@ class KeyRequestHandler @Inject constructor(
                     return
                 }
 
-                if (deviceInfo.isUnknown) {
-                    session?.cryptoService()?.setDeviceVerification(DeviceTrustLevel(crossSigningVerified = false, locallyVerified = false), userId, deviceId)
+                if (BuildConfig.ENABLE_CROSS_SIGNING) {
+                    if (deviceInfo.isUnknown) {
+                        session?.cryptoService()?.setDeviceVerification(
+                                DeviceTrustLevel(crossSigningVerified = false, locallyVerified = false), userId, deviceId)
 
-                    deviceInfo.trustLevel = DeviceTrustLevel(crossSigningVerified = false, locallyVerified = false)
+                        deviceInfo.trustLevel = DeviceTrustLevel(crossSigningVerified = false, locallyVerified = false)
 
-                    // can we get more info on this device?
-                    session?.cryptoService()?.getMyDevicesInfo()?.firstOrNull { it.deviceId == deviceId }?.let {
-                        postAlert(context, userId, deviceId, true, deviceInfo, it)
-                    } ?: run {
-                        postAlert(context, userId, deviceId, true, deviceInfo)
+                        // can we get more info on this device?
+                        session?.cryptoService()?.getMyDevicesInfo()?.firstOrNull { it.deviceId == deviceId }?.let {
+                            postAlert(context, userId, deviceId, true, deviceInfo, it)
+                        } ?: run {
+                            postAlert(context, userId, deviceId, true, deviceInfo)
+                        }
+                    } else {
+                        postAlert(context, userId, deviceId, false, deviceInfo)
                     }
-                } else {
-                    postAlert(context, userId, deviceId, false, deviceInfo)
                 }
             }
 
