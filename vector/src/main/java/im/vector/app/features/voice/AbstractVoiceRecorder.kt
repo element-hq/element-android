@@ -21,6 +21,7 @@ import android.media.MediaRecorder
 import android.os.Build
 import im.vector.app.core.intent.getFilenameFromUri
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
+import org.matrix.android.sdk.internal.util.md5
 import java.io.File
 import java.io.FileOutputStream
 import java.util.UUID
@@ -53,16 +54,22 @@ abstract class AbstractVoiceRecorder(
         }
     }
 
-    override fun initializeRecord(attachmentData: ContentAttachmentData) {
+    override fun initializeRecord(roomId: String, attachmentData: ContentAttachmentData) {
         getFilenameFromUri(context, attachmentData.queryUri)?.let {
-            outputFile = File(outputDirectory, it)
+            val voiceMessageFolder = File(outputDirectory, roomId.md5())
+            outputFile = File(voiceMessageFolder, it)
         }
     }
 
-    override fun startRecord() {
+    override fun startRecord(roomId: String) {
         init()
-        val fileName = """${UUID.randomUUID()}.$filenameExt"""
-        outputFile = File(outputDirectory, fileName)
+        val fileName = "Voice message.$filenameExt"
+        val outputDirectoryForRoom = File(outputDirectory, roomId.md5()).apply {
+            if (!exists()) {
+                mkdirs()
+            }
+        }
+        outputFile = File(outputDirectoryForRoom, fileName)
 
         val mr = mediaRecorder ?: return
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

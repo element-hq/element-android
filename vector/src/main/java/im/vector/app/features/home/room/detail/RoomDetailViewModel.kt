@@ -614,12 +614,12 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private fun handleInitializeVoiceRecorder(attachmentData: ContentAttachmentData) {
-        voiceMessageHelper.initializeRecorder(attachmentData)
+        voiceMessageHelper.initializeRecorder(room.roomId, attachmentData)
     }
 
     private fun handleStartRecordingVoiceMessage() {
         try {
-            voiceMessageHelper.startRecording()
+            voiceMessageHelper.startRecording(room.roomId)
         } catch (failure: Throwable) {
             _viewEvents.post(RoomDetailViewEvents.Failure(failure))
         }
