@@ -393,7 +393,13 @@ class RoomDetailFragment @Inject constructor(
                 return@onEach
             }
             when (mode) {
-                is SendMode.REGULAR -> renderRegularMode(mode.text, mode.messageType)
+                is SendMode.REGULAR -> {
+                    if (mode.messageType == MessageType.MSGTYPE_AUDIO) {
+                        renderVoiceMessageMode(mode.text)
+                    } else {
+                        renderRegularMode(mode.text)
+                    }
+                }
                 is SendMode.EDIT    -> renderSpecialMode(mode.timelineEvent, R.drawable.ic_edit, R.string.edit, mode.text)
                 is SendMode.QUOTE   -> renderSpecialMode(mode.timelineEvent, R.drawable.ic_quote, R.string.quote, mode.text)
                 is SendMode.REPLY   -> renderSpecialMode(mode.timelineEvent, R.drawable.ic_reply, R.string.reply, mode.text)
@@ -470,6 +476,14 @@ class RoomDetailFragment @Inject constructor(
         if (savedInstanceState == null) {
             handleShareData()
             handleSpaceShare()
+        }
+    }
+
+        private fun renderVoiceMessageMode(content: String) {
+        ContentAttachmentData.fromJsonString(content)?.let { audioAttachmentData ->
+            views.voiceMessageRecorderView.isVisible = true
+            messageComposerViewModel.handle(MessageComposerAction.InitializeVoiceRecorder(audioAttachmentData))
+            messageComposerViewModel.handle(MessageComposerAction.OnVoiceRecordingUiStateChanged(RecordingUiState.Playback))
         }
     }
 
@@ -591,13 +605,13 @@ class RoomDetailFragment @Inject constructor(
     private fun handleSaveDraft(defaultContent: String?, messageType: String) {
         if (messageType == MessageType.MSGTYPE_AUDIO) {
             defaultContent?.let {
-                textComposerViewModel.handle(
-                        TextComposerAction.SaveDraft(it, MessageType.MSGTYPE_AUDIO)
+                messageComposerViewModel.handle(
+                        MessageComposerAction.SaveDraft(it, MessageType.MSGTYPE_AUDIO)
                 )
             }
         } else {
-            textComposerViewModel.handle(
-                    TextComposerAction.SaveDraft(views.composerLayout.text.toString(), MessageType.MSGTYPE_TEXT)
+            messageComposerViewModel.handle(
+                    MessageComposerAction.SaveDraft(views.composerLayout.text.toString(), MessageType.MSGTYPE_TEXT)
             )
         }
     }
@@ -1060,20 +1074,11 @@ class RoomDetailFragment @Inject constructor(
                 .show()
     }
 
-    private fun renderRegularMode(content: String, messageType: String) {
-        if (messageType == MessageType.MSGTYPE_AUDIO) {
-            ContentAttachmentData.fromJsonString(content)?.let { audioAttachmentData ->
-                views.voiceMessageRecorderView.isVisible = true
-                roomDetailViewModel.handle(RoomDetailAction.InitializeVoiceRecorder(audioAttachmentData))
-                textComposerViewModel.handle(TextComposerAction.OnVoiceRecordingStateChanged(true))
-                views.voiceMessageRecorderView.initVoiceRecordingViews(isInPlaybackMode = true)
-            }
-        } else {
-            autoCompleter.exitSpecialMode()
-            views.composerLayout.collapse()
-            views.composerLayout.setTextIfDifferent(content)
-            views.composerLayout.views.sendButton.contentDescription = getString(R.string.send)
-        }
+    private fun renderRegularMode(content: String) {
+        autoCompleter.exitSpecialMode()
+        views.composerLayout.collapse()
+        views.composerLayout.setTextIfDifferent(content)
+        views.composerLayout.views.sendButton.contentDescription = getString(R.string.send)
     }
 
     private fun renderSpecialMode(event: TimelineEvent,
