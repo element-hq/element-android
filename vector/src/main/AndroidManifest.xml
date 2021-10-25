@@ -194,30 +194,30 @@
 
         <!-- Activity to intercept links coming from a web instance -->
         <!-- exported="true" is required to handle android.intent.action.VIEW for URL redirection-->
-        <activity
-            android:name=".features.link.LinkHandlerActivity"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
+<!--        <activity-->
+<!--            android:name=".features.link.LinkHandlerActivity"-->
+<!--            android:enabled="true"-->
+<!--            android:exported="true">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.VIEW" />-->
 
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
+<!--                <category android:name="android.intent.category.DEFAULT" />-->
+<!--                <category android:name="android.intent.category.BROWSABLE" />-->
 
-                <data android:scheme="https" />
-                <data android:host="riot.im" />
-                <data android:host="app.element.io" />
-                <data android:host="mobile.element.io" />
-                <data android:host="develop.element.io" />
-                <data android:host="staging.element.io" />
-            </intent-filter>
-        </activity>
+<!--                <data android:scheme="https" />-->
+<!--                <data android:host="riot.im" />-->
+<!--                <data android:host="app.element.io" />-->
+<!--                <data android:host="mobile.element.io" />-->
+<!--                <data android:host="develop.element.io" />-->
+<!--                <data android:host="staging.element.io" />-->
+<!--            </intent-filter>-->
+<!--        </activity>-->
 
         <!-- Activity alias for matrix.to or element permalinks -->
         <!-- exported="true" is required to handle android.intent.action.VIEW for URL redirection-->
         <activity-alias
             android:name=".features.permalink.PermalinkHandlerActivity"
-            android:enabled="true"
+            android:enabled="false"
             android:exported="true"
             android:launchMode="singleTask"
             android:targetActivity=".features.link.LinkHandlerActivity">

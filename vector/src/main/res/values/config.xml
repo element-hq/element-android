@@ -27,14 +27,14 @@
     </string-array>
 
     <!-- Permalink config -->
-    <string-array name="permalink_supported_hosts" translatable="false">
-        <!-- Regular Element Web instance -->
-        <item>app.element.io</item>
-        <!-- Other known instances of Element Web -->
-        <item>develop.element.io</item>
-        <item>staging.element.io</item>
-        <!-- Previous Web instance, kept for compatibility reason -->
-        <item>riot.im</item>
-    </string-array>
+<!--    <string-array name="permalink_supported_hosts" translatable="false">-->
+<!--        &lt;!&ndash; Regular Element Web instance &ndash;&gt;-->
+<!--        <item>app.element.io</item>-->
+<!--        &lt;!&ndash; Other known instances of Element Web &ndash;&gt;-->
+<!--        <item>develop.element.io</item>-->
+<!--        <item>staging.element.io</item>-->
+<!--        &lt;!&ndash; Previous Web instance, kept for compatibility reason &ndash;&gt;-->
+<!--        <item>riot.im</item>-->
+<!--    </string-array>-->
 
 </resources>

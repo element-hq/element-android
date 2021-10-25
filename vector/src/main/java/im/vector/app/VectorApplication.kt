@@ -212,7 +212,8 @@ class VectorApplication :
     override fun providesMatrixConfiguration(): MatrixConfiguration {
         return MatrixConfiguration(
                 applicationFlavor = BuildConfig.FLAVOR_DESCRIPTION,
-                roomDisplayNameFallbackProvider = VectorRoomDisplayNameFallbackProvider(this)
+                roomDisplayNameFallbackProvider = VectorRoomDisplayNameFallbackProvider(this),
+                clientPermalinkBaseUrl = getString(R.string.permalink_prefix)
         )
     }
 
