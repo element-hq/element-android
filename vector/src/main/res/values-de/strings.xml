@@ -2175,7 +2175,7 @@
     <string name="verify_other_sessions">Verifiziere alle deine Sitzungen, um sicherzustellen, dass dein Konto &amp; deine Nachrichten sicher sind</string>
     <string name="verify_this_session">Bestätige neue Anmeldung zu deinem Konto: %1$s</string>
     <string name="cross_signing_verify_by_text">Verifiziere manuell mit einem Text</string>
-    <string name="crosssigning_verify_session">Verifiziere Anmeldung</string>
+    <string name="crosssigning_verify_session">Anmeldung verifizieren</string>
     <string name="cross_signing_verify_by_emoji">Verifiziere interaktiv mit Emojis</string>
     <string name="confirm_your_identity">Bestätige deine Identität, indem du diesen Login von einer deiner anderen Sitzungen verifizierst, um Zugriff auf deine verschlüsselten Nachrichten zu erhalten.</string>
     <string name="mark_as_verified">Als vertraut markieren</string>
@@ -2800,7 +2800,7 @@
     <string name="activity_create_space_title">Einen Space erstellen</string>
     <string name="create_spaces_just_me">Nur für mich</string>
     <string name="create_spaces_choose_type_label">Welche Art von Space möchtest du erstellen\?</string>
-    <string name="add_space">Space hinzufügen</string>
+    <string name="add_space">Space erstellen</string>
     <string name="command_description_create_space">Space erstellen</string>
     <string name="room_settings_room_access_restricted_description">Jeder, der sich in einem Space mit diesem Raum befindet, kann diesen Raum finden und ihm beitreten. Nur die Administratoren des Raums können diesen zu einem Space hinzufügen.</string>
     <string name="room_settings_room_access_restricted_title">Nur Space-Mitglieder</string>
