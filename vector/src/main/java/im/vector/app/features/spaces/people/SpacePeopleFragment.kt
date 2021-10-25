@@ -37,21 +37,16 @@ import im.vector.app.core.resources.DrawableProvider
 import im.vector.app.databinding.FragmentRecyclerviewWithSearchBinding
 import im.vector.app.features.roomprofile.members.RoomMemberListAction
 import im.vector.app.features.roomprofile.members.RoomMemberListViewModel
-import im.vector.app.features.roomprofile.members.RoomMemberListViewState
 import io.reactivex.rxkotlin.subscribeBy
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class SpacePeopleFragment @Inject constructor(
-        private val viewModelFactory: SpacePeopleViewModel.Factory,
-        private val roomMemberModelFactory: RoomMemberListViewModel.Factory,
         private val drawableProvider: DrawableProvider,
         private val colorProvider: ColorProvider,
         private val epoxyController: SpacePeopleListController
 ) : VectorBaseFragment<FragmentRecyclerviewWithSearchBinding>(),
-        SpacePeopleViewModel.Factory,
-        RoomMemberListViewModel.Factory,
         OnBackPressed, SpacePeopleListController.InteractionListener {
 
     private val viewModel by fragmentViewModel(SpacePeopleViewModel::class)
@@ -64,14 +59,6 @@ class SpacePeopleFragment @Inject constructor(
     override fun onBackPressed(toolbarButton: Boolean): Boolean {
         sharedActionViewModel.post(SpacePeopleSharedAction.Dismiss)
         return true
-    }
-
-    override fun create(initialState: SpacePeopleViewState): SpacePeopleViewModel {
-        return viewModelFactory.create(initialState)
-    }
-
-    override fun create(initialState: RoomMemberListViewState): RoomMemberListViewModel {
-        return roomMemberModelFactory.create(initialState)
     }
 
     override fun invalidate() = withState(membersViewModel) { memberListState ->

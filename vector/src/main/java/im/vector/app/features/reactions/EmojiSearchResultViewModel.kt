@@ -15,14 +15,13 @@
  */
 package im.vector.app.features.reactions
 
-import androidx.lifecycle.viewModelScope
-import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.MavericksViewModelFactory
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.reactions.data.EmojiDataSource
@@ -40,18 +39,11 @@ class EmojiSearchResultViewModel @AssistedInject constructor(
     VectorViewModel<EmojiSearchResultViewState, EmojiSearchAction, EmptyViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: EmojiSearchResultViewState): EmojiSearchResultViewModel
+    interface Factory : MavericksAssistedViewModelFactory<EmojiSearchResultViewModel, EmojiSearchResultViewState> {
+        override fun create(initialState: EmojiSearchResultViewState): EmojiSearchResultViewModel
     }
 
-    companion object : MavericksViewModelFactory<EmojiSearchResultViewModel, EmojiSearchResultViewState> {
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: EmojiSearchResultViewState): EmojiSearchResultViewModel? {
-            val activity: EmojiReactionPickerActivity = (viewModelContext as ActivityViewModelContext).activity()
-            return activity.emojiSearchResultViewModelFactory.create(state)
-        }
-    }
+    companion object : MavericksViewModelFactory<EmojiSearchResultViewModel, EmojiSearchResultViewState> by hiltMavericksViewModelFactory()
 
     override fun handle(action: EmojiSearchAction) {
         when (action) {

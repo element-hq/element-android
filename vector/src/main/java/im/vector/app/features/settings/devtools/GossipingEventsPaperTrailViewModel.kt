@@ -19,15 +19,15 @@ package im.vector.app.features.settings.devtools
 import androidx.lifecycle.asFlow
 import androidx.paging.PagedList
 import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Uninitialized
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
@@ -60,17 +60,9 @@ class GossipingEventsPaperTrailViewModel @AssistedInject constructor(@Assisted i
     override fun handle(action: EmptyAction) {}
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: GossipingEventsPaperTrailState): GossipingEventsPaperTrailViewModel
+    interface Factory : MavericksAssistedViewModelFactory<GossipingEventsPaperTrailViewModel, GossipingEventsPaperTrailState> {
+        override fun create(initialState: GossipingEventsPaperTrailState): GossipingEventsPaperTrailViewModel
     }
 
-    companion object : MavericksViewModelFactory<GossipingEventsPaperTrailViewModel, GossipingEventsPaperTrailState> {
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: GossipingEventsPaperTrailState): GossipingEventsPaperTrailViewModel? {
-            val fragment: GossipingEventsPaperTrailFragment = (viewModelContext as FragmentViewModelContext).fragment()
-
-            return fragment.viewModelFactory.create(state)
-        }
-    }
+    companion object : MavericksViewModelFactory<GossipingEventsPaperTrailViewModel, GossipingEventsPaperTrailState> by hiltMavericksViewModelFactory()
 }

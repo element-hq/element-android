@@ -16,13 +16,12 @@
 
 package im.vector.app.features.login2.created
 
-import androidx.lifecycle.viewModelScope
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MavericksViewModelFactory
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -40,18 +39,11 @@ class AccountCreatedViewModel @AssistedInject constructor(
 ) : VectorViewModel<AccountCreatedViewState, AccountCreatedAction, AccountCreatedViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: AccountCreatedViewState): AccountCreatedViewModel
+    interface Factory : MavericksAssistedViewModelFactory<AccountCreatedViewModel, AccountCreatedViewState> {
+        override fun create(initialState: AccountCreatedViewState): AccountCreatedViewModel
     }
 
-    companion object : MavericksViewModelFactory<AccountCreatedViewModel, AccountCreatedViewState> {
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: AccountCreatedViewState): AccountCreatedViewModel? {
-            val fragment: AccountCreatedFragment = (viewModelContext as FragmentViewModelContext).fragment()
-            return fragment.accountCreatedViewModelFactory.create(state)
-        }
-    }
+    companion object : MavericksViewModelFactory<AccountCreatedViewModel, AccountCreatedViewState> by hiltMavericksViewModelFactory()
 
     init {
         setState {

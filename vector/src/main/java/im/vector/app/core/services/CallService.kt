@@ -26,7 +26,8 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.media.session.MediaButtonReceiver
 import com.airbnb.mvrx.Mavericks
-import im.vector.app.core.extensions.vectorComponent
+import dagger.hilt.android.AndroidEntryPoint
+import im.vector.app.core.extensions.singletonEntryPoint
 import im.vector.app.features.call.CallArgs
 import im.vector.app.features.call.VectorCallActivity
 import im.vector.app.features.call.telecom.CallConnection
@@ -42,23 +43,25 @@ import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.session.room.model.call.EndCallReason
 import org.matrix.android.sdk.api.util.MatrixItem
 import timber.log.Timber
+import javax.inject.Inject
 
 private val loggerTag = LoggerTag("CallService", LoggerTag.VOIP)
 
 /**
  * Foreground service to manage calls
  */
+@AndroidEntryPoint
 class CallService : VectorService() {
 
     private val connections = mutableMapOf<String, CallConnection>()
     private val knownCalls = mutableMapOf<String, CallInformation>()
     private val connectedCallIds = mutableSetOf<String>()
 
-    private lateinit var notificationManager: NotificationManagerCompat
-    private lateinit var notificationUtils: NotificationUtils
-    private lateinit var callManager: WebRtcCallManager
-    private lateinit var avatarRenderer: AvatarRenderer
-    private lateinit var alertManager: PopupAlertManager
+    lateinit var notificationManager: NotificationManagerCompat
+    @Inject lateinit var notificationUtils: NotificationUtils
+    @Inject lateinit var callManager: WebRtcCallManager
+    @Inject lateinit var avatarRenderer: AvatarRenderer
+    @Inject lateinit var alertManager: PopupAlertManager
 
     private var callRingPlayerIncoming: CallRingPlayerIncoming? = null
     private var callRingPlayerOutgoing: CallRingPlayerOutgoing? = null
@@ -80,10 +83,6 @@ class CallService : VectorService() {
     override fun onCreate() {
         super.onCreate()
         notificationManager = NotificationManagerCompat.from(this)
-        notificationUtils = vectorComponent().notificationUtils()
-        callManager = vectorComponent().webRtcCallManager()
-        avatarRenderer = vectorComponent().avatarRenderer()
-        alertManager = vectorComponent().alertManager()
         callRingPlayerIncoming = CallRingPlayerIncoming(applicationContext, notificationUtils)
         callRingPlayerOutgoing = CallRingPlayerOutgoing(applicationContext)
     }
@@ -298,7 +297,7 @@ class CallService : VectorService() {
                 callId = this.callId,
                 nativeRoomId = this.nativeRoomId,
                 opponentUserId = this.mxCall.opponentUserId,
-                opponentMatrixItem = vectorComponent().activeSessionHolder().getSafeActiveSession()?.let {
+                opponentMatrixItem = singletonEntryPoint().activeSessionHolder().getSafeActiveSession()?.let {
                     this.getOpponentAsMatrixItem(it)
                 },
                 isVideoCall = this.mxCall.isVideoCall,

@@ -17,7 +17,7 @@ package im.vector.app.gplay.features.settings.troubleshoot
 
 import android.content.Intent
 import androidx.activity.result.ActivityResultLauncher
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentActivity
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import im.vector.app.R
@@ -29,7 +29,7 @@ import javax.inject.Inject
 /*
 * Check that the play services APK is available an up-to-date. If needed provide quick fix to install it.
  */
-class TestPlayServices @Inject constructor(private val context: AppCompatActivity,
+class TestPlayServices @Inject constructor(private val context: FragmentActivity,
                                            private val stringProvider: StringProvider) :
     TroubleshootTest(R.string.settings_troubleshoot_test_play_services_title) {
 

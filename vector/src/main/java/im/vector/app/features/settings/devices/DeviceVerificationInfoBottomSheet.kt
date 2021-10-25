@@ -25,7 +25,7 @@ import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
-import im.vector.app.core.di.ScreenComponent
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
@@ -39,6 +39,7 @@ data class DeviceVerificationInfoArgs(
         val deviceId: String
 ) : Parcelable
 
+@AndroidEntryPoint
 class DeviceVerificationInfoBottomSheet :
         VectorBaseBottomSheetDialogFragment<BottomSheetGenericListWithTitleBinding>(),
         DeviceVerificationInfoBottomSheetController.Callback {
@@ -46,12 +47,6 @@ class DeviceVerificationInfoBottomSheet :
     private val viewModel: DeviceVerificationInfoBottomSheetViewModel by fragmentViewModel(DeviceVerificationInfoBottomSheetViewModel::class)
 
     private val sharedViewModel: DevicesViewModel by parentFragmentViewModel(DevicesViewModel::class)
-
-    @Inject lateinit var deviceVerificationInfoViewModelFactory: DeviceVerificationInfoBottomSheetViewModel.Factory
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
 
     @Inject lateinit var controller: DeviceVerificationInfoBottomSheetController
 
