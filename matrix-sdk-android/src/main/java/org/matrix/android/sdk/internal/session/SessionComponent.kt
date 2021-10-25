@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.session
 
 import dagger.BindsInstance
 import dagger.Component
+import im.vector.matrix.android.sdk.internal.session.contentscanning.ContentScannerModule
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.auth.data.SessionParams
 import org.matrix.android.sdk.api.session.Session
@@ -94,6 +95,7 @@ import org.matrix.android.sdk.internal.util.system.SystemModule
             AccountModule::class,
             FederationModule::class,
             CallModule::class,
+            ContentScannerModule::class,
             SearchModule::class,
             ThirdPartyModule::class,
             SpaceModule::class,
