@@ -61,7 +61,7 @@ class LoginSplashFragment @Inject constructor(
     }
 
     private fun getStarted() {
-        loginViewModel.handle(LoginAction.OnGetStarted(false))
+        loginViewModel.handle(LoginAction.OnGetStarted(resetLoginConfig = false))
     }
 
     override fun resetViewModel() {
@@ -77,7 +77,7 @@ class LoginSplashFragment @Inject constructor(
                     .setTitle(R.string.dialog_title_error)
                     .setMessage(getString(R.string.login_error_homeserver_from_url_not_found, url))
                     .setPositiveButton(R.string.login_error_homeserver_from_url_not_found_enter_manual) { _, _ ->
-                        loginViewModel.handle(LoginAction.OnGetStarted(true))
+                        loginViewModel.handle(LoginAction.OnGetStarted(resetLoginConfig = true))
                     }
                     .setNegativeButton(R.string.cancel, null)
                     .show()
