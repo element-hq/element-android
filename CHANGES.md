@@ -17,6 +17,7 @@ Features ✨
 ----------
  - Implement /part command, with or without parameter ([#2909](https://github.com/vector-im/element-android/issues/2909))
  - Handle Presence support, for Direct Message room ([#4090](https://github.com/vector-im/element-android/issues/4090))
+ - Priority conversations for Android 11+ ([#3313](https://github.com/vector-im/element-android/issues/3313))
 
 Bugfixes 🐛
 ----------
