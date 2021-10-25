@@ -76,6 +76,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                                                    private val cryptoService: DefaultCryptoService,
                                                    private val roomMemberEventHandler: RoomMemberEventHandler,
                                                    private val roomTypingUsersHandler: RoomTypingUsersHandler,
+                                                   private val threadsAwarenessHandler: ThreadsAwarenessHandler,
                                                    private val roomChangeMembershipStateDataSource: RoomChangeMembershipStateDataSource,
                                                    @UserId private val userId: String,
                                                    private val timelineInput: TimelineInput) {
@@ -365,6 +366,8 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
             if (event.isEncrypted() && insertType != EventInsertType.INITIAL_SYNC) {
                 decryptIfNeeded(event, roomId)
             }
+
+            threadsAwarenessHandler.handleIfNeeded(realm, roomId, event, ::decryptIfNeeded)
 
             val ageLocalTs = event.unsignedData?.age?.let { syncLocalTimestampMillis - it }
             val eventEntity = event.toEntity(roomId, SendState.SYNCED, ageLocalTs).copyToRealmOrIgnore(realm, insertType)
