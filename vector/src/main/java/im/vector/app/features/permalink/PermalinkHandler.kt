@@ -20,6 +20,7 @@ import android.content.Context
 import android.net.Uri
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
+import im.vector.app.core.extensions.isIgnored
 import im.vector.app.core.utils.toast
 import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.roomdirectory.roompreview.RoomPreviewData
@@ -53,15 +54,19 @@ class PermalinkHandler @Inject constructor(private val activeSessionHolder: Acti
             navigationInterceptor: NavigationInterceptor? = null,
             buildTask: Boolean = false
     ): Boolean {
-        if (deepLink == null || !isPermalinkSupported(context, deepLink.toString())) {
-            return false
-        }
-        return tryOrNull {
-            withContext(Dispatchers.Default) {
-                val permalinkData = PermalinkParser.parse(deepLink)
-                handlePermalink(permalinkData, deepLink, context, navigationInterceptor, buildTask)
+        return when {
+            deepLink == null                                    -> false
+            deepLink.isIgnored()                                -> true
+            !isPermalinkSupported(context, deepLink.toString()) -> false
+            else                                                -> {
+                tryOrNull {
+                    withContext(Dispatchers.Default) {
+                        val permalinkData = PermalinkParser.parse(deepLink)
+                        handlePermalink(permalinkData, deepLink, context, navigationInterceptor, buildTask)
+                    }
+                } ?: false
             }
-        } ?: false
+        }
     }
 
     private suspend fun handlePermalink(
@@ -115,8 +120,8 @@ class PermalinkHandler @Inject constructor(private val activeSessionHolder: Acti
     private fun isPermalinkSupported(context: Context, url: String): Boolean {
         return url.startsWith(PermalinkService.MATRIX_TO_URL_BASE) ||
                 context.resources.getStringArray(R.array.permalink_supported_hosts).any {
-            url.startsWith(it)
-        }
+                    url.startsWith(it)
+                }
     }
 
     private suspend fun PermalinkData.RoomLink.getRoomId(): String? {
