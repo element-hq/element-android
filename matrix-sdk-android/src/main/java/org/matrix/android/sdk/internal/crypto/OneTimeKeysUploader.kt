@@ -124,15 +124,15 @@ internal class OneTimeKeysUploader @Inject constructor(
      * @param keyLimit the limit
      * @return the number of uploaded keys
      */
-    private suspend fun uploadOTK(keyCount: Int, keyLimit: Int, shouldGenerateFallbackKey: Boolean): Int {
-        if (keyLimit <= keyCount && !shouldGenerateFallbackKey) {
+    private suspend fun uploadOTK(keyCount: Int, keyLimit: Int, shouldUploadFallbackKey: Boolean): Int {
+        if (keyLimit <= keyCount && !shouldUploadFallbackKey) {
             // If we don't need to generate any more keys then we are done.
             return 0
         }
         val keysThisLoop = min(keyLimit - keyCount, ONE_TIME_KEY_GENERATION_MAX_NUMBER)
         olmDevice.generateOneTimeKeys(keysThisLoop)
 
-        val fallbackKey = if (shouldGenerateFallbackKey) olmDevice.getFallbackKey() else null
+        val fallbackKey = if (shouldUploadFallbackKey) olmDevice.getFallbackKey() else null
 
         val response = uploadOneTimeKeys(olmDevice.getOneTimeKeys(), fallbackKey)
         olmDevice.markKeysAsPublished()
@@ -183,7 +183,7 @@ internal class OneTimeKeysUploader @Inject constructor(
         val uploadParams = UploadKeysTask.Params(
                 deviceKeys = null,
                 oneTimeKeys = oneTimeJson,
-                fallbackKeys = if (fallbackJson.isNotEmpty()) fallbackJson else null
+                fallbackKeys = fallbackJson.takeIf { fallbackJson.isNotEmpty() }
         )
         return uploadKeysTask.execute(uploadParams)
     }
