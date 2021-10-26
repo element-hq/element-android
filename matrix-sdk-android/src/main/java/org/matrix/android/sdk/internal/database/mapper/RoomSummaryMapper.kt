@@ -21,13 +21,13 @@ import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
 import org.matrix.android.sdk.api.session.room.model.SpaceParentInfo
 import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
+import org.matrix.android.sdk.api.session.typing.TypingUsersTracker
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
 import org.matrix.android.sdk.internal.database.model.presence.toUserPresence
-import org.matrix.android.sdk.internal.session.typing.DefaultTypingUsersTracker
 import javax.inject.Inject
 
 internal class RoomSummaryMapper @Inject constructor(private val timelineEventMapper: TimelineEventMapper,
-                                                     private val typingUsersTracker: DefaultTypingUsersTracker) {
+                                                     private val typingUsersTracker: TypingUsersTracker) {
 
     fun map(roomSummaryEntity: RoomSummaryEntity): RoomSummary {
         val tags = roomSummaryEntity.tags().map {

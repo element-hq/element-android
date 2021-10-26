@@ -41,6 +41,7 @@ import org.matrix.android.sdk.api.session.file.ContentDownloadStateTracker
 import org.matrix.android.sdk.api.session.file.FileService
 import org.matrix.android.sdk.api.session.group.GroupService
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilitiesService
+import org.matrix.android.sdk.api.session.identity.IdentityService
 import org.matrix.android.sdk.api.session.initsync.SyncStatusService
 import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerService
 import org.matrix.android.sdk.api.session.media.MediaService
@@ -72,7 +73,6 @@ import org.matrix.android.sdk.internal.di.SessionId
 import org.matrix.android.sdk.internal.di.UnauthenticatedWithCertificate
 import org.matrix.android.sdk.internal.di.WorkManagerProvider
 import org.matrix.android.sdk.internal.network.GlobalErrorHandler
-import org.matrix.android.sdk.internal.session.identity.DefaultIdentityService
 import org.matrix.android.sdk.internal.session.sync.SyncTokenStore
 import org.matrix.android.sdk.internal.session.sync.job.SyncThread
 import org.matrix.android.sdk.internal.session.sync.job.SyncWorker
@@ -124,7 +124,7 @@ internal class DefaultSession @Inject constructor(
         private val _sharedSecretStorageService: Lazy<SharedSecretStorageService>,
         private val accountService: Lazy<AccountService>,
         private val eventService: Lazy<EventService>,
-        private val defaultIdentityService: DefaultIdentityService,
+        private val identityService: IdentityService,
         private val integrationManagerService: IntegrationManagerService,
         private val thirdPartyService: Lazy<ThirdPartyService>,
         private val callSignalingService: Lazy<CallSignalingService>,
@@ -275,7 +275,7 @@ internal class DefaultSession @Inject constructor(
 
     override fun cryptoService(): CryptoService = cryptoService.get()
 
-    override fun identityService() = defaultIdentityService
+    override fun identityService() = identityService
 
     override fun fileService(): FileService = defaultFileService.get()
 
