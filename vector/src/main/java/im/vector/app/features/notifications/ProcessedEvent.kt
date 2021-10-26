@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright (c) 2021 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,18 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package im.vector.app.features.notifications
 
-import java.io.Serializable
+data class ProcessedEvent<T>(
+        val type: Type,
+        val event: T
+) {
 
-/**
- * Parent interface for all events which can be displayed as a Notification
- */
-sealed interface NotifiableEvent : Serializable {
-    val eventId: String
-    val editedEventId: String?
+    enum class Type {
+        KEEP,
+        REMOVE
+    }
+}
 
-    // Used to know if event should be replaced with the one coming from eventstream
-    val canBeReplaced: Boolean
-    val isRedacted: Boolean
+fun <T> List<ProcessedEvent<T>>.onlyKeptEvents() = mapNotNull { processedEvent ->
+    processedEvent.event.takeIf { processedEvent.type == ProcessedEvent.Type.KEEP }
 }

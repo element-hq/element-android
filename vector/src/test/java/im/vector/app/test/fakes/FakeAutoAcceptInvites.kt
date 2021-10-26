@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright (c) 2021 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,18 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package im.vector.app.features.notifications
 
-import java.io.Serializable
+package im.vector.app.test.fakes
 
-/**
- * Parent interface for all events which can be displayed as a Notification
- */
-sealed interface NotifiableEvent : Serializable {
-    val eventId: String
-    val editedEventId: String?
+import im.vector.app.features.invite.AutoAcceptInvites
 
-    // Used to know if event should be replaced with the one coming from eventstream
-    val canBeReplaced: Boolean
-    val isRedacted: Boolean
+class FakeAutoAcceptInvites : AutoAcceptInvites {
+
+    var _isEnabled: Boolean = false
+
+    override val isEnabled: Boolean
+        get() = _isEnabled
 }
