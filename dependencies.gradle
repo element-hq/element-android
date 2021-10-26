@@ -41,7 +41,8 @@ ext.libs = [
         jetbrains   : [
                 'coroutinesCore'          : "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinCoroutines",
                 'coroutinesAndroid'       : "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinCoroutines",
-                'coroutinesRx2'           : "org.jetbrains.kotlinx:kotlinx-coroutines-rx2:$kotlinCoroutines"
+                'coroutinesRx2'           : "org.jetbrains.kotlinx:kotlinx-coroutines-rx2:$kotlinCoroutines",
+                'coroutinesTest'          : "org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlinCoroutines"
         ],
         androidx    : [
                 'appCompat'               : "androidx.appcompat:appcompat:1.3.1",

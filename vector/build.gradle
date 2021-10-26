@@ -508,6 +508,7 @@ dependencies {
     // Plant Timber tree for test
     testImplementation libs.tests.timberJunitRule
     testImplementation libs.airbnb.mavericksTesting
+    testImplementation libs.jetbrains.coroutinesTest
 
     // Activate when you want to check for leaks, from time to time.
     //debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.3'
@@ -521,6 +522,7 @@ dependencies {
     androidTestImplementation libs.androidx.espressoIntents
     androidTestImplementation libs.tests.kluent
     androidTestImplementation libs.androidx.coreTesting
+    androidTestImplementation libs.jetbrains.coroutinesTest
     // Plant Timber tree for test
     androidTestImplementation libs.tests.timberJunitRule
     // "The one who serves a great Espresso"

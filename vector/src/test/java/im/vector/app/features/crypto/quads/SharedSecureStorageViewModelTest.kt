@@ -22,6 +22,7 @@ import im.vector.app.test.InstantRxRule
 import im.vector.app.test.fakes.FakeSession
 import im.vector.app.test.fakes.FakeStringProvider
 import im.vector.app.test.test
+import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Rule
 import org.junit.Test
 import org.matrix.android.sdk.api.session.securestorage.IntegrityResult
@@ -41,6 +42,7 @@ class SharedSecureStorageViewModelTest {
 
     @get:Rule
     val instantRx = InstantRxRule()
+
     @get:Rule
     val mvrxTestRule = MvRxTestRule()
 
@@ -50,78 +52,100 @@ class SharedSecureStorageViewModelTest {
 
     @Test
     fun `given a key info with passphrase when initialising then step is EnterPassphrase`() {
-        givenKey(KEY_INFO_WITH_PASSPHRASE)
-
-        val viewModel = createViewModel()
-
-        viewModel.test().assertState(aViewState(
-                hasPassphrase = true,
-                step = SharedSecureStorageViewState.Step.EnterPassphrase
-        ))
+        runBlockingTest {
+            givenKey(KEY_INFO_WITH_PASSPHRASE)
+            val viewModel = createViewModel()
+            viewModel
+                    .test(this)
+                    .assertState(aViewState(
+                            hasPassphrase = true,
+                            step = SharedSecureStorageViewState.Step.EnterPassphrase
+                    ))
+                    .finish()
+        }
     }
 
     @Test
     fun `given a key info without passphrase when initialising then step is EnterKey`() {
-        givenKey(KEY_INFO_WITHOUT_PASSPHRASE)
+        runBlockingTest {
+            givenKey(KEY_INFO_WITHOUT_PASSPHRASE)
 
-        val viewModel = createViewModel()
+            val viewModel = createViewModel()
 
-        viewModel.test().assertState(aViewState(
-                hasPassphrase = false,
-                step = SharedSecureStorageViewState.Step.EnterKey
-        ))
+            viewModel
+                    .test(this)
+                    .assertState(aViewState(
+                            hasPassphrase = false,
+                            step = SharedSecureStorageViewState.Step.EnterKey
+                    ))
+                    .finish()
+        }
     }
 
     @Test
     fun `given on EnterKey step when going back then dismisses`() {
-        givenKey(KEY_INFO_WITHOUT_PASSPHRASE)
+        runBlockingTest {
+            givenKey(KEY_INFO_WITHOUT_PASSPHRASE)
 
-        val viewModel = createViewModel()
-        val test = viewModel.test()
-
-        viewModel.handle(SharedSecureStorageAction.Back)
-
-        test.assertEvents(SharedSecureStorageViewEvent.Dismiss)
+            val viewModel = createViewModel()
+            val test = viewModel.test(this)
+            viewModel.handle(SharedSecureStorageAction.Back)
+            test
+                    .assertEvents(SharedSecureStorageViewEvent.Dismiss)
+                    .finish()
+        }
     }
 
     @Test
     fun `given on passphrase step when using key then step is EnterKey`() {
-        givenKey(KEY_INFO_WITH_PASSPHRASE)
-        val viewModel = createViewModel()
-        val test = viewModel.test()
+        runBlockingTest {
+            givenKey(KEY_INFO_WITH_PASSPHRASE)
+            val viewModel = createViewModel()
+            val test = viewModel.test(this)
 
-        viewModel.handle(SharedSecureStorageAction.UseKey)
+            viewModel.handle(SharedSecureStorageAction.UseKey)
 
-        test.assertState(aViewState(
-                hasPassphrase = true,
-                step = SharedSecureStorageViewState.Step.EnterKey
-        ))
+            test
+                    .assertState(aViewState(
+                            hasPassphrase = true,
+                            step = SharedSecureStorageViewState.Step.EnterKey
+                    ))
+                    .finish()
+        }
     }
 
     @Test
     fun `given a key info with passphrase and on EnterKey step when going back then step is EnterPassphrase`() {
-        givenKey(KEY_INFO_WITH_PASSPHRASE)
-        val viewModel = createViewModel()
-        val test = viewModel.test()
+        runBlockingTest {
+            givenKey(KEY_INFO_WITH_PASSPHRASE)
+            val viewModel = createViewModel()
+            val test = viewModel.test(this)
 
-        viewModel.handle(SharedSecureStorageAction.UseKey)
-        viewModel.handle(SharedSecureStorageAction.Back)
+            viewModel.handle(SharedSecureStorageAction.UseKey)
+            viewModel.handle(SharedSecureStorageAction.Back)
 
-        test.assertState(aViewState(
-                hasPassphrase = true,
-                step = SharedSecureStorageViewState.Step.EnterPassphrase
-        ))
+            test
+                    .assertState(aViewState(
+                    hasPassphrase = true,
+                    step = SharedSecureStorageViewState.Step.EnterPassphrase
+            ))
+                    .finish()
+        }
     }
 
     @Test
     fun `given on passphrase step when going back then dismisses`() {
-        givenKey(KEY_INFO_WITH_PASSPHRASE)
-        val viewModel = createViewModel()
-        val test = viewModel.test()
+        runBlockingTest {
+            givenKey(KEY_INFO_WITH_PASSPHRASE)
+            val viewModel = createViewModel()
+            val test = viewModel.test(this)
 
-        viewModel.handle(SharedSecureStorageAction.Back)
+            viewModel.handle(SharedSecureStorageAction.Back)
 
-        test.assertEvents(SharedSecureStorageViewEvent.Dismiss)
+            test
+                    .assertEvents(SharedSecureStorageViewEvent.Dismiss)
+                    .finish()
+        }
     }
 
     private fun createViewModel(): SharedSecureStorageViewModel {
