@@ -31,6 +31,7 @@ import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.core.utils.PublishDataSource
 import im.vector.app.features.auth.ReAuthActivity
 import im.vector.app.features.login.ReAuthHelper
 import io.reactivex.subjects.PublishSubject
@@ -66,6 +67,7 @@ import org.matrix.android.sdk.internal.util.awaitCallback
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.net.ssl.HttpsURLConnection
+import javax.sql.DataSource
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -103,7 +105,7 @@ class DevicesViewModel @AssistedInject constructor(
 
     companion object : MavericksViewModelFactory<DevicesViewModel, DevicesViewState> by hiltMavericksViewModelFactory()
 
-    private val refreshPublisher: PublishSubject<Unit> = PublishSubject.create()
+    private val refreshSource= PublishDataSource<Unit>()
 
     init {
 
@@ -166,12 +168,12 @@ class DevicesViewModel @AssistedInject constructor(
 //                    )
 //                }
 
-        refreshPublisher.throttleFirst(4_000, TimeUnit.MILLISECONDS)
-                .subscribe {
+        refreshSource.stream().sample(4_000)
+                .onEach {
                     session.cryptoService().fetchDevicesList(NoOpMatrixCallback())
                     session.cryptoService().downloadKeys(listOf(session.myUserId), true, NoOpMatrixCallback())
                 }
-                .disposeOnClear()
+                .launchIn(viewModelScope)
         // then force download
         queryRefreshDevicesList()
     }
@@ -193,7 +195,7 @@ class DevicesViewModel @AssistedInject constructor(
      * It can be any mobile devices, and any browsers.
      */
     private fun queryRefreshDevicesList() {
-        refreshPublisher.onNext(Unit)
+        refreshSource.post(Unit)
     }
 
     override fun handle(action: DevicesAction) {

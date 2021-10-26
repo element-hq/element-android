@@ -26,6 +26,7 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.annotation.CallSuper
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.viewbinding.ViewBinding
 import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.MavericksView
@@ -39,6 +40,10 @@ import im.vector.app.core.utils.DimensionConverter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
@@ -193,11 +198,10 @@ abstract class VectorBaseBottomSheetDialogFragment<VB : ViewBinding> : BottomShe
 
     protected fun <T : VectorViewEvents> VectorViewModel<*, *, T>.observeViewEvents(observer: (T) -> Unit) {
         viewEvents
-                .observe()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
+                .stream()
+                .onEach {
                     observer(it)
                 }
-                .disposeOnDestroyView()
+                .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 }

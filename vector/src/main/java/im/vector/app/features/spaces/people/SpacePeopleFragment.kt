@@ -91,7 +91,7 @@ class SpacePeopleFragment @Inject constructor(
             handleViewEvents(it)
         }
 
-        viewModel.subscribe(this) {
+        viewModel.onEach {
             when (it.createAndInviteState) {
                 is Loading -> sharedActionViewModel.post(SpacePeopleSharedAction.ShowModalLoading)
                 Uninitialized,

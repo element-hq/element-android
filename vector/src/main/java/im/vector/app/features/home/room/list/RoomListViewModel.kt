@@ -135,6 +135,7 @@ class RoomListViewModel @AssistedInject constructor(
         )
     } else {
         RoomListSectionBuilderGroup(
+                viewModelScope,
                 session,
                 stringProvider,
                 appStateHandler,
@@ -336,8 +337,4 @@ class RoomListViewModel @AssistedInject constructor(
         }
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        roomListSectionBuilder.dispose()
-    }
 }

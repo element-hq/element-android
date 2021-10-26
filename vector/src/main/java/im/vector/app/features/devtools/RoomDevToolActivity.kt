@@ -66,7 +66,7 @@ class RoomDevToolActivity : SimpleFragmentActivity(), FragmentManager.OnBackStac
 
     override fun initUiAndData() {
         super.initUiAndData()
-        viewModel.subscribe(this) {
+        viewModel.onEach {
             renderState(it)
         }
 

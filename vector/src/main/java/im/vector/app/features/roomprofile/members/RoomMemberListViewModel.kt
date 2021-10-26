@@ -95,7 +95,6 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
 
         if (room.isEncrypted()) {
             room.flow().liveRoomMembers(roomMemberQueryParams)
-                    .flowOn(Dispatchers.Main)
                     .flatMapLatest { membersSummary ->
                         session.cryptoService().getLiveCryptoDeviceInfo(membersSummary.map { it.userId })
                                 .asFlow()

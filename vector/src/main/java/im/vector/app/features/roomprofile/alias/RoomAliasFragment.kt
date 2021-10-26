@@ -21,6 +21,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
@@ -38,6 +39,8 @@ import im.vector.app.features.roomprofile.RoomProfileArgs
 import im.vector.app.features.roomprofile.alias.detail.RoomAliasBottomSheet
 import im.vector.app.features.roomprofile.alias.detail.RoomAliasBottomSheetSharedAction
 import im.vector.app.features.roomprofile.alias.detail.RoomAliasBottomSheetSharedActionViewModel
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.session.room.alias.RoomAliasError
 import org.matrix.android.sdk.api.session.room.model.RoomDirectoryVisibility
 import org.matrix.android.sdk.api.util.toMatrixItem
@@ -77,9 +80,9 @@ class RoomAliasFragment @Inject constructor(
         }
 
         sharedActionViewModel
-                .observe()
-                .subscribe { handleAliasAction(it) }
-                .disposeOnDestroyView()
+                .stream()
+                .onEach { handleAliasAction(it) }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     private fun handleAliasAction(action: RoomAliasBottomSheetSharedAction?) {

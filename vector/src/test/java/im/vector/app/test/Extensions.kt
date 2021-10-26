@@ -27,17 +27,17 @@ fun String.trimIndentOneLine() = trimIndent().replace("\n", "")
 
 fun <S : MavericksState, VA : VectorViewModelAction, VE : VectorViewEvents> VectorViewModel<S, VA, VE>.test(): ViewModelTest<S, VE> {
     val state = { com.airbnb.mvrx.withState(this) { it } }
-    val viewEvents = viewEvents.observe().test()
-    return ViewModelTest(state, viewEvents)
+    //val viewEvents = viewEvents.stream().test()
+    return ViewModelTest(state)
 }
 
 class ViewModelTest<S, VE>(
         val state: () -> S,
-        val viewEvents: TestObserver<VE>
+        //val viewEvents: TestObserver<VE>
 ) {
 
     fun assertEvents(vararg expected: VE) {
-        viewEvents.assertValues(*expected)
+        //viewEvents.assertValues(*expected)
     }
 
     fun assertState(expected: S) {

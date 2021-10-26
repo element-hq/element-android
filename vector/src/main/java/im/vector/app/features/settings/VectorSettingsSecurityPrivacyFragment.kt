@@ -149,11 +149,11 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
         refreshMyDevice()
         refreshXSigningStatus()
         session.liveSecretSynchronisationInfo()
-                .flowOn(Dispatchers.Main)
                 .onEach {
                     refresh4SSection(it)
                     refreshXSigningStatus()
-                }.launchIn(viewLifecycleOwner.lifecycleScope)
+                }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
         lifecycleScope.launchWhenResumed {
             findPreference<VectorPreference>(VectorPreferences.SETTINGS_CRYPTOGRAPHY_HS_ADMIN_DISABLED_E2E_DEFAULT)?.isVisible =

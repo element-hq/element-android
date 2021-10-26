@@ -160,10 +160,10 @@ class UserListViewModel @AssistedInject constructor(@Assisted initialState: User
 
         knownUsersSearch
                 .sample(300)
-                .flowOn(Dispatchers.Main)
                 .flatMapLatest { search ->
                     session.getPagedUsersLive(search, state.excludedUserIds).asFlow()
-                }.execute {
+                }
+                .execute {
                     copy(knownUsers = it)
                 }
 

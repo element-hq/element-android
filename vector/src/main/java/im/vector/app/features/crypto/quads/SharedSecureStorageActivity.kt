@@ -63,7 +63,7 @@ class SharedSecureStorageActivity :
 
         viewModel.observeViewEvents { observeViewEvents(it) }
 
-        viewModel.subscribe(this) { renderState(it) }
+        viewModel.onEach { renderState(it) }
     }
 
     override fun onDestroy() {

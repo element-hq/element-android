@@ -20,6 +20,7 @@ package im.vector.app.features.roomprofile
 import android.content.Context
 import android.content.Intent
 import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
 import com.google.android.material.appbar.MaterialToolbar
@@ -41,6 +42,8 @@ import im.vector.app.features.roomprofile.notifications.RoomNotificationSettings
 import im.vector.app.features.roomprofile.permissions.RoomPermissionsFragment
 import im.vector.app.features.roomprofile.settings.RoomSettingsFragment
 import im.vector.app.features.roomprofile.uploads.RoomUploadsFragment
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -93,8 +96,8 @@ class RoomProfileActivity :
             }
         }
         sharedActionViewModel
-                .observe()
-                .subscribe { sharedAction ->
+                .stream()
+                .onEach { sharedAction ->
                     when (sharedAction) {
                         RoomProfileSharedAction.OpenRoomMembers                 -> openRoomMembers()
                         RoomProfileSharedAction.OpenRoomSettings                -> openRoomSettings()
@@ -105,7 +108,7 @@ class RoomProfileActivity :
                         RoomProfileSharedAction.OpenRoomNotificationSettings -> openRoomNotificationSettings()
                     }.exhaustive
                 }
-                .disposeOnDestroy()
+                .launchIn(lifecycleScope)
 
         requireActiveMembershipViewModel.observeViewEvents {
             when (it) {
