@@ -52,11 +52,23 @@ internal class DefaultLoginWizard(
 
     override suspend fun login(login: String,
                                password: String,
-                               deviceName: String): Session {
+                               initialDeviceName: String,
+                               deviceId: String?): Session {
         val loginParams = if (Patterns.EMAIL_ADDRESS.matcher(login).matches()) {
-            PasswordLoginParams.thirdPartyIdentifier(ThreePidMedium.EMAIL, login, password, deviceName)
+            PasswordLoginParams.thirdPartyIdentifier(
+                    medium = ThreePidMedium.EMAIL,
+                    address = login,
+                    password = password,
+                    deviceDisplayName = initialDeviceName,
+                    deviceId = deviceId
+            )
         } else {
-            PasswordLoginParams.userIdentifier(login, password, deviceName)
+            PasswordLoginParams.userIdentifier(
+                    user = login,
+                    password = password,
+                    deviceDisplayName = initialDeviceName,
+                    deviceId = deviceId
+            )
         }
         val credentials = executeRequest(null) {
             authAPI.login(loginParams)
