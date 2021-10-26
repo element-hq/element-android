@@ -21,6 +21,7 @@ import org.matrix.android.sdk.api.auth.login.LoginProfileInfo
 import org.matrix.android.sdk.api.auth.login.LoginWizard
 import org.matrix.android.sdk.api.auth.registration.RegisterThreePid
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.internal.auth.AuthAPI
 import org.matrix.android.sdk.internal.auth.PendingSessionStore
 import org.matrix.android.sdk.internal.auth.SessionCreator
@@ -74,6 +75,14 @@ internal class DefaultLoginWizard(
         )
         val credentials = executeRequest(null) {
             authAPI.login(loginParams)
+        }
+
+        return sessionCreator.createSession(credentials, pendingSessionData.homeServerConnectionConfig)
+    }
+
+    override suspend fun loginCustom(data: JsonDict): Session {
+        val credentials = executeRequest(null) {
+            authAPI.login(data)
         }
 
         return sessionCreator.createSession(credentials, pendingSessionData.homeServerConnectionConfig)
