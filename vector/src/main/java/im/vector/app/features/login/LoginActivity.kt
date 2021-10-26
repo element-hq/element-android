@@ -95,7 +95,6 @@ open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), ToolbarCo
         // Get config extra
         val loginConfig = intent.getParcelableExtra<LoginConfig?>(EXTRA_CONFIG)
         if (isFirstCreation()) {
-            // TODO Check this
             loginViewModel.handle(LoginAction.InitWith(loginConfig))
         }
     }

@@ -22,9 +22,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.BuildConfig
+import im.vector.app.R
 import im.vector.app.databinding.FragmentLoginSplashBinding
 import im.vector.app.features.settings.VectorPreferences
+import org.matrix.android.sdk.api.failure.Failure
+import java.net.UnknownHostException
 import javax.inject.Inject
 
 /**
@@ -45,7 +49,7 @@ class LoginSplashFragment @Inject constructor(
     }
 
     private fun setupViews() {
-        views.loginSplashSubmit.setOnClickListener { getStarted() }
+        views.loginSplashSubmit.debouncedClicks { getStarted() }
 
         if (BuildConfig.DEBUG || vectorPreferences.developerMode()) {
             views.loginSplashVersion.isVisible = true
@@ -57,10 +61,28 @@ class LoginSplashFragment @Inject constructor(
     }
 
     private fun getStarted() {
-        loginViewModel.handle(LoginAction.PostViewEvent(LoginViewEvents.OpenServerSelection))
+        loginViewModel.handle(LoginAction.OnGetStarted(resetLoginConfig = false))
     }
 
     override fun resetViewModel() {
         // Nothing to do
+    }
+
+    override fun onError(throwable: Throwable) {
+        if (throwable is Failure.NetworkConnection &&
+                throwable.ioException is UnknownHostException) {
+            // Invalid homeserver from URL config
+            val url = loginViewModel.getInitialHomeServerUrl().orEmpty()
+            MaterialAlertDialogBuilder(requireActivity())
+                    .setTitle(R.string.dialog_title_error)
+                    .setMessage(getString(R.string.login_error_homeserver_from_url_not_found, url))
+                    .setPositiveButton(R.string.login_error_homeserver_from_url_not_found_enter_manual) { _, _ ->
+                        loginViewModel.handle(LoginAction.OnGetStarted(resetLoginConfig = true))
+                    }
+                    .setNegativeButton(R.string.cancel, null)
+                    .show()
+        } else {
+            super.onError(throwable)
+        }
     }
 }

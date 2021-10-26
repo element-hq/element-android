@@ -156,10 +156,5 @@ class LoginServerUrlFormFragment @Inject constructor() : AbstractLoginFragment<F
         setupUi(state)
 
         views.loginServerUrlFormClearHistory.isInvisible = state.knownCustomHomeServersUrls.isEmpty()
-
-        if (state.loginMode != LoginMode.Unknown) {
-            // The homeserver url is valid
-            loginViewModel.handle(LoginAction.PostViewEvent(LoginViewEvents.OnLoginFlowRetrieved))
-        }
     }
 }
