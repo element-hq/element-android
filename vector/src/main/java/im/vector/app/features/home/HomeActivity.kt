@@ -247,8 +247,7 @@ class HomeActivity :
         }
         homeActivityViewModel.onEach { renderState(it) }
 
-        shortcutsHandler.observeRoomsAndBuildShortcuts()
-                .disposeOnDestroy()
+        shortcutsHandler.observeRoomsAndBuildShortcuts(lifecycleScope)
 
         if (!vectorPreferences.didPromoteNewRestrictedFeature()) {
             promoteRestrictedViewModel.onEach {

@@ -21,13 +21,15 @@ import android.content.pm.ShortcutManager
 import android.os.Build
 import androidx.core.content.getSystemService
 import androidx.core.content.pm.ShortcutManagerCompat
+import androidx.lifecycle.asFlow
 import im.vector.app.core.di.ActiveSessionHolder
-import io.reactivex.disposables.Disposable
-import io.reactivex.disposables.Disposables
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.session.room.RoomSortOrder
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
-import org.matrix.android.sdk.rx.asObservable
 import javax.inject.Inject
 
 class ShortcutsHandler @Inject constructor(
@@ -36,12 +38,11 @@ class ShortcutsHandler @Inject constructor(
         private val activeSessionHolder: ActiveSessionHolder
 ) {
 
-    fun observeRoomsAndBuildShortcuts(): Disposable {
+    fun observeRoomsAndBuildShortcuts(coroutineScope: CoroutineScope): Job {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N_MR1) {
             // No op
-            return Disposables.empty()
+            return Job()
         }
-
         return activeSessionHolder.getSafeActiveSession()
                 ?.getPagedRoomSummariesLive(
                         roomSummaryQueryParams {
@@ -49,8 +50,8 @@ class ShortcutsHandler @Inject constructor(
                         },
                         sortOrder = RoomSortOrder.PRIORITY_AND_ACTIVITY
                 )
-                ?.asObservable()
-                ?.subscribe { rooms ->
+                ?.asFlow()
+                ?.onEach { rooms ->
                     // Remove dead shortcuts (i.e. deleted rooms)
                     val roomIds = rooms.map { it.roomId }
                     val deadShortcutIds = ShortcutManagerCompat.getShortcuts(context, ShortcutManagerCompat.FLAG_MATCH_DYNAMIC)
@@ -66,7 +67,8 @@ class ShortcutsHandler @Inject constructor(
                         ShortcutManagerCompat.pushDynamicShortcut(context, shortcut)
                     }
                 }
-                ?: Disposables.empty()
+                ?.launchIn(coroutineScope)
+                ?: Job()
     }
 
     fun clearShortcuts() {

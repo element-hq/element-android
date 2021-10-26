@@ -56,9 +56,7 @@ import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.flow.flow
-import org.matrix.android.sdk.rx.asObservable
 import timber.log.Timber
-import java.util.concurrent.TimeUnit
 
 /**
  * View model used to update the home bottom bar notification counts, observe the sync state and
