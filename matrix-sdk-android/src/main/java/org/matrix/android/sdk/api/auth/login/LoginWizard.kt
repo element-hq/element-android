@@ -34,12 +34,14 @@ interface LoginWizard {
      *
      * @param login the login field. Can be a user name, or a msisdn (email or phone number) associated to the account
      * @param password the password of the account
-     * @param deviceName the initial device name
+     * @param initialDeviceName the initial device name
+     * @param deviceId the device id, optional. If not provided or null, the server will generate one.
      * @return a [Session] if the login is successful
      */
     suspend fun login(login: String,
                       password: String,
-                      deviceName: String): Session
+                      initialDeviceName: String,
+                      deviceId: String? = null): Session
 
     /**
      * Exchange a login token to an access token.
