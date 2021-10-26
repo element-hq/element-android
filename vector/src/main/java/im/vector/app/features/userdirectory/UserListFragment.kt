@@ -222,6 +222,11 @@ class UserListFragment @Inject constructor(
         )
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.handle(UserListAction.Resumed)
+    }
+
     override fun giveIdentityServerConsent() {
         withState(viewModel) { state ->
             requireContext().showIdentityServerConsentDialog(

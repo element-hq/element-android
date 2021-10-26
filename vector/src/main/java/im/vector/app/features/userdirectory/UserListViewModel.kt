@@ -17,6 +17,7 @@
 package im.vector.app.features.userdirectory
 
 import androidx.lifecycle.asFlow
+import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Uninitialized
 import dagger.assisted.Assisted
@@ -40,6 +41,7 @@ import kotlinx.coroutines.flow.sample
 import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.identity.IdentityServiceError
 import org.matrix.android.sdk.api.session.identity.IdentityServiceListener
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.profile.ProfileService
@@ -57,7 +59,7 @@ class UserListViewModel @AssistedInject constructor(@Assisted initialState: User
 
     private val knownUsersSearch = MutableStateFlow("")
     private val directoryUsersSearch = MutableStateFlow("")
-    private val identityServerUsersSearch = MutableStateFlow("")
+    private val identityServerUsersSearch = MutableStateFlow(UserSearch(searchTerm = ""))
 
     @AssistedFactory
     interface Factory : MavericksAssistedViewModelFactory<UserListViewModel, UserListViewState> {
@@ -69,7 +71,7 @@ class UserListViewModel @AssistedInject constructor(@Assisted initialState: User
     private val identityServerListener = object : IdentityServiceListener {
         override fun onIdentityServerChange() {
             withState {
-                identityServerUsersSearch.tryEmit(it.searchTerm)
+                identityServerUsersSearch.tryEmit(UserSearch(it.searchTerm))
                 val identityServerURL = cleanISURL(session.identityService().getCurrentIdentityServerUrl())
                 setState {
                     copy(configuredIdentityServer = identityServerURL)
@@ -105,14 +107,27 @@ class UserListViewModel @AssistedInject constructor(@Assisted initialState: User
             is UserListAction.RemovePendingSelection     -> handleRemoveSelectedUser(action)
             UserListAction.ComputeMatrixToLinkForSharing -> handleShareMyMatrixToLink()
             is UserListAction.UpdateUserConsent          -> handleISUpdateConsent(action)
+            UserListAction.Resumed                       -> handleResumed()
         }.exhaustive
     }
 
     private fun handleISUpdateConsent(action: UserListAction.UpdateUserConsent) {
         session.identityService().setUserConsent(action.consent)
         withState {
-            identityServerUsersSearch.tryEmit(it.searchTerm)
+            retryUserSearch(it)
         }
+    }
+
+    private fun handleResumed() {
+        withState {
+            if (it.hasNoIdentityServerConfigured()) {
+                retryUserSearch(it)
+            }
+        }
+    }
+
+    private fun retryUserSearch(state: UserListViewState) {
+        identityServerUsersSearch.tryEmit(UserSearch(state.searchTerm, cacheBuster = System.currentTimeMillis()))
     }
 
     private fun handleSearchUsers(searchTerm: String) {
@@ -130,7 +145,7 @@ class UserListViewModel @AssistedInject constructor(@Assisted initialState: User
                 )
             }
         }
-        identityServerUsersSearch.tryEmit(searchTerm)
+        identityServerUsersSearch.tryEmit(UserSearch(searchTerm))
         knownUsersSearch.tryEmit(searchTerm)
         directoryUsersSearch.tryEmit(searchTerm)
     }
@@ -144,7 +159,7 @@ class UserListViewModel @AssistedInject constructor(@Assisted initialState: User
     private fun handleClearSearchUsers() {
         knownUsersSearch.tryEmit("")
         directoryUsersSearch.tryEmit("")
-        identityServerUsersSearch.tryEmit("")
+        identityServerUsersSearch.tryEmit(UserSearch(""))
         setState {
             copy(searchTerm = "")
         }
@@ -152,10 +167,10 @@ class UserListViewModel @AssistedInject constructor(@Assisted initialState: User
 
     private fun observeUsers() = withState { state ->
         identityServerUsersSearch
-                .filter { it.isEmail() }
+                .filter { it.searchTerm.isEmail() }
                 .sample(300)
                 .onEach { search ->
-                    executeSearchEmail(search)
+                    executeSearchEmail(search.searchTerm)
                 }.launchIn(viewModelScope)
 
         knownUsersSearch
@@ -239,3 +254,10 @@ class UserListViewModel @AssistedInject constructor(@Assisted initialState: User
         setState { copy(pendingSelections = selections) }
     }
 }
+
+private fun UserListViewState.hasNoIdentityServerConfigured() = matchingEmail is Fail && matchingEmail.error == IdentityServiceError.NoIdentityServerConfigured
+
+/**
+ * Wrapper class to allow identical search terms to be re-emitted
+ */
+private data class UserSearch(val searchTerm: String, val cacheBuster: Long = 0)
