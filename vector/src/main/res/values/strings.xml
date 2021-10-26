@@ -3239,7 +3239,7 @@
 
 
     <string name="notice_crypto_unable_to_decrypt_final">You cannot access this message</string>
-    <string name="notice_crypto_unable_to_decrypt_friendly">Waiting for this message, this may take a while</string>
+    <string name="template_notice_crypto_unable_to_decrypt_friendly">Failed to decrypt: please open ${app_name} on your other devices to allow key share request</string>
     <string name="crypto_utd">Cannot Decrypt</string>
     <string name="notice_crypto_unable_to_decrypt_friendly_desc">Due to end-to-end encryption, you might need to wait for someone\'s message to arrive because the encryption keys were not properly sent to you.</string>
     <string name="crypto_error_withheld_blacklisted">You cannot access this message because you have been blocked by the sender</string>

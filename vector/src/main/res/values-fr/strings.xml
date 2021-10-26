@@ -2222,7 +2222,7 @@
     <string name="crypto_error_withheld_blacklisted">Impossible d’accéder à ce message car vous avez été bloqué par l’envoyeur</string>
     <string name="notice_crypto_unable_to_decrypt_friendly_desc">À cause du chiffrement de bout en bout, vous pouvez avoir besoin d’attendre l’arrivée du message de quelqu’un car les clés de chiffrement ne vous ont pas été correctement envoyées.</string>
     <string name="crypto_utd">Impossible de déchiffrer</string>
-    <string name="notice_crypto_unable_to_decrypt_friendly">Attente du message, cela peut prendre du temps</string>
+    <string name="template_notice_crypto_unable_to_decrypt_friendly">Echec de déchiffrement : veuillez ouvrir ${app_name} sur vos autres appareils afin d’autoriser le partage de clés</string>
     <string name="notice_crypto_unable_to_decrypt_final">Vous n’avez pas accès à ce message</string>
     <string name="room_settings_save_success">Vous avez bien changé les paramètres du salon</string>
     <string name="room_settings_topic_hint">Sujet</string>
