@@ -177,11 +177,9 @@ class UserListViewModel @AssistedInject constructor(@Assisted initialState: User
     private suspend fun executeSearchEmail(search: String) {
         suspend {
             val params = listOf(ThreePid.Email(search))
-            val foundThreePid = tryOrNull {
-                session.identityService().lookUp(params).firstOrNull()
-            }
+            val foundThreePid = session.identityService().lookUp(params).firstOrNull()
             if (foundThreePid == null) {
-                null
+                ThreePidUser(email = search, user = null)
             } else {
                 try {
                     val json = session.getProfile(foundThreePid.matrixId)
