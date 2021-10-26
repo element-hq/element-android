@@ -41,7 +41,7 @@ import javax.inject.Inject
 /**
  * This handler is responsible for a smooth threads migration. It will map all incoming
  * threads as replies. So a device without threads enabled/updated will be able to view
- * threads response as replies to the orighinal message
+ * threads response as replies to the original message
  */
 internal class ThreadsAwarenessHandler @Inject constructor(
         private val permalinkFactory: PermalinkFactory
@@ -50,6 +50,7 @@ internal class ThreadsAwarenessHandler @Inject constructor(
     fun handleIfNeeded(realm: Realm,
                        roomId: String,
                        event: Event,
+                       isInitialSync: Boolean,
                        decryptIfNeeded: (event: Event, roomId: String) -> Unit) {
 
         if (!isThreadEvent(event)) return
@@ -60,9 +61,8 @@ internal class ThreadsAwarenessHandler @Inject constructor(
         val rootThreadEventEntity = EventEntity.where(realm, eventId = rootThreadEventId).findFirst() ?: return
         val rootThreadEvent = EventMapper.map(rootThreadEventEntity)
         val rootThreadEventSenderId = rootThreadEvent.senderId ?: return
-        val rootThreadEventEventId = rootThreadEvent.eventId ?: return
 
-        Timber.i("------> Thread event detected!")
+        Timber.i("------> Thread event detected! - isInitialSync: $isInitialSync")
 
         if (rootThreadEvent.isEncrypted()) {
             decryptIfNeeded(rootThreadEvent, roomId)
@@ -70,7 +70,7 @@ internal class ThreadsAwarenessHandler @Inject constructor(
 
         val rootThreadEventBody = getValueFromPayload(rootThreadEvent.mxDecryptionResult?.payload?.toMutableMap(),"body")
 
-        val permalink = permalinkFactory.createPermalink(roomId, rootThreadEventEventId, false)
+        val permalink = permalinkFactory.createPermalink(roomId, rootThreadEventId, false)
         val userLink =  permalinkFactory.createPermalink(rootThreadEventSenderId, false) ?: ""
 
         val replyFormatted = LocalEchoEventFactory.REPLY_PATTERN.format(
