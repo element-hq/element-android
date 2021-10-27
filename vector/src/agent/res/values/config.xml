@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="padlock_icon_tint_color">?colorPrimary</color>
-
     <!-- Identity server names -->
     <string-array name="preferred_identity_server_names" translatable="false">
         <item>agent.agriculture.tchap.gouv.fr</item>
