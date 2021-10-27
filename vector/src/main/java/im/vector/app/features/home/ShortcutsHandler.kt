@@ -22,6 +22,7 @@ import android.os.Build
 import androidx.core.content.getSystemService
 import androidx.core.content.pm.ShortcutManagerCompat
 import im.vector.app.core.di.ActiveSessionHolder
+import im.vector.app.features.pin.PinCodeStore
 import io.reactivex.disposables.Disposable
 import io.reactivex.disposables.Disposables
 import org.matrix.android.sdk.api.session.room.RoomSortOrder
@@ -35,7 +36,8 @@ import javax.inject.Inject
 class ShortcutsHandler @Inject constructor(
         private val context: Context,
         private val shortcutCreator: ShortcutCreator,
-        private val activeSessionHolder: ActiveSessionHolder
+        private val activeSessionHolder: ActiveSessionHolder,
+        private val pinCodeStore: PinCodeStore
 ) {
 
     fun observeRoomsAndBuildShortcuts(): Disposable {
@@ -61,7 +63,6 @@ class ShortcutsHandler @Inject constructor(
                 }
     }
 
-
     private fun removeDeadShortcut(roomIds: List<String>) {
         val deadShortcutIds = ShortcutManagerCompat.getShortcuts(context, ShortcutManagerCompat.FLAG_MATCH_DYNAMIC)
                 .map { it.id }
@@ -79,12 +80,17 @@ class ShortcutsHandler @Inject constructor(
     }
 
     private fun createShortcuts(rooms: List<RoomSummary>) {
-        val shortcuts = rooms.mapIndexed { index, room ->
-            shortcutCreator.create(room, index)
-        }
+        if (pinCodeStore.getEncodedPin() != null) {
+            // No shortcut in this case (privacy)
+            ShortcutManagerCompat.removeAllDynamicShortcuts(context)
+        } else {
+            val shortcuts = rooms.mapIndexed { index, room ->
+                shortcutCreator.create(room, index)
+            }
 
-        shortcuts.forEach { shortcut ->
-            ShortcutManagerCompat.pushDynamicShortcut(context, shortcut)
+            shortcuts.forEach { shortcut ->
+                ShortcutManagerCompat.pushDynamicShortcut(context, shortcut)
+            }
         }
     }
 
