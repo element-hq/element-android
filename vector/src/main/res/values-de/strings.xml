@@ -1072,7 +1072,7 @@
     <string name="command_description_op_user">Bestimmt das Berechtigungslevel des Benutzers</string>
     <string name="command_description_deop_user">Setzt Berechtigungen des Benutzers zurück</string>
     <string name="command_description_invite_user">Lädt Benutzer mit angegebener Kennung in den aktuellen Raum ein</string>
-    <string name="command_description_join_room">Tritt dem Raum mit angegebenen Alias bei</string>
+    <string name="command_description_join_room">Raum mit angegebener Adresse beitreten</string>
     <string name="command_description_part_room">Verlasse Raum</string>
     <string name="command_description_topic">Raumthema ändern</string>
     <string name="command_description_kick_user">Entfernt die Person angegebener ID</string>
@@ -2313,7 +2313,7 @@
     <string name="identity_server_error_terms_not_signed">Bitte akzeptiere zuerst die AGB des Identitätsservers in den Einstellungen.</string>
     <string name="template_identity_server_error_bulk_sha256_not_supported">Deiner Privatsphäre wegen unterstützt ${app_name} nur das Senden gehashter E-Mail-Adressen und Telefonnummern.</string>
     <string name="identity_server_error_binding_error">Die Assoziierung ist fehlgeschlagen.</string>
-    <string name="identity_server_error_no_current_binding_error">Für diese Kennung gibt es aktuell keine Assoziierung.</string>
+    <string name="identity_server_error_no_current_binding_error">Für diese Kennung gibt es aktuell keine Zuordnung.</string>
     <string name="identity_server_set_default_notice">Dein Home-Server (%1$s) schlägt %2$s als Identitätsserver vor</string>
     <string name="identity_server_set_default_submit">Benutze %1$s</string>
     <string name="identity_server_set_alternative_notice">Alternativ kannst du die URL eines beliebigen anderen Identitätsservers angeben</string>
@@ -2658,7 +2658,7 @@
     <string name="call_tile_call_back">Zurückrufen</string>
     <string name="call_tile_ended">Dieser Anruf wurde beendet</string>
     <string name="call_tile_other_declined">%1$s hat diesen Anruf abgelehnt</string>
-    <string name="call_tile_you_declined">Du hast diesen Anruf %1$s abgelehnt</string>
+    <string name="call_tile_you_declined">Du hast diesen Anruf %s abgelehnt</string>
     <string name="call_tile_in_call">Du nimmst zur Zeit an diesem Anruf teil</string>
     <string name="call_tile_other_started_call">%1$s hat einen Anruf gestartet</string>
     <string name="call_tile_you_started_call">Du hast einen Anruf gestartet</string>
@@ -2696,7 +2696,7 @@
     <string name="a11y_trust_level_default">Standard-Vertrauensstufe</string>
     <string name="a11y_selected">Ausgewählt</string>
     <string name="a11y_video">Video</string>
-    <string name="a11y_unsent_draft">Dieser Raum enthält einen ungesendeten Entwurf</string>
+    <string name="a11y_unsent_draft">enthält einen ungesendeten Entwurf</string>
     <string name="a11y_error_some_message_not_sent">Einige Nachrichten wurden nicht gesendet</string>
     <string name="a11y_delete_avatar">Avatar löschen</string>
     <string name="a11y_change_avatar">Avatar ändern</string>
@@ -2846,8 +2846,8 @@
     <string name="spaces_no_server_support_description">Für weitere Infos kontaktiere bitte die Administration des Homeservers</string>
     <string name="spaces_no_server_support_title">Dein Homeserver scheint Spaces noch nicht zu unterstützen</string>
     <string name="space_add_rooms">Räume hinzufügen</string>
-    <string name="space_leave_prompt_msg_as_admin">Du bist der Admin von diesem Space. Stelle vor dem Verlassen sicher, dass du die Adminrechte an jemand anderen übergibst.</string>
-    <string name="space_leave_prompt_msg_private">Dieser Raum ist nicht öffentlich. Du wirst ihn ohne Einladung nicht wieder betreten können.</string>
+    <string name="space_leave_prompt_msg_as_admin">Du bist der einzige Admin von diesem Space. Wenn du ihn verlässt, hat niemand Kontrolle über ihn.</string>
+    <string name="space_leave_prompt_msg_private">Du wirst diesen Raum ohne erneute Einladung nicht betreten können.</string>
     <string name="space_leave_prompt_msg_only_you">Du bist die einzige Person hier. Wenn du den Space verlässt, ist er für immer verloren (eine lange Zeit).</string>
     <string name="invite_to_space">Einladen in %s</string>
     <string name="private_space">Privater Space</string>
@@ -2891,12 +2891,12 @@
     <string name="voice_message_tap_to_stop_toast">Klicke, um die Aufnahme zu starten oder stoppen</string>
     <string name="voice_message_n_seconds_warning_toast">%1$ds übrig</string>
     <string name="voice_message_release_to_send_toast">Zum Aufnehmen drücken, zum Senden loslassen</string>
-    <string name="a11y_delete_recorded_voice_message">Aufgenommene Sprachnachricht löschen</string>
+    <string name="a11y_delete_recorded_voice_message">Aufnahme löschen</string>
     <string name="a11y_recording_voice_message">Sprachnachricht wird aufgenommen</string>
     <string name="a11y_pause_voice_message">Sprachnachricht pausieren</string>
     <string name="a11y_play_voice_message">Sprachnachricht abspielen</string>
     <string name="a11y_lock_voice_message">Sprachnachricht einrasten</string>
-    <string name="a11y_start_voice_message">Sprachnachricht starten</string>
+    <string name="a11y_start_voice_message">Sprachnachricht aufnehmen</string>
     <string name="room_using_unstable_room_version">Dieser Raum verwendet die Raumversion %s, die von diesem Heimserver als instabil markiert ist.</string>
     <string name="upgrade_room_no_power_to_manage">Du benötigst die Berechtigung, um einen Raum upzugraden</string>
     <string name="upgrade_room_update_parent_space">Übergeordneten Space automatisch updaten</string>
@@ -3027,4 +3027,25 @@
     <string name="space_participants_kick_prompt_msg">Kicken entfernt die Person aus dem Space
 \n
 \nUm sie für immer zu entfernen, solltest du sie bannen.</string>
+    <string name="a11y_stop_voice_message">Aufnahme beenden</string>
+    <string name="pick_tings_to_leave">Welche Räume willst du verlassen\?</string>
+    <string name="finish_setup">Einrichtung beenden</string>
+    <string name="a11y_presence_unavailable">Nicht verfügbar</string>
+    <string name="a11y_presence_offline">Offline</string>
+    <string name="a11y_presence_online">Online</string>
+    <string name="call_tap_to_return">%1$s Klicke zum Zurückkehren</string>
+    <string name="call_tile_no_answer">Nicht erreicht</string>
+    <string name="command_description_lenny">Nachricht mit ( ͡° ͜ʖ ͡°) beginnen</string>
+    <string name="command_description_whois">Zeigt Information über die Person an</string>
+    <string name="command_description_avatar_for_room">Ändert dein Profilbild im aktuellen Raum</string>
+    <string name="command_description_room_avatar">Ändert das Raumbild</string>
+    <string name="command_description_nick_for_room">Ändert deinen Nicknamen für diesen Raum</string>
+    <string name="command_description_room_name">Ändert den Raumnamen</string>
+    <string name="command_description_unignore_user">Entblockt eine Person und zeigt deren Nachrichten wieder an</string>
+    <string name="command_description_ignore_user">Blockiert eine Person und versteckt deren Nachrichten</string>
+    <string name="room_settings_space_access_public_description">Jeder kann den Space finden und beitreten</string>
+    <string name="room_settings_room_notifications_manage_notifications">Du kannst deine Benachrichtigungen in den %1$s verwalten.</string>
+    <string name="room_settings_room_notifications_encryption_notice">Beachte, dass Benachrichtigungen zu Erwähnungen und Schlüsselwörtern in verschlüsselten Räumen momentan nicht verfügbar sind.</string>
+    <string name="space_permissions_notice">Wähle die Berechtigungen der Rollen aus</string>
+    <string name="space_settings_permissions_subtitle">Rollen deren Berechtigungen einsehen und bearbeiten.</string>
 </resources>
