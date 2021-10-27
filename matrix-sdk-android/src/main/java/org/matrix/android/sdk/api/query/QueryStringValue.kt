@@ -35,8 +35,23 @@ sealed interface QueryStringValue {
     data class Contains(override val string: String, override val case: Case = Case.SENSITIVE) : ContentQueryStringValue
 
     enum class Case {
+        /**
+         * Match query sensitive to case
+         */
         SENSITIVE,
+
+        /**
+         * Match query insensitive to case, this only works for Latin-1 character sets
+         */
         INSENSITIVE,
+
+        /**
+         * Match query with input normalized (case insensitive)
+         * Works around Realms inability to sort or filter by case for non Latin-1 character sets
+         * Expects the target field to contain normalized data
+         *
+         * @see org.matrix.android.sdk.internal.util.Normalizer.normalize
+         */
         NORMALIZED
     }
 }
