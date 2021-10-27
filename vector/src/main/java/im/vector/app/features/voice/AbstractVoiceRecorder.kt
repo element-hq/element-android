@@ -26,16 +26,16 @@ abstract class AbstractVoiceRecorder(
         context: Context,
         private val filenameExt: String
 ) : VoiceRecorder {
-    private val outputDirectory = File(context.cacheDir, "voice_records")
+    private val outputDirectory: File by lazy {
+        File(context.cacheDir, "voice_records").also {
+            if (!it.exists()) {
+                it.mkdirs()
+            }
+        }
+    }
 
     private var mediaRecorder: MediaRecorder? = null
     private var outputFile: File? = null
-
-    init {
-        if (!outputDirectory.exists()) {
-            outputDirectory.mkdirs()
-        }
-    }
 
     abstract fun setOutputFormat(mediaRecorder: MediaRecorder)
     abstract fun convertFile(recordedFile: File?): File?

@@ -27,11 +27,11 @@ import javax.inject.Inject
 class VoicePlayerHelper @Inject constructor(
         context: Context
 ) {
-    private val outputDirectory = File(context.cacheDir, "voice_records")
-
-    init {
-        if (!outputDirectory.exists()) {
-            outputDirectory.mkdirs()
+    private val outputDirectory: File by lazy {
+        File(context.cacheDir, "voice_records").also {
+            if (!it.exists()) {
+                it.mkdirs()
+            }
         }
     }
 
