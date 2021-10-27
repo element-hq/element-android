@@ -69,6 +69,8 @@ class TchapContactListViewModel @AssistedInject constructor(@Assisted initialSta
     // All the contacts on the phone
     private var localUsers: List<User> = emptyList()
 
+    private val isExternalUser = TchapUtils.isExternalTchapUser(session.myUserId)
+
     @AssistedFactory
     interface Factory {
         fun create(initialState: TchapContactListViewState): TchapContactListViewModel
@@ -101,8 +103,6 @@ class TchapContactListViewModel @AssistedInject constructor(@Assisted initialSta
         selectSubscribe(TchapContactListViewState::searchTerm) {
             updateFilteredContacts()
         }
-
-        val isExternalUser = TchapUtils.isExternalTchapUser(session.myUserId)
 
         setState {
             copy(
@@ -271,20 +271,22 @@ class TchapContactListViewModel @AssistedInject constructor(@Assisted initialSta
 //                    copy(knownUsers = async)
 //                }
 
-        directoryUsersSearch
-                .debounce(300, TimeUnit.MILLISECONDS)
-                .switchMapSingle { search ->
-                    val stream = if (search.isBlank()) {
-                        Single.just(emptyList())
-                    } else {
-                        session.rx().searchUsersDirectory(search, 50, state.excludedUserIds.orEmpty())
+        if (!isExternalUser) {
+            directoryUsersSearch
+                    .debounce(300, TimeUnit.MILLISECONDS)
+                    .switchMapSingle { search ->
+                        val stream = if (search.isBlank()) {
+                            Single.just(emptyList())
+                        } else {
+                            session.rx().searchUsersDirectory(search, 50, state.excludedUserIds.orEmpty())
+                        }
+                        stream.toAsync {
+                            copy(directoryUsers = it)
+                        }
                     }
-                    stream.toAsync {
-                        copy(directoryUsers = it)
-                    }
-                }
-                .subscribe()
-                .disposeOnClear()
+                    .subscribe()
+                    .disposeOnClear()
+        }
     }
 
     private fun observeDMs() {
