@@ -57,6 +57,13 @@ internal class RealmSessionStoreMigration @Inject constructor(
         const val SESSION_STORE_SCHEMA_VERSION = 19L
     }
 
+    /**
+     * Forces all RealmSessionStoreMigration instances to be equal
+     * Avoids Realm throwing when multiple instances of the migration are set
+     */
+    override fun equals(other: Any?) = other is RealmSessionStoreMigration
+    override fun hashCode() = 1000
+
     override fun migrate(realm: DynamicRealm, oldVersion: Long, newVersion: Long) {
         Timber.v("Migrating Realm Session from $oldVersion to $newVersion")
 
