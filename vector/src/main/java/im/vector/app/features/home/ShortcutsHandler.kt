@@ -39,6 +39,7 @@ class ShortcutsHandler @Inject constructor(
         private val activeSessionHolder: ActiveSessionHolder,
         private val pinCodeStore: PinCodeStore
 ) {
+    private val isRequestPinShortcutSupported = ShortcutManagerCompat.isRequestPinShortcutSupported(context)
 
     fun observeRoomsAndBuildShortcuts(): Disposable {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N_MR1) {
@@ -71,7 +72,7 @@ class ShortcutsHandler @Inject constructor(
         if (deadShortcutIds.isNotEmpty()) {
             Timber.d("Removing shortcut(s) $deadShortcutIds")
             ShortcutManagerCompat.removeLongLivedShortcuts(context, deadShortcutIds)
-            if (ShortcutManagerCompat.isRequestPinShortcutSupported(context)) {
+            if (isRequestPinShortcutSupported) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
                     context.getSystemService<ShortcutManager>()?.disableShortcuts(deadShortcutIds)
                 }
@@ -107,7 +108,7 @@ class ShortcutsHandler @Inject constructor(
         ShortcutManagerCompat.removeLongLivedShortcuts(context, shortcuts)
 
         // We can only disabled pinned shortcuts with the API, but at least it will prevent the crash
-        if (ShortcutManagerCompat.isRequestPinShortcutSupported(context)) {
+        if (isRequestPinShortcutSupported) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
                 context.getSystemService<ShortcutManager>()
                         ?.let {
