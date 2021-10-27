@@ -18,6 +18,7 @@
 package im.vector.app.features.roommemberprofile
 
 import com.airbnb.epoxy.TypedEpoxyController
+import fr.gouv.tchap.core.utils.TchapUtils
 import im.vector.app.R
 import im.vector.app.core.epoxy.profiles.buildProfileAction
 import im.vector.app.core.epoxy.profiles.buildProfileSection
@@ -176,12 +177,15 @@ class RoomMemberProfileController @Inject constructor(
 
             buildProfileSection(stringProvider.getString(R.string.room_profile_section_more))
 
-            buildProfileAction(
-                    id = "direct",
-                    editable = false,
-                    title = stringProvider.getString(R.string.room_member_open_or_create_dm),
-                    action = { callback?.onOpenDmClicked() }
-            )
+            // Both myUserId and otherUserId are not external
+            if (!TchapUtils.isExternalTchapUser(session.myUserId) || !TchapUtils.isExternalTchapUser(state.userId)) {
+                buildProfileAction(
+                        id = "direct",
+                        editable = false,
+                        title = stringProvider.getString(R.string.room_member_open_or_create_dm),
+                        action = { callback?.onOpenDmClicked() }
+                )
+            }
 
             if (!state.isSpace && state.hasReadReceipt) {
                 buildProfileAction(
