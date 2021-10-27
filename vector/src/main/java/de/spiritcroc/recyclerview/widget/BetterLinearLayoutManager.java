@@ -157,6 +157,22 @@ public class BetterLinearLayoutManager extends LinearLayoutManager implements
      */
     private int mInitialPrefetchItemCount = 2;
 
+    /**
+     * The position to use as anchor.
+     */
+    private int mPreferredAnchorPosition = -1;
+
+    /**
+     * Whether to care about the placement of the anchor view, i.e., whether to use mPreferredAnchorPlacement.
+     */
+    private boolean mCareAboutAnchorPlacement = false;
+
+    /**
+     * The placement where to look for anchor views, relative to the visible bounds.
+     * Should usually be within 0f - 1f.
+     */
+    private float mPreferredAnchorPlacement = 0.5f;
+
     // Reusable int array to be passed to method calls that mutate it in order to "return" two ints.
     // This should only be used used transiently and should not be used to retain any state over
     // time.
@@ -852,7 +868,15 @@ public class BetterLinearLayoutManager extends LinearLayoutManager implements
             Log.d(TAG, "deciding anchor info for fresh state");
         }
         anchorInfo.assignCoordinateFromPadding();
-        anchorInfo.mPosition = mStackFromEnd ? state.getItemCount() - 1 : 0;
+        if (mPreferredAnchorPosition >= 0) {
+            if (mPreferredAnchorPosition < state.getItemCount()) {
+                anchorInfo.mPosition = mPreferredAnchorPosition;
+            } else {
+                anchorInfo.mPosition = state.getItemCount() - 1;
+            }
+        } else {
+            anchorInfo.mPosition = mStackFromEnd ? state.getItemCount() - 1 : 0;
+        }
     }
 
     /**
@@ -1878,12 +1902,26 @@ public class BetterLinearLayoutManager extends LinearLayoutManager implements
 
         int itemCount = state.getItemCount();
 
+        // Prefer exact matches to anything else if possible
+        if (mPreferredAnchorPosition >= 0 && mPreferredAnchorPosition < itemCount) {
+            for (int i = start; i != end; i += diff) {
+                final View view = getChildAt(i);
+                final int position = getPosition(view);
+                if (position == mPreferredAnchorPosition &&
+                        !((RecyclerView.LayoutParams) view.getLayoutParams()).isItemRemoved()) {
+                    return view;
+                }
+            }
+        }
+
         final int boundsStart = mOrientationHelper.getStartAfterPadding();
         final int boundsEnd = mOrientationHelper.getEndAfterPadding();
+        final int shouldCover = (int) ((boundsEnd - boundsStart) * mPreferredAnchorPlacement);
 
         View invalidMatch = null;
         View bestFirstFind = null;
         View bestSecondFind = null;
+        View bestFind = null;
 
 
         for (int i = start; i != end; i += diff) {
@@ -1923,11 +1961,33 @@ public class BetterLinearLayoutManager extends LinearLayoutManager implements
                             }
                         }
                     } else {
-                        // We found an in bounds item, greedily return it.
-                        return view;
+                        if (mCareAboutAnchorPlacement) {
+                            if (bestFind == null) {
+                                bestFind = view;
+                            }
+                            if (layoutFromEnd) {
+                                if (childStart < shouldCover) {
+                                    // Won't get better than this
+                                    return view;
+                                }
+                            } else {
+                                if (childEnd > shouldCover) {
+                                    // Won't get better than this
+                                    return view;
+                                }
+                            }
+                        } else {
+                            // We found an in bounds item, greedily return it.
+                            return view;
+                        }
                     }
                 }
             }
+        }
+
+        if (bestFind != null) {
+            // Upstream would have returned this immediately
+            return bestFind;
         }
 
         // We didn't find an in bounds item so we will settle for an item in this order:
@@ -2243,6 +2303,30 @@ public class BetterLinearLayoutManager extends LinearLayoutManager implements
                                 - mOrientationHelper.getDecoratedMeasurement(view));
             }
         }
+    }
+
+    /**
+     * Set the position to use as anchor. Use -1 to not use a fixed anchor position.
+     */
+    public void setPreferredAnchorPosition(int anchorPosition) {
+        mPreferredAnchorPosition = anchorPosition;
+    }
+
+    /**
+     * Set the placement where to look for anchor views, relative to the visible bounds.
+     * Should usually be within 0f - 1f.
+     */
+    public void setPreferredAnchorPlacement(float placement) {
+        mPreferredAnchorPlacement = placement;
+        mCareAboutAnchorPlacement = true;
+    }
+
+    /**
+     * Disable fixing a certain area for views.
+     * Reverts the effect of {@link #setPreferredAnchorPlacement(float)}.
+     */
+    public void disablePreferredAnchorPlacement() {
+        mCareAboutAnchorPlacement = false;
     }
 
     /**
