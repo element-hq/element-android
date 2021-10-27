@@ -40,6 +40,17 @@ internal open class RoomSummaryEntity(
         set(value) {
             if (value != field) field = value
         }
+
+    /**
+     * Workaround for Realm only supporting Latin-1 character sets when sorting
+     * or filtering by case
+     * See https://github.com/realm/realm-core/issues/777
+     */
+    var normalizedDisplayName: String? = ""
+        set(value) {
+            if (value != field) field = value
+        }
+
     var avatarUrl: String? = ""
         set(value) {
             if (value != field) field = value
@@ -284,5 +295,6 @@ internal open class RoomSummaryEntity(
                 roomEncryptionTrustLevelStr = value?.name
             }
         }
+
     companion object
 }

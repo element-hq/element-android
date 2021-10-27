@@ -191,7 +191,7 @@ class RoomListViewModel @AssistedInject constructor(
         }
         updatableQuery?.updateQuery {
             it.copy(
-                    displayName = QueryStringValue.Contains(action.filter, QueryStringValue.Case.INSENSITIVE)
+                    displayName = QueryStringValue.Contains(action.filter, QueryStringValue.Case.NORMALIZED)
             )
         }
     }

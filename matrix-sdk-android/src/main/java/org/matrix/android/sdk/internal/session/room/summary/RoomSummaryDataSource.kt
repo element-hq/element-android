@@ -245,7 +245,11 @@ internal class RoomSummaryDataSource @Inject constructor(
         val query = with(queryStringValueProcessor) {
             val query = RoomSummaryEntity.where(realm)
             query.process(RoomSummaryEntityFields.ROOM_ID, queryParams.roomId)
-            query.process(RoomSummaryEntityFields.DISPLAY_NAME, queryParams.displayName)
+            if (queryParams.displayName.isNormalized()) {
+                query.process(RoomSummaryEntityFields.NORMALIZED_DISPLAY_NAME, queryParams.displayName)
+            } else {
+                query.process(RoomSummaryEntityFields.DISPLAY_NAME, queryParams.displayName)
+            }
             query.process(RoomSummaryEntityFields.CANONICAL_ALIAS, queryParams.canonicalAlias)
             query.process(RoomSummaryEntityFields.MEMBERSHIP_STR, queryParams.memberships)
             query.equalTo(RoomSummaryEntityFields.IS_HIDDEN_FROM_USER, false)
