@@ -26,8 +26,10 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.disposables.Disposables
 import org.matrix.android.sdk.api.session.room.RoomSortOrder
 import org.matrix.android.sdk.api.session.room.model.Membership
+import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.rx.asObservable
+import timber.log.Timber
 import javax.inject.Inject
 
 class ShortcutsHandler @Inject constructor(
@@ -52,20 +54,38 @@ class ShortcutsHandler @Inject constructor(
                 .asObservable()
                 .subscribe { rooms ->
                     // Remove dead shortcuts (i.e. deleted rooms)
-                    val roomIds = rooms.map { it.roomId }
-                    val deadShortcutIds = ShortcutManagerCompat.getShortcuts(context, ShortcutManagerCompat.FLAG_MATCH_DYNAMIC)
-                            .map { it.id }
-                            .filter { !roomIds.contains(it) }
-                    ShortcutManagerCompat.removeLongLivedShortcuts(context, deadShortcutIds)
+                    removeDeadShortcut(rooms.map { it.roomId })
 
-                    val shortcuts = rooms.mapIndexed { index, room ->
-                        shortcutCreator.create(room, index)
-                    }
-
-                    shortcuts.forEach { shortcut ->
-                        ShortcutManagerCompat.pushDynamicShortcut(context, shortcut)
-                    }
+                    // Create shortcuts
+                    createShortcuts(rooms)
                 }
+    }
+
+
+    private fun removeDeadShortcut(roomIds: List<String>) {
+        val deadShortcutIds = ShortcutManagerCompat.getShortcuts(context, ShortcutManagerCompat.FLAG_MATCH_DYNAMIC)
+                .map { it.id }
+                .filter { !roomIds.contains(it) }
+
+        if (deadShortcutIds.isNotEmpty()) {
+            Timber.d("Removing shortcut(s) $deadShortcutIds")
+            ShortcutManagerCompat.removeLongLivedShortcuts(context, deadShortcutIds)
+            if (ShortcutManagerCompat.isRequestPinShortcutSupported(context)) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+                    context.getSystemService<ShortcutManager>()?.disableShortcuts(deadShortcutIds)
+                }
+            }
+        }
+    }
+
+    private fun createShortcuts(rooms: List<RoomSummary>) {
+        val shortcuts = rooms.mapIndexed { index, room ->
+            shortcutCreator.create(room, index)
+        }
+
+        shortcuts.forEach { shortcut ->
+            ShortcutManagerCompat.pushDynamicShortcut(context, shortcut)
+        }
     }
 
     fun clearShortcuts() {
