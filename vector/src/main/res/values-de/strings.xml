@@ -1741,7 +1741,7 @@
     <string name="timeline_unread_messages">Ungelesene Nachrichten</string>
     <string name="login_splash_text1">Privat oder in Gruppen mit Leuten chatten</string>
     <string name="login_splash_text2">Halte Gespräche mittels Verschlüsselung privat</string>
-    <string name="login_splash_submit">Beginne</string>
+    <string name="login_splash_submit">Los geht\'s</string>
     <string name="login_server_title">Wähle einen Server</string>
     <string name="login_server_text">Genau wie bei E-Mails haben Accounts ein Zuhause, auch wenn du mit jedem kommunizieren kannst</string>
     <string name="login_server_matrix_org_text">Folge Millionen Anderen kostenlos auf dem größten öffentlichen Server</string>
@@ -1755,7 +1755,7 @@
     <string name="settings_agree_to_terms">Stimme den Nutzungsbedingungen des Identitätsservers (%s) zu, um zu erlauben per E-Mail oder Telefonnummer gefunden zu werden.</string>
     <string name="error_handling_incoming_share">Zu teilende Daten nicht verarbeitbar</string>
     <string name="login_splash_text3">Erweitere &amp; individualisiere dein Benutzererlebnis</string>
-    <string name="login_connect_to">Verbinde mit %1$s</string>
+    <string name="login_connect_to">Mit %1$s verbinden</string>
     <string name="login_connect_to_modular">Mit Element Matrix Services verbinden</string>
     <string name="login_connect_to_a_custom_server">Mit einem benutzerdefinierten Server verbinden</string>
     <string name="login_signin_to">Bei %1$s anmelden</string>
@@ -1818,7 +1818,7 @@
     <string name="login_mode_not_supported">Die Anwendung kann sich nicht bei diesem Home-Server anmelden. Der Home-Server unterstützt die folgenden Anmeldetypen: %1$s.
 \n 
 \nMöchtest du dich mit einem Webclient anmelden\?</string>
-    <string name="login_reset_password_notice">Eine Bestätigungsmail wird an dich gesendet, um dein neues Passwort zu bestätigen.</string>
+    <string name="login_reset_password_notice">Dir wird eine Bestätigungsmail gesendet, um dein neues Passwort zu bestätigen.</string>
     <string name="login_reset_password_submit">Weiter</string>
     <string name="login_reset_password_success_notice_2">Du wurdest von allen Sitzungen abgemeldet und erhältst keine Push-Benachrichtigungen mehr. Um Benachrichtigungen wieder zu aktivieren, melde dich auf jedem Gerät erneut an.</string>
     <string name="login_reset_password_cancel_confirmation_title">Warnung</string>
@@ -1831,7 +1831,7 @@
     <string name="login_msisdn_confirm_submit">Weiter</string>
     <string name="login_msisdn_error_not_international">Internationale Telefonnummern müssen mit \'+\' beginnen</string>
     <string name="login_msisdn_error_other">Die Telefonnummer scheint ungültig zu sein. Bitte prüfen</string>
-    <string name="login_signup_to">Anmelden bei %1$s</string>
+    <string name="login_signup_to">Registrieren bei %1$s</string>
     <string name="login_signup_username_hint">Benutzername</string>
     <string name="login_signup_submit">Weiter</string>
     <string name="login_signup_cancel_confirmation_title">Warnung</string>
@@ -2620,7 +2620,7 @@
     <string name="default_message_emote_confetti">Sendet Konfetti 🎉</string>
     <string name="command_snow">Nachricht mit Schnee senden</string>
     <string name="command_confetti">Sendet die nachfolgende Nachricht mit Konfetti</string>
-    <string name="login_clear_homeserver_history">Nachrichtenverlauf bereinigen</string>
+    <string name="login_clear_homeserver_history">Verlauf löschen</string>
     <string name="login_social_sso">Einmalanmeldung</string>
     <string name="login_social_signin_with">Anmelden mit %s</string>
     <string name="login_social_signup_with">Registrieren mit %s</string>
