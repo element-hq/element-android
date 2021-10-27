@@ -16,28 +16,14 @@
 
 package im.vector.app.core.rx
 
-import im.vector.app.features.settings.VectorPreferences
-import io.reactivex.plugins.RxJavaPlugins
-import timber.log.Timber
 import javax.inject.Inject
 
-class RxConfig @Inject constructor(
-        private val vectorPreferences: VectorPreferences
-) {
+class RxConfig @Inject constructor() {
 
     /**
      * Make sure unhandled Rx error does not crash the app in production
      */
     fun setupRxPlugin() {
-        RxJavaPlugins.setErrorHandler { throwable ->
-            Timber.e(throwable, "RxError")
-            // is InterruptedException -> fine, some blocking code was interrupted by a dispose call
-            if (throwable !is InterruptedException) {
-                // Avoid crash in production, except if user wants it
-                if (vectorPreferences.failFast()) {
-                    throw throwable
-                }
-            }
-        }
+
     }
 }

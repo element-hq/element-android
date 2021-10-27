@@ -45,7 +45,6 @@ import com.airbnb.mvrx.MavericksView
 import com.bumptech.glide.util.Util
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.snackbar.Snackbar
-import com.jakewharton.rxbinding3.view.clicks
 import dagger.hilt.android.EntryPointAccessors
 import im.vector.app.BuildConfig
 import im.vector.app.R
@@ -78,17 +77,13 @@ import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.themes.ActivityOtherThemes
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.receivers.DebugReceiver
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.sample
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.failure.GlobalError
+import reactivecircus.flowbinding.android.view.clicks
 import timber.log.Timber
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), MavericksView {
@@ -123,10 +118,9 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
 
     protected fun View.debouncedClicks(onClicked: () -> Unit) {
         clicks()
-                .throttleFirst(300, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { onClicked() }
-                .disposeOnDestroy()
+                .sample(300)
+                .onEach { onClicked() }
+                .launchIn(lifecycleScope)
     }
 
     /* ==========================================================================================
@@ -137,6 +131,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
     private lateinit var sessionListener: SessionListener
     protected lateinit var bugReporter: BugReporter
     private lateinit var pinLocker: PinLocker
+
     @Inject
     lateinit var rageShake: RageShake
     lateinit var navigator: Navigator
@@ -154,7 +149,6 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
     // For debug only
     private var debugReceiver: DebugReceiver? = null
 
-    private val uiDisposables = CompositeDisposable()
     private val restorables = ArrayList<Restorable>()
 
     override fun attachBaseContext(base: Context) {
@@ -177,10 +171,6 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
         Util.assertMainThread()
         restorables.add(this)
         return this
-    }
-
-    protected fun Disposable.disposeOnDestroy() {
-        uiDisposables.add(this)
     }
 
     @CallSuper
@@ -306,8 +296,6 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
     override fun onDestroy() {
         super.onDestroy()
         Timber.i("onDestroy Activity ${javaClass.simpleName}")
-
-        uiDisposables.dispose()
     }
 
     private val pinStartForActivityResult = registerStartForActivityResult { activityResult ->

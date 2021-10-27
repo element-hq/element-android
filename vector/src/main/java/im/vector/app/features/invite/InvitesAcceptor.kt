@@ -18,7 +18,6 @@ package im.vector.app.features.invite
 
 import im.vector.app.ActiveSessionDataSource
 import im.vector.app.features.session.coroutineScope
-import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob

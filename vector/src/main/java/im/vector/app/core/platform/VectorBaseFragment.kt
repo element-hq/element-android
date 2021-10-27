@@ -35,7 +35,6 @@ import com.airbnb.mvrx.MavericksView
 import com.bumptech.glide.util.Util.assertMainThread
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.jakewharton.rxbinding3.view.clicks
 import dagger.hilt.android.EntryPointAccessors
 import im.vector.app.R
 import im.vector.app.core.di.ActivityEntryPoint
@@ -46,14 +45,10 @@ import im.vector.app.core.extensions.toMvRxBundle
 import im.vector.app.features.navigation.Navigator
 import im.vector.lib.ui.styles.dialogs.MaterialProgressDialog
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.sample
+import reactivecircus.flowbinding.android.view.clicks
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
@@ -155,7 +150,6 @@ abstract class VectorBaseFragment<VB : ViewBinding> : Fragment(), MavericksView 
     @CallSuper
     override fun onDestroyView() {
         Timber.i("onDestroyView Fragment ${javaClass.simpleName}")
-        uiDisposables.clear()
         _binding = null
         super.onDestroyView()
     }
@@ -163,7 +157,6 @@ abstract class VectorBaseFragment<VB : ViewBinding> : Fragment(), MavericksView 
     @CallSuper
     override fun onDestroy() {
         Timber.i("onDestroy Fragment ${javaClass.simpleName}")
-        uiDisposables.dispose()
         super.onDestroy()
     }
 
@@ -229,16 +222,6 @@ abstract class VectorBaseFragment<VB : ViewBinding> : Fragment(), MavericksView 
     }
 
     /* ==========================================================================================
-     * Disposable
-     * ========================================================================================== */
-
-    private val uiDisposables = CompositeDisposable()
-
-    protected fun Disposable.disposeOnDestroyView() {
-        uiDisposables.add(this)
-    }
-
-    /* ==========================================================================================
      * ViewEvents
      * ========================================================================================== */
 
@@ -258,10 +241,9 @@ abstract class VectorBaseFragment<VB : ViewBinding> : Fragment(), MavericksView 
 
     protected fun View.debouncedClicks(onClicked: () -> Unit) {
         clicks()
-                .throttleFirst(300, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { onClicked() }
-                .disposeOnDestroyView()
+                .sample(300)
+                .onEach { onClicked() }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     /* ==========================================================================================

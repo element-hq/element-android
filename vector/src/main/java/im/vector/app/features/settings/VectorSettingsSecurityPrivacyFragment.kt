@@ -58,7 +58,6 @@ import im.vector.app.features.pin.PinMode
 import im.vector.app.features.raw.wellknown.getElementWellknown
 import im.vector.app.features.raw.wellknown.isE2EByDefault
 import im.vector.app.features.themes.ThemeUtils
-import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
@@ -85,7 +84,6 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
 
     override var titleRes = R.string.settings_security_and_privacy
     override val preferenceXmlRes = R.xml.vector_settings_security_privacy
-    private var disposables = mutableListOf<Disposable>()
 
     // cryptography
     private val mCryptographyCategory by lazy {
@@ -171,14 +169,6 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
 //    private val secureBackupResetPreference by lazy {
 //        findPreference<VectorPreference>(VectorPreferences.SETTINGS_SECURE_BACKUP_RESET_PREFERENCE_KEY)
 //    }
-
-    override fun onPause() {
-        super.onPause()
-        disposables.forEach {
-            it.dispose()
-        }
-        disposables.clear()
-    }
 
     private fun refresh4SSection(info: SecretsSynchronisationInfo) {
         // it's a lot of if / else if / else

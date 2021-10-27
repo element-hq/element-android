@@ -22,16 +22,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.activityViewModel
-import com.jakewharton.rxbinding3.widget.editorActionEvents
-import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.app.R
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.startImportTextFromFileIntent
 import im.vector.app.databinding.FragmentSsssAccessFromKeyBinding
 import io.reactivex.android.schedulers.AndroidSchedulers
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.sample
 import org.matrix.android.sdk.api.extensions.tryOrNull
+import reactivecircus.flowbinding.android.widget.editorActionEvents
+import reactivecircus.flowbinding.android.widget.textChanges
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -48,22 +52,21 @@ class SharedSecuredStorageKeyFragment @Inject constructor() : VectorBaseFragment
         views.ssssRestoreWithKeyText.text = getString(R.string.enter_secret_storage_input_key)
 
         views.ssssKeyEnterEdittext.editorActionEvents()
-                .throttleFirst(300, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
+                .sample(300)
+                .onEach {
                     if (it.actionId == EditorInfo.IME_ACTION_DONE) {
                         submit()
                     }
                 }
-                .disposeOnDestroyView()
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
         views.ssssKeyEnterEdittext.textChanges()
                 .skipInitialValue()
-                .subscribe {
+                .onEach {
                     views.ssssKeyEnterTil.error = null
                     views.ssssKeySubmit.isEnabled = it.isNotBlank()
                 }
-                .disposeOnDestroyView()
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
         views.ssssKeyUseFile.debouncedClicks { startImportTextFromFileIntent(requireContext(), importFileStartForActivityResult) }
 

@@ -373,14 +373,10 @@ dependencies {
     // Phone number https://github.com/google/libphonenumber
     implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.35'
 
-    // rx
-    implementation libs.rx.rxKotlin
-    implementation libs.rx.rxAndroid
-    implementation 'com.jakewharton.rxrelay2:rxrelay:2.1.1'
-    // RXBinding
-    implementation libs.jakewharton.rxbinding
-    implementation libs.jakewharton.rxbindingAppcompat
-    implementation libs.jakewharton.rxbindingMaterial
+    // FlowBinding
+    implementation libs.github.flowBinding
+    implementation libs.github.flowBindingAppcompat
+    implementation libs.github.flowBindingMaterial
 
     implementation libs.airbnb.epoxy
     implementation libs.airbnb.epoxyGlide

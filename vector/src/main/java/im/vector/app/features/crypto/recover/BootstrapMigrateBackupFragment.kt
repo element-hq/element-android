@@ -27,10 +27,9 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.core.text.toSpannable
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
-import com.jakewharton.rxbinding3.widget.editorActionEvents
-import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.registerStartForActivityResult
@@ -40,8 +39,13 @@ import im.vector.app.core.utils.colorizeMatchingText
 import im.vector.app.core.utils.startImportTextFromFileIntent
 import im.vector.app.databinding.FragmentBootstrapMigrateBackupBinding
 import io.reactivex.android.schedulers.AndroidSchedulers
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.sample
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.internal.crypto.keysbackup.util.isValidRecoveryKey
+import reactivecircus.flowbinding.android.widget.editorActionEvents
+import reactivecircus.flowbinding.android.widget.textChanges
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -63,22 +67,21 @@ class BootstrapMigrateBackupFragment @Inject constructor(
             views.bootstrapMigrateEditText.setText(it.passphrase ?: "")
         }
         views.bootstrapMigrateEditText.editorActionEvents()
-                .throttleFirst(300, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
+                .sample(300)
+                .onEach {
                     if (it.actionId == EditorInfo.IME_ACTION_DONE) {
                         submit()
                     }
                 }
-                .disposeOnDestroyView()
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
         views.bootstrapMigrateEditText.textChanges()
                 .skipInitialValue()
-                .subscribe {
+                .onEach {
                     views.bootstrapRecoveryKeyEnterTil.error = null
                     // sharedViewModel.handle(BootstrapActions.UpdateCandidatePassphrase(it?.toString() ?: ""))
                 }
-                .disposeOnDestroyView()
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
         // sharedViewModel.observeViewEvents {}
         views.bootstrapMigrateContinueButton.debouncedClicks { submit() }

@@ -22,14 +22,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.core.text.toSpannable
+import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.activityViewModel
-import com.jakewharton.rxbinding3.widget.editorActionEvents
-import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.databinding.FragmentSsssAccessFromPassphraseBinding
 import io.reactivex.android.schedulers.AndroidSchedulers
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.sample
+import reactivecircus.flowbinding.android.widget.editorActionEvents
+import reactivecircus.flowbinding.android.widget.textChanges
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -60,21 +64,20 @@ class SharedSecuredStoragePassphraseFragment @Inject constructor(
         // .colorizeMatchingText(key, colorProvider.getColorFromAttribute(android.R.attr.textColorLink))
 
         views.ssssPassphraseEnterEdittext.editorActionEvents()
-                .throttleFirst(300, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
+                .sample(300)
+                .onEach {
                     if (it.actionId == EditorInfo.IME_ACTION_DONE) {
                         submit()
                     }
                 }
-                .disposeOnDestroyView()
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
         views.ssssPassphraseEnterEdittext.textChanges()
-                .subscribe {
+                .onEach {
                     views.ssssPassphraseEnterTil.error = null
                     views.ssssPassphraseSubmit.isEnabled = it.isNotBlank()
                 }
-                .disposeOnDestroyView()
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
         views.ssssPassphraseReset.views.bottomSheetActionClickableZone.debouncedClicks {
             sharedViewModel.handle(SharedSecureStorageAction.ForgotResetAll)

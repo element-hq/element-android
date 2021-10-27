@@ -16,7 +16,6 @@
 
 package im.vector.app.core.utils
 
-import com.jakewharton.rxrelay2.BehaviorRelay
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -45,14 +44,6 @@ open class BehaviorDataSource<T>(private val defaultValue: T? = null) : MutableD
 
     override fun post(value: T) {
         mutableFlow.tryEmit(value)
-    }
-
-    private fun createRelay(): BehaviorRelay<T> {
-        return if (defaultValue == null) {
-            BehaviorRelay.create()
-        } else {
-            BehaviorRelay.createDefault(defaultValue)
-        }
     }
 }
 

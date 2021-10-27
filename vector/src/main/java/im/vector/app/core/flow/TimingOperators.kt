@@ -26,13 +26,14 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.selects.select
 
 @ExperimentalCoroutinesApi
 fun <T> Flow<T>.chunk(durationInMillis: Long): Flow<List<T>> {
-    require(durationInMillis> 0) { "Duration should be greater than 0" }
+    require(durationInMillis > 0) { "Duration should be greater than 0" }
     return flow {
         coroutineScope {
             val events = ArrayList<T>()
@@ -64,6 +65,10 @@ fun <T> Flow<T>.chunk(durationInMillis: Long): Flow<List<T>> {
             }
         }
     }
+}
+
+fun tickerFlow(scope: CoroutineScope, delayMillis: Long, initialDelayMillis: Long = delayMillis): Flow<Unit> {
+    return scope.fixedPeriodTicker(delayMillis, initialDelayMillis).consumeAsFlow()
 }
 
 private fun CoroutineScope.fixedPeriodTicker(delayMillis: Long, initialDelayMillis: Long = delayMillis): ReceiveChannel<Unit> {

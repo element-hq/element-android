@@ -28,7 +28,6 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.viewModel
 import com.google.android.material.tabs.TabLayout
-import com.jakewharton.rxbinding3.widget.queryTextChanges
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.EmojiCompatFontProvider
 import im.vector.app.R
@@ -37,7 +36,11 @@ import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityEmojiReactionPickerBinding
 import im.vector.app.features.reactions.data.EmojiDataSource
 import io.reactivex.android.schedulers.AndroidSchedulers
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.sample
 import kotlinx.coroutines.launch
+import reactivecircus.flowbinding.android.widget.queryTextChanges
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -167,13 +170,11 @@ class EmojiReactionPickerActivity : VectorBaseActivity<ActivityEmojiReactionPick
             }
 
             searchView.queryTextChanges()
-                    .throttleWithTimeout(600, TimeUnit.MILLISECONDS)
-                    .doOnError { err -> Timber.e(err) }
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe { query ->
+                    .sample(600)
+                    .onEach { query ->
                         onQueryText(query.toString())
                     }
-                    .disposeOnDestroy()
+                    .launchIn(lifecycleScope)
         }
         searchItem.expandActionView()
         return true
