@@ -3628,4 +3628,10 @@
 
     <!-- Poll -->
     <string name="create_poll_title">Create Poll</string>
+    <string name="create_poll_question_title">Poll question or topic</string>
+    <string name="create_poll_question_hint">Question or topic</string>
+    <string name="create_poll_options_title">Create options</string>
+    <string name="create_poll_options_hint">Option %1$d</string>
+    <string name="create_poll_add_option">ADD OPTION</string>
+    <string name="create_poll_button">CREATE POLL</string>
 </resources>

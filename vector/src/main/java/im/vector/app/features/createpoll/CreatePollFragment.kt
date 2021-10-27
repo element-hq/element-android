@@ -20,11 +20,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.airbnb.mvrx.activityViewModel
+import com.airbnb.mvrx.withState
+import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentCreatePollBinding
 import javax.inject.Inject
 
-class CreatePollFragment @Inject constructor() : VectorBaseFragment<FragmentCreatePollBinding>() {
+class CreatePollFragment @Inject constructor(
+        private val controller: CreatePollController
+) : VectorBaseFragment<FragmentCreatePollBinding>(), CreatePollController.Callback {
+
+    private val viewModel: CreatePollViewModel by activityViewModel()
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentCreatePollBinding {
         return FragmentCreatePollBinding.inflate(inflater, container, false)
@@ -34,8 +41,35 @@ class CreatePollFragment @Inject constructor() : VectorBaseFragment<FragmentCrea
         super.onViewCreated(view, savedInstanceState)
         vectorBaseActivity.setSupportActionBar(views.createPollToolbar)
 
+        views.createPollRecyclerView.configureWith(controller)
+        controller.callback = this
+
         views.createPollClose.debouncedClicks {
             requireActivity().finish()
         }
+
+        views.createPollButton.debouncedClicks {
+            viewModel.handle(CreatePollAction.OnCreatePoll)
+        }
+    }
+
+    override fun invalidate() = withState(viewModel) {
+        controller.setData(it)
+    }
+
+    override fun onQuestionChanged(question: String) {
+        viewModel.handle(CreatePollAction.OnQuestionChanged(question))
+    }
+
+    override fun onOptionChanged(index: Int, option: String) {
+        viewModel.handle(CreatePollAction.OnOptionChanged(index, option))
+    }
+
+    override fun onDeleteOption(index: Int) {
+        viewModel.handle(CreatePollAction.OnDeleteOption(index))
+    }
+
+    override fun onAddOption() {
+        viewModel.handle(CreatePollAction.OnAddOption)
     }
 }

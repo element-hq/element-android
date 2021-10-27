@@ -19,5 +19,6 @@ package im.vector.app.features.createpoll
 import com.airbnb.mvrx.MavericksState
 
 data class CreatePollViewState(
-        val question: String = ""
+        val question: String = "",
+        val options: List<String> = emptyList()
 ) : MavericksState
