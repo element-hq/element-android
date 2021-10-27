@@ -90,7 +90,7 @@
 
         <activity
             android:name=".features.MainActivity"
-            android:theme="@style/Theme.Vector.Launcher" />
+            android:theme="@style/Theme.Tchap.Launcher" />
 
         <!-- Activity alias for the launcher Activity (must be declared after the Activity it targets) -->
         <!-- exported="true" is required to launch application -->

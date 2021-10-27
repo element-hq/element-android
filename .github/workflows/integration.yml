@@ -17,6 +17,10 @@ jobs:
   compile-android-test:
     name: Compile Android tests
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        target: [ GplayPreprodWithoutvoipWithoutpinning, FdroidPreprodWithoutvoipWithoutpinning ]
     steps:
       - uses: actions/checkout@v2
       - uses: actions/cache@v2
@@ -27,8 +31,8 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
-      - name: Compile Android tests
-        run: ./gradlew clean assembleAndroidTest $CI_GRADLE_ARG_PROPERTIES --stacktrace -PallWarningsAsErrors=false
+      - name: Compile ${{ matrix.target }} Android tests
+        run: ./gradlew clean assemble${{ matrix.target }}DebugAndroidTest $CI_GRADLE_ARG_PROPERTIES --stacktrace -PallWarningsAsErrors=false
 
   integration-tests:
     name: Integration Tests (Synapse)
