@@ -56,7 +56,6 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.TransitionManager
 import com.airbnb.epoxy.EpoxyModel
@@ -71,6 +70,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.jakewharton.rxbinding3.view.focusChanges
 import com.jakewharton.rxbinding3.widget.textChanges
 import com.vanniktech.emoji.EmojiPopup
+import de.spiritcroc.recyclerview.widget.BetterLinearLayoutManager
 import im.vector.app.R
 import im.vector.app.core.dialogs.ConfirmationDialogBuilder
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
@@ -311,7 +311,7 @@ class RoomDetailFragment @Inject constructor(
     private lateinit var sharedActionViewModel: MessageSharedActionViewModel
     private lateinit var knownCallsViewModel: SharedKnownCallsViewModel
 
-    private lateinit var layoutManager: LinearLayoutManager
+    private lateinit var layoutManager: BetterLinearLayoutManager
     private lateinit var jumpToBottomViewVisibilityManager: JumpToBottomViewVisibilityManager
     private var modelBuildListener: OnModelBuildFinishedListener? = null
 
@@ -1219,7 +1219,7 @@ class RoomDetailFragment @Inject constructor(
         timelineEventController.timeline = roomDetailViewModel.timeline
 
         views.timelineRecyclerView.trackItemsVisibilityChange()
-        layoutManager = object : LinearLayoutManager(context, RecyclerView.VERTICAL, true) {
+        layoutManager = object : BetterLinearLayoutManager(context, RecyclerView.VERTICAL, true) {
             override fun onLayoutCompleted(state: RecyclerView.State?) {
                 super.onLayoutCompleted(state)
                 updateJumpToReadMarkerViewVisibility()

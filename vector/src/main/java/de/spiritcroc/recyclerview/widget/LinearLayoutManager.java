@@ -1,14 +1,27 @@
 package de.spiritcroc.recyclerview.widget;
 
+import android.content.Context;
+import android.util.AttributeSet;
 import android.view.View;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 /**
- * Exposing/replicating some internal functions from RecylerView.LayoutManager
+ * Exposing/replicating some internal functions/attributes from RecylerView.LayoutManager
  */
-public abstract class LayoutManager extends RecyclerView.LayoutManager {
+public abstract class LinearLayoutManager extends androidx.recyclerview.widget.LinearLayoutManager {
 
+    public LinearLayoutManager(Context context) {
+        super(context);
+    }
+
+    public LinearLayoutManager(Context context, int orientation, boolean reverseLayout) {
+        super(context, orientation, reverseLayout);
+    }
+
+    public LinearLayoutManager(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
+    }
 
     /*
      * Exposed things from RecyclerView.java
@@ -22,31 +35,31 @@ public abstract class LayoutManager extends RecyclerView.LayoutManager {
             new ViewBoundsCheck.Callback() {
                 @Override
                 public View getChildAt(int index) {
-                    return LayoutManager.this.getChildAt(index);
+                    return LinearLayoutManager.this.getChildAt(index);
                 }
 
                 @Override
                 public int getParentStart() {
-                    return LayoutManager.this.getPaddingLeft();
+                    return LinearLayoutManager.this.getPaddingLeft();
                 }
 
                 @Override
                 public int getParentEnd() {
-                    return LayoutManager.this.getWidth() - LayoutManager.this.getPaddingRight();
+                    return LinearLayoutManager.this.getWidth() - LinearLayoutManager.this.getPaddingRight();
                 }
 
                 @Override
                 public int getChildStart(View view) {
                     final RecyclerView.LayoutParams params = (RecyclerView.LayoutParams)
                             view.getLayoutParams();
-                    return LayoutManager.this.getDecoratedLeft(view) - params.leftMargin;
+                    return LinearLayoutManager.this.getDecoratedLeft(view) - params.leftMargin;
                 }
 
                 @Override
                 public int getChildEnd(View view) {
                     final RecyclerView.LayoutParams params = (RecyclerView.LayoutParams)
                             view.getLayoutParams();
-                    return LayoutManager.this.getDecoratedRight(view) + params.rightMargin;
+                    return LinearLayoutManager.this.getDecoratedRight(view) + params.rightMargin;
                 }
             };
 
@@ -58,32 +71,32 @@ public abstract class LayoutManager extends RecyclerView.LayoutManager {
             new ViewBoundsCheck.Callback() {
                 @Override
                 public View getChildAt(int index) {
-                    return LayoutManager.this.getChildAt(index);
+                    return LinearLayoutManager.this.getChildAt(index);
                 }
 
                 @Override
                 public int getParentStart() {
-                    return LayoutManager.this.getPaddingTop();
+                    return LinearLayoutManager.this.getPaddingTop();
                 }
 
                 @Override
                 public int getParentEnd() {
-                    return LayoutManager.this.getHeight()
-                            - LayoutManager.this.getPaddingBottom();
+                    return LinearLayoutManager.this.getHeight()
+                            - LinearLayoutManager.this.getPaddingBottom();
                 }
 
                 @Override
                 public int getChildStart(View view) {
                     final RecyclerView.LayoutParams params = (RecyclerView.LayoutParams)
                             view.getLayoutParams();
-                    return LayoutManager.this.getDecoratedTop(view) - params.topMargin;
+                    return LinearLayoutManager.this.getDecoratedTop(view) - params.topMargin;
                 }
 
                 @Override
                 public int getChildEnd(View view) {
                     final RecyclerView.LayoutParams params = (RecyclerView.LayoutParams)
                             view.getLayoutParams();
-                    return LayoutManager.this.getDecoratedBottom(view) + params.bottomMargin;
+                    return LinearLayoutManager.this.getDecoratedBottom(view) + params.bottomMargin;
                 }
             };
 

@@ -47,7 +47,7 @@ import java.util.List;
  * A {@link RecyclerView.LayoutManager} implementation which provides
  * similar functionality to {@link android.widget.ListView}.
  */
-public class BetterLinearLayoutManager extends LayoutManager implements
+public class BetterLinearLayoutManager extends LinearLayoutManager implements
         ItemTouchHelper.ViewDropHandler, RecyclerView.SmoothScroller.ScrollVectorProvider {
 
     private static final String TAG = "LinearLayoutManager";
@@ -179,6 +179,7 @@ public class BetterLinearLayoutManager extends LayoutManager implements
      */
     public BetterLinearLayoutManager(Context context, @RecyclerView.Orientation int orientation,
                                      boolean reverseLayout) {
+        super(context, orientation, reverseLayout);
         setOrientation(orientation);
         setReverseLayout(reverseLayout);
     }
@@ -193,6 +194,7 @@ public class BetterLinearLayoutManager extends LayoutManager implements
      */
     public BetterLinearLayoutManager(Context context, AttributeSet attrs, int defStyleAttr,
                                      int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
         Properties properties = getProperties(context, attrs, defStyleAttr, defStyleRes);
         setOrientation(properties.orientation);
         setReverseLayout(properties.reverseLayout);
@@ -322,6 +324,11 @@ public class BetterLinearLayoutManager extends LayoutManager implements
      * Compatibility support for {@link android.widget.AbsListView#setStackFromBottom(boolean)}
      */
     public void setStackFromEnd(boolean stackFromEnd) {
+        // mAnchorInfo can be uninitialized during super construction execution. Avoid duplicate execution
+        if (mAnchorInfo == null) {
+            return;
+        }
+
         assertNotInLayoutOrScroll(null);
         if (mStackFromEnd == stackFromEnd) {
             return;
@@ -352,6 +359,11 @@ public class BetterLinearLayoutManager extends LayoutManager implements
      * @param orientation {@link #HORIZONTAL} or {@link #VERTICAL}
      */
     public void setOrientation(@RecyclerView.Orientation int orientation) {
+        // mAnchorInfo can be uninitialized during super construction execution. Avoid duplicate execution
+        if (mAnchorInfo == null) {
+            return;
+        }
+
         if (orientation != HORIZONTAL && orientation != VERTICAL) {
             throw new IllegalArgumentException("invalid orientation:" + orientation);
         }
@@ -406,6 +418,10 @@ public class BetterLinearLayoutManager extends LayoutManager implements
      * {@link #setStackFromEnd(boolean)}
      */
     public void setReverseLayout(boolean reverseLayout) {
+        // mAnchorInfo can be uninitialized during super construction execution. Avoid duplicate execution
+        if (mAnchorInfo == null) {
+            return;
+        }
         assertNotInLayoutOrScroll(null);
         if (reverseLayout == mReverseLayout) {
             return;
