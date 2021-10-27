@@ -23,8 +23,11 @@ import androidx.core.content.getSystemService
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.lifecycle.asFlow
 import im.vector.app.core.di.ActiveSessionHolder
+import im.vector.app.core.dispatchers.CoroutineDispatchers
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.session.room.RoomSortOrder
@@ -34,6 +37,7 @@ import javax.inject.Inject
 
 class ShortcutsHandler @Inject constructor(
         private val context: Context,
+        private val appDispatchers: CoroutineDispatchers,
         private val shortcutCreator: ShortcutCreator,
         private val activeSessionHolder: ActiveSessionHolder
 ) {
@@ -67,6 +71,7 @@ class ShortcutsHandler @Inject constructor(
                         ShortcutManagerCompat.pushDynamicShortcut(context, shortcut)
                     }
                 }
+                ?.flowOn(appDispatchers.computation)
                 ?.launchIn(coroutineScope)
                 ?: Job()
     }
