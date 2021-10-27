@@ -138,9 +138,7 @@ internal class RoomSummaryUpdater @Inject constructor(
                 // avoid this call if we are sure there are unread events
                 !isEventRead(realm.configuration, userId, roomId, latestPreviewableEvent?.eventId)
 
-        val roomDisplayName = roomDisplayNameResolver.resolve(realm, roomId)
-        roomSummaryEntity.displayName = roomDisplayName
-        roomSummaryEntity.normalizedDisplayName = normalizer.normalize(roomDisplayName)
+        roomSummaryEntity.setDisplayName(roomDisplayNameResolver.resolve(realm, roomId))
         roomSummaryEntity.avatarUrl = roomAvatarResolver.resolve(realm, roomId)
         roomSummaryEntity.name = ContentMapper.map(lastNameEvent?.content).toModel<RoomNameContent>()?.name
         roomSummaryEntity.topic = ContentMapper.map(lastTopicEvent?.content).toModel<RoomTopicContent>()?.topic
