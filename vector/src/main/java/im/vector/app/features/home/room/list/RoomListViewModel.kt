@@ -52,7 +52,7 @@ import javax.inject.Inject
 
 class RoomListViewModel @Inject constructor(
         initialState: RoomListViewState,
-        private val session: Session,
+        val session: Session,
         private val stringProvider: StringProvider,
         private val appStateHandler: AppStateHandler,
         private val vectorPreferences: VectorPreferences,

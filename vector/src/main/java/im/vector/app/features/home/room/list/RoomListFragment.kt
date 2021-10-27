@@ -32,6 +32,7 @@ import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import fr.gouv.tchap.core.utils.TchapUtils
 import im.vector.app.R
 import im.vector.app.core.epoxy.LayoutManagerStateRestorer
 import im.vector.app.core.extensions.cleanup
@@ -201,10 +202,11 @@ class RoomListFragment @Inject constructor(
     }
 
     private fun setupCreateRoomButton() {
+        val showFab = !TchapUtils.isExternalTchapUser(roomListViewModel.session.myUserId)
         when (roomListParams.displayMode) {
-            RoomListDisplayMode.NOTIFICATIONS -> views.createChatFabMenu.isVisible = true
-            RoomListDisplayMode.PEOPLE        -> views.createChatRoomButton.isVisible = true
-            RoomListDisplayMode.ROOMS         -> views.createRoomFabMenu.isVisible = true
+            RoomListDisplayMode.NOTIFICATIONS -> views.createChatFabMenu.isVisible = showFab
+            RoomListDisplayMode.PEOPLE        -> views.createChatRoomButton.isVisible = showFab
+            RoomListDisplayMode.ROOMS         -> views.createRoomFabMenu.isVisible = showFab
             else                              -> Unit // No button in this mode
         }
 
@@ -216,6 +218,8 @@ class RoomListFragment @Inject constructor(
         views.roomListView.addOnScrollListener(
                 object : RecyclerView.OnScrollListener() {
                     override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                        if (!showFab) return // do nothing
+
                         views.createChatFabMenu.removeCallbacks(showFabRunnable)
                         views.createRoomFabMenu.removeCallbacks(showFabRunnable)
 
