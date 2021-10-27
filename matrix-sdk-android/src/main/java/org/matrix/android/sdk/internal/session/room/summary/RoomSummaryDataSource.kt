@@ -244,16 +244,18 @@ internal class RoomSummaryDataSource @Inject constructor(
 
     private fun roomSummariesQuery(realm: Realm, queryParams: RoomSummaryQueryParams): RealmQuery<RoomSummaryEntity> {
         val query = with(queryStringValueProcessor) {
-            val query = RoomSummaryEntity.where(realm)
-            query.process(RoomSummaryEntityFields.ROOM_ID, queryParams.roomId)
-            if (queryParams.displayName.isNormalized()) {
-                query.process(RoomSummaryEntityFields.NORMALIZED_DISPLAY_NAME, queryParams.displayName)
-            } else {
-                query.process(RoomSummaryEntityFields.DISPLAY_NAME, queryParams.displayName)
-            }
-            query.process(RoomSummaryEntityFields.CANONICAL_ALIAS, queryParams.canonicalAlias)
-            query.process(RoomSummaryEntityFields.MEMBERSHIP_STR, queryParams.memberships)
-            query.equalTo(RoomSummaryEntityFields.IS_HIDDEN_FROM_USER, false)
+            RoomSummaryEntity.where(realm)
+                    .process(RoomSummaryEntityFields.ROOM_ID, queryParams.roomId)
+                    .let {
+                        if (queryParams.displayName.isNormalized()) {
+                            it.process(RoomSummaryEntityFields.NORMALIZED_DISPLAY_NAME, queryParams.displayName)
+                        } else {
+                            it.process(RoomSummaryEntityFields.DISPLAY_NAME, queryParams.displayName)
+                        }
+                    }
+                    .process(RoomSummaryEntityFields.CANONICAL_ALIAS, queryParams.canonicalAlias)
+                    .process(RoomSummaryEntityFields.MEMBERSHIP_STR, queryParams.memberships)
+                    .equalTo(RoomSummaryEntityFields.IS_HIDDEN_FROM_USER, false)
         }
 
         queryParams.roomCategoryFilter?.let {
