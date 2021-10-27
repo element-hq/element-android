@@ -44,13 +44,11 @@ import im.vector.app.core.extensions.singletonEntryPoint
 import im.vector.app.core.extensions.toMvRxBundle
 import im.vector.app.features.navigation.Navigator
 import im.vector.lib.ui.styles.dialogs.MaterialProgressDialog
-import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.sample
 import reactivecircus.flowbinding.android.view.clicks
 import timber.log.Timber
-import java.util.concurrent.TimeUnit
 
 abstract class VectorBaseFragment<VB : ViewBinding> : Fragment(), MavericksView {
 

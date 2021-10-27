@@ -28,12 +28,10 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.isEmail
 import im.vector.app.core.extensions.toggle
 import im.vector.app.core.platform.VectorViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.sample

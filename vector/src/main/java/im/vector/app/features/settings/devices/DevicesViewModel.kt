@@ -64,9 +64,7 @@ import org.matrix.android.sdk.internal.crypto.model.rest.DefaultBaseAuth
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
 import org.matrix.android.sdk.internal.util.awaitCallback
 import timber.log.Timber
-import java.util.concurrent.TimeUnit
 import javax.net.ssl.HttpsURLConnection
-import javax.sql.DataSource
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -104,7 +102,7 @@ class DevicesViewModel @AssistedInject constructor(
 
     companion object : MavericksViewModelFactory<DevicesViewModel, DevicesViewState> by hiltMavericksViewModelFactory()
 
-    private val refreshSource= PublishDataSource<Unit>()
+    private val refreshSource = PublishDataSource<Unit>()
 
     init {
 

@@ -34,7 +34,6 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.util.MatrixItem
 import reactivecircus.flowbinding.appcompat.queryTextChanges
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class RoomJoinRuleChooseRestrictedFragment @Inject constructor(

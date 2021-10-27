@@ -47,7 +47,6 @@ import im.vector.app.features.settings.VectorSettingsActivity
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.flow.startWith
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.user.model.User
 import reactivecircus.flowbinding.android.widget.textChanges
@@ -137,7 +136,7 @@ class UserListFragment @Inject constructor(
     private fun setupSearchView() {
         views.userListSearch
                 .textChanges()
-                .onStart { emit(views.userListSearch.text)}
+                .onStart { emit(views.userListSearch.text) }
                 .onEach { text ->
                     val searchValue = text.trim()
                     val action = if (searchValue.isBlank()) {

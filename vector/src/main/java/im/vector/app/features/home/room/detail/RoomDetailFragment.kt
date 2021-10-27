@@ -222,7 +222,6 @@ import reactivecircus.flowbinding.android.widget.textChanges
 import timber.log.Timber
 import java.net.URL
 import java.util.UUID
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @Parcelize

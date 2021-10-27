@@ -43,7 +43,6 @@ import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.user.model.User
 import reactivecircus.flowbinding.android.widget.checkedChanges
 import reactivecircus.flowbinding.android.widget.textChanges
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class ContactsBookFragment @Inject constructor(

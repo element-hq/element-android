@@ -42,7 +42,6 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import reactivecircus.flowbinding.appcompat.queryTextChanges
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class SpacePeopleFragment @Inject constructor(

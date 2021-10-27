@@ -36,17 +36,17 @@ class ViewModelTest<S, VE>(
         val viewEvents: FlowTestObserver<VE>
 ) {
 
-    fun assertEvents(vararg expected: VE): ViewModelTest<S,VE> {
+    fun assertEvents(vararg expected: VE): ViewModelTest<S, VE> {
         viewEvents.assertValues(*expected)
         return this
     }
 
-    fun assertState(expected: S): ViewModelTest<S,VE> {
+    fun assertState(expected: S): ViewModelTest<S, VE> {
         state() shouldBeEqualTo expected
         return this
     }
 
-    fun finish(){
+    fun finish() {
         viewEvents.finish()
     }
 }

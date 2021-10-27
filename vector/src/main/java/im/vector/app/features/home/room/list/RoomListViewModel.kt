@@ -336,5 +336,4 @@ class RoomListViewModel @AssistedInject constructor(
             _viewEvents.post(value)
         }
     }
-
 }

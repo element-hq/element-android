@@ -43,7 +43,6 @@ import im.vector.app.core.utils.styleMatchingText
 import im.vector.app.databinding.BottomSheetLeaveSpaceBinding
 import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.spaces.leave.SpaceLeaveAdvancedActivity
-import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.parcelize.Parcelize

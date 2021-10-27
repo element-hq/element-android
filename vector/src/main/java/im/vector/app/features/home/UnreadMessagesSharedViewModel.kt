@@ -115,7 +115,6 @@ class UnreadMessagesSharedViewModel @AssistedInject constructor(@Assisted initia
                             }, sortOrder = RoomSortOrder.NONE
                     ).asFlow()
                             .sample(300)
-
                 }
         ) { groupingMethod, _ ->
             when (groupingMethod.orNull()) {

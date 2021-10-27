@@ -24,6 +24,5 @@ class RxConfig @Inject constructor() {
      * Make sure unhandled Rx error does not crash the app in production
      */
     fun setupRxPlugin() {
-
     }
 }
