@@ -17,7 +17,7 @@
 package im.vector.app.features.home.room.detail
 
 import android.view.View
-import androidx.recyclerview.widget.LinearLayoutManager
+import de.spiritcroc.recyclerview.widget.BetterLinearLayoutManager
 import im.vector.app.core.platform.DefaultListUpdateCallback
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.item.ItemWithEvents
@@ -25,13 +25,19 @@ import org.matrix.android.sdk.api.extensions.tryOrNull
 import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.math.max
 
-class ScrollOnNewMessageCallback(private val layoutManager: LinearLayoutManager,
+class ScrollOnNewMessageCallback(private val layoutManager: BetterLinearLayoutManager,
                                  private val timelineEventController: TimelineEventController,
                                  private val parentView: View) : DefaultListUpdateCallback {
 
     private val newTimelineEventIds = CopyOnWriteArrayList<String>()
     private var forceScroll = false
     var initialForceScroll = false
+        set(value) {
+            field = value
+            if (!value) {
+                layoutManager.setPreferredAnchorPosition(-1)
+            }
+        }
     var initialForceScrollEventId: String? = null
 
     fun addNewTimelineEventIds(eventIds: List<String>) {
@@ -64,6 +70,7 @@ class ScrollOnNewMessageCallback(private val layoutManager: LinearLayoutManager,
             }
             if (scrollToEvent == null) {
                 layoutManager.scrollToPositionWithOffset(0, 0)
+                layoutManager.setPreferredAnchorPosition(0)
             } else {
                 timelineEventController.searchPositionOfEvent(scrollToEvent)?.let {
                     // Scroll such that the scrolled-to event is moved down (1-TARGET_SCROLL_OUT_FACTOR) of the screen.
@@ -71,6 +78,7 @@ class ScrollOnNewMessageCallback(private val layoutManager: LinearLayoutManager,
                     // from the bottom of the view, not the top).
                     val scrollToPosition = max(it + scrollOffset + 1, 0)
                     layoutManager.scrollToPositionWithOffset(scrollToPosition, (parentView.measuredHeight * RoomDetailFragment.TARGET_SCROLL_OUT_FACTOR).toInt())
+                    layoutManager.setPreferredAnchorPosition(scrollToPosition)
                 }
             }
             return
