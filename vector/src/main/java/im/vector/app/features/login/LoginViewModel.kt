@@ -19,7 +19,6 @@ package im.vector.app.features.login
 import android.content.Context
 import android.net.Uri
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
@@ -128,6 +127,7 @@ class LoginViewModel @AssistedInject constructor(
 
     override fun handle(action: LoginAction) {
         when (action) {
+            is LoginAction.OnGetStarted               -> handleOnGetStarted(action)
             is LoginAction.UpdateServerType           -> handleUpdateServerType(action)
             is LoginAction.UpdateSignMode             -> handleUpdateSignMode(action)
             is LoginAction.InitWith                   -> handleInitWith(action)
@@ -144,6 +144,27 @@ class LoginViewModel @AssistedInject constructor(
             LoginAction.ClearHomeServerHistory        -> handleClearHomeServerHistory()
             is LoginAction.PostViewEvent              -> _viewEvents.post(action.viewEvent)
         }.exhaustive
+    }
+
+    private fun handleOnGetStarted(action: LoginAction.OnGetStarted) {
+        if (action.resetLoginConfig) {
+            loginConfig = null
+        }
+
+        val configUrl = loginConfig?.homeServerUrl?.takeIf { it.isNotEmpty() }
+        if (configUrl != null) {
+            // Use config from uri
+            val homeServerConnectionConfig = homeServerConnectionConfigFactory.create(configUrl)
+            if (homeServerConnectionConfig == null) {
+                // Url is invalid, in this case, just use the regular flow
+                Timber.w("Url from config url was invalid: $configUrl")
+                _viewEvents.post(LoginViewEvents.OpenServerSelection)
+            } else {
+                getLoginFlow(homeServerConnectionConfig, ServerType.Other)
+            }
+        } else {
+            _viewEvents.post(LoginViewEvents.OpenServerSelection)
+        }
     }
 
     private fun handleUserAcceptCertificate(action: LoginAction.UserAcceptCertificate) {
@@ -744,7 +765,8 @@ class LoginViewModel @AssistedInject constructor(
         }
     }
 
-    private fun getLoginFlow(homeServerConnectionConfig: HomeServerConnectionConfig) {
+    private fun getLoginFlow(homeServerConnectionConfig: HomeServerConnectionConfig,
+                             serverTypeOverride: ServerType? = null) {
         currentHomeServerConnectionConfig = homeServerConnectionConfig
 
         currentJob = viewModelScope.launch {
@@ -755,7 +777,11 @@ class LoginViewModel @AssistedInject constructor(
                         asyncHomeServerLoginFlowRequest = Loading(),
                         // If user has entered https://matrix.org, ensure that server type is ServerType.MatrixOrg
                         // It is also useful to set the value again in the case of a certificate error on matrix.org
-                        serverType = if (homeServerConnectionConfig.homeServerUri.toString() == matrixOrgUrl) ServerType.MatrixOrg else serverType
+                        serverType = if (homeServerConnectionConfig.homeServerUri.toString() == matrixOrgUrl) {
+                            ServerType.MatrixOrg
+                        } else {
+                            serverTypeOverride ?: serverType
+                        }
                 )
             }
 
@@ -788,7 +814,6 @@ class LoginViewModel @AssistedInject constructor(
                 else                                                               -> LoginMode.Unsupported
             }
 
-            // FIXME We should post a view event here normally?
             setState {
                 copy(
                         asyncHomeServerLoginFlowRequest = Uninitialized,
@@ -803,6 +828,7 @@ class LoginViewModel @AssistedInject constructor(
                 // Notify the UI
                 _viewEvents.post(LoginViewEvents.OutdatedHomeserver)
             }
+            _viewEvents.post(LoginViewEvents.OnLoginFlowRetrieved)
         }
     }
 
