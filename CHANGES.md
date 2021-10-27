@@ -1,3 +1,12 @@
+Changes in Element v1.3.6 (2021-10-26)
+======================================
+
+Bugfixes 🐛
+----------
+ - Correctly handle url of type https://mobile.element.io/?hs_url=…&is_url=…
+  Skip the choose server screen when such URL are open when Element ([#2684](https://github.com/vector-im/element-android/issues/2684))
+
+
 Changes in Element v1.3.5 (2021-10-25)
 ======================================
 

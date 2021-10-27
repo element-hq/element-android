@@ -29,6 +29,8 @@ import im.vector.app.core.extensions.addFragmentToBackstack
 import im.vector.app.core.extensions.popBackstack
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivitySimpleBinding
+import im.vector.app.features.matrixto.MatrixToBottomSheet
+import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.roomdirectory.createroom.CreateRoomArgs
 import im.vector.app.features.roomdirectory.createroom.CreateRoomFragment
 import im.vector.app.features.roomdirectory.picker.RoomDirectoryPickerFragment
@@ -37,7 +39,7 @@ import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class RoomDirectoryActivity : VectorBaseActivity<ActivitySimpleBinding>() {
+class RoomDirectoryActivity : VectorBaseActivity<ActivitySimpleBinding>(), MatrixToBottomSheet.InteractionListener {
 
     @Inject lateinit var roomDirectoryViewModelFactory: RoomDirectoryViewModel.Factory
     private val roomDirectoryViewModel: RoomDirectoryViewModel by viewModel()
@@ -82,6 +84,14 @@ class RoomDirectoryActivity : VectorBaseActivity<ActivitySimpleBinding>() {
         if (isFirstCreation()) {
             addFragment(R.id.simpleFragmentContainer, PublicRoomsFragment::class.java)
         }
+    }
+
+    override fun mxToBottomSheetNavigateToRoom(roomId: String) {
+        navigator.openRoom(this, roomId)
+    }
+
+    override fun mxToBottomSheetSwitchToSpace(spaceId: String) {
+        navigator.switchToSpace(this, spaceId, Navigator.PostSwitchSpaceAction.None)
     }
 
     companion object {

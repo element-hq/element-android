@@ -547,7 +547,7 @@ class LoginViewModel2 @AssistedInject constructor(
                     safeLoginWizard.login(
                             login = login,
                             password = password,
-                            deviceName = stringProvider.getString(R.string.login_default_session_public_name)
+                            initialDeviceName = stringProvider.getString(R.string.login_default_session_public_name)
                     )
                 } catch (failure: Throwable) {
                     _viewEvents.post(LoginViewEvents2.Failure(failure))

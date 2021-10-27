@@ -23,6 +23,7 @@ import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.Mavericks
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.commitTransaction
 import im.vector.app.core.extensions.hideKeyboard
@@ -33,6 +34,7 @@ import im.vector.app.features.spaces.share.ShareSpaceBottomSheet
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
+@AndroidEntryPoint
 class SpacePeopleActivity : VectorBaseActivity<ActivitySimpleLoadingBinding>() {
 
     override fun getBinding() = ActivitySimpleLoadingBinding.inflate(layoutInflater)
