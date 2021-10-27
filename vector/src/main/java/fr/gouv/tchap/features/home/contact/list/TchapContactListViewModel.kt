@@ -58,7 +58,7 @@ private typealias DirectoryUsersSearch = String
 class TchapContactListViewModel @AssistedInject constructor(@Assisted initialState: TchapContactListViewState,
                                                             private val contactsDataSource: ContactsDataSource,
                                                             private val session: Session) :
-    VectorViewModel<TchapContactListViewState, TchapContactListAction, TchapContactListViewEvents>(initialState) {
+        VectorViewModel<TchapContactListViewState, TchapContactListAction, TchapContactListViewEvents>(initialState) {
 
     //    private val knownUsersSearch = BehaviorRelay.create<KnownUsersSearch>()
     private val directoryUsersSearch = BehaviorRelay.create<DirectoryUsersSearch>()
@@ -102,19 +102,15 @@ class TchapContactListViewModel @AssistedInject constructor(@Assisted initialSta
             updateFilteredContacts()
         }
 
+        val isExternalUser = TchapUtils.isExternalTchapUser(session.myUserId)
+
         setState {
             copy(
                     identityServerUrl = session.identityService().getCurrentIdentityServerUrl(),
-                    userConsent = session.identityService().getUserConsent()
+                    userConsent = session.identityService().getUserConsent(),
+                    showInviteActions = !isExternalUser,
+                    showSearch = !isExternalUser
             )
-        }
-
-        if (!TchapUtils.isExternalTchapUser(session.myUserId)) {
-            setState {
-                copy(
-                        showInviteActions = true
-                )
-            }
         }
     }
 
