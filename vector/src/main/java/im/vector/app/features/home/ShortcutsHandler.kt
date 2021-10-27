@@ -23,6 +23,7 @@ import androidx.core.content.getSystemService
 import androidx.core.content.pm.ShortcutManagerCompat
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.features.pin.PinCodeStore
+import im.vector.app.features.pin.PinCodeStoreListener
 import io.reactivex.disposables.Disposable
 import io.reactivex.disposables.Disposables
 import org.matrix.android.sdk.api.session.room.RoomSortOrder
@@ -38,8 +39,11 @@ class ShortcutsHandler @Inject constructor(
         private val shortcutCreator: ShortcutCreator,
         private val activeSessionHolder: ActiveSessionHolder,
         private val pinCodeStore: PinCodeStore
-) {
+) : PinCodeStoreListener {
     private val isRequestPinShortcutSupported = ShortcutManagerCompat.isRequestPinShortcutSupported(context)
+
+    // Value will be set correctly if necessary
+    private var hasPinCode = true
 
     fun observeRoomsAndBuildShortcuts(): Disposable {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N_MR1) {
@@ -47,7 +51,10 @@ class ShortcutsHandler @Inject constructor(
             return Disposables.empty()
         }
 
+        hasPinCode = pinCodeStore.getEncodedPin() != null
+
         val session = activeSessionHolder.getSafeActiveSession() ?: return Disposables.empty()
+        pinCodeStore.addListener(this)
         return session.getRoomSummariesLive(
                 roomSummaryQueryParams {
                     memberships = listOf(Membership.JOIN)
@@ -55,6 +62,9 @@ class ShortcutsHandler @Inject constructor(
                 sortOrder = RoomSortOrder.PRIORITY_AND_ACTIVITY
         )
                 .asObservable()
+                .doOnDispose {
+                    pinCodeStore.removeListener(this)
+                }
                 .subscribe { rooms ->
                     // Remove dead shortcuts (i.e. deleted rooms)
                     removeDeadShortcut(rooms.map { it.roomId })
@@ -81,7 +91,7 @@ class ShortcutsHandler @Inject constructor(
     }
 
     private fun createShortcuts(rooms: List<RoomSummary>) {
-        if (pinCodeStore.getEncodedPin() != null) {
+        if (hasPinCode) {
             // No shortcut in this case (privacy)
             ShortcutManagerCompat.removeAllDynamicShortcuts(context)
         } else {
@@ -116,5 +126,15 @@ class ShortcutsHandler @Inject constructor(
                         }
             }
         }
+    }
+
+    override fun onPinSetUpChange(isConfigured: Boolean) {
+        hasPinCode = isConfigured
+        if (isConfigured) {
+            // Remove shortcuts immediately
+            ShortcutManagerCompat.removeAllDynamicShortcuts(context)
+        }
+        // Else shortcut will be created next time any room summary is updated, or
+        // next time the app is started which is acceptable
     }
 }
