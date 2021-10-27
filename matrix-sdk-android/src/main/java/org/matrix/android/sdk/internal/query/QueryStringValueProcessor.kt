@@ -22,20 +22,24 @@ import io.realm.RealmQuery
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.query.QueryStringValue.ContentQueryStringValue
 import timber.log.Timber
+import javax.inject.Inject
 
-fun <T : RealmObject> RealmQuery<T>.process(field: String, queryStringValue: QueryStringValue): RealmQuery<T> {
-    return when (queryStringValue) {
-        is QueryStringValue.NoCondition -> {
-            Timber.v("No condition to process")
-            this
-        }
-        is QueryStringValue.IsNotNull   -> isNotNull(field)
-        is QueryStringValue.IsNull      -> isNull(field)
-        is QueryStringValue.IsEmpty     -> isEmpty(field)
-        is QueryStringValue.IsNotEmpty  -> isNotEmpty(field)
-        is ContentQueryStringValue      -> when (queryStringValue) {
-            is QueryStringValue.Equals   -> equalTo(field, queryStringValue.string, queryStringValue.case.toRealmCase())
-            is QueryStringValue.Contains -> contains(field, queryStringValue.string, queryStringValue.case.toRealmCase())
+class QueryStringValueProcessor @Inject constructor() {
+
+    fun <T : RealmObject> RealmQuery<T>.process(field: String, queryStringValue: QueryStringValue): RealmQuery<T> {
+        return when (queryStringValue) {
+            is QueryStringValue.NoCondition -> {
+                Timber.v("No condition to process")
+                this
+            }
+            is QueryStringValue.IsNotNull   -> isNotNull(field)
+            is QueryStringValue.IsNull      -> isNull(field)
+            is QueryStringValue.IsEmpty     -> isEmpty(field)
+            is QueryStringValue.IsNotEmpty  -> isNotEmpty(field)
+            is ContentQueryStringValue      -> when (queryStringValue) {
+                is QueryStringValue.Equals   -> equalTo(field, queryStringValue.string, queryStringValue.case.toRealmCase())
+                is QueryStringValue.Contains -> contains(field, queryStringValue.string, queryStringValue.case.toRealmCase())
+            }
         }
     }
 }

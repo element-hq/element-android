@@ -48,12 +48,16 @@ import org.matrix.android.sdk.internal.database.model.RoomSummaryEntityFields
 import org.matrix.android.sdk.internal.database.query.findByAlias
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase
+import org.matrix.android.sdk.internal.query.QueryStringValueProcessor
 import org.matrix.android.sdk.internal.query.process
 import org.matrix.android.sdk.internal.util.fetchCopyMap
 import javax.inject.Inject
 
-internal class RoomSummaryDataSource @Inject constructor(@SessionDatabase private val monarchy: Monarchy,
-                                                         private val roomSummaryMapper: RoomSummaryMapper) {
+internal class RoomSummaryDataSource @Inject constructor(
+        @SessionDatabase private val monarchy: Monarchy,
+        private val roomSummaryMapper: RoomSummaryMapper,
+        private val queryStringValueProcessor: QueryStringValueProcessor
+) {
 
     fun getRoomSummary(roomIdOrAlias: String): RoomSummary? {
         return monarchy
@@ -238,12 +242,14 @@ internal class RoomSummaryDataSource @Inject constructor(@SessionDatabase privat
     }
 
     private fun roomSummariesQuery(realm: Realm, queryParams: RoomSummaryQueryParams): RealmQuery<RoomSummaryEntity> {
-        val query = RoomSummaryEntity.where(realm)
-        query.process(RoomSummaryEntityFields.ROOM_ID, queryParams.roomId)
-        query.process(RoomSummaryEntityFields.DISPLAY_NAME, queryParams.displayName)
-        query.process(RoomSummaryEntityFields.CANONICAL_ALIAS, queryParams.canonicalAlias)
-        query.process(RoomSummaryEntityFields.MEMBERSHIP_STR, queryParams.memberships)
-        query.equalTo(RoomSummaryEntityFields.IS_HIDDEN_FROM_USER, false)
+        val query = with(queryStringValueProcessor) {
+            val query = RoomSummaryEntity.where(realm)
+            query.process(RoomSummaryEntityFields.ROOM_ID, queryParams.roomId)
+            query.process(RoomSummaryEntityFields.DISPLAY_NAME, queryParams.displayName)
+            query.process(RoomSummaryEntityFields.CANONICAL_ALIAS, queryParams.canonicalAlias)
+            query.process(RoomSummaryEntityFields.MEMBERSHIP_STR, queryParams.memberships)
+            query.equalTo(RoomSummaryEntityFields.IS_HIDDEN_FROM_USER, false)
+        }
 
         queryParams.roomCategoryFilter?.let {
             when (it) {
