@@ -20,19 +20,24 @@ import io.realm.Case
 import io.realm.RealmObject
 import io.realm.RealmQuery
 import org.matrix.android.sdk.api.query.QueryStringValue
+import org.matrix.android.sdk.api.query.QueryStringValue.ContentQueryStringValue
 import timber.log.Timber
 
 fun <T : RealmObject> RealmQuery<T>.process(field: String, queryStringValue: QueryStringValue): RealmQuery<T> {
-    when (queryStringValue) {
-        is QueryStringValue.NoCondition -> Timber.v("No condition to process")
+    return when (queryStringValue) {
+        is QueryStringValue.NoCondition -> {
+            Timber.v("No condition to process")
+            this
+        }
         is QueryStringValue.IsNotNull   -> isNotNull(field)
         is QueryStringValue.IsNull      -> isNull(field)
         is QueryStringValue.IsEmpty     -> isEmpty(field)
         is QueryStringValue.IsNotEmpty  -> isNotEmpty(field)
-        is QueryStringValue.Equals      -> equalTo(field, queryStringValue.string, queryStringValue.case.toRealmCase())
-        is QueryStringValue.Contains    -> contains(field, queryStringValue.string, queryStringValue.case.toRealmCase())
+        is ContentQueryStringValue      -> when (queryStringValue) {
+            is QueryStringValue.Equals   -> equalTo(field, queryStringValue.string, queryStringValue.case.toRealmCase())
+            is QueryStringValue.Contains -> contains(field, queryStringValue.string, queryStringValue.case.toRealmCase())
+        }
     }
-    return this
 }
 
 private fun QueryStringValue.Case.toRealmCase(): Case {

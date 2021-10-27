@@ -19,14 +19,17 @@ package org.matrix.android.sdk.api.query
 /**
  * Basic query language. All these cases are mutually exclusive.
  */
-sealed class QueryStringValue {
-    object NoCondition : QueryStringValue()
-    object IsNull : QueryStringValue()
-    object IsNotNull : QueryStringValue()
-    object IsEmpty : QueryStringValue()
-    object IsNotEmpty : QueryStringValue()
-    data class Equals(val string: String, val case: Case = Case.SENSITIVE) : QueryStringValue()
-    data class Contains(val string: String, val case: Case = Case.SENSITIVE) : QueryStringValue()
+sealed interface QueryStringValue {
+    sealed interface ContentQueryStringValue : QueryStringValue
+
+    object NoCondition : QueryStringValue
+    object IsNull : QueryStringValue
+    object IsNotNull : QueryStringValue
+    object IsEmpty : QueryStringValue
+    object IsNotEmpty : QueryStringValue
+
+    data class Equals(val string: String, val case: Case = Case.SENSITIVE) : ContentQueryStringValue
+    data class Contains(val string: String, val case: Case = Case.SENSITIVE) : ContentQueryStringValue
 
     enum class Case {
         SENSITIVE,
