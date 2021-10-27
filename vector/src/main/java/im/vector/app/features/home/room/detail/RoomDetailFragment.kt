@@ -1226,6 +1226,7 @@ class RoomDetailFragment @Inject constructor(
                 jumpToBottomViewVisibilityManager.maybeShowJumpToBottomViewVisibilityWithDelay()
             }
         }
+        layoutManager.setPreferredAnchorPlacement(1f - TARGET_SCROLL_OUT_FACTOR)
         val stateRestorer = LayoutManagerStateRestorer(layoutManager).register()
         scrollOnNewMessageCallback = ScrollOnNewMessageCallback(layoutManager, timelineEventController, views.timelineRecyclerView)
         // Force scroll until the user has scrolled to address the bug where the list would jump during initial loading
