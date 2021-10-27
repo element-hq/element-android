@@ -39,6 +39,6 @@ sealed interface QueryStringValue {
         INSENSITIVE,
         NORMALIZED
     }
-
-    fun isNormalized() = this is ContentQueryStringValue && case == Case.NORMALIZED
 }
+
+internal fun QueryStringValue.isNormalized() = this is QueryStringValue.ContentQueryStringValue && case == QueryStringValue.Case.NORMALIZED
