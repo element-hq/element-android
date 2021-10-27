@@ -17,10 +17,14 @@
 package im.vector.app.features.home
 
 import com.airbnb.epoxy.EpoxyController
+import fr.gouv.tchap.core.utils.TchapUtils
 import im.vector.app.R
+import org.matrix.android.sdk.api.session.Session
 import javax.inject.Inject
 
-class HomeDrawerActionsController @Inject constructor() : EpoxyController() {
+class HomeDrawerActionsController @Inject constructor(
+        private val session: Session
+) : EpoxyController() {
 
     interface Listener {
         fun inviteByEmail()
@@ -35,11 +39,13 @@ class HomeDrawerActionsController @Inject constructor() : EpoxyController() {
 
     override fun buildModels() {
         val host = this
-        homeDrawerActionItem {
-            id("emailInvite")
-            titleRes(R.string.tchap_invite_to)
-            iconRes(R.drawable.ic_tchap_invite)
-            itemClickAction { host.listener?.inviteByEmail() }
+        if (!TchapUtils.isExternalTchapUser(session.myUserId)) {
+            homeDrawerActionItem {
+                id("emailInvite")
+                titleRes(R.string.tchap_invite_to)
+                iconRes(R.drawable.ic_tchap_invite)
+                itemClickAction { host.listener?.inviteByEmail() }
+            }
         }
         homeDrawerActionItem {
             id("openTAC")
