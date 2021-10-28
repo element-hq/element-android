@@ -105,7 +105,6 @@ def buildNumber = System.env.BUILDKITE_BUILD_NUMBER as Integer ?: 0
 android {
 
 
-
     // Due to a bug introduced in Android gradle plugin 3.6.0, we have to specify the ndk version to use
     // Ref: https://issuetracker.google.com/issues/144111441
     ndkVersion "21.3.6528147"
@@ -463,7 +462,7 @@ dependencies {
     gplayImplementation 'com.google.android.gms:play-services-oss-licenses:17.0.0'
 
     implementation "androidx.emoji:emoji-appcompat:1.1.0"
-    implementation ('com.github.BillCarsonFr:JsonViewer:0.7')
+    implementation('com.github.BillCarsonFr:JsonViewer:0.7')
 
     // WebRTC
     // org.webrtc:google-webrtc is for development purposes only
@@ -504,7 +503,9 @@ dependencies {
     // Plant Timber tree for test
     testImplementation libs.tests.timberJunitRule
     testImplementation libs.airbnb.mavericksTesting
-    testImplementation libs.jetbrains.coroutinesTest
+    testImplementation(libs.jetbrains.coroutinesTest) {
+        exclude group: "org.jetbrains.kotlinx", module: "kotlinx-coroutines-debug"
+    }
 
     // Activate when you want to check for leaks, from time to time.
     //debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.3'
@@ -518,7 +519,9 @@ dependencies {
     androidTestImplementation libs.androidx.espressoIntents
     androidTestImplementation libs.tests.kluent
     androidTestImplementation libs.androidx.coreTesting
-    androidTestImplementation libs.jetbrains.coroutinesTest
+    androidTestImplementation(libs.jetbrains.coroutinesTest) {
+        exclude group: "org.jetbrains.kotlinx", module: "kotlinx-coroutines-debug"
+    }
     // Plant Timber tree for test
     androidTestImplementation libs.tests.timberJunitRule
     // "The one who serves a great Espresso"
