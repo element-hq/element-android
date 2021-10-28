@@ -54,7 +54,6 @@ class ShortcutsHandler @Inject constructor(
         hasPinCode = pinCodeStore.getEncodedPin() != null
 
         val session = activeSessionHolder.getSafeActiveSession() ?: return Disposables.empty()
-        pinCodeStore.addListener(this)
         return session.getRoomSummariesLive(
                 roomSummaryQueryParams {
                     memberships = listOf(Membership.JOIN)
@@ -62,9 +61,8 @@ class ShortcutsHandler @Inject constructor(
                 sortOrder = RoomSortOrder.PRIORITY_AND_ACTIVITY
         )
                 .asObservable()
-                .doOnDispose {
-                    pinCodeStore.removeListener(this)
-                }
+                .doOnSubscribe { pinCodeStore.addListener(this) }
+                .doFinally { pinCodeStore.removeListener(this) }
                 .subscribe { rooms ->
                     // Remove dead shortcuts (i.e. deleted rooms)
                     removeDeadShortcut(rooms.map { it.roomId })
