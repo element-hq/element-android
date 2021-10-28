@@ -76,6 +76,8 @@ fun openUrlInExternalBrowser(context: Context, url: String?) {
 fun openUrlInExternalBrowser(context: Context, uri: Uri?) {
     uri?.let {
         val browserIntent = Intent(Intent.ACTION_VIEW, it).apply {
+            // Open activity on browser task and not on element task
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK
             putExtra(Browser.EXTRA_APPLICATION_ID, context.packageName)
             putExtra(Browser.EXTRA_CREATE_NEW_TAB, true)
         }
