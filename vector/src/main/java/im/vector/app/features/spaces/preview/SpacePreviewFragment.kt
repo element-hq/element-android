@@ -32,6 +32,7 @@ import com.airbnb.mvrx.withState
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
+import im.vector.app.core.flow.throttleFirst
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentSpacePreviewBinding
 import im.vector.app.features.home.AvatarRenderer
@@ -39,7 +40,6 @@ import im.vector.app.features.spaces.SpacePreviewSharedAction
 import im.vector.app.features.spaces.SpacePreviewSharedActionViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.sample
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.util.MatrixItem
 import reactivecircus.flowbinding.appcompat.navigationClicks
@@ -76,7 +76,7 @@ class SpacePreviewFragment @Inject constructor(
 
         views.roomPreviewNoPreviewToolbar
                 .navigationClicks()
-                .sample(300)
+                .throttleFirst(300)
                 .onEach { sharedActionViewModel.post(SpacePreviewSharedAction.DismissAction) }
                 .launchIn(viewLifecycleOwner.lifecycleScope)
 

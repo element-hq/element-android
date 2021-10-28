@@ -33,6 +33,7 @@ import com.airbnb.mvrx.withState
 import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.registerStartForActivityResult
+import im.vector.app.core.flow.throttleFirst
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.utils.colorizeMatchingText
@@ -40,7 +41,6 @@ import im.vector.app.core.utils.startImportTextFromFileIntent
 import im.vector.app.databinding.FragmentBootstrapMigrateBackupBinding
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.sample
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.internal.crypto.keysbackup.util.isValidRecoveryKey
 import reactivecircus.flowbinding.android.widget.editorActionEvents
@@ -65,7 +65,7 @@ class BootstrapMigrateBackupFragment @Inject constructor(
             views.bootstrapMigrateEditText.setText(it.passphrase ?: "")
         }
         views.bootstrapMigrateEditText.editorActionEvents()
-                .sample(300)
+                .throttleFirst(300)
                 .onEach {
                     if (it.actionId == EditorInfo.IME_ACTION_DONE) {
                         submit()

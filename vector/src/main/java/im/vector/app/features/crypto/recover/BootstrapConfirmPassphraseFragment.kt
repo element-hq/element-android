@@ -27,11 +27,11 @@ import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
+import im.vector.app.core.flow.throttleFirst
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentBootstrapEnterPassphraseBinding
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.sample
 import reactivecircus.flowbinding.android.widget.editorActionEvents
 import reactivecircus.flowbinding.android.widget.textChanges
 import javax.inject.Inject
@@ -60,7 +60,7 @@ class BootstrapConfirmPassphraseFragment @Inject constructor() :
         }
 
         views.ssssPassphraseEnterEdittext.editorActionEvents()
-                .sample(300)
+                .throttleFirst(300)
                 .onEach {
                     if (it.actionId == EditorInfo.IME_ACTION_DONE) {
                         submit()

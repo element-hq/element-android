@@ -59,6 +59,7 @@ import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.restart
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.extensions.singletonEntryPoint
+import im.vector.app.core.flow.throttleFirst
 import im.vector.app.core.utils.toast
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
@@ -79,7 +80,6 @@ import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.receivers.DebugReceiver
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.sample
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.failure.GlobalError
 import reactivecircus.flowbinding.android.view.clicks
@@ -118,7 +118,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
 
     protected fun View.debouncedClicks(onClicked: () -> Unit) {
         clicks()
-                .sample(300)
+                .throttleFirst(300)
                 .onEach { onClicked() }
                 .launchIn(lifecycleScope)
     }

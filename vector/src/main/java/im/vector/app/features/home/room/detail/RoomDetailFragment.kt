@@ -182,10 +182,10 @@ import im.vector.app.features.widgets.WidgetActivity
 import im.vector.app.features.widgets.WidgetArgs
 import im.vector.app.features.widgets.WidgetKind
 import im.vector.app.features.widgets.permissions.RoomWidgetPermissionBottomSheet
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.sample
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import nl.dionsegijn.konfetti.models.Shape
@@ -1350,7 +1350,7 @@ class RoomDetailFragment @Inject constructor(
     private fun observerUserTyping() {
         views.composerLayout.views.composerEditText.textChanges()
                 .skipInitialValue()
-                .sample(300)
+                .debounce(300)
                 .map { it.isNotEmpty() }
                 .onEach {
                     Timber.d("Typing: User is typing: $it")

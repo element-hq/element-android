@@ -26,12 +26,12 @@ import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.activityViewModel
 import im.vector.app.R
 import im.vector.app.core.extensions.registerStartForActivityResult
+import im.vector.app.core.flow.throttleFirst
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.startImportTextFromFileIntent
 import im.vector.app.databinding.FragmentSsssAccessFromKeyBinding
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.sample
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import reactivecircus.flowbinding.android.widget.editorActionEvents
 import reactivecircus.flowbinding.android.widget.textChanges
@@ -50,7 +50,7 @@ class SharedSecuredStorageKeyFragment @Inject constructor() : VectorBaseFragment
         views.ssssRestoreWithKeyText.text = getString(R.string.enter_secret_storage_input_key)
 
         views.ssssKeyEnterEdittext.editorActionEvents()
-                .sample(300)
+                .throttleFirst(300)
                 .onEach {
                     if (it.actionId == EditorInfo.IME_ACTION_DONE) {
                         submit()
