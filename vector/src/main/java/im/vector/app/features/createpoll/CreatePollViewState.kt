@@ -21,7 +21,8 @@ import com.airbnb.mvrx.MavericksState
 data class CreatePollViewState(
         val roomId: String,
         val question: String = "",
-        val options: List<String> = emptyList()
+        val options: List<String> = emptyList(),
+        val canCreatePoll: Boolean = false
 ) : MavericksState {
 
     constructor(args: CreatePollArgs) : this(

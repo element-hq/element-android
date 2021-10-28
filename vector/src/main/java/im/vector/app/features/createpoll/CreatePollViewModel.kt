@@ -25,11 +25,10 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.core.platform.VectorViewModel
 import org.matrix.android.sdk.api.session.Session
-import timber.log.Timber
 
 class CreatePollViewModel @AssistedInject constructor(
         @Assisted private val initialState: CreatePollViewState,
-        private val session: Session
+        session: Session
 ) : VectorViewModel<CreatePollViewState, CreatePollAction, CreatePollViewEvents>(initialState) {
 
     private val room = session.getRoom(initialState.roomId)!!
@@ -40,6 +39,8 @@ class CreatePollViewModel @AssistedInject constructor(
     }
 
     companion object : MavericksViewModelFactory<CreatePollViewModel, CreatePollViewState> {
+
+        private const val REQUIRED_MIN_OPTION_COUNT = 2
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: CreatePollViewState): CreatePollViewModel {
@@ -52,11 +53,11 @@ class CreatePollViewModel @AssistedInject constructor(
     }
 
     init {
-        // Initialize with 2 default empty options
+        // Initialize with REQUIRED_MIN_OPTION_COUNT default empty options
         setState {
             copy(
                     question = "",
-                    options = listOf("", "")
+                    options = List(REQUIRED_MIN_OPTION_COUNT) { "" }
             )
         }
     }
@@ -72,14 +73,27 @@ class CreatePollViewModel @AssistedInject constructor(
     }
 
     private fun handleOnCreatePoll() = withState { state ->
-        
+        val nonEmptyOptions = state.options.filter { it.isNotEmpty() }
+        when {
+            state.question.isEmpty()                         -> {
+                _viewEvents.post(CreatePollViewEvents.EmptyQuestionError)
+            }
+            nonEmptyOptions.size < REQUIRED_MIN_OPTION_COUNT -> {
+                _viewEvents.post(CreatePollViewEvents.NotEnoughOptionsError(requiredOptionsCount = REQUIRED_MIN_OPTION_COUNT))
+            }
+            else                                             -> {
+                room.sendPoll(state.question, state.options)
+                _viewEvents.post(CreatePollViewEvents.Success)
+            }
+        }
     }
 
     private fun handleOnAddOption() {
         setState {
             val extendedOptions = options + ""
             copy(
-                    options = extendedOptions
+                    options = extendedOptions,
+                    canCreatePoll = canCreatePoll(this.copy(options = extendedOptions))
             )
         }
     }
@@ -88,7 +102,8 @@ class CreatePollViewModel @AssistedInject constructor(
         setState {
             val filteredOptions = options.filterIndexed { ind, _ -> ind != index }
             copy(
-                    options = filteredOptions
+                    options = filteredOptions,
+                    canCreatePoll = canCreatePoll(this.copy(options = filteredOptions))
             )
         }
     }
@@ -97,7 +112,8 @@ class CreatePollViewModel @AssistedInject constructor(
         setState {
             val changedOptions = options.mapIndexed { ind, s -> if (ind == index) option else s }
             copy(
-                    options = changedOptions
+                    options = changedOptions,
+                    canCreatePoll = canCreatePoll(this.copy(options = changedOptions))
             )
         }
     }
@@ -105,8 +121,14 @@ class CreatePollViewModel @AssistedInject constructor(
     private fun handleOnQuestionChanged(question: String) {
         setState {
             copy(
-                    question = question
+                    question = question,
+                    canCreatePoll = canCreatePoll(this.copy(question = question))
             )
         }
+    }
+
+    private fun canCreatePoll(state: CreatePollViewState): Boolean {
+        return state.question.isNotEmpty() &&
+                state.options.filter { it.isNotEmpty() }.size >= REQUIRED_MIN_OPTION_COUNT
     }
 }

@@ -78,4 +78,18 @@
         android:text="@string/create_poll_button"
         app:layout_constraintBottom_toBottomOf="parent" />
 
+    <TextView
+        android:id="@+id/createPollToast"
+        style="@style/Widget.Vector.TextView.Caption.Toast"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginBottom="84dp"
+        android:visibility="gone"
+        android:accessibilityLiveRegion="polite"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="@string/voice_message_release_to_send_toast"
+        tools:visibility="visible" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

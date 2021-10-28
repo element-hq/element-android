@@ -16,6 +16,7 @@
 
 package im.vector.app.features.createpoll
 
+import android.view.Gravity
 import com.airbnb.epoxy.EpoxyController
 import im.vector.app.R
 import im.vector.app.core.resources.ColorProvider
@@ -85,6 +86,8 @@ class CreatePollController @Inject constructor(
             id("add_option")
             text(host.stringProvider.getString(R.string.create_poll_add_option))
             textColor(host.colorProvider.getColor(R.color.palette_element_green))
+            gravity(Gravity.START)
+            bold(true)
             buttonClickAction {
                 host.callback?.onAddOption()
             }

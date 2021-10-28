@@ -21,9 +21,11 @@ import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.withState
+import im.vector.app.R
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentCreatePollBinding
@@ -41,7 +43,6 @@ class CreatePollFragment @Inject constructor(
 ) : VectorBaseFragment<FragmentCreatePollBinding>(), CreatePollController.Callback {
 
     private val viewModel: CreatePollViewModel by activityViewModel()
-    private val createPollArgs: CreatePollArgs by args()
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentCreatePollBinding {
         return FragmentCreatePollBinding.inflate(inflater, container, false)
@@ -60,6 +61,18 @@ class CreatePollFragment @Inject constructor(
 
         views.createPollButton.debouncedClicks {
             viewModel.handle(CreatePollAction.OnCreatePoll)
+        }
+
+        viewModel.subscribe(this) {
+            views.createPollButton.isEnabled = it.canCreatePoll
+        }
+
+        viewModel.observeViewEvents {
+            when (it) {
+                CreatePollViewEvents.Success                  -> handleSuccess()
+                CreatePollViewEvents.EmptyQuestionError       -> handleEmptyQuestionError()
+                is CreatePollViewEvents.NotEnoughOptionsError -> handleNotEnoughOptionsError(it.requiredOptionsCount)
+            }
         }
     }
 
@@ -81,5 +94,34 @@ class CreatePollFragment @Inject constructor(
 
     override fun onAddOption() {
         viewModel.handle(CreatePollAction.OnAddOption)
+    }
+
+    private fun handleSuccess() {
+        requireActivity().finish()
+    }
+
+    private fun handleEmptyQuestionError() {
+        renderToast(getString(R.string.create_poll_empty_question_error))
+    }
+
+    private fun handleNotEnoughOptionsError(requiredOptionsCount: Int) {
+        renderToast(
+                resources.getQuantityString(
+                        R.plurals.create_poll_not_enough_options_error,
+                        requiredOptionsCount,
+                        requiredOptionsCount
+                )
+        )
+    }
+
+    private fun renderToast(message: String) {
+        views.createPollToast.removeCallbacks(hideToastRunnable)
+        views.createPollToast.text = message
+        views.createPollToast.isVisible = true
+        views.createPollToast.postDelayed(hideToastRunnable, 2_000)
+    }
+
+    private val hideToastRunnable = Runnable {
+        views.createPollToast.isVisible = false
     }
 }

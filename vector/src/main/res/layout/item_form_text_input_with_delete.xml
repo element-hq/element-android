@@ -28,13 +28,13 @@
 
     <ImageButton
         android:id="@+id/formTextInputDeleteButton"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:layout_marginEnd="@dimen/layout_horizontal_margin"
         android:background="@drawable/circle"
         android:contentDescription="@string/delete"
         android:scaleType="center"
-        android:src="@drawable/ic_delete"
+        android:src="@drawable/ic_delete_10dp"
         app:layout_constraintBottom_toBottomOf="@id/formTextInputTextInputLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/formTextInputTextInputLayout"
