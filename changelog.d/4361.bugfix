@@ -1,0 +1,1 @@
+Fixing QR code crashes caused by a known issue in the zxing library for older versions of android by downgrading to 3.3.3
