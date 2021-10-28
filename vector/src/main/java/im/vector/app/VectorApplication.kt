@@ -99,7 +99,6 @@ class VectorApplication :
     @Inject lateinit var callManager: WebRtcCallManager
     @Inject lateinit var invitesAcceptor: InvitesAcceptor
     @Inject lateinit var vectorFileLogger: VectorFileLogger
-    @Inject lateinit var guardServiceStarter: GuardServiceStarter
 
     // font thread handler
     private var fontThreadHandler: Handler? = null
