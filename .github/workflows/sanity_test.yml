@@ -15,6 +15,7 @@ jobs:
   integration-tests:
     name: Sanity Tests (Synapse)
     runs-on: ubuntu-latest
+    if: ${{ false }}
     strategy:
       fail-fast: false
       matrix:
