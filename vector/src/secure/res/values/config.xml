@@ -42,7 +42,7 @@
     </string-array>
 
     <!-- Bug report config -->
-    <string name="bug_report_default_host" translatable="false">education.tchap.gouv.fr</string>
+    <string name="bug_report_default_host" translatable="false">ssi.tchap.gouv.fr</string>
 
     <!--
     Pusher config for the application

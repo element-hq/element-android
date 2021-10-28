@@ -263,6 +263,10 @@ class HomeActivity :
                         HomeActivitySharedAction.OpenTermAndConditions -> {
                             openUrlInChromeCustomTab(this, null, VectorSettingsUrls.TAC)
                         }
+                        HomeActivitySharedAction.OpenBugReport         -> {
+                            views.drawerLayout.closeDrawer(GravityCompat.START)
+                            bugReporter.openBugReportScreen(this, ReportType.BUG_REPORT, false)
+                        }
                     }.exhaustive
                 }
                 .disposeOnDestroy()

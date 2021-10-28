@@ -74,6 +74,8 @@ class BugReporter @Inject constructor(
     var inMultiWindowMode = false
 
     companion object {
+        private const val BUG_REPORT_URL_SUFFIX = "/bugreports/submit"
+
         // filenames
         private const val LOG_CAT_ERROR_FILENAME = "logcatError.log"
         private const val LOG_CAT_FILENAME = "logcat.log"
@@ -238,11 +240,17 @@ class BugReporter @Inject constructor(
                 var deviceId = "undefined"
                 var userId = "undefined"
                 var olmVersion = "undefined"
+                var bugReportURL = buildString {
+                    append(context.getString(R.string.server_url_prefix))
+                    append(context.getString(R.string.bug_report_default_host))
+                    append(BUG_REPORT_URL_SUFFIX)
+                }
 
                 activeSessionHolder.getSafeActiveSession()?.let { session ->
                     userId = session.myUserId
                     deviceId = session.sessionParams.deviceId ?: "undefined"
                     olmVersion = session.cryptoService().getCryptoVersion(context, true)
+                    bugReportURL = session.sessionParams.homeServerUrl.removeSuffix("/") + BUG_REPORT_URL_SUFFIX
                 }
 
                 if (!mIsCancelled) {
@@ -255,7 +263,7 @@ class BugReporter @Inject constructor(
                     // build the multi part request
                     val builder = BugReporterMultipartBody.Builder()
                             .addFormDataPart("text", text)
-                            .addFormDataPart("app", "riot-android")
+                            .addFormDataPart("app", "tchap-android")
                             .addFormDataPart("user_agent", Matrix.getInstance(context).getUserAgent())
                             .addFormDataPart("user_id", userId)
                             .addFormDataPart("can_contact", canContact.toString())
@@ -361,7 +369,7 @@ class BugReporter @Inject constructor(
 
                     // build the request
                     val request = Request.Builder()
-                            .url(context.getString(R.string.bug_report_url))
+                            .url(bugReportURL)
                             .post(requestBody)
                             .build()
 
@@ -449,14 +457,14 @@ class BugReporter @Inject constructor(
     /**
      * Send a bug report either with email or with Vector.
      */
-    fun openBugReportScreen(activity: FragmentActivity, reportType: ReportType = ReportType.BUG_REPORT) {
+    fun openBugReportScreen(activity: FragmentActivity, reportType: ReportType = ReportType.BUG_REPORT, withScreenshot: Boolean = true) {
         screenshot = takeScreenshot(activity)
         activeSessionHolder.getSafeActiveSession()?.let {
             it.logDbUsageInfo()
             it.cryptoService().logDbUsageInfo()
         }
 
-        activity.startActivity(BugReportActivity.intent(activity, reportType))
+        activity.startActivity(BugReportActivity.intent(activity, reportType, withScreenshot))
     }
 
 // ==============================================================================================================
