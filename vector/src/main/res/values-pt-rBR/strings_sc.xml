@@ -119,4 +119,5 @@
     <string name="settings_apply_sc_default_settings">Não clique nesta configuração</string>
     <string name="settings_apply_sc_default_settings_dialog_title">Estragar as configurações</string>
     <string name="settings_apply_sc_default_settings_dialog_summary">Se você continuar, isso vai bagunçar as configurações do seu app!</string>
+    <string name="room_list_quick_actions_open_at_bottom">Abrir focando em mensagens recentes</string>
 </resources>
