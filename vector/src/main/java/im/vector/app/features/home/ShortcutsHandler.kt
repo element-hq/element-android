@@ -21,7 +21,6 @@ import android.content.pm.ShortcutManager
 import android.os.Build
 import androidx.core.content.getSystemService
 import androidx.core.content.pm.ShortcutManagerCompat
-import androidx.lifecycle.asFlow
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.dispatchers.CoroutineDispatchers
 import im.vector.app.features.pin.PinCodeStore
@@ -37,6 +36,7 @@ import org.matrix.android.sdk.api.session.room.RoomSortOrder
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
+import org.matrix.android.sdk.flow.flow
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
@@ -61,13 +61,12 @@ class ShortcutsHandler @Inject constructor(
         }
         hasPinCode.set(pinCodeStore.getEncodedPin() != null)
         val session = activeSessionHolder.getSafeActiveSession() ?: return Job()
-        return session.getRoomSummariesLive(
+        return session.flow().liveRoomSummaries(
                 roomSummaryQueryParams {
                     memberships = listOf(Membership.JOIN)
                 },
                 sortOrder = RoomSortOrder.PRIORITY_AND_ACTIVITY
         )
-                .asFlow()
                 .onStart { pinCodeStore.addListener(this@ShortcutsHandler) }
                 .onCompletion { pinCodeStore.removeListener(this@ShortcutsHandler) }
                 .onEach { rooms ->

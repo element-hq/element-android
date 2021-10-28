@@ -27,6 +27,7 @@ import im.vector.app.RoomGroupingMethod
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.singletonEntryPoint
+import im.vector.app.core.flow.throttleFirst
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.call.dialpad.DialPadLookup
 import im.vector.app.features.call.lookup.CallProtocolsChecker
@@ -43,7 +44,6 @@ import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.sample
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.query.ActiveSpaceFilter
 import org.matrix.android.sdk.api.query.RoomCategoryFilter
@@ -214,7 +214,7 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
                     sortOrder = RoomSortOrder.NONE
             ).asFlow()
         }
-                .sample(300)
+                .throttleFirst(300)
                 .onEach {
                     when (val groupingMethod = appStateHandler.getCurrentRoomGroupingMethod()) {
                         is RoomGroupingMethod.ByLegacyGroup -> {

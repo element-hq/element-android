@@ -26,6 +26,7 @@ import im.vector.app.AppStateHandler
 import im.vector.app.RoomGroupingMethod
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
+import im.vector.app.core.flow.throttleFirst
 import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
@@ -36,7 +37,6 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.sample
 import org.matrix.android.sdk.api.query.ActiveSpaceFilter
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.RoomSortOrder
@@ -79,7 +79,7 @@ class UnreadMessagesSharedViewModel @AssistedInject constructor(@Assisted initia
                     this.activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(null)
                 }, sortOrder = RoomSortOrder.NONE
         ).asFlow()
-                .sample(300)
+                .throttleFirst(300)
                 .execute {
                     val counts = session.getNotificationCountForRooms(
                             roomSummaryQueryParams {
@@ -114,7 +114,7 @@ class UnreadMessagesSharedViewModel @AssistedInject constructor(@Assisted initia
                                 this.memberships = Membership.activeMemberships()
                             }, sortOrder = RoomSortOrder.NONE
                     ).asFlow()
-                            .sample(300)
+                            .throttleFirst(300)
                 }
         ) { groupingMethod, _ ->
             when (groupingMethod.orNull()) {
