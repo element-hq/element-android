@@ -28,9 +28,7 @@ abstract class AbstractVoiceRecorder(
 ) : VoiceRecorder {
     private val outputDirectory: File by lazy {
         File(context.cacheDir, "voice_records").also {
-            if (!it.exists()) {
-                it.mkdirs()
-            }
+            it.mkdirs()
         }
     }
 
