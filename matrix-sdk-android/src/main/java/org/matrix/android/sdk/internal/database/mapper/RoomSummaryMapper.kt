@@ -42,7 +42,7 @@ internal class RoomSummaryMapper @Inject constructor(private val timelineEventMa
 
         return RoomSummary(
                 roomId = roomSummaryEntity.roomId,
-                displayName = roomSummaryEntity.displayName ?: "",
+                displayName = roomSummaryEntity.displayName() ?: "",
                 name = roomSummaryEntity.name ?: "",
                 topic = roomSummaryEntity.topic ?: "",
                 avatarUrl = roomSummaryEntity.avatarUrl ?: "",
