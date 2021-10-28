@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 New Vector Ltd
+ * Copyright 2021 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 data class PollCreationInfo(
     @Json(name = "question") val question: PollQuestion? = null,
-    @Json(name = "kind") val kind: String? = "m.poll.disclosed",
+    @Json(name = "kind") val kind: String? = "org.matrix.msc3381.poll.disclosed",
     @Json(name = "max_selections") val maxSelections: Int = 1,
     @Json(name = "answers") val answers: List<PollAnswer>? = null
 )
