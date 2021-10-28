@@ -84,10 +84,10 @@ interface SendService {
     /**
      * Send a poll to the room.
      * @param question the question
-     * @param options list of (label, value)
+     * @param options list of options
      * @return a [Cancelable]
      */
-    fun sendPoll(question: String, options: List<OptionItem>): Cancelable
+    fun sendPoll(question: String, options: List<String>): Cancelable
 
     /**
      * Method to send a poll response.
