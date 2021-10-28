@@ -43,12 +43,10 @@ import org.matrix.android.sdk.api.session.identity.ThreePid
 import javax.inject.Inject
 
 class ThreePidsSettingsFragment @Inject constructor(
-        private val viewModelFactory: ThreePidsSettingsViewModel.Factory,
         private val epoxyController: ThreePidsSettingsController
 ) :
         VectorBaseFragment<FragmentGenericRecyclerBinding>(),
         OnBackPressed,
-        ThreePidsSettingsViewModel.Factory by viewModelFactory,
         ThreePidsSettingsController.InteractionListener {
 
     private val viewModel: ThreePidsSettingsViewModel by fragmentViewModel()

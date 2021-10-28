@@ -29,9 +29,9 @@ import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.viewModel
 import com.google.android.material.tabs.TabLayout
 import com.jakewharton.rxbinding3.widget.queryTextChanges
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.EmojiCompatFontProvider
 import im.vector.app.R
-import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.observeEvent
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityEmojiReactionPickerBinding
@@ -47,6 +47,7 @@ import javax.inject.Inject
  * TODO: Loading indicator while getting emoji data source?
  * TODO: Finish Refactor to vector base activity
  */
+@AndroidEntryPoint
 class EmojiReactionPickerActivity : VectorBaseActivity<ActivityEmojiReactionPickerBinding>(),
         EmojiCompatFontProvider.FontProviderListener {
 
@@ -60,7 +61,6 @@ class EmojiReactionPickerActivity : VectorBaseActivity<ActivityEmojiReactionPick
 
     override fun getTitleRes() = R.string.title_activity_emoji_reaction_picker
 
-    @Inject lateinit var emojiSearchResultViewModelFactory: EmojiSearchResultViewModel.Factory
     @Inject lateinit var emojiCompatFontProvider: EmojiCompatFontProvider
     @Inject lateinit var emojiDataSource: EmojiDataSource
 
@@ -76,10 +76,6 @@ class EmojiReactionPickerActivity : VectorBaseActivity<ActivityEmojiReactionPick
         override fun onTabSelected(tab: TabLayout.Tab) {
             viewModel.scrollToSection(tab.position)
         }
-    }
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
     }
 
     override fun initUiAndData() {

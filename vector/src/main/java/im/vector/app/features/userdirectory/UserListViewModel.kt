@@ -17,14 +17,13 @@
 package im.vector.app.features.userdirectory
 
 import androidx.lifecycle.asFlow
-import com.airbnb.mvrx.ActivityViewModelContext
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Uninitialized
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.isEmail
 import im.vector.app.core.extensions.toggle
@@ -61,20 +60,11 @@ class UserListViewModel @AssistedInject constructor(@Assisted initialState: User
     private val identityServerUsersSearch = MutableStateFlow("")
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: UserListViewState): UserListViewModel
+    interface Factory : MavericksAssistedViewModelFactory<UserListViewModel, UserListViewState> {
+        override fun create(initialState: UserListViewState): UserListViewModel
     }
 
-    companion object : MavericksViewModelFactory<UserListViewModel, UserListViewState> {
-
-        override fun create(viewModelContext: ViewModelContext, state: UserListViewState): UserListViewModel? {
-            val factory = when (viewModelContext) {
-                is FragmentViewModelContext -> viewModelContext.fragment as? Factory
-                is ActivityViewModelContext -> viewModelContext.activity as? Factory
-            }
-            return factory?.create(state) ?: error("You should let your activity/fragment implements Factory interface")
-        }
-    }
+    companion object : MavericksViewModelFactory<UserListViewModel, UserListViewState> by hiltMavericksViewModelFactory()
 
     private val identityServerListener = object : IdentityServiceListener {
         override fun onIdentityServerChange() {

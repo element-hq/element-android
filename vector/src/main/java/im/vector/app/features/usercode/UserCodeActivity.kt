@@ -28,8 +28,8 @@ import androidx.fragment.app.FragmentManager
 import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.commitTransaction
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorBaseActivity
@@ -37,14 +37,11 @@ import im.vector.app.core.utils.onPermissionDeniedSnackbar
 import im.vector.app.databinding.ActivitySimpleBinding
 import im.vector.app.features.matrixto.MatrixToBottomSheet
 import kotlinx.parcelize.Parcelize
-import javax.inject.Inject
 import kotlin.reflect.KClass
 
+@AndroidEntryPoint
 class UserCodeActivity : VectorBaseActivity<ActivitySimpleBinding>(),
-        UserCodeSharedViewModel.Factory,
         MatrixToBottomSheet.InteractionListener {
-
-    @Inject lateinit var viewModelFactory: UserCodeSharedViewModel.Factory
 
     val sharedViewModel: UserCodeSharedViewModel by viewModel()
 
@@ -56,10 +53,6 @@ class UserCodeActivity : VectorBaseActivity<ActivitySimpleBinding>(),
     override fun getBinding() = ActivitySimpleBinding.inflate(layoutInflater)
 
     override fun getCoordinatorLayout() = views.coordinatorLayout
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
 
     private val fragmentLifecycleCallbacks = object : FragmentManager.FragmentLifecycleCallbacks() {
         override fun onFragmentResumed(fm: FragmentManager, f: Fragment) {
@@ -146,9 +139,6 @@ class UserCodeActivity : VectorBaseActivity<ActivitySimpleBinding>(),
             UserCodeState.Mode.SCAN -> sharedViewModel.handle(UserCodeActions.SwitchMode(UserCodeState.Mode.SHOW))
         }.exhaustive
     }
-
-    override fun create(initialState: UserCodeState) =
-            viewModelFactory.create(initialState)
 
     companion object {
         fun newIntent(context: Context, userId: String): Intent {

@@ -17,17 +17,16 @@
 package im.vector.app.features.contactsbook
 
 import androidx.lifecycle.viewModelScope
-import com.airbnb.mvrx.ActivityViewModelContext
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.core.contacts.ContactsDataSource
 import im.vector.app.core.contacts.MappedContact
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
@@ -45,20 +44,11 @@ class ContactsBookViewModel @AssistedInject constructor(@Assisted
     VectorViewModel<ContactsBookViewState, ContactsBookAction, EmptyViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: ContactsBookViewState): ContactsBookViewModel
+    interface Factory : MavericksAssistedViewModelFactory<ContactsBookViewModel, ContactsBookViewState> {
+        override fun create(initialState: ContactsBookViewState): ContactsBookViewModel
     }
 
-    companion object : MavericksViewModelFactory<ContactsBookViewModel, ContactsBookViewState> {
-
-        override fun create(viewModelContext: ViewModelContext, state: ContactsBookViewState): ContactsBookViewModel? {
-            val factory = when (viewModelContext) {
-                is FragmentViewModelContext -> viewModelContext.fragment as? Factory
-                is ActivityViewModelContext -> viewModelContext.activity as? Factory
-            }
-            return factory?.create(state) ?: error("You should let your activity/fragment implements Factory interface")
-        }
-    }
+    companion object : MavericksViewModelFactory<ContactsBookViewModel, ContactsBookViewState> by hiltMavericksViewModelFactory()
 
     private var allContacts: List<MappedContact> = emptyList()
     private var mappedContacts: List<MappedContact> = emptyList()

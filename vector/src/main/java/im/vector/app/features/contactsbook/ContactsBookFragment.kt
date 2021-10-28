@@ -43,9 +43,8 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class ContactsBookFragment @Inject constructor(
-        private val contactsBookViewModelFactory: ContactsBookViewModel.Factory,
         private val contactsBookController: ContactsBookController
-) : VectorBaseFragment<FragmentContactsBookBinding>(), ContactsBookController.Callback, ContactsBookViewModel.Factory {
+) : VectorBaseFragment<FragmentContactsBookBinding>(), ContactsBookController.Callback {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentContactsBookBinding {
         return FragmentContactsBookBinding.inflate(inflater, container, false)
@@ -57,10 +56,6 @@ class ContactsBookFragment @Inject constructor(
     private val contactsBookViewModel: ContactsBookViewModel by activityViewModel()
 
     private lateinit var sharedActionViewModel: UserListSharedActionViewModel
-
-    override fun create(initialState: ContactsBookViewState): ContactsBookViewModel {
-        return contactsBookViewModelFactory.create(initialState)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

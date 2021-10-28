@@ -17,17 +17,16 @@
 package im.vector.app.features.spaces.invite
 
 import androidx.lifecycle.viewModelScope
-import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.session.coroutineScope
@@ -93,20 +92,11 @@ class SpaceInviteBottomSheetViewModel @AssistedInject constructor(
     }
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: SpaceInviteBottomSheetState): SpaceInviteBottomSheetViewModel
+    interface Factory : MavericksAssistedViewModelFactory<SpaceInviteBottomSheetViewModel, SpaceInviteBottomSheetState> {
+        override fun create(initialState: SpaceInviteBottomSheetState): SpaceInviteBottomSheetViewModel
     }
 
-    companion object : MavericksViewModelFactory<SpaceInviteBottomSheetViewModel, SpaceInviteBottomSheetState> {
-
-        override fun create(viewModelContext: ViewModelContext, state: SpaceInviteBottomSheetState): SpaceInviteBottomSheetViewModel? {
-            val factory = when (viewModelContext) {
-                is FragmentViewModelContext -> viewModelContext.fragment as? Factory
-                is ActivityViewModelContext -> viewModelContext.activity as? Factory
-            }
-            return factory?.create(state) ?: error("You should let your activity/fragment implements Factory interface")
-        }
-    }
+    companion object : MavericksViewModelFactory<SpaceInviteBottomSheetViewModel, SpaceInviteBottomSheetState> by hiltMavericksViewModelFactory()
 
     override fun handle(action: SpaceInviteBottomSheetAction) {
         when (action) {

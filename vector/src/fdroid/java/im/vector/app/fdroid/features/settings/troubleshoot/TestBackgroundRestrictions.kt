@@ -18,15 +18,15 @@ package im.vector.app.fdroid.features.settings.troubleshoot
 import android.content.Intent
 import android.net.ConnectivityManager
 import androidx.activity.result.ActivityResultLauncher
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.getSystemService
 import androidx.core.net.ConnectivityManagerCompat
+import androidx.fragment.app.FragmentActivity
 import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.settings.troubleshoot.TroubleshootTest
 import javax.inject.Inject
 
-class TestBackgroundRestrictions @Inject constructor(private val context: AppCompatActivity,
+class TestBackgroundRestrictions @Inject constructor(private val context: FragmentActivity,
                                                      private val stringProvider: StringProvider) :
     TroubleshootTest(R.string.settings_troubleshoot_test_bg_restricted_title) {
 

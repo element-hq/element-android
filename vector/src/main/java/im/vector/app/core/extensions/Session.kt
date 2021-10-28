@@ -34,7 +34,7 @@ fun Session.configureAndStart(context: Context, startSyncing: Boolean = true) {
         startSyncing(context)
     }
     refreshPushers()
-    context.vectorComponent().webRtcCallManager().checkForProtocolsSupportIfNeeded()
+    context.singletonEntryPoint().webRtcCallManager().checkForProtocolsSupportIfNeeded()
 }
 
 fun Session.startSyncing(context: Context) {

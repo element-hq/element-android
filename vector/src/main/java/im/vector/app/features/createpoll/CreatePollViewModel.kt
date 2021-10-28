@@ -23,6 +23,8 @@ import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
 import org.matrix.android.sdk.api.session.Session
 
@@ -34,22 +36,13 @@ class CreatePollViewModel @AssistedInject constructor(
     private val room = session.getRoom(initialState.roomId)!!
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: CreatePollViewState): CreatePollViewModel
+    interface Factory : MavericksAssistedViewModelFactory<CreatePollViewModel, CreatePollViewState> {
+        override fun create(initialState: CreatePollViewState): CreatePollViewModel
     }
 
-    companion object : MavericksViewModelFactory<CreatePollViewModel, CreatePollViewState> {
+    companion object : MavericksViewModelFactory<CreatePollViewModel, CreatePollViewState> by hiltMavericksViewModelFactory() {
 
         private const val REQUIRED_MIN_OPTION_COUNT = 2
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: CreatePollViewState): CreatePollViewModel {
-            val factory = when (viewModelContext) {
-                is FragmentViewModelContext -> (viewModelContext.fragment as CreatePollFragment).createPollViewModelFactory
-                is ActivityViewModelContext -> viewModelContext.activity as? Factory
-            }
-            return factory?.create(state) ?: error("You should let your activity/fragment implements Factory interface")
-        }
     }
 
     init {

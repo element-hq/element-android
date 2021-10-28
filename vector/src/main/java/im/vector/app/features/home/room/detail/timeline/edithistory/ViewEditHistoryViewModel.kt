@@ -15,16 +15,15 @@
  */
 package im.vector.app.features.home.room.detail.timeline.edithistory
 
-import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
@@ -47,18 +46,11 @@ class ViewEditHistoryViewModel @AssistedInject constructor(
             ?: throw IllegalStateException("Shouldn't use this ViewModel without a room")
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: ViewEditHistoryViewState): ViewEditHistoryViewModel
+    interface Factory : MavericksAssistedViewModelFactory<ViewEditHistoryViewModel, ViewEditHistoryViewState> {
+        override fun create(initialState: ViewEditHistoryViewState): ViewEditHistoryViewModel
     }
 
-    companion object : MavericksViewModelFactory<ViewEditHistoryViewModel, ViewEditHistoryViewState> {
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: ViewEditHistoryViewState): ViewEditHistoryViewModel? {
-            val fragment: ViewEditHistoryBottomSheet = (viewModelContext as FragmentViewModelContext).fragment()
-            return fragment.viewEditHistoryViewModelFactory.create(state)
-        }
-    }
+    companion object : MavericksViewModelFactory<ViewEditHistoryViewModel, ViewEditHistoryViewState> by hiltMavericksViewModelFactory()
 
     init {
         loadHistory()

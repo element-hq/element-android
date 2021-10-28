@@ -21,20 +21,16 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import im.vector.app.R
-import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.SimpleFragmentActivity
 import javax.inject.Inject
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class CreatePollActivity : SimpleFragmentActivity(), CreatePollViewModel.Factory {
 
     var currentRoomId: String? = null
     @Inject lateinit var createPollViewModelFactory: CreatePollViewModel.Factory
-
-    override fun injectWith(injector: ScreenComponent) {
-        super.injectWith(injector)
-        injector.inject(this)
-    }
 
     override fun create(initialState: CreatePollViewState) = createPollViewModelFactory.create(initialState)
 

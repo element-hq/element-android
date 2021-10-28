@@ -1,3 +1,24 @@
+Changes in Element v1.3.6 (2021-10-26)
+======================================
+
+Bugfixes 🐛
+----------
+ - Correctly handle url of type https://mobile.element.io/?hs_url=…&is_url=…
+  Skip the choose server screen when such URL are open when Element ([#2684](https://github.com/vector-im/element-android/issues/2684))
+
+
+Changes in Element v1.3.5 (2021-10-25)
+======================================
+
+Bugfixes 🐛
+----------
+ - Fixing malformed link pop up when tapping on notifications ([#4267](https://github.com/vector-im/element-android/issues/4267))
+ - Fix Broken EditText when using FromEditTextItem ([#4276](https://github.com/vector-im/element-android/issues/4276))
+ - Fix crash when clicking on ViewEvent source actions ([#4279](https://github.com/vector-im/element-android/issues/4279))
+ - Fix voice message record button wrong visibility ([#4283](https://github.com/vector-im/element-android/issues/4283))
+ - Fix unread marker not showing ([#4313](https://github.com/vector-im/element-android/issues/4313))
+
+
 Changes in Element v1.3.4 (2021-10-20)
 ======================================
 
@@ -5,6 +26,7 @@ Features ✨
 ----------
  - Implement /part command, with or without parameter ([#2909](https://github.com/vector-im/element-android/issues/2909))
  - Handle Presence support, for Direct Message room ([#4090](https://github.com/vector-im/element-android/issues/4090))
+ - Priority conversations for Android 11+ ([#3313](https://github.com/vector-im/element-android/issues/3313))
 
 Bugfixes 🐛
 ----------

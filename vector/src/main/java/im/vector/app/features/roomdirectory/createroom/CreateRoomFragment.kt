@@ -59,7 +59,6 @@ data class CreateRoomArgs(
 class CreateRoomFragment @Inject constructor(
         private val createRoomController: CreateRoomController,
         private val createSpaceController: CreateSubSpaceController,
-        val createRoomViewModelFactory: CreateRoomViewModel.Factory,
         colorProvider: ColorProvider
 ) : VectorBaseFragment<FragmentCreateRoomBinding>(),
         CreateRoomController.Listener,

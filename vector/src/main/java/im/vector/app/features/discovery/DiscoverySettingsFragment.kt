@@ -45,8 +45,7 @@ import org.matrix.android.sdk.api.session.terms.TermsService
 import javax.inject.Inject
 
 class DiscoverySettingsFragment @Inject constructor(
-        private val controller: DiscoverySettingsController,
-        val viewModelFactory: DiscoverySettingsViewModel.Factory
+        private val controller: DiscoverySettingsController
 ) : VectorBaseFragment<FragmentGenericRecyclerBinding>(),
         DiscoverySettingsController.Listener {
 

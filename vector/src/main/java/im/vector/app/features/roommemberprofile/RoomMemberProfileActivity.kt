@@ -23,21 +23,19 @@ import android.widget.Toast
 import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
 import com.google.android.material.appbar.MaterialToolbar
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivitySimpleBinding
 import im.vector.app.features.room.RequireActiveMembershipViewEvents
 import im.vector.app.features.room.RequireActiveMembershipViewModel
-import im.vector.app.features.room.RequireActiveMembershipViewState
-import javax.inject.Inject
 
+@AndroidEntryPoint
 class RoomMemberProfileActivity :
         VectorBaseActivity<ActivitySimpleBinding>(),
-        ToolbarConfigurable,
-        RequireActiveMembershipViewModel.Factory {
+        ToolbarConfigurable {
 
     companion object {
         fun newIntent(context: Context, args: RoomMemberProfileArgs): Intent {
@@ -48,17 +46,6 @@ class RoomMemberProfileActivity :
     }
 
     private val requireActiveMembershipViewModel: RequireActiveMembershipViewModel by viewModel()
-
-    @Inject
-    lateinit var requireActiveMembershipViewModelFactory: RequireActiveMembershipViewModel.Factory
-
-    override fun create(initialState: RequireActiveMembershipViewState): RequireActiveMembershipViewModel {
-        return requireActiveMembershipViewModelFactory.create(initialState)
-    }
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
 
     override fun getBinding(): ActivitySimpleBinding {
         return ActivitySimpleBinding.inflate(layoutInflater)

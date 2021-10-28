@@ -657,6 +657,8 @@
     <string name="login_error_unknown_host">This URL is not reachable, please check it</string>
     <string name="login_error_no_homeserver_found">This is not a valid Matrix server address</string>
     <string name="login_error_homeserver_not_found">Cannot reach a homeserver at this URL, please check it</string>
+    <string name="login_error_homeserver_from_url_not_found">Cannot reach a homeserver at the URL %s. Please check your link or choose a homeserver manually.</string>
+    <string name="login_error_homeserver_from_url_not_found_enter_manual">Choose homeserver</string>
     <string name="login_error_ssl_peer_unverified">"SSL Error: the peer's identity has not been verified."</string>
     <string name="login_error_ssl_other">"SSL Error."</string>
     <string name="login_error_ssl_handshake">Your device is using an outdated TLS security protocol, vulnerable to attack, for your security you will not be able to connect</string>
