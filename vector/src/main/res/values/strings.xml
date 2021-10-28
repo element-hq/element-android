@@ -322,6 +322,7 @@
     <string name="notification_sync_init">Initializing service</string>
     <string name="notification_sync_in_progress">Synchronising…</string>
     <string name="notification_listening_for_events">Listening for events</string>
+    <string name="notification_listening_for_notifications">Listening for notifications</string>
     <string name="notification_noisy_notifications">Noisy notifications</string>
     <string name="notification_silent_notifications">Silent notifications</string>
 
