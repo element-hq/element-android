@@ -149,15 +149,19 @@ class RoomSettingsController @Inject constructor(
                 divider = true,
                 editable = data.actionPermissions.canChangeAccessByLink,
 
-                action = { callback?.onAccessByLinkClicked() }
+                action = {
+                    if (data.isAccessByLinkEnabled() || data.actionPermissions.canChangeAccessByLink) {
+                        callback?.onAccessByLinkClicked()
+                    }
+                }
         )
 
         RoomUtils.getRoomType(roomSummary).let {
             if (data.actionPermissions.canRemoveFromRoomsDirectory &&
                     (it == TchapRoomType.FORUM ||
                             (it == TchapRoomType.UNKNOWN &&
-                            data.roomDirectoryVisibility is Success &&
-                            data.roomDirectoryVisibility() == RoomDirectoryVisibility.PUBLIC))) {
+                                    data.roomDirectoryVisibility is Success &&
+                                    data.roomDirectoryVisibility() == RoomDirectoryVisibility.PUBLIC))) {
                 buildRemoveFromRoomsDirectory()
             }
         }

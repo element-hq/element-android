@@ -54,7 +54,15 @@ class TchapRoomLinkAccessController @Inject constructor(
                 stringProvider.getString(R.string.tchap_room_settings_room_access_by_link_title)
         )
 
-        if (roomType == TchapRoomType.FORUM) {
+        if (state.canChangeLinkAccess && roomType != TchapRoomType.FORUM) {
+            formSwitchItem {
+                id("LinkAccessActivation")
+                title(host.stringProvider.getString(R.string.tchap_room_settings_enable_room_access_by_link))
+                switchChecked(state.isLinkAccessEnabled)
+                listener { host.interactionListener?.setLinkAccessEnabled(it) }
+                enabled(state.canChangeLinkAccess)
+            }
+        } else {
             verticalMarginItem {
                 id("marginTop")
                 heightInPx(host.dimensionConverter.dpToPx(16))
@@ -69,14 +77,6 @@ class TchapRoomLinkAccessController @Inject constructor(
             verticalMarginItem {
                 id("marginBottom")
                 heightInPx(host.dimensionConverter.dpToPx(8))
-            }
-        } else {
-            formSwitchItem {
-                id("LinkAccessActivation")
-                title(host.stringProvider.getString(R.string.tchap_room_settings_enable_room_access_by_link))
-                switchChecked(state.isLinkAccessEnabled)
-                listener { host.interactionListener?.setLinkAccessEnabled(it) }
-                enabled(state.canChangeLinkAccess)
             }
         }
 

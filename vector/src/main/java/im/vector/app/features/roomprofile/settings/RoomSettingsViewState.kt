@@ -58,11 +58,12 @@ data class RoomSettingsViewState(
             val canChangeTopic: Boolean = false,
             val canChangeHistoryVisibility: Boolean = false,
             val canChangeJoinRule: Boolean = false,
+            val canChangeCanonicalAlias: Boolean = false,
             val canAddChildren: Boolean = false,
             val canRemoveFromRoomsDirectory: Boolean = false
     ) {
         val canChangeAccessByLink: Boolean
-            get() = canChangeJoinRule
+            get() = canChangeJoinRule && canChangeCanonicalAlias
     }
 
     sealed class AvatarAction {
@@ -99,14 +100,13 @@ data class RoomSettingsViewState(
         }
     }
 
+    fun isAccessByLinkEnabled() = (newRoomJoinRules.newJoinRules ?: currentRoomJoinRules) != RoomJoinRules.INVITE
+
     fun getAccessByLinkWording(stringProvider: StringProvider): String {
-        return when (newRoomJoinRules.newJoinRules ?: currentRoomJoinRules) {
-            RoomJoinRules.INVITE -> {
-                stringProvider.getString(R.string.tchap_room_settings_room_access_by_link_disabled)
-            }
-            else                 -> {
-                stringProvider.getString(R.string.tchap_room_settings_room_access_by_link_enabled)
-            }
+        return if (isAccessByLinkEnabled()) {
+            stringProvider.getString(R.string.tchap_room_settings_room_access_by_link_enabled)
+        } else {
+            stringProvider.getString(R.string.tchap_room_settings_room_access_by_link_disabled)
         }
     }
 }

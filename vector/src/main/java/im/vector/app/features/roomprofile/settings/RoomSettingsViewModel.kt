@@ -189,6 +189,7 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
                                     EventType.STATE_ROOM_JOIN_RULES) &&
                                     powerLevelsHelper.isUserAllowedToSend(session.myUserId, true,
                                     EventType.STATE_ROOM_GUEST_ACCESS),
+                            canChangeCanonicalAlias = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_CANONICAL_ALIAS),
                             canAddChildren = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true,
                                     EventType.STATE_SPACE_CHILD),
                             canRemoveFromRoomsDirectory = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_JOIN_RULES) &&
