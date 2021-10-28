@@ -141,5 +141,5 @@ interface Navigator {
 
     fun openCallTransfer(context: Context, callId: String)
 
-    fun openCreatePoll(context: Context)
+    fun openCreatePoll(context: Context, roomId: String)
 }

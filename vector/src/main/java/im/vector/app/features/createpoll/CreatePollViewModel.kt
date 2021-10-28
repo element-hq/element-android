@@ -24,11 +24,15 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.core.platform.VectorViewModel
+import org.matrix.android.sdk.api.session.Session
 import timber.log.Timber
 
-class CreatePollViewModel @AssistedInject constructor(@Assisted
-                                                      initialState: CreatePollViewState) :
-        VectorViewModel<CreatePollViewState, CreatePollAction, CreatePollViewEvents>(initialState) {
+class CreatePollViewModel @AssistedInject constructor(
+        @Assisted private val initialState: CreatePollViewState,
+        private val session: Session
+) : VectorViewModel<CreatePollViewState, CreatePollAction, CreatePollViewEvents>(initialState) {
+
+    private val room = session.getRoom(initialState.roomId)!!
 
     @AssistedFactory
     interface Factory {
@@ -40,7 +44,7 @@ class CreatePollViewModel @AssistedInject constructor(@Assisted
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: CreatePollViewState): CreatePollViewModel {
             val factory = when (viewModelContext) {
-                is FragmentViewModelContext -> viewModelContext.fragment as? Factory
+                is FragmentViewModelContext -> (viewModelContext.fragment as CreatePollFragment).createPollViewModelFactory
                 is ActivityViewModelContext -> viewModelContext.activity as? Factory
             }
             return factory?.create(state) ?: error("You should let your activity/fragment implements Factory interface")
@@ -68,7 +72,7 @@ class CreatePollViewModel @AssistedInject constructor(@Assisted
     }
 
     private fun handleOnCreatePoll() = withState { state ->
-        Timber.d(state.toString())
+        
     }
 
     private fun handleOnAddOption() {
@@ -82,7 +86,7 @@ class CreatePollViewModel @AssistedInject constructor(@Assisted
 
     private fun handleOnDeleteOption(index: Int) {
         setState {
-            val filteredOptions = options.filterIndexed { ind, _ -> ind != index  }
+            val filteredOptions = options.filterIndexed { ind, _ -> ind != index }
             copy(
                     options = filteredOptions
             )
@@ -91,7 +95,7 @@ class CreatePollViewModel @AssistedInject constructor(@Assisted
 
     private fun handleOnOptionChanged(index: Int, option: String) {
         setState {
-            val changedOptions = options.mapIndexed { ind, s -> if(ind == index) option else s }
+            val changedOptions = options.mapIndexed { ind, s -> if (ind == index) option else s }
             copy(
                     options = changedOptions
             )

@@ -20,7 +20,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import com.airbnb.mvrx.viewModel
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.addFragment
@@ -29,32 +28,40 @@ import javax.inject.Inject
 
 class CreatePollActivity : SimpleFragmentActivity(), CreatePollViewModel.Factory {
 
-    private val viewModel: CreatePollViewModel by viewModel()
-    @Inject lateinit var viewModelFactory: CreatePollViewModel.Factory
+    var currentRoomId: String? = null
+    @Inject lateinit var createPollViewModelFactory: CreatePollViewModel.Factory
 
     override fun injectWith(injector: ScreenComponent) {
         super.injectWith(injector)
         injector.inject(this)
     }
 
-    override fun create(initialState: CreatePollViewState) = viewModelFactory.create(initialState)
+    override fun create(initialState: CreatePollViewState) = createPollViewModelFactory.create(initialState)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         views.toolbar.visibility = View.GONE
 
+        val createPollArgs: CreatePollArgs? = intent?.extras?.getParcelable(EXTRA_CREATE_POLL_ARGS)
+        currentRoomId = createPollArgs?.roomId
+
         if (isFirstCreation()) {
             addFragment(
                     R.id.container,
-                    CreatePollFragment::class.java
+                    CreatePollFragment::class.java,
+                    createPollArgs
             )
         }
     }
 
     companion object {
 
-        fun getIntent(context: Context): Intent {
-            return Intent(context, CreatePollActivity::class.java)
+        private const val EXTRA_CREATE_POLL_ARGS = "EXTRA_CREATE_POLL_ARGS"
+
+        fun getIntent(context: Context, createPollArgs: CreatePollArgs): Intent {
+            return Intent(context, CreatePollActivity::class.java).apply {
+                putExtra(EXTRA_CREATE_POLL_ARGS, createPollArgs)
+            }
         }
     }
 }

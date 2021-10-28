@@ -41,6 +41,7 @@ import im.vector.app.features.call.conference.VectorJitsiActivity
 import im.vector.app.features.call.transfer.CallTransferActivity
 import im.vector.app.features.createdirect.CreateDirectRoomActivity
 import im.vector.app.features.createpoll.CreatePollActivity
+import im.vector.app.features.createpoll.CreatePollArgs
 import im.vector.app.features.crypto.keysbackup.settings.KeysBackupManageActivity
 import im.vector.app.features.crypto.keysbackup.setup.KeysBackupSetupActivity
 import im.vector.app.features.crypto.recover.BootstrapBottomSheet
@@ -499,8 +500,8 @@ class DefaultNavigator @Inject constructor(
         context.startActivity(intent)
     }
 
-    override fun openCreatePoll(context: Context) {
-        val intent = CreatePollActivity.getIntent(context)
+    override fun openCreatePoll(context: Context, roomId: String) {
+        val intent = CreatePollActivity.getIntent(context, CreatePollArgs(roomId = roomId))
         context.startActivity(intent)
     }
 

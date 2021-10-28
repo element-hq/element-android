@@ -17,21 +17,31 @@
 package im.vector.app.features.createpoll
 
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.airbnb.mvrx.activityViewModel
+import com.airbnb.mvrx.args
 import com.airbnb.mvrx.withState
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentCreatePollBinding
+import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
+@Parcelize
+data class CreatePollArgs(
+        val roomId: String
+) : Parcelable
+
 class CreatePollFragment @Inject constructor(
-        private val controller: CreatePollController
+        private val controller: CreatePollController,
+        val createPollViewModelFactory: CreatePollViewModel.Factory
 ) : VectorBaseFragment<FragmentCreatePollBinding>(), CreatePollController.Callback {
 
     private val viewModel: CreatePollViewModel by activityViewModel()
+    private val createPollArgs: CreatePollArgs by args()
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentCreatePollBinding {
         return FragmentCreatePollBinding.inflate(inflater, container, false)

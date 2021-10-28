@@ -14,18 +14,13 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.createpoll
+package org.matrix.android.sdk.api.session.room.model.message
 
-import com.airbnb.mvrx.MavericksState
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
-data class CreatePollViewState(
-        val roomId: String,
-        val question: String = "",
-        val options: List<String> = emptyList()
-) : MavericksState {
-
-    constructor(args: CreatePollArgs) : this(
-            roomId = args.roomId
-    )
-}
-
+@JsonClass(generateAdapter = true)
+data class PollAnswer(
+        @Json(name = "id") val id: String? = null,
+        @Json(name = "m.text") val answer: String? = null
+)
