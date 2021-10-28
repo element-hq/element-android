@@ -146,7 +146,7 @@ class UserListController @Inject constructor(private val session: Session,
                             text(
                                     span {
                                         span {
-                                            text = host.stringProvider.getString(R.string.settings_discovery_consent_notice_off)
+                                            text = host.stringProvider.getString(R.string.settings_discovery_consent_notice_off_2)
                                         }
                                         +"\n"
                                         span {

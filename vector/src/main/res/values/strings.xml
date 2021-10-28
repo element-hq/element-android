@@ -2363,11 +2363,13 @@
     <string name="settings_discovery_consent_title">Send emails and phone numbers</string>
     <string name="settings_discovery_consent_notice_on">You have given your consent to send emails and phone numbers to this identity server to discover other users from your contacts.</string>
     <string name="settings_discovery_consent_notice_off">You have not given your consent to send emails and phone numbers to this identity server to discover other users from your contacts.</string>
+    <string name="settings_discovery_consent_notice_off_2">Your contacts are private. You\'ll need to share your contact info to find people you know.</string>
     <string name="settings_discovery_consent_action_revoke">Revoke my consent</string>
     <string name="settings_discovery_consent_action_give_consent">Give consent</string>
 
     <string name="identity_server_consent_dialog_title">Send emails and phone numbers</string>
     <string name="identity_server_consent_dialog_content">In order to discover existing contacts you know, do you accept to send your contact data (phone numbers and/or emails) to the configured identity server (%1$s)?\n\nFor more privacy, the sent data will be hashed before being sent.</string>
+    <string name="identity_server_consent_dialog_content_2">Your contacts can\'t find you, and you can\'t find them. In order to see each other you must share your contact info with your identity server (%s).\n\nYour data will be sent securely.</string>
     <string name="identity_server_consent_dialog_neutral_policy">Policy</string>
 
     <string name="settings_discovery_enter_identity_server">Enter an identity server URL</string>

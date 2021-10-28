@@ -43,7 +43,7 @@ fun Context.displayInWebView(url: String) {
 fun Context.showIdentityServerConsentDialog(configuredIdentityServer: String?, policyLinkCallback: () -> Unit, consentCallBack: (() -> Unit)) {
     MaterialAlertDialogBuilder(this)
             .setTitle(R.string.identity_server_consent_dialog_title)
-            .setMessage(getString(R.string.identity_server_consent_dialog_content, configuredIdentityServer ?: ""))
+            .setMessage(getString(R.string.identity_server_consent_dialog_content_2, configuredIdentityServer ?: ""))
             .setPositiveButton(R.string.yes) { _, _ ->
                 consentCallBack.invoke()
             }
