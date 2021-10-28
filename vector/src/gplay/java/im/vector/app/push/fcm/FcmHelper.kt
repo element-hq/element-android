@@ -108,10 +108,6 @@ object FcmHelper {
 
     @Suppress("UNUSED_PARAMETER")
     fun onEnterBackground(context: Context, vectorPreferences: VectorPreferences, activeSessionHolder: ActiveSessionHolder) {
-        val activeSession = activeSessionHolder.getSafeActiveSession() ?: return
-        activeSession.startAutomaticBackgroundSync(
-                vectorPreferences.backgroundSyncTimeOut().toLong(),
-                vectorPreferences.backgroundSyncDelay().toLong()
-        )
+        // No op
     }
 }
