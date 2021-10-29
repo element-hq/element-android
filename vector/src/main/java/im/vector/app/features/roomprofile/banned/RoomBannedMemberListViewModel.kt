@@ -16,9 +16,8 @@
 
 package im.vector.app.features.roomprofile.banned
 
-import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -27,7 +26,7 @@ import im.vector.app.R
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
+import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.query.QueryStringValue
@@ -39,8 +38,8 @@ import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
-import org.matrix.android.sdk.rx.rx
-import org.matrix.android.sdk.rx.unwrap
+import org.matrix.android.sdk.flow.flow
+import org.matrix.android.sdk.flow.unwrap
 
 class RoomBannedMemberListViewModel @AssistedInject constructor(@Assisted initialState: RoomBannedMemberListViewState,
                                                                 private val stringProvider: StringProvider,
@@ -55,32 +54,30 @@ class RoomBannedMemberListViewModel @AssistedInject constructor(@Assisted initia
     private val room = session.getRoom(initialState.roomId)!!
 
     init {
-        val rxRoom = room.rx()
 
-        room.rx().liveRoomSummary()
+        room.flow().liveRoomSummary()
                 .unwrap()
                 .execute { async ->
                     copy(roomSummary = async)
                 }
 
-        rxRoom.liveRoomMembers(roomMemberQueryParams { memberships = listOf(Membership.BAN) })
+        room.flow().liveRoomMembers(roomMemberQueryParams { memberships = listOf(Membership.BAN) })
                 .execute {
                     copy(
                             bannedMemberSummaries = it
                     )
                 }
 
-        val powerLevelsContentLive = PowerLevelsObservableFactory(room).createObservable()
+        val powerLevelsContentLive = PowerLevelsFlowFactory(room).createFlow()
 
         powerLevelsContentLive
-                .subscribe {
+                .setOnEach {
                     val powerLevelsHelper = PowerLevelsHelper(it)
-                    setState { copy(canUserBan = powerLevelsHelper.isUserAbleToBan(session.myUserId)) }
+                    copy(canUserBan = powerLevelsHelper.isUserAbleToBan(session.myUserId))
                 }
-                .disposeOnClear()
     }
 
-    companion object : MvRxViewModelFactory<RoomBannedMemberListViewModel, RoomBannedMemberListViewState> {
+    companion object : MavericksViewModelFactory<RoomBannedMemberListViewModel, RoomBannedMemberListViewState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: RoomBannedMemberListViewState): RoomBannedMemberListViewModel? {

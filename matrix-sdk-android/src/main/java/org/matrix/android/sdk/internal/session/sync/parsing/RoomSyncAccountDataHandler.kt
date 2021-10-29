@@ -28,8 +28,8 @@ import org.matrix.android.sdk.internal.database.model.RoomAccountDataEntityField
 import org.matrix.android.sdk.internal.database.model.RoomEntity
 import org.matrix.android.sdk.internal.database.query.getOrCreate
 import org.matrix.android.sdk.internal.session.room.read.FullyReadContent
-import org.matrix.android.sdk.internal.session.sync.RoomFullyReadHandler
-import org.matrix.android.sdk.internal.session.sync.RoomTagHandler
+import org.matrix.android.sdk.internal.session.sync.handler.room.RoomFullyReadHandler
+import org.matrix.android.sdk.internal.session.sync.handler.room.RoomTagHandler
 import javax.inject.Inject
 
 internal class RoomSyncAccountDataHandler @Inject constructor(private val roomTagHandler: RoomTagHandler,

@@ -21,7 +21,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
-import com.airbnb.mvrx.MvRx
+import com.airbnb.mvrx.Mavericks
 import im.vector.app.R
 import im.vector.app.core.extensions.commitTransaction
 import im.vector.app.core.extensions.hideKeyboard
@@ -57,14 +57,14 @@ class SpacePeopleActivity : VectorBaseActivity<ActivitySimpleLoadingBinding>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val args = intent?.getParcelableExtra<GenericIdArgs>(MvRx.KEY_ARG)
+        val args = intent?.getParcelableExtra<GenericIdArgs>(Mavericks.KEY_ARG)
         if (isFirstCreation()) {
             val simpleName = SpacePeopleFragment::class.java.simpleName
             if (supportFragmentManager.findFragmentByTag(simpleName) == null) {
                 supportFragmentManager.commitTransaction {
                     replace(R.id.simpleFragmentContainer,
                             SpacePeopleFragment::class.java,
-                            Bundle().apply { this.putParcelable(MvRx.KEY_ARG, args) },
+                            Bundle().apply { this.putParcelable(Mavericks.KEY_ARG, args) },
                             simpleName
                     )
                 }
@@ -97,7 +97,7 @@ class SpacePeopleActivity : VectorBaseActivity<ActivitySimpleLoadingBinding>() {
     companion object {
         fun newIntent(context: Context, spaceId: String): Intent {
             return Intent(context, SpacePeopleActivity::class.java).apply {
-                putExtra(MvRx.KEY_ARG, GenericIdArgs(spaceId))
+                putExtra(Mavericks.KEY_ARG, GenericIdArgs(spaceId))
             }
         }
     }

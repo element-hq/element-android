@@ -21,7 +21,7 @@ import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.moshi.Types
@@ -40,8 +40,8 @@ import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.util.JsonDict
+import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.internal.di.MoshiProvider
-import org.matrix.android.sdk.rx.rx
 
 class RoomDevToolViewModel @AssistedInject constructor(
         @Assisted val initialState: RoomDevToolViewState,
@@ -55,7 +55,7 @@ class RoomDevToolViewModel @AssistedInject constructor(
         fun create(initialState: RoomDevToolViewState): RoomDevToolViewModel
     }
 
-    companion object : MvRxViewModelFactory<RoomDevToolViewModel, RoomDevToolViewState> {
+    companion object : MavericksViewModelFactory<RoomDevToolViewModel, RoomDevToolViewState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: RoomDevToolViewState): RoomDevToolViewModel {
@@ -69,7 +69,7 @@ class RoomDevToolViewModel @AssistedInject constructor(
 
     init {
         session.getRoom(initialState.roomId)
-                ?.rx()
+                ?.flow()
                 ?.liveStateEvents(emptySet())
                 ?.execute { async ->
                     copy(stateEvents = async)

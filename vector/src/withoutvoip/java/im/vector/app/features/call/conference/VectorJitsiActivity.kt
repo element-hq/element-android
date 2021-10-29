@@ -21,7 +21,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
-import com.airbnb.mvrx.MvRx
+import com.airbnb.mvrx.Mavericks
 import im.vector.app.databinding.ActivityJitsiBinding
 import kotlinx.parcelize.Parcelize
 
@@ -43,7 +43,7 @@ class VectorJitsiActivity : Activity() {
     companion object {
         fun newIntent(context: Context, roomId: String, widgetId: String, enableVideo: Boolean): Intent {
             return Intent(context, VectorJitsiActivity::class.java).apply {
-                putExtra(MvRx.KEY_ARG, Args(roomId, widgetId, enableVideo))
+                putExtra(Mavericks.KEY_ARG, Args(roomId, widgetId, enableVideo))
             }
         }
     }

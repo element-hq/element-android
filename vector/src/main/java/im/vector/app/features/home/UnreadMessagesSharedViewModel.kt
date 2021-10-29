@@ -18,8 +18,8 @@ package im.vector.app.features.home
 
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxState
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksState
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -46,7 +46,7 @@ import java.util.concurrent.TimeUnit
 data class UnreadMessagesState(
         val homeSpaceUnread: RoomAggregateNotificationCount = RoomAggregateNotificationCount(0, 0),
         val otherSpacesUnread: RoomAggregateNotificationCount = RoomAggregateNotificationCount(0, 0)
-) : MvRxState
+) : MavericksState
 
 data class CountInfo(
         val homeCount: RoomAggregateNotificationCount,
@@ -65,7 +65,7 @@ class UnreadMessagesSharedViewModel @AssistedInject constructor(@Assisted initia
         fun create(initialState: UnreadMessagesState): UnreadMessagesSharedViewModel
     }
 
-    companion object : MvRxViewModelFactory<UnreadMessagesSharedViewModel, UnreadMessagesState> {
+    companion object : MavericksViewModelFactory<UnreadMessagesSharedViewModel, UnreadMessagesState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: UnreadMessagesState): UnreadMessagesSharedViewModel? {

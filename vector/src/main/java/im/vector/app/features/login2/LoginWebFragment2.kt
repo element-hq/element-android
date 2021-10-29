@@ -56,6 +56,8 @@ class LoginWebFragment2 @Inject constructor(
         return FragmentLoginWebBinding.inflate(inflater, container, false)
     }
 
+    val softLogoutViewModel: SoftLogoutViewModel by activityViewModel()
+
     private var isWebViewLoaded = false
     private var isForSessionRecovery = false
 
@@ -233,7 +235,6 @@ class LoginWebFragment2 @Inject constructor(
 
     private fun notifyViewModel(credentials: Credentials) {
         if (isForSessionRecovery) {
-            val softLogoutViewModel: SoftLogoutViewModel by activityViewModel()
             softLogoutViewModel.handle(SoftLogoutAction.WebLoginSuccess(credentials))
         } else {
             loginViewModel.handle(LoginAction2.WebLoginSuccess(credentials))

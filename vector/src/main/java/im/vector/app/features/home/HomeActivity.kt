@@ -27,7 +27,8 @@ import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import com.airbnb.mvrx.MvRx
+import androidx.lifecycle.lifecycleScope
+import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -78,7 +79,7 @@ import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
 import im.vector.app.features.workers.signout.ServerBackupStatusViewState
 import im.vector.app.push.fcm.FcmHelper
-import io.reactivex.android.schedulers.AndroidSchedulers
+import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.session.initsync.SyncStatusService
 import org.matrix.android.sdk.api.session.permalinks.PermalinkService
@@ -271,7 +272,7 @@ class HomeActivity :
                 }
                 .disposeOnDestroy()
 
-        val args = intent.getParcelableExtra<HomeActivityArgs>(MvRx.KEY_ARG)
+        val args = intent.getParcelableExtra<HomeActivityArgs>(Mavericks.KEY_ARG)
 
         if (args?.clearNotification == true) {
             notificationDrawerManager.clearAllEvents()
@@ -331,26 +332,24 @@ class HomeActivity :
                 }
                 else                                                  -> deepLink
             }
-            permalinkHandler.launch(
-                    context = this,
-                    deepLink = resolvedLink,
-                    navigationInterceptor = this,
-                    buildTask = true
-            )
-                    // .delay(500, TimeUnit.MILLISECONDS)
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe { isHandled ->
-                        if (!isHandled) {
-                            val isMatrixToLink = deepLink.startsWith(PermalinkService.MATRIX_TO_URL_BASE) ||
-                                    deepLink.startsWith(MATRIX_TO_CUSTOM_SCHEME_URL_BASE)
-                            MaterialAlertDialogBuilder(this)
-                                    .setTitle(R.string.dialog_title_error)
-                                    .setMessage(if (isMatrixToLink) R.string.permalink_malformed else R.string.universal_link_malformed)
-                                    .setPositiveButton(R.string.ok, null)
-                                    .show()
-                        }
-                    }
-                    .disposeOnDestroy()
+
+            lifecycleScope.launch {
+                val isHandled = permalinkHandler.launch(
+                        context = this@HomeActivity,
+                        deepLink = resolvedLink,
+                        navigationInterceptor = this@HomeActivity,
+                        buildTask = true
+                )
+                if (!isHandled) {
+                    val isMatrixToLink = deepLink.startsWith(PermalinkService.MATRIX_TO_URL_BASE) ||
+                            deepLink.startsWith(MATRIX_TO_CUSTOM_SCHEME_URL_BASE)
+                    MaterialAlertDialogBuilder(this@HomeActivity)
+                            .setTitle(R.string.dialog_title_error)
+                            .setMessage(if (isMatrixToLink) R.string.permalink_malformed else R.string.universal_link_malformed)
+                            .setPositiveButton(R.string.ok, null)
+                            .show()
+                }
+            }
         }
     }
 
@@ -476,7 +475,7 @@ class HomeActivity :
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
-        val parcelableExtra = intent?.getParcelableExtra<HomeActivityArgs>(MvRx.KEY_ARG)
+        val parcelableExtra = intent?.getParcelableExtra<HomeActivityArgs>(Mavericks.KEY_ARG)
         if (parcelableExtra?.clearNotification == true) {
             notificationDrawerManager.clearAllEvents()
         }
@@ -609,7 +608,7 @@ class HomeActivity :
 
             return Intent(context, HomeActivity::class.java)
                     .apply {
-                        putExtra(MvRx.KEY_ARG, args)
+                        putExtra(Mavericks.KEY_ARG, args)
                     }
         }
     }

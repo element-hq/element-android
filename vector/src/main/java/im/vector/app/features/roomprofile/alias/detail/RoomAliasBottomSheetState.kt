@@ -16,7 +16,7 @@
 
 package im.vector.app.features.roomprofile.alias.detail
 
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MavericksState
 
 data class RoomAliasBottomSheetState(
         val alias: String,
@@ -25,7 +25,7 @@ data class RoomAliasBottomSheetState(
         val isMainAlias: Boolean,
         val isLocal: Boolean,
         val canEditCanonicalAlias: Boolean
-) : MvRxState {
+) : MavericksState {
 
     constructor(args: RoomAliasBottomSheetArgs) : this(
             alias = args.alias,

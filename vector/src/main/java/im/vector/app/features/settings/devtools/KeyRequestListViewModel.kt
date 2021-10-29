@@ -16,12 +16,13 @@
 
 package im.vector.app.features.settings.devtools
 
+import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagedList
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxState
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksState
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
@@ -34,12 +35,11 @@ import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.internal.crypto.IncomingRoomKeyRequest
 import org.matrix.android.sdk.internal.crypto.OutgoingRoomKeyRequest
-import org.matrix.android.sdk.rx.asObservable
 
 data class KeyRequestListViewState(
         val incomingRequests: Async<PagedList<IncomingRoomKeyRequest>> = Uninitialized,
         val outgoingRoomKeyRequests: Async<PagedList<OutgoingRoomKeyRequest>> = Uninitialized
-) : MvRxState
+) : MavericksState
 
 class KeyRequestListViewModel @AssistedInject constructor(@Assisted initialState: KeyRequestListViewState,
                                                           private val session: Session) :
@@ -51,13 +51,13 @@ class KeyRequestListViewModel @AssistedInject constructor(@Assisted initialState
 
     fun refresh() {
         viewModelScope.launch {
-            session.cryptoService().getOutgoingRoomKeyRequestsPaged().asObservable()
+            session.cryptoService().getOutgoingRoomKeyRequestsPaged().asFlow()
                     .execute {
                         copy(outgoingRoomKeyRequests = it)
                     }
 
             session.cryptoService().getIncomingRoomKeyRequestsPaged()
-                    .asObservable()
+                    .asFlow()
                     .execute {
                         copy(incomingRequests = it)
                     }
@@ -71,7 +71,7 @@ class KeyRequestListViewModel @AssistedInject constructor(@Assisted initialState
         fun create(initialState: KeyRequestListViewState): KeyRequestListViewModel
     }
 
-    companion object : MvRxViewModelFactory<KeyRequestListViewModel, KeyRequestListViewState> {
+    companion object : MavericksViewModelFactory<KeyRequestListViewModel, KeyRequestListViewState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: KeyRequestListViewState): KeyRequestListViewModel? {

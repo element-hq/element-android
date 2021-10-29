@@ -26,11 +26,13 @@ import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupState
 import org.matrix.android.sdk.api.session.sync.FilterService
 import timber.log.Timber
 
-fun Session.configureAndStart(context: Context) {
+fun Session.configureAndStart(context: Context, startSyncing: Boolean = true) {
     Timber.i("Configure and start session for $myUserId")
     open()
     setFilter(FilterService.FilterPreset.ElementFilter)
-    startSyncing(context)
+    if (startSyncing) {
+        startSyncing(context)
+    }
     refreshPushers()
     context.vectorComponent().webRtcCallManager().checkForProtocolsSupportIfNeeded()
 }

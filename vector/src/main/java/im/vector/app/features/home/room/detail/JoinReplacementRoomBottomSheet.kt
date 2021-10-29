@@ -61,7 +61,7 @@ class JoinReplacementRoomBottomSheet :
             }
         }
 
-        viewModel.selectSubscribe(this, RoomDetailViewState::joinUpgradedRoomAsync) { joinState ->
+        viewModel.onEach(RoomDetailViewState::joinUpgradedRoomAsync) { joinState ->
             when (joinState) {
                 // it should never be Uninitialized
                 Uninitialized,

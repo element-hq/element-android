@@ -17,10 +17,10 @@
 package fr.gouv.tchap.features.platform
 
 import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.Uninitialized
 import fr.gouv.tchap.android.sdk.internal.services.threepidplatformdiscover.model.Platform
 
 data class  PlatformViewState(
         val platformState: Async<Platform> = Uninitialized
-) : MvRxState
+) : MavericksState

@@ -18,7 +18,7 @@ package im.vector.app.features.home
 
 import androidx.annotation.StringRes
 import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.Uninitialized
 import im.vector.app.R
 import im.vector.app.RoomGroupingMethod
@@ -45,7 +45,7 @@ data class HomeDetailViewState(
         val showDialPadTab: Boolean = false,
         val inviteEmail: String? = null,
         val existingRoom: String? = null
-) : MvRxState
+) : MavericksState
 
 sealed class HomeTab(@StringRes val titleRes: Int) {
     data class RoomList(val displayMode: RoomListDisplayMode) : HomeTab(displayMode.titleRes)

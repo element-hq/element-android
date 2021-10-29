@@ -17,7 +17,7 @@
 package im.vector.app.features.roomdirectory
 
 import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.Uninitialized
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoom
@@ -40,4 +40,4 @@ data class PublicRoomsViewState(
         val asyncThirdPartyRequest: Async<Map<String, ThirdPartyProtocol>> = Uninitialized,
         // computed
         val directories: List<RoomDirectoryServer> = emptyList()
-) : MvRxState
+) : MavericksState

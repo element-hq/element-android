@@ -17,7 +17,7 @@
 package im.vector.app.features.spaces.explore
 
 import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MavericksState
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
@@ -39,7 +39,7 @@ data class SpaceDirectoryState(
         // cached room summaries of known rooms, we use it because computed room name would be better using it
         val knownRoomSummaries: List<RoomSummary> = emptyList(),
         val paginationStatus: Map<String, Async<Unit>> = emptyMap()
-) : MvRxState {
+) : MavericksState {
     constructor(args: SpaceDirectoryArgs) : this(
             spaceId = args.spaceId
     )

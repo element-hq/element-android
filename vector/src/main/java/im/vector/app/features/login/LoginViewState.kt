@@ -18,7 +18,7 @@ package im.vector.app.features.login
 
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.PersistState
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
@@ -53,9 +53,9 @@ data class LoginViewState(
         val loginMode: LoginMode = LoginMode.Unknown,
         // Supported types for the login. We cannot use a sealed class for LoginType because it is not serializable
         @PersistState
-val loginModeSupportedTypes: List<String> = emptyList(),
+        val loginModeSupportedTypes: List<String> = emptyList(),
         val knownCustomHomeServersUrls: List<String> = emptyList()
-) : MvRxState {
+) : MavericksState {
 
     fun isLoading(): Boolean {
         return asyncLoginAction is Loading ||

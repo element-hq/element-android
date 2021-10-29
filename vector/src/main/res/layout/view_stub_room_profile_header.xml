@@ -20,25 +20,58 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:src="@sample/room_round_avatars" />
 
-    <im.vector.app.core.ui.views.ShieldImageView
-        android:id="@+id/roomProfileDecorationImageView"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+    <im.vector.app.core.ui.views.PresenceStateImageView
+        android:id="@+id/roomProfilePresenceImageView"
+        android:layout_width="26dp"
+        android:layout_height="26dp"
+        android:background="@drawable/background_circle"
+        android:importantForAccessibility="no"
+        android:padding="3dp"
+        android:visibility="gone"
         app:layout_constraintCircle="@+id/roomProfileAvatarView"
         app:layout_constraintCircleAngle="135"
         app:layout_constraintCircleRadius="64dp"
-        tools:ignore="MissingConstraints" />
+        tools:ignore="MissingConstraints"
+        tools:src="@drawable/ic_presence_offline"
+        tools:visibility="visible" />
+
+    <ImageView
+        android:id="@+id/roomProfilePublicImageView"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:background="@drawable/background_circle"
+        android:contentDescription="@string/a11y_public_room"
+        android:padding="2dp"
+        android:src="@drawable/ic_public_room"
+        android:visibility="gone"
+        app:layout_constraintCircle="@+id/roomProfileAvatarView"
+        app:layout_constraintCircleAngle="135"
+        app:layout_constraintCircleRadius="64dp"
+        tools:ignore="MissingConstraints"
+        tools:visibility="visible" />
+
+    <im.vector.app.core.ui.views.ShieldImageView
+        android:id="@+id/roomProfileDecorationImageView"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/roomProfileNameView"
+        app:layout_constraintEnd_toStartOf="@+id/roomProfileNameView"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/roomProfileNameView"/>
 
     <TextView
         android:id="@+id/roomProfileNameView"
         style="@style/Widget.Vector.TextView.Title"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/roomProfileAliasView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/roomProfileDecorationImageView"
         app:layout_constraintTop_toBottomOf="@+id/roomProfileAvatarView"
         tools:text="@sample/rooms.json/data/name" />
 

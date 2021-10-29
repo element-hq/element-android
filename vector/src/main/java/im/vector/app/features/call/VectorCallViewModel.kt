@@ -19,7 +19,7 @@ package im.vector.app.features.call
 import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
@@ -345,7 +345,7 @@ class VectorCallViewModel @AssistedInject constructor(
         fun create(initialState: VectorCallViewState): VectorCallViewModel
     }
 
-    companion object : MvRxViewModelFactory<VectorCallViewModel, VectorCallViewState> {
+    companion object : MavericksViewModelFactory<VectorCallViewModel, VectorCallViewState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: VectorCallViewState): VectorCallViewModel {

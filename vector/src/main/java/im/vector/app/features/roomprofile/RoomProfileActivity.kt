@@ -20,7 +20,7 @@ package im.vector.app.features.roomprofile
 import android.content.Context
 import android.content.Intent
 import android.widget.Toast
-import com.airbnb.mvrx.MvRx
+import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
 import com.google.android.material.appbar.MaterialToolbar
 import im.vector.app.R
@@ -60,7 +60,7 @@ class RoomProfileActivity :
         fun newIntent(context: Context, roomId: String, directAccess: Int?): Intent {
             val roomProfileArgs = RoomProfileArgs(roomId)
             return Intent(context, RoomProfileActivity::class.java).apply {
-                putExtra(MvRx.KEY_ARG, roomProfileArgs)
+                putExtra(Mavericks.KEY_ARG, roomProfileArgs)
                 putExtra(EXTRA_DIRECT_ACCESS, directAccess)
             }
         }
@@ -91,7 +91,7 @@ class RoomProfileActivity :
 
     override fun initUiAndData() {
         sharedActionViewModel = viewModelProvider.get(RoomProfileSharedActionViewModel::class.java)
-        roomProfileArgs = intent?.extras?.getParcelable(MvRx.KEY_ARG) ?: return
+        roomProfileArgs = intent?.extras?.getParcelable(Mavericks.KEY_ARG) ?: return
         if (isFirstCreation()) {
             when (intent?.extras?.getInt(EXTRA_DIRECT_ACCESS, EXTRA_DIRECT_ACCESS_ROOM_ROOT)) {
                 EXTRA_DIRECT_ACCESS_ROOM_SETTINGS -> {

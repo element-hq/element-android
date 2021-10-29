@@ -21,7 +21,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import com.airbnb.mvrx.MvRx
+import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
@@ -73,12 +73,12 @@ class SpaceExploreActivity : VectorBaseActivity<ActivitySimpleBinding>(), SpaceD
 
         if (isFirstCreation()) {
             val simpleName = SpaceDirectoryFragment::class.java.simpleName
-            val args = intent?.getParcelableExtra<SpaceDirectoryArgs>(MvRx.KEY_ARG)
+            val args = intent?.getParcelableExtra<SpaceDirectoryArgs>(Mavericks.KEY_ARG)
             if (supportFragmentManager.findFragmentByTag(simpleName) == null) {
                 supportFragmentManager.commitTransaction {
                     replace(R.id.simpleFragmentContainer,
                             SpaceDirectoryFragment::class.java,
-                            Bundle().apply { this.putParcelable(MvRx.KEY_ARG, args) },
+                            Bundle().apply { this.putParcelable(Mavericks.KEY_ARG, args) },
                             simpleName
                     )
                 }
@@ -108,7 +108,7 @@ class SpaceExploreActivity : VectorBaseActivity<ActivitySimpleBinding>(), SpaceD
     companion object {
         fun newIntent(context: Context, spaceId: String): Intent {
             return Intent(context, SpaceExploreActivity::class.java).apply {
-                putExtra(MvRx.KEY_ARG, SpaceDirectoryArgs(spaceId))
+                putExtra(Mavericks.KEY_ARG, SpaceDirectoryArgs(spaceId))
             }
         }
     }

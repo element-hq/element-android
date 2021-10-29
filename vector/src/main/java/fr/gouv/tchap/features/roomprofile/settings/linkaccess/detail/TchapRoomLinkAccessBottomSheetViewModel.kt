@@ -17,7 +17,7 @@
 package fr.gouv.tchap.features.roomprofile.settings.linkaccess.detail
 
 import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -37,7 +37,7 @@ class TchapRoomLinkAccessBottomSheetViewModel @AssistedInject constructor(
         fun create(initialState: TchapRoomLinkAccessBottomSheetState): TchapRoomLinkAccessBottomSheetViewModel
     }
 
-    companion object : MvRxViewModelFactory<TchapRoomLinkAccessBottomSheetViewModel, TchapRoomLinkAccessBottomSheetState> {
+    companion object : MavericksViewModelFactory<TchapRoomLinkAccessBottomSheetViewModel, TchapRoomLinkAccessBottomSheetState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: TchapRoomLinkAccessBottomSheetState): TchapRoomLinkAccessBottomSheetViewModel? {

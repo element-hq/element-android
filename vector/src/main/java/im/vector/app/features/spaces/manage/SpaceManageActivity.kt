@@ -22,7 +22,7 @@ import android.os.Bundle
 import android.os.Parcelable
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
-import com.airbnb.mvrx.MvRx
+import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.appbar.MaterialToolbar
@@ -95,7 +95,7 @@ class SpaceManageActivity : VectorBaseActivity<ActivitySimpleLoadingBinding>(),
                 }
                 .disposeOnDestroy()
 
-        val args = intent?.getParcelableExtra<SpaceManageArgs>(MvRx.KEY_ARG)
+        val args = intent?.getParcelableExtra<SpaceManageArgs>(Mavericks.KEY_ARG)
         if (isFirstCreation()) {
             withState(sharedViewModel) {
                 when (it.manageType) {
@@ -106,7 +106,7 @@ class SpaceManageActivity : VectorBaseActivity<ActivitySimpleLoadingBinding>(),
                             supportFragmentManager.commitTransaction {
                                 replace(R.id.simpleFragmentContainer,
                                         SpaceAddRoomFragment::class.java,
-                                        Bundle().apply { this.putParcelable(MvRx.KEY_ARG, args) },
+                                        Bundle().apply { this.putParcelable(Mavericks.KEY_ARG, args) },
                                         simpleName
                                 )
                             }
@@ -118,7 +118,7 @@ class SpaceManageActivity : VectorBaseActivity<ActivitySimpleLoadingBinding>(),
                             supportFragmentManager.commitTransaction {
                                 replace(R.id.simpleFragmentContainer,
                                         SpaceSettingsFragment::class.java,
-                                        Bundle().apply { this.putParcelable(MvRx.KEY_ARG, RoomProfileArgs(args.spaceId)) },
+                                        Bundle().apply { this.putParcelable(Mavericks.KEY_ARG, RoomProfileArgs(args.spaceId)) },
                                         simpleName
                                 )
                             }
@@ -189,7 +189,7 @@ class SpaceManageActivity : VectorBaseActivity<ActivitySimpleLoadingBinding>(),
     companion object {
         fun newIntent(context: Context, spaceId: String, manageType: ManageType): Intent {
             return Intent(context, SpaceManageActivity::class.java).apply {
-                putExtra(MvRx.KEY_ARG, SpaceManageArgs(spaceId, manageType))
+                putExtra(Mavericks.KEY_ARG, SpaceManageArgs(spaceId, manageType))
             }
         }
     }

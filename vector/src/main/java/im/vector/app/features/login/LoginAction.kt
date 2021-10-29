@@ -23,6 +23,8 @@ import org.matrix.android.sdk.api.auth.registration.RegisterThreePid
 import org.matrix.android.sdk.internal.network.ssl.Fingerprint
 
 sealed class LoginAction : VectorViewModelAction {
+    data class OnGetStarted(val resetLoginConfig: Boolean) : LoginAction()
+
     data class UpdateServerType(val serverType: ServerType) : LoginAction()
     data class UpdateHomeServer(val homeServerUrl: String) : LoginAction()
     data class UpdateSignMode(val signMode: SignMode) : LoginAction()

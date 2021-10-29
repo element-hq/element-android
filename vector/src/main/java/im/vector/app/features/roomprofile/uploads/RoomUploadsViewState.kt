@@ -17,7 +17,7 @@
 package im.vector.app.features.roomprofile.uploads
 
 import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.Uninitialized
 import im.vector.app.features.roomprofile.RoomProfileArgs
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
@@ -33,7 +33,7 @@ data class RoomUploadsViewState(
         val asyncEventsRequest: Async<Unit> = Uninitialized,
         // True if more result are available server side
         val hasMore: Boolean = true
-) : MvRxState {
+) : MavericksState {
 
     constructor(args: RoomProfileArgs) : this(roomId = args.roomId)
 }

@@ -16,9 +16,8 @@
 
 package fr.gouv.tchap.features.roomprofile.settings.linkaccess
 
-import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -26,7 +25,10 @@ import dagger.assisted.AssistedInject
 import fr.gouv.tchap.core.utils.TchapUtils
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
-import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
+import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.mapNotNull
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
@@ -37,9 +39,9 @@ import org.matrix.android.sdk.api.session.room.model.RoomCanonicalAliasContent
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRulesContent
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
-import org.matrix.android.sdk.rx.mapOptional
-import org.matrix.android.sdk.rx.rx
-import org.matrix.android.sdk.rx.unwrap
+import org.matrix.android.sdk.flow.flow
+import org.matrix.android.sdk.flow.mapOptional
+import org.matrix.android.sdk.flow.unwrap
 import timber.log.Timber
 
 class TchapRoomLinkAccessViewModel @AssistedInject constructor(
@@ -52,7 +54,7 @@ class TchapRoomLinkAccessViewModel @AssistedInject constructor(
         fun create(initialState: TchapRoomLinkAccessState): TchapRoomLinkAccessViewModel
     }
 
-    companion object : MvRxViewModelFactory<TchapRoomLinkAccessViewModel, TchapRoomLinkAccessState> {
+    companion object : MavericksViewModelFactory<TchapRoomLinkAccessViewModel, TchapRoomLinkAccessState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: TchapRoomLinkAccessState): TchapRoomLinkAccessViewModel {
@@ -71,19 +73,15 @@ class TchapRoomLinkAccessViewModel @AssistedInject constructor(
     }
 
     private fun observeRoomCanonicalAlias() {
-        room.rx()
-                .liveStateEvent(EventType.STATE_ROOM_CANONICAL_ALIAS, QueryStringValue.NoCondition)
+        room.flow().liveStateEvent(EventType.STATE_ROOM_CANONICAL_ALIAS, QueryStringValue.NoCondition)
                 .mapOptional { it.content.toModel<RoomCanonicalAliasContent>() }
                 .unwrap()
-                .subscribe {
-                    setState {
-                        copy(
-                                canonicalAlias = it.canonicalAlias,
-                                alternativeAliases = it.alternativeAliases.orEmpty().sorted()
-                        )
-                    }
+                .setOnEach {
+                    copy(
+                            canonicalAlias = it.canonicalAlias,
+                            alternativeAliases = it.alternativeAliases.orEmpty().sorted()
+                    )
                 }
-                .disposeOnClear()
     }
 
     override fun handle(action: TchapRoomLinkAccessAction) {
@@ -93,36 +91,34 @@ class TchapRoomLinkAccessViewModel @AssistedInject constructor(
     }
 
     private fun observeRoomSummary() {
-        room.rx().liveRoomSummary()
+        room.flow().liveRoomSummary()
                 .unwrap()
                 .execute { async ->
-                    copy(roomSummary = async)
+                    copy(
+                            roomSummary = async
+                    )
                 }
     }
 
     private fun observePowerLevel() {
-        PowerLevelsObservableFactory(room)
-                .createObservable()
-                .subscribe {
+        PowerLevelsFlowFactory(room).createFlow()
+                .onEach {
                     val powerLevelsHelper = PowerLevelsHelper(it)
                     setState {
                         copy(canChangeLinkAccess = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_CANONICAL_ALIAS))
                     }
-                }
-                .disposeOnClear()
+                }.launchIn(viewModelScope)
     }
 
     private fun observeJoinRule() {
-        room.rx()
+        room.flow()
                 .liveStateEvent(EventType.STATE_ROOM_JOIN_RULES, QueryStringValue.NoCondition)
                 .mapOptional { it.content.toModel<RoomJoinRulesContent>() }
                 .unwrap()
-                .subscribe {
-                    it.joinRules?.let {
-                        setState { copy(currentRoomJoinRules = it) }
-                    }
+                .mapNotNull { it.joinRules }
+                .setOnEach {
+                    copy(currentRoomJoinRules = it)
                 }
-                .disposeOnClear()
     }
 
     private fun handleSetIsEnabled(action: TchapRoomLinkAccessAction.SetIsEnabled) {
@@ -151,18 +147,10 @@ class TchapRoomLinkAccessViewModel @AssistedInject constructor(
 
                     // Update room join rules
                     Timber.d("## enableRoomAccessByLink")
-                    room.rx()
-                            .updateJoinRule(RoomJoinRules.PUBLIC, GuestAccess.Forbidden)
-                            .subscribe(
-                                    { postLoading(false) },
-                                    {
-                                        Timber.e("## enableRoomAccessByLink: $it")
-                                        postLoading(false)
-                                        _viewEvents.post(TchapRoomLinkAccessViewEvents.Failure(it))
-                                    }
-                            )
-                            .disposeOnClear()
+                    room.updateJoinRule(RoomJoinRules.PUBLIC, GuestAccess.Forbidden)
+                    postLoading(false)
                 } catch (failure: Throwable) {
+                    Timber.e("## enableRoomAccessByLink: $failure")
                     postLoading(false)
                     _viewEvents.post(TchapRoomLinkAccessViewEvents.Failure(failure))
                 }
@@ -173,17 +161,17 @@ class TchapRoomLinkAccessViewModel @AssistedInject constructor(
     private fun disableRoomAccessByLink() {
         postLoading(true)
         Timber.d("## disableRoomAccessByLink")
-        room.rx()
-                .updateJoinRule(RoomJoinRules.INVITE, null)
-                .subscribe(
-                        { postLoading(false) },
-                        {
-                            Timber.e("## disableRoomAccessByLink: $it")
-                            postLoading(false)
-                            _viewEvents.post(TchapRoomLinkAccessViewEvents.Failure(it))
-                        }
-                )
-                .disposeOnClear()
+
+        viewModelScope.launch {
+            try {
+                room.updateJoinRule(RoomJoinRules.INVITE, null)
+                postLoading(false)
+            } catch (failure: Throwable) {
+                Timber.e("## disableRoomAccessByLink: $failure")
+                postLoading(false)
+                _viewEvents.post(TchapRoomLinkAccessViewEvents.Failure(failure))
+            }
+        }
     }
 
     private fun postLoading(isLoading: Boolean) {

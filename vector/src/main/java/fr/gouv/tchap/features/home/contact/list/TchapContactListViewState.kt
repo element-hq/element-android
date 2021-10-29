@@ -18,7 +18,7 @@ package fr.gouv.tchap.features.home.contact.list
 
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.Uninitialized
 import im.vector.app.core.contacts.MappedContact
 import im.vector.app.features.userdirectory.PendingSelection
@@ -50,7 +50,7 @@ data class TchapContactListViewState(
 
         val singleSelection: Boolean,
         val pendingSelections: Set<PendingSelection> = emptySet()
-) : MvRxState {
+) : MavericksState {
     constructor(args: TchapContactListFragmentArgs) : this(
             excludedUserIds = args.excludedUserIds,
             singleSelection = args.singleSelection,
