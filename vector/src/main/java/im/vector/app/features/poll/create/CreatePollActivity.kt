@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.createpoll
+package im.vector.app.features.poll.create
 
 import android.content.Context
 import android.content.Intent
@@ -23,23 +23,16 @@ import android.view.View
 import im.vector.app.R
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.SimpleFragmentActivity
-import javax.inject.Inject
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class CreatePollActivity : SimpleFragmentActivity(), CreatePollViewModel.Factory {
-
-    var currentRoomId: String? = null
-    @Inject lateinit var createPollViewModelFactory: CreatePollViewModel.Factory
-
-    override fun create(initialState: CreatePollViewState) = createPollViewModelFactory.create(initialState)
+class CreatePollActivity : SimpleFragmentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         views.toolbar.visibility = View.GONE
 
         val createPollArgs: CreatePollArgs? = intent?.extras?.getParcelable(EXTRA_CREATE_POLL_ARGS)
-        currentRoomId = createPollArgs?.roomId
 
         if (isFirstCreation()) {
             addFragment(

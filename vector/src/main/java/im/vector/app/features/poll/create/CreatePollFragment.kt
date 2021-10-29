@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.createpoll
+package im.vector.app.features.poll.create
 
 import android.os.Bundle
 import android.os.Parcelable
@@ -23,7 +23,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.activityViewModel
-import com.airbnb.mvrx.args
 import com.airbnb.mvrx.withState
 import im.vector.app.R
 import im.vector.app.core.extensions.configureWith
@@ -34,12 +33,12 @@ import javax.inject.Inject
 
 @Parcelize
 data class CreatePollArgs(
-        val roomId: String
+        val roomId: String,
+        val minOptionsCount: Int
 ) : Parcelable
 
 class CreatePollFragment @Inject constructor(
-        private val controller: CreatePollController,
-        val createPollViewModelFactory: CreatePollViewModel.Factory
+        private val controller: CreatePollController
 ) : VectorBaseFragment<FragmentCreatePollBinding>(), CreatePollController.Callback {
 
     private val viewModel: CreatePollViewModel by activityViewModel()

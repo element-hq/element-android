@@ -14,12 +14,9 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.createpoll
+package im.vector.app.features.poll.create
 
-import com.airbnb.mvrx.ActivityViewModelContext
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MavericksViewModelFactory
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -42,17 +39,7 @@ class CreatePollViewModel @AssistedInject constructor(
 
     companion object : MavericksViewModelFactory<CreatePollViewModel, CreatePollViewState> by hiltMavericksViewModelFactory() {
 
-        private const val REQUIRED_MIN_OPTION_COUNT = 2
-    }
-
-    init {
-        // Initialize with REQUIRED_MIN_OPTION_COUNT default empty options
-        setState {
-            copy(
-                    question = "",
-                    options = List(REQUIRED_MIN_OPTION_COUNT) { "" }
-            )
-        }
+        const val MIN_OPTIONS_COUNT = 2
     }
 
     override fun handle(action: CreatePollAction) {
@@ -68,13 +55,13 @@ class CreatePollViewModel @AssistedInject constructor(
     private fun handleOnCreatePoll() = withState { state ->
         val nonEmptyOptions = state.options.filter { it.isNotEmpty() }
         when {
-            state.question.isEmpty()                         -> {
+            state.question.isEmpty()                 -> {
                 _viewEvents.post(CreatePollViewEvents.EmptyQuestionError)
             }
-            nonEmptyOptions.size < REQUIRED_MIN_OPTION_COUNT -> {
-                _viewEvents.post(CreatePollViewEvents.NotEnoughOptionsError(requiredOptionsCount = REQUIRED_MIN_OPTION_COUNT))
+            nonEmptyOptions.size < MIN_OPTIONS_COUNT -> {
+                _viewEvents.post(CreatePollViewEvents.NotEnoughOptionsError(requiredOptionsCount = MIN_OPTIONS_COUNT))
             }
-            else                                             -> {
+            else                                     -> {
                 room.sendPoll(state.question, state.options)
                 _viewEvents.post(CreatePollViewEvents.Success)
             }
@@ -122,6 +109,6 @@ class CreatePollViewModel @AssistedInject constructor(
 
     private fun canCreatePoll(state: CreatePollViewState): Boolean {
         return state.question.isNotEmpty() &&
-                state.options.filter { it.isNotEmpty() }.size >= REQUIRED_MIN_OPTION_COUNT
+                state.options.filter { it.isNotEmpty() }.size >= MIN_OPTIONS_COUNT
     }
 }

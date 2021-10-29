@@ -14,12 +14,20 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.createpoll
+package im.vector.app.features.poll.create
 
-import im.vector.app.core.platform.VectorViewEvents
+import com.airbnb.mvrx.MavericksState
 
-sealed class CreatePollViewEvents : VectorViewEvents {
-    object Success : CreatePollViewEvents()
-    object EmptyQuestionError : CreatePollViewEvents()
-    data class NotEnoughOptionsError(val requiredOptionsCount: Int) : CreatePollViewEvents()
+data class CreatePollViewState(
+        val roomId: String,
+        val question: String = "",
+        val options: List<String> = emptyList(),
+        val canCreatePoll: Boolean = false
+) : MavericksState {
+
+    constructor(args: CreatePollArgs) : this(
+            roomId = args.roomId,
+            options = List(args.minOptionsCount) { "" }
+    )
 }
+

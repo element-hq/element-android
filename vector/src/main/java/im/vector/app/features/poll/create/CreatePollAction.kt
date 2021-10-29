@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.createpoll
+package im.vector.app.features.poll.create
 
 import im.vector.app.core.platform.VectorViewModelAction
 
