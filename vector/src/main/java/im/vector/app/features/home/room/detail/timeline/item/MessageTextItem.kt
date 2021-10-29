@@ -122,6 +122,8 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
         if (canUseTextFuture) {
             holder.messageView.setTextFuture(textFuture)
         } else {
+            // Remove possible previously set futures that might overwrite our text
+            holder.messageView.setTextFuture(null)
             holder.messageView.text = message
         }
     }
