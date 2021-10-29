@@ -226,7 +226,7 @@ internal class DefaultCryptoService @Inject constructor(
     override fun fetchDevicesList(callback: MatrixCallback<DevicesListResponse>) {
         getDevicesTask
                 .configureWith {
-                    //                    this.executionThread = TaskThread.CRYPTO
+                    this.callbackThread = TaskThread.CRYPTO
                     this.callback = object : MatrixCallback<DevicesListResponse> {
                         override fun onFailure(failure: Throwable) {
                             callback.onFailure(failure)
