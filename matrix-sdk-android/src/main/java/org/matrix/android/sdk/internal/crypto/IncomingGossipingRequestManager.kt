@@ -60,15 +60,13 @@ internal class IncomingGossipingRequestManager @Inject constructor(
 
     // list of IncomingRoomKeyRequests/IncomingRoomKeyRequestCancellations
     // we received in the current sync.
-    private val receivedGossipingRequests = ArrayList<IncomingShareRequestCommon>()
+    private val receivedGossipingRequests by lazy {
+        cryptoStore.getPendingIncomingGossipingRequests().toMutableList()
+    }
     private val receivedRequestCancellations = ArrayList<IncomingRequestCancellation>()
 
     // the listeners
     private val gossipingRequestListeners: MutableSet<GossipingRequestListener> = HashSet()
-
-    init {
-        receivedGossipingRequests.addAll(cryptoStore.getPendingIncomingGossipingRequests())
-    }
 
     fun close() {
         executor.shutdownNow()
