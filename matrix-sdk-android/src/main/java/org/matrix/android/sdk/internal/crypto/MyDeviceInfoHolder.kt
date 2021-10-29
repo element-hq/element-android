@@ -69,7 +69,7 @@ internal class MyDeviceInfoHolder @Inject constructor(
 
             val myDevices = endToEndDevicesForUser.orEmpty().toMutableMap()
 
-            myDevices[myDevice.deviceId] = myDevice
+            myDevices[it.deviceId] = it
 
             cryptoStore.storeUserDevices(credentials.userId, myDevices)
         }
