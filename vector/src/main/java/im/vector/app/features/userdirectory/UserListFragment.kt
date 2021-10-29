@@ -81,11 +81,11 @@ class UserListFragment @Inject constructor(
         setupRecyclerView()
         setupSearchView()
 
-        homeServerCapabilitiesViewModel.subscribe {
+        homeServerCapabilitiesViewModel.onEach {
             views.userListE2EbyDefaultDisabled.isVisible = !it.isE2EByDefault
         }
 
-        viewModel.selectSubscribe(this, UserListViewState::pendingSelections) {
+        viewModel.onEach(UserListViewState::pendingSelections) {
             renderSelectedUsers(it)
         }
 

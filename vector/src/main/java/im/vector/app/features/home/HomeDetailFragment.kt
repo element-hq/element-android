@@ -123,9 +123,15 @@ class HomeDetailFragment @Inject constructor(
     override fun getMenuRes() = R.menu.tchap_menu_home
 
     override fun onPrepareOptionsMenu(menu: Menu) {
-        super.onPrepareOptionsMenu(menu)
+        withState(viewModel) { state ->
+            val isRoomList = state.currentTab is HomeTab.RoomList
+            menu.findItem(R.id.menu_home_mark_all_as_read).isVisible = isRoomList && hasUnreadRooms
+        }
+
         val isSearchMode = views.homeSearchView.isVisible
         menu.findItem(R.id.menu_home_search_action)?.setIcon(if (isSearchMode) 0 else R.drawable.ic_search)
+
+        super.onPrepareOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -157,7 +163,12 @@ class HomeDetailFragment @Inject constructor(
         setupKeysBackupBanner()
         setupActiveCallView()
 
-        viewModel.selectSubscribe(this, HomeDetailViewState::roomGroupingMethod) { roomGroupingMethod ->
+        withState(viewModel) {
+            // Update the navigation view if needed (for when we restore the tabs)
+            views.bottomNavigationView.selectedItemId = it.currentTab.toMenuId()
+        }
+
+        viewModel.onEach(HomeDetailViewState::roomGroupingMethod) { roomGroupingMethod ->
             when (roomGroupingMethod) {
                 is RoomGroupingMethod.ByLegacyGroup -> {
                     onGroupChange(roomGroupingMethod.groupSummary)
@@ -168,11 +179,11 @@ class HomeDetailFragment @Inject constructor(
             }
         }
 
-        viewModel.selectSubscribe(this, HomeDetailViewState::currentTab) { currentTab ->
+        viewModel.onEach(HomeDetailViewState::currentTab) { currentTab ->
             updateUIForTab(currentTab)
         }
 
-        viewModel.selectSubscribe(this, HomeDetailViewState::showDialPadTab) { showDialPadTab ->
+        viewModel.onEach(HomeDetailViewState::showDialPadTab) { showDialPadTab ->
             updateTabVisibilitySafely(R.id.bottom_action_dial_pad, showDialPadTab)
         }
 
@@ -195,7 +206,7 @@ class HomeDetailFragment @Inject constructor(
             }
         }.exhaustive
 
-        unknownDeviceDetectorSharedViewModel.subscribe { state ->
+        unknownDeviceDetectorSharedViewModel.onEach { state ->
             state.unknownSessions.invoke()?.let { unknownDevices ->
 //                Timber.v("## Detector Triggerred in fragment - ${unknownDevices.firstOrNull()}")
                 if (unknownDevices.firstOrNull()?.currentSessionTrust == true) {
@@ -213,7 +224,7 @@ class HomeDetailFragment @Inject constructor(
             }
         }
 
-        unreadMessagesSharedViewModel.subscribe { state ->
+        unreadMessagesSharedViewModel.onEach { state ->
             views.drawerUnreadCounterBadgeView.render(
                     UnreadCounterBadgeView.State(
                             count = state.otherSpacesUnread.totalCount,

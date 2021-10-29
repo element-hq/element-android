@@ -16,11 +16,11 @@
 
 package fr.gouv.tchap.features.expired
 
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MavericksState
 
 /**
  * @property isRenewalEmailSent whether a renewal email has been sent.
  */
 data class ExpiredAccountViewState(
         val isRenewalEmailSent: Boolean = false
-) : MvRxState
+) : MavericksState

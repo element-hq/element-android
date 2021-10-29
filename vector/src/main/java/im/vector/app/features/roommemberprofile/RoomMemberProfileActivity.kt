@@ -20,7 +20,7 @@ package im.vector.app.features.roommemberprofile
 import android.content.Context
 import android.content.Intent
 import android.widget.Toast
-import com.airbnb.mvrx.MvRx
+import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
 import com.google.android.material.appbar.MaterialToolbar
 import im.vector.app.R
@@ -42,7 +42,7 @@ class RoomMemberProfileActivity :
     companion object {
         fun newIntent(context: Context, args: RoomMemberProfileArgs): Intent {
             return Intent(context, RoomMemberProfileActivity::class.java).apply {
-                putExtra(MvRx.KEY_ARG, args)
+                putExtra(Mavericks.KEY_ARG, args)
             }
         }
     }
@@ -66,7 +66,7 @@ class RoomMemberProfileActivity :
 
     override fun initUiAndData() {
         if (isFirstCreation()) {
-            val fragmentArgs: RoomMemberProfileArgs = intent?.extras?.getParcelable(MvRx.KEY_ARG) ?: return
+            val fragmentArgs: RoomMemberProfileArgs = intent?.extras?.getParcelable(Mavericks.KEY_ARG) ?: return
             addFragment(R.id.simpleFragmentContainer, RoomMemberProfileFragment::class.java, fragmentArgs)
         }
 

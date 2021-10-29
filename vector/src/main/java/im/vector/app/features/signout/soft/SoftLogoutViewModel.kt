@@ -16,11 +16,10 @@
 
 package im.vector.app.features.signout.soft
 
-import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
@@ -52,7 +51,7 @@ class SoftLogoutViewModel @AssistedInject constructor(
         fun create(initialState: SoftLogoutViewState): SoftLogoutViewModel
     }
 
-    companion object : MvRxViewModelFactory<SoftLogoutViewModel, SoftLogoutViewState> {
+    companion object : MavericksViewModelFactory<SoftLogoutViewModel, SoftLogoutViewState> {
 
         override fun initialState(viewModelContext: ViewModelContext): SoftLogoutViewState? {
             val activity: SoftLogoutActivity = (viewModelContext as ActivityViewModelContext).activity()

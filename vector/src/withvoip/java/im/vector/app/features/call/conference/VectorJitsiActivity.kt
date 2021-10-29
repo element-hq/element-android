@@ -28,7 +28,7 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.MvRx
+import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.viewModel
 import com.facebook.react.modules.core.PermissionListener
@@ -205,8 +205,8 @@ class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMee
         JitsiMeetActivityDelegate.onNewIntent(intent)
 
         // Is it a switch to another conf?
-        intent?.takeIf { it.hasExtra(MvRx.KEY_ARG) }
-                ?.let { intent.getParcelableExtra<Args>(MvRx.KEY_ARG) }
+        intent?.takeIf { it.hasExtra(Mavericks.KEY_ARG) }
+                ?.let { intent.getParcelableExtra<Args>(Mavericks.KEY_ARG) }
                 ?.let {
                     jitsiViewModel.handle(JitsiCallViewActions.SwitchTo(it, true))
                 }
@@ -242,7 +242,7 @@ class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMee
     companion object {
         fun newIntent(context: Context, roomId: String, widgetId: String, enableVideo: Boolean): Intent {
             return Intent(context, VectorJitsiActivity::class.java).apply {
-                putExtra(MvRx.KEY_ARG, Args(roomId, widgetId, enableVideo))
+                putExtra(Mavericks.KEY_ARG, Args(roomId, widgetId, enableVideo))
             }
         }
     }

@@ -16,14 +16,12 @@
 
 package fr.gouv.tchap.features.home.contact.list
 
-import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.ViewModelContext
-import com.jakewharton.rxrelay2.BehaviorRelay
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -34,26 +32,26 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.toggle
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.displayname.getBestName
-import io.reactivex.Single
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.query.ActiveSpaceFilter
 import org.matrix.android.sdk.api.query.RoomCategoryFilter
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.identity.IdentityServiceError
 import org.matrix.android.sdk.api.session.identity.ThreePid
+import org.matrix.android.sdk.api.session.profile.ProfileService
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.api.session.user.model.User
 import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.rx.asObservable
-import org.matrix.android.sdk.rx.rx
 import timber.log.Timber
-import java.util.concurrent.TimeUnit
-
-// private typealias KnownUsersSearch = String
-private typealias DirectoryUsersSearch = String
 
 class TchapContactListViewModel @AssistedInject constructor(@Assisted initialState: TchapContactListViewState,
                                                             private val contactsDataSource: ContactsDataSource,
@@ -61,7 +59,7 @@ class TchapContactListViewModel @AssistedInject constructor(@Assisted initialSta
         VectorViewModel<TchapContactListViewState, TchapContactListAction, TchapContactListViewEvents>(initialState) {
 
     //    private val knownUsersSearch = BehaviorRelay.create<KnownUsersSearch>()
-    private val directoryUsersSearch = BehaviorRelay.create<DirectoryUsersSearch>()
+    private val directoryUsersSearch = MutableStateFlow("")
 
     // All users from roomSummaries
     private var roomSummariesUsers: List<User> = emptyList()
@@ -76,7 +74,7 @@ class TchapContactListViewModel @AssistedInject constructor(@Assisted initialSta
         fun create(initialState: TchapContactListViewState): TchapContactListViewModel
     }
 
-    companion object : MvRxViewModelFactory<TchapContactListViewModel, TchapContactListViewState> {
+    companion object : MavericksViewModelFactory<TchapContactListViewModel, TchapContactListViewState> {
 
         override fun initialState(viewModelContext: ViewModelContext): TchapContactListViewState {
             return TchapContactListViewState(
@@ -230,13 +228,13 @@ class TchapContactListViewModel @AssistedInject constructor(@Assisted initialSta
         setState {
             copy(searchTerm = searchTerm)
         }
-//        knownUsersSearch.accept(searchTerm)
-        directoryUsersSearch.accept(searchTerm)
+//        knownUsersSearch.tryEmit(searchTerm)
+        directoryUsersSearch.tryEmit(searchTerm)
     }
 
     private fun handleClearSearchUsers() {
 //        knownUsersSearch.accept("")
-        directoryUsersSearch.accept("")
+        directoryUsersSearch.tryEmit("")
         setState {
             copy(searchTerm = "")
         }
@@ -273,19 +271,10 @@ class TchapContactListViewModel @AssistedInject constructor(@Assisted initialSta
 
         if (!isExternalUser) {
             directoryUsersSearch
-                    .debounce(300, TimeUnit.MILLISECONDS)
-                    .switchMapSingle { search ->
-                        val stream = if (search.isBlank()) {
-                            Single.just(emptyList())
-                        } else {
-                            session.rx().searchUsersDirectory(search, 50, state.excludedUserIds.orEmpty())
-                        }
-                        stream.toAsync {
-                            copy(directoryUsers = it)
-                        }
-                    }
-                    .subscribe()
-                    .disposeOnClear()
+                    .debounce(300)
+                    .onEach { search ->
+                        executeSearchDirectory(state, search)
+                    }.launchIn(viewModelScope)
         }
     }
 
@@ -333,6 +322,33 @@ class TchapContactListViewModel @AssistedInject constructor(@Assisted initialSta
                         updateFilteredContacts()
                     }
                 }.disposeOnClear()
+    }
+
+    private suspend fun executeSearchDirectory(state: TchapContactListViewState, search: String) {
+        suspend {
+            if (search.isBlank()) {
+                emptyList()
+            } else {
+                val searchResult = session.searchUsersDirectory(search, 50, state.excludedUserIds.orEmpty())
+                val userProfile = if (MatrixPatterns.isUserId(search)) {
+                    val json = tryOrNull { session.getProfile(search) }
+                    User(
+                            userId = search,
+                            displayName = json?.get(ProfileService.DISPLAY_NAME_KEY) as? String,
+                            avatarUrl = json?.get(ProfileService.AVATAR_URL_KEY) as? String
+                    )
+                } else {
+                    null
+                }
+                if (userProfile == null || searchResult.any { it.userId == userProfile.userId }) {
+                    searchResult
+                } else {
+                    listOf(userProfile) + searchResult
+                }
+            }
+        }.execute {
+            copy(directoryUsers = it)
+        }
     }
 
     private fun handleSelectUser(action: TchapContactListAction.AddPendingSelection) = withState { state ->

@@ -18,7 +18,7 @@ package im.vector.app.features.crypto.keysbackup.settings
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
@@ -45,7 +45,7 @@ class KeysBackupSettingsViewModel @AssistedInject constructor(@Assisted initialS
         fun create(initialState: KeysBackupSettingViewState): KeysBackupSettingsViewModel
     }
 
-    companion object : MvRxViewModelFactory<KeysBackupSettingsViewModel, KeysBackupSettingViewState> {
+    companion object : MavericksViewModelFactory<KeysBackupSettingsViewModel, KeysBackupSettingViewState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: KeysBackupSettingViewState): KeysBackupSettingsViewModel? {

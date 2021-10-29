@@ -20,7 +20,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
-import com.airbnb.mvrx.MvRx
+import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
 import com.google.android.material.tabs.TabLayoutMediator
 import im.vector.app.R
@@ -121,7 +121,7 @@ class CallTransferActivity : VectorBaseActivity<ActivityCallTransferBinding>(),
 
         fun newIntent(context: Context, callId: String): Intent {
             return Intent(context, CallTransferActivity::class.java).also {
-                it.putExtra(MvRx.KEY_ARG, CallTransferArgs(callId))
+                it.putExtra(Mavericks.KEY_ARG, CallTransferArgs(callId))
             }
         }
     }

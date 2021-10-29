@@ -18,7 +18,7 @@ package im.vector.app.features.widgets
 
 import androidx.annotation.StringRes
 import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.Uninitialized
 import im.vector.app.R
 import org.matrix.android.sdk.api.session.widgets.model.Widget
@@ -52,7 +52,7 @@ data class WidgetViewState(
         val widgetName: String = "",
         val canManageWidgets: Boolean = false,
         val asyncWidget: Async<Widget> = Uninitialized
-) : MvRxState {
+) : MavericksState {
 
     constructor(widgetArgs: WidgetArgs) : this(
             widgetKind = widgetArgs.kind,

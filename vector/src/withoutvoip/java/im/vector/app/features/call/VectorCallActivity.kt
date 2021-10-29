@@ -24,7 +24,7 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
 import android.view.WindowManager
-import com.airbnb.mvrx.MvRx
+import com.airbnb.mvrx.Mavericks
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityCallBinding
@@ -66,8 +66,8 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
         window.navigationBarColor = Color.BLACK
         super.onCreate(savedInstanceState)
 
-        if (intent.hasExtra(MvRx.KEY_ARG)) {
-            callArgs = intent.getParcelableExtra(MvRx.KEY_ARG)!!
+        if (intent.hasExtra(Mavericks.KEY_ARG)) {
+            callArgs = intent.getParcelableExtra(Mavericks.KEY_ARG)!!
         } else {
             Timber.tag(loggerTag.value).e("missing callArgs for VectorCall Activity")
             finish()
@@ -84,7 +84,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
             return Intent(context, VectorCallActivity::class.java).apply {
                 // what could be the best flags?
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                putExtra(MvRx.KEY_ARG, CallArgs(call.nativeRoomId, call.callId, call.mxCall.opponentUserId, !call.mxCall.isOutgoing, call.mxCall.isVideoCall))
+                putExtra(Mavericks.KEY_ARG, CallArgs(call.nativeRoomId, call.callId, call.mxCall.opponentUserId, !call.mxCall.isOutgoing, call.mxCall.isVideoCall))
                 putExtra(EXTRA_MODE, mode)
             }
         }
@@ -99,7 +99,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
             return Intent(context, VectorCallActivity::class.java).apply {
                 // what could be the best flags?
                 flags = FLAG_ACTIVITY_CLEAR_TOP
-                putExtra(MvRx.KEY_ARG, CallArgs(signalingRoomId, callId, otherUserId, isIncomingCall, isVideoCall))
+                putExtra(Mavericks.KEY_ARG, CallArgs(signalingRoomId, callId, otherUserId, isIncomingCall, isVideoCall))
                 putExtra(EXTRA_MODE, mode)
             }
         }

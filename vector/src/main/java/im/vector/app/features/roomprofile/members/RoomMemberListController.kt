@@ -17,14 +17,19 @@
 package im.vector.app.features.roomprofile.members
 
 import com.airbnb.epoxy.TypedEpoxyController
+import im.vector.app.R
 import im.vector.app.core.epoxy.dividerItem
 import im.vector.app.core.epoxy.profiles.buildProfileSection
 import im.vector.app.core.epoxy.profiles.profileMatrixItem
+import im.vector.app.core.epoxy.profiles.profileMatrixItemWithPowerLevelWithPresence
 import im.vector.app.core.extensions.join
+import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.home.AvatarRenderer
+import me.gujun.android.span.span
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.presence.model.UserPresence
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.session.room.model.RoomThirdPartyInviteContent
 import org.matrix.android.sdk.api.util.MatrixItem
@@ -34,6 +39,7 @@ import javax.inject.Inject
 class RoomMemberListController @Inject constructor(
         private val avatarRenderer: AvatarRenderer,
         private val stringProvider: StringProvider,
+        private val colorProvider: ColorProvider,
         private val roomMemberSummaryFilter: RoomMemberSummaryFilter
 ) : TypedEpoxyController<RoomMemberListViewState>() {
 
@@ -84,17 +90,10 @@ class RoomMemberListController @Inject constructor(
             buildProfileSection(
                     stringProvider.getString(powerLevelCategory.titleRes)
             )
+
             filteredRoomMemberList.join(
                     each = { _, roomMember ->
-                        profileMatrixItem {
-                            id(roomMember.userId)
-                            matrixItem(roomMember.toMatrixItem())
-                            avatarRenderer(host.avatarRenderer)
-                            userEncryptionTrustLevel(data.trustLevelMap.invoke()?.get(roomMember.userId))
-                            clickListener {
-                                host.callback?.onRoomMemberClicked(roomMember)
-                            }
-                        }
+                        buildPresence(roomMember, powerLevelCategory, host, data, roomMember.userPresence)
                     },
                     between = { _, roomMemberBefore ->
                         dividerItem {
@@ -120,6 +119,33 @@ class RoomMemberListController @Inject constructor(
             )
 
             buildThreePidInvites(data)
+        }
+    }
+
+    private fun buildPresence(roomMember: RoomMemberSummary,
+                              powerLevelCategory: RoomMemberListCategories,
+                              host: RoomMemberListController,
+                              data: RoomMemberListViewState,
+                              userPresence: UserPresence?
+    ) {
+        val powerLabel = stringProvider.getString(powerLevelCategory.titleRes)
+
+        profileMatrixItemWithPowerLevelWithPresence {
+            id(roomMember.userId)
+            matrixItem(roomMember.toMatrixItem())
+            avatarRenderer(host.avatarRenderer)
+            userEncryptionTrustLevel(data.trustLevelMap.invoke()?.get(roomMember.userId))
+            clickListener {
+                host.callback?.onRoomMemberClicked(roomMember)
+            }
+            userPresence(userPresence)
+            powerLevelLabel(
+                    span {
+                        span(powerLabel) {
+                            textColor = host.colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
+                        }
+                    }
+            )
         }
     }
 

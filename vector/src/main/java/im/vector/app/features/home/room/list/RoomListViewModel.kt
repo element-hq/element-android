@@ -23,7 +23,7 @@ import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.ViewModelContext
 import im.vector.app.AppStateHandler
@@ -37,6 +37,8 @@ import im.vector.app.features.home.HomeActivity
 import im.vector.app.features.invite.AutoAcceptInvites
 import im.vector.app.features.settings.VectorPreferences
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.query.QueryStringValue
@@ -46,7 +48,7 @@ import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
 import org.matrix.android.sdk.api.session.room.state.isPublic
 import org.matrix.android.sdk.api.util.toMatrixItem
-import org.matrix.android.sdk.rx.rx
+import org.matrix.android.sdk.flow.flow
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -99,7 +101,7 @@ class RoomListViewModel @Inject constructor(
                     )
                 }
 
-        session.rx().liveUser(session.myUserId)
+        session.flow().liveUser(session.myUserId)
                 .map { it.getOrNull()?.toMatrixItem()?.getBestName() }
                 .distinctUntilChanged()
                 .execute {
@@ -110,15 +112,14 @@ class RoomListViewModel @Inject constructor(
     }
 
     private fun observeMembershipChanges() {
-        session.rx()
+        session.flow()
                 .liveRoomChangeMembershipState()
-                .subscribe {
-                    setState { copy(roomMembershipChanges = it) }
+                .setOnEach {
+                    copy(roomMembershipChanges = it)
                 }
-                .disposeOnClear()
     }
 
-    companion object : MvRxViewModelFactory<RoomListViewModel, RoomListViewState> {
+    companion object : MavericksViewModelFactory<RoomListViewModel, RoomListViewState> {
 
         override fun initialState(viewModelContext: ViewModelContext): RoomListViewState? {
             val uiStateRepository = (viewModelContext.activity as HasScreenInjector).injector().uiStateRepository()
@@ -128,7 +129,7 @@ class RoomListViewModel @Inject constructor(
         }
 
         @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: RoomListViewState): RoomListViewModel? {
+        override fun create(viewModelContext: ViewModelContext, state: RoomListViewState): RoomListViewModel {
             return when (val activity: FragmentActivity = (viewModelContext as ActivityViewModelContext).activity()) {
                 is HomeActivity -> activity.create(state)
                 else            -> error("You should let your activity/fragment implements Factory interface")

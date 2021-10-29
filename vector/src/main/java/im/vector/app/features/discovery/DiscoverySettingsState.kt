@@ -17,7 +17,7 @@
 package im.vector.app.features.discovery
 
 import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.Uninitialized
 
 data class DiscoverySettingsState(
@@ -28,7 +28,7 @@ data class DiscoverySettingsState(
         val termsNotSigned: Boolean = false,
         val userConsent: Boolean = false,
         val isIdentityPolicyUrlsExpanded: Boolean = false
-) : MvRxState
+) : MavericksState
 
 data class IdentityServerWithTerms(
         val serverUrl: String,

@@ -12,6 +12,6 @@
 - [ ] Pull request updates [TCHAP_CHANGES.md](https://github.com/dinsic-pim/tchap-android-v2/blob/develop/TCHAP_CHANGES.md)
 - [ ] Pull request includes a new file under ./changelog.d. See https://github.com/dinsic-pim/tchap-android-v2/blob/develop/CONTRIBUTING.md#changelog
 - [ ] Pull request includes screenshots or videos if containing UI changes
-- [ ] Pull request includes a [sign off](https://github.com/matrix-org/synapse/blob/master/CONTRIBUTING.md#sign-off)
+- [ ] Pull request includes a [sign off](https://matrix-org.github.io/synapse/latest/development/contributing_guide.html#sign-off)
 - [ ] You've made a self review of your PR
 - [ ] If you have modified the screen flow, or added new screens to the application, you have updated the test [UiAllScreensSanityTest.allScreensTest()](https://github.com/vector-im/element-android/blob/main/vector/src/androidTest/java/im/vector/app/ui/UiAllScreensSanityTest.kt#L73)

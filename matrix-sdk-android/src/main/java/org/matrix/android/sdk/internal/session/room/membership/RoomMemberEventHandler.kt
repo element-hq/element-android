@@ -20,6 +20,9 @@ import io.realm.Realm
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
+import org.matrix.android.sdk.internal.database.model.RoomMemberSummaryEntity
+import org.matrix.android.sdk.internal.database.model.presence.UserPresenceEntity
+import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.events.getFixedRoomMemberContent
 import org.matrix.android.sdk.internal.session.sync.SyncResponsePostTreatmentAggregator
@@ -47,7 +50,13 @@ internal class RoomMemberEventHandler @Inject constructor(
         if (roomMember == null) {
             return false
         }
-        val roomMemberEntity = RoomMemberEntityFactory.create(roomId, userId, roomMember)
+        val roomMemberEntity = RoomMemberEntityFactory.create(
+                roomId,
+                userId,
+                roomMember,
+                // When an update is happening, insertOrUpdate replace existing values with null if they are not provided,
+                // but we want to preserve presence record value and not replace it with null
+                getExistingPresenceState(realm, roomId, userId))
         realm.insertOrUpdate(roomMemberEntity)
         if (roomMember.membership.isActive()) {
             val userEntity = UserEntityFactory.create(userId, roomMember)
@@ -60,7 +69,15 @@ internal class RoomMemberEventHandler @Inject constructor(
         if (mxId != null && mxId != myUserId) {
             aggregator?.directChatsToCheck?.put(roomId, mxId)
         }
-
         return true
+    }
+
+    /**
+     * Get the already existing presence state for a specific user & room in order NOT to be replaced in RoomMemberSummaryEntity
+     * by NULL value.
+     */
+
+    private fun getExistingPresenceState(realm: Realm, roomId: String, userId: String): UserPresenceEntity? {
+        return RoomMemberSummaryEntity.where(realm, roomId, userId).findFirst()?.userPresenceEntity
     }
 }

@@ -23,8 +23,6 @@ body:
         ### Do the release
 
         - [ ] Create release with gitflow, branch name `release/1.1.10`
-        - [ ] Run `./tools/import_emojis.py` and commit the change if any.
-        - [ ] Run `./tools/import_sas_strings.py` and commit the change if any. If there is no change since a while, ping Travis
         - [ ] Check the crashes from the PlayStore
         - [ ] Check the rageshake with the current dev version: https://github.com/matrix-org/element-android-rageshakes/labels/1.1.10-dev
         - [ ] Run the integration test, and especially `UiAllScreensSanityTest.allScreensTest()`

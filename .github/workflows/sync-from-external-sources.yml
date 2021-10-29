@@ -1,0 +1,69 @@
+name: Sync Data From External Sources
+on:
+  schedule:
+    # At 00:00 on every Monday UTC
+    - cron: '0 0 * * 1'
+
+jobs:
+  sync-emojis:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+      - name: Cache pip
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip
+          restore-keys: |
+            ${{ runner.os }}-pip-
+            ${{ runner.os }}-
+      - name: Install Prerequisite dependencies
+        run: |
+          pip install BeautifulSoup4
+          pip install requests
+      - name: Run Emoji script
+        run: ./tools/import_emojis.py
+      - name: Create Pull Request for Emojis
+        uses: peter-evans/create-pull-request@v3
+        with:
+          commit-message: Sync Emojis
+          title: Sync Emojis
+          body: |
+            - Update Emojis from Unicode.org
+          branch: sync-emojis
+          base: develop
+
+  sync-sas-strings:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+      - name: Cache pip
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip
+          restore-keys: |
+            ${{ runner.os }}-pip-
+            ${{ runner.os }}-
+      - name: Install Prerequisite dependencies
+        run: |
+          pip install requests
+      - name: Run SAS String script
+        run: ./tools/import_sas_strings.py
+      - name: Create Pull Request for SAS Strings
+        uses: peter-evans/create-pull-request@v3
+        with:
+          commit-message: Sync SAS Strings
+          title: Sync SAS Strings
+          body: |
+            - Update SAS Strings from matrix-doc.
+          branch: sync-sas-strings
+          base: develop

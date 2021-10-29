@@ -23,7 +23,7 @@ import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRx
+import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.viewModel
 import com.google.android.material.appbar.MaterialToolbar
@@ -74,7 +74,7 @@ class SpaceLeaveAdvancedActivity : VectorBaseActivity<ActivitySimpleLoadingBindi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val args = intent?.getParcelableExtra<SpaceBottomSheetSettingsArgs>(MvRx.KEY_ARG)
+        val args = intent?.getParcelableExtra<SpaceBottomSheetSettingsArgs>(Mavericks.KEY_ARG)
 
         if (isFirstCreation()) {
             val simpleName = SpaceLeaveAdvancedFragment::class.java.simpleName
@@ -83,7 +83,7 @@ class SpaceLeaveAdvancedActivity : VectorBaseActivity<ActivitySimpleLoadingBindi
                     replace(
                             R.id.simpleFragmentContainer,
                             SpaceLeaveAdvancedFragment::class.java,
-                            Bundle().apply { this.putParcelable(MvRx.KEY_ARG, args) },
+                            Bundle().apply { this.putParcelable(Mavericks.KEY_ARG, args) },
                             simpleName
                     )
                 }
@@ -123,7 +123,7 @@ class SpaceLeaveAdvancedActivity : VectorBaseActivity<ActivitySimpleLoadingBindi
     companion object {
         fun newIntent(context: Context, spaceId: String): Intent {
             return Intent(context, SpaceLeaveAdvancedActivity::class.java).apply {
-                putExtra(MvRx.KEY_ARG, SpaceBottomSheetSettingsArgs(spaceId))
+                putExtra(Mavericks.KEY_ARG, SpaceBottomSheetSettingsArgs(spaceId))
             }
         }
     }

@@ -17,6 +17,7 @@
 package im.vector.app.features.crypto.quads
 
 import com.airbnb.mvrx.Uninitialized
+import com.airbnb.mvrx.test.MvRxTestRule
 import im.vector.app.test.InstantRxRule
 import im.vector.app.test.fakes.FakeSession
 import im.vector.app.test.fakes.FakeStringProvider
@@ -40,6 +41,8 @@ class SharedSecureStorageViewModelTest {
 
     @get:Rule
     val instantRx = InstantRxRule()
+    @get:Rule
+    val mvrxTestRule = MvRxTestRule()
 
     private val stringProvider = FakeStringProvider()
     private val session = FakeSession()

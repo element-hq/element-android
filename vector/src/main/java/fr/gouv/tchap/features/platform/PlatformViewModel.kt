@@ -17,10 +17,9 @@
 package fr.gouv.tchap.features.platform
 
 import android.content.Context
-import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -51,7 +50,7 @@ class PlatformViewModel @AssistedInject constructor(
         fun create(initialState: PlatformViewState): PlatformViewModel
     }
 
-    companion object : MvRxViewModelFactory<PlatformViewModel, PlatformViewState> {
+    companion object : MavericksViewModelFactory<PlatformViewModel, PlatformViewState> {
 
         override fun create(viewModelContext: ViewModelContext, state: PlatformViewState): PlatformViewModel? {
             val factory = when (viewModelContext) {

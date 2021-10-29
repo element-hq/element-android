@@ -72,7 +72,7 @@ class AccountCreatedFragment @Inject constructor(
         setupSubmitButton()
         observeViewEvents()
 
-        viewModel.subscribe { invalidateState(it) }
+        viewModel.onEach { invalidateState(it) }
 
         views.loginAccountCreatedTime.text = dateFormatter.format(System.currentTimeMillis(), DateFormatKind.MESSAGE_SIMPLE)
     }

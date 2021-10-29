@@ -16,10 +16,9 @@
 
 package fr.gouv.tchap.features.expired
 
-import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -40,7 +39,7 @@ class ExpiredAccountViewModel @AssistedInject constructor(
         fun create(initialState: ExpiredAccountViewState): ExpiredAccountViewModel
     }
 
-    companion object : MvRxViewModelFactory<ExpiredAccountViewModel, ExpiredAccountViewState> {
+    companion object : MavericksViewModelFactory<ExpiredAccountViewModel, ExpiredAccountViewState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: ExpiredAccountViewState): ExpiredAccountViewModel {

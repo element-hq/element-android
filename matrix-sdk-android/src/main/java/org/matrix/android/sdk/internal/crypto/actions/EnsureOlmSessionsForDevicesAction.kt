@@ -25,6 +25,8 @@ import org.matrix.android.sdk.internal.crypto.tasks.ClaimOneTimeKeysForUsersDevi
 import timber.log.Timber
 import javax.inject.Inject
 
+private const val ONE_TIME_KEYS_RETRY_COUNT = 3
+
 internal class EnsureOlmSessionsForDevicesAction @Inject constructor(
         private val olmDevice: MXOlmDevice,
         private val oneTimeKeysForUsersDeviceTask: ClaimOneTimeKeysForUsersDeviceTask) {
@@ -72,7 +74,7 @@ internal class EnsureOlmSessionsForDevicesAction @Inject constructor(
         Timber.i("## CRYPTO | claimOneTimeKeysForUsersDevices() : $usersDevicesToClaim")
 
         val claimParams = ClaimOneTimeKeysForUsersDeviceTask.Params(usersDevicesToClaim)
-        val oneTimeKeys = oneTimeKeysForUsersDeviceTask.execute(claimParams)
+        val oneTimeKeys = oneTimeKeysForUsersDeviceTask.executeRetry(claimParams, remainingRetry = ONE_TIME_KEYS_RETRY_COUNT)
         Timber.v("## CRYPTO | claimOneTimeKeysForUsersDevices() : keysClaimResponse.oneTimeKeys: $oneTimeKeys")
         for ((userId, deviceInfos) in devicesByUser) {
             for (deviceInfo in deviceInfos) {

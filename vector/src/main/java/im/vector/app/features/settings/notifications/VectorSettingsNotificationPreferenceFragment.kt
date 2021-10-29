@@ -54,6 +54,7 @@ import org.matrix.android.sdk.api.pushrules.RuleKind
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.pushers.Pusher
+import org.matrix.android.sdk.internal.extensions.combineLatest
 import javax.inject.Inject
 
 // Referenced in vector_settings_preferences_root.xml
@@ -83,6 +84,21 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
 
             val areNotifEnabledAtAccountLevel = !mRuleMaster.enabled
             (pref as SwitchPreference).isChecked = areNotifEnabledAtAccountLevel
+        }
+
+        findPreference<SwitchPreference>(VectorPreferences.SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY)?.let {
+            it.setTransactionalSwitchChangeListener(lifecycleScope) { isChecked ->
+                if (isChecked) {
+                    FcmHelper.getFcmToken(requireContext())?.let {
+                        pushManager.registerPusherWithFcmKey(it)
+                    }
+                } else {
+                    FcmHelper.getFcmToken(requireContext())?.let {
+                        pushManager.unregisterPusher(it)
+                        session.refreshPushers()
+                    }
+                }
+            }
         }
 
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_FDROID_BACKGROUND_SYNC_MODE)?.let {
@@ -324,42 +340,12 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
 
     override fun onPreferenceTreeClick(preference: Preference?): Boolean {
         return when (preference?.key) {
-            VectorPreferences.SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY -> {
-                updateEnabledForDevice(preference)
-                true
-            }
-            VectorPreferences.SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY   -> {
+            VectorPreferences.SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY -> {
                 updateEnabledForAccount(preference)
                 true
             }
-            else                                                         -> {
+            else                                                       -> {
                 return super.onPreferenceTreeClick(preference)
-            }
-        }
-    }
-
-    private fun updateEnabledForDevice(preference: Preference?) {
-        val switchPref = preference as SwitchPreference
-        if (switchPref.isChecked) {
-            FcmHelper.getFcmToken(requireContext())?.let {
-                pushManager.registerPusherWithFcmKey(it)
-            }
-        } else {
-            FcmHelper.getFcmToken(requireContext())?.let {
-                lifecycleScope.launch {
-                    runCatching { pushManager.unregisterPusher(it) }
-                            .fold(
-                                    { session.refreshPushers() },
-                                    {
-                                        if (!isAdded) {
-                                            return@fold
-                                        }
-                                        // revert the check box
-                                        switchPref.isChecked = !switchPref.isChecked
-                                        Toast.makeText(activity, R.string.unknown_error, Toast.LENGTH_SHORT).show()
-                                    }
-                            )
-                }
             }
         }
     }
@@ -421,12 +407,9 @@ private fun Session.getEmailsWithPushInformation(): List<Pair<ThreePid.Email, Bo
 }
 
 private fun Session.getEmailsWithPushInformationLive(): LiveData<List<Pair<ThreePid.Email, Boolean>>> {
-    return getThreePidsLive(refreshData = false)
-            .distinctUntilChanged()
-            .map { threePids ->
-                val emailPushers = getPushers().filter { it.kind == Pusher.KIND_EMAIL }
-                threePids
-                        .filterIsInstance<ThreePid.Email>()
-                        .map { it to emailPushers.any { pusher -> pusher.pushKey == it.email } }
-            }
+    val emailThreePids = getThreePidsLive(refreshData = true).map { it.filterIsInstance<ThreePid.Email>() }
+    val emailPushers = getPushersLive().map { it.filter { pusher -> pusher.kind == Pusher.KIND_EMAIL } }
+    return combineLatest(emailThreePids, emailPushers) { emailThreePidsResult, emailPushersResult ->
+        emailThreePidsResult.map { it to emailPushersResult.any { pusher -> pusher.pushKey == it.email } }
+    }.distinctUntilChanged()
 }

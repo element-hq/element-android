@@ -17,7 +17,7 @@ package im.vector.app.features.discovery.change
 
 import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -46,7 +46,7 @@ class SetIdentityServerViewModel @AssistedInject constructor(
         fun create(initialState: SetIdentityServerState): SetIdentityServerViewModel
     }
 
-    companion object : MvRxViewModelFactory<SetIdentityServerViewModel, SetIdentityServerState> {
+    companion object : MavericksViewModelFactory<SetIdentityServerViewModel, SetIdentityServerState> {
 
         override fun initialState(viewModelContext: ViewModelContext): SetIdentityServerState? {
             val session = (viewModelContext.activity as HasScreenInjector).injector().activeSessionHolder().getActiveSession()

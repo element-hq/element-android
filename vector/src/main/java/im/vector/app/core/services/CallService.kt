@@ -25,7 +25,7 @@ import android.view.KeyEvent
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.media.session.MediaButtonReceiver
-import com.airbnb.mvrx.MvRx
+import com.airbnb.mvrx.Mavericks
 import im.vector.app.core.extensions.vectorComponent
 import im.vector.app.features.call.CallArgs
 import im.vector.app.features.call.VectorCallActivity
@@ -166,7 +166,7 @@ class CallService : VectorService() {
         val incomingCallAlert = IncomingCallAlert(callId,
                 shouldBeDisplayedIn = { activity ->
                     if (activity is VectorCallActivity) {
-                        activity.intent.getParcelableExtra<CallArgs>(MvRx.KEY_ARG)?.callId != call.callId
+                        activity.intent.getParcelableExtra<CallArgs>(Mavericks.KEY_ARG)?.callId != call.callId
                     } else true
                 }
         ).apply {

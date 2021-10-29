@@ -158,21 +158,10 @@ object CommandParser {
                     }
                 }
                 Command.PART.command                         -> {
-                    if (messageParts.size >= 2) {
-                        val roomAlias = messageParts[1]
-
-                        if (roomAlias.isNotEmpty()) {
-                            ParsedCommand.PartRoom(
-                                    roomAlias,
-                                    textMessage.substring(Command.PART.length + roomAlias.length)
-                                            .trim()
-                                            .takeIf { it.isNotBlank() }
-                            )
-                        } else {
-                            ParsedCommand.ErrorSyntax(Command.PART)
-                        }
-                    } else {
-                        ParsedCommand.ErrorSyntax(Command.PART)
+                    when (messageParts.size) {
+                        1    -> ParsedCommand.PartRoom(null)
+                        2    -> ParsedCommand.PartRoom(messageParts[1])
+                        else -> ParsedCommand.ErrorSyntax(Command.PART)
                     }
                 }
                 Command.ROOM_NAME.command                    -> {

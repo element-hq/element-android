@@ -27,7 +27,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRx
+import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.viewModel
@@ -208,7 +208,7 @@ class RoomDevToolActivity : SimpleFragmentActivity(), RoomDevToolViewModel.Facto
 
         fun intent(context: Context, roomId: String): Intent {
             return Intent(context, RoomDevToolActivity::class.java).apply {
-                putExtra(MvRx.KEY_ARG, Args(roomId))
+                putExtra(Mavericks.KEY_ARG, Args(roomId))
             }
         }
     }

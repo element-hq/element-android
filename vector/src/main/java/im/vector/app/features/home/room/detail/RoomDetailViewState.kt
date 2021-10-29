@@ -17,7 +17,7 @@
 package im.vector.app.features.home.room.detail
 
 import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.Uninitialized
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.events.model.Event
@@ -66,7 +66,7 @@ data class RoomDetailViewState(
         val isAllowedToStartWebRTCCall: Boolean = true,
         val hasFailedSending: Boolean = false,
         val jitsiState: JitsiState = JitsiState()
-) : MvRxState {
+) : MavericksState {
 
     constructor(args: RoomDetailArgs) : this(
             roomId = args.roomId,
