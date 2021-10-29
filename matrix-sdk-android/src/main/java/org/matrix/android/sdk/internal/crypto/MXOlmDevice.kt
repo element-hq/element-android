@@ -53,17 +53,40 @@ internal class MXOlmDevice @Inject constructor(
     /**
      * @return the Curve25519 key for the account.
      */
-    var deviceCurve25519Key: String? = null
-        private set
+    val deviceCurve25519Key: String? by lazy {
+        try {
+            olmAccount.identityKeys()[OlmAccount.JSON_KEY_IDENTITY_KEY]
+        } catch (e: Exception) {
+            Timber.e(e, "## MXOlmDevice : cannot find ${OlmAccount.JSON_KEY_IDENTITY_KEY} with error")
+            null
+        }
+    }
 
     /**
      * @return the Ed25519 key for the account.
      */
-    var deviceEd25519Key: String? = null
-        private set
+    val deviceEd25519Key: String? by lazy {
+        try {
+            olmAccount.identityKeys()[OlmAccount.JSON_KEY_FINGER_PRINT_KEY]
+        } catch (e: Exception) {
+            Timber.e(e, "## MXOlmDevice : cannot find ${OlmAccount.JSON_KEY_FINGER_PRINT_KEY} with error")
+            null
+        }
+    }
 
     // The OLM lib utility instance.
-    private var olmUtility: OlmUtility? = null
+    private val olmUtility: OlmUtility? by lazy {
+        try {
+            OlmUtility()
+        } catch (e: Exception) {
+            Timber.e(e, "## MXOlmDevice : OlmUtility failed with error")
+            null
+        }
+    }
+
+    private val olmAccount: OlmAccount by lazy {
+        store.getOrCreateOlmAccount()
+    }
 
     private data class GroupSessionCacheItem(
             val groupId: String,
@@ -88,40 +111,12 @@ internal class MXOlmDevice @Inject constructor(
     // The second level keys are strings of form "<senderKey>|<session_id>|<message_index>"
     private val inboundGroupSessionMessageIndexes: MutableMap<String, MutableSet<String>> = HashMap()
 
-    init {
-        // Retrieve the account from the store
-        try {
-            store.getOrCreateOlmAccount()
-        } catch (e: Exception) {
-            Timber.e(e, "MXOlmDevice : cannot initialize olmAccount")
-        }
-
-        try {
-            olmUtility = OlmUtility()
-        } catch (e: Exception) {
-            Timber.e(e, "## MXOlmDevice : OlmUtility failed with error")
-            olmUtility = null
-        }
-
-        try {
-            deviceCurve25519Key = store.getOlmAccount().identityKeys()[OlmAccount.JSON_KEY_IDENTITY_KEY]
-        } catch (e: Exception) {
-            Timber.e(e, "## MXOlmDevice : cannot find ${OlmAccount.JSON_KEY_IDENTITY_KEY} with error")
-        }
-
-        try {
-            deviceEd25519Key = store.getOlmAccount().identityKeys()[OlmAccount.JSON_KEY_FINGER_PRINT_KEY]
-        } catch (e: Exception) {
-            Timber.e(e, "## MXOlmDevice : cannot find ${OlmAccount.JSON_KEY_FINGER_PRINT_KEY} with error")
-        }
-    }
-
     /**
      * @return The current (unused, unpublished) one-time keys for this account.
      */
     fun getOneTimeKeys(): Map<String, Map<String, String>>? {
         try {
-            return store.getOlmAccount().oneTimeKeys()
+            return olmAccount.oneTimeKeys()
         } catch (e: Exception) {
             Timber.e(e, "## getOneTimeKeys() : failed")
         }
@@ -133,7 +128,7 @@ internal class MXOlmDevice @Inject constructor(
      * @return The maximum number of one-time keys the olm account can store.
      */
     fun getMaxNumberOfOneTimeKeys(): Long {
-        return store.getOlmAccount().maxOneTimeKeys()
+        return olmAccount.maxOneTimeKeys()
     }
 
     /**
@@ -155,7 +150,7 @@ internal class MXOlmDevice @Inject constructor(
      */
     fun signMessage(message: String): String? {
         try {
-            return store.getOlmAccount().signMessage(message)
+            return olmAccount.signMessage(message)
         } catch (e: Exception) {
             Timber.e(e, "## signMessage() : failed")
         }
@@ -168,7 +163,7 @@ internal class MXOlmDevice @Inject constructor(
      */
     fun markKeysAsPublished() {
         try {
-            store.getOlmAccount().markOneTimeKeysAsPublished()
+            olmAccount.markOneTimeKeysAsPublished()
             store.saveOlmAccount()
         } catch (e: Exception) {
             Timber.e(e, "## markKeysAsPublished() : failed")
@@ -182,7 +177,7 @@ internal class MXOlmDevice @Inject constructor(
      */
     fun generateOneTimeKeys(numKeys: Int) {
         try {
-            store.getOlmAccount().generateOneTimeKeys(numKeys)
+            olmAccount.generateOneTimeKeys(numKeys)
             store.saveOlmAccount()
         } catch (e: Exception) {
             Timber.e(e, "## generateOneTimeKeys() : failed")
@@ -203,7 +198,7 @@ internal class MXOlmDevice @Inject constructor(
 
         try {
             olmSession = OlmSession()
-            olmSession.initOutboundSession(store.getOlmAccount(), theirIdentityKey, theirOneTimeKey)
+            olmSession.initOutboundSession(olmAccount, theirIdentityKey, theirOneTimeKey)
 
             val olmSessionWrapper = OlmSessionWrapper(olmSession, 0)
 
@@ -243,7 +238,7 @@ internal class MXOlmDevice @Inject constructor(
         try {
             try {
                 olmSession = OlmSession()
-                olmSession.initInboundSessionFrom(store.getOlmAccount(), theirDeviceIdentityKey, ciphertext)
+                olmSession.initInboundSessionFrom(olmAccount, theirDeviceIdentityKey, ciphertext)
             } catch (e: Exception) {
                 Timber.e(e, "## createInboundSession() : the session creation failed")
                 return null
@@ -252,7 +247,7 @@ internal class MXOlmDevice @Inject constructor(
             Timber.v("## createInboundSession() : sessionId: ${olmSession.sessionIdentifier()}")
 
             try {
-                store.getOlmAccount().removeOneTimeKeys(olmSession)
+                olmAccount.removeOneTimeKeys(olmSession)
                 store.saveOlmAccount()
             } catch (e: Exception) {
                 Timber.e(e, "## createInboundSession() : removeOneTimeKeys failed")
