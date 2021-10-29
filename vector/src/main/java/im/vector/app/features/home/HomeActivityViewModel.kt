@@ -34,6 +34,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.auth.UIABaseAuth
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.auth.UserPasswordAuth
@@ -69,15 +70,8 @@ class HomeActivityViewModel @AssistedInject constructor(
 
     companion object : MavericksViewModelFactory<HomeActivityViewModel, HomeActivityViewState> by hiltMavericksViewModelFactory()
 
+    private var isStarted = false
     private var checkBootstrap = false
-    private var onceTrusted = false
-
-    init {
-        cleanupFiles()
-        observeInitialSync()
-        checkSessionPushIsOn()
-        observeCrossSigningReset()
-    }
 
     private fun cleanupFiles() {
         // Mitigation: delete all cached decrypted files each time the application is started.
@@ -87,28 +81,32 @@ class HomeActivityViewModel @AssistedInject constructor(
     private fun observeCrossSigningReset() {
         val safeActiveSession = activeSessionHolder.getSafeActiveSession() ?: return
 
-        onceTrusted = safeActiveSession
-                .cryptoService()
-                .crossSigningService().allPrivateKeysKnown()
+        viewModelScope.launch {
+            var onceTrusted = withContext(safeActiveSession.coroutineDispatchers.io) {
+                safeActiveSession
+                        .cryptoService()
+                        .crossSigningService().allPrivateKeysKnown()
+            }
 
-        safeActiveSession
-                .flow()
-                .liveCrossSigningInfo(safeActiveSession.myUserId)
-                .onEach {
-                    val isVerified = it.getOrNull()?.isTrusted() ?: false
-                    if (!isVerified && onceTrusted) {
-                        // cross signing keys have been reset
-                        // Trigger a popup to re-verify
-                        // Note: user can be null in case of logout
-                        safeActiveSession.getUser(safeActiveSession.myUserId)
-                                ?.toMatrixItem()
-                                ?.let { user ->
-                                    _viewEvents.post(HomeActivityViewEvents.OnCrossSignedInvalidated(user))
-                                }
+            safeActiveSession
+                    .flow()
+                    .liveCrossSigningInfo(safeActiveSession.myUserId)
+                    .onEach {
+                        val isVerified = it.getOrNull()?.isTrusted() ?: false
+                        if (!isVerified && onceTrusted) {
+                            // cross signing keys have been reset
+                            // Trigger a popup to re-verify
+                            // Note: user can be null in case of logout
+                            safeActiveSession.getUser(safeActiveSession.myUserId)
+                                    ?.toMatrixItem()
+                                    ?.let { user ->
+                                        _viewEvents.post(HomeActivityViewEvents.OnCrossSignedInvalidated(user))
+                                    }
+                        }
+                        onceTrusted = isVerified
                     }
-                    onceTrusted = isVerified
-                }
-                .launchIn(viewModelScope)
+                    .launchIn(viewModelScope)
+        }
     }
 
     private fun observeInitialSync() {
@@ -238,9 +236,19 @@ class HomeActivityViewModel @AssistedInject constructor(
 
     override fun handle(action: HomeActivityViewActions) {
         when (action) {
-            HomeActivityViewActions.PushPromptHasBeenReviewed -> {
-                vectorPreferences.setDidAskUserToEnableSessionPush()
-            }
+            HomeActivityViewActions.PushPromptHasBeenReviewed -> vectorPreferences.setDidAskUserToEnableSessionPush()
+            HomeActivityViewActions.ViewStarted               -> initialize()
         }.exhaustive
+    }
+
+    private fun initialize() {
+        if (isStarted) {
+            return
+        }
+        isStarted = true
+        cleanupFiles()
+        observeInitialSync()
+        checkSessionPushIsOn()
+        observeCrossSigningReset()
     }
 }
