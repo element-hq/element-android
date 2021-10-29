@@ -877,6 +877,7 @@ internal class DefaultKeysBackupService @Inject constructor(
     override fun getCurrentVersion(callback: MatrixCallback<KeysVersionResult?>) {
         getKeysBackupLastVersionTask
                 .configureWith {
+                    this.callbackThread = TaskThread.CRYPTO
                     this.callback = object : MatrixCallback<KeysVersionResult> {
                         override fun onSuccess(data: KeysVersionResult) {
                             callback.onSuccess(data)
