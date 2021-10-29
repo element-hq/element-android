@@ -21,6 +21,8 @@ import kotlinx.coroutines.runBlocking
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.NoOpMatrixCallback
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
+import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.crypto.crosssigning.CrossSigningService
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MXCrossSigningInfo
 import org.matrix.android.sdk.api.util.Optional
@@ -28,9 +30,18 @@ import org.matrix.android.sdk.internal.crypto.crosssigning.DeviceTrustResult
 import org.matrix.android.sdk.internal.crypto.crosssigning.UserTrustResult
 import org.matrix.android.sdk.internal.crypto.crosssigning.isVerified
 import org.matrix.android.sdk.internal.crypto.store.PrivateKeysInfo
+import org.matrix.android.sdk.internal.di.SessionId
+import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.extensions.foldToCallback
+import javax.inject.Inject
 
-internal class RustCrossSigningService(private val olmMachine: OlmMachine) : CrossSigningService {
+internal class RustCrossSigningService @Inject constructor(
+        @SessionId private val sessionId: String,
+        @UserId private val myUserId: String,
+        private val olmMachineProvider: OlmMachineProvider
+) : CrossSigningService {
+
+    val olmMachine = olmMachineProvider.olmMachine
     /**
      * Is our own device signed by our own cross signing identity
      */
@@ -89,7 +100,9 @@ internal class RustCrossSigningService(private val olmMachine: OlmMachine) : Cro
             sskPrivateKey: String?
     ): UserTrustResult {
         val export = PrivateKeysInfo(masterKeyPrivateKey, sskPrivateKey, uskKeyPrivateKey)
-        return runBlocking { olmMachine.importCrossSigningKeys(export) }
+        return runBlocking {
+            olmMachineProvider.olmMachine.importCrossSigningKeys(export)
+        }
     }
 
     /**
@@ -205,5 +218,47 @@ internal class RustCrossSigningService(private val olmMachine: OlmMachine) : Cro
 
     override fun onSecretUSKGossip(uskPrivateKey: String) {
         // And this.
+    }
+
+    override suspend fun shieldForGroup(userIds: List<String>): RoomEncryptionTrustLevel {
+        val myIdentity = olmMachine.getIdentity(myUserId)
+        val allTrustedUserIds = userIds
+                .filter { userId ->
+                    olmMachine.getIdentity(userId)?.verified() == true
+                }
+
+        return if (allTrustedUserIds.isEmpty()) {
+            RoomEncryptionTrustLevel.Default
+        } else {
+            // If one of the verified user as an untrusted device -> warning
+            // If all devices of all verified users are trusted -> green
+            // else -> black
+            allTrustedUserIds
+                    .map { userId ->
+                        olmMachineProvider.olmMachine.getUserDevices(userId)
+                    }
+                    .flatten()
+                    .let { allDevices ->
+                        if (myIdentity != null) {
+                            allDevices.any { !it.toCryptoDeviceInfo().trustLevel?.crossSigningVerified.orFalse() }
+                        } else {
+                            // TODO check that if myIdentity is null ean
+                            // Legacy method
+                            allDevices.any { !it.toCryptoDeviceInfo().isVerified }
+                        }
+                    }
+                    .let { hasWarning ->
+                        if (hasWarning) {
+                            RoomEncryptionTrustLevel.Warning
+                        } else {
+                            if (userIds.size == allTrustedUserIds.size) {
+                                // all users are trusted and all devices are verified
+                                RoomEncryptionTrustLevel.Trusted
+                            } else {
+                                RoomEncryptionTrustLevel.Default
+                            }
+                        }
+                    }
+        }
     }
 }

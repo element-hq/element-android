@@ -24,7 +24,6 @@ import org.matrix.android.sdk.internal.crypto.model.rest.KeysClaimBody
 import org.matrix.android.sdk.internal.crypto.model.rest.KeysClaimResponse
 import org.matrix.android.sdk.internal.crypto.model.rest.KeysQueryBody
 import org.matrix.android.sdk.internal.crypto.model.rest.KeysQueryResponse
-import org.matrix.android.sdk.internal.crypto.model.rest.KeysUploadBody
 import org.matrix.android.sdk.internal.crypto.model.rest.KeysUploadResponse
 import org.matrix.android.sdk.internal.crypto.model.rest.SendToDeviceBody
 import org.matrix.android.sdk.internal.crypto.model.rest.SignatureUploadResponse

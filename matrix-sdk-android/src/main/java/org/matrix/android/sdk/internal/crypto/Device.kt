@@ -39,7 +39,7 @@ internal class Device(
         private val machine: OlmMachine,
         private var inner: InnerDevice,
         private val sender: RequestSender,
-        private val listeners: ArrayList<VerificationService.Listener>,
+        private val listeners: ArrayList<VerificationService.Listener>
 ) {
     @Throws(CryptoStoreException::class)
     private suspend fun refreshData() {

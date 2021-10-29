@@ -37,7 +37,7 @@ internal class SasVerification(
         private val machine: OlmMachine,
         private var inner: Sas,
         private val sender: RequestSender,
-        listeners: ArrayList<VerificationService.Listener>,
+        listeners: ArrayList<VerificationService.Listener>
 ) :
         SasVerificationTransaction {
     private val dispatcher = UpdateDispatcher(listeners)

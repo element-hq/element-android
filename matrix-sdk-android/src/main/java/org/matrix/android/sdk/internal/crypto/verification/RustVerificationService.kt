@@ -16,8 +16,6 @@
 
 package org.matrix.android.sdk.internal.crypto.verification
 
-import android.os.Handler
-import android.os.Looper
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import kotlinx.coroutines.runBlocking
@@ -30,7 +28,7 @@ import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.message.MessageRelationContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
-import org.matrix.android.sdk.internal.crypto.OlmMachine
+import org.matrix.android.sdk.internal.crypto.OlmMachineProvider
 import org.matrix.android.sdk.internal.crypto.OwnUserIdentity
 import org.matrix.android.sdk.internal.crypto.SasVerification
 import org.matrix.android.sdk.internal.crypto.UserIdentity
@@ -38,13 +36,15 @@ import org.matrix.android.sdk.internal.crypto.model.rest.VERIFICATION_METHOD_QR_
 import org.matrix.android.sdk.internal.crypto.model.rest.VERIFICATION_METHOD_QR_CODE_SHOW
 import org.matrix.android.sdk.internal.crypto.model.rest.VERIFICATION_METHOD_RECIPROCATE
 import org.matrix.android.sdk.internal.crypto.model.rest.toValue
+import org.matrix.android.sdk.internal.session.SessionScope
 import timber.log.Timber
+import javax.inject.Inject
 
 /** A helper class to deserialize to-device `m.key.verification.*` events to fetch the transaction id out */
 @JsonClass(generateAdapter = true)
 internal data class ToDeviceVerificationEvent(
         @Json(name = "sender") val sender: String?,
-        @Json(name = "transaction_id") val transactionId: String,
+        @Json(name = "transaction_id") val transactionId: String
 )
 
 /** Helper method to fetch the unique ID of the verification event */
@@ -70,61 +70,13 @@ internal fun prepareMethods(methods: List<VerificationMethod>): List<String> {
     return stringMethods
 }
 
-/** Class that implements some common methods to dispatch updates for the verification related classes */
-internal class UpdateDispatcher(private val listeners: ArrayList<VerificationService.Listener>) {
-    private val uiHandler = Handler(Looper.getMainLooper())
+@SessionScope
+internal class RustVerificationService @Inject constructor(private val olmMachineProvider: OlmMachineProvider) : VerificationService {
 
-    internal fun addListener(listener: VerificationService.Listener) {
-        uiHandler.post {
-            if (!this.listeners.contains(listener)) {
-                this.listeners.add(listener)
-            }
-        }
+    val olmMachine by lazy {
+        olmMachineProvider.olmMachine
     }
 
-    internal fun removeListener(listener: VerificationService.Listener) {
-        uiHandler.post { this.listeners.remove(listener) }
-    }
-
-    internal fun dispatchTxAdded(tx: VerificationTransaction) {
-        uiHandler.post {
-            this.listeners.forEach {
-                try {
-                    it.transactionCreated(tx)
-                } catch (e: Throwable) {
-                    Timber.e(e, "## Error while notifying listeners")
-                }
-            }
-        }
-    }
-
-    internal fun dispatchTxUpdated(tx: VerificationTransaction) {
-        uiHandler.post {
-            this.listeners.forEach {
-                try {
-                    it.transactionUpdated(tx)
-                } catch (e: Throwable) {
-                    Timber.e(e, "## Error while notifying listeners")
-                }
-            }
-        }
-    }
-
-    internal fun dispatchRequestAdded(tx: PendingVerificationRequest) {
-        Timber.v("## SAS dispatchRequestAdded txId:${tx.transactionId} $tx")
-        uiHandler.post {
-            this.listeners.forEach {
-                try {
-                    it.verificationRequestCreated(tx)
-                } catch (e: Throwable) {
-                    Timber.e(e, "## Error while notifying listeners")
-                }
-            }
-        }
-    }
-}
-
-internal class RustVerificationService(private val olmMachine: OlmMachine) : VerificationService {
     private val dispatcher = UpdateDispatcher(this.olmMachine.verificationListeners)
 
     /** The main entry point for the verification service
@@ -279,8 +231,8 @@ internal class RustVerificationService(private val olmMachine: OlmMachine) : Ver
     ): PendingVerificationRequest {
         val verification = when (val identity = runBlocking { olmMachine.getIdentity(otherUserId) }) {
             is OwnUserIdentity -> runBlocking { identity.requestVerification(methods) }
-            is UserIdentity -> throw IllegalArgumentException("This method doesn't support verification of other users devices")
-            null -> throw IllegalArgumentException("Cross signing has not been bootstrapped for our own user")
+            is UserIdentity    -> throw IllegalArgumentException("This method doesn't support verification of other users devices")
+            null               -> throw IllegalArgumentException("Cross signing has not been bootstrapped for our own user")
         }
 
         return verification.toPendingVerificationRequest()
@@ -294,9 +246,9 @@ internal class RustVerificationService(private val olmMachine: OlmMachine) : Ver
     ): PendingVerificationRequest {
         Timber.i("## SAS Requesting verification to user: $otherUserId in room $roomId")
         val verification = when (val identity = runBlocking { olmMachine.getIdentity(otherUserId) }) {
-            is UserIdentity -> runBlocking { identity.requestVerification(methods, roomId, localId!!) }
+            is UserIdentity    -> runBlocking { identity.requestVerification(methods, roomId, localId!!) }
             is OwnUserIdentity -> throw IllegalArgumentException("This method doesn't support verification of our own user")
-            null -> throw IllegalArgumentException("The user that we wish to verify doesn't support cross signing")
+            null               -> throw IllegalArgumentException("The user that we wish to verify doesn't support cross signing")
         }
 
         return verification.toPendingVerificationRequest()

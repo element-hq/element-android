@@ -45,7 +45,7 @@ internal class VerificationRequest(
         private val machine: OlmMachine,
         private var inner: VerificationRequest,
         private val sender: RequestSender,
-        private val listeners: ArrayList<VerificationService.Listener>,
+        private val listeners: ArrayList<VerificationService.Listener>
 ) {
     private val uiHandler = Handler(Looper.getMainLooper())
 

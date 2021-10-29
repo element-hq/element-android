@@ -23,9 +23,9 @@ import org.matrix.android.sdk.api.auth.data.SessionParams
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.internal.crypto.CancelGossipRequestWorker
 import org.matrix.android.sdk.internal.crypto.CryptoModule
+import org.matrix.android.sdk.internal.crypto.OlmMachineProvider
 import org.matrix.android.sdk.internal.crypto.SendGossipRequestWorker
 import org.matrix.android.sdk.internal.crypto.SendGossipWorker
-import org.matrix.android.sdk.internal.crypto.crosssigning.UpdateTrustWorker
 import org.matrix.android.sdk.internal.di.MatrixComponent
 import org.matrix.android.sdk.internal.federation.FederationModule
 import org.matrix.android.sdk.internal.network.NetworkConnectivityChecker
@@ -117,6 +117,8 @@ internal interface SessionComponent {
 
     fun taskExecutor(): TaskExecutor
 
+    fun olmMachineProvider() : OlmMachineProvider
+
     fun inject(worker: SendEventWorker)
 
     fun inject(worker: MultipleEventSendingDispatcherWorker)
@@ -137,7 +139,7 @@ internal interface SessionComponent {
 
     fun inject(worker: SendGossipWorker)
 
-    fun inject(worker: UpdateTrustWorker)
+//    fun inject(worker: UpdateTrustWorker)
 
     @Component.Factory
     interface Factory {

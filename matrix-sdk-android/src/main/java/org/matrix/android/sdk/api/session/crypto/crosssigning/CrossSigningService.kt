@@ -19,6 +19,7 @@ package org.matrix.android.sdk.api.session.crypto.crosssigning
 import androidx.lifecycle.LiveData
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
+import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.crypto.crosssigning.DeviceTrustResult
 import org.matrix.android.sdk.internal.crypto.crosssigning.UserTrustResult
@@ -103,6 +104,8 @@ interface CrossSigningService {
      */
     fun trustDevice(deviceId: String,
                     callback: MatrixCallback<Unit>)
+
+    suspend fun shieldForGroup(userIds: List<String>) : RoomEncryptionTrustLevel
 
     /**
      * Check if a device is trusted

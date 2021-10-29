@@ -20,3 +20,5 @@ Cargo.lock
 /fastlane/report.xml
 
 /library/build
+
+matrix-sdk-android/src/main/jniLibs/

@@ -35,13 +35,11 @@ import org.matrix.android.sdk.internal.crypto.OutgoingRoomKeyRequest
 import org.matrix.android.sdk.internal.crypto.crosssigning.DeviceTrustLevel
 import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.ImportRoomKeysResult
-import org.matrix.android.sdk.internal.crypto.model.MXDeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.MXEncryptEventContentResult
 import org.matrix.android.sdk.internal.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.internal.crypto.model.event.RoomKeyWithHeldContent
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.rest.DevicesListResponse
-import org.matrix.android.sdk.internal.crypto.model.rest.RoomKeyRequestBody
 
 interface CryptoService {
 
@@ -153,4 +151,11 @@ interface CryptoService {
      * send, in order to speed up sending of the message.
      */
     fun prepareToEncrypt(roomId: String, callback: MatrixCallback<Unit>)
+
+    /**
+     * When LL all room members might not be loaded when setting up encryption.
+     * This is called after room members have been loaded
+     * ... not sure if shoud be API
+     */
+    fun onE2ERoomMemberLoadedFromServer(roomId: String)
 }

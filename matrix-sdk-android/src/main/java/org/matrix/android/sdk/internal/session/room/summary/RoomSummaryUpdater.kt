@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.session.room.summary
 
 import io.realm.Realm
 import io.realm.kotlin.createObject
+import org.matrix.android.sdk.api.session.crypto.crosssigning.CrossSigningService
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.accountdata.RoomAccountDataTypes
@@ -36,7 +37,6 @@ import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.sync.model.RoomSyncSummary
 import org.matrix.android.sdk.api.session.sync.model.RoomSyncUnreadNotifications
 import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
-import org.matrix.android.sdk.internal.crypto.crosssigning.DefaultCrossSigningService
 import org.matrix.android.sdk.internal.database.mapper.ContentMapper
 import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntity
 import org.matrix.android.sdk.internal.database.model.EventEntity
@@ -71,9 +71,8 @@ internal class RoomSummaryUpdater @Inject constructor(
         @UserId private val userId: String,
         private val roomDisplayNameResolver: RoomDisplayNameResolver,
         private val roomAvatarResolver: RoomAvatarResolver,
-        private val crossSigningService: DefaultCrossSigningService,
-        private val roomAccountDataDataSource: RoomAccountDataDataSource,
-        private val normalizer: Normalizer) {
+        private val crossSigningService: CrossSigningService,
+        private val roomAccountDataDataSource: RoomAccountDataDataSource) {
 
     fun update(realm: Realm,
                roomId: String,
@@ -168,8 +167,8 @@ internal class RoomSummaryUpdater @Inject constructor(
             roomSummaryEntity.otherMemberIds.clear()
             roomSummaryEntity.otherMemberIds.addAll(otherRoomMembers)
             if (roomSummaryEntity.isEncrypted && otherRoomMembers.isNotEmpty()) {
-                // mmm maybe we could only refresh shield instead of checking trust also?
-                crossSigningService.onUsersDeviceUpdate(otherRoomMembers)
+                // TODO do we really need to force a shield refresh here?
+                // crossSigningService.ensureRoomShieldForRoom(roomId)
             }
         }
     }

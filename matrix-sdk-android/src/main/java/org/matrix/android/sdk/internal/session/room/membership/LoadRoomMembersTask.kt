@@ -17,13 +17,14 @@
 package org.matrix.android.sdk.internal.session.room.membership
 
 import com.zhuinden.monarchy.Monarchy
+import dagger.Lazy
 import io.realm.Realm
 import io.realm.kotlin.createObject
 import kotlinx.coroutines.TimeoutCancellationException
+import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.internal.crypto.CryptoSessionInfoProvider
-import org.matrix.android.sdk.internal.crypto.DeviceListManager
 import org.matrix.android.sdk.internal.database.awaitNotEmptyResult
 import org.matrix.android.sdk.internal.database.mapper.toEntity
 import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntity
@@ -60,7 +61,7 @@ internal class DefaultLoadRoomMembersTask @Inject constructor(
         private val roomSummaryUpdater: RoomSummaryUpdater,
         private val roomMemberEventHandler: RoomMemberEventHandler,
         private val cryptoSessionInfoProvider: CryptoSessionInfoProvider,
-        private val deviceListManager: DeviceListManager,
+        private val cryptoService: Lazy<CryptoService>,
         private val globalErrorReceiver: GlobalErrorReceiver
 ) : LoadRoomMembersTask {
 
@@ -130,7 +131,10 @@ internal class DefaultLoadRoomMembersTask @Inject constructor(
         }
 
         if (cryptoSessionInfoProvider.isRoomEncrypted(roomId)) {
-            deviceListManager.onRoomMembersLoadedFor(roomId)
+            cryptoService.get().onE2ERoomMemberLoadedFromServer(roomId)
+//            val userIds = cryptoSessionInfoProvider.getRoomUserIds(roomId, true)
+//            olmMachineProvider.olmMachine.updateTrackedUsers(userIds)
+//            deviceListManager.onRoomMembersLoadedFor(roomId)
         }
     }
 

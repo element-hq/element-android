@@ -250,7 +250,14 @@ internal class UserIdentity(
      * Convert the identity into a MxCrossSigningInfo class.
      */
     override fun toMxCrossSigningInfo(): MXCrossSigningInfo {
-        val crossSigningKeys = listOf(this.masterKey, this.selfSigningKey)
-        return MXCrossSigningInfo(this.userId, crossSigningKeys)
+//        val crossSigningKeys = listOf(this.masterKey, this.selfSigningKey)
+        val trustLevel = DeviceTrustLevel(runBlocking { verified() }, false)
+        // TODO remove this, this is silly, we have way too many methods to check if a user is verified
+        masterKey.trustLevel = trustLevel
+        selfSigningKey.trustLevel = trustLevel
+        return MXCrossSigningInfo(this.userId, listOf(
+                this.masterKey.also { it.trustLevel = trustLevel },
+                this.selfSigningKey.also { it.trustLevel = trustLevel }
+        ))
     }
 }

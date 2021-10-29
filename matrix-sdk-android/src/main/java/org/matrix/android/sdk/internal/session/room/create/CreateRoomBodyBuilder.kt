@@ -23,8 +23,8 @@ import org.matrix.android.sdk.api.session.identity.IdentityServiceError
 import org.matrix.android.sdk.api.session.identity.toMedium
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.util.MimeTypes
-import org.matrix.android.sdk.internal.crypto.DeviceListManager
 import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
+import org.matrix.android.sdk.internal.crypto.OlmMachineProvider
 import org.matrix.android.sdk.internal.di.AuthenticatedIdentity
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.network.token.AccessTokenProvider
@@ -39,7 +39,8 @@ import javax.inject.Inject
 
 internal class CreateRoomBodyBuilder @Inject constructor(
         private val ensureIdentityTokenTask: EnsureIdentityTokenTask,
-        private val deviceListManager: DeviceListManager,
+//        private val deviceListManager: DeviceListManager,
+        private val olmMachineProvider: OlmMachineProvider,
         private val identityStore: IdentityStore,
         private val fileUploader: FileUploader,
         @UserId
@@ -173,14 +174,15 @@ internal class CreateRoomBodyBuilder @Inject constructor(
     }
 
     private suspend fun canEnableEncryption(params: CreateRoomParams): Boolean {
-        return params.enableEncryptionIfInvitedUsersSupportIt &&
+        return params.enableEncryptionIfInvitedUsersSupportIt
                 // Parity with web, enable if users have encryption ready devices
                 // for now remove checks on cross signing and 3pid invites
                 // && crossSigningService.isCrossSigningVerified()
-                params.invite3pids.isEmpty() &&
-                params.invitedUserIds.isNotEmpty() &&
-                params.invitedUserIds.let { userIds ->
-            val keys = deviceListManager.downloadKeys(userIds, forceDownload = false)
+                && params.invite3pids.isEmpty()
+                && params.invitedUserIds.isNotEmpty()
+                && params.invitedUserIds.let { userIds ->
+            val keys =  olmMachineProvider.olmMachine.getUserDevicesMap(userIds)
+            // deviceListManager.downloadKeys(userIds, forceDownload = false)
 
             userIds.all { userId ->
                 keys.map[userId].let { deviceMap ->

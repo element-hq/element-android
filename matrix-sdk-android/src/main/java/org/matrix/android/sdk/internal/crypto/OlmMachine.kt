@@ -22,6 +22,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.listeners.ProgressListener
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MXCrossSigningInfo
@@ -99,7 +100,7 @@ internal class LiveDevice(
 
 internal class LiveUserIdentity(
         internal var userId: String,
-        private var observer: UserIdentityUpdateObserver,
+        private var observer: UserIdentityUpdateObserver
 ) : MutableLiveData<Optional<MXCrossSigningInfo>>() {
     override fun onActive() {
         observer.addUserIdentityUpdateListener(this)
@@ -529,8 +530,13 @@ internal class OlmMachine(
 
         return when (identity) {
             is RustUserIdentity.Other -> {
-                val masterKey = adapter.fromJson(identity.masterKey)!!.toCryptoModel()
-                val selfSigningKey = adapter.fromJson(identity.selfSigningKey)!!.toCryptoModel()
+                val verified = this.inner().isIdentityVerified(userId)
+                val masterKey = adapter.fromJson(identity.masterKey)!!.toCryptoModel().apply {
+                    trustLevel = DeviceTrustLevel(verified, verified)
+                }
+                val selfSigningKey = adapter.fromJson(identity.selfSigningKey)!!.toCryptoModel().apply {
+                    trustLevel = DeviceTrustLevel(verified, verified)
+                }
 
                 UserIdentity(identity.userId, masterKey, selfSigningKey, this, this.requestSender)
             }

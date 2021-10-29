@@ -35,6 +35,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 // Legacy name: MXDeviceList
+@Deprecated("In favor of rust olmMachine")
 @SessionScope
 internal class DeviceListManager @Inject constructor(private val cryptoStore: IMXCryptoStore,
                                                      private val olmDevice: MXOlmDevice,

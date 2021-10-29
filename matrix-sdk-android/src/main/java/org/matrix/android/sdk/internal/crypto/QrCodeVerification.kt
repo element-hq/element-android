@@ -37,7 +37,7 @@ internal class QrCodeVerification(
         private var request: VerificationRequest,
         private var inner: QrCode?,
         private val sender: RequestSender,
-        listeners: ArrayList<VerificationService.Listener>,
+        listeners: ArrayList<VerificationService.Listener>
 ) : QrCodeVerificationTransaction {
     private val dispatcher = UpdateDispatcher(listeners)
 

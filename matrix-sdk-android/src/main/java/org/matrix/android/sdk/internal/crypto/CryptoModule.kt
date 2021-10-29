@@ -27,7 +27,6 @@ import org.matrix.android.sdk.api.session.crypto.crosssigning.CrossSigningServic
 import org.matrix.android.sdk.internal.crypto.api.CryptoApi
 import org.matrix.android.sdk.internal.crypto.crosssigning.ComputeTrustTask
 import org.matrix.android.sdk.internal.crypto.crosssigning.DefaultComputeTrustTask
-import org.matrix.android.sdk.internal.crypto.crosssigning.DefaultCrossSigningService
 import org.matrix.android.sdk.internal.crypto.keysbackup.api.RoomKeysApi
 import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.CreateKeysBackupVersionTask
 import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.DefaultCreateKeysBackupVersionTask
@@ -96,6 +95,11 @@ import org.matrix.android.sdk.internal.di.UserMd5
 import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.internal.session.cache.ClearCacheTask
 import org.matrix.android.sdk.internal.session.cache.RealmClearCacheTask
+import io.realm.RealmConfiguration
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
+import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
+import org.matrix.android.sdk.internal.crypto.verification.RustVerificationService
 import retrofit2.Retrofit
 import java.io.File
 
@@ -238,7 +242,10 @@ internal abstract class CryptoModule {
     abstract fun bindClaimOneTimeKeysForUsersDeviceTask(task: DefaultClaimOneTimeKeysForUsersDevice): ClaimOneTimeKeysForUsersDeviceTask
 
     @Binds
-    abstract fun bindCrossSigningService(service: DefaultCrossSigningService): CrossSigningService
+    abstract fun bindCrossSigningService(service: RustCrossSigningService): CrossSigningService
+
+    @Binds
+    abstract fun bindVerificationService(service: RustVerificationService): VerificationService
 
     @Binds
     abstract fun bindCryptoStore(store: RealmCryptoStore): IMXCryptoStore
