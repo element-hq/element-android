@@ -1047,22 +1047,27 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private fun computeUnreadState(events: List<TimelineEvent>, roomSummary: RoomSummary): UnreadState {
+        Timber.i("ReadMarker debug: computeUnreadState, empty = ${events.isEmpty()}, markerId = ${roomSummary.readMarkerId}")
         if (events.isEmpty()) return UnreadState.Unknown
         val readMarkerIdSnapshot = roomSummary.readMarkerId ?: return UnreadState.Unknown
         val firstDisplayableEventIndex = timeline.getIndexOfEvent(readMarkerIdSnapshot)
                 ?: return if (timeline.isLive) {
+                    Timber.i("ReadMarker debug: is live, but did not get index")
                     UnreadState.ReadMarkerNotLoaded(readMarkerIdSnapshot)
                 } else {
+                    Timber.i("ReadMarker debug: not live")
                     UnreadState.Unknown
                 }
         for (i in (firstDisplayableEventIndex - 1) downTo 0) {
             val timelineEvent = events.getOrNull(i) ?: return UnreadState.Unknown
             val eventId = timelineEvent.root.eventId ?: return UnreadState.Unknown
             val isFromMe = timelineEvent.root.senderId == session.myUserId
+            Timber.i("ReadMarker debug: isFromMe = $isFromMe")
             if (!isFromMe) {
                 return UnreadState.HasUnread(eventId)
             }
         }
+        Timber.i("ReadMarker debug: hasNoUnread")
         return UnreadState.HasNoUnread
     }
 
@@ -1110,6 +1115,7 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     override fun onTimelineUpdated(snapshot: List<TimelineEvent>) {
+        Timber.i("ReadMarker debug: onTimelineUpdated")
         viewModelScope.launch {
             // tryEmit doesn't work with SharedFlow without cache
             timelineEvents.emit(snapshot)
