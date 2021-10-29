@@ -140,15 +140,12 @@ internal class RealmCryptoStore @Inject constructor(
         newSessionListeners.remove(listener)
     }
 
-    private val monarchyWriteAsyncExecutor = Executors.newSingleThreadExecutor()
+    private val lazyRealmConfiguration by lazy {
+        ensureCryptoMetadataEntity(realmConfiguration)
+        realmConfiguration
+    }
 
-    private val monarchy = Monarchy.Builder()
-            .setRealmConfiguration(realmConfiguration)
-            .setWriteAsyncExecutor(monarchyWriteAsyncExecutor)
-            .build()
-
-    init {
-        // Ensure CryptoMetadataEntity is inserted in DB
+    private fun ensureCryptoMetadataEntity(realmConfiguration: RealmConfiguration) {
         doRealmTransaction(realmConfiguration) { realm ->
             var currentMetadata = realm.where<CryptoMetadataEntity>().findFirst()
 
@@ -178,12 +175,21 @@ internal class RealmCryptoStore @Inject constructor(
             }
         }
     }
+
+    private val monarchyWriteAsyncExecutor = Executors.newSingleThreadExecutor()
+
+    private val monarchy by lazy {
+        Monarchy.Builder()
+                .setRealmConfiguration(lazyRealmConfiguration)
+                .setWriteAsyncExecutor(monarchyWriteAsyncExecutor)
+                .build()
+    }
     /* ==========================================================================================
      * Other data
      * ========================================================================================== */
 
     override fun hasData(): Boolean {
-        return doWithRealm(realmConfiguration) {
+        return doWithRealm(lazyRealmConfiguration) {
             !it.isEmpty &&
                     // Check if there is a MetaData object
                     it.where<CryptoMetadataEntity>().count() > 0
@@ -191,7 +197,7 @@ internal class RealmCryptoStore @Inject constructor(
     }
 
     override fun deleteStore() {
-        doRealmTransaction(realmConfiguration) {
+        doRealmTransaction(lazyRealmConfiguration) {
             it.deleteAll()
         }
     }
@@ -199,7 +205,7 @@ internal class RealmCryptoStore @Inject constructor(
     override fun open() {
         synchronized(this) {
             if (realmLocker == null) {
-                realmLocker = Realm.getInstance(realmConfiguration)
+                realmLocker = Realm.getInstance(lazyRealmConfiguration)
             }
         }
     }
@@ -230,19 +236,19 @@ internal class RealmCryptoStore @Inject constructor(
     }
 
     override fun storeDeviceId(deviceId: String) {
-        doRealmTransaction(realmConfiguration) {
+        doRealmTransaction(lazyRealmConfiguration) {
             it.where<CryptoMetadataEntity>().findFirst()?.deviceId = deviceId
         }
     }
 
     override fun getDeviceId(): String {
-        return doWithRealm(realmConfiguration) {
+        return doWithRealm(lazyRealmConfiguration) {
             it.where<CryptoMetadataEntity>().findFirst()?.deviceId
         } ?: ""
     }
 
     override fun saveOlmAccount() {
-        doRealmTransaction(realmConfiguration) {
+        doRealmTransaction(lazyRealmConfiguration) {
             it.where<CryptoMetadataEntity>().findFirst()?.putOlmAccount(olmAccount)
         }
     }
@@ -252,7 +258,7 @@ internal class RealmCryptoStore @Inject constructor(
     }
 
     override fun getOrCreateOlmAccount(): OlmAccount {
-        doRealmTransaction(realmConfiguration) {
+        doRealmTransaction(lazyRealmConfiguration) {
             val metaData = it.where<CryptoMetadataEntity>().findFirst()
             val existing = metaData!!.getOlmAccount()
             if (existing == null) {
@@ -269,7 +275,7 @@ internal class RealmCryptoStore @Inject constructor(
     }
 
     override fun getUserDevice(userId: String, deviceId: String): CryptoDeviceInfo? {
-        return doWithRealm(realmConfiguration) {
+        return doWithRealm(lazyRealmConfiguration) {
             it.where<DeviceInfoEntity>()
                     .equalTo(DeviceInfoEntityFields.PRIMARY_KEY, DeviceInfoEntity.createPrimaryKey(userId, deviceId))
                     .findFirst()
@@ -280,7 +286,7 @@ internal class RealmCryptoStore @Inject constructor(
     }
 
     override fun deviceWithIdentityKey(identityKey: String): CryptoDeviceInfo? {
-        return doWithRealm(realmConfiguration) {
+        return doWithRealm(lazyRealmConfiguration) {
             it.where<DeviceInfoEntity>()
                     .equalTo(DeviceInfoEntityFields.IDENTITY_KEY, identityKey)
                     .findFirst()
@@ -291,7 +297,7 @@ internal class RealmCryptoStore @Inject constructor(
     }
 
     override fun storeUserDevices(userId: String, devices: Map<String, CryptoDeviceInfo>?) {
-        doRealmTransaction(realmConfiguration) { realm ->
+        doRealmTransaction(lazyRealmConfiguration) { realm ->
             if (devices == null) {
                 Timber.d("Remove user $userId")
                 // Remove the user
@@ -332,7 +338,7 @@ internal class RealmCryptoStore @Inject constructor(
                                            masterKey: CryptoCrossSigningKey?,
                                            selfSigningKey: CryptoCrossSigningKey?,
                                            userSigningKey: CryptoCrossSigningKey?) {
-        doRealmTransaction(realmConfiguration) { realm ->
+        doRealmTransaction(lazyRealmConfiguration) { realm ->
             UserEntity.getOrCreate(realm, userId)
                     .let { userEntity ->
                         if (masterKey == null || selfSigningKey == null) {
@@ -415,7 +421,7 @@ internal class RealmCryptoStore @Inject constructor(
     }
 
     override fun getCrossSigningPrivateKeys(): PrivateKeysInfo? {
-        return doWithRealm(realmConfiguration) { realm ->
+        return doWithRealm(lazyRealmConfiguration) { realm ->
             realm.where<CryptoMetadataEntity>()
                     .findFirst()
                     ?.let {
@@ -449,7 +455,7 @@ internal class RealmCryptoStore @Inject constructor(
 
     override fun storePrivateKeysInfo(msk: String?, usk: String?, ssk: String?) {
         Timber.v("## CRYPTO | *** storePrivateKeysInfo ${msk != null}, ${usk != null}, ${ssk != null}")
-        doRealmTransaction(realmConfiguration) { realm ->
+        doRealmTransaction(lazyRealmConfiguration) { realm ->
             realm.where<CryptoMetadataEntity>().findFirst()?.apply {
                 xSignMasterPrivateKey = msk
                 xSignUserPrivateKey = usk
@@ -459,7 +465,7 @@ internal class RealmCryptoStore @Inject constructor(
     }
 
     override fun saveBackupRecoveryKey(recoveryKey: String?, version: String?) {
-        doRealmTransaction(realmConfiguration) { realm ->
+        doRealmTransaction(lazyRealmConfiguration) { realm ->
             realm.where<CryptoMetadataEntity>().findFirst()?.apply {
                 keyBackupRecoveryKey = recoveryKey
                 keyBackupRecoveryKeyVersion = version
@@ -468,7 +474,7 @@ internal class RealmCryptoStore @Inject constructor(
     }
 
     override fun getKeyBackupRecoveryKeyInfo(): SavedKeyBackupKeyInfo? {
-        return doWithRealm(realmConfiguration) { realm ->
+        return doWithRealm(lazyRealmConfiguration) { realm ->
             realm.where<CryptoMetadataEntity>()
                     .findFirst()
                     ?.let {
@@ -485,7 +491,7 @@ internal class RealmCryptoStore @Inject constructor(
 
     override fun storeMSKPrivateKey(msk: String?) {
         Timber.v("## CRYPTO | *** storeMSKPrivateKey ${msk != null} ")
-        doRealmTransaction(realmConfiguration) { realm ->
+        doRealmTransaction(lazyRealmConfiguration) { realm ->
             realm.where<CryptoMetadataEntity>().findFirst()?.apply {
                 xSignMasterPrivateKey = msk
             }
@@ -494,7 +500,7 @@ internal class RealmCryptoStore @Inject constructor(
 
     override fun storeSSKPrivateKey(ssk: String?) {
         Timber.v("## CRYPTO | *** storeSSKPrivateKey ${ssk != null} ")
-        doRealmTransaction(realmConfiguration) { realm ->
+        doRealmTransaction(lazyRealmConfiguration) { realm ->
             realm.where<CryptoMetadataEntity>().findFirst()?.apply {
                 xSignSelfSignedPrivateKey = ssk
             }
@@ -503,7 +509,7 @@ internal class RealmCryptoStore @Inject constructor(
 
     override fun storeUSKPrivateKey(usk: String?) {
         Timber.v("## CRYPTO | *** storeUSKPrivateKey ${usk != null} ")
-        doRealmTransaction(realmConfiguration) { realm ->
+        doRealmTransaction(lazyRealmConfiguration) { realm ->
             realm.where<CryptoMetadataEntity>().findFirst()?.apply {
                 xSignUserPrivateKey = usk
             }
@@ -511,7 +517,7 @@ internal class RealmCryptoStore @Inject constructor(
     }
 
     override fun getUserDevices(userId: String): Map<String, CryptoDeviceInfo>? {
-        return doWithRealm(realmConfiguration) {
+        return doWithRealm(lazyRealmConfiguration) {
             it.where<UserEntity>()
                     .equalTo(UserEntityFields.USER_ID, userId)
                     .findFirst()
@@ -526,7 +532,7 @@ internal class RealmCryptoStore @Inject constructor(
     }
 
     override fun getUserDeviceList(userId: String): List<CryptoDeviceInfo>? {
-        return doWithRealm(realmConfiguration) {
+        return doWithRealm(lazyRealmConfiguration) {
             it.where<UserEntity>()
                     .equalTo(UserEntityFields.USER_ID, userId)
                     .findFirst()
@@ -621,7 +627,7 @@ internal class RealmCryptoStore @Inject constructor(
                     deviceId = it.deviceId
             )
         }
-        doRealmTransactionAsync(realmConfiguration) { realm ->
+        doRealmTransactionAsync(lazyRealmConfiguration) { realm ->
             realm.where<MyDeviceLastSeenInfoEntity>().findAll().deleteAllFromRealm()
             entities.forEach {
                 realm.insertOrUpdate(it)
@@ -630,26 +636,26 @@ internal class RealmCryptoStore @Inject constructor(
     }
 
     override fun storeRoomAlgorithm(roomId: String, algorithm: String) {
-        doRealmTransaction(realmConfiguration) {
+        doRealmTransaction(lazyRealmConfiguration) {
             CryptoRoomEntity.getOrCreate(it, roomId).algorithm = algorithm
         }
     }
 
     override fun getRoomAlgorithm(roomId: String): String? {
-        return doWithRealm(realmConfiguration) {
+        return doWithRealm(lazyRealmConfiguration) {
             CryptoRoomEntity.getById(it, roomId)?.algorithm
         }
     }
 
     override fun shouldEncryptForInvitedMembers(roomId: String): Boolean {
-        return doWithRealm(realmConfiguration) {
+        return doWithRealm(lazyRealmConfiguration) {
             CryptoRoomEntity.getById(it, roomId)?.shouldEncryptForInvitedMembers
         }
                 ?: false
     }
 
     override fun setShouldEncryptForInvitedMembers(roomId: String, shouldEncryptForInvitedMembers: Boolean) {
-        doRealmTransaction(realmConfiguration) {
+        doRealmTransaction(lazyRealmConfiguration) {
             CryptoRoomEntity.getOrCreate(it, roomId).shouldEncryptForInvitedMembers = shouldEncryptForInvitedMembers
         }
     }
@@ -673,7 +679,7 @@ internal class RealmCryptoStore @Inject constructor(
 
             olmSessionsToRelease[key] = olmSessionWrapper
 
-            doRealmTransaction(realmConfiguration) {
+            doRealmTransaction(lazyRealmConfiguration) {
                 val realmOlmSession = OlmSessionEntity().apply {
                     primaryKey = key
                     sessionId = sessionIdentifier
@@ -692,7 +698,7 @@ internal class RealmCryptoStore @Inject constructor(
 
         // If not in cache (or not found), try to read it from realm
         if (olmSessionsToRelease[key] == null) {
-            doRealmQueryAndCopy(realmConfiguration) {
+            doRealmQueryAndCopy(lazyRealmConfiguration) {
                 it.where<OlmSessionEntity>()
                         .equalTo(OlmSessionEntityFields.PRIMARY_KEY, key)
                         .findFirst()
@@ -709,7 +715,7 @@ internal class RealmCryptoStore @Inject constructor(
     }
 
     override fun getLastUsedSessionId(deviceKey: String): String? {
-        return doWithRealm(realmConfiguration) {
+        return doWithRealm(lazyRealmConfiguration) {
             it.where<OlmSessionEntity>()
                     .equalTo(OlmSessionEntityFields.DEVICE_KEY, deviceKey)
                     .sort(OlmSessionEntityFields.LAST_RECEIVED_MESSAGE_TS, Sort.DESCENDING)
@@ -719,7 +725,7 @@ internal class RealmCryptoStore @Inject constructor(
     }
 
     override fun getDeviceSessionIds(deviceKey: String): List<String> {
-        return doWithRealm(realmConfiguration) {
+        return doWithRealm(lazyRealmConfiguration) {
             it.where<OlmSessionEntity>()
                     .equalTo(OlmSessionEntityFields.DEVICE_KEY, deviceKey)
                     .findAll()
@@ -734,7 +740,7 @@ internal class RealmCryptoStore @Inject constructor(
             return
         }
 
-        doRealmTransaction(realmConfiguration) { realm ->
+        doRealmTransaction(lazyRealmConfiguration) { realm ->
             sessions.forEach { session ->
                 var sessionIdentifier: String? = null
 
@@ -772,7 +778,7 @@ internal class RealmCryptoStore @Inject constructor(
 
         // If not in cache (or not found), try to read it from realm
         if (inboundGroupSessionToRelease[key] == null) {
-            doWithRealm(realmConfiguration) {
+            doWithRealm(lazyRealmConfiguration) {
                 it.where<OlmInboundGroupSessionEntity>()
                         .equalTo(OlmInboundGroupSessionEntityFields.PRIMARY_KEY, key)
                         .findFirst()
@@ -787,7 +793,7 @@ internal class RealmCryptoStore @Inject constructor(
     }
 
     override fun getCurrentOutboundGroupSessionForRoom(roomId: String): OutboundGroupSessionWrapper? {
-        return doWithRealm(realmConfiguration) { realm ->
+        return doWithRealm(lazyRealmConfiguration) { realm ->
             realm.where<CryptoRoomEntity>()
                     .equalTo(CryptoRoomEntityFields.ROOM_ID, roomId)
                     .findFirst()?.outboundSessionInfo?.let { entity ->
@@ -806,7 +812,7 @@ internal class RealmCryptoStore @Inject constructor(
         // the olmdevice is caching the active instance
         // this is called for each sent message (so not high frequency), thus we can use basic realm async without
         // risk of reaching max async operation limit?
-        doRealmTransactionAsync(realmConfiguration) { realm ->
+        doRealmTransactionAsync(lazyRealmConfiguration) { realm ->
             CryptoRoomEntity.getById(realm, roomId)?.let { entity ->
                 // we should delete existing outbound session info if any
                 entity.outboundSessionInfo?.deleteFromRealm()
@@ -827,7 +833,7 @@ internal class RealmCryptoStore @Inject constructor(
      * so there is no need to use or update `inboundGroupSessionToRelease` for native memory management
      */
     override fun getInboundGroupSessions(): List<OlmInboundGroupSessionWrapper2> {
-        return doWithRealm(realmConfiguration) {
+        return doWithRealm(lazyRealmConfiguration) {
             it.where<OlmInboundGroupSessionEntity>()
                     .findAll()
                     .mapNotNull { inboundGroupSessionEntity ->
@@ -843,7 +849,7 @@ internal class RealmCryptoStore @Inject constructor(
         inboundGroupSessionToRelease[key]?.olmInboundGroupSession?.releaseSession()
         inboundGroupSessionToRelease.remove(key)
 
-        doRealmTransaction(realmConfiguration) {
+        doRealmTransaction(lazyRealmConfiguration) {
             it.where<OlmInboundGroupSessionEntity>()
                     .equalTo(OlmInboundGroupSessionEntityFields.PRIMARY_KEY, key)
                     .findAll()
@@ -856,25 +862,25 @@ internal class RealmCryptoStore @Inject constructor(
      * ========================================================================================== */
 
     override fun getKeyBackupVersion(): String? {
-        return doRealmQueryAndCopy(realmConfiguration) {
+        return doRealmQueryAndCopy(lazyRealmConfiguration) {
             it.where<CryptoMetadataEntity>().findFirst()
         }?.backupVersion
     }
 
     override fun setKeyBackupVersion(keyBackupVersion: String?) {
-        doRealmTransaction(realmConfiguration) {
+        doRealmTransaction(lazyRealmConfiguration) {
             it.where<CryptoMetadataEntity>().findFirst()?.backupVersion = keyBackupVersion
         }
     }
 
     override fun getKeysBackupData(): KeysBackupDataEntity? {
-        return doRealmQueryAndCopy(realmConfiguration) {
+        return doRealmQueryAndCopy(lazyRealmConfiguration) {
             it.where<KeysBackupDataEntity>().findFirst()
         }
     }
 
     override fun setKeysBackupData(keysBackupData: KeysBackupDataEntity?) {
-        doRealmTransaction(realmConfiguration) {
+        doRealmTransaction(lazyRealmConfiguration) {
             if (keysBackupData == null) {
                 // Clear the table
                 it.where<KeysBackupDataEntity>()
@@ -888,7 +894,7 @@ internal class RealmCryptoStore @Inject constructor(
     }
 
     override fun resetBackupMarkers() {
-        doRealmTransaction(realmConfiguration) {
+        doRealmTransaction(lazyRealmConfiguration) {
             it.where<OlmInboundGroupSessionEntity>()
                     .findAll()
                     .map { inboundGroupSession ->
@@ -902,7 +908,7 @@ internal class RealmCryptoStore @Inject constructor(
             return
         }
 
-        doRealmTransaction(realmConfiguration) {
+        doRealmTransaction(lazyRealmConfiguration) {
             olmInboundGroupSessionWrappers.forEach { olmInboundGroupSessionWrapper ->
                 try {
                     val key = OlmInboundGroupSessionEntity.createPrimaryKey(
@@ -921,7 +927,7 @@ internal class RealmCryptoStore @Inject constructor(
     }
 
     override fun inboundGroupSessionsToBackup(limit: Int): List<OlmInboundGroupSessionWrapper2> {
-        return doWithRealm(realmConfiguration) {
+        return doWithRealm(lazyRealmConfiguration) {
             it.where<OlmInboundGroupSessionEntity>()
                     .equalTo(OlmInboundGroupSessionEntityFields.BACKED_UP, false)
                     .limit(limit.toLong())
@@ -933,7 +939,7 @@ internal class RealmCryptoStore @Inject constructor(
     }
 
     override fun inboundGroupSessionsCount(onlyBackedUp: Boolean): Int {
-        return doWithRealm(realmConfiguration) {
+        return doWithRealm(lazyRealmConfiguration) {
             it.where<OlmInboundGroupSessionEntity>()
                     .apply {
                         if (onlyBackedUp) {
@@ -946,31 +952,31 @@ internal class RealmCryptoStore @Inject constructor(
     }
 
     override fun setGlobalBlacklistUnverifiedDevices(block: Boolean) {
-        doRealmTransaction(realmConfiguration) {
+        doRealmTransaction(lazyRealmConfiguration) {
             it.where<CryptoMetadataEntity>().findFirst()?.globalBlacklistUnverifiedDevices = block
         }
     }
 
     override fun getGlobalBlacklistUnverifiedDevices(): Boolean {
-        return doWithRealm(realmConfiguration) {
+        return doWithRealm(lazyRealmConfiguration) {
             it.where<CryptoMetadataEntity>().findFirst()?.globalBlacklistUnverifiedDevices
         } ?: false
     }
 
     override fun setDeviceKeysUploaded(uploaded: Boolean) {
-        doRealmTransaction(realmConfiguration) {
+        doRealmTransaction(lazyRealmConfiguration) {
             it.where<CryptoMetadataEntity>().findFirst()?.deviceKeysSentToServer = uploaded
         }
     }
 
     override fun areDeviceKeysUploaded(): Boolean {
-        return doWithRealm(realmConfiguration) {
+        return doWithRealm(lazyRealmConfiguration) {
             it.where<CryptoMetadataEntity>().findFirst()?.deviceKeysSentToServer
         } ?: false
     }
 
     override fun setRoomsListBlacklistUnverifiedDevices(roomIds: List<String>) {
-        doRealmTransaction(realmConfiguration) {
+        doRealmTransaction(lazyRealmConfiguration) {
             // Reset all
             it.where<CryptoRoomEntity>()
                     .findAll()
@@ -989,7 +995,7 @@ internal class RealmCryptoStore @Inject constructor(
     }
 
     override fun getRoomsListBlacklistUnverifiedDevices(): List<String> {
-        return doWithRealm(realmConfiguration) {
+        return doWithRealm(lazyRealmConfiguration) {
             it.where<CryptoRoomEntity>()
                     .equalTo(CryptoRoomEntityFields.BLACKLIST_UNVERIFIED_DEVICES, true)
                     .findAll()
@@ -1000,7 +1006,7 @@ internal class RealmCryptoStore @Inject constructor(
     }
 
     override fun getDeviceTrackingStatuses(): Map<String, Int> {
-        return doWithRealm(realmConfiguration) {
+        return doWithRealm(lazyRealmConfiguration) {
             it.where<UserEntity>()
                     .findAll()
                     .associateBy { user ->
@@ -1013,7 +1019,7 @@ internal class RealmCryptoStore @Inject constructor(
     }
 
     override fun saveDeviceTrackingStatuses(deviceTrackingStatuses: Map<String, Int>) {
-        doRealmTransaction(realmConfiguration) {
+        doRealmTransaction(lazyRealmConfiguration) {
             deviceTrackingStatuses
                     .map { entry ->
                         UserEntity.getOrCreate(it, entry.key)
@@ -1023,7 +1029,7 @@ internal class RealmCryptoStore @Inject constructor(
     }
 
     override fun getDeviceTrackingStatus(userId: String, defaultValue: Int): Int {
-        return doWithRealm(realmConfiguration) {
+        return doWithRealm(lazyRealmConfiguration) {
             it.where<UserEntity>()
                     .equalTo(UserEntityFields.USER_ID, userId)
                     .findFirst()
@@ -1119,7 +1125,7 @@ internal class RealmCryptoStore @Inject constructor(
     override fun getOrAddOutgoingRoomKeyRequest(requestBody: RoomKeyRequestBody, recipients: Map<String, List<String>>): OutgoingRoomKeyRequest? {
         // Insert the request and return the one passed in parameter
         var request: OutgoingRoomKeyRequest? = null
-        doRealmTransaction(realmConfiguration) { realm ->
+        doRealmTransaction(lazyRealmConfiguration) { realm ->
 
             val existing = realm.where<OutgoingGossipingRequestEntity>()
                     .equalTo(OutgoingGossipingRequestEntityFields.TYPE_STR, GossipRequestType.KEY.name)
@@ -1152,7 +1158,7 @@ internal class RealmCryptoStore @Inject constructor(
         var request: OutgoingSecretRequest? = null
 
         // Insert the request and return the one passed in parameter
-        doRealmTransaction(realmConfiguration) { realm ->
+        doRealmTransaction(lazyRealmConfiguration) { realm ->
             val existing = realm.where<OutgoingGossipingRequestEntity>()
                     .equalTo(OutgoingGossipingRequestEntityFields.TYPE_STR, GossipRequestType.SECRET.name)
                     .equalTo(OutgoingGossipingRequestEntityFields.REQUESTED_INFO_STR, secretName)
@@ -1291,7 +1297,7 @@ internal class RealmCryptoStore @Inject constructor(
                                              requestDeviceId: String?,
                                              requestId: String?,
                                              state: GossipingRequestState) {
-        doRealmTransaction(realmConfiguration) { realm ->
+        doRealmTransaction(lazyRealmConfiguration) { realm ->
             realm.where<IncomingGossipingRequestEntity>()
                     .equalTo(IncomingGossipingRequestEntityFields.OTHER_USER_ID, requestUserId)
                     .equalTo(IncomingGossipingRequestEntityFields.OTHER_DEVICE_ID, requestDeviceId)
@@ -1303,7 +1309,7 @@ internal class RealmCryptoStore @Inject constructor(
     }
 
     override fun updateOutgoingGossipingRequestState(requestId: String, state: OutgoingGossipingRequestState) {
-        doRealmTransaction(realmConfiguration) { realm ->
+        doRealmTransaction(lazyRealmConfiguration) { realm ->
             realm.where<OutgoingGossipingRequestEntity>()
                     .equalTo(OutgoingGossipingRequestEntityFields.REQUEST_ID, requestId)
                     .findAll().forEach {
@@ -1313,7 +1319,7 @@ internal class RealmCryptoStore @Inject constructor(
     }
 
     override fun getIncomingRoomKeyRequest(userId: String, deviceId: String, requestId: String): IncomingRoomKeyRequest? {
-        return doWithRealm(realmConfiguration) { realm ->
+        return doWithRealm(lazyRealmConfiguration) { realm ->
             realm.where<IncomingGossipingRequestEntity>()
                     .equalTo(IncomingGossipingRequestEntityFields.TYPE_STR, GossipRequestType.KEY.name)
                     .equalTo(IncomingGossipingRequestEntityFields.OTHER_DEVICE_ID, deviceId)
@@ -1327,7 +1333,7 @@ internal class RealmCryptoStore @Inject constructor(
     }
 
     override fun getPendingIncomingRoomKeyRequests(): List<IncomingRoomKeyRequest> {
-        return doWithRealm(realmConfiguration) {
+        return doWithRealm(lazyRealmConfiguration) {
             it.where<IncomingGossipingRequestEntity>()
                     .equalTo(IncomingGossipingRequestEntityFields.TYPE_STR, GossipRequestType.KEY.name)
                     .equalTo(IncomingGossipingRequestEntityFields.REQUEST_STATE_STR, GossipingRequestState.PENDING.name)
@@ -1345,7 +1351,7 @@ internal class RealmCryptoStore @Inject constructor(
     }
 
     override fun getPendingIncomingGossipingRequests(): List<IncomingShareRequestCommon> {
-        return doWithRealm(realmConfiguration) {
+        return doWithRealm(lazyRealmConfiguration) {
             it.where<IncomingGossipingRequestEntity>()
                     .equalTo(IncomingGossipingRequestEntityFields.REQUEST_STATE_STR, GossipingRequestState.PENDING.name)
                     .findAll()
@@ -1375,7 +1381,7 @@ internal class RealmCryptoStore @Inject constructor(
     }
 
     override fun storeIncomingGossipingRequest(request: IncomingShareRequestCommon, ageLocalTS: Long?) {
-        doRealmTransactionAsync(realmConfiguration) { realm ->
+        doRealmTransactionAsync(lazyRealmConfiguration) { realm ->
 
             // After a clear cache, we might have a
 
@@ -1397,7 +1403,7 @@ internal class RealmCryptoStore @Inject constructor(
     }
 
     override fun storeIncomingGossipingRequests(requests: List<IncomingShareRequestCommon>) {
-        doRealmTransactionAsync(realmConfiguration) { realm ->
+        doRealmTransactionAsync(lazyRealmConfiguration) { realm ->
             requests.forEach { request ->
                 // After a clear cache, we might have a
                 realm.createObject(IncomingGossipingRequestEntity::class.java).let {
@@ -1431,7 +1437,7 @@ internal class RealmCryptoStore @Inject constructor(
      * Cross Signing
      * ========================================================================================== */
     override fun getMyCrossSigningInfo(): MXCrossSigningInfo? {
-        return doWithRealm(realmConfiguration) {
+        return doWithRealm(lazyRealmConfiguration) {
             it.where<CryptoMetadataEntity>().findFirst()?.userId
         }?.let {
             getCrossSigningInfo(it)
@@ -1439,7 +1445,7 @@ internal class RealmCryptoStore @Inject constructor(
     }
 
     override fun setMyCrossSigningInfo(info: MXCrossSigningInfo?) {
-        doRealmTransaction(realmConfiguration) { realm ->
+        doRealmTransaction(lazyRealmConfiguration) { realm ->
             realm.where<CryptoMetadataEntity>().findFirst()?.userId?.let { userId ->
                 addOrUpdateCrossSigningInfo(realm, userId, info)
             }
@@ -1447,7 +1453,7 @@ internal class RealmCryptoStore @Inject constructor(
     }
 
     override fun setUserKeysAsTrusted(userId: String, trusted: Boolean) {
-        doRealmTransaction(realmConfiguration) { realm ->
+        doRealmTransaction(lazyRealmConfiguration) { realm ->
             val xInfoEntity = realm.where(CrossSigningInfoEntity::class.java)
                     .equalTo(CrossSigningInfoEntityFields.USER_ID, userId)
                     .findFirst()
@@ -1467,7 +1473,7 @@ internal class RealmCryptoStore @Inject constructor(
     }
 
     override fun setDeviceTrust(userId: String, deviceId: String, crossSignedVerified: Boolean, locallyVerified: Boolean?) {
-        doRealmTransaction(realmConfiguration) { realm ->
+        doRealmTransaction(lazyRealmConfiguration) { realm ->
             realm.where(DeviceInfoEntity::class.java)
                     .equalTo(DeviceInfoEntityFields.PRIMARY_KEY, DeviceInfoEntity.createPrimaryKey(userId, deviceId))
                     .findFirst()?.let { deviceInfoEntity ->
@@ -1487,7 +1493,7 @@ internal class RealmCryptoStore @Inject constructor(
     }
 
     override fun clearOtherUserTrust() {
-        doRealmTransaction(realmConfiguration) { realm ->
+        doRealmTransaction(lazyRealmConfiguration) { realm ->
             val xInfoEntities = realm.where(CrossSigningInfoEntity::class.java)
                     .findAll()
             xInfoEntities?.forEach { info ->
@@ -1502,7 +1508,7 @@ internal class RealmCryptoStore @Inject constructor(
     }
 
     override fun updateUsersTrust(check: (String) -> Boolean) {
-        doRealmTransaction(realmConfiguration) { realm ->
+        doRealmTransaction(lazyRealmConfiguration) { realm ->
             val xInfoEntities = realm.where(CrossSigningInfoEntity::class.java)
                     .findAll()
             xInfoEntities?.forEach { xInfoEntity ->
@@ -1573,7 +1579,7 @@ internal class RealmCryptoStore @Inject constructor(
     }
 
     override fun getCrossSigningInfo(userId: String): MXCrossSigningInfo? {
-        return doWithRealm(realmConfiguration) { realm ->
+        return doWithRealm(lazyRealmConfiguration) { realm ->
             val crossSigningInfo = realm.where(CrossSigningInfoEntity::class.java)
                     .equalTo(CrossSigningInfoEntityFields.USER_ID, userId)
                     .findFirst()
@@ -1609,13 +1615,13 @@ internal class RealmCryptoStore @Inject constructor(
     }
 
     override fun setCrossSigningInfo(userId: String, info: MXCrossSigningInfo?) {
-        doRealmTransaction(realmConfiguration) { realm ->
+        doRealmTransaction(lazyRealmConfiguration) { realm ->
             addOrUpdateCrossSigningInfo(realm, userId, info)
         }
     }
 
     override fun markMyMasterKeyAsLocallyTrusted(trusted: Boolean) {
-        doRealmTransaction(realmConfiguration) { realm ->
+        doRealmTransaction(lazyRealmConfiguration) { realm ->
             realm.where<CryptoMetadataEntity>().findFirst()?.userId?.let { myUserId ->
                 CrossSigningInfoEntity.get(realm, myUserId)?.getMasterKey()?.let { xInfoEntity ->
                     val level = xInfoEntity.trustLevelEntity
@@ -1654,7 +1660,7 @@ internal class RealmCryptoStore @Inject constructor(
         val roomId = withHeldContent.roomId ?: return
         val sessionId = withHeldContent.sessionId ?: return
         if (withHeldContent.algorithm != MXCRYPTO_ALGORITHM_MEGOLM) return
-        doRealmTransaction(realmConfiguration) { realm ->
+        doRealmTransaction(lazyRealmConfiguration) { realm ->
             WithHeldSessionEntity.getOrCreate(realm, roomId, sessionId)?.let {
                 it.code = withHeldContent.code
                 it.senderKey = withHeldContent.senderKey
@@ -1664,7 +1670,7 @@ internal class RealmCryptoStore @Inject constructor(
     }
 
     override fun getWithHeldMegolmSession(roomId: String, sessionId: String): RoomKeyWithHeldContent? {
-        return doWithRealm(realmConfiguration) { realm ->
+        return doWithRealm(lazyRealmConfiguration) { realm ->
             WithHeldSessionEntity.get(realm, roomId, sessionId)?.let {
                 RoomKeyWithHeldContent(
                         roomId = roomId,
@@ -1684,7 +1690,7 @@ internal class RealmCryptoStore @Inject constructor(
                                        deviceId: String,
                                        deviceIdentityKey: String,
                                        chainIndex: Int) {
-        doRealmTransaction(realmConfiguration) { realm ->
+        doRealmTransaction(lazyRealmConfiguration) { realm ->
             SharedSessionEntity.create(
                     realm = realm,
                     roomId = roomId,
@@ -1698,7 +1704,7 @@ internal class RealmCryptoStore @Inject constructor(
     }
 
     override fun getSharedSessionInfo(roomId: String?, sessionId: String, deviceInfo: CryptoDeviceInfo): IMXCryptoStore.SharedSessionResult {
-        return doWithRealm(realmConfiguration) { realm ->
+        return doWithRealm(lazyRealmConfiguration) { realm ->
             SharedSessionEntity.get(
                     realm = realm,
                     roomId = roomId,
@@ -1713,7 +1719,7 @@ internal class RealmCryptoStore @Inject constructor(
     }
 
     override fun getSharedWithInfo(roomId: String?, sessionId: String): MXUsersDevicesMap<Int> {
-        return doWithRealm(realmConfiguration) { realm ->
+        return doWithRealm(lazyRealmConfiguration) { realm ->
             val result = MXUsersDevicesMap<Int>()
             SharedSessionEntity.get(realm, roomId, sessionId)
                     .groupBy { it.userId }
@@ -1733,7 +1739,7 @@ internal class RealmCryptoStore @Inject constructor(
      */
     override fun tidyUpDataBase() {
         val prevWeekTs = System.currentTimeMillis() - 7 * 24 * 60 * 60 * 1_000
-        doRealmTransaction(realmConfiguration) { realm ->
+        doRealmTransaction(lazyRealmConfiguration) { realm ->
 
             // Only keep one week history
             realm.where<IncomingGossipingRequestEntity>()
@@ -1765,6 +1771,6 @@ internal class RealmCryptoStore @Inject constructor(
      * Prints out database info
      */
     override fun logDbUsageInfo() {
-        RealmDebugTools(realmConfiguration).logInfo("Crypto")
+        RealmDebugTools(lazyRealmConfiguration).logInfo("Crypto")
     }
 }
