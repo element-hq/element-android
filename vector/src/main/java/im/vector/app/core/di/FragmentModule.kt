@@ -27,6 +27,7 @@ import fr.gouv.tchap.features.login.TchapLoginFragment
 import fr.gouv.tchap.features.login.TchapWelcomeFragment
 import fr.gouv.tchap.features.login.registration.TchapRegisterFragment
 import fr.gouv.tchap.features.login.registration.TchapRegisterWaitForEmailFragment
+import fr.gouv.tchap.features.roomprofile.settings.linkaccess.TchapRoomLinkAccessFragment
 import im.vector.app.features.attachments.preview.AttachmentsPreviewFragment
 import im.vector.app.features.contactsbook.ContactsBookFragment
 import im.vector.app.features.crypto.keysbackup.settings.KeysBackupSettingsFragment
@@ -864,4 +865,9 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(SpaceLeaveAdvancedFragment::class)
     fun bindSpaceLeaveAdvancedFragment(fragment: SpaceLeaveAdvancedFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(TchapRoomLinkAccessFragment::class)
+    fun bindTchapRoomLinkAccessFragment(fragment: TchapRoomLinkAccessFragment): Fragment
 }

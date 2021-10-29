@@ -21,6 +21,7 @@ import androidx.lifecycle.ViewModelProvider
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
+import fr.gouv.tchap.features.roomprofile.settings.linkaccess.detail.TchapRoomLinkAccessBottomSheetSharedActionViewModel
 import fr.gouv.tchap.features.userdirectory.TchapContactListSharedActionViewModel
 import im.vector.app.core.platform.ConfigurationViewModel
 import im.vector.app.features.call.SharedKnownCallsViewModel
@@ -160,4 +161,9 @@ interface ViewModelModule {
     @IntoMap
     @ViewModelKey(TchapContactListSharedActionViewModel::class)
     fun bindTchapContactListSharedActionViewModel(viewModel: TchapContactListSharedActionViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(TchapRoomLinkAccessBottomSheetSharedActionViewModel::class)
+    fun bindTchapRoomLinkAccessBottomSheetSharedActionViewModel(viewModel: TchapRoomLinkAccessBottomSheetSharedActionViewModel): ViewModel
 }

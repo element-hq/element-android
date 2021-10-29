@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:colorBackground"
+    android:paddingStart="@dimen/layout_horizontal_margin"
+    android:paddingEnd="@dimen/layout_horizontal_margin">
+
+    <TextView
+        android:id="@+id/settings_item_desc"
+        style="@style/Widget.Vector.TextView.Body"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:textColor="?vctr_content_secondary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/tchap_room_settings_enable_room_access_by_link_info_on" />
+
+    <TextView
+        android:id="@+id/settings_item_link"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:foreground="?attr/selectableItemBackground"
+        android:gravity="center"
+        android:padding="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/settings_item_desc"
+        tools:text="https://foobar"
+        tools:textColor="@color/palette_links" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

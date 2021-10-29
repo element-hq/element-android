@@ -18,6 +18,7 @@ package fr.gouv.tchap.core.utils
 
 import im.vector.app.core.utils.safeCapitalize
 import org.matrix.android.sdk.api.MatrixPatterns
+import org.matrix.android.sdk.api.session.Session
 import java.util.Locale
 
 object TchapUtils {
@@ -162,11 +163,32 @@ object TchapUtils {
     /**
      * Create a room alias name with a prefix.
      *
-     * @param prefix the prefix to use.
+     * @param prefix the alias name prefix.
      * @return the suggested alias name.
      */
     fun createRoomAliasName(prefix: String): String {
         return prefix.trim().replace("[^a-zA-Z0-9]".toRegex(), "") + getRandomString(10)
+    }
+
+    /**
+     * Create a room alias with a prefix.
+     *
+     * @param session the user's session.
+     * @param prefix the alias name prefix.
+     * @return the suggested alias.
+     */
+    fun createRoomAlias(session: Session, prefix: String): String {
+        return "#${createRoomAliasName(prefix)}:${getHomeServerNameFromMXIdentifier(session.myUserId)}"
+    }
+
+    /**
+     * Extract the local part of the given room alias.
+     *
+     * @param roomAlias the room alias to parse.
+     * @return the alias local part.
+     */
+    fun extractRoomAliasName(roomAlias: String): String {
+        return roomAlias.substringAfter("#").substringBefore(":")
     }
 
     /**

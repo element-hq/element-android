@@ -42,6 +42,7 @@ import androidx.core.content.getSystemService
 import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.features.notifications.NotificationUtils
+import im.vector.app.features.share.IncomingShareActivity
 import im.vector.app.features.themes.ThemeUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -320,6 +321,17 @@ fun shareText(context: Context, text: String) {
     sendIntent.putExtra(Intent.EXTRA_TEXT, text)
 
     sendShareIntent(context, sendIntent)
+}
+
+fun forwardText(context: Context, text: String) {
+    val sendIntent = Intent().apply {
+        action = Intent.ACTION_SEND
+        type = "text/plain"
+        putExtra(Intent.EXTRA_TEXT, text)
+        setClass(context, IncomingShareActivity::class.java)
+    }
+
+    context.startActivity(sendIntent)
 }
 
 private fun sendShareIntent(context: Context, intent: Intent) {

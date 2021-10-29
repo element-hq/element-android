@@ -59,6 +59,7 @@ class RoomSettingsController @Inject constructor(
         fun onJoinRuleClicked()
         fun onToggleGuestAccess()
         fun onRemoveFromRoomsDirectory()
+        fun onAccessByLinkClicked()
     }
 
     var callback: Callback? = null
@@ -122,30 +123,45 @@ class RoomSettingsController @Inject constructor(
             id("topicDivider")
         }
 
-        buildProfileAction(
-                id = "historyReadability",
-                title = stringProvider.getString(R.string.room_settings_room_read_history_rules_pref_title),
-                subtitle = roomHistoryVisibilityFormatter.getSetting(data.newHistoryVisibility ?: data.currentHistoryVisibility),
-                divider = true,
-                editable = data.actionPermissions.canChangeHistoryVisibility,
-                action = { if (data.actionPermissions.canChangeHistoryVisibility) callback?.onHistoryVisibilityClicked() }
-        )
+        // Hidden in Tchap
+//        buildProfileAction(
+//                id = "historyReadability",
+//                title = stringProvider.getString(R.string.room_settings_room_read_history_rules_pref_title),
+//                subtitle = roomHistoryVisibilityFormatter.getSetting(data.newHistoryVisibility ?: data.currentHistoryVisibility),
+//                divider = true,
+//                editable = data.actionPermissions.canChangeHistoryVisibility,
+//                action = { if (data.actionPermissions.canChangeHistoryVisibility) callback?.onHistoryVisibilityClicked() }
+//        )
+
+//        buildProfileAction(
+//                id = "joinRule",
+//                title = stringProvider.getString(R.string.room_settings_room_access_title),
+//                subtitle = data.getJoinRuleWording(stringProvider),
+//                divider = true,
+//                editable = data.actionPermissions.canChangeJoinRule,
+//                action = { if (data.actionPermissions.canChangeJoinRule) callback?.onJoinRuleClicked() }
+//        )
 
         buildProfileAction(
-                id = "joinRule",
-                title = stringProvider.getString(R.string.room_settings_room_access_title),
-                subtitle = data.getJoinRuleWording(stringProvider),
+                id = "roomAccessByLink",
+                title = stringProvider.getString(R.string.tchap_room_settings_room_access_by_link_title),
+                subtitle = data.getAccessByLinkWording(stringProvider),
                 divider = true,
-                editable = data.actionPermissions.canChangeJoinRule,
-                action = { if (data.actionPermissions.canChangeJoinRule) callback?.onJoinRuleClicked() }
+                editable = data.actionPermissions.canChangeAccessByLink,
+
+                action = {
+                    if (data.isAccessByLinkEnabled() || data.actionPermissions.canChangeAccessByLink) {
+                        callback?.onAccessByLinkClicked()
+                    }
+                }
         )
 
         RoomUtils.getRoomType(roomSummary).let {
             if (data.actionPermissions.canRemoveFromRoomsDirectory &&
                     (it == TchapRoomType.FORUM ||
                             (it == TchapRoomType.UNKNOWN &&
-                            data.roomDirectoryVisibility is Success &&
-                            data.roomDirectoryVisibility() == RoomDirectoryVisibility.PUBLIC))) {
+                                    data.roomDirectoryVisibility is Success &&
+                                    data.roomDirectoryVisibility() == RoomDirectoryVisibility.PUBLIC))) {
                 buildRemoveFromRoomsDirectory()
             }
         }

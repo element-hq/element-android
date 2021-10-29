@@ -28,8 +28,10 @@ import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import fr.gouv.tchap.features.roomprofile.settings.linkaccess.TchapRoomLinkAccessFragment
 import im.vector.app.R
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
+import im.vector.app.core.extensions.addFragmentToBackstack
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.exhaustive
@@ -181,6 +183,10 @@ class RoomSettingsFragment @Inject constructor(
 
     override fun onJoinRuleClicked() {
         startActivity(RoomJoinRuleActivity.newIntent(requireContext(), roomProfileArgs.roomId))
+    }
+
+    override fun onAccessByLinkClicked() {
+        addFragmentToBackstack(R.id.simpleFragmentContainer, TchapRoomLinkAccessFragment::class.java, roomProfileArgs)
     }
 
     override fun onToggleGuestAccess() = withState(viewModel) { state ->

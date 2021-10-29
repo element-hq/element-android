@@ -11,6 +11,7 @@ Features ✨:
  - [Home screen] Toolbar + Search mode #52
  - [Room Creation] Set up the new room creation screen #121
  - [Expired Account] Support expired account by prompting the user to renew it #125
+ - [Room Settings] Support the access by link in the private room #229
 
 Improvements 🙌:
  - Replace Element references with the actual Tchap information #1

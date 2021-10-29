@@ -23,6 +23,7 @@ import dagger.BindsInstance
 import dagger.Component
 import fr.gouv.tchap.features.expired.ExpiredAccountActivity
 import fr.gouv.tchap.features.login.TchapLoginActivity
+import fr.gouv.tchap.features.roomprofile.settings.linkaccess.detail.TchapRoomLinkAccessBottomSheet
 import im.vector.app.core.dialogs.UnrecognizedCertificateDialog
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.preference.UserAvatarPreference
@@ -207,6 +208,7 @@ interface ScreenComponent {
     fun inject(bottomSheet: JoinReplacementRoomBottomSheet)
     fun inject(bottomSheet: MigrateRoomBottomSheet)
     fun inject(bottomSheet: LeaveSpaceBottomSheet)
+    fun inject(bottomSheet: TchapRoomLinkAccessBottomSheet)
 
     /* ==========================================================================================
      * Others
