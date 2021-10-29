@@ -36,10 +36,7 @@ internal class MyDeviceInfoHolder @Inject constructor(
     /**
      * my device info
      */
-    val myDevice: CryptoDeviceInfo
-
-    init {
-
+    val myDevice: CryptoDeviceInfo by lazy {
         val keys = HashMap<String, String>()
 
 // TODO it's a bit strange, why not load from DB?
@@ -60,21 +57,21 @@ internal class MyDeviceInfoHolder @Inject constructor(
         val crossSigned = cryptoStore.getMyCrossSigningInfo()?.masterKey()?.trustLevel?.locallyVerified ?: false
 //        myDevice.trustLevel = DeviceTrustLevel(crossSigned, true)
 
-        myDevice = CryptoDeviceInfo(
+        CryptoDeviceInfo(
                 credentials.deviceId!!,
                 credentials.userId,
                 keys = keys,
                 algorithms = MXCryptoAlgorithms.supportedAlgorithms(),
                 trustLevel = DeviceTrustLevel(crossSigned, true)
-        )
+        ).also {
+            // Add our own deviceinfo to the store
+            val endToEndDevicesForUser = cryptoStore.getUserDevices(credentials.userId)
 
-        // Add our own deviceinfo to the store
-        val endToEndDevicesForUser = cryptoStore.getUserDevices(credentials.userId)
+            val myDevices = endToEndDevicesForUser.orEmpty().toMutableMap()
 
-        val myDevices = endToEndDevicesForUser.orEmpty().toMutableMap()
+            myDevices[myDevice.deviceId] = myDevice
 
-        myDevices[myDevice.deviceId] = myDevice
-
-        cryptoStore.storeUserDevices(credentials.userId, myDevices)
+            cryptoStore.storeUserDevices(credentials.userId, myDevices)
+        }
     }
 }
