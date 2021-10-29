@@ -18,6 +18,7 @@ package im.vector.app.features.permalink
 
 import android.content.Context
 import android.net.Uri
+import androidx.core.net.toUri
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.extensions.isIgnored
@@ -118,9 +119,8 @@ class PermalinkHandler @Inject constructor(private val activeSessionHolder: Acti
 
     private fun isPermalinkSupported(context: Context, url: String): Boolean {
         return url.startsWith(PermalinkService.MATRIX_TO_URL_BASE) ||
-                context.resources.getStringArray(R.array.permalink_supported_hosts).any {
-                    url.startsWith(it)
-                }
+                context.resources.getStringArray(R.array.permalink_supported_hosts)
+                        .any { url.toUri().host == it }
     }
 
     private suspend fun PermalinkData.RoomLink.getRoomId(): String? {
