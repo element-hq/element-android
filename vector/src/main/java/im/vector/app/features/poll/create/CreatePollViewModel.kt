@@ -40,6 +40,25 @@ class CreatePollViewModel @AssistedInject constructor(
     companion object : MavericksViewModelFactory<CreatePollViewModel, CreatePollViewState> by hiltMavericksViewModelFactory() {
 
         const val MIN_OPTIONS_COUNT = 2
+        private const val MAX_OPTIONS_COUNT = 20
+    }
+
+    init {
+        observeState()
+    }
+
+    private fun observeState() {
+        onEach(
+                CreatePollViewState::question,
+                CreatePollViewState::options
+        ) { question, options ->
+            setState {
+                copy(
+                        canCreatePoll = canCreatePoll(question, options),
+                        canAddMoreOptions = options.size < MAX_OPTIONS_COUNT
+                )
+            }
+        }
     }
 
     override fun handle(action: CreatePollAction) {
@@ -72,8 +91,7 @@ class CreatePollViewModel @AssistedInject constructor(
         setState {
             val extendedOptions = options + ""
             copy(
-                    options = extendedOptions,
-                    canCreatePoll = canCreatePoll(this.copy(options = extendedOptions))
+                    options = extendedOptions
             )
         }
     }
@@ -82,8 +100,7 @@ class CreatePollViewModel @AssistedInject constructor(
         setState {
             val filteredOptions = options.filterIndexed { ind, _ -> ind != index }
             copy(
-                    options = filteredOptions,
-                    canCreatePoll = canCreatePoll(this.copy(options = filteredOptions))
+                    options = filteredOptions
             )
         }
     }
@@ -92,8 +109,7 @@ class CreatePollViewModel @AssistedInject constructor(
         setState {
             val changedOptions = options.mapIndexed { ind, s -> if (ind == index) option else s }
             copy(
-                    options = changedOptions,
-                    canCreatePoll = canCreatePoll(this.copy(options = changedOptions))
+                    options = changedOptions
             )
         }
     }
@@ -101,14 +117,13 @@ class CreatePollViewModel @AssistedInject constructor(
     private fun handleOnQuestionChanged(question: String) {
         setState {
             copy(
-                    question = question,
-                    canCreatePoll = canCreatePoll(this.copy(question = question))
+                    question = question
             )
         }
     }
 
-    private fun canCreatePoll(state: CreatePollViewState): Boolean {
-        return state.question.isNotEmpty() &&
-                state.options.filter { it.isNotEmpty() }.size >= MIN_OPTIONS_COUNT
+    private fun canCreatePoll(question: String, options: List<String>): Boolean {
+        return question.isNotEmpty() &&
+                options.filter { it.isNotEmpty() }.size >= MIN_OPTIONS_COUNT
     }
 }

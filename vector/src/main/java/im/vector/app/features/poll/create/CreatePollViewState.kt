@@ -22,7 +22,8 @@ data class CreatePollViewState(
         val roomId: String,
         val question: String = "",
         val options: List<String> = emptyList(),
-        val canCreatePoll: Boolean = false
+        val canCreatePoll: Boolean = false,
+        val canAddMoreOptions: Boolean = true
 ) : MavericksState {
 
     constructor(args: CreatePollArgs) : this(
