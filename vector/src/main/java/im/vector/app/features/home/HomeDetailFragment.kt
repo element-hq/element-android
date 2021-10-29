@@ -190,6 +190,7 @@ class HomeDetailFragment @Inject constructor(
                     currentCallsViewPresenter.updateCall(callManager.getCurrentCall(), callManager.getCalls())
                     invalidateOptionsMenu()
                 }
+        unknownDeviceDetectorSharedViewModel.handle(UnknownDeviceDetectorSharedViewModel.Action.Start)
     }
 
     private fun handleCallStarted() {
