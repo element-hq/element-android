@@ -906,9 +906,15 @@ public class BetterLinearLayoutManager extends LinearLayoutManager implements
                         mStackFromEnd);
         if (referenceChild != null) {
             anchorInfo.assignFromView(referenceChild, getPosition(referenceChild));
+            if (mCareAboutAnchorPlacement && mPreferredAnchorPosition >= 0) {
+                // Place anchor at the preferred anchor position
+                final int boundsStart = mOrientationHelper.getStartAfterPadding();
+                final int boundsEnd = mOrientationHelper.getEndAfterPadding();
+                anchorInfo.mCoordinate = (int) ((boundsEnd - boundsStart) * mPreferredAnchorPlacement);
+
             // If all visible views are removed in 1 pass, reference child might be out of bounds.
             // If that is the case, offset it back to 0 so that we use these pre-layout children.
-            if (!state.isPreLayout() && supportsPredictiveItemAnimations()) {
+            } else if (!state.isPreLayout() && supportsPredictiveItemAnimations()) {
                 // validate this child is at least partially visible. if not, offset it to start
                 final int childStart = mOrientationHelper.getDecoratedStart(referenceChild);
                 final int childEnd = mOrientationHelper.getDecoratedEnd(referenceChild);
