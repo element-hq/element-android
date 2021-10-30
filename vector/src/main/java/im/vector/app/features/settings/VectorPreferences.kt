@@ -1167,8 +1167,10 @@ class VectorPreferences @Inject constructor(private val context: Context): Stati
 
     fun prefSpacesShowAllRoomInHome(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_PREF_SPACE_SHOW_ALL_ROOM_IN_HOME,
-                // migration of old property
-                !labsSpacesOnlyOrphansInHome())
+                true)
+                // migration of old property - leads to unexpected results, since we don't do the same in the xml
+                // - and who cares nowadays either way
+                //!labsSpacesOnlyOrphansInHome())
     }
 
     /*

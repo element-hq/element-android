@@ -119,7 +119,7 @@
     <im.vector.app.core.preference.VectorPreferenceCategory android:title="@string/spaces">
 
         <im.vector.app.core.preference.VectorSwitchPreference
-            android:defaultValue="false"
+            android:defaultValue="true"
             android:key="SETTINGS_PREF_SPACE_SHOW_ALL_ROOM_IN_HOME"
             android:title="@string/preference_show_all_rooms_in_home"
             android:summary="@string/all_rooms_youre_in_will_be_shown_in_home" />
