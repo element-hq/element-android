@@ -146,14 +146,18 @@ class DisplayableEventFormatter @Inject constructor(
 
     private fun simpleFormat(senderName: String, body: CharSequence, appendAuthor: Boolean): CharSequence {
         return if (appendAuthor) {
+            val forceDirectionChar = if (stringProvider.preferRTL()) "\u200f" else "\u200e"
             span {
-                text = senderName
-                textColor = colorProvider.getColorFromAttribute(R.attr.vctr_content_primary)
-            }
-                    .append(": ")
+                text = forceDirectionChar
+            }.append(
+                    span {
+                        text = senderName
+                        textColor = colorProvider.getColorFromAttribute(R.attr.vctr_content_primary)
+                    })
+                    .append(": $forceDirectionChar")
                     .append(body)
         } else {
-            body
+            "\u2068$body"
         }
     }
 }
