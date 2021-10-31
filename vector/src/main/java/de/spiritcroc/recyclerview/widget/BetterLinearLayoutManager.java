@@ -43,6 +43,8 @@ import static androidx.recyclerview.widget.RecyclerView.VERTICAL;
 
 import java.util.List;
 
+import timber.log.Timber;
+
 /**
  * A {@link RecyclerView.LayoutManager} implementation which provides
  * similar functionality to {@link android.widget.ListView}.
@@ -911,6 +913,7 @@ public class BetterLinearLayoutManager extends LinearLayoutManager implements
                 final int boundsStart = mOrientationHelper.getStartAfterPadding();
                 final int boundsEnd = mOrientationHelper.getEndAfterPadding();
                 anchorInfo.mCoordinate = (int) ((boundsEnd - boundsStart) * mPreferredAnchorPlacement);
+                Timber.i("Set preferred anchor to " + mPreferredAnchorPosition + " - " + anchorInfo.mCoordinate);
 
             // If all visible views are removed in 1 pass, reference child might be out of bounds.
             // If that is the case, offset it back to 0 so that we use these pre-layout children.
