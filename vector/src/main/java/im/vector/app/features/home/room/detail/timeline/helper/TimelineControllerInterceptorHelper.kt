@@ -25,6 +25,7 @@ import im.vector.app.features.home.room.detail.timeline.item.DaySeparatorItem
 import im.vector.app.features.home.room.detail.timeline.item.ItemWithEvents
 import im.vector.app.features.home.room.detail.timeline.item.TimelineReadMarkerItem_
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
+import timber.log.Timber
 import kotlin.reflect.KMutableProperty0
 
 private const val DEFAULT_PREFETCH_THRESHOLD = 30
@@ -48,6 +49,8 @@ class TimelineControllerInterceptorHelper(private val positionOfReadMarker: KMut
         // Add some prefetch loader if needed
         models.addBackwardPrefetchIfNeeded(timeline, callback)
         models.addForwardPrefetchIfNeeded(timeline, callback)
+
+        Timber.i("ReadMarker debug: intercept $unreadState")
 
         val modelsIterator = models.listIterator()
         var index = 0
@@ -81,6 +84,7 @@ class TimelineControllerInterceptorHelper(private val positionOfReadMarker: KMut
                 index++
                 positionOfReadMarker.set(index)
                 appendReadMarker = false
+                Timber.i("ReadMarker debug: read marker appended at $index")
             }
             index++
         }
