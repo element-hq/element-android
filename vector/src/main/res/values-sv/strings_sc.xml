@@ -109,4 +109,10 @@
     <string name="settings_unifiedpush_reregister">Registrera om push-distributören</string>
     <string name="settings_force_allow_background_sync">Tillåt bakgrundssynkronisering utöver push</string>
     <string name="toast_unifiedpush_no_push_distributor">Ingen push-distributör hittades!</string>
+    <string name="room_list_quick_actions_open_at_bottom">Öppna vid senaste meddelanden</string>
+    <string name="settings_unread_counter">Oläst räknare</string>
+    <string name="settings_unimportant_counter_badge_v2">Räkna tysta meddelanden</string>
+    <string name="settings_unimportant_counter_badge_summary_v2">Visa antal för tysta meddelanden i chattöversikten</string>
+    <string name="settings_aggregate_unread_counts">Räkna chattar istället för meddelanden</string>
+    <string name="settings_aggregate_unread_counts_summary">Om olästa chattar ska räknas istället för enskilda meddelanden i utrymmen och rumskategorier</string>
 </resources>
