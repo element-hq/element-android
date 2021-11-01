@@ -30,6 +30,7 @@ import im.vector.app.features.call.lookup.CallUserMapper
 import im.vector.app.features.call.utils.EglUtils
 import im.vector.app.features.call.vectorCallService
 import im.vector.app.features.session.coroutineScope
+import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.push.fcm.FcmHelper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.asCoroutineDispatcher
@@ -69,7 +70,8 @@ private val loggerTag = LoggerTag("WebRtcCallManager", LoggerTag.VOIP)
 @Singleton
 class WebRtcCallManager @Inject constructor(
         private val context: Context,
-        private val activeSessionDataSource: ActiveSessionDataSource
+        private val activeSessionDataSource: ActiveSessionDataSource,
+        private var vectorPreferences: VectorPreferences
 ) : CallListener, LifecycleObserver {
 
     private val currentSession: Session?
@@ -328,7 +330,8 @@ class WebRtcCallManager @Inject constructor(
                 },
                 sessionProvider = { currentSession },
                 onCallBecomeActive = this::onCallActive,
-                onCallEnded = this::onCallEnded
+                onCallEnded = this::onCallEnded,
+                vectorPreferences = vectorPreferences
         )
         advertisedCalls.add(mxCall.callId)
         callsByCallId[mxCall.callId] = webRtcCall

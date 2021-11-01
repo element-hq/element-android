@@ -35,6 +35,7 @@ import im.vector.app.features.call.utils.awaitSetLocalDescription
 import im.vector.app.features.call.utils.awaitSetRemoteDescription
 import im.vector.app.features.call.utils.mapToCallCandidate
 import im.vector.app.features.session.coroutineScope
+import im.vector.app.features.settings.VectorPreferences
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.ReplaySubject
@@ -108,7 +109,8 @@ class WebRtcCall(
         private val sessionProvider: Provider<Session?>,
         private val peerConnectionFactoryProvider: Provider<PeerConnectionFactory?>,
         private val onCallBecomeActive: (WebRtcCall) -> Unit,
-        private val onCallEnded: (String, EndCallReason, Boolean) -> Unit
+        private val onCallEnded: (String, EndCallReason, Boolean) -> Unit,
+        private var vectorPreferences: VectorPreferences
 ) : MxCall.StateListener {
 
     interface Listener : MxCall.StateListener {
@@ -269,16 +271,27 @@ class WebRtcCall(
     private fun createPeerConnection(turnServerResponse: TurnServerResponse?) {
         val peerConnectionFactory = peerConnectionFactoryProvider.get() ?: return
         val iceServers = mutableListOf<PeerConnection.IceServer>().apply {
-            turnServerResponse?.let { server ->
-                server.uris?.forEach { uri ->
+            if (vectorPreferences.useFallbackTurnServer()) {
+                listOf("turn:turn.matrix.org:3478?transport=udp", "turn:turn.matrix.org:3478?transport=tcp", "turns:turn.matrix.org:443?transport=tcp").forEach {
                     add(
-                            PeerConnection
-                                    .IceServer
-                                    .builder(uri)
-                                    .setUsername(server.username)
-                                    .setPassword(server.password)
+                            PeerConnection.IceServer.builder(it)
+                                    .setUsername("xxxxx")
+                                    .setPassword("xxxxx")
                                     .createIceServer()
                     )
+                }
+            } else {
+                turnServerResponse?.let { server ->
+                    server.uris?.forEach { uri ->
+                        add(
+                                PeerConnection
+                                        .IceServer
+                                        .builder(uri)
+                                        .setUsername(server.username)
+                                        .setPassword(server.password)
+                                        .createIceServer()
+                        )
+                    }
                 }
             }
         }
