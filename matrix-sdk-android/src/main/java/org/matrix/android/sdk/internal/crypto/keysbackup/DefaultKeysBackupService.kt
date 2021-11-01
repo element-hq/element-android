@@ -410,7 +410,7 @@ internal class DefaultKeysBackupService @Inject constructor(
         val keysBackupVersionTrust = KeysBackupVersionTrust()
         val authData = keysBackupVersion.getAuthDataAsMegolmBackupAuthData()
 
-        if (authData == null || authData.publicKey.isEmpty() || authData.signatures.isEmpty()) {
+        if (authData == null || authData.publicKey.isEmpty() || authData.signatures.isNullOrEmpty()) {
             Timber.v("getKeysBackupTrust: Key backup is absent or missing required data")
             return keysBackupVersionTrust
         }
@@ -478,7 +478,7 @@ internal class DefaultKeysBackupService @Inject constructor(
             cryptoCoroutineScope.launch(coroutineDispatchers.main) {
                 val updateKeysBackupVersionBody = withContext(coroutineDispatchers.crypto) {
                     // Get current signatures, or create an empty set
-                    val myUserSignatures = authData.signatures[userId].orEmpty().toMutableMap()
+                    val myUserSignatures = authData.signatures?.get(userId).orEmpty().toMutableMap()
 
                     if (trust) {
                         // Add current device signature
@@ -497,7 +497,7 @@ internal class DefaultKeysBackupService @Inject constructor(
                     // Create an updated version of KeysVersionResult
                     val newMegolmBackupAuthData = authData.copy()
 
-                    val newSignatures = newMegolmBackupAuthData.signatures.toMutableMap()
+                    val newSignatures = newMegolmBackupAuthData.signatures.orEmpty().toMutableMap()
                     newSignatures[userId] = myUserSignatures
 
                     val newMegolmBackupAuthDataWithNewSignature = newMegolmBackupAuthData.copy(

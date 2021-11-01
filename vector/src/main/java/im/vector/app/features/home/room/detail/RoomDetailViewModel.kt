@@ -149,14 +149,16 @@ class RoomDetailViewModel @AssistedInject constructor(
         fun create(initialState: RoomDetailViewState): RoomDetailViewModel
     }
 
+    /**
+     * Can't use the hiltMaverick here because some dependencies are injected here and in fragment but they don't share the graph.
+     */
     companion object : MavericksViewModelFactory<RoomDetailViewModel, RoomDetailViewState> {
 
         const val PAGINATION_COUNT = 50
 
         @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: RoomDetailViewState): RoomDetailViewModel? {
+        override fun create(viewModelContext: ViewModelContext, state: RoomDetailViewState): RoomDetailViewModel {
             val fragment: RoomDetailFragment = (viewModelContext as FragmentViewModelContext).fragment()
-
             return fragment.roomDetailViewModelFactory.create(state)
         }
     }
@@ -533,9 +535,9 @@ class RoomDetailViewModel @AssistedInject constructor(
         val isAllowed = action.userJustAccepted || if (widget.type == WidgetType.Jitsi) {
             widget.senderInfo?.userId == session.myUserId ||
                     session.integrationManagerService().isNativeWidgetDomainAllowed(
-                    action.widget.type.preferred,
-                    domain
-            )
+                            action.widget.type.preferred,
+                            domain
+                    )
         } else false
 
         if (isAllowed) {
@@ -1110,8 +1112,10 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     override fun onTimelineUpdated(snapshot: List<TimelineEvent>) {
-        timelineEvents.tryEmit(snapshot)
-
+        viewModelScope.launch {
+            // tryEmit doesn't work with SharedFlow without cache
+            timelineEvents.emit(snapshot)
+        }
         // PreviewUrl
         if (vectorPreferences.showUrlPreviews()) {
             withState { state ->

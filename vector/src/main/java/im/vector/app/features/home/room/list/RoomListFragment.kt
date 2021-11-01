@@ -64,7 +64,6 @@ data class RoomListParams(
 
 class RoomListFragment @Inject constructor(
         private val pagedControllerFactory: RoomSummaryPagedControllerFactory,
-        val roomListViewModelFactory: RoomListViewModel.Factory,
         private val notificationDrawerManager: NotificationDrawerManager,
         private val footerController: RoomListFooterController,
         private val userPreferencesProvider: UserPreferencesProvider

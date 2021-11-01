@@ -52,7 +52,6 @@ import javax.inject.Inject
 class UserListFragment @Inject constructor(
         private val userListController: UserListController,
         private val dimensionConverter: DimensionConverter,
-        val homeServerCapabilitiesViewModelFactory: HomeServerCapabilitiesViewModel.Factory
 ) : VectorBaseFragment<FragmentUserListBinding>(),
         UserListController.Callback {
 

@@ -24,6 +24,7 @@ import im.vector.app.core.platform.WaitingViewData
 import org.matrix.android.sdk.api.session.securestorage.SsssKeyCreationInfo
 
 data class BootstrapViewState(
+        val setupMode: SetupMode,
         val step: BootstrapStep = BootstrapStep.CheckingMigration,
         val passphrase: String? = null,
         val migrationRecoveryKey: String? = null,
@@ -34,4 +35,7 @@ data class BootstrapViewState(
         val recoveryKeyCreationInfo: SsssKeyCreationInfo? = null,
         val initializationWaitingViewData: WaitingViewData? = null,
         val recoverySaveFileProcess: Async<Unit> = Uninitialized
-) : MavericksState
+) : MavericksState {
+
+    constructor(args: BootstrapBottomSheet.Args) : this(setupMode = args.setUpMode)
+}

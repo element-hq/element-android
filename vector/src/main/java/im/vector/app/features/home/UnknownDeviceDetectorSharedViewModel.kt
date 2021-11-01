@@ -16,17 +16,16 @@
 
 package im.vector.app.features.home
 
-import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.platform.VectorViewModelAction
@@ -66,21 +65,11 @@ class UnknownDeviceDetectorSharedViewModel @AssistedInject constructor(@Assisted
     }
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: UnknownDevicesState): UnknownDeviceDetectorSharedViewModel
+    interface Factory : MavericksAssistedViewModelFactory<UnknownDeviceDetectorSharedViewModel, UnknownDevicesState> {
+        override fun create(initialState: UnknownDevicesState): UnknownDeviceDetectorSharedViewModel
     }
 
-    companion object : MavericksViewModelFactory<UnknownDeviceDetectorSharedViewModel, UnknownDevicesState> {
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: UnknownDevicesState): UnknownDeviceDetectorSharedViewModel? {
-            val factory = when (viewModelContext) {
-                is FragmentViewModelContext -> viewModelContext.fragment as? Factory
-                is ActivityViewModelContext -> viewModelContext.activity as? Factory
-            }
-            return factory?.create(state) ?: error("You should let your activity/fragment implements Factory interface")
-        }
-    }
+    companion object : MavericksViewModelFactory<UnknownDeviceDetectorSharedViewModel, UnknownDevicesState> by hiltMavericksViewModelFactory()
 
     private val ignoredDeviceList = ArrayList<String>()
 

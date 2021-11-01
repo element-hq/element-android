@@ -30,10 +30,13 @@ Element menempatkan Anda dalam kendali dengan cara yang berbeda:
 Anda dapat mengobrol dengan siapa saja di jaringan Matrix, apakah mereka menggunakan Element, aplikasi Matrix lain atau bahkan jika mereka menggunakan aplikasi perpesanan yang berbeda.
 
 <b>Sangat aman</b>
-Enkripsi ujung-ke-ujung beneran (hanya mereka yang dalam percakapan dapat mendekripsi pesan), dan verifikasi perangkat yang ditanda tangani silang.
+Enkripsi ujung-ke-ujung yang nyata (hanya mereka yang dalam percakapan dapat mendekripsi pesan), dan verifikasi perangkat menggunakan penandatanganan-silang.
 
 <b>Komunikasi dan integrasi lengkap</b>
 Perpesanan, panggilan suara dan video, berbagi file, berbagi layar dan banyak integrasi, bot dan widget. Buat ruangan, komunitas, tetap terhubung dan selesaikan hal-hal.
 
 <b>Ambil di mana Anda tinggalkan</b>
 Tetap terhubung di mana pun Anda berada dengan riwayat pesan yang sepenuhnya disinkronkan di semua perangkat Anda dan di web di https://app.element.io
+
+<b>Open source</b>
+Element Android adalah proyek sumber terbuka, di-host oleh GitHub. Silakan melaporkan bug dan/atau membuat kontribusi ke pengembangannya di https://github.com/vector-im/element-android

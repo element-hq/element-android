@@ -19,16 +19,15 @@ package im.vector.app.features.spaces.manage
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagedList
-import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -55,9 +54,11 @@ class SpaceAddRoomsViewModel @AssistedInject constructor(
 ) : VectorViewModel<SpaceAddRoomsState, SpaceAddRoomActions, SpaceAddRoomsViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: SpaceAddRoomsState): SpaceAddRoomsViewModel
+    interface Factory : MavericksAssistedViewModelFactory<SpaceAddRoomsViewModel, SpaceAddRoomsState> {
+        override fun create(initialState: SpaceAddRoomsState): SpaceAddRoomsViewModel
     }
+
+    companion object : MavericksViewModelFactory<SpaceAddRoomsViewModel, SpaceAddRoomsState> by hiltMavericksViewModelFactory()
 
     val updatableLiveSpacePageResult: UpdatableLivePageResult by lazy {
         session.getFilteredPagedRoomSummariesLive(
@@ -129,16 +130,6 @@ class SpaceAddRoomsViewModel @AssistedInject constructor(
                     ignoreRooms = (spaceSummary?.flattenParentIds ?: emptyList()) + listOf(initialState.spaceId),
                     shouldShowDMs = !onlyShowSpaces && spaceSummary?.isPublic == false
             )
-        }
-    }
-
-    companion object : MavericksViewModelFactory<SpaceAddRoomsViewModel, SpaceAddRoomsState> {
-        override fun create(viewModelContext: ViewModelContext, state: SpaceAddRoomsState): SpaceAddRoomsViewModel? {
-            val factory = when (viewModelContext) {
-                is FragmentViewModelContext -> viewModelContext.fragment as? Factory
-                is ActivityViewModelContext -> viewModelContext.activity as? Factory
-            }
-            return factory?.create(state) ?: error("You should let your activity/fragment implements Factory interface")
         }
     }
 

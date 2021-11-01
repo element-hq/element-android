@@ -286,7 +286,7 @@
     <string name="view_decrypted_source">Vedi il codice sorgente decifrato</string>
     <string name="delete">Elimina</string>
     <string name="rename">Rinomina</string>
-    <string name="report_content">Segnala questo contenuto</string>
+    <string name="report_content">Segnala contenuto</string>
     <string name="active_call">Chiamata in corso</string>
     <string name="ongoing_conference_call">Avvio conferenza. 
 \nUnisciti come %1$s o %2$s</string>
@@ -2909,10 +2909,10 @@
     <string name="voice_message_tap_to_stop_toast">Tocca la registrazione per fermare o ascoltare</string>
     <string name="voice_message_n_seconds_warning_toast">%1$ds rimasti</string>
     <string name="voice_message_release_to_send_toast">Tieni premuto per registrare, rilascia per inviare</string>
-    <string name="a11y_delete_recorded_voice_message">Elimina messaggio vocale registrato</string>
+    <string name="a11y_delete_recorded_voice_message">Elimina la registrazione</string>
     <string name="a11y_recording_voice_message">Registrazione messaggio vocale</string>
     <string name="a11y_pause_voice_message">Pausa messaggio vocale</string>
-    <string name="a11y_start_voice_message">Inizia messaggio vocale</string>
+    <string name="a11y_start_voice_message">Registra messaggio vocale</string>
     <string name="a11y_play_voice_message">Riproduci messaggio vocale</string>
     <string name="a11y_lock_voice_message">Blocco messaggio vocale</string>
     <string name="voice_message_slide_to_cancel">Scorri per annullare</string>
@@ -3042,4 +3042,20 @@
     <string name="space_participants_kick_prompt_msg">buttando fuori l\'utente verrà rimosso da questo spazio.
 \n
 \nPer impedire che possa rientrare, dovresti invece bandirlo.</string>
+    <string name="a11y_stop_voice_message">Ferma la registrazione</string>
+    <string name="command_description_lenny">Antepone ( ͡° ͜ʖ ͡°) ad un messaggio di testo</string>
+    <string name="identity_server_consent_dialog_neutral_policy">Informativa</string>
+    <string name="settings_discovery_no_policy_provided">Nessun informativa fornita dal server d\'identità</string>
+    <string name="settings_discovery_hide_identity_server_policy_title">Nascondi l\'informativa del server d\'identità</string>
+    <string name="settings_discovery_show_identity_server_policy_title">Mostra l\'informativa del server d\'identità</string>
+    <string name="command_description_whois">Mostra le informazioni di un utente</string>
+    <string name="command_description_avatar_for_room">Cambia il tuo avatar solo nella stanza attuale</string>
+    <string name="command_description_room_avatar">Cambia l\'avatar della stanza attuale</string>
+    <string name="command_description_nick_for_room">Cambia il tuo nick solo nella stanza attuale</string>
+    <string name="command_description_room_name">Imposta il nome della stanza</string>
+    <string name="command_description_unignore_user">Smetti di ignorare un utente, mostrando i suoi messaggi successivi</string>
+    <string name="command_description_ignore_user">Ignora un utente, non mostrandoti i suoi messaggi</string>
+    <string name="a11y_presence_unavailable">Non disponibile</string>
+    <string name="a11y_presence_offline">Offline</string>
+    <string name="a11y_presence_online">Online</string>
 </resources>

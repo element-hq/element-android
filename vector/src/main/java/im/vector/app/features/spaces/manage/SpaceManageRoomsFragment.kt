@@ -45,10 +45,8 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class SpaceManageRoomsFragment @Inject constructor(
-        private val viewModelFactory: SpaceManageRoomsViewModel.Factory,
         private val epoxyController: SpaceManageRoomsController
 ) : VectorBaseFragment<FragmentSpaceAddRoomsBinding>(),
-        SpaceManageRoomsViewModel.Factory,
         OnBackPressed,
         SpaceManageRoomsController.Listener,
         Callback {
@@ -106,8 +104,6 @@ class SpaceManageRoomsFragment @Inject constructor(
         views.roomList.cleanup()
         super.onDestroyView()
     }
-
-    override fun create(initialState: SpaceManageRoomViewState) = viewModelFactory.create(initialState)
 
     override fun invalidate() = withState(viewModel) { state ->
         epoxyController.setData(state)

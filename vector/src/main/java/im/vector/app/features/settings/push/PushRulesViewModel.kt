@@ -18,7 +18,8 @@ package im.vector.app.features.settings.push
 import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
-import im.vector.app.core.di.HasScreenInjector
+import dagger.hilt.EntryPoints
+import im.vector.app.core.di.SingletonEntryPoint
 import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
@@ -34,7 +35,7 @@ class PushRulesViewModel(initialState: PushRulesViewState) :
     companion object : MavericksViewModelFactory<PushRulesViewModel, PushRulesViewState> {
 
         override fun initialState(viewModelContext: ViewModelContext): PushRulesViewState? {
-            val session = (viewModelContext.activity as HasScreenInjector).injector().activeSessionHolder().getActiveSession()
+            val session = EntryPoints.get(viewModelContext.app(), SingletonEntryPoint::class.java).activeSessionHolder().getActiveSession()
             val rules = session.getPushRules().getAllRules()
             return PushRulesViewState(rules)
         }

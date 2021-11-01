@@ -18,16 +18,16 @@
 package im.vector.app.features.roommemberprofile
 
 import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.R
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.mvrx.runCatchingToAsync
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
@@ -60,21 +60,14 @@ import org.matrix.android.sdk.flow.unwrap
 class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private val initialState: RoomMemberProfileViewState,
                                                              private val stringProvider: StringProvider,
                                                              private val session: Session) :
-    VectorViewModel<RoomMemberProfileViewState, RoomMemberProfileAction, RoomMemberProfileViewEvents>(initialState) {
+        VectorViewModel<RoomMemberProfileViewState, RoomMemberProfileAction, RoomMemberProfileViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: RoomMemberProfileViewState): RoomMemberProfileViewModel
+    interface Factory : MavericksAssistedViewModelFactory<RoomMemberProfileViewModel, RoomMemberProfileViewState> {
+        override fun create(initialState: RoomMemberProfileViewState): RoomMemberProfileViewModel
     }
 
-    companion object : MavericksViewModelFactory<RoomMemberProfileViewModel, RoomMemberProfileViewState> {
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: RoomMemberProfileViewState): RoomMemberProfileViewModel? {
-            val fragment: RoomMemberProfileFragment = (viewModelContext as FragmentViewModelContext).fragment()
-            return fragment.viewModelFactory.create(state)
-        }
-    }
+    companion object : MavericksViewModelFactory<RoomMemberProfileViewModel, RoomMemberProfileViewState> by hiltMavericksViewModelFactory()
 
     private val room = if (initialState.roomId != null) {
         session.getRoom(initialState.roomId)

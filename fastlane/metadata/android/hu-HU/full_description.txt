@@ -38,3 +38,6 @@ Igazi végpontok között titkosítás (csak a beszélgetésben résztvevők tud
 
 <b>Vedd fel a fonalat</b>
 Maradj kapcsolatban bárhol minden eszközödön a szinkronizált üzenetekkel és a weben a https://app.element.io oldallal
+
+<b>Nyílt forráskód</b>
+Element Android egy nyílt forráskódú projekt a GitHubon. Küldj hibajegyet és/vagy vegyél részt a fejlesztésében itt: https://github.com/vector-im/element-android

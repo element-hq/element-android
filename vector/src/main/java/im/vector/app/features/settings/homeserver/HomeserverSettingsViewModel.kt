@@ -16,16 +16,15 @@
 
 package im.vector.app.features.settings.homeserver
 
-import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import kotlinx.coroutines.launch
@@ -37,18 +36,11 @@ class HomeserverSettingsViewModel @AssistedInject constructor(
 ) : VectorViewModel<HomeServerSettingsViewState, HomeserverSettingsAction, EmptyViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: HomeServerSettingsViewState): HomeserverSettingsViewModel
+    interface Factory : MavericksAssistedViewModelFactory<HomeserverSettingsViewModel, HomeServerSettingsViewState> {
+        override fun create(initialState: HomeServerSettingsViewState): HomeserverSettingsViewModel
     }
 
-    companion object : MavericksViewModelFactory<HomeserverSettingsViewModel, HomeServerSettingsViewState> {
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: HomeServerSettingsViewState): HomeserverSettingsViewModel? {
-            val fragment: HomeserverSettingsFragment = (viewModelContext as FragmentViewModelContext).fragment()
-            return fragment.homeserverSettingsViewModelFactory.create(state)
-        }
-    }
+    companion object : MavericksViewModelFactory<HomeserverSettingsViewModel, HomeServerSettingsViewState> by hiltMavericksViewModelFactory()
 
     init {
         setState {

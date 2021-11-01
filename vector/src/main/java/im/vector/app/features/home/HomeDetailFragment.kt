@@ -57,15 +57,12 @@ import im.vector.app.features.settings.VectorSettingsActivity.Companion.EXTRA_DI
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.workers.signout.BannerState
 import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
-import im.vector.app.features.workers.signout.ServerBackupStatusViewState
 import org.matrix.android.sdk.api.session.group.model.GroupSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
 import javax.inject.Inject
 
 class HomeDetailFragment @Inject constructor(
-        val homeDetailViewModelFactory: HomeDetailViewModel.Factory,
-        private val serverBackupStatusViewModelFactory: ServerBackupStatusViewModel.Factory,
         private val avatarRenderer: AvatarRenderer,
         private val colorProvider: ColorProvider,
         private val alertManager: PopupAlertManager,
@@ -74,8 +71,7 @@ class HomeDetailFragment @Inject constructor(
         private val appStateHandler: AppStateHandler
 ) : VectorBaseFragment<FragmentHomeDetailBinding>(),
         KeysBackupBanner.Delegate,
-        CurrentCallsView.Callback,
-        ServerBackupStatusViewModel.Factory {
+        CurrentCallsView.Callback {
 
     private val viewModel: HomeDetailViewModel by fragmentViewModel()
     private val unknownDeviceDetectorSharedViewModel: UnknownDeviceDetectorSharedViewModel by activityViewModel()
@@ -108,9 +104,9 @@ class HomeDetailFragment @Inject constructor(
 
     override fun onPrepareOptionsMenu(menu: Menu) {
         withState(viewModel) { state ->
-            menu.iterator().forEach { it.isVisible = state.currentTab is HomeTab.RoomList }
+            val isRoomList = state.currentTab is HomeTab.RoomList
+            menu.findItem(R.id.menu_home_mark_all_as_read).isVisible = isRoomList && hasUnreadRooms
         }
-        menu.findItem(R.id.menu_home_mark_all_as_read).isVisible = hasUnreadRooms
         super.onPrepareOptionsMenu(menu)
     }
 
@@ -502,9 +498,5 @@ class HomeDetailFragment @Inject constructor(
             }
         }
         return this
-    }
-
-    override fun create(initialState: ServerBackupStatusViewState): ServerBackupStatusViewModel {
-        return serverBackupStatusViewModelFactory.create(initialState)
     }
 }

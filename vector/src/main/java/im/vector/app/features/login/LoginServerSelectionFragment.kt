@@ -87,10 +87,5 @@ class LoginServerSelectionFragment @Inject constructor() : AbstractLoginFragment
 
     override fun updateWithState(state: LoginViewState) {
         updateSelectedChoice(state)
-
-        if (state.loginMode != LoginMode.Unknown) {
-            // LoginFlow for matrix.org has been retrieved
-            loginViewModel.handle(LoginAction.PostViewEvent(LoginViewEvents.OnLoginFlowRetrieved))
-        }
     }
 }

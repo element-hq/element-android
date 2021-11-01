@@ -64,7 +64,7 @@ private data class NewAttachmentAttributes(
  * Possible next worker    : Always [MultipleEventSendingDispatcherWorker]
  */
 internal class UploadContentWorker(val context: Context, params: WorkerParameters) :
-    SessionSafeCoroutineWorker<UploadContentWorker.Params>(context, params, Params::class.java) {
+        SessionSafeCoroutineWorker<UploadContentWorker.Params>(context, params, Params::class.java) {
 
     @JsonClass(generateAdapter = true)
     internal data class Params(
@@ -81,6 +81,7 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
     @Inject lateinit var fileService: DefaultFileService
     @Inject lateinit var cancelSendTracker: CancelSendTracker
     @Inject lateinit var imageCompressor: ImageCompressor
+    @Inject lateinit var imageExitTagRemover: ImageExifTagRemover
     @Inject lateinit var videoCompressor: VideoCompressor
     @Inject lateinit var thumbnailExtractor: ThumbnailExtractor
     @Inject lateinit var localEchoRepository: LocalEchoRepository
@@ -114,7 +115,7 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
         }
 
         val attachment = params.attachment
-        val filesToDelete = mutableListOf<File>()
+        val filesToDelete = hashSetOf<File>()
 
         return try {
             val inputStream = context.contentResolver.openInputStream(attachment.queryUri)
@@ -219,6 +220,10 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                                     }
                                 }
                             }
+                } else if (attachment.type == ContentAttachmentData.Type.IMAGE && !params.compressBeforeSending) {
+                    fileToUpload = imageExitTagRemover.removeSensitiveJpegExifTags(workingFile)
+                            .also { filesToDelete.add(it) }
+                    newAttachmentAttributes = newAttachmentAttributes.copy(newFileSize = fileToUpload.length())
                 } else {
                     fileToUpload = workingFile
                     // Fix: OpenableColumns.SIZE may return -1 or 0

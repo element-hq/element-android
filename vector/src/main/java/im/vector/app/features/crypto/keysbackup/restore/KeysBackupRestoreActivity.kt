@@ -19,7 +19,9 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
+import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.extensions.addFragmentToBackstack
 import im.vector.app.core.extensions.observeEvent
 import im.vector.app.core.extensions.registerStartForActivityResult
@@ -28,7 +30,9 @@ import im.vector.app.core.platform.SimpleFragmentActivity
 import im.vector.app.core.ui.views.KeysBackupBanner
 import im.vector.app.features.crypto.quads.SharedSecureStorageActivity
 import org.matrix.android.sdk.api.session.crypto.crosssigning.KEYBACKUP_SECRET_SSSS_NAME
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class KeysBackupRestoreActivity : SimpleFragmentActivity() {
 
     companion object {
@@ -48,10 +52,12 @@ class KeysBackupRestoreActivity : SimpleFragmentActivity() {
         super.onBackPressed()
     }
 
+    @Inject  lateinit var activeSessionHolder: ActiveSessionHolder
+
     override fun initUiAndData() {
         super.initUiAndData()
         viewModel = viewModelProvider.get(KeysBackupRestoreSharedViewModel::class.java)
-        viewModel.initSession(session)
+        viewModel.initSession(activeSessionHolder.getActiveSession())
 
         viewModel.keySourceModel.observe(this) { keySource ->
             if (keySource != null && !keySource.isInQuadS && supportFragmentManager.fragments.isEmpty()) {

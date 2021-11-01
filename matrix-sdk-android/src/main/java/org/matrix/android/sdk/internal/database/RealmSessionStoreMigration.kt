@@ -47,11 +47,24 @@ import org.matrix.android.sdk.internal.database.model.TimelineEventEntityFields
 import org.matrix.android.sdk.internal.database.model.presence.UserPresenceEntityFields
 import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.query.process
+import org.matrix.android.sdk.internal.util.Normalizer
 import timber.log.Timber
+import javax.inject.Inject
 
-internal object RealmSessionStoreMigration : RealmMigration {
+internal class RealmSessionStoreMigration @Inject constructor(
+        private val normalizer: Normalizer
+) : RealmMigration {
 
-    const val SESSION_STORE_SCHEMA_VERSION = 19L
+    companion object {
+        const val SESSION_STORE_SCHEMA_VERSION = 19L
+    }
+
+    /**
+     * Forces all RealmSessionStoreMigration instances to be equal
+     * Avoids Realm throwing when multiple instances of the migration are set
+     */
+    override fun equals(other: Any?) = other is RealmSessionStoreMigration
+    override fun hashCode() = 1000
 
     override fun migrate(realm: DynamicRealm, oldVersion: Long, newVersion: Long) {
         Timber.v("Migrating Realm Session from $oldVersion to $newVersion")
@@ -369,11 +382,21 @@ internal object RealmSessionStoreMigration : RealmMigration {
     }
 
     private fun migrateTo19(realm: DynamicRealm) {
+        Timber.d("Step 18 -> 19")
         realm.schema.get("DraftEntity")
                 ?.addField(DraftEntityFields.MESSAGE_TYPE, String::class.java)
                 ?.setRequired(DraftEntityFields.MESSAGE_TYPE, true)
                 ?.transform {
                     it.setString(DraftEntityFields.MESSAGE_TYPE, MessageType.MSGTYPE_TEXT)
+                }
+
+        realm.schema.get("RoomSummaryEntity")
+                ?.addField(RoomSummaryEntityFields.NORMALIZED_DISPLAY_NAME, String::class.java)
+                ?.transform {
+                    it.getString(RoomSummaryEntityFields.DISPLAY_NAME)?.let { displayName ->
+                        val normalised = normalizer.normalize(displayName)
+                        it.set(RoomSummaryEntityFields.NORMALIZED_DISPLAY_NAME, normalised)
+                    }
                 }
     }
 }

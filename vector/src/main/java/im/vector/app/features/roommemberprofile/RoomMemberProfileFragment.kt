@@ -66,7 +66,6 @@ data class RoomMemberProfileArgs(
 ) : Parcelable
 
 class RoomMemberProfileFragment @Inject constructor(
-        val viewModelFactory: RoomMemberProfileViewModel.Factory,
         private val roomMemberProfileController: RoomMemberProfileController,
         private val avatarRenderer: AvatarRenderer,
         private val roomDetailPendingActionStore: RoomDetailPendingActionStore

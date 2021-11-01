@@ -44,9 +44,8 @@ class SpaceAddRoomFragment @Inject constructor(
         private val spaceEpoxyController: AddRoomListController,
         private val roomEpoxyController: AddRoomListController,
         private val dmEpoxyController: AddRoomListController,
-        private val viewModelFactory: SpaceAddRoomsViewModel.Factory
 ) : VectorBaseFragment<FragmentSpaceAddRoomsBinding>(),
-        OnBackPressed, AddRoomListController.Listener, SpaceAddRoomsViewModel.Factory {
+        OnBackPressed, AddRoomListController.Listener {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?) =
             FragmentSpaceAddRoomsBinding.inflate(layoutInflater, container, false)
@@ -54,9 +53,6 @@ class SpaceAddRoomFragment @Inject constructor(
     private val viewModel by fragmentViewModel(SpaceAddRoomsViewModel::class)
 
     private val sharedViewModel: SpaceManageSharedViewModel by activityViewModel()
-
-    override fun create(initialState: SpaceAddRoomsState): SpaceAddRoomsViewModel =
-            viewModelFactory.create(initialState)
 
     override fun getMenuRes(): Int = R.menu.menu_space_add_room
 

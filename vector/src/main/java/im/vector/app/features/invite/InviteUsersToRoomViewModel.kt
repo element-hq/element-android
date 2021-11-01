@@ -16,14 +16,13 @@
 
 package im.vector.app.features.invite
 
-import com.airbnb.mvrx.ActivityViewModelContext
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MavericksViewModelFactory
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.R
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.userdirectory.PendingSelection
@@ -43,21 +42,11 @@ class InviteUsersToRoomViewModel @AssistedInject constructor(@Assisted
     private val room = session.getRoom(initialState.roomId)!!
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: InviteUsersToRoomViewState): InviteUsersToRoomViewModel
+    interface Factory : MavericksAssistedViewModelFactory<InviteUsersToRoomViewModel, InviteUsersToRoomViewState> {
+        override fun create(initialState: InviteUsersToRoomViewState): InviteUsersToRoomViewModel
     }
 
-    companion object : MavericksViewModelFactory<InviteUsersToRoomViewModel, InviteUsersToRoomViewState> {
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: InviteUsersToRoomViewState): InviteUsersToRoomViewModel? {
-            val factory = when (viewModelContext) {
-                is FragmentViewModelContext -> viewModelContext.fragment as? Factory
-                is ActivityViewModelContext -> viewModelContext.activity as? Factory
-            }
-            return factory?.create(state) ?: error("You should let your activity/fragment implements Factory interface")
-        }
-    }
+    companion object : MavericksViewModelFactory<InviteUsersToRoomViewModel, InviteUsersToRoomViewState> by hiltMavericksViewModelFactory()
 
     override fun handle(action: InviteUsersToRoomAction) {
         when (action) {
