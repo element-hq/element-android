@@ -70,7 +70,6 @@ class ScrollOnNewMessageCallback(private val layoutManager: BetterLinearLayoutMa
             }
             if (scrollToEvent == null) {
                 layoutManager.scrollToPositionWithOffset(0, 0)
-                initialForceScroll = false
                 layoutManager.setPreferredAnchorPosition(0)
             } else {
                 timelineEventController.searchPositionOfEvent(scrollToEvent)?.let {
@@ -79,7 +78,6 @@ class ScrollOnNewMessageCallback(private val layoutManager: BetterLinearLayoutMa
                     // from the bottom of the view, not the top).
                     val scrollToPosition = max(it + scrollOffset + 1, 0)
                     layoutManager.scrollToPositionWithOffset(scrollToPosition, (parentView.measuredHeight * RoomDetailFragment.TARGET_SCROLL_OUT_FACTOR).toInt())
-                    initialForceScroll = false
                     layoutManager.setPreferredAnchorPosition(scrollToPosition)
                 }
             }
