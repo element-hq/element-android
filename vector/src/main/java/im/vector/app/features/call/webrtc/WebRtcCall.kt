@@ -272,7 +272,9 @@ class WebRtcCall(
         val peerConnectionFactory = peerConnectionFactoryProvider.get() ?: return
         val iceServers = mutableListOf<PeerConnection.IceServer>().apply {
             if (vectorPreferences.useFallbackTurnServer()) {
-                listOf("turn:turn.matrix.org:3478?transport=udp", "turn:turn.matrix.org:3478?transport=tcp", "turns:turn.matrix.org:443?transport=tcp").forEach {
+                listOf("turn:turn.matrix.org:3478?transport=udp",
+                        "turn:turn.matrix.org:3478?transport=tcp",
+                        "turns:turn.matrix.org:443?transport=tcp").forEach {
                     add(
                             PeerConnection.IceServer.builder(it)
                                     .setUsername("xxxxx")
