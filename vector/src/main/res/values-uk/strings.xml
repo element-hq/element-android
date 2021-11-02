@@ -2870,4 +2870,5 @@
     <string name="command_description_room_avatar">Змінює аватар поточної кімнати</string>
     <string name="command_description_nick_for_room">Змінює ваше показуване ім\'я лише у поточній кімнаті</string>
     <string name="command_description_room_name">Установлює назву кімнати</string>
+    <string name="settings_discovery_no_policy_provided">Сервер ідентифікації не надав жодних правил</string>
 </resources>
