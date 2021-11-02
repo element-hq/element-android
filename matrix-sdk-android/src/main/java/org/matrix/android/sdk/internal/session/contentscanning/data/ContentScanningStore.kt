@@ -4,7 +4,7 @@
  * Proprietary and confidential
  */
 
-package im.vector.matrix.android.sdk.internal.session.contentscanning.data
+package org.matrix.android.sdk.internal.session.contentscanning.data
 
 import androidx.lifecycle.LiveData
 import org.matrix.android.sdk.api.session.contentscanning.ScanState

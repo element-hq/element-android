@@ -4,17 +4,14 @@
  * Proprietary and confidential
  */
 
-package im.vector.matrix.android.sdk.internal.session.contentscanning
+package org.matrix.android.sdk.internal.session.contentscanning
 
 import androidx.lifecycle.LiveData
 import dagger.Lazy
-import im.vector.matrix.android.sdk.internal.session.contentscanning.data.ContentScanningStore
-import im.vector.matrix.android.sdk.internal.session.contentscanning.tasks.GetServerPublicKeyTask
-import im.vector.matrix.android.sdk.internal.session.contentscanning.tasks.ScanEncryptedTask
-import im.vector.matrix.android.sdk.internal.session.contentscanning.tasks.ScanMediaTask
 import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
 import org.matrix.android.sdk.api.MatrixCallback
+import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.NoOpMatrixCallback
 import org.matrix.android.sdk.api.session.contentscanning.ContentScannerService
 import org.matrix.android.sdk.api.session.contentscanning.ScanState
@@ -24,9 +21,12 @@ import org.matrix.android.sdk.internal.crypto.attachments.ElementToDecrypt
 import org.matrix.android.sdk.internal.di.Unauthenticated
 import org.matrix.android.sdk.internal.network.RetrofitFactory
 import org.matrix.android.sdk.internal.session.SessionScope
+import org.matrix.android.sdk.internal.session.contentscanning.data.ContentScanningStore
+import org.matrix.android.sdk.internal.session.contentscanning.tasks.GetServerPublicKeyTask
+import org.matrix.android.sdk.internal.session.contentscanning.tasks.ScanEncryptedTask
+import org.matrix.android.sdk.internal.session.contentscanning.tasks.ScanMediaTask
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.task.launchToCallback
-import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.internal.util.awaitCallback
 import timber.log.Timber
 import javax.inject.Inject

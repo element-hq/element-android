@@ -4,13 +4,12 @@
  * Proprietary and confidential
  */
 
-package im.vector.matrix.android.sdk.internal.session.contentscanning.tasks
+package org.matrix.android.sdk.internal.session.contentscanning.tasks
 
-import im.vector.matrix.android.sdk.internal.session.contentscanning.ContentScanApi
-import im.vector.matrix.android.sdk.internal.session.contentscanning.model.ServerPublicKeyResponse
 import org.matrix.android.sdk.internal.network.executeRequest
+import org.matrix.android.sdk.internal.session.contentscanning.ContentScanApi
+import org.matrix.android.sdk.internal.session.contentscanning.model.ServerPublicKeyResponse
 import org.matrix.android.sdk.internal.task.Task
-
 import javax.inject.Inject
 
 internal interface GetServerPublicKeyTask : Task<GetServerPublicKeyTask.Params, String?> {

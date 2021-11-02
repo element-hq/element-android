@@ -4,13 +4,13 @@
  * Proprietary and confidential
  */
 
-package im.vector.matrix.android.sdk.internal.session.contentscanning.tasks
+package org.matrix.android.sdk.internal.session.contentscanning.tasks
 
-import im.vector.matrix.android.sdk.internal.session.contentscanning.ContentScanningApiProvider
-import im.vector.matrix.android.sdk.internal.session.contentscanning.ScanEncryptorUtils
 import okhttp3.ResponseBody
 import org.matrix.android.sdk.internal.crypto.attachments.ElementToDecrypt
 import org.matrix.android.sdk.internal.network.executeRequest
+import org.matrix.android.sdk.internal.session.contentscanning.ContentScanningApiProvider
+import org.matrix.android.sdk.internal.session.contentscanning.ScanEncryptorUtils
 import org.matrix.android.sdk.internal.task.Task
 import javax.inject.Inject
 

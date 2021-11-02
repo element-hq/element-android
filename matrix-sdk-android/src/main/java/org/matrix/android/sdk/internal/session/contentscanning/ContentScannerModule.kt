@@ -4,22 +4,11 @@
  * Proprietary and confidential
  */
 
-package im.vector.matrix.android.sdk.internal.session.contentscanning
+package org.matrix.android.sdk.internal.session.contentscanning
 
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
-import im.vector.matrix.android.sdk.internal.session.contentscanning.data.ContentScanningStore
-import im.vector.matrix.android.sdk.internal.session.contentscanning.db.ContentScannerRealmModule
-import im.vector.matrix.android.sdk.internal.session.contentscanning.db.RealmContentScannerStore
-import im.vector.matrix.android.sdk.internal.session.contentscanning.tasks.DefaultDownloadEncryptedTask
-import im.vector.matrix.android.sdk.internal.session.contentscanning.tasks.DefaultGetServerPublicKeyTask
-import im.vector.matrix.android.sdk.internal.session.contentscanning.tasks.DefaultScanEncryptedTask
-import im.vector.matrix.android.sdk.internal.session.contentscanning.tasks.DefaultScanMediaTask
-import im.vector.matrix.android.sdk.internal.session.contentscanning.tasks.DownloadEncryptedTask
-import im.vector.matrix.android.sdk.internal.session.contentscanning.tasks.GetServerPublicKeyTask
-import im.vector.matrix.android.sdk.internal.session.contentscanning.tasks.ScanEncryptedTask
-import im.vector.matrix.android.sdk.internal.session.contentscanning.tasks.ScanMediaTask
 import io.realm.RealmConfiguration
 import org.matrix.android.sdk.api.session.contentscanning.ContentScannerService
 import org.matrix.android.sdk.internal.database.RealmKeysUtils
@@ -28,6 +17,17 @@ import org.matrix.android.sdk.internal.di.SessionFilesDirectory
 import org.matrix.android.sdk.internal.di.UserMd5
 import org.matrix.android.sdk.internal.session.SessionModule
 import org.matrix.android.sdk.internal.session.SessionScope
+import org.matrix.android.sdk.internal.session.contentscanning.data.ContentScanningStore
+import org.matrix.android.sdk.internal.session.contentscanning.db.ContentScannerRealmModule
+import org.matrix.android.sdk.internal.session.contentscanning.db.RealmContentScannerStore
+import org.matrix.android.sdk.internal.session.contentscanning.tasks.DefaultDownloadEncryptedTask
+import org.matrix.android.sdk.internal.session.contentscanning.tasks.DefaultGetServerPublicKeyTask
+import org.matrix.android.sdk.internal.session.contentscanning.tasks.DefaultScanEncryptedTask
+import org.matrix.android.sdk.internal.session.contentscanning.tasks.DefaultScanMediaTask
+import org.matrix.android.sdk.internal.session.contentscanning.tasks.DownloadEncryptedTask
+import org.matrix.android.sdk.internal.session.contentscanning.tasks.GetServerPublicKeyTask
+import org.matrix.android.sdk.internal.session.contentscanning.tasks.ScanEncryptedTask
+import org.matrix.android.sdk.internal.session.contentscanning.tasks.ScanMediaTask
 import java.io.File
 
 @Module

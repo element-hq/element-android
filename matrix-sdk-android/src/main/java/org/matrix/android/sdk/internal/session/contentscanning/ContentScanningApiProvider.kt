@@ -4,9 +4,10 @@
  * Proprietary and confidential
  */
 
-package im.vector.matrix.android.sdk.internal.session.contentscanning
+package org.matrix.android.sdk.internal.session.contentscanning
 
 import org.matrix.android.sdk.internal.session.SessionScope
+import org.matrix.android.sdk.internal.session.contentscanning.ContentScanApi
 import javax.inject.Inject
 
 @SessionScope

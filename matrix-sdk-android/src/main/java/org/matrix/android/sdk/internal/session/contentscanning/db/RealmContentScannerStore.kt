@@ -4,12 +4,12 @@
  * Proprietary and confidential
  */
 
-package im.vector.matrix.android.sdk.internal.session.contentscanning.db
+package org.matrix.android.sdk.internal.session.contentscanning.db
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import com.zhuinden.monarchy.Monarchy
-import im.vector.matrix.android.sdk.internal.session.contentscanning.data.ContentScanningStore
+import org.matrix.android.sdk.internal.session.contentscanning.data.ContentScanningStore
 import org.matrix.android.sdk.api.session.contentscanning.ScanState
 import org.matrix.android.sdk.api.session.contentscanning.ScanStatusInfo
 import io.realm.Realm

@@ -4,13 +4,13 @@
  * Proprietary and confidential
  */
 
-package im.vector.matrix.android.sdk.internal.session.contentscanning
+package org.matrix.android.sdk.internal.session.contentscanning
 
-import im.vector.matrix.android.sdk.internal.session.contentscanning.model.DownloadBody
-import im.vector.matrix.android.sdk.internal.session.contentscanning.model.ScanResponse
-import im.vector.matrix.android.sdk.internal.session.contentscanning.model.ServerPublicKeyResponse
 import okhttp3.ResponseBody
 import org.matrix.android.sdk.internal.network.NetworkConstants
+import org.matrix.android.sdk.internal.session.contentscanning.model.DownloadBody
+import org.matrix.android.sdk.internal.session.contentscanning.model.ScanResponse
+import org.matrix.android.sdk.internal.session.contentscanning.model.ServerPublicKeyResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST

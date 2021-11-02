@@ -4,16 +4,16 @@
  * Proprietary and confidential
  */
 
-package im.vector.matrix.android.sdk.internal.session.contentscanning.tasks
+package org.matrix.android.sdk.internal.session.contentscanning.tasks
 
-import im.vector.matrix.android.sdk.internal.session.contentscanning.ContentScanningApiProvider
-import im.vector.matrix.android.sdk.internal.session.contentscanning.ScanEncryptorUtils
-import im.vector.matrix.android.sdk.internal.session.contentscanning.data.ContentScanningStore
-import im.vector.matrix.android.sdk.internal.session.contentscanning.model.ScanResponse
 import org.matrix.android.sdk.api.failure.toScanFailure
 import org.matrix.android.sdk.api.session.contentscanning.ScanState
 import org.matrix.android.sdk.internal.crypto.attachments.ElementToDecrypt
 import org.matrix.android.sdk.internal.network.executeRequest
+import org.matrix.android.sdk.internal.session.contentscanning.ContentScanningApiProvider
+import org.matrix.android.sdk.internal.session.contentscanning.ScanEncryptorUtils
+import org.matrix.android.sdk.internal.session.contentscanning.data.ContentScanningStore
+import org.matrix.android.sdk.internal.session.contentscanning.model.ScanResponse
 import org.matrix.android.sdk.internal.task.Task
 import javax.inject.Inject
 
