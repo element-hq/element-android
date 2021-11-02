@@ -61,6 +61,11 @@ object CommandParser {
                 return ParsedCommand.ErrorEmptySlashCommand
             }
 
+            val command = Command.values().find { it.command == messageParts.first() }
+            if (command?.isTchapCommand == false) {
+                return ParsedCommand.ErrorNotACommand
+            }
+
             return when (val slashCommand = messageParts.first()) {
                 Command.PLAIN.command                        -> {
                     val text = textMessage.substring(Command.PLAIN.command.length).trim()
