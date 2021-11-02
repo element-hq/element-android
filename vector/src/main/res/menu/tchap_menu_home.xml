@@ -7,4 +7,10 @@
         android:icon="@drawable/ic_search"
         android:title="@string/cancel"
         app:showAsAction="always" />
+
+    <item
+        android:id="@+id/menu_home_mark_all_as_read"
+        android:icon="@drawable/ic_material_done"
+        android:title="@string/action_mark_all_as_read"
+        android:visible="false" />
 </menu>

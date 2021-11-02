@@ -122,28 +122,33 @@ class HomeDetailFragment @Inject constructor(
 
     override fun getMenuRes() = R.menu.tchap_menu_home
 
-    override fun onPrepareOptionsMenu(menu: Menu) {
-        withState(viewModel) { state ->
-            val isRoomList = state.currentTab is HomeTab.RoomList
-            menu.findItem(R.id.menu_home_mark_all_as_read).isVisible = isRoomList && hasUnreadRooms
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.menu_home_mark_all_as_read -> {
+                viewModel.handle(HomeDetailAction.MarkAllRoomsRead)
+                return true
+            }
+            R.id.menu_home_search_action    -> {
+                toggleSearchView()
+                true
+            }
+            else                            -> {
+                super.onOptionsItemSelected(item)
+            }
         }
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        // Tchap: Hidden mark all as read item
+//        withState(viewModel) { state ->
+//            val isRoomList = state.currentTab is HomeTab.RoomList
+//            menu.findItem(R.id.menu_home_mark_all_as_read).isVisible = isRoomList && hasUnreadRooms
+//        }
 
         val isSearchMode = views.homeSearchView.isVisible
         menu.findItem(R.id.menu_home_search_action)?.setIcon(if (isSearchMode) 0 else R.drawable.ic_search)
 
         super.onPrepareOptionsMenu(menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.menu_home_search_action -> {
-                toggleSearchView()
-                true
-            }
-            else                         -> {
-                super.onOptionsItemSelected(item)
-            }
-        }
     }
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentHomeDetailBinding {
