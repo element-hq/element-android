@@ -2982,7 +2982,7 @@
     <string name="settings_discovery_hide_identity_server_policy_title">Cacher la politique du serveur d’identité</string>
     <string name="settings_discovery_show_identity_server_policy_title">Afficher la politique du serveur d’identité</string>
     <string name="open_discovery_settings">Ouvrir les réglages de découverte</string>
-    <string name="user_directory_search_hint_2">Rechercher par nom, identifiant ou courriel</string>
+    <string name="user_directory_search_hint_2">Rechercher par nom ou adresse email</string>
     <string name="create_new_space">Créer un nouvel espace</string>
     <string name="command_description_whois">Affiche des informations à propos de l’utilisateur</string>
     <string name="command_description_avatar_for_room">Change votre avatar seulement dans le salon actuel</string>
