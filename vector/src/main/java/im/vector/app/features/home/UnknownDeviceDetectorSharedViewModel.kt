@@ -102,7 +102,6 @@ class UnknownDeviceDetectorSharedViewModel @AssistedInject constructor(@Assisted
         }
         isStarted = true
 
-
         viewModelScope.launch {
             val currentSessionTs = withContext(session.coroutineDispatchers.io) {
                 session.cryptoService().getCryptoDeviceInfo(session.myUserId)
