@@ -372,9 +372,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
             threadsAwarenessHandler.handleIfNeeded(
                     realm = realm,
                     roomId = roomId,
-                    event = event,
-                    isInitialSync = isInitialSync,
-                    ::decryptIfNeeded)
+                    event = event)
 
             val ageLocalTs = event.unsignedData?.age?.let { syncLocalTimestampMillis - it }
             val eventEntity = event.toEntity(roomId, SendState.SYNCED, ageLocalTs).copyToRealmOrIgnore(realm, insertType)

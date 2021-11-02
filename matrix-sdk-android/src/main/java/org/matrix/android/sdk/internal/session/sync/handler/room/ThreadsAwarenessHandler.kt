@@ -16,25 +16,32 @@
 
 package org.matrix.android.sdk.internal.session.sync.handler.room
 
+import com.zhuinden.monarchy.Monarchy
 import io.realm.Realm
-import org.matrix.android.sdk.api.session.events.model.Content
+import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.crypto.CryptoService
+import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.message.MessageFormat
 import org.matrix.android.sdk.api.session.room.model.message.MessageRelationContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageTextContent
-import org.matrix.android.sdk.api.session.room.model.tag.RoomTagContent
+import org.matrix.android.sdk.api.session.room.send.SendState
+import org.matrix.android.sdk.api.session.sync.model.SyncResponse
 import org.matrix.android.sdk.api.util.JsonDict
+import org.matrix.android.sdk.internal.crypto.MXEventDecryptionResult
+import org.matrix.android.sdk.internal.crypto.algorithms.olm.OlmDecryptionResult
 import org.matrix.android.sdk.internal.database.mapper.EventMapper
+import org.matrix.android.sdk.internal.database.mapper.toEntity
 import org.matrix.android.sdk.internal.database.model.EventEntity
 import org.matrix.android.sdk.internal.database.model.EventInsertType
-import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
-import org.matrix.android.sdk.internal.database.model.RoomTagEntity
-import org.matrix.android.sdk.internal.database.query.getOrCreate
+import org.matrix.android.sdk.internal.database.query.copyToRealmOrIgnore
 import org.matrix.android.sdk.internal.database.query.where
+import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.session.permalinks.PermalinkFactory
 import org.matrix.android.sdk.internal.session.room.send.LocalEchoEventFactory
+import org.matrix.android.sdk.internal.util.awaitTransaction
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -44,34 +51,137 @@ import javax.inject.Inject
  * threads response as replies to the original message
  */
 internal class ThreadsAwarenessHandler @Inject constructor(
-        private val permalinkFactory: PermalinkFactory
+        private val permalinkFactory: PermalinkFactory,
+        private val cryptoService: CryptoService,
+        @SessionDatabase private val monarchy: Monarchy,
+        private val session: Session
 ) {
+
+    /**
+     * Fetch root thread events if they are missing from the local storage
+     * @param syncResponse the sync response
+     */
+    suspend fun fetchRootThreadEventsIfNeeded(syncResponse: SyncResponse) {
+        val handlingStrategy = syncResponse.rooms?.join?.let {
+            RoomSyncHandler.HandlingStrategy.JOINED(it)
+        }
+        if (handlingStrategy !is RoomSyncHandler.HandlingStrategy.JOINED) return
+        val eventList = handlingStrategy.data
+                .mapNotNull { (roomId, roomSync) ->
+                    roomSync.timeline?.events?.map {
+                        it.copy(roomId = roomId)
+                    }
+                }.flatten()
+
+        fetchRootThreadEventsIfNeeded(eventList)
+    }
+
+    /**
+     * Fetch root thread events if they are missing from the local storage
+     * @param eventList a list with the events to examine
+     */
+    suspend fun fetchRootThreadEventsIfNeeded(eventList: List<Event>) {
+        if (eventList.isNullOrEmpty()) return
+
+        val threadsToFetch = emptyMap<String, String>().toMutableMap()
+        monarchy.awaitTransaction { realm ->
+            eventList.asSequence()
+                    .filter {
+                        isThreadEvent(it) && it.roomId != null
+                    }.mapNotNull { event ->
+                        getRootThreadEventId(event)?.let {
+                            Pair(it, event.roomId!!)
+                        }
+                    }.forEach { (rootThreadEventId, roomId) ->
+                        EventEntity.where(realm, rootThreadEventId).findFirst() ?: run { threadsToFetch[rootThreadEventId] = roomId }
+                    }
+        }
+        fetchThreadsEvents(threadsToFetch)
+    }
+
+    /**
+     * Fetch multiple unique events using the fetchEvent function
+     */
+    private suspend fun fetchThreadsEvents(threadsToFetch: Map<String, String>) {
+        val eventEntityList = threadsToFetch.mapNotNull { (eventId, roomId) ->
+            fetchEvent(eventId, roomId)?.let {
+                it.toEntity(roomId, SendState.SYNCED, it.ageLocalTs)
+            }
+        }
+
+        if (eventEntityList.isNullOrEmpty()) return
+
+        // Transaction should be done on its own thread, like below
+        monarchy.awaitTransaction { realm ->
+            eventEntityList.forEach {
+                it.copyToRealmOrIgnore(realm, EventInsertType.INCREMENTAL_SYNC)
+            }
+        }
+    }
+
+    /**
+     * This function will fetch the event from the homeserver, this is mandatory when the
+     * initial thread message is too old and is not saved in the device, so in order to
+     * construct the "reply to" format we need to know the event thread.
+     * @return the Event or null otherwise
+     */
+    private suspend fun fetchEvent(eventId: String, roomId: String): Event? {
+        return runCatching {
+            Timber.i("------> Fetching event[$eventId]....")
+            session.getEvent(roomId = roomId, eventId = eventId)
+        }.fold(
+                onSuccess = {
+                    it
+                },
+                onFailure = {
+                    null
+                })
+    }
 
     fun handleIfNeeded(realm: Realm,
                        roomId: String,
-                       event: Event,
-                       isInitialSync: Boolean,
-                       decryptIfNeeded: (event: Event, roomId: String) -> Unit) {
+                       event: Event) {
+        val payload = transformThreadToReplyIfNeeded(
+                realm = realm,
+                roomId = roomId,
+                event = event,
+                decryptedResult = event.mxDecryptionResult?.payload) ?: return
 
-        if (!isThreadEvent(event)) return
-        val rootThreadEventId = getRootThreadEventId(event) ?: return
-        val payload = event.mxDecryptionResult?.payload?.toMutableMap() ?: return
-        val body = getValueFromPayload(payload, "body") ?: return
-        val msgType = getValueFromPayload(payload, "msgtype") ?: return
-        val rootThreadEventEntity = EventEntity.where(realm, eventId = rootThreadEventId).findFirst() ?: return
-        val rootThreadEvent = EventMapper.map(rootThreadEventEntity)
-        val rootThreadEventSenderId = rootThreadEvent.senderId ?: return
+        event.mxDecryptionResult = event.mxDecryptionResult?.copy(payload = payload)
+    }
 
-        Timber.i("------> Thread event detected! - isInitialSync: $isInitialSync")
+    fun handleIfNeededDuringDecryption(realm: Realm,
+                                       roomId: String?,
+                                       event: Event,
+                                       result: MXEventDecryptionResult): JsonDict? {
+        return transformThreadToReplyIfNeeded(
+                realm = realm,
+                roomId = roomId,
+                event = event,
+                decryptedResult = result.clearEvent)
+    }
 
-        if (rootThreadEvent.isEncrypted()) {
-            decryptIfNeeded(rootThreadEvent, roomId)
-        }
+    /**
+     * If the event is a thread event then transform/enhance it to a visual Reply Event,
+     * If the event is not a thread event, null value will be returned
+     * If there is an error (ex. the root/origin thread event is not found), null willl be returend
+     */
+    private fun transformThreadToReplyIfNeeded(realm: Realm, roomId: String?, event: Event, decryptedResult: JsonDict?): JsonDict? {
+        roomId ?: return null
+        if (!isThreadEvent(event)) return null
+        val rootThreadEventId = getRootThreadEventId(event) ?: return null
+        val payload = decryptedResult?.toMutableMap() ?: return null
+        val body = getValueFromPayload(payload, "body") ?: return null
+        val msgType = getValueFromPayload(payload, "msgtype") ?: return null
+        val rootThreadEvent = getEventFromDB(realm, rootThreadEventId) ?: return null
+        val rootThreadEventSenderId = rootThreadEvent.senderId ?: return null
 
-        val rootThreadEventBody = getValueFromPayload(rootThreadEvent.mxDecryptionResult?.payload?.toMutableMap(),"body")
+        decryptIfNeeded(rootThreadEvent, roomId)
+
+        val rootThreadEventBody = getValueFromPayload(rootThreadEvent.mxDecryptionResult?.payload?.toMutableMap(), "body")
 
         val permalink = permalinkFactory.createPermalink(roomId, rootThreadEventId, false)
-        val userLink =  permalinkFactory.createPermalink(rootThreadEventSenderId, false) ?: ""
+        val userLink = permalinkFactory.createPermalink(rootThreadEventSenderId, false) ?: ""
 
         val replyFormatted = LocalEchoEventFactory.REPLY_PATTERN.format(
                 permalink,
@@ -81,7 +191,7 @@ internal class ThreadsAwarenessHandler @Inject constructor(
                 rootThreadEventBody,
                 body)
 
-        val messageTextContent =  MessageTextContent(
+        val messageTextContent = MessageTextContent(
                 msgType = msgType,
                 format = MessageFormat.FORMAT_MATRIX_HTML,
                 body = body,
@@ -90,8 +200,40 @@ internal class ThreadsAwarenessHandler @Inject constructor(
 
         payload["content"] = messageTextContent
 
-        event.mxDecryptionResult = event.mxDecryptionResult?.copy(payload = payload )
+        return payload
+    }
 
+    /**
+     * Decrypt the event
+     */
+
+    private fun decryptIfNeeded(event: Event, roomId: String) {
+        try {
+            if (!event.isEncrypted() || event.mxDecryptionResult != null) return
+
+            // Event from sync does not have roomId, so add it to the event first
+            val result = cryptoService.decryptEvent(event.copy(roomId = roomId), "")
+            event.mxDecryptionResult = OlmDecryptionResult(
+                    payload = result.clearEvent,
+                    senderKey = result.senderCurve25519Key,
+                    keysClaimed = result.claimedEd25519Key?.let { k -> mapOf("ed25519" to k) },
+                    forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain
+            )
+        } catch (e: MXCryptoError) {
+            if (e is MXCryptoError.Base) {
+                event.mCryptoError = e.errorType
+                event.mCryptoErrorReason = e.technicalMessage.takeIf { it.isNotEmpty() } ?: e.detailedErrorDescription
+            }
+        }
+    }
+
+    /**
+     * Try to get the event form the local DB, if the event does not exist null
+     * will be returned
+     */
+    private fun getEventFromDB(realm: Realm, eventId: String): Event? {
+        val eventEntity = EventEntity.where(realm, eventId = eventId).findFirst() ?: return null
+        return EventMapper.map(eventEntity)
     }
 
     private fun isThreadEvent(event: Event): Boolean =
