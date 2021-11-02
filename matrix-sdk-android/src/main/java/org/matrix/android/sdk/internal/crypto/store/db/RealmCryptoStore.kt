@@ -108,7 +108,8 @@ import kotlin.collections.set
 
 @SessionScope
 internal class RealmCryptoStore @Inject constructor(
-        @CryptoDatabase private val realmConfiguration: RealmConfiguration,
+        // Avoid using directly and instead interact with lazyRealmConfiguration
+        @CryptoDatabase realmConfiguration: RealmConfiguration,
         private val crossSigningKeysMapper: CrossSigningKeysMapper,
         @UserId private val userId: String,
         @DeviceId private val deviceId: String?
