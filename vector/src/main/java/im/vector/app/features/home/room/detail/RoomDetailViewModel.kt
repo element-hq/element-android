@@ -1067,7 +1067,10 @@ class RoomDetailViewModel @AssistedInject constructor(
                 return UnreadState.HasUnread(eventId)
             }
         }
-        Timber.i("ReadMarker debug: hasNoUnread")
+        Timber.i("ReadMarker debug: hasNoUnread / firstDisplayableEventIndex: $firstDisplayableEventIndex / " +
+                "latest previewable from summary ${roomSummary.latestPreviewableOriginalContentEvent?.eventId} - ${timeline.getIndexOfEvent(roomSummary.latestPreviewableOriginalContentEvent?.eventId)} / " +
+                "event-0 ${events.getOrNull(0)?.eventId}")
+        // TODO: if we return HasNoUnread, we need to be sure, since later HasUnread will be ignored in distinctUntilChanged. However, when loading the room at the last read directly, this doesn't always work
         return UnreadState.HasNoUnread
     }
 
