@@ -29,6 +29,7 @@ import dagger.assisted.AssistedInject
 import im.vector.app.R
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
+import im.vector.app.core.flow.throttleFirst
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.PublishDataSource
@@ -165,7 +166,7 @@ class DevicesViewModel @AssistedInject constructor(
 //                    )
 //                }
 
-        refreshSource.stream().sample(4_000)
+        refreshSource.stream().throttleFirst(4_000)
                 .onEach {
                     session.cryptoService().fetchDevicesList(NoOpMatrixCallback())
                     session.cryptoService().downloadKeys(listOf(session.myUserId), true, NoOpMatrixCallback())

@@ -32,12 +32,12 @@ import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.EmojiCompatFontProvider
 import im.vector.app.R
 import im.vector.app.core.extensions.observeEvent
+import im.vector.app.core.flow.throttleFirst
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityEmojiReactionPickerBinding
 import im.vector.app.features.reactions.data.EmojiDataSource
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.sample
 import kotlinx.coroutines.launch
 import reactivecircus.flowbinding.android.widget.queryTextChanges
 import javax.inject.Inject
@@ -167,7 +167,7 @@ class EmojiReactionPickerActivity : VectorBaseActivity<ActivityEmojiReactionPick
             }
 
             searchView.queryTextChanges()
-                    .sample(600)
+                    .throttleFirst(600)
                     .onEach { query ->
                         onQueryText(query.toString())
                     }
