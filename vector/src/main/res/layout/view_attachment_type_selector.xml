@@ -171,7 +171,7 @@
             android:layout_margin="16dp"
             android:baselineAligned="false"
             android:orientation="horizontal"
-            android:visibility="gone"
+            android:visibility="visible"
             android:weightSum="3">
 
             <LinearLayout
