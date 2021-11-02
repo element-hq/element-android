@@ -58,7 +58,6 @@ import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.internal.auth.registration.handleUIA
 import org.matrix.android.sdk.internal.crypto.crosssigning.DeviceTrustLevel
 import org.matrix.android.sdk.internal.crypto.keysbackup.RustKeyBackupService
-import org.matrix.android.sdk.internal.crypto.keysbackup.model.MegolmBackupAuthData
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.BackupKeysResult
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.CreateKeysBackupVersionBody
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysBackupData
@@ -70,6 +69,9 @@ import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.CreateKeysBackupV
 import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.DeleteBackupTask
 import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.GetKeysBackupLastVersionTask
 import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.GetKeysBackupVersionTask
+import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.GetRoomSessionDataTask
+import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.GetRoomSessionsDataTask
+import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.GetSessionsDataTask
 import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.StoreSessionsDataTask
 import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.UpdateKeysBackupVersionTask
 import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
@@ -142,6 +144,9 @@ internal class RequestSender @Inject constructor(
         private val createKeysBackupVersionTask: CreateKeysBackupVersionTask,
         private val backupRoomKeysTask: StoreSessionsDataTask,
         private val updateKeysBackupVersionTask: UpdateKeysBackupVersionTask,
+        private val getSessionsDataTask: GetSessionsDataTask,
+        private val getRoomSessionsDataTask: GetRoomSessionsDataTask,
+        private val getRoomSessionDataTask: GetRoomSessionDataTask,
         ) {
     companion object {
         const val REQUEST_RETRY_COUNT = 3
@@ -320,6 +325,26 @@ internal class RequestSender @Inject constructor(
     suspend fun updateBackup(keysBackupVersion: KeysVersionResult, body: UpdateKeysBackupVersionBody) {
         val params = UpdateKeysBackupVersionTask.Params(keysBackupVersion.version, body)
         updateKeysBackupVersionTask.executeRetry(params, REQUEST_RETRY_COUNT)
+    }
+
+    suspend fun downloadBackedUpKeys(version: String, roomId: String, sessionId: String): KeysBackupData {
+        val data = getRoomSessionDataTask.execute(GetRoomSessionDataTask.Params(roomId, sessionId, version))
+
+        return KeysBackupData(mutableMapOf(
+                roomId to RoomKeysBackupData(mutableMapOf(
+                        sessionId to data
+                ))
+        ))
+    }
+
+    suspend fun downloadBackedUpKeys(version: String, roomId: String): KeysBackupData {
+        val data = getRoomSessionsDataTask.execute(GetRoomSessionsDataTask.Params(roomId, version))
+        // Convert to KeysBackupData
+        return KeysBackupData(mutableMapOf(roomId to data))
+    }
+
+    suspend fun downloadBackedUpKeys(version: String): KeysBackupData {
+        return getSessionsDataTask.execute(GetSessionsDataTask.Params(version))
     }
 }
 

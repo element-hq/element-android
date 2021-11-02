@@ -17,7 +17,7 @@ mod responses;
 mod users;
 mod verification;
 
-pub use backup_recovery_key::{BackupKey, BackupRecoveryKey, PassphraseInfo};
+pub use backup_recovery_key::{BackupKey, BackupRecoveryKey, PassphraseInfo, PkDecryptionError};
 pub use device::Device;
 pub use error::{
     CryptoStoreError, DecryptionError, KeyImportError, SecretImportError, SignatureError,

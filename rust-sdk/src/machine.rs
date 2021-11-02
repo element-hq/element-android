@@ -35,6 +35,7 @@ use matrix_sdk_crypto::{
     backups::{MegolmV1BackupKey, RecoveryKey},
     decrypt_key_export, encrypt_key_export,
     matrix_qrcode::QrVerificationData,
+    olm::ExportedRoomKey,
     EncryptionSettings, LocalTrust, OlmMachine as InnerMachine, UserIdentities,
     Verification as RustVerification,
 };
@@ -603,6 +604,25 @@ impl OlmMachine {
         Ok(encrypted)
     }
 
+    fn impor_keys_helper(
+        &self,
+        keys: Vec<ExportedRoomKey>,
+        progress_listener: Box<dyn ProgressListener>,
+    ) -> Result<KeysImportResult, KeyImportError> {
+        let listener = |progress: usize, total: usize| {
+            progress_listener.on_progress(progress as i32, total as i32)
+        };
+
+        let result = self
+            .runtime
+            .block_on(self.inner.import_keys(keys, listener))?;
+
+        Ok(KeysImportResult {
+            total: result.1 as i32,
+            imported: result.0 as i32,
+        })
+    }
+
     /// Import room keys from the given serialized key export.
     ///
     /// # Arguments
@@ -621,19 +641,17 @@ impl OlmMachine {
     ) -> Result<KeysImportResult, KeyImportError> {
         let keys = Cursor::new(keys);
         let keys = decrypt_key_export(keys, passphrase)?;
+        self.impor_keys_helper(keys, progress_listener)
+    }
 
-        let listener = |progress: usize, total: usize| {
-            progress_listener.on_progress(progress as i32, total as i32)
-        };
-
-        let result = self
-            .runtime
-            .block_on(self.inner.import_keys(keys, listener))?;
-
-        Ok(KeysImportResult {
-            total: result.1 as i32,
-            imported: result.0 as i32,
-        })
+    /// TODO
+    pub fn import_decrypted_keys(
+        &self,
+        keys: &str,
+        progress_listener: Box<dyn ProgressListener>,
+    ) -> Result<KeysImportResult, KeyImportError> {
+        let keys: Vec<ExportedRoomKey> = serde_json::from_str(keys).unwrap();
+        self.impor_keys_helper(keys, progress_listener)
     }
 
     /// Discard the currently active room key for the given room if there is

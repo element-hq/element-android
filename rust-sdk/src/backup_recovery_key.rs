@@ -3,13 +3,22 @@ use pbkdf2::pbkdf2;
 use rand::{distributions::Alphanumeric, thread_rng, Rng};
 use sha2::Sha512;
 use std::{collections::HashMap, iter};
+use thiserror::Error;
 
-use matrix_sdk_crypto::backups::RecoveryKey;
+use matrix_sdk_crypto::backups::{RecoveryKey, OlmPkDecryptionError};
 
 /// TODO
 pub struct BackupRecoveryKey {
     pub(crate) inner: RecoveryKey,
     passphrase_info: Option<PassphraseInfo>,
+}
+
+/// TODO
+#[derive(Debug, Error)]
+pub enum PkDecryptionError {
+    /// TODO
+    #[error("Error decryption a PkMessage {0}")]
+    Olm(#[from] OlmPkDecryptionError),
 }
 
 /// TODO
@@ -113,5 +122,21 @@ impl BackupRecoveryKey {
     /// TODO
     pub fn to_base58(&self) -> String {
         self.inner.to_base58()
+    }
+
+    /// TODO
+    pub fn to_base64(&self) -> String {
+        self.inner.to_base64()
+    }
+
+    pub fn decrypt(
+        &self,
+        ephemeral_key: String,
+        mac: String,
+        ciphertext: String,
+    ) -> Result<String, PkDecryptionError> {
+        self.inner
+            .decrypt(ephemeral_key, mac, ciphertext)
+            .map_err(|e| e.into())
     }
 }

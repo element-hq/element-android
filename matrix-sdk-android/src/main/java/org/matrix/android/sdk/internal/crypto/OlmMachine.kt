@@ -18,10 +18,6 @@ package org.matrix.android.sdk.internal.crypto
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.squareup.moshi.Types
-import java.io.File
-import java.nio.charset.Charset
-import java.util.concurrent.ConcurrentHashMap
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
@@ -39,7 +35,6 @@ import org.matrix.android.sdk.api.util.toOptional
 import org.matrix.android.sdk.internal.crypto.crosssigning.DeviceTrustLevel
 import org.matrix.android.sdk.internal.crypto.crosssigning.UserTrustResult
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.MegolmBackupAuthData
-import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.RoomKeysBackupData
 import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.ImportRoomKeysResult
 import org.matrix.android.sdk.internal.crypto.model.MXUsersDevicesMap
@@ -51,7 +46,6 @@ import org.matrix.android.sdk.internal.network.parsing.CheckNumberType
 import org.matrix.android.sdk.internal.session.sync.model.DeviceListResponse
 import org.matrix.android.sdk.internal.session.sync.model.DeviceOneTimeKeysCountSyncResponse
 import org.matrix.android.sdk.internal.session.sync.model.ToDeviceSyncResponse
-import org.matrix.android.sdk.internal.util.JsonCanonicalizer
 import timber.log.Timber
 import uniffi.olm.BackupKey
 import uniffi.olm.BackupKeys
@@ -62,13 +56,16 @@ import uniffi.olm.DecryptionException
 import uniffi.olm.DeviceLists
 import uniffi.olm.KeyRequestPair
 import uniffi.olm.Logger
-import uniffi.olm.OlmMachine as InnerMachine
-import uniffi.olm.ProgressListener as RustProgressListener
 import uniffi.olm.Request
 import uniffi.olm.RequestType
 import uniffi.olm.RoomKeyCounts
-import uniffi.olm.UserIdentity as RustUserIdentity
 import uniffi.olm.setLogger
+import java.io.File
+import java.nio.charset.Charset
+import java.util.concurrent.ConcurrentHashMap
+import uniffi.olm.OlmMachine as InnerMachine
+import uniffi.olm.ProgressListener as RustProgressListener
+import uniffi.olm.UserIdentity as RustUserIdentity
 
 class CryptoLogger : Logger {
     override fun log(logLine: String) {
@@ -502,6 +499,22 @@ internal class OlmMachine(
                 val rustListener = CryptoProgressListener(listener)
 
                 val result = inner.importKeys(decodedKeys, passphrase, rustListener)
+
+                ImportRoomKeysResult(result.total, result.imported)
+            }
+
+    @Throws(CryptoStoreException::class)
+    suspend fun importDecryptedKeys(
+            keys: List<MegolmSessionData>,
+            listener: ProgressListener?
+    ): ImportRoomKeysResult =
+            withContext(Dispatchers.IO) {
+                val adapter = MoshiProvider.providesMoshi().adapter(List::class.java)
+                val encodedKeys = adapter.toJson(keys)
+
+                val rustListener = CryptoProgressListener(listener)
+
+                val result = inner.importDecryptedKeys(encodedKeys, rustListener)
 
                 ImportRoomKeysResult(result.total, result.imported)
             }

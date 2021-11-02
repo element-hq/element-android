@@ -11,6 +11,11 @@ callback interface ProgressListener {
 };
 
 [Error]
+enum PkDecryptionError {
+    "Olm",
+};
+
+[Error]
 enum KeyImportError {
     "Export",
     "CryptoStore",
@@ -334,6 +339,11 @@ interface OlmMachine {
         [ByRef] string passphrase,
         ProgressListener progress_listener
     );
+    [Throws=KeyImportError]
+    KeysImportResult import_decrypted_keys(
+        [ByRef] string keys,
+        ProgressListener progress_listener
+    );
     [Throws=CryptoStoreError]
     void discard_room_key([ByRef] string room_id);
 
@@ -394,5 +404,8 @@ interface BackupRecoveryKey {
     [Name=from_base58]
     constructor(string key);
     string to_base58();
+    string to_base64();
     BackupKey public_key();
+    [Throws=PkDecryptionError]
+    string decrypt(string ephemeral_key, string mac, string ciphertext);
 };
