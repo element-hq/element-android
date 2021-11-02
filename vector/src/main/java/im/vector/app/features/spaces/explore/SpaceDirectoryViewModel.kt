@@ -16,21 +16,22 @@
 
 package im.vector.app.features.spaces.explore
 
-import androidx.lifecycle.viewModelScope
-import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
-import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
+import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -41,7 +42,7 @@ import org.matrix.android.sdk.api.session.room.model.RoomType
 import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
-import org.matrix.android.sdk.rx.rx
+import org.matrix.android.sdk.flow.flow
 import timber.log.Timber
 
 class SpaceDirectoryViewModel @AssistedInject constructor(
@@ -50,19 +51,11 @@ class SpaceDirectoryViewModel @AssistedInject constructor(
 ) : VectorViewModel<SpaceDirectoryState, SpaceDirectoryViewAction, SpaceDirectoryViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: SpaceDirectoryState): SpaceDirectoryViewModel
+    interface Factory : MavericksAssistedViewModelFactory<SpaceDirectoryViewModel, SpaceDirectoryState> {
+        override fun create(initialState: SpaceDirectoryState): SpaceDirectoryViewModel
     }
 
-    companion object : MvRxViewModelFactory<SpaceDirectoryViewModel, SpaceDirectoryState> {
-        override fun create(viewModelContext: ViewModelContext, state: SpaceDirectoryState): SpaceDirectoryViewModel? {
-            val factory = when (viewModelContext) {
-                is FragmentViewModelContext -> viewModelContext.fragment as? Factory
-                is ActivityViewModelContext -> viewModelContext.activity as? Factory
-            }
-            return factory?.create(state) ?: error("You should let your activity/fragment implements Factory interface")
-        }
-    }
+    companion object : MavericksViewModelFactory<SpaceDirectoryViewModel, SpaceDirectoryState> by hiltMavericksViewModelFactory()
 
     init {
 
@@ -83,17 +76,17 @@ class SpaceDirectoryViewModel @AssistedInject constructor(
     private fun observePermissions() {
         val room = session.getRoom(initialState.spaceId) ?: return
 
-        val powerLevelsContentLive = PowerLevelsObservableFactory(room).createObservable()
+        val powerLevelsContentLive = PowerLevelsFlowFactory(room).createFlow()
 
         powerLevelsContentLive
-                .subscribe {
+                .onEach {
                     val powerLevelsHelper = PowerLevelsHelper(it)
                     setState {
                         copy(canAddRooms = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true,
                                 EventType.STATE_SPACE_CHILD))
                     }
                 }
-                .disposeOnClear()
+                .launchIn(viewModelScope)
     }
 
     private fun refreshFromApi(rootId: String?) = withState { state ->
@@ -146,7 +139,7 @@ class SpaceDirectoryViewModel @AssistedInject constructor(
             excludeType = null
         }
         session
-                .rx()
+                .flow()
                 .liveRoomSummaries(queryParams)
                 .map {
                     it.map { it.roomId }.toSet()
@@ -157,12 +150,11 @@ class SpaceDirectoryViewModel @AssistedInject constructor(
     }
 
     private fun observeMembershipChanges() {
-        session.rx()
+        session.flow()
                 .liveRoomChangeMembershipState()
-                .subscribe {
-                    setState { copy(changeMembershipStates = it) }
+                .setOnEach {
+                    copy(changeMembershipStates = it)
                 }
-                .disposeOnClear()
     }
 
     override fun handle(action: SpaceDirectoryViewAction) {

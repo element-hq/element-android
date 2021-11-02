@@ -1,0 +1,42 @@
+Element-i është si aplikacion shkëmbyes i sigurt mesazhesh, ashtu edhe bashkëpunimi prodhimtar ekipi, i cili është ideal për fjalosje në grup, teksa punohet së largëti. Ky aplikacion fjalosjeje përdor fshehtëzim skaj-më-skaj për të furnizuar konferencë video, shkëmbim kartelash dhe thirrje me zë të fuqishme.
+
+<b>Në veçoritë e Element-it përfshihen:</b>
+- Mjete të thelluara komunikimi internetor
+- Mesazhe plotësisht të fshehtëzuar, për të lejuar komunikim në nivel korporate, madje edhe për punonjës së largëti
+- Fjalosje e decentralizuar, bazuar në platformën me burim të hapët Matrix
+- Shkëmbim i sigurt kartelash, me të dhëna të fshehtëzuara, teksa administrohen projekte
+- Fjalosje video të llojit VoIP dhe tregim ekrani
+- Integrim i kollajtë me mjetet tuaja të parapëlqyera të bashkëpunimit internetor, mjete administrimi projektesh, shërbime VoIP dhe aplikacione të tjera shkëmbimi mesazhesh në ekip
+
+Element-i është plotësisht i ndryshëm nga aplikacione të tjera shkëmbimi mesazhesh dhe bashkëpunimi. Funksionimi i tij bazohet në Matrix, një rrjet i hapët për mesazhe të siguruar dhe komunikim të decentralizuar. Lejon vetëstrehim, për t’u dhënë përdoruesve pronësi dhe kontroll maksimal të të dhënave dhe mesazheve të tyre.
+
+<b>Privatësi dhe shkëmbim mesazhesh të fshehtëzuar</b>
+Element-i ju mbron nga reklama të padëshiruara, shfrytëzim të dhënash dhe vatha dixhitale. Ai siguron gjithashtu krejt të dhënat tuaja, komunikime tek-për-tek me video dhe me zë, përmes fshehtëzimi skaj-më-skaj dhe verifikim “cross-signed” pajisjesh.
+
+Element-i ju jep kontrollin e privatësisë tuaj, teksa ju lejon të komunikoni në mënyrë të siguruar me këdo në rrjetin Matrix, ose me mjete të tjera bashkëpunimi në shkallë biznesi, duke u integruar me aplikacione të tillë si Slack.
+
+<b>Element-i mund të vetëstrehohet</b>
+Për të lejuar më tepër kontroll mbi të dhënat dhe bisedat tuaja rezervat, Element-i mund të vetëstrehohet, ose mund të zgjidhni cilëndo strehë të bazuar në Matrix - standardi për komunikim me burim të hapët, të decentralizuar. Element-i ju jep privatësi, pajtueshmëri sigurie dhe zhdërvjelltësi integrimesh.
+
+<b>Jini zot i të dhënave tuaja</b>
+Ju vendosni ku të mbahen të dhënat dhe mesazhet tuaja. Pa rrezikun e shfrytëzimit të të dhënave apo hyrjes në to nga palë të treta.
+
+Element-i ju vë ju në kontroll përmes rrugësh të ndryshme:
+1. Merrni një llogari falas te shërbyesi publik matrix.org strehuar nga zhvillues të Matrix-it, ose zgjidhni prej mijëra shërbyesish publikë të strehuar nga vullnetarë
+2. Vetëstrehoni llogarinë tuaj duke xhiruar një shërbyes në infrastrukturën tuaj TI
+3. Regjistrohuni për një llogari në një shërbyes vetjak, thjesht duke u pajtuar te platforma Element Matrix Services e strehimeve
+
+<b>Shkëmbim mesazhesh dhe bashkëpunim me burim të hapët</b>
+Mund të fjaloseni me këdo në rrjetin Matrix, qoftë kur përdorin Element, një tjetër aplikacion Matrix, apo edhe kur përdorin një tjetër aplikacion shkëmbimi mesazhesh.
+
+<b>Super i sigurt</b>
+Fshehtëzim i njëmendtë skaj-më-skaj (vetëm ata te biseda mund të shfshehtëzojnë mesazhe), dhe verifikim “cross-signed” pajisjesh.
+
+<b>Komunikim dhe integrim i plotë</b>
+Shkëmbim mesazhesh, thirrje me zë dhe me video, shkëmbim kartelash, tregim ekrani dhe një grup i tërë integrimesh, robotësh dhe widget-esh. Krijoni dhoma, bashkësi, mbani lidhjet dhe mbaroni punë.
+
+<b>Rifillojani atje ku e latë</b>
+Jini në dijeni, kudo ku gjendeni, me historik plotësisht të njëkohësuar mesazhesh nëpër krejt pajisjet tuaja dhe në internet te https://app.element.io
+
+<b>Me burim të hapët</b>
+Element-i për Android është një projekt me burim të hapët, strehuar në GitHub. Ju lutemi, njoftoni të meta dhe/ose jepni ndihmesë në zhvillimin e tij te https://github.com/vector-im/element-android

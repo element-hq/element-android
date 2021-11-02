@@ -22,6 +22,7 @@ import androidx.work.ExistingWorkPolicy
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixCallback
+import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.crypto.crosssigning.CrossSigningService
@@ -42,7 +43,6 @@ import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.task.TaskThread
 import org.matrix.android.sdk.internal.task.configureWith
 import org.matrix.android.sdk.internal.util.JsonCanonicalizer
-import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.internal.util.logLimit
 import org.matrix.android.sdk.internal.worker.WorkerParamsFactory
 import org.matrix.olm.OlmPkSigning
@@ -529,13 +529,13 @@ internal class DefaultCrossSigningService @Inject constructor(
     }
 
     override fun canCrossSign(): Boolean {
-        return checkSelfTrust().isVerified() && cryptoStore.getCrossSigningPrivateKeys()?.selfSigned != null
-                && cryptoStore.getCrossSigningPrivateKeys()?.user != null
+        return checkSelfTrust().isVerified() && cryptoStore.getCrossSigningPrivateKeys()?.selfSigned != null &&
+                cryptoStore.getCrossSigningPrivateKeys()?.user != null
     }
 
     override fun allPrivateKeysKnown(): Boolean {
-        return checkSelfTrust().isVerified()
-                && cryptoStore.getCrossSigningPrivateKeys()?.allKnown().orFalse()
+        return checkSelfTrust().isVerified() &&
+                cryptoStore.getCrossSigningPrivateKeys()?.allKnown().orFalse()
     }
 
     override fun trustUser(otherUserId: String, callback: MatrixCallback<Unit>) {

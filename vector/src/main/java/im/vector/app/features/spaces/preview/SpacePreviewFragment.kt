@@ -49,10 +49,9 @@ data class SpacePreviewArgs(
 ) : Parcelable
 
 class SpacePreviewFragment @Inject constructor(
-        private val viewModelFactory: SpacePreviewViewModel.Factory,
         private val avatarRenderer: AvatarRenderer,
         private val epoxyController: SpacePreviewController
-) : VectorBaseFragment<FragmentSpacePreviewBinding>(), SpacePreviewViewModel.Factory {
+) : VectorBaseFragment<FragmentSpacePreviewBinding>() {
 
     private val viewModel by fragmentViewModel(SpacePreviewViewModel::class)
     lateinit var sharedActionViewModel: SpacePreviewSharedActionViewModel
@@ -65,8 +64,6 @@ class SpacePreviewFragment @Inject constructor(
         super.onCreate(savedInstanceState)
         sharedActionViewModel = activityViewModelProvider.get(SpacePreviewSharedActionViewModel::class.java)
     }
-
-    override fun create(initialState: SpacePreviewState) = viewModelFactory.create(initialState)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

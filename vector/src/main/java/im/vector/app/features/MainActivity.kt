@@ -24,9 +24,9 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
-import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.startSyncing
 import im.vector.app.core.platform.VectorBaseActivity
@@ -45,10 +45,10 @@ import im.vector.app.features.signout.soft.SoftLogoutActivity
 import im.vector.app.features.signout.soft.SoftLogoutActivity2
 import im.vector.app.features.themes.ActivityOtherThemes
 import im.vector.app.features.ui.UiStateRepository
-import kotlinx.parcelize.Parcelize
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.failure.GlobalError
 import timber.log.Timber
 import javax.inject.Inject
@@ -67,6 +67,7 @@ data class MainActivityArgs(
  * This Activity, when started with argument, is also doing some cleanup when user signs out,
  * clears cache, is logged out, or is soft logged out
  */
+@AndroidEntryPoint
 class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity {
 
     companion object {
@@ -97,10 +98,6 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
     @Inject lateinit var pinCodeStore: PinCodeStore
     @Inject lateinit var pinLocker: PinLocker
     @Inject lateinit var popupAlertManager: PopupAlertManager
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -220,20 +217,20 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
 
     private fun startNextActivityAndFinish(ignoreClearCredentials: Boolean = false) {
         val intent = when {
-            args.clearCredentials
-                    && !ignoreClearCredentials
-                    && (!args.isUserLoggedOut || args.isAccountDeactivated) -> {
+            args.clearCredentials &&
+                    !ignoreClearCredentials &&
+                    (!args.isUserLoggedOut || args.isAccountDeactivated) -> {
                 // User has explicitly asked to log out or deactivated his account
                 navigator.openLogin(this, null)
                 null
             }
-            args.isSoftLogout                                               ->
+            args.isSoftLogout                                            ->
                 // The homeserver has invalidated the token, with a soft logout
                 getSoftLogoutActivityIntent()
-            args.isUserLoggedOut                                            ->
+            args.isUserLoggedOut                                         ->
                 // the homeserver has invalidated the token (password changed, device deleted, other security reasons)
                 SignedOutActivity.newIntent(this)
-            sessionHolder.hasActiveSession()                                ->
+            sessionHolder.hasActiveSession()                             ->
                 // We have a session.
                 // Check it can be opened
                 if (sessionHolder.getActiveSession().isOpenable) {
@@ -242,7 +239,7 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
                     // The token is still invalid
                     getSoftLogoutActivityIntent()
                 }
-            else                                                            -> {
+            else                                                         -> {
                 // First start, or no active session
                 navigator.openLogin(this, null)
                 null

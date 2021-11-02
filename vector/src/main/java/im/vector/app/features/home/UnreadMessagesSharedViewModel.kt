@@ -16,16 +16,15 @@
 
 package im.vector.app.features.home
 
-import com.airbnb.mvrx.ActivityViewModelContext
-import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxState
-import com.airbnb.mvrx.MvRxViewModelFactory
-import com.airbnb.mvrx.ViewModelContext
+import com.airbnb.mvrx.MavericksState
+import com.airbnb.mvrx.MavericksViewModelFactory
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.AppStateHandler
 import im.vector.app.RoomGroupingMethod
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
@@ -38,6 +37,7 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.RoomSortOrder
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
+import org.matrix.android.sdk.api.session.room.spaceSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.summary.RoomAggregateNotificationCount
 import org.matrix.android.sdk.rx.asObservable
 import java.util.concurrent.TimeUnit
@@ -45,7 +45,7 @@ import java.util.concurrent.TimeUnit
 data class UnreadMessagesState(
         val homeSpaceUnread: RoomAggregateNotificationCount = RoomAggregateNotificationCount(0, 0),
         val otherSpacesUnread: RoomAggregateNotificationCount = RoomAggregateNotificationCount(0, 0)
-) : MvRxState
+) : MavericksState
 
 data class CountInfo(
         val homeCount: RoomAggregateNotificationCount,
@@ -56,25 +56,15 @@ class UnreadMessagesSharedViewModel @AssistedInject constructor(@Assisted initia
                                                                 session: Session,
                                                                 private val vectorPreferences: VectorPreferences,
                                                                 appStateHandler: AppStateHandler,
-                                                                private val autoAcceptInvites: AutoAcceptInvites)
-    : VectorViewModel<UnreadMessagesState, EmptyAction, EmptyViewEvents>(initialState) {
+                                                                private val autoAcceptInvites: AutoAcceptInvites) :
+    VectorViewModel<UnreadMessagesState, EmptyAction, EmptyViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: UnreadMessagesState): UnreadMessagesSharedViewModel
+    interface Factory : MavericksAssistedViewModelFactory<UnreadMessagesSharedViewModel, UnreadMessagesState> {
+        override fun create(initialState: UnreadMessagesState): UnreadMessagesSharedViewModel
     }
 
-    companion object : MvRxViewModelFactory<UnreadMessagesSharedViewModel, UnreadMessagesState> {
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: UnreadMessagesState): UnreadMessagesSharedViewModel? {
-            val factory = when (viewModelContext) {
-                is FragmentViewModelContext -> viewModelContext.fragment as? Factory
-                is ActivityViewModelContext -> viewModelContext.activity as? Factory
-            }
-            return factory?.create(state) ?: error("You should let your activity/fragment implements Factory interface")
-        }
-    }
+    companion object : MavericksViewModelFactory<UnreadMessagesSharedViewModel, UnreadMessagesState> by hiltMavericksViewModelFactory()
 
     override fun handle(action: EmptyAction) {}
 
@@ -143,6 +133,17 @@ class UnreadMessagesSharedViewModel @AssistedInject constructor(@Assisted initia
                                         roomSummaryQueryParams { this.memberships = listOf(Membership.INVITE) }
                                 ).size
                             }
+
+                            val spaceInviteCount = if (autoAcceptInvites.hideInvites) {
+                                0
+                            } else {
+                                session.getRoomSummaries(
+                                        spaceSummaryQueryParams {
+                                            this.memberships = listOf(Membership.INVITE)
+                                        }
+                                ).size
+                            }
+
                             val totalCount = session.getNotificationCountForRooms(
                                     roomSummaryQueryParams {
                                         this.memberships = listOf(Membership.JOIN)
@@ -161,15 +162,16 @@ class UnreadMessagesSharedViewModel @AssistedInject constructor(@Assisted initia
                                         // filter out current selection
                                         it.roomId != selectedSpace
                                     }
+
                             CountInfo(
                                     homeCount = counts,
                                     otherCount = RoomAggregateNotificationCount(
-                                            rootCounts.fold(0, { acc, rs ->
-                                                acc + rs.notificationCount
-                                            }) + (counts.notificationCount.takeIf { selectedSpace != null } ?: 0),
-                                            rootCounts.fold(0, { acc, rs ->
-                                                acc + rs.highlightCount
-                                            }) + (counts.highlightCount.takeIf { selectedSpace != null } ?: 0)
+                                            notificationCount = rootCounts.fold(0, { acc, rs -> acc + rs.notificationCount }) +
+                                                    (counts.notificationCount.takeIf { selectedSpace != null } ?: 0) +
+                                                    spaceInviteCount,
+                                            highlightCount = rootCounts.fold(0, { acc, rs -> acc + rs.highlightCount }) +
+                                                    (counts.highlightCount.takeIf { selectedSpace != null } ?: 0) +
+                                                    spaceInviteCount
                                     )
                             )
                         }

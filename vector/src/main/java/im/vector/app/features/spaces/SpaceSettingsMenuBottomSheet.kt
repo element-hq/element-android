@@ -26,7 +26,7 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
-import im.vector.app.core.di.ScreenComponent
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.databinding.BottomSheetSpaceSettingsBinding
@@ -46,12 +46,12 @@ data class SpaceBottomSheetSettingsArgs(
         val spaceId: String
 ) : Parcelable
 
-class SpaceSettingsMenuBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetSpaceSettingsBinding>(), SpaceMenuViewModel.Factory {
+@AndroidEntryPoint
+class SpaceSettingsMenuBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetSpaceSettingsBinding>() {
 
     @Inject lateinit var navigator: Navigator
     @Inject lateinit var avatarRenderer: AvatarRenderer
     @Inject lateinit var bugReporter: BugReporter
-    @Inject lateinit var viewModelFactory: SpaceMenuViewModel.Factory
 
     private val spaceArgs: SpaceBottomSheetSettingsArgs by args()
 
@@ -64,10 +64,6 @@ class SpaceSettingsMenuBottomSheet : VectorBaseBottomSheetDialogFragment<BottomS
     var interactionListener: InteractionListener? = null
 
     override val showExpanded = true
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
 
     var isLastAdmin: Boolean = false
 
@@ -138,9 +134,5 @@ class SpaceSettingsMenuBottomSheet : VectorBaseBottomSheetDialogFragment<BottomS
                 setArguments(SpaceBottomSheetSettingsArgs(spaceId))
             }
         }
-    }
-
-    override fun create(initialState: SpaceMenuState): SpaceMenuViewModel {
-        return viewModelFactory.create(initialState)
     }
 }

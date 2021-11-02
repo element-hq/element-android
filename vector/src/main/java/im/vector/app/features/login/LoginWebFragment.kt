@@ -37,7 +37,6 @@ import im.vector.app.core.utils.AssetReader
 import im.vector.app.databinding.FragmentLoginWebBinding
 import im.vector.app.features.signout.soft.SoftLogoutAction
 import im.vector.app.features.signout.soft.SoftLogoutViewModel
-
 import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.internal.di.MoshiProvider
 import timber.log.Timber
@@ -51,6 +50,8 @@ import javax.inject.Inject
 class LoginWebFragment @Inject constructor(
         private val assetReader: AssetReader
 ) : AbstractLoginFragment<FragmentLoginWebBinding>() {
+
+    val softLogoutViewModel: SoftLogoutViewModel by activityViewModel()
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLoginWebBinding {
         return FragmentLoginWebBinding.inflate(inflater, container, false)
@@ -233,7 +234,6 @@ class LoginWebFragment @Inject constructor(
 
     private fun notifyViewModel(credentials: Credentials) {
         if (isForSessionRecovery) {
-            val softLogoutViewModel: SoftLogoutViewModel by activityViewModel()
             softLogoutViewModel.handle(SoftLogoutAction.WebLoginSuccess(credentials))
         } else {
             loginViewModel.handle(LoginAction.WebLoginSuccess(credentials))

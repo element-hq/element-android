@@ -28,8 +28,8 @@ import javax.inject.Inject
  * Possible previous worker: None
  * Possible next worker    : None
  */
-internal class GetGroupDataWorker(context: Context, params: WorkerParameters)
-    : SessionSafeCoroutineWorker<GetGroupDataWorker.Params>(context, params, Params::class.java) {
+internal class GetGroupDataWorker(context: Context, params: WorkerParameters) :
+    SessionSafeCoroutineWorker<GetGroupDataWorker.Params>(context, params, Params::class.java) {
 
     @JsonClass(generateAdapter = true)
     internal data class Params(

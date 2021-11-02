@@ -16,32 +16,30 @@
 
 package im.vector.app.features.settings.threepids
 
-import androidx.lifecycle.viewModelScope
-import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxViewModelFactory
-import com.airbnb.mvrx.ViewModelContext
+import com.airbnb.mvrx.MavericksViewModelFactory
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.R
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.ReadOnceTrue
 import im.vector.app.features.auth.ReAuthActivity
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.auth.UIABaseAuth
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
+import org.matrix.android.sdk.api.auth.UserPasswordAuth
 import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.identity.ThreePid
+import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.internal.crypto.crosssigning.fromBase64
 import org.matrix.android.sdk.internal.crypto.model.rest.DefaultBaseAuth
-import org.matrix.android.sdk.api.auth.UIABaseAuth
-import org.matrix.android.sdk.api.auth.UserPasswordAuth
-import org.matrix.android.sdk.rx.rx
 import timber.log.Timber
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
@@ -80,21 +78,11 @@ class ThreePidsSettingsViewModel @AssistedInject constructor(
     }
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: ThreePidsSettingsViewState): ThreePidsSettingsViewModel
+    interface Factory : MavericksAssistedViewModelFactory<ThreePidsSettingsViewModel, ThreePidsSettingsViewState> {
+        override fun create(initialState: ThreePidsSettingsViewState): ThreePidsSettingsViewModel
     }
 
-    companion object : MvRxViewModelFactory<ThreePidsSettingsViewModel, ThreePidsSettingsViewState> {
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: ThreePidsSettingsViewState): ThreePidsSettingsViewModel? {
-            val factory = when (viewModelContext) {
-                is FragmentViewModelContext -> viewModelContext.fragment as? Factory
-                is ActivityViewModelContext -> viewModelContext.activity as? Factory
-            }
-            return factory?.create(state) ?: error("You should let your activity/fragment implements Factory interface")
-        }
-    }
+    companion object : MavericksViewModelFactory<ThreePidsSettingsViewModel, ThreePidsSettingsViewState> by hiltMavericksViewModelFactory()
 
     init {
         observeThreePids()
@@ -102,7 +90,7 @@ class ThreePidsSettingsViewModel @AssistedInject constructor(
     }
 
     private fun observeThreePids() {
-        session.rx()
+        session.flow()
                 .liveThreePIds(true)
                 .execute {
                     copy(
@@ -112,7 +100,7 @@ class ThreePidsSettingsViewModel @AssistedInject constructor(
     }
 
     private fun observePendingThreePids() {
-        session.rx()
+        session.flow()
                 .livePendingThreePIds()
                 .execute {
                     copy(
@@ -131,13 +119,13 @@ class ThreePidsSettingsViewModel @AssistedInject constructor(
 
     override fun handle(action: ThreePidsSettingsAction) {
         when (action) {
-            is ThreePidsSettingsAction.AddThreePid -> handleAddThreePid(action)
+            is ThreePidsSettingsAction.AddThreePid      -> handleAddThreePid(action)
             is ThreePidsSettingsAction.ContinueThreePid -> handleContinueThreePid(action)
-            is ThreePidsSettingsAction.SubmitCode -> handleSubmitCode(action)
-            is ThreePidsSettingsAction.CancelThreePid -> handleCancelThreePid(action)
-            is ThreePidsSettingsAction.DeleteThreePid -> handleDeleteThreePid(action)
-            is ThreePidsSettingsAction.ChangeUiState -> handleChangeUiState(action)
-            ThreePidsSettingsAction.SsoAuthDone -> {
+            is ThreePidsSettingsAction.SubmitCode       -> handleSubmitCode(action)
+            is ThreePidsSettingsAction.CancelThreePid   -> handleCancelThreePid(action)
+            is ThreePidsSettingsAction.DeleteThreePid   -> handleDeleteThreePid(action)
+            is ThreePidsSettingsAction.ChangeUiState    -> handleChangeUiState(action)
+            ThreePidsSettingsAction.SsoAuthDone         -> {
                 Timber.d("## UIA - FallBack success")
                 if (pendingAuth != null) {
                     uiaContinuation?.resume(pendingAuth!!)
@@ -155,7 +143,7 @@ class ThreePidsSettingsViewModel @AssistedInject constructor(
                         )
                 )
             }
-            ThreePidsSettingsAction.ReAuthCancelled -> {
+            ThreePidsSettingsAction.ReAuthCancelled     -> {
                 Timber.d("## UIA - Reauth cancelled")
                 uiaContinuation?.resumeWithException(Exception())
                 uiaContinuation = null

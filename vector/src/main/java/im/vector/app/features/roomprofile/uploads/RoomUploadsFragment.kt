@@ -38,16 +38,13 @@ import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.features.roomprofile.RoomProfileArgs
 import kotlinx.coroutines.launch
-
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
 class RoomUploadsFragment @Inject constructor(
-        private val viewModelFactory: RoomUploadsViewModel.Factory,
         private val avatarRenderer: AvatarRenderer,
         private val notificationUtils: NotificationUtils
-) : VectorBaseFragment<FragmentRoomUploadsBinding>(),
-        RoomUploadsViewModel.Factory by viewModelFactory {
+) : VectorBaseFragment<FragmentRoomUploadsBinding>() {
 
     private val roomProfileArgs: RoomProfileArgs by args()
 

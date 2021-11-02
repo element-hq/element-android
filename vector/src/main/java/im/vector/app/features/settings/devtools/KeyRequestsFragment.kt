@@ -38,12 +38,10 @@ import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.selectTxtFileToWrite
 import im.vector.app.databinding.FragmentDevtoolKeyrequestsBinding
-
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import javax.inject.Inject
 
-class KeyRequestsFragment @Inject constructor(
-        val viewModelFactory: KeyRequestViewModel.Factory) : VectorBaseFragment<FragmentDevtoolKeyrequestsBinding>() {
+class KeyRequestsFragment @Inject constructor() : VectorBaseFragment<FragmentDevtoolKeyrequestsBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentDevtoolKeyrequestsBinding {
         return FragmentDevtoolKeyrequestsBinding.inflate(inflater, container, false)

@@ -18,6 +18,5 @@ updates:
     open-pull-requests-limit: 200
     reviewers:
       - "bmarty"
-###    ignore:
-###      - dependency-name: com.squareup.okhttp3:logging-interceptor
-###        versions: "> 3.12.10"
+    ignore:
+      - dependency-name: com.google.zxing:core

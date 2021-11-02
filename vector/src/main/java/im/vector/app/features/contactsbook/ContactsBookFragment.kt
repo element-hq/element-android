@@ -23,30 +23,28 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.jakewharton.rxbinding3.widget.checkedChanges
 import com.jakewharton.rxbinding3.widget.textChanges
-import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.core.utils.showIdentityServerConsentDialog
 import im.vector.app.databinding.FragmentContactsBookBinding
+import im.vector.app.features.navigation.SettingsActivityPayload
 import im.vector.app.features.userdirectory.PendingSelection
 import im.vector.app.features.userdirectory.UserListAction
 import im.vector.app.features.userdirectory.UserListSharedAction
 import im.vector.app.features.userdirectory.UserListSharedActionViewModel
 import im.vector.app.features.userdirectory.UserListViewModel
-
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.user.model.User
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class ContactsBookFragment @Inject constructor(
-        private val contactsBookViewModelFactory: ContactsBookViewModel.Factory,
         private val contactsBookController: ContactsBookController
-) : VectorBaseFragment<FragmentContactsBookBinding>(), ContactsBookController.Callback, ContactsBookViewModel.Factory {
+) : VectorBaseFragment<FragmentContactsBookBinding>(), ContactsBookController.Callback {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentContactsBookBinding {
         return FragmentContactsBookBinding.inflate(inflater, container, false)
@@ -58,10 +56,6 @@ class ContactsBookFragment @Inject constructor(
     private val contactsBookViewModel: ContactsBookViewModel by activityViewModel()
 
     private lateinit var sharedActionViewModel: UserListSharedActionViewModel
-
-    override fun create(initialState: ContactsBookViewState): ContactsBookViewModel {
-        return contactsBookViewModelFactory.create(initialState)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -76,14 +70,13 @@ class ContactsBookFragment @Inject constructor(
     private fun setupConsentView() {
         views.phoneBookSearchForMatrixContacts.setOnClickListener {
             withState(contactsBookViewModel) { state ->
-                MaterialAlertDialogBuilder(requireActivity())
-                        .setTitle(R.string.identity_server_consent_dialog_title)
-                        .setMessage(getString(R.string.identity_server_consent_dialog_content, state.identityServerUrl ?: ""))
-                        .setPositiveButton(R.string.yes) { _, _ ->
-                            contactsBookViewModel.handle(ContactsBookAction.UserConsentGranted)
-                        }
-                        .setNegativeButton(R.string.no, null)
-                        .show()
+                requireContext().showIdentityServerConsentDialog(
+                        state.identityServerUrl,
+                        policyLinkCallback = {
+                            navigator.openSettings(requireContext(), SettingsActivityPayload.DiscoverySettings(expandIdentityPolicies = true))
+                        },
+                        consentCallBack = { contactsBookViewModel.handle(ContactsBookAction.UserConsentGranted) }
+                )
             }
         }
     }

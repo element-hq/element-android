@@ -25,11 +25,11 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentOnAttachListener
-import com.airbnb.mvrx.MvRx
+import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.commitTransaction
 import im.vector.app.core.platform.SimpleFragmentActivity
@@ -39,6 +39,7 @@ import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 import kotlin.reflect.KClass
 
+@AndroidEntryPoint
 class SharedSecureStorageActivity :
         SimpleFragmentActivity(),
         VectorBaseBottomSheetDialogFragment.ResultListener,
@@ -52,13 +53,7 @@ class SharedSecureStorageActivity :
     ) : Parcelable
 
     private val viewModel: SharedSecureStorageViewModel by viewModel()
-    @Inject lateinit var viewModelFactory: SharedSecureStorageViewModel.Factory
     @Inject lateinit var errorFormatter: ErrorFormatter
-
-    override fun injectWith(injector: ScreenComponent) {
-        super.injectWith(injector)
-        injector.inject(this)
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -159,7 +154,7 @@ class SharedSecureStorageActivity :
                       resultKeyStoreAlias: String = DEFAULT_RESULT_KEYSTORE_ALIAS): Intent {
             require(requestedSecrets.isNotEmpty())
             return Intent(context, SharedSecureStorageActivity::class.java).also {
-                it.putExtra(MvRx.KEY_ARG, Args(
+                it.putExtra(Mavericks.KEY_ARG, Args(
                         keyId,
                         requestedSecrets,
                         resultKeyStoreAlias

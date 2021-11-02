@@ -21,6 +21,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentFactory
 import dagger.Binds
 import dagger.Module
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ActivityComponent
 import dagger.multibindings.IntoMap
 import im.vector.app.features.attachments.preview.AttachmentsPreviewFragment
 import im.vector.app.features.contactsbook.ContactsBookFragment
@@ -76,7 +78,6 @@ import im.vector.app.features.login2.LoginFragmentSigninPassword2
 import im.vector.app.features.login2.LoginFragmentSigninUsername2
 import im.vector.app.features.login2.LoginFragmentSignupPassword2
 import im.vector.app.features.login2.LoginFragmentSignupUsername2
-import im.vector.app.features.login2.created.AccountCreatedFragment
 import im.vector.app.features.login2.LoginFragmentToAny2
 import im.vector.app.features.login2.LoginGenericTextInputFormFragment2
 import im.vector.app.features.login2.LoginResetPasswordFragment2
@@ -88,6 +89,7 @@ import im.vector.app.features.login2.LoginSplashSignUpSignInSelectionFragment2
 import im.vector.app.features.login2.LoginSsoOnlyFragment2
 import im.vector.app.features.login2.LoginWaitForEmailFragment2
 import im.vector.app.features.login2.LoginWebFragment2
+import im.vector.app.features.login2.created.AccountCreatedFragment
 import im.vector.app.features.login2.terms.LoginTermsFragment2
 import im.vector.app.features.matrixto.MatrixToRoomSpaceFragment
 import im.vector.app.features.matrixto.MatrixToUserFragment
@@ -114,12 +116,9 @@ import im.vector.app.features.roomprofile.settings.joinrule.RoomJoinRuleFragment
 import im.vector.app.features.roomprofile.uploads.RoomUploadsFragment
 import im.vector.app.features.roomprofile.uploads.files.RoomUploadsFilesFragment
 import im.vector.app.features.roomprofile.uploads.media.RoomUploadsMediaFragment
-import im.vector.app.features.settings.notifications.VectorSettingsAdvancedNotificationPreferenceFragment
 import im.vector.app.features.settings.VectorSettingsGeneralFragment
 import im.vector.app.features.settings.VectorSettingsHelpAboutFragment
 import im.vector.app.features.settings.VectorSettingsLabsFragment
-import im.vector.app.features.settings.notifications.VectorSettingsNotificationPreferenceFragment
-import im.vector.app.features.settings.notifications.VectorSettingsNotificationsTroubleshootFragment
 import im.vector.app.features.settings.VectorSettingsPinFragment
 import im.vector.app.features.settings.VectorSettingsPreferencesFragment
 import im.vector.app.features.settings.VectorSettingsSecurityPrivacyFragment
@@ -134,6 +133,9 @@ import im.vector.app.features.settings.devtools.OutgoingKeyRequestListFragment
 import im.vector.app.features.settings.homeserver.HomeserverSettingsFragment
 import im.vector.app.features.settings.ignored.VectorSettingsIgnoredUsersFragment
 import im.vector.app.features.settings.locale.LocalePickerFragment
+import im.vector.app.features.settings.notifications.VectorSettingsAdvancedNotificationPreferenceFragment
+import im.vector.app.features.settings.notifications.VectorSettingsNotificationPreferenceFragment
+import im.vector.app.features.settings.notifications.VectorSettingsNotificationsTroubleshootFragment
 import im.vector.app.features.settings.push.PushGatewaysFragment
 import im.vector.app.features.settings.push.PushRulesFragment
 import im.vector.app.features.settings.threepids.ThreePidsSettingsFragment
@@ -157,6 +159,7 @@ import im.vector.app.features.usercode.ShowUserCodeFragment
 import im.vector.app.features.userdirectory.UserListFragment
 import im.vector.app.features.widgets.WidgetFragment
 
+@InstallIn(ActivityComponent::class)
 @Module
 interface FragmentModule {
     /**

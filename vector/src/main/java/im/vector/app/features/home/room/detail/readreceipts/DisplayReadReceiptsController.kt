@@ -30,8 +30,8 @@ import javax.inject.Inject
  */
 class DisplayReadReceiptsController @Inject constructor(private val dateFormatter: VectorDateFormatter,
                                                         private val session: Session,
-                                                        private val avatarRender: AvatarRenderer)
-    : TypedEpoxyController<List<ReadReceiptData>>() {
+                                                        private val avatarRender: AvatarRenderer) :
+    TypedEpoxyController<List<ReadReceiptData>>() {
 
     var listener: Listener? = null
 

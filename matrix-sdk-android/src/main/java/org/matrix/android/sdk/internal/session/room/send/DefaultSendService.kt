@@ -22,9 +22,10 @@ import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequest
 import androidx.work.Operation
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.MatrixUrls.isMxcUrl
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.isAttachmentMessage
@@ -130,7 +131,7 @@ internal class DefaultSendService @AssistedInject constructor(
             val messageContent = clearContent?.toModel<MessageContent>() as? MessageWithAttachmentContent ?: return NoOpCancellable
 
             val url = messageContent.getFileUrl() ?: return NoOpCancellable
-            if (url.startsWith("mxc://")) {
+            if (url.isMxcUrl()) {
                 // We need to resend only the message as the attachment is ok
                 localEchoRepository.updateSendState(localEcho.eventId, roomId, SendState.UNSENT)
                 return sendEvent(localEcho.root)

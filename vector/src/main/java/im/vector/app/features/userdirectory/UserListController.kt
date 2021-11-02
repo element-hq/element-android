@@ -26,9 +26,14 @@ import im.vector.app.core.epoxy.errorWithRetryItem
 import im.vector.app.core.epoxy.loadingItem
 import im.vector.app.core.epoxy.noResultItem
 import im.vector.app.core.error.ErrorFormatter
+import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.core.ui.list.genericPillItem
+import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.AvatarRenderer
+import me.gujun.android.span.span
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.identity.IdentityServiceError
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.user.model.User
 import org.matrix.android.sdk.api.util.toMatrixItem
@@ -37,6 +42,7 @@ import javax.inject.Inject
 class UserListController @Inject constructor(private val session: Session,
                                              private val avatarRenderer: AvatarRenderer,
                                              private val stringProvider: StringProvider,
+                                             private val colorProvider: ColorProvider,
                                              private val errorFormatter: ErrorFormatter) : EpoxyController() {
 
     private var state: UserListViewState? = null
@@ -83,6 +89,119 @@ class UserListController @Inject constructor(private val session: Session,
                         host.callback?.onUseQRCode()
                     }
                 }
+            }
+        }
+
+        when (val matchingEmail = currentState.matchingEmail) {
+            is Success -> {
+                matchingEmail()?.let { threePidUser ->
+                    userListHeaderItem {
+                        id("identity_server_result_header")
+                        header(host.stringProvider.getString(R.string.discovery_section, currentState.configuredIdentityServer ?: ""))
+                    }
+                    val isSelected = currentState.pendingSelections.any { pendingSelection ->
+                        when (pendingSelection) {
+                            is PendingSelection.ThreePidPendingSelection -> {
+                                when (pendingSelection.threePid) {
+                                    is ThreePid.Email  -> pendingSelection.threePid.email == threePidUser.email
+                                    is ThreePid.Msisdn -> false
+                                }
+                            }
+                            is PendingSelection.UserPendingSelection     -> {
+                                threePidUser.user != null && threePidUser.user.userId == pendingSelection.user.userId
+                            }
+                        }
+                    }
+                    if (threePidUser.user == null) {
+                        inviteByEmailItem {
+                            id("email_${threePidUser.email}")
+                            foundItem(threePidUser)
+                            selected(isSelected)
+                            clickListener {
+                                host.callback?.onThreePidClick(ThreePid.Email(threePidUser.email))
+                            }
+                        }
+                    } else {
+                        userDirectoryUserItem {
+                            id(threePidUser.user.userId)
+                            selected(isSelected)
+                            matrixItem(threePidUser.user.toMatrixItem().let {
+                                it.copy(
+                                        displayName = "${it.getBestName()} [${threePidUser.email}]"
+                                )
+                            })
+                            avatarRenderer(host.avatarRenderer)
+                            clickListener {
+                                host.callback?.onItemClick(threePidUser.user)
+                            }
+                        }
+                    }
+                }
+            }
+            is Fail    -> {
+                when (matchingEmail.error) {
+                    is IdentityServiceError.UserConsentNotProvided     -> {
+                        genericPillItem {
+                            id("consent_not_given")
+                            text(
+                                    span {
+                                        span {
+                                            text = host.stringProvider.getString(R.string.settings_discovery_consent_notice_off)
+                                        }
+                                        +"\n"
+                                        span {
+                                            text = host.stringProvider.getString(R.string.settings_discovery_consent_action_give_consent)
+                                            textStyle = "bold"
+                                            textColor = host.colorProvider.getColorFromAttribute(R.attr.colorPrimary)
+                                        }
+                                    }
+                            )
+                            itemClickAction {
+                                host.callback?.giveIdentityServerConsent()
+                            }
+                        }
+                    }
+                    is IdentityServiceError.NoIdentityServerConfigured -> {
+                        genericPillItem {
+                            id("no_IDS")
+                            imageRes(R.drawable.ic_info)
+                            text(
+                                    span {
+                                        span {
+                                            text = host.stringProvider.getString(R.string.finish_setting_up_discovery)
+                                            textColor = host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary)
+                                        }
+                                        +"\n"
+                                        span {
+                                            text = host.stringProvider.getString(R.string.discovery_invite)
+                                            textColor = host.colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
+                                        }
+                                        +"\n"
+                                        span {
+                                            text = host.stringProvider.getString(R.string.finish_setup)
+                                            textStyle = "bold"
+                                            textColor = host.colorProvider.getColorFromAttribute(R.attr.colorPrimary)
+                                        }
+                                    }
+                            )
+                            itemClickAction {
+                                host.callback?.onSetupDiscovery()
+                            }
+                        }
+                    }
+                }
+            }
+            is Loading -> {
+                userListHeaderItem {
+                    id("identity_server_result_header_loading")
+                    header(host.stringProvider.getString(R.string.discovery_section, currentState.configuredIdentityServer ?: ""))
+                }
+                loadingItem {
+                    id("is_loading")
+                }
+            }
+            else       -> {
+                // nop
             }
         }
 
@@ -196,5 +315,7 @@ class UserListController @Inject constructor(private val session: Session,
         fun onItemClick(user: User)
         fun onMatrixIdClick(matrixId: String)
         fun onThreePidClick(threePid: ThreePid)
+        fun onSetupDiscovery()
+        fun giveIdentityServerConsent()
     }
 }

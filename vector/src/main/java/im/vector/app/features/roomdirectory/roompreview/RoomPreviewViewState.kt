@@ -17,7 +17,7 @@
 package im.vector.app.features.roomdirectory.roompreview
 
 import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.Uninitialized
 import im.vector.app.features.roomdirectory.JoinState
 import org.matrix.android.sdk.api.session.permalinks.PermalinkData
@@ -48,7 +48,7 @@ data class RoomPreviewViewState(
         val fromEmailInvite: PermalinkData.RoomEmailInviteLink? = null,
         // used only if it's an email invite
         val isEmailBoundToAccount: Boolean = false
-) : MvRxState {
+) : MavericksState {
 
     constructor(args: RoomPreviewData) : this(
             roomId = args.roomId,
@@ -62,7 +62,7 @@ data class RoomPreviewViewState(
             roomType = args.roomType
     )
 
-    fun matrixItem() : MatrixItem {
+    fun matrixItem(): MatrixItem {
         return if (roomType == RoomType.SPACE) MatrixItem.SpaceItem(roomId, roomName ?: roomAlias, avatarUrl)
             else MatrixItem.RoomItem(roomId, roomName ?: roomAlias, avatarUrl)
     }

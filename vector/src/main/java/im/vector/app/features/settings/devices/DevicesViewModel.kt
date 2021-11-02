@@ -16,49 +16,53 @@
 
 package im.vector.app.features.settings.devices
 
-import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxState
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksState
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.R
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.auth.ReAuthActivity
 import im.vector.app.features.login.ReAuthHelper
-import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.sample
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.NoOpMatrixCallback
+import org.matrix.android.sdk.api.auth.UIABaseAuth
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
+import org.matrix.android.sdk.api.auth.UserPasswordAuth
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
+import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
+import org.matrix.android.sdk.api.auth.registration.nextUncompletedStage
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
-import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
-import org.matrix.android.sdk.api.auth.registration.nextUncompletedStage
+import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.internal.crypto.crosssigning.DeviceTrustLevel
 import org.matrix.android.sdk.internal.crypto.crosssigning.fromBase64
 import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.rest.DefaultBaseAuth
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
-import org.matrix.android.sdk.api.auth.UIABaseAuth
-import org.matrix.android.sdk.api.auth.UserPasswordAuth
 import org.matrix.android.sdk.internal.util.awaitCallback
-import org.matrix.android.sdk.rx.rx
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.net.ssl.HttpsURLConnection
@@ -75,7 +79,7 @@ data class DevicesViewState(
         val request: Async<Unit> = Uninitialized,
         val hasAccountCrossSigning: Boolean = false,
         val accountCrossSigningIsTrusted: Boolean = false
-) : MvRxState
+) : MavericksState
 
 data class DeviceFullInfo(
         val deviceInfo: DeviceInfo,
@@ -93,18 +97,11 @@ class DevicesViewModel @AssistedInject constructor(
     var pendingAuth: UIABaseAuth? = null
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: DevicesViewState): DevicesViewModel
+    interface Factory : MavericksAssistedViewModelFactory<DevicesViewModel, DevicesViewState> {
+        override fun create(initialState: DevicesViewState): DevicesViewModel
     }
 
-    companion object : MvRxViewModelFactory<DevicesViewModel, DevicesViewState> {
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: DevicesViewState): DevicesViewModel? {
-            val fragment: VectorSettingsDevicesFragment = (viewModelContext as FragmentViewModelContext).fragment()
-            return fragment.devicesViewModelFactory.create(state)
-        }
-    }
+    companion object : MavericksViewModelFactory<DevicesViewModel, DevicesViewState> by hiltMavericksViewModelFactory()
 
     private val refreshPublisher: PublishSubject<Unit> = PublishSubject.create()
 
@@ -118,18 +115,17 @@ class DevicesViewModel @AssistedInject constructor(
             )
         }
 
-        Observable.combineLatest<List<CryptoDeviceInfo>, List<DeviceInfo>, List<DeviceFullInfo>>(
-                session.rx().liveUserCryptoDevices(session.myUserId),
-                session.rx().liveMyDevicesInfo(),
-                { cryptoList, infoList ->
-                    infoList
-                            .sortedByDescending { it.lastSeenTs }
-                            .map { deviceInfo ->
-                                val cryptoDeviceInfo = cryptoList.firstOrNull { it.deviceId == deviceInfo.deviceId }
-                                DeviceFullInfo(deviceInfo, cryptoDeviceInfo)
-                            }
-                }
-        )
+        combine(
+                session.flow().liveUserCryptoDevices(session.myUserId),
+                session.flow().liveMyDevicesInfo()
+        ) { cryptoList, infoList ->
+            infoList
+                    .sortedByDescending { it.lastSeenTs }
+                    .map { deviceInfo ->
+                        val cryptoDeviceInfo = cryptoList.firstOrNull { it.deviceId == deviceInfo.deviceId }
+                        DeviceFullInfo(deviceInfo, cryptoDeviceInfo)
+                    }
+        }
                 .distinctUntilChanged()
                 .execute { async ->
                     copy(
@@ -137,7 +133,7 @@ class DevicesViewModel @AssistedInject constructor(
                     )
                 }
 
-        session.rx().liveCrossSigningInfo(session.myUserId)
+        session.flow().liveCrossSigningInfo(session.myUserId)
                 .execute {
                     copy(
                             hasAccountCrossSigning = it.invoke()?.getOrNull() != null,
@@ -146,24 +142,24 @@ class DevicesViewModel @AssistedInject constructor(
                 }
         session.cryptoService().verificationService().addListener(this)
 
-//        session.rx().liveMyDeviceInfo()
+//        session.flow().liveMyDeviceInfo()
 //                .execute {
 //                    copy(
 //                            devices = it
 //                    )
 //                }
 
-        session.rx().liveUserCryptoDevices(session.myUserId)
+        session.flow().liveUserCryptoDevices(session.myUserId)
                 .map { it.size }
                 .distinctUntilChanged()
-                .throttleLast(5_000, TimeUnit.MILLISECONDS)
-                .subscribe {
+                .sample(5_000)
+                .onEach {
                     // If we have a new crypto device change, we might want to trigger refresh of device info
                     session.cryptoService().fetchDevicesList(NoOpMatrixCallback())
                 }
-                .disposeOnClear()
+                .launchIn(viewModelScope)
 
-//        session.rx().liveUserCryptoDevices(session.myUserId)
+//        session.flow().liveUserCryptoDevices(session.myUserId)
 //                .execute {
 //                    copy(
 //                            cryptoDevices = it

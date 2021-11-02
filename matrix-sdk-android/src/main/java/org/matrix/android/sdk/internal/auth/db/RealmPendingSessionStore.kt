@@ -16,11 +16,11 @@
 
 package org.matrix.android.sdk.internal.auth.db
 
+import io.realm.Realm
+import io.realm.RealmConfiguration
 import org.matrix.android.sdk.internal.auth.PendingSessionStore
 import org.matrix.android.sdk.internal.database.awaitTransaction
 import org.matrix.android.sdk.internal.di.AuthDatabase
-import io.realm.Realm
-import io.realm.RealmConfiguration
 import javax.inject.Inject
 
 internal class RealmPendingSessionStore @Inject constructor(private val mapper: PendingSessionMapper,

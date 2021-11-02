@@ -15,8 +15,8 @@
  */
 package im.vector.app.features.crypto.verification.conclusion
 
-import com.airbnb.mvrx.MvRxState
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksState
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.EmptyViewEvents
@@ -27,7 +27,7 @@ import org.matrix.android.sdk.api.session.crypto.verification.safeValueOf
 data class VerificationConclusionViewState(
         val conclusionState: ConclusionState = ConclusionState.CANCELLED,
         val isSelfVerification: Boolean = false
-) : MvRxState
+) : MavericksState
 
 enum class ConclusionState {
     SUCCESS,
@@ -35,10 +35,10 @@ enum class ConclusionState {
     CANCELLED
 }
 
-class VerificationConclusionViewModel(initialState: VerificationConclusionViewState)
-    : VectorViewModel<VerificationConclusionViewState, EmptyAction, EmptyViewEvents>(initialState) {
+class VerificationConclusionViewModel(initialState: VerificationConclusionViewState) :
+    VectorViewModel<VerificationConclusionViewState, EmptyAction, EmptyViewEvents>(initialState) {
 
-    companion object : MvRxViewModelFactory<VerificationConclusionViewModel, VerificationConclusionViewState> {
+    companion object : MavericksViewModelFactory<VerificationConclusionViewModel, VerificationConclusionViewState> {
 
         override fun initialState(viewModelContext: ViewModelContext): VerificationConclusionViewState? {
             val args = viewModelContext.args<VerificationConclusionFragment.Args>()

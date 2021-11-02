@@ -15,20 +15,19 @@
  */
 package im.vector.app.features.crypto.verification
 
-import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxState
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksState
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import im.vector.app.R
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
@@ -61,15 +60,17 @@ import org.matrix.android.sdk.internal.util.awaitCallback
 import timber.log.Timber
 
 data class VerificationBottomSheetViewState(
+        val otherUserId: String,
+        val verificationId: String?,
+        val roomId: String?,
+        // true when we display the loading and we wait for the other (incoming request)
+        val selfVerificationMode: Boolean,
         val otherUserMxItem: MatrixItem? = null,
-        val roomId: String? = null,
         val pendingRequest: Async<PendingVerificationRequest> = Uninitialized,
         val pendingLocalId: String? = null,
         val sasTransactionState: VerificationTxState? = null,
         val qrTransactionState: VerificationTxState? = null,
         val transactionId: String? = null,
-        // true when we display the loading and we wait for the other (incoming request)
-        val selfVerificationMode: Boolean = false,
         val verifiedFromPrivateKeys: Boolean = false,
         val verifyingFrom4S: Boolean = false,
         val isMe: Boolean = false,
@@ -79,29 +80,41 @@ data class VerificationBottomSheetViewState(
         val quadSContainsSecrets: Boolean = true,
         val quadSHasBeenReset: Boolean = false,
         val hasAnyOtherSession: Boolean = false
-) : MvRxState
+) : MavericksState {
+
+    constructor(args: VerificationBottomSheet.VerificationArgs) : this(
+            otherUserId = args.otherUserId,
+            verificationId = args.verificationId,
+            roomId = args.roomId,
+            selfVerificationMode = args.selfVerificationMode
+    )
+}
 
 class VerificationBottomSheetViewModel @AssistedInject constructor(
         @Assisted initialState: VerificationBottomSheetViewState,
-        @Assisted val args: VerificationBottomSheet.VerificationArgs,
         private val session: Session,
         private val supportedVerificationMethodsProvider: SupportedVerificationMethodsProvider,
-        private val stringProvider: StringProvider)
-    : VectorViewModel<VerificationBottomSheetViewState, VerificationAction, VerificationBottomSheetViewEvents>(initialState),
+        private val stringProvider: StringProvider) :
+        VectorViewModel<VerificationBottomSheetViewState, VerificationAction, VerificationBottomSheetViewEvents>(initialState),
         VerificationService.Listener {
+
+    @AssistedFactory
+    interface Factory : MavericksAssistedViewModelFactory<VerificationBottomSheetViewModel, VerificationBottomSheetViewState> {
+        override fun create(initialState: VerificationBottomSheetViewState): VerificationBottomSheetViewModel
+    }
+
+    companion object : MavericksViewModelFactory<VerificationBottomSheetViewModel, VerificationBottomSheetViewState> by hiltMavericksViewModelFactory()
 
     init {
         session.cryptoService().verificationService().addListener(this)
 
-        val userItem = session.getUser(args.otherUserId)
-
-        val selfVerificationMode = args.selfVerificationMode
+        val userItem = session.getUser(initialState.otherUserId)
 
         var autoReady = false
-        val pr = if (selfVerificationMode) {
+        val pr = if (initialState.selfVerificationMode) {
             // See if active tx for this user and take it
 
-            session.cryptoService().verificationService().getExistingVerificationRequests(args.otherUserId)
+            session.cryptoService().verificationService().getExistingVerificationRequests(initialState.otherUserId)
                     .lastOrNull { !it.isFinished }
                     ?.also { verificationRequest ->
                         if (verificationRequest.isIncoming && !verificationRequest.isReady) {
@@ -110,15 +123,15 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                         }
                     }
         } else {
-            session.cryptoService().verificationService().getExistingVerificationRequest(args.otherUserId, args.verificationId)
+            session.cryptoService().verificationService().getExistingVerificationRequest(initialState.otherUserId, initialState.verificationId)
         }
 
-        val sasTx = (pr?.transactionId ?: args.verificationId)?.let {
-            session.cryptoService().verificationService().getExistingTransaction(args.otherUserId, it) as? SasVerificationTransaction
+        val sasTx = (pr?.transactionId ?: initialState.verificationId)?.let {
+            session.cryptoService().verificationService().getExistingTransaction(initialState.otherUserId, it) as? SasVerificationTransaction
         }
 
-        val qrTx = (pr?.transactionId ?: args.verificationId)?.let {
-            session.cryptoService().verificationService().getExistingTransaction(args.otherUserId, it) as? QrCodeVerificationTransaction
+        val qrTx = (pr?.transactionId ?: initialState.verificationId)?.let {
+            session.cryptoService().verificationService().getExistingTransaction(initialState.otherUserId, it) as? QrCodeVerificationTransaction
         }
 
         val hasAnyOtherSession = session.cryptoService()
@@ -132,11 +145,9 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                     otherUserMxItem = userItem?.toMatrixItem(),
                     sasTransactionState = sasTx?.state,
                     qrTransactionState = qrTx?.state,
-                    transactionId = pr?.transactionId ?: args.verificationId,
+                    transactionId = pr?.transactionId ?: initialState.verificationId,
                     pendingRequest = if (pr != null) Success(pr) else Uninitialized,
-                    selfVerificationMode = selfVerificationMode,
-                    roomId = args.roomId,
-                    isMe = args.otherUserId == session.myUserId,
+                    isMe = initialState.otherUserId == session.myUserId,
                     currentDeviceCanCrossSign = session.cryptoService().crossSigningService().canCrossSign(),
                     quadSContainsSecrets = session.sharedSecretStorageService.isRecoverySetup(),
                     hasAnyOtherSession = hasAnyOtherSession
@@ -159,12 +170,6 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
         super.onCleared()
     }
 
-    @AssistedFactory
-    interface Factory {
-        fun create(initialState: VerificationBottomSheetViewState,
-                   args: VerificationBottomSheet.VerificationArgs): VerificationBottomSheetViewModel
-    }
-
     fun queryCancel() = withState { state ->
         if (state.userThinkItsNotHim) {
             setState {
@@ -172,9 +177,9 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
             }
         } else {
             // if the verification is already done you can't cancel anymore
-            if (state.pendingRequest.invoke()?.cancelConclusion != null
-                    || state.sasTransactionState is VerificationTxState.TerminalTxState
-                    || state.verifyingFrom4S) {
+            if (state.pendingRequest.invoke()?.cancelConclusion != null ||
+                    state.sasTransactionState is VerificationTxState.TerminalTxState ||
+                    state.verifyingFrom4S) {
                 // you cannot cancel anymore
             } else {
                 setState {
@@ -221,16 +226,6 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
     fun goToSettings() = withState { state ->
         cancelAllPendingVerifications(state)
         _viewEvents.post(VerificationBottomSheetViewEvents.GoToSettings)
-    }
-
-    companion object : MvRxViewModelFactory<VerificationBottomSheetViewModel, VerificationBottomSheetViewState> {
-
-        override fun create(viewModelContext: ViewModelContext, state: VerificationBottomSheetViewState): VerificationBottomSheetViewModel? {
-            val fragment: VerificationBottomSheet = (viewModelContext as FragmentViewModelContext).fragment()
-            val args: VerificationBottomSheet.VerificationArgs = viewModelContext.args()
-
-            return fragment.verificationViewModelFactory.create(state, args)
-        }
     }
 
     override fun handle(action: VerificationAction) = withState { state ->
@@ -537,12 +532,12 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
             }
         }
 
-        if (pr.localId == state.pendingLocalId
-                || pr.localId == state.pendingRequest.invoke()?.localId
-                || state.pendingRequest.invoke()?.transactionId == pr.transactionId) {
+        if (pr.localId == state.pendingLocalId ||
+                pr.localId == state.pendingRequest.invoke()?.localId ||
+                state.pendingRequest.invoke()?.transactionId == pr.transactionId) {
             setState {
                 copy(
-                        transactionId = args.verificationId ?: pr.transactionId,
+                        transactionId = state.verificationId ?: pr.transactionId,
                         pendingRequest = Success(pr)
                 )
             }

@@ -22,6 +22,7 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
 import com.jakewharton.rxbinding3.appcompat.queryTextChanges
@@ -37,7 +38,7 @@ import im.vector.app.databinding.FragmentPublicRoomsBinding
 import im.vector.app.features.permalink.NavigationInterceptor
 import im.vector.app.features.permalink.PermalinkHandler
 import io.reactivex.rxkotlin.subscribeBy
-
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoom
 import timber.log.Timber
@@ -125,20 +126,20 @@ class PublicRoomsFragment @Inject constructor(
     }
 
     override fun onUnknownRoomClicked(roomIdOrAlias: String) {
-        val permalink = session.permalinkService().createPermalink(roomIdOrAlias)
-        permalinkHandler
-                .launch(requireContext(), permalink, object : NavigationInterceptor {
-                    override fun navToRoom(roomId: String?, eventId: String?, deepLink: Uri?): Boolean {
-                        requireActivity().finish()
-                        return false
-                    }
-                })
-                .subscribe { isSuccessful ->
-                    if (!isSuccessful) {
-                        requireContext().toast(R.string.room_error_not_found)
-                    }
-                }
-                .disposeOnDestroyView()
+        viewLifecycleOwner.lifecycleScope.launch {
+            val permalink = session.permalinkService().createPermalink(roomIdOrAlias)
+            val isHandled = permalinkHandler
+                    .launch(requireContext(), permalink, object : NavigationInterceptor {
+                        override fun navToRoom(roomId: String?, eventId: String?, deepLink: Uri?): Boolean {
+                            requireActivity().finish()
+                            return false
+                        }
+                    })
+
+            if (!isHandled) {
+                requireContext().toast(R.string.room_error_not_found)
+            }
+        }
     }
 
     override fun onPublicRoomClicked(publicRoom: PublicRoom, joinState: JoinState) {

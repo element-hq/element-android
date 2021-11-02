@@ -27,6 +27,8 @@ import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.VersioningState
 import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
+import org.matrix.android.sdk.internal.database.model.presence.UserPresenceEntity
+import org.matrix.android.sdk.internal.session.room.membership.RoomName
 
 internal open class RoomSummaryEntity(
         @PrimaryKey var roomId: String = "",
@@ -35,10 +37,24 @@ internal open class RoomSummaryEntity(
         var children: RealmList<SpaceChildSummaryEntity> = RealmList()
 ) : RealmObject() {
 
-    var displayName: String? = ""
-        set(value) {
-            if (value != field) field = value
+    private var displayName: String? = ""
+
+    fun displayName() = displayName
+
+    fun setDisplayName(roomName: RoomName) {
+        if (roomName.name != displayName) {
+            displayName = roomName.name
+            normalizedDisplayName = roomName.normalizedName
         }
+    }
+
+    /**
+     * Workaround for Realm only supporting Latin-1 character sets when sorting
+     * or filtering by case
+     * See https://github.com/realm/realm-core/issues/777
+     */
+    private var normalizedDisplayName: String? = ""
+
     var avatarUrl: String? = ""
         set(value) {
             if (value != field) field = value
@@ -204,6 +220,11 @@ internal open class RoomSummaryEntity(
             if (value != field) field = value
         }
 
+    var directUserPresence: UserPresenceEntity? = null
+        set(value) {
+            if (value != field) field = value
+        }
+
     var hasFailedSending: Boolean = false
         set(value) {
             if (value != field) field = value
@@ -278,5 +299,6 @@ internal open class RoomSummaryEntity(
                 roomEncryptionTrustLevelStr = value?.name
             }
         }
+
     companion object
 }

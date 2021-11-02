@@ -36,19 +36,34 @@ import org.matrix.android.sdk.internal.database.model.PendingThreePidEntityField
 import org.matrix.android.sdk.internal.database.model.PreviewUrlCacheEntityFields
 import org.matrix.android.sdk.internal.database.model.RoomAccountDataEntityFields
 import org.matrix.android.sdk.internal.database.model.RoomEntityFields
+import org.matrix.android.sdk.internal.database.model.RoomMemberSummaryEntityFields
 import org.matrix.android.sdk.internal.database.model.RoomMembersLoadStatusType
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntityFields
 import org.matrix.android.sdk.internal.database.model.RoomTagEntityFields
 import org.matrix.android.sdk.internal.database.model.SpaceChildSummaryEntityFields
 import org.matrix.android.sdk.internal.database.model.SpaceParentSummaryEntityFields
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntityFields
+import org.matrix.android.sdk.internal.database.model.presence.UserPresenceEntityFields
 import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.query.process
+import org.matrix.android.sdk.internal.util.Normalizer
 import timber.log.Timber
+import javax.inject.Inject
 
-internal object RealmSessionStoreMigration : RealmMigration {
+internal class RealmSessionStoreMigration @Inject constructor(
+        private val normalizer: Normalizer
+) : RealmMigration {
 
-    const val SESSION_STORE_SCHEMA_VERSION = 18L
+    companion object {
+        const val SESSION_STORE_SCHEMA_VERSION = 20L
+    }
+
+    /**
+     * Forces all RealmSessionStoreMigration instances to be equal
+     * Avoids Realm throwing when multiple instances of the migration are set
+     */
+    override fun equals(other: Any?) = other is RealmSessionStoreMigration
+    override fun hashCode() = 1000
 
     override fun migrate(realm: DynamicRealm, oldVersion: Long, newVersion: Long) {
         Timber.v("Migrating Realm Session from $oldVersion to $newVersion")
@@ -71,6 +86,8 @@ internal object RealmSessionStoreMigration : RealmMigration {
         if (oldVersion <= 15) migrateTo16(realm)
         if (oldVersion <= 16) migrateTo17(realm)
         if (oldVersion <= 17) migrateTo18(realm)
+        if (oldVersion <= 18) migrateTo19(realm)
+        if (oldVersion <= 19) migrateTo20(realm)
     }
 
     private fun migrateTo1(realm: DynamicRealm) {
@@ -343,6 +360,41 @@ internal object RealmSessionStoreMigration : RealmMigration {
 
     private fun migrateTo18(realm: DynamicRealm) {
         Timber.d("Step 17 -> 18")
+        realm.schema.create("UserPresenceEntity")
+                ?.addField(UserPresenceEntityFields.USER_ID, String::class.java)
+                ?.addPrimaryKey(UserPresenceEntityFields.USER_ID)
+                ?.setRequired(UserPresenceEntityFields.USER_ID, true)
+                ?.addField(UserPresenceEntityFields.PRESENCE_STR, String::class.java)
+                ?.addField(UserPresenceEntityFields.LAST_ACTIVE_AGO, Long::class.java)
+                ?.setNullable(UserPresenceEntityFields.LAST_ACTIVE_AGO, true)
+                ?.addField(UserPresenceEntityFields.STATUS_MESSAGE, String::class.java)
+                ?.addField(UserPresenceEntityFields.IS_CURRENTLY_ACTIVE, Boolean::class.java)
+                ?.setNullable(UserPresenceEntityFields.IS_CURRENTLY_ACTIVE, true)
+                ?.addField(UserPresenceEntityFields.AVATAR_URL, String::class.java)
+                ?.addField(UserPresenceEntityFields.DISPLAY_NAME, String::class.java)
+
+        val userPresenceEntity = realm.schema.get("UserPresenceEntity") ?: return
+        realm.schema.get("RoomSummaryEntity")
+                ?.addRealmObjectField(RoomSummaryEntityFields.DIRECT_USER_PRESENCE.`$`, userPresenceEntity)
+
+        realm.schema.get("RoomMemberSummaryEntity")
+                ?.addRealmObjectField(RoomMemberSummaryEntityFields.USER_PRESENCE_ENTITY.`$`, userPresenceEntity)
+    }
+
+    private fun migrateTo19(realm: DynamicRealm) {
+        Timber.d("Step 18 -> 19")
+        realm.schema.get("RoomSummaryEntity")
+                ?.addField(RoomSummaryEntityFields.NORMALIZED_DISPLAY_NAME, String::class.java)
+                ?.transform {
+                    it.getString(RoomSummaryEntityFields.DISPLAY_NAME)?.let { displayName ->
+                        val normalised = normalizer.normalize(displayName)
+                        it.set(RoomSummaryEntityFields.NORMALIZED_DISPLAY_NAME, normalised)
+                    }
+                }
+    }
+
+    private fun migrateTo20(realm: DynamicRealm) {
+        Timber.d("Step 19 -> 20")
         realm.schema.get("ChunkEntity")?.apply {
             if (hasField("numberOfTimelineEvents")) {
                 removeField("numberOfTimelineEvents")
@@ -362,4 +414,5 @@ internal object RealmSessionStoreMigration : RealmMigration {
             }
         }
     }
+
 }

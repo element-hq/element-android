@@ -59,12 +59,12 @@ data class RoomFilter(
 ) {
 
     fun hasData(): Boolean {
-        return (notRooms != null
-                || rooms != null
-                || ephemeral != null
-                || includeLeave != null
-                || state != null
-                || timeline != null
-                || accountData != null)
+        return (notRooms != null ||
+                rooms != null ||
+                ephemeral != null ||
+                includeLeave != null ||
+                state != null ||
+                timeline != null ||
+                accountData != null)
     }
 }

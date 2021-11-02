@@ -29,6 +29,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.MatrixCallback
+import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.NoOpMatrixCallback
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.crypto.MXCryptoConfig
@@ -50,6 +51,7 @@ import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibilityContent
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
+import org.matrix.android.sdk.api.session.sync.model.SyncResponse
 import org.matrix.android.sdk.internal.crypto.actions.MegolmSessionDataImporter
 import org.matrix.android.sdk.internal.crypto.actions.SetDeviceVerificationAction
 import org.matrix.android.sdk.internal.crypto.algorithms.IMXEncrypting
@@ -87,13 +89,11 @@ import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.extensions.foldToCallback
 import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.internal.session.room.membership.LoadRoomMembersTask
-import org.matrix.android.sdk.internal.session.sync.model.SyncResponse
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.task.TaskThread
 import org.matrix.android.sdk.internal.task.configureWith
 import org.matrix.android.sdk.internal.task.launchToCallback
 import org.matrix.android.sdk.internal.util.JsonCanonicalizer
-import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
 import org.matrix.olm.OlmManager
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
@@ -868,8 +868,8 @@ internal class DefaultCryptoService @Inject constructor(
     }
 
     private fun getRoomUserIds(roomId: String): List<String> {
-        val encryptForInvitedMembers = isEncryptionEnabledForInvitedUser()
-                && shouldEncryptForInvitedMembers(roomId)
+        val encryptForInvitedMembers = isEncryptionEnabledForInvitedUser() &&
+                shouldEncryptForInvitedMembers(roomId)
         return cryptoSessionInfoProvider.getRoomUserIds(roomId, encryptForInvitedMembers)
     }
 
@@ -887,9 +887,9 @@ internal class DefaultCryptoService @Inject constructor(
             if (membership == Membership.JOIN) {
                 // make sure we are tracking the deviceList for this user.
                 deviceListManager.startTrackingDeviceList(listOf(userId))
-            } else if (membership == Membership.INVITE
-                    && shouldEncryptForInvitedMembers(roomId)
-                    && isEncryptionEnabledForInvitedUser()) {
+            } else if (membership == Membership.INVITE &&
+                    shouldEncryptForInvitedMembers(roomId) &&
+                    isEncryptionEnabledForInvitedUser()) {
                 // track the deviceList for this invited user.
                 // Caution: there's a big edge case here in that federated servers do not
                 // know what other servers are in the room at the time they've been invited.

@@ -17,16 +17,16 @@
 package im.vector.app.features.home.room.detail.timeline.reactions
 
 import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxState
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksState
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Uninitialized
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
@@ -41,8 +41,8 @@ import org.matrix.android.sdk.rx.unwrap
 data class DisplayReactionsViewState(
         val eventId: String,
         val roomId: String,
-        val mapReactionKeyToMemberList: Async<List<ReactionInfo>> = Uninitialized)
-    : MvRxState {
+        val mapReactionKeyToMemberList: Async<List<ReactionInfo>> = Uninitialized) :
+    MavericksState {
 
     constructor(args: TimelineEventFragmentArgs) : this(roomId = args.roomId, eventId = args.eventId)
 }
@@ -70,18 +70,11 @@ class ViewReactionsViewModel @AssistedInject constructor(@Assisted
             ?: throw IllegalStateException("Shouldn't use this ViewModel without a room")
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: DisplayReactionsViewState): ViewReactionsViewModel
+    interface Factory : MavericksAssistedViewModelFactory<ViewReactionsViewModel, DisplayReactionsViewState> {
+        override fun create(initialState: DisplayReactionsViewState): ViewReactionsViewModel
     }
 
-    companion object : MvRxViewModelFactory<ViewReactionsViewModel, DisplayReactionsViewState> {
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: DisplayReactionsViewState): ViewReactionsViewModel? {
-            val fragment: ViewReactionsBottomSheet = (viewModelContext as FragmentViewModelContext).fragment()
-            return fragment.viewReactionsViewModelFactory.create(state)
-        }
-    }
+    companion object : MavericksViewModelFactory<ViewReactionsViewModel, DisplayReactionsViewState> by hiltMavericksViewModelFactory()
 
     init {
         observeEventAnnotationSummaries()

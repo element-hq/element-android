@@ -26,11 +26,11 @@ import androidx.browser.customtabs.CustomTabsCallback
 import androidx.browser.customtabs.CustomTabsClient
 import androidx.browser.customtabs.CustomTabsServiceConnection
 import androidx.browser.customtabs.CustomTabsSession
-import com.airbnb.mvrx.MvRx
+import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.SimpleFragmentActivity
 import im.vector.app.core.utils.openUrlInChromeCustomTab
@@ -42,7 +42,8 @@ import org.matrix.android.sdk.api.auth.registration.nextUncompletedStage
 import timber.log.Timber
 import javax.inject.Inject
 
-class ReAuthActivity : SimpleFragmentActivity(), ReAuthViewModel.Factory {
+@AndroidEntryPoint
+class ReAuthActivity : SimpleFragmentActivity() {
 
     @Parcelize
     data class Args(
@@ -59,14 +60,6 @@ class ReAuthActivity : SimpleFragmentActivity(), ReAuthViewModel.Factory {
     private var customTabsSession: CustomTabsSession? = null
 
     @Inject lateinit var authenticationService: AuthenticationService
-    @Inject lateinit var reAuthViewModelFactory: ReAuthViewModel.Factory
-
-    override fun create(initialState: ReAuthState) = reAuthViewModelFactory.create(initialState)
-
-    override fun injectWith(injector: ScreenComponent) {
-        super.injectWith(injector)
-        injector.inject(this)
-    }
 
     private val sharedViewModel: ReAuthViewModel by viewModel()
 
@@ -78,7 +71,7 @@ class ReAuthActivity : SimpleFragmentActivity(), ReAuthViewModel.Factory {
         val title = intent.extras?.getString(EXTRA_REASON_TITLE) ?: getString(R.string.re_authentication_activity_title)
         supportActionBar?.setTitle(title) ?: run { setTitle(title) }
 
-//        val authArgs = intent.getParcelableExtra<Args>(MvRx.KEY_ARG)
+//        val authArgs = intent.getParcelableExtra<Args>(Mavericks.KEY_ARG)
 
         // For the sso flow we can for now only rely on the fallback flow, that handles all
         // the UI, due to the sandbox nature of CCT (chrome custom tab) we cannot get much information
@@ -221,7 +214,7 @@ class ReAuthActivity : SimpleFragmentActivity(), ReAuthViewModel.Factory {
                 }
             }
             return Intent(context, ReAuthActivity::class.java).apply {
-                putExtra(MvRx.KEY_ARG, Args(authType, reasonTitle, fromError.session, lastErrorCode, resultKeyStoreAlias))
+                putExtra(Mavericks.KEY_ARG, Args(authType, reasonTitle, fromError.session, lastErrorCode, resultKeyStoreAlias))
             }
         }
     }

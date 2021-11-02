@@ -29,13 +29,11 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.utils.createJSonViewerStyleProvider
 import im.vector.app.databinding.FragmentGenericRecyclerBinding
-
 import org.billcarsonfr.jsonviewer.JSonViewerDialog
 import org.matrix.android.sdk.api.session.events.model.Event
 import javax.inject.Inject
 
 class GossipingEventsPaperTrailFragment @Inject constructor(
-        val viewModelFactory: GossipingEventsPaperTrailViewModel.Factory,
         private val epoxyController: GossipingTrailPagedEpoxyController,
         private val colorProvider: ColorProvider
 ) : VectorBaseFragment<FragmentGenericRecyclerBinding>(),

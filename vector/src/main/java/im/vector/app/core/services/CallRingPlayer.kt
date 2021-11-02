@@ -62,6 +62,10 @@ class CallRingPlayerIncoming(
         val ringtoneUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE)
         ringtone = RingtoneManager.getRingtone(applicationContext, ringtoneUri)
         Timber.v("Play ringtone for incoming call")
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            ringtone?.isLooping = true
+        }
         ringtone?.play()
     }
 

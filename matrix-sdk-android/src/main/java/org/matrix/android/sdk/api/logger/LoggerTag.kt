@@ -24,6 +24,7 @@ package org.matrix.android.sdk.api.logger
  */
 open class LoggerTag(_value: String, parentTag: LoggerTag? = null) {
 
+    object SYNC : LoggerTag("SYNC")
     object VOIP : LoggerTag("VOIP")
 
     val value: String = if (parentTag == null) {

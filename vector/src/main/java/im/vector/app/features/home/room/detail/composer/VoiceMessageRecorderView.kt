@@ -27,6 +27,9 @@ import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import im.vector.app.BuildConfig
 import im.vector.app.R
+import im.vector.app.core.extensions.setAttributeBackground
+import im.vector.app.core.extensions.setAttributeTintedBackground
+import im.vector.app.core.extensions.setAttributeTintedImageResource
 import im.vector.app.core.hardware.vibrate
 import im.vector.app.core.utils.CountUpTimer
 import im.vector.app.core.utils.DimensionConverter
@@ -40,7 +43,7 @@ import kotlin.math.floor
 /**
  * Encapsulates the voice message recording view and animations.
  */
-class VoiceMessageRecorderView: ConstraintLayout, VoiceMessagePlaybackTracker.Listener {
+class VoiceMessageRecorderView : ConstraintLayout, VoiceMessagePlaybackTracker.Listener {
 
     interface Callback {
         // Return true if the recording is started
@@ -217,7 +220,7 @@ class VoiceMessageRecorderView: ConstraintLayout, VoiceMessagePlaybackTracker.Li
                 views.voiceMessageLockArrow.translationY = 0F
             }
             RecordingState.LOCKING    -> {
-                views.voiceMessageLockImage.setImageResource(R.drawable.ic_voice_message_locked)
+                views.voiceMessageLockImage.setAttributeTintedImageResource(R.drawable.ic_voice_message_locked, R.attr.colorPrimary)
                 val translationAmount = -distanceY.coerceIn(0F, distanceToLock)
                 views.voiceMessageMicButton.translationY = translationAmount
                 views.voiceMessageLockArrow.translationY = translationAmount
@@ -257,8 +260,8 @@ class VoiceMessageRecorderView: ConstraintLayout, VoiceMessagePlaybackTracker.Li
         val previousRecordingState = recordingState
         if (recordingState == RecordingState.STARTED) {
             // Determine if cancelling or locking for the first move action.
-            if (((currentX < firstX && rtlXMultiplier == 1) || (currentX > firstX && rtlXMultiplier == -1))
-                    && distanceX > distanceY && distanceX > lastDistanceX) {
+            if (((currentX < firstX && rtlXMultiplier == 1) || (currentX > firstX && rtlXMultiplier == -1)) &&
+                    distanceX > distanceY && distanceX > lastDistanceX) {
                 recordingState = RecordingState.CANCELLING
             } else if (currentY < firstY && distanceY > distanceX && distanceY > lastDistanceY) {
                 recordingState = RecordingState.LOCKING
@@ -366,6 +369,7 @@ class VoiceMessageRecorderView: ConstraintLayout, VoiceMessagePlaybackTracker.Li
 
     private fun showRecordingViews() {
         views.voiceMessageMicButton.setImageResource(R.drawable.ic_voice_mic_recording)
+        views.voiceMessageMicButton.setAttributeTintedBackground(R.drawable.circle_with_halo, R.attr.colorPrimary)
         views.voiceMessageMicButton.updateLayoutParams<MarginLayoutParams> {
             setMargins(0, 0, 0, 0)
         }
@@ -443,6 +447,7 @@ class VoiceMessageRecorderView: ConstraintLayout, VoiceMessagePlaybackTracker.Li
     private fun resetMicButtonUi() {
         views.voiceMessageMicButton.isVisible = true
         views.voiceMessageMicButton.setImageResource(R.drawable.ic_voice_mic)
+        views.voiceMessageMicButton.setAttributeBackground(android.R.attr.selectableItemBackgroundBorderless)
         views.voiceMessageMicButton.updateLayoutParams<MarginLayoutParams> {
             if (rtlXMultiplier == -1) {
                 // RTL
@@ -499,12 +504,14 @@ class VoiceMessageRecorderView: ConstraintLayout, VoiceMessagePlaybackTracker.Li
         views.voiceMessagePlaybackTimerIndicator.isVisible = true
         views.voicePlaybackControlButton.isVisible = false
         views.voiceMessageSendButton.isVisible = true
+        views.voicePlaybackWaveform.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_YES
         renderToast(context.getString(R.string.voice_message_tap_to_stop_toast))
     }
 
     private fun showPlaybackViews() {
         views.voiceMessagePlaybackTimerIndicator.isVisible = false
         views.voicePlaybackControlButton.isVisible = true
+        views.voicePlaybackWaveform.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
         callback?.onVoiceRecordingPlaybackModeOn()
     }
 

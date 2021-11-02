@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.api.session.room
 
 import androidx.lifecycle.LiveData
+import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.session.room.accountdata.RoomAccountDataService
 import org.matrix.android.sdk.api.session.room.alias.AliasService
 import org.matrix.android.sdk.api.session.room.call.RoomCallService
@@ -60,6 +61,8 @@ interface Room :
         RoomPushRuleService,
         RoomAccountDataService,
         RoomVersionService {
+
+    val coroutineDispatchers: MatrixCoroutineDispatchers
 
     /**
      * The roomId of this room

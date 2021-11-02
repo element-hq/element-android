@@ -18,7 +18,7 @@ package im.vector.app.features.roomprofile.settings
 
 import android.net.Uri
 import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.Uninitialized
 import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
@@ -46,7 +46,7 @@ data class RoomSettingsViewState(
         val actionPermissions: ActionPermissions = ActionPermissions(),
         val supportsRestricted: Boolean = false,
         val canUpgradeToRestricted: Boolean = false
-) : MvRxState {
+) : MavericksState {
 
     constructor(args: RoomProfileArgs) : this(roomId = args.roomId)
 

@@ -25,6 +25,8 @@ import org.matrix.android.sdk.internal.crypto.tasks.ClaimOneTimeKeysForUsersDevi
 import timber.log.Timber
 import javax.inject.Inject
 
+private const val ONE_TIME_KEYS_RETRY_COUNT = 3
+
 internal class EnsureOlmSessionsForDevicesAction @Inject constructor(
         private val olmDevice: MXOlmDevice,
         private val oneTimeKeysForUsersDeviceTask: ClaimOneTimeKeysForUsersDeviceTask) {
@@ -72,7 +74,7 @@ internal class EnsureOlmSessionsForDevicesAction @Inject constructor(
         Timber.i("## CRYPTO | claimOneTimeKeysForUsersDevices() : $usersDevicesToClaim")
 
         val claimParams = ClaimOneTimeKeysForUsersDeviceTask.Params(usersDevicesToClaim)
-        val oneTimeKeys = oneTimeKeysForUsersDeviceTask.execute(claimParams)
+        val oneTimeKeys = oneTimeKeysForUsersDeviceTask.executeRetry(claimParams, remainingRetry = ONE_TIME_KEYS_RETRY_COUNT)
         Timber.v("## CRYPTO | claimOneTimeKeysForUsersDevices() : keysClaimResponse.oneTimeKeys: $oneTimeKeys")
         for ((userId, deviceInfos) in devicesByUser) {
             for (deviceInfo in deviceInfos) {
@@ -90,8 +92,8 @@ internal class EnsureOlmSessionsForDevicesAction @Inject constructor(
                             oneTimeKey = key
                         }
                         if (oneTimeKey == null) {
-                            Timber.w("## CRYPTO | ensureOlmSessionsForDevices() : No one-time keys " + oneTimeKeyAlgorithm
-                                    + " for device " + userId + " : " + deviceId)
+                            Timber.w("## CRYPTO | ensureOlmSessionsForDevices() : No one-time keys " + oneTimeKeyAlgorithm +
+                                    " for device " + userId + " : " + deviceId)
                             continue
                         }
                         // Update the result for this device in results
@@ -126,15 +128,15 @@ internal class EnsureOlmSessionsForDevicesAction @Inject constructor(
                 sessionId = olmDevice.createOutboundSession(deviceInfo.identityKey()!!, oneTimeKey.value)
 
                 if (!sessionId.isNullOrEmpty()) {
-                    Timber.v("## CRYPTO | verifyKeyAndStartSession() : Started new sessionid " + sessionId
-                            + " for device " + deviceInfo + "(theirOneTimeKey: " + oneTimeKey.value + ")")
+                    Timber.v("## CRYPTO | verifyKeyAndStartSession() : Started new sessionid " + sessionId +
+                            " for device " + deviceInfo + "(theirOneTimeKey: " + oneTimeKey.value + ")")
                 } else {
                     // Possibly a bad key
                     Timber.e("## CRYPTO | verifyKeyAndStartSession() : Error starting session with device $userId:$deviceId")
                 }
             } else {
-                Timber.e("## CRYPTO | verifyKeyAndStartSession() : Unable to verify signature on one-time key for device " + userId
-                        + ":" + deviceId + " Error " + errorMessage)
+                Timber.e("## CRYPTO | verifyKeyAndStartSession() : Unable to verify signature on one-time key for device " + userId +
+                        ":" + deviceId + " Error " + errorMessage)
             }
         }
 

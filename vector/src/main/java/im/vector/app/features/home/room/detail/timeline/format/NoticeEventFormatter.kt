@@ -363,8 +363,8 @@ class NoticeEventFormatter @Inject constructor(
     private fun formatRoomMemberEvent(event: Event, senderName: String?, isDm: Boolean): String? {
         val eventContent: RoomMemberContent? = event.getClearContent().toModel()
         val prevEventContent: RoomMemberContent? = event.resolvedPrevContent().toModel()
-        val isMembershipEvent = prevEventContent?.membership != eventContent?.membership
-                || eventContent?.membership == Membership.LEAVE
+        val isMembershipEvent = prevEventContent?.membership != eventContent?.membership ||
+                eventContent?.membership == Membership.LEAVE
         return if (isMembershipEvent) {
             buildMembershipNotice(event, senderName, eventContent, prevEventContent, isDm)
         } else {

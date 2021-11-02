@@ -64,7 +64,6 @@ data class RoomListParams(
 
 class RoomListFragment @Inject constructor(
         private val pagedControllerFactory: RoomSummaryPagedControllerFactory,
-        val roomListViewModelFactory: RoomListViewModel.Factory,
         private val notificationDrawerManager: NotificationDrawerManager,
         private val footerController: RoomListFooterController,
         private val userPreferencesProvider: UserPreferencesProvider
@@ -123,7 +122,7 @@ class RoomListFragment @Inject constructor(
                 .subscribe { handleQuickActions(it) }
                 .disposeOnDestroyView()
 
-        roomListViewModel.selectSubscribe(viewLifecycleOwner, RoomListViewState::roomMembershipChanges) { ms ->
+        roomListViewModel.onEach(RoomListViewState::roomMembershipChanges) { ms ->
             // it's for invites local echo
             adapterInfosList.filter { it.section.notifyOfLocalEcho }
                     .onEach {
@@ -415,8 +414,8 @@ class RoomListFragment @Inject constructor(
     }
 
     private fun checkEmptyState() {
-        val shouldShowEmpty = adapterInfosList.all { it.sectionHeaderAdapter.roomsSectionData.isHidden }
-                && !adapterInfosList.any { it.sectionHeaderAdapter.roomsSectionData.isLoading }
+        val shouldShowEmpty = adapterInfosList.all { it.sectionHeaderAdapter.roomsSectionData.isHidden } &&
+                !adapterInfosList.any { it.sectionHeaderAdapter.roomsSectionData.isLoading }
         if (shouldShowEmpty) {
             val emptyState = when (roomListParams.displayMode) {
                 RoomListDisplayMode.NOTIFICATIONS -> {

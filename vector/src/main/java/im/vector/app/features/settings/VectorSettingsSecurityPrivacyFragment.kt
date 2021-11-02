@@ -58,17 +58,20 @@ import im.vector.app.features.pin.PinMode
 import im.vector.app.features.raw.wellknown.getElementWellknown
 import im.vector.app.features.raw.wellknown.isE2EByDefault
 import im.vector.app.features.themes.ThemeUtils
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import me.gujun.android.span.span
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.extensions.getFingerprintHumanReadable
+import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.internal.crypto.crosssigning.isVerified
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.rest.DevicesListResponse
 import org.matrix.android.sdk.rx.SecretsSynchronisationInfo
-import org.matrix.android.sdk.rx.rx
 import javax.inject.Inject
 
 class VectorSettingsSecurityPrivacyFragment @Inject constructor(
@@ -77,6 +80,7 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
         private val pinCodeStore: PinCodeStore,
         private val keysExporter: KeysExporter,
         private val keysImporter: KeysImporter,
+        private val rawService: RawService,
         private val navigator: Navigator
 ) : VectorSettingsBaseFragment() {
 
@@ -144,19 +148,16 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
         // My device name may have been updated
         refreshMyDevice()
         refreshXSigningStatus()
-        session.rx().liveSecretSynchronisationInfo()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
+        session.liveSecretSynchronisationInfo()
+                .flowOn(Dispatchers.Main)
+                .onEach {
                     refresh4SSection(it)
                     refreshXSigningStatus()
-                }.also {
-                    disposables.add(it)
-                }
+                }.launchIn(viewLifecycleOwner.lifecycleScope)
 
         lifecycleScope.launchWhenResumed {
             findPreference<VectorPreference>(VectorPreferences.SETTINGS_CRYPTOGRAPHY_HS_ADMIN_DISABLED_E2E_DEFAULT)?.isVisible =
-                    vectorActivity.getVectorComponent()
-                            .rawService()
+                    rawService
                             .getElementWellknown(session.sessionParams)
                             ?.isE2EByDefault() == false
         }

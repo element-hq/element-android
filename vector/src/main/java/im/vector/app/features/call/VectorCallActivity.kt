@@ -36,13 +36,13 @@ import androidx.core.content.getSystemService
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.MvRx
+import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.PERMISSIONS_FOR_AUDIO_IP_CALL
@@ -55,6 +55,7 @@ import im.vector.app.features.call.dialpad.DialPadFragment
 import im.vector.app.features.call.utils.EglUtils
 import im.vector.app.features.call.webrtc.WebRtcCall
 import im.vector.app.features.call.webrtc.WebRtcCallManager
+import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.RoomDetailActivity
 import im.vector.app.features.home.room.detail.RoomDetailArgs
@@ -84,20 +85,15 @@ data class CallArgs(
 
 private val loggerTag = LoggerTag("VectorCallActivity", LoggerTag.VOIP)
 
+@AndroidEntryPoint
 class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallControlsView.InteractionListener {
 
     override fun getBinding() = ActivityCallBinding.inflate(layoutInflater)
 
+    @Inject lateinit var callManager: WebRtcCallManager
     @Inject lateinit var avatarRenderer: AvatarRenderer
 
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
-
     private val callViewModel: VectorCallViewModel by viewModel()
-
-    @Inject lateinit var callManager: WebRtcCallManager
-    @Inject lateinit var viewModelFactory: VectorCallViewModel.Factory
 
     private val dialPadCallback = object : DialPadFragment.Callback {
         override fun onDigitAppended(digit: String) {
@@ -138,7 +134,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
             renderState(it)
         }
 
-        callViewModel.asyncSubscribe(this, VectorCallViewState::callState) {
+        callViewModel.onAsync(VectorCallViewState::callState) {
             if (it is CallState.Ended) {
                 handleCallEnded(it)
             }
@@ -152,7 +148,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                 }
                 .disposeOnDestroy()
 
-        callViewModel.selectSubscribe(this, VectorCallViewState::callId, VectorCallViewState::isVideoCall) { _, isVideoCall ->
+        callViewModel.onEach(VectorCallViewState::callId, VectorCallViewState::isVideoCall) { _, isVideoCall ->
             if (isVideoCall) {
                 if (checkPermissions(PERMISSIONS_FOR_VIDEO_IP_CALL, this, permissionCameraLauncher, R.string.permissions_rationale_msg_camera_and_audio)) {
                     setupRenderersIfNeeded()
@@ -167,8 +163,8 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
-        intent?.takeIf { it.hasExtra(MvRx.KEY_ARG) }
-                ?.let { intent.getParcelableExtra<CallArgs>(MvRx.KEY_ARG) }
+        intent?.takeIf { it.hasExtra(Mavericks.KEY_ARG) }
+                ?.let { intent.getParcelableExtra<CallArgs>(Mavericks.KEY_ARG) }
                 ?.let {
                     callViewModel.handle(VectorCallViewActions.SwitchCall(it))
                 }
@@ -630,10 +626,11 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
         const val INCOMING_ACCEPT = "INCOMING_ACCEPT"
 
         fun newIntent(context: Context, call: WebRtcCall, mode: String?): Intent {
+            val callArgs = CallArgs(call.nativeRoomId, call.callId, call.mxCall.opponentUserId, !call.mxCall.isOutgoing, call.mxCall.isVideoCall)
             return Intent(context, VectorCallActivity::class.java).apply {
                 // what could be the best flags?
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                putExtra(MvRx.KEY_ARG, CallArgs(call.nativeRoomId, call.callId, call.mxCall.opponentUserId, !call.mxCall.isOutgoing, call.mxCall.isVideoCall))
+                putExtra(Mavericks.KEY_ARG, callArgs)
                 putExtra(EXTRA_MODE, mode)
             }
         }
@@ -645,10 +642,11 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                       isIncomingCall: Boolean,
                       isVideoCall: Boolean,
                       mode: String?): Intent {
+            val callArgs = CallArgs(signalingRoomId, callId, otherUserId, isIncomingCall, isVideoCall)
             return Intent(context, VectorCallActivity::class.java).apply {
                 // what could be the best flags?
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                putExtra(MvRx.KEY_ARG, CallArgs(signalingRoomId, callId, otherUserId, isIncomingCall, isVideoCall))
+                putExtra(Mavericks.KEY_ARG, callArgs)
                 putExtra(EXTRA_MODE, mode)
             }
         }

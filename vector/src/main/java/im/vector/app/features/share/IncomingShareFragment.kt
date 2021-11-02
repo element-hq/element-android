@@ -41,7 +41,6 @@ import im.vector.app.databinding.FragmentIncomingShareBinding
 import im.vector.app.features.attachments.AttachmentsHelper
 import im.vector.app.features.attachments.preview.AttachmentsPreviewActivity
 import im.vector.app.features.attachments.preview.AttachmentsPreviewArgs
-
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import javax.inject.Inject
@@ -51,7 +50,6 @@ import javax.inject.Inject
  * The user can select multiple rooms to send the data to
  */
 class IncomingShareFragment @Inject constructor(
-        val incomingShareViewModelFactory: IncomingShareViewModel.Factory,
         private val incomingShareController: IncomingShareController,
         private val sessionHolder: ActiveSessionHolder
 ) :

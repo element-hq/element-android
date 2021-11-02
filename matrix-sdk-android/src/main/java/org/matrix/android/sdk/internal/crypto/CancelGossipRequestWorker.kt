@@ -35,8 +35,8 @@ import org.matrix.android.sdk.internal.worker.SessionWorkerParams
 import javax.inject.Inject
 
 internal class CancelGossipRequestWorker(context: Context,
-                                         params: WorkerParameters)
-    : SessionSafeCoroutineWorker<CancelGossipRequestWorker.Params>(context, params, Params::class.java) {
+                                         params: WorkerParameters) :
+    SessionSafeCoroutineWorker<CancelGossipRequestWorker.Params>(context, params, Params::class.java) {
 
     @JsonClass(generateAdapter = true)
     internal data class Params(

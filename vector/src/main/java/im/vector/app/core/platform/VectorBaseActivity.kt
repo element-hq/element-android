@@ -40,18 +40,16 @@ import androidx.fragment.app.FragmentFactory
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewbinding.ViewBinding
+import com.airbnb.mvrx.MavericksView
 import com.bumptech.glide.util.Util
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.snackbar.Snackbar
 import com.jakewharton.rxbinding3.view.clicks
+import dagger.hilt.android.EntryPointAccessors
 import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
-import im.vector.app.core.di.DaggerScreenComponent
-import im.vector.app.core.di.HasScreenInjector
-import im.vector.app.core.di.HasVectorInjector
-import im.vector.app.core.di.ScreenComponent
-import im.vector.app.core.di.VectorComponent
+import im.vector.app.core.di.ActivityEntryPoint
 import im.vector.app.core.dialogs.DialogLocker
 import im.vector.app.core.dialogs.UnrecognizedCertificateDialog
 import im.vector.app.core.extensions.exhaustive
@@ -60,7 +58,7 @@ import im.vector.app.core.extensions.observeNotNull
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.restart
 import im.vector.app.core.extensions.setTextOrHide
-import im.vector.app.core.extensions.vectorComponent
+import im.vector.app.core.extensions.singletonEntryPoint
 import im.vector.app.core.utils.toast
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
@@ -86,9 +84,9 @@ import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.failure.GlobalError
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
-import kotlin.system.measureTimeMillis
+import javax.inject.Inject
 
-abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), HasScreenInjector {
+abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), MavericksView {
     /* ==========================================================================================
      * View
      * ========================================================================================== */
@@ -135,8 +133,8 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), HasSc
     private lateinit var sessionListener: SessionListener
     protected lateinit var bugReporter: BugReporter
     private lateinit var pinLocker: PinLocker
+    @Inject
     lateinit var rageShake: RageShake
-
     lateinit var navigator: Navigator
         private set
     private lateinit var fragmentFactory: FragmentFactory
@@ -154,8 +152,6 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), HasSc
 
     private val uiDisposables = CompositeDisposable()
     private val restorables = ArrayList<Restorable>()
-
-    private lateinit var screenComponent: ScreenComponent
 
     override fun attachBaseContext(base: Context) {
         val vectorConfiguration = VectorConfiguration(this)
@@ -186,25 +182,19 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), HasSc
     @CallSuper
     override fun onCreate(savedInstanceState: Bundle?) {
         Timber.i("onCreate Activity ${javaClass.simpleName}")
-        val vectorComponent = getVectorComponent()
-        screenComponent = DaggerScreenComponent.factory().create(vectorComponent, this)
-        val timeForInjection = measureTimeMillis {
-            injectWith(screenComponent)
-        }
-        Timber.v("Injecting dependencies into ${javaClass.simpleName} took $timeForInjection ms")
+        val singletonEntryPoint = singletonEntryPoint()
+        val activityEntryPoint = EntryPointAccessors.fromActivity(this, ActivityEntryPoint::class.java)
         ThemeUtils.setActivityTheme(this, getOtherThemes())
-        fragmentFactory = screenComponent.fragmentFactory()
+        fragmentFactory = activityEntryPoint.fragmentFactory()
         supportFragmentManager.fragmentFactory = fragmentFactory
+        viewModelFactory = activityEntryPoint.viewModelFactory()
         super.onCreate(savedInstanceState)
-        viewModelFactory = screenComponent.viewModelFactory()
         configurationViewModel = viewModelProvider.get(ConfigurationViewModel::class.java)
-        bugReporter = screenComponent.bugReporter()
-        pinLocker = screenComponent.pinLocker()
-        // Shake detector
-        rageShake = screenComponent.rageShake()
-        navigator = screenComponent.navigator()
-        activeSessionHolder = screenComponent.activeSessionHolder()
-        vectorPreferences = vectorComponent.vectorPreferences()
+        bugReporter = singletonEntryPoint.bugReporter()
+        pinLocker = singletonEntryPoint.pinLocker()
+        navigator = singletonEntryPoint.navigator()
+        activeSessionHolder = singletonEntryPoint.activeSessionHolder()
+        vectorPreferences = singletonEntryPoint.vectorPreferences()
         configurationViewModel.activityRestarter.observe(this) {
             if (!it.hasBeenHandled) {
                 // Recreate the Activity because configuration has changed
@@ -216,7 +206,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), HasSc
                 navigator.openPinCode(this, pinStartForActivityResult, PinMode.AUTH)
             }
         }
-        sessionListener = vectorComponent.sessionListener()
+        sessionListener = singletonEntryPoint.sessionListener()
         sessionListener.globalErrorLiveData.observeEvent(this) {
             handleGlobalError(it)
         }
@@ -272,7 +262,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), HasSc
     }
 
     private fun handleCertificateError(certificateError: GlobalError.CertificateError) {
-        vectorComponent()
+        singletonEntryPoint()
                 .unrecognizedCertificateDialog()
                 .show(this,
                         certificateError.fingerprint,
@@ -402,12 +392,6 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), HasSc
         bugReporter.inMultiWindowMode = isInMultiWindowMode
     }
 
-    override fun injector(): ScreenComponent {
-        return screenComponent
-    }
-
-    protected open fun injectWith(injector: ScreenComponent) = Unit
-
     protected fun createFragment(fragmentClass: Class<out Fragment>, args: Bundle?): Fragment {
         return fragmentFactory.instantiate(classLoader, fragmentClass.name).apply {
             arguments = args
@@ -417,10 +401,6 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), HasSc
     /* ==========================================================================================
      * PRIVATE METHODS
      * ========================================================================================== */
-
-    internal fun getVectorComponent(): VectorComponent {
-        return (application as HasVectorInjector).injector()
-    }
 
     /**
      * Force to render the activity in fullscreen
@@ -575,6 +555,8 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), HasSc
     open fun doBeforeSetContentView() = Unit
 
     open fun initUiAndData() = Unit
+
+    override fun invalidate() = Unit
 
     @StringRes
     open fun getTitleRes() = -1

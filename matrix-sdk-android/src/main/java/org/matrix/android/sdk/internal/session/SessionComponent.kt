@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.session
 
 import dagger.BindsInstance
 import dagger.Component
+import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.auth.data.SessionParams
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.internal.crypto.CancelGossipRequestWorker
@@ -29,6 +30,7 @@ import org.matrix.android.sdk.internal.crypto.verification.SendVerificationMessa
 import org.matrix.android.sdk.internal.di.MatrixComponent
 import org.matrix.android.sdk.internal.federation.FederationModule
 import org.matrix.android.sdk.internal.network.NetworkConnectivityChecker
+import org.matrix.android.sdk.internal.network.RequestModule
 import org.matrix.android.sdk.internal.session.account.AccountModule
 import org.matrix.android.sdk.internal.session.cache.CacheModule
 import org.matrix.android.sdk.internal.session.call.CallModule
@@ -42,11 +44,11 @@ import org.matrix.android.sdk.internal.session.identity.IdentityModule
 import org.matrix.android.sdk.internal.session.integrationmanager.IntegrationManagerModule
 import org.matrix.android.sdk.internal.session.media.MediaModule
 import org.matrix.android.sdk.internal.session.openid.OpenIdModule
+import org.matrix.android.sdk.internal.session.presence.di.PresenceModule
 import org.matrix.android.sdk.internal.session.profile.ProfileModule
-import org.matrix.android.sdk.internal.session.pushers.AddHttpPusherWorker
+import org.matrix.android.sdk.internal.session.pushers.AddPusherWorker
 import org.matrix.android.sdk.internal.session.pushers.PushersModule
 import org.matrix.android.sdk.internal.session.room.RoomModule
-import org.matrix.android.sdk.internal.session.room.relation.SendRelationWorker
 import org.matrix.android.sdk.internal.session.room.send.MultipleEventSendingDispatcherWorker
 import org.matrix.android.sdk.internal.session.room.send.RedactEventWorker
 import org.matrix.android.sdk.internal.session.room.send.SendEventWorker
@@ -63,7 +65,6 @@ import org.matrix.android.sdk.internal.session.user.UserModule
 import org.matrix.android.sdk.internal.session.user.accountdata.AccountDataModule
 import org.matrix.android.sdk.internal.session.widgets.WidgetModule
 import org.matrix.android.sdk.internal.task.TaskExecutor
-import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.internal.util.system.SystemModule
 
 @Component(dependencies = [MatrixComponent::class],
@@ -95,7 +96,9 @@ import org.matrix.android.sdk.internal.util.system.SystemModule
             CallModule::class,
             SearchModule::class,
             ThirdPartyModule::class,
-            SpaceModule::class
+            SpaceModule::class,
+            PresenceModule::class,
+            RequestModule::class
         ]
 )
 @SessionScope
@@ -115,8 +118,6 @@ internal interface SessionComponent {
 
     fun inject(worker: SendEventWorker)
 
-    fun inject(worker: SendRelationWorker)
-
     fun inject(worker: MultipleEventSendingDispatcherWorker)
 
     fun inject(worker: RedactEventWorker)
@@ -127,7 +128,7 @@ internal interface SessionComponent {
 
     fun inject(worker: SyncWorker)
 
-    fun inject(worker: AddHttpPusherWorker)
+    fun inject(worker: AddPusherWorker)
 
     fun inject(worker: SendVerificationMessageWorker)
 

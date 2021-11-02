@@ -17,7 +17,7 @@
 package im.vector.app.features.roomprofile.notifications
 
 import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import im.vector.app.features.home.room.list.actions.RoomListActionsArgs
@@ -30,7 +30,7 @@ data class RoomNotificationSettingsViewState(
         val roomSummary: Async<RoomSummary> = Uninitialized,
         val isLoading: Boolean = false,
         val notificationState: Async<RoomNotificationState> = Uninitialized
-)  : MvRxState {
+)  : MavericksState {
     constructor(args: RoomProfileArgs) : this(roomId = args.roomId)
     constructor(args: RoomListActionsArgs) : this(roomId = args.roomId)
 }
@@ -40,8 +40,8 @@ data class RoomNotificationSettingsViewState(
  */
 val RoomNotificationSettingsViewState.notificationStateMapped: Async<RoomNotificationState>
     get() {
-        if ((roomSummary()?.isEncrypted == true && notificationState() == RoomNotificationState.MENTIONS_ONLY)
-                || notificationState() == RoomNotificationState.ALL_MESSAGES) {
+        if ((roomSummary()?.isEncrypted == true && notificationState() == RoomNotificationState.MENTIONS_ONLY) ||
+                notificationState() == RoomNotificationState.ALL_MESSAGES) {
             /** if in an encrypted room, mentions notifications are not supported so show "All Messages" as selected.
              * Also in the new settings there is no notion of notifications without sound so it maps to noisy also
              */
@@ -49,6 +49,7 @@ val RoomNotificationSettingsViewState.notificationStateMapped: Async<RoomNotific
         }
         return  notificationState
     }
+
 /**
  * Used to enumerate the new settings in notification settings v2. Notifications without sound and mentions in encrypted rooms not supported.
  */

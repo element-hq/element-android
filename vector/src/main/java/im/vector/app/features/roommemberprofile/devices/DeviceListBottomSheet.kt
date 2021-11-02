@@ -24,20 +24,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.airbnb.mvrx.MvRx
+import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.commitTransaction
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.databinding.BottomSheetWithFragmentsBinding
 import im.vector.app.features.crypto.verification.VerificationBottomSheet
 import kotlinx.parcelize.Parcelize
-import javax.inject.Inject
 import kotlin.reflect.KClass
 
+@AndroidEntryPoint
 class DeviceListBottomSheet :
         VectorBaseBottomSheetDialogFragment<BottomSheetWithFragmentsBinding>() {
 
@@ -46,12 +46,6 @@ class DeviceListBottomSheet :
     }
 
     private val viewModel: DeviceListBottomSheetViewModel by fragmentViewModel(DeviceListBottomSheetViewModel::class)
-
-    @Inject lateinit var viewModelFactory: DeviceListBottomSheetViewModel.Factory
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -122,7 +116,7 @@ class DeviceListBottomSheet :
     companion object {
         fun newInstance(userId: String, allowDeviceAction: Boolean = true): DeviceListBottomSheet {
             val args = Bundle()
-            args.putParcelable(MvRx.KEY_ARG, Args(userId, allowDeviceAction))
+            args.putParcelable(Mavericks.KEY_ARG, Args(userId, allowDeviceAction))
             return DeviceListBottomSheet().apply { arguments = args }
         }
     }

@@ -25,18 +25,19 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.widget.SearchView
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.viewModel
 import com.google.android.material.tabs.TabLayout
 import com.jakewharton.rxbinding3.widget.queryTextChanges
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.EmojiCompatFontProvider
 import im.vector.app.R
-import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.observeEvent
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityEmojiReactionPickerBinding
 import im.vector.app.features.reactions.data.EmojiDataSource
 import io.reactivex.android.schedulers.AndroidSchedulers
-
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -46,6 +47,7 @@ import javax.inject.Inject
  * TODO: Loading indicator while getting emoji data source?
  * TODO: Finish Refactor to vector base activity
  */
+@AndroidEntryPoint
 class EmojiReactionPickerActivity : VectorBaseActivity<ActivityEmojiReactionPickerBinding>(),
         EmojiCompatFontProvider.FontProviderListener {
 
@@ -59,7 +61,6 @@ class EmojiReactionPickerActivity : VectorBaseActivity<ActivityEmojiReactionPick
 
     override fun getTitleRes() = R.string.title_activity_emoji_reaction_picker
 
-    @Inject lateinit var emojiSearchResultViewModelFactory: EmojiSearchResultViewModel.Factory
     @Inject lateinit var emojiCompatFontProvider: EmojiCompatFontProvider
     @Inject lateinit var emojiDataSource: EmojiDataSource
 
@@ -77,10 +78,6 @@ class EmojiReactionPickerActivity : VectorBaseActivity<ActivityEmojiReactionPick
         }
     }
 
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
-
     override fun initUiAndData() {
         configureToolbar(views.emojiPickerToolbar)
         emojiCompatFontProvider.let {
@@ -91,17 +88,19 @@ class EmojiReactionPickerActivity : VectorBaseActivity<ActivityEmojiReactionPick
         viewModel = viewModelProvider.get(EmojiChooserViewModel::class.java)
 
         viewModel.eventId = intent.getStringExtra(EXTRA_EVENT_ID)
-
-        emojiDataSource.rawData.categories.forEach { category ->
-            val s = category.emojis[0]
-            views.tabs.newTab()
-                    .also { tab ->
-                        tab.text = emojiDataSource.rawData.emojis[s]!!.emoji
-                        tab.contentDescription = category.name
-                    }
-                    .also { tab ->
-                        views.tabs.addTab(tab)
-                    }
+        lifecycleScope.launch {
+            val rawData = emojiDataSource.rawData.await()
+            rawData.categories.forEach { category ->
+                val s = category.emojis[0]
+                views.tabs.newTab()
+                        .also { tab ->
+                            tab.text = rawData.emojis[s]!!.emoji
+                            tab.contentDescription = category.name
+                        }
+                        .also { tab ->
+                            views.tabs.addTab(tab)
+                        }
+            }
         }
         views.tabs.addOnTabSelectedListener(tabLayoutSelectionListener)
 
@@ -161,6 +160,12 @@ class EmojiReactionPickerActivity : VectorBaseActivity<ActivityEmojiReactionPick
                 }
             })
 
+            searchView.setOnCloseListener {
+                currentFocus?.clearFocus()
+                searchItem.collapseActionView()
+                true
+            }
+
             searchView.queryTextChanges()
                     .throttleWithTimeout(600, TimeUnit.MILLISECONDS)
                     .doOnError { err -> Timber.e(err) }
@@ -170,6 +175,7 @@ class EmojiReactionPickerActivity : VectorBaseActivity<ActivityEmojiReactionPick
                     }
                     .disposeOnDestroy()
         }
+        searchItem.expandActionView()
         return true
     }
 

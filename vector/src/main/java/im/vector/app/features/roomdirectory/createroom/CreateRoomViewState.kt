@@ -18,7 +18,7 @@ package im.vector.app.features.roomdirectory.createroom
 
 import android.net.Uri
 import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.Uninitialized
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
@@ -28,7 +28,8 @@ data class CreateRoomViewState(
         val roomName: String = "",
         val roomTopic: String = "",
         val roomJoinRules: RoomJoinRules = RoomJoinRules.INVITE,
-        val isEncrypted: Boolean = false,
+        val isEncrypted: Boolean? = null,
+        val defaultEncrypted: Map<RoomJoinRules, Boolean> = emptyMap(),
         val showAdvanced: Boolean = false,
         val disableFederation: Boolean = false,
         val homeServerName: String = "",
@@ -39,7 +40,7 @@ data class CreateRoomViewState(
         val supportsRestricted: Boolean = false,
         val aliasLocalPart: String? = null,
         val isSubSpace: Boolean = false
-) : MvRxState {
+) : MavericksState {
 
     constructor(args: CreateRoomArgs) : this(
             roomName = args.initialName,
@@ -50,8 +51,8 @@ data class CreateRoomViewState(
     /**
      * Return true if there is not important input from user
      */
-    fun isEmpty() = avatarUri == null
-            && roomName.isEmpty()
-            && roomTopic.isEmpty()
-            && aliasLocalPart.isNullOrEmpty()
+    fun isEmpty() = avatarUri == null &&
+            roomName.isEmpty() &&
+            roomTopic.isEmpty() &&
+            aliasLocalPart.isNullOrEmpty()
 }

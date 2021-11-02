@@ -89,7 +89,7 @@
         android:background="@null"
         android:drawablePadding="8dp"
         android:gravity="center_vertical"
-        android:hint="@string/user_directory_search_hint"
+        android:hint="@string/user_directory_search_hint_2"
         android:importantForAutofill="no"
         android:inputType="text"
         android:maxHeight="80dp"

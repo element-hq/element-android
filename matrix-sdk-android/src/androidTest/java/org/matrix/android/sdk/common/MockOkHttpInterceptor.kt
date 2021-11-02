@@ -15,12 +15,12 @@
  */
 package org.matrix.android.sdk.common
 
-import org.matrix.android.sdk.internal.session.TestInterceptor
 import okhttp3.Interceptor
 import okhttp3.Protocol
 import okhttp3.Request
 import okhttp3.Response
 import okhttp3.ResponseBody.Companion.toResponseBody
+import org.matrix.android.sdk.internal.session.TestInterceptor
 import javax.net.ssl.HttpsURLConnection
 
 /**

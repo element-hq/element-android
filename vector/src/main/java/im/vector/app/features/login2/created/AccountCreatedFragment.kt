@@ -33,6 +33,7 @@ import im.vector.app.core.intent.getFilenameFromUri
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.databinding.DialogBaseEditTextBinding
 import im.vector.app.databinding.FragmentLoginAccountCreatedBinding
+import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.helper.MatrixItemColorProvider
 import im.vector.app.features.login2.AbstractLoginFragment2
@@ -48,7 +49,6 @@ import javax.inject.Inject
  * - the account has been created and we propose the user to set an avatar and a display name
  */
 class AccountCreatedFragment @Inject constructor(
-        val accountCreatedViewModelFactory: AccountCreatedViewModel.Factory,
         private val avatarRenderer: AvatarRenderer,
         private val dateFormatter: VectorDateFormatter,
         private val matrixItemColorProvider: MatrixItemColorProvider,
@@ -71,7 +71,7 @@ class AccountCreatedFragment @Inject constructor(
         setupSubmitButton()
         observeViewEvents()
 
-        viewModel.subscribe { invalidateState(it) }
+        viewModel.onEach { invalidateState(it) }
 
         views.loginAccountCreatedTime.text = dateFormatter.format(System.currentTimeMillis(), DateFormatKind.MESSAGE_SIMPLE)
     }

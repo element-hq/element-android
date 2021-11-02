@@ -2125,7 +2125,6 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="qr_code">Kod QR</string>
     <string name="add_by_qr_code">Dodaj poprzez kod QR</string>
     <string name="labs_show_unread_notifications_as_tab">Dodaj dedykowaną kartę dla nieprzeczytanych powiadomień na ekranie głównym.</string>
-    <string name="user_directory_search_hint">Szukaj poprzez imię bądź ID</string>
     <string name="settings_labs_show_complete_history_in_encrypted_room">Pokazuj całą historię w zaszyfrowanych pokojach</string>
     <string name="create_room_federation_error">Ten pokój został utworzony ale niektóre zaproszenia nie zostały wysłane z następującego powodu:
 \n
@@ -2387,8 +2386,8 @@ Spróbuj uruchomić ponownie aplikację.</string>
 \nCzy na pewno kontynuować\?</string>
     <string name="external_link_confirmation_title">Kliknij dwukrotnie w ten link</string>
     <string name="error_empty_field_choose_password">Wybierz hasło.</string>
-    <string name="notice_room_server_acl_set_banned">• Dopasowanie serwera %s jest zbanowane.</string>
-    <string name="notice_room_server_acl_set_allowed">• Dopasowanie serwera %s jest dozwolone.</string>
+    <string name="notice_room_server_acl_set_banned">• Dopasowanie serwerów %s jest zbanowane.</string>
+    <string name="notice_room_server_acl_set_allowed">• Dopasowanie serwerów %s jest dozwolone.</string>
     <string name="notice_room_server_acl_set_title_by_you">Ustawiłeś serwer ACL dla tego pokoju.</string>
     <string name="notice_room_server_acl_set_title">%s ustawił(a) serwer ACL dla tego pokoju.</string>
     <string name="notice_direct_room_update_by_you">Uaktualniłeś tutaj.</string>

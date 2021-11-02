@@ -269,6 +269,10 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
     }
 
     override fun buildModels() {
+        // Don't build anything if membership is not joined
+        if (partialState.roomSummary?.membership != Membership.JOIN) {
+            return
+        }
         val timestamp = System.currentTimeMillis()
 
         val showingForwardLoader = LoadingItem_()
@@ -496,8 +500,8 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         if (vectorPreferences.labShowCompleteHistoryInEncryptedRoom()) {
             return
         }
-        if (event.root.type == EventType.STATE_ROOM_MEMBER
-                && event.root.stateKey == session.myUserId) {
+        if (event.root.type == EventType.STATE_ROOM_MEMBER &&
+                event.root.stateKey == session.myUserId) {
             val content = event.root.content.toModel<RoomMemberContent>()
             if (content?.membership == Membership.INVITE) {
                 hasReachedInvite = true

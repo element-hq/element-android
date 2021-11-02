@@ -18,7 +18,7 @@
 package im.vector.app.features.roomprofile
 
 import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.Uninitialized
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
@@ -35,7 +35,7 @@ data class RoomProfileViewState(
         val recommendedRoomVersion: String? = null,
         val canUpgradeRoom: Boolean = false,
         val isTombstoned: Boolean = false
-) : MvRxState {
+) : MavericksState {
 
     constructor(args: RoomProfileArgs) : this(roomId = args.roomId)
 

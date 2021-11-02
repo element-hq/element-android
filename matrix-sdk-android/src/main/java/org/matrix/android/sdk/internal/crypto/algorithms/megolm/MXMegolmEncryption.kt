@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.crypto.algorithms.megolm
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.Event
@@ -39,7 +40,6 @@ import org.matrix.android.sdk.internal.crypto.repository.WarnOnUnknownDeviceRepo
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.crypto.tasks.SendToDeviceTask
 import org.matrix.android.sdk.internal.util.JsonCanonicalizer
-import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.internal.util.convertToUTF8
 import timber.log.Timber
 
@@ -155,11 +155,11 @@ internal class MXMegolmEncryption(
     private suspend fun ensureOutboundSession(devicesInRoom: MXUsersDevicesMap<CryptoDeviceInfo>): MXOutboundSessionInfo {
         Timber.v("## CRYPTO | ensureOutboundSession start")
         var session = outboundSession
-        if (session == null
+        if (session == null ||
                 // Need to make a brand new session?
-                || session.needsRotation(sessionRotationPeriodMsgs, sessionRotationPeriodMs)
+                session.needsRotation(sessionRotationPeriodMsgs, sessionRotationPeriodMs) ||
                 // Determine if we have shared with anyone we shouldn't have
-                || session.sharedWithTooManyDevices(devicesInRoom)) {
+                session.sharedWithTooManyDevices(devicesInRoom)) {
             session = prepareNewSessionInRoom()
             outboundSession = session
         }
@@ -380,8 +380,8 @@ internal class MXMegolmEncryption(
         // with them, which means that they will have announced any new devices via
         // an m.new_device.
         val keys = deviceListManager.downloadKeys(userIds, false)
-        val encryptToVerifiedDevicesOnly = cryptoStore.getGlobalBlacklistUnverifiedDevices()
-                || cryptoStore.getRoomsListBlacklistUnverifiedDevices().contains(roomId)
+        val encryptToVerifiedDevicesOnly = cryptoStore.getGlobalBlacklistUnverifiedDevices() ||
+                cryptoStore.getRoomsListBlacklistUnverifiedDevices().contains(roomId)
 
         val devicesInRoom = DeviceInRoomInfo()
         val unknownDevices = MXUsersDevicesMap<CryptoDeviceInfo>()
@@ -446,10 +446,9 @@ internal class MXMegolmEncryption(
         val devicesByUser = mapOf(userId to listOf(deviceInfo))
         val usersDeviceMap = ensureOlmSessionsForDevicesAction.handle(devicesByUser)
         val olmSessionResult = usersDeviceMap.getObject(userId, deviceId)
-        olmSessionResult?.sessionId
-                ?: // no session with this device, probably because there were no one-time keys.
+        olmSessionResult?.sessionId // no session with this device, probably because there were no one-time keys.
                 // ensureOlmSessionsForDevicesAction has already done the logging, so just skip it.
-                return false.also {
+                ?: return false.also {
                     Timber.w("## Crypto reshareKey: no session with this device, probably because there were no one-time keys")
                 }
 

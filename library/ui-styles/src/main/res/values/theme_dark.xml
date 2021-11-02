@@ -42,6 +42,9 @@
         <item name="vctr_markdown_block_background_color">@android:color/black</item>
         <item name="vctr_spoiler_background_color">#FFFFFFFF</item>
 
+        <!-- Presence Indicator colors -->
+        <item name="vctr_presence_indicator_offline">@color/vctr_presence_indicator_offline_dark</item>
+
         <!-- Some alias -->
         <item name="vctr_header_background">?vctr_system</item>
         <item name="vctr_list_separator">?vctr_content_quinary</item>
