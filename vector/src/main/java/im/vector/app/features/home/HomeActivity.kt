@@ -273,14 +273,13 @@ class HomeActivity :
             val resolvedLink = when {
                 // Element custom scheme is not handled by the sdk, convert it to matrix.to link for compatibility
                 deepLink.startsWith(MATRIX_TO_CUSTOM_SCHEME_URL_BASE) -> {
-                    val let = when {
+                    when {
                         deepLink.startsWith(USER_LINK_PREFIX) -> deepLink.substring(USER_LINK_PREFIX.length)
                         deepLink.startsWith(ROOM_LINK_PREFIX) -> deepLink.substring(ROOM_LINK_PREFIX.length)
                         else                                  -> null
                     }?.let { permalinkId ->
                         activeSessionHolder.getSafeActiveSession()?.permalinkService()?.createPermalink(permalinkId)
                     }
-                    let
                 }
                 else                                                  -> deepLink
             }
