@@ -20,6 +20,9 @@ import im.vector.app.features.notifications.ProcessedEvent.Type
 import im.vector.app.test.fakes.FakeNotificationUtils
 import im.vector.app.test.fakes.FakeRoomGroupMessageCreator
 import im.vector.app.test.fakes.FakeSummaryGroupMessageCreator
+import im.vector.app.test.fixtures.aNotifiableMessageEvent
+import im.vector.app.test.fixtures.aSimpleNotifiableEvent
+import im.vector.app.test.fixtures.anInviteNotifiableEvent
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Test
 
