@@ -19,6 +19,8 @@ package org.matrix.android.sdk.internal.session.user.accountdata
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
+import fr.gouv.tchap.android.sdk.internal.session.user.accountdata.TchapUpdateHideProfileTask
+import fr.gouv.tchap.android.sdk.internal.session.user.accountdata.UpdateHideProfileTask
 import retrofit2.Retrofit
 
 @Module
@@ -42,4 +44,7 @@ internal abstract class AccountDataModule {
 
     @Binds
     abstract fun bindUpdateBreadcrumbsTask(task: DefaultUpdateBreadcrumbsTask): UpdateBreadcrumbsTask
+
+    @Binds
+    abstract fun bindHideProfileTask(task: TchapUpdateHideProfileTask): UpdateHideProfileTask
 }

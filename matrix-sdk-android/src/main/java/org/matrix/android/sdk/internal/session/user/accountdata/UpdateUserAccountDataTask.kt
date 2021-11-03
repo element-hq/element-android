@@ -16,6 +16,8 @@
 
 package org.matrix.android.sdk.internal.session.user.accountdata
 
+import fr.gouv.tchap.android.sdk.api.session.accountdata.HideProfileContent
+import fr.gouv.tchap.android.sdk.api.session.accountdata.TchapUserAccountDataTypes
 import org.matrix.android.sdk.api.session.accountdata.UserAccountDataTypes
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
@@ -85,6 +87,14 @@ internal interface UpdateUserAccountDataTask : Task<UpdateUserAccountDataTask.Pa
 
         override fun getData(): Any {
             return integrationProvisioningContent
+        }
+    }
+
+    data class HideProfile(override val type: String = TchapUserAccountDataTypes.TYPE_HIDE_PROFILE,
+                           private val hideProfileContent: HideProfileContent) : Params {
+
+        override fun getData(): Any {
+            return hideProfileContent
         }
     }
 

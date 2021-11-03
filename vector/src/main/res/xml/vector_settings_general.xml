@@ -22,6 +22,11 @@
             android:summary="@string/change_password_summary"
             android:title="@string/settings_password" />
 
+        <im.vector.app.core.preference.VectorSwitchPreference
+            android:key="TCHAP_SETTINGS_HIDE_FROM_USERS_DIRECTORY_PREFERENCE_KEY"
+            android:summary="@string/tchap_settings_hide_from_users_directory_summary"
+            android:title="@string/tchap_settings_hide_from_users_directory_title" />
+
         <im.vector.app.core.preference.VectorPreference
             android:key="SETTINGS_EMAILS_AND_PHONE_NUMBERS_PREFERENCE_KEY"
             android:summary="@string/settings_emails_and_phone_numbers_summary"

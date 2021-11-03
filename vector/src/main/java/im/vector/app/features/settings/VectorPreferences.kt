@@ -193,6 +193,8 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         private const val DID_ASK_TO_ENABLE_SESSION_PUSH = "DID_ASK_TO_ENABLE_SESSION_PUSH"
         private const val DID_PROMOTE_NEW_RESTRICTED_JOIN_RULE = "DID_PROMOTE_NEW_RESTRICTED_JOIN_RULE"
 
+        const val TCHAP_SETTINGS_HIDE_FROM_USERS_DIRECTORY_PREFERENCE_KEY = "TCHAP_SETTINGS_HIDE_FROM_USERS_DIRECTORY_PREFERENCE_KEY"
+
         private const val MEDIA_SAVING_3_DAYS = 0
         private const val MEDIA_SAVING_1_WEEK = 1
         private const val MEDIA_SAVING_1_MONTH = 2

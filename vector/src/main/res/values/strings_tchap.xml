@@ -163,6 +163,9 @@
 
     <!-- Settings -->
     <string name="tchap_settings_change_pwd_caution">Changing the password resets the encryption keys on all devices, making the chat history unreadable: first, backup your keys from all your sessions so you can use them after you change the password.</string>
+    <string name="tchap_settings_hide_from_users_directory_title">Subscribe to the red list.</string>
+    <string name="tchap_settings_hide_from_users_directory_summary">"Other users won't be able to find my account in their search results."</string>
+    <string name="tchap_settings_show_external_user_in_users_directory_prompt">To disable this option, you must accept that your email address is visible to the other users.</string>
 
     <string name="tchap_dialog_user_consent_homeserver_name">Tchap</string>
 </resources>

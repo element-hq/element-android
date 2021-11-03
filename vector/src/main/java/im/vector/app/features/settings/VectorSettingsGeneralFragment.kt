@@ -34,6 +34,9 @@ import androidx.preference.SwitchPreference
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.cache.DiskCache
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import fr.gouv.tchap.android.sdk.api.session.accountdata.HideProfileContent
+import fr.gouv.tchap.android.sdk.api.session.accountdata.TchapUserAccountDataTypes.TYPE_HIDE_PROFILE
+import fr.gouv.tchap.core.utils.TchapUtils
 import fr.gouv.tchap.features.settings.TchapSettingsChangePasswordPreDialog
 import im.vector.app.R
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
@@ -65,6 +68,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.failure.isInvalidPassword
+import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerConfig
 import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerService
 import org.matrix.android.sdk.flow.flow
@@ -97,6 +101,9 @@ class VectorSettingsGeneralFragment @Inject constructor(
     private val mPasswordPreference by lazy {
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_CHANGE_PASSWORD_PREFERENCE_KEY)!!
     }
+    private val hideFromUsersDirectoryPreference by lazy {
+        findPreference<VectorSwitchPreference>(VectorPreferences.TCHAP_SETTINGS_HIDE_FROM_USERS_DIRECTORY_PREFERENCE_KEY)!!
+    }
     private val mIdentityServerPreference by lazy {
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_IDENTITY_SERVER_PREFERENCE_KEY)!!
     }
@@ -125,6 +132,7 @@ class VectorSettingsGeneralFragment @Inject constructor(
 
         observeUserAvatar()
         observeUserDisplayName()
+        observeHideFromUserDirectory()
     }
 
     private fun observeUserAvatar() {
@@ -149,6 +157,17 @@ class VectorSettingsGeneralFragment @Inject constructor(
                         it.summary = displayName
                         it.text = displayName
                     }
+                }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
+    }
+
+    private fun observeHideFromUserDirectory() {
+        session.flow()
+                .liveUserAccountData(TYPE_HIDE_PROFILE)
+                .map { it.getOrNull()?.content.toModel<HideProfileContent>()?.hideProfile }
+                .distinctUntilChanged()
+                .onEach { isHidden ->
+                    hideFromUsersDirectoryPreference.isChecked = isHidden ?: false
                 }
                 .launchIn(viewLifecycleOwner.lifecycleScope)
     }
@@ -181,6 +200,14 @@ class VectorSettingsGeneralFragment @Inject constructor(
             }
         } else {
             mPasswordPreference.isVisible = false
+        }
+
+        // User directory visibility
+        hideFromUsersDirectoryPreference.let {
+            it.onPreferenceClickListener = Preference.OnPreferenceClickListener { _ ->
+                onHideFromUsersDirectoryClick()
+                true
+            }
         }
 
         val openDiscoveryScreenPreferenceClickListener = Preference.OnPreferenceClickListener {
@@ -476,6 +503,44 @@ class VectorSettingsGeneralFragment @Inject constructor(
                         }
                     }
                     .show(activity.supportFragmentManager, "changePasswordPreDialog")
+        }
+    }
+
+    private fun onHideFromUsersDirectoryClick() {
+        val hidden = hideFromUsersDirectoryPreference.isChecked
+        // The external users must be prompted before showing them to the users directory
+        if (!hidden && TchapUtils.isExternalTchapUser(session.myUserId)) {
+            MaterialAlertDialogBuilder(requireActivity())
+                    .setMessage(R.string.tchap_settings_show_external_user_in_users_directory_prompt)
+                    .setPositiveButton(R.string.accept) { _, _ ->
+                        hideUserFromUsersDirectory(false)
+                    }
+                    .setNegativeButton(R.string.cancel) { _, _ ->
+                        hideFromUsersDirectoryPreference.isChecked = true
+                    }
+                    .setOnCancelListener { _ ->
+                        hideFromUsersDirectoryPreference.isChecked = true
+                    }
+                    .show()
+        } else {
+            hideUserFromUsersDirectory(hidden)
+        }
+    }
+
+    private fun hideUserFromUsersDirectory(hidden: Boolean) {
+        displayLoadingView()
+        lifecycleScope.launch {
+            val result = runCatching { session.accountDataService().updateHideProfile(hidden) }
+            if (!isAdded) return@launch
+            result.onFailure { failure ->
+                // Refresh setting value
+                hideFromUsersDirectoryPreference.isChecked = session.accountDataService()
+                        .getUserAccountDataEvent(TYPE_HIDE_PROFILE)
+                        ?.content.toModel<HideProfileContent>()
+                        ?.hideProfile ?: false
+                requireActivity().toast(errorFormatter.toHumanReadable(failure))
+            }
+            hideLoadingView()
         }
     }
 
