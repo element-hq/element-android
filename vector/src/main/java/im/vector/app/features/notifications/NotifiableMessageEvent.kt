@@ -15,6 +15,7 @@
  */
 package im.vector.app.features.notifications
 
+import android.net.Uri
 import org.matrix.android.sdk.api.session.events.model.EventType
 
 data class NotifiableMessageEvent(
@@ -26,6 +27,7 @@ data class NotifiableMessageEvent(
         val senderName: String?,
         val senderId: String?,
         val body: String?,
+        val imageUri: Uri?,
         val roomId: String,
         val roomName: String?,
         val roomIsDirect: Boolean = false,

@@ -16,6 +16,11 @@
 
 package im.vector.app.features.notifications
 
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancelChildren
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.pushrules.PushEvents
 import org.matrix.android.sdk.api.pushrules.PushRuleService
 import org.matrix.android.sdk.api.pushrules.getActions
@@ -31,21 +36,24 @@ class PushRuleTriggerListener @Inject constructor(
 ) : PushRuleService.PushRuleListener {
 
     private var session: Session? = null
+    private val scope: CoroutineScope = CoroutineScope(SupervisorJob())
 
     override fun onEvents(pushEvents: PushEvents) {
-        session?.let { session ->
-            val notifiableEvents = createNotifiableEvents(pushEvents, session)
-            notificationDrawerManager.updateEvents { queuedEvents ->
-                notifiableEvents.forEach { notifiableEvent ->
-                    queuedEvents.onNotifiableEventReceived(notifiableEvent)
+        scope.launch {
+            session?.let { session ->
+                val notifiableEvents = createNotifiableEvents(pushEvents, session)
+                notificationDrawerManager.updateEvents { queuedEvents ->
+                    notifiableEvents.forEach { notifiableEvent ->
+                        queuedEvents.onNotifiableEventReceived(notifiableEvent)
+                    }
+                    queuedEvents.syncRoomEvents(roomsLeft = pushEvents.roomsLeft, roomsJoined = pushEvents.roomsJoined)
+                    queuedEvents.markRedacted(pushEvents.redactedEventIds)
                 }
-                queuedEvents.syncRoomEvents(roomsLeft = pushEvents.roomsLeft, roomsJoined = pushEvents.roomsJoined)
-                queuedEvents.markRedacted(pushEvents.redactedEventIds)
-            }
-        } ?: Timber.e("Called without active session")
+            } ?: Timber.e("Called without active session")
+        }
     }
 
-    private fun createNotifiableEvents(pushEvents: PushEvents, session: Session): List<NotifiableEvent> {
+    private suspend fun createNotifiableEvents(pushEvents: PushEvents, session: Session): List<NotifiableEvent> {
         return pushEvents.matchedEvents.mapNotNull { (event, pushRule) ->
             Timber.v("Push rule match for event ${event.eventId}")
             val action = pushRule.getActions().toNotificationAction()
@@ -67,6 +75,7 @@ class PushRuleTriggerListener @Inject constructor(
     }
 
     fun stop() {
+        scope.coroutineContext.cancelChildren(CancellationException("PushRuleTriggerListener stopping"))
         session?.removePushRuleListener(this)
         session = null
         notificationDrawerManager.clearAllEvents()
