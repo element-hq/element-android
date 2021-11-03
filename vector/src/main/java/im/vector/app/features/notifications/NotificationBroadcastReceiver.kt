@@ -145,8 +145,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
                 canBeReplaced = false
         )
 
-        notificationDrawerManager.onNotifiableEventReceived(notifiableMessageEvent)
-        notificationDrawerManager.refreshNotificationDrawer()
+        notificationDrawerManager.updateEvents { it.onNotifiableEventReceived(notifiableMessageEvent) }
 
         /*
         // TODO Error cannot be managed the same way than in Riot

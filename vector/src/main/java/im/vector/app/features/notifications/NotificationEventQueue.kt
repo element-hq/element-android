@@ -82,9 +82,40 @@ class NotificationEventQueue(
         queue.clear()
     }
 
-    fun add(notifiableEvent: NotifiableEvent) {
-        queue.add(notifiableEvent)
+    fun add(notifiableEvent: NotifiableEvent, seenEventIds: CircularCache<String>) {
+        val existing = findExistingById(notifiableEvent)
+        val edited = findEdited(notifiableEvent)
+        when {
+            existing != null                               -> {
+                if (existing.canBeReplaced) {
+                    // Use the event coming from the event stream as it may contains more info than
+                    // the fcm one (like type/content/clear text) (e.g when an encrypted message from
+                    // FCM should be update with clear text after a sync)
+                    // In this case the message has already been notified, and might have done some noise
+                    // So we want the notification to be updated even if it has already been displayed
+                    // Use setOnlyAlertOnce to ensure update notification does not interfere with sound
+                    // from first notify invocation as outlined in:
+                    // https://developer.android.com/training/notify-user/build-notification#Updating
+                    replace(replace = existing, with = notifiableEvent)
+                } else {
+                    // keep the existing one, do not replace
+                }
+            }
+            edited != null                                 -> {
+                // Replace the existing notification with the new content
+                replace(replace = edited, with = notifiableEvent)
+            }
+            seenEventIds.contains(notifiableEvent.eventId) -> {
+                // we've already seen the event, lets skip
+                Timber.d("onNotifiableEventReceived(): skipping event, already seen")
+            }
+            else                                           -> {
+                seenEventIds.put(notifiableEvent.eventId)
+                queue.add(notifiableEvent)
+            }
+        }
     }
+
 
     fun clearMemberShipNotificationForRoom(roomId: String) {
         Timber.v("clearMemberShipOfRoom $roomId")

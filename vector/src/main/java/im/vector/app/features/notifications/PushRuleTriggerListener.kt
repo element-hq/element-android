@@ -34,7 +34,7 @@ class PushRuleTriggerListener @Inject constructor(
 
     override fun onEvents(pushEvents: PushEvents) {
         session?.let { session ->
-            pushEvents.matchedEvents.mapNotNull { (event, pushRule) ->
+            val notifiableEvents = pushEvents.matchedEvents.mapNotNull { (event, pushRule) ->
                 Timber.v("Push rule match for event ${event.eventId}")
                 val action = pushRule.getActions().toNotificationAction()
                 if (action.shouldNotify) {
@@ -43,14 +43,15 @@ class PushRuleTriggerListener @Inject constructor(
                     Timber.v("Matched push rule is set to not notify")
                     null
                 }
-            }.forEach { notificationDrawerManager.onNotifiableEventReceived(it) }
+            }
 
             notificationDrawerManager.updateEvents { queuedEvents ->
+                notifiableEvents.forEach { notifiableEvent ->
+                    queuedEvents.onNotifiableEventReceived(notifiableEvent)
+                }
                 queuedEvents.syncRoomEvents(roomsLeft = pushEvents.roomsLeft, roomsJoined = pushEvents.roomsJoined)
                 queuedEvents.markRedacted(pushEvents.redactedEventIds)
             }
-
-            notificationDrawerManager.refreshNotificationDrawer()
         } ?: Timber.e("Called without active session")
     }
 
