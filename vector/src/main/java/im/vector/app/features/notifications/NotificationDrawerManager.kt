@@ -107,40 +107,34 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
         }
         synchronized(queuedEvents) {
             val existing = queuedEvents.findExistingById(notifiableEvent)
-            if (existing != null) {
-                if (existing.canBeReplaced) {
-                    // Use the event coming from the event stream as it may contains more info than
-                    // the fcm one (like type/content/clear text) (e.g when an encrypted message from
-                    // FCM should be update with clear text after a sync)
-                    // In this case the message has already been notified, and might have done some noise
-                    // So we want the notification to be updated even if it has already been displayed
-                    // Use setOnlyAlertOnce to ensure update notification does not interfere with sound
-                    // from first notify invocation as outlined in:
-                    // https://developer.android.com/training/notify-user/build-notification#Updating
-                    queuedEvents.replace(replace = existing, with = notifiableEvent)
-                } else {
-                    // keep the existing one, do not replace
+            val edited = queuedEvents.findEdited(notifiableEvent)
+            when {
+                existing != null                               -> {
+                    if (existing.canBeReplaced) {
+                        // Use the event coming from the event stream as it may contains more info than
+                        // the fcm one (like type/content/clear text) (e.g when an encrypted message from
+                        // FCM should be update with clear text after a sync)
+                        // In this case the message has already been notified, and might have done some noise
+                        // So we want the notification to be updated even if it has already been displayed
+                        // Use setOnlyAlertOnce to ensure update notification does not interfere with sound
+                        // from first notify invocation as outlined in:
+                        // https://developer.android.com/training/notify-user/build-notification#Updating
+                        queuedEvents.replace(replace = existing, with = notifiableEvent)
+                    } else {
+                        // keep the existing one, do not replace
+                    }
                 }
-            } else {
-                // Check if this is an edit
-                if (notifiableEvent.editedEventId != null) {
-                    // This is an edition
-                    val eventBeforeEdition = queuedEvents.findEdited(notifiableEvent)
-                    if (eventBeforeEdition != null) {
-                        // Replace the existing notification with the new content
-                        queuedEvents.replace(replace = eventBeforeEdition, with = notifiableEvent)
-                    } else {
-                        // Ignore an edit of a not displayed event in the notification drawer
-                    }
-                } else {
-                    // Not an edit
-                    if (seenEventIds.contains(notifiableEvent.eventId)) {
-                        // we've already seen the event, lets skip
-                        Timber.d("onNotifiableEventReceived(): skipping event, already seen")
-                    } else {
-                        seenEventIds.put(notifiableEvent.eventId)
-                        queuedEvents.add(notifiableEvent)
-                    }
+                edited != null                                 -> {
+                    // Replace the existing notification with the new content
+                    queuedEvents.replace(replace = edited, with = notifiableEvent)
+                }
+                seenEventIds.contains(notifiableEvent.eventId) -> {
+                    // we've already seen the event, lets skip
+                    Timber.d("onNotifiableEventReceived(): skipping event, already seen")
+                }
+                else                                           -> {
+                    seenEventIds.put(notifiableEvent.eventId)
+                    queuedEvents.add(notifiableEvent)
                 }
             }
         }

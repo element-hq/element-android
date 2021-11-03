@@ -66,9 +66,10 @@ class NotificationEventQueue(
     }
 
     fun findEdited(notifiableEvent: NotifiableEvent): NotifiableEvent? {
-        return queue.firstOrNull {
-            it.eventId == notifiableEvent.editedEventId ||
-                    it.editedEventId == notifiableEvent.editedEventId // or edition of an edition
+        return notifiableEvent.editedEventId?.let { editedId ->
+            queue.firstOrNull {
+                it.eventId == editedId || it.editedEventId == editedId
+            }
         }
     }
 
