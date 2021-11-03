@@ -16,10 +16,12 @@
 
 package im.vector.app.ui
 
+import androidx.preference.PreferenceManager
 import androidx.test.espresso.Espresso.closeSoftKeyboard
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.matcher.ViewMatchers.isRoot
 import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.platform.app.InstrumentationRegistry
 import com.adevinta.android.barista.assertion.BaristaEnabledAssertions.assertDisabled
 import com.adevinta.android.barista.assertion.BaristaEnabledAssertions.assertEnabled
 import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
@@ -29,8 +31,17 @@ import im.vector.app.R
 import im.vector.app.espresso.tools.waitUntilActivityVisible
 import im.vector.app.features.home.HomeActivity
 import im.vector.app.waitForView
+import java.lang.Thread.sleep
 
 class UiTestBase {
+
+    fun enableDeveloperMode() {
+        PreferenceManager.getDefaultSharedPreferences(InstrumentationRegistry.getInstrumentation().targetContext)
+                .edit()
+                .putBoolean("SETTINGS_DEVELOPER_MODE_PREFERENCE_KEY", true)
+                .apply()
+    }
+
     fun createAccount(userId: String, password: String = "password", homeServerUrl: String = "http://10.0.2.2:8080") {
         initSession(true, userId, password, homeServerUrl)
     }
@@ -52,6 +63,7 @@ class UiTestBase {
         writeTo(R.id.loginServerUrlFormHomeServerUrl, homeServerUrl)
         assertEnabled(R.id.loginServerUrlFormSubmit)
         closeSoftKeyboard()
+        sleep(500)
         clickOn(R.id.loginServerUrlFormSubmit)
         onView(isRoot()).perform(waitForView(withId(R.id.loginSignupSigninSubmit)))
 
@@ -75,6 +87,7 @@ class UiTestBase {
         assertEnabled(R.id.loginSubmit)
 
         closeSoftKeyboard()
+        sleep(500)
         clickOn(R.id.loginSubmit)
 
         // Wait
