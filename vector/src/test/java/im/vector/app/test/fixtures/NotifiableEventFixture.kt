@@ -20,23 +20,33 @@ import im.vector.app.features.notifications.InviteNotifiableEvent
 import im.vector.app.features.notifications.NotifiableMessageEvent
 import im.vector.app.features.notifications.SimpleNotifiableEvent
 
-fun aSimpleNotifiableEvent(eventId: String, type: String? = null) = SimpleNotifiableEvent(
+fun aSimpleNotifiableEvent(
+        eventId: String = "simple-event-id",
+        type: String? = null,
+        isRedacted: Boolean = false,
+        canBeReplaced: Boolean = false,
+        editedEventId: String? = null
+) = SimpleNotifiableEvent(
         matrixID = null,
         eventId = eventId,
-        editedEventId = null,
+        editedEventId = editedEventId,
         noisy = false,
         title = "title",
         description = "description",
         type = type,
         timestamp = 0,
         soundName = null,
-        canBeReplaced = false,
-        isRedacted = false
+        canBeReplaced = canBeReplaced,
+        isRedacted = isRedacted
 )
 
-fun anInviteNotifiableEvent(roomId: String) = InviteNotifiableEvent(
+fun anInviteNotifiableEvent(
+        roomId: String = "an-invite-room-id",
+        eventId: String = "invite-event-id",
+        isRedacted: Boolean = false
+) = InviteNotifiableEvent(
         matrixID = null,
-        eventId = "event-id",
+        eventId = eventId,
         roomId = roomId,
         roomName = "a room name",
         editedEventId = null,
@@ -47,10 +57,14 @@ fun anInviteNotifiableEvent(roomId: String) = InviteNotifiableEvent(
         timestamp = 0,
         soundName = null,
         canBeReplaced = false,
-        isRedacted = false
+        isRedacted = isRedacted
 )
 
-fun aNotifiableMessageEvent(eventId: String, roomId: String) = NotifiableMessageEvent(
+fun aNotifiableMessageEvent(
+        eventId: String = "a-message-event-id",
+        roomId: String = "a-message-room-id",
+        isRedacted: Boolean = false
+) = NotifiableMessageEvent(
         eventId = eventId,
         editedEventId = null,
         noisy = false,
@@ -62,5 +76,5 @@ fun aNotifiableMessageEvent(eventId: String, roomId: String) = NotifiableMessage
         roomName = "room-name",
         roomIsDirect = false,
         canBeReplaced = false,
-        isRedacted = false
+        isRedacted = isRedacted
 )
