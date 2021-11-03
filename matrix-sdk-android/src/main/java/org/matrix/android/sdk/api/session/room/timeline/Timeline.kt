@@ -71,29 +71,9 @@ interface Timeline {
     fun paginate(direction: Direction, count: Int)
 
     /**
-     * Returns the number of sending events
-     */
-    fun pendingEventCount(): Int
-
-    /**
-     * Returns the number of failed sending events.
-     */
-    fun failedToDeliverEventCount(): Int
-
-    /**
      * Returns the index of a built event or null.
      */
     fun getIndexOfEvent(eventId: String?): Int?
-
-    /**
-     * Returns the built [TimelineEvent] at index or null
-     */
-    fun getTimelineEventAtIndex(index: Int): TimelineEvent?
-
-    /**
-     * Returns the built [TimelineEvent] with eventId or null
-     */
-    fun getTimelineEventWithId(eventId: String?): TimelineEvent?
 
     fun getPaginationState(direction: Direction): PaginationState
 

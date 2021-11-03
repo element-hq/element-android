@@ -54,7 +54,7 @@ internal class DefaultTimeline internal constructor(private val roomId: String,
                                                     eventDecryptor: TimelineEventDecryptor) : Timeline {
 
     companion object {
-        val BACKGROUND_HANDLER = createBackgroundHandler("SimpleTimeline_Thread")
+        val BACKGROUND_HANDLER = createBackgroundHandler("DefaultTimeline_Thread")
     }
 
     override val timelineID = UUID.randomUUID().toString()
@@ -144,26 +144,9 @@ internal class DefaultTimeline internal constructor(private val roomId: String,
         }
     }
 
-    override fun pendingEventCount(): Int {
-        return 0
-    }
-
-    override fun failedToDeliverEventCount(): Int {
-        return 0
-    }
-
     override fun getIndexOfEvent(eventId: String?): Int? {
         if (eventId == null) return null
         return strategy.getBuiltEventIndex(eventId)
-    }
-
-    override fun getTimelineEventAtIndex(index: Int): TimelineEvent? {
-        return null
-    }
-
-    override fun getTimelineEventWithId(eventId: String?): TimelineEvent? {
-        if (eventId == null) return null
-        return strategy.getBuiltEvent(eventId)
     }
 
     override fun getPaginationState(direction: Timeline.Direction): Timeline.PaginationState {
