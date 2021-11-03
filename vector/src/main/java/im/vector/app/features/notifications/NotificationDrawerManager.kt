@@ -93,7 +93,7 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
     #refreshNotificationDrawer() is called.
     Events might be grouped and there might not be one notification per event!
      */
-    fun onNotifiableEventReceived(notifiableEvent: NotifiableEvent) {
+    fun NotificationEventQueue.onNotifiableEventReceived(notifiableEvent: NotifiableEvent) {
         if (!vectorPreferences.areNotificationEnabledForDevice()) {
             Timber.i("Notification are disabled for this device")
             return
@@ -105,46 +105,8 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
         } else {
             Timber.d("onNotifiableEventReceived(): is push: ${notifiableEvent.canBeReplaced}")
         }
-        synchronized(queuedEvents) {
-            val existing = queuedEvents.findExistingById(notifiableEvent)
-            val edited = queuedEvents.findEdited(notifiableEvent)
-            when {
-                existing != null                               -> {
-                    if (existing.canBeReplaced) {
-                        // Use the event coming from the event stream as it may contains more info than
-                        // the fcm one (like type/content/clear text) (e.g when an encrypted message from
-                        // FCM should be update with clear text after a sync)
-                        // In this case the message has already been notified, and might have done some noise
-                        // So we want the notification to be updated even if it has already been displayed
-                        // Use setOnlyAlertOnce to ensure update notification does not interfere with sound
-                        // from first notify invocation as outlined in:
-                        // https://developer.android.com/training/notify-user/build-notification#Updating
-                        queuedEvents.replace(replace = existing, with = notifiableEvent)
-                    } else {
-                        // keep the existing one, do not replace
-                    }
-                }
-                edited != null                                 -> {
-                    // Replace the existing notification with the new content
-                    queuedEvents.replace(replace = edited, with = notifiableEvent)
-                }
-                seenEventIds.contains(notifiableEvent.eventId) -> {
-                    // we've already seen the event, lets skip
-                    Timber.d("onNotifiableEventReceived(): skipping event, already seen")
-                }
-                else                                           -> {
-                    seenEventIds.put(notifiableEvent.eventId)
-                    queuedEvents.add(notifiableEvent)
-                }
-            }
-        }
-    }
 
-    fun updateEvents(action: (NotificationEventQueue) -> Unit) {
-        synchronized(queuedEvents) {
-            action(queuedEvents)
-        }
-        refreshNotificationDrawer()
+        add(notifiableEvent, seenEventIds)
     }
 
     /**
@@ -168,9 +130,27 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
         }
     }
 
+    fun notificationStyleChanged() {
+        updateEvents {
+            val newSettings = vectorPreferences.useCompleteNotificationFormat()
+            if (newSettings != useCompleteNotificationFormat) {
+                // Settings has changed, remove all current notifications
+                notificationDisplayer.cancelAllNotifications()
+                useCompleteNotificationFormat = newSettings
+            }
+        }
+    }
+
+    fun updateEvents(action: NotificationDrawerManager.(NotificationEventQueue) -> Unit) {
+        synchronized(queuedEvents) {
+            action(this, queuedEvents)
+        }
+        refreshNotificationDrawer()
+    }
+
     private var firstThrottler = FirstThrottler(200)
 
-    fun refreshNotificationDrawer() {
+    private fun refreshNotificationDrawer() {
         // Implement last throttler
         val canHandle = firstThrottler.canHandle()
         Timber.v("refreshNotificationDrawer(), delay: ${canHandle.waitMillis()} ms")
@@ -191,14 +171,6 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
     @WorkerThread
     private fun refreshNotificationDrawerBg() {
         Timber.v("refreshNotificationDrawerBg()")
-
-        val newSettings = vectorPreferences.useCompleteNotificationFormat()
-        if (newSettings != useCompleteNotificationFormat) {
-            // Settings has changed, remove all current notifications
-            notificationDisplayer.cancelAllNotifications()
-            useCompleteNotificationFormat = newSettings
-        }
-
         val eventsToRender = synchronized(queuedEvents) {
             notifiableEventProcessor.process(queuedEvents.rawEvents(), currentRoomId, renderedEvents).also {
                 queuedEvents.clearAndAdd(it.onlyKeptEvents())

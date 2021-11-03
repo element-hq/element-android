@@ -201,8 +201,7 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
             resolvedEvent
                     ?.also { Timber.tag(loggerTag.value).d("Fast lane: notify drawer") }
                     ?.let {
-                        notificationDrawerManager.onNotifiableEventReceived(it)
-                        notificationDrawerManager.refreshNotificationDrawer()
+                        notificationDrawerManager.updateEvents { it.onNotifiableEventReceived(resolvedEvent) }
                     }
         }
     }
