@@ -19,7 +19,6 @@ package im.vector.app.features.notifications
 import android.content.Context
 import android.graphics.Bitmap
 import android.os.Build
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.Person
 import androidx.core.content.pm.ShortcutInfoCompat
@@ -104,7 +103,6 @@ class RoomGroupMessageCreator @Inject constructor(
 
     private fun NotificationCompat.MessagingStyle.addMessagesFromEvents(events: List<NotifiableMessageEvent>) {
         events.forEach { event ->
-            Log.e("!!!", "event: $event")
             val senderPerson = if (event.outGoingMessage) {
                 null
             } else {
