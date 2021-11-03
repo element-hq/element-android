@@ -379,7 +379,6 @@ internal class DefaultCryptoService @Inject constructor(
         private val setDeviceNameTask: SetDeviceNameTask,
         private val loadRoomMembersTask: LoadRoomMembersTask,
         private val cryptoSessionInfoProvider: CryptoSessionInfoProvider,
-        private val createKeysBackupVersionTask: CreateKeysBackupVersionTask,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val taskExecutor: TaskExecutor,
         private val cryptoCoroutineScope: CoroutineScope,
@@ -662,6 +661,8 @@ internal class DefaultCryptoService @Inject constructor(
             // keys claim request to be sent out.
             // This could be omitted but then devices might be waiting for the next
             sendOutgoingRequests()
+
+            keysBackupService?.maybeBackupKeys()
         }
 
         cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
@@ -996,12 +997,14 @@ internal class DefaultCryptoService @Inject constructor(
         }
 
         val keyShareLock = roomKeyShareLocks.getOrPut(roomId, { Mutex() })
+        var sharedKey = false
 
         keyShareLock.withLock {
             coroutineScope {
                 this@DefaultCryptoService.olmMachine!!.shareRoomKey(roomId, roomMembers).map {
                     when (it) {
                         is Request.ToDevice -> {
+                            sharedKey = true
                             async {
                                 sendToDevice(it)
                             }
@@ -1015,6 +1018,12 @@ internal class DefaultCryptoService @Inject constructor(
                     }
                 }.joinAll()
             }
+        }
+
+        // If we sent out a room key over to-device messages it's likely that we created a new one
+        // Try to back the key up
+        if (sharedKey) {
+            keysBackupService?.maybeBackupKeys()
         }
     }
 
@@ -1120,7 +1129,10 @@ internal class DefaultCryptoService @Inject constructor(
     override suspend fun importRoomKeys(roomKeysAsArray: ByteArray,
                                         password: String,
                                         progressListener: ProgressListener?): ImportRoomKeysResult {
-        return olmMachine!!.importKeys(roomKeysAsArray, password, progressListener)
+        val result = olmMachine!!.importKeys(roomKeysAsArray, password, progressListener)
+        keysBackupService?.maybeBackupKeys()
+
+        return result
     }
 
     /**

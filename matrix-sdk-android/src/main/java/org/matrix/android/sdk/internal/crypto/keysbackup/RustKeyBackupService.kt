@@ -779,7 +779,7 @@ internal class RustKeyBackupService @Inject constructor(
     /**
      * Do a backup if there are new keys, with a delay
      */
-    private fun maybeBackupKeys() {
+    fun maybeBackupKeys() {
         when {
             isStucked                              -> {
                 // If not already done, or in error case, check for a valid backup version on the homeserver.
