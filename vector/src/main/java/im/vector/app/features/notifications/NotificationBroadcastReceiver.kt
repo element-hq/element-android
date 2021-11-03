@@ -49,26 +49,26 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
             NotificationUtils.SMART_REPLY_ACTION        ->
                 handleSmartReply(intent, context)
             NotificationUtils.DISMISS_ROOM_NOTIF_ACTION ->
-                intent.getStringExtra(KEY_ROOM_ID)?.let {
-                    notificationDrawerManager.clearMessageEventOfRoom(it)
+                intent.getStringExtra(KEY_ROOM_ID)?.let { roomId ->
+                    notificationDrawerManager.updateEvents { it.clearMessagesForRoom(roomId) }
                 }
             NotificationUtils.DISMISS_SUMMARY_ACTION    ->
                 notificationDrawerManager.clearAllEvents()
             NotificationUtils.MARK_ROOM_READ_ACTION     ->
-                intent.getStringExtra(KEY_ROOM_ID)?.let {
-                    notificationDrawerManager.clearMessageEventOfRoom(it)
-                    handleMarkAsRead(it)
+                intent.getStringExtra(KEY_ROOM_ID)?.let { roomId ->
+                    notificationDrawerManager.updateEvents { it.clearMessagesForRoom(roomId) }
+                    handleMarkAsRead(roomId)
                 }
             NotificationUtils.JOIN_ACTION               -> {
-                intent.getStringExtra(KEY_ROOM_ID)?.let {
-                    notificationDrawerManager.clearMemberShipNotificationForRoom(it)
-                    handleJoinRoom(it)
+                intent.getStringExtra(KEY_ROOM_ID)?.let { roomId ->
+                    notificationDrawerManager.updateEvents { it.clearMemberShipNotificationForRoom(roomId) }
+                    handleJoinRoom(roomId)
                 }
             }
             NotificationUtils.REJECT_ACTION             -> {
-                intent.getStringExtra(KEY_ROOM_ID)?.let {
-                    notificationDrawerManager.clearMemberShipNotificationForRoom(it)
-                    handleRejectRoom(it)
+                intent.getStringExtra(KEY_ROOM_ID)?.let { roomId ->
+                    notificationDrawerManager.updateEvents { it.clearMemberShipNotificationForRoom(roomId) }
+                    handleRejectRoom(roomId)
                 }
             }
         }

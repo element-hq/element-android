@@ -479,7 +479,7 @@ class RoomListFragment @Inject constructor(
     }
 
     override fun onAcceptRoomInvitation(room: RoomSummary) {
-        notificationDrawerManager.clearMemberShipNotificationForRoom(room.roomId)
+        notificationDrawerManager.updateEvents { it.clearMemberShipNotificationForRoom(room.roomId) }
         roomListViewModel.handle(RoomListAction.AcceptInvitation(room))
     }
 
@@ -492,7 +492,7 @@ class RoomListFragment @Inject constructor(
     }
 
     override fun onRejectRoomInvitation(room: RoomSummary) {
-        notificationDrawerManager.clearMemberShipNotificationForRoom(room.roomId)
+        notificationDrawerManager.updateEvents { it.clearMemberShipNotificationForRoom(room.roomId) }
         roomListViewModel.handle(RoomListAction.RejectInvitation(room))
     }
 }

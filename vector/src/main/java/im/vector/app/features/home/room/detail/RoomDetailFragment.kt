@@ -2099,12 +2099,12 @@ class RoomDetailFragment @Inject constructor(
 // VectorInviteView.Callback
 
     override fun onAcceptInvite() {
-        notificationDrawerManager.clearMemberShipNotificationForRoom(roomDetailArgs.roomId)
+        notificationDrawerManager.updateEvents { it.clearMemberShipNotificationForRoom(roomDetailArgs.roomId) }
         roomDetailViewModel.handle(RoomDetailAction.AcceptInvite)
     }
 
     override fun onRejectInvite() {
-        notificationDrawerManager.clearMemberShipNotificationForRoom(roomDetailArgs.roomId)
+        notificationDrawerManager.updateEvents { it.clearMemberShipNotificationForRoom(roomDetailArgs.roomId) }
         roomDetailViewModel.handle(RoomDetailAction.RejectInvite)
     }
 
