@@ -46,36 +46,11 @@ class NotificationEventQueue(
         }
     }
 
-    private fun MutableList<NotifiableEvent>.replace(eventId: String, block: (NotifiableEvent) -> NotifiableEvent) {
-        val indexToReplace = indexOfFirst { it.eventId == eventId }
-        if (indexToReplace == -1) {
-            return
-        }
-        set(indexToReplace, block(get(indexToReplace)))
-    }
-
     fun isEmpty() = queue.isEmpty()
 
     fun clearAndAdd(events: List<NotifiableEvent>) {
         queue.clear()
         queue.addAll(events)
-    }
-
-    fun findExistingById(notifiableEvent: NotifiableEvent): NotifiableEvent? {
-        return queue.firstOrNull { it.eventId == notifiableEvent.eventId }
-    }
-
-    fun findEdited(notifiableEvent: NotifiableEvent): NotifiableEvent? {
-        return notifiableEvent.editedEventId?.let { editedId ->
-            queue.firstOrNull {
-                it.eventId == editedId || it.editedEventId == editedId
-            }
-        }
-    }
-
-    fun replace(replace: NotifiableEvent, with: NotifiableEvent) {
-        queue.remove(replace)
-        queue.add(with)
     }
 
     fun clear() {
@@ -116,6 +91,22 @@ class NotificationEventQueue(
         }
     }
 
+    private fun findExistingById(notifiableEvent: NotifiableEvent): NotifiableEvent? {
+        return queue.firstOrNull { it.eventId == notifiableEvent.eventId }
+    }
+
+    private fun findEdited(notifiableEvent: NotifiableEvent): NotifiableEvent? {
+        return notifiableEvent.editedEventId?.let { editedId ->
+            queue.firstOrNull {
+                it.eventId == editedId || it.editedEventId == editedId
+            }
+        }
+    }
+
+    private fun replace(replace: NotifiableEvent, with: NotifiableEvent) {
+        queue.remove(replace)
+        queue.add(with)
+    }
 
     fun clearMemberShipNotificationForRoom(roomId: String) {
         Timber.v("clearMemberShipOfRoom $roomId")
@@ -128,4 +119,12 @@ class NotificationEventQueue(
     }
 
     fun rawEvents(): List<NotifiableEvent> = queue
+}
+
+private fun MutableList<NotifiableEvent>.replace(eventId: String, block: (NotifiableEvent) -> NotifiableEvent) {
+    val indexToReplace = indexOfFirst { it.eventId == eventId }
+    if (indexToReplace == -1) {
+        return
+    }
+    set(indexToReplace, block(get(indexToReplace)))
 }
