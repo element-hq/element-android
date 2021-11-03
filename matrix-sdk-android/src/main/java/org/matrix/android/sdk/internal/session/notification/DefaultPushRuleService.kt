@@ -41,6 +41,7 @@ import org.matrix.android.sdk.internal.session.pushers.UpdatePushRuleActionsTask
 import org.matrix.android.sdk.internal.session.pushers.UpdatePushRuleEnableStatusTask
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.task.configureWith
+import timber.log.Timber
 import javax.inject.Inject
 
 @SessionScope
@@ -160,7 +161,11 @@ internal class DefaultPushRuleService @Inject constructor(
     fun dispatchEvents(pushEvents: PushEvents) {
         synchronized(listeners) {
             listeners.forEach {
-                it.onEvents(pushEvents)
+                try {
+                    it.onEvents(pushEvents)
+                } catch (e: Throwable) {
+                    Timber.e(e, "Error while dispatching push events")
+                }
             }
         }
     }
