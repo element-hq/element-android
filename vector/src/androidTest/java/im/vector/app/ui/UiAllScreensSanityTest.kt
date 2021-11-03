@@ -83,6 +83,7 @@ class UiAllScreensSanityTest {
     // 2021-04-08 Testing 429 change
     @Test
     fun allScreensTest() {
+        uiTestBase.enableDeveloperMode()
         // Create an account
         val userId = "UiTest_" + UUID.randomUUID().toString()
         uiTestBase.createAccount(userId = userId)
@@ -211,6 +212,14 @@ class UiAllScreensSanityTest {
     private fun longClickOnMessageTest() {
         // Test quick reaction
         longClickOnMessage()
+
+        // Check View Source library
+        clickOn(R.string.view_source)
+        sleep(1000)
+        pressBack()
+
+        longClickOnMessage()
+
         // Add quick reaction
         clickOn("\uD83D\uDC4D️") // 👍
 
