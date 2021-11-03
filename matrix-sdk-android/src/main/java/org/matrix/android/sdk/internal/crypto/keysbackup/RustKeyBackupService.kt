@@ -812,7 +812,7 @@ internal class RustKeyBackupService @Inject constructor(
      * Send a chunk of keys to backup
      */
     @UiThread
-    private suspend fun backupKeys() {
+    private suspend fun backupKeys(forceRecheck: Boolean = false) {
         Timber.v("backupKeys")
 
         // Sanity check, as this method can be called after a delay, the state may have change during the delay
@@ -824,7 +824,7 @@ internal class RustKeyBackupService @Inject constructor(
             return
         }
 
-        if (state === KeysBackupState.BackingUp) {
+        if (state === KeysBackupState.BackingUp && !forceRecheck) {
             // Do nothing if we are already backing up
             Timber.v("backupKeys: Invalid state: $state")
             return
@@ -856,7 +856,7 @@ internal class RustKeyBackupService @Inject constructor(
 
                     // TODO, again is this correct?
                     withContext(Dispatchers.Main) {
-                        backupKeys()
+                        backupKeys(true)
                     }
                 } else {
                     // Can't happen, do we want to panic?
