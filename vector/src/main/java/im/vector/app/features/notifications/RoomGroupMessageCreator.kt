@@ -19,6 +19,7 @@ package im.vector.app.features.notifications
 import android.content.Context
 import android.graphics.Bitmap
 import android.os.Build
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.Person
 import androidx.core.content.pm.ShortcutInfoCompat
@@ -103,6 +104,7 @@ class RoomGroupMessageCreator @Inject constructor(
 
     private fun NotificationCompat.MessagingStyle.addMessagesFromEvents(events: List<NotifiableMessageEvent>) {
         events.forEach { event ->
+            Log.e("!!!", "event: $event")
             val senderPerson = if (event.outGoingMessage) {
                 null
             } else {
@@ -114,7 +116,14 @@ class RoomGroupMessageCreator @Inject constructor(
             }
             when {
                 event.isSmartReplyError() -> addMessage(stringProvider.getString(R.string.notification_inline_reply_failed), event.timestamp, senderPerson)
-                else                      -> addMessage(event.body, event.timestamp, senderPerson)
+                else                      -> {
+                    val message = NotificationCompat.MessagingStyle.Message(event.body, event.timestamp, senderPerson).also { message ->
+                        event.imageUri?.let {
+                            message.setData("image/", it)
+                        }
+                    }
+                    addMessage(message)
+                }
             }
         }
     }
