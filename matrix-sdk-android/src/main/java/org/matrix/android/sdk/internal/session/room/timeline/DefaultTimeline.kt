@@ -29,7 +29,6 @@ import kotlinx.coroutines.withContext
 import okhttp3.internal.closeQuietly
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
-import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.internal.database.mapper.TimelineEventMapper
 import org.matrix.android.sdk.internal.session.room.membership.LoadRoomMembersTask
 import org.matrix.android.sdk.internal.session.sync.handler.room.ReadReceiptHandler
@@ -81,7 +80,7 @@ internal class DefaultTimeline internal constructor(private val roomId: String,
             onNewTimelineEvents = this::onNewTimelineEvents
     )
 
-    private var strategy: LoadTimelineStrategy = buildStrategy(LoadTimelineStrategy.Mode.Default)
+    private var strategy: LoadTimelineStrategy = buildStrategy(LoadTimelineStrategy.Mode.Live)
 
     override val isLive: Boolean
         get() = !getPaginationState(Timeline.Direction.FORWARDS).hasMoreToLoad
@@ -191,7 +190,7 @@ internal class DefaultTimeline internal constructor(private val roomId: String,
         }
         strategy.onStop()
         strategy = if (eventId == null) {
-            buildStrategy(LoadTimelineStrategy.Mode.Default)
+            buildStrategy(LoadTimelineStrategy.Mode.Live)
         } else {
             buildStrategy(LoadTimelineStrategy.Mode.Permalink(eventId))
         }

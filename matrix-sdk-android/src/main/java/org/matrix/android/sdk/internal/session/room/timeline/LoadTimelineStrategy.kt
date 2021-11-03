@@ -33,11 +33,14 @@ import java.util.concurrent.atomic.AtomicReference
 
 /**
  * This class is responsible for keeping an instance of chunkEntity and timelineChunk according to the strategy.
- * There is 2 different mode: Default and Permalink.
- * In Default, we will query for the live chunk (isLastForward = true).
+ * There is 2 different mode: Live and Permalink.
+ * In Live, we will query for the live chunk (isLastForward = true).
  * In Permalink, we will query for the chunk including the eventId we are looking for.
  * Once we got a ChunkEntity we wrap it with TimelineChunk class so we dispatch any methods for loading data.
  */
+
+private const val INITIAL_LOAD_COUNT = 30L
+
 internal class LoadTimelineStrategy(
         private val roomId: String,
         private val timelineId: String,
@@ -45,7 +48,7 @@ internal class LoadTimelineStrategy(
         private val dependencies: Dependencies) {
 
     sealed class Mode {
-        object Default : Mode()
+        object Live : Mode()
         data class Permalink(val originEventId: String) : Mode()
 
         fun originEventId(): String? {
@@ -109,7 +112,7 @@ internal class LoadTimelineStrategy(
 
         override fun onNewTimelineEvents(roomId: String, eventIds: List<String>) {
             super.onNewTimelineEvents(roomId, eventIds)
-            if (mode == Mode.Default && roomId == this@LoadTimelineStrategy.roomId) {
+            if (mode == Mode.Live && roomId == this@LoadTimelineStrategy.roomId) {
                 dependencies.onNewTimelineEvents(eventIds)
             }
         }
@@ -133,8 +136,8 @@ internal class LoadTimelineStrategy(
             it.addChangeListener(chunkEntityListener)
             timelineChunk = it.createTimelineChunk()
         }
-        if (mode is Mode.Default) {
-            loadMore(10, Timeline.Direction.BACKWARDS)
+        if (mode is Mode.Live) {
+            loadMore(INITIAL_LOAD_COUNT, Timeline.Direction.BACKWARDS)
         }
     }
 
