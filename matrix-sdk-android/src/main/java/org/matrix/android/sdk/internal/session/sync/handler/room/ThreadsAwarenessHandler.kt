@@ -138,6 +138,9 @@ internal class ThreadsAwarenessHandler @Inject constructor(
                 })
     }
 
+    /**
+     * Handle events mainly coming from the RoomSyncHandler
+     */
     fun handleIfNeeded(realm: Realm,
                        roomId: String,
                        event: Event) {
@@ -150,6 +153,9 @@ internal class ThreadsAwarenessHandler @Inject constructor(
         event.mxDecryptionResult = event.mxDecryptionResult?.copy(payload = payload)
     }
 
+    /**
+     * Handle events while they are being decrypted
+     */
     fun handleIfNeededDuringDecryption(realm: Realm,
                                        roomId: String?,
                                        event: Event,
@@ -236,9 +242,17 @@ internal class ThreadsAwarenessHandler @Inject constructor(
         return EventMapper.map(eventEntity)
     }
 
+    /**
+     * Returns True if the event is a thread
+     * @param event
+     */
     private fun isThreadEvent(event: Event): Boolean =
             event.content.toModel<MessageRelationContent>()?.relatesTo?.type == "io.element.thread"
 
+    /**
+     * Returns the root thread eventId or null otherwise
+     * @param event
+     */
     private fun getRootThreadEventId(event: Event): String? =
             event.content.toModel<MessageRelationContent>()?.relatesTo?.eventId
 
