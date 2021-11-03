@@ -160,5 +160,8 @@
     <!-- Home drawer -->
     <string name="template_tchap_invite_to">Inviter à rejoindre ${app_name}</string>
 
+    <!-- Settings -->
+    <string name="tchap_settings_change_pwd_caution">Changer le mot de passe réinitialise les clés de chiffrement sur tous les appareils, rendant l’historique des discussions illisible : pensez d’abord à sauvegarder vos clés sur l’ensemble de vos sessions pour pouvoir les récupérer après le changement de mot de passe.</string>
+
     <string name="tchap_dialog_user_consent_homeserver_name">Tchap</string>
 </resources>

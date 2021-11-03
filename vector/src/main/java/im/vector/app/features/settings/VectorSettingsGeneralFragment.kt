@@ -34,6 +34,7 @@ import androidx.preference.SwitchPreference
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.cache.DiskCache
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import fr.gouv.tchap.features.settings.TchapSettingsChangePasswordPreDialog
 import im.vector.app.R
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
 import im.vector.app.core.extensions.hideKeyboard
@@ -51,6 +52,7 @@ import im.vector.app.core.utils.toast
 import im.vector.app.databinding.DialogChangePasswordBinding
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
+import im.vector.app.features.crypto.keys.KeysExporter
 import im.vector.app.features.discovery.DiscoverySettingsFragment
 import im.vector.app.features.navigation.SettingsActivityPayload
 import im.vector.app.features.workers.signout.SignOutUiWorker
@@ -72,6 +74,7 @@ import java.util.UUID
 import javax.inject.Inject
 
 class VectorSettingsGeneralFragment @Inject constructor(
+        private val keysExporter: KeysExporter,
         colorProvider: ColorProvider
 ) :
         VectorSettingsBaseFragment(),
@@ -450,7 +453,29 @@ class VectorSettingsGeneralFragment @Inject constructor(
                     }
                 }
             }
-            dialog.show()
+
+            TchapSettingsChangePasswordPreDialog(session)
+                    .apply {
+                        listener = object : TchapSettingsChangePasswordPreDialog.InteractionListener {
+                            override fun changePassword() {
+                                dialog.show()
+                            }
+
+                            override fun exportKeys(passphrase: String, uri: Uri) {
+                                showLoadingView(true)
+                                lifecycleScope.launch {
+                                    try {
+                                        keysExporter.export(passphrase, uri)
+                                        requireActivity().toast(getString(R.string.encryption_exported_successfully))
+                                    } catch (failure: Throwable) {
+                                        requireActivity().toast(errorFormatter.toHumanReadable(failure))
+                                    }
+                                    showLoadingView(false)
+                                }
+                            }
+                        }
+                    }
+                    .show(activity.supportFragmentManager, "changePasswordPreDialog")
         }
     }
 
