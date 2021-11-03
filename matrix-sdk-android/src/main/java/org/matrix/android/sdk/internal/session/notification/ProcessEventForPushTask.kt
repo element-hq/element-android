@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.internal.session.notification
 
+import org.matrix.android.sdk.api.pushrules.PushEvents
 import org.matrix.android.sdk.api.pushrules.rest.PushRule
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.isInvitation
@@ -39,14 +40,6 @@ internal class DefaultProcessEventForPushTask @Inject constructor(
 ) : ProcessEventForPushTask {
 
     override suspend fun execute(params: ProcessEventForPushTask.Params) {
-        // Handle left rooms
-        params.syncResponse.leave.keys.forEach {
-            defaultPushRuleService.dispatchRoomLeft(it)
-        }
-        // Handle joined rooms
-        params.syncResponse.join.keys.forEach {
-            defaultPushRuleService.dispatchRoomJoined(it)
-        }
         val newJoinEvents = params.syncResponse.join
                 .mapNotNull { (key, value) ->
                     value.timeline?.events?.mapNotNull {
@@ -74,10 +67,10 @@ internal class DefaultProcessEventForPushTask @Inject constructor(
         }
         Timber.v("[PushRules] Found ${allEvents.size} out of ${(newJoinEvents + inviteEvents).size}" +
                 " to check for push rules with ${params.rules.size} rules")
-        allEvents.forEach { event ->
+        val matchedEvents = allEvents.mapNotNull { event ->
             pushRuleFinder.fulfilledBingRule(event, params.rules)?.let {
                 Timber.v("[PushRules] Rule $it match for event ${event.eventId}")
-                defaultPushRuleService.dispatchBing(event, it)
+                event to it
             }
         }
 
@@ -91,10 +84,13 @@ internal class DefaultProcessEventForPushTask @Inject constructor(
 
         Timber.v("[PushRules] Found ${allRedactedEvents.size} redacted events")
 
-        allRedactedEvents.forEach { redactedEventId ->
-            defaultPushRuleService.dispatchRedactedEventId(redactedEventId)
-        }
-
-        defaultPushRuleService.dispatchFinish()
+        defaultPushRuleService.dispatchEvents(
+                PushEvents(
+                        matchedEvents = matchedEvents,
+                        roomsJoined = params.syncResponse.join.keys,
+                        roomsLeft = params.syncResponse.leave.keys,
+                        redactedEventIds = allRedactedEvents
+                )
+        )
     }
 }
