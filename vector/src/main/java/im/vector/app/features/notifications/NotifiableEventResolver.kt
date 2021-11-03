@@ -208,11 +208,15 @@ class NotifiableEventResolver @Inject constructor(
     }
 
     private suspend fun TimelineEvent.downloadAndExportImage(session: Session): Uri? {
-        return getLastMessageContent()?.takeAs<MessageWithAttachmentContent>()?.let { imageMessage ->
-            val fileService = session.fileService()
-            fileService.downloadFile(imageMessage)
-            fileService.getTemporarySharableURI(imageMessage)
-        }
+        return kotlin.runCatching {
+            getLastMessageContent()?.takeAs<MessageWithAttachmentContent>()?.let { imageMessage ->
+                val fileService = session.fileService()
+                fileService.downloadFile(imageMessage)
+                fileService.getTemporarySharableURI(imageMessage)
+            }
+        }.onFailure {
+            Timber.e(it, "Failed to download and export image for notification")
+        }.getOrNull()
     }
 
     private fun resolveStateRoomEvent(event: Event, session: Session, canBeReplaced: Boolean, isNoisy: Boolean): NotifiableEvent? {
