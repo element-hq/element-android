@@ -44,16 +44,12 @@ class PushRuleTriggerListener @Inject constructor(
                     null
                 }
             }.forEach { notificationDrawerManager.onNotifiableEventReceived(it) }
-            pushEvents.roomsLeft.forEach { roomId ->
-                notificationDrawerManager.clearMessageEventOfRoom(roomId)
-                notificationDrawerManager.clearMemberShipNotificationForRoom(roomId)
+
+            notificationDrawerManager.updateEvents { queuedEvents ->
+                queuedEvents.syncRoomEvents(roomsLeft = pushEvents.roomsLeft, roomsJoined = pushEvents.roomsJoined)
+                queuedEvents.markRedacted(pushEvents.redactedEventIds)
             }
-            pushEvents.roomsJoined.forEach { roomId ->
-                notificationDrawerManager.clearMemberShipNotificationForRoom(roomId)
-            }
-            pushEvents.redactedEventIds.forEach {
-                notificationDrawerManager.onEventRedacted(it)
-            }
+
             notificationDrawerManager.refreshNotificationDrawer()
         } ?: Timber.e("Called without active session")
     }
