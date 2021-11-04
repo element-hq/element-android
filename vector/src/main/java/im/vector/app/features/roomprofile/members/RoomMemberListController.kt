@@ -93,7 +93,7 @@ class RoomMemberListController @Inject constructor(
 
             filteredRoomMemberList.join(
                     each = { _, roomMember ->
-                        buildPresence(roomMember, powerLevelCategory, host, data, roomMember.userPresence)
+                        buildRoomMember(roomMember, powerLevelCategory, host, data, roomMember.userPresence)
                     },
                     between = { _, roomMemberBefore ->
                         dividerItem {
@@ -122,12 +122,11 @@ class RoomMemberListController @Inject constructor(
         }
     }
 
-    private fun buildPresence(roomMember: RoomMemberSummary,
-                              powerLevelCategory: RoomMemberListCategories,
-                              host: RoomMemberListController,
-                              data: RoomMemberListViewState,
-                              userPresence: UserPresence?
-    ) {
+    private fun buildRoomMember(roomMember: RoomMemberSummary,
+                                powerLevelCategory: RoomMemberListCategories,
+                                host: RoomMemberListController,
+                                data: RoomMemberListViewState,
+                                userPresence: UserPresence?) {
         val powerLabel = stringProvider.getString(powerLevelCategory.titleRes)
 
         profileMatrixItemWithPowerLevelWithPresence {
