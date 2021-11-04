@@ -148,7 +148,8 @@
     <string name="initial_sync_start_importing_account_invited_rooms">Початкова синхронізація:
 \nІмпортування запрошень до кімнат</string>
     <string name="initial_sync_start_importing_account_joined_rooms">Початкова синхронізація:
-\nІмпортування кімнат, до яких ви приєдналися</string>
+\nЗавантаження ваших бесід
+\nЯкщо ви приєдналися до багатьох кімнат, це може тривати досить довго</string>
     <string name="initial_sync_start_importing_account_rooms">Початкова синхронізація:
 \nІмпортування кімнат</string>
     <string name="initial_sync_start_importing_account_crypto">Початкова синхронізація:
