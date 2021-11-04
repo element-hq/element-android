@@ -1641,4 +1641,8 @@
     <string name="space_participants_kick_prompt_msg">hành động của bạn sẽ xóa họ khỏi không gian này.
 \n
 \nTrong trường hợp không muốn họ quay lại, bạn nên cấm họ tham gia lần nữa.</string>
+    <string name="room_settings_addresses_invalid_format_dialog_body">\'%s\' không phải là định dạng phù hợp</string>
+    <string name="room_settings_addresses_invalid_format_dialog_title">Định dạng không phù hợp</string>
+    <string name="room_settings_invalid_group_format_dialog_body">\'%s\' không phải là một ID cộng đồng hợp lệ</string>
+    <string name="room_settings_invalid_group_format_dialog_title">ID cộng đồng không hợp lệ</string>
 </resources>
