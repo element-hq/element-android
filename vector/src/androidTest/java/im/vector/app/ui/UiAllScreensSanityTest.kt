@@ -37,7 +37,6 @@ import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.longClickOn
 import com.adevinta.android.barista.interaction.BaristaDialogInteractions.clickDialogNegativeButton
 import com.adevinta.android.barista.interaction.BaristaDialogInteractions.clickDialogPositiveButton
-import com.adevinta.android.barista.interaction.BaristaDrawerInteractions.openDrawer
 import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
 import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem
 import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild
@@ -57,6 +56,7 @@ import im.vector.app.features.home.room.detail.RoomDetailActivity
 import im.vector.app.features.login.LoginActivity
 import im.vector.app.features.roomdirectory.RoomDirectoryActivity
 import im.vector.app.initialSyncIdlingResource
+import im.vector.app.ui.robot.ElementRobot
 import im.vector.app.waitForView
 import im.vector.app.withIdlingResource
 import org.junit.Rule
@@ -76,6 +76,7 @@ class UiAllScreensSanityTest {
     val activityRule = ActivityScenarioRule(MainActivity::class.java)
 
     private val uiTestBase = UiTestBase()
+    private val appRobot = ElementRobot()
 
     // Last passing:
     // 2020-11-09
@@ -368,44 +369,17 @@ class UiAllScreensSanityTest {
     }
 
     private fun navigateToSettings() {
-        // clickOn(R.id.groupToolbarAvatarImageView)
-        openDrawer()
-        clickOn(R.id.homeDrawerHeaderSettingsView)
-
-        clickOn(R.string.settings_general_title)
-        navigateToSettingsGeneral()
-        pressBack()
-
-        clickOn(R.string.settings_notifications)
-        navigateToSettingsNotifications()
-        pressBack()
-
-        clickOn(R.string.settings_preferences)
-        navigateToSettingsPreferences()
-        pressBack()
-
-        clickOn(R.string.preference_voice_and_video)
-        pressBack()
-
-        clickOn(R.string.settings_ignored_users)
-        pressBack()
-
-        clickOn(R.string.settings_security_and_privacy)
-        navigateToSettingsSecurity()
-        pressBack()
-
-        clickOn(R.string.room_settings_labs_pref_title)
-        pressBack()
-
-        clickOn(R.string.settings_advanced_settings)
-        navigateToSettingsAdvanced()
-        pressBack()
-
-        clickOn(R.string.preference_root_help_about)
-        navigateToSettingsHelp()
-        pressBack()
-
-        pressBack()
+        appRobot.openSettings {
+            openGeneral { navigateToSettingsGeneral() }
+            openNotifications { navigateToSettingsNotifications() }
+            openPreferences { navigateToSettingsPreferences() }
+            openVoiceAndVideo {}
+            openIgnoredUsers {}
+            openSecurityAndPrivacy { navigateToSettingsSecurity() }
+            openLabs { }
+            openAdvancedSettings { navigateToSettingsAdvanced() }
+            openHelpAbout { navigateToSettingsHelp() }
+        }
     }
 
     private fun navigateToSettingsHelp() {
@@ -521,3 +495,4 @@ class UiAllScreensSanityTest {
         pressBack()
     }
 }
+
