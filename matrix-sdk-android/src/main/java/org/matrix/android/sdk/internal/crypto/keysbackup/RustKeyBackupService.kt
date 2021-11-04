@@ -168,7 +168,7 @@ internal class RustKeyBackupService @Inject constructor(
                 // Reset backup markers.
                 // Don't we need to join the task here? Isn't this a race condition?
                 cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
-                    // TODO reset our backup state here, i.e. the `backed_up` flag on inbound group sessions
+                    olmMachine.disableBackup()
                 }
 
                 val keyBackupVersion = KeysVersionResult(
@@ -213,18 +213,7 @@ internal class RustKeyBackupService @Inject constructor(
      */
     private fun resetKeysBackupData() {
         resetBackupAllGroupSessionsListeners()
-
-        /*
-
-        TODO reset data on the rust side
-        cryptoStore.setKeyBackupVersion(null)
-        cryptoStore.setKeysBackupData(null)
-        backupOlmPkEncryption?.releaseEncryption()
-        backupOlmPkEncryption = null
-
-        // Reset backup markers
-        cryptoStore.resetBackupMarkers()
-        */
+        olmMachine.disableBackup()
     }
 
     override fun deleteBackup(version: String, callback: MatrixCallback<Unit>?) {

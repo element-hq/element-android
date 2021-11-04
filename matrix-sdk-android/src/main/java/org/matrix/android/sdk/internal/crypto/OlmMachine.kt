@@ -796,20 +796,28 @@ internal class OlmMachine(
         }
     }
 
+    @Throws(CryptoStoreException::class)
+    fun disableBackup() {
+        inner.disableBackup()
+    }
+
     fun backupEnabled(): Boolean {
         return inner.backupEnabled()
     }
 
+    @Throws(CryptoStoreException::class)
     fun roomKeyCounts(): RoomKeyCounts {
         // TODO convert this to a suspendable method
         return inner.roomKeyCounts()
     }
 
+    @Throws(CryptoStoreException::class)
     fun getBackupKeys(): BackupKeys? {
         // TODO this needs to be suspendable
         return inner.getBackupKeys()
     }
 
+    @Throws(CryptoStoreException::class)
     fun saveRecoveryKey(key: String?, version: String?) {
         // TODO convert this to a suspendable method
         inner.saveRecoveryKey(key, version)
