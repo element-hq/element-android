@@ -1916,7 +1916,7 @@
         <item quantity="few">%1$d osoby</item>
         <item quantity="other">%1$d osob</item>
     </plurals>
-    <string name="room_profile_section_more_uploads">Nahrání</string>
+    <string name="room_profile_section_more_uploads">Nahrané</string>
     <string name="room_profile_section_more_leave">Opustit místnost</string>
     <string name="room_profile_leaving_room">Opouštím místnost…</string>
     <string name="room_member_power_level_admins">Správci</string>
