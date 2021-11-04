@@ -76,5 +76,6 @@ fun aNotifiableMessageEvent(
         roomName = "room-name",
         roomIsDirect = false,
         canBeReplaced = false,
-        isRedacted = isRedacted
+        isRedacted = isRedacted,
+        imageUri = null
 )
