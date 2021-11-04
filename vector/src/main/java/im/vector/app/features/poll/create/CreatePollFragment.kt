@@ -34,7 +34,6 @@ import javax.inject.Inject
 @Parcelize
 data class CreatePollArgs(
         val roomId: String,
-        val minOptionsCount: Int
 ) : Parcelable
 
 class CreatePollFragment @Inject constructor(

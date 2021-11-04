@@ -504,7 +504,7 @@ class DefaultNavigator @Inject constructor(
     override fun openCreatePoll(context: Context, roomId: String) {
         val intent = CreatePollActivity.getIntent(
                 context,
-                CreatePollArgs(roomId = roomId, minOptionsCount = CreatePollViewModel.MIN_OPTIONS_COUNT)
+                CreatePollArgs(roomId = roomId)
         )
         context.startActivity(intent)
     }
