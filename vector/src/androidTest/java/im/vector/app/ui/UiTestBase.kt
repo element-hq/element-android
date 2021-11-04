@@ -29,8 +29,10 @@ import im.vector.app.R
 import im.vector.app.espresso.tools.waitUntilActivityVisible
 import im.vector.app.features.home.HomeActivity
 import im.vector.app.waitForView
+import java.lang.Thread.sleep
 
 class UiTestBase {
+
     fun createAccount(userId: String, password: String = "password", homeServerUrl: String = "http://10.0.2.2:8080") {
         initSession(true, userId, password, homeServerUrl)
     }
@@ -52,6 +54,7 @@ class UiTestBase {
         writeTo(R.id.loginServerUrlFormHomeServerUrl, homeServerUrl)
         assertEnabled(R.id.loginServerUrlFormSubmit)
         closeSoftKeyboard()
+        sleep(500)
         clickOn(R.id.loginServerUrlFormSubmit)
         onView(isRoot()).perform(waitForView(withId(R.id.loginSignupSigninSubmit)))
 
@@ -75,6 +78,7 @@ class UiTestBase {
         assertEnabled(R.id.loginSubmit)
 
         closeSoftKeyboard()
+        sleep(500)
         clickOn(R.id.loginSubmit)
 
         // Wait
