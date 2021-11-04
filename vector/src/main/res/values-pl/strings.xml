@@ -2809,4 +2809,5 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="notice_direct_room_leave_with_reason">%1$s wyszedł. Powód: %2$s</string>
     <string name="notice_room_leave_with_reason_by_you">Opuściłeś/aś pokój. Powód: %1$s</string>
     <string name="notice_room_leave_with_reason">%1$s opuścił/a pokój. Powód: %2$s</string>
+    <string name="audio_video_meeting_description">Spotkania wykorzystują polityki bezpieczeństwa i uprawnień Jitsi. Wszystkie osoby obecne w danej chwili w pokoju zobaczą zaproszenie do dołączenia w momencie rozpoczęcia spotkania.</string>
 </resources>
