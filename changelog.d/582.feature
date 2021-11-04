@@ -1,1 +1,0 @@
-Adding the room name to the invitation notification (if the room summary is available)
