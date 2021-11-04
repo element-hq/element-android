@@ -47,7 +47,7 @@ class RoomThreadDetailFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initTextComposer()
-        views.testTextVeiwddasda.text = "${roomThreadDetailArgs.eventId}  --  ${roomThreadDetailArgs.roomId}"
+//        views.testTextVeiwddasda.text = "${roomThreadDetailArgs.eventId}  --  ${roomThreadDetailArgs.roomId}"
     }
 
     private fun initTextComposer(){

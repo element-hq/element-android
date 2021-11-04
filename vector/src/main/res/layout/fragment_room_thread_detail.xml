@@ -6,12 +6,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/testTextVeiwddasda"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/room_threads_filter"
-        android:textSize="25sp"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/roomThreadDetailRecyclerView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:overScrollMode="always"
         app:layout_constraintBottom_toTopOf="@id/roomThreadDetailTextComposerView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

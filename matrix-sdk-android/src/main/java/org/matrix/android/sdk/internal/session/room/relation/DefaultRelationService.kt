@@ -56,7 +56,7 @@ internal class DefaultRelationService @AssistedInject constructor(
         private val timelineEventMapper: TimelineEventMapper,
         @SessionDatabase private val monarchy: Monarchy,
         private val taskExecutor: TaskExecutor) :
-    RelationService {
+        RelationService {
 
     @AssistedFactory
     interface Factory {
@@ -161,6 +161,9 @@ internal class DefaultRelationService @AssistedInject constructor(
 
     override fun replyInThread(eventToReplyInThread: TimelineEvent, replyInThreadText: CharSequence, autoMarkdown: Boolean): Cancelable? {
         val event = eventFactory.createThreadTextEvent(eventToReplyInThread, TextContent(replyInThreadText.toString()))
+                .also {
+                    saveLocalEcho(it)
+                }
         return eventSenderProcessor.postEvent(event, cryptoSessionInfoProvider.isRoomEncrypted(roomId))
     }
 
