@@ -1614,7 +1614,7 @@
     <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">Một hoặc nhiều phép thử đã thất bại, vui lòng gửi một bản báo cáo lỗi để giúp chúng tôi điều tra.</string>
     <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">Một hoặc nhiều phép thử đã thất bại, hãy thử (các) phương pháp được đề xuất sau.</string>
     <string name="settings_troubleshoot_diagnostic_success_status">Kết quả phân tích cơ bản là OK. Nếu bạn vẫn không thể nhận thông báo, vui lòng gửi cho chúng tôi một bản báo cáo lỗi để giúp chúng tôi điều tra.</string>
-    <string name="settings_troubleshoot_diagnostic_running_status">Đang chạy... (%1$d of %2$d)</string>
+    <string name="settings_troubleshoot_diagnostic_running_status">Đang chạy… (%1$d of %2$d)</string>
     <string name="settings_troubleshoot_diagnostic_run_button_title">Chạy thử</string>
     <string name="settings_troubleshoot_diagnostic">Chuẩn đoán khắc phục sự cố</string>
     <string name="settings_notification_emails_enable_for_email">Bật thông báo qua email cho %s</string>
