@@ -1330,4 +1330,10 @@
     <string name="keys_backup_setup_step2_text_title">أمّن النسخ الاختياطي بعبارة مرور.</string>
     <string name="keys_backup_setup_step1_manual_export">تصدير المفاتيح يدويًا</string>
     <string name="keys_backup_setup_step1_advanced">(متقدم)</string>
+    <string name="send_bug_report_include_key_share_history">أرسل سجل طلبات مشاركة المفاتيح</string>
+    <string name="audio_meeting">ابدأ مقابلة صوتية</string>
+    <string name="video_meeting">ابدأ مقابلة فيديو</string>
+    <string name="notice_end_to_end_unknown_algorithm">%1$s فعّل تشفير طرف لطرف (لم يُتعرف على خوارزمية %2$s).</string>
+    <string name="notice_end_to_end_ok_by_you">عطلتّ تشفير طرف لطرف.</string>
+    <string name="notice_end_to_end_ok">%1$s فعّل تشفير طرف لطرف.</string>
 </resources>

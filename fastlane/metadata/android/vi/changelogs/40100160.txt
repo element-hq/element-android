@@ -1,0 +1,2 @@
+Những thay đổi chính trong phiên bản này: hỗ trợ đăng nhập từ mạng xã hội.
+Log thay đổi đầy đủ: https://github.com/vector-im/element-android/releases/tag/v1.0.15 và https://github.com/vector-im/element-android/releases/tag/v1.0.16
