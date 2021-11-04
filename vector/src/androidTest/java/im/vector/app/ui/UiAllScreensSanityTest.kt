@@ -48,7 +48,6 @@ import im.vector.app.SleepViewAction
 import im.vector.app.activityIdlingResource
 import im.vector.app.espresso.tools.waitUntilActivityVisible
 import im.vector.app.features.MainActivity
-import im.vector.app.features.createdirect.CreateDirectRoomActivity
 import im.vector.app.features.home.HomeActivity
 import im.vector.app.features.home.room.detail.RoomDetailActivity
 import im.vector.app.features.login.LoginActivity
@@ -74,7 +73,7 @@ class UiAllScreensSanityTest {
     val activityRule = ActivityScenarioRule(MainActivity::class.java)
 
     private val uiTestBase = UiTestBase()
-    private val appRobot = ElementRobot()
+    private val elementRobot = ElementRobot()
 
     // Last passing:
     // 2020-11-09
@@ -101,7 +100,7 @@ class UiAllScreensSanityTest {
         assertDisplayed(R.id.bottomNavigationView)
 
         // Settings
-        appRobot.settings {
+        elementRobot.settings {
             general { crawl() }
             notifications { crawl() }
             preferences { crawl() }
@@ -113,9 +112,10 @@ class UiAllScreensSanityTest {
             helpAndAbout { crawl() }
         }
 
-        // Create DM
-        clickOn(R.id.bottom_action_people)
-        createDm()
+        elementRobot.newDirectMessage {
+            verifyQrCodeButton()
+            verifyInviteFriendsButton()
+        }
 
         // Create Room
         // First navigate to the other tab
@@ -359,21 +359,6 @@ class UiAllScreensSanityTest {
         clickDialogNegativeButton()
         sleep(1000)
         clickBack()
-    }
-
-    private fun createDm() {
-        clickOn(R.id.createChatRoomButton)
-
-        withIdlingResource(activityIdlingResource(CreateDirectRoomActivity::class.java)) {
-            onView(withId(R.id.userListRecyclerView))
-                    .perform(waitForView(withText(R.string.qr_code)))
-            onView(withId(R.id.userListRecyclerView))
-                    .perform(waitForView(withText(R.string.invite_friends)))
-        }
-
-        closeSoftKeyboard()
-        pressBack()
-        pressBack()
     }
 }
 

@@ -16,10 +16,14 @@
 
 package im.vector.app.ui.robot
 
-import androidx.test.espresso.Espresso
+import androidx.test.espresso.Espresso.pressBack
+import androidx.test.espresso.action.ViewActions
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import com.adevinta.android.barista.interaction.BaristaDrawerInteractions.openDrawer
 import im.vector.app.R
+import im.vector.app.activityIdlingResource
+import im.vector.app.features.createdirect.CreateDirectRoomActivity
+import im.vector.app.withIdlingResource
 
 class ElementRobot {
 
@@ -27,6 +31,16 @@ class ElementRobot {
         openDrawer()
         clickOn(R.id.homeDrawerHeaderSettingsView)
         block(SettingsRobot())
-        Espresso.pressBack()
+        pressBack()
+    }
+
+    fun newDirectMessage(block: NewDirectMessageRobot.() -> Unit) {
+        clickOn(R.id.bottom_action_people)
+        clickOn(R.id.createChatRoomButton)
+        ViewActions.closeSoftKeyboard()
+        withIdlingResource(activityIdlingResource(CreateDirectRoomActivity::class.java)) {
+            block(NewDirectMessageRobot())
+        }
+        pressBack()
     }
 }
