@@ -22,6 +22,7 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.Event
+import org.matrix.android.sdk.api.session.events.model.RelationType
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.message.MessageFormat
@@ -247,7 +248,7 @@ internal class ThreadsAwarenessHandler @Inject constructor(
      * @param event
      */
     private fun isThreadEvent(event: Event): Boolean =
-            event.content.toModel<MessageRelationContent>()?.relatesTo?.type == "io.element.thread"
+            event.content.toModel<MessageRelationContent>()?.relatesTo?.type == RelationType.THREAD
 
     /**
      * Returns the root thread eventId or null otherwise

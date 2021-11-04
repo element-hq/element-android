@@ -619,7 +619,7 @@ internal class DefaultTimeline(
                     it?.root
                 }.map {
                     EventMapper.map(it)
-                }.toList()
+                }
         threadsAwarenessHandler.fetchRootThreadEventsIfNeeded(eventEntityList)
     }
 
