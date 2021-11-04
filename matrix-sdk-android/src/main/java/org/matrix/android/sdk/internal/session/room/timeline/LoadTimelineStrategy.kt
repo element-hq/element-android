@@ -111,8 +111,7 @@ internal class LoadTimelineStrategy(
         }
 
         override fun onNewTimelineEvents(roomId: String, eventIds: List<String>) {
-            super.onNewTimelineEvents(roomId, eventIds)
-            if (mode == Mode.Live && roomId == this@LoadTimelineStrategy.roomId) {
+            if (roomId == this@LoadTimelineStrategy.roomId && hasReachedLastForward()) {
                 dependencies.onNewTimelineEvents(eventIds)
             }
         }
@@ -178,7 +177,7 @@ internal class LoadTimelineStrategy(
     }
 
     private fun buildSendingEvents(): List<TimelineEvent> {
-        return if (timelineChunk?.hasReachedLastForward().orFalse()) {
+        return if (hasReachedLastForward()) {
             sendingEventsDataSource.buildSendingEvents()
         } else {
             emptyList()
@@ -193,6 +192,10 @@ internal class LoadTimelineStrategy(
                     .equalTo(ChunkEntityFields.IS_LAST_FORWARD, true)
                     .findAll()
         }
+    }
+
+    private fun hasReachedLastForward(): Boolean{
+        return timelineChunk?.hasReachedLastForward().orFalse()
     }
 
     private fun RealmResults<ChunkEntity>.createTimelineChunk(): TimelineChunk? {

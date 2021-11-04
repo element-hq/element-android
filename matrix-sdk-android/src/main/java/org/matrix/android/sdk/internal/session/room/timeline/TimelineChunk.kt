@@ -28,10 +28,12 @@ import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.internal.database.mapper.TimelineEventMapper
 import org.matrix.android.sdk.internal.database.model.ChunkEntity
+import org.matrix.android.sdk.internal.database.model.ChunkEntityFields
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntityFields
 import timber.log.Timber
 import java.util.Collections
+import java.util.concurrent.atomic.AtomicBoolean
 
 /**
  * This is the value used to fetch on server. It's better to make constant as otherwise we can have weird chunks with disparate and small chunk of data.
@@ -54,8 +56,13 @@ internal class TimelineChunk constructor(private val chunkEntity: ChunkEntity,
                                          private val initialEventId: String?,
                                          private val onBuiltEvents: () -> Unit) {
 
+    private val isLastForward = AtomicBoolean(chunkEntity.isLastForward)
+
     private val chunkObjectListener = RealmObjectChangeListener<ChunkEntity> { _, changeSet ->
         Timber.v("on chunk (${chunkEntity.identifier()}) changed: ${changeSet?.changedFields?.joinToString(",")}")
+        if(changeSet?.isFieldChanged(ChunkEntityFields.IS_LAST_FORWARD).orFalse()){
+            isLastForward.set(chunkEntity.isLastForward)
+        }
     }
 
     private val timelineEventCollectionListener = OrderedRealmCollectionChangeListener { results: RealmResults<TimelineEventEntity>, changeSet: OrderedCollectionChangeSet ->
@@ -77,7 +84,7 @@ internal class TimelineChunk constructor(private val chunkEntity: ChunkEntity,
     }
 
     fun hasReachedLastForward(): Boolean {
-        return if (chunkEntity.isLastForward) {
+        return if (isLastForward.get()) {
             true
         } else {
             nextChunk?.hasReachedLastForward().orFalse()
