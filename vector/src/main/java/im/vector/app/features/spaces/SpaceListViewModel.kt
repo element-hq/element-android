@@ -17,16 +17,16 @@
 package im.vector.app.features.spaces
 
 import androidx.lifecycle.asFlow
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.AppStateHandler
 import im.vector.app.RoomGroupingMethod
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.invite.AutoAcceptInvites
 import im.vector.app.features.session.coroutineScope
@@ -59,26 +59,19 @@ import org.matrix.android.sdk.api.session.space.model.TopLevelSpaceComparator
 import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.flow.flow
 
-class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: SpaceListViewState,
-                                                      private val appStateHandler: AppStateHandler,
-                                                      private val session: Session,
-                                                      private val vectorPreferences: VectorPreferences,
-                                                      private val autoAcceptInvites: AutoAcceptInvites
+class SpaceListViewModel @AssistedInject constructor(@Assisted initialState: SpaceListViewState,
+                                                     private val appStateHandler: AppStateHandler,
+                                                     private val session: Session,
+                                                     private val vectorPreferences: VectorPreferences,
+                                                     private val autoAcceptInvites: AutoAcceptInvites
 ) : VectorViewModel<SpaceListViewState, SpaceListAction, SpaceListViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: SpaceListViewState): SpacesListViewModel
+    interface Factory : MavericksAssistedViewModelFactory<SpaceListViewModel, SpaceListViewState> {
+        override fun create(initialState: SpaceListViewState): SpaceListViewModel
     }
 
-    companion object : MavericksViewModelFactory<SpacesListViewModel, SpaceListViewState> {
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: SpaceListViewState): SpacesListViewModel {
-            val groupListFragment: SpaceListFragment = (viewModelContext as FragmentViewModelContext).fragment()
-            return groupListFragment.spaceListViewModelFactory.create(state)
-        }
-    }
+    companion object : MavericksViewModelFactory<SpaceListViewModel, SpaceListViewState> by hiltMavericksViewModelFactory()
 
 //    private var currentGroupingMethod : RoomGroupingMethod? = null
 

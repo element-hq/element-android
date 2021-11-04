@@ -44,7 +44,6 @@ import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
 class RoomAliasFragment @Inject constructor(
-        val viewModelFactory: RoomAliasViewModel.Factory,
         private val controller: RoomAliasController,
         private val avatarRenderer: AvatarRenderer
 ) :

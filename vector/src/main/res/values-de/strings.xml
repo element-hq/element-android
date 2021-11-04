@@ -1072,7 +1072,7 @@
     <string name="command_description_op_user">Bestimmt das Berechtigungslevel des Benutzers</string>
     <string name="command_description_deop_user">Setzt Berechtigungen des Benutzers zurück</string>
     <string name="command_description_invite_user">Lädt Benutzer mit angegebener Kennung in den aktuellen Raum ein</string>
-    <string name="command_description_join_room">Tritt dem Raum mit angegebenen Alias bei</string>
+    <string name="command_description_join_room">Raum mit angegebener Adresse beitreten</string>
     <string name="command_description_part_room">Verlasse Raum</string>
     <string name="command_description_topic">Raumthema ändern</string>
     <string name="command_description_kick_user">Entfernt die Person angegebener ID</string>
@@ -1741,7 +1741,7 @@
     <string name="timeline_unread_messages">Ungelesene Nachrichten</string>
     <string name="login_splash_text1">Privat oder in Gruppen mit Leuten chatten</string>
     <string name="login_splash_text2">Halte Gespräche mittels Verschlüsselung privat</string>
-    <string name="login_splash_submit">Beginne</string>
+    <string name="login_splash_submit">Los geht\'s</string>
     <string name="login_server_title">Wähle einen Server</string>
     <string name="login_server_text">Genau wie bei E-Mails haben Accounts ein Zuhause, auch wenn du mit jedem kommunizieren kannst</string>
     <string name="login_server_matrix_org_text">Folge Millionen Anderen kostenlos auf dem größten öffentlichen Server</string>
@@ -1755,7 +1755,7 @@
     <string name="settings_agree_to_terms">Stimme den Nutzungsbedingungen des Identitätsservers (%s) zu, um zu erlauben per E-Mail oder Telefonnummer gefunden zu werden.</string>
     <string name="error_handling_incoming_share">Zu teilende Daten nicht verarbeitbar</string>
     <string name="login_splash_text3">Erweitere &amp; individualisiere dein Benutzererlebnis</string>
-    <string name="login_connect_to">Verbinde mit %1$s</string>
+    <string name="login_connect_to">Mit %1$s verbinden</string>
     <string name="login_connect_to_modular">Mit Element Matrix Services verbinden</string>
     <string name="login_connect_to_a_custom_server">Mit einem benutzerdefinierten Server verbinden</string>
     <string name="login_signin_to">Bei %1$s anmelden</string>
@@ -1818,7 +1818,7 @@
     <string name="login_mode_not_supported">Die Anwendung kann sich nicht bei diesem Home-Server anmelden. Der Home-Server unterstützt die folgenden Anmeldetypen: %1$s.
 \n 
 \nMöchtest du dich mit einem Webclient anmelden\?</string>
-    <string name="login_reset_password_notice">Eine Bestätigungsmail wird an dich gesendet, um dein neues Passwort zu bestätigen.</string>
+    <string name="login_reset_password_notice">Dir wird eine Bestätigungsmail gesendet, um dein neues Passwort zu bestätigen.</string>
     <string name="login_reset_password_submit">Weiter</string>
     <string name="login_reset_password_success_notice_2">Du wurdest von allen Sitzungen abgemeldet und erhältst keine Push-Benachrichtigungen mehr. Um Benachrichtigungen wieder zu aktivieren, melde dich auf jedem Gerät erneut an.</string>
     <string name="login_reset_password_cancel_confirmation_title">Warnung</string>
@@ -1831,7 +1831,7 @@
     <string name="login_msisdn_confirm_submit">Weiter</string>
     <string name="login_msisdn_error_not_international">Internationale Telefonnummern müssen mit \'+\' beginnen</string>
     <string name="login_msisdn_error_other">Die Telefonnummer scheint ungültig zu sein. Bitte prüfen</string>
-    <string name="login_signup_to">Anmelden bei %1$s</string>
+    <string name="login_signup_to">Registrieren bei %1$s</string>
     <string name="login_signup_username_hint">Benutzername</string>
     <string name="login_signup_submit">Weiter</string>
     <string name="login_signup_cancel_confirmation_title">Warnung</string>
@@ -2175,7 +2175,7 @@
     <string name="verify_other_sessions">Verifiziere alle deine Sitzungen, um sicherzustellen, dass dein Konto &amp; deine Nachrichten sicher sind</string>
     <string name="verify_this_session">Bestätige neue Anmeldung zu deinem Konto: %1$s</string>
     <string name="cross_signing_verify_by_text">Verifiziere manuell mit einem Text</string>
-    <string name="crosssigning_verify_session">Verifiziere Anmeldung</string>
+    <string name="crosssigning_verify_session">Anmeldung verifizieren</string>
     <string name="cross_signing_verify_by_emoji">Verifiziere interaktiv mit Emojis</string>
     <string name="confirm_your_identity">Bestätige deine Identität, indem du diesen Login von einer deiner anderen Sitzungen verifizierst, um Zugriff auf deine verschlüsselten Nachrichten zu erhalten.</string>
     <string name="mark_as_verified">Als vertraut markieren</string>
@@ -2313,7 +2313,7 @@
     <string name="identity_server_error_terms_not_signed">Bitte akzeptiere zuerst die AGB des Identitätsservers in den Einstellungen.</string>
     <string name="template_identity_server_error_bulk_sha256_not_supported">Deiner Privatsphäre wegen unterstützt ${app_name} nur das Senden gehashter E-Mail-Adressen und Telefonnummern.</string>
     <string name="identity_server_error_binding_error">Die Assoziierung ist fehlgeschlagen.</string>
-    <string name="identity_server_error_no_current_binding_error">Für diese Kennung gibt es aktuell keine Assoziierung.</string>
+    <string name="identity_server_error_no_current_binding_error">Für diese Kennung gibt es aktuell keine Zuordnung.</string>
     <string name="identity_server_set_default_notice">Dein Home-Server (%1$s) schlägt %2$s als Identitätsserver vor</string>
     <string name="identity_server_set_default_submit">Benutze %1$s</string>
     <string name="identity_server_set_alternative_notice">Alternativ kannst du die URL eines beliebigen anderen Identitätsservers angeben</string>
@@ -2620,7 +2620,7 @@
     <string name="default_message_emote_confetti">Sendet Konfetti 🎉</string>
     <string name="command_snow">Nachricht mit Schnee senden</string>
     <string name="command_confetti">Sendet die nachfolgende Nachricht mit Konfetti</string>
-    <string name="login_clear_homeserver_history">Nachrichtenverlauf bereinigen</string>
+    <string name="login_clear_homeserver_history">Verlauf löschen</string>
     <string name="login_social_sso">Einmalanmeldung</string>
     <string name="login_social_signin_with">Anmelden mit %s</string>
     <string name="login_social_signup_with">Registrieren mit %s</string>
@@ -2658,7 +2658,7 @@
     <string name="call_tile_call_back">Zurückrufen</string>
     <string name="call_tile_ended">Dieser Anruf wurde beendet</string>
     <string name="call_tile_other_declined">%1$s hat diesen Anruf abgelehnt</string>
-    <string name="call_tile_you_declined">Du hast diesen Anruf %1$s abgelehnt</string>
+    <string name="call_tile_you_declined">Du hast diesen Anruf %s abgelehnt</string>
     <string name="call_tile_in_call">Du nimmst zur Zeit an diesem Anruf teil</string>
     <string name="call_tile_other_started_call">%1$s hat einen Anruf gestartet</string>
     <string name="call_tile_you_started_call">Du hast einen Anruf gestartet</string>
@@ -2696,7 +2696,7 @@
     <string name="a11y_trust_level_default">Standard-Vertrauensstufe</string>
     <string name="a11y_selected">Ausgewählt</string>
     <string name="a11y_video">Video</string>
-    <string name="a11y_unsent_draft">Dieser Raum enthält einen ungesendeten Entwurf</string>
+    <string name="a11y_unsent_draft">enthält einen ungesendeten Entwurf</string>
     <string name="a11y_error_some_message_not_sent">Einige Nachrichten wurden nicht gesendet</string>
     <string name="a11y_delete_avatar">Avatar löschen</string>
     <string name="a11y_change_avatar">Avatar ändern</string>
@@ -2800,7 +2800,7 @@
     <string name="activity_create_space_title">Einen Space erstellen</string>
     <string name="create_spaces_just_me">Nur für mich</string>
     <string name="create_spaces_choose_type_label">Welche Art von Space möchtest du erstellen\?</string>
-    <string name="add_space">Space hinzufügen</string>
+    <string name="add_space">Space erstellen</string>
     <string name="command_description_create_space">Space erstellen</string>
     <string name="room_settings_room_access_restricted_description">Jeder, der sich in einem Space mit diesem Raum befindet, kann diesen Raum finden und ihm beitreten. Nur die Administratoren des Raums können diesen zu einem Space hinzufügen.</string>
     <string name="room_settings_room_access_restricted_title">Nur Space-Mitglieder</string>
@@ -2846,8 +2846,8 @@
     <string name="spaces_no_server_support_description">Für weitere Infos kontaktiere bitte die Administration des Homeservers</string>
     <string name="spaces_no_server_support_title">Dein Homeserver scheint Spaces noch nicht zu unterstützen</string>
     <string name="space_add_rooms">Räume hinzufügen</string>
-    <string name="space_leave_prompt_msg_as_admin">Du bist der Admin von diesem Space. Stelle vor dem Verlassen sicher, dass du die Adminrechte an jemand anderen übergibst.</string>
-    <string name="space_leave_prompt_msg_private">Dieser Raum ist nicht öffentlich. Du wirst ihn ohne Einladung nicht wieder betreten können.</string>
+    <string name="space_leave_prompt_msg_as_admin">Du bist der einzige Admin von diesem Space. Wenn du ihn verlässt, hat niemand Kontrolle über ihn.</string>
+    <string name="space_leave_prompt_msg_private">Du wirst diesen Raum ohne erneute Einladung nicht betreten können.</string>
     <string name="space_leave_prompt_msg_only_you">Du bist die einzige Person hier. Wenn du den Space verlässt, ist er für immer verloren (eine lange Zeit).</string>
     <string name="invite_to_space">Einladen in %s</string>
     <string name="private_space">Privater Space</string>
@@ -2891,12 +2891,12 @@
     <string name="voice_message_tap_to_stop_toast">Klicke, um die Aufnahme zu starten oder stoppen</string>
     <string name="voice_message_n_seconds_warning_toast">%1$ds übrig</string>
     <string name="voice_message_release_to_send_toast">Zum Aufnehmen drücken, zum Senden loslassen</string>
-    <string name="a11y_delete_recorded_voice_message">Aufgenommene Sprachnachricht löschen</string>
+    <string name="a11y_delete_recorded_voice_message">Aufnahme löschen</string>
     <string name="a11y_recording_voice_message">Sprachnachricht wird aufgenommen</string>
     <string name="a11y_pause_voice_message">Sprachnachricht pausieren</string>
     <string name="a11y_play_voice_message">Sprachnachricht abspielen</string>
     <string name="a11y_lock_voice_message">Sprachnachricht einrasten</string>
-    <string name="a11y_start_voice_message">Sprachnachricht starten</string>
+    <string name="a11y_start_voice_message">Sprachnachricht aufnehmen</string>
     <string name="room_using_unstable_room_version">Dieser Raum verwendet die Raumversion %s, die von diesem Heimserver als instabil markiert ist.</string>
     <string name="upgrade_room_no_power_to_manage">Du benötigst die Berechtigung, um einen Raum upzugraden</string>
     <string name="upgrade_room_update_parent_space">Übergeordneten Space automatisch updaten</string>
@@ -3027,4 +3027,25 @@
     <string name="space_participants_kick_prompt_msg">Kicken entfernt die Person aus dem Space
 \n
 \nUm sie für immer zu entfernen, solltest du sie bannen.</string>
+    <string name="a11y_stop_voice_message">Aufnahme beenden</string>
+    <string name="pick_tings_to_leave">Welche Räume willst du verlassen\?</string>
+    <string name="finish_setup">Einrichtung beenden</string>
+    <string name="a11y_presence_unavailable">Nicht verfügbar</string>
+    <string name="a11y_presence_offline">Offline</string>
+    <string name="a11y_presence_online">Online</string>
+    <string name="call_tap_to_return">%1$s Klicke zum Zurückkehren</string>
+    <string name="call_tile_no_answer">Nicht erreicht</string>
+    <string name="command_description_lenny">Nachricht mit ( ͡° ͜ʖ ͡°) beginnen</string>
+    <string name="command_description_whois">Zeigt Information über die Person an</string>
+    <string name="command_description_avatar_for_room">Ändert dein Profilbild im aktuellen Raum</string>
+    <string name="command_description_room_avatar">Ändert das Raumbild</string>
+    <string name="command_description_nick_for_room">Ändert deinen Nicknamen für diesen Raum</string>
+    <string name="command_description_room_name">Ändert den Raumnamen</string>
+    <string name="command_description_unignore_user">Entblockt eine Person und zeigt deren Nachrichten wieder an</string>
+    <string name="command_description_ignore_user">Blockiert eine Person und versteckt deren Nachrichten</string>
+    <string name="room_settings_space_access_public_description">Jeder kann den Space finden und beitreten</string>
+    <string name="room_settings_room_notifications_manage_notifications">Du kannst deine Benachrichtigungen in den %1$s verwalten.</string>
+    <string name="room_settings_room_notifications_encryption_notice">Beachte, dass Benachrichtigungen zu Erwähnungen und Schlüsselwörtern in verschlüsselten Räumen momentan nicht verfügbar sind.</string>
+    <string name="space_permissions_notice">Wähle die Berechtigungen der Rollen aus</string>
+    <string name="space_settings_permissions_subtitle">Rollen deren Berechtigungen einsehen und bearbeiten.</string>
 </resources>

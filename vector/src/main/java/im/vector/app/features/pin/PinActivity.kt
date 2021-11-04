@@ -20,12 +20,14 @@ import android.content.Context
 import android.content.Intent
 import com.airbnb.mvrx.Mavericks
 import com.google.android.material.appbar.MaterialToolbar
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivitySimpleBinding
 
+@AndroidEntryPoint
 class PinActivity : VectorBaseActivity<ActivitySimpleBinding>(), ToolbarConfigurable, UnlockedActivity {
 
     companion object {

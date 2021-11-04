@@ -17,17 +17,16 @@
 package im.vector.app.features.roomdirectory.createroom
 
 import androidx.core.net.toFile
-import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.raw.wellknown.getElementWellknown
@@ -60,9 +59,11 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted private val init
 ) : VectorViewModel<CreateRoomViewState, CreateRoomAction, CreateRoomViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: CreateRoomViewState): CreateRoomViewModel
+    interface Factory : MavericksAssistedViewModelFactory<CreateRoomViewModel, CreateRoomViewState> {
+        override fun create(initialState: CreateRoomViewState): CreateRoomViewModel
     }
+
+    companion object : MavericksViewModelFactory<CreateRoomViewModel, CreateRoomViewState> by hiltMavericksViewModelFactory()
 
     init {
         initHomeServerName()
@@ -119,16 +120,6 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted private val init
 
                 )
             }
-        }
-    }
-
-    companion object : MavericksViewModelFactory<CreateRoomViewModel, CreateRoomViewState> {
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: CreateRoomViewState): CreateRoomViewModel? {
-            val fragment: CreateRoomFragment = (viewModelContext as FragmentViewModelContext).fragment()
-
-            return fragment.createRoomViewModelFactory.create(state)
         }
     }
 

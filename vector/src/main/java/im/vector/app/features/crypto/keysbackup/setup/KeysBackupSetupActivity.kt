@@ -23,8 +23,9 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.core.di.ScreenComponent
+import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.dialogs.ExportKeysDialog
 import im.vector.app.core.extensions.observeEvent
 import im.vector.app.core.extensions.queryExportKeys
@@ -36,6 +37,7 @@ import im.vector.app.features.crypto.keys.KeysExporter
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class KeysBackupSetupActivity : SimpleFragmentActivity() {
 
     override fun getTitleRes() = R.string.title_activity_keys_backup_setup
@@ -43,10 +45,10 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
     private lateinit var viewModel: KeysBackupSetupSharedViewModel
 
     @Inject lateinit var keysExporter: KeysExporter
+    @Inject lateinit var activeSessionHolder: ActiveSessionHolder
 
-    override fun injectWith(injector: ScreenComponent) {
-        super.injectWith(injector)
-        injector.inject(this)
+    private val session by lazy {
+        activeSessionHolder.getActiveSession()
     }
 
     override fun initUiAndData() {

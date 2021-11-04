@@ -16,12 +16,12 @@
 
 package im.vector.app.features.home.room.breadcrumbs
 
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MavericksViewModelFactory
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
@@ -33,21 +33,14 @@ import org.matrix.android.sdk.flow.flow
 
 class BreadcrumbsViewModel @AssistedInject constructor(@Assisted initialState: BreadcrumbsViewState,
                                                        private val session: Session) :
-    VectorViewModel<BreadcrumbsViewState, EmptyAction, EmptyViewEvents>(initialState) {
+        VectorViewModel<BreadcrumbsViewState, EmptyAction, EmptyViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: BreadcrumbsViewState): BreadcrumbsViewModel
+    interface Factory : MavericksAssistedViewModelFactory<BreadcrumbsViewModel, BreadcrumbsViewState> {
+        override fun create(initialState: BreadcrumbsViewState): BreadcrumbsViewModel
     }
 
-    companion object : MavericksViewModelFactory<BreadcrumbsViewModel, BreadcrumbsViewState> {
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: BreadcrumbsViewState): BreadcrumbsViewModel? {
-            val fragment: BreadcrumbsFragment = (viewModelContext as FragmentViewModelContext).fragment()
-            return fragment.breadcrumbsViewModelFactory.create(state)
-        }
-    }
+    companion object : MavericksViewModelFactory<BreadcrumbsViewModel, BreadcrumbsViewState> by hiltMavericksViewModelFactory()
 
     init {
         observeBreadcrumbs()

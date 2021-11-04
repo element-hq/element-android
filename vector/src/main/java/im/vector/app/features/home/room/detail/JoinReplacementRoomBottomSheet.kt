@@ -25,8 +25,8 @@ import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.parentFragmentViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.platform.ButtonStateView
@@ -34,6 +34,7 @@ import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.databinding.BottomSheetTombstoneJoinBinding
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class JoinReplacementRoomBottomSheet :
         VectorBaseBottomSheetDialogFragment<BottomSheetTombstoneJoinBinding>() {
 
@@ -42,10 +43,6 @@ class JoinReplacementRoomBottomSheet :
 
     @Inject
     lateinit var errorFormatter: ErrorFormatter
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
 
     private val viewModel: RoomDetailViewModel by parentFragmentViewModel()
 

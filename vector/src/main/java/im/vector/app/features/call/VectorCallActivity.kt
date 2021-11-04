@@ -41,8 +41,8 @@ import com.airbnb.mvrx.viewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.PERMISSIONS_FOR_AUDIO_IP_CALL
@@ -85,20 +85,15 @@ data class CallArgs(
 
 private val loggerTag = LoggerTag("VectorCallActivity", LoggerTag.VOIP)
 
+@AndroidEntryPoint
 class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallControlsView.InteractionListener {
 
     override fun getBinding() = ActivityCallBinding.inflate(layoutInflater)
 
+    @Inject lateinit var callManager: WebRtcCallManager
     @Inject lateinit var avatarRenderer: AvatarRenderer
 
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
-
     private val callViewModel: VectorCallViewModel by viewModel()
-
-    @Inject lateinit var callManager: WebRtcCallManager
-    @Inject lateinit var viewModelFactory: VectorCallViewModel.Factory
 
     private val dialPadCallback = object : DialPadFragment.Callback {
         override fun onDigitAppended(digit: String) {

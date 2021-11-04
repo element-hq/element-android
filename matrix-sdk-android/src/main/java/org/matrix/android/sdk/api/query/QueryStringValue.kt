@@ -19,17 +19,41 @@ package org.matrix.android.sdk.api.query
 /**
  * Basic query language. All these cases are mutually exclusive.
  */
-sealed class QueryStringValue {
-    object NoCondition : QueryStringValue()
-    object IsNull : QueryStringValue()
-    object IsNotNull : QueryStringValue()
-    object IsEmpty : QueryStringValue()
-    object IsNotEmpty : QueryStringValue()
-    data class Equals(val string: String, val case: Case = Case.SENSITIVE) : QueryStringValue()
-    data class Contains(val string: String, val case: Case = Case.SENSITIVE) : QueryStringValue()
+sealed interface QueryStringValue {
+    sealed interface ContentQueryStringValue : QueryStringValue {
+        val string: String
+        val case: Case
+    }
+
+    object NoCondition : QueryStringValue
+    object IsNull : QueryStringValue
+    object IsNotNull : QueryStringValue
+    object IsEmpty : QueryStringValue
+    object IsNotEmpty : QueryStringValue
+
+    data class Equals(override val string: String, override val case: Case = Case.SENSITIVE) : ContentQueryStringValue
+    data class Contains(override val string: String, override val case: Case = Case.SENSITIVE) : ContentQueryStringValue
 
     enum class Case {
+        /**
+         * Match query sensitive to case
+         */
         SENSITIVE,
-        INSENSITIVE
+
+        /**
+         * Match query insensitive to case, this only works for Latin-1 character sets
+         */
+        INSENSITIVE,
+
+        /**
+         * Match query with input normalized (case insensitive)
+         * Works around Realms inability to sort or filter by case for non Latin-1 character sets
+         * Expects the target field to contain normalized data
+         *
+         * @see org.matrix.android.sdk.internal.util.Normalizer.normalize
+         */
+        NORMALIZED
     }
 }
+
+internal fun QueryStringValue.isNormalized() = this is QueryStringValue.ContentQueryStringValue && case == QueryStringValue.Case.NORMALIZED

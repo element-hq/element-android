@@ -23,8 +23,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.commitTransaction
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivitySimpleBinding
@@ -32,18 +32,11 @@ import im.vector.app.features.matrixto.MatrixToBottomSheet
 import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.spaces.explore.SpaceDirectoryArgs
 import im.vector.app.features.spaces.explore.SpaceDirectoryFragment
-import im.vector.app.features.spaces.explore.SpaceDirectoryState
 import im.vector.app.features.spaces.explore.SpaceDirectoryViewEvents
 import im.vector.app.features.spaces.explore.SpaceDirectoryViewModel
-import javax.inject.Inject
 
-class SpaceExploreActivity : VectorBaseActivity<ActivitySimpleBinding>(), SpaceDirectoryViewModel.Factory, MatrixToBottomSheet.InteractionListener {
-
-    @Inject lateinit var spaceDirectoryViewModelFactory: SpaceDirectoryViewModel.Factory
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
+@AndroidEntryPoint
+class SpaceExploreActivity : VectorBaseActivity<ActivitySimpleBinding>(), MatrixToBottomSheet.InteractionListener {
 
     override fun getBinding(): ActivitySimpleBinding = ActivitySimpleBinding.inflate(layoutInflater)
 
@@ -112,9 +105,6 @@ class SpaceExploreActivity : VectorBaseActivity<ActivitySimpleBinding>(), SpaceD
             }
         }
     }
-
-    override fun create(initialState: SpaceDirectoryState): SpaceDirectoryViewModel =
-            spaceDirectoryViewModelFactory.create(initialState)
 
     override fun mxToBottomSheetNavigateToRoom(roomId: String) {
         navigator.openRoom(this, roomId)

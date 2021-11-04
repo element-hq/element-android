@@ -31,11 +31,15 @@ import org.matrix.android.sdk.internal.database.mapper.asDomain
 import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntity
 import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntityFields
 import org.matrix.android.sdk.internal.di.SessionDatabase
+import org.matrix.android.sdk.internal.query.QueryStringValueProcessor
 import org.matrix.android.sdk.internal.query.process
 import javax.inject.Inject
 
-internal class StateEventDataSource @Inject constructor(@SessionDatabase private val monarchy: Monarchy,
-                                                        private val realmSessionProvider: RealmSessionProvider) {
+internal class StateEventDataSource @Inject constructor(
+        @SessionDatabase private val monarchy: Monarchy,
+        private val realmSessionProvider: RealmSessionProvider,
+        private val queryStringValueProcessor: QueryStringValueProcessor
+) {
 
     fun getStateEvent(roomId: String, eventType: String, stateKey: QueryStringValue): Event? {
         return realmSessionProvider.withRealm { realm ->
@@ -78,13 +82,15 @@ internal class StateEventDataSource @Inject constructor(@SessionDatabase private
                                      eventTypes: Set<String>,
                                      stateKey: QueryStringValue
     ): RealmQuery<CurrentStateEventEntity> {
-        return realm.where<CurrentStateEventEntity>()
-                .equalTo(CurrentStateEventEntityFields.ROOM_ID, roomId)
-                .apply {
-                    if (eventTypes.isNotEmpty()) {
-                        `in`(CurrentStateEventEntityFields.TYPE, eventTypes.toTypedArray())
+        return with(queryStringValueProcessor) {
+            realm.where<CurrentStateEventEntity>()
+                    .equalTo(CurrentStateEventEntityFields.ROOM_ID, roomId)
+                    .apply {
+                        if (eventTypes.isNotEmpty()) {
+                            `in`(CurrentStateEventEntityFields.TYPE, eventTypes.toTypedArray())
+                        }
                     }
-                }
-                .process(CurrentStateEventEntityFields.STATE_KEY, stateKey)
+                    .process(CurrentStateEventEntityFields.STATE_KEY, stateKey)
+        }
     }
 }

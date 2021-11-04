@@ -29,7 +29,7 @@ import javax.inject.Inject
 @MatrixScope
 internal class BackgroundDetectionObserver @Inject constructor() : LifecycleObserver {
 
-    var isInBackground: Boolean = false
+    var isInBackground: Boolean = true
         private set
 
     private

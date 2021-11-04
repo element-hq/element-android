@@ -17,7 +17,6 @@
 package im.vector.app.features.roommemberprofile.devices
 
 import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.MavericksViewModelFactory
@@ -25,7 +24,10 @@ import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import im.vector.app.core.di.HasScreenInjector
+import dagger.hilt.EntryPoints
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.SingletonEntryPoint
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import org.matrix.android.sdk.api.session.Session
@@ -37,6 +39,8 @@ import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 
 data class DeviceListViewState(
+        val userId: String,
+        val allowDeviceAction: Boolean,
         val userItem: MatrixItem? = null,
         val isMine: Boolean = false,
         val memberCrossSigningKey: MXCrossSigningInfo? = null,
@@ -45,24 +49,41 @@ data class DeviceListViewState(
 ) : MavericksState
 
 class DeviceListBottomSheetViewModel @AssistedInject constructor(@Assisted private val initialState: DeviceListViewState,
-                                                                 @Assisted private val args: DeviceListBottomSheet.Args,
                                                                  private val session: Session) :
-    VectorViewModel<DeviceListViewState, DeviceListAction, DeviceListBottomSheetViewEvents>(initialState) {
+        VectorViewModel<DeviceListViewState, DeviceListAction, DeviceListBottomSheetViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: DeviceListViewState, args: DeviceListBottomSheet.Args): DeviceListBottomSheetViewModel
+    interface Factory : MavericksAssistedViewModelFactory<DeviceListBottomSheetViewModel, DeviceListViewState> {
+        override fun create(initialState: DeviceListViewState): DeviceListBottomSheetViewModel
+    }
+
+    companion object : MavericksViewModelFactory<DeviceListBottomSheetViewModel, DeviceListViewState> by hiltMavericksViewModelFactory() {
+
+        override fun initialState(viewModelContext: ViewModelContext): DeviceListViewState? {
+            val args = viewModelContext.args<DeviceListBottomSheet.Args>()
+            val userId = args.userId
+            val session = EntryPoints.get(viewModelContext.app(), SingletonEntryPoint::class.java).activeSessionHolder().getActiveSession()
+            return session.getUser(userId)?.toMatrixItem()?.let {
+                DeviceListViewState(
+                        userId = userId,
+                        allowDeviceAction = args.allowDeviceAction,
+                        userItem = it,
+                        isMine = userId == session.myUserId
+                )
+            } ?: return super.initialState(viewModelContext)
+        }
     }
 
     init {
-        session.flow().liveUserCryptoDevices(args.userId)
+
+        session.flow().liveUserCryptoDevices(initialState.userId)
                 .execute {
                     copy(cryptoDevices = it).also {
                         refreshSelectedId()
                     }
                 }
 
-        session.flow().liveCrossSigningInfo(args.userId)
+        session.flow().liveCrossSigningInfo(initialState.userId)
                 .execute {
                     copy(memberCrossSigningKey = it.invoke()?.getOrNull())
                 }
@@ -89,7 +110,7 @@ class DeviceListBottomSheetViewModel @AssistedInject constructor(@Assisted priva
     }
 
     private fun selectDevice(action: DeviceListAction.SelectDevice) {
-        if (!args.allowDeviceAction) return
+        if (!initialState.allowDeviceAction) return
         setState {
             copy(selectedDevice = action.device)
         }
@@ -102,29 +123,9 @@ class DeviceListBottomSheetViewModel @AssistedInject constructor(@Assisted priva
     }
 
     private fun manuallyVerify(action: DeviceListAction.ManuallyVerify) {
-        if (!args.allowDeviceAction) return
-        session.cryptoService().verificationService().beginKeyVerification(VerificationMethod.SAS, args.userId, action.deviceId, null)?.let { txID ->
-            _viewEvents.post(DeviceListBottomSheetViewEvents.Verify(args.userId, txID))
-        }
-    }
-
-    companion object : MavericksViewModelFactory<DeviceListBottomSheetViewModel, DeviceListViewState> {
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: DeviceListViewState): DeviceListBottomSheetViewModel? {
-            val fragment: DeviceListBottomSheet = (viewModelContext as FragmentViewModelContext).fragment()
-            val args = viewModelContext.args<DeviceListBottomSheet.Args>()
-            return fragment.viewModelFactory.create(state, args)
-        }
-
-        override fun initialState(viewModelContext: ViewModelContext): DeviceListViewState? {
-            val userId = viewModelContext.args<DeviceListBottomSheet.Args>().userId
-            val session = (viewModelContext.activity as HasScreenInjector).injector().activeSessionHolder().getActiveSession()
-            return session.getUser(userId)?.toMatrixItem()?.let {
-                DeviceListViewState(
-                        userItem = it,
-                        isMine = userId == session.myUserId
-                )
-            } ?: return super.initialState(viewModelContext)
+        if (!initialState.allowDeviceAction) return
+        session.cryptoService().verificationService().beginKeyVerification(VerificationMethod.SAS, initialState.userId, action.deviceId, null)?.let { txID ->
+            _viewEvents.post(DeviceListBottomSheetViewEvents.Verify(initialState.userId, txID))
         }
     }
 }

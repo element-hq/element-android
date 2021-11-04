@@ -1,0 +1,42 @@
+Element vừa là một ứng dụng nhắn tin an toàn vừa là một ứng dụng cộng tác nhóm năng suất, lý tưởng cho các cuộc trò chuyện nhóm trong khi làm việc từ xa. Ứng dụng trò chuyện này sử dụng mã hóa đầu cuối để cung cấp tính năng hội nghị truyền hình, chia sẻ tệp và cuộc gọi thoại mạnh mẽ.
+
+<b> Các tính năng của Element bao gồm: </b>
+- Các công cụ giao tiếp trực tuyến tiên tiến
+- Các tin nhắn được mã hóa hoàn toàn để cho phép liên lạc doanh nghiệp an toàn hơn, ngay cả đối với những người làm việc từ xa
+- Trò chuyện phi tập trung dựa trên khung mã nguồn mở Matrix
+- Chia sẻ tệp một cách an toàn với dữ liệu được mã hóa trong khi quản lý dự án
+- Trò chuyện video với VoIP và chia sẻ màn hình
+- Tích hợp dễ dàng với các công cụ cộng tác trực tuyến yêu thích của bạn, công cụ quản lý dự án, dịch vụ VoIP và các ứng dụng nhắn tin nhóm khác
+
+Element hoàn toàn khác với các ứng dụng nhắn tin và cộng tác khác. Nó hoạt động trên Matrix, một mạng mở để nhắn tin bảo mật và giao tiếp phi tập trung. Nó cho phép tự lưu trữ để cung cấp cho người dùng quyền sở hữu và kiểm soát tối đa dữ liệu và tin nhắn của họ.
+
+<b> Nhắn tin mã hóa và riêng tư </b>
+Element bảo vệ bạn khỏi các quảng cáo không mong muốn, khai thác dữ liệu và khu vườn có tường bao quanh. Nó cũng bảo mật tất cả dữ liệu của bạn, video 1-1 và giao tiếp thoại thông qua mã hóa đầu cuối và xác minh thiết bị có chữ ký chéo.
+
+Element cung cấp cho bạn quyền kiểm soát quyền riêng tư của mình đồng thời cho phép bạn giao tiếp an toàn với bất kỳ ai trên mạng Ma trận hoặc các công cụ cộng tác kinh doanh khác bằng cách tích hợp với các ứng dụng như Slack.
+
+<b> Phần tử có thể được tự lưu trữ </b>
+Để cho phép kiểm soát nhiều hơn dữ liệu nhạy cảm và các cuộc trò chuyện của bạn, Element có thể được tự host hoặc bạn có thể chọn bất kỳ host Matrix nào - tiêu chuẩn cho giao tiếp phân tán, mã nguồn mở. Element cung cấp cho bạn quyền riêng tư, tuân thủ bảo mật và tính linh hoạt trong tích hợp.
+
+<b> Sở hữu dữ liệu của bạn </b>
+Bạn quyết định nơi lưu giữ dữ liệu và tin nhắn của mình. Không có rủi ro khai thác dữ liệu hoặc truy cập từ bên thứ ba.
+
+Element giúp bạn kiểm soát theo những cách khác nhau:
+1. Nhận một tài khoản miễn phí trên máy chủ công cộng matrix.org do các nhà phát triển Matrix host hoặc chọn từ hàng nghìn máy chủ công cộng do các tình nguyện viên lưu trữ
+2. Tự host tài khoản của bạn bằng cách chạy một máy chủ trên cơ sở hạ tầng CNTT của riêng bạn
+3. Đăng ký tài khoản trên máy chủ tùy chỉnh bằng cách chỉ cần đăng ký nền tảng Element Matrix Services hosting
+
+<b> Mở tin nhắn và cộng tác </b>
+Bạn có thể trò chuyện với bất kỳ ai trên mạng Matrix, cho dù họ đang sử dụng Element, một ứng dụng Matrix khác hay ngay cả khi họ đang sử dụng một ứng dụng nhắn tin khác.
+
+<b> Siêu bảo mật </b>
+Mã hóa đầu-cuối thực (chỉ những người trong cuộc trò chuyện mới có thể giải mã tin nhắn) và xác minh thiết bị xác thực chéo.
+
+<b> Giao tiếp và tích hợp hoàn chỉnh </b>
+Nhắn tin, cuộc gọi thoại và video, chia sẻ tệp, chia sẻ màn hình và một loạt các tích hợp, bot và widget. Xây dựng phòng, cộng đồng, giữ liên lạc và hoàn thành công việc.
+
+<b> Tiếp tục nơi bạn đã dừng lại </b>
+Giữ liên lạc mọi lúc mọi nơi với lịch sử tin nhắn được đồng bộ hóa hoàn toàn trên tất cả các thiết bị của bạn và trên web tại https://app.element.io
+
+<b> Mã nguồn mở </b>
+Element Android là một dự án mã nguồn mở, được host bởi GitHub. Vui lòng báo cáo lỗi và / hoặc đóng góp vào sự phát triển của nó tại https://github.com/vector-im/element-android

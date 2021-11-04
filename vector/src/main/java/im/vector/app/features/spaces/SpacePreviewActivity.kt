@@ -20,6 +20,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import com.airbnb.mvrx.Mavericks
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.commitTransaction
 import im.vector.app.core.platform.VectorBaseActivity
@@ -27,6 +28,7 @@ import im.vector.app.databinding.ActivitySimpleBinding
 import im.vector.app.features.spaces.preview.SpacePreviewArgs
 import im.vector.app.features.spaces.preview.SpacePreviewFragment
 
+@AndroidEntryPoint
 class SpacePreviewActivity : VectorBaseActivity<ActivitySimpleBinding>() {
 
     lateinit var sharedActionViewModel: SpacePreviewSharedActionViewModel

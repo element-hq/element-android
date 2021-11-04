@@ -30,12 +30,9 @@ import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.transition.Transition
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
-import im.vector.app.core.di.DaggerScreenComponent
-import im.vector.app.core.di.HasVectorInjector
-import im.vector.app.core.di.ScreenComponent
-import im.vector.app.core.di.VectorComponent
 import im.vector.app.core.intent.getMimeTypeFromUri
 import im.vector.app.core.utils.shareMedia
 import im.vector.app.features.themes.ActivityOtherThemes
@@ -48,8 +45,8 @@ import kotlinx.coroutines.withContext
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 import javax.inject.Inject
-import kotlin.system.measureTimeMillis
 
+@AndroidEntryPoint
 class VectorAttachmentViewerActivity : AttachmentViewerActivity(), BaseAttachmentProvider.InteractionListener {
 
     @Parcelize
@@ -61,14 +58,10 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), BaseAttachmen
 
     @Inject
     lateinit var sessionHolder: ActiveSessionHolder
-
     @Inject
     lateinit var dataSourceFactory: AttachmentProviderFactory
-
     @Inject
     lateinit var imageContentRenderer: ImageContentRenderer
-
-    private lateinit var screenComponent: ScreenComponent
 
     private var initialIndex = 0
     private var isAnimatingOut = false
@@ -78,12 +71,6 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), BaseAttachmen
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Timber.i("onCreate Activity ${javaClass.simpleName}")
-        val vectorComponent = getVectorComponent()
-        screenComponent = DaggerScreenComponent.factory().create(vectorComponent, this)
-        val timeForInjection = measureTimeMillis {
-            screenComponent.inject(this)
-        }
-        Timber.v("Injecting dependencies into ${javaClass.simpleName} took $timeForInjection ms")
         ThemeUtils.setActivityTheme(this, getOtherThemes())
 
         val args = args() ?: throw IllegalArgumentException("Missing arguments")
@@ -219,10 +206,6 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), BaseAttachmen
     }
 
     private fun args() = intent.getParcelableExtra<Args>(EXTRA_ARGS)
-
-    private fun getVectorComponent(): VectorComponent {
-        return (application as HasVectorInjector).injector()
-    }
 
     private fun scheduleStartPostponedTransition(sharedElement: View) {
         sharedElement.viewTreeObserver.addOnPreDrawListener(

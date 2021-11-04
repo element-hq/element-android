@@ -642,7 +642,7 @@ class NotificationUtils @Inject constructor(private val context: Context,
 
         return NotificationCompat.Builder(context, channelID)
                 .setOnlyAlertOnce(true)
-                .setContentTitle(stringProvider.getString(R.string.app_name))
+                .setContentTitle(inviteNotifiableEvent.roomName ?: stringProvider.getString(R.string.app_name))
                 .setContentText(inviteNotifiableEvent.description)
                 .setGroup(stringProvider.getString(R.string.app_name))
                 .setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_ALL)

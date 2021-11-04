@@ -16,13 +16,13 @@
 
 package im.vector.app.features.roomprofile.banned
 
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MavericksViewModelFactory
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.R
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
@@ -44,11 +44,11 @@ import org.matrix.android.sdk.flow.unwrap
 class RoomBannedMemberListViewModel @AssistedInject constructor(@Assisted initialState: RoomBannedMemberListViewState,
                                                                 private val stringProvider: StringProvider,
                                                                 private val session: Session) :
-    VectorViewModel<RoomBannedMemberListViewState, RoomBannedMemberListAction, RoomBannedMemberListViewEvents>(initialState) {
+        VectorViewModel<RoomBannedMemberListViewState, RoomBannedMemberListAction, RoomBannedMemberListViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: RoomBannedMemberListViewState): RoomBannedMemberListViewModel
+    interface Factory : MavericksAssistedViewModelFactory<RoomBannedMemberListViewModel, RoomBannedMemberListViewState> {
+        override fun create(initialState: RoomBannedMemberListViewState): RoomBannedMemberListViewModel
     }
 
     private val room = session.getRoom(initialState.roomId)!!
@@ -77,14 +77,7 @@ class RoomBannedMemberListViewModel @AssistedInject constructor(@Assisted initia
                 }
     }
 
-    companion object : MavericksViewModelFactory<RoomBannedMemberListViewModel, RoomBannedMemberListViewState> {
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: RoomBannedMemberListViewState): RoomBannedMemberListViewModel? {
-            val fragment: RoomBannedMemberListFragment = (viewModelContext as FragmentViewModelContext).fragment()
-            return fragment.viewModelFactory.create(state)
-        }
-    }
+    companion object : MavericksViewModelFactory<RoomBannedMemberListViewModel, RoomBannedMemberListViewState> by hiltMavericksViewModelFactory()
 
     override fun handle(action: RoomBannedMemberListAction) {
         when (action) {
