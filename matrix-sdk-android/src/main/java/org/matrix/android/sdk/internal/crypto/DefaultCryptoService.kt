@@ -80,6 +80,7 @@ import org.matrix.android.sdk.internal.crypto.model.MXEncryptEventContentResult
 import org.matrix.android.sdk.internal.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.internal.crypto.model.event.RoomKeyContent
 import org.matrix.android.sdk.internal.crypto.model.event.RoomKeyWithHeldContent
+import org.matrix.android.sdk.internal.crypto.model.event.SecretSendEventContent
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.rest.DevicesListResponse
 import org.matrix.android.sdk.internal.crypto.model.rest.ForwardedRoomKeyContent
@@ -972,6 +973,12 @@ internal class DefaultCryptoService @Inject constructor(
                         val sessionId = content.sessionId
 
                         notifyRoomKeyReceived(roomId, sessionId)
+                    }
+                    EventType.SEND_SECRET -> {
+                        // The rust-sdk will clear this event if it's invalid, this will produce an invalid base64 error
+                        // when we try to construct the recovery key.
+                        val secretContent = event.getClearContent().toModel<SecretSendEventContent>() ?: return@forEach
+                        this.keysBackupService?.onSecretKeyGossip(secretContent.secretValue)
                     }
                     else                         -> {
                         this.verificationService?.onEvent(event)

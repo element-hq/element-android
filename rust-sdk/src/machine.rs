@@ -1311,7 +1311,7 @@ impl OlmMachine {
         key: Option<String>,
         version: Option<String>,
     ) -> Result<(), CryptoStoreError> {
-        let key = key.map(RecoveryKey::from_base64).transpose().ok().flatten();
+        let key = key.map(|k| RecoveryKey::from_base64(&k)).transpose().ok().flatten();
         Ok(self
             .runtime
             .block_on(self.inner.backup_machine().save_recovery_key(key, version))?)

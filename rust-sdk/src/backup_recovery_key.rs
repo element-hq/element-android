@@ -57,7 +57,7 @@ impl BackupRecoveryKey {
     /// TODO
     pub fn from_base64(key: String) -> Self {
         Self {
-            inner: RecoveryKey::from_base64(key).unwrap(),
+            inner: RecoveryKey::from_base64(&key).unwrap(),
             passphrase_info: None,
         }
     }

@@ -55,6 +55,7 @@ import org.matrix.android.sdk.internal.extensions.foldToCallback
 import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.internal.util.JsonCanonicalizer
 import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
+import org.matrix.android.sdk.internal.util.awaitCallback
 import org.matrix.olm.OlmException
 import timber.log.Timber
 import uniffi.olm.BackupRecoveryKey
@@ -407,7 +408,31 @@ internal class RustKeyBackupService @Inject constructor(
 
     override fun onSecretKeyGossip(secret: String) {
         Timber.i("## CrossSigning - onSecretKeyGossip")
-        TODO()
+        cryptoCoroutineScope.launch(coroutineDispatchers.main) {
+            try {
+                val version = sender.getKeyBackupVersion()
+
+                if (version != null) {
+                    val key = BackupRecoveryKey.fromBase64(secret)
+
+                    awaitCallback<Unit> {
+                        trustKeysBackupVersion(version, true, it)
+                    }
+                    val importResult = awaitCallback<ImportRoomKeysResult> {
+                        cryptoCoroutineScope.launch {
+                            restoreBackup(version, key, null, null, null)
+                        }
+                    }
+                    Timber.i("onSecretKeyGossip: Recovered keys ${importResult.successfullyNumberOfImportedKeys} out of ${importResult.totalNumberOfKeys}")
+
+                    saveBackupRecoveryKey(secret, version.version)
+                } else {
+                    Timber.e("onSecretKeyGossip: Failed to import backup recovery key, no backup version was found on the server")
+                }
+            } catch (failure: Throwable) {
+                Timber.e("onSecretKeyGossip: failed to trust key backup version ${keysBackupVersion?.version}: $failure")
+            }
+        }
     }
 
     override fun getBackupProgress(progressListener: ProgressListener) {
