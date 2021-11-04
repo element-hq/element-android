@@ -25,11 +25,11 @@ internal interface ContentScanApi {
     suspend fun downloadEncrypted(@Body info: DownloadBody): ResponseBody
 
     @POST(NetworkConstants.URI_API_PREFIX_PATH_MEDIA_PROXY_UNSTABLE + "scan_encrypted")
-    fun scanFile(@Body info: DownloadBody): ScanResponse
+    suspend fun scanFile(@Body info: DownloadBody): ScanResponse
 
     @GET(NetworkConstants.URI_API_PREFIX_PATH_MEDIA_PROXY_UNSTABLE + "public_key")
-    fun getServerPublicKey(): ServerPublicKeyResponse
+    suspend fun getServerPublicKey(): ServerPublicKeyResponse
 
     @GET(NetworkConstants.URI_API_PREFIX_PATH_MEDIA_PROXY_UNSTABLE + "scan/{domain}/{mediaId}")
-    fun scanMedia(@Path(value = "domain") domain: String, @Path(value = "mediaId") mediaId: String): ScanResponse
+    suspend fun scanMedia(@Path(value = "domain") domain: String, @Path(value = "mediaId") mediaId: String): ScanResponse
 }
