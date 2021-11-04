@@ -1037,7 +1037,7 @@ class RoomDetailViewModel @AssistedInject constructor(
                 .distinctUntilChanged { previous, current ->
                     when {
                         previous is UnreadState.Unknown || previous is UnreadState.ReadMarkerNotLoaded -> false
-                        current is UnreadState.HasUnread || current is UnreadState.HasNoUnread         -> true
+                        current is UnreadState.HasUnread /*|| current is UnreadState.HasNoUnread */    -> true
                         else                                                                           -> false
                     }
                 }
