@@ -43,7 +43,6 @@ import dagger.hilt.android.HiltAndroidApp
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.extensions.configureAndStart
 import im.vector.app.core.extensions.startSyncing
-import im.vector.app.core.rx.RxConfig
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.configuration.VectorConfiguration
 import im.vector.app.features.disclaimer.doNotShowDisclaimerDialog
@@ -93,7 +92,6 @@ class VectorApplication :
     @Inject lateinit var versionProvider: VersionProvider
     @Inject lateinit var notificationUtils: NotificationUtils
     @Inject lateinit var appStateHandler: AppStateHandler
-    @Inject lateinit var rxConfig: RxConfig
     @Inject lateinit var popupAlertManager: PopupAlertManager
     @Inject lateinit var pinLocker: PinLocker
     @Inject lateinit var callManager: WebRtcCallManager
@@ -118,7 +116,6 @@ class VectorApplication :
         appContext = this
         invitesAcceptor.initialize()
         vectorUncaughtExceptionHandler.activate(this)
-        rxConfig.setupRxPlugin()
 
         // Remove Log handler statically added by Jitsi
         Timber.forest()

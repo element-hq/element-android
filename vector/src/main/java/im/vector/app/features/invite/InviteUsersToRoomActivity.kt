@@ -21,6 +21,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
+import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -41,6 +42,8 @@ import im.vector.app.features.userdirectory.UserListFragment
 import im.vector.app.features.userdirectory.UserListFragmentArgs
 import im.vector.app.features.userdirectory.UserListSharedAction
 import im.vector.app.features.userdirectory.UserListSharedActionViewModel
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.failure.Failure
 import java.net.HttpURLConnection
@@ -63,8 +66,8 @@ class InviteUsersToRoomActivity : SimpleFragmentActivity() {
 
         sharedActionViewModel = viewModelProvider.get(UserListSharedActionViewModel::class.java)
         sharedActionViewModel
-                .observe()
-                .subscribe { sharedAction ->
+                .stream()
+                .onEach { sharedAction ->
                     when (sharedAction) {
                         UserListSharedAction.Close                 -> finish()
                         UserListSharedAction.GoBack                -> onBackPressed()
@@ -75,7 +78,7 @@ class InviteUsersToRoomActivity : SimpleFragmentActivity() {
                         }
                     }
                 }
-                .disposeOnDestroy()
+                .launchIn(lifecycleScope)
         if (isFirstCreation()) {
             addFragment(
                     R.id.container,

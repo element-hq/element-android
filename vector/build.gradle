@@ -105,7 +105,6 @@ def buildNumber = System.env.BUILDKITE_BUILD_NUMBER as Integer ?: 0
 android {
 
 
-
     // Due to a bug introduced in Android gradle plugin 3.6.0, we have to specify the ndk version to use
     // Ref: https://issuetracker.google.com/issues/144111441
     ndkVersion "21.3.6528147"
@@ -333,7 +332,6 @@ configurations {
 dependencies {
 
     implementation project(":matrix-sdk-android")
-    implementation project(":matrix-sdk-android-rx")
     implementation project(":matrix-sdk-android-flow")
     implementation project(":diff-match-patch")
     implementation project(":multipicker")
@@ -374,23 +372,16 @@ dependencies {
     // Phone number https://github.com/google/libphonenumber
     implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.36'
 
-    // rx
-    implementation libs.rx.rxKotlin
-    implementation libs.rx.rxAndroid
-    implementation 'com.jakewharton.rxrelay2:rxrelay:2.1.1'
-    // RXBinding
-    implementation libs.jakewharton.rxbinding
-    implementation libs.jakewharton.rxbindingAppcompat
-    implementation libs.jakewharton.rxbindingMaterial
+    // FlowBinding
+    implementation libs.github.flowBinding
+    implementation libs.github.flowBindingAppcompat
+    implementation libs.github.flowBindingMaterial
 
     implementation libs.airbnb.epoxy
     implementation libs.airbnb.epoxyGlide
     kapt libs.airbnb.epoxyProcessor
     implementation libs.airbnb.epoxyPaging
     implementation libs.airbnb.mavericks
-    //TODO: remove when entirely migrated to Flow
-    implementation libs.airbnb.mavericksRx
-
 
     // Work
     implementation libs.androidx.work
@@ -471,7 +462,7 @@ dependencies {
     gplayImplementation 'com.google.android.gms:play-services-oss-licenses:17.0.0'
 
     implementation "androidx.emoji:emoji-appcompat:1.1.0"
-    implementation ('com.github.BillCarsonFr:JsonViewer:0.7')
+    implementation('com.github.BillCarsonFr:JsonViewer:0.7')
 
     // WebRTC
     // org.webrtc:google-webrtc is for development purposes only
@@ -512,6 +503,9 @@ dependencies {
     // Plant Timber tree for test
     testImplementation libs.tests.timberJunitRule
     testImplementation libs.airbnb.mavericksTesting
+    testImplementation(libs.jetbrains.coroutinesTest) {
+        exclude group: "org.jetbrains.kotlinx", module: "kotlinx-coroutines-debug"
+    }
 
     // Activate when you want to check for leaks, from time to time.
     //debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.3'
@@ -525,6 +519,9 @@ dependencies {
     androidTestImplementation libs.androidx.espressoIntents
     androidTestImplementation libs.tests.kluent
     androidTestImplementation libs.androidx.coreTesting
+    androidTestImplementation(libs.jetbrains.coroutinesTest) {
+        exclude group: "org.jetbrains.kotlinx", module: "kotlinx-coroutines-debug"
+    }
     // Plant Timber tree for test
     androidTestImplementation libs.tests.timberJunitRule
     // "The one who serves a great Espresso"

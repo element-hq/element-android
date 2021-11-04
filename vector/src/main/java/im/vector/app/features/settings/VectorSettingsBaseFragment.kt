@@ -27,8 +27,6 @@ import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.singletonEntryPoint
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.toast
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
 import org.matrix.android.sdk.api.session.Session
 import timber.log.Timber
 
@@ -67,30 +65,9 @@ abstract class VectorSettingsBaseFragment : PreferenceFragmentCompat() {
         mLoadingView = vectorActivity.findViewById(R.id.vector_settings_spinner_views)
     }
 
-    @CallSuper
-    override fun onDestroyView() {
-        uiDisposables.clear()
-        super.onDestroyView()
-    }
-
-    override fun onDestroy() {
-        uiDisposables.dispose()
-        super.onDestroy()
-    }
-
     abstract fun bindPref()
 
     abstract var titleRes: Int
-
-    /* ==========================================================================================
-     * Disposable
-     * ========================================================================================== */
-
-    private val uiDisposables = CompositeDisposable()
-
-    protected fun Disposable.disposeOnDestroyView() {
-        uiDisposables.add(this)
-    }
 
     /* ==========================================================================================
      * Protected

@@ -35,6 +35,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
@@ -61,7 +62,8 @@ import im.vector.app.features.home.room.detail.RoomDetailActivity
 import im.vector.app.features.home.room.detail.RoomDetailArgs
 import io.github.hyuwah.draggableviewlib.DraggableView
 import io.github.hyuwah.draggableviewlib.setupDraggable
-import io.reactivex.android.schedulers.AndroidSchedulers
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.logger.LoggerTag
@@ -130,7 +132,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
         setSupportActionBar(views.callToolbar)
         configureCallViews()
 
-        callViewModel.subscribe(this) {
+        callViewModel.onEach {
             renderState(it)
         }
 
@@ -141,12 +143,11 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
         }
 
         callViewModel.viewEvents
-                .observe()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
+                .stream()
+                .onEach {
                     handleViewEvents(it)
                 }
-                .disposeOnDestroy()
+                .launchIn(lifecycleScope)
 
         callViewModel.onEach(VectorCallViewState::callId, VectorCallViewState::isVideoCall) { _, isVideoCall ->
             if (isVideoCall) {

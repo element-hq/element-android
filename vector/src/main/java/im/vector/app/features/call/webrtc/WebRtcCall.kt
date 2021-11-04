@@ -19,8 +19,10 @@ package im.vector.app.features.call.webrtc
 import android.content.Context
 import android.hardware.camera2.CameraManager
 import androidx.core.content.getSystemService
+import im.vector.app.core.flow.chunk
 import im.vector.app.core.services.CallService
 import im.vector.app.core.utils.CountUpTimer
+import im.vector.app.core.utils.PublishDataSource
 import im.vector.app.core.utils.TextUtils.formatDuration
 import im.vector.app.features.call.CameraEventsHandlerAdapter
 import im.vector.app.features.call.CameraProxy
@@ -35,14 +37,16 @@ import im.vector.app.features.call.utils.awaitSetLocalDescription
 import im.vector.app.features.call.utils.awaitSetRemoteDescription
 import im.vector.app.features.call.utils.mapToCallCandidate
 import im.vector.app.features.session.coroutineScope
-import io.reactivex.disposables.Disposable
-import io.reactivex.subjects.PublishSubject
-import io.reactivex.subjects.ReplaySubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.extensions.orFalse
@@ -85,7 +89,6 @@ import org.webrtc.VideoTrack
 import timber.log.Timber
 import java.lang.ref.WeakReference
 import java.util.concurrent.CopyOnWriteArrayList
-import java.util.concurrent.TimeUnit
 import javax.inject.Provider
 import kotlin.coroutines.CoroutineContext
 
@@ -157,7 +160,7 @@ class WebRtcCall(
     private var currentCaptureFormat: CaptureFormat = CaptureFormat.HD
     private var cameraAvailabilityCallback: CameraManager.AvailabilityCallback? = null
 
-    private val timer = CountUpTimer(Duration.ofSeconds(1).toMillis()).apply {
+    private val timer = CountUpTimer(1000L).apply {
         tickListener = object : CountUpTimer.TickListener {
             override fun onTick(milliseconds: Long) {
                 val formattedDuration = formatDuration(Duration.ofMillis(milliseconds))
@@ -197,26 +200,33 @@ class WebRtcCall(
     private var localSurfaceRenderers: MutableList<WeakReference<SurfaceViewRenderer>> = ArrayList()
     private var remoteSurfaceRenderers: MutableList<WeakReference<SurfaceViewRenderer>> = ArrayList()
 
-    private val iceCandidateSource: PublishSubject<IceCandidate> = PublishSubject.create()
-    private val iceCandidateDisposable = iceCandidateSource
-            .buffer(300, TimeUnit.MILLISECONDS)
-            .subscribe {
-                // omit empty :/
-                if (it.isNotEmpty()) {
-                    Timber.tag(loggerTag.value).v("Sending local ice candidates to call")
-                    // it.forEach { peerConnection?.addIceCandidate(it) }
-                    mxCall.sendLocalCallCandidates(it.mapToCallCandidate())
-                }
-            }
+    private val localIceCandidateSource = PublishDataSource<IceCandidate>()
+    private var localIceCandidateJob: Job? = null
 
-    private val remoteCandidateSource: ReplaySubject<IceCandidate> = ReplaySubject.create()
-    private var remoteIceCandidateDisposable: Disposable? = null
+    private val remoteCandidateSource: MutableSharedFlow<IceCandidate> = MutableSharedFlow(replay = Int.MAX_VALUE)
+    private var remoteIceCandidateJob: Job? = null
 
     init {
+        setupLocalIceCanditate()
         mxCall.addListener(this)
     }
 
-    fun onIceCandidate(iceCandidate: IceCandidate) = iceCandidateSource.onNext(iceCandidate)
+    private fun setupLocalIceCanditate() {
+        sessionScope?.let {
+            localIceCandidateJob = localIceCandidateSource.stream()
+                    .chunk(300)
+                    .onEach {
+                        // omit empty :/
+                        if (it.isNotEmpty()) {
+                            Timber.tag(loggerTag.value).v("Sending local ice candidates to call")
+                            // it.forEach { peerConnection?.addIceCandidate(it) }
+                            mxCall.sendLocalCallCandidates(it.mapToCallCandidate())
+                        }
+                    }.launchIn(it)
+        }
+    }
+
+    fun onIceCandidate(iceCandidate: IceCandidate) = localIceCandidateSource.post(iceCandidate)
 
     fun onRenegotiationNeeded(restartIce: Boolean) {
         sessionScope?.launch(dispatcher) {
@@ -438,12 +448,15 @@ class WebRtcCall(
         createLocalStream()
         attachViewRenderersInternal()
         Timber.tag(loggerTag.value).v("remoteCandidateSource $remoteCandidateSource")
-        remoteIceCandidateDisposable = remoteCandidateSource.subscribe({
-            Timber.tag(loggerTag.value).v("adding remote ice candidate $it")
-            peerConnection?.addIceCandidate(it)
-        }, {
-            Timber.tag(loggerTag.value).v("failed to add remote ice candidate $it")
-        })
+        remoteIceCandidateJob = remoteCandidateSource
+                .onEach {
+                    Timber.tag(loggerTag.value).v("adding remote ice candidate $it")
+                    peerConnection?.addIceCandidate(it)
+                }
+                .catch {
+                    Timber.tag(loggerTag.value).v("failed to add remote ice candidate $it")
+                }
+                .launchIn(this)
         // Now we wait for negotiation callback
     }
 
@@ -488,12 +501,13 @@ class WebRtcCall(
             mxCall.accept(it.description)
         }
         Timber.tag(loggerTag.value).v("remoteCandidateSource $remoteCandidateSource")
-        remoteIceCandidateDisposable = remoteCandidateSource.subscribe({
-            Timber.tag(loggerTag.value).v("adding remote ice candidate $it")
-            peerConnection?.addIceCandidate(it)
-        }, {
-            Timber.tag(loggerTag.value).v("failed to add remote ice candidate $it")
-        })
+        remoteIceCandidateJob = remoteCandidateSource
+                .onEach {
+                    Timber.tag(loggerTag.value).v("adding remote ice candidate $it")
+                    peerConnection?.addIceCandidate(it)
+                }.catch {
+                    Timber.tag(loggerTag.value).v("failed to add remote ice candidate $it")
+                }.launchIn(this)
     }
 
     private suspend fun getTurnServer(): TurnServerResponse? {
@@ -761,8 +775,8 @@ class WebRtcCall(
         videoCapturer?.stopCapture()
         videoCapturer?.dispose()
         videoCapturer = null
-        remoteIceCandidateDisposable?.dispose()
-        iceCandidateDisposable?.dispose()
+        remoteIceCandidateJob?.cancel()
+        localIceCandidateJob?.cancel()
         peerConnection?.close()
         peerConnection?.dispose()
         localAudioSource?.dispose()
@@ -852,7 +866,7 @@ class WebRtcCall(
                 }
                 Timber.tag(loggerTag.value).v("onCallIceCandidateReceived for call ${mxCall.callId} sdp: ${it.candidate}")
                 val iceCandidate = IceCandidate(it.sdpMid, it.sdpMLineIndex, it.candidate)
-                remoteCandidateSource.onNext(iceCandidate)
+                remoteCandidateSource.emit(iceCandidate)
             }
         }
     }

@@ -24,6 +24,7 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
 import com.google.android.material.appbar.MaterialToolbar
@@ -40,6 +41,8 @@ import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.room.RequireActiveMembershipAction
 import im.vector.app.features.room.RequireActiveMembershipViewEvents
 import im.vector.app.features.room.RequireActiveMembershipViewModel
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 @AndroidEntryPoint
 class RoomDetailActivity :
@@ -97,13 +100,13 @@ class RoomDetailActivity :
         sharedActionViewModel = viewModelProvider.get(RoomDetailSharedActionViewModel::class.java)
 
         sharedActionViewModel
-                .observe()
-                .subscribe { sharedAction ->
+                .stream()
+                .onEach { sharedAction ->
                     when (sharedAction) {
                         is RoomDetailSharedAction.SwitchToRoom -> switchToRoom(sharedAction)
                     }
                 }
-                .disposeOnDestroy()
+                .launchIn(lifecycleScope)
 
         requireActiveMembershipViewModel.observeViewEvents {
             when (it) {
