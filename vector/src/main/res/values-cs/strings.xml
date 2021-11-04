@@ -1916,7 +1916,7 @@
         <item quantity="few">%1$d osoby</item>
         <item quantity="other">%1$d osob</item>
     </plurals>
-    <string name="room_profile_section_more_uploads">Nahrání</string>
+    <string name="room_profile_section_more_uploads">Nahrané</string>
     <string name="room_profile_section_more_leave">Opustit místnost</string>
     <string name="room_profile_leaving_room">Opouštím místnost…</string>
     <string name="room_member_power_level_admins">Správci</string>
@@ -2179,7 +2179,7 @@
     <string name="external_link_confirmation_message">Odkaz %1$s Vás převede na jiný site: %2$s.
 \n
 \nOpravdu chcete pokračovat\?</string>
-    <string name="create_room_dm_failure">Nemohli jsme vytvořit Vaši DM. Prosím, zkontrolujte uživatele, které chcete pozvat, a zkuste znovu.</string>
+    <string name="create_room_dm_failure">Nemohli jsme vytvořit vaši přímou zprávu. Prosím, zkontrolujte uživatele, které chcete pozvat, a zkuste znovu.</string>
     <string name="add_members_to_room">Přidat členy</string>
     <string name="invite_users_to_room_action_invite">POZVAT</string>
     <string name="inviting_users_to_room">Zvu uživatele…</string>
@@ -3024,7 +3024,7 @@
     <string name="does_not_look_like_valid_email">Nevypadá to jako platná e-mailová adresa</string>
     <string name="open_discovery_settings">Otevřít nastavení objevování</string>
     <string name="user_directory_search_hint_2">Vyhledávání podle jména, ID nebo emailu</string>
-    <string name="create_new_space">Vytvořit nový prostor</string>
+    <string name="create_new_space">Založit nový prostor</string>
     <string name="room_settings_space_access_public_description">Každý může prostor najít a připojit se k němu</string>
     <string name="room_settings_space_access_title">Adresa prostoru</string>
     <string name="room_settings_access_rules_pref_dialog_title">Kdo má přístup\?</string>
