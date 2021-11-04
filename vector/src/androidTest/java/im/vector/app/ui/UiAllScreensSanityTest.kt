@@ -42,12 +42,10 @@ import com.adevinta.android.barista.interaction.BaristaListInteractions.clickLis
 import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild
 import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.clickMenu
 import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu
-import im.vector.app.BuildConfig
 import im.vector.app.EspressoHelper
 import im.vector.app.R
 import im.vector.app.SleepViewAction
 import im.vector.app.activityIdlingResource
-import im.vector.app.espresso.tools.clickOnPreference
 import im.vector.app.espresso.tools.waitUntilActivityVisible
 import im.vector.app.features.MainActivity
 import im.vector.app.features.createdirect.CreateDirectRoomActivity
@@ -103,7 +101,17 @@ class UiAllScreensSanityTest {
         assertDisplayed(R.id.bottomNavigationView)
 
         // Settings
-        navigateToSettings()
+        appRobot.settings {
+            general { crawl() }
+            notifications { crawl() }
+            preferences { crawl() }
+            voiceAndVideo()
+            ignoredUsers()
+            securityAndPrivacy { crawl() }
+            labs()
+            advancedSettings { crawl() }
+            helpAndAbout { crawl() }
+        }
 
         // Create DM
         clickOn(R.id.bottom_action_people)
@@ -365,133 +373,6 @@ class UiAllScreensSanityTest {
 
         closeSoftKeyboard()
         pressBack()
-        pressBack()
-    }
-
-    private fun navigateToSettings() {
-        appRobot.openSettings {
-            openGeneral { navigateToSettingsGeneral() }
-            openNotifications { navigateToSettingsNotifications() }
-            openPreferences { navigateToSettingsPreferences() }
-            openVoiceAndVideo {}
-            openIgnoredUsers {}
-            openSecurityAndPrivacy { navigateToSettingsSecurity() }
-            openLabs { }
-            openAdvancedSettings { navigateToSettingsAdvanced() }
-            openHelpAbout { navigateToSettingsHelp() }
-        }
-    }
-
-    private fun navigateToSettingsHelp() {
-        /*
-        clickOn(R.string.settings_app_info_link_title)
-        Cannot go back...
-        pressBack()
-        clickOn(R.string.settings_copyright)
-        pressBack()
-        clickOn(R.string.settings_app_term_conditions)
-        pressBack()
-        clickOn(R.string.settings_privacy_policy)
-        pressBack()
-         */
-        clickOn(R.string.settings_third_party_notices)
-        clickDialogPositiveButton()
-    }
-
-    private fun navigateToSettingsAdvanced() {
-        clickOnPreference(R.string.settings_notifications_targets)
-        pressBack()
-
-        clickOnPreference(R.string.settings_push_rules)
-        pressBack()
-
-        /* TODO P2 test developer screens
-        // Enable developer mode
-        clickOnSwitchPreference("SETTINGS_DEVELOPER_MODE_PREFERENCE_KEY")
-
-        clickOnPreference(R.string.settings_account_data)
-        clickOn("m.push_rules")
-        pressBack()
-        pressBack()
-        clickOnPreference(R.string.settings_key_requests)
-        pressBack()
-
-        // Disable developer mode
-        clickOnSwitchPreference("SETTINGS_DEVELOPER_MODE_PREFERENCE_KEY")
-         */
-    }
-
-    private fun navigateToSettingsSecurity() {
-        clickOnPreference(R.string.settings_active_sessions_show_all)
-        pressBack()
-
-        clickOnPreference(R.string.encryption_message_recovery)
-        // TODO go deeper here
-        pressBack()
-        /* Cannot exit
-        clickOnPreference(R.string.encryption_export_e2e_room_keys)
-        pressBack()
-         */
-    }
-
-    private fun navigateToSettingsPreferences() {
-        clickOn(R.string.settings_interface_language)
-        onView(isRoot())
-                .perform(waitForView(withText("Dansk (Danmark)")))
-        pressBack()
-        clickOn(R.string.settings_theme)
-        clickDialogNegativeButton()
-        clickOn(R.string.font_size)
-        clickDialogNegativeButton()
-    }
-
-    private fun navigateToSettingsNotifications() {
-        if (BuildConfig.USE_NOTIFICATION_SETTINGS_V2) {
-            clickOn(R.string.settings_notification_default)
-            pressBack()
-            clickOn(R.string.settings_notification_mentions_and_keywords)
-            // TODO Test adding a keyword?
-            pressBack()
-            clickOn(R.string.settings_notification_other)
-            pressBack()
-        } else {
-            clickOn(R.string.settings_notification_advanced)
-            pressBack()
-        }
-        /*
-        clickOn(R.string.settings_noisy_notifications_preferences)
-        TODO Cannot go back
-        pressBack()
-        clickOn(R.string.settings_silent_notifications_preferences)
-        pressBack()
-        clickOn(R.string.settings_call_notifications_preferences)
-        pressBack()
-         */
-        clickOnPreference(R.string.settings_notification_troubleshoot)
-        pressBack()
-    }
-
-    private fun navigateToSettingsGeneral() {
-        clickOn(R.string.settings_profile_picture)
-        clickDialogPositiveButton()
-        clickOn(R.string.settings_display_name)
-        clickDialogNegativeButton()
-        clickOn(R.string.settings_password)
-        clickDialogNegativeButton()
-        clickOn(R.string.settings_emails_and_phone_numbers_title)
-        pressBack()
-        clickOn(R.string.settings_discovery_manage)
-        clickOn(R.string.add_identity_server)
-        pressBack()
-        pressBack()
-        // Homeserver
-        clickOnPreference(R.string.settings_home_server)
-        pressBack()
-        // Identity server
-        clickOnPreference(R.string.settings_identity_server)
-        pressBack()
-        // Deactivate account
-        clickOnPreference(R.string.settings_deactivate_my_account)
         pressBack()
     }
 }

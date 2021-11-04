@@ -17,15 +17,15 @@
 package im.vector.app.ui.robot
 
 import androidx.test.espresso.Espresso
-import com.adevinta.android.barista.interaction.BaristaClickInteractions
-import com.adevinta.android.barista.interaction.BaristaDrawerInteractions
+import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
+import com.adevinta.android.barista.interaction.BaristaDrawerInteractions.openDrawer
 import im.vector.app.R
 
 class ElementRobot {
 
-    fun openSettings(block: SettingsRobot.() -> Unit) {
-        BaristaDrawerInteractions.openDrawer()
-        BaristaClickInteractions.clickOn(R.id.homeDrawerHeaderSettingsView)
+    fun settings(block: SettingsRobot.() -> Unit) {
+        openDrawer()
+        clickOn(R.id.homeDrawerHeaderSettingsView)
         block(SettingsRobot())
         Espresso.pressBack()
     }
