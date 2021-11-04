@@ -123,7 +123,8 @@
     <string name="initial_sync_start_importing_account_rooms">Inledande synk:
 \nImporterar rum</string>
     <string name="initial_sync_start_importing_account_joined_rooms">Inledande synk:
-\nImporterar anslutna rum</string>
+\nLaddar dina konversationer
+\nOm du har gått med i många rum så kan detta ta lite tid</string>
     <string name="initial_sync_start_importing_account_invited_rooms">Inledande synk:
 \nImporterar inbjudna rum</string>
     <string name="initial_sync_start_importing_account_left_rooms">Inledande synk:
@@ -2619,9 +2620,9 @@
     <string name="room_settings_room_version_title">Rumsversion</string>
     <string name="dialog_edit_hint">Nytt värde</string>
     <string name="action_switch">Byt</string>
-    <string name="initial_sync_start_downloading">Initial synk:
+    <string name="initial_sync_start_downloading">Inledande synk:
 \nLaddar ner data…</string>
-    <string name="initial_sync_start_server_computing">Initial synk:
+    <string name="initial_sync_start_server_computing">Inledande synk:
 \nVäntar på serversvar…</string>
     <string name="a11y_view_read_receipts">Visa läskvitton</string>
     <string name="a11y_rule_notify_off">Avisera inte</string>
@@ -3005,4 +3006,7 @@
     <string name="a11y_presence_unavailable">Otillgänglig</string>
     <string name="a11y_presence_offline">Offline</string>
     <string name="a11y_presence_online">Online</string>
+    <string name="login_error_homeserver_from_url_not_found_enter_manual">Välj hemserver</string>
+    <string name="login_error_homeserver_from_url_not_found">Kan inte nå en hemserver på URL:en %s. Vänligen kontrollera din länk eller välj en hemserver manuellt.</string>
+    <string name="notification_listening_for_notifications">Lyssnar efter aviseringar</string>
 </resources>
