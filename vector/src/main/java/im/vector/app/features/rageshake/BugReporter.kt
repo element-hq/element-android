@@ -56,6 +56,8 @@ import java.io.File
 import java.io.IOException
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
+import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.Locale
 import java.util.zip.GZIPOutputStream
 import javax.inject.Inject
@@ -279,10 +281,13 @@ class BugReporter @Inject constructor(
 
                     // UnifiedPush
                     // Only include the UP endpoint base url to exclude private user tokens in the path or parameters
+                    val reportTime = SimpleDateFormat("yyyy-MM-dd HH:mm:ss ZZZ", Locale.US).format(Date())
                     builder.addFormDataPart("unifiedpush_endpoint", UPHelper.getPrivacyFriendlyUpEndpoint(context).toString())
                             .addFormDataPart("unifiedpush_gateway", UPHelper.getPushGateway(context).toString())
                             .addFormDataPart("unifiedpush_distributor_exists", UPHelper.distributorExists(context).toString())
                             .addFormDataPart("unifiedpush_is_embedded_distributor", UPHelper.isEmbeddedDistributor(context).toString())
+                    // More Schildi-specific fields
+                            .addFormDataPart("reportTime", reportTime)
 
                     val buildNumber = context.getString(R.string.build_number)
                     if (buildNumber.isNotEmpty() && buildNumber != "0") {
