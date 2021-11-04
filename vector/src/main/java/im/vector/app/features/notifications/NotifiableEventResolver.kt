@@ -30,6 +30,7 @@ import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.isEdition
+import org.matrix.android.sdk.api.session.events.model.isImageMessage
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
@@ -202,7 +203,7 @@ class NotifiableEventResolver @Inject constructor(
     private suspend fun TimelineEvent.fetchImageIfPresent(session: Session): Uri? {
         return when {
             root.isEncrypted() && root.mxDecryptionResult == null -> null
-            root.getClearType() == EventType.MESSAGE              -> downloadAndExportImage(session)
+            root.isImageMessage()                                 -> downloadAndExportImage(session)
             else                                                  -> null
         }
     }
