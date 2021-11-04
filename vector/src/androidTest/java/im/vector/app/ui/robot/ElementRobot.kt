@@ -17,13 +17,14 @@
 package im.vector.app.ui.robot
 
 import androidx.test.espresso.Espresso.pressBack
-import androidx.test.espresso.action.ViewActions
+import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import com.adevinta.android.barista.interaction.BaristaDrawerInteractions.openDrawer
 import im.vector.app.R
-import im.vector.app.activityIdlingResource
+import im.vector.app.espresso.tools.waitUntilActivityVisible
 import im.vector.app.features.createdirect.CreateDirectRoomActivity
-import im.vector.app.withIdlingResource
+import im.vector.app.features.roomdirectory.RoomDirectoryActivity
+import java.lang.Thread.sleep
 
 class ElementRobot {
 
@@ -37,10 +38,21 @@ class ElementRobot {
     fun newDirectMessage(block: NewDirectMessageRobot.() -> Unit) {
         clickOn(R.id.bottom_action_people)
         clickOn(R.id.createChatRoomButton)
-        ViewActions.closeSoftKeyboard()
-        withIdlingResource(activityIdlingResource(CreateDirectRoomActivity::class.java)) {
-            block(NewDirectMessageRobot())
-        }
+        waitUntilActivityVisible<CreateDirectRoomActivity>()
+        // close keyboard
+        sleep(1000)
+        pressBack()
+        block(NewDirectMessageRobot())
+        pressBack()
+    }
+
+    fun newRoom(block: NewRoomRobot.() -> Unit) {
+        clickOn(R.id.bottom_action_rooms)
+        clickOn(R.id.createGroupRoomButton)
+        sleep(1000)
+        waitUntilActivityVisible<RoomDirectoryActivity>()
+        BaristaVisibilityAssertions.assertDisplayed(R.id.publicRoomsList)
+        block(NewRoomRobot())
         pressBack()
     }
 }

@@ -30,18 +30,10 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
-import com.adevinta.android.barista.assertion.BaristaListAssertions.assertListItemCount
 import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
-import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickBack
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
-import com.adevinta.android.barista.interaction.BaristaClickInteractions.longClickOn
 import com.adevinta.android.barista.interaction.BaristaDialogInteractions.clickDialogNegativeButton
 import com.adevinta.android.barista.interaction.BaristaDialogInteractions.clickDialogPositiveButton
-import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
-import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem
-import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild
-import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.clickMenu
-import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu
 import im.vector.app.EspressoHelper
 import im.vector.app.R
 import im.vector.app.SleepViewAction
@@ -49,12 +41,9 @@ import im.vector.app.activityIdlingResource
 import im.vector.app.espresso.tools.waitUntilActivityVisible
 import im.vector.app.features.MainActivity
 import im.vector.app.features.home.HomeActivity
-import im.vector.app.features.home.room.detail.RoomDetailActivity
 import im.vector.app.features.login.LoginActivity
-import im.vector.app.features.roomdirectory.RoomDirectoryActivity
 import im.vector.app.initialSyncIdlingResource
 import im.vector.app.ui.robot.ElementRobot
-import im.vector.app.waitForView
 import im.vector.app.withIdlingResource
 import org.junit.Rule
 import org.junit.Test
@@ -117,10 +106,19 @@ class UiAllScreensSanityTest {
             verifyInviteFriendsButton()
         }
 
-        // Create Room
-        // First navigate to the other tab
-        clickOn(R.id.bottom_action_rooms)
-        createRoom()
+        assertDisplayed(R.id.bottomNavigationView)
+        sleep(1000)
+
+        elementRobot.newRoom {
+            createNewRoom {
+                crawl()
+                createRoom {
+                    postMessage("Hello world!")
+                    crawl()
+                    openSettings { crawl() }
+                }
+            }
+        }
 
         assertDisplayed(R.id.bottomNavigationView)
 
@@ -171,194 +169,6 @@ class UiAllScreensSanityTest {
         clickOn(R.string.skip)
         assertDisplayed(R.string.are_you_sure)
         clickOn(R.string.skip)
-    }
-
-    private fun createRoom() {
-        clickOn(R.id.createGroupRoomButton)
-        waitUntilActivityVisible<RoomDirectoryActivity> {
-            assertDisplayed(R.id.publicRoomsList)
-        }
-        clickOn(R.string.create_new_room)
-
-        // Room access bottom sheet
-        clickOn(R.string.room_settings_room_access_private_title)
-        pressBack()
-
-        // Create
-        assertListItemCount(R.id.createRoomForm, 12)
-        clickListItemChild(R.id.createRoomForm, 11, R.id.form_submit_button)
-
-        waitUntilActivityVisible<RoomDetailActivity> {
-            assertDisplayed(R.id.roomDetailContainer)
-        }
-
-        clickOn(R.id.attachmentButton)
-        clickBack()
-
-        // Send a message
-        writeTo(R.id.composerEditText, "Hello world!")
-        clickOn(R.id.sendButton)
-
-        navigateToRoomSettings()
-
-        // Long click on the message
-        longClickOnMessageTest()
-
-        // Menu
-        openMenu()
-        pressBack()
-        clickMenu(R.id.voice_call)
-        pressBack()
-        clickMenu(R.id.video_call)
-        pressBack()
-        clickMenu(R.id.search)
-        pressBack()
-
-        pressBack()
-    }
-
-    private fun longClickOnMessageTest() {
-        // Test quick reaction
-        longClickOnMessage()
-        // Add quick reaction
-        clickOn("\uD83D\uDC4D️") // 👍
-
-        sleep(1000)
-
-        // Open reactions
-        longClickOn("\uD83D\uDC4D️") // 👍
-        pressBack()
-
-        // Test add reaction
-        longClickOnMessage()
-        clickOn(R.string.message_add_reaction)
-        // Filter
-        // TODO clickMenu(R.id.search)
-        // Wait for emoji to load, it's async now
-        sleep(2_000)
-        clickListItem(R.id.emojiRecyclerView, 4)
-
-        // Test Edit mode
-        longClickOnMessage()
-        clickOn(R.string.edit)
-        // TODO Cancel action
-        writeTo(R.id.composerEditText, "Hello universe!")
-        // Wait a bit for the keyboard layout to update
-        sleep(30)
-        clickOn(R.id.sendButton)
-        // Wait for the UI to update
-        sleep(1000)
-        // Open edit history
-        longClickOnMessage("Hello universe! (edited)")
-        clickOn(R.string.message_view_edit_history)
-        pressBack()
-    }
-
-    private fun longClickOnMessage(text: String = "Hello world!") {
-        onView(withId(R.id.timelineRecyclerView))
-                .perform(
-                        actionOnItem<RecyclerView.ViewHolder>(
-                                hasDescendant(withText(text)),
-                                longClick()
-                        )
-                )
-    }
-
-    private fun navigateToRoomSettings() {
-        clickOn(R.id.roomToolbarTitleView)
-        assertDisplayed(R.id.roomProfileAvatarView)
-
-        // Room settings
-        clickListItem(R.id.matrixProfileRecyclerView, 3)
-        navigateToRoomParameters()
-        pressBack()
-
-        // Notifications
-        clickListItem(R.id.matrixProfileRecyclerView, 5)
-        pressBack()
-
-        assertDisplayed(R.id.roomProfileAvatarView)
-
-        // People
-        clickListItem(R.id.matrixProfileRecyclerView, 7)
-        assertDisplayed(R.id.inviteUsersButton)
-        navigateToRoomPeople()
-        // Fab
-        navigateToInvite()
-        pressBack()
-        pressBack()
-
-        assertDisplayed(R.id.roomProfileAvatarView)
-
-        // Uploads
-        clickListItem(R.id.matrixProfileRecyclerView, 9)
-        // File tab
-        clickOn(R.string.uploads_files_title)
-        sleep(1000)
-        pressBack()
-
-        assertDisplayed(R.id.roomProfileAvatarView)
-
-        // Leave
-        clickListItem(R.id.matrixProfileRecyclerView, 13)
-        clickDialogNegativeButton()
-
-        // Advanced
-        // Room addresses
-        clickListItem(R.id.matrixProfileRecyclerView, 15)
-        onView(isRoot()).perform(waitForView(withText(R.string.room_alias_published_alias_title)))
-        pressBack()
-
-        // Room permissions
-        clickListItem(R.id.matrixProfileRecyclerView, 17)
-        onView(isRoot()).perform(waitForView(withText(R.string.room_permissions_title)))
-        clickOn(R.string.room_permissions_change_room_avatar)
-        clickDialogNegativeButton()
-        // Toggle
-        clickOn(R.string.show_advanced)
-        clickOn(R.string.hide_advanced)
-        pressBack()
-
-        // Menu share
-        // clickMenu(R.id.roomProfileShareAction)
-        // pressBack()
-
-        pressBack()
-    }
-
-    private fun navigateToRoomParameters() {
-        // Room history readability
-        clickListItem(R.id.roomSettingsRecyclerView, 4)
-        pressBack()
-
-        // Room access
-        clickListItem(R.id.roomSettingsRecyclerView, 6)
-        pressBack()
-    }
-
-    private fun navigateToInvite() {
-        assertDisplayed(R.id.inviteUsersButton)
-        clickOn(R.id.inviteUsersButton)
-        closeSoftKeyboard()
-        pressBack()
-    }
-
-    private fun navigateToRoomPeople() {
-        // Open first user
-        clickListItem(R.id.roomSettingsRecyclerView, 1)
-        sleep(1000)
-        assertDisplayed(R.id.memberProfilePowerLevelView)
-
-        // Verification
-        clickListItem(R.id.matrixProfileRecyclerView, 1)
-        clickBack()
-
-        // Role
-        clickListItem(R.id.matrixProfileRecyclerView, 3)
-        sleep(1000)
-        clickDialogNegativeButton()
-        sleep(1000)
-        clickBack()
     }
 }
 

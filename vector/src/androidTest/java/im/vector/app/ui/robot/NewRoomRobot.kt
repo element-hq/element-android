@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
+ * Copyright (c) 2021 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,12 +14,20 @@
  * limitations under the License.
  */
 
-package im.vector.app.espresso.tools
+package im.vector.app.ui.robot
 
-import android.app.Activity
-import im.vector.app.activityIdlingResource
-import im.vector.app.withIdlingResource
+import androidx.test.espresso.Espresso
+import com.adevinta.android.barista.interaction.BaristaClickInteractions
+import im.vector.app.R
 
-inline fun <reified T : Activity> waitUntilActivityVisible(noinline block: (() -> Unit) = {}) {
-    withIdlingResource(activityIdlingResource(T::class.java), block)
+class NewRoomRobot {
+
+    fun createNewRoom(block: CreateNewRoomRobot.() -> Unit) {
+        BaristaClickInteractions.clickOn(R.string.create_new_room)
+        val createNewRoomRobot = CreateNewRoomRobot()
+        block(createNewRoomRobot)
+        if (!createNewRoomRobot.createdRoom) {
+            Espresso.pressBack()
+        }
+    }
 }
