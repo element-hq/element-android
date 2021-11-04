@@ -252,4 +252,3 @@ class NotifiableEventResolver @Inject constructor(
         return null
     }
 }
-
