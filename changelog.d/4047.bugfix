@@ -1,1 +1,0 @@
-Fixing call ringtones only playing once when the ringtone doesn't contain looping metadata (android 9.0 and above)
