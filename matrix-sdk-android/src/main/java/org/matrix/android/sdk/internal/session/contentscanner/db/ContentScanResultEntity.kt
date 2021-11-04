@@ -4,13 +4,13 @@
  * Proprietary and confidential
  */
 
-package org.matrix.android.sdk.internal.session.contentscanning.db
+package org.matrix.android.sdk.internal.session.contentscanner.db
 
 import io.realm.RealmObject
 import io.realm.annotations.Index
 import org.matrix.android.sdk.api.extensions.tryOrNull
-import org.matrix.android.sdk.api.session.contentscanning.ScanState
-import org.matrix.android.sdk.api.session.contentscanning.ScanStatusInfo
+import org.matrix.android.sdk.api.session.contentscanner.ScanState
+import org.matrix.android.sdk.api.session.contentscanner.ScanStatusInfo
 
 internal open class ContentScanResultEntity(
         @Index

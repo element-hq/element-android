@@ -4,7 +4,7 @@
  * Proprietary and confidential
  */
 
-package org.matrix.android.sdk.internal.session.contentscanning.db
+package org.matrix.android.sdk.internal.session.contentscanner.db
 
 import io.realm.Realm
 import io.realm.kotlin.createObject

@@ -4,13 +4,12 @@
  * Proprietary and confidential
  */
 
-package org.matrix.android.sdk.internal.session.contentscanning
+package org.matrix.android.sdk.internal.session.contentscanner
 
 import org.matrix.android.sdk.internal.session.SessionScope
-import org.matrix.android.sdk.internal.session.contentscanning.ContentScanApi
 import javax.inject.Inject
 
 @SessionScope
-internal class ContentScanningApiProvider @Inject constructor() {
-    var contentScannerApi: ContentScanApi? = null
+internal class ContentScannerApiProvider @Inject constructor() {
+    var contentScannerApi: ContentScannerApi? = null
 }

@@ -4,7 +4,7 @@
  * Proprietary and confidential
  */
 
-package org.matrix.android.sdk.api.session.contentscanning
+package org.matrix.android.sdk.api.session.contentscanner
 
 enum class ScanState {
     TRUSTED,

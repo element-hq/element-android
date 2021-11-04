@@ -4,17 +4,17 @@
  * Proprietary and confidential
  */
 
-package org.matrix.android.sdk.internal.session.contentscanning.tasks
+package org.matrix.android.sdk.internal.session.contentscanner.tasks
 
 import org.matrix.android.sdk.internal.network.executeRequest
-import org.matrix.android.sdk.internal.session.contentscanning.ContentScanApi
-import org.matrix.android.sdk.internal.session.contentscanning.model.ServerPublicKeyResponse
+import org.matrix.android.sdk.internal.session.contentscanner.ContentScannerApi
+import org.matrix.android.sdk.internal.session.contentscanner.model.ServerPublicKeyResponse
 import org.matrix.android.sdk.internal.task.Task
 import javax.inject.Inject
 
 internal interface GetServerPublicKeyTask : Task<GetServerPublicKeyTask.Params, String?> {
     data class Params(
-            val contentScanApi: ContentScanApi
+            val contentScannerApi: ContentScannerApi
     )
 }
 
@@ -22,7 +22,7 @@ internal class DefaultGetServerPublicKeyTask @Inject constructor() : GetServerPu
 
     override suspend fun execute(params: GetServerPublicKeyTask.Params): String? {
         return executeRequest<ServerPublicKeyResponse>(null) {
-            params.contentScanApi.getServerPublicKey()
+            params.contentScannerApi.getServerPublicKey()
         }.publicKey
     }
 }

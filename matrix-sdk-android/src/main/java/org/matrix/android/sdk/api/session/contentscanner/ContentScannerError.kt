@@ -4,13 +4,13 @@
  * Proprietary and confidential
  */
 
-package org.matrix.android.sdk.api.session.contentscanning
+package org.matrix.android.sdk.api.session.contentscanner
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class ContentScanError(
+data class ContentScannerError(
         @Json(name = "info") val info: String? = null,
         @Json(name = "reason") val reason: String? = null
 ) {
@@ -32,7 +32,7 @@ data class ContentScanError(
     }
 }
 
-class ScanFailure(val error: ContentScanError, val httpCode: Int, cause: Throwable? = null) : Throwable(cause = cause)
+class ScanFailure(val error: ContentScannerError, val httpCode: Int, cause: Throwable? = null) : Throwable(cause = cause)
 
 // For Glide, which deals with Exception and not with Throwable
 fun ScanFailure.toException() = Exception(this)

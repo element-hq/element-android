@@ -4,13 +4,13 @@
  * Proprietary and confidential
  */
 
-package org.matrix.android.sdk.internal.session.contentscanning
+package org.matrix.android.sdk.internal.session.contentscanner
 
 import okhttp3.ResponseBody
 import org.matrix.android.sdk.internal.network.NetworkConstants
-import org.matrix.android.sdk.internal.session.contentscanning.model.DownloadBody
-import org.matrix.android.sdk.internal.session.contentscanning.model.ScanResponse
-import org.matrix.android.sdk.internal.session.contentscanning.model.ServerPublicKeyResponse
+import org.matrix.android.sdk.internal.session.contentscanner.model.DownloadBody
+import org.matrix.android.sdk.internal.session.contentscanner.model.ScanResponse
+import org.matrix.android.sdk.internal.session.contentscanner.model.ServerPublicKeyResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -19,7 +19,7 @@ import retrofit2.http.Path
 /**
  * https://github.com/matrix-org/matrix-content-scanner
  */
-internal interface ContentScanApi {
+internal interface ContentScannerApi {
 
     @POST(NetworkConstants.URI_API_PREFIX_PATH_MEDIA_PROXY_UNSTABLE + "download_encrypted")
     suspend fun downloadEncrypted(@Body info: DownloadBody): ResponseBody

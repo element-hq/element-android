@@ -4,7 +4,7 @@
  * Proprietary and confidential
  */
 
-package org.matrix.android.sdk.internal.session.contentscanning
+package org.matrix.android.sdk.internal.session.contentscanner
 
 import androidx.lifecycle.LiveData
 import dagger.Lazy
@@ -13,18 +13,18 @@ import okhttp3.OkHttpClient
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.NoOpMatrixCallback
-import org.matrix.android.sdk.api.session.contentscanning.ContentScannerService
-import org.matrix.android.sdk.api.session.contentscanning.ScanState
-import org.matrix.android.sdk.api.session.contentscanning.ScanStatusInfo
+import org.matrix.android.sdk.api.session.contentscanner.ContentScannerService
+import org.matrix.android.sdk.api.session.contentscanner.ScanState
+import org.matrix.android.sdk.api.session.contentscanner.ScanStatusInfo
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.crypto.attachments.ElementToDecrypt
 import org.matrix.android.sdk.internal.di.Unauthenticated
 import org.matrix.android.sdk.internal.network.RetrofitFactory
 import org.matrix.android.sdk.internal.session.SessionScope
-import org.matrix.android.sdk.internal.session.contentscanning.data.ContentScanningStore
-import org.matrix.android.sdk.internal.session.contentscanning.tasks.GetServerPublicKeyTask
-import org.matrix.android.sdk.internal.session.contentscanning.tasks.ScanEncryptedTask
-import org.matrix.android.sdk.internal.session.contentscanning.tasks.ScanMediaTask
+import org.matrix.android.sdk.internal.session.contentscanner.data.ContentScannerStore
+import org.matrix.android.sdk.internal.session.contentscanner.tasks.GetServerPublicKeyTask
+import org.matrix.android.sdk.internal.session.contentscanner.tasks.ScanEncryptedTask
+import org.matrix.android.sdk.internal.session.contentscanner.tasks.ScanMediaTask
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.task.launchToCallback
 import org.matrix.android.sdk.internal.util.awaitCallback
@@ -36,8 +36,8 @@ internal class DefaultContentScannerService @Inject constructor(
         private val retrofitFactory: RetrofitFactory,
         @Unauthenticated
         private val okHttpClient: Lazy<OkHttpClient>,
-        private val contentScanningApiProvider: ContentScanningApiProvider,
-        private val contentScanningStore: ContentScanningStore,
+        private val contentScannerApiProvider: ContentScannerApiProvider,
+        private val contentScannerStore: ContentScannerStore,
 //        private val sessionParams: SessionParams,
         private val getServerPublicKeyTask: GetServerPublicKeyTask,
         private val scanEncryptedTask: ScanEncryptedTask,
@@ -51,11 +51,11 @@ internal class DefaultContentScannerService @Inject constructor(
         private set
 
     override fun getContentScannerServer(): String? {
-        return contentScanningStore.getScannerUrl()
+        return contentScannerStore.getScannerUrl()
     }
 
     override fun getServerPublicKey(forceDownload: Boolean, callback: MatrixCallback<String?>) {
-        val api = contentScanningApiProvider.contentScannerApi ?: return Unit.also {
+        val api = contentScannerApiProvider.contentScannerApi ?: return Unit.also {
             callback.onFailure(IllegalArgumentException("No content scanner defined"))
         }
 
@@ -102,15 +102,15 @@ internal class DefaultContentScannerService @Inject constructor(
         }
     }
 
-    override fun setScannerUrl(url: String?) = contentScanningStore.setScannerUrl(url).also {
+    override fun setScannerUrl(url: String?) = contentScannerStore.setScannerUrl(url).also {
         if (url == null) {
-            contentScanningApiProvider.contentScannerApi = null
+            contentScannerApiProvider.contentScannerApi = null
             serverPublicKey = null
         } else {
             val api = retrofitFactory
                     .create(okHttpClient, url)
-                    .create(ContentScanApi::class.java)
-            contentScanningApiProvider.contentScannerApi = api
+                    .create(ContentScannerApi::class.java)
+            contentScannerApiProvider.contentScannerApi = api
 
             taskExecutor.executorScope.launch(coroutineDispatchers.io) {
                 try {
@@ -124,25 +124,25 @@ internal class DefaultContentScannerService @Inject constructor(
         }
     }
 
-    override fun enableScanner(enabled: Boolean) = contentScanningStore.enableScanning(enabled)
+    override fun enableScanner(enabled: Boolean) = contentScannerStore.enableScanning(enabled)
 
-    override fun isScannerEnabled(): Boolean = contentScanningStore.isScanEnabled()
+    override fun isScannerEnabled(): Boolean = contentScannerStore.isScanEnabled()
 
     override fun getCachedScanResultForFile(mxcUrl: String): ScanStatusInfo? {
-        return contentScanningStore.getScanResult(mxcUrl)
+        return contentScannerStore.getScanResult(mxcUrl)
     }
 
     override fun getLiveStatusForFile(mxcUrl: String, fetchIfNeeded: Boolean): LiveData<Optional<ScanStatusInfo>> {
-        val data = contentScanningStore.getLiveScanResult(mxcUrl)
-        if (fetchIfNeeded && !contentScanningStore.isScanResultKnownOrInProgress(mxcUrl, getContentScannerServer())) {
+        val data = contentScannerStore.getLiveScanResult(mxcUrl)
+        if (fetchIfNeeded && !contentScannerStore.isScanResultKnownOrInProgress(mxcUrl, getContentScannerServer())) {
             getScanResultForAttachment(mxcUrl, NoOpMatrixCallback())
         }
         return data
     }
 
     override fun getLiveStatusForEncryptedFile(mxcUrl: String, fileInfo: ElementToDecrypt, fetchIfNeeded: Boolean): LiveData<Optional<ScanStatusInfo>> {
-        val data = contentScanningStore.getLiveScanResult(mxcUrl)
-        if (fetchIfNeeded && !contentScanningStore.isScanResultKnownOrInProgress(mxcUrl, getContentScannerServer())) {
+        val data = contentScannerStore.getLiveScanResult(mxcUrl)
+        if (fetchIfNeeded && !contentScannerStore.isScanResultKnownOrInProgress(mxcUrl, getContentScannerServer())) {
             getScanResultForAttachment(mxcUrl, fileInfo, NoOpMatrixCallback())
         }
         return data

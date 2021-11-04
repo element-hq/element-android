@@ -4,15 +4,15 @@
  * Proprietary and confidential
  */
 
-package org.matrix.android.sdk.internal.session.contentscanning
+package org.matrix.android.sdk.internal.session.contentscanner
 
 import org.matrix.android.sdk.internal.crypto.attachments.ElementToDecrypt
 import org.matrix.android.sdk.internal.crypto.model.rest.EncryptedFileInfo
 import org.matrix.android.sdk.internal.crypto.model.rest.EncryptedFileKey
 import org.matrix.android.sdk.internal.crypto.tools.withOlmEncryption
-import org.matrix.android.sdk.internal.session.contentscanning.model.DownloadBody
-import org.matrix.android.sdk.internal.session.contentscanning.model.EncryptedBody
-import org.matrix.android.sdk.internal.session.contentscanning.model.toCanonicalJson
+import org.matrix.android.sdk.internal.session.contentscanner.model.DownloadBody
+import org.matrix.android.sdk.internal.session.contentscanner.model.EncryptedBody
+import org.matrix.android.sdk.internal.session.contentscanner.model.toCanonicalJson
 
 object ScanEncryptorUtils {
 

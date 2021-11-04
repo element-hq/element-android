@@ -18,8 +18,8 @@ package org.matrix.android.sdk.api.failure
 
 import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.api.extensions.tryOrNull
-import org.matrix.android.sdk.api.session.contentscanning.ContentScanError
-import org.matrix.android.sdk.api.session.contentscanning.ScanFailure
+import org.matrix.android.sdk.api.session.contentscanner.ContentScannerError
+import org.matrix.android.sdk.api.session.contentscanner.ScanFailure
 import org.matrix.android.sdk.internal.di.MoshiProvider
 import java.io.IOException
 import javax.net.ssl.HttpsURLConnection
@@ -110,7 +110,7 @@ fun Throwable.toScanFailure(): ScanFailure? {
     return if (this is Failure.OtherServerError) {
         tryOrNull {
             MoshiProvider.providesMoshi()
-                    .adapter(ContentScanError::class.java)
+                    .adapter(ContentScannerError::class.java)
                     .fromJson(errorBody)
         }
                 ?.let { ScanFailure(it, httpCode, this) }

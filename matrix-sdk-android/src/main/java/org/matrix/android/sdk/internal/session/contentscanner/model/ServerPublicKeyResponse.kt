@@ -4,7 +4,7 @@
  * Proprietary and confidential
  */
 
-package org.matrix.android.sdk.internal.session.contentscanning.model
+package org.matrix.android.sdk.internal.session.contentscanner.model
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass

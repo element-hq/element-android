@@ -4,16 +4,16 @@
  * Proprietary and confidential
  */
 
-package org.matrix.android.sdk.internal.session.contentscanning.tasks
+package org.matrix.android.sdk.internal.session.contentscanner.tasks
 
 import org.matrix.android.sdk.api.failure.toScanFailure
-import org.matrix.android.sdk.api.session.contentscanning.ScanState
+import org.matrix.android.sdk.api.session.contentscanner.ScanState
 import org.matrix.android.sdk.internal.crypto.attachments.ElementToDecrypt
 import org.matrix.android.sdk.internal.network.executeRequest
-import org.matrix.android.sdk.internal.session.contentscanning.ContentScanningApiProvider
-import org.matrix.android.sdk.internal.session.contentscanning.ScanEncryptorUtils
-import org.matrix.android.sdk.internal.session.contentscanning.data.ContentScanningStore
-import org.matrix.android.sdk.internal.session.contentscanning.model.ScanResponse
+import org.matrix.android.sdk.internal.session.contentscanner.ContentScannerApiProvider
+import org.matrix.android.sdk.internal.session.contentscanner.ScanEncryptorUtils
+import org.matrix.android.sdk.internal.session.contentscanner.data.ContentScannerStore
+import org.matrix.android.sdk.internal.session.contentscanner.model.ScanResponse
 import org.matrix.android.sdk.internal.task.Task
 import javax.inject.Inject
 
@@ -26,23 +26,23 @@ internal interface ScanEncryptedTask : Task<ScanEncryptedTask.Params, ScanRespon
 }
 
 internal class DefaultScanEncryptedTask @Inject constructor(
-        private val contentScanningApiProvider: ContentScanningApiProvider,
-        private val contentScanningStore: ContentScanningStore
+        private val contentScannerApiProvider: ContentScannerApiProvider,
+        private val contentScannerStore: ContentScannerStore
 ) : ScanEncryptedTask {
 
     override suspend fun execute(params: ScanEncryptedTask.Params): ScanResponse {
         val mxcUrl = params.mxcUrl
         val dlBody = ScanEncryptorUtils.getDownloadBodyAndEncryptIfNeeded(params.publicServerKey, params.mxcUrl, params.encryptedInfo)
 
-        val scannerUrl = contentScanningStore.getScannerUrl()
-        contentScanningStore.updateStateForContent(params.mxcUrl, ScanState.IN_PROGRESS, scannerUrl)
+        val scannerUrl = contentScannerStore.getScannerUrl()
+        contentScannerStore.updateStateForContent(params.mxcUrl, ScanState.IN_PROGRESS, scannerUrl)
 
         try {
-            val api = contentScanningApiProvider.contentScannerApi ?: throw IllegalArgumentException()
+            val api = contentScannerApiProvider.contentScannerApi ?: throw IllegalArgumentException()
             val executeRequest = executeRequest<ScanResponse>(null) {
                 api.scanFile(dlBody)
             }
-            contentScanningStore.updateScanResultForContent(
+            contentScannerStore.updateScanResultForContent(
                     mxcUrl,
                     scannerUrl,
                     ScanState.TRUSTED.takeIf { executeRequest.clean } ?: ScanState.INFECTED,
@@ -50,7 +50,7 @@ internal class DefaultScanEncryptedTask @Inject constructor(
             )
             return executeRequest
         } catch (failure: Throwable) {
-            contentScanningStore.updateStateForContent(params.mxcUrl, ScanState.UNKNOWN, scannerUrl)
+            contentScannerStore.updateStateForContent(params.mxcUrl, ScanState.UNKNOWN, scannerUrl)
             throw failure.toScanFailure() ?: failure
         }
     }

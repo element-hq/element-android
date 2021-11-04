@@ -4,14 +4,14 @@
  * Proprietary and confidential
  */
 
-package org.matrix.android.sdk.internal.session.contentscanning.data
+package org.matrix.android.sdk.internal.session.contentscanner.data
 
 import androidx.lifecycle.LiveData
-import org.matrix.android.sdk.api.session.contentscanning.ScanState
-import org.matrix.android.sdk.api.session.contentscanning.ScanStatusInfo
+import org.matrix.android.sdk.api.session.contentscanner.ScanState
+import org.matrix.android.sdk.api.session.contentscanner.ScanStatusInfo
 import org.matrix.android.sdk.api.util.Optional
 
-internal interface ContentScanningStore {
+internal interface ContentScannerStore {
 
     fun getScannerUrl(): String?
 

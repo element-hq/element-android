@@ -4,14 +4,14 @@
  * Proprietary and confidential
  */
 
-package org.matrix.android.sdk.internal.session.contentscanning.tasks
+package org.matrix.android.sdk.internal.session.contentscanner.tasks
 
 import org.matrix.android.sdk.api.failure.toScanFailure
-import org.matrix.android.sdk.api.session.contentscanning.ScanState
+import org.matrix.android.sdk.api.session.contentscanner.ScanState
 import org.matrix.android.sdk.internal.network.executeRequest
-import org.matrix.android.sdk.internal.session.contentscanning.ContentScanningApiProvider
-import org.matrix.android.sdk.internal.session.contentscanning.data.ContentScanningStore
-import org.matrix.android.sdk.internal.session.contentscanning.model.ScanResponse
+import org.matrix.android.sdk.internal.session.contentscanner.ContentScannerApiProvider
+import org.matrix.android.sdk.internal.session.contentscanner.data.ContentScannerStore
+import org.matrix.android.sdk.internal.session.contentscanner.model.ScanResponse
 import org.matrix.android.sdk.internal.task.Task
 import javax.inject.Inject
 
@@ -22,8 +22,8 @@ internal interface ScanMediaTask : Task<ScanMediaTask.Params, ScanResponse> {
 }
 
 internal class DefaultScanMediaTask @Inject constructor(
-        private val contentScanningApiProvider: ContentScanningApiProvider,
-        private val contentScanningStore: ContentScanningStore
+        private val contentScannerApiProvider: ContentScannerApiProvider,
+        private val contentScannerStore: ContentScannerStore
 ) : ScanMediaTask {
 
     override suspend fun execute(params: ScanMediaTask.Params): ScanResponse {
@@ -31,8 +31,8 @@ internal class DefaultScanMediaTask @Inject constructor(
         if (!params.mxcUrl.startsWith("mxc://")) {
             throw IllegalAccessException("Invalid mxc url")
         }
-        val scannerUrl = contentScanningStore.getScannerUrl()
-        contentScanningStore.updateStateForContent(params.mxcUrl, ScanState.IN_PROGRESS, scannerUrl)
+        val scannerUrl = contentScannerStore.getScannerUrl()
+        contentScannerStore.updateStateForContent(params.mxcUrl, ScanState.IN_PROGRESS, scannerUrl)
 
         var serverAndMediaId = params.mxcUrl.removePrefix("mxc://")
         val fragmentOffset = serverAndMediaId.indexOf("#")
@@ -47,10 +47,10 @@ internal class DefaultScanMediaTask @Inject constructor(
 
         try {
             val scanResponse = executeRequest<ScanResponse>(null) {
-                val api = contentScanningApiProvider.contentScannerApi ?: throw IllegalArgumentException()
+                val api = contentScannerApiProvider.contentScannerApi ?: throw IllegalArgumentException()
                 api.scanMedia(split[0], split[1])
             }
-            contentScanningStore.updateScanResultForContent(
+            contentScannerStore.updateScanResultForContent(
                     params.mxcUrl,
                     scannerUrl,
                     ScanState.TRUSTED.takeIf { scanResponse.clean } ?: ScanState.INFECTED,
@@ -58,7 +58,7 @@ internal class DefaultScanMediaTask @Inject constructor(
             )
             return scanResponse
         } catch (failure: Throwable) {
-            contentScanningStore.updateStateForContent(params.mxcUrl, ScanState.UNKNOWN, scannerUrl)
+            contentScannerStore.updateStateForContent(params.mxcUrl, ScanState.UNKNOWN, scannerUrl)
             throw failure.toScanFailure() ?: failure
         }
     }

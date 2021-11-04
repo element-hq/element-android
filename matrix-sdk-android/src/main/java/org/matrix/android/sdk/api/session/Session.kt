@@ -31,7 +31,7 @@ import org.matrix.android.sdk.api.session.cache.CacheService
 import org.matrix.android.sdk.api.session.call.CallSignalingService
 import org.matrix.android.sdk.api.session.content.ContentUploadStateTracker
 import org.matrix.android.sdk.api.session.content.ContentUrlResolver
-import org.matrix.android.sdk.api.session.contentscanning.ContentScannerService
+import org.matrix.android.sdk.api.session.contentscanner.ContentScannerService
 import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.events.EventService
 import org.matrix.android.sdk.api.session.file.ContentDownloadStateTracker
@@ -194,9 +194,9 @@ interface Session :
     fun cryptoService(): CryptoService
 
     /**
-     * Returns the ContentScanningService associated with the session
+     * Returns the ContentScannerService associated with the session
      */
-    fun contentScanningService(): ContentScannerService
+    fun contentScannerService(): ContentScannerService
 
     /**
      * Returns the identity service associated with the session

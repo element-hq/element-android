@@ -4,7 +4,7 @@
  * Proprietary and confidential
  */
 
-package org.matrix.android.sdk.api.session.contentscanning
+package org.matrix.android.sdk.api.session.contentscanner
 
 import androidx.lifecycle.LiveData
 import org.matrix.android.sdk.api.MatrixCallback

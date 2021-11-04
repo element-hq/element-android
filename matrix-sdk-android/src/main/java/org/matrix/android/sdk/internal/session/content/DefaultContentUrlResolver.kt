@@ -20,11 +20,11 @@ import org.matrix.android.sdk.api.MatrixUrls
 import org.matrix.android.sdk.api.MatrixUrls.isMxcUrl
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.session.content.ContentUrlResolver
-import org.matrix.android.sdk.api.session.contentscanning.ContentScannerService
+import org.matrix.android.sdk.api.session.contentscanner.ContentScannerService
 import org.matrix.android.sdk.internal.crypto.attachments.ElementToDecrypt
 import org.matrix.android.sdk.internal.network.NetworkConstants
-import org.matrix.android.sdk.internal.session.contentscanning.ScanEncryptorUtils
-import org.matrix.android.sdk.internal.session.contentscanning.model.toJson
+import org.matrix.android.sdk.internal.session.contentscanner.ScanEncryptorUtils
+import org.matrix.android.sdk.internal.session.contentscanner.model.toJson
 import org.matrix.android.sdk.internal.util.ensureTrailingSlash
 import javax.inject.Inject
 

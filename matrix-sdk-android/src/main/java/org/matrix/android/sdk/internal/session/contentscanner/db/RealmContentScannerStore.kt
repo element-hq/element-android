@@ -4,14 +4,14 @@
  * Proprietary and confidential
  */
 
-package org.matrix.android.sdk.internal.session.contentscanning.db
+package org.matrix.android.sdk.internal.session.contentscanner.db
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import com.zhuinden.monarchy.Monarchy
-import org.matrix.android.sdk.internal.session.contentscanning.data.ContentScanningStore
-import org.matrix.android.sdk.api.session.contentscanning.ScanState
-import org.matrix.android.sdk.api.session.contentscanning.ScanStatusInfo
+import org.matrix.android.sdk.internal.session.contentscanner.data.ContentScannerStore
+import org.matrix.android.sdk.api.session.contentscanner.ScanState
+import org.matrix.android.sdk.api.session.contentscanner.ScanStatusInfo
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import io.realm.kotlin.createObject
@@ -28,7 +28,7 @@ import javax.inject.Inject
 internal class RealmContentScannerStore @Inject constructor(
         @ContentScannerDatabase
         private val realmConfiguration: RealmConfiguration
-) : ContentScanningStore {
+) : ContentScannerStore {
 
     private val monarchy = Monarchy.Builder()
             .setRealmConfiguration(realmConfiguration)
