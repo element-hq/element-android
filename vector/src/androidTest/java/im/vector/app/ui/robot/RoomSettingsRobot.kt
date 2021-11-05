@@ -25,7 +25,9 @@ import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import com.adevinta.android.barista.interaction.BaristaDialogInteractions.clickDialogNegativeButton
 import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem
 import im.vector.app.R
+import im.vector.app.espresso.tools.waitUntilActivityVisible
 import im.vector.app.espresso.tools.waitUntilViewVisible
+import im.vector.app.features.roommemberprofile.RoomMemberProfileActivity
 
 class RoomSettingsRobot {
 
@@ -121,7 +123,9 @@ class RoomSettingsRobot {
     private fun navigateToRoomPeople() {
         // Open first user
         clickListItem(R.id.roomSettingsRecyclerView, 1)
-        waitUntilViewVisible(withId(R.id.memberProfilePowerLevelView))
+        waitUntilActivityVisible<RoomMemberProfileActivity> {
+            waitUntilViewVisible(withId(R.id.memberProfilePowerLevelView))
+        }
 
         // Verification
         clickListItem(R.id.matrixProfileRecyclerView, 1)
