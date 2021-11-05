@@ -69,7 +69,8 @@
     <string name="initial_sync_start_importing_account_rooms">Úvodní synchronizace:
 \nImportuji místnosti</string>
     <string name="initial_sync_start_importing_account_joined_rooms">Úvodní synchronizace:
-\nImportuji místností, jichž jste členy</string>
+\nNačítání konverzací
+\nPokud jste se připojili k mnoha místnostem, může to chvíli trvat</string>
     <string name="initial_sync_start_importing_account_left_rooms">Úvodní synchronizace:
 \nImportuji místnost, jež jste opustili</string>
     <string name="initial_sync_start_importing_account_groups">Úvodní synchronizace:
@@ -78,7 +79,7 @@
 \nImportuji data účtu</string>
     <string name="event_status_sending_message">Odesílám zprávu…</string>
     <string name="initial_sync_start_importing_account_invited_rooms">Úvodní synchronizace:
-\nImportuji pozvání</string>
+\nImportuji pozvánky do místností</string>
     <string name="clear_timeline_send_queue">Vymazat frontu neodeslaných zpráv</string>
     <string name="notice_room_invite_with_reason">%1$s pozvali %2$s. Důvod: %3$s</string>
     <string name="notice_room_invite_you_with_reason">%1$s vás pozvali. Důvod: %2$s</string>
@@ -1623,7 +1624,7 @@
     <string name="message_view_edit_history">Ukázat historii úprav</string>
     <string name="terms_of_service">Všeobecné podmínky</string>
     <string name="review_terms">Pročíst všeobecné podmínky</string>
-    <string name="terms_description_for_identity_server">Nechte se nalézt druhými</string>
+    <string name="terms_description_for_identity_server">Nechte se najít druhými</string>
     <string name="terms_description_for_integration_manager">Použijte boty, můstky, widgety a nálepkové sady</string>
     <string name="read_at">Čtěte na</string>
     <string name="identity_server">Server pro identity</string>
@@ -1631,11 +1632,11 @@
     <string name="add_identity_server">Nastavit server pro identity</string>
     <string name="change_identity_server">Změnit server pro identity</string>
     <string name="settings_discovery_identity_server_info">Nyní používáte %1$s, abyste nalezli a byli nalezeni existujícími kontakty, které znáte.</string>
-    <string name="settings_discovery_identity_server_info_none">Nyní nepoužíváte server pro identity. Abyste existující známé kontakty nalezli a nechali se jimi nalézt, nastavte nějaký níže.</string>
+    <string name="settings_discovery_identity_server_info_none">Nyní nepoužíváte server pro identity. Abyste známé kontakty našli a nechali se jimi najít, nastavte nějaký níže.</string>
     <string name="settings_discovery_emails_title">Emailová adresa k nalezení</string>
     <string name="settings_discovery_no_mails">Volby pro nalezení se ukážou, jakmile doplníte email.</string>
     <string name="settings_discovery_no_msisdn">Volby pro nalezení se ukážou, jakmile doplníte telefonní číslo.</string>
-    <string name="settings_discovery_disconnect_identity_server_info">Odpojení od serveru identit bude znamenat, že Vás jiní uživatelé nebudou moci nalézt a Vy nebudete moci pozvat druhé pomocí emailu nebo telefonního čísla.</string>
+    <string name="settings_discovery_disconnect_identity_server_info">Odpojení od serveru identit bude znamenat, že Vás jiní uživatelé nebudou moci najít a Vy nebudete moci pozvat druhé pomocí emailu nebo telefonního čísla.</string>
     <string name="settings_discovery_msisdn_title">Telefonní čísla pro nalezení</string>
     <string name="settings_discovery_confirm_mail">Poslali jsme Vám potvrzovací email na %s, podívejte se do emailu a klikněte na protvrzovací odkaz</string>
     <string name="settings_discovery_mail_pending">Nevyřízený</string>
@@ -2570,7 +2571,7 @@
     <string name="room_alias_action_publish">Zveřejnit tuto adresu</string>
     <string name="room_alias_local_address_add">Přidat lokální adresu</string>
     <string name="room_alias_local_address_empty">Tato místnost nemá žádné lokální adresy</string>
-    <string name="room_alias_local_address_subtitle">Nastavte adresy pro tuto místnost, aby uživatelé mohli tuto místnost nalézt přes Váš domovský server (%1$s)</string>
+    <string name="room_alias_local_address_subtitle">Nastavte adresy pro tuto místnost, aby uživatelé mohli tuto místnost najít přes Váš domovský server (%1$s)</string>
     <string name="room_alias_local_address_title">Lokální adresa</string>
     <string name="room_alias_address_hint">Nová zveřejněná adresa (např. #alias:server)</string>
     <string name="room_alias_address_empty">Zatím žádné zveřejněné adresy.</string>
@@ -2791,11 +2792,11 @@
     <string name="command_description_join_space">Vstoupit do prostoru s daným id</string>
     <string name="command_description_create_space">Založit prostor</string>
     <string name="search_hint_room_name">Hledat jméno</string>
-    <string name="room_settings_room_access_restricted_description">Kdokoli v prostoru s touto místností ji může nalézt a vstoupit. Jen správci místnosti ji mohou připojit k prostoru.</string>
+    <string name="room_settings_room_access_restricted_description">Kdokoli v prostoru s touto místností ji může najít a vstoupit do ní. Do prostoru ji mohou připojit jen správci místnosti.</string>
     <string name="room_settings_room_access_restricted_title">Pouze členové prostoru</string>
-    <string name="room_settings_room_access_public_description">Kdokoli může místnost nalézt a vstoupit</string>
-    <string name="room_settings_room_access_public_title">Veřejná</string>
-    <string name="room_settings_room_access_private_description">Pouze pozvaní mohou místnost nalézt a vstoupit</string>
+    <string name="room_settings_room_access_public_description">Kdokoliv může místnost najít a připojit se do ní</string>
+    <string name="room_settings_room_access_public_title">Veřejný</string>
+    <string name="room_settings_room_access_private_description">Pouze pozvaní mohou místnost najít a vstoupit do ní</string>
     <string name="room_settings_room_access_private_title">Privátní</string>
     <string name="room_settings_room_access_entry_unknown">Neznámé nastavení přístupu (%s)</string>
     <string name="room_settings_room_access_entry_knock">Každý může na místnost zaklepat, členové pak mohou přijmout či odmítnout</string>
@@ -2930,7 +2931,7 @@
     <string name="spaces_which_can_access">Prostory, které mají přístup</string>
     <string name="allow_space_member_to_find_and_access">Umožněte členům prostoru ho najít a zpřístupnit.</string>
     <string name="room_create_member_of_space_name_can_join">Členové prostoru %s mohou vyhledávat, prohlížet a připojovat se.</string>
-    <string name="room_settings_room_access_private_invite_only_title">Soukromé (pouze pro pozvané)</string>
+    <string name="room_settings_room_access_private_invite_only_title">Soukromý (pouze pro pozvané)</string>
     <string name="denied_permission_voice_message">Chcete-li odesílat hlasové zprávy, povolte oprávnění mikrofonu.</string>
     <string name="settings_room_upgrades">Aktualizace místnosti</string>
     <string name="settings_messages_by_bot">Zprávy od bota</string>
@@ -3061,4 +3062,7 @@
     <string name="a11y_presence_unavailable">Nedostupný</string>
     <string name="a11y_presence_offline">Offline</string>
     <string name="a11y_presence_online">Online</string>
+    <string name="notification_listening_for_notifications">Naslouchání oznámením</string>
+    <string name="login_error_homeserver_from_url_not_found_enter_manual">Vyberte domovský server</string>
+    <string name="login_error_homeserver_from_url_not_found">Nelze se spojit s domovským serverem na adrese %s. Zkontrolujte prosím svůj odkaz nebo vyberte domovský server ručně.</string>
 </resources>
