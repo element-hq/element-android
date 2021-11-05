@@ -18,36 +18,43 @@ package im.vector.app.ui.robot
 
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso
+import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.matcher.ViewMatchers.withId
 import com.adevinta.android.barista.interaction.BaristaClickInteractions
-import com.adevinta.android.barista.interaction.BaristaEditTextInteractions
-import com.adevinta.android.barista.interaction.BaristaListInteractions
-import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions
+import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
+import com.adevinta.android.barista.interaction.BaristaClickInteractions.longClickOn
+import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
+import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem
+import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.clickMenu
+import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu
 import im.vector.app.R
+import im.vector.app.espresso.tools.waitUntilViewVisible
 import im.vector.app.waitForView
+import java.lang.Thread.sleep
 
 class RoomDetailRobot {
 
     fun postMessage(content: String) {
-        BaristaEditTextInteractions.writeTo(R.id.composerEditText, content)
-        BaristaClickInteractions.clickOn(R.id.sendButton)
+        writeTo(R.id.composerEditText, content)
+        clickOn(R.id.sendButton)
     }
 
     fun crawl() {
-        BaristaClickInteractions.clickOn(R.id.attachmentButton)
+        clickOn(R.id.attachmentButton)
         BaristaClickInteractions.clickBack()
 
         // Menu
-        BaristaMenuClickInteractions.openMenu()
-        Espresso.pressBack()
-        BaristaMenuClickInteractions.clickMenu(R.id.voice_call)
-        Espresso.pressBack()
-        BaristaMenuClickInteractions.clickMenu(R.id.video_call)
-        Espresso.pressBack()
-        BaristaMenuClickInteractions.clickMenu(R.id.search)
-        Espresso.pressBack()
+        openMenu()
+        pressBack()
+        clickMenu(R.id.voice_call)
+        pressBack()
+        clickMenu(R.id.video_call)
+        pressBack()
+        clickMenu(R.id.search)
+        pressBack()
         // Long click on the message
         longClickOnMessageTest()
     }
@@ -55,43 +62,48 @@ class RoomDetailRobot {
     private fun longClickOnMessageTest() {
         // Test quick reaction
         longClickOnMessage()
+        waitUntilViewVisible(withId(R.id.bottomSheetRecyclerView))
         // Add quick reaction
-        BaristaClickInteractions.clickOn("\uD83D\uDC4D️") // 👍
-
-        Thread.sleep(1000)
+        clickOn("\uD83D\uDC4D️") // 👍
+        waitUntilViewVisible(withId(R.id.composerEditText))
 
         // Open reactions
-        BaristaClickInteractions.longClickOn("\uD83D\uDC4D️") // 👍
-        Espresso.pressBack()
+        longClickOn("\uD83D\uDC4D️") // 👍
+        // wait for bottom sheet
+        pressBack()
 
         // Test add reaction
         longClickOnMessage()
-        BaristaClickInteractions.clickOn(R.string.message_add_reaction)
+        waitUntilViewVisible(withId(R.id.bottomSheetRecyclerView))
+        clickOn(R.string.message_add_reaction)
         // Filter
         // TODO clickMenu(R.id.search)
         // Wait for emoji to load, it's async now
-        Thread.sleep(2000)
-        BaristaListInteractions.clickListItem(R.id.emojiRecyclerView, 4)
-        Thread.sleep(2000)
+        sleep(2000)
+        clickListItem(R.id.emojiRecyclerView, 4)
+        waitUntilViewVisible(withId(R.id.composerEditText))
 
         // Test Edit mode
         longClickOnMessage()
-        BaristaClickInteractions.clickOn(R.string.edit)
+        waitUntilViewVisible(withId(R.id.bottomSheetRecyclerView))
+        clickOn(R.string.edit)
+        waitUntilViewVisible(withId(R.id.composerEditText))
         // TODO Cancel action
-        BaristaEditTextInteractions.writeTo(R.id.composerEditText, "Hello universe!")
+        writeTo(R.id.composerEditText, "Hello universe!")
         // Wait a bit for the keyboard layout to update
-        Thread.sleep(30)
-        BaristaClickInteractions.clickOn(R.id.sendButton)
+        sleep(30)
+        clickOn(R.id.sendButton)
         // Wait for the UI to update
-        Thread.sleep(1000)
+        sleep(1000)
         // Open edit history
         longClickOnMessage("Hello universe! (edited)")
-        BaristaClickInteractions.clickOn(R.string.message_view_edit_history)
-        Espresso.pressBack()
+        waitUntilViewVisible(withId(R.id.bottomSheetRecyclerView))
+        clickOn(R.string.message_view_edit_history)
+        pressBack()
     }
 
     private fun longClickOnMessage(text: String = "Hello world!") {
-        Espresso.onView(ViewMatchers.withId(R.id.timelineRecyclerView))
+        Espresso.onView(withId(R.id.timelineRecyclerView))
                 .perform(
                         RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(
                                 ViewMatchers.hasDescendant(ViewMatchers.withText(text)),
@@ -101,9 +113,10 @@ class RoomDetailRobot {
     }
 
     fun openSettings(block: RoomSettingsRobot.() -> Unit) {
-        BaristaClickInteractions.clickOn(R.id.roomToolbarTitleView)
-        waitForView(ViewMatchers.withId(R.id.roomProfileAvatarView))
+        clickOn(R.id.roomToolbarTitleView)
+        waitForView(withId(R.id.roomProfileAvatarView))
+        sleep(1000)
         block(RoomSettingsRobot())
-        Espresso.pressBack()
+        pressBack()
     }
 }
