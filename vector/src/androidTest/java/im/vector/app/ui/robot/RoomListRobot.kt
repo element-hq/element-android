@@ -45,7 +45,10 @@ class RoomListRobot {
         waitUntilActivityVisible<RoomDirectoryActivity> {
             BaristaVisibilityAssertions.assertDisplayed(R.id.publicRoomsList)
         }
-        block(NewRoomRobot())
-        Espresso.pressBack()
+        val newRoomRobot = NewRoomRobot()
+        block(newRoomRobot)
+        if (!newRoomRobot.createdRoom) {
+            Espresso.pressBack()
+        }
     }
 }

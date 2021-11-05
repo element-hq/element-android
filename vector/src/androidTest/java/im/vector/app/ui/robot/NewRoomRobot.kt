@@ -20,12 +20,15 @@ import androidx.test.espresso.Espresso
 import com.adevinta.android.barista.interaction.BaristaClickInteractions
 import im.vector.app.R
 
-class NewRoomRobot {
+class NewRoomRobot(
+        var createdRoom: Boolean = false
+) {
 
     fun createNewRoom(block: CreateNewRoomRobot.() -> Unit) {
         BaristaClickInteractions.clickOn(R.string.create_new_room)
         val createNewRoomRobot = CreateNewRoomRobot()
         block(createNewRoomRobot)
+        createdRoom = createNewRoomRobot.createdRoom
         if (!createNewRoomRobot.createdRoom) {
             Espresso.pressBack()
         }

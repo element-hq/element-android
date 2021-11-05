@@ -16,7 +16,7 @@
 
 package im.vector.app.ui.robot
 
-import androidx.test.espresso.Espresso
+import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import com.adevinta.android.barista.assertion.BaristaListAssertions
 import com.adevinta.android.barista.interaction.BaristaClickInteractions
@@ -38,11 +38,12 @@ class CreateNewRoomRobot(
             waitUntilViewVisible(withId(R.id.composerEditText))
         }
         block(RoomDetailRobot())
+        pressBack()
     }
 
     fun crawl() {
         // Room access bottom sheet
         BaristaClickInteractions.clickOn(R.string.room_settings_room_access_private_title)
-        Espresso.pressBack()
+        pressBack()
     }
 }
