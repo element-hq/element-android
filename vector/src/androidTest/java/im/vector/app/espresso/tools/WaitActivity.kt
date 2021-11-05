@@ -32,4 +32,3 @@ inline fun <reified T : Activity> waitUntilActivityVisible(noinline block: (() -
 fun waitUntilViewVisible(viewMatcher: Matcher<View>) {
     Espresso.onView(ViewMatchers.isRoot()).perform(waitForView(viewMatcher))
 }
-

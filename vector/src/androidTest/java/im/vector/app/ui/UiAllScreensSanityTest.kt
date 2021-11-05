@@ -91,7 +91,7 @@ class UiAllScreensSanityTest {
 
 // Disable until the "you don't have a session for id %d" sign out bug is fixed
 //        elementRobot.signout()
-////        Login again on the same account
+// //     Login again on the same account
 //        elementRobot.login(userId)
 //
 //        ignoreVerification()
@@ -120,4 +120,3 @@ class UiAllScreensSanityTest {
         clickOn(R.string.skip)
     }
 }
-
