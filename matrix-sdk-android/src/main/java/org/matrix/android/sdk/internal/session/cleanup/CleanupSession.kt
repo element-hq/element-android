@@ -55,14 +55,14 @@ internal class CleanupSession @Inject constructor(
         val cryptoRealmCount = Realm.getGlobalInstanceCount(realmCryptoConfiguration)
         Timber.d("Realm instance ($sessionRealmCount - $cryptoRealmCount)")
 
-        Timber.d("Cleanup: delete session params...")
-        sessionParamsStore.delete(sessionId)
-
         Timber.d("Cleanup: cancel pending works...")
         workManagerProvider.cancelAllWorks()
 
         Timber.d("Cleanup: release session...")
         sessionManager.releaseSession(sessionId)
+
+        Timber.d("Cleanup: delete session params...")
+        sessionParamsStore.delete(sessionId)
 
         Timber.d("Cleanup: clear session data...")
         clearSessionDataTask.execute(Unit)
