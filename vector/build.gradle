@@ -338,6 +338,8 @@ dependencies {
     implementation project(":attachment-viewer")
     implementation project(":library:ui-styles")
     implementation 'androidx.multidex:multidex:2.0.1'
+    // make viewBinding classes accessible to Android Studio
+    compileOnly libs.android.viewbinding
 
     implementation libs.jetbrains.coroutinesCore
     implementation libs.jetbrains.coroutinesAndroid
