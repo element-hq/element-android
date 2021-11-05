@@ -793,22 +793,24 @@ internal class DefaultCrossSigningService @Inject constructor(
     }
 
     private fun setUserKeysAsTrusted(otherUserId: String, trusted: Boolean) {
-        val currentTrust = cryptoStore.getCrossSigningInfo(otherUserId)?.isTrusted()
-        cryptoStore.setUserKeysAsTrusted(otherUserId, trusted)
-        // If it's me, recheck trust of all users and devices?
-        val users = ArrayList<String>()
-        if (otherUserId == userId && currentTrust != trusted) {
+        cryptoCoroutineScope.launch {
+            val currentTrust = cryptoStore.getCrossSigningInfo(otherUserId)?.isTrusted()
+            cryptoStore.setUserKeysAsTrusted(otherUserId, trusted)
+            // If it's me, recheck trust of all users and devices?
+            val users = ArrayList<String>()
+            if (otherUserId == userId && currentTrust != trusted) {
 //                reRequestAllPendingRoomKeyRequest()
-            cryptoStore.updateUsersTrust {
-                users.add(it)
-                checkUserTrust(it).isVerified()
-            }
+                cryptoStore.updateUsersTrust {
+                    users.add(it)
+                    checkUserTrust(it).isVerified()
+                }
 
-            users.forEach {
-                cryptoStore.getUserDeviceList(it)?.forEach { device ->
-                    val updatedTrust = checkDeviceTrust(it, device.deviceId, device.trustLevel?.isLocallyVerified() ?: false)
-                    Timber.v("## CrossSigning - update trust for device ${device.deviceId} of user $otherUserId , verified=$updatedTrust")
-                    cryptoStore.setDeviceTrust(it, device.deviceId, updatedTrust.isCrossSignedVerified(), updatedTrust.isLocallyVerified())
+                users.forEach {
+                    cryptoStore.getUserDeviceList(it)?.forEach { device ->
+                        val updatedTrust = checkDeviceTrust(it, device.deviceId, device.trustLevel?.isLocallyVerified() ?: false)
+                        Timber.v("## CrossSigning - update trust for device ${device.deviceId} of user $otherUserId , verified=$updatedTrust")
+                        cryptoStore.setDeviceTrust(it, device.deviceId, updatedTrust.isCrossSignedVerified(), updatedTrust.isLocallyVerified())
+                    }
                 }
             }
         }
