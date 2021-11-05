@@ -16,7 +16,7 @@
 
 package im.vector.app.ui.robot.settings
 
-import androidx.test.espresso.Espresso
+import androidx.test.espresso.Espresso.pressBack
 import im.vector.app.R
 import im.vector.app.espresso.tools.clickOnPreference
 
@@ -24,10 +24,10 @@ class SettingsAdvancedRobot {
 
     fun crawl() {
         clickOnPreference(R.string.settings_notifications_targets)
-        Espresso.pressBack()
+        pressBack()
 
         clickOnPreference(R.string.settings_push_rules)
-        Espresso.pressBack()
+        pressBack()
 
         /* TODO P2 test developer screens
     // Enable developer mode

@@ -16,8 +16,8 @@
 
 package im.vector.app.ui.robot.settings
 
-import androidx.test.espresso.Espresso
-import com.adevinta.android.barista.interaction.BaristaClickInteractions
+import androidx.test.espresso.Espresso.pressBack
+import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.espresso.tools.clickOnPreference
@@ -26,16 +26,16 @@ class SettingsNotificationsRobot {
 
     fun crawl() {
         if (BuildConfig.USE_NOTIFICATION_SETTINGS_V2) {
-            BaristaClickInteractions.clickOn(R.string.settings_notification_default)
-            Espresso.pressBack()
-            BaristaClickInteractions.clickOn(R.string.settings_notification_mentions_and_keywords)
+            clickOn(R.string.settings_notification_default)
+            pressBack()
+            clickOn(R.string.settings_notification_mentions_and_keywords)
             // TODO Test adding a keyword?
-            Espresso.pressBack()
-            BaristaClickInteractions.clickOn(R.string.settings_notification_other)
-            Espresso.pressBack()
+            pressBack()
+            clickOn(R.string.settings_notification_other)
+            pressBack()
         } else {
-            BaristaClickInteractions.clickOn(R.string.settings_notification_advanced)
-            Espresso.pressBack()
+            clickOn(R.string.settings_notification_advanced)
+            pressBack()
         }
         /*
         clickOn(R.string.settings_noisy_notifications_preferences)
@@ -47,6 +47,6 @@ class SettingsNotificationsRobot {
         pressBack()
          */
         clickOnPreference(R.string.settings_notification_troubleshoot)
-        Espresso.pressBack()
+        pressBack()
     }
 }

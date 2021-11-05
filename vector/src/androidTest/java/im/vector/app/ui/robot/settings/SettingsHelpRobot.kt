@@ -16,8 +16,8 @@
 
 package im.vector.app.ui.robot.settings
 
-import com.adevinta.android.barista.interaction.BaristaClickInteractions
-import com.adevinta.android.barista.interaction.BaristaDialogInteractions
+import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
+import com.adevinta.android.barista.interaction.BaristaDialogInteractions.clickDialogPositiveButton
 import im.vector.app.R
 
 class SettingsHelpRobot {
@@ -34,7 +34,7 @@ class SettingsHelpRobot {
         clickOn(R.string.settings_privacy_policy)
         pressBack()
          */
-        BaristaClickInteractions.clickOn(R.string.settings_third_party_notices)
-        BaristaDialogInteractions.clickDialogPositiveButton()
+        clickOn(R.string.settings_third_party_notices)
+        clickDialogPositiveButton()
     }
 }

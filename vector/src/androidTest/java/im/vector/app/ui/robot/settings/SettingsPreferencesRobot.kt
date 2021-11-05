@@ -16,23 +16,23 @@
 
 package im.vector.app.ui.robot.settings
 
-import androidx.test.espresso.Espresso
-import androidx.test.espresso.matcher.ViewMatchers
-import com.adevinta.android.barista.interaction.BaristaClickInteractions
-import com.adevinta.android.barista.interaction.BaristaDialogInteractions
+import androidx.test.espresso.Espresso.pressBack
+import androidx.test.espresso.matcher.ViewMatchers.withText
+import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
+import com.adevinta.android.barista.interaction.BaristaDialogInteractions.clickDialogNegativeButton
 import im.vector.app.R
+import im.vector.app.espresso.tools.waitUntilViewVisible
 import im.vector.app.waitForView
 
 class SettingsPreferencesRobot {
 
     fun crawl() {
-        BaristaClickInteractions.clickOn(R.string.settings_interface_language)
-        Espresso.onView(ViewMatchers.isRoot())
-                .perform(waitForView(ViewMatchers.withText("Dansk (Danmark)")))
-        Espresso.pressBack()
-        BaristaClickInteractions.clickOn(R.string.settings_theme)
-        BaristaDialogInteractions.clickDialogNegativeButton()
-        BaristaClickInteractions.clickOn(R.string.font_size)
-        BaristaDialogInteractions.clickDialogNegativeButton()
+        clickOn(R.string.settings_interface_language)
+        waitUntilViewVisible(withText("Dansk (Danmark)"))
+        pressBack()
+        clickOn(R.string.settings_theme)
+        clickDialogNegativeButton()
+        clickOn(R.string.font_size)
+        clickDialogNegativeButton()
     }
 }
