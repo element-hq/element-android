@@ -55,7 +55,7 @@ dependencies {
     implementation libs.androidx.appCompat
     implementation libs.google.material
     // make viewBinding classes accessible to Android Studio
-    compileOnly 'com.android.databinding:viewbinding:7.0.3'
+    compileOnly libs.android.viewbinding
     // Pref theme
     implementation libs.androidx.preferenceKtx
     // PFLockScreen attrs

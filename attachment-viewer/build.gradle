@@ -49,7 +49,7 @@ dependencies {
     implementation project(":library:ui-styles")
 
     // make viewBinding classes accessible to Android Studio
-    compileOnly 'com.android.databinding:viewbinding:7.0.3'
+    compileOnly libs.android.viewbinding
 
     implementation 'com.github.chrisbanes:PhotoView:2.3.0'
 
