@@ -19,7 +19,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: [ GplayPreprodWithoutvoipWithpinning, FdroidPreprodWithoutvoipWithpinning ]
+        target: [ GplayPreprodWithoutvoipWithoutpinning, FdroidPreprodWithoutvoipWithoutpinning ]
     steps:
       - uses: actions/checkout@v2
       - uses: actions/cache@v2
@@ -40,9 +40,13 @@ jobs:
             vector/build/outputs/apk/*/debug/*.apk
 
   release:
-    name: Build unsigned GPlay APKs
+    name: Build unsigned ${{ matrix.target }} APKs
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
+    strategy:
+      fail-fast: false
+      matrix:
+        target: [ GplayPreprodWithoutvoipWithoutpinning, GplayAgentWithoutvoipWithpinning, FdroidSecureWithoutvoipWithoutpinning, FdroidPreprodWithoutvoipWithoutpinning, FdroidAgentWithoutvoipWithoutpinning ]
     steps:
       - uses: actions/checkout@v2
       - uses: actions/cache@v2
@@ -53,12 +57,12 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
-      - name: Assemble GPlay unsigned apk
-        run: ./gradlew clean assembleGplayAgentWithoutvoipWithpinningRelease $CI_GRADLE_ARG_PROPERTIES  --stacktrace
-      - name: Upload Gplay unsigned APKs
+      - name: Assemble ${{ matrix.target }} unsigned apk
+        run: ./gradlew clean assemble${{ matrix.target }}Release $CI_GRADLE_ARG_PROPERTIES  --stacktrace
+      - name: Upload ${{ matrix.target }} unsigned APKs
         uses: actions/upload-artifact@v2
         with:
-          name: vector-gplay-release-unsigned
+          name: vector-${{ matrix.target }}-release-unsigned
           path: |
             vector/build/outputs/apk/*/release/*.apk
 
