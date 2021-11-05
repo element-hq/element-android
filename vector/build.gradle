@@ -318,7 +318,7 @@ android {
             resValue "string", "app_name", "Tchap"
 
             applicationId "fr.gouv.tchap"
-            versionName "${versionMajor}.${versionMinor}.${versionPatch}${getTchapVersionSuffix()}"
+            versionName "${versionMajor}.${versionMinor}.${versionPatch}${getTchapVersionSuffix()}" + "_s"
         }
 
         preprod {
@@ -336,7 +336,7 @@ android {
             resValue "string", "app_name", "Tchap"
 
             applicationId "fr.gouv.tchap.a"
-            versionName "${versionMajor}.${versionMinor}.${versionPatch}${getTchapVersionSuffix()}" + "_a"
+            versionName "${versionMajor}.${versionMinor}.${versionPatch}${getTchapVersionSuffix()}"
         }
     }
 
