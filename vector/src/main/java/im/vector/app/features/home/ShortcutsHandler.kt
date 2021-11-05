@@ -50,6 +50,7 @@ class ShortcutsHandler @Inject constructor(
 ) : PinCodeStoreListener {
 
     private val isRequestPinShortcutSupported = ShortcutManagerCompat.isRequestPinShortcutSupported(context)
+    private val maxShortcutCountPerActivity = ShortcutManagerCompat.getMaxShortcutCountPerActivity(context)
 
     // Value will be set correctly if necessary
     private var hasPinCode = AtomicBoolean(true)
@@ -101,9 +102,11 @@ class ShortcutsHandler @Inject constructor(
             // No shortcut in this case (privacy)
             ShortcutManagerCompat.removeAllDynamicShortcuts(context)
         } else {
-            val shortcuts = rooms.mapIndexed { index, room ->
-                shortcutCreator.create(room, index)
-            }
+            val shortcuts = rooms
+                    .take(maxShortcutCountPerActivity)
+                    .mapIndexed { index, room ->
+                        shortcutCreator.create(room, index)
+                    }
 
             shortcuts.forEach { shortcut ->
                 ShortcutManagerCompat.pushDynamicShortcut(context, shortcut)
