@@ -146,16 +146,19 @@ internal class RoomSummaryUpdater @Inject constructor(
         }
 
         roomSummaryEntity.hasUnreadMessages = roomSummaryEntity.notificationCount > 0 ||
+                (roomSummaryEntity.unreadCount?.let { it > 0 } ?: false) ||
                 // avoid this call if we are sure there are unread events
                 !isEventRead(realm.configuration, userId, roomId, latestPreviewableEvent?.eventId)
         roomSummaryEntity.hasUnreadContentMessages = roomSummaryEntity.notificationCount > 0 ||
+                (roomSummaryEntity.unreadCount?.let { it > 0 } ?: false) ||
                 // avoid this call if we are sure there are unread events
                 (latestPreviewableContentEvent != null &&
                         !isEventRead(realm.configuration, userId, roomId, latestPreviewableContentEvent.eventId))
         roomSummaryEntity.hasUnreadOriginalContentMessages = roomSummaryEntity.notificationCount > 0 ||
+                (roomSummaryEntity.unreadCount?.let { it > 0 } ?: false) ||
                 // avoid this call if we are sure there are unread events
                 (latestPreviewableOriginalContentEvent != null &&
-                    !isEventRead(realm.configuration, userId, roomId, latestPreviewableOriginalContentEvent.eventId))
+                        !isEventRead(realm.configuration, userId, roomId, latestPreviewableOriginalContentEvent.eventId))
 
         roomSummaryEntity.displayName = roomDisplayNameResolver.resolve(realm, roomId)
         roomSummaryEntity.avatarUrl = roomAvatarResolver.resolve(realm, roomId)
