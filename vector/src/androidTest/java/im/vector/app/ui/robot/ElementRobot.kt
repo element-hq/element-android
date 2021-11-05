@@ -17,11 +17,13 @@
 package im.vector.app.ui.robot
 
 import androidx.test.espresso.Espresso.pressBack
+import androidx.test.espresso.matcher.ViewMatchers
 import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import com.adevinta.android.barista.interaction.BaristaDrawerInteractions.openDrawer
 import im.vector.app.R
 import im.vector.app.espresso.tools.waitUntilActivityVisible
+import im.vector.app.espresso.tools.waitUntilViewVisible
 import im.vector.app.features.createdirect.CreateDirectRoomActivity
 import im.vector.app.features.roomdirectory.RoomDirectoryActivity
 import java.lang.Thread.sleep
@@ -33,6 +35,7 @@ class ElementRobot {
         clickOn(R.id.homeDrawerHeaderSettingsView)
         block(SettingsRobot())
         pressBack()
+        waitUntilViewVisible(ViewMatchers.withId(R.id.bottomNavigationView))
     }
 
     fun newDirectMessage(block: NewDirectMessageRobot.() -> Unit) {
@@ -44,6 +47,7 @@ class ElementRobot {
         pressBack()
         block(NewDirectMessageRobot())
         pressBack()
+        waitUntilViewVisible(ViewMatchers.withId(R.id.bottomNavigationView))
     }
 
     fun newRoom(block: NewRoomRobot.() -> Unit) {
@@ -54,5 +58,6 @@ class ElementRobot {
         BaristaVisibilityAssertions.assertDisplayed(R.id.publicRoomsList)
         block(NewRoomRobot())
         pressBack()
+        waitUntilViewVisible(ViewMatchers.withId(R.id.bottomNavigationView))
     }
 }
