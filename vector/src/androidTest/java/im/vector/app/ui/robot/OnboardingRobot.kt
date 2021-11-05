@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.app.ui
+package im.vector.app.ui.robot
 
 import androidx.test.espresso.Espresso.closeSoftKeyboard
 import androidx.test.espresso.Espresso.onView
@@ -31,7 +31,7 @@ import im.vector.app.features.home.HomeActivity
 import im.vector.app.waitForView
 import java.lang.Thread.sleep
 
-class UiTestBase {
+class OnboardingRobot {
 
     fun createAccount(userId: String, password: String = "password", homeServerUrl: String = "http://10.0.2.2:8080") {
         initSession(true, userId, password, homeServerUrl)
