@@ -1,9 +1,8 @@
-Changes in Tchap 1.99.1 (2021-xx-xx)
+Changes in Tchap 1.99.1 (2021-11-05)
 ===================================================
 
-Features ✨:
-
 Improvements 🙌:
+- Prepare the Tchap release/pre-release #253
 
 Changes in Tchap 1.99.0 (2021-11-05)
 ===================================================
