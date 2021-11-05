@@ -30,7 +30,6 @@ import im.vector.app.R
 import im.vector.app.espresso.tools.waitUntilActivityVisible
 import im.vector.app.features.home.HomeActivity
 import im.vector.app.waitForView
-import java.lang.Thread.sleep
 
 class OnboardingRobot {
 
@@ -55,7 +54,6 @@ class OnboardingRobot {
         writeTo(R.id.loginServerUrlFormHomeServerUrl, homeServerUrl)
         assertEnabled(R.id.loginServerUrlFormSubmit)
         closeSoftKeyboard()
-        sleep(500)
         clickOn(R.id.loginServerUrlFormSubmit)
         onView(isRoot()).perform(waitForView(withId(R.id.loginSignupSigninSubmit)))
 
@@ -79,7 +77,6 @@ class OnboardingRobot {
         assertEnabled(R.id.loginSubmit)
 
         closeSoftKeyboard()
-        sleep(500)
         clickOn(R.id.loginSubmit)
 
         // Wait
