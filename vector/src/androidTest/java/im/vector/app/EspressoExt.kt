@@ -70,6 +70,8 @@ fun waitForView(viewMatcher: Matcher<View>, timeout: Long = 10_000, waitForDispl
             val endTime = startTime + timeout
             val visibleMatcher = isDisplayed()
 
+            uiController.loopMainThreadForAtLeast(100)
+
             do {
                 println("*** waitForView loop $view end:$endTime current:${System.currentTimeMillis()}")
                 val viewVisible = TreeIterables.breadthFirstViewTraversal(view)
@@ -92,6 +94,8 @@ fun waitForView(viewMatcher: Matcher<View>, timeout: Long = 10_000, waitForDispl
         }
     }
 }
+
+
 
 fun initialSyncIdlingResource(session: Session): IdlingResource {
     val res = object : IdlingResource, Observer<SyncState> {
