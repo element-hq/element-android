@@ -16,107 +16,124 @@
 
 package im.vector.app.ui.robot
 
-import androidx.test.espresso.Espresso
+import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.action.ViewActions
-import androidx.test.espresso.matcher.ViewMatchers
-import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions
-import com.adevinta.android.barista.interaction.BaristaClickInteractions
-import com.adevinta.android.barista.interaction.BaristaDialogInteractions
-import com.adevinta.android.barista.interaction.BaristaListInteractions
+import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
+import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
+import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
+import com.adevinta.android.barista.interaction.BaristaDialogInteractions.clickDialogNegativeButton
+import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem
 import im.vector.app.R
-import im.vector.app.waitForView
+import im.vector.app.espresso.tools.waitUntilViewVisible
 
 class RoomSettingsRobot {
 
     fun crawl() {
         // Room settings
-        BaristaListInteractions.clickListItem(R.id.matrixProfileRecyclerView, 3)
+        clickListItem(R.id.matrixProfileRecyclerView, 3)
         navigateToRoomParameters()
-        Espresso.pressBack()
+        pressBack()
 
         // Notifications
-        BaristaListInteractions.clickListItem(R.id.matrixProfileRecyclerView, 5)
-        Espresso.pressBack()
+        clickListItem(R.id.matrixProfileRecyclerView, 5)
+        pressBack()
 
-        BaristaVisibilityAssertions.assertDisplayed(R.id.roomProfileAvatarView)
+        assertDisplayed(R.id.roomProfileAvatarView)
 
         // People
-        BaristaListInteractions.clickListItem(R.id.matrixProfileRecyclerView, 7)
-        BaristaVisibilityAssertions.assertDisplayed(R.id.inviteUsersButton)
+        clickListItem(R.id.matrixProfileRecyclerView, 7)
+        assertDisplayed(R.id.inviteUsersButton)
         navigateToRoomPeople()
         // Fab
         navigateToInvite()
-        Espresso.pressBack()
-        Espresso.pressBack()
+        pressBack()
+        pressBack()
 
-        BaristaVisibilityAssertions.assertDisplayed(R.id.roomProfileAvatarView)
+        assertDisplayed(R.id.roomProfileAvatarView)
 
         // Uploads
-        BaristaListInteractions.clickListItem(R.id.matrixProfileRecyclerView, 9)
+        clickListItem(R.id.matrixProfileRecyclerView, 9)
         // File tab
-        BaristaClickInteractions.clickOn(R.string.uploads_files_title)
-        Thread.sleep(1000)
-        Espresso.pressBack()
+        clickOn(R.string.uploads_files_title)
+        waitUntilViewVisible(withText(R.string.uploads_media_title))
+        pressBack()
+        waitUntilViewVisible(withId(R.id.matrixProfileRecyclerView))
 
-        BaristaVisibilityAssertions.assertDisplayed(R.id.roomProfileAvatarView)
+        assertDisplayed(R.id.roomProfileAvatarView)
 
         // Leave
-        BaristaListInteractions.clickListItem(R.id.matrixProfileRecyclerView, 13)
-        BaristaDialogInteractions.clickDialogNegativeButton()
+        leaveRoom {
+            negativeAction()
+        }
 
         // Advanced
         // Room addresses
-        BaristaListInteractions.clickListItem(R.id.matrixProfileRecyclerView, 15)
-        Espresso.onView(ViewMatchers.isRoot()).perform(waitForView(ViewMatchers.withText(R.string.room_alias_published_alias_title)))
-        Espresso.pressBack()
+
+        clickListItem(R.id.matrixProfileRecyclerView, 15)
+        waitUntilViewVisible(withText(R.string.room_alias_published_alias_title))
+        pressBack()
 
         // Room permissions
-        BaristaListInteractions.clickListItem(R.id.matrixProfileRecyclerView, 17)
-        Espresso.onView(ViewMatchers.isRoot()).perform(waitForView(ViewMatchers.withText(R.string.room_permissions_title)))
-        BaristaClickInteractions.clickOn(R.string.room_permissions_change_room_avatar)
-        BaristaDialogInteractions.clickDialogNegativeButton()
+        clickListItem(R.id.matrixProfileRecyclerView, 17)
+        waitUntilViewVisible(withText(R.string.room_permissions_title))
+        clickOn(R.string.room_permissions_change_room_avatar)
+        waitUntilViewVisible(withId(android.R.id.button2))
+        clickDialogNegativeButton()
+        waitUntilViewVisible(withText(R.string.room_permissions_title))
         // Toggle
-        BaristaClickInteractions.clickOn(R.string.show_advanced)
-        BaristaClickInteractions.clickOn(R.string.hide_advanced)
-        Espresso.pressBack()
+        clickOn(R.string.show_advanced)
+        clickOn(R.string.hide_advanced)
+        pressBack()
 
         // Menu share
         // clickMenu(R.id.roomProfileShareAction)
         // pressBack()
     }
 
+    private fun leaveRoom(block: DialogRobot.() -> Unit) {
+        clickListItem(R.id.matrixProfileRecyclerView, 13)
+        waitUntilViewVisible(withId(android.R.id.button2))
+        val dialogRobot = DialogRobot()
+        block(dialogRobot)
+        if (dialogRobot.returnedToPreviousScreen) {
+            waitUntilViewVisible(withId(R.id.matrixProfileRecyclerView))
+        }
+    }
+
     private fun navigateToRoomParameters() {
         // Room history readability
-        BaristaListInteractions.clickListItem(R.id.roomSettingsRecyclerView, 4)
-        Espresso.pressBack()
+        clickListItem(R.id.roomSettingsRecyclerView, 4)
+        pressBack()
 
         // Room access
-        BaristaListInteractions.clickListItem(R.id.roomSettingsRecyclerView, 6)
-        Espresso.pressBack()
+        clickListItem(R.id.roomSettingsRecyclerView, 6)
+        pressBack()
     }
 
     private fun navigateToInvite() {
-        BaristaVisibilityAssertions.assertDisplayed(R.id.inviteUsersButton)
-        BaristaClickInteractions.clickOn(R.id.inviteUsersButton)
+        assertDisplayed(R.id.inviteUsersButton)
+        clickOn(R.id.inviteUsersButton)
         ViewActions.closeSoftKeyboard()
-        Espresso.pressBack()
+        pressBack()
     }
 
     private fun navigateToRoomPeople() {
         // Open first user
-        BaristaListInteractions.clickListItem(R.id.roomSettingsRecyclerView, 1)
-        Thread.sleep(1000)
-        BaristaVisibilityAssertions.assertDisplayed(R.id.memberProfilePowerLevelView)
+        clickListItem(R.id.roomSettingsRecyclerView, 1)
+        waitUntilViewVisible(withId(R.id.memberProfilePowerLevelView))
 
         // Verification
-        BaristaListInteractions.clickListItem(R.id.matrixProfileRecyclerView, 1)
-        BaristaClickInteractions.clickBack()
+        clickListItem(R.id.matrixProfileRecyclerView, 1)
+        waitUntilViewVisible(withId(R.id.bottomSheetRecyclerView))
+        pressBack()
+        waitUntilViewVisible(withId(R.id.matrixProfileRecyclerView))
 
         // Role
-        BaristaListInteractions.clickListItem(R.id.matrixProfileRecyclerView, 3)
-        Thread.sleep(1000)
-        BaristaDialogInteractions.clickDialogNegativeButton()
-        Thread.sleep(1000)
-        BaristaClickInteractions.clickBack()
+        clickListItem(R.id.matrixProfileRecyclerView, 3)
+        waitUntilViewVisible(withId(android.R.id.button2))
+        clickDialogNegativeButton()
+        waitUntilViewVisible(withId(R.id.matrixProfileRecyclerView))
+        pressBack()
     }
 }
