@@ -24,6 +24,7 @@ import com.adevinta.android.barista.assertion.BaristaEnabledAssertions.assertDis
 import com.adevinta.android.barista.assertion.BaristaEnabledAssertions.assertEnabled
 import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
+import com.adevinta.android.barista.interaction.BaristaDialogInteractions
 import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
 import im.vector.app.R
 import im.vector.app.espresso.tools.waitUntilActivityVisible
@@ -90,5 +91,10 @@ class OnboardingRobot {
     fun signout() {
         clickOn(R.id.groupToolbarAvatarImageView)
         clickOn(R.id.homeDrawerHeaderSignoutView)
+
+        // We have sent a message in a e2e room, accept to loose it
+        clickOn(R.id.exitAnywayButton)
+        // Dark pattern
+        BaristaDialogInteractions.clickDialogNegativeButton()
     }
 }

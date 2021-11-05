@@ -29,6 +29,7 @@ import im.vector.app.espresso.tools.waitUntilActivityVisible
 import im.vector.app.espresso.tools.waitUntilViewVisible
 import im.vector.app.features.createdirect.CreateDirectRoomActivity
 import im.vector.app.features.home.HomeActivity
+import im.vector.app.features.login.LoginActivity
 import im.vector.app.initialSyncIdlingResource
 import im.vector.app.withIdlingResource
 
@@ -63,7 +64,9 @@ class ElementRobot {
     fun newDirectMessage(block: NewDirectMessageRobot.() -> Unit) {
         clickOn(R.id.bottom_action_people)
         clickOn(R.id.createChatRoomButton)
-        waitUntilActivityVisible<CreateDirectRoomActivity>()
+        waitUntilActivityVisible<CreateDirectRoomActivity> {
+            waitUntilViewVisible(withId(R.id.userListSearch))
+        }
         // close keyboard
         pressBack()
         block(NewDirectMessageRobot())
@@ -81,5 +84,12 @@ class ElementRobot {
         clickOn(R.id.bottom_action_rooms)
         block(RoomListRobot())
         waitUntilViewVisible(withId(R.id.bottomNavigationView))
+    }
+
+    fun signout() {
+        OnboardingRobot().signout()
+        waitUntilActivityVisible<LoginActivity> {
+            BaristaVisibilityAssertions.assertDisplayed(R.id.loginSplashLogo)
+        }
     }
 }

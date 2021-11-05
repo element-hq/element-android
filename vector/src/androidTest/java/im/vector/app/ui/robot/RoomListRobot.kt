@@ -42,8 +42,9 @@ class RoomListRobot {
 
     fun newRoom(block: NewRoomRobot.() -> Unit) {
         BaristaClickInteractions.clickOn(R.id.createGroupRoomButton)
-        waitUntilActivityVisible<RoomDirectoryActivity>()
-        BaristaVisibilityAssertions.assertDisplayed(R.id.publicRoomsList)
+        waitUntilActivityVisible<RoomDirectoryActivity> {
+            BaristaVisibilityAssertions.assertDisplayed(R.id.publicRoomsList)
+        }
         block(NewRoomRobot())
         Espresso.pressBack()
     }
