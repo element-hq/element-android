@@ -18,7 +18,9 @@ package im.vector.app
 
 import android.app.Activity
 import android.view.View
+import androidx.annotation.StringRes
 import androidx.lifecycle.Observer
+import androidx.test.espresso.Espresso
 import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.IdlingResource
 import androidx.test.espresso.PerformException
@@ -32,6 +34,7 @@ import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import androidx.test.runner.lifecycle.ActivityLifecycleCallback
 import androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry
 import androidx.test.runner.lifecycle.Stage
+import com.adevinta.android.barista.interaction.BaristaClickInteractions
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers
 import org.hamcrest.StringDescription
@@ -94,8 +97,6 @@ fun waitForView(viewMatcher: Matcher<View>, timeout: Long = 10_000, waitForDispl
         }
     }
 }
-
-
 
 fun initialSyncIdlingResource(session: Session): IdlingResource {
     val res = object : IdlingResource, Observer<SyncState> {
@@ -208,4 +209,10 @@ fun allSecretsKnownIdling(session: Session): IdlingResource {
     }
 
     return res
+}
+
+fun clickOnAndGoBack(@StringRes name: Int, block: () -> Unit) {
+    BaristaClickInteractions.clickOn(name)
+    block()
+    Espresso.pressBack()
 }

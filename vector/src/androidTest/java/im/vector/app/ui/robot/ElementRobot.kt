@@ -31,6 +31,7 @@ import im.vector.app.features.createdirect.CreateDirectRoomActivity
 import im.vector.app.features.home.HomeActivity
 import im.vector.app.features.login.LoginActivity
 import im.vector.app.initialSyncIdlingResource
+import im.vector.app.ui.robot.settings.SettingsRobot
 import im.vector.app.withIdlingResource
 
 class ElementRobot {
