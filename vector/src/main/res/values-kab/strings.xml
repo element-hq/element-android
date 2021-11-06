@@ -1142,7 +1142,7 @@
     <string name="login_connect_to">Qqen ɣer %1$s</string>
     <string name="login_signin_to">Kcem ɣer %1$s</string>
     <string name="login_signin_sso">Kemmel s SSO</string>
-    <string name="login_server_url_form_modular_hint">Tansa n yimeẓla n SchildiChat Matrix</string>
+    <string name="login_server_url_form_modular_hint">Tansa n yimeẓla n Element Matrix</string>
     <string name="login_server_url_form_common_notice">Sekcem tansa n uqeddac i tebɣiḍ ad tesqedceḍ</string>
     <string name="login_login_with_email_error">Imayl-a ur iqqin ula ɣer yiwen n umiḍan.</string>
     <string name="login_reset_password_on">Wennez awal uffir ɣef %1$s</string>
@@ -1162,7 +1162,7 @@
     <string name="login_signin_username_hint">Isem n useqdac neɣ imayl</string>
     <string name="login_signup_error_user_in_use">Isem-a n useqdac yettwamudd</string>
     <string name="login_a11y_choose_matrix_org">Fren matrix.org</string>
-    <string name="login_a11y_choose_modular">Fren imeẓla n SchildiChat Matrix</string>
+    <string name="login_a11y_choose_modular">Fren imeẓla n Element Matrix</string>
     <string name="login_a11y_choose_other">Fren aqeddac agejdan udmawan</string>
     <string name="login_terms_title">Qbel tiwtilin i wakken ad tkemmleḍ</string>
     <string name="login_wait_for_email_title">Ttxil-k·m senqed imayl-ik·im</string>
@@ -1970,10 +1970,10 @@
     <string name="login_server_matrix_org_text">Rnu ɣer yimelyan n yimdanen baṭel ɣef uqeddac azayez ameqqran akk</string>
     <string name="login_server_modular_text">Tanezduɣt n Premium i tkebbaniyin</string>
     <string name="login_server_other_text">Iɣewwaren udmawanen &amp; leqqayen</string>
-    <string name="login_connect_to_modular">Qqen ɣer yimeẓla n SchildiChat Matrix</string>
+    <string name="login_connect_to_modular">Qqen ɣer yimeẓla n Element Matrix</string>
     <string name="login_connect_to_a_custom_server">Qqen aqeddac udmawan</string>
     <string name="login_server_url_form_modular_text">Tanezduɣt n Premium i tkebbaniyin</string>
-    <string name="login_server_url_form_modular_notice">Sekcem tansa n SchildiChat Modular neɣ n uqeddac i tebɣiḍ ad t-tesqedceḍ</string>
+    <string name="login_server_url_form_modular_notice">Sekcem tansa n Element Modular neɣ n uqeddac i tebɣiḍ ad t-tesqedceḍ</string>
     <string name="login_sso_error_message">Tella-d tuccḍa mi ara d-nessalay asebter: %1$s (%2$d)</string>
     <string name="login_mode_not_supported">Asnas ur yezmir ara ad yekcem ɣer uqeddac-a agejdan. Aqeddac agejdan yessefrak anaw-a n unekcum: %1$s.
 \n

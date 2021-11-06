@@ -1538,7 +1538,7 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="call_failed_dont_ask_again">No volver a preguntar</string>
     <string name="invite_no_identity_server_error">Para hacer esto, vaya a las opciones y añada un servidor de identidad.</string>
     <string name="settings_add_3pid_confirm_password_title">Confirme su contraseña</string>
-    <string name="settings_add_3pid_flow_not_supported">Eso no se puede hacer en SchildiChat para móvil</string>
+    <string name="settings_add_3pid_flow_not_supported">Eso no se puede hacer en Element para móvil</string>
     <string name="settings_add_3pid_authentication_needed">Se necesita autenticación</string>
     <string name="settings_background_fdroid_sync_mode_battery">Optimizado para batería</string>
     <string name="settings_background_fdroid_sync_mode_real_time">Optimizado para operar en tiempo real</string>
@@ -1765,7 +1765,7 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="login_signin">Iniciar sesión</string>
     <string name="login_server_url_form_other_hint">Dirección</string>
     <string name="login_server_url_form_modular_text">Alojamiento de pago para organizaciones</string>
-    <string name="login_server_url_form_modular_notice">Introduzca la dirección de Modular SchildiChat o servidor que quieres usar</string>
+    <string name="login_server_url_form_modular_notice">Introduzca la dirección de Modular Element o servidor que quieres usar</string>
     <string name="login_sso_error_message">Se produjo un error al cargar la página: %1$s (%2$d)</string>
     <string name="login_mode_not_supported">La aplicación no es capaz de iniciar sesión en este servidor. Éste solo soporta el acceso mediante: %1$s.
 \n
@@ -1829,7 +1829,7 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="template_identity_server_error_outdated_identity_server">Servidor de identidad desactualizado. ${app_name} solo soporta API V2.</string>
     <string name="identity_server_error_outdated_home_server">Operación no posible. Servidor desactualizado.</string>
     <string name="identity_server_error_no_identity_server_configured">Por favor, configure primero un Servidor de Identidad.</string>
-    <string name="disclaimer_title">Riot ahora es SchildiChat!</string>
+    <string name="disclaimer_title">Riot ahora es Element!</string>
     <string name="disclaimer_negative_button">Entendido</string>
     <string name="disclaimer_positive_button">Aprender Mas</string>
     <string name="search_in_my_contacts">Buscar en mis contactos</string>
@@ -2080,7 +2080,7 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="room_join_rules_invite_by_you">Hiciste la sala solo por invitación.</string>
     <string name="login_server_matrix_org_text">Únase gratis a millones de personas en el mayor servidor público</string>
     <string name="login_signin_sso">Continuar con SSO</string>
-    <string name="login_server_url_form_modular_hint">Dirección de servicios de SchildiChat Matrix</string>
+    <string name="login_server_url_form_modular_hint">Dirección de servicios de Element Matrix</string>
     <string name="login_server_url_form_common_notice">Ingrese la dirección del servidor que desea utilizar</string>
     <string name="login_reset_password_notice">Se enviará un correo electrónico de verificación a su bandeja de entrada para confirmar la configuración de su nueva contraseña.</string>
     <string name="login_reset_password_submit">Siguiente</string>
@@ -3033,7 +3033,7 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="call_ringing">Llamada sonando…</string>
     <string name="spaces">Espacios</string>
     <string name="learn_more">Aprende más</string>
-    <string name="link_this_email_with_your_account">%s en Configuración para recibir invitaciones directamente en SchildiChat.</string>
+    <string name="link_this_email_with_your_account">%s en Configuración para recibir invitaciones directamente en Element.</string>
     <string name="link_this_email_settings_link">Vincula este correo electrónico con tu cuenta</string>
     <string name="this_invite_to_this_space_was_sent">Esta invitación a este espacio se envió a %s que no está asociado con su cuenta</string>
     <string name="this_invite_to_this_room_was_sent">Esta invitación a esta sala se envió a %s que no está asociado con su cuenta</string>

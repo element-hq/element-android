@@ -375,7 +375,7 @@
     </plurals>
     <string name="groups_list">רשימת קבוצות</string>
     <string name="read_receipts_list">קרא את רשימת הקבלות</string>
-    <string name="template_e2e_re_request_encryption_key_dialog_content">הפעל את SchildiChat במכשיר אחר שיכול לפענח את ההודעה כדי שיוכל לשלוח את המפתחות להפעלה זו.</string>
+    <string name="template_e2e_re_request_encryption_key_dialog_content">הפעל את Element במכשיר אחר שיכול לפענח את ההודעה כדי שיוכל לשלוח את המפתחות להפעלה זו.</string>
     <string name="e2e_re_request_encryption_key_dialog_title">הבקשה נשלחה</string>
     <string name="e2e_re_request_encryption_key_sent">בקשת המפתח נשלחה.</string>
     <string name="e2e_re_request_encryption_key">בקש מחדש מפתחות הצפנה מהפעלות האחרות שלך.</string>
@@ -458,10 +458,10 @@
     <string name="template_settings_troubleshoot_test_battery_success">אלמנט אינו מושפע מתהליך מיטוב הסוללה.</string>
     <string name="settings_troubleshoot_test_battery_title">אופטימיזציה של הסוללה</string>
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">השבת הגבלות</string>
-    <string name="template_settings_troubleshoot_test_bg_restricted_failed">מגבלות רקע מופעלות עבור SchildiChat.
+    <string name="template_settings_troubleshoot_test_bg_restricted_failed">מגבלות רקע מופעלות עבור Element.
 \nהעבודה שהאפליקציה מנסה לעשות תוגבל באגרסיביות בזמן שהיא ברקע, וזה עלול להשפיע על ההודעות.
 \n%1$s</string>
-    <string name="template_settings_troubleshoot_test_bg_restricted_success">מגבלות רקע מושבתות עבור SchildiChat. יש להריץ בדיקה זו באמצעות נתונים ניידים (ללא WIFI).
+    <string name="template_settings_troubleshoot_test_bg_restricted_success">מגבלות רקע מושבתות עבור Element. יש להריץ בדיקה זו באמצעות נתונים ניידים (ללא WIFI).
 \n%1$s</string>
     <string name="settings_troubleshoot_test_bg_restricted_title">בדוק מגבלות רקע</string>
     <string name="settings_troubleshoot_test_service_boot_quickfix">הפעל את התחלה לאחר אתחול</string>
@@ -494,7 +494,7 @@
     <string name="template_settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
 \nשגיאה זו אינה בשליטה על אלמנט. זה יכול להתרחש מכמה סיבות. אולי זה יעבוד אם תנסה שוב מאוחר יותר, תוכל גם לבדוק ששירות Google Play אינו מוגבל בשימוש נתונים בהגדרות המערכת, או ששעון המכשיר שלך תקין, או שזה יכול לקרות ב- ROM מותאם אישית.</string>
     <string name="template_settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
-\nשגיאה זו איננה בשליטה על SchildiChat ולפי גוגל, שגיאה זו מצביעה על כך שלמכשיר יש יותר מדי אפליקציות הרשומות ב- FCM. השגיאה מתרחשת רק במקרים שבהם ישנם מספרים קיצוניים של אפליקציות, כך שהיא לא אמורה להשפיע על המשתמש הממוצע.</string>
+\nשגיאה זו איננה בשליטה על Element ולפי גוגל, שגיאה זו מצביעה על כך שלמכשיר יש יותר מדי אפליקציות הרשומות ב- FCM. השגיאה מתרחשת רק במקרים שבהם ישנם מספרים קיצוניים של אפליקציות, כך שהיא לא אמורה להשפיע על המשתמש הממוצע.</string>
     <string name="settings_troubleshoot_test_fcm_failed">נכשל באחזור אסימון FCM:
 \n%1$s</string>
     <string name="settings_troubleshoot_test_fcm_success">אסימון FCM אוחזר בהצלחה:
@@ -1071,7 +1071,7 @@
 \nגבה את המפתחות שלך בצורה מאובטחת כדי לא לאבד אותם.</string>
     <string name="keys_backup_setup_step1_title">לעולם אל תאבד הודעות מוצפנות</string>
     <string name="keys_backup_no_session_error">אין מושב מטריקס זמין</string>
-    <string name="template_keys_backup_passphrase_not_empty_error_message">אנא מחק את משפט הסיסמה אם ברצונך ש- SchildiChat ייצור מפתח שחזור.</string>
+    <string name="template_keys_backup_passphrase_not_empty_error_message">אנא מחק את משפט הסיסמה אם ברצונך ש- Element ייצור מפתח שחזור.</string>
     <string name="passphrase_passphrase_too_weak">משפט הסיסמה חלש מדי</string>
     <string name="passphrase_empty_error_message">אנא הזן משפט סיסמה</string>
     <string name="passphrase_passphrase_does_not_match">משפט הסיסמה אינו תואם</string>
@@ -1712,7 +1712,7 @@
     <string name="room_preview_no_preview_join">לא ניתן להציג תצוגה מקדימה של חדר זה. האם אתה רוצה להצטרף אליו\?</string>
     <string name="room_preview_not_found">בשלב זה אין גישה לחדר זה.
 \nנסה שוב מאוחר יותר, או בקש ממנהל החדר לבדוק אם יש לך גישה.</string>
-    <string name="template_room_preview_world_readable_room_not_supported_yet">התצוגה המקדימה של החדר הקריא בעולם עדיין אינה נתמכת ב- SchildiChat</string>
+    <string name="template_room_preview_world_readable_room_not_supported_yet">התצוגה המקדימה של החדר הקריא בעולם עדיין אינה נתמכת ב- Element</string>
     <string name="room_preview_no_preview">לא ניתן להציג תצוגה מקדימה של חדר זה</string>
     <string name="group_all_communities">כל הקהילות</string>
     <string name="please_wait">אנא המתינו…</string>
@@ -1815,13 +1815,13 @@
     <string name="auth_pin_confirm_to_disable_title">אשר PIN כדי להשבית PIN</string>
     <string name="settings_security_pin_code_change_pin_summary">שנה את קוד ה- PIN הנוכחי שלך</string>
     <string name="settings_security_pin_code_change_pin_title">שנה PIN</string>
-    <string name="template_settings_security_pin_code_grace_period_summary_off">קוד PIN נדרש בכל פעם שאתה פותח את SchildiChat.</string>
-    <string name="template_settings_security_pin_code_grace_period_summary_on">קוד PIN נדרש לאחר שתי דקות של אי שימוש ב- SchildiChat.</string>
+    <string name="template_settings_security_pin_code_grace_period_summary_off">קוד PIN נדרש בכל פעם שאתה פותח את Element.</string>
+    <string name="template_settings_security_pin_code_grace_period_summary_on">קוד PIN נדרש לאחר שתי דקות של אי שימוש ב- Element.</string>
     <string name="settings_security_pin_code_grace_period_title">דרוש מספר PIN לאחר 2 דקות</string>
     <string name="settings_security_pin_code_notifications_summary_off">הצג רק מספר הודעות שלא נקראו בהודעה פשוטה.</string>
     <string name="settings_security_pin_code_notifications_summary_on">הצג פרטים כמו שמות החדרים ותוכן ההודעה.</string>
     <string name="settings_security_pin_code_notifications_title">הצג תוכן בהתראות</string>
-    <string name="template_settings_security_pin_code_use_biometrics_summary_off">קוד PIN הוא הדרך היחידה לפתוח את SchildiChat.</string>
+    <string name="template_settings_security_pin_code_use_biometrics_summary_off">קוד PIN הוא הדרך היחידה לפתוח את Element.</string>
     <string name="settings_security_pin_code_use_biometrics_summary_on">אפשר ביומטריה ספציפית למכשירים, כמו טביעות אצבע וזיהוי פנים.</string>
     <plurals name="directory_search_rooms_for">
         <item quantity="one">%2$s חדר נמצא עבור %1$s</item>
@@ -1970,7 +1970,7 @@
     <string name="settings_data_save_mode_summary">מצב שמירת נתונים מחיל מסנן ספציפי כך שמסוננים עדכוני נוכחות והודעות הקלדה.</string>
     <string name="settings_data_save_mode">מצב שמירת נתונים</string>
     <string name="settings_opt_in_of_analytics_ok">כן, אני רוצה לעזור!</string>
-    <string name="template_settings_opt_in_of_analytics_prompt">אנא אפשר ניתוח נתונים כדי לעזור לנו לשפר את SchildiChat.</string>
+    <string name="template_settings_opt_in_of_analytics_prompt">אנא אפשר ניתוח נתונים כדי לעזור לנו לשפר את Element.</string>
     <string name="template_settings_opt_in_of_analytics_summary">אלמנט אוסף ניתוח אנונימי כדי לאפשר לנו לשפר את היישום.</string>
     <string name="settings_opt_in_of_analytics">שלח נתוני ניתוח</string>
     <string name="settings_analytics">ניתוח נתונים</string>
@@ -2136,7 +2136,7 @@
 \nאלמנט אנדרואיד</string>
     <string name="template_app_desktop_web">רשת האינטרנט
 \nשולחן העבודה של אלמנט</string>
-    <string name="template_use_other_session_content_description">השתמש באלמנט העדכני ביותר במכשירים האחרים שלך, Element Web, Element Desktop, Element iOS, SchildiChat for Android, או לקוח מטריקס אחר עם יכולת חתימה צולבת</string>
+    <string name="template_use_other_session_content_description">השתמש באלמנט העדכני ביותר במכשירים האחרים שלך, Element Web, Element Desktop, Element iOS, Element for Android, או לקוח מטריקס אחר עם יכולת חתימה צולבת</string>
     <string name="change_password_summary">הגדר סיסמת חשבון חדשה …</string>
     <string name="error_saving_media_file">לא ניתן היה לשמור את קובץ המדיה</string>
     <string name="error_adding_media_file_to_gallery">לא ניתן היה להוסיף קובץ מדיה לגלריה</string>
@@ -2283,7 +2283,7 @@
     <string name="disclaimer_positive_button">למד עוד</string>
     <string name="disclaimer_negative_button">הבנת</string>
     <string name="disclaimer_content">אנו שמחים לבשר ששינינו שם! האפליקציה שלך מעודכנת ואתה מחובר לחשבונך.</string>
-    <string name="disclaimer_title">Riot היא עכשיו SchildiChat!</string>
+    <string name="disclaimer_title">Riot היא עכשיו Element!</string>
     <string name="notice_crypto_unable_to_decrypt_merged">ממתין להיסטוריית הצפנה</string>
     <string name="crypto_error_withheld_generic">אינך יכול לגשת להודעה זו מכיוון שהשולח בכוונה לא שלח את המפתחות</string>
     <string name="crypto_error_withheld_unverified">אינך יכול לגשת להודעה זו מכיוון שהשולח אינו מהימן על ההפעלה שלך</string>
@@ -2328,7 +2328,7 @@
     <string name="identity_server_error_terms_not_signed">אנא קבל תחילה את התנאים של שרת הזהות בהגדרות.</string>
     <string name="identity_server_error_no_identity_server_configured">אנא הגדר תחילה שרת זהות.</string>
     <string name="identity_server_error_outdated_home_server">פעולה זו אינה אפשרית. שרת הבית מיושן.</string>
-    <string name="template_identity_server_error_outdated_identity_server">שרת זהות זה מיושן .SchildiChat תומך רק ב- API V2.</string>
+    <string name="template_identity_server_error_outdated_identity_server">שרת זהות זה מיושן .Element תומך רק ב- API V2.</string>
     <string name="disconnect_identity_server_dialog_content">להתנתק משרת הזהות%s\?</string>
     <string name="open_terms_of">תנאים פתוחים של%s</string>
     <string name="choose_locale_loading_locales">טוען שפות זמינות …</string>

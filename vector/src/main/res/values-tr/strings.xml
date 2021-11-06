@@ -1552,7 +1552,7 @@
     <string name="login_signin_to">%1$s sunucusuna giriş yap</string>
     <string name="login_connect_to_a_custom_server">Özel bir sunucuya bağlan</string>
     <string name="login_connect_to">%1$s sunucusuna bağlan</string>
-    <string name="login_connect_to_modular">SchildiChat Matrix Hizmetlerine bağlan</string>
+    <string name="login_connect_to_modular">Element Matrix Hizmetlerine bağlan</string>
     <string name="login_social_sso">tek seferlik giriş</string>
     <string name="login_social_signup_with">%s ile kayıt ol</string>
     <string name="login_social_signin_with">%s ile giriş yap</string>
@@ -1641,7 +1641,7 @@
     <string name="login_terms_title">Devam etmek için koşulları kabul edin</string>
     <string name="login_a11y_captcha_container">Lütfen aşağıdaki doğrulamayı tamamlayın</string>
     <string name="login_a11y_choose_other">Özel bir ana sunucu seçin</string>
-    <string name="login_a11y_choose_modular">SchildiChat Matric Hizmetleri\'ni seç</string>
+    <string name="login_a11y_choose_modular">Element Matric Hizmetleri\'ni seç</string>
     <string name="login_a11y_choose_matrix_org">Matrix.org sunucusunu seç</string>
     <string name="login_signup_cancel_confirmation_content">Hesabınız henüz oluşturulmadı.
 \n
@@ -1686,7 +1686,7 @@
 \nİnternet istemcisi ile kayıt olmak ister misiniz\?</string>
     <string name="login_registration_disabled">Üzgünüm, bu sunucu artık yeni hesap kabul etmiyor.</string>
     <string name="login_login_with_email_error">Bu e-posta herhangi bir hesapla ilişkili değil.</string>
-    <string name="login_server_url_form_modular_hint">SchildiChat Matrix Hizmetleri Adresi</string>
+    <string name="login_server_url_form_modular_hint">Element Matrix Hizmetleri Adresi</string>
     <string name="login_server_url_form_other_hint">Adres</string>
     <string name="login_clear_homeserver_history">Geçmişi temizle</string>
     <string name="login_signin">Giriş yap</string>
