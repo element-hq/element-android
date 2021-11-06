@@ -17,7 +17,6 @@ package im.vector.app.features.notifications
 
 import android.content.Context
 import androidx.annotation.WorkerThread
-import androidx.core.content.pm.ShortcutManagerCompat
 import im.vector.app.features.notifications.NotificationDrawerManager.Companion.ROOM_EVENT_NOTIFICATION_ID
 import im.vector.app.features.notifications.NotificationDrawerManager.Companion.ROOM_INVITATION_NOTIFICATION_ID
 import im.vector.app.features.notifications.NotificationDrawerManager.Companion.ROOM_MESSAGES_NOTIFICATION_ID
@@ -63,9 +62,6 @@ class NotificationRenderer @Inject constructor(private val notificationDisplayer
                     }
                     is RoomNotification.Message -> if (useCompleteNotificationFormat) {
                         Timber.d("Updating room messages notification ${wrapper.meta.roomId}")
-                        wrapper.shortcutInfo?.let {
-                            ShortcutManagerCompat.pushDynamicShortcut(appContext, it)
-                        }
                         notificationDisplayer.showNotificationMessage(wrapper.meta.roomId, ROOM_MESSAGES_NOTIFICATION_ID, wrapper.notification)
                     }
                 }
