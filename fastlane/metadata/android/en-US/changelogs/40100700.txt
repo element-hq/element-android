@@ -1,0 +1,9 @@
+- Update codebase to Element v1.3.6
+- Make "jump to bottom on send" a setting
+- Keep screen on during voice recording
+- Add setting to put DMs in spaces based on space memberships
+- At long press action to open rooms at the bottom, if "open at first unread" is enabled
+- Fix broken video compression
+- Avoid message jumps in the chat
+- Improve how expanding messages (e.g. added URL previews) move other messages
+- Improve room previews for RTL/LTR mixes of sender and message
