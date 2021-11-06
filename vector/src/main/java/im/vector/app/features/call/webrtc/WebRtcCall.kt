@@ -19,6 +19,8 @@ package im.vector.app.features.call.webrtc
 import android.content.Context
 import android.hardware.camera2.CameraManager
 import androidx.core.content.getSystemService
+import im.vector.app.R
+import im.vector.app.core.resources.StringArrayProvider
 import im.vector.app.core.flow.chunk
 import im.vector.app.core.services.CallService
 import im.vector.app.core.utils.CountUpTimer
@@ -113,7 +115,8 @@ class WebRtcCall(
         private val peerConnectionFactoryProvider: Provider<PeerConnectionFactory?>,
         private val onCallBecomeActive: (WebRtcCall) -> Unit,
         private val onCallEnded: (String, EndCallReason, Boolean) -> Unit,
-        private var vectorPreferences: VectorPreferences
+        private var vectorPreferences: VectorPreferences,
+        private val stringArrayProvider: StringArrayProvider
 ) : MxCall.StateListener {
 
     interface Listener : MxCall.StateListener {
@@ -282,9 +285,7 @@ class WebRtcCall(
         val peerConnectionFactory = peerConnectionFactoryProvider.get() ?: return
         val iceServers = mutableListOf<PeerConnection.IceServer>().apply {
             if (vectorPreferences.useFallbackTurnServer()) {
-                listOf("turn:turn.matrix.org:3478?transport=udp",
-                        "turn:turn.matrix.org:3478?transport=tcp",
-                        "turns:turn.matrix.org:443?transport=tcp").forEach {
+                stringArrayProvider.getStringArray(R.array.fallback_ice_servers).forEach {
                     add(
                             PeerConnection.IceServer.builder(it)
                                     .setUsername("xxxxx")
