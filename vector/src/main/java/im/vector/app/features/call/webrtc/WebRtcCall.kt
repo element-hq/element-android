@@ -284,27 +284,18 @@ class WebRtcCall(
     private fun createPeerConnection(turnServerResponse: TurnServerResponse?) {
         val peerConnectionFactory = peerConnectionFactoryProvider.get() ?: return
         val iceServers = mutableListOf<PeerConnection.IceServer>().apply {
-            if (vectorPreferences.useFallbackTurnServer()) {
-                stringArrayProvider.getStringArray(R.array.fallback_ice_servers).forEach {
+            turnServerResponse?.let { server ->
+                val useFallback = server.uris.isNullOrEmpty() && vectorPreferences.useFallbackTurnServer()
+                val serverList = if (useFallback) stringArrayProvider.getStringArray(R.array.fallback_ice_servers).toList() else server.uris
+                serverList?.forEach { uri ->
                     add(
-                            PeerConnection.IceServer.builder(it)
-                                    .setUsername("xxxxx")
-                                    .setPassword("xxxxx")
+                            PeerConnection
+                                    .IceServer
+                                    .builder(uri)
+                                    .setUsername(if (useFallback) "xxxxx" else server.username)
+                                    .setPassword(if (useFallback) "xxxxx" else server.password)
                                     .createIceServer()
                     )
-                }
-            } else {
-                turnServerResponse?.let { server ->
-                    server.uris?.forEach { uri ->
-                        add(
-                                PeerConnection
-                                        .IceServer
-                                        .builder(uri)
-                                        .setUsername(server.username)
-                                        .setPassword(server.password)
-                                        .createIceServer()
-                        )
-                    }
                 }
             }
         }
