@@ -214,8 +214,11 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                                                 .also { filesToDelete.add(it) }
                                     }
                                     VideoCompressionResult.CompressionNotNeeded,
-                                    VideoCompressionResult.CompressionCancelled,
+                                    VideoCompressionResult.CompressionCancelled -> {
+                                        workingFile
+                                    }
                                     is VideoCompressionResult.CompressionFailed -> {
+                                        Timber.e(videoCompressionResult.failure, "Video compression failed")
                                         workingFile
                                     }
                                 }

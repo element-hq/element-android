@@ -85,10 +85,9 @@ open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), ToolbarCo
             addFirstFragment()
         }
 
-        loginViewModel
-                .subscribe(this) {
-                    updateWithState(it)
-                }
+        loginViewModel.onEach {
+            updateWithState(it)
+        }
 
         loginViewModel.observeViewEvents { handleLoginViewEvents(it) }
 

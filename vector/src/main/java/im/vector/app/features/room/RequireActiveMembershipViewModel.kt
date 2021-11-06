@@ -77,8 +77,8 @@ class RequireActiveMembershipViewModel @AssistedInject constructor(
                     room.flow()
                             .liveRoomSummary()
                             .unwrap()
-                            .flowOn(Dispatchers.Default)
                             .map { mapToLeftViewEvent(room, it) }
+                            .flowOn(Dispatchers.Default)
                 }
                 .unwrap()
                 .onEach { event ->

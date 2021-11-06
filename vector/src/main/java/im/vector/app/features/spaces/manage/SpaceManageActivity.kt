@@ -22,6 +22,7 @@ import android.os.Bundle
 import android.os.Parcelable
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
 import com.airbnb.mvrx.withState
@@ -41,6 +42,8 @@ import im.vector.app.features.roomdirectory.createroom.CreateRoomFragment
 import im.vector.app.features.roomprofile.RoomProfileArgs
 import im.vector.app.features.roomprofile.alias.RoomAliasFragment
 import im.vector.app.features.roomprofile.permissions.RoomPermissionsFragment
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -80,14 +83,14 @@ class SpaceManageActivity : VectorBaseActivity<ActivitySimpleLoadingBinding>(),
 
         sharedDirectoryActionViewModel = viewModelProvider.get(RoomDirectorySharedActionViewModel::class.java)
         sharedDirectoryActionViewModel
-                .observe()
-                .subscribe { sharedAction ->
+                .stream()
+                .onEach { sharedAction ->
                     when (sharedAction) {
                         is RoomDirectorySharedAction.Back,
                         is RoomDirectorySharedAction.Close -> finish()
                     }
                 }
-                .disposeOnDestroy()
+                .launchIn(lifecycleScope)
 
         val args = intent?.getParcelableExtra<SpaceManageArgs>(Mavericks.KEY_ARG)
         if (isFirstCreation()) {

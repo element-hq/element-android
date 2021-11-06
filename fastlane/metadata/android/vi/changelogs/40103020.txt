@@ -1,0 +1,2 @@
+Những thay đổi chính trong phiên bản này: Thêm hỗ trợ Android Auto. Sửa rất nhiều lỗi!
+Log thay đổi đầy đủ: https://github.com/vector-im/element-android/releases/tag/v1.3.2

@@ -24,8 +24,13 @@ import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.utils.BehaviorDataSource
 import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.ui.UiStateRepository
-import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancelChildren
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.Session
@@ -54,10 +59,10 @@ class AppStateHandler @Inject constructor(
         private val activeSessionHolder: ActiveSessionHolder
 ) : LifecycleObserver {
 
-    private val compositeDisposable = CompositeDisposable()
+    private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
     private val selectedSpaceDataSource = BehaviorDataSource<Option<RoomGroupingMethod>>(Option.empty())
 
-    val selectedRoomGroupingObservable = selectedSpaceDataSource.observe()
+    val selectedRoomGroupingObservable = selectedSpaceDataSource.stream()
 
     fun getCurrentRoomGroupingMethod(): RoomGroupingMethod? {
         // XXX we should somehow make it live :/ just a work around
@@ -105,9 +110,9 @@ class AppStateHandler @Inject constructor(
     }
 
     private fun observeActiveSession() {
-        sessionDataSource.observe()
+        sessionDataSource.stream()
                 .distinctUntilChanged()
-                .subscribe {
+                .onEach {
                     // sessionDataSource could already return a session while activeSession holder still returns null
                     it.orNull()?.let { session ->
                         if (uiStateRepository.isGroupingMethodSpace(session.sessionId)) {
@@ -116,9 +121,8 @@ class AppStateHandler @Inject constructor(
                             setCurrentGroup(uiStateRepository.getSelectedGroup(session.sessionId), session)
                         }
                     }
-                }.also {
-                    compositeDisposable.add(it)
                 }
+                .launchIn(coroutineScope)
     }
 
     fun safeActiveSpaceId(): String? {
@@ -136,7 +140,7 @@ class AppStateHandler @Inject constructor(
 
     @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
     fun entersBackground() {
-        compositeDisposable.clear()
+        coroutineScope.coroutineContext.cancelChildren()
         val session = activeSessionHolder.getSafeActiveSession() ?: return
         when (val currentMethod = selectedSpaceDataSource.currentValue?.orNull() ?: RoomGroupingMethod.BySpace(null)) {
             is RoomGroupingMethod.BySpace       -> {

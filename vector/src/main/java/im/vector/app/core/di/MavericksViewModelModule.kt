@@ -80,6 +80,7 @@ import im.vector.app.features.settings.devices.DevicesViewModel
 import im.vector.app.features.settings.devtools.AccountDataViewModel
 import im.vector.app.features.settings.devtools.GossipingEventsPaperTrailViewModel
 import im.vector.app.features.settings.devtools.KeyRequestListViewModel
+import im.vector.app.features.settings.devtools.KeyRequestViewModel
 import im.vector.app.features.settings.homeserver.HomeserverSettingsViewModel
 import im.vector.app.features.settings.ignored.IgnoredUsersViewModel
 import im.vector.app.features.settings.locale.LocalePickerViewModel
@@ -340,6 +341,11 @@ interface MavericksViewModelModule {
     @IntoMap
     @MavericksViewModelKey(KeyRequestListViewModel::class)
     fun keyRequestListViewModelFactory(factory: KeyRequestListViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(KeyRequestViewModel::class)
+    fun keyRequestViewModelFactory(factory: KeyRequestViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
 
     @Binds
     @IntoMap

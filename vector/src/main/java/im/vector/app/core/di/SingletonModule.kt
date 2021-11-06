@@ -137,6 +137,6 @@ object VectorStaticModule {
     @Provides
     @JvmStatic
     fun providesCoroutineDispatchers(): CoroutineDispatchers {
-        return CoroutineDispatchers(io = Dispatchers.IO)
+        return CoroutineDispatchers(io = Dispatchers.IO, computation = Dispatchers.Default)
     }
 }

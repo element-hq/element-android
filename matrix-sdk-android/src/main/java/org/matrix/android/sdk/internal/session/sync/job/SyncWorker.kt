@@ -121,9 +121,9 @@ internal class SyncWorker(context: Context,
                     .setBackoffCriteria(BackoffPolicy.LINEAR, WorkManagerProvider.BACKOFF_DELAY_MILLIS, TimeUnit.MILLISECONDS)
                     .setInitialDelay(delayInSeconds, TimeUnit.SECONDS)
                     .build()
-
+            // Avoid risking multiple chains of syncs by replacing the existing chain
             workManagerProvider.workManager
-                    .enqueueUniqueWork(BG_SYNC_WORK_NAME, ExistingWorkPolicy.APPEND_OR_REPLACE, workRequest)
+                    .enqueueUniqueWork(BG_SYNC_WORK_NAME, ExistingWorkPolicy.REPLACE, workRequest)
         }
 
         fun stopAnyBackgroundSync(workManagerProvider: WorkManagerProvider) {

@@ -20,16 +20,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
-import com.jakewharton.rxbinding3.appcompat.queryTextChanges
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentSpaceLeaveAdvancedBinding
-import io.reactivex.rxkotlin.subscribeBy
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
-import java.util.concurrent.TimeUnit
+import reactivecircus.flowbinding.appcompat.queryTextChanges
 import javax.inject.Inject
 
 class SpaceLeaveAdvancedFragment @Inject constructor(
@@ -54,11 +56,11 @@ class SpaceLeaveAdvancedFragment @Inject constructor(
         }
 
         views.publicRoomsFilter.queryTextChanges()
-                .debounce(100, TimeUnit.MILLISECONDS)
-                .subscribeBy {
+                .debounce(100)
+                .onEach {
                     viewModel.handle(SpaceLeaveAdvanceViewAction.UpdateFilter(it.toString()))
                 }
-                .disposeOnDestroyView()
+                .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     override fun onDestroyView() {

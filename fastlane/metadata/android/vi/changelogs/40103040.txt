@@ -1,0 +1,2 @@
+Những thay đổi chính trong phiên bản này: Thêm hỗ trợ hiển thị, cho phòng Tin nhắn Trực tiếp (lưu ý: hiển thị bị vô hiệu hóa trên matrix.org. Thêm hỗ trợ Android Auto trở lại.
+Log thay đổi đầy đủ: https://github.com/vector-im/element-android/releases/tag/v1.3.4

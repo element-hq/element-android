@@ -299,7 +299,7 @@ class HomeDetailFragment @Inject constructor(
 
     private fun setupKeysBackupBanner() {
         serverBackupStatusViewModel
-                .subscribe(this) {
+                .onEach {
                     when (val banState = it.bannerState.invoke()) {
                         is BannerState.Setup  -> views.homeKeysBackupBanner.render(KeysBackupBanner.State.Setup(banState.numberOfKeys), false)
                         BannerState.BackingUp -> views.homeKeysBackupBanner.render(KeysBackupBanner.State.BackingUp, false)

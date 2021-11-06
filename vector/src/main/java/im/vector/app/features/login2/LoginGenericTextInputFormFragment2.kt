@@ -24,10 +24,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.autofill.HintConstants
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.args
 import com.google.i18n.phonenumbers.NumberParseException
 import com.google.i18n.phonenumbers.PhoneNumberUtil
-import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.isEmail
@@ -36,9 +36,12 @@ import im.vector.app.core.extensions.toReducedUrl
 import im.vector.app.databinding.FragmentLoginGenericTextInputForm2Binding
 import im.vector.app.features.login.LoginGenericTextInputFormFragmentArgument
 import im.vector.app.features.login.TextInputFormFragmentMode
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.auth.registration.RegisterThreePid
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.is401
+import reactivecircus.flowbinding.android.widget.textChanges
 import javax.inject.Inject
 
 /**
@@ -82,10 +85,10 @@ class LoginGenericTextInputFormFragment2 @Inject constructor() : AbstractLoginFr
 
     private fun setupTil() {
         views.loginGenericTextInputFormTextInput.textChanges()
-                .subscribe {
+                .onEach {
                     views.loginGenericTextInputFormTil.error = null
                 }
-                .disposeOnDestroyView()
+                .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     private fun setupUi() {
@@ -189,11 +192,11 @@ class LoginGenericTextInputFormFragment2 @Inject constructor() : AbstractLoginFr
     private fun setupSubmitButton() {
         views.loginGenericTextInputFormSubmit.isEnabled = false
         views.loginGenericTextInputFormTextInput.textChanges()
-                .subscribe { text ->
+                .onEach { text ->
                     views.loginGenericTextInputFormSubmit.isEnabled = isInputValid(text)
-                    text?.let { updateSubmitButtons(it) }
+                    updateSubmitButtons(text)
                 }
-                .disposeOnDestroyView()
+                .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     private fun updateSubmitButtons(text: CharSequence) {

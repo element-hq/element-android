@@ -104,7 +104,7 @@ class TextComposerViewModel @AssistedInject constructor(
     }
 
     private fun subscribeToStateInternal() {
-        selectSubscribe(TextComposerViewState::sendMode, TextComposerViewState::canSendMessage, TextComposerViewState::isVoiceRecording) { _, _, _ ->
+        onEach(TextComposerViewState::sendMode, TextComposerViewState::canSendMessage, TextComposerViewState::isVoiceRecording) { _, _, _ ->
             updateIsSendButtonVisibility(false)
         }
     }

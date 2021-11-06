@@ -19,6 +19,7 @@ package im.vector.app.features.home.room.list
 import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.asFlow
 import androidx.lifecycle.liveData
 import androidx.paging.PagedList
 import com.airbnb.mvrx.Async
@@ -29,12 +30,15 @@ import im.vector.app.features.home.RoomListDisplayMode
 import im.vector.app.features.invite.AutoAcceptInvites
 import im.vector.app.features.invite.showInvites
 import im.vector.app.space
-import io.reactivex.Observable
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.Observables
-import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.query.ActiveSpaceFilter
 import org.matrix.android.sdk.api.query.RoomCategoryFilter
@@ -44,7 +48,7 @@ import org.matrix.android.sdk.api.session.room.RoomSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.UpdatableLivePageResult
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.summary.RoomAggregateNotificationCount
-import org.matrix.android.sdk.rx.asObservable
+import timber.log.Timber
 
 class RoomListSectionBuilderSpace(
         private val session: Session,
@@ -56,8 +60,6 @@ class RoomListSectionBuilderSpace(
         private val suggestedRoomJoiningState: LiveData<Map<String, Async<Unit>>>,
         private val onlyOrphansInHome: Boolean = false
 ) : RoomListSectionBuilder {
-
-    private val disposables = CompositeDisposable()
 
     private val pagedListConfig = PagedList.Config.Builder()
             .setPageSize(10)
@@ -132,14 +134,12 @@ class RoomListSectionBuilderSpace(
 
         appStateHandler.selectedRoomGroupingObservable
                 .distinctUntilChanged()
-                .subscribe { groupingMethod ->
+                .onEach { groupingMethod ->
                     val selectedSpace = groupingMethod.orNull()?.space()
                     activeSpaceAwareQueries.onEach { updater ->
                         updater.updateForSpaceId(selectedSpace?.roomId)
                     }
-                }.also {
-                    disposables.add(it)
-                }
+                }.launchIn(viewModelScope)
 
         return sections
     }
@@ -221,13 +221,13 @@ class RoomListSectionBuilderSpace(
         }
 
         // add suggested rooms
-        val suggestedRoomsObservable = // MutableLiveData<List<SpaceChildInfo>>()
+        val suggestedRoomsFlow = // MutableLiveData<List<SpaceChildInfo>>()
                 appStateHandler.selectedRoomGroupingObservable
                         .distinctUntilChanged()
-                        .switchMap { groupingMethod ->
+                        .flatMapLatest { groupingMethod ->
                             val selectedSpace = groupingMethod.orNull()?.space()
                             if (selectedSpace == null) {
-                                Observable.just(emptyList())
+                                flowOf(emptyList())
                             } else {
                                 liveData(context = viewModelScope.coroutineContext + Dispatchers.IO) {
                                     val spaceSum = tryOrNull {
@@ -240,24 +240,23 @@ class RoomListSectionBuilderSpace(
                                         session.getRoomSummary(it.childRoomId)?.membership?.isActive() != true
                                     }
                                     emit(filtered)
-                                }.asObservable()
+                                }.asFlow()
                             }
                         }
 
         val liveSuggestedRooms = MutableLiveData<SuggestedRoomInfo>()
-        Observables.combineLatest(
-                suggestedRoomsObservable,
-                suggestedRoomJoiningState.asObservable()
+        combine(
+                suggestedRoomsFlow,
+                suggestedRoomJoiningState.asFlow()
         ) { rooms, joinStates ->
             SuggestedRoomInfo(
                     rooms,
                     joinStates
             )
-        }.subscribe {
+        }.onEach {
             liveSuggestedRooms.postValue(it)
-        }.also {
-            disposables.add(it)
-        }
+        }.launchIn(viewModelScope)
+
         sections.add(
                 RoomsSection(
                         sectionName = stringProvider.getString(R.string.suggested_header),
@@ -373,9 +372,9 @@ class RoomListSectionBuilderSpace(
                     }.livePagedList
                             .let { livePagedList ->
                                 // use it also as a source to update count
-                                livePagedList.asObservable()
-                                        .observeOn(Schedulers.computation())
-                                        .subscribe {
+                                livePagedList.asFlow()
+                                        .onEach {
+                                            Timber.v("Thread space list: ${Thread.currentThread()}")
                                             sections.find { it.sectionName == name }
                                                     ?.notificationCount
                                                     ?.postValue(
@@ -387,9 +386,9 @@ class RoomListSectionBuilderSpace(
                                                                 )
                                                             }
                                                     )
-                                        }.also {
-                                            disposables.add(it)
                                         }
+                                        .flowOn(Dispatchers.Default)
+                                        .launchIn(viewModelScope)
 
                                 sections.add(
                                         RoomsSection(
@@ -431,9 +430,5 @@ class RoomListSectionBuilderSpace(
             }
             RoomListViewModel.SpaceFilterStrategy.NONE                  -> this
         }
-    }
-
-    override fun dispose() {
-        disposables.dispose()
     }
 }

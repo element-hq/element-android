@@ -135,6 +135,7 @@ class RoomListViewModel @AssistedInject constructor(
         )
     } else {
         RoomListSectionBuilderGroup(
+                viewModelScope,
                 session,
                 stringProvider,
                 appStateHandler,
@@ -334,10 +335,5 @@ class RoomListViewModel @AssistedInject constructor(
                     .fold({ RoomListViewEvents.Done }, { RoomListViewEvents.Failure(it) })
             _viewEvents.post(value)
         }
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        roomListSectionBuilder.dispose()
     }
 }

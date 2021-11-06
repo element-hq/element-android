@@ -120,9 +120,11 @@ interface Session :
     fun requireBackgroundSync()
 
     /**
-     * Launches infinite periodic background syncs
-     * This does not work in doze mode :/
-     * If battery optimization is on it can work in app standby but that's all :/
+     * Launches infinite self rescheduling background syncs via the WorkManager
+     *
+     * While dozing, syncs will only occur during maintenance windows
+     * For reliability it's recommended to also start a long running foreground service
+     * along with disabling battery optimizations
      */
     fun startAutomaticBackgroundSync(timeOutInSeconds: Long, repeatDelayInSeconds: Long)
 
