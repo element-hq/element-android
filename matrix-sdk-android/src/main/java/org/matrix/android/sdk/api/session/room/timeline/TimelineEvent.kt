@@ -160,11 +160,11 @@ fun TimelineEvent.isEdition(): Boolean {
     return root.isEdition()
 }
 
-fun TimelineEvent.getTextEditableContent(): String {
+fun TimelineEvent.getTextEditableContent(): String? {
     val lastBody = getLastMessageBody()
     return if (isReply()) {
         return extractUsefulTextFromReply(lastBody ?: "")
     } else {
-        lastBody ?: ""
+        lastBody
     }
 }

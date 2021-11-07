@@ -90,7 +90,7 @@ class DisplayableEventFormatter @Inject constructor(
                             return if (timelineEvent.isReply()) {
                                 // Skip reply prefix, and show important
                                 // TODO add a reply image span ?
-                                simpleFormat(senderName, timelineEvent.getTextEditableContent(), appendAuthor)
+                                simpleFormat(senderName, timelineEvent.getTextEditableContent() ?: messageContent.body, appendAuthor)
                             } else {
                                 simpleFormat(senderName, timelineEvent.getLastMessageBody() ?: messageContent.body, appendAuthor)
                             }
