@@ -15,6 +15,8 @@
  */
 package org.matrix.android.sdk.api.util
 
+import org.matrix.android.sdk.internal.util.unescapeHtml
+
 object ContentUtils {
     fun extractUsefulTextFromReply(repliedBody: String): String {
         val lines = repliedBody.lines()
@@ -43,5 +45,9 @@ object ContentUtils {
             }
         }
         return repliedBody
+    }
+
+    fun formatSpoilerTextFromHtml(repliedBody: String): String {
+        return repliedBody.replace("(?<=<span data-mx-spoiler>).*(?=</span>)".toRegex(), { "█".repeat(it.value.length); }).unescapeHtml()
     }
 }

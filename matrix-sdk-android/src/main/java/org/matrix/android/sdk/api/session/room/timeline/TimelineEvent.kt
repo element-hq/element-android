@@ -28,8 +28,10 @@ import org.matrix.android.sdk.api.session.room.model.EventAnnotationsSummary
 import org.matrix.android.sdk.api.session.room.model.ReadReceipt
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageStickerContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageTextContent
 import org.matrix.android.sdk.api.session.room.model.relation.RelationDefaultContent
 import org.matrix.android.sdk.api.session.room.sender.SenderInfo
+import org.matrix.android.sdk.api.util.ContentUtils
 import org.matrix.android.sdk.api.util.ContentUtils.extractUsefulTextFromReply
 
 /**
@@ -138,7 +140,9 @@ fun TimelineEvent.getLastMessageBody(): String? {
     val lastMessageContent = getLastMessageContent()
 
     if (lastMessageContent != null) {
-        return lastMessageContent.newContent?.toModel<MessageContent>()?.body
+        return lastMessageContent.newContent?.toModel<MessageTextContent>()?.formattedBody?.let { ContentUtils.formatSpoilerTextFromHtml(it) }
+                ?: lastMessageContent.newContent?.toModel<MessageContent>()?.body
+                ?: (lastMessageContent as MessageTextContent).formattedBody?.let { ContentUtils.formatSpoilerTextFromHtml(it) }
                 ?: lastMessageContent.body
     }
 
@@ -156,11 +160,11 @@ fun TimelineEvent.isEdition(): Boolean {
     return root.isEdition()
 }
 
-fun TimelineEvent.getTextEditableContent(): String? {
-    val lastContent = getLastMessageContent()
+fun TimelineEvent.getTextEditableContent(): String {
+    val lastBody = getLastMessageBody()
     return if (isReply()) {
-        return extractUsefulTextFromReply(lastContent?.body ?: "")
+        return extractUsefulTextFromReply(lastBody ?: "")
     } else {
-        lastContent?.body ?: ""
+        lastBody ?: ""
     }
 }

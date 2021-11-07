@@ -29,6 +29,7 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.model.message.OPTION_TYPE_BUTTONS
 import org.matrix.android.sdk.api.session.room.model.relation.ReactionContent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
+import org.matrix.android.sdk.api.session.room.timeline.getLastMessageBody
 import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
 import org.matrix.android.sdk.api.session.room.timeline.getTextEditableContent
 import org.matrix.android.sdk.api.session.room.timeline.isReply
@@ -89,10 +90,9 @@ class DisplayableEventFormatter @Inject constructor(
                             return if (timelineEvent.isReply()) {
                                 // Skip reply prefix, and show important
                                 // TODO add a reply image span ?
-                                simpleFormat(senderName, timelineEvent.getTextEditableContent()
-                                        ?: messageContent.body, appendAuthor)
+                                simpleFormat(senderName, timelineEvent.getTextEditableContent(), appendAuthor)
                             } else {
-                                simpleFormat(senderName, messageContent.body, appendAuthor)
+                                simpleFormat(senderName, timelineEvent.getLastMessageBody() ?: messageContent.body, appendAuthor)
                             }
                         }
                         MessageType.MSGTYPE_RESPONSE             -> {
