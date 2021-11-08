@@ -2446,9 +2446,9 @@
     <string name="identity_server_consent_dialog_title">Envoyer des e\u2011mails et des numéros de téléphone</string>
     <string name="settings_discovery_consent_action_give_consent">Autoriser</string>
     <string name="settings_discovery_consent_action_revoke">Révoquer mon autorisation</string>
-    <string name="settings_discovery_consent_notice_off">Vous n’avez pas donné votre autorisation pour envoyer des e\u2011mails et des numéros de téléphone à ce serveur d’identité pour découvrir d\'autres utilisateurs à partir de vos contacts.</string>
-    <string name="settings_discovery_consent_notice_on">Vous avez donné votre autorisation pour envoyer des e\u2011mails et des numéros de téléphone à ce serveur d’identité pour découvrir d\'autres utilisateurs à partir de vos contacts.</string>
-    <string name="settings_discovery_consent_title">Envoyer des e\u2011mails et des numéros de téléphone</string>
+    <string name="template_settings_discovery_consent_notice_off">Vous n’avez pas donné votre autorisation pour envoyer des e\u2011mails au serveur ${app_name} pour découvrir d\'autres utilisateurs à partir de vos contacts.</string>
+    <string name="settings_discovery_consent_notice_on">Vous avez donné votre autorisation pour envoyer des e\u2011mails au serveur d’identité pour découvrir d\'autres utilisateurs à partir de vos contacts.</string>
+    <string name="settings_discovery_consent_title">Envoyer des e\u2011mails</string>
     <string name="direct_room_user_list_suggestions_title">Suggestions</string>
     <string name="direct_room_user_list_contacts_title">Contacts</string>
     <string name="direct_room_user_list_known_title">Utilisateurs connus</string>
