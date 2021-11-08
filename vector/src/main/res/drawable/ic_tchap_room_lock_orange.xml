@@ -5,8 +5,7 @@
     android:viewportHeight="13">
     <path
         android:pathData="M0.7168,11.4839C0.7168,11.753 0.935,11.9712 1.2042,11.9712H10.0281C10.2973,11.9712 10.5155,11.753 10.5155,11.4839V4.7999C10.5155,4.5307 10.2973,4.3125 10.0281,4.3125H1.2042C0.935,4.3125 0.7168,4.5307 0.7168,4.7999V11.4839Z"
-        android:fillColor="@color/tchap_room_external"
-        android:fillType="evenOdd" />
+        android:fillColor="@color/tchap_room_external" />
     <path
         android:pathData="M3.1543,6.228V3.4373C3.1543,2.0788 4.2566,0.9775 5.6165,0.9775C6.9761,0.9775 8.0785,2.0788 8.0785,3.4373V6.228"
         android:strokeWidth="1.302"
