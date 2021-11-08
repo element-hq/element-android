@@ -68,7 +68,8 @@
     <string name="initial_sync_start_importing_account_rooms">Synchronisation initiale :
 \nImportation des salons</string>
     <string name="initial_sync_start_importing_account_joined_rooms">Synchronisation initiale :
-\nImportation des salons que vous avez rejoints</string>
+\nChargement des conversations
+\nCela peut prendre du temps si vous avez rejoint beaucoup de salons</string>
     <string name="initial_sync_start_importing_account_invited_rooms">Synchronisation initiale :
 \nImportation des salons où vous avez été invité</string>
     <string name="initial_sync_start_importing_account_left_rooms">Synchronisation initiale :
@@ -3012,4 +3013,7 @@
     <string name="a11y_presence_unavailable">Indisponible</string>
     <string name="a11y_presence_offline">Hors ligne</string>
     <string name="a11y_presence_online">En ligne</string>
+    <string name="login_error_homeserver_from_url_not_found_enter_manual">Choisir un serveur d’accueil</string>
+    <string name="login_error_homeserver_from_url_not_found">Impossible de contacter un serveur d’accueil à l’URL %s. Veuillez vérifier votre lien ou choisir manuellement un serveur d’accueil.</string>
+    <string name="notification_listening_for_notifications">Écoute des notifications</string>
 </resources>
