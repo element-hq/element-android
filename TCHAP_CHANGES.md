@@ -1,3 +1,9 @@
+Changes in Tchap 1.99.2 (2021-11-08)
+===================================================
+
+Bugfix 🐛:
+ - Remove unsupported filltype attribute in vector drawable
+
 Changes in Tchap 1.99.1 (2021-11-05)
 ===================================================
 
