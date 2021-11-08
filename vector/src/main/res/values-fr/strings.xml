@@ -2342,7 +2342,7 @@
         <item quantity="other">%d utilisateurs bannis</item>
     </plurals>
     <string name="settings_emails_and_phone_numbers_summary">Gérer les e\u2011mails et numéros de téléphone liés à votre compte Matrix</string>
-    <string name="settings_emails_and_phone_numbers_title">E\u2011mails et numéros de téléphone</string>
+    <string name="settings_emails_and_phone_numbers_title">E\u2011mail</string>
     <string name="bottom_sheet_setup_secure_backup_title">Sauvegarde sécurisée</string>
     <string name="settings_setup_secure_backup">Activer la sauvegarde sécurisée</string>
     <string name="a11y_start_camera">Démarrer la caméra</string>

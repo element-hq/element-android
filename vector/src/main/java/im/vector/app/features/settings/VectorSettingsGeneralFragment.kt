@@ -64,11 +64,13 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.failure.isInvalidPassword
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerConfig
 import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerService
 import org.matrix.android.sdk.flow.flow
@@ -132,6 +134,7 @@ class VectorSettingsGeneralFragment @Inject constructor(
 
         observeUserAvatar()
         observeUserDisplayName()
+        observeUserThreePid()
         observeHideFromUserDirectory()
     }
 
@@ -157,6 +160,17 @@ class VectorSettingsGeneralFragment @Inject constructor(
                         it.summary = displayName
                         it.text = displayName
                     }
+                }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
+    }
+
+    private fun observeUserThreePid() {
+        session.flow()
+                .liveThreePIds(true)
+                .mapNotNull { it.filterIsInstance<ThreePid.Email>().firstOrNull() }
+                .distinctUntilChanged()
+                .onEach {
+                    (findPreference<VectorPreference>(VectorPreferences.SETTINGS_EMAILS_AND_PHONE_NUMBERS_PREFERENCE_KEY)!!).summary = it.email
                 }
                 .launchIn(viewLifecycleOwner.lifecycleScope)
     }
