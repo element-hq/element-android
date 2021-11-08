@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.app.ui
+package im.vector.app.ui.robot
 
 import androidx.test.espresso.Espresso.closeSoftKeyboard
 import androidx.test.espresso.Espresso.onView
@@ -24,13 +24,15 @@ import com.adevinta.android.barista.assertion.BaristaEnabledAssertions.assertDis
 import com.adevinta.android.barista.assertion.BaristaEnabledAssertions.assertEnabled
 import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
+import com.adevinta.android.barista.interaction.BaristaDialogInteractions
 import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
 import im.vector.app.R
 import im.vector.app.espresso.tools.waitUntilActivityVisible
 import im.vector.app.features.home.HomeActivity
 import im.vector.app.waitForView
 
-class UiTestBase {
+class OnboardingRobot {
+
     fun createAccount(userId: String, password: String = "password", homeServerUrl: String = "http://10.0.2.2:8080") {
         initSession(true, userId, password, homeServerUrl)
     }
@@ -86,5 +88,10 @@ class UiTestBase {
     fun signout() {
         clickOn(R.id.groupToolbarAvatarImageView)
         clickOn(R.id.homeDrawerHeaderSignoutView)
+
+        // We have sent a message in a e2e room, accept to loose it
+        clickOn(R.id.exitAnywayButton)
+        // Dark pattern
+        BaristaDialogInteractions.clickDialogNegativeButton()
     }
 }

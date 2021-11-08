@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
+ * Copyright (c) 2021 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,21 +14,22 @@
  * limitations under the License.
  */
 
-package im.vector.app.espresso.tools
+package im.vector.app.ui.robot
 
-import android.app.Activity
-import android.view.View
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.matcher.ViewMatchers
-import im.vector.app.activityIdlingResource
+import im.vector.app.R
 import im.vector.app.waitForView
-import im.vector.app.withIdlingResource
-import org.hamcrest.Matcher
 
-inline fun <reified T : Activity> waitUntilActivityVisible(noinline block: (() -> Unit) = {}) {
-    withIdlingResource(activityIdlingResource(T::class.java), block)
-}
+class NewDirectMessageRobot {
 
-fun waitUntilViewVisible(viewMatcher: Matcher<View>) {
-    Espresso.onView(ViewMatchers.isRoot()).perform(waitForView(viewMatcher))
+    fun verifyQrCodeButton() {
+        Espresso.onView(ViewMatchers.withId(R.id.userListRecyclerView))
+                .perform(waitForView(ViewMatchers.withText(R.string.qr_code)))
+    }
+
+    fun verifyInviteFriendsButton() {
+        Espresso.onView(ViewMatchers.withId(R.id.userListRecyclerView))
+                .perform(waitForView(ViewMatchers.withText(R.string.invite_friends)))
+    }
 }
