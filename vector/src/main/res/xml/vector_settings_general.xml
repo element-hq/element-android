@@ -86,17 +86,20 @@
         <im.vector.app.core.preference.VectorPreference
             android:key="SETTINGS_LOGGED_IN_PREFERENCE_KEY"
             android:title="@string/settings_logged_in"
+            app:isPreferenceVisible="false"
             tools:summary="\@user:matrix.org" />
 
         <im.vector.app.core.preference.VectorPreference
             android:key="SETTINGS_HOME_SERVER_PREFERENCE_KEY"
             android:title="@string/settings_home_server"
             app:fragment="im.vector.app.features.settings.homeserver.HomeserverSettingsFragment"
+            app:isPreferenceVisible="false"
             tools:summary="https://homeserver.org" />
 
         <im.vector.app.core.preference.VectorPreference
             android:key="SETTINGS_IDENTITY_SERVER_PREFERENCE_KEY"
             android:title="@string/settings_identity_server"
+            app:isPreferenceVisible="false"
             tools:summary="https://identity.server.url" />
 
         <im.vector.app.core.preference.VectorPreference
