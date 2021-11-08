@@ -95,15 +95,19 @@ class ElementRobot {
         waitUntilViewVisible(withId(R.id.bottomNavigationView))
     }
 
-    fun signout() {
+    fun signout(expectSignOutWarning: Boolean) {
         clickOn(R.id.groupToolbarAvatarImageView)
         clickOn(R.id.homeDrawerHeaderSignoutView)
 
-        val hasSentMessages = kotlin.runCatching {
+        val isShowingSignOutWarning = kotlin.runCatching {
             waitUntilViewVisible(withId(R.id.exitAnywayButton))
         }.isSuccess
 
-        if (hasSentMessages) {
+        if (expectSignOutWarning != isShowingSignOutWarning) {
+            Timber.w("Unexpected sign out flow, expected warning to be: ${expectSignOutWarning.toWarningType()} but was ${isShowingSignOutWarning.toWarningType()}")
+        }
+
+        if (isShowingSignOutWarning) {
             // We have sent a message in a e2e room, accept to loose it
             clickOn(R.id.exitAnywayButton)
             // Dark pattern
@@ -135,3 +139,5 @@ class ElementRobot {
         }.onFailure { Timber.w("Verification popup missing", it) }
     }
 }
+
+private fun Boolean.toWarningType() = if (this) "shown" else "skipped"

@@ -80,12 +80,12 @@ class UiAllScreensSanityTest {
             verifyCreatedRoom()
         }
 
-        elementRobot.signout()
+        elementRobot.signout(expectSignOutWarning = true)
 
         // Login again on the same account
         elementRobot.login(userId)
         elementRobot.dismissVerificationIfPresent()
         // TODO Deactivate account instead of logout?
-        elementRobot.signout()
+        elementRobot.signout(expectSignOutWarning = false)
     }
 }
