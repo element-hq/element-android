@@ -46,6 +46,7 @@ jobs:
           path: |
             vector/build/outputs/apk/*/debug/*.apk
 
+
   release:
     name: Build unsigned GPlay APKs
     runs-on: ubuntu-latest
