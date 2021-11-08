@@ -26,8 +26,6 @@ import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assert
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
 import im.vector.app.R
-import im.vector.app.espresso.tools.waitUntilActivityVisible
-import im.vector.app.features.home.HomeActivity
 import im.vector.app.waitForView
 
 class OnboardingRobot {
