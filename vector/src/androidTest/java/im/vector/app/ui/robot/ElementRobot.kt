@@ -17,14 +17,14 @@
 package im.vector.app.ui.robot
 
 import androidx.test.espresso.Espresso.pressBack
-import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.matcher.ViewMatchers.withId
-import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions
+import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
+import com.adevinta.android.barista.interaction.BaristaDialogInteractions.clickDialogNegativeButton
+import com.adevinta.android.barista.interaction.BaristaDialogInteractions.clickDialogPositiveButton
 import com.adevinta.android.barista.interaction.BaristaDrawerInteractions.openDrawer
 import im.vector.app.EspressoHelper
 import im.vector.app.R
-import im.vector.app.activityIdlingResource
 import im.vector.app.espresso.tools.waitUntilActivityVisible
 import im.vector.app.espresso.tools.waitUntilViewVisible
 import im.vector.app.features.createdirect.CreateDirectRoomActivity
@@ -36,22 +36,27 @@ import im.vector.app.withIdlingResource
 
 class ElementRobot {
 
-    fun login(userId: String) {
+    fun signUp(userId: String) {
         val onboardingRobot = OnboardingRobot()
         onboardingRobot.createAccount(userId = userId)
+        waitForHome()
+    }
 
-        withIdlingResource(activityIdlingResource(HomeActivity::class.java)) {
-            BaristaVisibilityAssertions.assertDisplayed(R.id.roomListContainer)
-            ViewActions.closeSoftKeyboard()
+    fun login(userId: String) {
+        val onboardingRobot = OnboardingRobot()
+        onboardingRobot.login(userId = userId)
+        waitForHome()
+    }
+
+    private fun waitForHome() {
+        waitUntilActivityVisible<HomeActivity> {
+            waitUntilViewVisible(withId(R.id.roomListContainer))
         }
-
         val activity = EspressoHelper.getCurrentActivity()!!
         val uiSession = (activity as HomeActivity).activeSessionHolder.getActiveSession()
-
         withIdlingResource(initialSyncIdlingResource(uiSession)) {
-            BaristaVisibilityAssertions.assertDisplayed(R.id.roomListContainer)
+            waitUntilViewVisible(withId(R.id.bottomNavigationView))
         }
-        waitUntilViewVisible(withId(R.id.bottomNavigationView))
     }
 
     fun settings(block: SettingsRobot.() -> Unit) {
@@ -88,9 +93,26 @@ class ElementRobot {
     }
 
     fun signout() {
-        OnboardingRobot().signout()
+        clickOn(R.id.groupToolbarAvatarImageView)
+        clickOn(R.id.homeDrawerHeaderSignoutView)
+
+        val hasSentMessages = kotlin.runCatching {
+            waitUntilViewVisible(withId(R.id.exitAnywayButton))
+        }.isSuccess
+
+        if (hasSentMessages) {
+            // We have sent a message in a e2e room, accept to loose it
+            clickOn(R.id.exitAnywayButton)
+            // Dark pattern
+            waitUntilViewVisible(withId(android.R.id.button2))
+            clickDialogNegativeButton()
+        } else {
+            waitUntilViewVisible(withId(android.R.id.button1))
+            clickDialogPositiveButton()
+        }
+
         waitUntilActivityVisible<LoginActivity> {
-            BaristaVisibilityAssertions.assertDisplayed(R.id.loginSplashLogo)
+            assertDisplayed(R.id.loginSplashLogo)
         }
     }
 }
