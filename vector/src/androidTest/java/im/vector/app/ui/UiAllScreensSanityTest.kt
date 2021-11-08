@@ -16,23 +16,14 @@
 
 package im.vector.app.ui
 
-import android.view.View
-import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.matcher.ViewMatchers.isRoot
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
-import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
-import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
-import im.vector.app.EspressoHelper
-import im.vector.app.R
-import im.vector.app.SleepViewAction
 import im.vector.app.features.MainActivity
 import im.vector.app.ui.robot.ElementRobot
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.lang.Thread.sleep
 import java.util.UUID
 
 /**
@@ -55,7 +46,7 @@ class UiAllScreensSanityTest {
     fun allScreensTest() {
         // Create an account
         val userId = "UiTest_" + UUID.randomUUID().toString()
-        elementRobot.login(userId)
+        elementRobot.signUp(userId)
 
         elementRobot.settings {
             general { crawl() }
@@ -89,34 +80,12 @@ class UiAllScreensSanityTest {
             verifyCreatedRoom()
         }
 
-// Disable until the "you don't have a session for id %d" sign out bug is fixed
-//        elementRobot.signout()
-// //     Login again on the same account
-//        elementRobot.login(userId)
-//
-//        ignoreVerification()
-//
-//        elementRobot.signout()
-//        clickDialogPositiveButton()
+        elementRobot.signout(expectSignOutWarning = true)
 
+        // Login again on the same account
+        elementRobot.login(userId)
+        elementRobot.dismissVerificationIfPresent()
         // TODO Deactivate account instead of logout?
-    }
-
-    private fun ignoreVerification() {
-        sleep(6000)
-        val activity = EspressoHelper.getCurrentActivity()!!
-
-        val popup = activity.findViewById<View>(com.tapadoo.alerter.R.id.llAlertBackground)
-        activity.runOnUiThread {
-            popup.performClick()
-        }
-
-        assertDisplayed(R.id.bottomSheetFragmentContainer)
-
-        onView(isRoot()).perform(SleepViewAction.sleep(2000))
-
-        clickOn(R.string.skip)
-        assertDisplayed(R.string.are_you_sure)
-        clickOn(R.string.skip)
+        elementRobot.signout(expectSignOutWarning = false)
     }
 }
