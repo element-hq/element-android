@@ -100,6 +100,7 @@ class RoomDetailRobot {
         waitUntilViewVisible(withId(R.id.bottomSheetRecyclerView))
         clickOn(R.string.message_view_edit_history)
         pressBack()
+        waitUntilViewVisible(withId(R.id.composerEditText))
     }
 
     private fun longClickOnMessage(text: String = "Hello world!") {
