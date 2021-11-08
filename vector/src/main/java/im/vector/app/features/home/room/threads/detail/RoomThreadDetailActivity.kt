@@ -25,6 +25,8 @@ import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityRoomThreadDetailBinding
 import im.vector.app.features.home.AvatarRenderer
+import im.vector.app.features.home.room.detail.RoomDetailArgs
+import im.vector.app.features.home.room.detail.RoomDetailFragment
 import im.vector.app.features.home.room.threads.detail.arguments.RoomThreadDetailArgs
 import org.matrix.android.sdk.api.util.MatrixItem
 import javax.inject.Inject
@@ -65,7 +67,16 @@ class RoomThreadDetailActivity : VectorBaseActivity<ActivityRoomThreadDetailBind
 
     private fun initFragment() {
         if (isFirstCreation()) {
-            replaceFragment(R.id.roomThreadDetailFragmentContainer, RoomThreadDetailFragment::class.java, getRoomThreadDetailArgs(), FRAGMENT_TAG)
+            getRoomThreadDetailArgs()?.let {
+                replaceFragment(
+                        R.id.roomThreadDetailFragmentContainer,
+                        RoomDetailFragment::class.java,
+                        RoomDetailArgs(
+                                roomId = it.roomId,
+                                roomThreadDetailArgs = it
+                        ))
+            }
+//            replaceFragment(R.id.roomThreadDetailFragmentContainer, RoomThreadDetailFragment::class.java, getRoomThreadDetailArgs(), FRAGMENT_TAG)
         }
     }
 

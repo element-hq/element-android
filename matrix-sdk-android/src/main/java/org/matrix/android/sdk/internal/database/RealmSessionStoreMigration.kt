@@ -25,6 +25,7 @@ import org.matrix.android.sdk.api.session.room.model.RoomJoinRulesContent
 import org.matrix.android.sdk.api.session.room.model.VersioningState
 import org.matrix.android.sdk.api.session.room.model.create.RoomCreateContent
 import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
+import org.matrix.android.sdk.internal.database.model.ChunkEntityFields
 import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntityFields
 import org.matrix.android.sdk.internal.database.model.EditAggregatedSummaryEntityFields
 import org.matrix.android.sdk.internal.database.model.EditionOfEventFields
@@ -49,7 +50,7 @@ import timber.log.Timber
 
 internal object RealmSessionStoreMigration : RealmMigration {
 
-    const val SESSION_STORE_SCHEMA_VERSION = 18L
+    const val SESSION_STORE_SCHEMA_VERSION = 19L
 
     override fun migrate(realm: DynamicRealm, oldVersion: Long, newVersion: Long) {
         Timber.v("Migrating Realm Session from $oldVersion to $newVersion")
@@ -72,6 +73,7 @@ internal object RealmSessionStoreMigration : RealmMigration {
         if (oldVersion <= 15) migrateTo16(realm)
         if (oldVersion <= 16) migrateTo17(realm)
         if (oldVersion <= 17) migrateTo18(realm)
+        if (oldVersion <= 18) migrateTo19(realm)
     }
 
     private fun migrateTo1(realm: DynamicRealm) {
@@ -363,5 +365,14 @@ internal object RealmSessionStoreMigration : RealmMigration {
 
         realm.schema.get("RoomMemberSummaryEntity")
                 ?.addRealmObjectField(RoomMemberSummaryEntityFields.USER_PRESENCE_ENTITY.`$`, userPresenceEntity)
+    }
+
+    private fun migrateTo19(realm: DynamicRealm) {
+        Timber.d("Step 18 -> 19")
+        realm.schema.get("EventEntity")
+                ?.addField(EventEntityFields.IS_THREAD, Boolean::class.java, FieldAttribute.INDEXED)
+                ?.addField(EventEntityFields.ROOT_THREAD_EVENT_ID, String::class.java)
+        realm.schema.get("ChunkEntity")
+                ?.addField(ChunkEntityFields.ROOT_THREAD_EVENT_ID, String::class.java, FieldAttribute.INDEXED)
     }
 }

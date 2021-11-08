@@ -98,6 +98,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
         // Render send state indicator
         holder.sendStateImageView.render(attributes.informationData.sendStateDecoration)
         holder.eventSendingIndicator.isVisible = attributes.informationData.sendStateDecoration == SendStateDecoration.SENDING_MEDIA
+        holder.isThread.isVisible = attributes.isRootThread
     }
 
     override fun unbind(holder: H) {
@@ -117,6 +118,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
         val timeView by bind<TextView>(R.id.messageTimeView)
         val sendStateImageView by bind<SendStateImageView>(R.id.messageSendStateImageView)
         val eventSendingIndicator by bind<ProgressBar>(R.id.eventSendingIndicator)
+        val isThread by bind<View>(R.id.messageIsThread)
     }
 
     /**
@@ -133,7 +135,8 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
             override val reactionPillCallback: TimelineEventController.ReactionPillCallback? = null,
             val avatarCallback: TimelineEventController.AvatarCallback? = null,
             override val readReceiptsCallback: TimelineEventController.ReadReceiptsCallback? = null,
-            val emojiTypeFace: Typeface? = null
+            val emojiTypeFace: Typeface? = null,
+            val isRootThread: Boolean = false
     ) : AbsBaseMessageItem.Attributes {
 
         // Have to override as it's used to diff epoxy items

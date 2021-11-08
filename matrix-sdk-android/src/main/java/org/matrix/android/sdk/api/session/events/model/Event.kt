@@ -96,6 +96,9 @@ data class Event(
     @Transient
     var sendStateDetails: String? = null
 
+    @Transient
+    var isRootThread: Boolean = false
+
     fun sendStateError(): MatrixError? {
         return sendStateDetails?.let {
             val matrixErrorAdapter = MoshiProvider.providesMoshi().adapter(MatrixError::class.java)
@@ -241,54 +244,54 @@ data class Event(
 fun Event.isTextMessage(): Boolean {
     return getClearType() == EventType.MESSAGE &&
             when (getClearContent()?.get(MessageContent.MSG_TYPE_JSON_KEY)) {
-        MessageType.MSGTYPE_TEXT,
-        MessageType.MSGTYPE_EMOTE,
-        MessageType.MSGTYPE_NOTICE -> true
-        else                       -> false
-    }
+                MessageType.MSGTYPE_TEXT,
+                MessageType.MSGTYPE_EMOTE,
+                MessageType.MSGTYPE_NOTICE -> true
+                else                       -> false
+            }
 }
 
 fun Event.isImageMessage(): Boolean {
     return getClearType() == EventType.MESSAGE &&
             when (getClearContent()?.get(MessageContent.MSG_TYPE_JSON_KEY)) {
-        MessageType.MSGTYPE_IMAGE -> true
-        else                      -> false
-    }
+                MessageType.MSGTYPE_IMAGE -> true
+                else                      -> false
+            }
 }
 
 fun Event.isVideoMessage(): Boolean {
     return getClearType() == EventType.MESSAGE &&
             when (getClearContent()?.get(MessageContent.MSG_TYPE_JSON_KEY)) {
-        MessageType.MSGTYPE_VIDEO -> true
-        else                      -> false
-    }
+                MessageType.MSGTYPE_VIDEO -> true
+                else                      -> false
+            }
 }
 
 fun Event.isAudioMessage(): Boolean {
     return getClearType() == EventType.MESSAGE &&
             when (getClearContent()?.get(MessageContent.MSG_TYPE_JSON_KEY)) {
-        MessageType.MSGTYPE_AUDIO -> true
-        else                      -> false
-    }
+                MessageType.MSGTYPE_AUDIO -> true
+                else                      -> false
+            }
 }
 
 fun Event.isFileMessage(): Boolean {
     return getClearType() == EventType.MESSAGE &&
             when (getClearContent()?.get(MessageContent.MSG_TYPE_JSON_KEY)) {
-        MessageType.MSGTYPE_FILE -> true
-        else                     -> false
-    }
+                MessageType.MSGTYPE_FILE -> true
+                else                     -> false
+            }
 }
 
 fun Event.isAttachmentMessage(): Boolean {
     return getClearType() == EventType.MESSAGE &&
             when (getClearContent()?.get(MessageContent.MSG_TYPE_JSON_KEY)) {
-        MessageType.MSGTYPE_IMAGE,
-        MessageType.MSGTYPE_AUDIO,
-        MessageType.MSGTYPE_VIDEO,
-        MessageType.MSGTYPE_FILE -> true
-        else                     -> false
-    }
+                MessageType.MSGTYPE_IMAGE,
+                MessageType.MSGTYPE_AUDIO,
+                MessageType.MSGTYPE_VIDEO,
+                MessageType.MSGTYPE_FILE -> true
+                else                     -> false
+            }
 }
 
 fun Event.getRelationContent(): RelationDefaultContent? {
@@ -299,12 +302,22 @@ fun Event.getRelationContent(): RelationDefaultContent? {
     }
 }
 
+/**
+ * Returns the relation content for a specific type or null otherwise
+ */
+fun Event.getRelationContentForType(type: String): RelationDefaultContent? =
+        getRelationContent()?.takeIf { it.type == type }
+
 fun Event.isReply(): Boolean {
     return getRelationContent()?.inReplyTo?.eventId != null
 }
 
+fun Event.isThread(): Boolean = getRelationContentForType(RelationType.THREAD)?.eventId != null
+
+fun Event.getRootThreadEventId(): String? = getRelationContentForType(RelationType.THREAD)?.eventId
+
 fun Event.isEdition(): Boolean {
-    return getRelationContent()?.takeIf { it.type == RelationType.REPLACE }?.eventId != null
+    return getRelationContentForType(RelationType.REPLACE)?.eventId != null
 }
 
 fun Event.getPresenceContent(): PresenceContent? {

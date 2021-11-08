@@ -21,6 +21,8 @@ import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.UnsignedData
+import org.matrix.android.sdk.api.session.events.model.getRootThreadEventId
+import org.matrix.android.sdk.api.session.events.model.isThread
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.internal.crypto.algorithms.olm.OlmDecryptionResult
 import org.matrix.android.sdk.internal.database.model.EventEntity
@@ -39,6 +41,8 @@ internal object EventMapper {
         eventEntity.isUseless = IsUselessResolver.isUseless(event)
         eventEntity.stateKey = event.stateKey
         eventEntity.type = event.type ?: EventType.MISSING_TYPE
+        eventEntity.isThread = if(event.isRootThread) true else event.isThread()
+        eventEntity.rootThreadEventId = if(event.isRootThread) null else event.getRootThreadEventId()
         eventEntity.sender = event.senderId
         eventEntity.originServerTs = event.originServerTs
         eventEntity.redacts = event.redacts
@@ -93,6 +97,7 @@ internal object EventMapper {
                 MXCryptoError.ErrorType.valueOf(errorCode)
             }
             it.mCryptoErrorReason = eventEntity.decryptionErrorReason
+            it.isRootThread = eventEntity.isRootThread()
         }
     }
 }

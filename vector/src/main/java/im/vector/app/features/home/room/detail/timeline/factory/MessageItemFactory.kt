@@ -149,7 +149,7 @@ class MessageItemFactory @Inject constructor(
             // This is an edit event, we should display it when debugging as a notice event
             return noticeItemFactory.create(params)
         }
-        val attributes = messageItemAttributesFactory.create(messageContent, informationData, callback)
+        val attributes = messageItemAttributesFactory.create(messageContent, informationData, callback, event.root.isRootThread)
 
 //        val all = event.root.toContent()
 //        val ev = all.toModel<Event>()

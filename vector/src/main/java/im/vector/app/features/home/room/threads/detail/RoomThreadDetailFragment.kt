@@ -47,7 +47,15 @@ class RoomThreadDetailFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initTextComposer()
-//        views.testTextVeiwddasda.text = "${roomThreadDetailArgs.eventId}  --  ${roomThreadDetailArgs.roomId}"
+//        lifecycleScope.launch(Dispatchers.IO) {
+//            Realm.getInstance(realmConfiguration).executeTransaction {
+//                val eventId = roomThreadDetailArgs.eventId ?: return@executeTransaction
+//                val r = EventEntity.where(it, eventId = eventId)
+//                        .findFirst() ?: return@executeTransaction
+//                Timber.i("------> $eventId isThread: ${EventMapper.map(r).isThread()}")
+//            }
+//        }
+////        views.testTextVeiwddasda.text = "${roomThreadDetailArgs.eventId}  --  ${roomThreadDetailArgs.roomId}"
     }
 
     private fun initTextComposer(){

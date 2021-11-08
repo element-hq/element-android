@@ -42,6 +42,7 @@ import org.commonmark.renderer.html.HtmlRenderer
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.getRootThreadEventId
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
@@ -88,11 +89,17 @@ class TextComposerViewModel @AssistedInject constructor(
             is TextComposerAction.UserIsTyping                 -> handleUserIsTyping(action)
             is TextComposerAction.OnTextChanged                -> handleOnTextChanged(action)
             is TextComposerAction.OnVoiceRecordingStateChanged -> handleOnVoiceRecordingStateChanged(action)
+            is TextComposerAction.EnterReplyInThreadTimeline   -> handleEnterReplyInThreadTimeline(action)
+
         }
     }
 
     private fun handleOnVoiceRecordingStateChanged(action: TextComposerAction.OnVoiceRecordingStateChanged) = setState {
         copy(isVoiceRecording = action.isRecording)
+    }
+
+    private fun handleEnterReplyInThreadTimeline(action: TextComposerAction.EnterReplyInThreadTimeline) = setState {
+        copy(rootThreadEventId = action.rootThreadEventId)
     }
 
     private fun handleOnTextChanged(action: TextComposerAction.OnTextChanged) {
@@ -151,11 +158,15 @@ class TextComposerViewModel @AssistedInject constructor(
     private fun handleSendMessage(action: TextComposerAction.SendMessage) {
         withState { state ->
             when (state.sendMode) {
-                is SendMode.REGULAR -> {
+                is SendMode.REGULAR         -> {
                     when (val slashCommandResult = CommandParser.parseSplashCommand(action.text)) {
                         is ParsedCommand.ErrorNotACommand         -> {
                             // Send the text message to the room
-                            room.sendTextMessage(action.text, autoMarkdown = action.autoMarkdown)
+                            if (state.rootThreadEventId != null)
+                                room.replyInThread(state.rootThreadEventId, action.text.toString(), action.autoMarkdown)
+                            else
+                                room.sendTextMessage(action.text, autoMarkdown = action.autoMarkdown)
+
                             _viewEvents.post(TextComposerViewEvents.MessageSent)
                             popDraft()
                         }
@@ -386,7 +397,7 @@ class TextComposerViewModel @AssistedInject constructor(
                         }
                     }.exhaustive
                 }
-                is SendMode.EDIT    -> {
+                is SendMode.EDIT            -> {
                     // is original event a reply?
                     val inReplyTo = state.sendMode.timelineEvent.getRelationContent()?.inReplyTo?.eventId
                     if (inReplyTo != null) {
@@ -409,7 +420,7 @@ class TextComposerViewModel @AssistedInject constructor(
                     _viewEvents.post(TextComposerViewEvents.MessageSent)
                     popDraft()
                 }
-                is SendMode.QUOTE   -> {
+                is SendMode.QUOTE           -> {
                     val messageContent = state.sendMode.timelineEvent.getLastMessageContent()
                     val textMsg = messageContent?.body
 
@@ -430,7 +441,7 @@ class TextComposerViewModel @AssistedInject constructor(
                     _viewEvents.post(TextComposerViewEvents.MessageSent)
                     popDraft()
                 }
-                is SendMode.REPLY   -> {
+                is SendMode.REPLY           -> {
                     state.sendMode.timelineEvent.let {
                         room.replyToMessage(it, action.text.toString(), action.autoMarkdown)
                         _viewEvents.post(TextComposerViewEvents.MessageSent)

@@ -21,31 +21,41 @@ import io.realm.kotlin.createObject
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.isThread
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.initsync.InitSyncStep
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageRelationContent
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.sync.model.InvitedRoomSync
 import org.matrix.android.sdk.api.session.sync.model.LazyRoomSyncEphemeral
 import org.matrix.android.sdk.api.session.sync.model.RoomSync
 import org.matrix.android.sdk.api.session.sync.model.RoomsSyncResponse
+import org.matrix.android.sdk.api.util.JsonDict
+import org.matrix.android.sdk.internal.crypto.CryptoSessionInfoProvider
 import org.matrix.android.sdk.internal.crypto.DefaultCryptoService
 import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import org.matrix.android.sdk.internal.crypto.algorithms.olm.OlmDecryptionResult
 import org.matrix.android.sdk.internal.database.helper.addIfNecessary
 import org.matrix.android.sdk.internal.database.helper.addTimelineEvent
+import org.matrix.android.sdk.internal.database.mapper.EventMapper
 import org.matrix.android.sdk.internal.database.mapper.asDomain
 import org.matrix.android.sdk.internal.database.mapper.toEntity
 import org.matrix.android.sdk.internal.database.model.ChunkEntity
 import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntity
+import org.matrix.android.sdk.internal.database.model.EventEntity
+import org.matrix.android.sdk.internal.database.model.EventEntityFields
 import org.matrix.android.sdk.internal.database.model.EventInsertType
 import org.matrix.android.sdk.internal.database.model.RoomEntity
 import org.matrix.android.sdk.internal.database.model.RoomMemberSummaryEntity
+import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
 import org.matrix.android.sdk.internal.database.model.deleteOnCascade
 import org.matrix.android.sdk.internal.database.query.copyToRealmOrIgnore
 import org.matrix.android.sdk.internal.database.query.find
+import org.matrix.android.sdk.internal.database.query.findAllThreadChunkOfRoom
 import org.matrix.android.sdk.internal.database.query.findLastForwardChunkOfRoom
+import org.matrix.android.sdk.internal.database.query.findThreadChunkOfRoom
 import org.matrix.android.sdk.internal.database.query.getOrCreate
 import org.matrix.android.sdk.internal.database.query.getOrNull
 import org.matrix.android.sdk.internal.database.query.where
@@ -58,8 +68,11 @@ import org.matrix.android.sdk.internal.session.initsync.mapWithProgress
 import org.matrix.android.sdk.internal.session.initsync.reportSubtask
 import org.matrix.android.sdk.internal.session.room.membership.RoomChangeMembershipStateDataSource
 import org.matrix.android.sdk.internal.session.room.membership.RoomMemberEventHandler
+import org.matrix.android.sdk.internal.session.room.send.LocalEchoEventFactory
+import org.matrix.android.sdk.internal.session.room.send.queue.EventSenderProcessor
 import org.matrix.android.sdk.internal.session.room.summary.RoomSummaryUpdater
 import org.matrix.android.sdk.internal.session.room.timeline.PaginationDirection
+import org.matrix.android.sdk.internal.session.room.timeline.TimelineEventDecryptor
 import org.matrix.android.sdk.internal.session.room.timeline.TimelineInput
 import org.matrix.android.sdk.internal.session.room.typing.TypingEventContent
 import org.matrix.android.sdk.internal.session.sync.InitialSyncStrategy
@@ -356,6 +369,21 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
         val eventIds = ArrayList<String>(eventList.size)
         val roomMemberContentsByUser = HashMap<String, RoomMemberContent?>()
 
+/////////////////////
+        // There is only one chunk per room
+
+        val threadChunks = ChunkEntity.findAllThreadChunkOfRoom(realm, roomId)
+
+        val tc = threadChunks.joinToString { chunk ->
+            var output = "\n----------------\n------> [${chunk.timelineEvents.size}] rootThreadEventId = ${chunk.rootThreadEventId}" + "\n"
+            output += chunk.timelineEvents
+                    .joinToString("") {
+                        "------>          " + "eventId:[${it?.eventId}] payload:[${getValueFromPayload(it.root?.let { root -> EventMapper.map(root).mxDecryptionResult }?.payload, "body")}]\n"
+            }
+            output
+        }
+        Timber.i("------> Chunks (${threadChunks.size})$tc")
+/////////////////////
         for (event in eventList) {
             if (event.eventId == null || event.senderId == null || event.type == null) {
                 continue
@@ -385,7 +413,16 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                 rootStateEvent?.asDomain()?.getFixedRoomMemberContent()
             }
 
-            chunkEntity.addTimelineEvent(roomId, eventEntity, PaginationDirection.FORWARDS, roomMemberContentsByUser)
+            Timber.i("------> [RoomSyncHandler] Add TimelineEvent to chunkEntity event[${event.eventId}] ${if (event.isThread()) "is Thread" else ""}")
+
+            addTimelineEventToChunk(
+                    realm = realm,
+                    roomId = roomId,
+                    eventEntity = eventEntity,
+                    chunkEntity = chunkEntity,
+                    roomEntity = roomEntity,
+                    roomMemberContentsByUser = roomMemberContentsByUser)
+
             // Give info to crypto module
             cryptoService.onLiveEvent(roomEntity.roomId, event)
 
@@ -412,7 +449,52 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
         }
         // posting new events to timeline if any is registered
         timelineInput.onNewTimelineEvents(roomId = roomId, eventIds = eventIds)
+
         return chunkEntity
+    }
+
+    /**
+     * Adds a timeline event to the correct chunk. If there is a thread detected will be added
+     * to a specific chunk
+     */
+    private fun addTimelineEventToChunk(realm: Realm,
+                                        roomId: String,
+                                        eventEntity: EventEntity,
+                                        chunkEntity: ChunkEntity,
+                                        roomEntity: RoomEntity,
+                                        roomMemberContentsByUser: Map<String, RoomMemberContent?>) {
+        val rootThreadEventId = eventEntity.rootThreadEventId
+        if (eventEntity.isThread && rootThreadEventId != null) {
+            val threadChunk = getOrCreateThreadChunk(realm, roomId, rootThreadEventId)
+            threadChunk.addTimelineEvent(roomId, eventEntity, PaginationDirection.FORWARDS, roomMemberContentsByUser)
+            markEventAsRootEvent(realm, rootThreadEventId)
+            roomEntity.addIfNecessary(threadChunk)
+        } else {
+            chunkEntity.addTimelineEvent(roomId, eventEntity, PaginationDirection.FORWARDS, roomMemberContentsByUser)
+        }
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    private fun getValueFromPayload(payload: JsonDict?, key: String): String? {
+        val content = payload?.get("content") as? JsonDict
+        return content?.get(key) as? String
+    }
+
+    /**
+     * Returns the chunk for the current room if exists, otherwise it creates a new ChunkEntity
+     */
+    private fun getOrCreateThreadChunk(realm: Realm, roomId: String, rootThreadEventId: String): ChunkEntity {
+        return ChunkEntity.findThreadChunkOfRoom(realm, roomId, rootThreadEventId)
+                ?: realm.createObject<ChunkEntity>().apply {
+                    this.rootThreadEventId = rootThreadEventId
+                }
+    }
+
+    private fun markEventAsRootEvent(realm: Realm, rootThreadEventId: String){
+        val rootThreadEvent = EventEntity
+                .where(realm, rootThreadEventId)
+                .equalTo(EventEntityFields.IS_THREAD, false).findFirst() ?: return
+        rootThreadEvent.isThread = true
     }
 
     private fun decryptIfNeeded(event: Event, roomId: String) {

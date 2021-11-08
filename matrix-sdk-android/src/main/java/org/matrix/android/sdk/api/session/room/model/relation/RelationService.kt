@@ -131,11 +131,11 @@ interface RelationService {
      * Creates a thread reply for an existing timeline event
      * The replyInThreadText can be a Spannable and contains special spans (MatrixItemSpan) that will be translated
      * by the sdk into pills.
-     * @param eventToReplyInThread the event referenced by the thread reply
+     * @param rootThreadEventId the root thread eventId
      * @param replyInThreadText the reply text
      * @param autoMarkdown If true, the SDK will generate a formatted HTML message from the body text if markdown syntax is present
      */
-    fun replyInThread(eventToReplyInThread: TimelineEvent,
+    fun replyInThread(rootThreadEventId: String,
                        replyInThreadText: CharSequence,
                        autoMarkdown: Boolean = false): Cancelable?
 }

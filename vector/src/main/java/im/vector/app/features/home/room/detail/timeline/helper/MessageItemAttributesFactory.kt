@@ -31,7 +31,8 @@ class MessageItemAttributesFactory @Inject constructor(
 
     fun create(messageContent: Any?,
                informationData: MessageInformationData,
-               callback: TimelineEventController.Callback?): AbsMessageItem.Attributes {
+               callback: TimelineEventController.Callback?,
+               isRootThread: Boolean = false): AbsMessageItem.Attributes {
         return AbsMessageItem.Attributes(
                 avatarSize = avatarSizeProvider.avatarSize,
                 informationData = informationData,
@@ -49,7 +50,8 @@ class MessageItemAttributesFactory @Inject constructor(
                 reactionPillCallback = callback,
                 avatarCallback = callback,
                 readReceiptsCallback = callback,
-                emojiTypeFace = emojiCompatFontProvider.typeface
+                emojiTypeFace = emojiCompatFontProvider.typeface,
+                isRootThread = isRootThread
         )
     }
 }

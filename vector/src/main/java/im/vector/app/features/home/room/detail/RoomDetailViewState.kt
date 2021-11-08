@@ -65,8 +65,9 @@ data class RoomDetailViewState(
         val isAllowedToManageWidgets: Boolean = false,
         val isAllowedToStartWebRTCCall: Boolean = true,
         val hasFailedSending: Boolean = false,
-        val jitsiState: JitsiState = JitsiState()
-) : MavericksState {
+        val jitsiState: JitsiState = JitsiState(),
+        val rootThreadEventId: String? = null
+        ) : MavericksState {
 
     constructor(args: RoomDetailArgs) : this(
             roomId = args.roomId,

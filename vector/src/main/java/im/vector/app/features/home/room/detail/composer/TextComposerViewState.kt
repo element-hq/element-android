@@ -46,6 +46,7 @@ data class TextComposerViewState(
         val canSendMessage: Boolean = true,
         val isVoiceRecording: Boolean = false,
         val isSendButtonVisible: Boolean = false,
+        val rootThreadEventId: String? = null,
         val sendMode: SendMode = SendMode.REGULAR("", false)
 ) : MavericksState {
 
@@ -53,4 +54,6 @@ data class TextComposerViewState(
         get() = canSendMessage && !isVoiceRecording
 
     constructor(args: RoomDetailArgs) : this(roomId = args.roomId)
+
+    fun isInThreadTimeline(): Boolean = rootThreadEventId != null
 }

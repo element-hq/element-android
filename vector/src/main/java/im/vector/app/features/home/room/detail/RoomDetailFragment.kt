@@ -49,6 +49,7 @@ import androidx.core.text.toSpannable
 import androidx.core.util.Pair
 import androidx.core.view.ViewCompat
 import androidx.core.view.forEach
+import androidx.core.view.isGone
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.fragment.app.setFragmentResultListener
@@ -228,7 +229,8 @@ data class RoomDetailArgs(
         val roomId: String,
         val eventId: String? = null,
         val sharedData: SharedData? = null,
-        val openShareSpaceForId: String? = null
+        val openShareSpaceForId: String? = null,
+        val roomThreadDetailArgs: RoomThreadDetailArgs? = null
 ) : Parcelable
 
 class RoomDetailFragment @Inject constructor(
@@ -352,7 +354,12 @@ class RoomDetailFragment @Inject constructor(
         )
         keyboardStateUtils = KeyboardStateUtils(requireActivity())
         lazyLoadedViews.bind(views)
-        setupToolbar(views.roomToolbar)
+        if (isThreadTimeLine()) {
+            views.roomToolbar.isGone = true
+        } else {
+            setupToolbar(views.roomToolbar)
+        }
+        setupThreadIfNeeded()
         setupRecyclerView()
         setupComposer()
         setupNotificationView()
@@ -390,10 +397,10 @@ class RoomDetailFragment @Inject constructor(
                 return@onEach
             }
             when (mode) {
-                is SendMode.REGULAR -> renderRegularMode(mode.text)
-                is SendMode.EDIT    -> renderSpecialMode(mode.timelineEvent, R.drawable.ic_edit, R.string.edit, mode.text)
-                is SendMode.QUOTE   -> renderSpecialMode(mode.timelineEvent, R.drawable.ic_quote, R.string.quote, mode.text)
-                is SendMode.REPLY   -> renderSpecialMode(mode.timelineEvent, R.drawable.ic_reply, R.string.reply, mode.text)
+                is SendMode.REGULAR         -> renderRegularMode(mode.text)
+                is SendMode.EDIT            -> renderSpecialMode(mode.timelineEvent, R.drawable.ic_edit, R.string.edit, mode.text)
+                is SendMode.QUOTE           -> renderSpecialMode(mode.timelineEvent, R.drawable.ic_quote, R.string.quote, mode.text)
+                is SendMode.REPLY           -> renderSpecialMode(mode.timelineEvent, R.drawable.ic_reply, R.string.reply, mode.text)
             }
         }
 
@@ -902,6 +909,7 @@ class RoomDetailFragment @Inject constructor(
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
+        if (isThreadTimeLine()) return
         // We use a custom layout for this menu item, so we need to set a ClickListener
         menu.findItem(R.id.open_matrix_apps)?.let { menuItem ->
             menuItem.actionView.setOnClickListener {
@@ -915,6 +923,12 @@ class RoomDetailFragment @Inject constructor(
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
+        if (isThreadTimeLine()) {
+            menu.forEach {
+                it.isVisible = false
+            }
+            return
+        }
         menu.forEach {
             it.isVisible = roomDetailViewModel.isMenuItemVisible(it.itemId)
         }
@@ -1179,6 +1193,12 @@ class RoomDetailFragment @Inject constructor(
     }
 
 // PRIVATE METHODS *****************************************************************************
+
+    private fun setupThreadIfNeeded(){
+        getRootThreadEventId()?.let{
+            textComposerViewModel.handle(TextComposerAction.EnterReplyInThreadTimeline(it))
+        }
+    }
 
     private fun setupRecyclerView() {
         timelineEventController.callback = this
@@ -2203,4 +2223,7 @@ class RoomDetailFragment @Inject constructor(
             }
         }
     }
+
+    fun isThreadTimeLine(): Boolean = roomDetailArgs.roomThreadDetailArgs != null
+    fun getRootThreadEventId(): String? = roomDetailArgs.roomThreadDetailArgs?.eventId
 }

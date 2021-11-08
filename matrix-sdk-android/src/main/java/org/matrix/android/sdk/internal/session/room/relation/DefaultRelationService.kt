@@ -159,11 +159,15 @@ internal class DefaultRelationService @AssistedInject constructor(
         }
     }
 
-    override fun replyInThread(eventToReplyInThread: TimelineEvent, replyInThreadText: CharSequence, autoMarkdown: Boolean): Cancelable? {
-        val event = eventFactory.createThreadTextEvent(eventToReplyInThread, TextContent(replyInThreadText.toString()))
-                .also {
-                    saveLocalEcho(it)
-                }
+    override fun replyInThread(rootThreadEventId: String, replyInThreadText: CharSequence, autoMarkdown: Boolean): Cancelable {
+        val event = eventFactory.createThreadTextEvent(
+                rootThreadEventId = rootThreadEventId,
+                roomId = roomId,
+                text = replyInThreadText.toString(),
+                autoMarkdown = autoMarkdown)
+//                .also {
+//                    saveLocalEcho(it)
+//                }
         return eventSenderProcessor.postEvent(event, cryptoSessionInfoProvider.isRoomEncrypted(roomId))
     }
 

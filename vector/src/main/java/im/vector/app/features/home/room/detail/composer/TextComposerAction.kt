@@ -28,4 +28,6 @@ sealed class TextComposerAction : VectorViewModelAction {
     data class UserIsTyping(val isTyping: Boolean) : TextComposerAction()
     data class OnTextChanged(val text: CharSequence) : TextComposerAction()
     data class OnVoiceRecordingStateChanged(val isRecording: Boolean) : TextComposerAction()
+    data class EnterReplyInThreadTimeline(val rootThreadEventId: String) : TextComposerAction()
+
 }

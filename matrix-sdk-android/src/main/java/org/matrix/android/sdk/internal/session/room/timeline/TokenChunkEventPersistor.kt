@@ -18,7 +18,9 @@ package org.matrix.android.sdk.internal.session.room.timeline
 
 import com.zhuinden.monarchy.Monarchy
 import io.realm.Realm
+import io.realm.kotlin.createObject
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.isThread
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
 import org.matrix.android.sdk.api.session.room.send.SendState
@@ -28,6 +30,8 @@ import org.matrix.android.sdk.internal.database.helper.addTimelineEvent
 import org.matrix.android.sdk.internal.database.helper.merge
 import org.matrix.android.sdk.internal.database.mapper.toEntity
 import org.matrix.android.sdk.internal.database.model.ChunkEntity
+import org.matrix.android.sdk.internal.database.model.EventEntity
+import org.matrix.android.sdk.internal.database.model.EventEntityFields
 import org.matrix.android.sdk.internal.database.model.EventInsertType
 import org.matrix.android.sdk.internal.database.model.RoomEntity
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
@@ -37,6 +41,7 @@ import org.matrix.android.sdk.internal.database.query.create
 import org.matrix.android.sdk.internal.database.query.find
 import org.matrix.android.sdk.internal.database.query.findAllIncludingEvents
 import org.matrix.android.sdk.internal.database.query.findLastForwardChunkOfRoom
+import org.matrix.android.sdk.internal.database.query.findThreadChunkOfRoom
 import org.matrix.android.sdk.internal.database.query.getOrCreate
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase
@@ -221,7 +226,15 @@ internal class TokenChunkEventPersistor @Inject constructor(@SessionDatabase pri
                 roomMemberContentsByUser[event.stateKey] = contentToUse.toModel<RoomMemberContent>()
             }
 
-            currentChunk.addTimelineEvent(roomId, eventEntity, direction, roomMemberContentsByUser)
+            Timber.i("------> [TokenChunkEventPersistor] Add TimelineEvent to chunkEntity event[${event.eventId}] ${if (event.isThread()) "is Thread" else ""}")
+
+            addTimelineEventToChunk(
+                    realm = realm,
+                    roomId = roomId,
+                    eventEntity = eventEntity,
+                    currentChunk = currentChunk,
+                    direction = direction,
+                    roomMemberContentsByUser = roomMemberContentsByUser)
         }
         // Find all the chunks which contain at least one event from the list of eventIds
         val chunks = ChunkEntity.findAllIncludingEvents(realm, eventIds)
@@ -246,5 +259,44 @@ internal class TokenChunkEventPersistor @Inject constructor(@SessionDatabase pri
         if (currentChunk.isValid) {
             RoomEntity.where(realm, roomId).findFirst()?.addIfNecessary(currentChunk)
         }
+    }
+
+    /**
+     * Adds a timeline event to the correct chunk. If there is a thread detected will be added
+     * to a specific chunk
+     */
+    private fun addTimelineEventToChunk(realm: Realm,
+                                        roomId: String,
+                                        eventEntity: EventEntity,
+                                        currentChunk: ChunkEntity,
+                                        direction: PaginationDirection,
+                                        roomMemberContentsByUser: Map<String, RoomMemberContent?>) {
+        val rootThreadEventId = eventEntity.rootThreadEventId
+        if (eventEntity.isThread && rootThreadEventId != null) {
+            val threadChunk = getOrCreateThreadChunk(realm, roomId, rootThreadEventId)
+            threadChunk.addTimelineEvent(roomId, eventEntity, direction, roomMemberContentsByUser)
+            markEventAsRootEvent(realm, rootThreadEventId)
+            if (threadChunk.isValid)
+                RoomEntity.where(realm, roomId).findFirst()?.addIfNecessary(threadChunk)
+        } else {
+            currentChunk.addTimelineEvent(roomId, eventEntity, direction, roomMemberContentsByUser)
+        }
+    }
+
+    private fun markEventAsRootEvent(realm: Realm, rootThreadEventId: String) {
+        val rootThreadEvent = EventEntity
+                .where(realm, rootThreadEventId)
+                .equalTo(EventEntityFields.IS_THREAD, false).findFirst() ?: return
+        rootThreadEvent.isThread = true
+    }
+
+    /**
+     * Returns the chunk for the current room if exists, otherwise it creates a new ChunkEntity
+     */
+    private fun getOrCreateThreadChunk(realm: Realm, roomId: String, rootThreadEventId: String): ChunkEntity {
+        return ChunkEntity.findThreadChunkOfRoom(realm, roomId, rootThreadEventId)
+                ?: realm.createObject<ChunkEntity>().apply {
+                    this.rootThreadEventId = rootThreadEventId
+                }
     }
 }

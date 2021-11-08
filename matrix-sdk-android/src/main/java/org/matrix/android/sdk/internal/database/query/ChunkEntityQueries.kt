@@ -33,9 +33,11 @@ internal fun ChunkEntity.Companion.find(realm: Realm, roomId: String, prevToken:
     val query = where(realm, roomId)
     if (prevToken != null) {
         query.equalTo(ChunkEntityFields.PREV_TOKEN, prevToken)
+        query.isNull(ChunkEntityFields.ROOT_THREAD_EVENT_ID)
     }
     if (nextToken != null) {
         query.equalTo(ChunkEntityFields.NEXT_TOKEN, nextToken)
+        query.isNull(ChunkEntityFields.ROOT_THREAD_EVENT_ID)
     }
     return query.findFirst()
 }
@@ -43,18 +45,22 @@ internal fun ChunkEntity.Companion.find(realm: Realm, roomId: String, prevToken:
 internal fun ChunkEntity.Companion.findLastForwardChunkOfRoom(realm: Realm, roomId: String): ChunkEntity? {
     return where(realm, roomId)
             .equalTo(ChunkEntityFields.IS_LAST_FORWARD, true)
+            .isNull(ChunkEntityFields.ROOT_THREAD_EVENT_ID)
             .findFirst()
 }
+
 
 internal fun ChunkEntity.Companion.findAllIncludingEvents(realm: Realm, eventIds: List<String>): RealmResults<ChunkEntity> {
     return realm.where<ChunkEntity>()
             .`in`(ChunkEntityFields.TIMELINE_EVENTS.EVENT_ID, eventIds.toTypedArray())
+            .isNull(ChunkEntityFields.ROOT_THREAD_EVENT_ID)
             .findAll()
 }
 
 internal fun ChunkEntity.Companion.findIncludingEvent(realm: Realm, eventId: String): ChunkEntity? {
     return findAllIncludingEvents(realm, listOf(eventId)).firstOrNull()
 }
+
 
 internal fun ChunkEntity.Companion.create(
         realm: Realm,
@@ -65,4 +71,17 @@ internal fun ChunkEntity.Companion.create(
         this.prevToken = prevToken
         this.nextToken = nextToken
     }
+}
+
+// Threads
+internal fun ChunkEntity.Companion.findThreadChunkOfRoom(realm: Realm, roomId: String, rootThreadEventId: String): ChunkEntity? {
+    return where(realm, roomId)
+            .equalTo(ChunkEntityFields.ROOT_THREAD_EVENT_ID, rootThreadEventId)
+            .findFirst()
+}
+
+internal fun ChunkEntity.Companion.findAllThreadChunkOfRoom(realm: Realm, roomId: String): RealmResults<ChunkEntity> {
+    return where(realm, roomId)
+            .isNotNull(ChunkEntityFields.ROOT_THREAD_EVENT_ID)
+            .findAll()
 }
