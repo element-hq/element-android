@@ -52,6 +52,7 @@ object ContentUtils {
         // var reason = "",
         // can capture the spoiler reason for better formatting? ex. { reason = it.value;  ">"}
         return formattedBody.replace("(?<=<span data-mx-spoiler)=\\\".+?\\\">".toRegex(), ">")
-            .replace("(?<=<span data-mx-spoiler>).+?(?=</span>)".toRegex(), { "█".repeat(it.value.length); }).unescapeHtml()
+            .replace("(?<=<span data-mx-spoiler>).+?(?=</span>)".toRegex(), { "█".repeat(it.value.length); })
+            .unescapeHtml()
     }
 }
