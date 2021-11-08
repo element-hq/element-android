@@ -91,7 +91,7 @@ class RoomDetailRobot {
         // TODO Cancel action
         writeTo(R.id.composerEditText, "Hello universe!")
         // Wait a bit for the keyboard layout to update
-        sleep(30)
+        waitUntilViewVisible(withId(R.id.sendButton))
         clickOn(R.id.sendButton)
         // Wait for the UI to update
         sleep(1000)
