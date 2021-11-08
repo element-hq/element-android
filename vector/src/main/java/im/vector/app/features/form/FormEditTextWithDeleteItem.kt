@@ -44,6 +44,12 @@ abstract class FormEditTextWithDeleteItem : VectorEpoxyModel<FormEditTextWithDel
     @EpoxyAttribute
     var enabled: Boolean = true
 
+    @EpoxyAttribute
+    var singleLine: Boolean = true
+
+    @EpoxyAttribute
+    var imeOptions: Int? = null
+
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var onTextChange: TextListener? = null
 
@@ -64,6 +70,12 @@ abstract class FormEditTextWithDeleteItem : VectorEpoxyModel<FormEditTextWithDel
         holder.textInputEditText.setTextIfDifferent(value)
 
         holder.textInputEditText.isEnabled = enabled
+        if (singleLine) {
+            holder.textInputEditText.setSingleLine()
+        }
+        imeOptions?.let {
+            holder.textInputEditText.imeOptions = it
+        }
 
         holder.textInputEditText.addTextChangedListenerOnce(onTextChangeListener)
 

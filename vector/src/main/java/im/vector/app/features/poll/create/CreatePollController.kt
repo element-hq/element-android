@@ -17,6 +17,7 @@
 package im.vector.app.features.poll.create
 
 import android.view.Gravity
+import android.view.inputmethod.EditorInfo
 import com.airbnb.epoxy.EpoxyController
 import im.vector.app.R
 import im.vector.app.core.resources.ColorProvider
@@ -69,10 +70,13 @@ class CreatePollController @Inject constructor(
         }
 
         currentState.options.forEachIndexed { index, option ->
+            val imeOptions = if (index == currentState.options.size -1) EditorInfo.IME_ACTION_DONE else EditorInfo.IME_ACTION_NEXT
             formEditTextWithDeleteItem {
                 id("option_$index")
                 value(option)
                 hint(host.stringProvider.getString(R.string.create_poll_options_hint, (index + 1)))
+                singleLine(true)
+                imeOptions(imeOptions)
                 onTextChange {
                     host.callback?.onOptionChanged(index, it)
                 }

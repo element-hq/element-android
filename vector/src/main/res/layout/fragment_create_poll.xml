@@ -14,7 +14,8 @@
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/createPollToolbar"
             android:layout_width="match_parent"
-            android:layout_height="?actionBarSize">
+            android:layout_height="?actionBarSize"
+            app:contentInsetStart="0dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -72,11 +73,13 @@
 
     <Button
         android:id="@+id/createPollButton"
+        style="@style/Widget.Vector.Button.CreatePoll"
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:layout_margin="16dp"
         android:text="@string/create_poll_button"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:enabled="false" />
 
     <TextView
         android:id="@+id/createPollToast"
@@ -84,8 +87,8 @@
         android:layout_width="wrap_content"
         android:layout_height="48dp"
         android:layout_marginBottom="84dp"
-        android:visibility="gone"
         android:accessibilityLiveRegion="polite"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
