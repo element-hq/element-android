@@ -37,7 +37,7 @@ jobs:
           java-version: 11
       - uses: gradle/gradle-build-action@v2
         with:
-          arguments: assemble${{ matrix.target }}Debug ${{CI_GRADLE_ARG_PROPERTIES}}
+          arguments: assemble${{ matrix.target }}Debug ${{env.CI_GRADLE_ARG_PROPERTIES}}
 ########
       - name: Upload ${{ matrix.target }} debug APKs
         uses: actions/upload-artifact@v2
