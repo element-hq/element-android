@@ -16,7 +16,9 @@
 
 package im.vector.app.ui.robot
 
+import android.view.View
 import androidx.test.espresso.Espresso.pressBack
+import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
@@ -33,6 +35,7 @@ import im.vector.app.features.login.LoginActivity
 import im.vector.app.initialSyncIdlingResource
 import im.vector.app.ui.robot.settings.SettingsRobot
 import im.vector.app.withIdlingResource
+import timber.log.Timber
 
 class ElementRobot {
 
@@ -114,5 +117,21 @@ class ElementRobot {
         waitUntilActivityVisible<LoginActivity> {
             assertDisplayed(R.id.loginSplashLogo)
         }
+    }
+
+    fun dismissVerificationIfPresent() {
+        kotlin.runCatching {
+            Thread.sleep(6000)
+            val activity = EspressoHelper.getCurrentActivity()!!
+            val popup = activity.findViewById<View>(com.tapadoo.alerter.R.id.llAlertBackground)!!
+            activity.runOnUiThread { popup.performClick() }
+
+            waitUntilViewVisible(withId(R.id.bottomSheetFragmentContainer))
+            waitUntilViewVisible(ViewMatchers.withText(R.string.skip))
+            clickOn(R.string.skip)
+            assertDisplayed(R.string.are_you_sure)
+            clickOn(R.string.skip)
+            waitUntilViewVisible(withId(R.id.bottomSheetFragmentContainer))
+        }.onFailure { Timber.w("Verification popup missing", it) }
     }
 }

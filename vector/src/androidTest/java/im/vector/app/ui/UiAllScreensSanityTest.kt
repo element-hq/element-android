@@ -16,24 +16,14 @@
 
 package im.vector.app.ui
 
-import android.view.View
-import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
-import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
-import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
-import im.vector.app.EspressoHelper
-import im.vector.app.R
-import im.vector.app.espresso.tools.waitUntilViewVisible
 import im.vector.app.features.MainActivity
 import im.vector.app.ui.robot.ElementRobot
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import timber.log.Timber
-import java.lang.Thread.sleep
 import java.util.UUID
 
 /**
@@ -94,25 +84,8 @@ class UiAllScreensSanityTest {
 
         // Login again on the same account
         elementRobot.login(userId)
-
-        ignoreVerification()
+        elementRobot.dismissVerificationIfPresent()
         // TODO Deactivate account instead of logout?
         elementRobot.signout()
-    }
-
-    private fun ignoreVerification() {
-        kotlin.runCatching {
-            sleep(6000)
-            val activity = EspressoHelper.getCurrentActivity()!!
-            val popup = activity.findViewById<View>(com.tapadoo.alerter.R.id.llAlertBackground)!!
-            activity.runOnUiThread { popup.performClick() }
-
-            waitUntilViewVisible(withId(R.id.bottomSheetFragmentContainer))
-            waitUntilViewVisible(withText(R.string.skip))
-            clickOn(R.string.skip)
-            assertDisplayed(R.string.are_you_sure)
-            clickOn(R.string.skip)
-            waitUntilViewVisible(withId(R.id.bottomSheetFragmentContainer))
-        }.onFailure { Timber.w("Verification popup missing", it) }
     }
 }
