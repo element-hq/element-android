@@ -94,7 +94,7 @@ class RoomDetailRobot {
         waitUntilViewVisible(withId(R.id.sendButton))
         clickOn(R.id.sendButton)
         // Wait for the UI to update
-        sleep(1000)
+        sleep(5000)
         // Open edit history
         longClickOnMessage("Hello universe! (edited)")
         waitUntilViewVisible(withId(R.id.bottomSheetRecyclerView))
