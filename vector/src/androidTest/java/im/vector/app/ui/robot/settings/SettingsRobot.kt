@@ -57,4 +57,3 @@ class SettingsRobot {
         clickOnAndGoBack(R.string.preference_root_help_about) { block(SettingsHelpRobot()) }
     }
 }
-

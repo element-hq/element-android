@@ -22,7 +22,6 @@ import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import com.adevinta.android.barista.interaction.BaristaDialogInteractions.clickDialogNegativeButton
 import im.vector.app.R
 import im.vector.app.espresso.tools.waitUntilViewVisible
-import im.vector.app.waitForView
 
 class SettingsPreferencesRobot {
 
