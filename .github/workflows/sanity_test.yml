@@ -14,7 +14,7 @@ env:
 jobs:
   integration-tests:
     name: Sanity Tests (Synapse)
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     strategy:
       fail-fast: false
       matrix:
@@ -50,6 +50,10 @@ jobs:
           pip install synapse matrix-synapse
           curl -sL https://raw.githubusercontent.com/matrix-org/synapse/develop/demo/start.sh --no-rate-limit \
             | sed s/127.0.0.1/0.0.0.0/g | bash
+      - uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: '11'
       - name: Run sanity tests on API ${{ matrix.api-level }}
         uses: reactivecircus/android-emulator-runner@v2
         with:
