@@ -52,10 +52,8 @@ internal class SessionManager @Inject constructor(private val matrixComponent: M
     }
 
     fun stopSession(sessionId: String) {
-        if (sessionComponents.containsKey(sessionId).not()) {
-            throw RuntimeException("You don't have a session for id $sessionId")
-        }
-        sessionComponents[sessionId]!!.session().stopSync()
+        val sessionComponent = sessionComponents[sessionId] ?: throw RuntimeException("You don't have a session for id $sessionId")
+        sessionComponent.session().stopSync()
     }
 
     fun getOrCreateSessionComponent(sessionParams: SessionParams): SessionComponent {
