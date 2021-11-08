@@ -1,9 +1,9 @@
 name: Sanity Test
 
 on:
-  pull_request: { }
-  push:
-    branches: [ main, develop ]
+  schedule:
+    # At 20:00 every day UTC
+    - cron: '0 20 * * *'
 
 # Enrich gradle.properties for CI/CD
 env:
@@ -21,6 +21,8 @@ jobs:
         api-level: [28]
     steps:
       - uses: actions/checkout@v2
+        with:
+          ref: develop
       - name: Set up Python 3.8
         uses: actions/setup-python@v2
         with:
