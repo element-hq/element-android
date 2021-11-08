@@ -17,7 +17,7 @@ PARAM_KEYSTORE_PATH=$1
 PARAM_APK=$2
 
 # Other params
-BUILD_TOOLS_VERSION="30.0.3"
+BUILD_TOOLS_VERSION="31.0.0-rc5"
 MIN_SDK_VERSION=21
 
 echo "Signing APK with build-tools version ${BUILD_TOOLS_VERSION} for min SDK version ${MIN_SDK_VERSION}..."
