@@ -59,12 +59,7 @@ jobs:
         with:
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           api-level: ${{ matrix.api-level }}
-          script: |
-            ./gradlew $CI_GRADLE_ARG_PROPERTIES \
-              -PallWarningsAsErrors=false \
-              connectedGplayDebugAndroidTest \
-              -Pandroid.testInstrumentationRunnerArguments.class=im.vector.app.ui.UiAllScreensSanityTest \
-              || adb pull sdcard/Pictures/failure_screenshots
+          script: ./gradlew $CI_GRADLE_ARG_PROPERTIES -PallWarningsAsErrors=false connectedGplayDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=im.vector.app.ui.UiAllScreensSanityTest || adb pull sdcard/Pictures/failure_screenshots
       - uses: actions/upload-artifact@v2
         with:
           name: failure-screenshots
