@@ -31,7 +31,9 @@ import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.cli
 import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu
 import im.vector.app.R
 import im.vector.app.espresso.tools.waitUntilViewVisible
+import im.vector.app.features.home.room.detail.timeline.action.MessageActionsBottomSheet
 import im.vector.app.features.reactions.data.EmojiDataSource
+import im.vector.app.interactWithSheet
 import im.vector.app.waitForView
 import java.lang.Thread.sleep
 
@@ -39,6 +41,7 @@ class RoomDetailRobot {
 
     fun postMessage(content: String) {
         writeTo(R.id.composerEditText, content)
+        waitUntilViewVisible(withId(R.id.sendButton))
         clickOn(R.id.sendButton)
     }
 
@@ -63,7 +66,6 @@ class RoomDetailRobot {
         openMessageMenu(message) {
             addQuickReaction(quickReaction)
         }
-        waitUntilViewVisible(withId(R.id.composerEditText))
         // Open reactions
         longClickOn(quickReaction)
         // wait for bottom sheet
@@ -72,16 +74,13 @@ class RoomDetailRobot {
         openMessageMenu(message) {
             addReactionFromEmojiPicker()
         }
-        waitUntilViewVisible(withId(R.id.composerEditText))
         // Test Edit mode
         openMessageMenu(message) {
             edit()
         }
-        waitUntilViewVisible(withId(R.id.composerEditText))
         // TODO Cancel action
         writeTo(R.id.composerEditText, "Hello universe!")
         // Wait a bit for the keyboard layout to update
-        sleep(30)
         waitUntilViewVisible(withId(R.id.sendButton))
         clickOn(R.id.sendButton)
         // Wait for the UI to update
@@ -100,11 +99,12 @@ class RoomDetailRobot {
                                 ViewActions.longClick()
                         )
                 )
-        waitUntilViewVisible(withId(R.id.bottomSheetRecyclerView))
-        val messageMenuRobot = MessageMenuRobot()
-        block(messageMenuRobot)
-        if (!messageMenuRobot.autoClosed) {
-            pressBack()
+        interactWithSheet<MessageActionsBottomSheet>(contentMatcher = withId(R.id.bottomSheetRecyclerView)) {
+            val messageMenuRobot = MessageMenuRobot()
+            block(messageMenuRobot)
+            if (!messageMenuRobot.autoClosed) {
+                pressBack()
+            }
         }
     }
 
