@@ -106,7 +106,9 @@ dependencies {
     implementation libs.androidx.appCompat
     implementation libs.androidx.core
 
-    implementation libs.androidx.lifecycleJava8
+    // Lifecycle
+    implementation libs.androidx.lifecycleCommon
+    implementation libs.androidx.lifecycleProcess
 
     // Network
     implementation libs.squareup.retrofit
