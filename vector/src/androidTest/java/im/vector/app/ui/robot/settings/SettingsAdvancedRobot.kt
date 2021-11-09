@@ -17,8 +17,11 @@
 package im.vector.app.ui.robot.settings
 
 import androidx.test.espresso.Espresso.pressBack
+import androidx.test.espresso.matcher.ViewMatchers.withText
+import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import im.vector.app.R
 import im.vector.app.espresso.tools.clickOnPreference
+import im.vector.app.espresso.tools.waitUntilViewVisible
 
 class SettingsAdvancedRobot {
 
@@ -28,20 +31,19 @@ class SettingsAdvancedRobot {
 
         clickOnPreference(R.string.settings_push_rules)
         pressBack()
+    }
 
-        /* TODO P2 test developer screens
-    // Enable developer mode
-    clickOnSwitchPreference("SETTINGS_DEVELOPER_MODE_PREFERENCE_KEY")
+    fun toggleDeveloperMode() {
+        clickOn(R.string.settings_developer_mode_summary)
+    }
 
-    clickOnPreference(R.string.settings_account_data)
-    clickOn("m.push_rules")
-    pressBack()
-    pressBack()
-    clickOnPreference(R.string.settings_key_requests)
-    pressBack()
-
-    // Disable developer mode
-    clickOnSwitchPreference("SETTINGS_DEVELOPER_MODE_PREFERENCE_KEY")
-     */
+    fun crawlDeveloperOptions() {
+        clickOnPreference(R.string.settings_account_data)
+        waitUntilViewVisible(withText("m.push_rules"))
+        clickOn("m.push_rules")
+        pressBack()
+        pressBack()
+        clickOnPreference(R.string.settings_key_requests)
+        pressBack()
     }
 }
