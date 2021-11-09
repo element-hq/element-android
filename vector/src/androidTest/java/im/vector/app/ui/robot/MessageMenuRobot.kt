@@ -16,44 +16,46 @@
 
 package im.vector.app.ui.robot
 
-import androidx.test.espresso.Espresso
-import com.adevinta.android.barista.interaction.BaristaClickInteractions
+import androidx.test.espresso.Espresso.pressBack
+import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import com.adevinta.android.barista.interaction.BaristaListInteractions
+import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem
 import im.vector.app.R
+import java.lang.Thread.sleep
 
 class MessageMenuRobot(
         var autoClosed: Boolean = false
 ) {
 
     fun viewSource() {
-        BaristaClickInteractions.clickOn(R.string.view_source)
+        clickOn(R.string.view_source)
         // wait for library
-        Thread.sleep(1000)
-        Espresso.pressBack()
+        sleep(1000)
+        pressBack()
         autoClosed = true
     }
 
     fun editHistory() {
-        BaristaClickInteractions.clickOn(R.string.message_view_edit_history)
-        Espresso.pressBack()
+        clickOn(R.string.message_view_edit_history)
+        pressBack()
         autoClosed = true
     }
 
     fun addQuickReaction(quickReaction: String) {
-        BaristaClickInteractions.clickOn(quickReaction)
+        clickOn(quickReaction)
         autoClosed = true
     }
 
     fun addReactionFromEmojiPicker() {
-        BaristaClickInteractions.clickOn(R.string.message_add_reaction)
+        clickOn(R.string.message_add_reaction)
         // Wait for emoji to load, it's async now
-        Thread.sleep(2000)
-        BaristaListInteractions.clickListItem(R.id.emojiRecyclerView, 4)
+        sleep(2000)
+        clickListItem(R.id.emojiRecyclerView, 4)
         autoClosed = true
     }
 
     fun edit() {
-        BaristaClickInteractions.clickOn(R.string.edit)
+        clickOn(R.string.edit)
         autoClosed = true
     }
 }
