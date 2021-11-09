@@ -44,6 +44,7 @@ class RoomDetailRobot {
         writeTo(R.id.composerEditText, content)
         waitUntilViewVisible(withId(R.id.sendButton))
         clickOn(R.id.sendButton)
+        waitUntilViewVisible(withText(content))
     }
 
     fun crawl() {
