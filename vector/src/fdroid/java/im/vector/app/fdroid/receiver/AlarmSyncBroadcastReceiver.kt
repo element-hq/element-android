@@ -25,6 +25,7 @@ import android.os.Build
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import im.vector.app.core.extensions.singletonEntryPoint
+import im.vector.app.core.platform.PendingIntentCompat
 import im.vector.app.core.services.VectorSyncService
 import org.matrix.android.sdk.internal.session.sync.job.SyncService
 import timber.log.Timber
@@ -67,7 +68,12 @@ class AlarmSyncBroadcastReceiver : BroadcastReceiver() {
                 putExtra(SyncService.EXTRA_SESSION_ID, sessionId)
                 putExtra(SyncService.EXTRA_PERIODIC, true)
             }
-            val pIntent = PendingIntent.getBroadcast(context, REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+            val pIntent = PendingIntent.getBroadcast(
+                    context,
+                    REQUEST_CODE,
+                    intent,
+                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntentCompat.FLAG_IMMUTABLE
+            )
             val firstMillis = System.currentTimeMillis() + delayInSeconds * 1000L
             val alarmMgr = context.getSystemService<AlarmManager>()!!
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -80,7 +86,12 @@ class AlarmSyncBroadcastReceiver : BroadcastReceiver() {
         fun cancelAlarm(context: Context) {
             Timber.v("## Sync: Cancel alarm for background sync")
             val intent = Intent(context, AlarmSyncBroadcastReceiver::class.java)
-            val pIntent = PendingIntent.getBroadcast(context, REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+            val pIntent = PendingIntent.getBroadcast(
+                    context,
+                    REQUEST_CODE,
+                    intent,
+                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntentCompat.FLAG_IMMUTABLE
+            )
             val alarmMgr = context.getSystemService<AlarmManager>()!!
             alarmMgr.cancel(pIntent)
 
