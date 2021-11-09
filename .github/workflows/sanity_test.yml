@@ -61,10 +61,10 @@ jobs:
           api-level: ${{ matrix.api-level }}
           script: |
             ./gradlew $CI_GRADLE_ARG_PROPERTIES \
-            -PallWarningsAsErrors=false \
-            connectedGplayDebugAndroidTest \
-            -Pandroid.testInstrumentationRunnerArguments.class=im.vector.app.ui.UiAllScreensSanityTest \
-            || adb pull sdcard/Pictures/failure_screenshots
+              -PallWarningsAsErrors=false \
+              connectedGplayDebugAndroidTest \
+              -Pandroid.testInstrumentationRunnerArguments.class=im.vector.app.ui.UiAllScreensSanityTest \
+              || adb pull sdcard/Pictures/failure_screenshots
       - uses: actions/upload-artifact@v2
         with:
           name: failure-screenshots
