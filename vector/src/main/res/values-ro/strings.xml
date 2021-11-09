@@ -358,7 +358,7 @@
     <string name="initial_sync_start_importing_account_rooms">Sincronizare inițială:
 \nSe importa camerele</string>
     <string name="initial_sync_start_importing_account_crypto">Sincronizare inițială:
-\nSe importă crypto</string>
+\nSe importă datele criptografice</string>
     <string name="initial_sync_start_importing_account">Sincronizare inițială:
 \nSe importă contul…</string>
     <string name="initial_sync_start_downloading">Sincronizare inițială:
@@ -393,4 +393,13 @@
     <string name="notice_room_server_acl_updated_ip_literals_allowed">Acum sunt permise serverele ce au adrese IP ce se potrivesc.</string>
     <string name="notice_room_server_acl_set_ip_literals_not_allowed">Sunt blocate serverele ce au adrese IP ce se potrivesc.</string>
     <string name="notice_room_server_acl_set_ip_literals_allowed">Sunt permise serverele ce au adrese IP ce se potrivesc.</string>
+    <string name="sign_out_bottom_sheet_backing_up_keys">Se creează o copie a cheilor criptografice.…</string>
+    <string name="sign_out_bottom_sheet_warning_no_backup">Dacă vă deconectați acum, veți pierde mesajele criptate</string>
+    <string name="keys_backup_is_not_finished_please_wait">Copierea cheilor nu sa încheiat, vă rugăm așteptați…</string>
+    <string name="title_activity_keys_backup_restore">Folosește cheia de rezervă</string>
+    <string name="title_activity_keys_backup_setup">Copia cheii de criptare</string>
+    <string name="title_activity_group_details">Detalii despre comunitate</string>
+    <string name="title_activity_bug_report">Raport de erori</string>
+    <string name="title_activity_historical">Istoricul activitățiilor</string>
+    <string name="title_activity_member_details">Detalii despre membri</string>
 </resources>
