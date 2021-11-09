@@ -23,6 +23,7 @@ import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.adevinta.android.barista.interaction.BaristaClickInteractions
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.longClickOn
@@ -84,7 +85,7 @@ class RoomDetailRobot {
         waitUntilViewVisible(withId(R.id.sendButton))
         clickOn(R.id.sendButton)
         // Wait for the UI to update
-        sleep(1000)
+        waitUntilViewVisible(withText("Hello universe! (edited)"))
         // Open edit history
         openMessageMenu("Hello universe! (edited)") {
             editHistory()
