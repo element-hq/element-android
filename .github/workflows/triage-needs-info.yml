@@ -8,7 +8,7 @@ jobs:
   Move_Labeled_Issue_On_Project_Board:
     runs-on: ubuntu-latest
     steps:
-    - uses: konradpabjan/move-labeled-or-milestoned-issue@v2.0
+    - uses: konradpabjan/move-labeled-or-milestoned-issue@219d384e03fa4b6460cd24f9f37d19eb033a4338
       with:
         action-token: ${{ secrets.GITHUB_TOKEN }}
         project-url: "https://github.com/vector-im/element-android/projects/4"
