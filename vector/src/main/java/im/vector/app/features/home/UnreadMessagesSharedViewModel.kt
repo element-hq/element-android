@@ -44,8 +44,8 @@ import org.matrix.android.sdk.rx.asObservable
 import java.util.concurrent.TimeUnit
 
 data class UnreadMessagesState(
-        val homeSpaceUnread: RoomAggregateNotificationCount = RoomAggregateNotificationCount(0, 0, 0, 0),
-        val otherSpacesUnread: RoomAggregateNotificationCount = RoomAggregateNotificationCount(0, 0, 0, 0)
+        val homeSpaceUnread: RoomAggregateNotificationCount = RoomAggregateNotificationCount(0, 0, 0),
+        val otherSpacesUnread: RoomAggregateNotificationCount = RoomAggregateNotificationCount(0, 0, 0)
 ) : MavericksState
 
 data class CountInfo(
@@ -110,8 +110,7 @@ class UnreadMessagesSharedViewModel @AssistedInject constructor(@Assisted initia
                             homeSpaceUnread = RoomAggregateNotificationCount(
                                     counts.notificationCount + invites,
                                     highlightCount = counts.highlightCount + invites,
-                                    unreadCount = counts.unreadCount,
-                                    markedUnreadCount = counts.markedUnreadCount
+                                    unreadCount = counts.unreadCount
                             )
                     )
                 }
@@ -132,8 +131,8 @@ class UnreadMessagesSharedViewModel @AssistedInject constructor(@Assisted initia
                         is RoomGroupingMethod.ByLegacyGroup -> {
                             // currently not supported
                             CountInfo(
-                                    RoomAggregateNotificationCount(0, 0, 0, 0),
-                                    RoomAggregateNotificationCount(0, 0, 0, 0)
+                                    RoomAggregateNotificationCount(0, 0, 0),
+                                    RoomAggregateNotificationCount(0, 0, 0)
                             )
                         }
                         is RoomGroupingMethod.BySpace       -> {
@@ -171,8 +170,7 @@ class UnreadMessagesSharedViewModel @AssistedInject constructor(@Assisted initia
                             val counts = RoomAggregateNotificationCount(
                                     totalCount.notificationCount + inviteCount,
                                     totalCount.highlightCount + inviteCount,
-                                    totalCount.unreadCount,
-                                    totalCount.markedUnreadCount
+                                    totalCount.unreadCount
                             )
 
                             // SC: count total room notifications for drawer badge, instead of filtering for others like Element does,
@@ -191,8 +189,7 @@ class UnreadMessagesSharedViewModel @AssistedInject constructor(@Assisted initia
                             val topLevelCounts = RoomAggregateNotificationCount(
                                     topLevelTotalCount.notificationCount + inviteCount + spaceInviteCount,
                                     topLevelTotalCount.highlightCount + inviteCount + spaceInviteCount,
-                                    topLevelTotalCount.unreadCount,
-                                    topLevelTotalCount.markedUnreadCount
+                                    topLevelTotalCount.unreadCount
                             )
 
                             CountInfo(homeCount = counts, otherCount = topLevelCounts)
@@ -225,16 +222,16 @@ class UnreadMessagesSharedViewModel @AssistedInject constructor(@Assisted initia
                         }
                         null                                -> {
                             CountInfo(
-                                    RoomAggregateNotificationCount(0, 0, 0, 0),
-                                    RoomAggregateNotificationCount(0, 0, 0, 0)
+                                    RoomAggregateNotificationCount(0, 0, 0),
+                                    RoomAggregateNotificationCount(0, 0, 0)
                             )
                         }
                     }
                 }
         ).execute {
             copy(
-                    homeSpaceUnread = it.invoke()?.homeCount ?: RoomAggregateNotificationCount(0, 0, 0, 0),
-                    otherSpacesUnread = it.invoke()?.otherCount ?: RoomAggregateNotificationCount(0, 0, 0, 0)
+                    homeSpaceUnread = it.invoke()?.homeCount ?: RoomAggregateNotificationCount(0, 0, 0),
+                    otherSpacesUnread = it.invoke()?.otherCount ?: RoomAggregateNotificationCount(0, 0, 0)
             )
         }
     }

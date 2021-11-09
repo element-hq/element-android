@@ -309,7 +309,7 @@ class RoomListFragment @Inject constructor(
                                                     notificationCount = counts.totalCount,
                                                     isHighlighted = counts.isHighlight,
                                                     unread = counts.unreadCount,
-                                                    markedUnread = counts.markedUnread
+                                                    markedUnread = false
                                             ))
                                         }
                                         section.isExpanded.observe(viewLifecycleOwner) { _ ->
@@ -350,7 +350,7 @@ class RoomListFragment @Inject constructor(
                                                     notificationCount = counts.totalCount,
                                                     isHighlighted = counts.isHighlight,
                                                     unread = counts.unreadCount,
-                                                    markedUnread = counts.markedUnread
+                                                    markedUnread = false
                                             ))
                                         }
                                         section.isExpanded.observe(viewLifecycleOwner) { _ ->

@@ -229,39 +229,36 @@ internal class RoomSummaryDataSource @Inject constructor(@SessionDatabase privat
         val preferenceProvider = StaticScSdkHelper.scSdkPreferenceProvider
         var notificationCount: RoomAggregateNotificationCount? = null
         monarchy.doWithRealm { realm ->
-            val roomSummariesQuery = roomSummariesQuery(realm, queryParams)
-            val markedUnreadCount = roomSummariesQuery(realm, queryParams).equalTo(RoomSummaryEntityFields.MARKED_UNREAD, true).count().toInt()
             notificationCount = if (preferenceProvider?.aggregateUnreadRoomCounts() != false) {
                 // Count chats
-                val notifCount = roomSummariesQuery.greaterThan(RoomSummaryEntityFields.NOTIFICATION_COUNT, 0).count().toInt()
-                val highlightCount = roomSummariesQuery.greaterThan(RoomSummaryEntityFields.HIGHLIGHT_COUNT, 0).count().toInt()
+                val notifCount = roomSummariesQuery(realm, queryParams).beginGroup().greaterThan(RoomSummaryEntityFields.NOTIFICATION_COUNT, 0).or().equalTo(RoomSummaryEntityFields.MARKED_UNREAD, true).endGroup().count().toInt()
+                val highlightCount = roomSummariesQuery(realm, queryParams).greaterThan(RoomSummaryEntityFields.HIGHLIGHT_COUNT, 0).count().toInt()
                 val unreadCount = max(
                         // Preferred since MSC 2654
-                        roomSummariesQuery.greaterThan(RoomSummaryEntityFields.UNREAD_COUNT, 0).count().toInt(),
+                        roomSummariesQuery(realm, queryParams).greaterThan(RoomSummaryEntityFields.UNREAD_COUNT, 0).count().toInt(),
                         // TODO-SC-merge: properly use dm/non-dm flag? (note that this will be likely overwritten either way by above field from MSC 2654)
                         roomSummariesQuery(realm, queryParams).equalTo(getUnreadRoomSummaryField(false), true).count().toInt()
                 )
                 RoomAggregateNotificationCount(
                         notifCount,
                         highlightCount,
-                        unreadCount,
-                        markedUnreadCount
+                        unreadCount
                 )
             } else {
                 // Sum unread counts
-                val notifCount = roomSummariesQuery.sum(RoomSummaryEntityFields.NOTIFICATION_COUNT).toInt()
-                val highlightCount = roomSummariesQuery.sum(RoomSummaryEntityFields.HIGHLIGHT_COUNT).toInt()
+                val notifCount = roomSummariesQuery(realm, queryParams).sum(RoomSummaryEntityFields.NOTIFICATION_COUNT).toInt() +
+                        roomSummariesQuery(realm, queryParams).beginGroup().lessThanOrEqualTo(RoomSummaryEntityFields.NOTIFICATION_COUNT, 0).and().equalTo(RoomSummaryEntityFields.MARKED_UNREAD, true).endGroup().count().toInt()
+                val highlightCount = roomSummariesQuery(realm, queryParams).sum(RoomSummaryEntityFields.HIGHLIGHT_COUNT).toInt()
                 val unreadCount = max(
                         // Preferred since MSC 2654
-                        roomSummariesQuery.sum(RoomSummaryEntityFields.UNREAD_COUNT).toInt(),
+                        roomSummariesQuery(realm, queryParams).sum(RoomSummaryEntityFields.UNREAD_COUNT).toInt(),
                         // TODO-SC-merge: properly use dm/non-dm flag? (note that this will be likely overwritten either way by above field from MSC 2654)
                         roomSummariesQuery(realm, queryParams).equalTo(getUnreadRoomSummaryField(false), true).count().toInt()
                 )
                 RoomAggregateNotificationCount(
                         notifCount,
                         highlightCount,
-                        unreadCount,
-                        markedUnreadCount
+                        unreadCount
                 )
             }
         }

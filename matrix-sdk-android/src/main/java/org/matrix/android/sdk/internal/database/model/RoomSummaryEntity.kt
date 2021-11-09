@@ -136,6 +136,15 @@ internal open class RoomSummaryEntity(
         }
     }
 
+    // Keep sync with RoomSummaryEntity.notificationCountOrMarkedUnread!
+    fun notificationCountOrMarkedUnread(): Int {
+        return when {
+            notificationCount > 0 -> notificationCount
+            markedUnread          -> 1
+            else                  -> 0
+        }
+    }
+
     var aggregatedUnreadCount: Int = 0
         set(value) {
             if (value != field) field = value

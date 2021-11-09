@@ -139,17 +139,12 @@ data class RoomSummary(
         }
     }
 
-    fun scNotificationCountWithManualUnread(): Int {
+    // Keep sync with RoomSummaryEntity.notificationCountOrMarkedUnread!
+    fun notificationCountOrMarkedUnread(): Int {
         return when {
-            notificationCount > 0 -> {
-                notificationCount
-            }
-            markedUnread          -> {
-                1
-            }
-            else                  -> {
-                0
-            }
+            notificationCount > 0 -> notificationCount
+            markedUnread          -> 1
+            else                  -> 0
         }
     }
 

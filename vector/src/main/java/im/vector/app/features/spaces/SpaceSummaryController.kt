@@ -138,7 +138,7 @@ class SpaceSummaryController @Inject constructor(
         homeSpaceSummaryItem {
             id("space_home")
             selected(selected is RoomGroupingMethod.BySpace && selected.space() == null)
-            countState(UnreadCounterBadgeView.State(homeCount.totalCount, homeCount.isHighlight, homeCount.unreadCount, homeCount.markedUnread))
+            countState(UnreadCounterBadgeView.State(homeCount.totalCount, homeCount.isHighlight, homeCount.unreadCount, false))
             listener { host.callback?.onSpaceSelected(null) }
         }
 

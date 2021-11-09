@@ -19,10 +19,8 @@ package org.matrix.android.sdk.api.session.room.summary
 data class RoomAggregateNotificationCount(
         val notificationCount: Int,
         val highlightCount: Int,
-        val unreadCount: Int,
-        val markedUnreadCount: Int
+        val unreadCount: Int
 ) {
-    val totalCount = notificationCount + markedUnreadCount
+    val totalCount = notificationCount
     val isHighlight = highlightCount > 0
-    val markedUnread = markedUnreadCount > 0
 }

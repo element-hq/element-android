@@ -141,8 +141,7 @@ class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: Sp
                     val counts = RoomAggregateNotificationCount(
                             totalCount.notificationCount + inviteCount,
                             totalCount.highlightCount + inviteCount,
-                            totalCount.unreadCount,
-                            if (totalCount.markedUnread) 1 else 0
+                            totalCount.unreadCount
                     )
                     setState {
                         copy(

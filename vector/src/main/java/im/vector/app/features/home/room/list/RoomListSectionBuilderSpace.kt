@@ -499,7 +499,7 @@ class RoomListSectionBuilderSpace(
                                                     ?.notificationCount
                                                     ?.postValue(
                                                             if (countRoomAsNotif) {
-                                                                RoomAggregateNotificationCount(it.size, it.size, 0, 0)
+                                                                RoomAggregateNotificationCount(it.size, it.size, 0)
                                                             } else {
                                                                 session.getNotificationCountForRooms(
                                                                         roomQueryParams.process(spaceFilterStrategy, appStateHandler.safeActiveSpaceId())

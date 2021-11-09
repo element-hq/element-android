@@ -187,7 +187,7 @@ class HomeDetailFragment @Inject constructor(
                             count = state.otherSpacesUnread.totalCount,
                             highlighted = state.otherSpacesUnread.isHighlight,
                             unread = state.otherSpacesUnread.unreadCount,
-                            markedUnread = state.otherSpacesUnread.markedUnread
+                            markedUnread = false
                     )
             )
         }

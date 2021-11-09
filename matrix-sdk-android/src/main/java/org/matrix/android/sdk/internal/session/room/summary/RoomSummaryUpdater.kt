@@ -450,7 +450,6 @@ internal class RoomSummaryUpdater @Inject constructor(
                         var highlightCount = 0
                         var notificationCount = 0
                         var unreadCount = 0
-                        var markedUnreadCount = 0
                         var aggregateUnreadCount = 0
                         var aggregateNotificationCount = 0
                         realm.where(RoomSummaryEntity::class.java)
@@ -462,16 +461,15 @@ internal class RoomSummaryUpdater @Inject constructor(
                                 .findAll().forEach {
                                     if (!it.isHiddenFromUser) {
                                         highlightCount += it.highlightCount
-                                        notificationCount += it.notificationCount
+                                        notificationCount += it.notificationCountOrMarkedUnread()
                                         unreadCount += it.safeUnreadCount()
-                                        aggregateNotificationCount += min(it.notificationCount, 1)
-                                        aggregateUnreadCount += min(it.safeUnreadCount(), 1)
-                                        markedUnreadCount += if (it.markedUnread) 1 else 0
+                                        aggregateNotificationCount += if (it.notificationCountOrMarkedUnread() > 0) 1 else 0
+                                        aggregateUnreadCount += if (it.safeUnreadCount() > 0) 1 else 0
                                     }
                                 }
 
                         space.highlightCount = highlightCount
-                        space.notificationCount = notificationCount + markedUnreadCount
+                        space.notificationCount = notificationCount
                         space.unreadCount = unreadCount
                         space.aggregatedUnreadCount = aggregateUnreadCount
                         space.aggregatedNotificationCount = aggregateNotificationCount
