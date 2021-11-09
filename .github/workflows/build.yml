@@ -22,23 +22,12 @@ jobs:
         target: [ Gplay, Fdroid ]
     steps:
       - uses: actions/checkout@v2
-#      - uses: actions/cache@v2
-#        with:
-#          path: |
-#            ~/.gradle/caches
-#            ~/.gradle/wrapper
-#          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-#          restore-keys: |
-#            ${{ runner.os }}-gradle-
-#      - name: Assemble ${{ matrix.target }} debug apk
-#        run: ./gradlew assemble${{ matrix.target }}Debug $CI_GRADLE_ARG_PROPERTIES --stacktrace
       - uses: actions/setup-java@v1
         with:
           java-version: 11
       - uses: gradle/gradle-build-action@v2
         with:
           arguments: assemble${{ matrix.target }}Debug ${{env.CI_GRADLE_ARG_PROPERTIES}}
-########
       - name: Upload ${{ matrix.target }} debug APKs
         uses: actions/upload-artifact@v2
         with:
