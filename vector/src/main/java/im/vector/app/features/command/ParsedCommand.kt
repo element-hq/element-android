@@ -61,7 +61,6 @@ sealed class ParsedCommand {
     class SendSpoiler(val message: String) : ParsedCommand()
     class SendShrug(val message: CharSequence) : ParsedCommand()
     class SendLenny(val message: CharSequence) : ParsedCommand()
-    class SendPoll(val question: String, val options: List<String>) : ParsedCommand()
     object DiscardSession : ParsedCommand()
     class ShowUser(val userId: String) : ParsedCommand()
     class SendChatEffect(val chatEffect: ChatEffect, val message: String) : ParsedCommand()

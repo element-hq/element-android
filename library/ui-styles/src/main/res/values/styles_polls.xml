@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+   <style name="Widget.Vector.Button.CreatePoll" parent="Widget.Vector.Button">
+       <item name="android:backgroundTint">@color/button_background_tint_selector</item>
+       <item name="android:textAppearance">@style/TextAppearance.Vector.Button</item>
+       <item name="android:textColor">@android:color/white</item>
+   </style>
+
+</resources>

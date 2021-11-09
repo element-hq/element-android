@@ -19,4 +19,9 @@
         <item name="android:textColor">?vctr_message_text_color</item>
     </style>
 
+    <style name="Widget.Vector.EditText.Form" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">@color/form_edit_text_stroke_color_selector</item>
+        <item name="android:textColorHint">@color/form_edit_text_hint_color_selector</item>
+    </style>
+
 </resources>

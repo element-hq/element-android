@@ -259,11 +259,6 @@ class TextComposerViewModel @AssistedInject constructor(
                             _viewEvents.post(TextComposerViewEvents.SlashCommandResultOk())
                             popDraft()
                         }
-                        is ParsedCommand.SendPoll                 -> {
-                            room.sendPoll(slashCommandResult.question, slashCommandResult.options.mapIndexed { index, s -> OptionItem(s, "$index. $s") })
-                            _viewEvents.post(TextComposerViewEvents.SlashCommandResultOk())
-                            popDraft()
-                        }
                         is ParsedCommand.ChangeTopic              -> {
                             handleChangeTopicSlashCommand(slashCommandResult)
                         }

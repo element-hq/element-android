@@ -2435,6 +2435,7 @@
     <string name="attachment_type_audio">"Audio"</string>
     <string name="attachment_type_gallery">"Gallery"</string>
     <string name="attachment_type_sticker">"Sticker"</string>
+    <string name="attachment_type_poll">Poll</string>
     <string name="rotate_and_crop_screen_title">Rotate and crop</string>
     <string name="error_handling_incoming_share">Couldn\'t handle share data</string>
 
@@ -3630,4 +3631,18 @@
     <string name="link_this_email_settings_link">Link this email with your account</string>
     <!-- %s will be replaced by the value of link_this_email_settings_link and styled as a link -->
     <string name="link_this_email_with_your_account">%s in Settings to receive invites directly in Element.</string>
+
+    <!-- Poll -->
+    <string name="create_poll_title">Create Poll</string>
+    <string name="create_poll_question_title">Poll question or topic</string>
+    <string name="create_poll_question_hint">Question or topic</string>
+    <string name="create_poll_options_title">Create options</string>
+    <string name="create_poll_options_hint">Option %1$d</string>
+    <string name="create_poll_add_option">ADD OPTION</string>
+    <string name="create_poll_button">CREATE POLL</string>
+    <string name="create_poll_empty_question_error">Question cannot be empty</string>
+    <plurals name="create_poll_not_enough_options_error">
+        <item quantity="one">At least %1$s option is required</item>
+        <item quantity="other">At least %1$s options are required</item>
+    </plurals>
 </resources>

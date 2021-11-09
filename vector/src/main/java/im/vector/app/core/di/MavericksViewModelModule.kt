@@ -26,6 +26,7 @@ import im.vector.app.features.call.conference.JitsiCallViewModel
 import im.vector.app.features.call.transfer.CallTransferViewModel
 import im.vector.app.features.contactsbook.ContactsBookViewModel
 import im.vector.app.features.createdirect.CreateDirectRoomViewModel
+import im.vector.app.features.poll.create.CreatePollViewModel
 import im.vector.app.features.crypto.keysbackup.settings.KeysBackupSettingsViewModel
 import im.vector.app.features.crypto.quads.SharedSecureStorageViewModel
 import im.vector.app.features.crypto.recover.BootstrapSharedViewModel
@@ -546,4 +547,9 @@ interface MavericksViewModelModule {
     @IntoMap
     @MavericksViewModelKey(VerificationBottomSheetViewModel::class)
     fun verificationBottomSheetViewModelFactory(factory: VerificationBottomSheetViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(CreatePollViewModel::class)
+    fun createPollViewModelFactory(factory: CreatePollViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
 }
