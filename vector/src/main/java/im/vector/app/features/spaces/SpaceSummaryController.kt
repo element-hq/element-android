@@ -36,6 +36,7 @@ import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
 import org.matrix.android.sdk.api.session.room.summary.RoomAggregateNotificationCount
 import org.matrix.android.sdk.api.util.toMatrixItem
+import java.util.Locale
 import javax.inject.Inject
 
 class SpaceSummaryController @Inject constructor(
@@ -47,7 +48,7 @@ class SpaceSummaryController @Inject constructor(
     var callback: Callback? = null
     private var viewState: SpaceListViewState? = null
 
-    private val subSpaceComparator: Comparator<SpaceChildInfo> = compareBy<SpaceChildInfo> { it.order }.thenBy { it.childRoomId }
+    private val subSpaceComparator: Comparator<SpaceChildInfo> = compareBy<SpaceChildInfo> { it.order }.thenBy { it.name?.lowercase(Locale.getDefault()) }.thenBy { it.childRoomId }
 
     init {
         requestModelBuild()
