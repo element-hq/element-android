@@ -19,6 +19,7 @@ package im.vector.app
 import android.app.Activity
 import android.view.View
 import androidx.annotation.StringRes
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.IdlingRegistry
@@ -35,6 +36,11 @@ import androidx.test.runner.lifecycle.ActivityLifecycleCallback
 import androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry
 import androidx.test.runner.lifecycle.Stage
 import com.adevinta.android.barista.interaction.BaristaClickInteractions
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
+import im.vector.app.espresso.tools.waitUntilViewVisible
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers
 import org.hamcrest.StringDescription
@@ -51,6 +57,14 @@ object EspressoHelper {
             currentActivity = ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(Stage.RESUMED).elementAtOrNull(0)
         }
         return currentActivity
+    }
+
+    inline fun <reified T : VectorBaseBottomSheetDialogFragment<*>> getBottomSheetDialog(): BottomSheetDialogFragment? {
+        return (getCurrentActivity() as? FragmentActivity)
+                ?.supportFragmentManager
+                ?.fragments
+                ?.filterIsInstance<T>()
+                ?.firstOrNull()
     }
 }
 
@@ -219,4 +233,47 @@ fun clickOnAndGoBack(@StringRes name: Int, block: () -> Unit) {
     BaristaClickInteractions.clickOn(name)
     block()
     Espresso.pressBack()
+}
+
+inline fun <reified T : VectorBaseBottomSheetDialogFragment<*>> interactWithSheet(contentMatcher: Matcher<View>, noinline block: () -> Unit = {}) {
+    waitUntilViewVisible(contentMatcher)
+    val behaviour = (EspressoHelper.getBottomSheetDialog<T>()!!.dialog as BottomSheetDialog).behavior
+    withIdlingResource(BottomSheetResource(behaviour, BottomSheetBehavior.STATE_EXPANDED), block)
+    withIdlingResource(BottomSheetResource(behaviour, BottomSheetBehavior.STATE_HIDDEN)) {}
+}
+
+class BottomSheetResource(
+        private val bottomSheetBehavior: BottomSheetBehavior<*>,
+        @BottomSheetBehavior.State private val wantedState: Int
+) : IdlingResource, BottomSheetBehavior.BottomSheetCallback() {
+
+    private var isIdle: Boolean = false
+    private var resourceCallback: IdlingResource.ResourceCallback? = null
+
+    override fun onSlide(bottomSheet: View, slideOffset: Float) {}
+
+    override fun onStateChanged(bottomSheet: View, newState: Int) {
+        val wasIdle = isIdle
+        isIdle = newState == BottomSheetBehavior.STATE_EXPANDED
+        if (!wasIdle && isIdle) {
+            bottomSheetBehavior.removeBottomSheetCallback(this)
+            resourceCallback?.onTransitionToIdle()
+        }
+    }
+
+    override fun getName() = "BottomSheet awaiting state: $wantedState"
+
+    override fun isIdleNow() = isIdle
+
+    override fun registerIdleTransitionCallback(callback: IdlingResource.ResourceCallback) {
+        resourceCallback = callback
+
+        val state = bottomSheetBehavior.state
+        isIdle = state == wantedState
+        if (isIdle) {
+            resourceCallback!!.onTransitionToIdle()
+        } else {
+            bottomSheetBehavior.addBottomSheetCallback(this)
+        }
+    }
 }
