@@ -26,6 +26,7 @@ import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
+import org.matrix.android.sdk.api.session.room.model.RoomType
 import org.matrix.android.sdk.api.session.room.model.VersioningState
 import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
@@ -125,12 +126,13 @@ internal open class RoomSummaryEntity(
         }
          */
 
+    // Keep in sync with RoomSummary.kt!
     fun safeUnreadCount(): Int {
         val safeUnreadCount = unreadCount
-        return if (safeUnreadCount == null || safeUnreadCount <= 0) {
-            if (hasUnreadOriginalContentMessages) 1 else 0
-        } else {
-            safeUnreadCount
+        return when {
+            safeUnreadCount != null && safeUnreadCount > 0                 -> safeUnreadCount
+            hasUnreadOriginalContentMessages && roomType != RoomType.SPACE -> 1
+            else                                                           -> 0
         }
     }
 
