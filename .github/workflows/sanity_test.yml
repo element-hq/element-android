@@ -58,5 +58,14 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
-          script: ./gradlew $CI_GRADLE_ARG_PROPERTIES -PallWarningsAsErrors=false connectedGplayDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=im.vector.app.ui.UiAllScreensSanityTest
+          script: |
+            ./gradlew $CI_GRADLE_ARG_PROPERTIES \
+            -PallWarningsAsErrors=false \
+            connectedGplayDebugAndroidTest \
+            -Pandroid.testInstrumentationRunnerArguments.class=im.vector.app.ui.UiAllScreensSanityTest \
+            || adb pull sdcard/Pictures/failure_screenshots
+      - uses: actions/upload-artifact@v2
+        with:
+          name: failure-screenshots
+          path: failure_screenshots
 
