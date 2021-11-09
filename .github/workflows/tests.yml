@@ -21,6 +21,7 @@ jobs:
           java-version: 11
       - uses: gradle/gradle-build-action@v2
         with:
+          gradle-version: 7.2
           arguments: clean test ${{ matrix.target }}Debug ${{env.CI_GRADLE_ARG_PROPERTIES}} -PallWarningsAsErrors=false --stacktrace
 #      - uses: actions/cache@v2
 #        with:
