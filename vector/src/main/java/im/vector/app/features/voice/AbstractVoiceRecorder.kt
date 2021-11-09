@@ -24,7 +24,6 @@ import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import org.matrix.android.sdk.internal.util.md5
 import java.io.File
 import java.io.FileOutputStream
-import java.util.UUID
 
 abstract class AbstractVoiceRecorder(
         private val context: Context,
