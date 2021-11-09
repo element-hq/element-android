@@ -356,7 +356,6 @@ dependencies {
 
     implementation libs.squareup.moshi
     kapt libs.squareup.moshiKotlin
-    implementation libs.androidx.lifecycleExtensions
     implementation libs.androidx.lifecycleLivedata
 
     implementation libs.androidx.datastore
