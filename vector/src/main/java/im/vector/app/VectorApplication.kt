@@ -27,9 +27,8 @@ import android.os.HandlerThread
 import android.os.StrictMode
 import androidx.core.provider.FontRequest
 import androidx.core.provider.FontsContractCompat
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.OnLifecycleEvent
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.multidex.MultiDex
 import com.airbnb.epoxy.EpoxyAsyncUtil
@@ -166,9 +165,8 @@ class VectorApplication :
 
         ProcessLifecycleOwner.get().lifecycle.addObserver(startSyncOnFirstStart)
 
-        ProcessLifecycleOwner.get().lifecycle.addObserver(object : LifecycleObserver {
-            @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-            fun entersForeground() {
+        ProcessLifecycleOwner.get().lifecycle.addObserver(object : DefaultLifecycleObserver {
+            override fun onResume(owner: LifecycleOwner) {
                 Timber.i("App entered foreground")
                 FcmHelper.onEnterForeground(appContext, activeSessionHolder)
                 activeSessionHolder.getSafeActiveSession()?.also {
@@ -176,8 +174,7 @@ class VectorApplication :
                 }
             }
 
-            @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
-            fun entersBackground() {
+            override fun onPause(owner: LifecycleOwner) {
                 Timber.i("App entered background") // call persistInfo
                 notificationDrawerManager.persistInfo()
                 FcmHelper.onEnterBackground(appContext, vectorPreferences, activeSessionHolder)
@@ -198,9 +195,8 @@ class VectorApplication :
         EmojiManager.install(GoogleEmojiProvider())
     }
 
-    private val startSyncOnFirstStart = object : LifecycleObserver {
-        @OnLifecycleEvent(Lifecycle.Event.ON_START)
-        fun onStart() {
+    private val startSyncOnFirstStart = object : DefaultLifecycleObserver {
+        override fun onStart(owner: LifecycleOwner) {
             Timber.i("App process started")
             authenticationService.getLastAuthenticatedSession()?.startSyncing(appContext)
             ProcessLifecycleOwner.get().lifecycle.removeObserver(this)
