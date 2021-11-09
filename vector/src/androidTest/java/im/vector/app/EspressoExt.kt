@@ -54,6 +54,10 @@ object EspressoHelper {
     }
 }
 
+fun getString(@StringRes id: Int): String {
+    return EspressoHelper.getCurrentActivity()!!.resources.getString(id)
+}
+
 fun waitForView(viewMatcher: Matcher<View>, timeout: Long = 10_000, waitForDisplayed: Boolean = true): ViewAction {
     return object : ViewAction {
         override fun getConstraints(): Matcher<View> {
