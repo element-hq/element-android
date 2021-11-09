@@ -20,12 +20,14 @@ import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import im.vector.app.R
+import im.vector.app.espresso.tools.ScreenshotFailureRule
 import im.vector.app.features.MainActivity
 import im.vector.app.getString
 import im.vector.app.ui.robot.ElementRobot
 import im.vector.app.ui.robot.withDeveloperMode
 import org.junit.Rule
 import org.junit.Test
+import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
 import java.util.UUID
 
@@ -37,7 +39,9 @@ import java.util.UUID
 class UiAllScreensSanityTest {
 
     @get:Rule
-    val activityRule = ActivityScenarioRule(MainActivity::class.java)
+    val testRule = RuleChain
+            .outerRule(ActivityScenarioRule(MainActivity::class.java))
+            .around(ScreenshotFailureRule())
 
     private val elementRobot = ElementRobot()
 
