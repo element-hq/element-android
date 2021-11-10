@@ -68,6 +68,18 @@ object EspressoHelper {
     }
 }
 
+fun withRetry(attempts: Int = 3, action: () -> Unit) {
+    runCatching { action() }.onFailure {
+        val remainingAttempts = attempts - 1
+        if (remainingAttempts <= 0) {
+            throw it
+        } else {
+            Thread.sleep(500)
+            withRetry(remainingAttempts, action)
+        }
+    }
+}
+
 fun getString(@StringRes id: Int): String {
     return EspressoHelper.getCurrentActivity()!!.resources.getString(id)
 }
