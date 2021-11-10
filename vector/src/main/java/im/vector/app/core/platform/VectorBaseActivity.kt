@@ -405,7 +405,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
             window.setDecorFitsSystemWindows(false)
             // New API instead of SYSTEM_UI_FLAG_IMMERSIVE
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                window.decorView.windowInsetsController?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_DEFAULT
+                window.decorView.windowInsetsController?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
             } else {
                 @SuppressLint("WrongConstant")
                 window.decorView.windowInsetsController?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_BARS_BY_SWIPE
