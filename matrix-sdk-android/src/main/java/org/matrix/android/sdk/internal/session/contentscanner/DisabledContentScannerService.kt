@@ -18,16 +18,18 @@ package org.matrix.android.sdk.internal.session.contentscanner
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.contentscanner.ContentScannerService
 import org.matrix.android.sdk.api.session.contentscanner.ScanStatusInfo
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.crypto.attachments.ElementToDecrypt
+import org.matrix.android.sdk.internal.session.SessionScope
+import javax.inject.Inject
 
 /**
  * Created to by-pass ProfileTask execution in LoginWizard.
  */
-class DisabledContentScannerService : ContentScannerService {
+@SessionScope
+internal class DisabledContentScannerService @Inject constructor() : ContentScannerService {
 
     override val serverPublicKey: String?
         get() = null
@@ -36,13 +38,12 @@ class DisabledContentScannerService : ContentScannerService {
         return null
     }
 
-    override fun getServerPublicKey(forceDownload: Boolean, callback: MatrixCallback<String?>) {
+    override suspend fun getServerPublicKey(forceDownload: Boolean): String? {
+        return null
     }
 
-    override fun getScanResultForAttachment(mxcUrl: String, callback: MatrixCallback<ScanStatusInfo>) {
-    }
-
-    override fun getScanResultForAttachment(mxcUrl: String, fileInfo: ElementToDecrypt, callback: MatrixCallback<ScanStatusInfo>) {
+    override suspend fun getScanResultForAttachment(mxcUrl: String, fileInfo: ElementToDecrypt?): ScanStatusInfo {
+        TODO("Not yet implemented")
     }
 
     override fun setScannerUrl(url: String?) {
@@ -55,11 +56,7 @@ class DisabledContentScannerService : ContentScannerService {
         return false
     }
 
-    override fun getLiveStatusForFile(mxcUrl: String, fetchIfNeeded: Boolean): LiveData<Optional<ScanStatusInfo>> {
-        return MutableLiveData()
-    }
-
-    override fun getLiveStatusForEncryptedFile(mxcUrl: String, fileInfo: ElementToDecrypt, fetchIfNeeded: Boolean): LiveData<Optional<ScanStatusInfo>> {
+    override fun getLiveStatusForFile(mxcUrl: String, fetchIfNeeded: Boolean, fileInfo: ElementToDecrypt?): LiveData<Optional<ScanStatusInfo>> {
         return MutableLiveData()
     }
 
