@@ -39,6 +39,7 @@ private val deviceLanguage = Locale.getDefault().language
 
 class ScreenshotFailureRule : TestWatcher() {
     override fun failed(e: Throwable?, description: Description) {
+        Timber.e("Test Failed - Starting screenshot capture")
         val screenShotName = "$deviceLanguage-${description.methodName}-${SimpleDateFormat("EEE-MMMM-dd-HH:mm:ss").format(Date())}"
         val bitmap = getInstrumentation().uiAutomation.takeScreenshot()
         storeFailureScreenshot(bitmap, screenShotName)
@@ -84,6 +85,7 @@ private fun useMediaStoreScreenshotStorage(
     contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, "$screenshotName.jpeg")
     contentValues.put(MediaStore.Images.Media.RELATIVE_PATH, screenshotLocation)
     val uri: Uri? = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
+    Timber.e("Writing screenshot to ${uri?.toString()}")
     if (uri != null) {
         contentResolver.openOutputStream(uri)?.let { saveScreenshotToStream(bitmap, it) }
         contentResolver.update(uri, contentValues, null, null)
@@ -102,6 +104,7 @@ private fun usePublicExternalScreenshotStorage(
         directory.mkdirs()
     }
     val file = File(directory, "$screenshotName.jpeg")
+    Timber.e("Writing screenshot to ${file.absolutePath}")
     saveScreenshotToStream(bitmap, FileOutputStream(file))
     contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
 }
