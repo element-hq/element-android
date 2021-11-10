@@ -25,18 +25,16 @@ interface ContentScannerService {
     val serverPublicKey: String?
 
     fun getContentScannerServer(): String?
+    fun setScannerUrl(url: String?)
+    fun enableScanner(enabled: Boolean)
+    fun isScannerEnabled(): Boolean
+    fun getLiveStatusForFile(mxcUrl: String, fetchIfNeeded: Boolean = true, fileInfo: ElementToDecrypt? = null): LiveData<Optional<ScanStatusInfo>>
+    fun getCachedScanResultForFile(mxcUrl: String): ScanStatusInfo?
+
     /**
      * Get the current public curve25519 key that the AV server is advertising.
      * @param callback on success callback containing the server public key
      */
     suspend fun getServerPublicKey(forceDownload: Boolean = false): String?
-
     suspend fun getScanResultForAttachment(mxcUrl: String, fileInfo: ElementToDecrypt? = null): ScanStatusInfo
-
-    fun setScannerUrl(url: String?)
-
-    fun enableScanner(enabled: Boolean)
-    fun isScannerEnabled(): Boolean
-    fun getLiveStatusForFile(mxcUrl: String, fetchIfNeeded: Boolean = true, fileInfo: ElementToDecrypt? = null): LiveData<Optional<ScanStatusInfo>>
-    fun getCachedScanResultForFile(mxcUrl: String): ScanStatusInfo?
 }

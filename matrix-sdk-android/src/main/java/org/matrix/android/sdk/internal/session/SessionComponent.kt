@@ -18,7 +18,6 @@ package org.matrix.android.sdk.internal.session
 
 import dagger.BindsInstance
 import dagger.Component
-import org.matrix.android.sdk.internal.session.contentscanner.ContentScannerModule
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.auth.data.SessionParams
 import org.matrix.android.sdk.api.session.Session
@@ -37,6 +36,7 @@ import org.matrix.android.sdk.internal.session.cache.CacheModule
 import org.matrix.android.sdk.internal.session.call.CallModule
 import org.matrix.android.sdk.internal.session.content.ContentModule
 import org.matrix.android.sdk.internal.session.content.UploadContentWorker
+import org.matrix.android.sdk.internal.session.contentscanner.ContentScannerModule
 import org.matrix.android.sdk.internal.session.filter.FilterModule
 import org.matrix.android.sdk.internal.session.group.GetGroupDataWorker
 import org.matrix.android.sdk.internal.session.group.GroupModule

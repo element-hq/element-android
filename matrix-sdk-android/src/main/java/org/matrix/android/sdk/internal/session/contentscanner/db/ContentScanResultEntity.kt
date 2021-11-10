@@ -43,7 +43,7 @@ internal open class ContentScanResultEntity(
             scanStatusString = result.name
         }
 
-    fun toModel() : ScanStatusInfo {
+    fun toModel(): ScanStatusInfo {
         return ScanStatusInfo(
                 state = this.scanResult,
                 humanReadableMessage = humanReadableMessage,

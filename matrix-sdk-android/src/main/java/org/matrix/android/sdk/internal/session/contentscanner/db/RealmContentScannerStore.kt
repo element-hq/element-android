@@ -19,18 +19,18 @@ package org.matrix.android.sdk.internal.session.contentscanner.db
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import com.zhuinden.monarchy.Monarchy
-import org.matrix.android.sdk.internal.session.contentscanner.data.ContentScannerStore
-import org.matrix.android.sdk.api.session.contentscanner.ScanState
-import org.matrix.android.sdk.api.session.contentscanner.ScanStatusInfo
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import io.realm.kotlin.createObject
 import io.realm.kotlin.where
 import org.matrix.android.sdk.api.extensions.orFalse
+import org.matrix.android.sdk.api.session.contentscanner.ScanState
+import org.matrix.android.sdk.api.session.contentscanner.ScanStatusInfo
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.api.util.toOptional
 import org.matrix.android.sdk.internal.di.ContentScannerDatabase
 import org.matrix.android.sdk.internal.session.SessionScope
+import org.matrix.android.sdk.internal.session.contentscanner.data.ContentScannerStore
 import org.matrix.android.sdk.internal.util.isValidUrl
 import javax.inject.Inject
 
@@ -121,7 +121,8 @@ internal class RealmContentScannerStore @Inject constructor(
                     }
         }, {
             it.toModel()
-        }).firstOrNull()
+        })
+                .firstOrNull()
     }
 
     override fun getLiveScanResult(mxcUrl: String): LiveData<Optional<ScanStatusInfo>> {

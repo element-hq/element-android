@@ -24,7 +24,7 @@ enum class ScanState {
 }
 
 data class ScanStatusInfo(
-        val state : ScanState,
+        val state: ScanState,
         val scanDateTimestamp: Long?,
         val humanReadableMessage: String?
 )

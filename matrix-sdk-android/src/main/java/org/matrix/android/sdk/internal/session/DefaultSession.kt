@@ -278,7 +278,7 @@ internal class DefaultSession @Inject constructor(
     override fun cryptoService(): CryptoService = cryptoService.get()
 
     override fun contentScannerService(): ContentScannerService = contentScannerService.get()
-    
+
     override fun identityService() = identityService
 
     override fun fileService(): FileService = defaultFileService.get()
