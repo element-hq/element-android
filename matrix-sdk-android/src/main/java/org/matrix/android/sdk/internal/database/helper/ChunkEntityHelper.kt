@@ -191,3 +191,29 @@ internal fun ChunkEntity.nextDisplayIndex(direction: PaginationDirection): Int {
         }
     }
 }
+
+internal fun ChunkEntity.doesNextChunksVerifyCondition(linkCondition: (ChunkEntity) -> Boolean): Boolean {
+    var nextChunkToCheck = this.nextChunk
+    while (nextChunkToCheck != null) {
+        if (linkCondition(nextChunkToCheck)) {
+            return true
+        }
+        nextChunkToCheck = nextChunkToCheck.nextChunk
+    }
+    return false
+}
+
+internal fun ChunkEntity.isMoreRecentThan(chunkToCheck: ChunkEntity): Boolean {
+    if (this.isLastForward) return true
+    if (chunkToCheck.isLastForward) return false
+    // Check if the chunk to check is linked to this one
+    if(chunkToCheck.doesNextChunksVerifyCondition { it == this }){
+        return true
+    }
+    // Otherwise check if this chunk is linked to last forward
+    if(this.doesNextChunksVerifyCondition { it.isLastForward }){
+        return true
+    }
+    // We don't know, so we assume it's false
+    return false
+}

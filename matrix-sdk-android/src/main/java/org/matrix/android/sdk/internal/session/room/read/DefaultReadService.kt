@@ -39,7 +39,6 @@ import org.matrix.android.sdk.internal.task.TaskExecutor
 internal class DefaultReadService @AssistedInject constructor(
         @Assisted private val roomId: String,
         @SessionDatabase private val monarchy: Monarchy,
-        private val taskExecutor: TaskExecutor,
         private val setReadMarkersTask: SetReadMarkersTask,
         private val readReceiptsSummaryMapper: ReadReceiptsSummaryMapper,
         @UserId private val userId: String

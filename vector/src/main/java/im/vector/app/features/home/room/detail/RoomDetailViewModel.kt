@@ -794,7 +794,6 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private fun handleNavigateToEvent(action: RoomDetailAction.NavigateToEvent) {
-        stopTrackingUnreadMessages()
         val targetEventId: String = action.eventId
         val indexOfEvent = timeline.getIndexOfEvent(targetEventId)
         if (indexOfEvent == null) {
@@ -868,12 +867,12 @@ class RoomDetailViewModel @AssistedInject constructor(
                 .buffer(1, TimeUnit.SECONDS)
                 .filter { it.isNotEmpty() }
                 .subscribeBy(onNext = { actions ->
-                    val bufferedMostRecentDisplayedEvent = actions.maxByOrNull { it.event.displayIndex }?.event ?: return@subscribeBy
+                    val bufferedMostRecentDisplayedEvent = actions.minByOrNull { it.event.indexOfEvent() }?.event ?: return@subscribeBy
                     val globalMostRecentDisplayedEvent = mostRecentDisplayedEvent
                     if (trackUnreadMessages.get()) {
                         if (globalMostRecentDisplayedEvent == null) {
                             mostRecentDisplayedEvent = bufferedMostRecentDisplayedEvent
-                        } else if (bufferedMostRecentDisplayedEvent.displayIndex > globalMostRecentDisplayedEvent.displayIndex) {
+                        } else if (bufferedMostRecentDisplayedEvent.indexOfEvent() < globalMostRecentDisplayedEvent.indexOfEvent()) {
                             mostRecentDisplayedEvent = bufferedMostRecentDisplayedEvent
                         }
                     }
@@ -885,6 +884,12 @@ class RoomDetailViewModel @AssistedInject constructor(
                 })
                 .disposeOnClear()
     }
+
+    /**
+     * Returns the index of event in the timeline.
+     * Returns Int.MAX_VALUE if not found
+     */
+    private fun TimelineEvent.indexOfEvent(): Int = timeline.getIndexOfEvent(eventId) ?: Int.MAX_VALUE
 
     private fun handleMarkAllAsRead() {
         setState { copy(unreadState = UnreadState.HasNoUnread) }
