@@ -46,7 +46,7 @@ class ComposerEditText @JvmOverloads constructor(context: Context, attrs: Attrib
 
     override fun onCreateInputConnection(editorInfo: EditorInfo): InputConnection? {
         var ic = super.onCreateInputConnection(editorInfo) ?: return null
-        val mimeTypes = ViewCompat.getOnReceiveContentMimeTypes(this) ?: arrayOf("*/*")
+        val mimeTypes = ViewCompat.getOnReceiveContentMimeTypes(this) ?: arrayOf("image/*")
 
         EditorInfoCompat.setContentMimeTypes(editorInfo, mimeTypes)
         ic = InputConnectionCompat.createWrapper(this, ic, editorInfo)
