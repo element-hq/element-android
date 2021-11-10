@@ -38,6 +38,7 @@ import im.vector.app.features.home.room.detail.timeline.reactions.ViewReactionsB
 import im.vector.app.features.reactions.data.EmojiDataSource
 import im.vector.app.interactWithSheet
 import im.vector.app.waitForView
+import im.vector.app.withRetry
 import java.lang.Thread.sleep
 
 class RoomDetailRobot {
@@ -71,7 +72,7 @@ class RoomDetailRobot {
             addQuickReaction(quickReaction)
         }
         // Open reactions
-        longClickOn(quickReaction)
+        longClickReaction(quickReaction)
         // wait for bottom sheet
         interactWithSheet<ViewReactionsBottomSheet>(withText(R.string.reactions), openState = BottomSheetBehavior.STATE_COLLAPSED) {
             pressBack()
@@ -97,6 +98,12 @@ class RoomDetailRobot {
             editHistory()
         }
         waitUntilViewVisible(withId(R.id.composerEditText))
+    }
+
+    private fun longClickReaction(quickReaction: String) {
+        withRetry {
+            longClickOn(quickReaction)
+        }
     }
 
     fun openMessageMenu(message: String, block: MessageMenuRobot.() -> Unit) {
