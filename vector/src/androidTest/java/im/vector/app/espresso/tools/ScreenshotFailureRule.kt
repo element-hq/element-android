@@ -115,4 +115,3 @@ private fun saveScreenshotToStream(bitmap: Bitmap, outputStream: OutputStream) {
         }
     }
 }
-

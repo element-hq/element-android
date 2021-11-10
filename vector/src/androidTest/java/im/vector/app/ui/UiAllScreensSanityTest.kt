@@ -113,4 +113,3 @@ class UiAllScreensSanityTest {
         elementRobot.signout(expectSignOutWarning = false)
     }
 }
-

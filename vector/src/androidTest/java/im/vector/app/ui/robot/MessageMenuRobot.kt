@@ -18,7 +18,6 @@ package im.vector.app.ui.robot
 
 import androidx.test.espresso.Espresso.pressBack
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
-import com.adevinta.android.barista.interaction.BaristaListInteractions
 import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem
 import im.vector.app.R
 import java.lang.Thread.sleep
