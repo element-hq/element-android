@@ -56,7 +56,8 @@ class CreatePollController @Inject constructor(
             id("question")
             value(currentState.question)
             hint(host.stringProvider.getString(R.string.create_poll_question_hint))
-            singleLine(false)
+            singleLine(true)
+            imeOptions(EditorInfo.IME_ACTION_NEXT)
             maxLength(500)
             onTextChange {
                 host.callback?.onQuestionChanged(it)
