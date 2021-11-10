@@ -21,6 +21,12 @@ import im.vector.app.clickOnAndGoBack
 
 class SettingsRobot {
 
+    fun toggleDeveloperMode() {
+        advancedSettings {
+            toggleDeveloperMode()
+        }
+    }
+
     fun general(block: SettingsGeneralRobot.() -> Unit) {
         clickOnAndGoBack(R.string.settings_general_title) { block(SettingsGeneralRobot()) }
     }
@@ -50,7 +56,9 @@ class SettingsRobot {
     }
 
     fun advancedSettings(block: SettingsAdvancedRobot.() -> Unit) {
-        clickOnAndGoBack(R.string.settings_advanced_settings) { block(SettingsAdvancedRobot()) }
+        clickOnAndGoBack(R.string.settings_advanced_settings) {
+            block(SettingsAdvancedRobot())
+        }
     }
 
     fun helpAndAbout(block: SettingsHelpRobot.() -> Unit) {

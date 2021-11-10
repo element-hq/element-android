@@ -17,21 +17,24 @@
 package im.vector.app.ui.robot
 
 import androidx.recyclerview.widget.RecyclerView
-import androidx.test.espresso.Espresso
+import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.adevinta.android.barista.interaction.BaristaClickInteractions
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.longClickOn
 import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
-import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem
 import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.clickMenu
 import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu
 import im.vector.app.R
 import im.vector.app.espresso.tools.waitUntilViewVisible
+import im.vector.app.features.home.room.detail.timeline.action.MessageActionsBottomSheet
+import im.vector.app.features.reactions.data.EmojiDataSource
+import im.vector.app.interactWithSheet
 import im.vector.app.waitForView
 import java.lang.Thread.sleep
 
@@ -39,7 +42,9 @@ class RoomDetailRobot {
 
     fun postMessage(content: String) {
         writeTo(R.id.composerEditText, content)
+        waitUntilViewVisible(withId(R.id.sendButton))
         clickOn(R.id.sendButton)
+        waitUntilViewVisible(withText(content))
     }
 
     fun crawl() {
@@ -55,61 +60,54 @@ class RoomDetailRobot {
         pressBack()
         clickMenu(R.id.search)
         pressBack()
-        // Long click on the message
-        longClickOnMessageTest()
     }
 
-    private fun longClickOnMessageTest() {
+    fun crawlMessage(message: String) {
         // Test quick reaction
-        longClickOnMessage()
-        waitUntilViewVisible(withId(R.id.bottomSheetRecyclerView))
-        // Add quick reaction
-        clickOn("\uD83D\uDC4D️") // 👍
-        waitUntilViewVisible(withId(R.id.composerEditText))
-
+        val quickReaction = EmojiDataSource.quickEmojis[0] // 👍
+        openMessageMenu(message) {
+            addQuickReaction(quickReaction)
+        }
         // Open reactions
-        longClickOn("\uD83D\uDC4D️") // 👍
+        longClickOn(quickReaction)
         // wait for bottom sheet
         pressBack()
-
         // Test add reaction
-        longClickOnMessage()
-        waitUntilViewVisible(withId(R.id.bottomSheetRecyclerView))
-        clickOn(R.string.message_add_reaction)
-        // Filter
-        // TODO clickMenu(R.id.search)
-        // Wait for emoji to load, it's async now
-        sleep(2000)
-        clickListItem(R.id.emojiRecyclerView, 4)
-        waitUntilViewVisible(withId(R.id.composerEditText))
-
+        openMessageMenu(message) {
+            addReactionFromEmojiPicker()
+        }
         // Test Edit mode
-        longClickOnMessage()
-        waitUntilViewVisible(withId(R.id.bottomSheetRecyclerView))
-        clickOn(R.string.edit)
-        waitUntilViewVisible(withId(R.id.composerEditText))
+        openMessageMenu(message) {
+            edit()
+        }
         // TODO Cancel action
         writeTo(R.id.composerEditText, "Hello universe!")
         // Wait a bit for the keyboard layout to update
-        sleep(30)
+        waitUntilViewVisible(withId(R.id.sendButton))
         clickOn(R.id.sendButton)
         // Wait for the UI to update
-        sleep(1000)
+        waitUntilViewVisible(withText("Hello universe! (edited)"))
         // Open edit history
-        longClickOnMessage("Hello universe! (edited)")
-        waitUntilViewVisible(withId(R.id.bottomSheetRecyclerView))
-        clickOn(R.string.message_view_edit_history)
-        pressBack()
+        openMessageMenu("Hello universe! (edited)") {
+            editHistory()
+        }
     }
 
-    private fun longClickOnMessage(text: String = "Hello world!") {
-        Espresso.onView(withId(R.id.timelineRecyclerView))
+    fun openMessageMenu(message: String, block: MessageMenuRobot.() -> Unit) {
+        onView(withId(R.id.timelineRecyclerView))
                 .perform(
                         RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(
-                                ViewMatchers.hasDescendant(ViewMatchers.withText(text)),
+                                ViewMatchers.hasDescendant(ViewMatchers.withText(message)),
                                 ViewActions.longClick()
                         )
                 )
+        interactWithSheet<MessageActionsBottomSheet>(contentMatcher = withId(R.id.bottomSheetRecyclerView)) {
+            val messageMenuRobot = MessageMenuRobot()
+            block(messageMenuRobot)
+            if (!messageMenuRobot.autoClosed) {
+                pressBack()
+            }
+        }
     }
 
     fun openSettings(block: RoomSettingsRobot.() -> Unit) {
