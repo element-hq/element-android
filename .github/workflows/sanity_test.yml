@@ -56,7 +56,6 @@ jobs:
           java-version: '11'
       - name: Run sanity tests on API ${{ matrix.api-level }}
         uses: reactivecircus/android-emulator-runner@v2
-        continue-on-error: true # allow pipeline to upload failure results
         with:
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           api-level: ${{ matrix.api-level }}
