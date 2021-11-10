@@ -25,7 +25,6 @@ import android.provider.MediaStore
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import org.junit.rules.TestWatcher
 import org.junit.runner.Description
-import timber.log.Timber
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -38,8 +37,9 @@ private val SCREENSHOT_FOLDER_LOCATION = "${Environment.DIRECTORY_PICTURES}/fail
 private val deviceLanguage = Locale.getDefault().language
 
 class ScreenshotFailureRule : TestWatcher() {
+
     override fun failed(e: Throwable?, description: Description) {
-        Timber.e("Test Failed - Starting screenshot capture")
+        println("Test Failed - Starting screenshot capture")
         val screenShotName = "$deviceLanguage-${description.methodName}-${SimpleDateFormat("EEE-MMMM-dd-HH:mm:ss").format(Date())}"
         val bitmap = getInstrumentation().uiAutomation.takeScreenshot()
         storeFailureScreenshot(bitmap, screenShotName)
@@ -85,7 +85,7 @@ private fun useMediaStoreScreenshotStorage(
     contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, "$screenshotName.jpeg")
     contentValues.put(MediaStore.Images.Media.RELATIVE_PATH, screenshotLocation)
     val uri: Uri? = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
-    Timber.e("Writing screenshot to ${uri?.toString()}")
+    println("Writing screenshot to ${uri?.toString()}")
     if (uri != null) {
         contentResolver.openOutputStream(uri)?.let { saveScreenshotToStream(bitmap, it) }
         contentResolver.update(uri, contentValues, null, null)
@@ -104,7 +104,7 @@ private fun usePublicExternalScreenshotStorage(
         directory.mkdirs()
     }
     val file = File(directory, "$screenshotName.jpeg")
-    Timber.e("Writing screenshot to ${file.absolutePath}")
+    println("Writing screenshot to ${file.absolutePath}")
     saveScreenshotToStream(bitmap, FileOutputStream(file))
     contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
 }
@@ -114,7 +114,7 @@ private fun saveScreenshotToStream(bitmap: Bitmap, outputStream: OutputStream) {
         try {
             bitmap.compress(Bitmap.CompressFormat.JPEG, 50, it)
         } catch (e: IOException) {
-            Timber.e("Screenshot was not stored at this time")
+            println("Screenshot was not stored at this time")
         }
     }
 }
