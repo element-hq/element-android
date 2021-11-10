@@ -16,6 +16,7 @@
 
 package im.vector.app.core.platform
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.res.Configuration
@@ -403,7 +404,12 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
             // New API instead of SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN and SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
             window.setDecorFitsSystemWindows(false)
             // New API instead of SYSTEM_UI_FLAG_IMMERSIVE
-            window.decorView.windowInsetsController?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_BARS_BY_SWIPE
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                window.decorView.windowInsetsController?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_DEFAULT
+            } else {
+                @SuppressLint("WrongConstant")
+                window.decorView.windowInsetsController?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_BARS_BY_SWIPE
+            }
             // New API instead of FLAG_TRANSLUCENT_STATUS
             window.statusBarColor = ContextCompat.getColor(this, im.vector.lib.attachmentviewer.R.color.half_transparent_status_bar)
             // New API instead of FLAG_TRANSLUCENT_NAVIGATION
