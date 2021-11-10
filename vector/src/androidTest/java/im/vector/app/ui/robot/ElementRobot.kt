@@ -29,6 +29,7 @@ import im.vector.app.EspressoHelper
 import im.vector.app.R
 import im.vector.app.espresso.tools.waitUntilActivityVisible
 import im.vector.app.espresso.tools.waitUntilViewVisible
+import im.vector.app.espresso.tools.waitUntilDialogVisible
 import im.vector.app.features.createdirect.CreateDirectRoomActivity
 import im.vector.app.features.home.HomeActivity
 import im.vector.app.features.login.LoginActivity
@@ -111,10 +112,10 @@ class ElementRobot {
             // We have sent a message in a e2e room, accept to loose it
             clickOn(R.id.exitAnywayButton)
             // Dark pattern
-            waitUntilViewVisible(withId(android.R.id.button2))
+            waitUntilDialogVisible(withId(android.R.id.button2))
             clickDialogNegativeButton()
         } else {
-            waitUntilViewVisible(withId(android.R.id.button1))
+            waitUntilDialogVisible(withId(android.R.id.button1))
             clickDialogPositiveButton()
         }
 
