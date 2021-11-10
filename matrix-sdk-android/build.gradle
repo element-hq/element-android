@@ -44,6 +44,7 @@ android {
     }
 
     testOptions {
+        // Comment to run on Android 12
         execution 'ANDROIDX_TEST_ORCHESTRATOR'
     }
 

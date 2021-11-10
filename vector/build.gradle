@@ -210,6 +210,7 @@ android {
         // This property does not affect tests that you run using Android Studio.”
         animationsDisabled = true
 
+        // Comment to run on Android 12
         execution 'ANDROIDX_TEST_ORCHESTRATOR'
     }
 
