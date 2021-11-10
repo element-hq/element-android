@@ -73,7 +73,7 @@ class ContactPicker : Picker<MultiPickerContactType>() {
                                 selection,
                                 selectionArgs,
                                 null
-                        )?.use inner@ { innerCursor ->
+                        )?.use inner@{ innerCursor ->
                             val mimeTypeColumnIndex = innerCursor.getColumnIndexOrNull(ContactsContract.Data.MIMETYPE) ?: return@inner
                             val data1ColumnIndex = innerCursor.getColumnIndexOrNull(ContactsContract.Data.DATA1) ?: return@inner
 
