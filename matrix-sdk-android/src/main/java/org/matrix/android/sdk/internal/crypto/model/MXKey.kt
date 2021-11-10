@@ -40,6 +40,10 @@ data class MXKey(
          */
         private val signatures: Map<String, Map<String, String>>,
 
+        /**
+         * We have to store the original json because it can contain other fields
+         * that we don't support yet but they would be needed to check signatures
+         */
         private val rawMap: JsonDict
 ) {
 
