@@ -139,6 +139,7 @@ import im.vector.app.features.home.room.detail.composer.TextComposerViewEvents
 import im.vector.app.features.home.room.detail.composer.TextComposerViewModel
 import im.vector.app.features.home.room.detail.composer.TextComposerViewState
 import im.vector.app.features.home.room.detail.composer.voice.VoiceMessageRecorderView
+import im.vector.app.features.home.room.detail.composer.voice.VoiceMessageRecorderView.RecordingUiState
 import im.vector.app.features.home.room.detail.readreceipts.DisplayReadReceiptsBottomSheet
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.action.EventSharedAction
@@ -694,15 +695,15 @@ class RoomDetailFragment @Inject constructor(
     private fun setupVoiceMessageView() {
         voiceMessagePlaybackTracker.track(VoiceMessagePlaybackTracker.RECORDING_ID, views.voiceMessageRecorderView)
         views.voiceMessageRecorderView.callback = object : VoiceMessageRecorderView.Callback {
-            override fun onVoiceRecordingStarted(): Boolean {
-                return if (checkPermissions(PERMISSIONS_FOR_VOICE_MESSAGE, requireActivity(), permissionVoiceMessageLauncher)) {
+
+            private var currentUiState: RecordingUiState = RecordingUiState.None
+
+            override fun onVoiceRecordingStarted() {
+                if (checkPermissions(PERMISSIONS_FOR_VOICE_MESSAGE, requireActivity(), permissionVoiceMessageLauncher)) {
                     roomDetailViewModel.handle(RoomDetailAction.StartRecordingVoiceMessage)
                     textComposerViewModel.handle(TextComposerAction.OnVoiceRecordingStateChanged(true))
                     vibrate(requireContext())
-                    true
-                } else {
-                    // Permission dialog is displayed
-                    false
+                    views.voiceMessageRecorderView.display(RecordingUiState.Started)
                 }
             }
 
@@ -717,6 +718,29 @@ class RoomDetailFragment @Inject constructor(
 
             override fun onVoicePlaybackButtonClicked() {
                 roomDetailViewModel.handle(RoomDetailAction.PlayOrPauseRecordingPlayback)
+            }
+
+            override fun onRecordingStopped() {
+                if (currentUiState != RecordingUiState.Locked && currentUiState != RecordingUiState.None) {
+                    views.voiceMessageRecorderView.display(RecordingUiState.None)
+                }
+            }
+
+            override fun onUiStateChanged(state: RecordingUiState) {
+                currentUiState = state
+                views.voiceMessageRecorderView.display(state)
+            }
+
+            override fun sendVoiceMessage() {
+                views.voiceMessageRecorderView.display(RecordingUiState.None)
+            }
+
+            override fun deleteVoiceMessage() {
+                views.voiceMessageRecorderView.display(RecordingUiState.None)
+            }
+
+            override fun onRecordingLimitReached() {
+                views.voiceMessageRecorderView.display(RecordingUiState.Playback)
             }
         }
     }

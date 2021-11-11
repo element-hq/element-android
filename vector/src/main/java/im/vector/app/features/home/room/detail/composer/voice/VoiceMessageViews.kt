@@ -32,7 +32,7 @@ import im.vector.app.core.extensions.setAttributeTintedBackground
 import im.vector.app.core.extensions.setAttributeTintedImageResource
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.databinding.ViewVoiceMessageRecorderBinding
-import im.vector.app.features.home.room.detail.composer.voice.VoiceMessageRecorderView.RecordingState
+import im.vector.app.features.home.room.detail.composer.voice.VoiceMessageRecorderView.RecordingUiState
 import im.vector.app.features.home.room.detail.timeline.helper.VoiceMessagePlaybackTracker
 import org.matrix.android.sdk.api.extensions.orFalse
 
@@ -155,9 +155,9 @@ class VoiceMessageViews(
         views.voiceMessageSendButton.isVisible = false
     }
 
-    fun hideRecordingViews(recordingState: RecordingState, isCancelled: Boolean?, onVoiceRecordingEnded: (Boolean) -> Unit) {
+    fun hideRecordingViews(recordingState: RecordingUiState, isCancelled: Boolean?, onVoiceRecordingEnded: (Boolean) -> Unit) {
         // We need to animate the lock image first
-        if (recordingState != RecordingState.Locked || isCancelled.orFalse()) {
+        if (recordingState != RecordingUiState.Locked || isCancelled.orFalse()) {
             views.voiceMessageLockImage.isVisible = false
             views.voiceMessageLockImage.animate().translationY(0f).start()
             views.voiceMessageLockBackground.isVisible = false
@@ -171,7 +171,7 @@ class VoiceMessageViews(
         views.voiceMessageSlideToCancel.animate().translationX(0f).translationY(0f).start()
         views.voiceMessagePlaybackLayout.isVisible = false
 
-        if (recordingState != RecordingState.Locked) {
+        if (recordingState != RecordingUiState.Locked) {
             views.voiceMessageMicButton
                     .animate()
                     .scaleX(1f)
@@ -203,7 +203,7 @@ class VoiceMessageViews(
         }
 
         // Hide toasts if user cancelled recording before the timeout of the toast.
-        if (recordingState == RecordingState.Cancelled || recordingState == RecordingState.None) {
+        if (recordingState == RecordingUiState.Cancelled || recordingState == RecordingUiState.None) {
             hideToast()
         }
     }
@@ -266,7 +266,7 @@ class VoiceMessageViews(
         views.voiceMessageToast.isVisible = false
     }
 
-    fun showRecordingLockedViews(recordingState: RecordingState, onVoiceRecordingEnded: (Boolean) -> Unit) {
+    fun showRecordingLockedViews(recordingState: RecordingUiState, onVoiceRecordingEnded: (Boolean) -> Unit) {
         hideRecordingViews(recordingState, null, onVoiceRecordingEnded)
         views.voiceMessagePlaybackLayout.isVisible = true
         views.voiceMessagePlaybackTimerIndicator.isVisible = true
@@ -283,7 +283,7 @@ class VoiceMessageViews(
     }
 
     fun initViews(onVoiceRecordingEnded: (Boolean) -> Unit) {
-        hideRecordingViews(RecordingState.None, null, onVoiceRecordingEnded)
+        hideRecordingViews(RecordingUiState.None, null, onVoiceRecordingEnded)
         views.voiceMessageMicButton.isVisible = true
         views.voiceMessageSendButton.isVisible = false
         views.voicePlaybackWaveform.post { views.voicePlaybackWaveform.recreate() }
@@ -312,9 +312,9 @@ class VoiceMessageViews(
         views.voiceMessageToast.isVisible = false
     }
 
-    fun renderRecordingTimer(recordingState: RecordingState, recordingTimeMillis: Long) {
+    fun renderRecordingTimer(recordingState: RecordingUiState, recordingTimeMillis: Long) {
         val formattedTimerText = DateUtils.formatElapsedTime(recordingTimeMillis)
-        if (recordingState == RecordingState.Locked) {
+        if (recordingState == RecordingUiState.Locked) {
             views.voicePlaybackTime.apply {
                 post {
                     text = formattedTimerText
@@ -349,7 +349,7 @@ class VoiceMessageViews(
         fun onRequestRecording()
         fun onRecordingStopped()
         fun isActive(): Boolean
-        fun updateState(updater: (RecordingState) -> RecordingState)
+        fun updateState(updater: (RecordingUiState) -> RecordingUiState)
         fun sendMessage()
         fun delete()
         fun waveformClicked()

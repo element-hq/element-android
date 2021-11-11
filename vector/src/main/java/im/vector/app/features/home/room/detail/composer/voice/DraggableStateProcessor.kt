@@ -21,7 +21,7 @@ import android.view.MotionEvent
 import im.vector.app.R
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.features.home.room.detail.composer.voice.VoiceMessageRecorderView.DraggingState
-import im.vector.app.features.home.room.detail.composer.voice.VoiceMessageRecorderView.RecordingState
+import im.vector.app.features.home.room.detail.composer.voice.VoiceMessageRecorderView.RecordingUiState
 import kotlin.math.abs
 
 class DraggableStateProcessor(
@@ -50,7 +50,7 @@ class DraggableStateProcessor(
         lastDistanceY = 0F
     }
 
-    fun process(event: MotionEvent, recordingState: RecordingState): RecordingState {
+    fun process(event: MotionEvent, recordingState: RecordingUiState): RecordingUiState {
         val currentX = event.rawX
         val currentY = event.rawY
         val distanceX = abs(firstX - currentX)
@@ -63,9 +63,9 @@ class DraggableStateProcessor(
         }
     }
 
-    private fun nextRecordingState(recordingState: RecordingState, currentX: Float, currentY: Float, distanceX: Float, distanceY: Float): RecordingState {
+    private fun nextRecordingState(recordingState: RecordingUiState, currentX: Float, currentY: Float, distanceX: Float, distanceY: Float): RecordingUiState {
         return when (recordingState) {
-            RecordingState.Started      -> {
+            RecordingUiState.Started    -> {
                 // Determine if cancelling or locking for the first move action.
                 if (((currentX < firstX && rtlXMultiplier == 1) || (currentX > firstX && rtlXMultiplier == -1)) && distanceX > distanceY && distanceX > lastDistanceX) {
                     DraggingState.Cancelling(distanceX)
@@ -78,9 +78,9 @@ class DraggableStateProcessor(
             is DraggingState.Cancelling -> {
                 // Check if cancelling conditions met, also check if it should be initial state
                 if (distanceX < minimumMove && distanceX < lastDistanceX) {
-                    RecordingState.Started
+                    RecordingUiState.Started
                 } else if (shouldCancelRecording(distanceX)) {
-                    RecordingState.Cancelled
+                    RecordingUiState.Cancelled
                 } else {
                     DraggingState.Cancelling(distanceX)
                 }
@@ -88,9 +88,9 @@ class DraggableStateProcessor(
             is DraggingState.Locking    -> {
                 // Check if locking conditions met, also check if it should be initial state
                 if (distanceY < minimumMove && distanceY < lastDistanceY) {
-                    RecordingState.Started
+                    RecordingUiState.Started
                 } else if (shouldLockRecording(distanceY)) {
-                    RecordingState.Locked
+                    RecordingUiState.Locked
                 } else {
                     DraggingState.Locking(distanceY)
                 }
