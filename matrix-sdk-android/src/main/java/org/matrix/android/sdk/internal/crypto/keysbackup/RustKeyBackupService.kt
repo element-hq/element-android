@@ -120,7 +120,7 @@ internal class RustKeyBackupService @Inject constructor(
             runCatching {
                 withContext(coroutineDispatchers.crypto) {
                     val key = if (password != null) {
-                        BackupRecoveryKey.fromPassphrase(password)
+                        BackupRecoveryKey.newFromPassphrase(password)
                     } else {
                         BackupRecoveryKey()
                     }
@@ -397,9 +397,15 @@ internal class RustKeyBackupService @Inject constructor(
                                                       callback: MatrixCallback<Unit>) {
         cryptoCoroutineScope.launch {
             try {
-                val key = BackupRecoveryKey.fromPassphrase(password)
-                checkRecoveryKey(key, keysBackupVersion)
-                trustKeysBackupVersion(keysBackupVersion, true, callback)
+                val key = recoveryKeyFromPassword(password, keysBackupVersion)
+
+                if (key == null) {
+                    Timber.w("trustKeysBackupVersionWithPassphrase: Key backup is missing required data")
+                    callback.onFailure(IllegalArgumentException("Missing element"))
+                } else {
+                    checkRecoveryKey(key, keysBackupVersion)
+                    trustKeysBackupVersion(keysBackupVersion, true, callback)
+                }
             } catch (exception: Throwable) {
                 callback.onFailure(exception)
             }
@@ -589,7 +595,15 @@ internal class RustKeyBackupService @Inject constructor(
         cryptoCoroutineScope.launch(coroutineDispatchers.main) {
             runCatching {
                 val recoveryKey = withContext(coroutineDispatchers.crypto) {
-                    BackupRecoveryKey.fromPassphrase(password)
+                    val key = recoveryKeyFromPassword(password, keysBackupVersion)
+
+                    if (key == null) {
+                        Timber.w("trustKeysBackupVersionWithPassphrase: Key backup is missing required data")
+
+                        throw IllegalArgumentException("Missing element")
+                    } else {
+                        key
+                    }
                 }
 
                 restoreBackup(keysBackupVersion, recoveryKey, roomId, sessionId, stepProgressListener)
@@ -747,6 +761,33 @@ internal class RustKeyBackupService @Inject constructor(
     override fun getKeyBackupRecoveryKeyInfo(): SavedKeyBackupKeyInfo? {
         val info = olmMachine.getBackupKeys() ?: return null
         return SavedKeyBackupKeyInfo(info.recoveryKey, info.backupVersion)
+    }
+
+    /**
+     * Compute the recovery key from a password and key backup version.
+     *
+     * @param password the password.
+     * @param keysBackupData the backup and its auth data.
+     *
+     * @return the recovery key if successful, null in other cases
+     */
+    @WorkerThread
+    private fun recoveryKeyFromPassword(password: String, keysBackupData: KeysVersionResult): BackupRecoveryKey? {
+        val authData = getMegolmBackupAuthData(keysBackupData)
+
+        if (authData == null) {
+            Timber.w("recoveryKeyFromPassword: invalid parameter")
+            return null
+        }
+
+        if (authData.privateKeySalt.isNullOrBlank()
+                || authData.privateKeyIterations == null) {
+            Timber.w("recoveryKeyFromPassword: Salt and/or iterations not found in key backup auth data")
+
+            return null
+        }
+
+        return BackupRecoveryKey.fromPassphrase(password, authData.privateKeySalt, authData.privateKeyIterations)
     }
 
     /**

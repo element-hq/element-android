@@ -5,47 +5,48 @@ use sha2::Sha512;
 use std::{collections::HashMap, iter};
 use thiserror::Error;
 
-use matrix_sdk_crypto::backups::{RecoveryKey, OlmPkDecryptionError};
+use matrix_sdk_crypto::backups::{OlmPkDecryptionError, RecoveryKey};
 
-/// TODO
+/// The private part of the backup key, the one used for recovery.
 pub struct BackupRecoveryKey {
     pub(crate) inner: RecoveryKey,
     passphrase_info: Option<PassphraseInfo>,
 }
 
-/// TODO
+/// Error type for the decryption of backed up room keys.
 #[derive(Debug, Error)]
 pub enum PkDecryptionError {
-    /// TODO
+    /// An internal libolm error happened during decryption.
     #[error("Error decryption a PkMessage {0}")]
     Olm(#[from] OlmPkDecryptionError),
 }
 
-/// TODO
+/// Struct containing info about the way the backup key got derived from a
+/// passphrase.
 #[derive(Debug, Clone)]
 pub struct PassphraseInfo {
-    /// TODO
+    /// The salt that was used during key derivation.
     pub private_key_salt: String,
-    /// TODO
+    /// The number of PBKDF rounds that were used for key derivation.
     pub private_key_iterations: i32,
 }
 
-/// TODO
+/// The public part of the backup key.
 pub struct BackupKey {
-    /// TODO
+    /// The actuall base64 encoded public key.
     pub public_key: String,
-    /// TODO
+    /// Signatures that have signed our backup key.
     pub signatures: HashMap<String, HashMap<String, String>>,
-    /// TODO
+    /// The passphrase info, if the key was derived from one.
     pub passphrase_info: Option<PassphraseInfo>,
 }
 
 impl BackupRecoveryKey {
     const KEY_SIZE: usize = 32;
     const SALT_SIZE: usize = 32;
-    const PBKDF_ROUNDS: u32 = 500_000;
+    const PBKDF_ROUNDS: i32 = 500_000;
 
-    /// TODO
+    /// Create a new random [`BackupRecoveryKey`].
     pub fn new() -> Self {
         Self {
             inner: RecoveryKey::new()
@@ -54,26 +55,26 @@ impl BackupRecoveryKey {
         }
     }
 
-    /// TODO
+    /// Try to create a [`BackupRecoveryKey`] from a base 64 encoded string.
     pub fn from_base64(key: String) -> Self {
         Self {
+            // TODO remove the unwrap
             inner: RecoveryKey::from_base64(&key).unwrap(),
             passphrase_info: None,
         }
     }
 
-    /// TODO
+    /// Try to create a [`BackupRecoveryKey`] from a base 58 encoded string.
     pub fn from_base58(key: String) -> Self {
         Self {
+            // TODO remove the unwrap
             inner: RecoveryKey::from_base58(&key).unwrap(),
             passphrase_info: None,
         }
     }
 
-    /// TODO
-    pub fn from_passphrase(passphrase: String) -> Self {
-        let mut key = [0u8; Self::KEY_SIZE];
-
+    /// Create a new [`BackupRecoveryKey`] from the given passphrase.
+    pub fn new_from_passphrase(passphrase: String) -> Self {
         let mut rng = thread_rng();
         let salt: String = iter::repeat(())
             .map(|()| rng.sample(Alphanumeric))
@@ -81,10 +82,18 @@ impl BackupRecoveryKey {
             .take(Self::SALT_SIZE)
             .collect();
 
+        Self::from_passphrase(passphrase, salt, Self::PBKDF_ROUNDS)
+    }
+
+    /// Restore a [`BackupRecoveryKey`] from the given passphrase.
+    pub fn from_passphrase(passphrase: String, salt: String, rounds: i32) -> Self {
+        let mut key = [0u8; Self::KEY_SIZE];
+        let rounds = rounds as u32;
+
         pbkdf2::<Hmac<Sha512>>(
             passphrase.as_bytes(),
             salt.as_bytes(),
-            Self::PBKDF_ROUNDS,
+            rounds,
             &mut key,
         );
 
@@ -92,12 +101,12 @@ impl BackupRecoveryKey {
             inner: RecoveryKey::from_bytes(key),
             passphrase_info: Some(PassphraseInfo {
                 private_key_salt: salt,
-                private_key_iterations: Self::PBKDF_ROUNDS as i32,
+                private_key_iterations: rounds as i32,
             }),
         }
     }
 
-    /// TODO
+    /// Get the public part of the backup key.
     pub fn public_key(&self) -> BackupKey {
         let public_key = self.inner.public_key();
 
@@ -113,22 +122,24 @@ impl BackupRecoveryKey {
             .collect();
 
         BackupKey {
-            public_key: public_key.encoded_key(),
+            public_key: public_key.to_base64(),
             signatures,
             passphrase_info: self.passphrase_info.clone(),
         }
     }
 
-    /// TODO
+    /// Convert the recovery key to a base 58 encoded string.
     pub fn to_base58(&self) -> String {
         self.inner.to_base58()
     }
 
-    /// TODO
+    /// Convert the recovery key to a base 64 encoded string.
     pub fn to_base64(&self) -> String {
         self.inner.to_base64()
     }
 
+    /// Try to decrypt a message that was encrypted using the public part of the
+    /// backup key.
     pub fn decrypt(
         &self,
         ephemeral_key: String,

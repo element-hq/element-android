@@ -400,7 +400,9 @@ interface BackupRecoveryKey {
     [Name=from_base64]
     constructor(string key);
     [Name=from_passphrase]
-    constructor(string key);
+    constructor(string passphrase, string salt, i32 rounds);
+    [Name=new_from_passphrase]
+    constructor(string passphrase);
     [Name=from_base58]
     constructor(string key);
     string to_base58();
