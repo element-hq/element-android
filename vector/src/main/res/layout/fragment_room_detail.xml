@@ -212,7 +212,7 @@
         app:layout_constraintStart_toStartOf="parent"
         tools:visibility="visible" />
 
-    <im.vector.app.features.home.room.detail.composer.VoiceMessageRecorderView
+    <im.vector.app.features.home.room.detail.composer.voice.VoiceMessageRecorderView
         android:id="@+id/voiceMessageRecorderView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

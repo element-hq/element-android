@@ -138,7 +138,7 @@ import im.vector.app.features.home.room.detail.composer.TextComposerView
 import im.vector.app.features.home.room.detail.composer.TextComposerViewEvents
 import im.vector.app.features.home.room.detail.composer.TextComposerViewModel
 import im.vector.app.features.home.room.detail.composer.TextComposerViewState
-import im.vector.app.features.home.room.detail.composer.VoiceMessageRecorderView
+import im.vector.app.features.home.room.detail.composer.voice.VoiceMessageRecorderView
 import im.vector.app.features.home.room.detail.readreceipts.DisplayReadReceiptsBottomSheet
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.action.EventSharedAction
@@ -692,8 +692,7 @@ class RoomDetailFragment @Inject constructor(
     }
 
     private fun setupVoiceMessageView() {
-        views.voiceMessageRecorderView.voiceMessagePlaybackTracker = voiceMessagePlaybackTracker
-
+        voiceMessagePlaybackTracker.track(VoiceMessagePlaybackTracker.RECORDING_ID, views.voiceMessageRecorderView)
         views.voiceMessageRecorderView.callback = object : VoiceMessageRecorderView.Callback {
             override fun onVoiceRecordingStarted(): Boolean {
                 return if (checkPermissions(PERMISSIONS_FOR_VOICE_MESSAGE, requireActivity(), permissionVoiceMessageLauncher)) {
