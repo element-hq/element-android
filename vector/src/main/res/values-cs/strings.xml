@@ -1952,15 +1952,15 @@
     <string name="verification_code_notice">Porovnejte kód s tím na obrazovce druhého uživatele.</string>
     <string name="verification_conclusion_ok_notice">Zprávy s tímto uživatelem jsou koncově šifrovány a nemohou být čteny třetími stranami.</string>
     <string name="verification_conclusion_ok_self_notice">Vaše nová relace je nyní ověřena. Má přístup k Vašim zašifrovaným zprávám a ostatní uživatelé ji uvidi jako důvěryhodnou.</string>
-    <string name="encryption_information_cross_signing_state">Křížový podpis</string>
-    <string name="encryption_information_dg_xsigning_complete">Křížový podpis je zapnut.
+    <string name="encryption_information_cross_signing_state">Křížové podepisování</string>
+    <string name="encryption_information_dg_xsigning_complete">Křížové podpisování je zapnuto.
 \nPrivátní klíče v zařízení.</string>
-    <string name="encryption_information_dg_xsigning_trusted">Křížový podpis je zapnut
+    <string name="encryption_information_dg_xsigning_trusted">Křížové podpisování je zapnuto
 \nKlíče jsou důvěryhodné.
 \nPrivátní klíče nejsou známy</string>
-    <string name="encryption_information_dg_xsigning_not_trusted">Křížový podpis je zapnut.
+    <string name="encryption_information_dg_xsigning_not_trusted">Křížové podpisování je zapnuto.
 \nKlíče nejsou důvěryhodné</string>
-    <string name="encryption_information_dg_xsigning_disabled">Křížový podpis není zapnut</string>
+    <string name="encryption_information_dg_xsigning_disabled">Křížové podpisování není zapnuto</string>
     <string name="settings_active_sessions_list">Aktivní relace</string>
     <string name="settings_active_sessions_show_all">Ukázat všechny relace</string>
     <string name="settings_active_sessions_manage">Správa relací</string>
@@ -2007,7 +2007,7 @@
         <item quantity="other">%d hlasů - Konečné výsledky</item>
     </plurals>
     <string name="poll_item_selected_aria">Zvolená možnost</string>
-    <string name="command_description_poll">Založí jednoduchou anketu</string>
+    <string name="command_description_poll">Vytvoří jednoduché hlasování</string>
     <string name="verification_cannot_access_other_session">Použijte metodu obnovy</string>
     <string name="verification_use_passphrase">Pokud se nemůžete dostat do existující relace</string>
     <string name="new_signin">Nové přihlášení</string>
@@ -2150,12 +2150,12 @@
     <string name="login_signin_matrix_id_error_invalid_matrix_id">To není platný identifikátor uživatele. Platný formát: \'@uživatel:homeserver.org\'</string>
     <string name="autodiscover_well_known_error">Nemohu najít platný domovský server. Prosím, zkontrolujte svůj identifikátor</string>
     <string name="no_connectivity_to_the_server_indicator_airplane">Režim letadlo je zapnut</string>
-    <string name="template_use_other_session_content_description">Použijte na svých zařízeních nejnovější ${app_name}, ${app_name} Web, ${app_name} Desktop, ${app_name} iOS, ${app_name} pro Android nebo jiný Matrix klient schopný křížového přihlášení</string>
+    <string name="template_use_other_session_content_description">Použijte na svých zařízeních nejnovější ${app_name}, ${app_name} Web, ${app_name} Desktop, ${app_name} iOS, ${app_name} pro Android nebo jiný Matrix klient schopný křížového podepisování</string>
     <string name="template_app_desktop_web">${app_name} Web
 \n${app_name} Desktop</string>
     <string name="template_app_ios_android">${app_name} iOS
 \n${app_name} Android</string>
-    <string name="or_other_mx_capabale_client">nebo jiný Matrix klient schopný křížového přihlášení</string>
+    <string name="or_other_mx_capabale_client">nebo jiný Matrix klient schopný křížového podepisování</string>
     <string name="template_use_latest_app">Použijte na svých zařízeních nejnovější ${app_name}:</string>
     <string name="command_description_discard_session">Vynutí zahození probíhající skupinové relace v šifrované místnosti</string>
     <string name="command_description_discard_session_not_handled">Podporováno jen v šifrovaných místnostech</string>
@@ -2416,7 +2416,7 @@
     </plurals>
     <string name="settings_show_room_member_state_events">Zobrazit stavové události účastníků v místnosti</string>
     <string name="settings_show_room_member_state_events_summary">Zahrnuje události pozvat/vstoupit/opustit/vykopnout/vykázat a změny avatara/veřejného jména.</string>
-    <string name="sent_a_poll">Průzkum</string>
+    <string name="sent_a_poll">Hlasování</string>
     <string name="sent_a_bot_buttons">Tlačítka botů</string>
     <string name="sent_a_reaction">Reagoval(a): %s</string>
     <string name="sent_verification_conclusion">Výsledek ověření</string>
