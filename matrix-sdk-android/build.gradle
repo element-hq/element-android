@@ -156,7 +156,7 @@ dependencies {
     implementation libs.apache.commonsImaging
 
     // Phone number https://github.com/google/libphonenumber
-    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.36'
+    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.37'
 
     testImplementation libs.tests.junit
     testImplementation 'org.robolectric:robolectric:4.6.1'
