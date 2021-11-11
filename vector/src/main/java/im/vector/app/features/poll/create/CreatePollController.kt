@@ -52,12 +52,14 @@ class CreatePollController @Inject constructor(
             title(host.stringProvider.getString(R.string.create_poll_question_title))
         }
 
+        val questionImeAction = if (currentState.options.isEmpty()) EditorInfo.IME_ACTION_DONE else EditorInfo.IME_ACTION_NEXT
+
         formEditTextItem {
             id("question")
             value(currentState.question)
             hint(host.stringProvider.getString(R.string.create_poll_question_hint))
             singleLine(true)
-            imeOptions(EditorInfo.IME_ACTION_NEXT)
+            imeOptions(questionImeAction)
             maxLength(500)
             onTextChange {
                 host.callback?.onQuestionChanged(it)
