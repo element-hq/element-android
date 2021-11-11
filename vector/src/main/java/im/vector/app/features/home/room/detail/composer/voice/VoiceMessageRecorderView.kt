@@ -41,7 +41,6 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
 
     interface Callback {
         fun onVoiceRecordingStarted()
-        fun onVoiceRecordingEnded(isCancelled: Boolean)
         fun onVoiceRecordingPlaybackModeOn()
         fun onVoicePlaybackButtonClicked()
         fun onRecordingStopped()
@@ -59,6 +58,7 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
     lateinit var callback: Callback
 
     private var recordingTicker: CountUpTimer? = null
+    private var lastKnownState: RecordingUiState? = null
 
     init {
         inflate(this.context, R.layout.view_voice_message_recorder, this)
@@ -92,8 +92,11 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
             override fun isActive() = callback.currentState() != RecordingUiState.Cancelled
 
             override fun updateState(updater: (RecordingUiState) -> RecordingUiState) {
-                updater(callback.currentState()).also { newState ->
-                    callback.onUiStateChanged(newState)
+                updater(lastKnownState ?: RecordingUiState.None).also { newState ->
+                    when (newState) {
+                        is DraggingState -> display(newState)
+                        else             -> callback.onUiStateChanged(newState)
+                    }
                 }
             }
 
@@ -102,7 +105,6 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
             }
 
             override fun delete() {
-                // this was previously marked as cancelled true
                 callback.deleteVoiceMessage()
             }
 
@@ -117,11 +119,12 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
     }
 
     fun display(recordingState: RecordingUiState) {
+        if (lastKnownState == recordingState) return
+        lastKnownState = recordingState
         when (recordingState) {
             RecordingUiState.None      -> {
                 stopRecordingTicker()
                 voiceMessageViews.initViews()
-                callback.onVoiceRecordingEnded(false)
             }
             RecordingUiState.Started   -> {
                 startRecordingTicker()
@@ -130,13 +133,15 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
             }
             RecordingUiState.Cancelled -> {
                 stopRecordingTicker()
-                voiceMessageViews.hideRecordingViews(recordingState, isCancelled = true) { callback.onVoiceRecordingEnded(it) }
+                voiceMessageViews.hideRecordingViews(recordingState, isCancelled = true) { callback.deleteVoiceMessage() }
                 vibrate(context)
             }
             RecordingUiState.Locked    -> {
                 voiceMessageViews.renderLocked()
                 postDelayed({
-                    voiceMessageViews.showRecordingLockedViews(recordingState) { callback.onVoiceRecordingEnded(it) }
+                    voiceMessageViews.showRecordingLockedViews(recordingState) {
+                        // do nothing
+                    }
                 }, 500)
             }
             RecordingUiState.Playback  -> {

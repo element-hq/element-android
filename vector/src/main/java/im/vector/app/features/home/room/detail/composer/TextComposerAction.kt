@@ -17,6 +17,7 @@
 package im.vector.app.features.home.room.detail.composer
 
 import im.vector.app.core.platform.VectorViewModelAction
+import im.vector.app.features.home.room.detail.composer.voice.VoiceMessageRecorderView
 
 sealed class TextComposerAction : VectorViewModelAction {
     data class SaveDraft(val draft: String) : TextComposerAction()
@@ -27,5 +28,5 @@ sealed class TextComposerAction : VectorViewModelAction {
     data class EnterRegularMode(val text: String, val fromSharing: Boolean) : TextComposerAction()
     data class UserIsTyping(val isTyping: Boolean) : TextComposerAction()
     data class OnTextChanged(val text: CharSequence) : TextComposerAction()
-    data class OnVoiceRecordingStateChanged(val isRecording: Boolean) : TextComposerAction()
+    data class OnVoiceRecordingUiStateChanged(val uiState: VoiceMessageRecorderView.RecordingUiState) : TextComposerAction()
 }

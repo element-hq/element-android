@@ -77,12 +77,10 @@ class DraggableStateProcessor(
             }
             is DraggingState.Cancelling -> {
                 // Check if cancelling conditions met, also check if it should be initial state
-                if (distanceX < minimumMove && distanceX < lastDistanceX) {
-                    RecordingUiState.Started
-                } else if (shouldCancelRecording(distanceX)) {
-                    RecordingUiState.Cancelled
-                } else {
-                    DraggingState.Cancelling(distanceX)
+                when {
+                    distanceX < minimumMove && distanceX < lastDistanceX -> RecordingUiState.Started
+                    shouldCancelRecording(distanceX)                     -> RecordingUiState.Cancelled
+                    else                                                 -> DraggingState.Cancelling(distanceX)
                 }
             }
             is DraggingState.Locking    -> {

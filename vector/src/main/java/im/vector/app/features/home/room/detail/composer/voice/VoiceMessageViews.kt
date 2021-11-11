@@ -19,6 +19,7 @@ package im.vector.app.features.home.room.detail.composer.voice
 import android.annotation.SuppressLint
 import android.content.res.Resources
 import android.text.format.DateUtils
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
@@ -73,6 +74,7 @@ class VoiceMessageViews(
         views.voiceMessageMicButton.setOnTouchListener { _, event ->
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
+                    Log.e("!!!", "event down: $event")
                     positions.reset(event)
                     actions.onRequestRecording()
                     true

@@ -696,24 +696,12 @@ class RoomDetailFragment @Inject constructor(
         voiceMessagePlaybackTracker.track(VoiceMessagePlaybackTracker.RECORDING_ID, views.voiceMessageRecorderView)
         views.voiceMessageRecorderView.callback = object : VoiceMessageRecorderView.Callback {
 
-            private var currentUiState: RecordingUiState = RecordingUiState.None
-
-            init {
-                display(currentUiState)
-            }
-
             override fun onVoiceRecordingStarted() {
                 if (checkPermissions(PERMISSIONS_FOR_VOICE_MESSAGE, requireActivity(), permissionVoiceMessageLauncher)) {
                     roomDetailViewModel.handle(RoomDetailAction.StartRecordingVoiceMessage)
-                    textComposerViewModel.handle(TextComposerAction.OnVoiceRecordingStateChanged(true))
                     vibrate(requireContext())
                     display(RecordingUiState.Started)
                 }
-            }
-
-            override fun onVoiceRecordingEnded(isCancelled: Boolean) {
-                roomDetailViewModel.handle(RoomDetailAction.EndRecordingVoiceMessage(isCancelled))
-                textComposerViewModel.handle(TextComposerAction.OnVoiceRecordingStateChanged(false))
             }
 
             override fun onVoiceRecordingPlaybackModeOn() {
@@ -725,7 +713,8 @@ class RoomDetailFragment @Inject constructor(
             }
 
             override fun onRecordingStopped() {
-                if (currentUiState != RecordingUiState.Locked) {
+                roomDetailViewModel.handle(RoomDetailAction.EndRecordingVoiceMessage(isCancelled = true))
+                if (currentState() != RecordingUiState.Locked) {
                     display(RecordingUiState.None)
                 }
             }
@@ -739,6 +728,7 @@ class RoomDetailFragment @Inject constructor(
             }
 
             override fun deleteVoiceMessage() {
+                roomDetailViewModel.handle(RoomDetailAction.EndRecordingVoiceMessage(isCancelled = true))
                 display(RecordingUiState.Cancelled)
             }
 
@@ -751,13 +741,10 @@ class RoomDetailFragment @Inject constructor(
             }
 
             private fun display(state: RecordingUiState) {
-                if (currentUiState != state) {
-                    views.voiceMessageRecorderView.display(state)
-                }
-                currentUiState = state
+                textComposerViewModel.handle(TextComposerAction.OnVoiceRecordingUiStateChanged(state))
             }
 
-            override fun currentState() = currentUiState
+            override fun currentState() = withState(textComposerViewModel) { it.voiceRecordingUiState }
         }
     }
 
@@ -1444,6 +1431,7 @@ class RoomDetailFragment @Inject constructor(
                 views.composerLayout.isInvisible = !textComposerState.isComposerVisible
                 views.voiceMessageRecorderView.isVisible = textComposerState.isVoiceMessageRecorderVisible
                 views.composerLayout.views.sendButton.isInvisible = !textComposerState.isSendButtonVisible
+                views.voiceMessageRecorderView.display(textComposerState.voiceRecordingUiState)
                 views.composerLayout.setRoomEncrypted(summary.isEncrypted)
                 // views.composerLayout.alwaysShowSendButton = false
                 if (textComposerState.canSendMessage) {
