@@ -30,9 +30,11 @@ import com.adevinta.android.barista.interaction.BaristaClickInteractions.longCli
 import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
 import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.clickMenu
 import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import im.vector.app.R
 import im.vector.app.espresso.tools.waitUntilViewVisible
 import im.vector.app.features.home.room.detail.timeline.action.MessageActionsBottomSheet
+import im.vector.app.features.home.room.detail.timeline.reactions.ViewReactionsBottomSheet
 import im.vector.app.features.reactions.data.EmojiDataSource
 import im.vector.app.interactWithSheet
 import im.vector.app.waitForView
@@ -72,7 +74,9 @@ class RoomDetailRobot {
         // Open reactions
         longClickReaction(quickReaction)
         // wait for bottom sheet
-        pressBack()
+        interactWithSheet<ViewReactionsBottomSheet>(withText(R.string.reactions), openState = BottomSheetBehavior.STATE_COLLAPSED) {
+            pressBack()
+        }
         // Test add reaction
         openMessageMenu(message) {
             addReactionFromEmojiPicker()
@@ -82,16 +86,18 @@ class RoomDetailRobot {
             edit()
         }
         // TODO Cancel action
-        writeTo(R.id.composerEditText, "Hello universe!")
+        val edit = "Hello universe - long message to avoid espresso tapping edited!"
+        writeTo(R.id.composerEditText, edit)
         // Wait a bit for the keyboard layout to update
         waitUntilViewVisible(withId(R.id.sendButton))
         clickOn(R.id.sendButton)
         // Wait for the UI to update
-        waitUntilViewVisible(withText("Hello universe! (edited)"))
+        waitUntilViewVisible(withText("$edit (edited)"))
         // Open edit history
-        openMessageMenu("Hello universe! (edited)") {
+        openMessageMenu("$edit (edited)") {
             editHistory()
         }
+        waitUntilViewVisible(withId(R.id.composerEditText))
     }
 
     private fun longClickReaction(quickReaction: String) {
@@ -118,7 +124,7 @@ class RoomDetailRobot {
     }
 
     fun openSettings(block: RoomSettingsRobot.() -> Unit) {
-        clickOn(R.id.roomToolbarTitleView)
+        clickMenu(R.id.timeline_setting)
         waitForView(withId(R.id.roomProfileAvatarView))
         sleep(1000)
         block(RoomSettingsRobot())
