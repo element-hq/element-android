@@ -78,7 +78,7 @@ class RoomSettingsRobot {
 
         // Room permissions
         clickListItem(R.id.matrixProfileRecyclerView, 17)
-        waitUntilViewVisible(withText(R.string.room_permissions_title))
+        waitUntilViewVisible(withText(R.string.room_permissions_change_room_avatar))
         clickOn(R.string.room_permissions_change_room_avatar)
         waitUntilViewVisible(withId(android.R.id.button2))
         clickDialogNegativeButton()
