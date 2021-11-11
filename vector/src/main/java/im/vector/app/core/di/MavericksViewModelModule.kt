@@ -26,7 +26,6 @@ import im.vector.app.features.call.conference.JitsiCallViewModel
 import im.vector.app.features.call.transfer.CallTransferViewModel
 import im.vector.app.features.contactsbook.ContactsBookViewModel
 import im.vector.app.features.createdirect.CreateDirectRoomViewModel
-import im.vector.app.features.poll.create.CreatePollViewModel
 import im.vector.app.features.crypto.keysbackup.settings.KeysBackupSettingsViewModel
 import im.vector.app.features.crypto.quads.SharedSecureStorageViewModel
 import im.vector.app.features.crypto.recover.BootstrapSharedViewModel
@@ -55,6 +54,7 @@ import im.vector.app.features.login.LoginViewModel
 import im.vector.app.features.login2.LoginViewModel2
 import im.vector.app.features.login2.created.AccountCreatedViewModel
 import im.vector.app.features.matrixto.MatrixToBottomSheetViewModel
+import im.vector.app.features.poll.create.CreatePollViewModel
 import im.vector.app.features.rageshake.BugReportViewModel
 import im.vector.app.features.reactions.EmojiSearchResultViewModel
 import im.vector.app.features.room.RequireActiveMembershipViewModel

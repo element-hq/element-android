@@ -71,7 +71,7 @@ class CreatePollController @Inject constructor(
         }
 
         currentState.options.forEachIndexed { index, option ->
-            val imeOptions = if (index == currentState.options.size -1) EditorInfo.IME_ACTION_DONE else EditorInfo.IME_ACTION_NEXT
+            val imeOptions = if (index == currentState.options.size - 1) EditorInfo.IME_ACTION_DONE else EditorInfo.IME_ACTION_NEXT
             formEditTextWithDeleteItem {
                 id("option_$index")
                 value(option)

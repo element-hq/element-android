@@ -30,4 +30,3 @@ data class CreatePollViewState(
             roomId = args.roomId
     )
 }
-
