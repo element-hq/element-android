@@ -50,7 +50,7 @@ class CreatePollFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
         vectorBaseActivity.setSupportActionBar(views.createPollToolbar)
 
-        views.createPollRecyclerView.configureWith(controller)
+        views.createPollRecyclerView.configureWith(controller, disableItemAnimation = true)
         controller.callback = this
 
         views.createPollClose.debouncedClicks {
@@ -92,6 +92,12 @@ class CreatePollFragment @Inject constructor(
 
     override fun onAddOption() {
         viewModel.handle(CreatePollAction.OnAddOption)
+        // Scroll to bottom to show "Add Option" button
+        views.createPollRecyclerView.apply {
+            postDelayed({
+                smoothScrollToPosition(adapter?.itemCount?.minus(1) ?: 0)
+            }, 100)
+        }
     }
 
     private fun handleSuccess() {

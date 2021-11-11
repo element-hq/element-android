@@ -52,11 +52,14 @@ class CreatePollController @Inject constructor(
             title(host.stringProvider.getString(R.string.create_poll_question_title))
         }
 
+        val questionImeAction = if (currentState.options.isEmpty()) EditorInfo.IME_ACTION_DONE else EditorInfo.IME_ACTION_NEXT
+
         formEditTextItem {
             id("question")
             value(currentState.question)
             hint(host.stringProvider.getString(R.string.create_poll_question_hint))
-            singleLine(false)
+            singleLine(true)
+            imeOptions(questionImeAction)
             maxLength(500)
             onTextChange {
                 host.callback?.onQuestionChanged(it)
@@ -70,7 +73,7 @@ class CreatePollController @Inject constructor(
         }
 
         currentState.options.forEachIndexed { index, option ->
-            val imeOptions = if (index == currentState.options.size -1) EditorInfo.IME_ACTION_DONE else EditorInfo.IME_ACTION_NEXT
+            val imeOptions = if (index == currentState.options.size - 1) EditorInfo.IME_ACTION_DONE else EditorInfo.IME_ACTION_NEXT
             formEditTextWithDeleteItem {
                 id("option_$index")
                 value(option)
