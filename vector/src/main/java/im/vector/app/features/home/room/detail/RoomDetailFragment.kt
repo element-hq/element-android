@@ -506,7 +506,7 @@ class RoomDetailFragment @Inject constructor(
 
     private fun onCannotRecord() {
         // Update the UI, cancel the animation
-        views.voiceMessageRecorderView.initVoiceRecordingViews()
+        views.voiceMessageRecorderView.display(RecordingUiState.None)
     }
 
     private fun acceptIncomingCall(event: RoomDetailViewEvents.DisplayAndAcceptCall) {
@@ -698,12 +698,16 @@ class RoomDetailFragment @Inject constructor(
 
             private var currentUiState: RecordingUiState = RecordingUiState.None
 
+            init {
+                display(currentUiState)
+            }
+
             override fun onVoiceRecordingStarted() {
                 if (checkPermissions(PERMISSIONS_FOR_VOICE_MESSAGE, requireActivity(), permissionVoiceMessageLauncher)) {
                     roomDetailViewModel.handle(RoomDetailAction.StartRecordingVoiceMessage)
                     textComposerViewModel.handle(TextComposerAction.OnVoiceRecordingStateChanged(true))
                     vibrate(requireContext())
-                    views.voiceMessageRecorderView.display(RecordingUiState.Started)
+                    display(RecordingUiState.Started)
                 }
             }
 
@@ -721,27 +725,39 @@ class RoomDetailFragment @Inject constructor(
             }
 
             override fun onRecordingStopped() {
-                if (currentUiState != RecordingUiState.Locked && currentUiState != RecordingUiState.None) {
-                    views.voiceMessageRecorderView.display(RecordingUiState.None)
+                if (currentUiState != RecordingUiState.Locked) {
+                    display(RecordingUiState.None)
                 }
             }
 
             override fun onUiStateChanged(state: RecordingUiState) {
-                currentUiState = state
-                views.voiceMessageRecorderView.display(state)
+                display(state)
             }
 
             override fun sendVoiceMessage() {
-                views.voiceMessageRecorderView.display(RecordingUiState.None)
+                display(RecordingUiState.None)
             }
 
             override fun deleteVoiceMessage() {
-                views.voiceMessageRecorderView.display(RecordingUiState.None)
+                display(RecordingUiState.Cancelled)
             }
 
             override fun onRecordingLimitReached() {
-                views.voiceMessageRecorderView.display(RecordingUiState.Playback)
+                display(RecordingUiState.Playback)
             }
+
+            override fun recordingWaveformClicked() {
+                display(RecordingUiState.Playback)
+            }
+
+            private fun display(state: RecordingUiState) {
+                if (currentUiState != state) {
+                    views.voiceMessageRecorderView.display(state)
+                }
+                currentUiState = state
+            }
+
+            override fun currentState() = currentUiState
         }
     }
 
@@ -1132,7 +1148,7 @@ class RoomDetailFragment @Inject constructor(
 
         // We should improve the UX to support going into playback mode when paused and delete the media when the view is destroyed.
         roomDetailViewModel.handle(RoomDetailAction.EndAllVoiceActions(deleteRecord = false))
-        views.voiceMessageRecorderView.initVoiceRecordingViews()
+        views.voiceMessageRecorderView.display(RecordingUiState.None)
     }
 
     private val attachmentFileActivityResultLauncher = registerStartForActivityResult {

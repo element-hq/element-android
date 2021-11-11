@@ -282,8 +282,8 @@ class VoiceMessageViews(
         views.voicePlaybackWaveform.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
     }
 
-    fun initViews(onVoiceRecordingEnded: (Boolean) -> Unit) {
-        hideRecordingViews(RecordingUiState.None, null, onVoiceRecordingEnded)
+    fun initViews() {
+        hideRecordingViews(RecordingUiState.None, null, onVoiceRecordingEnded = {})
         views.voiceMessageMicButton.isVisible = true
         views.voiceMessageSendButton.isVisible = false
         views.voicePlaybackWaveform.post { views.voicePlaybackWaveform.recreate() }
