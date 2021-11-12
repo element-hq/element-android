@@ -90,11 +90,6 @@ class TextComposerView @JvmOverloads constructor(
         }
     }
 
-    private fun updateSendButtonColor(isBlank: Boolean) {
-        val color = ThemeUtils.getColor(views.sendButton.context, if (isBlank) R.attr.vctr_content_tertiary else R.attr.colorAccent)
-        views.sendButton.imageTintList = ColorStateList.valueOf(color)
-    }
-
     fun collapse(animate: Boolean = true, transitionComplete: (() -> Unit)? = null) {
         if (currentConstraintSetId == R.layout.composer_layout_constraint_set_compact) {
             // ignore we good
