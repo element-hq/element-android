@@ -44,6 +44,8 @@
         <attr name="conference_animation_from" format="color" />
         <attr name="conference_animation_to" format="color" />
 
+        <attr name="vctr_presence_indicator_online" format="color" />
+
     </declare-styleable>
 
 </resources>
