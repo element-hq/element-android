@@ -500,7 +500,8 @@ internal class OlmMachine(
 
                 val result = inner.importKeys(decodedKeys, passphrase, rustListener)
 
-                ImportRoomKeysResult(result.total, result.imported)
+                // TODO do we want to remove the cast here?
+                ImportRoomKeysResult(result.total.toInt(), result.imported.toInt())
             }
 
     @Throws(CryptoStoreException::class)
@@ -516,7 +517,7 @@ internal class OlmMachine(
 
                 val result = inner.importDecryptedKeys(encodedKeys, rustListener)
 
-                ImportRoomKeysResult(result.total, result.imported)
+                ImportRoomKeysResult(result.total.toInt(), result.imported.toInt())
             }
 
     @Throws(CryptoStoreException::class)

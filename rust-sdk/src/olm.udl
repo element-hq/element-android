@@ -58,8 +58,8 @@ dictionary DeviceLists {
 };
 
 dictionary KeysImportResult {
-    i32 total;
-    i32 imported;
+    i64 total;
+    i64 imported;
 };
 
 dictionary DecryptedEvent {

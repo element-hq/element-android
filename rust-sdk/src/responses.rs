@@ -295,8 +295,8 @@ impl From<DeviceLists> for RumaDeviceLists {
 }
 
 pub struct KeysImportResult {
-    pub total: i32,
-    pub imported: i32,
+    pub total: i64,
+    pub imported: i64,
 }
 
 pub(crate) enum OwnedResponse {

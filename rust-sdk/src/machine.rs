@@ -618,8 +618,8 @@ impl OlmMachine {
             .block_on(self.inner.import_keys(keys, listener))?;
 
         Ok(KeysImportResult {
-            total: result.1 as i32,
-            imported: result.0 as i32,
+            total: result.total_count as i64,
+            imported: result.imported_count as i64,
         })
     }
 
