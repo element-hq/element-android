@@ -21,6 +21,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -121,12 +122,17 @@ public class ColorMatrixListPreferenceDialogFragment extends PreferenceDialogFra
     }
 
     private boolean isDarkTheme() {
-        TypedValue tv = new TypedValue();
-        getContext().getTheme().resolveAttribute(android.R.attr.colorBackground, tv, true);
-        int bgColor = tv.data;
-        getContext().getTheme().resolveAttribute(android.R.attr.colorForeground, tv, true);
-        int fgColor = tv.data;
-        return Color.luminance(fgColor) > Color.luminance(bgColor);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            TypedValue tv = new TypedValue();
+            getContext().getTheme().resolveAttribute(android.R.attr.colorBackground, tv, true);
+            int bgColor = tv.data;
+            getContext().getTheme().resolveAttribute(android.R.attr.colorForeground, tv, true);
+            int fgColor = tv.data;
+            return Color.luminance(fgColor) > Color.luminance(bgColor);
+        } else {
+            // We might want to implement a fallback here, but for now, let's just not care
+            return false;
+        }
     }
 
     private int getAccentColor() {
