@@ -398,15 +398,10 @@ internal class RustKeyBackupService @Inject constructor(
         cryptoCoroutineScope.launch {
             try {
                 val key = recoveryKeyFromPassword(password, keysBackupVersion)
-
-                if (key == null) {
-                    Timber.w("trustKeysBackupVersionWithPassphrase: Key backup is missing required data")
-                    callback.onFailure(IllegalArgumentException("Missing element"))
-                } else {
-                    checkRecoveryKey(key, keysBackupVersion)
-                    trustKeysBackupVersion(keysBackupVersion, true, callback)
-                }
+                checkRecoveryKey(key, keysBackupVersion)
+                trustKeysBackupVersion(keysBackupVersion, true, callback)
             } catch (exception: Throwable) {
+                Timber.w(exception)
                 callback.onFailure(exception)
             }
         }
@@ -595,15 +590,7 @@ internal class RustKeyBackupService @Inject constructor(
         cryptoCoroutineScope.launch(coroutineDispatchers.main) {
             runCatching {
                 val recoveryKey = withContext(coroutineDispatchers.crypto) {
-                    val key = recoveryKeyFromPassword(password, keysBackupVersion)
-
-                    if (key == null) {
-                        Timber.w("trustKeysBackupVersionWithPassphrase: Key backup is missing required data")
-
-                        throw IllegalArgumentException("Missing element")
-                    } else {
-                        key
-                    }
+                    recoveryKeyFromPassword(password, keysBackupVersion)
                 }
 
                 restoreBackup(keysBackupVersion, recoveryKey, roomId, sessionId, stepProgressListener)
@@ -772,22 +759,20 @@ internal class RustKeyBackupService @Inject constructor(
      * @return the recovery key if successful, null in other cases
      */
     @WorkerThread
-    private fun recoveryKeyFromPassword(password: String, keysBackupData: KeysVersionResult): BackupRecoveryKey? {
+    private fun recoveryKeyFromPassword(password: String, keysBackupData: KeysVersionResult): BackupRecoveryKey {
         val authData = getMegolmBackupAuthData(keysBackupData)
 
-        if (authData == null) {
-            Timber.w("recoveryKeyFromPassword: invalid parameter")
-            return null
+        return when {
+            authData == null                                                                 -> {
+                throw IllegalArgumentException("recoveryKeyFromPassword: invalid parameter")
+            }
+            authData.privateKeySalt.isNullOrBlank() || authData.privateKeyIterations == null -> {
+                throw java.lang.IllegalArgumentException("recoveryKeyFromPassword: Salt and/or iterations not found in key backup auth data")
+            }
+            else                                                                             -> {
+                BackupRecoveryKey.fromPassphrase(password, authData.privateKeySalt, authData.privateKeyIterations)
+            }
         }
-
-        if (authData.privateKeySalt.isNullOrBlank()
-                || authData.privateKeyIterations == null) {
-            Timber.w("recoveryKeyFromPassword: Salt and/or iterations not found in key backup auth data")
-
-            return null
-        }
-
-        return BackupRecoveryKey.fromPassphrase(password, authData.privateKeySalt, authData.privateKeyIterations)
     }
 
     /**
