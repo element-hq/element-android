@@ -334,7 +334,7 @@ Ijinkan akses lewat halaman selanjutnya untuk menemukan pengguna ${app_name} yan
     <string name="room_participants_action_leave">Tinggalkan ruang ini</string>
     <string name="room_participants_action_remove">Keluarkan dari ruang ini</string>
     <string name="room_participants_action_ban">Larang</string>
-    <string name="room_participants_action_unban">Hapus Larangan</string>
+    <string name="room_participants_action_unban">Hapus Cekalan</string>
     <string name="room_participants_action_set_default_power_level">Setel ulang ke user biasa</string>
     <string name="room_participants_action_set_moderator">Jadikan moderator</string>
     <string name="room_participants_action_set_admin">Jadikan admin</string>
@@ -522,7 +522,7 @@ Ijinkan akses lewat halaman selanjutnya untuk menemukan pengguna ${app_name} yan
     <string name="unrecognized_command">Perintah tak dikenal: %s</string>
     <string name="command_description_emote">Tunjukkan tindakan</string>
     <string name="command_description_ban_user">Larang user dengan id berikut</string>
-    <string name="command_description_unban_user">Cabut larangan pengguna dengan id berikut</string>
+    <string name="command_description_unban_user">Menghapus cekalan pengguna dengan id berikut</string>
     <string name="command_description_op_user">Tentukan tingkat kuasa seorang pengguna</string>
     <string name="command_description_invite_user">Undang pengguna dengan id berikut bergabung ke ruang ini</string>
     <string name="command_description_join_room">Gabung ke ruangan dengan alamat berikut</string>
@@ -1332,7 +1332,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="notice_room_server_acl_updated_ip_literals_allowed">• Server yang cocok dengan IP literal sekarang diizinkan.</string>
     <string name="notice_room_server_acl_updated_was_allowed">• Server yang cocok dengan %s telah dihapus dari daftar izin.</string>
     <string name="notice_room_server_acl_updated_allowed">• Server yang cocok dengan %s sekarang telah diizinkan.</string>
-    <string name="notice_room_server_acl_updated_was_banned">• Server yang cocok dengan %s dihapus dari daftar larangan.</string>
+    <string name="notice_room_server_acl_updated_was_banned">• Server yang cocok dengan %s dihapus dari daftar cekalan.</string>
     <string name="notice_room_server_acl_updated_title_by_you">Anda mengubah ACL server untuk ruangan ini.</string>
     <string name="notice_room_server_acl_updated_title">%s mengubah ACL server untuk ruangan ini.</string>
     <string name="notice_room_server_acl_set_ip_literals_allowed">• Server yang cocok dengan IP literal diizinkan.</string>
@@ -2630,7 +2630,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="invitations_sent_to_two_users">Undangan terkirim ke %1$s dan %2$s</string>
     <string name="invitation_sent_to_one_user">Undangan terkirim ke %1$s</string>
     <string name="template_invite_friends_rich_title">🔐️ Bergabung dengan saya di ${app_name}</string>
-    <string name="template_invite_friends_text">Hi, bicara dengan saya di ${app_name}: %s</string>
+    <string name="template_invite_friends_text">Halo, bicara dengan saya di ${app_name}: %s</string>
     <string name="invite_friends">Undang teman</string>
     <string name="invite_users_to_room_title">Undang Pengguna</string>
     <string name="inviting_users_to_room">Mengundang pengguna…</string>
