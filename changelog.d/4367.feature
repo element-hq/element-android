@@ -1,1 +1,1 @@
-Poll Feature - Create Poll Screen
+Poll Feature - Create Poll Screen (Disabled for now)
