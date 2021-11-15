@@ -881,7 +881,7 @@ class RoomDetailFragment @Inject constructor(
     }
 
     private fun navigateToEvent(action: RoomDetailViewEvents.NavigateToEvent) {
-        scrollOnNewMessageCallback.initialForceScroll = true
+        setInitialForceScrollEnabled(true)
         scrollOnNewMessageCallback.initialForceScrollEventId = action.eventId
         val scrollPosition = timelineEventController.searchPositionOfEvent(action.eventId)
         if (scrollPosition == null) {
@@ -1226,11 +1226,11 @@ class RoomDetailFragment @Inject constructor(
                 jumpToBottomViewVisibilityManager.maybeShowJumpToBottomViewVisibilityWithDelay()
             }
         }
-        layoutManager.setPreferredAnchorPlacement(1f - TARGET_SCROLL_OUT_FACTOR)
         val stateRestorer = LayoutManagerStateRestorer(layoutManager).register()
         scrollOnNewMessageCallback = ScrollOnNewMessageCallback(layoutManager, timelineEventController, views.timelineRecyclerView)
-        // Force scroll until the user has scrolled to address the bug where the list would jump during initial loading
-        scrollOnNewMessageCallback.initialForceScroll = true
+        // Force scroll until the user has scrolled so we ensure that the targeted events are at a meaningful position when the timeline is loaded.
+        // This also sets the preferred anchor position which ensures a nicer expand direction of re-measuring views (e.g. due to url-previews).
+        setInitialForceScrollEnabled(true)
         scrollOnHighlightedEventCallback = ScrollOnHighlightedEventCallback(views.timelineRecyclerView, layoutManager, timelineEventController)
         views.timelineRecyclerView.layoutManager = layoutManager
         views.timelineRecyclerView.itemAnimator = null
@@ -1245,8 +1245,12 @@ class RoomDetailFragment @Inject constructor(
         views.timelineRecyclerView.addOnScrollListener(object: RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 if (dy != 0) {
-                    // User has scrolled, stop force scrolling
-                    scrollOnNewMessageCallback.initialForceScroll = false
+                    // User has scrolled, stop force scrolling.
+                    // Also, restore the preferred anchor placement in case it has been temporarily disabled while the composer view is open.
+                    setInitialForceScrollEnabled(false, stickToBottom = false)
+                    // If we do not clear the focus manually, it will keep it forever?
+                    // We want to listen to new focus events to re-enable the stickToBottom though.
+                    views.composerLayout.views.composerEditText.clearFocus()
                 }
                 super.onScrolled(recyclerView, dx, dy)
             }
@@ -1408,6 +1412,11 @@ class RoomDetailFragment @Inject constructor(
 
         views.composerLayout.views.composerEditText.focusChanges()
                 .subscribe {
+                    if (it) {
+                        // Prioritize staying scrolled at the bottom compared to keeping the unread messages line at the fixed position
+                        setInitialForceScrollEnabled(false, stickToBottom = true)
+                    }
+
                     roomDetailViewModel.handle(RoomDetailAction.ComposerFocusChange(it))
                 }
                 .disposeOnDestroyView()
@@ -2242,6 +2251,16 @@ class RoomDetailFragment @Inject constructor(
             ).let {
                 startActivity(it)
             }
+        }
+    }
+
+    private fun setInitialForceScrollEnabled(enabled: Boolean, stickToBottom: Boolean = false) {
+        scrollOnNewMessageCallback.initialForceScroll = enabled
+        if (stickToBottom) {
+            layoutManager.disablePreferredAnchorPlacement()
+        } else {
+            // (Re-) Enable preferred anchor placement
+            layoutManager.setPreferredAnchorPlacement(1f - TARGET_SCROLL_OUT_FACTOR)
         }
     }
 }
