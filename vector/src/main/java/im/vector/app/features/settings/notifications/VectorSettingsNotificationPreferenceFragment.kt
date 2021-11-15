@@ -31,6 +31,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.map
 import androidx.preference.Preference
 import androidx.preference.SwitchPreference
+import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.extensions.registerStartForActivityResult
@@ -141,17 +142,21 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
         }
 
         findPreference<VectorPreference>(SETTINGS_UNIFIED_PUSH_RE_REGISTER)?.let {
-            it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                lifecycleScope.launch {
-                    updateEnabledForDevice(false)
-                    UPHelper.registerUnifiedPush(requireContext(), forceShowSelection = true) {
-                        lifecycleScope.launch {
-                            updateEnabledForDevice(true)
+            if (BuildConfig.ALLOW_EXTERNAL_UNIFIEDPUSH_DISTRIB) {
+                it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                    lifecycleScope.launch {
+                        updateEnabledForDevice(false)
+                        UPHelper.registerUnifiedPush(requireContext(), forceShowSelection = true) {
+                            lifecycleScope.launch {
+                                updateEnabledForDevice(true)
+                            }
+                            Handler(Looper.getMainLooper()).postDelayed({ refreshBackgroundSyncPrefs() }, 500)
                         }
-                        Handler(Looper.getMainLooper()).postDelayed({ refreshBackgroundSyncPrefs() }, 500)
                     }
+                    true
                 }
-                true
+            } else {
+                it.isVisible = false
             }
         }
 
