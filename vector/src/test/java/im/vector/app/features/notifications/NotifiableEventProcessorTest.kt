@@ -19,6 +19,9 @@ package im.vector.app.features.notifications
 import im.vector.app.features.notifications.ProcessedEvent.Type
 import im.vector.app.test.fakes.FakeAutoAcceptInvites
 import im.vector.app.test.fakes.FakeOutdatedEventDetector
+import im.vector.app.test.fixtures.aNotifiableMessageEvent
+import im.vector.app.test.fixtures.aSimpleNotifiableEvent
+import im.vector.app.test.fixtures.anInviteNotifiableEvent
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Test
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -145,48 +148,3 @@ class NotifiableEventProcessorTest {
         ProcessedEvent(it.first, it.second)
     }
 }
-
-fun aSimpleNotifiableEvent(eventId: String, type: String? = null) = SimpleNotifiableEvent(
-        matrixID = null,
-        eventId = eventId,
-        editedEventId = null,
-        noisy = false,
-        title = "title",
-        description = "description",
-        type = type,
-        timestamp = 0,
-        soundName = null,
-        canBeReplaced = false,
-        isRedacted = false
-)
-
-fun anInviteNotifiableEvent(roomId: String) = InviteNotifiableEvent(
-        matrixID = null,
-        eventId = "event-id",
-        roomId = roomId,
-        roomName = "a room name",
-        editedEventId = null,
-        noisy = false,
-        title = "title",
-        description = "description",
-        type = null,
-        timestamp = 0,
-        soundName = null,
-        canBeReplaced = false,
-        isRedacted = false
-)
-
-fun aNotifiableMessageEvent(eventId: String, roomId: String) = NotifiableMessageEvent(
-        eventId = eventId,
-        editedEventId = null,
-        noisy = false,
-        timestamp = 0,
-        senderName = "sender-name",
-        senderId = "sending-id",
-        body = "message-body",
-        roomId = roomId,
-        roomName = "room-name",
-        roomIsDirect = false,
-        canBeReplaced = false,
-        isRedacted = false
-)
