@@ -2255,8 +2255,9 @@ class RoomDetailFragment @Inject constructor(
     }
 
     private fun setInitialForceScrollEnabled(enabled: Boolean, stickToBottom: Boolean = false) {
+        val shouldStickToBottom = stickToBottom || (!enabled && !views.timelineRecyclerView.canScrollVertically(1))
         scrollOnNewMessageCallback.initialForceScroll = enabled
-        if (stickToBottom) {
+        if (shouldStickToBottom) {
             layoutManager.disablePreferredAnchorPlacement()
         } else {
             // (Re-) Enable preferred anchor placement
