@@ -13,12 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package im.vector.app.fdroid.service
+package im.vector.app.core.services
 
 import android.content.Intent
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.core.services.VectorService
 import im.vector.app.features.notifications.NotificationUtils
 import javax.inject.Inject
 

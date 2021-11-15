@@ -382,6 +382,11 @@
             </intent-filter>
         </service>
 
+        <service
+            android:name=".core.services.GuardService"
+            android:exported="false"
+            tools:ignore="Instantiatable" />
+
         <!-- Receivers -->
 
         <receiver
