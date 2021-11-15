@@ -2859,4 +2859,5 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="notice_room_aliases_added_and_removed">%1$s dodał(a) %2$s i usunął(eła) %3$s jako adres tego pokoju.</string>
     <string name="notice_room_withdraw_with_reason_by_you">Odrzucono zaproszenie od %1$s. Powód: %2$s</string>
     <string name="notice_room_withdraw_with_reason">%1$s odrzucił(a) zaproszenie %2$s. Powód: %3$s</string>
+    <string name="a11y_delete_recorded_voice_message">Usuń nagranie</string>
 </resources>
