@@ -69,7 +69,7 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         app:layout_constraintBottom_toTopOf="@id/createPollButton"
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
-        tools:listitem="@layout/item_profile_action" />
+        tools:listitem="@layout/item_form_text_input_with_delete" />
 
     <Button
         android:id="@+id/createPollButton"
@@ -92,7 +92,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:text="@string/voice_message_release_to_send_toast"
+        tools:text="@string/create_poll_empty_question_error"
         tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
