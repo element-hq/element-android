@@ -27,15 +27,13 @@ import org.matrix.android.sdk.internal.extensions.assertIsManaged
 internal open class EventEntity(@Index var eventId: String = "",
                                 @Index var roomId: String = "",
                                 @Index var type: String = "",
-                                @Index var isThread: Boolean = false,
-                                var rootThreadEventId: String? = null,
                                 var content: String? = null,
                                 var prevContent: String? = null,
                                 var isUseless: Boolean = false,
                                 @Index var stateKey: String? = null,
                                 var originServerTs: Long? = null,
                                 @Index var sender: String? = null,
-        // Can contain a serialized MatrixError
+                                // Can contain a serialized MatrixError
                                 var sendStateDetails: String? = null,
                                 var age: Long? = 0,
                                 var unsignedData: String? = null,
@@ -43,7 +41,13 @@ internal open class EventEntity(@Index var eventId: String = "",
                                 var decryptionResultJson: String? = null,
                                 var decryptionErrorCode: String? = null,
                                 var decryptionErrorReason: String? = null,
-                                var ageLocalTs: Long? = null
+                                var ageLocalTs: Long? = null,
+                                // Thread related, no need to create a new Entity for performance
+                                @Index var isRootThread: Boolean = false,
+                                @Index var rootThreadEventId: String? = null,
+                                var numberOfThreads: Int = 0,
+                                var threadSummaryLatestMessage: TimelineEventEntity? = null
+
 ) : RealmObject() {
 
     private var sendStateStr: String = SendState.UNKNOWN.name
@@ -78,9 +82,6 @@ internal open class EventEntity(@Index var eventId: String = "",
                 ?.canBeProcessed = true
     }
 
-    /**
-     * Returns true if the current event is a thread root event
-     */
-    fun isRootThread(): Boolean = isThread && rootThreadEventId == null
+    fun isThread(): Boolean = rootThreadEventId != null
 
 }

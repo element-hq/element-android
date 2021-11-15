@@ -21,6 +21,7 @@ import im.vector.app.features.home.room.detail.timeline.MessageColorProvider
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.item.AbsMessageItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageInformationData
+import org.matrix.android.sdk.api.session.threads.ThreadDetails
 import javax.inject.Inject
 
 class MessageItemAttributesFactory @Inject constructor(
@@ -32,7 +33,7 @@ class MessageItemAttributesFactory @Inject constructor(
     fun create(messageContent: Any?,
                informationData: MessageInformationData,
                callback: TimelineEventController.Callback?,
-               isRootThread: Boolean = false): AbsMessageItem.Attributes {
+               threadDetails: ThreadDetails? = null): AbsMessageItem.Attributes {
         return AbsMessageItem.Attributes(
                 avatarSize = avatarSizeProvider.avatarSize,
                 informationData = informationData,
@@ -51,7 +52,7 @@ class MessageItemAttributesFactory @Inject constructor(
                 avatarCallback = callback,
                 readReceiptsCallback = callback,
                 emojiTypeFace = emojiCompatFontProvider.typeface,
-                isRootThread = isRootThread
+                threadDetails = threadDetails
         )
     }
 }

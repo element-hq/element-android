@@ -359,7 +359,6 @@ class RoomDetailFragment @Inject constructor(
         } else {
             setupToolbar(views.roomToolbar)
         }
-        setupThreadIfNeeded()
         setupRecyclerView()
         setupComposer()
         setupNotificationView()
@@ -1194,12 +1193,6 @@ class RoomDetailFragment @Inject constructor(
 
 // PRIVATE METHODS *****************************************************************************
 
-    private fun setupThreadIfNeeded(){
-        getRootThreadEventId()?.let{
-            textComposerViewModel.handle(TextComposerAction.EnterReplyInThreadTimeline(it))
-        }
-    }
-
     private fun setupRecyclerView() {
         timelineEventController.callback = this
         timelineEventController.timeline = roomDetailViewModel.timeline
@@ -1762,7 +1755,7 @@ class RoomDetailFragment @Inject constructor(
         this.view?.hideKeyboard()
 
         MessageActionsBottomSheet
-                .newInstance(roomId, informationData)
+                .newInstance(roomId, informationData, isThreadTimeLine())
                 .show(requireActivity().supportFragmentManager, "MESSAGE_CONTEXTUAL_ACTIONS")
 
         return true

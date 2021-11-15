@@ -33,8 +33,8 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="4dp"
         android:layout_marginEnd="4dp"
-        android:layout_toStartOf="@+id/messageTimeView"
-        android:layout_toEndOf="@+id/messageStartGuideline"
+        android:layout_toStartOf="@id/messageTimeView"
+        android:layout_toEndOf="@id/messageStartGuideline"
         android:ellipsize="end"
         android:maxLines="1"
         android:textColor="?vctr_content_primary"
@@ -200,17 +200,7 @@
         </com.google.android.flexbox.FlexboxLayout>
     </LinearLayout>
 
-    <View
-        android:id="@+id/messageIsThread"
-        android:layout_width="wrap_content"
-        android:background="#2653AE"
-        android:layout_height="2dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="4dp"
-        android:layout_below="@id/informationBottom"
-        android:layout_toStartOf="@id/messageSendStateImageView"
-        android:layout_toEndOf="@id/messageStartGuideline"
-        android:contentDescription="@string/room_threads_filter" />
+    <include
+        layout="@layout/view_thread_room_summary" />
 
 </RelativeLayout>

@@ -26,6 +26,7 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.model.relation.RelationDefaultContent
 import org.matrix.android.sdk.api.session.room.send.SendState
+import org.matrix.android.sdk.api.session.threads.ThreadDetails
 import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.internal.crypto.algorithms.olm.OlmDecryptionResult
 import org.matrix.android.sdk.internal.crypto.model.event.EncryptedEventContent
@@ -97,7 +98,7 @@ data class Event(
     var sendStateDetails: String? = null
 
     @Transient
-    var isRootThread: Boolean = false
+    var threadDetails: ThreadDetails? = null
 
     fun sendStateError(): MatrixError? {
         return sendStateDetails?.let {
@@ -124,6 +125,7 @@ data class Event(
             it.mCryptoErrorReason = mCryptoErrorReason
             it.sendState = sendState
             it.ageLocalTs = ageLocalTs
+            it.threadDetails = threadDetails
         }
     }
 
@@ -186,6 +188,16 @@ data class Event(
         return contentMap?.let { JSONObject(adapter.toJson(it)).toString(4) }
     }
 
+    fun getDecryptedMessageText(): String {
+        return getValueFromPayload(mxDecryptionResult?.payload).orEmpty()
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    private fun getValueFromPayload(payload: JsonDict?, key: String = "body"): String? {
+        val content = payload?.get("content") as? JsonDict
+        return content?.get(key) as? String
+    }
+
     /**
      * Tells if the event is redacted
      */
@@ -218,7 +230,7 @@ data class Event(
         if (mCryptoError != other.mCryptoError) return false
         if (mCryptoErrorReason != other.mCryptoErrorReason) return false
         if (sendState != other.sendState) return false
-
+        if (threadDetails != other.threadDetails) return false
         return true
     }
 
@@ -237,6 +249,8 @@ data class Event(
         result = 31 * result + (mCryptoError?.hashCode() ?: 0)
         result = 31 * result + (mCryptoErrorReason?.hashCode() ?: 0)
         result = 31 * result + sendState.hashCode()
+        result = 31 * result + threadDetails.hashCode()
+
         return result
     }
 }

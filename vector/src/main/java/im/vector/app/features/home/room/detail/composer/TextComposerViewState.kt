@@ -53,7 +53,9 @@ data class TextComposerViewState(
     val isComposerVisible: Boolean
         get() = canSendMessage && !isVoiceRecording
 
-    constructor(args: RoomDetailArgs) : this(roomId = args.roomId)
+    constructor(args: RoomDetailArgs) : this(
+            roomId = args.roomId,
+            rootThreadEventId = args.roomThreadDetailArgs?.eventId)
 
     fun isInThreadTimeline(): Boolean = rootThreadEventId != null
 }

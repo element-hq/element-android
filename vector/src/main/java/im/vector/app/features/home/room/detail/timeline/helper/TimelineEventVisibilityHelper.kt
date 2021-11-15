@@ -18,9 +18,12 @@ package im.vector.app.features.home.room.detail.timeline.helper
 
 import im.vector.app.core.extensions.localDateTime
 import im.vector.app.core.resources.UserPreferencesProvider
+import org.matrix.android.sdk.BuildConfig
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.RelationType
 import org.matrix.android.sdk.api.session.events.model.getRelationContent
+import org.matrix.android.sdk.api.session.events.model.getRootThreadEventId
+import org.matrix.android.sdk.api.session.events.model.isThread
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
@@ -37,7 +40,7 @@ class TimelineEventVisibilityHelper @Inject constructor(private val userPreferen
      *
      * @return a list of timeline events which have sequentially the same type following the next direction.
      */
-    fun nextSameTypeEvents(timelineEvents: List<TimelineEvent>, index: Int, minSize: Int, eventIdToHighlight: String?): List<TimelineEvent> {
+    private fun nextSameTypeEvents(timelineEvents: List<TimelineEvent>, index: Int, minSize: Int, eventIdToHighlight: String?, rootThreadEventId: String?): List<TimelineEvent> {
         if (index >= timelineEvents.size - 1) {
             return emptyList()
         }
@@ -59,7 +62,7 @@ class TimelineEventVisibilityHelper @Inject constructor(private val userPreferen
         } else {
             nextSameDayEvents.subList(0, indexOfFirstDifferentEventType)
         }
-        val filteredSameTypeEvents = sameTypeEvents.filter { shouldShowEvent(it, eventIdToHighlight) }
+        val filteredSameTypeEvents = sameTypeEvents.filter { shouldShowEvent(it, eventIdToHighlight, rootThreadEventId) }
         if (filteredSameTypeEvents.size < minSize) {
             return emptyList()
         }
@@ -74,12 +77,12 @@ class TimelineEventVisibilityHelper @Inject constructor(private val userPreferen
      *
      * @return a list of timeline events which have sequentially the same type following the prev direction.
      */
-    fun prevSameTypeEvents(timelineEvents: List<TimelineEvent>, index: Int, minSize: Int, eventIdToHighlight: String?): List<TimelineEvent> {
+    fun prevSameTypeEvents(timelineEvents: List<TimelineEvent>, index: Int, minSize: Int, eventIdToHighlight: String?, rootThreadEventId: String?): List<TimelineEvent> {
         val prevSub = timelineEvents.subList(0, index + 1)
         return prevSub
                 .reversed()
                 .let {
-                    nextSameTypeEvents(it, 0, minSize, eventIdToHighlight)
+                    nextSameTypeEvents(it, 0, minSize, eventIdToHighlight, rootThreadEventId)
                 }
     }
 
@@ -88,7 +91,7 @@ class TimelineEventVisibilityHelper @Inject constructor(private val userPreferen
      * @param highlightedEventId can be checked to force visibility to true
      * @return true if the event should be shown in the timeline.
      */
-    fun shouldShowEvent(timelineEvent: TimelineEvent, highlightedEventId: String?): Boolean {
+    fun shouldShowEvent(timelineEvent: TimelineEvent, highlightedEventId: String?, rootThreadEventId: String?): Boolean {
         // If show hidden events is true we should always display something
         if (userPreferencesProvider.shouldShowHiddenEvents()) {
             return true
@@ -100,15 +103,16 @@ class TimelineEventVisibilityHelper @Inject constructor(private val userPreferen
         if (!timelineEvent.isDisplayable()) {
             return false
         }
+
         // Check for special case where we should hide the event, like redacted, relation, memberships... according to user preferences.
-        return !timelineEvent.shouldBeHidden()
+        return !timelineEvent.shouldBeHidden(rootThreadEventId)
     }
 
     private fun TimelineEvent.isDisplayable(): Boolean {
         return TimelineDisplayableEvents.DISPLAYABLE_TYPES.contains(root.getClearType())
     }
 
-    private fun TimelineEvent.shouldBeHidden(): Boolean {
+    private fun TimelineEvent.shouldBeHidden(rootThreadEventId: String?): Boolean {
         if (root.isRedacted() && !userPreferencesProvider.shouldShowRedactedMessages()) {
             return true
         }
@@ -120,6 +124,11 @@ class TimelineEventVisibilityHelper @Inject constructor(private val userPreferen
             if ((diff.isJoin || diff.isPart) && !userPreferencesProvider.shouldShowJoinLeaves()) return true
             if ((diff.isAvatarChange || diff.isDisplaynameChange) && !userPreferencesProvider.shouldShowAvatarDisplayNameChanges()) return true
         }
+
+        if(BuildConfig.THREADING_ENABLED && rootThreadEventId == null && root.isThread() && root.getRootThreadEventId() != null){
+            return true
+        }
+
         return false
     }
 

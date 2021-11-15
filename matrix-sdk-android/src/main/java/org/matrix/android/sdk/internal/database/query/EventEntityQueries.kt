@@ -85,3 +85,8 @@ internal fun RealmList<EventEntity>.find(eventId: String): EventEntity? {
 internal fun RealmList<EventEntity>.fastContains(eventId: String): Boolean {
     return this.find(eventId) != null
 }
+
+internal fun EventEntity.Companion.whereRootThreadEventId(realm: Realm, rootThreadEventId: String): RealmQuery<EventEntity> {
+    return realm.where<EventEntity>()
+            .equalTo(EventEntityFields.ROOT_THREAD_EVENT_ID, rootThreadEventId)
+}

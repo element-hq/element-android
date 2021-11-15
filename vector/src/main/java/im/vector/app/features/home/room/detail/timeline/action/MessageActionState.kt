@@ -49,10 +49,15 @@ data class MessageActionState(
         // For actions
         val actions: List<EventSharedAction> = emptyList(),
         val expendedReportContentMenu: Boolean = false,
-        val actionPermissions: ActionPermissions = ActionPermissions()
+        val actionPermissions: ActionPermissions = ActionPermissions(),
+        val isFromThreadTimeline: Boolean = false
 ) : MavericksState {
 
-    constructor(args: TimelineEventFragmentArgs) : this(roomId = args.roomId, eventId = args.eventId, informationData = args.informationData)
+    constructor(args: TimelineEventFragmentArgs) : this(
+            roomId = args.roomId,
+            eventId = args.eventId,
+            informationData = args.informationData,
+            isFromThreadTimeline = args.isFromThreadTimeline)
 
     fun senderName(): String = informationData.memberName?.toString() ?: ""
 

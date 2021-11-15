@@ -89,17 +89,11 @@ class TextComposerViewModel @AssistedInject constructor(
             is TextComposerAction.UserIsTyping                 -> handleUserIsTyping(action)
             is TextComposerAction.OnTextChanged                -> handleOnTextChanged(action)
             is TextComposerAction.OnVoiceRecordingStateChanged -> handleOnVoiceRecordingStateChanged(action)
-            is TextComposerAction.EnterReplyInThreadTimeline   -> handleEnterReplyInThreadTimeline(action)
-
         }
     }
 
     private fun handleOnVoiceRecordingStateChanged(action: TextComposerAction.OnVoiceRecordingStateChanged) = setState {
         copy(isVoiceRecording = action.isRecording)
-    }
-
-    private fun handleEnterReplyInThreadTimeline(action: TextComposerAction.EnterReplyInThreadTimeline) = setState {
-        copy(rootThreadEventId = action.rootThreadEventId)
     }
 
     private fun handleOnTextChanged(action: TextComposerAction.OnTextChanged) {

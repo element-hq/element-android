@@ -159,6 +159,9 @@ android {
         //  This *must* only be set in trusted environments.
         buildConfigField "Boolean", "handleCallAssertedIdentityEvents", "false"
 
+        // Indicates whether or not threading support is enabled
+        buildConfigField "Boolean", "THREADING_ENABLED", "${isThreadingEnabled}"
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         // Keep abiFilter for the universalApk

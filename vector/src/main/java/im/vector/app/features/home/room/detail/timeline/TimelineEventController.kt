@@ -93,14 +93,16 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
             val unreadState: UnreadState = UnreadState.Unknown,
             val highlightedEventId: String? = null,
             val jitsiState: JitsiState = JitsiState(),
-            val roomSummary: RoomSummary? = null
+            val roomSummary: RoomSummary? = null,
+            val rootThreadEventId: String? = null
     ) {
 
         constructor(state: RoomDetailViewState) : this(
                 unreadState = state.unreadState,
                 highlightedEventId = state.highlightedEventId,
                 jitsiState = state.jitsiState,
-                roomSummary = state.asyncRoomSummary()
+                roomSummary = state.asyncRoomSummary(),
+                rootThreadEventId = state.rootThreadEventId
         )
     }
 
@@ -191,7 +193,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
                 // it's sent by the same user so we are sure we have up to date information.
                 val invalidatedSenderId: String? = currentSnapshot.getOrNull(position)?.senderInfo?.userId
                 val prevDisplayableEventIndex = currentSnapshot.subList(0, position).indexOfLast {
-                    timelineEventVisibilityHelper.shouldShowEvent(it, partialState.highlightedEventId)
+                    timelineEventVisibilityHelper.shouldShowEvent(it, partialState.highlightedEventId, partialState.rootThreadEventId  )
                 }
                 if (prevDisplayableEventIndex != -1 && currentSnapshot[prevDisplayableEventIndex].senderInfo.userId == invalidatedSenderId) {
                     modelCache[prevDisplayableEventIndex] = null
@@ -319,6 +321,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
     }
 
     private fun submitSnapshot(newSnapshot: List<TimelineEvent>) {
+        // Update is triggered on any DB change
         backgroundHandler.post {
             inSubmitList = true
             val diffCallback = TimelineEventDiffUtilCallback(currentSnapshot, newSnapshot)
@@ -367,7 +370,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
             val nextEvent = currentSnapshot.nextOrNull(position)
             val prevEvent = currentSnapshot.prevOrNull(position)
             val nextDisplayableEvent = currentSnapshot.subList(position + 1, currentSnapshot.size).firstOrNull {
-                timelineEventVisibilityHelper.shouldShowEvent(it, partialState.highlightedEventId)
+                timelineEventVisibilityHelper.shouldShowEvent(it, partialState.highlightedEventId, partialState.rootThreadEventId)
             }
             // Should be build if not cached or if model should be refreshed
             if (modelCache[position] == null || modelCache[position]?.isCacheable == false) {
@@ -449,7 +452,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
                 return null
             }
             // If the event is not shown, we go to the next one
-            if (!timelineEventVisibilityHelper.shouldShowEvent(event, partialState.highlightedEventId)) {
+            if (!timelineEventVisibilityHelper.shouldShowEvent(event, partialState.highlightedEventId, partialState.rootThreadEventId)) {
                 continue
             }
             // If the event is sent by us, we update the holder with the eventId and stop the search
@@ -471,7 +474,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
             val currentReadReceipts = ArrayList(event.readReceipts).filter {
                 it.user.userId != session.myUserId
             }
-            if (timelineEventVisibilityHelper.shouldShowEvent(event, partialState.highlightedEventId)) {
+            if (timelineEventVisibilityHelper.shouldShowEvent(event, partialState.highlightedEventId, partialState.rootThreadEventId)) {
                 lastShownEventId = event.eventId
             }
             if (lastShownEventId == null) {

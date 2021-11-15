@@ -22,6 +22,7 @@ import dagger.Lazy
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.canReact
@@ -326,7 +327,6 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                 add(EventSharedAction.Reply(eventId))
             }
 
-            // *** Testing Threads ****
             if (canReplyInThread(timelineEvent, messageContent, actionPermissions)) {
                 add(EventSharedAction.ReplyInThread(eventId))
             }
@@ -417,18 +417,22 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
         }
     }
 
-    private fun canReplyInThread(event: TimelineEvent, messageContent: MessageContent?, actionPermissions: ActionPermissions): Boolean {
+    private fun canReplyInThread(event: TimelineEvent,
+                                 messageContent: MessageContent?,
+                                 actionPermissions: ActionPermissions): Boolean {
         // Only event of type EventType.MESSAGE are supported for the moment
+        if (!BuildConfig.THREADING_ENABLED) return false
+        if (initialState.isFromThreadTimeline) return false
         if (event.root.getClearType() != EventType.MESSAGE) return false
         if (!actionPermissions.canSendMessage) return false
         return when (messageContent?.msgType) {
-            MessageType.MSGTYPE_TEXT,
-            MessageType.MSGTYPE_NOTICE,
-            MessageType.MSGTYPE_EMOTE,
-            MessageType.MSGTYPE_IMAGE,
-            MessageType.MSGTYPE_VIDEO,
-            MessageType.MSGTYPE_AUDIO,
-            MessageType.MSGTYPE_FILE -> true
+            MessageType.MSGTYPE_TEXT -> true
+//            MessageType.MSGTYPE_NOTICE,
+//            MessageType.MSGTYPE_EMOTE,
+//            MessageType.MSGTYPE_IMAGE,
+//            MessageType.MSGTYPE_VIDEO,
+//            MessageType.MSGTYPE_AUDIO,
+//            MessageType.MSGTYPE_FILE -> true
             else                     -> false
         }
     }

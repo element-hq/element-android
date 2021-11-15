@@ -101,7 +101,7 @@ internal class DefaultTimeline(
     private val builtEventsIdMap = Collections.synchronizedMap(HashMap<String, Int>())
     private val backwardsState = AtomicReference(TimelineState())
     private val forwardsState = AtomicReference(TimelineState())
-
+    private var isFromThreadTimeline = false
     override val timelineID = UUID.randomUUID().toString()
 
     override val isLive
@@ -143,8 +143,9 @@ internal class DefaultTimeline(
         }
     }
 
-    override fun start() {
+    override fun start(rootThreadEventId: String?) {
         if (isStarted.compareAndSet(false, true)) {
+            isFromThreadTimeline = rootThreadEventId != null
             Timber.v("Start timeline for roomId: $roomId and eventId: $initialEventId")
             timelineInput.listeners.add(this)
             BACKGROUND_HANDLER.post {
@@ -163,7 +164,13 @@ internal class DefaultTimeline(
                     postSnapshot()
                 }
 
-                timelineEvents = buildEventQuery(realm).sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.DESCENDING).findAll()
+                timelineEvents = rootThreadEventId?.let {
+                    TimelineEventEntity
+                            .whereRoomId(realm, roomId = roomId)
+                            .equalTo(TimelineEventEntityFields.ROOT.ROOT_THREAD_EVENT_ID, it)
+                            .sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.DESCENDING).findAll()
+                } ?: buildEventQuery(realm).sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.DESCENDING).findAll()
+
                 timelineEvents.addChangeListener(eventsChangeListener)
                 handleInitialLoad()
                 loadRoomMembersTask
@@ -313,16 +320,18 @@ internal class DefaultTimeline(
         val firstCacheEvent = results.firstOrNull()
         val chunkEntity = getLiveChunk()
 
+
         updateState(Timeline.Direction.FORWARDS) {
             it.copy(
-                    hasMoreInCache = !builtEventsIdMap.containsKey(firstCacheEvent?.eventId),
-                    hasReachedEnd = chunkEntity?.isLastForward ?: false
+                    hasMoreInCache = !builtEventsIdMap.containsKey(firstCacheEvent?.eventId),   // what is in DB
+                    hasReachedEnd = if (isFromThreadTimeline) true else chunkEntity?.isLastForward ?: false // if you neeed fetch more
             )
         }
         updateState(Timeline.Direction.BACKWARDS) {
+
             it.copy(
                     hasMoreInCache = !builtEventsIdMap.containsKey(lastCacheEvent?.eventId),
-                    hasReachedEnd = chunkEntity?.isLastBackward ?: false || lastCacheEvent?.root?.type == EventType.STATE_ROOM_CREATE
+                    hasReachedEnd = if (isFromThreadTimeline) true else chunkEntity?.isLastBackward ?: false || lastCacheEvent?.root?.type == EventType.STATE_ROOM_CREATE
             )
         }
     }
@@ -472,6 +481,7 @@ internal class DefaultTimeline(
      * This has to be called on TimelineThread as it accesses realm live results
      */
     private fun executePaginationTask(direction: Timeline.Direction, limit: Int) {
+
         val currentChunk = getLiveChunk()
         val token = if (direction == Timeline.Direction.BACKWARDS) currentChunk?.prevToken else currentChunk?.nextToken
         if (token == null) {

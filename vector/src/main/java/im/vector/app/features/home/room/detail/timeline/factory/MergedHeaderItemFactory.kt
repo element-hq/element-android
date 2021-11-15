@@ -83,7 +83,7 @@ class MergedHeaderItemFactory @Inject constructor(private val activeSessionHolde
                                                    eventIdToHighlight: String?,
                                                    requestModelBuild: () -> Unit,
                                                    callback: TimelineEventController.Callback?): MergedMembershipEventsItem_? {
-        val mergedEvents = timelineEventVisibilityHelper.prevSameTypeEvents(items, currentPosition, 2, eventIdToHighlight)
+        val mergedEvents = timelineEventVisibilityHelper.prevSameTypeEvents(items, currentPosition, 2, eventIdToHighlight, partialState.rootThreadEventId)
         return if (mergedEvents.isEmpty()) {
             null
         } else {

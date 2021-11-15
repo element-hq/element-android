@@ -369,10 +369,12 @@ internal object RealmSessionStoreMigration : RealmMigration {
 
     private fun migrateTo19(realm: DynamicRealm) {
         Timber.d("Step 18 -> 19")
+        val eventEntity = realm.schema.get("TimelineEventEntity") ?: return
+
         realm.schema.get("EventEntity")
-                ?.addField(EventEntityFields.IS_THREAD, Boolean::class.java, FieldAttribute.INDEXED)
-                ?.addField(EventEntityFields.ROOT_THREAD_EVENT_ID, String::class.java)
-        realm.schema.get("ChunkEntity")
-                ?.addField(ChunkEntityFields.ROOT_THREAD_EVENT_ID, String::class.java, FieldAttribute.INDEXED)
+                ?.addField(EventEntityFields.IS_ROOT_THREAD, Boolean::class.java, FieldAttribute.INDEXED)
+                ?.addField(EventEntityFields.ROOT_THREAD_EVENT_ID, String::class.java, FieldAttribute.INDEXED)
+                ?.addField(EventEntityFields.NUMBER_OF_THREADS, Int::class.java)
+                ?.addRealmObjectField(EventEntityFields.THREAD_SUMMARY_LATEST_MESSAGE.`$`, eventEntity)
     }
 }

@@ -160,7 +160,7 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     init {
-        timeline.start()
+        timeline.start(initialState.rootThreadEventId)
         timeline.addListener(this)
         observeRoomSummary()
         observeMembershipChanges()
@@ -1094,6 +1094,7 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     override fun onTimelineUpdated(snapshot: List<TimelineEvent>) {
+
         timelineEvents.tryEmit(snapshot)
 
         // PreviewUrl

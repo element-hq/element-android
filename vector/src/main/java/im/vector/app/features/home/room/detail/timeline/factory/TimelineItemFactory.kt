@@ -42,8 +42,8 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
     fun create(params: TimelineItemFactoryParams): VectorEpoxyModel<*> {
         val event = params.event
         val computedModel = try {
-            if (!timelineEventVisibilityHelper.shouldShowEvent(event, params.highlightedEventId)) {
-                return buildEmptyItem(event, params.prevEvent, params.highlightedEventId)
+            if (!timelineEventVisibilityHelper.shouldShowEvent(event, params.highlightedEventId, params.rootThreadEventId)) {
+                return buildEmptyItem(event, params.prevEvent, params.highlightedEventId, params.rootThreadEventId)
             }
             when (event.root.getClearType()) {
                 // Message itemsX
@@ -109,11 +109,11 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
             Timber.e(throwable, "failed to create message item")
             defaultItemFactory.create(params, throwable)
         }
-        return computedModel ?: buildEmptyItem(event, params.prevEvent, params.highlightedEventId)
+        return computedModel ?: buildEmptyItem(event, params.prevEvent, params.highlightedEventId, params.rootThreadEventId)
     }
 
-    private fun buildEmptyItem(timelineEvent: TimelineEvent, prevEvent: TimelineEvent?, highlightedEventId: String?): TimelineEmptyItem {
-        val isNotBlank = prevEvent == null || timelineEventVisibilityHelper.shouldShowEvent(prevEvent, highlightedEventId)
+    private fun buildEmptyItem(timelineEvent: TimelineEvent, prevEvent: TimelineEvent?, highlightedEventId: String?, rootThreadEventId: String?): TimelineEmptyItem {
+        val isNotBlank = prevEvent == null || timelineEventVisibilityHelper.shouldShowEvent(prevEvent, highlightedEventId, rootThreadEventId)
         return TimelineEmptyItem_()
                 .id(timelineEvent.localId)
                 .eventId(timelineEvent.eventId)

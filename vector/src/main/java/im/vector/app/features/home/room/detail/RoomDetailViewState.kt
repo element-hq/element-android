@@ -73,7 +73,8 @@ data class RoomDetailViewState(
             roomId = args.roomId,
             eventId = args.eventId,
             // Also highlight the target event, if any
-            highlightedEventId = args.eventId
+            highlightedEventId = args.eventId,
+            rootThreadEventId = args.roomThreadDetailArgs?.eventId
     )
 
     fun isWebRTCCallOptionAvailable() = (asyncRoomSummary.invoke()?.joinedMembersCount ?: 0) <= 2

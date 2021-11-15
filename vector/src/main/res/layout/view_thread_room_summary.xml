@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/messageThreadSummaryConstraintLayout"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_below="@id/informationBottom"
+    android:layout_marginEnd="32dp"
+    android:layout_marginBottom="4dp"
+    android:layout_toEndOf="@id/messageStartGuideline"
+    android:background="@drawable/rounded_rect_shape_8"
+    android:contentDescription="@string/room_threads_filter"
+    android:maxWidth="496dp"
+    android:minWidth="144dp"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp"
+    android:visibility="gone"
+    tools:visibility="visible">
+
+    <ImageView
+        android:id="@+id/messageThreadSummaryImageView"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_marginStart="13dp"
+        android:layout_marginTop="2dp"
+        android:contentDescription="@string/room_threads_filter"
+        android:src="@drawable/ic_thread_summary" />
+
+    <TextView
+        android:id="@+id/messageThreadSummaryCounterTextView"
+        style="@style/Widget.Vector.TextView.Caption"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/messageThreadSummaryImageView"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:textColor="?vctr_content_secondary"
+        tools:text="187" />
+
+    <ImageView
+        android:id="@+id/messageThreadSummaryAvatarImageView"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/messageThreadSummaryCounterTextView"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="13dp"
+        android:contentDescription="@string/avatar"
+        tools:src="@sample/user_round_avatars" />
+
+
+    <TextView
+        android:id="@+id/messageThreadSummaryInfoTextView"
+        style="@style/Widget.Vector.TextView.Caption"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toEndOf="@id/messageThreadSummaryAvatarImageView"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_default="wrap"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="13dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="?vctr_content_secondary"
+        tools:text="Hello There, whats up! Its a large centence" />
+</androidx.constraintlayout.widget.ConstraintLayout>

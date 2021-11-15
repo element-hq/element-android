@@ -18,10 +18,12 @@ package im.vector.app.features.home.room.detail.timeline.item
 
 import android.graphics.Typeface
 import android.view.View
+import android.view.ViewStub
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.annotation.IdRes
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
@@ -32,6 +34,9 @@ import im.vector.app.core.ui.views.SendStateImageView
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.MessageColorProvider
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
+import org.matrix.android.sdk.api.session.threads.ThreadDetails
+import org.matrix.android.sdk.api.util.MatrixItem
+import timber.log.Timber
 
 /**
  * Base timeline item that adds an optional information bar with the sender avatar, name, time, send state
@@ -98,8 +103,19 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
         // Render send state indicator
         holder.sendStateImageView.render(attributes.informationData.sendStateDecoration)
         holder.eventSendingIndicator.isVisible = attributes.informationData.sendStateDecoration == SendStateDecoration.SENDING_MEDIA
-        holder.isThread.isVisible = attributes.isRootThread
+
+        // Threads
+        attributes.threadDetails?.let { threadDetails ->
+            threadDetails.isRootThread
+            holder.threadSummaryConstraintLayout.isVisible = threadDetails.isRootThread
+            holder.threadSummaryCounterTextView.text = threadDetails.numberOfThreads.toString()
+            holder.threadSummaryInfoTextView.text = threadDetails.threadSummaryLatestTextMessage
+            threadDetails.threadSummarySenderInfo?.let { senderInfo ->
+                attributes.avatarRenderer.render(MatrixItem.UserItem(senderInfo.userId, senderInfo.displayName, senderInfo.avatarUrl), holder.threadSummaryAvatarImageView)
+            }
+        }
     }
+
 
     override fun unbind(holder: H) {
         attributes.avatarRenderer.clear(holder.avatarImageView)
@@ -118,7 +134,11 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
         val timeView by bind<TextView>(R.id.messageTimeView)
         val sendStateImageView by bind<SendStateImageView>(R.id.messageSendStateImageView)
         val eventSendingIndicator by bind<ProgressBar>(R.id.eventSendingIndicator)
-        val isThread by bind<View>(R.id.messageIsThread)
+        val threadSummaryConstraintLayout by bind<ConstraintLayout>(R.id.messageThreadSummaryConstraintLayout)
+        val threadSummaryCounterTextView by bind<TextView>(R.id.messageThreadSummaryCounterTextView)
+        val threadSummaryImageView by bind<ImageView>(R.id.messageThreadSummaryImageView)
+        val threadSummaryAvatarImageView by bind<ImageView>(R.id.messageThreadSummaryAvatarImageView)
+        val threadSummaryInfoTextView by bind<TextView>(R.id.messageThreadSummaryInfoTextView)
     }
 
     /**
@@ -136,7 +156,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
             val avatarCallback: TimelineEventController.AvatarCallback? = null,
             override val readReceiptsCallback: TimelineEventController.ReadReceiptsCallback? = null,
             val emojiTypeFace: Typeface? = null,
-            val isRootThread: Boolean = false
+            val threadDetails: ThreadDetails? = null
     ) : AbsBaseMessageItem.Attributes {
 
         // Have to override as it's used to diff epoxy items
@@ -148,6 +168,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
 
             if (avatarSize != other.avatarSize) return false
             if (informationData != other.informationData) return false
+            if (threadDetails != other.threadDetails) return false
 
             return true
         }
@@ -155,6 +176,8 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
         override fun hashCode(): Int {
             var result = avatarSize
             result = 31 * result + informationData.hashCode()
+            result = 31 * result + threadDetails.hashCode()
+
             return result
         }
     }
