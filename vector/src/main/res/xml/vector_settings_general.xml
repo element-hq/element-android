@@ -11,8 +11,7 @@
             android:key="SETTINGS_PROFILE_PICTURE_PREFERENCE_KEY"
             android:title="@string/settings_profile_picture" />
 
-        <im.vector.app.core.preference.VectorEditTextPreference
-            android:enabled="false"
+        <im.vector.app.core.preference.VectorPreference
             android:key="SETTINGS_DISPLAY_NAME_PREFERENCE_KEY"
             android:persistent="false"
             android:title="@string/settings_display_name" />
@@ -28,7 +27,6 @@
             android:title="@string/tchap_settings_hide_from_users_directory_title" />
 
         <im.vector.app.core.preference.VectorPreference
-            android:enabled="false"
             android:key="SETTINGS_EMAILS_AND_PHONE_NUMBERS_PREFERENCE_KEY"
             android:persistent="false"
             android:title="@string/settings_emails_and_phone_numbers_title" />

@@ -18,7 +18,6 @@ package org.matrix.android.sdk.internal.session.user.accountdata
 
 import androidx.lifecycle.LiveData
 import com.zhuinden.monarchy.Monarchy
-import fr.gouv.tchap.android.sdk.internal.session.user.accountdata.UpdateHideProfileTask
 import org.matrix.android.sdk.api.session.accountdata.SessionAccountDataService
 import org.matrix.android.sdk.api.session.accountdata.UserAccountDataEvent
 import org.matrix.android.sdk.api.session.events.model.Content
@@ -38,7 +37,6 @@ internal class DefaultSessionAccountDataService @Inject constructor(
         private val userAccountDataSyncHandler: UserAccountDataSyncHandler,
         private val userAccountDataDataSource: UserAccountDataDataSource,
         private val roomAccountDataDataSource: RoomAccountDataDataSource,
-        private val updateHideProfileTask: UpdateHideProfileTask,
         private val taskExecutor: TaskExecutor
 ) : SessionAccountDataService {
 
@@ -79,9 +77,5 @@ internal class DefaultSessionAccountDataService @Inject constructor(
         monarchy.runTransactionSync { realm ->
             userAccountDataSyncHandler.handleGenericAccountData(realm, type, content)
         }
-    }
-
-    override suspend fun updateHideProfile(hideProfile: Boolean) {
-        updateHideProfileTask.execute(UpdateHideProfileTask.Params(hideProfile = hideProfile))
     }
 }

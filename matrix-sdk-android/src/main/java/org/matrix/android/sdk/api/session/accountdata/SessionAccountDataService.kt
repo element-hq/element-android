@@ -63,9 +63,4 @@ interface SessionAccountDataService {
      * Update the account data with the provided type and the provided account data content
      */
     suspend fun updateUserAccountData(type: String, content: Content)
-
-    /**
-     * Update the `im.vector.hide_profile` field in the account data.
-     */
-    suspend fun updateHideProfile(hideProfile: Boolean)
 }

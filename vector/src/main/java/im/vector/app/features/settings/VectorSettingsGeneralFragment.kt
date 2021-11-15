@@ -27,7 +27,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
-import androidx.preference.EditTextPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
 import androidx.preference.SwitchPreference
@@ -69,6 +68,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.failure.isInvalidPassword
+import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerConfig
@@ -98,7 +98,7 @@ class VectorSettingsGeneralFragment @Inject constructor(
         findPreference<UserAvatarPreference>(VectorPreferences.SETTINGS_PROFILE_PICTURE_PREFERENCE_KEY)!!
     }
     private val mDisplayNamePreference by lazy {
-        findPreference<EditTextPreference>("SETTINGS_DISPLAY_NAME_PREFERENCE_KEY")!!
+        findPreference<VectorPreference>("SETTINGS_DISPLAY_NAME_PREFERENCE_KEY")!!
     }
     private val mPasswordPreference by lazy {
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_CHANGE_PASSWORD_PREFERENCE_KEY)!!
@@ -158,7 +158,7 @@ class VectorSettingsGeneralFragment @Inject constructor(
                 .onEach { displayName ->
                     mDisplayNamePreference.let {
                         it.summary = displayName
-                        it.text = displayName
+//                        it.text = displayName
                     }
                 }
                 .launchIn(viewLifecycleOwner.lifecycleScope)
@@ -195,15 +195,16 @@ class VectorSettingsGeneralFragment @Inject constructor(
             }
         }
 
-        // Display name
-        mDisplayNamePreference.let {
-            it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
-                newValue
-                        ?.let { value -> (value as? String)?.trim() }
-                        ?.let { value -> onDisplayNameChanged(value) }
-                false
-            }
-        }
+        // Tchap: Displayname cannot change
+//        // Display name
+//        mDisplayNamePreference.let {
+//            it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
+//                newValue
+//                        ?.let { value -> (value as? String)?.trim() }
+//                        ?.let { value -> onDisplayNameChanged(value) }
+//                false
+//            }
+//        }
 
         // Password
         // Hide the preference if password can not be updated
@@ -544,7 +545,7 @@ class VectorSettingsGeneralFragment @Inject constructor(
     private fun hideUserFromUsersDirectory(hidden: Boolean) {
         displayLoadingView()
         lifecycleScope.launch {
-            val result = runCatching { session.accountDataService().updateHideProfile(hidden) }
+            val result = runCatching { session.accountDataService().updateUserAccountData(TYPE_HIDE_PROFILE, HideProfileContent(hidden).toContent()) }
             if (!isAdded) return@launch
             result.onFailure { failure ->
                 // Refresh setting value
@@ -558,29 +559,30 @@ class VectorSettingsGeneralFragment @Inject constructor(
         }
     }
 
-    /**
-     * Update the displayname.
-     */
-    private fun onDisplayNameChanged(value: String) {
-        val currentDisplayName = session.getUser(session.myUserId)?.displayName ?: ""
-        if (currentDisplayName != value) {
-            displayLoadingView()
-
-            lifecycleScope.launch {
-                val result = runCatching { session.setDisplayName(session.myUserId, value) }
-                if (!isAdded) return@launch
-                result.fold(
-                        {
-                            // refresh the settings value
-                            mDisplayNamePreference.summary = value
-                            mDisplayNamePreference.text = value
-                            onCommonDone(null)
-                        },
-                        {
-                            onCommonDone(it.localizedMessage)
-                        }
-                )
-            }
-        }
-    }
+    // Tchap: Displayname cannot change
+//    /**
+//     * Update the displayname.
+//     */
+//    private fun onDisplayNameChanged(value: String) {
+//        val currentDisplayName = session.getUser(session.myUserId)?.displayName ?: ""
+//        if (currentDisplayName != value) {
+//            displayLoadingView()
+//
+//            lifecycleScope.launch {
+//                val result = runCatching { session.setDisplayName(session.myUserId, value) }
+//                if (!isAdded) return@launch
+//                result.fold(
+//                        {
+//                            // refresh the settings value
+//                            mDisplayNamePreference.summary = value
+//                            mDisplayNamePreference.text = value
+//                            onCommonDone(null)
+//                        },
+//                        {
+//                            onCommonDone(it.localizedMessage)
+//                        }
+//                )
+//            }
+//        }
+//    }
 }
