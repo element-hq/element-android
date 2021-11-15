@@ -3,7 +3,7 @@
     trivial_casts,
     trivial_numeric_casts,
     unused_extern_crates,
-    unused_import_braces,
+    unused_import_braces
 )]
 
 //! TODO
@@ -17,7 +17,9 @@ mod responses;
 mod users;
 mod verification;
 
-pub use backup_recovery_key::{BackupKey, BackupRecoveryKey, PassphraseInfo, PkDecryptionError};
+pub use backup_recovery_key::{
+    BackupKey, BackupRecoveryKey, DecodeError, PassphraseInfo, PkDecryptionError,
+};
 pub use device::Device;
 pub use error::{
     CryptoStoreError, DecryptionError, KeyImportError, SecretImportError, SignatureError,

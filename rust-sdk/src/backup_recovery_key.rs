@@ -21,6 +21,13 @@ pub enum PkDecryptionError {
     Olm(#[from] OlmPkDecryptionError),
 }
 
+#[derive(Debug, Error)]
+pub enum DecodeError {
+    /// An error happened while decoding the recovery key.
+    #[error(transparent)]
+    Decode(#[from] matrix_sdk_crypto::backups::DecodeError),
+}
+
 /// Struct containing info about the way the backup key got derived from a
 /// passphrase.
 #[derive(Debug, Clone)]
@@ -56,21 +63,19 @@ impl BackupRecoveryKey {
     }
 
     /// Try to create a [`BackupRecoveryKey`] from a base 64 encoded string.
-    pub fn from_base64(key: String) -> Self {
-        Self {
-            // TODO remove the unwrap
-            inner: RecoveryKey::from_base64(&key).unwrap(),
+    pub fn from_base64(key: String) -> Result<Self, DecodeError> {
+        Ok(Self {
+            inner: RecoveryKey::from_base64(&key)?,
             passphrase_info: None,
-        }
+        })
     }
 
     /// Try to create a [`BackupRecoveryKey`] from a base 58 encoded string.
-    pub fn from_base58(key: String) -> Self {
-        Self {
-            // TODO remove the unwrap
-            inner: RecoveryKey::from_base58(&key).unwrap(),
+    pub fn from_base58(key: String) -> Result<Self, DecodeError> {
+        Ok(Self {
+            inner: RecoveryKey::from_base58(&key)?,
             passphrase_info: None,
-        }
+        })
     }
 
     /// Create a new [`BackupRecoveryKey`] from the given passphrase.
@@ -90,12 +95,7 @@ impl BackupRecoveryKey {
         let mut key = [0u8; Self::KEY_SIZE];
         let rounds = rounds as u32;
 
-        pbkdf2::<Hmac<Sha512>>(
-            passphrase.as_bytes(),
-            salt.as_bytes(),
-            rounds,
-            &mut key,
-        );
+        pbkdf2::<Hmac<Sha512>>(passphrase.as_bytes(), salt.as_bytes(), rounds, &mut key);
 
         Self {
             inner: RecoveryKey::from_bytes(key),
