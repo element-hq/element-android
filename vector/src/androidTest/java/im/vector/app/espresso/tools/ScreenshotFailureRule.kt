@@ -90,6 +90,7 @@ private fun useMediaStoreScreenshotStorage(
     }
 }
 
+@Suppress("DEPRECATION")
 private fun usePublicExternalScreenshotStorage(
         contentValues: ContentValues,
         contentResolver: ContentResolver,
