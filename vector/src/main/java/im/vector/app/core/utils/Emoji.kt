@@ -28,7 +28,9 @@ import com.vanniktech.emoji.EmojiUtils
  */
 fun containsOnlyEmojis(str: String?): Boolean {
     // Now rely on vanniktech library
-    return EmojiUtils.isOnlyEmojis(str)
+    // Emojis sent from desktop such as thumbs-up or down are sent with a variant selection symbol "\ufe0f",
+    // that the library identifies as non-emoji character, so remove that manually before.
+    return EmojiUtils.isOnlyEmojis(str?.replace("\ufe0f", ""))
 }
 
 /**
