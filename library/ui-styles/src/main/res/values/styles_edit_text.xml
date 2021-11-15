@@ -1,14 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- Default style for TextInputLayout -->
-    <style name="Widget.Vector.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox" />
-
-    <style name="Widget.Vector.TextInputLayout.Password">
-        <item name="endIconMode">password_toggle</item>
-        <item name="endIconTint">?vctr_content_secondary</item>
-    </style>
-
     <style name="Widget.Vector.EditText.Composer" parent="Widget.AppCompat.EditText">
         <item name="android:background">@android:color/transparent</item>
         <item name="android:inputType">textCapSentences|textMultiLine</item>
@@ -17,11 +9,6 @@
         <item name="android:padding">8dp</item>
         <item name="android:textSize">15sp</item>
         <item name="android:textColor">?vctr_message_text_color</item>
-    </style>
-
-    <style name="Widget.Vector.EditText.Form" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-        <item name="boxStrokeColor">@color/form_edit_text_stroke_color_selector</item>
-        <item name="android:textColorHint">@color/form_edit_text_hint_color_selector</item>
     </style>
 
 </resources>
