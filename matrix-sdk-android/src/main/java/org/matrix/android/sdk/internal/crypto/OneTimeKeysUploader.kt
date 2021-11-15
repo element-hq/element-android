@@ -147,7 +147,6 @@ internal class OneTimeKeysUploader @Inject constructor(
         olmDevice.markKeysAsPublished()
         needNewFallbackKey = false
 
-
         if (response.hasOneTimeKeyCountsForAlgorithm(MXKey.KEY_SIGNED_CURVE_25519_TYPE)) {
             // Maybe upload other keys
             return keysThisLoop + uploadOTK(response.oneTimeKeyCountsForAlgorithm(MXKey.KEY_SIGNED_CURVE_25519_TYPE), keyLimit)
@@ -176,7 +175,6 @@ internal class OneTimeKeysUploader @Inject constructor(
 
             oneTimeJson["signed_curve25519:$key_id"] = k
         }
-
 
         val fallbackJson = mutableMapOf<String, Any>()
         if (needNewFallbackKey) {
