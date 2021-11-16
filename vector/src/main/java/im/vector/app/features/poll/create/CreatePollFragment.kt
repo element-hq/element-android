@@ -61,8 +61,8 @@ class CreatePollFragment @Inject constructor(
             viewModel.handle(CreatePollAction.OnCreatePoll)
         }
 
-        viewModel.subscribe(this) {
-            views.createPollButton.isEnabled = it.canCreatePoll
+        viewModel.onEach(CreatePollViewState::canCreatePoll) { canCreatePoll ->
+            views.createPollButton.isEnabled = canCreatePoll
         }
 
         viewModel.observeViewEvents {

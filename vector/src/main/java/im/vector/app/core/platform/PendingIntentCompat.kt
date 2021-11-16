@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
+ * Copyright (c) 2021 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,17 +14,21 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.call.telecom
+package im.vector.app.core.platform
 
-import android.content.Context
-import android.telephony.TelephonyManager
-import androidx.core.content.getSystemService
+import android.app.PendingIntent
+import android.os.Build
 
-object TelecomUtils {
+object PendingIntentCompat {
+    val FLAG_IMMUTABLE = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        PendingIntent.FLAG_IMMUTABLE
+    } else {
+        0
+    }
 
-    fun isLineBusy(context: Context): Boolean {
-        val telephonyManager = context.getSystemService<TelephonyManager>()
-                ?: return false
-        return telephonyManager.callState != TelephonyManager.CALL_STATE_IDLE
+    val FLAG_MUTABLE = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        PendingIntent.FLAG_MUTABLE
+    } else {
+        0
     }
 }

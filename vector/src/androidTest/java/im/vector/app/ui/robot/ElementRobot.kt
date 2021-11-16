@@ -141,3 +141,9 @@ class ElementRobot {
 }
 
 private fun Boolean.toWarningType() = if (this) "shown" else "skipped"
+
+fun ElementRobot.withDeveloperMode(block: ElementRobot.() -> Unit) {
+    settings { toggleDeveloperMode() }
+    block()
+    settings { toggleDeveloperMode() }
+}

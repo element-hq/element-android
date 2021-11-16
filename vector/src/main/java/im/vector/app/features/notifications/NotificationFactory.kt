@@ -17,7 +17,6 @@
 package im.vector.app.features.notifications
 
 import android.app.Notification
-import androidx.core.content.pm.ShortcutInfoCompat
 import javax.inject.Inject
 
 private typealias ProcessedMessageEvents = List<ProcessedEvent<NotifiableMessageEvent>>
@@ -104,7 +103,7 @@ class NotificationFactory @Inject constructor(
 
 sealed interface RoomNotification {
     data class Removed(val roomId: String) : RoomNotification
-    data class Message(val notification: Notification, val shortcutInfo: ShortcutInfoCompat?, val meta: Meta) : RoomNotification {
+    data class Message(val notification: Notification, val meta: Meta) : RoomNotification {
         data class Meta(
                 val summaryLine: CharSequence,
                 val messageCount: Int,

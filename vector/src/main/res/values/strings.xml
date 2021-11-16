@@ -1080,6 +1080,9 @@
     <string name="room_settings_forget">Forget</string>
     <string name="room_settings_add_homescreen_shortcut">Add to Home screen</string>
 
+    <string name="shortcut_disabled_reason_room_left">The room has been left!</string>
+    <string name="shortcut_disabled_reason_sign_out">The session has been signed out!</string>
+
     <!-- home sliding menu -->
     <string name="room_sliding_menu_messages">Messages</string>
     <string name="room_sliding_menu_settings">Settings</string>
