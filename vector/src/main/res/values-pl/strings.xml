@@ -567,8 +567,8 @@ Zauważ, że ta czynność spowoduje ponowne uruchomienie aplikacji i może to t
     <string name="auth_threepid_warning_message">Rejestracja jednocześnie za pomocą numeru telefonu i adresu e-mail nie jest obsługiwana dopóki nie pojawi się odpowiednie API. Tylko numer telefonu będzie brany pod uwagę.
 
 Możesz dodać adres e-mail do swojego profilu w ustawieniach.</string>
-    <string name="auth_home_server">Serwer Domowy:</string>
-    <string name="auth_identity_server">Serwer Tożsamości:</string>
+    <string name="auth_home_server">Serwer domowy:</string>
+    <string name="auth_identity_server">Serwer tożsamości:</string>
     <string name="auth_reset_password_success_message">Twoje hasło zostało zresetowane. Zostałeś wylogowany ze wszystkich sesji i nie będziesz więcej otrzymywać powiadomień push. Aby ponownie włączyć powiadomienia, zaloguj się ponownie na każdym urządzeniu.</string>
     <string name="login_error_unknown_token">Wprowadzony token dostępu nie został rozpoznany</string>
     <string name="login_error_bad_json">Uszkodzony JSON</string>
