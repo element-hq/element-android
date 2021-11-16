@@ -24,17 +24,20 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.autofill.HintConstants
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.Fail
-import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.hidePassword
 import im.vector.app.databinding.FragmentLoginSigninPassword2Binding
 import im.vector.app.features.home.AvatarRenderer
-import io.reactivex.rxkotlin.subscribeBy
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.auth.login.LoginProfileInfo
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.isInvalidPassword
+import reactivecircus.flowbinding.android.widget.textChanges
 import javax.inject.Inject
 import javax.net.ssl.HttpsURLConnection
 
@@ -121,11 +124,11 @@ class LoginFragmentSigninPassword2 @Inject constructor(
         views.passwordField
                 .textChanges()
                 .map { it.isNotEmpty() }
-                .subscribeBy {
+                .onEach {
                     views.passwordFieldTil.error = null
                     views.loginSubmit.isEnabled = it
                 }
-                .disposeOnDestroyView()
+                .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     private fun forgetPasswordClicked() {

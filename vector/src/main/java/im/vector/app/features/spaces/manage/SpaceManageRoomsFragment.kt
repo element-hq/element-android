@@ -25,13 +25,13 @@ import android.view.ViewGroup
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.view.ActionMode.Callback
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import androidx.transition.TransitionManager
 import com.airbnb.epoxy.EpoxyVisibilityTracker
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
-import com.jakewharton.rxbinding3.appcompat.queryTextChanges
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
@@ -39,9 +39,11 @@ import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.toast
 import im.vector.app.databinding.FragmentSpaceAddRoomsBinding
-import io.reactivex.rxkotlin.subscribeBy
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
-import java.util.concurrent.TimeUnit
+import reactivecircus.flowbinding.appcompat.queryTextChanges
 import javax.inject.Inject
 
 class SpaceManageRoomsFragment @Inject constructor(
@@ -72,11 +74,11 @@ class SpaceManageRoomsFragment @Inject constructor(
         epoxyVisibilityTracker.attach(views.roomList)
 
         views.publicRoomsFilter.queryTextChanges()
-                .debounce(200, TimeUnit.MILLISECONDS)
-                .subscribeBy {
+                .debounce(200)
+                .onEach {
                     viewModel.handle(SpaceManageRoomViewAction.UpdateFilter(it.toString()))
                 }
-                .disposeOnDestroyView()
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
         viewModel.onEach(SpaceManageRoomViewState::actionState) { actionState ->
             when (actionState) {

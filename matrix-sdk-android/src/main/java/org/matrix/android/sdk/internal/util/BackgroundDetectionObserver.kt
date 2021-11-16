@@ -16,9 +16,8 @@
 
 package org.matrix.android.sdk.internal.util
 
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.OnLifecycleEvent
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import org.matrix.android.sdk.internal.di.MatrixScope
 import timber.log.Timber
 import javax.inject.Inject
@@ -27,13 +26,12 @@ import javax.inject.Inject
  * To be attached to ProcessLifecycleOwner lifecycle
  */
 @MatrixScope
-internal class BackgroundDetectionObserver @Inject constructor() : LifecycleObserver {
+internal class BackgroundDetectionObserver @Inject constructor() : DefaultLifecycleObserver {
 
-    var isInBackground: Boolean = false
+    var isInBackground: Boolean = true
         private set
 
-    private
-    val listeners = LinkedHashSet<Listener>()
+    private val listeners = LinkedHashSet<Listener>()
 
     fun register(listener: Listener) {
         listeners.add(listener)
@@ -43,15 +41,13 @@ internal class BackgroundDetectionObserver @Inject constructor() : LifecycleObse
         listeners.remove(listener)
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_START)
-    fun onMoveToForeground() {
+    override fun onStart(owner: LifecycleOwner) {
         Timber.v("App returning to foreground…")
         isInBackground = false
         listeners.forEach { it.onMoveToForeground() }
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
-    fun onMoveToBackground() {
+    override fun onStop(owner: LifecycleOwner) {
         Timber.v("App going to background…")
         isInBackground = true
         listeners.forEach { it.onMoveToBackground() }

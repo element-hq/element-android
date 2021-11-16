@@ -22,16 +22,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.core.view.isGone
+import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
-import com.jakewharton.rxbinding3.widget.editorActionEvents
-import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
+import im.vector.app.core.flow.throttleFirst
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentBootstrapEnterPassphraseBinding
-import io.reactivex.android.schedulers.AndroidSchedulers
-import java.util.concurrent.TimeUnit
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import reactivecircus.flowbinding.android.widget.editorActionEvents
+import reactivecircus.flowbinding.android.widget.textChanges
 import javax.inject.Inject
 
 class BootstrapConfirmPassphraseFragment @Inject constructor() :
@@ -58,21 +60,20 @@ class BootstrapConfirmPassphraseFragment @Inject constructor() :
         }
 
         views.ssssPassphraseEnterEdittext.editorActionEvents()
-                .throttleFirst(300, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
+                .throttleFirst(300)
+                .onEach {
                     if (it.actionId == EditorInfo.IME_ACTION_DONE) {
                         submit()
                     }
                 }
-                .disposeOnDestroyView()
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
         views.ssssPassphraseEnterEdittext.textChanges()
-                .subscribe {
+                .onEach {
                     views.ssssPassphraseEnterTil.error = null
-                    sharedViewModel.handle(BootstrapActions.UpdateConfirmCandidatePassphrase(it?.toString() ?: ""))
+                    sharedViewModel.handle(BootstrapActions.UpdateConfirmCandidatePassphrase(it.toString()))
                 }
-                .disposeOnDestroyView()
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
         sharedViewModel.observeViewEvents {
             //            when (it) {

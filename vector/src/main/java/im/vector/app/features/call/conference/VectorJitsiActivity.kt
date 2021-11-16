@@ -68,7 +68,7 @@ class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMee
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        jitsiViewModel.subscribe(this) {
+        jitsiViewModel.onEach {
             renderState(it)
         }
 

@@ -1,0 +1,1 @@
+Adds support for images inside message notifications

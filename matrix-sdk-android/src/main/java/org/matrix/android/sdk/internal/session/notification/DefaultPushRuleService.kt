@@ -19,6 +19,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import com.zhuinden.monarchy.Monarchy
 import org.matrix.android.sdk.api.pushrules.Action
+import org.matrix.android.sdk.api.pushrules.PushEvents
 import org.matrix.android.sdk.api.pushrules.PushRuleService
 import org.matrix.android.sdk.api.pushrules.RuleKind
 import org.matrix.android.sdk.api.pushrules.RuleScope
@@ -142,79 +143,6 @@ internal class DefaultPushRuleService @Inject constructor(
         return pushRuleFinder.fulfilledBingRule(event, rules)?.getActions().orEmpty()
     }
 
-//    fun processEvents(events: List<Event>) {
-//        var hasDoneSomething = false
-//        events.forEach { event ->
-//            fulfilledBingRule(event)?.let {
-//                hasDoneSomething = true
-//                dispatchBing(event, it)
-//            }
-//        }
-//        if (hasDoneSomething)
-//            dispatchFinish()
-//    }
-
-    fun dispatchBing(event: Event, rule: PushRule) {
-        synchronized(listeners) {
-            val actionsList = rule.getActions()
-            listeners.forEach {
-                try {
-                    it.onMatchRule(event, actionsList)
-                } catch (e: Throwable) {
-                    Timber.e(e, "Error while dispatching bing")
-                }
-            }
-        }
-    }
-
-    fun dispatchRoomJoined(roomId: String) {
-        synchronized(listeners) {
-            listeners.forEach {
-                try {
-                    it.onRoomJoined(roomId)
-                } catch (e: Throwable) {
-                    Timber.e(e, "Error while dispatching room joined")
-                }
-            }
-        }
-    }
-
-    fun dispatchRoomLeft(roomId: String) {
-        synchronized(listeners) {
-            listeners.forEach {
-                try {
-                    it.onRoomLeft(roomId)
-                } catch (e: Throwable) {
-                    Timber.e(e, "Error while dispatching room left")
-                }
-            }
-        }
-    }
-
-    fun dispatchRedactedEventId(redactedEventId: String) {
-        synchronized(listeners) {
-            listeners.forEach {
-                try {
-                    it.onEventRedacted(redactedEventId)
-                } catch (e: Throwable) {
-                    Timber.e(e, "Error while dispatching redacted event")
-                }
-            }
-        }
-    }
-
-    fun dispatchFinish() {
-        synchronized(listeners) {
-            listeners.forEach {
-                try {
-                    it.batchFinish()
-                } catch (e: Throwable) {
-                    Timber.e(e, "Error while dispatching finish")
-                }
-            }
-        }
-    }
-
     override fun getKeywords(): LiveData<Set<String>> {
         // Keywords are all content rules that don't start with '.'
         val liveData = monarchy.findAllMappedWithChanges(
@@ -227,6 +155,18 @@ internal class DefaultPushRuleService @Inject constructor(
         )
         return Transformations.map(liveData) { results ->
             results.firstOrNull().orEmpty().toSet()
+        }
+    }
+
+    fun dispatchEvents(pushEvents: PushEvents) {
+        synchronized(listeners) {
+            listeners.forEach {
+                try {
+                    it.onEvents(pushEvents)
+                } catch (e: Throwable) {
+                    Timber.e(e, "Error while dispatching push events")
+                }
+            }
         }
     }
 }

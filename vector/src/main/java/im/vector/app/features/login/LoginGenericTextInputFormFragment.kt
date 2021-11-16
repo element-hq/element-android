@@ -25,19 +25,22 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.autofill.HintConstants
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.args
 import com.google.i18n.phonenumbers.NumberParseException
 import com.google.i18n.phonenumbers.PhoneNumberUtil
-import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.isEmail
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.databinding.FragmentLoginGenericTextInputFormBinding
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.auth.registration.RegisterThreePid
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.is401
+import reactivecircus.flowbinding.android.widget.textChanges
 import javax.inject.Inject
 
 enum class TextInputFormFragmentMode {
@@ -93,10 +96,10 @@ class LoginGenericTextInputFormFragment @Inject constructor() : AbstractLoginFra
 
     private fun setupTil() {
         views.loginGenericTextInputFormTextInput.textChanges()
-                .subscribe {
+                .onEach {
                     views.loginGenericTextInputFormTil.error = null
                 }
-                .disposeOnDestroyView()
+                .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     private fun setupUi() {
@@ -195,10 +198,10 @@ class LoginGenericTextInputFormFragment @Inject constructor() : AbstractLoginFra
     private fun setupSubmitButton() {
         views.loginGenericTextInputFormSubmit.isEnabled = false
         views.loginGenericTextInputFormTextInput.textChanges()
-                .subscribe {
+                .onEach {
                     views.loginGenericTextInputFormSubmit.isEnabled = isInputValid(it)
                 }
-                .disposeOnDestroyView()
+                .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     private fun isInputValid(input: CharSequence): Boolean {

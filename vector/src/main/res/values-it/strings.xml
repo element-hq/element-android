@@ -1071,7 +1071,7 @@
     <string name="command_description_op_user">Imposta i poteri di un utente</string>
     <string name="command_description_deop_user">Rimuove il rango di operatore dall\'utente con l\'ID specificato</string>
     <string name="command_description_invite_user">Invita l\'utente con l\'ID specificato nella stanza corrente</string>
-    <string name="command_description_join_room">Entra nella stanza con un determinato nome</string>
+    <string name="command_description_join_room">Entra nella stanza con l\'indirizzo scelto</string>
     <string name="command_description_part_room">Esci dalla stanza</string>
     <string name="command_description_topic">Imposta l\'argomento della stanza</string>
     <string name="command_description_kick_user">Butta fuori l\'utente con l\'ID specificato</string>

@@ -1,1 +1,0 @@
-Updating single sign on providers ordering to match priority/popularity

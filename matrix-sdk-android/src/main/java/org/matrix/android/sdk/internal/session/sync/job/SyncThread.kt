@@ -160,6 +160,9 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
                 synchronized(lock) { lock.wait() }
                 Timber.tag(loggerTag.value).d("...retry")
             } else if (!isTokenValid) {
+                if (state == SyncState.Killing) {
+                    continue
+                }
                 Timber.tag(loggerTag.value).d("Token is invalid. Waiting...")
                 updateStateTo(SyncState.InvalidToken)
                 synchronized(lock) { lock.wait() }

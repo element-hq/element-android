@@ -2628,7 +2628,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="not_a_valid_qr_code">Bukan kode QR Matrix yang valid</string>
     <string name="invitations_sent_to_two_users">Undangan terkirim ke %1$s dan %2$s</string>
     <string name="invitation_sent_to_one_user">Undangan terkirim ke %1$s</string>
-    <string name="template_invite_friends_rich_title">🔐️ Bergabung dengan saya di ${app_name]</string>
+    <string name="template_invite_friends_rich_title">🔐️ Bergabung dengan saya di ${app_name}</string>
     <string name="template_invite_friends_text">Hi, bicara dengan saya di ${app_name}: %s</string>
     <string name="invite_friends">Undang teman</string>
     <string name="invite_users_to_room_title">Undang Pengguna</string>
