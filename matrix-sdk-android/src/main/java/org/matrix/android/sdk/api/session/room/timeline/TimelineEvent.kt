@@ -140,9 +140,9 @@ fun TimelineEvent.getLastMessageBody(): String? {
     val lastMessageContent = getLastMessageContent()
 
     if (lastMessageContent != null) {
-        return lastMessageContent.newContent?.toModel<MessageTextContent>()?.formattedBody?.let { ContentUtils.formatSpoilerTextFromHtml(it) }
+        return lastMessageContent.newContent?.toModel<MessageTextContent>()?.matrixFormattedBody?.let { ContentUtils.formatSpoilerTextFromHtml(it) }
                 ?: lastMessageContent.newContent?.toModel<MessageContent>()?.body
-                ?: (lastMessageContent as MessageTextContent).formattedBody?.let { ContentUtils.formatSpoilerTextFromHtml(it) }
+                ?: (lastMessageContent as MessageTextContent).matrixFormattedBody?.let { ContentUtils.formatSpoilerTextFromHtml(it) }
                 ?: lastMessageContent.body
     }
 
