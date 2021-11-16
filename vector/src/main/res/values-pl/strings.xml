@@ -2090,7 +2090,7 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="login_error_outdated_homeserver_warning_content">Ten serwer domowy pracuje na starej wersji. Poproś jego administratora o zaktualizowanie go. Możesz kontynuować, ale niektóre funkcjonalności mogą nie działać poprawnie.</string>
     <string name="login_msisdn_notice">Użyj proszę formatu międzynarodowego (numer telefonu musi zaczynać się od \"+\")</string>
     <string name="login_server_url_form_common_notice">Wpisz adres serwera, którego chcesz używać</string>
-    <string name="direct_room_join_rules_invite_by_you">Zrobiłeś(-łaś) to dostępne tylko przez zaproszenie</string>
+    <string name="direct_room_join_rules_invite_by_you">Zrobiłeś(-łaś) to dostępne tylko przez zaproszenie.</string>
     <string name="room_join_rules_invite_by_you">Uczyniłeś(-łaś) ten pokój dostępnym tylko poprzez zaproszenie.</string>
     <string name="room_join_rules_public_by_you">Uczyniłeś(-łaś) ten pokój publicznym dla każdego kto zna link.</string>
     <string name="notice_member_no_changes_by_you">Nie dokonano żadnych zmian</string>
@@ -2861,4 +2861,5 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="notice_room_withdraw_with_reason">%1$s odrzucił(a) zaproszenie %2$s. Powód: %3$s</string>
     <string name="a11y_delete_recorded_voice_message">Usuń nagranie</string>
     <string name="feedback">Opinie</string>
+    <string name="bootstrap_crosssigning_progress_save_ssk">Synchronizacja Klucza Samopodpisującego (Self Signing key)</string>
 </resources>
