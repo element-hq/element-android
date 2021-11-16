@@ -2298,7 +2298,7 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="permissions_denied_add_contact">Zezwól na dostęp do Twoich kontaktów.</string>
     <string name="call_select_sound_device">Wybierz urządzenie dźwiękowe</string>
     <string name="template_call_failed_no_connection">Połączenie ${app_name} nieudane</string>
-    <string name="call_notification_reject">Zrezygnuj</string>
+    <string name="call_notification_reject">Odmów</string>
     <string name="start_chatting">Rozpocznij konwersację</string>
     <string name="matrix_to_card_title">Łącze Matrix</string>
     <string name="warning_unsaved_change_discard">Odrzuć zmiany</string>
