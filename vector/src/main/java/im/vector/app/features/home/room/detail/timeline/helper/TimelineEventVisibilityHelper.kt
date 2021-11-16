@@ -119,8 +119,7 @@ class TimelineEventVisibilityHelper @Inject constructor(private val userPreferen
             val diff = computeMembershipDiff()
             if ((diff.isJoin || diff.isPart) && !userPreferencesProvider.shouldShowJoinLeaves()) return true
             if ((diff.isAvatarChange || diff.isDisplaynameChange) && !userPreferencesProvider.shouldShowAvatarDisplayNameChanges()) return true
-            // No change
-            if (!diff.isJoin && !diff.isPart && !diff.isDisplaynameChange && !diff.isAvatarChange) return true
+            if (diff.isNoChange) return true
         }
         return false
     }
@@ -137,11 +136,16 @@ class TimelineEventVisibilityHelper @Inject constructor(private val userPreferen
         val isDisplaynameChange = isProfileChanged && content?.displayName != prevContent?.displayName
         val isAvatarChange = isProfileChanged && content?.avatarUrl != prevContent?.avatarUrl
 
+        // Compare NoticeEventFormatter.formatRoomMemberEvent()
+        val isMembershipEvent = prevContent?.membership != content?.membership ||
+                content?.membership == Membership.LEAVE
+
         return MembershipDiff(
                 isJoin = isJoin,
                 isPart = isPart,
                 isDisplaynameChange = isDisplaynameChange,
-                isAvatarChange = isAvatarChange
+                isAvatarChange = isAvatarChange,
+                isNoChange = !isMembershipEvent && !isJoin && !isPart && !isDisplaynameChange && !isAvatarChange
         )
     }
 
@@ -149,6 +153,7 @@ class TimelineEventVisibilityHelper @Inject constructor(private val userPreferen
             val isJoin: Boolean,
             val isPart: Boolean,
             val isDisplaynameChange: Boolean,
-            val isAvatarChange: Boolean
+            val isAvatarChange: Boolean,
+            val isNoChange: Boolean
     )
 }
