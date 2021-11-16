@@ -2051,7 +2051,7 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="settings_call_show_confirmation_dialog_title">Zapobiegaj przypadkowym połączeniom</string>
     <string name="action_unpublish">Wycofaj publikację</string>
     <string name="action_add">Dodaj</string>
-    <string name="action_copy">Skopiuj</string>
+    <string name="action_copy">Kopiuj</string>
     <string name="call_notification_hangup">Zakończ rozmowę</string>
     <string name="reset">Zresetuj</string>
     <string name="no_connectivity_to_the_server_indicator_airplane">Tryb samolotowy jest włączony</string>
@@ -2194,7 +2194,7 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="settings_emails_and_phone_numbers_summary">Zarządzaj adresami e-mail oraz numerami telefonów powiązanymi z Twoim kontem Matrix</string>
     <string name="settings_emails_and_phone_numbers_title">Adresy e-mail i numery telefonów</string>
     <string name="disabled_integration_dialog_content">Włącz \"Zezwalaj na integracje\" w Ustawieniach żeby to zrobić.</string>
-    <string name="disabled_integration_dialog_title">Integracje są wyłączone</string>
+    <string name="disabled_integration_dialog_title">Integracje są zablokowane</string>
     <string name="reset_secure_backup_warning">To zastąpi obecny Klucz bądź Hasło.</string>
     <string name="reset_secure_backup_title">Wygeneruj nowy Klucz Bezpieczeństwa albo Hasło dla istniejącej kopii zapasowej.</string>
     <string name="settings_secure_backup_section_info">Zabezpiecza przeciwko utracie dostępu do zaszyfrowanych wiadomości oraz danych poprzez zapisanie zaszyfrowanych kluczy na Twoim serwerze.</string>
@@ -2285,7 +2285,7 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="settings_when_rooms_are_upgraded">Kiedy pokoje są aktualizowane</string>
     <string name="bootstrap_info_text">Zabezpiecz i odblokuj zaszyfrowane wiadomości oraz zaufane poprzez %s.</string>
     <string name="send_a_sticker">Naklejka</string>
-    <string name="direct_room_join_rules_invite">%1$s zrobił(a) to dostępne tylko z zaproszeniem.</string>
+    <string name="direct_room_join_rules_invite">"%1$s  zrobił(a) to dostępne tylko poprzez zaproszenie"</string>
     <plurals name="two_and_some_others_read">
         <item quantity="one">%1$s, %2$s i %3$d czyta</item>
         <item quantity="few">%1$s, %2$s i %3$d czytają</item>
@@ -2547,7 +2547,7 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="call_held_by_user">%s zawiesił(a) połączenie</string>
     <string name="call_hold_action">Zawieś</string>
     <string name="call_resume_action">Wznów</string>
-    <string name="return_to_call">Wróć do połączenia</string>
+    <string name="return_to_call">Wróć do rozmowy</string>
     <string name="audio_call_with_participant">Połączenie głosowe z %s</string>
     <string name="video_call_with_participant">Połączenie wideo z %s</string>
     <plurals name="missed_video_call">
