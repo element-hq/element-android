@@ -343,13 +343,21 @@ internal class LocalEchoEventFactory @Inject constructor(
     /**
      * Creates a thread event related to the already existing event
      */
-    fun createThreadTextEvent(rootThreadEventId: String, roomId:String, text: String, autoMarkdown: Boolean): Event =
-            createEvent(
-                    roomId,
-                    EventType.MESSAGE,
-                    createTextContent(text, autoMarkdown)
-                            .toThreadTextContent(rootThreadEventId)
-                            .toContent())
+    fun createThreadTextEvent(
+            rootThreadEventId: String,
+            roomId: String,
+            text: String,
+            msgType: String,
+            autoMarkdown: Boolean,
+            formattedText: String?): Event {
+
+        val content = formattedText?.let { TextContent(text, it) } ?: createTextContent(text, autoMarkdown)
+        return createEvent(
+                roomId,
+                EventType.MESSAGE,
+                content.toThreadTextContent(rootThreadEventId, msgType)
+                        .toContent())
+    }
 
     private fun dummyOriginServerTs(): Long {
         return System.currentTimeMillis()

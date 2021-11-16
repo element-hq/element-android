@@ -18,6 +18,7 @@ package org.matrix.android.sdk.api.session.room.model.relation
 import androidx.lifecycle.LiveData
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.model.EventAnnotationsSummary
+import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.util.Cancelable
 import org.matrix.android.sdk.api.util.Optional
@@ -136,6 +137,8 @@ interface RelationService {
      * @param autoMarkdown If true, the SDK will generate a formatted HTML message from the body text if markdown syntax is present
      */
     fun replyInThread(rootThreadEventId: String,
-                       replyInThreadText: CharSequence,
-                       autoMarkdown: Boolean = false): Cancelable?
+                      replyInThreadText: CharSequence,
+                      msgType: String = MessageType.MSGTYPE_TEXT,
+                      autoMarkdown: Boolean = false,
+                      formattedText: String? = null): Cancelable?
 }

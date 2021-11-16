@@ -49,9 +49,10 @@ import org.matrix.android.sdk.api.util.toRoomAliasMatrixItem
 
 class AutoCompleter @AssistedInject constructor(
         @Assisted val roomId: String,
+        @Assisted val isInThreadTimeline: Boolean,
         private val avatarRenderer: AvatarRenderer,
         private val commandAutocompletePolicy: CommandAutocompletePolicy,
-        private val autocompleteCommandPresenter: AutocompleteCommandPresenter,
+        AutocompleteCommandPresenterFactory: AutocompleteCommandPresenter.Factory,
         private val autocompleteMemberPresenterFactory: AutocompleteMemberPresenter.Factory,
         private val autocompleteRoomPresenter: AutocompleteRoomPresenter,
         private val autocompleteGroupPresenter: AutocompleteGroupPresenter,
@@ -62,7 +63,11 @@ class AutoCompleter @AssistedInject constructor(
 
     @AssistedFactory
     interface Factory {
-        fun create(roomId: String): AutoCompleter
+        fun create(roomId: String, isInThreadTimeline: Boolean): AutoCompleter
+    }
+
+    private val autocompleteCommandPresenter: AutocompleteCommandPresenter by lazy {
+        AutocompleteCommandPresenterFactory.create(isInThreadTimeline)
     }
 
     private var editText: EditText? = null

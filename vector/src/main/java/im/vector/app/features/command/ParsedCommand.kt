@@ -28,6 +28,8 @@ sealed class ParsedCommand {
 
     object ErrorEmptySlashCommand : ParsedCommand()
 
+    class ErrorCommandNotSupportedInThreads(val slashCommand: String) : ParsedCommand()
+
     // Unknown/Unsupported slash command
     class ErrorUnknownSlashCommand(val slashCommand: String) : ParsedCommand()
 

@@ -16,6 +16,7 @@
 
 package im.vector.app.features.command
 
+import im.vector.app.BuildConfig
 import im.vector.app.core.extensions.isEmail
 import im.vector.app.core.extensions.isMsisdn
 import im.vector.app.features.home.room.detail.ChatEffect
@@ -32,7 +33,7 @@ object CommandParser {
      * @param textMessage   the text message
      * @return a parsed slash command (ok or error)
      */
-    fun parseSplashCommand(textMessage: CharSequence): ParsedCommand {
+    fun parseSplashCommand(textMessage: CharSequence, isInThreadTimeline: Boolean): ParsedCommand {
         // check if it has the Slash marker
         if (!textMessage.startsWith("/")) {
             return ParsedCommand.ErrorNotACommand
@@ -59,6 +60,20 @@ object CommandParser {
             // test if the string cut fails
             if (messageParts.isNullOrEmpty()) {
                 return ParsedCommand.ErrorEmptySlashCommand
+            }
+
+            // If the command is not supported by threads return error
+
+            if(BuildConfig.THREADING_ENABLED && isInThreadTimeline){
+                val slashCommand = messageParts.first()
+                val notSupportedCommandsInThreads = Command.values().filter {
+                    !it.isThreadCommand
+                }.map {
+                    it.command
+                }
+                if(notSupportedCommandsInThreads.contains(slashCommand)){
+                    return ParsedCommand.ErrorCommandNotSupportedInThreads(slashCommand)
+                }
             }
 
             return when (val slashCommand = messageParts.first()) {

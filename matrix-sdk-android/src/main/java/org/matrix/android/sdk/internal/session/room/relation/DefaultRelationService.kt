@@ -159,12 +159,15 @@ internal class DefaultRelationService @AssistedInject constructor(
         }
     }
 
-    override fun replyInThread(rootThreadEventId: String, replyInThreadText: CharSequence, autoMarkdown: Boolean): Cancelable {
+    override fun replyInThread(rootThreadEventId: String, replyInThreadText: CharSequence, msgType: String, autoMarkdown: Boolean, formattedText: String?): Cancelable {
         val event = eventFactory.createThreadTextEvent(
                 rootThreadEventId = rootThreadEventId,
                 roomId = roomId,
                 text = replyInThreadText.toString(),
-                autoMarkdown = autoMarkdown)
+                msgType = msgType,
+                autoMarkdown = autoMarkdown,
+                formattedText = formattedText
+            )
 //                .also {
 //                    saveLocalEcho(it)
 //                }
