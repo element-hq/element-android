@@ -24,11 +24,13 @@ import org.matrix.android.sdk.api.session.initsync.InitSyncStep
 import org.matrix.android.sdk.api.session.sync.model.GroupsSyncResponse
 import org.matrix.android.sdk.api.session.sync.model.RoomsSyncResponse
 import org.matrix.android.sdk.api.session.sync.model.SyncResponse
+import org.matrix.android.sdk.internal.SessionManager
 import org.matrix.android.sdk.internal.crypto.DefaultCryptoService
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.di.SessionId
 import org.matrix.android.sdk.internal.di.WorkManagerProvider
 import org.matrix.android.sdk.internal.session.SessionListeners
+import org.matrix.android.sdk.internal.session.dispatchTo
 import org.matrix.android.sdk.internal.session.group.GetGroupDataWorker
 import org.matrix.android.sdk.internal.session.initsync.ProgressReporter
 import org.matrix.android.sdk.internal.session.initsync.reportSubtask
@@ -62,7 +64,8 @@ internal class SyncResponseHandler @Inject constructor(
         private val tokenStore: SyncTokenStore,
         private val processEventForPushTask: ProcessEventForPushTask,
         private val pushRuleService: PushRuleService,
-        private val presenceSyncHandler: PresenceSyncHandler
+        private val presenceSyncHandler: PresenceSyncHandler,
+        private val sessionManager: SessionManager
 ) {
 
     suspend fun handleResponse(syncResponse: SyncResponse,
@@ -158,8 +161,9 @@ internal class SyncResponseHandler @Inject constructor(
     }
 
     private fun dispatchInvitedRoom(roomsSyncResponse: RoomsSyncResponse) {
+        val session = sessionManager.getSessionComponent(sessionId)?.session()
         roomsSyncResponse.invite.keys.forEach { roomId ->
-            sessionListeners.dispatch { session, listener ->
+            session.dispatchTo(sessionListeners) { session, listener ->
                 listener.onNewInvitedRoom(session, roomId)
             }
         }
