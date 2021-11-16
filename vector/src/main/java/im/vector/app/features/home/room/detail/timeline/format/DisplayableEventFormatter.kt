@@ -33,10 +33,8 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.model.message.OPTION_TYPE_BUTTONS
 import org.matrix.android.sdk.api.session.room.model.relation.ReactionContent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
-import org.matrix.android.sdk.api.session.room.timeline.getLastMessageBody
 import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
 import org.matrix.android.sdk.api.session.room.timeline.getTextEditableContent
-import org.matrix.android.sdk.api.session.room.timeline.isReply
 import javax.inject.Inject
 
 class DisplayableEventFormatter @Inject constructor(
@@ -64,11 +62,7 @@ class DisplayableEventFormatter @Inject constructor(
                 timelineEvent.getLastMessageContent()?.let { messageContent ->
                     when (messageContent.msgType) {
                         MessageType.MSGTYPE_TEXT                 -> {
-                            val body = if (timelineEvent.isReply()) {
-                                timelineEvent.getTextEditableContent() ?: messageContent.body
-                            } else {
-                                messageContent.body
-                            }
+                            val body = timelineEvent.getTextEditableContent() ?: messageContent.body
                             if (messageContent is MessageTextContent && messageContent.matrixFormattedBody.isNullOrBlank().not()) {
                                 val localFormattedBody = htmlRenderer.get().parse(body) as Document
                                 val renderedBody = htmlRenderer.get().render(localFormattedBody) ?: body
@@ -95,18 +89,6 @@ class DisplayableEventFormatter @Inject constructor(
                         }
                         MessageType.MSGTYPE_FILE                 -> {
                             return simpleFormat(senderName, stringProvider.getString(R.string.sent_a_file), appendAuthor)
-                        }
-                        MessageType.MSGTYPE_TEXT                 -> {
-                          todo fix merge issue
-                            return if (timelineEvent.isReply()) {
-                                // Skip reply prefix, and show important
-                                // TODO add a reply image span ?
-                                simpleFormat(senderName, timelineEvent.getTextEditableContent()
-                                        ?: messageContent.body, appendAuthor)
-                            } else {
-                                simpleFormat(senderName, timelineEvent.getLastMessageBody()
-                                        ?: messageContent.body, appendAuthor)
-                            }
                         }
                         MessageType.MSGTYPE_RESPONSE             -> {
                             // do not show that?
