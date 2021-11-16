@@ -104,7 +104,7 @@
     <string name="view_decrypted_source">Wyświetl odszyfrowane źródło</string>
     <string name="delete">Usuń</string>
     <string name="rename">Zmień nazwę</string>
-    <string name="report_content">Zgłoś zawartość</string>
+    <string name="report_content">Zgłoś treść</string>
     <string name="active_call">Aktywne połączenie</string>
     <string name="ongoing_conference_call">Przychodzące połączenie grupowe.
 \nDołącz z %1$s lub %2$s</string>
@@ -179,7 +179,7 @@
     <string name="create_account">Stwórz konto</string>
     <string name="login">Zaloguj się</string>
     <string name="logout">Wyloguj</string>
-    <string name="hs_url">Adres serwera</string>
+    <string name="hs_url">Adres serwera domowego</string>
     <string name="search">Szukaj</string>
     <string name="start_new_chat">Rozpocznij nową rozmowę</string>
     <string name="start_voice_call">Rozpocznij połączenie telefoniczne</string>
@@ -218,7 +218,7 @@
     <string name="auth_forgot_password">Zapomniałeś(-aś) hasła?</string>
     <string name="auth_use_server_options">Użyj niestandardowych ustawień serwera (zaawansowane)</string>
     <string name="auth_email_validation_message">Sprawdź swój adres e-mail, aby kontynuować rejestrację</string>
-    <string name="auth_recaptcha_message">Serwer chciałby upewnić się, czy nie jesteś robotem</string>
+    <string name="auth_recaptcha_message">Potwierdź, że nie jesteś robotem</string>
     <string name="auth_username_in_use">Nazwa użytkownika jest już używana</string>
     <string name="auth_reset_password_next_step_button">Zweryfikowałem adres e-mail</string>
     <string name="auth_reset_password_message">Aby przywrócić hasło, wprowadź adres e-mail powiązany z kontem:</string>
@@ -331,7 +331,7 @@ Przyznaj dostęp w następnym oknie.</string>
     <string name="room_resend_unsent_messages">Wyślij niewysłane wiadomości ponownie</string>
     <string name="room_delete_unsent_messages">Usuń niewysłane wiadomości</string>
     <string name="room_message_file_not_found">Nie znaleziono pliku</string>
-    <string name="room_do_not_have_permission_to_post">Nie masz uprawnień, aby pisać w tym pokoju</string>
+    <string name="room_do_not_have_permission_to_post">Nie masz uprawnień, aby pisać w tym pokoju.</string>
     <string name="ssl_trust">Ufaj</string>
     <string name="ssl_do_not_trust">Nie ufaj</string>
     <string name="ssl_logout_account">Wyloguj</string>
@@ -514,7 +514,7 @@ Zauważ, że ta czynność spowoduje ponowne uruchomienie aplikacji i może to t
     <string name="unknown_devices_alert_title">Pokój zawiera nieznane sesje</string>
     <string name="select_room_directory">Wybierz katalog pokojów</string>
     <string name="directory_server_fail_to_retrieve_server">Serwer może być wyłączony lub przeciążony</string>
-    <string name="directory_server_placeholder">Adres serwera domowego</string>
+    <string name="directory_server_placeholder">Nazwa serwera</string>
     <string name="directory_server_all_rooms_on_server">Wszystkie pokoje na serwerze %s</string>
     <string name="historical_placeholder">Szukaj w archiwum</string>
     <string name="font_size">Rozmiar czcionki</string>
@@ -907,7 +907,7 @@ Widoczność wiadomości w Matrix jest podobna do wiadomości e-mail. Nasze zapo
     <string name="command_description_kick_user">Wyrzuca użytkownika z podanym ID</string>
     <string name="command_description_nick">Zmienia twój wyświetlany nick</string>
     <string name="command_description_clear_scalar_token">Do naprawiania zarządzania aplikacjami Matrix</string>
-    <string name="room_tombstone_versioned_description">Ten pokój został zamieniony i nie jest już aktywny</string>
+    <string name="room_tombstone_versioned_description">Ten pokój został zamieniony i nie jest już aktywny.</string>
     <string name="room_tombstone_continuation_link">Konwersacja jest kontynuowana tutaj</string>
     <string name="room_tombstone_continuation_description">Ten pokój jest kontynuacją innej rozmowy</string>
     <string name="resource_limit_exceeded_title">Limit pakietów został przekroczony</string>
@@ -1077,7 +1077,7 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="settings_notification_troubleshoot">Diagnostyka powiadomień</string>
     <string name="settings_troubleshoot_diagnostic">Rozwiązywanie problemów</string>
     <string name="settings_troubleshoot_diagnostic_success_status">Diagnostyka podstawowa nie wykazała problemów. Jeżeli wciąż nie otrzymujesz powiadomień, prosimy o przesłanie raportu o błędach, w celu ich rozwiązania.</string>
-    <string name="settings_notification_privacy_no_background_sync">Aplikacja <b>nie</b> potrzebuje łączyć się z serwerem domowym w tle, powinno to zredukować użycie baterii</string>
+    <string name="settings_notification_privacy_no_background_sync">Aplikacja <b>nie</b> potrzebuje łączyć się z serwerem domowym w tle, powinno to zmniejszyć użycie baterii</string>
     <string name="keys_backup_restore_with_passphrase_helper_with_link">Jeżeli nie pamiętasz swoich danych odzystkiwania, możesz %s.</string>
     <string name="keys_backup_restore_with_key_helper">Zgubiłeś (-łaś) swój klucz odzyskiwania\? Możesz ustawić nowy w ustawieniach.</string>
     <string name="keys_backup_settings_valid_signature_from_unverified_device">Kopia zapasowa posiada poprawną sygnaturę z niezweryfikowanej sesji %s</string>
@@ -1095,7 +1095,7 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Dodaj Konto</string>
     <string name="settings_cryptography_manage_keys">Zarządzanie Kluczami Kryptograficznymi</string>
     <string name="settings_integration_allow">Zezwól na integracje</string>
-    <string name="settings_integration_manager">Menadżer Integracji</string>
+    <string name="settings_integration_manager">Menedżer Integracji</string>
     <string name="settings_fail_to_update_password_invalid_current_password">Hasło jest nieprawidłowe</string>
     <string name="passwords_do_not_match">Hasła nie pasują do siebie</string>
     <string name="compression_opt_list_choose">Wybierz</string>
@@ -1233,8 +1233,8 @@ Spróbuj uruchomić ponownie aplikację.</string>
 \n%1$s</string>
     <string name="template_settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
 \n${app_name} nie ma wpływu na wystąpienie tego problemu. Na tym urządzeniu nie ma konta Google. Otwórz menadżer kont i dodaj konto Google.</string>
-    <string name="settings_troubleshoot_test_token_registration_success">Token FCM z powodzeniem zarejestrowany na serwerze domowym.</string>
-    <string name="settings_troubleshoot_test_token_registration_failed">Niepowodzenie przy rejestracji tokena FCM na serwerze domowym:
+    <string name="settings_troubleshoot_test_token_registration_success">Token FCM pomyślnie zarejestrowany na serwerze domowym.</string>
+    <string name="settings_troubleshoot_test_token_registration_failed">Nieudana rejestracja tokena FCM na serwerze domowym:
 \n%1$s</string>
     <string name="settings_troubleshoot_test_service_restart_success">Usługa została zatrzymana i automatycznie uruchomiona ponownie.</string>
     <string name="settings_troubleshoot_test_service_restart_failed">Usługa nie uruchomiła się ponownie</string>
@@ -1255,7 +1255,7 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="auth_add_email_phone_message_2">Wprowadź adres e-mail, aby możliwe było odzyskiwanie konta. Opcjonalnie użyj adresu e-mail lub numeru telefonu aby móc zostać odkrytym przez znajomych.</string>
     <string name="auth_add_email_and_phone_message_2">Wprowadź adres e-mail, aby możliwe było odzyskiwanie konta. Opcjonalnie użyj adresu e-mail lub numeru telefonu aby móc zostać odkrytym przez znajomych.</string>
     <string name="settings_call_ringtone_use_default_stun">Pozwól na awaryjny serwer wspomagania połączeń</string>
-    <string name="settings_call_ringtone_use_default_stun_sum">Użyje %s aby wspomagać gdy Twój serwer domowy takiego nie ofertuje (Twój adres IP będzie udostępniony podczas połączenia)</string>
+    <string name="settings_call_ringtone_use_default_stun_sum">Użyj %s, gdy Twój serwer domowy takiego nie ofertuje (Twój adres IP będzie udostępniony podczas połączenia)</string>
     <string name="template_settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
 \nBłąd jest poza kontrolą ${app_name} i nawiązując do Google sygnalizuje on, iż urządzenie posiada zbyt wiele aplikacji zarejestrowanych z FCM. Błąd występuje jedynie w przypadku posiadania skrajnie wielu aplikacji, w związku z czym nie powinno dotknąć to normalnego użytkownika.</string>
     <string name="template_settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
@@ -1281,8 +1281,8 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="settings_set_workmanager_delay">Preferowany interwał synchronizacji</string>
     <string name="settings_set_workmanager_delay_summary">%s
 \nSynchronizacja może zostać opóźniona w zależności od zasobów (bateria) lub stanu urządzenia (hibernacja).</string>
-    <string name="settings_integrations_summary">Użyj Menedżera Integracji aby zarządzać botami, mostami, widżetami oraz pakietami naklejek.
-\nMenadżerowie Integracji odbierają dane konfiguracji, mogą zmieniać widżety, wysyłać zaproszenia do pokoi oraz ustawiać poziomy uprawnień na Twoje żądanie.</string>
+    <string name="settings_integrations_summary">Użyj menedżera integracji aby zarządzać botami, mostami, widżetami i pakietami naklejek.
+\nMenedżerzy integracji odbierają dane konfiguracji, modyfikują widżety, wysyłają zaproszenia do pokoi i ustawiają poziomy uprawnień na Twe żądanie.</string>
     <string name="settings_inline_url_preview_summary">Pokaż podgląd linków wewnątrz czatu jeśli twój serwer wspiera tę funkcję.</string>
     <string name="settings_send_markdown_summary">Formatuj wiadomości używając składni Markdown zanim zostaną wysłane. Pozwala to na zaawansowane formatowanie takie jak używanie asterysków do wyświetlania tekstu w kursywie.</string>
     <string name="settings_show_join_leave_messages_summary">Nie wpływa to na zaproszenia, wyrzucenia oraz bany.</string>
@@ -1358,7 +1358,7 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="recovery_key_export_saved_as_warning">Klucz odzyskiwania został zapisany do \'%s\'.
 \n
 \nUwaga: plik może zostać usunięty, jeżeli aplikacja jest odinstalowana.</string>
-    <string name="keys_backup_setup_override_backup_prompt_tile">Kopia zapasowa już istnieje na Twoim serwerze domowym</string>
+    <string name="keys_backup_setup_override_backup_prompt_tile">Kopia zapasowa istnieje już na Twoim serwerze domowym</string>
     <string name="keys_backup_setup_override_backup_prompt_description">Wygląda na to, iż kopia zapasowa kluczy została skonfigurowana za pomocą innej sesji. Czy chcesz zastąpić ją tą, którą tworzysz\?</string>
     <string name="keys_backup_setup_step3_generating_key_status">Generowanie Klucza Odzyskiwania używając hasła, proces może zająć kilka sekund.</string>
     <string name="keys_backup_setup_backup_started_title">Kopia zapasowa uruchomiona</string>
@@ -1872,7 +1872,7 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="audio_meeting">Rozpocznij połączenie głosowe</string>
     <string name="video_meeting">Rozpocznij połączenie wideo</string>
     <string name="conference_call_in_progress">Połączenie grupowe już trwa!</string>
-    <string name="no_permissions_to_start_conf_call">Nie posiadasz wymaganych uprawnień aby rozpocząć połączenie grupowe w tym pokoju</string>
+    <string name="no_permissions_to_start_conf_call">Nie posiadasz uprawnień, aby rozpocząć połączenie grupowe w tym pokoju</string>
     <string name="no_permissions_to_start_webrtc_call_in_direct_room">Nie posiadasz wymaganych uprawnień do rozpoczęcia połączenia</string>
     <string name="no_permissions_to_start_conf_call_in_direct_room">Nie posiadasz wymaganych uprawnień, aby rozpocząć połączenie grupowe</string>
     <string name="alert_push_are_disabled_description">Przejrzyj swoje ustawienia aby włączyć powiadomienia PUSH</string>
@@ -2810,4 +2810,53 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="notice_room_leave_with_reason_by_you">Opuściłeś/aś pokój. Powód: %1$s</string>
     <string name="notice_room_leave_with_reason">%1$s opuścił/a pokój. Powód: %2$s</string>
     <string name="audio_video_meeting_description">Spotkania wykorzystują polityki bezpieczeństwa i uprawnień Jitsi. Wszystkie osoby obecne w danej chwili w pokoju zobaczą zaproszenie do dołączenia w momencie rozpoczęcia spotkania.</string>
+    <string name="settings_discovery_no_policy_provided">Serwer tożsamości nie udostępnił swojej polityki</string>
+    <string name="settings_discovery_hide_identity_server_policy_title">Ukryj politykę serwera tożsamości</string>
+    <string name="settings_discovery_show_identity_server_policy_title">Wyświetl politykę serwera tożsamości</string>
+    <string name="open_discovery_settings">Otwórz ustawienia Poznawania</string>
+    <string name="search_hint_room_name">Wyszukaj nazwę</string>
+    <string name="user_directory_search_hint_2">Wyszukaj po nazwie, ID lub mailu</string>
+    <string name="send_file_step_compressing_video">Kompresowanie filmu %d%%</string>
+    <string name="send_file_step_compressing_image">Kompresowanie obrazu…</string>
+    <string name="give_feedback">Podziel się opinią</string>
+    <string name="feedback_failed">Nie udało się przesłać opinii (%s)</string>
+    <string name="feedback_sent">Dziękujemy, Twoja opinia została wysłana</string>
+    <string name="you_may_contact_me">Zachęcamy do kontaktu, jeśli masz dodatkowe pytania</string>
+    <string name="send_feedback_space_info">Używasz przestrzeni w wersji beta. Ta opinia pomoże nam w tworzeniu kolejnych wersji. Twoja platforma i nazwa użytkownika zostaną odnotowane, abyśmy mogli w pełni wykorzystać Twoje sugestie.</string>
+    <string name="send_feedback_space_title">Prześlij opinię o przestrzeniach</string>
+    <string name="create_new_space">Stwórz nową przestrzeń</string>
+    <string name="command_description_whois">Wyświetla informacje o użytkowniku</string>
+    <string name="command_description_avatar_for_room">Zmienia Twój awatar tylko w tym pokoju</string>
+    <string name="command_description_room_avatar">Zmienia awatar obecnego pokoju</string>
+    <string name="command_description_nick_for_room">Zmienia Twój wyświetlany pseudonim tylko w tym pokoju</string>
+    <string name="command_description_room_name">Ustawia nazwę pokoju</string>
+    <string name="command_description_unignore_user">Przestaje ignorować użytkownika, od teraz jego wiadomości będą dla Ciebie widoczne</string>
+    <string name="command_description_ignore_user">Ignoruje użytkownika, ukrywając dla Ciebie jego wiadomości</string>
+    <string name="jitsi_leave_conf_to_join_another_one_content">Opuścić obecną konferencję i przejść do innej\?</string>
+    <string name="error_jitsi_join_conf">Wystąpił błąd podczas próby dołączenia do konferencji</string>
+    <string name="directory_add_a_new_server_error_already_added">Ten serwer znajduje się już na liście</string>
+    <string name="directory_add_a_new_server_error">Nie można odnaleźć tego serwera lub jego listy pokoi</string>
+    <string name="directory_add_a_new_server_prompt">Wprowadź nazwę nowego serwera, który chcesz odkrywać.</string>
+    <string name="directory_add_a_new_server">Dodaj nowy serwer</string>
+    <string name="directory_your_server">Twój serwer</string>
+    <string name="room_settings_room_version_title">Wersja pokoju</string>
+    <string name="other_spaces_or_rooms_you_might_not_know">Inne przestrzenie lub pokoje, których możesz nie znać</string>
+    <string name="space_you_know_that_contains_this_room">Przestrzeń, o której wiesz, że zawiera ten pokój</string>
+    <string name="decide_who_can_find_and_join">Zdecyduj kto może odnaleźć i dołączyć do tego pokoju.</string>
+    <string name="tap_to_edit_spaces">Dotknij, aby edytować przestrzenie</string>
+    <string name="select_spaces">Wybierz przestrzenie</string>
+    <string name="decide_which_spaces_can_access">Zdecyduj które przestrzenie mogą mieć dostęp do tego pokoju. Członkowie wybranej przestrzeni będą mogli odnaleźć i dołączyć do nazwy pokoju.</string>
+    <string name="spaces_which_can_access">Przestrzenie mogące uzyskać dostęp</string>
+    <string name="allow_space_member_to_find_and_access">Zezwól użytkownikom przestrzeni na znalezienie i dostęp.</string>
+    <string name="settings_room_upgrades">Ulepszenia pokoju</string>
+    <string name="space_participants_kick_prompt_msg">wyproszenie użytkownika zaskutkuje usunięciem go z tej przestrzeni.
+\n
+\nAby uniemożliwić mu ponowne dołączenie, należy go zbanować.</string>
+    <string name="settings_room_directory_show_all_rooms_summary">Pokaż wszystkie pokoje w katalogu pokoi (również te zawierające treści dla dorosłych).</string>
+    <string name="settings_room_directory_show_all_rooms">Pokaż pokoje z treścią dla dorosłych</string>
+    <string name="notice_room_canonical_alias_alternative_changed">%1$s zmienił(a) alternatywne adresy dla tego pokoju.</string>
+    <string name="notice_room_aliases_added_and_removed_by_you">Dodano %1$s i usunięto %2$s jako adresy tego pokoju.</string>
+    <string name="notice_room_aliases_added_and_removed">%1$s dodał(a) %2$s i usunął(eła) %3$s jako adres tego pokoju.</string>
+    <string name="notice_room_withdraw_with_reason_by_you">Odrzucono zaproszenie od %1$s. Powód: %2$s</string>
+    <string name="notice_room_withdraw_with_reason">%1$s odrzucił(a) zaproszenie %2$s. Powód: %3$s</string>
 </resources>
