@@ -2285,7 +2285,7 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="settings_when_rooms_are_upgraded">Kiedy pokoje są aktualizowane</string>
     <string name="bootstrap_info_text">Zabezpiecz i odblokuj zaszyfrowane wiadomości oraz zaufane poprzez %s.</string>
     <string name="send_a_sticker">Naklejka</string>
-    <string name="direct_room_join_rules_invite">"%1$s  zrobił(a) to dostępne tylko poprzez zaproszenie"</string>
+    <string name="direct_room_join_rules_invite">%1$s wymaga otrzymania zaproszenia do dołączenia.</string>
     <plurals name="two_and_some_others_read">
         <item quantity="one">%1$s, %2$s i %3$d czyta</item>
         <item quantity="few">%1$s, %2$s i %3$d czytają</item>
