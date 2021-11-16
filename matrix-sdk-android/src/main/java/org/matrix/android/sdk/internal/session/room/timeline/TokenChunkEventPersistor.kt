@@ -128,7 +128,7 @@ internal class TokenChunkEventPersistor @Inject constructor(@SessionDatabase pri
                 roomMemberContentsByUser[stateEvent.stateKey] = stateEvent.content.toModel<RoomMemberContent>()
             }
         }
-        run processTimelineEvents@ {
+        run processTimelineEvents@{
             eventList.forEach { event ->
                 if (event.eventId == null || event.senderId == null) {
                     return@forEach
@@ -139,12 +139,23 @@ internal class TokenChunkEventPersistor @Inject constructor(@SessionDatabase pri
                 // If it exists, we want to stop here, just link the prevChunk
                 val existingChunk = existingTimelineEvent?.chunk?.firstOrNull()
                 if (existingChunk != null) {
-                    if (direction == PaginationDirection.BACKWARDS) {
-                        currentChunk.prevChunk = existingChunk
-                        existingChunk.nextChunk = currentChunk
-                    } else if (direction == PaginationDirection.FORWARDS) {
-                        currentChunk.nextChunk = existingChunk
-                        existingChunk.prevChunk = currentChunk
+                    when (direction) {
+                        PaginationDirection.BACKWARDS -> {
+                            if (currentChunk.nextChunk == existingChunk) {
+                                Timber.w("Avoid double link, shouldn't happen in an ideal world")
+                            } else {
+                                currentChunk.prevChunk = existingChunk
+                                existingChunk.nextChunk = currentChunk
+                            }
+                        }
+                        PaginationDirection.FORWARDS  -> {
+                            if (currentChunk.prevChunk == existingChunk) {
+                                Timber.w("Avoid double link, shouldn't happen in an ideal world")
+                            } else {
+                                currentChunk.nextChunk = existingChunk
+                                existingChunk.prevChunk = currentChunk
+                            }
+                        }
                     }
                     // Stop processing here
                     return@processTimelineEvents
