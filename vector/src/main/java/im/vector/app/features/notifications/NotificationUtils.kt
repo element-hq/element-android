@@ -818,7 +818,8 @@ class NotificationUtils @Inject constructor(private val context: Context,
                     context,
                     System.currentTimeMillis().toInt(),
                     intent,
-                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntentCompat.FLAG_IMMUTABLE
+                    // PendingIntents attached to actions with remote inputs must be mutable
+                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntentCompat.FLAG_MUTABLE
             )
         } else {
             /*
