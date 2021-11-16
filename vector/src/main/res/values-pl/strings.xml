@@ -218,7 +218,7 @@
     <string name="auth_forgot_password">Zapomniałeś(-aś) hasła?</string>
     <string name="auth_use_server_options">Użyj niestandardowych ustawień serwera (zaawansowane)</string>
     <string name="auth_email_validation_message">Sprawdź swój adres e-mail, aby kontynuować rejestrację</string>
-    <string name="auth_recaptcha_message">Potwierdź, że nie jesteś robotem</string>
+    <string name="auth_recaptcha_message">Serwer domowy prosi o potwierdzenie, że nie jesteś robotem</string>
     <string name="auth_username_in_use">Nazwa użytkownika jest już używana</string>
     <string name="auth_reset_password_next_step_button">Zweryfikowałem adres e-mail</string>
     <string name="auth_reset_password_message">Aby przywrócić hasło, wprowadź adres e-mail powiązany z kontem:</string>
@@ -902,7 +902,7 @@ Widoczność wiadomości w Matrix jest podobna do wiadomości e-mail. Nasze zapo
     <string name="command_description_op_user">Określ poziom mocy użytkownika</string>
     <string name="command_description_deop_user">Usuwa opa użytkownikowi z podanym ID</string>
     <string name="command_description_invite_user">Zaprasza użytkownika z podanym ID do aktualnego pokoju</string>
-    <string name="command_description_join_room">Dołącza do pokoju z podanym aliasem</string>
+    <string name="command_description_join_room">Dołącza do pokoju o podanym adresie</string>
     <string name="command_description_topic">Ustawia temat pokoju</string>
     <string name="command_description_kick_user">Wyrzuca użytkownika z podanym ID</string>
     <string name="command_description_nick">Zmienia twój wyświetlany nick</string>
@@ -2041,7 +2041,7 @@ Spróbuj uruchomić ponownie aplikację.</string>
         <item quantity="other">%d sek.</item>
     </plurals>
     <string name="settings_troubleshoot_test_push_loop_success">Aplikacja odebrała PUSH</string>
-    <string name="settings_troubleshoot_test_push_loop_title">Przetestuj wiadomość Push</string>
+    <string name="settings_troubleshoot_test_push_loop_title">Przetestuj powiadomienia push</string>
     <string name="room_participants_unban_title">Odbanuj użytkownika</string>
     <string name="room_participants_ban_reason">Powód zbanowania</string>
     <string name="room_participants_kick_prompt_msg">Wykopanie użytkownika spowoduje usunięcie go z tego pokoju.
@@ -2298,7 +2298,7 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="permissions_denied_add_contact">Zezwól na dostęp do Twoich kontaktów.</string>
     <string name="call_select_sound_device">Wybierz urządzenie dźwiękowe</string>
     <string name="template_call_failed_no_connection">Połączenie ${app_name} nieudane</string>
-    <string name="call_notification_reject">Odmów</string>
+    <string name="call_notification_reject">Odrzuć</string>
     <string name="start_chatting">Rozpocznij konwersację</string>
     <string name="matrix_to_card_title">Łącze Matrix</string>
     <string name="warning_unsaved_change_discard">Odrzuć zmiany</string>
@@ -2860,4 +2860,5 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="notice_room_withdraw_with_reason_by_you">Odrzucono zaproszenie od %1$s. Powód: %2$s</string>
     <string name="notice_room_withdraw_with_reason">%1$s odrzucił(a) zaproszenie %2$s. Powód: %3$s</string>
     <string name="a11y_delete_recorded_voice_message">Usuń nagranie</string>
+    <string name="feedback">Opinie</string>
 </resources>
