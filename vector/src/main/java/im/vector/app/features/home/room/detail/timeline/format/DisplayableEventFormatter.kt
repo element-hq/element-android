@@ -33,6 +33,7 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.model.message.OPTION_TYPE_BUTTONS
 import org.matrix.android.sdk.api.session.room.model.relation.ReactionContent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
+import org.matrix.android.sdk.api.session.room.timeline.getLastMessageBody
 import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
 import org.matrix.android.sdk.api.session.room.timeline.getTextEditableContent
 import org.matrix.android.sdk.api.session.room.timeline.isReply
@@ -93,7 +94,19 @@ class DisplayableEventFormatter @Inject constructor(
                             simpleFormat(senderName, stringProvider.getString(R.string.sent_a_video), appendAuthor)
                         }
                         MessageType.MSGTYPE_FILE                 -> {
-                            simpleFormat(senderName, stringProvider.getString(R.string.sent_a_file), appendAuthor)
+                            return simpleFormat(senderName, stringProvider.getString(R.string.sent_a_file), appendAuthor)
+                        }
+                        MessageType.MSGTYPE_TEXT                 -> {
+                          todo fix merge issue
+                            return if (timelineEvent.isReply()) {
+                                // Skip reply prefix, and show important
+                                // TODO add a reply image span ?
+                                simpleFormat(senderName, timelineEvent.getTextEditableContent()
+                                        ?: messageContent.body, appendAuthor)
+                            } else {
+                                simpleFormat(senderName, timelineEvent.getLastMessageBody()
+                                        ?: messageContent.body, appendAuthor)
+                            }
                         }
                         MessageType.MSGTYPE_RESPONSE             -> {
                             // do not show that?

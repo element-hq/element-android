@@ -15,6 +15,8 @@
  */
 package org.matrix.android.sdk.api.util
 
+import org.matrix.android.sdk.internal.util.unescapeHtml
+
 object ContentUtils {
     fun extractUsefulTextFromReply(repliedBody: String): String {
         val lines = repliedBody.lines()
@@ -43,5 +45,14 @@ object ContentUtils {
             }
         }
         return repliedBody
+    }
+
+    @Suppress("RegExpRedundantEscape")
+    fun formatSpoilerTextFromHtml(formattedBody: String): String {
+        // var reason = "",
+        // can capture the spoiler reason for better formatting? ex. { reason = it.value;  ">"}
+        return formattedBody.replace("(?<=<span data-mx-spoiler)=\\\".+?\\\">".toRegex(), ">")
+            .replace("(?<=<span data-mx-spoiler>).+?(?=</span>)".toRegex(), { "█".repeat(it.value.length); })
+            .unescapeHtml()
     }
 }
