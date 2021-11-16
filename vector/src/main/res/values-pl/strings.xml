@@ -1874,7 +1874,7 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="conference_call_in_progress">Połączenie grupowe już trwa!</string>
     <string name="no_permissions_to_start_conf_call">Nie posiadasz uprawnień, aby rozpocząć połączenie grupowe w tym pokoju</string>
     <string name="no_permissions_to_start_webrtc_call_in_direct_room">Nie posiadasz wymaganych uprawnień do rozpoczęcia połączenia</string>
-    <string name="no_permissions_to_start_conf_call_in_direct_room">Nie posiadasz wymaganych uprawnień, aby rozpocząć połączenie grupowe</string>
+    <string name="no_permissions_to_start_conf_call_in_direct_room">Nie posiadasz uprawnień, aby rozpocząć połączenie grupowe</string>
     <string name="alert_push_are_disabled_description">Przejrzyj swoje ustawienia aby włączyć powiadomienia PUSH</string>
     <string name="alert_push_are_disabled_title">Powiadomienia PUSH są wyłączone</string>
     <string name="failed_to_unban">Nie udało się odblokować użytkownika</string>
