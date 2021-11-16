@@ -20,13 +20,14 @@ import androidx.work.ExistingPeriodicWorkPolicy
 import com.zhuinden.monarchy.Monarchy
 import org.matrix.android.sdk.api.pushrules.PushRuleService
 import org.matrix.android.sdk.api.pushrules.RuleScope
-import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.initsync.InitSyncStep
 import org.matrix.android.sdk.api.session.sync.model.GroupsSyncResponse
 import org.matrix.android.sdk.api.session.sync.model.RoomsSyncResponse
 import org.matrix.android.sdk.api.session.sync.model.SyncResponse
+import org.matrix.android.sdk.internal.SessionManager
 import org.matrix.android.sdk.internal.crypto.DefaultCryptoService
 import org.matrix.android.sdk.internal.di.SessionDatabase
+import org.matrix.android.sdk.internal.di.SessionId
 import org.matrix.android.sdk.internal.di.WorkManagerProvider
 import org.matrix.android.sdk.internal.session.SessionListeners
 import org.matrix.android.sdk.internal.session.dispatchTo
@@ -51,7 +52,8 @@ private const val GET_GROUP_DATA_WORKER = "GET_GROUP_DATA_WORKER"
 
 internal class SyncResponseHandler @Inject constructor(
         @SessionDatabase private val monarchy: Monarchy,
-        private val session: Session,
+        @SessionId private val sessionId: String,
+        private val sessionManager: SessionManager,
         private val sessionListeners: SessionListeners,
         private val workManagerProvider: WorkManagerProvider,
         private val roomSyncHandler: RoomSyncHandler,
@@ -63,7 +65,7 @@ internal class SyncResponseHandler @Inject constructor(
         private val tokenStore: SyncTokenStore,
         private val processEventForPushTask: ProcessEventForPushTask,
         private val pushRuleService: PushRuleService,
-        private val presenceSyncHandler: PresenceSyncHandler,
+        private val presenceSyncHandler: PresenceSyncHandler
 ) {
 
     suspend fun handleResponse(syncResponse: SyncResponse,
@@ -159,6 +161,7 @@ internal class SyncResponseHandler @Inject constructor(
     }
 
     private fun dispatchInvitedRoom(roomsSyncResponse: RoomsSyncResponse) {
+        val session = sessionManager.getSessionComponent(sessionId)?.session()
         roomsSyncResponse.invite.keys.forEach { roomId ->
             session.dispatchTo(sessionListeners) { session, listener ->
                 listener.onNewInvitedRoom(session, roomId)
@@ -179,7 +182,7 @@ internal class SyncResponseHandler @Inject constructor(
             return
         }
         Timber.v("There are ${groupIds.size} new groups to fetch data for.")
-        val getGroupDataWorkerParams = GetGroupDataWorker.Params(session.sessionId)
+        val getGroupDataWorkerParams = GetGroupDataWorker.Params(sessionId)
         val workData = WorkerParamsFactory.toData(getGroupDataWorkerParams)
 
         val getGroupWork = workManagerProvider.matrixPeriodicWorkRequestBuilder<GetGroupDataWorker>(1, TimeUnit.HOURS)
