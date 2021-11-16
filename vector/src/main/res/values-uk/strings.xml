@@ -765,7 +765,7 @@
     <string name="font_size">Розмір шрифту</string>
     <string name="tiny">Крихітний</string>
     <string name="small">Дрібний</string>
-    <string name="normal">Нормальний</string>
+    <string name="normal">Звичайний</string>
     <string name="large">Чималий</string>
     <string name="larger">Великий</string>
     <string name="largest">Найбільший</string>
@@ -835,7 +835,7 @@
     <string name="room_settings_mute">Без звуку</string>
     <string name="room_settings_add_homescreen_shortcut">Додати ярлик на головний екран</string>
     <string name="settings_notification_privacy">Приватність сповіщень</string>
-    <string name="settings_notification_privacy_normal">Нормальний</string>
+    <string name="settings_notification_privacy_normal">Звичайний</string>
     <string name="title_activity_choose_sticker">Надіслати наліпку</string>
     <string name="option_send_sticker">Надіслати наліпку</string>
     <string name="no_sticker_application_dialog_content">У вас поки що не має наліпок.
@@ -1309,7 +1309,7 @@
     <string name="action_add">Додати</string>
     <string name="audio_video_meeting_description">Наради використовують політику безпеки та дозволів Jitsi. Усі люди, які зараз перебувають у кімнаті, побачать запрошення приєднатися під час вашої зустрічі.</string>
     <string name="start_chatting">Почати спілкування</string>
-    <string name="labs_show_unread_notifications_as_tab">Додати спеціальну вкладку для непрочитаних сповіщень на головному екрані.</string>
+    <string name="labs_show_unread_notifications_as_tab">Додати спеціальну вкладку для непрочитаних сповіщень на головний екран.</string>
     <string name="settings_labs_show_complete_history_in_encrypted_room">Показувати повну історію зашифрованих кімнат</string>
     <string name="settings_account_data">Дані облікового запису</string>
     <string name="settings_dev_tools">Інструменти розробника</string>
@@ -1464,7 +1464,7 @@
     <string name="room_alias_action_publish">Опублікувати цю адресу</string>
     <string name="room_alias_local_address_add">Додати локальну адресу</string>
     <string name="room_alias_local_address_empty">Кімната не має локальної адреси</string>
-    <string name="room_alias_local_address_subtitle">Встановіть адреси для цієї кімнати, щоб користувачі могли знаходити цю кімнату через ваш домашній сервер (%1$s)</string>
+    <string name="room_alias_local_address_subtitle">Укажіть адреси для цієї кімнати, щоб користувачі могли знаходити цю кімнату через ваш домашній сервер (%1$s)</string>
     <string name="room_alias_local_address_title">Локальні адреси</string>
     <string name="room_alias_address_hint">Нова опублікована адреса (наприклад, #alias:server)</string>
     <string name="room_alias_address_empty">Інших опублікованих адрес поки що немає.</string>
@@ -1477,7 +1477,7 @@
     <string name="room_alias_published_other">Інші опубліковані адреси:</string>
     <string name="room_alias_main_address_hint">Основна адреса</string>
     <string name="room_alias_published_alias_main">Це основна адреса</string>
-    <string name="room_alias_published_alias_subtitle">Загальнодоступні адреси може використовувати будь-хто на будь-якому сервері для приєднання до вашої кімнати. Щоб опублікувати адресу спочатку встановіть її локальною адресою.</string>
+    <string name="room_alias_published_alias_subtitle">Загальнодоступні адреси може використовувати будь-хто на будь-якому сервері для приєднання до вашої кімнати. Щоб опублікувати адресу спочатку вкажіть її локальною адресою.</string>
     <string name="room_alias_published_alias_title">Загальнодоступні адреси</string>
     <string name="room_alias_title">Адреси кімнат</string>
     <string name="room_settings_alias_subtitle">Перегляньте та керуйте адресами цієї кімнати та їхньою видимістю у каталозі кімнат.</string>
@@ -2872,4 +2872,10 @@
     <string name="command_description_nick_for_room">Змінює ваше показуване ім\'я лише у поточній кімнаті</string>
     <string name="command_description_room_name">Установлює назву кімнати</string>
     <string name="settings_discovery_no_policy_provided">Сервер ідентифікації не надав жодних правил</string>
+    <string name="labs_use_restricted_join_rule_desc">Попередження: вимагає підтримки сервера та експериментальної версії кімнати</string>
+    <string name="spaces_feeling_experimental_subspace">Бажаєте поекспериментувати\?
+\nМожете додати наявні простори до простору.</string>
+    <string name="labs_use_restricted_join_rule">Експериментальний простір - обмежена кімната.</string>
+    <string name="all_rooms_youre_in_will_be_shown_in_home">Усі кімнати, у яких ви перебуваєте, буде показано на сторінці Домівка.</string>
+    <string name="preference_show_all_rooms_in_home">Показувати у Домівці</string>
 </resources>
