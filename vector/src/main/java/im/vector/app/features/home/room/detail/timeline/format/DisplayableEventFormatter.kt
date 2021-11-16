@@ -91,7 +91,11 @@ class DisplayableEventFormatter @Inject constructor(
                             return simpleFormat(senderName, stringProvider.getString(R.string.sent_a_file), appendAuthor)
                         }
                         MessageType.MSGTYPE_TEXT                 -> {
-                            val body = if (timelineEvent.isReply()) timelineEvent.getTextEditableContent() ?: messageContent.body else messageContent.body
+                            val body = if (timelineEvent.isReply()) {
+                                timelineEvent.getTextEditableContent() ?: messageContent.body
+                            } else {
+                                messageContent.body
+                            }
                             return if (messageContent is MessageTextContent && messageContent.matrixFormattedBody.isNullOrBlank().not()) {
                                 val localFormattedBody = htmlRenderer.get().parse(body) as Document
                                 val renderedBody = htmlRenderer.get().render(localFormattedBody) ?: body
