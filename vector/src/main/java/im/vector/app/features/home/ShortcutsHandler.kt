@@ -21,8 +21,10 @@ import android.content.pm.ShortcutManager
 import android.os.Build
 import androidx.core.content.getSystemService
 import androidx.core.content.pm.ShortcutManagerCompat
+import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.dispatchers.CoroutineDispatchers
+import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.pin.PinCodeStore
 import im.vector.app.features.pin.PinCodeStoreListener
 import kotlinx.coroutines.CoroutineScope
@@ -43,6 +45,7 @@ import javax.inject.Inject
 
 class ShortcutsHandler @Inject constructor(
         private val context: Context,
+        private val stringProvider: StringProvider,
         private val appDispatchers: CoroutineDispatchers,
         private val shortcutCreator: ShortcutCreator,
         private val activeSessionHolder: ActiveSessionHolder,
@@ -72,7 +75,7 @@ class ShortcutsHandler @Inject constructor(
                 .onCompletion { pinCodeStore.removeListener(this@ShortcutsHandler) }
                 .onEach { rooms ->
                     // Remove dead shortcuts (i.e. deleted rooms)
-                    removeDeadShortcut(rooms.map { it.roomId })
+                    removeDeadShortcuts(rooms.map { it.roomId })
 
                     // Create shortcuts
                     createShortcuts(rooms)
@@ -81,7 +84,7 @@ class ShortcutsHandler @Inject constructor(
                 .launchIn(coroutineScope)
     }
 
-    private fun removeDeadShortcut(roomIds: List<String>) {
+    private fun removeDeadShortcuts(roomIds: List<String>) {
         val deadShortcutIds = ShortcutManagerCompat.getShortcuts(context, ShortcutManagerCompat.FLAG_MATCH_DYNAMIC)
                 .map { it.id }
                 .filter { !roomIds.contains(it) }
@@ -91,7 +94,11 @@ class ShortcutsHandler @Inject constructor(
             ShortcutManagerCompat.removeLongLivedShortcuts(context, deadShortcutIds)
             if (isRequestPinShortcutSupported) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
-                    context.getSystemService<ShortcutManager>()?.disableShortcuts(deadShortcutIds)
+                    ShortcutManagerCompat.disableShortcuts(
+                            context,
+                            deadShortcutIds,
+                            stringProvider.getString(R.string.shortcut_disabled_reason_room_left)
+                    )
                 }
             }
         }
@@ -130,8 +137,15 @@ class ShortcutsHandler @Inject constructor(
         if (isRequestPinShortcutSupported) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
                 context.getSystemService<ShortcutManager>()
-                        ?.let {
-                            it.disableShortcuts(it.pinnedShortcuts.map { pinnedShortcut -> pinnedShortcut.id })
+                        ?.pinnedShortcuts
+                        ?.takeIf { it.isNotEmpty() }
+                        ?.map { pinnedShortcut -> pinnedShortcut.id }
+                        ?.let { shortcutIdsToDisable ->
+                            ShortcutManagerCompat.disableShortcuts(
+                                    context,
+                                    shortcutIdsToDisable,
+                                    stringProvider.getString(R.string.shortcut_disabled_reason_sign_out)
+                            )
                         }
             }
         }

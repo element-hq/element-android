@@ -210,6 +210,7 @@ android {
         // This property does not affect tests that you run using Android Studio.”
         animationsDisabled = true
 
+        // Comment to run on Android 12
         execution 'ANDROIDX_TEST_ORCHESTRATOR'
     }
 
@@ -356,8 +357,10 @@ dependencies {
 
     implementation libs.squareup.moshi
     kapt libs.squareup.moshiKotlin
-    implementation libs.androidx.lifecycleExtensions
+
+    // Lifecycle
     implementation libs.androidx.lifecycleLivedata
+    implementation libs.androidx.lifecycleProcess
 
     implementation libs.androidx.datastore
     implementation libs.androidx.datastorepreferences
@@ -370,7 +373,7 @@ dependencies {
     implementation 'com.facebook.stetho:stetho:1.6.0'
 
     // Phone number https://github.com/google/libphonenumber
-    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.36'
+    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.37'
 
     // FlowBinding
     implementation libs.github.flowBinding
@@ -411,7 +414,7 @@ dependencies {
     implementation 'com.github.Armen101:AudioRecordView:1.0.5'
 
     // Custom Tab
-    implementation 'androidx.browser:browser:1.3.0'
+    implementation 'androidx.browser:browser:1.4.0'
 
     // Passphrase strength helper
     implementation 'com.nulab-inc:zxcvbn:1.5.2'

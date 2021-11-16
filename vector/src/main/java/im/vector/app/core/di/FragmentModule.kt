@@ -94,6 +94,7 @@ import im.vector.app.features.login2.terms.LoginTermsFragment2
 import im.vector.app.features.matrixto.MatrixToRoomSpaceFragment
 import im.vector.app.features.matrixto.MatrixToUserFragment
 import im.vector.app.features.pin.PinFragment
+import im.vector.app.features.poll.create.CreatePollFragment
 import im.vector.app.features.qrcode.QrCodeScannerFragment
 import im.vector.app.features.reactions.EmojiChooserFragment
 import im.vector.app.features.reactions.EmojiSearchResultFragment
@@ -837,4 +838,9 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(SpaceLeaveAdvancedFragment::class)
     fun bindSpaceLeaveAdvancedFragment(fragment: SpaceLeaveAdvancedFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(CreatePollFragment::class)
+    fun bindCreatePollFragment(fragment: CreatePollFragment): Fragment
 }

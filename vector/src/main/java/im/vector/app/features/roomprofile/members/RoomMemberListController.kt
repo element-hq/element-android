@@ -29,7 +29,6 @@ import im.vector.app.features.home.AvatarRenderer
 import me.gujun.android.span.span
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.toModel
-import org.matrix.android.sdk.api.session.presence.model.UserPresence
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.session.room.model.RoomThirdPartyInviteContent
 import org.matrix.android.sdk.api.util.MatrixItem

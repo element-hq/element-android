@@ -66,3 +66,7 @@ fun String?.insertBeforeLast(insert: String, delimiter: String = "."): String {
         replaceRange(idx, idx, insert)
     }
 }
+
+inline fun <reified R> Any?.takeAs(): R? {
+    return takeIf { it is R } as R?
+}

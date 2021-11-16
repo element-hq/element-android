@@ -2102,12 +2102,12 @@ class RoomDetailFragment @Inject constructor(
 // VectorInviteView.Callback
 
     override fun onAcceptInvite() {
-        notificationDrawerManager.clearMemberShipNotificationForRoom(roomDetailArgs.roomId)
+        notificationDrawerManager.updateEvents { it.clearMemberShipNotificationForRoom(roomDetailArgs.roomId) }
         roomDetailViewModel.handle(RoomDetailAction.AcceptInvite)
     }
 
     override fun onRejectInvite() {
-        notificationDrawerManager.clearMemberShipNotificationForRoom(roomDetailArgs.roomId)
+        notificationDrawerManager.updateEvents { it.clearMemberShipNotificationForRoom(roomDetailArgs.roomId) }
         roomDetailViewModel.handle(RoomDetailAction.RejectInvite)
     }
 
@@ -2158,6 +2158,7 @@ class RoomDetailFragment @Inject constructor(
             AttachmentTypeSelectorView.Type.AUDIO   -> attachmentsHelper.selectAudio(attachmentAudioActivityResultLauncher)
             AttachmentTypeSelectorView.Type.CONTACT -> attachmentsHelper.selectContact(attachmentContactActivityResultLauncher)
             AttachmentTypeSelectorView.Type.STICKER -> roomDetailViewModel.handle(RoomDetailAction.SelectStickerAttachment)
+            AttachmentTypeSelectorView.Type.POLL    -> navigator.openCreatePoll(requireContext(), roomDetailArgs.roomId)
         }.exhaustive
     }
 

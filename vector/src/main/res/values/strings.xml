@@ -1080,6 +1080,9 @@
     <string name="room_settings_forget">Forget</string>
     <string name="room_settings_add_homescreen_shortcut">Add to Home screen</string>
 
+    <string name="shortcut_disabled_reason_room_left">The room has been left!</string>
+    <string name="shortcut_disabled_reason_sign_out">The session has been signed out!</string>
+
     <!-- home sliding menu -->
     <string name="room_sliding_menu_messages">Messages</string>
     <string name="room_sliding_menu_settings">Settings</string>
@@ -2366,11 +2369,14 @@
     <string name="settings_discovery_consent_title">Send emails and phone numbers</string>
     <string name="settings_discovery_consent_notice_on">You have given your consent to send emails and phone numbers to this identity server to discover other users from your contacts.</string>
     <string name="settings_discovery_consent_notice_off">You have not given your consent to send emails and phone numbers to this identity server to discover other users from your contacts.</string>
+    <string name="settings_discovery_consent_notice_off_2">Your contacts are private. To discover users from your contacts, we need your permission to send contact info to your identity server.</string>
     <string name="settings_discovery_consent_action_revoke">Revoke my consent</string>
     <string name="settings_discovery_consent_action_give_consent">Give consent</string>
 
     <string name="identity_server_consent_dialog_title">Send emails and phone numbers</string>
+    <string name="identity_server_consent_dialog_title_2">Send emails and phone numbers to %s</string>
     <string name="identity_server_consent_dialog_content">In order to discover existing contacts you know, do you accept to send your contact data (phone numbers and/or emails) to the configured identity server (%1$s)?\n\nFor more privacy, the sent data will be hashed before being sent.</string>
+    <string name="identity_server_consent_dialog_content_2">To discover existing contacts, you need to send contact info to your identity server.\n\nWe hash your data before sending for privacy. Do you consent to send this info?</string>
     <string name="identity_server_consent_dialog_neutral_policy">Policy</string>
 
     <string name="settings_discovery_enter_identity_server">Enter an identity server URL</string>
@@ -2432,6 +2438,7 @@
     <string name="attachment_type_audio">"Audio"</string>
     <string name="attachment_type_gallery">"Gallery"</string>
     <string name="attachment_type_sticker">"Sticker"</string>
+    <string name="attachment_type_poll">Poll</string>
     <string name="rotate_and_crop_screen_title">Rotate and crop</string>
     <string name="error_handling_incoming_share">Couldn\'t handle share data</string>
 
@@ -3627,4 +3634,18 @@
     <string name="link_this_email_settings_link">Link this email with your account</string>
     <!-- %s will be replaced by the value of link_this_email_settings_link and styled as a link -->
     <string name="link_this_email_with_your_account">%s in Settings to receive invites directly in Element.</string>
+
+    <!-- Poll -->
+    <string name="create_poll_title">Create Poll</string>
+    <string name="create_poll_question_title">Poll question or topic</string>
+    <string name="create_poll_question_hint">Question or topic</string>
+    <string name="create_poll_options_title">Create options</string>
+    <string name="create_poll_options_hint">Option %1$d</string>
+    <string name="create_poll_add_option">ADD OPTION</string>
+    <string name="create_poll_button">CREATE POLL</string>
+    <string name="create_poll_empty_question_error">Question cannot be empty</string>
+    <plurals name="create_poll_not_enough_options_error">
+        <item quantity="one">At least %1$s option is required</item>
+        <item quantity="other">At least %1$s options are required</item>
+    </plurals>
 </resources>

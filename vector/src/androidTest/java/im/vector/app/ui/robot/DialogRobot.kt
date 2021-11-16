@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
+ * Copyright (c) 2021 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,17 +14,16 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.call.telecom
+package im.vector.app.ui.robot
 
-import android.content.Context
-import android.telephony.TelephonyManager
-import androidx.core.content.getSystemService
+import com.adevinta.android.barista.interaction.BaristaDialogInteractions.clickDialogNegativeButton
 
-object TelecomUtils {
+class DialogRobot(
+        var returnedToPreviousScreen: Boolean = false
+) {
 
-    fun isLineBusy(context: Context): Boolean {
-        val telephonyManager = context.getSystemService<TelephonyManager>()
-                ?: return false
-        return telephonyManager.callState != TelephonyManager.CALL_STATE_IDLE
+    fun negativeAction() {
+        clickDialogNegativeButton()
+        returnedToPreviousScreen = true
     }
 }
