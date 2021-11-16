@@ -37,8 +37,8 @@ internal fun Uri.toMultiPickerImageType(context: Context): MultiPickerImageType?
             null,
             null
     )?.use { cursor ->
-        val nameColumn = cursor.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME)
-        val sizeColumn = cursor.getColumnIndex(MediaStore.Images.Media.SIZE)
+        val nameColumn = cursor.getColumnIndexOrNull(MediaStore.Images.Media.DISPLAY_NAME) ?: return@use null
+        val sizeColumn = cursor.getColumnIndexOrNull(MediaStore.Images.Media.SIZE) ?: return@use null
 
         if (cursor.moveToNext()) {
             val name = cursor.getString(nameColumn)
@@ -75,8 +75,8 @@ internal fun Uri.toMultiPickerVideoType(context: Context): MultiPickerVideoType?
             null,
             null
     )?.use { cursor ->
-        val nameColumn = cursor.getColumnIndex(MediaStore.Video.Media.DISPLAY_NAME)
-        val sizeColumn = cursor.getColumnIndex(MediaStore.Video.Media.SIZE)
+        val nameColumn = cursor.getColumnIndexOrNull(MediaStore.Video.Media.DISPLAY_NAME) ?: return@use null
+        val sizeColumn = cursor.getColumnIndexOrNull(MediaStore.Video.Media.SIZE) ?: return@use null
 
         if (cursor.moveToNext()) {
             val name = cursor.getString(nameColumn)
@@ -124,8 +124,8 @@ fun Uri.toMultiPickerAudioType(context: Context): MultiPickerAudioType? {
             null,
             null
     )?.use { cursor ->
-        val nameColumn = cursor.getColumnIndex(MediaStore.Audio.Media.DISPLAY_NAME)
-        val sizeColumn = cursor.getColumnIndex(MediaStore.Audio.Media.SIZE)
+        val nameColumn = cursor.getColumnIndexOrNull(MediaStore.Audio.Media.DISPLAY_NAME) ?: return@use null
+        val sizeColumn = cursor.getColumnIndexOrNull(MediaStore.Audio.Media.SIZE) ?: return@use null
 
         if (cursor.moveToNext()) {
             val name = cursor.getString(nameColumn)

@@ -21,6 +21,7 @@ import android.content.Context
 import android.content.Intent
 import android.provider.ContactsContract
 import im.vector.lib.multipicker.entity.MultiPickerContactType
+import im.vector.lib.multipicker.utils.getColumnIndexOrNull
 
 /**
  * Contact Picker implementation
@@ -49,9 +50,9 @@ class ContactPicker : Picker<MultiPickerContactType>() {
                     null
             )?.use { cursor ->
                 if (cursor.moveToFirst()) {
-                    val idColumn = cursor.getColumnIndex(ContactsContract.Contacts._ID)
-                    val nameColumn = cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)
-                    val photoUriColumn = cursor.getColumnIndex(ContactsContract.Contacts.PHOTO_URI)
+                    val idColumn = cursor.getColumnIndexOrNull(ContactsContract.Contacts._ID) ?: return@use
+                    val nameColumn = cursor.getColumnIndexOrNull(ContactsContract.Contacts.DISPLAY_NAME) ?: return@use
+                    val photoUriColumn = cursor.getColumnIndexOrNull(ContactsContract.Contacts.PHOTO_URI) ?: return@use
 
                     val contactId = cursor.getInt(idColumn)
                     var name = cursor.getString(nameColumn)
@@ -72,10 +73,13 @@ class ContactPicker : Picker<MultiPickerContactType>() {
                                 selection,
                                 selectionArgs,
                                 null
-                        )?.use { cursor ->
-                            while (cursor.moveToNext()) {
-                                val mimeType = cursor.getString(cursor.getColumnIndex(ContactsContract.Data.MIMETYPE))
-                                val contactData = cursor.getString(cursor.getColumnIndex(ContactsContract.Data.DATA1))
+                        )?.use inner@{ innerCursor ->
+                            val mimeTypeColumnIndex = innerCursor.getColumnIndexOrNull(ContactsContract.Data.MIMETYPE) ?: return@inner
+                            val data1ColumnIndex = innerCursor.getColumnIndexOrNull(ContactsContract.Data.DATA1) ?: return@inner
+
+                            while (innerCursor.moveToNext()) {
+                                val mimeType = innerCursor.getString(mimeTypeColumnIndex)
+                                val contactData = innerCursor.getString(data1ColumnIndex)
 
                                 if (mimeType == ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE) {
                                     name = contactData
@@ -115,7 +119,10 @@ class ContactPicker : Picker<MultiPickerContactType>() {
                 selectionArgs,
                 null
         )?.use { cursor ->
-            return if (cursor.moveToFirst()) cursor.getInt(cursor.getColumnIndex(ContactsContract.RawContacts._ID)) else null
+            return if (cursor.moveToFirst()) {
+                cursor.getColumnIndexOrNull(ContactsContract.RawContacts._ID)
+                        ?.let { cursor.getInt(it) }
+            } else null
         }
     }
 

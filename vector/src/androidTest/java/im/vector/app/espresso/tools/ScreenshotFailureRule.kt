@@ -20,6 +20,7 @@ import android.content.ContentResolver
 import android.content.ContentValues
 import android.graphics.Bitmap
 import android.net.Uri
+import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
@@ -55,7 +56,7 @@ private fun storeFailureScreenshot(bitmap: Bitmap, screenshotName: String) {
         put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
         put(MediaStore.Images.Media.DATE_TAKEN, System.currentTimeMillis())
     }
-    if (android.os.Build.VERSION.SDK_INT >= 29) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
         useMediaStoreScreenshotStorage(
                 contentValues,
                 contentResolver,
@@ -90,6 +91,7 @@ private fun useMediaStoreScreenshotStorage(
     }
 }
 
+@Suppress("DEPRECATION")
 private fun usePublicExternalScreenshotStorage(
         contentValues: ContentValues,
         contentResolver: ContentResolver,
