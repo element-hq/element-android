@@ -59,18 +59,23 @@ class DisplayableEventFormatter @Inject constructor(
         val senderName = timelineEvent.senderInfo.disambiguatedDisplayName
 
         when (timelineEvent.root.getClearType()) {
-            EventType.STICKER               -> {
-                return simpleFormat(senderName, stringProvider.getString(R.string.send_a_sticker), appendAuthor)
-            }
-            EventType.REACTION              -> {
-                timelineEvent.root.getClearContent().toModel<ReactionContent>()?.relatesTo?.let {
-                    val emojiSpanned = emojiCompatWrapper.safeEmojiSpanify(stringProvider.getString(R.string.sent_a_reaction, it.key))
-                    return simpleFormat(senderName, emojiSpanned, appendAuthor)
-                }
-            }
             EventType.MESSAGE               -> {
                 timelineEvent.getLastMessageContent()?.let { messageContent ->
                     when (messageContent.msgType) {
+                        MessageType.MSGTYPE_TEXT                 -> {
+                            val body = if (timelineEvent.isReply()) {
+                                timelineEvent.getTextEditableContent() ?: messageContent.body
+                            } else {
+                                messageContent.body
+                            }
+                            return if (messageContent is MessageTextContent && messageContent.matrixFormattedBody.isNullOrBlank().not()) {
+                                val localFormattedBody = htmlRenderer.get().parse(body) as Document
+                                val renderedBody = htmlRenderer.get().render(localFormattedBody) ?: body
+                                simpleFormat(senderName, renderedBody, appendAuthor)
+                            } else {
+                                simpleFormat(senderName, body, appendAuthor)
+                            }
+                        }
                         MessageType.MSGTYPE_VERIFICATION_REQUEST -> {
                             return simpleFormat(senderName, stringProvider.getString(R.string.verification_request), appendAuthor)
                         }
@@ -89,20 +94,6 @@ class DisplayableEventFormatter @Inject constructor(
                         }
                         MessageType.MSGTYPE_FILE                 -> {
                             return simpleFormat(senderName, stringProvider.getString(R.string.sent_a_file), appendAuthor)
-                        }
-                        MessageType.MSGTYPE_TEXT                 -> {
-                            val body = if (timelineEvent.isReply()) {
-                                timelineEvent.getTextEditableContent() ?: messageContent.body
-                            } else {
-                                messageContent.body
-                            }
-                            return if (messageContent is MessageTextContent && messageContent.matrixFormattedBody.isNullOrBlank().not()) {
-                                val localFormattedBody = htmlRenderer.get().parse(body) as Document
-                                val renderedBody = htmlRenderer.get().render(localFormattedBody) ?: body
-                                simpleFormat(senderName, renderedBody, appendAuthor)
-                            } else {
-                                simpleFormat(senderName, body, appendAuthor)
-                            }
                         }
                         MessageType.MSGTYPE_RESPONSE             -> {
                             // do not show that?
@@ -127,6 +118,15 @@ class DisplayableEventFormatter @Inject constructor(
                             return simpleFormat(senderName, messageContent.body, appendAuthor)
                         }
                     }
+                }
+            }
+            EventType.STICKER               -> {
+                return simpleFormat(senderName, stringProvider.getString(R.string.send_a_sticker), appendAuthor)
+            }
+            EventType.REACTION              -> {
+                timelineEvent.root.getClearContent().toModel<ReactionContent>()?.relatesTo?.let {
+                    val emojiSpanned = emojiCompatWrapper.safeEmojiSpanify(stringProvider.getString(R.string.sent_a_reaction, it.key))
+                    return simpleFormat(senderName, emojiSpanned, appendAuthor)
                 }
             }
             EventType.KEY_VERIFICATION_CANCEL,
