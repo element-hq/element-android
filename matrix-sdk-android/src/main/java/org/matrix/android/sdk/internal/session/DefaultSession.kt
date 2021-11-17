@@ -35,6 +35,7 @@ import org.matrix.android.sdk.api.session.cache.CacheService
 import org.matrix.android.sdk.api.session.call.CallSignalingService
 import org.matrix.android.sdk.api.session.content.ContentUploadStateTracker
 import org.matrix.android.sdk.api.session.content.ContentUrlResolver
+import org.matrix.android.sdk.api.session.contentscanner.ContentScannerService
 import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.events.EventService
 import org.matrix.android.sdk.api.session.file.ContentDownloadStateTracker
@@ -124,6 +125,7 @@ internal class DefaultSession @Inject constructor(
         private val _sharedSecretStorageService: Lazy<SharedSecretStorageService>,
         private val accountService: Lazy<AccountService>,
         private val eventService: Lazy<EventService>,
+        private val contentScannerService: Lazy<ContentScannerService>,
         private val identityService: IdentityService,
         private val integrationManagerService: IntegrationManagerService,
         private val thirdPartyService: Lazy<ThirdPartyService>,
@@ -274,6 +276,8 @@ internal class DefaultSession @Inject constructor(
     override fun contentDownloadProgressTracker(): ContentDownloadStateTracker = contentDownloadStateTracker
 
     override fun cryptoService(): CryptoService = cryptoService.get()
+
+    override fun contentScannerService(): ContentScannerService = contentScannerService.get()
 
     override fun identityService() = identityService
 
