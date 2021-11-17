@@ -22,7 +22,6 @@ import im.vector.app.R
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.features.home.room.detail.composer.voice.VoiceMessageRecorderView.DraggingState
 import im.vector.app.features.home.room.detail.composer.voice.VoiceMessageRecorderView.RecordingUiState
-import kotlin.math.abs
 
 class DraggableStateProcessor(
         resources: Resources,
@@ -53,8 +52,8 @@ class DraggableStateProcessor(
     fun process(event: MotionEvent, recordingState: RecordingUiState): RecordingUiState {
         val currentX = event.rawX
         val currentY = event.rawY
-        val distanceX = abs(firstX - currentX)
-        val distanceY = abs(firstY - currentY)
+        val distanceX = firstX - currentX
+        val distanceY = firstY - currentY
         return nextRecordingState(recordingState, currentX, currentY, distanceX, distanceY).also {
             lastX = currentX
             lastY = currentY
@@ -67,12 +66,10 @@ class DraggableStateProcessor(
         return when (recordingState) {
             RecordingUiState.Started    -> {
                 // Determine if cancelling or locking for the first move action.
-                if (((currentX < firstX && rtlXMultiplier == 1) || (currentX > firstX && rtlXMultiplier == -1)) && distanceX > distanceY && distanceX > lastDistanceX) {
-                    DraggingState.Cancelling(distanceX)
-                } else if (currentY < firstY && distanceY > distanceX && distanceY > lastDistanceY) {
-                    DraggingState.Locking(distanceY)
-                } else {
-                    recordingState
+                when {
+                    (isSlidingToCancel(currentX)) && distanceX > distanceY && distanceX > lastDistanceX -> DraggingState.Cancelling(distanceX)
+                    isSlidingToLock(currentY) && distanceY > distanceX && distanceY > lastDistanceY     -> DraggingState.Locking(distanceY)
+                    else                                                                                -> recordingState
                 }
             }
             is DraggingState.Cancelling -> {
@@ -85,12 +82,10 @@ class DraggableStateProcessor(
             }
             is DraggingState.Locking    -> {
                 // Check if locking conditions met, also check if it should be initial state
-                if (distanceY < minimumMove && distanceY < lastDistanceY) {
-                    RecordingUiState.Started
-                } else if (shouldLockRecording(distanceY)) {
-                    RecordingUiState.Locked
-                } else {
-                    DraggingState.Locking(distanceY)
+                when {
+                    distanceY < minimumMove && distanceY < lastDistanceY -> RecordingUiState.Started
+                    shouldLockRecording(distanceY)                       -> RecordingUiState.Locked
+                    else                                                 -> DraggingState.Locking(distanceY)
                 }
             }
             else                        -> {
@@ -98,6 +93,10 @@ class DraggableStateProcessor(
             }
         }
     }
+
+    private fun isSlidingToLock(currentY: Float) = currentY < firstY
+
+    private fun isSlidingToCancel(currentX: Float) = (currentX < firstX && rtlXMultiplier == 1) || (currentX > firstX && rtlXMultiplier == -1)
 
     private fun shouldCancelRecording(distanceX: Float): Boolean {
         return distanceX >= distanceToCancel
