@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.session.sync.handler.room
 
 import com.zhuinden.monarchy.Monarchy
 import io.realm.Realm
+import io.realm.RealmConfiguration
 import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.Event
@@ -54,6 +55,7 @@ import javax.inject.Inject
 internal class ThreadsAwarenessHandler @Inject constructor(
         private val permalinkFactory: PermalinkFactory,
         private val cryptoService: CryptoService,
+        @SessionDatabase private val realmConfiguration: RealmConfiguration,
         @SessionDatabase private val monarchy: Monarchy,
         private val getEventTask: GetEventTask
 ) {
@@ -85,7 +87,7 @@ internal class ThreadsAwarenessHandler @Inject constructor(
         if (eventList.isNullOrEmpty()) return
 
         val threadsToFetch = emptyMap<String, String>().toMutableMap()
-        monarchy.awaitTransaction { realm ->
+        Realm.getInstance(realmConfiguration).use {  realm ->
             eventList.asSequence()
                     .filter {
                         isThreadEvent(it) && it.roomId != null
