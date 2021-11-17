@@ -2355,7 +2355,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="invite_by_mxid">Ielūgt pēc lietotājvārda</string>
     <string name="invite_by_email">Ielūgt pa e-pastu</string>
     <string name="invite_people_to_your_space_desc">Šobrīd esi tikai tu. %s būs vēl labāk kopā ar citiem.</string>
-    <string name="invite_to_space">Uzaicināt uz</string>
+    <string name="invite_to_space">Uzaicināt uz %s</string>
     <string name="invite_people_menu">Uzaicināt cilvēkus</string>
     <string name="invite_people_to_your_space">Uzaiciniet cilvēkus uz savu Telpu</string>
     <string name="create_space_topic_hint">Apraksts</string>
@@ -2464,7 +2464,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="a11y_mute_microphone">Izslēgt mikrofonu</string>
     <string name="identity_server_set_alternative_notice_no_default">Varat ievadīt jebkura cita identitātes servera URL adresi.</string>
     <string name="identity_server_set_alternative_notice">Varat arī ievadīt jebkuru citu identitātes servera URL.</string>
-    <string name="identity_server_set_default_submit">Izmantot</string>
+    <string name="identity_server_set_default_submit">Izmantot %1$s</string>
     <string name="identity_server_set_default_notice">Jūsu mājasserveris (%1$s) ierosina identitātes serverim izmantot %2$s</string>
     <string name="template_identity_server_error_bulk_sha256_not_supported">Jūsu privātuma dēļ ${app_name} atbalsta tikai šifrētu lietotāja e-pasta vēstules un tālruņa numura nosūtīšanu.</string>
     <string name="identity_server_error_terms_not_signed">Vispirms iestatījumos pieņemiet identitātes servera noteikumus.</string>
@@ -2730,7 +2730,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
 \nŠī kļūda ir ārpus ${app_name} kontroles. Tā var rasties vairāku iemeslu dēļ. Iespējams, tā darbosies, ja vēlāk mēģināsiet vēlreiz, varat arī pārbaudīt, vai sistēmas iestatījumos nav ierobežota Google Play pakalpojuma datu izmantošana, vai ierīces pulkstenis ir pareizs, vai arī tā var notikt uz atsevišķām sistēmām.</string>
     <string name="template_settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
 \nŠī kļūda nav kontrolējama ar ${app_name}, un saskaņā ar Google datiem šī kļūda norāda, ka ierīcē ir pārāk daudz lietotņu, kas reģistrētas FCM. Kļūda rodas tikai gadījumos, kad ir ārkārtīgi liels lietotņu skaits, tāpēc šim nevajadzētu ietekmēt parastu lietotāju.</string>
-    <string name="settings_troubleshoot_diagnostic_running_status">Izpilda... (%1$d of %2$d)</string>
+    <string name="settings_troubleshoot_diagnostic_running_status">Izpilda… (%1$d of %2$d)</string>
     <string name="settings_notification_keyword_contains_invalid_character">Atslēgvārds nevar saturēt \'%s\'</string>
     <string name="settings_notification_keyword_contains_dot">Atslēgvārds nevar sākties ar \'.\'</string>
     <string name="settings_notification_new_keyword">Pievienot jaunu atslēgvārdu</string>
