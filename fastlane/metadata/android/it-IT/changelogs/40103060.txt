@@ -1,0 +1,2 @@
+Modifiche principali in questa versione: aggiunto supporto alla presenza per i messaggi diretti (nota: la presenza è disattivata su matrix.org). Aggiunto di nuovo il supporto a Android Auto.
+Cronologia completa: https://github.com/vector-im/element-android/releases/tag/v1.3.6
