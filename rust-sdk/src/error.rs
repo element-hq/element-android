@@ -2,7 +2,7 @@
 
 use matrix_sdk_crypto::{
     store::CryptoStoreError as InnerStoreError, KeyExportError, MegolmError, OlmError,
-    SignatureError as InnerSignatureError, SecretImportError as RustSecretImportError,
+    SecretImportError as RustSecretImportError, SignatureError as InnerSignatureError,
 };
 use ruma::identifiers::Error as RumaIdentifierError;
 
@@ -12,6 +12,8 @@ pub enum KeyImportError {
     Export(#[from] KeyExportError),
     #[error(transparent)]
     CryptoStore(#[from] InnerStoreError),
+    #[error(transparent)]
+    Json(#[from] serde_json::Error),
 }
 
 #[derive(Debug, thiserror::Error)]

@@ -10,13 +10,13 @@ pub enum Verification {
     /// The `m.sas.v1` verification flow.
     SasV1 {
         #[allow(missing_docs)]
-        sas: Sas
+        sas: Sas,
     },
     /// The `m.qr_code.scan.v1`, `m.qr_code.show.v1`, and `m.reciprocate.v1`
     /// verification flow.
     QrCodeV1 {
         #[allow(missing_docs)]
-        qrcode: QrCode
+        qrcode: QrCode,
     },
 }
 

@@ -5,7 +5,10 @@ use sha2::Sha512;
 use std::{collections::HashMap, iter};
 use thiserror::Error;
 
-use matrix_sdk_crypto::backups::{OlmPkDecryptionError, RecoveryKey};
+use matrix_sdk_crypto::{
+    backups::{OlmPkDecryptionError, RecoveryKey},
+    store::CryptoStoreError as InnerStoreError,
+};
 
 /// The private part of the backup key, the one used for recovery.
 pub struct BackupRecoveryKey {
@@ -26,6 +29,9 @@ pub enum DecodeError {
     /// An error happened while decoding the recovery key.
     #[error(transparent)]
     Decode(#[from] matrix_sdk_crypto::backups::DecodeError),
+    /// An error happened in the storage layer,
+    #[error(transparent)]
+    CryptoStore(#[from] InnerStoreError),
 }
 
 /// Struct containing info about the way the backup key got derived from a
@@ -39,13 +45,15 @@ pub struct PassphraseInfo {
 }
 
 /// The public part of the backup key.
-pub struct BackupKey {
+pub struct MegolmV1BackupKey {
     /// The actuall base64 encoded public key.
     pub public_key: String,
     /// Signatures that have signed our backup key.
     pub signatures: HashMap<String, HashMap<String, String>>,
     /// The passphrase info, if the key was derived from one.
     pub passphrase_info: Option<PassphraseInfo>,
+    /// Get the full name of the backup algorithm this backup key supports.
+    pub backup_algorithm: String,
 }
 
 impl BackupRecoveryKey {
@@ -107,8 +115,8 @@ impl BackupRecoveryKey {
     }
 
     /// Get the public part of the backup key.
-    pub fn public_key(&self) -> BackupKey {
-        let public_key = self.inner.public_key();
+    pub fn megolm_v1_public_key(&self) -> MegolmV1BackupKey {
+        let public_key = self.inner.megolm_v1_public_key();
 
         let signatures: HashMap<String, HashMap<String, String>> = public_key
             .signatures()
@@ -121,10 +129,11 @@ impl BackupRecoveryKey {
             })
             .collect();
 
-        BackupKey {
+        MegolmV1BackupKey {
             public_key: public_key.to_base64(),
             signatures,
             passphrase_info: self.passphrase_info.clone(),
+            backup_algorithm: public_key.backup_algorithm().to_owned(),
         }
     }
 
@@ -140,14 +149,14 @@ impl BackupRecoveryKey {
 
     /// Try to decrypt a message that was encrypted using the public part of the
     /// backup key.
-    pub fn decrypt(
+    pub fn decrypt_v1(
         &self,
         ephemeral_key: String,
         mac: String,
         ciphertext: String,
     ) -> Result<String, PkDecryptionError> {
         self.inner
-            .decrypt(ephemeral_key, mac, ciphertext)
+            .decrypt_v1(ephemeral_key, mac, ciphertext)
             .map_err(|e| e.into())
     }
 }

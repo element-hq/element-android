@@ -32,7 +32,7 @@ use tokio::runtime::Runtime;
 
 use matrix_sdk_common::{deserialized_responses::AlgorithmInfo, uuid::Uuid};
 use matrix_sdk_crypto::{
-    backups::{MegolmV1BackupKey, RecoveryKey},
+    backups::{MegolmV1BackupKey as RustBackupKey, RecoveryKey},
     decrypt_key_export, encrypt_key_export,
     matrix_qrcode::QrVerificationData,
     olm::ExportedRoomKey,
@@ -43,11 +43,11 @@ use matrix_sdk_crypto::{
 use crate::{
     error::{CryptoStoreError, DecryptionError, SecretImportError, SignatureError},
     responses::{response_from_string, OutgoingVerificationRequest, OwnedResponse},
-    BackupKey, BackupKeys, BootstrapCrossSigningResult, ConfirmVerificationResult,
-    CrossSigningKeyExport, CrossSigningStatus, DecryptedEvent, Device, DeviceLists, KeyImportError,
-    KeysImportResult, ProgressListener, QrCode, Request, RequestType, RequestVerificationResult,
-    RoomKeyCounts, ScanResult, SignatureUploadRequest, StartSasResult, UserIdentity, Verification,
-    VerificationRequest,
+    BackupKeys, BootstrapCrossSigningResult, ConfirmVerificationResult, CrossSigningKeyExport,
+    CrossSigningStatus, DecodeError, DecryptedEvent, Device, DeviceLists, KeyImportError,
+    KeysImportResult, MegolmV1BackupKey, ProgressListener, QrCode, Request, RequestType,
+    RequestVerificationResult, RoomKeyCounts, ScanResult, SignatureUploadRequest, StartSasResult,
+    UserIdentity, Verification, VerificationRequest,
 };
 
 /// A high level state machine that handles E2EE for Matrix.
@@ -79,7 +79,7 @@ impl OlmMachine {
     pub fn new(user_id: &str, device_id: &str, path: &str) -> Result<Self, CryptoStoreError> {
         let user_id = UserId::try_from(user_id)?;
         let device_id = device_id.into();
-        let runtime = Runtime::new().unwrap();
+        let runtime = Runtime::new().expect("Couldn't create a tokio runtime");
 
         Ok(OlmMachine {
             inner: runtime.block_on(InnerMachine::new_with_default_store(
@@ -499,7 +499,7 @@ impl OlmMachine {
         let encrypted_content = self
             .runtime
             .block_on(self.inner.encrypt(&room_id, content))
-            .unwrap();
+            .expect("Encrypting an event produced an error");
 
         Ok(serde_json::to_string(&encrypted_content)?)
     }
@@ -644,13 +644,24 @@ impl OlmMachine {
         self.impor_keys_helper(keys, progress_listener)
     }
 
-    /// TODO
+    /// Import room keys from the given serialized unencrypted key export.
+    ///
+    /// This method is the same as [`OlmMachine::import_keys`] but the
+    /// decryption step is skipped and should be performed by the caller. This
+    /// may be useful for custom handling or for server-side key backups.
+    ///
+    /// # Arguments
+    ///
+    /// * `keys` - The serialized version of the unencrypted key export.
+    ///
+    /// * `progress_listener` - A callback that can be used to introspect the
+    /// progress of the key import.
     pub fn import_decrypted_keys(
         &self,
         keys: &str,
         progress_listener: Box<dyn ProgressListener>,
     ) -> Result<KeysImportResult, KeyImportError> {
-        let keys: Vec<ExportedRoomKey> = serde_json::from_str(keys).unwrap();
+        let keys: Vec<ExportedRoomKey> = serde_json::from_str(keys)?;
         self.impor_keys_helper(keys, progress_listener)
     }
 
@@ -1263,30 +1274,47 @@ impl OlmMachine {
         Ok(())
     }
 
-    /// TODO
-    pub fn enable_backup(&self, key: BackupKey, version: String) -> Result<(), CryptoStoreError> {
-        let backup_key = MegolmV1BackupKey::from_base64(&key.public_key).unwrap();
+    /// Activate the given backup key to be used with the given backup version.
+    ///
+    /// **Warning**: The caller needs to make sure that the given `BackupKey` is
+    /// trusted, otherwise we might be encrypting room keys that a malicious
+    /// party could decrypt.
+    ///
+    /// The [`OlmMachine::verify_backup`] method can be used to so.
+    pub fn enable_backup_v1(
+        &self,
+        key: MegolmV1BackupKey,
+        version: String,
+    ) -> Result<(), DecodeError> {
+        let backup_key = RustBackupKey::from_base64(&key.public_key)?;
         backup_key.set_version(version);
 
         self.runtime
-            .block_on(self.inner.backup_machine().enable_backup(backup_key))?;
+            .block_on(self.inner.backup_machine().enable_backup_v1(backup_key))?;
 
         Ok(())
     }
 
-    /// TODO
+    /// Are we able to encrypt room keys.
+    ///
+    /// This returns true if we have an active `BackupKey` and backup version
+    /// registered with the state machine.
     pub fn backup_enabled(&self) -> bool {
         self.runtime.block_on(self.inner.backup_machine().enabled())
     }
 
-    /// TODO
+    /// Disable and reset our backup state.
+    ///
+    /// This will remove any pending backup request, remove the backup key and
+    /// reset the backup state of each room key we have.
     pub fn disable_backup(&self) -> Result<(), CryptoStoreError> {
         Ok(self
             .runtime
             .block_on(self.inner.backup_machine().disable_backup())?)
     }
 
-    /// TODO
+    /// Encrypt a batch of room keys and return a request that needs to be sent
+    /// out to backup the room keys.
     pub fn backup_room_keys(&self) -> Result<Option<Request>, CryptoStoreError> {
         let request = self
             .runtime
@@ -1297,7 +1325,7 @@ impl OlmMachine {
         Ok(request)
     }
 
-    /// TODO
+    /// Get the number of backed up room keys and the total number of room keys.
     pub fn room_key_counts(&self) -> Result<RoomKeyCounts, CryptoStoreError> {
         Ok(self
             .runtime
@@ -1305,7 +1333,10 @@ impl OlmMachine {
             .into())
     }
 
-    /// TODO
+    /// Store the recovery key in the cryptostore.
+    ///
+    /// This is useful if the client wants to support gossiping of the backup
+    /// key.
     pub fn save_recovery_key(
         &self,
         key: Option<String>,
@@ -1321,7 +1352,7 @@ impl OlmMachine {
             .block_on(self.inner.backup_machine().save_recovery_key(key, version))?)
     }
 
-    /// TODO
+    /// Get the backup keys we have saved in our crypto store.
     pub fn get_backup_keys(&self) -> Result<Option<BackupKeys>, CryptoStoreError> {
         Ok(self
             .runtime
@@ -1330,7 +1361,8 @@ impl OlmMachine {
             .ok())
     }
 
-    /// TODO
+    /// Sign the given message using our device key and if available cross
+    /// signing master key.
     pub fn sign(&self, message: &str) -> HashMap<String, HashMap<String, String>> {
         self.runtime
             .block_on(self.inner.sign(message))
@@ -1344,7 +1376,8 @@ impl OlmMachine {
             .collect()
     }
 
-    /// TODO
+    /// Check if the given backup has been verified by us or by another of our
+    /// devices that we trust.
     pub fn verify_backup(&self, auth_data: &str) -> Result<bool, CryptoStoreError> {
         let auth_data = serde_json::from_str(auth_data)?;
         Ok(self

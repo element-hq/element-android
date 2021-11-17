@@ -125,7 +125,7 @@ internal class RustKeyBackupService @Inject constructor(
                         BackupRecoveryKey()
                     }
 
-                    val publicKey = key.publicKey()
+                    val publicKey = key.megolmV1PublicKey()
                     val backupAuthData = SignalableMegolmBackupAuthData(
                             publicKey = publicKey.publicKey,
                             privateKeySalt = publicKey.passphraseInfo?.privateKeySalt,
@@ -144,7 +144,7 @@ internal class RustKeyBackupService @Inject constructor(
                     )
 
                     MegolmBackupCreationInfo(
-                            algorithm = MXCRYPTO_ALGORITHM_MEGOLM_BACKUP,
+                            algorithm = publicKey.backupAlgorithm,
                             authData = signedMegolmBackupAuthData,
                             recoveryKey = key.toBase58()
                     )
@@ -264,7 +264,8 @@ internal class RustKeyBackupService @Inject constructor(
 
     override fun backupAllGroupSessions(progressListener: ProgressListener?,
                                         callback: MatrixCallback<Unit>?) {
-        // This is only used in tests?
+        // This is only used in tests? While it's fine have methods that are
+        // only used for tests, this one has a lot of logic that is nowhere else used.
         TODO()
     }
 
@@ -354,7 +355,7 @@ internal class RustKeyBackupService @Inject constructor(
     // Check that the recovery key matches to the public key that we downloaded from the server.
     // If they match, we can trust the public key and enable backups since we have the private key.
     private fun checkRecoveryKey(recoveryKey: BackupRecoveryKey, keysBackupData: KeysVersionResult) {
-        val backupKey = recoveryKey.publicKey()
+        val backupKey = recoveryKey.megolmV1PublicKey()
         val authData = getMegolmBackupAuthData(keysBackupData)
 
         when {
@@ -474,7 +475,7 @@ internal class RustKeyBackupService @Inject constructor(
 
         if (ciphertext != null && mac != null && ephemeralKey != null) {
             try {
-                val decrypted = key.decrypt(ephemeralKey, mac, ciphertext)
+                val decrypted = key.decryptV1(ephemeralKey, mac, ciphertext)
 
                 val moshi = MoshiProvider.providesMoshi()
                 val adapter = moshi.adapter(MegolmSessionData::class.java)
@@ -729,7 +730,7 @@ internal class RustKeyBackupService @Inject constructor(
     }
 
     private fun isValidRecoveryKey(recoveryKey: BackupRecoveryKey, version: KeysVersionResult): Boolean {
-        val publicKey = recoveryKey.publicKey().publicKey
+        val publicKey = recoveryKey.megolmV1PublicKey().publicKey
         val authData = getMegolmBackupAuthData(version) ?: return false
         return authData.publicKey == publicKey
     }
@@ -800,7 +801,7 @@ internal class RustKeyBackupService @Inject constructor(
 
         if (retrievedMegolmBackupAuthData != null) {
             try {
-                olmMachine.enableBackup(retrievedMegolmBackupAuthData.publicKey, keysVersionResult.version)
+                olmMachine.enableBackupV1(retrievedMegolmBackupAuthData.publicKey, keysVersionResult.version)
                 keysBackupVersion = keysVersionResult
             } catch (e: OlmException) {
                 Timber.e(e, "OlmException")

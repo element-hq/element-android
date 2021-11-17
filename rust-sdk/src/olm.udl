@@ -19,6 +19,7 @@ enum PkDecryptionError {
 enum KeyImportError {
     "Export",
     "CryptoStore",
+    "Json",
 };
 
 [Error]
@@ -357,8 +358,8 @@ interface OlmMachine {
     boolean is_identity_verified([ByRef] string user_id);
 
     record<DOMString, record<DOMString, string>> sign([ByRef] string message);
-    [Throws=CryptoStoreError]
-    void enable_backup(BackupKey key, string version);
+    [Throws=DecodeError]
+    void enable_backup_v1(MegolmV1BackupKey key, string version);
     [Throws=CryptoStoreError]
     void disable_backup();
     [Throws=CryptoStoreError]
@@ -379,10 +380,11 @@ dictionary PassphraseInfo {
     i32 private_key_iterations;
 };
 
-dictionary BackupKey {
+dictionary MegolmV1BackupKey {
     string public_key;
     record<DOMString, record<DOMString, string>> signatures;
     PassphraseInfo? passphrase_info;
+    string backup_algorithm;
 };
 
 dictionary BackupKeys {
@@ -398,6 +400,7 @@ dictionary RoomKeyCounts {
 [Error]
 enum DecodeError {
     "Decode",
+    "CryptoStore",
 };
 
 interface BackupRecoveryKey {
@@ -412,7 +415,7 @@ interface BackupRecoveryKey {
     constructor(string key);
     string to_base58();
     string to_base64();
-    BackupKey public_key();
+    MegolmV1BackupKey megolm_v1_public_key();
     [Throws=PkDecryptionError]
-    string decrypt(string ephemeral_key, string mac, string ciphertext);
+    string decrypt_v1(string ephemeral_key, string mac, string ciphertext);
 };

@@ -47,7 +47,6 @@ import org.matrix.android.sdk.internal.session.sync.model.DeviceListResponse
 import org.matrix.android.sdk.internal.session.sync.model.DeviceOneTimeKeysCountSyncResponse
 import org.matrix.android.sdk.internal.session.sync.model.ToDeviceSyncResponse
 import timber.log.Timber
-import uniffi.olm.BackupKey
 import uniffi.olm.BackupKeys
 import uniffi.olm.CrossSigningKeyExport
 import uniffi.olm.CrossSigningStatus
@@ -56,6 +55,7 @@ import uniffi.olm.DecryptionException
 import uniffi.olm.DeviceLists
 import uniffi.olm.KeyRequestPair
 import uniffi.olm.Logger
+import uniffi.olm.MegolmV1BackupKey
 import uniffi.olm.Request
 import uniffi.olm.RequestType
 import uniffi.olm.RoomKeyCounts
@@ -790,10 +790,10 @@ internal class OlmMachine(
     }
 
     @Throws(CryptoStoreException::class)
-    suspend fun enableBackup(key: String, version: String) {
+    suspend fun enableBackupV1(key: String, version: String) {
         return withContext(Dispatchers.Default) {
-            val backupKey = BackupKey(key, mapOf(), null)
-            inner.enableBackup(backupKey, version)
+            val backupKey = MegolmV1BackupKey(key, mapOf(), null, MXCRYPTO_ALGORITHM_MEGOLM_BACKUP)
+            inner.enableBackupV1(backupKey, version)
         }
     }
 

@@ -18,7 +18,7 @@ mod users;
 mod verification;
 
 pub use backup_recovery_key::{
-    BackupKey, BackupRecoveryKey, DecodeError, PassphraseInfo, PkDecryptionError,
+    BackupRecoveryKey, DecodeError, MegolmV1BackupKey, PassphraseInfo, PkDecryptionError,
 };
 pub use device::Device;
 pub use error::{
@@ -87,19 +87,19 @@ pub struct CrossSigningKeyExport {
     pub user_signing_key: Option<String>,
 }
 
-/// TODO
+/// Struct holding the number of room keys we have.
 pub struct RoomKeyCounts {
-    /// TODO
+    /// The total number of room keys.
     pub total: i64,
-    /// TODO
+    /// The number of backed up room keys.
     pub backed_up: i64,
 }
 
-/// TODO
+/// Backup keys and information we load from the store.
 pub struct BackupKeys {
-    /// TODO
+    /// The recovery key as a base64 encoded string.
     pub recovery_key: String,
-    /// TODO
+    /// The version that is used with the recovery key.
     pub backup_version: String,
 }
 
