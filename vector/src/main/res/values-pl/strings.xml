@@ -2862,4 +2862,5 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="a11y_delete_recorded_voice_message">Usuń nagranie</string>
     <string name="feedback">Opinie</string>
     <string name="bootstrap_crosssigning_progress_save_ssk">Synchronizacja Klucza Samopodpisującego (Self Signing key)</string>
+    <string name="cross_signing_verify_by_text">Weryfikacja ręczna poprzez Tekst</string>
 </resources>
