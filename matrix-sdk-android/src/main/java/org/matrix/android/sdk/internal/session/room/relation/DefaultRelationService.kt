@@ -38,7 +38,6 @@ import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.session.room.send.LocalEchoEventFactory
-import org.matrix.android.sdk.internal.session.room.send.TextContent
 import org.matrix.android.sdk.internal.session.room.send.queue.EventSenderProcessor
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.task.configureWith
@@ -133,7 +132,11 @@ internal class DefaultRelationService @AssistedInject constructor(
     }
 
     override fun replyToMessage(eventReplied: TimelineEvent, replyText: CharSequence, autoMarkdown: Boolean): Cancelable? {
-        val event = eventFactory.createReplyTextEvent(roomId, eventReplied, replyText, autoMarkdown)
+        val event = eventFactory.createReplyTextEvent(
+                roomId = roomId,
+                eventReplied = eventReplied,
+                replyText = replyText,
+                autoMarkdown = autoMarkdown)
                 ?.also { saveLocalEcho(it) }
                 ?: return null
 
@@ -159,15 +162,27 @@ internal class DefaultRelationService @AssistedInject constructor(
         }
     }
 
-    override fun replyInThread(rootThreadEventId: String, replyInThreadText: CharSequence, msgType: String, autoMarkdown: Boolean, formattedText: String?): Cancelable {
-        val event = eventFactory.createThreadTextEvent(
+    override fun replyInThread(
+            rootThreadEventId: String,
+            replyInThreadText: CharSequence,
+            msgType: String,
+            autoMarkdown: Boolean,
+            formattedText: String?,
+            eventReplied: TimelineEvent?): Cancelable {
+        val event = eventReplied?.let {
+            eventFactory.createReplyTextEvent(
+                    roomId = roomId,
+                    eventReplied = eventReplied,
+                    replyText = replyInThreadText,
+                    autoMarkdown = autoMarkdown,
+                    rootThreadEventId = rootThreadEventId)
+        } ?: eventFactory.createThreadTextEvent(
                 rootThreadEventId = rootThreadEventId,
                 roomId = roomId,
                 text = replyInThreadText.toString(),
                 msgType = msgType,
                 autoMarkdown = autoMarkdown,
-                formattedText = formattedText
-            )
+                formattedText = formattedText)
 //                .also {
 //                    saveLocalEcho(it)
 //                }

@@ -276,7 +276,7 @@ class TextComposerViewModel @AssistedInject constructor(
                                         replyInThreadText = slashCommandResult.message,
                                         msgType = MessageType.MSGTYPE_EMOTE,
                                         formattedText = rainbowGenerator.generate(message))
-                            } ?: room.sendFormattedTextMessage(message, rainbowGenerator.generate(message),MessageType.MSGTYPE_EMOTE)
+                            } ?: room.sendFormattedTextMessage(message, rainbowGenerator.generate(message), MessageType.MSGTYPE_EMOTE)
 
                             _viewEvents.post(TextComposerViewEvents.SlashCommandHandled())
                             popDraft()
@@ -465,20 +465,36 @@ class TextComposerViewModel @AssistedInject constructor(
                     val document = parser.parse(finalText)
                     val renderer = HtmlRenderer.builder().build()
                     val htmlText = renderer.render(document)
+
                     if (finalText == htmlText) {
-                        room.sendTextMessage(finalText)
+                        state.rootThreadEventId?.let {
+                            room.replyInThread(
+                                    rootThreadEventId = it,
+                                    replyInThreadText = finalText)
+                        } ?: room.sendTextMessage(finalText)
                     } else {
-                        room.sendFormattedTextMessage(finalText, htmlText)
+                        state.rootThreadEventId?.let {
+                            room.replyInThread(
+                                    rootThreadEventId = it,
+                                    replyInThreadText = finalText,
+                                    formattedText = htmlText)
+                        } ?: room.sendFormattedTextMessage(finalText, htmlText)
                     }
                     _viewEvents.post(TextComposerViewEvents.MessageSent)
                     popDraft()
                 }
                 is SendMode.REPLY   -> {
-                    state.sendMode.timelineEvent.let {
-                        room.replyToMessage(it, action.text.toString(), action.autoMarkdown)
-                        _viewEvents.post(TextComposerViewEvents.MessageSent)
-                        popDraft()
-                    }
+                    val timelineEvent = state.sendMode.timelineEvent
+                    state.rootThreadEventId?.let { rootThreadEventId ->
+                        room.replyInThread(
+                                rootThreadEventId = rootThreadEventId,
+                                replyInThreadText = action.text.toString(),
+                                autoMarkdown = action.autoMarkdown,
+                                eventReplied = timelineEvent)
+                    } ?: room.replyToMessage(timelineEvent, action.text.toString(), action.autoMarkdown)
+
+                    _viewEvents.post(TextComposerViewEvents.MessageSent)
+                    popDraft()
                 }
             }.exhaustive
         }
@@ -705,7 +721,7 @@ class TextComposerViewModel @AssistedInject constructor(
         }
         rootThreadEventId?.let {
             room.replyInThread(it, sequence)
-        }?: room.sendTextMessage(sequence)
+        } ?: room.sendTextMessage(sequence)
     }
 
     /**

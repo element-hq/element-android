@@ -134,11 +134,15 @@ interface RelationService {
      * by the sdk into pills.
      * @param rootThreadEventId the root thread eventId
      * @param replyInThreadText the reply text
+     * @param msgType the message type: MessageType.MSGTYPE_TEXT (default) or MessageType.MSGTYPE_EMOTE
+     * @param formattedText The formatted body using MessageType#FORMAT_MATRIX_HTML
      * @param autoMarkdown If true, the SDK will generate a formatted HTML message from the body text if markdown syntax is present
+     * @param eventReplied the event referenced by the reply within a thread
      */
     fun replyInThread(rootThreadEventId: String,
                       replyInThreadText: CharSequence,
                       msgType: String = MessageType.MSGTYPE_TEXT,
                       autoMarkdown: Boolean = false,
-                      formattedText: String? = null): Cancelable?
+                      formattedText: String? = null,
+                      eventReplied: TimelineEvent? = null): Cancelable?
 }

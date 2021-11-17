@@ -341,7 +341,7 @@ internal class LocalEchoEventFactory @Inject constructor(
     }
 
     /**
-     * Creates a thread event related to the already existing event
+     * Creates a thread event related to the already existing root event
      */
     fun createThreadTextEvent(
             rootThreadEventId: String,
@@ -363,10 +363,14 @@ internal class LocalEchoEventFactory @Inject constructor(
         return System.currentTimeMillis()
     }
 
+    /**
+     * Creates a reply to a regular timeline Event or a thread Event if needed
+     */
     fun createReplyTextEvent(roomId: String,
                              eventReplied: TimelineEvent,
                              replyText: CharSequence,
-                             autoMarkdown: Boolean): Event? {
+                             autoMarkdown: Boolean,
+                             rootThreadEventId: String? = null): Event? {
         // Fallbacks and event representation
         // TODO Add error/warning logs when any of this is null
         val permalink = permalinkFactory.createPermalink(eventReplied.root, false) ?: return null
@@ -393,10 +397,21 @@ internal class LocalEchoEventFactory @Inject constructor(
                 format = MessageFormat.FORMAT_MATRIX_HTML,
                 body = replyFallback,
                 formattedBody = replyFormatted,
-                relatesTo = RelationDefaultContent(null, null, ReplyToContent(eventId))
-        )
+                relatesTo = generateReplyRelationContent(eventId = eventId, rootThreadEventId = rootThreadEventId))
         return createMessageEvent(roomId, content)
     }
+
+    /**
+     * Generates the appropriate relatesTo object for a reply event.
+     * It can either be a regular reply or a reply within a thread
+     */
+    private fun generateReplyRelationContent(eventId: String, rootThreadEventId: String? = null): RelationDefaultContent =
+            rootThreadEventId?.let {
+                RelationDefaultContent(
+                        type = RelationType.THREAD,
+                        eventId = it,
+                        inReplyTo = ReplyToContent(eventId))
+            } ?: RelationDefaultContent(null, null, ReplyToContent(eventId))
 
     private fun buildReplyFallback(body: TextContent, originalSenderId: String?, newBodyText: String): String {
         return buildString {
