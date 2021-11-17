@@ -31,7 +31,6 @@ import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.chip.Chip
-import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
@@ -45,8 +44,12 @@ import im.vector.app.databinding.FragmentUserListBinding
 import im.vector.app.features.homeserver.HomeServerCapabilitiesViewModel
 import im.vector.app.features.navigation.SettingsActivityPayload
 import im.vector.app.features.settings.VectorSettingsActivity
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.user.model.User
+import reactivecircus.flowbinding.android.widget.textChanges
 import javax.inject.Inject
 
 class UserListFragment @Inject constructor(
@@ -133,8 +136,8 @@ class UserListFragment @Inject constructor(
     private fun setupSearchView() {
         views.userListSearch
                 .textChanges()
-                .startWith(views.userListSearch.text)
-                .subscribe { text ->
+                .onStart { emit(views.userListSearch.text) }
+                .onEach { text ->
                     val searchValue = text.trim()
                     val action = if (searchValue.isBlank()) {
                         UserListAction.ClearSearchUsers
@@ -143,7 +146,7 @@ class UserListFragment @Inject constructor(
                     }
                     viewModel.handle(action)
                 }
-                .disposeOnDestroyView()
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
         views.userListSearch.setupAsSearch()
         views.userListSearch.requestFocus()
@@ -220,6 +223,11 @@ class UserListFragment @Inject constructor(
                 requireContext(),
                 VectorSettingsActivity.EXTRA_DIRECT_ACCESS_DISCOVERY_SETTINGS
         )
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.handle(UserListAction.Resumed)
     }
 
     override fun giveIdentityServerConsent() {

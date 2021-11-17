@@ -67,7 +67,8 @@
     <string name="initial_sync_start_importing_account_rooms">初始化同步：
 \n正在匯入聊天室</string>
     <string name="initial_sync_start_importing_account_joined_rooms">初始化同步：
-\n正在匯入已加入的聊天室</string>
+\n正在載入您的對話
+\n若您加入了很多聊天室，這可能會花一點時間</string>
     <string name="initial_sync_start_importing_account_invited_rooms">初始化同步：
 \n正在匯入已邀請的聊天室</string>
     <string name="initial_sync_start_importing_account_left_rooms">初始化同步：
@@ -2949,4 +2950,7 @@
     <string name="a11y_presence_unavailable">不可用</string>
     <string name="a11y_presence_offline">離線</string>
     <string name="a11y_presence_online">線上</string>
+    <string name="login_error_homeserver_from_url_not_found_enter_manual">選擇家伺服器</string>
+    <string name="login_error_homeserver_from_url_not_found">無法存取 URL %s 的家伺服器。請檢查您的連結或手動選擇家伺服器。</string>
+    <string name="notification_listening_for_notifications">監聽通知</string>
 </resources>

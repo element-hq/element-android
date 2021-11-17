@@ -50,7 +50,7 @@ class SoftLogoutActivity : LoginActivity() {
     override fun initUiAndData() {
         super.initUiAndData()
 
-        softLogoutViewModel.subscribe(this) {
+        softLogoutViewModel.onEach {
             updateWithState(it)
         }
 

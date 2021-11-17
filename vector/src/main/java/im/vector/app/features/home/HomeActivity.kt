@@ -73,6 +73,8 @@ import im.vector.app.features.spaces.share.ShareSpaceBottomSheet
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
 import im.vector.app.push.fcm.FcmHelper
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.session.initsync.SyncStatusService
@@ -178,8 +180,8 @@ class HomeActivity :
         }
 
         sharedActionViewModel
-                .observe()
-                .subscribe { sharedAction ->
+                .stream()
+                .onEach { sharedAction ->
                     when (sharedAction) {
                         is HomeActivitySharedAction.OpenDrawer        -> views.drawerLayout.openDrawer(GravityCompat.START)
                         is HomeActivitySharedAction.CloseDrawer       -> views.drawerLayout.closeDrawer(GravityCompat.START)
@@ -222,7 +224,7 @@ class HomeActivity :
                         }
                     }.exhaustive
                 }
-                .disposeOnDestroy()
+                .launchIn(lifecycleScope)
 
         val args = intent.getParcelableExtra<HomeActivityArgs>(Mavericks.KEY_ARG)
 
@@ -243,13 +245,12 @@ class HomeActivity :
                 is HomeActivityViewEvents.OnCrossSignedInvalidated      -> handleCrossSigningInvalidated(it)
             }.exhaustive
         }
-        homeActivityViewModel.subscribe(this) { renderState(it) }
+        homeActivityViewModel.onEach { renderState(it) }
 
-        shortcutsHandler.observeRoomsAndBuildShortcuts()
-                .disposeOnDestroy()
+        shortcutsHandler.observeRoomsAndBuildShortcuts(lifecycleScope)
 
         if (!vectorPreferences.didPromoteNewRestrictedFeature()) {
-            promoteRestrictedViewModel.subscribe(this) {
+            promoteRestrictedViewModel.onEach {
                 if (it.activeSpaceSummary != null && !it.activeSpaceSummary.isPublic &&
                         it.activeSpaceSummary.otherMemberIds.isNotEmpty()) {
                     // It's a private space with some members show this once

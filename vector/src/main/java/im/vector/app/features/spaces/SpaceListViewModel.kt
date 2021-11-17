@@ -35,6 +35,7 @@ import im.vector.app.group
 import im.vector.app.space
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -89,14 +90,11 @@ class SpaceListViewModel @AssistedInject constructor(@Assisted initialState: Spa
 //        observeSelectionState()
         appStateHandler.selectedRoomGroupingObservable
                 .distinctUntilChanged()
-                .subscribe {
-                    setState {
-                        copy(
-                                selectedGroupingMethod = it.orNull() ?: RoomGroupingMethod.BySpace(null)
-                        )
-                    }
+                .setOnEach {
+                    copy(
+                            selectedGroupingMethod = it.orNull() ?: RoomGroupingMethod.BySpace(null)
+                    )
                 }
-                .disposeOnClear()
 
         session.getGroupSummariesLive(groupSummaryQueryParams {})
                 .asFlow()
@@ -114,7 +112,6 @@ class SpaceListViewModel @AssistedInject constructor(@Assisted initialState: Spa
                 }, sortOrder = RoomSortOrder.NONE
         ).asFlow()
                 .sample(300)
-                .flowOn(Dispatchers.Default)
                 .onEach {
                     val inviteCount = if (autoAcceptInvites.hideInvites) {
                         0
@@ -140,7 +137,9 @@ class SpaceListViewModel @AssistedInject constructor(@Assisted initialState: Spa
                                 homeAggregateCount = counts
                         )
                     }
-                }.launchIn(viewModelScope)
+                }
+                .flowOn(Dispatchers.Default)
+                .launchIn(viewModelScope)
     }
 
     override fun handle(action: SpaceListAction) {

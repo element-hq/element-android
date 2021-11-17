@@ -31,18 +31,16 @@ import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.home.room.detail.timeline.action.TimelineEventFragmentArgs
-import io.reactivex.Observable
-import io.reactivex.Single
+import kotlinx.coroutines.flow.map
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.room.model.ReactionAggregatedSummary
-import org.matrix.android.sdk.rx.RxRoom
-import org.matrix.android.sdk.rx.unwrap
+import org.matrix.android.sdk.flow.flow
+import org.matrix.android.sdk.flow.unwrap
 
 data class DisplayReactionsViewState(
         val eventId: String,
         val roomId: String,
         val mapReactionKeyToMemberList: Async<List<ReactionInfo>> = Uninitialized) :
-    MavericksState {
+        MavericksState {
 
     constructor(args: TimelineEventFragmentArgs) : this(roomId = args.roomId, eventId = args.eventId)
 }
@@ -81,37 +79,29 @@ class ViewReactionsViewModel @AssistedInject constructor(@Assisted
     }
 
     private fun observeEventAnnotationSummaries() {
-        RxRoom(room)
+        room.flow()
                 .liveAnnotationSummary(eventId)
                 .unwrap()
-                .flatMapSingle { summaries ->
-                    Observable
-                            .fromIterable(summaries.reactionsSummary)
-                            // .filter { reactionAggregatedSummary -> isSingleEmoji(reactionAggregatedSummary.key) }
-                            .toReactionInfoList()
+                .map { annotationsSummary ->
+                    annotationsSummary.reactionsSummary
+                            .flatMap { reactionsSummary ->
+                                reactionsSummary.sourceEvents.map {
+                                    val event = room.getTimeLineEvent(it)
+                                            ?: throw RuntimeException("Your eventId is not valid")
+                                    ReactionInfo(
+                                            event.root.eventId!!,
+                                            reactionsSummary.key,
+                                            event.root.senderId ?: "",
+                                            event.senderInfo.disambiguatedDisplayName,
+                                            dateFormatter.format(event.root.originServerTs, DateFormatKind.DEFAULT_DATE_AND_TIME)
+
+                                    )
+                                }
+                            }
                 }
                 .execute {
                     copy(mapReactionKeyToMemberList = it)
                 }
-    }
-
-    private fun Observable<ReactionAggregatedSummary>.toReactionInfoList(): Single<List<ReactionInfo>> {
-        return flatMap { summary ->
-            Observable
-                    .fromIterable(summary.sourceEvents)
-                    .map {
-                        val event = room.getTimeLineEvent(it)
-                                ?: throw RuntimeException("Your eventId is not valid")
-                        ReactionInfo(
-                                event.root.eventId!!,
-                                summary.key,
-                                event.root.senderId ?: "",
-                                event.senderInfo.disambiguatedDisplayName,
-                                dateFormatter.format(event.root.originServerTs, DateFormatKind.DEFAULT_DATE_AND_TIME)
-
-                        )
-                    }
-        }.toList()
     }
 
     override fun handle(action: EmptyAction) {

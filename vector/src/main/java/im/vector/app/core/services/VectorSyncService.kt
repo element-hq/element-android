@@ -32,6 +32,7 @@ import androidx.work.Worker
 import androidx.work.WorkerParameters
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
+import im.vector.app.core.platform.PendingIntentCompat
 import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.features.settings.BackgroundSyncMode
 import org.matrix.android.sdk.internal.session.sync.job.SyncService
@@ -199,9 +200,9 @@ private fun Context.rescheduleSyncService(sessionId: String,
         startService(intent)
     } else {
         val pendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            PendingIntent.getForegroundService(this, 0, intent, 0)
+            PendingIntent.getForegroundService(this, 0, intent, PendingIntentCompat.FLAG_IMMUTABLE)
         } else {
-            PendingIntent.getService(this, 0, intent, 0)
+            PendingIntent.getService(this, 0, intent, PendingIntentCompat.FLAG_IMMUTABLE)
         }
         val firstMillis = System.currentTimeMillis() + syncDelaySeconds * 1000L
         val alarmMgr = getSystemService<AlarmManager>()!!

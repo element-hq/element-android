@@ -95,7 +95,7 @@ class DiscoverySettingsController @Inject constructor(
         } else {
             settingsInfoItem {
                 id("idConsentInfo")
-                helperTextResId(R.string.settings_discovery_consent_notice_off)
+                helperTextResId(R.string.settings_discovery_consent_notice_off_2)
             }
             settingsButtonItem {
                 id("idConsentButton")

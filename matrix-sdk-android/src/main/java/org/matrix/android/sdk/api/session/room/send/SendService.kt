@@ -20,7 +20,6 @@ import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
-import org.matrix.android.sdk.api.session.room.model.message.OptionItem
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.util.Cancelable
 
@@ -84,10 +83,10 @@ interface SendService {
     /**
      * Send a poll to the room.
      * @param question the question
-     * @param options list of (label, value)
+     * @param options list of options
      * @return a [Cancelable]
      */
-    fun sendPoll(question: String, options: List<OptionItem>): Cancelable
+    fun sendPoll(question: String, options: List<String>): Cancelable
 
     /**
      * Method to send a poll response.

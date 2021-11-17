@@ -102,6 +102,9 @@ object EventType {
     // Relation Events
     const val REACTION = "m.reaction"
 
+    // Poll
+    const val POLL_START = "org.matrix.msc3381.poll.start"
+
     // Unwedging
     internal const val DUMMY = "m.dummy"
 
