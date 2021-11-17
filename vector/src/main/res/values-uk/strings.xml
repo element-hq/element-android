@@ -179,7 +179,7 @@
     <string name="black_theme">OLED Тема</string>
     <!-- permanent notification subtitle -->
     <string name="notification_sync_in_progress">Синхронізація…</string>
-    <string name="notification_listening_for_events">Слухати події</string>
+    <string name="notification_listening_for_events">Стеження за подіями</string>
     <!-- titles -->
     <string name="title_activity_home">Повідомлення</string>
     <string name="title_activity_room">Кімната</string>
@@ -2878,4 +2878,29 @@
     <string name="labs_use_restricted_join_rule">Експериментальний простір - обмежена кімната.</string>
     <string name="all_rooms_youre_in_will_be_shown_in_home">Усі кімнати, у яких ви перебуваєте, буде показано на сторінці Домівка.</string>
     <string name="preference_show_all_rooms_in_home">Показувати у Домівці</string>
+    <string name="verification_cancelled">Перевірку скасовано</string>
+    <string name="verify_cancelled_notice">Перевірку скасовано. Ви можете розпочати її повторно.</string>
+    <string name="event_redacted_by_admin_reason_with_reason">Подію змінено адміністратором кімнати, причина: %1$s</string>
+    <string name="delete_event_dialog_reason_hint">Причина редагування</string>
+    <string name="delete_event_dialog_reason_checkbox">Вказати причину</string>
+    <string name="send_images_and_video_with_original_size">Надіслати медіа в оригінальному розмірі</string>
+    <plurals name="send_videos_with_original_size">
+        <item quantity="one">Надіслати відео в оригінальному розмірі</item>
+        <item quantity="few">Надіслати відео в оригінальному розмірі</item>
+        <item quantity="many">Надіслати відео в оригінальному розмірі</item>
+        <item quantity="other">Надіслати відео в оригінальному розмірі</item>
+    </plurals>
+    <plurals name="send_images_with_original_size">
+        <item quantity="one">Надіслати зображення в оригінальному розмірі</item>
+        <item quantity="few">Надіслати зображення в оригінальному розмірі</item>
+        <item quantity="many">Надіслати зображення в оригінальному розмірі</item>
+        <item quantity="other">Надіслати зображення в оригінальному розмірі</item>
+    </plurals>
+    <string name="share_confirm_room">Хочете надіслати це вкладення до %1$s\?</string>
+    <string name="enter_secret_storage_passphrase">Введіть парольну фразу таємного сховища</string>
+    <string name="enter_secret_storage_invalid">Не вдалося знайти дані у сховищі</string>
+    <string name="crosssigning_other_user_not_trust">Інші користувачі можуть йому не довіряти</string>
+    <string name="attachment_type_poll">Опитування</string>
+    <string name="login_error_homeserver_from_url_not_found_enter_manual">Вибрати домашній сервер</string>
+    <string name="notification_listening_for_notifications">Стеження за сповіщеннями</string>
 </resources>
