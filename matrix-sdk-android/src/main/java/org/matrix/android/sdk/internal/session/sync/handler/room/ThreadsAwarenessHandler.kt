@@ -42,6 +42,7 @@ import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.session.permalinks.PermalinkFactory
 import org.matrix.android.sdk.internal.session.room.send.LocalEchoEventFactory
+import org.matrix.android.sdk.internal.session.room.timeline.GetEventTask
 import org.matrix.android.sdk.internal.util.awaitTransaction
 import timber.log.Timber
 import javax.inject.Inject
@@ -55,7 +56,7 @@ internal class ThreadsAwarenessHandler @Inject constructor(
         private val permalinkFactory: PermalinkFactory,
         private val cryptoService: CryptoService,
         @SessionDatabase private val monarchy: Monarchy,
-        private val session: Session
+        private val getEventTask: GetEventTask
 ) {
 
     /**
@@ -129,7 +130,9 @@ internal class ThreadsAwarenessHandler @Inject constructor(
     private suspend fun fetchEvent(eventId: String, roomId: String): Event? {
         return runCatching {
             Timber.i("------> Fetching event[$eventId]....")
-            session.getEvent(roomId = roomId, eventId = eventId)
+            getEventTask.execute(GetEventTask.Params(roomId = roomId, eventId = eventId)).apply {
+                unsignedData?.age?.let { System.currentTimeMillis() - it }
+            }
         }.fold(
                 onSuccess = {
                     it
