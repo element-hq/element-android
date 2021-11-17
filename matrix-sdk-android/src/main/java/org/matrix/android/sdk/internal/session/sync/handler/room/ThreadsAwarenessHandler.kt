@@ -18,7 +18,6 @@ package org.matrix.android.sdk.internal.session.sync.handler.room
 
 import com.zhuinden.monarchy.Monarchy
 import io.realm.Realm
-import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.Event
