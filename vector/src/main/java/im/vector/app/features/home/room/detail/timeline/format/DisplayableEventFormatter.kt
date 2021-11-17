@@ -34,7 +34,7 @@ import org.matrix.android.sdk.api.session.room.model.message.OPTION_TYPE_BUTTONS
 import org.matrix.android.sdk.api.session.room.model.relation.ReactionContent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
-import org.matrix.android.sdk.api.session.room.timeline.getTextEditableContent
+import org.matrix.android.sdk.api.session.room.timeline.getTextDisplayableContent
 import javax.inject.Inject
 
 class DisplayableEventFormatter @Inject constructor(
@@ -62,7 +62,7 @@ class DisplayableEventFormatter @Inject constructor(
                 timelineEvent.getLastMessageContent()?.let { messageContent ->
                     when (messageContent.msgType) {
                         MessageType.MSGTYPE_TEXT                 -> {
-                            val body = timelineEvent.getTextEditableContent() ?: messageContent.body
+                            val body = messageContent.getTextDisplayableContent()
                             if (messageContent is MessageTextContent && messageContent.matrixFormattedBody.isNullOrBlank().not()) {
                                 val localFormattedBody = htmlRenderer.get().parse(body) as Document
                                 val renderedBody = htmlRenderer.get().render(localFormattedBody) ?: body

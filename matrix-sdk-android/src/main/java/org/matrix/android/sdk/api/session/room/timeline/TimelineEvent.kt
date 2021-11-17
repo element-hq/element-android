@@ -134,19 +134,26 @@ fun TimelineEvent.getLastMessageContent(): MessageContent? {
 }
 
 /**
- * Get last Message body, after a possible edition
+ * Get the latest message body, after a possible edition, stripping the reply prefix if necessary
  */
-fun TimelineEvent.getLastMessageBody(): String? {
-    val lastMessageContent = getLastMessageContent()
-
-    if (lastMessageContent != null) {
-        return lastMessageContent.newContent?.toModel<MessageTextContent>()?.matrixFormattedBody?.let { ContentUtils.formatSpoilerTextFromHtml(it) }
-                ?: lastMessageContent.newContent?.toModel<MessageContent>()?.body
-                ?: (lastMessageContent as MessageTextContent).matrixFormattedBody?.let { ContentUtils.formatSpoilerTextFromHtml(it) }
-                ?: lastMessageContent.body
+fun TimelineEvent.getTextEditableContent(): String {
+    val lastContentBody = getLastMessageContent()?.body ?: return ""
+    return if (isReply()) {
+        extractUsefulTextFromReply(lastContentBody)
+    } else {
+        lastContentBody
     }
+}
 
-    return null
+/**
+ * Get the latest displayable content.
+ * Will take care to hide spoiler text
+ */
+fun MessageContent.getTextDisplayableContent(): String {
+    return newContent?.toModel<MessageTextContent>()?.matrixFormattedBody?.let { ContentUtils.formatSpoilerTextFromHtml(it) }
+            ?: newContent?.toModel<MessageContent>()?.body
+            ?: (this as MessageTextContent?)?.matrixFormattedBody?.let { ContentUtils.formatSpoilerTextFromHtml(it) }
+            ?: body
 }
 
 /**
@@ -158,13 +165,4 @@ fun TimelineEvent.isReply(): Boolean {
 
 fun TimelineEvent.isEdition(): Boolean {
     return root.isEdition()
-}
-
-fun TimelineEvent.getTextEditableContent(): String? {
-    val lastBody = getLastMessageBody()
-    return if (isReply()) {
-        return extractUsefulTextFromReply(lastBody ?: "")
-    } else {
-        lastBody
-    }
 }
