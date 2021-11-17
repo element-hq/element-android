@@ -86,7 +86,7 @@ class SpaceLeaveAdvancedActivity : VectorBaseActivity<ActivitySimpleLoadingBindi
     override fun initUiAndData() {
         super.initUiAndData()
         waitingView = views.waitingView.waitingView
-        leaveViewModel.subscribe(this) { state ->
+        leaveViewModel.onEach { state ->
             when (state.leaveState) {
                 is Loading -> {
                     showWaitingView()

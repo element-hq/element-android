@@ -117,7 +117,7 @@
         <item name="vctr_jump_to_unread_style">@style/Widget.Vector.JumpToUnread.SC.Light</item>
 
         <!-- Voice Message -->
-        <item name="vctr_voice_message_toast_background">@color/background_floating_sc</item> <!-- needs dark background -->
+        <item name="vctr_toast_background">@color/background_floating_sc</item> <!-- needs dark background -->
     </style>
 
     <!-- Default AppTheme for usage where settings don't apply -->

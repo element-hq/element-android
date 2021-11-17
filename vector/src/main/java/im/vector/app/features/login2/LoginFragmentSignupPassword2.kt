@@ -23,12 +23,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.autofill.HintConstants
-import com.jakewharton.rxbinding3.widget.textChanges
+import androidx.lifecycle.lifecycleScope
 import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.hidePassword
 import im.vector.app.databinding.FragmentLoginSignupPassword2Binding
-import io.reactivex.rxkotlin.subscribeBy
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import reactivecircus.flowbinding.android.widget.textChanges
 import javax.inject.Inject
 
 /**
@@ -87,11 +89,11 @@ class LoginFragmentSignupPassword2 @Inject constructor() : AbstractLoginFragment
     private fun setupSubmitButton() {
         views.loginSubmit.setOnClickListener { submit() }
         views.passwordField.textChanges()
-                .subscribeBy { password ->
+                .onEach { password ->
                     views.passwordFieldTil.error = null
                     views.loginSubmit.isEnabled = password.isNotEmpty()
                 }
-                .disposeOnDestroyView()
+                .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     override fun resetViewModel() {

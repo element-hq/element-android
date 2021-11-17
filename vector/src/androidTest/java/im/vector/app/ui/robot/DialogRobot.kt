@@ -14,19 +14,16 @@
  * limitations under the License.
  */
 
-package im.vector.app.test
+package im.vector.app.ui.robot
 
-import io.reactivex.android.plugins.RxAndroidPlugins
-import io.reactivex.plugins.RxJavaPlugins
-import io.reactivex.schedulers.Schedulers
-import org.junit.rules.TestRule
-import org.junit.runner.Description
-import org.junit.runners.model.Statement
+import com.adevinta.android.barista.interaction.BaristaDialogInteractions.clickDialogNegativeButton
 
-class InstantRxRule : TestRule {
-    override fun apply(base: Statement, description: Description?): Statement {
-        RxJavaPlugins.setInitNewThreadSchedulerHandler { Schedulers.trampoline() }
-        RxAndroidPlugins.setInitMainThreadSchedulerHandler { Schedulers.trampoline() }
-        return base
+class DialogRobot(
+        var returnedToPreviousScreen: Boolean = false
+) {
+
+    fun negativeAction() {
+        clickDialogNegativeButton()
+        returnedToPreviousScreen = true
     }
 }

@@ -10,7 +10,7 @@ body:
     id: usecase
     attributes:
       label: Your use case
-      description: What would you like to be able to do? Please feel welcome to include screenshots or mock ups.
+      description: Please feel welcome to include screenshots or mock ups.
       placeholder: Tell us what you would like to do!
       value: |
         #### What would you like to do?

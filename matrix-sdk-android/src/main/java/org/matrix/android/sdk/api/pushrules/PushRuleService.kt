@@ -51,11 +51,7 @@ interface PushRuleService {
 //    fun fulfilledBingRule(event: Event, rules: List<PushRule>): PushRule?
 
     interface PushRuleListener {
-        fun onMatchRule(event: Event, actions: List<Action>)
-        fun onRoomJoined(roomId: String)
-        fun onRoomLeft(roomId: String)
-        fun onEventRedacted(redactedEventId: String)
-        fun batchFinish()
+        fun onEvents(pushEvents: PushEvents)
     }
 
     fun getKeywords(): LiveData<Set<String>>

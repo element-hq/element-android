@@ -18,11 +18,14 @@ package im.vector.app.features.invite
 
 import im.vector.app.ActiveSessionDataSource
 import im.vector.app.features.session.coroutineScope
-import io.reactivex.disposables.Disposable
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -51,7 +54,8 @@ class InvitesAcceptor @Inject constructor(
         private val autoAcceptInvites: AutoAcceptInvites
 ) : Session.Listener {
 
-    private lateinit var activeSessionDisposable: Disposable
+    private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
+
     private val shouldRejectRoomIds = mutableSetOf<String>()
     private val activeSessionIds = mutableSetOf<String>()
     private val semaphore = Semaphore(1)
@@ -61,13 +65,14 @@ class InvitesAcceptor @Inject constructor(
     }
 
     private fun observeActiveSession() {
-        activeSessionDisposable = sessionDataSource.observe()
+        sessionDataSource.stream()
                 .distinctUntilChanged()
-                .subscribe {
+                .onEach {
                     it.orNull()?.let { session ->
                         onSessionActive(session)
                     }
                 }
+                .launchIn(coroutineScope)
     }
 
     private fun onSessionActive(session: Session) {

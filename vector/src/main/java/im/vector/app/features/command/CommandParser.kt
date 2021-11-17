@@ -345,15 +345,6 @@ object CommandParser {
 
                     ParsedCommand.SendLenny(message)
                 }
-                Command.POLL.command                         -> {
-                    val rawCommand = textMessage.substring(Command.POLL.command.length).trim()
-                    val split = rawCommand.split("|").map { it.trim() }
-                    if (split.size > 2) {
-                        ParsedCommand.SendPoll(split[0], split.subList(1, split.size))
-                    } else {
-                        ParsedCommand.ErrorSyntax(Command.POLL)
-                    }
-                }
                 Command.DISCARD_SESSION.command              -> {
                     ParsedCommand.DiscardSession
                 }

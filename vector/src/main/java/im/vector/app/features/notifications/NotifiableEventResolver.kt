@@ -15,8 +15,10 @@
  */
 package im.vector.app.features.notifications
 
+import android.net.Uri
 import im.vector.app.BuildConfig
 import im.vector.app.R
+import im.vector.app.core.extensions.takeAs
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.room.detail.timeline.format.DisplayableEventFormatter
@@ -28,12 +30,15 @@ import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.isEdition
+import org.matrix.android.sdk.api.session.events.model.isImageMessage
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageWithAttachmentContent
 import org.matrix.android.sdk.api.session.room.sender.SenderInfo
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.getEditedEventId
+import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
 import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.internal.crypto.algorithms.olm.OlmDecryptionResult
 import timber.log.Timber
@@ -49,11 +54,12 @@ import javax.inject.Inject
 class NotifiableEventResolver @Inject constructor(
         private val stringProvider: StringProvider,
         private val noticeEventFormatter: NoticeEventFormatter,
-        private val displayableEventFormatter: DisplayableEventFormatter) {
+        private val displayableEventFormatter: DisplayableEventFormatter
+) {
 
     // private val eventDisplay = RiotEventDisplay(context)
 
-    fun resolveEvent(event: Event/*, roomState: RoomState?, bingRule: PushRule?*/, session: Session, isNoisy: Boolean): NotifiableEvent? {
+    suspend fun resolveEvent(event: Event/*, roomState: RoomState?, bingRule: PushRule?*/, session: Session, isNoisy: Boolean): NotifiableEvent? {
         val roomID = event.roomId ?: return null
         val eventId = event.eventId ?: return null
         if (event.getClearType() == EventType.STATE_ROOM_MEMBER) {
@@ -89,7 +95,7 @@ class NotifiableEventResolver @Inject constructor(
         }
     }
 
-    fun resolveInMemoryEvent(session: Session, event: Event, canBeReplaced: Boolean): NotifiableEvent? {
+    suspend fun resolveInMemoryEvent(session: Session, event: Event, canBeReplaced: Boolean): NotifiableEvent? {
         if (event.getClearType() != EventType.MESSAGE) return null
 
         // Ignore message edition
@@ -120,7 +126,7 @@ class NotifiableEventResolver @Inject constructor(
         }
     }
 
-    private fun resolveMessageEvent(event: TimelineEvent, session: Session, canBeReplaced: Boolean, isNoisy: Boolean): NotifiableEvent {
+    private suspend fun resolveMessageEvent(event: TimelineEvent, session: Session, canBeReplaced: Boolean, isNoisy: Boolean): NotifiableEvent {
         // The event only contains an eventId, and roomId (type is m.room.*) , we need to get the displayable content (names, avatar, text, etc...)
         val room = session.getRoom(event.root.roomId!! /*roomID cannot be null*/)
 
@@ -140,6 +146,7 @@ class NotifiableEventResolver @Inject constructor(
                     senderName = senderDisplayName,
                     senderId = event.root.senderId,
                     body = body.toString(),
+                    imageUri = event.fetchImageIfPresent(session),
                     roomId = event.root.roomId!!,
                     roomName = roomName,
                     matrixID = session.myUserId
@@ -173,6 +180,7 @@ class NotifiableEventResolver @Inject constructor(
                     senderName = senderDisplayName,
                     senderId = event.root.senderId,
                     body = body,
+                    imageUri = event.fetchImageIfPresent(session),
                     roomId = event.root.roomId!!,
                     roomName = roomName,
                     roomIsDirect = room.roomSummary()?.isDirect ?: false,
@@ -190,6 +198,26 @@ class NotifiableEventResolver @Inject constructor(
                     soundName = null
             )
         }
+    }
+
+    private suspend fun TimelineEvent.fetchImageIfPresent(session: Session): Uri? {
+        return when {
+            root.isEncrypted() && root.mxDecryptionResult == null -> null
+            root.isImageMessage()                                 -> downloadAndExportImage(session)
+            else                                                  -> null
+        }
+    }
+
+    private suspend fun TimelineEvent.downloadAndExportImage(session: Session): Uri? {
+        return kotlin.runCatching {
+            getLastMessageContent()?.takeAs<MessageWithAttachmentContent>()?.let { imageMessage ->
+                val fileService = session.fileService()
+                fileService.downloadFile(imageMessage)
+                fileService.getTemporarySharableURI(imageMessage)
+            }
+        }.onFailure {
+            Timber.e(it, "Failed to download and export image for notification")
+        }.getOrNull()
     }
 
     private fun resolveStateRoomEvent(event: Event, session: Session, canBeReplaced: Boolean, isNoisy: Boolean): NotifiableEvent? {

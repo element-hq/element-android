@@ -39,7 +39,7 @@ class CallControlsBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetC
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        callViewModel.subscribe(this) {
+        callViewModel.onEach {
             renderState(it)
         }
 

@@ -24,15 +24,18 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.ArrayAdapter
 import androidx.core.view.isInvisible
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.textfield.TextInputLayout
-import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.utils.ensureProtocol
 import im.vector.app.databinding.FragmentLoginServerUrlForm2Binding
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.MatrixError
+import reactivecircus.flowbinding.android.widget.textChanges
 import java.net.UnknownHostException
 import javax.inject.Inject
 import javax.net.ssl.HttpsURLConnection
@@ -60,11 +63,11 @@ class LoginServerUrlFormFragment2 @Inject constructor() : AbstractLoginFragment2
 
     private fun setupHomeServerField() {
         views.loginServerUrlFormHomeServerUrl.textChanges()
-                .subscribe {
+                .onEach {
                     views.loginServerUrlFormHomeServerUrlTil.error = null
                     views.loginServerUrlFormSubmit.isEnabled = it.isNotBlank()
                 }
-                .disposeOnDestroyView()
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
         views.loginServerUrlFormHomeServerUrl.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
