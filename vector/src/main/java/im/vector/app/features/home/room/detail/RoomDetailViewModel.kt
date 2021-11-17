@@ -153,14 +153,16 @@ class RoomDetailViewModel @AssistedInject constructor(
         fun create(initialState: RoomDetailViewState): RoomDetailViewModel
     }
 
+    /**
+     * Can't use the hiltMaverick here because some dependencies are injected here and in fragment but they don't share the graph.
+     */
     companion object : MavericksViewModelFactory<RoomDetailViewModel, RoomDetailViewState> {
 
         const val PAGINATION_COUNT = 50
 
         @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: RoomDetailViewState): RoomDetailViewModel? {
+        override fun create(viewModelContext: ViewModelContext, state: RoomDetailViewState): RoomDetailViewModel {
             val fragment: RoomDetailFragment = (viewModelContext as FragmentViewModelContext).fragment()
-
             return fragment.roomDetailViewModelFactory.create(state)
         }
     }

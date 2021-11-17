@@ -15,14 +15,13 @@
  */
 package im.vector.app.features.widgets.permissions
 
-import com.airbnb.mvrx.ActivityViewModelContext
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MavericksViewModelFactory
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.R
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
@@ -141,19 +140,9 @@ class RoomWidgetPermissionViewModel @AssistedInject constructor(@Assisted val in
     }
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: RoomWidgetPermissionViewState): RoomWidgetPermissionViewModel
+    interface Factory : MavericksAssistedViewModelFactory<RoomWidgetPermissionViewModel, RoomWidgetPermissionViewState> {
+        override fun create(initialState: RoomWidgetPermissionViewState): RoomWidgetPermissionViewModel
     }
 
-    companion object : MavericksViewModelFactory<RoomWidgetPermissionViewModel, RoomWidgetPermissionViewState> {
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: RoomWidgetPermissionViewState): RoomWidgetPermissionViewModel? {
-            val factory = when (viewModelContext) {
-                is FragmentViewModelContext -> viewModelContext.fragment as? Factory
-                is ActivityViewModelContext -> viewModelContext.activity as? Factory
-            }
-            return factory?.create(state) ?: error("You should let your activity/fragment implements Factory interface")
-        }
-    }
+    companion object : MavericksViewModelFactory<RoomWidgetPermissionViewModel, RoomWidgetPermissionViewState> by hiltMavericksViewModelFactory()
 }

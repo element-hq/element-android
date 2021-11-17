@@ -15,12 +15,12 @@
  */
 package im.vector.app.features.roomprofile.alias.detail
 
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MavericksViewModelFactory
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
@@ -32,18 +32,11 @@ class RoomAliasBottomSheetViewModel @AssistedInject constructor(
 ) : VectorViewModel<RoomAliasBottomSheetState, EmptyAction, EmptyViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: RoomAliasBottomSheetState): RoomAliasBottomSheetViewModel
+    interface Factory : MavericksAssistedViewModelFactory<RoomAliasBottomSheetViewModel, RoomAliasBottomSheetState> {
+        override fun create(initialState: RoomAliasBottomSheetState): RoomAliasBottomSheetViewModel
     }
 
-    companion object : MavericksViewModelFactory<RoomAliasBottomSheetViewModel, RoomAliasBottomSheetState> {
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: RoomAliasBottomSheetState): RoomAliasBottomSheetViewModel? {
-            val fragment: RoomAliasBottomSheet = (viewModelContext as FragmentViewModelContext).fragment()
-            return fragment.roomAliasBottomSheetViewModelFactory.create(state)
-        }
-    }
+    companion object : MavericksViewModelFactory<RoomAliasBottomSheetViewModel, RoomAliasBottomSheetState> by hiltMavericksViewModelFactory()
 
     init {
         setState {

@@ -54,6 +54,7 @@ import androidx.core.view.forEach
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.fragment.app.setFragmentResultListener
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -241,7 +242,6 @@ class RoomDetailFragment @Inject constructor(
         private val permalinkHandler: PermalinkHandler,
         private val notificationDrawerManager: NotificationDrawerManager,
         val roomDetailViewModelFactory: RoomDetailViewModel.Factory,
-        val textComposerViewModelFactory: TextComposerViewModel.Factory,
         private val eventHtmlRenderer: EventHtmlRenderer,
         private val vectorPreferences: VectorPreferences,
         private val colorProvider: ColorProvider,
@@ -653,15 +653,25 @@ class RoomDetailFragment @Inject constructor(
                         setImageResource(R.drawable.ic_keyboard)
                     }
                 }
-                .setOnEmojiPopupDismissListener {
-                    if (isAdded) {
-                        views.composerLayout.views.composerEmojiButton.apply {
-                            contentDescription = getString(R.string.a11y_open_emoji_picker)
-                            setImageResource(R.drawable.ic_insert_emoji)
-                        }
+                .setOnEmojiPopupDismissListenerLifecycleAware {
+                    views.composerLayout.views.composerEmojiButton.apply {
+                        contentDescription = getString(R.string.a11y_open_emoji_picker)
+                        setImageResource(R.drawable.ic_insert_emoji)
                     }
                 }
                 .build(views.composerLayout.views.composerEditText)
+    }
+
+    /**
+     *  Ensure dismiss actions only trigger when the fragment is in the started state
+     *  EmojiPopup by default dismisses onViewDetachedFromWindow, this can cause race conditions with onDestroyView
+     */
+    private fun EmojiPopup.Builder.setOnEmojiPopupDismissListenerLifecycleAware(action: () -> Unit): EmojiPopup.Builder {
+        return setOnEmojiPopupDismissListener {
+            if (lifecycle.currentState == Lifecycle.State.STARTED) {
+                action()
+            }
+        }
     }
 
     private val permissionVoiceMessageLauncher = registerForPermissionsResult { allGranted, deniedPermanently ->

@@ -26,8 +26,8 @@ import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.appbar.MaterialToolbar
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.addFragmentToBackstack
 import im.vector.app.core.extensions.commitTransaction
 import im.vector.app.core.extensions.hideKeyboard
@@ -42,7 +42,6 @@ import im.vector.app.features.roomprofile.RoomProfileArgs
 import im.vector.app.features.roomprofile.alias.RoomAliasFragment
 import im.vector.app.features.roomprofile.permissions.RoomPermissionsFragment
 import kotlinx.parcelize.Parcelize
-import javax.inject.Inject
 
 @Parcelize
 data class SpaceManageArgs(
@@ -50,16 +49,11 @@ data class SpaceManageArgs(
         val manageType: ManageType
 ) : Parcelable
 
+@AndroidEntryPoint
 class SpaceManageActivity : VectorBaseActivity<ActivitySimpleLoadingBinding>(),
-        ToolbarConfigurable,
-        SpaceManageSharedViewModel.Factory {
+        ToolbarConfigurable {
 
-    @Inject lateinit var sharedViewModelFactory: SpaceManageSharedViewModel.Factory
     private lateinit var sharedDirectoryActionViewModel: RoomDirectorySharedActionViewModel
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
 
     override fun getBinding(): ActivitySimpleLoadingBinding = ActivitySimpleLoadingBinding.inflate(layoutInflater)
 
@@ -193,8 +187,6 @@ class SpaceManageActivity : VectorBaseActivity<ActivitySimpleLoadingBinding>(),
             }
         }
     }
-
-    override fun create(initialState: SpaceManageViewState) = sharedViewModelFactory.create(initialState)
 
     override fun configure(toolbar: MaterialToolbar) {
         configureToolbar(toolbar)

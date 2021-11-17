@@ -42,19 +42,13 @@ import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
 class RoomMemberListFragment @Inject constructor(
-        val viewModelFactory: RoomMemberListViewModel.Factory,
         private val roomMemberListController: RoomMemberListController,
         private val avatarRenderer: AvatarRenderer
 ) : VectorBaseFragment<FragmentRoomMemberListBinding>(),
-        RoomMemberListController.Callback,
-        RoomMemberListViewModel.Factory {
+        RoomMemberListController.Callback {
 
     private val viewModel: RoomMemberListViewModel by fragmentViewModel()
     private val roomProfileArgs: RoomProfileArgs by args()
-
-    override fun create(initialState: RoomMemberListViewState): RoomMemberListViewModel {
-        return viewModelFactory.create(initialState)
-    }
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentRoomMemberListBinding {
         return FragmentRoomMemberListBinding.inflate(inflater, container, false)

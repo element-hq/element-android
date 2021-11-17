@@ -17,16 +17,16 @@ package im.vector.app.features.discovery
 
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.R
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
@@ -49,18 +49,11 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
 ) : VectorViewModel<DiscoverySettingsState, DiscoverySettingsAction, DiscoverySettingsViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: DiscoverySettingsState): DiscoverySettingsViewModel
+    interface Factory : MavericksAssistedViewModelFactory<DiscoverySettingsViewModel, DiscoverySettingsState> {
+        override fun create(initialState: DiscoverySettingsState): DiscoverySettingsViewModel
     }
 
-    companion object : MavericksViewModelFactory<DiscoverySettingsViewModel, DiscoverySettingsState> {
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: DiscoverySettingsState): DiscoverySettingsViewModel? {
-            val fragment: DiscoverySettingsFragment = (viewModelContext as FragmentViewModelContext).fragment()
-            return fragment.viewModelFactory.create(state)
-        }
-    }
+    companion object : MavericksViewModelFactory<DiscoverySettingsViewModel, DiscoverySettingsState> by hiltMavericksViewModelFactory()
 
     private val identityService = session.identityService()
     private val termsService: TermsService = session

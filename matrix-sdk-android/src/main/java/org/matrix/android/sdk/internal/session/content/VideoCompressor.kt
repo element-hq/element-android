@@ -44,7 +44,7 @@ internal class VideoCompressor @Inject constructor(
         var result: Int = -1
         var failure: Throwable? = null
         Transcoder.into(destinationFile.path)
-                .addDataSource(object: FilePathDataSource(videoFile.path) {
+                .addDataSource(object : FilePathDataSource(videoFile.path) {
                     // https://github.com/natario1/Transcoder/issues/154
                     @Suppress("SENSELESS_COMPARISON") // Source is annotated as @NonNull, but can actually be null...
                     override fun isInitialized(): Boolean {

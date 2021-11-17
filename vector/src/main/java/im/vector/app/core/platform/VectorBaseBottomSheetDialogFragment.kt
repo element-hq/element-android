@@ -33,8 +33,8 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.jakewharton.rxbinding3.view.clicks
-import im.vector.app.core.di.DaggerScreenComponent
-import im.vector.app.core.di.ScreenComponent
+import dagger.hilt.android.EntryPointAccessors
+import im.vector.app.core.di.ActivityEntryPoint
 import im.vector.app.core.utils.DimensionConverter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -46,8 +46,6 @@ import java.util.concurrent.TimeUnit
  * Add Mavericks capabilities, handle DI and bindings.
  */
 abstract class VectorBaseBottomSheetDialogFragment<VB : ViewBinding> : BottomSheetDialogFragment(), MavericksView {
-
-    private lateinit var screenComponent: ScreenComponent
 
     /* ==========================================================================================
      * View
@@ -122,13 +120,10 @@ abstract class VectorBaseBottomSheetDialogFragment<VB : ViewBinding> : BottomShe
     }
 
     override fun onAttach(context: Context) {
-        screenComponent = DaggerScreenComponent.factory().create(vectorBaseActivity.getVectorComponent(), vectorBaseActivity)
-        viewModelFactory = screenComponent.viewModelFactory()
+        val activityEntryPoint = EntryPointAccessors.fromActivity(vectorBaseActivity, ActivityEntryPoint::class.java)
+        viewModelFactory = activityEntryPoint.viewModelFactory()
         super.onAttach(context)
-        injectWith(screenComponent)
     }
-
-    protected open fun injectWith(injector: ScreenComponent) = Unit
 
     override fun onResume() {
         super.onResume()

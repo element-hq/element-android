@@ -66,6 +66,7 @@ import org.matrix.android.sdk.internal.session.room.accountdata.RoomAccountDataD
 import org.matrix.android.sdk.internal.session.room.membership.RoomDisplayNameResolver
 import org.matrix.android.sdk.internal.session.room.membership.RoomMemberHelper
 import org.matrix.android.sdk.internal.session.room.relationship.RoomChildRelationInfo
+import org.matrix.android.sdk.internal.util.Normalizer
 import timber.log.Timber
 import javax.inject.Inject
 import kotlin.math.min
@@ -77,7 +78,8 @@ internal class RoomSummaryUpdater @Inject constructor(
         private val roomAvatarResolver: RoomAvatarResolver,
         private val eventDecryptor: EventDecryptor,
         private val crossSigningService: DefaultCrossSigningService,
-        private val roomAccountDataDataSource: RoomAccountDataDataSource) {
+        private val roomAccountDataDataSource: RoomAccountDataDataSource,
+        private val normalizer: Normalizer) {
 
     fun update(realm: Realm,
                roomId: String,
@@ -160,7 +162,7 @@ internal class RoomSummaryUpdater @Inject constructor(
                 (latestPreviewableOriginalContentEvent != null &&
                         !isEventRead(realm.configuration, userId, roomId, latestPreviewableOriginalContentEvent.eventId))
 
-        roomSummaryEntity.displayName = roomDisplayNameResolver.resolve(realm, roomId)
+        roomSummaryEntity.setDisplayName(roomDisplayNameResolver.resolve(realm, roomId))
         roomSummaryEntity.avatarUrl = roomAvatarResolver.resolve(realm, roomId)
         roomSummaryEntity.name = ContentMapper.map(lastNameEvent?.content).toModel<RoomNameContent>()?.name
         roomSummaryEntity.topic = ContentMapper.map(lastTopicEvent?.content).toModel<RoomTopicContent>()?.topic

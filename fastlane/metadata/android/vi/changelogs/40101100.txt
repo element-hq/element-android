@@ -1,0 +1,2 @@
+Những thay đổi chính trong phiên bản này: cập nhật chủ đề và phong cách và các tính năng mới cho Space.
+Log thay đổi đầy đủ: https://github.com/vector-im/element-android/releases/tag/v1.1.10

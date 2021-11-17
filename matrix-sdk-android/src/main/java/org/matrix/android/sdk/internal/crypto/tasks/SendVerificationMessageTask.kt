@@ -34,7 +34,7 @@ internal interface SendVerificationMessageTask : Task<SendVerificationMessageTas
 
 internal class DefaultSendVerificationMessageTask @Inject constructor(
         private val localEchoRepository: LocalEchoRepository,
-        private val encryptEventTask: DefaultEncryptEventTask,
+        private val encryptEventTask: EncryptEventTask,
         private val roomAPI: RoomAPI,
         private val cryptoSessionInfoProvider: CryptoSessionInfoProvider,
         private val globalErrorReceiver: GlobalErrorReceiver) : SendVerificationMessageTask {

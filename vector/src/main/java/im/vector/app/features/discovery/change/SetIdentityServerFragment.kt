@@ -41,7 +41,6 @@ import org.matrix.android.sdk.api.session.terms.TermsService
 import javax.inject.Inject
 
 class SetIdentityServerFragment @Inject constructor(
-        val viewModelFactory: SetIdentityServerViewModel.Factory,
         val colorProvider: ColorProvider
 ) : VectorBaseFragment<FragmentSetIdentityServerBinding>() {
 

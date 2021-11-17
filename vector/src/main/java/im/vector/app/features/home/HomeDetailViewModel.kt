@@ -17,7 +17,6 @@
 package im.vector.app.features.home
 
 import androidx.lifecycle.asFlow
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
@@ -25,7 +24,9 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.AppStateHandler
 import im.vector.app.RoomGroupingMethod
-import im.vector.app.core.di.HasScreenInjector
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
+import im.vector.app.core.extensions.singletonEntryPoint
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.call.dialpad.DialPadLookup
 import im.vector.app.features.call.lookup.CallProtocolsChecker
@@ -69,23 +70,17 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
         CallProtocolsChecker.Listener {
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: HomeDetailViewState): HomeDetailViewModel
+    interface Factory : MavericksAssistedViewModelFactory<HomeDetailViewModel, HomeDetailViewState> {
+        override fun create(initialState: HomeDetailViewState): HomeDetailViewModel
     }
 
-    companion object : MavericksViewModelFactory<HomeDetailViewModel, HomeDetailViewState> {
+    companion object : MavericksViewModelFactory<HomeDetailViewModel, HomeDetailViewState> by hiltMavericksViewModelFactory() {
 
-        override fun initialState(viewModelContext: ViewModelContext): HomeDetailViewState? {
-            val uiStateRepository = (viewModelContext.activity as HasScreenInjector).injector().uiStateRepository()
+        override fun initialState(viewModelContext: ViewModelContext): HomeDetailViewState {
+            val uiStateRepository = viewModelContext.activity.singletonEntryPoint().uiStateRepository()
             return HomeDetailViewState(
                     currentTab = HomeTab.RoomList(uiStateRepository.getDisplayMode())
             )
-        }
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: HomeDetailViewState): HomeDetailViewModel? {
-            val fragment: HomeDetailFragment = (viewModelContext as FragmentViewModelContext).fragment()
-            return fragment.homeDetailViewModelFactory.create(state)
         }
     }
 

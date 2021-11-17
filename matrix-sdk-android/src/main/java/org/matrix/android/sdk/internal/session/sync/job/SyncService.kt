@@ -105,9 +105,8 @@ abstract class SyncService : Service() {
                 }
             }
         }
-
-        // It's ok to be not sticky because we will explicitly start it again on the next alarm?
-        return START_NOT_STICKY
+        // Attempt to continue scheduling syncs after killed service is restarted
+        return START_REDELIVER_INTENT
     }
 
     override fun onDestroy() {

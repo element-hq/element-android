@@ -16,16 +16,15 @@
 
 package im.vector.app.features.home
 
-import com.airbnb.mvrx.ActivityViewModelContext
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.MavericksViewModelFactory
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.AppStateHandler
 import im.vector.app.RoomGroupingMethod
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
@@ -61,21 +60,11 @@ class UnreadMessagesSharedViewModel @AssistedInject constructor(@Assisted initia
     VectorViewModel<UnreadMessagesState, EmptyAction, EmptyViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: UnreadMessagesState): UnreadMessagesSharedViewModel
+    interface Factory : MavericksAssistedViewModelFactory<UnreadMessagesSharedViewModel, UnreadMessagesState> {
+        override fun create(initialState: UnreadMessagesState): UnreadMessagesSharedViewModel
     }
 
-    companion object : MavericksViewModelFactory<UnreadMessagesSharedViewModel, UnreadMessagesState> {
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: UnreadMessagesState): UnreadMessagesSharedViewModel? {
-            val factory = when (viewModelContext) {
-                is FragmentViewModelContext -> viewModelContext.fragment as? Factory
-                is ActivityViewModelContext -> viewModelContext.activity as? Factory
-            }
-            return factory?.create(state) ?: error("You should let your activity/fragment implements Factory interface")
-        }
-    }
+    companion object : MavericksViewModelFactory<UnreadMessagesSharedViewModel, UnreadMessagesState> by hiltMavericksViewModelFactory()
 
     override fun handle(action: EmptyAction) {}
 

@@ -23,10 +23,8 @@ import androidx.annotation.CallSuper
 import de.spiritcroc.preference.ScPreferenceFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
-import im.vector.app.core.di.DaggerScreenComponent
-import im.vector.app.core.di.HasScreenInjector
-import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.error.ErrorFormatter
+import im.vector.app.core.extensions.singletonEntryPoint
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.toast
 import io.reactivex.disposables.CompositeDisposable
@@ -34,7 +32,7 @@ import io.reactivex.disposables.Disposable
 import org.matrix.android.sdk.api.session.Session
 import timber.log.Timber
 
-abstract class VectorSettingsBaseFragment : ScPreferenceFragment(), HasScreenInjector {
+abstract class VectorSettingsBaseFragment : ScPreferenceFragment() {
 
     val vectorActivity: VectorBaseActivity<*> by lazy {
         activity as VectorBaseActivity<*>
@@ -45,7 +43,6 @@ abstract class VectorSettingsBaseFragment : ScPreferenceFragment(), HasScreenInj
     // members
     protected lateinit var session: Session
     protected lateinit var errorFormatter: ErrorFormatter
-    private lateinit var screenComponent: ScreenComponent
 
     abstract val preferenceXmlRes: Int
 
@@ -56,17 +53,10 @@ abstract class VectorSettingsBaseFragment : ScPreferenceFragment(), HasScreenInj
     }
 
     override fun onAttach(context: Context) {
-        screenComponent = DaggerScreenComponent.factory().create(vectorActivity.getVectorComponent(), vectorActivity)
+        val singletonEntryPoint = context.singletonEntryPoint()
         super.onAttach(context)
-        session = screenComponent.activeSessionHolder().getActiveSession()
-        errorFormatter = screenComponent.errorFormatter()
-        injectWith(injector())
-    }
-
-    protected open fun injectWith(injector: ScreenComponent) = Unit
-
-    override fun injector(): ScreenComponent {
-        return screenComponent
+        session = singletonEntryPoint.activeSessionHolder().getActiveSession()
+        errorFormatter = singletonEntryPoint.errorFormatter()
     }
 
     override fun onResume() {

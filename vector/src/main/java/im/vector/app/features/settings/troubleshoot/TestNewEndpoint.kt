@@ -17,7 +17,7 @@ package im.vector.app.features.settings.troubleshoot
 
 import android.content.Intent
 import androidx.activity.result.ActivityResultLauncher
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentActivity
 import im.vector.app.R
 import im.vector.app.core.pushers.UPHelper
 import im.vector.app.core.resources.StringProvider
@@ -26,7 +26,7 @@ import javax.inject.Inject
 /*
 * Test that app can successfully retrieve a new endpoint
  */
-class TestNewEndpoint @Inject constructor(private val context: AppCompatActivity,
+class TestNewEndpoint @Inject constructor(private val context: FragmentActivity,
                                           private val stringProvider: StringProvider
                                           ) : TroubleshootTest(R.string.settings_troubleshoot_test_endpoint_title) {
 

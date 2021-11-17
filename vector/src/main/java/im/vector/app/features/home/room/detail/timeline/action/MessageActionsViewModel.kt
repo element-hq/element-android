@@ -15,14 +15,14 @@
  */
 package im.vector.app.features.home.room.detail.timeline.action
 
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MavericksViewModelFactory
-import com.airbnb.mvrx.ViewModelContext
 import dagger.Lazy
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.R
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.canReact
 import im.vector.app.core.platform.EmptyViewEvents
@@ -85,17 +85,11 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
     private val eventIdFlow = MutableStateFlow(initialState.eventId)
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: MessageActionState): MessageActionsViewModel
+    interface Factory : MavericksAssistedViewModelFactory<MessageActionsViewModel, MessageActionState> {
+        override fun create(initialState: MessageActionState): MessageActionsViewModel
     }
 
-    companion object : MavericksViewModelFactory<MessageActionsViewModel, MessageActionState> {
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: MessageActionState): MessageActionsViewModel? {
-            val fragment: MessageActionsBottomSheet = (viewModelContext as FragmentViewModelContext).fragment()
-            return fragment.messageActionViewModelFactory.create(state)
-        }
-    }
+    companion object : MavericksViewModelFactory<MessageActionsViewModel, MessageActionState> by hiltMavericksViewModelFactory()
 
     init {
         observeEvent()

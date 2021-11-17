@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright 2021 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,9 +14,14 @@
  * limitations under the License.
  */
 
-package im.vector.app.core.di
+package org.matrix.android.sdk.internal.util
 
-interface HasScreenInjector {
+import java.text.Normalizer
+import javax.inject.Inject
 
-    fun injector(): ScreenComponent
+class Normalizer @Inject constructor() {
+
+    fun normalize(input: String): String {
+        return Normalizer.normalize(input.lowercase(), Normalizer.Form.NFD)
+    }
 }

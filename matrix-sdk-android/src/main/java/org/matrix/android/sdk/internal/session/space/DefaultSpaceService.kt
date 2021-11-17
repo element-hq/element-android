@@ -23,6 +23,7 @@ import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.room.RoomSortOrder
 import org.matrix.android.sdk.api.session.room.model.GuestAccess
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
@@ -94,12 +95,14 @@ internal class DefaultSpaceService @Inject constructor(
         return spaceGetter.get(spaceId)
     }
 
-    override fun getSpaceSummariesLive(queryParams: SpaceSummaryQueryParams): LiveData<List<RoomSummary>> {
-        return roomSummaryDataSource.getSpaceSummariesLive(queryParams)
+    override fun getSpaceSummariesLive(queryParams: SpaceSummaryQueryParams,
+                                       sortOrder: RoomSortOrder): LiveData<List<RoomSummary>> {
+        return roomSummaryDataSource.getSpaceSummariesLive(queryParams, sortOrder)
     }
 
-    override fun getSpaceSummaries(spaceSummaryQueryParams: SpaceSummaryQueryParams): List<RoomSummary> {
-        return roomSummaryDataSource.getSpaceSummaries(spaceSummaryQueryParams)
+    override fun getSpaceSummaries(spaceSummaryQueryParams: SpaceSummaryQueryParams,
+                                   sortOrder: RoomSortOrder): List<RoomSummary> {
+        return roomSummaryDataSource.getSpaceSummaries(spaceSummaryQueryParams, sortOrder)
     }
 
     override fun getRootSpaceSummaries(): List<RoomSummary> {

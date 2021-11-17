@@ -67,7 +67,6 @@ class RoomProfileFragment @Inject constructor(
         private val roomProfileController: RoomProfileController,
         private val avatarRenderer: AvatarRenderer,
         private val roomDetailPendingActionStore: RoomDetailPendingActionStore,
-        val roomProfileViewModelFactory: RoomProfileViewModel.Factory
 ) :
         VectorBaseFragment<FragmentMatrixProfileBinding>(),
         RoomProfileController.Callback {

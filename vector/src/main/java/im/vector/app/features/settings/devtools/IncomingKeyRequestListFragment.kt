@@ -30,7 +30,6 @@ import im.vector.app.databinding.FragmentGenericRecyclerBinding
 import javax.inject.Inject
 
 class IncomingKeyRequestListFragment @Inject constructor(
-        val viewModelFactory: KeyRequestListViewModel.Factory,
         private val epoxyController: IncomingKeyRequestPagedController
 ) : VectorBaseFragment<FragmentGenericRecyclerBinding>() {
 

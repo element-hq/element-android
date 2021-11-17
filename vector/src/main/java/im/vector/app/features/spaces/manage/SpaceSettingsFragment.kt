@@ -59,11 +59,9 @@ import javax.inject.Inject
 class SpaceSettingsFragment @Inject constructor(
         private val epoxyController: SpaceSettingsController,
         private val colorProvider: ColorProvider,
-        val viewModelFactory: RoomSettingsViewModel.Factory,
         private val avatarRenderer: AvatarRenderer,
         private val drawableProvider: DrawableProvider
 ) : VectorBaseFragment<FragmentRoomSettingGenericBinding>(),
-        RoomSettingsViewModel.Factory,
         SpaceSettingsController.Callback,
         GalleryOrCameraDialogHelper.Listener,
         OnBackPressed {
@@ -80,10 +78,6 @@ class SpaceSettingsFragment @Inject constructor(
     private val roomProfileArgs: RoomProfileArgs by args()
 
     override fun getMenuRes() = R.menu.vector_room_settings
-
-    override fun create(initialState: RoomSettingsViewState): RoomSettingsViewModel {
-        return viewModelFactory.create(initialState)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
