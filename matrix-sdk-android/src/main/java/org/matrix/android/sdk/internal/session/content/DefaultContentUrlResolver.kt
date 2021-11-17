@@ -82,7 +82,7 @@ internal class DefaultContentUrlResolver @Inject constructor(
 
     private fun resolve(contentUrl: String,
                         toThumbnail: Boolean,
-                        params: String = ""): String? {
+                        params: String = ""): String {
         var serverAndMediaId = contentUrl.removePrefix(MatrixUrls.MATRIX_CONTENT_URI_SCHEME)
 
         val apiPath = if (scannerService.isScannerEnabled()) {
