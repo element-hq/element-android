@@ -1005,7 +1005,7 @@ class VectorPreferences @Inject constructor(private val context: Context): Stati
 
     // SC addition
     fun labAllowMarkUnread(): Boolean {
-        return defaultPrefs.getBoolean(SETTINGS_LABS_ALLOW_MARK_UNREAD, false)
+        return defaultPrefs.getBoolean(SETTINGS_LABS_ALLOW_MARK_UNREAD, true)
     }
 
     // SC addition
