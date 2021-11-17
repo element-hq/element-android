@@ -16,12 +16,12 @@
  */
 package im.vector.app.features.crypto.verification.epoxy
 
+import android.widget.ImageView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
-import im.vector.app.core.ui.views.ShieldImageView
 import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
 
 /**
@@ -35,10 +35,23 @@ abstract class BottomSheetVerificationBigImageItem : VectorEpoxyModel<BottomShee
 
     override fun bind(holder: Holder) {
         super.bind(holder)
-        holder.image.render(roomEncryptionTrustLevel)
+        when (roomEncryptionTrustLevel) {
+            RoomEncryptionTrustLevel.Default -> {
+                holder.image.contentDescription = holder.view.context.getString(R.string.a11y_trust_level_default)
+                holder.image.setImageResource(R.drawable.ic_shield_black)
+            }
+            RoomEncryptionTrustLevel.Warning -> {
+                holder.image.contentDescription = holder.view.context.getString(R.string.a11y_trust_level_warning)
+                holder.image.setImageResource(R.drawable.ic_shield_warning_no_border)
+            }
+            RoomEncryptionTrustLevel.Trusted -> {
+                holder.image.contentDescription = holder.view.context.getString(R.string.a11y_trust_level_trusted)
+                holder.image.setImageResource(R.drawable.ic_shield_trusted_no_border)
+            }
+        }
     }
 
     class Holder : VectorEpoxyHolder() {
-        val image by bind<ShieldImageView>(R.id.itemVerificationBigImage)
+        val image by bind<ImageView>(R.id.itemVerificationBigImage)
     }
 }

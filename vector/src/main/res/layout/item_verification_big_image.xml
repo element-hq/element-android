@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<im.vector.app.core.ui.views.ShieldImageView xmlns:android="http://schemas.android.com/apk/res/android"
+<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:contentDescription="@string/trusted"
+    tools:src="@drawable/ic_shield_trusted_no_border"
     android:id="@+id/itemVerificationBigImage"
     android:layout_width="match_parent"
     android:layout_height="180dp"
