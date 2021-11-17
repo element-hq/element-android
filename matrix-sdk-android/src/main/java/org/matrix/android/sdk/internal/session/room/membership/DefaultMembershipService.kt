@@ -17,10 +17,12 @@
 package org.matrix.android.sdk.internal.session.room.membership
 
 import androidx.lifecycle.LiveData
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
-import dagger.assisted.AssistedFactory
 import com.zhuinden.monarchy.Monarchy
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import io.realm.Realm
+import io.realm.RealmQuery
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.room.members.MembershipService
 import org.matrix.android.sdk.api.session.room.members.RoomMemberQueryParams
@@ -31,6 +33,7 @@ import org.matrix.android.sdk.internal.database.model.RoomMemberSummaryEntity
 import org.matrix.android.sdk.internal.database.model.RoomMemberSummaryEntityFields
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.di.UserId
+import org.matrix.android.sdk.internal.query.QueryStringValueProcessor
 import org.matrix.android.sdk.internal.query.process
 import org.matrix.android.sdk.internal.session.room.membership.admin.MembershipAdminTask
 import org.matrix.android.sdk.internal.session.room.membership.joining.InviteTask
@@ -38,8 +41,6 @@ import org.matrix.android.sdk.internal.session.room.membership.joining.JoinRoomT
 import org.matrix.android.sdk.internal.session.room.membership.leaving.LeaveRoomTask
 import org.matrix.android.sdk.internal.session.room.membership.threepid.InviteThreePidTask
 import org.matrix.android.sdk.internal.util.fetchCopied
-import io.realm.Realm
-import io.realm.RealmQuery
 
 internal class DefaultMembershipService @AssistedInject constructor(
         @Assisted private val roomId: String,
@@ -51,7 +52,8 @@ internal class DefaultMembershipService @AssistedInject constructor(
         private val leaveRoomTask: LeaveRoomTask,
         private val membershipAdminTask: MembershipAdminTask,
         @UserId
-        private val userId: String
+        private val userId: String,
+        private val queryStringValueProcessor: QueryStringValueProcessor
 ) : MembershipService {
 
     @AssistedFactory
@@ -94,15 +96,17 @@ internal class DefaultMembershipService @AssistedInject constructor(
     }
 
     private fun roomMembersQuery(realm: Realm, queryParams: RoomMemberQueryParams): RealmQuery<RoomMemberSummaryEntity> {
-        return RoomMemberHelper(realm, roomId).queryRoomMembersEvent()
-                .process(RoomMemberSummaryEntityFields.USER_ID, queryParams.userId)
-                .process(RoomMemberSummaryEntityFields.MEMBERSHIP_STR, queryParams.memberships)
-                .process(RoomMemberSummaryEntityFields.DISPLAY_NAME, queryParams.displayName)
-                .apply {
-                    if (queryParams.excludeSelf) {
-                        notEqualTo(RoomMemberSummaryEntityFields.USER_ID, userId)
+        return with(queryStringValueProcessor) {
+            RoomMemberHelper(realm, roomId).queryRoomMembersEvent()
+                    .process(RoomMemberSummaryEntityFields.USER_ID, queryParams.userId)
+                    .process(RoomMemberSummaryEntityFields.MEMBERSHIP_STR, queryParams.memberships)
+                    .process(RoomMemberSummaryEntityFields.DISPLAY_NAME, queryParams.displayName)
+                    .apply {
+                        if (queryParams.excludeSelf) {
+                            notEqualTo(RoomMemberSummaryEntityFields.USER_ID, userId)
+                        }
                     }
-                }
+        }
     }
 
     override fun getNumberOfJoinedMembers(): Int {

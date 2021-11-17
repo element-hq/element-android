@@ -40,6 +40,7 @@ private const val REALM_NAME = "disk_store.realm"
  */
 internal class SessionRealmConfigurationFactory @Inject constructor(
         private val realmKeysUtils: RealmKeysUtils,
+        private val realmSessionStoreMigration: RealmSessionStoreMigration,
         @SessionFilesDirectory val directory: File,
         @SessionId val sessionId: String,
         @UserMd5 val userMd5: String,
@@ -71,7 +72,7 @@ internal class SessionRealmConfigurationFactory @Inject constructor(
                 .allowWritesOnUiThread(true)
                 .modules(SessionRealmModule())
                 .schemaVersion(RealmSessionStoreMigration.SESSION_STORE_SCHEMA_VERSION)
-                .migration(RealmSessionStoreMigration)
+                .migration(realmSessionStoreMigration)
                 .build()
 
         // Try creating a realm instance and if it succeeds we can clear the flag

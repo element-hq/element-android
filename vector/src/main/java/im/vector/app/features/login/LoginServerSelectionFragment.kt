@@ -23,7 +23,6 @@ import android.view.ViewGroup
 import im.vector.app.R
 import im.vector.app.core.utils.openUrlInChromeCustomTab
 import im.vector.app.databinding.FragmentLoginServerSelectionBinding
-
 import me.gujun.android.span.span
 import javax.inject.Inject
 
@@ -88,10 +87,5 @@ class LoginServerSelectionFragment @Inject constructor() : AbstractLoginFragment
 
     override fun updateWithState(state: LoginViewState) {
         updateSelectedChoice(state)
-
-        if (state.loginMode != LoginMode.Unknown) {
-            // LoginFlow for matrix.org has been retrieved
-            loginViewModel.handle(LoginAction.PostViewEvent(LoginViewEvents.OnLoginFlowRetrieved))
-        }
     }
 }

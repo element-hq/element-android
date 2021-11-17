@@ -39,8 +39,8 @@ class ExplicitTermFilter @Inject constructor(
     }
 
     fun isValid(str: String): Boolean {
-        return explicitContentRegex.matches(str.replace("\n", " ")).not()
+        return explicitContentRegex.matches(str.replace("\n", " ")).not() &&
                 // Special treatment for "18+" since word boundaries does not work here
-                && str.contains("18+").not()
+                str.contains("18+").not()
     }
 }

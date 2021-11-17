@@ -21,10 +21,10 @@ import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.airbnb.mvrx.MvRx
+import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.args
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
@@ -43,6 +43,7 @@ data class DisplayReadReceiptArgs(
 /**
  * Bottom sheet displaying list of read receipts for a given event ordered by descending timestamp
  */
+@AndroidEntryPoint
 class DisplayReadReceiptsBottomSheet :
         VectorBaseBottomSheetDialogFragment<BottomSheetGenericListWithTitleBinding>(),
         DisplayReadReceiptsController.Listener {
@@ -52,10 +53,6 @@ class DisplayReadReceiptsBottomSheet :
     private val displayReadReceiptArgs: DisplayReadReceiptArgs by args()
 
     private lateinit var sharedActionViewModel: MessageSharedActionViewModel
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): BottomSheetGenericListWithTitleBinding {
         return BottomSheetGenericListWithTitleBinding.inflate(inflater, container, false)
@@ -88,7 +85,7 @@ class DisplayReadReceiptsBottomSheet :
             val parcelableArgs = DisplayReadReceiptArgs(
                     readReceipts
             )
-            args.putParcelable(MvRx.KEY_ARG, parcelableArgs)
+            args.putParcelable(Mavericks.KEY_ARG, parcelableArgs)
             return DisplayReadReceiptsBottomSheet().apply { arguments = args }
         }
     }

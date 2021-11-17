@@ -16,25 +16,29 @@
 
 package im.vector.app.features.call.conference
 
+import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
-import io.reactivex.disposables.Disposable
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.widgets.model.Widget
 import org.matrix.android.sdk.api.session.widgets.model.WidgetType
-import org.matrix.android.sdk.rx.asObservable
 
 class JitsiCallViewModel @AssistedInject constructor(
         @Assisted initialState: JitsiCallViewState,
@@ -43,11 +47,11 @@ class JitsiCallViewModel @AssistedInject constructor(
 ) : VectorViewModel<JitsiCallViewState, JitsiCallViewActions, JitsiCallViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: JitsiCallViewState): JitsiCallViewModel
+    interface Factory : MavericksAssistedViewModelFactory<JitsiCallViewModel, JitsiCallViewState> {
+        override fun create(initialState: JitsiCallViewState): JitsiCallViewModel
     }
 
-    private var currentWidgetObserver: Disposable? = null
+    private var currentWidgetObserver: Job? = null
     private val widgetService = session.widgetService()
 
     private var confIsJoined = false
@@ -59,11 +63,11 @@ class JitsiCallViewModel @AssistedInject constructor(
 
     private fun observeWidget(roomId: String, widgetId: String) {
         confIsJoined = false
-        currentWidgetObserver?.dispose()
+        currentWidgetObserver?.cancel()
         currentWidgetObserver = widgetService.getRoomWidgetsLive(roomId, QueryStringValue.Equals(widgetId), WidgetType.Jitsi.values())
-                .asObservable()
+                .asFlow()
                 .distinctUntilChanged()
-                .subscribe {
+                .onEach {
                     val jitsiWidget = it.firstOrNull()
                     if (jitsiWidget != null) {
                         setState {
@@ -81,7 +85,7 @@ class JitsiCallViewModel @AssistedInject constructor(
                         }
                     }
                 }
-                .disposeOnClear()
+                .launchIn(viewModelScope)
     }
 
     private fun joinConference(jitsiWidget: Widget) = withState { state ->
@@ -104,8 +108,8 @@ class JitsiCallViewModel @AssistedInject constructor(
 
     private fun handleSwitchTo(action: JitsiCallViewActions.SwitchTo) = withState { state ->
         // Check if it is the same conf
-        if (action.args.roomId != state.roomId
-                || action.args.widgetId != state.widgetId) {
+        if (action.args.roomId != state.roomId ||
+                action.args.widgetId != state.widgetId) {
             if (action.withConfirmation) {
                 // Ask confirmation to switch, but wait a bit for the Activity to quit the PiP mode
                 viewModelScope.launch {
@@ -140,24 +144,7 @@ class JitsiCallViewModel @AssistedInject constructor(
         }
     }
 
-    companion object : MvRxViewModelFactory<JitsiCallViewModel, JitsiCallViewState> {
-
+    companion object : MavericksViewModelFactory<JitsiCallViewModel, JitsiCallViewState> by hiltMavericksViewModelFactory() {
         const val ENABLE_VIDEO_OPTION = "ENABLE_VIDEO_OPTION"
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: JitsiCallViewState): JitsiCallViewModel? {
-            val callActivity: VectorJitsiActivity = viewModelContext.activity()
-            return callActivity.viewModelFactory.create(state)
-        }
-
-        override fun initialState(viewModelContext: ViewModelContext): JitsiCallViewState? {
-            val args: VectorJitsiActivity.Args = viewModelContext.args()
-
-            return JitsiCallViewState(
-                    roomId = args.roomId,
-                    widgetId = args.widgetId,
-                    enableVideo = args.enableVideo
-            )
-        }
     }
 }

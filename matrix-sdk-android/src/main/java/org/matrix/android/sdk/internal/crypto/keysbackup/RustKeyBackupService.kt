@@ -27,6 +27,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.MatrixCallback
+import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.MatrixError
 import org.matrix.android.sdk.api.listeners.ProgressListener
@@ -54,7 +55,6 @@ import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.extensions.foldToCallback
 import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.internal.util.JsonCanonicalizer
-import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.internal.util.awaitCallback
 import org.matrix.olm.OlmException
 import timber.log.Timber
@@ -270,7 +270,7 @@ internal class RustKeyBackupService @Inject constructor(
     }
 
     private suspend fun checkBackupTrust(authData: MegolmBackupAuthData?): KeysBackupVersionTrust {
-        return if (authData == null || authData.publicKey.isEmpty() || authData.signatures.isEmpty()) {
+        return if (authData == null || authData.publicKey.isEmpty() || authData.signatures.isNullOrEmpty()) {
             Timber.v("getKeysBackupTrust: Key backup is absent or missing required data")
             KeysBackupVersionTrust()
         } else {
@@ -308,7 +308,7 @@ internal class RustKeyBackupService @Inject constructor(
                 val body = withContext(coroutineDispatchers.crypto) {
                     // Get current signatures, or create an empty set
                     val userId = olmMachine.userId()
-                    val signatures = authData.signatures[userId].orEmpty().toMutableMap()
+                    val signatures = authData.signatures?.get(userId).orEmpty().toMutableMap()
 
                     if (trust) {
                         // Add current device signature
@@ -323,7 +323,7 @@ internal class RustKeyBackupService @Inject constructor(
                     }
 
                     val newAuthData = authData.copy()
-                    val newSignatures = newAuthData.signatures.toMutableMap()
+                    val newSignatures = newAuthData.signatures.orEmpty().toMutableMap()
                     newSignatures[userId] = signatures
 
                     @Suppress("UNCHECKED_CAST")

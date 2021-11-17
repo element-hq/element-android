@@ -30,7 +30,6 @@ import org.matrix.android.sdk.internal.session.pushers.gateway.PushGatewayNotify
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.task.configureWith
 import org.matrix.android.sdk.internal.worker.WorkerParamsFactory
-import java.security.InvalidParameterException
 import java.util.UUID
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -41,6 +40,7 @@ internal class DefaultPushersService @Inject constructor(
         @SessionId private val sessionId: String,
         private val getPusherTask: GetPushersTask,
         private val pushGatewayNotifyTask: PushGatewayNotifyTask,
+        private val addPusherTask: AddPusherTask,
         private val removePusherTask: RemovePusherTask,
         private val taskExecutor: TaskExecutor
 ) : PushersService {
@@ -58,35 +58,50 @@ internal class DefaultPushersService @Inject constructor(
                 .executeBy(taskExecutor)
     }
 
-    override fun addHttpPusher(pushkey: String,
-                               appId: String,
-                               profileTag: String,
-                               lang: String,
-                               appDisplayName: String,
-                               deviceDisplayName: String,
-                               url: String,
-                               append: Boolean,
-                               withEventIdOnly: Boolean)
-            : UUID {
-        // Do some parameter checks. It's ok to throw Exception, to inform developer of the problem
-        if (pushkey.length > 512) throw InvalidParameterException("pushkey should not exceed 512 chars")
-        if (appId.length > 64) throw InvalidParameterException("appId should not exceed 64 chars")
-        if ("/_matrix/push/v1/notify" !in url) throw InvalidParameterException("url should contain '/_matrix/push/v1/notify'")
+    override fun enqueueAddHttpPusher(httpPusher: PushersService.HttpPusher): UUID {
+        return enqueueAddPusher(httpPusher.toJsonPusher())
+    }
 
-        val pusher = JsonPusher(
-                pushKey = pushkey,
-                kind = "http",
-                appId = appId,
-                appDisplayName = appDisplayName,
-                deviceDisplayName = deviceDisplayName,
-                profileTag = profileTag,
-                lang = lang,
-                data = JsonPusherData(url, EVENT_ID_ONLY.takeIf { withEventIdOnly }),
-                append = append)
+    override suspend fun addHttpPusher(httpPusher: PushersService.HttpPusher) {
+        addPusherTask.execute(AddPusherTask.Params(httpPusher.toJsonPusher()))
+    }
 
-        val params = AddHttpPusherWorker.Params(sessionId, pusher)
+    private fun PushersService.HttpPusher.toJsonPusher() = JsonPusher(
+            pushKey = pushkey,
+            kind = "http",
+            appId = appId,
+            profileTag = profileTag,
+            lang = lang,
+            appDisplayName = appDisplayName,
+            deviceDisplayName = deviceDisplayName,
+            data = JsonPusherData(url, EVENT_ID_ONLY.takeIf { withEventIdOnly }),
+            append = append
+    )
 
-        val request = workManagerProvider.matrixOneTimeWorkRequestBuilder<AddHttpPusherWorker>()
+    override suspend fun addEmailPusher(email: String,
+                                        lang: String,
+                                        emailBranding: String,
+                                        appDisplayName: String,
+                                        deviceDisplayName: String,
+                                        append: Boolean) {
+        addPusherTask.execute(
+                AddPusherTask.Params(JsonPusher(
+                        pushKey = email,
+                        kind = Pusher.KIND_EMAIL,
+                        appId = Pusher.APP_ID_EMAIL,
+                        profileTag = "",
+                        lang = lang,
+                        appDisplayName = appDisplayName,
+                        deviceDisplayName = deviceDisplayName,
+                        data = JsonPusherData(brand = emailBranding),
+                        append = append
+                ))
+        )
+    }
+
+    private fun enqueueAddPusher(pusher: JsonPusher): UUID {
+        val params = AddPusherWorker.Params(sessionId, pusher)
+        val request = workManagerProvider.matrixOneTimeWorkRequestBuilder<AddPusherWorker>()
                 .setConstraints(WorkManagerProvider.workConstraints)
                 .setInputData(WorkerParamsFactory.toData(params))
                 .setBackoffCriteria(BackoffPolicy.LINEAR, WorkManagerProvider.BACKOFF_DELAY_MILLIS, TimeUnit.MILLISECONDS)
@@ -95,8 +110,20 @@ internal class DefaultPushersService @Inject constructor(
         return request.id
     }
 
+    override suspend fun removePusher(pusher: Pusher) {
+        removePusher(pusher.pushKey, pusher.appId)
+    }
+
     override suspend fun removeHttpPusher(pushkey: String, appId: String) {
-        val params = RemovePusherTask.Params(pushkey, appId)
+        removePusher(pushkey, appId)
+    }
+
+    override suspend fun removeEmailPusher(email: String) {
+        removePusher(pushKey = email, Pusher.APP_ID_EMAIL)
+    }
+
+    private suspend fun removePusher(pushKey: String, pushAppId: String) {
+        val params = RemovePusherTask.Params(pushKey, pushAppId)
         removePusherTask.execute(params)
     }
 

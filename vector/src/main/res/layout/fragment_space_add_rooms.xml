@@ -24,8 +24,7 @@
             android:id="@+id/addRoomToSpaceToolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:minHeight="0dp"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap|enterAlways">
+            android:minHeight="0dp">
 
             <LinearLayout
                 android:layout_width="match_parent"

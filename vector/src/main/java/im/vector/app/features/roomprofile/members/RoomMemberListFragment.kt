@@ -34,7 +34,6 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentRoomMemberListBinding
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.roomprofile.RoomProfileArgs
-
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
@@ -43,19 +42,13 @@ import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
 class RoomMemberListFragment @Inject constructor(
-        val viewModelFactory: RoomMemberListViewModel.Factory,
         private val roomMemberListController: RoomMemberListController,
         private val avatarRenderer: AvatarRenderer
 ) : VectorBaseFragment<FragmentRoomMemberListBinding>(),
-        RoomMemberListController.Callback,
-        RoomMemberListViewModel.Factory {
+        RoomMemberListController.Callback {
 
     private val viewModel: RoomMemberListViewModel by fragmentViewModel()
     private val roomProfileArgs: RoomProfileArgs by args()
-
-    override fun create(initialState: RoomMemberListViewState): RoomMemberListViewModel {
-        return viewModelFactory.create(initialState)
-    }
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentRoomMemberListBinding {
         return FragmentRoomMemberListBinding.inflate(inflater, container, false)

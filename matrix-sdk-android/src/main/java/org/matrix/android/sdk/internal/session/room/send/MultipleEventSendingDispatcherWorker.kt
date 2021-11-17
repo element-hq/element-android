@@ -38,8 +38,8 @@ import javax.inject.Inject
  * Possible previous worker: Always [UploadContentWorker]
  * Possible next worker    : None, but it will post new work to send events, encrypted or not
  */
-internal class MultipleEventSendingDispatcherWorker(context: Context, params: WorkerParameters)
-    : SessionSafeCoroutineWorker<MultipleEventSendingDispatcherWorker.Params>(context, params, Params::class.java) {
+internal class MultipleEventSendingDispatcherWorker(context: Context, params: WorkerParameters) :
+    SessionSafeCoroutineWorker<MultipleEventSendingDispatcherWorker.Params>(context, params, Params::class.java) {
 
     @JsonClass(generateAdapter = true)
     internal data class Params(

@@ -1,0 +1,2 @@
+此版本中的主要變動：使用空間來整理您的聊天室！v1.3.1 修復了在 v1.3.0 中遇到的當機問題。
+完整的變更紀錄：https://github.com/vector-im/element-android/releases/tag/v1.3.1

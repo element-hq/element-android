@@ -102,17 +102,20 @@ object EventType {
     // Relation Events
     const val REACTION = "m.reaction"
 
+    // Poll
+    const val POLL_START = "org.matrix.msc3381.poll.start"
+
     // Unwedging
     internal const val DUMMY = "m.dummy"
 
     fun isCallEvent(type: String): Boolean {
-        return type == CALL_INVITE
-                || type == CALL_CANDIDATES
-                || type == CALL_ANSWER
-                || type == CALL_HANGUP
-                || type == CALL_SELECT_ANSWER
-                || type == CALL_NEGOTIATE
-                || type == CALL_REJECT
-                || type == CALL_REPLACES
+        return type == CALL_INVITE ||
+                type == CALL_CANDIDATES ||
+                type == CALL_ANSWER ||
+                type == CALL_HANGUP ||
+                type == CALL_SELECT_ANSWER ||
+                type == CALL_NEGOTIATE ||
+                type == CALL_REJECT ||
+                type == CALL_REPLACES
     }
 }

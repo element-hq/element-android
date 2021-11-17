@@ -23,6 +23,7 @@ import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.core.util.Pair
 import im.vector.app.features.crypto.recover.SetupMode
+import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.login.LoginConfig
 import im.vector.app.features.media.AttachmentData
 import im.vector.app.features.pin.PinMode
@@ -30,6 +31,7 @@ import im.vector.app.features.roomdirectory.RoomDirectoryData
 import im.vector.app.features.roomdirectory.roompreview.RoomPreviewData
 import im.vector.app.features.settings.VectorSettingsActivity
 import im.vector.app.features.share.SharedData
+import org.matrix.android.sdk.api.session.permalinks.PermalinkData
 import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoom
 import org.matrix.android.sdk.api.session.terms.TermsService
 import org.matrix.android.sdk.api.session.widgets.model.Widget
@@ -65,7 +67,7 @@ interface Navigator {
 
     fun openRoomPreview(context: Context, publicRoom: PublicRoom, roomDirectoryData: RoomDirectoryData)
 
-    fun openRoomPreview(context: Context, roomPreviewData: RoomPreviewData)
+    fun openRoomPreview(context: Context, roomPreviewData: RoomPreviewData, fromEmailInviteLink: PermalinkData.RoomEmailInviteLink? = null)
 
     fun openMatrixToBottomSheet(context: Context, link: String)
 
@@ -80,6 +82,8 @@ interface Navigator {
     fun openRoomsFiltering(context: Context)
 
     fun openSettings(context: Context, directAccess: Int = VectorSettingsActivity.EXTRA_DIRECT_ACCESS_ROOT)
+
+    fun openSettings(context: Context, payload: SettingsActivityPayload)
 
     fun openDebug(context: Context)
 
@@ -136,4 +140,6 @@ interface Navigator {
     fun openDevTools(context: Context, roomId: String)
 
     fun openCallTransfer(context: Context, callId: String)
+
+    fun openCreatePoll(context: Context, roomId: String)
 }

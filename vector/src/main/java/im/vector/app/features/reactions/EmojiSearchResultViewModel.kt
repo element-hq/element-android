@@ -15,41 +15,35 @@
  */
 package im.vector.app.features.reactions
 
-import com.airbnb.mvrx.ActivityViewModelContext
-import com.airbnb.mvrx.MvRxState
-import com.airbnb.mvrx.MvRxViewModelFactory
-import com.airbnb.mvrx.ViewModelContext
+import com.airbnb.mvrx.MavericksState
+import com.airbnb.mvrx.MavericksViewModelFactory
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.reactions.data.EmojiDataSource
 import im.vector.app.features.reactions.data.EmojiItem
+import kotlinx.coroutines.launch
 
 data class EmojiSearchResultViewState(
         val query: String = "",
         val results: List<EmojiItem> = emptyList()
-) : MvRxState
+) : MavericksState
 
 class EmojiSearchResultViewModel @AssistedInject constructor(
         @Assisted initialState: EmojiSearchResultViewState,
-        private val dataSource: EmojiDataSource)
-    : VectorViewModel<EmojiSearchResultViewState, EmojiSearchAction, EmptyViewEvents>(initialState) {
+        private val dataSource: EmojiDataSource) :
+    VectorViewModel<EmojiSearchResultViewState, EmojiSearchAction, EmptyViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: EmojiSearchResultViewState): EmojiSearchResultViewModel
+    interface Factory : MavericksAssistedViewModelFactory<EmojiSearchResultViewModel, EmojiSearchResultViewState> {
+        override fun create(initialState: EmojiSearchResultViewState): EmojiSearchResultViewModel
     }
 
-    companion object : MvRxViewModelFactory<EmojiSearchResultViewModel, EmojiSearchResultViewState> {
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: EmojiSearchResultViewState): EmojiSearchResultViewModel? {
-            val activity: EmojiReactionPickerActivity = (viewModelContext as ActivityViewModelContext).activity()
-            return activity.emojiSearchResultViewModelFactory.create(state)
-        }
-    }
+    companion object : MavericksViewModelFactory<EmojiSearchResultViewModel, EmojiSearchResultViewState> by hiltMavericksViewModelFactory()
 
     override fun handle(action: EmojiSearchAction) {
         when (action) {
@@ -58,11 +52,14 @@ class EmojiSearchResultViewModel @AssistedInject constructor(
     }
 
     private fun updateQuery(action: EmojiSearchAction.UpdateQuery) {
-        setState {
-            copy(
-                    query = action.queryString,
-                    results = dataSource.filterWith(action.queryString)
-            )
+        viewModelScope.launch {
+            val results = dataSource.filterWith(action.queryString)
+            setState {
+                copy(
+                        query = action.queryString,
+                        results = results
+                )
+            }
         }
     }
 }

@@ -24,22 +24,22 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.airbnb.mvrx.Incomplete
-import com.airbnb.mvrx.MvRx
+import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.commitTransaction
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.databinding.BottomSheetMatrixToCardBinding
 import im.vector.app.features.home.AvatarRenderer
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.session.permalinks.PermalinkData
-import java.lang.ref.WeakReference
 import javax.inject.Inject
 import kotlin.reflect.KClass
 
+@AndroidEntryPoint
 class MatrixToBottomSheet :
         VectorBaseBottomSheetDialogFragment<BottomSheetMatrixToCardBinding>() {
 
@@ -50,20 +50,7 @@ class MatrixToBottomSheet :
 
     @Inject lateinit var avatarRenderer: AvatarRenderer
 
-    @Inject
-    lateinit var matrixToBottomSheetViewModelFactory: MatrixToBottomSheetViewModel.Factory
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
-
-    private var weakReference = WeakReference<InteractionListener>(null)
-
-    var interactionListener: InteractionListener?
-        set(value) {
-            weakReference = WeakReference(value)
-        }
-        get() = weakReference.get()
+    var interactionListener: InteractionListener? = null
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): BottomSheetMatrixToCardBinding {
         return BottomSheetMatrixToCardBinding.inflate(inflater, container, false)
@@ -72,8 +59,8 @@ class MatrixToBottomSheet :
     private val viewModel by fragmentViewModel(MatrixToBottomSheetViewModel::class)
 
     interface InteractionListener {
-        fun navigateToRoom(roomId: String)
-        fun switchToSpace(spaceId: String) {}
+        fun mxToBottomSheetNavigateToRoom(roomId: String)
+        fun mxToBottomSheetSwitchToSpace(spaceId: String)
     }
 
     override fun invalidate() = withState(viewModel) { state ->
@@ -112,12 +99,12 @@ class MatrixToBottomSheet :
         viewModel.observeViewEvents {
             when (it) {
                 is MatrixToViewEvents.NavigateToRoom -> {
-                    interactionListener?.navigateToRoom(it.roomId)
+                    interactionListener?.mxToBottomSheetNavigateToRoom(it.roomId)
                     dismiss()
                 }
                 MatrixToViewEvents.Dismiss -> dismiss()
                 is MatrixToViewEvents.NavigateToSpace -> {
-                    interactionListener?.switchToSpace(it.spaceId)
+                    interactionListener?.mxToBottomSheetSwitchToSpace(it.spaceId)
                     dismiss()
                 }
                 is MatrixToViewEvents.ShowModalError -> {
@@ -131,14 +118,13 @@ class MatrixToBottomSheet :
     }
 
     companion object {
-        fun withLink(matrixToLink: String, listener: InteractionListener?): MatrixToBottomSheet {
+        fun withLink(matrixToLink: String): MatrixToBottomSheet {
             return MatrixToBottomSheet().apply {
                 arguments = Bundle().apply {
-                    putParcelable(MvRx.KEY_ARG, MatrixToArgs(
+                    putParcelable(Mavericks.KEY_ARG, MatrixToArgs(
                             matrixToLink = matrixToLink
                     ))
                 }
-                interactionListener = listener
             }
         }
     }

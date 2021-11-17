@@ -29,7 +29,8 @@ mv ./fastlane/metadata/android/ga  ./fastlane_tmp
 mv ./fastlane/metadata/android/kab ./fastlane_tmp
 mv ./fastlane/metadata/android/nb  ./fastlane_tmp
 
-# Fastlane / PlayStore require longDescription and shortDescription file to be set, so copy the default one for
+# Fastlane / PlayStore require longDescription and shortDescription file to be set, so copy the default
+# one for languages where they are missing
 echo "Copying default description when missing"
 if [[ -f "./fastlane/metadata/android/ro/full_description.txt" ]]; then
   echo "It appears that file ./fastlane/metadata/android/ro/full_description.txt now exists. This can be removed."
@@ -67,15 +68,6 @@ else
   removeFullDes_th=1
 fi
 
-if [[ -f "./fastlane/metadata/android/vi/full_description.txt" ]]; then
-  echo "It appears that file ./fastlane/metadata/android/vi/full_description.txt now exists. This can be removed."
-  removeFullDes_vi=0
-else
-  echo "Copy default full description to ./fastlane/metadata/android/vi"
-  cp ./fastlane/metadata/android/en-US/full_description.txt ./fastlane/metadata/android/vi
-  removeFullDes_vi=1
-fi
-
 # Run fastlane
 echo "Run fastlane to push to the PlaysStore"
 fastlane deployMeta
@@ -100,10 +92,6 @@ fi
 
 if [[ ${removeFullDes_th} -eq 1 ]]; then
   rm ./fastlane/metadata/android/th/full_description.txt
-fi
-
-if [[ ${removeFullDes_vi} -eq 1 ]]; then
-  rm ./fastlane/metadata/android/vi/full_description.txt
 fi
 
 echo "Success!"

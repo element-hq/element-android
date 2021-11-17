@@ -106,7 +106,8 @@ internal class TimelineEventDecryptor @Inject constructor(
             val result = cryptoService.decryptEvent(request.event, timelineId)
             Timber.v("Successfully decrypted event ${event.eventId}")
             realm.executeTransaction {
-                EventEntity.where(it, eventId = event.eventId ?: "")
+                val eventId = event.eventId ?: ""
+                EventEntity.where(it, eventId = eventId)
                         .findFirst()
                         ?.setDecryptionResult(result)
             }

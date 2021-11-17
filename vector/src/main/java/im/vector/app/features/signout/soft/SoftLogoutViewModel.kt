@@ -16,11 +16,10 @@
 
 package im.vector.app.features.signout.soft
 
-import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
@@ -28,6 +27,8 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.core.di.ActiveSessionHolder
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.hasUnsavedKeys
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.login.LoginMode
@@ -48,11 +49,11 @@ class SoftLogoutViewModel @AssistedInject constructor(
 ) : VectorViewModel<SoftLogoutViewState, SoftLogoutAction, SoftLogoutViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: SoftLogoutViewState): SoftLogoutViewModel
+    interface Factory : MavericksAssistedViewModelFactory<SoftLogoutViewModel, SoftLogoutViewState> {
+        override fun create(initialState: SoftLogoutViewState): SoftLogoutViewModel
     }
 
-    companion object : MvRxViewModelFactory<SoftLogoutViewModel, SoftLogoutViewState> {
+    companion object : MavericksViewModelFactory<SoftLogoutViewModel, SoftLogoutViewState> by hiltMavericksViewModelFactory() {
 
         override fun initialState(viewModelContext: ViewModelContext): SoftLogoutViewState? {
             val activity: SoftLogoutActivity = (viewModelContext as ActivityViewModelContext).activity()
@@ -64,12 +65,6 @@ class SoftLogoutViewModel @AssistedInject constructor(
                     userDisplayName = activity.session.getUser(userId)?.displayName ?: userId,
                     hasUnsavedKeys = activity.session.hasUnsavedKeys()
             )
-        }
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: SoftLogoutViewState): SoftLogoutViewModel? {
-            val activity: SoftLogoutActivity = (viewModelContext as ActivityViewModelContext).activity()
-            return activity.softLogoutViewModelFactory.create(state)
         }
     }
 
@@ -103,11 +98,11 @@ class SoftLogoutViewModel @AssistedInject constructor(
 
             val loginMode = when {
                 // SSO login is taken first
-                data.supportedLoginTypes.contains(LoginFlowTypes.SSO)
-                        && data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD) -> LoginMode.SsoAndPassword(data.ssoIdentityProviders)
-                data.supportedLoginTypes.contains(LoginFlowTypes.SSO)                 -> LoginMode.Sso(data.ssoIdentityProviders)
-                data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD)            -> LoginMode.Password
-                else                                                                  -> LoginMode.Unsupported
+                data.supportedLoginTypes.contains(LoginFlowTypes.SSO) &&
+                        data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD) -> LoginMode.SsoAndPassword(data.ssoIdentityProviders)
+                data.supportedLoginTypes.contains(LoginFlowTypes.SSO)              -> LoginMode.Sso(data.ssoIdentityProviders)
+                data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD)         -> LoginMode.Password
+                else                                                               -> LoginMode.Unsupported
             }
 
             setState {

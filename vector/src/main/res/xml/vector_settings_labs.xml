@@ -52,9 +52,5 @@
         android:summary="@string/labs_use_restricted_join_rule_desc"/>
     <!--</im.vector.app.core.preference.VectorPreferenceCategory>-->
 
-    <im.vector.app.core.preference.VectorSwitchPreference
-        android:defaultValue="false"
-        android:key="SETTINGS_LABS_SPACES_HOME_AS_ORPHAN"
-        android:title="@string/labs_space_show_orphan_in_home"/>
 
 </androidx.preference.PreferenceScreen>

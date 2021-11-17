@@ -16,12 +16,12 @@
 
 package org.matrix.android.sdk.internal.network.httpclient
 
+import okhttp3.OkHttpClient
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.internal.network.AccessTokenInterceptor
 import org.matrix.android.sdk.internal.network.interceptors.CurlLoggingInterceptor
 import org.matrix.android.sdk.internal.network.ssl.CertUtil
 import org.matrix.android.sdk.internal.network.token.AccessTokenProvider
-import okhttp3.OkHttpClient
 import timber.log.Timber
 
 internal fun OkHttpClient.Builder.addAccessTokenInterceptor(accessTokenProvider: AccessTokenProvider): OkHttpClient.Builder {

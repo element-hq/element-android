@@ -17,10 +17,11 @@
 package im.vector.app.features.settings.notifications
 
 import im.vector.app.R
+import im.vector.app.core.preference.VectorPreferenceCategory
 import org.matrix.android.sdk.api.pushrules.RuleIds
 
-class VectorSettingsOtherNotificationPreferenceFragment
-    : VectorSettingsPushRuleNotificationPreferenceFragment() {
+class VectorSettingsOtherNotificationPreferenceFragment :
+    VectorSettingsPushRuleNotificationPreferenceFragment() {
 
     override var titleRes: Int = R.string.settings_notification_other
 
@@ -32,4 +33,10 @@ class VectorSettingsOtherNotificationPreferenceFragment
                 "SETTINGS_PUSH_RULE_MESSAGES_SENT_BY_BOT_PREFERENCE_KEY" to RuleIds.RULE_ID_SUPPRESS_BOTS_NOTIFICATIONS,
                 "SETTINGS_PUSH_RULE_ROOMS_UPGRADED_KEY" to RuleIds.RULE_ID_TOMBSTONE
         )
+
+    override fun bindPref() {
+        super.bindPref()
+        val category = findPreference<VectorPreferenceCategory>("SETTINGS_OTHER")!!
+        category.isIconSpaceReserved = false
+    }
 }

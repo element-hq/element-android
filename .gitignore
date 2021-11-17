@@ -8,6 +8,7 @@
 .idea/*.xml
 .DS_Store
 /build
+/benchmark-out
 /captures
 .externalNativeBuild
 rust-sdk/target/*
@@ -18,4 +19,4 @@ Cargo.lock
 /fastlane/private
 /fastlane/report.xml
 
-ktlint
+/library/build

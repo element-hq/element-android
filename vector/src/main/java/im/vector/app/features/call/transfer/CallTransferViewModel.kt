@@ -16,13 +16,12 @@
 
 package im.vector.app.features.call.transfer
 
-import androidx.lifecycle.viewModelScope
-import com.airbnb.mvrx.ActivityViewModelContext
-import com.airbnb.mvrx.MvRxViewModelFactory
-import com.airbnb.mvrx.ViewModelContext
+import com.airbnb.mvrx.MavericksViewModelFactory
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.call.dialpad.DialPadLookup
@@ -37,22 +36,15 @@ import org.matrix.android.sdk.api.session.call.MxCall
 class CallTransferViewModel @AssistedInject constructor(@Assisted initialState: CallTransferViewState,
                                                         private val dialPadLookup: DialPadLookup,
                                                         private val directRoomHelper: DirectRoomHelper,
-                                                        private val callManager: WebRtcCallManager)
-    : VectorViewModel<CallTransferViewState, CallTransferAction, CallTransferViewEvents>(initialState) {
+                                                        private val callManager: WebRtcCallManager) :
+    VectorViewModel<CallTransferViewState, CallTransferAction, CallTransferViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: CallTransferViewState): CallTransferViewModel
+    interface Factory : MavericksAssistedViewModelFactory<CallTransferViewModel, CallTransferViewState> {
+        override fun create(initialState: CallTransferViewState): CallTransferViewModel
     }
 
-    companion object : MvRxViewModelFactory<CallTransferViewModel, CallTransferViewState> {
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: CallTransferViewState): CallTransferViewModel? {
-            val activity: CallTransferActivity = (viewModelContext as ActivityViewModelContext).activity()
-            return activity.callTransferViewModelFactory.create(state)
-        }
-    }
+    companion object : MavericksViewModelFactory<CallTransferViewModel, CallTransferViewState> by hiltMavericksViewModelFactory()
 
     private val call = callManager.getCallById(initialState.callId)
     private val callListener = object : WebRtcCall.Listener {

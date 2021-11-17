@@ -16,15 +16,15 @@
 
 package org.matrix.android.sdk.api.pushrules
 
-import org.matrix.android.sdk.MatrixTest
-import org.matrix.android.sdk.api.pushrules.rest.PushRule
-import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import org.matrix.android.sdk.MatrixTest
+import org.matrix.android.sdk.api.pushrules.rest.PushRule
+import org.matrix.android.sdk.internal.di.MoshiProvider
 
-class PushRuleActionsTest: MatrixTest {
+class PushRuleActionsTest : MatrixTest {
 
     @Test
     fun test_action_parsing() {

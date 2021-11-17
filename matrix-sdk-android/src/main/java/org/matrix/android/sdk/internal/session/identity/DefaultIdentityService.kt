@@ -20,10 +20,17 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
 import dagger.Lazy
+import kotlinx.coroutines.withContext
+import okhttp3.OkHttpClient
+import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.auth.data.SessionParams
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.MatrixError
+import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.SessionLifecycleObserver
+import org.matrix.android.sdk.api.session.accountdata.UserAccountDataTypes
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilitiesService
 import org.matrix.android.sdk.api.session.identity.FoundThreePid
@@ -36,22 +43,16 @@ import org.matrix.android.sdk.internal.di.AuthenticatedIdentity
 import org.matrix.android.sdk.internal.di.UnauthenticatedWithCertificate
 import org.matrix.android.sdk.internal.extensions.observeNotNull
 import org.matrix.android.sdk.internal.network.RetrofitFactory
-import org.matrix.android.sdk.api.session.SessionLifecycleObserver
 import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.internal.session.identity.data.IdentityStore
+import org.matrix.android.sdk.internal.session.identity.model.SignInvitationResult
 import org.matrix.android.sdk.internal.session.openid.GetOpenIdTokenTask
 import org.matrix.android.sdk.internal.session.profile.BindThreePidsTask
 import org.matrix.android.sdk.internal.session.profile.UnbindThreePidsTask
 import org.matrix.android.sdk.internal.session.sync.model.accountdata.IdentityServerContent
-import org.matrix.android.sdk.api.session.accountdata.UserAccountDataTypes
-import org.matrix.android.sdk.internal.session.user.accountdata.UserAccountDataDataSource
 import org.matrix.android.sdk.internal.session.user.accountdata.UpdateUserAccountDataTask
-import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
+import org.matrix.android.sdk.internal.session.user.accountdata.UserAccountDataDataSource
 import org.matrix.android.sdk.internal.util.ensureProtocol
-import kotlinx.coroutines.withContext
-import okhttp3.OkHttpClient
-import org.matrix.android.sdk.api.extensions.orFalse
-import org.matrix.android.sdk.api.session.Session
 import timber.log.Timber
 import javax.inject.Inject
 import javax.net.ssl.HttpsURLConnection
@@ -79,6 +80,7 @@ internal class DefaultIdentityService @Inject constructor(
         private val identityApiProvider: IdentityApiProvider,
         private val accountDataDataSource: UserAccountDataDataSource,
         private val homeServerCapabilitiesService: HomeServerCapabilitiesService,
+        private val sign3pidInvitationTask: Sign3pidInvitationTask,
         private val sessionParams: SessionParams
 ) : IdentityService, SessionLifecycleObserver {
 
@@ -200,6 +202,8 @@ internal class DefaultIdentityService @Inject constructor(
 
             identityStore.setUrl(urlCandidate)
             identityStore.setToken(token)
+            // could we remember if it was previously given?
+            identityStore.setUserConsent(false)
             updateIdentityAPI(urlCandidate)
 
             updateAccountData(urlCandidate)
@@ -228,6 +232,8 @@ internal class DefaultIdentityService @Inject constructor(
     }
 
     override suspend fun lookUp(threePids: List<ThreePid>): List<FoundThreePid> {
+        if (getCurrentIdentityServerUrl() == null) throw IdentityServiceError.NoIdentityServerConfigured
+
         if (!getUserConsent()) {
             throw IdentityServiceError.UserConsentNotProvided
         }
@@ -290,6 +296,14 @@ internal class DefaultIdentityService @Inject constructor(
         return token.token
     }
 
+    override suspend fun sign3pidInvitation(identiyServer: String, token: String, secret: String): SignInvitationResult {
+        return sign3pidInvitationTask.execute(Sign3pidInvitationTask.Params(
+                url = identiyServer,
+                token = token,
+                privateKey = secret
+        ))
+    }
+
     override fun addListener(listener: IdentityServiceListener) {
         listeners.add(listener)
     }
@@ -306,12 +320,12 @@ internal class DefaultIdentityService @Inject constructor(
 }
 
 private fun Throwable.isInvalidToken(): Boolean {
-    return this is Failure.ServerError
-            && httpCode == HttpsURLConnection.HTTP_UNAUTHORIZED /* 401 */
+    return this is Failure.ServerError &&
+            httpCode == HttpsURLConnection.HTTP_UNAUTHORIZED /* 401 */
 }
 
 private fun Throwable.isTermsNotSigned(): Boolean {
-    return this is Failure.ServerError
-            && httpCode == HttpsURLConnection.HTTP_FORBIDDEN /* 403 */
-            && error.code == MatrixError.M_TERMS_NOT_SIGNED
+    return this is Failure.ServerError &&
+            httpCode == HttpsURLConnection.HTTP_FORBIDDEN && /* 403 */
+            error.code == MatrixError.M_TERMS_NOT_SIGNED
 }

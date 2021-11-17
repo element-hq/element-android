@@ -22,9 +22,9 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
-import com.jakewharton.rxbinding3.appcompat.queryTextChanges
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
@@ -36,12 +36,14 @@ import im.vector.app.core.utils.toast
 import im.vector.app.databinding.FragmentPublicRoomsBinding
 import im.vector.app.features.permalink.NavigationInterceptor
 import im.vector.app.features.permalink.PermalinkHandler
-import io.reactivex.rxkotlin.subscribeBy
-
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoom
+import reactivecircus.flowbinding.appcompat.queryTextChanges
 import timber.log.Timber
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 /**
@@ -78,11 +80,11 @@ class PublicRoomsFragment @Inject constructor(
         setupRecyclerView()
 
         views.publicRoomsFilter.queryTextChanges()
-                .debounce(500, TimeUnit.MILLISECONDS)
-                .subscribeBy {
+                .debounce(500)
+                .onEach {
                     viewModel.handle(RoomDirectoryAction.FilterWith(it.toString()))
                 }
-                .disposeOnDestroyView()
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
         views.publicRoomsCreateNewRoom.debouncedClicks {
             sharedActionViewModel.post(RoomDirectorySharedAction.CreateRoom)
@@ -125,20 +127,20 @@ class PublicRoomsFragment @Inject constructor(
     }
 
     override fun onUnknownRoomClicked(roomIdOrAlias: String) {
-        val permalink = session.permalinkService().createPermalink(roomIdOrAlias)
-        permalinkHandler
-                .launch(requireContext(), permalink, object : NavigationInterceptor {
-                    override fun navToRoom(roomId: String?, eventId: String?, deepLink: Uri?): Boolean {
-                        requireActivity().finish()
-                        return false
-                    }
-                })
-                .subscribe { isSuccessful ->
-                    if (!isSuccessful) {
-                        requireContext().toast(R.string.room_error_not_found)
-                    }
-                }
-                .disposeOnDestroyView()
+        viewLifecycleOwner.lifecycleScope.launch {
+            val permalink = session.permalinkService().createPermalink(roomIdOrAlias)
+            val isHandled = permalinkHandler
+                    .launch(requireContext(), permalink, object : NavigationInterceptor {
+                        override fun navToRoom(roomId: String?, eventId: String?, deepLink: Uri?): Boolean {
+                            requireActivity().finish()
+                            return false
+                        }
+                    })
+
+            if (!isHandled) {
+                requireContext().toast(R.string.room_error_not_found)
+            }
+        }
     }
 
     override fun onPublicRoomClicked(publicRoom: PublicRoom, joinState: JoinState) {

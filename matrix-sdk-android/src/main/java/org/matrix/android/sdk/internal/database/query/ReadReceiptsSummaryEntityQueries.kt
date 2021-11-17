@@ -16,11 +16,11 @@
 
 package org.matrix.android.sdk.internal.database.query
 
-import org.matrix.android.sdk.internal.database.model.ReadReceiptsSummaryEntity
-import org.matrix.android.sdk.internal.database.model.ReadReceiptsSummaryEntityFields
 import io.realm.Realm
 import io.realm.RealmQuery
 import io.realm.kotlin.where
+import org.matrix.android.sdk.internal.database.model.ReadReceiptsSummaryEntity
+import org.matrix.android.sdk.internal.database.model.ReadReceiptsSummaryEntityFields
 
 internal fun ReadReceiptsSummaryEntity.Companion.where(realm: Realm, eventId: String): RealmQuery<ReadReceiptsSummaryEntity> {
     return realm.where<ReadReceiptsSummaryEntity>()

@@ -16,13 +16,13 @@
 
 package im.vector.app.features.spaces.manage
 
-import com.airbnb.mvrx.ActivityViewModelContext
-import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxViewModelFactory
-import com.airbnb.mvrx.ViewModelContext
+import com.airbnb.mvrx.MavericksViewModelFactory
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
+import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import org.matrix.android.sdk.api.session.Session
 
@@ -32,31 +32,25 @@ class SpaceManageSharedViewModel @AssistedInject constructor(
 ) : VectorViewModel<SpaceManageViewState, SpaceManagedSharedAction, SpaceManagedSharedViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: SpaceManageViewState): SpaceManageSharedViewModel
+    interface Factory : MavericksAssistedViewModelFactory<SpaceManageSharedViewModel, SpaceManageViewState> {
+        override fun create(initialState: SpaceManageViewState): SpaceManageSharedViewModel
     }
 
-    companion object : MvRxViewModelFactory<SpaceManageSharedViewModel, SpaceManageViewState> {
-        override fun create(viewModelContext: ViewModelContext, state: SpaceManageViewState): SpaceManageSharedViewModel? {
-            val factory = when (viewModelContext) {
-                is FragmentViewModelContext -> viewModelContext.fragment as? Factory
-                is ActivityViewModelContext -> viewModelContext.activity as? Factory
-            }
-            return factory?.create(state) ?: error("You should let your activity/fragment implements Factory interface")
-        }
-    }
+    companion object : MavericksViewModelFactory<SpaceManageSharedViewModel, SpaceManageViewState> by hiltMavericksViewModelFactory()
 
     override fun handle(action: SpaceManagedSharedAction) {
         when (action) {
-            SpaceManagedSharedAction.HandleBack -> {
+            SpaceManagedSharedAction.HandleBack                  -> {
                 // for now finish
                 _viewEvents.post(SpaceManagedSharedViewEvents.Finish)
             }
-            SpaceManagedSharedAction.HideLoading -> _viewEvents.post(SpaceManagedSharedViewEvents.HideLoading)
-            SpaceManagedSharedAction.ShowLoading -> _viewEvents.post(SpaceManagedSharedViewEvents.ShowLoading)
-            SpaceManagedSharedAction.CreateRoom ->  _viewEvents.post(SpaceManagedSharedViewEvents.NavigateToCreateRoom)
-            SpaceManagedSharedAction.ManageRooms -> _viewEvents.post(SpaceManagedSharedViewEvents.NavigateToManageRooms)
-            SpaceManagedSharedAction.OpenSpaceAliasesSettings -> _viewEvents.post(SpaceManagedSharedViewEvents.NavigateToAliasSettings)
-        }
+            SpaceManagedSharedAction.HideLoading                 -> _viewEvents.post(SpaceManagedSharedViewEvents.HideLoading)
+            SpaceManagedSharedAction.ShowLoading                 -> _viewEvents.post(SpaceManagedSharedViewEvents.ShowLoading)
+            SpaceManagedSharedAction.CreateRoom                  -> _viewEvents.post(SpaceManagedSharedViewEvents.NavigateToCreateRoom)
+            SpaceManagedSharedAction.CreateSpace                 -> _viewEvents.post(SpaceManagedSharedViewEvents.NavigateToCreateSpace)
+            SpaceManagedSharedAction.ManageRooms                 -> _viewEvents.post(SpaceManagedSharedViewEvents.NavigateToManageRooms)
+            SpaceManagedSharedAction.OpenSpaceAliasesSettings    -> _viewEvents.post(SpaceManagedSharedViewEvents.NavigateToAliasSettings)
+            SpaceManagedSharedAction.OpenSpacePermissionSettings -> _viewEvents.post(SpaceManagedSharedViewEvents.NavigateToPermissionSettings)
+        }.exhaustive
     }
 }

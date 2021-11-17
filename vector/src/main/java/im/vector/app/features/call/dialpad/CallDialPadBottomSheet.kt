@@ -87,7 +87,11 @@ class CallDialPadBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetCa
         dialPadFragment?.callback = DialPadFragmentCallbackWrapper(callback)
     }
 
-    private inner class DialPadFragmentCallbackWrapper(val callback: DialPadFragment.Callback?): DialPadFragment.Callback {
+    private inner class DialPadFragmentCallbackWrapper(val callback: DialPadFragment.Callback?) : DialPadFragment.Callback {
+
+        override fun onDigitAppended(digit: String) {
+            callback?.onDigitAppended(digit)
+        }
 
         override fun onOkClicked(formatted: String?, raw: String?) {
             callback?.onOkClicked(formatted, raw)

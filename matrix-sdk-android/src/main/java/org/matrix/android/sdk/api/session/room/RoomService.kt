@@ -27,6 +27,7 @@ import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.session.room.peeking.PeekResult
 import org.matrix.android.sdk.api.session.room.summary.RoomAggregateNotificationCount
 import org.matrix.android.sdk.api.util.Optional
+import org.matrix.android.sdk.internal.session.identity.model.SignInvitationResult
 import org.matrix.android.sdk.internal.session.room.alias.RoomAliasDescription
 
 /**
@@ -64,6 +65,18 @@ interface RoomService {
                          viaServers: List<String> = emptyList())
 
     /**
+     * @param roomId the roomId of the room to join
+     * @param reason optional reason for joining the room
+     * @param thirdPartySigned A signature of an m.third_party_invite token to prove that this user owns a third party identity
+     * which has been invited to the room.
+     */
+    suspend fun joinRoom(
+            roomId: String,
+            reason: String? = null,
+            thirdPartySigned: SignInvitationResult
+    )
+
+    /**
      * Get a room from a roomId
      * @param roomId the roomId to look for.
      * @return a room with roomId or null
@@ -81,13 +94,15 @@ interface RoomService {
      * Get a snapshot list of room summaries.
      * @return the immutable list of [RoomSummary]
      */
-    fun getRoomSummaries(queryParams: RoomSummaryQueryParams): List<RoomSummary>
+    fun getRoomSummaries(queryParams: RoomSummaryQueryParams,
+                         sortOrder: RoomSortOrder = RoomSortOrder.NONE): List<RoomSummary>
 
     /**
      * Get a live list of room summaries. This list is refreshed as soon as the data changes.
      * @return the [LiveData] of List[RoomSummary]
      */
-    fun getRoomSummariesLive(queryParams: RoomSummaryQueryParams): LiveData<List<RoomSummary>>
+    fun getRoomSummariesLive(queryParams: RoomSummaryQueryParams,
+                             sortOrder: RoomSortOrder = RoomSortOrder.ACTIVITY): LiveData<List<RoomSummary>>
 
     /**
      * Get a snapshot list of Breadcrumbs
@@ -207,7 +222,7 @@ interface RoomService {
                 .setPrefetchDistance(10)
                 .build()
 
-    fun getFlattenRoomSummaryChildrenOf(spaceId: String?, memberships: List<Membership> = Membership.activeMemberships()) : List<RoomSummary>
+    fun getFlattenRoomSummaryChildrenOf(spaceId: String?, memberships: List<Membership> = Membership.activeMemberships()): List<RoomSummary>
 
     /**
      * Returns all the children of this space, as LiveData

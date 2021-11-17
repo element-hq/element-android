@@ -14,27 +14,26 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.roomprofile.settings.joinrule
+package im.vector.app.features.roomprofile.settings.joinrule.advanced
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
-import com.jakewharton.rxbinding3.appcompat.queryTextChanges
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentSpaceRestrictedSelectBinding
 import im.vector.app.features.home.AvatarRenderer
-import im.vector.app.features.roomprofile.settings.joinrule.advanced.ChooseRestrictedController
-import im.vector.app.features.roomprofile.settings.joinrule.advanced.RoomJoinRuleChooseRestrictedActions
-import im.vector.app.features.roomprofile.settings.joinrule.advanced.RoomJoinRuleChooseRestrictedViewModel
-import io.reactivex.rxkotlin.subscribeBy
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.util.MatrixItem
-import java.util.concurrent.TimeUnit
+import reactivecircus.flowbinding.appcompat.queryTextChanges
 import javax.inject.Inject
 
 class RoomJoinRuleChooseRestrictedFragment @Inject constructor(
@@ -54,11 +53,11 @@ class RoomJoinRuleChooseRestrictedFragment @Inject constructor(
         controller.listener = this
         views.recyclerView.configureWith(controller)
         views.roomsFilter.queryTextChanges()
-                .debounce(500, TimeUnit.MILLISECONDS)
-                .subscribeBy {
+                .debounce(500)
+                .onEach {
                     viewModel.handle(RoomJoinRuleChooseRestrictedActions.FilterWith(it.toString()))
                 }
-                .disposeOnDestroyView()
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
         views.okButton.debouncedClicks {
             parentFragmentManager.popBackStack()

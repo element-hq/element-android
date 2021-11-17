@@ -41,5 +41,5 @@ interface RoomDirectoryService {
      */
     suspend fun setRoomDirectoryVisibility(roomId: String, roomDirectoryVisibility: RoomDirectoryVisibility)
 
-    suspend fun checkAliasAvailability(aliasLocalPart: String?) : AliasAvailabilityResult
+    suspend fun checkAliasAvailability(aliasLocalPart: String?): AliasAvailabilityResult
 }

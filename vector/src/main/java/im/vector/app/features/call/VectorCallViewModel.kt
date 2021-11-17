@@ -19,12 +19,13 @@ package im.vector.app.features.call
 import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.call.audio.CallAudioManager
@@ -60,7 +61,7 @@ class VectorCallViewModel @AssistedInject constructor(
             setState {
                 copy(
                         isLocalOnHold = call?.isLocalOnHold ?: false,
-                        isRemoteOnHold = call?.remoteOnHold ?: false
+                        isRemoteOnHold = call?.isRemoteOnHold ?: false
                 )
             }
         }
@@ -134,19 +135,25 @@ class VectorCallViewModel @AssistedInject constructor(
         } ?: VectorCallViewState.TransfereeState.UnknownTransferee
     }
 
-    private val currentCallListener = object : WebRtcCallManager.CurrentCallListener {
+    private val callManagerListener = object : WebRtcCallManager.Listener {
+
+        override fun onCallEnded(callId: String) {
+            withState { state ->
+                if (state.otherKnownCallInfo?.callId == callId) {
+                    setState { copy(otherKnownCallInfo = null) }
+                }
+            }
+        }
 
         override fun onCurrentCallChange(call: WebRtcCall?) {
-            if (call == null) {
-                _viewEvents.post(VectorCallViewEvents.DismissNoCall)
-            } else {
+            if (call != null) {
                 updateOtherKnownCall(call)
             }
         }
 
         override fun onAudioDevicesChange() {
             val currentSoundDevice = callManager.audioManager.selectedDevice ?: return
-            if (currentSoundDevice == CallAudioManager.Device.PHONE) {
+            if (currentSoundDevice == CallAudioManager.Device.Phone) {
                 proximityManager.start()
             } else {
                 proximityManager.stop()
@@ -161,9 +168,7 @@ class VectorCallViewModel @AssistedInject constructor(
     }
 
     private fun updateOtherKnownCall(currentCall: WebRtcCall) {
-        val otherCall = callManager.getCalls().firstOrNull {
-            it.callId != currentCall.callId && it.mxCall.state is CallState.Connected
-        }
+        val otherCall = getOtherKnownCall(currentCall)
         setState {
             if (otherCall == null) {
                 copy(otherKnownCallInfo = null)
@@ -173,28 +178,41 @@ class VectorCallViewModel @AssistedInject constructor(
         }
     }
 
+    private fun getOtherKnownCall(currentCall: WebRtcCall): WebRtcCall? {
+        return callManager.getCalls().firstOrNull {
+            it.callId != currentCall.callId && it.mxCall.state is CallState.Connected
+        }
+    }
+
     init {
-        val webRtcCall = callManager.getCallById(initialState.callId)
+        setupCallWithCurrentState()
+    }
+
+    private fun setupCallWithCurrentState() = withState { state ->
+        call?.removeListener(callListener)
+        val webRtcCall = callManager.getCallById(state.callId)
         if (webRtcCall == null) {
             setState {
                 copy(callState = Fail(IllegalArgumentException("No call")))
             }
         } else {
             call = webRtcCall
-            callManager.addCurrentCallListener(currentCallListener)
+            callManager.addListener(callManagerListener)
             webRtcCall.addListener(callListener)
             val currentSoundDevice = callManager.audioManager.selectedDevice
-            if (currentSoundDevice == CallAudioManager.Device.PHONE) {
+            if (currentSoundDevice == CallAudioManager.Device.Phone) {
                 proximityManager.start()
             }
             setState {
                 copy(
+                        isAudioMuted = webRtcCall.micMuted,
+                        isVideoEnabled = !webRtcCall.videoMuted,
                         isVideoCall = webRtcCall.mxCall.isVideoCall,
                         callState = Success(webRtcCall.mxCall.state),
                         callInfo = webRtcCall.extractCallInfo(),
-                        device = currentSoundDevice ?: CallAudioManager.Device.PHONE,
+                        device = currentSoundDevice ?: CallAudioManager.Device.Phone,
                         isLocalOnHold = webRtcCall.isLocalOnHold,
-                        isRemoteOnHold = webRtcCall.remoteOnHold,
+                        isRemoteOnHold = webRtcCall.isRemoteOnHold,
                         availableDevices = callManager.audioManager.availableDevices,
                         isFrontCamera = webRtcCall.currentCameraType() == CameraType.FRONT,
                         canSwitchCamera = webRtcCall.canSwitchCamera(),
@@ -225,8 +243,9 @@ class VectorCallViewModel @AssistedInject constructor(
     }
 
     override fun onCleared() {
-        callManager.removeCurrentCallListener(currentCallListener)
+        callManager.removeListener(callManagerListener)
         call?.removeListener(callListener)
+        call = null
         proximityManager.stop()
         super.onCleared()
     }
@@ -307,6 +326,10 @@ class VectorCallViewModel @AssistedInject constructor(
             VectorCallViewActions.TransferCall         -> {
                 handleCallTransfer()
             }
+            is VectorCallViewActions.SwitchCall        -> {
+                setState { VectorCallViewState(action.callArgs) }
+                setupCallWithCurrentState()
+            }
         }.exhaustive
     }
 
@@ -319,16 +342,9 @@ class VectorCallViewModel @AssistedInject constructor(
     }
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: VectorCallViewState): VectorCallViewModel
+    interface Factory : MavericksAssistedViewModelFactory<VectorCallViewModel, VectorCallViewState> {
+        override fun create(initialState: VectorCallViewState): VectorCallViewModel
     }
 
-    companion object : MvRxViewModelFactory<VectorCallViewModel, VectorCallViewState> {
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: VectorCallViewState): VectorCallViewModel {
-            val callActivity: VectorCallActivity = viewModelContext.activity()
-            return callActivity.viewModelFactory.create(state)
-        }
-    }
+    companion object : MavericksViewModelFactory<VectorCallViewModel, VectorCallViewState> by hiltMavericksViewModelFactory()
 }

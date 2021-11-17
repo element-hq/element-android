@@ -39,7 +39,6 @@ import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
 class RoomPermissionsFragment @Inject constructor(
-        val viewModelFactory: RoomPermissionsViewModel.Factory,
         private val controller: RoomPermissionsController,
         private val avatarRenderer: AvatarRenderer
 ) :

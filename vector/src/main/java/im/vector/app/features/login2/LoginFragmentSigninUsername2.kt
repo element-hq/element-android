@@ -22,13 +22,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.autofill.HintConstants
-import com.jakewharton.rxbinding3.widget.textChanges
+import androidx.lifecycle.lifecycleScope
 import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.databinding.FragmentLoginSigninUsername2Binding
-import io.reactivex.rxkotlin.subscribeBy
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.MatrixError
+import reactivecircus.flowbinding.android.widget.textChanges
 import javax.inject.Inject
 
 /**
@@ -83,11 +86,11 @@ class LoginFragmentSigninUsername2 @Inject constructor() : AbstractLoginFragment
         views.loginSubmit.setOnClickListener { submit() }
         views.loginField.textChanges()
                 .map { it.trim().isNotEmpty() }
-                .subscribeBy {
+                .onEach {
                     views.loginFieldTil.error = null
                     views.loginSubmit.isEnabled = it
                 }
-                .disposeOnDestroyView()
+                .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     override fun resetViewModel() {
@@ -95,9 +98,9 @@ class LoginFragmentSigninUsername2 @Inject constructor() : AbstractLoginFragment
     }
 
     override fun onError(throwable: Throwable) {
-        if (throwable is Failure.ServerError
-                && throwable.error.code == MatrixError.M_FORBIDDEN
-                && throwable.error.message.isEmpty()) {
+        if (throwable is Failure.ServerError &&
+                throwable.error.code == MatrixError.M_FORBIDDEN &&
+                throwable.error.message.isEmpty()) {
             // Login with email, but email unknown
             views.loginFieldTil.error = getString(R.string.login_login_with_email_error)
         } else {

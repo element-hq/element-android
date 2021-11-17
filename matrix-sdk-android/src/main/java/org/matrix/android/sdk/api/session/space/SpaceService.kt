@@ -18,9 +18,10 @@ package org.matrix.android.sdk.api.session.space
 
 import android.net.Uri
 import androidx.lifecycle.LiveData
+import org.matrix.android.sdk.api.session.events.model.Event
+import org.matrix.android.sdk.api.session.room.RoomSortOrder
 import org.matrix.android.sdk.api.session.room.RoomSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
-import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
 import org.matrix.android.sdk.internal.session.space.peeking.SpacePeekResult
 
 typealias SpaceSummaryQueryParams = RoomSummaryQueryParams
@@ -58,18 +59,27 @@ interface SpaceService {
 
     /**
      * Get's information of a space by querying the server
+     * @param suggestedOnly If true, return only child events and rooms where the m.space.child event has suggested: true.
+     * @param limit a client-defined limit to the maximum number of rooms to return per page. Must be a non-negative integer.
+     * @param from: Optional. Pagination token given to retrieve the next set of rooms. Note that if a pagination token is provided,
+     * then the parameters given for suggested_only and max_depth must be the same.
      */
     suspend fun querySpaceChildren(spaceId: String,
                                    suggestedOnly: Boolean? = null,
-                                   autoJoinedOnly: Boolean? = null): Pair<RoomSummary, List<SpaceChildInfo>>
+                                   limit: Int? = null,
+                                   from: String? = null,
+                                   // when paginating, pass back the m.space.child state events
+                                   knownStateList: List<Event>? = null): SpaceHierarchyData
 
     /**
      * Get a live list of space summaries. This list is refreshed as soon as the data changes.
      * @return the [LiveData] of List[SpaceSummary]
      */
-    fun getSpaceSummariesLive(queryParams: SpaceSummaryQueryParams): LiveData<List<RoomSummary>>
+    fun getSpaceSummariesLive(queryParams: SpaceSummaryQueryParams,
+                              sortOrder: RoomSortOrder = RoomSortOrder.NONE): LiveData<List<RoomSummary>>
 
-    fun getSpaceSummaries(spaceSummaryQueryParams: SpaceSummaryQueryParams): List<RoomSummary>
+    fun getSpaceSummaries(spaceSummaryQueryParams: SpaceSummaryQueryParams,
+                          sortOrder: RoomSortOrder = RoomSortOrder.NONE): List<RoomSummary>
 
     suspend fun joinSpace(spaceIdOrAlias: String,
                           reason: String? = null,
@@ -86,6 +96,8 @@ interface SpaceService {
      * if multiple are present the client should select the one with the lowest room ID, as determined via a lexicographic utf-8 ordering.
      */
     suspend fun setSpaceParent(childRoomId: String, parentSpaceId: String, canonical: Boolean, viaServers: List<String>)
+
+    suspend fun removeSpaceParent(childRoomId: String, parentSpaceId: String)
 
     fun getRootSpaceSummaries(): List<RoomSummary>
 }

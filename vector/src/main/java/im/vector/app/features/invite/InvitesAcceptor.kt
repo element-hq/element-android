@@ -18,10 +18,17 @@ package im.vector.app.features.invite
 
 import im.vector.app.ActiveSessionDataSource
 import im.vector.app.features.session.coroutineScope
-import io.reactivex.Observable
-import io.reactivex.disposables.Disposable
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
 import org.matrix.android.sdk.api.extensions.orFalse
@@ -31,9 +38,8 @@ import org.matrix.android.sdk.api.session.room.Room
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
-import org.matrix.android.sdk.rx.rx
+import org.matrix.android.sdk.flow.flow
 import timber.log.Timber
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -48,9 +54,10 @@ class InvitesAcceptor @Inject constructor(
         private val autoAcceptInvites: AutoAcceptInvites
 ) : Session.Listener {
 
-    private lateinit var activeSessionDisposable: Disposable
+    private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
+
     private val shouldRejectRoomIds = mutableSetOf<String>()
-    private val invitedRoomDisposables = HashMap<String, Disposable>()
+    private val activeSessionIds = mutableSetOf<String>()
     private val semaphore = Semaphore(1)
 
     fun initialize() {
@@ -58,47 +65,46 @@ class InvitesAcceptor @Inject constructor(
     }
 
     private fun observeActiveSession() {
-        activeSessionDisposable = sessionDataSource.observe()
+        sessionDataSource.stream()
                 .distinctUntilChanged()
-                .subscribe {
+                .onEach {
                     it.orNull()?.let { session ->
                         onSessionActive(session)
                     }
                 }
+                .launchIn(coroutineScope)
     }
 
     private fun onSessionActive(session: Session) {
         if (!autoAcceptInvites.isEnabled) {
             return
         }
-        if (invitedRoomDisposables.containsKey(session.sessionId)) {
+        if (activeSessionIds.contains(session.sessionId)) {
             return
         }
+        activeSessionIds.add(session.sessionId)
         session.addListener(this)
         val roomQueryParams = roomSummaryQueryParams {
             this.memberships = listOf(Membership.INVITE)
         }
-        val rxSession = session.rx()
-        Observable
-                .combineLatest(
-                        rxSession.liveRoomSummaries(roomQueryParams),
-                        rxSession.liveRoomChangeMembershipState().debounce(1, TimeUnit.SECONDS),
-                        { invitedRooms, _ -> invitedRooms.map { it.roomId } }
-                )
+        val flowSession = session.flow()
+        combine(
+                flowSession.liveRoomSummaries(roomQueryParams),
+                flowSession.liveRoomChangeMembershipState().debounce(1000)
+        ) { invitedRooms, _ -> invitedRooms.map { it.roomId } }
                 .filter { it.isNotEmpty() }
-                .subscribe { invitedRoomIds ->
-                    session.coroutineScope.launch {
-                        semaphore.withPermit {
-                            Timber.v("Invited roomIds: $invitedRoomIds")
-                            for (roomId in invitedRoomIds) {
-                                async { session.joinRoomSafely(roomId) }.start()
-                            }
-                        }
-                    }
-                }
-                .also {
-                    invitedRoomDisposables[session.sessionId] = it
-                }
+                .onEach { invitedRoomIds ->
+                    joinInvitedRooms(session, invitedRoomIds)
+                }.launchIn(session.coroutineScope)
+    }
+
+    private suspend fun joinInvitedRooms(session: Session, invitedRoomIds: List<String>) = coroutineScope {
+        semaphore.withPermit {
+            Timber.v("Invited roomIds: $invitedRoomIds")
+            for (roomId in invitedRoomIds) {
+                async { session.joinRoomSafely(roomId) }.start()
+            }
+        }
     }
 
     private suspend fun Session.joinRoomSafely(roomId: String) {
@@ -138,6 +144,6 @@ class InvitesAcceptor @Inject constructor(
 
     override fun onSessionStopped(session: Session) {
         session.removeListener(this)
-        invitedRoomDisposables.remove(session.sessionId)?.dispose()
+        activeSessionIds.remove(session.sessionId)
     }
 }

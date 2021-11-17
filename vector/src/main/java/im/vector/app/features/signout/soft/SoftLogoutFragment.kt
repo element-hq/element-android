@@ -32,7 +32,6 @@ import im.vector.app.features.login.AbstractLoginFragment
 import im.vector.app.features.login.LoginAction
 import im.vector.app.features.login.LoginMode
 import im.vector.app.features.login.LoginViewEvents
-
 import javax.inject.Inject
 
 /**
@@ -56,7 +55,7 @@ class SoftLogoutFragment @Inject constructor(
 
         setupRecyclerView()
 
-        softLogoutViewModel.subscribe(this) { softLogoutViewState ->
+        softLogoutViewModel.onEach { softLogoutViewState ->
             softLogoutController.update(softLogoutViewState)
             when (val mode = softLogoutViewState.asyncHomeServerLoginFlowRequest.invoke()) {
                 is LoginMode.SsoAndPassword -> {

@@ -19,6 +19,7 @@ package org.matrix.android.sdk.internal.session.room
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.model.Membership
+import org.matrix.android.sdk.api.session.room.model.RoomStrippedState
 import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoomsParams
 import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoomsResponse
 import org.matrix.android.sdk.api.util.JsonDict
@@ -159,7 +160,8 @@ internal interface RoomAPI {
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/receipt/{receiptType}/{eventId}")
     suspend fun sendReceipt(@Path("roomId") roomId: String,
                             @Path("receiptType") receiptType: String,
-                            @Path("eventId") eventId: String)
+                            @Path("eventId") eventId: String,
+                            @Body body: JsonDict = emptyMap())
 
     /**
      * Invite a user to the given room.
@@ -215,22 +217,6 @@ internal interface RoomAPI {
     suspend fun getRoomState(@Path("roomId") roomId: String): List<Event>
 
     /**
-     * Send a relation event to a room.
-     *
-     * @param txId      the transaction Id
-     * @param roomId    the room id
-     * @param eventType the event type
-     * @param content   the event content
-     */
-    @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/send_relation/{parent_id}/{relation_type}/{event_type}")
-    suspend fun sendRelation(@Path("roomId") roomId: String,
-                             @Path("parent_id") parentId: String,
-                             @Path("relation_type") relationType: String,
-                             @Path("event_type") eventType: String,
-                             @Body content: Content?
-    ): SendResponse
-
-    /**
      * Paginate relations for event based in normal topological order
      *
      * @param relationType filter for this relation type
@@ -253,7 +239,7 @@ internal interface RoomAPI {
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "join/{roomIdOrAlias}")
     suspend fun join(@Path("roomIdOrAlias") roomIdOrAlias: String,
                      @Query("server_name") viaServers: List<String>,
-                     @Body params: Map<String, String?>): JoinRoomResponse
+                     @Body params: JsonDict): JoinRoomResponse
 
     /**
      * Leave the given room.
@@ -380,4 +366,14 @@ internal interface RoomAPI {
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/upgrade")
     suspend fun upgradeRoom(@Path("roomId") roomId: String,
                             @Body body: RoomUpgradeBody): RoomUpgradeResponse
+
+    /**
+     * The API returns the summary of the specified room, if the room could be found and the client should be able to view
+     * its contents according to the join_rules, history visibility, space membership and similar rules outlined in MSC3173
+     * as well as if the user is already a member of that room.
+     * https://github.com/deepbluev7/matrix-doc/blob/room-summaries/proposals/3266-room-summary.md
+     */
+    @GET(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "im.nheko.summary/rooms/{roomIdOrAlias}/summary")
+    suspend fun getRoomSummary(@Path("roomIdOrAlias") roomidOrAlias: String,
+                               @Query("via") viaServers: List<String>?): RoomStrippedState
 }

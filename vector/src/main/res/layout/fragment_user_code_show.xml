@@ -135,6 +135,7 @@
                         android:id="@+id/showUserCodeQRImage"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:contentDescription="@string/a11y_qr_code_for_verification"
                         tools:src="@drawable/ic_qr_code_add" />
 
                 </com.google.android.material.card.MaterialCardView>
@@ -147,7 +148,7 @@
             android:id="@+id/showUserCodeAvatar"
             android:layout_width="76dp"
             android:layout_height="76dp"
-            android:contentDescription="@string/avatar"
+            android:importantForAccessibility="no"
             android:elevation="4dp"
             android:transitionName="profile"
             app:layout_constraintBottom_toTopOf="@id/showUserCodeCard"

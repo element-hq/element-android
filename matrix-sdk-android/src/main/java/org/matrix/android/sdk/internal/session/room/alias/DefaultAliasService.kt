@@ -17,8 +17,8 @@
 package org.matrix.android.sdk.internal.session.room.alias
 
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import org.matrix.android.sdk.api.session.room.alias.AliasService
 
 internal class DefaultAliasService @AssistedInject constructor(

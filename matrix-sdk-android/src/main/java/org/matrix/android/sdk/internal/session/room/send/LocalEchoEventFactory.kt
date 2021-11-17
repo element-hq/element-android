@@ -38,13 +38,14 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageContentWithF
 import org.matrix.android.sdk.api.session.room.model.message.MessageFileContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageFormat
 import org.matrix.android.sdk.api.session.room.model.message.MessageImageContent
-import org.matrix.android.sdk.api.session.room.model.message.MessageOptionsContent
+import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
 import org.matrix.android.sdk.api.session.room.model.message.MessagePollResponseContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageTextContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.model.message.MessageVideoContent
-import org.matrix.android.sdk.api.session.room.model.message.OPTION_TYPE_POLL
-import org.matrix.android.sdk.api.session.room.model.message.OptionItem
+import org.matrix.android.sdk.api.session.room.model.message.PollAnswer
+import org.matrix.android.sdk.api.session.room.model.message.PollCreationInfo
+import org.matrix.android.sdk.api.session.room.model.message.PollQuestion
 import org.matrix.android.sdk.api.session.room.model.message.ThumbnailInfo
 import org.matrix.android.sdk.api.session.room.model.message.VideoInfo
 import org.matrix.android.sdk.api.session.room.model.relation.ReactionContent
@@ -138,24 +139,29 @@ internal class LocalEchoEventFactory @Inject constructor(
 
     fun createPollEvent(roomId: String,
                         question: String,
-                        options: List<OptionItem>): Event {
-        val compatLabel = buildString {
-            append("[Poll] ")
-            append(question)
-            options.forEach {
-                append("\n")
-                append(it.value)
-            }
-        }
-        return createMessageEvent(
-                roomId,
-                MessageOptionsContent(
-                        body = compatLabel,
-                        label = question,
-                        optionType = OPTION_TYPE_POLL,
-                        options = options.toList()
+                        options: List<String>): Event {
+        val content = MessagePollContent(
+                pollCreationInfo = PollCreationInfo(
+                        question = PollQuestion(
+                                question = question
+                        ),
+                        answers = options.mapIndexed { index, option ->
+                            PollAnswer(
+                                    id = index.toString(),
+                                    answer = option
+                            )
+                        }
                 )
         )
+        val localId = LocalEcho.createLocalEchoId()
+        return Event(
+                roomId = roomId,
+                originServerTs = dummyOriginServerTs(),
+                senderId = userId,
+                eventId = localId,
+                type = EventType.POLL_START,
+                content = content.toContent(),
+                unsignedData = UnsignedData(age = null, transactionId = localId))
     }
 
     fun createReplaceTextOfReply(roomId: String,
@@ -165,8 +171,8 @@ internal class LocalEchoEventFactory @Inject constructor(
                                  newBodyAutoMarkdown: Boolean,
                                  msgType: String,
                                  compatibilityText: String): Event {
-        val permalink = permalinkFactory.createPermalink(roomId, originalEvent.root.eventId ?: "")
-        val userLink = originalEvent.root.senderId?.let { permalinkFactory.createPermalink(it) } ?: ""
+        val permalink = permalinkFactory.createPermalink(roomId, originalEvent.root.eventId ?: "", false)
+        val userLink = originalEvent.root.senderId?.let { permalinkFactory.createPermalink(it, false) } ?: ""
 
         val body = bodyForReply(originalEvent.getLastMessageContent(), originalEvent.isReply())
         val replyFormatted = REPLY_PATTERN.format(
@@ -350,9 +356,9 @@ internal class LocalEchoEventFactory @Inject constructor(
                              autoMarkdown: Boolean): Event? {
         // Fallbacks and event representation
         // TODO Add error/warning logs when any of this is null
-        val permalink = permalinkFactory.createPermalink(eventReplied.root) ?: return null
+        val permalink = permalinkFactory.createPermalink(eventReplied.root, false) ?: return null
         val userId = eventReplied.root.senderId ?: return null
-        val userLink = permalinkFactory.createPermalink(userId) ?: return null
+        val userLink = permalinkFactory.createPermalink(userId, false) ?: return null
 
         val body = bodyForReply(eventReplied.getLastMessageContent(), eventReplied.isReply())
         val replyFormatted = REPLY_PATTERN.format(

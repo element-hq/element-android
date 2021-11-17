@@ -17,6 +17,7 @@
 
 package im.vector.lib.attachmentviewer
 
+import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
@@ -39,7 +40,6 @@ import androidx.core.view.updatePadding
 import androidx.transition.TransitionManager
 import androidx.viewpager2.widget.ViewPager2
 import im.vector.lib.attachmentviewer.databinding.ActivityAttachmentViewerBinding
-
 import java.lang.ref.WeakReference
 import kotlin.math.abs
 
@@ -142,7 +142,12 @@ abstract class AttachmentViewerActivity : AppCompatActivity(), AttachmentEventLi
             // New API instead of SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN and SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
             window.setDecorFitsSystemWindows(false)
             // New API instead of SYSTEM_UI_FLAG_IMMERSIVE
-            window.decorView.windowInsetsController?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_BARS_BY_SWIPE
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                window.decorView.windowInsetsController?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+            } else {
+                @SuppressLint("WrongConstant")
+                window.decorView.windowInsetsController?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_BARS_BY_SWIPE
+            }
             // New API instead of FLAG_TRANSLUCENT_STATUS
             window.statusBarColor = ContextCompat.getColor(this, R.color.half_transparent_status_bar)
             // new API instead of FLAG_TRANSLUCENT_NAVIGATION
@@ -291,8 +296,8 @@ abstract class AttachmentViewerActivity : AppCompatActivity(), AttachmentEventLi
     private fun calculateTranslationAlpha(translationY: Float, translationLimit: Int): Float =
             1.0f - 1.0f / translationLimit.toFloat() / 4f * abs(translationY)
 
-    private fun createSwipeToDismissHandler()
-            : SwipeToDismissHandler = SwipeToDismissHandler(
+    private fun createSwipeToDismissHandler(): SwipeToDismissHandler =
+            SwipeToDismissHandler(
             swipeView = views.dismissContainer,
             shouldAnimateDismiss = { shouldAnimateDismiss() },
             onDismiss = { animateClose() },
@@ -348,7 +353,12 @@ abstract class AttachmentViewerActivity : AppCompatActivity(), AttachmentEventLi
             // new API instead of SYSTEM_UI_FLAG_HIDE_NAVIGATION
             window.decorView.windowInsetsController?.hide(WindowInsets.Type.navigationBars())
             // New API instead of SYSTEM_UI_FLAG_IMMERSIVE
-            window.decorView.windowInsetsController?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_BARS_BY_SWIPE
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                window.decorView.windowInsetsController?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+            } else {
+                @SuppressLint("WrongConstant")
+                window.decorView.windowInsetsController?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_BARS_BY_SWIPE
+            }
             // New API instead of FLAG_TRANSLUCENT_STATUS
             window.statusBarColor = ContextCompat.getColor(this, R.color.half_transparent_status_bar)
             // New API instead of FLAG_TRANSLUCENT_NAVIGATION

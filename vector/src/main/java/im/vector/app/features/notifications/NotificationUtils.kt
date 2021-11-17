@@ -47,12 +47,15 @@ import androidx.core.graphics.drawable.IconCompat
 import androidx.fragment.app.Fragment
 import im.vector.app.BuildConfig
 import im.vector.app.R
+import im.vector.app.core.extensions.createIgnoredUri
+import im.vector.app.core.platform.PendingIntentCompat
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.services.CallService
 import im.vector.app.core.utils.startNotificationChannelSettingsIntent
 import im.vector.app.features.call.VectorCallActivity
 import im.vector.app.features.call.service.CallHeadsUpActionReceiver
 import im.vector.app.features.call.webrtc.WebRtcCall
+import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.HomeActivity
 import im.vector.app.features.home.room.detail.RoomDetailActivity
 import im.vector.app.features.home.room.detail.RoomDetailArgs
@@ -168,7 +171,7 @@ class NotificationUtils @Inject constructor(private val context: Context,
          * intrude.
          */
         notificationManager.createNotificationChannel(NotificationChannel(NOISY_NOTIFICATION_CHANNEL_ID,
-                stringProvider.getString(R.string.notification_noisy_notifications),
+                stringProvider.getString(R.string.notification_noisy_notifications).ifEmpty { "Noisy notifications" },
                 NotificationManager.IMPORTANCE_DEFAULT)
                 .apply {
                     description = stringProvider.getString(R.string.notification_noisy_notifications)
@@ -181,7 +184,7 @@ class NotificationUtils @Inject constructor(private val context: Context,
          * Low notification importance: shows everywhere, but is not intrusive.
          */
         notificationManager.createNotificationChannel(NotificationChannel(SILENT_NOTIFICATION_CHANNEL_ID,
-                stringProvider.getString(R.string.notification_silent_notifications),
+                stringProvider.getString(R.string.notification_silent_notifications).ifEmpty { "Silent notifications" },
                 NotificationManager.IMPORTANCE_LOW)
                 .apply {
                     description = stringProvider.getString(R.string.notification_silent_notifications)
@@ -191,7 +194,7 @@ class NotificationUtils @Inject constructor(private val context: Context,
                 })
 
         notificationManager.createNotificationChannel(NotificationChannel(LISTENING_FOR_EVENTS_NOTIFICATION_CHANNEL_ID,
-                stringProvider.getString(R.string.notification_listening_for_events),
+                stringProvider.getString(R.string.notification_listening_for_events).ifEmpty { "Listening for events" },
                 NotificationManager.IMPORTANCE_MIN)
                 .apply {
                     description = stringProvider.getString(R.string.notification_listening_for_events)
@@ -200,7 +203,7 @@ class NotificationUtils @Inject constructor(private val context: Context,
                 })
 
         notificationManager.createNotificationChannel(NotificationChannel(CALL_NOTIFICATION_CHANNEL_ID,
-                stringProvider.getString(R.string.call),
+                stringProvider.getString(R.string.call).ifEmpty { "Call" },
                 NotificationManager.IMPORTANCE_HIGH)
                 .apply {
                     description = stringProvider.getString(R.string.call)
@@ -225,7 +228,7 @@ class NotificationUtils @Inject constructor(private val context: Context,
         // build the pending intent go to the home screen if this is clicked.
         val i = HomeActivity.newIntent(context)
         i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-        val pi = PendingIntent.getActivity(context, 0, i, 0)
+        val pi = PendingIntent.getActivity(context, 0, i, PendingIntentCompat.FLAG_IMMUTABLE)
 
         val accentColor = ContextCompat.getColor(context, R.color.notification_accent_color)
 
@@ -316,18 +319,25 @@ class NotificationUtils @Inject constructor(private val context: Context,
                 mode = VectorCallActivity.INCOMING_RINGING
         ).apply {
             flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-            data = Uri.parse("foobar://${call.callId}")
+            data = createIgnoredUri(call.callId)
         }
-        val contentPendingIntent = PendingIntent.getActivity(context, System.currentTimeMillis().toInt(), contentIntent, 0)
+        val contentPendingIntent = PendingIntent.getActivity(
+                context,
+                System.currentTimeMillis().toInt(),
+                contentIntent,
+                PendingIntentCompat.FLAG_IMMUTABLE
+        )
 
         val answerCallPendingIntent = TaskStackBuilder.create(context)
                 .addNextIntentWithParentStack(HomeActivity.newIntent(context))
-                .addNextIntent(VectorCallActivity.newIntent(
-                        context = context,
-                        call = call,
-                        mode = VectorCallActivity.INCOMING_ACCEPT)
+                .addNextIntent(
+                        VectorCallActivity.newIntent(
+                                context = context,
+                                call = call,
+                                mode = VectorCallActivity.INCOMING_ACCEPT
+                        )
                 )
-                .getPendingIntent(System.currentTimeMillis().toInt(), PendingIntent.FLAG_UPDATE_CURRENT)
+                .getPendingIntent(System.currentTimeMillis().toInt(), PendingIntent.FLAG_UPDATE_CURRENT or PendingIntentCompat.FLAG_IMMUTABLE)
 
         val rejectCallPendingIntent = buildRejectCallPendingIntent(call.callId)
 
@@ -336,7 +346,8 @@ class NotificationUtils @Inject constructor(private val context: Context,
                         IconCompat.createWithResource(context, R.drawable.ic_call_hangup)
                                 .setTint(ThemeUtils.getColor(context, R.attr.colorError)),
                         getActionText(R.string.call_notification_reject, R.attr.colorError),
-                        rejectCallPendingIntent)
+                        rejectCallPendingIntent
+                )
         )
 
         builder.addAction(
@@ -360,7 +371,7 @@ class NotificationUtils @Inject constructor(private val context: Context,
         val builder = NotificationCompat.Builder(context, SILENT_NOTIFICATION_CHANNEL_ID)
                 .setContentTitle(ensureTitleNotEmpty(title))
                 .apply {
-                    setContentText(stringProvider.getString(R.string.call_ring))
+                    setContentText(stringProvider.getString(R.string.call_ringing))
                     if (call.mxCall.isVideoCall) {
                         setSmallIcon(R.drawable.ic_call_answer_video)
                     } else {
@@ -377,9 +388,14 @@ class NotificationUtils @Inject constructor(private val context: Context,
                 call = call,
                 mode = null).apply {
             flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-            data = Uri.parse("foobar://$call.callId")
+            data = createIgnoredUri(call.callId)
         }
-        val contentPendingIntent = PendingIntent.getActivity(context, System.currentTimeMillis().toInt(), contentIntent, 0)
+        val contentPendingIntent = PendingIntent.getActivity(
+                context,
+                System.currentTimeMillis().toInt(),
+                contentIntent,
+                PendingIntentCompat.FLAG_IMMUTABLE
+        )
 
         val rejectCallPendingIntent = buildRejectCallPendingIntent(call.callId)
 
@@ -388,7 +404,8 @@ class NotificationUtils @Inject constructor(private val context: Context,
                         IconCompat.createWithResource(context, R.drawable.ic_call_hangup)
                                 .setTint(ThemeUtils.getColor(context, R.attr.colorError)),
                         getActionText(R.string.call_notification_hangup, R.attr.colorError),
-                        rejectCallPendingIntent)
+                        rejectCallPendingIntent
+                )
         )
         builder.setContentIntent(contentPendingIntent)
 
@@ -429,13 +446,14 @@ class NotificationUtils @Inject constructor(private val context: Context,
                         IconCompat.createWithResource(context, R.drawable.ic_call_hangup)
                                 .setTint(ThemeUtils.getColor(context, R.attr.colorError)),
                         getActionText(R.string.call_notification_hangup, R.attr.colorError),
-                        rejectCallPendingIntent)
+                        rejectCallPendingIntent
+                )
         )
 
         val contentPendingIntent = TaskStackBuilder.create(context)
                 .addNextIntentWithParentStack(HomeActivity.newIntent(context))
                 .addNextIntent(VectorCallActivity.newIntent(context, call, null))
-                .getPendingIntent(System.currentTimeMillis().toInt(), PendingIntent.FLAG_UPDATE_CURRENT)
+                .getPendingIntent(System.currentTimeMillis().toInt(), PendingIntent.FLAG_UPDATE_CURRENT or PendingIntentCompat.FLAG_IMMUTABLE)
 
         builder.setContentIntent(contentPendingIntent)
 
@@ -451,7 +469,7 @@ class NotificationUtils @Inject constructor(private val context: Context,
                 context,
                 System.currentTimeMillis().toInt(),
                 rejectCallActionReceiver,
-                PendingIntent.FLAG_UPDATE_CURRENT
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntentCompat.FLAG_IMMUTABLE
         )
     }
 
@@ -468,7 +486,6 @@ class NotificationUtils @Inject constructor(private val context: Context,
                         setSmallIcon(R.drawable.ic_call_answer)
                     }
                 }
-                // This is a trick to make the previous notification with same id disappear as cancel notification is not working with Foreground Service.
                 .setTimeoutAfter(1)
                 .setColor(ThemeUtils.getColor(context, android.R.attr.colorPrimary))
                 .setCategory(NotificationCompat.CATEGORY_CALL)
@@ -498,7 +515,7 @@ class NotificationUtils @Inject constructor(private val context: Context,
         val contentPendingIntent = TaskStackBuilder.create(context)
                 .addNextIntentWithParentStack(HomeActivity.newIntent(context))
                 .addNextIntent(RoomDetailActivity.newIntent(context, RoomDetailArgs(callInformation.nativeRoomId)))
-                .getPendingIntent(System.currentTimeMillis().toInt(), PendingIntent.FLAG_UPDATE_CURRENT)
+                .getPendingIntent(System.currentTimeMillis().toInt(), PendingIntent.FLAG_UPDATE_CURRENT or PendingIntentCompat.FLAG_IMMUTABLE)
 
         builder.setContentIntent(contentPendingIntent)
         return builder.build()
@@ -516,7 +533,10 @@ class NotificationUtils @Inject constructor(private val context: Context,
                         addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                     }
                     PendingIntent.getActivity(
-                            context, System.currentTimeMillis().toInt(), intent, PendingIntent.FLAG_UPDATE_CURRENT
+                            context,
+                            System.currentTimeMillis().toInt(),
+                            intent,
+                            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntentCompat.FLAG_IMMUTABLE
                     ).let {
                         setContentIntent(it)
                     }
@@ -540,36 +560,31 @@ class NotificationUtils @Inject constructor(private val context: Context,
 
         val channelID = if (roomInfo.shouldBing) NOISY_NOTIFICATION_CHANNEL_ID else SILENT_NOTIFICATION_CHANNEL_ID
         return NotificationCompat.Builder(context, channelID)
+                .setOnlyAlertOnce(true)
                 .setWhen(lastMessageTimestamp)
                 // MESSAGING_STYLE sets title and content for API 16 and above devices.
                 .setStyle(messageStyle)
-
                 // A category allows groups of notifications to be ranked and filtered – per user or system settings.
                 // For example, alarm notifications should display before promo notifications, or message from known contact
                 // that can be displayed in not disturb mode if white listed (the later will need compat28.x)
                 .setCategory(NotificationCompat.CATEGORY_MESSAGE)
-
+                // ID of the corresponding shortcut, for conversation features under API 30+
+                .setShortcutId(roomInfo.roomId)
                 // Title for API < 16 devices.
                 .setContentTitle(roomInfo.roomDisplayName)
                 // Content for API < 16 devices.
                 .setContentText(stringProvider.getString(R.string.notification_new_messages))
-
                 // Number of new notifications for API <24 (M and below) devices.
                 .setSubText(stringProvider.getQuantityString(R.plurals.room_new_messages_notification, messageStyle.messages.size, messageStyle.messages.size))
-
                 // Auto-bundling is enabled for 4 or more notifications on API 24+ (N+)
                 // devices and all Wear devices. But we want a custom grouping, so we specify the groupID
                 // TODO Group should be current user display name
                 .setGroup(stringProvider.getString(R.string.app_name))
-
                 // In order to avoid notification making sound twice (due to the summary notification)
-                .setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_SUMMARY)
-
+                .setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_ALL)
                 .setSmallIcon(smallIcon)
-
                 // Set primary color (important for Wear 2.0 Notifications).
                 .setColor(accentColor)
-
                 // Sets priority for 25 and below. For 26 and above, 'priority' is deprecated for
                 // 'importance' which is set in the NotificationChannel. The integers representing
                 // 'priority' are different from 'importance', so make sure you don't mix them.
@@ -589,15 +604,21 @@ class NotificationUtils @Inject constructor(private val context: Context,
                     // Mark room as read
                     val markRoomReadIntent = Intent(context, NotificationBroadcastReceiver::class.java)
                     markRoomReadIntent.action = MARK_ROOM_READ_ACTION
-                    markRoomReadIntent.data = Uri.parse("foobar://${roomInfo.roomId}")
+                    markRoomReadIntent.data = createIgnoredUri(roomInfo.roomId)
                     markRoomReadIntent.putExtra(NotificationBroadcastReceiver.KEY_ROOM_ID, roomInfo.roomId)
-                    val markRoomReadPendingIntent = PendingIntent.getBroadcast(context, System.currentTimeMillis().toInt(), markRoomReadIntent,
-                            PendingIntent.FLAG_UPDATE_CURRENT)
+                    val markRoomReadPendingIntent = PendingIntent.getBroadcast(
+                            context,
+                            System.currentTimeMillis().toInt(),
+                            markRoomReadIntent,
+                            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntentCompat.FLAG_IMMUTABLE
+                    )
 
-                    addAction(NotificationCompat.Action(
-                            R.drawable.ic_material_done_all_white,
-                            stringProvider.getString(R.string.action_mark_room_read),
-                            markRoomReadPendingIntent))
+                    NotificationCompat.Action.Builder(R.drawable.ic_material_done_all_white,
+                            stringProvider.getString(R.string.action_mark_room_read), markRoomReadPendingIntent)
+                            .setSemanticAction(NotificationCompat.Action.SEMANTIC_ACTION_MARK_AS_READ)
+                            .setShowsUserInterface(false)
+                            .build()
+                            .let { addAction(it) }
 
                     // Quick reply
                     if (!roomInfo.hasSmartReplyError) {
@@ -608,6 +629,8 @@ class NotificationUtils @Inject constructor(private val context: Context,
                             NotificationCompat.Action.Builder(R.drawable.vector_notification_quick_reply,
                                     stringProvider.getString(R.string.action_quick_reply), replyPendingIntent)
                                     .addRemoteInput(remoteInput)
+                                    .setSemanticAction(NotificationCompat.Action.SEMANTIC_ACTION_REPLY)
+                                    .setShowsUserInterface(false)
                                     .build()
                                     .let { addAction(it) }
                         }
@@ -624,8 +647,12 @@ class NotificationUtils @Inject constructor(private val context: Context,
                     val intent = Intent(context, NotificationBroadcastReceiver::class.java)
                     intent.putExtra(NotificationBroadcastReceiver.KEY_ROOM_ID, roomInfo.roomId)
                     intent.action = DISMISS_ROOM_NOTIF_ACTION
-                    val pendingIntent = PendingIntent.getBroadcast(context.applicationContext,
-                            System.currentTimeMillis().toInt(), intent, PendingIntent.FLAG_UPDATE_CURRENT)
+                    val pendingIntent = PendingIntent.getBroadcast(
+                            context.applicationContext,
+                            System.currentTimeMillis().toInt(),
+                            intent,
+                            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntentCompat.FLAG_IMMUTABLE
+                    )
                     setDeleteIntent(pendingIntent)
                 }
                 .setTicker(tickerText)
@@ -641,10 +668,11 @@ class NotificationUtils @Inject constructor(private val context: Context,
         val channelID = if (inviteNotifiableEvent.noisy) NOISY_NOTIFICATION_CHANNEL_ID else SILENT_NOTIFICATION_CHANNEL_ID
 
         return NotificationCompat.Builder(context, channelID)
-                .setContentTitle(stringProvider.getString(R.string.app_name))
+                .setOnlyAlertOnce(true)
+                .setContentTitle(inviteNotifiableEvent.roomName ?: stringProvider.getString(R.string.app_name))
                 .setContentText(inviteNotifiableEvent.description)
                 .setGroup(stringProvider.getString(R.string.app_name))
-                .setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_SUMMARY)
+                .setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_ALL)
                 .setSmallIcon(smallIcon)
                 .setColor(accentColor)
                 .apply {
@@ -652,33 +680,43 @@ class NotificationUtils @Inject constructor(private val context: Context,
                     // offer to type a quick reject button
                     val rejectIntent = Intent(context, NotificationBroadcastReceiver::class.java)
                     rejectIntent.action = REJECT_ACTION
-                    rejectIntent.data = Uri.parse("foobar://$roomId&$matrixId")
+                    rejectIntent.data = createIgnoredUri("$roomId&$matrixId")
                     rejectIntent.putExtra(NotificationBroadcastReceiver.KEY_ROOM_ID, roomId)
-                    val rejectIntentPendingIntent = PendingIntent.getBroadcast(context, System.currentTimeMillis().toInt(), rejectIntent,
-                            PendingIntent.FLAG_UPDATE_CURRENT)
+                    val rejectIntentPendingIntent = PendingIntent.getBroadcast(
+                            context,
+                            System.currentTimeMillis().toInt(),
+                            rejectIntent,
+                            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntentCompat.FLAG_IMMUTABLE
+                    )
 
                     addAction(
                             R.drawable.vector_notification_reject_invitation,
                             stringProvider.getString(R.string.reject),
-                            rejectIntentPendingIntent)
+                            rejectIntentPendingIntent
+                    )
 
                     // offer to type a quick accept button
                     val joinIntent = Intent(context, NotificationBroadcastReceiver::class.java)
                     joinIntent.action = JOIN_ACTION
-                    joinIntent.data = Uri.parse("foobar://$roomId&$matrixId")
+                    joinIntent.data = createIgnoredUri("$roomId&$matrixId")
                     joinIntent.putExtra(NotificationBroadcastReceiver.KEY_ROOM_ID, roomId)
-                    val joinIntentPendingIntent = PendingIntent.getBroadcast(context, System.currentTimeMillis().toInt(), joinIntent,
-                            PendingIntent.FLAG_UPDATE_CURRENT)
+                    val joinIntentPendingIntent = PendingIntent.getBroadcast(
+                            context,
+                            System.currentTimeMillis().toInt(),
+                            joinIntent,
+                            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntentCompat.FLAG_IMMUTABLE
+                    )
                     addAction(
                             R.drawable.vector_notification_accept_invitation,
                             stringProvider.getString(R.string.join),
-                            joinIntentPendingIntent)
+                            joinIntentPendingIntent
+                    )
 
-                    val contentIntent = HomeActivity.newIntent(context)
+                    val contentIntent = HomeActivity.newIntent(context, inviteNotificationRoomId = inviteNotifiableEvent.roomId)
                     contentIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
                     // pending intent get reused by system, this will mess up the extra params, so put unique info to avoid that
-                    contentIntent.data = Uri.parse("foobar://" + inviteNotifiableEvent.eventId)
-                    setContentIntent(PendingIntent.getActivity(context, 0, contentIntent, 0))
+                    contentIntent.data = createIgnoredUri(inviteNotifiableEvent.eventId)
+                    setContentIntent(PendingIntent.getActivity(context, 0, contentIntent, PendingIntentCompat.FLAG_IMMUTABLE))
 
                     if (inviteNotifiableEvent.noisy) {
                         // Compat
@@ -704,10 +742,11 @@ class NotificationUtils @Inject constructor(private val context: Context,
         val channelID = if (simpleNotifiableEvent.noisy) NOISY_NOTIFICATION_CHANNEL_ID else SILENT_NOTIFICATION_CHANNEL_ID
 
         return NotificationCompat.Builder(context, channelID)
+                .setOnlyAlertOnce(true)
                 .setContentTitle(stringProvider.getString(R.string.app_name))
                 .setContentText(simpleNotifiableEvent.description)
                 .setGroup(stringProvider.getString(R.string.app_name))
-                .setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_SUMMARY)
+                .setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_ALL)
                 .setSmallIcon(smallIcon)
                 .setColor(accentColor)
                 .setAutoCancel(true)
@@ -715,8 +754,8 @@ class NotificationUtils @Inject constructor(private val context: Context,
                     val contentIntent = HomeActivity.newIntent(context)
                     contentIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
                     // pending intent get reused by system, this will mess up the extra params, so put unique info to avoid that
-                    contentIntent.data = Uri.parse("foobar://" + simpleNotifiableEvent.eventId)
-                    setContentIntent(PendingIntent.getActivity(context, 0, contentIntent, 0))
+                    contentIntent.data = createIgnoredUri(simpleNotifiableEvent.eventId)
+                    setContentIntent(PendingIntent.getActivity(context, 0, contentIntent, PendingIntentCompat.FLAG_IMMUTABLE))
 
                     if (simpleNotifiableEvent.noisy) {
                         // Compat
@@ -737,20 +776,28 @@ class NotificationUtils @Inject constructor(private val context: Context,
         val roomIntentTap = RoomDetailActivity.newIntent(context, RoomDetailArgs(roomId))
         roomIntentTap.action = TAP_TO_VIEW_ACTION
         // pending intent get reused by system, this will mess up the extra params, so put unique info to avoid that
-        roomIntentTap.data = Uri.parse("foobar://openRoom?$roomId")
+        roomIntentTap.data = createIgnoredUri("openRoom?$roomId")
 
         // Recreate the back stack
         return TaskStackBuilder.create(context)
                 .addNextIntentWithParentStack(HomeActivity.newIntent(context))
                 .addNextIntent(roomIntentTap)
-                .getPendingIntent(System.currentTimeMillis().toInt(), PendingIntent.FLAG_UPDATE_CURRENT)
+                .getPendingIntent(
+                        System.currentTimeMillis().toInt(),
+                        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntentCompat.FLAG_IMMUTABLE
+                )
     }
 
     private fun buildOpenHomePendingIntentForSummary(): PendingIntent {
         val intent = HomeActivity.newIntent(context, clearNotification = true)
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-        intent.data = Uri.parse("foobar://tapSummary")
-        return PendingIntent.getActivity(context, Random.nextInt(1000), intent, PendingIntent.FLAG_UPDATE_CURRENT)
+        intent.data = createIgnoredUri("tapSummary")
+        return PendingIntent.getActivity(
+                context,
+                Random.nextInt(1000),
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntentCompat.FLAG_IMMUTABLE
+        )
     }
 
     /*
@@ -765,10 +812,15 @@ class NotificationUtils @Inject constructor(private val context: Context,
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             intent = Intent(context, NotificationBroadcastReceiver::class.java)
             intent.action = SMART_REPLY_ACTION
-            intent.data = Uri.parse("foobar://$roomId")
+            intent.data = createIgnoredUri(roomId)
             intent.putExtra(NotificationBroadcastReceiver.KEY_ROOM_ID, roomId)
-            return PendingIntent.getBroadcast(context, System.currentTimeMillis().toInt(), intent,
-                    PendingIntent.FLAG_UPDATE_CURRENT)
+            return PendingIntent.getBroadcast(
+                    context,
+                    System.currentTimeMillis().toInt(),
+                    intent,
+                    // PendingIntents attached to actions with remote inputs must be mutable
+                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntentCompat.FLAG_MUTABLE
+            )
         } else {
             /*
             TODO
@@ -780,8 +832,8 @@ class NotificationUtils @Inject constructor(private val context: Context,
 
                 // the action must be unique else the parameters are ignored
                 quickReplyIntent.action = QUICK_LAUNCH_ACTION
-                quickReplyIntent.data = Uri.parse("foobar://$roomId")
-                return PendingIntent.getActivity(context, 0, quickReplyIntent, 0)
+                quickReplyIntent.data = createIgnoredUri($roomId")
+                return PendingIntent.getActivity(context, 0, quickReplyIntent, PendingIntentCompat.FLAG_IMMUTABLE)
             }
              */
         }
@@ -800,6 +852,7 @@ class NotificationUtils @Inject constructor(private val context: Context,
         val smallIcon = R.drawable.ic_status_bar
 
         return NotificationCompat.Builder(context, if (noisy) NOISY_NOTIFICATION_CHANNEL_ID else SILENT_NOTIFICATION_CHANNEL_ID)
+                .setOnlyAlertOnce(true)
                 // used in compat < N, after summary is built based on child notifications
                 .setWhen(lastMessageTimestamp)
                 .setStyle(style)
@@ -833,9 +886,13 @@ class NotificationUtils @Inject constructor(private val context: Context,
     private fun getDismissSummaryPendingIntent(): PendingIntent {
         val intent = Intent(context, NotificationBroadcastReceiver::class.java)
         intent.action = DISMISS_SUMMARY_ACTION
-        intent.data = Uri.parse("foobar://deleteSummary")
-        return PendingIntent.getBroadcast(context.applicationContext,
-                0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+        intent.data = createIgnoredUri("deleteSummary")
+        return PendingIntent.getBroadcast(
+                context.applicationContext,
+                0,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntentCompat.FLAG_IMMUTABLE
+        )
     }
 
     fun showNotificationMessage(tag: String?, id: Int, notification: Notification) {
@@ -872,7 +929,7 @@ class NotificationUtils @Inject constructor(private val context: Context,
                 context,
                 0,
                 testActionIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntentCompat.FLAG_IMMUTABLE
         )
 
         notificationManager.notify(
@@ -913,8 +970,8 @@ class NotificationUtils @Inject constructor(private val context: Context,
         // We cannot use NotificationManagerCompat here.
         val setting = context.getSystemService<NotificationManager>()!!.currentInterruptionFilter
 
-        return setting == NotificationManager.INTERRUPTION_FILTER_NONE
-                || setting == NotificationManager.INTERRUPTION_FILTER_ALARMS
+        return setting == NotificationManager.INTERRUPTION_FILTER_NONE ||
+                setting == NotificationManager.INTERRUPTION_FILTER_ALARMS
     }
 
     private fun getActionText(@StringRes stringRes: Int, @AttrRes colorRes: Int): Spannable {

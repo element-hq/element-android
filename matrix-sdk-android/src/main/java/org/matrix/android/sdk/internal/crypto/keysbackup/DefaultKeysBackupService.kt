@@ -21,7 +21,12 @@ import android.os.Looper
 import androidx.annotation.UiThread
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.WorkerThread
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.MatrixCallback
+import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.MatrixError
@@ -40,6 +45,7 @@ import org.matrix.android.sdk.internal.crypto.keysbackup.model.KeysBackupVersion
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.KeysBackupVersionTrustSignature
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.MegolmBackupAuthData
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.MegolmBackupCreationInfo
+import org.matrix.android.sdk.internal.crypto.keysbackup.model.SignalableMegolmBackupAuthData
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.BackupKeysResult
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.CreateKeysBackupVersionBody
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeyBackupData
@@ -78,14 +84,7 @@ import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.task.TaskThread
 import org.matrix.android.sdk.internal.task.configureWith
 import org.matrix.android.sdk.internal.util.JsonCanonicalizer
-import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.internal.util.awaitCallback
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import okhttp3.internal.wait
-import org.matrix.android.sdk.internal.crypto.keysbackup.model.SignalableMegolmBackupAuthData
 import org.matrix.olm.OlmException
 import org.matrix.olm.OlmPkDecryption
 import org.matrix.olm.OlmPkEncryption
@@ -411,7 +410,7 @@ internal class DefaultKeysBackupService @Inject constructor(
         val keysBackupVersionTrust = KeysBackupVersionTrust()
         val authData = keysBackupVersion.getAuthDataAsMegolmBackupAuthData()
 
-        if (authData == null || authData.publicKey.isEmpty() || authData.signatures.isEmpty()) {
+        if (authData == null || authData.publicKey.isEmpty() || authData.signatures.isNullOrEmpty()) {
             Timber.v("getKeysBackupTrust: Key backup is absent or missing required data")
             return keysBackupVersionTrust
         }
@@ -479,7 +478,7 @@ internal class DefaultKeysBackupService @Inject constructor(
             cryptoCoroutineScope.launch(coroutineDispatchers.main) {
                 val updateKeysBackupVersionBody = withContext(coroutineDispatchers.crypto) {
                     // Get current signatures, or create an empty set
-                    val myUserSignatures = authData.signatures[userId].orEmpty().toMutableMap()
+                    val myUserSignatures = authData.signatures?.get(userId).orEmpty().toMutableMap()
 
                     if (trust) {
                         // Add current device signature
@@ -498,7 +497,7 @@ internal class DefaultKeysBackupService @Inject constructor(
                     // Create an updated version of KeysVersionResult
                     val newMegolmBackupAuthData = authData.copy()
 
-                    val newSignatures = newMegolmBackupAuthData.signatures.toMutableMap()
+                    val newSignatures = newMegolmBackupAuthData.signatures.orEmpty().toMutableMap()
                     newSignatures[userId] = myUserSignatures
 
                     val newMegolmBackupAuthDataWithNewSignature = newMegolmBackupAuthData.copy(
@@ -861,8 +860,8 @@ internal class DefaultKeysBackupService @Inject constructor(
                         }
 
                         override fun onFailure(failure: Throwable) {
-                            if (failure is Failure.ServerError
-                                    && failure.error.code == MatrixError.M_NOT_FOUND) {
+                            if (failure is Failure.ServerError &&
+                                    failure.error.code == MatrixError.M_NOT_FOUND) {
                                 // Workaround because the homeserver currently returns M_NOT_FOUND when there is no key backup
                                 callback.onSuccess(null)
                             } else {
@@ -884,8 +883,8 @@ internal class DefaultKeysBackupService @Inject constructor(
                         }
 
                         override fun onFailure(failure: Throwable) {
-                            if (failure is Failure.ServerError
-                                    && failure.error.code == MatrixError.M_NOT_FOUND) {
+                            if (failure is Failure.ServerError &&
+                                    failure.error.code == MatrixError.M_NOT_FOUND) {
                                 // Workaround because the homeserver currently returns M_NOT_FOUND when there is no key backup
                                 callback.onSuccess(null)
                             } else {
@@ -1043,8 +1042,8 @@ internal class DefaultKeysBackupService @Inject constructor(
             return null
         }
 
-        if (authData.privateKeySalt.isNullOrBlank()
-                || authData.privateKeyIterations == null) {
+        if (authData.privateKeySalt.isNullOrBlank() ||
+                authData.privateKeyIterations == null) {
             Timber.w("recoveryKeyFromPassword: Salt and/or iterations not found in key backup auth data")
 
             return null

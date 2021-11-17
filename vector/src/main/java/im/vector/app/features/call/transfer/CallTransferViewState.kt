@@ -16,11 +16,11 @@
 
 package im.vector.app.features.call.transfer
 
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MavericksState
 
 data class CallTransferViewState(
         val callId: String
-) : MvRxState {
+) : MavericksState {
 
     constructor(args: CallTransferArgs) : this(callId = args.callId)
 }

@@ -23,6 +23,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.SessionLifecycleObserver
 import org.matrix.android.sdk.api.session.accountdata.UserAccountDataEvent
 import org.matrix.android.sdk.api.session.accountdata.UserAccountDataTypes
 import org.matrix.android.sdk.api.session.events.model.Content
@@ -35,7 +36,6 @@ import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.session.widgets.WidgetManagementFailure
 import org.matrix.android.sdk.api.session.widgets.model.Widget
 import org.matrix.android.sdk.internal.di.UserId
-import org.matrix.android.sdk.api.session.SessionLifecycleObserver
 import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.internal.session.integrationmanager.IntegrationManager
 import org.matrix.android.sdk.internal.session.room.state.StateEventDataSource
@@ -51,9 +51,9 @@ internal class WidgetManager @Inject constructor(private val integrationManager:
                                                  private val stateEventDataSource: StateEventDataSource,
                                                  private val createWidgetTask: CreateWidgetTask,
                                                  private val widgetFactory: WidgetFactory,
-                                                 @UserId private val userId: String)
+                                                 @UserId private val userId: String) :
 
-    : IntegrationManagerService.Listener, SessionLifecycleObserver {
+    IntegrationManagerService.Listener, SessionLifecycleObserver {
 
     private val lifecycleOwner: LifecycleOwner = LifecycleOwner { lifecycleRegistry }
     private val lifecycleRegistry: LifecycleRegistry = LifecycleRegistry(lifecycleOwner)
@@ -155,8 +155,8 @@ internal class WidgetManager @Inject constructor(private val integrationManager:
         return extractWidgetSequence(widgetFactory)
                 .filter {
                     val widgetType = it.widgetContent.type ?: return@filter false
-                    (widgetTypes == null || widgetTypes.contains(widgetType))
-                            && (excludedTypes == null || !excludedTypes.contains(widgetType))
+                    (widgetTypes == null || widgetTypes.contains(widgetType)) &&
+                            (excludedTypes == null || !excludedTypes.contains(widgetType))
                 }
                 .toList()
     }

@@ -16,48 +16,43 @@
 
 package im.vector.app.features.share
 
-import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxViewModelFactory
-import com.airbnb.mvrx.ViewModelContext
-import com.jakewharton.rxrelay2.BehaviorRelay
+import com.airbnb.mvrx.MavericksViewModelFactory
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.toggle
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.attachments.isPreviewable
 import im.vector.app.features.attachments.toGroupedContentAttachmentData
 import im.vector.app.features.home.room.list.BreadcrumbsRoomComparator
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.sample
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
-import org.matrix.android.sdk.rx.rx
-import java.util.concurrent.TimeUnit
+import org.matrix.android.sdk.flow.flow
 
 class IncomingShareViewModel @AssistedInject constructor(
         @Assisted initialState: IncomingShareViewState,
         private val session: Session,
-        private val breadcrumbsRoomComparator: BreadcrumbsRoomComparator)
-    : VectorViewModel<IncomingShareViewState, IncomingShareAction, IncomingShareViewEvents>(initialState) {
+        private val breadcrumbsRoomComparator: BreadcrumbsRoomComparator) :
+    VectorViewModel<IncomingShareViewState, IncomingShareAction, IncomingShareViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: IncomingShareViewState): IncomingShareViewModel
+    interface Factory : MavericksAssistedViewModelFactory<IncomingShareViewModel, IncomingShareViewState> {
+        override fun create(initialState: IncomingShareViewState): IncomingShareViewModel
     }
 
-    companion object : MvRxViewModelFactory<IncomingShareViewModel, IncomingShareViewState> {
+    companion object : MavericksViewModelFactory<IncomingShareViewModel, IncomingShareViewState> by hiltMavericksViewModelFactory()
 
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: IncomingShareViewState): IncomingShareViewModel? {
-            val fragment: IncomingShareFragment = (viewModelContext as FragmentViewModelContext).fragment()
-            return fragment.incomingShareViewModelFactory.create(state)
-        }
-    }
-
-    private val filterStream: BehaviorRelay<String> = BehaviorRelay.createDefault("")
+    private val filterStream = MutableStateFlow("")
 
     init {
         observeRoomSummaries()
@@ -68,13 +63,13 @@ class IncomingShareViewModel @AssistedInject constructor(
             memberships = listOf(Membership.JOIN)
         }
         session
-                .rx().liveRoomSummaries(queryParams)
+                .flow().liveRoomSummaries(queryParams)
                 .execute {
                     copy(roomSummaries = it)
                 }
 
         filterStream
-                .switchMap { filter ->
+                .flatMapLatest { filter ->
                     val displayNameQuery = if (filter.isEmpty()) {
                         QueryStringValue.NoCondition
                     } else {
@@ -84,9 +79,9 @@ class IncomingShareViewModel @AssistedInject constructor(
                         displayName = displayNameQuery
                         memberships = listOf(Membership.JOIN)
                     }
-                    session.rx().liveRoomSummaries(filterQueryParams)
+                    session.flow().liveRoomSummaries(filterQueryParams)
                 }
-                .throttleLast(300, TimeUnit.MILLISECONDS)
+                .sample(300)
                 .map { it.sortedWith(breadcrumbsRoomComparator) }
                 .execute {
                     copy(filteredRoomSummaries = it)
@@ -109,7 +104,7 @@ class IncomingShareViewModel @AssistedInject constructor(
     }
 
     private fun handleFilter(action: IncomingShareAction.FilterWith) {
-        filterStream.accept(action.filter)
+        filterStream.tryEmit(action.filter)
     }
 
     private fun handleShareToSelectedRooms() = withState { state ->

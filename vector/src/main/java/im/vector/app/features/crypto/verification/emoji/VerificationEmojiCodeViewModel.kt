@@ -17,17 +17,19 @@ package im.vector.app.features.crypto.verification.emoji
 
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxState
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksState
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
-import im.vector.app.core.di.HasScreenInjector
+import dagger.assisted.AssistedInject
+import dagger.hilt.EntryPoints
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.SingletonEntryPoint
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
@@ -48,7 +50,7 @@ data class VerificationEmojiCodeViewState(
         val emojiDescription: Async<List<EmojiRepresentation>> = Uninitialized,
         val decimalDescription: Async<String> = Uninitialized,
         val isWaitingFromOther: Boolean = false
-) : MvRxState
+) : MavericksState
 
 class VerificationEmojiCodeViewModel @AssistedInject constructor(
         @Assisted initialState: VerificationEmojiCodeViewState,
@@ -151,20 +153,15 @@ class VerificationEmojiCodeViewModel @AssistedInject constructor(
     }
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: VerificationEmojiCodeViewState): VerificationEmojiCodeViewModel
+    interface Factory : MavericksAssistedViewModelFactory<VerificationEmojiCodeViewModel, VerificationEmojiCodeViewState> {
+        override fun create(initialState: VerificationEmojiCodeViewState): VerificationEmojiCodeViewModel
     }
 
-    companion object : MvRxViewModelFactory<VerificationEmojiCodeViewModel, VerificationEmojiCodeViewState> {
-
-        override fun create(viewModelContext: ViewModelContext, state: VerificationEmojiCodeViewState): VerificationEmojiCodeViewModel? {
-            val factory = (viewModelContext as FragmentViewModelContext).fragment<VerificationEmojiCodeFragment>().viewModelFactory
-            return factory.create(state)
-        }
+    companion object : MavericksViewModelFactory<VerificationEmojiCodeViewModel, VerificationEmojiCodeViewState> by hiltMavericksViewModelFactory() {
 
         override fun initialState(viewModelContext: ViewModelContext): VerificationEmojiCodeViewState? {
             val args = viewModelContext.args<VerificationBottomSheet.VerificationArgs>()
-            val session = (viewModelContext.activity as HasScreenInjector).injector().activeSessionHolder().getActiveSession()
+            val session = EntryPoints.get(viewModelContext.app(), SingletonEntryPoint::class.java).activeSessionHolder().getActiveSession()
             val matrixItem = session.getUser(args.otherUserId)?.toMatrixItem()
 
             return VerificationEmojiCodeViewState(

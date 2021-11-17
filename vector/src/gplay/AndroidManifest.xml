@@ -9,7 +9,9 @@
             android:name="firebase_analytics_collection_deactivated"
             android:value="true" />
 
-        <service android:name=".gplay.push.fcm.VectorFirebaseMessagingService">
+        <service
+            android:name=".gplay.push.fcm.VectorFirebaseMessagingService"
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>

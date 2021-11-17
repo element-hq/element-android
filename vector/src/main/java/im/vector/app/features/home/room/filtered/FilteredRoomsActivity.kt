@@ -20,8 +20,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.widget.SearchView
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityFilteredRoomsBinding
@@ -29,6 +29,7 @@ import im.vector.app.features.home.RoomListDisplayMode
 import im.vector.app.features.home.room.list.RoomListFragment
 import im.vector.app.features.home.room.list.RoomListParams
 
+@AndroidEntryPoint
 class FilteredRoomsActivity : VectorBaseActivity<ActivityFilteredRoomsBinding>() {
 
     private val roomListFragment: RoomListFragment?
@@ -39,10 +40,6 @@ class FilteredRoomsActivity : VectorBaseActivity<ActivityFilteredRoomsBinding>()
     override fun getBinding() = ActivityFilteredRoomsBinding.inflate(layoutInflater)
 
     override fun getCoordinatorLayout() = views.coordinatorLayout
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -20,13 +20,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
-import com.jakewharton.rxbinding3.appcompat.queryTextChanges
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
@@ -37,21 +37,18 @@ import im.vector.app.core.resources.DrawableProvider
 import im.vector.app.databinding.FragmentRecyclerviewWithSearchBinding
 import im.vector.app.features.roomprofile.members.RoomMemberListAction
 import im.vector.app.features.roomprofile.members.RoomMemberListViewModel
-import im.vector.app.features.roomprofile.members.RoomMemberListViewState
-import io.reactivex.rxkotlin.subscribeBy
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
-import java.util.concurrent.TimeUnit
+import reactivecircus.flowbinding.appcompat.queryTextChanges
 import javax.inject.Inject
 
 class SpacePeopleFragment @Inject constructor(
-        private val viewModelFactory: SpacePeopleViewModel.Factory,
-        private val roomMemberModelFactory: RoomMemberListViewModel.Factory,
         private val drawableProvider: DrawableProvider,
         private val colorProvider: ColorProvider,
         private val epoxyController: SpacePeopleListController
 ) : VectorBaseFragment<FragmentRecyclerviewWithSearchBinding>(),
-        SpacePeopleViewModel.Factory,
-        RoomMemberListViewModel.Factory,
         OnBackPressed, SpacePeopleListController.InteractionListener {
 
     private val viewModel by fragmentViewModel(SpacePeopleViewModel::class)
@@ -64,14 +61,6 @@ class SpacePeopleFragment @Inject constructor(
     override fun onBackPressed(toolbarButton: Boolean): Boolean {
         sharedActionViewModel.post(SpacePeopleSharedAction.Dismiss)
         return true
-    }
-
-    override fun create(initialState: SpacePeopleViewState): SpacePeopleViewModel {
-        return viewModelFactory.create(initialState)
-    }
-
-    override fun create(initialState: RoomMemberListViewState): RoomMemberListViewModel {
-        return roomMemberModelFactory.create(initialState)
     }
 
     override fun invalidate() = withState(membersViewModel) { memberListState ->
@@ -104,7 +93,7 @@ class SpacePeopleFragment @Inject constructor(
             handleViewEvents(it)
         }
 
-        viewModel.subscribe(this) {
+        viewModel.onEach {
             when (it.createAndInviteState) {
                 is Loading -> sharedActionViewModel.post(SpacePeopleSharedAction.ShowModalLoading)
                 Uninitialized,
@@ -130,11 +119,11 @@ class SpacePeopleFragment @Inject constructor(
     private fun setupSearchView() {
         views.memberNameFilter.queryHint = getString(R.string.search_members_hint)
         views.memberNameFilter.queryTextChanges()
-                .debounce(100, TimeUnit.MILLISECONDS)
-                .subscribeBy {
+                .debounce(100)
+                .onEach {
                     membersViewModel.handle(RoomMemberListAction.FilterMemberList(it.toString()))
                 }
-                .disposeOnDestroyView()
+                .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     private fun handleViewEvents(events: SpacePeopleViewEvents) {

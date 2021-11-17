@@ -33,6 +33,7 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import org.matrix.android.sdk.api.MatrixCallback
+import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.NoOpMatrixCallback
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.crypto.MXCryptoConfig
@@ -54,6 +55,9 @@ import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibilityContent
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
+import org.matrix.android.sdk.api.session.sync.model.DeviceListResponse
+import org.matrix.android.sdk.api.session.sync.model.DeviceOneTimeKeysCountSyncResponse
+import org.matrix.android.sdk.api.session.sync.model.ToDeviceSyncResponse
 import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.internal.auth.registration.handleUIA
 import org.matrix.android.sdk.internal.crypto.crosssigning.DeviceTrustLevel
@@ -111,14 +115,10 @@ import org.matrix.android.sdk.internal.extensions.foldToCallback
 import org.matrix.android.sdk.internal.network.parsing.CheckNumberType
 import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.internal.session.room.membership.LoadRoomMembersTask
-import org.matrix.android.sdk.internal.session.sync.model.DeviceListResponse
-import org.matrix.android.sdk.internal.session.sync.model.DeviceOneTimeKeysCountSyncResponse
-import org.matrix.android.sdk.internal.session.sync.model.ToDeviceSyncResponse
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.task.TaskThread
 import org.matrix.android.sdk.internal.task.configureWith
 import org.matrix.android.sdk.internal.task.launchToCallback
-import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
 import timber.log.Timber
 import uniffi.olm.OutgoingVerificationRequest
 import uniffi.olm.Request
@@ -888,8 +888,8 @@ internal class DefaultCryptoService @Inject constructor(
     }
 
     private fun getRoomUserIds(roomId: String): List<String> {
-        val encryptForInvitedMembers = isEncryptionEnabledForInvitedUser()
-                && shouldEncryptForInvitedMembers(roomId)
+        val encryptForInvitedMembers = isEncryptionEnabledForInvitedUser() &&
+                shouldEncryptForInvitedMembers(roomId)
         return cryptoSessionInfoProvider.getRoomUserIds(roomId, encryptForInvitedMembers)
     }
 

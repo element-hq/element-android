@@ -17,9 +17,8 @@
 package im.vector.app.features.call.webrtc
 
 import android.content.Context
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.OnLifecycleEvent
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import im.vector.app.ActiveSessionDataSource
 import im.vector.app.BuildConfig
 import im.vector.app.core.services.CallService
@@ -70,7 +69,8 @@ private val loggerTag = LoggerTag("WebRtcCallManager", LoggerTag.VOIP)
 class WebRtcCallManager @Inject constructor(
         private val context: Context,
         private val activeSessionDataSource: ActiveSessionDataSource
-) : CallListener, LifecycleObserver {
+) : CallListener,
+        DefaultLifecycleObserver {
 
     private val currentSession: Session?
         get() = activeSessionDataSource.currentValue?.orNull()
@@ -84,9 +84,10 @@ class WebRtcCallManager @Inject constructor(
     private val sessionScope: CoroutineScope?
         get() = currentSession?.coroutineScope
 
-    interface CurrentCallListener {
-        fun onCurrentCallChange(call: WebRtcCall?) {}
-        fun onAudioDevicesChange() {}
+    interface Listener {
+        fun onCallEnded(callId: String) = Unit
+        fun onCurrentCallChange(call: WebRtcCall?) = Unit
+        fun onAudioDevicesChange() = Unit
     }
 
     val supportedPSTNProtocol: String?
@@ -106,13 +107,13 @@ class WebRtcCallManager @Inject constructor(
         protocolsChecker?.removeListener(listener)
     }
 
-    private val currentCallsListeners = CopyOnWriteArrayList<CurrentCallListener>()
+    private val currentCallsListeners = CopyOnWriteArrayList<Listener>()
 
-    fun addCurrentCallListener(listener: CurrentCallListener) {
+    fun addListener(listener: Listener) {
         currentCallsListeners.add(listener)
     }
 
-    fun removeCurrentCallListener(listener: CurrentCallListener) {
+    fun removeListener(listener: Listener) {
         currentCallsListeners.remove(listener)
     }
 
@@ -132,13 +133,11 @@ class WebRtcCallManager @Inject constructor(
 
     private var isInBackground: Boolean = true
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-    fun entersForeground() {
+    override fun onResume(owner: LifecycleOwner) {
         isInBackground = false
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
-    fun entersBackground() {
+    override fun onPause(owner: LifecycleOwner) {
         isInBackground = true
     }
 
@@ -250,9 +249,12 @@ class WebRtcCallManager @Inject constructor(
         callsByRoomId[webRtcCall.signalingRoomId]?.remove(webRtcCall)
         callsByRoomId[webRtcCall.nativeRoomId]?.remove(webRtcCall)
         transferees.remove(callId)
-        if (getCurrentCall()?.callId == callId) {
+        if (currentCall.get()?.callId == callId) {
             val otherCall = getCalls().lastOrNull()
             currentCall.setAndNotify(otherCall)
+        }
+        tryOrNull {
+            currentCallsListeners.forEach { it.onCallEnded(callId) }
         }
         // There is no active calls
         if (getCurrentCall() == null) {
@@ -424,7 +426,11 @@ class WebRtcCallManager @Inject constructor(
 
     override fun onCallManagedByOtherSession(callId: String) {
         Timber.tag(loggerTag.value).v("onCallManagedByOtherSession: $callId")
-        onCallEnded(callId, EndCallReason.ANSWERED_ELSEWHERE, false)
+        val call = callsByCallId[callId]
+                ?: return Unit.also {
+                    Timber.tag(loggerTag.value).w("onCallManagedByOtherSession for non active call? $callId")
+                }
+        call.endCall(EndCallReason.ANSWERED_ELSEWHERE, sendSignaling = false)
     }
 
     override fun onCallAssertedIdentityReceived(callAssertedIdentityContent: CallAssertedIdentityContent) {

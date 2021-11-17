@@ -44,7 +44,7 @@ internal class DefaultDeactivateAccountTask @Inject constructor(
 
     override suspend fun execute(params: DeactivateAccountTask.Params) {
         val deactivateAccountParams = DeactivateAccountParams.create(params.userAuthParam, params.eraseAllData)
-
+        cleanupSession.stopActiveTasks()
         val canCleanup = try {
             executeRequest(globalErrorReceiver) {
                 accountAPI.deactivate(deactivateAccountParams)
@@ -71,7 +71,7 @@ internal class DefaultDeactivateAccountTask @Inject constructor(
             runCatching { identityDisconnectTask.execute(Unit) }
                     .onFailure { Timber.w(it, "Unable to disconnect identity server") }
 
-            cleanupSession.handle()
+            cleanupSession.cleanup()
         }
     }
 }

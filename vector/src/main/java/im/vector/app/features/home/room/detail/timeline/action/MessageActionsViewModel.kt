@@ -15,15 +15,14 @@
  */
 package im.vector.app.features.home.room.detail.timeline.action
 
-import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxViewModelFactory
-import com.airbnb.mvrx.ViewModelContext
-import com.jakewharton.rxrelay2.BehaviorRelay
+import com.airbnb.mvrx.MavericksViewModelFactory
 import dagger.Lazy
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.R
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.canReact
 import im.vector.app.core.platform.EmptyViewEvents
@@ -33,9 +32,15 @@ import im.vector.app.features.home.room.detail.timeline.format.NoticeEventFormat
 import im.vector.app.features.html.EventHtmlRenderer
 import im.vector.app.features.html.PillsPostProcessor
 import im.vector.app.features.html.VectorHtmlCompressor
-import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
+import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import im.vector.app.features.reactions.data.EmojiDataSource
 import im.vector.app.features.settings.VectorPreferences
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupState
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -53,9 +58,8 @@ import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
 import org.matrix.android.sdk.api.session.room.timeline.hasBeenEdited
-import org.matrix.android.sdk.rx.rx
-import org.matrix.android.sdk.rx.unwrap
-import java.util.ArrayList
+import org.matrix.android.sdk.flow.flow
+import org.matrix.android.sdk.flow.unwrap
 
 /**
  * Information related to an event and used to display preview in contextual bottom sheet.
@@ -78,20 +82,14 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
         pillsPostProcessorFactory.create(initialState.roomId)
     }
 
-    private val eventIdObservable = BehaviorRelay.createDefault(initialState.eventId)
+    private val eventIdFlow = MutableStateFlow(initialState.eventId)
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: MessageActionState): MessageActionsViewModel
+    interface Factory : MavericksAssistedViewModelFactory<MessageActionsViewModel, MessageActionState> {
+        override fun create(initialState: MessageActionState): MessageActionsViewModel
     }
 
-    companion object : MvRxViewModelFactory<MessageActionsViewModel, MessageActionState> {
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: MessageActionState): MessageActionsViewModel? {
-            val fragment: MessageActionsBottomSheet = (viewModelContext as FragmentViewModelContext).fragment()
-            return fragment.messageActionViewModelFactory.create(state)
-        }
-    }
+    companion object : MavericksViewModelFactory<MessageActionsViewModel, MessageActionState> by hiltMavericksViewModelFactory()
 
     init {
         observeEvent()
@@ -118,8 +116,8 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
         if (room == null) {
             return
         }
-        PowerLevelsObservableFactory(room).createObservable()
-                .subscribe {
+        PowerLevelsFlowFactory(room).createFlow()
+                .onEach {
                     val powerLevelsHelper = PowerLevelsHelper(it)
                     val canReact = powerLevelsHelper.isUserAllowedToSend(session.myUserId, false, EventType.REACTION)
                     val canRedact = powerLevelsHelper.isUserAbleToRedact(session.myUserId)
@@ -128,13 +126,12 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                     setState {
                         copy(actionPermissions = permissions)
                     }
-                }
-                .disposeOnClear()
+                }.launchIn(viewModelScope)
     }
 
     private fun observeEvent() {
         if (room == null) return
-        room.rx()
+        room.flow()
                 .liveTimelineEvent(initialState.eventId)
                 .unwrap()
                 .execute {
@@ -144,9 +141,9 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
 
     private fun observeReactions() {
         if (room == null) return
-        eventIdObservable
-                .switchMap { eventId ->
-                    room.rx()
+        eventIdFlow
+                .flatMapLatest { eventId ->
+                    room.flow()
                             .liveAnnotationSummary(eventId)
                             .map { annotations ->
                                 EmojiDataSource.quickEmojis.map { emoji ->
@@ -160,9 +157,9 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
     }
 
     private fun observeTimelineEventState() {
-        selectSubscribe(MessageActionState::timelineEvent, MessageActionState::actionPermissions) { timelineEvent, permissions ->
-            val nonNullTimelineEvent = timelineEvent() ?: return@selectSubscribe
-            eventIdObservable.accept(nonNullTimelineEvent.eventId)
+        onEach(MessageActionState::timelineEvent, MessageActionState::actionPermissions) { timelineEvent, permissions ->
+            val nonNullTimelineEvent = timelineEvent() ?: return@onEach
+            eventIdFlow.tryEmit(nonNullTimelineEvent.eventId)
             setState {
                 copy(
                         eventId = nonNullTimelineEvent.eventId,
@@ -207,7 +204,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                     EventType.CALL_CANDIDATES,
                     EventType.CALL_HANGUP,
                     EventType.CALL_ANSWER -> {
-                        noticeEventFormatter.format(timelineEvent)
+                        noticeEventFormatter.format(timelineEvent, room?.roomSummary()?.isDirect.orFalse())
                     }
                     else                  -> null
                 }
@@ -340,12 +337,12 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                 add(EventSharedAction.AddReaction(eventId))
             }
 
-            if (canQuote(timelineEvent, messageContent, actionPermissions)) {
-                add(EventSharedAction.Quote(eventId))
-            }
-
             if (canViewReactions(timelineEvent)) {
                 add(EventSharedAction.ViewReactions(informationData))
+            }
+
+            if (canQuote(timelineEvent, messageContent, actionPermissions)) {
+                add(EventSharedAction.Quote(eventId))
             }
 
             if (timelineEvent.hasBeenEdited()) {
@@ -364,14 +361,14 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
         if (vectorPreferences.developerMode()) {
             if (timelineEvent.isEncrypted() && timelineEvent.root.mCryptoError != null) {
                 val keysBackupService = session.cryptoService().keysBackupService()
-                if (keysBackupService.state == KeysBackupState.NotTrusted
-                        || (keysBackupService.state == KeysBackupState.ReadyToBackUp
-                                && keysBackupService.canRestoreKeys())
+                if (keysBackupService.state == KeysBackupState.NotTrusted ||
+                        (keysBackupService.state == KeysBackupState.ReadyToBackUp &&
+                                keysBackupService.canRestoreKeys())
                 ) {
                     add(EventSharedAction.UseKeyBackup)
                 }
-                if (session.cryptoService().getCryptoDeviceInfo(session.myUserId).size > 1
-                        || timelineEvent.senderInfo.userId != session.myUserId) {
+                if (session.cryptoService().getCryptoDeviceInfo(session.myUserId).size > 1 ||
+                        timelineEvent.senderInfo.userId != session.myUserId) {
                     add(EventSharedAction.ReRequestKey(timelineEvent.eventId))
                 }
             }
@@ -434,9 +431,9 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
     }
 
     private fun canRetry(event: TimelineEvent, actionPermissions: ActionPermissions): Boolean {
-        return event.root.sendState.hasFailed()
-                && actionPermissions.canSendMessage
-                && (event.root.isAttachmentMessage() || event.root.isTextMessage())
+        return event.root.sendState.hasFailed() &&
+                actionPermissions.canSendMessage &&
+                (event.root.isAttachmentMessage() || event.root.isTextMessage())
     }
 
     private fun canViewReactions(event: TimelineEvent): Boolean {
@@ -452,8 +449,8 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
         // TODO if user is admin or moderator
         val messageContent = event.root.getClearContent().toModel<MessageContent>()
         return event.root.senderId == myUserId && (
-                messageContent?.msgType == MessageType.MSGTYPE_TEXT
-                        || messageContent?.msgType == MessageType.MSGTYPE_EMOTE
+                messageContent?.msgType == MessageType.MSGTYPE_TEXT ||
+                        messageContent?.msgType == MessageType.MSGTYPE_EMOTE
                 )
     }
 

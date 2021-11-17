@@ -7,32 +7,14 @@
     android:background="@drawable/reaction_rounded_rect_shape"
     android:clipChildren="false"
     android:minWidth="44dp"
-    tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
+    android:gravity="center"
+    tools:parentTag="android.widget.LinearLayout">
 
     <!--<View-->
     <!--android:id="@+id/reactionSelector"-->
     <!--android:layout_width="match_parent"-->
     <!--android:layout_height="match_parent"-->
     <!--android:background="@drawable/rounded_rect_shape" />-->
-
-    <im.vector.app.features.reactions.widget.DotsView
-        android:id="@+id/dots"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:clipChildren="false"
-        app:layout_constraintBottom_toBottomOf="@+id/reactionText"
-        app:layout_constraintEnd_toEndOf="@+id/reactionText"
-        app:layout_constraintStart_toStartOf="@+id/reactionText"
-        app:layout_constraintTop_toTopOf="@+id/reactionText" />
-
-    <im.vector.app.features.reactions.widget.CircleView
-        android:id="@+id/circle"
-        android:layout_width="14dp"
-        android:layout_height="14dp"
-        app:layout_constraintBottom_toBottomOf="@+id/reactionText"
-        app:layout_constraintEnd_toEndOf="@+id/reactionText"
-        app:layout_constraintStart_toStartOf="@+id/reactionText"
-        app:layout_constraintTop_toTopOf="@+id/reactionText" />
 
     <TextView
         android:id="@+id/reactionText"
@@ -46,11 +28,6 @@
         android:minWidth="20dp"
         android:singleLine="true"
         android:textColor="@color/emoji_color"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/reactionCount"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         tools:text="* Party Parrot Again * 👀" />
 
     <TextView
@@ -67,10 +44,6 @@
         app:autoSizeMaxTextSize="14sp"
         app:autoSizeMinTextSize="8sp"
         app:autoSizeTextType="uniform"
-        app:layout_constraintBaseline_toBaselineOf="@id/reactionText"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toEndOf="@id/reactionText"
         tools:text="13450" />
 
 </merge>

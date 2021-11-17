@@ -53,8 +53,8 @@ private const val ANIMATION_DURATION = 250
  */
 class AttachmentTypeSelectorView(context: Context,
                                  inflater: LayoutInflater,
-                                 var callback: Callback?)
-    : PopupWindow(context) {
+                                 var callback: Callback?) :
+    PopupWindow(context) {
 
     interface Callback {
         fun onTypeSelected(type: Type)
@@ -75,6 +75,7 @@ class AttachmentTypeSelectorView(context: Context,
         views.attachmentStickersButton.configure(Type.STICKER)
         views.attachmentAudioButton.configure(Type.AUDIO)
         views.attachmentContactButton.configure(Type.CONTACT)
+        views.attachmentPollButton.configure(Type.POLL)
         width = LinearLayout.LayoutParams.MATCH_PARENT
         height = LinearLayout.LayoutParams.WRAP_CONTENT
         animationStyle = 0
@@ -103,11 +104,12 @@ class AttachmentTypeSelectorView(context: Context,
             animateWindowInCircular(anchor, contentView)
         }
         animateButtonIn(views.attachmentGalleryButton, ANIMATION_DURATION / 2)
-        animateButtonIn(views.attachmentCameraButton, ANIMATION_DURATION / 2)
-        animateButtonIn(views.attachmentFileButton, ANIMATION_DURATION / 4)
-        animateButtonIn(views.attachmentAudioButton, ANIMATION_DURATION / 2)
+        animateButtonIn(views.attachmentCameraButton, ANIMATION_DURATION / 4)
+        animateButtonIn(views.attachmentFileButton, ANIMATION_DURATION / 2)
+        animateButtonIn(views.attachmentAudioButton, 0)
         animateButtonIn(views.attachmentContactButton, ANIMATION_DURATION / 4)
-        animateButtonIn(views.attachmentStickersButton, 0)
+        animateButtonIn(views.attachmentStickersButton, ANIMATION_DURATION / 2)
+        animateButtonIn(views.attachmentPollButton, ANIMATION_DURATION / 4)
     }
 
     override fun dismiss() {
@@ -212,6 +214,7 @@ class AttachmentTypeSelectorView(context: Context,
         FILE(PERMISSIONS_EMPTY),
         STICKER(PERMISSIONS_EMPTY),
         AUDIO(PERMISSIONS_EMPTY),
-        CONTACT(PERMISSIONS_FOR_PICKING_CONTACT)
+        CONTACT(PERMISSIONS_FOR_PICKING_CONTACT),
+        POLL(PERMISSIONS_EMPTY)
     }
 }

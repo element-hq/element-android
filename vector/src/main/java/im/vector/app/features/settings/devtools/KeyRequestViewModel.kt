@@ -17,19 +17,18 @@
 package im.vector.app.features.settings.devtools
 
 import android.net.Uri
-import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxState
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksState
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewEvents
 import im.vector.app.core.platform.VectorViewModel
@@ -48,26 +47,19 @@ sealed class KeyRequestEvents : VectorViewEvents {
 
 data class KeyRequestViewState(
         val exporting: Async<Unit> = Uninitialized
-) : MvRxState
+) : MavericksState
 
 class KeyRequestViewModel @AssistedInject constructor(
         @Assisted initialState: KeyRequestViewState,
-        private val session: Session)
-    : VectorViewModel<KeyRequestViewState, KeyRequestAction, KeyRequestEvents>(initialState) {
+        private val session: Session) :
+    VectorViewModel<KeyRequestViewState, KeyRequestAction, KeyRequestEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: KeyRequestViewState): KeyRequestViewModel
+    interface Factory : MavericksAssistedViewModelFactory<KeyRequestViewModel, KeyRequestViewState> {
+        override fun create(initialState: KeyRequestViewState): KeyRequestViewModel
     }
 
-    companion object : MvRxViewModelFactory<KeyRequestViewModel, KeyRequestViewState> {
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: KeyRequestViewState): KeyRequestViewModel? {
-            val fragment: KeyRequestsFragment = (viewModelContext as FragmentViewModelContext).fragment()
-            return fragment.viewModelFactory.create(state)
-        }
-    }
+    companion object : MavericksViewModelFactory<KeyRequestViewModel, KeyRequestViewState> by hiltMavericksViewModelFactory()
 
     override fun handle(action: KeyRequestAction) {
         when (action) {

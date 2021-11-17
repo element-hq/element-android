@@ -25,4 +25,5 @@ sealed class SpaceManageRoomViewAction : VectorViewModelAction {
     data class MarkAllAsSuggested(val suggested: Boolean) : SpaceManageRoomViewAction()
     object BulkRemove : SpaceManageRoomViewAction()
     object RefreshFromServer : SpaceManageRoomViewAction()
+    object LoadAdditionalItemsIfNeeded : SpaceManageRoomViewAction()
 }

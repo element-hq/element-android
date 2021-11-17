@@ -18,33 +18,29 @@ package org.matrix.android.sdk.internal.session.permalinks
 
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.permalinks.PermalinkService
-import org.matrix.android.sdk.api.session.permalinks.PermalinkService.Companion.MATRIX_TO_URL_BASE
 import javax.inject.Inject
 
 internal class DefaultPermalinkService @Inject constructor(
         private val permalinkFactory: PermalinkFactory
 ) : PermalinkService {
 
-    override fun createPermalink(event: Event): String? {
-        return permalinkFactory.createPermalink(event)
+    override fun createPermalink(event: Event, forceMatrixTo: Boolean): String? {
+        return permalinkFactory.createPermalink(event, forceMatrixTo)
     }
 
-    override fun createPermalink(id: String): String? {
-        return permalinkFactory.createPermalink(id)
+    override fun createPermalink(id: String, forceMatrixTo: Boolean): String? {
+        return permalinkFactory.createPermalink(id, forceMatrixTo)
     }
 
-    override fun createRoomPermalink(roomId: String, viaServers: List<String>?): String? {
-        return permalinkFactory.createRoomPermalink(roomId, viaServers)
+    override fun createRoomPermalink(roomId: String, viaServers: List<String>?, forceMatrixTo: Boolean): String? {
+        return permalinkFactory.createRoomPermalink(roomId, viaServers, forceMatrixTo)
     }
 
-    override fun createPermalink(roomId: String, eventId: String): String {
-        return permalinkFactory.createPermalink(roomId, eventId)
+    override fun createPermalink(roomId: String, eventId: String, forceMatrixTo: Boolean): String {
+        return permalinkFactory.createPermalink(roomId, eventId, forceMatrixTo)
     }
 
     override fun getLinkedId(url: String): String? {
-        return url
-                .takeIf { it.startsWith(MATRIX_TO_URL_BASE) }
-                ?.substring(MATRIX_TO_URL_BASE.length)
-                ?.substringBeforeLast("?")
+        return permalinkFactory.getLinkedId(url)
     }
 }

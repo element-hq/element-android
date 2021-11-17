@@ -50,7 +50,6 @@ class SpaceCardRenderer @Inject constructor(
             inCard.matrixToCardButtonLoading.isVisible = false
             avatarRenderer.render(spaceSummary.toMatrixItem(), inCard.matrixToCardAvatar)
             inCard.matrixToCardNameText.text = spaceSummary.name
-            inCard.matrixToBetaTag.isVisible = true
             inCard.matrixToCardAliasText.setTextOrHide(spaceSummary.canonicalAlias)
             inCard.matrixToCardDescText.setTextOrHide(spaceSummary.topic.linkify(matrixLinkCallback))
             if (spaceSummary.isPublic) {
@@ -62,7 +61,7 @@ class SpaceCardRenderer @Inject constructor(
                 inCard.matrixToAccessImage.isVisible = true
                 inCard.matrixToAccessImage.setImageResource(R.drawable.ic_room_private)
             }
-            val memberCount = spaceSummary.otherMemberIds.size
+            val memberCount = spaceSummary.joinedMembersCount ?: 0
             if (memberCount != 0) {
                 inCard.matrixToMemberPills.isVisible = true
                 inCard.spaceChildMemberCountText.text = stringProvider.getQuantityString(R.plurals.room_title_members, memberCount, memberCount)
@@ -97,7 +96,6 @@ class SpaceCardRenderer @Inject constructor(
             inCard.matrixToCardButtonLoading.isVisible = false
             avatarRenderer.render(spaceChildInfo.toMatrixItem(), inCard.matrixToCardAvatar)
             inCard.matrixToCardNameText.setTextOrHide(spaceChildInfo.name)
-            inCard.matrixToBetaTag.isVisible = true
             inCard.matrixToCardAliasText.setTextOrHide(spaceChildInfo.canonicalAlias)
             inCard.matrixToCardDescText.setTextOrHide(spaceChildInfo.topic?.linkify(matrixLinkCallback))
             if (spaceChildInfo.worldReadable) {

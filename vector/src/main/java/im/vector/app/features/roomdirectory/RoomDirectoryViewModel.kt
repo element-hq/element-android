@@ -16,21 +16,21 @@
 
 package im.vector.app.features.roomdirectory
 
-import androidx.lifecycle.viewModelScope
-import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.ViewModelContext
 import com.airbnb.mvrx.appendAt
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.settings.VectorPreferences
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
@@ -38,7 +38,7 @@ import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoomsFilter
 import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoomsParams
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
-import org.matrix.android.sdk.rx.rx
+import org.matrix.android.sdk.flow.flow
 import timber.log.Timber
 
 class RoomDirectoryViewModel @AssistedInject constructor(
@@ -49,18 +49,12 @@ class RoomDirectoryViewModel @AssistedInject constructor(
 ) : VectorViewModel<PublicRoomsViewState, RoomDirectoryAction, RoomDirectoryViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: PublicRoomsViewState): RoomDirectoryViewModel
+    interface Factory : MavericksAssistedViewModelFactory<RoomDirectoryViewModel, PublicRoomsViewState> {
+        override fun create(initialState: PublicRoomsViewState): RoomDirectoryViewModel
     }
 
-    companion object : MvRxViewModelFactory<RoomDirectoryViewModel, PublicRoomsViewState> {
+    companion object : MavericksViewModelFactory<RoomDirectoryViewModel, PublicRoomsViewState> by hiltMavericksViewModelFactory() {
         private const val PUBLIC_ROOMS_LIMIT = 20
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: PublicRoomsViewState): RoomDirectoryViewModel? {
-            val activity: RoomDirectoryActivity = (viewModelContext as ActivityViewModelContext).activity()
-            return activity.roomDirectoryViewModelFactory.create(state)
-        }
     }
 
     private val showAllRooms = vectorPreferences.showAllPublicRooms()
@@ -80,28 +74,24 @@ class RoomDirectoryViewModel @AssistedInject constructor(
             memberships = listOf(Membership.JOIN)
         }
         session
-                .rx()
+                .flow()
                 .liveRoomSummaries(queryParams)
-                .subscribe { list ->
-                    val joinedRoomIds = list
-                            ?.map { it.roomId }
-                            ?.toSet()
-                            .orEmpty()
-
-                    setState {
-                        copy(joinedRoomsIds = joinedRoomIds)
-                    }
+                .map { roomSummaries ->
+                    roomSummaries
+                            .map { it.roomId }
+                            .toSet()
                 }
-                .disposeOnClear()
+                .setOnEach {
+                    copy(joinedRoomsIds = it)
+                }
     }
 
     private fun observeMembershipChanges() {
-        session.rx()
+        session.flow()
                 .liveRoomChangeMembershipState()
-                .subscribe {
-                    setState { copy(changeMembershipStates = it) }
+                .setOnEach {
+                    copy(changeMembershipStates = it)
                 }
-                .disposeOnClear()
     }
 
     override fun handle(action: RoomDirectoryAction) {

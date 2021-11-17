@@ -61,8 +61,8 @@ class PublicRoomsController @Inject constructor(private val stringProvider: Stri
 
             unknownRoomItem?.addTo(this)
 
-            if ((viewState.hasMore && viewState.asyncPublicRoomsRequest is Success)
-                    || viewState.asyncPublicRoomsRequest is Incomplete) {
+            if ((viewState.hasMore && viewState.asyncPublicRoomsRequest is Success) ||
+                    viewState.asyncPublicRoomsRequest is Incomplete) {
                 loadingItem {
                     // Change id to avoid list to scroll automatically when first results are displayed
                     if (publicRooms.isEmpty()) {

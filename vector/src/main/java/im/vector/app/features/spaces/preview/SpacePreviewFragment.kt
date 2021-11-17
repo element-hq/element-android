@@ -22,25 +22,27 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
-import com.jakewharton.rxbinding3.appcompat.navigationClicks
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
+import im.vector.app.core.flow.throttleFirst
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentSpacePreviewBinding
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.spaces.SpacePreviewSharedAction
 import im.vector.app.features.spaces.SpacePreviewSharedActionViewModel
-import io.reactivex.android.schedulers.AndroidSchedulers
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.util.MatrixItem
-import java.util.concurrent.TimeUnit
+import reactivecircus.flowbinding.appcompat.navigationClicks
 import javax.inject.Inject
 
 @Parcelize
@@ -49,10 +51,9 @@ data class SpacePreviewArgs(
 ) : Parcelable
 
 class SpacePreviewFragment @Inject constructor(
-        private val viewModelFactory: SpacePreviewViewModel.Factory,
         private val avatarRenderer: AvatarRenderer,
         private val epoxyController: SpacePreviewController
-) : VectorBaseFragment<FragmentSpacePreviewBinding>(), SpacePreviewViewModel.Factory {
+) : VectorBaseFragment<FragmentSpacePreviewBinding>() {
 
     private val viewModel by fragmentViewModel(SpacePreviewViewModel::class)
     lateinit var sharedActionViewModel: SpacePreviewSharedActionViewModel
@@ -66,8 +67,6 @@ class SpacePreviewFragment @Inject constructor(
         sharedActionViewModel = activityViewModelProvider.get(SpacePreviewSharedActionViewModel::class.java)
     }
 
-    override fun create(initialState: SpacePreviewState) = viewModelFactory.create(initialState)
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -75,11 +74,11 @@ class SpacePreviewFragment @Inject constructor(
             handleViewEvents(it)
         }
 
-        views.roomPreviewNoPreviewToolbar.navigationClicks()
-                .throttleFirst(300, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { sharedActionViewModel.post(SpacePreviewSharedAction.DismissAction) }
-                .disposeOnDestroyView()
+        views.roomPreviewNoPreviewToolbar
+                .navigationClicks()
+                .throttleFirst(300)
+                .onEach { sharedActionViewModel.post(SpacePreviewSharedAction.DismissAction) }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
         views.spacePreviewRecyclerView.configureWith(epoxyController)
 

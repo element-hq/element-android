@@ -16,39 +16,38 @@
 
 package im.vector.app.features.home
 
-import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxState
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksState
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.platform.VectorViewModelAction
 import im.vector.app.features.settings.VectorPreferences
-import io.reactivex.Observable
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.sample
 import org.matrix.android.sdk.api.NoOpMatrixCallback
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.util.MatrixItem
-import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.api.util.toMatrixItem
-import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
+import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
-import org.matrix.android.sdk.internal.crypto.store.PrivateKeysInfo
-import org.matrix.android.sdk.rx.rx
 import timber.log.Timber
-import java.util.concurrent.TimeUnit
 
 data class UnknownDevicesState(
         val myMatrixItem: MatrixItem.UserItem? = null,
         val unknownSessions: Async<List<DeviceDetectionInfo>> = Uninitialized
-) : MvRxState
+) : MavericksState
 
 data class DeviceDetectionInfo(
         val deviceInfo: DeviceInfo,
@@ -58,29 +57,19 @@ data class DeviceDetectionInfo(
 
 class UnknownDeviceDetectorSharedViewModel @AssistedInject constructor(@Assisted initialState: UnknownDevicesState,
                                                                        session: Session,
-                                                                       private val vectorPreferences: VectorPreferences)
-    : VectorViewModel<UnknownDevicesState, UnknownDeviceDetectorSharedViewModel.Action, EmptyViewEvents>(initialState) {
+                                                                       private val vectorPreferences: VectorPreferences) :
+    VectorViewModel<UnknownDevicesState, UnknownDeviceDetectorSharedViewModel.Action, EmptyViewEvents>(initialState) {
 
     sealed class Action : VectorViewModelAction {
         data class IgnoreDevice(val deviceIds: List<String>) : Action()
     }
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: UnknownDevicesState): UnknownDeviceDetectorSharedViewModel
+    interface Factory : MavericksAssistedViewModelFactory<UnknownDeviceDetectorSharedViewModel, UnknownDevicesState> {
+        override fun create(initialState: UnknownDevicesState): UnknownDeviceDetectorSharedViewModel
     }
 
-    companion object : MvRxViewModelFactory<UnknownDeviceDetectorSharedViewModel, UnknownDevicesState> {
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: UnknownDevicesState): UnknownDeviceDetectorSharedViewModel? {
-            val factory = when (viewModelContext) {
-                is FragmentViewModelContext -> viewModelContext.fragment as? Factory
-                is ActivityViewModelContext -> viewModelContext.activity as? Factory
-            }
-            return factory?.create(state) ?: error("You should let your activity/fragment implements Factory interface")
-        }
-    }
+    companion object : MavericksViewModelFactory<UnknownDeviceDetectorSharedViewModel, UnknownDevicesState> by hiltMavericksViewModelFactory()
 
     private val ignoredDeviceList = ArrayList<String>()
 
@@ -98,31 +87,30 @@ class UnknownDeviceDetectorSharedViewModel @AssistedInject constructor(@Assisted
                 }
         )
 
-        Observable.combineLatest<List<CryptoDeviceInfo>, List<DeviceInfo>, Optional<PrivateKeysInfo>, List<DeviceDetectionInfo>>(
-                session.rx().liveUserCryptoDevices(session.myUserId),
-                session.rx().liveMyDevicesInfo(),
-                session.rx().liveCrossSigningPrivateKeys(),
-                { cryptoList, infoList, pInfo ->
-                    //                    Timber.v("## Detector trigger ${cryptoList.map { "${it.deviceId} ${it.trustLevel}" }}")
+        combine(
+                session.flow().liveUserCryptoDevices(session.myUserId),
+                session.flow().liveMyDevicesInfo(),
+                session.flow().liveCrossSigningPrivateKeys()
+        ) { cryptoList, infoList, pInfo ->
+            //                    Timber.v("## Detector trigger ${cryptoList.map { "${it.deviceId} ${it.trustLevel}" }}")
 //                    Timber.v("## Detector trigger canCrossSign ${pInfo.get().selfSigned != null}")
-                    infoList
-                            .filter { info ->
-                                // filter verified session, by checking the crypto device info
-                                cryptoList.firstOrNull { info.deviceId == it.deviceId }?.isVerified?.not().orFalse()
-                            }
-                            // filter out ignored devices
-                            .filter { !ignoredDeviceList.contains(it.deviceId) }
-                            .sortedByDescending { it.lastSeenTs }
-                            .map { deviceInfo ->
-                                val deviceKnownSince = cryptoList.firstOrNull { it.deviceId == deviceInfo.deviceId }?.firstTimeSeenLocalTs ?: 0
-                                DeviceDetectionInfo(
-                                        deviceInfo,
-                                        deviceKnownSince > currentSessionTs + 60_000, // short window to avoid false positive,
-                                        pInfo.getOrNull()?.selfSigned != null // adding this to pass distinct when cross sign change
-                                )
-                            }
-                }
-        )
+            infoList
+                    .filter { info ->
+                        // filter verified session, by checking the crypto device info
+                        cryptoList.firstOrNull { info.deviceId == it.deviceId }?.isVerified?.not().orFalse()
+                    }
+                    // filter out ignored devices
+                    .filter { !ignoredDeviceList.contains(it.deviceId) }
+                    .sortedByDescending { it.lastSeenTs }
+                    .map { deviceInfo ->
+                        val deviceKnownSince = cryptoList.firstOrNull { it.deviceId == deviceInfo.deviceId }?.firstTimeSeenLocalTs ?: 0
+                        DeviceDetectionInfo(
+                                deviceInfo,
+                                deviceKnownSince > currentSessionTs + 60_000, // short window to avoid false positive,
+                                pInfo.getOrNull()?.selfSigned != null // adding this to pass distinct when cross sign change
+                        )
+                    }
+        }
                 .distinctUntilChanged()
                 .execute { async ->
                     //                    Timber.v("## Detector trigger passed distinct")
@@ -132,14 +120,14 @@ class UnknownDeviceDetectorSharedViewModel @AssistedInject constructor(@Assisted
                     )
                 }
 
-        session.rx().liveUserCryptoDevices(session.myUserId)
+        session.flow().liveUserCryptoDevices(session.myUserId)
                 .distinctUntilChanged()
-                .throttleLast(5_000, TimeUnit.MILLISECONDS)
-                .subscribe {
+                .sample(5_000)
+                .onEach {
                     // If we have a new crypto device change, we might want to trigger refresh of device info
                     session.cryptoService().fetchDevicesList(NoOpMatrixCallback())
                 }
-                .disposeOnClear()
+                .launchIn(viewModelScope)
 
         // trigger a refresh of lastSeen / last Ip
         session.cryptoService().fetchDevicesList(NoOpMatrixCallback())

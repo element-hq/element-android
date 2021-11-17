@@ -17,7 +17,7 @@
 package im.vector.app.features.spaces.share
 
 import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.Uninitialized
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 
@@ -27,7 +27,7 @@ data class ShareSpaceViewState(
         val canInviteByMxId: Boolean = false,
         val canShareLink: Boolean = false,
         val postCreation: Boolean = false
-) : MvRxState {
+) : MavericksState {
     constructor(args: ShareSpaceBottomSheet.Args) : this(
             spaceId = args.spaceId,
             postCreation = args.postCreation

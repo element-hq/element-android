@@ -75,7 +75,7 @@ object FcmHelper {
                         .addOnSuccessListener { token ->
                             storeFcmToken(activity, token)
                             if (registerPusher) {
-                                pushersManager.registerPusherWithFcmKey(token)
+                                pushersManager.enqueueRegisterPusherWithFcmKey(token)
                             }
                         }
                         .addOnFailureListener { e ->
@@ -108,6 +108,6 @@ object FcmHelper {
 
     @Suppress("UNUSED_PARAMETER")
     fun onEnterBackground(context: Context, vectorPreferences: VectorPreferences, activeSessionHolder: ActiveSessionHolder) {
-        // TODO FCM fallback
+        // No op
     }
 }

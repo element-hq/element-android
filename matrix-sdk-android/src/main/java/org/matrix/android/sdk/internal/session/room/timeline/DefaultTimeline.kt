@@ -42,7 +42,7 @@ import org.matrix.android.sdk.internal.database.query.findAllInRoomWithSendState
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.database.query.whereRoomId
 import org.matrix.android.sdk.internal.session.room.membership.LoadRoomMembersTask
-import org.matrix.android.sdk.internal.session.sync.ReadReceiptHandler
+import org.matrix.android.sdk.internal.session.sync.handler.room.ReadReceiptHandler
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.task.configureWith
 import org.matrix.android.sdk.internal.util.Debouncer
@@ -475,8 +475,8 @@ internal class DefaultTimeline(
         val currentChunk = getLiveChunk()
         val token = if (direction == Timeline.Direction.BACKWARDS) currentChunk?.prevToken else currentChunk?.nextToken
         if (token == null) {
-            if (direction == Timeline.Direction.BACKWARDS
-                    || (direction == Timeline.Direction.FORWARDS && currentChunk?.hasBeenALastForwardChunk().orFalse())) {
+            if (direction == Timeline.Direction.BACKWARDS ||
+                    (direction == Timeline.Direction.FORWARDS && currentChunk?.hasBeenALastForwardChunk().orFalse())) {
                 // We are in the case where event exists, but we do not know the token.
                 // Fetch (again) the last event to get a token
                 val lastKnownEventId = if (direction == Timeline.Direction.FORWARDS) {
@@ -583,8 +583,8 @@ internal class DefaultTimeline(
             val transactionId = timelineEvent.root.unsignedData?.transactionId
             uiEchoManager.onSyncedEvent(transactionId)
 
-            if (timelineEvent.isEncrypted()
-                    && timelineEvent.root.mxDecryptionResult == null) {
+            if (timelineEvent.isEncrypted() &&
+                    timelineEvent.root.mxDecryptionResult == null) {
                 timelineEvent.root.eventId?.also { eventDecryptor.requestDecryption(TimelineEventDecryptor.DecryptionRequest(timelineEvent.root, timelineID)) }
             }
 

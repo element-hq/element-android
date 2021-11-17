@@ -29,6 +29,9 @@ import org.matrix.android.sdk.api.session.crypto.verification.VerificationServic
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTransaction
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.Event
+import org.matrix.android.sdk.api.session.sync.model.DeviceListResponse
+import org.matrix.android.sdk.api.session.sync.model.DeviceOneTimeKeysCountSyncResponse
+import org.matrix.android.sdk.api.session.sync.model.ToDeviceSyncResponse
 import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.api.util.toOptional
@@ -43,9 +46,6 @@ import org.matrix.android.sdk.internal.crypto.model.rest.UnsignedDeviceInfo
 import org.matrix.android.sdk.internal.crypto.store.PrivateKeysInfo
 import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.network.parsing.CheckNumberType
-import org.matrix.android.sdk.internal.session.sync.model.DeviceListResponse
-import org.matrix.android.sdk.internal.session.sync.model.DeviceOneTimeKeysCountSyncResponse
-import org.matrix.android.sdk.internal.session.sync.model.ToDeviceSyncResponse
 import timber.log.Timber
 import uniffi.olm.BackupKeys
 import uniffi.olm.CrossSigningKeyExport
