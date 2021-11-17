@@ -3,6 +3,7 @@ Changes in Element v1.3.8 (2021-11-17)
 
 Features ✨
 ----------
+ - Android 12 support ([#4433](https://github.com/vector-im/element-android/issues/4433))
  - Make notification text spoiler aware ([#3477](https://github.com/vector-im/element-android/issues/3477))
  - Poll Feature - Create Poll Screen (Disabled for now) ([#4367](https://github.com/vector-im/element-android/issues/4367))
  - Adds support for images inside message notifications ([#4402](https://github.com/vector-im/element-android/issues/4402))
