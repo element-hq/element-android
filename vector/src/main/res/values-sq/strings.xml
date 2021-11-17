@@ -62,22 +62,23 @@
     <string name="notice_event_redacted_with_reason">Mesazh i hequr [arsye: %1$s]</string>
     <string name="notice_event_redacted_by_with_reason">Mesazh i hequr nga %1$s [arsye: %2$s]</string>
     <string name="notice_room_update">%s e përmirësoi këtë dhomë.</string>
-    <string name="initial_sync_start_importing_account">Njëkohësimi Fillestar:
+    <string name="initial_sync_start_importing_account">Njëkohësimi fillestar:
 \nPo importohet llogaria…</string>
-    <string name="initial_sync_start_importing_account_crypto">Njëkohësimi Fillestar:
+    <string name="initial_sync_start_importing_account_crypto">Njëkohësimi fillestar:
 \nPo importohet kriptografi</string>
-    <string name="initial_sync_start_importing_account_rooms">Njëkohësimi Fillestar:
+    <string name="initial_sync_start_importing_account_rooms">Njëkohësimi fillestar:
 \nPo importohen Dhoma</string>
     <string name="initial_sync_start_importing_account_joined_rooms">Njëkohësimi Fillestar:
-\nPo importohen Dhoma Ku Është Bërë Hyrje</string>
-    <string name="initial_sync_start_importing_account_invited_rooms">Njëkohësimi Fillestar:
-\nPo importohen Dhoma Me Ftesë</string>
-    <string name="initial_sync_start_importing_account_left_rooms">Njëkohësimi Fillestar:
-\nPo importohen Dhoma të Braktisura</string>
-    <string name="initial_sync_start_importing_account_groups">Njëkohësimi Fillestar:
-\nPo importohen Bashkësi</string>
-    <string name="initial_sync_start_importing_account_data">Njëkohësimi Fillestar:
-\nPo importohet të Dhëna Llogarie</string>
+\nPo ngarkohen bisedat tuaja
+\nNëse keni hyrë në shumë dhoma, kjo mund të zgjasë ca</string>
+    <string name="initial_sync_start_importing_account_invited_rooms">Njëkohësimi fillestar:
+\nPo importohen dhoma me ftesë</string>
+    <string name="initial_sync_start_importing_account_left_rooms">Njëkohësimi fillestar:
+\nPo importohen dhoma të braktisura</string>
+    <string name="initial_sync_start_importing_account_groups">Njëkohësimi fillestar:
+\nPo importohen bashkësi</string>
+    <string name="initial_sync_start_importing_account_data">Njëkohësimi fillestar:
+\nPo importohet të dhëna llogarie</string>
     <string name="event_status_sending_message">Po dërgohet mesazh…</string>
     <string name="clear_timeline_send_queue">Spastro radhë pritjeje</string>
     <string name="notice_room_third_party_revoked_invite">%1$s shfuqizoi ftesën për %2$s për pjesëmarrje te dhoma</string>
@@ -289,7 +290,7 @@
     <string name="view_decrypted_source">Shihni Burim të Shfshehtëzuar</string>
     <string name="delete">Fshije</string>
     <string name="rename">Riemërtojeni</string>
-    <string name="report_content">Raportoni lëndë</string>
+    <string name="report_content">Raportoni Lëndë</string>
     <string name="active_call">Thirrje aktive</string>
     <string name="cannot_start_call">S’fillohet dot thirrja, ju lutemi, riprovoni më vonë</string>
     <string name="missing_permissions_title_to_start_conf_call">S’fillohet dot thirrja</string>
@@ -807,7 +808,7 @@
     <string name="command_description_ban_user">Dëbon përdoruesin me ID-në e dhënë</string>
     <string name="command_description_unban_user">I heq dëbimin përdoruesit me ID-në e dhënë</string>
     <string name="command_description_op_user">Përcaktoni shkallë pushteti të një përdoruesi</string>
-    <string name="command_description_join_room">Hyn në dhomë me aliasin e dhënë</string>
+    <string name="command_description_join_room">Hyn te dhoma me adresën e dhënë</string>
     <string name="command_description_part_room">Dilni nga dhoma</string>
     <string name="command_description_topic">Caktoni temë dhome</string>
     <string name="command_description_kick_user">Përzë përdoruesin me ID-në e dhënë</string>
@@ -2657,9 +2658,9 @@
     <string name="action_return">Kthehuni</string>
     <string name="action_switch">Ndërroje</string>
     <string name="event_status_sent_message">Mesazh i dërguar</string>
-    <string name="initial_sync_start_downloading">Njëkohësimi Fillestar:
+    <string name="initial_sync_start_downloading">Njëkohësimi fillestar:
 \nPo shkarkohen të dhëna…</string>
-    <string name="initial_sync_start_server_computing">Njëkohësimi Fillestar:
+    <string name="initial_sync_start_server_computing">Njëkohësimi fillestar:
 \nPo pritet për përgjigje nga shërbyesi…</string>
     <string name="spaces_beta_welcome_to_spaces_desc">Hapësirat janë mënyra për të grupuar dhoma dhe persona.</string>
     <string name="labs_use_restricted_join_rule_desc">Sinjalizimi lyp mbulim nga shërbyesi dhe version eksperimental dhome</string>
@@ -2846,13 +2847,13 @@
     <string name="voice_message_tap_to_stop_toast">Që ta ndalni ose ta dëgjoni, prekni mbi incizimin tuaj</string>
     <string name="voice_message_n_seconds_warning_toast">Edhe %1$ds</string>
     <string name="voice_message_release_to_send_toast">Mbajeni, që të incizojë, lëshojeni që të dërgohet</string>
-    <string name="a11y_delete_recorded_voice_message">Fshije mesazhin zanor të incizuar</string>
+    <string name="a11y_delete_recorded_voice_message">Fshije incizimin</string>
     <string name="a11y_recording_voice_message">Po incizohet mesazh zanor</string>
     <string name="a11y_pause_voice_message">Ndalni Mesazh Zanor</string>
     <string name="a11y_play_voice_message">Luani Mesazh Zanor</string>
     <string name="a11y_lock_voice_message">Kyçje Mesazhi Zanor</string>
     <string name="voice_message_slide_to_cancel">Rrëshqiteni që të anulohet</string>
-    <string name="a11y_start_voice_message">Nisni Mesazh Zanor</string>
+    <string name="a11y_start_voice_message">Incizoni Mesazh Zanor</string>
     <string name="allow_anyone_in_room_to_access">Lejo cilindo te %s ta gjejë dhe hyjë. Mund të përzgjidhni edhe hapësira të tjera.</string>
     <string name="upgrade_required">Lypset Domosdo Përmirësim</string>
     <string name="sent_a_voice_message">Zë</string>
@@ -2993,4 +2994,7 @@
     <string name="command_description_ignore_user">Shpërfill një përdorues, duke fshehur mesazhet e tij prej jush</string>
     <string name="a11y_presence_offline">Jo në linjë</string>
     <string name="a11y_presence_online">Në linjë</string>
+    <string name="login_error_homeserver_from_url_not_found_enter_manual">Zgjidhni shërbyes Home</string>
+    <string name="login_error_homeserver_from_url_not_found">Te URL-ja %s s’kapet dot një shërbyes Home. Ju lutemi, kontrolloni lidhjen tuaj, ose zgjidheni një shërbyes Home dorazi.</string>
+    <string name="notification_listening_for_notifications">Po dëgjohet për njoftime</string>
 </resources>

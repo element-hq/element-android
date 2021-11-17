@@ -1,0 +1,2 @@
+Ndryshimet kryesore në këtë version: Shtim mbulimi për Prani, për dhomën Mesazh i Drejtpërdrejtë (shënim: prania është e çaktivizuar në matrix.org). Shtim sërish i mbulimit për Android Auto.
+Regjistër i plotë ndryshimesh: https://github.com/vector-im/element-android/releases/tag/v1.3.5
