@@ -134,6 +134,17 @@ fun TimelineEvent.getLastMessageContent(): MessageContent? {
 }
 
 /**
+ * Returns true if it's a reply
+ */
+fun TimelineEvent.isReply(): Boolean {
+    return root.isReply()
+}
+
+fun TimelineEvent.isEdition(): Boolean {
+    return root.isEdition()
+}
+
+/**
  * Get the latest message body, after a possible edition, stripping the reply prefix if necessary
  */
 fun TimelineEvent.getTextEditableContent(): String {
@@ -154,15 +165,4 @@ fun MessageContent.getTextDisplayableContent(): String {
             ?: newContent?.toModel<MessageContent>()?.body
             ?: (this as MessageTextContent?)?.matrixFormattedBody?.let { ContentUtils.formatSpoilerTextFromHtml(it) }
             ?: body
-}
-
-/**
- * Returns true if it's a reply
- */
-fun TimelineEvent.isReply(): Boolean {
-    return root.isReply()
-}
-
-fun TimelineEvent.isEdition(): Boolean {
-    return root.isEdition()
 }
