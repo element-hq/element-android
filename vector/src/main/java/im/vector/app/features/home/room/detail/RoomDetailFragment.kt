@@ -712,9 +712,10 @@ class RoomDetailFragment @Inject constructor(
                 roomDetailViewModel.handle(RoomDetailAction.PlayOrPauseRecordingPlayback)
             }
 
-            override fun onRecordingStopped() {
-                roomDetailViewModel.handle(RoomDetailAction.EndRecordingVoiceMessage(isCancelled = true))
-                if (currentState() != RecordingUiState.Locked) {
+            override fun onVoiceRecordingEnded(lastKnownState: RecordingUiState?) {
+                if (lastKnownState != RecordingUiState.Locked) {
+                    val isCancelled = lastKnownState == RecordingUiState.Cancelled
+                    roomDetailViewModel.handle(RoomDetailAction.EndRecordingVoiceMessage(isCancelled = isCancelled))
                     display(RecordingUiState.None)
                 }
             }
@@ -729,7 +730,7 @@ class RoomDetailFragment @Inject constructor(
 
             override fun deleteVoiceMessage() {
                 roomDetailViewModel.handle(RoomDetailAction.EndRecordingVoiceMessage(isCancelled = true))
-                display(RecordingUiState.Cancelled)
+                display(RecordingUiState.None)
             }
 
             override fun onRecordingLimitReached() {
@@ -743,8 +744,6 @@ class RoomDetailFragment @Inject constructor(
             private fun display(state: RecordingUiState) {
                 textComposerViewModel.handle(TextComposerAction.OnVoiceRecordingUiStateChanged(state))
             }
-
-            override fun currentState() = withState(textComposerViewModel) { it.voiceRecordingUiState }
         }
     }
 
@@ -1986,7 +1985,7 @@ class RoomDetailFragment @Inject constructor(
                 roomDetailViewModel.handle(RoomDetailAction.UpdateQuickReactAction(action.eventId, action.clickedOn, action.add))
             }
             is EventSharedAction.Edit                       -> {
-                if (!views.voiceMessageRecorderView.isActive()) {
+                if (withState(textComposerViewModel) { it.isVoiceMessageIdle }) {
                     textComposerViewModel.handle(TextComposerAction.EnterEditMode(action.eventId, views.composerLayout.text.toString()))
                 } else {
                     requireActivity().toast(R.string.error_voice_message_cannot_reply_or_edit)
@@ -1996,7 +1995,7 @@ class RoomDetailFragment @Inject constructor(
                 textComposerViewModel.handle(TextComposerAction.EnterQuoteMode(action.eventId, views.composerLayout.text.toString()))
             }
             is EventSharedAction.Reply                      -> {
-                if (!views.voiceMessageRecorderView.isActive()) {
+                if (withState(textComposerViewModel) { it.isVoiceMessageIdle }) {
                     textComposerViewModel.handle(TextComposerAction.EnterReplyMode(action.eventId, views.composerLayout.text.toString()))
                 } else {
                     requireActivity().toast(R.string.error_voice_message_cannot_reply_or_edit)

@@ -60,8 +60,14 @@ data class TextComposerViewState(
         VoiceMessageRecorderView.RecordingUiState.Started  -> true
     }
 
+    val isVoiceMessageIdle = when (voiceRecordingUiState) {
+        VoiceMessageRecorderView.RecordingUiState.None, VoiceMessageRecorderView.RecordingUiState.Cancelled -> false
+        else                                                                                                -> true
+    }
+
     val isComposerVisible = canSendMessage && !isVoiceRecording
     val isVoiceMessageRecorderVisible = canSendMessage && !isSendButtonVisible
 
+    @Suppress("UNUSED") // needed by mavericks
     constructor(args: RoomDetailArgs) : this(roomId = args.roomId)
 }

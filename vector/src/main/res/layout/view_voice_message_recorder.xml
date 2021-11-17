@@ -95,6 +95,7 @@
 
     <!-- Slide to cancel text should go under this view -->
     <View
+        android:id="@+id/voiceMessageSlideToCancelDivider"
         android:layout_width="48dp"
         android:layout_height="0dp"
         android:background="?android:colorBackground"

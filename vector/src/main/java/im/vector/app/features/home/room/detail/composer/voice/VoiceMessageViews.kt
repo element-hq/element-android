@@ -19,7 +19,6 @@ package im.vector.app.features.home.room.detail.composer.voice
 import android.annotation.SuppressLint
 import android.content.res.Resources
 import android.text.format.DateUtils
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
@@ -74,22 +73,17 @@ class VoiceMessageViews(
         views.voiceMessageMicButton.setOnTouchListener { _, event ->
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
-                    Log.e("!!!", "event down: $event")
-                    positions.reset(event)
+                    positions.initialize(event)
                     actions.onRequestRecording()
                     true
                 }
                 MotionEvent.ACTION_UP   -> {
-                    actions.onRecordingStopped()
+                    actions.onMicButtonReleased()
                     true
                 }
                 MotionEvent.ACTION_MOVE -> {
-                    if (actions.isActive()) {
-                        actions.updateState { currentState -> positions.process(event, currentState) }
-                        true
-                    } else {
-                        false
-                    }
+                    actions.updateState { currentState -> positions.process(event, currentState) }
+                    true
                 }
                 else                    -> false
             }
@@ -128,6 +122,7 @@ class VoiceMessageViews(
         views.voiceMessageLockBackground.isVisible = false
         views.voiceMessageLockImage.isVisible = false
         views.voiceMessageLockArrow.isVisible = false
+        views.voiceMessageSlideToCancelDivider.isVisible = true
         // Reset Y translations
         views.voiceMessageMicButton.translationY = 0F
         views.voiceMessageLockArrow.translationY = 0F
@@ -167,11 +162,14 @@ class VoiceMessageViews(
         } else {
             animateLockImageWithBackground()
         }
+        views.voiceMessageSlideToCancelDivider.isVisible = false
         views.voiceMessageLockArrow.isVisible = false
         views.voiceMessageLockArrow.animate().translationY(0f).start()
         views.voiceMessageSlideToCancel.isVisible = false
         views.voiceMessageSlideToCancel.animate().translationX(0f).translationY(0f).start()
         views.voiceMessagePlaybackLayout.isVisible = false
+        views.voiceMessageTimerIndicator.isVisible = false
+        views.voiceMessageTimer.isVisible = false
 
         if (recordingState != RecordingUiState.Locked) {
             views.voiceMessageMicButton
@@ -182,8 +180,6 @@ class VoiceMessageViews(
                     .translationY(0f)
                     .setDuration(150)
                     .withEndAction {
-                        views.voiceMessageTimerIndicator.isVisible = false
-                        views.voiceMessageTimer.isVisible = false
                         resetMicButtonUi()
                         isCancelled?.let {
                             onVoiceRecordingEnded(it)
@@ -349,8 +345,7 @@ class VoiceMessageViews(
 
     interface Actions {
         fun onRequestRecording()
-        fun onRecordingStopped()
-        fun isActive(): Boolean
+        fun onMicButtonReleased()
         fun updateState(updater: (RecordingUiState) -> RecordingUiState)
         fun sendMessage()
         fun delete()
