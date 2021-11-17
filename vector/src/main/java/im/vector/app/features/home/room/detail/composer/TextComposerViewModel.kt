@@ -122,7 +122,7 @@ class TextComposerViewModel @AssistedInject constructor(
 
     private fun handleEnterEditMode(action: TextComposerAction.EnterEditMode) {
         room.getTimeLineEvent(action.eventId)?.let { timelineEvent ->
-            setState { copy(sendMode = SendMode.EDIT(timelineEvent, timelineEvent.getTextEditableContent() ?: "")) }
+            setState { copy(sendMode = SendMode.EDIT(timelineEvent, timelineEvent.getTextEditableContent())) }
         }
     }
 
