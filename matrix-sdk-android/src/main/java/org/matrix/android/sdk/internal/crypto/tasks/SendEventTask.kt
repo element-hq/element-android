@@ -34,7 +34,7 @@ internal interface SendEventTask : Task<SendEventTask.Params, String> {
 
 internal class DefaultSendEventTask @Inject constructor(
         private val localEchoRepository: LocalEchoRepository,
-        private val encryptEventTask: DefaultEncryptEventTask,
+        private val encryptEventTask: EncryptEventTask,
         private val loadRoomMembersTask: LoadRoomMembersTask,
         private val roomAPI: RoomAPI,
         private val globalErrorReceiver: GlobalErrorReceiver) : SendEventTask {

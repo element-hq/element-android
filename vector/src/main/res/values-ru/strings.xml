@@ -1120,7 +1120,7 @@
     <string name="room_tombstone_continuation_link">Этот разговор продолжается здесь</string>
     <string name="room_tombstone_continuation_description">Эта комната является продолжением другого разговора</string>
     <string name="room_tombstone_predecessor_link">Нажмите здесь для просмотра старых сообщений</string>
-    <string name="command_description_join_room">Присоединиться к комнате с указанным псевдонимом</string>
+    <string name="command_description_join_room">Присоединиться к комнате с указанным адресом</string>
     <string name="command_description_clear_scalar_token">Для исправления управления приложениями Matrix</string>
     <string name="missing_permissions_error">Из-за отсутствия разрешений это действие невозможно.</string>
     <plurals name="format_time_s">

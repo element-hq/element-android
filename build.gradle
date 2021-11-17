@@ -17,6 +17,7 @@ buildscript {
         // https://developer.android.com/studio/releases/gradle-plugin
         classpath libs.gradle.gradlePlugin
         classpath libs.gradle.kotlinPlugin
+        classpath libs.gradle.hiltPlugin
         classpath 'com.google.gms:google-services:4.3.10'
         classpath 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:3.3'
         classpath 'com.google.android.gms:oss-licenses-plugin:0.10.4'

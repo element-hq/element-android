@@ -24,6 +24,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -53,6 +54,8 @@ import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedA
 import im.vector.app.features.home.room.list.widget.NotifsFabMenuView
 import im.vector.app.features.notifications.NotificationDrawerManager
 import im.vector.app.features.settings.VectorPreferences
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.extensions.orTrue
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
@@ -69,7 +72,6 @@ data class RoomListParams(
 class RoomListFragment @Inject constructor(
         private val appStateHandler: AppStateHandler,
         private val pagedControllerFactory: RoomSummaryPagedControllerFactory,
-        val roomListViewModelFactory: RoomListViewModel.Factory,
         private val notificationDrawerManager: NotificationDrawerManager,
         private val vectorPreferences: VectorPreferences,
         private val footerController: RoomListFooterController,
@@ -128,9 +130,9 @@ class RoomListFragment @Inject constructor(
         views.createChatFabMenu.listener = this
 
         sharedActionViewModel
-                .observe()
-                .subscribe { handleQuickActions(it) }
-                .disposeOnDestroyView()
+                .stream()
+                .onEach { handleQuickActions(it) }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
         roomListViewModel.onEach(RoomListViewState::roomMembershipChanges) { ms ->
             // it's for invites local echo
@@ -533,7 +535,7 @@ class RoomListFragment @Inject constructor(
     }
 
     override fun onAcceptRoomInvitation(room: RoomSummary) {
-        notificationDrawerManager.clearMemberShipNotificationForRoom(room.roomId)
+        notificationDrawerManager.updateEvents { it.clearMemberShipNotificationForRoom(room.roomId) }
         roomListViewModel.handle(RoomListAction.AcceptInvitation(room))
     }
 
@@ -546,7 +548,7 @@ class RoomListFragment @Inject constructor(
     }
 
     override fun onRejectRoomInvitation(room: RoomSummary) {
-        notificationDrawerManager.clearMemberShipNotificationForRoom(room.roomId)
+        notificationDrawerManager.updateEvents { it.clearMemberShipNotificationForRoom(room.roomId) }
         roomListViewModel.handle(RoomListAction.RejectInvitation(room))
     }
 

@@ -19,6 +19,7 @@ package org.matrix.android.sdk.api.auth.data
 import android.net.Uri
 import com.squareup.moshi.JsonClass
 import okhttp3.CipherSuite
+import okhttp3.ConnectionSpec
 import okhttp3.TlsVersion
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig.Builder
 import org.matrix.android.sdk.internal.network.ssl.Fingerprint
@@ -191,32 +192,25 @@ data class HomeServerConnectionConfig(
         /**
          * Convenient method to limit the TLS versions and cipher suites for this Builder
          * Ref:
-         * - https://www.ssi.gouv.fr/uploads/2017/02/security-recommendations-for-tls_v1.1.pdf
+         * - https://www.ssi.gouv.fr/uploads/2017/07/anssi-guide-recommandations_de_securite_relatives_a_tls-v1.2.pdf
          * - https://developer.android.com/reference/javax/net/ssl/SSLEngine
          *
          * @param tlsLimitations         true to use Tls limitations
          * @param enableCompatibilityMode set to true for Android < 20
          * @return this builder
          */
+        @Deprecated("TLS versions and cipher suites are limited by default")
         fun withTlsLimitations(tlsLimitations: Boolean, enableCompatibilityMode: Boolean): Builder {
             if (tlsLimitations) {
                 withShouldAcceptTlsExtensions(false)
 
-                // Tls versions
-                addAcceptedTlsVersion(TlsVersion.TLS_1_2)
-                addAcceptedTlsVersion(TlsVersion.TLS_1_3)
+                // TlS versions
+                ConnectionSpec.RESTRICTED_TLS.tlsVersions?.let { this.tlsVersions.addAll(it) }
 
                 forceUsageOfTlsVersions(enableCompatibilityMode)
 
                 // Cipher suites
-                addAcceptedTlsCipherSuite(CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256)
-                addAcceptedTlsCipherSuite(CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256)
-                addAcceptedTlsCipherSuite(CipherSuite.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256)
-                addAcceptedTlsCipherSuite(CipherSuite.TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256)
-                addAcceptedTlsCipherSuite(CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384)
-                addAcceptedTlsCipherSuite(CipherSuite.TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384)
-                addAcceptedTlsCipherSuite(CipherSuite.TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256)
-                addAcceptedTlsCipherSuite(CipherSuite.TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256)
+                ConnectionSpec.RESTRICTED_TLS.cipherSuites?.let { this.tlsCipherSuites.addAll(it) }
 
                 if (enableCompatibilityMode) {
                     // Adopt some preceding cipher suites for Android < 20 to be able to negotiate

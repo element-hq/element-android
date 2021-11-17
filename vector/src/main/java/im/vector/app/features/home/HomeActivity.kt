@@ -34,10 +34,10 @@ import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.AppStateHandler
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
-import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.registerStartForActivityResult
@@ -74,8 +74,9 @@ import im.vector.app.features.spaces.invite.SpaceInviteBottomSheet
 import im.vector.app.features.spaces.share.ShareSpaceBottomSheet
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
-import im.vector.app.features.workers.signout.ServerBackupStatusViewState
 import im.vector.app.core.pushers.UPHelper
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.session.initsync.SyncStatusService
@@ -93,13 +94,10 @@ data class HomeActivityArgs(
         val inviteNotificationRoomId: String? = null
 ) : Parcelable
 
+@AndroidEntryPoint
 class HomeActivity :
         VectorBaseActivity<ActivityHomeBinding>(),
         ToolbarConfigurable,
-        UnknownDeviceDetectorSharedViewModel.Factory,
-        ServerBackupStatusViewModel.Factory,
-        UnreadMessagesSharedViewModel.Factory,
-        PromoteRestrictedViewModel.Factory,
         NavigationInterceptor,
         SpaceInviteBottomSheet.InteractionListener,
         MatrixToBottomSheet.InteractionListener {
@@ -107,11 +105,8 @@ class HomeActivity :
     private lateinit var sharedActionViewModel: HomeSharedActionViewModel
 
     private val homeActivityViewModel: HomeActivityViewModel by viewModel()
-    @Inject lateinit var viewModelFactory: HomeActivityViewModel.Factory
 
     private val serverBackupStatusViewModel: ServerBackupStatusViewModel by viewModel()
-    @Inject lateinit var serverBackupviewModelFactory: ServerBackupStatusViewModel.Factory
-    @Inject lateinit var promoteRestrictedViewModelFactory: PromoteRestrictedViewModel.Factory
     private val promoteRestrictedViewModel: PromoteRestrictedViewModel by viewModel()
 
     @Inject lateinit var activeSessionHolder: ActiveSessionHolder
@@ -121,8 +116,6 @@ class HomeActivity :
     @Inject lateinit var vectorPreferences: VectorPreferences
     @Inject lateinit var popupAlertManager: PopupAlertManager
     @Inject lateinit var shortcutsHandler: ShortcutsHandler
-    @Inject lateinit var unknownDeviceViewModelFactory: UnknownDeviceDetectorSharedViewModel.Factory
-    @Inject lateinit var unreadMessagesSharedViewModelFactory: UnreadMessagesSharedViewModel.Factory
     @Inject lateinit var permalinkHandler: PermalinkHandler
     @Inject lateinit var avatarRenderer: AvatarRenderer
     @Inject lateinit var initSyncStepFormatter: InitSyncStepFormatter
@@ -177,22 +170,6 @@ class HomeActivity :
 
     override fun getBinding() = ActivityHomeBinding.inflate(layoutInflater)
 
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
-
-    override fun create(initialState: UnknownDevicesState): UnknownDeviceDetectorSharedViewModel {
-        return unknownDeviceViewModelFactory.create(initialState)
-    }
-
-    override fun create(initialState: ServerBackupStatusViewState): ServerBackupStatusViewModel {
-        return serverBackupviewModelFactory.create(initialState)
-    }
-
-    override fun create(initialState: UnreadMessagesState): UnreadMessagesSharedViewModel {
-        return unreadMessagesSharedViewModelFactory.create(initialState)
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         supportFragmentManager.registerFragmentLifecycleCallbacks(fragmentLifecycleCallbacks, false)
@@ -205,8 +182,8 @@ class HomeActivity :
         }
 
         sharedActionViewModel
-                .observe()
-                .subscribe { sharedAction ->
+                .stream()
+                .onEach { sharedAction ->
                     when (sharedAction) {
                         is HomeActivitySharedAction.OpenDrawer        -> views.drawerLayout.openDrawer(GravityCompat.START)
                         is HomeActivitySharedAction.CloseDrawer       -> views.drawerLayout.closeDrawer(GravityCompat.START)
@@ -249,7 +226,7 @@ class HomeActivity :
                         }
                     }.exhaustive
                 }
-                .disposeOnDestroy()
+                .launchIn(lifecycleScope)
 
         val args = intent.getParcelableExtra<HomeActivityArgs>(Mavericks.KEY_ARG)
 
@@ -270,13 +247,12 @@ class HomeActivity :
                 is HomeActivityViewEvents.OnCrossSignedInvalidated      -> handleCrossSigningInvalidated(it)
             }.exhaustive
         }
-        homeActivityViewModel.subscribe(this) { renderState(it) }
+        homeActivityViewModel.onEach { renderState(it) }
 
-        shortcutsHandler.observeRoomsAndBuildShortcuts()
-                .disposeOnDestroy()
+        shortcutsHandler.observeRoomsAndBuildShortcuts(lifecycleScope)
 
         if (!vectorPreferences.didPromoteNewRestrictedFeature()) {
-            promoteRestrictedViewModel.subscribe(this) {
+            promoteRestrictedViewModel.onEach {
                 if (it.activeSpaceSummary != null && !it.activeSpaceSummary.isPublic &&
                         it.activeSpaceSummary.otherMemberIds.isNotEmpty()) {
                     // It's a private space with some members show this once
@@ -300,14 +276,13 @@ class HomeActivity :
             val resolvedLink = when {
                 // Element custom scheme is not handled by the sdk, convert it to matrix.to link for compatibility
                 deepLink.startsWith(MATRIX_TO_CUSTOM_SCHEME_URL_BASE) -> {
-                    val let = when {
+                    when {
                         deepLink.startsWith(USER_LINK_PREFIX) -> deepLink.substring(USER_LINK_PREFIX.length)
                         deepLink.startsWith(ROOM_LINK_PREFIX) -> deepLink.substring(ROOM_LINK_PREFIX.length)
                         else                                  -> null
                     }?.let { permalinkId ->
                         activeSessionHolder.getSafeActiveSession()?.permalinkService()?.createPermalink(permalinkId)
                     }
-                    let
                 }
                 else                                                  -> deepLink
             }
@@ -593,8 +568,6 @@ class HomeActivity :
                     }
         }
     }
-
-    override fun create(initialState: ActiveSpaceViewState) = promoteRestrictedViewModelFactory.create(initialState)
 
     override fun mxToBottomSheetNavigateToRoom(roomId: String) {
         navigator.openRoom(this, roomId)

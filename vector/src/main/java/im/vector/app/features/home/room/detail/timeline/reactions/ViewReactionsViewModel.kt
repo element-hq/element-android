@@ -17,32 +17,30 @@
 package im.vector.app.features.home.room.detail.timeline.reactions
 
 import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Uninitialized
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.home.room.detail.timeline.action.TimelineEventFragmentArgs
-import io.reactivex.Observable
-import io.reactivex.Single
+import kotlinx.coroutines.flow.map
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.room.model.ReactionAggregatedSummary
-import org.matrix.android.sdk.rx.RxRoom
-import org.matrix.android.sdk.rx.unwrap
+import org.matrix.android.sdk.flow.flow
+import org.matrix.android.sdk.flow.unwrap
 
 data class DisplayReactionsViewState(
         val eventId: String,
         val roomId: String,
         val mapReactionKeyToMemberList: Async<List<ReactionInfo>> = Uninitialized) :
-    MavericksState {
+        MavericksState {
 
     constructor(args: TimelineEventFragmentArgs) : this(roomId = args.roomId, eventId = args.eventId)
 }
@@ -70,55 +68,40 @@ class ViewReactionsViewModel @AssistedInject constructor(@Assisted
             ?: throw IllegalStateException("Shouldn't use this ViewModel without a room")
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: DisplayReactionsViewState): ViewReactionsViewModel
+    interface Factory : MavericksAssistedViewModelFactory<ViewReactionsViewModel, DisplayReactionsViewState> {
+        override fun create(initialState: DisplayReactionsViewState): ViewReactionsViewModel
     }
 
-    companion object : MavericksViewModelFactory<ViewReactionsViewModel, DisplayReactionsViewState> {
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: DisplayReactionsViewState): ViewReactionsViewModel? {
-            val fragment: ViewReactionsBottomSheet = (viewModelContext as FragmentViewModelContext).fragment()
-            return fragment.viewReactionsViewModelFactory.create(state)
-        }
-    }
+    companion object : MavericksViewModelFactory<ViewReactionsViewModel, DisplayReactionsViewState> by hiltMavericksViewModelFactory()
 
     init {
         observeEventAnnotationSummaries()
     }
 
     private fun observeEventAnnotationSummaries() {
-        RxRoom(room)
+        room.flow()
                 .liveAnnotationSummary(eventId)
                 .unwrap()
-                .flatMapSingle { summaries ->
-                    Observable
-                            .fromIterable(summaries.reactionsSummary)
-                            // .filter { reactionAggregatedSummary -> isSingleEmoji(reactionAggregatedSummary.key) }
-                            .toReactionInfoList()
+                .map { annotationsSummary ->
+                    annotationsSummary.reactionsSummary
+                            .flatMap { reactionsSummary ->
+                                reactionsSummary.sourceEvents.map {
+                                    val event = room.getTimeLineEvent(it)
+                                            ?: throw RuntimeException("Your eventId is not valid")
+                                    ReactionInfo(
+                                            event.root.eventId!!,
+                                            reactionsSummary.key,
+                                            event.root.senderId ?: "",
+                                            event.senderInfo.disambiguatedDisplayName,
+                                            dateFormatter.format(event.root.originServerTs, DateFormatKind.DEFAULT_DATE_AND_TIME)
+
+                                    )
+                                }
+                            }
                 }
                 .execute {
                     copy(mapReactionKeyToMemberList = it)
                 }
-    }
-
-    private fun Observable<ReactionAggregatedSummary>.toReactionInfoList(): Single<List<ReactionInfo>> {
-        return flatMap { summary ->
-            Observable
-                    .fromIterable(summary.sourceEvents)
-                    .map {
-                        val event = room.getTimeLineEvent(it)
-                                ?: throw RuntimeException("Your eventId is not valid")
-                        ReactionInfo(
-                                event.root.eventId!!,
-                                summary.key,
-                                event.root.senderId ?: "",
-                                event.senderInfo.disambiguatedDisplayName,
-                                dateFormatter.format(event.root.originServerTs, DateFormatKind.DEFAULT_DATE_AND_TIME)
-
-                        )
-                    }
-        }.toList()
     }
 
     override fun handle(action: EmptyAction) {

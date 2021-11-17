@@ -16,8 +16,8 @@
 
 package im.vector.app.features.home.room.list
 
+import androidx.core.util.Predicate
 import im.vector.app.features.home.RoomListDisplayMode
-import io.reactivex.functions.Predicate
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 

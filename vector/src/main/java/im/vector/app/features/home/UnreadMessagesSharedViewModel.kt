@@ -16,23 +16,27 @@
 
 package im.vector.app.features.home
 
-import com.airbnb.mvrx.ActivityViewModelContext
-import com.airbnb.mvrx.FragmentViewModelContext
+import androidx.lifecycle.asFlow
 import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.MavericksViewModelFactory
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.AppStateHandler
 import im.vector.app.RoomGroupingMethod
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
+import im.vector.app.core.flow.throttleFirst
 import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.invite.AutoAcceptInvites
 import im.vector.app.features.settings.VectorPreferences
-import io.reactivex.Observable
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOn
 import org.matrix.android.sdk.api.query.ActiveSpaceFilter
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.RoomSortOrder
@@ -40,8 +44,6 @@ import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.spaceSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.summary.RoomAggregateNotificationCount
-import org.matrix.android.sdk.rx.asObservable
-import java.util.concurrent.TimeUnit
 
 data class UnreadMessagesState(
         val homeSpaceUnread: RoomAggregateNotificationCount = RoomAggregateNotificationCount(0, 0, 0),
@@ -58,24 +60,14 @@ class UnreadMessagesSharedViewModel @AssistedInject constructor(@Assisted initia
                                                                 private val vectorPreferences: VectorPreferences,
                                                                 appStateHandler: AppStateHandler,
                                                                 private val autoAcceptInvites: AutoAcceptInvites) :
-    VectorViewModel<UnreadMessagesState, EmptyAction, EmptyViewEvents>(initialState) {
+        VectorViewModel<UnreadMessagesState, EmptyAction, EmptyViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: UnreadMessagesState): UnreadMessagesSharedViewModel
+    interface Factory : MavericksAssistedViewModelFactory<UnreadMessagesSharedViewModel, UnreadMessagesState> {
+        override fun create(initialState: UnreadMessagesState): UnreadMessagesSharedViewModel
     }
 
-    companion object : MavericksViewModelFactory<UnreadMessagesSharedViewModel, UnreadMessagesState> {
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: UnreadMessagesState): UnreadMessagesSharedViewModel? {
-            val factory = when (viewModelContext) {
-                is FragmentViewModelContext -> viewModelContext.fragment as? Factory
-                is ActivityViewModelContext -> viewModelContext.activity as? Factory
-            }
-            return factory?.create(state) ?: error("You should let your activity/fragment implements Factory interface")
-        }
-    }
+    companion object : MavericksViewModelFactory<UnreadMessagesSharedViewModel, UnreadMessagesState> by hiltMavericksViewModelFactory()
 
     override fun handle(action: EmptyAction) {}
 
@@ -86,8 +78,8 @@ class UnreadMessagesSharedViewModel @AssistedInject constructor(@Assisted initia
                     this.memberships = listOf(Membership.JOIN)
                     this.activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(null)
                 }, sortOrder = RoomSortOrder.NONE
-        ).asObservable()
-                .throttleFirst(300, TimeUnit.MILLISECONDS)
+        ).asFlow()
+                .throttleFirst(300)
                 .execute {
                     val counts = session.getNotificationCountForRooms(
                             roomSummaryQueryParams {
@@ -115,124 +107,122 @@ class UnreadMessagesSharedViewModel @AssistedInject constructor(@Assisted initia
                     )
                 }
 
-        Observable.combineLatest(
+        combine(
                 appStateHandler.selectedRoomGroupingObservable.distinctUntilChanged(),
-                appStateHandler.selectedRoomGroupingObservable.switchMap {
+                appStateHandler.selectedRoomGroupingObservable.flatMapLatest {
                     session.getPagedRoomSummariesLive(
                             roomSummaryQueryParams {
                                 this.memberships = Membership.activeMemberships()
                             }, sortOrder = RoomSortOrder.NONE
-                    ).asObservable()
-                            .throttleFirst(300, TimeUnit.MILLISECONDS)
-                            .observeOn(Schedulers.computation())
-                },
-                { groupingMethod, _ ->
-                    when (groupingMethod.orNull()) {
-                        is RoomGroupingMethod.ByLegacyGroup -> {
-                            // currently not supported
-                            CountInfo(
-                                    RoomAggregateNotificationCount(0, 0, 0),
-                                    RoomAggregateNotificationCount(0, 0, 0)
-                            )
-                        }
-                        is RoomGroupingMethod.BySpace       -> {
-                            //val selectedSpace = appStateHandler.safeActiveSpaceId()
-
-                            val inviteCount = if (autoAcceptInvites.hideInvites) {
-                                0
-                            } else {
-                                session.getRoomSummaries(
-                                        roomSummaryQueryParams { this.memberships = listOf(Membership.INVITE) }
-                                ).size
-                            }
-
-                            val spacesShowAllRoomsInHome = vectorPreferences.prefSpacesShowAllRoomInHome()
-
-                            val spaceInviteCount = if (autoAcceptInvites.hideInvites) {
-                                0
-                            } else {
-                                session.getRoomSummaries(
-                                        spaceSummaryQueryParams {
-                                            this.memberships = listOf(Membership.INVITE)
-                                        }
-                                ).size
-                            }
-
-                            val totalCount = session.getNotificationCountForRooms(
-                                    roomSummaryQueryParams {
-                                        this.memberships = listOf(Membership.JOIN)
-                                        this.activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(null).takeIf {
-                                            !spacesShowAllRoomsInHome
-                                        } ?: ActiveSpaceFilter.None
-                                    }
-                            )
-
-                            val counts = RoomAggregateNotificationCount(
-                                    totalCount.notificationCount + inviteCount,
-                                    totalCount.highlightCount + inviteCount,
-                                    totalCount.unreadCount
-                            )
-
-                            // SC: count total room notifications for drawer badge, instead of filtering for others like Element does,
-                            // to prevent counting rooms multiple times
-                            val topLevelTotalCount = if (spacesShowAllRoomsInHome) {
-                                totalCount
-                            } else {
-                                session.getNotificationCountForRooms(
-                                        roomSummaryQueryParams {
-                                            this.memberships = listOf(Membership.JOIN)
-                                            this.activeSpaceFilter = ActiveSpaceFilter.None
-                                        }
-                                )
-                            }
-
-                            val topLevelCounts = RoomAggregateNotificationCount(
-                                    topLevelTotalCount.notificationCount + inviteCount + spaceInviteCount,
-                                    topLevelTotalCount.highlightCount + inviteCount + spaceInviteCount,
-                                    topLevelTotalCount.unreadCount
-                            )
-
-                            CountInfo(homeCount = counts, otherCount = topLevelCounts)
-
-                            /*
-                            val rootCounts = session.spaceService().getRootSpaceSummaries()
-                                    .filter {
-                                        // filter out current selection
-                                        it.roomId != selectedSpace
-                                    }
-
-                            CountInfo(
-                                    homeCount = counts,
-                                    otherCount = RoomAggregateNotificationCount(
-                                            notificationCount = rootCounts.fold(0, { acc, rs -> acc + rs.notificationCount }) +
-                                                    (counts.notificationCount.takeIf { selectedSpace != null } ?: 0) +
-                                                    spaceInviteCount,
-                                            highlightCount = rootCounts.fold(0, { acc, rs -> acc + rs.highlightCount }) +
-                                                    (counts.highlightCount.takeIf { selectedSpace != null } ?: 0) +
-                                                    spaceInviteCount,
-
-                                            unreadCount = rootCounts.fold(0, { acc, rs -> acc + (if (rs.scIsUnread()) 1 else 0) }) +
-                                                    (counts.unreadCount.takeIf { selectedSpace != null } ?: 0) +
-                                                    spaceInviteCount,
-                                            markedUnreadCount = rootCounts.fold(0, { acc, rs -> acc + (if (rs.markedUnread) 1 else 0) }) +
-                                                    (counts.markedUnreadCount.takeIf { selectedSpace != null } ?: 0)
-                                    )
-                            )
-                             */
-                        }
-                        null                                -> {
-                            CountInfo(
-                                    RoomAggregateNotificationCount(0, 0, 0),
-                                    RoomAggregateNotificationCount(0, 0, 0)
-                            )
-                        }
-                    }
+                    ).asFlow()
+                            .throttleFirst(300)
                 }
-        ).execute {
-            copy(
-                    homeSpaceUnread = it.invoke()?.homeCount ?: RoomAggregateNotificationCount(0, 0, 0),
-                    otherSpacesUnread = it.invoke()?.otherCount ?: RoomAggregateNotificationCount(0, 0, 0)
-            )
+        ) { groupingMethod, _ ->
+            when (groupingMethod.orNull()) {
+                is RoomGroupingMethod.ByLegacyGroup -> {
+                    // currently not supported
+                    CountInfo(
+                            RoomAggregateNotificationCount(0, 0, 0),
+                            RoomAggregateNotificationCount(0, 0, 0)
+                    )
+                }
+                is RoomGroupingMethod.BySpace       -> {
+                    //val selectedSpace = appStateHandler.safeActiveSpaceId()
+
+                    val inviteCount = if (autoAcceptInvites.hideInvites) {
+                        0
+                    } else {
+                        session.getRoomSummaries(
+                                roomSummaryQueryParams { this.memberships = listOf(Membership.INVITE) }
+                        ).size
+                    }
+
+                    val spacesShowAllRoomsInHome = vectorPreferences.prefSpacesShowAllRoomInHome()
+
+                    val spaceInviteCount = if (autoAcceptInvites.hideInvites) {
+                        0
+                    } else {
+                        session.getRoomSummaries(
+                                spaceSummaryQueryParams {
+                                    this.memberships = listOf(Membership.INVITE)
+                                }
+                        ).size
+                    }
+
+                    val totalCount = session.getNotificationCountForRooms(
+                            roomSummaryQueryParams {
+                                this.memberships = listOf(Membership.JOIN)
+                                this.activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(null).takeIf {
+                                    !spacesShowAllRoomsInHome
+                                } ?: ActiveSpaceFilter.None
+                            }
+                    )
+
+                    val counts = RoomAggregateNotificationCount(
+                            totalCount.notificationCount + inviteCount,
+                            totalCount.highlightCount + inviteCount,
+                            totalCount.unreadCount
+                    )
+
+                    // SC: count total room notifications for drawer badge, instead of filtering for others like Element does,
+                    // to prevent counting rooms multiple times
+                    val topLevelTotalCount = if (spacesShowAllRoomsInHome) {
+                        totalCount
+                    } else {
+                        session.getNotificationCountForRooms(
+                                roomSummaryQueryParams {
+                                    this.memberships = listOf(Membership.JOIN)
+                                    this.activeSpaceFilter = ActiveSpaceFilter.None
+                                }
+                        )
+                    }
+
+                    val topLevelCounts = RoomAggregateNotificationCount(
+                            topLevelTotalCount.notificationCount + inviteCount + spaceInviteCount,
+                            topLevelTotalCount.highlightCount + inviteCount + spaceInviteCount,
+                            topLevelTotalCount.unreadCount
+                    )
+
+                    CountInfo(homeCount = counts, otherCount = topLevelCounts)
+
+                    /*
+                    val rootCounts = session.spaceService().getRootSpaceSummaries()
+                            .filter {
+                                // filter out current selection
+                                it.roomId != selectedSpace
+                            }
+
+                    CountInfo(
+                            homeCount = counts,
+                            otherCount = RoomAggregateNotificationCount(
+                                    notificationCount = rootCounts.fold(0, { acc, rs -> acc + rs.notificationCount }) +
+                                            (counts.notificationCount.takeIf { selectedSpace != null } ?: 0) +
+                                            spaceInviteCount,
+                                    highlightCount = rootCounts.fold(0, { acc, rs -> acc + rs.highlightCount }) +
+                                            (counts.highlightCount.takeIf { selectedSpace != null } ?: 0) +
+                                            spaceInviteCount,
+
+                                    unreadCount = rootCounts.fold(0, { acc, rs -> acc + (if (rs.scIsUnread()) 1 else 0) }) +
+                                            (counts.unreadCount.takeIf { selectedSpace != null } ?: 0) +
+                                            spaceInviteCount
+                            )
+                    )
+                     */
+                }
+                null                                -> {
+                    CountInfo(
+                            RoomAggregateNotificationCount(0, 0, 0),
+                            RoomAggregateNotificationCount(0, 0, 0)
+                    )
+                }
+            }
         }
+                .flowOn(Dispatchers.Default)
+                .execute {
+                    copy(
+                            homeSpaceUnread = it.invoke()?.homeCount ?: RoomAggregateNotificationCount(0, 0, 0),
+                            otherSpacesUnread = it.invoke()?.otherCount ?: RoomAggregateNotificationCount(0, 0, 0)
+                    )
+                }
     }
 }

@@ -69,13 +69,14 @@
     <string name="initial_sync_start_importing_account_rooms">Sincronizzazione iniziale:
 \nImportazione stanze</string>
     <string name="initial_sync_start_importing_account_joined_rooms">Sincronizzazione iniziale:
-\nImportazione stanze partecipate</string>
+\nCaricamento delle conversazioni
+\nSe sei dentro a molte stanze, potrebbe volerci un po\'</string>
     <string name="initial_sync_start_importing_account_invited_rooms">Sincronizzazione iniziale:
 \nImportazione stanze con invito</string>
     <string name="initial_sync_start_importing_account_left_rooms">Sincronizzazione iniziale:
-\nImportazione stanze lasciate</string>
+\nImportazione stanze abbandonate</string>
     <string name="initial_sync_start_importing_account_groups">Sincronizzazione iniziale:
-\nImportazione comunità</string>
+\nImportazione delle comunità</string>
     <string name="initial_sync_start_importing_account_data">Sincronizzazione iniziale:
 \nImportazione dati account</string>
     <string name="notice_room_update">%s ha aggiornato questa stanza.</string>
@@ -1071,7 +1072,7 @@
     <string name="command_description_op_user">Imposta i poteri di un utente</string>
     <string name="command_description_deop_user">Rimuove il rango di operatore dall\'utente con l\'ID specificato</string>
     <string name="command_description_invite_user">Invita l\'utente con l\'ID specificato nella stanza corrente</string>
-    <string name="command_description_join_room">Entra nella stanza con un determinato nome</string>
+    <string name="command_description_join_room">Entra nella stanza con l\'indirizzo scelto</string>
     <string name="command_description_part_room">Esci dalla stanza</string>
     <string name="command_description_topic">Imposta l\'argomento della stanza</string>
     <string name="command_description_kick_user">Butta fuori l\'utente con l\'ID specificato</string>
@@ -3058,4 +3059,7 @@
     <string name="a11y_presence_unavailable">Non disponibile</string>
     <string name="a11y_presence_offline">Offline</string>
     <string name="a11y_presence_online">Online</string>
+    <string name="login_error_homeserver_from_url_not_found_enter_manual">Scegli homeserver</string>
+    <string name="login_error_homeserver_from_url_not_found">Impossibile raggiungere un homeserver all\'URL %s. Controlla il link o scegli manualmente un homeserver.</string>
+    <string name="notification_listening_for_notifications">Ascolto di notifiche</string>
 </resources>

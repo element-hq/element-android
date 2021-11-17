@@ -16,15 +16,14 @@
 
 package im.vector.app.features.roomdirectory.roompreview
 
-import androidx.lifecycle.viewModelScope
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
@@ -50,18 +49,11 @@ class RoomPreviewViewModel @AssistedInject constructor(@Assisted private val ini
     VectorViewModel<RoomPreviewViewState, RoomPreviewAction, EmptyViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: RoomPreviewViewState): RoomPreviewViewModel
+    interface Factory : MavericksAssistedViewModelFactory<RoomPreviewViewModel, RoomPreviewViewState> {
+        override fun create(initialState: RoomPreviewViewState): RoomPreviewViewModel
     }
 
-    companion object : MavericksViewModelFactory<RoomPreviewViewModel, RoomPreviewViewState> {
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: RoomPreviewViewState): RoomPreviewViewModel? {
-            val fragment: RoomPreviewNoPreviewFragment = (viewModelContext as FragmentViewModelContext).fragment()
-            return fragment.roomPreviewViewModelFactory.create(state)
-        }
-    }
+    companion object : MavericksViewModelFactory<RoomPreviewViewModel, RoomPreviewViewState> by hiltMavericksViewModelFactory()
 
     init {
         // Observe joined room (from the sync)

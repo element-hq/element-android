@@ -68,7 +68,8 @@
     <string name="initial_sync_start_importing_account_rooms">Induló szinkronizáció:
 \nSzobák betöltése</string>
     <string name="initial_sync_start_importing_account_joined_rooms">Induló szinkronizáció:
-\nCsatlakozott szobák betöltése</string>
+\nBeszélgetések betöltése
+\nHa sok szobában vagy jelen sokáig tarthat</string>
     <string name="initial_sync_start_importing_account_invited_rooms">Induló szinkronizáció:
 \nMeghívott szobák betöltése</string>
     <string name="initial_sync_start_importing_account_left_rooms">Induló szinkronizáció:
@@ -3010,4 +3011,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="a11y_presence_unavailable">Elérhetetlen</string>
     <string name="a11y_presence_offline">Kapcsolat nélkül</string>
     <string name="a11y_presence_online">Kapcsolódva</string>
+    <string name="login_error_homeserver_from_url_not_found_enter_manual">Matrix szerver kiválasztása</string>
+    <string name="login_error_homeserver_from_url_not_found">A matrix szervert nem sikerül elérni ezen az URL-en: %s. Ellenőrizd a kapcsolatodat vagy add meg a matrix szervert kézzel.</string>
+    <string name="notification_listening_for_notifications">Értesítések figyelése</string>
 </resources>

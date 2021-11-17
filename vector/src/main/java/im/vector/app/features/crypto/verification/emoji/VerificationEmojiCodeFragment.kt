@@ -31,7 +31,6 @@ import im.vector.app.features.crypto.verification.VerificationBottomSheetViewMod
 import javax.inject.Inject
 
 class VerificationEmojiCodeFragment @Inject constructor(
-        val viewModelFactory: VerificationEmojiCodeViewModel.Factory,
         val controller: VerificationEmojiCodeController
 ) : VectorBaseFragment<BottomSheetVerificationChildFragmentBinding>(),
         VerificationEmojiCodeController.Listener {

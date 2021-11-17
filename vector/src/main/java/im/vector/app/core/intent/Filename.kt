@@ -19,15 +19,17 @@ package im.vector.app.core.intent
 import android.content.Context
 import android.net.Uri
 import android.provider.OpenableColumns
+import im.vector.lib.multipicker.utils.getColumnIndexOrNull
 
 fun getFilenameFromUri(context: Context?, uri: Uri): String? {
     if (context != null && uri.scheme == "content") {
-        val cursor = context.contentResolver.query(uri, null, null, null, null)
-        cursor?.use {
-            if (it.moveToFirst()) {
-                return it.getString(it.getColumnIndex(OpenableColumns.DISPLAY_NAME))
-            }
-        }
+        context.contentResolver.query(uri, null, null, null, null)
+                ?.use { cursor ->
+                    if (cursor.moveToFirst()) {
+                        return cursor.getColumnIndexOrNull(OpenableColumns.DISPLAY_NAME)
+                                ?.let { cursor.getString(it) }
+                    }
+                }
     }
     return uri.path?.substringAfterLast('/')
 }

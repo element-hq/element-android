@@ -27,6 +27,7 @@ import org.matrix.android.sdk.api.session.group.GroupSummaryQueryParams
 import org.matrix.android.sdk.api.session.group.model.GroupSummary
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.pushers.Pusher
+import org.matrix.android.sdk.api.session.room.RoomSortOrder
 import org.matrix.android.sdk.api.session.room.RoomSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.accountdata.RoomAccountDataEvent
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
@@ -44,10 +45,10 @@ import org.matrix.android.sdk.internal.crypto.store.PrivateKeysInfo
 
 class FlowSession(private val session: Session) {
 
-    fun liveRoomSummaries(queryParams: RoomSummaryQueryParams): Flow<List<RoomSummary>> {
-        return session.getRoomSummariesLive(queryParams).asFlow()
+    fun liveRoomSummaries(queryParams: RoomSummaryQueryParams, sortOrder: RoomSortOrder = RoomSortOrder.NONE): Flow<List<RoomSummary>> {
+        return session.getRoomSummariesLive(queryParams, sortOrder).asFlow()
                 .startWith(session.coroutineDispatchers.io) {
-                    session.getRoomSummaries(queryParams)
+                    session.getRoomSummaries(queryParams, sortOrder)
                 }
     }
 

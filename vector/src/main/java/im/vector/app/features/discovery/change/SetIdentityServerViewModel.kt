@@ -15,15 +15,16 @@
  */
 package im.vector.app.features.discovery.change
 
-import androidx.lifecycle.viewModelScope
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import dagger.hilt.EntryPoints
 import im.vector.app.R
-import im.vector.app.core.di.HasScreenInjector
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.SingletonEntryPoint
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
@@ -42,25 +43,18 @@ class SetIdentityServerViewModel @AssistedInject constructor(
     VectorViewModel<SetIdentityServerState, SetIdentityServerAction, SetIdentityServerViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: SetIdentityServerState): SetIdentityServerViewModel
+    interface Factory : MavericksAssistedViewModelFactory<SetIdentityServerViewModel, SetIdentityServerState> {
+        override fun create(initialState: SetIdentityServerState): SetIdentityServerViewModel
     }
 
-    companion object : MavericksViewModelFactory<SetIdentityServerViewModel, SetIdentityServerState> {
+    companion object : MavericksViewModelFactory<SetIdentityServerViewModel, SetIdentityServerState> by hiltMavericksViewModelFactory() {
 
-        override fun initialState(viewModelContext: ViewModelContext): SetIdentityServerState? {
-            val session = (viewModelContext.activity as HasScreenInjector).injector().activeSessionHolder().getActiveSession()
-
+        override fun initialState(viewModelContext: ViewModelContext): SetIdentityServerState {
+            val session = EntryPoints.get(viewModelContext.app(), SingletonEntryPoint::class.java).activeSessionHolder().getActiveSession()
             return SetIdentityServerState(
                     homeServerUrl = session.sessionParams.homeServerUrl,
                     defaultIdentityServerUrl = session.identityService().getDefaultIdentityServer()
             )
-        }
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: SetIdentityServerState): SetIdentityServerViewModel? {
-            val fragment: SetIdentityServerFragment = (viewModelContext as FragmentViewModelContext).fragment()
-            return fragment.viewModelFactory.create(state)
         }
     }
 

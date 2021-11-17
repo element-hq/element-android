@@ -16,53 +16,17 @@
 
 package im.vector.app.core.platform
 
-import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.BaseMvRxViewModel
-import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksState
-import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.MavericksViewModel
 import im.vector.app.core.utils.DataSource
 import im.vector.app.core.utils.PublishDataSource
-import io.reactivex.Observable
-import io.reactivex.Single
 
 abstract class VectorViewModel<S : MavericksState, VA : VectorViewModelAction, VE : VectorViewEvents>(initialState: S) :
-        BaseMvRxViewModel<S>(initialState) {
-
-    interface Factory<S : MavericksState> {
-        fun create(state: S): BaseMvRxViewModel<S>
-    }
+        MavericksViewModel<S>(initialState) {
 
     // Used to post transient events to the View
     protected val _viewEvents = PublishDataSource<VE>()
     val viewEvents: DataSource<VE> = _viewEvents
-
-    /**
-     * This method does the same thing as the execute function, but it doesn't subscribe to the stream
-     * so you can use this in a switchMap or a flatMap
-     */
-    // False positive
-    @Suppress("USELESS_CAST", "NULLABLE_TYPE_PARAMETER_AGAINST_NOT_NULL_TYPE_PARAMETER")
-    fun <T> Single<T>.toAsync(stateReducer: S.(Async<T>) -> S): Single<Async<T>> {
-        setState { stateReducer(Loading()) }
-        return map { Success(it) as Async<T> }
-                .onErrorReturn { Fail(it) }
-                .doOnSuccess { setState { stateReducer(it) } }
-    }
-
-    /**
-     * This method does the same thing as the execute function, but it doesn't subscribe to the stream
-     * so you can use this in a switchMap or a flatMap
-     */
-    // False positive
-    @Suppress("USELESS_CAST", "NULLABLE_TYPE_PARAMETER_AGAINST_NOT_NULL_TYPE_PARAMETER")
-    fun <T> Observable<T>.toAsync(stateReducer: S.(Async<T>) -> S): Observable<Async<T>> {
-        setState { stateReducer(Loading()) }
-        return map { Success(it) as Async<T> }
-                .onErrorReturn { Fail(it) }
-                .doOnNext { setState { stateReducer(it) } }
-    }
 
     abstract fun handle(action: VA)
 }

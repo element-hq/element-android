@@ -19,9 +19,11 @@ package im.vector.app.features.home
 import android.os.Handler
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.migration.DisableInstallInCheck
 import im.vector.app.features.home.room.detail.timeline.TimelineEventControllerHandler
 import im.vector.app.features.home.room.detail.timeline.helper.TimelineAsyncHelper
 
+@DisableInstallInCheck
 @Module
 object HomeModule {
 

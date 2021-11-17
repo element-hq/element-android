@@ -61,21 +61,22 @@
         <item quantity="other">%1$s ja %2$d muud</item>
     </plurals>
     <string name="room_displayname_empty_room">Tühi jututuba</string>
-    <string name="initial_sync_start_importing_account">Alglaadimine:
+    <string name="initial_sync_start_importing_account">Esmane laadimine:
 \nImpordin kontot…</string>
-    <string name="initial_sync_start_importing_account_crypto">Alglaadimine:
+    <string name="initial_sync_start_importing_account_crypto">Esmane laadimine:
 \nImpordin krüptoseadistusi</string>
-    <string name="initial_sync_start_importing_account_rooms">Alglaadimine:
+    <string name="initial_sync_start_importing_account_rooms">Esmane laadimine:
 \nImpordin jututubasid</string>
-    <string name="initial_sync_start_importing_account_joined_rooms">Alglaadimine:
-\nImpordin liitutud jututubasid</string>
-    <string name="initial_sync_start_importing_account_invited_rooms">Alglaadimine:
+    <string name="initial_sync_start_importing_account_joined_rooms">Esmane laadimine:
+\nLaadin sinu vestluste ja jtututubade andmeid
+\nKui sa oled liitunud paljude jututubadega, siis kulub natuke aega</string>
+    <string name="initial_sync_start_importing_account_invited_rooms">Esmane laadimine:
 \nImpordin kutsutud jututubasid</string>
-    <string name="initial_sync_start_importing_account_left_rooms">Alglaadimine:
+    <string name="initial_sync_start_importing_account_left_rooms">Esmane laadimine:
 \nImpordin lahkutud jututubasid</string>
-    <string name="initial_sync_start_importing_account_groups">Alglaadimine:
+    <string name="initial_sync_start_importing_account_groups">Esmane laadimine:
 \nImpordin kogukondi</string>
-    <string name="initial_sync_start_importing_account_data">Alglaadimine:
+    <string name="initial_sync_start_importing_account_data">Esmane laadimine:
 \nImpordin kontoandmeid</string>
     <string name="event_status_sending_message">Saadan sõnumit…</string>
     <string name="clear_timeline_send_queue">Tühjenda saatmisjärjekord</string>
@@ -3005,4 +3006,7 @@
     <string name="a11y_presence_unavailable">Pole leitav</string>
     <string name="a11y_presence_offline">Võrgust väljas</string>
     <string name="a11y_presence_online">Võrgus</string>
+    <string name="login_error_homeserver_from_url_not_found_enter_manual">Vali koduserver</string>
+    <string name="login_error_homeserver_from_url_not_found">Ei õnnestu ühendus koduserveriga aadressil %s. Palun kontrolli kas link on õige või lisa koduserver käsitsi.</string>
+    <string name="notification_listening_for_notifications">Vaatan, kas leidub teavitusi</string>
 </resources>

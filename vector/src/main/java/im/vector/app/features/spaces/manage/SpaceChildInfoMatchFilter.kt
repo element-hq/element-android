@@ -16,7 +16,7 @@
 
 package im.vector.app.features.spaces.manage
 
-import io.reactivex.functions.Predicate
+import androidx.core.util.Predicate
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
 

@@ -162,13 +162,13 @@
     <string name="start_voice_call">음성 통화 시작하기</string>
     <string name="start_video_call">영상 통화 시작하기</string>
     <string name="start_new_chat_prompt_msg">정말로 %s님과 새 대화를 시작하시겠습니까\?</string>
-    <string name="start_voice_call_prompt_msg">정말 음성통화를 시작하시겠어요?</string>
-    <string name="start_video_call_prompt_msg">정말 영상통화를 시작하시겠어요?</string>
+    <string name="start_voice_call_prompt_msg">정말 음성통화를 시작하시겠습니까\?</string>
+    <string name="start_video_call_prompt_msg">정말 영상통화를 시작하시겠습니까\?</string>
     <string name="option_send_files">파일 보내기</string>
     <string name="option_send_sticker">스티커 보내기</string>
-    <string name="option_take_photo_video">사진이나 영상 찍기</string>
-    <string name="option_take_photo">사진 찍기</string>
-    <string name="option_take_video">영상 찍기</string>
+    <string name="option_take_photo_video">사진이나 영상 촬영</string>
+    <string name="option_take_photo">사진 촬영</string>
+    <string name="option_take_video">영상 촬영</string>
     <string name="auth_login">로그인</string>
     <string name="auth_register">계정 만들기</string>
     <string name="auth_submit">제출하기</string>
@@ -193,7 +193,7 @@
     <string name="stay">머물기</string>
     <string name="skip">넘기기</string>
     <string name="done">완료</string>
-    <string name="action_sign_out_confirmation_simple">정말 로그아웃하시겠어요\?</string>
+    <string name="action_sign_out_confirmation_simple">정말 로그아웃하시겠습니까\?</string>
     <string name="action_mark_room_read">읽음으로 표시</string>
     <string name="template_no_contact_access_placeholder">${app_name}이 연락처에 접근할 수 없게 되어 있습니다</string>
     <plurals name="public_room_nb_users">
@@ -246,7 +246,7 @@
     <string name="call_anyway">무시하고 통화</string>
     <string name="accept">수락하기</string>
     <string name="abort">중단</string>
-    <string name="ignore">무시</string>
+    <string name="ignore">차단</string>
     <string name="action_global_search">세계 검색</string>
     <string name="home_filter_placeholder_favorites">즐겨찾기 필터</string>
     <string name="home_filter_placeholder_people">사람 필터</string>
@@ -348,7 +348,7 @@
     <string name="call_error_ice_failed">미디어 연결 실패</string>
     <string name="call_error_camera_init_failed">카메라를 초기화할 수 없습니다</string>
     <string name="call_error_answered_elsewhere">다른 곳에서 전화 응답</string>
-    <string name="media_picker_both_capture_title">사진이나 영상 찍기</string>
+    <string name="media_picker_both_capture_title">사진이나 영상 촬영</string>
     <string name="media_picker_cannot_record_video">영상을 촬영할 수 없음</string>
     <string name="permissions_rationale_popup_title">정보</string>
     <string name="template_permissions_rationale_msg_storage">첨부 파일을 보내고 저장하려면 ${app_name}은 영상과 사진 보관함에 접근하는 권한이 필요합니다.
@@ -432,8 +432,8 @@
     <string name="room_participants_action_set_default_power_level">일반 사용자로 재 설정</string>
     <string name="room_participants_action_set_moderator">중재자로 하기</string>
     <string name="room_participants_action_set_admin">관리자로 하기</string>
-    <string name="room_participants_action_ignore">이 사용자의 모든 메시지 숨기기</string>
-    <string name="room_participants_action_unignore">이 사용자의 모든 메시지 보이기</string>
+    <string name="room_participants_action_ignore">차단</string>
+    <string name="room_participants_action_unignore">차단 해제</string>
     <string name="room_participants_invite_search_another_user">사용자 ID, 이름 혹은 이메일</string>
     <string name="room_participants_action_mention">언급</string>
     <string name="room_participants_action_devices_list">기기 목록 보이기</string>
@@ -475,7 +475,7 @@
     <string name="ssl_trust">신뢰함</string>
     <string name="ssl_do_not_trust">신뢰하지 않음</string>
     <string name="ssl_logout_account">로그아웃</string>
-    <string name="ssl_remain_offline">무시하기</string>
+    <string name="ssl_remain_offline">무시</string>
     <string name="ssl_fingerprint_hash">핑거프린트 (%s):</string>
     <string name="ssl_could_not_verify">원격 서버의 ID를 확인할 수 없습니다.</string>
     <string name="ssl_cert_not_trust">이는 누군가가 당신의 트래픽을 악의적으로 가로채고 있거나, 휴대 전화가 원격 서버에서 제공한 인증서를 신뢰하지 않는 것입니다.</string>
@@ -665,7 +665,7 @@
     <string name="settings_clear_media_cache">미디어 캐시 지우기</string>
     <string name="settings_user_settings">사용자 설정</string>
     <string name="settings_notifications">알림</string>
-    <string name="settings_ignored_users">차단한 사용자</string>
+    <string name="settings_ignored_users">차단된 사용자</string>
     <string name="settings_other">기타</string>
     <string name="settings_advanced">고급</string>
     <string name="settings_cryptography">암호화</string>
@@ -747,7 +747,7 @@
     <string name="settings_fail_to_update_password">비밀번호 갱신 실패</string>
     <string name="settings_fail_to_update_password_invalid_current_password">비밀번호가 올바르지 않습니다</string>
     <string name="settings_password_updated">당신의 비밀번호가 갱신되었습니다</string>
-    <string name="settings_unignore_user">%s님의 모든 메시지를 보이겠습니까\?
+    <string name="settings_unignore_user">%s님의 모든 메시지를 표시하시겠습니까\?
 \n
 \n이 동작은 앱을 다시 시작하고 일정 시간이 걸릴 수 있습니다.</string>
     <string name="passwords_do_not_match">비밀번호가 맞지 않음</string>
@@ -1411,19 +1411,19 @@
     <string name="report_content_custom_title">이 내용 신고하기</string>
     <string name="report_content_custom_hint">이 내용을 신고하는 이유</string>
     <string name="report_content_custom_submit">신고</string>
-    <string name="block_user">사용자 출입 금지</string>
+    <string name="block_user">사용자 차단</string>
     <string name="content_reported_title">내용 신고됨</string>
     <string name="content_reported_content">이 내용을 신고했습니다.
 \n
-\n이 사용자의 내용을 더 이상 보고 싶지 않다면, 사용자를 차단하거나 메시지를 감출 수 있습니다</string>
+\n이 사용자의 내용을 더 이상 보고 싶지 않다면, 사용자를 차단하거나 메시지를 감출 수 있습니다.</string>
     <string name="content_reported_as_spam_title">스팸 문자로 신고됨</string>
     <string name="content_reported_as_spam_content">이 내용을 스팸 메일로 신고했습니다.
 \n
-\n이 사용자의 내용을 더 이상 보고 싶지 않다면, 사용자를 차단하거나 메시지를 감출 수 있습니다</string>
+\n이 사용자의 내용을 더 이상 보고 싶지 않다면, 사용자를 차단하거나 메시지를 감출 수 있습니다.</string>
     <string name="content_reported_as_inappropriate_title">부적절한 문자로 신고됨</string>
     <string name="content_reported_as_inappropriate_content">이 내용을 부적절한 문자로 신고했습니다.
 \n
-\n이 사용자의 내용을 더 이상 보고 싶지 않다면, 사용자를 차단하거나 메시지를 감출 수 있습니다</string>
+\n이 사용자의 내용을 더 이상 보고 싶지 않다면, 사용자를 차단하거나 메시지를 감출 수 있습니다.</string>
     <string name="template_permissions_rationale_msg_keys_backup_export">${app_name}은 종단간 키를 디스크에 저장하려면 권한이 필요합니다.
 \n
 \n키를 수동으로 내보내려면 다음 팝업에서 접근을 허용해주세요.</string>
@@ -1483,4 +1483,37 @@
     <string name="pause_video">일시 정지</string>
     <string name="play_video">재생</string>
     <string name="denied_permission_voice_message">음성 메시지를 보내려면 마이크 권한을 허용해주세요.</string>
+    <string name="event_redacted">삭제된 메시지</string>
+    <string name="action_copy">복사</string>
+    <string name="unignore">차단 해제</string>
+    <string name="no_ignored_users">차단한 사용자가 없습니다</string>
+    <string name="message_ignore_user">차단</string>
+    <string name="command_description_unignore_user">차단을 해제하고, 차단 해제한 사용자의 메시지를 다시 표시합니다</string>
+    <string name="command_description_ignore_user">사용자를 차단하고, 차단한 사용자의 모든 메시지를 숨깁니다</string>
+    <string name="room_participants_action_unignore_prompt_msg">차단 해제한 사용자의 모든 메시지가 표시됩니다.</string>
+    <string name="room_participants_action_unignore_title">차단 해제</string>
+    <string name="settings_category_timeline">타임라인</string>
+    <string name="timeline_unread_messages">읽지 않은 메시지</string>
+    <string name="option_always_ask">항상 묻기</string>
+    <string name="devices_current_device">현재 세션</string>
+    <plurals name="settings_active_sessions_count">
+        <item quantity="other">%d개의 활성 세션</item>
+    </plurals>
+    <string name="settings_active_sessions_signout_device">이 세션에서 로그아웃</string>
+    <string name="settings_active_sessions_manage">세션 관리</string>
+    <string name="settings_active_sessions_show_all">모든 세션 보기</string>
+    <string name="settings_active_sessions_list">활성 세션</string>
+    <string name="settings_security_application_protection_screen_title">보안 설정</string>
+    <string name="template_settings_security_pin_code_grace_period_summary_on">${app_name}을 2분 동안 사용하지 않으면 PIN을 사용하도록 설정합니다.</string>
+    <string name="settings_security_pin_code_grace_period_title">2분 후 PIN 잠금</string>
+    <string name="settings_security_pin_code_notifications_summary_on">방 이름이나 메시지 내용같은 자세한 정보를 표시합니다.</string>
+    <string name="settings_security_pin_code_notifications_title">알림에 내용 표시</string>
+    <string name="settings_security_pin_code_change_pin_summary">설정된 PIN을 변경합니다</string>
+    <string name="settings_security_pin_code_change_pin_title">PIN 변경</string>
+    <string name="settings_security_pin_code_summary">PIN을 재설정하고 싶다면 PIN 분실을 눌러 로그아웃 후 재설정을 진행할 수 있습니다.</string>
+    <string name="settings_security_pin_code_use_biometrics_summary_on">지문 인식이나 얼굴 인식과 같은 생체 인증을 활성화합니다.</string>
+    <string name="settings_security_pin_code_use_biometrics_title">생체 인증 활성화</string>
+    <string name="settings_security_pin_code_title">PIN 활성화</string>
+    <string name="settings_security_application_protection_summary">PIN이나 생체 인증으로 보안 접근을 사용합니다.</string>
+    <string name="settings_security_application_protection_title">보안 접근</string>
 </resources>

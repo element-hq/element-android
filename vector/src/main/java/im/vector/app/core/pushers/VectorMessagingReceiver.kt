@@ -31,9 +31,9 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.BuildConfig
 import im.vector.app.core.di.ActiveSessionHolder
-import im.vector.app.core.extensions.vectorComponent
 import im.vector.app.core.network.WifiDetector
 import im.vector.app.features.badge.BadgeProxy
 import im.vector.app.features.notifications.NotifiableEventResolver
@@ -52,6 +52,7 @@ import org.matrix.android.sdk.api.session.Session
 import org.unifiedpush.android.connector.MessagingReceiver
 import org.unifiedpush.android.connector.MessagingReceiverHandler
 import timber.log.Timber
+import javax.inject.Inject
 
 @JsonClass(generateAdapter = true)
 data class UnifiedPushMessage(
@@ -74,17 +75,32 @@ data class Counts(
 private val loggerTag = LoggerTag("Push", LoggerTag.SYNC)
 
 /**
+ * Injected variables can't be into interfaces.
+ * We need to create an interface with a function
+ * to initialize these variables.
+ */
+interface VectorMessagingReceiverHandler : MessagingReceiverHandler {
+    fun init(notificationDrawerManager: NotificationDrawerManager,
+             notifiableEventResolver: NotifiableEventResolver,
+             pusherManager: PushersManager,
+             activeSessionHolder: ActiveSessionHolder,
+             vectorPreferences: VectorPreferences,
+             vectorDataStore: VectorDataStore,
+             wifiDetector: WifiDetector
+    )
+}
+
+/**
  * UnifiedPush handler.
  */
-val upHandler = object: MessagingReceiverHandler {
-
-    private lateinit var notificationDrawerManager: NotificationDrawerManager
-    private lateinit var notifiableEventResolver: NotifiableEventResolver
-    private lateinit var pusherManager: PushersManager
-    private lateinit var activeSessionHolder: ActiveSessionHolder
-    private lateinit var vectorPreferences: VectorPreferences
-    private lateinit var vectorDataStore: VectorDataStore
-    private lateinit var wifiDetector: WifiDetector
+val upHandler = object: VectorMessagingReceiverHandler {
+    lateinit var notificationDrawerManager: NotificationDrawerManager
+    lateinit var notifiableEventResolver: NotifiableEventResolver
+    lateinit var pusherManager: PushersManager
+    lateinit var activeSessionHolder: ActiveSessionHolder
+    lateinit var vectorPreferences: VectorPreferences
+    lateinit var vectorDataStore: VectorDataStore
+    lateinit var wifiDetector: WifiDetector
 
     private val coroutineScope = CoroutineScope(SupervisorJob())
 
@@ -93,16 +109,24 @@ val upHandler = object: MessagingReceiverHandler {
         Handler(Looper.getMainLooper())
     }
 
-    fun initVar(context: Context) {
-        with(context.vectorComponent()) {
-            notificationDrawerManager = notificationDrawerManager()
-            notifiableEventResolver = notifiableEventResolver()
-            pusherManager = pusherManager()
-            activeSessionHolder = activeSessionHolder()
-            vectorPreferences = vectorPreferences()
-            vectorDataStore = vectorDataStore()
-            wifiDetector = wifiDetector()
-        }
+    /**
+     * Called to init injected vars
+     */
+    override fun init(notificationDrawerManager: NotificationDrawerManager,
+                      notifiableEventResolver: NotifiableEventResolver,
+                      pusherManager: PushersManager,
+                      activeSessionHolder: ActiveSessionHolder,
+                      vectorPreferences: VectorPreferences,
+                      vectorDataStore: VectorDataStore,
+                      wifiDetector: WifiDetector) {
+        Timber.tag(loggerTag.value).d("Init vars")
+        this.notificationDrawerManager = notificationDrawerManager
+        this.notifiableEventResolver = notifiableEventResolver
+        this.pusherManager = pusherManager
+        this.activeSessionHolder = activeSessionHolder
+        this.vectorPreferences = vectorPreferences
+        this.vectorDataStore = vectorDataStore
+        this.wifiDetector = wifiDetector
     }
 
     /**
@@ -112,11 +136,10 @@ val upHandler = object: MessagingReceiverHandler {
      * @param instance connection, for multi-account
      */
     override fun onMessage(context: Context?, message: String, instance: String) {
-        initVar(context!!)
         if (BuildConfig.LOW_PRIVACY_LOG_ENABLE) {
-            Timber.tag(loggerTag.value).d("## onMessageReceived() %s", message)
+            Timber.tag(loggerTag.value).d("## onMessage() %s", message)
         } else {
-            Timber.tag(loggerTag.value).d("## onMessageReceived()")
+            Timber.tag(loggerTag.value).d("## onMessage() received")
         }
 
         runBlocking {
@@ -128,7 +151,7 @@ val upHandler = object: MessagingReceiverHandler {
                 .build()
         lateinit var notification: Notification
 
-        if (UPHelper.isEmbeddedDistributor(context)) {
+        if (UPHelper.isEmbeddedDistributor(context!!)) {
             notification = moshi.adapter(Notification::class.java)
                     .fromJson(message) ?: return
         } else {
@@ -137,7 +160,6 @@ val upHandler = object: MessagingReceiverHandler {
             notification = data.notification
             notification.unread = notification.counts.unread
         }
-
 
         // Diagnostic Push
         if (notification.eventId == PushersManager.TEST_EVENT_ID) {
@@ -168,10 +190,9 @@ val upHandler = object: MessagingReceiverHandler {
      * you retrieve the token.
      */
     override fun onNewEndpoint(context: Context?, endpoint: String, instance: String) {
-        initVar(context!!)
         Timber.tag(loggerTag.value).i("onNewEndpoint: adding $endpoint")
         if (vectorPreferences.areNotificationEnabledForDevice() && activeSessionHolder.hasActiveSession()) {
-            val gateway = UPHelper.customOrDefaultGateway(context, endpoint)
+            val gateway = UPHelper.customOrDefaultGateway(context!!, endpoint)
             if (UPHelper.getUpEndpoint(context) != endpoint
                     || UPHelper.getPushGateway(context) != gateway) {
                 UPHelper.storePushGateway(context, gateway)
@@ -181,7 +202,7 @@ val upHandler = object: MessagingReceiverHandler {
                 Timber.tag(loggerTag.value).i("onNewEndpoint: skipped")
             }
         }
-        if (!UPHelper.allowBackgroundSync(context)) {
+        if (context == null || !UPHelper.allowBackgroundSync(context)) {
             val mode = BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_DISABLED
             vectorPreferences.setFdroidSyncBackgroundMode(mode)
         }
@@ -197,12 +218,11 @@ val upHandler = object: MessagingReceiverHandler {
 
     override fun onUnregistered(context: Context?, instance: String) {
         Timber.tag(loggerTag.value).d("Unifiedpush: Unregistered")
-        initVar(context!!)
         val mode = BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_BATTERY
         vectorPreferences.setFdroidSyncBackgroundMode(mode)
         runBlocking {
             try {
-                pusherManager.unregisterPusher(context, UPHelper.getUpEndpoint(context)!!)
+                pusherManager.unregisterPusher(context!!, UPHelper.getUpEndpoint(context)!!)
             } catch (e: Exception) {
                 Timber.tag(loggerTag.value).d("Probably unregistering a non existant pusher")
             }
@@ -264,14 +284,12 @@ val upHandler = object: MessagingReceiverHandler {
             Timber.tag(loggerTag.value).d("Fast lane: start request")
             val event = tryOrNull { session.getEvent(roomId, eventId) } ?: return@launch
 
-            val resolvedEvent = notifiableEventResolver.resolveInMemoryEvent(session, event)
+            val resolvedEvent = notifiableEventResolver.resolveInMemoryEvent(session, event, canBeReplaced = true)
 
             resolvedEvent
                     ?.also { Timber.tag(loggerTag.value).d("Fast lane: notify drawer") }
                     ?.let {
-                        it.isPushGatewayEvent = true
-                        notificationDrawerManager.onNotifiableEventReceived(it)
-                        notificationDrawerManager.refreshNotificationDrawer()
+                        notificationDrawerManager.updateEvents { it.onNotifiableEventReceived(resolvedEvent) }
                     }
         }
     }
@@ -292,4 +310,32 @@ val upHandler = object: MessagingReceiverHandler {
     }
 }
 
-class VectorMessagingReceiver : MessagingReceiver(upHandler)
+/**
+ * Hilt injection happen at super.onReceive().
+ * We must implement an intermediate receiver to
+ * initialize vars of the handler before
+ * super.onReceive().
+ */
+open class InjectedMessagingReceiver : MessagingReceiver(upHandler) {
+    @Inject lateinit var notificationDrawerManager: NotificationDrawerManager
+    @Inject lateinit var notifiableEventResolver: NotifiableEventResolver
+    @Inject lateinit var pusherManager: PushersManager
+    @Inject lateinit var activeSessionHolder: ActiveSessionHolder
+    @Inject lateinit var vectorPreferences: VectorPreferences
+    @Inject lateinit var vectorDataStore: VectorDataStore
+    @Inject lateinit var wifiDetector: WifiDetector
+
+    override fun onReceive(context: Context?, intent: Intent?) {
+        upHandler.init(notificationDrawerManager,
+                notifiableEventResolver,
+                pusherManager,
+                activeSessionHolder,
+                vectorPreferences,
+                vectorDataStore,
+                wifiDetector)
+        super.onReceive(context, intent) // Injection would happen here
+    }
+}
+
+@AndroidEntryPoint
+class VectorMessagingReceiver : InjectedMessagingReceiver()

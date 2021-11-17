@@ -21,6 +21,7 @@ import org.matrix.android.sdk.api.auth.login.LoginProfileInfo
 import org.matrix.android.sdk.api.auth.login.LoginWizard
 import org.matrix.android.sdk.api.auth.registration.RegisterThreePid
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.internal.auth.AuthAPI
 import org.matrix.android.sdk.internal.auth.PendingSessionStore
 import org.matrix.android.sdk.internal.auth.SessionCreator
@@ -32,6 +33,7 @@ import org.matrix.android.sdk.internal.auth.registration.AddThreePidRegistration
 import org.matrix.android.sdk.internal.auth.registration.RegisterAddThreePidTask
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.content.DefaultContentUrlResolver
+import org.matrix.android.sdk.internal.session.contentscanner.DisabledContentScannerService
 
 internal class DefaultLoginWizard(
         private val authAPI: AuthAPI,
@@ -43,7 +45,7 @@ internal class DefaultLoginWizard(
 
     private val getProfileTask: GetProfileTask = DefaultGetProfileTask(
             authAPI,
-            DefaultContentUrlResolver(pendingSessionData.homeServerConnectionConfig)
+            DefaultContentUrlResolver(pendingSessionData.homeServerConnectionConfig, DisabledContentScannerService())
     )
 
     override suspend fun getProfileInfo(matrixId: String): LoginProfileInfo {
@@ -52,11 +54,23 @@ internal class DefaultLoginWizard(
 
     override suspend fun login(login: String,
                                password: String,
-                               deviceName: String): Session {
+                               initialDeviceName: String,
+                               deviceId: String?): Session {
         val loginParams = if (Patterns.EMAIL_ADDRESS.matcher(login).matches()) {
-            PasswordLoginParams.thirdPartyIdentifier(ThreePidMedium.EMAIL, login, password, deviceName)
+            PasswordLoginParams.thirdPartyIdentifier(
+                    medium = ThreePidMedium.EMAIL,
+                    address = login,
+                    password = password,
+                    deviceDisplayName = initialDeviceName,
+                    deviceId = deviceId
+            )
         } else {
-            PasswordLoginParams.userIdentifier(login, password, deviceName)
+            PasswordLoginParams.userIdentifier(
+                    user = login,
+                    password = password,
+                    deviceDisplayName = initialDeviceName,
+                    deviceId = deviceId
+            )
         }
         val credentials = executeRequest(null) {
             authAPI.login(loginParams)
@@ -74,6 +88,14 @@ internal class DefaultLoginWizard(
         )
         val credentials = executeRequest(null) {
             authAPI.login(loginParams)
+        }
+
+        return sessionCreator.createSession(credentials, pendingSessionData.homeServerConnectionConfig)
+    }
+
+    override suspend fun loginCustom(data: JsonDict): Session {
+        val credentials = executeRequest(null) {
+            authAPI.login(data)
         }
 
         return sessionCreator.createSession(credentials, pendingSessionData.homeServerConnectionConfig)
