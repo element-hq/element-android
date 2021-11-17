@@ -16,6 +16,8 @@
 
 package org.matrix.android.sdk.internal.session.contentscanner.tasks
 
+import org.matrix.android.sdk.api.MatrixUrls.isMxcUrl
+import org.matrix.android.sdk.api.MatrixUrls.removeMxcPrefix
 import org.matrix.android.sdk.api.failure.toScanFailure
 import org.matrix.android.sdk.api.session.contentscanner.ScanState
 import org.matrix.android.sdk.internal.network.executeRequest
@@ -38,13 +40,13 @@ internal class DefaultScanMediaTask @Inject constructor(
 
     override suspend fun execute(params: ScanMediaTask.Params): ScanResponse {
         // "mxc://server.org/QNDpzLopkoQYNikJfoZCQuCXJ"
-        if (!params.mxcUrl.startsWith("mxc://")) {
+        if (!params.mxcUrl.isMxcUrl()) {
             throw IllegalAccessException("Invalid mxc url")
         }
         val scannerUrl = contentScannerStore.getScannerUrl()
         contentScannerStore.updateStateForContent(params.mxcUrl, ScanState.IN_PROGRESS, scannerUrl)
 
-        var serverAndMediaId = params.mxcUrl.removePrefix("mxc://")
+        var serverAndMediaId = params.mxcUrl.removeMxcPrefix()
         val fragmentOffset = serverAndMediaId.indexOf("#")
         if (fragmentOffset >= 0) {
             serverAndMediaId = serverAndMediaId.substring(0, fragmentOffset)
