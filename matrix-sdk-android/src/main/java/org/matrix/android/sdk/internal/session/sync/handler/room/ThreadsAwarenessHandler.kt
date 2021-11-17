@@ -18,7 +18,6 @@ package org.matrix.android.sdk.internal.session.sync.handler.room
 
 import com.zhuinden.monarchy.Monarchy
 import io.realm.Realm
-import io.realm.RealmConfiguration
 import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.Event
@@ -44,7 +43,6 @@ import org.matrix.android.sdk.internal.session.permalinks.PermalinkFactory
 import org.matrix.android.sdk.internal.session.room.send.LocalEchoEventFactory
 import org.matrix.android.sdk.internal.session.room.timeline.GetEventTask
 import org.matrix.android.sdk.internal.util.awaitTransaction
-import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -55,7 +53,6 @@ import javax.inject.Inject
 internal class ThreadsAwarenessHandler @Inject constructor(
         private val permalinkFactory: PermalinkFactory,
         private val cryptoService: CryptoService,
-        @SessionDatabase private val realmConfiguration: RealmConfiguration,
         @SessionDatabase private val monarchy: Monarchy,
         private val getEventTask: GetEventTask
 ) {
@@ -87,7 +84,7 @@ internal class ThreadsAwarenessHandler @Inject constructor(
         if (eventList.isNullOrEmpty()) return
 
         val threadsToFetch = emptyMap<String, String>().toMutableMap()
-        Realm.getInstance(realmConfiguration).use {  realm ->
+        Realm.getInstance(monarchy.realmConfiguration).use {  realm ->
             eventList.asSequence()
                     .filter {
                         isThreadEvent(it) && it.roomId != null
@@ -130,10 +127,7 @@ internal class ThreadsAwarenessHandler @Inject constructor(
      */
     private suspend fun fetchEvent(eventId: String, roomId: String): Event? {
         return runCatching {
-            Timber.i("------> Fetching event[$eventId]....")
-            getEventTask.execute(GetEventTask.Params(roomId = roomId, eventId = eventId)).apply {
-                unsignedData?.age?.let { System.currentTimeMillis() - it }
-            }
+            getEventTask.execute(GetEventTask.Params(roomId = roomId, eventId = eventId))
         }.fold(
                 onSuccess = {
                     it
