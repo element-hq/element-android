@@ -34,7 +34,6 @@ import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.databinding.ViewVoiceMessageRecorderBinding
 import im.vector.app.features.home.room.detail.composer.voice.VoiceMessageRecorderView.RecordingUiState
 import im.vector.app.features.home.room.detail.timeline.helper.VoiceMessagePlaybackTracker
-import org.matrix.android.sdk.api.extensions.orFalse
 
 class VoiceMessageViews(
         private val resources: Resources,
@@ -152,9 +151,9 @@ class VoiceMessageViews(
         views.voiceMessageSendButton.isVisible = false
     }
 
-    fun hideRecordingViews(recordingState: RecordingUiState, isCancelled: Boolean?, onVoiceRecordingEnded: (Boolean) -> Unit) {
+    fun hideRecordingViews(recordingState: RecordingUiState, onVoiceRecordingEnded: () -> Unit = {}) {
         // We need to animate the lock image first
-        if (recordingState != RecordingUiState.Locked || isCancelled.orFalse()) {
+        if (recordingState != RecordingUiState.Locked) {
             views.voiceMessageLockImage.isVisible = false
             views.voiceMessageLockImage.animate().translationY(0f).start()
             views.voiceMessageLockBackground.isVisible = false
@@ -181,9 +180,7 @@ class VoiceMessageViews(
                     .setDuration(150)
                     .withEndAction {
                         resetMicButtonUi()
-                        isCancelled?.let {
-                            onVoiceRecordingEnded(it)
-                        }
+                        onVoiceRecordingEnded()
                     }
                     .start()
         } else {
@@ -195,9 +192,7 @@ class VoiceMessageViews(
                 translationX = 0f
                 translationY = 0f
             }
-            isCancelled?.let {
-                onVoiceRecordingEnded(it)
-            }
+            onVoiceRecordingEnded()
         }
 
         // Hide toasts if user cancelled recording before the timeout of the toast.
@@ -264,8 +259,8 @@ class VoiceMessageViews(
         views.voiceMessageToast.isVisible = false
     }
 
-    fun showRecordingLockedViews(recordingState: RecordingUiState, onVoiceRecordingEnded: (Boolean) -> Unit) {
-        hideRecordingViews(recordingState, null, onVoiceRecordingEnded)
+    fun showRecordingLockedViews(recordingState: RecordingUiState) {
+        hideRecordingViews(recordingState)
         views.voiceMessagePlaybackLayout.isVisible = true
         views.voiceMessagePlaybackTimerIndicator.isVisible = true
         views.voicePlaybackControlButton.isVisible = false
@@ -281,7 +276,7 @@ class VoiceMessageViews(
     }
 
     fun initViews() {
-        hideRecordingViews(RecordingUiState.None, null, onVoiceRecordingEnded = {})
+        hideRecordingViews(RecordingUiState.None)
         views.voiceMessageMicButton.isVisible = true
         views.voiceMessageSendButton.isVisible = false
         views.voicePlaybackWaveform.post { views.voicePlaybackWaveform.recreate() }
