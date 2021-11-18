@@ -38,7 +38,7 @@ There is some delay between when a release is created and when it appears in the
 If you would like to receive releases more quickly (bearing in mind that they may not be stable) you have a number of options:
 
 1. [Sign up to receive beta releases](https://play.google.com/apps/testing/im.vector.app) via the Google Play Store.
-2. Install a [release APK](https://github.com/vector-im/element-android/releases) directly - download the relevant .apk file and allow installing from untrusted sources in your device settings.
+2. Install a [release APK](https://github.com/vector-im/element-android/releases) directly - download the relevant .apk file and allow installing from untrusted sources in your device settings.  Note: these releases are the Google Play version, which depend on some Google services.  If you prefer to avoid that, try the latest dev builds, and choose the F-Droid version.
 3. If you're really brave, install the [very latest dev build](https://buildkite.com/matrix-dot-org/element-android/builds/latest?branch=develop&state=passed) - click on *Assemble (GPlay or FDroid) Debug version* then on *Artifacts*.
 
 ## Contributing
