@@ -38,6 +38,7 @@ import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.session.room.membership.LoadRoomMembersTask
 import org.matrix.android.sdk.internal.session.sync.handler.room.ReadReceiptHandler
+import org.matrix.android.sdk.internal.session.sync.handler.room.ThreadsAwarenessHandler
 import org.matrix.android.sdk.internal.task.TaskExecutor
 
 internal class DefaultTimelineService @AssistedInject constructor(
@@ -52,6 +53,7 @@ internal class DefaultTimelineService @AssistedInject constructor(
         private val fetchTokenAndPaginateTask: FetchTokenAndPaginateTask,
         private val timelineEventMapper: TimelineEventMapper,
         private val loadRoomMembersTask: LoadRoomMembersTask,
+        private val threadsAwarenessHandler: ThreadsAwarenessHandler,
         private val readReceiptHandler: ReadReceiptHandler
 ) : TimelineService {
 
@@ -75,6 +77,7 @@ internal class DefaultTimelineService @AssistedInject constructor(
                 fetchTokenAndPaginateTask = fetchTokenAndPaginateTask,
                 realmSessionProvider = realmSessionProvider,
                 loadRoomMembersTask = loadRoomMembersTask,
+                threadsAwarenessHandler = threadsAwarenessHandler,
                 readReceiptHandler = readReceiptHandler
         )
     }
