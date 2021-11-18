@@ -2868,4 +2868,5 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="notice_crypto_unable_to_decrypt_merged">Oczekiwanie na historię szyfrowania</string>
     <string name="room_using_unstable_room_version">Ten pokój działa na wersji pokoju %s, którą serwer oznaczył jako niestabilną</string>
     <string name="allow_anyone_in_room_to_access">Pozwól każdemu w %s na znalezienie i dostęp. Możesz wybrać także inne miejsca.</string>
+    <string name="upgrade_room_for_restricted">Każdy w %s będzie mógł znaleźć i dołączyć do tego pokoju - nie ma potrzeby poszczególnie wysyłać wszystkim zaproszenia. Będziesz mógł zmienić to później w ustawieniach pokoju.</string>
 </resources>
