@@ -2866,7 +2866,7 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="or_other_mx_capabale_client">lub innego klienta Matrix z krzyżową weryfikacją nowych sesji logowania</string>
     <string name="upgrade_room_no_power_to_manage">Nie masz uprawnień do zmiany poziomu pokoju</string>
     <string name="notice_crypto_unable_to_decrypt_merged">Oczekiwanie na historię szyfrowania</string>
-    <string name="room_using_unstable_room_version">Ten pokój działa na wersji pokoju %s, którą serwer oznaczył jako niestabilną</string>
+    <string name="room_using_unstable_room_version">Ten pokój pracuje na wersji pokoju %s, którą serwer domowy oznaczył jako niestabilną.</string>
     <string name="allow_anyone_in_room_to_access">Pozwól każdemu w %s na znalezienie i dostęp. Możesz wybrać także inne miejsca.</string>
     <string name="upgrade_room_for_restricted">Każdy w %s będzie mógł znaleźć i dołączyć do tego pokoju - nie ma potrzeby poszczególnie wysyłać wszystkim zaproszenia. Będziesz mógł zmienić to później w ustawieniach pokoju.</string>
 </resources>
