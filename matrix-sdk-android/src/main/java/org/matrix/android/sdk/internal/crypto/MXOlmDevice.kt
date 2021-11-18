@@ -674,7 +674,7 @@ internal class MXOlmDevice @Inject constructor(
      * @return the decrypting result. Nil if the sessionId is unknown.
      */
     @Throws(MXCryptoError::class)
-    @Synchronized fun decryptGroupMessage(body: String,
+    fun decryptGroupMessage(body: String,
                             roomId: String,
                             timeline: String?,
                             sessionId: String,
