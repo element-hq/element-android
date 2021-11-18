@@ -21,7 +21,8 @@ import org.matrix.android.sdk.api.session.Session
 
 class NotificationState(
         /**
-         * The notifiable events to render
+         * The notifiable events queued for rendering or currently rendered
+         *
          * this is our source of truth for notifications, any changes to this list will be rendered as notifications
          * when events are removed the previously rendered notifications will be cancelled
          * when adding or updating, the notifications will be notified
@@ -36,13 +37,6 @@ class NotificationState(
          * allowing us to cancel any notifications previous displayed by now removed events
          */
         private val renderedEvents: MutableList<ProcessedEvent<NotifiableEvent>>,
-
-        /**
-         * An in memory FIFO cache of the seen events.
-         * Acts as a notification debouncer to stop already dismissed push notifications from
-         * displaying again when the /sync response is delayed.
-         */
-        val seenEventIds: CircularCache<String>
 ) {
 
     fun <T> updateQueuedEvents(drawerManager: NotificationDrawerManager, action: NotificationDrawerManager.(NotificationEventQueue, List<ProcessedEvent<NotifiableEvent>>) -> T): T {
@@ -65,13 +59,11 @@ class NotificationState(
     companion object {
 
         fun createInitialNotificationState(context: Context, currentSession: Session?): NotificationState {
-            val queuedEvents = NotificationEventPersistence.loadEvents(context, currentSession)
-            return NotificationState(
-                    queuedEvents = queuedEvents,
-                    renderedEvents = queuedEvents.rawEvents().map { ProcessedEvent(ProcessedEvent.Type.KEEP, it) }.toMutableList(),
-                    seenEventIds = CircularCache.create(cacheSize = 25)
-            )
+            val queuedEvents = NotificationEventPersistence.loadEvents(context, currentSession, factory = { rawEvents ->
+                NotificationEventQueue(rawEvents.toMutableList(), seenEventIds = CircularCache.create(cacheSize = 25))
+            })
+            val renderedEvents = queuedEvents.rawEvents().map { ProcessedEvent(ProcessedEvent.Type.KEEP, it) }.toMutableList()
+            return NotificationState(queuedEvents, renderedEvents)
         }
     }
 }
-

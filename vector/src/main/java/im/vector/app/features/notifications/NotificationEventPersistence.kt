@@ -28,21 +28,21 @@ private const val KEY_ALIAS_SECRET_STORAGE = "notificationMgr"
 
 object NotificationEventPersistence {
 
-    fun loadEvents(context: Context, currentSession: Session?): NotificationEventQueue {
+    fun loadEvents(context: Context, currentSession: Session?, factory: (List<NotifiableEvent>) -> NotificationEventQueue): NotificationEventQueue {
         try {
             val file = File(context.applicationContext.cacheDir, ROOMS_NOTIFICATIONS_FILE_NAME)
             if (file.exists()) {
                 file.inputStream().use {
                     val events: ArrayList<NotifiableEvent>? = currentSession?.loadSecureSecret(it, KEY_ALIAS_SECRET_STORAGE)
                     if (events != null) {
-                        return NotificationEventQueue(events.toMutableList())
+                        return factory(events)
                     }
                 }
             }
         } catch (e: Throwable) {
             Timber.e(e, "## Failed to load cached notification info")
         }
-        return NotificationEventQueue()
+        return factory(emptyList())
     }
 
     fun persistEvents(queuedEvents: NotificationEventQueue, context: Context, currentSession: Session) {

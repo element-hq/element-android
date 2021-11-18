@@ -86,7 +86,7 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
             Timber.d("onNotifiableEventReceived(): is push: ${notifiableEvent.canBeReplaced}")
         }
 
-        add(notifiableEvent, notificationState.seenEventIds)
+        add(notifiableEvent)
     }
 
     /**
