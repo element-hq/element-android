@@ -470,10 +470,10 @@ dependencies {
     // WebRTC
     // org.webrtc:google-webrtc is for development purposes only
     // implementation 'org.webrtc:google-webrtc:1.0.+'
-    implementation('com.facebook.react:react-native-webrtc:1.87.3-jitsi-6624067@aar')
+    implementation('com.facebook.react:react-native-webrtc:1.92.1-jitsi-9093212@aar')
 
     // Jitsi
-    implementation('org.jitsi.react:jitsi-meet-sdk:3.1.0') {
+    implementation('org.jitsi.react:jitsi-meet-sdk:3.10.0') {
         exclude group: 'com.google.firebase'
         exclude group: 'com.google.android.gms'
         exclude group: 'com.android.installreferrer'
