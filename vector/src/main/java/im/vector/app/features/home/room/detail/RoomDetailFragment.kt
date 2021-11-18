@@ -506,7 +506,7 @@ class RoomDetailFragment @Inject constructor(
 
     private fun onCannotRecord() {
         // Update the UI, cancel the animation
-        views.voiceMessageRecorderView.display(RecordingUiState.None)
+        textComposerViewModel.handle(TextComposerAction.OnVoiceRecordingUiStateChanged(RecordingUiState.None))
     }
 
     private fun acceptIncomingCall(event: RoomDetailViewEvents.DisplayAndAcceptCall) {
