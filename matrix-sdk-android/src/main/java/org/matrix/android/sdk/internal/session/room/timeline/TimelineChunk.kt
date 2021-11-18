@@ -26,6 +26,7 @@ import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
+import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
 import org.matrix.android.sdk.internal.database.mapper.TimelineEventMapper
 import org.matrix.android.sdk.internal.database.model.ChunkEntity
 import org.matrix.android.sdk.internal.database.model.ChunkEntityFields
@@ -46,6 +47,7 @@ private const val PAGINATION_COUNT = 50
  * It also triggers pagination to the server when needed, or dispatch to the prev or next chunk if any.
  */
 internal class TimelineChunk constructor(private val chunkEntity: ChunkEntity,
+                                         private val timelineSettings: TimelineSettings,
                                          private val roomId: String,
                                          private val timelineId: String,
                                          private val eventDecryptor: TimelineEventDecryptor,
@@ -59,6 +61,9 @@ internal class TimelineChunk constructor(private val chunkEntity: ChunkEntity,
     private val isLastForward = AtomicBoolean(chunkEntity.isLastForward)
 
     private val chunkObjectListener = RealmObjectChangeListener<ChunkEntity> { _, changeSet ->
+        if(changeSet?.isDeleted.orFalse()){
+            return@RealmObjectChangeListener
+        }
         Timber.v("on chunk (${chunkEntity.identifier()}) changed: ${changeSet?.changedFields?.joinToString(",")}")
         if(changeSet?.isFieldChanged(ChunkEntityFields.IS_LAST_FORWARD).orFalse()){
             isLastForward.set(chunkEntity.isLastForward)
@@ -252,7 +257,8 @@ internal class TimelineChunk constructor(private val chunkEntity: ChunkEntity,
     }
 
     private fun buildTimelineEvent(eventEntity: TimelineEventEntity) = timelineEventMapper.map(
-            timelineEventEntity = eventEntity
+            timelineEventEntity = eventEntity,
+            buildReadReceipts = timelineSettings.buildReadReceipts
     ).let {
         // eventually enhance with ui echo?
         (uiEchoManager?.decorateEventWithReactionUiEcho(it) ?: it)
@@ -261,6 +267,7 @@ internal class TimelineChunk constructor(private val chunkEntity: ChunkEntity,
     private fun createTimelineChunk(chunkEntity: ChunkEntity): TimelineChunk {
         return TimelineChunk(
                 chunkEntity = chunkEntity,
+                timelineSettings = timelineSettings,
                 timelineId = timelineId,
                 eventDecryptor = eventDecryptor,
                 roomId = roomId,

@@ -24,6 +24,7 @@ import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
+import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
 import org.matrix.android.sdk.internal.database.mapper.TimelineEventMapper
 import org.matrix.android.sdk.internal.database.model.ChunkEntity
 import org.matrix.android.sdk.internal.database.model.ChunkEntityFields
@@ -38,8 +39,6 @@ import java.util.concurrent.atomic.AtomicReference
  * In Permalink, we will query for the chunk including the eventId we are looking for.
  * Once we got a ChunkEntity we wrap it with TimelineChunk class so we dispatch any methods for loading data.
  */
-
-private const val INITIAL_LOAD_COUNT = 30L
 
 internal class LoadTimelineStrategy(
         private val roomId: String,
@@ -61,6 +60,7 @@ internal class LoadTimelineStrategy(
     }
 
     data class Dependencies(
+            val timelineSettings: TimelineSettings,
             val realm: AtomicReference<Realm>,
             val eventDecryptor: TimelineEventDecryptor,
             val paginationTask: PaginationTask,
@@ -136,7 +136,7 @@ internal class LoadTimelineStrategy(
             timelineChunk = it.createTimelineChunk()
         }
         if (mode is Mode.Live) {
-            loadMore(INITIAL_LOAD_COUNT, Timeline.Direction.BACKWARDS)
+            loadMore(dependencies.timelineSettings.initialSize.toLong(), Timeline.Direction.BACKWARDS)
         }
     }
 
@@ -202,6 +202,7 @@ internal class LoadTimelineStrategy(
         return firstOrNull()?.let {
             return TimelineChunk(
                     chunkEntity = it,
+                    timelineSettings = dependencies.timelineSettings,
                     roomId = roomId,
                     timelineId = timelineId,
                     eventDecryptor = dependencies.eventDecryptor,

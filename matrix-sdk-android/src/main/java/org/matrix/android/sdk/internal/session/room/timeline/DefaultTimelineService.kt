@@ -64,6 +64,7 @@ internal class DefaultTimelineService @AssistedInject constructor(
         return DefaultTimeline(
                 roomId = roomId,
                 initialEventId = eventId,
+                settings = settings,
                 realmConfiguration = monarchy.realmConfiguration,
                 paginationTask = paginationTask,
                 timelineEventMapper = timelineEventMapper,

@@ -29,6 +29,7 @@ import kotlinx.coroutines.withContext
 import okhttp3.internal.closeQuietly
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
+import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
 import org.matrix.android.sdk.internal.database.mapper.TimelineEventMapper
 import org.matrix.android.sdk.internal.session.room.membership.LoadRoomMembersTask
 import org.matrix.android.sdk.internal.session.sync.handler.room.ReadReceiptHandler
@@ -42,6 +43,7 @@ import java.util.concurrent.atomic.AtomicReference
 
 internal class DefaultTimeline internal constructor(private val roomId: String,
                                                     private val initialEventId: String?,
+                                                    private val settings: TimelineSettings,
                                                     private val realmConfiguration: RealmConfiguration,
                                                     private val loadRoomMembersTask: LoadRoomMembersTask,
                                                     private val readReceiptHandler: ReadReceiptHandler,
@@ -70,6 +72,7 @@ internal class DefaultTimeline internal constructor(private val roomId: String,
 
     private val strategyDependencies = LoadTimelineStrategy.Dependencies(
             eventDecryptor = eventDecryptor,
+            timelineSettings = settings,
             paginationTask = paginationTask,
             fetchTokenAndPaginateTask = fetchTokenAndPaginateTask,
             timelineInput = timelineInput,
