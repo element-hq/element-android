@@ -20,6 +20,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.Menu
@@ -515,7 +516,16 @@ class HomeActivity :
         if (views.drawerLayout.isDrawerOpen(GravityCompat.START)) {
             views.drawerLayout.closeDrawer(GravityCompat.START)
         } else {
-            super.onBackPressed()
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R && supportFragmentManager.backStackEntryCount == 0) {
+                if (isTaskRoot) {
+                    super.onBackPressed()
+                } else {
+                    Timber.e("Application is potentially corrupted by an unknown activity")
+                    finishAffinity()
+                }
+            } else {
+                super.onBackPressed()
+            }
         }
     }
 

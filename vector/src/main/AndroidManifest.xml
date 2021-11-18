@@ -97,6 +97,7 @@
 
         <activity
             android:name=".features.MainActivity"
+            android:launchMode="singleTask"
             android:theme="@style/Theme.Vector.Launcher" />
 
         <!-- Activity alias for the launcher Activity (must be declared after the Activity it targets) -->
@@ -116,7 +117,9 @@
                 android:resource="@xml/shortcuts" />
         </activity-alias>
 
-        <activity android:name=".features.home.HomeActivity" />
+        <activity
+            android:name=".features.home.HomeActivity"
+            android:launchMode="singleTask" />
 
         <activity
             android:name=".features.login.SSORedirectRouterActivity"
