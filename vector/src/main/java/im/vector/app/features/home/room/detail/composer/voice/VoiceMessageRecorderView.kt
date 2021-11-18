@@ -41,14 +41,13 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
 
     interface Callback {
         fun onVoiceRecordingStarted()
-        fun onVoiceRecordingPlaybackModeOn()
+        fun onVoiceRecordingEnded(lastKnownState: RecordingUiState?)
         fun onVoicePlaybackButtonClicked()
         fun onUiStateChanged(state: RecordingUiState)
-        fun sendVoiceMessage()
-        fun deleteVoiceMessage()
+        fun onSendVoiceMessage()
+        fun onDeleteVoiceMessage()
         fun onRecordingLimitReached()
-        fun recordingWaveformClicked()
-        fun onVoiceRecordingEnded(lastKnownState: RecordingUiState?)
+        fun onRecordingWaveformClicked()
     }
 
     // We need to define views as lateinit var to be able to check if initialized for the bug fix on api 21 and 22.
@@ -70,25 +69,15 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
         initListeners()
     }
 
-    override fun onVisibilityChanged(changedView: View, visibility: Int) {
-        super.onVisibilityChanged(changedView, visibility)
-        // onVisibilityChanged is called by constructor on api 21 and 22.
-        if (!this::voiceMessageViews.isInitialized) return
-        val parentChanged = changedView == this
-        voiceMessageViews.renderVisibilityChanged(parentChanged, visibility)
-    }
-
     private fun initListeners() {
         voiceMessageViews.start(object : VoiceMessageViews.Actions {
-            override fun onRequestRecording() {
-                callback.onVoiceRecordingStarted()
-            }
-
-            override fun onMicButtonReleased() {
-                callback.onVoiceRecordingEnded(lastKnownState)
-            }
-
-            override fun updateState(updater: (RecordingUiState) -> RecordingUiState) {
+            override fun onRequestRecording() = callback.onVoiceRecordingStarted()
+            override fun onMicButtonReleased() = callback.onVoiceRecordingEnded(lastKnownState)
+            override fun onSendVoiceMessage() = callback.onSendVoiceMessage()
+            override fun onDeleteVoiceMessage() = callback.onDeleteVoiceMessage()
+            override fun onWaveformClicked() = callback.onRecordingWaveformClicked()
+            override fun onVoicePlaybackButtonClicked() = callback.onVoicePlaybackButtonClicked()
+            override fun onMicButtonDrag(updater: (RecordingUiState) -> RecordingUiState) {
                 when (val currentState = lastKnownState) {
                     null, RecordingUiState.None -> {
                         // ignore drag events when the view is idle
@@ -104,23 +93,15 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
                     }
                 }
             }
-
-            override fun sendMessage() {
-                callback.sendVoiceMessage()
-            }
-
-            override fun delete() {
-                callback.deleteVoiceMessage()
-            }
-
-            override fun waveformClicked() {
-                callback.recordingWaveformClicked()
-            }
-
-            override fun onVoicePlaybackButtonClicked() {
-                callback.onVoicePlaybackButtonClicked()
-            }
         })
+    }
+
+    override fun onVisibilityChanged(changedView: View, visibility: Int) {
+        super.onVisibilityChanged(changedView, visibility)
+        // onVisibilityChanged is called by constructor on api 21 and 22.
+        if (!this::voiceMessageViews.isInitialized) return
+        val parentChanged = changedView == this
+        voiceMessageViews.renderVisibilityChanged(parentChanged, visibility)
     }
 
     fun display(recordingState: RecordingUiState) {
@@ -139,7 +120,7 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
             }
             RecordingUiState.Cancelled -> {
                 stopRecordingTicker()
-                voiceMessageViews.hideRecordingViews(recordingState) { callback.deleteVoiceMessage() }
+                voiceMessageViews.hideRecordingViews(recordingState) { callback.onDeleteVoiceMessage() }
                 vibrate(context)
             }
             RecordingUiState.Locked    -> {
@@ -151,7 +132,6 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
             RecordingUiState.Playback  -> {
                 stopRecordingTicker()
                 voiceMessageViews.showPlaybackViews()
-                callback.onVoiceRecordingPlaybackModeOn()
             }
             is DraggingState           -> when (recordingState) {
                 is DraggingState.Cancelling -> voiceMessageViews.renderCancelling(recordingState.distanceX)

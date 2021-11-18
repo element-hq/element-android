@@ -48,16 +48,16 @@ class VoiceMessageViews(
     fun start(actions: Actions) {
         views.voiceMessageSendButton.setOnClickListener {
             views.voiceMessageSendButton.isVisible = false
-            actions.sendMessage()
+            actions.onSendVoiceMessage()
         }
 
         views.voiceMessageDeletePlayback.setOnClickListener {
             views.voiceMessageSendButton.isVisible = false
-            actions.delete()
+            actions.onDeleteVoiceMessage()
         }
 
         views.voicePlaybackWaveform.setOnClickListener {
-            actions.waveformClicked()
+            actions.onWaveformClicked()
         }
 
         views.voicePlaybackControlButton.setOnClickListener {
@@ -81,7 +81,7 @@ class VoiceMessageViews(
                     true
                 }
                 MotionEvent.ACTION_MOVE -> {
-                    actions.updateState { currentState -> positions.process(event, currentState) }
+                    actions.onMicButtonDrag { currentState -> positions.process(event, currentState) }
                     true
                 }
                 else                    -> false
@@ -341,10 +341,10 @@ class VoiceMessageViews(
     interface Actions {
         fun onRequestRecording()
         fun onMicButtonReleased()
-        fun updateState(updater: (RecordingUiState) -> RecordingUiState)
-        fun sendMessage()
-        fun delete()
-        fun waveformClicked()
+        fun onMicButtonDrag(updater: (RecordingUiState) -> RecordingUiState)
+        fun onSendVoiceMessage()
+        fun onDeleteVoiceMessage()
+        fun onWaveformClicked()
         fun onVoicePlaybackButtonClicked()
     }
 }

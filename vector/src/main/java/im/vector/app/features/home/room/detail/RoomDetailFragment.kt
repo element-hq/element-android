@@ -704,10 +704,6 @@ class RoomDetailFragment @Inject constructor(
                 }
             }
 
-            override fun onVoiceRecordingPlaybackModeOn() {
-                roomDetailViewModel.handle(RoomDetailAction.PauseRecordingVoiceMessage)
-            }
-
             override fun onVoicePlaybackButtonClicked() {
                 roomDetailViewModel.handle(RoomDetailAction.PlayOrPauseRecordingPlayback)
             }
@@ -724,21 +720,23 @@ class RoomDetailFragment @Inject constructor(
                 updateRecordingUiState(state)
             }
 
-            override fun sendVoiceMessage() {
+            override fun onSendVoiceMessage() {
                 updateRecordingUiState(RecordingUiState.None)
             }
 
-            override fun deleteVoiceMessage() {
+            override fun onDeleteVoiceMessage() {
                 roomDetailViewModel.handle(RoomDetailAction.EndRecordingVoiceMessage(isCancelled = true))
                 updateRecordingUiState(RecordingUiState.None)
             }
 
             override fun onRecordingLimitReached() {
                 updateRecordingUiState(RecordingUiState.Playback)
+                roomDetailViewModel.handle(RoomDetailAction.PauseRecordingVoiceMessage)
             }
 
-            override fun recordingWaveformClicked() {
+            override fun onRecordingWaveformClicked() {
                 updateRecordingUiState(RecordingUiState.Playback)
+                roomDetailViewModel.handle(RoomDetailAction.PauseRecordingVoiceMessage)
             }
 
             private fun updateRecordingUiState(state: RecordingUiState) {
