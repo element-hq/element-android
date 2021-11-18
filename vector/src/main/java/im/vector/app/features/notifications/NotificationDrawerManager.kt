@@ -161,7 +161,7 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
             notificationState.clearAndAddRenderedEvents(eventsToRender)
             val session = currentSession ?: return
             renderEvents(session, eventsToRender)
-            notificationState.persistState(context, session)
+            notificationState.persist(context, session)
         }
     }
 
