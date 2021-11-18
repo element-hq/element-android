@@ -149,7 +149,10 @@ class RxRoom(private val room: Room) {
     }
 
     fun sendMedia(attachment: ContentAttachmentData, compressBeforeSending: Boolean, roomIds: Set<String>): Completable = rxCompletable {
-        room.sendMedia(attachment, compressBeforeSending, roomIds)
+        room.sendMedia(
+                attachment = attachment,
+                compressBeforeSending = compressBeforeSending,
+                roomIds = roomIds)
     }
 }
 

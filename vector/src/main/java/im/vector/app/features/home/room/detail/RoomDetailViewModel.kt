@@ -531,9 +531,9 @@ class RoomDetailViewModel @AssistedInject constructor(
         val isAllowed = action.userJustAccepted || if (widget.type == WidgetType.Jitsi) {
             widget.senderInfo?.userId == session.myUserId ||
                     session.integrationManagerService().isNativeWidgetDomainAllowed(
-                    action.widget.type.preferred,
-                    domain
-            )
+                            action.widget.type.preferred,
+                            domain
+                    )
         } else false
 
         if (isAllowed) {
@@ -626,7 +626,11 @@ class RoomDetailViewModel @AssistedInject constructor(
         } else {
             voiceMessageHelper.stopRecording()?.let { audioType ->
                 if (audioType.duration > 1000) {
-                    room.sendMedia(audioType.toContentAttachmentData(), false, emptySet())
+                    room.sendMedia(
+                            attachment = audioType.toContentAttachmentData(),
+                            compressBeforeSending = false,
+                            roomIds = emptySet(),
+                            rootThreadEventId = initialState.rootThreadEventId)
                 } else {
                     voiceMessageHelper.deleteRecording()
                 }
@@ -705,7 +709,12 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private fun handleSendMedia(action: RoomDetailAction.SendMedia) {
-        room.sendMedias(action.attachments, action.compressBeforeSending, emptySet())
+        room.sendMedias(
+                action.attachments,
+                action.compressBeforeSending,
+                emptySet(),
+                initialState.rootThreadEventId
+        )
     }
 
     private fun handleEventVisible(action: RoomDetailAction.TimelineEventTurnsVisible) {
