@@ -29,8 +29,6 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.content.ContentUrlResolver
 import org.matrix.android.sdk.api.util.toMatrixItem
 import timber.log.Timber
-import java.io.File
-import java.io.FileOutputStream
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -50,42 +48,24 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
     private val handlerThread: HandlerThread = HandlerThread("NotificationDrawerManager", Thread.MIN_PRIORITY)
     private var backgroundHandler: Handler
 
-    init {
-        handlerThread.start()
-        backgroundHandler = Handler(handlerThread.looper)
-    }
-
-    /**
-     * The notifiable events to render
-     * this is our source of truth for notifications, any changes to this list will be rendered as notifications
-     * when events are removed the previously rendered notifications will be cancelled
-     * when adding or updating, the notifications will be notified
-     *
-     * Events are unique by their properties, we should be careful not to insert multiple events with the same event-id
-     */
-    private val queuedEvents = loadEventInfo()
-
-    /**
-     * The last known rendered notifiable events
-     * we keep track of them in order to know which events have been removed from the eventList
-     * allowing us to cancel any notifications previous displayed by now removed events
-     */
-    private var renderedEvents = emptyList<ProcessedEvent<NotifiableEvent>>()
-    private val avatarSize = context.resources.getDimensionPixelSize(R.dimen.profile_avatar_size)
-    private var currentRoomId: String? = null
-
     // TODO Multi-session: this will have to be improved
     private val currentSession: Session?
         get() = activeSessionDataSource.currentValue?.orNull()
 
+    /**
+     * Lazily initializes the NotificationState as we rely on having a current session in order to fetch the persisted queue of events
+     */
+    private val notificationState by lazy { NotificationState.createInitialNotificationState(context, currentSession) }
+    private val avatarSize = context.resources.getDimensionPixelSize(R.dimen.profile_avatar_size)
+    private var currentRoomId: String? = null
+    private val firstThrottler = FirstThrottler(200)
+
     private var useCompleteNotificationFormat = vectorPreferences.useCompleteNotificationFormat()
 
-    /**
-     * An in memory FIFO cache of the seen events.
-     * Acts as a notification debouncer to stop already dismissed push notifications from
-     * displaying again when the /sync response is delayed.
-     */
-    private val seenEventIds = CircularCache.create<String>(cacheSize = 25)
+    init {
+        handlerThread.start()
+        backgroundHandler = Handler(handlerThread.looper)
+    }
 
     /**
     Should be called as soon as a new event is ready to be displayed.
@@ -106,7 +86,7 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
             Timber.d("onNotifiableEventReceived(): is push: ${notifiableEvent.canBeReplaced}")
         }
 
-        add(notifiableEvent, seenEventIds)
+        add(notifiableEvent, notificationState.seenEventIds)
     }
 
     /**
@@ -142,13 +122,11 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
     }
 
     fun updateEvents(action: NotificationDrawerManager.(NotificationEventQueue) -> Unit) {
-        synchronized(queuedEvents) {
-            action(this, queuedEvents)
+        notificationState.updateQueuedEvents(this) { queuedEvents, _ ->
+            action(queuedEvents)
         }
         refreshNotificationDrawer()
     }
-
-    private var firstThrottler = FirstThrottler(200)
 
     private fun refreshNotificationDrawer() {
         // Implement last throttler
@@ -171,74 +149,37 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
     @WorkerThread
     private fun refreshNotificationDrawerBg() {
         Timber.v("refreshNotificationDrawerBg()")
-        val eventsToRender = synchronized(queuedEvents) {
+        val eventsToRender = notificationState.updateQueuedEvents(this) { queuedEvents, renderedEvents ->
             notifiableEventProcessor.process(queuedEvents.rawEvents(), currentRoomId, renderedEvents).also {
                 queuedEvents.clearAndAdd(it.onlyKeptEvents())
             }
         }
 
-        if (renderedEvents == eventsToRender) {
+        if (notificationState.hasAlreadyRendered(eventsToRender)) {
             Timber.d("Skipping notification update due to event list not changing")
         } else {
-            renderedEvents = eventsToRender
+            notificationState.clearAndAddRenderedEvents(eventsToRender)
             val session = currentSession ?: return
-            val user = session.getUser(session.myUserId)
-            // myUserDisplayName cannot be empty else NotificationCompat.MessagingStyle() will crash
-            val myUserDisplayName = user?.toMatrixItem()?.getBestName() ?: session.myUserId
-            val myUserAvatarUrl = session.contentUrlResolver().resolveThumbnail(
-                    contentUrl = user?.avatarUrl,
-                    width = avatarSize,
-                    height = avatarSize,
-                    method = ContentUrlResolver.ThumbnailMethod.SCALE
-            )
-            notificationRenderer.render(session.myUserId, myUserDisplayName, myUserAvatarUrl, useCompleteNotificationFormat, eventsToRender)
+            renderEvents(session, eventsToRender)
+            notificationState.persistState(context, session)
         }
+    }
+
+    private fun renderEvents(session: Session, eventsToRender: List<ProcessedEvent<NotifiableEvent>>) {
+        val user = session.getUser(session.myUserId)
+        // myUserDisplayName cannot be empty else NotificationCompat.MessagingStyle() will crash
+        val myUserDisplayName = user?.toMatrixItem()?.getBestName() ?: session.myUserId
+        val myUserAvatarUrl = session.contentUrlResolver().resolveThumbnail(
+                contentUrl = user?.avatarUrl,
+                width = avatarSize,
+                height = avatarSize,
+                method = ContentUrlResolver.ThumbnailMethod.SCALE
+        )
+        notificationRenderer.render(session.myUserId, myUserDisplayName, myUserAvatarUrl, useCompleteNotificationFormat, eventsToRender)
     }
 
     fun shouldIgnoreMessageEventInRoom(roomId: String?): Boolean {
         return currentRoomId != null && roomId == currentRoomId
-    }
-
-    fun persistInfo() {
-        synchronized(queuedEvents) {
-            if (queuedEvents.isEmpty()) {
-                deleteCachedRoomNotifications()
-                return
-            }
-            try {
-                val file = File(context.applicationContext.cacheDir, ROOMS_NOTIFICATIONS_FILE_NAME)
-                if (!file.exists()) file.createNewFile()
-                FileOutputStream(file).use {
-                    currentSession?.securelyStoreObject(queuedEvents.rawEvents(), KEY_ALIAS_SECRET_STORAGE, it)
-                }
-            } catch (e: Throwable) {
-                Timber.e(e, "## Failed to save cached notification info")
-            }
-        }
-    }
-
-    private fun loadEventInfo(): NotificationEventQueue {
-        try {
-            val file = File(context.applicationContext.cacheDir, ROOMS_NOTIFICATIONS_FILE_NAME)
-            if (file.exists()) {
-                file.inputStream().use {
-                    val events: ArrayList<NotifiableEvent>? = currentSession?.loadSecureSecret(it, KEY_ALIAS_SECRET_STORAGE)
-                    if (events != null) {
-                        return NotificationEventQueue(events.toMutableList())
-                    }
-                }
-            }
-        } catch (e: Throwable) {
-            Timber.e(e, "## Failed to load cached notification info")
-        }
-        return NotificationEventQueue()
-    }
-
-    private fun deleteCachedRoomNotifications() {
-        val file = File(context.applicationContext.cacheDir, ROOMS_NOTIFICATIONS_FILE_NAME)
-        if (file.exists()) {
-            file.delete()
-        }
     }
 
     companion object {
@@ -246,10 +187,5 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
         const val ROOM_MESSAGES_NOTIFICATION_ID = 1
         const val ROOM_EVENT_NOTIFICATION_ID = 2
         const val ROOM_INVITATION_NOTIFICATION_ID = 3
-
-        // TODO Mutliaccount
-        private const val ROOMS_NOTIFICATIONS_FILE_NAME = "im.vector.notifications.cache"
-
-        private const val KEY_ALIAS_SECRET_STORAGE = "notificationMgr"
     }
 }
