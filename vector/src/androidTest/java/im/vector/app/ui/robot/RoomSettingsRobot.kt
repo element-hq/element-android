@@ -26,8 +26,8 @@ import com.adevinta.android.barista.interaction.BaristaDialogInteractions.clickD
 import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem
 import im.vector.app.R
 import im.vector.app.espresso.tools.waitUntilActivityVisible
-import im.vector.app.espresso.tools.waitUntilViewVisible
 import im.vector.app.espresso.tools.waitUntilDialogVisible
+import im.vector.app.espresso.tools.waitUntilViewVisible
 import im.vector.app.features.roommemberprofile.RoomMemberProfileActivity
 
 class RoomSettingsRobot {
