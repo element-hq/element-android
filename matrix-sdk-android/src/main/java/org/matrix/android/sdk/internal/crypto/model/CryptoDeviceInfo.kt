@@ -75,3 +75,5 @@ data class CryptoDeviceInfo(
 internal fun CryptoDeviceInfo.toRest(): DeviceKeys {
     return CryptoInfoMapper.map(this)
 }
+
+internal fun CryptoDeviceInfo.toShortDebugString() = "$userId|$deviceId"

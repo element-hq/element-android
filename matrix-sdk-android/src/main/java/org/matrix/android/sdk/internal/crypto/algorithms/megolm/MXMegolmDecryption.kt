@@ -335,7 +335,7 @@ internal class MXMegolmDecryption(private val userId: String,
             runCatching { deviceListManager.downloadKeys(listOf(userId), false) }
                     .mapCatching {
                         val deviceId = request.deviceId
-                        val deviceInfo = cryptoStore.getUserDevice(userId, deviceId ?: "")
+                        val deviceInfo = it.getObject(userId, deviceId) // cryptoStore.getUserDevice(userId, deviceId ?: "")
                         if (deviceInfo == null) {
                             throw RuntimeException()
                         } else {

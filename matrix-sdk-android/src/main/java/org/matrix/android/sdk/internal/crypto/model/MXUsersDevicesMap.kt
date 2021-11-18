@@ -115,6 +115,12 @@ class MXUsersDevicesMap<E> {
         }
     }
 
+    fun addEntriesFromRawMap(other: Map<String /* userId */, Map<String /* deviceId */, E>>) {
+        other.forEach { (userID, deviceList) ->
+            setObjects(userID, deviceList)
+        }
+    }
+
     override fun toString(): String {
         return "MXUsersDevicesMap $map"
     }
@@ -129,3 +135,11 @@ inline fun <T> MXUsersDevicesMap<T>.forEach(action: (String, String, T) -> Unit)
         }
     }
 }
+
+fun <T> MXUsersDevicesMap<T>.toDebugString() =
+        map.entries.joinToString { "${it.key} [${it.value.keys.joinToString { it }}]" }
+
+fun <T> MXUsersDevicesMap<T>.toDebugCount() =
+        map.entries.fold(0) { acc, new ->
+            acc + new.value.keys.size
+        }

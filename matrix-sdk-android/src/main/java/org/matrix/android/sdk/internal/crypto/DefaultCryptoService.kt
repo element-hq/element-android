@@ -1315,7 +1315,7 @@ internal class DefaultCryptoService @Inject constructor(
             }.fold(
                     { callback.onSuccess(Unit) },
                     {
-                        Timber.e("## CRYPTO | prepareToEncrypt() failed.")
+                        Timber.e(it, "## CRYPTO | prepareToEncrypt() failed.")
                         callback.onFailure(it)
                     }
             )

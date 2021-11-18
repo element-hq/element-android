@@ -25,6 +25,7 @@ import org.matrix.android.sdk.internal.crypto.CancelGossipRequestWorker
 import org.matrix.android.sdk.internal.crypto.CryptoModule
 import org.matrix.android.sdk.internal.crypto.SendGossipRequestWorker
 import org.matrix.android.sdk.internal.crypto.SendGossipWorker
+import org.matrix.android.sdk.internal.crypto.SimpleSendToDeviceWorker
 import org.matrix.android.sdk.internal.crypto.crosssigning.UpdateTrustWorker
 import org.matrix.android.sdk.internal.crypto.verification.SendVerificationMessageWorker
 import org.matrix.android.sdk.internal.di.MatrixComponent
@@ -141,6 +142,8 @@ internal interface SessionComponent {
     fun inject(worker: SendGossipWorker)
 
     fun inject(worker: UpdateTrustWorker)
+
+    fun inject(worker: SimpleSendToDeviceWorker)
 
     @Component.Factory
     interface Factory {

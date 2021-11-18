@@ -21,6 +21,8 @@ import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.MXKey
 import org.matrix.android.sdk.internal.crypto.model.MXOlmSessionResult
 import org.matrix.android.sdk.internal.crypto.model.MXUsersDevicesMap
+import org.matrix.android.sdk.internal.crypto.model.forEach
+import org.matrix.android.sdk.internal.crypto.model.toDebugString
 import org.matrix.android.sdk.internal.crypto.tasks.ClaimOneTimeKeysForUsersDeviceTask
 import timber.log.Timber
 import javax.inject.Inject
@@ -33,29 +35,39 @@ internal class EnsureOlmSessionsForDevicesAction @Inject constructor(
 
     suspend fun handle(devicesByUser: Map<String, List<CryptoDeviceInfo>>, force: Boolean = false): MXUsersDevicesMap<MXOlmSessionResult> {
         val devicesWithoutSession = ArrayList<CryptoDeviceInfo>()
+        val devicesWithSession = MXUsersDevicesMap<MXOlmSessionResult>()
 
-        val results = MXUsersDevicesMap<MXOlmSessionResult>()
+//        val results = MXUsersDevicesMap<MXOlmSessionResult>()
 
         for ((userId, deviceInfos) in devicesByUser) {
             for (deviceInfo in deviceInfos) {
                 val deviceId = deviceInfo.deviceId
                 val key = deviceInfo.identityKey()
-
-                val sessionId = olmDevice.getSessionId(key!!)
-
-                if (sessionId.isNullOrEmpty() || force) {
-                    devicesWithoutSession.add(deviceInfo)
+                if (key == null) {
+                    Timber.w("## CRYPTO | Ignoring device (${deviceInfo.userId}|$deviceId) without identity key ")
+                    continue
                 }
 
-                val olmSessionResult = MXOlmSessionResult(deviceInfo, sessionId)
-                results.setObject(userId, deviceId, olmSessionResult)
+                val sessionId = olmDevice.getSessionId(key)
+
+                if (sessionId.isNullOrEmpty() || force) {
+                    Timber.d("## CRYPTO | Found no existing olm session (${deviceInfo.userId}|$deviceId) (force=$force)")
+                    devicesWithoutSession.add(deviceInfo)
+                } else {
+                    Timber.d("## CRYPTO | using olm session $sessionId for (${deviceInfo.userId}|$deviceId)")
+                    val olmSessionResult = MXOlmSessionResult(deviceInfo, sessionId)
+                    devicesWithSession.setObject(userId, deviceId, olmSessionResult)
+                }
             }
         }
 
+        Timber.i("## CRYPTO | Devices without olm session (count:${devicesWithoutSession.size}) :" +
+                " ${devicesWithoutSession.joinToString { "${it.userId}|${it.deviceId}" }}")
         if (devicesWithoutSession.size == 0) {
-            return results
+            return devicesWithSession
         }
 
+        // Let's try to setup olm sessions with the other devices
         // Prepare the request for claiming one-time keys
         val usersDevicesToClaim = MXUsersDevicesMap<String>()
 
@@ -68,41 +80,80 @@ internal class EnsureOlmSessionsForDevicesAction @Inject constructor(
         // TODO: this has a race condition - if we try to send another message
         // while we are claiming a key, we will end up claiming two and setting up
         // two sessions.
-        //
         // That should eventually resolve itself, but it's poor form.
 
-        Timber.i("## CRYPTO | claimOneTimeKeysForUsersDevices() : $usersDevicesToClaim")
+        Timber.i("## CRYPTO | claimOneTimeKeysForUsersDevices() : ${usersDevicesToClaim.toDebugString()}")
 
         val claimParams = ClaimOneTimeKeysForUsersDeviceTask.Params(usersDevicesToClaim)
         val oneTimeKeys = oneTimeKeysForUsersDeviceTask.executeRetry(claimParams, remainingRetry = ONE_TIME_KEYS_RETRY_COUNT)
-        Timber.v("## CRYPTO | claimOneTimeKeysForUsersDevices() : keysClaimResponse.oneTimeKeys: $oneTimeKeys")
-        for ((userId, deviceInfos) in devicesByUser) {
-            for (deviceInfo in deviceInfos) {
-                var oneTimeKey: MXKey? = null
-                val deviceIds = oneTimeKeys.getUserDeviceIds(userId)
-                if (null != deviceIds) {
-                    for (deviceId in deviceIds) {
-                        val olmSessionResult = results.getObject(userId, deviceId)
-                        if (olmSessionResult!!.sessionId != null && !force) {
-                            // We already have a result for this device
-                            continue
-                        }
-                        val key = oneTimeKeys.getObject(userId, deviceId)
-                        if (key?.type == oneTimeKeyAlgorithm) {
-                            oneTimeKey = key
-                        }
-                        if (oneTimeKey == null) {
-                            Timber.w("## CRYPTO | ensureOlmSessionsForDevices() : No one-time keys " + oneTimeKeyAlgorithm +
-                                    " for device " + userId + " : " + deviceId)
-                            continue
-                        }
-                        // Update the result for this device in results
-                        olmSessionResult.sessionId = verifyKeyAndStartSession(oneTimeKey, userId, deviceInfo)
+
+        // We iterate through claimed info to log missing otks
+        usersDevicesToClaim.forEach { userId, deviceId, _ ->
+            val foundOtk = oneTimeKeys.getObject(userId, deviceId)
+            if (foundOtk == null) {
+                Timber.d("## CRYPTO: No one time key for $userId|$deviceId")
+            } else if (foundOtk.type == oneTimeKeyAlgorithm) {
+                devicesByUser[userId]?.firstOrNull { it.deviceId == deviceId }?.let { cryptoDeviceInfo ->
+                    Timber.d("## CRYPTO | creating outbound session for $userId|$deviceId ...")
+                    val createdSession = verifyKeyAndStartSession(foundOtk, userId, cryptoDeviceInfo)
+                    if (createdSession != null) {
+                        Timber.d("## CRYPTO | ... created outbound session $createdSession for $userId|$deviceId")
+                        devicesWithSession.setObject(userId, deviceId, MXOlmSessionResult(cryptoDeviceInfo, createdSession))
+                    } else {
+                        Timber.d("## CRYPTO | ... Failed to create outbound session for $userId|$deviceId")
                     }
                 }
+            } else {
+                // Skipping this key
+                Timber.i("## CRYPTO | skipping otk for $userId|$deviceId because unsupported algorithm")
             }
         }
-        return results
+//        oneTimeKeys.forEach { userId, deviceId, oneTimeKey ->
+//            if (oneTimeKey.type == oneTimeKeyAlgorithm) {
+//                devicesByUser[userId]?.firstOrNull { it.deviceId == deviceId }?.let { cryptoDeviceInfo ->
+//                    Timber.d("## CRYPTO | creating outbound session for $userId|$deviceId ...")
+//                    val createdSession = verifyKeyAndStartSession(oneTimeKey, userId, cryptoDeviceInfo)
+//                    if (createdSession != null) {
+//                        Timber.d("## CRYPTO | ... created outbound session $createdSession for $userId|$deviceId")
+//                        devicesWithSession.setObject(userId, deviceId, MXOlmSessionResult(cryptoDeviceInfo, createdSession))
+//                    } else {
+//                        Timber.d("## CRYPTO | ... Failed to create outbound session for $userId|$deviceId")
+//                    }
+//                }
+//            } else {
+//                // Skipping this key
+//                Timber.i("## CRYPTO | skiping otk for $userId|$deviceId because unsupported algorithm")
+//            }
+//        }
+
+        return devicesWithSession
+//        for ((userId, deviceInfos) in devicesByUser) {
+//            for (deviceInfo in deviceInfos) {
+//                var oneTimeKey: MXKey? = null
+//                val deviceIds = oneTimeKeys.getUserDeviceIds(userId)
+//                if (null != deviceIds) {
+//                    for (deviceId in deviceIds) {
+//                        val olmSessionResult = results.getObject(userId, deviceId)
+//                        if (olmSessionResult!!.sessionId != null && !force) {
+//                            // We already have a result for this device
+//                            continue
+//                        }
+//                        val key = oneTimeKeys.getObject(userId, deviceId)
+//                        if (key?.type == oneTimeKeyAlgorithm) {
+//                            oneTimeKey = key
+//                        }
+//                        if (oneTimeKey == null) {
+//                            Timber.w("## CRYPTO | ensureOlmSessionsForDevices() : No one-time keys " + oneTimeKeyAlgorithm +
+//                                    " for device " + userId + "|" + deviceId)
+//                            continue
+//                        }
+//                        // Update the result for this device in results
+//                        olmSessionResult.sessionId = verifyKeyAndStartSession(oneTimeKey, userId, deviceInfo)
+//                    }
+//                }
+//            }
+//        }
+//        return results
     }
 
     private fun verifyKeyAndStartSession(oneTimeKey: MXKey, userId: String, deviceInfo: CryptoDeviceInfo): String? {
@@ -112,27 +163,34 @@ internal class EnsureOlmSessionsForDevicesAction @Inject constructor(
         val signKeyId = "ed25519:$deviceId"
         val signature = oneTimeKey.signatureForUserId(userId, signKeyId)
 
-        if (!signature.isNullOrEmpty() && !deviceInfo.fingerprint().isNullOrEmpty()) {
+        val fingerprint = deviceInfo.fingerprint()
+        if (!signature.isNullOrEmpty() && !fingerprint.isNullOrEmpty()) {
             var isVerified = false
             var errorMessage: String? = null
 
             try {
-                olmDevice.verifySignature(deviceInfo.fingerprint()!!, oneTimeKey.signalableJSONDictionary(), signature)
+                olmDevice.verifySignature(fingerprint, oneTimeKey.signalableJSONDictionary(), signature)
                 isVerified = true
             } catch (e: Exception) {
+                Timber.d(e, "## CRYPTO | verifyKeyAndStartSession() : Verify error for otk: ${oneTimeKey.signalableJSONDictionary()}," +
+                        " signature:$signature fingerprint:$fingerprint")
+                Timber.e("## CRYPTO | verifyKeyAndStartSession() : Verify error for ${deviceInfo.userId}|${deviceInfo.deviceId} " +
+                        " - signable json ${oneTimeKey.signalableJSONDictionary()}")
                 errorMessage = e.message
             }
 
             // Check one-time key signature
             if (isVerified) {
-                sessionId = olmDevice.createOutboundSession(deviceInfo.identityKey()!!, oneTimeKey.value)
+                sessionId = deviceInfo.identityKey()?.let { identityKey ->
+                    olmDevice.createOutboundSession(identityKey, oneTimeKey.value)
+                }
 
-                if (!sessionId.isNullOrEmpty()) {
-                    Timber.v("## CRYPTO | verifyKeyAndStartSession() : Started new sessionid " + sessionId +
-                            " for device " + deviceInfo + "(theirOneTimeKey: " + oneTimeKey.value + ")")
-                } else {
+                if (sessionId.isNullOrEmpty()) {
                     // Possibly a bad key
                     Timber.e("## CRYPTO | verifyKeyAndStartSession() : Error starting session with device $userId:$deviceId")
+                } else {
+                    Timber.v("## CRYPTO | verifyKeyAndStartSession() : Started new sessionid " + sessionId +
+                            " for device " + deviceInfo + "(theirOneTimeKey: " + oneTimeKey.value + ")")
                 }
             } else {
                 Timber.e("## CRYPTO | verifyKeyAndStartSession() : Unable to verify signature on one-time key for device " + userId +

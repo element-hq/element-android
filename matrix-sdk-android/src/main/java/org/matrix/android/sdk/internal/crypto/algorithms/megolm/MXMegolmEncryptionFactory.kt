@@ -27,7 +27,9 @@ import org.matrix.android.sdk.internal.crypto.repository.WarnOnUnknownDeviceRepo
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.crypto.tasks.SendToDeviceTask
 import org.matrix.android.sdk.internal.di.DeviceId
+import org.matrix.android.sdk.internal.di.SessionId
 import org.matrix.android.sdk.internal.di.UserId
+import org.matrix.android.sdk.internal.di.WorkManagerProvider
 import javax.inject.Inject
 
 internal class MXMegolmEncryptionFactory @Inject constructor(
@@ -38,27 +40,31 @@ internal class MXMegolmEncryptionFactory @Inject constructor(
         private val ensureOlmSessionsForDevicesAction: EnsureOlmSessionsForDevicesAction,
         @UserId private val userId: String,
         @DeviceId private val deviceId: String?,
+        @SessionId private val sessionId: String,
         private val sendToDeviceTask: SendToDeviceTask,
         private val messageEncrypter: MessageEncrypter,
         private val warnOnUnknownDevicesRepository: WarnOnUnknownDeviceRepository,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
+        private val workManagerProvider: WorkManagerProvider,
         private val cryptoCoroutineScope: CoroutineScope) {
 
     fun create(roomId: String): MXMegolmEncryption {
         return MXMegolmEncryption(
                 roomId = roomId,
+                matrixSessionId = sessionId,
                 olmDevice = olmDevice,
                 defaultKeysBackupService = defaultKeysBackupService,
                 cryptoStore = cryptoStore,
                 deviceListManager = deviceListManager,
                 ensureOlmSessionsForDevicesAction = ensureOlmSessionsForDevicesAction,
-                userId = userId,
-                deviceId = deviceId!!,
+                myUserId = userId,
+                myDeviceId = deviceId!!,
                 sendToDeviceTask = sendToDeviceTask,
                 messageEncrypter = messageEncrypter,
                 warnOnUnknownDevicesRepository = warnOnUnknownDevicesRepository,
                 coroutineDispatchers = coroutineDispatchers,
-                cryptoCoroutineScope = cryptoCoroutineScope
+                cryptoCoroutineScope = cryptoCoroutineScope,
+                workManagerProvider = workManagerProvider
         )
     }
 }

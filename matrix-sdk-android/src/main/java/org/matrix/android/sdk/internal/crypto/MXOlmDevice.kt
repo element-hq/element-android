@@ -119,7 +119,7 @@ internal class MXOlmDevice @Inject constructor(
     /**
      * @return The current (unused, unpublished) one-time keys for this account.
      */
-    fun getOneTimeKeys(): Map<String, Map<String, String>>? {
+    @Synchronized fun getOneTimeKeys(): Map<String, Map<String, String>>? {
         try {
             return store.getOlmAccount().oneTimeKeys()
         } catch (e: Exception) {
@@ -132,7 +132,7 @@ internal class MXOlmDevice @Inject constructor(
     /**
      * @return The maximum number of one-time keys the olm account can store.
      */
-    fun getMaxNumberOfOneTimeKeys(): Long {
+    @Synchronized fun getMaxNumberOfOneTimeKeys(): Long {
         return store.getOlmAccount().maxOneTimeKeys()
     }
 
@@ -153,7 +153,7 @@ internal class MXOlmDevice @Inject constructor(
      * @param message the message to be signed.
      * @return the base64-encoded signature.
      */
-    fun signMessage(message: String): String? {
+    @Synchronized fun signMessage(message: String): String? {
         try {
             return store.getOlmAccount().signMessage(message)
         } catch (e: Exception) {
@@ -166,7 +166,7 @@ internal class MXOlmDevice @Inject constructor(
     /**
      * Marks all of the one-time keys as published.
      */
-    fun markKeysAsPublished() {
+    @Synchronized fun markKeysAsPublished() {
         try {
             store.getOlmAccount().markOneTimeKeysAsPublished()
             store.saveOlmAccount()
@@ -180,7 +180,7 @@ internal class MXOlmDevice @Inject constructor(
      *
      * @param numKeys number of keys to generate
      */
-    fun generateOneTimeKeys(numKeys: Int) {
+    @Synchronized fun generateOneTimeKeys(numKeys: Int) {
         try {
             store.getOlmAccount().generateOneTimeKeys(numKeys)
             store.saveOlmAccount()
@@ -197,7 +197,7 @@ internal class MXOlmDevice @Inject constructor(
      * @param theirOneTimeKey  the remote user's one-time Curve25519 key
      * @return the session id for the outbound session.
      */
-    fun createOutboundSession(theirIdentityKey: String, theirOneTimeKey: String): String? {
+    @Synchronized fun createOutboundSession(theirIdentityKey: String, theirOneTimeKey: String): String? {
         Timber.v("## createOutboundSession() ; theirIdentityKey $theirIdentityKey theirOneTimeKey $theirOneTimeKey")
         var olmSession: OlmSession? = null
 
@@ -235,7 +235,7 @@ internal class MXOlmDevice @Inject constructor(
      * @param ciphertext             base64-encoded body from the received message.
      * @return {{payload: string, session_id: string}} decrypted payload, and session id of new session.
      */
-    fun createInboundSession(theirDeviceIdentityKey: String, messageType: Int, ciphertext: String): Map<String, String>? {
+    @Synchronized fun createInboundSession(theirDeviceIdentityKey: String, messageType: Int, ciphertext: String): Map<String, String>? {
         Timber.v("## createInboundSession() : theirIdentityKey: $theirDeviceIdentityKey")
 
         var olmSession: OlmSession? = null
@@ -674,7 +674,7 @@ internal class MXOlmDevice @Inject constructor(
      * @return the decrypting result. Nil if the sessionId is unknown.
      */
     @Throws(MXCryptoError::class)
-    fun decryptGroupMessage(body: String,
+    @Synchronized fun decryptGroupMessage(body: String,
                             roomId: String,
                             timeline: String?,
                             sessionId: String,
