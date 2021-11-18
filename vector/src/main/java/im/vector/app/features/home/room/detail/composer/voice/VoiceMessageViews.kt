@@ -151,7 +151,7 @@ class VoiceMessageViews(
         views.voiceMessageSendButton.isVisible = false
     }
 
-    fun hideRecordingViews(recordingState: RecordingUiState, onVoiceRecordingEnded: () -> Unit = {}) {
+    fun hideRecordingViews(recordingState: RecordingUiState) {
         // We need to animate the lock image first
         if (recordingState != RecordingUiState.Locked) {
             views.voiceMessageLockImage.isVisible = false
@@ -180,7 +180,6 @@ class VoiceMessageViews(
                     .setDuration(150)
                     .withEndAction {
                         resetMicButtonUi()
-                        onVoiceRecordingEnded()
                     }
                     .start()
         } else {
@@ -192,7 +191,6 @@ class VoiceMessageViews(
                 translationX = 0f
                 translationY = 0f
             }
-            onVoiceRecordingEnded()
         }
 
         // Hide toasts if user cancelled recording before the timeout of the toast.

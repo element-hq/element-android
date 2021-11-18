@@ -131,7 +131,7 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
             }
             RecordingUiState.Cancelled -> {
                 stopRecordingTicker()
-                voiceMessageViews.hideRecordingViews(recordingState) { callback.onDeleteVoiceMessage() }
+                voiceMessageViews.hideRecordingViews(recordingState)
                 vibrate(context)
             }
             RecordingUiState.Locked    -> {
