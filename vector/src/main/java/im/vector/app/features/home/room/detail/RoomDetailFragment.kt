@@ -700,7 +700,7 @@ class RoomDetailFragment @Inject constructor(
                 if (checkPermissions(PERMISSIONS_FOR_VOICE_MESSAGE, requireActivity(), permissionVoiceMessageLauncher)) {
                     roomDetailViewModel.handle(RoomDetailAction.StartRecordingVoiceMessage)
                     vibrate(requireContext())
-                    display(RecordingUiState.Started)
+                    updateRecordingUiState(RecordingUiState.Started)
                 }
             }
 
@@ -716,32 +716,32 @@ class RoomDetailFragment @Inject constructor(
                 if (lastKnownState != RecordingUiState.Locked) {
                     val isCancelled = lastKnownState == RecordingUiState.Cancelled
                     roomDetailViewModel.handle(RoomDetailAction.EndRecordingVoiceMessage(isCancelled = isCancelled))
-                    display(RecordingUiState.None)
+                    updateRecordingUiState(RecordingUiState.None)
                 }
             }
 
             override fun onUiStateChanged(state: RecordingUiState) {
-                display(state)
+                updateRecordingUiState(state)
             }
 
             override fun sendVoiceMessage() {
-                display(RecordingUiState.None)
+                updateRecordingUiState(RecordingUiState.None)
             }
 
             override fun deleteVoiceMessage() {
                 roomDetailViewModel.handle(RoomDetailAction.EndRecordingVoiceMessage(isCancelled = true))
-                display(RecordingUiState.None)
+                updateRecordingUiState(RecordingUiState.None)
             }
 
             override fun onRecordingLimitReached() {
-                display(RecordingUiState.Playback)
+                updateRecordingUiState(RecordingUiState.Playback)
             }
 
             override fun recordingWaveformClicked() {
-                display(RecordingUiState.Playback)
+                updateRecordingUiState(RecordingUiState.Playback)
             }
 
-            private fun display(state: RecordingUiState) {
+            private fun updateRecordingUiState(state: RecordingUiState) {
                 textComposerViewModel.handle(TextComposerAction.OnVoiceRecordingUiStateChanged(state))
             }
         }
