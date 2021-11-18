@@ -115,4 +115,5 @@
     <string name="settings_unimportant_counter_badge_summary_v2">Visa antal för tysta meddelanden i chattöversikten</string>
     <string name="settings_aggregate_unread_counts">Räkna chattar istället för meddelanden</string>
     <string name="settings_aggregate_unread_counts_summary">Om olästa chattar ska räknas istället för enskilda meddelanden i utrymmen och rumskategorier</string>
+    <string name="sc_accent_lime">Lime färg</string>
 </resources>
