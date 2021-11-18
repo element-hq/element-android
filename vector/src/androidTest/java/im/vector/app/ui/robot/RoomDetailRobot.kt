@@ -71,12 +71,14 @@ class RoomDetailRobot {
         openMessageMenu(message) {
             addQuickReaction(quickReaction)
         }
+        println("Open reactions bottom sheet")
         // Open reactions
         longClickReaction(quickReaction)
         // wait for bottom sheet
         interactWithSheet<ViewReactionsBottomSheet>(withText(R.string.reactions), openState = BottomSheetBehavior.STATE_COLLAPSED) {
             pressBack()
         }
+        println("Room Detail Robot: Open reaction from emoji picker")
         // Test add reaction
         openMessageMenu(message) {
             addReactionFromEmojiPicker()
