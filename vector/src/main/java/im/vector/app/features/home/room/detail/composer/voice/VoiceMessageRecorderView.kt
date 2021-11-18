@@ -41,8 +41,9 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
 
     interface Callback {
         fun onVoiceRecordingStarted()
-        fun onVoiceRecordingEnded(lastKnownState: RecordingUiState?)
+        fun onVoiceRecordingEnded()
         fun onVoicePlaybackButtonClicked()
+        fun onVoiceRecordingCancelled()
         fun onUiStateChanged(state: RecordingUiState)
         fun onSendVoiceMessage()
         fun onDeleteVoiceMessage()
@@ -72,7 +73,17 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
     private fun initListeners() {
         voiceMessageViews.start(object : VoiceMessageViews.Actions {
             override fun onRequestRecording() = callback.onVoiceRecordingStarted()
-            override fun onMicButtonReleased() = callback.onVoiceRecordingEnded(lastKnownState)
+            override fun onMicButtonReleased() {
+                when (lastKnownState) {
+                    RecordingUiState.Locked    -> {
+                        // do nothing,
+                        // onSendVoiceMessage, onDeleteVoiceMessage or onRecordingLimitReached will be triggered instead
+                    }
+                    RecordingUiState.Cancelled -> callback.onVoiceRecordingCancelled()
+                    else                       -> callback.onVoiceRecordingEnded()
+                }
+            }
+
             override fun onSendVoiceMessage() = callback.onSendVoiceMessage()
             override fun onDeleteVoiceMessage() = callback.onDeleteVoiceMessage()
             override fun onWaveformClicked() = callback.onRecordingWaveformClicked()

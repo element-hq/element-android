@@ -708,18 +708,12 @@ class RoomDetailFragment @Inject constructor(
                 roomDetailViewModel.handle(RoomDetailAction.PlayOrPauseRecordingPlayback)
             }
 
-            override fun onVoiceRecordingEnded(lastKnownState: RecordingUiState?) {
-                when (lastKnownState) {
-                    RecordingUiState.Locked -> {
-                        // do nothing,
-                        // onSendVoiceMessage, onDeleteVoiceMessage or onRecordingLimitReached will be triggered instead
-                    }
-                    else                    -> {
-                        val isCancelled = lastKnownState == RecordingUiState.Cancelled
-                        roomDetailViewModel.handle(RoomDetailAction.EndRecordingVoiceMessage(isCancelled = isCancelled))
-                        updateRecordingUiState(RecordingUiState.None)
-                    }
-                }
+            override fun onVoiceRecordingCancelled() {
+                onDeleteVoiceMessage()
+            }
+
+            override fun onVoiceRecordingEnded() {
+                onSendVoiceMessage()
             }
 
             override fun onUiStateChanged(state: RecordingUiState) {
