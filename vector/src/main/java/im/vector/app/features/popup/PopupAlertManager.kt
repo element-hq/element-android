@@ -44,7 +44,6 @@ class PopupAlertManager @Inject constructor() {
 
     companion object {
         const val INCOMING_CALL_PRIORITY = Int.MAX_VALUE
-        const val JITSI_CALL_PRIORITY = INCOMING_CALL_PRIORITY - 1
     }
 
     private var weakCurrentActivity: WeakReference<Activity>? = null
