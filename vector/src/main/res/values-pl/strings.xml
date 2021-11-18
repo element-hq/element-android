@@ -2865,4 +2865,5 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="cross_signing_verify_by_text">Weryfikacja ręczna poprzez tekst</string>
     <string name="or_other_mx_capabale_client">lub innego klienta Matrix z krzyżową weryfikacją nowych sesji logowania</string>
     <string name="upgrade_room_no_power_to_manage">Musisz mieć odpowiednie uprawnienia aby podnieść poziom pokoju</string>
+    <string name="notice_crypto_unable_to_decrypt_merged">Oczekiwanie na historię szyfrowania</string>
 </resources>
