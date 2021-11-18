@@ -1,6 +1,1 @@
-If message containing image is selected for reply and then some other message selected which does not
-have image in message then image in text compose box goes away, previously the image was not going away.
-
-If message which is not an image is selected for reply and then a different message which is a image
-is replaced for the reply then image related to measage appears in the text compose box previously it
-was not appearing.
+ix a display issue in the composer when the replied message is changed.

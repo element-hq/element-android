@@ -1055,13 +1055,13 @@ class RoomDetailFragment @Inject constructor(
         val data = event.buildImageContentRendererData(dimensionConverter.dpToPx(66))
         val isImageVisible = if (data != null) {
             imageContentRenderer.render(data, ImageContentRenderer.Mode.THUMBNAIL, views.composerLayout.views.composerRelatedMessageImage)
-            views.composerLayout.views.composerRelatedMessageImage.isVisible = true
             true
         } else {
             imageContentRenderer.clear(views.composerLayout.views.composerRelatedMessageImage)
-            views.composerLayout.views.composerRelatedMessageImage.isVisible = false
             false
         }
+
+        views.composerLayout.views.composerRelatedMessageImage.isVisible = isImageVisible
 
         views.composerLayout.setTextIfDifferent(defaultContent)
 
