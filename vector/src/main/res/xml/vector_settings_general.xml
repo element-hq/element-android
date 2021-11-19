@@ -11,7 +11,7 @@
             android:key="SETTINGS_PROFILE_PICTURE_PREFERENCE_KEY"
             android:title="@string/settings_profile_picture" />
 
-        <im.vector.app.core.preference.VectorEditTextPreference
+        <im.vector.app.core.preference.VectorPreference
             android:key="SETTINGS_DISPLAY_NAME_PREFERENCE_KEY"
             android:persistent="false"
             android:title="@string/settings_display_name" />
@@ -21,11 +21,17 @@
             android:summary="@string/change_password_summary"
             android:title="@string/settings_password" />
 
+        <im.vector.app.core.preference.VectorSwitchPreference
+            android:key="TCHAP_SETTINGS_HIDE_FROM_USERS_DIRECTORY_PREFERENCE_KEY"
+            android:summary="@string/tchap_settings_hide_from_users_directory_summary"
+            android:title="@string/tchap_settings_hide_from_users_directory_title" />
+
         <im.vector.app.core.preference.VectorPreference
             android:key="SETTINGS_EMAILS_AND_PHONE_NUMBERS_PREFERENCE_KEY"
-            android:summary="@string/settings_emails_and_phone_numbers_summary"
-            android:title="@string/settings_emails_and_phone_numbers_title"
-            app:fragment="im.vector.app.features.settings.threepids.ThreePidsSettingsFragment" />
+            android:persistent="false"
+            android:title="@string/settings_emails_and_phone_numbers_title" />
+        <!--            app:fragment="im.vector.app.features.settings.threepids.ThreePidsSettingsFragment"-->
+        <!--            android:summary="@string/settings_emails_and_phone_numbers_summary"-->
 
         <im.vector.app.core.preference.VectorPreference
             android:key="SETTINGS_DISCOVERY_PREFERENCE_KEY"
@@ -78,17 +84,20 @@
         <im.vector.app.core.preference.VectorPreference
             android:key="SETTINGS_LOGGED_IN_PREFERENCE_KEY"
             android:title="@string/settings_logged_in"
+            app:isPreferenceVisible="false"
             tools:summary="\@user:matrix.org" />
 
         <im.vector.app.core.preference.VectorPreference
             android:key="SETTINGS_HOME_SERVER_PREFERENCE_KEY"
             android:title="@string/settings_home_server"
             app:fragment="im.vector.app.features.settings.homeserver.HomeserverSettingsFragment"
+            app:isPreferenceVisible="false"
             tools:summary="https://homeserver.org" />
 
         <im.vector.app.core.preference.VectorPreference
             android:key="SETTINGS_IDENTITY_SERVER_PREFERENCE_KEY"
             android:title="@string/settings_identity_server"
+            app:isPreferenceVisible="false"
             tools:summary="https://identity.server.url" />
 
         <im.vector.app.core.preference.VectorPreference

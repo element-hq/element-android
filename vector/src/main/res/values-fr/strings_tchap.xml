@@ -160,5 +160,11 @@
     <!-- Home drawer -->
     <string name="template_tchap_invite_to">Inviter à rejoindre ${app_name}</string>
 
+    <!-- Settings -->
+    <string name="tchap_settings_change_pwd_caution">Changer le mot de passe réinitialise les clés de chiffrement sur tous les appareils, rendant l’historique des discussions illisible : pensez d’abord à sauvegarder vos clés sur l’ensemble de vos sessions pour pouvoir les récupérer après le changement de mot de passe.</string>
+    <string name="tchap_settings_hide_from_users_directory_title">Inscrire mon compte sur liste rouge</string>
+    <string name="tchap_settings_hide_from_users_directory_summary">Les autres utilisateurs ne pourront pas découvrir mon compte lors de leurs recherches</string>
+    <string name="tchap_settings_show_external_user_in_users_directory_prompt">Pour désactiver cette option, vous devez accepter que votre adresse e\u2011mail soit visible des autres utilisateurs lors de leurs recherches.</string>
+
     <string name="tchap_dialog_user_consent_homeserver_name">Tchap</string>
 </resources>

@@ -43,7 +43,7 @@ internal class RoomAccountDataDataSource @Inject constructor(@SessionDatabase pr
 
     fun getLiveAccountDataEvent(roomId: String, type: String): LiveData<Optional<RoomAccountDataEvent>> {
         return Transformations.map(getLiveAccountDataEvents(roomId, setOf(type))) {
-            it.firstOrNull()?.toOptional()
+            it.firstOrNull().toOptional()
         }
     }
 

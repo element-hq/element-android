@@ -27,13 +27,16 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
-import androidx.preference.EditTextPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
 import androidx.preference.SwitchPreference
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.cache.DiskCache
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import fr.gouv.tchap.android.sdk.api.session.accountdata.HideProfileContent
+import fr.gouv.tchap.android.sdk.api.session.accountdata.TchapUserAccountDataTypes.TYPE_HIDE_PROFILE
+import fr.gouv.tchap.core.utils.TchapUtils
+import fr.gouv.tchap.features.settings.TchapSettingsChangePasswordPreDialog
 import im.vector.app.R
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
 import im.vector.app.core.extensions.hideKeyboard
@@ -51,6 +54,7 @@ import im.vector.app.core.utils.toast
 import im.vector.app.databinding.DialogChangePasswordBinding
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
+import im.vector.app.features.crypto.keys.KeysExporter
 import im.vector.app.features.discovery.DiscoverySettingsFragment
 import im.vector.app.features.navigation.SettingsActivityPayload
 import im.vector.app.features.workers.signout.SignOutUiWorker
@@ -59,10 +63,14 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.failure.isInvalidPassword
+import org.matrix.android.sdk.api.session.events.model.toContent
+import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerConfig
 import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerService
 import org.matrix.android.sdk.flow.flow
@@ -72,6 +80,7 @@ import java.util.UUID
 import javax.inject.Inject
 
 class VectorSettingsGeneralFragment @Inject constructor(
+        private val keysExporter: KeysExporter,
         colorProvider: ColorProvider
 ) :
         VectorSettingsBaseFragment(),
@@ -89,10 +98,13 @@ class VectorSettingsGeneralFragment @Inject constructor(
         findPreference<UserAvatarPreference>(VectorPreferences.SETTINGS_PROFILE_PICTURE_PREFERENCE_KEY)!!
     }
     private val mDisplayNamePreference by lazy {
-        findPreference<EditTextPreference>("SETTINGS_DISPLAY_NAME_PREFERENCE_KEY")!!
+        findPreference<VectorPreference>("SETTINGS_DISPLAY_NAME_PREFERENCE_KEY")!!
     }
     private val mPasswordPreference by lazy {
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_CHANGE_PASSWORD_PREFERENCE_KEY)!!
+    }
+    private val hideFromUsersDirectoryPreference by lazy {
+        findPreference<VectorSwitchPreference>(VectorPreferences.TCHAP_SETTINGS_HIDE_FROM_USERS_DIRECTORY_PREFERENCE_KEY)!!
     }
     private val mIdentityServerPreference by lazy {
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_IDENTITY_SERVER_PREFERENCE_KEY)!!
@@ -122,6 +134,8 @@ class VectorSettingsGeneralFragment @Inject constructor(
 
         observeUserAvatar()
         observeUserDisplayName()
+        observeUserThreePid()
+        observeHideFromUserDirectory()
     }
 
     private fun observeUserAvatar() {
@@ -144,8 +158,30 @@ class VectorSettingsGeneralFragment @Inject constructor(
                 .onEach { displayName ->
                     mDisplayNamePreference.let {
                         it.summary = displayName
-                        it.text = displayName
+//                        it.text = displayName
                     }
+                }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
+    }
+
+    private fun observeUserThreePid() {
+        session.flow()
+                .liveThreePIds(true)
+                .mapNotNull { it.filterIsInstance<ThreePid.Email>().firstOrNull() }
+                .distinctUntilChanged()
+                .onEach {
+                    (findPreference<VectorPreference>(VectorPreferences.SETTINGS_EMAILS_AND_PHONE_NUMBERS_PREFERENCE_KEY)!!).summary = it.email
+                }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
+    }
+
+    private fun observeHideFromUserDirectory() {
+        session.flow()
+                .liveUserAccountData(TYPE_HIDE_PROFILE)
+                .map { it.getOrNull()?.content.toModel<HideProfileContent>()?.hideProfile }
+                .distinctUntilChanged()
+                .onEach { isHidden ->
+                    hideFromUsersDirectoryPreference.isChecked = isHidden ?: false
                 }
                 .launchIn(viewLifecycleOwner.lifecycleScope)
     }
@@ -159,15 +195,16 @@ class VectorSettingsGeneralFragment @Inject constructor(
             }
         }
 
-        // Display name
-        mDisplayNamePreference.let {
-            it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
-                newValue
-                        ?.let { value -> (value as? String)?.trim() }
-                        ?.let { value -> onDisplayNameChanged(value) }
-                false
-            }
-        }
+        // Tchap: Displayname cannot change
+//        // Display name
+//        mDisplayNamePreference.let {
+//            it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
+//                newValue
+//                        ?.let { value -> (value as? String)?.trim() }
+//                        ?.let { value -> onDisplayNameChanged(value) }
+//                false
+//            }
+//        }
 
         // Password
         // Hide the preference if password can not be updated
@@ -178,6 +215,14 @@ class VectorSettingsGeneralFragment @Inject constructor(
             }
         } else {
             mPasswordPreference.isVisible = false
+        }
+
+        // User directory visibility
+        hideFromUsersDirectoryPreference.let {
+            it.onPreferenceClickListener = Preference.OnPreferenceClickListener { _ ->
+                onHideFromUsersDirectoryClick()
+                true
+            }
         }
 
         val openDiscoveryScreenPreferenceClickListener = Preference.OnPreferenceClickListener {
@@ -450,33 +495,94 @@ class VectorSettingsGeneralFragment @Inject constructor(
                     }
                 }
             }
-            dialog.show()
-        }
-    }
 
-    /**
-     * Update the displayname.
-     */
-    private fun onDisplayNameChanged(value: String) {
-        val currentDisplayName = session.getUser(session.myUserId)?.displayName ?: ""
-        if (currentDisplayName != value) {
-            displayLoadingView()
+            TchapSettingsChangePasswordPreDialog(session)
+                    .apply {
+                        listener = object : TchapSettingsChangePasswordPreDialog.InteractionListener {
+                            override fun changePassword() {
+                                dialog.show()
+                            }
 
-            lifecycleScope.launch {
-                val result = runCatching { session.setDisplayName(session.myUserId, value) }
-                if (!isAdded) return@launch
-                result.fold(
-                        {
-                            // refresh the settings value
-                            mDisplayNamePreference.summary = value
-                            mDisplayNamePreference.text = value
-                            onCommonDone(null)
-                        },
-                        {
-                            onCommonDone(it.localizedMessage)
+                            override fun exportKeys(passphrase: String, uri: Uri) {
+                                showLoadingView(true)
+                                lifecycleScope.launch {
+                                    try {
+                                        keysExporter.export(passphrase, uri)
+                                        requireActivity().toast(getString(R.string.encryption_exported_successfully))
+                                    } catch (failure: Throwable) {
+                                        requireActivity().toast(errorFormatter.toHumanReadable(failure))
+                                    }
+                                    showLoadingView(false)
+                                }
+                            }
                         }
-                )
-            }
+                    }
+                    .show(activity.supportFragmentManager, "changePasswordPreDialog")
         }
     }
+
+    private fun onHideFromUsersDirectoryClick() {
+        val hidden = hideFromUsersDirectoryPreference.isChecked
+        // The external users must be prompted before showing them to the users directory
+        if (!hidden && TchapUtils.isExternalTchapUser(session.myUserId)) {
+            MaterialAlertDialogBuilder(requireActivity())
+                    .setMessage(R.string.tchap_settings_show_external_user_in_users_directory_prompt)
+                    .setPositiveButton(R.string.accept) { _, _ ->
+                        hideUserFromUsersDirectory(false)
+                    }
+                    .setNegativeButton(R.string.cancel) { _, _ ->
+                        hideFromUsersDirectoryPreference.isChecked = true
+                    }
+                    .setOnCancelListener { _ ->
+                        hideFromUsersDirectoryPreference.isChecked = true
+                    }
+                    .show()
+        } else {
+            hideUserFromUsersDirectory(hidden)
+        }
+    }
+
+    private fun hideUserFromUsersDirectory(hidden: Boolean) {
+        displayLoadingView()
+        lifecycleScope.launch {
+            val result = runCatching { session.accountDataService().updateUserAccountData(TYPE_HIDE_PROFILE, HideProfileContent(hidden).toContent()) }
+            if (!isAdded) return@launch
+            result.onFailure { failure ->
+                // Refresh setting value
+                hideFromUsersDirectoryPreference.isChecked = session.accountDataService()
+                        .getUserAccountDataEvent(TYPE_HIDE_PROFILE)
+                        ?.content.toModel<HideProfileContent>()
+                        ?.hideProfile ?: false
+                requireActivity().toast(errorFormatter.toHumanReadable(failure))
+            }
+            hideLoadingView()
+        }
+    }
+
+    // Tchap: Displayname cannot change
+//    /**
+//     * Update the displayname.
+//     */
+//    private fun onDisplayNameChanged(value: String) {
+//        val currentDisplayName = session.getUser(session.myUserId)?.displayName ?: ""
+//        if (currentDisplayName != value) {
+//            displayLoadingView()
+//
+//            lifecycleScope.launch {
+//                val result = runCatching { session.setDisplayName(session.myUserId, value) }
+//                if (!isAdded) return@launch
+//                result.fold(
+//                        {
+//                            // refresh the settings value
+//                            mDisplayNamePreference.summary = value
+//                            mDisplayNamePreference.text = value
+//                            onCommonDone(null)
+//                        },
+//                        {
+//                            onCommonDone(it.localizedMessage)
+//                        }
+//                )
+//            }
+//        }
+//    }
 }
