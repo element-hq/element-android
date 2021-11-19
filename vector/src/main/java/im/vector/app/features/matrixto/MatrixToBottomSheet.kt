@@ -24,7 +24,6 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.airbnb.mvrx.Incomplete
-import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -66,15 +65,15 @@ class MatrixToBottomSheet :
     override fun invalidate() = withState(viewModel) { state ->
         super.invalidate()
         when (state.linkType) {
-            is PermalinkData.RoomLink -> {
+            is PermalinkData.RoomLink     -> {
                 views.matrixToCardContentLoading.isVisible = state.roomPeekResult is Incomplete
                 showFragment(MatrixToRoomSpaceFragment::class, Bundle())
             }
-            is PermalinkData.UserLink -> {
+            is PermalinkData.UserLink     -> {
                 views.matrixToCardContentLoading.isVisible = state.matrixItem is Incomplete
                 showFragment(MatrixToUserFragment::class, Bundle())
             }
-            is PermalinkData.GroupLink -> {
+            is PermalinkData.GroupLink    -> {
             }
             is PermalinkData.FallbackLink -> {
             }
@@ -98,16 +97,16 @@ class MatrixToBottomSheet :
 
         viewModel.observeViewEvents {
             when (it) {
-                is MatrixToViewEvents.NavigateToRoom -> {
+                is MatrixToViewEvents.NavigateToRoom  -> {
                     interactionListener?.mxToBottomSheetNavigateToRoom(it.roomId)
                     dismiss()
                 }
-                MatrixToViewEvents.Dismiss -> dismiss()
+                MatrixToViewEvents.Dismiss            -> dismiss()
                 is MatrixToViewEvents.NavigateToSpace -> {
                     interactionListener?.mxToBottomSheetSwitchToSpace(it.spaceId)
                     dismiss()
                 }
-                is MatrixToViewEvents.ShowModalError -> {
+                is MatrixToViewEvents.ShowModalError  -> {
                     MaterialAlertDialogBuilder(requireContext())
                             .setMessage(it.error)
                             .setPositiveButton(getString(R.string.ok), null)
@@ -120,11 +119,7 @@ class MatrixToBottomSheet :
     companion object {
         fun withLink(matrixToLink: String): MatrixToBottomSheet {
             return MatrixToBottomSheet().apply {
-                arguments = Bundle().apply {
-                    putParcelable(Mavericks.KEY_ARG, MatrixToArgs(
-                            matrixToLink = matrixToLink
-                    ))
-                }
+                setArguments(MatrixToArgs(matrixToLink = matrixToLink))
             }
         }
     }
