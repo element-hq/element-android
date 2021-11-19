@@ -16,9 +16,6 @@
 
 package im.vector.app.features.notifications
 
-import android.content.Context
-import org.matrix.android.sdk.api.session.Session
-
 class NotificationState(
         /**
          * The notifiable events queued for rendering or currently rendered
@@ -53,18 +50,9 @@ class NotificationState(
 
     fun hasAlreadyRendered(eventsToRender: List<ProcessedEvent<NotifiableEvent>>) = renderedEvents == eventsToRender
 
-    fun persist(context: Context, session: Session) {
-        NotificationEventPersistence.persistEvents(queuedEvents, context, session)
-    }
-
-    companion object {
-
-        fun createInitialNotificationState(context: Context, currentSession: Session?): NotificationState {
-            val queuedEvents = NotificationEventPersistence.loadEvents(context, currentSession, factory = { rawEvents ->
-                NotificationEventQueue(rawEvents.toMutableList(), seenEventIds = CircularCache.create(cacheSize = 25))
-            })
-            val renderedEvents = queuedEvents.rawEvents().map { ProcessedEvent(ProcessedEvent.Type.KEEP, it) }.toMutableList()
-            return NotificationState(queuedEvents, renderedEvents)
+    fun queuedEvents(block: (NotificationEventQueue) -> Unit) {
+        synchronized(queuedEvents) {
+            block(queuedEvents)
         }
     }
 }

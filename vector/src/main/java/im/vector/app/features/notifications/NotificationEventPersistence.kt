@@ -21,14 +21,15 @@ import org.matrix.android.sdk.api.session.Session
 import timber.log.Timber
 import java.io.File
 import java.io.FileOutputStream
+import javax.inject.Inject
 
 // TODO Multi-account
 private const val ROOMS_NOTIFICATIONS_FILE_NAME = "im.vector.notifications.cache"
 private const val KEY_ALIAS_SECRET_STORAGE = "notificationMgr"
 
-object NotificationEventPersistence {
+class NotificationEventPersistence @Inject constructor(private val context: Context) {
 
-    fun loadEvents(context: Context, currentSession: Session?, factory: (List<NotifiableEvent>) -> NotificationEventQueue): NotificationEventQueue {
+    fun loadEvents(currentSession: Session?, factory: (List<NotifiableEvent>) -> NotificationEventQueue): NotificationEventQueue {
         try {
             val file = File(context.applicationContext.cacheDir, ROOMS_NOTIFICATIONS_FILE_NAME)
             if (file.exists()) {
@@ -45,21 +46,19 @@ object NotificationEventPersistence {
         return factory(emptyList())
     }
 
-    fun persistEvents(queuedEvents: NotificationEventQueue, context: Context, currentSession: Session) {
-        synchronized(queuedEvents) {
-            if (queuedEvents.isEmpty()) {
-                deleteCachedRoomNotifications(context)
-                return
+    fun persistEvents(queuedEvents: NotificationEventQueue, currentSession: Session) {
+        if (queuedEvents.isEmpty()) {
+            deleteCachedRoomNotifications(context)
+            return
+        }
+        try {
+            val file = File(context.applicationContext.cacheDir, ROOMS_NOTIFICATIONS_FILE_NAME)
+            if (!file.exists()) file.createNewFile()
+            FileOutputStream(file).use {
+                currentSession.securelyStoreObject(queuedEvents.rawEvents(), KEY_ALIAS_SECRET_STORAGE, it)
             }
-            try {
-                val file = File(context.applicationContext.cacheDir, ROOMS_NOTIFICATIONS_FILE_NAME)
-                if (!file.exists()) file.createNewFile()
-                FileOutputStream(file).use {
-                    currentSession.securelyStoreObject(queuedEvents.rawEvents(), KEY_ALIAS_SECRET_STORAGE, it)
-                }
-            } catch (e: Throwable) {
-                Timber.e(e, "## Failed to save cached notification info")
-            }
+        } catch (e: Throwable) {
+            Timber.e(e, "## Failed to save cached notification info")
         }
     }
 

@@ -38,12 +38,15 @@ import javax.inject.Singleton
  * Events can be grouped into the same notification, old (already read) events can be removed to do some cleaning.
  */
 @Singleton
-class NotificationDrawerManager @Inject constructor(private val context: Context,
-                                                    private val notificationDisplayer: NotificationDisplayer,
-                                                    private val vectorPreferences: VectorPreferences,
-                                                    private val activeSessionDataSource: ActiveSessionDataSource,
-                                                    private val notifiableEventProcessor: NotifiableEventProcessor,
-                                                    private val notificationRenderer: NotificationRenderer) {
+class NotificationDrawerManager @Inject constructor(
+        private val context: Context,
+        private val notificationDisplayer: NotificationDisplayer,
+        private val vectorPreferences: VectorPreferences,
+        private val activeSessionDataSource: ActiveSessionDataSource,
+        private val notifiableEventProcessor: NotifiableEventProcessor,
+        private val notificationRenderer: NotificationRenderer,
+        private val notificationEventPersistence: NotificationEventPersistence
+) {
 
     private val handlerThread: HandlerThread = HandlerThread("NotificationDrawerManager", Thread.MIN_PRIORITY)
     private var backgroundHandler: Handler
@@ -55,7 +58,7 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
     /**
      * Lazily initializes the NotificationState as we rely on having a current session in order to fetch the persisted queue of events
      */
-    private val notificationState by lazy { NotificationState.createInitialNotificationState(context, currentSession) }
+    private val notificationState by lazy { createInitialNotificationState() }
     private val avatarSize = context.resources.getDimensionPixelSize(R.dimen.profile_avatar_size)
     private var currentRoomId: String? = null
     private val firstThrottler = FirstThrottler(200)
@@ -65,6 +68,14 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
     init {
         handlerThread.start()
         backgroundHandler = Handler(handlerThread.looper)
+    }
+
+    private fun createInitialNotificationState(): NotificationState {
+        val queuedEvents = notificationEventPersistence.loadEvents(currentSession, factory = { rawEvents ->
+            NotificationEventQueue(rawEvents.toMutableList(), seenEventIds = CircularCache.create(cacheSize = 25))
+        })
+        val renderedEvents = queuedEvents.rawEvents().map { ProcessedEvent(ProcessedEvent.Type.KEEP, it) }.toMutableList()
+        return NotificationState(queuedEvents, renderedEvents)
     }
 
     /**
@@ -161,7 +172,13 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
             notificationState.clearAndAddRenderedEvents(eventsToRender)
             val session = currentSession ?: return
             renderEvents(session, eventsToRender)
-            notificationState.persist(context, session)
+            persistEvents(session)
+        }
+    }
+
+    private fun persistEvents(session: Session) {
+        notificationState.queuedEvents { queuedEvents ->
+            notificationEventPersistence.persistEvents(queuedEvents, session)
         }
     }
 
