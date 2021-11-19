@@ -1138,7 +1138,7 @@ class RoomDetailFragment @Inject constructor(
 
         // We should improve the UX to support going into playback mode when paused and delete the media when the view is destroyed.
         messageComposerViewModel.handle(MessageComposerAction.EndAllVoiceActions(deleteRecord = false))
-        views.voiceMessageRecorderView.display(RecordingUiState.None)
+        views.voiceMessageRecorderView.render(RecordingUiState.None)
     }
 
     private val attachmentFileActivityResultLauncher = registerStartForActivityResult {
@@ -1434,7 +1434,7 @@ class RoomDetailFragment @Inject constructor(
                 views.composerLayout.isInvisible = !messageComposerState.isComposerVisible
                 views.voiceMessageRecorderView.isVisible = messageComposerState.isVoiceMessageRecorderVisible
                 views.composerLayout.views.sendButton.isInvisible = !messageComposerState.isSendButtonVisible
-                views.voiceMessageRecorderView.display(messageComposerState.voiceRecordingUiState)
+                views.voiceMessageRecorderView.render(messageComposerState.voiceRecordingUiState)
                 views.composerLayout.setRoomEncrypted(summary.isEncrypted)
                 // views.composerLayout.alwaysShowSendButton = false
                 if (messageComposerState.canSendMessage) {
