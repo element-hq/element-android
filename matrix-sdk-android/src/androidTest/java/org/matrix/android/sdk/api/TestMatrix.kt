@@ -35,16 +35,16 @@ import org.matrix.android.sdk.internal.SessionManager
 import org.matrix.android.sdk.internal.network.ApiInterceptor
 import org.matrix.android.sdk.internal.network.UserAgentHolder
 import org.matrix.android.sdk.internal.util.BackgroundDetectionObserver
+import org.matrix.android.sdk.internal.worker.MatrixWorkerFactory
 import org.matrix.olm.OlmManager
 import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
 
 /**
- * This is the main entry point to the matrix sdk.
- * To get the singleton instance, use getInstance static method.
+ * This mimics the Matrix class but using TestMatrixComponent internally instead of regular MatrixComponent.
  */
-class Matrix private constructor(context: Context, matrixConfiguration: MatrixConfiguration) {
+class TestMatrix constructor(context: Context, matrixConfiguration: MatrixConfiguration) {
 
     @Inject internal lateinit var legacySessionImporter: LegacySessionImporter
     @Inject internal lateinit var authenticationService: AuthenticationService
@@ -55,15 +55,18 @@ class Matrix private constructor(context: Context, matrixConfiguration: MatrixCo
     @Inject internal lateinit var sessionManager: SessionManager
     @Inject internal lateinit var homeServerHistoryService: HomeServerHistoryService
     @Inject internal lateinit var apiInterceptor: ApiInterceptor
+    @Inject internal lateinit var matrixWorkerFactory: MatrixWorkerFactory
 
     private val uiHandler = Handler(Looper.getMainLooper())
 
     init {
         Monarchy.init(context)
         DaggerTestMatrixComponent.factory().create(context, matrixConfiguration).inject(this)
-        if (context.applicationContext !is Configuration.Provider) {
-            WorkManager.initialize(context, Configuration.Builder().setExecutor(Executors.newCachedThreadPool()).build())
-        }
+        val configuration = Configuration.Builder()
+                .setExecutor(Executors.newCachedThreadPool())
+                .setWorkerFactory(matrixWorkerFactory)
+                .build()
+        WorkManager.initialize(context, configuration)
         uiHandler.post {
             ProcessLifecycleOwner.get().lifecycle.addObserver(backgroundDetectionObserver)
         }
@@ -93,21 +96,21 @@ class Matrix private constructor(context: Context, matrixConfiguration: MatrixCo
 
     companion object {
 
-        private lateinit var instance: Matrix
+        private lateinit var instance: TestMatrix
         private val isInit = AtomicBoolean(false)
 
         fun initialize(context: Context, matrixConfiguration: MatrixConfiguration) {
             if (isInit.compareAndSet(false, true)) {
-                instance = Matrix(context.applicationContext, matrixConfiguration)
+                instance = TestMatrix(context.applicationContext, matrixConfiguration)
             }
         }
 
-        fun getInstance(context: Context): Matrix {
+        fun getInstance(context: Context): TestMatrix {
             if (isInit.compareAndSet(false, true)) {
                 val appContext = context.applicationContext
                 if (appContext is MatrixConfiguration.Provider) {
                     val matrixConfiguration = (appContext as MatrixConfiguration.Provider).providesMatrixConfiguration()
-                    instance = Matrix(appContext, matrixConfiguration)
+                    instance = TestMatrix(appContext, matrixConfiguration)
                 } else {
                     throw IllegalStateException("Matrix is not initialized properly." +
                             " You should call Matrix.initialize or let your application implements MatrixConfiguration.Provider.")

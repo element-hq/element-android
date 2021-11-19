@@ -22,22 +22,31 @@ import org.matrix.android.sdk.internal.di.MatrixScope
 import timber.log.Timber
 import javax.inject.Inject
 
-/**
- * To be attached to ProcessLifecycleOwner lifecycle
- */
-@MatrixScope
-internal class BackgroundDetectionObserver @Inject constructor() : DefaultLifecycleObserver {
 
-    var isInBackground: Boolean = true
+interface BackgroundDetectionObserver: DefaultLifecycleObserver {
+    val isInBackground: Boolean
+
+    fun register(listener: Listener)
+    fun unregister(listener: Listener)
+
+    interface Listener {
+        fun onMoveToForeground()
+        fun onMoveToBackground()
+    }
+}
+
+internal class DefaultBackgroundDetectionObserver: BackgroundDetectionObserver {
+
+    override var isInBackground: Boolean = true
         private set
 
-    private val listeners = LinkedHashSet<Listener>()
+    private val listeners = LinkedHashSet<BackgroundDetectionObserver.Listener>()
 
-    fun register(listener: Listener) {
+    override fun register(listener: BackgroundDetectionObserver.Listener) {
         listeners.add(listener)
     }
 
-    fun unregister(listener: Listener) {
+    override fun unregister(listener: BackgroundDetectionObserver.Listener) {
         listeners.remove(listener)
     }
 
@@ -52,9 +61,17 @@ internal class BackgroundDetectionObserver @Inject constructor() : DefaultLifecy
         isInBackground = true
         listeners.forEach { it.onMoveToBackground() }
     }
+}
 
-    interface Listener {
-        fun onMoveToForeground()
-        fun onMoveToBackground()
-    }
+/**
+ * Force foreground for testing
+ */
+internal class TestBackgroundDetectionObserver : BackgroundDetectionObserver {
+
+    override val isInBackground: Boolean = false
+
+    override fun register(listener: BackgroundDetectionObserver.Listener) = Unit
+
+    override fun unregister(listener: BackgroundDetectionObserver.Listener) = Unit
+
 }

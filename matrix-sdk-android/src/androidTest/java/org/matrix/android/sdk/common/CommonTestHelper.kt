@@ -20,7 +20,6 @@ import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.Observer
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement
-import androidx.test.internal.runner.junit4.statement.UiThreadStatement.runOnUiThread
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -30,9 +29,9 @@ import kotlinx.coroutines.withTimeout
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
-import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.MatrixConfiguration
+import org.matrix.android.sdk.api.TestMatrix
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.registration.RegistrationResult
 import org.matrix.android.sdk.api.session.Session
@@ -45,7 +44,6 @@ import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
 import org.matrix.android.sdk.api.session.sync.SyncState
-import java.util.ArrayList
 import java.util.UUID
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
@@ -56,13 +54,13 @@ import java.util.concurrent.TimeUnit
  */
 class CommonTestHelper(context: Context) {
 
-    val matrix: Matrix
+    val matrix: TestMatrix
 
-    fun getTestInterceptor(session: Session): MockOkHttpInterceptor? = TestNetworkModule.interceptorForSession(session.sessionId) as? MockOkHttpInterceptor
+    fun getTestInterceptor(session: Session): MockOkHttpInterceptor? = TestModule.interceptorForSession(session.sessionId) as? MockOkHttpInterceptor
 
     init {
         UiThreadStatement.runOnUiThread {
-            Matrix.initialize(
+            TestMatrix.initialize(
                     context,
                     MatrixConfiguration(
                             applicationFlavor = "TestFlavor",
@@ -70,7 +68,7 @@ class CommonTestHelper(context: Context) {
                     )
             )
         }
-        matrix = Matrix.getInstance(context)
+        matrix = TestMatrix.getInstance(context)
     }
 
     fun createAccount(userNamePrefix: String, testParams: SessionTestParams): Session {

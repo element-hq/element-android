@@ -20,6 +20,7 @@ import android.content.Context
 import dagger.BindsInstance
 import dagger.Component
 import org.matrix.android.sdk.api.MatrixConfiguration
+import org.matrix.android.sdk.api.TestMatrix
 import org.matrix.android.sdk.internal.auth.AuthModule
 import org.matrix.android.sdk.internal.di.MatrixComponent
 import org.matrix.android.sdk.internal.di.MatrixModule
@@ -34,11 +35,12 @@ import org.matrix.android.sdk.internal.util.system.SystemModule
     NetworkModule::class,
     AuthModule::class,
     RawModule::class,
-    SystemModule::class,
-    TestNetworkModule::class
+    SystemModule::class
 ])
 @MatrixScope
 internal interface TestMatrixComponent : MatrixComponent {
+
+    fun inject(matrix: TestMatrix)
 
     @Component.Factory
     interface Factory {

@@ -48,6 +48,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.matrix.android.sdk.api.Matrix
+import org.matrix.android.sdk.api.TestMatrix
 import org.matrix.android.sdk.api.session.Session
 
 @RunWith(AndroidJUnit4::class)
@@ -62,7 +63,7 @@ class SecurityBootstrapTest : VerificationTestBase() {
     @Before
     fun createSessionWithCrossSigning() {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
-        val matrix = Matrix.getInstance(context)
+        val matrix = TestMatrix.getInstance(context)
         val userName = "foobar_${System.currentTimeMillis()}"
         existingSession = createAccountAndSync(matrix, userName, password, true)
         stubAllExternalIntents()

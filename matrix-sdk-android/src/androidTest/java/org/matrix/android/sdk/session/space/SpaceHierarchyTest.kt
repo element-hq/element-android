@@ -540,6 +540,7 @@ class SpaceHierarchyTest : InstrumentedTest {
     }
 
     @Test
+    @Suppress("EXPERIMENTAL_API_USAGE")
     fun testParentRelation() {
         val aliceSession = commonTestHelper.createAccount("Alice", SessionTestParams(true))
         val bobSession = commonTestHelper.createAccount("Bib", SessionTestParams(true))
