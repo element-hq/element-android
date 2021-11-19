@@ -77,20 +77,20 @@ class TextComposerViewModel @AssistedInject constructor(
     override fun handle(action: TextComposerAction) {
         Timber.v("Handle action: $action")
         when (action) {
-            is TextComposerAction.EnterEditMode                -> handleEnterEditMode(action)
-            is TextComposerAction.EnterQuoteMode               -> handleEnterQuoteMode(action)
-            is TextComposerAction.EnterRegularMode             -> handleEnterRegularMode(action)
-            is TextComposerAction.EnterReplyMode               -> handleEnterReplyMode(action)
-            is TextComposerAction.SaveDraft                    -> handleSaveDraft(action)
-            is TextComposerAction.SendMessage                  -> handleSendMessage(action)
-            is TextComposerAction.UserIsTyping                 -> handleUserIsTyping(action)
-            is TextComposerAction.OnTextChanged                -> handleOnTextChanged(action)
-            is TextComposerAction.OnVoiceRecordingStateChanged -> handleOnVoiceRecordingStateChanged(action)
+            is TextComposerAction.EnterEditMode                  -> handleEnterEditMode(action)
+            is TextComposerAction.EnterQuoteMode                 -> handleEnterQuoteMode(action)
+            is TextComposerAction.EnterRegularMode               -> handleEnterRegularMode(action)
+            is TextComposerAction.EnterReplyMode                 -> handleEnterReplyMode(action)
+            is TextComposerAction.SaveDraft                      -> handleSaveDraft(action)
+            is TextComposerAction.SendMessage                    -> handleSendMessage(action)
+            is TextComposerAction.UserIsTyping                   -> handleUserIsTyping(action)
+            is TextComposerAction.OnTextChanged                  -> handleOnTextChanged(action)
+            is TextComposerAction.OnVoiceRecordingUiStateChanged -> handleOnVoiceRecordingUiStateChanged(action)
         }
     }
 
-    private fun handleOnVoiceRecordingStateChanged(action: TextComposerAction.OnVoiceRecordingStateChanged) = setState {
-        copy(isVoiceRecording = action.isRecording)
+    private fun handleOnVoiceRecordingUiStateChanged(action: TextComposerAction.OnVoiceRecordingUiStateChanged) = setState {
+        copy(voiceRecordingUiState = action.uiState)
     }
 
     private fun handleOnTextChanged(action: TextComposerAction.OnTextChanged) {

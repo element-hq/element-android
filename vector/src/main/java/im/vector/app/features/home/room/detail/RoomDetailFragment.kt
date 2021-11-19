@@ -138,7 +138,8 @@ import im.vector.app.features.home.room.detail.composer.TextComposerView
 import im.vector.app.features.home.room.detail.composer.TextComposerViewEvents
 import im.vector.app.features.home.room.detail.composer.TextComposerViewModel
 import im.vector.app.features.home.room.detail.composer.TextComposerViewState
-import im.vector.app.features.home.room.detail.composer.VoiceMessageRecorderView
+import im.vector.app.features.home.room.detail.composer.voice.VoiceMessageRecorderView
+import im.vector.app.features.home.room.detail.composer.voice.VoiceMessageRecorderView.RecordingUiState
 import im.vector.app.features.home.room.detail.readreceipts.DisplayReadReceiptsBottomSheet
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.action.EventSharedAction
@@ -505,7 +506,7 @@ class RoomDetailFragment @Inject constructor(
 
     private fun onCannotRecord() {
         // Update the UI, cancel the animation
-        views.voiceMessageRecorderView.initVoiceRecordingViews()
+        textComposerViewModel.handle(TextComposerAction.OnVoiceRecordingUiStateChanged(RecordingUiState.None))
     }
 
     private fun acceptIncomingCall(event: RoomDetailViewEvents.DisplayAndAcceptCall) {
@@ -692,32 +693,56 @@ class RoomDetailFragment @Inject constructor(
     }
 
     private fun setupVoiceMessageView() {
-        views.voiceMessageRecorderView.voiceMessagePlaybackTracker = voiceMessagePlaybackTracker
-
+        voiceMessagePlaybackTracker.track(VoiceMessagePlaybackTracker.RECORDING_ID, views.voiceMessageRecorderView)
         views.voiceMessageRecorderView.callback = object : VoiceMessageRecorderView.Callback {
-            override fun onVoiceRecordingStarted(): Boolean {
-                return if (checkPermissions(PERMISSIONS_FOR_VOICE_MESSAGE, requireActivity(), permissionVoiceMessageLauncher)) {
+
+            override fun onVoiceRecordingStarted() {
+                if (checkPermissions(PERMISSIONS_FOR_VOICE_MESSAGE, requireActivity(), permissionVoiceMessageLauncher)) {
                     roomDetailViewModel.handle(RoomDetailAction.StartRecordingVoiceMessage)
-                    textComposerViewModel.handle(TextComposerAction.OnVoiceRecordingStateChanged(true))
                     vibrate(requireContext())
-                    true
-                } else {
-                    // Permission dialog is displayed
-                    false
+                    updateRecordingUiState(RecordingUiState.Started)
                 }
-            }
-
-            override fun onVoiceRecordingEnded(isCancelled: Boolean) {
-                roomDetailViewModel.handle(RoomDetailAction.EndRecordingVoiceMessage(isCancelled))
-                textComposerViewModel.handle(TextComposerAction.OnVoiceRecordingStateChanged(false))
-            }
-
-            override fun onVoiceRecordingPlaybackModeOn() {
-                roomDetailViewModel.handle(RoomDetailAction.PauseRecordingVoiceMessage)
             }
 
             override fun onVoicePlaybackButtonClicked() {
                 roomDetailViewModel.handle(RoomDetailAction.PlayOrPauseRecordingPlayback)
+            }
+
+            override fun onVoiceRecordingCancelled() {
+                roomDetailViewModel.handle(RoomDetailAction.EndRecordingVoiceMessage(isCancelled = true))
+                updateRecordingUiState(RecordingUiState.Cancelled)
+            }
+
+            override fun onVoiceRecordingLocked() {
+                updateRecordingUiState(RecordingUiState.Locked)
+            }
+
+            override fun onVoiceRecordingEnded() {
+                onSendVoiceMessage()
+            }
+
+            override fun onSendVoiceMessage() {
+                roomDetailViewModel.handle(RoomDetailAction.EndRecordingVoiceMessage(isCancelled = false))
+                updateRecordingUiState(RecordingUiState.None)
+            }
+
+            override fun onDeleteVoiceMessage() {
+                roomDetailViewModel.handle(RoomDetailAction.EndRecordingVoiceMessage(isCancelled = true))
+                updateRecordingUiState(RecordingUiState.None)
+            }
+
+            override fun onRecordingLimitReached() {
+                roomDetailViewModel.handle(RoomDetailAction.PauseRecordingVoiceMessage)
+                updateRecordingUiState(RecordingUiState.Playback)
+            }
+
+            override fun onRecordingWaveformClicked() {
+                roomDetailViewModel.handle(RoomDetailAction.PauseRecordingVoiceMessage)
+                updateRecordingUiState(RecordingUiState.Playback)
+            }
+
+            private fun updateRecordingUiState(state: RecordingUiState) {
+                textComposerViewModel.handle(TextComposerAction.OnVoiceRecordingUiStateChanged(state))
             }
         }
     }
@@ -1112,7 +1137,7 @@ class RoomDetailFragment @Inject constructor(
 
         // We should improve the UX to support going into playback mode when paused and delete the media when the view is destroyed.
         roomDetailViewModel.handle(RoomDetailAction.EndAllVoiceActions(deleteRecord = false))
-        views.voiceMessageRecorderView.initVoiceRecordingViews()
+        views.voiceMessageRecorderView.display(RecordingUiState.None)
     }
 
     private val attachmentFileActivityResultLauncher = registerStartForActivityResult {
@@ -1408,6 +1433,7 @@ class RoomDetailFragment @Inject constructor(
                 views.composerLayout.isInvisible = !textComposerState.isComposerVisible
                 views.voiceMessageRecorderView.isVisible = textComposerState.isVoiceMessageRecorderVisible
                 views.composerLayout.views.sendButton.isInvisible = !textComposerState.isSendButtonVisible
+                views.voiceMessageRecorderView.display(textComposerState.voiceRecordingUiState)
                 views.composerLayout.setRoomEncrypted(summary.isEncrypted)
                 // views.composerLayout.alwaysShowSendButton = false
                 if (textComposerState.canSendMessage) {
@@ -1962,7 +1988,7 @@ class RoomDetailFragment @Inject constructor(
                 roomDetailViewModel.handle(RoomDetailAction.UpdateQuickReactAction(action.eventId, action.clickedOn, action.add))
             }
             is EventSharedAction.Edit                       -> {
-                if (!views.voiceMessageRecorderView.isActive()) {
+                if (withState(textComposerViewModel) { it.isVoiceMessageIdle }) {
                     textComposerViewModel.handle(TextComposerAction.EnterEditMode(action.eventId, views.composerLayout.text.toString()))
                 } else {
                     requireActivity().toast(R.string.error_voice_message_cannot_reply_or_edit)
@@ -1972,7 +1998,7 @@ class RoomDetailFragment @Inject constructor(
                 textComposerViewModel.handle(TextComposerAction.EnterQuoteMode(action.eventId, views.composerLayout.text.toString()))
             }
             is EventSharedAction.Reply                      -> {
-                if (!views.voiceMessageRecorderView.isActive()) {
+                if (withState(textComposerViewModel) { it.isVoiceMessageIdle }) {
                     textComposerViewModel.handle(TextComposerAction.EnterReplyMode(action.eventId, views.composerLayout.text.toString()))
                 } else {
                     requireActivity().toast(R.string.error_voice_message_cannot_reply_or_edit)
