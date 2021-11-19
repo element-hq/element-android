@@ -214,14 +214,10 @@ class BootstrapBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetBoot
 
     companion object {
 
-        const val EXTRA_ARGS = "EXTRA_ARGS"
-
         fun show(fragmentManager: FragmentManager, mode: SetupMode): BootstrapBottomSheet {
             return BootstrapBottomSheet().apply {
                 isCancelable = false
-                arguments = Bundle().apply {
-                    this.putParcelable(EXTRA_ARGS, Args(setUpMode = mode))
-                }
+                setArguments(Args(setUpMode = mode))
             }.also {
                 it.show(fragmentManager, "BootstrapBottomSheet")
             }
