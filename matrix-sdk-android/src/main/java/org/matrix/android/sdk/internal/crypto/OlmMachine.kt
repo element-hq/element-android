@@ -22,7 +22,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
-import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.listeners.ProgressListener
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MXCrossSigningInfo
@@ -771,7 +770,6 @@ internal class OlmMachine(
     suspend fun exportCrossSigningKeys(): PrivateKeysInfo? {
         val export = withContext(Dispatchers.IO) {
             inner.exportCrossSigningKeys()
-
         } ?: return null
 
         return PrivateKeysInfo(export.masterKey, export.selfSigningKey, export.userSigningKey)

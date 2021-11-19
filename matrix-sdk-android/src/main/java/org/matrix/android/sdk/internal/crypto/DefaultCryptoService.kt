@@ -41,7 +41,6 @@ import org.matrix.android.sdk.api.listeners.ProgressListener
 import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.crypto.crosssigning.CrossSigningService
-import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupService
 import org.matrix.android.sdk.api.session.crypto.keyshare.GossipingRequestListener
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.Event
@@ -310,7 +309,7 @@ internal class DefaultCryptoService @Inject constructor(
             setRustLogger()
             Timber.v(
                     "## CRYPTO | Successfully started up an Olm machine for " +
-                            "${userId}, ${deviceId}, identity keys: ${this.olmMachine.identityKeys()}")
+                            "$userId, $deviceId, identity keys: ${this.olmMachine.identityKeys()}")
         } catch (throwable: Throwable) {
             Timber.v("Failed create an Olm machine: $throwable")
         }
@@ -408,7 +407,7 @@ internal class DefaultCryptoService @Inject constructor(
 
     override fun getLiveCryptoDeviceInfo(userIds: List<String>): LiveData<List<CryptoDeviceInfo>> {
         return runBlocking {
-            this@DefaultCryptoService.olmMachine.getLiveDevices(userIds) //?: LiveDevice(userIds, deviceObserver)
+            this@DefaultCryptoService.olmMachine.getLiveDevices(userIds) // ?: LiveDevice(userIds, deviceObserver)
         }
     }
 
@@ -626,9 +625,9 @@ internal class DefaultCryptoService @Inject constructor(
                 cryptoCoroutineScope.launch {
                     olmMachine.updateTrackedUsers(listOf(userId))
                 }
-            } else if (membership == Membership.INVITE
-                    && shouldEncryptForInvitedMembers(roomId)
-                    && isEncryptionEnabledForInvitedUser()) {
+            } else if (membership == Membership.INVITE &&
+                    shouldEncryptForInvitedMembers(roomId) &&
+                    isEncryptionEnabledForInvitedUser()) {
                 // track the deviceList for this invited user.
                 // Caution: there's a big edge case here in that federated servers do not
                 // know what other servers are in the room at the time they've been invited.
@@ -1010,7 +1009,7 @@ internal class DefaultCryptoService @Inject constructor(
                     // where we would download the fresh info from the server.
                     this@DefaultCryptoService.olmMachine.getUserDevicesMap(userIds) // ?: MXUsersDevicesMap()
                 } else {
-                    this@DefaultCryptoService.olmMachine.getUserDevicesMap(userIds) //?: MXUsersDevicesMap()
+                    this@DefaultCryptoService.olmMachine.getUserDevicesMap(userIds) // ?: MXUsersDevicesMap()
                 }
             }.foldToCallback(callback)
         }

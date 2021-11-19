@@ -168,8 +168,8 @@ internal class RequestSender @Inject constructor(
         try {
             uploadSigningKeysTask.execute(uploadSigningKeysParams)
         } catch (failure: Throwable) {
-            if (interactiveAuthInterceptor == null
-                    || !handleUIA(
+            if (interactiveAuthInterceptor == null ||
+                    !handleUIA(
                             failure = failure,
                             interceptor = interactiveAuthInterceptor,
                             retryBlock = { authUpdate ->
@@ -218,8 +218,8 @@ internal class RequestSender @Inject constructor(
                 getKeysBackupLastVersionTask.execute(Unit)
             }
         } catch (failure: Throwable) {
-            if (failure is Failure.ServerError
-                    && failure.error.code == MatrixError.M_NOT_FOUND) {
+            if (failure is Failure.ServerError &&
+                    failure.error.code == MatrixError.M_NOT_FOUND) {
                 null
             } else {
                 throw failure

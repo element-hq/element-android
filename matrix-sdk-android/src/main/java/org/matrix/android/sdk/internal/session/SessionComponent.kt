@@ -117,7 +117,7 @@ internal interface SessionComponent {
 
     fun taskExecutor(): TaskExecutor
 
-    fun olmMachineProvider() : OlmMachineProvider
+    fun olmMachineProvider(): OlmMachineProvider
 
     fun inject(worker: SendEventWorker)
 

@@ -174,8 +174,7 @@ internal class QrCodeVerification(
      */
     @Throws(CryptoStoreException::class)
     private suspend fun confirm() {
-        val result = withContext(Dispatchers.IO)
-        {
+        val result = withContext(Dispatchers.IO) {
             machine.confirmVerification(request.otherUser(), request.flowId())
         }
 

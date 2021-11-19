@@ -25,10 +25,10 @@ import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.rest.UnsignedDeviceInfo
 import org.matrix.android.sdk.internal.crypto.verification.prepareMethods
 import uniffi.olm.CryptoStoreException
-import uniffi.olm.Device as InnerDevice
 import uniffi.olm.OlmMachine
 import uniffi.olm.SignatureException
 import uniffi.olm.VerificationRequest
+import uniffi.olm.Device as InnerDevice
 
 /** Class representing a device that supports E2EE in the Matrix world
  *

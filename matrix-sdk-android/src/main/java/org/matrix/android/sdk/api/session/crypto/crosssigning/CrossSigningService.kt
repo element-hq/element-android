@@ -105,7 +105,7 @@ interface CrossSigningService {
     fun trustDevice(deviceId: String,
                     callback: MatrixCallback<Unit>)
 
-    suspend fun shieldForGroup(userIds: List<String>) : RoomEncryptionTrustLevel
+    suspend fun shieldForGroup(userIds: List<String>): RoomEncryptionTrustLevel
 
     /**
      * Check if a device is trusted
