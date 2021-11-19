@@ -18,8 +18,8 @@ package im.vector.app.features.notifications
 
 import timber.log.Timber
 
-class NotificationEventQueue(
-        private val queue: MutableList<NotifiableEvent> = mutableListOf(),
+data class NotificationEventQueue(
+        private val queue: MutableList<NotifiableEvent>,
 
         /**
          * An in memory FIFO cache of the seen events.
