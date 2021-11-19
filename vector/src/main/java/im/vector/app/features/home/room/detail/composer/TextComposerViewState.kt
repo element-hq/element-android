@@ -54,8 +54,6 @@ data class TextComposerViewState(
         VoiceMessageRecorderView.RecordingUiState.None,
         VoiceMessageRecorderView.RecordingUiState.Cancelled,
         VoiceMessageRecorderView.RecordingUiState.Playback -> false
-        is VoiceMessageRecorderView.DraggingState.Cancelling,
-        is VoiceMessageRecorderView.DraggingState.Locking,
         VoiceMessageRecorderView.RecordingUiState.Locked,
         VoiceMessageRecorderView.RecordingUiState.Started  -> true
     }

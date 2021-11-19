@@ -21,7 +21,6 @@ import android.view.MotionEvent
 import im.vector.app.R
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.features.home.room.detail.composer.voice.VoiceMessageRecorderView.DraggingState
-import im.vector.app.features.home.room.detail.composer.voice.VoiceMessageRecorderView.RecordingUiState
 
 class DraggableStateProcessor(
         resources: Resources,
@@ -44,37 +43,37 @@ class DraggableStateProcessor(
         lastDistanceY = 0F
     }
 
-    fun process(event: MotionEvent, recordingState: RecordingUiState): RecordingUiState {
+    fun process(event: MotionEvent, draggingState: DraggingState): DraggingState {
         val currentX = event.rawX
         val currentY = event.rawY
         val distanceX = firstX - currentX
         val distanceY = firstY - currentY
-        return recordingState.nextRecordingState(currentX, currentY, distanceX, distanceY).also {
+        return draggingState.nextDragState(currentX, currentY, distanceX, distanceY).also {
             lastDistanceX = distanceX
             lastDistanceY = distanceY
         }
     }
 
-    private fun RecordingUiState.nextRecordingState(currentX: Float, currentY: Float, distanceX: Float, distanceY: Float): RecordingUiState {
+    private fun DraggingState.nextDragState(currentX: Float, currentY: Float, distanceX: Float, distanceY: Float): DraggingState {
         return when (this) {
-            RecordingUiState.Started    -> {
+            DraggingState.Ready         -> {
                 when {
                     isDraggingToCancel(currentX, distanceX, distanceY) -> DraggingState.Cancelling(distanceX)
                     isDraggingToLock(currentY, distanceX, distanceY)   -> DraggingState.Locking(distanceY)
-                    else                                               -> this
+                    else                                               -> DraggingState.Ready
                 }
             }
             is DraggingState.Cancelling -> {
                 when {
                     isDraggingToLock(currentY, distanceX, distanceY) -> DraggingState.Locking(distanceY)
-                    shouldCancelRecording(distanceX)                 -> RecordingUiState.Cancelled
+                    shouldCancelRecording(distanceX)                 -> DraggingState.Cancel
                     else                                             -> DraggingState.Cancelling(distanceX)
                 }
             }
             is DraggingState.Locking    -> {
                 when {
                     isDraggingToCancel(currentX, distanceX, distanceY) -> DraggingState.Cancelling(distanceX)
-                    shouldLockRecording(distanceY)                     -> RecordingUiState.Locked
+                    shouldLockRecording(distanceY)                     -> DraggingState.Lock
                     else                                               -> DraggingState.Locking(distanceY)
                 }
             }

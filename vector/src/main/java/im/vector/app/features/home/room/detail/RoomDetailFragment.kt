@@ -709,15 +709,16 @@ class RoomDetailFragment @Inject constructor(
             }
 
             override fun onVoiceRecordingCancelled() {
-                onDeleteVoiceMessage()
+                roomDetailViewModel.handle(RoomDetailAction.EndRecordingVoiceMessage(isCancelled = true))
+                updateRecordingUiState(RecordingUiState.Cancelled)
+            }
+
+            override fun onVoiceRecordingLocked() {
+                updateRecordingUiState(RecordingUiState.Locked)
             }
 
             override fun onVoiceRecordingEnded() {
                 onSendVoiceMessage()
-            }
-
-            override fun onUiStateChanged(state: RecordingUiState) {
-                updateRecordingUiState(state)
             }
 
             override fun onSendVoiceMessage() {

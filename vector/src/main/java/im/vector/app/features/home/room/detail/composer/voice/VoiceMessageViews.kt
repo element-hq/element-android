@@ -32,6 +32,7 @@ import im.vector.app.core.extensions.setAttributeTintedBackground
 import im.vector.app.core.extensions.setAttributeTintedImageResource
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.databinding.ViewVoiceMessageRecorderBinding
+import im.vector.app.features.home.room.detail.composer.voice.VoiceMessageRecorderView.DraggingState
 import im.vector.app.features.home.room.detail.composer.voice.VoiceMessageRecorderView.RecordingUiState
 import im.vector.app.features.home.room.detail.timeline.helper.VoiceMessagePlaybackTracker
 
@@ -68,11 +69,11 @@ class VoiceMessageViews(
 
     @SuppressLint("ClickableViewAccessibility")
     private fun observeMicButton(actions: Actions) {
-        val positions = DraggableStateProcessor(resources, dimensionConverter)
+        val draggableStateProcessor = DraggableStateProcessor(resources, dimensionConverter)
         views.voiceMessageMicButton.setOnTouchListener { _, event ->
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
-                    positions.initialize(event)
+                    draggableStateProcessor.initialize(event)
                     actions.onRequestRecording()
                     true
                 }
@@ -81,7 +82,7 @@ class VoiceMessageViews(
                     true
                 }
                 MotionEvent.ACTION_MOVE -> {
-                    actions.onMicButtonDrag { currentState -> positions.process(event, currentState) }
+                    actions.onMicButtonDrag { currentState -> draggableStateProcessor.process(event, currentState) }
                     true
                 }
                 else                    -> false
@@ -339,7 +340,7 @@ class VoiceMessageViews(
     interface Actions {
         fun onRequestRecording()
         fun onMicButtonReleased()
-        fun onMicButtonDrag(updater: (RecordingUiState) -> RecordingUiState)
+        fun onMicButtonDrag(nextDragStateCreator: (DraggingState) -> DraggingState)
         fun onSendVoiceMessage()
         fun onDeleteVoiceMessage()
         fun onWaveformClicked()
