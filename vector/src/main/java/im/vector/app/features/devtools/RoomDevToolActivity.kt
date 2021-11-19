@@ -109,15 +109,15 @@ class RoomDevToolActivity : SimpleFragmentActivity(), FragmentManager.OnBackStac
                 }
                 RoomDevToolViewState.Mode.StateEventList,
                 RoomDevToolViewState.Mode.StateEventListByType -> {
-                    val frag = createFragment(RoomDevToolStateEventListFragment::class.java, Bundle().toMvRxBundle())
+                    val frag = createFragment(RoomDevToolStateEventListFragment::class.java)
                     navigateTo(frag)
                 }
                 RoomDevToolViewState.Mode.EditEventContent     -> {
-                    val frag = createFragment(RoomDevToolEditFragment::class.java, Bundle().toMvRxBundle())
+                    val frag = createFragment(RoomDevToolEditFragment::class.java)
                     navigateTo(frag)
                 }
                 is RoomDevToolViewState.Mode.SendEventForm     -> {
-                    val frag = createFragment(RoomDevToolSendFormFragment::class.java, Bundle().toMvRxBundle())
+                    val frag = createFragment(RoomDevToolSendFormFragment::class.java)
                     navigateTo(frag)
                 }
             }

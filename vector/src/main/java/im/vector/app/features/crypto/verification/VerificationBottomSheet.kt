@@ -345,12 +345,12 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetV
         super.invalidate()
     }
 
-    private fun showFragment(fragmentClass: KClass<out Fragment>, parcelable: Parcelable? = null) {
+    private fun showFragment(fragmentClass: KClass<out Fragment>, argsParcelable: Parcelable? = null) {
         if (childFragmentManager.findFragmentByTag(fragmentClass.simpleName) == null) {
             childFragmentManager.commitTransaction {
                 replace(R.id.bottomSheetFragmentContainer,
                         fragmentClass.java,
-                        parcelable?.toMvRxBundle(),
+                        argsParcelable?.toMvRxBundle(),
                         fragmentClass.simpleName
                 )
             }
