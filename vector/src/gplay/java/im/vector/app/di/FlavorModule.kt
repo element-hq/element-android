@@ -24,14 +24,10 @@ import im.vector.app.core.services.GuardServiceStarter
 
 @InstallIn(SingletonComponent::class)
 @Module
-abstract class FlavorModule {
+object FlavorModule {
 
-    companion object {
-
-        @Provides
-        @JvmStatic
-        fun provideGuardServiceStarter(): GuardServiceStarter {
-            return object : GuardServiceStarter {}
-        }
+    @Provides
+    fun provideGuardServiceStarter(): GuardServiceStarter {
+        return object : GuardServiceStarter {}
     }
 }
