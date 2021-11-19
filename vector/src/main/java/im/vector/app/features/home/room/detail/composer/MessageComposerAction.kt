@@ -20,22 +20,22 @@ import im.vector.app.core.platform.VectorViewModelAction
 import im.vector.app.features.home.room.detail.composer.voice.VoiceMessageRecorderView
 import org.matrix.android.sdk.api.session.room.model.message.MessageAudioContent
 
-sealed class TextComposerAction : VectorViewModelAction {
-    data class SaveDraft(val draft: String) : TextComposerAction()
-    data class SendMessage(val text: CharSequence, val autoMarkdown: Boolean) : TextComposerAction()
-    data class EnterEditMode(val eventId: String, val text: String) : TextComposerAction()
-    data class EnterQuoteMode(val eventId: String, val text: String) : TextComposerAction()
-    data class EnterReplyMode(val eventId: String, val text: String) : TextComposerAction()
-    data class EnterRegularMode(val text: String, val fromSharing: Boolean) : TextComposerAction()
-    data class UserIsTyping(val isTyping: Boolean) : TextComposerAction()
-    data class OnTextChanged(val text: CharSequence) : TextComposerAction()
+sealed class MessageComposerAction : VectorViewModelAction {
+    data class SaveDraft(val draft: String) : MessageComposerAction()
+    data class SendMessage(val text: CharSequence, val autoMarkdown: Boolean) : MessageComposerAction()
+    data class EnterEditMode(val eventId: String, val text: String) : MessageComposerAction()
+    data class EnterQuoteMode(val eventId: String, val text: String) : MessageComposerAction()
+    data class EnterReplyMode(val eventId: String, val text: String) : MessageComposerAction()
+    data class EnterRegularMode(val text: String, val fromSharing: Boolean) : MessageComposerAction()
+    data class UserIsTyping(val isTyping: Boolean) : MessageComposerAction()
+    data class OnTextChanged(val text: CharSequence) : MessageComposerAction()
 
     // Voice Message
-    data class OnVoiceRecordingUiStateChanged(val uiState: VoiceMessageRecorderView.RecordingUiState) : TextComposerAction()
-    object StartRecordingVoiceMessage : TextComposerAction()
-    data class EndRecordingVoiceMessage(val isCancelled: Boolean) : TextComposerAction()
-    object PauseRecordingVoiceMessage : TextComposerAction()
-    data class PlayOrPauseVoicePlayback(val eventId: String, val messageAudioContent: MessageAudioContent) : TextComposerAction()
-    object PlayOrPauseRecordingPlayback : TextComposerAction()
-    data class EndAllVoiceActions(val deleteRecord: Boolean = true) : TextComposerAction()
+    data class OnVoiceRecordingUiStateChanged(val uiState: VoiceMessageRecorderView.RecordingUiState) : MessageComposerAction()
+    object StartRecordingVoiceMessage : MessageComposerAction()
+    data class EndRecordingVoiceMessage(val isCancelled: Boolean) : MessageComposerAction()
+    object PauseRecordingVoiceMessage : MessageComposerAction()
+    data class PlayOrPauseVoicePlayback(val eventId: String, val messageAudioContent: MessageAudioContent) : MessageComposerAction()
+    object PlayOrPauseRecordingPlayback : MessageComposerAction()
+    data class EndAllVoiceActions(val deleteRecord: Boolean = true) : MessageComposerAction()
 }

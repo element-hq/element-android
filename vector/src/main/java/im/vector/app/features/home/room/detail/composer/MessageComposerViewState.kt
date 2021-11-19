@@ -42,7 +42,7 @@ sealed class SendMode(open val text: String) {
     data class REPLY(val timelineEvent: TimelineEvent, override val text: String) : SendMode(text)
 }
 
-data class TextComposerViewState(
+data class MessageComposerViewState(
         val roomId: String,
         val canSendMessage: Boolean = true,
         val isSendButtonVisible: Boolean = false,
