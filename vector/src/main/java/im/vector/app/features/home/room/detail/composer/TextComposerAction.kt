@@ -18,6 +18,7 @@ package im.vector.app.features.home.room.detail.composer
 
 import im.vector.app.core.platform.VectorViewModelAction
 import im.vector.app.features.home.room.detail.composer.voice.VoiceMessageRecorderView
+import org.matrix.android.sdk.api.session.room.model.message.MessageAudioContent
 
 sealed class TextComposerAction : VectorViewModelAction {
     data class SaveDraft(val draft: String) : TextComposerAction()
@@ -28,5 +29,13 @@ sealed class TextComposerAction : VectorViewModelAction {
     data class EnterRegularMode(val text: String, val fromSharing: Boolean) : TextComposerAction()
     data class UserIsTyping(val isTyping: Boolean) : TextComposerAction()
     data class OnTextChanged(val text: CharSequence) : TextComposerAction()
+
+    // Voice Message
     data class OnVoiceRecordingUiStateChanged(val uiState: VoiceMessageRecorderView.RecordingUiState) : TextComposerAction()
+    object StartRecordingVoiceMessage : TextComposerAction()
+    data class EndRecordingVoiceMessage(val isCancelled: Boolean) : TextComposerAction()
+    object PauseRecordingVoiceMessage : TextComposerAction()
+    data class PlayOrPauseVoicePlayback(val eventId: String, val messageAudioContent: MessageAudioContent) : TextComposerAction()
+    object PlayOrPauseRecordingPlayback : TextComposerAction()
+    data class EndAllVoiceActions(val deleteRecord: Boolean = true) : TextComposerAction()
 }

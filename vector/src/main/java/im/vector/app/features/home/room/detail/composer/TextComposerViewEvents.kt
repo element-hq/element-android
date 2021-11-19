@@ -42,4 +42,6 @@ sealed class TextComposerViewEvents : VectorViewEvents {
     object SlashCommandNotImplemented : SendMessageResult()
 
     data class ShowRoomUpgradeDialog(val newVersion: String, val isPublic: Boolean) : TextComposerViewEvents()
+
+    data class VoicePlaybackOrRecordingFailure(val throwable: Throwable) : TextComposerViewEvents()
 }

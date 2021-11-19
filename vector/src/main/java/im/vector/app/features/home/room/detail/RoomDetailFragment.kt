@@ -241,7 +241,7 @@ class RoomDetailFragment @Inject constructor(
         autoCompleterFactory: AutoCompleter.Factory,
         private val permalinkHandler: PermalinkHandler,
         private val notificationDrawerManager: NotificationDrawerManager,
-        val roomDetailViewModelFactory: RoomDetailViewModel.Factory,
+        val textComposerViewModelFactory: TextComposerViewModel.Factory,
         private val eventHtmlRenderer: EventHtmlRenderer,
         private val vectorPreferences: VectorPreferences,
         private val colorProvider: ColorProvider,
@@ -414,23 +414,24 @@ class RoomDetailFragment @Inject constructor(
 
         textComposerViewModel.observeViewEvents {
             when (it) {
-                is TextComposerViewEvents.JoinRoomCommandSuccess      -> handleJoinedToAnotherRoom(it)
-                is TextComposerViewEvents.SendMessageResult           -> renderSendMessageResult(it)
-                is TextComposerViewEvents.ShowMessage                 -> showSnackWithMessage(it.message)
-                is TextComposerViewEvents.ShowRoomUpgradeDialog       -> handleShowRoomUpgradeDialog(it)
-                is TextComposerViewEvents.AnimateSendButtonVisibility -> handleSendButtonVisibilityChanged(it)
-                is TextComposerViewEvents.OpenRoomMemberProfile       -> openRoomMemberProfile(it.userId)
-            }.exhaustive
-        }
-
-        roomDetailViewModel.observeViewEvents {
-            when (it) {
-                is RoomDetailViewEvents.Failure                          -> {
+                is TextComposerViewEvents.JoinRoomCommandSuccess          -> handleJoinedToAnotherRoom(it)
+                is TextComposerViewEvents.SendMessageResult               -> renderSendMessageResult(it)
+                is TextComposerViewEvents.ShowMessage                     -> showSnackWithMessage(it.message)
+                is TextComposerViewEvents.ShowRoomUpgradeDialog           -> handleShowRoomUpgradeDialog(it)
+                is TextComposerViewEvents.AnimateSendButtonVisibility     -> handleSendButtonVisibilityChanged(it)
+                is TextComposerViewEvents.OpenRoomMemberProfile           -> openRoomMemberProfile(it.userId)
+                is TextComposerViewEvents.VoicePlaybackOrRecordingFailure -> {
                     if (it.throwable is VoiceFailure.UnableToRecord) {
                         onCannotRecord()
                     }
                     showErrorInSnackbar(it.throwable)
                 }
+            }.exhaustive
+        }
+
+        roomDetailViewModel.observeViewEvents {
+            when (it) {
+                is RoomDetailViewEvents.Failure                          -> showErrorInSnackbar(it.throwable)
                 is RoomDetailViewEvents.OnNewTimelineEvents              -> scrollOnNewMessageCallback.addNewTimelineEventIds(it.eventIds)
                 is RoomDetailViewEvents.ActionSuccess                    -> displayRoomDetailActionSuccess(it)
                 is RoomDetailViewEvents.ActionFailure                    -> displayRoomDetailActionFailure(it)
@@ -698,18 +699,18 @@ class RoomDetailFragment @Inject constructor(
 
             override fun onVoiceRecordingStarted() {
                 if (checkPermissions(PERMISSIONS_FOR_VOICE_MESSAGE, requireActivity(), permissionVoiceMessageLauncher)) {
-                    roomDetailViewModel.handle(RoomDetailAction.StartRecordingVoiceMessage)
+                    textComposerViewModel.handle(TextComposerAction.StartRecordingVoiceMessage)
                     vibrate(requireContext())
                     updateRecordingUiState(RecordingUiState.Started)
                 }
             }
 
             override fun onVoicePlaybackButtonClicked() {
-                roomDetailViewModel.handle(RoomDetailAction.PlayOrPauseRecordingPlayback)
+                textComposerViewModel.handle(TextComposerAction.PlayOrPauseRecordingPlayback)
             }
 
             override fun onVoiceRecordingCancelled() {
-                roomDetailViewModel.handle(RoomDetailAction.EndRecordingVoiceMessage(isCancelled = true))
+                textComposerViewModel.handle(TextComposerAction.EndRecordingVoiceMessage(isCancelled = true))
                 updateRecordingUiState(RecordingUiState.Cancelled)
             }
 
@@ -722,22 +723,22 @@ class RoomDetailFragment @Inject constructor(
             }
 
             override fun onSendVoiceMessage() {
-                roomDetailViewModel.handle(RoomDetailAction.EndRecordingVoiceMessage(isCancelled = false))
+                textComposerViewModel.handle(TextComposerAction.EndRecordingVoiceMessage(isCancelled = false))
                 updateRecordingUiState(RecordingUiState.None)
             }
 
             override fun onDeleteVoiceMessage() {
-                roomDetailViewModel.handle(RoomDetailAction.EndRecordingVoiceMessage(isCancelled = true))
+                textComposerViewModel.handle(TextComposerAction.EndRecordingVoiceMessage(isCancelled = true))
                 updateRecordingUiState(RecordingUiState.None)
             }
 
             override fun onRecordingLimitReached() {
-                roomDetailViewModel.handle(RoomDetailAction.PauseRecordingVoiceMessage)
+                textComposerViewModel.handle(TextComposerAction.PauseRecordingVoiceMessage)
                 updateRecordingUiState(RecordingUiState.Playback)
             }
 
             override fun onRecordingWaveformClicked() {
-                roomDetailViewModel.handle(RoomDetailAction.PauseRecordingVoiceMessage)
+                textComposerViewModel.handle(TextComposerAction.PauseRecordingVoiceMessage)
                 updateRecordingUiState(RecordingUiState.Playback)
             }
 
@@ -1136,7 +1137,7 @@ class RoomDetailFragment @Inject constructor(
         textComposerViewModel.handle(TextComposerAction.SaveDraft(views.composerLayout.text.toString()))
 
         // We should improve the UX to support going into playback mode when paused and delete the media when the view is destroyed.
-        roomDetailViewModel.handle(RoomDetailAction.EndAllVoiceActions(deleteRecord = false))
+        textComposerViewModel.handle(TextComposerAction.EndAllVoiceActions(deleteRecord = false))
         views.voiceMessageRecorderView.display(RecordingUiState.None)
     }
 
@@ -1883,7 +1884,7 @@ class RoomDetailFragment @Inject constructor(
     }
 
     override fun onVoiceControlButtonClicked(eventId: String, messageAudioContent: MessageAudioContent) {
-        roomDetailViewModel.handle(RoomDetailAction.PlayOrPauseVoicePlayback(eventId, messageAudioContent))
+        textComposerViewModel.handle(TextComposerAction.PlayOrPauseVoicePlayback(eventId, messageAudioContent))
     }
 
     private fun onShareActionClicked(action: EventSharedAction.Share) {

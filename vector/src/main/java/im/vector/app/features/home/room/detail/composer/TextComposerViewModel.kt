@@ -16,24 +16,27 @@
 
 package im.vector.app.features.home.room.detail.composer
 
+import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MavericksViewModelFactory
+import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.R
-import im.vector.app.core.di.MavericksAssistedViewModelFactory
-import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.features.attachments.toContentAttachmentData
 import im.vector.app.features.command.CommandParser
 import im.vector.app.features.command.ParsedCommand
 import im.vector.app.features.home.room.detail.ChatEffect
+import im.vector.app.features.home.room.detail.RoomDetailFragment
 import im.vector.app.features.home.room.detail.composer.rainbow.RainbowGenerator
 import im.vector.app.features.home.room.detail.toMessageType
 import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.VectorPreferences
+import im.vector.app.features.voice.VoicePlayerHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.commonmark.parser.Parser
@@ -60,7 +63,9 @@ class TextComposerViewModel @AssistedInject constructor(
         private val session: Session,
         private val stringProvider: StringProvider,
         private val vectorPreferences: VectorPreferences,
-        private val rainbowGenerator: RainbowGenerator
+        private val rainbowGenerator: RainbowGenerator,
+        private val voiceMessageHelper: VoiceMessageHelper,
+        private val voicePlayerHelper: VoicePlayerHelper
 ) : VectorViewModel<TextComposerViewState, TextComposerAction, TextComposerViewEvents>(initialState) {
 
     private val room = session.getRoom(initialState.roomId)!!
@@ -86,6 +91,12 @@ class TextComposerViewModel @AssistedInject constructor(
             is TextComposerAction.UserIsTyping                   -> handleUserIsTyping(action)
             is TextComposerAction.OnTextChanged                  -> handleOnTextChanged(action)
             is TextComposerAction.OnVoiceRecordingUiStateChanged -> handleOnVoiceRecordingUiStateChanged(action)
+            TextComposerAction.StartRecordingVoiceMessage        -> handleStartRecordingVoiceMessage()
+            is TextComposerAction.EndRecordingVoiceMessage       -> handleEndRecordingVoiceMessage(action.isCancelled)
+            is TextComposerAction.PlayOrPauseVoicePlayback       -> handlePlayOrPauseVoicePlayback(action)
+            TextComposerAction.PauseRecordingVoiceMessage        -> handlePauseRecordingVoiceMessage()
+            TextComposerAction.PlayOrPauseRecordingPlayback      -> handlePlayOrPauseRecordingPlayback()
+            is TextComposerAction.EndAllVoiceActions             -> handleEndAllVoiceActions(action.deleteRecord)
         }
     }
 
@@ -688,6 +699,56 @@ class TextComposerViewModel @AssistedInject constructor(
         }
     }
 
+    private fun handleStartRecordingVoiceMessage() {
+        try {
+            voiceMessageHelper.startRecording()
+        } catch (failure: Throwable) {
+            _viewEvents.post(TextComposerViewEvents.VoicePlaybackOrRecordingFailure(failure))
+        }
+    }
+
+    private fun handleEndRecordingVoiceMessage(isCancelled: Boolean) {
+        voiceMessageHelper.stopPlayback()
+        if (isCancelled) {
+            voiceMessageHelper.deleteRecording()
+        } else {
+            voiceMessageHelper.stopRecording()?.let { audioType ->
+                if (audioType.duration > 1000) {
+                    room.sendMedia(audioType.toContentAttachmentData(), false, emptySet())
+                } else {
+                    voiceMessageHelper.deleteRecording()
+                }
+            }
+        }
+    }
+
+    private fun handlePlayOrPauseVoicePlayback(action: TextComposerAction.PlayOrPauseVoicePlayback) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                // Download can fail
+                val audioFile = session.fileService().downloadFile(action.messageAudioContent)
+                // Conversion can fail, fallback to the original file in this case and let the player fail for us
+                val convertedFile = voicePlayerHelper.convertFile(audioFile) ?: audioFile
+                // Play can fail
+                voiceMessageHelper.startOrPausePlayback(action.eventId, convertedFile)
+            } catch (failure: Throwable) {
+                _viewEvents.post(TextComposerViewEvents.VoicePlaybackOrRecordingFailure(failure))
+            }
+        }
+    }
+
+    private fun handlePlayOrPauseRecordingPlayback() {
+        voiceMessageHelper.startOrPauseRecordingPlayback()
+    }
+
+    private fun handleEndAllVoiceActions(deleteRecord: Boolean) {
+        voiceMessageHelper.stopAllVoiceActions(deleteRecord)
+    }
+
+    private fun handlePauseRecordingVoiceMessage() {
+        voiceMessageHelper.pauseRecording()
+    }
+
     private fun launchSlashCommandFlowSuspendable(block: suspend () -> Unit) {
         _viewEvents.post(TextComposerViewEvents.SlashCommandLoading)
         viewModelScope.launch {
@@ -703,9 +764,19 @@ class TextComposerViewModel @AssistedInject constructor(
     }
 
     @AssistedFactory
-    interface Factory : MavericksAssistedViewModelFactory<TextComposerViewModel, TextComposerViewState> {
-        override fun create(initialState: TextComposerViewState): TextComposerViewModel
+    interface Factory {
+        fun create(initialState: TextComposerViewState): TextComposerViewModel
     }
 
-    companion object : MavericksViewModelFactory<TextComposerViewModel, TextComposerViewState> by hiltMavericksViewModelFactory()
+    /**
+     * Can't use the hiltMaverick here because some dependencies are injected here and in fragment but they don't share the graph.
+     */
+    companion object : MavericksViewModelFactory<TextComposerViewModel, TextComposerViewState> {
+
+        @JvmStatic
+        override fun create(viewModelContext: ViewModelContext, state: TextComposerViewState): TextComposerViewModel {
+            val fragment: RoomDetailFragment = (viewModelContext as FragmentViewModelContext).fragment()
+            return fragment.textComposerViewModelFactory.create(state)
+        }
+    }
 }
