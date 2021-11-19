@@ -769,7 +769,11 @@ class MessageComposerViewModel @AssistedInject constructor(
     }
 
     /**
-     * Can't use the hiltMaverick here because some dependencies are injected here and in fragment but they don't share the graph.
+     * We're unable to create this ViewModel with `by hiltMavericksViewModelFactory()` due to the
+     * VoiceMessagePlaybackTracker being ActivityScoped
+     *
+     * This factory allows us to provide the ViewModel instance from the Fragment directly
+     * bypassing the Singleton scope requirement
      */
     companion object : MavericksViewModelFactory<MessageComposerViewModel, MessageComposerViewState> {
 
