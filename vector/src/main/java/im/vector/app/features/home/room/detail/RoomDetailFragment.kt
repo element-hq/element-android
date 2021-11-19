@@ -469,7 +469,6 @@ class RoomDetailFragment @Inject constructor(
                 RoomDetailViewEvents.StopChatEffects                     -> handleStopChatEffects()
                 is RoomDetailViewEvents.DisplayAndAcceptCall             -> acceptIncomingCall(it)
                 RoomDetailViewEvents.RoomReplacementStarted              -> handleRoomReplacement()
-                is RoomDetailViewEvents.SaveDraft                        -> handleSaveDraft(it.defaultContent, it.messageType)
             }.exhaustive
         }
 
@@ -479,11 +478,10 @@ class RoomDetailFragment @Inject constructor(
         }
     }
 
-        private fun renderVoiceMessageMode(content: String) {
+    private fun renderVoiceMessageMode(content: String) {
         ContentAttachmentData.fromJsonString(content)?.let { audioAttachmentData ->
             views.voiceMessageRecorderView.isVisible = true
             messageComposerViewModel.handle(MessageComposerAction.InitializeVoiceRecorder(audioAttachmentData))
-            messageComposerViewModel.handle(MessageComposerAction.OnVoiceRecordingUiStateChanged(RecordingUiState.Playback))
         }
     }
 
@@ -599,20 +597,6 @@ class RoomDetailFragment @Inject constructor(
         navigator.openRoom(requireContext(), openRoom.roomId, null)
         if (openRoom.closeCurrentRoom) {
             requireActivity().finish()
-        }
-    }
-
-    private fun handleSaveDraft(defaultContent: String?, messageType: String) {
-        if (messageType == MessageType.MSGTYPE_AUDIO) {
-            defaultContent?.let {
-                messageComposerViewModel.handle(
-                        MessageComposerAction.SaveDraft(it, MessageType.MSGTYPE_AUDIO)
-                )
-            }
-        } else {
-            messageComposerViewModel.handle(
-                    MessageComposerAction.SaveDraft(views.composerLayout.text.toString(), MessageType.MSGTYPE_TEXT)
-            )
         }
     }
 
@@ -1161,14 +1145,8 @@ class RoomDetailFragment @Inject constructor(
 
     override fun onPause() {
         super.onPause()
-
         notificationDrawerManager.setCurrentRoom(null)
-
-        messageComposerViewModel.handle(MessageComposerAction.SaveDraft(views.composerLayout.text.toString(), MessageType.MSGTYPE_TEXT))
-
-        // We should improve the UX to support going into playback mode when paused and delete the media when the view is destroyed.
-        messageComposerViewModel.handle(MessageComposerAction.EndAllVoiceActions(deleteRecord = false))
-        views.voiceMessageRecorderView.render(RecordingUiState.None)
+        messageComposerViewModel.handle(MessageComposerAction.OnEntersBackground(views.composerLayout.text.toString()))
     }
 
     private val attachmentFileActivityResultLauncher = registerStartForActivityResult {

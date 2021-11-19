@@ -258,6 +258,16 @@ class VoiceMessageViews(
         views.voiceMessageToast.isVisible = false
     }
 
+    fun showDraftViews() {
+        hideRecordingViews(RecordingUiState.None)
+        views.voiceMessageMicButton.isVisible = false
+        views.voiceMessageSendButton.isVisible = true
+        views.voicePlaybackWaveform.post { views.voicePlaybackWaveform.recreate() }
+        views.voiceMessagePlaybackLayout.isVisible = true
+        showPlaybackViews()
+        renderIdle()
+    }
+
     fun showRecordingLockedViews(recordingState: RecordingUiState) {
         hideRecordingViews(recordingState)
         views.voiceMessagePlaybackLayout.isVisible = true

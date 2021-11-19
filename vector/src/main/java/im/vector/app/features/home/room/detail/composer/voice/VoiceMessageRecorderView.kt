@@ -130,6 +130,9 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
                 stopRecordingTicker()
                 voiceMessageViews.showPlaybackViews()
             }
+            RecordingUiState.Draft     -> {
+                voiceMessageViews.showDraftViews()
+            }
         }
     }
 
@@ -214,6 +217,7 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
         object Cancelled : RecordingUiState
         object Locked : RecordingUiState
         object Playback : RecordingUiState
+        object Draft : RecordingUiState
     }
 
     sealed interface DraggingState {
