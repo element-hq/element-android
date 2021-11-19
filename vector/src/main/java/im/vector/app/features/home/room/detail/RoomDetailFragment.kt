@@ -1057,8 +1057,11 @@ class RoomDetailFragment @Inject constructor(
             imageContentRenderer.render(data, ImageContentRenderer.Mode.THUMBNAIL, views.composerLayout.views.composerRelatedMessageImage)
             true
         } else {
+            imageContentRenderer.clear(views.composerLayout.views.composerRelatedMessageImage)
             false
         }
+
+        views.composerLayout.views.composerRelatedMessageImage.isVisible = isImageVisible
 
         views.composerLayout.setTextIfDifferent(defaultContent)
 
