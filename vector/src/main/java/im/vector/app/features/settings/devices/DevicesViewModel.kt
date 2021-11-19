@@ -261,9 +261,7 @@ class DevicesViewModel @AssistedInject constructor(
         viewModelScope.launch {
             if (state.hasAccountCrossSigning) {
                 try {
-                    awaitCallback<Unit> {
-                        session.cryptoService().crossSigningService().trustDevice(action.cryptoDeviceInfo.deviceId, it)
-                    }
+                    session.cryptoService().crossSigningService().trustDevice(action.cryptoDeviceInfo.deviceId)
                 } catch (failure: Throwable) {
                     Timber.e("Failed to manually cross sign device ${action.cryptoDeviceInfo.deviceId} : ${failure.localizedMessage}")
                     _viewEvents.post(DevicesViewEvents.Failure(failure))

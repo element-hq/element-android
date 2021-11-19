@@ -183,8 +183,8 @@ class XSigningTest : InstrumentedTest {
         assertNotNull("Bob Second device should be known and persisted from first", bobSecondDevicePOVFirstDevice)
 
         // Manually mark it as trusted from first session
-        mTestHelper.doSync<Unit> {
-            bobSession.cryptoService().crossSigningService().trustDevice(bobSecondDeviceId, it)
+        mTestHelper.runBlockingTest {
+            bobSession.cryptoService().crossSigningService().trustDevice(bobSecondDeviceId)
         }
 
         // Now alice should cross trust bob's second device

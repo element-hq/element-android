@@ -73,7 +73,7 @@ internal class RustCrossSigningService @Inject constructor(
             if (verified) {
                 UserTrustResult.Success
             } else {
-                UserTrustResult.UnknownCrossSignatureInfo(otherUserId)
+                UserTrustResult.Failure("failed to verify $otherUserId")
             }
         } else {
             UserTrustResult.CrossSigningNotConfigured(otherUserId)
@@ -94,15 +94,13 @@ internal class RustCrossSigningService @Inject constructor(
      * This will check if the injected private cross signing keys match the public ones provided
      * by the server and if they do so
      */
-    override fun checkTrustFromPrivateKeys(
+    override suspend fun checkTrustFromPrivateKeys(
             masterKeyPrivateKey: String?,
             uskKeyPrivateKey: String?,
             sskPrivateKey: String?
     ): UserTrustResult {
         val export = PrivateKeysInfo(masterKeyPrivateKey, sskPrivateKey, uskKeyPrivateKey)
-        return runBlocking {
-            olmMachineProvider.olmMachine.importCrossSigningKeys(export)
-        }
+        return olmMachine.importCrossSigningKeys(export)
     }
 
     /**
@@ -171,19 +169,19 @@ internal class RustCrossSigningService @Inject constructor(
     /**
      * Sign one of your devices and upload the signature
      */
-    override fun trustDevice(deviceId: String, callback: MatrixCallback<Unit>) {
-        val device = runBlocking { olmMachine.getDevice(olmMachine.userId(), deviceId) }
+    override suspend fun trustDevice(deviceId: String) {
+        val device = olmMachine.getDevice(olmMachine.userId(), deviceId)
 
         return if (device != null) {
-            val verified = runBlocking { device.verify() }
+            val verified = device.verify()
 
             if (verified) {
-                callback.onSuccess(Unit)
+                return
             } else {
-                callback.onFailure(IllegalArgumentException("This device [$deviceId] is not known, or not yours"))
+                throw IllegalArgumentException("This device [$deviceId] is not known, or not yours")
             }
         } else {
-            callback.onFailure(IllegalArgumentException("This device [$deviceId] is not known"))
+            throw  IllegalArgumentException("This device [$deviceId] is not known")
         }
     }
 

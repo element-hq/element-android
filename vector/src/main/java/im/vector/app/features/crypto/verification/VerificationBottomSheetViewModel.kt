@@ -33,7 +33,6 @@ import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.crosssigning.KEYBACKUP_SECRET_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MASTER_KEY_SSSS_NAME
@@ -372,7 +371,8 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
             try {
                 action.cypherData.fromBase64().inputStream().use { ins ->
                     val res = session.loadSecureSecret<Map<String, String>>(ins, action.alias)
-                    val trustResult = session.cryptoService().crossSigningService().checkTrustFromPrivateKeys(
+                    val crossSigningService = session.cryptoService().crossSigningService()
+                    val trustResult = crossSigningService.checkTrustFromPrivateKeys(
                             res?.get(MASTER_KEY_SSSS_NAME),
                             res?.get(USER_SIGNING_KEY_SSSS_NAME),
                             res?.get(SELF_SIGNING_KEY_SSSS_NAME)
@@ -380,12 +380,11 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                     if (trustResult.isVerified()) {
                         // Sign this device and upload the signature
                         session.sessionParams.deviceId?.let { deviceId ->
-                            session.cryptoService()
-                                    .crossSigningService().trustDevice(deviceId, object : MatrixCallback<Unit> {
-                                        override fun onFailure(failure: Throwable) {
-                                            Timber.w(failure, "Failed to sign my device after recovery")
-                                        }
-                                    })
+                            try {
+                                crossSigningService.trustDevice(deviceId)
+                            } catch (failure: Exception) {
+                                Timber.w(failure, "Failed to sign my device after recovery")
+                            }
                         }
 
                         setState {

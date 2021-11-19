@@ -103,7 +103,7 @@ class KeyShareTests : InstrumentedTest {
 
         val outgoingRequestsBefore = aliceSession2.cryptoService().getOutgoingRoomKeyRequests()
         // Try to request
-        aliceSession2.cryptoService().requestRoomKeyForEvent(receivedEvent.root)
+        aliceSession2.cryptoService().reRequestRoomKeyForEvent(receivedEvent.root)
 
         val waitLatch = CountDownLatch(1)
         val eventMegolmSessionId = receivedEvent.root.content.toModel<EncryptedEventContent>()?.sessionId

@@ -554,9 +554,17 @@ internal class OlmMachine(
                 UserIdentity(identity.userId, masterKey, selfSigningKey, this, this.requestSender)
             }
             is RustUserIdentity.Own   -> {
-                val masterKey = adapter.fromJson(identity.masterKey)!!.toCryptoModel()
-                val selfSigningKey = adapter.fromJson(identity.selfSigningKey)!!.toCryptoModel()
-                val userSigningKey = adapter.fromJson(identity.userSigningKey)!!.toCryptoModel()
+                val verified = this.inner().isIdentityVerified(userId)
+
+                val masterKey = adapter.fromJson(identity.masterKey)!!.toCryptoModel().apply {
+                    trustLevel = DeviceTrustLevel(verified, verified)
+                }
+                val selfSigningKey = adapter.fromJson(identity.selfSigningKey)!!.toCryptoModel().apply {
+                    trustLevel = DeviceTrustLevel(verified, verified)
+                }
+                val userSigningKey = adapter.fromJson(identity.userSigningKey)!!.toCryptoModel().apply {
+                    trustLevel = DeviceTrustLevel(verified, verified)
+                }
 
                 OwnUserIdentity(
                         identity.userId,
@@ -823,13 +831,28 @@ internal class OlmMachine(
     suspend fun importCrossSigningKeys(export: PrivateKeysInfo): UserTrustResult {
         val rustExport = CrossSigningKeyExport(export.master, export.selfSigned, export.user)
 
+        var result: UserTrustResult
         withContext(Dispatchers.IO) {
-            inner.importCrossSigningKeys(rustExport)
-        }
+            result = try {
+                inner.importCrossSigningKeys(rustExport)
 
-        this.updateLivePrivateKeys()
-        // TODO map the errors from importCrossSigningKeys to the UserTrustResult
-        return UserTrustResult.Success
+                // Sign the cross signing keys with our device
+                // Fail silently if signature upload fails??
+                try {
+                    getIdentity(userId())?.verify()
+                } catch (failure: Throwable) {
+                    Timber.e(failure, "Failed to sign x-keys with own device")
+                }
+                UserTrustResult.Success
+            } catch (failure: Exception) {
+                // KeyImportError?
+                UserTrustResult.Failure(failure.localizedMessage)
+            }
+        }
+        withContext(Dispatchers.Main) {
+            this@OlmMachine.updateLivePrivateKeys()
+        }
+        return result
     }
 
     suspend fun sign(message: String): Map<String, Map<String, String>> {

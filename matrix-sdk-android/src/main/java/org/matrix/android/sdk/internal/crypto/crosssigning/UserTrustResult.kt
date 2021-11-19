@@ -16,9 +16,6 @@
 
 package org.matrix.android.sdk.internal.crypto.crosssigning
 
-import org.matrix.android.sdk.api.session.crypto.crosssigning.MXCrossSigningInfo
-import org.matrix.android.sdk.internal.crypto.model.CryptoCrossSigningKey
-
 sealed class UserTrustResult {
     object Success : UserTrustResult()
 
@@ -26,10 +23,11 @@ sealed class UserTrustResult {
     // data class UnknownDevice(val deviceID: String) : UserTrustResult()
     data class CrossSigningNotConfigured(val userID: String) : UserTrustResult()
 
-    data class UnknownCrossSignatureInfo(val userID: String) : UserTrustResult()
-    data class KeysNotTrusted(val key: MXCrossSigningInfo) : UserTrustResult()
-    data class KeyNotSigned(val key: CryptoCrossSigningKey) : UserTrustResult()
-    data class InvalidSignature(val key: CryptoCrossSigningKey, val signature: String) : UserTrustResult()
+    data class Failure(val message: String) : UserTrustResult()
+//    data class UnknownCrossSignatureInfo(val userID: String) : UserTrustResult()
+//    data class KeysNotTrusted(val key: MXCrossSigningInfo) : UserTrustResult()
+//    data class KeyNotSigned(val key: CryptoCrossSigningKey) : UserTrustResult()
+//    data class InvalidSignature(val key: CryptoCrossSigningKey, val signature: String) : UserTrustResult()
 }
 
 fun UserTrustResult.isVerified() = this is UserTrustResult.Success
