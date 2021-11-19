@@ -28,6 +28,7 @@ import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import timber.log.Timber
 import javax.inject.Inject
 
+@Deprecated("rust")
 internal class MegolmSessionDataImporter @Inject constructor(private val olmDevice: MXOlmDevice,
                                                              private val roomDecryptorProvider: RoomDecryptorProvider,
                                                              private val outgoingGossipingRequestManager: OutgoingGossipingRequestManager,

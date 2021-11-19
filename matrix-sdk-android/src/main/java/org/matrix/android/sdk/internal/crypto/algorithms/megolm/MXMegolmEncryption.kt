@@ -43,6 +43,7 @@ import org.matrix.android.sdk.internal.util.JsonCanonicalizer
 import org.matrix.android.sdk.internal.util.convertToUTF8
 import timber.log.Timber
 
+@Deprecated("in favour of rust")
 internal class MXMegolmEncryption(
         // The id of the room we will be sending to.
         private val roomId: String,

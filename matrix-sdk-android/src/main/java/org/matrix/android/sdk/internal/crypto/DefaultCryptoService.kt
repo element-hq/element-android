@@ -20,8 +20,6 @@ import android.content.Context
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.paging.PagedList
-import com.squareup.moshi.Types
-import dagger.Lazy
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
@@ -39,14 +37,12 @@ import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.crypto.MXCryptoConfig
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.failure.Failure
-import org.matrix.android.sdk.api.failure.MatrixError
 import org.matrix.android.sdk.api.listeners.ProgressListener
 import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.crypto.crosssigning.CrossSigningService
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupService
 import org.matrix.android.sdk.api.session.crypto.keyshare.GossipingRequestListener
-import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -58,26 +54,8 @@ import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
 import org.matrix.android.sdk.api.session.sync.model.DeviceListResponse
 import org.matrix.android.sdk.api.session.sync.model.DeviceOneTimeKeysCountSyncResponse
 import org.matrix.android.sdk.api.session.sync.model.ToDeviceSyncResponse
-import org.matrix.android.sdk.api.util.JsonDict
-import org.matrix.android.sdk.internal.auth.registration.handleUIA
 import org.matrix.android.sdk.internal.crypto.crosssigning.DeviceTrustLevel
 import org.matrix.android.sdk.internal.crypto.keysbackup.RustKeyBackupService
-import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.BackupKeysResult
-import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.CreateKeysBackupVersionBody
-import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysBackupData
-import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersion
-import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersionResult
-import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.RoomKeysBackupData
-import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.UpdateKeysBackupVersionBody
-import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.CreateKeysBackupVersionTask
-import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.DeleteBackupTask
-import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.GetKeysBackupLastVersionTask
-import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.GetKeysBackupVersionTask
-import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.GetRoomSessionDataTask
-import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.GetRoomSessionsDataTask
-import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.GetSessionsDataTask
-import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.StoreSessionsDataTask
-import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.UpdateKeysBackupVersionTask
 import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.ImportRoomKeysResult
 import org.matrix.android.sdk.internal.crypto.model.MXEncryptEventContentResult
@@ -96,7 +74,6 @@ import org.matrix.android.sdk.internal.crypto.tasks.GetDevicesTask
 import org.matrix.android.sdk.internal.crypto.tasks.SetDeviceNameTask
 import org.matrix.android.sdk.internal.crypto.verification.RustVerificationService
 import org.matrix.android.sdk.internal.di.DeviceId
-import org.matrix.android.sdk.internal.di.SessionFilesDirectory
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.extensions.foldToCallback
 import org.matrix.android.sdk.internal.session.SessionScope
@@ -152,6 +129,7 @@ internal class DefaultCryptoService @Inject constructor(
         private val sender: RequestSender,
         private val crossSigningService: CrossSigningService,
         private val verificationService: RustVerificationService,
+        private val keysBackupService: RustKeyBackupService,
         private val olmMachineProvider: OlmMachineProvider
 ) : CryptoService {
 
@@ -164,11 +142,6 @@ internal class DefaultCryptoService @Inject constructor(
 //    private var verificationService: RustVerificationService? = null
 
 //    private val deviceObserver: DeviceUpdateObserver = DeviceUpdateObserver()
-
-    // The key backup service.
-    private var keysBackupService: RustKeyBackupService? = null
-
-    private val deviceObserver: DeviceUpdateObserver = DeviceUpdateObserver()
 
     // Locks for some of our operations
     private val keyClaimLock: Mutex = Mutex()
@@ -335,7 +308,6 @@ internal class DefaultCryptoService @Inject constructor(
 
         try {
             setRustLogger()
-            keysBackupService = RustKeyBackupService(machine, sender, coroutineDispatchers, cryptoCoroutineScope)
             Timber.v(
                     "## CRYPTO | Successfully started up an Olm machine for " +
                             "${userId}, ${deviceId}, identity keys: ${this.olmMachine.identityKeys()}")
@@ -346,7 +318,7 @@ internal class DefaultCryptoService @Inject constructor(
         // We try to enable key backups, if the backup version on the server is trusted,
         // we're gonna continue backing up.
         tryOrNull {
-            keysBackupService!!.checkAndStartKeysBackup()
+            keysBackupService.checkAndStartKeysBackup()
         }
 
         // Open the store
@@ -370,12 +342,7 @@ internal class DefaultCryptoService @Inject constructor(
     /**
      * @return the Keys backup Service
      */
-    override fun keysBackupService(): KeysBackupService {
-        if (keysBackupService == null) {
-            internalStart()
-        }
-        return keysBackupService!!
-    }
+    override fun keysBackupService() = keysBackupService
 
     /**
      * @return the VerificationService
@@ -400,7 +367,7 @@ internal class DefaultCryptoService @Inject constructor(
             // This could be omitted but then devices might be waiting for the next
             sendOutgoingRequests()
 
-            keysBackupService?.maybeBackupKeys()
+            keysBackupService.maybeBackupKeys()
         }
 
         cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
@@ -431,7 +398,7 @@ internal class DefaultCryptoService @Inject constructor(
 
     override fun getCryptoDeviceInfo(userId: String): List<CryptoDeviceInfo> {
         return runBlocking {
-            this@DefaultCryptoService.olmMachine.getCryptoDeviceInfo(userId) ?: listOf()
+            this@DefaultCryptoService.olmMachine.getCryptoDeviceInfo(userId)
         }
     }
 
@@ -633,6 +600,7 @@ internal class DefaultCryptoService @Inject constructor(
             olmMachine.updateTrackedUsers(userIds)
         }
     }
+
     private fun getRoomUserIds(roomId: String): List<String> {
         val encryptForInvitedMembers = isEncryptionEnabledForInvitedUser() &&
                 shouldEncryptForInvitedMembers(roomId)
@@ -726,7 +694,7 @@ internal class DefaultCryptoService @Inject constructor(
 
                         notifyRoomKeyReceived(roomId, sessionId)
                     }
-                    EventType.SEND_SECRET -> {
+                    EventType.SEND_SECRET        -> {
                         // The rust-sdk will clear this event if it's invalid, this will produce an invalid base64 error
                         // when we try to construct the recovery key.
                         val secretContent = event.getClearContent().toModel<SecretSendEventContent>() ?: return@forEach
@@ -808,7 +776,6 @@ internal class DefaultCryptoService @Inject constructor(
                     cryptoSessionInfoProvider.updateShieldForRoom(roomId, shield)
                 }
             }
-
         } catch (throwable: Throwable) {
             Timber.e(throwable, "## CRYPTO | doKeyDownloadForUsers(): error")
         }

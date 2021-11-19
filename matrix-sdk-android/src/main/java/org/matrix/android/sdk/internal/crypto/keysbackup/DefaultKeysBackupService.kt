@@ -99,6 +99,7 @@ import kotlin.random.Random
  * to the user's homeserver.
  */
 @SessionScope
+@Deprecated("use rust")
 internal class DefaultKeysBackupService @Inject constructor(
         @UserId private val userId: String,
         private val credentials: Credentials,

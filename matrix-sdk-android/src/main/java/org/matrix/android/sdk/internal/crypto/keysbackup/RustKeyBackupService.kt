@@ -38,6 +38,7 @@ import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupStateListe
 import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM_BACKUP
 import org.matrix.android.sdk.internal.crypto.MegolmSessionData
 import org.matrix.android.sdk.internal.crypto.OlmMachine
+import org.matrix.android.sdk.internal.crypto.OlmMachineProvider
 import org.matrix.android.sdk.internal.crypto.RequestSender
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.KeysBackupVersionTrust
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.MegolmBackupAuthData
@@ -71,7 +72,7 @@ import kotlin.random.Random
  */
 @SessionScope
 internal class RustKeyBackupService @Inject constructor(
-        private val olmMachine: OlmMachine,
+        olmMachineProvider: OlmMachineProvider,
         private val sender: RequestSender,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val cryptoCoroutineScope: CoroutineScope,
@@ -84,6 +85,8 @@ internal class RustKeyBackupService @Inject constructor(
     private val uiHandler = Handler(Looper.getMainLooper())
 
     private val keysBackupStateManager = KeysBackupStateManager(uiHandler)
+
+    private val olmMachine = olmMachineProvider.olmMachine
 
     // The backup version
     override var keysBackupVersion: KeysVersionResult? = null

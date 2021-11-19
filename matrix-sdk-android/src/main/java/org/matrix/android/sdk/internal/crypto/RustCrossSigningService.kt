@@ -30,18 +30,18 @@ import org.matrix.android.sdk.internal.crypto.crosssigning.DeviceTrustResult
 import org.matrix.android.sdk.internal.crypto.crosssigning.UserTrustResult
 import org.matrix.android.sdk.internal.crypto.crosssigning.isVerified
 import org.matrix.android.sdk.internal.crypto.store.PrivateKeysInfo
-import org.matrix.android.sdk.internal.di.SessionId
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.extensions.foldToCallback
 import javax.inject.Inject
 
 internal class RustCrossSigningService @Inject constructor(
-        @SessionId private val sessionId: String,
+//        @SessionId private val sessionId: String,
         @UserId private val myUserId: String,
         private val olmMachineProvider: OlmMachineProvider
 ) : CrossSigningService {
 
     val olmMachine = olmMachineProvider.olmMachine
+
     /**
      * Is our own device signed by our own cross signing identity
      */

@@ -41,6 +41,7 @@ import java.net.URLEncoder
 import javax.inject.Inject
 
 // The libolm wrapper.
+@Deprecated("rust")
 @SessionScope
 internal class MXOlmDevice @Inject constructor(
         /**

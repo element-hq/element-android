@@ -21,6 +21,7 @@ import org.matrix.android.sdk.api.session.events.model.Content
 /**
  * An interface for encrypting data
  */
+@Deprecated("rust")
 internal interface IMXEncrypting {
 
     /**

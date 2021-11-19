@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.internal.crypto.algorithms
 
+@Deprecated("rust")
 internal interface IMXGroupEncryption {
 
     /**

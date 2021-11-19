@@ -26,6 +26,7 @@ import org.matrix.android.sdk.internal.crypto.keysbackup.DefaultKeysBackupServic
 /**
  * An interface for decrypting data
  */
+@Deprecated("rust")
 internal interface IMXDecrypting {
 
     /**

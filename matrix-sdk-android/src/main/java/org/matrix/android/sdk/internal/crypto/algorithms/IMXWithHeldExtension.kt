@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.crypto.algorithms
 
 import org.matrix.android.sdk.internal.crypto.model.event.RoomKeyWithHeldContent
 
+@Deprecated("rust")
 internal interface IMXWithHeldExtension {
     fun onRoomKeyWithHeldEvent(withHeldInfo: RoomKeyWithHeldContent)
 }
