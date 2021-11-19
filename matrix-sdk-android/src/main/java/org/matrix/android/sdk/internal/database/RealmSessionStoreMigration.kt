@@ -56,7 +56,7 @@ internal class RealmSessionStoreMigration @Inject constructor(
 ) : RealmMigration {
 
     companion object {
-        const val SESSION_STORE_SCHEMA_VERSION = 19L
+        const val SESSION_STORE_SCHEMA_VERSION = 20L
     }
 
     /**
@@ -88,6 +88,7 @@ internal class RealmSessionStoreMigration @Inject constructor(
         if (oldVersion <= 16) migrateTo17(realm)
         if (oldVersion <= 17) migrateTo18(realm)
         if (oldVersion <= 18) migrateTo19(realm)
+        if (oldVersion <= 19) migrateTo20(realm)
     }
 
     private fun migrateTo1(realm: DynamicRealm) {
@@ -396,6 +397,16 @@ internal class RealmSessionStoreMigration @Inject constructor(
                         val normalised = normalizer.normalize(displayName)
                         it.set(RoomSummaryEntityFields.NORMALIZED_DISPLAY_NAME, normalised)
                     }
+                }
+    }
+
+    private fun migrateTo20(realm: DynamicRealm) {
+        Timber.d("Step 19 -> 20")
+        realm.schema.get("DraftEntity")
+                ?.addField(DraftEntityFields.MESSAGE_TYPE, String::class.java)
+                ?.setRequired(DraftEntityFields.MESSAGE_TYPE, true)
+                ?.transform {
+                    it.setString(DraftEntityFields.MESSAGE_TYPE, MessageType.MSGTYPE_TEXT)
                 }
     }
 }
