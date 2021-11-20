@@ -66,7 +66,7 @@ class SpacePeopleListController @Inject constructor(
         memberSummaries.forEach { memberEntry ->
 
             val filtered = memberEntry.second
-                    .filter { roomMemberSummaryFilter.test(it) }
+                    .filter { roomMemberSummaryFilter.test(it.roomMemberSummary) }
             if (filtered.isNotEmpty()) {
                 dividerItem {
                     id("divider_type_${memberEntry.first.titleRes}")
@@ -75,7 +75,8 @@ class SpacePeopleListController @Inject constructor(
             foundCount += filtered.size
             filtered
                     .join(
-                            each = { _, roomMember ->
+                            each = { _, roomMemberWrapper ->
+                                val roomMember = roomMemberWrapper.roomMemberSummary
                                 profileMatrixItemWithPowerLevel {
                                     id(roomMember.userId)
                                     matrixItem(roomMember.toMatrixItem())
@@ -118,7 +119,7 @@ class SpacePeopleListController @Inject constructor(
                             },
                             between = { _, roomMemberBefore ->
                                 dividerItem {
-                                    id("divider_${roomMemberBefore.userId}")
+                                    id("divider_${roomMemberBefore.roomMemberSummary.userId}")
                                 }
                             }
                     )

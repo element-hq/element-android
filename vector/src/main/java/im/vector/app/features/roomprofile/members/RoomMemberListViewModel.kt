@@ -52,7 +52,8 @@ import org.matrix.android.sdk.flow.unwrap
 import timber.log.Timber
 
 class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState: RoomMemberListViewState,
-                                                          private val roomMemberSummaryComparator: RoomMemberSummaryComparator,
+                                                          //private val roomMemberSummaryComparator: RoomMemberSummaryComparator,
+                                                          private val roomMemberSummaryWithPowerComparator: RoomMemberSummaryWithPowerComparator,
                                                           private val session: Session) :
         VectorViewModel<RoomMemberListViewState, RoomMemberListAction, EmptyViewEvents>(initialState) {
 
@@ -149,7 +150,11 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
                 }
     }
 
-    private fun buildRoomMemberSummaries(powerLevelsContent: PowerLevelsContent, roomMembers: List<RoomMemberSummary>): RoomMemberSummaries {
+    private fun List<RoomMemberSummary>.toPoweredMemberList(listCategory: RoomMemberListCategories, powerLevelsHelper: PowerLevelsHelper): List<RoomMemberSummaryWithPower> {
+        return map { RoomMemberSummaryWithPower(it, listCategory, powerLevelsHelper.getUserPowerLevelValue(it.userId)) }
+    }
+
+    private fun buildRoomMemberSummaries(powerLevelsContent: PowerLevelsContent, roomMembers: List<RoomMemberSummary>): RoomMemberSummariesWithPower {
         val admins = ArrayList<RoomMemberSummary>()
         val moderators = ArrayList<RoomMemberSummary>()
         val users = ArrayList<RoomMemberSummary>(roomMembers.size)
@@ -168,12 +173,23 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
                     }
                 }
 
+        /*
         return listOf(
                 RoomMemberListCategories.ADMIN to admins.sortedWith(roomMemberSummaryComparator),
                 RoomMemberListCategories.MODERATOR to moderators.sortedWith(roomMemberSummaryComparator),
                 RoomMemberListCategories.CUSTOM to customs.sortedWith(roomMemberSummaryComparator),
                 RoomMemberListCategories.INVITE to invites.sortedWith(roomMemberSummaryComparator),
                 RoomMemberListCategories.USER to users.sortedWith(roomMemberSummaryComparator)
+        )
+         */
+        val invitesWithPower = invites.toPoweredMemberList(RoomMemberListCategories.INVITE, powerLevelsHelper)
+        val membersWithPower = admins.toPoweredMemberList(RoomMemberListCategories.SG_ADMIN, powerLevelsHelper) +
+                moderators.toPoweredMemberList(RoomMemberListCategories.SG_MODERATOR, powerLevelsHelper) +
+                users.toPoweredMemberList(RoomMemberListCategories.SG_USER, powerLevelsHelper) +
+                customs.toPoweredMemberList(RoomMemberListCategories.SG_CUSTOM, powerLevelsHelper)
+        return listOf(
+                RoomMemberListCategories.INVITE to invitesWithPower.sortedWith(roomMemberSummaryWithPowerComparator),
+                RoomMemberListCategories.MEMBER to membersWithPower.sortedWith(roomMemberSummaryWithPowerComparator)
         )
     }
 
@@ -201,4 +217,10 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
             )
         }
     }
+
+    data class RoomMemberSummaryWithPower constructor(
+            val roomMemberSummary: RoomMemberSummary,
+            val powerLevelCategory: RoomMemberListCategories,
+            val powerLevel: Int
+    )
 }

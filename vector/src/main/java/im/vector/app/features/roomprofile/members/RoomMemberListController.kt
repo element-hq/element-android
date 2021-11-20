@@ -69,13 +69,15 @@ class RoomMemberListController @Inject constructor(
                 }
                 .orEmpty()
         var threePidInvitesDone = filteredThreePidInvites.isEmpty()
+        var isFirstSection = true
 
         for ((powerLevelCategory, roomMemberList) in roomMembersByPowerLevel) {
-            val filteredRoomMemberList = roomMemberList.filter { roomMemberSummaryFilter.test(it) }
+            val filteredRoomMemberList = roomMemberList.filter { roomMemberSummaryFilter.test(it.roomMemberSummary) }
             if (filteredRoomMemberList.isEmpty()) {
                 continue
             }
 
+            /*
             if (powerLevelCategory == RoomMemberListCategories.USER && !threePidInvitesDone) {
                 // If there is no regular invite, display threepid invite before the regular user
                 buildProfileSection(
@@ -85,18 +87,22 @@ class RoomMemberListController @Inject constructor(
                 buildThreePidInvites(filteredThreePidInvites, data.actionsPermissions.canRevokeThreePidInvite)
                 threePidInvitesDone = true
             }
+             */
 
-            buildProfileSection(
-                    stringProvider.getString(powerLevelCategory.titleRes)
-            )
+            if (powerLevelCategory != RoomMemberListCategories.MEMBER || !isFirstSection) {
+                buildProfileSection(
+                        stringProvider.getString(powerLevelCategory.titleRes)
+                )
+            }
+            isFirstSection = false
 
             filteredRoomMemberList.join(
                     each = { _, roomMember ->
-                        buildRoomMember(roomMember, powerLevelCategory, host, data)
+                        buildRoomMember(roomMember.roomMemberSummary, roomMember.powerLevelCategory, host, data)
                     },
                     between = { _, roomMemberBefore ->
                         dividerItem {
-                            id("divider_${roomMemberBefore.userId}")
+                            id("divider_${roomMemberBefore.roomMemberSummary.userId}")
                         }
                     }
             )
