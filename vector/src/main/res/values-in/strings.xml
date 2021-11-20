@@ -47,7 +47,7 @@
     <string name="read_receipt">Baca</string>
     <string name="create_account">Daftar</string>
     <string name="login">Masuk</string>
-    <string name="logout">Copot akun</string>
+    <string name="logout">Keluar</string>
     <string name="hs_url">URL Homeserver</string>
     <string name="search">Cari</string>
     <string name="start_new_chat">Mulai Obrolan Baru</string>
@@ -447,7 +447,7 @@ Ijinkan akses lewat halaman selanjutnya untuk menemukan pengguna ${app_name} yan
     <string name="room_sliding_menu_version">Versi</string>
     <string name="room_sliding_menu_term_and_conditions">Syarat &amp; ketentuan</string>
     <string name="room_sliding_menu_third_party_notices">Pemberitahuan pihak ketiga</string>
-    <string name="room_sliding_menu_copyright">Hak Cipta</string>
+    <string name="room_sliding_menu_copyright">Hak cipta</string>
     <string name="room_sliding_menu_privacy_policy">Kebijakan privasi</string>
     <string name="settings_profile_picture">Gambar Profil</string>
     <string name="settings_display_name">Nama Layar</string>
@@ -697,7 +697,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
 \nPeringatan: berkas ini mungkin ikut terhapus bila aplikasi ini dihapus.</string>
     <string name="notification_listening_for_events">Mendengarkan peristiwa</string>
     <string name="settings_third_party_notices">Pemberitahuan pihak ketiga</string>
-    <string name="settings_copyright">Hak Cipta</string>
+    <string name="settings_copyright">Hak cipta</string>
     <string name="settings_privacy_policy">Kebijakan privasi</string>
     <string name="settings_clear_cache">Bersihkan cache</string>
     <string name="settings_clear_media_cache">Bersihkan cache media</string>
@@ -1812,8 +1812,8 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="push_gateway_item_push_key">push_key:</string>
     <string name="push_gateway_item_app_id">app_id:</string>
     <string name="settings_push_gateway_no_pushers">Tidak ada gateway dorong terdaftar</string>
-    <string name="settings_push_rules_no_rules">Tidak ada aturan dorong ditentukan</string>
-    <string name="settings_push_rules">Aturan Dorong</string>
+    <string name="settings_push_rules_no_rules">Tidak ada aturan push yang ditentukan</string>
+    <string name="settings_push_rules">Aturan Push</string>
     <string name="settings_expert">Ahli</string>
     <string name="send_you_invite">Mengirim Anda undangan</string>
     <string name="room_list_empty">Gabung ruangan untuk memulai menggunakan aplikasi.</string>
@@ -2957,4 +2957,23 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="login_error_homeserver_from_url_not_found_enter_manual">Pilih homeserver</string>
     <string name="login_error_homeserver_from_url_not_found">Tidak dapat menjangkau homeserver di URL %s. Silakan periksa tautan Anda atau pilih sebuah homeserver secara manual.</string>
     <string name="notification_listening_for_notifications">Mendengarkan notifikasi</string>
+    <plurals name="create_poll_not_enough_options_error">
+        <item quantity="other">Setidaknya diperlukan %1$s opsi</item>
+    </plurals>
+    <string name="create_poll_empty_question_error">Pertanyaan tidak bisa kosong</string>
+    <string name="create_poll_button">BUAT POLL</string>
+    <string name="create_poll_add_option">TAMBAHKAN OPSI</string>
+    <string name="create_poll_options_hint">Opsi %1$d</string>
+    <string name="create_poll_options_title">Buat opsi</string>
+    <string name="create_poll_question_hint">Pertanyaan atau topik</string>
+    <string name="create_poll_question_title">Pertanyaan atau topik poll</string>
+    <string name="create_poll_title">Buat Poll</string>
+    <string name="attachment_type_poll">Poll</string>
+    <string name="identity_server_consent_dialog_content_2">Untuk menemukan kontak yang sudah ada, Anda memerlukan untuk mengirim informasi kontak ke server identitas Anda.
+\n
+\nKami meng-hash data Anda sebelum mengirim untuk privasi. Apakah Anda terima untuk mengirimkan informasi ini\?</string>
+    <string name="identity_server_consent_dialog_title_2">Kirim email dan nomor telepon ke %s</string>
+    <string name="settings_discovery_consent_notice_off_2">Kontak Anda privat. Untuk menemukan pengguna dari kontak Anda, kami membutuhkan izin untuk mengirim info kontak ke server identitas Anda.</string>
+    <string name="shortcut_disabled_reason_sign_out">Sesinya telah dikeluarkan!</string>
+    <string name="shortcut_disabled_reason_room_left">Ruangannya telah ditinggalkan!</string>
 </resources>
