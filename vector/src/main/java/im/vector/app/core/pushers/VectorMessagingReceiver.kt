@@ -35,6 +35,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.BuildConfig
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.network.WifiDetector
+import im.vector.app.core.services.GuardServiceStarter
 import im.vector.app.features.badge.BadgeProxy
 import im.vector.app.features.notifications.NotifiableEventResolver
 import im.vector.app.features.notifications.NotificationDrawerManager
@@ -205,6 +206,9 @@ val upHandler = object: VectorMessagingReceiverHandler {
         if (context == null || !UPHelper.allowBackgroundSync(context)) {
             val mode = BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_DISABLED
             vectorPreferences.setFdroidSyncBackgroundMode(mode)
+            if (context != null) {
+                GuardServiceStarter(vectorPreferences, context).stop()
+            }
         }
     }
 
