@@ -2962,4 +2962,5 @@ Spróbuj uruchomić ponownie aplikację.</string>
     </plurals>
     <string name="login_social_sso">pojedyncze logowanie</string>
     <string name="shortcut_disabled_reason_room_left">Pokój opuszczony!</string>
+    <string name="call_dial_pad_lookup_error">Wystąpił błąd poczukując tego numeru</string>
 </resources>
