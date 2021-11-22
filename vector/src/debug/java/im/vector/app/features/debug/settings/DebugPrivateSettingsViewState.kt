@@ -14,20 +14,10 @@
  * limitations under the License.
  */
 
-package im.vector.app.di
+package im.vector.app.features.debug.settings
 
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
-import im.vector.app.core.services.GuardServiceStarter
+import com.airbnb.mvrx.MavericksState
 
-@InstallIn(SingletonComponent::class)
-@Module
-object FlavorModule {
-
-    @Provides
-    fun provideGuardServiceStarter(): GuardServiceStarter {
-        return object : GuardServiceStarter {}
-    }
-}
+data class DebugPrivateSettingsViewState(
+        val dialPadVisible: Boolean = false
+) : MavericksState

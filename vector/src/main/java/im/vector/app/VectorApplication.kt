@@ -175,8 +175,7 @@ class VectorApplication :
             }
 
             override fun onPause(owner: LifecycleOwner) {
-                Timber.i("App entered background") // call persistInfo
-                notificationDrawerManager.persistInfo()
+                Timber.i("App entered background")
                 FcmHelper.onEnterBackground(appContext, vectorPreferences, activeSessionHolder)
             }
         })

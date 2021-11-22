@@ -14,20 +14,10 @@
  * limitations under the License.
  */
 
-package im.vector.app.di
+package im.vector.app.features.debug.settings
 
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
-import im.vector.app.core.services.GuardServiceStarter
+import im.vector.app.core.platform.VectorViewModelAction
 
-@InstallIn(SingletonComponent::class)
-@Module
-object FlavorModule {
-
-    @Provides
-    fun provideGuardServiceStarter(): GuardServiceStarter {
-        return object : GuardServiceStarter {}
-    }
+sealed class DebugPrivateSettingsViewActions : VectorViewModelAction {
+    data class SetDialPadVisibility(val force: Boolean) : DebugPrivateSettingsViewActions()
 }

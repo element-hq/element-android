@@ -14,23 +14,23 @@
  * limitations under the License.
  */
 
-package im.vector.app.di
+package im.vector.app.features.debug.di
 
-import android.content.Context
+import dagger.Binds
 import dagger.Module
-import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
-import im.vector.app.core.services.GuardServiceStarter
-import im.vector.app.fdroid.service.FDroidGuardServiceStarter
-import im.vector.app.features.settings.VectorPreferences
+import dagger.multibindings.IntoMap
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.MavericksViewModelComponent
+import im.vector.app.core.di.MavericksViewModelKey
+import im.vector.app.features.debug.settings.DebugPrivateSettingsViewModel
 
-@InstallIn(SingletonComponent::class)
+@InstallIn(MavericksViewModelComponent::class)
 @Module
-object FlavorModule {
+interface MavericksViewModelDebugModule {
 
-    @Provides
-    fun provideGuardServiceStarter(preferences: VectorPreferences, appContext: Context): GuardServiceStarter {
-        return FDroidGuardServiceStarter(preferences, appContext)
-    }
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(DebugPrivateSettingsViewModel::class)
+    fun debugPrivateSettingsViewModelFactory(factory: DebugPrivateSettingsViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
 }
