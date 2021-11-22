@@ -60,15 +60,16 @@ import timber.log.Timber
  * View model used to update the home bottom bar notification counts, observe the sync state and
  * change the selected room list view
  */
-class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: HomeDetailViewState,
-                                                      private val session: Session,
-                                                      private val uiStateRepository: UiStateRepository,
-                                                      private val vectorDataStore: VectorDataStore,
-                                                      private val callManager: WebRtcCallManager,
-                                                      private val directRoomHelper: DirectRoomHelper,
-                                                      private val appStateHandler: AppStateHandler,
-                                                      private val autoAcceptInvites: AutoAcceptInvites) :
-        VectorViewModel<HomeDetailViewState, HomeDetailAction, HomeDetailViewEvents>(initialState),
+class HomeDetailViewModel @AssistedInject constructor(
+        @Assisted initialState: HomeDetailViewState,
+        private val session: Session,
+        private val uiStateRepository: UiStateRepository,
+        private val vectorDataStore: VectorDataStore,
+        private val callManager: WebRtcCallManager,
+        private val directRoomHelper: DirectRoomHelper,
+        private val appStateHandler: AppStateHandler,
+        private val autoAcceptInvites: AutoAcceptInvites
+) : VectorViewModel<HomeDetailViewState, HomeDetailAction, HomeDetailViewEvents>(initialState),
         CallProtocolsChecker.Listener {
 
     @AssistedFactory
