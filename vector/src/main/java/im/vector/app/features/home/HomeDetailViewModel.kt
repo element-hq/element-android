@@ -38,7 +38,6 @@ import im.vector.app.features.invite.showInvites
 import im.vector.app.features.settings.VectorDataStore
 import im.vector.app.features.ui.UiStateRepository
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.flatMapLatest
@@ -104,19 +103,16 @@ class HomeDetailViewModel @AssistedInject constructor(
     private var forceDialPad = false
 
     private fun observeDataStore() {
-        viewModelScope.launch {
-            vectorDataStore.pushCounterFlow.collect { nbOfPush ->
-                setState {
-                    copy(
-                            pushCounter = nbOfPush
-                    )
-                }
-            }
-            vectorDataStore.forceDialPadDisplayFlow.collect { force ->
-                forceDialPad = force
-                updateShowDialPadTab()
-            }
+        vectorDataStore.pushCounterFlow.setOnEach { nbOfPush ->
+            copy(
+                    pushCounter = nbOfPush
+            )
         }
+
+        vectorDataStore.forceDialPadDisplayFlow.onEach { force ->
+            forceDialPad = force
+            updateShowDialPadTab()
+        }.launchIn(viewModelScope)
     }
 
     override fun handle(action: HomeDetailAction) {

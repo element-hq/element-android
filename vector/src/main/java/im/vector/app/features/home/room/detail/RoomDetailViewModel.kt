@@ -195,14 +195,10 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private fun observeDataStore() {
-        viewModelScope.launch {
-            vectorDataStore.pushCounterFlow.collect { nbOfPush ->
-                setState {
-                    copy(
-                            pushCounter = nbOfPush
-                    )
-                }
-            }
+        vectorDataStore.pushCounterFlow.setOnEach { nbOfPush ->
+            copy(
+                    pushCounter = nbOfPush
+            )
         }
     }
 

@@ -25,7 +25,6 @@ import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.settings.VectorDataStore
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 class DebugPrivateSettingsViewModel @AssistedInject constructor(
@@ -45,12 +44,10 @@ class DebugPrivateSettingsViewModel @AssistedInject constructor(
     }
 
     private fun observeVectorDataStore() {
-        vectorDataStore.forceDialPadDisplayFlow.onEach {
-            setState {
-                copy(
-                        dialPadVisible = it
-                )
-            }
+        vectorDataStore.forceDialPadDisplayFlow.setOnEach {
+            copy(
+                    dialPadVisible = it
+            )
         }
     }
 
