@@ -2912,12 +2912,12 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="call_transfer_connect_action">Połącz</string>
     <string name="call_tile_connection_failed">Połączenie nieudane</string>
     <string name="call_tile_no_answer">Brak odpowiedzi</string>
-    <string name="call_tile_voice_missed">Nieodebrane połączenie wideo</string>
-    <string name="call_tile_video_active">Aktywna rozmowa wideo</string>
+    <string name="call_tile_voice_missed">Nieodebrane połączenie głosowe</string>
+    <string name="call_tile_video_active">Aktywna wideorozmowa</string>
     <string name="call_tile_voice_active">Aktywna rozmowa głosowa</string>
-    <string name="call_tile_video_incoming">Przychodzące połączenie wideo</string>
+    <string name="call_tile_video_incoming">Przychodząca wideorozmowa</string>
     <string name="call_tile_voice_incoming">Przychodzące połączenie głosowe</string>
-    <string name="call_tile_ended">Rozmowa zakończyła się</string>
+    <string name="call_tile_ended">Rozmowa zakończona</string>
     <string name="call_tile_other_declined">%1$s odrzucił połączenie</string>
     <string name="call_tile_you_declined_this_call">Odrzuciłeś połączenie</string>
     <string name="call_tile_you_declined">Odrzuciłeś połączenie od %s</string>
@@ -2929,10 +2929,10 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="bottom_sheet_setup_secure_backup_title">Bezpieczna kopia zapasowa</string>
     <string name="settings_setup_secure_backup">Ustaw bezpieczną Kopię Zapasową</string>
     <string name="default_message_emote_snow">wysyła opady śniegu ❄️</string>
-    <string name="default_message_emote_confetti">wysyła confetti 🎉</string>
-    <string name="command_snow">Wysyła wiadomość z opadami śniegu (Winter is coming)</string>
-    <string name="command_confetti">Wysyła wiadomość z confetti :D</string>
-    <string name="enter_secret_storage_input_key">Wybierz swój Klucz Odzyskiwania, lub wpisz go manualnie lub wklej go ze schowka</string>
+    <string name="default_message_emote_confetti">wysyła konfetti 🎉</string>
+    <string name="command_snow">Wysyła wiadomość z opadami śniegu</string>
+    <string name="command_confetti">Wysyła wiadomość z konfetti</string>
+    <string name="enter_secret_storage_input_key">Wybierz swój klucz odzyskiwania, wpisz go ręcznie lub wklej ze schowka</string>
     <string name="use_recovery_key">Użyj Klucza Odzyskiwania</string>
     <string name="template_use_other_session_content_description">Użyj najnowszej wersji ${app_name} na innych urządzeniach, ${app_name} Web, ${app_name} Desktop, ${app_name} iOS, ${app_name} dla Androida, oraz innych wspieranych klientów protokołu Matrix</string>
     <string name="bootstrap_migration_use_recovery_key">użyj swojego klucza odzyskiwania Klucza Kopii Zapasowej</string>
@@ -2962,6 +2962,17 @@ Spróbuj uruchomić ponownie aplikację.</string>
     </plurals>
     <string name="login_social_sso">pojedyncze logowanie</string>
     <string name="shortcut_disabled_reason_room_left">Pokój opuszczony!</string>
-    <string name="call_dial_pad_lookup_error">Wystąpił błąd poczukując tego numeru</string>
+    <string name="call_dial_pad_lookup_error">Błąd podczas wyszukiwania numeru telefonu</string>
     <string name="call_transfer_title">Przenieś</string>
+    <string name="call_tap_to_return">%1$s dotknij by powrócić</string>
+    <string name="call_one_active">Aktywne połączenie (%1$s) ·</string>
+    <string name="call_only_active">Aktywne połączenie (%1$s)</string>
+    <string name="call_dial_pad_title">Klawisze wybierania</string>
+    <string name="call_tile_video_call_has_ended">Wideorozmowa zakończona • %1$s</string>
+    <string name="call_tile_video_declined">Odrzucono wideorozmowę</string>
+    <string name="call_tile_video_missed">Nieodebrana wideorozmowa</string>
+    <string name="call_tile_voice_declined">Odrzucono połączenie głosowe</string>
+    <string name="call_tile_voice_call_has_ended">Rozmowa głosowa zakończona • %1$s</string>
+    <string name="call_tile_call_back">Oddzwoń</string>
+    <string name="failed_to_initialize_cross_signing">Nie udało się skonfigurować logowania krzyżowego</string>
 </resources>
