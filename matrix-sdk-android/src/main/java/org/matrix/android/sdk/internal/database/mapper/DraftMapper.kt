@@ -28,9 +28,9 @@ internal object DraftMapper {
     fun map(entity: DraftEntity): UserDraft {
         return when (entity.draftMode) {
             DraftEntity.MODE_REGULAR -> UserDraft.Regular(entity.content, entity.messageType)
-            DraftEntity.MODE_EDIT    -> UserDraft.Edit(entity.linkedEventId, entity.content, entity.messageType)
-            DraftEntity.MODE_QUOTE   -> UserDraft.Quote(entity.linkedEventId, entity.content, entity.messageType)
-            DraftEntity.MODE_REPLY   -> UserDraft.Reply(entity.linkedEventId, entity.content, entity.messageType)
+            DraftEntity.MODE_EDIT    -> UserDraft.Edit(entity.linkedEventId, entity.content)
+            DraftEntity.MODE_QUOTE   -> UserDraft.Quote(entity.linkedEventId, entity.content)
+            DraftEntity.MODE_REPLY   -> UserDraft.Reply(entity.linkedEventId, entity.content)
             else                     -> null
         } ?: UserDraft.Regular("", MessageType.MSGTYPE_TEXT)
     }
@@ -43,8 +43,8 @@ internal object DraftMapper {
                     messageType = domain.messageType
             )
             is UserDraft.Edit    -> DraftEntity(content = domain.content, draftMode = DraftEntity.MODE_EDIT, linkedEventId = domain.linkedEventId)
-            is UserDraft.Quote -> DraftEntity(content = domain.content, draftMode = DraftEntity.MODE_QUOTE, linkedEventId = domain.linkedEventId)
-            is UserDraft.Reply -> DraftEntity(content = domain.content, draftMode = DraftEntity.MODE_REPLY, linkedEventId = domain.linkedEventId)
+            is UserDraft.Quote   -> DraftEntity(content = domain.content, draftMode = DraftEntity.MODE_QUOTE, linkedEventId = domain.linkedEventId)
+            is UserDraft.Reply   -> DraftEntity(content = domain.content, draftMode = DraftEntity.MODE_REPLY, linkedEventId = domain.linkedEventId)
         }
     }
 }

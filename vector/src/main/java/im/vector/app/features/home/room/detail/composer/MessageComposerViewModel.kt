@@ -689,15 +689,15 @@ class MessageComposerViewModel @AssistedInject constructor(
                 }
                 it.sendMode is SendMode.Reply                               -> {
                     setState { copy(sendMode = it.sendMode.copy(text = draft)) }
-                    room.saveDraft(UserDraft.Reply(it.sendMode.timelineEvent.root.eventId!!, draft, messageType))
+                    room.saveDraft(UserDraft.Reply(it.sendMode.timelineEvent.root.eventId!!, draft))
                 }
                 it.sendMode is SendMode.Quote                               -> {
                     setState { copy(sendMode = it.sendMode.copy(text = draft)) }
-                    room.saveDraft(UserDraft.Quote(it.sendMode.timelineEvent.root.eventId!!, draft, messageType))
+                    room.saveDraft(UserDraft.Quote(it.sendMode.timelineEvent.root.eventId!!, draft))
                 }
                 it.sendMode is SendMode.Edit  -> {
                     setState { copy(sendMode = it.sendMode.copy(text = draft)) }
-                    room.saveDraft(UserDraft.Edit(it.sendMode.timelineEvent.root.eventId!!, draft, messageType))
+                    room.saveDraft(UserDraft.Edit(it.sendMode.timelineEvent.root.eventId!!, draft))
                 }
             }
         }
