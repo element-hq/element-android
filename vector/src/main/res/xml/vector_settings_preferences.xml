@@ -35,8 +35,8 @@
         <im.vector.app.core.preference.VectorSwitchPreference
             android:defaultValue="false"
             android:key="SETTINGS_PREF_SPACE_SHOW_ALL_ROOM_IN_HOME"
-            android:title="@string/preference_show_all_rooms_in_home"
-            android:summary="@string/all_rooms_youre_in_will_be_shown_in_home" />
+            android:summary="@string/all_rooms_youre_in_will_be_shown_in_home"
+            android:title="@string/preference_show_all_rooms_in_home" />
 
     </im.vector.app.core.preference.VectorPreferenceCategory>
 
@@ -120,20 +120,6 @@
             android:key="SETTINGS_ENABLE_CHAT_EFFECTS"
             android:summary="@string/settings_chat_effects_description"
             android:title="@string/settings_chat_effects_title" />
-
-        <im.vector.app.core.preference.VectorSwitchPreference
-            android:defaultValue="true"
-            android:key="SETTINGS_SHOW_JOIN_LEAVE_MESSAGES_KEY"
-            android:summary="@string/settings_show_join_leave_messages_summary"
-            android:title="@string/settings_show_join_leave_messages"
-            app:isPreferenceVisible="@bool/false_not_implemented" />
-
-        <im.vector.app.core.preference.VectorSwitchPreference
-            android:defaultValue="true"
-            android:key="SETTINGS_SHOW_AVATAR_DISPLAY_NAME_CHANGES_MESSAGES_KEY"
-            android:summary="@string/settings_show_avatar_display_name_changes_messages_summary"
-            android:title="@string/settings_show_avatar_display_name_changes_messages"
-            app:isPreferenceVisible="@bool/false_not_implemented" />
 
         <im.vector.app.core.preference.VectorSwitchPreference
             android:key="SETTINGS_VIBRATE_ON_MENTION_KEY"
