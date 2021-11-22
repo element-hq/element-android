@@ -556,7 +556,8 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
 
     open fun initUiAndData() = Unit
 
-    override fun invalidate() = Unit
+    // Note: does not seem to be called
+    final override fun invalidate() = Unit
 
     @StringRes
     open fun getTitleRes() = -1
