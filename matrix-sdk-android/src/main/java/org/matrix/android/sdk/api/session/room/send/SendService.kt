@@ -57,6 +57,16 @@ interface SendService {
     fun sendFormattedTextMessage(text: String, formattedText: String, msgType: String = MessageType.MSGTYPE_TEXT): Cancelable
 
     /**
+     * Method to quote an events content.
+     * @param quotedEvent The event to which we will quote it's content.
+     * @param text the text message to send
+     * @param msgType the message type: MessageType.MSGTYPE_TEXT (default) or MessageType.MSGTYPE_EMOTE
+     * @param autoMarkdown If true, the SDK will generate a formatted HTML message from the body text if markdown syntax is present
+     * @return a [Cancelable]
+     */
+    fun sendQuotedTextMessage(quotedEvent: TimelineEvent, text: String, autoMarkdown: Boolean = false): Cancelable
+
+    /**
      * Method to send a media asynchronously.
      * @param attachment the media to send
      * @param compressBeforeSending set to true to compress images before sending them

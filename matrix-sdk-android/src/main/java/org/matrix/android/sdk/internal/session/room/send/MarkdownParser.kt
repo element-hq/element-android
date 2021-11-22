@@ -34,11 +34,17 @@ internal class MarkdownParser @Inject constructor(
 
     private val mdSpecialChars = "[`_\\-*>.\\[\\]#~]".toRegex()
 
-    fun parse(text: CharSequence): TextContent {
+    /**
+     * Parses some input text and produces html.
+     * @param text An input CharSequence to be parsed.
+     * @param force Skips the check for detecting if the input contains markdown and always converts to html.
+     * @return TextContent containing the plain text and the formatted html if generated.
+     */
+    fun parse(text: CharSequence, force: Boolean = false): TextContent {
         val source = textPillsUtils.processSpecialSpansToMarkdown(text) ?: text.toString()
 
         // If no special char are detected, just return plain text
-        if (source.contains(mdSpecialChars).not()) {
+        if (!force && source.contains(mdSpecialChars).not()) {
             return TextContent(source)
         }
 

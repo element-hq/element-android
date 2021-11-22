@@ -395,23 +395,7 @@ class TextComposerViewModel @AssistedInject constructor(
                     popDraft()
                 }
                 is SendMode.QUOTE   -> {
-                    val messageContent = state.sendMode.timelineEvent.getLastMessageContent()
-                    val textMsg = messageContent?.body
-
-                    val finalText = legacyRiotQuoteText(textMsg, action.text.toString())
-
-                    // TODO check for pills?
-
-                    // TODO Refactor this, just temporary for quotes
-                    val parser = Parser.builder().build()
-                    val document = parser.parse(finalText)
-                    val renderer = HtmlRenderer.builder().build()
-                    val htmlText = renderer.render(document)
-                    if (finalText == htmlText) {
-                        room.sendTextMessage(finalText)
-                    } else {
-                        room.sendFormattedTextMessage(finalText, htmlText)
-                    }
+                    room.sendQuotedTextMessage(state.sendMode.timelineEvent, action.text.toString(), action.autoMarkdown)
                     _viewEvents.post(TextComposerViewEvents.MessageSent)
                     popDraft()
                 }

@@ -20,6 +20,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.media.MediaMetadataRetriever
 import androidx.exifinterface.media.ExifInterface
+import okhttp3.internal.format
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.Event
@@ -88,9 +89,9 @@ internal class LocalEchoEventFactory @Inject constructor(
         return createMessageEvent(roomId, content)
     }
 
-    private fun createTextContent(text: CharSequence, autoMarkdown: Boolean): TextContent {
+    private fun createTextContent(text: CharSequence, autoMarkdown: Boolean, forceMarkdownParse: Boolean = false): TextContent {
         if (autoMarkdown) {
-            return markdownParser.parse(text)
+            return markdownParser.parse(text, force = forceMarkdownParse)
         } else {
             // Try to detect pills
             textPillsUtils.processSpecialSpansToHtml(text)?.let {
@@ -175,13 +176,17 @@ internal class LocalEchoEventFactory @Inject constructor(
         val userLink = originalEvent.root.senderId?.let { permalinkFactory.createPermalink(it, false) } ?: ""
 
         val body = bodyForReply(originalEvent.getLastMessageContent(), originalEvent.isReply())
+        // As we always supply formatted body for replies we should force the MarkdownParser to produce html.
+        val newBodyFormatted = createTextContent(newBodyText, newBodyAutoMarkdown, forceMarkdownParse = true).takeFormatted()
+        // Body of the original message may not have formatted version, so may also have to convert to html.
+        val bodyFormatted = body.formattedText ?: createTextContent(body.text, newBodyAutoMarkdown, forceMarkdownParse = true).takeFormatted()
         val replyFormatted = REPLY_PATTERN.format(
                 permalink,
                 userLink,
                 originalEvent.senderInfo.disambiguatedDisplayName,
                 // Remove inner mx_reply tags if any
-                body.takeFormatted().replace(MX_REPLY_REGEX, ""),
-                createTextContent(newBodyText, newBodyAutoMarkdown).takeFormatted()
+                bodyFormatted.replace(MX_REPLY_REGEX, ""),
+                newBodyFormatted
         )
         //
         // > <@alice:example.org> This is the original body
@@ -361,13 +366,18 @@ internal class LocalEchoEventFactory @Inject constructor(
         val userLink = permalinkFactory.createPermalink(userId, false) ?: return null
 
         val body = bodyForReply(eventReplied.getLastMessageContent(), eventReplied.isReply())
+
+        // As we always supply formatted body for replies we should force the MarkdownParser to produce html.
+        val replyTextFormatted = createTextContent(replyText, autoMarkdown, forceMarkdownParse = true).takeFormatted()
+        // Body of the original message may not have formatted version, so may also have to convert to html.
+        val bodyFormatted = body.formattedText ?: createTextContent(body.text, autoMarkdown, forceMarkdownParse = true).takeFormatted()
         val replyFormatted = REPLY_PATTERN.format(
                 permalink,
                 userLink,
                 userId,
                 // Remove inner mx_reply tags if any
-                body.takeFormatted().replace(MX_REPLY_REGEX, ""),
-                createTextContent(replyText, autoMarkdown).takeFormatted()
+                bodyFormatted.replace(MX_REPLY_REGEX, ""),
+                replyTextFormatted
         )
         //
         // > <@alice:example.org> This is the original body
@@ -465,6 +475,38 @@ internal class LocalEchoEventFactory @Inject constructor(
     fun createLocalEcho(event: Event) {
         checkNotNull(event.roomId) { "Your event should have a roomId" }
         localEchoRepository.createLocalEcho(event)
+    }
+
+    fun createQuotedTextEvent(
+            roomId: String,
+            quotedEvent: TimelineEvent,
+            text: String,
+            autoMarkdown: Boolean
+    ): Event {
+        val messageContent = quotedEvent.getLastMessageContent()
+        val textMsg = messageContent?.body
+        val quoteText = legacyRiotQuoteText(textMsg, text)
+        return createFormattedTextEvent(roomId, createTextContent(quoteText, autoMarkdown), MessageType.MSGTYPE_TEXT)
+    }
+
+    private fun legacyRiotQuoteText(quotedText: String?, myText: String): String {
+        val messageParagraphs = quotedText?.split("\n\n".toRegex())?.dropLastWhile { it.isEmpty() }?.toTypedArray()
+        return buildString {
+            if (messageParagraphs != null) {
+                for (i in messageParagraphs.indices) {
+                    if (messageParagraphs[i].isNotBlank()) {
+                        append("> ")
+                        append(messageParagraphs[i])
+                    }
+
+                    if (i != messageParagraphs.lastIndex) {
+                        append("\n\n")
+                    }
+                }
+            }
+            append("\n\n")
+            append(myText)
+        }
     }
 
     companion object {
