@@ -764,7 +764,6 @@ class MessageComposerViewModel @AssistedInject constructor(
                 handleEndAllVoiceActions(deleteRecord = false)?.toContentAttachmentData()?.let { voiceDraft ->
                     handleSaveDraft(draft = voiceDraft.toJsonString(), messageType = MessageType.MSGTYPE_AUDIO)
                 }
-                setState { it.copy(voiceRecordingUiState = VoiceMessageRecorderView.RecordingUiState.None) }
             } else {
                 handleSaveDraft(draft = composerText, messageType = MessageType.MSGTYPE_TEXT)
             }
