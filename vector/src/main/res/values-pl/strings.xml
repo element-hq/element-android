@@ -2903,8 +2903,8 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="settings_discovery_consent_notice_off_2">Twoje kontakty są prywatne. Aby odnaleźć użytkowników z Twoich kontaktów, potrzebujemy zgody do wysłania informacji o nich na Twój serwer tożsamości.</string>
     <string name="secure_backup_banner_setup_line1">Bezpieczna kopia</string>
     <string name="shortcut_disabled_reason_sign_out">Sesja została wylogowana!</string>
-    <string name="setup_cross_signing">Włącz Podpisywanie Krzyżowe</string>
-    <string name="re_authentication_activity_title">Wymagane Ponowne Logowanie</string>
+    <string name="setup_cross_signing">Włącz krzyżowe logowanie</string>
+    <string name="re_authentication_activity_title">Wymagane ponowne logowanie</string>
     <string name="call_slide_to_end_conference">Przesuń aby zakończyć rozmowę</string>
     <string name="call_transfer_unknown_person">Nieznana osoba</string>
     <string name="call_transfer_users_tab_title">Użytkownicy</string>
@@ -2912,7 +2912,7 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="call_transfer_connect_action">Połącz</string>
     <string name="call_tile_connection_failed">Połączenie nieudane</string>
     <string name="call_tile_no_answer">Brak odpowiedzi</string>
-    <string name="call_tile_voice_missed">Odrzucono połączenie wideo</string>
+    <string name="call_tile_voice_missed">Nieodebrane połączenie wideo</string>
     <string name="call_tile_video_active">Aktywna rozmowa wideo</string>
     <string name="call_tile_voice_active">Aktywna rozmowa głosowa</string>
     <string name="call_tile_video_incoming">Przychodzące połączenie wideo</string>
