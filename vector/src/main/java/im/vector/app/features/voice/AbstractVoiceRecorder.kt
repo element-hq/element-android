@@ -72,9 +72,7 @@ abstract class AbstractVoiceRecorder(
         init()
         val fileName = "Voice message-${UUID.randomUUID()}.$filenameExt"
         val outputDirectoryForRoom = File(outputDirectory, roomId.md5()).apply {
-            if (!exists()) {
-                mkdirs()
-            }
+            mkdirs()
         }
         outputFile = File(outputDirectoryForRoom, fileName)
 
