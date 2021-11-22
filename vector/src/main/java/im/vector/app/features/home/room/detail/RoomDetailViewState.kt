@@ -19,6 +19,7 @@ package im.vector.app.features.home.room.detail
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.Uninitialized
+import im.vector.app.features.home.room.detail.arguments.TimelineArgs
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.initsync.SyncStatusService
@@ -69,12 +70,12 @@ data class RoomDetailViewState(
         val rootThreadEventId: String? = null
         ) : MavericksState {
 
-    constructor(args: RoomDetailArgs) : this(
+    constructor(args: TimelineArgs) : this(
             roomId = args.roomId,
             eventId = args.eventId,
             // Also highlight the target event, if any
             highlightedEventId = args.eventId,
-            rootThreadEventId = args.roomThreadDetailArgs?.eventId
+            rootThreadEventId = args.threadTimelineArgs?.rootThreadEventId
     )
 
     fun isWebRTCCallOptionAvailable() = (asyncRoomSummary.invoke()?.joinedMembersCount ?: 0) <= 2
@@ -84,4 +85,7 @@ data class RoomDetailViewState(
     fun hasActiveJitsiWidget() = activeRoomWidgets()?.any { it.type == WidgetType.Jitsi && it.isActive }.orFalse()
 
     fun isDm() = asyncRoomSummary()?.isDirect == true
+
+    fun isThreadTimeline() = rootThreadEventId != null
+
 }

@@ -34,6 +34,7 @@ import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityRoomDetailBinding
 import im.vector.app.features.home.room.breadcrumbs.BreadcrumbsFragment
+import im.vector.app.features.home.room.detail.arguments.TimelineArgs
 import im.vector.app.features.matrixto.MatrixToBottomSheet
 import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.room.RequireActiveMembershipAction
@@ -102,16 +103,16 @@ class RoomDetailActivity :
         super.onCreate(savedInstanceState)
         supportFragmentManager.registerFragmentLifecycleCallbacks(fragmentLifecycleCallbacks, false)
         waitingView = views.waitingView.waitingView
-        val roomDetailArgs: RoomDetailArgs? = if (intent?.action == ACTION_ROOM_DETAILS_FROM_SHORTCUT) {
-            RoomDetailArgs(roomId = intent?.extras?.getString(EXTRA_ROOM_ID)!!)
+        val timelineArgs: TimelineArgs? = if (intent?.action == ACTION_ROOM_DETAILS_FROM_SHORTCUT) {
+            TimelineArgs(roomId = intent?.extras?.getString(EXTRA_ROOM_ID)!!)
         } else {
             intent?.extras?.getParcelable(EXTRA_ROOM_DETAIL_ARGS)
         }
-        if (roomDetailArgs == null) return
-        currentRoomId = roomDetailArgs.roomId
+        if (timelineArgs == null) return
+        currentRoomId = timelineArgs.roomId
 
         if (isFirstCreation()) {
-            replaceFragment(R.id.roomDetailContainer, RoomDetailFragment::class.java, roomDetailArgs)
+            replaceFragment(R.id.roomDetailContainer, TimelineFragment::class.java, timelineArgs)
             replaceFragment(R.id.roomDetailDrawerContainer, BreadcrumbsFragment::class.java)
         }
 
@@ -147,7 +148,7 @@ class RoomDetailActivity :
         if (currentRoomId != switchToRoom.roomId) {
             currentRoomId = switchToRoom.roomId
             requireActiveMembershipViewModel.handle(RequireActiveMembershipAction.ChangeRoom(switchToRoom.roomId))
-            replaceFragment(R.id.roomDetailContainer, RoomDetailFragment::class.java, RoomDetailArgs(switchToRoom.roomId))
+            replaceFragment(R.id.roomDetailContainer, TimelineFragment::class.java, TimelineArgs(switchToRoom.roomId))
         }
     }
 
@@ -191,9 +192,9 @@ class RoomDetailActivity :
         const val EXTRA_ROOM_ID = "EXTRA_ROOM_ID"
         const val ACTION_ROOM_DETAILS_FROM_SHORTCUT = "ROOM_DETAILS_FROM_SHORTCUT"
 
-        fun newIntent(context: Context, roomDetailArgs: RoomDetailArgs): Intent {
+        fun newIntent(context: Context, timelineArgs: TimelineArgs): Intent {
             return Intent(context, RoomDetailActivity::class.java).apply {
-                putExtra(EXTRA_ROOM_DETAIL_ARGS, roomDetailArgs)
+                putExtra(EXTRA_ROOM_DETAIL_ARGS, timelineArgs)
             }
         }
 

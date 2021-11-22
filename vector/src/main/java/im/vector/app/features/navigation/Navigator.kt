@@ -24,6 +24,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.core.util.Pair
 import im.vector.app.features.crypto.recover.SetupMode
 import im.vector.app.features.displayname.getBestName
+import im.vector.app.features.home.room.threads.arguments.ThreadTimelineArgs
 import im.vector.app.features.login.LoginConfig
 import im.vector.app.features.media.AttachmentData
 import im.vector.app.features.pin.PinMode
@@ -140,4 +141,7 @@ interface Navigator {
     fun openDevTools(context: Context, roomId: String)
 
     fun openCallTransfer(context: Context, callId: String)
+
+    fun openThread(context: Context, threadTimelineArgs: ThreadTimelineArgs)
+
 }

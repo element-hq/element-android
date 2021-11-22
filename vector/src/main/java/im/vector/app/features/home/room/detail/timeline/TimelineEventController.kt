@@ -140,7 +140,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
     }
 
     interface BaseCallback {
-        fun onEventCellClicked(informationData: MessageInformationData, messageContent: Any?, view: View)
+        fun onEventCellClicked(informationData: MessageInformationData, messageContent: Any?, view: View, isRootThreadEvent: Boolean)
         fun onEventLongClicked(informationData: MessageInformationData, messageContent: Any?, view: View): Boolean
     }
 

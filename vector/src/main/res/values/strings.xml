@@ -441,6 +441,7 @@
     <string name="action_sign_out_confirmation_simple">Are you sure you want to sign out?</string>
     <string name="action_voice_call">Voice Call</string>
     <string name="action_video_call">Video Call</string>
+    <string name="action_view_threads">View Threads</string>
     <string name="action_global_search">Global search</string>
     <string name="action_mark_all_as_read">Mark all as read</string>
     <string name="action_historical">Historical</string>
@@ -455,6 +456,11 @@
     <string name="copied_to_clipboard">Copied to clipboard</string>
     <string name="disable">Disable</string>
     <string name="action_return">Return</string>
+
+    <!-- actions threads -->
+    <string name="action_thread_view_in_room">View in room</string>
+    <string name="action_thread_copy_link_to_thread">Copy link to thread</string>
+    <string name="action_thread_share">Share</string>
 
     <!-- dialog titles -->
     <string name="dialog_title_confirmation">Confirmation</string>
@@ -1023,6 +1029,7 @@
 
     <!-- Room Threads -->
     <string name="room_threads_filter">Filter Threads in room</string>
+    <string name="room_threads_title">Thread</string>
 
     <!-- Room events -->
     <string name="room_event_action_report_prompt_reason">Reason for reporting this content</string>

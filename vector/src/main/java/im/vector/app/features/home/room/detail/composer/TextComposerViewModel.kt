@@ -29,7 +29,7 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.command.CommandParser
 import im.vector.app.features.command.ParsedCommand
 import im.vector.app.features.home.room.detail.ChatEffect
-import im.vector.app.features.home.room.detail.RoomDetailFragment
+import im.vector.app.features.home.room.detail.TimelineFragment
 import im.vector.app.features.home.room.detail.composer.rainbow.RainbowGenerator
 import im.vector.app.features.home.room.detail.toMessageType
 import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
@@ -42,7 +42,6 @@ import org.commonmark.renderer.html.HtmlRenderer
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
-import org.matrix.android.sdk.api.session.events.model.getRootThreadEventId
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
@@ -772,7 +771,7 @@ class TextComposerViewModel @AssistedInject constructor(
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: TextComposerViewState): TextComposerViewModel {
-            val fragment: RoomDetailFragment = (viewModelContext as FragmentViewModelContext).fragment()
+            val fragment: TimelineFragment = (viewModelContext as FragmentViewModelContext).fragment()
             return fragment.textComposerViewModelFactory.create(state)
         }
     }

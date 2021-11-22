@@ -14,15 +14,12 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.home.room.threads.detail.arguments
+package im.vector.app.features.home.room.threads.arguments
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class RoomThreadDetailArgs(
-        val roomId: String,
-        val displayName: String?,
-        val avatarUrl: String?,
-        val eventId: String? = null,
+data class ThreadListArgs(
+        val roomId: String
 ) : Parcelable

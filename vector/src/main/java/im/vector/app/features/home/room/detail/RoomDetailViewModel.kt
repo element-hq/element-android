@@ -153,7 +153,7 @@ class RoomDetailViewModel @AssistedInject constructor(
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: RoomDetailViewState): RoomDetailViewModel? {
-            val fragment: RoomDetailFragment = (viewModelContext as FragmentViewModelContext).fragment()
+            val fragment: TimelineFragment = (viewModelContext as FragmentViewModelContext).fragment()
 
             return fragment.roomDetailViewModelFactory.create(state)
         }
@@ -668,20 +668,30 @@ class RoomDetailViewModel @AssistedInject constructor(
     private fun isIntegrationEnabled() = session.integrationManagerService().isIntegrationEnabled()
 
     fun isMenuItemVisible(@IdRes itemId: Int): Boolean = com.airbnb.mvrx.withState(this) { state ->
+
         if (state.asyncRoomSummary()?.membership != Membership.JOIN) {
             return@withState false
         }
-        when (itemId) {
-            R.id.timeline_setting -> true
-            R.id.invite           -> state.canInvite
-            R.id.open_matrix_apps -> true
-            R.id.voice_call       -> state.isWebRTCCallOptionAvailable()
-            R.id.video_call       -> state.isWebRTCCallOptionAvailable() || state.jitsiState.confId == null || state.jitsiState.hasJoined
-            // Show Join conference button only if there is an active conf id not joined. Otherwise fallback to default video disabled. ^
-            R.id.join_conference  -> !state.isWebRTCCallOptionAvailable() && state.jitsiState.confId != null && !state.jitsiState.hasJoined
-            R.id.search           -> true
-            R.id.dev_tools        -> vectorPreferences.developerMode()
-            else                  -> false
+
+        if (initialState.isThreadTimeline()) {
+            when (itemId) {
+                R.id.menu_thread_timeline_more -> true
+                else                                   -> false
+            }
+        } else {
+            when (itemId) {
+                R.id.timeline_setting -> true
+                R.id.invite           -> state.canInvite
+                R.id.open_matrix_apps -> true
+                R.id.voice_call       -> state.isWebRTCCallOptionAvailable()
+                R.id.video_call       -> state.isWebRTCCallOptionAvailable() || state.jitsiState.confId == null || state.jitsiState.hasJoined
+                // Show Join conference button only if there is an active conf id not joined. Otherwise fallback to default video disabled. ^
+                R.id.join_conference  -> !state.isWebRTCCallOptionAvailable() && state.jitsiState.confId != null && !state.jitsiState.hasJoined
+                R.id.search           -> true
+                R.id.threads          -> true
+                R.id.dev_tools        -> vectorPreferences.developerMode()
+                else                  -> false
+            }
         }
     }
 

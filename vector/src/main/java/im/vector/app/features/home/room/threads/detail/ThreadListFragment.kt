@@ -16,34 +16,31 @@
 
 package im.vector.app.features.home.room.threads.detail
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import com.airbnb.mvrx.args
 import im.vector.app.core.platform.VectorBaseFragment
-import im.vector.app.databinding.FragmentRoomThreadDetailBinding
-import im.vector.app.features.home.room.threads.detail.arguments.RoomThreadDetailArgs
+import im.vector.app.databinding.FragmentThreadListBinding
+import im.vector.app.features.home.room.threads.arguments.ThreadTimelineArgs
 import org.matrix.android.sdk.api.session.Session
 import javax.inject.Inject
 
-class RoomThreadDetailFragment @Inject constructor(
+class ThreadListFragment @Inject constructor(
         private val session: Session
-) : VectorBaseFragment<FragmentRoomThreadDetailBinding>() {
+) : VectorBaseFragment<FragmentThreadListBinding>() {
 
-    private val roomThreadDetailArgs: RoomThreadDetailArgs by args()
+    private val threadTimelineArgs: ThreadTimelineArgs by args()
 
-    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentRoomThreadDetailBinding {
-        return FragmentRoomThreadDetailBinding.inflate(inflater, container, false)
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentThreadListBinding {
+        return FragmentThreadListBinding.inflate(inflater, container, false)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
 
-    @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initTextComposer()
@@ -59,7 +56,7 @@ class RoomThreadDetailFragment @Inject constructor(
     }
 
     private fun initTextComposer(){
-        views.roomThreadDetailTextComposerView.views.sendButton.isVisible = true
+//        views.roomThreadDetailTextComposerView.views.sendButton.isVisible = true
     }
 
 }

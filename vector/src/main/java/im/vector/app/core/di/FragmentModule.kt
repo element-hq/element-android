@@ -55,10 +55,10 @@ import im.vector.app.features.home.HomeDetailFragment
 import im.vector.app.features.home.HomeDrawerFragment
 import im.vector.app.features.home.LoadingFragment
 import im.vector.app.features.home.room.breadcrumbs.BreadcrumbsFragment
-import im.vector.app.features.home.room.detail.RoomDetailFragment
+import im.vector.app.features.home.room.detail.TimelineFragment
 import im.vector.app.features.home.room.detail.search.SearchFragment
 import im.vector.app.features.home.room.list.RoomListFragment
-import im.vector.app.features.home.room.threads.detail.RoomThreadDetailFragment
+import im.vector.app.features.home.room.threads.detail.ThreadListFragment
 import im.vector.app.features.login.LoginCaptchaFragment
 import im.vector.app.features.login.LoginFragment
 import im.vector.app.features.login.LoginGenericTextInputFormFragment
@@ -183,8 +183,8 @@ interface FragmentModule {
 
     @Binds
     @IntoMap
-    @FragmentKey(RoomDetailFragment::class)
-    fun bindRoomDetailFragment(fragment: RoomDetailFragment): Fragment
+    @FragmentKey(TimelineFragment::class)
+    fun bindRoomDetailFragment(fragment: TimelineFragment): Fragment
 
     @Binds
     @IntoMap
@@ -838,6 +838,6 @@ interface FragmentModule {
 
     @Binds
     @IntoMap
-    @FragmentKey(RoomThreadDetailFragment::class)
-    fun bindRoomThreadDetailFragment(fragment: RoomThreadDetailFragment): Fragment
+    @FragmentKey(ThreadListFragment::class)
+    fun bindRoomThreadDetailFragment(fragment: ThreadListFragment): Fragment
 }

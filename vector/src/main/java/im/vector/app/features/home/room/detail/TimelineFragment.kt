@@ -25,7 +25,6 @@ import android.graphics.Typeface
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.Parcelable
 import android.text.Spannable
 import android.text.format.DateUtils
 import android.view.HapticFeedbackConstants
@@ -49,7 +48,6 @@ import androidx.core.text.toSpannable
 import androidx.core.util.Pair
 import androidx.core.view.ViewCompat
 import androidx.core.view.forEach
-import androidx.core.view.isGone
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.fragment.app.setFragmentResultListener
@@ -134,6 +132,7 @@ import im.vector.app.features.command.Command
 import im.vector.app.features.crypto.keysbackup.restore.KeysBackupRestoreActivity
 import im.vector.app.features.crypto.verification.VerificationBottomSheet
 import im.vector.app.features.home.AvatarRenderer
+import im.vector.app.features.home.room.detail.arguments.TimelineArgs
 import im.vector.app.features.home.room.detail.composer.SendMode
 import im.vector.app.features.home.room.detail.composer.TextComposerAction
 import im.vector.app.features.home.room.detail.composer.TextComposerView
@@ -162,8 +161,7 @@ import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlRetriever
 import im.vector.app.features.home.room.detail.upgrade.MigrateRoomBottomSheet
 import im.vector.app.features.home.room.detail.views.RoomDetailLazyLoadedViews
 import im.vector.app.features.home.room.detail.widget.RoomWidgetsBottomSheet
-import im.vector.app.features.home.room.threads.detail.arguments.RoomThreadDetailArgs
-import im.vector.app.features.home.room.threads.detail.RoomThreadDetailActivity
+import im.vector.app.features.home.room.threads.arguments.ThreadTimelineArgs
 import im.vector.app.features.html.EventHtmlRenderer
 import im.vector.app.features.html.PillImageSpan
 import im.vector.app.features.html.PillsPostProcessor
@@ -188,7 +186,6 @@ import im.vector.app.features.widgets.WidgetArgs
 import im.vector.app.features.widgets.WidgetKind
 import im.vector.app.features.widgets.permissions.RoomWidgetPermissionBottomSheet
 import kotlinx.coroutines.launch
-import kotlinx.parcelize.Parcelize
 import nl.dionsegijn.konfetti.models.Shape
 import nl.dionsegijn.konfetti.models.Size
 import org.billcarsonfr.jsonviewer.JSonViewerDialog
@@ -224,16 +221,7 @@ import java.util.UUID
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-@Parcelize
-data class RoomDetailArgs(
-        val roomId: String,
-        val eventId: String? = null,
-        val sharedData: SharedData? = null,
-        val openShareSpaceForId: String? = null,
-        val roomThreadDetailArgs: RoomThreadDetailArgs? = null
-) : Parcelable
-
-class RoomDetailFragment @Inject constructor(
+class TimelineFragment @Inject constructor(
         private val session: Session,
         private val avatarRenderer: AvatarRenderer,
         private val timelineEventController: TimelineEventController,
@@ -282,16 +270,16 @@ class RoomDetailFragment @Inject constructor(
 
     private val galleryOrCameraDialogHelper = GalleryOrCameraDialogHelper(this, colorProvider)
 
-    private val roomDetailArgs: RoomDetailArgs by args()
+    private val timelineArgs: TimelineArgs by args()
     private val glideRequests by lazy {
         GlideApp.with(this)
     }
     private val pillsPostProcessor by lazy {
-        pillsPostProcessorFactory.create(roomDetailArgs.roomId)
+        pillsPostProcessorFactory.create(timelineArgs.roomId)
     }
 
     private val autoCompleter: AutoCompleter by lazy {
-        autoCompleterFactory.create(roomDetailArgs.roomId, isThreadTimeLine())
+        autoCompleterFactory.create(timelineArgs.roomId, isThreadTimeLine())
     }
 
     private val roomDetailViewModel: RoomDetailViewModel by fragmentViewModel()
@@ -308,6 +296,8 @@ class RoomDetailFragment @Inject constructor(
     override fun getMenuRes() = R.menu.menu_timeline
 
     private lateinit var sharedActionViewModel: MessageSharedActionViewModel
+    private lateinit var sharedActivityActionViewModel: RoomDetailSharedActionViewModel
+
     private lateinit var knownCallsViewModel: SharedKnownCallsViewModel
 
     private lateinit var layoutManager: LinearLayoutManager
@@ -341,10 +331,11 @@ class RoomDetailFragment @Inject constructor(
         lifecycle.addObserver(ConferenceEventObserver(vectorBaseActivity, this::onBroadcastJitsiEvent))
         super.onViewCreated(view, savedInstanceState)
         sharedActionViewModel = activityViewModelProvider.get(MessageSharedActionViewModel::class.java)
+        sharedActivityActionViewModel = activityViewModelProvider.get(RoomDetailSharedActionViewModel::class.java)
         knownCallsViewModel = activityViewModelProvider.get(SharedKnownCallsViewModel::class.java)
         attachmentsHelper = AttachmentsHelper(requireContext(), this).register()
         callActionsHandler = StartCallActionsHandler(
-                roomId = roomDetailArgs.roomId,
+                roomId = timelineArgs.roomId,
                 fragment = this,
                 vectorPreferences = vectorPreferences,
                 roomDetailViewModel = roomDetailViewModel,
@@ -355,11 +346,7 @@ class RoomDetailFragment @Inject constructor(
         )
         keyboardStateUtils = KeyboardStateUtils(requireActivity())
         lazyLoadedViews.bind(views)
-        if (isThreadTimeLine()) {
-            views.roomToolbar.isGone = true
-        } else {
-            setupToolbar(views.roomToolbar)
-        }
+        setupToolbar(views.roomToolbar)
         setupRecyclerView()
         setupComposer()
         setupNotificationView()
@@ -370,8 +357,8 @@ class RoomDetailFragment @Inject constructor(
         setupRemoveJitsiWidgetView()
         setupVoiceMessageView()
 
-        views.roomToolbarContentView.debouncedClicks {
-            navigator.openRoomProfile(requireActivity(), roomDetailArgs.roomId)
+        views.includeRoomToolbar.roomToolbarContentView.debouncedClicks {
+            navigator.openRoomProfile(requireActivity(), timelineArgs.roomId)
         }
 
         sharedActionViewModel
@@ -456,7 +443,7 @@ class RoomDetailFragment @Inject constructor(
                 RoomDetailViewEvents.HideWaitingView                     -> vectorBaseActivity.hideWaitingView()
                 is RoomDetailViewEvents.RequestNativeWidgetPermission    -> requestNativeWidgetPermission(it)
                 is RoomDetailViewEvents.OpenRoom                         -> handleOpenRoom(it)
-                RoomDetailViewEvents.OpenInvitePeople                    -> navigator.openInviteUsersToRoom(requireContext(), roomDetailArgs.roomId)
+                RoomDetailViewEvents.OpenInvitePeople                    -> navigator.openInviteUsersToRoom(requireContext(), timelineArgs.roomId)
                 RoomDetailViewEvents.OpenSetRoomAvatarDialog             -> galleryOrCameraDialogHelper.show()
                 RoomDetailViewEvents.OpenRoomSettings                    -> handleOpenRoomSettings()
                 is RoomDetailViewEvents.ShowRoomAvatarFullScreen         -> it.matrixItem?.let { item ->
@@ -532,7 +519,7 @@ class RoomDetailFragment @Inject constructor(
 
     private fun handleShowRoomUpgradeDialog(roomDetailViewEvents: TextComposerViewEvents.ShowRoomUpgradeDialog) {
         val tag = MigrateRoomBottomSheet::javaClass.name
-        MigrateRoomBottomSheet.newInstance(roomDetailArgs.roomId, roomDetailViewEvents.newVersion)
+        MigrateRoomBottomSheet.newInstance(timelineArgs.roomId, roomDetailViewEvents.newVersion)
                 .show(parentFragmentManager, tag)
     }
 
@@ -578,7 +565,7 @@ class RoomDetailFragment @Inject constructor(
     private fun handleOpenRoomSettings() {
         navigator.openRoomProfile(
                 requireContext(),
-                roomDetailArgs.roomId,
+                timelineArgs.roomId,
                 RoomProfileActivity.EXTRA_DIRECT_ACCESS_ROOM_SETTINGS
         )
     }
@@ -600,7 +587,7 @@ class RoomDetailFragment @Inject constructor(
                     WidgetArgs(
                             baseUrl = it.domain,
                             kind = WidgetKind.ROOM,
-                            roomId = roomDetailArgs.roomId,
+                            roomId = timelineArgs.roomId,
                             widgetId = it.widget.widgetId
                     )
             ).apply {
@@ -626,7 +613,7 @@ class RoomDetailFragment @Inject constructor(
         navigator.openIntegrationManager(
                 context = requireContext(),
                 activityResultLauncher = integrationManagerActivityResultLauncher,
-                roomId = roomDetailArgs.roomId,
+                roomId = timelineArgs.roomId,
                 integId = null,
                 screen = screen
         )
@@ -717,11 +704,11 @@ class RoomDetailFragment @Inject constructor(
     }
 
     private fun joinJitsiRoom(jitsiWidget: Widget, enableVideo: Boolean) {
-        navigator.openRoomWidget(requireContext(), roomDetailArgs.roomId, jitsiWidget, mapOf(JitsiCallViewModel.ENABLE_VIDEO_OPTION to enableVideo))
+        navigator.openRoomWidget(requireContext(), timelineArgs.roomId, jitsiWidget, mapOf(JitsiCallViewModel.ENABLE_VIDEO_OPTION to enableVideo))
     }
 
     private fun openStickerPicker(event: RoomDetailViewEvents.OpenStickerPicker) {
-        navigator.openStickerPicker(requireContext(), stickerActivityResultLauncher, roomDetailArgs.roomId, event.widget)
+        navigator.openStickerPicker(requireContext(), stickerActivityResultLauncher, timelineArgs.roomId, event.widget)
     }
 
     private fun startOpenFileIntent(action: RoomDetailViewEvents.OpenFile) {
@@ -795,7 +782,7 @@ class RoomDetailFragment @Inject constructor(
     }
 
     private fun handleShareData() {
-        when (val sharedData = roomDetailArgs.sharedData) {
+        when (val sharedData = timelineArgs.sharedData) {
             is SharedData.Text        -> {
                 textComposerViewModel.handle(TextComposerAction.EnterRegularMode(sharedData.text, fromSharing = true))
             }
@@ -808,7 +795,7 @@ class RoomDetailFragment @Inject constructor(
     }
 
     private fun handleSpaceShare() {
-        roomDetailArgs.openShareSpaceForId?.let { spaceId ->
+        timelineArgs.openShareSpaceForId?.let { spaceId ->
             ShareSpaceBottomSheet.show(childFragmentManager, spaceId, true)
             view?.post {
                 handleChatEffect(ChatEffect.CONFETTI)
@@ -909,7 +896,6 @@ class RoomDetailFragment @Inject constructor(
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-        if (isThreadTimeLine()) return
         // We use a custom layout for this menu item, so we need to set a ClickListener
         menu.findItem(R.id.open_matrix_apps)?.let { menuItem ->
             menuItem.actionView.setOnClickListener {
@@ -923,15 +909,11 @@ class RoomDetailFragment @Inject constructor(
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
-        if (isThreadTimeLine()) {
-            menu.forEach {
-                it.isVisible = false
-            }
-            return
-        }
+
         menu.forEach {
             it.isVisible = roomDetailViewModel.isMenuItemVisible(it.itemId)
         }
+
         withState(roomDetailViewModel) { state ->
             // Set the visual state of the call buttons (voice/video) to enabled/disabled according to user permissions
             val hasCallInRoom = callManager.getCallsByRoomId(state.roomId).isNotEmpty() || state.jitsiState.hasJoined
@@ -968,41 +950,72 @@ class RoomDetailFragment @Inject constructor(
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.invite           -> {
-                navigator.openInviteUsersToRoom(requireActivity(), roomDetailArgs.roomId)
+            R.id.invite                            -> {
+                navigator.openInviteUsersToRoom(requireActivity(), timelineArgs.roomId)
                 true
             }
-            R.id.timeline_setting -> {
-                navigator.openRoomProfile(requireActivity(), roomDetailArgs.roomId)
+            R.id.timeline_setting                  -> {
+                navigator.openRoomProfile(requireActivity(), timelineArgs.roomId)
                 true
             }
-            R.id.open_matrix_apps -> {
+            R.id.open_matrix_apps                  -> {
                 roomDetailViewModel.handle(RoomDetailAction.ManageIntegrations)
                 true
             }
-            R.id.voice_call       -> {
+            R.id.voice_call                        -> {
                 callActionsHandler.onVoiceCallClicked()
                 true
             }
-            R.id.video_call       -> {
+            R.id.video_call                        -> {
                 callActionsHandler.onVideoCallClicked()
                 true
             }
-            R.id.search           -> {
+            R.id.threads                           -> {
+                requireActivity().toast("View All Threads")
+                true
+            }
+            R.id.search                            -> {
                 handleSearchAction()
                 true
             }
-            R.id.dev_tools        -> {
-                navigator.openDevTools(requireContext(), roomDetailArgs.roomId)
+            R.id.dev_tools                         -> {
+                navigator.openDevTools(requireContext(), timelineArgs.roomId)
                 true
             }
-            else                  -> super.onOptionsItemSelected(item)
+            R.id.menu_thread_timeline_copy_link    -> {
+                requireActivity().toast("menu_thread_timeline_copy_link")
+                true
+            }
+            R.id.menu_thread_timeline_view_in_room -> {
+                handleViewInRoomAction()
+                true
+            }
+            R.id.menu_thread_timeline_share        -> {
+                requireActivity().toast("menu_thread_timeline_share")
+                true
+            }
+            else                                   -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    /**
+     * View and highlight the original root thread message in the main timeline
+     */
+    private fun handleViewInRoomAction(){
+        getRootThreadEventId()?.let {
+            val newRoom = timelineArgs.copy(threadTimelineArgs = null,eventId = it)
+            context?.let{ con ->
+                val int = RoomDetailActivity.newIntent(con, newRoom)
+                int.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                con.startActivity(int)
+
+            }
         }
     }
 
     private fun handleSearchAction() {
-        if (session.getRoom(roomDetailArgs.roomId)?.isEncrypted() == false) {
-            navigator.openSearch(requireContext(), roomDetailArgs.roomId)
+        if (session.getRoom(timelineArgs.roomId)?.isEncrypted() == false) {
+            navigator.openSearch(requireContext(), timelineArgs.roomId)
         } else {
             showDialogWithMessage(getString(R.string.search_is_not_supported_in_e2e_room))
         }
@@ -1080,7 +1093,7 @@ class RoomDetailFragment @Inject constructor(
 
     override fun onResume() {
         super.onResume()
-        notificationDrawerManager.setCurrentRoom(roomDetailArgs.roomId)
+        notificationDrawerManager.setCurrentRoom(timelineArgs.roomId)
         roomDetailPendingActionStore.data?.let { handlePendingAction(it) }
         roomDetailPendingActionStore.data = null
 
@@ -1322,7 +1335,7 @@ class RoomDetailFragment @Inject constructor(
         views.composerLayout.callback = object : TextComposerView.Callback {
             override fun onAddAttachment() {
                 if (!::attachmentTypeSelector.isInitialized) {
-                    attachmentTypeSelector = AttachmentTypeSelectorView(vectorBaseActivity, vectorBaseActivity.layoutInflater, this@RoomDetailFragment)
+                    attachmentTypeSelector = AttachmentTypeSelectorView(vectorBaseActivity, vectorBaseActivity.layoutInflater, this@TimelineFragment)
                 }
                 attachmentTypeSelector.show(views.composerLayout.views.attachmentButton, keyboardStateUtils.isKeyboardShowing)
             }
@@ -1420,7 +1433,7 @@ class RoomDetailFragment @Inject constructor(
         } else if (summary?.membership == Membership.INVITE && inviter != null) {
             views.hideComposerViews()
             lazyLoadedViews.inviteView(true)?.apply {
-                callback = this@RoomDetailFragment
+                callback = this@TimelineFragment
                 isVisible = true
                 render(inviter, VectorInviteView.Mode.LARGE, mainState.changeMembershipState)
                 setOnClickListener { }
@@ -1437,23 +1450,35 @@ class RoomDetailFragment @Inject constructor(
     }
 
     private fun renderToolbar(roomSummary: RoomSummary?, typingMessage: String?) {
-        if (roomSummary == null) {
-            views.roomToolbarContentView.isClickable = false
+        if (!isThreadTimeLine()) {
+            views.includeRoomToolbar.roomToolbarContentView.isVisible = true
+            views.includeThreadToolbar.roomToolbarThreadConstraintLayout.isVisible = false
+            if (roomSummary == null) {
+                views.includeRoomToolbar.roomToolbarContentView.isClickable = false
+            } else {
+                views.includeRoomToolbar.roomToolbarContentView.isClickable = roomSummary.membership == Membership.JOIN
+                views.includeRoomToolbar.roomToolbarTitleView.text = roomSummary.displayName
+                avatarRenderer.render(roomSummary.toMatrixItem(), views.includeRoomToolbar.roomToolbarAvatarImageView)
+                renderSubTitle(typingMessage, roomSummary.topic)
+                views.includeRoomToolbar.roomToolbarDecorationImageView.render(roomSummary.roomEncryptionTrustLevel)
+                views.includeRoomToolbar.roomToolbarPresenceImageView.render(roomSummary.isDirect, roomSummary.directUserPresence)
+                views.includeRoomToolbar.roomToolbarPublicImageView.isVisible = roomSummary.isPublic && !roomSummary.isDirect
+            }
         } else {
-            views.roomToolbarContentView.isClickable = roomSummary.membership == Membership.JOIN
-            views.roomToolbarTitleView.text = roomSummary.displayName
-            avatarRenderer.render(roomSummary.toMatrixItem(), views.roomToolbarAvatarImageView)
-            renderSubTitle(typingMessage, roomSummary.topic)
-            views.roomToolbarDecorationImageView.render(roomSummary.roomEncryptionTrustLevel)
-            views.roomToolbarPresenceImageView.render(roomSummary.isDirect, roomSummary.directUserPresence)
-            views.roomToolbarPublicImageView.isVisible = roomSummary.isPublic && !roomSummary.isDirect
+            views.includeRoomToolbar.roomToolbarContentView.isVisible = false
+            views.includeThreadToolbar.roomToolbarThreadConstraintLayout.isVisible = true
+            timelineArgs.threadTimelineArgs?.let {
+                val matrixItem = MatrixItem.RoomItem(it.roomId, it.displayName, it.avatarUrl)
+                avatarRenderer.render(matrixItem, views.includeThreadToolbar.roomToolbarThreadImageView)
+                views.includeThreadToolbar.roomToolbarThreadSubtitleTextView.text = it.displayName
+            }
         }
     }
 
     private fun renderSubTitle(typingMessage: String?, topic: String) {
         // TODO Temporary place to put typing data
         val subtitle = typingMessage?.takeIf { it.isNotBlank() } ?: topic
-        views.roomToolbarSubtitleView.apply {
+        views.includeRoomToolbar.roomToolbarSubtitleView.apply {
             setTextOrHide(subtitle)
             if (typingMessage.isNullOrBlank()) {
                 setTextColor(colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
@@ -1592,14 +1617,14 @@ class RoomDetailFragment @Inject constructor(
             is RoomDetailAction.RequestVerification       -> {
                 Timber.v("## SAS RequestVerification action")
                 VerificationBottomSheet.withArgs(
-                        roomDetailArgs.roomId,
+                        timelineArgs.roomId,
                         data.userId
                 ).show(parentFragmentManager, "REQ")
             }
             is RoomDetailAction.AcceptVerificationRequest -> {
                 Timber.v("## SAS AcceptVerificationRequest action")
                 VerificationBottomSheet.withArgs(
-                        roomDetailArgs.roomId,
+                        timelineArgs.roomId,
                         data.otherUserId,
                         data.transactionId
                 ).show(parentFragmentManager, "REQ")
@@ -1609,7 +1634,7 @@ class RoomDetailFragment @Inject constructor(
                 VerificationBottomSheet().apply {
                     arguments = Bundle().apply {
                         putParcelable(Mavericks.KEY_ARG, VerificationBottomSheet.VerificationArgs(
-                                otherUserId, data.transactionId, roomId = roomDetailArgs.roomId))
+                                otherUserId, data.transactionId, roomId = timelineArgs.roomId))
                     }
                 }.show(parentFragmentManager, "REQ")
             }
@@ -1624,7 +1649,7 @@ class RoomDetailFragment @Inject constructor(
                     .launch(requireActivity(), url, object : NavigationInterceptor {
                         override fun navToRoom(roomId: String?, eventId: String?, deepLink: Uri?): Boolean {
                             // Same room?
-                            if (roomId == roomDetailArgs.roomId) {
+                            if (roomId == timelineArgs.roomId) {
                                 // Navigation to same room
                                 if (eventId == null) {
                                     showSnackWithMessage(getString(R.string.navigate_to_room_when_already_in_the_room))
@@ -1691,7 +1716,7 @@ class RoomDetailFragment @Inject constructor(
     override fun onImageMessageClicked(messageImageContent: MessageImageInfoContent, mediaData: ImageContentRenderer.Data, view: View) {
         navigator.openMediaViewer(
                 activity = requireActivity(),
-                roomId = roomDetailArgs.roomId,
+                roomId = timelineArgs.roomId,
                 mediaData = mediaData,
                 view = view
         ) { pairs ->
@@ -1703,7 +1728,7 @@ class RoomDetailFragment @Inject constructor(
     override fun onVideoMessageClicked(messageVideoContent: MessageVideoContent, mediaData: VideoContentRenderer.Data, view: View) {
         navigator.openMediaViewer(
                 activity = requireActivity(),
-                roomId = roomDetailArgs.roomId,
+                roomId = timelineArgs.roomId,
                 mediaData = mediaData,
                 view = view
         ) { pairs ->
@@ -1738,7 +1763,7 @@ class RoomDetailFragment @Inject constructor(
         roomDetailViewModel.handle(RoomDetailAction.LoadMoreTimelineEvents(direction))
     }
 
-    override fun onEventCellClicked(informationData: MessageInformationData, messageContent: Any?, view: View) {
+    override fun onEventCellClicked(informationData: MessageInformationData, messageContent: Any?, view: View, isRootThreadEvent: Boolean) {
         when (messageContent) {
             is MessageVerificationRequestContent -> {
                 roomDetailViewModel.handle(RoomDetailAction.ResumeVerification(informationData.eventId, null))
@@ -1751,11 +1776,14 @@ class RoomDetailFragment @Inject constructor(
                 roomDetailViewModel.handle(RoomDetailAction.TapOnFailedToDecrypt(informationData.eventId))
             }
         }
+        if (isRootThreadEvent) {
+            navigateToThreadTimeline(informationData.eventId)
+        }
     }
 
     override fun onEventLongClicked(informationData: MessageInformationData, messageContent: Any?, view: View): Boolean {
         view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
-        val roomId = roomDetailArgs.roomId
+        val roomId = timelineArgs.roomId
         this.view?.hideKeyboard()
 
         MessageActionsBottomSheet
@@ -1786,7 +1814,7 @@ class RoomDetailFragment @Inject constructor(
     }
 
     private fun openRoomMemberProfile(userId: String) {
-        navigator.openRoomMemberProfile(userId = userId, roomId = roomDetailArgs.roomId, context = requireActivity())
+        navigator.openRoomMemberProfile(userId = userId, roomId = timelineArgs.roomId, context = requireActivity())
     }
 
     override fun onMemberNameClicked(informationData: MessageInformationData) {
@@ -1804,12 +1832,12 @@ class RoomDetailFragment @Inject constructor(
     }
 
     override fun onLongClickOnReactionPill(informationData: MessageInformationData, reaction: String) {
-        ViewReactionsBottomSheet.newInstance(roomDetailArgs.roomId, informationData)
+        ViewReactionsBottomSheet.newInstance(timelineArgs.roomId, informationData)
                 .show(requireActivity().supportFragmentManager, "DISPLAY_REACTIONS")
     }
 
     override fun onEditedDecorationClicked(informationData: MessageInformationData) {
-        ViewEditHistoryBottomSheet.newInstance(roomDetailArgs.roomId, informationData)
+        ViewEditHistoryBottomSheet.newInstance(timelineArgs.roomId, informationData)
                 .show(requireActivity().supportFragmentManager, "DISPLAY_EDITS")
     }
 
@@ -1921,7 +1949,7 @@ class RoomDetailFragment @Inject constructor(
                 emojiActivityResultLauncher.launch(EmojiReactionPickerActivity.intent(requireContext(), action.eventId))
             }
             is EventSharedAction.ViewReactions              -> {
-                ViewReactionsBottomSheet.newInstance(roomDetailArgs.roomId, action.messageInformationData)
+                ViewReactionsBottomSheet.newInstance(timelineArgs.roomId, action.messageInformationData)
                         .show(requireActivity().supportFragmentManager, "DISPLAY_REACTIONS")
             }
             is EventSharedAction.Copy                       -> {
@@ -1978,20 +2006,13 @@ class RoomDetailFragment @Inject constructor(
             }
             is EventSharedAction.ReplyInThread              -> {
                 if (!views.voiceMessageRecorderView.isActive()) {
-                    context?.let {
-                        val roomThreadDetailArgs = RoomThreadDetailArgs(
-                                roomId = roomDetailArgs.roomId,
-                                displayName = roomDetailViewModel.getRoomSummary()?.displayName,
-                                avatarUrl = roomDetailViewModel.getRoomSummary()?.avatarUrl,
-                                eventId = action.eventId)
-                        startActivity(RoomThreadDetailActivity.newIntent(it, roomThreadDetailArgs))
-                    }
+                    navigateToThreadTimeline(action.eventId)
                 } else {
                     requireActivity().toast(R.string.error_voice_message_cannot_reply_or_edit)
                 }
             }
             is EventSharedAction.CopyPermalink              -> {
-                val permalink = session.permalinkService().createPermalink(roomDetailArgs.roomId, action.eventId)
+                val permalink = session.permalinkService().createPermalink(timelineArgs.roomId, action.eventId)
                 copyToClipboard(requireContext(), permalink, false)
                 showSnackWithMessage(getString(R.string.copied_to_clipboard))
             }
@@ -2114,15 +2135,31 @@ class RoomDetailFragment @Inject constructor(
                 .show()
     }
 
+    /**
+     * Navigate to Threads timeline for the specified threadRootEventId
+     * using the RoomThreadDetailActivity
+     */
+
+    private fun navigateToThreadTimeline(rootThreadEventId: String) {
+        context?.let {
+            val roomThreadDetailArgs = ThreadTimelineArgs(
+                    roomId = timelineArgs.roomId,
+                    displayName = roomDetailViewModel.getRoomSummary()?.displayName,
+                    avatarUrl = roomDetailViewModel.getRoomSummary()?.avatarUrl,
+                    rootThreadEventId = rootThreadEventId)
+            navigator.openThread(it, roomThreadDetailArgs)
+        }
+    }
+
 // VectorInviteView.Callback
 
     override fun onAcceptInvite() {
-        notificationDrawerManager.clearMemberShipNotificationForRoom(roomDetailArgs.roomId)
+        notificationDrawerManager.clearMemberShipNotificationForRoom(timelineArgs.roomId)
         roomDetailViewModel.handle(RoomDetailAction.AcceptInvite)
     }
 
     override fun onRejectInvite() {
-        notificationDrawerManager.clearMemberShipNotificationForRoom(roomDetailArgs.roomId)
+        notificationDrawerManager.clearMemberShipNotificationForRoom(timelineArgs.roomId)
         roomDetailViewModel.handle(RoomDetailAction.RejectInvite)
     }
 
@@ -2221,6 +2258,13 @@ class RoomDetailFragment @Inject constructor(
         }
     }
 
-    private fun isThreadTimeLine(): Boolean = roomDetailArgs.roomThreadDetailArgs != null
-    fun getRootThreadEventId(): String? = roomDetailArgs.roomThreadDetailArgs?.eventId
+    /**
+     * Returns true if the current room is a Thread room, false otherwise
+     */
+    private fun isThreadTimeLine(): Boolean = timelineArgs.threadTimelineArgs?.rootThreadEventId != null
+
+    /**
+     * Returns the root thread event if we are in a thread room, otherwise returns null
+     */
+    fun getRootThreadEventId(): String? = timelineArgs.threadTimelineArgs?.rootThreadEventId
 }

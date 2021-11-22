@@ -56,7 +56,7 @@ import im.vector.app.features.call.webrtc.WebRtcCall
 import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.HomeActivity
 import im.vector.app.features.home.room.detail.RoomDetailActivity
-import im.vector.app.features.home.room.detail.RoomDetailArgs
+import im.vector.app.features.home.room.detail.arguments.TimelineArgs
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.troubleshoot.TestNotificationReceiver
 import im.vector.app.features.themes.ThemeUtils
@@ -497,7 +497,7 @@ class NotificationUtils @Inject constructor(private val context: Context,
 
         val contentPendingIntent = TaskStackBuilder.create(context)
                 .addNextIntentWithParentStack(HomeActivity.newIntent(context))
-                .addNextIntent(RoomDetailActivity.newIntent(context, RoomDetailArgs(callInformation.nativeRoomId)))
+                .addNextIntent(RoomDetailActivity.newIntent(context, TimelineArgs(callInformation.nativeRoomId)))
                 .getPendingIntent(System.currentTimeMillis().toInt(), PendingIntent.FLAG_UPDATE_CURRENT)
 
         builder.setContentIntent(contentPendingIntent)
@@ -735,7 +735,7 @@ class NotificationUtils @Inject constructor(private val context: Context,
     }
 
     private fun buildOpenRoomIntent(roomId: String): PendingIntent? {
-        val roomIntentTap = RoomDetailActivity.newIntent(context, RoomDetailArgs(roomId))
+        val roomIntentTap = RoomDetailActivity.newIntent(context, TimelineArgs(roomId))
         roomIntentTap.action = TAP_TO_VIEW_ACTION
         // pending intent get reused by system, this will mess up the extra params, so put unique info to avoid that
         roomIntentTap.data = Uri.parse("foobar://openRoom?$roomId")

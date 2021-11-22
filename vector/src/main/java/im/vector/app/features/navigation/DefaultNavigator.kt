@@ -49,10 +49,13 @@ import im.vector.app.features.crypto.verification.VerificationBottomSheet
 import im.vector.app.features.debug.DebugMenuActivity
 import im.vector.app.features.devtools.RoomDevToolActivity
 import im.vector.app.features.home.room.detail.RoomDetailActivity
-import im.vector.app.features.home.room.detail.RoomDetailArgs
+import im.vector.app.features.home.room.detail.arguments.TimelineArgs
 import im.vector.app.features.home.room.detail.search.SearchActivity
 import im.vector.app.features.home.room.detail.search.SearchArgs
 import im.vector.app.features.home.room.filtered.FilteredRoomsActivity
+import im.vector.app.features.home.room.threads.ThreadsActivity
+import im.vector.app.features.home.room.threads.arguments.ThreadListArgs
+import im.vector.app.features.home.room.threads.arguments.ThreadTimelineArgs
 import im.vector.app.features.invite.InviteUsersToRoomActivity
 import im.vector.app.features.login.LoginActivity
 import im.vector.app.features.login.LoginConfig
@@ -118,7 +121,7 @@ class DefaultNavigator @Inject constructor(
             fatalError("Trying to open an unknown room $roomId", vectorPreferences.failFast())
             return
         }
-        val args = RoomDetailArgs(roomId, eventId)
+        val args = TimelineArgs(roomId, eventId)
         val intent = RoomDetailActivity.newIntent(context, args)
         startActivity(context, intent, buildTask)
     }
@@ -141,7 +144,7 @@ class DefaultNavigator @Inject constructor(
                 startActivity(context, SpaceManageActivity.newIntent(context, spaceId, ManageType.AddRooms), false)
             }
             is Navigator.PostSwitchSpaceAction.OpenDefaultRoom   -> {
-                val args = RoomDetailArgs(
+                val args = TimelineArgs(
                         postSwitchSpaceAction.roomId,
                         eventId = null,
                         openShareSpaceForId = spaceId.takeIf { postSwitchSpaceAction.showShareSheet }
@@ -239,7 +242,7 @@ class DefaultNavigator @Inject constructor(
     }
 
     override fun openRoomForSharingAndFinish(activity: Activity, roomId: String, sharedData: SharedData) {
-        val args = RoomDetailArgs(roomId, null, sharedData)
+        val args = TimelineArgs(roomId, null, sharedData)
         val intent = RoomDetailActivity.newIntent(activity, args)
         activity.startActivity(intent)
         activity.finish()
@@ -506,5 +509,12 @@ class DefaultNavigator @Inject constructor(
         } else {
             context.startActivity(intent)
         }
+    }
+
+    override fun openThread(context: Context, threadTimelineArgs: ThreadTimelineArgs) {
+        context.startActivity(ThreadsActivity.newIntent(
+                context = context,
+                threadTimelineArgs =  threadTimelineArgs,
+                threadListArgs =null))
     }
 }
