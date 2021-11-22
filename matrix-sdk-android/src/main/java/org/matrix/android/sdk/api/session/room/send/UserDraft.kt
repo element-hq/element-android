@@ -24,17 +24,14 @@ package org.matrix.android.sdk.api.session.room.send
  * REPLY: draft of a reply of another message
  */
 sealed interface UserDraft {
-    val content: String
-    val messageType: String
-
-    data class REGULAR(override val content: String, override val messageType: String) : UserDraft
-    data class QUOTE(val linkedEventId: String, override val content: String, override val messageType: String) : UserDraft
-    data class EDIT(val linkedEventId: String, override val content: String, override val messageType: String) : UserDraft
-    data class REPLY(val linkedEventId: String, override val content: String, override val messageType: String) : UserDraft
+    data class Regular(val content: String, val messageType: String) : UserDraft
+    data class Quote(val linkedEventId: String, val content: String, val messageType: String) : UserDraft
+    data class Edit(val linkedEventId: String, val content: String, val messageType: String) : UserDraft
+    data class Reply(val linkedEventId: String, val content: String, val messageType: String) : UserDraft
 
     fun isValid(): Boolean {
         return when (this) {
-            is REGULAR -> content.isNotBlank()
+            is Regular -> content.isNotBlank()
             else       -> true
         }
     }

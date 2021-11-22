@@ -27,24 +27,24 @@ internal object DraftMapper {
 
     fun map(entity: DraftEntity): UserDraft {
         return when (entity.draftMode) {
-            DraftEntity.MODE_REGULAR -> UserDraft.REGULAR(entity.content, entity.messageType)
-            DraftEntity.MODE_EDIT    -> UserDraft.EDIT(entity.linkedEventId, entity.content, entity.messageType)
-            DraftEntity.MODE_QUOTE   -> UserDraft.QUOTE(entity.linkedEventId, entity.content, entity.messageType)
-            DraftEntity.MODE_REPLY   -> UserDraft.REPLY(entity.linkedEventId, entity.content, entity.messageType)
+            DraftEntity.MODE_REGULAR -> UserDraft.Regular(entity.content, entity.messageType)
+            DraftEntity.MODE_EDIT    -> UserDraft.Edit(entity.linkedEventId, entity.content, entity.messageType)
+            DraftEntity.MODE_QUOTE   -> UserDraft.Quote(entity.linkedEventId, entity.content, entity.messageType)
+            DraftEntity.MODE_REPLY   -> UserDraft.Reply(entity.linkedEventId, entity.content, entity.messageType)
             else                     -> null
-        } ?: UserDraft.REGULAR("", MessageType.MSGTYPE_TEXT)
+        } ?: UserDraft.Regular("", MessageType.MSGTYPE_TEXT)
     }
 
     fun map(domain: UserDraft): DraftEntity {
         return when (domain) {
-            is UserDraft.REGULAR -> DraftEntity(content = domain.content,
+            is UserDraft.Regular -> DraftEntity(content = domain.content,
                     draftMode = DraftEntity.MODE_REGULAR,
                     linkedEventId = "",
                     messageType = domain.messageType
             )
-            is UserDraft.EDIT    -> DraftEntity(content = domain.content, draftMode = DraftEntity.MODE_EDIT, linkedEventId = domain.linkedEventId)
-            is UserDraft.QUOTE   -> DraftEntity(content = domain.content, draftMode = DraftEntity.MODE_QUOTE, linkedEventId = domain.linkedEventId)
-            is UserDraft.REPLY   -> DraftEntity(content = domain.content, draftMode = DraftEntity.MODE_REPLY, linkedEventId = domain.linkedEventId)
+            is UserDraft.Edit    -> DraftEntity(content = domain.content, draftMode = DraftEntity.MODE_EDIT, linkedEventId = domain.linkedEventId)
+            is UserDraft.Quote -> DraftEntity(content = domain.content, draftMode = DraftEntity.MODE_QUOTE, linkedEventId = domain.linkedEventId)
+            is UserDraft.Reply -> DraftEntity(content = domain.content, draftMode = DraftEntity.MODE_REPLY, linkedEventId = domain.linkedEventId)
         }
     }
 }
