@@ -409,7 +409,7 @@ class MessageComposerViewModel @AssistedInject constructor(
                     _viewEvents.post(MessageComposerViewEvents.MessageSent)
                     popDraft()
                 }
-                is SendMode.Quote -> {
+                is SendMode.Quote   -> {
                     val messageContent = state.sendMode.timelineEvent.getLastMessageContent()
                     val textMsg = messageContent?.body
 
@@ -430,12 +430,15 @@ class MessageComposerViewModel @AssistedInject constructor(
                     _viewEvents.post(MessageComposerViewEvents.MessageSent)
                     popDraft()
                 }
-                is SendMode.Reply -> {
+                is SendMode.Reply   -> {
                     state.sendMode.timelineEvent.let {
                         room.replyToMessage(it, action.text.toString(), action.autoMarkdown)
                         _viewEvents.post(MessageComposerViewEvents.MessageSent)
                         popDraft()
                     }
+                }
+                is SendMode.Voice   -> {
+                    // do nothing
                 }
             }.exhaustive
         }
@@ -461,22 +464,23 @@ class MessageComposerViewModel @AssistedInject constructor(
                     // Create a sendMode from a draft and retrieve the TimelineEvent
                     sendMode = when (currentDraft) {
                         is UserDraft.Regular -> SendMode.Regular(currentDraft.content, false, currentDraft.messageType)
-                        is UserDraft.Quote -> {
+                        is UserDraft.Quote   -> {
                             room.getTimeLineEvent(currentDraft.linkedEventId)?.let { timelineEvent ->
                                 SendMode.Quote(timelineEvent, currentDraft.content)
                             }
                         }
-                        is UserDraft.Reply -> {
+                        is UserDraft.Reply   -> {
                             room.getTimeLineEvent(currentDraft.linkedEventId)?.let { timelineEvent ->
                                 SendMode.Reply(timelineEvent, currentDraft.content)
                             }
                         }
-                        is UserDraft.Edit  -> {
+                        is UserDraft.Edit    -> {
                             room.getTimeLineEvent(currentDraft.linkedEventId)?.let { timelineEvent ->
                                 SendMode.Edit(timelineEvent, currentDraft.content)
                             }
                         }
-                        else               -> null
+                        is UserDraft.Voice   -> SendMode.Voice(currentDraft.content)
+                        else                 -> null
                     } ?: SendMode.Regular("", fromSharing = false)
             )
         }
@@ -695,7 +699,7 @@ class MessageComposerViewModel @AssistedInject constructor(
                     setState { copy(sendMode = it.sendMode.copy(text = draft)) }
                     room.saveDraft(UserDraft.Quote(it.sendMode.timelineEvent.root.eventId!!, draft))
                 }
-                it.sendMode is SendMode.Edit  -> {
+                it.sendMode is SendMode.Edit                                -> {
                     setState { copy(sendMode = it.sendMode.copy(text = draft)) }
                     room.saveDraft(UserDraft.Edit(it.sendMode.timelineEvent.root.eventId!!, draft))
                 }

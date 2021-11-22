@@ -42,6 +42,7 @@ sealed interface SendMode {
     data class Quote(val timelineEvent: TimelineEvent, val text: String) : SendMode
     data class Edit(val timelineEvent: TimelineEvent, val text: String) : SendMode
     data class Reply(val timelineEvent: TimelineEvent, val text: String) : SendMode
+    data class Voice(val text: String) : SendMode
 }
 
 data class MessageComposerViewState(
