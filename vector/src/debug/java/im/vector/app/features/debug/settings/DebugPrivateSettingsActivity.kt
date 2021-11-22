@@ -16,26 +16,23 @@
 
 package im.vector.app.features.debug.settings
 
-import com.airbnb.mvrx.viewModel
-import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
+import im.vector.app.R
+import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.VectorBaseActivity
-import im.vector.app.databinding.ActivityDebugPrivateSettingsBinding
+import im.vector.app.databinding.ActivitySimpleBinding
 
 @AndroidEntryPoint
-class DebugPrivateSettingsActivity : VectorBaseActivity<ActivityDebugPrivateSettingsBinding>() {
+class DebugPrivateSettingsActivity : VectorBaseActivity<ActivitySimpleBinding>() {
 
-    private val viewModel: DebugPrivateSettingsViewModel by viewModel()
-
-    override fun getBinding() = ActivityDebugPrivateSettingsBinding.inflate(layoutInflater)
+    override fun getBinding() = ActivitySimpleBinding.inflate(layoutInflater)
 
     override fun initUiAndData() {
-        views.forceDialPadTabDisplay.setOnCheckedChangeListener { _, isChecked ->
-            viewModel.handle(DebugPrivateSettingsViewActions.SetDialPadVisibility(isChecked))
+        if (isFirstCreation()) {
+            addFragment(
+                    R.id.simpleFragmentContainer,
+                    DebugPrivateSettingsFragment::class.java
+            )
         }
-    }
-
-    override fun invalidate() = withState(viewModel) {
-        views.forceDialPadTabDisplay.isChecked = it.dialPadVisible
     }
 }
