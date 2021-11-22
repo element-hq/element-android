@@ -103,7 +103,7 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
         voiceMessageViews.renderVisibilityChanged(parentChanged, visibility)
     }
 
-    fun display(recordingState: RecordingUiState) {
+    fun render(recordingState: RecordingUiState) {
         if (lastKnownState == recordingState) return
         lastKnownState = recordingState
         when (recordingState) {
