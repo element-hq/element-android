@@ -90,7 +90,7 @@ class HomeDetailViewModel @AssistedInject constructor(
         observeSyncState()
         observeRoomGroupingMethod()
         observeRoomSummaries()
-        updateShowDialPadTab()
+        updatePstnSupportFlag()
         observeDataStore()
         callManager.addProtocolsCheckerListener(this)
         session.flow().liveUser(session.myUserId).execute {
@@ -152,10 +152,10 @@ class HomeDetailViewModel @AssistedInject constructor(
     }
 
     override fun onPSTNSupportUpdated() {
-        updateShowDialPadTab()
+        updatePstnSupportFlag()
     }
 
-    private fun updateShowDialPadTab() {
+    private fun updatePstnSupportFlag() {
         setState {
             copy(pstnSupportFlag = callManager.supportsPSTNProtocol)
         }
