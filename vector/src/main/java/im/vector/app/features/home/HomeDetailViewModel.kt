@@ -101,6 +101,8 @@ class HomeDetailViewModel @AssistedInject constructor(
         }
     }
 
+    private var forceDialPad = false
+
     private fun observeDataStore() {
         viewModelScope.launch {
             vectorDataStore.pushCounterFlow.collect { nbOfPush ->
@@ -109,6 +111,10 @@ class HomeDetailViewModel @AssistedInject constructor(
                             pushCounter = nbOfPush
                     )
                 }
+            }
+            vectorDataStore.forceDialPadDisplayFlow.collect { force ->
+                forceDialPad = force
+                updateShowDialPadTab()
             }
         }
     }
@@ -156,7 +162,7 @@ class HomeDetailViewModel @AssistedInject constructor(
 
     private fun updateShowDialPadTab() {
         setState {
-            copy(showDialPadTab = callManager.supportsPSTNProtocol)
+            copy(showDialPadTab = forceDialPad || callManager.supportsPSTNProtocol)
         }
     }
 
