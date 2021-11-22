@@ -19,11 +19,13 @@ package im.vector.app.features.settings
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import org.matrix.android.sdk.api.extensions.orFalse
 import javax.inject.Inject
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "vector_settings")
@@ -42,6 +44,19 @@ class VectorDataStore @Inject constructor(
         context.dataStore.edit { settings ->
             val currentCounterValue = settings[pushCounter] ?: 0
             settings[pushCounter] = currentCounterValue + 1
+        }
+    }
+
+    // For debug only
+    private val forceDialPadDisplay = booleanPreferencesKey("force_dial_pad_display")
+
+    val forceDialPadDisplayFlow: Flow<Boolean> = context.dataStore.data.map { preferences ->
+        preferences[forceDialPadDisplay].orFalse()
+    }
+
+    suspend fun setForceDialPadDisplay(force: Boolean) {
+        context.dataStore.edit { settings ->
+            settings[forceDialPadDisplay] = force
         }
     }
 }
