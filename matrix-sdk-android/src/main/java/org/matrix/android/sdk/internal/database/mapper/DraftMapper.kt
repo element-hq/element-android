@@ -37,7 +37,11 @@ internal object DraftMapper {
 
     fun map(domain: UserDraft): DraftEntity {
         return when (domain) {
-            is UserDraft.REGULAR -> DraftEntity(content = domain.content, draftMode = DraftEntity.MODE_REGULAR, linkedEventId = "", messageType = domain.messageType)
+            is UserDraft.REGULAR -> DraftEntity(content = domain.content,
+                    draftMode = DraftEntity.MODE_REGULAR,
+                    linkedEventId = "",
+                    messageType = domain.messageType
+            )
             is UserDraft.EDIT    -> DraftEntity(content = domain.content, draftMode = DraftEntity.MODE_EDIT, linkedEventId = domain.linkedEventId)
             is UserDraft.QUOTE   -> DraftEntity(content = domain.content, draftMode = DraftEntity.MODE_QUOTE, linkedEventId = domain.linkedEventId)
             is UserDraft.REPLY   -> DraftEntity(content = domain.content, draftMode = DraftEntity.MODE_REPLY, linkedEventId = domain.linkedEventId)
