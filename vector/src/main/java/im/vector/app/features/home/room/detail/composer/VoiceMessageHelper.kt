@@ -86,9 +86,9 @@ class VoiceMessageHelper @Inject constructor(
         }
         try {
             voiceMessageFile?.let {
-                val outputFileUri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".fileProvider", it)
+                val outputFileUri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".fileProvider", it, "Voice message.${it.extension}")
                 return outputFileUri
-                        ?.toMultiPickerAudioType(context)
+                        .toMultiPickerAudioType(context)
                         ?.apply {
                             waveform = if (amplitudeList.size < 50) {
                                 amplitudeList

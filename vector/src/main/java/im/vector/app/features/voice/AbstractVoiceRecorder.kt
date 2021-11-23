@@ -70,7 +70,7 @@ abstract class AbstractVoiceRecorder(
 
     override fun startRecord(roomId: String) {
         init()
-        val fileName = "Voice message-${UUID.randomUUID()}.$filenameExt"
+        val fileName = "${UUID.randomUUID()}.$filenameExt"
         val outputDirectoryForRoom = File(outputDirectory, roomId.md5()).apply {
             mkdirs()
         }
