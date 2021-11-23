@@ -181,7 +181,7 @@ internal class CreateRoomBodyBuilder @Inject constructor(
                 params.invite3pids.isEmpty() &&
                 params.invitedUserIds.isNotEmpty() &&
                 params.invitedUserIds.let { userIds ->
-            val keys =  olmMachineProvider.olmMachine.getUserDevicesMap(userIds)
+            val keys =  olmMachineProvider.olmMachine.ensureUserDevicesMap(userIds, forceDownload = false)
             // deviceListManager.downloadKeys(userIds, forceDownload = false)
 
             userIds.all { userId ->

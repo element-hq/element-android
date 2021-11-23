@@ -22,6 +22,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.listeners.ProgressListener
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MXCrossSigningInfo
@@ -62,6 +63,7 @@ import uniffi.olm.RoomKeyCounts
 import uniffi.olm.setLogger
 import java.io.File
 import java.nio.charset.Charset
+import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 import uniffi.olm.OlmMachine as InnerMachine
 import uniffi.olm.ProgressListener as RustProgressListener
@@ -644,6 +646,17 @@ internal class OlmMachine(
         return plainDevices
     }
 
+    @Throws
+    suspend fun forceKeyDownload(userIds: List<String>): MXUsersDevicesMap<CryptoDeviceInfo> {
+        withContext(Dispatchers.IO) {
+            val requestId = UUID.randomUUID().toString()
+            val response = requestSender.queryKeys(Request.KeysQuery(requestId, userIds))
+            markRequestAsSent(requestId, RequestType.KEYS_QUERY, response)
+        }
+        // TODO notify shield listener (?)
+        return getUserDevicesMap(userIds)
+    }
+
     suspend fun getUserDevicesMap(userIds: List<String>): MXUsersDevicesMap<CryptoDeviceInfo> {
         val userMap = MXUsersDevicesMap<CryptoDeviceInfo>()
 
@@ -656,6 +669,25 @@ internal class OlmMachine(
         }
 
         return userMap
+    }
+
+    /**
+     * If the user is untracked or forceDownload is set to true, a key query request will be made.
+     * It will suspend until query response, and the device list will be returned.
+     * As there is no API to know tracking status, we consider that if there are no known devices the user is un tracked.
+     *
+     * The key query request will be retried a few time in case of shaky connection, but could fail.
+     */
+    suspend fun ensureUserDevicesMap(userIds: List<String>, forceDownload: Boolean = false): MXUsersDevicesMap<CryptoDeviceInfo> {
+        val known = getUserDevicesMap(userIds)
+        return if (known.isEmpty /* We have no api to know if was tracked..*/ || forceDownload) {
+            updateTrackedUsers(userIds)
+             tryOrNull("Failed to download keys for $userIds") {
+                 forceKeyDownload(userIds)
+             } ?: known
+        } else {
+            known
+        }
     }
 
     suspend fun getLiveUserIdentity(userId: String): LiveData<Optional<MXCrossSigningInfo>> {
