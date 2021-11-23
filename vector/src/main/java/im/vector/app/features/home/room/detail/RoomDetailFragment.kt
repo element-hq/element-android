@@ -28,6 +28,7 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.text.Spannable
 import android.text.format.DateUtils
+import android.util.Log
 import android.view.HapticFeedbackConstants
 import android.view.KeyEvent
 import android.view.LayoutInflater

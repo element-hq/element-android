@@ -24,7 +24,7 @@ package org.matrix.android.sdk.api.session.room.send
  * REPLY: draft of a reply of another message
  */
 sealed interface UserDraft {
-    data class Regular(val content: String, val messageType: String) : UserDraft
+    data class Regular(val content: String) : UserDraft
     data class Quote(val linkedEventId: String, val content: String) : UserDraft
     data class Edit(val linkedEventId: String, val content: String) : UserDraft
     data class Reply(val linkedEventId: String, val content: String) : UserDraft

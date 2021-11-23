@@ -17,13 +17,10 @@
 package org.matrix.android.sdk.internal.database.model
 
 import io.realm.RealmObject
-import org.matrix.android.sdk.api.session.room.model.message.MessageType
 
 internal open class DraftEntity(var content: String = "",
                                 var draftMode: String = MODE_REGULAR,
-                                var linkedEventId: String = "",
-                                var messageType: String = MessageType.MSGTYPE_TEXT
-
+                                var linkedEventId: String = ""
 ) : RealmObject() {
 
     companion object {

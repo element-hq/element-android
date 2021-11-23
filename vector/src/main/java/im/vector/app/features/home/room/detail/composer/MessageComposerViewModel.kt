@@ -463,7 +463,7 @@ class MessageComposerViewModel @AssistedInject constructor(
             copy(
                     // Create a sendMode from a draft and retrieve the TimelineEvent
                     sendMode = when (currentDraft) {
-                        is UserDraft.Regular -> SendMode.Regular(currentDraft.content, false, currentDraft.messageType)
+                        is UserDraft.Regular -> SendMode.Regular(currentDraft.content, false)
                         is UserDraft.Quote   -> {
                             room.getTimeLineEvent(currentDraft.linkedEventId)?.let { timelineEvent ->
                                 SendMode.Quote(timelineEvent, currentDraft.content)
@@ -684,12 +684,12 @@ class MessageComposerViewModel @AssistedInject constructor(
     /**
      * Convert a send mode to a draft and save the draft
      */
-    private fun handleSaveDraft(draft: String, messageType: String) = withState {
+    private fun handleSaveTextDraft(draft: String) = withState {
         session.coroutineScope.launch {
             when {
                 it.sendMode is SendMode.Regular && !it.sendMode.fromSharing -> {
-                    setState { copy(sendMode = it.sendMode.copy(text = draft, messageType = messageType)) }
-                    room.saveDraft(UserDraft.Regular(draft, messageType))
+                    setState { copy(sendMode = it.sendMode.copy(text = draft)) }
+                    room.saveDraft(UserDraft.Regular(draft))
                 }
                 it.sendMode is SendMode.Reply                               -> {
                     setState { copy(sendMode = it.sendMode.copy(text = draft)) }
@@ -728,6 +728,7 @@ class MessageComposerViewModel @AssistedInject constructor(
                 }
             }
         }
+        handleEnterRegularMode(MessageComposerAction.EnterRegularMode(text = "", fromSharing = false))
     }
 
     private fun handlePlayOrPauseVoicePlayback(action: MessageComposerAction.PlayOrPauseVoicePlayback) {
@@ -765,11 +766,14 @@ class MessageComposerViewModel @AssistedInject constructor(
     private fun handleEntersBackground(composerText: String) {
         withState {
             if (it.isVoiceRecording) {
-                handleEndAllVoiceActions(deleteRecord = false)?.toContentAttachmentData()?.let { voiceDraft ->
-                    handleSaveDraft(draft = voiceDraft.toJsonString(), messageType = MessageType.MSGTYPE_AUDIO)
+                viewModelScope.launch {
+                    handleEndAllVoiceActions(deleteRecord = false)?.toContentAttachmentData()?.let { voiceDraft ->
+                        val content = voiceDraft.toJsonString()
+                        room.saveDraft(UserDraft.Voice(content))
+                    }
                 }
             } else {
-                handleSaveDraft(draft = composerText, messageType = MessageType.MSGTYPE_TEXT)
+                handleSaveTextDraft(draft = composerText)
             }
         }
     }

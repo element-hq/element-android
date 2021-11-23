@@ -34,7 +34,6 @@ sealed interface SendMode {
     data class Regular(
             val text: String,
             val fromSharing: Boolean,
-            val messageType: String = MessageType.MSGTYPE_TEXT,
             // This is necessary for forcing refresh on selectSubscribe
             private val ts: Long = System.currentTimeMillis()
     ) : SendMode
