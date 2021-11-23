@@ -1272,4 +1272,65 @@
         <item quantity="one">%1$s hat %2$s as alternatyf keameradres tafoege.</item>
         <item quantity="other">%1$s hat %2$s as alternative keameradressen tafoege.</item>
     </plurals>
+    <string name="room_preview_unlinked_email_warning">Dizze útnûging is nei %s ferstjoerd, mar dy is net assosjearre mei dizze account.
+\nMiskien wolle jo jo mei in oare account oanmelde, of dit e-mailadres oan dizze account tafoegje.</string>
+    <string name="room_preview_invitation_format">%s hat jo yn dizze keamer útnûge</string>
+    <string name="room_jump_to_first_unread">Gean nei net-lêzen</string>
+    <string name="open_chat_header">Opskrift iepenje</string>
+    <string name="list_members">Ledelist</string>
+    <string name="reject">Ofwize</string>
+    <string name="permissions_denied_add_contact">Tagong jaan ta jo kontaktpersoanen.</string>
+    <string name="permissions_denied_qr_code">Om de QR-koade te scannen moatte jo tagong ta de kamera jaan.</string>
+    <string name="permissions_action_not_performed_missing_permissions">Sorry. De aksje is net tapast fanwegen ûntbrekkende rjochten</string>
+    <string name="template_permissions_msg_contacts_warning_other_androids">${app_name} kin jo adresboek benaderje om oare Matrix-brûkers te finen oan de hân fan harren e-mailadressen en telefoannûmers.
+\n
+\nWolle jo jo adresboek hjir foar diele.</string>
+    <string name="template_permissions_rationale_msg_contacts">${app_name} kin jo adresboek benaderje om oare Matrix-brûkers te finen oan de hân fan harren e-mailadressen en telefoannûmers. As jo it goed fine om jo adresboek hjirfoar te dielen, jou dan tagong op de folgjende pop-up.</string>
+    <string name="template_permissions_rationale_msg_camera_and_audio">${app_name} hat tagong nedich ta jo kamera en mikrofoan om fideo-oproppen te meitsjen.
+\n
+\nJou tagong op de folgjende pop-ups om de oprop te meitsjen.</string>
+    <string name="permissions_rationale_msg_record_audio_explanation">"
+\n
+\nJou tagong op de folgjende pop-up om de oprop te meitsjen."</string>
+    <string name="template_permissions_rationale_msg_record_audio">${app_name} hat tagong nedich ta jo mikrofoan om spraakoproppen te meitsjen.</string>
+    <string name="permissions_rationale_msg_camera_explanation">"
+\n
+\nJou tagong op de folgjende pop-up om de oprop te meitsjen."</string>
+    <string name="template_permissions_rationale_msg_camera">${app_name} hat tagong nedich ta jo kamera om foto’s en fideo-oproppen te meitsjen.</string>
+    <string name="template_permissions_rationale_msg_storage">${app_name} hat tagong nedich ta jo mediabestannen om bylagen te ferstjoeren en te bewarjen.
+\n
+\nJou tagong op de folgjende pop-up om bestannen fan jo telefoan ôf te stjoeren.</string>
+    <string name="call_remove_jitsi_widget_progress">Oprop beëinigje…</string>
+    <string name="call_error_answered_elsewhere">oprop earne oars opnommen</string>
+    <string name="call_error_camera_init_failed">Kin de kamera net inisjalisearje</string>
+    <string name="call_error_ice_failed">Mediaferbining is mislearre</string>
+    <string name="call_error_user_not_responding">De oare kant hat net opnommen.</string>
+    <string name="call_ended_invite_timeout_title">Gjin antwurd</string>
+    <string name="call_ended_user_busy_description">De brûker dy’t jo belle hawwe is dwaande.</string>
+    <string name="call_ended_user_busy_title">Brûker dwaande</string>
+    <string name="call_held_by_you">Jo hawwe de oprop yn de wacht set</string>
+    <string name="call_held_by_user">%s hat de oprop yn de wacht set</string>
+    <string name="call_hold_action">Yn de wacht sette</string>
+    <string name="return_to_call">Weromgean nei oprop</string>
+    <string name="active_call_with_duration">Aktive oprop (%s)</string>
+    <string name="audio_call_with_participant">Belje mei %s</string>
+    <string name="video_call_with_participant">Fideo-oprop mei %s</string>
+    <string name="video_call_in_progress">Fideo-oprop dwaande…</string>
+    <string name="call_in_progress">Oprop dwaande…</string>
+    <string name="incoming_voice_call">Ynkommende spraakoprop</string>
+    <string name="incoming_video_call">Ynkommende fideo-oprop</string>
+    <string name="incoming_call">Ynkommende oprop</string>
+    <plurals name="missed_video_call">
+        <item quantity="one">Miste fideo-oprop</item>
+        <item quantity="other">%d miste fideo-oproppen</item>
+    </plurals>
+    <plurals name="missed_audio_call">
+        <item quantity="one">Miste spraakoprop</item>
+        <item quantity="other">%d miste spraakoproppen</item>
+    </plurals>
+    <string name="call_ended">Oprop beëinige</string>
+    <string name="call_ringing">Giet oer…</string>
+    <string name="call_connecting">Oprop is oan it ferbinen…</string>
+    <string name="template_e2e_re_request_encryption_key_dialog_content">Start ${app_name} op in oar apparaat dat it berjocht ûntsiferje kin, sadat it de kaaien nei dizze sesje stjoere kin.</string>
+    <string name="login_error_homeserver_from_url_not_found">Thússerver-URL %s net te berikken. Kontrolearje jo keppeling of kies hânmjittich in oare thússerver.</string>
 </resources>
