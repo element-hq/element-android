@@ -720,7 +720,8 @@ class RoomDetailFragment @Inject constructor(
 
             override fun onVoiceRecordingCancelled() {
                 messageComposerViewModel.handle(MessageComposerAction.EndRecordingVoiceMessage(isCancelled = true))
-                updateRecordingUiState(RecordingUiState.Cancelled)
+                vibrate(requireContext())
+                updateRecordingUiState(RecordingUiState.None)
             }
 
             override fun onVoiceRecordingLocked() {

@@ -197,7 +197,7 @@ class VoiceMessageViews(
         }
 
         // Hide toasts if user cancelled recording before the timeout of the toast.
-        if (recordingState == RecordingUiState.Cancelled || recordingState == RecordingUiState.None) {
+        if (recordingState == RecordingUiState.None) {
             hideToast()
         }
     }
