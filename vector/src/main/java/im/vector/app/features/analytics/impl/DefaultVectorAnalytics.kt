@@ -93,11 +93,22 @@ class DefaultVectorAnalytics @Inject constructor(
     override fun capture(event: String, properties: Map<String, Any>?) {
         posthog?.capture(
                 event,
-                properties?.let { props ->
-                    Properties().apply {
-                        props.forEach { putValue(it.key, it.value) }
-                    }
-                }
+                properties.toPostHogProperties()
         )
+    }
+
+    override fun screen(name: String, properties: Map<String, Any>?) {
+        posthog?.screen(
+                name,
+                properties.toPostHogProperties()
+        )
+    }
+
+    private fun Map<String, Any>?.toPostHogProperties(): Properties? {
+        if (this == null) return null
+
+        return Properties().apply {
+            this@toPostHogProperties.forEach { putValue(it.key, it.value) }
+        }
     }
 }

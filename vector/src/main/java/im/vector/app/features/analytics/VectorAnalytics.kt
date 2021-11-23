@@ -63,4 +63,9 @@ interface VectorAnalytics {
      * Capture an Event
      */
     fun capture(event: String, properties: Map<String, Any>? = null)
+
+    /**
+     * Track a displayed screen
+     */
+    fun screen(name: String, properties: Map<String, Any>? = null)
 }
