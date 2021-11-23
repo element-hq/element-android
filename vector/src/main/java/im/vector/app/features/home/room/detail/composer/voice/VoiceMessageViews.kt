@@ -23,9 +23,11 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.doOnLayout
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
+import com.visualizer.amplitude.AudioRecordView
 import im.vector.app.R
 import im.vector.app.core.extensions.setAttributeBackground
 import im.vector.app.core.extensions.setAttributeTintedBackground
@@ -262,10 +264,9 @@ class VoiceMessageViews(
         hideRecordingViews(RecordingUiState.None)
         views.voiceMessageMicButton.isVisible = false
         views.voiceMessageSendButton.isVisible = true
-        views.voicePlaybackWaveform.post { views.voicePlaybackWaveform.recreate() }
         views.voiceMessagePlaybackLayout.isVisible = true
+        views.voicePlaybackWaveform.recreate()
         showPlaybackViews()
-        renderIdle()
     }
 
     fun showRecordingLockedViews(recordingState: RecordingUiState) {
@@ -330,11 +331,9 @@ class VoiceMessageViews(
     }
 
     fun renderRecordingWaveform(amplitudeList: Array<Int>) {
-        views.voicePlaybackWaveform.post {
-            views.voicePlaybackWaveform.apply {
-                amplitudeList.iterator().forEach {
-                    update(it)
-                }
+        views.voicePlaybackWaveform.doOnLayout { waveFormView ->
+            amplitudeList.iterator().forEach {
+                (waveFormView as AudioRecordView).update(it)
             }
         }
     }
