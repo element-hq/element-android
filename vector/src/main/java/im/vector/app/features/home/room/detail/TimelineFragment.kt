@@ -1002,10 +1002,10 @@ class TimelineFragment @Inject constructor(
     /**
      * View and highlight the original root thread message in the main timeline
      */
-    private fun handleViewInRoomAction(){
+    private fun handleViewInRoomAction() {
         getRootThreadEventId()?.let {
-            val newRoom = timelineArgs.copy(threadTimelineArgs = null,eventId = it)
-            context?.let{ con ->
+            val newRoom = timelineArgs.copy(threadTimelineArgs = null, eventId = it)
+            context?.let { con ->
                 val int = RoomDetailActivity.newIntent(con, newRoom)
                 int.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
                 con.startActivity(int)
@@ -1473,6 +1473,7 @@ class TimelineFragment @Inject constructor(
                 avatarRenderer.render(matrixItem, views.includeThreadToolbar.roomToolbarThreadImageView)
                 views.includeThreadToolbar.roomToolbarThreadSubtitleTextView.text = it.displayName
             }
+            views.includeThreadToolbar.roomToolbarThreadTitleTextView.text = resources.getText(R.string.thread_timeline_title)
         }
     }
 
@@ -1776,9 +1777,9 @@ class TimelineFragment @Inject constructor(
             is EncryptedEventContent             -> {
                 roomDetailViewModel.handle(RoomDetailAction.TapOnFailedToDecrypt(informationData.eventId))
             }
-        }
-        if (BuildConfig.THREADING_ENABLED && isRootThreadEvent && !isThreadTimeLine()) {
-            navigateToThreadTimeline(informationData.eventId)
+            else                                 -> {
+                onThreadSummaryClicked(informationData.eventId, isRootThreadEvent)
+            }
         }
     }
 
@@ -1808,6 +1809,13 @@ class TimelineFragment @Inject constructor(
                     .show()
         }
     }
+
+    override fun onThreadSummaryClicked(eventId: String, isRootThreadEvent: Boolean) {
+        if (BuildConfig.THREADING_ENABLED && isRootThreadEvent && !isThreadTimeLine()) {
+            navigateToThreadTimeline(eventId)
+        }
+    }
+
 
     override fun onAvatarClicked(informationData: MessageInformationData) {
         // roomDetailViewModel.handle(RoomDetailAction.RequestVerification(informationData.userId))
@@ -2012,7 +2020,7 @@ class TimelineFragment @Inject constructor(
                     requireActivity().toast(R.string.error_voice_message_cannot_reply_or_edit)
                 }
             }
-            is EventSharedAction.ViewInRoom              -> {
+            is EventSharedAction.ViewInRoom                 -> {
                 if (!views.voiceMessageRecorderView.isActive()) {
                     handleViewInRoomAction()
                 } else {

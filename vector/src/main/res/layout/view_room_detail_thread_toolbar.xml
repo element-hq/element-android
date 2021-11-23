@@ -5,8 +5,8 @@
     android:id="@+id/roomToolbarThreadConstraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:visibility="gone"
-    android:visibility="gone">
+    android:visibility="gone"
+    tools:visibility="visible">
 
     <TextView
         android:id="@+id/roomToolbarThreadTitleTextView"
@@ -15,11 +15,11 @@
         android:layout_height="wrap_content"
         android:ellipsize="end"
         android:maxLines="1"
-        android:text="@string/room_threads_title"
         android:textColor="?vctr_content_primary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/thread_timeline_title" />
 
     <ImageView
         android:id="@+id/roomToolbarThreadImageView"

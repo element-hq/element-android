@@ -21,6 +21,7 @@ import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.threads.list.model.threadSummary
+import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
@@ -67,11 +68,14 @@ class ThreadSummaryController @Inject constructor(
                         lastMessage(timelineEvent.root.threadDetails?.threadSummaryLatestTextMessage.orEmpty())
                         lastMessageCounter(timelineEvent.root.threadDetails?.numberOfThreads.toString())
                         lastMessageMatrixItem(timelineEvent.root.threadDetails?.threadSummarySenderInfo?.toMatrixItem())
+                        itemClickListener {
+                            host.listener?.onThreadClicked(timelineEvent)
+                        }
                     }
                 }
     }
 
     interface Listener {
-        fun onBreadcrumbClicked(roomId: String)
+        fun onThreadClicked(timelineEvent: TimelineEvent)
     }
 }

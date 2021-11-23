@@ -112,6 +112,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
             BaseCallback,
             ReactionPillCallback,
             AvatarCallback,
+            ThreadCallback,
             UrlClickCallback,
             ReadReceiptsCallback,
             PreviewUrlCallback {
@@ -149,6 +150,10 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
     interface AvatarCallback {
         fun onAvatarClicked(informationData: MessageInformationData)
         fun onMemberNameClicked(informationData: MessageInformationData)
+    }
+
+    interface ThreadCallback {
+        fun onThreadSummaryClicked(eventId: String, isRootThreadEvent: Boolean)
     }
 
     interface ReadReceiptsCallback {

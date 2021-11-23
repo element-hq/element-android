@@ -50,6 +50,7 @@ class MessageItemAttributesFactory @Inject constructor(
                 },
                 reactionPillCallback = callback,
                 avatarCallback = callback,
+                threadCallback = callback,
                 readReceiptsCallback = callback,
                 emojiTypeFace = emojiCompatFontProvider.typeface,
                 threadDetails = threadDetails

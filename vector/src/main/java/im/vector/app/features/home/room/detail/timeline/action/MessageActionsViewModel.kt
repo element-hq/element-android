@@ -435,13 +435,13 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
         if (event.root.getClearType() != EventType.MESSAGE) return false
         if (!actionPermissions.canSendMessage) return false
         return when (messageContent?.msgType) {
-            MessageType.MSGTYPE_TEXT -> true
-//            MessageType.MSGTYPE_NOTICE,
-//            MessageType.MSGTYPE_EMOTE,
-//            MessageType.MSGTYPE_IMAGE,
-//            MessageType.MSGTYPE_VIDEO,
-//            MessageType.MSGTYPE_AUDIO,
-//            MessageType.MSGTYPE_FILE -> true
+            MessageType.MSGTYPE_TEXT,
+            MessageType.MSGTYPE_NOTICE,
+            MessageType.MSGTYPE_EMOTE,
+            MessageType.MSGTYPE_IMAGE,
+            MessageType.MSGTYPE_VIDEO,
+            MessageType.MSGTYPE_AUDIO,
+            MessageType.MSGTYPE_FILE -> true
             else                     -> false
         }
     }
@@ -460,13 +460,13 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
         if (!actionPermissions.canSendMessage) return false
 
         return when (messageContent?.msgType) {
-            MessageType.MSGTYPE_TEXT -> event.root.threadDetails?.isRootThread ?: false
-//            MessageType.MSGTYPE_NOTICE,
-//            MessageType.MSGTYPE_EMOTE,
-//            MessageType.MSGTYPE_IMAGE,
-//            MessageType.MSGTYPE_VIDEO,
-//            MessageType.MSGTYPE_AUDIO,
-//            MessageType.MSGTYPE_FILE -> true
+            MessageType.MSGTYPE_TEXT,
+            MessageType.MSGTYPE_NOTICE,
+            MessageType.MSGTYPE_EMOTE,
+            MessageType.MSGTYPE_IMAGE,
+            MessageType.MSGTYPE_VIDEO,
+            MessageType.MSGTYPE_AUDIO,
+            MessageType.MSGTYPE_FILE -> event.root.threadDetails?.isRootThread ?: false
             else                     -> false
         }
     }

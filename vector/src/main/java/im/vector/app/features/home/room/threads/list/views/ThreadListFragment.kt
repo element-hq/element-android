@@ -20,7 +20,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.isVisible
+import androidx.transition.TransitionInflater
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
@@ -33,10 +35,13 @@ import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.breadcrumbs.BreadcrumbsAnimator
 import im.vector.app.features.home.room.breadcrumbs.BreadcrumbsViewModel
 import im.vector.app.features.home.room.detail.RoomDetailSharedActionViewModel
+import im.vector.app.features.home.room.threads.ThreadsActivity
 import im.vector.app.features.home.room.threads.arguments.ThreadListArgs
+import im.vector.app.features.home.room.threads.arguments.ThreadTimelineArgs
 import im.vector.app.features.home.room.threads.list.viewmodel.ThreadSummaryController
 import im.vector.app.features.home.room.threads.list.viewmodel.ThreadSummaryViewModel
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.util.MatrixItem
 import javax.inject.Inject
 
@@ -45,7 +50,8 @@ class ThreadListFragment @Inject constructor(
         private val avatarRenderer: AvatarRenderer,
         private val threadSummaryController: ThreadSummaryController,
         val threadSummaryViewModelFactory: ThreadSummaryViewModel.Factory
-) : VectorBaseFragment<FragmentThreadListBinding>() {
+) : VectorBaseFragment<FragmentThreadListBinding>(),
+        ThreadSummaryController.Listener {
 
     private val threadSummaryViewModel: ThreadSummaryViewModel by fragmentViewModel()
 
@@ -65,15 +71,16 @@ class ThreadListFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
         views.threadListRecyclerView.configureWith(threadSummaryController, BreadcrumbsAnimator(), hasFixedSize = false)
-//        threadSummaryController.listener = this
+        threadSummaryController.listener = this
     }
 
     override fun onDestroyView() {
         views.threadListRecyclerView.cleanup()
-//        breadcrumbsController.listener = null
+        threadSummaryController.listener = null
         super.onDestroyView()
     }
-    private fun initToolbar(){
+
+    private fun initToolbar() {
         setupToolbar(views.threadListToolbar)
         renderToolbar()
     }
@@ -84,8 +91,13 @@ class ThreadListFragment @Inject constructor(
 
     private fun renderToolbar() {
         views.includeThreadListToolbar.roomToolbarThreadConstraintLayout.isVisible = true
-            val matrixItem = MatrixItem.RoomItem(threadListArgs.roomId, threadListArgs.displayName, threadListArgs.avatarUrl)
-            avatarRenderer.render(matrixItem, views.includeThreadListToolbar.roomToolbarThreadImageView)
-            views.includeThreadListToolbar.roomToolbarThreadSubtitleTextView.text = threadListArgs.displayName
+        val matrixItem = MatrixItem.RoomItem(threadListArgs.roomId, threadListArgs.displayName, threadListArgs.avatarUrl)
+        avatarRenderer.render(matrixItem, views.includeThreadListToolbar.roomToolbarThreadImageView)
+        views.includeThreadListToolbar.roomToolbarThreadTitleTextView.text = resources.getText(R.string.thread_list_title)
+        views.includeThreadListToolbar.roomToolbarThreadSubtitleTextView.text = threadListArgs.displayName
+    }
+
+    override fun onThreadClicked(timelineEvent: TimelineEvent) {
+        (activity as? ThreadsActivity)?.navigateToThreadTimeline(timelineEvent)
     }
 }

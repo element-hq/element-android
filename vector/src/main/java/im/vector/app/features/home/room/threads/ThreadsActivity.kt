@@ -19,9 +19,16 @@ package im.vector.app.features.home.room.threads
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
+import android.view.ViewGroup
+import androidx.core.view.ViewCompat
+import androidx.core.view.children
+import androidx.fragment.app.FragmentTransaction
 import com.google.android.material.appbar.MaterialToolbar
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
+import im.vector.app.core.extensions.addFragment
+import im.vector.app.core.extensions.addFragmentToBackstack
 import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
@@ -32,6 +39,7 @@ import im.vector.app.features.home.room.detail.TimelineFragment
 import im.vector.app.features.home.room.threads.arguments.ThreadListArgs
 import im.vector.app.features.home.room.threads.arguments.ThreadTimelineArgs
 import im.vector.app.features.home.room.threads.list.views.ThreadListFragment
+import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import javax.inject.Inject
 
 class ThreadsActivity : VectorBaseActivity<ActivityThreadsBinding>(), ToolbarConfigurable {
@@ -88,6 +96,31 @@ class ThreadsActivity : VectorBaseActivity<ActivityThreadsBinding>(), ToolbarCon
                             roomId = threadTimelineArgs.roomId,
                             threadTimelineArgs = threadTimelineArgs
                     ))
+
+    /**
+     * This function is used to navigate to the selected thread timeline.
+     * One usage of that is from the Threads Activity
+     */
+    fun navigateToThreadTimeline(
+            timelineEvent: TimelineEvent) {
+        val roomThreadDetailArgs = ThreadTimelineArgs(
+                roomId = timelineEvent.roomId,
+                displayName = timelineEvent.senderInfo.displayName,
+                avatarUrl = timelineEvent.senderInfo.avatarUrl,
+                rootThreadEventId = timelineEvent.eventId)
+        val commonOption: (FragmentTransaction) -> Unit = {
+            it.setCustomAnimations(R.anim.animation_slide_in_right, R.anim.animation_slide_out_left, R.anim.animation_slide_in_left, R.anim.animation_slide_out_right)
+        }
+        addFragmentToBackstack(
+                frameId = R.id.threadsActivityFragmentContainer,
+                fragmentClass = TimelineFragment::class.java,
+                params = TimelineArgs(
+                        roomId = timelineEvent.roomId,
+                        threadTimelineArgs = roomThreadDetailArgs
+                ),
+                option = commonOption
+        )
+    }
 
     override fun configure(toolbar: MaterialToolbar) {
         configureToolbar(toolbar)

@@ -1029,7 +1029,8 @@
 
     <!-- Room Threads -->
     <string name="room_threads_filter">Filter Threads in room</string>
-    <string name="room_threads_title">Thread</string>
+    <string name="thread_timeline_title">Thread</string>
+    <string name="thread_list_title">Threads</string>
 
     <!-- Room events -->
     <string name="room_event_action_report_prompt_reason">Reason for reporting this content</string>

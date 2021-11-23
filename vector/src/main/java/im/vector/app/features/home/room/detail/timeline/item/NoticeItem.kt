@@ -77,7 +77,8 @@ abstract class NoticeItem : BaseEventItem<NoticeItem.Holder>() {
             val noticeText: CharSequence,
             val itemLongClickListener: View.OnLongClickListener? = null,
             val readReceiptsCallback: TimelineEventController.ReadReceiptsCallback? = null,
-            val avatarClickListener: ClickListener? = null
+            val avatarClickListener: ClickListener? = null,
+            val threadSummaryClickListener: ClickListener? = null
     )
 
     companion object {

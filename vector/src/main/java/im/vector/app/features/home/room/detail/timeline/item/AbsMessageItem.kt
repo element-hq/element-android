@@ -67,6 +67,11 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
         }
     }
 
+    private val _threadClickListener = object : ClickListener {
+        override fun invoke(p1: View) {
+            attributes.threadCallback?.onThreadSummaryClicked(attributes.informationData.eventId, attributes.threadDetails?.isRootThread ?: false)
+        }
+    }
     override fun bind(holder: H) {
         super.bind(holder)
         if (attributes.informationData.showInformation) {
@@ -107,6 +112,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
 
         // Threads
         if(BuildConfig.THREADING_ENABLED) {
+            holder.threadSummaryConstraintLayout.onClick(_threadClickListener)
             attributes.threadDetails?.let { threadDetails ->
                 holder.threadSummaryConstraintLayout.isVisible = threadDetails.isRootThread
                 holder.threadSummaryCounterTextView.text = threadDetails.numberOfThreads.toString()
@@ -125,6 +131,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
         holder.avatarImageView.setOnLongClickListener(null)
         holder.memberNameView.setOnClickListener(null)
         holder.memberNameView.setOnLongClickListener(null)
+        holder.threadSummaryConstraintLayout.setOnClickListener(null)
         super.unbind(holder)
     }
 
@@ -156,6 +163,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
             val memberClickListener: ClickListener? = null,
             override val reactionPillCallback: TimelineEventController.ReactionPillCallback? = null,
             val avatarCallback: TimelineEventController.AvatarCallback? = null,
+            val threadCallback: TimelineEventController.ThreadCallback? = null,
             override val readReceiptsCallback: TimelineEventController.ReadReceiptsCallback? = null,
             val emojiTypeFace: Typeface? = null,
             val threadDetails: ThreadDetails? = null
