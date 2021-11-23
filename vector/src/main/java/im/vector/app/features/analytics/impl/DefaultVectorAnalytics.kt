@@ -16,14 +16,23 @@
 
 package im.vector.app.features.analytics.impl
 
+import android.content.Context
+import com.posthog.android.PostHog
+import im.vector.app.features.analytics.AnalyticsConfig
 import im.vector.app.features.analytics.VectorAnalytics
 import im.vector.app.features.analytics.store.AnalyticsStore
 import kotlinx.coroutines.flow.Flow
+import timber.log.Timber
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class DefaultVectorAnalytics @Inject constructor(
+        private val context: Context,
         private val analyticsStore: AnalyticsStore
 ) : VectorAnalytics {
+    private var posthog: PostHog? = null
+
     override fun getUserConsent(): Flow<Boolean> {
         return analyticsStore.userConsentFlow
     }
@@ -51,5 +60,30 @@ class DefaultVectorAnalytics @Inject constructor(
     override suspend fun onSignOut() {
         // reset the analyticsId
         setAnalyticsId("")
+    }
+
+    override fun init() {
+        val config: AnalyticsConfig = AnalyticsConfig.getConfig()
+                ?: return Unit.also { Timber.w("Analytics is disabled") }
+
+        posthog = PostHog.Builder(context, config.postHogApiKey, config.postHogHost)
+                // Record certain application events automatically! (off/false by default)
+                // .captureApplicationLifecycleEvents()
+
+                // Record screen views automatically! (off/false by default)
+                // .recordScreenViews()
+
+                // Capture deep links as part of the screen call. (off by default)
+                // .captureDeepLinks()
+
+                // Maximum number of events to keep in queue before flushing (20)
+                // .flushQueueSize(20)
+
+                // Max delay before flushing the queue (30 seconds)
+                // .flushInterval(30, TimeUnit.SECONDS)
+
+                // Enable or disable collection of ANDROID_ID (true)
+                .collectDeviceId(false)
+                .build()
     }
 }
