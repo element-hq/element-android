@@ -227,13 +227,16 @@ class VoiceMessageHelper @Inject constructor(
         playbackTicker = null
     }
 
+    fun clearTracker() {
+        playbackTracker.clear()
+    }
+
     fun stopAllVoiceActions(deleteRecord: Boolean = true): MultiPickerAudioType? {
         val audioType = stopRecording()
         stopPlayback()
         if (deleteRecord) {
             deleteRecording()
         }
-        playbackTracker.clear()
         return audioType
     }
 }

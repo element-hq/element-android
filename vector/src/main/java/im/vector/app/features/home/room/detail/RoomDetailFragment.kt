@@ -241,7 +241,6 @@ class RoomDetailFragment @Inject constructor(
         autoCompleterFactory: AutoCompleter.Factory,
         private val permalinkHandler: PermalinkHandler,
         private val notificationDrawerManager: NotificationDrawerManager,
-        val messageComposerViewModelFactory: MessageComposerViewModel.Factory,
         private val eventHtmlRenderer: EventHtmlRenderer,
         private val vectorPreferences: VectorPreferences,
         private val colorProvider: ColorProvider,
@@ -1141,6 +1140,7 @@ class RoomDetailFragment @Inject constructor(
     override fun onPause() {
         super.onPause()
         notificationDrawerManager.setCurrentRoom(null)
+        voiceMessagePlaybackTracker.unTrack(VoiceMessagePlaybackTracker.RECORDING_ID)
         messageComposerViewModel.handle(MessageComposerAction.OnEntersBackground(views.composerLayout.text.toString()))
     }
 
