@@ -18,6 +18,7 @@ package im.vector.app.features.analytics.impl
 
 import android.content.Context
 import com.posthog.android.PostHog
+import com.posthog.android.Properties
 import im.vector.app.features.analytics.AnalyticsConfig
 import im.vector.app.features.analytics.VectorAnalytics
 import im.vector.app.features.analytics.store.AnalyticsStore
@@ -60,6 +61,8 @@ class DefaultVectorAnalytics @Inject constructor(
     override suspend fun onSignOut() {
         // reset the analyticsId
         setAnalyticsId("")
+        // reset the library
+        posthog?.reset()
     }
 
     override fun init() {
@@ -85,5 +88,16 @@ class DefaultVectorAnalytics @Inject constructor(
                 // Enable or disable collection of ANDROID_ID (true)
                 .collectDeviceId(false)
                 .build()
+    }
+
+    override fun capture(event: String, properties: Map<String, Any>?) {
+        posthog?.capture(
+                event,
+                properties?.let { props ->
+                    Properties().apply {
+                        props.forEach { putValue(it.key, it.value) }
+                    }
+                }
+        )
     }
 }

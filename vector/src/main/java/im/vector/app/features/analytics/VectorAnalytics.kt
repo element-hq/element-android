@@ -58,4 +58,9 @@ interface VectorAnalytics {
      * To be called when application is started
      */
     fun init()
+
+    /**
+     * Capture an Event
+     */
+    fun capture(event: String, properties: Map<String, Any>? = null)
 }
