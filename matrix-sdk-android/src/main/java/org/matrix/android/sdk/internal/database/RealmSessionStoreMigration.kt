@@ -24,10 +24,8 @@ import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRulesContent
 import org.matrix.android.sdk.api.session.room.model.VersioningState
 import org.matrix.android.sdk.api.session.room.model.create.RoomCreateContent
-import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
 import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntityFields
-import org.matrix.android.sdk.internal.database.model.DraftEntityFields
 import org.matrix.android.sdk.internal.database.model.EditAggregatedSummaryEntityFields
 import org.matrix.android.sdk.internal.database.model.EditionOfEventFields
 import org.matrix.android.sdk.internal.database.model.EventEntityFields

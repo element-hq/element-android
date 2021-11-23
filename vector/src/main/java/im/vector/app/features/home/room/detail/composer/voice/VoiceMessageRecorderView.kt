@@ -90,7 +90,7 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
             override fun onWaveformClicked() {
                 when (lastKnownState) {
                     RecordingUiState.Draft  -> callback.onVoicePlaybackButtonClicked()
-                    RecordingUiState.Started,
+                    RecordingUiState.Recording,
                     RecordingUiState.Locked -> callback.onRecordingWaveformClicked()
                 }
             }
@@ -114,16 +114,16 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
         if (lastKnownState == recordingState) return
         lastKnownState = recordingState
         when (recordingState) {
-            RecordingUiState.None    -> {
+            RecordingUiState.Idle      -> {
                 reset()
             }
-            RecordingUiState.Started -> {
+            RecordingUiState.Recording -> {
                 startRecordingTicker()
                 voiceMessageViews.renderToast(context.getString(R.string.voice_message_release_to_send_toast))
                 voiceMessageViews.showRecordingViews()
                 dragState = DraggingState.Ready
             }
-            RecordingUiState.Locked  -> {
+            RecordingUiState.Locked    -> {
                 voiceMessageViews.renderLocked()
                 postDelayed({
                     voiceMessageViews.showRecordingLockedViews(recordingState)
@@ -212,8 +212,8 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
     }
 
     sealed interface RecordingUiState {
-        object None : RecordingUiState
-        object Started : RecordingUiState
+        object Idle : RecordingUiState
+        object Recording : RecordingUiState
         object Locked : RecordingUiState
         object Draft : RecordingUiState
     }

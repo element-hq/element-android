@@ -48,14 +48,14 @@ data class MessageComposerViewState(
         val canSendMessage: Boolean = true,
         val isSendButtonVisible: Boolean = false,
         val sendMode: SendMode = SendMode.Regular("", false),
-        val voiceRecordingUiState: VoiceMessageRecorderView.RecordingUiState = VoiceMessageRecorderView.RecordingUiState.None
+        val voiceRecordingUiState: VoiceMessageRecorderView.RecordingUiState = VoiceMessageRecorderView.RecordingUiState.Idle
 ) : MavericksState {
 
     val isVoiceRecording = when (voiceRecordingUiState) {
-        VoiceMessageRecorderView.RecordingUiState.None    -> false
+        VoiceMessageRecorderView.RecordingUiState.Idle      -> false
         VoiceMessageRecorderView.RecordingUiState.Locked,
         VoiceMessageRecorderView.RecordingUiState.Draft,
-        VoiceMessageRecorderView.RecordingUiState.Started -> true
+        VoiceMessageRecorderView.RecordingUiState.Recording -> true
     }
 
     val isVoiceMessageIdle = !isVoiceRecording

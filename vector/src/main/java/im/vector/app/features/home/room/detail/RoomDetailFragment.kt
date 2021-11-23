@@ -28,7 +28,6 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.text.Spannable
 import android.text.format.DateUtils
-import android.util.Log
 import android.view.HapticFeedbackConstants
 import android.view.KeyEvent
 import android.view.LayoutInflater
@@ -516,7 +515,7 @@ class RoomDetailFragment @Inject constructor(
 
     private fun onCannotRecord() {
         // Update the UI, cancel the animation
-        messageComposerViewModel.handle(MessageComposerAction.OnVoiceRecordingUiStateChanged(RecordingUiState.None))
+        messageComposerViewModel.handle(MessageComposerAction.OnVoiceRecordingUiStateChanged(RecordingUiState.Idle))
     }
 
     private fun acceptIncomingCall(event: RoomDetailViewEvents.DisplayAndAcceptCall) {
@@ -710,7 +709,7 @@ class RoomDetailFragment @Inject constructor(
                 if (checkPermissions(PERMISSIONS_FOR_VOICE_MESSAGE, requireActivity(), permissionVoiceMessageLauncher)) {
                     messageComposerViewModel.handle(MessageComposerAction.StartRecordingVoiceMessage)
                     vibrate(requireContext())
-                    updateRecordingUiState(RecordingUiState.Started)
+                    updateRecordingUiState(RecordingUiState.Recording)
                 }
             }
 
@@ -721,7 +720,7 @@ class RoomDetailFragment @Inject constructor(
             override fun onVoiceRecordingCancelled() {
                 messageComposerViewModel.handle(MessageComposerAction.EndRecordingVoiceMessage(isCancelled = true))
                 vibrate(requireContext())
-                updateRecordingUiState(RecordingUiState.None)
+                updateRecordingUiState(RecordingUiState.Idle)
             }
 
             override fun onVoiceRecordingLocked() {
@@ -734,12 +733,12 @@ class RoomDetailFragment @Inject constructor(
 
             override fun onSendVoiceMessage() {
                 messageComposerViewModel.handle(MessageComposerAction.EndRecordingVoiceMessage(isCancelled = false))
-                updateRecordingUiState(RecordingUiState.None)
+                updateRecordingUiState(RecordingUiState.Idle)
             }
 
             override fun onDeleteVoiceMessage() {
                 messageComposerViewModel.handle(MessageComposerAction.EndRecordingVoiceMessage(isCancelled = true))
-                updateRecordingUiState(RecordingUiState.None)
+                updateRecordingUiState(RecordingUiState.Idle)
             }
 
             override fun onRecordingLimitReached() {

@@ -197,7 +197,7 @@ class VoiceMessageViews(
         }
 
         // Hide toasts if user cancelled recording before the timeout of the toast.
-        if (recordingState == RecordingUiState.None) {
+        if (recordingState == RecordingUiState.Idle) {
             hideToast()
         }
     }
@@ -261,7 +261,7 @@ class VoiceMessageViews(
     }
 
     fun showDraftViews() {
-        hideRecordingViews(RecordingUiState.None)
+        hideRecordingViews(RecordingUiState.Idle)
         views.voiceMessageMicButton.isVisible = false
         views.voiceMessageSendButton.isVisible = true
         views.voiceMessagePlaybackLayout.isVisible = true
@@ -285,7 +285,7 @@ class VoiceMessageViews(
     }
 
     fun initViews() {
-        hideRecordingViews(RecordingUiState.None)
+        hideRecordingViews(RecordingUiState.Idle)
         views.voiceMessageMicButton.isVisible = true
         views.voiceMessageSendButton.isVisible = false
         views.voicePlaybackWaveform.post { views.voicePlaybackWaveform.recreate() }
