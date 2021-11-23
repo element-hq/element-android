@@ -676,7 +676,7 @@ class RoomDetailViewModel @AssistedInject constructor(
         if (initialState.isThreadTimeline()) {
             when (itemId) {
                 R.id.menu_thread_timeline_more -> true
-                else                                   -> false
+                else                           -> false
             }
         } else {
             when (itemId) {
@@ -688,7 +688,7 @@ class RoomDetailViewModel @AssistedInject constructor(
                 // Show Join conference button only if there is an active conf id not joined. Otherwise fallback to default video disabled. ^
                 R.id.join_conference  -> !state.isWebRTCCallOptionAvailable() && state.jitsiState.confId != null && !state.jitsiState.hasJoined
                 R.id.search           -> true
-                R.id.threads          -> true
+                R.id.threads          -> BuildConfig.THREADING_ENABLED
                 R.id.dev_tools        -> vectorPreferences.developerMode()
                 else                  -> false
             }

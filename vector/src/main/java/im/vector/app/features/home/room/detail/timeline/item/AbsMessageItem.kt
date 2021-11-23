@@ -114,9 +114,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
                 threadDetails.threadSummarySenderInfo?.let { senderInfo ->
                     attributes.avatarRenderer.render(MatrixItem.UserItem(senderInfo.userId, senderInfo.displayName, senderInfo.avatarUrl), holder.threadSummaryAvatarImageView)
                 }
-            }
-        }else{
-            holder.threadSummaryConstraintLayout.isVisible = false
+            } ?: run{holder.threadSummaryConstraintLayout.isVisible = false}
         }
     }
 

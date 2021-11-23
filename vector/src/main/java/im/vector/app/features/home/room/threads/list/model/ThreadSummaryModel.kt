@@ -37,7 +37,7 @@ abstract class ThreadSummaryModel : VectorEpoxyModel<ThreadSummaryModel.Holder>(
     @EpoxyAttribute lateinit var rootMessage: String
     @EpoxyAttribute lateinit var lastMessage: String
     @EpoxyAttribute lateinit var lastMessageCounter: String
-    @EpoxyAttribute lateinit var lastMessageMatrixItem: MatrixItem
+    @EpoxyAttribute var lastMessageMatrixItem: MatrixItem? = null
 
     override fun bind(holder: Holder) {
         super.bind(holder)
@@ -48,8 +48,10 @@ abstract class ThreadSummaryModel : VectorEpoxyModel<ThreadSummaryModel.Holder>(
         holder.rootMessageTextView.text = rootMessage
 
         // Last message summary
-        avatarRenderer.render(lastMessageMatrixItem, holder.lastMessageAvatarImageView)
-        holder.lastMessageAvatarImageView.contentDescription = lastMessageMatrixItem.getBestName()
+        lastMessageMatrixItem?.let {
+            avatarRenderer.render(it, holder.lastMessageAvatarImageView)
+        }
+        holder.lastMessageAvatarImageView.contentDescription = lastMessageMatrixItem?.getBestName()
         holder.lastMessageTextView.text = lastMessage
         holder.lastMessageCounterTextView.text = lastMessageCounter
     }

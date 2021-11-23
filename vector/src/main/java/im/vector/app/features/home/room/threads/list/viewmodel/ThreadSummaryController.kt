@@ -17,13 +17,16 @@
 package im.vector.app.features.home.room.threads.list.viewmodel
 
 import com.airbnb.epoxy.EpoxyController
+import im.vector.app.core.date.DateFormatKind
+import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.threads.list.model.threadSummary
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
 class ThreadSummaryController @Inject constructor(
-        private val avatarRenderer: AvatarRenderer
+        private val avatarRenderer: AvatarRenderer,
+        private val dateFormatter: VectorDateFormatter
 ) : EpoxyController() {
 
     var listener: Listener? = null
@@ -53,12 +56,13 @@ class ThreadSummaryController @Inject constructor(
         // this one is added to the breadcrumbs
         safeViewState.rootThreadEventList.invoke()
                 ?.forEach { timelineEvent ->
+                    val date = dateFormatter.format(timelineEvent.root.originServerTs, DateFormatKind.ROOM_LIST)
                     threadSummary {
                         id(timelineEvent.eventId)
                         avatarRenderer(host.avatarRenderer)
                         matrixItem(timelineEvent.senderInfo.toMatrixItem())
                         title(timelineEvent.senderInfo.displayName)
-                        date(timelineEvent.root.ageLocalTs.toString())
+                        date(date)
                         rootMessage(timelineEvent.root.getDecryptedUserFriendlyTextSummary())
                         lastMessage(timelineEvent.root.threadDetails?.threadSummaryLatestTextMessage.orEmpty())
                         lastMessageCounter(timelineEvent.root.threadDetails?.numberOfThreads.toString())

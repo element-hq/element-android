@@ -125,6 +125,9 @@ class MessageItemFactory @Inject constructor(
         pillsPostProcessorFactory.create(roomId)
     }
 
+
+
+
     fun create(params: TimelineItemFactoryParams): VectorEpoxyModel<*>? {
         val event = params.event
         val highlight = params.isHighlighted
@@ -149,7 +152,10 @@ class MessageItemFactory @Inject constructor(
             // This is an edit event, we should display it when debugging as a notice event
             return noticeItemFactory.create(params)
         }
-        val attributes = messageItemAttributesFactory.create(messageContent, informationData, callback, event.root.threadDetails)
+
+        // always hide summary when we are on thread timeline
+        val threadDetails = if(params.isFromThreadTimeline()) null else event.root.threadDetails
+        val attributes = messageItemAttributesFactory.create(messageContent, informationData, callback, threadDetails)
 
 //        val all = event.root.toContent()
 //        val ev = all.toModel<Event>()
@@ -174,6 +180,9 @@ class MessageItemFactory @Inject constructor(
         }
     }
 
+    private fun isFromThreadTimeline(params: TimelineItemFactoryParams){
+        params.rootThreadEventId
+    }
     private fun buildOptionsMessageItem(messageContent: MessageOptionsContent,
                                         informationData: MessageInformationData,
                                         highlight: Boolean,

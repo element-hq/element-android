@@ -331,6 +331,10 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                 add(EventSharedAction.ReplyInThread(eventId))
             }
 
+            if (canViewInRoom(timelineEvent, messageContent, actionPermissions)) {
+                add(EventSharedAction.ViewInRoom)
+            }
+
             if (canEdit(timelineEvent, session.myUserId, actionPermissions)) {
                 add(EventSharedAction.Edit(eventId))
             }
@@ -417,6 +421,11 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
         }
     }
 
+    /**
+     * Determine whether or not the Reply In Thread bottom sheet setting will be visible
+     * to the user
+     */
+    // TODO handle reply in thread for images etc
     private fun canReplyInThread(event: TimelineEvent,
                                  messageContent: MessageContent?,
                                  actionPermissions: ActionPermissions): Boolean {
@@ -436,6 +445,32 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
             else                     -> false
         }
     }
+
+    /**
+     * Determine whether or no the selected event is a root thread event from within
+     * a thread timeline
+     */
+    private fun canViewInRoom(event: TimelineEvent,
+                                 messageContent: MessageContent?,
+                                 actionPermissions: ActionPermissions): Boolean {
+        // Only event of type EventType.MESSAGE are supported for the moment
+        if (!BuildConfig.THREADING_ENABLED) return false
+        if (!initialState.isFromThreadTimeline) return  false
+        if (event.root.getClearType() != EventType.MESSAGE) return false
+        if (!actionPermissions.canSendMessage) return false
+
+        return when (messageContent?.msgType) {
+            MessageType.MSGTYPE_TEXT -> event.root.threadDetails?.isRootThread ?: false
+//            MessageType.MSGTYPE_NOTICE,
+//            MessageType.MSGTYPE_EMOTE,
+//            MessageType.MSGTYPE_IMAGE,
+//            MessageType.MSGTYPE_VIDEO,
+//            MessageType.MSGTYPE_AUDIO,
+//            MessageType.MSGTYPE_FILE -> true
+            else                     -> false
+        }
+    }
+
 
     private fun canQuote(event: TimelineEvent, messageContent: MessageContent?, actionPermissions: ActionPermissions): Boolean {
         // Only event of type EventType.MESSAGE are supported for the moment

@@ -20,12 +20,13 @@
         style="@style/Widget.Vector.TextView.Caption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:minEms="1"
         android:layout_marginStart="5dp"
         android:textColor="?vctr_content_secondary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/messageThreadSummaryImageView"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="187" />
+        tools:text="192" />
 
     <ImageView
         android:id="@+id/messageThreadSummaryAvatarImageView"
