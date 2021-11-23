@@ -27,11 +27,13 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.model.relation.RelationDefaultContent
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.threads.ThreadDetails
+import org.matrix.android.sdk.api.util.ContentUtils
 import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.internal.crypto.algorithms.olm.OlmDecryptionResult
 import org.matrix.android.sdk.internal.crypto.model.event.EncryptedEventContent
 import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.session.presence.model.PresenceContent
+import org.matrix.android.sdk.internal.session.room.send.removeInReplyFallbacks
 import timber.log.Timber
 
 typealias Content = JsonDict
@@ -188,14 +190,39 @@ data class Event(
         return contentMap?.let { JSONObject(adapter.toJson(it)).toString(4) }
     }
 
-    fun getDecryptedMessageText(): String {
-        return getValueFromPayload(mxDecryptionResult?.payload).orEmpty()
+    /**
+     * Returns a user friendly content depending on the message type.
+     * It can be used especially for message summaries.
+     * It will return a decrypted text message or an empty string otherwise.
+     */
+    fun getDecryptedUserFriendlyTextSummary(): String {
+        val text = getDecryptedValue().orEmpty()
+        return when {
+            isReply() || isQuote() -> ContentUtils.extractUsefulTextFromReply(text)
+            isFileMessage()        -> "sent a file."
+            isAudioMessage()       -> "sent an audio file."
+            isImageMessage()       -> "sent an image."
+            isVideoMessage()       -> "sent a video."
+            else                   -> text
+        }
     }
 
-    @Suppress("UNCHECKED_CAST")
-    private fun getValueFromPayload(payload: JsonDict?, key: String = "body"): String? {
-        val content = payload?.get("content") as? JsonDict
-        return content?.get(key) as? String
+    private fun Event.isQuote(): Boolean {
+        if (isReply()) return false
+        return getDecryptedValue("formatted_body")?.contains("<blockquote>") ?: false
+    }
+
+    /**
+     * Decrypt the message, or return the pure payload value if there is no encryption
+     */
+    private fun getDecryptedValue(key: String = "body"): String? {
+        return if (isEncrypted()) {
+            @Suppress("UNCHECKED_CAST")
+            val content = mxDecryptionResult?.payload?.get("content") as? JsonDict
+            content?.get(key) as? String
+        } else {
+            content?.get(key) as? String
+        }
     }
 
     /**

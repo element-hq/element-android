@@ -168,7 +168,11 @@ internal class DefaultTimeline(
                     TimelineEventEntity
                             .whereRoomId(realm, roomId = roomId)
                             .equalTo(TimelineEventEntityFields.ROOT.ROOT_THREAD_EVENT_ID, it)
-                            .sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.DESCENDING).findAll()
+                            .or()
+                            .equalTo(TimelineEventEntityFields.ROOT.EVENT_ID, rootThreadEventId)
+                            .sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.DESCENDING)
+                            .findAll()
+
                 } ?: buildEventQuery(realm).sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.DESCENDING).findAll()
 
                 timelineEvents.addChangeListener(eventsChangeListener)

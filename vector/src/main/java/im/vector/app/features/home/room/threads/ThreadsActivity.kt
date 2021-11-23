@@ -25,14 +25,13 @@ import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
-import im.vector.app.core.platform.VectorViewModelAction
 import im.vector.app.databinding.ActivityThreadsBinding
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.arguments.TimelineArgs
 import im.vector.app.features.home.room.detail.TimelineFragment
 import im.vector.app.features.home.room.threads.arguments.ThreadListArgs
 import im.vector.app.features.home.room.threads.arguments.ThreadTimelineArgs
-import im.vector.app.features.home.room.threads.detail.ThreadListFragment
+import im.vector.app.features.home.room.threads.list.views.ThreadListFragment
 import javax.inject.Inject
 
 class ThreadsActivity : VectorBaseActivity<ActivityThreadsBinding>(), ToolbarConfigurable {

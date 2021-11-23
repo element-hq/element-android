@@ -517,4 +517,14 @@ class DefaultNavigator @Inject constructor(
                 threadTimelineArgs =  threadTimelineArgs,
                 threadListArgs =null))
     }
+    override fun openThreadList(context: Context, threadTimelineArgs: ThreadTimelineArgs) {
+        context.startActivity(ThreadsActivity.newIntent(
+                context = context,
+                threadTimelineArgs =  null,
+                threadListArgs = ThreadListArgs(
+                        roomId = threadTimelineArgs.roomId,
+                        displayName = threadTimelineArgs.displayName,
+                        avatarUrl = threadTimelineArgs.avatarUrl
+                )))
+    }
 }

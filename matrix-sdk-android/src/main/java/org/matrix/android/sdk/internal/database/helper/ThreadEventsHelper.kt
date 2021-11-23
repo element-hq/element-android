@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.internal.database.helper
 
 import io.realm.Realm
+import io.realm.RealmQuery
 import io.realm.RealmResults
 import io.realm.Sort
 import org.matrix.android.sdk.BuildConfig
@@ -82,7 +83,17 @@ internal fun EventEntity.findAllThreadsForRootEventId(realm: Realm, rootThreadEv
         TimelineEventEntity
                 .whereRoomId(realm, roomId = roomId)
                 .equalTo(TimelineEventEntityFields.ROOT.ROOT_THREAD_EVENT_ID, rootThreadEventId)
-                .sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.DESCENDING).findAll()
+                .sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.DESCENDING)
+                .findAll()
 
 
+/**
+ * Find all TimelineEventEntity that are root threads for the specified room
+ * @param roomId The room that all stored root threads will be returned
+ */
+internal fun TimelineEventEntity.Companion.findAllThreadsForRoomId(realm: Realm, roomId: String): RealmQuery<TimelineEventEntity> =
+        TimelineEventEntity
+                .whereRoomId(realm, roomId = roomId)
+                .equalTo(TimelineEventEntityFields.ROOT.IS_ROOT_THREAD,true)
+                .sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.DESCENDING)
 

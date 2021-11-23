@@ -27,6 +27,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
+import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.onClick
@@ -105,14 +106,17 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
         holder.eventSendingIndicator.isVisible = attributes.informationData.sendStateDecoration == SendStateDecoration.SENDING_MEDIA
 
         // Threads
-        attributes.threadDetails?.let { threadDetails ->
-            threadDetails.isRootThread
-            holder.threadSummaryConstraintLayout.isVisible = threadDetails.isRootThread
-            holder.threadSummaryCounterTextView.text = threadDetails.numberOfThreads.toString()
-            holder.threadSummaryInfoTextView.text = threadDetails.threadSummaryLatestTextMessage
-            threadDetails.threadSummarySenderInfo?.let { senderInfo ->
-                attributes.avatarRenderer.render(MatrixItem.UserItem(senderInfo.userId, senderInfo.displayName, senderInfo.avatarUrl), holder.threadSummaryAvatarImageView)
+        if(BuildConfig.THREADING_ENABLED) {
+            attributes.threadDetails?.let { threadDetails ->
+                holder.threadSummaryConstraintLayout.isVisible = threadDetails.isRootThread
+                holder.threadSummaryCounterTextView.text = threadDetails.numberOfThreads.toString()
+                holder.threadSummaryInfoTextView.text = threadDetails.threadSummaryLatestTextMessage
+                threadDetails.threadSummarySenderInfo?.let { senderInfo ->
+                    attributes.avatarRenderer.render(MatrixItem.UserItem(senderInfo.userId, senderInfo.displayName, senderInfo.avatarUrl), holder.threadSummaryAvatarImageView)
+                }
             }
+        }else{
+            holder.threadSummaryConstraintLayout.isVisible = false
         }
     }
 

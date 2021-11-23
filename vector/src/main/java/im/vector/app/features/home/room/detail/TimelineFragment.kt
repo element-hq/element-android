@@ -68,6 +68,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.jakewharton.rxbinding3.view.focusChanges
 import com.jakewharton.rxbinding3.widget.textChanges
 import com.vanniktech.emoji.EmojiPopup
+import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.dialogs.ConfirmationDialogBuilder
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
@@ -971,7 +972,7 @@ class TimelineFragment @Inject constructor(
                 true
             }
             R.id.threads                           -> {
-                requireActivity().toast("View All Threads")
+                navigateToThreadList()
                 true
             }
             R.id.search                            -> {
@@ -1776,7 +1777,7 @@ class TimelineFragment @Inject constructor(
                 roomDetailViewModel.handle(RoomDetailAction.TapOnFailedToDecrypt(informationData.eventId))
             }
         }
-        if (isRootThreadEvent) {
+        if (BuildConfig.THREADING_ENABLED && isRootThreadEvent && !isThreadTimeLine()) {
             navigateToThreadTimeline(informationData.eventId)
         }
     }
@@ -2136,8 +2137,8 @@ class TimelineFragment @Inject constructor(
     }
 
     /**
-     * Navigate to Threads timeline for the specified threadRootEventId
-     * using the RoomThreadDetailActivity
+     * Navigate to Threads timeline for the specified rootThreadEventId
+     * using the ThreadsActivity
      */
 
     private fun navigateToThreadTimeline(rootThreadEventId: String) {
@@ -2148,6 +2149,21 @@ class TimelineFragment @Inject constructor(
                     avatarUrl = roomDetailViewModel.getRoomSummary()?.avatarUrl,
                     rootThreadEventId = rootThreadEventId)
             navigator.openThread(it, roomThreadDetailArgs)
+        }
+    }
+
+    /**
+     * Navigate to Threads list for the current room
+     * using the ThreadsActivity
+     */
+
+    private fun navigateToThreadList() {
+        context?.let {
+            val roomThreadDetailArgs = ThreadTimelineArgs(
+                    roomId = timelineArgs.roomId,
+                    displayName = roomDetailViewModel.getRoomSummary()?.displayName,
+                    avatarUrl = roomDetailViewModel.getRoomSummary()?.avatarUrl)
+            navigator.openThreadList(it, roomThreadDetailArgs)
         }
     }
 

@@ -21,5 +21,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class ThreadListArgs(
-        val roomId: String
+        val roomId: String,
+        val displayName: String?,
+        val avatarUrl: String?,
 ) : Parcelable

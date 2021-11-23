@@ -55,4 +55,17 @@ interface TimelineService {
      * Returns a snapshot list of TimelineEvent with EventType.MESSAGE and MessageType.MSGTYPE_IMAGE or MessageType.MSGTYPE_VIDEO.
      */
     fun getAttachmentMessages(): List<TimelineEvent>
+
+    /**
+     * Get a live list of all the thread for the specified roomId
+     * @return the [LiveData] of [TimelineEvent]
+     */
+    fun getAllThreadsLive(): LiveData<List<TimelineEvent>>
+
+    /**
+     * Get a list of all the thread for the specified roomId
+     * @return the [LiveData] of [TimelineEvent]
+     */
+    fun getAllThreads(): List<TimelineEvent>
+
 }
