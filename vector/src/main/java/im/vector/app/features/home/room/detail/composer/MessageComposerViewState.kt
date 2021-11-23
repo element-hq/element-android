@@ -19,7 +19,6 @@ package im.vector.app.features.home.room.detail.composer
 import com.airbnb.mvrx.MavericksState
 import im.vector.app.features.home.room.detail.RoomDetailArgs
 import im.vector.app.features.home.room.detail.composer.voice.VoiceMessageRecorderView
-import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 
 /**
@@ -54,11 +53,10 @@ data class MessageComposerViewState(
 
     val isVoiceRecording = when (voiceRecordingUiState) {
         VoiceMessageRecorderView.RecordingUiState.None,
-        VoiceMessageRecorderView.RecordingUiState.Cancelled,
-        VoiceMessageRecorderView.RecordingUiState.Playback -> false
+        VoiceMessageRecorderView.RecordingUiState.Cancelled -> false
         VoiceMessageRecorderView.RecordingUiState.Locked,
         VoiceMessageRecorderView.RecordingUiState.Draft,
-        VoiceMessageRecorderView.RecordingUiState.Started  -> true
+        VoiceMessageRecorderView.RecordingUiState.Started   -> true
     }
 
     val isVoiceMessageIdle = !isVoiceRecording

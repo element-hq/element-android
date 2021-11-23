@@ -743,12 +743,12 @@ class RoomDetailFragment @Inject constructor(
 
             override fun onRecordingLimitReached() {
                 messageComposerViewModel.handle(MessageComposerAction.PauseRecordingVoiceMessage)
-                updateRecordingUiState(RecordingUiState.Playback)
+                updateRecordingUiState(RecordingUiState.Draft)
             }
 
             override fun onRecordingWaveformClicked() {
                 messageComposerViewModel.handle(MessageComposerAction.PauseRecordingVoiceMessage)
-                updateRecordingUiState(RecordingUiState.Playback)
+                updateRecordingUiState(RecordingUiState.Draft)
             }
 
             private fun updateRecordingUiState(state: RecordingUiState) {

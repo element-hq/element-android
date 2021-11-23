@@ -87,7 +87,14 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
 
             override fun onSendVoiceMessage() = callback.onSendVoiceMessage()
             override fun onDeleteVoiceMessage() = callback.onDeleteVoiceMessage()
-            override fun onWaveformClicked() = callback.onRecordingWaveformClicked()
+            override fun onWaveformClicked() {
+                when (lastKnownState) {
+                    RecordingUiState.Draft  -> callback.onVoicePlaybackButtonClicked()
+                    RecordingUiState.Started,
+                    RecordingUiState.Locked -> callback.onRecordingWaveformClicked()
+                }
+            }
+
             override fun onVoicePlaybackButtonClicked() = callback.onVoicePlaybackButtonClicked()
             override fun onMicButtonDrag(nextDragStateCreator: (DraggingState) -> DraggingState) {
                 onDrag(dragState, newDragState = nextDragStateCreator(dragState))
@@ -126,11 +133,8 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
                     voiceMessageViews.showRecordingLockedViews(recordingState)
                 }, 500)
             }
-            RecordingUiState.Playback  -> {
-                stopRecordingTicker()
-                voiceMessageViews.showPlaybackViews()
-            }
             RecordingUiState.Draft     -> {
+                stopRecordingTicker()
                 voiceMessageViews.showDraftViews()
             }
         }
@@ -216,7 +220,6 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
         object Started : RecordingUiState
         object Cancelled : RecordingUiState
         object Locked : RecordingUiState
-        object Playback : RecordingUiState
         object Draft : RecordingUiState
     }
 

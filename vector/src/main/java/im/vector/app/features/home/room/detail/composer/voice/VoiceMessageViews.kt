@@ -265,7 +265,6 @@ class VoiceMessageViews(
         views.voiceMessageMicButton.isVisible = false
         views.voiceMessageSendButton.isVisible = true
         views.voiceMessagePlaybackLayout.isVisible = true
-        views.voicePlaybackWaveform.recreate()
         showPlaybackViews()
     }
 
