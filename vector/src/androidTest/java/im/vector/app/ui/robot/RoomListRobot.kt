@@ -27,6 +27,7 @@ import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import im.vector.app.R
 import im.vector.app.espresso.tools.waitUntilActivityVisible
+import im.vector.app.espresso.tools.waitUntilViewVisible
 import im.vector.app.features.roomdirectory.RoomDirectoryActivity
 
 class RoomListRobot {
@@ -49,7 +50,9 @@ class RoomListRobot {
     }
 
     fun newRoom(block: NewRoomRobot.() -> Unit) {
-        clickOn(R.id.createGroupRoomButton)
+        clickOn(R.id.createRoomFabMenu)
+        waitUntilViewVisible(ViewMatchers.withId(R.id.joinForumItemGroup))
+        clickOn(R.id.joinForumItemGroup)
         waitUntilActivityVisible<RoomDirectoryActivity> {
             BaristaVisibilityAssertions.assertDisplayed(R.id.publicRoomsList)
         }
