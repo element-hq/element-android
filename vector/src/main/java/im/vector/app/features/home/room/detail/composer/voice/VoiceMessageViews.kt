@@ -265,7 +265,9 @@ class VoiceMessageViews(
         views.voiceMessageMicButton.isVisible = false
         views.voiceMessageSendButton.isVisible = true
         views.voiceMessagePlaybackLayout.isVisible = true
-        showPlaybackViews()
+        views.voiceMessagePlaybackTimerIndicator.isVisible = false
+        views.voicePlaybackControlButton.isVisible = true
+        views.voicePlaybackWaveform.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
     }
 
     fun showRecordingLockedViews(recordingState: RecordingUiState) {
@@ -276,12 +278,6 @@ class VoiceMessageViews(
         views.voiceMessageSendButton.isVisible = true
         views.voicePlaybackWaveform.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_YES
         renderToast(resources.getString(R.string.voice_message_tap_to_stop_toast))
-    }
-
-    fun showPlaybackViews() {
-        views.voiceMessagePlaybackTimerIndicator.isVisible = false
-        views.voicePlaybackControlButton.isVisible = true
-        views.voicePlaybackWaveform.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
     }
 
     fun initViews() {
