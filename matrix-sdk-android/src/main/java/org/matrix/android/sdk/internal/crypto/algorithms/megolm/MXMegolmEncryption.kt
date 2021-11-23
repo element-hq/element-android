@@ -285,7 +285,7 @@ internal class MXMegolmEncryption(
                 gossipingEventBuffer.add(
                         Event(
                                 type = EventType.ROOM_KEY,
-                                senderId = this.myUserId,
+                                senderId = myUserId,
                                 content = submap.apply {
                                     this["session_key"] = ""
                                     // we add a fake key for trail

@@ -33,7 +33,7 @@ import org.matrix.android.sdk.internal.session.initsync.ProgressReporter
 import timber.log.Timber
 import javax.inject.Inject
 
-private val loggerTag = LoggerTag("MXMegolmEncryption", LoggerTag.CRYPTO)
+private val loggerTag = LoggerTag("CryptoSyncHandler", LoggerTag.CRYPTO)
 
 internal class CryptoSyncHandler @Inject constructor(private val cryptoService: DefaultCryptoService,
                                                      private val verificationService: DefaultVerificationService) {
