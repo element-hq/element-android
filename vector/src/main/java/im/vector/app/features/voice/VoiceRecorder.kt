@@ -22,10 +22,9 @@ import java.io.File
 interface VoiceRecorder {
     /**
      * Initialize recording with a pre-recorded file.
-     * @param roomId room id to initialize draft record
      * @param attachmentData data of the recorded file
      */
-    fun initializeRecord(roomId: String, attachmentData: ContentAttachmentData)
+    fun initializeRecord(attachmentData: ContentAttachmentData)
 
     /**
      * Start the recording

@@ -754,7 +754,7 @@ class MessageComposerViewModel @AssistedInject constructor(
     }
 
     private fun handleInitializeVoiceRecorder(attachmentData: ContentAttachmentData) {
-        voiceMessageHelper.initializeRecorder(room.roomId, attachmentData)
+        voiceMessageHelper.initializeRecorder(attachmentData)
         setState { copy(voiceRecordingUiState = VoiceMessageRecorderView.RecordingUiState.Draft) }
     }
 

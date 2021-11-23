@@ -18,8 +18,8 @@ package im.vector.app.features.voice
 
 import android.content.Context
 import android.media.MediaRecorder
+import android.net.Uri
 import android.os.Build
-import im.vector.app.core.intent.getFilenameFromUri
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import org.matrix.android.sdk.internal.util.md5
 import java.io.File
@@ -61,11 +61,8 @@ abstract class AbstractVoiceRecorder(
         }
     }
 
-    override fun initializeRecord(roomId: String, attachmentData: ContentAttachmentData) {
-        getFilenameFromUri(context, attachmentData.queryUri)?.let {
-            val voiceMessageFolder = File(outputDirectory, roomId.md5())
-            outputFile = File(voiceMessageFolder, it)
-        }
+    override fun initializeRecord(attachmentData: ContentAttachmentData) {
+        outputFile = attachmentData.findVoiceFile(outputDirectory)
     }
 
     override fun startRecord(roomId: String) {
@@ -114,4 +111,12 @@ abstract class AbstractVoiceRecorder(
     override fun getVoiceMessageFile(): File? {
         return convertFile(outputFile)
     }
+}
+
+private fun ContentAttachmentData.findVoiceFile(baseDirectory: File): File {
+    return File(baseDirectory, queryUri.takePathAfter(baseDirectory.name))
+}
+
+private fun Uri.takePathAfter(after: String): String {
+    return pathSegments.takeLastWhile { it != after }.joinToString(separator = "/") { it }
 }
