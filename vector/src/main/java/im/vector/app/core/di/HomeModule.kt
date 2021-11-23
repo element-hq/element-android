@@ -28,7 +28,6 @@ import im.vector.app.features.home.room.detail.timeline.helper.TimelineAsyncHelp
 @InstallIn(ActivityComponent::class)
 object HomeModule {
     @Provides
-    @JvmStatic
     @TimelineEventControllerHandler
     fun providesTimelineBackgroundHandler(): Handler {
         return TimelineAsyncHelper.getBackgroundHandler()

@@ -90,7 +90,6 @@ class NotificationRendererTest {
     fun `given a room message group notification is added when rendering then show the message notification and update summary`() {
         givenNotifications(roomNotifications = listOf(RoomNotification.Message(
                 A_NOTIFICATION,
-                shortcutInfo = null,
                 MESSAGE_META
         )))
 

@@ -9,7 +9,7 @@
         <item name="iconGravity">start</item>
         <item name="android:textSize">14sp</item>
         <item name="android:textAlignment">center</item>
-        <item name="android:paddingStart">2dp</item>
+        <item name="android:paddingStart">4dp</item>
         <!-- Compensate icon size to center text correctly-->
         <item name="android:paddingEnd">38dp</item>
         <item name="android:clipToPadding">false</item>

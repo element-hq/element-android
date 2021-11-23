@@ -41,7 +41,7 @@ import im.vector.app.features.home.PromoteRestrictedViewModel
 import im.vector.app.features.home.UnknownDeviceDetectorSharedViewModel
 import im.vector.app.features.home.UnreadMessagesSharedViewModel
 import im.vector.app.features.home.room.breadcrumbs.BreadcrumbsViewModel
-import im.vector.app.features.home.room.detail.composer.TextComposerViewModel
+import im.vector.app.features.home.room.detail.RoomDetailViewModel
 import im.vector.app.features.home.room.detail.search.SearchViewModel
 import im.vector.app.features.home.room.detail.timeline.action.MessageActionsViewModel
 import im.vector.app.features.home.room.detail.timeline.edithistory.ViewEditHistoryViewModel
@@ -54,6 +54,7 @@ import im.vector.app.features.login.LoginViewModel
 import im.vector.app.features.login2.LoginViewModel2
 import im.vector.app.features.login2.created.AccountCreatedViewModel
 import im.vector.app.features.matrixto.MatrixToBottomSheetViewModel
+import im.vector.app.features.poll.create.CreatePollViewModel
 import im.vector.app.features.rageshake.BugReportViewModel
 import im.vector.app.features.reactions.EmojiSearchResultViewModel
 import im.vector.app.features.room.RequireActiveMembershipViewModel
@@ -504,8 +505,8 @@ interface MavericksViewModelModule {
 
     @Binds
     @IntoMap
-    @MavericksViewModelKey(TextComposerViewModel::class)
-    fun textComposerViewModelFactory(factory: TextComposerViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+    @MavericksViewModelKey(RoomDetailViewModel::class)
+    fun roomDetailViewModelFactory(factory: RoomDetailViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
 
     @Binds
     @IntoMap
@@ -546,4 +547,9 @@ interface MavericksViewModelModule {
     @IntoMap
     @MavericksViewModelKey(VerificationBottomSheetViewModel::class)
     fun verificationBottomSheetViewModelFactory(factory: VerificationBottomSheetViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(CreatePollViewModel::class)
+    fun createPollViewModelFactory(factory: CreatePollViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
 }

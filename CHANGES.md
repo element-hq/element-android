@@ -1,3 +1,35 @@
+Changes in Element v1.3.8 (2021-11-17)
+======================================
+
+Features ✨
+----------
+ - Android 12 support ([#4433](https://github.com/vector-im/element-android/issues/4433))
+ - Make notification text spoiler aware ([#3477](https://github.com/vector-im/element-android/issues/3477))
+ - Poll Feature - Create Poll Screen (Disabled for now) ([#4367](https://github.com/vector-im/element-android/issues/4367))
+ - Adds support for images inside message notifications ([#4402](https://github.com/vector-im/element-android/issues/4402))
+
+Bugfixes 🐛
+----------
+ - Render markdown in room list ([#452](https://github.com/vector-im/element-android/issues/452))
+ - Fix incorrect cropping of conversation icons ([#4424](https://github.com/vector-im/element-android/issues/4424))
+ - Fix potential NullPointerException crashes in Room and User account data sources ([#4428](https://github.com/vector-im/element-android/issues/4428))
+ - Unable to establish Olm outbound session from fallback key ([#4446](https://github.com/vector-im/element-android/issues/4446))
+ - Fixes intermittent crash on sign out due to the session being incorrectly recreated whilst being closed ([#4480](https://github.com/vector-im/element-android/issues/4480))
+
+SDK API changes ⚠️
+------------------
+ - Add content scanner API from MSC1453
+  API documentation : https://github.com/matrix-org/matrix-content-scanner#api ([#4392](https://github.com/vector-im/element-android/issues/4392))
+ - Breaking SDK API change to PushRuleListener, the separated callbacks have been merged into one with a data class which includes all the previously separated push information ([#4401](https://github.com/vector-im/element-android/issues/4401))
+
+Other changes
+-------------
+ - Finish migration from RxJava to Flow ([#4219](https://github.com/vector-im/element-android/issues/4219))
+ - Remove redundant text in feature request issue form ([#4257](https://github.com/vector-im/element-android/issues/4257))
+ - Add and improve issue triage workflows ([#4435](https://github.com/vector-im/element-android/issues/4435))
+ - Update issue template to bring in line with element-web ([#4452](https://github.com/vector-im/element-android/issues/4452))
+
+
 Changes in Element v1.3.7 (2021-11-04)
 ======================================
 

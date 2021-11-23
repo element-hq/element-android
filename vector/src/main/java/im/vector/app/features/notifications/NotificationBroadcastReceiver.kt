@@ -49,26 +49,26 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
             NotificationUtils.SMART_REPLY_ACTION        ->
                 handleSmartReply(intent, context)
             NotificationUtils.DISMISS_ROOM_NOTIF_ACTION ->
-                intent.getStringExtra(KEY_ROOM_ID)?.let {
-                    notificationDrawerManager.clearMessageEventOfRoom(it)
+                intent.getStringExtra(KEY_ROOM_ID)?.let { roomId ->
+                    notificationDrawerManager.updateEvents { it.clearMessagesForRoom(roomId) }
                 }
             NotificationUtils.DISMISS_SUMMARY_ACTION    ->
                 notificationDrawerManager.clearAllEvents()
             NotificationUtils.MARK_ROOM_READ_ACTION     ->
-                intent.getStringExtra(KEY_ROOM_ID)?.let {
-                    notificationDrawerManager.clearMessageEventOfRoom(it)
-                    handleMarkAsRead(it)
+                intent.getStringExtra(KEY_ROOM_ID)?.let { roomId ->
+                    notificationDrawerManager.updateEvents { it.clearMessagesForRoom(roomId) }
+                    handleMarkAsRead(roomId)
                 }
             NotificationUtils.JOIN_ACTION               -> {
-                intent.getStringExtra(KEY_ROOM_ID)?.let {
-                    notificationDrawerManager.clearMemberShipNotificationForRoom(it)
-                    handleJoinRoom(it)
+                intent.getStringExtra(KEY_ROOM_ID)?.let { roomId ->
+                    notificationDrawerManager.updateEvents { it.clearMemberShipNotificationForRoom(roomId) }
+                    handleJoinRoom(roomId)
                 }
             }
             NotificationUtils.REJECT_ACTION             -> {
-                intent.getStringExtra(KEY_ROOM_ID)?.let {
-                    notificationDrawerManager.clearMemberShipNotificationForRoom(it)
-                    handleRejectRoom(it)
+                intent.getStringExtra(KEY_ROOM_ID)?.let { roomId ->
+                    notificationDrawerManager.updateEvents { it.clearMemberShipNotificationForRoom(roomId) }
+                    handleRejectRoom(roomId)
                 }
             }
         }
@@ -138,6 +138,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
                         ?: context?.getString(R.string.notification_sender_me),
                 senderId = session.myUserId,
                 body = message,
+                imageUri = null,
                 roomId = room.roomId,
                 roomName = room.roomSummary()?.displayName ?: room.roomId,
                 roomIsDirect = room.roomSummary()?.isDirect == true,
@@ -145,8 +146,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
                 canBeReplaced = false
         )
 
-        notificationDrawerManager.onNotifiableEventReceived(notifiableMessageEvent)
-        notificationDrawerManager.refreshNotificationDrawer()
+        notificationDrawerManager.updateEvents { it.onNotifiableEventReceived(notifiableMessageEvent) }
 
         /*
         // TODO Error cannot be managed the same way than in Riot

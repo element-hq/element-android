@@ -46,7 +46,7 @@ class RageShake @Inject constructor(private val activity: FragmentActivity,
 
         shakeDetector = ShakeDetector(this).apply {
             setSensitivity(vectorPreferences.getRageshakeSensitivity())
-            start(sensorManager)
+            start(sensorManager, SensorManager.SENSOR_DELAY_GAME)
         }
     }
 

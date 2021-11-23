@@ -17,9 +17,8 @@
 package im.vector.app.features.call.webrtc
 
 import android.content.Context
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.OnLifecycleEvent
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import im.vector.app.ActiveSessionDataSource
 import im.vector.app.BuildConfig
 import im.vector.app.core.resources.StringArrayProvider
@@ -73,7 +72,8 @@ class WebRtcCallManager @Inject constructor(
         private val context: Context,
         private val activeSessionDataSource: ActiveSessionDataSource,
         private var vectorPreferences: VectorPreferences
-) : CallListener, LifecycleObserver {
+) : CallListener,
+        DefaultLifecycleObserver {
 
     private val currentSession: Session?
         get() = activeSessionDataSource.currentValue?.orNull()
@@ -136,13 +136,11 @@ class WebRtcCallManager @Inject constructor(
 
     private var isInBackground: Boolean = true
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-    fun entersForeground() {
+    override fun onResume(owner: LifecycleOwner) {
         isInBackground = false
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
-    fun entersBackground() {
+    override fun onPause(owner: LifecycleOwner) {
         isInBackground = true
     }
 

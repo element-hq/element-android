@@ -23,7 +23,7 @@ import java.io.File
 import java.io.FileOutputStream
 
 abstract class AbstractVoiceRecorder(
-        context: Context,
+        private val context: Context,
         private val filenameExt: String
 ) : VoiceRecorder {
     private val outputDirectory: File by lazy {
@@ -39,12 +39,21 @@ abstract class AbstractVoiceRecorder(
     abstract fun convertFile(recordedFile: File?): File?
 
     private fun init() {
-        MediaRecorder().let {
+        createMediaRecorder().let {
             it.setAudioSource(MediaRecorder.AudioSource.DEFAULT)
             setOutputFormat(it)
             it.setAudioEncodingBitRate(24000)
             it.setAudioSamplingRate(48000)
             mediaRecorder = it
+        }
+    }
+
+    private fun createMediaRecorder(): MediaRecorder {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            MediaRecorder(context)
+        } else {
+            @Suppress("DEPRECATION")
+            MediaRecorder()
         }
     }
 
