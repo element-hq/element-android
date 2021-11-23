@@ -1377,6 +1377,9 @@
     <string name="template_settings_opt_in_of_analytics_prompt">Please enable analytics to help us improve ${app_name}.</string>
     <string name="settings_opt_in_of_analytics_ok">Yes, I want to help!</string>
 
+    <!-- analytics v2 -->
+    <string name="analytics_consent_splash">Send anonymous usage data to element.io</string>
+
     <string name="settings_data_save_mode">Data save mode</string>
     <string name="settings_data_save_mode_summary">Data save mode applies a specific filter so presence updates and typing notifications are filtered out.</string>
 
