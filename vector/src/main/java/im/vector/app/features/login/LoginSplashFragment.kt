@@ -27,6 +27,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.databinding.FragmentLoginSplashBinding
+import im.vector.app.features.analytics.AnalyticsConfig
 import im.vector.app.features.analytics.ui.consent.AnalyticsConsentViewActions
 import im.vector.app.features.analytics.ui.consent.AnalyticsConsentViewModel
 import im.vector.app.features.analytics.ui.consent.AnalyticsConsentViewState
@@ -64,6 +65,7 @@ class LoginSplashFragment @Inject constructor(
     private fun setupViews() {
         views.loginSplashSubmit.debouncedClicks { getStarted() }
         // setOnCheckedChangeListener is to annoying since it does not distinguish user changes and code changes
+        views.loginSplashAnalyticsConsent.isVisible = AnalyticsConfig.isAnalyticsEnabled()
         views.loginSplashAnalyticsConsent.setOnClickListener {
             analyticsConsentViewModel.handle(AnalyticsConsentViewActions.SetUserConsent(
                     views.loginSplashAnalyticsConsent.isChecked

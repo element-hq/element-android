@@ -233,6 +233,10 @@ android {
             // Set to true if you want to enable strict mode in debug
             buildConfigField "boolean", "ENABLE_STRICT_MODE_LOGS", "false"
 
+            // Analytics. Set to empty strings to just disable analytics
+            buildConfigField "String", "ANALYTICS_POSTHOG_HOST", "\"https://posthog.hss.element.io/\""
+            buildConfigField "String", "ANALYTICS_POSTHOG_API_KEY", "\"TODO\""
+
             signingConfig signingConfigs.debug
         }
 
@@ -242,6 +246,10 @@ android {
             resValue "bool", "debug_mode", "false"
             buildConfigField "boolean", "LOW_PRIVACY_LOG_ENABLE", "false"
             buildConfigField "boolean", "ENABLE_STRICT_MODE_LOGS", "false"
+
+            // Analytics. Set to empty strings to just disable analytics
+            buildConfigField "String", "ANALYTICS_POSTHOG_HOST", "\"https://posthog-poc.lab.element.dev/\""
+            buildConfigField "String", "ANALYTICS_POSTHOG_API_KEY", "\"TODO\""
 
             postprocessing {
                 removeUnusedCode true
