@@ -161,7 +161,7 @@ dependencies {
     implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.37'
 
     testImplementation libs.tests.junit
-    testImplementation 'org.robolectric:robolectric:4.7.1'
+    testImplementation 'org.robolectric:robolectric:4.7.2'
     //testImplementation 'org.robolectric:shadows-support-v4:3.0'
     // Note: version sticks to 1.9.2 due to https://github.com/mockk/mockk/issues/281
     testImplementation libs.mockk.mockk
