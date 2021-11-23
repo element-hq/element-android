@@ -29,17 +29,17 @@ import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
  *
  * Depending on the state the bottom toolbar will change (icons/preview/actions...)
  */
-sealed class SendMode(open val text: String) {
+sealed interface SendMode {
     data class Regular(
-            override val text: String,
+            val text: String,
             val fromSharing: Boolean,
             // This is necessary for forcing refresh on selectSubscribe
             private val ts: Long = System.currentTimeMillis()
-    ) : SendMode(text)
+    ) : SendMode
 
-    data class Quote(val timelineEvent: TimelineEvent, override val text: String) : SendMode(text)
-    data class Edit(val timelineEvent: TimelineEvent, override val text: String) : SendMode(text)
-    data class Reply(val timelineEvent: TimelineEvent, override val text: String) : SendMode(text)
+    data class Quote(val timelineEvent: TimelineEvent, val text: String) : SendMode
+    data class Edit(val timelineEvent: TimelineEvent, val text: String) : SendMode
+    data class Reply(val timelineEvent: TimelineEvent, val text: String) : SendMode
 }
 
 data class MessageComposerViewState(
