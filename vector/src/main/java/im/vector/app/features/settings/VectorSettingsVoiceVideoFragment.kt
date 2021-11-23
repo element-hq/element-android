@@ -54,7 +54,7 @@ class VectorSettingsVoiceVideoFragment : VectorSettingsBaseFragment() {
 
         useDefaultStunPreference.let {
             val stun = getString(R.string.fallback_stun_server_url)
-            it.summary = getString(R.string.settings_call_ringtone_use_default_stun_sum, stun)
+            it.summary = getString(R.string.settings_call_ringtone_use_default_stun_summary, stun)
         }
 
         mCallRingtonePreference.let {

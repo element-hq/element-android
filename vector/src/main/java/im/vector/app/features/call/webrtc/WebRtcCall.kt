@@ -115,8 +115,7 @@ class WebRtcCall(
         private val peerConnectionFactoryProvider: Provider<PeerConnectionFactory?>,
         private val onCallBecomeActive: (WebRtcCall) -> Unit,
         private val onCallEnded: (String, EndCallReason, Boolean) -> Unit,
-        private var vectorPreferences: VectorPreferences,
-        private val stringArrayProvider: StringArrayProvider
+        private var vectorPreferences: VectorPreferences
 ) : MxCall.StateListener {
 
     interface Listener : MxCall.StateListener {
@@ -286,15 +285,22 @@ class WebRtcCall(
         val iceServers = mutableListOf<PeerConnection.IceServer>().apply {
             turnServerResponse?.let { server ->
                 val useFallback = server.uris?.isEmpty() == true && vectorPreferences.useFallbackTurnServer()
-                val serverList = if (useFallback) stringArrayProvider.getStringArray(R.array.fallback_ice_servers).toList() else server.uris
+                val serverList = if (useFallback) listOf("stun:" + R.string.fallback_stun_server_url) else server.uris
                 serverList?.forEach { uri ->
                     add(
-                            PeerConnection
-                                    .IceServer
-                                    .builder(uri)
-                                    .setUsername(if (useFallback) "xxxxx" else server.username)
-                                    .setPassword(if (useFallback) "xxxxx" else server.password)
-                                    .createIceServer()
+                            if (useFallback)
+                                PeerConnection
+                                        .IceServer
+                                        .builder(uri)
+                                        .createIceServer()
+                            else
+                                PeerConnection
+                                        .IceServer
+                                        .builder(uri)
+                                        .setUsername(server.username)
+                                        .setPassword(server.password)
+                                        .createIceServer()
+
                     )
                 }
             }

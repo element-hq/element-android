@@ -72,8 +72,7 @@ private val loggerTag = LoggerTag("WebRtcCallManager", LoggerTag.VOIP)
 class WebRtcCallManager @Inject constructor(
         private val context: Context,
         private val activeSessionDataSource: ActiveSessionDataSource,
-        private var vectorPreferences: VectorPreferences,
-        private val stringArrayProvider: StringArrayProvider
+        private var vectorPreferences: VectorPreferences
 ) : CallListener, LifecycleObserver {
 
     private val currentSession: Session?
@@ -333,8 +332,7 @@ class WebRtcCallManager @Inject constructor(
                 sessionProvider = { currentSession },
                 onCallBecomeActive = this::onCallActive,
                 onCallEnded = this::onCallEnded,
-                vectorPreferences = vectorPreferences,
-                stringArrayProvider = stringArrayProvider
+                vectorPreferences = vectorPreferences
         )
         advertisedCalls.add(mxCall.callId)
         callsByCallId[mxCall.callId] = webRtcCall
