@@ -285,7 +285,7 @@ class WebRtcCall(
         val peerConnectionFactory = peerConnectionFactoryProvider.get() ?: return
         val iceServers = mutableListOf<PeerConnection.IceServer>().apply {
             turnServerResponse?.let { server ->
-                val useFallback = server.uris.isNullOrEmpty() && vectorPreferences.useFallbackTurnServer()
+                val useFallback = server.uris?.isEmpty() == true && vectorPreferences.useFallbackTurnServer()
                 val serverList = if (useFallback) stringArrayProvider.getStringArray(R.array.fallback_ice_servers).toList() else server.uris
                 serverList?.forEach { uri ->
                     add(
