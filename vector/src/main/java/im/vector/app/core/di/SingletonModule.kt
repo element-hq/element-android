@@ -31,6 +31,8 @@ import im.vector.app.core.error.DefaultErrorFormatter
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.time.Clock
 import im.vector.app.core.time.DefaultClock
+import im.vector.app.features.analytics.VectorAnalytics
+import im.vector.app.features.analytics.impl.DefaultVectorAnalytics
 import im.vector.app.features.invite.AutoAcceptInvites
 import im.vector.app.features.invite.CompileTimeAutoAcceptInvites
 import im.vector.app.features.navigation.DefaultNavigator
@@ -56,6 +58,9 @@ abstract class VectorBindModule {
 
     @Binds
     abstract fun bindNavigator(navigator: DefaultNavigator): Navigator
+
+    @Binds
+    abstract fun bindVectorAnalytics(analytics: DefaultVectorAnalytics): VectorAnalytics
 
     @Binds
     abstract fun bindErrorFormatter(formatter: DefaultErrorFormatter): ErrorFormatter
