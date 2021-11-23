@@ -58,10 +58,7 @@ data class MessageComposerViewState(
         VoiceMessageRecorderView.RecordingUiState.Started  -> true
     }
 
-    val isVoiceMessageIdle = when (voiceRecordingUiState) {
-        VoiceMessageRecorderView.RecordingUiState.None, VoiceMessageRecorderView.RecordingUiState.Cancelled -> false
-        else                                                                                                -> true
-    }
+    val isVoiceMessageIdle = !isVoiceRecording
 
     val isComposerVisible = canSendMessage && !isVoiceRecording
     val isVoiceMessageRecorderVisible = canSendMessage && !isSendButtonVisible
