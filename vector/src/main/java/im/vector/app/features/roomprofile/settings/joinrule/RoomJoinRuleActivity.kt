@@ -27,8 +27,8 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.viewModel
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.extensions.commitTransaction
@@ -40,30 +40,22 @@ import im.vector.app.features.home.room.detail.upgrade.MigrateRoomBottomSheet
 import im.vector.app.features.roomprofile.RoomProfileArgs
 import im.vector.app.features.roomprofile.settings.joinrule.advanced.RoomJoinRuleChooseRestrictedActions
 import im.vector.app.features.roomprofile.settings.joinrule.advanced.RoomJoinRuleChooseRestrictedEvents
+import im.vector.app.features.roomprofile.settings.joinrule.advanced.RoomJoinRuleChooseRestrictedFragment
 import im.vector.app.features.roomprofile.settings.joinrule.advanced.RoomJoinRuleChooseRestrictedState
 import im.vector.app.features.roomprofile.settings.joinrule.advanced.RoomJoinRuleChooseRestrictedViewModel
 import javax.inject.Inject
 
-class RoomJoinRuleActivity : VectorBaseActivity<ActivitySimpleBinding>(),
-        RoomJoinRuleChooseRestrictedViewModel.Factory {
+@AndroidEntryPoint
+class RoomJoinRuleActivity : VectorBaseActivity<ActivitySimpleBinding>() {
 
     override fun getBinding() = ActivitySimpleBinding.inflate(layoutInflater)
 
     private lateinit var roomProfileArgs: RoomProfileArgs
 
     @Inject
-    lateinit var allowListViewModelFactory: RoomJoinRuleChooseRestrictedViewModel.Factory
-
-    @Inject
     lateinit var errorFormatter: ErrorFormatter
 
     val viewModel: RoomJoinRuleChooseRestrictedViewModel by viewModel()
-
-    override fun create(initialState: RoomJoinRuleChooseRestrictedState) = allowListViewModelFactory.create(initialState)
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
 
     override fun initUiAndData() {
         roomProfileArgs = intent?.extras?.getParcelable(Mavericks.KEY_ARG) ?: return

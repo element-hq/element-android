@@ -9,6 +9,7 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/formTextInputTextInputLayout"
+        style="@style/Widget.Vector.TextInputLayout.Form"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/layout_horizontal_margin"

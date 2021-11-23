@@ -21,11 +21,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
+import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.extensions.addFragmentToBackstack
@@ -37,14 +38,12 @@ import im.vector.app.core.utils.onPermissionDeniedSnackbar
 import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.core.utils.toast
 import im.vector.app.features.contactsbook.ContactsBookFragment
-import im.vector.app.features.contactsbook.ContactsBookViewModel
-import im.vector.app.features.contactsbook.ContactsBookViewState
 import im.vector.app.features.userdirectory.UserListFragment
 import im.vector.app.features.userdirectory.UserListFragmentArgs
 import im.vector.app.features.userdirectory.UserListSharedAction
 import im.vector.app.features.userdirectory.UserListSharedActionViewModel
-import im.vector.app.features.userdirectory.UserListViewModel
-import im.vector.app.features.userdirectory.UserListViewState
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.failure.Failure
 import java.net.HttpURLConnection
@@ -53,25 +52,12 @@ import javax.inject.Inject
 @Parcelize
 data class InviteUsersToRoomArgs(val roomId: String) : Parcelable
 
-class InviteUsersToRoomActivity : SimpleFragmentActivity(), UserListViewModel.Factory, ContactsBookViewModel.Factory, InviteUsersToRoomViewModel.Factory {
+@AndroidEntryPoint
+class InviteUsersToRoomActivity : SimpleFragmentActivity() {
 
     private val viewModel: InviteUsersToRoomViewModel by viewModel()
     private lateinit var sharedActionViewModel: UserListSharedActionViewModel
-    @Inject lateinit var userListViewModelFactory: UserListViewModel.Factory
-    @Inject lateinit var inviteUsersToRoomViewModelFactory: InviteUsersToRoomViewModel.Factory
-    @Inject lateinit var contactsBookViewModelFactory: ContactsBookViewModel.Factory
     @Inject lateinit var errorFormatter: ErrorFormatter
-
-    override fun injectWith(injector: ScreenComponent) {
-        super.injectWith(injector)
-        injector.inject(this)
-    }
-
-    override fun create(initialState: UserListViewState) = userListViewModelFactory.create(initialState)
-
-    override fun create(initialState: ContactsBookViewState) = contactsBookViewModelFactory.create(initialState)
-
-    override fun create(initialState: InviteUsersToRoomViewState) = inviteUsersToRoomViewModelFactory.create(initialState)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,8 +66,8 @@ class InviteUsersToRoomActivity : SimpleFragmentActivity(), UserListViewModel.Fa
 
         sharedActionViewModel = viewModelProvider.get(UserListSharedActionViewModel::class.java)
         sharedActionViewModel
-                .observe()
-                .subscribe { sharedAction ->
+                .stream()
+                .onEach { sharedAction ->
                     when (sharedAction) {
                         UserListSharedAction.Close                 -> finish()
                         UserListSharedAction.GoBack                -> onBackPressed()
@@ -92,7 +78,7 @@ class InviteUsersToRoomActivity : SimpleFragmentActivity(), UserListViewModel.Fa
                         }
                     }
                 }
-                .disposeOnDestroy()
+                .launchIn(lifecycleScope)
         if (isFirstCreation()) {
             addFragment(
                     R.id.container,

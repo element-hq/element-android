@@ -17,6 +17,7 @@
 package im.vector.app.features.home.room.list
 
 import androidx.annotation.StringRes
+import androidx.lifecycle.asFlow
 import im.vector.app.AppStateHandler
 import im.vector.app.R
 import im.vector.app.RoomGroupingMethod
@@ -24,25 +25,27 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.home.RoomListDisplayMode
 import im.vector.app.features.invite.AutoAcceptInvites
 import im.vector.app.features.invite.showInvites
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.query.RoomCategoryFilter
 import org.matrix.android.sdk.api.query.RoomTagQueryFilter
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.RoomSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.UpdatableLivePageResult
 import org.matrix.android.sdk.api.session.room.model.Membership
-import org.matrix.android.sdk.rx.asObservable
 
 class RoomListSectionBuilderGroup(
+        private val coroutineScope: CoroutineScope,
         private val session: Session,
         private val stringProvider: StringProvider,
         private val appStateHandler: AppStateHandler,
         private val autoAcceptInvites: AutoAcceptInvites,
         private val onUpdatable: (UpdatableLivePageResult) -> Unit
 ) : RoomListSectionBuilder {
-
-    private val disposables = CompositeDisposable()
 
     override fun buildSections(mode: RoomListDisplayMode): List<RoomsSection> {
         val activeGroupAwareQueries = mutableListOf<UpdatableLivePageResult>()
@@ -103,16 +106,14 @@ class RoomListSectionBuilderGroup(
 
         appStateHandler.selectedRoomGroupingObservable
                 .distinctUntilChanged()
-                .subscribe { groupingMethod ->
+                .onEach { groupingMethod ->
                     val selectedGroupId = (groupingMethod.orNull() as? RoomGroupingMethod.ByLegacyGroup)?.groupSummary?.groupId
                     activeGroupAwareQueries.onEach { updater ->
                         updater.updateQuery { query ->
                             query.copy(activeGroupId = selectedGroupId)
                         }
                     }
-                }.also {
-                    disposables.add(it)
-                }
+                }.launchIn(coroutineScope)
 
         return sections
     }
@@ -252,15 +253,14 @@ class RoomListSectionBuilderGroup(
                             }.livePagedList
                             .let { livePagedList ->
                                 // use it also as a source to update count
-                                livePagedList.asObservable()
-                                        .observeOn(Schedulers.computation())
-                                        .subscribe {
+                                livePagedList.asFlow()
+                                        .onEach {
                                             sections.find { it.sectionName == name }
                                                     ?.notificationCount
                                                     ?.postValue(session.getNotificationCountForRooms(roomQueryParams))
-                                        }.also {
-                                            disposables.add(it)
                                         }
+                                        .flowOn(Dispatchers.Default)
+                                        .launchIn(coroutineScope)
 
                                 sections.add(
                                         RoomsSection(
@@ -280,9 +280,5 @@ class RoomListSectionBuilderGroup(
                 .apply { builder.invoke(this) }
                 .build()
                 .let { block(it) }
-    }
-
-    override fun dispose() {
-        disposables.dispose()
     }
 }

@@ -28,8 +28,8 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.viewModel
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.commitTransaction
 import im.vector.app.core.extensions.hideKeyboard
@@ -40,23 +40,15 @@ import im.vector.app.databinding.ActivitySimpleLoadingBinding
 import im.vector.app.features.spaces.SpaceBottomSheetSettingsArgs
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class SpaceLeaveAdvancedActivity : VectorBaseActivity<ActivitySimpleLoadingBinding>(),
-        SpaceLeaveAdvancedViewModel.Factory,
         ToolbarConfigurable {
 
     override fun getBinding(): ActivitySimpleLoadingBinding = ActivitySimpleLoadingBinding.inflate(layoutInflater)
 
     val leaveViewModel: SpaceLeaveAdvancedViewModel by viewModel()
 
-    @Inject lateinit var viewModelFactory: SpaceLeaveAdvancedViewModel.Factory
     @Inject lateinit var errorFormatter: ErrorFormatter
-
-    override fun create(initialState: SpaceLeaveAdvanceViewState) = viewModelFactory.create(initialState)
-
-    override fun injectWith(injector: ScreenComponent) {
-        super.injectWith(injector)
-        injector.inject(this)
-    }
 
     override fun showWaitingView(text: String?) {
         hideKeyboard()
@@ -94,7 +86,7 @@ class SpaceLeaveAdvancedActivity : VectorBaseActivity<ActivitySimpleLoadingBindi
     override fun initUiAndData() {
         super.initUiAndData()
         waitingView = views.waitingView.waitingView
-        leaveViewModel.subscribe(this) { state ->
+        leaveViewModel.onEach { state ->
             when (state.leaveState) {
                 is Loading -> {
                     showWaitingView()

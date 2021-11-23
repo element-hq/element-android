@@ -49,7 +49,6 @@ import javax.inject.Inject
  * - the account has been created and we propose the user to set an avatar and a display name
  */
 class AccountCreatedFragment @Inject constructor(
-        val accountCreatedViewModelFactory: AccountCreatedViewModel.Factory,
         private val avatarRenderer: AvatarRenderer,
         private val dateFormatter: VectorDateFormatter,
         private val matrixItemColorProvider: MatrixItemColorProvider,

@@ -16,15 +16,15 @@
 
 package im.vector.app.features.roomdirectory
 
-import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.roomdirectory.picker.RoomDirectoryListCreator
 import im.vector.app.features.settings.VectorPreferences
@@ -53,17 +53,12 @@ class RoomDirectoryViewModel @AssistedInject constructor(
 ) : VectorViewModel<PublicRoomsViewState, RoomDirectoryAction, RoomDirectoryViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: PublicRoomsViewState): RoomDirectoryViewModel
+    interface Factory : MavericksAssistedViewModelFactory<RoomDirectoryViewModel, PublicRoomsViewState> {
+        override fun create(initialState: PublicRoomsViewState): RoomDirectoryViewModel
     }
 
-    companion object : MavericksViewModelFactory<RoomDirectoryViewModel, PublicRoomsViewState> {
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: PublicRoomsViewState): RoomDirectoryViewModel? {
-            val activity: RoomDirectoryActivity = (viewModelContext as ActivityViewModelContext).activity()
-            return activity.roomDirectoryViewModelFactory.create(state)
-        }
+    companion object : MavericksViewModelFactory<RoomDirectoryViewModel, PublicRoomsViewState> by hiltMavericksViewModelFactory() {
+        private const val PUBLIC_ROOMS_LIMIT = 20
     }
 
     private val showAllRooms = vectorPreferences.showAllPublicRooms()
@@ -79,7 +74,7 @@ class RoomDirectoryViewModel @AssistedInject constructor(
     }
 
     private fun observeAndCompute() {
-        selectSubscribe(
+        onEach(
                 PublicRoomsViewState::asyncThirdPartyRequest
         ) { async ->
             async()?.let {

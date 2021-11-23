@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="im.vector.app">
+
+    <application>
+
+        <!-- Temporary fix for Android 12. android:exported has to be explicitly set when targeting Android 12
+        Do it for services coming from dependencies - BEGIN -->
+        <service
+            android:name="org.jitsi.meet.sdk.ConnectionService"
+            android:exported="false"
+            tools:node="merge" />
+        <service
+            android:name="org.jitsi.meet.sdk.JitsiMeetOngoingConferenceService"
+            android:exported="false"
+            tools:node="merge" />
+        <!-- Temporary fix for Android 12 change - END -->
+
+    </application>
+
+</manifest>

@@ -164,5 +164,36 @@
 
             </LinearLayout>
         </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="16dp"
+            android:baselineAligned="false"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            android:weightSum="3">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageButton
+                    android:id="@+id/attachmentPollButton"
+                    style="@style/AttachmentTypeSelectorButton"
+                    android:contentDescription="@string/attachment_type_poll"
+                    android:src="@drawable/ic_attachment_poll_white_24dp"
+                    tools:background="?colorPrimary" />
+
+                <TextView
+                    style="@style/AttachmentTypeSelectorLabel"
+                    android:importantForAccessibility="no"
+                    android:text="@string/attachment_type_poll" />
+            </LinearLayout>
+        </LinearLayout>
     </LinearLayout>
 </FrameLayout>

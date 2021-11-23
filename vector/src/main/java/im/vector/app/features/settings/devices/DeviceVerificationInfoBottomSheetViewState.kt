@@ -23,6 +23,7 @@ import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
 
 data class DeviceVerificationInfoBottomSheetViewState(
+        val deviceId: String,
         val cryptoDeviceInfo: Async<CryptoDeviceInfo?> = Uninitialized,
         val deviceInfo: Async<DeviceInfo> = Uninitialized,
         val hasAccountCrossSigning: Boolean = false,
@@ -32,6 +33,7 @@ data class DeviceVerificationInfoBottomSheetViewState(
         val isRecoverySetup: Boolean = false
 ) : MavericksState {
 
-    val canVerifySession: Boolean
-        get() = hasOtherSessions || isRecoverySetup
+    constructor(args: DeviceVerificationInfoArgs) : this(deviceId = args.deviceId)
+
+    val canVerifySession = hasOtherSessions || isRecoverySetup
 }

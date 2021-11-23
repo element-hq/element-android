@@ -49,51 +49,54 @@ internal data class PasswordLoginParams(
 
         fun userIdentifier(user: String,
                            password: String,
-                           deviceDisplayName: String? = null,
-                           deviceId: String? = null): PasswordLoginParams {
+                           deviceDisplayName: String?,
+                           deviceId: String?): PasswordLoginParams {
             return PasswordLoginParams(
-                    mapOf(
+                    identifier = mapOf(
                             IDENTIFIER_KEY_TYPE to IDENTIFIER_KEY_TYPE_USER,
                             IDENTIFIER_KEY_USER to user
                     ),
-                    password,
-                    LoginFlowTypes.PASSWORD,
-                    deviceDisplayName,
-                    deviceId)
+                    password = password,
+                    type = LoginFlowTypes.PASSWORD,
+                    deviceDisplayName = deviceDisplayName,
+                    deviceId = deviceId
+            )
         }
 
         fun thirdPartyIdentifier(medium: String,
                                  address: String,
                                  password: String,
-                                 deviceDisplayName: String? = null,
-                                 deviceId: String? = null): PasswordLoginParams {
+                                 deviceDisplayName: String?,
+                                 deviceId: String?): PasswordLoginParams {
             return PasswordLoginParams(
-                    mapOf(
+                    identifier = mapOf(
                             IDENTIFIER_KEY_TYPE to IDENTIFIER_KEY_TYPE_THIRD_PARTY,
                             IDENTIFIER_KEY_MEDIUM to medium,
                             IDENTIFIER_KEY_ADDRESS to address
                     ),
-                    password,
-                    LoginFlowTypes.PASSWORD,
-                    deviceDisplayName,
-                    deviceId)
+                    password = password,
+                    type = LoginFlowTypes.PASSWORD,
+                    deviceDisplayName = deviceDisplayName,
+                    deviceId = deviceId
+            )
         }
 
         fun phoneIdentifier(country: String,
                             phone: String,
                             password: String,
-                            deviceDisplayName: String? = null,
-                            deviceId: String? = null): PasswordLoginParams {
+                            deviceDisplayName: String?,
+                            deviceId: String?): PasswordLoginParams {
             return PasswordLoginParams(
-                    mapOf(
+                    identifier = mapOf(
                             IDENTIFIER_KEY_TYPE to IDENTIFIER_KEY_TYPE_PHONE,
                             IDENTIFIER_KEY_COUNTRY to country,
                             IDENTIFIER_KEY_PHONE to phone
                     ),
-                    password,
-                    LoginFlowTypes.PASSWORD,
-                    deviceDisplayName,
-                    deviceId)
+                    password = password,
+                    type = LoginFlowTypes.PASSWORD,
+                    deviceDisplayName = deviceDisplayName,
+                    deviceId = deviceId
+            )
         }
     }
 }

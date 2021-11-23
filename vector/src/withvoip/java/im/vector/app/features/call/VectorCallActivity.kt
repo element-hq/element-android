@@ -35,14 +35,15 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.PERMISSIONS_FOR_AUDIO_IP_CALL
@@ -61,7 +62,8 @@ import im.vector.app.features.home.room.detail.RoomDetailActivity
 import im.vector.app.features.home.room.detail.RoomDetailArgs
 import io.github.hyuwah.draggableviewlib.DraggableView
 import io.github.hyuwah.draggableviewlib.setupDraggable
-import io.reactivex.android.schedulers.AndroidSchedulers
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.logger.LoggerTag
@@ -85,20 +87,15 @@ data class CallArgs(
 
 private val loggerTag = LoggerTag("VectorCallActivity", LoggerTag.VOIP)
 
+@AndroidEntryPoint
 class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallControlsView.InteractionListener {
 
     override fun getBinding() = ActivityCallBinding.inflate(layoutInflater)
 
+    @Inject lateinit var callManager: WebRtcCallManager
     @Inject lateinit var avatarRenderer: AvatarRenderer
 
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
-
     private val callViewModel: VectorCallViewModel by viewModel()
-
-    @Inject lateinit var callManager: WebRtcCallManager
-    @Inject lateinit var viewModelFactory: VectorCallViewModel.Factory
 
     private val dialPadCallback = object : DialPadFragment.Callback {
         override fun onDigitAppended(digit: String) {
@@ -135,7 +132,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
         setSupportActionBar(views.callToolbar)
         configureCallViews()
 
-        callViewModel.subscribe(this) {
+        callViewModel.onEach {
             renderState(it)
         }
 
@@ -146,12 +143,11 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
         }
 
         callViewModel.viewEvents
-                .observe()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
+                .stream()
+                .onEach {
                     handleViewEvents(it)
                 }
-                .disposeOnDestroy()
+                .launchIn(lifecycleScope)
 
         callViewModel.onEach(VectorCallViewState::callId, VectorCallViewState::isVideoCall) { _, isVideoCall ->
             if (isVideoCall) {

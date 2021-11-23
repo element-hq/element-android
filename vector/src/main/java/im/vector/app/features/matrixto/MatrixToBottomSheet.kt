@@ -28,8 +28,8 @@ import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.commitTransaction
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.databinding.BottomSheetMatrixToCardBinding
@@ -39,6 +39,7 @@ import org.matrix.android.sdk.api.session.permalinks.PermalinkData
 import javax.inject.Inject
 import kotlin.reflect.KClass
 
+@AndroidEntryPoint
 class MatrixToBottomSheet :
         VectorBaseBottomSheetDialogFragment<BottomSheetMatrixToCardBinding>() {
 
@@ -48,13 +49,6 @@ class MatrixToBottomSheet :
     ) : Parcelable
 
     @Inject lateinit var avatarRenderer: AvatarRenderer
-
-    @Inject
-    lateinit var matrixToBottomSheetViewModelFactory: MatrixToBottomSheetViewModel.Factory
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
 
     var interactionListener: InteractionListener? = null
 

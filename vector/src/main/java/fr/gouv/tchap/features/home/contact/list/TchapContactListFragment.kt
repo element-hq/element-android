@@ -22,11 +22,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.jakewharton.rxbinding3.widget.textChanges
 import fr.gouv.tchap.core.dialogs.InviteByEmailDialog
 import fr.gouv.tchap.features.userdirectory.TchapContactListSharedAction
 import fr.gouv.tchap.features.userdirectory.TchapContactListSharedActionViewModel
@@ -41,8 +41,12 @@ import im.vector.app.core.utils.checkPermissions
 import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.databinding.FragmentTchapContactListBinding
 import im.vector.app.features.userdirectory.PendingSelection
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.user.model.User
+import reactivecircus.flowbinding.android.widget.textChanges
 import javax.inject.Inject
 
 class TchapContactListFragment @Inject constructor(
@@ -82,11 +86,11 @@ class TchapContactListFragment @Inject constructor(
         views.userListFilterGroup.isVisible = args.showFilter
         views.userListSearch
                 .textChanges()
-                .startWith(views.userListSearch.text)
-                .subscribe { text ->
+                .onStart { emit(views.userListSearch.text) }
+                .onEach { text ->
                     searchContactsWith(text.trim().toString())
                 }
-                .disposeOnDestroyView()
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
         views.userListSearch.setupAsSearch()
     }

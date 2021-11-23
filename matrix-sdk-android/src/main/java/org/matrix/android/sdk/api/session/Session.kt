@@ -33,6 +33,7 @@ import org.matrix.android.sdk.api.session.cache.CacheService
 import org.matrix.android.sdk.api.session.call.CallSignalingService
 import org.matrix.android.sdk.api.session.content.ContentUploadStateTracker
 import org.matrix.android.sdk.api.session.content.ContentUrlResolver
+import org.matrix.android.sdk.api.session.contentscanner.ContentScannerService
 import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.events.EventService
 import org.matrix.android.sdk.api.session.file.ContentDownloadStateTracker
@@ -122,9 +123,11 @@ interface Session :
     fun requireBackgroundSync()
 
     /**
-     * Launches infinite periodic background syncs
-     * This does not work in doze mode :/
-     * If battery optimization is on it can work in app standby but that's all :/
+     * Launches infinite self rescheduling background syncs via the WorkManager
+     *
+     * While dozing, syncs will only occur during maintenance windows
+     * For reliability it's recommended to also start a long running foreground service
+     * along with disabling battery optimizations
      */
     fun startAutomaticBackgroundSync(timeOutInSeconds: Long, repeatDelayInSeconds: Long)
 
@@ -191,6 +194,11 @@ interface Session :
      * Returns the cryptoService associated with the session
      */
     fun cryptoService(): CryptoService
+
+    /**
+     * Returns the ContentScannerService associated with the session
+     */
+    fun contentScannerService(): ContentScannerService
 
     /**
      * Returns the identity service associated with the session

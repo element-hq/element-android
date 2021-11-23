@@ -16,20 +16,19 @@
 
 package im.vector.app.features.home.room.detail.composer
 
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MavericksViewModelFactory
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.R
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.command.CommandParser
 import im.vector.app.features.command.ParsedCommand
 import im.vector.app.features.home.room.detail.ChatEffect
-import im.vector.app.features.home.room.detail.RoomDetailFragment
 import im.vector.app.features.home.room.detail.composer.rainbow.RainbowGenerator
 import im.vector.app.features.home.room.detail.toMessageType
 import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
@@ -48,7 +47,6 @@ import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
 import org.matrix.android.sdk.api.session.room.model.RoomAvatarContent
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
-import org.matrix.android.sdk.api.session.room.model.message.OptionItem
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.session.room.send.UserDraft
 import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
@@ -105,7 +103,7 @@ class TextComposerViewModel @AssistedInject constructor(
     }
 
     private fun subscribeToStateInternal() {
-        selectSubscribe(TextComposerViewState::sendMode, TextComposerViewState::canSendMessage, TextComposerViewState::isVoiceRecording) { _, _, _ ->
+        onEach(TextComposerViewState::sendMode, TextComposerViewState::canSendMessage, TextComposerViewState::isVoiceRecording) { _, _, _ ->
             updateIsSendButtonVisibility(false)
         }
     }
@@ -124,7 +122,7 @@ class TextComposerViewModel @AssistedInject constructor(
 
     private fun handleEnterEditMode(action: TextComposerAction.EnterEditMode) {
         room.getTimeLineEvent(action.eventId)?.let { timelineEvent ->
-            setState { copy(sendMode = SendMode.EDIT(timelineEvent, timelineEvent.getTextEditableContent() ?: "")) }
+            setState { copy(sendMode = SendMode.EDIT(timelineEvent, timelineEvent.getTextEditableContent())) }
         }
     }
 
@@ -257,11 +255,6 @@ class TextComposerViewModel @AssistedInject constructor(
                         }
                         is ParsedCommand.SendChatEffect           -> {
                             sendChatEffect(slashCommandResult)
-                            _viewEvents.post(TextComposerViewEvents.SlashCommandResultOk())
-                            popDraft()
-                        }
-                        is ParsedCommand.SendPoll                 -> {
-                            room.sendPoll(slashCommandResult.question, slashCommandResult.options.mapIndexed { index, s -> OptionItem(s, "$index. $s") })
                             _viewEvents.post(TextComposerViewEvents.SlashCommandResultOk())
                             popDraft()
                         }
@@ -710,16 +703,9 @@ class TextComposerViewModel @AssistedInject constructor(
     }
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: TextComposerViewState): TextComposerViewModel
+    interface Factory : MavericksAssistedViewModelFactory<TextComposerViewModel, TextComposerViewState> {
+        override fun create(initialState: TextComposerViewState): TextComposerViewModel
     }
 
-    companion object : MavericksViewModelFactory<TextComposerViewModel, TextComposerViewState> {
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: TextComposerViewState): TextComposerViewModel {
-            val fragment: RoomDetailFragment = (viewModelContext as FragmentViewModelContext).fragment()
-            return fragment.textComposerViewModelFactory.create(state)
-        }
-    }
+    companion object : MavericksViewModelFactory<TextComposerViewModel, TextComposerViewState> by hiltMavericksViewModelFactory()
 }

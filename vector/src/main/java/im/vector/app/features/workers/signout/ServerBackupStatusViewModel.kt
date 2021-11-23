@@ -17,17 +17,16 @@
 package im.vector.app.features.workers.signout
 
 import androidx.lifecycle.MutableLiveData
-import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Uninitialized
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.BuildConfig
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
@@ -69,21 +68,11 @@ class ServerBackupStatusViewModel @AssistedInject constructor(@Assisted initialS
         VectorViewModel<ServerBackupStatusViewState, EmptyAction, EmptyViewEvents>(initialState), KeysBackupStateListener {
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: ServerBackupStatusViewState): ServerBackupStatusViewModel
+    interface Factory : MavericksAssistedViewModelFactory<ServerBackupStatusViewModel, ServerBackupStatusViewState> {
+        override fun create(initialState: ServerBackupStatusViewState): ServerBackupStatusViewModel
     }
 
-    companion object : MavericksViewModelFactory<ServerBackupStatusViewModel, ServerBackupStatusViewState> {
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: ServerBackupStatusViewState): ServerBackupStatusViewModel? {
-            val factory = when (viewModelContext) {
-                is FragmentViewModelContext -> viewModelContext.fragment as? Factory
-                is ActivityViewModelContext -> viewModelContext.activity as? Factory
-            }
-            return factory?.create(state) ?: error("You should let your activity/fragment implements Factory interface")
-        }
-    }
+    companion object : MavericksViewModelFactory<ServerBackupStatusViewModel, ServerBackupStatusViewState> by hiltMavericksViewModelFactory()
 
     // Keys exported manually
     val keysExportedToFile = MutableLiveData<Boolean>()

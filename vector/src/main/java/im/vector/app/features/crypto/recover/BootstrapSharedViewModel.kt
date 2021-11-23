@@ -16,26 +16,24 @@
 
 package im.vector.app.features.crypto.recover
 
-import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
-import com.airbnb.mvrx.ViewModelContext
 import com.nulabinc.zxcvbn.Zxcvbn
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.R
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.platform.WaitingViewData
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.auth.ReAuthActivity
-import im.vector.app.features.login.ReAuthHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.auth.UIABaseAuth
@@ -59,13 +57,11 @@ import kotlin.coroutines.resumeWithException
 
 class BootstrapSharedViewModel @AssistedInject constructor(
         @Assisted initialState: BootstrapViewState,
-        @Assisted val args: BootstrapBottomSheet.Args,
         private val stringProvider: StringProvider,
         private val errorFormatter: ErrorFormatter,
         private val session: Session,
         private val bootstrapTask: BootstrapCrossSigningTask,
         private val migrationTask: BackupToQuadSMigrationTask,
-        private val reAuthHelper: ReAuthHelper
 ) : VectorViewModel<BootstrapViewState, BootstrapActions, BootstrapViewEvents>(initialState) {
 
     private var doesKeyBackupExist: Boolean = false
@@ -73,9 +69,11 @@ class BootstrapSharedViewModel @AssistedInject constructor(
     private val zxcvbn = Zxcvbn()
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: BootstrapViewState, args: BootstrapBottomSheet.Args): BootstrapSharedViewModel
+    interface Factory : MavericksAssistedViewModelFactory<BootstrapSharedViewModel, BootstrapViewState> {
+        override fun create(initialState: BootstrapViewState): BootstrapSharedViewModel
     }
+
+    companion object : MavericksViewModelFactory<BootstrapSharedViewModel, BootstrapViewState> by hiltMavericksViewModelFactory()
 
 //    private var _pendingSession: String? = null
 
@@ -84,7 +82,7 @@ class BootstrapSharedViewModel @AssistedInject constructor(
 
     init {
 
-        when (args.setUpMode) {
+        when (initialState.setupMode) {
             SetupMode.PASSPHRASE_RESET,
             SetupMode.PASSPHRASE_AND_NEEDED_SECRETS_RESET,
             SetupMode.HARD_RESET         -> {
@@ -410,7 +408,7 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                             progressListener = progressListener,
                             passphrase = state.passphrase,
                             keySpec = state.migrationRecoveryKey?.let { extractCurveKeyFromRecoveryKey(it)?.let { RawBytesKeySpec(it) } },
-                            setupMode = args.setUpMode
+                            setupMode = state.setupMode
                     )
             ) { bootstrapResult ->
                 when (bootstrapResult) {
@@ -516,7 +514,7 @@ class BootstrapSharedViewModel @AssistedInject constructor(
             BootstrapStep.CheckingMigration                  -> Unit
             is BootstrapStep.FirstForm                       -> {
                 _viewEvents.post(
-                        when (args.setUpMode) {
+                        when (state.setupMode) {
                             SetupMode.CROSS_SIGNING_ONLY,
                             SetupMode.NORMAL -> BootstrapViewEvents.SkipBootstrap()
                             else             -> BootstrapViewEvents.Dismiss(success = false)
@@ -545,20 +543,6 @@ class BootstrapSharedViewModel @AssistedInject constructor(
             // is BackupToQuadSMigrationTask.Result.NoKeyBackupVersion,
             // is BackupToQuadSMigrationTask.Result.IllegalParams,
             else                                                       -> stringProvider.getString(R.string.unexpected_error)
-        }
-    }
-
-    // ======================================
-    // Companion, view model assisted creation
-    // ======================================
-
-    companion object : MavericksViewModelFactory<BootstrapSharedViewModel, BootstrapViewState> {
-
-        override fun create(viewModelContext: ViewModelContext, state: BootstrapViewState): BootstrapSharedViewModel? {
-            val fragment: BootstrapBottomSheet = (viewModelContext as FragmentViewModelContext).fragment()
-            val args: BootstrapBottomSheet.Args = fragment.arguments?.getParcelable(BootstrapBottomSheet.EXTRA_ARGS)
-                    ?: BootstrapBottomSheet.Args(SetupMode.CROSS_SIGNING_ONLY)
-            return fragment.bootstrapViewModelFactory.create(state, args)
         }
     }
 }

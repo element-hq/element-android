@@ -1,9 +1,9 @@
 name: Sanity Test
 
 on:
-  pull_request: { }
-  push:
-    branches: [ main, develop ]
+  schedule:
+    # At 20:00 every day UTC
+    - cron: '0 20 * * *'
 
 # Enrich gradle.properties for CI/CD
 env:
@@ -14,14 +14,16 @@ env:
 jobs:
   integration-tests:
     name: Sanity Tests (Synapse)
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     if: ${{ false }}
     strategy:
       fail-fast: false
       matrix:
-        api-level: [28]
+        api-level: [ 29 ]
     steps:
       - uses: actions/checkout@v2
+        with:
+          ref: develop
       - name: Set up Python 3.8
         uses: actions/setup-python@v2
         with:
@@ -47,11 +49,32 @@ jobs:
           python3 -m venv .synapse
           source .synapse/bin/activate
           pip install synapse matrix-synapse
-          curl -sL https://raw.githubusercontent.com/matrix-org/synapse/develop/demo/start.sh --no-rate-limit \
-            | sed s/127.0.0.1/0.0.0.0/g | bash
+          curl -sL https://raw.githubusercontent.com/matrix-org/synapse/develop/demo/start.sh \
+            | sed s/127.0.0.1/0.0.0.0/g | sed 's/http:\/\/localhost/http:\/\/10.0.2.2/g' | bash -s -- --no-rate-limit
+      - uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: '11'
       - name: Run sanity tests on API ${{ matrix.api-level }}
         uses: reactivecircus/android-emulator-runner@v2
+        continue-on-error: true # allow pipeline to upload failure results
         with:
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           api-level: ${{ matrix.api-level }}
-          script: ./gradlew $CI_GRADLE_ARG_PROPERTIES -PallWarningsAsErrors=false connectedGplayPreprodWithoutvoipWithoutpinningDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=im.vector.app.ui.UiAllScreensSanityTest
+          emulator-build: 7425822  # workaround to emulator bug: https://github.com/ReactiveCircus/android-emulator-runner/issues/160
+          script: |
+            adb root
+            adb logcat -c
+            touch emulator.log
+            chmod 777 emulator.log
+            adb logcat >> emulator.log &
+            ./gradlew $CI_GRADLE_ARG_PROPERTIES -PallWarningsAsErrors=false connectedGplayPreprodWithoutvoipWithoutpinningDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=im.vector.app.ui.UiAllScreensSanityTest || adb pull storage/emulated/0/Pictures/failure_screenshots
 
+      - name: Upload Failing Test Report Log
+        if: failure()
+        uses: actions/upload-artifact@v2
+        with:
+          name: sanity-error-results
+          path: |
+            emulator.log
+            failure_screenshots/

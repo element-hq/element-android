@@ -17,19 +17,18 @@
 package im.vector.app.features.workers.signout
 
 import android.net.Uri
-import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.BuildConfig
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
@@ -68,21 +67,11 @@ class SignoutCheckViewModel @AssistedInject constructor(
     }
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: SignoutCheckViewState): SignoutCheckViewModel
+    interface Factory : MavericksAssistedViewModelFactory<SignoutCheckViewModel, SignoutCheckViewState> {
+        override fun create(initialState: SignoutCheckViewState): SignoutCheckViewModel
     }
 
-    companion object : MavericksViewModelFactory<SignoutCheckViewModel, SignoutCheckViewState> {
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: SignoutCheckViewState): SignoutCheckViewModel? {
-            val factory = when (viewModelContext) {
-                is FragmentViewModelContext -> viewModelContext.fragment as? Factory
-                is ActivityViewModelContext -> viewModelContext.activity as? Factory
-            }
-            return factory?.create(state) ?: error("You should let your activity/fragment implements Factory interface")
-        }
-    }
+    companion object : MavericksViewModelFactory<SignoutCheckViewModel, SignoutCheckViewState> by hiltMavericksViewModelFactory()
 
     init {
         withState { state ->

@@ -65,6 +65,8 @@ import im.vector.app.features.media.VectorAttachmentViewerActivity
 import im.vector.app.features.pin.PinActivity
 import im.vector.app.features.pin.PinArgs
 import im.vector.app.features.pin.PinMode
+import im.vector.app.features.poll.create.CreatePollActivity
+import im.vector.app.features.poll.create.CreatePollArgs
 import im.vector.app.features.roomdirectory.RoomDirectoryActivity
 import im.vector.app.features.roomdirectory.RoomDirectoryData
 import im.vector.app.features.roomdirectory.createroom.CreateRoomActivity
@@ -510,6 +512,14 @@ class DefaultNavigator @Inject constructor(
 
     override fun openCallTransfer(context: Context, callId: String) {
         val intent = CallTransferActivity.newIntent(context, callId)
+        context.startActivity(intent)
+    }
+
+    override fun openCreatePoll(context: Context, roomId: String) {
+        val intent = CreatePollActivity.getIntent(
+                context,
+                CreatePollArgs(roomId = roomId)
+        )
         context.startActivity(intent)
     }
 

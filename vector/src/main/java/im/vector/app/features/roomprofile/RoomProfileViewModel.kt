@@ -17,13 +17,13 @@
 
 package im.vector.app.features.roomprofile
 
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MavericksViewModelFactory
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.R
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
@@ -53,18 +53,11 @@ class RoomProfileViewModel @AssistedInject constructor(
 ) : VectorViewModel<RoomProfileViewState, RoomProfileAction, RoomProfileViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: RoomProfileViewState): RoomProfileViewModel
+    interface Factory : MavericksAssistedViewModelFactory<RoomProfileViewModel, RoomProfileViewState> {
+        override fun create(initialState: RoomProfileViewState): RoomProfileViewModel
     }
 
-    companion object : MavericksViewModelFactory<RoomProfileViewModel, RoomProfileViewState> {
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: RoomProfileViewState): RoomProfileViewModel? {
-            val fragment: RoomProfileFragment = (viewModelContext as FragmentViewModelContext).fragment()
-            return fragment.roomProfileViewModelFactory.create(state)
-        }
-    }
+    companion object : MavericksViewModelFactory<RoomProfileViewModel, RoomProfileViewState> by hiltMavericksViewModelFactory()
 
     private val room = session.getRoom(initialState.roomId)!!
 

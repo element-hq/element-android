@@ -24,10 +24,12 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.lifecycleScope
+import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
 import com.google.android.material.appbar.MaterialToolbar
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.ToolbarConfigurable
@@ -39,16 +41,13 @@ import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.room.RequireActiveMembershipAction
 import im.vector.app.features.room.RequireActiveMembershipViewEvents
 import im.vector.app.features.room.RequireActiveMembershipViewModel
-import im.vector.app.features.room.RequireActiveMembershipViewState
-import im.vector.app.features.widgets.permissions.RoomWidgetPermissionViewModel
-import im.vector.app.features.widgets.permissions.RoomWidgetPermissionViewState
-import javax.inject.Inject
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
+@AndroidEntryPoint
 class RoomDetailActivity :
         VectorBaseActivity<ActivityRoomDetailBinding>(),
         ToolbarConfigurable,
-        RequireActiveMembershipViewModel.Factory,
-        RoomWidgetPermissionViewModel.Factory,
         MatrixToBottomSheet.InteractionListener {
 
     override fun getBinding(): ActivityRoomDetailBinding {
@@ -77,24 +76,6 @@ class RoomDetailActivity :
     private lateinit var sharedActionViewModel: RoomDetailSharedActionViewModel
     private val requireActiveMembershipViewModel: RequireActiveMembershipViewModel by viewModel()
 
-    @Inject
-    lateinit var requireActiveMembershipViewModelFactory: RequireActiveMembershipViewModel.Factory
-
-    override fun create(initialState: RequireActiveMembershipViewState): RequireActiveMembershipViewModel {
-        // Due to shortcut, we cannot use MvRx args. Pass the first roomId here
-        return requireActiveMembershipViewModelFactory.create(initialState.copy(roomId = currentRoomId ?: ""))
-    }
-
-    @Inject
-    lateinit var permissionsViewModelFactory: RoomWidgetPermissionViewModel.Factory
-    override fun create(initialState: RoomWidgetPermissionViewState): RoomWidgetPermissionViewModel {
-        return permissionsViewModelFactory.create(initialState)
-    }
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
-
     // Simple filter
     var currentRoomId: String? = null
 
@@ -108,6 +89,7 @@ class RoomDetailActivity :
             intent?.extras?.getParcelable(EXTRA_ROOM_DETAIL_ARGS)
         }
         if (roomDetailArgs == null) return
+        intent.putExtra(Mavericks.KEY_ARG, roomDetailArgs)
         currentRoomId = roomDetailArgs.roomId
 
         if (isFirstCreation()) {
@@ -118,13 +100,13 @@ class RoomDetailActivity :
         sharedActionViewModel = viewModelProvider.get(RoomDetailSharedActionViewModel::class.java)
 
         sharedActionViewModel
-                .observe()
-                .subscribe { sharedAction ->
+                .stream()
+                .onEach { sharedAction ->
                     when (sharedAction) {
                         is RoomDetailSharedAction.SwitchToRoom -> switchToRoom(sharedAction)
                     }
                 }
-                .disposeOnDestroy()
+                .launchIn(lifecycleScope)
 
         requireActiveMembershipViewModel.observeViewEvents {
             when (it) {

@@ -38,6 +38,7 @@ import org.matrix.android.sdk.internal.session.cache.CacheModule
 import org.matrix.android.sdk.internal.session.call.CallModule
 import org.matrix.android.sdk.internal.session.content.ContentModule
 import org.matrix.android.sdk.internal.session.content.UploadContentWorker
+import org.matrix.android.sdk.internal.session.contentscanner.ContentScannerModule
 import org.matrix.android.sdk.internal.session.filter.FilterModule
 import org.matrix.android.sdk.internal.session.group.GetGroupDataWorker
 import org.matrix.android.sdk.internal.session.group.GroupModule
@@ -96,6 +97,7 @@ import org.matrix.android.sdk.internal.util.system.SystemModule
             AccountModule::class,
             FederationModule::class,
             CallModule::class,
+            ContentScannerModule::class,
             SearchModule::class,
             ThirdPartyModule::class,
             SpaceModule::class,

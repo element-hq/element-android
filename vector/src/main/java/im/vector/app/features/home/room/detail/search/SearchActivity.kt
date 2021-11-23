@@ -21,12 +21,13 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.widget.SearchView
 import com.airbnb.mvrx.Mavericks
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivitySearchBinding
 
+@AndroidEntryPoint
 class SearchActivity : VectorBaseActivity<ActivitySearchBinding>() {
 
     private val searchFragment: SearchFragment?
@@ -37,10 +38,6 @@ class SearchActivity : VectorBaseActivity<ActivitySearchBinding>() {
     override fun getBinding() = ActivitySearchBinding.inflate(layoutInflater)
 
     override fun getCoordinatorLayout() = views.coordinatorLayout
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

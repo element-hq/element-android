@@ -29,7 +29,6 @@ import im.vector.app.features.home.AvatarRenderer
 import me.gujun.android.span.span
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.toModel
-import org.matrix.android.sdk.api.session.presence.model.UserPresence
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.session.room.model.RoomThirdPartyInviteContent
 import org.matrix.android.sdk.api.util.MatrixItem
@@ -61,7 +60,7 @@ class RoomMemberListController @Inject constructor(
         roomMemberSummaryFilter.filter = data.filter
 
         val roomMembersByPowerLevel = data.roomMemberSummaries.invoke() ?: return
-        val threePidInvites = data.threePidInvites()
+        val filteredThreePidInvites = data.threePidInvites()
                 ?.filter { event ->
                     event.content.toModel<RoomThirdPartyInviteContent>()
                             ?.takeIf {
@@ -69,7 +68,7 @@ class RoomMemberListController @Inject constructor(
                             } != null
                 }
                 .orEmpty()
-        var threePidInvitesDone = threePidInvites.isEmpty()
+        var threePidInvitesDone = filteredThreePidInvites.isEmpty()
 
         for ((powerLevelCategory, roomMemberList) in roomMembersByPowerLevel) {
             val filteredRoomMemberList = roomMemberList.filter { roomMemberSummaryFilter.test(it) }
@@ -83,7 +82,7 @@ class RoomMemberListController @Inject constructor(
                         stringProvider.getString(RoomMemberListCategories.INVITE.titleRes)
                 )
 
-                buildThreePidInvites(data)
+                buildThreePidInvites(filteredThreePidInvites, data.actionsPermissions.canRevokeThreePidInvite)
                 threePidInvitesDone = true
             }
 
@@ -93,7 +92,7 @@ class RoomMemberListController @Inject constructor(
 
             filteredRoomMemberList.join(
                     each = { _, roomMember ->
-                        buildPresence(roomMember, powerLevelCategory, host, data, roomMember.userPresence)
+                        buildRoomMember(roomMember, powerLevelCategory, host, data)
                     },
                     between = { _, roomMemberBefore ->
                         dividerItem {
@@ -107,7 +106,7 @@ class RoomMemberListController @Inject constructor(
                     id("divider_threepidinvites")
                 }
 
-                buildThreePidInvites(data)
+                buildThreePidInvites(filteredThreePidInvites, data.actionsPermissions.canRevokeThreePidInvite)
                 threePidInvitesDone = true
             }
         }
@@ -118,16 +117,14 @@ class RoomMemberListController @Inject constructor(
                     stringProvider.getString(RoomMemberListCategories.INVITE.titleRes)
             )
 
-            buildThreePidInvites(data)
+            buildThreePidInvites(filteredThreePidInvites, data.actionsPermissions.canRevokeThreePidInvite)
         }
     }
 
-    private fun buildPresence(roomMember: RoomMemberSummary,
-                              powerLevelCategory: RoomMemberListCategories,
-                              host: RoomMemberListController,
-                              data: RoomMemberListViewState,
-                              userPresence: UserPresence?
-    ) {
+    private fun buildRoomMember(roomMember: RoomMemberSummary,
+                                powerLevelCategory: RoomMemberListCategories,
+                                host: RoomMemberListController,
+                                data: RoomMemberListViewState) {
         val powerLabel = stringProvider.getString(powerLevelCategory.titleRes)
 
         profileMatrixItemWithPowerLevelWithPresence {
@@ -138,7 +135,7 @@ class RoomMemberListController @Inject constructor(
             clickListener {
                 host.callback?.onRoomMemberClicked(roomMember)
             }
-            userPresence(userPresence)
+            userPresence(roomMember.userPresence)
             powerLevelLabel(
                     span {
                         span(powerLabel) {
@@ -149,11 +146,10 @@ class RoomMemberListController @Inject constructor(
         }
     }
 
-    private fun buildThreePidInvites(data: RoomMemberListViewState) {
+    private fun buildThreePidInvites(filteredThreePidInvites: List<Event>, canRevokeThreePidInvite: Boolean) {
         val host = this
-        data.threePidInvites()
-                ?.filter { it.content.toModel<RoomThirdPartyInviteContent>() != null }
-                ?.join(
+        filteredThreePidInvites
+                .join(
                         each = { idx, event ->
                             event.content.toModel<RoomThirdPartyInviteContent>()
                                     ?.let { content ->
@@ -161,7 +157,7 @@ class RoomMemberListController @Inject constructor(
                                             id("3pid_$idx")
                                             matrixItem(MatrixItem.UserItem("@", displayName = content.displayName))
                                             avatarRenderer(host.avatarRenderer)
-                                            editable(data.actionsPermissions.canRevokeThreePidInvite)
+                                            editable(canRevokeThreePidInvite)
                                             clickListener {
                                                 host.callback?.onThreePidInviteClicked(event)
                                             }

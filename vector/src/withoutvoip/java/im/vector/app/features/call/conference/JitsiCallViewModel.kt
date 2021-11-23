@@ -16,9 +16,30 @@
 
 package im.vector.app.features.call.conference
 
-class JitsiCallViewModel {
+import com.airbnb.mvrx.MavericksViewModelFactory
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
+import im.vector.app.core.platform.EmptyAction
+import im.vector.app.core.platform.EmptyViewEvents
+import im.vector.app.core.platform.VectorViewModel
 
-    companion object {
+class JitsiCallViewModel @AssistedInject constructor(
+        @Assisted initialState: JitsiCallViewState
+) : VectorViewModel<JitsiCallViewState, EmptyAction, EmptyViewEvents>(initialState) {
+
+    @AssistedFactory
+    interface Factory : MavericksAssistedViewModelFactory<JitsiCallViewModel, JitsiCallViewState> {
+        override fun create(initialState: JitsiCallViewState): JitsiCallViewModel
+    }
+
+    override fun handle(action: EmptyAction) {
+        // No op
+    }
+
+    companion object : MavericksViewModelFactory<JitsiCallViewModel, JitsiCallViewState> by hiltMavericksViewModelFactory() {
         const val ENABLE_VIDEO_OPTION = "ENABLE_VIDEO_OPTION"
     }
 }

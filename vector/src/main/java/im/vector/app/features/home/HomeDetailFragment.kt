@@ -27,12 +27,12 @@ import androidx.core.view.doOnNextLayout
 import androidx.core.view.isEmpty
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.badge.BadgeDrawable
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.jakewharton.rxbinding3.appcompat.queryTextChanges
 import fr.gouv.tchap.core.utils.TchapUtils
 import fr.gouv.tchap.features.home.contact.list.TchapContactListFragment
 import fr.gouv.tchap.features.home.contact.list.TchapContactListFragmentArgs
@@ -41,7 +41,6 @@ import fr.gouv.tchap.features.home.contact.list.TchapContactListViewModel
 import fr.gouv.tchap.features.platform.PlatformAction
 import fr.gouv.tchap.features.platform.PlatformViewEvents
 import fr.gouv.tchap.features.platform.PlatformViewModel
-import fr.gouv.tchap.features.platform.PlatformViewState
 import fr.gouv.tchap.features.userdirectory.TchapContactListSharedAction
 import fr.gouv.tchap.features.userdirectory.TchapContactListSharedActionViewModel
 import im.vector.app.AppStateHandler
@@ -77,17 +76,17 @@ import im.vector.app.features.settings.VectorSettingsActivity.Companion.EXTRA_DI
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.workers.signout.BannerState
 import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
-import im.vector.app.features.workers.signout.ServerBackupStatusViewState
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.session.group.model.GroupSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.user.model.User
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
+import reactivecircus.flowbinding.appcompat.queryTextChanges
 import javax.inject.Inject
 
 class HomeDetailFragment @Inject constructor(
-        val homeDetailViewModelFactory: HomeDetailViewModel.Factory,
-        private val serverBackupStatusViewModelFactory: ServerBackupStatusViewModel.Factory,
-        private val platformViewModelFactory: PlatformViewModel.Factory,
         private val avatarRenderer: AvatarRenderer,
         private val colorProvider: ColorProvider,
         private val alertManager: PopupAlertManager,
@@ -96,9 +95,7 @@ class HomeDetailFragment @Inject constructor(
         private val appStateHandler: AppStateHandler
 ) : VectorBaseFragment<FragmentHomeDetailBinding>(),
         KeysBackupBanner.Delegate,
-        CurrentCallsView.Callback,
-        ServerBackupStatusViewModel.Factory,
-        PlatformViewModel.Factory {
+        CurrentCallsView.Callback {
 
     private val viewModel: HomeDetailViewModel by fragmentViewModel()
     private val platformViewModel: PlatformViewModel by fragmentViewModel()
@@ -239,14 +236,14 @@ class HomeDetailFragment @Inject constructor(
         }
 
         sharedContactActionViewModel
-                .observe()
-                .subscribe { action ->
+                .stream()
+                .onEach { action ->
                     when (action) {
                         is TchapContactListSharedAction.OnInviteByEmail -> onInviteByEmail(action.email)
                         is TchapContactListSharedAction.OnSelectContact -> onSelectContact(action)
                     }.exhaustive
                 }
-                .disposeOnDestroyView()
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
         sharedCallActionViewModel
                 .liveKnownCalls
@@ -284,14 +281,14 @@ class HomeDetailFragment @Inject constructor(
         }
 
         sharedActionViewModel
-                .observe()
-                .subscribe { action ->
+                .stream()
+                .onEach { action ->
                     when (action) {
                         is HomeActivitySharedAction.InviteByEmail -> onInviteByEmail(action.email)
                         else                                      -> Unit // no-op
                     }.exhaustive
                 }
-                .disposeOnDestroyView()
+                .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     private fun handleCallStarted() {
@@ -440,7 +437,7 @@ class HomeDetailFragment @Inject constructor(
 
     private fun setupKeysBackupBanner() {
         serverBackupStatusViewModel
-                .subscribe(this) {
+                .onEach {
                     when (val banState = it.bannerState.invoke()) {
                         is BannerState.Setup  -> views.homeKeysBackupBanner.render(KeysBackupBanner.State.Setup(banState.numberOfKeys), false)
                         BannerState.BackingUp -> views.homeKeysBackupBanner.render(KeysBackupBanner.State.BackingUp, false)
@@ -484,8 +481,8 @@ class HomeDetailFragment @Inject constructor(
         views.homeSearchView.queryTextChanges()
                 .skipInitialValue()
                 .map { it.trim().toString() }
-                .subscribe { searchWith(it) }
-                .disposeOnDestroyView()
+                .onEach { searchWith(it) }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     private fun setupBottomNavigationView() {
@@ -700,14 +697,6 @@ class HomeDetailFragment @Inject constructor(
                     viewModel.handle(HomeDetailAction.SelectContact(user))
                 }
                 .show()
-    }
-
-    override fun create(initialState: ServerBackupStatusViewState): ServerBackupStatusViewModel {
-        return serverBackupStatusViewModelFactory.create(initialState)
-    }
-
-    override fun create(initialState: PlatformViewState): PlatformViewModel {
-        return platformViewModelFactory.create(initialState)
     }
 
     companion object {

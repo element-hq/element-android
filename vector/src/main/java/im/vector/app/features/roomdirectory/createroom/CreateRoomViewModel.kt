@@ -17,14 +17,11 @@
 package im.vector.app.features.roomdirectory.createroom
 
 import androidx.core.net.toFile
-import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -33,6 +30,8 @@ import fr.gouv.tchap.android.sdk.api.session.room.model.RoomAccessRules
 import fr.gouv.tchap.android.sdk.api.session.room.model.RoomAccessRulesContent
 import fr.gouv.tchap.core.utils.TchapRoomType
 import fr.gouv.tchap.core.utils.TchapUtils
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.displayname.getBestName
@@ -65,8 +64,12 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted private val init
 ) : VectorViewModel<CreateRoomViewState, CreateRoomAction, CreateRoomViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: CreateRoomViewState): CreateRoomViewModel
+    interface Factory : MavericksAssistedViewModelFactory<CreateRoomViewModel, CreateRoomViewState> {
+        override fun create(initialState: CreateRoomViewState): CreateRoomViewModel
+    }
+
+    companion object : MavericksViewModelFactory<CreateRoomViewModel, CreateRoomViewState> by hiltMavericksViewModelFactory() {
+        private const val AGENT_SERVER_DOMAIN = "Agent"
     }
 
     init {
@@ -131,18 +134,6 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted private val init
 
                 )
             }
-        }
-    }
-
-    companion object : MavericksViewModelFactory<CreateRoomViewModel, CreateRoomViewState> {
-
-        private const val AGENT_SERVER_DOMAIN = "Agent"
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: CreateRoomViewState): CreateRoomViewModel? {
-            val fragment: CreateRoomFragment = (viewModelContext as FragmentViewModelContext).fragment()
-
-            return fragment.createRoomViewModelFactory.create(state)
         }
     }
 

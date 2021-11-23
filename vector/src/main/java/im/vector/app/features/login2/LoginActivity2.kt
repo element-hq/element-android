@@ -20,7 +20,6 @@ import android.content.Context
 import android.content.Intent
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.CallSuper
 import androidx.core.view.ViewCompat
 import androidx.core.view.children
 import androidx.core.view.isVisible
@@ -30,8 +29,8 @@ import androidx.fragment.app.FragmentTransaction
 import com.airbnb.mvrx.viewModel
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.POP_BACK_STACK_EXCLUSIVE
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.extensions.addFragmentToBackstack
@@ -55,21 +54,14 @@ import im.vector.app.features.pin.UnlockedActivity
 import org.matrix.android.sdk.api.auth.registration.FlowResult
 import org.matrix.android.sdk.api.auth.registration.Stage
 import org.matrix.android.sdk.api.extensions.tryOrNull
-import javax.inject.Inject
 
 /**
  * The LoginActivity manages the fragment navigation and also display the loading View
  */
+@AndroidEntryPoint
 open class LoginActivity2 : VectorBaseActivity<ActivityLoginBinding>(), ToolbarConfigurable, UnlockedActivity {
 
     private val loginViewModel: LoginViewModel2 by viewModel()
-
-    @Inject lateinit var loginViewModelFactory: LoginViewModel2.Factory
-
-    @CallSuper
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
 
     private val enterAnim = R.anim.enter_fade_in
     private val exitAnim = R.anim.exit_fade_out
@@ -100,10 +92,9 @@ open class LoginActivity2 : VectorBaseActivity<ActivityLoginBinding>(), ToolbarC
             addFirstFragment()
         }
 
-        loginViewModel
-                .subscribe(this) {
-                    updateWithState(it)
-                }
+        loginViewModel.onEach {
+            updateWithState(it)
+        }
 
         loginViewModel.observeViewEvents { handleLoginViewEvents(it) }
 
@@ -209,19 +200,19 @@ open class LoginActivity2 : VectorBaseActivity<ActivityLoginBinding>(), ToolbarC
                 // Go back to the login fragment
                 supportFragmentManager.popBackStack(FRAGMENT_LOGIN_TAG, POP_BACK_STACK_EXCLUSIVE)
             }
-            is LoginViewEvents2.OnSendEmailSuccess       ->
+            is LoginViewEvents2.OnSendEmailSuccess                         ->
                 addFragmentToBackstack(R.id.loginFragmentContainer,
                         LoginWaitForEmailFragment2::class.java,
                         LoginWaitForEmailFragmentArgument(event.email),
                         tag = FRAGMENT_REGISTRATION_STAGE_TAG,
                         option = commonOption)
-            is LoginViewEvents2.OpenSigninPasswordScreen -> {
+            is LoginViewEvents2.OpenSigninPasswordScreen                   -> {
                 addFragmentToBackstack(R.id.loginFragmentContainer,
                         LoginFragmentSigninPassword2::class.java,
                         tag = FRAGMENT_LOGIN_TAG,
                         option = commonOption)
             }
-            is LoginViewEvents2.OpenSignupPasswordScreen -> {
+            is LoginViewEvents2.OpenSignupPasswordScreen                   -> {
                 addFragmentToBackstack(R.id.loginFragmentContainer,
                         LoginFragmentSignupPassword2::class.java,
                         tag = FRAGMENT_REGISTRATION_STAGE_TAG,

@@ -18,26 +18,23 @@ package im.vector.app.features.login
 
 import android.content.Context
 import android.net.Uri
-import androidx.fragment.app.FragmentActivity
-import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import fr.gouv.tchap.features.login.TchapLoginActivity
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.configureAndStart
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.ensureTrailingSlash
-import im.vector.app.features.signout.soft.SoftLogoutActivity
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixPatterns.getDomain
@@ -73,20 +70,19 @@ class LoginViewModel @AssistedInject constructor(
 ) : VectorViewModel<LoginViewState, LoginAction, LoginViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: LoginViewState): LoginViewModel
+    interface Factory : MavericksAssistedViewModelFactory<LoginViewModel, LoginViewState> {
+        override fun create(initialState: LoginViewState): LoginViewModel
     }
 
-    companion object : MavericksViewModelFactory<LoginViewModel, LoginViewState> {
+    companion object : MavericksViewModelFactory<LoginViewModel, LoginViewState> by hiltMavericksViewModelFactory()
 
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: LoginViewState): LoginViewModel? {
-            return when (val activity: FragmentActivity = (viewModelContext as ActivityViewModelContext).activity()) {
-                is TchapLoginActivity -> activity.loginViewModelFactory.create(state)
-                is LoginActivity      -> activity.loginViewModelFactory.create(state)
-                is SoftLogoutActivity -> activity.loginViewModelFactory.create(state)
-                else                  -> error("Invalid Activity")
-            }
+    init {
+        getKnownCustomHomeServersUrls()
+    }
+
+    private fun getKnownCustomHomeServersUrls() {
+        setState {
+            copy(knownCustomHomeServersUrls = homeServerHistoryService.getKnownServersUrls())
         }
     }
 

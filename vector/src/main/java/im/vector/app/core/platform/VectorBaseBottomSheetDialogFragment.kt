@@ -26,28 +26,26 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.annotation.CallSuper
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.viewbinding.ViewBinding
 import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.MavericksView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.jakewharton.rxbinding3.view.clicks
-import im.vector.app.core.di.DaggerScreenComponent
-import im.vector.app.core.di.ScreenComponent
+import dagger.hilt.android.EntryPointAccessors
+import im.vector.app.core.di.ActivityEntryPoint
+import im.vector.app.core.flow.throttleFirst
 import im.vector.app.core.utils.DimensionConverter
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import reactivecircus.flowbinding.android.view.clicks
 import timber.log.Timber
-import java.util.concurrent.TimeUnit
 
 /**
  * Add Mavericks capabilities, handle DI and bindings.
  */
 abstract class VectorBaseBottomSheetDialogFragment<VB : ViewBinding> : BottomSheetDialogFragment(), MavericksView {
-
-    private lateinit var screenComponent: ScreenComponent
 
     /* ==========================================================================================
      * View
@@ -110,25 +108,20 @@ abstract class VectorBaseBottomSheetDialogFragment<VB : ViewBinding> : BottomShe
 
     @CallSuper
     override fun onDestroyView() {
-        uiDisposables.clear()
         _binding = null
         super.onDestroyView()
     }
 
     @CallSuper
     override fun onDestroy() {
-        uiDisposables.dispose()
         super.onDestroy()
     }
 
     override fun onAttach(context: Context) {
-        screenComponent = DaggerScreenComponent.factory().create(vectorBaseActivity.getVectorComponent(), vectorBaseActivity)
-        viewModelFactory = screenComponent.viewModelFactory()
+        val activityEntryPoint = EntryPointAccessors.fromActivity(vectorBaseActivity, ActivityEntryPoint::class.java)
+        viewModelFactory = activityEntryPoint.viewModelFactory()
         super.onAttach(context)
-        injectWith(screenComponent)
     }
-
-    protected open fun injectWith(injector: ScreenComponent) = Unit
 
     override fun onResume() {
         super.onResume()
@@ -170,26 +163,14 @@ abstract class VectorBaseBottomSheetDialogFragment<VB : ViewBinding> : BottomShe
     }
 
     /* ==========================================================================================
-     * Disposable
-     * ========================================================================================== */
-
-    private val uiDisposables = CompositeDisposable()
-
-    protected fun Disposable.disposeOnDestroyView(): Disposable {
-        uiDisposables.add(this)
-        return this
-    }
-
-    /* ==========================================================================================
      * Views
      * ========================================================================================== */
 
     protected fun View.debouncedClicks(onClicked: () -> Unit) {
         clicks()
-                .throttleFirst(300, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { onClicked() }
-                .disposeOnDestroyView()
+                .throttleFirst(300)
+                .onEach { onClicked() }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     /* ==========================================================================================
@@ -198,11 +179,10 @@ abstract class VectorBaseBottomSheetDialogFragment<VB : ViewBinding> : BottomShe
 
     protected fun <T : VectorViewEvents> VectorViewModel<*, *, T>.observeViewEvents(observer: (T) -> Unit) {
         viewEvents
-                .observe()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
+                .stream()
+                .onEach {
                     observer(it)
                 }
-                .disposeOnDestroyView()
+                .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 }

@@ -52,6 +52,7 @@ import androidx.core.view.forEach
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.fragment.app.setFragmentResultListener
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -66,8 +67,6 @@ import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.jakewharton.rxbinding3.view.focusChanges
-import com.jakewharton.rxbinding3.widget.textChanges
 import com.vanniktech.emoji.EmojiPopup
 import im.vector.app.R
 import im.vector.app.core.dialogs.ConfirmationDialogBuilder
@@ -184,6 +183,10 @@ import im.vector.app.features.widgets.WidgetActivity
 import im.vector.app.features.widgets.WidgetArgs
 import im.vector.app.features.widgets.WidgetKind
 import im.vector.app.features.widgets.permissions.RoomWidgetPermissionBottomSheet
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import nl.dionsegijn.konfetti.models.Shape
@@ -215,10 +218,11 @@ import org.matrix.android.sdk.api.util.MimeTypes
 import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.internal.crypto.model.event.EncryptedEventContent
 import org.matrix.android.sdk.internal.crypto.model.event.WithHeldCode
+import reactivecircus.flowbinding.android.view.focusChanges
+import reactivecircus.flowbinding.android.widget.textChanges
 import timber.log.Timber
 import java.net.URL
 import java.util.UUID
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @Parcelize
@@ -237,7 +241,6 @@ class RoomDetailFragment @Inject constructor(
         private val permalinkHandler: PermalinkHandler,
         private val notificationDrawerManager: NotificationDrawerManager,
         val roomDetailViewModelFactory: RoomDetailViewModel.Factory,
-        val textComposerViewModelFactory: TextComposerViewModel.Factory,
         private val eventHtmlRenderer: EventHtmlRenderer,
         private val vectorPreferences: VectorPreferences,
         private val colorProvider: ColorProvider,
@@ -366,11 +369,11 @@ class RoomDetailFragment @Inject constructor(
         }
 
         sharedActionViewModel
-                .observe()
-                .subscribe {
+                .stream()
+                .onEach {
                     handleActions(it)
                 }
-                .disposeOnDestroyView()
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
         knownCallsViewModel
                 .liveKnownCalls
@@ -640,15 +643,25 @@ class RoomDetailFragment @Inject constructor(
                         setImageResource(R.drawable.ic_keyboard)
                     }
                 }
-                .setOnEmojiPopupDismissListener {
-                    if (isAdded) {
-                        views.composerLayout.views.composerEmojiButton.apply {
-                            contentDescription = getString(R.string.a11y_open_emoji_picker)
-                            setImageResource(R.drawable.ic_insert_emoji)
-                        }
+                .setOnEmojiPopupDismissListenerLifecycleAware {
+                    views.composerLayout.views.composerEmojiButton.apply {
+                        contentDescription = getString(R.string.a11y_open_emoji_picker)
+                        setImageResource(R.drawable.ic_insert_emoji)
                     }
                 }
                 .build(views.composerLayout.views.composerEditText)
+    }
+
+    /**
+     *  Ensure dismiss actions only trigger when the fragment is in the started state
+     *  EmojiPopup by default dismisses onViewDetachedFromWindow, this can cause race conditions with onDestroyView
+     */
+    private fun EmojiPopup.Builder.setOnEmojiPopupDismissListenerLifecycleAware(action: () -> Unit): EmojiPopup.Builder {
+        return setOnEmojiPopupDismissListener {
+            if (lifecycle.currentState == Lifecycle.State.STARTED) {
+                action()
+            }
+        }
     }
 
     private val permissionVoiceMessageLauncher = registerForPermissionsResult { allGranted, deniedPermanently ->
@@ -1348,19 +1361,19 @@ class RoomDetailFragment @Inject constructor(
     private fun observerUserTyping() {
         views.composerLayout.views.composerEditText.textChanges()
                 .skipInitialValue()
-                .debounce(300, TimeUnit.MILLISECONDS)
+                .debounce(300)
                 .map { it.isNotEmpty() }
-                .subscribe {
+                .onEach {
                     Timber.d("Typing: User is typing: $it")
                     textComposerViewModel.handle(TextComposerAction.UserIsTyping(it))
                 }
-                .disposeOnDestroyView()
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
         views.composerLayout.views.composerEditText.focusChanges()
-                .subscribe {
+                .onEach {
                     roomDetailViewModel.handle(RoomDetailAction.ComposerFocusChange(it))
                 }
-                .disposeOnDestroyView()
+                .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     private fun sendUri(uri: Uri): Boolean {
@@ -2089,12 +2102,12 @@ class RoomDetailFragment @Inject constructor(
 // VectorInviteView.Callback
 
     override fun onAcceptInvite() {
-        notificationDrawerManager.clearMemberShipNotificationForRoom(roomDetailArgs.roomId)
+        notificationDrawerManager.updateEvents { it.clearMemberShipNotificationForRoom(roomDetailArgs.roomId) }
         roomDetailViewModel.handle(RoomDetailAction.AcceptInvite)
     }
 
     override fun onRejectInvite() {
-        notificationDrawerManager.clearMemberShipNotificationForRoom(roomDetailArgs.roomId)
+        notificationDrawerManager.updateEvents { it.clearMemberShipNotificationForRoom(roomDetailArgs.roomId) }
         roomDetailViewModel.handle(RoomDetailAction.RejectInvite)
     }
 
@@ -2145,6 +2158,7 @@ class RoomDetailFragment @Inject constructor(
             AttachmentTypeSelectorView.Type.AUDIO   -> attachmentsHelper.selectAudio(attachmentAudioActivityResultLauncher)
             AttachmentTypeSelectorView.Type.CONTACT -> attachmentsHelper.selectContact(attachmentContactActivityResultLauncher)
             AttachmentTypeSelectorView.Type.STICKER -> roomDetailViewModel.handle(RoomDetailAction.SelectStickerAttachment)
+            AttachmentTypeSelectorView.Type.POLL    -> navigator.openCreatePoll(requireContext(), roomDetailArgs.roomId)
         }.exhaustive
     }
 

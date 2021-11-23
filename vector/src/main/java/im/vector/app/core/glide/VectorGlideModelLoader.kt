@@ -25,7 +25,7 @@ import com.bumptech.glide.load.model.ModelLoader
 import com.bumptech.glide.load.model.ModelLoaderFactory
 import com.bumptech.glide.load.model.MultiModelLoaderFactory
 import com.bumptech.glide.signature.ObjectKey
-import im.vector.app.core.extensions.vectorComponent
+import im.vector.app.core.extensions.singletonEntryPoint
 import im.vector.app.core.files.LocalFilesHelper
 import im.vector.app.features.media.ImageContentRenderer
 import im.vector.app.features.session.coroutineScope
@@ -67,7 +67,7 @@ class VectorGlideDataFetcher(context: Context,
     DataFetcher<InputStream> {
 
     private val localFilesHelper = LocalFilesHelper(context)
-    private val activeSessionHolder = context.vectorComponent().activeSessionHolder()
+    private val activeSessionHolder = context.singletonEntryPoint().activeSessionHolder()
 
     private val client = activeSessionHolder.getSafeActiveSession()?.getOkHttpClient() ?: OkHttpClient()
 

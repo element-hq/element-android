@@ -68,6 +68,7 @@
     <!-- Timber -->
     <!--    This rule is failing on CI because it's marked as unknwown rule id :/-->
     <!--    <issue id="BinaryOperationInTimber" severity="error" />-->
+    <issue id="LogNotTimber" severity="error" />
 
     <!-- Wording -->
     <issue id="Typos" severity="error" />

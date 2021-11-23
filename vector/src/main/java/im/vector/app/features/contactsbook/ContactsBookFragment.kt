@@ -21,10 +21,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
-import com.jakewharton.rxbinding3.widget.checkedChanges
-import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.hideKeyboard
@@ -37,15 +36,18 @@ import im.vector.app.features.userdirectory.UserListAction
 import im.vector.app.features.userdirectory.UserListSharedAction
 import im.vector.app.features.userdirectory.UserListSharedActionViewModel
 import im.vector.app.features.userdirectory.UserListViewModel
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.user.model.User
-import java.util.concurrent.TimeUnit
+import reactivecircus.flowbinding.android.widget.checkedChanges
+import reactivecircus.flowbinding.android.widget.textChanges
 import javax.inject.Inject
 
 class ContactsBookFragment @Inject constructor(
-        private val contactsBookViewModelFactory: ContactsBookViewModel.Factory,
         private val contactsBookController: ContactsBookController
-) : VectorBaseFragment<FragmentContactsBookBinding>(), ContactsBookController.Callback, ContactsBookViewModel.Factory {
+) : VectorBaseFragment<FragmentContactsBookBinding>(), ContactsBookController.Callback {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentContactsBookBinding {
         return FragmentContactsBookBinding.inflate(inflater, container, false)
@@ -57,10 +59,6 @@ class ContactsBookFragment @Inject constructor(
     private val contactsBookViewModel: ContactsBookViewModel by activityViewModel()
 
     private lateinit var sharedActionViewModel: UserListSharedActionViewModel
-
-    override fun create(initialState: ContactsBookViewState): ContactsBookViewModel {
-        return contactsBookViewModelFactory.create(initialState)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -88,21 +86,21 @@ class ContactsBookFragment @Inject constructor(
 
     private fun setupOnlyBoundContactsView() {
         views.phoneBookOnlyBoundContacts.checkedChanges()
-                .subscribe {
+                .onEach {
                     contactsBookViewModel.handle(ContactsBookAction.OnlyBoundContacts(it))
                 }
-                .disposeOnDestroyView()
+                .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     private fun setupFilterView() {
         views.phoneBookFilter
                 .textChanges()
                 .skipInitialValue()
-                .debounce(300, TimeUnit.MILLISECONDS)
-                .subscribe {
+                .debounce(300)
+                .onEach {
                     contactsBookViewModel.handle(ContactsBookAction.FilterWith(it.toString()))
                 }
-                .disposeOnDestroyView()
+                .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     override fun onDestroyView() {

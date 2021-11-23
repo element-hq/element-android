@@ -20,9 +20,9 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import androidx.core.app.RemoteInput
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
-import im.vector.app.core.extensions.vectorComponent
 import im.vector.app.features.session.coroutineScope
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.tryOrNull
@@ -36,6 +36,7 @@ import javax.inject.Inject
 /**
  * Receives actions broadcast by notification (on click, on dismiss, inline replies, etc.)
  */
+@AndroidEntryPoint
 class NotificationBroadcastReceiver : BroadcastReceiver() {
 
     @Inject lateinit var notificationDrawerManager: NotificationDrawerManager
@@ -44,31 +45,30 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         if (intent == null || context == null) return
         Timber.v("NotificationBroadcastReceiver received : $intent")
-        context.vectorComponent().inject(this)
         when (intent.action) {
             NotificationUtils.SMART_REPLY_ACTION        ->
                 handleSmartReply(intent, context)
             NotificationUtils.DISMISS_ROOM_NOTIF_ACTION ->
-                intent.getStringExtra(KEY_ROOM_ID)?.let {
-                    notificationDrawerManager.clearMessageEventOfRoom(it)
+                intent.getStringExtra(KEY_ROOM_ID)?.let { roomId ->
+                    notificationDrawerManager.updateEvents { it.clearMessagesForRoom(roomId) }
                 }
             NotificationUtils.DISMISS_SUMMARY_ACTION    ->
                 notificationDrawerManager.clearAllEvents()
             NotificationUtils.MARK_ROOM_READ_ACTION     ->
-                intent.getStringExtra(KEY_ROOM_ID)?.let {
-                    notificationDrawerManager.clearMessageEventOfRoom(it)
-                    handleMarkAsRead(it)
+                intent.getStringExtra(KEY_ROOM_ID)?.let { roomId ->
+                    notificationDrawerManager.updateEvents { it.clearMessagesForRoom(roomId) }
+                    handleMarkAsRead(roomId)
                 }
             NotificationUtils.JOIN_ACTION               -> {
-                intent.getStringExtra(KEY_ROOM_ID)?.let {
-                    notificationDrawerManager.clearMemberShipNotificationForRoom(it)
-                    handleJoinRoom(it)
+                intent.getStringExtra(KEY_ROOM_ID)?.let { roomId ->
+                    notificationDrawerManager.updateEvents { it.clearMemberShipNotificationForRoom(roomId) }
+                    handleJoinRoom(roomId)
                 }
             }
             NotificationUtils.REJECT_ACTION             -> {
-                intent.getStringExtra(KEY_ROOM_ID)?.let {
-                    notificationDrawerManager.clearMemberShipNotificationForRoom(it)
-                    handleRejectRoom(it)
+                intent.getStringExtra(KEY_ROOM_ID)?.let { roomId ->
+                    notificationDrawerManager.updateEvents { it.clearMemberShipNotificationForRoom(roomId) }
+                    handleRejectRoom(roomId)
                 }
             }
         }
@@ -130,22 +130,23 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
 
         val notifiableMessageEvent = NotifiableMessageEvent(
                 // Generate a Fake event id
-                UUID.randomUUID().toString(),
-                null,
-                false,
-                System.currentTimeMillis(),
-                session.getRoomMember(session.myUserId, room.roomId)?.displayName
+                eventId = UUID.randomUUID().toString(),
+                editedEventId = null,
+                noisy = false,
+                timestamp = System.currentTimeMillis(),
+                senderName = session.getRoomMember(session.myUserId, room.roomId)?.displayName
                         ?: context?.getString(R.string.notification_sender_me),
-                session.myUserId,
-                message,
-                room.roomId,
-                room.roomSummary()?.displayName ?: room.roomId,
-                room.roomSummary()?.isDirect == true
+                senderId = session.myUserId,
+                body = message,
+                imageUri = null,
+                roomId = room.roomId,
+                roomName = room.roomSummary()?.displayName ?: room.roomId,
+                roomIsDirect = room.roomSummary()?.isDirect == true,
+                outGoingMessage = true,
+                canBeReplaced = false
         )
-        notifiableMessageEvent.outGoingMessage = true
 
-        notificationDrawerManager.onNotifiableEventReceived(notifiableMessageEvent)
-        notificationDrawerManager.refreshNotificationDrawer()
+        notificationDrawerManager.updateEvents { it.onNotifiableEventReceived(notifiableMessageEvent) }
 
         /*
         // TODO Error cannot be managed the same way than in Riot

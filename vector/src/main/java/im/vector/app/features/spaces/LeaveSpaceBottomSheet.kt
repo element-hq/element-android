@@ -26,14 +26,14 @@ import android.view.ViewGroup
 import androidx.core.text.toSpannable
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
-import com.jakewharton.rxbinding3.widget.checkedChanges
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.setTextOrHide
@@ -43,12 +43,15 @@ import im.vector.app.core.utils.styleMatchingText
 import im.vector.app.databinding.BottomSheetLeaveSpaceBinding
 import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.spaces.leave.SpaceLeaveAdvancedActivity
-import io.reactivex.android.schedulers.AndroidSchedulers
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.parcelize.Parcelize
 import me.gujun.android.span.span
 import org.matrix.android.sdk.api.util.toMatrixItem
+import reactivecircus.flowbinding.android.widget.checkedChanges
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class LeaveSpaceBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetLeaveSpaceBinding>() {
 
     val settingsViewModel: SpaceMenuViewModel by parentFragmentViewModel()
@@ -59,10 +62,6 @@ class LeaveSpaceBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetLea
 
     @Inject lateinit var colorProvider: ColorProvider
     @Inject lateinit var errorFormatter: ErrorFormatter
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
 
     @Parcelize
     data class Args(
@@ -85,8 +84,7 @@ class LeaveSpaceBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetLea
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         views.autoLeaveRadioGroup.checkedChanges()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
+                .onEach {
                     when (it) {
                         views.leaveAll.id      -> {
                             settingsViewModel.handle(SpaceLeaveViewAction.SetAutoLeaveAll)
@@ -103,7 +101,7 @@ class LeaveSpaceBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetLea
                         }
                     }
                 }
-                .disposeOnDestroyView()
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
         views.leaveButton.debouncedClicks {
             settingsViewModel.handle(SpaceLeaveViewAction.LeaveSpace)

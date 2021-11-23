@@ -24,8 +24,8 @@ import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.viewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.toMvRxBundle
 import im.vector.app.core.platform.SimpleFragmentActivity
 import im.vector.app.features.spaces.create.ChoosePrivateSpaceTypeFragment
@@ -39,16 +39,9 @@ import im.vector.app.features.spaces.create.CreateSpaceState
 import im.vector.app.features.spaces.create.CreateSpaceViewModel
 import im.vector.app.features.spaces.create.SpaceTopology
 import im.vector.app.features.spaces.create.SpaceType
-import javax.inject.Inject
 
-class SpaceCreationActivity : SimpleFragmentActivity(), CreateSpaceViewModel.Factory {
-
-    @Inject lateinit var viewModelFactory: CreateSpaceViewModel.Factory
-
-    override fun injectWith(injector: ScreenComponent) {
-        super.injectWith(injector)
-        injector.inject(this)
-    }
+@AndroidEntryPoint
+class SpaceCreationActivity : SimpleFragmentActivity() {
 
     val viewModel: CreateSpaceViewModel by viewModel()
 
@@ -78,7 +71,7 @@ class SpaceCreationActivity : SimpleFragmentActivity(), CreateSpaceViewModel.Fac
     override fun initUiAndData() {
         super.initUiAndData()
 
-        viewModel.subscribe(this) {
+        viewModel.onEach {
             renderState(it)
         }
 
@@ -187,6 +180,4 @@ class SpaceCreationActivity : SimpleFragmentActivity(), CreateSpaceViewModel.Fac
             return data?.extras?.getBoolean(RESULT_DATA_CREATED_SPACE_IS_JUST_ME, false) == true
         }
     }
-
-    override fun create(initialState: CreateSpaceState): CreateSpaceViewModel = viewModelFactory.create(initialState)
 }

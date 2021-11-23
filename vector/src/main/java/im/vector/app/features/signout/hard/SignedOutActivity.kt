@@ -19,6 +19,7 @@ package im.vector.app.features.signout.hard
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivitySignedOutBinding
 import im.vector.app.features.MainActivity
@@ -29,6 +30,7 @@ import timber.log.Timber
 /**
  * In this screen, the user is viewing a message informing that he has been logged out
  */
+@AndroidEntryPoint
 class SignedOutActivity : VectorBaseActivity<ActivitySignedOutBinding>() {
 
     override fun getBinding() = ActivitySignedOutBinding.inflate(layoutInflater)
