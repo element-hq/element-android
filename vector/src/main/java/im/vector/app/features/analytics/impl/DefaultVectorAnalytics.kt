@@ -22,7 +22,10 @@ import com.posthog.android.Properties
 import im.vector.app.features.analytics.AnalyticsConfig
 import im.vector.app.features.analytics.VectorAnalytics
 import im.vector.app.features.analytics.store.AnalyticsStore
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -33,6 +36,8 @@ class DefaultVectorAnalytics @Inject constructor(
         private val analyticsStore: AnalyticsStore
 ) : VectorAnalytics {
     private var posthog: PostHog? = null
+
+    private var userConsent: Boolean = false
 
     override fun getUserConsent(): Flow<Boolean> {
         return analyticsStore.userConsentFlow
@@ -61,8 +66,6 @@ class DefaultVectorAnalytics @Inject constructor(
     override suspend fun onSignOut() {
         // reset the analyticsId
         setAnalyticsId("")
-        // reset the library
-        posthog?.reset()
     }
 
     override fun init() {
@@ -88,20 +91,43 @@ class DefaultVectorAnalytics @Inject constructor(
                 // Enable or disable collection of ANDROID_ID (true)
                 .collectDeviceId(false)
                 .build()
+
+        observeUserConsent()
+        observeAnalyticsId()
+    }
+
+    @Suppress("EXPERIMENTAL_API_USAGE")
+    private fun observeAnalyticsId() {
+        GlobalScope.launch {
+            getAnalyticsId().onEach {
+                if (it.isEmpty()) {
+                    posthog?.reset()
+                } else {
+                    posthog?.identify(it)
+                }
+            }
+        }
+    }
+
+    @Suppress("EXPERIMENTAL_API_USAGE")
+    private fun observeUserConsent() {
+        GlobalScope.launch {
+            getUserConsent().onEach {
+                userConsent = it
+            }
+        }
     }
 
     override fun capture(event: String, properties: Map<String, Any>?) {
-        posthog?.capture(
-                event,
-                properties.toPostHogProperties()
-        )
+        posthog
+                ?.takeIf { userConsent }
+                ?.capture(event, properties.toPostHogProperties())
     }
 
     override fun screen(name: String, properties: Map<String, Any>?) {
-        posthog?.screen(
-                name,
-                properties.toPostHogProperties()
-        )
+        posthog
+                ?.takeIf { userConsent }
+                ?.screen(name, properties.toPostHogProperties())
     }
 
     private fun Map<String, Any>?.toPostHogProperties(): Properties? {
