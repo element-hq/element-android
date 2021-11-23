@@ -40,8 +40,8 @@ internal class EnsureOlmSessionsForDevicesAction @Inject constructor(
 
         val results = MXUsersDevicesMap<MXOlmSessionResult>()
 
-        for ((userId, deviceInfo) in devicesByUser) {
-            for (deviceInfo in deviceInfo) {
+        for ((userId, deviceList) in devicesByUser) {
+            for (deviceInfo in deviceList) {
                 val deviceId = deviceInfo.deviceId
                 val key = deviceInfo.identityKey()
                 if (key == null) {
@@ -153,8 +153,7 @@ internal class EnsureOlmSessionsForDevicesAction @Inject constructor(
                     Timber.tag(loggerTag.value).d("verifyKeyAndStartSession() : Started new sessionId $sessionId for device $userId:$deviceId")
                 }
             } else {
-                Timber.tag(loggerTag.value).e("verifyKeyAndStartSession() : Unable to verify signature on one-time key for device " + userId +
-                        ":" + deviceId + " Error " + errorMessage)
+                Timber.tag(loggerTag.value).e("verifyKeyAndStartSession() : Unable to verify otk signature for $userId:$deviceId: $errorMessage")
             }
         }
 
