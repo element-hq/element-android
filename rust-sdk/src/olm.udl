@@ -271,6 +271,8 @@ interface OlmMachine {
     [Throws=CryptoStoreError]
     sequence<Device> get_user_devices([ByRef] string user_id);
 
+    [Throws=CryptoStoreError]
+    boolean is_user_tracked([ByRef] string user_id);
     void update_tracked_users(sequence<string> users);
     [Throws=CryptoStoreError]
     Request? get_missing_sessions(sequence<string> users);

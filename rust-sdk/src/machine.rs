@@ -387,6 +387,15 @@ impl OlmMachine {
             .block_on(self.inner.update_tracked_users(users.iter()));
     }
 
+    /// Check if the given user is considered to be tracked.
+    ///
+    /// A user can be marked for tracking using the
+    /// [`OlmMachine::update_tracked_users()`] method.
+    pub fn is_user_tracked(&self, user_id: &str) -> Result<bool, CryptoStoreError> {
+        let user_id = UserId::try_from(user_id)?;
+        Ok(self.inner.tracked_users().contains(&user_id))
+    }
+
     /// Generate one-time key claiming requests for all the users we are missing
     /// sessions for.
     ///
