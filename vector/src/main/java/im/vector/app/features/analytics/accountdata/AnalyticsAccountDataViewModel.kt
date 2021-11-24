@@ -28,6 +28,7 @@ import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.analytics.VectorAnalytics
+import im.vector.app.features.analytics.log.analyticsTag
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.mapNotNull
@@ -93,9 +94,9 @@ class AnalyticsAccountDataViewModel @AssistedInject constructor(
                     if (analyticsAccountDataContent.id.isNullOrEmpty()) {
                         // Probably consent revoked from Element Web
                         // Ignore here
-                        Timber.d("Consent revoked from Element Web?")
+                        Timber.tag(analyticsTag.value).d("Consent revoked from Element Web?")
                     } else {
-                        Timber.d("AnalyticsId has been retrieved")
+                        Timber.tag(analyticsTag.value).d("AnalyticsId has been retrieved")
                         analytics.setAnalyticsId(analyticsAccountDataContent.id)
                     }
                 }

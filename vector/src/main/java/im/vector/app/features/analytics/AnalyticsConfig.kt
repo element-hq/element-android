@@ -17,6 +17,7 @@
 package im.vector.app.features.analytics
 
 import im.vector.app.BuildConfig
+import im.vector.app.features.analytics.log.analyticsTag
 import timber.log.Timber
 
 data class AnalyticsConfig(
@@ -29,9 +30,13 @@ data class AnalyticsConfig(
          */
         fun getConfig(): AnalyticsConfig? {
             val postHogHost = BuildConfig.ANALYTICS_POSTHOG_HOST.takeIf { it.isNotEmpty() }
-                    ?: return null.also { Timber.w("Analytics is disabled, ANALYTICS_POSTHOG_HOST is empty") }
+                    ?: return null.also {
+                        Timber.tag(analyticsTag.value).w("Analytics is disabled, ANALYTICS_POSTHOG_HOST is empty")
+                    }
             val postHogApiKey = BuildConfig.ANALYTICS_POSTHOG_API_KEY.takeIf { it.isNotEmpty() }
-                    ?: return null.also { Timber.w("Analytics is disabled, ANALYTICS_POSTHOG_API_KEY is empty") }
+                    ?: return null.also {
+                        Timber.tag(analyticsTag.value).w("Analytics is disabled, ANALYTICS_POSTHOG_API_KEY is empty")
+                    }
 
             return AnalyticsConfig(
                     postHogHost = postHogHost,

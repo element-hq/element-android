@@ -22,6 +22,7 @@ import com.posthog.android.Properties
 import im.vector.app.BuildConfig
 import im.vector.app.features.analytics.AnalyticsConfig
 import im.vector.app.features.analytics.VectorAnalytics
+import im.vector.app.features.analytics.log.analyticsTag
 import im.vector.app.features.analytics.store.AnalyticsStore
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
@@ -45,6 +46,7 @@ class DefaultVectorAnalytics @Inject constructor(
     }
 
     override suspend fun setUserConsent(userConsent: Boolean) {
+        Timber.tag(analyticsTag.value).d("setUserConsent($userConsent)")
         analyticsStore.setUserConsent(userConsent)
     }
 
@@ -53,6 +55,7 @@ class DefaultVectorAnalytics @Inject constructor(
     }
 
     override suspend fun setDidAskUserConsent() {
+        Timber.tag(analyticsTag.value).d("setDidAskUserConsent()")
         analyticsStore.setDidAskUserConsent()
     }
 
@@ -61,6 +64,7 @@ class DefaultVectorAnalytics @Inject constructor(
     }
 
     override suspend fun setAnalyticsId(analyticsId: String) {
+        Timber.tag(analyticsTag.value).d("setAnalyticsId($analyticsId)")
         analyticsStore.setAnalyticsId(analyticsId)
     }
 
@@ -78,9 +82,12 @@ class DefaultVectorAnalytics @Inject constructor(
     private fun observeAnalyticsId() {
         getAnalyticsId()
                 .onEach { id ->
+                    Timber.tag(analyticsTag.value).d("Analytics Id updated to '$id'")
                     if (id.isEmpty()) {
+                        Timber.tag(analyticsTag.value).d("reset")
                         posthog?.reset()
                     } else {
+                        Timber.tag(analyticsTag.value).d("identify")
                         posthog?.identify(id)
                     }
                 }
@@ -91,6 +98,7 @@ class DefaultVectorAnalytics @Inject constructor(
     private fun observeUserConsent() {
         getUserConsent()
                 .onEach { consent ->
+                    Timber.tag(analyticsTag.value).d("User consent updated to $consent")
                     userConsent = consent
                     if (consent) {
                         createAnalyticsClient()
@@ -101,8 +109,10 @@ class DefaultVectorAnalytics @Inject constructor(
     }
 
     private fun createAnalyticsClient() {
+        Timber.tag(analyticsTag.value).d("createAnalyticsClient()")
+
         val config: AnalyticsConfig = AnalyticsConfig.getConfig()
-                ?: return Unit.also { Timber.w("Analytics is disabled") }
+                ?: return Unit.also { Timber.tag(analyticsTag.value).w("Analytics is disabled") }
 
         posthog = PostHog.Builder(context, config.postHogApiKey, config.postHogHost)
                 // Record certain application events automatically! (off/false by default)
@@ -135,12 +145,14 @@ class DefaultVectorAnalytics @Inject constructor(
     }
 
     override fun capture(event: String, properties: Map<String, Any>?) {
+        Timber.tag(analyticsTag.value).d("capture($event)")
         posthog
                 ?.takeIf { userConsent }
                 ?.capture(event, properties.toPostHogProperties())
     }
 
     override fun screen(name: String, properties: Map<String, Any>?) {
+        Timber.tag(analyticsTag.value).d("screen($name)")
         posthog
                 ?.takeIf { userConsent }
                 ?.screen(name, properties.toPostHogProperties())
