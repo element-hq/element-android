@@ -188,8 +188,8 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
                 users.toPoweredMemberList(RoomMemberListCategories.SG_USER, powerLevelsHelper) +
                 customs.toPoweredMemberList(RoomMemberListCategories.SG_CUSTOM, powerLevelsHelper)
         return listOf(
-                RoomMemberListCategories.INVITE to invitesWithPower.sortedWith(roomMemberSummaryWithPowerComparator),
-                RoomMemberListCategories.MEMBER to membersWithPower.sortedWith(roomMemberSummaryWithPowerComparator)
+                RoomMemberListCategories.MEMBER to membersWithPower.sortedWith(roomMemberSummaryWithPowerComparator),
+                RoomMemberListCategories.INVITE to invitesWithPower.sortedWith(roomMemberSummaryWithPowerComparator)
         )
     }
 
