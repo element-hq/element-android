@@ -19,6 +19,7 @@ package im.vector.app.features.analytics.impl
 import android.content.Context
 import com.posthog.android.PostHog
 import com.posthog.android.Properties
+import im.vector.app.BuildConfig
 import im.vector.app.features.analytics.AnalyticsConfig
 import im.vector.app.features.analytics.VectorAnalytics
 import im.vector.app.features.analytics.store.AnalyticsStore
@@ -90,10 +91,19 @@ class DefaultVectorAnalytics @Inject constructor(
 
                 // Enable or disable collection of ANDROID_ID (true)
                 .collectDeviceId(false)
+                .logLevel(getLogLevel())
                 .build()
 
         observeUserConsent()
         observeAnalyticsId()
+    }
+
+    private fun getLogLevel(): PostHog.LogLevel {
+        return if (BuildConfig.DEBUG) {
+            PostHog.LogLevel.DEBUG
+        } else {
+            PostHog.LogLevel.INFO
+        }
     }
 
     @Suppress("EXPERIMENTAL_API_USAGE")
