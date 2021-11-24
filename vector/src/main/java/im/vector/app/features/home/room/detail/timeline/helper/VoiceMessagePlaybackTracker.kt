@@ -26,7 +26,16 @@ class VoiceMessagePlaybackTracker @Inject constructor() {
 
     private val mainHandler = Handler(Looper.getMainLooper())
     private val listeners = mutableMapOf<String, Listener>()
+    private val activityListeners = mutableMapOf<String, ActivityListener>()
     private val states = mutableMapOf<String, Listener.State>()
+
+    fun trackActivity(key: String, listener: ActivityListener) {
+        activityListeners[key] = listener
+    }
+
+    fun unTrackActivity(id: String) {
+        activityListeners.remove(id)
+    }
 
     fun track(id: String, listener: Listener) {
         listeners[id] = listener
@@ -52,8 +61,10 @@ class VoiceMessagePlaybackTracker @Inject constructor() {
      */
     private fun setState(key: String, state: Listener.State) {
         states[key] = state
+        val isActive = states.values.any { it is Listener.State.Playing || it is Listener.State.Recording }
         mainHandler.post {
             listeners[key]?.onUpdate(state)
+            activityListeners.forEach { it.value.onUpdate(isActive) }
         }
     }
 
@@ -124,5 +135,9 @@ class VoiceMessagePlaybackTracker @Inject constructor() {
             data class Paused(val playbackTime: Int) : State()
             data class Recording(val amplitudeList: List<Int>) : State()
         }
+    }
+
+    fun interface ActivityListener {
+        fun onUpdate(isActive: Boolean)
     }
 }

@@ -30,12 +30,15 @@ import com.airbnb.mvrx.viewModel
 import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
+import im.vector.app.core.extensions.endKeepScreenOn
 import im.vector.app.core.extensions.hideKeyboard
+import im.vector.app.core.extensions.keepScreenOn
 import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityRoomDetailBinding
 import im.vector.app.features.home.room.breadcrumbs.BreadcrumbsFragment
+import im.vector.app.features.home.room.detail.timeline.helper.VoiceMessagePlaybackTracker
 import im.vector.app.features.matrixto.MatrixToBottomSheet
 import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.room.RequireActiveMembershipAction
@@ -43,6 +46,9 @@ import im.vector.app.features.room.RequireActiveMembershipViewEvents
 import im.vector.app.features.room.RequireActiveMembershipViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import javax.inject.Inject
+
+private const val ROOM_DETAILS_SCREEN_ON_TRACKER = "room_details_screen_on"
 
 @AndroidEntryPoint
 class RoomDetailActivity :
@@ -73,6 +79,7 @@ class RoomDetailActivity :
 
     override fun getCoordinatorLayout() = views.coordinatorLayout
 
+    @Inject lateinit var playbackTracker: VoiceMessagePlaybackTracker
     private lateinit var sharedActionViewModel: RoomDetailSharedActionViewModel
     private val requireActiveMembershipViewModel: RequireActiveMembershipViewModel by viewModel()
 
@@ -114,6 +121,13 @@ class RoomDetailActivity :
             }
         }
         views.drawerLayout.addDrawerListener(drawerListener)
+
+        playbackTracker.trackActivity(ROOM_DETAILS_SCREEN_ON_TRACKER) { isActive ->
+            when (isActive) {
+                true  -> keepScreenOn()
+                false -> endKeepScreenOn()
+            }
+        }
     }
 
     private fun handleRoomLeft(roomLeft: RequireActiveMembershipViewEvents.RoomLeft) {
@@ -136,6 +150,7 @@ class RoomDetailActivity :
     override fun onDestroy() {
         supportFragmentManager.unregisterFragmentLifecycleCallbacks(fragmentLifecycleCallbacks)
         views.drawerLayout.removeDrawerListener(drawerListener)
+        playbackTracker.unTrackActivity(ROOM_DETAILS_SCREEN_ON_TRACKER)
         super.onDestroy()
     }
 
