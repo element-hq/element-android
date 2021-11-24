@@ -240,7 +240,6 @@ class RoomDetailFragment @Inject constructor(
         autoCompleterFactory: AutoCompleter.Factory,
         private val permalinkHandler: PermalinkHandler,
         private val notificationDrawerManager: NotificationDrawerManager,
-        val messageComposerViewModelFactory: MessageComposerViewModel.Factory,
         private val eventHtmlRenderer: EventHtmlRenderer,
         private val vectorPreferences: VectorPreferences,
         private val colorProvider: ColorProvider,
@@ -393,8 +392,8 @@ class RoomDetailFragment @Inject constructor(
             when (mode) {
                 is SendMode.Regular -> renderRegularMode(mode.text)
                 is SendMode.Edit    -> renderSpecialMode(mode.timelineEvent, R.drawable.ic_edit, R.string.edit, mode.text)
-                is SendMode.Quote -> renderSpecialMode(mode.timelineEvent, R.drawable.ic_quote, R.string.quote, mode.text)
-                is SendMode.Reply -> renderSpecialMode(mode.timelineEvent, R.drawable.ic_reply, R.string.reply, mode.text)
+                is SendMode.Quote   -> renderSpecialMode(mode.timelineEvent, R.drawable.ic_quote, R.string.quote, mode.text)
+                is SendMode.Reply   -> renderSpecialMode(mode.timelineEvent, R.drawable.ic_reply, R.string.reply, mode.text)
             }
         }
 
@@ -1130,9 +1129,8 @@ class RoomDetailFragment @Inject constructor(
 
     override fun onPause() {
         super.onPause()
-
         notificationDrawerManager.setCurrentRoom(null)
-
+        voiceMessagePlaybackTracker.unTrack(VoiceMessagePlaybackTracker.RECORDING_ID)
         messageComposerViewModel.handle(MessageComposerAction.SaveDraft(views.composerLayout.text.toString()))
 
         // We should improve the UX to support going into playback mode when paused and delete the media when the view is destroyed.

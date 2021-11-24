@@ -23,6 +23,8 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.R
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
@@ -764,23 +766,10 @@ class MessageComposerViewModel @AssistedInject constructor(
     }
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: MessageComposerViewState): MessageComposerViewModel
+    interface Factory : MavericksAssistedViewModelFactory<MessageComposerViewModel, MessageComposerViewState> {
+        override fun create(initialState: MessageComposerViewState): MessageComposerViewModel
     }
 
-    /**
-     * We're unable to create this ViewModel with `by hiltMavericksViewModelFactory()` due to the
-     * VoiceMessagePlaybackTracker being ActivityScoped
-     *
-     * This factory allows us to provide the ViewModel instance from the Fragment directly
-     * bypassing the Singleton scope requirement
-     */
-    companion object : MavericksViewModelFactory<MessageComposerViewModel, MessageComposerViewState> {
+    companion object : MavericksViewModelFactory<MessageComposerViewModel, MessageComposerViewState> by hiltMavericksViewModelFactory()
 
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: MessageComposerViewState): MessageComposerViewModel {
-            val fragment: RoomDetailFragment = (viewModelContext as FragmentViewModelContext).fragment()
-            return fragment.messageComposerViewModelFactory.create(state)
-        }
-    }
 }
