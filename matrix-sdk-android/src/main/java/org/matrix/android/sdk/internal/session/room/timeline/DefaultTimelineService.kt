@@ -21,6 +21,7 @@ import com.zhuinden.monarchy.Monarchy
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import io.realm.Realm
 import io.realm.Sort
 import io.realm.kotlin.where
 import org.matrix.android.sdk.api.session.events.model.isImageMessage
@@ -32,10 +33,10 @@ import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.database.RealmSessionProvider
 import org.matrix.android.sdk.internal.database.helper.findAllThreadsForRoomId
+import org.matrix.android.sdk.internal.database.helper.isUserParticipatingInThread
 import org.matrix.android.sdk.internal.database.mapper.TimelineEventMapper
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntityFields
-import org.matrix.android.sdk.internal.database.query.findAllInRoomWithSendStates
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.session.room.membership.LoadRoomMembersTask
@@ -111,10 +112,21 @@ internal class DefaultTimelineService @AssistedInject constructor(
                 { timelineEventMapper.map(it) }
         )
     }
+
     override fun getAllThreads(): List<TimelineEvent> {
         return monarchy.fetchAllMappedSync(
                 { TimelineEventEntity.findAllThreadsForRoomId(it, roomId = roomId) },
                 { timelineEventMapper.map(it) }
         )
+    }
+
+    override fun isUserParticipatingInThread(rootThreadEventId: String, senderId: String): Boolean {
+        return Realm.getInstance(monarchy.realmConfiguration).use {
+            TimelineEventEntity.isUserParticipatingInThread(
+                    realm = it,
+                    roomId = roomId,
+                    rootThreadEventId = rootThreadEventId,
+                    senderId = senderId)
+        }
     }
 }

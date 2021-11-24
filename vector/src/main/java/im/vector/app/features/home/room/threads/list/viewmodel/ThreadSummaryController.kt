@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 New Vector Ltd
+ * Copyright 2021 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,12 +34,6 @@ class ThreadSummaryController @Inject constructor(
 
     private var viewState: ThreadSummaryViewState? = null
 
-    init {
-        // We are requesting a model build directly as the first build of epoxy is on the main thread.
-        // It avoids to build the whole list of breadcrumbs on the main thread.
-        requestModelBuild()
-    }
-
     fun update(viewState: ThreadSummaryViewState) {
         this.viewState = viewState
         requestModelBuild()
@@ -48,13 +42,7 @@ class ThreadSummaryController @Inject constructor(
     override fun buildModels() {
         val safeViewState = viewState ?: return
         val host = this
-        // Add a ZeroItem to avoid automatic scroll when the breadcrumbs are updated from another client
-//        zeroItem {
-//            id("top")
-//        }
 
-        // An empty breadcrumbs list can only be temporary because when entering in a room,
-        // this one is added to the breadcrumbs
         safeViewState.rootThreadEventList.invoke()
                 ?.forEach { timelineEvent ->
                     val date = dateFormatter.format(timelineEvent.root.originServerTs, DateFormatKind.ROOM_LIST)
@@ -64,7 +52,7 @@ class ThreadSummaryController @Inject constructor(
                         matrixItem(timelineEvent.senderInfo.toMatrixItem())
                         title(timelineEvent.senderInfo.displayName)
                         date(date)
-                        rootMessage(timelineEvent.root.getDecryptedUserFriendlyTextSummary())
+                        rootMessage(timelineEvent.root.getDecryptedTextSummary())
                         lastMessage(timelineEvent.root.threadDetails?.threadSummaryLatestTextMessage.orEmpty())
                         lastMessageCounter(timelineEvent.root.threadDetails?.numberOfThreads.toString())
                         lastMessageMatrixItem(timelineEvent.root.threadDetails?.threadSummarySenderInfo?.toMatrixItem())

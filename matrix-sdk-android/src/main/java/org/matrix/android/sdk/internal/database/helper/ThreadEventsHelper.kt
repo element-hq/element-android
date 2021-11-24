@@ -86,7 +86,6 @@ internal fun EventEntity.findAllThreadsForRootEventId(realm: Realm, rootThreadEv
                 .sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.DESCENDING)
                 .findAll()
 
-
 /**
  * Find all TimelineEventEntity that are root threads for the specified room
  * @param roomId The room that all stored root threads will be returned
@@ -94,6 +93,20 @@ internal fun EventEntity.findAllThreadsForRootEventId(realm: Realm, rootThreadEv
 internal fun TimelineEventEntity.Companion.findAllThreadsForRoomId(realm: Realm, roomId: String): RealmQuery<TimelineEventEntity> =
         TimelineEventEntity
                 .whereRoomId(realm, roomId = roomId)
-                .equalTo(TimelineEventEntityFields.ROOT.IS_ROOT_THREAD,true)
+                .equalTo(TimelineEventEntityFields.ROOT.IS_ROOT_THREAD, true)
                 .sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.DESCENDING)
 
+/**
+ * Returns whether or not the given user is participating in a current thread
+ * @param roomId the room that the thread exists
+ * @param rootThreadEventId the thread that the search will be done
+ * @param senderId the user that will try to find participation
+ */
+internal fun TimelineEventEntity.Companion.isUserParticipatingInThread(realm: Realm, roomId: String, rootThreadEventId: String, senderId: String): Boolean =
+        TimelineEventEntity
+                .whereRoomId(realm, roomId = roomId)
+                .equalTo(TimelineEventEntityFields.ROOT.ROOT_THREAD_EVENT_ID, rootThreadEventId)
+                .equalTo(TimelineEventEntityFields.ROOT.SENDER, senderId)
+                .findFirst()
+                ?.let { true }
+                ?: false

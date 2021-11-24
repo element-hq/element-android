@@ -111,7 +111,7 @@ internal object EventMapper {
                                 avatarUrl = timelineEventEntity.senderAvatar
                         )
                     },
-                    threadSummaryLatestTextMessage = eventEntity.threadSummaryLatestMessage?.root?.asDomain()?.getDecryptedUserFriendlyTextSummary().orEmpty()
+                    threadSummaryLatestTextMessage = eventEntity.threadSummaryLatestMessage?.root?.asDomain()?.getDecryptedTextSummary().orEmpty()
             )
         }
     }

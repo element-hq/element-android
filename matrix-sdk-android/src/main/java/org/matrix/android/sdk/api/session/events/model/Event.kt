@@ -195,7 +195,7 @@ data class Event(
      * It can be used especially for message summaries.
      * It will return a decrypted text message or an empty string otherwise.
      */
-    fun getDecryptedUserFriendlyTextSummary(): String {
+    fun getDecryptedTextSummary(): String {
         val text = getDecryptedValue().orEmpty()
         return when {
             isReply() || isQuote() -> ContentUtils.extractUsefulTextFromReply(text)

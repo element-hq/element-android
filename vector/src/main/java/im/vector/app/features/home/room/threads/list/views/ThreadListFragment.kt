@@ -18,11 +18,10 @@ package im.vector.app.features.home.room.threads.list.views
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.view.isVisible
-import androidx.transition.TransitionInflater
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
@@ -32,21 +31,16 @@ import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentThreadListBinding
 import im.vector.app.features.home.AvatarRenderer
-import im.vector.app.features.home.room.breadcrumbs.BreadcrumbsAnimator
-import im.vector.app.features.home.room.breadcrumbs.BreadcrumbsViewModel
-import im.vector.app.features.home.room.detail.RoomDetailSharedActionViewModel
+import im.vector.app.features.home.room.detail.timeline.animation.TimelineItemAnimator
 import im.vector.app.features.home.room.threads.ThreadsActivity
 import im.vector.app.features.home.room.threads.arguments.ThreadListArgs
-import im.vector.app.features.home.room.threads.arguments.ThreadTimelineArgs
 import im.vector.app.features.home.room.threads.list.viewmodel.ThreadSummaryController
 import im.vector.app.features.home.room.threads.list.viewmodel.ThreadSummaryViewModel
-import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.util.MatrixItem
 import javax.inject.Inject
 
 class ThreadListFragment @Inject constructor(
-        private val session: Session,
         private val avatarRenderer: AvatarRenderer,
         private val threadSummaryController: ThreadSummaryController,
         val threadSummaryViewModelFactory: ThreadSummaryViewModel.Factory
@@ -67,10 +61,20 @@ class ThreadListFragment @Inject constructor(
         super.onCreate(savedInstanceState)
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.menu_thread_list_filter -> {
+                ThreadListBottomSheet().show(childFragmentManager, "Filtering")
+                true
+            }
+            else                         -> super.onOptionsItemSelected(item)
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
-        views.threadListRecyclerView.configureWith(threadSummaryController, BreadcrumbsAnimator(), hasFixedSize = false)
+        views.threadListRecyclerView.configureWith(threadSummaryController, TimelineItemAnimator(), hasFixedSize = false)
         threadSummaryController.listener = this
     }
 

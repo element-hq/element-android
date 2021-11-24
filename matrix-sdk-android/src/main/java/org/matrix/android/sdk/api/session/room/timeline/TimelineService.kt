@@ -68,4 +68,11 @@ interface TimelineService {
      */
     fun getAllThreads(): List<TimelineEvent>
 
+    /**
+     * Returns whether or not the current user is participating in the thread
+     * @param rootThreadEventId the eventId of the current thread
+     */
+    fun isUserParticipatingInThread(rootThreadEventId: String, senderId: String): Boolean
+
+
 }

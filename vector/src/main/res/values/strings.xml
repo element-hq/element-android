@@ -1027,10 +1027,15 @@
     <string name="room_details_people_invited_group_name">INVITED</string>
     <string name="room_details_people_present_group_name">JOINED</string>
 
-    <!-- Room Threads -->
+    <!-- Threads -->
     <string name="room_threads_filter">Filter Threads in room</string>
     <string name="thread_timeline_title">Thread</string>
     <string name="thread_list_title">Threads</string>
+    <string name="thread_list_modal_title">Filter</string>
+    <string name="thread_list_modal_all_threads_title">All Threads</string>
+    <string name="thread_list_modal_all_threads_subtitle">Shows all threads from current room</string>
+    <string name="thread_list_modal_my_threads_title">My Threads</string>
+    <string name="thread_list_modal_my_threads_subtitle">Shows all threads you’ve participated in</string>
 
     <!-- Room events -->
     <string name="room_event_action_report_prompt_reason">Reason for reporting this content</string>
