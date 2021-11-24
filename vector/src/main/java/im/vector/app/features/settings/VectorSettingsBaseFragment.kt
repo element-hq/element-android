@@ -21,6 +21,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.annotation.CallSuper
 import androidx.preference.PreferenceFragmentCompat
+import com.airbnb.mvrx.MavericksView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.error.ErrorFormatter
@@ -30,7 +31,7 @@ import im.vector.app.core.utils.toast
 import org.matrix.android.sdk.api.session.Session
 import timber.log.Timber
 
-abstract class VectorSettingsBaseFragment : PreferenceFragmentCompat() {
+abstract class VectorSettingsBaseFragment : PreferenceFragmentCompat(), MavericksView {
 
     val vectorActivity: VectorBaseActivity<*> by lazy {
         activity as VectorBaseActivity<*>
@@ -144,5 +145,9 @@ abstract class VectorSettingsBaseFragment : PreferenceFragmentCompat() {
                 .setMessage(errorMessage)
                 .setPositiveButton(R.string.ok, null)
                 .show()
+    }
+
+    override fun invalidate() {
+        // No op by default
     }
 }

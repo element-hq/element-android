@@ -24,6 +24,7 @@ import im.vector.app.features.analytics.VectorAnalytics
 import im.vector.app.features.analytics.store.AnalyticsStore
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -106,6 +107,7 @@ class DefaultVectorAnalytics @Inject constructor(
                     posthog?.identify(it)
                 }
             }
+                    .launchIn(GlobalScope)
         }
     }
 
@@ -115,6 +117,7 @@ class DefaultVectorAnalytics @Inject constructor(
             getUserConsent().onEach {
                 userConsent = it
             }
+                    .launchIn(GlobalScope)
         }
     }
 
