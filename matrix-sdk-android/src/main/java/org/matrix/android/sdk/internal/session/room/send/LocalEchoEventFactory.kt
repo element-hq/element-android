@@ -207,8 +207,8 @@ internal class LocalEchoEventFactory @Inject constructor(
         return when (attachment.type) {
             ContentAttachmentData.Type.IMAGE         -> createImageEvent(roomId, attachment)
             ContentAttachmentData.Type.VIDEO         -> createVideoEvent(roomId, attachment)
-            ContentAttachmentData.Type.AUDIO         -> createAudioEvent(roomId, attachment)
-            ContentAttachmentData.Type.VOICE_MESSAGE -> createAudioEvent(roomId, attachment)
+            ContentAttachmentData.Type.AUDIO         -> createAudioEvent(roomId, attachment, isVoiceMessage = false)
+            ContentAttachmentData.Type.VOICE_MESSAGE -> createAudioEvent(roomId, attachment, isVoiceMessage = true)
             ContentAttachmentData.Type.FILE          -> createFileEvent(roomId, attachment)
         }
     }
@@ -297,8 +297,7 @@ internal class LocalEchoEventFactory @Inject constructor(
         return createMessageEvent(roomId, content)
     }
 
-    private fun createAudioEvent(roomId: String, attachment: ContentAttachmentData): Event {
-        val isVoiceMessage = attachment.waveform != null
+    private fun createAudioEvent(roomId: String, attachment: ContentAttachmentData, isVoiceMessage: Boolean): Event {
         val content = MessageAudioContent(
                 msgType = MessageType.MSGTYPE_AUDIO,
                 body = attachment.name ?: "audio",
