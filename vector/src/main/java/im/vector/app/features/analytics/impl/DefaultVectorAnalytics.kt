@@ -70,6 +70,37 @@ class DefaultVectorAnalytics @Inject constructor(
     }
 
     override fun init() {
+        observeUserConsent()
+        observeAnalyticsId()
+    }
+
+    @Suppress("EXPERIMENTAL_API_USAGE")
+    private fun observeAnalyticsId() {
+        getAnalyticsId()
+                .onEach { id ->
+                    if (id.isEmpty()) {
+                        posthog?.reset()
+                    } else {
+                        posthog?.identify(id)
+                    }
+                }
+                .launchIn(GlobalScope)
+    }
+
+    @Suppress("EXPERIMENTAL_API_USAGE")
+    private fun observeUserConsent() {
+        getUserConsent()
+                .onEach { consent ->
+                    userConsent = consent
+                    if (consent) {
+                        createAnalyticsClient()
+                    }
+                    posthog?.optOut(!consent)
+                }
+                .launchIn(GlobalScope)
+    }
+
+    private fun createAnalyticsClient() {
         val config: AnalyticsConfig = AnalyticsConfig.getConfig()
                 ?: return Unit.also { Timber.w("Analytics is disabled") }
 
@@ -93,9 +124,6 @@ class DefaultVectorAnalytics @Inject constructor(
                 .collectDeviceId(false)
                 .logLevel(getLogLevel())
                 .build()
-
-        observeUserConsent()
-        observeAnalyticsId()
     }
 
     private fun getLogLevel(): PostHog.LogLevel {
@@ -104,29 +132,6 @@ class DefaultVectorAnalytics @Inject constructor(
         } else {
             PostHog.LogLevel.INFO
         }
-    }
-
-    @Suppress("EXPERIMENTAL_API_USAGE")
-    private fun observeAnalyticsId() {
-        getAnalyticsId()
-                .onEach { id ->
-                    if (id.isEmpty()) {
-                        posthog?.reset()
-                    } else {
-                        posthog?.identify(id)
-                    }
-                }
-                .launchIn(GlobalScope)
-    }
-
-    @Suppress("EXPERIMENTAL_API_USAGE")
-    private fun observeUserConsent() {
-        getUserConsent()
-                .onEach { consent ->
-                    userConsent = consent
-                    posthog?.optOut(!consent)
-                }
-                .launchIn(GlobalScope)
     }
 
     override fun capture(event: String, properties: Map<String, Any>?) {
