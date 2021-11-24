@@ -114,6 +114,7 @@ class DefaultVectorAnalytics @Inject constructor(
         getUserConsent()
                 .onEach { consent ->
                     userConsent = consent
+                    posthog?.optOut(!consent)
                 }
                 .launchIn(GlobalScope)
     }
