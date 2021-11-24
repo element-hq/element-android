@@ -1333,4 +1333,55 @@
     <string name="call_connecting">Oprop is oan it ferbinen…</string>
     <string name="template_e2e_re_request_encryption_key_dialog_content">Start ${app_name} op in oar apparaat dat it berjocht ûntsiferje kin, sadat it de kaaien nei dizze sesje stjoere kin.</string>
     <string name="login_error_homeserver_from_url_not_found">Thússerver-URL %s net te berikken. Kontrolearje jo keppeling of kies hânmjittich in oare thússerver.</string>
+    <string name="space_participants_ban_prompt_msg">Troch dizze brûker te ferballen sil dy fuortsmiten wurde út dizze romte en foarkommen dat dy opnij ta treed.</string>
+    <string name="room_participants_ban_prompt_msg">As in brûker ferballe wurdt, wurdt dizze út dizze keamer fuortsmiten en wurdt der foarkommen dat dy opnij lid wurdt.</string>
+    <string name="room_participants_unban_title">Ferballing brûker ûngedien meitsje</string>
+    <string name="room_participants_ban_reason">Reden foar ferballing</string>
+    <string name="room_participants_ban_title">Brûker ferbalje</string>
+    <string name="space_participants_kick_prompt_msg">troch dizze brûker fuort te smiten sil dy net mear yn dizze romte sitte.
+\n
+\nOm foar te kommen dat dyjinge opnij ta treed, kinne jo him/har ek ferballe.</string>
+    <string name="room_participants_kick_prompt_msg">troch dizze brûker fuort te smiten sil dy net mear yn dit petear sitte.
+\n
+\nOm foar te kommen dat dyjinge opnij ta treed, kinne jo him/har ek ferballe.</string>
+    <string name="room_participants_kick_reason">Reden foar fuortsmiten</string>
+    <string name="room_participants_kick_title">Brûker fuortsmite</string>
+    <string name="room_participants_action_cancel_invite_prompt_msg">Binne jo wis dat jo de útnûging foar dizze brûker annulearje wolle\?</string>
+    <string name="room_participants_action_unignore_prompt_msg">It net mear negearjen fan dizze brûker sil al syn/har berjochten opnij werjaan.</string>
+    <string name="room_participants_action_ignore_prompt_msg">Troch dizze brûker te negearjen wurden syn/har berjochten fuortsmiten út petearen dy’t jimme diele.
+\n
+\nJo kinne dizze aksje op elk momint ûngedien meitsje yn de algemiene ynstellingen.</string>
+    <string name="room_participants_power_level_demote_warning_prompt">Jo kinne dizze wiziging net ûngedien meitsje, omdat jo josels degradearje, as jo de lêste brûker mei rjochten binne yn it petear sil it net mooglik wêze om opnij rjochten te krijen.</string>
+    <string name="room_participants_power_level_prompt">Jo kinne dizze wizigingen net ûngedien meitsje omdat jo de brûker ta itselde nivo as josels promovearje.
+\nBinne jo wis\?</string>
+    <string name="room_participants_action_unban">Untballe</string>
+    <string name="room_participants_remove_prompt_msg">Binne jo wis dat jo %s út dit petear gean wolle\?</string>
+    <string name="room_participants_leave_private_warning">Dit petear is net iepenbier. Jo kinne net opnij ta trede sûnder útnûging.</string>
+    <plurals name="format_time_d">
+        <item quantity="one">%dd</item>
+        <item quantity="other">%dd</item>
+    </plurals>
+    <plurals name="format_time_h">
+        <item quantity="one">%do</item>
+        <item quantity="other">%do</item>
+    </plurals>
+    <plurals name="format_time_m">
+        <item quantity="one">%dm</item>
+        <item quantity="other">%dm</item>
+    </plurals>
+    <plurals name="format_time_s">
+        <item quantity="one">%ds</item>
+        <item quantity="other">%ds</item>
+    </plurals>
+    <plurals name="room_title_members">
+        <item quantity="one">%d dielnimmer</item>
+        <item quantity="other">%d dielnimmers</item>
+    </plurals>
+    <plurals name="room_header_active_members_count">
+        <item quantity="one">%d aktive dielnimmer</item>
+        <item quantity="other">%d aktive dielnimmers</item>
+    </plurals>
+    <string name="room_creation_add_member">Dielnimmer tafoegje</string>
+    <string name="room_preview_room_interactions_disabled">Dit is in foarfertoaning fan dit petear. Petearynteraksjes binne útskeakele.</string>
+    <string name="room_preview_try_join_an_unknown_room">Jo probearje tagong te krijen ta %s. Soenen jo ta trede wolle om oan it petear mei te dwaan\?</string>
 </resources>
