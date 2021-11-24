@@ -52,8 +52,8 @@ class DefaultVectorAnalytics @Inject constructor(
         return analyticsStore.didAskUserConsentFlow
     }
 
-    override suspend fun setDidAskUserConsent(didAskUserConsent: Boolean) {
-        analyticsStore.setDidAskUserConsent(didAskUserConsent)
+    override suspend fun setDidAskUserConsent() {
+        analyticsStore.setDidAskUserConsent()
     }
 
     override fun getAnalyticsId(): Flow<String> {

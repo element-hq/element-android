@@ -37,7 +37,7 @@ interface VectorAnalytics {
     /**
      * Store the fact that the user has been asked for their consent
      */
-    suspend fun setDidAskUserConsent(didAskUserConsent: Boolean)
+    suspend fun setDidAskUserConsent()
 
     /**
      * Return a Flow of String, used for analytics Id

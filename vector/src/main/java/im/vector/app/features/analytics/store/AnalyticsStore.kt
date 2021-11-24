@@ -61,9 +61,9 @@ class AnalyticsStore @Inject constructor(
         }
     }
 
-    suspend fun setDidAskUserConsent(newDidAskUserConsent: Boolean) {
+    suspend fun setDidAskUserConsent() {
         context.dataStore.edit { settings ->
-            settings[didAskUserConsent] = newDidAskUserConsent
+            settings[didAskUserConsent] = true
         }
     }
 

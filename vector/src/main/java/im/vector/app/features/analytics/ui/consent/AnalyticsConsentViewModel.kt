@@ -65,7 +65,7 @@ class AnalyticsConsentViewModel @AssistedInject constructor(
             analytics.setUserConsent(action.userConsent)
             if (!action.userConsent) {
                 // User explicitly changed the default value, let's avoid reverting to the default value
-                analytics.setDidAskUserConsent(true)
+                analytics.setDidAskUserConsent()
             }
         }
     }
@@ -73,7 +73,7 @@ class AnalyticsConsentViewModel @AssistedInject constructor(
     private fun handleOnScreenLeft() {
         // Whatever the state of the box, consider the user acknowledge it
         viewModelScope.launch {
-            analytics.setDidAskUserConsent(true)
+            analytics.setDidAskUserConsent()
         }
     }
 }
