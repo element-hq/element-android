@@ -234,8 +234,8 @@ android {
             buildConfigField "boolean", "ENABLE_STRICT_MODE_LOGS", "false"
 
             // Analytics. Set to empty strings to just disable analytics
-            buildConfigField "String", "ANALYTICS_POSTHOG_HOST", "\"https://posthog.hss.element.io/\""
-            buildConfigField "String", "ANALYTICS_POSTHOG_API_KEY", "\"TODO\""
+            buildConfigField "String", "ANALYTICS_POSTHOG_HOST", "\"https://posthog-poc.lab.element.dev/\""
+            buildConfigField "String", "ANALYTICS_POSTHOG_API_KEY", "\"rs-pJjsYJTuAkXJfhaMmPUNBhWliDyTKLOOxike6ck8\""
 
             signingConfig signingConfigs.debug
         }
@@ -248,8 +248,8 @@ android {
             buildConfigField "boolean", "ENABLE_STRICT_MODE_LOGS", "false"
 
             // Analytics. Set to empty strings to just disable analytics
-            buildConfigField "String", "ANALYTICS_POSTHOG_HOST", "\"https://posthog-poc.lab.element.dev/\""
-            buildConfigField "String", "ANALYTICS_POSTHOG_API_KEY", "\"TODO\""
+            buildConfigField "String", "ANALYTICS_POSTHOG_HOST", "\"https://posthog.hss.element.io/\""
+            buildConfigField "String", "ANALYTICS_POSTHOG_API_KEY", "\"phc_Jzsm6DTm6V2705zeU5dcNvQDlonOR68XvX2sh1sEOHO\""
 
             postprocessing {
                 removeUnusedCode true
