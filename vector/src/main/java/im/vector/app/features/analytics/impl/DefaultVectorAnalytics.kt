@@ -26,7 +26,6 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -99,26 +98,24 @@ class DefaultVectorAnalytics @Inject constructor(
 
     @Suppress("EXPERIMENTAL_API_USAGE")
     private fun observeAnalyticsId() {
-        GlobalScope.launch {
-            getAnalyticsId().onEach {
-                if (it.isEmpty()) {
-                    posthog?.reset()
-                } else {
-                    posthog?.identify(it)
+        getAnalyticsId()
+                .onEach { id ->
+                    if (id.isEmpty()) {
+                        posthog?.reset()
+                    } else {
+                        posthog?.identify(id)
+                    }
                 }
-            }
-                    .launchIn(GlobalScope)
-        }
+                .launchIn(GlobalScope)
     }
 
     @Suppress("EXPERIMENTAL_API_USAGE")
     private fun observeUserConsent() {
-        GlobalScope.launch {
-            getUserConsent().onEach {
-                userConsent = it
-            }
-                    .launchIn(GlobalScope)
-        }
+        getUserConsent()
+                .onEach { consent ->
+                    userConsent = consent
+                }
+                .launchIn(GlobalScope)
     }
 
     override fun capture(event: String, properties: Map<String, Any>?) {
