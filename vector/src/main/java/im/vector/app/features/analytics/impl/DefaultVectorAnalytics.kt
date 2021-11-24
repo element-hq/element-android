@@ -39,7 +39,8 @@ class DefaultVectorAnalytics @Inject constructor(
 ) : VectorAnalytics {
     private var posthog: PostHog? = null
 
-    private var userConsent: Boolean = false
+    // Cache for the store values
+    private var userConsent: Boolean? = null
     private var analyticsId: String? = null
 
     override fun getUserConsent(): Flow<Boolean> {
@@ -77,6 +78,7 @@ class DefaultVectorAnalytics @Inject constructor(
     override fun init() {
         observeUserConsent()
         observeAnalyticsId()
+        createAnalyticsClient()
     }
 
     @Suppress("EXPERIMENTAL_API_USAGE")
@@ -107,12 +109,13 @@ class DefaultVectorAnalytics @Inject constructor(
                 .onEach { consent ->
                     Timber.tag(analyticsTag.value).d("User consent updated to $consent")
                     userConsent = consent
-                    if (consent) {
-                        createAnalyticsClient()
-                    }
-                    posthog?.optOut(!consent)
+                    optOutPostHog()
                 }
                 .launchIn(GlobalScope)
+    }
+
+    private fun optOutPostHog() {
+        userConsent?.let { posthog?.optOut(!it) }
     }
 
     private fun createAnalyticsClient() {
@@ -142,6 +145,7 @@ class DefaultVectorAnalytics @Inject constructor(
                 .logLevel(getLogLevel())
                 .build()
 
+        optOutPostHog()
         identifyPostHog()
     }
 
@@ -156,14 +160,14 @@ class DefaultVectorAnalytics @Inject constructor(
     override fun capture(event: String, properties: Map<String, Any>?) {
         Timber.tag(analyticsTag.value).d("capture($event)")
         posthog
-                ?.takeIf { userConsent }
+                ?.takeIf { userConsent == true }
                 ?.capture(event, properties.toPostHogProperties())
     }
 
     override fun screen(name: String, properties: Map<String, Any>?) {
         Timber.tag(analyticsTag.value).d("screen($name)")
         posthog
-                ?.takeIf { userConsent }
+                ?.takeIf { userConsent == true }
                 ?.screen(name, properties.toPostHogProperties())
     }
 
