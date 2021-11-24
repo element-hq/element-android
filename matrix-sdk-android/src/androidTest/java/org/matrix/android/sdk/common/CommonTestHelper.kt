@@ -20,8 +20,9 @@ import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.Observer
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -55,6 +56,7 @@ import java.util.concurrent.TimeUnit
 class CommonTestHelper(context: Context) {
 
     val matrix: TestMatrix
+    val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
 
     fun getTestInterceptor(session: Session): MockOkHttpInterceptor? = TestModule.interceptorForSession(session.sessionId) as? MockOkHttpInterceptor
 
@@ -93,30 +95,45 @@ class CommonTestHelper(context: Context) {
      *
      * @param session    the session to sync
      */
-    @Suppress("EXPERIMENTAL_API_USAGE")
-    fun syncSession(session: Session, timeout: Long = TestConstants.timeOutMillis) {
+    fun syncSession(session: Session, timeout: Long = TestConstants.timeOutMillis * 10) {
         val lock = CountDownLatch(1)
-
-        val job = GlobalScope.launch(Dispatchers.Main) {
-            session.open()
-        }
-        runBlocking { job.join() }
-
-        session.startSync(true)
-
-        val syncLiveData = runBlocking(Dispatchers.Main) {
-            session.getSyncStateLive()
-        }
-        val syncObserver = object : Observer<SyncState> {
-            override fun onChanged(t: SyncState?) {
-                if (session.hasAlreadySynced()) {
-                    lock.countDown()
-                    syncLiveData.removeObserver(this)
+        coroutineScope.launch {
+            session.startSync(true)
+            val syncLiveData = session.getSyncStateLive()
+            val syncObserver = object : Observer<SyncState> {
+                override fun onChanged(t: SyncState?) {
+                    if (session.hasAlreadySynced()) {
+                        lock.countDown()
+                        syncLiveData.removeObserver(this)
+                    }
                 }
             }
+            syncLiveData.observeForever(syncObserver)
         }
-        GlobalScope.launch(Dispatchers.Main) { syncLiveData.observeForever(syncObserver) }
+        await(lock, timeout)
+    }
 
+    /**
+     * This methods clear the cache and waits for initialSync
+     *
+     * @param session    the session to sync
+     */
+    fun clearCacheAndSync(session: Session, timeout: Long = TestConstants.timeOutMillis) {
+        val lock = CountDownLatch(1)
+        coroutineScope.launch {
+            session.clearCache()
+            val syncLiveData = session.getSyncStateLive()
+            val syncObserver = object : Observer<SyncState> {
+                override fun onChanged(t: SyncState?) {
+                    if (session.hasAlreadySynced()) {
+                        lock.countDown()
+                        syncLiveData.removeObserver(this)
+                    }
+                }
+            }
+            syncLiveData.observeForever(syncObserver)
+            session.startSync(true)
+        }
         await(lock, timeout)
     }
 
@@ -130,41 +147,40 @@ class CommonTestHelper(context: Context) {
     fun sendTextMessage(room: Room, message: String, nbOfMessages: Int, timeout: Long = TestConstants.timeOutMillis): List<TimelineEvent> {
         val timeline = room.createTimeline(null, TimelineSettings(10))
         val sentEvents = ArrayList<TimelineEvent>(nbOfMessages)
-        val latch = CountDownLatch(1)
-        val timelineListener = object : Timeline.Listener {
-            override fun onTimelineFailure(throwable: Throwable) {
-            }
+        waitWithLatch(timeout   ) {  latch ->
+            val timelineListener = object : Timeline.Listener {
+                override fun onTimelineFailure(throwable: Throwable) {
+                }
 
-            override fun onNewTimelineEvents(eventIds: List<String>) {
-                // noop
-            }
+                override fun onNewTimelineEvents(eventIds: List<String>) {
+                    // noop
+                }
 
-            override fun onTimelineUpdated(snapshot: List<TimelineEvent>) {
-                val newMessages = snapshot
-                        .filter { it.root.sendState == SendState.SYNCED }
-                        .filter { it.root.getClearType() == EventType.MESSAGE }
-                        .filter { it.root.getClearContent().toModel<MessageContent>()?.body?.startsWith(message) == true }
+                override fun onTimelineUpdated(snapshot: List<TimelineEvent>) {
+                    val newMessages = snapshot
+                            .filter { it.root.sendState == SendState.SYNCED }
+                            .filter { it.root.getClearType() == EventType.MESSAGE }
+                            .filter { it.root.getClearContent().toModel<MessageContent>()?.body?.startsWith(message) == true }
 
-                if (newMessages.size == nbOfMessages) {
-                    sentEvents.addAll(newMessages)
-                    // Remove listener now, if not at the next update sendEvents could change
-                    timeline.removeListener(this)
-                    latch.countDown()
+                    if (newMessages.size == nbOfMessages) {
+                        sentEvents.addAll(newMessages)
+                        // Remove listener now, if not at the next update sendEvents could change
+                        timeline.removeListener(this)
+                        latch.countDown()
+                    }
                 }
             }
+            timeline.start()
+            timeline.addListener(timelineListener)
+            for (i in 0 until nbOfMessages) {
+                room.sendTextMessage(message + " #" + (i + 1))
+                // Sleep a bit otherwise database will be flowed and sync won't be live (we might end up with gap then...)
+                delay(50)
+            }
         }
-        timeline.start()
-        timeline.addListener(timelineListener)
-        for (i in 0 until nbOfMessages) {
-            room.sendTextMessage(message + " #" + (i + 1))
-        }
-        // Wait 3 second more per message
-        await(latch, timeout = timeout + 3_000L * nbOfMessages)
         timeline.dispose()
-
         // Check that all events has been created
         assertEquals("Message number do not match $sentEvents", nbOfMessages.toLong(), sentEvents.size.toLong())
-
         return sentEvents
     }
 
@@ -237,10 +253,10 @@ class CommonTestHelper(context: Context) {
 
         assertTrue(registrationResult is RegistrationResult.Success)
         val session = (registrationResult as RegistrationResult.Success).session
+        session.open()
         if (sessionTestParams.withInitialSync) {
             syncSession(session, 60_000)
         }
-
         return session
     }
 
@@ -265,7 +281,7 @@ class CommonTestHelper(context: Context) {
                     .getLoginWizard()
                     .login(userName, password, "myDevice")
         }
-
+        session.open()
         if (sessionTestParams.withInitialSync) {
             syncSession(session)
         }
@@ -331,21 +347,21 @@ class CommonTestHelper(context: Context) {
     }
 
     @Suppress("EXPERIMENTAL_API_USAGE")
-    fun retryPeriodicallyWithLatch(latch: CountDownLatch, condition: (() -> Boolean)) {
-        GlobalScope.launch {
-            while (true) {
-                delay(1000)
-                if (condition()) {
-                    latch.countDown()
-                    return@launch
-                }
+    suspend fun retryPeriodicallyWithLatch(latch: CountDownLatch, condition: (() -> Boolean)) {
+        while (true) {
+            delay(1000)
+            if (condition()) {
+                latch.countDown()
+                return
             }
         }
     }
 
-    fun waitWithLatch(timeout: Long? = TestConstants.timeOutMillis, block: (CountDownLatch) -> Unit) {
+    fun waitWithLatch(timeout: Long? = TestConstants.timeOutMillis, block: suspend (CountDownLatch) -> Unit) {
         val latch = CountDownLatch(1)
-        block(latch)
+        coroutineScope.launch {
+            block(latch)
+        }
         await(latch, timeout)
     }
 
