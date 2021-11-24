@@ -40,6 +40,7 @@ class DefaultVectorAnalytics @Inject constructor(
     private var posthog: PostHog? = null
 
     private var userConsent: Boolean = false
+    private var analyticsId: String? = null
 
     override fun getUserConsent(): Flow<Boolean> {
         return analyticsStore.userConsentFlow
@@ -83,15 +84,21 @@ class DefaultVectorAnalytics @Inject constructor(
         getAnalyticsId()
                 .onEach { id ->
                     Timber.tag(analyticsTag.value).d("Analytics Id updated to '$id'")
-                    if (id.isEmpty()) {
-                        Timber.tag(analyticsTag.value).d("reset")
-                        posthog?.reset()
-                    } else {
-                        Timber.tag(analyticsTag.value).d("identify")
-                        posthog?.identify(id)
-                    }
+                    analyticsId = id
+                    identifyPostHog()
                 }
                 .launchIn(GlobalScope)
+    }
+
+    private fun identifyPostHog() {
+        val id = analyticsId ?: return
+        if (id.isEmpty()) {
+            Timber.tag(analyticsTag.value).d("reset")
+            posthog?.reset()
+        } else {
+            Timber.tag(analyticsTag.value).d("identify")
+            posthog?.identify(id)
+        }
     }
 
     @Suppress("EXPERIMENTAL_API_USAGE")
@@ -134,6 +141,8 @@ class DefaultVectorAnalytics @Inject constructor(
                 .collectDeviceId(false)
                 .logLevel(getLogLevel())
                 .build()
+
+        identifyPostHog()
     }
 
     private fun getLogLevel(): PostHog.LogLevel {
