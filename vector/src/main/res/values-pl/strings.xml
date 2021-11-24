@@ -3045,4 +3045,15 @@
     <string name="authentication_error">Uwierzytelnianie nieudane</string>
     <string name="template_re_authentication_default_confirm_text">${app_name} wymaga podania Twoich danych do wykonania tej czynności.</string>
     <string name="call_transfer_transfer_to_title">Przekaż do %1$s</string>
+    <string name="create_poll_empty_question_error">Pytanie nie może być puste</string>
+    <string name="create_poll_button">UTWÓRZ ANKIETĘ</string>
+    <string name="create_poll_add_option">DODAJ OPCJĘ</string>
+    <string name="create_poll_options_hint">Opcja %1$d</string>
+    <string name="create_poll_options_title">Utwórz opcje</string>
+    <string name="create_poll_question_hint">Pytanie lub temat</string>
+    <string name="create_poll_question_title">Pytanie lub temat ankiety</string>
+    <string name="create_poll_title">Utwórz ankietę</string>
+    <string name="link_this_email_settings_link">Powiąż ten email ze swoim kontem</string>
+    <string name="create_spaces_room_private_header_desc">Stwórzmy pokój dla każdego z nich. Możesz potem dodać kolejne, także te już istniejące.</string>
+    <string name="create_spaces_room_private_header">Nad czym pracujesz\?</string>
 </resources>
