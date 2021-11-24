@@ -40,6 +40,7 @@ sealed interface SendMode {
     data class Quote(val timelineEvent: TimelineEvent, val text: String) : SendMode
     data class Edit(val timelineEvent: TimelineEvent, val text: String) : SendMode
     data class Reply(val timelineEvent: TimelineEvent, val text: String) : SendMode
+    data class Voice(val text: String) : SendMode
 }
 
 data class MessageComposerViewState(
@@ -47,15 +48,14 @@ data class MessageComposerViewState(
         val canSendMessage: Boolean = true,
         val isSendButtonVisible: Boolean = false,
         val sendMode: SendMode = SendMode.Regular("", false),
-        val voiceRecordingUiState: VoiceMessageRecorderView.RecordingUiState = VoiceMessageRecorderView.RecordingUiState.None
+        val voiceRecordingUiState: VoiceMessageRecorderView.RecordingUiState = VoiceMessageRecorderView.RecordingUiState.Idle
 ) : MavericksState {
 
     val isVoiceRecording = when (voiceRecordingUiState) {
-        VoiceMessageRecorderView.RecordingUiState.None,
-        VoiceMessageRecorderView.RecordingUiState.Cancelled,
-        VoiceMessageRecorderView.RecordingUiState.Playback -> false
+        VoiceMessageRecorderView.RecordingUiState.Idle      -> false
         is VoiceMessageRecorderView.RecordingUiState.Locked,
-        is VoiceMessageRecorderView.RecordingUiState.Started  -> true
+        VoiceMessageRecorderView.RecordingUiState.Draft,
+        is VoiceMessageRecorderView.RecordingUiState.Recording -> true
     }
 
     val isVoiceMessageIdle = !isVoiceRecording
