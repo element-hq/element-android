@@ -18,9 +18,12 @@ package im.vector.app.features.voice
 
 import android.content.Context
 import android.media.MediaRecorder
+import android.net.Uri
 import android.os.Build
+import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import java.io.File
 import java.io.FileOutputStream
+import java.util.UUID
 
 abstract class AbstractVoiceRecorder(
         private val context: Context,
@@ -59,7 +62,7 @@ abstract class AbstractVoiceRecorder(
 
     override fun startRecord() {
         init()
-        outputFile = File(outputDirectory, "Voice message.$filenameExt")
+        outputFile = File(outputDirectory, "${UUID.randomUUID()}$filenameExt")
 
         val mr = mediaRecorder ?: return
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -99,4 +102,13 @@ abstract class AbstractVoiceRecorder(
     override fun getVoiceMessageFile(): File? {
         return convertFile(outputFile)
     }
+}
+
+@Suppress("UNUSED") // preemptively added for https://github.com/vector-im/element-android/pull/4527
+private fun ContentAttachmentData.findVoiceFile(baseDirectory: File): File {
+    return File(baseDirectory, queryUri.takePathAfter(baseDirectory.name))
+}
+
+private fun Uri.takePathAfter(after: String): String {
+    return pathSegments.takeLastWhile { it != after }.joinToString(separator = "/") { it }
 }
