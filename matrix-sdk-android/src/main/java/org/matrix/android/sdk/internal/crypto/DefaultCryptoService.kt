@@ -255,7 +255,11 @@ internal class DefaultCryptoService @Inject constructor(
      * @return the tracking status
      */
     override fun getDeviceTrackingStatus(userId: String): Int {
-        return cryptoStore.getDeviceTrackingStatus(userId, DeviceListManager.TRACKING_STATUS_NOT_TRACKED)
+        return if (olmMachine.isUserTracked(userId)) {
+            3
+        } else {
+            -1
+        }
     }
 
     /**

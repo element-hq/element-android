@@ -332,6 +332,17 @@ internal class OlmMachine(
     suspend fun updateTrackedUsers(users: List<String>) =
             withContext(Dispatchers.IO) { inner.updateTrackedUsers(users) }
 
+
+    /**
+     * Check if the given user is considered to be tracked.
+     * A user can be marked for tracking using the
+     * [OlmMachine.updateTrackedUsers] method.
+     */
+    @Throws(CryptoStoreException::class)
+    fun isUserTracked(userId: String): Boolean {
+        return this.inner.isUserTracked(userId)
+    }
+
     /**
      * Generate one-time key claiming requests for all the users we are missing sessions for.
      *
