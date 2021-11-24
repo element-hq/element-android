@@ -62,7 +62,7 @@ abstract class AbstractVoiceRecorder(
 
     override fun startRecord() {
         init()
-        outputFile = File(outputDirectory, "${UUID.randomUUID()}$filenameExt")
+        outputFile = File(outputDirectory, "${UUID.randomUUID()}.$filenameExt")
 
         val mr = mediaRecorder ?: return
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
