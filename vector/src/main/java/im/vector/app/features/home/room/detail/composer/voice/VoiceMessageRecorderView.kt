@@ -140,6 +140,7 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
     }
 
     private fun onDrag(currentDragState: DraggingState, newDragState: DraggingState) {
+        if (currentDragState == newDragState) return
         when (newDragState) {
             is DraggingState.Cancelling -> voiceMessageViews.renderCancelling(newDragState.distanceX)
             is DraggingState.Locking    -> {
