@@ -86,4 +86,6 @@ data class RoomDetailViewState(
     fun hasActiveJitsiWidget() = activeRoomWidgets()?.any { it.type == WidgetType.Jitsi && it.isActive }.orFalse()
 
     fun isDm() = asyncRoomSummary()?.isDirect == true
+
+    fun isPublic() = asyncRoomSummary()?.isPublic == true
 }

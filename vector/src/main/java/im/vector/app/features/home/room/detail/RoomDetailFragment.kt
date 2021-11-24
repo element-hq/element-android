@@ -1058,6 +1058,17 @@ class RoomDetailFragment @Inject constructor(
         views.composerLayout.views.sendButton.contentDescription = getString(R.string.send)
     }
 
+    private fun getMemberNameColor(matrixItem: MatrixItem) = matrixItemColorProvider.getColor(
+            matrixItem,
+            withState(roomDetailViewModel) {
+                MatrixItemColorProvider.UserInRoomInformation(
+                        it.isDm(),
+                        it.isPublic(),
+                        it.powerLevelsHelper?.getUserPowerLevelValue(matrixItem.id)
+                )
+            }
+    )
+
     private fun renderSpecialMode(event: TimelineEvent,
                                   @DrawableRes iconRes: Int,
                                   @StringRes descriptionRes: Int,
@@ -1066,7 +1077,7 @@ class RoomDetailFragment @Inject constructor(
         // switch to expanded bar
         views.composerLayout.views.composerRelatedMessageTitle.apply {
             text = event.senderInfo.disambiguatedDisplayName
-            setTextColor(matrixItemColorProvider.getColor(MatrixItem.UserItem(event.root.senderId ?: "@")))
+            setTextColor(getMemberNameColor(MatrixItem.UserItem(event.root.senderId ?: "@")))
         }
 
         val messageContent: MessageContent? = event.getLastMessageContent()
