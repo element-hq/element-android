@@ -20,19 +20,23 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.hardware.vibrate
+import im.vector.app.core.time.Clock
 import im.vector.app.core.utils.CountUpTimer
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.databinding.ViewVoiceMessageRecorderBinding
 import im.vector.app.features.home.room.detail.timeline.helper.VoiceMessagePlaybackTracker
+import javax.inject.Inject
 import kotlin.math.floor
 
 /**
  * Encapsulates the voice message recording view and animations.
  */
+@AndroidEntryPoint
 class VoiceMessageRecorderView @JvmOverloads constructor(
         context: Context,
         attrs: AttributeSet? = null,
@@ -50,6 +54,8 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
         fun onRecordingLimitReached()
         fun onRecordingWaveformClicked()
     }
+
+    @Inject lateinit var clock: Clock
 
     // We need to define views as lateinit var to be able to check if initialized for the bug fix on api 21 and 22.
     @Suppress("UNNECESSARY_LATEINIT")
@@ -163,7 +169,7 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
     }
 
     private fun startRecordingTicker(startFromLocked: Boolean, startAt: Long) {
-        val startMs = ((System.currentTimeMillis() - startAt)).coerceAtLeast(0)
+        val startMs = ((clock.epochMillis() - startAt)).coerceAtLeast(0)
         recordingTicker?.stop()
         recordingTicker = CountUpTimer().apply {
             tickListener = object : CountUpTimer.TickListener {

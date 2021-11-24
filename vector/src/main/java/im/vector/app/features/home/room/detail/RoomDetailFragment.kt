@@ -87,6 +87,7 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.platform.lifecycleAwareLazy
 import im.vector.app.core.platform.showOptimizedSnackbar
 import im.vector.app.core.resources.ColorProvider
+import im.vector.app.core.time.Clock
 import im.vector.app.core.ui.views.CurrentCallsView
 import im.vector.app.core.ui.views.CurrentCallsViewPresenter
 import im.vector.app.core.ui.views.FailedMessagesWarningView
@@ -250,7 +251,8 @@ class RoomDetailFragment @Inject constructor(
         private val roomDetailPendingActionStore: RoomDetailPendingActionStore,
         private val pillsPostProcessorFactory: PillsPostProcessor.Factory,
         private val callManager: WebRtcCallManager,
-        private val voiceMessagePlaybackTracker: VoiceMessagePlaybackTracker
+        private val voiceMessagePlaybackTracker: VoiceMessagePlaybackTracker,
+        private val clock: Clock
 ) :
         VectorBaseFragment<FragmentRoomDetailBinding>(),
         TimelineEventController.Callback,
@@ -699,7 +701,7 @@ class RoomDetailFragment @Inject constructor(
                 if (checkPermissions(PERMISSIONS_FOR_VOICE_MESSAGE, requireActivity(), permissionVoiceMessageLauncher)) {
                     messageComposerViewModel.handle(MessageComposerAction.StartRecordingVoiceMessage)
                     vibrate(requireContext())
-                    updateRecordingUiState(RecordingUiState.Started(System.currentTimeMillis()))
+                    updateRecordingUiState(RecordingUiState.Started(clock.epochMillis()))
                 }
             }
 
@@ -714,7 +716,7 @@ class RoomDetailFragment @Inject constructor(
 
             override fun onVoiceRecordingLocked() {
                 val startedState = withState(messageComposerViewModel) { it.voiceRecordingUiState as? RecordingUiState.Started }
-                val startTime = startedState?.recordingStartTimestamp ?: System.currentTimeMillis()
+                val startTime = startedState?.recordingStartTimestamp ?: clock.epochMillis()
                 updateRecordingUiState(RecordingUiState.Locked(startTime))
             }
 
