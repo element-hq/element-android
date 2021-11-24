@@ -21,6 +21,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import im.vector.app.core.dialogs.UnrecognizedCertificateDialog
 import im.vector.app.core.error.ErrorFormatter
+import im.vector.app.features.analytics.VectorAnalytics
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.navigation.Navigator
@@ -54,6 +55,8 @@ interface SingletonEntryPoint {
     fun uiStateRepository(): UiStateRepository
 
     fun pinLocker(): PinLocker
+
+    fun analytics(): VectorAnalytics
 
     fun webRtcCallManager(): WebRtcCallManager
 

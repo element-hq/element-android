@@ -28,6 +28,7 @@ import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.singletonEntryPoint
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.toast
+import im.vector.app.features.analytics.VectorAnalytics
 import org.matrix.android.sdk.api.session.Session
 import timber.log.Timber
 
@@ -42,6 +43,7 @@ abstract class VectorSettingsBaseFragment : PreferenceFragmentCompat(), Maverick
     // members
     protected lateinit var session: Session
     protected lateinit var errorFormatter: ErrorFormatter
+    protected lateinit var analytics: VectorAnalytics
 
     abstract val preferenceXmlRes: Int
 
@@ -56,6 +58,7 @@ abstract class VectorSettingsBaseFragment : PreferenceFragmentCompat(), Maverick
         super.onAttach(context)
         session = singletonEntryPoint.activeSessionHolder().getActiveSession()
         errorFormatter = singletonEntryPoint.errorFormatter()
+        analytics = singletonEntryPoint.analytics()
     }
 
     override fun onResume() {
