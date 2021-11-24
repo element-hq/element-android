@@ -205,10 +205,11 @@ internal class LocalEchoEventFactory @Inject constructor(
 
     fun createMediaEvent(roomId: String, attachment: ContentAttachmentData): Event {
         return when (attachment.type) {
-            ContentAttachmentData.Type.IMAGE -> createImageEvent(roomId, attachment)
-            ContentAttachmentData.Type.VIDEO -> createVideoEvent(roomId, attachment)
-            ContentAttachmentData.Type.AUDIO -> createAudioEvent(roomId, attachment)
-            ContentAttachmentData.Type.FILE  -> createFileEvent(roomId, attachment)
+            ContentAttachmentData.Type.IMAGE         -> createImageEvent(roomId, attachment)
+            ContentAttachmentData.Type.VIDEO         -> createVideoEvent(roomId, attachment)
+            ContentAttachmentData.Type.AUDIO         -> createAudioEvent(roomId, attachment)
+            ContentAttachmentData.Type.VOICE_MESSAGE -> createAudioEvent(roomId, attachment)
+            ContentAttachmentData.Type.FILE          -> createFileEvent(roomId, attachment)
         }
     }
 

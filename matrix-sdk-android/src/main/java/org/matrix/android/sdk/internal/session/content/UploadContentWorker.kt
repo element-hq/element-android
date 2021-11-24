@@ -280,7 +280,7 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                 }
 
                 // Delete the temporary voice message file
-                if (params.attachment.type == ContentAttachmentData.Type.AUDIO && params.attachment.mimeType == MimeTypes.Ogg) {
+                if (params.attachment.type == ContentAttachmentData.Type.VOICE_MESSAGE) {
                     context.contentResolver.delete(params.attachment.queryUri, null, null)
                 }
 
