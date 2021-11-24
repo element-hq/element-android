@@ -699,7 +699,7 @@ class RoomDetailFragment @Inject constructor(
                 if (checkPermissions(PERMISSIONS_FOR_VOICE_MESSAGE, requireActivity(), permissionVoiceMessageLauncher)) {
                     messageComposerViewModel.handle(MessageComposerAction.StartRecordingVoiceMessage)
                     vibrate(requireContext())
-                    updateRecordingUiState(RecordingUiState.Started)
+                    updateRecordingUiState(RecordingUiState.Started(System.currentTimeMillis()))
                 }
             }
 
@@ -713,7 +713,9 @@ class RoomDetailFragment @Inject constructor(
             }
 
             override fun onVoiceRecordingLocked() {
-                updateRecordingUiState(RecordingUiState.Locked)
+                val startedState = withState(messageComposerViewModel) { it.voiceRecordingUiState as? RecordingUiState.Started }
+                val startTime = startedState?.recordingStartTimestamp ?: System.currentTimeMillis()
+                updateRecordingUiState(RecordingUiState.Locked(startTime))
             }
 
             override fun onVoiceRecordingEnded() {
@@ -1131,11 +1133,15 @@ class RoomDetailFragment @Inject constructor(
         super.onPause()
         notificationDrawerManager.setCurrentRoom(null)
         voiceMessagePlaybackTracker.unTrack(VoiceMessagePlaybackTracker.RECORDING_ID)
-        messageComposerViewModel.handle(MessageComposerAction.SaveDraft(views.composerLayout.text.toString()))
 
-        // We should improve the UX to support going into playback mode when paused and delete the media when the view is destroyed.
-        messageComposerViewModel.handle(MessageComposerAction.EndAllVoiceActions(deleteRecord = false))
-        views.voiceMessageRecorderView.render(RecordingUiState.None)
+        if (withState(messageComposerViewModel) { it.isVoiceRecording } && requireActivity().isChangingConfigurations) {
+            // we're rotating, maintain any active recordings
+        } else {
+            messageComposerViewModel.handle(MessageComposerAction.SaveDraft(views.composerLayout.text.toString()))
+            // We should improve the UX to support going into playback mode when paused and delete the media when the view is destroyed.
+            messageComposerViewModel.handle(MessageComposerAction.EndAllVoiceActions(deleteRecord = false))
+            views.voiceMessageRecorderView.render(RecordingUiState.None)
+        }
     }
 
     private val attachmentFileActivityResultLauncher = registerStartForActivityResult {
