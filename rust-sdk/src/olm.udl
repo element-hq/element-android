@@ -59,8 +59,9 @@ dictionary DeviceLists {
 };
 
 dictionary KeysImportResult {
-    i64 total;
     i64 imported;
+    i64 total;
+    record<DOMString, record<DOMString, sequence<string>>> keys;
 };
 
 dictionary DecryptedEvent {

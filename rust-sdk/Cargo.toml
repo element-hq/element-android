@@ -29,11 +29,11 @@ features = ["lax_deserialize"]
 
 [dependencies.matrix-sdk-common]
 git = "https://github.com/matrix-org/matrix-rust-sdk/"
-rev = "fc74526699b82ba5be3349e810ded51138dae7fc"
+rev = "7b6132b71e499224ed25bdc571b2a54d076551d6"
 
 [dependencies.matrix-sdk-crypto]
 git = "https://github.com/matrix-org/matrix-rust-sdk/"
-rev = "fc74526699b82ba5be3349e810ded51138dae7fc"
+rev = "7b6132b71e499224ed25bdc571b2a54d076551d6"
 features = ["sled_cryptostore", "qrcode", "backups_v1"]
 
 [dependencies.tokio]

@@ -628,8 +628,20 @@ impl OlmMachine {
             .block_on(self.inner.import_keys(keys, from_backup, listener))?;
 
         Ok(KeysImportResult {
-            total: result.total_count as i64,
             imported: result.imported_count as i64,
+            total: result.total_count as i64,
+            keys: result
+                .keys
+                .into_iter()
+                .map(|(r, m)| {
+                    (
+                        r.to_string(),
+                        m.into_iter()
+                            .map(|(s, k)| (s, k.into_iter().collect()))
+                            .collect(),
+                    )
+                })
+                .collect(),
         })
     }
 

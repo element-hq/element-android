@@ -295,8 +295,15 @@ impl From<DeviceLists> for RumaDeviceLists {
 }
 
 pub struct KeysImportResult {
-    pub total: i64,
+    /// The number of room keys that were imported.
     pub imported: i64,
+    /// The total number of room keys that were found in the export.
+    pub total: i64,
+    /// The map of keys that were imported.
+    ///
+    /// It's a map from room id to a map of the sender key to a list of session
+    /// ids.
+    pub keys: HashMap<String, HashMap<String, Vec<String>>>,
 }
 
 pub(crate) enum OwnedResponse {
