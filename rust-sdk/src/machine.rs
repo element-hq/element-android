@@ -616,6 +616,7 @@ impl OlmMachine {
     fn import_keys_helper(
         &self,
         keys: Vec<ExportedRoomKey>,
+        from_backup: bool,
         progress_listener: Box<dyn ProgressListener>,
     ) -> Result<KeysImportResult, KeyImportError> {
         let listener = |progress: usize, total: usize| {
@@ -624,7 +625,7 @@ impl OlmMachine {
 
         let result = self
             .runtime
-            .block_on(self.inner.import_keys(keys, listener))?;
+            .block_on(self.inner.import_keys(keys, from_backup, listener))?;
 
         Ok(KeysImportResult {
             total: result.total_count as i64,
@@ -650,14 +651,15 @@ impl OlmMachine {
     ) -> Result<KeysImportResult, KeyImportError> {
         let keys = Cursor::new(keys);
         let keys = decrypt_key_export(keys, passphrase)?;
-        self.import_keys_helper(keys, progress_listener)
+        self.import_keys_helper(keys, false, progress_listener)
     }
 
     /// Import room keys from the given serialized unencrypted key export.
     ///
     /// This method is the same as [`OlmMachine::import_keys`] but the
     /// decryption step is skipped and should be performed by the caller. This
-    /// may be useful for custom handling or for server-side key backups.
+    /// should be used if the room keys are comming from the server-side backup,
+    /// the method will mark all imported room keys as backed up.
     ///
     /// # Arguments
     ///
@@ -678,7 +680,7 @@ impl OlmMachine {
             .filter_map(|k| k.ok())
             .collect();
 
-        self.import_keys_helper(keys, progress_listener)
+        self.import_keys_helper(keys, true, progress_listener)
     }
 
     /// Discard the currently active room key for the given room if there is
