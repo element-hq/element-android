@@ -311,7 +311,7 @@ internal class OlmMachine(
                     DeviceLists(deviceChanges?.changed.orEmpty(), deviceChanges?.left.orEmpty())
             val adapter =
                     MoshiProvider.providesMoshi().adapter(ToDeviceSyncResponse::class.java)
-            val events = toDevice?.let { adapter.toJson(it) } ?: "[]"
+            val events = adapter.toJson(toDevice ?: ToDeviceSyncResponse())!!
 
             adapter.fromJson(inner.receiveSyncChanges(events, devices, counts)) ?: ToDeviceSyncResponse()
         }
