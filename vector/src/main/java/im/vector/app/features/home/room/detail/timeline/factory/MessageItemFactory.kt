@@ -125,19 +125,19 @@ class MessageItemFactory @Inject constructor(
         pillsPostProcessorFactory.create(roomId)
     }
 
-
-
-
     fun create(params: TimelineItemFactoryParams): VectorEpoxyModel<*>? {
+
         val event = params.event
         val highlight = params.isHighlighted
         val callback = params.callback
         event.root.eventId ?: return null
         roomId = event.roomId
         val informationData = messageInformationDataFactory.create(params)
+        val threadDetails = if (params.isFromThreadTimeline()) null else event.root.threadDetails
+
         if (event.root.isRedacted()) {
             // message is redacted
-            val attributes = messageItemAttributesFactory.create(null, informationData, callback)
+            val attributes = messageItemAttributesFactory.create(null, informationData, callback, threadDetails)
             return buildRedactedItem(attributes, highlight)
         }
 
@@ -154,7 +154,6 @@ class MessageItemFactory @Inject constructor(
         }
 
         // always hide summary when we are on thread timeline
-        val threadDetails = if(params.isFromThreadTimeline()) null else event.root.threadDetails
         val attributes = messageItemAttributesFactory.create(messageContent, informationData, callback, threadDetails)
 
 //        val all = event.root.toContent()
@@ -180,9 +179,10 @@ class MessageItemFactory @Inject constructor(
         }
     }
 
-    private fun isFromThreadTimeline(params: TimelineItemFactoryParams){
+    private fun isFromThreadTimeline(params: TimelineItemFactoryParams) {
         params.rootThreadEventId
     }
+
     private fun buildOptionsMessageItem(messageContent: MessageOptionsContent,
                                         informationData: MessageInformationData,
                                         highlight: Boolean,

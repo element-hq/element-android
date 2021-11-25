@@ -22,7 +22,7 @@ import com.airbnb.mvrx.Uninitialized
 import im.vector.app.features.home.room.threads.arguments.ThreadListArgs
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 
-data class ThreadSummaryViewState(
+data class ThreadListViewState(
         val rootThreadEventList: Async<List<TimelineEvent>> = Uninitialized,
         val shouldFilterThreads: Boolean = false,
         val roomId: String

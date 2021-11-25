@@ -34,20 +34,20 @@ import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.animation.TimelineItemAnimator
 import im.vector.app.features.home.room.threads.ThreadsActivity
 import im.vector.app.features.home.room.threads.arguments.ThreadListArgs
-import im.vector.app.features.home.room.threads.list.viewmodel.ThreadSummaryController
-import im.vector.app.features.home.room.threads.list.viewmodel.ThreadSummaryViewModel
+import im.vector.app.features.home.room.threads.list.viewmodel.ThreadListController
+import im.vector.app.features.home.room.threads.list.viewmodel.ThreadListViewModel
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.util.MatrixItem
 import javax.inject.Inject
 
 class ThreadListFragment @Inject constructor(
         private val avatarRenderer: AvatarRenderer,
-        private val threadSummaryController: ThreadSummaryController,
-        val threadSummaryViewModelFactory: ThreadSummaryViewModel.Factory
+        private val threadListController: ThreadListController,
+        val threadListViewModelFactory: ThreadListViewModel.Factory
 ) : VectorBaseFragment<FragmentThreadListBinding>(),
-        ThreadSummaryController.Listener {
+        ThreadListController.Listener {
 
-    private val threadSummaryViewModel: ThreadSummaryViewModel by fragmentViewModel()
+    private val threadListViewModel: ThreadListViewModel by fragmentViewModel()
 
     private val threadListArgs: ThreadListArgs by args()
 
@@ -74,13 +74,13 @@ class ThreadListFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
-        views.threadListRecyclerView.configureWith(threadSummaryController, TimelineItemAnimator(), hasFixedSize = false)
-        threadSummaryController.listener = this
+        views.threadListRecyclerView.configureWith(threadListController, TimelineItemAnimator(), hasFixedSize = false)
+        threadListController.listener = this
     }
 
     override fun onDestroyView() {
         views.threadListRecyclerView.cleanup()
-        threadSummaryController.listener = null
+        threadListController.listener = null
         super.onDestroyView()
     }
 
@@ -89,8 +89,8 @@ class ThreadListFragment @Inject constructor(
         renderToolbar()
     }
 
-    override fun invalidate() = withState(threadSummaryViewModel) { state ->
-        threadSummaryController.update(state)
+    override fun invalidate() = withState(threadListViewModel) { state ->
+        threadListController.update(state)
     }
 
     private fun renderToolbar() {

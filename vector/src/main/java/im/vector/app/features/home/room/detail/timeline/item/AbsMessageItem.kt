@@ -72,6 +72,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
             attributes.threadCallback?.onThreadSummaryClicked(attributes.informationData.eventId, attributes.threadDetails?.isRootThread ?: false)
         }
     }
+
     override fun bind(holder: H) {
         super.bind(holder)
         if (attributes.informationData.showInformation) {
@@ -111,19 +112,20 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
         holder.eventSendingIndicator.isVisible = attributes.informationData.sendStateDecoration == SendStateDecoration.SENDING_MEDIA
 
         // Threads
-        if(BuildConfig.THREADING_ENABLED) {
+        if (BuildConfig.THREADING_ENABLED) {
             holder.threadSummaryConstraintLayout.onClick(_threadClickListener)
             attributes.threadDetails?.let { threadDetails ->
                 holder.threadSummaryConstraintLayout.isVisible = threadDetails.isRootThread
                 holder.threadSummaryCounterTextView.text = threadDetails.numberOfThreads.toString()
                 holder.threadSummaryInfoTextView.text = threadDetails.threadSummaryLatestTextMessage
-                threadDetails.threadSummarySenderInfo?.let { senderInfo ->
-                    attributes.avatarRenderer.render(MatrixItem.UserItem(senderInfo.userId, senderInfo.displayName, senderInfo.avatarUrl), holder.threadSummaryAvatarImageView)
-                }
-            } ?: run{holder.threadSummaryConstraintLayout.isVisible = false}
+
+                val userId = threadDetails.threadSummarySenderInfo?.userId ?: return@let
+                val displayName = threadDetails.threadSummarySenderInfo?.displayName
+                val avatarUrl = threadDetails.threadSummarySenderInfo?.avatarUrl
+                attributes.avatarRenderer.render(MatrixItem.UserItem(userId, displayName, avatarUrl), holder.threadSummaryAvatarImageView)
+            } ?: run { holder.threadSummaryConstraintLayout.isVisible = false }
         }
     }
-
 
     override fun unbind(holder: H) {
         attributes.avatarRenderer.clear(holder.avatarImageView)
@@ -131,6 +133,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
         holder.avatarImageView.setOnLongClickListener(null)
         holder.memberNameView.setOnClickListener(null)
         holder.memberNameView.setOnLongClickListener(null)
+        attributes.avatarRenderer.clear(holder.threadSummaryAvatarImageView)
         holder.threadSummaryConstraintLayout.setOnClickListener(null)
         super.unbind(holder)
     }

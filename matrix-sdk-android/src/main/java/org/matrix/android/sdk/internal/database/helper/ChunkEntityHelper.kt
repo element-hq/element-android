@@ -34,6 +34,7 @@ import org.matrix.android.sdk.internal.database.model.TimelineEventEntityFields
 import org.matrix.android.sdk.internal.database.query.find
 import org.matrix.android.sdk.internal.database.query.getOrCreate
 import org.matrix.android.sdk.internal.database.query.where
+import org.matrix.android.sdk.internal.database.query.whereRoomId
 import org.matrix.android.sdk.internal.extensions.assertIsManaged
 import org.matrix.android.sdk.internal.session.room.timeline.PaginationDirection
 import timber.log.Timber
@@ -157,7 +158,19 @@ private fun ChunkEntity.addTimelineEventFromMerge(realm: Realm, timelineEventEnt
         this.senderName = timelineEventEntity.senderName
         this.isUniqueDisplayName = timelineEventEntity.isUniqueDisplayName
     }
+    handleThreadSummary(realm, eventId, copied)
     timelineEvents.add(copied)
+}
+
+/**
+ * Upon copy of the timeline events we should update the latestMessage TimelineEventEntity with the new one
+ */
+private fun handleThreadSummary(realm: Realm, oldEventId: String, newTimelineEventEntity: TimelineEventEntity) {
+    EventEntity
+            .whereRoomId(realm, newTimelineEventEntity.roomId)
+            .equalTo(EventEntityFields.IS_ROOT_THREAD, true)
+            .equalTo(EventEntityFields.THREAD_SUMMARY_LATEST_MESSAGE.EVENT_ID, oldEventId)
+            .findFirst()?.threadSummaryLatestMessage = newTimelineEventEntity
 }
 
 private fun handleReadReceipts(realm: Realm, roomId: String, eventEntity: EventEntity, senderId: String): ReadReceiptsSummaryEntity {

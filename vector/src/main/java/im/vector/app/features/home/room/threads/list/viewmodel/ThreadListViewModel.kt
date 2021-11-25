@@ -31,23 +31,23 @@ import kotlinx.coroutines.flow.map
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.flow.flow
 
-class ThreadSummaryViewModel @AssistedInject constructor(@Assisted val initialState: ThreadSummaryViewState,
-                                                         private val session: Session) :
-        VectorViewModel<ThreadSummaryViewState, EmptyAction, EmptyViewEvents>(initialState) {
+class ThreadListViewModel @AssistedInject constructor(@Assisted val initialState: ThreadListViewState,
+                                                      private val session: Session) :
+        VectorViewModel<ThreadListViewState, EmptyAction, EmptyViewEvents>(initialState) {
 
     private val room = session.getRoom(initialState.roomId)
 
     @AssistedFactory
     interface Factory {
-        fun create(initialState: ThreadSummaryViewState): ThreadSummaryViewModel
+        fun create(initialState: ThreadListViewState): ThreadListViewModel
     }
 
-    companion object : MavericksViewModelFactory<ThreadSummaryViewModel, ThreadSummaryViewState> {
+    companion object : MavericksViewModelFactory<ThreadListViewModel, ThreadListViewState> {
 
         @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: ThreadSummaryViewState): ThreadSummaryViewModel? {
+        override fun create(viewModelContext: ViewModelContext, state: ThreadListViewState): ThreadListViewModel? {
             val fragment: ThreadListFragment = (viewModelContext as FragmentViewModelContext).fragment()
-            return fragment.threadSummaryViewModelFactory.create(state)
+            return fragment.threadListViewModelFactory.create(state)
         }
     }
 

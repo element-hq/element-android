@@ -20,21 +20,21 @@ import com.airbnb.epoxy.EpoxyController
 import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.features.home.AvatarRenderer
-import im.vector.app.features.home.room.threads.list.model.threadSummary
+import im.vector.app.features.home.room.threads.list.model.threadList
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
-class ThreadSummaryController @Inject constructor(
+class ThreadListController @Inject constructor(
         private val avatarRenderer: AvatarRenderer,
         private val dateFormatter: VectorDateFormatter
 ) : EpoxyController() {
 
     var listener: Listener? = null
 
-    private var viewState: ThreadSummaryViewState? = null
+    private var viewState: ThreadListViewState? = null
 
-    fun update(viewState: ThreadSummaryViewState) {
+    fun update(viewState: ThreadListViewState) {
         this.viewState = viewState
         requestModelBuild()
     }
@@ -46,7 +46,7 @@ class ThreadSummaryController @Inject constructor(
         safeViewState.rootThreadEventList.invoke()
                 ?.forEach { timelineEvent ->
                     val date = dateFormatter.format(timelineEvent.root.originServerTs, DateFormatKind.ROOM_LIST)
-                    threadSummary {
+                    threadList {
                         id(timelineEvent.eventId)
                         avatarRenderer(host.avatarRenderer)
                         matrixItem(timelineEvent.senderInfo.toMatrixItem())

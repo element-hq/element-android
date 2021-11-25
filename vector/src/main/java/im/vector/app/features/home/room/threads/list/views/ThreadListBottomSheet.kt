@@ -20,14 +20,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.core.content.ContextCompat
 import com.airbnb.mvrx.parentFragmentViewModel
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.databinding.BottomSheetThreadListBinding
-import im.vector.app.features.home.room.threads.list.viewmodel.ThreadSummaryViewModel
-import im.vector.app.features.home.room.threads.list.viewmodel.ThreadSummaryViewState
+import im.vector.app.features.home.room.threads.list.viewmodel.ThreadListViewModel
+import im.vector.app.features.home.room.threads.list.viewmodel.ThreadListViewState
 
 class ThreadListBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetThreadListBinding>() {
 
@@ -35,13 +34,12 @@ class ThreadListBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetThr
         return BottomSheetThreadListBinding.inflate(inflater, container, false)
     }
 
-
-    private val threadListViewModel: ThreadSummaryViewModel by parentFragmentViewModel()
+    private val threadListViewModel: ThreadListViewModel by parentFragmentViewModel()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        threadListViewModel.subscribe(this){
+        threadListViewModel.subscribe(this) {
             renderState(it)
         }
         views.threadListModalAllThreads.views.bottomSheetActionClickableZone.debouncedClicks {
@@ -52,18 +50,11 @@ class ThreadListBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetThr
             threadListViewModel.applyFiltering(true)
             dismiss()
         }
-
     }
 
-    private fun renderState(state: ThreadSummaryViewState) {
-
-        if(state.shouldFilterThreads){
-            views.threadListModalAllThreads.rightIcon = null
-            views.threadListModalMyThreads.rightIcon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_tick)
-        }else{
-            views.threadListModalAllThreads.rightIcon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_tick)
-            views.threadListModalMyThreads.rightIcon = null
-        }
-
+    private fun renderState(state: ThreadListViewState) {
+        val tickDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_tick)
+        views.threadListModalAllThreads.rightIcon = if (state.shouldFilterThreads) null else tickDrawable
+        views.threadListModalMyThreads.rightIcon = if (state.shouldFilterThreads) tickDrawable else null
     }
 }

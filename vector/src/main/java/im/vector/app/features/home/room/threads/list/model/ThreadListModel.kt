@@ -16,7 +16,6 @@
 
 package im.vector.app.features.home.room.threads.list.model
 
-import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -31,8 +30,8 @@ import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.AvatarRenderer
 import org.matrix.android.sdk.api.util.MatrixItem
 
-@EpoxyModelClass(layout = R.layout.item_thread_summary)
-abstract class ThreadSummaryModel : VectorEpoxyModel<ThreadSummaryModel.Holder>() {
+@EpoxyModelClass(layout = R.layout.item_thread_list)
+abstract class ThreadListModel : VectorEpoxyModel<ThreadListModel.Holder>() {
 
     @EpoxyAttribute lateinit var avatarRenderer: AvatarRenderer
     @EpoxyAttribute lateinit var matrixItem: MatrixItem
