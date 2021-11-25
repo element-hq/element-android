@@ -23,6 +23,8 @@ import im.vector.app.BuildConfig
 import im.vector.app.features.analytics.AnalyticsConfig
 import im.vector.app.features.analytics.VectorAnalytics
 import im.vector.app.features.analytics.log.analyticsTag
+import im.vector.app.features.analytics.itf.VectorAnalyticsEvent
+import im.vector.app.features.analytics.itf.VectorAnalyticsScreen
 import im.vector.app.features.analytics.store.AnalyticsStore
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
@@ -152,18 +154,18 @@ class DefaultVectorAnalytics @Inject constructor(
         }
     }
 
-    override fun capture(event: String, properties: Map<String, Any>?) {
+    override fun capture(event: VectorAnalyticsEvent) {
         Timber.tag(analyticsTag.value).d("capture($event)")
         posthog
                 ?.takeIf { userConsent == true }
-                ?.capture(event, properties.toPostHogProperties())
+                ?.capture(event.getName(), event.getProperties()?.toPostHogProperties())
     }
 
-    override fun screen(name: String, properties: Map<String, Any>?) {
-        Timber.tag(analyticsTag.value).d("screen($name)")
+    override fun screen(screen: VectorAnalyticsScreen) {
+        Timber.tag(analyticsTag.value).d("screen($screen)")
         posthog
                 ?.takeIf { userConsent == true }
-                ?.screen(name, properties.toPostHogProperties())
+                ?.screen(screen.getName(), screen.getProperties()?.toPostHogProperties())
     }
 
     private fun Map<String, Any>?.toPostHogProperties(): Properties? {

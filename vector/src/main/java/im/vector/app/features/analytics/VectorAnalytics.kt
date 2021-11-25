@@ -16,6 +16,8 @@
 
 package im.vector.app.features.analytics
 
+import im.vector.app.features.analytics.itf.VectorAnalyticsEvent
+import im.vector.app.features.analytics.itf.VectorAnalyticsScreen
 import kotlinx.coroutines.flow.Flow
 
 interface VectorAnalytics {
@@ -62,10 +64,10 @@ interface VectorAnalytics {
     /**
      * Capture an Event
      */
-    fun capture(event: String, properties: Map<String, Any>? = null)
+    fun capture(event: VectorAnalyticsEvent)
 
     /**
      * Track a displayed screen
      */
-    fun screen(name: String, properties: Map<String, Any>? = null)
+    fun screen(screen: VectorAnalyticsScreen)
 }
