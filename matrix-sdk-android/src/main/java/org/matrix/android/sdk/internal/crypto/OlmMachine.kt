@@ -334,7 +334,6 @@ internal class OlmMachine(
     suspend fun updateTrackedUsers(users: List<String>) =
             withContext(Dispatchers.IO) { inner.updateTrackedUsers(users) }
 
-
     /**
      * Check if the given user is considered to be tracked.
      * A user can be marked for tracking using the
@@ -647,14 +646,12 @@ internal class OlmMachine(
     }
 
     @Throws
-    suspend fun forceKeyDownload(userIds: List<String>): MXUsersDevicesMap<CryptoDeviceInfo> {
+    suspend fun forceKeyDownload(userIds: List<String>) {
         withContext(Dispatchers.IO) {
             val requestId = UUID.randomUUID().toString()
             val response = requestSender.queryKeys(Request.KeysQuery(requestId, userIds))
             markRequestAsSent(requestId, RequestType.KEYS_QUERY, response)
         }
-        // TODO notify shield listener (?)
-        return getUserDevicesMap(userIds)
     }
 
     suspend fun getUserDevicesMap(userIds: List<String>): MXUsersDevicesMap<CryptoDeviceInfo> {
@@ -674,20 +671,23 @@ internal class OlmMachine(
     /**
      * If the user is untracked or forceDownload is set to true, a key query request will be made.
      * It will suspend until query response, and the device list will be returned.
-     * As there is no API to know tracking status, we consider that if there are no known devices the user is un tracked.
      *
      * The key query request will be retried a few time in case of shaky connection, but could fail.
      */
     suspend fun ensureUserDevicesMap(userIds: List<String>, forceDownload: Boolean = false): MXUsersDevicesMap<CryptoDeviceInfo> {
-        val known = getUserDevicesMap(userIds)
-        return if (known.isEmpty /* We have no api to know if was tracked..*/ || forceDownload) {
-            updateTrackedUsers(userIds)
-             tryOrNull("Failed to download keys for $userIds") {
-                 forceKeyDownload(userIds)
-             } ?: known
+        val toDownload = if (forceDownload) {
+            userIds
         } else {
-            known
+            userIds.mapNotNull { userId ->
+                userId.takeIf { !isUserTracked(it) }
+            }.also {
+                updateTrackedUsers(it)
+            }
         }
+        tryOrNull("Failed to download keys for $toDownload") {
+            forceKeyDownload(toDownload)
+        }
+        return getUserDevicesMap(userIds)
     }
 
     suspend fun getLiveUserIdentity(userId: String): LiveData<Optional<MXCrossSigningInfo>> {
@@ -795,7 +795,7 @@ internal class OlmMachine(
     }
 
     suspend fun bootstrapCrossSigning(uiaInterceptor: UserInteractiveAuthInterceptor?) {
-        val requests =  withContext(Dispatchers.IO) {
+        val requests = withContext(Dispatchers.IO) {
             inner.bootstrapCrossSigning()
         }
 
