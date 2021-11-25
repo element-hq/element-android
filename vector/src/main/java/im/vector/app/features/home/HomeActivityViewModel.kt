@@ -47,8 +47,6 @@ import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.flow.flow
-import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
-import org.matrix.android.sdk.internal.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.internal.util.awaitCallback
 import timber.log.Timber
 import kotlin.coroutines.Continuation
@@ -181,9 +179,7 @@ class HomeActivityViewModel @AssistedInject constructor(
             val session = activeSessionHolder.getSafeActiveSession() ?: return@launch
 
             tryOrNull("## MaybeBootstrapCrossSigning: Failed to download keys") {
-                awaitCallback<MXUsersDevicesMap<CryptoDeviceInfo>> {
-                    session.cryptoService().downloadKeys(listOf(session.myUserId), true, it)
-                }
+                session.cryptoService().downloadKeys(listOf(session.myUserId), true)
             }
 
             // From there we are up to date with server

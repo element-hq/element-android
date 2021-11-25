@@ -30,6 +30,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.NoOpMatrixCallback
@@ -178,7 +179,13 @@ internal class DefaultCryptoService @Inject constructor(
                     this.callback = object : MatrixCallback<Unit> {
                         override fun onSuccess(data: Unit) {
                             // bg refresh of crypto device
-                            downloadKeys(listOf(userId), true, NoOpMatrixCallback())
+                            cryptoCoroutineScope.launch {
+                                try {
+                                    downloadKeys(listOf(userId), true)
+                                } catch (failure: Throwable) {
+                                    Timber.w(failure, "setDeviceName: Failed to refresh of crypto device")
+                                }
+                            }
                             callback.onSuccess(data)
                         }
 
@@ -1005,11 +1012,9 @@ internal class DefaultCryptoService @Inject constructor(
         // TODO
     }
 
-    override fun downloadKeys(userIds: List<String>, forceDownload: Boolean, callback: MatrixCallback<MXUsersDevicesMap<CryptoDeviceInfo>>) {
-        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
-            runCatching {
-                olmMachine.ensureUserDevicesMap(userIds, forceDownload)
-            }.foldToCallback(callback)
+    override suspend fun downloadKeys(userIds: List<String>, forceDownload: Boolean): MXUsersDevicesMap<CryptoDeviceInfo> {
+        return withContext(coroutineDispatchers.crypto) {
+            olmMachine.ensureUserDevicesMap(userIds, forceDownload)
         }
     }
 

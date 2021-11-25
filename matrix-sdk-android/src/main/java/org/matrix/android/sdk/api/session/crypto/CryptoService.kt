@@ -119,7 +119,7 @@ interface CryptoService {
 
     fun shouldEncryptForInvitedMembers(roomId: String): Boolean
 
-    fun downloadKeys(userIds: List<String>, forceDownload: Boolean, callback: MatrixCallback<MXUsersDevicesMap<CryptoDeviceInfo>>)
+    suspend fun downloadKeys(userIds: List<String>, forceDownload: Boolean = false): MXUsersDevicesMap<CryptoDeviceInfo>
 
     fun getCryptoDeviceInfo(userId: String): List<CryptoDeviceInfo>
 

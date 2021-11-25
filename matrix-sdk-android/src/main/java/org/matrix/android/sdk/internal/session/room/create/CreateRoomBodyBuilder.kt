@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.internal.session.room.create
 
 import org.matrix.android.sdk.api.extensions.tryOrNull
+import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.identity.IdentityServiceError
@@ -24,7 +25,6 @@ import org.matrix.android.sdk.api.session.identity.toMedium
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.util.MimeTypes
 import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
-import org.matrix.android.sdk.internal.crypto.OlmMachineProvider
 import org.matrix.android.sdk.internal.di.AuthenticatedIdentity
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.network.token.AccessTokenProvider
@@ -40,7 +40,7 @@ import javax.inject.Inject
 internal class CreateRoomBodyBuilder @Inject constructor(
         private val ensureIdentityTokenTask: EnsureIdentityTokenTask,
 //        private val deviceListManager: DeviceListManager,
-        private val olmMachineProvider: OlmMachineProvider,
+        private val cryptoService: CryptoService,
         private val identityStore: IdentityStore,
         private val fileUploader: FileUploader,
         @UserId
@@ -181,20 +181,20 @@ internal class CreateRoomBodyBuilder @Inject constructor(
                 params.invite3pids.isEmpty() &&
                 params.invitedUserIds.isNotEmpty() &&
                 params.invitedUserIds.let { userIds ->
-            val keys =  olmMachineProvider.olmMachine.ensureUserDevicesMap(userIds, forceDownload = false)
-            // deviceListManager.downloadKeys(userIds, forceDownload = false)
+                    val keys = cryptoService.downloadKeys(userIds, forceDownload = false)
+                    // deviceListManager.downloadKeys(userIds, forceDownload = false)
 
-            userIds.all { userId ->
-                keys.map[userId].let { deviceMap ->
-                    if (deviceMap.isNullOrEmpty()) {
-                        // A user has no device, so do not enable encryption
-                        false
-                    } else {
-                        // Check that every user's device have at least one key
-                        deviceMap.values.all { !it.keys.isNullOrEmpty() }
+                    userIds.all { userId ->
+                        keys.map[userId].let { deviceMap ->
+                            if (deviceMap.isNullOrEmpty()) {
+                                // A user has no device, so do not enable encryption
+                                false
+                            } else {
+                                // Check that every user's device have at least one key
+                                deviceMap.values.all { !it.keys.isNullOrEmpty() }
+                            }
+                        }
                     }
                 }
-            }
-        }
     }
 }

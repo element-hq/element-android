@@ -169,7 +169,7 @@ class DevicesViewModel @AssistedInject constructor(
         refreshSource.stream().throttleFirst(4_000)
                 .onEach {
                     session.cryptoService().fetchDevicesList(NoOpMatrixCallback())
-                    session.cryptoService().downloadKeys(listOf(session.myUserId), true, NoOpMatrixCallback())
+                    session.cryptoService().downloadKeys(listOf(session.myUserId), true)
                 }
                 .launchIn(viewModelScope)
         // then force download

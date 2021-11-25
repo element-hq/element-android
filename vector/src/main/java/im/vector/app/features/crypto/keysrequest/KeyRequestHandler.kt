@@ -22,7 +22,13 @@ import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.features.popup.DefaultVectorAlert
 import im.vector.app.features.popup.PopupAlertManager
-import org.matrix.android.sdk.api.MatrixCallback
+import im.vector.app.features.session.coroutineScope
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.keyshare.GossipingRequestListener
 import org.matrix.android.sdk.api.session.crypto.verification.SasVerificationTransaction
@@ -34,7 +40,6 @@ import org.matrix.android.sdk.internal.crypto.IncomingRoomKeyRequest
 import org.matrix.android.sdk.internal.crypto.IncomingSecretShareRequest
 import org.matrix.android.sdk.internal.crypto.crosssigning.DeviceTrustLevel
 import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
-import org.matrix.android.sdk.internal.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
 import timber.log.Timber
 import javax.inject.Inject
@@ -48,6 +53,7 @@ import javax.inject.Singleton
  * depending on user action)
  */
 
+// TODO Do we ever request to users anymore?
 @Singleton
 class KeyRequestHandler @Inject constructor(
         private val context: Context,
@@ -60,13 +66,18 @@ class KeyRequestHandler @Inject constructor(
 
     var session: Session? = null
 
+    var scope: CoroutineScope? = null
+
     fun start(session: Session) {
         this.session = session
+        scope = CoroutineScope(SupervisorJob() + session.coroutineScope.coroutineContext)
         session.cryptoService().verificationService().addListener(this)
         session.cryptoService().addRoomKeysRequestListener(this)
     }
 
     fun stop() {
+        scope?.cancel()
+        scope = null
         session?.cryptoService()?.verificationService()?.removeListener(this)
         session?.cryptoService()?.removeRoomKeysRequestListener(this)
         session = null
@@ -104,15 +115,16 @@ class KeyRequestHandler @Inject constructor(
 
         alertsToRequests[mappingKey] = ArrayList<IncomingRoomKeyRequest>().apply { this.add(request) }
 
-        // Add a notification for every incoming request
-        session?.cryptoService()?.downloadKeys(listOf(userId), false, object : MatrixCallback<MXUsersDevicesMap<CryptoDeviceInfo>> {
-            override fun onSuccess(data: MXUsersDevicesMap<CryptoDeviceInfo>) {
+        scope?.launch {
+            try {
+                val data = session?.cryptoService()?.downloadKeys(listOf(userId), false)
+                        ?: return@launch
                 val deviceInfo = data.getObject(userId, deviceId)
 
                 if (null == deviceInfo) {
                     Timber.e("## displayKeyShareDialog() : No details found for device $userId:$deviceId")
                     // ignore
-                    return
+                    return@launch
                 }
 
                 if (deviceInfo.isUnknown) {
@@ -122,20 +134,23 @@ class KeyRequestHandler @Inject constructor(
 
                     // can we get more info on this device?
                     session?.cryptoService()?.getMyDevicesInfo()?.firstOrNull { it.deviceId == deviceId }?.let {
-                        postAlert(context, userId, deviceId, true, deviceInfo, it)
+                        withContext(Dispatchers.Main) {
+                            postAlert(context, userId, deviceId, true, deviceInfo, it)
+                        }
                     } ?: run {
-                        postAlert(context, userId, deviceId, true, deviceInfo)
+                        withContext(Dispatchers.Main) {
+                            postAlert(context, userId, deviceId, true, deviceInfo)
+                        }
                     }
                 } else {
-                    postAlert(context, userId, deviceId, false, deviceInfo)
+                    withContext(Dispatchers.Main) {
+                        postAlert(context, userId, deviceId, false, deviceInfo)
+                    }
                 }
-            }
-
-            override fun onFailure(failure: Throwable) {
-                // ignore
+            } catch (failure: Throwable) {
                 Timber.e(failure, "## displayKeyShareDialog : downloadKeys")
             }
-        })
+        }
     }
 
     private fun postAlert(context: Context,
