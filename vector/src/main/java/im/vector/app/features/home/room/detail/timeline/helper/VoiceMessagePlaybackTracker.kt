@@ -26,15 +26,15 @@ class VoiceMessagePlaybackTracker @Inject constructor() {
 
     private val mainHandler = Handler(Looper.getMainLooper())
     private val listeners = mutableMapOf<String, Listener>()
-    private val activityListeners = mutableMapOf<String, ActivityListener>()
+    private val activityListeners = mutableListOf<ActivityListener>()
     private val states = mutableMapOf<String, Listener.State>()
 
-    fun trackActivity(key: String, listener: ActivityListener) {
-        activityListeners[key] = listener
+    fun trackActivity(listener: ActivityListener) {
+        activityListeners.add(listener)
     }
 
-    fun unTrackActivity(id: String) {
-        activityListeners.remove(id)
+    fun unTrackActivity(listener: ActivityListener) {
+        activityListeners.remove(listener)
     }
 
     fun track(id: String, listener: Listener) {
@@ -61,10 +61,10 @@ class VoiceMessagePlaybackTracker @Inject constructor() {
      */
     private fun setState(key: String, state: Listener.State) {
         states[key] = state
-        val isActive = states.values.any { it is Listener.State.Playing || it is Listener.State.Recording }
+        val isPlayingOrRecording = states.values.any { it is Listener.State.Playing || it is Listener.State.Recording }
         mainHandler.post {
             listeners[key]?.onUpdate(state)
-            activityListeners.forEach { it.value.onUpdate(isActive) }
+            activityListeners.forEach { it.onUpdate(isPlayingOrRecording) }
         }
     }
 
@@ -138,6 +138,6 @@ class VoiceMessagePlaybackTracker @Inject constructor() {
     }
 
     fun interface ActivityListener {
-        fun onUpdate(isActive: Boolean)
+        fun onUpdate(isPlayingOrRecording: Boolean)
     }
 }

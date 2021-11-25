@@ -48,8 +48,6 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
-private const val ROOM_DETAILS_SCREEN_ON_TRACKER = "room_details_screen_on"
-
 @AndroidEntryPoint
 class RoomDetailActivity :
         VectorBaseActivity<ActivityRoomDetailBinding>(),
@@ -74,6 +72,13 @@ class RoomDetailActivity :
                 f.interactionListener = null
             }
             super.onFragmentPaused(fm, f)
+        }
+    }
+
+    private val playbackActivityListener = VoiceMessagePlaybackTracker.ActivityListener { isPlayingOrRecording ->
+        when (isPlayingOrRecording) {
+            true  -> keepScreenOn()
+            false -> endKeepScreenOn()
         }
     }
 
@@ -122,12 +127,7 @@ class RoomDetailActivity :
         }
         views.drawerLayout.addDrawerListener(drawerListener)
 
-        playbackTracker.trackActivity(ROOM_DETAILS_SCREEN_ON_TRACKER) { isActive ->
-            when (isActive) {
-                true  -> keepScreenOn()
-                false -> endKeepScreenOn()
-            }
-        }
+        playbackTracker.trackActivity(playbackActivityListener)
     }
 
     private fun handleRoomLeft(roomLeft: RequireActiveMembershipViewEvents.RoomLeft) {
@@ -150,7 +150,7 @@ class RoomDetailActivity :
     override fun onDestroy() {
         supportFragmentManager.unregisterFragmentLifecycleCallbacks(fragmentLifecycleCallbacks)
         views.drawerLayout.removeDrawerListener(drawerListener)
-        playbackTracker.unTrackActivity(ROOM_DETAILS_SCREEN_ON_TRACKER)
+        playbackTracker.unTrackActivity(playbackActivityListener)
         super.onDestroy()
     }
 
