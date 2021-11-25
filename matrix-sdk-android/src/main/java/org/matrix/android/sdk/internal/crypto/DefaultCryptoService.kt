@@ -164,7 +164,7 @@ internal class DefaultCryptoService @Inject constructor(
             EventType.STATE_ROOM_MEMBER             -> onRoomMembershipEvent(roomId, event)
             EventType.STATE_ROOM_HISTORY_VISIBILITY -> onRoomHistoryVisibilityEvent(roomId, event)
             else                                    -> cryptoCoroutineScope.launch {
-                this@DefaultCryptoService.verificationService?.onEvent(event)
+                this@DefaultCryptoService.verificationService.onEvent(event)
             }
         }
     }
@@ -701,7 +701,7 @@ internal class DefaultCryptoService @Inject constructor(
                         // The rust-sdk will clear this event if it's invalid, this will produce an invalid base64 error
                         // when we try to construct the recovery key.
                         val secretContent = event.getClearContent().toModel<SecretSendEventContent>() ?: return@forEach
-                        this.keysBackupService?.onSecretKeyGossip(secretContent.secretValue)
+                        this.keysBackupService.onSecretKeyGossip(secretContent.secretValue)
                     }
                     else                         -> {
                         this.verificationService.onEvent(event)
@@ -753,7 +753,7 @@ internal class DefaultCryptoService @Inject constructor(
         // If we sent out a room key over to-device messages it's likely that we created a new one
         // Try to back the key up
         if (sharedKey) {
-            keysBackupService?.maybeBackupKeys()
+            keysBackupService.maybeBackupKeys()
         }
     }
 
@@ -868,8 +868,8 @@ internal class DefaultCryptoService @Inject constructor(
     override suspend fun importRoomKeys(roomKeysAsArray: ByteArray,
                                         password: String,
                                         progressListener: ProgressListener?): ImportRoomKeysResult {
-        val result = olmMachine!!.importKeys(roomKeysAsArray, password, progressListener)
-        keysBackupService?.maybeBackupKeys()
+        val result = olmMachine.importKeys(roomKeysAsArray, password, progressListener)
+        keysBackupService.maybeBackupKeys()
 
         return result
     }
