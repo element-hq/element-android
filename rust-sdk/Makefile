@@ -1,3 +1,5 @@
+all: x86 aarch64 armv7-linux-androideabi
+
 # x86_64:
 # 	cargo build --release --target x86_64-linux-android
 # 	mkdir -p ../matrix-sdk-android/src/main/jniLibs/x86_64/
