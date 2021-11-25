@@ -308,13 +308,12 @@ internal class OlmMachine(
             }
 
             val devices =
-                    DeviceLists(
-                            deviceChanges?.changed ?: listOf(), deviceChanges?.left ?: listOf())
+                    DeviceLists(deviceChanges?.changed.orEmpty(), deviceChanges?.left.orEmpty())
             val adapter =
                     MoshiProvider.providesMoshi().adapter(ToDeviceSyncResponse::class.java)
-            val events = adapter.toJson(toDevice ?: ToDeviceSyncResponse())!!
+            val events = toDevice?.let { adapter.toJson(it) } ?: "[]"
 
-            adapter.fromJson(inner.receiveSyncChanges(events, devices, counts))!!
+            adapter.fromJson(inner.receiveSyncChanges(events, devices, counts)) ?: ToDeviceSyncResponse()
         }
 
         // We may get cross signing keys over a to-device event, update our listeners.
@@ -435,13 +434,16 @@ internal class OlmMachine(
             withContext(Dispatchers.IO) {
                 val adapter = MoshiProvider.providesMoshi().adapter(Event::class.java)
                 val serializedEvent = adapter.toJson(event)
-
                 try {
-                    val decrypted = inner.decryptRoomEvent(serializedEvent, event.roomId!!)
+                    if (event.roomId.isNullOrBlank()) {
+                        throw MXCryptoError.Base(MXCryptoError.ErrorType.MISSING_FIELDS, MXCryptoError.MISSING_FIELDS_REASON)
+                    }
+                    val decrypted = inner.decryptRoomEvent(serializedEvent, event.roomId)
 
                     val deserializationAdapter =
                             MoshiProvider.providesMoshi().adapter<JsonDict>(Map::class.java)
-                    val clearEvent = deserializationAdapter.fromJson(decrypted.clearEvent)!!
+                    val clearEvent = deserializationAdapter.fromJson(decrypted.clearEvent)
+                            ?: throw MXCryptoError.Base(MXCryptoError.ErrorType.MISSING_FIELDS, MXCryptoError.MISSING_FIELDS_REASON)
 
                     MXEventDecryptionResult(
                             clearEvent,
