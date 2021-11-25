@@ -23,6 +23,13 @@ interface Clock {
 }
 
 class DefaultClock @Inject constructor() : Clock {
+
+    /**
+     * Provides a UTC epoch in milliseconds
+     *
+     * This value is not guaranteed to be correct with reality
+     * as a User can override the system time and date to any values.
+     */
     override fun epochMillis(): Long {
         return System.currentTimeMillis()
     }
