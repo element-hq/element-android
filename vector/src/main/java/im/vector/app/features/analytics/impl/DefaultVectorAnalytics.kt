@@ -134,7 +134,7 @@ class DefaultVectorAnalytics @Inject constructor(
                 // Capture deep links as part of the screen call. (off by default)
                 // .captureDeepLinks()
 
-                // Maximum number of events to keep in queue before flushing (20)
+                // Maximum number of events to keep in queue before flushing (default 20)
                 // .flushQueueSize(20)
 
                 // Max delay before flushing the queue (30 seconds)
