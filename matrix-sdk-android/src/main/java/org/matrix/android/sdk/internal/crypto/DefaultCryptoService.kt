@@ -256,7 +256,12 @@ internal class DefaultCryptoService @Inject constructor(
     }
 
     override fun inboundGroupSessionsCount(onlyBackedUp: Boolean): Int {
-        return cryptoStore.inboundGroupSessionsCount(onlyBackedUp)
+        return if (onlyBackedUp) {
+            keysBackupService.getTotalNumbersOfBackedUpKeys()
+        } else {
+            keysBackupService.getTotalNumbersOfKeys()
+        }
+        // return cryptoStore.inboundGroupSessionsCount(onlyBackedUp)
     }
 
     /**
@@ -331,8 +336,10 @@ internal class DefaultCryptoService @Inject constructor(
 
         // We try to enable key backups, if the backup version on the server is trusted,
         // we're gonna continue backing up.
-        tryOrNull {
-            keysBackupService.checkAndStartKeysBackup()
+        cryptoCoroutineScope.launch {
+            tryOrNull {
+                keysBackupService.checkAndStartKeysBackup()
+            }
         }
 
         // Open the store

@@ -31,8 +31,10 @@ import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.features.session.coroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.crosssigning.KEYBACKUP_SECRET_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MASTER_KEY_SSSS_NAME
@@ -51,10 +53,7 @@ import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.internal.crypto.crosssigning.fromBase64
 import org.matrix.android.sdk.internal.crypto.crosssigning.isVerified
-import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersionResult
 import org.matrix.android.sdk.internal.crypto.keysbackup.util.computeRecoveryKey
-import org.matrix.android.sdk.internal.crypto.model.ImportRoomKeysResult
-import org.matrix.android.sdk.internal.util.awaitCallback
 import timber.log.Timber
 
 data class VerificationBottomSheetViewState(
@@ -419,30 +418,27 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
     }
 
     private fun tentativeRestoreBackup(res: Map<String, String>?) {
-        viewModelScope.launch(Dispatchers.IO) {
+        // on session scope because will happen after viewmodel is cleared
+        session.coroutineScope.launch {
             try {
                 val secret = res?.get(KEYBACKUP_SECRET_SSSS_NAME) ?: return@launch Unit.also {
                     Timber.v("## Keybackup secret not restored from SSSS")
                 }
 
-                val version = awaitCallback<KeysVersionResult?> {
-                    session.cryptoService().keysBackupService().getCurrentVersion(it)
-                } ?: return@launch
+                val version = tryOrNull { session.cryptoService().keysBackupService().getCurrentVersion() }
+                        ?: return@launch
 
-                awaitCallback<ImportRoomKeysResult> {
-                    session.cryptoService().keysBackupService().restoreKeysWithRecoveryKey(
-                            version,
-                            computeRecoveryKey(secret.fromBase64()),
-                            null,
-                            null,
-                            null,
-                            it
-                    )
-                }
+                // TODO maybe mark as trusted earlier by checking recovery key early, then download?
 
-                awaitCallback<Unit> {
-                    session.cryptoService().keysBackupService().trustKeysBackupVersion(version, true, it)
-                }
+                session.cryptoService().keysBackupService().restoreKeysWithRecoveryKey(
+                        version,
+                        computeRecoveryKey(secret.fromBase64()),
+                        null,
+                        null,
+                        null
+                )
+
+                session.cryptoService().keysBackupService().trustKeysBackupVersion(version, true)
             } catch (failure: Throwable) {
                 // Just ignore for now
                 Timber.e(failure, "## Failed to restore backup after SSSS recovery")

@@ -16,7 +16,6 @@
 
 package org.matrix.android.sdk.api.session.crypto.keysbackup
 
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.listeners.ProgressListener
 import org.matrix.android.sdk.api.listeners.StepProgressListener
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.KeysBackupVersionTrust
@@ -31,18 +30,17 @@ interface KeysBackupService {
      * Retrieve the current version of the backup from the homeserver
      *
      * It can be different than keysBackupVersion.
-     * @param callback onSuccess(null) will be called if there is no backup on the server
      */
-    fun getCurrentVersion(callback: MatrixCallback<KeysVersionResult?>)
+    suspend fun getCurrentVersion(): KeysVersionResult?
 
     /**
      * Create a new keys backup version and enable it, using the information return from [prepareKeysBackupVersion].
      *
      * @param keysBackupCreationInfo the info object from [prepareKeysBackupVersion].
-     * @param callback               Asynchronous callback
+     * @return KeysVersion
      */
-    fun createKeysBackupVersion(keysBackupCreationInfo: MegolmBackupCreationInfo,
-                                callback: MatrixCallback<KeysVersion>)
+    @Throws
+    suspend fun createKeysBackupVersion(keysBackupCreationInfo: MegolmBackupCreationInfo): KeysVersion
 
     /**
      * Facility method to get the total number of locally stored keys
@@ -54,23 +52,21 @@ interface KeysBackupService {
      */
     fun getTotalNumbersOfBackedUpKeys(): Int
 
-    /**
-     * Start to back up keys immediately.
-     *
-     * @param progressListener the callback to follow the progress
-     * @param callback the main callback
-     */
-    fun backupAllGroupSessions(progressListener: ProgressListener?,
-                               callback: MatrixCallback<Unit>?)
+//    /**
+//     * Start to back up keys immediately.
+//     *
+//     * @param progressListener the callback to follow the progress
+//     * @param callback the main callback
+//     */
+//    fun backupAllGroupSessions(progressListener: ProgressListener?,
+//                               callback: MatrixCallback<Unit>?)
 
     /**
      * Check trust on a key backup version.
      *
      * @param keysBackupVersion the backup version to check.
-     * @param callback block called when the operations completes.
      */
-    fun getKeysBackupTrust(keysBackupVersion: KeysVersionResult,
-                           callback: MatrixCallback<KeysBackupVersionTrust>)
+    suspend fun getKeysBackupTrust(keysBackupVersion: KeysVersionResult): KeysBackupVersionTrust
 
     /**
      * Return the current progress of the backup
@@ -82,18 +78,16 @@ interface KeysBackupService {
      *
      * It can be different than keysBackupVersion.
      * @param version the backup version
-     * @param callback
      */
-    fun getVersion(version: String,
-                   callback: MatrixCallback<KeysVersionResult?>)
+    suspend fun getVersion(version: String): KeysVersionResult?
 
     /**
      * This method fetches the last backup version on the server, then compare to the currently backup version use.
      * If versions are not the same, the current backup is deleted (on server or locally), then the backup may be started again, using the last version.
      *
-     * @param callback true if backup is already using the last version, and false if it is not the case
+     * @return true if backup is already using the last version, and false if it is not the case
      */
-    fun forceUsingLastVersion(callback: MatrixCallback<Boolean>)
+    suspend fun forceUsingLastVersion(): Boolean
 
     /**
      * Check the server for an active key backup.
@@ -101,7 +95,7 @@ interface KeysBackupService {
      * If one is present and has a valid signature from one of the user's verified
      * devices, start backing up to it.
      */
-    fun checkAndStartKeysBackup()
+    suspend fun checkAndStartKeysBackup()
 
     fun addListener(listener: KeysBackupStateListener)
 
@@ -119,19 +113,16 @@ interface KeysBackupService {
      * @param progressListener a progress listener, as generating private key from password may take a while
      * @param callback Asynchronous callback
      */
-    fun prepareKeysBackupVersion(password: String?,
-                                 progressListener: ProgressListener?,
-                                 callback: MatrixCallback<MegolmBackupCreationInfo>)
+    suspend fun prepareKeysBackupVersion(password: String?): MegolmBackupCreationInfo
 
     /**
      * Delete a keys backup version. It will delete all backed up keys on the server, and the backup itself.
      * If we are backing up to this version. Backup will be stopped.
      *
      * @param version  the backup version to delete.
-     * @param callback Asynchronous callback
      */
-    fun deleteBackup(version: String,
-                     callback: MatrixCallback<Unit>?)
+    @Throws
+    suspend fun deleteBackup(version: String)
 
     /**
      * Ask if the backup on the server contains keys that we may do not have locally.
@@ -145,35 +136,29 @@ interface KeysBackupService {
      *
      * @param keysBackupVersion the backup version to check.
      * @param trust the trust to set to the keys backup.
-     * @param callback block called when the operations completes.
      */
-    fun trustKeysBackupVersion(keysBackupVersion: KeysVersionResult,
-                               trust: Boolean,
-                               callback: MatrixCallback<Unit>)
+    @Throws
+    suspend fun trustKeysBackupVersion(keysBackupVersion: KeysVersionResult, trust: Boolean)
 
     /**
      * Set trust on a keys backup version.
      *
      * @param keysBackupVersion the backup version to check.
      * @param recoveryKey the recovery key to challenge with the key backup public key.
-     * @param callback block called when the operations completes.
      */
-    fun trustKeysBackupVersionWithRecoveryKey(keysBackupVersion: KeysVersionResult,
-                                              recoveryKey: String,
-                                              callback: MatrixCallback<Unit>)
+    suspend fun trustKeysBackupVersionWithRecoveryKey(keysBackupVersion: KeysVersionResult,
+                                              recoveryKey: String)
 
     /**
      * Set trust on a keys backup version.
      *
      * @param keysBackupVersion the backup version to check.
      * @param password the pass phrase to challenge with the keyBackupVersion public key.
-     * @param callback block called when the operations completes.
      */
-    fun trustKeysBackupVersionWithPassphrase(keysBackupVersion: KeysVersionResult,
-                                             password: String,
-                                             callback: MatrixCallback<Unit>)
+    suspend fun trustKeysBackupVersionWithPassphrase(keysBackupVersion: KeysVersionResult,
+                                             password: String)
 
-    fun onSecretKeyGossip(secret: String)
+    suspend fun onSecretKeyGossip(secret: String)
 
     /**
      * Restore a backup with a recovery key from a given backup version stored on the homeserver.
@@ -185,11 +170,10 @@ interface KeysBackupService {
      * @param stepProgressListener the step progress listener
      * @param callback             Callback. It provides the number of found keys and the number of successfully imported keys.
      */
-    fun restoreKeysWithRecoveryKey(keysVersionResult: KeysVersionResult,
+    suspend fun restoreKeysWithRecoveryKey(keysVersionResult: KeysVersionResult,
                                    recoveryKey: String, roomId: String?,
                                    sessionId: String?,
-                                   stepProgressListener: StepProgressListener?,
-                                   callback: MatrixCallback<ImportRoomKeysResult>)
+                                   stepProgressListener: StepProgressListener?): ImportRoomKeysResult
 
     /**
      * Restore a backup with a password from a given backup version stored on the homeserver.
@@ -201,12 +185,11 @@ interface KeysBackupService {
      * @param stepProgressListener the step progress listener
      * @param callback Callback. It provides the number of found keys and the number of successfully imported keys.
      */
-    fun restoreKeyBackupWithPassword(keysBackupVersion: KeysVersionResult,
+    suspend fun restoreKeyBackupWithPassword(keysBackupVersion: KeysVersionResult,
                                      password: String,
                                      roomId: String?,
                                      sessionId: String?,
-                                     stepProgressListener: StepProgressListener?,
-                                     callback: MatrixCallback<ImportRoomKeysResult>)
+                                     stepProgressListener: StepProgressListener?): ImportRoomKeysResult
 
     val keysBackupVersion: KeysVersionResult?
     val currentBackupVersion: String?
@@ -218,5 +201,5 @@ interface KeysBackupService {
     fun saveBackupRecoveryKey(recoveryKey: String?, version: String?)
     fun getKeyBackupRecoveryKeyInfo(): SavedKeyBackupKeyInfo?
 
-    fun isValidRecoveryKeyForCurrentVersion(recoveryKey: String, callback: MatrixCallback<Boolean>)
+    suspend fun isValidRecoveryKeyForCurrentVersion(recoveryKey: String): Boolean
 }

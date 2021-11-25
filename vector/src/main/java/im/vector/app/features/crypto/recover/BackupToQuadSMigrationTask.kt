@@ -20,7 +20,9 @@ import im.vector.app.R
 import im.vector.app.core.platform.ViewModelTask
 import im.vector.app.core.platform.WaitingViewData
 import im.vector.app.core.resources.StringProvider
-import org.matrix.android.sdk.api.NoOpMatrixCallback
+import im.vector.app.features.session.coroutineScope
+import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.listeners.ProgressListener
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.crosssigning.KEYBACKUP_SECRET_SSSS_NAME
@@ -32,7 +34,6 @@ import org.matrix.android.sdk.internal.crypto.crosssigning.toBase64NoPadding
 import org.matrix.android.sdk.internal.crypto.keysbackup.deriveKey
 import org.matrix.android.sdk.internal.crypto.keysbackup.util.computeRecoveryKey
 import org.matrix.android.sdk.internal.crypto.keysbackup.util.extractCurveKeyFromRecoveryKey
-import org.matrix.android.sdk.internal.util.awaitCallback
 import timber.log.Timber
 import java.util.UUID
 import javax.inject.Inject
@@ -87,9 +88,7 @@ class BackupToQuadSMigrationTask @Inject constructor(
             reportProgress(params, R.string.bootstrap_progress_compute_curve_key)
             val recoveryKey = computeRecoveryKey(curveKey)
 
-            val isValid = awaitCallback<Boolean> {
-                keysBackupService.isValidRecoveryKeyForCurrentVersion(recoveryKey, it)
-            }
+            val isValid = keysBackupService.isValidRecoveryKeyForCurrentVersion(recoveryKey)
 
             if (!isValid) return Result.InvalidRecoverySecret
 
@@ -141,14 +140,17 @@ class BackupToQuadSMigrationTask @Inject constructor(
             keysBackupService.saveBackupRecoveryKey(recoveryKey, version.version)
 
             // while we are there let's restore, but do not block
-            session.cryptoService().keysBackupService().restoreKeysWithRecoveryKey(
-                    version,
-                    recoveryKey,
-                    null,
-                    null,
-                    null,
-                    NoOpMatrixCallback()
-            )
+            session.coroutineScope.launch {
+                tryOrNull {
+                    session.cryptoService().keysBackupService().restoreKeysWithRecoveryKey(
+                            version,
+                            recoveryKey,
+                            null,
+                            null,
+                            null
+                    )
+                }
+            }
 
             return Result.Success
         } catch (failure: Throwable) {

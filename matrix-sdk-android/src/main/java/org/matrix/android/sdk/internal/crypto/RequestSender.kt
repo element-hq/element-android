@@ -213,13 +213,14 @@ internal class RequestSender @Inject constructor(
     suspend fun getKeyBackupVersion(version: String? = null): KeysVersionResult? {
         return try {
             if (version != null) {
-                getKeysBackupVersionTask.execute(version)
+                getKeysBackupVersionTask.executeRetry(version, 3)
             } else {
-                getKeysBackupLastVersionTask.execute(Unit)
+                getKeysBackupLastVersionTask.executeRetry(Unit, 3)
             }
         } catch (failure: Throwable) {
             if (failure is Failure.ServerError &&
                     failure.error.code == MatrixError.M_NOT_FOUND) {
+                // Workaround because the homeserver currently returns M_NOT_FOUND when there is no key backup
                 null
             } else {
                 throw failure

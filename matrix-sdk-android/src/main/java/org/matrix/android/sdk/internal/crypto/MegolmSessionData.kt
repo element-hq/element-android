@@ -70,4 +70,15 @@ data class MegolmSessionData(
          */
         @Json(name = "forwarding_curve25519_key_chain")
         val forwardingCurve25519KeyChain: List<String>? = null
-)
+) {
+
+    fun isValid(): Boolean {
+        return roomId != null &&
+                forwardingCurve25519KeyChain != null &&
+                algorithm != null &&
+                senderKey != null &&
+                senderClaimedKeys != null &&
+                sessionId != null &&
+                sessionKey != null
+    }
+}

@@ -2041,6 +2041,7 @@
     <string name="keys_backup_restoring_computing_key_waiting_message">Computing recovery key…</string>
     <string name="keys_backup_restoring_downloading_backup_waiting_message">Downloading keys…</string>
     <string name="keys_backup_restoring_importing_keys_waiting_message">Importing keys…</string>
+    <string name="keys_backup_restoring_decrypting_keys_waiting_message">Decrypting keys…</string>
     <string name="keys_backup_unlock_button">Unlock History</string>
     <string name="keys_backup_recovery_code_empty_error_message">Please enter a recovery key</string>
     <string name="keys_backup_recovery_code_error_decrypt">Backup could not be decrypted with this recovery key: please verify that you entered the correct recovery key.</string>
@@ -3442,6 +3443,7 @@
     <string name="command_description_join_space">Join the Space with the given id</string>
     <string name="command_description_leave_room">Leave room with given id (or current room if null)</string>
     <string name="command_description_upgrade_room">Upgrades a room to a new version</string>
+    <string name="command_description_gen_keys">Gen keys</string>
 
     <string name="event_status_a11y_sending">Sending</string>
     <string name="event_status_a11y_sent">Sent</string>
