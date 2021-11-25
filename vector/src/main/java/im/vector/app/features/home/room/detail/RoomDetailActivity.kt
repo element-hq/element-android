@@ -75,11 +75,14 @@ class RoomDetailActivity :
         }
     }
 
+    private var lastKnownPlayingOrRecordingState: Boolean? = null
     private val playbackActivityListener = VoiceMessagePlaybackTracker.ActivityListener { isPlayingOrRecording ->
+        if (lastKnownPlayingOrRecordingState == isPlayingOrRecording) return@ActivityListener
         when (isPlayingOrRecording) {
             true  -> keepScreenOn()
             false -> endKeepScreenOn()
         }
+        lastKnownPlayingOrRecordingState = isPlayingOrRecording
     }
 
     override fun getCoordinatorLayout() = views.coordinatorLayout
