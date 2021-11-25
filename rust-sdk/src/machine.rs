@@ -27,7 +27,7 @@ use ruma::{
     DeviceKeyAlgorithm, EventId, RoomId, UserId,
 };
 use serde::{Deserialize, Serialize};
-use serde_json::value::RawValue;
+use serde_json::{value::RawValue, Value};
 use tokio::runtime::Runtime;
 
 use matrix_sdk_common::{deserialized_responses::AlgorithmInfo, uuid::Uuid};
@@ -613,7 +613,7 @@ impl OlmMachine {
         Ok(encrypted)
     }
 
-    fn impor_keys_helper(
+    fn import_keys_helper(
         &self,
         keys: Vec<ExportedRoomKey>,
         progress_listener: Box<dyn ProgressListener>,
@@ -650,7 +650,7 @@ impl OlmMachine {
     ) -> Result<KeysImportResult, KeyImportError> {
         let keys = Cursor::new(keys);
         let keys = decrypt_key_export(keys, passphrase)?;
-        self.impor_keys_helper(keys, progress_listener)
+        self.import_keys_helper(keys, progress_listener)
     }
 
     /// Import room keys from the given serialized unencrypted key export.
@@ -670,8 +670,15 @@ impl OlmMachine {
         keys: &str,
         progress_listener: Box<dyn ProgressListener>,
     ) -> Result<KeysImportResult, KeyImportError> {
-        let keys: Vec<ExportedRoomKey> = serde_json::from_str(keys)?;
-        self.impor_keys_helper(keys, progress_listener)
+        let keys: Vec<Value> = serde_json::from_str(keys)?;
+
+        let keys = keys
+            .into_iter()
+            .map(serde_json::from_value)
+            .filter_map(|k| k.ok())
+            .collect();
+
+        self.import_keys_helper(keys, progress_listener)
     }
 
     /// Discard the currently active room key for the given room if there is
