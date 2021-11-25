@@ -18,17 +18,16 @@ package im.vector.app.features.login2
 
 import android.content.Context
 import android.net.Uri
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.viewModelScope
-import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksViewModelFactory
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.configureAndStart
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.tryAsync
@@ -72,9 +71,11 @@ class LoginViewModel2 @AssistedInject constructor(
 ) : VectorViewModel<LoginViewState2, LoginAction2, LoginViewEvents2>(initialState) {
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: LoginViewState2): LoginViewModel2
+    interface Factory : MavericksAssistedViewModelFactory<LoginViewModel2, LoginViewState2> {
+        override fun create(initialState: LoginViewState2): LoginViewModel2
     }
+
+    companion object : MavericksViewModelFactory<LoginViewModel2, LoginViewState2> by hiltMavericksViewModelFactory()
 
     init {
         getKnownCustomHomeServersUrls()
@@ -83,18 +84,6 @@ class LoginViewModel2 @AssistedInject constructor(
     private fun getKnownCustomHomeServersUrls() {
         setState {
             copy(knownCustomHomeServersUrls = homeServerHistoryService.getKnownServersUrls())
-        }
-    }
-
-    companion object : MavericksViewModelFactory<LoginViewModel2, LoginViewState2> {
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: LoginViewState2): LoginViewModel2? {
-            return when (val activity: FragmentActivity = (viewModelContext as ActivityViewModelContext).activity()) {
-                is LoginActivity2 -> activity.loginViewModelFactory.create(state)
-                // TODO is SoftLogoutActivity -> activity.loginViewModelFactory.create(state)
-                else              -> error("Invalid Activity")
-            }
         }
     }
 
@@ -558,7 +547,7 @@ class LoginViewModel2 @AssistedInject constructor(
                     safeLoginWizard.login(
                             login = login,
                             password = password,
-                            deviceName = stringProvider.getString(R.string.login_default_session_public_name)
+                            initialDeviceName = stringProvider.getString(R.string.login_default_session_public_name)
                     )
                 } catch (failure: Throwable) {
                     _viewEvents.post(LoginViewEvents2.Failure(failure))

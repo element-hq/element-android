@@ -15,13 +15,13 @@
  */
 package im.vector.app.features.settings.crosssigning
 
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MavericksViewModelFactory
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.R
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
@@ -61,27 +61,27 @@ class CrossSigningSettingsViewModel @AssistedInject constructor(
         ) { myDevicesInfo, mxCrossSigningInfo ->
             myDevicesInfo to mxCrossSigningInfo
         }
-        .execute { data ->
-            val crossSigningKeys = data.invoke()?.second?.getOrNull()
-            val xSigningIsEnableInAccount = crossSigningKeys != null
-            val xSigningKeysAreTrusted = session.cryptoService().crossSigningService().checkUserTrust(session.myUserId).isVerified()
-            val xSigningKeyCanSign = session.cryptoService().crossSigningService().canCrossSign()
+                .execute { data ->
+                    val crossSigningKeys = data.invoke()?.second?.getOrNull()
+                    val xSigningIsEnableInAccount = crossSigningKeys != null
+                    val xSigningKeysAreTrusted = session.cryptoService().crossSigningService().checkUserTrust(session.myUserId).isVerified()
+                    val xSigningKeyCanSign = session.cryptoService().crossSigningService().canCrossSign()
 
-            copy(
-                    crossSigningInfo = crossSigningKeys,
-                    xSigningIsEnableInAccount = xSigningIsEnableInAccount,
-                    xSigningKeysAreTrusted = xSigningKeysAreTrusted,
-                    xSigningKeyCanSign = xSigningKeyCanSign
-            )
-        }
+                    copy(
+                            crossSigningInfo = crossSigningKeys,
+                            xSigningIsEnableInAccount = xSigningIsEnableInAccount,
+                            xSigningKeysAreTrusted = xSigningKeysAreTrusted,
+                            xSigningKeyCanSign = xSigningKeyCanSign
+                    )
+                }
     }
 
     var uiaContinuation: Continuation<UIABaseAuth>? = null
     var pendingAuth: UIABaseAuth? = null
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: CrossSigningSettingsViewState): CrossSigningSettingsViewModel
+    interface Factory : MavericksAssistedViewModelFactory<CrossSigningSettingsViewModel, CrossSigningSettingsViewState> {
+        override fun create(initialState: CrossSigningSettingsViewState): CrossSigningSettingsViewModel
     }
 
     override fun handle(action: CrossSigningSettingsAction) {
@@ -154,12 +154,5 @@ class CrossSigningSettingsViewModel @AssistedInject constructor(
         _viewEvents.post(CrossSigningSettingsViewEvents.Failure(Exception(stringProvider.getString(R.string.failed_to_initialize_cross_signing))))
     }
 
-    companion object : MavericksViewModelFactory<CrossSigningSettingsViewModel, CrossSigningSettingsViewState> {
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: CrossSigningSettingsViewState): CrossSigningSettingsViewModel? {
-            val fragment: CrossSigningSettingsFragment = (viewModelContext as FragmentViewModelContext).fragment()
-            return fragment.viewModelFactory.create(state)
-        }
-    }
+    companion object : MavericksViewModelFactory<CrossSigningSettingsViewModel, CrossSigningSettingsViewState> by hiltMavericksViewModelFactory()
 }

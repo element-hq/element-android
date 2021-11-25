@@ -16,16 +16,15 @@
 
 package im.vector.app.features.home.room.detail.search
 
-import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import kotlinx.coroutines.CancellationException
@@ -46,18 +45,11 @@ class SearchViewModel @AssistedInject constructor(
     private var nextBatch: String? = null
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: SearchViewState): SearchViewModel
+    interface Factory : MavericksAssistedViewModelFactory<SearchViewModel, SearchViewState> {
+        override fun create(initialState: SearchViewState): SearchViewModel
     }
 
-    companion object : MavericksViewModelFactory<SearchViewModel, SearchViewState> {
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: SearchViewState): SearchViewModel? {
-            val fragment: SearchFragment = (viewModelContext as FragmentViewModelContext).fragment()
-            return fragment.viewModelFactory.create(state)
-        }
-    }
+    companion object : MavericksViewModelFactory<SearchViewModel, SearchViewState> by hiltMavericksViewModelFactory()
 
     override fun handle(action: SearchAction) {
         when (action) {

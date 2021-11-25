@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="im.vector.app">
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <!--
     Required for long polling account synchronisation in background.
     If not present ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS intent action won't work
@@ -12,7 +14,9 @@
 
     <application>
 
-        <receiver android:name=".fdroid.receiver.OnApplicationUpgradeOrRebootReceiver">
+        <receiver
+            android:name=".fdroid.receiver.OnApplicationUpgradeOrRebootReceiver"
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
@@ -23,6 +27,11 @@
             android:name=".fdroid.receiver.AlarmSyncBroadcastReceiver"
             android:enabled="true"
             android:exported="false" />
+
+        <service
+            android:name=".fdroid.service.GuardService"
+            android:exported="false"
+            tools:ignore="Instantiatable" />
 
     </application>
 

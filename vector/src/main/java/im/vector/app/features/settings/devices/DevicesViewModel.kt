@@ -18,22 +18,23 @@ package im.vector.app.features.settings.devices
 
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.R
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
+import im.vector.app.core.flow.throttleFirst
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.core.utils.PublishDataSource
 import im.vector.app.features.auth.ReAuthActivity
 import im.vector.app.features.login.ReAuthHelper
-import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -64,7 +65,6 @@ import org.matrix.android.sdk.internal.crypto.model.rest.DefaultBaseAuth
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
 import org.matrix.android.sdk.internal.util.awaitCallback
 import timber.log.Timber
-import java.util.concurrent.TimeUnit
 import javax.net.ssl.HttpsURLConnection
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
@@ -97,20 +97,13 @@ class DevicesViewModel @AssistedInject constructor(
     var pendingAuth: UIABaseAuth? = null
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: DevicesViewState): DevicesViewModel
+    interface Factory : MavericksAssistedViewModelFactory<DevicesViewModel, DevicesViewState> {
+        override fun create(initialState: DevicesViewState): DevicesViewModel
     }
 
-    companion object : MavericksViewModelFactory<DevicesViewModel, DevicesViewState> {
+    companion object : MavericksViewModelFactory<DevicesViewModel, DevicesViewState> by hiltMavericksViewModelFactory()
 
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: DevicesViewState): DevicesViewModel? {
-            val fragment: VectorSettingsDevicesFragment = (viewModelContext as FragmentViewModelContext).fragment()
-            return fragment.devicesViewModelFactory.create(state)
-        }
-    }
-
-    private val refreshPublisher: PublishSubject<Unit> = PublishSubject.create()
+    private val refreshSource = PublishDataSource<Unit>()
 
     init {
 
@@ -175,12 +168,12 @@ class DevicesViewModel @AssistedInject constructor(
 //                    )
 //                }
 
-        refreshPublisher.throttleFirst(4_000, TimeUnit.MILLISECONDS)
-                .subscribe {
+        refreshSource.stream().throttleFirst(4_000)
+                .onEach {
                     session.cryptoService().fetchDevicesList(NoOpMatrixCallback())
                     session.cryptoService().downloadKeys(listOf(session.myUserId), true, NoOpMatrixCallback())
                 }
-                .disposeOnClear()
+                .launchIn(viewModelScope)
         // then force download
         queryRefreshDevicesList()
     }
@@ -202,7 +195,7 @@ class DevicesViewModel @AssistedInject constructor(
      * It can be any mobile devices, and any browsers.
      */
     private fun queryRefreshDevicesList() {
-        refreshPublisher.onNext(Unit)
+        refreshSource.post(Unit)
     }
 
     override fun handle(action: DevicesAction) {

@@ -106,11 +106,17 @@ interface AuthenticationService {
     /**
      * Authenticate with a matrixId and a password
      * Usually call this after a successful call to getWellKnownData()
+     * @param homeServerConnectionConfig the information about the homeserver and other configuration
+     * @param matrixId the matrixId of the user
+     * @param password the password of the account
+     * @param initialDeviceName the initial device name
+     * @param deviceId the device id, optional. If not provided or null, the server will generate one.
      */
     suspend fun directAuthentication(homeServerConnectionConfig: HomeServerConnectionConfig,
                                      matrixId: String,
                                      password: String,
-                                     initialDeviceName: String): Session
+                                     initialDeviceName: String,
+                                     deviceId: String? = null): Session
 
     /**
      * Get password policy.

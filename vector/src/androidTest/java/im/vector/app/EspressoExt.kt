@@ -18,7 +18,10 @@ package im.vector.app
 
 import android.app.Activity
 import android.view.View
+import androidx.annotation.StringRes
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
+import androidx.test.espresso.Espresso
 import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.IdlingResource
 import androidx.test.espresso.PerformException
@@ -32,6 +35,12 @@ import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import androidx.test.runner.lifecycle.ActivityLifecycleCallback
 import androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry
 import androidx.test.runner.lifecycle.Stage
+import com.adevinta.android.barista.interaction.BaristaClickInteractions
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
+import im.vector.app.espresso.tools.waitUntilViewVisible
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers
 import org.hamcrest.StringDescription
@@ -49,6 +58,18 @@ object EspressoHelper {
         }
         return currentActivity
     }
+
+    inline fun <reified T : VectorBaseBottomSheetDialogFragment<*>> getBottomSheetDialog(): BottomSheetDialogFragment? {
+        return (getCurrentActivity() as? FragmentActivity)
+                ?.supportFragmentManager
+                ?.fragments
+                ?.filterIsInstance<T>()
+                ?.firstOrNull()
+    }
+}
+
+fun getString(@StringRes id: Int): String {
+    return EspressoHelper.getCurrentActivity()!!.resources.getString(id)
 }
 
 fun waitForView(viewMatcher: Matcher<View>, timeout: Long = 10_000, waitForDisplayed: Boolean = true): ViewAction {
@@ -69,6 +90,8 @@ fun waitForView(viewMatcher: Matcher<View>, timeout: Long = 10_000, waitForDispl
             val startTime = System.currentTimeMillis()
             val endTime = startTime + timeout
             val visibleMatcher = isDisplayed()
+
+            uiController.loopMainThreadForAtLeast(100)
 
             do {
                 println("*** waitForView loop $view end:$endTime current:${System.currentTimeMillis()}")
@@ -204,4 +227,53 @@ fun allSecretsKnownIdling(session: Session): IdlingResource {
     }
 
     return res
+}
+
+fun clickOnAndGoBack(@StringRes name: Int, block: () -> Unit) {
+    BaristaClickInteractions.clickOn(name)
+    block()
+    Espresso.pressBack()
+}
+
+inline fun <reified T : VectorBaseBottomSheetDialogFragment<*>> interactWithSheet(contentMatcher: Matcher<View>, noinline block: () -> Unit = {}) {
+    waitUntilViewVisible(contentMatcher)
+    val behaviour = (EspressoHelper.getBottomSheetDialog<T>()!!.dialog as BottomSheetDialog).behavior
+    withIdlingResource(BottomSheetResource(behaviour, BottomSheetBehavior.STATE_EXPANDED), block)
+    withIdlingResource(BottomSheetResource(behaviour, BottomSheetBehavior.STATE_HIDDEN)) {}
+}
+
+class BottomSheetResource(
+        private val bottomSheetBehavior: BottomSheetBehavior<*>,
+        @BottomSheetBehavior.State private val wantedState: Int
+) : IdlingResource, BottomSheetBehavior.BottomSheetCallback() {
+
+    private var isIdle: Boolean = false
+    private var resourceCallback: IdlingResource.ResourceCallback? = null
+
+    override fun onSlide(bottomSheet: View, slideOffset: Float) {}
+
+    override fun onStateChanged(bottomSheet: View, newState: Int) {
+        val wasIdle = isIdle
+        isIdle = newState == BottomSheetBehavior.STATE_EXPANDED
+        if (!wasIdle && isIdle) {
+            bottomSheetBehavior.removeBottomSheetCallback(this)
+            resourceCallback?.onTransitionToIdle()
+        }
+    }
+
+    override fun getName() = "BottomSheet awaiting state: $wantedState"
+
+    override fun isIdleNow() = isIdle
+
+    override fun registerIdleTransitionCallback(callback: IdlingResource.ResourceCallback) {
+        resourceCallback = callback
+
+        val state = bottomSheetBehavior.state
+        isIdle = state == wantedState
+        if (isIdle) {
+            resourceCallback!!.onTransitionToIdle()
+        } else {
+            bottomSheetBehavior.addBottomSheetCallback(this)
+        }
+    }
 }

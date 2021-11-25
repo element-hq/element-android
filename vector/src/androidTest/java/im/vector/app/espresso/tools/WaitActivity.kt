@@ -17,9 +17,18 @@
 package im.vector.app.espresso.tools
 
 import android.app.Activity
+import android.view.View
+import androidx.test.espresso.Espresso
+import androidx.test.espresso.matcher.ViewMatchers
 import im.vector.app.activityIdlingResource
+import im.vector.app.waitForView
 import im.vector.app.withIdlingResource
+import org.hamcrest.Matcher
 
-inline fun <reified T : Activity> waitUntilActivityVisible(noinline block: (() -> Unit)) {
+inline fun <reified T : Activity> waitUntilActivityVisible(noinline block: (() -> Unit) = {}) {
     withIdlingResource(activityIdlingResource(T::class.java), block)
+}
+
+fun waitUntilViewVisible(viewMatcher: Matcher<View>) {
+    Espresso.onView(ViewMatchers.isRoot()).perform(waitForView(viewMatcher))
 }

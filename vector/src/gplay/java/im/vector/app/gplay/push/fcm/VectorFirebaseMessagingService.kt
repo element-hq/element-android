@@ -27,18 +27,15 @@ import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.BuildConfig
-import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
-import im.vector.app.core.extensions.vectorComponent
 import im.vector.app.core.network.WifiDetector
 import im.vector.app.core.pushers.PushersManager
 import im.vector.app.features.badge.BadgeProxy
 import im.vector.app.features.notifications.NotifiableEventResolver
-import im.vector.app.features.notifications.NotifiableMessageEvent
 import im.vector.app.features.notifications.NotificationDrawerManager
 import im.vector.app.features.notifications.NotificationUtils
-import im.vector.app.features.notifications.SimpleNotifiableEvent
 import im.vector.app.features.settings.VectorDataStore
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.push.fcm.FcmHelper
@@ -48,44 +45,31 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.logger.LoggerTag
-import org.matrix.android.sdk.api.pushrules.Action
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.events.model.Event
 import timber.log.Timber
+import javax.inject.Inject
 
 private val loggerTag = LoggerTag("Push", LoggerTag.SYNC)
 
 /**
  * Class extending FirebaseMessagingService.
  */
+@AndroidEntryPoint
 class VectorFirebaseMessagingService : FirebaseMessagingService() {
 
-    private lateinit var notificationDrawerManager: NotificationDrawerManager
-    private lateinit var notifiableEventResolver: NotifiableEventResolver
-    private lateinit var pusherManager: PushersManager
-    private lateinit var activeSessionHolder: ActiveSessionHolder
-    private lateinit var vectorPreferences: VectorPreferences
-    private lateinit var vectorDataStore: VectorDataStore
-    private lateinit var wifiDetector: WifiDetector
+    @Inject lateinit var notificationDrawerManager: NotificationDrawerManager
+    @Inject lateinit var notifiableEventResolver: NotifiableEventResolver
+    @Inject lateinit var pusherManager: PushersManager
+    @Inject lateinit var activeSessionHolder: ActiveSessionHolder
+    @Inject lateinit var vectorPreferences: VectorPreferences
+    @Inject lateinit var vectorDataStore: VectorDataStore
+    @Inject lateinit var wifiDetector: WifiDetector
 
     private val coroutineScope = CoroutineScope(SupervisorJob())
 
     // UI handler
     private val mUIHandler by lazy {
         Handler(Looper.getMainLooper())
-    }
-
-    override fun onCreate() {
-        super.onCreate()
-        with(vectorComponent()) {
-            notificationDrawerManager = notificationDrawerManager()
-            notifiableEventResolver = notifiableEventResolver()
-            pusherManager = pusherManager()
-            activeSessionHolder = activeSessionHolder()
-            vectorPreferences = vectorPreferences()
-            vectorDataStore = vectorDataStore()
-            wifiDetector = wifiDetector()
-        }
     }
 
     /**
@@ -212,14 +196,12 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
             Timber.tag(loggerTag.value).d("Fast lane: start request")
             val event = tryOrNull { session.getEvent(roomId, eventId) } ?: return@launch
 
-            val resolvedEvent = notifiableEventResolver.resolveInMemoryEvent(session, event)
+            val resolvedEvent = notifiableEventResolver.resolveInMemoryEvent(session, event, canBeReplaced = true)
 
             resolvedEvent
                     ?.also { Timber.tag(loggerTag.value).d("Fast lane: notify drawer") }
                     ?.let {
-                        it.isPushGatewayEvent = true
-                        notificationDrawerManager.onNotifiableEventReceived(it)
-                        notificationDrawerManager.refreshNotificationDrawer()
+                        notificationDrawerManager.updateEvents { it.onNotifiableEventReceived(resolvedEvent) }
                     }
         }
     }
@@ -237,88 +219,5 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
             }
         }
         return false
-    }
-
-    private fun handleNotificationWithoutSyncingMode(data: Map<String, String>, session: Session?) {
-        if (session == null) {
-            Timber.tag(loggerTag.value).e("## handleNotificationWithoutSyncingMode cannot find session")
-            return
-        }
-
-        // The Matrix event ID of the event being notified about.
-        // This is required if the notification is about a particular Matrix event.
-        // It may be omitted for notifications that only contain updated badge counts.
-        // This ID can and should be used to detect duplicate notification requests.
-        val eventId = data["event_id"] ?: return // Just ignore
-
-        val eventType = data["type"]
-        if (eventType == null) {
-            // Just add a generic unknown event
-            val simpleNotifiableEvent = SimpleNotifiableEvent(
-                    session.myUserId,
-                    eventId,
-                    null,
-                    true, // It's an issue in this case, all event will bing even if expected to be silent.
-                    title = getString(R.string.notification_unknown_new_event),
-                    description = "",
-                    type = null,
-                    timestamp = System.currentTimeMillis(),
-                    soundName = Action.ACTION_OBJECT_VALUE_VALUE_DEFAULT,
-                    isPushGatewayEvent = true
-            )
-            notificationDrawerManager.onNotifiableEventReceived(simpleNotifiableEvent)
-            notificationDrawerManager.refreshNotificationDrawer()
-        } else {
-            val event = parseEvent(data) ?: return
-
-            val notifiableEvent = notifiableEventResolver.resolveEvent(event, session)
-
-            if (notifiableEvent == null) {
-                Timber.tag(loggerTag.value).e("Unsupported notifiable event $eventId")
-                if (BuildConfig.LOW_PRIVACY_LOG_ENABLE) {
-                    Timber.tag(loggerTag.value).e("--> $event")
-                }
-            } else {
-                if (notifiableEvent is NotifiableMessageEvent) {
-                    if (notifiableEvent.senderName.isNullOrEmpty()) {
-                        notifiableEvent.senderName = data["sender_display_name"] ?: data["sender"] ?: ""
-                    }
-                    if (notifiableEvent.roomName.isNullOrEmpty()) {
-                        notifiableEvent.roomName = findRoomNameBestEffort(data, session) ?: ""
-                    }
-                }
-
-                notifiableEvent.isPushGatewayEvent = true
-                notifiableEvent.matrixID = session.myUserId
-                notificationDrawerManager.onNotifiableEventReceived(notifiableEvent)
-                notificationDrawerManager.refreshNotificationDrawer()
-            }
-        }
-    }
-
-    private fun findRoomNameBestEffort(data: Map<String, String>, session: Session?): String? {
-        var roomName: String? = data["room_name"]
-        val roomId = data["room_id"]
-        if (null == roomName && null != roomId) {
-            // Try to get the room name from our store
-            roomName = session?.getRoom(roomId)?.roomSummary()?.displayName
-        }
-        return roomName
-    }
-
-    /**
-     * Try to create an event from the FCM data
-     *
-     * @param data the FCM data
-     * @return the event or null if required data are missing
-     */
-    private fun parseEvent(data: Map<String, String>?): Event? {
-        return Event(
-                eventId = data?.get("event_id") ?: return null,
-                senderId = data["sender"],
-                roomId = data["room_id"] ?: return null,
-                type = data["type"] ?: return null,
-                originServerTs = System.currentTimeMillis()
-        )
     }
 }

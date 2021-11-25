@@ -16,8 +16,10 @@
 
 package org.matrix.android.sdk.internal.session.notification
 
+import org.matrix.android.sdk.api.pushrules.PushEvents
 import org.matrix.android.sdk.api.pushrules.rest.PushRule
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.isInvitation
 import org.matrix.android.sdk.api.session.sync.model.RoomsSyncResponse
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.task.Task
@@ -38,24 +40,20 @@ internal class DefaultProcessEventForPushTask @Inject constructor(
 ) : ProcessEventForPushTask {
 
     override suspend fun execute(params: ProcessEventForPushTask.Params) {
-        // Handle left rooms
-        params.syncResponse.leave.keys.forEach {
-            defaultPushRuleService.dispatchRoomLeft(it)
-        }
-        // Handle joined rooms
-        params.syncResponse.join.keys.forEach {
-            defaultPushRuleService.dispatchRoomJoined(it)
-        }
         val newJoinEvents = params.syncResponse.join
                 .mapNotNull { (key, value) ->
-                    value.timeline?.events?.map { it.copy(roomId = key) }
+                    value.timeline?.events?.mapNotNull {
+                        it.takeIf { !it.isInvitation() }?.copy(roomId = key)
+                    }
                 }
                 .flatten()
+
         val inviteEvents = params.syncResponse.invite
                 .mapNotNull { (key, value) ->
                     value.inviteState?.events?.map { it.copy(roomId = key) }
                 }
                 .flatten()
+
         val allEvents = (newJoinEvents + inviteEvents).filter { event ->
             when (event.type) {
                 EventType.MESSAGE,
@@ -69,10 +67,10 @@ internal class DefaultProcessEventForPushTask @Inject constructor(
         }
         Timber.v("[PushRules] Found ${allEvents.size} out of ${(newJoinEvents + inviteEvents).size}" +
                 " to check for push rules with ${params.rules.size} rules")
-        allEvents.forEach { event ->
+        val matchedEvents = allEvents.mapNotNull { event ->
             pushRuleFinder.fulfilledBingRule(event, params.rules)?.let {
                 Timber.v("[PushRules] Rule $it match for event ${event.eventId}")
-                defaultPushRuleService.dispatchBing(event, it)
+                event to it
             }
         }
 
@@ -86,10 +84,13 @@ internal class DefaultProcessEventForPushTask @Inject constructor(
 
         Timber.v("[PushRules] Found ${allRedactedEvents.size} redacted events")
 
-        allRedactedEvents.forEach { redactedEventId ->
-            defaultPushRuleService.dispatchRedactedEventId(redactedEventId)
-        }
-
-        defaultPushRuleService.dispatchFinish()
+        defaultPushRuleService.dispatchEvents(
+                PushEvents(
+                        matchedEvents = matchedEvents,
+                        roomsJoined = params.syncResponse.join.keys,
+                        roomsLeft = params.syncResponse.leave.keys,
+                        redactedEventIds = allRedactedEvents
+                )
+        )
     }
 }

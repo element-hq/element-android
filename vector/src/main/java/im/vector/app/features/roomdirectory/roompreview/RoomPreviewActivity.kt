@@ -20,6 +20,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Parcelable
 import com.google.android.material.appbar.MaterialToolbar
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.ToolbarConfigurable
@@ -51,6 +52,7 @@ data class RoomPreviewData(
         get() = MatrixItem.RoomItem(roomId, roomName ?: roomAlias, avatarUrl)
 }
 
+@AndroidEntryPoint
 class RoomPreviewActivity : VectorBaseActivity<ActivitySimpleBinding>(), ToolbarConfigurable {
 
     companion object {

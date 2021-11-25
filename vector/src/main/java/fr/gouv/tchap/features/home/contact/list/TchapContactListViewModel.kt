@@ -16,8 +16,6 @@
 
 package fr.gouv.tchap.features.home.contact.list
 
-import com.airbnb.mvrx.ActivityViewModelContext
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
@@ -28,6 +26,8 @@ import dagger.assisted.AssistedInject
 import fr.gouv.tchap.core.utils.TchapUtils
 import im.vector.app.core.contacts.ContactsDataSource
 import im.vector.app.core.contacts.MappedContact
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.toggle
 import im.vector.app.core.platform.VectorViewModel
@@ -50,13 +50,14 @@ import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.api.session.user.model.User
 import org.matrix.android.sdk.api.util.toMatrixItem
-import org.matrix.android.sdk.rx.asObservable
+import org.matrix.android.sdk.flow.flow
 import timber.log.Timber
 
-class TchapContactListViewModel @AssistedInject constructor(@Assisted initialState: TchapContactListViewState,
-                                                            private val contactsDataSource: ContactsDataSource,
-                                                            private val session: Session) :
-        VectorViewModel<TchapContactListViewState, TchapContactListAction, TchapContactListViewEvents>(initialState) {
+class TchapContactListViewModel @AssistedInject constructor(
+        @Assisted initialState: TchapContactListViewState,
+        private val contactsDataSource: ContactsDataSource,
+        private val session: Session
+) : VectorViewModel<TchapContactListViewState, TchapContactListAction, TchapContactListViewEvents>(initialState) {
 
     //    private val knownUsersSearch = BehaviorRelay.create<KnownUsersSearch>()
     private val directoryUsersSearch = MutableStateFlow("")
@@ -70,11 +71,11 @@ class TchapContactListViewModel @AssistedInject constructor(@Assisted initialSta
     private val isExternalUser = TchapUtils.isExternalTchapUser(session.myUserId)
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: TchapContactListViewState): TchapContactListViewModel
+    interface Factory : MavericksAssistedViewModelFactory<TchapContactListViewModel, TchapContactListViewState> {
+        override fun create(initialState: TchapContactListViewState): TchapContactListViewModel
     }
 
-    companion object : MavericksViewModelFactory<TchapContactListViewModel, TchapContactListViewState> {
+    companion object : MavericksViewModelFactory<TchapContactListViewModel, TchapContactListViewState> by hiltMavericksViewModelFactory() {
 
         override fun initialState(viewModelContext: ViewModelContext): TchapContactListViewState {
             return TchapContactListViewState(
@@ -84,21 +85,13 @@ class TchapContactListViewModel @AssistedInject constructor(@Assisted initialSta
                     showInviteActions = false
             )
         }
-
-        override fun create(viewModelContext: ViewModelContext, state: TchapContactListViewState): TchapContactListViewModel {
-            val factory = when (viewModelContext) {
-                is FragmentViewModelContext -> viewModelContext.fragment as? Factory
-                is ActivityViewModelContext -> viewModelContext.activity as? Factory
-            }
-            return factory?.create(state) ?: error("You should let your activity/fragment implements Factory interface")
-        }
     }
 
     init {
         observeUsers()
         observeDMs()
 
-        selectSubscribe(TchapContactListViewState::searchTerm) {
+        onEach(TchapContactListViewState::searchTerm) {
             updateFilteredContacts()
         }
 
@@ -279,14 +272,15 @@ class TchapContactListViewModel @AssistedInject constructor(@Assisted initialSta
     }
 
     private fun observeDMs() {
-        session.getRoomSummariesLive(
-                roomSummaryQueryParams {
-                    this.memberships = listOf(Membership.JOIN)
-                    this.activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(null)
-                    this.roomCategoryFilter = RoomCategoryFilter.ONLY_DM
-                }
-        ).asObservable()
-                .subscribe { roomSummaries ->
+        session.flow()
+                .liveRoomSummaries(
+                        roomSummaryQueryParams {
+                            this.memberships = listOf(Membership.JOIN)
+                            this.activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(null)
+                            this.roomCategoryFilter = RoomCategoryFilter.ONLY_DM
+                        }
+                )
+                .onEach { roomSummaries ->
                     val unresolvedThreePids = mutableListOf<String>()
                     val directUserIds = roomSummaries.mapNotNull { roomSummary -> roomSummary.directUserId }
 
@@ -321,7 +315,8 @@ class TchapContactListViewModel @AssistedInject constructor(@Assisted initialSta
                         roomSummariesUsers = emptyList()
                         updateFilteredContacts()
                     }
-                }.disposeOnClear()
+                }
+                .launchIn(viewModelScope)
     }
 
     private suspend fun executeSearchDirectory(state: TchapContactListViewState, search: String) {

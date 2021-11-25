@@ -4,7 +4,10 @@
     package="im.vector.app">
 
     <!-- Needed for VOIP call to detect and switch to headset-->
-    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission
+        android:name="android.permission.BLUETOOTH"
+        android:maxSdkVersion="30" />
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
@@ -339,7 +342,9 @@
         <activity android:name=".features.spaces.manage.SpaceManageActivity" />
         <activity android:name=".features.spaces.people.SpacePeopleActivity" />
         <activity android:name=".features.spaces.leave.SpaceLeaveAdvancedActivity" />
+        <activity android:name=".features.poll.create.CreatePollActivity" />
         <activity android:name="fr.gouv.tchap.features.expired.ExpiredAccountActivity" />
+
         <!-- Services -->
 
         <service
@@ -417,6 +422,14 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/sdk_provider_paths" />
         </provider>
+
+        <!-- Temporary fix for Android 12. android:exported has to be explicitly set when targeting Android 12
+        Do it for services coming from dependencies - BEGIN -->
+        <service
+            android:name="androidx.sharetarget.ChooserTargetServiceCompat"
+            android:exported="false"
+            tools:node="merge" />
+        <!-- Temporary fix for Android 12 change - END -->
     </application>
 
 </manifest>

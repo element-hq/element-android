@@ -20,8 +20,8 @@ import android.content.Context
 import android.content.Intent
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.viewModel
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityTchapExpiredBinding
 import im.vector.app.features.MainActivity
@@ -32,6 +32,7 @@ import javax.inject.Inject
 /**
  * In this screen, the user is viewing a message informing that his account has expired.
  */
+@AndroidEntryPoint
 class ExpiredAccountActivity : VectorBaseActivity<ActivityTchapExpiredBinding>(), ExpiredAccountViewModel.Factory {
 
     @Inject lateinit var expiredAccountFactory: ExpiredAccountViewModel.Factory
@@ -39,10 +40,6 @@ class ExpiredAccountActivity : VectorBaseActivity<ActivityTchapExpiredBinding>()
     private val viewModel: ExpiredAccountViewModel by viewModel()
 
     override fun getBinding() = ActivityTchapExpiredBinding.inflate(layoutInflater)
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
 
     override fun create(initialState: ExpiredAccountViewState): ExpiredAccountViewModel {
         return expiredAccountFactory.create(initialState)
@@ -57,7 +54,7 @@ class ExpiredAccountActivity : VectorBaseActivity<ActivityTchapExpiredBinding>()
                 viewModel.handle(ExpiredAccountAction.RequestSendingRenewalEmail)
             }
         }
-        viewModel.subscribe(this) { renderState(it) }
+        viewModel.onEach { renderState(it) }
     }
 
     override fun handleExpiredAccount() {

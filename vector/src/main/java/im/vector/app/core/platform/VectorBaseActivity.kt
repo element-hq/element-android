@@ -16,6 +16,7 @@
 
 package im.vector.app.core.platform
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.res.Configuration
@@ -39,20 +40,17 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentFactory
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.viewbinding.ViewBinding
 import com.airbnb.mvrx.MavericksView
 import com.bumptech.glide.util.Util
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.snackbar.Snackbar
-import com.jakewharton.rxbinding3.view.clicks
+import dagger.hilt.android.EntryPointAccessors
 import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
-import im.vector.app.core.di.DaggerScreenComponent
-import im.vector.app.core.di.HasScreenInjector
-import im.vector.app.core.di.HasVectorInjector
-import im.vector.app.core.di.ScreenComponent
-import im.vector.app.core.di.VectorComponent
+import im.vector.app.core.di.ActivityEntryPoint
 import im.vector.app.core.dialogs.DialogLocker
 import im.vector.app.core.dialogs.UnrecognizedCertificateDialog
 import im.vector.app.core.extensions.exhaustive
@@ -61,7 +59,8 @@ import im.vector.app.core.extensions.observeNotNull
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.restart
 import im.vector.app.core.extensions.setTextOrHide
-import im.vector.app.core.extensions.vectorComponent
+import im.vector.app.core.extensions.singletonEntryPoint
+import im.vector.app.core.flow.throttleFirst
 import im.vector.app.core.utils.toast
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
@@ -80,16 +79,15 @@ import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.themes.ActivityOtherThemes
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.receivers.DebugReceiver
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.failure.GlobalError
+import reactivecircus.flowbinding.android.view.clicks
 import timber.log.Timber
-import java.util.concurrent.TimeUnit
-import kotlin.system.measureTimeMillis
+import javax.inject.Inject
 
-abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), HasScreenInjector, MavericksView {
+abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), MavericksView {
     /* ==========================================================================================
      * View
      * ========================================================================================== */
@@ -107,13 +105,12 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), HasSc
 
     protected fun <T : VectorViewEvents> VectorViewModel<*, *, T>.observeViewEvents(observer: (T) -> Unit) {
         viewEvents
-                .observe()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
+                .stream()
+                .onEach {
                     hideWaitingView()
                     observer(it)
                 }
-                .disposeOnDestroy()
+                .launchIn(lifecycleScope)
     }
 
     /* ==========================================================================================
@@ -122,10 +119,9 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), HasSc
 
     protected fun View.debouncedClicks(onClicked: () -> Unit) {
         clicks()
-                .throttleFirst(300, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { onClicked() }
-                .disposeOnDestroy()
+                .throttleFirst(300)
+                .onEach { onClicked() }
+                .launchIn(lifecycleScope)
     }
 
     /* ==========================================================================================
@@ -136,8 +132,9 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), HasSc
     private lateinit var sessionListener: SessionListener
     protected lateinit var bugReporter: BugReporter
     private lateinit var pinLocker: PinLocker
-    lateinit var rageShake: RageShake
 
+    @Inject
+    lateinit var rageShake: RageShake
     lateinit var navigator: Navigator
         private set
     private lateinit var fragmentFactory: FragmentFactory
@@ -153,10 +150,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), HasSc
     // For debug only
     private var debugReceiver: DebugReceiver? = null
 
-    private val uiDisposables = CompositeDisposable()
     private val restorables = ArrayList<Restorable>()
-
-    private lateinit var screenComponent: ScreenComponent
 
     override fun attachBaseContext(base: Context) {
         val vectorConfiguration = VectorConfiguration(this)
@@ -180,32 +174,22 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), HasSc
         return this
     }
 
-    protected fun Disposable.disposeOnDestroy() {
-        uiDisposables.add(this)
-    }
-
     @CallSuper
     override fun onCreate(savedInstanceState: Bundle?) {
         Timber.i("onCreate Activity ${javaClass.simpleName}")
-        val vectorComponent = getVectorComponent()
-        screenComponent = DaggerScreenComponent.factory().create(vectorComponent, this)
-        val timeForInjection = measureTimeMillis {
-            injectWith(screenComponent)
-        }
-        Timber.v("Injecting dependencies into ${javaClass.simpleName} took $timeForInjection ms")
+        val singletonEntryPoint = singletonEntryPoint()
+        val activityEntryPoint = EntryPointAccessors.fromActivity(this, ActivityEntryPoint::class.java)
         ThemeUtils.setActivityTheme(this, getOtherThemes())
-        fragmentFactory = screenComponent.fragmentFactory()
+        fragmentFactory = activityEntryPoint.fragmentFactory()
         supportFragmentManager.fragmentFactory = fragmentFactory
+        viewModelFactory = activityEntryPoint.viewModelFactory()
         super.onCreate(savedInstanceState)
-        viewModelFactory = screenComponent.viewModelFactory()
         configurationViewModel = viewModelProvider.get(ConfigurationViewModel::class.java)
-        bugReporter = screenComponent.bugReporter()
-        pinLocker = screenComponent.pinLocker()
-        // Shake detector
-        rageShake = screenComponent.rageShake()
-        navigator = screenComponent.navigator()
-        activeSessionHolder = screenComponent.activeSessionHolder()
-        vectorPreferences = vectorComponent.vectorPreferences()
+        bugReporter = singletonEntryPoint.bugReporter()
+        pinLocker = singletonEntryPoint.pinLocker()
+        navigator = singletonEntryPoint.navigator()
+        activeSessionHolder = singletonEntryPoint.activeSessionHolder()
+        vectorPreferences = singletonEntryPoint.vectorPreferences()
         configurationViewModel.activityRestarter.observe(this) {
             if (!it.hasBeenHandled) {
                 // Recreate the Activity because configuration has changed
@@ -217,7 +201,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), HasSc
                 navigator.openPinCode(this, pinStartForActivityResult, PinMode.AUTH)
             }
         }
-        sessionListener = vectorComponent.sessionListener()
+        sessionListener = singletonEntryPoint.sessionListener()
         sessionListener.globalErrorLiveData.observeEvent(this) {
             handleGlobalError(it)
         }
@@ -274,7 +258,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), HasSc
     }
 
     private fun handleCertificateError(certificateError: GlobalError.CertificateError) {
-        vectorComponent()
+        singletonEntryPoint()
                 .unrecognizedCertificateDialog()
                 .show(this,
                         certificateError.fingerprint,
@@ -325,8 +309,6 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), HasSc
     override fun onDestroy() {
         super.onDestroy()
         Timber.i("onDestroy Activity ${javaClass.simpleName}")
-
-        uiDisposables.dispose()
     }
 
     private val pinStartForActivityResult = registerStartForActivityResult { activityResult ->
@@ -415,12 +397,6 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), HasSc
         bugReporter.inMultiWindowMode = isInMultiWindowMode
     }
 
-    override fun injector(): ScreenComponent {
-        return screenComponent
-    }
-
-    protected open fun injectWith(injector: ScreenComponent) = Unit
-
     protected fun createFragment(fragmentClass: Class<out Fragment>, args: Bundle?): Fragment {
         return fragmentFactory.instantiate(classLoader, fragmentClass.name).apply {
             arguments = args
@@ -431,10 +407,6 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), HasSc
      * PRIVATE METHODS
      * ========================================================================================== */
 
-    internal fun getVectorComponent(): VectorComponent {
-        return (application as HasVectorInjector).injector()
-    }
-
     /**
      * Force to render the activity in fullscreen
      */
@@ -444,7 +416,12 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), HasSc
             // New API instead of SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN and SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
             window.setDecorFitsSystemWindows(false)
             // New API instead of SYSTEM_UI_FLAG_IMMERSIVE
-            window.decorView.windowInsetsController?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_BARS_BY_SWIPE
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                window.decorView.windowInsetsController?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+            } else {
+                @SuppressLint("WrongConstant")
+                window.decorView.windowInsetsController?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_BARS_BY_SWIPE
+            }
             // New API instead of FLAG_TRANSLUCENT_STATUS
             window.statusBarColor = ContextCompat.getColor(this, im.vector.lib.attachmentviewer.R.color.half_transparent_status_bar)
             // New API instead of FLAG_TRANSLUCENT_NAVIGATION

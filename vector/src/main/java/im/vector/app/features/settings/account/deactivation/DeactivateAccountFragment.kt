@@ -36,9 +36,7 @@ import im.vector.app.features.settings.VectorSettingsActivity
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import javax.inject.Inject
 
-class DeactivateAccountFragment @Inject constructor(
-        val viewModelFactory: DeactivateAccountViewModel.Factory
-) : VectorBaseFragment<FragmentDeactivateAccountBinding>() {
+class DeactivateAccountFragment @Inject constructor() : VectorBaseFragment<FragmentDeactivateAccountBinding>() {
 
     private val viewModel: DeactivateAccountViewModel by fragmentViewModel()
 

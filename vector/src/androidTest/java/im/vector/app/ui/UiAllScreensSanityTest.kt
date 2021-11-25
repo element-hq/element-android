@@ -16,53 +16,19 @@
 
 package im.vector.app.ui
 
-import android.view.View
-import androidx.recyclerview.widget.RecyclerView
-import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.Espresso.pressBack
-import androidx.test.espresso.action.ViewActions.closeSoftKeyboard
-import androidx.test.espresso.action.ViewActions.longClick
-import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItem
-import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
-import androidx.test.espresso.matcher.ViewMatchers.isRoot
-import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
-import com.adevinta.android.barista.assertion.BaristaListAssertions.assertListItemCount
-import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
-import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickBack
-import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
-import com.adevinta.android.barista.interaction.BaristaClickInteractions.longClickOn
-import com.adevinta.android.barista.interaction.BaristaDialogInteractions.clickDialogNegativeButton
-import com.adevinta.android.barista.interaction.BaristaDialogInteractions.clickDialogPositiveButton
-import com.adevinta.android.barista.interaction.BaristaDrawerInteractions.openDrawer
-import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
-import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem
-import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild
-import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.clickMenu
-import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu
-import im.vector.app.BuildConfig
-import im.vector.app.EspressoHelper
 import im.vector.app.R
-import im.vector.app.SleepViewAction
-import im.vector.app.activityIdlingResource
-import im.vector.app.espresso.tools.clickOnPreference
-import im.vector.app.espresso.tools.waitUntilActivityVisible
+import im.vector.app.espresso.tools.ScreenshotFailureRule
 import im.vector.app.features.MainActivity
-import im.vector.app.features.createdirect.CreateDirectRoomActivity
-import im.vector.app.features.home.HomeActivity
-import im.vector.app.features.home.room.detail.RoomDetailActivity
-import im.vector.app.features.login.LoginActivity
-import im.vector.app.features.roomdirectory.RoomDirectoryActivity
-import im.vector.app.initialSyncIdlingResource
-import im.vector.app.waitForView
-import im.vector.app.withIdlingResource
+import im.vector.app.getString
+import im.vector.app.ui.robot.ElementRobot
+import im.vector.app.ui.robot.withDeveloperMode
 import org.junit.Rule
 import org.junit.Test
+import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
-import java.lang.Thread.sleep
 import java.util.UUID
 
 /**
@@ -73,9 +39,11 @@ import java.util.UUID
 class UiAllScreensSanityTest {
 
     @get:Rule
-    val activityRule = ActivityScenarioRule(MainActivity::class.java)
+    val testRule = RuleChain
+            .outerRule(ActivityScenarioRule(MainActivity::class.java))
+            .around(ScreenshotFailureRule())
 
-    private val uiTestBase = UiTestBase()
+    private val elementRobot = ElementRobot()
 
     // Last passing:
     // 2020-11-09
@@ -85,439 +53,63 @@ class UiAllScreensSanityTest {
     fun allScreensTest() {
         // Create an account
         val userId = "UiTest_" + UUID.randomUUID().toString()
-        uiTestBase.createAccount(userId = userId)
+        elementRobot.signUp(userId)
 
-        withIdlingResource(activityIdlingResource(HomeActivity::class.java)) {
-            assertDisplayed(R.id.roomListContainer)
-            closeSoftKeyboard()
+        elementRobot.settings {
+            general { crawl() }
+            notifications { crawl() }
+            preferences { crawl() }
+            voiceAndVideo()
+            ignoredUsers()
+            securityAndPrivacy { crawl() }
+            labs()
+            advancedSettings { crawl() }
+            helpAndAbout { crawl() }
         }
 
-        val activity = EspressoHelper.getCurrentActivity()!!
-        val uiSession = (activity as HomeActivity).activeSessionHolder.getActiveSession()
-
-        withIdlingResource(initialSyncIdlingResource(uiSession)) {
-            assertDisplayed(R.id.roomListContainer)
+        elementRobot.newDirectMessage {
+            verifyQrCodeButton()
+            verifyInviteFriendsButton()
         }
 
-        assertDisplayed(R.id.bottomNavigationView)
+        elementRobot.newRoom {
+            createNewRoom {
+                crawl()
+                createRoom {
+                    val message = "Hello world!"
+                    postMessage(message)
+                    crawl()
+                    crawlMessage(message)
+                    openSettings { crawl() }
+                }
+            }
+        }
 
-        // Settings
-        navigateToSettings()
+        elementRobot.withDeveloperMode {
+            settings {
+                advancedSettings { crawlDeveloperOptions() }
+            }
+            roomList {
+                openRoom(getString(R.string.room_displayname_empty_room)) {
+                    val message = "Test view source"
+                    postMessage(message)
+                    openMessageMenu(message) {
+                        viewSource()
+                    }
+                }
+            }
+        }
 
-        // Create DM
-        clickOn(R.id.bottom_action_people)
-        createDm()
+        elementRobot.roomList {
+            verifyCreatedRoom()
+        }
 
-        // Create Room
-        // First navigate to the other tab
-        clickOn(R.id.bottom_action_rooms)
-        createRoom()
-
-        assertDisplayed(R.id.bottomNavigationView)
-
-        // Long click on the room
-        onView(withId(R.id.roomListView))
-                .perform(
-                        actionOnItem<RecyclerView.ViewHolder>(
-                                hasDescendant(withText(R.string.room_displayname_empty_room)),
-                                longClick()
-                        )
-                )
-        pressBack()
-
-        uiTestBase.signout()
-
-        // We have sent a message in a e2e room, accept to loose it
-        clickOn(R.id.exitAnywayButton)
-        // Dark pattern
-        clickDialogNegativeButton()
+        elementRobot.signout(expectSignOutWarning = true)
 
         // Login again on the same account
-        waitUntilActivityVisible<LoginActivity> {
-            assertDisplayed(R.id.loginSplashLogo)
-        }
-
-        uiTestBase.login(userId)
-        ignoreVerification()
-
-        uiTestBase.signout()
-        clickDialogPositiveButton()
-
+        elementRobot.login(userId)
+        elementRobot.dismissVerificationIfPresent()
         // TODO Deactivate account instead of logout?
-    }
-
-    private fun ignoreVerification() {
-        sleep(6000)
-        val activity = EspressoHelper.getCurrentActivity()!!
-
-        val popup = activity.findViewById<View>(com.tapadoo.alerter.R.id.llAlertBackground)
-        activity.runOnUiThread {
-            popup.performClick()
-        }
-
-        assertDisplayed(R.id.bottomSheetFragmentContainer)
-
-        onView(isRoot()).perform(SleepViewAction.sleep(2000))
-
-        clickOn(R.string.skip)
-        assertDisplayed(R.string.are_you_sure)
-        clickOn(R.string.skip)
-    }
-
-    private fun createRoom() {
-        clickOn(R.id.createRoomFabMenu)
-        waitUntilActivityVisible<RoomDirectoryActivity> {
-            assertDisplayed(R.id.publicRoomsList)
-        }
-        clickOn(R.string.create_new_room)
-
-        // Room access bottom sheet
-        clickOn(R.string.room_settings_room_access_private_title)
-        pressBack()
-
-        // Create
-        assertListItemCount(R.id.createRoomForm, 12)
-        clickListItemChild(R.id.createRoomForm, 11, R.id.form_submit_button)
-
-        waitUntilActivityVisible<RoomDetailActivity> {
-            assertDisplayed(R.id.roomDetailContainer)
-        }
-
-        clickOn(R.id.attachmentButton)
-        clickBack()
-
-        // Send a message
-        writeTo(R.id.composerEditText, "Hello world!")
-        clickOn(R.id.sendButton)
-
-        navigateToRoomSettings()
-
-        // Long click on the message
-        longClickOnMessageTest()
-
-        // Menu
-        openMenu()
-        pressBack()
-        clickMenu(R.id.voice_call)
-        pressBack()
-        clickMenu(R.id.video_call)
-        pressBack()
-        clickMenu(R.id.search)
-        pressBack()
-
-        pressBack()
-    }
-
-    private fun longClickOnMessageTest() {
-        // Test quick reaction
-        longClickOnMessage()
-        // Add quick reaction
-        clickOn("\uD83D\uDC4D️") // 👍
-
-        sleep(1000)
-
-        // Open reactions
-        longClickOn("\uD83D\uDC4D️") // 👍
-        pressBack()
-
-        // Test add reaction
-        longClickOnMessage()
-        clickOn(R.string.message_add_reaction)
-        // Filter
-        // TODO clickMenu(R.id.search)
-        // Wait for emoji to load, it's async now
-        sleep(2_000)
-        clickListItem(R.id.emojiRecyclerView, 4)
-
-        // Test Edit mode
-        longClickOnMessage()
-        clickOn(R.string.edit)
-        // TODO Cancel action
-        writeTo(R.id.composerEditText, "Hello universe!")
-        // Wait a bit for the keyboard layout to update
-        sleep(30)
-        clickOn(R.id.sendButton)
-        // Wait for the UI to update
-        sleep(1000)
-        // Open edit history
-        longClickOnMessage("Hello universe! (edited)")
-        clickOn(R.string.message_view_edit_history)
-        pressBack()
-    }
-
-    private fun longClickOnMessage(text: String = "Hello world!") {
-        onView(withId(R.id.timelineRecyclerView))
-                .perform(
-                        actionOnItem<RecyclerView.ViewHolder>(
-                                hasDescendant(withText(text)),
-                                longClick()
-                        )
-                )
-    }
-
-    private fun navigateToRoomSettings() {
-        clickOn(R.id.roomToolbarTitleView)
-        assertDisplayed(R.id.roomProfileAvatarView)
-
-        // Room settings
-        clickListItem(R.id.matrixProfileRecyclerView, 3)
-        navigateToRoomParameters()
-        pressBack()
-
-        // Notifications
-        clickListItem(R.id.matrixProfileRecyclerView, 5)
-        pressBack()
-
-        assertDisplayed(R.id.roomProfileAvatarView)
-
-        // People
-        clickListItem(R.id.matrixProfileRecyclerView, 7)
-        assertDisplayed(R.id.inviteUsersButton)
-        navigateToRoomPeople()
-        // Fab
-        navigateToInvite()
-        pressBack()
-        pressBack()
-
-        assertDisplayed(R.id.roomProfileAvatarView)
-
-        // Uploads
-        clickListItem(R.id.matrixProfileRecyclerView, 9)
-        // File tab
-        clickOn(R.string.uploads_files_title)
-        sleep(1000)
-        pressBack()
-
-        assertDisplayed(R.id.roomProfileAvatarView)
-
-        // Leave
-        clickListItem(R.id.matrixProfileRecyclerView, 13)
-        clickDialogNegativeButton()
-
-        // Advanced
-        // Room addresses
-        clickListItem(R.id.matrixProfileRecyclerView, 15)
-        onView(isRoot()).perform(waitForView(withText(R.string.room_alias_published_alias_title)))
-        pressBack()
-
-        // Room permissions
-        clickListItem(R.id.matrixProfileRecyclerView, 17)
-        onView(isRoot()).perform(waitForView(withText(R.string.room_permissions_title)))
-        clickOn(R.string.room_permissions_change_room_avatar)
-        clickDialogNegativeButton()
-        // Toggle
-        clickOn(R.string.show_advanced)
-        clickOn(R.string.hide_advanced)
-        pressBack()
-
-        // Menu share
-        // clickMenu(R.id.roomProfileShareAction)
-        // pressBack()
-
-        pressBack()
-    }
-
-    private fun navigateToRoomParameters() {
-        // Room history readability
-        clickListItem(R.id.roomSettingsRecyclerView, 4)
-        pressBack()
-
-        // Room access
-        clickListItem(R.id.roomSettingsRecyclerView, 6)
-        pressBack()
-    }
-
-    private fun navigateToInvite() {
-        assertDisplayed(R.id.inviteUsersButton)
-        clickOn(R.id.inviteUsersButton)
-        closeSoftKeyboard()
-        pressBack()
-    }
-
-    private fun navigateToRoomPeople() {
-        // Open first user
-        clickListItem(R.id.roomSettingsRecyclerView, 1)
-        sleep(1000)
-        assertDisplayed(R.id.memberProfilePowerLevelView)
-
-        // Verification
-        clickListItem(R.id.matrixProfileRecyclerView, 1)
-        clickBack()
-
-        // Role
-        clickListItem(R.id.matrixProfileRecyclerView, 3)
-        sleep(1000)
-        clickDialogNegativeButton()
-        sleep(1000)
-        clickBack()
-    }
-
-    private fun createDm() {
-        clickOn(R.id.createChatRoomButton)
-
-        withIdlingResource(activityIdlingResource(CreateDirectRoomActivity::class.java)) {
-            onView(withId(R.id.userListRecyclerView))
-                    .perform(waitForView(withText(R.string.qr_code)))
-            onView(withId(R.id.userListRecyclerView))
-                    .perform(waitForView(withText(R.string.invite_friends)))
-        }
-
-        closeSoftKeyboard()
-        pressBack()
-        pressBack()
-    }
-
-    private fun navigateToSettings() {
-        // clickOn(R.id.groupToolbarAvatarImageView)
-        openDrawer()
-        clickOn(R.id.homeDrawerHeaderSettingsView)
-
-        clickOn(R.string.settings_general_title)
-        navigateToSettingsGeneral()
-        pressBack()
-
-        clickOn(R.string.settings_notifications)
-        navigateToSettingsNotifications()
-        pressBack()
-
-        clickOn(R.string.settings_preferences)
-        navigateToSettingsPreferences()
-        pressBack()
-
-        clickOn(R.string.preference_voice_and_video)
-        pressBack()
-
-        clickOn(R.string.settings_ignored_users)
-        pressBack()
-
-        clickOn(R.string.settings_security_and_privacy)
-        navigateToSettingsSecurity()
-        pressBack()
-
-        clickOn(R.string.room_settings_labs_pref_title)
-        pressBack()
-
-        clickOn(R.string.settings_advanced_settings)
-        navigateToSettingsAdvanced()
-        pressBack()
-
-        clickOn(R.string.preference_root_help_about)
-        navigateToSettingsHelp()
-        pressBack()
-
-        pressBack()
-    }
-
-    private fun navigateToSettingsHelp() {
-        /*
-        clickOn(R.string.settings_app_info_link_title)
-        Cannot go back...
-        pressBack()
-        clickOn(R.string.settings_copyright)
-        pressBack()
-        clickOn(R.string.settings_app_term_conditions)
-        pressBack()
-        clickOn(R.string.settings_privacy_policy)
-        pressBack()
-         */
-        clickOn(R.string.settings_third_party_notices)
-        clickDialogPositiveButton()
-    }
-
-    private fun navigateToSettingsAdvanced() {
-        clickOnPreference(R.string.settings_notifications_targets)
-        pressBack()
-
-        clickOnPreference(R.string.settings_push_rules)
-        pressBack()
-
-        /* TODO P2 test developer screens
-        // Enable developer mode
-        clickOnSwitchPreference("SETTINGS_DEVELOPER_MODE_PREFERENCE_KEY")
-
-        clickOnPreference(R.string.settings_account_data)
-        clickOn("m.push_rules")
-        pressBack()
-        pressBack()
-        clickOnPreference(R.string.settings_key_requests)
-        pressBack()
-
-        // Disable developer mode
-        clickOnSwitchPreference("SETTINGS_DEVELOPER_MODE_PREFERENCE_KEY")
-         */
-    }
-
-    private fun navigateToSettingsSecurity() {
-        clickOnPreference(R.string.settings_active_sessions_show_all)
-        pressBack()
-
-        clickOnPreference(R.string.encryption_message_recovery)
-        // TODO go deeper here
-        pressBack()
-        /* Cannot exit
-        clickOnPreference(R.string.encryption_export_e2e_room_keys)
-        pressBack()
-         */
-    }
-
-    private fun navigateToSettingsPreferences() {
-        clickOn(R.string.settings_interface_language)
-        onView(isRoot())
-                .perform(waitForView(withText("Dansk (Danmark)")))
-        pressBack()
-        clickOn(R.string.settings_theme)
-        clickDialogNegativeButton()
-        clickOn(R.string.font_size)
-        clickDialogNegativeButton()
-    }
-
-    private fun navigateToSettingsNotifications() {
-        if (BuildConfig.USE_NOTIFICATION_SETTINGS_V2) {
-            clickOn(R.string.settings_notification_default)
-            pressBack()
-            clickOn(R.string.settings_notification_mentions_and_keywords)
-            // TODO Test adding a keyword?
-            pressBack()
-            clickOn(R.string.settings_notification_other)
-            pressBack()
-        } else {
-            clickOn(R.string.settings_notification_advanced)
-            pressBack()
-        }
-        /*
-        clickOn(R.string.settings_noisy_notifications_preferences)
-        TODO Cannot go back
-        pressBack()
-        clickOn(R.string.settings_silent_notifications_preferences)
-        pressBack()
-        clickOn(R.string.settings_call_notifications_preferences)
-        pressBack()
-         */
-        clickOnPreference(R.string.settings_notification_troubleshoot)
-        pressBack()
-    }
-
-    private fun navigateToSettingsGeneral() {
-        clickOn(R.string.settings_profile_picture)
-        clickDialogPositiveButton()
-        clickOn(R.string.settings_display_name)
-        clickDialogNegativeButton()
-        clickOn(R.string.settings_password)
-        clickDialogNegativeButton()
-        clickOn(R.string.settings_emails_and_phone_numbers_title)
-        pressBack()
-        clickOn(R.string.settings_discovery_manage)
-        clickOn(R.string.add_identity_server)
-        pressBack()
-        pressBack()
-        // Homeserver
-        clickOnPreference(R.string.settings_home_server)
-        pressBack()
-        // Identity server
-        clickOnPreference(R.string.settings_identity_server)
-        pressBack()
-        // Deactivate account
-        clickOnPreference(R.string.settings_deactivate_my_account)
-        pressBack()
+        elementRobot.signout(expectSignOutWarning = false)
     }
 }

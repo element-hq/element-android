@@ -16,24 +16,25 @@
 
 package im.vector.app.features.home.room.list
 
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
-import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.ViewModelContext
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import im.vector.app.AppStateHandler
 import im.vector.app.RoomGroupingMethod
-import im.vector.app.core.di.HasScreenInjector
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.exhaustive
+import im.vector.app.core.extensions.singletonEntryPoint
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.displayname.getBestName
-import im.vector.app.features.home.HomeActivity
 import im.vector.app.features.invite.AutoAcceptInvites
 import im.vector.app.features.settings.VectorPreferences
 import kotlinx.coroutines.Dispatchers
@@ -50,10 +51,9 @@ import org.matrix.android.sdk.api.session.room.state.isPublic
 import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.flow.flow
 import timber.log.Timber
-import javax.inject.Inject
 
-class RoomListViewModel @Inject constructor(
-        initialState: RoomListViewState,
+class RoomListViewModel @AssistedInject constructor(
+        @Assisted initialState: RoomListViewState,
         val session: Session,
         private val stringProvider: StringProvider,
         private val appStateHandler: AppStateHandler,
@@ -61,8 +61,9 @@ class RoomListViewModel @Inject constructor(
         private val autoAcceptInvites: AutoAcceptInvites
 ) : VectorViewModel<RoomListViewState, RoomListAction, RoomListViewEvents>(initialState) {
 
-    interface Factory {
-        fun create(initialState: RoomListViewState): RoomListViewModel
+    @AssistedFactory
+    interface Factory : MavericksAssistedViewModelFactory<RoomListViewModel, RoomListViewState> {
+        override fun create(initialState: RoomListViewState): RoomListViewModel
     }
 
     private var updatableQueries = mutableListOf<UpdatableLivePageResult>()
@@ -119,47 +120,38 @@ class RoomListViewModel @Inject constructor(
                 }
     }
 
-    companion object : MavericksViewModelFactory<RoomListViewModel, RoomListViewState> {
+    companion object : MavericksViewModelFactory<RoomListViewModel, RoomListViewState> by hiltMavericksViewModelFactory() {
 
-        override fun initialState(viewModelContext: ViewModelContext): RoomListViewState? {
-            val uiStateRepository = (viewModelContext.activity as HasScreenInjector).injector().uiStateRepository()
+        override fun initialState(viewModelContext: ViewModelContext): RoomListViewState {
+            val uiStateRepository = viewModelContext.activity.singletonEntryPoint().uiStateRepository()
             return RoomListViewState(
                     displayMode = uiStateRepository.getDisplayMode()
             )
         }
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: RoomListViewState): RoomListViewModel {
-            return when (val activity: FragmentActivity = (viewModelContext as ActivityViewModelContext).activity()) {
-                is HomeActivity -> activity.create(state)
-                else            -> error("You should let your activity/fragment implements Factory interface")
-            }
-        }
     }
 
-    private val roomListSectionBuilder by lazy {
-        if (appStateHandler.getCurrentRoomGroupingMethod() is RoomGroupingMethod.BySpace) {
-            RoomListSectionBuilderSpace(
-                    session,
-                    stringProvider,
-                    appStateHandler,
-                    viewModelScope,
-                    autoAcceptInvites,
-                    {
-                        updatableQueries.add(it)
-                    },
-                    suggestedRoomJoiningState,
-                    !vectorPreferences.prefSpacesShowAllRoomInHome()
-            )
-        } else {
-            RoomListSectionBuilderGroup(
-                    session,
-                    stringProvider,
-                    appStateHandler,
-                    autoAcceptInvites
-            ) {
-                updatableQueries.add(it)
-            }
+    private val roomListSectionBuilder = if (appStateHandler.getCurrentRoomGroupingMethod() is RoomGroupingMethod.BySpace) {
+        RoomListSectionBuilderSpace(
+                session,
+                stringProvider,
+                appStateHandler,
+                viewModelScope,
+                autoAcceptInvites,
+                {
+                    updatableQueries.add(it)
+                },
+                suggestedRoomJoiningState,
+                !vectorPreferences.prefSpacesShowAllRoomInHome()
+        )
+    } else {
+        RoomListSectionBuilderGroup(
+                viewModelScope,
+                session,
+                stringProvider,
+                appStateHandler,
+                autoAcceptInvites
+        ) {
+            updatableQueries.add(it)
         }
     }
 
@@ -212,11 +204,12 @@ class RoomListViewModel @Inject constructor(
                     roomFilter = action.filter
             )
         }
+
         // filter query for each section
         updatableQueries.forEach { updatableQuery ->
             updatableQuery.updateQuery {
                 it.copy(
-                        displayName = QueryStringValue.Contains(action.filter, QueryStringValue.Case.INSENSITIVE)
+                        displayName = QueryStringValue.Contains(action.filter, QueryStringValue.Case.NORMALIZED)
                 )
             }
         }
@@ -376,10 +369,5 @@ class RoomListViewModel @Inject constructor(
 
     private fun handleCancelSearch() {
         _viewEvents.post(RoomListViewEvents.CancelSearch)
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        roomListSectionBuilder.dispose()
     }
 }

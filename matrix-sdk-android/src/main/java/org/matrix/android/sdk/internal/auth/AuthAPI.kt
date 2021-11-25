@@ -122,6 +122,10 @@ internal interface AuthAPI {
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "login")
     suspend fun login(@Body loginParams: TokenLoginParams): Credentials
 
+    @Headers("CONNECT_TIMEOUT:60000", "READ_TIMEOUT:60000", "WRITE_TIMEOUT:60000")
+    @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "login")
+    suspend fun login(@Body loginParams: JsonDict): Credentials
+
     /**
      * Ask the homeserver to reset the password associated with the provided email.
      */

@@ -80,15 +80,14 @@ class PermalinkHandler @Inject constructor(private val activeSessionHolder: Acti
         return when (permalinkData) {
             is PermalinkData.RoomLink            -> {
                 val roomId = permalinkData.getRoomId()
-                if (navigationInterceptor?.navToRoom(roomId, permalinkData.eventId, rawLink) != true) {
-                    openRoom(
-                            context = context,
-                            roomId = roomId,
-                            permalinkData = permalinkData,
-                            rawLink = rawLink,
-                            buildTask = buildTask
-                    )
-                }
+                openRoom(
+                        navigationInterceptor,
+                        context = context,
+                        roomId = roomId,
+                        permalinkData = permalinkData,
+                        rawLink = rawLink,
+                        buildTask = buildTask
+                )
                 true
             }
             is PermalinkData.GroupLink           -> {
@@ -121,7 +120,7 @@ class PermalinkHandler @Inject constructor(private val activeSessionHolder: Acti
     private fun isPermalinkSupported(context: Context, url: String): Boolean {
         return url.startsWith(PermalinkService.MATRIX_TO_URL_BASE) ||
                 context.resources.getStringArray(R.array.permalink_supported_hosts)
-                        .any { url.toUri().host == it || url.startsWith(it) }
+                        .any { url.toUri().host == it }
     }
 
     private suspend fun PermalinkData.RoomLink.getRoomId(): String? {
@@ -146,6 +145,7 @@ class PermalinkHandler @Inject constructor(private val activeSessionHolder: Acti
      * Open room either joined, or not
      */
     private fun openRoom(
+            navigationInterceptor: NavigationInterceptor?,
             context: Context,
             roomId: String?,
             permalinkData: PermalinkData.RoomLink,
@@ -167,7 +167,7 @@ class PermalinkHandler @Inject constructor(private val activeSessionHolder: Acti
             membership?.isActive().orFalse() -> {
                 if (!isSpace && membership == Membership.JOIN) {
                     // If it's a room you're in, let's just open it, you can tap back if needed
-                    navigator.openRoom(context, roomId, eventId, buildTask)
+                    navigationInterceptor.openJoinedRoomScreen(buildTask, roomId, eventId, rawLink, context)
                 } else {
                     // maybe open space preview navigator.openSpacePreview(context, roomId)? if already joined?
                     navigator.openMatrixToBottomSheet(context, rawLink.toString())
@@ -177,6 +177,12 @@ class PermalinkHandler @Inject constructor(private val activeSessionHolder: Acti
                 // XXX this could trigger another server load
                 navigator.openMatrixToBottomSheet(context, rawLink.toString())
             }
+        }
+    }
+
+    private fun NavigationInterceptor?.openJoinedRoomScreen(buildTask: Boolean, roomId: String, eventId: String?, rawLink: Uri, context: Context) {
+        if (this?.navToRoom(roomId, eventId, rawLink) != true) {
+            navigator.openRoom(context, roomId, eventId, buildTask)
         }
     }
 

@@ -144,8 +144,7 @@
         <!-- Keywords -->
         <item name="vctr_keyword_style">@style/Widget.Vector.Keyword</item>
 
-        <!-- Voice Message -->
-        <item name="vctr_voice_message_toast_background">@color/vctr_voice_message_toast_background_light</item>
+        <item name="vctr_toast_background">@color/vctr_toast_background_light</item>
     </style>
 
     <style name="Theme.Vector.Light" parent="Base.Theme.Vector.Light" />

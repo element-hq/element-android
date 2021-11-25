@@ -19,14 +19,19 @@ package im.vector.app.features.spaces
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.Mavericks
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.commitTransaction
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivitySimpleBinding
 import im.vector.app.features.spaces.preview.SpacePreviewArgs
 import im.vector.app.features.spaces.preview.SpacePreviewFragment
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
+@AndroidEntryPoint
 class SpacePreviewActivity : VectorBaseActivity<ActivitySimpleBinding>() {
 
     lateinit var sharedActionViewModel: SpacePreviewSharedActionViewModel
@@ -37,8 +42,8 @@ class SpacePreviewActivity : VectorBaseActivity<ActivitySimpleBinding>() {
         super.onCreate(savedInstanceState)
         sharedActionViewModel = viewModelProvider.get(SpacePreviewSharedActionViewModel::class.java)
         sharedActionViewModel
-                .observe()
-                .subscribe { action ->
+                .stream()
+                .onEach { action ->
                     when (action) {
                         SpacePreviewSharedAction.DismissAction -> finish()
                         SpacePreviewSharedAction.ShowModalLoading -> showWaitingView()
@@ -46,7 +51,7 @@ class SpacePreviewActivity : VectorBaseActivity<ActivitySimpleBinding>() {
                         is SpacePreviewSharedAction.ShowErrorMessage -> action.error?.let { showSnackbar(it) }
                     }
                 }
-                .disposeOnDestroy()
+                .launchIn(lifecycleScope)
 
         if (isFirstCreation()) {
             val simpleName = SpacePreviewFragment::class.java.simpleName

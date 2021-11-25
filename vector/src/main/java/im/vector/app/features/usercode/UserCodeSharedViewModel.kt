@@ -16,15 +16,13 @@
 
 package im.vector.app.features.usercode
 
-import androidx.lifecycle.viewModelScope
-import com.airbnb.mvrx.ActivityViewModelContext
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MavericksViewModelFactory
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.R
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.createdirect.DirectRoomHelper
@@ -45,15 +43,7 @@ class UserCodeSharedViewModel @AssistedInject constructor(
         private val directRoomHelper: DirectRoomHelper,
         private val rawService: RawService) : VectorViewModel<UserCodeState, UserCodeActions, UserCodeShareViewEvents>(initialState) {
 
-    companion object : MavericksViewModelFactory<UserCodeSharedViewModel, UserCodeState> {
-        override fun create(viewModelContext: ViewModelContext, state: UserCodeState): UserCodeSharedViewModel? {
-            val factory = when (viewModelContext) {
-                is FragmentViewModelContext -> viewModelContext.fragment as? Factory
-                is ActivityViewModelContext -> viewModelContext.activity as? Factory
-            }
-            return factory?.create(state) ?: error("You should let your activity/fragment implements Factory interface")
-        }
-    }
+    companion object : MavericksViewModelFactory<UserCodeSharedViewModel, UserCodeState> by hiltMavericksViewModelFactory()
 
     init {
         val user = session.getUser(initialState.userId)
@@ -66,8 +56,8 @@ class UserCodeSharedViewModel @AssistedInject constructor(
     }
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: UserCodeState): UserCodeSharedViewModel
+    interface Factory : MavericksAssistedViewModelFactory<UserCodeSharedViewModel, UserCodeState> {
+        override fun create(initialState: UserCodeState): UserCodeSharedViewModel
     }
 
     override fun handle(action: UserCodeActions) {

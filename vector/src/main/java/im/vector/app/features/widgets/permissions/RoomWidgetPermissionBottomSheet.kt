@@ -26,8 +26,8 @@ import android.view.ViewGroup
 import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.withArgs
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.databinding.BottomSheetRoomWidgetPermissionBinding
@@ -36,6 +36,7 @@ import im.vector.app.features.widgets.WidgetArgs
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class RoomWidgetPermissionBottomSheet :
         VectorBaseBottomSheetDialogFragment<BottomSheetRoomWidgetPermissionBinding>() {
 
@@ -48,10 +49,6 @@ class RoomWidgetPermissionBottomSheet :
     @Inject lateinit var avatarRenderer: AvatarRenderer
 
     override val showExpanded = true
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
 
     // Use this if you don't need the full activity view model
     var directListener: ((Boolean) -> Unit)? = null

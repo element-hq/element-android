@@ -25,7 +25,7 @@ import android.os.Parcelable
 import android.view.View
 import android.view.WindowManager
 import com.airbnb.mvrx.Mavericks
-import im.vector.app.core.di.ScreenComponent
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityCallBinding
 import im.vector.app.features.call.webrtc.WebRtcCall
@@ -45,13 +45,10 @@ data class CallArgs(
 
 private val loggerTag = LoggerTag("VectorCallActivity", LoggerTag.VOIP)
 
+@AndroidEntryPoint
 class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallControlsView.InteractionListener {
 
     override fun getBinding() = ActivityCallBinding.inflate(layoutInflater)
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
 
     private lateinit var callArgs: CallArgs
 

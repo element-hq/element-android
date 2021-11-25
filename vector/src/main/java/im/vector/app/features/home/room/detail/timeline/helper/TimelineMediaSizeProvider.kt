@@ -17,11 +17,11 @@
 package im.vector.app.features.home.room.detail.timeline.helper
 
 import androidx.recyclerview.widget.RecyclerView
-import im.vector.app.core.di.ScreenScope
+import dagger.hilt.android.scopes.ActivityScoped
 import javax.inject.Inject
 import kotlin.math.roundToInt
 
-@ScreenScope
+@ActivityScoped
 class TimelineMediaSizeProvider @Inject constructor() {
 
     var recyclerView: RecyclerView? = null

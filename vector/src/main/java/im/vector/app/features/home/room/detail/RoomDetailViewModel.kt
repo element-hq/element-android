@@ -27,16 +27,17 @@ import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
-import com.jakewharton.rxrelay2.BehaviorRelay
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.extensions.exhaustive
+import im.vector.app.core.flow.chunk
 import im.vector.app.core.mvrx.runCatchingToAsync
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.core.utils.BehaviorDataSource
 import im.vector.app.features.attachments.toContentAttachmentData
 import im.vector.app.features.call.conference.ConferenceEvent
 import im.vector.app.features.call.conference.JitsiActiveConferenceHolder
@@ -56,13 +57,14 @@ import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.VectorDataStore
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.voice.VoicePlayerHelper
-import io.reactivex.rxkotlin.subscribeBy
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterIsInstance
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -98,7 +100,6 @@ import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.flow.unwrap
 import org.matrix.android.sdk.internal.crypto.model.event.WithHeldCode
 import timber.log.Timber
-import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
 
 class RoomDetailViewModel @AssistedInject constructor(
@@ -123,8 +124,8 @@ class RoomDetailViewModel @AssistedInject constructor(
 
     private val room = session.getRoom(initialState.roomId)!!
     private val eventId = initialState.eventId
-    private val invisibleEventsObservable = BehaviorRelay.create<RoomDetailAction.TimelineEventTurnsInvisible>()
-    private val visibleEventsObservable = BehaviorRelay.create<RoomDetailAction.TimelineEventTurnsVisible>()
+    private val invisibleEventsSource = BehaviorDataSource<RoomDetailAction.TimelineEventTurnsInvisible>()
+    private val visibleEventsSource = BehaviorDataSource<RoomDetailAction.TimelineEventTurnsVisible>()
     private var timelineEvents = MutableSharedFlow<List<TimelineEvent>>(0)
     val timeline = timelineFactory.createTimeline(viewModelScope, room, eventId)
 
@@ -147,14 +148,16 @@ class RoomDetailViewModel @AssistedInject constructor(
         fun create(initialState: RoomDetailViewState): RoomDetailViewModel
     }
 
+    /**
+     * Can't use the hiltMaverick here because some dependencies are injected here and in fragment but they don't share the graph.
+     */
     companion object : MavericksViewModelFactory<RoomDetailViewModel, RoomDetailViewState> {
 
         const val PAGINATION_COUNT = 50
 
         @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: RoomDetailViewState): RoomDetailViewModel? {
+        override fun create(viewModelContext: ViewModelContext, state: RoomDetailViewState): RoomDetailViewModel {
             val fragment: RoomDetailFragment = (viewModelContext as FragmentViewModelContext).fragment()
-
             return fragment.roomDetailViewModelFactory.create(state)
         }
     }
@@ -560,7 +563,7 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private fun handleEventInvisible(action: RoomDetailAction.TimelineEventTurnsInvisible) {
-        invisibleEventsObservable.accept(action)
+        invisibleEventsSource.post(action)
     }
 
     fun getMember(userId: String): RoomMemberSummary? {
@@ -710,12 +713,12 @@ class RoomDetailViewModel @AssistedInject constructor(
     private fun handleEventVisible(action: RoomDetailAction.TimelineEventTurnsVisible) {
         viewModelScope.launch(Dispatchers.Default) {
             if (action.event.root.sendState.isSent()) { // ignore pending/local events
-                visibleEventsObservable.accept(action)
+                visibleEventsSource.post(action)
             }
             // We need to update this with the related m.replace also (to move read receipt)
             action.event.annotations?.editSummary?.sourceEvents?.forEach {
                 room.getTimeLineEvent(it)?.let { event ->
-                    visibleEventsObservable.accept(RoomDetailAction.TimelineEventTurnsVisible(event))
+                    visibleEventsSource.post(RoomDetailAction.TimelineEventTurnsVisible(event))
                 }
             }
 
@@ -863,11 +866,13 @@ class RoomDetailViewModel @AssistedInject constructor(
     private fun observeEventDisplayedActions() {
         // We are buffering scroll events for one second
         // and keep the most recent one to set the read receipt on.
-        visibleEventsObservable
-                .buffer(1, TimeUnit.SECONDS)
+
+        visibleEventsSource
+                .stream()
+                .chunk(1000)
                 .filter { it.isNotEmpty() }
-                .subscribeBy(onNext = { actions ->
-                    val bufferedMostRecentDisplayedEvent = actions.maxByOrNull { it.event.displayIndex }?.event ?: return@subscribeBy
+                .onEach { actions ->
+                    val bufferedMostRecentDisplayedEvent = actions.maxByOrNull { it.event.displayIndex }?.event ?: return@onEach
                     val globalMostRecentDisplayedEvent = mostRecentDisplayedEvent
                     if (trackUnreadMessages.get()) {
                         if (globalMostRecentDisplayedEvent == null) {
@@ -881,8 +886,9 @@ class RoomDetailViewModel @AssistedInject constructor(
                             tryOrNull { room.setReadReceipt(eventId) }
                         }
                     }
-                })
-                .disposeOnClear()
+                }
+                .flowOn(Dispatchers.Default)
+                .launchIn(viewModelScope)
     }
 
     private fun handleMarkAllAsRead() {

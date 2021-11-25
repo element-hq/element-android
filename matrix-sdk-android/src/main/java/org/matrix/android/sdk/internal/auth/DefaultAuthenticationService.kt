@@ -389,8 +389,15 @@ internal class DefaultAuthenticationService @Inject constructor(
     override suspend fun directAuthentication(homeServerConnectionConfig: HomeServerConnectionConfig,
                                               matrixId: String,
                                               password: String,
-                                              initialDeviceName: String): Session {
-        return directLoginTask.execute(DirectLoginTask.Params(homeServerConnectionConfig, matrixId, password, initialDeviceName))
+                                              initialDeviceName: String,
+                                              deviceId: String?): Session {
+        return directLoginTask.execute(DirectLoginTask.Params(
+                homeServerConnectionConfig = homeServerConnectionConfig,
+                userId = matrixId,
+                password = password,
+                deviceName = initialDeviceName,
+                deviceId = deviceId
+        ))
     }
 
     override suspend fun getPasswordPolicy(homeServerConnectionConfig: HomeServerConnectionConfig): PasswordPolicy {

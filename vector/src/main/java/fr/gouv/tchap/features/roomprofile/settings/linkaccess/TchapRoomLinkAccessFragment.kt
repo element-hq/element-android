@@ -21,6 +21,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import fr.gouv.tchap.features.roomprofile.settings.linkaccess.detail.TchapRoomLinkAccessBottomSheet
@@ -34,6 +35,8 @@ import im.vector.app.core.utils.forwardText
 import im.vector.app.core.utils.shareText
 import im.vector.app.databinding.FragmentRoomSettingGenericBinding
 import im.vector.app.features.home.AvatarRenderer
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
@@ -73,9 +76,9 @@ class TchapRoomLinkAccessFragment @Inject constructor(
         views.roomSettingsRecyclerView.configureWith(controller, hasFixedSize = true)
 
         sharedActionViewModel
-                .observe()
-                .subscribe { handleLinkAccessAction(it) }
-                .disposeOnDestroyView()
+                .stream()
+                .onEach { handleLinkAccessAction(it) }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
         viewModel.observeViewEvents {
             when (it) {
