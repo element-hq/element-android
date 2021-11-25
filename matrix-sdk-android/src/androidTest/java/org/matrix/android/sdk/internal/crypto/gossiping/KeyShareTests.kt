@@ -218,11 +218,11 @@ class KeyShareTests : InstrumentedTest {
         }
 
         // Also bootstrap keybackup on first session
-        val creationInfo = mTestHelper.doSync<MegolmBackupCreationInfo> {
-            aliceSession1.cryptoService().keysBackupService().prepareKeysBackupVersion(null, null, it)
+        val creationInfo = mTestHelper.runBlockingTest {
+            aliceSession1.cryptoService().keysBackupService().prepareKeysBackupVersion(null)
         }
-        val version = mTestHelper.doSync<KeysVersion> {
-            aliceSession1.cryptoService().keysBackupService().createKeysBackupVersion(creationInfo, it)
+        val version = mTestHelper.runBlockingTest {
+            aliceSession1.cryptoService().keysBackupService().createKeysBackupVersion(creationInfo)
         }
         // Save it for gossiping
         aliceSession1.cryptoService().keysBackupService().saveBackupRecoveryKey(creationInfo.recoveryKey, version = version.version)
@@ -233,11 +233,11 @@ class KeyShareTests : InstrumentedTest {
         val aliceVerificationService2 = aliceSession2.cryptoService().verificationService()
 
         // force keys download
-        mTestHelper.doSync<MXUsersDevicesMap<CryptoDeviceInfo>> {
-            aliceSession1.cryptoService().downloadKeys(listOf(aliceSession1.myUserId), true, it)
+        mTestHelper.runBlockingTest {
+            aliceSession1.cryptoService().downloadKeys(listOf(aliceSession1.myUserId), true)
         }
-        mTestHelper.doSync<MXUsersDevicesMap<CryptoDeviceInfo>> {
-            aliceSession2.cryptoService().downloadKeys(listOf(aliceSession2.myUserId), true, it)
+        mTestHelper.runBlockingTest {
+            aliceSession2.cryptoService().downloadKeys(listOf(aliceSession2.myUserId), true)
         }
 
         var session1ShortCode: String? = null

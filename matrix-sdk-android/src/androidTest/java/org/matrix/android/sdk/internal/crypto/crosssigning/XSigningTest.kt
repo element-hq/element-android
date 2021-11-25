@@ -112,7 +112,7 @@ class XSigningTest : InstrumentedTest {
         }, it) }
 
         // Check that alice can see bob keys
-        mTestHelper.doSync<MXUsersDevicesMap<CryptoDeviceInfo>> { aliceSession.cryptoService().downloadKeys(listOf(bobSession.myUserId), true, it) }
+        mTestHelper.runBlockingTest { aliceSession.cryptoService().downloadKeys(listOf(bobSession.myUserId), true) }
 
         val bobKeysFromAlicePOV = aliceSession.cryptoService().crossSigningService().getUserCrossSigningKeys(bobSession.myUserId)
         assertNotNull("Alice can see bob Master key", bobKeysFromAlicePOV!!.masterKey())
@@ -157,7 +157,7 @@ class XSigningTest : InstrumentedTest {
 
         // Check that alice can see bob keys
         val bobUserId = bobSession.myUserId
-        mTestHelper.doSync<MXUsersDevicesMap<CryptoDeviceInfo>> { aliceSession.cryptoService().downloadKeys(listOf(bobUserId), true, it) }
+        mTestHelper.runBlockingTest { aliceSession.cryptoService().downloadKeys(listOf(bobUserId), true) }
 
         val bobKeysFromAlicePOV = aliceSession.cryptoService().crossSigningService().getUserCrossSigningKeys(bobUserId)
         assertTrue("Bob keys from alice pov should not be trusted", bobKeysFromAlicePOV?.isTrusted() == false)
@@ -171,8 +171,8 @@ class XSigningTest : InstrumentedTest {
         val bobSecondDeviceId = bobSession2.sessionParams.deviceId!!
 
         // Check that bob first session sees the new login
-        val data = mTestHelper.doSync<MXUsersDevicesMap<CryptoDeviceInfo>> {
-            bobSession.cryptoService().downloadKeys(listOf(bobUserId), true, it)
+        val data = mTestHelper.runBlockingTest {
+            bobSession.cryptoService().downloadKeys(listOf(bobUserId), true)
         }
 
         if (data.getUserDeviceIds(bobUserId)?.contains(bobSecondDeviceId) == false) {
@@ -188,8 +188,8 @@ class XSigningTest : InstrumentedTest {
         }
 
         // Now alice should cross trust bob's second device
-        val data2 = mTestHelper.doSync<MXUsersDevicesMap<CryptoDeviceInfo>> {
-            aliceSession.cryptoService().downloadKeys(listOf(bobUserId), true, it)
+        val data2 = mTestHelper.runBlockingTest {
+            aliceSession.cryptoService().downloadKeys(listOf(bobUserId), true)
         }
 
         // check that the device is seen
