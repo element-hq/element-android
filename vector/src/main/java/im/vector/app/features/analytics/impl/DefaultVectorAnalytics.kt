@@ -127,19 +127,14 @@ class DefaultVectorAnalytics @Inject constructor(
         posthog = PostHog.Builder(context, config.postHogApiKey, config.postHogHost)
                 // Record certain application events automatically! (off/false by default)
                 // .captureApplicationLifecycleEvents()
-
                 // Record screen views automatically! (off/false by default)
                 // .recordScreenViews()
-
                 // Capture deep links as part of the screen call. (off by default)
                 // .captureDeepLinks()
-
                 // Maximum number of events to keep in queue before flushing (default 20)
                 // .flushQueueSize(20)
-
                 // Max delay before flushing the queue (30 seconds)
                 // .flushInterval(30, TimeUnit.SECONDS)
-
                 // Enable or disable collection of ANDROID_ID (true)
                 .collectDeviceId(false)
                 .logLevel(getLogLevel())
@@ -175,7 +170,7 @@ class DefaultVectorAnalytics @Inject constructor(
         if (this == null) return null
 
         return Properties().apply {
-            this@toPostHogProperties.forEach { putValue(it.key, it.value) }
+            putAll(this@toPostHogProperties)
         }
     }
 }

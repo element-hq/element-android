@@ -60,7 +60,7 @@ class AnalyticsAccountDataViewModel @AssistedInject constructor(
     }
 
     companion object : MavericksViewModelFactory<AnalyticsAccountDataViewModel, DummyState> by hiltMavericksViewModelFactory() {
-        private const val ANALYTICS_EVENT_TYPE = "im.vector.analytics";
+        private const val ANALYTICS_EVENT_TYPE = "im.vector.analytics"
     }
 
     init {
