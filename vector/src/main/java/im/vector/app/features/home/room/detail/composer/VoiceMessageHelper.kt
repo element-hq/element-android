@@ -74,6 +74,7 @@ class VoiceMessageHelper @Inject constructor(
             voiceRecorder.stopRecord()
             voiceRecorder.getVoiceMessageFile()
         }
+
         try {
             voiceMessageFile?.let {
                 val outputFileUri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".fileProvider", it, "Voice message.${it.extension}")
@@ -153,6 +154,7 @@ class VoiceMessageHelper @Inject constructor(
     }
 
     fun stopPlayback() {
+        playbackTracker.stopPlayback(VoiceMessagePlaybackTracker.RECORDING_ID)
         mediaPlayer?.stop()
         stopPlaybackTicker()
     }
