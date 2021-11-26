@@ -84,23 +84,11 @@ class SearchMessagesTest : InstrumentedTest {
         val aliceSession = cryptoTestData.firstSession
         val aliceRoomId = cryptoTestData.roomId
         val roomFromAlicePOV = aliceSession.getRoom(aliceRoomId)!!
-        val aliceTimeline = roomFromAlicePOV.createTimeline(null, TimelineSettings(10))
-        aliceTimeline.start()
-
-        val lock = CountDownLatch(1)
-
-        val eventListener = commonTestHelper.createEventListener(lock) { snapshot ->
-            snapshot.count { it.root.content.toModel<MessageContent>()?.body?.startsWith(MESSAGE).orFalse() } == 2
-        }
-
-        aliceTimeline.addListener(eventListener)
 
         commonTestHelper.sendTextMessage(
                 roomFromAlicePOV,
                 MESSAGE,
                 2)
-
-        commonTestHelper.await(lock)
 
         val data = commonTestHelper.runBlockingTest {
             block.invoke(cryptoTestData)
@@ -114,7 +102,6 @@ class SearchMessagesTest : InstrumentedTest {
                         }.orFalse()
         )
 
-        aliceTimeline.removeAllListeners()
         cryptoTestData.cleanUp(commonTestHelper)
     }
 }

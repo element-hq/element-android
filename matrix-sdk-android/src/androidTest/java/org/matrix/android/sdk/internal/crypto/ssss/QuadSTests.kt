@@ -32,6 +32,7 @@ import org.matrix.android.sdk.api.session.securestorage.EncryptedSecretContent
 import org.matrix.android.sdk.api.session.securestorage.KeySigner
 import org.matrix.android.sdk.api.session.securestorage.RawBytesKeySpec
 import org.matrix.android.sdk.api.session.securestorage.SecretStorageKeyContent
+import org.matrix.android.sdk.api.session.securestorage.SharedSecretStorageError
 import org.matrix.android.sdk.api.session.securestorage.SharedSecretStorageService
 import org.matrix.android.sdk.api.session.securestorage.SsssKeyCreationInfo
 import org.matrix.android.sdk.api.util.Optional
@@ -90,7 +91,7 @@ class QuadSTests : InstrumentedTest {
         testHelper.waitWithLatch { latch ->
             quadS.setDefaultKey(TEST_KEY_ID)
             val liveDefAccountData =
-                aliceSession.accountDataService().getLiveUserAccountDataEvent(DefaultSharedSecretStorageService.DEFAULT_KEY_ID)
+                    aliceSession.accountDataService().getLiveUserAccountDataEvent(DefaultSharedSecretStorageService.DEFAULT_KEY_ID)
             val accountDefDataObserver = Observer<Optional<UserAccountDataEvent>?> { t ->
                 if (t?.getOrNull()?.type == DefaultSharedSecretStorageService.DEFAULT_KEY_ID) {
                     defaultKeyAccountData = t.getOrNull()!!
@@ -233,14 +234,18 @@ class QuadSTests : InstrumentedTest {
         }
 
         testHelper.runBlockingTest {
-            aliceSession.sharedSecretStorageService.getSecret("my.secret",
-                    keyId1,
-                    RawBytesKeySpec.fromPassphrase(
-                            "A bad passphrase",
-                            key1Info.content?.passphrase?.salt ?: "",
-                            key1Info.content?.passphrase?.iterations ?: 0,
-                            null)
-            )
+            try {
+                aliceSession.sharedSecretStorageService.getSecret("my.secret",
+                        keyId1,
+                        RawBytesKeySpec.fromPassphrase(
+                                "A bad passphrase",
+                                key1Info.content?.passphrase?.salt ?: "",
+                                key1Info.content?.passphrase?.iterations ?: 0,
+                                null)
+                )
+            } catch (throwable: Throwable) {
+                assert(throwable is SharedSecretStorageError.BadMac)
+            }
         }
 
         // Now try with correct key

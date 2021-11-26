@@ -20,6 +20,7 @@ import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.Observer
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -45,6 +46,7 @@ import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
 import org.matrix.android.sdk.api.session.sync.SyncState
+import timber.log.Timber
 import java.util.UUID
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
@@ -119,22 +121,21 @@ class CommonTestHelper(context: Context) {
      * @param session    the session to sync
      */
     fun clearCacheAndSync(session: Session, timeout: Long = TestConstants.timeOutMillis) {
-        val lock = CountDownLatch(1)
-        coroutineScope.launch {
+        waitWithLatch(timeout) { latch ->
             session.clearCache()
             val syncLiveData = session.getSyncStateLive()
             val syncObserver = object : Observer<SyncState> {
                 override fun onChanged(t: SyncState?) {
                     if (session.hasAlreadySynced()) {
-                        lock.countDown()
+                        Timber.v("Clear cache and synced")
                         syncLiveData.removeObserver(this)
+                        latch.countDown()
                     }
                 }
             }
             syncLiveData.observeForever(syncObserver)
             session.startSync(true)
         }
-        await(lock, timeout)
     }
 
     /**
@@ -145,9 +146,10 @@ class CommonTestHelper(context: Context) {
      * @param nbOfMessages the number of time the message will be sent
      */
     fun sendTextMessage(room: Room, message: String, nbOfMessages: Int, timeout: Long = TestConstants.timeOutMillis): List<TimelineEvent> {
-        val timeline = room.createTimeline(null, TimelineSettings(10))
         val sentEvents = ArrayList<TimelineEvent>(nbOfMessages)
-        waitWithLatch(timeout   ) {  latch ->
+        val timeline = room.createTimeline(null, TimelineSettings(10))
+        timeline.start()
+        waitWithLatch(timeout + 1_000L * nbOfMessages) { latch ->
             val timelineListener = object : Timeline.Listener {
                 override fun onTimelineFailure(throwable: Throwable) {
                 }
@@ -162,6 +164,7 @@ class CommonTestHelper(context: Context) {
                             .filter { it.root.getClearType() == EventType.MESSAGE }
                             .filter { it.root.getClearContent().toModel<MessageContent>()?.body?.startsWith(message) == true }
 
+                    Timber.v("New synced message size: ${newMessages.size}")
                     if (newMessages.size == nbOfMessages) {
                         sentEvents.addAll(newMessages)
                         // Remove listener now, if not at the next update sendEvents could change
@@ -170,18 +173,28 @@ class CommonTestHelper(context: Context) {
                     }
                 }
             }
-            timeline.start()
             timeline.addListener(timelineListener)
-            for (i in 0 until nbOfMessages) {
-                room.sendTextMessage(message + " #" + (i + 1))
-                // Sleep a bit otherwise database will be flowed and sync won't be live (we might end up with gap then...)
-                delay(50)
-            }
+            sendTextMessagesBatched(room, message, nbOfMessages)
         }
         timeline.dispose()
         // Check that all events has been created
         assertEquals("Message number do not match $sentEvents", nbOfMessages.toLong(), sentEvents.size.toLong())
         return sentEvents
+    }
+
+    /**
+     * Will send nb of messages provided by count parameter but waits a bit every 10 messages to avoid gap in sync
+     */
+    private fun sendTextMessagesBatched(room: Room, message: String, count: Int) {
+        (1 until count + 1)
+                .map { "$message #$it" }
+                .chunked(10)
+                .forEach { batchedMessages ->
+                    batchedMessages.forEach { formattedMessage ->
+                        room.sendTextMessage(formattedMessage)
+                    }
+                    Thread.sleep(1_000L)
+                }
     }
 
     // PRIVATE METHODS *****************************************************************************
@@ -357,9 +370,9 @@ class CommonTestHelper(context: Context) {
         }
     }
 
-    fun waitWithLatch(timeout: Long? = TestConstants.timeOutMillis, block: suspend (CountDownLatch) -> Unit) {
+    fun waitWithLatch(timeout: Long? = TestConstants.timeOutMillis, dispatcher: CoroutineDispatcher = Dispatchers.Main, block: suspend (CountDownLatch) -> Unit) {
         val latch = CountDownLatch(1)
-        coroutineScope.launch {
+        coroutineScope.launch(dispatcher) {
             block(latch)
         }
         await(latch, timeout)

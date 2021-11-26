@@ -59,7 +59,7 @@ class SpaceHierarchyTest : InstrumentedTest {
         val session = commonTestHelper.createAccount("John", SessionTestParams(true))
         val spaceName = "My Space"
         val topic = "A public space for test"
-        var spaceId: String = ""
+        var spaceId = ""
         commonTestHelper.waitWithLatch {
             spaceId = session.spaceService().createSpace(spaceName, topic, null, true)
             it.countDown()
@@ -67,7 +67,7 @@ class SpaceHierarchyTest : InstrumentedTest {
 
         val syncedSpace = session.spaceService().getSpace(spaceId)
 
-        var roomId: String = ""
+        var roomId = ""
         commonTestHelper.waitWithLatch {
             roomId = session.createRoom(CreateRoomParams().apply { name = "General" })
             it.countDown()
@@ -314,6 +314,11 @@ class SpaceHierarchyTest : InstrumentedTest {
             session.spaceService().setSpaceParent(spaceBInfo.spaceId, spaceAInfo.spaceId, true, viaServers)
         }
 
+        val spaceCInfo = createPublicSpace(session, "SpaceC", listOf(
+                Triple("C1", true /*auto-join*/, true/*canonical*/),
+                Triple("C2", true, true)
+        ))
+
         commonTestHelper.waitWithLatch { latch ->
 
             val flatAChildren = session.getFlattenRoomSummaryChildrenOfLive(spaceAInfo.spaceId)
@@ -328,11 +333,6 @@ class SpaceHierarchyTest : InstrumentedTest {
                     }
                 }
             }
-
-            val spaceCInfo = createPublicSpace(session, "SpaceC", listOf(
-                    Triple("C1", true /*auto-join*/, true/*canonical*/),
-                    Triple("C2", true, true)
-            ))
 
             // add C as subspace of B
             val spaceB = session.spaceService().getSpace(spaceBInfo.spaceId)
@@ -408,7 +408,7 @@ class SpaceHierarchyTest : InstrumentedTest {
     ): TestSpaceCreationResult {
         var spaceId = ""
         var roomIds: List<String> = emptyList()
-        commonTestHelper.waitWithLatch {
+        commonTestHelper.waitWithLatch { latch ->
             spaceId = session.spaceService().createSpace(spaceName, "My Private Space", null, false)
             val syncedSpace = session.spaceService().getSpace(spaceId)
             val viaServers = listOf(session.sessionParams.homeServerHost ?: "")
@@ -433,6 +433,7 @@ class SpaceHierarchyTest : InstrumentedTest {
                     session.spaceService().setSpaceParent(roomId, spaceId, canonical, viaServers)
                 }
             }
+            latch.countDown()
         }
         return TestSpaceCreationResult(spaceId, roomIds)
     }
