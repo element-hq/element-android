@@ -195,7 +195,7 @@ class KeysBackupRestoreSharedViewModel @Inject constructor(
 
                 viewModelScope.launch(Dispatchers.IO) {
                     try {
-                        recoverUsingBackupRecoveryKey(secret)
+                        recoverUsingBackupRecoveryKey(computeRecoveryKey(secret.fromBase64()))
                     } catch (failure: Throwable) {
                         _navigateEvent.postValue(
                                 LiveEvent(NAVIGATE_FAILED_TO_LOAD_4S)
