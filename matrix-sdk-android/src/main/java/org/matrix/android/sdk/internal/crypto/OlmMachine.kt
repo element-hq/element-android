@@ -75,13 +75,9 @@ class CryptoLogger : Logger {
     }
 }
 
-private class CryptoProgressListener(listener: ProgressListener?) : RustProgressListener {
-    private val inner: ProgressListener? = listener
-
+private class CryptoProgressListener(private val listener: ProgressListener?) : RustProgressListener {
     override fun onProgress(progress: Int, total: Int) {
-        if (this.inner != null) {
-            this.inner.onProgress(progress, total)
-        }
+        listener?.onProgress(progress, total)
     }
 }
 
@@ -524,14 +520,29 @@ internal class OlmMachine(
             listener: ProgressListener?
     ): ImportRoomKeysResult =
             withContext(Dispatchers.IO) {
+
                 val adapter = MoshiProvider.providesMoshi().adapter(List::class.java)
-                val encodedKeys = adapter.toJson(keys)
 
-                val rustListener = CryptoProgressListener(listener)
+                // If the key backup is too big we take the risk of causing OOM
+                // so let's chunk to avoid it
+                var totalImported = 0L
+                var accTotal = 0L
+                keys.chunked(500)
+                        .forEach { keysSlice ->
+                            val encodedKeys = adapter.toJson(keysSlice)
+                            val rustListener = object : RustProgressListener {
+                                override fun onProgress(progress: Int, total: Int) {
+                                    val accProgress = (accTotal + progress).toInt()
+                                    listener?.onProgress(accProgress, keys.size)
+                                }
+                            }
 
-                val result = inner.importDecryptedKeys(encodedKeys, rustListener)
-
-                ImportRoomKeysResult(result.total.toInt(), result.imported.toInt())
+                            inner.importDecryptedKeys(encodedKeys, rustListener).let {
+                                totalImported += it.imported
+                                accTotal += it.total
+                            }
+                        }
+                ImportRoomKeysResult(totalImported.toInt(), accTotal.toInt())
             }
 
     @Throws(CryptoStoreException::class)
