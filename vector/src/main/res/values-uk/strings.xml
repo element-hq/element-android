@@ -2976,4 +2976,16 @@
     <string name="warning_room_not_created_yet">Кімнату ще не створено. Скасувати створення кімнати\?</string>
     <string name="universal_link_malformed">Посилання було неправильним</string>
     <string name="cannot_dm_self">Не можна надсилати повідомлення самим собі!</string>
+    <string name="bootstrap_progress_storing_in_sss">Збереження резервної копії ключа в SSSS</string>
+    <string name="bootstrap_progress_generating_ssss_recovery">Генерування ключа SSSS з ключа відновлення</string>
+    <string name="bootstrap_progress_generating_ssss_with_info">Генерування ключа SSSS з парольної фрази (%s)</string>
+    <string name="bootstrap_progress_generating_ssss">Генерування ключа SSSS з парольної фрази</string>
+    <string name="bootstrap_progress_compute_curve_key">Отримання кривої ключа</string>
+    <string name="bootstrap_progress_checking_backup_with_info">Перевірка ключа резервного копіювання (%s)</string>
+    <string name="bootstrap_progress_checking_backup">Перевірка ключа резервного копіювання</string>
+    <string name="auth_invalid_login_param_space_in_password">Неправильне ім\'я користувача та/або пароль. Введений пароль починається або закінчується пробілами, перевірте це.</string>
+    <string name="e2e_use_keybackup">Розблокувати історію зашифрованих повідомлень</string>
+    <string name="settings_export_trail">Експорт аудиту</string>
+    <string name="keys_backup_restore_success_title_already_up_to_date">Ключі вже оновлено!</string>
+    <string name="command_description_lenny">Додає ( ͡° ͜ʖ ͡°) до текстового повідомлення</string>
 </resources>
