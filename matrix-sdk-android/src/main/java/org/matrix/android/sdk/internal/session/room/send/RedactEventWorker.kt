@@ -20,7 +20,6 @@ import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.internal.SessionManager
-import org.matrix.android.sdk.internal.di.MatrixComponent
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.SessionComponent

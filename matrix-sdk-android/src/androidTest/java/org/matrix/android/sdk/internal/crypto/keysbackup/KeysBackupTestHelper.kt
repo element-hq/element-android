@@ -35,7 +35,7 @@ class KeysBackupTestHelper(
         private val testHelper: CommonTestHelper,
         private val cryptoTestHelper: CryptoTestHelper) {
 
-    fun waitForKeybackUpBatching(){
+    fun waitForKeybackUpBatching() {
         Thread.sleep(400)
     }
 

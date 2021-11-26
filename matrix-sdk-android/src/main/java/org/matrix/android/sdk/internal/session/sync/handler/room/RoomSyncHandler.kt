@@ -193,7 +193,6 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                                  aggregator: SyncResponsePostTreatmentAggregator): RoomEntity {
         Timber.v("Handle join sync for room $roomId")
 
-
         val ephemeralResult = (roomSync.ephemeral as? LazyRoomSyncEphemeral.Parsed)
                 ?._roomSyncEphemeral
                 ?.events

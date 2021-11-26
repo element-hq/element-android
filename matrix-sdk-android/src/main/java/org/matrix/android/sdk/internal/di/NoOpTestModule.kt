@@ -37,6 +37,4 @@ internal object NoOpTestModule {
     fun providesBackgroundDetectionObserver(): BackgroundDetectionObserver {
         return DefaultBackgroundDetectionObserver()
     }
-
-
 }

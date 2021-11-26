@@ -30,7 +30,6 @@ import org.matrix.android.sdk.internal.crypto.model.rest.ShareRequestCancellatio
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.crypto.tasks.SendToDeviceTask
 import org.matrix.android.sdk.internal.crypto.tasks.createUniqueTxnId
-import org.matrix.android.sdk.internal.di.MatrixComponent
 import org.matrix.android.sdk.internal.session.SessionComponent
 import org.matrix.android.sdk.internal.worker.SessionSafeCoroutineWorker
 import org.matrix.android.sdk.internal.worker.SessionWorkerParams

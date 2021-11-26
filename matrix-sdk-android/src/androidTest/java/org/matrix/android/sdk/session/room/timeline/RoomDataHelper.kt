@@ -45,7 +45,7 @@ object RoomDataHelper {
                                 content: Content? = null,
                                 prevContent: Content? = null,
                                 sender: String = FAKE_TEST_SENDER,
-                                stateKey: String? =null
+                                stateKey: String? = null
     ): Event {
         return Event(
                 type = type,

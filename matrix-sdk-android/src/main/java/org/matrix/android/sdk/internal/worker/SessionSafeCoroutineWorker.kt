@@ -23,7 +23,6 @@ import androidx.work.Data
 import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
 import org.matrix.android.sdk.internal.SessionManager
-import org.matrix.android.sdk.internal.di.MatrixComponent
 import org.matrix.android.sdk.internal.session.SessionComponent
 import timber.log.Timber
 

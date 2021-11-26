@@ -22,7 +22,6 @@ import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.internal.SessionManager
-import org.matrix.android.sdk.internal.di.MatrixComponent
 import org.matrix.android.sdk.internal.di.WorkManagerProvider
 import org.matrix.android.sdk.internal.session.SessionComponent
 import org.matrix.android.sdk.internal.session.content.UploadContentWorker

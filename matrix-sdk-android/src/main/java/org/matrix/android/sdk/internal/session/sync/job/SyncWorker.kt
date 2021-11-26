@@ -22,9 +22,7 @@ import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
 import org.matrix.android.sdk.api.failure.isTokenError
 import org.matrix.android.sdk.internal.SessionManager
-import org.matrix.android.sdk.internal.di.MatrixComponent
 import org.matrix.android.sdk.internal.di.WorkManagerProvider
-import org.matrix.android.sdk.internal.network.NetworkConnectivityChecker
 import org.matrix.android.sdk.internal.session.SessionComponent
 import org.matrix.android.sdk.internal.session.sync.SyncPresence
 import org.matrix.android.sdk.internal.session.sync.SyncTask
@@ -43,8 +41,8 @@ private const val DEFAULT_DELAY_TIMEOUT = 30_000L
  * Possible previous worker: None
  * Possible next worker    : None
  */
-internal class SyncWorker(context: Context, workerParameters: WorkerParameters, sessionManager: SessionManager)
-    : SessionSafeCoroutineWorker<SyncWorker.Params>(context, workerParameters, sessionManager, Params::class.java) {
+internal class SyncWorker(context: Context, workerParameters: WorkerParameters, sessionManager: SessionManager) :
+    SessionSafeCoroutineWorker<SyncWorker.Params>(context, workerParameters, sessionManager, Params::class.java) {
 
     @JsonClass(generateAdapter = true)
     internal data class Params(

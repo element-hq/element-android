@@ -24,14 +24,10 @@ import org.junit.runners.JUnit4
 import org.junit.runners.MethodSorters
 import org.matrix.android.sdk.InstrumentedTest
 import org.matrix.android.sdk.api.extensions.orFalse
-import org.matrix.android.sdk.api.session.events.model.toModel
-import org.matrix.android.sdk.api.session.room.model.message.MessageContent
-import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
 import org.matrix.android.sdk.api.session.search.SearchResult
 import org.matrix.android.sdk.common.CommonTestHelper
 import org.matrix.android.sdk.common.CryptoTestData
 import org.matrix.android.sdk.common.CryptoTestHelper
-import java.util.concurrent.CountDownLatch
 
 @RunWith(JUnit4::class)
 @FixMethodOrder(MethodSorters.JVM)

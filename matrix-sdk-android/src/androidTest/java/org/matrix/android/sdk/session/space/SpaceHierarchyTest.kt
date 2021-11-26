@@ -18,7 +18,6 @@ package org.matrix.android.sdk.session.space
 
 import android.util.Log
 import androidx.lifecycle.Observer
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull

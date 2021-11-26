@@ -18,12 +18,9 @@ package org.matrix.android.sdk.internal.util
 
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
-import org.matrix.android.sdk.internal.di.MatrixScope
 import timber.log.Timber
-import javax.inject.Inject
 
-
-interface BackgroundDetectionObserver: DefaultLifecycleObserver {
+interface BackgroundDetectionObserver : DefaultLifecycleObserver {
     val isInBackground: Boolean
 
     fun register(listener: Listener)
@@ -35,7 +32,7 @@ interface BackgroundDetectionObserver: DefaultLifecycleObserver {
     }
 }
 
-internal class DefaultBackgroundDetectionObserver: BackgroundDetectionObserver {
+internal class DefaultBackgroundDetectionObserver : BackgroundDetectionObserver {
 
     override var isInBackground: Boolean = true
         private set
@@ -73,5 +70,4 @@ internal class TestBackgroundDetectionObserver : BackgroundDetectionObserver {
     override fun register(listener: BackgroundDetectionObserver.Listener) = Unit
 
     override fun unregister(listener: BackgroundDetectionObserver.Listener) = Unit
-
 }

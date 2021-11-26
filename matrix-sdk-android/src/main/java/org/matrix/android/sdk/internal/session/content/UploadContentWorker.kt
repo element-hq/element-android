@@ -38,7 +38,6 @@ import org.matrix.android.sdk.internal.crypto.attachments.MXEncryptedAttachments
 import org.matrix.android.sdk.internal.crypto.model.rest.EncryptedFileInfo
 import org.matrix.android.sdk.internal.database.mapper.ContentMapper
 import org.matrix.android.sdk.internal.database.mapper.asDomain
-import org.matrix.android.sdk.internal.di.MatrixComponent
 import org.matrix.android.sdk.internal.network.ProgressRequestBody
 import org.matrix.android.sdk.internal.session.DefaultFileService
 import org.matrix.android.sdk.internal.session.SessionComponent
