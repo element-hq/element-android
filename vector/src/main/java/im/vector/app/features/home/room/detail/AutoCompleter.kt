@@ -194,7 +194,8 @@ class AutoCompleter @AssistedInject constructor(
                         }
 
                         // Replace the word by its completion
-                        editable.replace(startIndex, endIndex, item)
+                        editable.delete(startIndex, endIndex)
+                        editable.insert(startIndex, item)
                         return true
                     }
 
