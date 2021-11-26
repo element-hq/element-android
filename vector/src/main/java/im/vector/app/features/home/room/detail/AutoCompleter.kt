@@ -181,7 +181,7 @@ class AutoCompleter @AssistedInject constructor(
                 .with(backgroundDrawable)
                 .with(object : AutocompleteCallback<String> {
                     override fun onPopupItemClicked(editable: Editable, item: String): Boolean {
-                        // Detect last ":" and remove it
+                        // Infer that the last ":" before the current cursor position is the original popup trigger
                         var startIndex = editable.subSequence(0, editText.selectionStart).lastIndexOf(":")
                         if (startIndex == -1) {
                             startIndex = 0
