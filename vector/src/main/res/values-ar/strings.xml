@@ -165,8 +165,8 @@
     <string name="notice_direct_room_leave_with_reason">إنَّ %1$s قد غادر. السبب: %2$s</string>
     <string name="notice_room_leave_with_reason_by_you">أنتَ قد غادرتَ الغُرفة. السبب: %1$s</string>
     <string name="notice_room_leave_with_reason">إنَّ %1$s قد غادر الغُرفة. السبب: %2$s</string>
-    <string name="notice_direct_room_join_with_reason_by_you">أنتَ قد إنضممت. السبب: %1$s</string>
-    <string name="notice_direct_room_join_with_reason">إنَّ %1$s قد إنضم. السبب: %2$s</string>
+    <string name="notice_direct_room_join_with_reason_by_you">انضممتَ. السبب: %1$s</string>
+    <string name="notice_direct_room_join_with_reason">انضم %1$s. السبب: %2$s</string>
     <string name="notice_room_join_with_reason_by_you">انضممتَ إلى الغُرفة. السبب: %1$s</string>
     <string name="notice_room_join_with_reason">انضم %1$s إلى الغُرفة. السبب: %2$s</string>
     <string name="notice_room_invite_you_with_reason">دعاك %1$s. السبب: %2$s</string>
