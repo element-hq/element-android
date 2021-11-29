@@ -87,6 +87,7 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.platform.lifecycleAwareLazy
 import im.vector.app.core.platform.showOptimizedSnackbar
 import im.vector.app.core.resources.ColorProvider
+import im.vector.app.core.time.Clock
 import im.vector.app.core.ui.views.CurrentCallsView
 import im.vector.app.core.ui.views.CurrentCallsViewPresenter
 import im.vector.app.core.ui.views.FailedMessagesWarningView
@@ -240,7 +241,6 @@ class RoomDetailFragment @Inject constructor(
         autoCompleterFactory: AutoCompleter.Factory,
         private val permalinkHandler: PermalinkHandler,
         private val notificationDrawerManager: NotificationDrawerManager,
-        val messageComposerViewModelFactory: MessageComposerViewModel.Factory,
         private val eventHtmlRenderer: EventHtmlRenderer,
         private val vectorPreferences: VectorPreferences,
         private val colorProvider: ColorProvider,
@@ -251,7 +251,8 @@ class RoomDetailFragment @Inject constructor(
         private val roomDetailPendingActionStore: RoomDetailPendingActionStore,
         private val pillsPostProcessorFactory: PillsPostProcessor.Factory,
         private val callManager: WebRtcCallManager,
-        private val voiceMessagePlaybackTracker: VoiceMessagePlaybackTracker
+        private val voiceMessagePlaybackTracker: VoiceMessagePlaybackTracker,
+        private val clock: Clock
 ) :
         VectorBaseFragment<FragmentRoomDetailBinding>(),
         TimelineEventController.Callback,
@@ -393,8 +394,8 @@ class RoomDetailFragment @Inject constructor(
             when (mode) {
                 is SendMode.Regular -> renderRegularMode(mode.text)
                 is SendMode.Edit    -> renderSpecialMode(mode.timelineEvent, R.drawable.ic_edit, R.string.edit, mode.text)
-                is SendMode.Quote -> renderSpecialMode(mode.timelineEvent, R.drawable.ic_quote, R.string.quote, mode.text)
-                is SendMode.Reply -> renderSpecialMode(mode.timelineEvent, R.drawable.ic_reply, R.string.reply, mode.text)
+                is SendMode.Quote   -> renderSpecialMode(mode.timelineEvent, R.drawable.ic_quote, R.string.quote, mode.text)
+                is SendMode.Reply   -> renderSpecialMode(mode.timelineEvent, R.drawable.ic_reply, R.string.reply, mode.text)
             }
         }
 
@@ -700,7 +701,7 @@ class RoomDetailFragment @Inject constructor(
                 if (checkPermissions(PERMISSIONS_FOR_VOICE_MESSAGE, requireActivity(), permissionVoiceMessageLauncher)) {
                     messageComposerViewModel.handle(MessageComposerAction.StartRecordingVoiceMessage)
                     vibrate(requireContext())
-                    updateRecordingUiState(RecordingUiState.Started)
+                    updateRecordingUiState(RecordingUiState.Started(clock.epochMillis()))
                 }
             }
 
@@ -714,7 +715,9 @@ class RoomDetailFragment @Inject constructor(
             }
 
             override fun onVoiceRecordingLocked() {
-                updateRecordingUiState(RecordingUiState.Locked)
+                val startedState = withState(messageComposerViewModel) { it.voiceRecordingUiState as? RecordingUiState.Started }
+                val startTime = startedState?.recordingStartTimestamp ?: clock.epochMillis()
+                updateRecordingUiState(RecordingUiState.Locked(startTime))
             }
 
             override fun onVoiceRecordingEnded() {
@@ -1130,14 +1133,17 @@ class RoomDetailFragment @Inject constructor(
 
     override fun onPause() {
         super.onPause()
-
         notificationDrawerManager.setCurrentRoom(null)
+        voiceMessagePlaybackTracker.unTrack(VoiceMessagePlaybackTracker.RECORDING_ID)
 
-        messageComposerViewModel.handle(MessageComposerAction.SaveDraft(views.composerLayout.text.toString()))
-
-        // We should improve the UX to support going into playback mode when paused and delete the media when the view is destroyed.
-        messageComposerViewModel.handle(MessageComposerAction.EndAllVoiceActions(deleteRecord = false))
-        views.voiceMessageRecorderView.render(RecordingUiState.None)
+        if (withState(messageComposerViewModel) { it.isVoiceRecording } && requireActivity().isChangingConfigurations) {
+            // we're rotating, maintain any active recordings
+        } else {
+            messageComposerViewModel.handle(MessageComposerAction.SaveDraft(views.composerLayout.text.toString()))
+            // We should improve the UX to support going into playback mode when paused and delete the media when the view is destroyed.
+            messageComposerViewModel.handle(MessageComposerAction.EndAllVoiceActions(deleteRecord = false))
+            views.voiceMessageRecorderView.render(RecordingUiState.None)
+        }
     }
 
     private val attachmentFileActivityResultLauncher = registerStartForActivityResult {

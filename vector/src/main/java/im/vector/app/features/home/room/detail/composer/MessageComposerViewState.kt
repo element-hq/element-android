@@ -54,8 +54,8 @@ data class MessageComposerViewState(
         VoiceMessageRecorderView.RecordingUiState.None,
         VoiceMessageRecorderView.RecordingUiState.Cancelled,
         VoiceMessageRecorderView.RecordingUiState.Playback -> false
-        VoiceMessageRecorderView.RecordingUiState.Locked,
-        VoiceMessageRecorderView.RecordingUiState.Started  -> true
+        is VoiceMessageRecorderView.RecordingUiState.Locked,
+        is VoiceMessageRecorderView.RecordingUiState.Started  -> true
     }
 
     val isVoiceMessageIdle = !isVoiceRecording

@@ -29,6 +29,8 @@ import dagger.hilt.components.SingletonComponent
 import im.vector.app.core.dispatchers.CoroutineDispatchers
 import im.vector.app.core.error.DefaultErrorFormatter
 import im.vector.app.core.error.ErrorFormatter
+import im.vector.app.core.time.Clock
+import im.vector.app.core.time.DefaultClock
 import im.vector.app.features.invite.AutoAcceptInvites
 import im.vector.app.features.invite.CompileTimeAutoAcceptInvites
 import im.vector.app.features.navigation.DefaultNavigator
@@ -66,6 +68,9 @@ abstract class VectorBindModule {
 
     @Binds
     abstract fun bindAutoAcceptInvites(autoAcceptInvites: CompileTimeAutoAcceptInvites): AutoAcceptInvites
+
+    @Binds
+    abstract fun bindDefaultClock(clock: DefaultClock): Clock
 }
 
 @InstallIn(SingletonComponent::class)

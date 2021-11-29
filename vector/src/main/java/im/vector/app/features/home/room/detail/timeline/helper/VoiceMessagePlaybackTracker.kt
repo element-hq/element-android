@@ -18,10 +18,10 @@ package im.vector.app.features.home.room.detail.timeline.helper
 
 import android.os.Handler
 import android.os.Looper
-import dagger.hilt.android.scopes.ActivityScoped
 import javax.inject.Inject
+import javax.inject.Singleton
 
-@ActivityScoped
+@Singleton
 class VoiceMessagePlaybackTracker @Inject constructor() {
 
     private val mainHandler = Handler(Looper.getMainLooper())

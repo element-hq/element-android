@@ -154,7 +154,7 @@ class VoiceMessageViews(
 
     fun hideRecordingViews(recordingState: RecordingUiState) {
         // We need to animate the lock image first
-        if (recordingState != RecordingUiState.Locked) {
+        if (recordingState !is RecordingUiState.Locked) {
             views.voiceMessageLockImage.isVisible = false
             views.voiceMessageLockImage.animate().translationY(0f).start()
             views.voiceMessageLockBackground.isVisible = false
@@ -171,7 +171,7 @@ class VoiceMessageViews(
         views.voiceMessageTimerIndicator.isVisible = false
         views.voiceMessageTimer.isVisible = false
 
-        if (recordingState != RecordingUiState.Locked) {
+        if (recordingState !is RecordingUiState.Locked) {
             views.voiceMessageMicButton
                     .animate()
                     .scaleX(1f)
@@ -304,9 +304,9 @@ class VoiceMessageViews(
         views.voiceMessageToast.isVisible = false
     }
 
-    fun renderRecordingTimer(recordingState: RecordingUiState, recordingTimeMillis: Long) {
+    fun renderRecordingTimer(isLocked: Boolean, recordingTimeMillis: Long) {
         val formattedTimerText = DateUtils.formatElapsedTime(recordingTimeMillis)
-        if (recordingState == RecordingUiState.Locked) {
+        if (isLocked) {
             views.voicePlaybackTime.apply {
                 post {
                     text = formattedTimerText
