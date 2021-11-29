@@ -19,7 +19,6 @@ package org.matrix.android.sdk.internal.crypto.keysbackup
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.common.CommonTestHelper
 import org.matrix.android.sdk.common.CryptoTestData
-import org.matrix.android.sdk.internal.crypto.model.OlmInboundGroupSessionWrapper2
 
 /**
  * Data class to store result of [KeysBackupTestHelper.createKeysBackupScenarioWithPassword]

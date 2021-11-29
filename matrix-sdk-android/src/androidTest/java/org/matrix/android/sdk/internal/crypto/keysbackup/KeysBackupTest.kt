@@ -29,23 +29,16 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
 import org.matrix.android.sdk.InstrumentedTest
-import org.matrix.android.sdk.api.listeners.ProgressListener
 import org.matrix.android.sdk.api.listeners.StepProgressListener
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupState
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupStateListener
 import org.matrix.android.sdk.common.CommonTestHelper
 import org.matrix.android.sdk.common.CryptoTestHelper
 import org.matrix.android.sdk.common.TestConstants
-import org.matrix.android.sdk.common.TestMatrixCallback
 import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM_BACKUP
 import org.matrix.android.sdk.internal.crypto.crosssigning.DeviceTrustLevel
-import org.matrix.android.sdk.internal.crypto.keysbackup.model.KeysBackupVersionTrust
-import org.matrix.android.sdk.internal.crypto.keysbackup.model.MegolmBackupCreationInfo
-import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersion
-import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersionResult
 import org.matrix.android.sdk.internal.crypto.model.ImportRoomKeysResult
 import java.util.ArrayList
-import java.util.Collections
 import java.util.concurrent.CountDownLatch
 
 @RunWith(AndroidJUnit4::class)
@@ -452,7 +445,7 @@ class KeysBackupTest : InstrumentedTest {
         assertTrue(testData.aliceSession2.cryptoService().keysBackupService().isEnabled)
 
         // - Retrieve the last version from the server
-        val keysVersionResult = mTestHelper.runBlockingTest{
+        val keysVersionResult = mTestHelper.runBlockingTest {
             testData.aliceSession2.cryptoService().keysBackupService().getCurrentVersion()
         }
 
@@ -501,7 +494,6 @@ class KeysBackupTest : InstrumentedTest {
                 )
                 fail("Should have failed to trust")
             } catch (failure: Throwable) {
-
             }
         }
 
@@ -608,7 +600,6 @@ class KeysBackupTest : InstrumentedTest {
                 )
                 fail("Should have fail to trust")
             } catch (failure: Throwable) {
-
             }
         }
         mTestHelper.await(latch)
