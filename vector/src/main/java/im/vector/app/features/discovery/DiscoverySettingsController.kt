@@ -62,8 +62,7 @@ class DiscoverySettingsController @Inject constructor(
                 }
             }
             is Success -> {
-                // Hidden in Tchap
-//                buildIdentityServerSection(data)
+                buildIdentityServerSection(data)
                 val hasIdentityServer = data.identityServer()?.serverUrl.isNullOrBlank().not()
                 if (hasIdentityServer && !data.termsNotSigned) {
                     buildConsentSection(data)
