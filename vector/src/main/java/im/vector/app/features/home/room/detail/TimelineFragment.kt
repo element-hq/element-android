@@ -984,7 +984,12 @@ class TimelineFragment @Inject constructor(
                 true
             }
             R.id.menu_thread_timeline_copy_link    -> {
-                requireActivity().toast("menu_thread_timeline_copy_link")
+                getRootThreadEventId()?.let {
+                    val permalink = session.permalinkService().createPermalink(timelineArgs.roomId, it)
+                    copyToClipboard(requireContext(), permalink, false)
+                    showSnackWithMessage(getString(R.string.copied_to_clipboard))
+
+                }
                 true
             }
             R.id.menu_thread_timeline_view_in_room -> {
@@ -992,7 +997,10 @@ class TimelineFragment @Inject constructor(
                 true
             }
             R.id.menu_thread_timeline_share        -> {
-                requireActivity().toast("menu_thread_timeline_share")
+                getRootThreadEventId()?.let {
+                    val permalink = session.permalinkService().createPermalink(timelineArgs.roomId, it)
+                    shareText(requireContext(), permalink)
+                }
                 true
             }
             else                                   -> super.onOptionsItemSelected(item)
@@ -1649,20 +1657,36 @@ class TimelineFragment @Inject constructor(
         viewLifecycleOwner.lifecycleScope.launch {
             val isManaged = permalinkHandler
                     .launch(requireActivity(), url, object : NavigationInterceptor {
-                        override fun navToRoom(roomId: String?, eventId: String?, deepLink: Uri?): Boolean {
+                        override fun navToRoom(roomId: String?, eventId: String?, deepLink: Uri?, rootThreadEventId: String?): Boolean {
                             // Same room?
-                            if (roomId == timelineArgs.roomId) {
-                                // Navigation to same room
-                                if (eventId == null) {
+                            if (roomId != timelineArgs.roomId) return false
+                            // Navigation to same room
+                            if (!isThreadTimeLine()) {
+
+                                if (rootThreadEventId != null) {
+                                    // Thread link, so PermalinkHandler will handle the navigation
+                                    return false
+                                }
+                                return if (eventId == null) {
                                     showSnackWithMessage(getString(R.string.navigate_to_room_when_already_in_the_room))
+                                    true
                                 } else {
                                     // Highlight and scroll to this event
                                     roomDetailViewModel.handle(RoomDetailAction.NavigateToEvent(eventId, true))
+                                    true
                                 }
-                                return true
+                            } else {
+                                return if (rootThreadEventId == getRootThreadEventId() && eventId == null) {
+                                    showSnackWithMessage(getString(R.string.navigate_to_thread_when_already_in_the_thread))
+                                    true
+                                } else if (rootThreadEventId == getRootThreadEventId() && eventId != null) {
+                                    // we are in the same thread
+                                    roomDetailViewModel.handle(RoomDetailAction.NavigateToEvent(eventId, true))
+                                    true
+                                } else {
+                                    false
+                                }
                             }
-                            // Not handled
-                            return false
                         }
 
                         override fun navToMemberProfile(userId: String, deepLink: Uri): Boolean {
@@ -1816,7 +1840,6 @@ class TimelineFragment @Inject constructor(
         }
     }
 
-
     override fun onAvatarClicked(informationData: MessageInformationData) {
         // roomDetailViewModel.handle(RoomDetailAction.RequestVerification(informationData.userId))
         openRoomMemberProfile(informationData.senderId)
@@ -1862,7 +1885,7 @@ class TimelineFragment @Inject constructor(
         viewLifecycleOwner.lifecycleScope.launchWhenResumed {
             permalinkHandler
                     .launch(requireContext(), url, object : NavigationInterceptor {
-                        override fun navToRoom(roomId: String?, eventId: String?, deepLink: Uri?): Boolean {
+                        override fun navToRoom(roomId: String?, eventId: String?, deepLink: Uri?, rootThreadEventId: String?): Boolean {
                             requireActivity().finish()
                             return false
                         }

@@ -94,6 +94,7 @@ class ThreadsActivity : VectorBaseActivity<ActivityThreadsBinding>(), ToolbarCon
                     TimelineFragment::class.java,
                     TimelineArgs(
                             roomId = threadTimelineArgs.roomId,
+                            eventId = getEventIdToNavigate(),
                             threadTimelineArgs = threadTimelineArgs
                     ))
 
@@ -141,15 +142,23 @@ class ThreadsActivity : VectorBaseActivity<ActivityThreadsBinding>(), ToolbarCon
 
     private fun getThreadTimelineArgs(): ThreadTimelineArgs? = intent?.extras?.getParcelable(THREAD_TIMELINE_ARGS)
     private fun getThreadListArgs(): ThreadListArgs? = intent?.extras?.getParcelable(THREAD_LIST_ARGS)
+    private fun getEventIdToNavigate(): String? = intent?.extras?.getString(THREAD_EVENT_ID_TO_NAVIGATE)
 
     companion object {
         //        private val FRAGMENT_TAG = RoomThreadDetailFragment::class.simpleName
         const val THREAD_TIMELINE_ARGS = "THREAD_TIMELINE_ARGS"
+        const val THREAD_EVENT_ID_TO_NAVIGATE = "THREAD_EVENT_ID_TO_NAVIGATE"
         const val THREAD_LIST_ARGS = "THREAD_LIST_ARGS"
 
-        fun newIntent(context: Context, threadTimelineArgs: ThreadTimelineArgs?, threadListArgs: ThreadListArgs?): Intent {
+        fun newIntent(
+                context: Context,
+                threadTimelineArgs: ThreadTimelineArgs?,
+                threadListArgs: ThreadListArgs?,
+                eventIdToNavigate: String? = null
+        ): Intent {
             return Intent(context, ThreadsActivity::class.java).apply {
                 putExtra(THREAD_TIMELINE_ARGS, threadTimelineArgs)
+                putExtra(THREAD_EVENT_ID_TO_NAVIGATE, eventIdToNavigate)
                 putExtra(THREAD_LIST_ARGS, threadListArgs)
 
             }

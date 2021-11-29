@@ -142,7 +142,7 @@ interface Navigator {
 
     fun openCallTransfer(context: Context, callId: String)
 
-    fun openThread(context: Context, threadTimelineArgs: ThreadTimelineArgs)
+    fun openThread(context: Context, threadTimelineArgs: ThreadTimelineArgs, eventIdToNavigate: String? = null)
 
     fun openThreadList(context: Context, threadTimelineArgs: ThreadTimelineArgs)
 

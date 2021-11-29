@@ -116,7 +116,12 @@ class DefaultNavigator @Inject constructor(
         context.startActivity(intent)
     }
 
-    override fun openRoom(context: Context, roomId: String, eventId: String?, buildTask: Boolean) {
+    override fun openRoom(
+            context: Context,
+            roomId: String,
+            eventId: String?,
+            buildTask: Boolean
+    ) {
         if (sessionHolder.getSafeActiveSession()?.getRoom(roomId) == null) {
             fatalError("Trying to open an unknown room $roomId", vectorPreferences.failFast())
             return
@@ -511,16 +516,19 @@ class DefaultNavigator @Inject constructor(
         }
     }
 
-    override fun openThread(context: Context, threadTimelineArgs: ThreadTimelineArgs) {
+    override fun openThread(context: Context, threadTimelineArgs: ThreadTimelineArgs, eventIdToNavigate: String?) {
         context.startActivity(ThreadsActivity.newIntent(
                 context = context,
-                threadTimelineArgs =  threadTimelineArgs,
-                threadListArgs =null))
+                threadTimelineArgs = threadTimelineArgs,
+                threadListArgs = null,
+                eventIdToNavigate = eventIdToNavigate
+                ))
     }
+
     override fun openThreadList(context: Context, threadTimelineArgs: ThreadTimelineArgs) {
         context.startActivity(ThreadsActivity.newIntent(
                 context = context,
-                threadTimelineArgs =  null,
+                threadTimelineArgs = null,
                 threadListArgs = ThreadListArgs(
                         roomId = threadTimelineArgs.roomId,
                         displayName = threadTimelineArgs.displayName,
