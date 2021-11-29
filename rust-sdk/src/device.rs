@@ -37,7 +37,7 @@ impl From<InnerDevice> for Device {
                 .map(|(k, v)| (k.to_string(), v.to_string()))
                 .collect(),
             algorithms: d.algorithms().iter().map(|a| a.to_string()).collect(),
-            display_name: d.display_name().clone(),
+            display_name: d.display_name().map(|d| d.to_owned()),
             is_blocked: d.is_blacklisted(),
             locally_trusted: d.is_locally_trusted(),
             cross_signing_trusted: d.is_cross_signing_trusted(),
