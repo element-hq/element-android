@@ -510,8 +510,7 @@ internal class OlmMachine(
 
                 val result = inner.importKeys(decodedKeys, passphrase, rustListener)
 
-                // TODO do we want to remove the cast here?
-                ImportRoomKeysResult(result.total.toInt(), result.imported.toInt())
+                ImportRoomKeysResult.fromOlm(result)
             }
 
     @Throws(CryptoStoreException::class)
@@ -520,13 +519,14 @@ internal class OlmMachine(
             listener: ProgressListener?
     ): ImportRoomKeysResult =
             withContext(Dispatchers.IO) {
-
                 val adapter = MoshiProvider.providesMoshi().adapter(List::class.java)
 
                 // If the key backup is too big we take the risk of causing OOM
+                // when serializing to json
                 // so let's chunk to avoid it
                 var totalImported = 0L
                 var accTotal = 0L
+                val details = mutableMapOf<String, Map<String, List<String>>>()
                 keys.chunked(500)
                         .forEach { keysSlice ->
                             val encodedKeys = adapter.toJson(keysSlice)
@@ -540,9 +540,10 @@ internal class OlmMachine(
                             inner.importDecryptedKeys(encodedKeys, rustListener).let {
                                 totalImported += it.imported
                                 accTotal += it.total
+                                details.putAll(it.keys)
                             }
                         }
-                ImportRoomKeysResult(totalImported.toInt(), accTotal.toInt())
+                ImportRoomKeysResult(totalImported.toInt(), accTotal.toInt(), details)
             }
 
     @Throws(CryptoStoreException::class)

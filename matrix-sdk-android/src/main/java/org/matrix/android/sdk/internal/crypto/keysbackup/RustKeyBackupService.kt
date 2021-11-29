@@ -39,6 +39,7 @@ import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupState
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupStateListener
 import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM_BACKUP
 import org.matrix.android.sdk.internal.crypto.MegolmSessionData
+import org.matrix.android.sdk.internal.crypto.MegolmSessionImportManager
 import org.matrix.android.sdk.internal.crypto.OlmMachineProvider
 import org.matrix.android.sdk.internal.crypto.RequestSender
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.KeysBackupVersionTrust
@@ -74,6 +75,7 @@ internal class RustKeyBackupService @Inject constructor(
         olmMachineProvider: OlmMachineProvider,
         private val sender: RequestSender,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
+        private val megolmSessionImportManager: MegolmSessionImportManager,
         private val cryptoCoroutineScope: CoroutineScope,
 ) : KeysBackupService {
     companion object {
@@ -545,7 +547,9 @@ internal class RustKeyBackupService @Inject constructor(
                 null
             }
 
-            val result = olmMachine.importDecryptedKeys(sessionsData, progressListener)
+            val result = olmMachine.importDecryptedKeys(sessionsData, progressListener).also {
+                megolmSessionImportManager.dispatchKeyImportResults(it)
+            }
 
             // Do not back up the key if it comes from a backup recovery
             if (backUp) {

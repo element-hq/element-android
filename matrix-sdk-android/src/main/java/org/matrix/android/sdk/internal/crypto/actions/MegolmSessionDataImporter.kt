@@ -103,6 +103,6 @@ internal class MegolmSessionDataImporter @Inject constructor(private val olmDevi
 
         Timber.v("## importMegolmSessionsData : sessions import " + (t1 - t0) + " ms (" + megolmSessionsData.size + " sessions)")
 
-        return ImportRoomKeysResult(totalNumbersOfKeys, totalNumbersOfImportedKeys)
+        return ImportRoomKeysResult(totalNumbersOfKeys, totalNumbersOfImportedKeys, emptyMap())
     }
 }

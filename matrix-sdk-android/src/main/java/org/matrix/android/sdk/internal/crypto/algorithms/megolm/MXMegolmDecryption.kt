@@ -317,7 +317,7 @@ internal class MXMegolmDecryption(private val userId: String,
      */
     override fun onNewSession(senderKey: String, sessionId: String) {
         Timber.tag(loggerTag.value).v("ON NEW SESSION $sessionId - $senderKey")
-        newSessionListener?.onNewSession(null, senderKey, sessionId)
+        newSessionListener?.onNewSession(null, sessionId)
     }
 
     override fun hasKeysForKeyRequest(request: IncomingRoomKeyRequest): Boolean {

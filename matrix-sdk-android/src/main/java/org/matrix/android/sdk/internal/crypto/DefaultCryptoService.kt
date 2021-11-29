@@ -134,6 +134,7 @@ internal class DefaultCryptoService @Inject constructor(
         private val crossSigningService: CrossSigningService,
         private val verificationService: RustVerificationService,
         private val keysBackupService: RustKeyBackupService,
+        private val megolmSessionImportManager: MegolmSessionImportManager,
         private val olmMachineProvider: OlmMachineProvider
 ) : CryptoService {
 
@@ -151,9 +152,6 @@ internal class DefaultCryptoService @Inject constructor(
     private val keyClaimLock: Mutex = Mutex()
     private val outgoingRequestsLock: Mutex = Mutex()
     private val roomKeyShareLocks: ConcurrentHashMap<String, Mutex> = ConcurrentHashMap()
-
-    // TODO does this need to be concurrent?
-    private val newSessionListeners = ArrayList<NewSessionListener>()
 
     fun onStateEvent(roomId: String, event: Event) {
         when (event.getClearType()) {
@@ -675,17 +673,7 @@ internal class DefaultCryptoService @Inject constructor(
             roomId: String,
             sessionId: String,
     ) {
-        // The sender key is actually unused since it's unimportant for megolm
-        // Our events don't contain the info so pass an empty string until we
-        // change the listener definition
-        val senderKey = ""
-
-        newSessionListeners.forEach {
-            try {
-                it.onNewSession(roomId, senderKey, sessionId)
-            } catch (e: Throwable) {
-            }
-        }
+        megolmSessionImportManager.dispatchNewSession(roomId, sessionId)
     }
 
     suspend fun receiveSyncChanges(
@@ -886,7 +874,9 @@ internal class DefaultCryptoService @Inject constructor(
     override suspend fun importRoomKeys(roomKeysAsArray: ByteArray,
                                         password: String,
                                         progressListener: ProgressListener?): ImportRoomKeysResult {
-        val result = olmMachine.importKeys(roomKeysAsArray, password, progressListener)
+        val result = olmMachine.importKeys(roomKeysAsArray, password, progressListener).also {
+            megolmSessionImportManager.dispatchKeyImportResults(it)
+        }
         keysBackupService.maybeBackupKeys()
 
         return result
@@ -1030,11 +1020,11 @@ internal class DefaultCryptoService @Inject constructor(
     }
 
     override fun addNewSessionListener(newSessionListener: NewSessionListener) {
-        if (!newSessionListeners.contains(newSessionListener)) newSessionListeners.add(newSessionListener)
+        megolmSessionImportManager.addListener(newSessionListener)
     }
 
     override fun removeSessionListener(listener: NewSessionListener) {
-        newSessionListeners.remove(listener)
+        megolmSessionImportManager.removeListener(listener)
     }
 /* ==========================================================================================
  * DEBUG INFO
