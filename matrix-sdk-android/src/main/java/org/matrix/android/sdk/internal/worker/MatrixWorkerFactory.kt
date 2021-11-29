@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.internal.worker
 
 import android.content.Context
+import androidx.work.CoroutineWorker
 import androidx.work.ListenableWorker
 import androidx.work.WorkerFactory
 import androidx.work.WorkerParameters
@@ -51,7 +52,9 @@ internal class MatrixWorkerFactory @Inject constructor(private val sessionManage
     ): ListenableWorker? {
         Timber.d("MatrixWorkerFactory.createWorker for $workerClassName")
         return when (workerClassName) {
-            AddPusherWorker::class.java.name                      ->
+            CheckFactoryWorker::class.java.name ->
+                CheckFactoryWorker(appContext, workerParameters, true)
+            AddPusherWorker::class.java.name    ->
                 AddPusherWorker(appContext, workerParameters, sessionManager)
             CancelGossipRequestWorker::class.java.name            ->
                 CancelGossipRequestWorker(appContext, workerParameters, sessionManager)
@@ -75,9 +78,29 @@ internal class MatrixWorkerFactory @Inject constructor(private val sessionManage
                 UpdateTrustWorker(appContext, workerParameters, sessionManager)
             UploadContentWorker::class.java.name                  ->
                 UploadContentWorker(appContext, workerParameters, sessionManager)
-            else                                                  ->
+            else                                                  -> {
+                Timber.w("No worker defined on MatrixWorkerFactory for $workerClassName will delegate to default.")
                 // Return null to delegate to the default WorkerFactory.
                 null
+            }
+        }
+    }
+
+    /**
+     * This worker is launched by the factory with the isCreatedByMatrixWorkerFactory flag to true.
+     * If the MatrixWorkerFactory is not set up, it will default to the other constructor and it will throw
+     */
+    class CheckFactoryWorker(context: Context, workerParameters: WorkerParameters, private val isCreatedByMatrixWorkerFactory: Boolean) : CoroutineWorker(context, workerParameters) {
+
+        // Called by WorkManager if there is no MatrixWorkerFactory
+        constructor(context: Context, workerParameters: WorkerParameters) : this(context, workerParameters, isCreatedByMatrixWorkerFactory = false)
+
+        override suspend fun doWork(): Result {
+            return if (!isCreatedByMatrixWorkerFactory) {
+                Result.failure()
+            } else {
+                Result.success()
+            }
         }
     }
 }
