@@ -26,6 +26,7 @@ import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assert
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
 import im.vector.app.R
+import im.vector.app.espresso.tools.waitUntilViewVisible
 import im.vector.app.waitForView
 
 class OnboardingRobot {
@@ -42,6 +43,7 @@ class OnboardingRobot {
                             userId: String,
                             password: String,
                             homeServerUrl: String) {
+        waitUntilViewVisible(withId(R.id.loginSplashSubmit))
         assertDisplayed(R.id.loginSplashSubmit, R.string.login_splash_submit)
         clickOn(R.id.loginSplashSubmit)
         assertDisplayed(R.id.loginServerTitle, R.string.login_server_title)

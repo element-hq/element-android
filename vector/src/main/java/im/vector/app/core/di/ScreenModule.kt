@@ -30,11 +30,9 @@ import im.vector.app.core.glide.GlideApp
 object ScreenModule {
 
     @Provides
-    @JvmStatic
     fun providesGlideRequests(context: AppCompatActivity) = GlideApp.with(context)
 
     @Provides
-    @JvmStatic
     @ActivityScoped
     fun providesSharedViewPool() = RecyclerView.RecycledViewPool()
 }

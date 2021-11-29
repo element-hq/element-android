@@ -18,15 +18,24 @@ package im.vector.app.features.home.room.detail.timeline.helper
 
 import android.os.Handler
 import android.os.Looper
-import dagger.hilt.android.scopes.ActivityScoped
 import javax.inject.Inject
+import javax.inject.Singleton
 
-@ActivityScoped
+@Singleton
 class VoiceMessagePlaybackTracker @Inject constructor() {
 
     private val mainHandler = Handler(Looper.getMainLooper())
     private val listeners = mutableMapOf<String, Listener>()
+    private val activityListeners = mutableListOf<ActivityListener>()
     private val states = mutableMapOf<String, Listener.State>()
+
+    fun trackActivity(listener: ActivityListener) {
+        activityListeners.add(listener)
+    }
+
+    fun unTrackActivity(listener: ActivityListener) {
+        activityListeners.remove(listener)
+    }
 
     fun track(id: String, listener: Listener) {
         listeners[id] = listener
@@ -52,8 +61,10 @@ class VoiceMessagePlaybackTracker @Inject constructor() {
      */
     private fun setState(key: String, state: Listener.State) {
         states[key] = state
+        val isPlayingOrRecording = states.values.any { it is Listener.State.Playing || it is Listener.State.Recording }
         mainHandler.post {
             listeners[key]?.onUpdate(state)
+            activityListeners.forEach { it.onUpdate(isPlayingOrRecording) }
         }
     }
 
@@ -124,5 +135,9 @@ class VoiceMessagePlaybackTracker @Inject constructor() {
             data class Paused(val playbackTime: Int) : State()
             data class Recording(val amplitudeList: List<Int>) : State()
         }
+    }
+
+    fun interface ActivityListener {
+        fun onUpdate(isPlayingOrRecording: Boolean)
     }
 }

@@ -1,1 +1,0 @@
-Fixes intermittent crash on sign out due to the session being incorrectly recreated whilst being closed

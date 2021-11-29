@@ -68,6 +68,18 @@ object EspressoHelper {
     }
 }
 
+fun withRetry(attempts: Int = 3, action: () -> Unit) {
+    runCatching { action() }.onFailure {
+        val remainingAttempts = attempts - 1
+        if (remainingAttempts <= 0) {
+            throw it
+        } else {
+            Thread.sleep(500)
+            withRetry(remainingAttempts, action)
+        }
+    }
+}
+
 fun getString(@StringRes id: Int): String {
     return EspressoHelper.getCurrentActivity()!!.resources.getString(id)
 }
@@ -235,11 +247,16 @@ fun clickOnAndGoBack(@StringRes name: Int, block: () -> Unit) {
     Espresso.pressBack()
 }
 
-inline fun <reified T : VectorBaseBottomSheetDialogFragment<*>> interactWithSheet(contentMatcher: Matcher<View>, noinline block: () -> Unit = {}) {
+inline fun <reified T : VectorBaseBottomSheetDialogFragment<*>> interactWithSheet(
+        contentMatcher: Matcher<View>,
+        @BottomSheetBehavior.State openState: Int = BottomSheetBehavior.STATE_EXPANDED,
+        @BottomSheetBehavior.State exitState: Int = BottomSheetBehavior.STATE_HIDDEN,
+        noinline block: () -> Unit = {}
+) {
     waitUntilViewVisible(contentMatcher)
     val behaviour = (EspressoHelper.getBottomSheetDialog<T>()!!.dialog as BottomSheetDialog).behavior
-    withIdlingResource(BottomSheetResource(behaviour, BottomSheetBehavior.STATE_EXPANDED), block)
-    withIdlingResource(BottomSheetResource(behaviour, BottomSheetBehavior.STATE_HIDDEN)) {}
+    withIdlingResource(BottomSheetResource(behaviour, openState), block)
+    withIdlingResource(BottomSheetResource(behaviour, exitState)) {}
 }
 
 class BottomSheetResource(

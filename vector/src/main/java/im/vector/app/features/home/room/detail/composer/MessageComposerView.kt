@@ -36,7 +36,7 @@ import im.vector.app.databinding.ComposerLayoutBinding
 /**
  * Encapsulate the timeline composer UX.
  */
-class TextComposerView @JvmOverloads constructor(
+class MessageComposerView @JvmOverloads constructor(
         context: Context,
         attrs: AttributeSet? = null,
         defStyleAttr: Int = 0) : ConstraintLayout(context, attrs, defStyleAttr) {

@@ -56,6 +56,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/passphrase_enter_passphrase"
+                android:inputType="textPassword"
                 android:maxLines="3"
                 android:singleLine="false" />
 

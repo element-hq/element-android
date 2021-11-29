@@ -38,7 +38,6 @@ import im.vector.app.features.invite.showInvites
 import im.vector.app.features.settings.VectorDataStore
 import im.vector.app.features.ui.UiStateRepository
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.flatMapLatest
@@ -60,15 +59,16 @@ import timber.log.Timber
  * View model used to update the home bottom bar notification counts, observe the sync state and
  * change the selected room list view
  */
-class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: HomeDetailViewState,
-                                                      private val session: Session,
-                                                      private val uiStateRepository: UiStateRepository,
-                                                      private val vectorDataStore: VectorDataStore,
-                                                      private val callManager: WebRtcCallManager,
-                                                      private val directRoomHelper: DirectRoomHelper,
-                                                      private val appStateHandler: AppStateHandler,
-                                                      private val autoAcceptInvites: AutoAcceptInvites) :
-        VectorViewModel<HomeDetailViewState, HomeDetailAction, HomeDetailViewEvents>(initialState),
+class HomeDetailViewModel @AssistedInject constructor(
+        @Assisted initialState: HomeDetailViewState,
+        private val session: Session,
+        private val uiStateRepository: UiStateRepository,
+        private val vectorDataStore: VectorDataStore,
+        private val callManager: WebRtcCallManager,
+        private val directRoomHelper: DirectRoomHelper,
+        private val appStateHandler: AppStateHandler,
+        private val autoAcceptInvites: AutoAcceptInvites
+) : VectorViewModel<HomeDetailViewState, HomeDetailAction, HomeDetailViewEvents>(initialState),
         CallProtocolsChecker.Listener {
 
     @AssistedFactory
@@ -90,7 +90,7 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
         observeSyncState()
         observeRoomGroupingMethod()
         observeRoomSummaries()
-        updateShowDialPadTab()
+        updatePstnSupportFlag()
         observeDataStore()
         callManager.addProtocolsCheckerListener(this)
         session.flow().liveUser(session.myUserId).execute {
@@ -101,14 +101,16 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
     }
 
     private fun observeDataStore() {
-        viewModelScope.launch {
-            vectorDataStore.pushCounterFlow.collect { nbOfPush ->
-                setState {
-                    copy(
-                            pushCounter = nbOfPush
-                    )
-                }
-            }
+        vectorDataStore.pushCounterFlow.setOnEach { nbOfPush ->
+            copy(
+                    pushCounter = nbOfPush
+            )
+        }
+
+        vectorDataStore.forceDialPadDisplayFlow.setOnEach { force ->
+            copy(
+                    forceDialPadTab = force
+            )
         }
     }
 
@@ -150,12 +152,12 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
     }
 
     override fun onPSTNSupportUpdated() {
-        updateShowDialPadTab()
+        updatePstnSupportFlag()
     }
 
-    private fun updateShowDialPadTab() {
+    private fun updatePstnSupportFlag() {
         setState {
-            copy(showDialPadTab = callManager.supportsPSTNProtocol)
+            copy(pstnSupportFlag = callManager.supportsPSTNProtocol)
         }
     }
 

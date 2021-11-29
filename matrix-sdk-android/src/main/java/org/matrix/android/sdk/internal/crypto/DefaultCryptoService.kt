@@ -39,6 +39,7 @@ import org.matrix.android.sdk.api.crypto.MXCryptoConfig
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.listeners.ProgressListener
+import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.crypto.crosssigning.CrossSigningService
@@ -100,6 +101,9 @@ import kotlin.math.max
  * CryptoService maintains all necessary keys and their sharing with other devices required for the crypto.
  * Specially, it tracks all room membership changes events in order to do keys updates.
  */
+
+private val loggerTag = LoggerTag("DefaultCryptoService", LoggerTag.CRYPTO)
+
 @SessionScope
 internal class DefaultCryptoService @Inject constructor(
         @UserId
@@ -183,7 +187,7 @@ internal class DefaultCryptoService @Inject constructor(
                                 try {
                                     downloadKeys(listOf(userId), true)
                                 } catch (failure: Throwable) {
-                                    Timber.w(failure, "setDeviceName: Failed to refresh of crypto device")
+                                    Timber.tag(loggerTag.value).w(failure, "setDeviceName: Failed to refresh of crypto device")
                                 }
                             }
                             callback.onSuccess(data)
@@ -318,11 +322,11 @@ internal class DefaultCryptoService @Inject constructor(
 
         try {
             setRustLogger()
-            Timber.v(
+            Timber.tag(loggerTag.value).v(
                     "## CRYPTO | Successfully started up an Olm machine for " +
                             "$userId, $deviceId, identity keys: ${this.olmMachine.identityKeys()}")
         } catch (throwable: Throwable) {
-            Timber.v("Failed create an Olm machine: $throwable")
+            Timber.tag(loggerTag.value).v("Failed create an Olm machine: $throwable")
         }
 
         // We try to enable key backups, if the backup version on the server is trusted,
@@ -449,12 +453,12 @@ internal class DefaultCryptoService @Inject constructor(
         val existingAlgorithm = cryptoStore.getRoomAlgorithm(roomId)
 
         if (!existingAlgorithm.isNullOrEmpty() && existingAlgorithm != algorithm) {
-            Timber.e("## CRYPTO | setEncryptionInRoom() : Ignoring m.room.encryption event which requests a change of config in $roomId")
+            Timber.tag(loggerTag.value).e("setEncryptionInRoom() : Ignoring m.room.encryption event which requests a change of config in $roomId")
             return false
         }
 
         if (algorithm != MXCRYPTO_ALGORITHM_MEGOLM) {
-            Timber.e("## CRYPTO | setEncryptionInRoom() : Unable to encrypt room $roomId with $algorithm")
+            Timber.tag(loggerTag.value).e("## CRYPTO | setEncryptionInRoom() : Unable to encrypt room $roomId with $algorithm")
             return false
         }
 
@@ -466,7 +470,7 @@ internal class DefaultCryptoService @Inject constructor(
         // e2e rooms with them, so there is room for optimisation here, but for now
         // we just invalidate everyone in the room.
         if (null == existingAlgorithm) {
-            Timber.v("Enabling encryption in $roomId for the first time; invalidating device lists for all users therein")
+            Timber.tag(loggerTag.value).d("Enabling encryption in $roomId for the first time; invalidating device lists for all users therein")
 
             val userIds = ArrayList(membersId)
             olmMachine.updateTrackedUsers(userIds)
@@ -531,16 +535,16 @@ internal class DefaultCryptoService @Inject constructor(
             if (algorithm != null) {
                 val userIds = getRoomUserIds(roomId)
                 val t0 = System.currentTimeMillis()
-                Timber.v("## CRYPTO | encryptEventContent() starts")
+                Timber.tag(loggerTag.value).v("encryptEventContent() starts")
                 runCatching {
                     preshareRoomKey(roomId, userIds)
                     val content = encrypt(roomId, eventType, eventContent)
-                    Timber.v("## CRYPTO | encryptEventContent() : succeeds after ${System.currentTimeMillis() - t0} ms")
+                    Timber.tag(loggerTag.value).v("## CRYPTO | encryptEventContent() : succeeds after ${System.currentTimeMillis() - t0} ms")
                     MXEncryptEventContentResult(content, EventType.ENCRYPTED)
                 }.foldToCallback(callback)
             } else {
                 val reason = String.format(MXCryptoError.UNABLE_TO_ENCRYPT_REASON, MXCryptoError.NO_MORE_ALGORITHM_REASON)
-                Timber.e("## CRYPTO | encryptEventContent() : $reason")
+                Timber.tag(loggerTag.value).e("encryptEventContent() : failed $reason")
                 callback.onFailure(Failure.CryptoError(MXCryptoError.Base(MXCryptoError.ErrorType.UNABLE_TO_ENCRYPT, reason)))
             }
         }
@@ -584,7 +588,7 @@ internal class DefaultCryptoService @Inject constructor(
     private fun onRoomEncryptionEvent(roomId: String, event: Event) {
         if (!event.isStateEvent()) {
             // Ignore
-            Timber.w("Invalid encryption event")
+            Timber.tag(loggerTag.value).w("Invalid encryption event")
             return
         }
 
@@ -787,7 +791,7 @@ internal class DefaultCryptoService @Inject constructor(
                 }
             }
         } catch (throwable: Throwable) {
-            Timber.e(throwable, "## CRYPTO | doKeyDownloadForUsers(): error")
+            Timber.tag(loggerTag.value).e(throwable, "## CRYPTO | doKeyDownloadForUsers(): error")
         }
     }
 
@@ -1071,12 +1075,12 @@ internal class DefaultCryptoService @Inject constructor(
 
     override fun prepareToEncrypt(roomId: String, callback: MatrixCallback<Unit>) {
         cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
-            Timber.d("## CRYPTO | prepareToEncrypt() : Check room members up to date")
+            Timber.tag(loggerTag.value).d("prepareToEncrypt() roomId:$roomId Check room members up to date")
             // Ensure to load all room members
             try {
                 loadRoomMembersTask.execute(LoadRoomMembersTask.Params(roomId))
             } catch (failure: Throwable) {
-                Timber.e("## CRYPTO | prepareToEncrypt() : Failed to load room members")
+                Timber.tag(loggerTag.value).e("prepareToEncrypt() : Failed to load room members")
                 callback.onFailure(failure)
                 return@launch
             }
@@ -1087,7 +1091,7 @@ internal class DefaultCryptoService @Inject constructor(
 
             if (algorithm == null) {
                 val reason = String.format(MXCryptoError.UNABLE_TO_ENCRYPT_REASON, MXCryptoError.NO_MORE_ALGORITHM_REASON)
-                Timber.e("## CRYPTO | prepareToEncrypt() : $reason")
+                Timber.tag(loggerTag.value).e("prepareToEncrypt() : $reason")
                 callback.onFailure(IllegalArgumentException("Missing algorithm"))
                 return@launch
             }
@@ -1097,7 +1101,7 @@ internal class DefaultCryptoService @Inject constructor(
             }.fold(
                     { callback.onSuccess(Unit) },
                     {
-                        Timber.e("## CRYPTO | prepareToEncrypt() failed.")
+                        Timber.tag(loggerTag.value).e(it, "prepareToEncrypt() failed.")
                         callback.onFailure(it)
                     }
             )

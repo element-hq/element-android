@@ -44,7 +44,8 @@ data class ContentAttachmentData(
         FILE,
         IMAGE,
         AUDIO,
-        VIDEO
+        VIDEO,
+        VOICE_MESSAGE
     }
 
     fun getSafeMimeType() = mimeType?.normalizeMimeType()

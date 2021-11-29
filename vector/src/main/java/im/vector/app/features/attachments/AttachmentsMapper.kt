@@ -49,11 +49,11 @@ fun MultiPickerFileType.toContentAttachmentData(): ContentAttachmentData {
     )
 }
 
-fun MultiPickerAudioType.toContentAttachmentData(): ContentAttachmentData {
+fun MultiPickerAudioType.toContentAttachmentData(isVoiceMessage: Boolean): ContentAttachmentData {
     if (mimeType == null) Timber.w("No mimeType")
     return ContentAttachmentData(
             mimeType = mimeType,
-            type = mapType(),
+            type = if (isVoiceMessage) ContentAttachmentData.Type.VOICE_MESSAGE else mapType(),
             size = size,
             name = displayName,
             duration = duration,
@@ -75,7 +75,7 @@ fun MultiPickerBaseType.toContentAttachmentData(): ContentAttachmentData {
     return when (this) {
         is MultiPickerImageType -> toContentAttachmentData()
         is MultiPickerVideoType -> toContentAttachmentData()
-        is MultiPickerAudioType -> toContentAttachmentData()
+        is MultiPickerAudioType -> toContentAttachmentData(isVoiceMessage = false)
         is MultiPickerFileType  -> toContentAttachmentData()
         else                    -> throw IllegalStateException("Unknown file type")
     }

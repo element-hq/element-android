@@ -74,11 +74,11 @@ class VoiceMessageHelper @Inject constructor(
             voiceRecorder.stopRecord()
             voiceRecorder.getVoiceMessageFile()
         }
+
         try {
             voiceMessageFile?.let {
-                val outputFileUri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".fileProvider", it)
-                return outputFileUri
-                        ?.toMultiPickerAudioType(context)
+                val outputFileUri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".fileProvider", it, "Voice message.${it.extension}")
+                return outputFileUri.toMultiPickerAudioType(context)
                         ?.apply {
                             waveform = if (amplitudeList.size < 50) {
                                 amplitudeList
@@ -154,6 +154,7 @@ class VoiceMessageHelper @Inject constructor(
     }
 
     fun stopPlayback() {
+        playbackTracker.stopPlayback(VoiceMessagePlaybackTracker.RECORDING_ID)
         mediaPlayer?.stop()
         stopPlaybackTicker()
     }

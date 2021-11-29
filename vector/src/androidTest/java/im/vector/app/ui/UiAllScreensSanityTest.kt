@@ -16,6 +16,7 @@
 
 package im.vector.app.ui
 
+import androidx.test.espresso.IdlingPolicies
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
@@ -30,6 +31,7 @@ import org.junit.Test
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
 import java.util.UUID
+import java.util.concurrent.TimeUnit
 
 /**
  * This test aim to open every possible screen of the application
@@ -51,6 +53,8 @@ class UiAllScreensSanityTest {
     // 2021-04-08 Testing 429 change
     @Test
     fun allScreensTest() {
+        IdlingPolicies.setMasterPolicyTimeout(120, TimeUnit.SECONDS)
+
         // Create an account
         val userId = "UiTest_" + UUID.randomUUID().toString()
         elementRobot.signUp(userId)

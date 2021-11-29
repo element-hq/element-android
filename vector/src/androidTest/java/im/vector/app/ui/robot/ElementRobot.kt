@@ -28,6 +28,7 @@ import com.adevinta.android.barista.interaction.BaristaDrawerInteractions.openDr
 import im.vector.app.EspressoHelper
 import im.vector.app.R
 import im.vector.app.espresso.tools.waitUntilActivityVisible
+import im.vector.app.espresso.tools.waitUntilDialogVisible
 import im.vector.app.espresso.tools.waitUntilViewVisible
 import im.vector.app.features.createdirect.CreateDirectRoomActivity
 import im.vector.app.features.home.HomeActivity
@@ -104,17 +105,19 @@ class ElementRobot {
         }.isSuccess
 
         if (expectSignOutWarning != isShowingSignOutWarning) {
-            Timber.w("Unexpected sign out flow, expected warning to be: ${expectSignOutWarning.toWarningType()} but was ${isShowingSignOutWarning.toWarningType()}")
+            val expected = expectSignOutWarning.toWarningType()
+            val actual = isShowingSignOutWarning.toWarningType()
+            Timber.w("Unexpected sign out flow, expected warning to be: $expected but was $actual")
         }
 
         if (isShowingSignOutWarning) {
             // We have sent a message in a e2e room, accept to loose it
             clickOn(R.id.exitAnywayButton)
             // Dark pattern
-            waitUntilViewVisible(withId(android.R.id.button2))
+            waitUntilDialogVisible(withId(android.R.id.button2))
             clickDialogNegativeButton()
         } else {
-            waitUntilViewVisible(withId(android.R.id.button1))
+            waitUntilDialogVisible(withId(android.R.id.button1))
             clickDialogPositiveButton()
         }
 
