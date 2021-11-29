@@ -26,6 +26,9 @@ import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.epoxy.onClick
+import im.vector.app.core.extensions.clearDrawables
+import im.vector.app.core.extensions.setLeftDrawable
+import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.AvatarRenderer
 import org.matrix.android.sdk.api.util.MatrixItem
@@ -40,6 +43,7 @@ abstract class ThreadListModel : VectorEpoxyModel<ThreadListModel.Holder>() {
     @EpoxyAttribute lateinit var rootMessage: String
     @EpoxyAttribute lateinit var lastMessage: String
     @EpoxyAttribute lateinit var lastMessageCounter: String
+    @EpoxyAttribute var rootMessageDeleted: Boolean = false
     @EpoxyAttribute var lastMessageMatrixItem: MatrixItem? = null
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var itemClickListener: ClickListener? = null
 
@@ -50,8 +54,14 @@ abstract class ThreadListModel : VectorEpoxyModel<ThreadListModel.Holder>() {
         holder.avatarImageView.contentDescription = matrixItem.getBestName()
         holder.titleTextView.text = title
         holder.dateTextView.text = date
-        holder.rootMessageTextView.text = rootMessage
-
+        if (rootMessageDeleted){
+            holder.rootMessageTextView.text = holder.view.context.getString(R.string.event_redacted)
+            holder.rootMessageTextView.setLeftDrawable(R.drawable.ic_trash_16, R.attr.colorOnPrimary)
+            holder.rootMessageTextView.compoundDrawablePadding = DimensionConverter(holder.view.context.resources).dpToPx(10)
+        }else{
+            holder.rootMessageTextView.text = rootMessage
+            holder.rootMessageTextView.clearDrawables()
+        }
         // Last message summary
         lastMessageMatrixItem?.let {
             avatarRenderer.render(it, holder.lastMessageAvatarImageView)
@@ -59,7 +69,6 @@ abstract class ThreadListModel : VectorEpoxyModel<ThreadListModel.Holder>() {
         holder.lastMessageAvatarImageView.contentDescription = lastMessageMatrixItem?.getBestName()
         holder.lastMessageTextView.text = lastMessage
         holder.lastMessageCounterTextView.text = lastMessageCounter
-
     }
 
     class Holder : VectorEpoxyHolder() {

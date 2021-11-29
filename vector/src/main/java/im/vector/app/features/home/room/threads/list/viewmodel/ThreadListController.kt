@@ -52,6 +52,7 @@ class ThreadListController @Inject constructor(
                         matrixItem(timelineEvent.senderInfo.toMatrixItem())
                         title(timelineEvent.senderInfo.displayName)
                         date(date)
+                        rootMessageDeleted(timelineEvent.root.isRedacted())
                         rootMessage(timelineEvent.root.getDecryptedTextSummary())
                         lastMessage(timelineEvent.root.threadDetails?.threadSummaryLatestTextMessage.orEmpty())
                         lastMessageCounter(timelineEvent.root.threadDetails?.numberOfThreads.toString())
