@@ -68,8 +68,7 @@ class DiscoverySettingsController @Inject constructor(
                 if (hasIdentityServer && !data.termsNotSigned) {
                     buildConsentSection(data)
                     buildEmailsSection(data.emailList)
-                    // Hidden in Tchap
-//                    buildMsisdnSection(data.phoneNumbersList)
+                    buildMsisdnSection(data.phoneNumbersList)
                 }
             }
         }
