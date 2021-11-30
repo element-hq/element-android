@@ -574,9 +574,7 @@ internal class OlmMachine(
                 val selfSigningKey = adapter.fromJson(identity.selfSigningKey)!!.toCryptoModel().apply {
                     trustLevel = DeviceTrustLevel(verified, verified)
                 }
-                val userSigningKey = adapter.fromJson(identity.userSigningKey)!!.toCryptoModel().apply {
-                    trustLevel = DeviceTrustLevel(verified, verified)
-                }
+                val userSigningKey = adapter.fromJson(identity.userSigningKey)!!.toCryptoModel()
 
                 OwnUserIdentity(
                         identity.userId,
