@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
+ * Copyright (c) 2021 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,16 +16,12 @@
 
 package im.vector.app.features.discovery
 
-import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.MavericksState
-import com.airbnb.mvrx.Uninitialized
+data class IdentityServerWithTerms(
+        val serverUrl: String,
+        val policies: List<IdentityServerPolicy>
+)
 
-data class DiscoverySettingsState(
-        val identityServer: Async<IdentityServerWithTerms?> = Uninitialized,
-        val emailList: Async<List<PidInfo>> = Uninitialized,
-        val phoneNumbersList: Async<List<PidInfo>> = Uninitialized,
-        // Can be true if terms are updated
-        val termsNotSigned: Boolean = false,
-        val userConsent: Boolean = false,
-        val isIdentityPolicyUrlsExpanded: Boolean = false
-) : MavericksState
+data class IdentityServerPolicy(
+        val name: String,
+        val url: String
+)
