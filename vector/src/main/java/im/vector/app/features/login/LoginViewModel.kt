@@ -115,7 +115,7 @@ class LoginViewModel @AssistedInject constructor(
 
     override fun handle(action: LoginAction) {
         when (action) {
-            is LoginAction.OnGetStarted               -> handleOnGetStarted(action)
+            is LoginAction.OnSplashResult             -> handleSplashResult(action)
             is LoginAction.UpdateServerType           -> handleUpdateServerType(action)
             is LoginAction.UpdateSignMode             -> handleUpdateSignMode(action)
             is LoginAction.InitWith                   -> handleInitWith(action)
@@ -134,10 +134,12 @@ class LoginViewModel @AssistedInject constructor(
         }.exhaustive
     }
 
-    private fun handleOnGetStarted(action: LoginAction.OnGetStarted) {
+    private fun handleSplashResult(action: LoginAction.OnSplashResult) {
         if (action.resetLoginConfig) {
             loginConfig = null
         }
+
+        setState { copy(onboardingEntry = action.entry) }
 
         val configUrl = loginConfig?.homeServerUrl?.takeIf { it.isNotEmpty() }
         if (configUrl != null) {
@@ -148,7 +150,7 @@ class LoginViewModel @AssistedInject constructor(
                 Timber.w("Url from config url was invalid: $configUrl")
                 _viewEvents.post(LoginViewEvents.OpenServerSelection)
             } else {
-                getLoginFlow(homeServerConnectionConfig, ServerType.Other)
+                getLoginFlow(homeServerConnectionConfig, serverTypeOverride = ServerType.Other)
             }
         } else {
             _viewEvents.post(LoginViewEvents.OpenServerSelection)
@@ -816,7 +818,15 @@ class LoginViewModel @AssistedInject constructor(
                 // Notify the UI
                 _viewEvents.post(LoginViewEvents.OutdatedHomeserver)
             }
-            _viewEvents.post(LoginViewEvents.OnLoginFlowRetrieved)
+
+            withState {
+                val signMode = when (it.onboardingEntry) {
+                    OnboardingEntry.Splash -> error("Developer error, unexpected onboarding entry")
+                    OnboardingEntry.SignUp -> SignMode.SignUp
+                    OnboardingEntry.SignIn -> SignMode.SignIn
+                }
+                handleUpdateSignMode(LoginAction.UpdateSignMode(signMode))
+            }
         }
     }
 

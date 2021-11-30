@@ -147,10 +147,6 @@ open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), ToolbarCo
                         })
             is LoginViewEvents.OnServerSelectionDone                      -> onServerSelectionDone(loginViewEvents)
             is LoginViewEvents.OnSignModeSelected                         -> onSignModeSelected(loginViewEvents)
-            is LoginViewEvents.OnLoginFlowRetrieved                       ->
-                addFragmentToBackstack(R.id.loginFragmentContainer,
-                        LoginSignUpSignInSelectionFragment::class.java,
-                        option = commonOption)
             is LoginViewEvents.OnWebLoginError                            -> onWebLoginError(loginViewEvents)
             is LoginViewEvents.OnForgetPasswordClicked                    ->
                 addFragmentToBackstack(R.id.loginFragmentContainer,

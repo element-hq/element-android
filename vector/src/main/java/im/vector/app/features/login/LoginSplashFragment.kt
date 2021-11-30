@@ -22,6 +22,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.BuildConfig
 import im.vector.app.R
@@ -50,6 +51,7 @@ class LoginSplashFragment @Inject constructor(
 
     private fun setupViews() {
         views.loginSplashSubmit.debouncedClicks { getStarted() }
+        views.loginSplashAlreadyHaveAccount.debouncedClicks { alreadyHaveAnAccount() }
 
         if (BuildConfig.DEBUG || vectorPreferences.developerMode()) {
             views.loginSplashVersion.isVisible = true
@@ -61,7 +63,11 @@ class LoginSplashFragment @Inject constructor(
     }
 
     private fun getStarted() {
-        loginViewModel.handle(LoginAction.OnGetStarted(resetLoginConfig = false))
+        loginViewModel.handle(LoginAction.OnSplashResult(resetLoginConfig = false, entry = OnboardingEntry.SignUp))
+    }
+
+    private fun alreadyHaveAnAccount() {
+        loginViewModel.handle(LoginAction.OnSplashResult(resetLoginConfig = false, entry = OnboardingEntry.SignIn))
     }
 
     override fun resetViewModel() {
@@ -77,7 +83,8 @@ class LoginSplashFragment @Inject constructor(
                     .setTitle(R.string.dialog_title_error)
                     .setMessage(getString(R.string.login_error_homeserver_from_url_not_found, url))
                     .setPositiveButton(R.string.login_error_homeserver_from_url_not_found_enter_manual) { _, _ ->
-                        loginViewModel.handle(LoginAction.OnGetStarted(resetLoginConfig = true))
+                        val entry = withState(loginViewModel) { it.onboardingEntry }
+                        loginViewModel.handle(LoginAction.OnSplashResult(resetLoginConfig = true, entry = entry))
                     }
                     .setNegativeButton(R.string.cancel, null)
                     .show()

@@ -32,6 +32,8 @@ data class LoginViewState(
 
         // User choices
         @PersistState
+        val onboardingEntry: OnboardingEntry = OnboardingEntry.Splash,
+        @PersistState
         val serverType: ServerType = ServerType.Unknown,
         @PersistState
         val signMode: SignMode = SignMode.Unknown,
