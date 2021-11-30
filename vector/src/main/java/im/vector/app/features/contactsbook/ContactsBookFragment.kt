@@ -26,6 +26,7 @@ import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
+import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.showIdentityServerConsentDialog
@@ -67,18 +68,25 @@ class ContactsBookFragment @Inject constructor(
         setupConsentView()
         setupOnlyBoundContactsView()
         setupCloseView()
+        contactsBookViewModel.observeViewEvents {
+            when (it) {
+                is ContactsBookViewEvents.Failure             -> showFailure(it.throwable)
+                is ContactsBookViewEvents.OnPoliciesRetrieved -> showConsentDialog(it)
+            }.exhaustive
+        }
     }
 
     private fun setupConsentView() {
         views.phoneBookSearchForMatrixContacts.setOnClickListener {
-            withState(contactsBookViewModel) { state ->
-                requireContext().showIdentityServerConsentDialog(
-                        state.identityServerUrl,
-                        /* TODO */ emptyList(),
-                        consentCallBack = { contactsBookViewModel.handle(ContactsBookAction.UserConsentGranted) }
-                )
-            }
+            contactsBookViewModel.handle(ContactsBookAction.UserConsentRequest)
         }
+    }
+
+    private fun showConsentDialog(event: ContactsBookViewEvents.OnPoliciesRetrieved) {
+        requireContext().showIdentityServerConsentDialog(
+                event.identityServerWithTerms,
+                consentCallBack = { contactsBookViewModel.handle(ContactsBookAction.UserConsentGranted) }
+        )
     }
 
     private fun setupOnlyBoundContactsView() {

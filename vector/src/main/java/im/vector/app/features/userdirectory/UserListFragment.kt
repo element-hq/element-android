@@ -102,6 +102,8 @@ class UserListFragment @Inject constructor(
                             extraTitle = getString(R.string.invite_friends_rich_title)
                     )
                 }
+                is UserListViewEvents.Failure               -> showFailure(it.throwable)
+                is UserListViewEvents.OnPoliciesRetrieved   -> showConsentDialog(it)
             }
         }
     }
@@ -230,13 +232,14 @@ class UserListFragment @Inject constructor(
     }
 
     override fun giveIdentityServerConsent() {
-        withState(viewModel) { state ->
-            requireContext().showIdentityServerConsentDialog(
-                    state.configuredIdentityServer,
-                    /* TODO */ emptyList(),
-                    consentCallBack = { viewModel.handle(UserListAction.UpdateUserConsent(true)) }
-            )
-        }
+        viewModel.handle(UserListAction.UserConsentRequest)
+    }
+
+    private fun showConsentDialog(event: UserListViewEvents.OnPoliciesRetrieved) {
+        requireContext().showIdentityServerConsentDialog(
+                event.identityServerWithTerms,
+                consentCallBack = { viewModel.handle(UserListAction.UpdateUserConsent(true)) }
+        )
     }
 
     override fun onUseQRCode() {

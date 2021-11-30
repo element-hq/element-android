@@ -23,7 +23,7 @@ import android.webkit.WebViewClient
 import android.widget.TextView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
-import im.vector.app.features.discovery.IdentityServerPolicy
+import im.vector.app.features.discovery.IdentityServerWithTerms
 import me.gujun.android.span.link
 import me.gujun.android.span.span
 
@@ -45,19 +45,18 @@ fun Context.displayInWebView(url: String) {
             .show()
 }
 
-fun Context.showIdentityServerConsentDialog(configuredIdentityServer: String?,
-                                            policies: List<IdentityServerPolicy>?,
+fun Context.showIdentityServerConsentDialog(identityServerWithTerms: IdentityServerWithTerms?,
                                             consentCallBack: (() -> Unit)) {
     // Build the message
     val content = span {
         +getString(R.string.identity_server_consent_dialog_content_3)
         +"\n\n"
-        if (!policies.isNullOrEmpty()) {
+        if (identityServerWithTerms?.policies?.isNullOrEmpty() == false) {
             span {
                 textStyle = "bold"
                 text = getString(R.string.settings_privacy_policy)
             }
-            policies.forEach {
+            identityServerWithTerms.policies.forEach {
                 +"\n • "
                 // Use the url as the text too
                 link(it.url, it.url)
@@ -67,7 +66,7 @@ fun Context.showIdentityServerConsentDialog(configuredIdentityServer: String?,
         +getString(R.string.identity_server_consent_dialog_content_question)
     }
     MaterialAlertDialogBuilder(this)
-            .setTitle(getString(R.string.identity_server_consent_dialog_title_2, configuredIdentityServer.orEmpty()))
+            .setTitle(getString(R.string.identity_server_consent_dialog_title_2, identityServerWithTerms?.serverUrl.orEmpty()))
             .setMessage(content)
             .setPositiveButton(R.string.reactions_agree) { _, _ ->
                 consentCallBack.invoke()
