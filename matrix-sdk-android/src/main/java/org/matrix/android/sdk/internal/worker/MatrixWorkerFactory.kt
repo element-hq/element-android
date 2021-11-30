@@ -52,9 +52,9 @@ internal class MatrixWorkerFactory @Inject constructor(private val sessionManage
     ): ListenableWorker? {
         Timber.d("MatrixWorkerFactory.createWorker for $workerClassName")
         return when (workerClassName) {
-            CheckFactoryWorker::class.java.name ->
+            CheckFactoryWorker::class.java.name                   ->
                 CheckFactoryWorker(appContext, workerParameters, true)
-            AddPusherWorker::class.java.name    ->
+            AddPusherWorker::class.java.name                      ->
                 AddPusherWorker(appContext, workerParameters, sessionManager)
             CancelGossipRequestWorker::class.java.name            ->
                 CancelGossipRequestWorker(appContext, workerParameters, sessionManager)
@@ -90,10 +90,15 @@ internal class MatrixWorkerFactory @Inject constructor(private val sessionManage
      * This worker is launched by the factory with the isCreatedByMatrixWorkerFactory flag to true.
      * If the MatrixWorkerFactory is not set up, it will default to the other constructor and it will throw
      */
-    class CheckFactoryWorker(context: Context, workerParameters: WorkerParameters, private val isCreatedByMatrixWorkerFactory: Boolean) : CoroutineWorker(context, workerParameters) {
+    class CheckFactoryWorker(context: Context,
+                             workerParameters: WorkerParameters,
+                             private val isCreatedByMatrixWorkerFactory: Boolean) :
+        CoroutineWorker(context, workerParameters) {
 
         // Called by WorkManager if there is no MatrixWorkerFactory
-        constructor(context: Context, workerParameters: WorkerParameters) : this(context, workerParameters, isCreatedByMatrixWorkerFactory = false)
+        constructor(context: Context, workerParameters: WorkerParameters) : this(context,
+                workerParameters,
+                isCreatedByMatrixWorkerFactory = false)
 
         override suspend fun doWork(): Result {
             return if (!isCreatedByMatrixWorkerFactory) {

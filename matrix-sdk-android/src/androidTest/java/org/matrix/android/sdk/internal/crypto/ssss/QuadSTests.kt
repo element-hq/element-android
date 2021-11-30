@@ -263,7 +263,6 @@ class QuadSTests : InstrumentedTest {
         testHelper.signOutAndClose(aliceSession)
     }
 
-    @Suppress("EXPERIMENTAL_API_USAGE")
     private fun assertAccountData(session: Session, type: String): UserAccountDataEvent {
         var accountData: UserAccountDataEvent? = null
         testHelper.waitWithLatch {

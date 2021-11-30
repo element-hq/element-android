@@ -24,7 +24,6 @@ import org.matrix.android.sdk.internal.di.MatrixScope
 import org.matrix.android.sdk.internal.session.MockHttpInterceptor
 import org.matrix.android.sdk.internal.session.TestInterceptor
 import org.matrix.android.sdk.internal.util.BackgroundDetectionObserver
-import org.matrix.android.sdk.internal.util.TestBackgroundDetectionObserver
 
 @Module
 internal abstract class TestModule {

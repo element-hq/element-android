@@ -359,7 +359,6 @@ class CommonTestHelper(context: Context) {
         assertTrue(latch.await(timeout ?: TestConstants.timeOutMillis, TimeUnit.MILLISECONDS))
     }
 
-    @Suppress("EXPERIMENTAL_API_USAGE")
     suspend fun retryPeriodicallyWithLatch(latch: CountDownLatch, condition: (() -> Boolean)) {
         while (true) {
             delay(1000)

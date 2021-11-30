@@ -59,15 +59,3 @@ internal class DefaultBackgroundDetectionObserver : BackgroundDetectionObserver 
         listeners.forEach { it.onMoveToBackground() }
     }
 }
-
-/**
- * Force foreground for testing
- */
-internal class TestBackgroundDetectionObserver : BackgroundDetectionObserver {
-
-    override val isInBackground: Boolean = false
-
-    override fun register(listener: BackgroundDetectionObserver.Listener) = Unit
-
-    override fun unregister(listener: BackgroundDetectionObserver.Listener) = Unit
-}

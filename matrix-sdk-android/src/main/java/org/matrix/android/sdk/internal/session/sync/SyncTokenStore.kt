@@ -34,9 +34,7 @@ internal class SyncTokenStore @Inject constructor(@SessionDatabase private val m
     }
 
     fun saveToken(realm: Realm, token: String?) {
-        if (realm.isInTransaction) {
-            val sync = SyncEntity(token)
-            realm.insertOrUpdate(sync)
-        }
+        val sync = SyncEntity(token)
+        realm.insertOrUpdate(sync)
     }
 }

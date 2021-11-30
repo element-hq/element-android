@@ -88,7 +88,6 @@ class CryptoTestHelper(private val testHelper: CommonTestHelper) {
     /**
      * @return alice and bob sessions
      */
-    @Suppress("EXPERIMENTAL_API_USAGE")
     fun doE2ETestWithAliceAndBobInARoom(encryptedRoom: Boolean = true): CryptoTestData {
         val cryptoTestData = doE2ETestWithAliceInARoom(encryptedRoom)
         val aliceSession = cryptoTestData.firstSession

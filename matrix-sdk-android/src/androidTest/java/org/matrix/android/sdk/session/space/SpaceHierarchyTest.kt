@@ -53,7 +53,6 @@ class SpaceHierarchyTest : InstrumentedTest {
     private val commonTestHelper = CommonTestHelper(context())
 
     @Test
-    @Suppress("EXPERIMENTAL_API_USAGE")
     fun createCanonicalChildRelation() {
         val session = commonTestHelper.createAccount("John", SessionTestParams(true))
         val spaceName = "My Space"
@@ -170,7 +169,6 @@ class SpaceHierarchyTest : InstrumentedTest {
 //    }
 
     @Test
-    @Suppress("EXPERIMENTAL_API_USAGE")
     fun testFilteringBySpace() {
         val session = commonTestHelper.createAccount("John", SessionTestParams(true))
 
@@ -246,7 +244,6 @@ class SpaceHierarchyTest : InstrumentedTest {
     }
 
     @Test
-    @Suppress("EXPERIMENTAL_API_USAGE")
     fun testBreakCycle() {
         val session = commonTestHelper.createAccount("John", SessionTestParams(true))
 
@@ -290,7 +287,6 @@ class SpaceHierarchyTest : InstrumentedTest {
     }
 
     @Test
-    @Suppress("EXPERIMENTAL_API_USAGE")
     fun testLiveFlatChildren() {
         val session = commonTestHelper.createAccount("John", SessionTestParams(true))
 
