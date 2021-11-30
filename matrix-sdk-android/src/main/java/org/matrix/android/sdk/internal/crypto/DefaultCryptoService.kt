@@ -90,6 +90,7 @@ import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
 import kotlin.math.max
+import kotlin.system.measureTimeMillis
 
 /**
  * A `CryptoService` class instance manages the end-to-end crypto for a session.
@@ -542,7 +543,11 @@ internal class DefaultCryptoService @Inject constructor(
                 val t0 = System.currentTimeMillis()
                 Timber.tag(loggerTag.value).v("encryptEventContent() starts")
                 runCatching {
-                    preshareRoomKey(roomId, userIds)
+                    measureTimeMillis {
+                        preshareRoomKey(roomId, userIds)
+                    }.also {
+                        Timber.d("Shared room key in room $roomId took $it ms")
+                    }
                     val content = encrypt(roomId, eventType, eventContent)
                     Timber.tag(loggerTag.value).v("## CRYPTO | encryptEventContent() : succeeds after ${System.currentTimeMillis() - t0} ms")
                     MXEncryptEventContentResult(content, EventType.ENCRYPTED)
