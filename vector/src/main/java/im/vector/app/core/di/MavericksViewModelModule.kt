@@ -41,7 +41,8 @@ import im.vector.app.features.home.PromoteRestrictedViewModel
 import im.vector.app.features.home.UnknownDeviceDetectorSharedViewModel
 import im.vector.app.features.home.UnreadMessagesSharedViewModel
 import im.vector.app.features.home.room.breadcrumbs.BreadcrumbsViewModel
-import im.vector.app.features.home.room.detail.composer.TextComposerViewModel
+import im.vector.app.features.home.room.detail.RoomDetailViewModel
+import im.vector.app.features.home.room.detail.composer.MessageComposerViewModel
 import im.vector.app.features.home.room.detail.search.SearchViewModel
 import im.vector.app.features.home.room.detail.timeline.action.MessageActionsViewModel
 import im.vector.app.features.home.room.detail.timeline.edithistory.ViewEditHistoryViewModel
@@ -505,8 +506,13 @@ interface MavericksViewModelModule {
 
     @Binds
     @IntoMap
-    @MavericksViewModelKey(TextComposerViewModel::class)
-    fun textComposerViewModelFactory(factory: TextComposerViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+    @MavericksViewModelKey(RoomDetailViewModel::class)
+    fun roomDetailViewModelFactory(factory: RoomDetailViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(MessageComposerViewModel::class)
+    fun messageComposerViewModelFactory(factory: MessageComposerViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
 
     @Binds
     @IntoMap

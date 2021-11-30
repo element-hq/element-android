@@ -354,11 +354,12 @@
     <string name="initial_sync_start_importing_account_invited_rooms">Sincronizare inițială:
 \nSe importă camerele la care a-ți primit invitații</string>
     <string name="initial_sync_start_importing_account_joined_rooms">Sincronizare inițială:
-\nSe importă camerele la care v-ați alăturat</string>
+\nSe încarcă conversațiile tale
+\nDacă te-ai alăturat mai multe camere, ar putea dura puțin mai mult</string>
     <string name="initial_sync_start_importing_account_rooms">Sincronizare inițială:
 \nSe importa camerele</string>
     <string name="initial_sync_start_importing_account_crypto">Sincronizare inițială:
-\nSe importă crypto</string>
+\nSe importă datele criptografice</string>
     <string name="initial_sync_start_importing_account">Sincronizare inițială:
 \nSe importă contul…</string>
     <string name="initial_sync_start_downloading">Sincronizare inițială:
@@ -393,4 +394,111 @@
     <string name="notice_room_server_acl_updated_ip_literals_allowed">Acum sunt permise serverele ce au adrese IP ce se potrivesc.</string>
     <string name="notice_room_server_acl_set_ip_literals_not_allowed">Sunt blocate serverele ce au adrese IP ce se potrivesc.</string>
     <string name="notice_room_server_acl_set_ip_literals_allowed">Sunt permise serverele ce au adrese IP ce se potrivesc.</string>
+    <string name="sign_out_bottom_sheet_backing_up_keys">Se creează o copie a cheilor criptografice.…</string>
+    <string name="sign_out_bottom_sheet_warning_no_backup">Dacă vă deconectați acum, veți pierde mesajele criptate</string>
+    <string name="keys_backup_is_not_finished_please_wait">Copierea cheilor nu sa încheiat, vă rugăm așteptați…</string>
+    <string name="title_activity_keys_backup_restore">Folosește cheia de rezervă</string>
+    <string name="title_activity_keys_backup_setup">Copia cheii de criptare</string>
+    <string name="title_activity_group_details">Detalii despre comunitate</string>
+    <string name="title_activity_bug_report">Raport de erori</string>
+    <string name="title_activity_historical">Istoricul activitățiilor</string>
+    <string name="title_activity_member_details">Detalii despre membri</string>
+    <string name="backup">Backup</string>
+    <string name="are_you_sure">Ești sigur \?</string>
+    <string name="keys_backup_activate">Folosește backup-ul cheii de criptare</string>
+    <string name="sign_out_bottom_sheet_warning_backup_not_active">Backup-ul cheii de criptare ar trebui să fie activ pe toate dispozitivele tale, pentru a evita pierderea mesajelor tale criptate.</string>
+    <string name="sign_out_bottom_sheet_warning_backing_up">Se creează backup-ul cheii de criptare. Daca te deconectezi de la aplicație acum vei pierde accesul la mesajele tale criptate.</string>
+    <string name="notification_listening_for_notifications">Se ascultă notificările</string>
+    <string name="system_theme">Setările implicite ale sistemului</string>
+    <string name="notice_end_to_end_unknown_algorithm_by_you">Tu ai pornit criptarea end-to-end (algoritm nerecunoscut %1$s).</string>
+    <string name="notice_end_to_end_unknown_algorithm">%1$s a pornit criptarea end-to-end (algoritm nerecunoscut %2$s).</string>
+    <string name="notice_end_to_end_ok_by_you">Tu ai pornit criptarea end-to-end.</string>
+    <string name="notice_end_to_end_ok">%1$s a pornit criptarea end-to-end.</string>
+    <string name="notice_direct_room_guest_access_forbidden_by_you">Tu ai împiedicat invitați din a se alătura acestei camere.</string>
+    <string name="notice_direct_room_guest_access_forbidden">%1$s a împiedicat invitații din a se alătura acestei camere.</string>
+    <string name="notice_room_guest_access_forbidden_by_you">Tu ai împiedicat invitați să se alăture acestei camere.</string>
+    <string name="notice_room_guest_access_forbidden">%1$s a împiedicat invitații din a se alătura acestei camere.</string>
+    <string name="notice_direct_room_guest_access_can_join_by_you">Tu ai permis invitațiilor să se alăture aici.</string>
+    <string name="notice_direct_room_guest_access_can_join">%1$s a permis invitațiilor să se alăture aici.</string>
+    <string name="notice_room_guest_access_can_join_by_you">Ai permis invitaților să se alăture acestei camere.</string>
+    <string name="notice_room_guest_access_can_join">%1$s a permis invitațiilor să se alăture acestei camere.</string>
+    <string name="notice_room_canonical_alias_no_change_by_you">Ai schimbat adresele pentru această cameră.</string>
+    <string name="notice_room_canonical_alias_no_change">%1$s a schimbat adresele pentru aceasta cameră.</string>
+    <string name="notice_room_canonical_alias_main_and_alternative_changed_by_you">Ai schimbat adresele principală și alternativă pentru această cameră.</string>
+    <string name="notice_room_canonical_alias_main_and_alternative_changed">%1$s a schimbat adresele principală și secundară pentru această cameră.</string>
+    <string name="notice_room_canonical_alias_alternative_changed_by_you">Ai schimbat adresele alternative pentru această cameră.</string>
+    <string name="notice_room_canonical_alias_alternative_changed">%1$s a modificat adresele alternative pentru această cameră.</string>
+    <plurals name="notice_room_canonical_alias_alternative_removed_by_you">
+        <item quantity="one">Ai șters adresa alternativă %1$s pentru aceasta cameră.</item>
+        <item quantity="few">Ai șters adresele alternative %1$s pentru aceste camere.</item>
+        <item quantity="other">Ai șters adresele alternative %1$s pentru aceste camere.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_removed">
+        <item quantity="one">%1$s a șters adresa alternativă %2$s pentru această cameră.</item>
+        <item quantity="few">%1$s a șters adresele alternative %2$s pentru această cameră.</item>
+        <item quantity="other">%1$s a șters adresele alternative %2$s pentru această cameră.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_added_by_you">
+        <item quantity="one">Ai adăugat adresa alternativă %1$spentru această cameră.</item>
+        <item quantity="few">Ai adăugat adresele alternative %1$s pentru această cameră.</item>
+        <item quantity="other">Ai adăugat adresele alternative %1$s pentru această cameră.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_added">
+        <item quantity="one">%1$s a adăugat adresa alternativă %2$s pentru aceasta cameră.</item>
+        <item quantity="few">%1$s a adăugat adresele alternative %2$s pentru această cameră.</item>
+        <item quantity="other">%1$s a adăugat adresele alternative %2$s pentru această cameră.</item>
+    </plurals>
+    <string name="notice_room_canonical_alias_unset_by_you">Ai șters adresa principală pentru această cameră.</string>
+    <string name="notice_room_canonical_alias_unset">%1$s a șters adresa principală pentru această cameră.</string>
+    <string name="notice_room_canonical_alias_set_by_you">Ai setat adresa principală pentru această cameră ca fiind %1$s.</string>
+    <string name="notice_room_canonical_alias_set">%1$s a setat adresa principală pentru această adresa ca fiind %2$s.</string>
+    <string name="notice_room_aliases_added_and_removed_by_you">Ai adăugat %1$s și îndepărtat %2$s ca adrese pentru această cameră.</string>
+    <string name="notice_room_aliases_added_and_removed">%1$s a adăugat %2$s și îndepărtat %3$s ca adrese pentru această cameră.</string>
+    <plurals name="notice_room_aliases_removed_by_you">
+        <item quantity="one">Ai îndepărtat %1$s ca adresă pentru această adresă.</item>
+        <item quantity="few">Ai îndepărtat %1$s ca adrese pentru această adresă.</item>
+        <item quantity="other">Ai îndepărtat %1$s ca adrese pentru această adresă.</item>
+    </plurals>
+    <plurals name="notice_room_aliases_removed">
+        <item quantity="one">%1$s a retras %2$s ca o adresă pentru această cameră.</item>
+        <item quantity="few">%1$s a retras %2$s ca adrese pentru această cameră.</item>
+        <item quantity="other">%1$s a retras %2$s ca adrese pentru această cameră.</item>
+    </plurals>
+    <plurals name="notice_room_aliases_added_by_you">
+        <item quantity="one">Ai adăugat %1$s ca o adresă pentru această cameră.</item>
+        <item quantity="few">Ai adăugat %1$s ca adrese pentru această cameră.</item>
+        <item quantity="other">Ai adăugat %1$s ca adrese pentru această cameră.</item>
+    </plurals>
+    <plurals name="notice_room_aliases_added">
+        <item quantity="one">%1$s a adăugat pe %2$s ca o adresă pentru această cameră.</item>
+        <item quantity="few">%1$s a adăugat pe %2$s ca adrese pentru această cameră.</item>
+        <item quantity="other">%1$s a adăugat pe %2$s ca adrese pentru această cameră.</item>
+    </plurals>
+    <string name="notice_room_withdraw_with_reason_by_you">Ți-ai retras invitația către %1$s. Motivul: %2$s</string>
+    <string name="notice_room_withdraw_with_reason">%1$s și-a retras invitația către %2$s. Motivul: %3$s</string>
+    <string name="notice_room_kick_with_reason">%1$s la evacuat pe %2$s. Motivul: %3$s</string>
+    <string name="notice_room_invite_with_reason_by_you">Tu ai invitat %1$s. Motivul: %2$s</string>
+    <string name="notice_room_third_party_registered_invite_with_reason_by_you">Ai acceptat invitaţia pentru %1$s. Motivul: %2$s</string>
+    <string name="notice_room_third_party_registered_invite_with_reason">%1$s a acceptat invitaţia pentru %2$s. Motivul: %3$s</string>
+    <string name="notice_room_third_party_revoked_invite_with_reason_by_you">Ai retras invitaţia către %1$s de alăturare acestei camere. Motivul: %2$s</string>
+    <string name="notice_room_third_party_revoked_invite_with_reason">%1$s a retras invitaţia către %2$s de alăturare acestei camere. Motivul: %3$s</string>
+    <string name="notice_room_third_party_invite_with_reason_by_you">Tu ai trimis o invitaţie către %1$s pentru a se al\\ătura camerei. Motivul: %2$s</string>
+    <string name="notice_room_third_party_invite_with_reason">%1$s a trimis o invitaţie către %2$s pentru a se alătura camerei. Motivul: %3$s</string>
+    <string name="notice_room_ban_with_reason_by_you">Ai blocat utilizatorul %1$s. Motivul: %2$s</string>
+    <string name="notice_room_ban_with_reason">%1$s a blocat utilizatorul %2$s. Motivul: %3$s</string>
+    <string name="notice_room_unban_with_reason_by_you">Ai deblocat utilizatorul %1$s. Motivul: %2$s</string>
+    <string name="notice_room_unban_with_reason">%1$s a blocat pe %2$s. Motivul: %3$s</string>
+    <string name="notice_room_kick_with_reason_by_you">Ai dat afară utilizatorul %1$s. Motivul: %2$s</string>
+    <string name="notice_room_reject_with_reason_by_you">Ai respins invitaţia. Motivul: %1$s</string>
+    <string name="notice_room_reject_with_reason">%1$s a respins invitaţia. Motivul: %2$s</string>
+    <string name="notice_direct_room_leave_with_reason_by_you">Ai ieşit. Motivul: %1$s</string>
+    <string name="notice_direct_room_leave_with_reason">%1$s a părăsit camera. Motivul: %2$s</string>
+    <string name="notice_room_leave_with_reason_by_you">Ai părăsit camera. Motivul: %1$s</string>
+    <string name="notice_room_leave_with_reason">%1$s a părăsit camera. Motivul: %2$s</string>
+    <string name="notice_direct_room_join_with_reason_by_you">Tu te-ai alăturat. Motivul: %1$s</string>
+    <string name="notice_direct_room_join_with_reason">%1$s s-a alăturat. Motivul: %2$s</string>
+    <string name="notice_room_join_with_reason_by_you">Tu te-ai alăturat camerei. Motivul: %1$s</string>
+    <string name="notice_room_join_with_reason">%1$s s-a alăturat camerei. Motivul: %2$s</string>
+    <string name="notice_room_invite_you_with_reason">%1$s te-a invitat. Motivul: %2$s</string>
+    <string name="notice_room_invite_with_reason">%1$s la invitat pe %2$s. Motivul este: %3$s</string>
 </resources>

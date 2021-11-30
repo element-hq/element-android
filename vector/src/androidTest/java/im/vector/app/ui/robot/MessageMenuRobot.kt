@@ -17,9 +17,13 @@
 package im.vector.app.ui.robot
 
 import androidx.test.espresso.Espresso.pressBack
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import im.vector.app.R
+import im.vector.app.features.home.room.detail.timeline.edithistory.ViewEditHistoryBottomSheet
+import im.vector.app.interactWithSheet
 import java.lang.Thread.sleep
 
 class MessageMenuRobot(
@@ -36,7 +40,9 @@ class MessageMenuRobot(
 
     fun editHistory() {
         clickOn(R.string.message_view_edit_history)
-        pressBack()
+        interactWithSheet<ViewEditHistoryBottomSheet>(withText(R.string.message_edits), openState = BottomSheetBehavior.STATE_COLLAPSED) {
+            pressBack()
+        }
         autoClosed = true
     }
 

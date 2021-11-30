@@ -67,13 +67,14 @@
     <string name="initial_sync_start_importing_account_rooms">初始化同步：
 \n正在导入聊天室</string>
     <string name="initial_sync_start_importing_account_joined_rooms">初始化同步：
-\n正在导入已加入的聊天室</string>
+\n正在加载对话
+\n如果你加入了很多论聊天室，这可能需要一段时间</string>
     <string name="initial_sync_start_importing_account_invited_rooms">初始化同步：
 \n正在导入已邀请的聊天室</string>
     <string name="initial_sync_start_importing_account_left_rooms">初始化同步：
 \n正在导入已离开的聊天室</string>
     <string name="initial_sync_start_importing_account_groups">初始化同步：
-\n正在导入社群</string>
+\n正在导入社区</string>
     <string name="initial_sync_start_importing_account_data">初始化同步：
 \n正在导入账号数据</string>
     <string name="notice_room_update">%s 升级了此聊天室。</string>
@@ -2959,4 +2960,7 @@
     <string name="a11y_presence_unavailable">不可用</string>
     <string name="a11y_presence_offline">离线</string>
     <string name="a11y_presence_online">在线</string>
+    <string name="login_error_homeserver_from_url_not_found_enter_manual">选择主服务器</string>
+    <string name="login_error_homeserver_from_url_not_found">无法访问 URL %s 上的主服务器。请检查您的链接或手动选择一个主服务器。</string>
+    <string name="notification_listening_for_notifications">侦听通知</string>
 </resources>

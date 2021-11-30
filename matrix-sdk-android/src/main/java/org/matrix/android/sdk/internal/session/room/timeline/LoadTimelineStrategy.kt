@@ -30,6 +30,7 @@ import org.matrix.android.sdk.internal.database.model.ChunkEntity
 import org.matrix.android.sdk.internal.database.model.ChunkEntityFields
 import org.matrix.android.sdk.internal.database.query.findAllIncludingEvents
 import org.matrix.android.sdk.internal.database.query.where
+import org.matrix.android.sdk.internal.session.sync.handler.room.ThreadsAwarenessHandler
 import java.util.concurrent.atomic.AtomicReference
 
 /**
@@ -68,6 +69,7 @@ internal class LoadTimelineStrategy(
             val getContextOfEventTask: GetContextOfEventTask,
             val timelineInput: TimelineInput,
             val timelineEventMapper: TimelineEventMapper,
+            val threadsAwarenessHandler: ThreadsAwarenessHandler,
             val onEventsUpdated: () -> Unit,
             val onNewTimelineEvents: (List<String>) -> Unit
     )
@@ -210,6 +212,7 @@ internal class LoadTimelineStrategy(
                     fetchTokenAndPaginateTask = dependencies.fetchTokenAndPaginateTask,
                     timelineEventMapper = dependencies.timelineEventMapper,
                     uiEchoManager = uiEchoManager,
+                    threadsAwarenessHandler = dependencies.threadsAwarenessHandler,
                     initialEventId = mode.originEventId(),
                     onBuiltEvents = dependencies.onEventsUpdated
             )

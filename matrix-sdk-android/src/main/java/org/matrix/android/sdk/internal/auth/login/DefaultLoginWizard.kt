@@ -33,6 +33,7 @@ import org.matrix.android.sdk.internal.auth.registration.AddThreePidRegistration
 import org.matrix.android.sdk.internal.auth.registration.RegisterAddThreePidTask
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.content.DefaultContentUrlResolver
+import org.matrix.android.sdk.internal.session.contentscanner.DisabledContentScannerService
 
 internal class DefaultLoginWizard(
         private val authAPI: AuthAPI,
@@ -44,7 +45,7 @@ internal class DefaultLoginWizard(
 
     private val getProfileTask: GetProfileTask = DefaultGetProfileTask(
             authAPI,
-            DefaultContentUrlResolver(pendingSessionData.homeServerConnectionConfig)
+            DefaultContentUrlResolver(pendingSessionData.homeServerConnectionConfig, DisabledContentScannerService())
     )
 
     override suspend fun getProfileInfo(matrixId: String): LoginProfileInfo {

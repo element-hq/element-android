@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.session.room.timeline
 
 import io.realm.Realm
 import io.realm.RealmConfiguration
+import io.realm.RealmResults
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -25,14 +26,17 @@ import kotlinx.coroutines.android.asCoroutineDispatcher
 import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import okhttp3.internal.closeQuietly
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
+import org.matrix.android.sdk.internal.database.mapper.EventMapper
 import org.matrix.android.sdk.internal.database.mapper.TimelineEventMapper
 import org.matrix.android.sdk.internal.session.room.membership.LoadRoomMembersTask
 import org.matrix.android.sdk.internal.session.sync.handler.room.ReadReceiptHandler
+import org.matrix.android.sdk.internal.session.sync.handler.room.ThreadsAwarenessHandler
 import org.matrix.android.sdk.internal.task.SemaphoreCoroutineSequencer
 import org.matrix.android.sdk.internal.util.createBackgroundHandler
 import timber.log.Timber
@@ -52,6 +56,7 @@ internal class DefaultTimeline internal constructor(private val roomId: String,
                                                     fetchTokenAndPaginateTask: FetchTokenAndPaginateTask,
                                                     timelineEventMapper: TimelineEventMapper,
                                                     timelineInput: TimelineInput,
+                                                    private val threadsAwarenessHandler: ThreadsAwarenessHandler,
                                                     eventDecryptor: TimelineEventDecryptor) : Timeline {
 
     companion object {
@@ -79,6 +84,7 @@ internal class DefaultTimeline internal constructor(private val roomId: String,
             timelineEventMapper = timelineEventMapper,
             realm = backgroundRealm,
             getContextOfEventTask = getEventTask,
+            threadsAwarenessHandler = threadsAwarenessHandler,
             onEventsUpdated = this::postSnapshot,
             onNewTimelineEvents = this::onNewTimelineEvents
     )

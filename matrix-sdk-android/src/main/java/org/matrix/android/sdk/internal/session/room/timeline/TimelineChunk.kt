@@ -22,16 +22,19 @@ import io.realm.RealmObjectChangeListener
 import io.realm.RealmQuery
 import io.realm.RealmResults
 import io.realm.Sort
+import kotlinx.coroutines.runBlocking
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
+import org.matrix.android.sdk.internal.database.mapper.EventMapper
 import org.matrix.android.sdk.internal.database.mapper.TimelineEventMapper
 import org.matrix.android.sdk.internal.database.model.ChunkEntity
 import org.matrix.android.sdk.internal.database.model.ChunkEntityFields
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntityFields
+import org.matrix.android.sdk.internal.session.sync.handler.room.ThreadsAwarenessHandler
 import timber.log.Timber
 import java.util.Collections
 import java.util.concurrent.atomic.AtomicBoolean
@@ -55,6 +58,7 @@ internal class TimelineChunk constructor(private val chunkEntity: ChunkEntity,
                                          private val fetchTokenAndPaginateTask: FetchTokenAndPaginateTask,
                                          private val timelineEventMapper: TimelineEventMapper,
                                          private val uiEchoManager: UIEchoManager? = null,
+                                         private val threadsAwarenessHandler: ThreadsAwarenessHandler,
                                          private val initialEventId: String?,
                                          private val onBuiltEvents: () -> Unit) {
 
@@ -223,11 +227,12 @@ internal class TimelineChunk constructor(private val chunkEntity: ChunkEntity,
         timelineEventEntities.removeChangeListener(timelineEventCollectionListener)
     }
 
-    private fun loadFromDb(count: Long, direction: Timeline.Direction): Long {
+    private suspend fun loadFromDb(count: Long, direction: Timeline.Direction): Long {
         val displayIndex = getNextDisplayIndex(direction) ?: return 0
         val baseQuery = timelineEventEntities.where()
         val timelineEvents = baseQuery.offsets(direction, count, displayIndex).findAll().orEmpty()
         if (timelineEvents.isEmpty()) return 0
+        fetchRootThreadEventsIfNeeded(timelineEvents)
         if (direction == Timeline.Direction.FORWARDS) {
             builtEventsIndexes.entries.forEach { it.setValue(it.value + timelineEvents.size) }
         }
@@ -244,6 +249,21 @@ internal class TimelineChunk constructor(private val chunkEntity: ChunkEntity,
                 }
         return timelineEvents.size.toLong()
     }
+
+    /**
+     * This function is responsible to fetch and store the root event of a thread event
+     * in order to be able to display the event to the user appropriately
+     */
+    private suspend fun fetchRootThreadEventsIfNeeded(offsetResults: List<TimelineEventEntity>) {
+        val eventEntityList = offsetResults
+                .mapNotNull {
+                    it.root
+                }.map {
+                    EventMapper.map(it)
+                }
+        threadsAwarenessHandler.fetchRootThreadEventsIfNeeded(eventEntityList)
+    }
+
 
     private fun TimelineEventEntity.buildAndDecryptIfNeeded(): TimelineEvent {
         val timelineEvent = buildTimelineEvent(this)
@@ -275,6 +295,7 @@ internal class TimelineChunk constructor(private val chunkEntity: ChunkEntity,
                 fetchTokenAndPaginateTask = fetchTokenAndPaginateTask,
                 timelineEventMapper = timelineEventMapper,
                 uiEchoManager = uiEchoManager,
+                threadsAwarenessHandler = threadsAwarenessHandler,
                 initialEventId = null,
                 onBuiltEvents = onBuiltEvents
         )

@@ -279,6 +279,11 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                     Timber.e(failure, "## Failed to update file cache")
                 }
 
+                // Delete the temporary voice message file
+                if (params.attachment.type == ContentAttachmentData.Type.VOICE_MESSAGE) {
+                    context.contentResolver.delete(params.attachment.queryUri, null, null)
+                }
+
                 val uploadThumbnailResult = dealWithThumbnail(params)
 
                 handleSuccess(params,
@@ -298,11 +303,6 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
             // Delete all temporary files
             filesToDelete.forEach {
                 tryOrNull { it.delete() }
-            }
-
-            // Delete the temporary voice message file
-            if (params.attachment.type == ContentAttachmentData.Type.AUDIO && params.attachment.mimeType == MimeTypes.Ogg) {
-                context.contentResolver.delete(params.attachment.queryUri, null, null)
             }
         }
     }

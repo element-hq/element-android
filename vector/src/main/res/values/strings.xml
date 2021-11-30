@@ -2898,7 +2898,7 @@
 
     <string name="a11y_qr_code_for_verification">QR code</string>
 
-    <string name="qr_code_scanned_by_other_notice">Almost there! Is %s showing the same shield?</string>
+    <string name="qr_code_scanned_by_other_notice">Almost there! Is %s showing a tick?</string>
     <string name="qr_code_scanned_by_other_yes">Yes</string>
     <string name="qr_code_scanned_by_other_no">No</string>
 
@@ -3051,7 +3051,7 @@
     <string name="add_a_topic_link_text">Add a topic</string>
     <string name="topic_prefix">"Topic: "</string>
 
-    <string name="qr_code_scanned_self_verif_notice">Almost there! Is the other device showing the same shield?</string>
+    <string name="qr_code_scanned_self_verif_notice">Almost there! Is the other device showing a tick?</string>
     <string name="qr_code_scanned_verif_waiting_notice">Almost there! Waiting for confirmation…</string>
     <string name="qr_code_scanned_verif_waiting">Waiting for %s…</string>
 

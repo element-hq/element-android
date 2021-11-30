@@ -16,19 +16,44 @@
 
 package org.matrix.android.sdk.internal.session.content
 
-import org.matrix.android.sdk.api.MatrixUrls
 import org.matrix.android.sdk.api.MatrixUrls.isMxcUrl
+import org.matrix.android.sdk.api.MatrixUrls.removeMxcPrefix
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.session.content.ContentUrlResolver
+import org.matrix.android.sdk.api.session.contentscanner.ContentScannerService
+import org.matrix.android.sdk.internal.crypto.attachments.ElementToDecrypt
 import org.matrix.android.sdk.internal.network.NetworkConstants
+import org.matrix.android.sdk.internal.session.contentscanner.ScanEncryptorUtils
+import org.matrix.android.sdk.internal.session.contentscanner.model.toJson
 import org.matrix.android.sdk.internal.util.ensureTrailingSlash
 import javax.inject.Inject
 
-internal class DefaultContentUrlResolver @Inject constructor(homeServerConnectionConfig: HomeServerConnectionConfig) : ContentUrlResolver {
+internal class DefaultContentUrlResolver @Inject constructor(
+        homeServerConnectionConfig: HomeServerConnectionConfig,
+        private val scannerService: ContentScannerService
+) : ContentUrlResolver {
 
     private val baseUrl = homeServerConnectionConfig.homeServerUriBase.toString().ensureTrailingSlash()
 
     override val uploadUrl = baseUrl + NetworkConstants.URI_API_MEDIA_PREFIX_PATH_R0 + "upload"
+
+    override fun resolveForDownload(contentUrl: String?, elementToDecrypt: ElementToDecrypt?): ContentUrlResolver.ResolvedMethod? {
+        return if (scannerService.isScannerEnabled() && elementToDecrypt != null) {
+            val baseUrl = scannerService.getContentScannerServer()
+            val sep = if (baseUrl?.endsWith("/") == true) "" else "/"
+
+            val url = baseUrl + sep + NetworkConstants.URI_API_PREFIX_PATH_MEDIA_PROXY_UNSTABLE + "download_encrypted"
+
+            ContentUrlResolver.ResolvedMethod.POST(
+                    url = url,
+                    jsonBody = ScanEncryptorUtils
+                            .getDownloadBodyAndEncryptIfNeeded(scannerService.serverPublicKey, contentUrl ?: "", elementToDecrypt)
+                            .toJson()
+            )
+        } else {
+            resolveFullSize(contentUrl)?.let { ContentUrlResolver.ResolvedMethod.GET(it) }
+        }
+    }
 
     override fun resolveFullSize(contentUrl: String?): String? {
         return contentUrl
@@ -37,7 +62,7 @@ internal class DefaultContentUrlResolver @Inject constructor(homeServerConnectio
                 ?.let {
                     resolve(
                             contentUrl = it,
-                            prefix = NetworkConstants.URI_API_MEDIA_PREFIX_PATH_R0 + "download/"
+                            toThumbnail = false
                     )
                 }
     }
@@ -49,16 +74,27 @@ internal class DefaultContentUrlResolver @Inject constructor(homeServerConnectio
                 ?.let {
                     resolve(
                             contentUrl = it,
-                            prefix = NetworkConstants.URI_API_MEDIA_PREFIX_PATH_R0 + "thumbnail/",
+                            toThumbnail = true,
                             params = "?width=$width&height=$height&method=${method.value}"
                     )
                 }
     }
 
     private fun resolve(contentUrl: String,
-                        prefix: String,
-                        params: String = ""): String? {
-        var serverAndMediaId = contentUrl.removePrefix(MatrixUrls.MATRIX_CONTENT_URI_SCHEME)
+                        toThumbnail: Boolean,
+                        params: String = ""): String {
+        var serverAndMediaId = contentUrl.removeMxcPrefix()
+
+        val apiPath = if (scannerService.isScannerEnabled()) {
+            NetworkConstants.URI_API_PREFIX_PATH_MEDIA_PROXY_UNSTABLE
+        } else {
+            NetworkConstants.URI_API_MEDIA_PREFIX_PATH_R0
+        }
+        val prefix = if (toThumbnail) {
+            apiPath + "thumbnail/"
+        } else {
+            apiPath + "download/"
+        }
         val fragmentOffset = serverAndMediaId.indexOf("#")
         var fragment = ""
         if (fragmentOffset >= 0) {
@@ -66,6 +102,11 @@ internal class DefaultContentUrlResolver @Inject constructor(homeServerConnectio
             serverAndMediaId = serverAndMediaId.substring(0, fragmentOffset)
         }
 
-        return baseUrl + prefix + serverAndMediaId + params + fragment
+        val resolvedUrl = if (scannerService.isScannerEnabled()) {
+            scannerService.getContentScannerServer()!!.ensureTrailingSlash()
+        } else {
+            baseUrl
+        }
+        return resolvedUrl + prefix + serverAndMediaId + params + fragment
     }
 }

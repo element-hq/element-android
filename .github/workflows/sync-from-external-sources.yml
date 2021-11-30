@@ -7,6 +7,8 @@ on:
 jobs:
   sync-emojis:
     runs-on: ubuntu-latest
+    # Skip in forks
+    if: github.repository == 'vector-im/element-android'
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python 3.8
@@ -39,6 +41,8 @@ jobs:
 
   sync-sas-strings:
     runs-on: ubuntu-latest
+    # Skip in forks
+    if: github.repository == 'vector-im/element-android'
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python 3.8
