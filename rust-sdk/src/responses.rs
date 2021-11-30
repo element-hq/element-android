@@ -283,12 +283,12 @@ impl From<DeviceLists> for RumaDeviceLists {
             changed: d
                 .changed
                 .into_iter()
-                .filter_map(|u| UserId::try_from(u).ok())
+                .filter_map(|u| Box::<UserId>::try_from(u).ok())
                 .collect(),
             left: d
                 .left
                 .into_iter()
-                .filter_map(|u| UserId::try_from(u).ok())
+                .filter_map(|u| Box::<UserId>::try_from(u).ok())
                 .collect(),
         })
     }
