@@ -507,13 +507,6 @@ internal class RustKeyBackupService @Inject constructor(
                         async {
                             slice.mapNotNull { pair ->
                                 decryptKeyBackupData(pair.second.value, pair.second.key, pair.first, recoveryKey)
-                                        ?.takeIf { sessionData ->
-                                            sessionData.isValid().also {
-                                                if (!it) {
-                                                    Timber.w("restoreKeysWithRecoveryKey: malformed sessionData $sessionData")
-                                                }
-                                            }
-                                        }
                             }
                         }
                     }
