@@ -44,7 +44,7 @@ import javax.inject.Inject
 /**
  * This mimics the Matrix class but using TestMatrixComponent internally instead of regular MatrixComponent.
  */
-class TestMatrix constructor(context: Context, matrixConfiguration: MatrixConfiguration) {
+internal class TestMatrix constructor(context: Context, matrixConfiguration: MatrixConfiguration) {
 
     @Inject internal lateinit var legacySessionImporter: LegacySessionImporter
     @Inject internal lateinit var authenticationService: AuthenticationService

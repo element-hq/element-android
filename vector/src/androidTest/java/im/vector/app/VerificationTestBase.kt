@@ -25,8 +25,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeout
 import org.junit.Assert
+import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.MatrixCallback
-import org.matrix.android.sdk.api.TestMatrix
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.registration.RegistrationResult
 import org.matrix.android.sdk.api.session.Session
@@ -41,7 +41,7 @@ abstract class VerificationTestBase {
 
     protected val uiTestBase = OnboardingRobot()
 
-    fun createAccountAndSync(matrix: TestMatrix,
+    fun createAccountAndSync(matrix: Matrix,
                              userName: String,
                              password: String,
                              withInitialSync: Boolean): Session {
