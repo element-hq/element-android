@@ -31,6 +31,7 @@ import im.vector.app.features.command.CommandParser
 import im.vector.app.features.command.ParsedCommand
 import im.vector.app.features.home.room.detail.ChatEffect
 import im.vector.app.features.home.room.detail.composer.rainbow.RainbowGenerator
+import im.vector.app.features.home.room.detail.composer.voice.VoiceMessageRecorderView
 import im.vector.app.features.home.room.detail.toMessageType
 import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import im.vector.app.features.session.coroutineScope
@@ -42,6 +43,7 @@ import org.commonmark.parser.Parser
 import org.commonmark.renderer.html.HtmlRenderer
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
@@ -85,17 +87,18 @@ class MessageComposerViewModel @AssistedInject constructor(
             is MessageComposerAction.EnterQuoteMode                 -> handleEnterQuoteMode(action)
             is MessageComposerAction.EnterRegularMode               -> handleEnterRegularMode(action)
             is MessageComposerAction.EnterReplyMode                 -> handleEnterReplyMode(action)
-            is MessageComposerAction.SaveDraft                      -> handleSaveDraft(action)
             is MessageComposerAction.SendMessage                    -> handleSendMessage(action)
             is MessageComposerAction.UserIsTyping                   -> handleUserIsTyping(action)
             is MessageComposerAction.OnTextChanged                  -> handleOnTextChanged(action)
             is MessageComposerAction.OnVoiceRecordingUiStateChanged -> handleOnVoiceRecordingUiStateChanged(action)
-            MessageComposerAction.StartRecordingVoiceMessage        -> handleStartRecordingVoiceMessage()
+            is MessageComposerAction.StartRecordingVoiceMessage     -> handleStartRecordingVoiceMessage()
             is MessageComposerAction.EndRecordingVoiceMessage       -> handleEndRecordingVoiceMessage(action.isCancelled)
             is MessageComposerAction.PlayOrPauseVoicePlayback       -> handlePlayOrPauseVoicePlayback(action)
             MessageComposerAction.PauseRecordingVoiceMessage        -> handlePauseRecordingVoiceMessage()
             MessageComposerAction.PlayOrPauseRecordingPlayback      -> handlePlayOrPauseRecordingPlayback()
             is MessageComposerAction.EndAllVoiceActions             -> handleEndAllVoiceActions(action.deleteRecord)
+            is MessageComposerAction.InitializeVoiceRecorder        -> handleInitializeVoiceRecorder(action.attachmentData)
+            is MessageComposerAction.OnEntersBackground             -> handleEntersBackground(action.composerText)
         }
     }
 
@@ -432,6 +435,9 @@ class MessageComposerViewModel @AssistedInject constructor(
                         popDraft()
                     }
                 }
+                is SendMode.Voice   -> {
+                    // do nothing
+                }
             }.exhaustive
         }
     }
@@ -455,22 +461,23 @@ class MessageComposerViewModel @AssistedInject constructor(
             copy(
                     // Create a sendMode from a draft and retrieve the TimelineEvent
                     sendMode = when (currentDraft) {
-                        is UserDraft.Regular -> SendMode.Regular(currentDraft.text, false)
+                        is UserDraft.Regular -> SendMode.Regular(currentDraft.content, false)
                         is UserDraft.Quote   -> {
                             room.getTimeLineEvent(currentDraft.linkedEventId)?.let { timelineEvent ->
-                                SendMode.Quote(timelineEvent, currentDraft.text)
+                                SendMode.Quote(timelineEvent, currentDraft.content)
                             }
                         }
                         is UserDraft.Reply   -> {
                             room.getTimeLineEvent(currentDraft.linkedEventId)?.let { timelineEvent ->
-                                SendMode.Reply(timelineEvent, currentDraft.text)
+                                SendMode.Reply(timelineEvent, currentDraft.content)
                             }
                         }
                         is UserDraft.Edit    -> {
                             room.getTimeLineEvent(currentDraft.linkedEventId)?.let { timelineEvent ->
-                                SendMode.Edit(timelineEvent, currentDraft.text)
+                                SendMode.Edit(timelineEvent, currentDraft.content)
                             }
                         }
+                        is UserDraft.Voice   -> SendMode.Voice(currentDraft.content)
                         else                 -> null
                     } ?: SendMode.Regular("", fromSharing = false)
             )
@@ -675,24 +682,24 @@ class MessageComposerViewModel @AssistedInject constructor(
     /**
      * Convert a send mode to a draft and save the draft
      */
-    private fun handleSaveDraft(action: MessageComposerAction.SaveDraft) = withState {
+    private fun handleSaveTextDraft(draft: String) = withState {
         session.coroutineScope.launch {
             when {
                 it.sendMode is SendMode.Regular && !it.sendMode.fromSharing -> {
-                    setState { copy(sendMode = it.sendMode.copy(action.draft)) }
-                    room.saveDraft(UserDraft.Regular(action.draft))
+                    setState { copy(sendMode = it.sendMode.copy(text = draft)) }
+                    room.saveDraft(UserDraft.Regular(draft))
                 }
                 it.sendMode is SendMode.Reply                               -> {
-                    setState { copy(sendMode = it.sendMode.copy(text = action.draft)) }
-                    room.saveDraft(UserDraft.Reply(it.sendMode.timelineEvent.root.eventId!!, action.draft))
+                    setState { copy(sendMode = it.sendMode.copy(text = draft)) }
+                    room.saveDraft(UserDraft.Reply(it.sendMode.timelineEvent.root.eventId!!, draft))
                 }
                 it.sendMode is SendMode.Quote                               -> {
-                    setState { copy(sendMode = it.sendMode.copy(text = action.draft)) }
-                    room.saveDraft(UserDraft.Quote(it.sendMode.timelineEvent.root.eventId!!, action.draft))
+                    setState { copy(sendMode = it.sendMode.copy(text = draft)) }
+                    room.saveDraft(UserDraft.Quote(it.sendMode.timelineEvent.root.eventId!!, draft))
                 }
                 it.sendMode is SendMode.Edit                                -> {
-                    setState { copy(sendMode = it.sendMode.copy(text = action.draft)) }
-                    room.saveDraft(UserDraft.Edit(it.sendMode.timelineEvent.root.eventId!!, action.draft))
+                    setState { copy(sendMode = it.sendMode.copy(text = draft)) }
+                    room.saveDraft(UserDraft.Edit(it.sendMode.timelineEvent.root.eventId!!, draft))
                 }
             }
         }
@@ -700,7 +707,7 @@ class MessageComposerViewModel @AssistedInject constructor(
 
     private fun handleStartRecordingVoiceMessage() {
         try {
-            voiceMessageHelper.startRecording()
+            voiceMessageHelper.startRecording(room.roomId)
         } catch (failure: Throwable) {
             _viewEvents.post(MessageComposerViewEvents.VoicePlaybackOrRecordingFailure(failure))
         }
@@ -719,6 +726,7 @@ class MessageComposerViewModel @AssistedInject constructor(
                 }
             }
         }
+        handleEnterRegularMode(MessageComposerAction.EnterRegularMode(text = "", fromSharing = false))
     }
 
     private fun handlePlayOrPauseVoicePlayback(action: MessageComposerAction.PlayOrPauseVoicePlayback) {
@@ -741,11 +749,33 @@ class MessageComposerViewModel @AssistedInject constructor(
     }
 
     private fun handleEndAllVoiceActions(deleteRecord: Boolean) {
+        voiceMessageHelper.clearTracker()
         voiceMessageHelper.stopAllVoiceActions(deleteRecord)
+    }
+
+    private fun handleInitializeVoiceRecorder(attachmentData: ContentAttachmentData) {
+        voiceMessageHelper.initializeRecorder(attachmentData)
+        setState { copy(voiceRecordingUiState = VoiceMessageRecorderView.RecordingUiState.Draft) }
     }
 
     private fun handlePauseRecordingVoiceMessage() {
         voiceMessageHelper.pauseRecording()
+    }
+
+    private fun handleEntersBackground(composerText: String) {
+        val isVoiceRecording = com.airbnb.mvrx.withState(this) { it.isVoiceRecording }
+        if (isVoiceRecording) {
+            voiceMessageHelper.clearTracker()
+            viewModelScope.launch {
+                voiceMessageHelper.stopAllVoiceActions(deleteRecord = false)?.toContentAttachmentData()?.let { voiceDraft ->
+                    val content = voiceDraft.toJsonString()
+                    room.saveDraft(UserDraft.Voice(content))
+                    setState { copy(sendMode = SendMode.Voice(content)) }
+                }
+            }
+        } else {
+            handleSaveTextDraft(draft = composerText)
+        }
     }
 
     private fun launchSlashCommandFlowSuspendable(block: suspend () -> Unit) {
