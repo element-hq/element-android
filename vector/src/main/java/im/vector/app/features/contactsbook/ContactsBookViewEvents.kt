@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
+ * Copyright (c) 2021 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,10 @@
 
 package im.vector.app.features.contactsbook
 
-import im.vector.app.core.platform.VectorViewModelAction
+import im.vector.app.core.platform.VectorViewEvents
+import im.vector.app.features.discovery.IdentityServerWithTerms
 
-sealed class ContactsBookAction : VectorViewModelAction {
-    data class FilterWith(val filter: String) : ContactsBookAction()
-    data class OnlyBoundContacts(val onlyBoundContacts: Boolean) : ContactsBookAction()
-    object UserConsentRequest : ContactsBookAction()
-    object UserConsentGranted : ContactsBookAction()
+sealed class ContactsBookViewEvents : VectorViewEvents {
+    data class Failure(val throwable: Throwable) : ContactsBookViewEvents()
+    data class OnPoliciesRetrieved(val identityServerWithTerms: IdentityServerWithTerms?) : ContactsBookViewEvents()
 }

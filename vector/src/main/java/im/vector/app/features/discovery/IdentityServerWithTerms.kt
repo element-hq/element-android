@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
+ * Copyright (c) 2021 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.contactsbook
+package im.vector.app.features.discovery
 
-import im.vector.app.core.platform.VectorViewModelAction
+data class IdentityServerWithTerms(
+        val serverUrl: String,
+        val policies: List<IdentityServerPolicy>
+)
 
-sealed class ContactsBookAction : VectorViewModelAction {
-    data class FilterWith(val filter: String) : ContactsBookAction()
-    data class OnlyBoundContacts(val onlyBoundContacts: Boolean) : ContactsBookAction()
-    object UserConsentRequest : ContactsBookAction()
-    object UserConsentGranted : ContactsBookAction()
-}
+data class IdentityServerPolicy(
+        val name: String,
+        val url: String
+)
