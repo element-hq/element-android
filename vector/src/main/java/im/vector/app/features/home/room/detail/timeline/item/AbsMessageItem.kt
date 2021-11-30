@@ -18,14 +18,16 @@ package im.vector.app.features.home.room.detail.timeline.item
 
 import android.graphics.Typeface
 import android.view.View
-import android.view.ViewStub
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.ProgressBar
+import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.annotation.IdRes
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
+import androidx.core.view.updateLayoutParams
 import com.airbnb.epoxy.EpoxyAttribute
 import im.vector.app.BuildConfig
 import im.vector.app.R
@@ -37,7 +39,6 @@ import im.vector.app.features.home.room.detail.timeline.MessageColorProvider
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import org.matrix.android.sdk.api.session.threads.ThreadDetails
 import org.matrix.android.sdk.api.util.MatrixItem
-import timber.log.Timber
 
 /**
  * Base timeline item that adds an optional information bar with the sender avatar, name, time, send state
@@ -123,7 +124,21 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
                 val displayName = threadDetails.threadSummarySenderInfo?.displayName
                 val avatarUrl = threadDetails.threadSummarySenderInfo?.avatarUrl
                 attributes.avatarRenderer.render(MatrixItem.UserItem(userId, displayName, avatarUrl), holder.threadSummaryAvatarImageView)
-            } ?: run { holder.threadSummaryConstraintLayout.isVisible = false }
+                updateHighlightedMessageHeight(holder,true)
+            } ?: run {
+                holder.threadSummaryConstraintLayout.isVisible = false
+                updateHighlightedMessageHeight(holder,false)
+            }
+        }
+    }
+
+    private fun updateHighlightedMessageHeight(holder: Holder, isExpanded: Boolean) {
+        holder.checkableBackground.updateLayoutParams<RelativeLayout.LayoutParams> {
+            if (isExpanded) {
+                addRule(RelativeLayout.ALIGN_BOTTOM, holder.threadSummaryConstraintLayout.id)
+            } else {
+                addRule(RelativeLayout.ALIGN_BOTTOM, holder.informationBottom.id)
+            }
         }
     }
 
@@ -141,14 +156,15 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
     private fun Attributes.getMemberNameColor() = messageColorProvider.getMemberNameTextColor(informationData.matrixItem)
 
     abstract class Holder(@IdRes stubId: Int) : AbsBaseMessageItem.Holder(stubId) {
+
         val avatarImageView by bind<ImageView>(R.id.messageAvatarImageView)
         val memberNameView by bind<TextView>(R.id.messageMemberNameView)
         val timeView by bind<TextView>(R.id.messageTimeView)
         val sendStateImageView by bind<SendStateImageView>(R.id.messageSendStateImageView)
         val eventSendingIndicator by bind<ProgressBar>(R.id.eventSendingIndicator)
+        val informationBottom by bind<LinearLayout>(R.id.informationBottom)
         val threadSummaryConstraintLayout by bind<ConstraintLayout>(R.id.messageThreadSummaryConstraintLayout)
         val threadSummaryCounterTextView by bind<TextView>(R.id.messageThreadSummaryCounterTextView)
-        val threadSummaryImageView by bind<ImageView>(R.id.messageThreadSummaryImageView)
         val threadSummaryAvatarImageView by bind<ImageView>(R.id.messageThreadSummaryAvatarImageView)
         val threadSummaryInfoTextView by bind<TextView>(R.id.messageThreadSummaryInfoTextView)
     }
