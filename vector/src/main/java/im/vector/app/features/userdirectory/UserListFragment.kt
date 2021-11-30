@@ -42,7 +42,6 @@ import im.vector.app.core.utils.showIdentityServerConsentDialog
 import im.vector.app.core.utils.startSharePlainTextIntent
 import im.vector.app.databinding.FragmentUserListBinding
 import im.vector.app.features.homeserver.HomeServerCapabilitiesViewModel
-import im.vector.app.features.navigation.SettingsActivityPayload
 import im.vector.app.features.settings.VectorSettingsActivity
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -234,9 +233,7 @@ class UserListFragment @Inject constructor(
         withState(viewModel) { state ->
             requireContext().showIdentityServerConsentDialog(
                     state.configuredIdentityServer,
-                    policyLinkCallback = {
-                        navigator.openSettings(requireContext(), SettingsActivityPayload.DiscoverySettings(expandIdentityPolicies = true))
-                    },
+                    /* TODO */ emptyList(),
                     consentCallBack = { viewModel.handle(UserListAction.UpdateUserConsent(true)) }
             )
         }
