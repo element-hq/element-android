@@ -198,6 +198,19 @@
         app:layout_constraintTop_toBottomOf="@+id/loginSplashSubmit"
         app:layout_constraintVertical_weight="4" />
 
+    <Button
+        android:id="@+id/showPrivacyPolicyButton"
+        style="@style/Widget.Vector.Button.Text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/layout_vertical_margin"
+        android:minWidth="130dp"
+        android:text="@string/settings_privacy_policy"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/loginSplashVersion"
+        app:layout_constraintTop_toBottomOf="@id/loginSplashSubmit" />
+
     <TextView
         android:id="@+id/loginSplashVersion"
         style="@style/Widget.Vector.TextView.Caption"

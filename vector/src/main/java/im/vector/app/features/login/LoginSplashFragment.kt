@@ -25,8 +25,10 @@ import androidx.core.view.isVisible
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.BuildConfig
 import im.vector.app.R
+import im.vector.app.core.utils.openUrlInChromeCustomTab
 import im.vector.app.databinding.FragmentLoginSplashBinding
 import im.vector.app.features.settings.VectorPreferences
+import im.vector.app.features.settings.VectorSettingsUrls
 import org.matrix.android.sdk.api.failure.Failure
 import java.net.UnknownHostException
 import javax.inject.Inject
@@ -50,6 +52,7 @@ class LoginSplashFragment @Inject constructor(
 
     private fun setupViews() {
         views.loginSplashSubmit.debouncedClicks { getStarted() }
+        views.showPrivacyPolicyButton.debouncedClicks { showPrivacyPolicy() }
 
         if (BuildConfig.DEBUG || vectorPreferences.developerMode()) {
             views.loginSplashVersion.isVisible = true
@@ -62,6 +65,10 @@ class LoginSplashFragment @Inject constructor(
 
     private fun getStarted() {
         loginViewModel.handle(LoginAction.OnGetStarted(resetLoginConfig = false))
+    }
+
+    private fun showPrivacyPolicy() {
+        openUrlInChromeCustomTab(requireContext(), null, VectorSettingsUrls.PRIVACY_POLICY)
     }
 
     override fun resetViewModel() {
