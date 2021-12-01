@@ -20,6 +20,8 @@ import android.content.Context
 import android.net.Uri
 import android.provider.ContactsContract
 import androidx.annotation.WorkerThread
+import androidx.core.database.getLongOrNull
+import androidx.core.database.getStringOrNull
 import im.vector.lib.multipicker.utils.getColumnIndexOrNull
 import timber.log.Timber
 import javax.inject.Inject
@@ -61,8 +63,8 @@ class ContactsDataSource @Inject constructor(
                             val displayNameColumnIndex = cursor.getColumnIndexOrNull(ContactsContract.Contacts.DISPLAY_NAME) ?: return@use
                             val photoUriColumnIndex = cursor.getColumnIndexOrNull(ContactsContract.Data.PHOTO_URI)
                             while (cursor.moveToNext()) {
-                                val id = cursor.getLong(idColumnIndex)
-                                val displayName = cursor.getString(displayNameColumnIndex)
+                                val id = cursor.getLongOrNull(idColumnIndex) ?: continue
+                                val displayName = cursor.getStringOrNull(displayNameColumnIndex) ?: continue
 
                                 val mappedContactBuilder = MappedContactBuilder(
                                         id = id,
@@ -70,7 +72,7 @@ class ContactsDataSource @Inject constructor(
                                 )
 
                                 photoUriColumnIndex
-                                        ?.let { cursor.getString(it) }
+                                        ?.let { cursor.getStringOrNull(it) }
                                         ?.let { Uri.parse(it) }
                                         ?.let { mappedContactBuilder.photoURI = it }
 
@@ -94,10 +96,10 @@ class ContactsDataSource @Inject constructor(
                             val phoneNumberColumnIndex = cursor.getColumnIndexOrNull(ContactsContract.CommonDataKinds.Phone.NUMBER) ?: return@use
 
                             while (cursor.moveToNext()) {
-                                val mappedContactBuilder = cursor.getLong(idColumnIndex)
-                                        .let { map[it] }
+                                val mappedContactBuilder = cursor.getLongOrNull(idColumnIndex)
+                                        ?.let { map[it] }
                                         ?: continue
-                                cursor.getString(phoneNumberColumnIndex)
+                                cursor.getStringOrNull(phoneNumberColumnIndex)
                                         ?.let {
                                             mappedContactBuilder.msisdns.add(
                                                     MappedMsisdn(
@@ -128,10 +130,10 @@ class ContactsDataSource @Inject constructor(
                             while (cursor.moveToNext()) {
                                 // This would allow you get several email addresses
                                 // if the email addresses were stored in an array
-                                val mappedContactBuilder = cursor.getLong(idColumnIndex)
-                                        .let { map[it] }
+                                val mappedContactBuilder = cursor.getLongOrNull(idColumnIndex)
+                                        ?.let { map[it] }
                                         ?: continue
-                                cursor.getString(emailColumnIndex)
+                                cursor.getStringOrNull(emailColumnIndex)
                                         ?.let {
                                             mappedContactBuilder.emails.add(
                                                     MappedEmail(
