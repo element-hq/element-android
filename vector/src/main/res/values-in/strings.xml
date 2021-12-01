@@ -2726,7 +2726,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="error_failed_to_import_keys">Gagal mengimpor kunci</string>
     <string name="qr_code_scanned_verif_waiting">Menunggu untuk %s…</string>
     <string name="qr_code_scanned_verif_waiting_notice">Hampir selesai! Menunggu untuk konfirmasi…</string>
-    <string name="qr_code_scanned_self_verif_notice">Hampir selesai! Apakah perangkat yang lain menunjukkan perisai yang sama\?</string>
+    <string name="qr_code_scanned_self_verif_notice">Hampir selesai! Apakah perangkat yang lain menunjukkan centang yang sama\?</string>
     <string name="topic_prefix">"Topik: "</string>
     <string name="add_a_topic_link_text">Tambahkan topik</string>
     <string name="room_created_summary_no_topic_creation_text">%s untuk memberi tahu orang-orang tentang ruangan ini.</string>
@@ -2904,7 +2904,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="no_connectivity_to_the_server_indicator">Koneksi ke server telah hilang</string>
     <string name="qr_code_scanned_by_other_no">Tidak</string>
     <string name="qr_code_scanned_by_other_yes">Ya</string>
-    <string name="qr_code_scanned_by_other_notice">Hampir selesai! Apakah %s menampilkan perisai yang sama\?</string>
+    <string name="qr_code_scanned_by_other_notice">Hampir selesai! Apakah %s menampilkan centang yang sama\?</string>
     <string name="a11y_qr_code_for_verification">Kode QR</string>
     <string name="reset_cross_signing">Atur Ulang Kunci</string>
     <string name="initialize_cross_signing">Memulai Tanda Tangan Silang</string>
@@ -2976,4 +2976,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="settings_discovery_consent_notice_off_2">Kontak Anda privat. Untuk menemukan pengguna dari kontak Anda, kami membutuhkan izin untuk mengirim info kontak ke server identitas Anda.</string>
     <string name="shortcut_disabled_reason_sign_out">Sesinya telah dikeluarkan!</string>
     <string name="shortcut_disabled_reason_room_left">Ruangannya telah ditinggalkan!</string>
+    <string name="identity_server_consent_dialog_content_question">Apakah Anda setuju untuk mengirimkan info ini\?</string>
+    <string name="identity_server_consent_dialog_content_3">Untuk menemukan kontak yang sudah ada, Anda harus mengirim info kontak (email dan nomor telepon) ke server identitas Anda. Kami meng-hash data Anda sebelum mengirim untuk privasi.</string>
+    <string name="action_not_now">Nanti</string>
 </resources>
