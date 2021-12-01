@@ -116,4 +116,8 @@
     <string name="settings_aggregate_unread_counts">Räkna chattar istället för meddelanden</string>
     <string name="settings_aggregate_unread_counts_summary">Om olästa chattar ska räknas istället för enskilda meddelanden i utrymmen och rumskategorier</string>
     <string name="sc_accent_lime">Lime färg</string>
+    <string name="settings_jump_to_bottom_on_send">Hoppa till botten vid sändning</string>
+    <string name="settings_jump_to_bottom_on_send_summary">Rulla automatiskt nedåt när du skickar ett meddelande</string>
+    <string name="settings_include_space_members_as_rooms">Visa människor i utrymmen</string>
+    <string name="settings_include_space_members_as_rooms_summary">Om det är inaktiverat kan du fortfarande lägga till direktmeddelanden till personliga Spaces. Om det är aktiverat ser du automatiskt alla som är medlemmar i Space.</string>
 </resources>
