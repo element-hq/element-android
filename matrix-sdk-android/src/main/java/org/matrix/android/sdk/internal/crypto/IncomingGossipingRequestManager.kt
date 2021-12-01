@@ -44,6 +44,7 @@ import timber.log.Timber
 import java.util.concurrent.Executors
 import javax.inject.Inject
 
+@Deprecated("rust")
 @SessionScope
 internal class IncomingGossipingRequestManager @Inject constructor(
         @SessionId private val sessionId: String,

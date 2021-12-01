@@ -83,11 +83,6 @@ class KeysBackupRestoreActivity : SimpleFragmentActivity() {
                     .show()
         }
 
-        if (viewModel.keyVersionResult.value == null) {
-            // We need to fetch from API
-            viewModel.getLatestVersion()
-        }
-
         viewModel.navigateEvent.observeEvent(this) { uxStateEvent ->
             when (uxStateEvent) {
                 KeysBackupRestoreSharedViewModel.NAVIGATE_TO_RECOVER_WITH_KEY -> {

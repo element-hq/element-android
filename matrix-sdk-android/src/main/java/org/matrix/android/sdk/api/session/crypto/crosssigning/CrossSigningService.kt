@@ -61,7 +61,7 @@ interface CrossSigningService {
      * This will check if the injected private cross signing keys match the public ones provided
      * by the server and if they do so
      */
-    fun checkTrustFromPrivateKeys(masterKeyPrivateKey: String?,
+    suspend fun checkTrustFromPrivateKeys(masterKeyPrivateKey: String?,
                                   uskKeyPrivateKey: String?,
                                   sskPrivateKey: String?): UserTrustResult
 
@@ -102,8 +102,8 @@ interface CrossSigningService {
     /**
      * Sign one of your devices and upload the signature
      */
-    fun trustDevice(deviceId: String,
-                    callback: MatrixCallback<Unit>)
+    @Throws
+    suspend fun trustDevice(deviceId: String)
 
     suspend fun shieldForGroup(userIds: List<String>): RoomEncryptionTrustLevel
 

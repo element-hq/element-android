@@ -36,8 +36,6 @@ import org.matrix.android.sdk.common.CommonTestHelper
 import org.matrix.android.sdk.common.CryptoTestHelper
 import org.matrix.android.sdk.common.SessionTestParams
 import org.matrix.android.sdk.common.TestConstants
-import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
-import org.matrix.android.sdk.internal.crypto.model.MXUsersDevicesMap
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
 
@@ -112,7 +110,7 @@ class XSigningTest : InstrumentedTest {
         }, it) }
 
         // Check that alice can see bob keys
-        mTestHelper.doSync<MXUsersDevicesMap<CryptoDeviceInfo>> { aliceSession.cryptoService().downloadKeys(listOf(bobSession.myUserId), true, it) }
+        mTestHelper.runBlockingTest { aliceSession.cryptoService().downloadKeys(listOf(bobSession.myUserId), true) }
 
         val bobKeysFromAlicePOV = aliceSession.cryptoService().crossSigningService().getUserCrossSigningKeys(bobSession.myUserId)
         assertNotNull("Alice can see bob Master key", bobKeysFromAlicePOV!!.masterKey())
@@ -157,7 +155,7 @@ class XSigningTest : InstrumentedTest {
 
         // Check that alice can see bob keys
         val bobUserId = bobSession.myUserId
-        mTestHelper.doSync<MXUsersDevicesMap<CryptoDeviceInfo>> { aliceSession.cryptoService().downloadKeys(listOf(bobUserId), true, it) }
+        mTestHelper.runBlockingTest { aliceSession.cryptoService().downloadKeys(listOf(bobUserId), true) }
 
         val bobKeysFromAlicePOV = aliceSession.cryptoService().crossSigningService().getUserCrossSigningKeys(bobUserId)
         assertTrue("Bob keys from alice pov should not be trusted", bobKeysFromAlicePOV?.isTrusted() == false)
@@ -171,8 +169,8 @@ class XSigningTest : InstrumentedTest {
         val bobSecondDeviceId = bobSession2.sessionParams.deviceId!!
 
         // Check that bob first session sees the new login
-        val data = mTestHelper.doSync<MXUsersDevicesMap<CryptoDeviceInfo>> {
-            bobSession.cryptoService().downloadKeys(listOf(bobUserId), true, it)
+        val data = mTestHelper.runBlockingTest {
+            bobSession.cryptoService().downloadKeys(listOf(bobUserId), true)
         }
 
         if (data.getUserDeviceIds(bobUserId)?.contains(bobSecondDeviceId) == false) {
@@ -183,13 +181,13 @@ class XSigningTest : InstrumentedTest {
         assertNotNull("Bob Second device should be known and persisted from first", bobSecondDevicePOVFirstDevice)
 
         // Manually mark it as trusted from first session
-        mTestHelper.doSync<Unit> {
-            bobSession.cryptoService().crossSigningService().trustDevice(bobSecondDeviceId, it)
+        mTestHelper.runBlockingTest {
+            bobSession.cryptoService().crossSigningService().trustDevice(bobSecondDeviceId)
         }
 
         // Now alice should cross trust bob's second device
-        val data2 = mTestHelper.doSync<MXUsersDevicesMap<CryptoDeviceInfo>> {
-            aliceSession.cryptoService().downloadKeys(listOf(bobUserId), true, it)
+        val data2 = mTestHelper.runBlockingTest {
+            aliceSession.cryptoService().downloadKeys(listOf(bobUserId), true)
         }
 
         // check that the device is seen

@@ -42,14 +42,13 @@ import org.matrix.android.sdk.api.auth.UserPasswordAuth
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.api.auth.registration.nextUncompletedStage
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.securestorage.RawBytesKeySpec
 import org.matrix.android.sdk.internal.crypto.crosssigning.fromBase64
-import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersionResult
 import org.matrix.android.sdk.internal.crypto.keysbackup.util.extractCurveKeyFromRecoveryKey
 import org.matrix.android.sdk.internal.crypto.model.rest.DefaultBaseAuth
-import org.matrix.android.sdk.internal.util.awaitCallback
 import java.io.OutputStream
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
@@ -104,9 +103,8 @@ class BootstrapSharedViewModel @AssistedInject constructor(
 
                 // We need to check if there is an existing backup
                 viewModelScope.launch(Dispatchers.IO) {
-                    val version = awaitCallback<KeysVersionResult?> {
-                        session.cryptoService().keysBackupService().getCurrentVersion(it)
-                    }
+                    val version = tryOrNull { session.cryptoService().keysBackupService().getCurrentVersion() }
+
                     if (version == null) {
                         // we just resume plain bootstrap
                         doesKeyBackupExist = false
@@ -115,8 +113,8 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                         }
                     } else {
                         // we need to get existing backup passphrase/key and convert to SSSS
-                        val keyVersion = awaitCallback<KeysVersionResult?> {
-                            session.cryptoService().keysBackupService().getVersion(version.version, it)
+                        val keyVersion = tryOrNull {
+                            session.cryptoService().keysBackupService().getVersion(version.version)
                         }
                         if (keyVersion == null) {
                             // strange case... just finish?

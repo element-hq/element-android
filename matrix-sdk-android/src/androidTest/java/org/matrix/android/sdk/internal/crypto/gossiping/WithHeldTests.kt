@@ -24,7 +24,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
 import org.matrix.android.sdk.InstrumentedTest
-import org.matrix.android.sdk.api.NoOpMatrixCallback
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -217,8 +216,10 @@ class WithHeldTests : InstrumentedTest {
         mCryptoTestHelper.initializeCrossSigning(bobSecondSession)
 
         // Trust bob second device from Alice POV
-        aliceSession.cryptoService().crossSigningService().trustDevice(bobSecondSession.sessionParams.deviceId!!, NoOpMatrixCallback())
-        bobSecondSession.cryptoService().crossSigningService().trustDevice(aliceSession.sessionParams.deviceId!!, NoOpMatrixCallback())
+        mTestHelper.runBlockingTest {
+            aliceSession.cryptoService().crossSigningService().trustDevice(bobSecondSession.sessionParams.deviceId!!)
+            bobSecondSession.cryptoService().crossSigningService().trustDevice(aliceSession.sessionParams.deviceId!!)
+        }
 
         var sessionId: String? = null
         // Check that the

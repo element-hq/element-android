@@ -75,13 +75,9 @@ class CryptoLogger : Logger {
     }
 }
 
-private class CryptoProgressListener(listener: ProgressListener?) : RustProgressListener {
-    private val inner: ProgressListener? = listener
-
+private class CryptoProgressListener(private val listener: ProgressListener?) : RustProgressListener {
     override fun onProgress(progress: Int, total: Int) {
-        if (this.inner != null) {
-            this.inner.onProgress(progress, total)
-        }
+        listener?.onProgress(progress, total)
     }
 }
 
@@ -514,8 +510,7 @@ internal class OlmMachine(
 
                 val result = inner.importKeys(decodedKeys, passphrase, rustListener)
 
-                // TODO do we want to remove the cast here?
-                ImportRoomKeysResult(result.total.toInt(), result.imported.toInt())
+                ImportRoomKeysResult.fromOlm(result)
             }
 
     @Throws(CryptoStoreException::class)
@@ -525,13 +520,30 @@ internal class OlmMachine(
     ): ImportRoomKeysResult =
             withContext(Dispatchers.IO) {
                 val adapter = MoshiProvider.providesMoshi().adapter(List::class.java)
-                val encodedKeys = adapter.toJson(keys)
 
-                val rustListener = CryptoProgressListener(listener)
+                // If the key backup is too big we take the risk of causing OOM
+                // when serializing to json
+                // so let's chunk to avoid it
+                var totalImported = 0L
+                var accTotal = 0L
+                val details = mutableMapOf<String, Map<String, List<String>>>()
+                keys.chunked(500)
+                        .forEach { keysSlice ->
+                            val encodedKeys = adapter.toJson(keysSlice)
+                            val rustListener = object : RustProgressListener {
+                                override fun onProgress(progress: Int, total: Int) {
+                                    val accProgress = (accTotal + progress).toInt()
+                                    listener?.onProgress(accProgress, keys.size)
+                                }
+                            }
 
-                val result = inner.importDecryptedKeys(encodedKeys, rustListener)
-
-                ImportRoomKeysResult(result.total.toInt(), result.imported.toInt())
+                            inner.importDecryptedKeys(encodedKeys, rustListener).let {
+                                totalImported += it.imported
+                                accTotal += it.total
+                                details.putAll(it.keys)
+                            }
+                        }
+                ImportRoomKeysResult(totalImported.toInt(), accTotal.toInt(), details)
             }
 
     @Throws(CryptoStoreException::class)
@@ -554,8 +566,14 @@ internal class OlmMachine(
                 UserIdentity(identity.userId, masterKey, selfSigningKey, this, this.requestSender)
             }
             is RustUserIdentity.Own   -> {
-                val masterKey = adapter.fromJson(identity.masterKey)!!.toCryptoModel()
-                val selfSigningKey = adapter.fromJson(identity.selfSigningKey)!!.toCryptoModel()
+                val verified = this.inner().isIdentityVerified(userId)
+
+                val masterKey = adapter.fromJson(identity.masterKey)!!.toCryptoModel().apply {
+                    trustLevel = DeviceTrustLevel(verified, verified)
+                }
+                val selfSigningKey = adapter.fromJson(identity.selfSigningKey)!!.toCryptoModel().apply {
+                    trustLevel = DeviceTrustLevel(verified, verified)
+                }
                 val userSigningKey = adapter.fromJson(identity.userSigningKey)!!.toCryptoModel()
 
                 OwnUserIdentity(
@@ -823,13 +841,28 @@ internal class OlmMachine(
     suspend fun importCrossSigningKeys(export: PrivateKeysInfo): UserTrustResult {
         val rustExport = CrossSigningKeyExport(export.master, export.selfSigned, export.user)
 
+        var result: UserTrustResult
         withContext(Dispatchers.IO) {
-            inner.importCrossSigningKeys(rustExport)
-        }
+            result = try {
+                inner.importCrossSigningKeys(rustExport)
 
-        this.updateLivePrivateKeys()
-        // TODO map the errors from importCrossSigningKeys to the UserTrustResult
-        return UserTrustResult.Success
+                // Sign the cross signing keys with our device
+                // Fail silently if signature upload fails??
+                try {
+                    getIdentity(userId())?.verify()
+                } catch (failure: Throwable) {
+                    Timber.e(failure, "Failed to sign x-keys with own device")
+                }
+                UserTrustResult.Success
+            } catch (failure: Exception) {
+                // KeyImportError?
+                UserTrustResult.Failure(failure.localizedMessage)
+            }
+        }
+        withContext(Dispatchers.Main) {
+            this@OlmMachine.updateLivePrivateKeys()
+        }
+        return result
     }
 
     suspend fun sign(message: String): Map<String, Map<String, String>> {

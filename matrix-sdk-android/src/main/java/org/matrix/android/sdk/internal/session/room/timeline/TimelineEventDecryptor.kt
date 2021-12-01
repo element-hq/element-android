@@ -40,7 +40,7 @@ internal class TimelineEventDecryptor @Inject constructor(
 ) {
 
     private val newSessionListener = object : NewSessionListener {
-        override fun onNewSession(roomId: String?, senderKey: String, sessionId: String) {
+        override fun onNewSession(roomId: String?, sessionId: String) {
             synchronized(unknownSessionsFailure) {
                 unknownSessionsFailure[sessionId]
                         ?.toList()

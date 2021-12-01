@@ -16,5 +16,5 @@
 package org.matrix.android.sdk.internal.crypto
 
 interface NewSessionListener {
-    fun onNewSession(roomId: String?, senderKey: String, sessionId: String)
+    fun onNewSession(roomId: String?, sessionId: String)
 }

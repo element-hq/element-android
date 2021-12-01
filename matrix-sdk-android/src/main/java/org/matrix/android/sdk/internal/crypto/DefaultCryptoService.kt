@@ -90,6 +90,7 @@ import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
 import kotlin.math.max
+import kotlin.system.measureTimeMillis
 
 /**
  * A `CryptoService` class instance manages the end-to-end crypto for a session.
@@ -134,6 +135,7 @@ internal class DefaultCryptoService @Inject constructor(
         private val crossSigningService: CrossSigningService,
         private val verificationService: RustVerificationService,
         private val keysBackupService: RustKeyBackupService,
+        private val megolmSessionImportManager: MegolmSessionImportManager,
         private val olmMachineProvider: OlmMachineProvider
 ) : CryptoService {
 
@@ -151,9 +153,6 @@ internal class DefaultCryptoService @Inject constructor(
     private val keyClaimLock: Mutex = Mutex()
     private val outgoingRequestsLock: Mutex = Mutex()
     private val roomKeyShareLocks: ConcurrentHashMap<String, Mutex> = ConcurrentHashMap()
-
-    // TODO does this need to be concurrent?
-    private val newSessionListeners = ArrayList<NewSessionListener>()
 
     fun onStateEvent(roomId: String, event: Event) {
         when (event.getClearType()) {
@@ -256,7 +255,12 @@ internal class DefaultCryptoService @Inject constructor(
     }
 
     override fun inboundGroupSessionsCount(onlyBackedUp: Boolean): Int {
-        return cryptoStore.inboundGroupSessionsCount(onlyBackedUp)
+        return if (onlyBackedUp) {
+            keysBackupService.getTotalNumbersOfBackedUpKeys()
+        } else {
+            keysBackupService.getTotalNumbersOfKeys()
+        }
+        // return cryptoStore.inboundGroupSessionsCount(onlyBackedUp)
     }
 
     /**
@@ -331,8 +335,10 @@ internal class DefaultCryptoService @Inject constructor(
 
         // We try to enable key backups, if the backup version on the server is trusted,
         // we're gonna continue backing up.
-        tryOrNull {
-            keysBackupService.checkAndStartKeysBackup()
+        cryptoCoroutineScope.launch {
+            tryOrNull {
+                keysBackupService.checkAndStartKeysBackup()
+            }
         }
 
         // Open the store
@@ -537,7 +543,11 @@ internal class DefaultCryptoService @Inject constructor(
                 val t0 = System.currentTimeMillis()
                 Timber.tag(loggerTag.value).v("encryptEventContent() starts")
                 runCatching {
-                    preshareRoomKey(roomId, userIds)
+                    measureTimeMillis {
+                        preshareRoomKey(roomId, userIds)
+                    }.also {
+                        Timber.d("Shared room key in room $roomId took $it ms")
+                    }
                     val content = encrypt(roomId, eventType, eventContent)
                     Timber.tag(loggerTag.value).v("## CRYPTO | encryptEventContent() : succeeds after ${System.currentTimeMillis() - t0} ms")
                     MXEncryptEventContentResult(content, EventType.ENCRYPTED)
@@ -668,17 +678,7 @@ internal class DefaultCryptoService @Inject constructor(
             roomId: String,
             sessionId: String,
     ) {
-        // The sender key is actually unused since it's unimportant for megolm
-        // Our events don't contain the info so pass an empty string until we
-        // change the listener definition
-        val senderKey = ""
-
-        newSessionListeners.forEach {
-            try {
-                it.onNewSession(roomId, senderKey, sessionId)
-            } catch (e: Throwable) {
-            }
-        }
+        megolmSessionImportManager.dispatchNewSession(roomId, sessionId)
     }
 
     suspend fun receiveSyncChanges(
@@ -879,7 +879,9 @@ internal class DefaultCryptoService @Inject constructor(
     override suspend fun importRoomKeys(roomKeysAsArray: ByteArray,
                                         password: String,
                                         progressListener: ProgressListener?): ImportRoomKeysResult {
-        val result = olmMachine.importKeys(roomKeysAsArray, password, progressListener)
+        val result = olmMachine.importKeys(roomKeysAsArray, password, progressListener).also {
+            megolmSessionImportManager.dispatchKeyImportResults(it)
+        }
         keysBackupService.maybeBackupKeys()
 
         return result
@@ -1023,11 +1025,11 @@ internal class DefaultCryptoService @Inject constructor(
     }
 
     override fun addNewSessionListener(newSessionListener: NewSessionListener) {
-        if (!newSessionListeners.contains(newSessionListener)) newSessionListeners.add(newSessionListener)
+        megolmSessionImportManager.addListener(newSessionListener)
     }
 
     override fun removeSessionListener(listener: NewSessionListener) {
-        newSessionListeners.remove(listener)
+        megolmSessionImportManager.removeListener(listener)
     }
 /* ==========================================================================================
  * DEBUG INFO

@@ -50,10 +50,6 @@ import org.matrix.android.sdk.common.TestConstants
 import org.matrix.android.sdk.internal.crypto.GossipingRequestState
 import org.matrix.android.sdk.internal.crypto.OutgoingGossipingRequestState
 import org.matrix.android.sdk.internal.crypto.crosssigning.DeviceTrustLevel
-import org.matrix.android.sdk.internal.crypto.keysbackup.model.MegolmBackupCreationInfo
-import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersion
-import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
-import org.matrix.android.sdk.internal.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.internal.crypto.model.event.EncryptedEventContent
 import java.util.concurrent.CountDownLatch
 import kotlin.coroutines.Continuation
@@ -103,7 +99,7 @@ class KeyShareTests : InstrumentedTest {
 
         val outgoingRequestsBefore = aliceSession2.cryptoService().getOutgoingRoomKeyRequests()
         // Try to request
-        aliceSession2.cryptoService().requestRoomKeyForEvent(receivedEvent.root)
+        aliceSession2.cryptoService().reRequestRoomKeyForEvent(receivedEvent.root)
 
         val waitLatch = CountDownLatch(1)
         val eventMegolmSessionId = receivedEvent.root.content.toModel<EncryptedEventContent>()?.sessionId
@@ -218,11 +214,11 @@ class KeyShareTests : InstrumentedTest {
         }
 
         // Also bootstrap keybackup on first session
-        val creationInfo = mTestHelper.doSync<MegolmBackupCreationInfo> {
-            aliceSession1.cryptoService().keysBackupService().prepareKeysBackupVersion(null, null, it)
+        val creationInfo = mTestHelper.runBlockingTest {
+            aliceSession1.cryptoService().keysBackupService().prepareKeysBackupVersion(null)
         }
-        val version = mTestHelper.doSync<KeysVersion> {
-            aliceSession1.cryptoService().keysBackupService().createKeysBackupVersion(creationInfo, it)
+        val version = mTestHelper.runBlockingTest {
+            aliceSession1.cryptoService().keysBackupService().createKeysBackupVersion(creationInfo)
         }
         // Save it for gossiping
         aliceSession1.cryptoService().keysBackupService().saveBackupRecoveryKey(creationInfo.recoveryKey, version = version.version)
@@ -233,11 +229,11 @@ class KeyShareTests : InstrumentedTest {
         val aliceVerificationService2 = aliceSession2.cryptoService().verificationService()
 
         // force keys download
-        mTestHelper.doSync<MXUsersDevicesMap<CryptoDeviceInfo>> {
-            aliceSession1.cryptoService().downloadKeys(listOf(aliceSession1.myUserId), true, it)
+        mTestHelper.runBlockingTest {
+            aliceSession1.cryptoService().downloadKeys(listOf(aliceSession1.myUserId), true)
         }
-        mTestHelper.doSync<MXUsersDevicesMap<CryptoDeviceInfo>> {
-            aliceSession2.cryptoService().downloadKeys(listOf(aliceSession2.myUserId), true, it)
+        mTestHelper.runBlockingTest {
+            aliceSession2.cryptoService().downloadKeys(listOf(aliceSession2.myUserId), true)
         }
 
         var session1ShortCode: String? = null

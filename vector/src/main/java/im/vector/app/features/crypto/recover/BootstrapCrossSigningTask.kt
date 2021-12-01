@@ -33,9 +33,6 @@ import org.matrix.android.sdk.api.session.securestorage.SharedSecretStorageServi
 import org.matrix.android.sdk.api.session.securestorage.SsssKeyCreationInfo
 import org.matrix.android.sdk.api.session.securestorage.SsssKeySpec
 import org.matrix.android.sdk.internal.crypto.crosssigning.toBase64NoPadding
-import org.matrix.android.sdk.internal.crypto.keysbackup.model.MegolmBackupCreationInfo
-import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersion
-import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersionResult
 import org.matrix.android.sdk.internal.crypto.keysbackup.util.extractCurveKeyFromRecoveryKey
 import org.matrix.android.sdk.internal.util.awaitCallback
 import timber.log.Timber
@@ -221,9 +218,7 @@ class BootstrapCrossSigningTask @Inject constructor(
             Timber.d("## BootstrapCrossSigningTask: Creating 4S - Checking megolm backup")
 
             // First ensure that in sync
-            var serverVersion = awaitCallback<KeysVersionResult?> {
-                session.cryptoService().keysBackupService().getCurrentVersion(it)
-            }
+            var serverVersion = session.cryptoService().keysBackupService().getCurrentVersion()
 
             val knownMegolmSecret = session.cryptoService().keysBackupService().getKeyBackupRecoveryKeyInfo()
             val isMegolmBackupSecretKnown = knownMegolmSecret != null && knownMegolmSecret.version == serverVersion?.version
@@ -233,21 +228,14 @@ class BootstrapCrossSigningTask @Inject constructor(
             if (shouldCreateKeyBackup) {
                 // clear all existing backups
                 while (serverVersion != null) {
-                    awaitCallback<Unit> {
-                        session.cryptoService().keysBackupService().deleteBackup(serverVersion!!.version, it)
-                    }
-                    serverVersion = awaitCallback {
-                        session.cryptoService().keysBackupService().getCurrentVersion(it)
-                    }
+                    session.cryptoService().keysBackupService().deleteBackup(serverVersion.version)
+                    serverVersion = session.cryptoService().keysBackupService().getCurrentVersion()
                 }
 
                 Timber.d("## BootstrapCrossSigningTask: Creating 4S - Create megolm backup")
-                val creationInfo = awaitCallback<MegolmBackupCreationInfo> {
-                    session.cryptoService().keysBackupService().prepareKeysBackupVersion(null, null, it)
-                }
-                val version = awaitCallback<KeysVersion> {
-                    session.cryptoService().keysBackupService().createKeysBackupVersion(creationInfo, it)
-                }
+                val creationInfo = session.cryptoService().keysBackupService().prepareKeysBackupVersion(null)
+                val version = session.cryptoService().keysBackupService().createKeysBackupVersion(creationInfo)
+
                 // Save it for gossiping
                 Timber.d("## BootstrapCrossSigningTask: Creating 4S - Save megolm backup key for gossiping")
                 session.cryptoService().keysBackupService().saveBackupRecoveryKey(creationInfo.recoveryKey, version = version.version)
@@ -264,12 +252,10 @@ class BootstrapCrossSigningTask @Inject constructor(
                 // ensure we store existing backup secret if we have it!
                 if (isMegolmBackupSecretKnown) {
                     // check it matches
-                    val isValid = awaitCallback<Boolean> {
-                        session.cryptoService().keysBackupService().isValidRecoveryKeyForCurrentVersion(knownMegolmSecret!!.recoveryKey, it)
-                    }
+                    val isValid = session.cryptoService().keysBackupService().isValidRecoveryKeyForCurrentVersion(knownMegolmSecret!!.recoveryKey)
                     if (isValid) {
                         Timber.d("## BootstrapCrossSigningTask: Creating 4S - Megolm key valid and known")
-                        extractCurveKeyFromRecoveryKey(knownMegolmSecret!!.recoveryKey)?.toBase64NoPadding()?.let { secret ->
+                        extractCurveKeyFromRecoveryKey(knownMegolmSecret.recoveryKey)?.toBase64NoPadding()?.let { secret ->
                             ssssService.storeSecret(
                                     KEYBACKUP_SECRET_SSSS_NAME,
                                     secret,

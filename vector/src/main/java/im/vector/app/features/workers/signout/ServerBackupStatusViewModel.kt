@@ -155,7 +155,9 @@ class ServerBackupStatusViewModel @AssistedInject constructor(@Assisted initialS
 
     fun refreshRemoteStateIfNeeded() {
         if (keysBackupState.value == KeysBackupState.Disabled) {
-            session.cryptoService().keysBackupService().checkAndStartKeysBackup()
+            viewModelScope.launch {
+                session.cryptoService().keysBackupService().checkAndStartKeysBackup()
+            }
         }
     }
 

@@ -27,13 +27,11 @@ import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
-import org.matrix.android.sdk.api.MatrixCallback
-import org.matrix.android.sdk.api.NoOpMatrixCallback
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupService
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupState
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupStateListener
-import org.matrix.android.sdk.internal.crypto.keysbackup.model.KeysBackupVersionTrust
 import timber.log.Timber
 
 class KeysBackupSettingsViewModel @AssistedInject constructor(@Assisted initialState: KeysBackupSettingViewState,
@@ -70,7 +68,9 @@ class KeysBackupSettingsViewModel @AssistedInject constructor(@Assisted initialS
     }
 
     private fun init() {
-        keysBackupService.forceUsingLastVersion(NoOpMatrixCallback())
+        viewModelScope.launch {
+            keysBackupService.forceUsingLastVersion()
+        }
     }
 
     private fun getKeysBackupTrust() = withState { state ->
@@ -86,26 +86,24 @@ class KeysBackupSettingsViewModel @AssistedInject constructor(@Assisted initialS
             }
             Timber.d("BACKUP: HEEEEEEE TWO")
 
-            keysBackupService
-                    .getKeysBackupTrust(versionResult, object : MatrixCallback<KeysBackupVersionTrust> {
-                        override fun onSuccess(data: KeysBackupVersionTrust) {
-                            Timber.d("BACKUP: HEEEE suceeeded $data")
-                            setState {
-                                copy(
-                                        keysBackupVersionTrust = Success(data)
-                                )
-                            }
-                        }
-
-                        override fun onFailure(failure: Throwable) {
-                            Timber.d("BACKUP: HEEEE FAILED $failure")
-                            setState {
-                                copy(
-                                        keysBackupVersionTrust = Fail(failure)
-                                )
-                            }
-                        }
-                    })
+            viewModelScope.launch {
+                try {
+                    val data = keysBackupService.getKeysBackupTrust(versionResult)
+                    Timber.d("BACKUP: HEEEE suceeeded $data")
+                    setState {
+                        copy(
+                                keysBackupVersionTrust = Success(data)
+                        )
+                    }
+                } catch (failure: Throwable) {
+                    Timber.d("BACKUP: HEEEE FAILED $failure")
+                    setState {
+                        copy(
+                                keysBackupVersionTrust = Fail(failure)
+                        )
+                    }
+                }
+            }
         }
     }
 
@@ -128,15 +126,16 @@ class KeysBackupSettingsViewModel @AssistedInject constructor(@Assisted initialS
     private fun deleteCurrentBackup() {
         val keysBackupService = keysBackupService
 
-        if (keysBackupService.currentBackupVersion != null) {
+        val currentBackupVersion = keysBackupService.currentBackupVersion
+        if (currentBackupVersion != null) {
             setState {
                 copy(
                         deleteBackupRequest = Loading()
                 )
             }
-
-            keysBackupService.deleteBackup(keysBackupService.currentBackupVersion!!, object : MatrixCallback<Unit> {
-                override fun onSuccess(data: Unit) {
+            viewModelScope.launch {
+                try {
+                    keysBackupService.deleteBackup(currentBackupVersion)
                     setState {
                         copy(
                                 keysBackupVersion = null,
@@ -145,16 +144,14 @@ class KeysBackupSettingsViewModel @AssistedInject constructor(@Assisted initialS
                                 deleteBackupRequest = Uninitialized
                         )
                     }
-                }
-
-                override fun onFailure(failure: Throwable) {
+                } catch (failure: Throwable) {
                     setState {
                         copy(
                                 deleteBackupRequest = Fail(failure)
                         )
                     }
                 }
-            })
+            }
         }
     }
 

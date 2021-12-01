@@ -22,7 +22,6 @@ import org.matrix.android.sdk.internal.crypto.DeviceListManager
 import org.matrix.android.sdk.internal.crypto.MXOlmDevice
 import org.matrix.android.sdk.internal.crypto.actions.EnsureOlmSessionsForDevicesAction
 import org.matrix.android.sdk.internal.crypto.actions.MessageEncrypter
-import org.matrix.android.sdk.internal.crypto.keysbackup.DefaultKeysBackupService
 import org.matrix.android.sdk.internal.crypto.repository.WarnOnUnknownDeviceRepository
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.crypto.tasks.SendToDeviceTask
@@ -32,7 +31,7 @@ import javax.inject.Inject
 
 internal class MXMegolmEncryptionFactory @Inject constructor(
         private val olmDevice: MXOlmDevice,
-        private val defaultKeysBackupService: DefaultKeysBackupService,
+//        private val defaultKeysBackupService: DefaultKeysBackupService,
         private val cryptoStore: IMXCryptoStore,
         private val deviceListManager: DeviceListManager,
         private val ensureOlmSessionsForDevicesAction: EnsureOlmSessionsForDevicesAction,
@@ -48,7 +47,7 @@ internal class MXMegolmEncryptionFactory @Inject constructor(
         return MXMegolmEncryption(
                 roomId = roomId,
                 olmDevice = olmDevice,
-                defaultKeysBackupService = defaultKeysBackupService,
+//                defaultKeysBackupService = defaultKeysBackupService,
                 cryptoStore = cryptoStore,
                 deviceListManager = deviceListManager,
                 ensureOlmSessionsForDevicesAction = ensureOlmSessionsForDevicesAction,
