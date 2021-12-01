@@ -1,0 +1,10 @@
+- Update codebase to Element v1.3.8
+- Fix some edge cases when counting unread chats
+- Sort subspaces by alphabet
+- Fix crash of the color selection preference on older devices
+- Hide "member made no changes" events in the timeline
+- Enable "Mark as unread" by default
+- Sort room members strictly by power level, instead of using a "custom" category
+- Fix displayname color by power level in reply composer
+- Apply presence to all DMs with a user
+- Link privacy policy from the login splash screen
