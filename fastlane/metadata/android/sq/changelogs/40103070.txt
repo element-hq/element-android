@@ -1,0 +1,2 @@
+Ndryshimet kryesore në këtë version: Ndreqje të metash të lidhura kryesisht me njoftimet.
+Regjistër i plotë ndryshimesh: https://github.com/vector-im/element-android/releases/tag/v1.3.7-RC2
