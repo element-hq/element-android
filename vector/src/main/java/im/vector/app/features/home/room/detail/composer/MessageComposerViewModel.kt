@@ -718,7 +718,7 @@ class MessageComposerViewModel @AssistedInject constructor(
         if (isCancelled) {
             voiceMessageHelper.deleteRecording()
         } else {
-            voiceMessageHelper.stopRecording()?.let { audioType ->
+            voiceMessageHelper.stopRecording(convertForSending = true)?.let { audioType ->
                 if (audioType.duration > 1000) {
                     room.sendMedia(audioType.toContentAttachmentData(isVoiceMessage = true), false, emptySet())
                 } else {
