@@ -19,6 +19,8 @@ package im.vector.lib.multipicker
 import android.content.Context
 import android.content.Intent
 import android.provider.OpenableColumns
+import androidx.core.database.getLongOrNull
+import androidx.core.database.getStringOrNull
 import im.vector.lib.multipicker.entity.MultiPickerBaseType
 import im.vector.lib.multipicker.entity.MultiPickerFileType
 import im.vector.lib.multipicker.utils.getColumnIndexOrNull
@@ -53,8 +55,8 @@ class FilePicker : Picker<MultiPickerBaseType>() {
                                 val nameColumn = cursor.getColumnIndexOrNull(OpenableColumns.DISPLAY_NAME) ?: return@use null
                                 val sizeColumn = cursor.getColumnIndexOrNull(OpenableColumns.SIZE) ?: return@use null
                                 if (cursor.moveToFirst()) {
-                                    val name = cursor.getString(nameColumn)
-                                    val size = cursor.getLong(sizeColumn)
+                                    val name = cursor.getStringOrNull(nameColumn)
+                                    val size = cursor.getLongOrNull(sizeColumn) ?: 0
 
                                     MultiPickerFileType(
                                             name,
