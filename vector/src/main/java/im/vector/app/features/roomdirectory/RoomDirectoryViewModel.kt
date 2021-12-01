@@ -233,7 +233,6 @@ class RoomDirectoryViewModel @AssistedInject constructor(
     }
 
     override fun onCleared() {
-        currentJob?.cancel()
         super.onCleared()
     }
 }

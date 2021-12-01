@@ -143,7 +143,6 @@ class SearchViewModel @AssistedInject constructor(
     }
 
     override fun onCleared() {
-        currentTask?.cancel()
         super.onCleared()
     }
 }
