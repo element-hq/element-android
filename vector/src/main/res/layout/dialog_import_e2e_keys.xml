@@ -28,9 +28,9 @@
         style="@style/Widget.Vector.TextInputLayout.Password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toStartOf="@+id/importDialogShowPassword"
+        app:layout_constraintEnd_toStartOf="@id/importDialogShowPassword"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dialog_e2e_keys_passphrase_filename">
+        app:layout_constraintTop_toBottomOf="@id/dialog_e2e_keys_passphrase_filename">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/dialog_e2e_keys_passphrase_edit_text"

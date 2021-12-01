@@ -59,7 +59,7 @@
             android:minWidth="120dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintStart_toEndOf="@+id/itemCallRejectView"
+            app:layout_constraintStart_toEndOf="@id/itemCallRejectView"
             app:layout_constraintTop_toTopOf="@id/itemCallRejectView"
             tools:text="@string/join" />
 
@@ -70,7 +70,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="4dp"
             android:minWidth="120dp"
-            app:layout_constraintEnd_toStartOf="@+id/itemCallAcceptView"
+            app:layout_constraintEnd_toStartOf="@id/itemCallAcceptView"
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"

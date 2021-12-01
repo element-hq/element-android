@@ -25,3 +25,6 @@
 
 ### Use style="@style/Widget.Vector.TextView.*" instead of textSize attribute
 android:textSize===9
+
+### Use `@id` and not `@+id` when referencing ids in layouts
+Of="@\+id

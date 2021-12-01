@@ -50,10 +50,10 @@
         android:maxLines="1"
         android:textColor="?vctr_content_primary"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/createDirectRoomUserID"
+        app:layout_constraintBottom_toTopOf="@id/createDirectRoomUserID"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/createDirectRoomUserAvatarContainer"
+        app:layout_constraintStart_toEndOf="@id/createDirectRoomUserAvatarContainer"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@sample/users.json/data/displayName" />
 
@@ -68,8 +68,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="@+id/createDirectRoomUserName"
-        app:layout_constraintTop_toBottomOf="@+id/createDirectRoomUserName"
+        app:layout_constraintStart_toStartOf="@id/createDirectRoomUserName"
+        app:layout_constraintTop_toBottomOf="@id/createDirectRoomUserName"
         tools:text="@sample/users.json/data/id" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

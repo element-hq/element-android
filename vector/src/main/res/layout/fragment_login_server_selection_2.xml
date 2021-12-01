@@ -52,7 +52,7 @@
                     android:layout_height="wrap_content"
                     android:importantForAccessibility="no"
                     android:src="@drawable/ic_logo_matrix_org"
-                    app:layout_constraintBottom_toTopOf="@+id/loginServerChoiceMatrixOrgText"
+                    app:layout_constraintBottom_toTopOf="@id/loginServerChoiceMatrixOrgText"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_chainStyle="packed"
@@ -71,7 +71,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/loginServerChoiceMatrixOrgIcon" />
+                    app:layout_constraintTop_toBottomOf="@id/loginServerChoiceMatrixOrgIcon" />
 
             </im.vector.app.core.platform.CheckableConstraintLayout>
 
@@ -104,7 +104,7 @@
                     android:gravity="start"
                     android:text="@string/login_element_matrix_server_and_others"
                     android:textColor="?vctr_content_primary"
-                    app:layout_constraintBottom_toTopOf="@+id/loginServerChoiceOtherText"
+                    app:layout_constraintBottom_toTopOf="@id/loginServerChoiceOtherText"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_chainStyle="packed" />
@@ -121,7 +121,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/loginServerChoiceOtherTitle" />
+                    app:layout_constraintTop_toBottomOf="@id/loginServerChoiceOtherTitle" />
 
             </im.vector.app.core.platform.CheckableConstraintLayout>
 
@@ -135,9 +135,9 @@
                 android:paddingBottom="16dp"
                 android:text="@string/login_server_modular_learn_more_about_ems"
                 android:textColor="?vctr_content_secondary"
-                app:layout_constraintBottom_toBottomOf="@+id/loginServerChoiceEmsText"
+                app:layout_constraintBottom_toBottomOf="@id/loginServerChoiceEmsText"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/loginServerChoiceEmsText" />
+                app:layout_constraintTop_toTopOf="@id/loginServerChoiceEmsText" />
 
         </LinearLayout>
 

@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:itemSpacing="1dp"
-        app:layout_constraintBottom_toTopOf="@+id/buttonBar"
+        app:layout_constraintBottom_toTopOf="@id/buttonBar"
         app:layout_constraintTop_toTopOf="parent"
         tools:itemCount="1"
         tools:listitem="@layout/item_bottom_sheet_joinrule_restricted" />

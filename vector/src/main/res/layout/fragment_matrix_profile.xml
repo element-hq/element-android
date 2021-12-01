@@ -82,7 +82,7 @@
                         android:textColor="?vctr_content_primary"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/matrixProfileToolbarAvatarImageView"
+                        app:layout_constraintStart_toEndOf="@id/matrixProfileToolbarAvatarImageView"
                         app:layout_constraintTop_toTopOf="parent"
                         tools:alpha="1"
                         tools:text="@sample/rooms.json/data/name" />

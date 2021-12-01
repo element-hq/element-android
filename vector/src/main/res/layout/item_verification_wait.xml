@@ -33,7 +33,7 @@
         android:src="@drawable/ic_monitor"
         app:layout_constraintEnd_toStartOf="@id/smartphoneIcon"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/use_latest_riot"
+        app:layout_constraintTop_toBottomOf="@id/use_latest_riot"
         app:tint="?vctr_notice_secondary"
         tools:ignore="MissingPrefix" />
 
@@ -47,7 +47,7 @@
         android:src="@drawable/ic_smartphone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/monitorIcon"
-        app:layout_constraintTop_toBottomOf="@+id/use_latest_riot"
+        app:layout_constraintTop_toBottomOf="@id/use_latest_riot"
         app:tint="?vctr_notice_secondary"
         tools:ignore="MissingPrefix" />
 

@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:autoLink="web"
         android:ellipsize="end"
-        app:layout_constraintBottom_toTopOf="@+id/expandableArrow"
+        app:layout_constraintBottom_toTopOf="@id/expandableArrow"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -30,7 +30,7 @@
         android:src="@drawable/ic_expand_more"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/expandableContent"
+        app:layout_constraintTop_toBottomOf="@id/expandableContent"
         app:tint="?vctr_content_secondary"
         tools:ignore="MissingPrefix" />
 
