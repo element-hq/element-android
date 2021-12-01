@@ -38,7 +38,6 @@
             app:layout_constraintStart_toEndOf="@id/ssss_shield"
             app:layout_constraintTop_toTopOf="parent" />
 
-
         <TextView
             android:id="@+id/ssss_restore_with_key_text"
             style="@style/Widget.Vector.TextView.Subtitle"
@@ -50,7 +49,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ssss_restore_with_key"
             tools:text="@string/enter_secret_storage_input_key" />
-
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/ssss_key_enter_til"
@@ -77,7 +75,6 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <!--        -->
-
 
         <Button
             android:id="@+id/ssss_key_use_file"
@@ -109,7 +106,6 @@
             app:layout_constraintTop_toBottomOf="@id/ssss_key_enter_til"
             app:layout_goneMarginBottom="@dimen/layout_vertical_margin_big" />
 
-
         <im.vector.app.core.ui.views.BottomSheetActionButton
             android:id="@+id/ssss_key_reset"
             android:layout_width="match_parent"
@@ -122,7 +118,6 @@
             app:leftIcon="@drawable/ic_alert_triangle"
             app:tint="?colorError"
             app:titleTextColor="?vctr_content_secondary" />
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

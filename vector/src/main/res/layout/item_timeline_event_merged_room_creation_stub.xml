@@ -170,7 +170,6 @@
             android:textStyle="italic"
             tools:text="@string/room_created_summary_item" />
 
-
         <TextView
             android:id="@+id/itemMergedExpandTextView"
             style="@style/Widget.Vector.TextView.Body"

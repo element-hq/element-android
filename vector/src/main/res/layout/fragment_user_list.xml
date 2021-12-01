@@ -108,7 +108,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/userListSearch" />
 
-
     <TextView
         android:id="@+id/userListE2EbyDefaultDisabled"
         style="@style/Widget.Vector.TextView.Body"

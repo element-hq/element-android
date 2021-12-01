@@ -16,7 +16,6 @@
         tools:itemCount="1"
         tools:listitem="@layout/item_bottom_sheet_joinrule_restricted" />
 
-
     <LinearLayout
         android:id="@+id/buttonBar"
         android:layout_width="match_parent"
@@ -45,7 +44,6 @@
             android:layout_height="wrap_content"
             android:text="@string/save" />
     </LinearLayout>
-
 
     <FrameLayout
         android:layout_width="match_parent"

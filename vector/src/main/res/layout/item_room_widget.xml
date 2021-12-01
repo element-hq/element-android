@@ -57,5 +57,4 @@
         app:tint="?vctr_content_secondary"
         tools:ignore="MissingPrefix" />
 
-
 </androidx.constraintlayout.widget.ConstraintLayout>

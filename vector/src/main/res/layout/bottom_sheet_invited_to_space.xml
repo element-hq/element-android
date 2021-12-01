@@ -33,7 +33,6 @@
                 app:layout_constraintTop_toTopOf="parent"
                 tools:src="@sample/user_round_avatars" />
 
-
             <TextView
                 android:id="@+id/inviterText"
                 style="@style/Widget.Vector.TextView.Subtitle"
@@ -60,7 +59,6 @@
                 app:layout_constraintStart_toEndOf="@id/inviterAvatarImage"
                 app:layout_constraintTop_toBottomOf="@id/inviterText"
                 tools:text="@sample/users.json/data/id" />
-
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

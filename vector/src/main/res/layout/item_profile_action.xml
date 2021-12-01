@@ -80,7 +80,6 @@
         tools:src="@drawable/ic_shield_warning"
         tools:visibility="visible" />
 
-
     <ImageView
         android:id="@+id/actionEditable"
         android:layout_width="wrap_content"

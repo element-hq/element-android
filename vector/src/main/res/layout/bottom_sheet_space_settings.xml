@@ -44,7 +44,6 @@
             app:layout_constraintVertical_chainStyle="packed"
             tools:text="@sample/spaces.json/data/name" />
 
-
         <TextView
             android:id="@+id/spaceDescription"
             style="@style/Widget.Vector.TextView.Body"
@@ -108,7 +107,6 @@
         app:tint="?vctr_content_primary"
         app:titleTextColor="?vctr_content_primary"
         tools:actionDescription="" />
-
 
     <im.vector.app.core.ui.views.BottomSheetActionButton
         android:id="@+id/addRooms"

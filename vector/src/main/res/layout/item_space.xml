@@ -54,7 +54,6 @@
         tools:text="147"
         tools:visibility="visible" />
 
-
     <TextView
         android:id="@+id/groupNameView"
         style="@style/Widget.Vector.TextView.Subtitle"
@@ -91,7 +90,6 @@
         app:layout_constraintVertical_chainStyle="packed"
         tools:text="@tools:sample/lorem/random"
         tools:visibility="visible" />
-
 
     <ImageView
         android:id="@+id/groupChildrenCollapse"

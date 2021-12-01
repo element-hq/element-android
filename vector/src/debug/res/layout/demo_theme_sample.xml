@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <!--
- The aim of this file is to test the different themes of Riot
+ The aim of this file is to test the different themes of Element
   -->
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"

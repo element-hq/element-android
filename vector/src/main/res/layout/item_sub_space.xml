@@ -54,7 +54,6 @@
         tools:text="147"
         tools:visibility="visible" />
 
-
     <TextView
         android:id="@+id/groupNameView"
         style="@style/Widget.Vector.TextView.Subtitle"

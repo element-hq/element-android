@@ -62,7 +62,6 @@
 
         </com.google.android.material.appbar.AppBarLayout>
 
-
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/showUserCodeCard"
             android:layout_width="0dp"
@@ -109,7 +108,6 @@
                     android:textColor="?vctr_content_tertiary"
                     app:layout_constraintTop_toBottomOf="@id/showUserCodeCardNameText"
                     tools:text="@sample/users.json/data/id" />
-
 
                 <!--                android:id="@+id/itemShareQrCodeImage"-->
                 <!--                android:layout_width="300dp"-->

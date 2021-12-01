@@ -30,7 +30,6 @@
             app:layout_constraintVertical_chainStyle="spread_inside"
             tools:src="@sample/user_round_avatars" />
 
-
         <im.vector.app.core.ui.views.PresenceStateImageView
             android:id="@+id/memberProfilePresenceImageView"
             android:layout_width="26dp"

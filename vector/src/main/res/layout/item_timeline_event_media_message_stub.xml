@@ -31,7 +31,6 @@
         app:layout_constraintTop_toTopOf="@id/messageThumbnailView"
         tools:visibility="visible" />
 
-
     <include
         android:id="@+id/messageMediaUploadProgressLayout"
         layout="@layout/media_upload_download_progress_layout"

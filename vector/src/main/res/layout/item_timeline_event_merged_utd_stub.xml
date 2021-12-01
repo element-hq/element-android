@@ -33,7 +33,6 @@
             app:drawableStartCompat="@drawable/ic_clock"
             app:drawableTint="?vctr_content_secondary" />
 
-
         <TextView
             android:id="@+id/itemVerificationDoneDetailTextView"
             style="@style/Widget.Vector.TextView.Caption"
@@ -47,7 +46,6 @@
             android:text="@string/notice_crypto_unable_to_decrypt_friendly_desc"
             android:textColor="?vctr_content_secondary"
             android:textStyle="italic" />
-
 
         <TextView
             android:id="@+id/itemMergedExpandTextView"

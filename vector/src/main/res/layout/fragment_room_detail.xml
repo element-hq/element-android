@@ -150,7 +150,6 @@
         android:visibility="visible"
         app:layout_constraintTop_toBottomOf="@id/syncStateView" />
 
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/timelineRecyclerView"
         android:layout_width="0dp"
@@ -178,7 +177,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/removeJitsiWidgetView"
         tools:visibility="visible" />
-
 
     <im.vector.app.core.ui.views.NotificationAreaView
         android:id="@+id/notificationAreaView"

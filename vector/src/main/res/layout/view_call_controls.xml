@@ -52,7 +52,6 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/connectedControls"
         android:layout_width="match_parent"
@@ -92,7 +91,6 @@
             app:backgroundTint="?android:colorBackground"
             app:tint="?vctr_content_primary"
             tools:ignore="MissingConstraints,MissingPrefix" />
-
 
         <ImageView
             android:id="@+id/videoToggleIcon"

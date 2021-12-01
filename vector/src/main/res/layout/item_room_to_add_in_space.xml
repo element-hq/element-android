@@ -52,5 +52,4 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:src="@drawable/ic_checkbox_on" />
 
-
 </androidx.constraintlayout.widget.ConstraintLayout>

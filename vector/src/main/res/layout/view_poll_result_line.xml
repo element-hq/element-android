@@ -29,7 +29,6 @@
         android:textColor="?vctr_content_primary"
         tools:text="Open a Github Issue" />
 
-
     <TextView
         android:id="@+id/pollResultItemPercent"
         style="@style/Widget.Vector.TextView.Body"

@@ -69,7 +69,6 @@
 
     </FrameLayout>
 
-
     <im.vector.app.core.ui.views.ShieldImageView
         android:id="@+id/messageE2EDecoration"
         android:layout_width="16dp"
@@ -91,7 +90,6 @@
         android:src="@drawable/ic_warning_badge"
         android:visibility="gone"
         tools:visibility="visible" />
-
 
     <LinearLayout
         android:id="@+id/informationBottom"

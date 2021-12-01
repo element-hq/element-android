@@ -26,7 +26,6 @@
 
     </FrameLayout>
 
-
     <!-- Margin bottom does not work, so I use space -->
     <Space
         android:id="@+id/roomAvatarBottomSpace"

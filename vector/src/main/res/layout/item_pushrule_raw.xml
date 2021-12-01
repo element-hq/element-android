@@ -6,7 +6,6 @@
     android:orientation="horizontal"
     android:padding="8dp">
 
-
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -22,7 +21,6 @@
             android:layout_marginBottom="4dp"
             android:textStyle="bold"
             tools:text=".m.rule.contains_user_name" />
-
 
         <TextView
             android:id="@+id/pushRuleDescription"
