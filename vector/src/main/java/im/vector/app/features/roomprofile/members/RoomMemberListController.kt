@@ -49,10 +49,6 @@ class RoomMemberListController @Inject constructor(
 
     var callback: Callback? = null
 
-    init {
-        setData(null)
-    }
-
     override fun buildModels(data: RoomMemberListViewState?) {
         data ?: return
         val host = this

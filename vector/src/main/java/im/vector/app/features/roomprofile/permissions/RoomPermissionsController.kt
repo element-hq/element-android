@@ -108,10 +108,6 @@ class RoomPermissionsController @Inject constructor(
             EditablePermission.UpgradeTheRoom()
     )
 
-    init {
-        setData(null)
-    }
-
     override fun buildModels(data: RoomPermissionsViewState?) {
         val host = this
         buildProfileSection(

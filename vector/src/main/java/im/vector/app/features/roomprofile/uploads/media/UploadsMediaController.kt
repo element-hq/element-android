@@ -54,10 +54,6 @@ class UploadsMediaController @Inject constructor(
 
     private val itemSize = dimensionConverter.dpToPx(IMAGE_SIZE_DP)
 
-    init {
-        setData(null)
-    }
-
     override fun buildModels(data: RoomUploadsViewState?) {
         data ?: return
         val host = this
