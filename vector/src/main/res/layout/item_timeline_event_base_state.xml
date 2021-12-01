@@ -11,7 +11,7 @@
         android:id="@+id/messageSelectedBackground"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignBottom="@+id/informationBottom"
+        android:layout_alignBottom="@id/informationBottom"
         android:layout_alignParentTop="true"
         android:background="@drawable/highlighted_message_background" />
 
@@ -84,7 +84,7 @@
         android:id="@+id/messageFailToSendIndicator"
         android:layout_width="14dp"
         android:layout_height="14dp"
-        android:layout_alignTop="@+id/viewStubContainer"
+        android:layout_alignTop="@id/viewStubContainer"
         android:layout_marginStart="2dp"
         android:layout_toEndOf="@id/viewStubContainer"
         android:contentDescription="@string/a11y_error_message_not_sent"

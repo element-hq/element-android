@@ -142,7 +142,7 @@
         android:id="@+id/mergedSumContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/creationTile"
+        android:layout_below="@id/creationTile"
         android:layout_marginTop="8dp">
 
         <ImageView
@@ -192,7 +192,7 @@
         android:id="@+id/itemMergedSeparatorView"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_below="@+id/mergedSumContainer"
+        android:layout_below="@id/mergedSumContainer"
         android:layout_marginTop="4dp"
         android:background="?vctr_list_separator" />
 

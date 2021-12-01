@@ -21,7 +21,7 @@
             app:scrimAnimationDuration="250"
             app:scrimVisibleHeightTrigger="80dp"
             app:titleEnabled="false"
-            app:toolbarId="@+id/matrixProfileToolbar">
+            app:toolbarId="@id/matrixProfileToolbar">
 
             <ViewStub
                 android:id="@+id/matrixProfileHeaderView"
