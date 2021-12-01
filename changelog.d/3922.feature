@@ -1,1 +1,0 @@
-Voice messages: Persist drafts of voice messages when navigating between rooms

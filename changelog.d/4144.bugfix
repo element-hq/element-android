@@ -1,1 +1,0 @@
-Allowing users to hang up VOIP calls during the initialisation phase (avoids getting stuck in the call screen if something goes wrong)
