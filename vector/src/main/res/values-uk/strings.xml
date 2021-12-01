@@ -1958,10 +1958,10 @@
     <string name="not_a_valid_qr_code">Цей QR-код не дійсний</string>
     <string name="qr_code_scanned_verif_waiting">Чекаємо на %s…</string>
     <string name="qr_code_scanned_verif_waiting_notice">Майже все! Чекаємо на підтвердження…</string>
-    <string name="qr_code_scanned_self_verif_notice">Майже все! Чи показує інший пристрій такий самий щит\?</string>
+    <string name="qr_code_scanned_self_verif_notice">Майже все! Чи показує інший пристрій галочку\?</string>
     <string name="qr_code_scanned_by_other_no">Ні</string>
     <string name="qr_code_scanned_by_other_yes">Так</string>
-    <string name="qr_code_scanned_by_other_notice">Майже все! Чи показує %s такий самий щит\?</string>
+    <string name="qr_code_scanned_by_other_notice">Майже все! Чи показує %s галочку\?</string>
     <string name="a11y_qr_code_for_verification">QR-код</string>
     <string name="a13n_qr_code_description">Зображення QR-коду</string>
     <string name="qr_code">QR-код</string>
