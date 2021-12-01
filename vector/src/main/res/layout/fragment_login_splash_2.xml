@@ -202,7 +202,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="14dp"
-            android:text="@string/login_i_already_have_an_account" />
+            android:text="@string/login_splash_already_have_account" />
 
     </LinearLayout>
 

@@ -24,7 +24,6 @@
     <string name="login_if_you_re_not_sure_select_this_option">If you\'re not sure, select this option</string>
     <string name="login_element_matrix_server_and_others">Element Matrix Server and others</string>
     <string name="login_create_a_new_account">Create a new account</string>
-    <string name="login_i_already_have_an_account">I already have an account</string>
 
     <string name="login_unknown_user_warning">Warning: no profile information can be retrieved with this Matrix identifier. Please check that there is no mistake.</string>
 
