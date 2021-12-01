@@ -1,0 +1,1 @@
+Updates onboarding splash screen to have a dedicated sign in button and removes the dual purpose sign in/up stage
