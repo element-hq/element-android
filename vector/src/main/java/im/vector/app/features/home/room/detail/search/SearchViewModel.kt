@@ -141,8 +141,4 @@ class SearchViewModel @AssistedInject constructor(
             )
         }
     }
-
-    override fun onCleared() {
-        super.onCleared()
-    }
 }
