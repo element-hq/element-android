@@ -4,14 +4,14 @@
 
     <!-- Click on main FAB: toggle -->
     <Transition
-        motion:constraintSetEnd="@+id/constraint_set_fab_menu_open"
-        motion:constraintSetStart="@+id/constraint_set_fab_menu_close"
+        motion:constraintSetEnd="@id/constraint_set_fab_menu_open"
+        motion:constraintSetStart="@id/constraint_set_fab_menu_close"
         motion:duration="300"
         motion:motionInterpolator="easeInOut">
 
         <OnClick
             motion:clickAction="toggle"
-            motion:targetId="@+id/createRoomButton" />
+            motion:targetId="@id/createRoomButton" />
 
         <KeyFrameSet>
 
