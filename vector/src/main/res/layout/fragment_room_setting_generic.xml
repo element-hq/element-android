@@ -41,7 +41,7 @@
                     android:id="@+id/roomSettingsDecorationToolbarAvatarImageView"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    app:layout_constraintCircle="@+id/roomSettingsToolbarAvatarImageView"
+                    app:layout_constraintCircle="@id/roomSettingsToolbarAvatarImageView"
                     app:layout_constraintCircleAngle="135"
                     app:layout_constraintCircleRadius="20dp"
                     tools:ignore="MissingConstraints" />

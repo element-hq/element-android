@@ -27,5 +27,5 @@
 android:textSize===9
 
 ### Use `@id` and not `@+id` when referencing ids in layouts
-Of="@\+id
+layout_constraint(.*)="@\+id
 accessibilityTraversal(.*)="@\+id

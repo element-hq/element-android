@@ -47,7 +47,7 @@
         android:paddingEnd="4dp"
         android:textColor="?colorOnError"
         android:visibility="gone"
-        app:layout_constraintCircle="@+id/groupAvatarImageView"
+        app:layout_constraintCircle="@id/groupAvatarImageView"
         app:layout_constraintCircleAngle="45"
         app:layout_constraintCircleRadius="24dp"
         tools:background="@drawable/bg_unread_highlight"

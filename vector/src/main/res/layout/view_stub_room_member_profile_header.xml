@@ -39,7 +39,7 @@
             android:importantForAccessibility="no"
             android:padding="3dp"
             android:visibility="gone"
-            app:layout_constraintCircle="@+id/memberProfileAvatarView"
+            app:layout_constraintCircle="@id/memberProfileAvatarView"
             app:layout_constraintCircleAngle="135"
             app:layout_constraintCircleRadius="64dp"
             tools:ignore="MissingConstraints"

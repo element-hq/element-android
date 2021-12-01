@@ -45,7 +45,7 @@
         android:importantForAccessibility="no"
         android:padding="2dp"
         android:visibility="gone"
-        app:layout_constraintCircle="@+id/matrixItemAvatar"
+        app:layout_constraintCircle="@id/matrixItemAvatar"
         app:layout_constraintCircleAngle="135"
         app:layout_constraintCircleRadius="16dp"
         tools:ignore="MissingConstraints"
