@@ -19,6 +19,7 @@ package im.vector.app.core.intent
 import android.content.Context
 import android.net.Uri
 import android.provider.OpenableColumns
+import androidx.core.database.getStringOrNull
 import im.vector.lib.multipicker.utils.getColumnIndexOrNull
 
 fun getFilenameFromUri(context: Context?, uri: Uri): String? {
@@ -27,7 +28,7 @@ fun getFilenameFromUri(context: Context?, uri: Uri): String? {
                 ?.use { cursor ->
                     if (cursor.moveToFirst()) {
                         return cursor.getColumnIndexOrNull(OpenableColumns.DISPLAY_NAME)
-                                ?.let { cursor.getString(it) }
+                                ?.let { cursor.getStringOrNull(it) }
                     }
                 }
     }

@@ -97,6 +97,8 @@ class CallControlsView @JvmOverloads constructor(
                 views.ringingControlDecline.isVisible = true
                 views.connectedControls.isVisible = false
             }
+            CallState.CreateOffer,
+            CallState.Idle,
             is CallState.Connected,
             is CallState.Dialing,
             is CallState.Answering    -> {
@@ -105,7 +107,7 @@ class CallControlsView @JvmOverloads constructor(
                 views.videoToggleIcon.isVisible = state.isVideoCall
                 views.moreIcon.isVisible = callState is CallState.Connected && callState.iceConnectionState == MxPeerConnectionState.CONNECTED
             }
-            else                      -> {
+            is CallState.Ended        -> {
                 views.ringingControls.isVisible = false
                 views.connectedControls.isVisible = false
             }

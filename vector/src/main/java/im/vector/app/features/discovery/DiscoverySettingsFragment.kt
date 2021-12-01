@@ -186,8 +186,7 @@ class DiscoverySettingsFragment @Inject constructor(
         if (newValue) {
             withState(viewModel) { state ->
                 requireContext().showIdentityServerConsentDialog(
-                        state.identityServer.invoke()?.serverUrl,
-                        policyLinkCallback = { viewModel.handle(DiscoverySettingsAction.SetPoliciesExpandState(expanded = true)) },
+                        state.identityServer.invoke(),
                         consentCallBack = { viewModel.handle(DiscoverySettingsAction.UpdateUserConsent(true)) }
                 )
             }

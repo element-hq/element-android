@@ -58,6 +58,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/passphrase_create_passphrase"
+                android:inputType="textPassword"
                 android:maxLines="3" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -86,6 +87,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/passphrase_confirm_passphrase"
+                android:inputType="textPassword"
                 android:maxLines="3" />
 
         </com.google.android.material.textfield.TextInputLayout>

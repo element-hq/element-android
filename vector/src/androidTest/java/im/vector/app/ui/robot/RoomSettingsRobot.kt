@@ -26,6 +26,7 @@ import com.adevinta.android.barista.interaction.BaristaDialogInteractions.clickD
 import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem
 import im.vector.app.R
 import im.vector.app.espresso.tools.waitUntilActivityVisible
+import im.vector.app.espresso.tools.waitUntilDialogVisible
 import im.vector.app.espresso.tools.waitUntilViewVisible
 import im.vector.app.features.roommemberprofile.RoomMemberProfileActivity
 
@@ -78,9 +79,9 @@ class RoomSettingsRobot {
 
         // Room permissions
         clickListItem(R.id.matrixProfileRecyclerView, 17)
-        waitUntilViewVisible(withText(R.string.room_permissions_title))
+        waitUntilViewVisible(withText(R.string.room_permissions_change_room_avatar))
         clickOn(R.string.room_permissions_change_room_avatar)
-        waitUntilViewVisible(withId(android.R.id.button2))
+        waitUntilDialogVisible(withId(android.R.id.button2))
         clickDialogNegativeButton()
         waitUntilViewVisible(withText(R.string.room_permissions_title))
         // Toggle
@@ -95,7 +96,7 @@ class RoomSettingsRobot {
 
     private fun leaveRoom(block: DialogRobot.() -> Unit) {
         clickListItem(R.id.matrixProfileRecyclerView, 13)
-        waitUntilViewVisible(withId(android.R.id.button2))
+        waitUntilDialogVisible(withId(android.R.id.button2))
         val dialogRobot = DialogRobot()
         block(dialogRobot)
         if (dialogRobot.returnedToPreviousScreen) {
@@ -135,7 +136,7 @@ class RoomSettingsRobot {
 
         // Role
         clickListItem(R.id.matrixProfileRecyclerView, 3)
-        waitUntilViewVisible(withId(android.R.id.button2))
+        waitUntilDialogVisible(withId(android.R.id.button2))
         clickDialogNegativeButton()
         waitUntilViewVisible(withId(R.id.matrixProfileRecyclerView))
         pressBack()
