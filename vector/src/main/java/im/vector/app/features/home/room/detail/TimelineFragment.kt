@@ -1024,7 +1024,12 @@ class TimelineFragment @Inject constructor(
 
     private fun handleSearchAction() {
         if (session.getRoom(timelineArgs.roomId)?.isEncrypted() == false) {
-            navigator.openSearch(requireContext(), timelineArgs.roomId)
+            navigator.openSearch(
+                    context = requireContext(),
+                    roomId = timelineArgs.roomId,
+                    roomDisplayName = roomDetailViewModel.getRoomSummary()?.displayName,
+                    roomAvatarUrl = roomDetailViewModel.getRoomSummary()?.avatarUrl
+            )
         } else {
             showDialogWithMessage(getString(R.string.search_is_not_supported_in_e2e_room))
         }

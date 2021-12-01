@@ -492,8 +492,11 @@ class DefaultNavigator @Inject constructor(
         }
     }
 
-    override fun openSearch(context: Context, roomId: String) {
-        val intent = SearchActivity.newIntent(context, SearchArgs(roomId))
+    override fun openSearch(context: Context,
+                            roomId: String,
+                            roomDisplayName: String?,
+                            roomAvatarUrl: String?) {
+        val intent = SearchActivity.newIntent(context, SearchArgs(roomId, roomDisplayName, roomAvatarUrl))
         context.startActivity(intent)
     }
 
@@ -522,7 +525,7 @@ class DefaultNavigator @Inject constructor(
                 threadTimelineArgs = threadTimelineArgs,
                 threadListArgs = null,
                 eventIdToNavigate = eventIdToNavigate
-                ))
+        ))
     }
 
     override fun openThreadList(context: Context, threadTimelineArgs: ThreadTimelineArgs) {

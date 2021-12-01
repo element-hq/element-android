@@ -136,7 +136,7 @@ interface Navigator {
                         inMemory: List<AttachmentData> = emptyList(),
                         options: ((MutableList<Pair<View, String>>) -> Unit)?)
 
-    fun openSearch(context: Context, roomId: String)
+    fun openSearch(context: Context, roomId: String, roomDisplayName: String?, roomAvatarUrl: String?)
 
     fun openDevTools(context: Context, roomId: String)
 
@@ -145,5 +145,4 @@ interface Navigator {
     fun openThread(context: Context, threadTimelineArgs: ThreadTimelineArgs, eventIdToNavigate: String? = null)
 
     fun openThreadList(context: Context, threadTimelineArgs: ThreadTimelineArgs)
-
 }
