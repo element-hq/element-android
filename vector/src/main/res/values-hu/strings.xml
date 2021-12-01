@@ -1887,7 +1887,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="initialize_cross_signing">Eszközök közötti hitelesítés inicializálása</string>
     <string name="reset_cross_signing">Visszaállítási Kulcsok</string>
     <string name="a11y_qr_code_for_verification">QR kód</string>
-    <string name="qr_code_scanned_by_other_notice">Majdnem kész! %s is ugyanazt a pajzsot mutatja\?</string>
+    <string name="qr_code_scanned_by_other_notice">Majdnem kész! %s is ugyanazt a pipát mutatja\?</string>
     <string name="qr_code_scanned_by_other_yes">Igen</string>
     <string name="qr_code_scanned_by_other_no">Nem</string>
     <string name="no_connectivity_to_the_server_indicator">Megszakadt a kapcsolat a szerverrel</string>
@@ -1986,7 +1986,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="encryption_not_enabled">Titkosítás nincs engedélyezve</string>
     <string name="encryption_unknown_algorithm_tile_description">A szobában használt titkosítás nem támogatott</string>
     <string name="room_created_summary_item">%s elkészítette és beállította a szobát.</string>
-    <string name="qr_code_scanned_self_verif_notice">Majdnem kész! A másik eszközöd is ugyanazt a pajzsot mutatja\?</string>
+    <string name="qr_code_scanned_self_verif_notice">Majdnem kész! A másik eszközöd is ugyanazt a pipát mutatja\?</string>
     <string name="qr_code_scanned_verif_waiting_notice">Majdnem kész! Várakozás a megerősítésre…</string>
     <string name="qr_code_scanned_verif_waiting">Várakozás erre: %s…</string>
     <string name="error_failed_to_import_keys">A kulcsok betöltése sikertelen</string>
@@ -3034,4 +3034,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="identity_server_consent_dialog_title_2">Email címek és telefonszámok küldése ide: %s</string>
     <string name="shortcut_disabled_reason_sign_out">Kijelentkeztél a munkamenetből!</string>
     <string name="shortcut_disabled_reason_room_left">Elhagytad a szobát!</string>
+    <string name="identity_server_consent_dialog_content_3">A meglévő kapcsolatok felderítéséhez információkat (e-mail cím és telefonszám) kell elküldeni az azonosítási szolgáltatónak. Az adatok az adatvédelem miatt hashelve lesznek elküldve.</string>
+    <string name="identity_server_consent_dialog_content_question">Beleegyezel az információk elküldésébe\?</string>
+    <string name="action_not_now">Nem most</string>
 </resources>
