@@ -1,0 +1,2 @@
+此版本主要变化：Bug 修复！
+完整更新日志：https://github.com/vector-im/element-android/releases/tag/v1.3.8
