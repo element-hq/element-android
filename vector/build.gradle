@@ -15,7 +15,7 @@ kapt {
 // Note: 2 digits max for each value
 ext.versionMajor = 1
 ext.versionMinor = 99
-ext.versionPatch = 2
+ext.versionPatch = 3
 
 static def getGitTimestamp() {
     def cmd = 'git show -s --format=%ct'
