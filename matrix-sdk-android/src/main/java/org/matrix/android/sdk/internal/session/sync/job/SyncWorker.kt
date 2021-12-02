@@ -36,7 +36,7 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 private const val DEFAULT_LONG_POOL_TIMEOUT_SECONDS = 6L
-private const val DEFAULT_DELAY_TIMEOUT_MILLIS = 30_000L
+private const val DEFAULT_DELAY_MILLIS = 30_000L
 
 /**
  * Possible previous worker: None
@@ -52,7 +52,7 @@ internal class SyncWorker(context: Context,
             // In seconds
             val timeout: Long = DEFAULT_LONG_POOL_TIMEOUT_SECONDS,
             // In milliseconds
-            val delay: Long = DEFAULT_DELAY_TIMEOUT_MILLIS,
+            val delay: Long = DEFAULT_DELAY_MILLIS,
             val periodic: Boolean = false,
             val forceImmediate: Boolean = false,
             override val lastFailureMessage: String? = null
