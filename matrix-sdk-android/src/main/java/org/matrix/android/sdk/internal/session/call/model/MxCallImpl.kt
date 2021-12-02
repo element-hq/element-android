@@ -203,16 +203,19 @@ internal class MxCallImpl(
 
     override fun selectAnswer() {
         Timber.tag(loggerTag.value).v("select answer $callId")
-        if (isOutgoing) return
-        state = CallState.Answering
-        CallSelectAnswerContent(
-                callId = callId,
-                partyId = ourPartyId,
-                selectedPartyId = opponentPartyId?.getOrNull(),
-                version = MxCall.VOIP_PROTO_VERSION.toString()
-        )
-                .let { createEventAndLocalEcho(type = EventType.CALL_SELECT_ANSWER, roomId = roomId, content = it.toContent()) }
-                .also { eventSenderProcessor.postEvent(it) }
+        if (isOutgoing) {
+            // This is an outgoing call, select the remote client that answered.
+            // state is still DIALING.
+            CallSelectAnswerContent(
+                    callId = callId,
+                    partyId = ourPartyId,
+                    selectedPartyId = opponentPartyId?.getOrNull(),
+                    version = MxCall.VOIP_PROTO_VERSION.toString()
+            )
+                    .let { createEventAndLocalEcho(type = EventType.CALL_SELECT_ANSWER, roomId = roomId, content = it.toContent()) }
+                    .also { eventSenderProcessor.postEvent(it) }
+        }
+
     }
 
     override suspend fun transfer(targetUserId: String,
