@@ -25,6 +25,7 @@ import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
 import im.vector.app.core.epoxy.onClick
+import im.vector.app.core.epoxy.onLongClickIgnoringLinks
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.tools.findPillsAndProcess
 import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlRetriever
@@ -94,10 +95,9 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
         }
         super.bind(holder)
         holder.messageView.movementMethod = movementMethod
-
         renderSendState(holder.messageView, holder.messageView)
         holder.messageView.onClick(attributes.itemClickListener)
-        holder.messageView.setOnLongClickListener(attributes.itemLongClickListener)
+        holder.messageView.onLongClickIgnoringLinks(attributes.itemLongClickListener)
 
         if (canUseTextFuture) {
             holder.messageView.setTextFuture(textFuture)
@@ -133,6 +133,7 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
             previewUrlView?.render(state, safeImageContentRenderer)
         }
     }
+
     companion object {
         private const val STUB_ID = R.id.messageContentTextStub
     }
