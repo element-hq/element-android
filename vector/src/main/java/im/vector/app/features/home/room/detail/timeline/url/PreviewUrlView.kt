@@ -125,9 +125,15 @@ class PreviewUrlView @JvmOverloads constructor(
 
     private fun renderData(previewUrlData: PreviewUrlData, imageContentRenderer: ImageContentRenderer) {
         isVisible = true
+
         views.urlPreviewTitle.setTextOrHide(previewUrlData.title)
         views.urlPreviewImage.isVisible = previewUrlData.mxcUrl?.let { imageContentRenderer.render(it, views.urlPreviewImage) }.orFalse()
         views.urlPreviewDescription.setTextOrHide(previewUrlData.description)
+        views.urlPreviewDescription.maxLines = when {
+            previewUrlData.mxcUrl != null -> 2
+            previewUrlData.title != null  -> 3
+            else                          -> 5
+        }
         views.urlPreviewSite.setTextOrHide(previewUrlData.siteName.takeIf { it != previewUrlData.title })
     }
 
