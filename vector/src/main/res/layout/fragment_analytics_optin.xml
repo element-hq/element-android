@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?android:colorBackground"
+    android:paddingStart="@dimen/layout_horizontal_margin"
+    android:paddingEnd="@dimen/layout_horizontal_margin">
+
+    <androidx.constraintlayout.helper.widget.Flow
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/layout_vertical_margin"
+        android:orientation="vertical"
+        app:constraint_referenced_ids="logo,title,subtitle"
+        app:flow_firstVerticalStyle="spread"
+        app:flow_verticalStyle="spread"
+        app:layout_constraintBottom_toTopOf="@id/separator"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:importantForAccessibility="no"
+        android:src="@drawable/element_logo_stars"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/title"
+        style="@style/Widget.Vector.TextView.Title.Medium"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="8dp"
+        android:gravity="center"
+        android:text="@string/analytics_opt_in_title"
+        android:textColor="?vctr_content_primary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/subtitle"
+        style="@style/Widget.Vector.TextView.Body"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:gravity="center"
+        android:textColor="?vctr_content_secondary"
+        app:drawableStart="@drawable/ic_list_item_bullet"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="@string/analytics_opt_in_content" />
+
+    <View
+        android:id="@+id/separator"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="?vctr_content_quinary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.48" />
+
+    <androidx.constraintlayout.helper.widget.Flow
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:constraint_referenced_ids="list_item_1,list_item_2,list_item_3"
+        app:flow_verticalGap="12dp"
+        app:layout_constraintBottom_toTopOf="@id/submit"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/separator"
+        app:layout_constraintVertical_bias="0.25" />
+
+    <TextView
+        android:id="@+id/list_item_1"
+        style="@style/Widget.Vector.TextView.Body.Medium"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:drawablePadding="10dp"
+        android:gravity="center_vertical"
+        android:text="@string/analytics_opt_in_list_item_1"
+        android:textColor="?vctr_content_secondary"
+        app:drawableStartCompat="@drawable/ic_list_item_bullet" />
+
+    <TextView
+        android:id="@+id/list_item_2"
+        style="@style/Widget.Vector.TextView.Body.Medium"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:drawablePadding="10dp"
+        android:gravity="center_vertical"
+        android:text="@string/analytics_opt_in_list_item_2"
+        android:textColor="?vctr_content_secondary"
+        app:drawableStartCompat="@drawable/ic_list_item_bullet" />
+
+    <TextView
+        android:id="@+id/list_item_3"
+        style="@style/Widget.Vector.TextView.Body.Medium"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:drawablePadding="10dp"
+        android:gravity="center_vertical"
+        android:text="@string/analytics_opt_in_list_item_3"
+        android:textColor="?vctr_content_secondary"
+        app:drawableStartCompat="@drawable/ic_list_item_bullet" />
+
+    <Button
+        android:id="@+id/submit"
+        style="@style/Widget.Vector.Button.CallToAction"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/layout_touch_size"
+        android:text="@string/action_enable"
+        app:layout_constraintBottom_toTopOf="@id/later"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/later"
+        style="@style/Widget.Vector.Button.Text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/layout_vertical_margin"
+        android:text="@string/action_not_now"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
