@@ -3029,4 +3029,5 @@
     <string name="settings_discovery_consent_notice_off_2">Dina kontakter är privata. För att upptäcka användare från dina kontakter så behöver vi ditt tillstånd att skicka kontaktinfo till din identitetsserver.</string>
     <string name="shortcut_disabled_reason_sign_out">Sessionen har loggats ut!</string>
     <string name="shortcut_disabled_reason_room_left">Rummet har lämnats!</string>
+    <string name="action_not_now">Inte nu</string>
 </resources>
