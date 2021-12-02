@@ -26,8 +26,8 @@
         android:maxLines="2"
         android:textColor="?vctr_content_primary"
         android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/url_preview_close"
-        app:layout_constraintStart_toStartOf="@+id/url_preview_left_border"
+        app:layout_constraintEnd_toStartOf="@id/url_preview_close"
+        app:layout_constraintStart_toStartOf="@id/url_preview_left_border"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Jo Malone denounces her former brand's John Boyega decision" />
 
@@ -39,8 +39,8 @@
         android:importantForAccessibility="no"
         android:scaleType="fitStart"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/url_preview_title"
-        app:layout_constraintTop_toBottomOf="@+id/url_preview_title"
+        app:layout_constraintStart_toStartOf="@id/url_preview_title"
+        app:layout_constraintTop_toBottomOf="@id/url_preview_title"
         tools:src="@tools:sample/backgrounds/scenic" />
 
     <TextView
@@ -54,8 +54,8 @@
         android:maxLines="4"
         android:textColor="?vctr_content_secondary"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/url_preview_left_border"
-        app:layout_constraintTop_toBottomOf="@+id/url_preview_image"
+        app:layout_constraintStart_toStartOf="@id/url_preview_left_border"
+        app:layout_constraintTop_toBottomOf="@id/url_preview_image"
         tools:text="The British perfumer says removing actor John Boyega from his own advert was “utterly despicable”." />
 
     <TextView
@@ -70,8 +70,8 @@
         android:singleLine="true"
         android:textColor="?vctr_content_tertiary"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/url_preview_left_border"
-        app:layout_constraintTop_toBottomOf="@+id/url_preview_description"
+        app:layout_constraintStart_toStartOf="@id/url_preview_left_border"
+        app:layout_constraintTop_toBottomOf="@id/url_preview_description"
         tools:text="BBC News" />
 
     <ImageView

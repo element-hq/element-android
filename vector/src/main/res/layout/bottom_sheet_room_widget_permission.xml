@@ -9,7 +9,6 @@
     android:paddingTop="8dp"
     android:paddingBottom="8dp">
 
-
     <TextView
         style="@style/Widget.Vector.TextView.HeadlineMedium"
         android:layout_width="match_parent"

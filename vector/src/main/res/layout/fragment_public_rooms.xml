@@ -48,7 +48,7 @@
             app:iconPadding="13dp"
             app:iconTint="?colorPrimary"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/publicRoomsToolbar" />
+            app:layout_constraintTop_toBottomOf="@id/publicRoomsToolbar" />
 
     </com.google.android.material.appbar.AppBarLayout>
 

@@ -47,8 +47,8 @@
         android:scaleType="center"
         android:src="@drawable/ic_delete"
         android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="@+id/itemEditableAvatarImageContainer"
-        app:layout_constraintTop_toTopOf="@+id/itemEditableAvatarImageContainer"
+        app:layout_constraintEnd_toEndOf="@id/itemEditableAvatarImageContainer"
+        app:layout_constraintTop_toTopOf="@id/itemEditableAvatarImageContainer"
         app:tint="?colorError"
         tools:ignore="MissingPrefix"
         tools:visibility="visible" />

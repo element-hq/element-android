@@ -30,7 +30,7 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/keys_backup_shield"
+        app:layout_constraintTop_toBottomOf="@id/keys_backup_shield"
         tools:text="@string/keys_backup_restore_success_title" />
 
     <TextView
@@ -43,7 +43,7 @@
         android:textColor="?vctr_content_secondary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/success_text"
+        app:layout_constraintTop_toBottomOf="@id/success_text"
         tools:text="Restored a backup with 34 keys.\n22 new keys have been added to this session." />
 
     <Button
@@ -55,6 +55,6 @@
         android:text="@string/done"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/success_details_text" />
+        app:layout_constraintTop_toBottomOf="@id/success_details_text" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

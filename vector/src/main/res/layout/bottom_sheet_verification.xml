@@ -31,7 +31,7 @@
             android:id="@+id/otherUserShield"
             android:layout_width="16dp"
             android:layout_height="16dp"
-            app:layout_constraintCircle="@+id/otherUserAvatarImageView"
+            app:layout_constraintCircle="@id/otherUserAvatarImageView"
             app:layout_constraintCircleAngle="135"
             app:layout_constraintCircleRadius="16dp"
             tools:ignore="MissingConstraints" />
@@ -47,10 +47,10 @@
             android:maxLines="2"
             android:textColor="?vctr_content_primary"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/otherUserAvatarImageView"
+            app:layout_constraintBottom_toBottomOf="@id/otherUserAvatarImageView"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/otherUserAvatarImageView"
-            app:layout_constraintTop_toTopOf="@+id/otherUserAvatarImageView"
+            app:layout_constraintStart_toEndOf="@id/otherUserAvatarImageView"
+            app:layout_constraintTop_toTopOf="@id/otherUserAvatarImageView"
             tools:text="@string/verification_verify_user" />
 
         <FrameLayout
@@ -59,7 +59,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/otherUserAvatarImageView" />
+            app:layout_constraintTop_toBottomOf="@id/otherUserAvatarImageView" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
