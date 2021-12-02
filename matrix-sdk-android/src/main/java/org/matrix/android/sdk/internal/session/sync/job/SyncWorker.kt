@@ -35,8 +35,8 @@ import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-private const val DEFAULT_LONG_POOL_TIMEOUT = 6L
-private const val DEFAULT_DELAY_TIMEOUT = 30_000L
+private const val DEFAULT_LONG_POOL_TIMEOUT_SECONDS = 6L
+private const val DEFAULT_DELAY_TIMEOUT_MILLIS = 30_000L
 
 /**
  * Possible previous worker: None
@@ -49,8 +49,10 @@ internal class SyncWorker(context: Context,
     @JsonClass(generateAdapter = true)
     internal data class Params(
             override val sessionId: String,
-            val timeout: Long = DEFAULT_LONG_POOL_TIMEOUT,
-            val delay: Long = DEFAULT_DELAY_TIMEOUT,
+            // In seconds
+            val timeout: Long = DEFAULT_LONG_POOL_TIMEOUT_SECONDS,
+            // In milliseconds
+            val delay: Long = DEFAULT_DELAY_TIMEOUT_MILLIS,
             val periodic: Boolean = false,
             val forceImmediate: Boolean = false,
             override val lastFailureMessage: String? = null
@@ -78,7 +80,7 @@ internal class SyncWorker(context: Context,
                             automaticallyBackgroundSync(
                                     workManagerProvider = workManagerProvider,
                                     sessionId = params.sessionId,
-                                    serverTimeout = params.timeout,
+                                    serverTimeoutInSeconds = params.timeout,
                                     delayInSeconds = params.delay,
                                     forceImmediate = hasToDeviceEvents
                             )
@@ -87,7 +89,7 @@ internal class SyncWorker(context: Context,
                             requireBackgroundSync(
                                     workManagerProvider = workManagerProvider,
                                     sessionId = params.sessionId,
-                                    serverTimeout = 0
+                                    serverTimeoutInSeconds = 0
                             )
                         }
                     }
@@ -123,8 +125,8 @@ internal class SyncWorker(context: Context,
 
         fun requireBackgroundSync(workManagerProvider: WorkManagerProvider,
                                   sessionId: String,
-                                  serverTimeout: Long = 0) {
-            val data = WorkerParamsFactory.toData(Params(sessionId, serverTimeout, 0L, false))
+                                  serverTimeoutInSeconds: Long = 0) {
+            val data = WorkerParamsFactory.toData(Params(sessionId, serverTimeoutInSeconds, 0L, false))
             val workRequest = workManagerProvider.matrixOneTimeWorkRequestBuilder<SyncWorker>()
                     .setConstraints(WorkManagerProvider.workConstraints)
                     .setBackoffCriteria(BackoffPolicy.LINEAR, WorkManagerProvider.BACKOFF_DELAY_MILLIS, TimeUnit.MILLISECONDS)
@@ -136,10 +138,10 @@ internal class SyncWorker(context: Context,
 
         fun automaticallyBackgroundSync(workManagerProvider: WorkManagerProvider,
                                         sessionId: String,
-                                        serverTimeout: Long = 0,
+                                        serverTimeoutInSeconds: Long = 0,
                                         delayInSeconds: Long = 30,
                                         forceImmediate: Boolean = false) {
-            val data = WorkerParamsFactory.toData(Params(sessionId, serverTimeout, delayInSeconds, forceImmediate))
+            val data = WorkerParamsFactory.toData(Params(sessionId, serverTimeoutInSeconds, delayInSeconds, forceImmediate))
             val workRequest = workManagerProvider.matrixOneTimeWorkRequestBuilder<SyncWorker>()
                     .setConstraints(WorkManagerProvider.workConstraints)
                     .setInputData(data)
