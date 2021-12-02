@@ -20,6 +20,7 @@ import androidx.work.BackoffPolicy
 import androidx.work.ExistingWorkPolicy
 import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.failure.isTokenError
 import org.matrix.android.sdk.internal.di.WorkManagerProvider
 import org.matrix.android.sdk.internal.network.NetworkConnectivityChecker
@@ -51,6 +52,7 @@ internal class SyncWorker(context: Context,
             val timeout: Long = DEFAULT_LONG_POOL_TIMEOUT,
             val delay: Long = DEFAULT_DELAY_TIMEOUT,
             val periodic: Boolean = false,
+            val forceImmediate: Boolean = false,
             override val lastFailureMessage: String? = null
     ) : SessionWorkerParams
 
@@ -67,13 +69,16 @@ internal class SyncWorker(context: Context,
         Timber.i("Sync work starting")
 
         return runCatching {
-            doSync(params.timeout)
+            doSync(if (params.forceImmediate) 0 else params.timeout)
         }.fold(
-                {
+                { hasToDeviceEvents ->
                     Result.success().also {
                         if (params.periodic) {
-                            // we want to schedule another one after delay
-                            automaticallyBackgroundSync(workManagerProvider, params.sessionId, params.timeout, params.delay)
+                            // we want to schedule another one after a delay, or immediately if hasToDeviceEvents
+                            automaticallyBackgroundSync(workManagerProvider, params.sessionId, params.timeout, params.delay, forceImmediate = hasToDeviceEvents)
+                        } else if (hasToDeviceEvents) {
+                            // Previous response has toDevice events, request an immediate sync request
+                            requireBackgroundSync(workManagerProvider, params.sessionId, 0)
                         }
                     }
                 },
@@ -94,9 +99,13 @@ internal class SyncWorker(context: Context,
         return params.copy(lastFailureMessage = params.lastFailureMessage ?: message)
     }
 
-    private suspend fun doSync(timeout: Long) {
+    /**
+     * Will return true if the sync response contains some toDevice events.
+     */
+    private suspend fun doSync(timeout: Long): Boolean {
         val taskParams = SyncTask.Params(timeout * 1000, SyncPresence.Offline)
-        syncTask.execute(taskParams)
+        val syncResponse = syncTask.execute(taskParams)
+        return syncResponse.toDevice?.events?.isNotEmpty().orFalse()
     }
 
     companion object {
@@ -113,13 +122,17 @@ internal class SyncWorker(context: Context,
                     .enqueueUniqueWork(BG_SYNC_WORK_NAME, ExistingWorkPolicy.APPEND_OR_REPLACE, workRequest)
         }
 
-        fun automaticallyBackgroundSync(workManagerProvider: WorkManagerProvider, sessionId: String, serverTimeout: Long = 0, delayInSeconds: Long = 30) {
-            val data = WorkerParamsFactory.toData(Params(sessionId, serverTimeout, delayInSeconds, true))
+        fun automaticallyBackgroundSync(workManagerProvider: WorkManagerProvider,
+                                        sessionId: String,
+                                        serverTimeout: Long = 0,
+                                        delayInSeconds: Long = 30,
+                                        forceImmediate: Boolean = false) {
+            val data = WorkerParamsFactory.toData(Params(sessionId, serverTimeout, delayInSeconds, forceImmediate))
             val workRequest = workManagerProvider.matrixOneTimeWorkRequestBuilder<SyncWorker>()
                     .setConstraints(WorkManagerProvider.workConstraints)
                     .setInputData(data)
                     .setBackoffCriteria(BackoffPolicy.LINEAR, WorkManagerProvider.BACKOFF_DELAY_MILLIS, TimeUnit.MILLISECONDS)
-                    .setInitialDelay(delayInSeconds, TimeUnit.SECONDS)
+                    .setInitialDelay(if (forceImmediate) 0 else delayInSeconds, TimeUnit.SECONDS)
                     .build()
             // Avoid risking multiple chains of syncs by replacing the existing chain
             workManagerProvider.workManager
