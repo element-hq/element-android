@@ -95,7 +95,7 @@ interface Timeline {
          */
         fun onNewTimelineEvents(eventIds: List<String>)
 
-        fun onStateUpdated() = Unit
+        fun onStateUpdated(direction: Direction, state: PaginationState) = Unit
     }
 
     /**

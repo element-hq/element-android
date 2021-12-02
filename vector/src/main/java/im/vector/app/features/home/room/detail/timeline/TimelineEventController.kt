@@ -309,6 +309,14 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         // no-op, already handled
     }
 
+    override fun onStateUpdated(direction: Timeline.Direction, state: Timeline.PaginationState) {
+        if(!state.hasMoreToLoad) {
+            backgroundHandler.post {
+                requestModelBuild()
+            }
+        }
+    }
+
     private fun submitSnapshot(newSnapshot: List<TimelineEvent>) {
         backgroundHandler.post {
             inSubmitList = true
