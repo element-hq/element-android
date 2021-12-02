@@ -173,11 +173,9 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
                 if (state !is SyncState.Running) {
                     updateStateTo(SyncState.Running(afterPause = true))
                 }
-                // No timeout after a pause
                 val timeout = when {
-                    previousSyncResponseHasToDevice                        -> 0L
-                            .also { Timber.tag(loggerTag.value).d("Force timeout to 0") }
-                    state.let { it is SyncState.Running && it.afterPause } -> 0L
+                    previousSyncResponseHasToDevice                        -> 0L /* Force timeout to 0 */
+                    state.let { it is SyncState.Running && it.afterPause } -> 0L /* No timeout after a pause */
                     else                                                   -> DEFAULT_LONG_POOL_TIMEOUT
                 }
                 Timber.tag(loggerTag.value).d("Execute sync request with timeout $timeout")
