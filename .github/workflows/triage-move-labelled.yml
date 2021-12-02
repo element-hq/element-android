@@ -6,7 +6,7 @@ on:
     
 jobs:
   move_needs_info_issues:
-    name: Move X-Needs-Info issues to Need info on triage board
+    name: X-Needs-Info issues to Need info column on triage board
     runs-on: ubuntu-latest
     steps:
       - uses: konradpabjan/move-labeled-or-milestoned-issue@219d384e03fa4b6460cd24f9f37d19eb033a4338
@@ -17,7 +17,7 @@ jobs:
           label-name: "X-Needs-Info"
 
   add_priority_design_issues_to_project:
-    name: Move priority X-Needs-Design issues to Design project board
+    name: P1 X-Needs-Design to Design project board
     runs-on: ubuntu-latest
     if: >
         contains(github.event.issue.labels.*.name, 'X-Needs-Design') &&
@@ -78,7 +78,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
 
   move_voice-message_issues:
-    name: Move A-Voice Messages to Voice message board
+    name: A-Voice Messages to voice message board
     runs-on: ubuntu-latest
     if: >
         contains(github.event.issue.labels.*.name, 'A-Voice Messages')
@@ -101,7 +101,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
 
   move_threads_issues:
-    name: Move A-Threads to Thread board
+    name: A-Threads to Thread board
     runs-on: ubuntu-latest
     if: >
         contains(github.event.issue.labels.*.name, 'A-Threads')
