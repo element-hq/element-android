@@ -80,6 +80,7 @@
             android:layout_marginBottom="16dp"
             android:gravity="center"
             android:textStyle="bold"
+            android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@+id/memberProfilePowerLevelView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

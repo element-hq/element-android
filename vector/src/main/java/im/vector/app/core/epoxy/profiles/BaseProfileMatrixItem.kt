@@ -16,6 +16,7 @@
 
 package im.vector.app.core.epoxy.profiles
 
+import android.view.View
 import androidx.annotation.CallSuper
 import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
@@ -43,13 +44,15 @@ abstract class BaseProfileMatrixItem<T : ProfileMatrixItem.Holder> : VectorEpoxy
     override fun bind(holder: T) {
         super.bind(holder)
         val bestName = matrixItem.getBestName()
-        val matrixId = matrixItem.id
-                .takeIf { it != bestName }
-                // Special case for ThreePid fake matrix item
-                .takeIf { it != "@" }
+//        val matrixId = matrixItem.id
+//                .takeIf { it != bestName }
+//                // Special case for ThreePid fake matrix item
+//                .takeIf { it != "@" }
         holder.view.onClick(clickListener?.takeIf { editable })
         holder.titleView.text = bestName
-        holder.subtitleView.setTextOrHide(matrixId)
+        //holder.subtitleView.setTextOrHide(matrixId)
+        // Hide the Matrix Id for Tchap
+        holder.subtitleView.visibility = View.GONE
         holder.editableView.isVisible = editable
         avatarRenderer.render(matrixItem, holder.avatarImageView)
         holder.avatarDecorationImageView.render(userEncryptionTrustLevel)
