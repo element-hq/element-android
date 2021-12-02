@@ -75,10 +75,20 @@ internal class SyncWorker(context: Context,
                     Result.success().also {
                         if (params.periodic) {
                             // we want to schedule another one after a delay, or immediately if hasToDeviceEvents
-                            automaticallyBackgroundSync(workManagerProvider, params.sessionId, params.timeout, params.delay, forceImmediate = hasToDeviceEvents)
+                            automaticallyBackgroundSync(
+                                    workManagerProvider = workManagerProvider,
+                                    sessionId = params.sessionId,
+                                    serverTimeout = params.timeout,
+                                    delayInSeconds = params.delay,
+                                    forceImmediate = hasToDeviceEvents
+                            )
                         } else if (hasToDeviceEvents) {
                             // Previous response has toDevice events, request an immediate sync request
-                            requireBackgroundSync(workManagerProvider, params.sessionId, 0)
+                            requireBackgroundSync(
+                                    workManagerProvider = workManagerProvider,
+                                    sessionId = params.sessionId,
+                                    serverTimeout = 0
+                            )
                         }
                     }
                 },
@@ -111,7 +121,9 @@ internal class SyncWorker(context: Context,
     companion object {
         private const val BG_SYNC_WORK_NAME = "BG_SYNCP"
 
-        fun requireBackgroundSync(workManagerProvider: WorkManagerProvider, sessionId: String, serverTimeout: Long = 0) {
+        fun requireBackgroundSync(workManagerProvider: WorkManagerProvider,
+                                  sessionId: String,
+                                  serverTimeout: Long = 0) {
             val data = WorkerParamsFactory.toData(Params(sessionId, serverTimeout, 0L, false))
             val workRequest = workManagerProvider.matrixOneTimeWorkRequestBuilder<SyncWorker>()
                     .setConstraints(WorkManagerProvider.workConstraints)
