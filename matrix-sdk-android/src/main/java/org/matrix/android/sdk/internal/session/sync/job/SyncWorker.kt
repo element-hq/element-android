@@ -126,7 +126,14 @@ internal class SyncWorker(context: Context,
         fun requireBackgroundSync(workManagerProvider: WorkManagerProvider,
                                   sessionId: String,
                                   serverTimeoutInSeconds: Long = 0) {
-            val data = WorkerParamsFactory.toData(Params(sessionId, serverTimeoutInSeconds, 0L, false))
+            val data = WorkerParamsFactory.toData(
+                    Params(
+                            sessionId = sessionId,
+                            timeout = serverTimeoutInSeconds,
+                            delay = 0L,
+                            periodic = false
+                    )
+            )
             val workRequest = workManagerProvider.matrixOneTimeWorkRequestBuilder<SyncWorker>()
                     .setConstraints(WorkManagerProvider.workConstraints)
                     .setBackoffCriteria(BackoffPolicy.LINEAR, WorkManagerProvider.BACKOFF_DELAY_MILLIS, TimeUnit.MILLISECONDS)
@@ -141,7 +148,14 @@ internal class SyncWorker(context: Context,
                                         serverTimeoutInSeconds: Long = 0,
                                         delayInSeconds: Long = 30,
                                         forceImmediate: Boolean = false) {
-            val data = WorkerParamsFactory.toData(Params(sessionId, serverTimeoutInSeconds, delayInSeconds, forceImmediate))
+            val data = WorkerParamsFactory.toData(
+                    Params(
+                            sessionId = sessionId,
+                            timeout = serverTimeoutInSeconds,
+                            delay = delayInSeconds,
+                            forceImmediate = forceImmediate
+                    )
+            )
             val workRequest = workManagerProvider.matrixOneTimeWorkRequestBuilder<SyncWorker>()
                     .setConstraints(WorkManagerProvider.workConstraints)
                     .setInputData(data)
