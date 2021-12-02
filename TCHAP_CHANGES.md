@@ -1,3 +1,9 @@
+Changes in Tchap 1.99.3 (2021-xx-xx)
+===================================================
+
+Bugfix 🐛:
+ - [Login Screen] An unexpected error on the password field #276
+  
 Changes in Tchap 1.99.2 (2021-11-08)
 ===================================================
 
@@ -8,7 +14,7 @@ Changes in Tchap 1.99.1 (2021-11-05)
 ===================================================
 
 Improvements 🙌:
-- Prepare the Tchap release/pre-release #253
+ - Prepare the Tchap release/pre-release #253
 
 Changes in Tchap 1.99.0 (2021-11-05)
 ===================================================
