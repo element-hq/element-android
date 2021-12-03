@@ -24,9 +24,8 @@ import me.gujun.android.span.span
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.message.MessageAudioContent
-import org.matrix.android.sdk.api.session.room.model.message.MessageOptionsContent
+import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
-import org.matrix.android.sdk.api.session.room.model.message.OPTION_TYPE_BUTTONS
 import org.matrix.android.sdk.api.session.room.model.relation.ReactionContent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
@@ -63,6 +62,10 @@ class DisplayableEventFormatter @Inject constructor(
                     return simpleFormat(senderName, emojiSpanned, appendAuthor)
                 }
             }
+            EventType.POLL_START            -> {
+                return timelineEvent.root.getClearContent().toModel<MessagePollContent>(catchError = true)?.pollCreationInfo?.question?.question
+                        ?: stringProvider.getString(R.string.sent_a_poll)
+            }
             EventType.MESSAGE               -> {
                 timelineEvent.getLastMessageContent()?.let { messageContent ->
                     when (messageContent.msgType) {
@@ -93,25 +96,6 @@ class DisplayableEventFormatter @Inject constructor(
                                         ?: messageContent.body, appendAuthor)
                             } else {
                                 simpleFormat(senderName, messageContent.body, appendAuthor)
-                            }
-                        }
-                        MessageType.MSGTYPE_RESPONSE             -> {
-                            // do not show that?
-                            return span { }
-                        }
-                        MessageType.MSGTYPE_OPTIONS              -> {
-                            return when (messageContent) {
-                                is MessageOptionsContent -> {
-                                    val previewText = if (messageContent.optionType == OPTION_TYPE_BUTTONS) {
-                                        stringProvider.getString(R.string.sent_a_bot_buttons)
-                                    } else {
-                                        stringProvider.getString(R.string.sent_a_poll)
-                                    }
-                                    simpleFormat(senderName, previewText, appendAuthor)
-                                }
-                                else                     -> {
-                                    span { }
-                                }
                             }
                         }
                         else                                     -> {
