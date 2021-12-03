@@ -215,7 +215,6 @@ internal class MxCallImpl(
                     .let { createEventAndLocalEcho(type = EventType.CALL_SELECT_ANSWER, roomId = roomId, content = it.toContent()) }
                     .also { eventSenderProcessor.postEvent(it) }
         }
-
     }
 
     override suspend fun transfer(targetUserId: String,
