@@ -44,13 +44,10 @@ import im.vector.app.core.utils.copyToClipboard
 import im.vector.app.core.utils.startSharePlainTextIntent
 import im.vector.app.databinding.FragmentMatrixProfileBinding
 import im.vector.app.databinding.ViewStubRoomProfileHeaderBinding
-import im.vector.app.features.VectorFeatures
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.RoomDetailPendingAction
 import im.vector.app.features.home.room.detail.RoomDetailPendingActionStore
 import im.vector.app.features.home.room.detail.upgrade.MigrateRoomBottomSheet
-import im.vector.app.features.home.room.list.actions.RoomListActionsArgs
-import im.vector.app.features.home.room.list.actions.RoomListQuickActionsBottomSheet
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedAction
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedActionViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -69,8 +66,7 @@ data class RoomProfileArgs(
 class RoomProfileFragment @Inject constructor(
         private val roomProfileController: RoomProfileController,
         private val avatarRenderer: AvatarRenderer,
-        private val roomDetailPendingActionStore: RoomDetailPendingActionStore,
-        private val features: VectorFeatures
+        private val roomDetailPendingActionStore: RoomDetailPendingActionStore
 ) :
         VectorBaseFragment<FragmentMatrixProfileBinding>(),
         RoomProfileController.Callback {
@@ -259,16 +255,7 @@ class RoomProfileFragment @Inject constructor(
     }
 
     override fun onNotificationsClicked() {
-        when (features.notificationSettingsVersion()) {
-            VectorFeatures.NotificationSettingsVersion.V1 -> {
-                RoomListQuickActionsBottomSheet
-                        .newInstance(roomProfileArgs.roomId, RoomListActionsArgs.Mode.NOTIFICATIONS)
-                        .show(childFragmentManager, "ROOM_PROFILE_NOTIFICATIONS")
-            }
-            VectorFeatures.NotificationSettingsVersion.V2 -> {
-                roomProfileSharedActionViewModel.post(RoomProfileSharedAction.OpenRoomNotificationSettings)
-            }
-        }
+        roomProfileSharedActionViewModel.post(RoomProfileSharedAction.OpenRoomNotificationSettings)
     }
 
     override fun onUploadsClicked() {
