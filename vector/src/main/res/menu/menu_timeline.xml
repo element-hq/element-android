@@ -38,14 +38,13 @@
         tools:visible="true" />
 
     <item
-        android:id="@+id/threads"
-        android:icon="@drawable/ic_thread_menu_item"
+        android:id="@+id/menu_timeline_thread_list"
         android:title="@string/action_view_threads"
         android:visible="false"
         app:iconTint="?colorPrimary"
+        app:actionLayout="@layout/view_thread_notification_badge"
         app:showAsAction="always"
         tools:visible="true" />
-
     <item
         android:id="@+id/join_conference"
         android:title="@string/join"

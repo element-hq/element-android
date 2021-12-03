@@ -36,12 +36,14 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.net.toUri
 import androidx.core.text.buildSpannedString
 import androidx.core.text.toSpannable
@@ -61,6 +63,7 @@ import com.airbnb.epoxy.OnModelBuildFinishedListener
 import com.airbnb.epoxy.addGlidePreloader
 import com.airbnb.epoxy.glidePreloader
 import com.airbnb.mvrx.Mavericks
+import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
@@ -133,6 +136,7 @@ import im.vector.app.features.command.Command
 import im.vector.app.features.crypto.keysbackup.restore.KeysBackupRestoreActivity
 import im.vector.app.features.crypto.verification.VerificationBottomSheet
 import im.vector.app.features.home.AvatarRenderer
+import im.vector.app.features.home.UnreadMessagesSharedViewModel
 import im.vector.app.features.home.room.detail.arguments.TimelineArgs
 import im.vector.app.features.home.room.detail.composer.SendMode
 import im.vector.app.features.home.room.detail.composer.TextComposerAction
@@ -285,6 +289,7 @@ class TimelineFragment @Inject constructor(
 
     private val roomDetailViewModel: RoomDetailViewModel by fragmentViewModel()
     private val textComposerViewModel: TextComposerViewModel by fragmentViewModel()
+
     private val debouncer = Debouncer(createUIHandler())
 
     private lateinit var scrollOnNewMessageCallback: ScrollOnNewMessageCallback
@@ -907,6 +912,13 @@ class TimelineFragment @Inject constructor(
         (joinConfItem.actionView as? JoinConferenceView)?.onJoinClicked = {
             roomDetailViewModel.handle(RoomDetailAction.JoinJitsiCall)
         }
+
+        // Custom thread notification menu item
+        menu.findItem(R.id.menu_timeline_thread_list)?.let { menuItem ->
+            menuItem.actionView.setOnClickListener {
+                onOptionsItemSelected(menuItem)
+            }
+        }
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
@@ -946,6 +958,10 @@ class TimelineFragment @Inject constructor(
                 actionView.findViewById<TextView>(R.id.cart_badge).setTextOrHide("$widgetsCount")
                 matrixAppsMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
             }
+
+            // Handle custom threads badge notification
+            updateMenuThreadNotificationBadge(menu, state)
+
         }
     }
 
@@ -971,7 +987,7 @@ class TimelineFragment @Inject constructor(
                 callActionsHandler.onVideoCallClicked()
                 true
             }
-            R.id.threads                           -> {
+            R.id.menu_timeline_thread_list         -> {
                 navigateToThreadList()
                 true
             }
@@ -1004,6 +1020,29 @@ class TimelineFragment @Inject constructor(
                 true
             }
             else                                   -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    /**
+     * Update menu thread notification badge appropriately
+     */
+    private fun updateMenuThreadNotificationBadge(menu: Menu, state: RoomDetailViewState) {
+        val menuThreadList = menu.findItem(R.id.menu_timeline_thread_list).actionView
+        val badgeFrameLayout = menuThreadList.findViewById<FrameLayout>(R.id.threadNotificationBadgeFrameLayout)
+        val badgeTextView = menuThreadList.findViewById<TextView>(R.id.threadNotificationBadgeTextView)
+
+        val unreadThreadMessages = 18 + state.pushCounter
+
+        val userIsMentioned = true
+        if (unreadThreadMessages > 0) {
+            badgeFrameLayout.isVisible = true
+            badgeTextView.text = unreadThreadMessages.toString()
+            val badgeDrawable = DrawableCompat.wrap(badgeFrameLayout.background)
+            val color = ContextCompat.getColor(requireContext(), if (userIsMentioned) R.color.palette_vermilion else R.color.palette_gray_200)
+            DrawableCompat.setTint(badgeDrawable, color)
+            badgeFrameLayout.background = badgeDrawable
+        } else {
+            badgeFrameLayout.isVisible = false
         }
     }
 

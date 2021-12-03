@@ -41,4 +41,8 @@
     <!-- Navigation Drawer -->
     <dimen name="navigation_drawer_max_width">320dp</dimen>
 
+    <dimen name="menu_item_icon_size">24dp</dimen>
+    <dimen name="menu_item_size">48dp</dimen>
+    <dimen name="menu_item_ripple_size">48dp</dimen>
+
 </resources>
