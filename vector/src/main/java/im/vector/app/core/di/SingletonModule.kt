@@ -137,7 +137,7 @@ object VectorStaticModule {
     }
 
     @Provides
-    fun providesFeatures(context: Context): VectorFeatures {
-        return DefaultVectorFeatures(context)
+    fun providesFeatures(): VectorFeatures {
+        return DefaultVectorFeatures()
     }
 }

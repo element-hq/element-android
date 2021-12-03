@@ -133,13 +133,11 @@
 
         <activity
             android:name=".features.login.LoginActivity"
-            android:enabled="@bool/useLoginV1"
             android:launchMode="singleTask"
             android:windowSoftInputMode="adjustResize" />
 
         <activity
             android:name=".features.login2.LoginActivity2"
-            android:enabled="@bool/useLoginV2"
             android:launchMode="singleTask"
             android:windowSoftInputMode="adjustResize" />
 

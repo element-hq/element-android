@@ -111,26 +111,26 @@ class DefaultNavigator @Inject constructor(
 ) : Navigator {
 
     override fun openLogin(context: Context, loginConfig: LoginConfig?, flags: Int) {
-        val intent = when (features.loginType()) {
-            VectorFeatures.LoginType.V1 -> LoginActivity.newIntent(context, loginConfig)
-            VectorFeatures.LoginType.V2 -> LoginActivity2.newIntent(context, loginConfig)
+        val intent = when (features.loginVersion()) {
+            VectorFeatures.LoginVersion.V1 -> LoginActivity.newIntent(context, loginConfig)
+            VectorFeatures.LoginVersion.V2 -> LoginActivity2.newIntent(context, loginConfig)
         }
         intent.addFlags(flags)
         context.startActivity(intent)
     }
 
     override fun loginSSORedirect(context: Context, data: Uri?) {
-        val intent = when (features.loginType()) {
-            VectorFeatures.LoginType.V1 -> LoginActivity.redirectIntent(context, data)
-            VectorFeatures.LoginType.V2 -> LoginActivity2.redirectIntent(context, data)
+        val intent = when (features.loginVersion()) {
+            VectorFeatures.LoginVersion.V1 -> LoginActivity.redirectIntent(context, data)
+            VectorFeatures.LoginVersion.V2 -> LoginActivity2.redirectIntent(context, data)
         }
         context.startActivity(intent)
     }
 
     override fun softLogout(context: Context) {
-        val intent = when (features.loginType()) {
-            VectorFeatures.LoginType.V1 -> SoftLogoutActivity.newIntent(context)
-            VectorFeatures.LoginType.V2 -> SoftLogoutActivity2.newIntent(context)
+        val intent = when (features.loginVersion()) {
+            VectorFeatures.LoginVersion.V1 -> SoftLogoutActivity.newIntent(context)
+            VectorFeatures.LoginVersion.V2 -> SoftLogoutActivity2.newIntent(context)
         }
         context.startActivity(intent)
     }

@@ -16,27 +16,18 @@
 
 package im.vector.app.features
 
-import android.content.Context
-import im.vector.app.R
-import im.vector.app.features.VectorFeatures.LoginType
+import im.vector.app.BuildConfig
 
 interface VectorFeatures {
 
-    fun loginType(): LoginType
+    fun loginVersion(): LoginVersion
 
-    enum class LoginType {
+    enum class LoginVersion {
         V1,
         V2
     }
 }
 
-class DefaultVectorFeatures(private val context: Context) : VectorFeatures {
-    override fun loginType(): LoginType {
-        val v2LoginIsEnabled = context.resources.getBoolean(R.bool.useLoginV2)
-        return if (v2LoginIsEnabled) {
-            LoginType.V2
-        } else {
-            LoginType.V1
-        }
-    }
+class DefaultVectorFeatures : VectorFeatures {
+    override fun loginVersion(): VectorFeatures.LoginVersion = BuildConfig.LOGIN_VERSION
 }
