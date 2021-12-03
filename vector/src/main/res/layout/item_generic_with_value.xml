@@ -28,7 +28,6 @@
         android:textColor="?vctr_content_primary"
         tools:text="Label" />
 
-
     <TextView
         android:id="@+id/itemGenericWithValueValueText"
         style="@style/Widget.Vector.TextView.Subtitle"

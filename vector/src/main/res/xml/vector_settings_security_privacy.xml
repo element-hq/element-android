@@ -80,7 +80,6 @@
             android:summary="@string/settings_secure_backup_section_info" />
     </im.vector.app.core.preference.VectorPreferenceCategory>
 
-
     <im.vector.app.core.preference.VectorPreferenceCategory
         android:key="SETTINGS_CRYPTOGRAPHY_MANAGE_PREFERENCE_KEY"
         android:title="@string/settings_cryptography_manage_keys">

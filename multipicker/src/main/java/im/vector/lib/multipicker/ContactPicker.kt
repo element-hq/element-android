@@ -20,6 +20,8 @@ import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
 import android.provider.ContactsContract
+import androidx.core.database.getIntOrNull
+import androidx.core.database.getStringOrNull
 import im.vector.lib.multipicker.entity.MultiPickerContactType
 import im.vector.lib.multipicker.utils.getColumnIndexOrNull
 
@@ -54,9 +56,9 @@ class ContactPicker : Picker<MultiPickerContactType>() {
                     val nameColumn = cursor.getColumnIndexOrNull(ContactsContract.Contacts.DISPLAY_NAME) ?: return@use
                     val photoUriColumn = cursor.getColumnIndexOrNull(ContactsContract.Contacts.PHOTO_URI) ?: return@use
 
-                    val contactId = cursor.getInt(idColumn)
-                    var name = cursor.getString(nameColumn)
-                    val photoUri = cursor.getString(photoUriColumn)
+                    val contactId = cursor.getIntOrNull(idColumn) ?: return@use
+                    var name = cursor.getStringOrNull(nameColumn) ?: return@use
+                    val photoUri = cursor.getStringOrNull(photoUriColumn)
                     val phoneNumberList = mutableListOf<String>()
                     val emailList = mutableListOf<String>()
 
@@ -78,8 +80,8 @@ class ContactPicker : Picker<MultiPickerContactType>() {
                             val data1ColumnIndex = innerCursor.getColumnIndexOrNull(ContactsContract.Data.DATA1) ?: return@inner
 
                             while (innerCursor.moveToNext()) {
-                                val mimeType = innerCursor.getString(mimeTypeColumnIndex)
-                                val contactData = innerCursor.getString(data1ColumnIndex)
+                                val mimeType = innerCursor.getStringOrNull(mimeTypeColumnIndex)
+                                val contactData = innerCursor.getStringOrNull(data1ColumnIndex) ?: continue
 
                                 if (mimeType == ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE) {
                                     name = contactData
@@ -121,7 +123,7 @@ class ContactPicker : Picker<MultiPickerContactType>() {
         )?.use { cursor ->
             return if (cursor.moveToFirst()) {
                 cursor.getColumnIndexOrNull(ContactsContract.RawContacts._ID)
-                        ?.let { cursor.getInt(it) }
+                        ?.let { cursor.getIntOrNull(it) }
             } else null
         }
     }

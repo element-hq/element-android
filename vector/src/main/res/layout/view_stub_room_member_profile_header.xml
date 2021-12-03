@@ -14,8 +14,8 @@
         android:layout_height="wrap_content"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/memberProfileNameView"
-        app:layout_constraintTop_toTopOf="@+id/memberProfileNameView">
+        app:layout_constraintBottom_toTopOf="@id/memberProfileNameView"
+        app:layout_constraintTop_toTopOf="@id/memberProfileNameView">
 
         <ImageView
             android:id="@+id/memberProfileAvatarView"
@@ -23,13 +23,12 @@
             android:layout_height="128dp"
             android:layout_marginBottom="16dp"
             android:contentDescription="@string/avatar"
-            app:layout_constraintBottom_toTopOf="@+id/memberProfileNameView"
+            app:layout_constraintBottom_toTopOf="@id/memberProfileNameView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_chainStyle="spread_inside"
             tools:src="@sample/user_round_avatars" />
-
 
         <im.vector.app.core.ui.views.PresenceStateImageView
             android:id="@+id/memberProfilePresenceImageView"
@@ -39,7 +38,7 @@
             android:importantForAccessibility="no"
             android:padding="3dp"
             android:visibility="gone"
-            app:layout_constraintCircle="@+id/memberProfileAvatarView"
+            app:layout_constraintCircle="@id/memberProfileAvatarView"
             app:layout_constraintCircleAngle="135"
             app:layout_constraintCircleRadius="64dp"
             tools:ignore="MissingConstraints"
@@ -52,11 +51,11 @@
             android:layout_height="30dp"
             android:layout_marginTop="2dp"
             android:layout_marginEnd="8dp"
-            app:layout_constraintBottom_toBottomOf="@+id/memberProfileNameView"
-            app:layout_constraintEnd_toStartOf="@+id/memberProfileNameView"
+            app:layout_constraintBottom_toBottomOf="@id/memberProfileNameView"
+            app:layout_constraintEnd_toStartOf="@id/memberProfileNameView"
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/memberProfileNameView" />
+            app:layout_constraintTop_toTopOf="@id/memberProfileNameView" />
 
         <TextView
             android:id="@+id/memberProfileNameView"
@@ -65,10 +64,10 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/memberProfileIdView"
+            app:layout_constraintBottom_toTopOf="@id/memberProfileIdView"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/memberProfileDecorationImageView"
-            app:layout_constraintTop_toBottomOf="@+id/memberProfileAvatarView"
+            app:layout_constraintStart_toEndOf="@id/memberProfileDecorationImageView"
+            app:layout_constraintTop_toBottomOf="@id/memberProfileAvatarView"
             tools:text="@sample/users.json/data/displayName" />
 
         <TextView
@@ -80,10 +79,10 @@
             android:layout_marginBottom="16dp"
             android:gravity="center"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/memberProfilePowerLevelView"
+            app:layout_constraintBottom_toTopOf="@id/memberProfilePowerLevelView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/memberProfileNameView"
+            app:layout_constraintTop_toBottomOf="@id/memberProfileNameView"
             tools:text="@sample/users.json/data/id" />
 
         <TextView
@@ -94,10 +93,10 @@
             android:layout_marginBottom="16dp"
             android:gravity="center"
             android:textColor="?vctr_content_primary"
-            app:layout_constraintBottom_toTopOf="@+id/memberProfileStatusView"
+            app:layout_constraintBottom_toTopOf="@id/memberProfileStatusView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/memberProfileIdView"
+            app:layout_constraintTop_toBottomOf="@id/memberProfileIdView"
             tools:text="Admin in Matrix" />
 
         <TextView
@@ -110,7 +109,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/memberProfilePowerLevelView"
+            app:layout_constraintTop_toBottomOf="@id/memberProfilePowerLevelView"
             tools:text="Here is a profile status"
             tools:visibility="visible" />
 

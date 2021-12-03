@@ -29,7 +29,7 @@
             android:textColor="?vctr_content_primary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/deactivateAccountContent" />
+            app:layout_constraintTop_toBottomOf="@id/deactivateAccountContent" />
 
         <Button
             android:id="@+id/deactivateAccountSubmit"
@@ -40,7 +40,7 @@
             android:text="@string/deactivate_account_submit"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/deactivateAccountEraseCheckbox" />
+            app:layout_constraintTop_toBottomOf="@id/deactivateAccountEraseCheckbox" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

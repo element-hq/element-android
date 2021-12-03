@@ -18,7 +18,7 @@
         android:layout_marginStart="@dimen/layout_horizontal_margin"
         android:importantForAccessibility="no"
         android:duplicateParentState="true"
-        app:layout_constraintBottom_toTopOf="@+id/groupBottomSeparator"
+        app:layout_constraintBottom_toTopOf="@id/groupBottomSeparator"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:src="@sample/room_round_avatars" />
@@ -34,9 +34,9 @@
         android:maxLines="1"
         android:textColor="?vctr_content_primary"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/groupBottomSeparator"
-        app:layout_constraintEnd_toStartOf="@+id/groupAvatarChevron"
-        app:layout_constraintStart_toEndOf="@+id/groupAvatarImageView"
+        app:layout_constraintBottom_toTopOf="@id/groupBottomSeparator"
+        app:layout_constraintEnd_toStartOf="@id/groupAvatarChevron"
+        app:layout_constraintStart_toEndOf="@id/groupAvatarImageView"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@tools:sample/lorem/random" />
 
@@ -47,7 +47,7 @@
         android:layout_marginEnd="21dp"
         android:importantForAccessibility="no"
         android:src="@drawable/ic_arrow_right"
-        app:layout_constraintBottom_toTopOf="@+id/groupBottomSeparator"
+        app:layout_constraintBottom_toTopOf="@id/groupBottomSeparator"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:tint="?vctr_content_primary"

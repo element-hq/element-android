@@ -7,7 +7,6 @@
     android:background="?android:attr/colorBackground"
     android:minHeight="50dp">
 
-
     <ImageView
         android:id="@+id/troubleshootStatusIcon"
         android:layout_width="20dp"
@@ -30,8 +29,8 @@
         android:paddingBottom="4dp"
         android:textColor="?vctr_content_primary"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/troubleshootTestDescription"
-        app:layout_constraintEnd_toStartOf="@+id/troubleshootStatusIcon"
+        app:layout_constraintBottom_toTopOf="@id/troubleshootTestDescription"
+        app:layout_constraintEnd_toStartOf="@id/troubleshootStatusIcon"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintHorizontal_chainStyle="spread"
         app:layout_constraintStart_toStartOf="parent"
@@ -51,10 +50,10 @@
         android:textColor="?vctr_content_secondary"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/troubleshootTestButton"
-        app:layout_constraintEnd_toStartOf="@+id/troubleshootStatusIcon"
+        app:layout_constraintEnd_toStartOf="@id/troubleshootStatusIcon"
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/troubleshootTestTitle"
+        app:layout_constraintTop_toBottomOf="@id/troubleshootTestTitle"
         tools:text="@string/settings_troubleshoot_test_device_settings_failed"
         tools:visibility="visible" />
 
@@ -68,10 +67,10 @@
         android:padding="8dp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/troubleshootProgressBar"
+        app:layout_constraintEnd_toStartOf="@id/troubleshootProgressBar"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/troubleshootTestDescription"
+        app:layout_constraintTop_toBottomOf="@id/troubleshootTestDescription"
         tools:text="@string/settings_troubleshoot_test_device_settings_quickfix"
         tools:visibility="visible" />
 
@@ -83,7 +82,7 @@
         android:layout_margin="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/troubleshootTestTitle"
+        app:layout_constraintStart_toEndOf="@id/troubleshootTestTitle"
         app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

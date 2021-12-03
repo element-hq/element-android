@@ -39,7 +39,7 @@
                     android:id="@+id/roomUploadsDecorationToolbarAvatarImageView"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    app:layout_constraintCircle="@+id/roomUploadsToolbarAvatarImageView"
+                    app:layout_constraintCircle="@id/roomUploadsToolbarAvatarImageView"
                     app:layout_constraintCircleAngle="135"
                     app:layout_constraintCircleRadius="20dp"
                     tools:ignore="MissingConstraints" />
@@ -56,7 +56,7 @@
                     android:textColor="?vctr_content_primary"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/roomUploadsToolbarAvatarImageView"
+                    app:layout_constraintStart_toEndOf="@id/roomUploadsToolbarAvatarImageView"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:text="@sample/rooms.json/data/name" />
 
@@ -68,7 +68,7 @@
             android:id="@+id/roomUploadsTabs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/roomUploadsToolbarAvatarImageView"
+            app:layout_constraintTop_toBottomOf="@id/roomUploadsToolbarAvatarImageView"
             app:tabGravity="fill"
             app:tabMaxWidth="0dp"
             app:tabMode="fixed" />

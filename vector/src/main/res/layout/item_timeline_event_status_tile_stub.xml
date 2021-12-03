@@ -5,7 +5,6 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-
     <TextView
         android:id="@+id/itemVerificationDoneTitleTextView"
         style="@style/Widget.Vector.TextView.Subtitle"
@@ -18,7 +17,6 @@
         android:textStyle="bold"
         tools:drawableStart="@drawable/ic_shield_trusted"
         tools:text="@string/sas_verified" />
-
 
     <TextView
         android:id="@+id/itemVerificationDoneDetailTextView"

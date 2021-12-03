@@ -46,10 +46,6 @@ class DevicesController @Inject constructor(private val errorFormatter: ErrorFor
     var callback: Callback? = null
     private var viewState: DevicesViewState? = null
 
-    init {
-        requestModelBuild()
-    }
-
     fun update(viewState: DevicesViewState) {
         this.viewState = viewState
         requestModelBuild()

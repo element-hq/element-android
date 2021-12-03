@@ -21,6 +21,7 @@ import android.media.MediaRecorder
 import android.net.Uri
 import android.os.Build
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
+import org.matrix.android.sdk.internal.util.md5
 import java.io.File
 import java.io.FileOutputStream
 import java.util.UUID
@@ -60,9 +61,17 @@ abstract class AbstractVoiceRecorder(
         }
     }
 
-    override fun startRecord() {
+    override fun initializeRecord(attachmentData: ContentAttachmentData) {
+        outputFile = attachmentData.findVoiceFile(outputDirectory)
+    }
+
+    override fun startRecord(roomId: String) {
         init()
-        outputFile = File(outputDirectory, "${UUID.randomUUID()}.$filenameExt")
+        val fileName = "${UUID.randomUUID()}.$filenameExt"
+        val outputDirectoryForRoom = File(outputDirectory, roomId.md5()).apply {
+            mkdirs()
+        }
+        outputFile = File(outputDirectoryForRoom, fileName)
 
         val mr = mediaRecorder ?: return
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -104,7 +113,6 @@ abstract class AbstractVoiceRecorder(
     }
 }
 
-@Suppress("UNUSED") // preemptively added for https://github.com/vector-im/element-android/pull/4527
 private fun ContentAttachmentData.findVoiceFile(baseDirectory: File): File {
     return File(baseDirectory, queryUri.takePathAfter(baseDirectory.name))
 }

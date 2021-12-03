@@ -24,5 +24,4 @@
         app:tint="?vctr_content_primary"
         app:titleTextColor="?vctr_content_primary" />
 
-
 </LinearLayout>

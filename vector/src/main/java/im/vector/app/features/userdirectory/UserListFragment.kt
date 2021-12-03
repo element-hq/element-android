@@ -42,7 +42,6 @@ import im.vector.app.core.utils.showIdentityServerConsentDialog
 import im.vector.app.core.utils.startSharePlainTextIntent
 import im.vector.app.databinding.FragmentUserListBinding
 import im.vector.app.features.homeserver.HomeServerCapabilitiesViewModel
-import im.vector.app.features.navigation.SettingsActivityPayload
 import im.vector.app.features.settings.VectorSettingsActivity
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -103,6 +102,8 @@ class UserListFragment @Inject constructor(
                             extraTitle = getString(R.string.invite_friends_rich_title)
                     )
                 }
+                is UserListViewEvents.Failure               -> showFailure(it.throwable)
+                is UserListViewEvents.OnPoliciesRetrieved   -> showConsentDialog(it)
             }
         }
     }
@@ -231,15 +232,14 @@ class UserListFragment @Inject constructor(
     }
 
     override fun giveIdentityServerConsent() {
-        withState(viewModel) { state ->
-            requireContext().showIdentityServerConsentDialog(
-                    state.configuredIdentityServer,
-                    policyLinkCallback = {
-                        navigator.openSettings(requireContext(), SettingsActivityPayload.DiscoverySettings(expandIdentityPolicies = true))
-                    },
-                    consentCallBack = { viewModel.handle(UserListAction.UpdateUserConsent(true)) }
-            )
-        }
+        viewModel.handle(UserListAction.UserConsentRequest)
+    }
+
+    private fun showConsentDialog(event: UserListViewEvents.OnPoliciesRetrieved) {
+        requireContext().showIdentityServerConsentDialog(
+                event.identityServerWithTerms,
+                consentCallBack = { viewModel.handle(UserListAction.UpdateUserConsent(true)) }
+        )
     }
 
     override fun onUseQRCode() {

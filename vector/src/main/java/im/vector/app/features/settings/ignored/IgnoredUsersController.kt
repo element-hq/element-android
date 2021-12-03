@@ -31,10 +31,6 @@ class IgnoredUsersController @Inject constructor(private val stringProvider: Str
     var callback: Callback? = null
     private var viewState: IgnoredUsersViewState? = null
 
-    init {
-        requestModelBuild()
-    }
-
     fun update(viewState: IgnoredUsersViewState) {
         this.viewState = viewState
         requestModelBuild()
