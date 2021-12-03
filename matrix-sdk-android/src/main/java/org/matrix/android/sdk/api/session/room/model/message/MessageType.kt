@@ -25,6 +25,7 @@ object MessageType {
     const val MSGTYPE_VIDEO = "m.video"
     const val MSGTYPE_LOCATION = "m.location"
     const val MSGTYPE_FILE = "m.file"
+    const val MSGTYPE_POLL_START = "org.matrix.msc3381.poll.start"
     const val MSGTYPE_OPTIONS = "org.matrix.options"
     const val MSGTYPE_RESPONSE = "org.matrix.response"
     const val MSGTYPE_POLL_CLOSED = "org.matrix.poll_closed"

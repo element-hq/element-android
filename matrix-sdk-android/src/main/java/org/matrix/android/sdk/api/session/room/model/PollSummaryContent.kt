@@ -24,8 +24,7 @@ import com.squareup.moshi.JsonClass
  */
 @JsonClass(generateAdapter = true)
 data class PollSummaryContent(
-        // Index of my vote
-        var myVote: Int? = null,
+        var myVote: String? = null,
         // Array of VoteInfo, list is constructed so that there is only one vote by user
         // And that optionIndex is valid
         var votes: List<VoteInfo>? = null
@@ -35,14 +34,14 @@ data class PollSummaryContent(
         return votes?.size ?: 0
     }
 
-    fun voteCountForOption(optionIndex: Int): Int {
-        return votes?.filter { it.optionIndex == optionIndex }?.count() ?: 0
+    fun voteCountForOption(option: String): Int {
+        return votes?.filter { it.option == option }?.count() ?: 0
     }
 }
 
 @JsonClass(generateAdapter = true)
 data class VoteInfo(
         val userId: String,
-        val optionIndex: Int,
+        val option: String,
         val voteTimestamp: Long
 )
