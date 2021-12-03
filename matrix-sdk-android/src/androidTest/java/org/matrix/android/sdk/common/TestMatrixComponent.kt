@@ -20,7 +20,6 @@ import android.content.Context
 import dagger.BindsInstance
 import dagger.Component
 import org.matrix.android.sdk.api.MatrixConfiguration
-import org.matrix.android.sdk.api.TestMatrix
 import org.matrix.android.sdk.internal.auth.AuthModule
 import org.matrix.android.sdk.internal.di.MatrixComponent
 import org.matrix.android.sdk.internal.di.MatrixModule

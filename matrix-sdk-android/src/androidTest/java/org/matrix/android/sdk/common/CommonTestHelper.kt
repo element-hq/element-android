@@ -33,7 +33,6 @@ import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.MatrixConfiguration
-import org.matrix.android.sdk.api.TestMatrix
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.registration.RegistrationResult
 import org.matrix.android.sdk.api.session.Session
@@ -57,7 +56,7 @@ import java.util.concurrent.TimeUnit
  */
 class CommonTestHelper(context: Context) {
 
-    val matrix: TestMatrix
+    internal val matrix: TestMatrix
     val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
 
     fun getTestInterceptor(session: Session): MockOkHttpInterceptor? = TestModule.interceptorForSession(session.sessionId) as? MockOkHttpInterceptor
