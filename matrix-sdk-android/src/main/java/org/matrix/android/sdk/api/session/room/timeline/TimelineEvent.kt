@@ -27,6 +27,7 @@ import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.EventAnnotationsSummary
 import org.matrix.android.sdk.api.session.room.model.ReadReceipt
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
+import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageStickerContent
 import org.matrix.android.sdk.api.session.room.model.relation.RelationDefaultContent
 import org.matrix.android.sdk.api.session.room.sender.SenderInfo
@@ -124,10 +125,10 @@ fun TimelineEvent.getEditedEventId(): String? {
  * Get last MessageContent, after a possible edition
  */
 fun TimelineEvent.getLastMessageContent(): MessageContent? {
-    return if (root.getClearType() == EventType.STICKER) {
-        root.getClearContent().toModel<MessageStickerContent>()
-    } else {
-        (annotations?.editSummary?.latestContent ?: root.getClearContent()).toModel()
+    return when (root.getClearType()) {
+        EventType.STICKER    -> root.getClearContent().toModel<MessageStickerContent>()
+        EventType.POLL_START -> root.getClearContent().toModel<MessagePollContent>()
+        else                 -> (annotations?.editSummary?.latestContent ?: root.getClearContent()).toModel()
     }
 }
 

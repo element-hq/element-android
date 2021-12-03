@@ -49,6 +49,8 @@ import org.matrix.android.sdk.api.session.events.model.isTextMessage
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageFormat
+import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
+import org.matrix.android.sdk.api.session.room.model.message.MessagePollResponseContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageTextContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.model.message.MessageVerificationRequestContent
@@ -206,6 +208,9 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                     EventType.CALL_ANSWER -> {
                         noticeEventFormatter.format(timelineEvent, room?.roomSummary()?.isDirect.orFalse())
                     }
+                    EventType.POLL_START  -> {
+                        timelineEvent.root.getClearContent().toModel<MessagePollContent>(catchError = true)?.pollCreationInfo?.question?.question ?: ""
+                    }
                     else                  -> null
                 }
             }
@@ -320,6 +325,10 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                 add(EventSharedAction.Reply(eventId))
             }
 
+            if (canEndPoll(timelineEvent, actionPermissions)) {
+                add(EventSharedAction.EndPoll(timelineEvent.eventId))
+            }
+
             if (canEdit(timelineEvent, session.myUserId, actionPermissions)) {
                 add(EventSharedAction.Edit(eventId))
             }
@@ -422,8 +431,8 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
     }
 
     private fun canRedact(event: TimelineEvent, actionPermissions: ActionPermissions): Boolean {
-        // Only event of type EventType.MESSAGE or EventType.STICKER are supported for the moment
-        if (event.root.getClearType() !in listOf(EventType.MESSAGE, EventType.STICKER)) return false
+        // Only event of type EventType.MESSAGE, EventType.STICKER and EventType.POLL_START are supported for the moment
+        if (event.root.getClearType() !in listOf(EventType.MESSAGE, EventType.STICKER, EventType.POLL_START)) return false
         // Message sent by the current user can always be redacted
         if (event.root.senderId == session.myUserId) return true
         // Check permission for messages sent by other users
@@ -437,8 +446,8 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
     }
 
     private fun canViewReactions(event: TimelineEvent): Boolean {
-        // Only event of type EventType.MESSAGE and EventType.STICKER are supported for the moment
-        if (event.root.getClearType() !in listOf(EventType.MESSAGE, EventType.STICKER)) return false
+        // Only event of type EventType.MESSAGE, EventType.STICKER and EventType.POLL_START are supported for the moment
+        if (event.root.getClearType() !in listOf(EventType.MESSAGE, EventType.STICKER, EventType.POLL_START)) return false
         return event.annotations?.reactionsSummary?.isNotEmpty() ?: false
     }
 
@@ -486,5 +495,11 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
             MessageType.MSGTYPE_FILE -> true
             else                     -> false
         }
+    }
+
+    private fun canEndPoll(event: TimelineEvent, actionPermissions: ActionPermissions): Boolean {
+        return event.root.getClearType() == EventType.POLL_START &&
+                canRedact(event, actionPermissions) &&
+                event.annotations?.pollResponseSummary?.closedTime == null
     }
 }
