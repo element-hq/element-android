@@ -25,6 +25,7 @@ import im.vector.app.core.epoxy.bottomsheet.bottomSheetRoomPreviewItem
 import im.vector.app.core.epoxy.profiles.notifications.radioButtonItem
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.features.VectorFeatures
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.roomprofile.notifications.notificationOptions
 import im.vector.app.features.roomprofile.notifications.notificationStateMapped
@@ -38,7 +39,8 @@ import javax.inject.Inject
 class RoomListQuickActionsEpoxyController @Inject constructor(
         private val avatarRenderer: AvatarRenderer,
         private val colorProvider: ColorProvider,
-        private val stringProvider: StringProvider
+        private val stringProvider: StringProvider,
+        private val features: VectorFeatures
 ) : TypedEpoxyController<RoomListQuickActionViewState>() {
 
     var listener: Listener? = null
@@ -47,7 +49,7 @@ class RoomListQuickActionsEpoxyController @Inject constructor(
         val notificationViewState = state.notificationSettingsViewState
         val roomSummary = notificationViewState.roomSummary() ?: return
         val host = this
-        val isV2 = BuildConfig.USE_NOTIFICATION_SETTINGS_V2
+        val isV2 = features.notificationSettingsVersion() == VectorFeatures.NotificationSettingsVersion.V2
         // V2 always shows full details as we no longer display the sheet from RoomProfile > Notifications
         val showFull = state.roomListActionsArgs.mode == RoomListActionsArgs.Mode.FULL || isV2
 
