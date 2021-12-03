@@ -30,7 +30,7 @@
         android:background="@drawable/bg_unread_highlight"
         android:gravity="center"
         android:textColor="?colorOnError"
-        app:layout_constraintCircle="@+id/action_view_icon_image"
+        app:layout_constraintCircle="@id/action_view_icon_image"
         app:layout_constraintCircleAngle="45"
         app:layout_constraintCircleRadius="12dp"
         tools:ignore="MissingConstraints"

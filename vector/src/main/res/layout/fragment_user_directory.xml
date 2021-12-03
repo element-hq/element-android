@@ -56,7 +56,7 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.0"
-                        app:layout_constraintStart_toEndOf="@+id/userDirectoryClose"
+                        app:layout_constraintStart_toEndOf="@id/userDirectoryClose"
                         app:layout_constraintTop_toTopOf="parent" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -73,7 +73,7 @@
                 android:layout_marginBottom="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
+                app:layout_constraintTop_toBottomOf="@id/appBarLayout">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/userDirectorySearchById"
@@ -95,7 +95,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
+            app:layout_constraintTop_toBottomOf="@id/appBarLayout"
             tools:listitem="@layout/item_known_user" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

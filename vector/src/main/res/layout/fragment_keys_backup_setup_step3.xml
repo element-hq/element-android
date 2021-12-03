@@ -40,7 +40,6 @@
             android:visibility="gone"
             tools:visibility="visible" />
 
-
         <TextView
             android:id="@+id/keys_backup_setup_step3_line1_text"
             style="@style/Widget.Vector.TextView.Subtitle"
@@ -65,7 +64,6 @@
             android:textColor="?vctr_content_secondary"
             tools:text="@string/keys_backup_setup_step3_text_line2" />
 
-
         <TextView
             android:id="@+id/keys_backup_setup_step3_recovery_key_text"
             style="@style/Widget.Vector.TextView.Title"
@@ -78,7 +76,6 @@
             android:visibility="gone"
             tools:text="HHWJ Y8DK RDR4\nBQEN FQ4V M4F8\nBQEN FQ4V M4A8"
             tools:visibility="visible" />
-
 
         <Button
             android:id="@+id/keys_backup_setup_step3_copy_button"

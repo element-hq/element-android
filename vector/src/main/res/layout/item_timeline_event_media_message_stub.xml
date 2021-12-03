@@ -31,7 +31,6 @@
         app:layout_constraintTop_toTopOf="@id/messageThumbnailView"
         tools:visibility="visible" />
 
-
     <include
         android:id="@+id/messageMediaUploadProgressLayout"
         layout="@layout/media_upload_download_progress_layout"
@@ -43,6 +42,6 @@
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/messageThumbnailView"
+        app:layout_constraintTop_toBottomOf="@id/messageThumbnailView"
         tools:visibility="visible" />
 </androidx.constraintlayout.widget.ConstraintLayout>

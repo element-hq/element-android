@@ -38,10 +38,10 @@
             android:maxLines="1"
             android:singleLine="true"
             android:textColor="?vctr_content_primary"
-            app:layout_constraintBottom_toTopOf="@+id/homeDrawerUserIdView"
-            app:layout_constraintEnd_toStartOf="@+id/homeDrawerQRCodeButton"
-            app:layout_constraintStart_toEndOf="@+id/homeDrawerHeaderAvatarView"
-            app:layout_constraintTop_toTopOf="@+id/homeDrawerHeaderAvatarView"
+            app:layout_constraintBottom_toTopOf="@id/homeDrawerUserIdView"
+            app:layout_constraintEnd_toStartOf="@id/homeDrawerQRCodeButton"
+            app:layout_constraintStart_toEndOf="@id/homeDrawerHeaderAvatarView"
+            app:layout_constraintTop_toTopOf="@id/homeDrawerHeaderAvatarView"
             app:layout_constraintVertical_chainStyle="packed"
             tools:text="@sample/users.json/data/displayName" />
 
@@ -55,10 +55,10 @@
             android:maxLines="1"
             android:singleLine="true"
             android:textColor="?vctr_content_secondary"
-            app:layout_constraintBottom_toBottomOf="@+id/homeDrawerHeaderAvatarView"
-            app:layout_constraintEnd_toStartOf="@+id/homeDrawerQRCodeButton"
-            app:layout_constraintStart_toStartOf="@+id/homeDrawerUsernameView"
-            app:layout_constraintTop_toBottomOf="@+id/homeDrawerUsernameView"
+            app:layout_constraintBottom_toBottomOf="@id/homeDrawerHeaderAvatarView"
+            app:layout_constraintEnd_toStartOf="@id/homeDrawerQRCodeButton"
+            app:layout_constraintStart_toStartOf="@id/homeDrawerUsernameView"
+            app:layout_constraintTop_toBottomOf="@id/homeDrawerUsernameView"
             tools:text="@sample/users.json/data/id" />
 
         <ImageView
@@ -93,8 +93,8 @@
             app:iconGravity="textStart"
             app:iconSize="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/homeDrawerHeaderAvatarView"
-            app:layout_constraintTop_toBottomOf="@+id/homeDrawerHeaderAvatarView"
+            app:layout_constraintStart_toStartOf="@id/homeDrawerHeaderAvatarView"
+            app:layout_constraintTop_toBottomOf="@id/homeDrawerHeaderAvatarView"
             tools:ignore="MissingPrefix" />
 
         <ImageView
@@ -117,24 +117,24 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="?vctr_list_separator"
-        app:layout_constraintTop_toBottomOf="@+id/homeDrawerHeader" />
+        app:layout_constraintTop_toBottomOf="@id/homeDrawerHeader" />
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/homeDrawerGroupListContainer"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/homeDrawerBottomSeparator"
+        app:layout_constraintBottom_toTopOf="@id/homeDrawerBottomSeparator"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/homeDrawerHeaderSeparator" />
+        app:layout_constraintTop_toBottomOf="@id/homeDrawerHeaderSeparator" />
 
     <View
         android:id="@+id/homeDrawerBottomSeparator"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="?vctr_list_separator"
-        app:layout_constraintBottom_toTopOf="@+id/homeDrawerHeaderSettingsView" />
+        app:layout_constraintBottom_toTopOf="@id/homeDrawerHeaderSettingsView" />
 
     <TextView
         android:id="@+id/homeDrawerHeaderSettingsView"

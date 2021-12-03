@@ -36,7 +36,7 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/keys_backup_shield" />
+            app:layout_constraintTop_toBottomOf="@id/keys_backup_shield" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/key_input_layout"
@@ -45,9 +45,9 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             app:errorEnabled="true"
-            app:layout_constraintEnd_toStartOf="@+id/keys_backup_import"
+            app:layout_constraintEnd_toStartOf="@id/keys_backup_import"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/keys_restore_with_key">
+            app:layout_constraintTop_toBottomOf="@id/keys_restore_with_key">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/key_text_edit"
@@ -86,7 +86,7 @@
             android:textColor="?vctr_content_secondary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/key_input_layout" />
+            app:layout_constraintTop_toBottomOf="@id/key_input_layout" />
 
         <Button
             android:id="@+id/keys_restore_button"
@@ -97,7 +97,7 @@
             android:minWidth="200dp"
             android:text="@string/keys_backup_unlock_button"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/keys_restore_key_help_with_link"
+            app:layout_constraintTop_toBottomOf="@id/keys_restore_key_help_with_link"
             app:layout_constraintVertical_bias="0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -31,7 +31,7 @@
         android:textColor="?vctr_content_primary"
         app:drawableStartCompat="@drawable/ic_sending_message_failed"
         app:layout_constraintBottom_toBottomOf="@id/failedMessagesRetryButton"
-        app:layout_constraintEnd_toStartOf="@+id/failedMessagesDeleteAllButton"
+        app:layout_constraintEnd_toStartOf="@id/failedMessagesDeleteAllButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/failedMessagesRetryButton" />
 

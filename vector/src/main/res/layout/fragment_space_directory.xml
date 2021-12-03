@@ -20,7 +20,7 @@
             app:scrimAnimationDuration="250"
             app:scrimVisibleHeightTrigger="120dp"
             app:titleEnabled="false"
-            app:toolbarId="@+id/toolbar">
+            app:toolbarId="@id/toolbar">
 
             <FrameLayout
                 android:layout_width="match_parent"
@@ -42,7 +42,6 @@
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
-
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/spaceDirectoryList"

@@ -38,8 +38,8 @@
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/contactDetailName"
-        app:layout_constraintTop_toBottomOf="@+id/contactDetailName"
+        app:layout_constraintStart_toStartOf="@id/contactDetailName"
+        app:layout_constraintTop_toBottomOf="@id/contactDetailName"
         tools:text="@sample/users.json/data/id"
         tools:visibility="visible" />
 

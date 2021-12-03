@@ -17,9 +17,9 @@
             android:layout_marginStart="16dp"
             android:importantForAccessibility="no"
             android:src="@drawable/ic_security_key_24dp"
-            app:layout_constraintBottom_toBottomOf="@+id/ssss_restore_with_key"
+            app:layout_constraintBottom_toBottomOf="@id/ssss_restore_with_key"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/ssss_restore_with_key"
+            app:layout_constraintTop_toTopOf="@id/ssss_restore_with_key"
             app:tint="?vctr_content_primary"
             tools:ignore="MissingPrefix" />
 
@@ -38,7 +38,6 @@
             app:layout_constraintStart_toEndOf="@id/ssss_shield"
             app:layout_constraintTop_toTopOf="parent" />
 
-
         <TextView
             android:id="@+id/ssss_restore_with_key_text"
             style="@style/Widget.Vector.TextView.Subtitle"
@@ -50,7 +49,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ssss_restore_with_key"
             tools:text="@string/enter_secret_storage_input_key" />
-
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/ssss_key_enter_til"
@@ -78,7 +76,6 @@
 
         <!--        -->
 
-
         <Button
             android:id="@+id/ssss_key_use_file"
             style="@style/Widget.Vector.Button.Text"
@@ -105,10 +102,9 @@
             app:constraint_referenced_ids="ssss_key_use_file,ssss_key_submit"
             app:flow_horizontalStyle="spread_inside"
             app:flow_wrapMode="chain"
-            app:layout_constraintBottom_toTopOf="@+id/ssss_key_reset"
-            app:layout_constraintTop_toBottomOf="@+id/ssss_key_enter_til"
+            app:layout_constraintBottom_toTopOf="@id/ssss_key_reset"
+            app:layout_constraintTop_toBottomOf="@id/ssss_key_enter_til"
             app:layout_goneMarginBottom="@dimen/layout_vertical_margin_big" />
-
 
         <im.vector.app.core.ui.views.BottomSheetActionButton
             android:id="@+id/ssss_key_reset"
@@ -122,7 +118,6 @@
             app:leftIcon="@drawable/ic_alert_triangle"
             app:tint="?colorError"
             app:titleTextColor="?vctr_content_secondary" />
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

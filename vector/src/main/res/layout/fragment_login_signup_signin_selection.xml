@@ -39,7 +39,7 @@
                 android:layout_marginTop="27dp"
                 android:textColor="?vctr_content_primary"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/loginSignupSigninServerIcon"
+                app:layout_constraintTop_toBottomOf="@id/loginSignupSigninServerIcon"
                 app:layout_goneMarginTop="0dp"
                 tools:text="@string/login_connect_to" />
 
@@ -53,7 +53,7 @@
                 android:textColor="?vctr_content_secondary"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/loginSignupSigninTitle"
+                app:layout_constraintTop_toBottomOf="@id/loginSignupSigninTitle"
                 tools:text="@string/login_server_matrix_org_text" />
 
             <!-- Sign up or sign in SSO -->
@@ -65,7 +65,7 @@
                 android:layout_marginTop="38dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/loginSignupSigninText"
+                app:layout_constraintTop_toBottomOf="@id/loginSignupSigninText"
                 tools:text="@string/login_signup" />
 
             <!-- Sign in or gone -->
@@ -80,7 +80,7 @@
                 app:layout_constraintBottom_toTopOf="@id/loginSignupSigninSignInSocialLoginContainer"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/loginSignupSigninSubmit"
+                app:layout_constraintTop_toBottomOf="@id/loginSignupSigninSubmit"
                 tools:visibility="visible" />
 
             <!-- Social Login buttons -->

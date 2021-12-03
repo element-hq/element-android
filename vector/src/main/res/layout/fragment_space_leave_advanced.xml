@@ -50,7 +50,6 @@
 
         </com.google.android.material.appbar.MaterialToolbar>
 
-
         <androidx.appcompat.widget.SearchView
             android:id="@+id/publicRoomsFilter"
             android:layout_width="match_parent"
@@ -59,7 +58,7 @@
             android:layout_marginBottom="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/addRoomToSpaceToolbar"
+            app:layout_constraintTop_toBottomOf="@id/addRoomToSpaceToolbar"
             app:queryHint="@string/search_hint_room_name" />
 
     </com.google.android.material.appbar.AppBarLayout>

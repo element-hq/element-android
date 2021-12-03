@@ -21,7 +21,7 @@
             app:scrimAnimationDuration="250"
             app:scrimVisibleHeightTrigger="80dp"
             app:titleEnabled="false"
-            app:toolbarId="@+id/matrixProfileToolbar">
+            app:toolbarId="@id/matrixProfileToolbar">
 
             <ViewStub
                 android:id="@+id/matrixProfileHeaderView"
@@ -63,7 +63,7 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:alpha="0"
-                        app:layout_constraintCircle="@+id/matrixProfileToolbarAvatarImageView"
+                        app:layout_constraintCircle="@id/matrixProfileToolbarAvatarImageView"
                         app:layout_constraintCircleAngle="135"
                         app:layout_constraintCircleRadius="20dp"
                         tools:alpha="1"
@@ -82,7 +82,7 @@
                         android:textColor="?vctr_content_primary"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/matrixProfileToolbarAvatarImageView"
+                        app:layout_constraintStart_toEndOf="@id/matrixProfileToolbarAvatarImageView"
                         app:layout_constraintTop_toTopOf="parent"
                         tools:alpha="1"
                         tools:text="@sample/rooms.json/data/name" />
