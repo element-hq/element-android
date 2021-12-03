@@ -204,7 +204,6 @@ internal class MxCallImpl(
     override fun selectAnswer() {
         Timber.tag(loggerTag.value).v("select answer $callId")
         if (!isOutgoing) return
-        
         // This is an outgoing call, select the remote client that answered.
         // state is still DIALING.
         CallSelectAnswerContent(
