@@ -20,6 +20,7 @@ import androidx.work.Data
 import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
 import org.matrix.android.sdk.api.failure.shouldBeRetried
+import org.matrix.android.sdk.internal.SessionManager
 import org.matrix.android.sdk.internal.crypto.tasks.SendVerificationMessageTask
 import org.matrix.android.sdk.internal.session.SessionComponent
 import org.matrix.android.sdk.internal.session.room.send.CancelSendTracker
@@ -33,9 +34,8 @@ import javax.inject.Inject
  * Possible previous worker: None
  * Possible next worker    : None
  */
-internal class SendVerificationMessageWorker(context: Context,
-                                             params: WorkerParameters) :
-    SessionSafeCoroutineWorker<SendVerificationMessageWorker.Params>(context, params, Params::class.java) {
+internal class SendVerificationMessageWorker(context: Context, params: WorkerParameters, sessionManager: SessionManager) :
+    SessionSafeCoroutineWorker<SendVerificationMessageWorker.Params>(context, params, sessionManager, Params::class.java) {
 
     @JsonClass(generateAdapter = true)
     internal data class Params(

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Matrix.org Foundation C.I.C.
+ * Copyright 2021 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,18 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.worker
+package org.matrix.android.sdk.common
 
-import android.content.Context
-import androidx.work.ListenableWorker
-import androidx.work.WorkerParameters
+import org.matrix.android.sdk.internal.util.BackgroundDetectionObserver
 
-interface DelegateWorkerFactory {
+/**
+ * Force foreground for testing
+ */
+internal class TestBackgroundDetectionObserver : BackgroundDetectionObserver {
 
-    fun create(context: Context, params: WorkerParameters): ListenableWorker
+    override val isInBackground: Boolean = false
+
+    override fun register(listener: BackgroundDetectionObserver.Listener) = Unit
+
+    override fun unregister(listener: BackgroundDetectionObserver.Listener) = Unit
 }

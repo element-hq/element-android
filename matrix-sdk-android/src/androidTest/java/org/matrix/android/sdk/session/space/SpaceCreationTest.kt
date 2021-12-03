@@ -16,9 +16,7 @@
 
 package org.matrix.android.sdk.session.space
 
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
@@ -50,18 +48,15 @@ class SpaceCreationTest : InstrumentedTest {
     private val commonTestHelper = CommonTestHelper(context())
 
     @Test
-    @Suppress("EXPERIMENTAL_API_USAGE")
     fun createSimplePublicSpace() {
         val session = commonTestHelper.createAccount("Hubble", SessionTestParams(true))
         val roomName = "My Space"
         val topic = "A public space for test"
         var spaceId: String = ""
         commonTestHelper.waitWithLatch {
-            GlobalScope.launch {
-                spaceId = session.spaceService().createSpace(roomName, topic, null, true)
-                // wait a bit to let the summary update it self :/
-                it.countDown()
-            }
+            spaceId = session.spaceService().createSpace(roomName, topic, null, true)
+            // wait a bit to let the summary update it self :/
+            it.countDown()
         }
 
         val syncedSpace = session.spaceService().getSpace(spaceId)
@@ -134,7 +129,6 @@ class SpaceCreationTest : InstrumentedTest {
     }
 
     @Test
-    @Suppress("EXPERIMENTAL_API_USAGE")
     fun testSimplePublicSpaceWithChildren() {
         val aliceSession = commonTestHelper.createAccount("alice", SessionTestParams(true))
         val bobSession = commonTestHelper.createAccount("bob", SessionTestParams(true))
@@ -148,50 +142,40 @@ class SpaceCreationTest : InstrumentedTest {
         // create a room
         var firstChild: String? = null
         commonTestHelper.waitWithLatch {
-            GlobalScope.launch {
-                firstChild = aliceSession.createRoom(CreateRoomParams().apply {
-                    this.name = "FirstRoom"
-                    this.topic = "Description of first room"
-                    this.preset = CreateRoomPreset.PRESET_PUBLIC_CHAT
-                })
-                it.countDown()
-            }
+            firstChild = aliceSession.createRoom(CreateRoomParams().apply {
+                this.name = "FirstRoom"
+                this.topic = "Description of first room"
+                this.preset = CreateRoomPreset.PRESET_PUBLIC_CHAT
+            })
+            it.countDown()
         }
 
         commonTestHelper.waitWithLatch {
-            GlobalScope.launch {
-                syncedSpace?.addChildren(firstChild!!, listOf(aliceSession.sessionParams.homeServerHost ?: ""), "a", suggested = true)
-                it.countDown()
-            }
+            syncedSpace?.addChildren(firstChild!!, listOf(aliceSession.sessionParams.homeServerHost ?: ""), "a", suggested = true)
+            it.countDown()
         }
 
         var secondChild: String? = null
         commonTestHelper.waitWithLatch {
-            GlobalScope.launch {
-                secondChild = aliceSession.createRoom(CreateRoomParams().apply {
-                    this.name = "SecondRoom"
-                    this.topic = "Description of second room"
-                    this.preset = CreateRoomPreset.PRESET_PUBLIC_CHAT
-                })
-                it.countDown()
-            }
+            secondChild = aliceSession.createRoom(CreateRoomParams().apply {
+                this.name = "SecondRoom"
+                this.topic = "Description of second room"
+                this.preset = CreateRoomPreset.PRESET_PUBLIC_CHAT
+            })
+            it.countDown()
         }
 
         commonTestHelper.waitWithLatch {
-            GlobalScope.launch {
-                syncedSpace?.addChildren(secondChild!!, listOf(aliceSession.sessionParams.homeServerHost ?: ""), "b", suggested = true)
-                it.countDown()
-            }
+            syncedSpace?.addChildren(secondChild!!, listOf(aliceSession.sessionParams.homeServerHost ?: ""), "b", suggested = true)
+            it.countDown()
         }
 
         // Try to join from bob, it's a public space no need to invite
         var joinResult: JoinSpaceResult? = null
         commonTestHelper.waitWithLatch {
-            GlobalScope.launch {
-                joinResult = bobSession.spaceService().joinSpace(spaceId)
-                // wait a bit to let the summary update it self :/
-                it.countDown()
-            }
+            joinResult = bobSession.spaceService().joinSpace(spaceId)
+            // wait a bit to let the summary update it self :/
+            it.countDown()
         }
 
         assertEquals(JoinSpaceResult.Success, joinResult)

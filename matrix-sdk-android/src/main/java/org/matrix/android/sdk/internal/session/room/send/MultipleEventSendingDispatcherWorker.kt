@@ -21,6 +21,7 @@ import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
 import org.matrix.android.sdk.api.session.room.send.SendState
+import org.matrix.android.sdk.internal.SessionManager
 import org.matrix.android.sdk.internal.di.WorkManagerProvider
 import org.matrix.android.sdk.internal.session.SessionComponent
 import org.matrix.android.sdk.internal.session.content.UploadContentWorker
@@ -38,8 +39,8 @@ import javax.inject.Inject
  * Possible previous worker: Always [UploadContentWorker]
  * Possible next worker    : None, but it will post new work to send events, encrypted or not
  */
-internal class MultipleEventSendingDispatcherWorker(context: Context, params: WorkerParameters) :
-    SessionSafeCoroutineWorker<MultipleEventSendingDispatcherWorker.Params>(context, params, Params::class.java) {
+internal class MultipleEventSendingDispatcherWorker(context: Context, params: WorkerParameters, sessionManager: SessionManager) :
+    SessionSafeCoroutineWorker<MultipleEventSendingDispatcherWorker.Params>(context, params, sessionManager, Params::class.java) {
 
     @JsonClass(generateAdapter = true)
     internal data class Params(

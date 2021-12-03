@@ -25,9 +25,12 @@ import javax.inject.Inject
 internal class SyncTokenStore @Inject constructor(@SessionDatabase private val monarchy: Monarchy) {
 
     fun getLastToken(): String? {
-        return Realm.getInstance(monarchy.realmConfiguration).use {
+        val token = Realm.getInstance(monarchy.realmConfiguration).use {
+            // Makes sure realm is up-to-date as it's used for querying internally on non looper thread.
+            it.refresh()
             it.where(SyncEntity::class.java).findFirst()?.nextBatch
         }
+        return token
     }
 
     fun saveToken(realm: Realm, token: String?) {

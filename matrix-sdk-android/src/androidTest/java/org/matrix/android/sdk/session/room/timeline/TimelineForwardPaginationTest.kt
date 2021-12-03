@@ -65,14 +65,8 @@ class TimelineForwardPaginationTest : InstrumentedTest {
                 message,
                 numberOfMessagesToSend)
 
-        // Alice clear the cache
-        commonTestHelper.runBlockingTest {
-            aliceSession.clearCache()
-        }
-
-        // And restarts the sync
-        aliceSession.startSync(true)
-
+        // Alice clear the cache and restart the sync
+        commonTestHelper.clearCacheAndSync(aliceSession)
         val aliceTimeline = roomFromAlicePOV.createTimeline(null, TimelineSettings(30))
         aliceTimeline.start()
 
