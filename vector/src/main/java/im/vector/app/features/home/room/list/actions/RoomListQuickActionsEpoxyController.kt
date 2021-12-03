@@ -17,7 +17,6 @@ package im.vector.app.features.home.room.list.actions
 
 import androidx.annotation.StringRes
 import com.airbnb.epoxy.TypedEpoxyController
-import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.epoxy.bottomSheetDividerItem
 import im.vector.app.core.epoxy.bottomsheet.bottomSheetActionItem
@@ -75,14 +74,14 @@ class RoomListQuickActionsEpoxyController @Inject constructor(
         }
 
         if (isV2) {
-            notificationViewState.notificationOptions.forEach {  notificationState ->
+            notificationViewState.notificationOptions.forEach { notificationState ->
                 val title = titleForNotificationState(notificationState)
                 radioButtonItem {
                     id(notificationState.name)
                     titleRes(title)
                     selected(notificationViewState.notificationStateMapped() == notificationState)
                     listener {
-                    host.listener?.didSelectRoomNotificationState(notificationState)
+                        host.listener?.didSelectRoomNotificationState(notificationState)
                     }
                 }
             }
@@ -104,8 +103,9 @@ class RoomListQuickActionsEpoxyController @Inject constructor(
         RoomNotificationState.ALL_MESSAGES_NOISY -> R.string.room_settings_all_messages
         RoomNotificationState.MENTIONS_ONLY      -> R.string.room_settings_mention_and_keyword_only
         RoomNotificationState.MUTE               -> R.string.room_settings_none
-        else -> null
+        else                                     -> null
     }
+
     private fun RoomListQuickActionsSharedAction.toBottomSheetItem(index: Int, roomNotificationState: RoomNotificationState? = null) {
         val host = this@RoomListQuickActionsEpoxyController
         val selected = when (this) {

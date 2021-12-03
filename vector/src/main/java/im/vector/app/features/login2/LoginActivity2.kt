@@ -41,7 +41,6 @@ import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityLoginBinding
 import im.vector.app.features.home.HomeActivity
-import im.vector.app.features.login.LoginActivity
 import im.vector.app.features.login.LoginCaptchaFragmentArgument
 import im.vector.app.features.login.LoginConfig
 import im.vector.app.features.login.LoginGenericTextInputFormFragmentArgument
