@@ -18,7 +18,6 @@ package org.matrix.android.sdk.internal.session.room.timeline
 
 import io.realm.Realm
 import io.realm.RealmConfiguration
-import io.realm.RealmResults
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -26,13 +25,11 @@ import kotlinx.coroutines.android.asCoroutineDispatcher
 import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import okhttp3.internal.closeQuietly
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
-import org.matrix.android.sdk.internal.database.mapper.EventMapper
 import org.matrix.android.sdk.internal.database.mapper.TimelineEventMapper
 import org.matrix.android.sdk.internal.session.room.membership.LoadRoomMembersTask
 import org.matrix.android.sdk.internal.session.sync.handler.room.ReadReceiptHandler
@@ -47,16 +44,16 @@ import java.util.concurrent.atomic.AtomicReference
 
 internal class DefaultTimeline internal constructor(private val roomId: String,
                                                     private val initialEventId: String?,
-                                                    private val settings: TimelineSettings,
                                                     private val realmConfiguration: RealmConfiguration,
                                                     private val loadRoomMembersTask: LoadRoomMembersTask,
                                                     private val readReceiptHandler: ReadReceiptHandler,
+                                                    settings: TimelineSettings,
                                                     paginationTask: PaginationTask,
                                                     getEventTask: GetContextOfEventTask,
                                                     fetchTokenAndPaginateTask: FetchTokenAndPaginateTask,
                                                     timelineEventMapper: TimelineEventMapper,
                                                     timelineInput: TimelineInput,
-                                                    private val threadsAwarenessHandler: ThreadsAwarenessHandler,
+                                                    threadsAwarenessHandler: ThreadsAwarenessHandler,
                                                     eventDecryptor: TimelineEventDecryptor) : Timeline {
 
     companion object {
@@ -76,6 +73,7 @@ internal class DefaultTimeline internal constructor(private val roomId: String,
     private val sequencer = SemaphoreCoroutineSequencer()
 
     private val strategyDependencies = LoadTimelineStrategy.Dependencies(
+            timelineScope = timelineScope,
             eventDecryptor = eventDecryptor,
             timelineSettings = settings,
             paginationTask = paginationTask,
@@ -139,6 +137,7 @@ internal class DefaultTimeline internal constructor(private val roomId: String,
     override fun restartWithEventId(eventId: String?) {
         timelineScope.launch {
             openAround(eventId)
+            postSnapshot()
         }
     }
 
@@ -165,7 +164,7 @@ internal class DefaultTimeline internal constructor(private val roomId: String,
         }.get()
     }
 
-    private suspend fun loadMore(count: Long, direction: Timeline.Direction) = withContext(timelineDispatcher) {
+    private suspend fun loadMore(count: Long, direction: Timeline.Direction) {
         val baseLogMessage = "loadMore(count: $count, direction: $direction, roomId: $roomId)"
         Timber.v("$baseLogMessage started")
         if (!isStarted.get()) {
@@ -174,21 +173,21 @@ internal class DefaultTimeline internal constructor(private val roomId: String,
         val currentState = getPaginationState(direction)
         if (!currentState.hasMoreToLoad) {
             Timber.v("$baseLogMessage : nothing more to load")
-            return@withContext
+            return
         }
         if (currentState.loading) {
             Timber.v("$baseLogMessage : already loading")
-            return@withContext
+            return
         }
         updateState(direction) {
             it.copy(loading = true)
         }
         val loadMoreResult = strategy.loadMore(count, direction)
+        Timber.v("$baseLogMessage: result $loadMoreResult")
         val hasMoreToLoad = loadMoreResult != LoadMoreResult.REACHED_END
         updateState(direction) {
             it.copy(loading = false, hasMoreToLoad = hasMoreToLoad)
         }
-        postSnapshot()
     }
 
     private suspend fun openAround(eventId: String?) = withContext(timelineDispatcher) {
@@ -210,12 +209,12 @@ internal class DefaultTimeline internal constructor(private val roomId: String,
             it.copy(loading = false, hasMoreToLoad = true)
         }
         strategy.onStart()
-        postSnapshot()
     }
 
     private fun postSnapshot() {
         timelineScope.launch {
             val snapshot = strategy.buildSnapshot()
+            Timber.v("Post snapshot of ${snapshot.size} items")
             withContext(Dispatchers.Main) {
                 listeners.forEach {
                     tryOrNull { it.onTimelineUpdated(snapshot) }
@@ -242,7 +241,7 @@ internal class DefaultTimeline internal constructor(private val roomId: String,
         stateReference.set(newValue)
         withContext(Dispatchers.Main) {
             listeners.forEach {
-                tryOrNull { it.onStateUpdated() }
+                tryOrNull { it.onStateUpdated(direction, newValue) }
             }
         }
     }

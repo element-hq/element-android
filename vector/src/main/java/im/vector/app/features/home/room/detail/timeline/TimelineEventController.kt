@@ -310,9 +310,9 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
     }
 
     override fun onStateUpdated(direction: Timeline.Direction, state: Timeline.PaginationState) {
-        if(!state.hasMoreToLoad) {
+        if (!state.hasMoreToLoad) {
             backgroundHandler.post {
-                requestModelBuild()
+                requestDelayedModelBuild(0)
             }
         }
     }
@@ -324,7 +324,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
             currentSnapshot = newSnapshot
             val diffResult = DiffUtil.calculateDiff(diffCallback)
             diffResult.dispatchUpdatesTo(listUpdateCallback)
-            requestModelBuild()
+            requestDelayedModelBuild(0)
             inSubmitList = false
         }
     }

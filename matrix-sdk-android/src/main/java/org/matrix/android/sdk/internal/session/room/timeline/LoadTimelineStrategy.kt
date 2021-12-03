@@ -20,6 +20,7 @@ import io.realm.OrderedCollectionChangeSet
 import io.realm.OrderedRealmCollectionChangeListener
 import io.realm.Realm
 import io.realm.RealmResults
+import kotlinx.coroutines.CoroutineScope
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
@@ -62,6 +63,7 @@ internal class LoadTimelineStrategy(
 
     data class Dependencies(
             val timelineSettings: TimelineSettings,
+            val timelineScope: CoroutineScope,
             val realm: AtomicReference<Realm>,
             val eventDecryptor: TimelineEventDecryptor,
             val paginationTask: PaginationTask,
@@ -214,7 +216,8 @@ internal class LoadTimelineStrategy(
                     uiEchoManager = uiEchoManager,
                     threadsAwarenessHandler = dependencies.threadsAwarenessHandler,
                     initialEventId = mode.originEventId(),
-                    onBuiltEvents = dependencies.onEventsUpdated
+                    onBuiltEvents = dependencies.onEventsUpdated,
+                    timelineScope = dependencies.timelineScope
             )
         }
     }

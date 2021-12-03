@@ -22,7 +22,8 @@ import io.realm.RealmObjectChangeListener
 import io.realm.RealmQuery
 import io.realm.RealmResults
 import io.realm.Sort
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
@@ -50,6 +51,7 @@ private const val PAGINATION_COUNT = 50
  * It also triggers pagination to the server when needed, or dispatch to the prev or next chunk if any.
  */
 internal class TimelineChunk constructor(private val chunkEntity: ChunkEntity,
+                                         private val timelineScope: CoroutineScope,
                                          private val timelineSettings: TimelineSettings,
                                          private val roomId: String,
                                          private val timelineId: String,
@@ -65,18 +67,30 @@ internal class TimelineChunk constructor(private val chunkEntity: ChunkEntity,
     private val isLastForward = AtomicBoolean(chunkEntity.isLastForward)
 
     private val chunkObjectListener = RealmObjectChangeListener<ChunkEntity> { _, changeSet ->
-        if(changeSet?.isDeleted.orFalse()){
+        if (changeSet == null) return@RealmObjectChangeListener
+        if (changeSet.isDeleted.orFalse()) {
             return@RealmObjectChangeListener
         }
-        Timber.v("on chunk (${chunkEntity.identifier()}) changed: ${changeSet?.changedFields?.joinToString(",")}")
-        if(changeSet?.isFieldChanged(ChunkEntityFields.IS_LAST_FORWARD).orFalse()){
+        Timber.v("on chunk (${chunkEntity.identifier()}) changed: ${changeSet.changedFields?.joinToString(",")}")
+        if (changeSet.isFieldChanged(ChunkEntityFields.IS_LAST_FORWARD)) {
             isLastForward.set(chunkEntity.isLastForward)
+        }
+        if (changeSet.isFieldChanged(ChunkEntityFields.NEXT_CHUNK.`$`)) {
+            nextChunk = createTimelineChunk(chunkEntity.nextChunk)
+            timelineScope.launch {
+                nextChunk?.loadMore(PAGINATION_COUNT.toLong(), Timeline.Direction.FORWARDS)
+            }
+        }
+        if (changeSet.isFieldChanged(ChunkEntityFields.PREV_CHUNK.`$`)) {
+            prevChunk = createTimelineChunk(chunkEntity.prevChunk)
+            timelineScope.launch {
+                prevChunk?.loadMore(PAGINATION_COUNT.toLong(), Timeline.Direction.BACKWARDS)
+            }
         }
     }
 
     private val timelineEventCollectionListener = OrderedRealmCollectionChangeListener { results: RealmResults<TimelineEventEntity>, changeSet: OrderedCollectionChangeSet ->
         val frozenResults = results.freeze()
-        Timber.v("on timeline event changed: $changeSet")
         handleDatabaseChangeSet(frozenResults, changeSet)
     }
 
@@ -116,18 +130,22 @@ internal class TimelineChunk constructor(private val chunkEntity: ChunkEntity,
 
     suspend fun loadMore(count: Long, direction: Timeline.Direction): LoadMoreResult {
         val loadFromDbCount = loadFromDb(count, direction)
+        Timber.v("Has loaded $loadFromDbCount items from db")
         val offsetCount = count - loadFromDbCount
         // We have built the right amount of data
-        if (offsetCount == 0L) {
-            onBuiltEvents()
-            return LoadMoreResult.SUCCESS
+        return if (offsetCount == 0L) {
+            LoadMoreResult.SUCCESS
+        } else {
+            delegateLoadMore(offsetCount, direction)
         }
+    }
+
+    private suspend fun delegateLoadMore(offsetCount: Long, direction: Timeline.Direction): LoadMoreResult {
         return if (direction == Timeline.Direction.FORWARDS) {
             val nextChunkEntity = chunkEntity.nextChunk
             if (nextChunkEntity == null) {
                 // Fetch next chunk from server if not in the db
-                val token = chunkEntity.nextToken
-                fetchFromServer(token, direction)
+                fetchFromServer(chunkEntity.nextToken, direction)
             } else {
                 // otherwise we delegate to the next chunk
                 if (nextChunk == null) {
@@ -139,8 +157,7 @@ internal class TimelineChunk constructor(private val chunkEntity: ChunkEntity,
             val prevChunkEntity = chunkEntity.prevChunk
             if (prevChunkEntity == null) {
                 // Fetch prev chunk from server if not in the db
-                val token = chunkEntity.prevToken
-                fetchFromServer(token, direction)
+                fetchFromServer(chunkEntity.prevToken, direction)
             } else {
                 // otherwise we delegate to the prev chunk
                 if (prevChunk == null) {
@@ -227,6 +244,9 @@ internal class TimelineChunk constructor(private val chunkEntity: ChunkEntity,
         timelineEventEntities.removeChangeListener(timelineEventCollectionListener)
     }
 
+    /**
+     * This method tries to read events from the current chunk.
+     */
     private suspend fun loadFromDb(count: Long, direction: Timeline.Direction): Long {
         val displayIndex = getNextDisplayIndex(direction) ?: return 0
         val baseQuery = timelineEventEntities.where()
@@ -247,6 +267,7 @@ internal class TimelineChunk constructor(private val chunkEntity: ChunkEntity,
                         builtEvents.add(timelineEvent)
                     }
                 }
+        onBuiltEvents()
         return timelineEvents.size.toLong()
     }
 
@@ -263,7 +284,6 @@ internal class TimelineChunk constructor(private val chunkEntity: ChunkEntity,
                 }
         threadsAwarenessHandler.fetchRootThreadEventsIfNeeded(eventEntityList)
     }
-
 
     private fun TimelineEventEntity.buildAndDecryptIfNeeded(): TimelineEvent {
         val timelineEvent = buildTimelineEvent(this)
@@ -284,23 +304,11 @@ internal class TimelineChunk constructor(private val chunkEntity: ChunkEntity,
         (uiEchoManager?.decorateEventWithReactionUiEcho(it) ?: it)
     }
 
-    private fun createTimelineChunk(chunkEntity: ChunkEntity): TimelineChunk {
-        return TimelineChunk(
-                chunkEntity = chunkEntity,
-                timelineSettings = timelineSettings,
-                timelineId = timelineId,
-                eventDecryptor = eventDecryptor,
-                roomId = roomId,
-                paginationTask = paginationTask,
-                fetchTokenAndPaginateTask = fetchTokenAndPaginateTask,
-                timelineEventMapper = timelineEventMapper,
-                uiEchoManager = uiEchoManager,
-                threadsAwarenessHandler = threadsAwarenessHandler,
-                initialEventId = null,
-                onBuiltEvents = onBuiltEvents
-        )
-    }
-
+    /**
+     * Will try to fetch a new chunk on the home server.
+     * It will take care to update the database by inserting new events and linking new chunk
+     * with this one.
+     */
     private suspend fun fetchFromServer(token: String?, direction: Timeline.Direction): LoadMoreResult {
         val paginationResult = try {
             if (token == null) {
@@ -309,6 +317,7 @@ internal class TimelineChunk constructor(private val chunkEntity: ChunkEntity,
                 val taskParams = FetchTokenAndPaginateTask.Params(roomId, lastKnownEventId, direction.toPaginationDirection(), PAGINATION_COUNT)
                 fetchTokenAndPaginateTask.execute(taskParams)
             } else {
+                Timber.v("Fetch more events on server")
                 val taskParams = PaginationTask.Params(roomId, token, direction.toPaginationDirection(), PAGINATION_COUNT)
                 paginationTask.execute(taskParams)
             }
@@ -337,6 +346,10 @@ internal class TimelineChunk constructor(private val chunkEntity: ChunkEntity,
         return offset
     }
 
+    /**
+     * This method is responsible for managing insertions and updates of events on this chunk.
+     *
+     */
     private fun handleDatabaseChangeSet(frozenResults: RealmResults<TimelineEventEntity>, changeSet: OrderedCollectionChangeSet) {
         val insertions = changeSet.insertionRanges
         for (range in insertions) {
@@ -384,6 +397,25 @@ internal class TimelineChunk constructor(private val chunkEntity: ChunkEntity,
         } else {
             builtEvents.last().displayIndex - 1
         }
+    }
+
+    private fun createTimelineChunk(chunkEntity: ChunkEntity?): TimelineChunk? {
+        if (chunkEntity == null) return null
+        return TimelineChunk(
+                chunkEntity = chunkEntity,
+                timelineScope = timelineScope,
+                timelineSettings = timelineSettings,
+                timelineId = timelineId,
+                eventDecryptor = eventDecryptor,
+                roomId = roomId,
+                paginationTask = paginationTask,
+                fetchTokenAndPaginateTask = fetchTokenAndPaginateTask,
+                timelineEventMapper = timelineEventMapper,
+                uiEchoManager = uiEchoManager,
+                threadsAwarenessHandler = threadsAwarenessHandler,
+                initialEventId = null,
+                onBuiltEvents = this.onBuiltEvents
+        )
     }
 }
 
