@@ -41,6 +41,8 @@ interface Navigator {
 
     fun openLogin(context: Context, loginConfig: LoginConfig? = null, flags: Int = 0)
 
+    fun softLogout(context: Context)
+
     fun openRoom(context: Context, roomId: String, eventId: String? = null, buildTask: Boolean = false)
 
     sealed class PostSwitchSpaceAction {
