@@ -2008,7 +2008,7 @@
     <string name="initialize_cross_signing">Inizializza la firma incrociata</string>
     <string name="reset_cross_signing">Reimposta chiavi</string>
     <string name="a11y_qr_code_for_verification">Codice QR</string>
-    <string name="qr_code_scanned_by_other_notice">Quasi fatto! %s sta mostrando lo stesso badge\?</string>
+    <string name="qr_code_scanned_by_other_notice">Quasi fatto! %s sta mostrando una spunta\?</string>
     <string name="qr_code_scanned_by_other_yes">Sì</string>
     <string name="qr_code_scanned_by_other_no">No</string>
     <string name="no_connectivity_to_the_server_indicator">La connessione al server è stata persa</string>
@@ -2107,7 +2107,7 @@
     <string name="encryption_not_enabled">Crittografia non attiva</string>
     <string name="encryption_unknown_algorithm_tile_description">La crittografia usata in questa stanza non è supportata</string>
     <string name="room_created_summary_item">%s ha creato e configurato la stanza.</string>
-    <string name="qr_code_scanned_self_verif_notice">Quasi fatto! L\'altro dispositivo sta mostrando lo stesso badge\?</string>
+    <string name="qr_code_scanned_self_verif_notice">Quasi fatto! L\'altro dispositivo sta mostrando una spunta\?</string>
     <string name="qr_code_scanned_verif_waiting_notice">Quasi fatto! In attesa della conferma…</string>
     <string name="qr_code_scanned_verif_waiting">In attesa di %s…</string>
     <string name="error_failed_to_import_keys">Importazione chiavi fallita</string>
@@ -3082,4 +3082,7 @@
     <string name="settings_discovery_consent_notice_off_2">I tuoi contatti sono privati. Per trovare utenti dai tuoi contatti, ci serve l\'autorizzazione per inviare le informazioni dei contatti al tuo server d\'identità.</string>
     <string name="shortcut_disabled_reason_sign_out">La sessione è stata disconnessa!</string>
     <string name="shortcut_disabled_reason_room_left">La stanza è stata lasciata!</string>
+    <string name="identity_server_consent_dialog_content_question">Sei d\'accordo con l\'invio di queste informazioni\?</string>
+    <string name="identity_server_consent_dialog_content_3">Per trovare i contatti esistenti, devi inviare le informazioni dei contatti (email e numeri di telefono) al tuo server d\'identità. Facciamo un hash dei dati prima di inviarli per privacy.</string>
+    <string name="action_not_now">Non ora</string>
 </resources>
