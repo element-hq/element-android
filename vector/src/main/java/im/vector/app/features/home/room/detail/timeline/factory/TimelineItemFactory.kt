@@ -48,6 +48,7 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
             when (event.root.getClearType()) {
                 // Message itemsX
                 EventType.STICKER,
+                EventType.POLL_START,
                 EventType.MESSAGE               -> messageItemFactory.create(params)
                 EventType.STATE_ROOM_TOMBSTONE,
                 EventType.STATE_ROOM_NAME,

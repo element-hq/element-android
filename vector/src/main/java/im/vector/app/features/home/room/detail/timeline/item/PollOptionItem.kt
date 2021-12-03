@@ -1,0 +1,100 @@
+/*
+ * Copyright (c) 2021 New Vector Ltd
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package im.vector.app.features.home.room.detail.timeline.item
+
+import android.content.Context
+import android.os.Build
+import android.util.AttributeSet
+import androidx.appcompat.content.res.AppCompatResources
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.isVisible
+import im.vector.app.R
+import im.vector.app.core.extensions.setAttributeTintedImageResource
+import im.vector.app.databinding.ItemPollOptionBinding
+
+class PollOptionItem @JvmOverloads constructor(
+        context: Context,
+        attrs: AttributeSet? = null,
+        defStyleAttr: Int = 0
+) : ConstraintLayout(context, attrs, defStyleAttr) {
+
+    interface Callback {
+        fun onOptionClicked()
+    }
+
+    private lateinit var views: ItemPollOptionBinding
+    private var callback: Callback? = null
+
+    init {
+        setupViews()
+    }
+
+    private fun setupViews() {
+        inflate(context, R.layout.item_poll_option, this)
+        views = ItemPollOptionBinding.bind(this)
+
+        views.root.setOnClickListener { callback?.onOptionClicked() }
+    }
+
+    fun update(optionName: String,
+               isSelected: Boolean,
+               isWinner: Boolean,
+               isEnded: Boolean,
+               showVote: Boolean,
+               voteCount: Int,
+               votePercentage: Double,
+               callback: Callback) {
+        this.callback = callback
+        views.optionNameTextView.text = optionName
+
+        views.optionCheckImageView.isVisible = !isEnded
+
+        if (isEnded && isWinner) {
+            views.optionBorderImageView.setAttributeTintedImageResource(R.drawable.bg_poll_option, R.attr.colorPrimary)
+            views.optionVoteProgress.progressDrawable = AppCompatResources.getDrawable(context, R.drawable.poll_option_progressbar_checked)
+            views.optionWinnerImageView.isVisible = true
+        } else if (isSelected) {
+            views.optionBorderImageView.setAttributeTintedImageResource(R.drawable.bg_poll_option, R.attr.colorPrimary)
+            views.optionVoteProgress.progressDrawable = AppCompatResources.getDrawable(context, R.drawable.poll_option_progressbar_checked)
+            views.optionCheckImageView.setImageResource(R.drawable.poll_option_checked)
+            views.optionWinnerImageView.isVisible = false
+        } else {
+            views.optionBorderImageView.setAttributeTintedImageResource(R.drawable.bg_poll_option, R.attr.vctr_content_quinary)
+            views.optionVoteProgress.progressDrawable = AppCompatResources.getDrawable(context, R.drawable.poll_option_progressbar_unchecked)
+            views.optionCheckImageView.setImageResource(R.drawable.poll_option_unchecked)
+            views.optionWinnerImageView.isVisible = false
+        }
+
+        if (showVote) {
+            views.optionVoteCountTextView.apply {
+                isVisible = true
+                text = resources.getQuantityString(R.plurals.poll_option_vote_count, voteCount, voteCount)
+            }
+            views.optionVoteProgress.apply {
+                val progressValue = (votePercentage * 100).toInt()
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    setProgress(progressValue, true)
+                } else {
+                    progress = progressValue
+                }
+            }
+        } else {
+            views.optionVoteCountTextView.isVisible = false
+            views.optionVoteProgress.progress = 0
+        }
+    }
+}

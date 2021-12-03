@@ -23,6 +23,7 @@ import android.text.style.AbsoluteSizeSpan
 import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
 import android.view.View
+import com.airbnb.epoxy.EpoxyModel
 import dagger.Lazy
 import im.vector.app.R
 import im.vector.app.core.epoxy.ClickListener
@@ -48,12 +49,12 @@ import im.vector.app.features.home.room.detail.timeline.item.MessageFileItem_
 import im.vector.app.features.home.room.detail.timeline.item.MessageImageVideoItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageImageVideoItem_
 import im.vector.app.features.home.room.detail.timeline.item.MessageInformationData
-import im.vector.app.features.home.room.detail.timeline.item.MessageOptionsItem_
-import im.vector.app.features.home.room.detail.timeline.item.MessagePollItem_
 import im.vector.app.features.home.room.detail.timeline.item.MessageTextItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageTextItem_
 import im.vector.app.features.home.room.detail.timeline.item.MessageVoiceItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageVoiceItem_
+import im.vector.app.features.home.room.detail.timeline.item.PollItem
+import im.vector.app.features.home.room.detail.timeline.item.PollItem_
 import im.vector.app.features.home.room.detail.timeline.item.RedactedMessageItem
 import im.vector.app.features.home.room.detail.timeline.item.RedactedMessageItem_
 import im.vector.app.features.home.room.detail.timeline.item.VerificationRequestItem
@@ -80,14 +81,11 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageEmoteContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageFileContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageImageInfoContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageNoticeContent
-import org.matrix.android.sdk.api.session.room.model.message.MessageOptionsContent
-import org.matrix.android.sdk.api.session.room.model.message.MessagePollResponseContent
+import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageTextContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.model.message.MessageVerificationRequestContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageVideoContent
-import org.matrix.android.sdk.api.session.room.model.message.OPTION_TYPE_BUTTONS
-import org.matrix.android.sdk.api.session.room.model.message.OPTION_TYPE_POLL
 import org.matrix.android.sdk.api.session.room.model.message.getFileName
 import org.matrix.android.sdk.api.session.room.model.message.getFileUrl
 import org.matrix.android.sdk.api.session.room.model.message.getThumbnailUrl
@@ -125,7 +123,7 @@ class MessageItemFactory @Inject constructor(
         pillsPostProcessorFactory.create(roomId)
     }
 
-    fun create(params: TimelineItemFactoryParams): VectorEpoxyModel<*>? {
+    fun create(params: TimelineItemFactoryParams): EpoxyModel<*>? {
         val event = params.event
         val highlight = params.isHighlighted
         val callback = params.callback
@@ -168,41 +166,24 @@ class MessageItemFactory @Inject constructor(
                 }
             }
             is MessageVerificationRequestContent -> buildVerificationRequestMessageItem(messageContent, informationData, highlight, callback, attributes)
-            is MessageOptionsContent             -> buildOptionsMessageItem(messageContent, informationData, highlight, callback, attributes)
-            is MessagePollResponseContent        -> noticeItemFactory.create(params)
+            is MessagePollContent                -> buildPollContent(messageContent, informationData, highlight, callback, attributes)
             else                                 -> buildNotHandledMessageItem(messageContent, informationData, highlight, callback, attributes)
         }
     }
 
-    private fun buildOptionsMessageItem(messageContent: MessageOptionsContent,
-                                        informationData: MessageInformationData,
-                                        highlight: Boolean,
-                                        callback: TimelineEventController.Callback?,
-                                        attributes: AbsMessageItem.Attributes): VectorEpoxyModel<*>? {
-        return when (messageContent.optionType) {
-            OPTION_TYPE_POLL    -> {
-                MessagePollItem_()
-                        .attributes(attributes)
-                        .callback(callback)
-                        .informationData(informationData)
-                        .leftGuideline(avatarSizeProvider.leftGuideline)
-                        .optionsContent(messageContent)
-                        .highlighted(highlight)
-            }
-            OPTION_TYPE_BUTTONS -> {
-                MessageOptionsItem_()
-                        .attributes(attributes)
-                        .callback(callback)
-                        .informationData(informationData)
-                        .leftGuideline(avatarSizeProvider.leftGuideline)
-                        .optionsContent(messageContent)
-                        .highlighted(highlight)
-            }
-            else                -> {
-                // Not supported optionType
-                buildNotHandledMessageItem(messageContent, informationData, highlight, callback, attributes)
-            }
-        }
+    private fun buildPollContent(messageContent: MessagePollContent,
+                                 informationData: MessageInformationData,
+                                 highlight: Boolean,
+                                 callback: TimelineEventController.Callback?,
+                                 attributes: AbsMessageItem.Attributes): PollItem? {
+        return PollItem_()
+                .attributes(attributes)
+                .eventId(informationData.eventId)
+                .pollResponseSummary(informationData.pollResponseAggregatedSummary)
+                .pollContent(messageContent)
+                .highlighted(highlight)
+                .leftGuideline(avatarSizeProvider.leftGuideline)
+                .callback(callback)
     }
 
     private fun buildAudioMessageItem(messageContent: MessageAudioContent,

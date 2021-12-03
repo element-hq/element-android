@@ -50,7 +50,8 @@ object TimelineDisplayableEvents {
             EventType.STATE_ROOM_TOMBSTONE,
             EventType.STATE_ROOM_JOIN_RULES,
             EventType.KEY_VERIFICATION_DONE,
-            EventType.KEY_VERIFICATION_CANCEL
+            EventType.KEY_VERIFICATION_CANCEL,
+            EventType.POLL_START
     )
 }
 

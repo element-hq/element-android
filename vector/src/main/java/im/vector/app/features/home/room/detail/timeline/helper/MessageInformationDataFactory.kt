@@ -107,9 +107,9 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
                 pollResponseAggregatedSummary = event.annotations?.pollResponseSummary?.let {
                     PollResponseData(
                             myVote = it.aggregatedContent?.myVote,
-                            isClosed = it.closedTime ?: Long.MAX_VALUE > System.currentTimeMillis(),
+                            isClosed = it.closedTime != null,
                             votes = it.aggregatedContent?.votes
-                                    ?.groupBy({ it.optionIndex }, { it.userId })
+                                    ?.groupBy({ it.option }, { it.userId })
                                     ?.mapValues { it.value.size }
                     )
                 },

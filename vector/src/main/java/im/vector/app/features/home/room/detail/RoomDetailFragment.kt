@@ -2017,6 +2017,9 @@ class RoomDetailFragment @Inject constructor(
                     startActivity(KeysBackupRestoreActivity.intent(it))
                 }
             }
+            is EventSharedAction.EndPoll                    -> {
+                roomDetailViewModel.handle(RoomDetailAction.EndPoll(action.eventId))
+            }
         }
     }
 

@@ -71,8 +71,8 @@ data class ReadReceiptData(
 
 @Parcelize
 data class PollResponseData(
-        val myVote: Int?,
-        val votes: Map<Int, Int>?,
+        val myVote: String?,
+        val votes: Map<String, Int>?,
         val isClosed: Boolean = false
 ) : Parcelable
 

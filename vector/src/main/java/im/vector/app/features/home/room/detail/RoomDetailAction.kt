@@ -53,7 +53,7 @@ sealed class RoomDetailAction : VectorViewModelAction {
     data class RemoveFailedEcho(val eventId: String) : RoomDetailAction()
     data class CancelSend(val eventId: String, val force: Boolean) : RoomDetailAction()
 
-    data class ReplyToOptions(val eventId: String, val optionIndex: Int, val optionValue: String) : RoomDetailAction()
+    data class RegisterVoteToPoll(val eventId: String, val optionKey: String) : RoomDetailAction()
 
     data class ReportContent(
             val eventId: String,
@@ -116,4 +116,7 @@ sealed class RoomDetailAction : VectorViewModelAction {
     data class PlayOrPauseVoicePlayback(val eventId: String, val messageAudioContent: MessageAudioContent) : RoomDetailAction()
     object PlayOrPauseRecordingPlayback : RoomDetailAction()
     data class EndAllVoiceActions(val deleteRecord: Boolean = true) : RoomDetailAction()
+
+    // Poll
+    data class EndPoll(val eventId: String) : RoomDetailAction()
 }

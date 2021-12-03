@@ -1,0 +1,22 @@
+{
+  "question": "What type of food should we have at the party?",
+  "data": [
+    {
+      "answer": "Italian \uD83C\uDDEE\uD83C\uDDF9",
+      "votes": "9 votes"
+    },
+    {
+      "answer": "Chinese \uD83C\uDDE8\uD83C\uDDF3",
+      "votes": "1 vote"
+    },
+    {
+      "answer": "Brazilian \uD83C\uDDE7\uD83C\uDDF7",
+      "votes": "0 votes"
+    },
+    {
+      "answer": "French \uD83C\uDDEB\uD83C\uDDF7",
+      "votes": "15 votes"
+    }
+  ],
+  "totalVotes": "Based on 20 votes"
+}

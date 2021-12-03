@@ -309,7 +309,7 @@ class RoomDetailViewModel @AssistedInject constructor(
             is RoomDetailAction.IgnoreUser                       -> handleIgnoreUser(action)
             is RoomDetailAction.EnterTrackingUnreadMessagesState -> startTrackingUnreadMessages()
             is RoomDetailAction.ExitTrackingUnreadMessagesState  -> stopTrackingUnreadMessages()
-            is RoomDetailAction.ReplyToOptions                   -> handleReplyToOptions(action)
+            is RoomDetailAction.RegisterVoteToPoll               -> handleRegisterVoteToPoll(action)
             is RoomDetailAction.AcceptVerificationRequest        -> handleAcceptVerification(action)
             is RoomDetailAction.DeclineVerificationRequest       -> handleDeclineVerification(action)
             is RoomDetailAction.RequestVerification              -> handleRequestVerification(action)
@@ -355,6 +355,7 @@ class RoomDetailViewModel @AssistedInject constructor(
                 }
                 _viewEvents.post(RoomDetailViewEvents.OpenRoom(action.replacementRoomId, closeCurrentRoom = true))
             }
+            is RoomDetailAction.EndPoll                          -> handleEndPoll(action.eventId)
         }.exhaustive
     }
 
@@ -983,10 +984,14 @@ class RoomDetailViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleReplyToOptions(action: RoomDetailAction.ReplyToOptions) {
+    private fun handleRegisterVoteToPoll(action: RoomDetailAction.RegisterVoteToPoll) {
         // Do not allow to reply to unsent local echo
         if (LocalEcho.isLocalEchoId(action.eventId)) return
-        room.sendOptionsReply(action.eventId, action.optionIndex, action.optionValue)
+        room.registerVoteToPoll(action.eventId, action.optionKey)
+    }
+
+    private fun handleEndPoll(eventId: String) {
+        room.endPoll(eventId)
     }
 
     private fun observeSyncState() {
