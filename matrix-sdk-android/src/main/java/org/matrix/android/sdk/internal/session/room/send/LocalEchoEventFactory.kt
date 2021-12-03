@@ -35,6 +35,7 @@ import org.matrix.android.sdk.api.session.room.model.message.ImageInfo
 import org.matrix.android.sdk.api.session.room.model.message.MessageAudioContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageContentWithFormattedBody
+import org.matrix.android.sdk.api.session.room.model.message.MessageEndPollContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageFileContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageFormat
 import org.matrix.android.sdk.api.session.room.model.message.MessageImageContent
@@ -46,6 +47,7 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageVideoContent
 import org.matrix.android.sdk.api.session.room.model.message.PollAnswer
 import org.matrix.android.sdk.api.session.room.model.message.PollCreationInfo
 import org.matrix.android.sdk.api.session.room.model.message.PollQuestion
+import org.matrix.android.sdk.api.session.room.model.message.PollResponse
 import org.matrix.android.sdk.api.session.room.model.message.ThumbnailInfo
 import org.matrix.android.sdk.api.session.room.model.message.VideoInfo
 import org.matrix.android.sdk.api.session.room.model.relation.ReactionContent
@@ -122,19 +124,28 @@ internal class LocalEchoEventFactory @Inject constructor(
                 ))
     }
 
-    fun createOptionsReplyEvent(roomId: String,
-                                pollEventId: String,
-                                optionIndex: Int,
-                                optionLabel: String): Event {
-        return createMessageEvent(roomId,
-                MessagePollResponseContent(
-                        body = optionLabel,
-                        relatesTo = RelationDefaultContent(
-                                type = RelationType.RESPONSE,
-                                option = optionIndex,
-                                eventId = pollEventId)
+    fun createPollReplyEvent(roomId: String,
+                             pollEventId: String,
+                             optionLabel: String): Event {
+        val content = MessagePollResponseContent(
+                body = optionLabel,
+                relatesTo = RelationDefaultContent(
+                        type = RelationType.REFERENCE,
+                        eventId = pollEventId),
+                response = PollResponse(
+                        answers = listOf(optionLabel)
+                )
 
-                ))
+        )
+        val localId = LocalEcho.createLocalEchoId()
+        return Event(
+                roomId = roomId,
+                originServerTs = dummyOriginServerTs(),
+                senderId = userId,
+                eventId = localId,
+                type = EventType.POLL_RESPONSE,
+                content = content.toContent(),
+                unsignedData = UnsignedData(age = null, transactionId = localId))
     }
 
     fun createPollEvent(roomId: String,
@@ -160,6 +171,22 @@ internal class LocalEchoEventFactory @Inject constructor(
                 senderId = userId,
                 eventId = localId,
                 type = EventType.POLL_START,
+                content = content.toContent(),
+                unsignedData = UnsignedData(age = null, transactionId = localId))
+    }
+
+    fun createEndPollEvent(roomId: String,
+                           eventId: String): Event {
+        val content = MessageEndPollContent(
+                eventId = eventId
+        )
+        val localId = LocalEcho.createLocalEchoId()
+        return Event(
+                roomId = roomId,
+                originServerTs = dummyOriginServerTs(),
+                senderId = userId,
+                eventId = localId,
+                type = EventType.POLL_END,
                 content = content.toContent(),
                 unsignedData = UnsignedData(age = null, transactionId = localId))
     }
