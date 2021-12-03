@@ -267,7 +267,9 @@ internal class TokenChunkEventPersistor @Inject constructor(@SessionDatabase pri
             RoomEntity.where(realm, roomId).findFirst()?.addIfNecessary(currentChunk)
         }
 
-        optimizedThreadSummaryMap.updateThreadSummaryIfNeeded()
+        // passing isInitialSync = true because we want to disable local notifications
+        // they do not work properly without the API
+        optimizedThreadSummaryMap.updateThreadSummaryIfNeeded(true)
 
     }
 }

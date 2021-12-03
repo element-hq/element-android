@@ -31,7 +31,7 @@ import org.matrix.android.sdk.internal.database.query.whereRoomId
  * Finds the root thread event and update it with the latest message summary along with the number
  * of threads included. If there is no root thread event no action is done
  */
-internal fun Map<String, EventEntity>.updateThreadSummaryIfNeeded() {
+internal fun Map<String, EventEntity>.updateThreadSummaryIfNeeded(isInitialSync: Boolean = false, currentUserId: String? = null) {
 
     if (!BuildConfig.THREADING_ENABLED) return
 
@@ -47,6 +47,8 @@ internal fun Map<String, EventEntity>.updateThreadSummaryIfNeeded() {
             val rootThreadEvent = if (eventEntity.isThread()) eventEntity.findRootThreadEvent() else eventEntity
 
             rootThreadEvent?.markEventAsRoot(
+                    isInitialSync = isInitialSync,
+                    currentUserId = currentUserId,
                     threadsCounted = it.size,
                     latestMessageTimelineEventEntity = latestMessage
             )
@@ -68,11 +70,20 @@ internal fun EventEntity.findRootThreadEvent(): EventEntity? =
 /**
  * Mark or update the current event a root thread event
  */
-internal fun EventEntity.markEventAsRoot(threadsCounted: Int,
-                                         latestMessageTimelineEventEntity: TimelineEventEntity?) {
+internal fun EventEntity.markEventAsRoot(
+        isInitialSync: Boolean,
+        currentUserId: String?,
+        threadsCounted: Int,
+        latestMessageTimelineEventEntity: TimelineEventEntity?) {
     isRootThread = true
     numberOfThreads = threadsCounted
     threadSummaryLatestMessage = latestMessageTimelineEventEntity
+    // skip notification coming from messages from the same user, also retain already marked events
+    hasUnreadThreadMessages = if (hasUnreadThreadMessages) {
+        latestMessageTimelineEventEntity?.root?.sender != currentUserId
+    } else {
+        if (latestMessageTimelineEventEntity?.root?.sender == currentUserId) false else !isInitialSync
+    }
 }
 
 /**
@@ -95,6 +106,16 @@ internal fun TimelineEventEntity.Companion.findAllThreadsForRoomId(realm: Realm,
                 .whereRoomId(realm, roomId = roomId)
                 .equalTo(TimelineEventEntityFields.ROOT.IS_ROOT_THREAD, true)
                 .sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.DESCENDING)
+
+/**
+ * Find the number of all the local notifications for the specified room
+ * @param roomId The room that the number of notifications will be returned
+ */
+internal fun TimelineEventEntity.Companion.findAllLocalThreadNotificationsForRoomId(realm: Realm, roomId: String): RealmQuery<TimelineEventEntity> =
+        TimelineEventEntity
+                .whereRoomId(realm, roomId = roomId)
+                .equalTo(TimelineEventEntityFields.ROOT.IS_ROOT_THREAD, true)
+                .equalTo(TimelineEventEntityFields.ROOT.HAS_UNREAD_THREAD_MESSAGES, true)
 
 /**
  * Returns whether or not the given user is participating in a current thread

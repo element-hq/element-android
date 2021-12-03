@@ -375,6 +375,7 @@ internal object RealmSessionStoreMigration : RealmMigration {
                 ?.addField(EventEntityFields.IS_ROOT_THREAD, Boolean::class.java, FieldAttribute.INDEXED)
                 ?.addField(EventEntityFields.ROOT_THREAD_EVENT_ID, String::class.java, FieldAttribute.INDEXED)
                 ?.addField(EventEntityFields.NUMBER_OF_THREADS, Int::class.java)
+                ?.addField(EventEntityFields.HAS_UNREAD_THREAD_MESSAGES, Boolean::class.java)
                 ?.addRealmObjectField(EventEntityFields.THREAD_SUMMARY_LATEST_MESSAGE.`$`, eventEntity)
     }
 }

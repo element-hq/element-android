@@ -106,6 +106,13 @@ class FlowRoom(private val room: Room) {
                     room.getAllThreads()
                 }
     }
+
+    fun liveLocalUnreadThreadList(): Flow<List<TimelineEvent>> {
+        return room.getNumberOfLocalThreadNotificationsLive().asFlow()
+                .startWith(room.coroutineDispatchers.io) {
+                    room.getNumberOfLocalThreadNotifications()
+                }
+    }
 }
 
 fun Room.flow(): FlowRoom {

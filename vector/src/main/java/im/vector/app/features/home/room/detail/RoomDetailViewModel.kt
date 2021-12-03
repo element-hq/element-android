@@ -189,7 +189,11 @@ class RoomDetailViewModel @AssistedInject constructor(
         if (OutboundSessionKeySharingStrategy.WhenEnteringRoom == BuildConfig.outboundSessionKeySharingStrategy && room.isEncrypted()) {
             prepareForEncryption()
         }
+        markThreadTimelineAsReadLocal()
+        observeLocalThreadNotifications()
     }
+
+
 
     private fun observeDataStore() {
         viewModelScope.launch {
@@ -280,6 +284,17 @@ class RoomDetailViewModel @AssistedInject constructor(
                 }
     }
 
+    /**
+     * Observe local unread threads
+     */
+    private fun observeLocalThreadNotifications(){
+        room.flow()
+                .liveLocalUnreadThreadList()
+                .execute {
+                    copy(numberOfLocalUnreadThreads = it.invoke()?.size ?: 0)
+                }
+
+    }
     fun getOtherUserIds() = room.roomSummary()?.otherMemberIds
 
     fun getRoomSummary() = room.roomSummary()
@@ -1112,6 +1127,17 @@ class RoomDetailViewModel @AssistedInject constructor(
         }
     }
 
+    /**
+     * Mark the thread as read, while the user navigated within the thread
+     * This is a local implementation has nothing to do with APIs
+     */
+    private fun markThreadTimelineAsReadLocal(){
+        initialState.rootThreadEventId?.let{
+            session.coroutineScope.launch {
+                room.markThreadAsRead(it)
+            }
+        }
+    }
     override fun onTimelineUpdated(snapshot: List<TimelineEvent>) {
 
         timelineEvents.tryEmit(snapshot)

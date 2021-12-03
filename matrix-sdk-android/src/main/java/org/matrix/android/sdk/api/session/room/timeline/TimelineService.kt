@@ -69,10 +69,27 @@ interface TimelineService {
     fun getAllThreads(): List<TimelineEvent>
 
     /**
+     * Get a live list of all the local unread threads for the specified roomId
+     * @return the [LiveData] of [TimelineEvent]
+     */
+    fun getNumberOfLocalThreadNotificationsLive(): LiveData<List<TimelineEvent>>
+
+    /**
+     * Get a list of all the local unread threads for the specified roomId
+     * @return the [LiveData] of [TimelineEvent]
+     */
+    fun getNumberOfLocalThreadNotifications(): List<TimelineEvent>
+
+    /**
      * Returns whether or not the current user is participating in the thread
      * @param rootThreadEventId the eventId of the current thread
      */
     fun isUserParticipatingInThread(rootThreadEventId: String, senderId: String): Boolean
 
+    /**
+     * Marks the current thread as read. This is a local implementation
+     * @param rootThreadEventId the eventId of the current thread
+     */
+    suspend fun markThreadAsRead(rootThreadEventId: String)
 
 }

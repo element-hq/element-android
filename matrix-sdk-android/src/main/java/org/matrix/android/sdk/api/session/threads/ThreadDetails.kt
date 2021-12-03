@@ -22,5 +22,6 @@ data class ThreadDetails(
         val isRootThread: Boolean = false,
         val numberOfThreads: Int = 0,
         val threadSummarySenderInfo: SenderInfo? = null,
-        val threadSummaryLatestTextMessage: String? = null
+        val threadSummaryLatestTextMessage: String? = null,
+        val hasUnreadMessage: Boolean = false
 )

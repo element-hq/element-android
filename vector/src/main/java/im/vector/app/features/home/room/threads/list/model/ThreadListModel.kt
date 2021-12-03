@@ -19,6 +19,7 @@ package im.vector.app.features.home.room.threads.list.model
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
@@ -42,6 +43,7 @@ abstract class ThreadListModel : VectorEpoxyModel<ThreadListModel.Holder>() {
     @EpoxyAttribute lateinit var date: String
     @EpoxyAttribute lateinit var rootMessage: String
     @EpoxyAttribute lateinit var lastMessage: String
+    @EpoxyAttribute  var unreadMessage: Boolean = false
     @EpoxyAttribute lateinit var lastMessageCounter: String
     @EpoxyAttribute var rootMessageDeleted: Boolean = false
     @EpoxyAttribute var lastMessageMatrixItem: MatrixItem? = null
@@ -69,6 +71,7 @@ abstract class ThreadListModel : VectorEpoxyModel<ThreadListModel.Holder>() {
         holder.lastMessageAvatarImageView.contentDescription = lastMessageMatrixItem?.getBestName()
         holder.lastMessageTextView.text = lastMessage
         holder.lastMessageCounterTextView.text = lastMessageCounter
+        holder.unreadImageView.isVisible = unreadMessage
     }
 
     class Holder : VectorEpoxyHolder() {
@@ -79,6 +82,8 @@ abstract class ThreadListModel : VectorEpoxyModel<ThreadListModel.Holder>() {
         val lastMessageAvatarImageView by bind<ImageView>(R.id.messageThreadSummaryAvatarImageView)
         val lastMessageCounterTextView by bind<TextView>(R.id.messageThreadSummaryCounterTextView)
         val lastMessageTextView by bind<TextView>(R.id.messageThreadSummaryInfoTextView)
+        val unreadImageView by bind<ImageView>(R.id.threadSummaryUnreadImageView)
+
         val rootView by bind<ConstraintLayout>(R.id.threadSummaryRootConstraintLayout)
     }
 }

@@ -55,6 +55,7 @@ internal object EventMapper {
         eventEntity.decryptionErrorReason = event.mCryptoErrorReason
         eventEntity.decryptionErrorCode = event.mCryptoError?.name
         eventEntity.isRootThread = event.threadDetails?.isRootThread ?: false
+        eventEntity.hasUnreadThreadMessages = event.threadDetails?.hasUnreadMessage ?: false
         eventEntity.rootThreadEventId = event.getRootThreadEventId()
         eventEntity.numberOfThreads = event.threadDetails?.numberOfThreads ?: 0
         return eventEntity
@@ -111,6 +112,7 @@ internal object EventMapper {
                                 avatarUrl = timelineEventEntity.senderAvatar
                         )
                     },
+                    hasUnreadMessage = eventEntity.hasUnreadThreadMessages,
                     threadSummaryLatestTextMessage = eventEntity.threadSummaryLatestMessage?.root?.asDomain()?.getDecryptedTextSummary().orEmpty()
             )
         }

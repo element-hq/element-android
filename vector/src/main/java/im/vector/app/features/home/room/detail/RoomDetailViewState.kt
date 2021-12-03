@@ -67,8 +67,9 @@ data class RoomDetailViewState(
         val isAllowedToStartWebRTCCall: Boolean = true,
         val hasFailedSending: Boolean = false,
         val jitsiState: JitsiState = JitsiState(),
-        val rootThreadEventId: String? = null
-        ) : MavericksState {
+        val rootThreadEventId: String? = null,
+        val numberOfLocalUnreadThreads: Int = 0
+) : MavericksState {
 
     constructor(args: TimelineArgs) : this(
             roomId = args.roomId,

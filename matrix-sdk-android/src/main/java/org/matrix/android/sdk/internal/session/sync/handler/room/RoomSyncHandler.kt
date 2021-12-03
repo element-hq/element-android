@@ -425,7 +425,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
             }
         }
 
-        optimizedThreadSummaryMap.updateThreadSummaryIfNeeded()
+        optimizedThreadSummaryMap.updateThreadSummaryIfNeeded(insertType == EventInsertType.INITIAL_SYNC, userId)
 
         // posting new events to timeline if any is registered
         timelineInput.onNewTimelineEvents(roomId = roomId, eventIds = eventIds)
