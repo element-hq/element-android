@@ -45,7 +45,7 @@ object RoomDataHelper {
                                 content: Content? = null,
                                 prevContent: Content? = null,
                                 sender: String = FAKE_TEST_SENDER,
-                                stateKey: String = FAKE_TEST_SENDER
+                                stateKey: String? = null
     ): Event {
         return Event(
                 type = type,
@@ -64,6 +64,6 @@ object RoomDataHelper {
 
     private fun createFakeRoomMemberEvent(): Event {
         val roomMember = RoomMemberContent(Membership.JOIN, "Fake name #${Random.nextLong()}").toContent()
-        return createFakeEvent(EventType.STATE_ROOM_MEMBER, roomMember)
+        return createFakeEvent(EventType.STATE_ROOM_MEMBER, roomMember, stateKey = FAKE_TEST_SENDER)
     }
 }

@@ -1,0 +1,1 @@
+Fix for outgoing voip call via sip bridge failing after 1 minute.

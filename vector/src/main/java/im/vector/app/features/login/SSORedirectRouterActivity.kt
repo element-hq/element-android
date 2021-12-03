@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2021 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,22 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.worker
+package im.vector.app.features.login
 
-import android.content.Context
-import androidx.work.ListenableWorker
-import androidx.work.WorkerParameters
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import dagger.hilt.android.AndroidEntryPoint
+import im.vector.app.features.navigation.Navigator
+import javax.inject.Inject
 
-interface DelegateWorkerFactory {
+@AndroidEntryPoint
+class SSORedirectRouterActivity : AppCompatActivity() {
 
-    fun create(context: Context, params: WorkerParameters): ListenableWorker
+    @Inject lateinit var navigator: Navigator
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        navigator.loginSSORedirect(this, intent.data)
+        finish()
+    }
 }

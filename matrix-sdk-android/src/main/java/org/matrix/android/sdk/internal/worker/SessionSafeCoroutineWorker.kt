@@ -22,6 +22,7 @@ import androidx.work.CoroutineWorker
 import androidx.work.Data
 import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
+import org.matrix.android.sdk.internal.SessionManager
 import org.matrix.android.sdk.internal.session.SessionComponent
 import timber.log.Timber
 
@@ -33,6 +34,7 @@ import timber.log.Timber
 internal abstract class SessionSafeCoroutineWorker<PARAM : SessionWorkerParams>(
         context: Context,
         workerParameters: WorkerParameters,
+        private val sessionManager: SessionManager,
         private val paramClass: Class<PARAM>
 ) : CoroutineWorker(context, workerParameters) {
 
@@ -48,7 +50,7 @@ internal abstract class SessionSafeCoroutineWorker<PARAM : SessionWorkerParams>(
                         .also { Timber.e("Unable to parse work parameters") }
 
         return try {
-            val sessionComponent = getSessionComponent(params.sessionId)
+            val sessionComponent = sessionManager.getSessionComponent(params.sessionId)
                     ?: return buildErrorResult(params, "No session")
 
             // Make sure to inject before handling error as you may need some dependencies to process them.

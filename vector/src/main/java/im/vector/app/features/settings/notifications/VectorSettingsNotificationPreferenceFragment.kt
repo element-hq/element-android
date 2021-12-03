@@ -40,6 +40,7 @@ import im.vector.app.core.pushers.PushersManager
 import im.vector.app.core.services.GuardServiceStarter
 import im.vector.app.core.utils.isIgnoringBatteryOptimizations
 import im.vector.app.core.utils.requestDisablingBatteryOptimization
+import im.vector.app.features.VectorFeatures
 import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.features.settings.BackgroundSyncMode
 import im.vector.app.features.settings.BackgroundSyncModeChooserDialog
@@ -63,7 +64,8 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
         private val pushManager: PushersManager,
         private val activeSessionHolder: ActiveSessionHolder,
         private val vectorPreferences: VectorPreferences,
-        private val guardServiceStarter: GuardServiceStarter
+        private val guardServiceStarter: GuardServiceStarter,
+        private val features: VectorFeatures
 ) : VectorSettingsBaseFragment(),
         BackgroundSyncModeChooserDialog.InteractionListener {
 
@@ -145,6 +147,7 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
         refreshBackgroundSyncPrefs()
 
         handleSystemPreference()
+        handleVersionedSettings()
     }
 
     private fun bindEmailNotifications() {
@@ -307,6 +310,15 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
                         .summary = notificationRingToneName
             }
         }
+    }
+
+    private fun handleVersionedSettings() {
+        val isNotificationSettingsV2Enabled = features.notificationSettingsVersion() == VectorFeatures.NotificationSettingsVersion.V2
+
+        findPreference<Preference>(VectorPreferences.SETTINGS_NOTIFICATION_ADVANCED_PREFERENCE_KEY)?.isVisible = !isNotificationSettingsV2Enabled
+        findPreference<Preference>(VectorPreferences.SETTINGS_NOTIFICATION_DEFAULT_PREFERENCE_KEY)?.isVisible = isNotificationSettingsV2Enabled
+        findPreference<Preference>(VectorPreferences.SETTINGS_NOTIFICATION_KEYWORD_AND_MENTIONS_PREFERENCE_KEY)?.isVisible = isNotificationSettingsV2Enabled
+        findPreference<Preference>(VectorPreferences.SETTINGS_NOTIFICATION_OTHER_PREFERENCE_KEY)?.isVisible = isNotificationSettingsV2Enabled
     }
 
     override fun onResume() {

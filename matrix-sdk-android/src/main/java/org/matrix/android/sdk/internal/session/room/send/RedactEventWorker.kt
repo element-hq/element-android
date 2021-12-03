@@ -19,6 +19,7 @@ import android.content.Context
 import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
 import org.matrix.android.sdk.api.failure.Failure
+import org.matrix.android.sdk.internal.SessionManager
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.SessionComponent
@@ -32,8 +33,8 @@ import javax.inject.Inject
  * Possible previous worker: None
  * Possible next worker    : None
  */
-internal class RedactEventWorker(context: Context, params: WorkerParameters) :
-    SessionSafeCoroutineWorker<RedactEventWorker.Params>(context, params, Params::class.java) {
+internal class RedactEventWorker(context: Context, params: WorkerParameters, sessionManager: SessionManager) :
+    SessionSafeCoroutineWorker<RedactEventWorker.Params>(context, params, sessionManager, Params::class.java) {
 
     @JsonClass(generateAdapter = true)
     internal data class Params(

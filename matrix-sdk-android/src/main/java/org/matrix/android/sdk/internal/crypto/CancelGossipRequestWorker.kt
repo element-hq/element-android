@@ -24,6 +24,7 @@ import org.matrix.android.sdk.api.failure.shouldBeRetried
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toContent
+import org.matrix.android.sdk.internal.SessionManager
 import org.matrix.android.sdk.internal.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.internal.crypto.model.rest.ShareRequestCancellation
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
@@ -34,9 +35,8 @@ import org.matrix.android.sdk.internal.worker.SessionSafeCoroutineWorker
 import org.matrix.android.sdk.internal.worker.SessionWorkerParams
 import javax.inject.Inject
 
-internal class CancelGossipRequestWorker(context: Context,
-                                         params: WorkerParameters) :
-    SessionSafeCoroutineWorker<CancelGossipRequestWorker.Params>(context, params, Params::class.java) {
+internal class CancelGossipRequestWorker(context: Context, params: WorkerParameters, sessionManager: SessionManager) :
+    SessionSafeCoroutineWorker<CancelGossipRequestWorker.Params>(context, params, sessionManager, Params::class.java) {
 
     @JsonClass(generateAdapter = true)
     internal data class Params(

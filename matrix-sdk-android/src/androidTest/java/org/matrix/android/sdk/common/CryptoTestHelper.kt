@@ -19,10 +19,6 @@ package org.matrix.android.sdk.common
 import android.os.SystemClock
 import android.util.Log
 import androidx.lifecycle.Observer
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
@@ -31,6 +27,7 @@ import org.matrix.android.sdk.api.auth.UIABaseAuth
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.auth.UserPasswordAuth
 import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.verification.IncomingSasVerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.OutgoingSasVerificationTransaction
@@ -44,16 +41,16 @@ import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
+import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM_BACKUP
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.MegolmBackupAuthData
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.MegolmBackupCreationInfo
 import java.util.UUID
-import java.util.concurrent.CountDownLatch
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
 
-class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
+class CryptoTestHelper(private val testHelper: CommonTestHelper) {
 
     private val messagesFromAlice: List<String> = listOf("0 - Hello I'm Alice!", "4 - Go!")
     private val messagesFromBob: List<String> = listOf("1 - Hello I'm Bob!", "2 - Isn't life grand?", "3 - Let's go to the opera.")
@@ -64,27 +61,33 @@ class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
      * @return alice session
      */
     fun doE2ETestWithAliceInARoom(encryptedRoom: Boolean = true): CryptoTestData {
-        val aliceSession = mTestHelper.createAccount(TestConstants.USER_ALICE, defaultSessionParams)
+        val aliceSession = testHelper.createAccount(TestConstants.USER_ALICE, defaultSessionParams)
 
-        val roomId = mTestHelper.runBlockingTest {
+        val roomId = testHelper.runBlockingTest {
             aliceSession.createRoom(CreateRoomParams().apply { name = "MyRoom" })
         }
-
         if (encryptedRoom) {
-            val room = aliceSession.getRoom(roomId)!!
-
-            mTestHelper.runBlockingTest {
+            testHelper.waitWithLatch { latch ->
+                val room = aliceSession.getRoom(roomId)!!
                 room.enableEncryption()
+                val roomSummaryLive = room.getRoomSummaryLive()
+                val roomSummaryObserver = object : Observer<Optional<RoomSummary>> {
+                    override fun onChanged(roomSummary: Optional<RoomSummary>) {
+                        if (roomSummary.getOrNull()?.isEncrypted.orFalse()) {
+                            roomSummaryLive.removeObserver(this)
+                            latch.countDown()
+                        }
+                    }
+                }
+                roomSummaryLive.observeForever(roomSummaryObserver)
             }
         }
-
         return CryptoTestData(roomId, listOf(aliceSession))
     }
 
     /**
      * @return alice and bob sessions
      */
-    @Suppress("EXPERIMENTAL_API_USAGE")
     fun doE2ETestWithAliceAndBobInARoom(encryptedRoom: Boolean = true): CryptoTestData {
         val cryptoTestData = doE2ETestWithAliceInARoom(encryptedRoom)
         val aliceSession = cryptoTestData.firstSession
@@ -92,54 +95,37 @@ class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
 
         val aliceRoom = aliceSession.getRoom(aliceRoomId)!!
 
-        val bobSession = mTestHelper.createAccount(TestConstants.USER_BOB, defaultSessionParams)
+        val bobSession = testHelper.createAccount(TestConstants.USER_BOB, defaultSessionParams)
 
-        val lock1 = CountDownLatch(1)
-
-        val bobRoomSummariesLive = runBlocking(Dispatchers.Main) {
-            bobSession.getRoomSummariesLive(roomSummaryQueryParams { })
-        }
-
-        val newRoomObserver = object : Observer<List<RoomSummary>> {
-            override fun onChanged(t: List<RoomSummary>?) {
-                if (t?.isNotEmpty() == true) {
-                    lock1.countDown()
-                    bobRoomSummariesLive.removeObserver(this)
+        testHelper.waitWithLatch { latch ->
+            val bobRoomSummariesLive = bobSession.getRoomSummariesLive(roomSummaryQueryParams { })
+            val newRoomObserver = object : Observer<List<RoomSummary>> {
+                override fun onChanged(t: List<RoomSummary>?) {
+                    if (t?.isNotEmpty() == true) {
+                        bobRoomSummariesLive.removeObserver(this)
+                        latch.countDown()
+                    }
                 }
             }
-        }
-
-        GlobalScope.launch(Dispatchers.Main) {
             bobRoomSummariesLive.observeForever(newRoomObserver)
-        }
-
-        mTestHelper.runBlockingTest {
             aliceRoom.invite(bobSession.myUserId)
         }
 
-        mTestHelper.await(lock1)
-
-        val lock = CountDownLatch(1)
-
-        val roomJoinedObserver = object : Observer<List<RoomSummary>> {
-            override fun onChanged(t: List<RoomSummary>?) {
-                if (bobSession.getRoom(aliceRoomId)
-                                ?.getRoomMember(aliceSession.myUserId)
-                                ?.membership == Membership.JOIN) {
-                    lock.countDown()
-                    bobRoomSummariesLive.removeObserver(this)
+        testHelper.waitWithLatch { latch ->
+            val bobRoomSummariesLive = bobSession.getRoomSummariesLive(roomSummaryQueryParams { })
+            val roomJoinedObserver = object : Observer<List<RoomSummary>> {
+                override fun onChanged(t: List<RoomSummary>?) {
+                    if (bobSession.getRoom(aliceRoomId)
+                                    ?.getRoomMember(bobSession.myUserId)
+                                    ?.membership == Membership.JOIN) {
+                        bobRoomSummariesLive.removeObserver(this)
+                        latch.countDown()
+                    }
                 }
             }
-        }
-
-        GlobalScope.launch(Dispatchers.Main) {
             bobRoomSummariesLive.observeForever(roomJoinedObserver)
+            bobSession.joinRoom(aliceRoomId)
         }
-
-        mTestHelper.runBlockingTest { bobSession.joinRoom(aliceRoomId) }
-
-        mTestHelper.await(lock)
-
         // Ensure bob can send messages to the room
 //        val roomFromBobPOV = bobSession.getRoom(aliceRoomId)!!
 //        assertNotNull(roomFromBobPOV.powerLevels)
@@ -171,13 +157,13 @@ class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
      * @Return Sam session
      */
     fun createSamAccountAndInviteToTheRoom(room: Room): Session {
-        val samSession = mTestHelper.createAccount(TestConstants.USER_SAM, defaultSessionParams)
+        val samSession = testHelper.createAccount(TestConstants.USER_SAM, defaultSessionParams)
 
-        mTestHelper.runBlockingTest {
+        testHelper.runBlockingTest {
             room.invite(samSession.myUserId, null)
         }
 
-        mTestHelper.runBlockingTest {
+        testHelper.runBlockingTest {
             samSession.joinRoom(room.roomId, null, emptyList())
         }
 
@@ -194,23 +180,20 @@ class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
         val bobSession = cryptoTestData.secondSession!!
 
         bobSession.cryptoService().setWarnOnUnknownDevices(false)
-
         aliceSession.cryptoService().setWarnOnUnknownDevices(false)
 
         val roomFromBobPOV = bobSession.getRoom(aliceRoomId)!!
         val roomFromAlicePOV = aliceSession.getRoom(aliceRoomId)!!
 
         // Alice sends a message
-        mTestHelper.sendTextMessage(roomFromAlicePOV, messagesFromAlice[0], 1)
-//        roomFromAlicePOV.sendTextMessage(messagesFromAlice[0])
+        testHelper.sendTextMessage(roomFromAlicePOV, messagesFromAlice[0], 1)
 
         // Bob send 3 messages
-        mTestHelper.sendTextMessage(roomFromBobPOV, messagesFromBob[0], 1)
-        mTestHelper.sendTextMessage(roomFromBobPOV, messagesFromBob[1], 1)
-        mTestHelper.sendTextMessage(roomFromBobPOV, messagesFromBob[2], 1)
+        testHelper.sendTextMessage(roomFromBobPOV, messagesFromBob[0], 1)
+        testHelper.sendTextMessage(roomFromBobPOV, messagesFromBob[1], 1)
+        testHelper.sendTextMessage(roomFromBobPOV, messagesFromBob[2], 1)
         // Alice sends a message
-        mTestHelper.sendTextMessage(roomFromAlicePOV, messagesFromAlice[1], 1)
-
+        testHelper.sendTextMessage(roomFromAlicePOV, messagesFromAlice[1], 1)
         return cryptoTestData
     }
 
@@ -256,60 +239,44 @@ class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
         )
     }
 
-    @Suppress("EXPERIMENTAL_API_USAGE")
     fun createDM(alice: Session, bob: Session): String {
-        val roomId = mTestHelper.runBlockingTest {
-            alice.createDirectRoom(bob.myUserId)
-        }
-
-        mTestHelper.waitWithLatch { latch ->
-            val bobRoomSummariesLive = runBlocking(Dispatchers.Main) {
-                bob.getRoomSummariesLive(roomSummaryQueryParams { })
-            }
-
+        var roomId: String = ""
+        testHelper.waitWithLatch { latch ->
+            roomId = alice.createDirectRoom(bob.myUserId)
+            val bobRoomSummariesLive = bob.getRoomSummariesLive(roomSummaryQueryParams { })
             val newRoomObserver = object : Observer<List<RoomSummary>> {
                 override fun onChanged(t: List<RoomSummary>?) {
                     val indexOfFirst = t?.indexOfFirst { it.roomId == roomId } ?: -1
                     if (indexOfFirst != -1) {
-                        latch.countDown()
                         bobRoomSummariesLive.removeObserver(this)
+                        latch.countDown()
                     }
                 }
             }
-
-            GlobalScope.launch(Dispatchers.Main) {
-                bobRoomSummariesLive.observeForever(newRoomObserver)
-            }
+            bobRoomSummariesLive.observeForever(newRoomObserver)
         }
 
-        mTestHelper.waitWithLatch { latch ->
-            val bobRoomSummariesLive = runBlocking(Dispatchers.Main) {
-                bob.getRoomSummariesLive(roomSummaryQueryParams { })
-            }
-
+        testHelper.waitWithLatch { latch ->
+            val bobRoomSummariesLive = bob.getRoomSummariesLive(roomSummaryQueryParams { })
             val newRoomObserver = object : Observer<List<RoomSummary>> {
                 override fun onChanged(t: List<RoomSummary>?) {
                     if (bob.getRoom(roomId)
                                     ?.getRoomMember(bob.myUserId)
                                     ?.membership == Membership.JOIN) {
-                        latch.countDown()
                         bobRoomSummariesLive.removeObserver(this)
+                        latch.countDown()
                     }
                 }
             }
-
-            GlobalScope.launch(Dispatchers.Main) {
-                bobRoomSummariesLive.observeForever(newRoomObserver)
-            }
-
-            mTestHelper.runBlockingTest { bob.joinRoom(roomId) }
+            bobRoomSummariesLive.observeForever(newRoomObserver)
+            bob.joinRoom(roomId)
         }
 
         return roomId
     }
 
     fun initializeCrossSigning(session: Session) {
-        mTestHelper.doSync<Unit> {
+        testHelper.doSync<Unit> {
             session.cryptoService().crossSigningService()
                     .initializeCrossSigning(
                             object : UserInteractiveAuthInterceptor {
@@ -346,8 +313,8 @@ class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
         var bobPovTx: IncomingSasVerificationTransaction? = null
 
         // wait for alice to get the ready
-        mTestHelper.waitWithLatch {
-            mTestHelper.retryPeriodicallyWithLatch(it) {
+        testHelper.waitWithLatch {
+            testHelper.retryPeriodicallyWithLatch(it) {
                 bobPovTx = bobVerificationService.getExistingTransaction(alice.myUserId, requestID) as? IncomingSasVerificationTransaction
                 Log.v("TEST", "== bobPovTx is ${alicePovTx?.uxState}")
                 if (bobPovTx?.state == VerificationTxState.OnStarted) {
@@ -359,16 +326,16 @@ class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
             }
         }
 
-        mTestHelper.waitWithLatch {
-            mTestHelper.retryPeriodicallyWithLatch(it) {
+        testHelper.waitWithLatch {
+            testHelper.retryPeriodicallyWithLatch(it) {
                 alicePovTx = aliceVerificationService.getExistingTransaction(bob.myUserId, requestID) as? OutgoingSasVerificationTransaction
                 Log.v("TEST", "== alicePovTx is ${alicePovTx?.uxState}")
                 alicePovTx?.state == VerificationTxState.ShortCodeReady
             }
         }
         // wait for alice to get the ready
-        mTestHelper.waitWithLatch {
-            mTestHelper.retryPeriodicallyWithLatch(it) {
+        testHelper.waitWithLatch {
+            testHelper.retryPeriodicallyWithLatch(it) {
                 bobPovTx = bobVerificationService.getExistingTransaction(alice.myUserId, requestID) as? IncomingSasVerificationTransaction
                 Log.v("TEST", "== bobPovTx is ${alicePovTx?.uxState}")
                 if (bobPovTx?.state == VerificationTxState.OnStarted) {
@@ -383,38 +350,38 @@ class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
         bobPovTx!!.userHasVerifiedShortCode()
         alicePovTx!!.userHasVerifiedShortCode()
 
-        mTestHelper.waitWithLatch {
-            mTestHelper.retryPeriodicallyWithLatch(it) {
+        testHelper.waitWithLatch {
+            testHelper.retryPeriodicallyWithLatch(it) {
                 alice.cryptoService().crossSigningService().isUserTrusted(bob.myUserId)
             }
         }
 
-        mTestHelper.waitWithLatch {
-            mTestHelper.retryPeriodicallyWithLatch(it) {
+        testHelper.waitWithLatch {
+            testHelper.retryPeriodicallyWithLatch(it) {
                 alice.cryptoService().crossSigningService().isUserTrusted(bob.myUserId)
             }
         }
     }
 
     fun doE2ETestWithManyMembers(numberOfMembers: Int): CryptoTestData {
-        val aliceSession = mTestHelper.createAccount(TestConstants.USER_ALICE, defaultSessionParams)
+        val aliceSession = testHelper.createAccount(TestConstants.USER_ALICE, defaultSessionParams)
         aliceSession.cryptoService().setWarnOnUnknownDevices(false)
 
-        val roomId = mTestHelper.runBlockingTest {
+        val roomId = testHelper.runBlockingTest {
             aliceSession.createRoom(CreateRoomParams().apply { name = "MyRoom" })
         }
         val room = aliceSession.getRoom(roomId)!!
 
-        mTestHelper.runBlockingTest {
+        testHelper.runBlockingTest {
             room.enableEncryption()
         }
 
         val sessions = mutableListOf(aliceSession)
         for (index in 1 until numberOfMembers) {
-            val session = mTestHelper.createAccount("User_$index", defaultSessionParams)
-            mTestHelper.runBlockingTest(timeout = 600_000) { room.invite(session.myUserId, null) }
+            val session = testHelper.createAccount("User_$index", defaultSessionParams)
+            testHelper.runBlockingTest(timeout = 600_000) { room.invite(session.myUserId, null) }
             println("TEST -> " + session.myUserId + " invited")
-            mTestHelper.runBlockingTest { session.joinRoom(room.roomId, null, emptyList()) }
+            testHelper.runBlockingTest { session.joinRoom(room.roomId, null, emptyList()) }
             println("TEST -> " + session.myUserId + " joined")
             sessions.add(session)
         }

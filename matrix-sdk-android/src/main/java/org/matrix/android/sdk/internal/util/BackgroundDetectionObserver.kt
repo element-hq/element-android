@@ -18,26 +18,32 @@ package org.matrix.android.sdk.internal.util
 
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
-import org.matrix.android.sdk.internal.di.MatrixScope
 import timber.log.Timber
-import javax.inject.Inject
 
-/**
- * To be attached to ProcessLifecycleOwner lifecycle
- */
-@MatrixScope
-internal class BackgroundDetectionObserver @Inject constructor() : DefaultLifecycleObserver {
+interface BackgroundDetectionObserver : DefaultLifecycleObserver {
+    val isInBackground: Boolean
 
-    var isInBackground: Boolean = true
+    fun register(listener: Listener)
+    fun unregister(listener: Listener)
+
+    interface Listener {
+        fun onMoveToForeground()
+        fun onMoveToBackground()
+    }
+}
+
+internal class DefaultBackgroundDetectionObserver : BackgroundDetectionObserver {
+
+    override var isInBackground: Boolean = true
         private set
 
-    private val listeners = LinkedHashSet<Listener>()
+    private val listeners = LinkedHashSet<BackgroundDetectionObserver.Listener>()
 
-    fun register(listener: Listener) {
+    override fun register(listener: BackgroundDetectionObserver.Listener) {
         listeners.add(listener)
     }
 
-    fun unregister(listener: Listener) {
+    override fun unregister(listener: BackgroundDetectionObserver.Listener) {
         listeners.remove(listener)
     }
 
@@ -51,10 +57,5 @@ internal class BackgroundDetectionObserver @Inject constructor() : DefaultLifecy
         Timber.v("App going to background…")
         isInBackground = true
         listeners.forEach { it.onMoveToBackground() }
-    }
-
-    interface Listener {
-        fun onMoveToForeground()
-        fun onMoveToBackground()
     }
 }
