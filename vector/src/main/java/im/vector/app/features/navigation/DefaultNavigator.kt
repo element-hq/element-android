@@ -36,6 +36,7 @@ import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.error.fatalError
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.toast
+import im.vector.app.features.VectorFeatures
 import im.vector.app.features.call.conference.JitsiCallViewModel
 import im.vector.app.features.call.conference.VectorJitsiActivity
 import im.vector.app.features.call.transfer.CallTransferActivity
@@ -104,24 +105,23 @@ class DefaultNavigator @Inject constructor(
         private val vectorPreferences: VectorPreferences,
         private val widgetArgsBuilder: WidgetArgsBuilder,
         private val appStateHandler: AppStateHandler,
-        private val supportedVerificationMethodsProvider: SupportedVerificationMethodsProvider
+        private val supportedVerificationMethodsProvider: SupportedVerificationMethodsProvider,
+        private val features: VectorFeatures
 ) : Navigator {
 
     override fun openLogin(context: Context, loginConfig: LoginConfig?, flags: Int) {
-        val intent = if (context.resources.getBoolean(R.bool.useLoginV2)) {
-            LoginActivity2.newIntent(context, loginConfig)
-        } else {
-            LoginActivity.newIntent(context, loginConfig)
+        val intent = when (features.loginType()) {
+            VectorFeatures.LoginType.V1 -> LoginActivity.newIntent(context, loginConfig)
+            VectorFeatures.LoginType.V2 -> LoginActivity2.newIntent(context, loginConfig)
         }
         intent.addFlags(flags)
         context.startActivity(intent)
     }
 
     override fun softLogout(context: Context) {
-        val intent = if (context.resources.getBoolean(R.bool.useLoginV2)) {
-            SoftLogoutActivity2.newIntent(context)
-        } else {
-            SoftLogoutActivity.newIntent(context)
+        val intent = when (features.loginType()) {
+            VectorFeatures.LoginType.V1 -> SoftLogoutActivity.newIntent(context)
+            VectorFeatures.LoginType.V2 -> SoftLogoutActivity2.newIntent(context)
         }
         context.startActivity(intent)
     }
