@@ -19,6 +19,7 @@ package im.vector.app.features.navigation
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.view.View
 import android.view.Window
@@ -115,6 +116,14 @@ class DefaultNavigator @Inject constructor(
             VectorFeatures.LoginType.V2 -> LoginActivity2.newIntent(context, loginConfig)
         }
         intent.addFlags(flags)
+        context.startActivity(intent)
+    }
+
+    override fun loginSSORedirect(context: Context, data: Uri?) {
+        val intent = when (features.loginType()) {
+            VectorFeatures.LoginType.V1 -> LoginActivity.redirectIntent(context, data)
+            VectorFeatures.LoginType.V2 -> LoginActivity2.redirectIntent(context, data)
+        }
         context.startActivity(intent)
     }
 

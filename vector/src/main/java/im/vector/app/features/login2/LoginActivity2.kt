@@ -18,6 +18,7 @@ package im.vector.app.features.login2
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.ViewCompat
@@ -40,6 +41,7 @@ import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityLoginBinding
 import im.vector.app.features.home.HomeActivity
+import im.vector.app.features.login.LoginActivity
 import im.vector.app.features.login.LoginCaptchaFragmentArgument
 import im.vector.app.features.login.LoginConfig
 import im.vector.app.features.login.LoginGenericTextInputFormFragmentArgument
@@ -394,6 +396,12 @@ open class LoginActivity2 : VectorBaseActivity<ActivityLoginBinding>(), ToolbarC
         fun newIntent(context: Context, loginConfig: LoginConfig?): Intent {
             return Intent(context, LoginActivity2::class.java).apply {
                 putExtra(EXTRA_CONFIG, loginConfig)
+            }
+        }
+
+        fun redirectIntent(context: Context, data: Uri?): Intent {
+            return Intent(context, LoginActivity2::class.java).apply {
+                setData(data)
             }
         }
     }
