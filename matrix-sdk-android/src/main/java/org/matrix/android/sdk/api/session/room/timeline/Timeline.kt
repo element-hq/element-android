@@ -83,18 +83,21 @@ interface Timeline {
          * The latest event is the first in the list
          * @param snapshot the most up to date snapshot
          */
-        fun onTimelineUpdated(snapshot: List<TimelineEvent>)
+        fun onTimelineUpdated(snapshot: List<TimelineEvent>) = Unit
 
         /**
          * Called whenever an error we can't recover from occurred
          */
-        fun onTimelineFailure(throwable: Throwable)
+        fun onTimelineFailure(throwable: Throwable) = Unit
 
         /**
          * Called when new events come through the sync
          */
-        fun onNewTimelineEvents(eventIds: List<String>)
+        fun onNewTimelineEvents(eventIds: List<String>) = Unit
 
+        /**
+         * Called when the pagination state has changed in one direction
+         */
         fun onStateUpdated(direction: Direction, state: PaginationState) = Unit
     }
 
