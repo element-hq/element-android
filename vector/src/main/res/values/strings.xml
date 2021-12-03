@@ -3667,4 +3667,7 @@
     </plurals>
     <string name="poll_end_action">End poll</string>
     <string name="a11y_poll_winner_option">winner option</string>
+    <string name="end_poll_confirmation_title">End poll</string>
+    <string name="end_poll_confirmation_description">Are you sure you want to end this poll? This will stop people from being able to vote and will display the final results of the poll.</string>
+    <string name="end_poll_confirmation_approve_button">End poll</string>
 </resources>

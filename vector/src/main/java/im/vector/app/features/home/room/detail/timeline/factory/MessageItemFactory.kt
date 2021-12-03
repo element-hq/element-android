@@ -23,7 +23,6 @@ import android.text.style.AbsoluteSizeSpan
 import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
 import android.view.View
-import com.airbnb.epoxy.EpoxyModel
 import dagger.Lazy
 import im.vector.app.R
 import im.vector.app.core.epoxy.ClickListener
@@ -123,7 +122,7 @@ class MessageItemFactory @Inject constructor(
         pillsPostProcessorFactory.create(roomId)
     }
 
-    fun create(params: TimelineItemFactoryParams): EpoxyModel<*>? {
+    fun create(params: TimelineItemFactoryParams): VectorEpoxyModel<*>? {
         val event = params.event
         val highlight = params.isHighlighted
         val callback = params.callback

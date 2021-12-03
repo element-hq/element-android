@@ -2018,9 +2018,20 @@ class RoomDetailFragment @Inject constructor(
                 }
             }
             is EventSharedAction.EndPoll                    -> {
-                roomDetailViewModel.handle(RoomDetailAction.EndPoll(action.eventId))
+                askConfirmationToEndPoll(action.eventId)
             }
         }
+    }
+
+    private fun askConfirmationToEndPoll(eventId: String) {
+        MaterialAlertDialogBuilder(requireContext(), R.style.ThemeOverlay_Vector_MaterialAlertDialog)
+                .setTitle(R.string.end_poll_confirmation_title)
+                .setMessage(R.string.end_poll_confirmation_description)
+                .setNegativeButton(R.string.cancel, null)
+                .setPositiveButton(R.string.end_poll_confirmation_approve_button) { _, _ ->
+                    roomDetailViewModel.handle(RoomDetailAction.EndPoll(eventId))
+                }
+                .show()
     }
 
     private fun askConfirmationToIgnoreUser(senderId: String) {

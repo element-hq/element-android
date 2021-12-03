@@ -55,7 +55,7 @@ abstract class PollItem : AbsMessageItem<PollItem.Holder>() {
         val didUserVoted = pollResponseSummary?.myVote?.isNotEmpty().orFalse()
         val showVotes = didUserVoted || isEnded
         val totalVotes = pollResponseSummary?.votes?.map { it.value }?.sum() ?: 0
-        val winnerVoteCount = pollResponseSummary?.votes?.map { it.value }?.maxOrNull() ?: 0
+        val winnerVoteCount = pollResponseSummary?.votes?.map { it.value }?.maxOrNull() ?: -1
 
         pollContent?.pollCreationInfo?.answers?.forEach { option ->
             val isMyVote = pollResponseSummary?.myVote?.let { option.id == it }.orFalse()
