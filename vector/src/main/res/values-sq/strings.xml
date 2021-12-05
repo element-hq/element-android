@@ -1693,7 +1693,7 @@
     <string name="login_server_url_form_modular_hint">Adresë Element Matrix Services i</string>
     <string name="login_server_url_form_other_hint">Adresë</string>
     <string name="login_server_url_form_modular_text">Strehim me pagesë për ente</string>
-    <string name="login_server_url_form_modular_notice">Jepni adresën e Modular SchildiChat-it ose Shërbyesit që doni të përdoret</string>
+    <string name="login_server_url_form_modular_notice">Jepni adresën e Modular Element-it ose Shërbyesit që doni të përdoret</string>
     <string name="login_sso_error_message">Ndodhi një gabim kur ngarkohej faqja: %1$s (%2$d)</string>
     <string name="login_mode_not_supported">Aplikacioni s’është në gjendje të bëjë hyrje në llogari në këtë shërbyes Home. Shërbyesi Home mbulon llojet vijuese të hyrjes(ve): %1$s.
 \n
@@ -2329,7 +2329,7 @@
     <string name="crypto_error_withheld_unverified">S’mund të hapni këtë mesazh, ngaqë sesionit tuaj nuk i zihet besë nga dërguesi</string>
     <string name="crypto_error_withheld_generic">S’mund ta hapni këtë mesazh, ngaqë dërguesi qëllimisht nuk ju dërgoi kyçet</string>
     <string name="notice_crypto_unable_to_decrypt_merged">Po pritet për historik fshehtëzimesh</string>
-    <string name="disclaimer_title">Riot-i tanimë quhet SchildiChat!</string>
+    <string name="disclaimer_title">Riot-i tanimë quhet Element!</string>
     <string name="disclaimer_content">Jemi të ngazëllyer t’ju njoftojmë se kemi ndërruar emër! Aplikacioni juaj është i përditësuar dhe jeni i futur në llogarinë tuaj.</string>
     <string name="disclaimer_negative_button">E MORA VESH</string>
     <string name="disclaimer_positive_button">MËSONI MË TEPËR</string>
@@ -2881,7 +2881,7 @@
     <string name="settings_notification_other">Tjetër</string>
     <string name="settings_notification_mentions_and_keywords">Përmendje dhe Fjalëkyçe</string>
     <string name="settings_notification_default">Njoftime Parazgjedhje</string>
-    <string name="link_this_email_with_your_account">%s te Rregullimet, që të merrni ftesa drejt e në SchildiChat.</string>
+    <string name="link_this_email_with_your_account">%s te Rregullimet, që të merrni ftesa drejt e në Element.</string>
     <string name="link_this_email_settings_link">Lidheni këtë email me llogarinë tuaj</string>
     <string name="this_invite_to_this_space_was_sent">Kjo ftesë për te kjo hapësirë u dërgua te %s që s’është i përshoqëruar me llogarinë tuaj</string>
     <string name="this_invite_to_this_room_was_sent">Kjo ftesë për te kjo dhomë qe dërguar për %s që s’është i përshoqëruar me llogarinë tuaj</string>

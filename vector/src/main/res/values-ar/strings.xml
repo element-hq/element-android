@@ -269,7 +269,7 @@
     <string name="local_address_book_header">دفتر العناوين المحلي</string>
     <string name="matrix_only_filter">متراسلو «ماترِكس» فقط</string>
     <string name="no_conversation_placeholder">لا محادثات</string>
-    <string name="template_no_contact_access_placeholder">لم تسمح لِ‍ SchildiChat بمطالعة متراسليك المحليين</string>
+    <string name="template_no_contact_access_placeholder">لم تسمح لِ‍ Element بمطالعة متراسليك المحليين</string>
     <string name="no_result_placeholder">لا نتائج</string>
     <string name="rooms_header">الغرف</string>
     <string name="rooms_directory_header">دليل الغرف</string>
@@ -684,20 +684,20 @@
     <string name="compression_options">"أرسِل كَ‍ "</string>
     <string name="call_error_ice_failed">فشل اتصال الوسائط</string>
     <string name="call_error_answered_elsewhere">رُدّ على المكالة في مكان آخر</string>
-    <string name="template_permissions_rationale_msg_storage">يحتاج SchildiChat تصريحا منك للوصول إلى مكتبتي الصور والفديو لإرسال المرفقات وحفظها.
+    <string name="template_permissions_rationale_msg_storage">يحتاج Element تصريحا منك للوصول إلى مكتبتي الصور والفديو لإرسال المرفقات وحفظها.
 
 رجاءً اسمح بالوصول في المنبثقة التالية لتقدر على إرسال الملفات من هاتفك.</string>
-    <string name="template_permissions_rationale_msg_camera">يحتاج SchildiChat تصريحا منك للوصول إلى الكمرة لأخذ الصور وللمكالمات الصورية.</string>
-    <string name="template_permissions_rationale_msg_record_audio">يحتاج SchildiChat تصريحا منك للوصول إلى المِكرفون لإجراء المكالمات الصوتية.</string>
+    <string name="template_permissions_rationale_msg_camera">يحتاج Element تصريحا منك للوصول إلى الكمرة لأخذ الصور وللمكالمات الصورية.</string>
+    <string name="template_permissions_rationale_msg_record_audio">يحتاج Element تصريحا منك للوصول إلى المِكرفون لإجراء المكالمات الصوتية.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">
 
 رجاءً اسمح بالنفاذ في المنبثقة الآتية لتتمكن من إجراء محادثة.</string>
-    <string name="template_permissions_rationale_msg_camera_and_audio">يحتاج SchildiChat تصريحا منك للوصول إلى الكمرة والمِكرفون لإجراء المكالمات الصورية.
+    <string name="template_permissions_rationale_msg_camera_and_audio">يحتاج Element تصريحا منك للوصول إلى الكمرة والمِكرفون لإجراء المكالمات الصورية.
 
 رجاءً اسمح بالوصول في المنبثقة التالية لتقدر على إرسال إجراء المكالمات الصورية.</string>
-    <string name="template_permissions_rationale_msg_contacts">يحتاج SchildiChat تصريحا منك للوصول إلى دفتر العناوين للعثور على مستخدمي ماترِكس الآخرين وذلك حسب البريد الإلكتروني ورقم الهاتف.
+    <string name="template_permissions_rationale_msg_contacts">يحتاج Element تصريحا منك للوصول إلى دفتر العناوين للعثور على مستخدمي ماترِكس الآخرين وذلك حسب البريد الإلكتروني ورقم الهاتف.
 
-رجاءً اسمح بالوصول في المنبثقة التالية لتستكشف مستخدميك في دفتر العناوين من SchildiChat.</string>
+رجاءً اسمح بالوصول في المنبثقة التالية لتستكشف مستخدميك في دفتر العناوين من Element.</string>
     <string name="media_slider_saved">حُفظت</string>
     <string name="preview">عايِن</string>
     <string name="room_sync_in_progress">يُزامن…</string>
@@ -712,9 +712,9 @@
     <string name="read_receipts_list">قائمة علامات القراءة</string>
     <string name="compression_opt_list_original">الأصلي</string>
     <string name="call_error_user_not_responding">لم يُجب الطرف البعيد.</string>
-    <string name="template_permissions_msg_contacts_warning_other_androids">يحتاج SchildiChat تصريحا منك للوصول إلى دفتر العناوين للعثور على مستخدمي ماترِكس الآخرين وذلك حسب البريد الإلكتروني ورقم الهاتف.
+    <string name="template_permissions_msg_contacts_warning_other_androids">يحتاج Element تصريحا منك للوصول إلى دفتر العناوين للعثور على مستخدمي ماترِكس الآخرين وذلك حسب البريد الإلكتروني ورقم الهاتف.
 
-أتسمح بأن يصل SchildiChat إلى متراسليك؟</string>
+أتسمح بأن يصل Element إلى متراسليك؟</string>
     <string name="room_participants_header_direct_chats">الدردشات المباشرة</string>
     <string name="room_participants_invite_search_another_user">معرّف المستخدم أو اسمه أو بريده</string>
     <string name="room_participants_action_mention">أشِر إليه</string>
@@ -934,7 +934,7 @@
     <string name="e2e_re_request_encryption_key"><u>أعِد طلب مفاتيح التعمية</u>من أجهزتك الأخرى.</string>
     <string name="e2e_re_request_encryption_key_sent">أُرسل طلب المفتاح.</string>
     <string name="e2e_re_request_encryption_key_dialog_title">أُرسل الطلب</string>
-    <string name="template_e2e_re_request_encryption_key_dialog_content">رجاءً أطلِق SchildiChat في جهاز آخر يقدر على فك تعمية الرسالة ليُرسل المفاتيح إلى هذا الجهاز.</string>
+    <string name="template_e2e_re_request_encryption_key_dialog_content">رجاءً أطلِق Element في جهاز آخر يقدر على فك تعمية الرسالة ليُرسل المفاتيح إلى هذا الجهاز.</string>
     <string name="speak">انطِق</string>
     <string name="clear">امسح</string>
     <string name="room_participants_online">متّصل</string>
@@ -956,8 +956,8 @@
     <string name="startup_notification_privacy_button_grant">امنح التصريح</string>
     <string name="startup_notification_privacy_button_other">اختر خيارا آخر</string>
     <string name="settings_opt_in_of_analytics">أرسِل بيانات التحاليل</string>
-    <string name="template_settings_opt_in_of_analytics_summary">يجمع SchildiChat التحاليل بشكل مجهّل فيتيح لنا ذلك تحسين التطبيق.</string>
-    <string name="template_settings_opt_in_of_analytics_prompt">رجاءً فعّل التحاليل لمساعدتنا في تحسين SchildiChat.</string>
+    <string name="template_settings_opt_in_of_analytics_summary">يجمع Element التحاليل بشكل مجهّل فيتيح لنا ذلك تحسين التطبيق.</string>
+    <string name="template_settings_opt_in_of_analytics_prompt">رجاءً فعّل التحاليل لمساعدتنا في تحسين Element.</string>
     <string name="settings_opt_in_of_analytics_ok">نعم أريد المساعدة!</string>
     <string name="lock_screen_hint">اكتب هنا…</string>
     <string name="widget_integration_missing_parameter">ثمة معامل مطلوب ناقص.</string>
@@ -1019,7 +1019,7 @@
         <item quantity="other">%d محدّدة</item>
     </plurals>
     <string name="settings_preview_media_before_sending">عايِن الوسيط قبل إرساله</string>
-    <string name="template_startup_notification_privacy_message">يمكن أن يعمل SchildiChat في الخلفية ليُدير الإخطارات بأمان وخصوصية (قد يؤثّر هذا على استهلاك البطارية).</string>
+    <string name="template_startup_notification_privacy_message">يمكن أن يعمل Element في الخلفية ليُدير الإخطارات بأمان وخصوصية (قد يؤثّر هذا على استهلاك البطارية).</string>
     <string name="settings_without_flair">لست عضوًا في أي مجتمع حاليًا.</string>
     <plurals name="notification_unread_notified_messages">
         <item quantity="zero">لا رسائل إخطار غير مقروءة</item>

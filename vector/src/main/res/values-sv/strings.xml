@@ -2033,7 +2033,7 @@
     <string name="login_server_url_form_modular_hint">Element Matrix Services-adress</string>
     <string name="login_server_url_form_other_hint">Adress</string>
     <string name="login_server_url_form_modular_text">Premiumservervärd för organisationer</string>
-    <string name="login_server_url_form_modular_notice">Skriv in adressen för den Modular SchildiChat eller server du vill använda</string>
+    <string name="login_server_url_form_modular_notice">Skriv in adressen för den Modular Element eller server du vill använda</string>
     <string name="login_server_url_form_common_notice">Skriv in adressen för servern du vill använda</string>
     <string name="login_sso_error_message">Ett fel inträffade vid laddning av sidan: %1$s (%2$d)</string>
     <string name="login_mode_not_supported">Appen kan inte logga in på den här hemservern. Hemservern stöder följande inloggningstyp(er): %1$s.
@@ -2317,7 +2317,7 @@
     <string name="room_settings_save_success">Du ändrade rumsinställningarna framgångsrikt</string>
     <string name="crypto_utd">Kan inte avkryptera</string>
     <string name="notice_crypto_unable_to_decrypt_merged">Väntar på krypteringshistorik</string>
-    <string name="disclaimer_title">Riot är nu SchildiChat!</string>
+    <string name="disclaimer_title">Riot är nu Element!</string>
     <string name="disclaimer_content">Vi är glada att meddela att vi har bytt namn! Din app är uppdaterad och du är inloggad på ditt konto.</string>
     <string name="disclaimer_negative_button">UPPFATTAT</string>
     <string name="disclaimer_positive_button">LÄR DIG MER</string>
@@ -2891,7 +2891,7 @@
     <string name="hs_client_url">Hemserver-API-URL</string>
     <string name="missing_permissions_title">Saknar behörighet</string>
     <string name="denied_permission_voice_message">För att skicka röstmeddelanden, vänligen ge mikrofonåtkomst.</string>
-    <string name="link_this_email_with_your_account">%s i inställningar för att ta emot inbjudningar direkt i SchildiChat.</string>
+    <string name="link_this_email_with_your_account">%s i inställningar för att ta emot inbjudningar direkt i Element.</string>
     <string name="link_this_email_settings_link">Länka den här e-postadressen med ditt konto</string>
     <string name="this_invite_to_this_space_was_sent">Denna inbjudan till det här utrymmet skickades till %s, vilket inte är associerat med ditt konto</string>
     <string name="this_invite_to_this_room_was_sent">Denna inbjudan till det här rummet skickades till %s, vilket inte är associerat med ditt konto</string>

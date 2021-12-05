@@ -1905,15 +1905,15 @@
     <string name="member_banned_by">Vetat per %1$s</string>
     <string name="three_pid_revoke_invite_dialog_content">Revoca la invitació a %1$s\?</string>
     <string name="three_pid_revoke_invite_dialog_title">Revoca la invitació</string>
-    <string name="login_server_url_form_modular_notice">Introdueix l\'adreça d\'SchildiChat Modular o del servidor que vulguis utilitzar</string>
+    <string name="login_server_url_form_modular_notice">Introdueix l\'adreça d\'Element Modular o del servidor que vulguis utilitzar</string>
     <string name="login_server_url_form_modular_text">Allotjament de primera classe per a organitzacions</string>
     <string name="login_server_url_form_other_hint">Adreça</string>
-    <string name="login_server_url_form_modular_hint">Adreça dels Serveis Matrix d\'SchildiChat</string>
+    <string name="login_server_url_form_modular_hint">Adreça dels Serveis Matrix d\'Element</string>
     <string name="login_signin">Inicia sessió</string>
     <string name="login_signup">Registra\'t</string>
     <string name="login_signin_to">Inicia sessió a %1$s</string>
     <string name="login_connect_to_a_custom_server">Connecta\'t a un servidor personalitzat</string>
-    <string name="login_connect_to_modular">Connecta\'t als Serveis Matrix d\'SchildiChat</string>
+    <string name="login_connect_to_modular">Connecta\'t als Serveis Matrix d\'Element</string>
     <string name="login_connect_to">Connecta\'t a %1$s</string>
     <string name="login_continue">Continua</string>
     <string name="login_social_sso">inici de sessió únic</string>
@@ -2337,7 +2337,7 @@
     <string name="login_wait_for_email_title">Comprova el teu correu</string>
     <string name="login_a11y_captcha_container">Resol el repte captcha</string>
     <string name="login_a11y_choose_other">Selecciona un servidor local personalitzat</string>
-    <string name="login_a11y_choose_modular">Selecciona Serveis Matrix d\'SchildiChat</string>
+    <string name="login_a11y_choose_modular">Selecciona Serveis Matrix d\'Element</string>
     <string name="login_a11y_choose_matrix_org">Selecciona matrix.org</string>
     <string name="login_signup_cancel_confirmation_content">El teu compte encara s\'ha creat.
 \n
@@ -2454,7 +2454,7 @@
     <string name="phone_book_perform_lookup">Busca contactes a Matrix</string>
     <string name="search_in_my_contacts">Busca als meus contactes</string>
     <string name="disclaimer_positive_button">MÉS INFORMACIÓ</string>
-    <string name="disclaimer_title">Riot ara és SchildiChat!</string>
+    <string name="disclaimer_title">Riot ara és Element!</string>
     <string name="crypto_error_withheld_generic">No pots accedir al missatge perquè el remitent, intencionadament, no ha enviat les claus</string>
     <string name="crypto_error_withheld_unverified">No pots accedir al missatge perquè la teva sessió no és de confiança pel remitent</string>
     <string name="crypto_error_withheld_blacklisted">No pots accedir al missatge perquè el remitent t\'ha bloquejat</string>

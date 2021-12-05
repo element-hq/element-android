@@ -243,7 +243,7 @@
     </plurals>
     <string name="room_displayname_empty_room_was">Leerer Raum (war %s)</string>
     <plurals name="room_displayname_four_and_more_members">
-        <item quantity="one">%1$s, %2$s, %3$s und %4$d anderer</item>
+        <item quantity="one">%1$s, %2$s, %3$s und %4$d andere/r</item>
         <item quantity="other">%1$s, %2$s, %3$s und %4$d andere</item>
     </plurals>
     <string name="room_displayname_4_members">%1$s, %2$s, %3$s und %4$s</string>
@@ -1283,7 +1283,7 @@
     <string name="keys_backup_settings_delete_confirm_title">Lösche Sicherung</string>
     <string name="settings_notification_by_event">Präferenz der Benachrichtigungen nach Ereignis</string>
     <string name="template_settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
-\nDieser Fehler ist außerhalb von ${app_name} passiert. Google sagt, dass dieses Gerät zu viele Apps registriert hat, um FCM zu nutzen. Der Fehler taucht nur auf, wenn sehr viele Apps installiert sind. Er sollte also den Durchschnittsnutzer nicht betreffen.</string>
+\nDieser Fehler ist außerhalb von ${app_name} passiert. Google sagt, dass dieses Gerät zu viele Apps registriert hat um FCM zu nutzen. Der Fehler taucht nur auf, wenn sehr viele Apps installiert sind. Er sollte also den Durchschnittsnutzer nicht betreffen.</string>
     <string name="template_settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
 \nDieser Fehler liegt nicht unter der Kontrolle von ${app_name}. Er kann aus verschiedenen Gründen auftreten. Vielleicht wird es funktionieren, wenn du es später noch einmal probierst. Außerdem kannst Du prüfen, ob die Datennutzung der Google-Play-Dienste unbeschränkt ist und die Geräteuhr richtig eingestellt ist. Der Fehler kann aber auch unter Custom-ROMs auftreten.</string>
     <string name="template_settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
@@ -1668,7 +1668,7 @@
     <string name="settings_discovery_msisdn_title">Auffindbare Telefonnummern</string>
     <string name="settings_discovery_please_enter_server">Bitte gib die Adresse des Identitätsservers ein</string>
     <string name="settings_discovery_no_terms_title">Identitätsserver hat keine Nutzungsbedingungen</string>
-    <string name="settings_discovery_no_terms">Der Identitätsserver, den du ausgewählt hast, hat keine Nutzungsbedingungen. Fahre nur fort, wenn du dem Besitzer des Dienstes vertraust</string>
+    <string name="settings_discovery_no_terms">Der Identitätsserver den du ausgewählt hast, hat keine Nutzungsbedingungen. Fahre nur fort, wenn du dem Besitzer des Dienstes vertraust</string>
     <string name="settings_text_message_sent">Eine Textnachricht wurde an %s gesendet. Bitte gib den Verifizierungscode ein, den sie enthält.</string>
     <string name="labs_allow_extended_logging">Aktiviere ausführliche Logs.</string>
     <string name="labs_allow_extended_logging_summary">Ausführliche Logs werden der Entwicklung der App dadurch helfen, dass mehr Informationen übertragen werden, wenn du einen Fehlerbericht sendest. Auch wenn dies aktiviert ist, werden keine Nachrichteninhalte oder andere privaten Daten aufgezeichnet.</string>
@@ -1814,7 +1814,7 @@
     <string name="room_join_rules_invite">%1$s hat den Raum auf \"nur-einladen\" gestellt.</string>
     <string name="login_splash_title">Es ist deine Konversation. Mache sie dir zu eigen.</string>
     <string name="login_server_url_form_modular_text">Premium-Hosting für Organisationen</string>
-    <string name="login_server_url_form_modular_notice">Gib die Adresse des Modular SchildiChat oder Servers ein, den du verwenden möchtest</string>
+    <string name="login_server_url_form_modular_notice">Gib die Adresse des Modular Element oder Servers ein, den du verwenden möchtest</string>
     <string name="login_mode_not_supported">Die Anwendung kann sich nicht bei diesem Home-Server anmelden. Der Home-Server unterstützt die folgenden Anmeldetypen: %1$s.
 \n 
 \nMöchtest du dich mit einem Webclient anmelden\?</string>
@@ -2242,7 +2242,7 @@
     <string name="room_participants_ban_title">Benutzer bannen</string>
     <string name="room_participants_ban_reason">Grund für den Bann</string>
     <string name="room_participants_unban_title">Bann des Benutzers aufheben</string>
-    <string name="room_participants_unban_prompt_msg">Das Aufheben des Bannes wird dem Benutzer erlauben, dem Raum wieder beizutreten.</string>
+    <string name="room_participants_unban_prompt_msg">Das Aufheben des Bannes wird dem Benutzer erlauben dem Raum wieder beizutreten.</string>
     <string name="settings_secure_backup_section_title">Sicheres Backup</string>
     <string name="settings_secure_backup_manage">Verwalten</string>
     <string name="settings_secure_backup_setup">Backup einrichten</string>
@@ -2352,7 +2352,7 @@
     <string name="crypto_error_withheld_unverified">Du kannst auf diese Nachricht nicht zugreifen, weil der Sender deiner Sitzung nicht vertraut</string>
     <string name="crypto_error_withheld_generic">Du kannst auf diese Nachricht nicht zugreifen, weil der Sender absichtlich die Schlüssel nicht gesendet hat</string>
     <string name="notice_crypto_unable_to_decrypt_merged">Warte auf Verschlüsselungshistorie</string>
-    <string name="disclaimer_title">Riot heißt nun SchildiChat!</string>
+    <string name="disclaimer_title">Riot heißt nun Element!</string>
     <string name="disclaimer_content">Wir sind begeistert unsere Namensänderung mitteilen zu können! Deine App ist auf dem neusten Stand und du bist mit deinem Account angemeldet.</string>
     <string name="disclaimer_negative_button">VERSTANDEN</string>
     <string name="disclaimer_positive_button">MEHR ERFAHREN</string>

@@ -762,7 +762,7 @@
     <string name="passphrase_confirm_passphrase">Vahvista salasana</string>
     <string name="encryption_export_saved_as">Huoneen osapuolten välisen salauksen avaimet tallennettiin tiedostoon \'%s\'
 \n
-\nVaroitus: tämä tiedosto saatetaan poistaa, mikäli SchildiChat poistetaan.</string>
+\nVaroitus: tämä tiedosto saatetaan poistaa, mikäli Element poistetaan.</string>
     <string name="encryption_import_e2e_room_keys">Tuo salatun huoneen avaimet</string>
     <string name="encryption_import_room_keys">Tuo huoneen avaimet</string>
     <string name="encryption_import_room_keys_summary">Tuo avaimet paikallisesta tiedostosta</string>
@@ -1089,7 +1089,7 @@
     <string name="settings_troubleshoot_test_foreground_service_started_title">Ilmoituspalvelu</string>
     <string name="settings_troubleshoot_test_foreground_service_startedt_success">Ilmoituspalvelu on käynnissä.</string>
     <string name="settings_troubleshoot_test_foreground_service_started_failed">Ilmoituspalvelu ei ole käynnissä.
-\nKokeile SchildiChatin uudelleenkäynnistystä.</string>
+\nKokeile Elementin uudelleenkäynnistystä.</string>
     <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Käynnistä palvelu</string>
     <string name="settings_troubleshoot_test_service_restart_title">Ilmoituspalvelun automaattinen uudelleenkäynnistys</string>
     <string name="settings_troubleshoot_test_service_restart_success">Palvelu suljettiin ja se käynnistyi uudelleen automaattisesti.</string>
@@ -1166,7 +1166,7 @@
     </plurals>
     <string name="widget_integration_missing_parameter">Vaadittu parametri puuttuu.</string>
     <string name="widget_integration_invalid_parameter">Parametri ei ole kelvollinen.</string>
-    <string name="settings_labs_native_camera_summary">Käynnistä järjestelmän kamera SchildiChatin kameraruudun sijaan.</string>
+    <string name="settings_labs_native_camera_summary">Käynnistä järjestelmän kamera Elementin kameraruudun sijaan.</string>
     <string name="settings_labs_keyboard_options_to_send_message">Käytä näppäimistön rivinvaihtopainiketta viestin lähettämiseen</string>
     <string name="settings_labs_enable_send_voice_summary">Tämä valinta vaatii kolmannen osapuolen sovelluksen viestien tallennukseen.</string>
     <string name="command_problem_with_parameters">Komento ”%s” vaatii enemmän parametreja, tai jotkin parametrit ovat virheellisiä.</string>
@@ -1265,7 +1265,7 @@
     <string name="keys_backup_setup_step3_save_button_title">Tallenna tiedostona</string>
     <string name="recovery_key_export_saved_as_warning">Palautusavain on tallennettu kohteeseen \'%s\'.
 \n
-\nVaroitus: tämä tiedosto saatetaan poistaa, mikäli SchildiChat poistetaan.</string>
+\nVaroitus: tämä tiedosto saatetaan poistaa, mikäli Element poistetaan.</string>
     <string name="keys_backup_setup_step3_please_make_copy">Teethän kopion</string>
     <string name="keys_backup_setup_step3_share_intent_chooser_title">Jaa palautusavain kohteelle…</string>
     <string name="keys_backup_setup_step3_generating_key_status">Luodaan palautusavainta käyttäen salalausetta. Tässä saattaa kestää useampi sekunti.</string>
@@ -1590,7 +1590,7 @@
     <string name="auth_add_email_phone_message_2">Aseta sähköpostisi tunnuksen palautusta varten. Myöhemmin voit asettaa sähköpostisi tai puhelinnumerosi löydettäviksi, jotta sinut voi löytää näillä tiedoilla.</string>
     <string name="auth_add_email_and_phone_message_2">Aseta sähköpostisi tunnuksen palautusta varten. Myöhemmin voit asettaa sähköpostisi tai puhelinnumerosi löydettäviksi, jotta sinut voi löytää näillä tiedoilla.</string>
     <string name="settings_add_3pid_confirm_password_title">Vahvista salasanasi</string>
-    <string name="settings_add_3pid_flow_not_supported">Et voi tehdä tätä mobiili SchildiChatistä</string>
+    <string name="settings_add_3pid_flow_not_supported">Et voi tehdä tätä mobiili Elementistä</string>
     <string name="settings_add_3pid_authentication_needed">Tunnistautuminen vaaditaan</string>
     <string name="settings_integrations">Integraatiot</string>
     <string name="settings_integrations_summary">Käytä Integraatioiden hallintaa botteihin, siltoihin, sovelmiin ja tarroihin.
@@ -1723,7 +1723,7 @@
     <string name="login_server_url_form_modular_hint">Element Matrix Services in osoite</string>
     <string name="login_server_url_form_other_hint">Osoite</string>
     <string name="login_server_url_form_modular_text">Korkealuokkaista isännöintiä organisaatioille</string>
-    <string name="login_server_url_form_modular_notice">Syötä Modular SchildiChatin tai haluamasi palvelimen osoite</string>
+    <string name="login_server_url_form_modular_notice">Syötä Modular Elementin tai haluamasi palvelimen osoite</string>
     <string name="login_sso_error_message">Sivun lataamisessa tapahtui virhe: %1$s (%2$d)</string>
     <string name="login_mode_not_supported">Sovellus ei pysty kirjautumaan sisään tälle kotipalvelimelle. Tämä kotipalvelin tukee seuraavia kirjautumistyyppejä: %1$s.
 \n
@@ -2469,7 +2469,7 @@
     <string name="disclaimer_positive_button">LUE LISÄÄ</string>
     <string name="disclaimer_negative_button">SELVÄ</string>
     <string name="disclaimer_content">Olemme iloisia uuden nimen lanseerauksesta! Sovelluksesi on ajan tasalla ja olet kirjautunut tilillesi.</string>
-    <string name="disclaimer_title">Riot on nyt SchildiChat!</string>
+    <string name="disclaimer_title">Riot on nyt Element!</string>
     <string name="crypto_utd">Salausta ei voi purkaa</string>
     <string name="room_settings_save_success">Muutit huoneen asetuksia onnistuneesti</string>
     <string name="a11y_start_camera">Käynnistä kamera</string>

@@ -1596,7 +1596,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
 \nApakah Anda ingin masuk menggunakan client web\?</string>
     <string name="login_sso_error_message">Ada kesalahan terjadi saat memuat halaman: %1$s (%2$d)</string>
     <string name="login_server_url_form_common_notice">Masukkan alamat server yang ingin Anda gunakan</string>
-    <string name="login_server_url_form_modular_notice">Masukkan alamat Modular SchildiChat atau Server yang ingin Anda gunakan</string>
+    <string name="login_server_url_form_modular_notice">Masukkan alamat Modular Element atau Server yang ingin Anda gunakan</string>
     <string name="login_server_url_form_modular_text">Hosting premium untuk organisasi</string>
     <string name="login_server_url_form_other_hint">Alamat</string>
     <string name="login_server_url_form_modular_hint">Alamat Element Matrix Services</string>
@@ -2565,7 +2565,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="disclaimer_positive_button">PELAJARI LEBIH LANJUT</string>
     <string name="disclaimer_negative_button">MENGERTI</string>
     <string name="disclaimer_content">Kami senang mengumumkan kami telah mengubah nama! Aplikasi Anda mutakhir dan Anda telah masuk ke akun Anda.</string>
-    <string name="disclaimer_title">Riot sekarang telah menjadi SchildiChat!</string>
+    <string name="disclaimer_title">Riot sekarang telah menjadi Element!</string>
     <string name="notice_crypto_unable_to_decrypt_merged">Menunggu untuk sejarah enkripsi</string>
     <string name="crypto_error_withheld_generic">Anda tidak dapat mengakses pesan ini karena pengirim telah sengaja tidak mengirim kuncinya</string>
     <string name="crypto_error_withheld_unverified">Anda tidak dapat mengakses pesan ini karena sesi Anda tidak dipercayai oleh pengirim</string>
@@ -2645,7 +2645,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="space_add_space_to_any_space_you_manage">Tambahkan sebuah space ke space apa saja yang Anda bisa kelola.</string>
     <string name="create_space_error_empty_field_space_name">Beri nama untuk melanjutkan.</string>
     <string name="create_pin_confirm_failure">Gagal untuk memvalidasi PIN, mohon ketuk yang baru.</string>
-    <string name="link_this_email_with_your_account">%s di Pengaturan untuk menerima undangan secara langsung di SchildiChat.</string>
+    <string name="link_this_email_with_your_account">%s di Pengaturan untuk menerima undangan secara langsung di Element.</string>
     <string name="link_this_email_settings_link">Tautkan email ini ke akun Anda</string>
     <string name="this_invite_to_this_space_was_sent">Undangan space ini telah dikirim ke %s yang tidak diasosiasikan dengan akun Anda</string>
     <string name="this_invite_to_this_room_was_sent">Undangan ruangan ini telah dikirim ke %s yang tidak diasosiasikan dengan akun Anda</string>

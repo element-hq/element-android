@@ -1170,7 +1170,7 @@
     <string name="disclaimer_positive_button">EN SAVOIR PLUS</string>
     <string name="disclaimer_negative_button">COMPRIS</string>
     <string name="disclaimer_content">Nous sommes heureux de vous annoncer que nous avons un nouveau nom ! Votre application est à jour et vous êtes connectés à votre compte.</string>
-    <string name="disclaimer_title">Riot est désormais SchildiChat !</string>
+    <string name="disclaimer_title">Riot est désormais Element !</string>
     <string name="notice_crypto_unable_to_decrypt_merged">Attente de l’historique du chiffrement</string>
     <string name="crypto_error_withheld_generic">Impossible d’accéder à ce message car l’envoyeur n’a intentionnellement pas envoyé les clés</string>
     <string name="crypto_error_withheld_unverified">Vous ne pouvez pas accéder à ce message car l’envoyeur n’a pas confiance en votre session</string>
@@ -1235,7 +1235,7 @@
     <string name="login_registration_disabled">Désolé, ce serveur n’accepte pas de nouveau compte.</string>
     <string name="login_sso_error_message">Une erreur est survenue pendant le chargement de la page : %1$s (%2$d)</string>
     <string name="login_server_url_form_common_notice">Entrez l’adresse du serveur que vous voulez utiliser</string>
-    <string name="login_server_url_form_modular_notice">Saisir l’adresse de SchildiChat ou du serveur de Modular que vous voulez utiliser</string>
+    <string name="login_server_url_form_modular_notice">Saisir l’adresse de Element ou du serveur de Modular que vous voulez utiliser</string>
     <string name="login_server_url_form_modular_text">Hébergement privé pour les organisations</string>
     <string name="login_server_url_form_other_hint">Adresse</string>
     <string name="login_server_url_form_modular_hint">Adresse Element Matrix Services</string>
