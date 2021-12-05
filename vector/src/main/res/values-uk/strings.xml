@@ -2988,4 +2988,7 @@
     <string name="settings_export_trail">Експорт аудиту</string>
     <string name="keys_backup_restore_success_title_already_up_to_date">Ключі вже оновлено!</string>
     <string name="command_description_lenny">Додає ( ͡° ͜ʖ ͡°) до текстового повідомлення</string>
+    <string name="identity_server_consent_dialog_content_question">Ви згодні надіслати цю інформацію\?</string>
+    <string name="login_error_homeserver_from_url_not_found">Не вдалося звʼязатися з домашнім сервером за адресою %s. Перевірте посилання або виберіть домашній сервер вручну.</string>
+    <string name="action_not_now">Не зараз</string>
 </resources>
