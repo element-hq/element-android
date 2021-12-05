@@ -41,6 +41,7 @@ import org.matrix.android.sdk.internal.session.sync.handler.PresenceSyncHandler
 import org.matrix.android.sdk.internal.session.sync.handler.SyncResponsePostTreatmentAggregatorHandler
 import org.matrix.android.sdk.internal.session.sync.handler.UserAccountDataSyncHandler
 import org.matrix.android.sdk.internal.session.sync.handler.room.RoomSyncHandler
+import org.matrix.android.sdk.internal.session.sync.handler.room.ThreadsAwarenessHandler
 import org.matrix.android.sdk.internal.util.awaitTransaction
 import org.matrix.android.sdk.internal.worker.WorkerParamsFactory
 import timber.log.Timber
@@ -65,6 +66,7 @@ internal class SyncResponseHandler @Inject constructor(
         private val tokenStore: SyncTokenStore,
         private val processEventForPushTask: ProcessEventForPushTask,
         private val pushRuleService: PushRuleService,
+        private val threadsAwarenessHandler: ThreadsAwarenessHandler,
         private val presenceSyncHandler: PresenceSyncHandler
 ) {
 
@@ -97,6 +99,10 @@ internal class SyncResponseHandler @Inject constructor(
             Timber.v("Finish handling toDevice in $it ms")
         }
         val aggregator = SyncResponsePostTreatmentAggregator()
+
+        // Prerequisite for thread events handling in RoomSyncHandler
+        threadsAwarenessHandler.fetchRootThreadEventsIfNeeded(syncResponse)
+
         // Start one big transaction
         monarchy.awaitTransaction { realm ->
             measureTimeMillis {

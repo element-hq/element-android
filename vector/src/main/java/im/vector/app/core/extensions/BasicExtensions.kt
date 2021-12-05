@@ -16,9 +16,7 @@
 
 package im.vector.app.core.extensions
 
-import android.os.Bundle
 import android.util.Patterns
-import androidx.fragment.app.Fragment
 import com.google.i18n.phonenumbers.NumberParseException
 import com.google.i18n.phonenumbers.PhoneNumberUtil
 import org.matrix.android.sdk.api.extensions.ensurePrefix
@@ -26,11 +24,6 @@ import org.matrix.android.sdk.api.extensions.ensurePrefix
 fun Boolean.toOnOff() = if (this) "ON" else "OFF"
 
 inline fun <T> T.ooi(block: (T) -> Unit): T = also(block)
-
-/**
- * Apply argument to a Fragment
- */
-fun <T : Fragment> T.withArgs(block: Bundle.() -> Unit) = apply { arguments = Bundle().apply(block) }
 
 /**
  * Check if a CharSequence is an email

@@ -84,4 +84,7 @@
     <!-- Bug in lint agp 4.1 incorrectly thinks kotlin forEach is using java 8 API's. -->
     <!-- FIXME this workaround should be removed in a near future -->
     <issue id="NewApi" severity="warning" />
+
+    <!-- DI -->
+    <issue id="JvmStaticProvidesInObjectDetector" severity="error" />
 </lint>

@@ -20,13 +20,13 @@ import androidx.annotation.StringRes
 import im.vector.app.core.platform.VectorViewEvents
 import im.vector.app.features.command.Command
 
-sealed class TextComposerViewEvents : VectorViewEvents {
+sealed class MessageComposerViewEvents : VectorViewEvents {
 
-    data class AnimateSendButtonVisibility(val isVisible: Boolean, val isActive: Boolean) : TextComposerViewEvents()
+    data class AnimateSendButtonVisibility(val isVisible: Boolean, val isActive: Boolean) : MessageComposerViewEvents()
 
-    data class ShowMessage(val message: String) : TextComposerViewEvents()
+    data class ShowMessage(val message: String) : MessageComposerViewEvents()
 
-    abstract class SendMessageResult : TextComposerViewEvents()
+    abstract class SendMessageResult : MessageComposerViewEvents()
 
     object MessageSent : SendMessageResult()
     data class JoinRoomCommandSuccess(val roomId: String) : SendMessageResult()
@@ -36,10 +36,12 @@ sealed class TextComposerViewEvents : VectorViewEvents {
     data class SlashCommandResultOk(@StringRes val messageRes: Int? = null) : SendMessageResult()
     class SlashCommandResultError(val throwable: Throwable) : SendMessageResult()
 
-    data class OpenRoomMemberProfile(val userId: String) : TextComposerViewEvents()
+    data class OpenRoomMemberProfile(val userId: String) : MessageComposerViewEvents()
 
     // TODO Remove
     object SlashCommandNotImplemented : SendMessageResult()
 
-    data class ShowRoomUpgradeDialog(val newVersion: String, val isPublic: Boolean) : TextComposerViewEvents()
+    data class ShowRoomUpgradeDialog(val newVersion: String, val isPublic: Boolean) : MessageComposerViewEvents()
+
+    data class VoicePlaybackOrRecordingFailure(val throwable: Throwable) : MessageComposerViewEvents()
 }

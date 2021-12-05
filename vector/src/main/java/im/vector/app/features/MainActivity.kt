@@ -116,7 +116,6 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
     private fun clearNotifications() {
         // Dismiss all notifications
         notificationDrawerManager.clearAllEvents()
-        notificationDrawerManager.persistInfo()
 
         // Also clear the dynamic shortcuts
         shortcutsHandler.clearShortcuts()

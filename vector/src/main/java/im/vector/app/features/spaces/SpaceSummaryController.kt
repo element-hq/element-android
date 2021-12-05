@@ -50,10 +50,6 @@ class SpaceSummaryController @Inject constructor(
 
     private val subSpaceComparator: Comparator<SpaceChildInfo> = compareBy<SpaceChildInfo> { it.order }.thenBy { it.name?.lowercase(Locale.getDefault()) }.thenBy { it.childRoomId }
 
-    init {
-        requestModelBuild()
-    }
-
     fun update(viewState: SpaceListViewState) {
         this.viewState = viewState
         requestModelBuild()

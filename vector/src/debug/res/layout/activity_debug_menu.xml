@@ -21,6 +21,12 @@
             android:showDividers="middle">
 
             <Button
+                android:id="@+id/debug_private_setting"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Private settings" />
+
+            <Button
                 android:id="@+id/debug_test_text_view_link"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

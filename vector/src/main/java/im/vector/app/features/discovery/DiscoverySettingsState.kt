@@ -29,10 +29,3 @@ data class DiscoverySettingsState(
         val userConsent: Boolean = false,
         val isIdentityPolicyUrlsExpanded: Boolean = false
 ) : MavericksState
-
-data class IdentityServerWithTerms(
-        val serverUrl: String,
-        val policies: List<IdentityServerPolicy>
-)
-
-data class IdentityServerPolicy(val name: String, val url: String)

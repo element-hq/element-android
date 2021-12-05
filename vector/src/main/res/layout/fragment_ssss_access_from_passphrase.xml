@@ -70,9 +70,9 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/passphrase_enter_passphrase"
                 android:imeOptions="actionDone"
+                android:inputType="textPassword"
                 android:maxLines="3"
-                android:singleLine="false"
-                tools:inputType="textPassword" />
+                android:singleLine="false" />
 
         </com.google.android.material.textfield.TextInputLayout>
 

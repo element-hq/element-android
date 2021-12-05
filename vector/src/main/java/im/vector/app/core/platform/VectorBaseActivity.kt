@@ -22,6 +22,7 @@ import android.content.Context
 import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -60,6 +61,7 @@ import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.restart
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.extensions.singletonEntryPoint
+import im.vector.app.core.extensions.toMvRxBundle
 import im.vector.app.core.flow.throttleFirst
 import im.vector.app.core.utils.toast
 import im.vector.app.features.MainActivity
@@ -385,9 +387,9 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
         bugReporter.inMultiWindowMode = isInMultiWindowMode
     }
 
-    protected fun createFragment(fragmentClass: Class<out Fragment>, args: Bundle?): Fragment {
+    protected fun createFragment(fragmentClass: Class<out Fragment>, argsParcelable: Parcelable? = null): Fragment {
         return fragmentFactory.instantiate(classLoader, fragmentClass.name).apply {
-            arguments = args
+            arguments = argsParcelable?.toMvRxBundle()
         }
     }
 
@@ -554,7 +556,8 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
 
     open fun initUiAndData() = Unit
 
-    override fun invalidate() = Unit
+    // Note: does not seem to be called
+    final override fun invalidate() = Unit
 
     @StringRes
     open fun getTitleRes() = -1

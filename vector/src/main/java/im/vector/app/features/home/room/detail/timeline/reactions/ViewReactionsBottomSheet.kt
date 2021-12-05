@@ -20,7 +20,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
@@ -82,14 +81,13 @@ class ViewReactionsBottomSheet :
 
     companion object {
         fun newInstance(roomId: String, informationData: MessageInformationData): ViewReactionsBottomSheet {
-            val args = Bundle()
-            val parcelableArgs = TimelineEventFragmentArgs(
-                    informationData.eventId,
-                    roomId,
-                    informationData
-            )
-            args.putParcelable(Mavericks.KEY_ARG, parcelableArgs)
-            return ViewReactionsBottomSheet().apply { arguments = args }
+            return ViewReactionsBottomSheet().apply {
+                setArguments(TimelineEventFragmentArgs(
+                        eventId = informationData.eventId,
+                        roomId = roomId,
+                        informationData = informationData
+                ))
+            }
         }
     }
 }

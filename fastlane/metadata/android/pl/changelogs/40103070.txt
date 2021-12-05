@@ -1,0 +1,2 @@
+Główne zmiany w tej wersji: Poprawki błędów dotyczące głównie powiadomień
+Pełny changelog: https://github.com/vector-im/element-android/releases/tag/v1.3.7

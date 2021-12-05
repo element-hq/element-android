@@ -456,6 +456,7 @@
     <string name="copied_to_clipboard">Copied to clipboard</string>
     <string name="disable">Disable</string>
     <string name="action_return">Return</string>
+    <string name="action_not_now">Not now</string>
 
     <!-- dialog titles -->
     <string name="dialog_title_confirmation">Confirmation</string>
@@ -2193,7 +2194,9 @@
     <string name="room_list_rooms_empty_body">Your rooms will be displayed here. Tap the + bottom right to find existing ones or start some of your own.</string>
 
     <string name="title_activity_emoji_reaction_picker">Reactions</string>
+    <!-- TODO weblate sync: rename to "action_agree"-->
     <string name="reactions_agree">Agree</string>
+    <!-- TODO weblate sync: rename to "action_like"-->
     <string name="reactions_like">Like</string>
     <string name="message_add_reaction">Add Reaction</string>
     <string name="message_view_reaction">View Reactions</string>
@@ -2377,6 +2380,8 @@
     <string name="identity_server_consent_dialog_title_2">Send emails and phone numbers to %s</string>
     <string name="identity_server_consent_dialog_content">In order to discover existing contacts you know, do you accept to send your contact data (phone numbers and/or emails) to the configured identity server (%1$s)?\n\nFor more privacy, the sent data will be hashed before being sent.</string>
     <string name="identity_server_consent_dialog_content_2">To discover existing contacts, you need to send contact info to your identity server.\n\nWe hash your data before sending for privacy. Do you consent to send this info?</string>
+    <string name="identity_server_consent_dialog_content_3">To discover existing contacts, you need to send contact info (emails and phone numbers) to your identity server. We hash your data before sending for privacy.</string>
+    <string name="identity_server_consent_dialog_content_question">Do you agree to send this info?</string>
     <string name="identity_server_consent_dialog_neutral_policy">Policy</string>
 
     <string name="settings_discovery_enter_identity_server">Enter an identity server URL</string>
@@ -2898,7 +2903,7 @@
 
     <string name="a11y_qr_code_for_verification">QR code</string>
 
-    <string name="qr_code_scanned_by_other_notice">Almost there! Is %s showing the same shield?</string>
+    <string name="qr_code_scanned_by_other_notice">Almost there! Is %s showing a tick?</string>
     <string name="qr_code_scanned_by_other_yes">Yes</string>
     <string name="qr_code_scanned_by_other_no">No</string>
 
@@ -3051,7 +3056,7 @@
     <string name="add_a_topic_link_text">Add a topic</string>
     <string name="topic_prefix">"Topic: "</string>
 
-    <string name="qr_code_scanned_self_verif_notice">Almost there! Is the other device showing the same shield?</string>
+    <string name="qr_code_scanned_self_verif_notice">Almost there! Is the other device showing a tick?</string>
     <string name="qr_code_scanned_verif_waiting_notice">Almost there! Waiting for confirmation…</string>
     <string name="qr_code_scanned_verif_waiting">Waiting for %s…</string>
 

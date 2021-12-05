@@ -126,7 +126,7 @@ class NotificationEventQueueTest {
     fun `given no events when adding then adds event`() {
         val queue = givenQueue(listOf())
 
-        queue.add(aSimpleNotifiableEvent(), seenEventIds = seenIdsCache)
+        queue.add(aSimpleNotifiableEvent())
 
         queue.rawEvents() shouldBeEqualTo listOf(aSimpleNotifiableEvent())
     }
@@ -137,7 +137,7 @@ class NotificationEventQueueTest {
         val notifiableEvent = aSimpleNotifiableEvent()
         seenIdsCache.put(notifiableEvent.eventId)
 
-        queue.add(notifiableEvent, seenEventIds = seenIdsCache)
+        queue.add(notifiableEvent)
 
         queue.rawEvents() shouldBeEqualTo emptyList()
     }
@@ -148,7 +148,7 @@ class NotificationEventQueueTest {
         val updatedEvent = replaceableEvent.copy(title = "updated title")
         val queue = givenQueue(listOf(replaceableEvent))
 
-        queue.add(updatedEvent, seenEventIds = seenIdsCache)
+        queue.add(updatedEvent)
 
         queue.rawEvents() shouldBeEqualTo listOf(updatedEvent)
     }
@@ -159,7 +159,7 @@ class NotificationEventQueueTest {
         val updatedEvent = nonReplaceableEvent.copy(title = "updated title")
         val queue = givenQueue(listOf(nonReplaceableEvent))
 
-        queue.add(updatedEvent, seenEventIds = seenIdsCache)
+        queue.add(updatedEvent)
 
         queue.rawEvents() shouldBeEqualTo listOf(nonReplaceableEvent)
     }
@@ -170,7 +170,7 @@ class NotificationEventQueueTest {
         val updatedEvent = editedEvent.copy(eventId = "1", editedEventId = "id-to-edit", title = "updated title")
         val queue = givenQueue(listOf(editedEvent))
 
-        queue.add(updatedEvent, seenEventIds = seenIdsCache)
+        queue.add(updatedEvent)
 
         queue.rawEvents() shouldBeEqualTo listOf(updatedEvent)
     }
@@ -181,7 +181,7 @@ class NotificationEventQueueTest {
         val updatedEvent = editedEvent.copy(eventId = "1", editedEventId = "id-to-edit", title = "updated title")
         val queue = givenQueue(listOf(editedEvent))
 
-        queue.add(updatedEvent, seenEventIds = seenIdsCache)
+        queue.add(updatedEvent)
 
         queue.rawEvents() shouldBeEqualTo listOf(updatedEvent)
     }
@@ -212,5 +212,5 @@ class NotificationEventQueueTest {
         queue.rawEvents() shouldBeEqualTo listOf(anInviteNotifiableEvent(roomId = roomId))
     }
 
-    private fun givenQueue(events: List<NotifiableEvent>) = NotificationEventQueue(events.toMutableList())
+    private fun givenQueue(events: List<NotifiableEvent>) = NotificationEventQueue(events.toMutableList(), seenEventIds = seenIdsCache)
 }

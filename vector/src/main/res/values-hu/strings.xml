@@ -3014,4 +3014,24 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="login_error_homeserver_from_url_not_found_enter_manual">Matrix szerver kiválasztása</string>
     <string name="login_error_homeserver_from_url_not_found">A matrix szervert nem sikerül elérni ezen az URL-en: %s. Ellenőrizd a kapcsolatodat vagy add meg a matrix szervert kézzel.</string>
     <string name="notification_listening_for_notifications">Értesítések figyelése</string>
+    <string name="identity_server_consent_dialog_content_2">A létező kapcsolatok felderítéséhez információkat kell küldeni a kapcsolataidról az azonosítási szolgáltatás felé.
+\n
+\nAz adatot a bizalmasság érdekében küldés előtt hash-eljük. Beleegyezel az adatok küldésébe\?</string>
+    <string name="settings_discovery_consent_notice_off_2">A névjegyeid személyes adatok. Ahhoz, hogy a névjegyzéked alapján megtalálhass felhasználókat, szükségünk van az engedélyedre, hogy a névjegy adatokat elküldhessük az azonosítási szolgáltatásnak.</string>
+    <plurals name="create_poll_not_enough_options_error">
+        <item quantity="one">Legalább %1$s válasz szükséges</item>
+        <item quantity="other">Legalább %1$s válasz szükséges</item>
+    </plurals>
+    <string name="create_poll_empty_question_error">A kérdés nem lehet üres</string>
+    <string name="create_poll_button">SZAVAZÁS LÉTREHOZÁSA</string>
+    <string name="create_poll_add_option">VÁLASZTÁS HOZZÁADÁSA</string>
+    <string name="create_poll_options_hint">%1$d. lehetőség</string>
+    <string name="create_poll_options_title">Lehetőségek hozzáadása</string>
+    <string name="create_poll_question_hint">Kérdés vagy téma</string>
+    <string name="create_poll_question_title">Szavazás kérdés vagy téma</string>
+    <string name="create_poll_title">Szavazás létrehozása</string>
+    <string name="attachment_type_poll">Szavazás</string>
+    <string name="identity_server_consent_dialog_title_2">Email címek és telefonszámok küldése ide: %s</string>
+    <string name="shortcut_disabled_reason_sign_out">Kijelentkeztél a munkamenetből!</string>
+    <string name="shortcut_disabled_reason_room_left">Elhagytad a szobát!</string>
 </resources>
