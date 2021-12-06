@@ -77,7 +77,7 @@ class ContactsBookFragment @Inject constructor(
     }
 
     private fun setupConsentView() {
-        views.phoneBookSearchForMatrixContacts.setOnClickListener {
+        views.phoneBookSearchForMatrixContacts.debouncedClicks {
             contactsBookViewModel.handle(ContactsBookAction.UserConsentRequest)
         }
     }

@@ -20,14 +20,19 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.annotation.CallSuper
+import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceFragmentCompat
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.singletonEntryPoint
+import im.vector.app.core.flow.throttleFirst
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.toast
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.session.Session
+import reactivecircus.flowbinding.android.view.clicks
 import timber.log.Timber
 
 abstract class VectorSettingsBaseFragment : PreferenceFragmentCompat() {
@@ -41,6 +46,17 @@ abstract class VectorSettingsBaseFragment : PreferenceFragmentCompat() {
     // members
     protected lateinit var session: Session
     protected lateinit var errorFormatter: ErrorFormatter
+
+    /* ==========================================================================================
+     * Views
+     * ========================================================================================== */
+
+    protected fun View.debouncedClicks(onClicked: () -> Unit) {
+        clicks()
+                .throttleFirst(300)
+                .onEach { onClicked() }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
+    }
 
     abstract val preferenceXmlRes: Int
 

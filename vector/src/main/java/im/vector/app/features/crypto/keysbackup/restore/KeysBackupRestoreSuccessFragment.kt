@@ -52,7 +52,7 @@ class KeysBackupRestoreSuccessFragment @Inject constructor() : VectorBaseFragmen
             views.successText.text = context?.getString(R.string.keys_backup_restore_success_title_already_up_to_date)
             views.successDetailsText.isVisible = false
         }
-        views.keysBackupSetupDoneButton.setOnClickListener { onDone() }
+        views.keysBackupSetupDoneButton.debouncedClicks { onDone() }
     }
 
     private fun onDone() {
