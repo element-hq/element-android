@@ -24,6 +24,7 @@ import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityComponent
 import dagger.multibindings.IntoMap
+import im.vector.app.features.analytics.ui.consent.AnalyticsOptInFragment
 import im.vector.app.features.attachments.preview.AttachmentsPreviewFragment
 import im.vector.app.features.contactsbook.ContactsBookFragment
 import im.vector.app.features.crypto.keysbackup.settings.KeysBackupSettingsFragment
@@ -518,6 +519,11 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(BreadcrumbsFragment::class)
     fun bindBreadcrumbsFragment(fragment: BreadcrumbsFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(AnalyticsOptInFragment::class)
+    fun bindAnalyticsOptInFragment(fragment: AnalyticsOptInFragment): Fragment
 
     @Binds
     @IntoMap

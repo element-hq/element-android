@@ -105,6 +105,8 @@ interface Navigator {
 
     fun openBigImageViewer(activity: Activity, sharedElement: View?, mxcUrl: String?, title: String?)
 
+    fun openAnalyticsOptIn(context: Context)
+
     fun openPinCode(context: Context,
                     activityResultLauncher: ActivityResultLauncher<Intent>,
                     pinMode: PinMode)

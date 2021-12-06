@@ -22,15 +22,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import com.airbnb.mvrx.fragmentViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.databinding.FragmentLoginSplashBinding
-import im.vector.app.features.analytics.AnalyticsConfig
-import im.vector.app.features.analytics.ui.consent.AnalyticsConsentViewActions
-import im.vector.app.features.analytics.ui.consent.AnalyticsConsentViewModel
-import im.vector.app.features.analytics.ui.consent.AnalyticsConsentViewState
 import im.vector.app.features.settings.VectorPreferences
 import org.matrix.android.sdk.api.failure.Failure
 import java.net.UnknownHostException
@@ -43,8 +38,6 @@ class LoginSplashFragment @Inject constructor(
         private val vectorPreferences: VectorPreferences
 ) : AbstractLoginFragment<FragmentLoginSplashBinding>() {
 
-    private val analyticsConsentViewModel: AnalyticsConsentViewModel by fragmentViewModel()
-
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLoginSplashBinding {
         return FragmentLoginSplashBinding.inflate(inflater, container, false)
     }
@@ -53,24 +46,10 @@ class LoginSplashFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
 
         setupViews()
-        observeAnalyticsState()
-    }
-
-    private fun observeAnalyticsState() {
-        analyticsConsentViewModel.onEach(AnalyticsConsentViewState::shouldCheckTheBox) {
-            views.loginSplashAnalyticsConsent.isChecked = it
-        }
     }
 
     private fun setupViews() {
         views.loginSplashSubmit.debouncedClicks { getStarted() }
-        // setOnCheckedChangeListener is to annoying since it does not distinguish user changes and code changes
-        views.loginSplashAnalyticsConsent.isVisible = AnalyticsConfig.isAnalyticsEnabled()
-        views.loginSplashAnalyticsConsent.setOnClickListener {
-            analyticsConsentViewModel.handle(AnalyticsConsentViewActions.SetUserConsent(
-                    views.loginSplashAnalyticsConsent.isChecked
-            ))
-        }
 
         if (BuildConfig.DEBUG || vectorPreferences.developerMode()) {
             views.loginSplashVersion.isVisible = true
@@ -82,7 +61,6 @@ class LoginSplashFragment @Inject constructor(
     }
 
     private fun getStarted() {
-        analyticsConsentViewModel.handle(AnalyticsConsentViewActions.OnGetStarted)
         loginViewModel.handle(LoginAction.OnGetStarted(resetLoginConfig = false))
     }
 

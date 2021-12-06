@@ -236,6 +236,7 @@ android {
             // Analytics. Set to empty strings to just disable analytics
             buildConfigField "String", "ANALYTICS_POSTHOG_HOST", "\"https://posthog-poc.lab.element.dev\""
             buildConfigField "String", "ANALYTICS_POSTHOG_API_KEY", "\"rs-pJjsYJTuAkXJfhaMmPUNBhWliDyTKLOOxike6ck8\""
+            buildConfigField "String", "ANALYTICS_POLICY_URL", "\"https://element.io/cookie-policy\""
 
             signingConfig signingConfigs.debug
         }
@@ -250,6 +251,7 @@ android {
             // Analytics. Set to empty strings to just disable analytics
             buildConfigField "String", "ANALYTICS_POSTHOG_HOST", "\"https://posthog.hss.element.io\""
             buildConfigField "String", "ANALYTICS_POSTHOG_API_KEY", "\"phc_Jzsm6DTm6V2705zeU5dcNvQDlonOR68XvX2sh1sEOHO\""
+            buildConfigField "String", "ANALYTICS_POLICY_URL", "\"https://element.io/cookie-policy\""
 
             postprocessing {
                 removeUnusedCode true

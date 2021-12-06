@@ -204,20 +204,9 @@
         android:layout_height="wrap_content"
         android:textColor="?vctr_content_secondary"
         android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@id/loginSplashAnalyticsConsent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         tools:text="@string/settings_version"
-        tools:visibility="visible" />
-
-    <CheckBox
-        android:id="@+id/loginSplashAnalyticsConsent"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="@string/analytics_consent_splash"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

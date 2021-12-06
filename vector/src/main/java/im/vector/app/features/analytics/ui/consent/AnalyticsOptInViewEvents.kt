@@ -16,8 +16,8 @@
 
 package im.vector.app.features.analytics.ui.consent
 
-import im.vector.app.core.platform.VectorViewModelAction
+import im.vector.app.core.platform.VectorViewEvents
 
-sealed class AnalyticsConsentViewActions : VectorViewModelAction {
-    data class SetUserConsent(val userConsent: Boolean) : AnalyticsConsentViewActions()
+sealed interface AnalyticsOptInViewEvents : VectorViewEvents {
+    object OnDataSaved : AnalyticsOptInViewEvents
 }

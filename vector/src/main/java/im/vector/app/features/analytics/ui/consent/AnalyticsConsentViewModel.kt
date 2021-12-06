@@ -23,7 +23,6 @@ import dagger.assisted.AssistedInject
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.exhaustive
-import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.analytics.VectorAnalytics
 import kotlinx.coroutines.launch
@@ -31,7 +30,7 @@ import kotlinx.coroutines.launch
 class AnalyticsConsentViewModel @AssistedInject constructor(
         @Assisted initialState: AnalyticsConsentViewState,
         private val analytics: VectorAnalytics
-) : VectorViewModel<AnalyticsConsentViewState, AnalyticsConsentViewActions, EmptyViewEvents>(initialState) {
+) : VectorViewModel<AnalyticsConsentViewState, AnalyticsConsentViewActions, AnalyticsOptInViewEvents>(initialState) {
 
     @AssistedFactory
     interface Factory : MavericksAssistedViewModelFactory<AnalyticsConsentViewModel, AnalyticsConsentViewState> {
@@ -56,24 +55,14 @@ class AnalyticsConsentViewModel @AssistedInject constructor(
     override fun handle(action: AnalyticsConsentViewActions) {
         when (action) {
             is AnalyticsConsentViewActions.SetUserConsent -> handleSetUserConsent(action)
-            AnalyticsConsentViewActions.OnGetStarted      -> handleOnScreenLeft()
         }.exhaustive
     }
 
     private fun handleSetUserConsent(action: AnalyticsConsentViewActions.SetUserConsent) {
         viewModelScope.launch {
             analytics.setUserConsent(action.userConsent)
-            if (!action.userConsent) {
-                // User explicitly changed the default value, let's avoid reverting to the default value
-                analytics.setDidAskUserConsent()
-            }
-        }
-    }
-
-    private fun handleOnScreenLeft() {
-        // Whatever the state of the box, consider the user acknowledge it
-        viewModelScope.launch {
             analytics.setDidAskUserConsent()
+            _viewEvents.post(AnalyticsOptInViewEvents.OnDataSaved)
         }
     }
 }
