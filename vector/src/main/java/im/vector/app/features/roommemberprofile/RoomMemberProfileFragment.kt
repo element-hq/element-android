@@ -232,10 +232,10 @@ class RoomMemberProfileFragment @Inject constructor(
                     headerViews.memberProfileDecorationImageView.isVisible = false
                 }
 
-                headerViews.memberProfileAvatarView.debouncedClicks { view ->
+                headerViews.memberProfileAvatarView.setOnClickListener { view ->
                     onAvatarClicked(view, userMatrixItem)
                 }
-                views.matrixProfileToolbarAvatarImageView.debouncedClicks { view ->
+                views.matrixProfileToolbarAvatarImageView.setOnClickListener { view ->
                     onAvatarClicked(view, userMatrixItem)
                 }
             }
