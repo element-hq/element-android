@@ -22,7 +22,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.databinding.FragmentGenericRecyclerBinding
-import im.vector.app.features.DefaultVectorFeatures
 import im.vector.app.features.themes.ActivityOtherThemes
 import im.vector.app.features.themes.ThemeUtils
 import javax.inject.Inject
@@ -31,7 +30,7 @@ import javax.inject.Inject
 class DebugFeaturesSettingsActivity : AppCompatActivity() {
 
     @Inject lateinit var debugFeatures: DebugVectorFeatures
-    @Inject lateinit var defaultFeatures: DefaultVectorFeatures
+    @Inject lateinit var debugFeaturesStateFactory: DebugFeaturesStateFactory
 
     private lateinit var views: FragmentGenericRecyclerBinding
 
@@ -48,27 +47,7 @@ class DebugFeaturesSettingsActivity : AppCompatActivity() {
             }
         })
         views.genericRecyclerView.configureWith(controller)
-        controller.setData(createState())
-    }
-
-    private fun createState(): FeaturesState {
-        return FeaturesState(listOf(
-                createEnumFeature(
-                        label = "Login version",
-                        selection = debugFeatures.loginVersion(),
-                        default = defaultFeatures.loginVersion()
-                )
-        ))
-    }
-
-    private inline fun <reified T : Enum<T>> createEnumFeature(label: String, selection: T, default: T): Feature {
-        return Feature.EnumFeature(
-                label = label,
-                selection = selection.takeIf { debugFeatures.hasEnumOverride(T::class) },
-                default = default,
-                options = enumValues<T>().toList(),
-                type = T::class
-        )
+        controller.setData(debugFeaturesStateFactory.create())
     }
 
     override fun onDestroy() {
