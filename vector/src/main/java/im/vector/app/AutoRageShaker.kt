@@ -52,7 +52,6 @@ class AutoRageShaker @Inject constructor(
 
     private val activeSessionIds = mutableSetOf<String>()
     private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
-    private val uisiDetectors = mutableMapOf<String, UISIDetector>()
     private var currentActiveSessionId: String? = null
 
     // Simple in memory cache of already sent report
@@ -102,7 +101,7 @@ class AutoRageShaker @Inject constructor(
     fun enable(enabled: Boolean) {
         if (enabled == _enabled) return
         _enabled = enabled
-        uisiDetectors.forEach { it.value.enabled = enabled }
+        detector.enabled = enabled
     }
 
     private fun observeActiveSession() {
@@ -269,9 +268,7 @@ class AutoRageShaker @Inject constructor(
     }
 
     override fun onSessionStopped(session: Session) {
-        uisiDetectors.get(session.sessionId)?.let {
-            session.removeEventStreamListener(it)
-        }
+        session.removeEventStreamListener(detector)
         activeSessionIds.remove(session.sessionId)
     }
 }
