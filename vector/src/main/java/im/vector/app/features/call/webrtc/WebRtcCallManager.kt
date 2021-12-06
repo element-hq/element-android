@@ -21,7 +21,7 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import im.vector.app.ActiveSessionDataSource
 import im.vector.app.BuildConfig
-import im.vector.app.core.resources.StringArrayProvider
+import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.services.CallService
 import im.vector.app.features.call.VectorCallActivity
 import im.vector.app.features.call.audio.CallAudioManager
@@ -71,7 +71,8 @@ private val loggerTag = LoggerTag("WebRtcCallManager", LoggerTag.VOIP)
 class WebRtcCallManager @Inject constructor(
         private val context: Context,
         private val activeSessionDataSource: ActiveSessionDataSource,
-        private var vectorPreferences: VectorPreferences
+        private var vectorPreferences: VectorPreferences,
+        private val stringProvider: StringProvider
 ) : CallListener,
         DefaultLifecycleObserver {
 
@@ -330,7 +331,8 @@ class WebRtcCallManager @Inject constructor(
                 sessionProvider = { currentSession },
                 onCallBecomeActive = this::onCallActive,
                 onCallEnded = this::onCallEnded,
-                vectorPreferences = vectorPreferences
+                vectorPreferences = vectorPreferences,
+                stringProvider = stringProvider
         )
         advertisedCalls.add(mxCall.callId)
         callsByCallId[mxCall.callId] = webRtcCall

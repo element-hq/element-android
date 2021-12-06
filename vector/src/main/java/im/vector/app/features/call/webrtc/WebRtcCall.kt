@@ -20,7 +20,7 @@ import android.content.Context
 import android.hardware.camera2.CameraManager
 import androidx.core.content.getSystemService
 import im.vector.app.R
-import im.vector.app.core.resources.StringArrayProvider
+import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.flow.chunk
 import im.vector.app.core.services.CallService
 import im.vector.app.core.utils.CountUpTimer
@@ -115,7 +115,8 @@ class WebRtcCall(
         private val peerConnectionFactoryProvider: Provider<PeerConnectionFactory?>,
         private val onCallBecomeActive: (WebRtcCall) -> Unit,
         private val onCallEnded: (String, EndCallReason, Boolean) -> Unit,
-        private var vectorPreferences: VectorPreferences
+        private var vectorPreferences: VectorPreferences,
+        private val stringProvider: StringProvider
 ) : MxCall.StateListener {
 
     interface Listener : MxCall.StateListener {
@@ -284,25 +285,24 @@ class WebRtcCall(
         val peerConnectionFactory = peerConnectionFactoryProvider.get() ?: return
         val iceServers = mutableListOf<PeerConnection.IceServer>().apply {
             turnServerResponse?.let { server ->
-                val useFallback = server.uris?.isEmpty() == true && vectorPreferences.useFallbackTurnServer()
-                val serverList = if (useFallback) listOf("stun:" + R.string.fallback_stun_server_url) else server.uris
-                serverList?.forEach { uri ->
+                server.uris?.forEach { uri ->
                     add(
-                            if (useFallback)
-                                PeerConnection
-                                        .IceServer
-                                        .builder(uri)
-                                        .createIceServer()
-                            else
-                                PeerConnection
-                                        .IceServer
-                                        .builder(uri)
-                                        .setUsername(server.username)
-                                        .setPassword(server.password)
-                                        .createIceServer()
-
+                            PeerConnection
+                                    .IceServer
+                                    .builder(uri)
+                                    .setUsername(server.username)
+                                    .setPassword(server.password)
+                                    .createIceServer()
                     )
                 }
+            }
+            if ((turnServerResponse == null || turnServerResponse.uris.isNullOrEmpty()) && vectorPreferences.useFallbackTurnServer()) {
+                add(
+                        PeerConnection
+                                .IceServer
+                                .builder("stun:" + stringProvider.getString(R.string.fallback_stun_server_url))
+                                .createIceServer()
+                )
             }
         }
         Timber.tag(loggerTag.value).v("creating peer connection...with iceServers $iceServers ")
