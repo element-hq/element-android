@@ -3030,4 +3030,5 @@
     <string name="shortcut_disabled_reason_sign_out">Sessionen har loggats ut!</string>
     <string name="shortcut_disabled_reason_room_left">Rummet har lämnats!</string>
     <string name="action_not_now">Inte nu</string>
+    <string name="identity_server_consent_dialog_content_3">För att hitta existerande kontakter så behöver du skicka kontaktinfo (e-postadresser och telefonnummer) till din identitetsserver. Vi hashar din data innan den skickas av sekretesskäl.</string>
 </resources>
