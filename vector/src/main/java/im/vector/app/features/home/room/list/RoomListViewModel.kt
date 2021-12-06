@@ -339,7 +339,7 @@ class RoomListViewModel @AssistedInject constructor(
             viewModelScope.launch {
                 try {
                     room.setMarkedUnread(action.markedUnread)
-                } catch (failure: Exception) {
+                } catch (failure: Throwable) {
                     _viewEvents.post(RoomListViewEvents.Failure(failure))
                 }
             }
