@@ -40,7 +40,6 @@ class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>(),
         ToolbarConfigurable {
 
     companion object {
-
         private const val WIDGET_FRAGMENT_TAG = "WIDGET_FRAGMENT_TAG"
         private const val WIDGET_PERMISSION_FRAGMENT_TAG = "WIDGET_PERMISSION_FRAGMENT_TAG"
         private const val EXTRA_RESULT = "EXTRA_RESULT"
@@ -56,7 +55,7 @@ class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>(),
             return intent.extras?.getSerializable(EXTRA_RESULT) as? Content
         }
 
-        fun createResultIntent(content: Content): Intent {
+        private fun createResultIntent(content: Content): Intent {
             return Intent().apply {
                 putExtra(EXTRA_RESULT, content as Serializable)
             }
