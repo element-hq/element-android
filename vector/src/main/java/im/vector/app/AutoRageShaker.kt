@@ -25,6 +25,9 @@ import im.vector.app.features.settings.VectorPreferences
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -52,10 +55,43 @@ class AutoRageShaker @Inject constructor(
     private val uisiDetectors = mutableMapOf<String, UISIDetector>()
     private var currentActiveSessionId: String? = null
 
+    // Simple in memory cache of already sent report
+    private data class ReportInfo(
+            val roomId: String,
+            val sessionId: String
+    )
+
+    private val alreadyReportedUisi = mutableListOf<ReportInfo>()
+
+    private val e2eDetectedFlow = MutableSharedFlow<E2EMessageDetected>(replay = 0)
+    private val matchingRSRequestFlow = MutableSharedFlow<Event>(replay = 0)
+
     fun initialize() {
         observeActiveSession()
         // It's a singleton...
         vectorPreferences.subscribeToChanges(this)
+
+        // Simple rate limit, notice that order is not
+        // necessarily preserved
+        e2eDetectedFlow
+                .onEach {
+                    sendRageShake(it)
+                    delay(2_000)
+                }
+                .catch { cause ->
+                    Timber.w(cause, "Failed to RS")
+                }
+                .launchIn(coroutineScope)
+
+        matchingRSRequestFlow
+                .onEach {
+                    sendMatchingRageShake(it)
+                    delay(2_000)
+                }
+                .catch { cause ->
+                    Timber.w(cause, "Failed to send matching rageshake")
+                }
+                .launchIn(coroutineScope)
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
@@ -83,63 +119,83 @@ class AutoRageShaker @Inject constructor(
     fun decryptionErrorDetected(target: E2EMessageDetected) {
         if (target.source == UISIEventSource.INITIAL_SYNC) return
         if (activeSessionHolder.getSafeActiveSession()?.sessionId != currentActiveSessionId) return
-        coroutineScope.launch {
-            bugReporter.sendBugReport(
-                    context = context,
-                    reportType = ReportType.AUTO_UISI,
-                    withDevicesLogs = true,
-                    withCrashLogs = true,
-                    withKeyRequestHistory = true,
-                    withScreenshot = false,
-                    theBugDescription = "UISI detected",
-                    serverVersion = "",
-                    canContact = false,
-                    customFields = mapOf("auto-uisi" to buildString {
-                        append("\neventId: ${target.eventId}")
-                        append("\nroomId: ${target.roomId}")
-                        append("\nsenderKey: ${target.senderKey}")
-                        append("\nsource: ${target.source}")
-                        append("\ndeviceId: ${target.senderDeviceId}")
-                        append("\nuserId: ${target.senderUserId}")
-                        append("\nsessionId: ${target.sessionId}")
-                    }),
-                    listener = object : BugReporter.IMXBugReportListener {
-                        override fun onUploadCancelled() {
+        val shouldSendRS = synchronized(alreadyReportedUisi) {
+            val reportInfo = ReportInfo(target.roomId, target.sessionId)
+            val alreadySent = alreadyReportedUisi.contains(reportInfo)
+            if (!alreadySent) {
+                alreadyReportedUisi.add(reportInfo)
+            }
+            !alreadySent
+        }
+        if (shouldSendRS) {
+            coroutineScope.launch {
+                e2eDetectedFlow.emit(target)
+            }
+        }
+    }
+
+    private fun sendRageShake(target: E2EMessageDetected) {
+        bugReporter.sendBugReport(
+                context = context,
+                reportType = ReportType.AUTO_UISI,
+                withDevicesLogs = true,
+                withCrashLogs = true,
+                withKeyRequestHistory = true,
+                withScreenshot = false,
+                theBugDescription = "UISI detected",
+                serverVersion = "",
+                canContact = false,
+                customFields = mapOf("auto-uisi" to buildString {
+                    append("\neventId: ${target.eventId}")
+                    append("\nroomId: ${target.roomId}")
+                    append("\nsenderKey: ${target.senderKey}")
+                    append("\nsource: ${target.source}")
+                    append("\ndeviceId: ${target.senderDeviceId}")
+                    append("\nuserId: ${target.senderUserId}")
+                    append("\nsessionId: ${target.sessionId}")
+                }),
+                listener = object : BugReporter.IMXBugReportListener {
+                    override fun onUploadCancelled() {
+                        synchronized(alreadyReportedUisi) {
+                            alreadyReportedUisi.remove(ReportInfo(target.roomId, target.sessionId))
                         }
+                    }
 
-                        override fun onUploadFailed(reason: String?) {
+                    override fun onUploadFailed(reason: String?) {
+                        synchronized(alreadyReportedUisi) {
+                            alreadyReportedUisi.remove(ReportInfo(target.roomId, target.sessionId))
                         }
+                    }
 
-                        override fun onProgress(progress: Int) {
-                        }
+                    override fun onProgress(progress: Int) {
+                    }
 
-                        override fun onUploadSucceed(reportUrl: String?) {
-                            Timber.w("## VALR Report URL is $reportUrl")
-                            // we need to send the toDevice message to the sender
+                    override fun onUploadSucceed(reportUrl: String?) {
+                        Timber.w("## VALR Report URL is $reportUrl")
+                        // we need to send the toDevice message to the sender
 
-                            coroutineScope.launch {
-                                try {
-                                    activeSessionHolder.getSafeActiveSession()?.sendToDevice(
-                                            eventType = AUTO_RS_REQUEST,
-                                            userId = target.senderUserId,
-                                            deviceId = target.senderDeviceId,
-                                            content = mapOf(
-                                                    "event_id" to target.eventId,
-                                                    "room_id" to target.roomId,
-                                                    "session_id" to target.sessionId,
-                                                    "device_id" to target.senderDeviceId,
-                                                    "user_id" to target.senderUserId,
-                                                    "sender_key" to target.senderKey,
-                                                    "matching_issue" to reportUrl
-                                            ).toContent()
-                                    )
-                                } catch (failure: Throwable) {
-                                    Timber.w("## VALR : failed to send auto-uisi to device")
-                                }
+                        coroutineScope.launch {
+                            try {
+                                activeSessionHolder.getSafeActiveSession()?.sendToDevice(
+                                        eventType = AUTO_RS_REQUEST,
+                                        userId = target.senderUserId,
+                                        deviceId = target.senderDeviceId,
+                                        content = mapOf(
+                                                "event_id" to target.eventId,
+                                                "room_id" to target.roomId,
+                                                "session_id" to target.sessionId,
+                                                "device_id" to target.senderDeviceId,
+                                                "user_id" to target.senderUserId,
+                                                "sender_key" to target.senderKey,
+                                                "matching_issue" to reportUrl
+                                        ).toContent()
+                                )
+                            } catch (failure: Throwable) {
+                                Timber.w("## VALR : failed to send auto-uisi to device")
                             }
                         }
-                    })
-        }
+                    }
+                })
     }
 
     fun remoteAutoUISIRequest(event: Event) {
@@ -147,38 +203,42 @@ class AutoRageShaker @Inject constructor(
         if (activeSessionHolder.getSafeActiveSession()?.sessionId != currentActiveSessionId) return
 
         coroutineScope.launch {
-            val eventId = event.content?.get("event_id")
-            val roomId = event.content?.get("room_id")
-            val sessionId = event.content?.get("session_id")
-            val deviceId = event.content?.get("device_id")
-            val userId = event.content?.get("user_id")
-            val senderKey = event.content?.get("sender_key")
-            val matchingIssue = event.content?.get("matching_issue")?.toString() ?: ""
-
-            bugReporter.sendBugReport(
-                    context = context,
-                    reportType = ReportType.AUTO_UISI_SENDER,
-                    withDevicesLogs = true,
-                    withCrashLogs = true,
-                    withKeyRequestHistory = true,
-                    withScreenshot = false,
-                    theBugDescription = "UISI detected $matchingIssue",
-                    serverVersion = "",
-                    canContact = false,
-                    customFields = mapOf(
-                            "auto-uisi" to buildString {
-                                append("\neventId: $eventId")
-                                append("\nroomId: $roomId")
-                                append("\nsenderKey: $senderKey")
-                                append("\ndeviceId: $deviceId")
-                                append("\nuserId: $userId")
-                                append("\nsessionId: $sessionId")
-                            },
-                            "matching_issue" to matchingIssue
-                    ),
-                    listener = null
-            )
+            matchingRSRequestFlow.emit(event)
         }
+    }
+
+    private fun sendMatchingRageShake(event: Event) {
+        val eventId = event.content?.get("event_id")
+        val roomId = event.content?.get("room_id")
+        val sessionId = event.content?.get("session_id")
+        val deviceId = event.content?.get("device_id")
+        val userId = event.content?.get("user_id")
+        val senderKey = event.content?.get("sender_key")
+        val matchingIssue = event.content?.get("matching_issue")?.toString() ?: ""
+
+        bugReporter.sendBugReport(
+                context = context,
+                reportType = ReportType.AUTO_UISI_SENDER,
+                withDevicesLogs = true,
+                withCrashLogs = true,
+                withKeyRequestHistory = true,
+                withScreenshot = false,
+                theBugDescription = "UISI detected $matchingIssue",
+                serverVersion = "",
+                canContact = false,
+                customFields = mapOf(
+                        "auto-uisi" to buildString {
+                            append("\neventId: $eventId")
+                            append("\nroomId: $roomId")
+                            append("\nsenderKey: $senderKey")
+                            append("\ndeviceId: $deviceId")
+                            append("\nuserId: $userId")
+                            append("\nsessionId: $sessionId")
+                        },
+                        "matching_issue" to matchingIssue
+                ),
+                listener = null
+        )
     }
 
     private val detector = UISIDetector().apply {
