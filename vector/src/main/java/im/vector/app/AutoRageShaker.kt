@@ -22,10 +22,12 @@ import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.features.rageshake.BugReporter
 import im.vector.app.features.rageshake.ReportType
 import im.vector.app.features.settings.VectorPreferences
-import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.Event
@@ -45,7 +47,6 @@ class AutoRageShaker @Inject constructor(
         private val vectorPreferences: VectorPreferences
 ) : Session.Listener, SharedPreferences.OnSharedPreferenceChangeListener {
 
-    private lateinit var activeSessionDisposable: Disposable
     private val activeSessionIds = mutableSetOf<String>()
     private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
     private val uisiDetectors = mutableMapOf<String, UISIDetector>()
@@ -69,13 +70,14 @@ class AutoRageShaker @Inject constructor(
     }
 
     private fun observeActiveSession() {
-        activeSessionDisposable = sessionDataSource.observe()
+        sessionDataSource.stream()
                 .distinctUntilChanged()
-                .subscribe {
+                .onEach {
                     it.orNull()?.let { session ->
                         onSessionActive(session)
                     }
                 }
+                .launchIn(coroutineScope)
     }
 
     fun decryptionErrorDetected(target: E2EMessageDetected) {
@@ -163,7 +165,7 @@ class AutoRageShaker @Inject constructor(
                     theBugDescription = "UISI detected $matchingIssue",
                     serverVersion = "",
                     canContact = false,
-                    customFields = mapOf<String, String>(
+                    customFields = mapOf(
                             "auto-uisi" to buildString {
                                 append("\neventId: $eventId")
                                 append("\nroomId: $roomId")
