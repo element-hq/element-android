@@ -20,8 +20,8 @@ import android.content.Context
 import android.hardware.camera2.CameraManager
 import androidx.core.content.getSystemService
 import im.vector.app.R
-import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.flow.chunk
+import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.services.CallService
 import im.vector.app.core.utils.CountUpTimer
 import im.vector.app.core.utils.PublishDataSource
