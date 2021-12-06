@@ -26,7 +26,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.singletonEntryPoint
-import im.vector.app.core.flow.throttleFirst
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.toast
 import kotlinx.coroutines.flow.launchIn
@@ -53,7 +52,6 @@ abstract class VectorSettingsBaseFragment : PreferenceFragmentCompat() {
 
     protected fun View.debouncedClicks(onClicked: () -> Unit) {
         clicks()
-                .throttleFirst(300)
                 .onEach { onClicked() }
                 .launchIn(viewLifecycleOwner.lifecycleScope)
     }
