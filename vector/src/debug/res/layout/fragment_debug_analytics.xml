@@ -26,16 +26,18 @@
                 tools:text="Store content" />
 
             <Button
-                android:id="@+id/show_analytics_opt_in"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Show Analytics Opt in" />
-
-            <Button
                 android:id="@+id/reset_analytics_opt_in_displayed"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Reset Analytics Opt in Displayed" />
+
+            <Button
+                android:id="@+id/show_analytics_opt_in"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Show Analytics Opt in" />
+
         </LinearLayout>
 
     </ScrollView>

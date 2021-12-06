@@ -56,7 +56,7 @@ class AnalyticsOptInFragment @Inject constructor(
     }
 
     private fun setupLink() {
-        views.submit.setTextWithColoredPart(
+        views.subtitle.setTextWithColoredPart(
                 fullTextRes = R.string.analytics_opt_in_content,
                 coloredTextRes = R.string.analytics_opt_in_content_link,
                 onClick = {

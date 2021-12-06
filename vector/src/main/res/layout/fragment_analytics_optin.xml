@@ -54,7 +54,6 @@
         android:layout_marginEnd="8dp"
         android:gravity="center"
         android:textColor="?vctr_content_secondary"
-        app:drawableStartCompat="@drawable/ic_list_item_bullet"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         tools:text="@string/analytics_opt_in_content" />
