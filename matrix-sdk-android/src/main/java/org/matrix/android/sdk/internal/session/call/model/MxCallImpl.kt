@@ -205,8 +205,8 @@ internal class MxCallImpl(
         Timber.tag(loggerTag.value).v("select answer $callId")
         if (!isOutgoing) return
         // This is an outgoing call, select the remote client that answered.
-        if (state != CallState.Dialing) {
-            Timber.tag(loggerTag.value).w("Expected state is CallState.Dialing got $state.")
+        if (state is CallState.Dialing || state is CallState.Connected) {
+            Timber.tag(loggerTag.value).w("Expected state is CallState.Dialing or CallState.Connected got $state.")
         }
         CallSelectAnswerContent(
                 callId = callId,
