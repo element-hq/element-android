@@ -62,7 +62,6 @@ import im.vector.app.core.extensions.restart
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.extensions.singletonEntryPoint
 import im.vector.app.core.extensions.toMvRxBundle
-import im.vector.app.core.flow.throttleFirst
 import im.vector.app.core.utils.toast
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
@@ -121,7 +120,6 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
 
     protected fun View.debouncedClicks(onClicked: () -> Unit) {
         clicks()
-                .throttleFirst(300)
                 .onEach { onClicked() }
                 .launchIn(lifecycleScope)
     }

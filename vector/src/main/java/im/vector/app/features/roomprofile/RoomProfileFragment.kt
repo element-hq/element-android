@@ -146,12 +146,12 @@ class RoomProfileFragment @Inject constructor(
                 headerViews.roomProfileNameView,
                 views.matrixProfileToolbarTitleView
         ).forEach {
-            it.setOnClickListener {
+            it.debouncedClicks {
                 roomProfileSharedActionViewModel.post(RoomProfileSharedAction.OpenRoomSettings)
             }
         }
         // Shortcut to room alias
-        headerViews.roomProfileAliasView.setOnClickListener {
+        headerViews.roomProfileAliasView.debouncedClicks {
             roomProfileSharedActionViewModel.post(RoomProfileSharedAction.OpenRoomAliasesSettings)
         }
         // Open Avatar
@@ -159,7 +159,7 @@ class RoomProfileFragment @Inject constructor(
                 headerViews.roomProfileAvatarView,
                 views.matrixProfileToolbarAvatarImageView
         ).forEach { view ->
-            view.setOnClickListener { onAvatarClicked(view) }
+            view.debouncedClicks { onAvatarClicked(view) }
         }
     }
 

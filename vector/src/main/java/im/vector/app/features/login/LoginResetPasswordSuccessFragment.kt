@@ -35,7 +35,7 @@ class LoginResetPasswordSuccessFragment @Inject constructor() : AbstractLoginFra
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        views.resetPasswordSuccessSubmit.setOnClickListener { submit() }
+        views.resetPasswordSuccessSubmit.debouncedClicks { submit() }
     }
 
     private fun submit() {

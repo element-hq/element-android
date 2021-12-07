@@ -128,8 +128,8 @@ class KeysBackupSetupStep2Fragment @Inject constructor() : VectorBaseFragment<Fr
     }
 
     private fun setupViews() {
-        views.keysBackupSetupStep2Button.setOnClickListener { doNext() }
-        views.keysBackupSetupStep2SkipButton.setOnClickListener { skipPassphrase() }
+        views.keysBackupSetupStep2Button.debouncedClicks { doNext() }
+        views.keysBackupSetupStep2SkipButton.debouncedClicks { skipPassphrase() }
 
         views.keysBackupSetupStep2PassphraseEnterEdittext.doOnTextChanged { _, _, _, _ -> onPassphraseChanged() }
         views.keysBackupSetupStep2PassphraseConfirmEditText.doOnTextChanged { _, _, _, _ -> onConfirmPassphraseChanged() }
