@@ -14,7 +14,8 @@
     android:paddingStart="@dimen/layout_horizontal_margin"
     android:paddingTop="12dp"
     android:paddingEnd="@dimen/layout_horizontal_margin"
-    android:paddingBottom="12dp">
+    android:paddingBottom="12dp"
+    tools:viewBindingIgnore="true">
 
     <TextView
         android:id="@+id/itemFormAdvancedToggleTitleView"

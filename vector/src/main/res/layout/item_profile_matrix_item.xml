@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- https://tinyurl.com/PresenceListInRooms -->
+<?xml version="1.0" encoding="utf-8"?><!-- https://tinyurl.com/PresenceListInRooms -->
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -13,7 +12,8 @@
     android:paddingStart="@dimen/layout_horizontal_margin"
     android:paddingTop="8dp"
     android:paddingEnd="@dimen/layout_horizontal_margin"
-    android:paddingBottom="8dp">
+    android:paddingBottom="8dp"
+    tools:viewBindingIgnore="true">
 
     <ImageView
         android:id="@+id/matrixItemAvatar"

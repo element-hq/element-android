@@ -7,7 +7,8 @@
     android:layout_height="wrap_content"
     android:layout_margin="2dp"
     card_view:cardBackgroundColor="@android:color/transparent"
-    card_view:cardElevation="0dp">
+    card_view:cardElevation="0dp"
+    tools:viewBindingIgnore="true">
 
     <im.vector.app.core.platform.CheckableImageView
         android:id="@+id/attachmentMiniatureImageView"

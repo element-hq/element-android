@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:foreground="?selectableItemBackground"
-    android:minHeight="64dp">
+    android:minHeight="64dp"
+    tools:viewBindingIgnore="true">
 
     <ImageView
         android:id="@+id/uploadsFileIcon"

@@ -8,4 +8,5 @@
     android:layout_margin="16dp"
     android:importantForAccessibility="no"
     app:tint="?colorPrimary"
-    tools:src="@drawable/ic_layers" />
+    tools:src="@drawable/ic_layers"
+    tools:viewBindingIgnore="true" />

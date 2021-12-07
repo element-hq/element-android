@@ -11,7 +11,8 @@
     android:paddingStart="@dimen/layout_horizontal_margin"
     android:paddingTop="8dp"
     android:paddingEnd="@dimen/layout_horizontal_margin"
-    android:paddingBottom="8dp">
+    android:paddingBottom="8dp"
+    tools:viewBindingIgnore="true">
 
     <ImageView
         android:id="@+id/radioIcon"

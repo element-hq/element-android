@@ -7,7 +7,8 @@
     android:background="?android:colorBackground"
     android:paddingStart="32dp"
     android:paddingTop="16dp"
-    android:paddingEnd="32dp">
+    android:paddingEnd="32dp"
+    tools:viewBindingIgnore="true">
 
     <TextView
         android:id="@+id/itemLoginErrorRetryText"

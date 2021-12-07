@@ -7,7 +7,8 @@
     android:background="?android:colorBackground"
     android:minHeight="64dp"
     android:paddingStart="@dimen/layout_horizontal_margin"
-    android:paddingEnd="@dimen/layout_horizontal_margin">
+    android:paddingEnd="@dimen/layout_horizontal_margin"
+    tools:viewBindingIgnore="true">
 
     <ImageView
         android:id="@+id/item_settings_three_pid_icon"
