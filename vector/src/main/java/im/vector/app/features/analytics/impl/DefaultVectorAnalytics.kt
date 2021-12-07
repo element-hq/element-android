@@ -20,11 +20,11 @@ import android.content.Context
 import com.posthog.android.PostHog
 import com.posthog.android.Properties
 import im.vector.app.BuildConfig
-import im.vector.app.features.analytics.AnalyticsConfig
+import im.vector.app.config.analyticsConfig
 import im.vector.app.features.analytics.VectorAnalytics
-import im.vector.app.features.analytics.log.analyticsTag
 import im.vector.app.features.analytics.itf.VectorAnalyticsEvent
 import im.vector.app.features.analytics.itf.VectorAnalyticsScreen
+import im.vector.app.features.analytics.log.analyticsTag
 import im.vector.app.features.analytics.store.AnalyticsStore
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
@@ -123,10 +123,12 @@ class DefaultVectorAnalytics @Inject constructor(
     private fun createAnalyticsClient() {
         Timber.tag(analyticsTag.value).d("createAnalyticsClient()")
 
-        val config: AnalyticsConfig = AnalyticsConfig.getConfig()
-                ?: return Unit.also { Timber.tag(analyticsTag.value).w("Analytics is disabled") }
+        if (analyticsConfig.isEnabled.not()) {
+            Timber.tag(analyticsTag.value).w("Analytics is disabled")
+            return
+        }
 
-        posthog = PostHog.Builder(context, config.postHogApiKey, config.postHogHost)
+        posthog = PostHog.Builder(context, analyticsConfig.postHogApiKey, analyticsConfig.postHogHost)
                 // Record certain application events automatically! (off/false by default)
                 // .captureApplicationLifecycleEvents()
                 // Record screen views automatically! (off/false by default)

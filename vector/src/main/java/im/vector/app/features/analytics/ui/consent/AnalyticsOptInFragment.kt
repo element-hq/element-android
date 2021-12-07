@@ -21,8 +21,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.airbnb.mvrx.activityViewModel
-import im.vector.app.BuildConfig
 import im.vector.app.R
+import im.vector.app.config.analyticsConfig
 import im.vector.app.core.extensions.setTextWithColoredPart
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.openUrlInChromeCustomTab
@@ -60,7 +60,7 @@ class AnalyticsOptInFragment @Inject constructor(
                 fullTextRes = R.string.analytics_opt_in_content,
                 coloredTextRes = R.string.analytics_opt_in_content_link,
                 onClick = {
-                    openUrlInChromeCustomTab(requireContext(), null, BuildConfig.ANALYTICS_POLICY_URL)
+                    openUrlInChromeCustomTab(requireContext(), null, analyticsConfig.policyLink)
                 }
         )
     }

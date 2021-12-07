@@ -35,6 +35,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.mvrx.fragmentViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
+import im.vector.app.config.analyticsConfig
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.dialogs.ExportKeysDialog
 import im.vector.app.core.extensions.queryExportKeys
@@ -50,7 +51,6 @@ import im.vector.app.core.utils.copyToClipboard
 import im.vector.app.core.utils.openFileSelection
 import im.vector.app.core.utils.toast
 import im.vector.app.databinding.DialogImportE2eKeysBinding
-import im.vector.app.features.analytics.AnalyticsConfig
 import im.vector.app.features.analytics.ui.consent.AnalyticsConsentViewActions
 import im.vector.app.features.analytics.ui.consent.AnalyticsConsentViewModel
 import im.vector.app.features.analytics.ui.consent.AnalyticsConsentViewState
@@ -294,7 +294,7 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
     }
 
     private fun setUpAnalytics() {
-        analyticsCategory.isVisible = AnalyticsConfig.isAnalyticsEnabled()
+        analyticsCategory.isVisible = analyticsConfig.isEnabled
 
         analyticsConsent.setOnPreferenceClickListener {
             analyticsConsentViewModel.handle(AnalyticsConsentViewActions.SetUserConsent(analyticsConsent.isChecked))

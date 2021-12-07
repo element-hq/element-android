@@ -14,11 +14,14 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.analytics
+package im.vector.app.config
 
-interface AnalyticsConfig {
-    val isEnabled: Boolean
-    val postHogHost: String
-    val postHogApiKey: String
-    val policyLink: String
+import im.vector.app.BuildConfig
+import im.vector.app.features.analytics.AnalyticsConfig
+
+val analyticsConfig: AnalyticsConfig = object : AnalyticsConfig {
+    override val isEnabled = BuildConfig.APPLICATION_ID == "im.vector.app.debug"
+    override val postHogHost = "https://posthog-poc.lab.element.dev"
+    override val postHogApiKey = "rs-pJjsYJTuAkXJfhaMmPUNBhWliDyTKLOOxike6ck8"
+    override val policyLink = "https://element.io/cookie-policy"
 }
