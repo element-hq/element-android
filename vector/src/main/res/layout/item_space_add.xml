@@ -9,7 +9,6 @@
     android:focusable="true"
     android:foreground="?attr/selectableItemBackground">
 
-
     <ImageView
         android:id="@+id/groupAvatarImageView"
         android:layout_width="42dp"
@@ -39,7 +38,7 @@
         android:textColor="?colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/groupAvatarImageView"
+        app:layout_constraintStart_toEndOf="@id/groupAvatarImageView"
         app:layout_constraintTop_toTopOf="parent" />
 
 </im.vector.app.core.platform.CheckableConstraintLayout>

@@ -1,4 +1,4 @@
-name: Move P1 issues into the P1 column for the App Team and Crypto team
+name: Move P1 bugs to boards
 
 on:
   issues:

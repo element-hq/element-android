@@ -31,5 +31,4 @@
         style="@style/BottomSheetItemTime"
         tools:text="10:44" />
 
-
 </LinearLayout>

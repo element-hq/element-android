@@ -19,7 +19,7 @@
         android:maxLines="2"
         android:textColor="?vctr_content_primary"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/itemRoomDirectoryServerDescription"
+        app:layout_constraintBottom_toTopOf="@id/itemRoomDirectoryServerDescription"
         app:layout_constraintEnd_toStartOf="@id/itemRoomDirectoryServerRemove"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -42,7 +42,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/itemRoomDirectoryServerRemove"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/itemRoomDirectoryServerName"
+        app:layout_constraintTop_toBottomOf="@id/itemRoomDirectoryServerName"
         app:layout_goneMarginEnd="@dimen/layout_horizontal_margin"
         tools:text="@string/directory_your_server"
         tools:visibility="visible" />

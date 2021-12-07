@@ -19,6 +19,7 @@ package org.matrix.android.sdk.internal.session.group
 import android.content.Context
 import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
+import org.matrix.android.sdk.internal.SessionManager
 import org.matrix.android.sdk.internal.session.SessionComponent
 import org.matrix.android.sdk.internal.worker.SessionSafeCoroutineWorker
 import org.matrix.android.sdk.internal.worker.SessionWorkerParams
@@ -28,8 +29,8 @@ import javax.inject.Inject
  * Possible previous worker: None
  * Possible next worker    : None
  */
-internal class GetGroupDataWorker(context: Context, params: WorkerParameters) :
-    SessionSafeCoroutineWorker<GetGroupDataWorker.Params>(context, params, Params::class.java) {
+internal class GetGroupDataWorker(context: Context, params: WorkerParameters, sessionManager: SessionManager) :
+        SessionSafeCoroutineWorker<GetGroupDataWorker.Params>(context, params, sessionManager, Params::class.java) {
 
     @JsonClass(generateAdapter = true)
     internal data class Params(

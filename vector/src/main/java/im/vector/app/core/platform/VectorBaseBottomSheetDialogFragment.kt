@@ -36,7 +36,6 @@ import dagger.hilt.android.EntryPointAccessors
 import im.vector.app.core.di.ActivityEntryPoint
 import im.vector.app.core.extensions.singletonEntryPoint
 import im.vector.app.core.extensions.toMvRxBundle
-import im.vector.app.core.flow.throttleFirst
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.features.analytics.VectorAnalytics
 import kotlinx.coroutines.flow.launchIn
@@ -174,7 +173,6 @@ abstract class VectorBaseBottomSheetDialogFragment<VB : ViewBinding> : BottomShe
 
     protected fun View.debouncedClicks(onClicked: () -> Unit) {
         clicks()
-                .throttleFirst(300)
                 .onEach { onClicked() }
                 .launchIn(viewLifecycleOwner.lifecycleScope)
     }

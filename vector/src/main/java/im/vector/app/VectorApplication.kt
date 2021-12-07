@@ -223,6 +223,7 @@ class VectorApplication :
 
     override fun getWorkManagerConfiguration(): WorkConfiguration {
         return WorkConfiguration.Builder()
+                .setWorkerFactory(Matrix.getInstance(this.appContext).workerFactory())
                 .setExecutor(Executors.newCachedThreadPool())
                 .build()
     }

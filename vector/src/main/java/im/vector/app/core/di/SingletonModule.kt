@@ -31,6 +31,8 @@ import im.vector.app.core.error.DefaultErrorFormatter
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.time.Clock
 import im.vector.app.core.time.DefaultClock
+import im.vector.app.features.DefaultVectorFeatures
+import im.vector.app.features.VectorFeatures
 import im.vector.app.features.analytics.VectorAnalytics
 import im.vector.app.features.analytics.impl.DefaultVectorAnalytics
 import im.vector.app.features.invite.AutoAcceptInvites
@@ -137,5 +139,10 @@ object VectorStaticModule {
     @Provides
     fun providesCoroutineDispatchers(): CoroutineDispatchers {
         return CoroutineDispatchers(io = Dispatchers.IO, computation = Dispatchers.Default)
+    }
+
+    @Provides
+    fun providesFeatures(): VectorFeatures {
+        return DefaultVectorFeatures()
     }
 }

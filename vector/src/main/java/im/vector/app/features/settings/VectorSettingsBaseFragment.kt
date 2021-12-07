@@ -20,6 +20,7 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.annotation.CallSuper
+import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceFragmentCompat
 import com.airbnb.mvrx.MavericksView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -29,7 +30,10 @@ import im.vector.app.core.extensions.singletonEntryPoint
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.toast
 import im.vector.app.features.analytics.VectorAnalytics
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.session.Session
+import reactivecircus.flowbinding.android.view.clicks
 import timber.log.Timber
 
 abstract class VectorSettingsBaseFragment : PreferenceFragmentCompat(), MavericksView {
@@ -44,6 +48,16 @@ abstract class VectorSettingsBaseFragment : PreferenceFragmentCompat(), Maverick
     protected lateinit var session: Session
     protected lateinit var errorFormatter: ErrorFormatter
     protected lateinit var analytics: VectorAnalytics
+
+    /* ==========================================================================================
+     * Views
+     * ========================================================================================== */
+
+    protected fun View.debouncedClicks(onClicked: () -> Unit) {
+        clicks()
+                .onEach { onClicked() }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
+    }
 
     abstract val preferenceXmlRes: Int
 

@@ -33,7 +33,6 @@
         android:textColor="@color/emoji_black"
         tools:text="😀" />
 
-
     <TextView
         android:id="@+id/quickReaction3"
         style="@style/Widget.Vector.TextView.Title"

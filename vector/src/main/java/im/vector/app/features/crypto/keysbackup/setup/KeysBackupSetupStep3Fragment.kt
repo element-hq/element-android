@@ -85,9 +85,9 @@ class KeysBackupSetupStep3Fragment @Inject constructor() : VectorBaseFragment<Fr
     }
 
     private fun setupViews() {
-        views.keysBackupSetupStep3FinishButton.setOnClickListener { onFinishButtonClicked() }
-        views.keysBackupSetupStep3CopyButton.setOnClickListener { onCopyButtonClicked() }
-        views.keysBackupSetupStep3RecoveryKeyText.setOnClickListener { onRecoveryKeyClicked() }
+        views.keysBackupSetupStep3FinishButton.debouncedClicks { onFinishButtonClicked() }
+        views.keysBackupSetupStep3CopyButton.debouncedClicks { onCopyButtonClicked() }
+        views.keysBackupSetupStep3RecoveryKeyText.debouncedClicks { onRecoveryKeyClicked() }
     }
 
     private fun onFinishButtonClicked() {
@@ -127,7 +127,7 @@ class KeysBackupSetupStep3Fragment @Inject constructor() : VectorBaseFragment<Fr
             }
         }
 
-        dialog.findViewById<View>(R.id.keys_backup_setup_save)?.setOnClickListener {
+        dialog.findViewById<View>(R.id.keys_backup_setup_save)?.debouncedClicks {
             val userId = viewModel.userId
             val timestamp = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
             selectTxtFileToWrite(
@@ -139,7 +139,7 @@ class KeysBackupSetupStep3Fragment @Inject constructor() : VectorBaseFragment<Fr
             dialog.dismiss()
         }
 
-        dialog.findViewById<View>(R.id.keys_backup_setup_share)?.setOnClickListener {
+        dialog.findViewById<View>(R.id.keys_backup_setup_share)?.debouncedClicks {
             startSharePlainTextIntent(
                     fragment = this,
                     activityResultLauncher = null,
