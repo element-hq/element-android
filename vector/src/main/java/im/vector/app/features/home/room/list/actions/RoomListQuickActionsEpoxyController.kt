@@ -77,7 +77,7 @@ class RoomListQuickActionsEpoxyController @Inject constructor(
             }
         }
 
-        RoomListQuickActionsSharedAction.Leave(roomSummary.roomId, showIcon = !true).toBottomSheetItem(5)
+        RoomListQuickActionsSharedAction.Leave(roomSummary.roomId, showIcon = !true).toBottomSheetItem()
     }
 
     @StringRes
@@ -88,18 +88,11 @@ class RoomListQuickActionsEpoxyController @Inject constructor(
         else                                     -> null
     }
 
-    private fun RoomListQuickActionsSharedAction.toBottomSheetItem(index: Int, roomNotificationState: RoomNotificationState? = null) {
+    private fun RoomListQuickActionsSharedAction.Leave.toBottomSheetItem() {
         val host = this@RoomListQuickActionsEpoxyController
-        val selected = when (this) {
-            is RoomListQuickActionsSharedAction.NotificationsAllNoisy     -> roomNotificationState == RoomNotificationState.ALL_MESSAGES_NOISY
-            is RoomListQuickActionsSharedAction.NotificationsAll          -> roomNotificationState == RoomNotificationState.ALL_MESSAGES
-            is RoomListQuickActionsSharedAction.NotificationsMentionsOnly -> roomNotificationState == RoomNotificationState.MENTIONS_ONLY
-            is RoomListQuickActionsSharedAction.NotificationsMute         -> roomNotificationState == RoomNotificationState.MUTE
-            else                                                          -> false
-        }
         return bottomSheetActionItem {
-            id("action_$index")
-            selected(selected)
+            id("action_leave")
+            selected(false)
             if (iconResId != null) {
                 iconRes(iconResId)
             } else {
