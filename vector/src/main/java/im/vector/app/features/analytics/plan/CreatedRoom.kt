@@ -16,44 +16,26 @@
 
 package im.vector.app.features.analytics.plan
 
-import im.vector.app.features.analytics.itf.VectorAnalyticsScreen
+import im.vector.app.features.analytics.itf.VectorAnalyticsEvent
 
 // GENERATED FILE, DO NOT EDIT. FOR MORE INFORMATION VISIT
 // https://github.com/matrix-org/matrix-analytics-events/
 
 /**
- * Triggered when the user changed screen
+ * Triggered when the user creates a room.
  */
-data class Screen(
+data class CreatedRoom(
     /**
-     * How long the screen was displayed for in milliseconds.
+     * Whether the room is a DM.
      */
-    val durationMs: Int? = null,
-    val screenName: ScreenName,
-) : VectorAnalyticsScreen {
+    val isDM: Boolean,
+) : VectorAnalyticsEvent {
 
-    enum class ScreenName {
-        Group,
-        Home,
-        MyGroups,
-        Room,
-        RoomDirectory,
-        User,
-        WebCompleteSecurity,
-        WebE2ESetup,
-        WebForgotPassword,
-        WebLoading,
-        WebLogin,
-        WebRegister,
-        WebSoftLogout,
-        WebWelcome,
-    }
-
-    override fun getName() = screenName.name
+    override fun getName() = "CreatedRoom"
 
     override fun getProperties(): Map<String, Any>? {
         return mutableMapOf<String, Any>().apply {
-            durationMs?.let { put("durationMs", it) }
+            put("isDM", isDM)
         }.takeIf { it.isNotEmpty() }
     }
 }

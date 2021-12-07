@@ -16,44 +16,41 @@
 
 package im.vector.app.features.analytics.plan
 
-import im.vector.app.features.analytics.itf.VectorAnalyticsScreen
+import im.vector.app.features.analytics.itf.VectorAnalyticsEvent
 
 // GENERATED FILE, DO NOT EDIT. FOR MORE INFORMATION VISIT
 // https://github.com/matrix-org/matrix-analytics-events/
 
 /**
- * Triggered when the user changed screen
+ * Triggered when a call has ended.
  */
-data class Screen(
+data class CallEnded(
     /**
-     * How long the screen was displayed for in milliseconds.
+     * The duration of the call in milliseconds.
      */
-    val durationMs: Int? = null,
-    val screenName: ScreenName,
-) : VectorAnalyticsScreen {
+    val durationMs: Int,
+    /**
+     * Whether its a video call or not.
+     */
+    val isVideo: Boolean,
+    /**
+     * Number of participants in the call.
+     */
+    val numParticipants: Int,
+    /**
+     * Whether this user placed it.
+     */
+    val placed: Boolean,
+) : VectorAnalyticsEvent {
 
-    enum class ScreenName {
-        Group,
-        Home,
-        MyGroups,
-        Room,
-        RoomDirectory,
-        User,
-        WebCompleteSecurity,
-        WebE2ESetup,
-        WebForgotPassword,
-        WebLoading,
-        WebLogin,
-        WebRegister,
-        WebSoftLogout,
-        WebWelcome,
-    }
-
-    override fun getName() = screenName.name
+    override fun getName() = "CallEnded"
 
     override fun getProperties(): Map<String, Any>? {
         return mutableMapOf<String, Any>().apply {
-            durationMs?.let { put("durationMs", it) }
+            put("durationMs", durationMs)
+            put("isVideo", isVideo)
+            put("numParticipants", numParticipants)
+            put("placed", placed)
         }.takeIf { it.isNotEmpty() }
     }
 }

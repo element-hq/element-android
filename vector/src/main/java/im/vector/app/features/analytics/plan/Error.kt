@@ -18,7 +18,8 @@ package im.vector.app.features.analytics.plan
 
 import im.vector.app.features.analytics.itf.VectorAnalyticsEvent
 
-// GENERATED FILE, DO NOT EDIT
+// GENERATED FILE, DO NOT EDIT. FOR MORE INFORMATION VISIT
+// https://github.com/matrix-org/matrix-analytics-events/
 
 /**
  * Triggered when an error occurred

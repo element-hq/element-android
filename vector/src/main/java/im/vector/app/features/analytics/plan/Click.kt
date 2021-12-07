@@ -16,44 +16,35 @@
 
 package im.vector.app.features.analytics.plan
 
-import im.vector.app.features.analytics.itf.VectorAnalyticsScreen
+import im.vector.app.features.analytics.itf.VectorAnalyticsEvent
 
 // GENERATED FILE, DO NOT EDIT. FOR MORE INFORMATION VISIT
 // https://github.com/matrix-org/matrix-analytics-events/
 
 /**
- * Triggered when the user changed screen
+ * Triggered when the user clicks/taps on a UI element.
  */
-data class Screen(
+data class Click(
     /**
-     * How long the screen was displayed for in milliseconds.
+     * The index of the element, if its in a list of elements.
      */
-    val durationMs: Int? = null,
-    val screenName: ScreenName,
-) : VectorAnalyticsScreen {
+    val index: Int? = null,
+    /**
+     * The unique name of this element.
+     */
+    val name: Name,
+) : VectorAnalyticsEvent {
 
-    enum class ScreenName {
-        Group,
-        Home,
-        MyGroups,
-        Room,
-        RoomDirectory,
-        User,
-        WebCompleteSecurity,
-        WebE2ESetup,
-        WebForgotPassword,
-        WebLoading,
-        WebLogin,
-        WebRegister,
-        WebSoftLogout,
-        WebWelcome,
+    enum class Name {
+        SendMessageButton,
     }
 
-    override fun getName() = screenName.name
+    override fun getName() = "Click"
 
     override fun getProperties(): Map<String, Any>? {
         return mutableMapOf<String, Any>().apply {
-            durationMs?.let { put("durationMs", it) }
+            index?.let { put("index", it) }
+            put("name", name.name)
         }.takeIf { it.isNotEmpty() }
     }
 }
